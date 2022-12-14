@@ -2,138 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8A264C109
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 01:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC48764C10E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 01:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237155AbiLNAJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 19:09:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
+        id S238042AbiLNAMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 19:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237204AbiLNAIh (ORCPT
+        with ESMTP id S237952AbiLNALo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 19:08:37 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5265B22BEA
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 16:08:02 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id a25so600150qkl.12
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 16:08:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mZ92YtnQEvuyt/w8J84vCUssEmExzTkIRL4Fcee9MWo=;
-        b=UR3KFG5PX0bDn6p+beajzZzOZuq7o76x0V4yEZJzuRUo+g9KB/zUshRWZFL7qzw1Dd
-         YBNU/+3H6oSu6Oeou0P+gkPSa8c9GgpsOTIh6lNWyMV5qAKdyk4vaBEiD8Z6xF+1kzgs
-         ZeVz/do2fqCKNvExOw00A6jMjt2r5heSQ+pHl18IoYGSsxns4GcokTZxMATa16zO6N34
-         fb2w+HLArv9/WzLNLhg+gxbT9AR/g+NdSdOiAyYHTt9Kc2clh3WEW+2UY7MRcb3xJnue
-         8Nf+jdlsrMRNItw8qNQ7hgFiXGPrZUx8LA7qzp9tQ7c5JiNAvnpM46ACWxmSKgfYnVOQ
-         xQhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mZ92YtnQEvuyt/w8J84vCUssEmExzTkIRL4Fcee9MWo=;
-        b=les+SD35Q9xlDdUz/IJK7uvi0WZqZ81gCAYvlcugdKNxKGS6/8XIygHQBzfC2msY7O
-         NILUDWPU1XRHkOo5IlFMh0vSWqoVX6UJEMskMzBbtdZ1eThJRJ8mINOPnAcv+flYD8We
-         BCOdE8gU+Zy+haUqT+59gmjJZIUHnoBc/3kYbH6EHO+QYhwgfzgxAMmmfV7SYS7HPSVs
-         RvKQwfARkCsPW72JKzIMZ+11bWMDsoqPe6fNQvwoCiQmnwY7UH4s+Ihr0JFO6z0kuxi0
-         6iVCkifwAgwpKwQO3d2dH2cZTkwQ4qvDVq8U35ruJzX2Gdeo8S3WPEIU6Ffk+4hlRFqE
-         Zm8A==
-X-Gm-Message-State: ANoB5plkeN1TpMcmx8xOGup6S2hgkkIXACG9F3Qtoj8wGVT9GQt/gS3Y
-        5ABP8Lo570Vada0a7787nWJl6j1koMkJE8Y/Nebu+g==
-X-Google-Smtp-Source: AA0mqf73jnVk0hm795bF34Ej8JDTLzHjT28OVxzoAdtvD9F/amsG47bO5LXsmdljvTU3WlDR2kiXhiv1+x3AhENu9YE=
-X-Received: by 2002:a05:620a:1361:b0:6ff:ae58:94ee with SMTP id
- d1-20020a05620a136100b006ffae5894eemr382091qkl.81.1670976481397; Tue, 13 Dec
- 2022 16:08:01 -0800 (PST)
-MIME-Version: 1.0
-References: <20221206173601.549281-1-bgardon@google.com> <20221206173601.549281-2-bgardon@google.com>
- <Y5O1LbbeI7XXeaT2@google.com>
-In-Reply-To: <Y5O1LbbeI7XXeaT2@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Tue, 13 Dec 2022 16:07:50 -0800
-Message-ID: <CANgfPd9seknv1UCORyaR2KdkkBco1cDPuBc4z7V0trUtM_sZnQ@mail.gmail.com>
-Subject: Re: [PATCH 1/7] KVM: x86/MMU: Move pte_list operations to rmap.c
-To:     David Matlack <dmatlack@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vipin Sharma <vipinsh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 13 Dec 2022 19:11:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991D027CCD;
+        Tue, 13 Dec 2022 16:10:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3954CB81601;
+        Wed, 14 Dec 2022 00:10:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D115CC433F0;
+        Wed, 14 Dec 2022 00:10:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670976607;
+        bh=1LX+mnHnnqjKrR5XHodpysvLGdEiCpFeyYbmqhdy5aw=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=SNEVJRcjWbZRTORDAArmRT0KubrapdIBsDiGF04vYig0ztvrJW7vzw1uULEItfngZ
+         cQ+My6skoAe0aqs48dml0ijLfY0FxZ5TuXkvRY53fszy7PQF33bSNbpF6ExdmQ/9kc
+         hBUabwxJVD+3ZcFiYBezYoGOhFiAWx1DqLDJ6R4XLXq1KKX4KULnJDJOoIwUJ9pWfQ
+         gB+3P2JvvjSe9iSGihVG3dAqmpYd0IrwnUObL0lS0QfD8BkSVnb5JHeGrmdJb9Okm/
+         pz+fe43vepiDg0442Rp1ajmSAhmzN/GSLpiMPc1potstk0Y0zqqTJKym6jezxy5g53
+         1Rj4kE2TzkKPg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BF458C41612;
+        Wed, 14 Dec 2022 00:10:07 +0000 (UTC)
+Subject: Re: [GIT PULL] Networking for 6.2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221213165444.361342-1-pabeni@redhat.com>
+References: <20221213165444.361342-1-pabeni@redhat.com>
+X-PR-Tracked-List-Id: <netdev.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221213165444.361342-1-pabeni@redhat.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git tags/net-next-6.2
+X-PR-Tracked-Commit-Id: 7c4a6309e27f411743817fe74a832ec2d2798a4b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7e68dd7d07a28faa2e6574dd6b9dbd90cdeaae91
+Message-Id: <167097660775.30863.855239824169929279.pr-tracker-bot@kernel.org>
+Date:   Wed, 14 Dec 2022 00:10:07 +0000
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 9, 2022 at 2:22 PM David Matlack <dmatlack@google.com> wrote:
->
-> On Tue, Dec 06, 2022 at 05:35:55PM +0000, Ben Gardon wrote:
-> > In the interest of eventually splitting the Shadow MMU out of mmu.c,
-> > start by moving some of the operations for manipulating pte_lists out of
-> > mmu.c and into a new pair of files: rmap.c and rmap.h.
-> >
-> > No functional change intended.
-> >
-> > Signed-off-by: Ben Gardon <bgardon@google.com>
-> > ---
-> [...]
-> > diff --git a/arch/x86/kvm/mmu/rmap.h b/arch/x86/kvm/mmu/rmap.h
-> > new file mode 100644
-> > index 000000000000..059765b6e066
-> > --- /dev/null
-> > +++ b/arch/x86/kvm/mmu/rmap.h
-> > @@ -0,0 +1,34 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +#ifndef __KVM_X86_MMU_RMAP_H
-> > +#define __KVM_X86_MMU_RMAP_H
-> > +
-> > +#include <linux/kvm_host.h>
-> > +
-> > +/* make pte_list_desc fit well in cache lines */
-> > +#define PTE_LIST_EXT 14
-> > +
-> > +/*
-> > + * Slight optimization of cacheline layout, by putting `more' and `spte_count'
-> > + * at the start; then accessing it will only use one single cacheline for
-> > + * either full (entries==PTE_LIST_EXT) case or entries<=6.
-> > + */
-> > +struct pte_list_desc {
-> > +     struct pte_list_desc *more;
-> > +     /*
-> > +      * Stores number of entries stored in the pte_list_desc.  No need to be
-> > +      * u64 but just for easier alignment.  When PTE_LIST_EXT, means full.
-> > +      */
-> > +     u64 spte_count;
-> > +     u64 *sptes[PTE_LIST_EXT];
-> > +};
-> > +
-> > +static struct kmem_cache *pte_list_desc_cache;
->
-> The definition of pte_list_desc_cache needs to go in a C file since it's
-> a global variable. Since it now needs to be accessed by more than once C
-> file, drop the static. Then it can be accessed with extern.
->
-> Since most of the code that sets up and deals with pte_list_desc_cache
-> is still in mmu.c, my vote is to keep the definition there.
->
-> i.e.
->
-> mmu.c:
->
->   struct kmem_cache *pte_list_desc_cache;
->
-> rmap.c
->
->   extern struct kmem_cache *pte_list_desc_cache;
->
-> And no need for anything in rmap.h.
+The pull request you sent on Tue, 13 Dec 2022 17:54:44 +0100:
 
-Right, good point. I'll fix that in the next edition.
+> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git tags/net-next-6.2
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7e68dd7d07a28faa2e6574dd6b9dbd90cdeaae91
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
