@@ -2,66 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A675364CB07
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA2F64CAF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238585AbiLNNTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 08:19:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
+        id S238308AbiLNNSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 08:18:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238520AbiLNNTA (ORCPT
+        with ESMTP id S238288AbiLNNSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 08:19:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12920209AC;
-        Wed, 14 Dec 2022 05:18:57 -0800 (PST)
+        Wed, 14 Dec 2022 08:18:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686CF1B1F0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:18:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3B0DB818BA;
-        Wed, 14 Dec 2022 13:18:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A14FC433EF;
-        Wed, 14 Dec 2022 13:18:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0409F619B2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 13:18:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D69D5C433EF;
+        Wed, 14 Dec 2022 13:18:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671023934;
-        bh=xwJ2F+HL8Yk0Fx3XqoMXtNfS5GIPd1gzxcsg5dDoon8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QP7v+ZzVI06/yPy1cj0gYDD7mG1of1hKuSt/w5bpOrTOsOETjgUEc6Dxsq65g4/hQ
-         Fjy5ZqjxlEO4FPBy+HmWmxUARSuxIc328Fzp+FLLmftMf0i9OO7JDX0pfLb1AAELxO
-         4F2oUr73dVKcnjM84Sm1+0uoO332iQyxBEjrQDzgOhOchxhbfaBaP0GiecxfOpt8U7
-         2RgX4K0g69VvqkFaH3Oy4ffIl4AFigY7gl+xIltPIJbjXCwlSdgufiiDPMDhPmI97X
-         cp5rZOCf/Bmf7NFqdGdEGrwTBsae1YJmG5SHuHSmoPTDEGuXLGZ97M7gAlRE+SBO+a
-         iT520n6hJ8R2Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1p5RfO-0000gO-Nm; Wed, 14 Dec 2022 14:19:22 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 4/4] thermal/drivers/qcom: fix lock inversion
-Date:   Wed, 14 Dec 2022 14:16:17 +0100
-Message-Id: <20221214131617.2447-5-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221214131617.2447-1-johan+linaro@kernel.org>
-References: <20221214131617.2447-1-johan+linaro@kernel.org>
+        s=k20201202; t=1671023922;
+        bh=vUEUw7umkHcdN8/poSpqNEUmzIsAMybBL8IL/dAeuUU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sVXi2uB7BtOjWKiCScn5bL9wd1ewcVR4gJUZN10rI/+X+ZA01cOJIbqR6STKAvEKz
+         iHEx+hSxSwpam3bUActYuIbvmF/3ejyT+QjK6j4nzbUCkt9vrUzn5dHHxvSSjwBdCa
+         1wZ4+QXEoW7AddsbPvZft77G/y4jMFapXIAC+n06Yj/fUfkBXIjNC52Pqx9c2Lh/WN
+         ZIXeeVnplrYXgBItr+zqv5B31FPHHludoL9GiPDmu2Wh+RIrtsJ8FnfnzDORMHGrun
+         x8nU5igAlnMZXJvaItaPy9oXl77tlB3iWbj5FTeUtM39p65qyOZRQoBg23ZUhf4wEC
+         l9GGMhajS+vMw==
+Date:   Wed, 14 Dec 2022 14:18:39 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     atomlin@redhat.com, cl@linux.com, tglx@linutronix.de,
+        mingo@kernel.org, peterz@infradead.org, pauld@redhat.com,
+        neelx@redhat.com, oleksandr@natalenko.name,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v9 3/5] mm/vmstat: manage per-CPU stats from CPU context
+ when NOHZ full
+Message-ID: <20221214131839.GE1930067@lothringen>
+References: <20221206161826.698593151@redhat.com>
+ <20221206162416.474800121@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206162416.474800121@redhat.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -71,51 +57,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The thermal-zone-device lock is held by core when setting trip points
-and the driver takes its chip lock in the corresponding callback.
+On Tue, Dec 06, 2022 at 01:18:29PM -0300, Marcelo Tosatti wrote:
+> For nohz full CPUs, manage per-CPU stat syncing from CPU context:
+> start delayed work when marking per-CPU vmstat dirty.
+> 
+> When returning to userspace, fold the stats and cancel the delayed work.
+> 
+> When entering idle, only fold the stats.
 
-Fetching the thermal trip points using thermal_zone_get_trip() also
-involves taking the thermal-zone-device lock, which means that the chip
-lock can not be held when doing so.
+The changelog still misses the reason behind the changes.
 
-Drop the chip lock temporarily during probe to avoid the lock inversion
-that was detected by lockdep:
+> @@ -195,9 +196,24 @@ void fold_vm_numa_events(void)
+>  
+>  #ifdef CONFIG_SMP
+>  static DEFINE_PER_CPU_ALIGNED(bool, vmstat_dirty);
+> +static DEFINE_PER_CPU(struct delayed_work, vmstat_work);
+> +int sysctl_stat_interval __read_mostly = HZ;
+>  
+>  static inline void vmstat_mark_dirty(void)
+>  {
+> +	int cpu = smp_processor_id();
+> +
+> +	if (tick_nohz_full_cpu(cpu) && !this_cpu_read(vmstat_dirty)) {
+> +		struct delayed_work *dw;
+> +
+> +		dw = &per_cpu(vmstat_work, cpu);
 
-  ======================================================
-  WARNING: possible circular locking dependency detected
-  6.1.0-next-20221213 #122 Not tainted
-  ------------------------------------------------------
-  systemd-udevd/264 is trying to acquire lock:
-  ffff741e444a0920 (&chip->lock){+.+.}-{3:3}, at: qpnp_tm_get_temp+0xb4/0x1b0 [qcom_spmi_temp_alarm]
+this_cpu_ptr()
 
-  but task is already holding lock:
-  ffff741e44341618 (&tz->lock){+.+.}-{3:3}, at: thermal_zone_device_update+0x2c/0x70
+> +		if (!delayed_work_pending(dw)) {
+> +			unsigned long delay;
+> +
+> +			delay = round_jiffies_relative(sysctl_stat_interval);
+> +			queue_delayed_work_on(cpu, mm_percpu_wq, dw, delay);
+> +		}
+> +	}
+>  	this_cpu_write(vmstat_dirty, true);
+>  }
+>  
+> @@ -1973,21 +1986,27 @@ static void vmstat_update(struct work_st
+>   * until the diffs stay at zero. The function is used by NOHZ and can only be
+>   * invoked when tick processing is not active.
+>   */
+> -void quiet_vmstat(void)
+> +void quiet_vmstat(bool user)
+>  {
+> +	struct delayed_work *dw;
+> +
+>  	if (system_state != SYSTEM_RUNNING)
+>  		return;
+>  
+>  	if (!is_vmstat_dirty())
+>  		return;
+>  
+> +	refresh_cpu_vm_stats(false);
+> +
+> +	if (!user)
+> +		return;
+>  	/*
+> -	 * Just refresh counters and do not care about the pending delayed
+> -	 * vmstat_update. It doesn't fire that often to matter and canceling
+> -	 * it would be too expensive from this path.
+> -	 * vmstat_shepherd will take care about that for us.
+> +	 * If the tick is stopped, cancel any delayed work to avoid
+> +	 * interruptions to this CPU in the future.
+>  	 */
+> -	refresh_cpu_vm_stats(false);
+> +	dw = &per_cpu(vmstat_work, smp_processor_id());
 
-  which lock already depends on the new lock.
+this_cpu_ptr()
 
-Fixes: 78c3e2429be8 ("thermal/drivers/qcom: Use generic thermal_zone_get_trip() function")
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Thanks.
 
-diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-index bfaec74f13b2..e2429676d0d2 100644
---- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-+++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-@@ -348,7 +348,12 @@ static int qpnp_tm_init(struct qpnp_tm_chip *chip)
- 	if (stage)
- 		chip->temp = qpnp_tm_decode_temp(chip, stage);
- 
-+	mutex_unlock(&chip->lock);
-+
- 	crit_temp = qpnp_tm_get_critical_trip_temp(chip);
-+
-+	mutex_lock(&chip->lock);
-+
- 	ret = qpnp_tm_update_critical_trip_temp(chip, crit_temp);
- 	if (ret < 0)
- 		goto out;
--- 
-2.37.4
-
+> +	if (delayed_work_pending(dw))
+> +		cancel_delayed_work(dw);
+>  }
+>  
+>  /*
