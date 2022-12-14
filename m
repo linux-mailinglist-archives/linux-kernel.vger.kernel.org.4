@@ -2,143 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B4164C5A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:13:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D7A64C59A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237875AbiLNJLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 04:11:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
+        id S237571AbiLNJLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 04:11:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237872AbiLNJLd (ORCPT
+        with ESMTP id S229572AbiLNJLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 04:11:33 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C161E701
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:11:32 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id bg10so10740098wmb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:11:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZeychOEoq7Zx2fAKmiJJqkfIh0+9mZMjXMwWbS//l/Q=;
-        b=OXFVZCylX/4bT+jsLBPms7oXz7QPabkjEgubvKA5voELoHfDi00peMTghNLCzd8eaq
-         nP2ibgokYJBj2KWiBZjEhKQ+zdmJm+v6RlifmQdsO8suBtWGnxKbf4CZsTyvWffB4Xzk
-         CP3ibLqZDT/ds1dpodM9ahZo2PdJUUORzc2JLPe003BODyIMy6Euf0GauL3sERFOo6Tk
-         ocbUZXufRgpRSvXRXJdlr5yjxhhP7goz0joVE3Ti48T/ApcY1JbsyFQe1viina/MkBUX
-         uu6xSSyMCQBH1l6fEHWCCwz0qhfylUeTZSHlVGhgvKIfvrRA8OZeVMdqZHiZgovSOzJV
-         hByA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZeychOEoq7Zx2fAKmiJJqkfIh0+9mZMjXMwWbS//l/Q=;
-        b=5oQZGaV3CbNB6/Byf9fCWpoBpegMD35Asl2vT2Qmmw7tiJ3+6t4z2ihYWevIOvq5f0
-         8es5lWZLB+sELPUVHKZrlnZQ6IGhB6fv1lHCqgHU4izhI9yC37UFRnsq72SZTx9G0h8Q
-         eC9hmgfgVXZwgIzQEWCL/B7gp8jcjV1rd4y41gZAte2WNbIlqgoFv+iZq7JeL4PCF9jh
-         zb+uRuLSG9jB3OYjJLd+I++9/77vQ7tsRpiOfiAYCTIHumhiQFkhIYYBbQOCvMpDih8e
-         ompL44piLjjvs6m6UsPN3pEwBfg0UKgjBGHAFJlkJSHv2xTIjXHFcc1nqkFzdqivjFPP
-         5LqQ==
-X-Gm-Message-State: ANoB5pkuadIMySekxA7DZn2z3kJPXL4rAzBRFiPw/ZIYaO2oC4Omd2ZI
-        r3bWMuhCzt6W/2GnqZJdD1BfI53Tsmln7MikuyOwHA==
-X-Google-Smtp-Source: AA0mqf7lFwCf3f1u4ql2QYub40j2Jn+xpyaWCbFrBIxrz+GPM5OrSo5cjZ+bxnr0nuG4jOrNfiMuxCV5PCxKqjmsLpU=
-X-Received: by 2002:a05:600c:3b91:b0:3d0:3d33:a629 with SMTP id
- n17-20020a05600c3b9100b003d03d33a629mr73994wms.126.1671009090250; Wed, 14 Dec
- 2022 01:11:30 -0800 (PST)
+        Wed, 14 Dec 2022 04:11:12 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6AD1DD
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:11:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=J9zy1I1jvlVgO4gzWDG/fOFo9/RhHbRmxr5v73Xv7gw=; b=oMRZQuRTOV1r55GY3GDiNpot78
+        YV423zDDRBUOUvXbu/ES3QOoWo+D7G/ZEmV4z5HkDVM2fzgocVhNEEkRmh6MHxwvhfd56nfuqV0yQ
+        hgBx+t/2NhPLzUqMVmF/+szA7pZz6ERJ9BoL6XxrFGnqIw/OElmzUVLW11ReeeuUwFFr/nBS/AXS0
+        L83UKKPFejjhH0zCqd2bn7aiMBblLX1i79qpcKsKJivAywur0kmbfObV46a72fOlRHxExY0AcAf+Z
+        gEzf87rH77AOPvVt+pJPK4aBr0lhpjB2ct4vUKqX2lIWWbbK/rKKUp5/JtCdElvlTVCZ9PR/qF7d1
+        kP5qVSgw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p5NnD-00D4Ly-6P; Wed, 14 Dec 2022 09:11:11 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8705530036B;
+        Wed, 14 Dec 2022 10:11:01 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2AA54202344B3; Wed, 14 Dec 2022 10:11:01 +0100 (CET)
+Date:   Wed, 14 Dec 2022 10:11:01 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] sched: Make const-safe
+Message-ID: <Y5mTJVi2PBix+Gy6@hirez.programming.kicks-ass.net>
+References: <20221212144946.2657785-1-willy@infradead.org>
 MIME-Version: 1.0
-References: <20221124074725.74325-1-haozhe.chang@mediatek.com>
- <CAMZdPi9JOQpmhQepBMeG5jzncP8t5mp68O2nfSOFUUZ9e_fDsQ@mail.gmail.com> <54c37c8f8eb7f35e4bb983b9104bd232758bae7b.camel@mediatek.com>
-In-Reply-To: <54c37c8f8eb7f35e4bb983b9104bd232758bae7b.camel@mediatek.com>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Wed, 14 Dec 2022 10:10:54 +0100
-Message-ID: <CAMZdPi8NOfMn99yy043oYGrO1=UrnhhRvpZq-zWe4BfiU_08NA@mail.gmail.com>
-Subject: Re: [PATCH v5] wwan: core: Support slicing in port TX flow of WWAN subsystem
-To:     =?UTF-8?B?SGFvemhlIENoYW5nICjluLjmtanlk7Ip?= 
-        <Haozhe.Chang@mediatek.com>
-Cc:     "stephan@gerhold.net" <stephan@gerhold.net>,
-        "oneukum@suse.com" <oneukum@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linuxwwan@intel.com" <linuxwwan@intel.com>,
-        "m.chetan.kumar@intel.com" <m.chetan.kumar@intel.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        =?UTF-8?B?SHVhIFlhbmcgKOadqOWNjik=?= <Hua.Yang@mediatek.com>,
-        "chiranjeevi.rapolu@linux.intel.com" 
-        <chiranjeevi.rapolu@linux.intel.com>,
-        =?UTF-8?B?SGFpanVuIExpdSAo5YiY5rW35YabKQ==?= 
-        <haijun.liu@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "ryazanov.s.a@gmail.com" <ryazanov.s.a@gmail.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        =?UTF-8?B?WGlheXUgWmhhbmcgKOW8oOWkj+Wuhyk=?= 
-        <Xiayu.Zhang@mediatek.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "chandrashekar.devegowda@intel.com" 
-        <chandrashekar.devegowda@intel.com>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "shangxiaojing@huawei.com" <shangxiaojing@huawei.com>,
-        =?UTF-8?B?TGFtYmVydCBXYW5nICjnjovkvJ8p?= 
-        <Lambert.Wang@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "ricardo.martinez@linux.intel.com" <ricardo.martinez@linux.intel.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221212144946.2657785-1-willy@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Thu, 2022-12-01 at 10:56 +0100, Loic Poulain wrote:
-> > On Thu, 24 Nov 2022 at 08:47, <haozhe.chang@mediatek.com> wrote:
-> > >
-> > > From: haozhe chang <haozhe.chang@mediatek.com>
-> > >
-> > > wwan_port_fops_write inputs the SKB parameter to the TX callback of
-> > > the WWAN device driver. However, the WWAN device (e.g., t7xx) may
-> > > have an MTU less than the size of SKB, causing the TX buffer to be
-> > > sliced and copied once more in the WWAN device driver.
-> > >
-> > > This patch implements the slicing in the WWAN subsystem and gives
-> > > the WWAN devices driver the option to slice(by frag_len) or not. By
-> > > doing so, the additional memory copy is reduced.
-> > >
-> > > Meanwhile, this patch gives WWAN devices driver the option to
-> > > reserve
-> > > headroom in fragments for the device-specific metadata.
-> > >
-> > > Signed-off-by: haozhe chang <haozhe.chang@mediatek.com>
-> >
-> > Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
->
-> I have submitted patch V6 to add a reviewer, do you have any other
-> suggestions about the patch?
+On Mon, Dec 12, 2022 at 02:49:46PM +0000, Matthew Wilcox (Oracle) wrote:
+> With a modified container_of() that preserves constness, the compiler
+> finds some pointers which should have been marked as const.  task_of()
+> also needs to become const-preserving for the !FAIR_GROUP_SCHED case so
+> that cfs_rq_of() can take a const argument.  No change to generated code.
 
-You normally don't need to resubmit a version just for adding review
-tags, as it is well tracked. You can see status of netdev changes from
-patchwork:
-https://patchwork.kernel.org/project/netdevbpf/list/?series=&submitter=207580&state=*&q=&archive=both&delegate=
+More const more better I suppose.. Thanks!
 
-Regarding this change you should however resubmit for the net-next
-tree with appropriate subject since it is not a bug fix:
-https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html?highlight=netdev#how-do-i-indicate-which-tree-net-vs-net-next-my-patch-should-be-in
-
-Then it should be picked by netdev maintainer(s). But note that we're
-currently in the Linux 6.2 merge window, so merging for net-next can
-be delayed until the mainline merge window is closed (and net-next
-open):
-https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html?highlight=netdev#how-often-do-changes-from-these-trees-make-it-to-the-mainline-linus-tree
-
-Regards,
-Loic
+Happen to have a sha for the container_of() commit handy?
