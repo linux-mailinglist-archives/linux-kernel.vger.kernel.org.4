@@ -2,227 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02DE664E01B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9C864E01C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:58:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiLOR6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 12:58:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
+        id S229909AbiLOR6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 12:58:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiLOR61 (ORCPT
+        with ESMTP id S229691AbiLOR63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 12:58:27 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1423322518
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 09:58:26 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id 130so114036pfu.8
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 09:58:26 -0800 (PST)
+        Thu, 15 Dec 2022 12:58:29 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095F6389EE
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 09:58:28 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id c1so16872539lfi.7
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 09:58:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=joelfernandes.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GrLrz3poxKOCnQD8TmgmuF/CjpfAGceNT3pwtG5IIEQ=;
-        b=PET1DCooVL0kLbhn/8bSBAdFnwVrPTsoQd5R+haAv60Ba3BgXQC9F5wPJCmOuDo1/y
-         HqQroLJDPOU+aKkqy9uO5TR3NfAGuvRw9Am/ZVIh+SjA5mdcPeWfQnNkTKzu938s0glG
-         2pp6g0J2FVanwrsAmGw3U6h4P0y8YiHRprWgw/Oy8W0XUXUXRaWD9Wxp4PsR7D+TK6C2
-         XnFHsyfK0Unw8U9Qgt180/gCVnru5B3v0WjtsK1JFZ6Pkp5lefNHQMkV4BquSFTfyyJx
-         zKILeZPe/7Ypfucspvi4rh99RzTf8HCRm4SpoR0EnSV3J2VN1y/o1YKKYmdvaigIpA2s
-         ehRQ==
+        bh=38UxcYPj+ZJxWmmAMOiK5v5tLaOBZZGjUg3oW8gg23w=;
+        b=USelrgDSqDkdFFiYCI3jh0GYMDbbbVG7gDylGDCH8RxHaFKZ69JGRkY8gsn3xE/lr1
+         VbgeLCPuc7vORPvoBpQDUL56lNvXCZaLSUOuCT9K1zvA6VRZoOYtD9uUQakmcEO/UuEH
+         zqKevyFhEy1Sq/KIVk9b4ty9ubi2JpHluF87k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GrLrz3poxKOCnQD8TmgmuF/CjpfAGceNT3pwtG5IIEQ=;
-        b=sqMS4VY7Fk7i87Ee8Z0I6QPuVbSUoD7cCyFheEBiFBiR7Xo7BlG0ru+XnRuLJ0QnM9
-         4/kVCkgMSxXsCId4xqusZ8ZjG96GfsoFBe20DuReZADch1NcsQpybo38ObHc0wkP4sHR
-         deP8f+wtnHvCl+o6WVHcucRVHTmk+glPsQPd1RjYaogk/oJJbcxr+8Db5omHhKtt15Rm
-         +SQTG+l60CT2nImC1hlBu6XgrNLBGvMJe5cIyBoHAwr8hMOIL+pqvmi9wj1fZ8zhXU2u
-         33LtTDsMK2RfDRyxqHviCL+VoTML0VsSQqQgBKI7lCF3ducmF+E1OlpOmxdY69hd3FV5
-         lBSQ==
-X-Gm-Message-State: ANoB5pniRkr5Ksl9S0OXonO/JknlTRFGPXiFQpEy3FxG7r6xF739Wsiu
-        l6Cmr9Sdh+HeUQdwJkziAodFooYpfoff+JTv6r7K9g==
-X-Google-Smtp-Source: AA0mqf6ZFym1byapTv5pA4J3s1CK6k09g1l0JvSBqYhJKUAc/XNV4jJYWpEV7NmvhQZFGV45sgwG7cFtxkoZAFrpGMA=
-X-Received: by 2002:a63:1c22:0:b0:478:c543:89d3 with SMTP id
- c34-20020a631c22000000b00478c54389d3mr15665867pgc.184.1671127105299; Thu, 15
- Dec 2022 09:58:25 -0800 (PST)
+        bh=38UxcYPj+ZJxWmmAMOiK5v5tLaOBZZGjUg3oW8gg23w=;
+        b=H75lpxVMXrt+Jg60erlxYPXXfEIX+eRHveaJtJxofGsDHisCdKAST+bxp0Z4e/NjOS
+         oFUAlvuJggLOdFoOP+2w3z+Lwc8VK0gz1v1S1zekapw6XWPeZHyMdStdSQMXBHJm4RQM
+         aZNCIfGxbSjVxtL0ug4iZYfg/9vwI5yMD1663bNTO9m/mb/Rx7E1+cQv+qKeg7zFNuSf
+         O1iSmsj/4HzmA3JguI7PljvB0x3qiQaLzNXy5ezxR6AqwDbK2gAXR2eiWfZ7G26IxSUw
+         dN0y7G5P/NFqGup4U//d7qn5Kn7nPyN+3B8t3i8+bLgPwagB71WdyNbesUUH3o6w2gZE
+         Te6g==
+X-Gm-Message-State: ANoB5pm/wK2pyFwBc9wdJixJGI/a29ocRorSUuStsj1cJfJbpC46JZLZ
+        Ew0bBWe1ulZhLOSkuEgQKgPWX/1HR8UFeH5c5KbwEA==
+X-Google-Smtp-Source: AA0mqf4sGvzUAZCYd6bjKQCt55zCHjMZISFnT6+9/M3mXfkjeqJUGbluZiuG/0KE8X0ROTr6HOmAvWmwwRi1wqq8Ux0=
+X-Received: by 2002:a05:6512:224c:b0:4b5:ad89:8174 with SMTP id
+ i12-20020a056512224c00b004b5ad898174mr2263391lfu.84.1671127106373; Thu, 15
+ Dec 2022 09:58:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20221202223533.1785418-1-almasrymina@google.com>
- <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz> <CAHS8izM-XdLgFrQ1k13X-4YrK=JGayRXV_G3c3Qh4NLKP7cH_g@mail.gmail.com>
- <87k02volwe.fsf@yhuang6-desk2.ccr.corp.intel.com> <Y5h+gHBneexFQcR3@cmpxchg.org>
- <Y5iGJ/9PMmSCwqLj@dhcp22.suse.cz> <CAHS8izOuT_-p-N1xPApi+BPJQ+P--2YVSUeiWBROGvGinN0vcg@mail.gmail.com>
- <Y5mkJL6I5Zlc1k97@dhcp22.suse.cz>
-In-Reply-To: <Y5mkJL6I5Zlc1k97@dhcp22.suse.cz>
-From:   Wei Xu <weixugc@google.com>
-Date:   Thu, 15 Dec 2022 09:58:12 -0800
-Message-ID: <CAAPL-u_KFTScyd1hxDGb-nHf6hW5_pCsh5a0NDZCr5v5AGq88A@mail.gmail.com>
-Subject: Re: [PATCH v3] mm: Add nodes= arg to memory.reclaim
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Huang, Ying" <ying.huang@intel.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, fvdl@google.com,
-        bagasdotme@gmail.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
+References: <20221214191355.GA2596199@paulmck-ThinkPad-P17-Gen-1>
+ <20221215165452.GA1957735@lothringen> <20221215170834.GH4001@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YTSW9kr3DsJm6hTQ0FfwVbVjzDa8=7H29+ysD10ZCbnHA@mail.gmail.com>
+In-Reply-To: <CAEXW_YTSW9kr3DsJm6hTQ0FfwVbVjzDa8=7H29+ysD10ZCbnHA@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 15 Dec 2022 17:58:14 +0000
+Message-ID: <CAEXW_YQEZSdny005w314zNQMmS7MHMjp-WwAvV6k9hDhhzQmdA@mail.gmail.com>
+Subject: Re: [PATCH RFC] srcu: Yet more detail for srcu_readers_active_idx_check()
+ comments
+To:     paulmck@kernel.org
+Cc:     Frederic Weisbecker <frederic@kernel.org>, boqun.feng@gmail.com,
+        neeraj.iitr10@gmail.com, urezki@gmail.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 2:23 AM Michal Hocko <mhocko@suse.com> wrote:
+On Thu, Dec 15, 2022 at 5:48 PM Joel Fernandes <joel@joelfernandes.org> wrote:
 >
-> On Tue 13-12-22 11:29:45, Mina Almasry wrote:
-> > On Tue, Dec 13, 2022 at 6:03 AM Michal Hocko <mhocko@suse.com> wrote:
+> On Thu, Dec 15, 2022 at 5:08 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> > > Scenario for the reader to increment the old idx once:
 > > >
-> > > On Tue 13-12-22 14:30:40, Johannes Weiner wrote:
-> > > > On Tue, Dec 13, 2022 at 02:30:57PM +0800, Huang, Ying wrote:
-> > > [...]
-> > > > > After these discussion, I think the solution maybe use different
-> > > > > interfaces for "proactive demote" and "proactive reclaim".  That is,
-> > > > > reconsider "memory.demote".  In this way, we will always uncharge the
-> > > > > cgroup for "memory.reclaim".  This avoid the possible confusion there.
-> > > > > And, because demotion is considered aging, we don't need to disable
-> > > > > demotion for "memory.reclaim", just don't count it.
-> > > >
-> > > > Hm, so in summary:
-> > > >
-> > > > 1) memory.reclaim would demote and reclaim like today, but it would
-> > > >    change to only count reclaimed pages against the goal.
-> > > >
-> > > > 2) memory.demote would only demote.
-> > > >
-> >
-> > If the above 2 points are agreeable then yes, this sounds good to me
-> > and does address our use case.
-> >
-> > > >    a) What if the demotion targets are full? Would it reclaim or fail?
-> > > >
-> >
-> > Wei will chime in if he disagrees, but I think we _require_ that it
-> > fails, not falls back to reclaim. The interface is asking for
-> > demotion, and is called memory.demote. For such an interface to fall
-> > back to reclaim would be very confusing to userspace and may trigger
-> > reclaim on a high priority job that we want to shield from proactive
-> > reclaim.
->
-> But what should happen if the immediate demotion target is full but
-> lower tiers are still usable. Should the first one demote before
-> allowing to demote from the top tier?
-
-In that case, the demotion will fall back to the lower tiers.  See
-node_get_allowed_targets() and establish_demotion_targets()..
-
-> > > > 3) Would memory.reclaim and memory.demote still need nodemasks?
-> >
-> > memory.demote will need a nodemask, for sure. Today the nodemask would
-> > be useful if there is a specific node in the top tier that is
-> > overloaded and we want to reduce the pressure by demoting. In the
-> > future there will be N tiers and the nodemask says which tier to
-> > demote from.
->
-> OK, so what is the exact semantic of the node mask. Does it control
-> where to demote from or to or both?
-
-The nodemask argument proposed here is to control where to demote
-from.   We can follow the existing kernel demotion order to select
-where to demote to.  If the need to control the demotion destination
-arises, another argument can be added.
-
-> > I don't think memory.reclaim would need a nodemask anymore? At least I
-> > no longer see the use for it for us.
-> >
-> > > >    Would
-> > > >    they return -EINVAL if a) memory.reclaim gets passed only toptier
-> > > >    nodes or b) memory.demote gets passed any lasttier nodes?
+> > > _ Assume ssp->srcu_idx is initially 0.
+> > > _ The READER reads idx that is 0
+> > > _ The updater runs and flips the idx that is now 1
+> > > _ The reader resumes with 0 as an index but on the next srcu_read_lock()
+> > >   it will see the new idx which is 1
 > > >
+> > > What could be the scenario for it to increment the old idx twice?
 > >
-> > Honestly it would be great if memory.reclaim can force reclaim from a
-> > top tier nodes. It breaks the aginig pipeline, yes, but if the user is
-> > specifically asking for that because they decided in their usecase
-> > it's a good idea then the kernel should comply IMO. Not a strict
-> > requirement for us. Wei will chime in if he disagrees.
+> > Unless I am missing something, the reader must reference the
+> > srcu_unlock_count[old_idx] and then do smp_mb() before it will be
+> > absolutely guaranteed of seeing the new value of ->srcu_idx.
 >
-> That would require a nodemask to say which nodes to reclaim, no? The
-> default behavior should be in line with what standard memory reclaim
-> does. If the demotion is a part of that process so should be
-> memory.reclaim part of it. If we want to have a finer control then a
-> nodemask is really a must and then the nodemaks should constrain both
-> agining and reclaim.
-
-Given that the original meaning of memory.reclaim is to free up
-memory, I agree that when a nodemask is provided, the kernel should be
-allowed to do both aging/demotion and reclaim.  Whether to allow
-reclaim from top-tier nodes is a kernel implementation choice.  The
-userspace should not depend on that.
-
-Also, because the expectation of memory.reclaim is to free up the
-specified amount of bytes, I think if a page is demoted, but both its
-source and target nodes are still in the given nodemask, such a
-demoted page should not be counted towards the requested bytes of
-memory.reclaim. In the case that no nodemask is given (i.e. to free up
-memory from all nodes), the demoted pages should never be counted in
-the return value of try_to_free_mem_cgroup_pages().
-
-Meanwhile, I'd argue that even though we want to unify demotion and
-reclaim, there are still significant differences between them.
-Demotion moves pages between two memory tiers, while reclaim can move
-pages to a much slower tier, e.g. disk-based files or swap.  Both the
-page movement latencies and the reaccess latencies can be
-significantly different for demotion/reclaim.  So it is useful for the
-userspace to be able to request demotion without reclaim.  A separate
-interface, e.g. memory.demote, seems like a good choice for that.
-
-> > memory.demote returning -EINVAL for lasttier nodes makes sense to me.
-> >
-> > > I would also add
-> > > 4) Do we want to allow to control the demotion path (e.g. which node to
-> > >    demote from and to) and how to achieve that?
-> >
-> > We care deeply about specifying which node to demote _from_. That
-> > would be some node that is approaching pressure and we're looking for
-> > proactive saving from. So far I haven't seen any reason to control
-> > which nodes to demote _to_. The kernel deciding that based on the
-> > aging pipeline and the node distances sounds good to me. Obviously
-> > someone else may find that useful.
+> I think both of you are right depending on how the flip raced with the
+> first reader's unlock in that specific task.
 >
-> Please keep in mind that the interface should be really prepared for
-> future extensions so try to abstract from your immediate usecases.
->
-> > > 5) Is the demotion api restricted to multi-tier systems or any numa
-> > >    configuration allowed as well?
-> > >
-> >
-> > demotion will of course not work on single tiered systems. The
-> > interface may return some failure on such systems or not be available
-> > at all.
->
-> Is there any strong reason for that? We do not have any interface to
-> control NUMA balancing from userspace. Why cannot we use the interface
-> for that purpose?
+> If the first read section's srcu_read_unlock() and its corresponding
+> smp_mb()  happened before the flip, then the increment of old idx
+> would happen only once. The next srcu_read_lock() will read the new
+> index. If the srcu_read_unlock() and it's corresponding smp_mb()
+> happened after the flip, the old_idx will be sampled again and can be
+> incremented twice. So it depends on how the flip races with
+> srcu_read_unlock().
 
-A demotion interface such as memory.demote will trigger the demotion
-code path in the kernel, which depends on multiple memory tiers.
+I am sorry this is inverted, but my statement's gist stands I believe:
 
-I think what you are getting is a more general page migration
-interface for memcg, which will need both source and target nodes as
-arguments. I think this can be a great idea.  It should be able to
-support our demotion use cases as well.
+1. Flip+smp_mb() happened before unlock's smp_mb() -- reader will not
+increment old_idx the second time.
 
-> --
-> Michal Hocko
-> SUSE Labs
+2. unlock()'s smp_mb() happened before Flip+smp_mb() , now the reader
+has no new smp_mb() that happens AFTER the flip happened. So it can
+totally sample the old idx again -- that particular reader will
+increment twice, but the next time, it will see the flipped one.
+
+Did I get that right? Thanks.
