@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D3A64D856
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C59B964D858
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiLOJN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 04:13:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
+        id S229852AbiLOJOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 04:14:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiLOJNz (ORCPT
+        with ESMTP id S229847AbiLOJOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 04:13:55 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E232E9F8
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:13:53 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id n3so6259955pfq.10
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:13:53 -0800 (PST)
+        Thu, 15 Dec 2022 04:14:06 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDD44732C;
+        Thu, 15 Dec 2022 01:14:03 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id l10so6189586plb.8;
+        Thu, 15 Dec 2022 01:14:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CV/yxiAD8I/dVWILLoVEzHnUUSycLRVJuKvOLcZE2pw=;
-        b=beg44w5fksmsGwVqCXhL3LWHUgBDFXHHp8S9HKehkPtfZzXoWY6aMeXMFm0lQJMLyA
-         iSRX8qOUXHVb1hDYG+6/ZTrsnNPfK5rHwsvAjlkZlXpZNmGN8e+wRJ9/tw0BuIiz0UWe
-         GCVQXNVjclrh+F0mikOVP1I1wNd+GOkhAUigtOeVzSJrm2tn5rDmotcufYbKHYljmVzp
-         o+Yg0K1pHVFOT5SCphcbV3PcwKRUFZuNf6H8C4GBN8wNsZCXdcObihEtv2hHdf9G+8X4
-         UM3UPUaAy1BEf1W0Kf4UxfIaIR0Qbfc2mpoO3Ww9qQ4WJleODSsnox5F8iuMwNDY41/Z
-         FvIw==
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZfLzsL7VDero6YWwKcqTb9ieJRXrPfx+gmoIve9/GWg=;
+        b=Nc0l7TBhxhOs1I5DfhXoyqlSlNtIsM2erNwOEUEnj/kKTKaaxqivDkCIJBMFmV6J15
+         JF42SXlUVpkaGSb7llFjitND5nGdaFKBI6SkmES1aOlCoGyuKGNScjaekdk6GUX81WV2
+         tuFzTWZDWlXLRvo+/nMFOJN+PoMCEKlomOb39Xc71Ah3RBZgHWPM8J7YIuOgINdi21Qk
+         RgQ+fW+v+yiiXgnqmBSaWh1pucLR5x1Q9VlUGZlHf4gyvdpEszn5+QM08B/W9GmQ/c4F
+         tUA3ZCr8403Z7U6k7Cm7OwRqNArTaA+n+vc6HOkByFdvEqe8/rViL/XrYA47hEKwdLRo
+         mk1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CV/yxiAD8I/dVWILLoVEzHnUUSycLRVJuKvOLcZE2pw=;
-        b=JBoKZCbx5Yye/73jfCWf3IZdTELkqDfcG8ySFqyjqasDJ/CL/Oxu5B044nXeujr+Yl
-         lMp5h8teft2NPq6//kpnHrRePODSFpGy7Rv19hnP5d+4QlJTqKxoS825lNNVlDYRo8rX
-         Jsut4VU7/Wg/eQO0DXcp9pMH1oV5xm7le9B8twdCDhNz8qG3n2Ekn4b1xfertH/rs8g5
-         0y5GBQvKFwZNi/MgckJrVmOy2qxZvLX9SlskUwTtgjq0zf+Y0hnONOTqt2Uqt08R0SaB
-         duRGLFcjkvHjFTaN9Ox76wc5bwzrEfPjtM9Gcrz87lOop6Jl9QdWOiLdRcfW8cpnF9ut
-         wmTA==
-X-Gm-Message-State: ANoB5pn8DOD85fQtMefByWq6PYPLXfFM9t54ep1iJQ8xuVYwXbYxwEg7
-        +M3iRgXH6sZIlMJB3qRX80M=
-X-Google-Smtp-Source: AA0mqf6U6GYMHr0h3xlUOa6iSaDAaBflsbEiXohceX6teh2LBEcdggzqs8d2jcWXFBhXwhpi3IcjEA==
-X-Received: by 2002:a05:6a00:2913:b0:579:6402:64ce with SMTP id cg19-20020a056a00291300b00579640264cemr13941944pfb.8.1671095633001;
-        Thu, 15 Dec 2022 01:13:53 -0800 (PST)
-Received: from ubuntu.localdomain ([60.221.148.50])
-        by smtp.gmail.com with ESMTPSA id p4-20020aa79e84000000b00576259507c0sm1222295pfq.100.2022.12.15.01.13.50
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZfLzsL7VDero6YWwKcqTb9ieJRXrPfx+gmoIve9/GWg=;
+        b=XxeMhm4ZgBOPBsauygZcpXQSQle6czDqFvI/FH+DKWyephuSbJq/xVbG6pT6bJ+FNW
+         qUWweqsjq3A744fVBb0F5asFrAkq8zv2tZE+tqTSzNY7T03Y++M+Dnh1lgUx4Dcsx0Ff
+         CaxoMwpfTvlj6vto4e7x5HNIcOJvviuP6yh35mtXbEy8zLmxLucS1OxySc2j9ZErUa5z
+         DlNtGhldB2o76o7OcQnbArn7Ze6/tbLd+tCLl7aRVTnaeroyRVsBW2iV7RSOqSYuFcdv
+         LNHIcnwzQTkcQB+FzDgbqn9Y5vO+LwiwQ5tVrgmv3+EQiFV2Nh+ILFTZXOxb9ZC/lcyj
+         a1Hw==
+X-Gm-Message-State: ANoB5pmtJ5kicaq+E3Q/onXKCfd6Kv0LN+dAqNHsBt/yj6rKlboBo8kd
+        mq9QbWwmMxQOF85e28nSVA8=
+X-Google-Smtp-Source: AA0mqf4ZNsrUVxvC5YowLGVU7xgRW1as+5Ggcf0AZq8gW61WK2Qb2nAuhQuFWgYufN/ITiCJkF4vng==
+X-Received: by 2002:a17:902:d195:b0:189:760d:c5f1 with SMTP id m21-20020a170902d19500b00189760dc5f1mr23640282plb.7.1671095642648;
+        Thu, 15 Dec 2022 01:14:02 -0800 (PST)
+Received: from dell-cros.hitronhub.home ([119.77.166.223])
+        by smtp.gmail.com with ESMTPSA id e4-20020a170902ef4400b0017f36638010sm3228297plx.276.2022.12.15.01.14.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 01:13:52 -0800 (PST)
-From:   Donglin Peng <dolinux.peng@gmail.com>
-To:     rostedt@goodmis.org
-Cc:     mhiramat@kernel.org, xiehuan09@gmail.com,
-        linux-kernel@vger.kernel.org,
-        Donglin Peng <dolinux.peng@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v4] tracing/probe: add a char type to show the character value of traced arguments
-Date:   Thu, 15 Dec 2022 01:13:46 -0800
-Message-Id: <20221215091346.33710-1-dolinux.peng@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Thu, 15 Dec 2022 01:14:02 -0800 (PST)
+From:   Ron Lee <ron.lee.intel@gmail.com>
+X-Google-Original-From: Ron Lee <ron.lee@intel.com>
+To:     bhelgaas@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        lmajczak@google.com, rajatja@google.com,
+        Ron Lee <ron.lee@intel.com>
+Subject: [PATCH v2] PCI: Fix up L1SS capability for Intel Apollolake PCIe bridge
+Date:   Thu, 15 Dec 2022 17:13:57 +0800
+Message-Id: <20221215091357.8738-1-ron.lee@intel.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -72,107 +68,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are scenes that we want to show the character value of traced
-arguments other than a decimal or hexadecimal or string value for debug
-convinience. Add a new type named 'char' to do it.
+On Google Coral and Reef family chromebooks, the PCIe bridge lost its
+L1 PM Substates capability after resumed from D3cold, and identify that
+the pointer to the this capability and capapability header are missing
+from the capability list.
 
-For example:
+....
+Capabilities: [150 v0] Null
+Capabilities: [200 v1] L1 PM Substates
+        L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+ ...
+                  PortCommonModeRestoreTime=40us PortTPowerOnTime=10us
+        L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+
+                   T_CommonMode=40us LTR1.2_Threshold=98304ns
+        L1SubCtl2: T_PwrOn=60us
+...
 
-The to be traced function is 'void demo_func(char type, char *name);', we
-can add a kprobe event as follows to show argument values as we want:
+This patch fix up the header and the pointer to the L1SS capability
+after resuming from D3Cold.
 
-echo 'p:myprobe demo_func $arg1:char +0($arg2):char[2]' > kprobe_events
-
-we will get the following trace log:
-
-... 95.451350: myprobe: (demo_func+0x0/0x29) arg1=A arg2={b,p}
-
-Signed-off-by: Donglin Peng <dolinux.peng@gmail.com>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Ron Lee <ron.lee@intel.com>
 Reported-by: kernel test robot <lkp@intel.com>
 ---
-Changes in v4:
- - update the example in the commit log
+ drivers/pci/quirks.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-Changes in v3:
- - update readme_msg
-
-Changes in v2:
- - fix build warnings reported by kernel test robot
- - modify commit log
----
- Documentation/trace/kprobetrace.rst | 3 ++-
- kernel/trace/trace.c                | 2 +-
- kernel/trace/trace_probe.c          | 2 ++
- kernel/trace/trace_probe.h          | 1 +
- 4 files changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
-index 4274cc6a2f94..007972a3c5c4 100644
---- a/Documentation/trace/kprobetrace.rst
-+++ b/Documentation/trace/kprobetrace.rst
-@@ -58,7 +58,7 @@ Synopsis of kprobe_events
-   NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
-   FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
- 		  (u8/u16/u32/u64/s8/s16/s32/s64), hexadecimal types
--		  (x8/x16/x32/x64), "string", "ustring" and bitfield
-+		  (x8/x16/x32/x64), "char", "string", "ustring" and bitfield
- 		  are supported.
- 
-   (\*1) only for the probe on function entry (offs == 0).
-@@ -80,6 +80,7 @@ E.g. 'x16[4]' means an array of x16 (2bytes hex) with 4 elements.
- Note that the array can be applied to memory type fetchargs, you can not
- apply it to registers/stack-entries etc. (for example, '$stack1:x8[8]' is
- wrong, but '+8($stack):x8[8]' is OK.)
-+Char type can be used to show the character value of traced arguments.
- String type is a special type, which fetches a "null-terminated" string from
- kernel space. This means it will fail and store NULL if the string container
- has been paged out. "ustring" type is an alternative of string for user-space.
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 5cfc95a52bc3..a64e206f94e6 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -5615,7 +5615,7 @@ static const char readme_msg[] =
- 	"\t           $stack<index>, $stack, $retval, $comm,\n"
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 285acc4aaccc..fc959be17a9d 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -5992,3 +5992,20 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2d, dpc_log_size);
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2f, dpc_log_size);
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a31, dpc_log_size);
  #endif
- 	"\t           +|-[u]<offset>(<fetcharg>), \\imm-value, \\\"imm-string\"\n"
--	"\t     type: s8/16/32/64, u8/16/32/64, x8/16/32/64, string, symbol,\n"
-+	"\t     type: s8/16/32/64, u8/16/32/64, x8/16/32/64, char, string, symbol,\n"
- 	"\t           b<bit-width>@<bit-offset>/<container-size>, ustring,\n"
- 	"\t           <type>\\[<array-size>\\]\n"
- #ifdef CONFIG_HIST_TRIGGERS
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index 36dff277de46..a4abf7f6c295 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -50,6 +50,7 @@ DEFINE_BASIC_PRINT_TYPE_FUNC(x8,  u8,  "0x%x")
- DEFINE_BASIC_PRINT_TYPE_FUNC(x16, u16, "0x%x")
- DEFINE_BASIC_PRINT_TYPE_FUNC(x32, u32, "0x%x")
- DEFINE_BASIC_PRINT_TYPE_FUNC(x64, u64, "0x%Lx")
-+DEFINE_BASIC_PRINT_TYPE_FUNC(char, u8, "%c")
- 
- int PRINT_TYPE_FUNC_NAME(symbol)(struct trace_seq *s, void *data, void *ent)
- {
-@@ -93,6 +94,7 @@ static const struct fetch_type probe_fetch_types[] = {
- 	ASSIGN_FETCH_TYPE_ALIAS(x16, u16, u16, 0),
- 	ASSIGN_FETCH_TYPE_ALIAS(x32, u32, u32, 0),
- 	ASSIGN_FETCH_TYPE_ALIAS(x64, u64, u64, 0),
-+	ASSIGN_FETCH_TYPE_ALIAS(char, u8, u8,  0),
- 	ASSIGN_FETCH_TYPE_ALIAS(symbol, ADDR_FETCH_TYPE, ADDR_FETCH_TYPE, 0),
- 
- 	ASSIGN_FETCH_TYPE_END
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index de38f1c03776..8c86aaa8b0c9 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -164,6 +164,7 @@ DECLARE_BASIC_PRINT_TYPE_FUNC(x16);
- DECLARE_BASIC_PRINT_TYPE_FUNC(x32);
- DECLARE_BASIC_PRINT_TYPE_FUNC(x64);
- 
-+DECLARE_BASIC_PRINT_TYPE_FUNC(char);
- DECLARE_BASIC_PRINT_TYPE_FUNC(string);
- DECLARE_BASIC_PRINT_TYPE_FUNC(symbol);
- 
++
++#ifdef CONFIG_PCIEASPM
++static void chromeos_fixup_apl_bridge_l1ss_capability(struct pci_dev *pdev)
++{
++	if (!dmi_match(DMI_SYS_VENDOR, "Google") ||
++		(!dmi_match(DMI_PRODUCT_FAMILY, "Google_Coral") &&
++		 !dmi_match(DMI_PRODUCT_FAMILY, "Google_Reef")))
++		return;
++
++	pci_info(pdev, "Fix up L1SS Capability\n");
++	/* Fix up the L1SS Capability Header*/
++	pci_write_config_dword(pdev, pdev->l1ss, (0x220 << 20) | (1 << 16) | (PCI_EXT_CAP_ID_L1SS));
++	/* Fix up the pointer to L1SS Capability*/
++	pci_write_config_dword(pdev, 0x150, pdev->l1ss << 20);
++}
++DECLARE_PCI_FIXUP_RESUME(PCI_VENDOR_ID_INTEL, 0x5ad6, chromeos_fixup_apl_bridge_l1ss_capability);
++#endif
+
+base-commit: e2ca6ba6ba0152361aa4fcbf6067db71b2c7a770
 -- 
-2.25.1
+2.17.1
 
