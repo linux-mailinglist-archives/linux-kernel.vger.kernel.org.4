@@ -2,112 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 042D264DADE
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 13:09:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3282164DAE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 13:09:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbiLOMJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 07:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
+        id S230004AbiLOMJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 07:09:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiLOMJY (ORCPT
+        with ESMTP id S229917AbiLOMJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 07:09:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0F02DAB2;
+        Thu, 15 Dec 2022 07:09:26 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C97E2D1DA
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 04:09:25 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id cf42so15363152lfb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 04:09:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BonayDXjelRmeYBGGJjvECoETrAi9l86oKUl2f/LTBs=;
+        b=NZqx9pPeB0Pzcb5nIc5vvSOBjvvyGu7zDGqvDIpnGMLF3uCvxylvCo9HlNEZGRtdFP
+         7VnsQYEW4SsYrnDPa/CwmizqbTb+7Tsn4VRbd0DwMy6iE7KfAAf6QcMoM9eMDxz5zY3b
+         MITKvGFCEu1nxaKaWocTfOJ7QVeQbQ20Qwq54=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BonayDXjelRmeYBGGJjvECoETrAi9l86oKUl2f/LTBs=;
+        b=aD7GTti499JZgtO/SFa5shPWeTAAS+20I9BauqEyHWkpxFnTL1/Sqv9jW+7PIlQW9x
+         ygaZAZ8VA5Beblgin7U2kjpIvM47pMB5FIixCefB9PoSP05XjhEOKr571Go1O6JJqBsH
+         aFR4VWkbSpGHO3Ad29KIDN8XFTF8/VA57h7M0XX0oEZfZ0m8iWlsjlVjBEJbmw7CHkSL
+         0JMxElndUPyYDTsu+/XZj+dSARckJ5pyMXKFciNinVhJTIeFMSA8qDAX+ukTAI6L4YF8
+         71YsPaqHnygzrCxA6zcMa6DeXyC3me3MxwK4X3Rov5IqRNJt6dA9AEcVxP3z0fHSWFVW
+         C41A==
+X-Gm-Message-State: ANoB5pmBzhL1VqNoAFnvpuo0n0XkAevgcdmXXZMSNLFaMAk+QU6tlJz3
+        ReuVbiqkm2bVpfzH6pESKRjCDQ==
+X-Google-Smtp-Source: AA0mqf6FJx7D+G5p9QQX/o7bT+pFkhw513lLD2u4U9OZ1hBHy2y58Em73i14qx/TWBY6n0pv2ql1ew==
+X-Received: by 2002:a05:6512:6d1:b0:4a4:7cab:3bad with SMTP id u17-20020a05651206d100b004a47cab3badmr9344432lff.28.1671106163654;
         Thu, 15 Dec 2022 04:09:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE60861DB1;
-        Thu, 15 Dec 2022 12:09:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF162C433EF;
-        Thu, 15 Dec 2022 12:09:21 +0000 (UTC)
-Date:   Thu, 15 Dec 2022 07:09:19 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] trace: allocate space from temparary trace
- sequence buffer
-Message-ID: <20221215070919.52c899c3@gandalf.local.home>
-In-Reply-To: <fea0e9c9-18b6-0b6f-9e5e-5632d7ab6eea@quicinc.com>
-References: <1671078807-20748-1-git-send-email-quic_linyyuan@quicinc.com>
-        <1671078807-20748-2-git-send-email-quic_linyyuan@quicinc.com>
-        <20221214235402.5ea7489e@gandalf.local.home>
-        <fea0e9c9-18b6-0b6f-9e5e-5632d7ab6eea@quicinc.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id a23-20020a19f817000000b0049465afdd38sm1149721lff.108.2022.12.15.04.09.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 04:09:23 -0800 (PST)
+Message-ID: <de35cbb1-e02e-5777-b80b-738e4c695bdb@rasmusvillemoes.dk>
+Date:   Thu, 15 Dec 2022 13:09:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH AUTOSEL 4.9 2/2] net: loopback: use NET_NAME_PREDICTABLE
+ for name_assign_type
+Content-Language: en-US, da
+To:     Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        "David S . Miller" <davem@davemloft.net>, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org
+References: <20221212103704.300692-1-sashal@kernel.org>
+ <20221212103704.300692-2-sashal@kernel.org> <Y5r+KyWmREm7dKbr@duo.ucw.cz>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <Y5r+KyWmREm7dKbr@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 13:08:21 +0800
-Linyu Yuan <quic_linyyuan@quicinc.com> wrote:
+On 15/12/2022 11.59, Pavel Machek wrote:
+> Hi!
+> 
+>> From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+>>
+>> [ Upstream commit 31d929de5a112ee1b977a89c57de74710894bbbf ]
+>>
+>> When the name_assign_type attribute was introduced (commit
+>> 685343fc3ba6, "net: add name_assign_type netdev attribute"), the
+>> loopback device was explicitly mentioned as one which would make use
+>> of NET_NAME_PREDICTABLE:
+>>
+>>     The name_assign_type attribute gives hints where the interface name of a
+>>     given net-device comes from. These values are currently defined:
+>> ...
+>>       NET_NAME_PREDICTABLE:
+>>         The ifname has been assigned by the kernel in a predictable way
+>>         that is guaranteed to avoid reuse and always be the same for a
+>>         given device. Examples include statically created devices like
+>>         the loopback device [...]
+>>
+>> Switch to that so that reading /sys/class/net/lo/name_assign_type
+>> produces something sensible instead of returning -EINVAL.
+> 
+> This was already part of the previous autosel:
 
-> On 12/15/2022 12:54 PM, Steven Rostedt wrote:
-> > On Thu, 15 Dec 2022 12:33:27 +0800
-> > Linyu Yuan <quic_linyyuan@quicinc.com> wrote:
-> >  
-> >> there is one dwc3 trace event declare as below,
-> >> DECLARE_EVENT_CLASS(dwc3_log_event,
-> >> 	TP_PROTO(u32 event, struct dwc3 *dwc),
-> >> 	TP_ARGS(event, dwc),
-> >> 	TP_STRUCT__entry(
-> >> 		__field(u32, event)
-> >> 		__field(u32, ep0state)
-> >> 		__dynamic_array(char, str, DWC3_MSG_MAX)
-> >> 	),
-> >> 	TP_fast_assign(
-> >> 		__entry->event = event;
-> >> 		__entry->ep0state = dwc->ep0state;
-> >> 	),
-> >> 	TP_printk("event (%08x): %s", __entry->event,
-> >> 			dwc3_decode_event(__get_str(str), DWC3_MSG_MAX,
-> >> 				__entry->event, __entry->ep0state))
-> >> );
-> >> the problem is when trace function called, it will allocate up to
-> >> DWC3_MSG_MAX bytes from trace event buffer, but never fill the buffer
-> >> during fast assignment, it only fill the buffer when output function are
-> >> called, so this means if output function are not called, the buffer will
-> >> never used.
-> >>
-> >> add __get_buf(len) which allocate space from iter->tmp_seq when trace
-> >> output function called, it allow user write any data to allocatd space.
-> >>
-> >> the mentioned dwc3 trace event will changed as below,
-> >> DECLARE_EVENT_CLASS(dwc3_log_event,
-> >> 	TP_PROTO(u32 event, struct dwc3 *dwc),
-> >> 	TP_ARGS(event, dwc),
-> >> 	TP_STRUCT__entry(
-> >> 		__field(u32, event)
-> >> 		__field(u32, ep0state)
-> >> 	),
-> >> 	TP_fast_assign(
-> >> 		__entry->event = event;
-> >> 		__entry->ep0state = dwc->ep0state;
-> >> 	),
-> >> 	TP_printk("event (%08x): %s", __entry->event,
-> >> 		dwc3_decode_event(__get_buf(DWC3_MSG_MAX), DWC3_MSG_MAX,
-> >> 				__entry->event, __entry->ep0state))
-> >> );.
-> >>
-> >> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>  
-> >
-> > No!  
+Yup, but it was punted for a week:
 
-> ok, so you don't like a common function in trace_seq.c ?
+https://lore.kernel.org/lkml/Y5AO7TrYsdeVqyI6@sashalap/
 
-Ah sorry, I got confused by the name "alloc" thinking you allocated a new
-trace_seq. I misread your patch (it was late and I was about to go to bed
-when I replied).
-
-Let me look at it again when I'm more awake ;-)
-
--- Steve
