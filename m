@@ -2,52 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFBC64DD1C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 15:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F7164DD1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 15:49:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbiLOOs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 09:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
+        id S229882AbiLOOtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 09:49:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiLOOst (ORCPT
+        with ESMTP id S229460AbiLOOtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 09:48:49 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2802F641;
-        Thu, 15 Dec 2022 06:48:46 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id c0c6e7946502b002; Thu, 15 Dec 2022 15:48:45 +0100
-Received: from kreacher.localnet (unknown [213.134.188.201])
+        Thu, 15 Dec 2022 09:49:03 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDA12F66B;
+        Thu, 15 Dec 2022 06:49:02 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 4D8B71DE5297;
-        Thu, 15 Dec 2022 15:48:44 +0100 (CET)
-Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>
-Cc:     Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Bastien Nocera <hadess@hadess.net>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/2] HID: Revert catchall handling of Bluetooth device in hid-logitech-hidpp
-Date:   Thu, 15 Dec 2022 15:48:43 +0100
-Message-ID: <2659428.mvXUDI8C0e@kreacher>
-In-Reply-To: <4787931.31r3eYUQgx@kreacher>
-References: <20221207142433.1158329-1-benjamin.tissoires@redhat.com> <nycvar.YFH.7.76.2212071757220.6045@cbobk.fhfr.pm> <4787931.31r3eYUQgx@kreacher>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E573121DEE;
+        Thu, 15 Dec 2022 14:49:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1671115740; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/05kX5zbvi3NUUBWHtzWjv0InClnlmKra/u1zbe89QA=;
+        b=cwB0qmah1kasZ+JJ4slx+vkMaAn8Nlsf738RNidmI3V6V2s9ug8TrV8At/IC/+oDCrlE0H
+        /l87zNolT0duVZ1Ixuh0aJiDlokSr7jAH9iyt6VgN+7JA1Jjjtac/D6rgr5QeHGvWiJBRu
+        dAR8wRMYdWHTTsGo9yTcfWaNZW3GUlI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BE941138E5;
+        Thu, 15 Dec 2022 14:49:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 92ZELNwzm2PcbAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 15 Dec 2022 14:49:00 +0000
+Date:   Thu, 15 Dec 2022 15:49:00 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andi Kleen <ak@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Huang Ying <ying.huang@intel.com>, linux-api@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH] mm/mempolicy: do not duplicate policy if it is not
+ applicable for set_mempolicy_home_node
+Message-ID: <Y5sz3Ax+tONdWgbN@dhcp22.suse.cz>
+References: <20221214222110.200487-1-mathieu.desnoyers@efficios.com>
+ <Y5rR9n5HSvlATV5A@dhcp22.suse.cz>
+ <72a402db-b156-74ff-2241-a018cd8ee885@efficios.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.188.201
-X-CLIENT-HOSTNAME: 213.134.188.201
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehgdeijecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudekkedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeekrddvtddupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtohepsggvnhhjrghmihhnrdhtihhsshhoihhrvghssehrvgguhhgrthdrtghomhdprhgtphhtthhopehjihhkohhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlrghinhhssehrihhsvghuphdrnhgvthdprhgtphhtthhopehhrgguvghssheshhgruggvshhsrdhnvghtpdhrtghpthhtoheprhgvghhrvghsshhiohhnsheslhgvvghmhhhu
- ihhsrdhinhhfohdprhgtphhtthhopehlihhnuhigqdhinhhpuhhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <72a402db-b156-74ff-2241-a018cd8ee885@efficios.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,35 +76,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday, December 12, 2022 6:03:07 PM CET Rafael J. Wysocki wrote:
-> On Wednesday, December 7, 2022 5:57:47 PM CET Jiri Kosina wrote:
-> > On Wed, 7 Dec 2022, Benjamin Tissoires wrote:
-> > 
-> > > We are basically too late in the 6.1 cycle to be able to do anything
-> > > else. Let's revert these 2 patches as we are in a situation where we
-> > > would break too many users.
-> > > 
-> > > We will reintroduce them during the next cycle with proper fixes in the
-> > > driver.
-> > 
-> > Rafael,
-> > 
-> > it would be nice to get
-> > 
-> > 	Reported-by:
-> > 	Tested-by:
-> > 
-> > for these reverts if possible.
+On Thu 15-12-22 09:33:54, Mathieu Desnoyers wrote:
+> On 2022-12-15 02:51, Michal Hocko wrote:
+[...]
+> > Btw. looking at the code again it seems rather pointless to duplicate
+> > the policy just to throw it away anyway. A slightly bigger diff but this
+> > looks more reasonable to me. What do you think? I can also send it as a
+> > clean up on top of your fix.
 > 
-> I had been offline for the previous 3 days, sorry.
+> I think it would be best if this comes as a cleanup on top of my fix. The
+> diff is larger than the minimal change needed to fix the leak in stable
+> branches.
 > 
-> I'll test 6.1 and let you know.
+> Your approach looks fine, except for the vma_policy(vma) -> old change
+> already spotted by Aneesh.
 
-Sorry for the delay.
+This shouldn't have any real effect on the functionality. Anyway, here
+is a follow up cleanup:
+--- 
+From f3fdb6f65fa3977aab13378b8e299b168719577c Mon Sep 17 00:00:00 2001
+From: Michal Hocko <mhocko@suse.com>
+Date: Thu, 15 Dec 2022 15:41:27 +0100
+Subject: [PATCH] mm/mempolicy: do not duplicate policy if it is not applicable
+ for set_mempolicy_home_node
 
-I have tested final 6.1 on the affected machine and I can confirm that it works well.
+set_mempolicy_home_node tries to duplicate a memory policy before
+checking it whether it is applicable for the operation. There is
+no real reason for doing that and it might actually be a pointless
+memory allocation and deallocation exercise for MPOL_INTERLEAVE.
 
-Thanks!
+Not a big problem but we can do better. Simply check the policy before
+acting on it.
 
+Signed-off-by: Michal Hocko <mhocko@suse.com>
+---
+ mm/mempolicy.c | 28 ++++++++++++----------------
+ 1 file changed, 12 insertions(+), 16 deletions(-)
 
+diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+index 02c8a712282f..becf41e10076 100644
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -1489,7 +1489,7 @@ SYSCALL_DEFINE4(set_mempolicy_home_node, unsigned long, start, unsigned long, le
+ {
+ 	struct mm_struct *mm = current->mm;
+ 	struct vm_area_struct *vma;
+-	struct mempolicy *new;
++	struct mempolicy *new, *old;
+ 	unsigned long vmstart;
+ 	unsigned long vmend;
+ 	unsigned long end;
+@@ -1521,31 +1521,27 @@ SYSCALL_DEFINE4(set_mempolicy_home_node, unsigned long, start, unsigned long, le
+ 		return 0;
+ 	mmap_write_lock(mm);
+ 	for_each_vma_range(vmi, vma, end) {
+-		vmstart = max(start, vma->vm_start);
+-		vmend   = min(end, vma->vm_end);
+-		new = mpol_dup(vma_policy(vma));
+-		if (IS_ERR(new)) {
+-			err = PTR_ERR(new);
+-			break;
+-		}
+-		/*
+-		 * Only update home node if there is an existing vma policy
+-		 */
+-		if (!new)
+-			continue;
+-
+ 		/*
+ 		 * If any vma in the range got policy other than MPOL_BIND
+ 		 * or MPOL_PREFERRED_MANY we return error. We don't reset
+ 		 * the home node for vmas we already updated before.
+ 		 */
+-		if (new->mode != MPOL_BIND && new->mode != MPOL_PREFERRED_MANY) {
+-			mpol_put(new);
++		old = vma_policy(vma);
++		if (!old)
++			continue;
++		if (old->mode != MPOL_BIND && old->mode != MPOL_PREFERRED_MANY) {
+ 			err = -EOPNOTSUPP;
+ 			break;
+ 		}
++		new = mpol_dup(old);
++		if (IS_ERR(new)) {
++			err = PTR_ERR(new);
++			break;
++		}
+ 
+ 		new->home_node = home_node;
++		vmstart = max(start, vma->vm_start);
++		vmend   = min(end, vma->vm_end);
+ 		err = mbind_range(mm, vmstart, vmend, new);
+ 		mpol_put(new);
+ 		if (err)
+-- 
+2.30.2
 
+-- 
+Michal Hocko
+SUSE Labs
