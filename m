@@ -2,52 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF83464DED0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:40:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02EB064DED2
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiLOQkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:40:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
+        id S230171AbiLOQlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:41:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiLOQk3 (ORCPT
+        with ESMTP id S230159AbiLOQlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:40:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDFE2AE07;
-        Thu, 15 Dec 2022 08:40:29 -0800 (PST)
+        Thu, 15 Dec 2022 11:41:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089FBDF12
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:41:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C02A161E61;
-        Thu, 15 Dec 2022 16:40:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83905C433D2;
-        Thu, 15 Dec 2022 16:40:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA8B4B81BA1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 16:41:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10FA5C433F1;
+        Thu, 15 Dec 2022 16:41:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671122428;
-        bh=vM3CUj4GDE5CqX99A6tmi97aIvyuGUgE2Z3VCaT0Z+I=;
+        s=k20201202; t=1671122475;
+        bh=B56jZ4GwXNxhvlUoyX2XvXatc24AC7epFPyOb5O+MA0=;
         h=From:To:Cc:Subject:Date:From;
-        b=OKeIwSrwxWpFiXDfoywHNKECTEwF2U3EqtQss0QWLiHb5jQByez8MJOwDB7pqrSyx
-         TJPayJrHeVZnhLzQHlz6BhvhmDyWTAu2qyZgo811xQrb8qLp0ha0d3k8DfBko2L4uR
-         agwVLPmNojdMe8aMrEiJ4fAotsx1pZxpuaFZ++J4daDKb7d/SyLRgpQJ5BHI2+GnFR
-         +dbGm0pM7DwNttwngEd2qmZkVOZp3oBVh7vzEhnhsewE5DGM8OaQCCtbH/sr9oV6uK
-         5kcTPehvme2Wmt2pc3/Az+vadb8TUwKkbBQbPHiXikTIjg7DyNjDcA36H76dz+dOBx
-         ahVijGzINeMPQ==
+        b=BzFfFEieMR+SMt6S/dei6SFTQVj8/YXpa6OIj53vpHCw38xgKhrP78DVIJYNHyDoX
+         AHOZkO3zIQKppPi1AOIG5YIDfaXIphT4RisfC314Rklmtqnd7NJEIqjFm7nzp5PVV7
+         dGqmKpeP0N2oQT88VvhzC6LbdU4sd6JDbADMum8/ntm6apFawFX27zX9dusuoqimq+
+         Ui0oEHFPFoj1qkWHMxfTLmT+JJZoTk6u78tjJW0J8HIYGyp2nUcy/L/tDfqt03QJQh
+         3HEuJBOqXmlyBfcoJktdRb8BJECMRw/fxc5w5KgPAjh3m6JCJpttCI0NldPL3TfmE3
+         MK0436U3Xd3fw==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Moudy Ho <moudy.ho@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] media: platform: mtk-mdp3: fix Kconfig dependencies
-Date:   Thu, 15 Dec 2022 17:40:08 +0100
-Message-Id: <20221215164021.694343-1-arnd@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Frank Li <Frank.Li@nxp.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] irqchip: build IMX_MU_MSI only on ARM
+Date:   Thu, 15 Dec 2022 17:40:41 +0100
+Message-Id: <20221215164109.761427-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,49 +55,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The new mdp3 driver uses 'select' to force-enable a couple of drivers
-it depends on. This is error-prone and likely to cause dependency
-loops as well as warnings like:
+compile-testing IMX_MU_MSI on x86 without PCI_MSI support results
+in a build failure:
 
-WARNING: unmet direct dependencies detected for VIDEO_MEDIATEK_VPU
-  Depends on [n]: MEDIA_SUPPORT [=m] && MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] && V4L_MEM2MEM_DRIVERS [=n] && VIDEO_DEV [=m] && (ARCH_MEDIATEK [=y] || COMPILE_TEST [=y])
-  Selected by [m]:
-  - VIDEO_MEDIATEK_MDP3 [=m] && MEDIA_SUPPORT [=m] && MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] && (MTK_IOMMU [=m] || COMPILE_TEST [=y]) && VIDEO_DEV [=m] && (ARCH_MEDIATEK [=y] || COMPILE_TEST [=y]) && HAS_DMA [=y] && REMOTEPROC [=y]
+arch/x86/kernel/hpet.c:520:46: error: 'msi_alloc_info_t' {aka 'struct irq_alloc_info'} has no member named 'hwirq'
+  520 |         irq_domain_set_info(domain, virq, arg->hwirq, info->chip, NULL,
+      |                                              ^~
+arch/x86/kernel/hpet.c:521:49: error: 'msi_alloc_info_t' {aka 'struct irq_alloc_info'} has no member named 'data'
+  521 |                             handle_edge_irq, arg->data, "edge");
+      |                                                 ^~
+arch/x86/kernel/hpet.c: In function 'hpet_create_irq_domain':
+arch/x86/kernel/hpet.c:550:13: error: 'x86_vector_domain' undeclared (first use in this function)
+  550 |         if (x86_vector_domain == NULL)
+      |             ^~~~~~~~~~~~~~~~~
+arch/x86/kernel/hpet.c:550:13: note: each undeclared identifier is reported only once for each function it appears in
+arch/x86/kernel/hpet.c: In function 'hpet_assign_irq':
+arch/x86/kernel/hpet.c:600:9: error: implicit declaration of function 'init_irq_alloc_info' [-Werror=implicit-function-declaration]
+  600 |         init_irq_alloc_info(&info, NULL);
 
-This specific warning was already addressed in a previous patch,
-but there are similar unnecessary 'select' statements, so turn those
-into 'depends on'. This also means the dependency on ARCH_MEDIATEK
-is redundant and can be dropped.
+Tighten the dependency further to only allow compile testing on Arm.
+This could be refined further to allow certain x86 configs.
 
-Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
-Fixes: 9195a860ef0a ("media: platform: mtk-mdp3: remove unused VIDEO_MEDIATEK_VPU config")
+Fixes: 6c9f7434159b ("irqchip: IMX_MU_MSI should depend on ARCH_MXC")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/media/platform/mediatek/mdp3/Kconfig | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/irqchip/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mediatek/mdp3/Kconfig b/drivers/media/platform/mediatek/mdp3/Kconfig
-index 846e759a8f6a..602329c44750 100644
---- a/drivers/media/platform/mediatek/mdp3/Kconfig
-+++ b/drivers/media/platform/mediatek/mdp3/Kconfig
-@@ -3,14 +3,13 @@ config VIDEO_MEDIATEK_MDP3
- 	tristate "MediaTek MDP v3 driver"
- 	depends on MTK_IOMMU || COMPILE_TEST
- 	depends on VIDEO_DEV
--	depends on ARCH_MEDIATEK || COMPILE_TEST
- 	depends on HAS_DMA
- 	depends on REMOTEPROC
-+	depends on MTK_MMSYS
-+	depends on MTK_CMDQ
-+	depends on MTK_SCP
- 	select VIDEOBUF2_DMA_CONTIG
- 	select V4L2_MEM2MEM_DEV
--	select MTK_MMSYS
--	select MTK_CMDQ
--	select MTK_SCP
- 	default n
- 	help
- 	    It is a v4l2 driver and present in MediaTek MT8183 SoC.
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index caa952c40ff9..4ebf4d566e6f 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -484,7 +484,7 @@ config IMX_INTMUX
+ config IMX_MU_MSI
+ 	tristate "i.MX MU used as MSI controller"
+ 	depends on OF && HAS_IOMEM
+-	depends on ARCH_MXC || COMPILE_TEST
++	depends on ARCH_MXC || ((ARM || ARM64) && COMPILE_TEST)
+ 	default m if ARCH_MXC
+ 	select IRQ_DOMAIN
+ 	select IRQ_DOMAIN_HIERARCHY
 -- 
 2.35.1
 
