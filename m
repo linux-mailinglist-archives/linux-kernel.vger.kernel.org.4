@@ -2,118 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BFE964D975
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:22:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8950364D980
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiLOKWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 05:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
+        id S229628AbiLOK0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 05:26:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbiLOKV4 (ORCPT
+        with ESMTP id S229506AbiLOK0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 05:21:56 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438241D66E;
-        Thu, 15 Dec 2022 02:21:55 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFABrlx031884;
-        Thu, 15 Dec 2022 10:21:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=25J3tmS0CQRm5M+aL1a3pu4Teu7wCVJydV//fYAkxg8=;
- b=rsOVNm/jSLiVMl3DP/ED0AGqsdgedbeFl+jDlhjn5V4wNDtCfpERDvE5yileznuC4e5F
- 9+/QEL0PmwJb4FA4iQTrFBisMAn9RIl3lXIIZWl7WTDD1717KkOJwAuhENmkVCIKIpcj
- 26kxXG0VPgOvd9YhxY8UEMX+E3Cn2BKFF/voXYpnSBScEdUxHjElPYdoxws2CKmLpyt7
- bEjpQzQDk5PQt8nbG6ptd2HLR/QWP7XmGiqhWZMCUeU/CK3BiPiGyy/o/sSr6qJgXYam
- 9vMKe0H/P+qssw7fkNsjVKRWrCIbtX4Zw4UONgDVRy3rx2UajpoHy3q2kNcBVQLiVTeA /Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg1m3g6sh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 10:21:23 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BFADSjI005138;
-        Thu, 15 Dec 2022 10:21:22 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg1m3g6ru-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 10:21:22 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BF8E25e011769;
-        Thu, 15 Dec 2022 10:21:20 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3meyyhw129-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 10:21:20 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BFALJVf5701934
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Dec 2022 10:21:19 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 81FE15805F;
-        Thu, 15 Dec 2022 10:21:19 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 347D05805D;
-        Thu, 15 Dec 2022 10:21:18 +0000 (GMT)
-Received: from sig-9-65-242-118.ibm.com (unknown [9.65.242.118])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 15 Dec 2022 10:21:18 +0000 (GMT)
-Message-ID: <7d61852678d1652030ce9c7c2f906217c5c4ce06.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 07/10] KEYS: X.509: Flag Intermediate CA certs as
- endorsed
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>, jarkko@kernel.org
-Cc:     dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, pvorel@suse.cz, noodles@fb.com, tiwai@suse.de,
-        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
-        erpalmer@linux.vnet.ibm.com, coxu@redhat.com,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Thu, 15 Dec 2022 05:21:17 -0500
-In-Reply-To: <20221214003401.4086781-8-eric.snowberg@oracle.com>
-References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
-         <20221214003401.4086781-8-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Thu, 15 Dec 2022 05:26:23 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 358B8F17;
+        Thu, 15 Dec 2022 02:26:21 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2207F1063;
+        Thu, 15 Dec 2022 02:27:01 -0800 (PST)
+Received: from [10.57.88.90] (unknown [10.57.88.90])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6ED333F5A1;
+        Thu, 15 Dec 2022 02:26:17 -0800 (PST)
+Message-ID: <07ec7610-f1be-9b5c-416d-17781a22427d@arm.com>
+Date:   Thu, 15 Dec 2022 10:26:08 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v7 23/25] PCI: dwc: Restore DMA-mask after MSI-data
+ allocation
+Content-Language: en-GB
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221214235305.31744-1-Sergey.Semin@baikalelectronics.ru>
+ <20221214235305.31744-24-Sergey.Semin@baikalelectronics.ru>
+ <Y5rJJfZeVqliA5Rg@infradead.org>
+ <20221215092721.tvz3hpaql3kotgnu@mobilestation>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20221215092721.tvz3hpaql3kotgnu@mobilestation>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: g3aTJeon1Lgo5P8BsoQre75BFY68m_fg
-X-Proofpoint-ORIG-GUID: NbJVGw742pMa7IzUmlMZz_8rmmLyZQ9G
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-15_03,2022-12-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- mlxscore=0 lowpriorityscore=0 suspectscore=0 impostorscore=0 phishscore=0
- priorityscore=1501 adultscore=0 clxscore=1015 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212150080
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+On 2022-12-15 09:27, Serge Semin wrote:
+> Hi Christoph
+> 
+> On Wed, Dec 14, 2022 at 11:13:41PM -0800, Christoph Hellwig wrote:
+>> On Thu, Dec 15, 2022 at 02:53:03AM +0300, Serge Semin wrote:
+>>> DW PCIe Root Ports and End-points can be equipped with the DW eDMA engine.
+>>> In that case it is critical to have the platform device pre-initialized
+>>> with a valid DMA-mask so the drivers using the eDMA-engine would be able
+>>> to allocate the DMA-able buffers. The MSI-capable data requires to be
+>>> allocated from the lowest 4GB region. Since that procedure implies the
+>>> DMA-mask change we need to restore the mask set by the low-level drivers
+>>> after the MSI-data allocation is done.
+>>
+>> You can't change the DMA mask when there are existing allocations.
+> 
+> Em, what do you guys suggest for the DW PCIe devices with the embedded
+> DMA-engine then? To live forever with the SWIOTLBs? I can't drop the
+> DMA-mask update due to this commit 423511ec23e2 ("PCI: dwc: Drop
+> dependency on ZONE_DMA32") and I can't change the mask after it's
+> updated. Note it's updated for the memory allocation to which actually
+> no DMA will be performed, see
+> https://lore.kernel.org/linux-pci/20220825185026.3816331-2-willmcvicker@google.com/.
+> My patches imply adding the real DMA operations support.
+> 
+> We've discussed this a lot with Robin in various threads and I thought
+> a workable solution was found. I was going to update the mask in
+> another place, but basically it would still mean to have first setting
+> the 32-bit mask here, and then change it to 64-bit one in the
+> framework of the DW eDMA driver.
+> 
+> So to speak I don't see a proper way out from the situation. Nothing I
+> suggested was accepted and now we'll have to live with the SWIOTLBs
+> used for the memory above 4GB. So please suggest a workable solution
+> then. We need the next things:
+> 1. Somehow preserve a single DWORD of the PCIe bus memory for the
+> iMSI-RX engine. (That's what is currently done the
+> dw_pcie_msi_host_init() method by allocating the coherent memory.)
+> 2. Set the actual DMA-mask to the DW PCIe platform device so the
+> DMA-engine clients would be able to allocate actually DMA-able memory.
+> 
+> @Robin, please join the discussion.
 
-On Tue, 2022-12-13 at 19:33 -0500, Eric Snowberg wrote:
-> Currently X.509 intermediate certs with the CA flag set to false do not
-> have the endorsed CA (KEY_FLAG_ECA) set. Allow these intermediate certs to
-> be added.  Requirements for an intermediate include: Usage extension
-> defined as keyCertSign, Basic Constrains for CA is false, and the
-> intermediate cert is signed by a current endorsed CA.
+Basically just don't touch the coherent mask. The eDMA drivers can still 
+set the streaming mask to something larger, and that's the one that's 
+going to matter for most dmaengine clients anyway. Even if someone does 
+call dma_alloc_coherent() for their eDMA channel, it's not going to make 
+much practical difference if that has to come from a DMA zone, unless 
+the system is under severe memory pressure anyway.
 
-Intermediary keys should have the CA flag enabled as well.   Why is
-this needed?    At least for the new Kconfig, please keep it simple as
-to which certificates may be added to the machine keyring.
-
-thanks,
-
-Mimi
-
+Thanks,
+Robin.
