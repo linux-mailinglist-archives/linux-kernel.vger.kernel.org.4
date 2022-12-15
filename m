@@ -2,72 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46ADB64DDB8
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8585364DDBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiLOPVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 10:21:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
+        id S230094AbiLOPWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 10:22:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiLOPVK (ORCPT
+        with ESMTP id S230014AbiLOPWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 10:21:10 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A4122524;
-        Thu, 15 Dec 2022 07:19:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=veWqpQXIk6sP3oOKoPG/TZGs2w9yCqcBMZk/w842K00=; b=QbNQuPdyKRFdDd4vHkfoRgJo9/
-        2FiN/5ro9QZsnj+FWx2oWEjf16PdPmyp1LW6MWVgAgLAw6gBUblFg4GhIKRxt1Weox1/gxj2p1gki
-        wKqqQPElTKHIZ1aq4ZCnk+si4ytzhH4gwNNFBgK+0Q+4aMuU+kYKs4yKemH9M8O1Ya4itX9+2STsp
-        S1zH6aUWo1+8Xzz2acQaLnEsbmEqsee/iALnBwhqMNrPl5CFKPgFhEs8hMXcm1QAIQP5RHDJE7Pp5
-        udVGt+AKOy+X8UUJaT8qVx93oUI9npbGrwRmeLIH8rv+uH0zAValHAGU+vqV3aO8xFcIKTHsvWYk1
-        5BoWsuCg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1p5q1X-00C3Q0-1K;
-        Thu, 15 Dec 2022 15:19:51 +0000
-Date:   Thu, 15 Dec 2022 15:19:51 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Wei Chen <harperchen1110@gmail.com>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        syzbot <syzkaller@googlegroups.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>
-Subject: Re: possible deadlock in __ata_sff_interrupt
-Message-ID: <Y5s7F/4WKe8BtftB@ZenIV>
-References: <CAO4mrfcX8J73DWunmdYjf_SK5TyLfp9W9rmESTj57PCkG2qkBw@mail.gmail.com>
- <5eff70b8-04fc-ee87-973a-2099a65f6e29@opensource.wdc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5eff70b8-04fc-ee87-973a-2099a65f6e29@opensource.wdc.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+        Thu, 15 Dec 2022 10:22:19 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE9463B2;
+        Thu, 15 Dec 2022 07:20:46 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFEg8iZ016907;
+        Thu, 15 Dec 2022 15:20:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : date : in-reply-to : references : content-type : mime-version
+ : content-transfer-encoding; s=pp1;
+ bh=xdF95zfdlqQe0Hxg5x6UNWrnW1o+HxaeSMyj1IkXHF8=;
+ b=ByzoE5MkR3T9Ezoq16/klZGWm/reu6YkwI8Ys1gQkHhC3lNtIezyKf3iiKBy6gT3yv8C
+ cSUNRsj5dTz8gciiS6s22PGtCODdwPj5LB2PmM4E2fPXfzGM2jJqoLjBiSPl6GRqOFWj
+ 3cw50hwWmcEaa8H1Q989ICXZyIHuuNc9LJVZ0WUwlTGhw427poot8rCDMx6aJNdSIcHT
+ jhFHjoOmwt6yHHlng7GJH9cn5VswrTSyMLIPoBKFw7qJ2VJNA4JCSm08Vo/FPOrA/mht
+ mBZgyqtKW+EYYjSSYF4cJDjc5tsdCnJsmSG42x227aPKMezoLllr5vUUH7UqTYsUgvtO CA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg3x0vhr9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 15:20:41 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BFF0otj012486;
+        Thu, 15 Dec 2022 15:20:41 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg3x0vhqt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 15:20:41 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFE7emx006734;
+        Thu, 15 Dec 2022 15:20:40 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
+        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3mf08eupw3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 15:20:40 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BFFKdGC54002034
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Dec 2022 15:20:39 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EA2505804C;
+        Thu, 15 Dec 2022 15:20:38 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4D19658067;
+        Thu, 15 Dec 2022 15:20:38 +0000 (GMT)
+Received: from sig-9-65-242-118.ibm.com (unknown [9.65.242.118])
+        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 15 Dec 2022 15:20:38 +0000 (GMT)
+Message-ID: <473749e7a302d0fbb790956e8e1423835a46987a.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: add check for khdr->buffer_size
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     "iuppiterlucas@gmail.com" <iuppiterlucas@gmail.com>,
+        =?UTF-8?B??= <dmitry.kasatkin@gmail.com>,
+        =?UTF-8?B??= <paul@paul-moore.com>,
+        =?UTF-8?B??= <jmorris@namei.org>,
+        =?UTF-8?B??= <serge@hallyn.com>,
+        =?UTF-8?B??= <akpm@linux-foundation.org>,
+        =?UTF-8?B??= <linux-integrity@vger.kernel.org>,
+        =?UTF-8?B??= <linux-security-module@vger.kernel.org>,
+        =?UTF-8?B??= <linux-kernel@vger.kernel.org>
+Date:   Thu, 15 Dec 2022 10:20:37 -0500
+In-Reply-To: <639b3953.170a0220.35d95.65e9@mx.google.com>
+References: <639b3953.170a0220.35d95.65e9@mx.google.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: OvkvSI3i0S_NwEOEm5W-aYJkTb3XlxWZ
+X-Proofpoint-ORIG-GUID: h6Dj1SUFIdLa_aKdR5nMxiHwY6OCDkj5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-15_08,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ mlxlogscore=692 priorityscore=1501 malwarescore=0 phishscore=0
+ suspectscore=0 mlxscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212150122
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 06:48:20PM +0900, Damien Le Moal wrote:
+Hi Lucas,
 
-> The problem is here: sg_rq_end_io() calling kill_fasync(). But at a quick
-> glance, this is not the only driver calling kill_fasync() with a spinlock
-> held with irq disabled... So there may be a fundamental problem with
-> kill_fasync() function if drivers are allowed to do that, or the reverse,
-> all drivers calling that function with a lock held with irq disabled need
-> to be fixed.
+On Thu, 2022-12-15 at 23:12 +0800, iuppiterlucas@gmail.com wrote:
+> When khdr->buffer_size > size, continuing to use ima_parse_buf
 > 
-> Al, Chuck, Jeff,
+> may cause memory access out of bounds.
 > 
-> Any thought ?
+> 
+> Fixes: 94c3aac567a9 ("ima: on soft reboot, restore the measurement list")
+> 
+> 
+> Signed-off-by: Lucas Iuppiter <iuppiterlucas@gmail.com>
 
-What is the problem with read_lock_irqsave() called with irqs disabled?
-read_lock_irq() would have been a bug in such conditions, of course, but
-that's not what we use...
+When posting patches to the linux-integrity mailing list, patches
+should be posted in plain text, not mime encoded.
+
+thanks,
+
+Mimi
+
