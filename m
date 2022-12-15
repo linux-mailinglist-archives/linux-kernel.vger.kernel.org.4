@@ -2,162 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE11064E286
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 21:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A0264E28B
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 21:49:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiLOUrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 15:47:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
+        id S229637AbiLOUtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 15:49:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiLOUrM (ORCPT
+        with ESMTP id S229864AbiLOUt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 15:47:12 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397414D5D4
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:47:07 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id t17so1521697eju.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:47:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VxVyPZKSysf+HLi7nhh+VUixxCogFeRsVo86ZrnztgQ=;
-        b=hxzxmAZbiyk38wc8gz9+Ee2T8BOYtvW5SiTPnrxwx4lOkojFHNVaj0lvh5AJI9zjSp
-         z1LbbrCXSyJnMlxM2SWfndRjFiopwVhc7pMCfEsmD2JaOTOxR8rXZmrwBoHCKySl7Hvg
-         dTFJBmC7oIU/73t9a6PjJcbym1vMucF0MPJdo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VxVyPZKSysf+HLi7nhh+VUixxCogFeRsVo86ZrnztgQ=;
-        b=g1GdkBl7yGNxEQHQdX4C5++byoNbZUlqutqpS1UJFUYFqpeW2G+XliJbmvWiwi0QyE
-         Rw2voEQGHbkmTlL7G1t9cCLAgnl3p6QG5BLz2LkwrkOBL+O1EXZ7vdEuahZ9RUOX/mYC
-         mFT8SSBzVrPHluGrfmDXoE/bzSCZqFnW6ILh//YOgK2cFaEYU5EJZ6nYgFCNkGHSeq3J
-         tlxrFiIEnkAVZRdt6M0eHlbCjDyJb0xCAfMNrnDoHeuUSacup1XVy2FDf6Z9orTlIqUB
-         mFc3cpgVFHcwRQw21sKer0ThUxE85p3OQB05xiAmgt7iJwUKt0NWN1gv3di5F7NSFg3N
-         rqFA==
-X-Gm-Message-State: ANoB5pnvCYjt0PX/5CnrTh24s7GJ5p+1JSu1SiNPilox1hkBGUlQ8meB
-        Wfpa9KKj1Yv7rLWTuJ4q6F5P5m5ELmT25suGuzM=
-X-Google-Smtp-Source: AA0mqf4Cs3lUtPRGHT/nhpKGAJL3UzNoIaJQEzpIhQBTXA4MNeXwAOmEfZ6A8ZnOejdRiOqJWz8kow==
-X-Received: by 2002:a17:907:c295:b0:78d:f455:c398 with SMTP id tk21-20020a170907c29500b0078df455c398mr14447612ejc.62.1671137225623;
-        Thu, 15 Dec 2022 12:47:05 -0800 (PST)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id y2-20020a17090614c200b007c4f32726c4sm57851ejc.133.2022.12.15.12.47.03
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 12:47:03 -0800 (PST)
-Received: by mail-wm1-f54.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso2742728wme.5
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:47:03 -0800 (PST)
-X-Received: by 2002:a05:600c:4153:b0:3d2:191d:2427 with SMTP id
- h19-20020a05600c415300b003d2191d2427mr176059wmm.188.1671137223155; Thu, 15
- Dec 2022 12:47:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20221215165453.1864836-1-arnd@kernel.org>
-In-Reply-To: <20221215165453.1864836-1-arnd@kernel.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 15 Dec 2022 12:46:51 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=U6pfSk0nY+s-p4f43Gq6-arfr8hQe8d9NC0nS0ckMYKw@mail.gmail.com>
-Message-ID: <CAD=FV=U6pfSk0nY+s-p4f43Gq6-arfr8hQe8d9NC0nS0ckMYKw@mail.gmail.com>
-Subject: Re: [PATCH] tty: serial: qcom_geni: avoid duplicate struct member init
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
+        Thu, 15 Dec 2022 15:49:28 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8023026AA3;
+        Thu, 15 Dec 2022 12:49:27 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFKQwGT009458;
+        Thu, 15 Dec 2022 20:49:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=VK6BeCywnJYOa+0P4ryIqF9jCO11IlECxLhsDeBfXyM=;
+ b=YEkJ/3lvY2W/6Qqqo5M9NZXMP+FKDvx8ytoD1xiltCtpJqgfKujYqEkCQNolUiRZNAs0
+ w+KQtfOqcDw5JCmc0QhkyxMlQBjkJuXwftlpKfvXptS8Pt08KLMrUMv9Vk75bk4hpzTZ
+ yy0XnlvQOF0pafOfMzYf9Dvn6n4BGe3BFwZ3MNAphRzV+XxC/cCOt/8ktpPoZLq+Qw43
+ fKl5R/WKX0C8NJmcbkN1RyXFFt8usaviClIYYu25kgg1TtkpTdqHX7iz1XErdVOcj5Nk
+ kmIhbv36cpXQ5MfSRP01ZuaSbpr4Tu7zCdQTaAwwIZ9rOZ2w2yFbLTkqToXuKglwFwaP iw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mfxseaj43-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 20:49:21 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BFKnKnF007071
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 20:49:20 GMT
+Received: from core-thresher1.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 15 Dec 2022 12:49:20 -0800
+Date:   Thu, 15 Dec 2022 12:49:18 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+CC:     Linus Walleij <linus.walleij@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Aniket Randive <quic_arandive@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH v2 2/4] dt-bindings: pinctrl: qcom,tlmm-common: document
+ i2c pull property
+Message-ID: <20221215204615.GA19388@core-thresher1.qualcomm.com>
+References: <20221123152001.694546-1-abel.vesa@linaro.org>
+ <20221123152001.694546-3-abel.vesa@linaro.org>
+ <CACRpkdZtkHCkfUAcezSJvmei=HOezK6oyx+4C5kBrEtU+vAB-g@mail.gmail.com>
+ <fecb2dd6-9be2-78dc-4598-cc338fbdc2a2@linaro.org>
+ <CACRpkdZJaz9BEorQa7dTNkgTkwZjJNB-MWrpKFxHRgdsf3xJww@mail.gmail.com>
+ <8602cacd-f552-e843-5c17-681b099069a3@linaro.org>
+ <CACRpkdbqjNJH_QvWyEPceUUxRQ2tOpErNOWA0rg5GNwq7PfUFQ@mail.gmail.com>
+ <f6ffd433-1652-fb4f-8657-928e7407ba5f@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <f6ffd433-1652-fb4f-8657-928e7407ba5f@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: nwRNLs4KNGuiwhYtkj-TaKeQrt4ea046
+X-Proofpoint-GUID: nwRNLs4KNGuiwhYtkj-TaKeQrt4ea046
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-15_11,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ clxscore=1011 spamscore=0 phishscore=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212150174
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Nov 29, 2022 at 09:15:02AM +0100, Neil Armstrong wrote:
+> Hi Linus,
+> 
+> On 26/11/2022 22:53, Linus Walleij wrote:
+> > On Fri, Nov 25, 2022 at 1:40 PM <neil.armstrong@linaro.org> wrote:
+> > 
+> > > As I understood, it enables an "I2C resistor" on the pin, removing the need
+> > > of an external pull-up resistor on the line.
+> > > 
+> > > I assume the classical pull-up bias is not strong enough to replace an actual
+> > > resistor on the PCB.
 
-On Thu, Dec 15, 2022 at 8:55 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> When -Woverride-init is enabled in a build, gcc points out that
-> qcom_geni_serial_pm_ops contains conflicting initializers:
->
-> drivers/tty/serial/qcom_geni_serial.c:1586:20: error: initialized field overwritten [-Werror=override-init]
->  1586 |         .restore = qcom_geni_serial_sys_hib_resume,
->       |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/tty/serial/qcom_geni_serial.c:1586:20: note: (near initialization for 'qcom_geni_serial_pm_ops.restore')
-> drivers/tty/serial/qcom_geni_serial.c:1587:17: error: initialized field overwritten [-Werror=override-init]
->  1587 |         .thaw = qcom_geni_serial_sys_hib_resume,
->       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> Open-code the initializers with the version that was already used,
-> and use the pm_sleep_ptr() method to deal with unused ones,
-> in place of the __maybe_unused annotation.
->
-> Fixes: 35781d8356a2 ("tty: serial: qcom-geni-serial: Add support for Hibernation feature")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/tty/serial/qcom_geni_serial.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index b487823f0e61..03dda47184d9 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -1516,7 +1516,7 @@ static int qcom_geni_serial_remove(struct platform_device *pdev)
->         return 0;
->  }
->
-> -static int __maybe_unused qcom_geni_serial_sys_suspend(struct device *dev)
-> +static int qcom_geni_serial_sys_suspend(struct device *dev)
+That is correct.
 
-Officially the removal of "__maybe_unused" could be a totally
-different patch, right? SET_SYSTEM_SLEEP_PM_OPS() already eventually
-used pm_sleep_ptr() even without your change, so the removal of these
-tags is unrelated to the rest of your change, right?
+> > 
+> > In that case I think this should be an argument to bias-pull-up like:
+> > 
+> > bias-pull-up = <360000>;
+> > 
+> > Nominally the pull up is in ohms:
+> > 
+> >    bias-pull-up:
+> >      oneOf:
+> >        - type: boolean
+> >        - $ref: /schemas/types.yaml#/definitions/uint32
+> >      description: pull up the pin. Takes as optional argument on hardware
+> >        supporting it the pull strength in Ohm.
+> > 
+> > Then the driver can choose to shunt in this extra I2C resistance
+> > from the resistance passed as argument. So no special property
+> > is needed, provided you can get an idea about the resistance
+> > provided here.
+> 
+> I like this alternative, I'll try to figure out if we can find a value
+> to match against.
+> 
 
+The typical value for this resistor is 2.2kOhm.
 
->  {
->         struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
->         struct uart_port *uport = &port->uport;
-> @@ -1533,7 +1533,7 @@ static int __maybe_unused qcom_geni_serial_sys_suspend(struct device *dev)
->         return uart_suspend_port(private_data->drv, uport);
->  }
->
-> -static int __maybe_unused qcom_geni_serial_sys_resume(struct device *dev)
-> +static int qcom_geni_serial_sys_resume(struct device *dev)
->  {
->         int ret;
->         struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
-> @@ -1581,10 +1581,12 @@ static int qcom_geni_serial_sys_hib_resume(struct device *dev)
->  }
->
->  static const struct dev_pm_ops qcom_geni_serial_pm_ops = {
-> -       SET_SYSTEM_SLEEP_PM_OPS(qcom_geni_serial_sys_suspend,
-> -                                       qcom_geni_serial_sys_resume)
-> -       .restore = qcom_geni_serial_sys_hib_resume,
-> -       .thaw = qcom_geni_serial_sys_hib_resume,
-> +       .suspend = pm_sleep_ptr(qcom_geni_serial_sys_suspend),
-> +       .resume = pm_sleep_ptr(qcom_geni_serial_sys_resume),
-> +       .freeze = pm_sleep_ptr(qcom_geni_serial_sys_suspend),
-> +       .poweroff = pm_sleep_ptr(qcom_geni_serial_sys_suspend),
-> +       .restore = pm_sleep_ptr(qcom_geni_serial_sys_hib_resume),
-> +       .thaw = pm_sleep_ptr(qcom_geni_serial_sys_hib_resume),
-
-Personally, the order you listed them is less intuitive than the order
-that SET_SYSTEM_SLEEP_PM_OPS() lists functions. IMO it's better to
-consistently alternate matching suspend/resume functions. ;-)
-
-Both of those are nits, so I'm also fine with:
-
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Regards,
+Bjorn
