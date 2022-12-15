@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C853B64E2FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 308A864E2FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiLOVUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 16:20:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
+        id S229614AbiLOVUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 16:20:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbiLOVUR (ORCPT
+        with ESMTP id S230127AbiLOVUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 16:20:17 -0500
+        Thu, 15 Dec 2022 16:20:20 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DAC5C0EF;
-        Thu, 15 Dec 2022 13:20:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14D65C763;
+        Thu, 15 Dec 2022 13:20:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AA8461DF3;
-        Thu, 15 Dec 2022 21:20:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D17B9C433D2;
-        Thu, 15 Dec 2022 21:20:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F25261DF3;
+        Thu, 15 Dec 2022 21:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AE96CC433F1;
+        Thu, 15 Dec 2022 21:20:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671139215;
-        bh=GP7shHdk1ZTDNP6SobUegK31SbYKyc/TR/tgYY6unRA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=n2C1FIlw7w2qhL9JVQ0Zf3DlotraAbcUMhAYI5MOxOzy87RCCrpEAdLELZNKE98KD
-         VzJZf+BprILlsOGCqeZgtDCLxxRDiYum2B43d4QR7OxXqqIbOYbMZhBWUB3881LoYC
-         8w3Ydclmq+t/axcXl0Dt171tPvb/tV//uafVthtDlx0ap6j1kQVEAfWbFq8uG/MxNT
-         KJQKFQ3bDkIfhrcd56yqnnx50SmV4GqigGF1i9uvLcuSMr9/OJvEwMMWQToApErxxI
-         zN3C5luweYG315/BRWVD0Fg8y8+5kNr9hLO/uY647NsoCAM1aWbSrN6XkdHorMdw9C
-         234UG6l2xy7kw==
+        s=k20201202; t=1671139217;
+        bh=hTA0Xhc2b0v2QvH2F1ogKmba78dHaUC/h9xat3cSAAQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=UE+aYwats5BEQkJzTkRCOZA5NPpjWXUrzwo8/YDPeqKZxb60XIOmfNo26IqXb52Oq
+         va/CdrbELK+HZG7e7pOJcp/7LV4ynNPjdDdcG4giJJvkq1Wj/8p3/bj+NyubqisgAZ
+         amhuToqqGHg9l74MkmXDGiX4H1XzPTAVzh6boJLd3LIFZCj5FbaFV/EI0LHYSMalyV
+         rWEpB23R2ltE5HvzwYYCRlF50Aan/QyXYoUYKdgw5ZB3EBdWVvb9NT2f+Ku2v3lD2T
+         aYrRpLj61SBKHW7O5s53FbnV93LszAHTvzX035JW9sXDtjX4hmS/6JvJ3I1aq83Thf
+         RebU6UrOMiqDQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AD7ADE4D028;
-        Thu, 15 Dec 2022 21:20:15 +0000 (UTC)
-Subject: Re: [GIT PULL] VFIO updates for v6.2-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221215132415.07f82cda.alex.williamson@redhat.com>
-References: <20221215132415.07f82cda.alex.williamson@redhat.com>
-X-PR-Tracked-List-Id: <kvm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221215132415.07f82cda.alex.williamson@redhat.com>
-X-PR-Tracked-Remote: https://github.com/awilliam/linux-vfio.git tags/vfio-v6.2-rc1
-X-PR-Tracked-Commit-Id: 70be6f322860d322ebcd120cf0c05402ead5c6de
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 785d21ba2f447fb26df4b22f45653763beb767ea
-Message-Id: <167113921567.15818.18296679987223463629.pr-tracker-bot@kernel.org>
-Date:   Thu, 15 Dec 2022 21:20:15 +0000
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8F7A3E4D028;
+        Thu, 15 Dec 2022 21:20:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] Bluetooth: Fix a buffer overflow in mgmt_mesh_add()
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <167113921758.15811.17067027797406608637.git-patchwork-notify@kernel.org>
+Date:   Thu, 15 Dec 2022 21:20:17 +0000
+References: <20221212130828.988528-1-harshit.m.mogalapalli@oracle.com>
+In-Reply-To: <20221212130828.988528-1-harshit.m.mogalapalli@oracle.com>
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@gmail.com, error27@gmail.com,
+        darren.kenny@oracle.com, marcel@holtmann.org,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        brian.gix@intel.com, linux-bluetooth@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,15 +60,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 15 Dec 2022 13:24:15 -0700:
+Hello:
 
-> https://github.com/awilliam/linux-vfio.git tags/vfio-v6.2-rc1
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/785d21ba2f447fb26df4b22f45653763beb767ea
+On Mon, 12 Dec 2022 05:08:28 -0800 you wrote:
+> Smatch Warning:
+> net/bluetooth/mgmt_util.c:375 mgmt_mesh_add() error: __memcpy()
+> 'mesh_tx->param' too small (48 vs 50)
+> 
+> Analysis:
+> 
+> 'mesh_tx->param' is array of size 48. This is the destination.
+> u8 param[sizeof(struct mgmt_cp_mesh_send) + 29]; // 19 + 29 = 48.
+> 
+> [...]
 
-Thank you!
+Here is the summary with links:
+  - Bluetooth: Fix a buffer overflow in mgmt_mesh_add()
+    https://git.kernel.org/bluetooth/bluetooth-next/c/becee9f3220c
 
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
