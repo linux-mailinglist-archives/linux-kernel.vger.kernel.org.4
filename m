@@ -2,74 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEB364E0D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:31:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7537564E0DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiLOSax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 13:30:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55714 "EHLO
+        id S231156AbiLOSbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 13:31:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbiLOS3g (ORCPT
+        with ESMTP id S230415AbiLOSaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 13:29:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69259F5BC;
-        Thu, 15 Dec 2022 10:28:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 15 Dec 2022 13:30:25 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC52C770;
+        Thu, 15 Dec 2022 10:30:07 -0800 (PST)
+Received: from jupiter.universe (dyndsl-095-033-168-084.ewe-ip-backbone.de [95.33.168.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E979F61EB7;
-        Thu, 15 Dec 2022 18:28:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 548E2C43396;
-        Thu, 15 Dec 2022 18:28:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671128933;
-        bh=1ThKZ2KV+vE+nqXAV/w9d1N2Ghsp/GX0r5pFgGEiN2E=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=TSU703zWVNj3cxFJiEnqcO3zBQnV13k4NSAmhACL/26+PNXVT7oRWatT7skJeT94u
-         pLGJ9IJQXOW6WfWJW3Gb16akVv1KWMcQrlIrhLuyc4MHVA/tQUlegwcHNS8e4kWHwy
-         +faTtERx+fu3WZ8dYxloJH6qGcPKgKqxjSJ5WJbj5NoU8Xy99uR7hlDsKwYo7JXn78
-         yiIlZ0Ox+Nuct1tMZeSj1sYP27nxRNYMK+Bk1SgeikomfTjwsGbnt8eHEiUIYmN4aV
-         ugpXXATU1B8khkEufvD14v3SAjY0oNOavDS+SQLLaHo441vVlsJM/aK2EEL/wFT3xp
-         C5oN32JV9HpNA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 37E9BE4D00F;
-        Thu, 15 Dec 2022 18:28:53 +0000 (UTC)
-Subject: Re: [GIT PULL] More ACPI updates for v6.2-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0hy7LXMyKF1H3Sh7ZKS8HyuMWPX_htN84wBYkRxxeNupA@mail.gmail.com>
-References: <CAJZ5v0hy7LXMyKF1H3Sh7ZKS8HyuMWPX_htN84wBYkRxxeNupA@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0hy7LXMyKF1H3Sh7ZKS8HyuMWPX_htN84wBYkRxxeNupA@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.2-rc1-2
-X-PR-Tracked-Commit-Id: 3d03140c4844bbd128728e8a367bb467d95f888e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 057b40f43ce429a02e793adf3cfbf2446a19a38e
-Message-Id: <167112893322.20649.9904351691496894542.pr-tracker-bot@kernel.org>
-Date:   Thu, 15 Dec 2022 18:28:53 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 365B56602C74;
+        Thu, 15 Dec 2022 18:30:06 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671129006;
+        bh=wV+xB70dL/rAr5vw7rOX1NxQMtNjnz1aalkQwKIFdK4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=W4jtxJkD9DGbxWiK4ww05mPg7dOhutW6O43JRQk7hUqlTEN/SdJF9ZKygwPfF8OcC
+         oGsYWqogKundaqs7OyBheiENCMKwbprdp0jiBVdjyjipHOxKJ6KslWeJMP1W1e1StF
+         lJVvAALzaqIabTQNn8pFr/2nfgudSltmhDKDPaETqiYXvj+U+SOOcqRI/mtoj++Pa9
+         fiJIiIBhukufGXe3DVSHyp38HGU+4QVYAlKYPwiBRLgoPk0JR0kUUb4t5/EnYrz4xs
+         V2ZM1BJ6xqcQJoXHM5JITvxC7nYBZL9HG9r2AKkvGLktGwr62xoUe1yBMfmfh3lepj
+         KOj+9fCvzh5wg==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id 4A427480119; Thu, 15 Dec 2022 19:30:03 +0100 (CET)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, Jagan Teki <jagan@edgeble.ai>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christopher Obbard <chris.obbard@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCHv7 0/7] Initial rk3588 DT
+Date:   Thu, 15 Dec 2022 19:29:55 +0100
+Message-Id: <20221215183002.211081-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 15 Dec 2022 19:07:11 +0100:
+Hi,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.2-rc1-2
+This adds initial rk3588(s) DT including three different board
+devicetrees. All required driver changes have been merged into
+Linus tree already. To avoid warnings from
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/057b40f43ce429a02e793adf3cfbf2446a19a38e
+$ make CHECK_DTBS=y rockchip/rk3588-evb1-v10.dtb \
+  rockchip/rk3588-rock-5b.dtb rockchip/rk3588s-rock-5a.dtb
 
-Thank you!
+it is required to have dt-schema 2022.12 (older releases may
+generate warnings for the ethernet nodes) and c69bffe199270c
+("dt-bindings: rtc: convert hym8563 bindings to json-schema")
+from rtc-next.
+
+Changes since PATCHv6:
+ * https://lore.kernel.org/all/20221214182247.79824-1-sebastian.reichel@collabora.com/
+ * renamed ppi_cluster<x> to ppi_partition<x>
+ * updated commit message of the third patch removing the incorrect "(single core)" and
+   listing all added IP blocks.
+ * removed brightness levels from EVB1 backlight; I kept the backlight node. It's the
+   test case for PWM support.
+ * rebase to current linus master (041fae9c105a)
+
+Changes since PATCHv5:
+ * https://lore.kernel.org/all/20221205172350.75234-1-sebastian.reichel@collabora.com/
+ * modified GIC interrupts to use rk3399 style setup with two PPI partitions
+ * add interrupt-names to the ARM timer node
+ * add hyp-virt IRQ to the ARM timer node
+ * re-add the #power-domain-cells for the power-controller sub-nodes and set to 0;
+   the DT binding document requires it. I'm not sure why it was not pointed out by
+   DTBS_CHECK when sending v4 and v5.
+
+Changes since PATCHv4:
+ * https://lore.kernel.org/all/20221124144928.35381-1-sebastian.reichel@collabora.com/
+ * update compatible string for the PHY to provide PHY ID. Without the IDs
+   provided in the firmware, the kernel tries to identify the correct driver by
+   reading the ID. This fails, if the bootloader does not setup the reset GPIO,
+   since the kernel only setups the reset GPIO in the PHY driver. Rock 5A with
+   the default bootloader runs into this, but I also changed EVB1 since the kernel
+   should not depend on bootloader configuration for this.
+ * added pinctrl for PHY reset-gpios
+ * drop rgmii-rxid from gmac1 node
+ * added reviewed-by from Michael Risch for board DTs
+ * I kept the order of the trailers (i.e. my SoB being the last), which is the usual
+   order in most subsystems
+
+Changes since PATCHv3:
+ * https://lore.kernel.org/all/20221121175814.68927-1-sebastian.reichel@collabora.com/
+ * update reset gpio + timings in EVB1 and Rock 5A DT to new style
+ * change regulator- prefix to -regulator suffix in EVB1 and Rock 5B DTB
+ * merge dt-binding update patches for EVB1, Rock 5A and Rock 5B and add Krzysztof's Ack
+ * change pinctrl name "active" to "default" for all PWM nodes
+ * remove aliases from rk3588s and rk3588 DTSI
+ * sort includes in rk3588s.dtsi
+ * add dma names for uart
+ * some more property order fixes
+ * remove #power-domain-cells for the power-controller sub-nodes; only the main node should be referenced
+ * add dynamic-power-coefficient and #cooling-cells for all CPU cores
+
+Changes since PATCHv2:
+ * https://lore.kernel.org/all/20221115161702.163057-1-sebastian.reichel@collabora.com/
+ * add minimal Radxa Rock 5B DT
+ * Add aliases for i2c, spi and gpio in rk3588s.dtsi
+ * Fix ethernet-phy node name and remove #phy-cells
+ * Sort nodes / includes in both boards
+ * Sort nodes in rk3588s.dtsi according to register address
+ * add missing spi4 node in rk3588s.dtsi
+ * split board specific dt-bindings into their own patches
+ * add board specific mmc alias following the downstream enumeration
+
+Changes since PATCHv1:
+ * https://lore.kernel.org/all/20221108171500.99599-1-sebastian.reichel@collabora.com/
+ * Drop Acked-by from Krzysztof
+ * Add 'regulator-' prefix to VCC12V VCC5V0 regulators
+ * Change 'Radxa Rock 5A' to 'Radxa ROCK 5 Model A' in DT binding
+ * Update cover-letter (clock driver and some DT binding fixes got merged)
+
+-- Sebastian
+
+Christopher Obbard (1):
+  arm64: dts: rockchip: Add rock-5b board
+
+Jianqun Xu (1):
+  arm64: dts: rockchip: Add rk3588 pinctrl data
+
+Kever Yang (2):
+  arm64: dts: rockchip: Add base DT for rk3588 SoC
+  arm64: dts: rockchip: Add rk3588-evb1 board
+
+Sebastian Reichel (3):
+  dt-bindings: soc: rockchip: add initial rk3588 syscon compatibles
+  dt-bindings: arm: rockchip: add initial rk3588 boards
+  arm64: dts: rockchip: Add rock-5a board
+
+ .../devicetree/bindings/arm/rockchip.yaml     |   15 +
+ .../devicetree/bindings/soc/rockchip/grf.yaml |    5 +
+ arch/arm64/boot/dts/rockchip/Makefile         |    3 +
+ .../boot/dts/rockchip/rk3588-evb1-v10.dts     |  129 +
+ .../boot/dts/rockchip/rk3588-pinctrl.dtsi     |  516 +++
+ .../boot/dts/rockchip/rk3588-rock-5b.dts      |   44 +
+ arch/arm64/boot/dts/rockchip/rk3588.dtsi      |   58 +
+ .../boot/dts/rockchip/rk3588s-pinctrl.dtsi    | 3403 +++++++++++++++++
+ .../boot/dts/rockchip/rk3588s-rock-5a.dts     |   73 +
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi     | 1703 +++++++++
+ 10 files changed, 5949 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s.dtsi
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.39.0
+
