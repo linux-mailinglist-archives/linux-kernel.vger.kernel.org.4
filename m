@@ -2,233 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6733D64D923
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EF764D92D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:01:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiLOJ6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 04:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
+        id S230017AbiLOKB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 05:01:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiLOJ6s (ORCPT
+        with ESMTP id S230013AbiLOKBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 04:58:48 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21DA193EB;
-        Thu, 15 Dec 2022 01:58:43 -0800 (PST)
-X-UUID: d340c21f11ce47178777f9129ab04fc3-20221215
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=63a5UIGzfu3Wi1UYpCYyrB4fgEwqDRpWf0vQJYcCngE=;
-        b=h9cxfIjojX5DinOfSiRqDxMF9Ajk1Gh8z5D/RqSpaCqA5EOw9hZd+zdSLLcEiDbbR6GP6LiwT9aMFA+3Ok/i6UAnpILNn5Jx/G/wDpPAY3F7hs9S6lBwsIk9um/KOxAEyBAPKsN8u0maW9/K8+6P+l1Nq7tQ+liBlMvrz8cBHUk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:4130c903-cf6c-4ef2-be1a-e9c749e48bac,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:dcaaed0,CLOUDID:828cb9af-9f02-4d44-9c44-6e4bb4e4f412,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: d340c21f11ce47178777f9129ab04fc3-20221215
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1938023813; Thu, 15 Dec 2022 17:58:35 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 15 Dec 2022 17:58:34 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 15 Dec 2022 17:58:34 +0800
-Message-ID: <d15babbe-5f69-38c0-28d4-614b6ffd1b8b@mediatek.com>
-Date:   Thu, 15 Dec 2022 17:58:32 +0800
+        Thu, 15 Dec 2022 05:01:24 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFEA2036F;
+        Thu, 15 Dec 2022 02:01:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=wkAghe3ZNHLtMkd0SpeOhPk85q8HVfUfHIWkbKQ6Tjs=; b=Hvp+NvWQs5Luk958wA57VbeRNK
+        OMTEG4yA7yQFAXaOHiEClUFOcpr8R2ndbIlSlETpKMTWVrJdB+1xovmDAeVAKvI48kpqhBwcWAJwj
+        JZANyR1PLRmtLYM3JiEZEQF/GtMXeeVt60oO59kNv6lGYmuqk41ljxzBRQJahnQX7Y4UDLbY3zF21
+        hBjLWXEkvipV1HSKqCK9pmkQ9XMOqIlHl/vP7cygXrhE7TQQzmNUKR+fxyCmzGoMvsmnJYtwSLsnH
+        zFnt1DnoBMJt6OGpXPXUrOr/icR8B/Jmviw8bwjL5QyermsF5Fx+f9C58xG7QmfTH2noGbyiU4XUh
+        rnyFmlLg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p5l3D-008daE-QI; Thu, 15 Dec 2022 10:01:15 +0000
+Date:   Thu, 15 Dec 2022 02:01:15 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>
+Cc:     axboe@kernel.dk, corbet@lwn.net, linux-block@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 09/21] block, blksnap: attaching and detaching the
+ filter and handling I/O units
+Message-ID: <Y5rwa6m3yqo40vz1@infradead.org>
+References: <20221209142331.26395-1-sergei.shtepa@veeam.com>
+ <20221209142331.26395-10-sergei.shtepa@veeam.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] usb: typec: tcpm: Fix altmode re-registration causes
- sysfs create fail
-Content-Language: en-US
-To:     cy_huang <u0084500@gmail.com>, <linux@roeck-us.net>,
-        <heikki.krogerus@linux.intel.com>, <matthias.bgg@gmail.com>
-CC:     <gregkh@linuxfoundation.org>, <tommyyl.chen@mediatek.com>,
-        <gene_chen@richtek.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        ChiYuan Huang <cy_huang@richtek.com>, <stable@vger.kernel.org>,
-        Bear Wang <bear.wang@mediatek.com>,
-        Pablo Sun <pablo.sun@mediatek.com>
-References: <1671096096-20307-1-git-send-email-u0084500@gmail.com>
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-In-Reply-To: <1671096096-20307-1-git-send-email-u0084500@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221209142331.26395-10-sergei.shtepa@veeam.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/22 17:21, cy_huang wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> There's the altmode re-registeration issue after data role
-> swap (DR_SWAP).
-> 
-> Comparing to USBPD 2.0, in USBPD 3.0, it loose the limit that only DFP
-> can initiate the VDM command to get partner identity information.
-> 
-> For a USBPD 3.0 UFP device, it may already get the identity information
-> from its port partner before DR_SWAP. If DR_SWAP send or receive at the
-> mean time, 'send_discover' flag will be raised again. It causes discover
-> identify action restart while entering ready state. And after all
-> discover actions are done, the 'tcpm_register_altmodes' will be called.
-> If old altmode is not unregistered, this sysfs create fail can be found.
-> 
-> In 'DR_SWAP_CHANGE_DR' state case, only DFP will unregister altmodes.
-> For UFP, the original altmodes keep registered.
-> 
-> This patch fix the logic that after DR_SWAP, 'tcpm_unregister_altmodes'
-> must be called whatever the current data role is.
-> 
-> Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together)
-> Reported-by: TommyYl Chen <tommyyl.chen@mediatek.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
-> Hi,
-> 
-> Below's the issue log for the reference.
-> 
-> *TCPM
-> [    3.856679] AMS DISCOVER_MODES start
-> [    3.856687] PD TX, header: 0x188f
-> [    3.858827] PD TX complete, status: 0
-> [    3.865330] PD RX, header: 0x2daf [1]
-> [    3.865340] Rx VDM cmd 0xff01a043 type 1 cmd 3 len 2
-> [    3.865348] AMS DISCOVER_MODES finished
-> [    3.865352]  Alternate mode 0: SVID 0xff01, VDO 1: 0x001c0045
-> [    3.865362] AMS DISCOVER_MODES start
-> [    3.865367] PD TX, header: 0x1a8f
-> [    3.867802] PD TX complete, status: 0
-> [    3.875208] PD RX, header: 0x2faf [1]
-> [    3.875216] Rx VDM cmd 0x413ca043 type 1 cmd 3 len 2
-> [    3.875222] AMS DISCOVER_MODES finished
-> [    3.875225]  Alternate mode 1: SVID 0x413c, VDO 1: 0x00000001
-> [    3.938243] AMS GET_SINK_CAPABILITIES start
-> [    3.938255] state change SNK_READY -> AMS_START [rev3 GET_SINK_CAPABILITIES]
-> [    3.938266] state change AMS_START -> GET_SINK_CAP [rev3 GET_SINK_CAPABILITIES]
-> [    3.938274] PD TX, header: 0xe88
-> [    3.940268] PD TX complete, status: 0
-> [    3.940310] pending state change GET_SINK_CAP -> GET_SINK_CAP_TIMEOUT @ 60 ms
-> [rev3 GET_SINK_CAPABILITIES]
-> [    3.946291] PD RX, header: 0x13a4 [1]
-> [    3.946295] Port partner FRS capable partner_frs_current:0 port_frs_current:0 enable:n
-> [    3.946298] state change GET_SINK_CAP -> SNK_READY [rev3 GET_SINK_CAPABILITIES]
-> [    3.946304] AMS GET_SINK_CAPABILITIES finished
-> [    4.239342] CC1: 5 -> 4, CC2: 0 -> 0 [state SNK_READY, polarity 0, connected]
-> [    4.256594] PD RX, header: 0x5a9 [1]
-> [    4.256603] state change SNK_READY -> DR_SWAP_ACCEPT [rev3 DATA_ROLE_SWAP]
-> [    4.256609] PD TX, header: 0x83
-> [    4.258528] PD TX complete, status: 0
-> [    4.258584] state change DR_SWAP_ACCEPT -> DR_SWAP_CHANGE_DR [rev3 DATA_ROLE_SWAP]
-> [    4.258591] Requesting mux state 1, usb-role 1, orientation 1
-> [    4.259588] AMS DATA_ROLE_SWAP finished
-> [    4.259592] state change DR_SWAP_CHANGE_DR -> SNK_READY [rev3 NONE_AMS]
-> [    4.259605] AMS DISCOVER_IDENTITY start
-> [    4.259609] Sink TX No Go
-> [    4.260874] CC1: 4 -> 5, CC2: 0 -> 0 [state SNK_READY, polarity 0, connected]
-> [    4.359636] AMS DISCOVER_IDENTITY start
-> [    4.359642] PD TX, header: 0x12af
-> [    4.361884] PD TX complete, status: 0
-> [    4.369433] PD RX, header: 0x578f [1]
-> [    4.369439] Rx VDM cmd 0xff00a041 type 1 cmd 1 len 5
-> [    4.369448] AMS DISCOVER_IDENTITY finished
-> [    4.369515] Identity: 413c:c013.0712
-> [    4.369521] AMS DISCOVER_SVIDS start
-> [    4.369524] PD TX, header: 0x14af
-> [    4.371696] PD TX complete, status: 0
-> [    4.378564] PD RX, header: 0x398f [1]
-> [    4.378573] Rx VDM cmd 0xff00a042 type 1 cmd 2 len 3
-> [    4.378579] AMS DISCOVER_SVIDS finished
-> [    4.378582] SVID 1: 0xff01
-> [    4.378584] SVID 2: 0x413c
-> [    4.378594] AMS DISCOVER_MODES start
-> [    4.378597] PD TX, header: 0x16af
-> [    4.380696] PD TX complete, status: 0
-> [    4.387008] PD RX, header: 0x2b8f [1]
-> [    4.387014] Rx VDM cmd 0xff01a043 type 1 cmd 3 len 2
-> [    4.387021] AMS DISCOVER_MODES finished
-> [    4.387023]  Alternate mode 0: SVID 0xff01, VDO 1: 0x001c0045
-> [    4.387029] AMS DISCOVER_MODES start
-> [    4.387031] PD TX, header: 0x18af
-> [    4.389134] PD TX complete, status: 0
-> [    4.395528] PD RX, header: 0x2d8f [1]
-> [    4.395538] Rx VDM cmd 0x413ca043 type 1 cmd 3 len 2
-> [    4.395546] AMS DISCOVER_MODES finished
-> [    4.395548]  Alternate mode 1: SVID 0x413c, VDO 1: 0x00000001
-> 
-> *Kernel TRACE
-> sysfs: cannot create duplicate filename
-> '/devices/platform/soc/11d01000.i2c/i2c-0/0-0034/mt6360-tcpc.6.auto/typec/port0/port0.0/partner'
-> CPU: 2 PID: 299 Comm: mt6360-tcpc.6.a Tainted: GO      5.15.37-mtk+g880abc5122e7 #1
-> Hardware name: MediaTek MT8195 demo board (DT)
-> Call trace:
->   dump_backtrace+0x0/0x1ac
->   show_stack+0x24/0x30
->   dump_stack_lvl+0x68/0x84
->   dump_stack+0x1c/0x38
->   sysfs_warn_dup+0x70/0x90
->   typec_probe+0xa4/0x134 [typec]
->   really_probe.part.0+0xa4/0x310
->   __device_attach_driver+0x100/0x16c
->   bus_for_each_drv+0x84/0xe0
->   __device_attach+0xe0/0x1ac
->   device_add+0x39c/0x8b0
->   device_register+0x2c/0x40
->   typec_register_altmode+0x1f4/0x360 [typec]
->   typec_partner_register_altmode+0x1c/0x30 [typec]
->   tcpm_pd_rx_handler+0x19d4/0x1c0c [tcpm]
->   kthread_worker_fn+0xb8/0x290
->   kthread+0x15c/0x170
->   ret_from_fork+0x10/0x20
-> [    4.395962] typec_displayport port0-partner.2: failed to create symlinks
-> [    4.395967] typec_displayport: probe of port0-partner.2 failed with error -17
-> 
-> It seems it's a common issue if typec port supports the modal operation.
-> 
-> ---
->   drivers/usb/typec/tcpm/tcpm.c | 7 +++----
->   1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 904c7b4..59b366b 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4594,14 +4594,13 @@ static void run_state_machine(struct tcpm_port *port)
->   		tcpm_set_state(port, ready_state(port), 0);
->   		break;
->   	case DR_SWAP_CHANGE_DR:
-> -		if (port->data_role == TYPEC_HOST) {
-> -			tcpm_unregister_altmodes(port);
-> +		tcpm_unregister_altmodes(port);
-> +		if (port->data_role == TYPEC_HOST)
->   			tcpm_set_roles(port, true, port->pwr_role,
->   				       TYPEC_DEVICE);
-> -		} else {
-> +		else
->   			tcpm_set_roles(port, true, port->pwr_role,
->   				       TYPEC_HOST);
-> -		}
->   		tcpm_ams_finish(port);
->   		tcpm_set_state(port, ready_state(port), 0);
->   		break;
+> +static bool tracker_submit_bio_cb(struct bio *bio)
+> +{
+> +	struct bdev_filter *flt = bio->bi_bdev->bd_filter;
+> +	struct bio_list bio_list_on_stack[2] = { };
+> +	struct bio *new_bio;
+> +	bool ret = true;
+> +	struct tracker *tracker = container_of(flt, struct tracker, flt);
+> +	int err;
+> +	sector_t sector;
+> +	sector_t count;
+> +	unsigned int current_flag;
+> +
+> +	WARN_ON_ONCE(!flt);
+> +	if (unlikely(!flt))
+> +		return true;
 
-Reviewed-by: Macpaul Lin <macpaul.lin@mediatek.com>
+We're called through the filter, so checking this again here (twice)
+is a bit silly.
 
-Thank for your help.
+> +	if (bio->bi_opf & REQ_NOWAIT) {
+> +		if (!percpu_down_read_trylock(&tracker_submit_lock)) {
+> +			bio_wouldblock_error(bio);
+> +			return false;
+> +		}
+> +	} else
+> +		percpu_down_read(&tracker_submit_lock);
 
-Regards,
-Macpaul Lin
+Does it make sense to make this a global lock vs per-struct tracker?
+
+> +	if (!op_is_write(bio_op(bio)))
+> +		goto out;
+> +
+> +	count = bio_sectors(bio);
+> +	if (!count)
+> +		goto out;
+
+Just nitpicking, but what about moving all the code below here
+into a separate helper that is only called for op_is_write &&
+bio_sectors?  It's not going to change anything functionally, but
+would make the code easier to follow.
+
+> +	current_flag = memalloc_noio_save();
+> +	bio_list_init(&bio_list_on_stack[0]);
+> +	current->bio_list = bio_list_on_stack;
+> +	barrier();
+
+barrier is just a compiler barrier, so it is unlikely to do what
+you want. But without a comment I can't even figure out what it is
+trying to do.
+
+> +static int tracker_filter_attach(struct block_device *bdev,
+> +				 struct tracker *tracker)
+> +{
+> +	int ret;
+> +	bool is_frozen = false;
+> +
+> +	pr_debug("Tracker attach filter\n");
+> +
+> +	if (freeze_bdev(bdev))
+> +		pr_err("Failed to freeze device [%u:%u]\n", MAJOR(bdev->bd_dev),
+> +		       MINOR(bdev->bd_dev));
+
+I think you need to fail the attachment if we can't freeze the device.
+
+> +static int tracker_filter_detach(struct block_device *bdev)
+> +{
+> +	int ret;
+> +	bool is_frozen = false;
+> +
+> +	pr_debug("Tracker delete filter\n");
+> +	if (freeze_bdev(bdev))
+> +		pr_err("Failed to freeze device [%u:%u]\n", MAJOR(bdev->bd_dev),
+> +		       MINOR(bdev->bd_dev));
+
+Same here.
+
+> +/**
+> + * tracker_wait_for_release - Waiting for all trackers are released.
+> + *
+> + * Trackers are released in the worker thread. So, this function allows to wait
+> + * for the end of the process of releasing trackers.
+> + */
+> +static void tracker_wait_for_release(void)
+
+This defeats the reason to move it to the workqueue first, as you
+can still deadlock on whatever problem that tried to solve, just
+out of reach of lockdep.
+
+> +struct tracker *tracker_create_or_get(dev_t dev_id)
+> +{
+> +	struct tracker *tracker;
+> +	struct block_device *bdev;
+> +	struct tracked_device *tr_dev;
+> +
+> +	bdev = blkdev_get_by_dev(dev_id, 0, NULL);
+
+These blkdev_get_by_dev calls are a little problematic, as they
+bypass any access restriction (LSMs, containers, etc).  That's
+why the kernel generally does a blkdev_get_by_name based on the
+actual file name, which does all the proper checks.  I think the
+tracker creation also needs to happen based on names to fit into this
+security model.  Passing in names should also be much easier for
+userspace to start with.
+
+
+Now for remove, and the other operations on the tracked device:
+Is there any reason to not simply add an ioctl method to
+bdev_filter_operations, so that you can issue these ioctls against the
+tracked device?  That removes the need to find the tracked device
+entirely and should simplify a lot of things.
+
+In fact thinking wonder if attachment of a filter driver should
+go through the block layer using an ioctl on the tracked device
+as well, i.e.
+
+ - add a name field to bdev_filter_operations
+ - keep a list of all bdev_filter_operations in the block core
+ - new core block layer ioctl to associate a block device with a
+   bdev_filter_operations
+ - everything after that is done through bdev_filter_operations->ioctl.
+
