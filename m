@@ -2,49 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABDEE64DFCC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A31864DFB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbiLORhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 12:37:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
+        id S229850AbiLORcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 12:32:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiLORhV (ORCPT
+        with ESMTP id S229614AbiLORcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 12:37:21 -0500
-X-Greylist: delayed 380 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Dec 2022 09:37:19 PST
-Received: from email.studentenwerk.mhn.de (mailin.studentenwerk.mhn.de [141.84.225.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4670629CB5;
-        Thu, 15 Dec 2022 09:37:19 -0800 (PST)
-Received: from mailhub.studentenwerk.mhn.de (mailhub.studentenwerk.mhn.de [127.0.0.1])
-        by email.studentenwerk.mhn.de (Postfix) with ESMTPS id 4NXzm00N79zRhTg;
-        Thu, 15 Dec 2022 18:30:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwm.de; s=stwm-20170627;
-        t=1671125456;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=O/PT2ChNLGC2cux6NliV6PIJ2JFRP5aYtPit3o1VDkA=;
-        b=GEF6JMhFscQy35Rg9BO+oaXXEpfTltnyC3ewyYhSSNAoLGhAMCGL8dngTNvFGWXmbba9Ay
-        yNZkZR2z2pBqzMaZf9IgK410xg3vUL2XHpoxrAr4cOqJF0D5kuh5NC81xfmtGbo/0JaGbO
-        D59G4skkjloTp62srvs/N6dpEk7OMCdpmpsce1TRbukbJJXdHBMhCEui7hqiIEFXsTW5nm
-        2YORKTemf7Cr+h4IQqvJ94R6K99dTe04XQICNSy40mI/gKPl9dSseQbFdwVCO0ZGqYXeb5
-        4LDJDN6Du06+dGz8fFoC+oxHW0SlBAdXV8OlzF/p3C4Dy/ApsGm9y7vRkGQEeg==
+        Thu, 15 Dec 2022 12:32:50 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2043.outbound.protection.outlook.com [40.107.237.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7876BDF27;
+        Thu, 15 Dec 2022 09:32:48 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cA0UACVk02UHbXgm8kvvCFx0Yr9lf0Antt1DCXB4xYQU7jS8mQYbixReIBMOKW9c5WEmEA6xs4AEzbTT/SAt+P+BVnoCP41jiCBRo9MEHEEieNnSgxUrlxx6a+candnvI5WHB4XZAefw1l1n78b8texrDPzKx9ZhvQhbio0Uq/Gx1KcXerVpyQXKiG1X+sNWZivlip4Ng1Dp9VhxzaCSqabihXXQOHr3rSKsr5g6vWnAUiEsRahBZPcHYNuCI++czUQNOOhlwJRciCm77pSauahd7/7VYrQmI8w7XQGmyiXRo281KHL2NM4G4ukAf1I11UEu/ROmteUx1pGj7IfMEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WOfYKO5Mptaap7zkC6m1fti+nZESZ8nqYJcEWicd+ME=;
+ b=ViUWeWUrpW5YKHdjw3o8+StBop6yZgHW5zoTOylg2I41jD/PoKc+RHwRiX87QktC2Ggb7mpIMwLCd9IR7m46CzVHW3yQcuyz3StwsqZmaKBsz84eHSm7B4gyERnZAAxBmPgOfAX0QvxqAyJDXVNEw3oAa+MoWGeItDRTLtGGiCgVl1lAzEtrpta/6LP5p0+51sHAKdA72DDmFEuzDonDaxz54hRMOnGGBmxnZ6C9oKamtEDl4GjvLNL0+FB7qu4hQRG4IdsTJ0z17/Y01+qMj0l8V6lwFbJ2FdcI46azquwrmCo3Shu1xU8LNOJS/YASg3UsBE1gQaL9XtLoezNZnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WOfYKO5Mptaap7zkC6m1fti+nZESZ8nqYJcEWicd+ME=;
+ b=Ts8isMLohIlXhaA4uwYq7ONCDJU7oWRU2sNdW9o1R/fUlpgJjMRTOs1SQalTcC1Eo66UvUz2cs+VmfVlJo9alGNuA5QBE/uxEif5TfRonJ+v5AvHW1AiyJUBFJY2z3ASIXdxDKafRGCRe3fEN6YsPr02r0LzL2qXoTnMN8Ojrwo=
+Received: from BN0PR04CA0073.namprd04.prod.outlook.com (2603:10b6:408:ea::18)
+ by LV2PR12MB5728.namprd12.prod.outlook.com (2603:10b6:408:17c::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12; Thu, 15 Dec
+ 2022 17:32:46 +0000
+Received: from BN8NAM11FT035.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ea:cafe::88) by BN0PR04CA0073.outlook.office365.com
+ (2603:10b6:408:ea::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12 via Frontend
+ Transport; Thu, 15 Dec 2022 17:32:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT035.mail.protection.outlook.com (10.13.177.116) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5924.12 via Frontend Transport; Thu, 15 Dec 2022 17:32:46 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 15 Dec
+ 2022 11:32:45 -0600
+Received: from xsjlizhih40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Thu, 15 Dec 2022 11:32:45 -0600
+From:   Lizhi Hou <lizhi.hou@amd.com>
+To:     <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Lizhi Hou <lizhi.hou@amd.com>, <max.zhen@amd.com>,
+        <sonal.santan@amd.com>, <larry.liu@amd.com>, <brian.xu@amd.com>,
+        <tumic@gpxsee.org>
+Subject: [PATCH V11 XDMA 0/2] xilinx XDMA driver
+Date:   Thu, 15 Dec 2022 09:32:31 -0800
+Message-ID: <1671125553-57707-1-git-send-email-lizhi.hou@amd.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Date:   Thu, 15 Dec 2022 18:31:16 +0100
-From:   Wolfgang Walter <linux@stwm.de>
-To:     linux-wireless@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: kernel v6.1: NULL pointer dereference in ieee80211_deliver_skb
-Message-ID: <1585238f2dee5e2daafe28ba0606b6a4@stwm.de>
-X-Sender: linux@stwm.de
-Organization: =?UTF-8?Q?Studentenwerk_M=C3=BCnchen?=
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT035:EE_|LV2PR12MB5728:EE_
+X-MS-Office365-Filtering-Correlation-Id: 37c179ec-bac9-470e-3c6f-08dadec26159
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: npXM47ZHp2lFr/d3IIlFg2Xf0lv05Sv5uAVaVbK/fpakRX7FS3ptwK8xANMF7NdF8s6Frc2cfP+X3PXRjRy2wywpiq92WHrHD+Ahu7XJeccJ/pCCJ3Z0er3ygPrVge3yhIGgwVEOkNN3HZLNQS+9NG1LiWRWG5/U4jJAGek5VPGOnq+P+CPAORkBkm5dFJNxOL290t05rrMB9lZjRSCPVVwL72AL+EGQwzdEZwhMYYNyfMjxhvUN49NZI+LI0/nWkLsyQZtCh+kgSeR6HrOzv62joz0bO2B3fZSemvDhaZYVdJ2GHoBSODG4EFiOwZnt+L5FctcVKOdl84YvpzdRgkfKH2Y7mbyIScE2qEtcb+reuot93jtt/esVRA+vN2zn74D4xuNsSOsEF7xOJ4tKEB/vvUtt/jPKaxKQd/llDSNFApz1KqxIodS03jjYLoSswSi2CN4m3SSpNiA7KKzStViToQUyjjhxsrvMiYs7wDD0WgOxwnlEUYpyHm0qrfDs0jRWy9kD3mjPvRIuS3NOewrSd4o8OtyrQRbZ//IWMypQrGiWgqH8Or8qJykR0cz9uyAhq1kca8DP4bducTqmvHwdE50/42nGixqFMrMt5XMCTpl+EJG2Pa0ygHBzWSF9U4s90RHkCsGA6dVMOWf/rk02X566H+mAIjMjAj7ZuULOF0kv4/inditPyss5/dOI+Rpn2fYagRFQlgYqJXlRsriQ0QhvVGVOJSltpBm9LsKHda34TczociUK2IgWBJcC+a7CoC5aoV+gXf/ViEe2qzX1aV7gN1O02ubeTgp8uYAjbY76Sa8PPmO5vZmUyjRt
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:CA;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(396003)(39860400002)(451199015)(36840700001)(46966006)(40470700004)(86362001)(36756003)(4326008)(8676002)(70206006)(70586007)(316002)(336012)(54906003)(2616005)(81166007)(82740400003)(47076005)(426003)(2906002)(83380400001)(36860700001)(40460700003)(82310400005)(26005)(110136005)(186003)(966005)(478600001)(40480700001)(356005)(6666004)(41300700001)(5660300002)(8936002)(44832011)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2022 17:32:46.4137
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37c179ec-bac9-470e-3c6f-08dadec26159
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT035.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5728
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,116 +100,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello,
 
-with kernel v6.1 I always get the following oops when running on a small 
-router:
+This V10 of patch series is to provide the platform driver to support the
+Xilinx XDMA subsystem. The XDMA subsystem is used in conjunction with the
+PCI Express IP block to provide high performance data transfer between host
+memory and the card's DMA subsystem. It also provides up to 16 user
+interrupt wires to user logic that generate interrupts to the host.
 
-====================================================
-Dez 14 18:14:29 knut systemd[1]: Started LSB: DHCP relay.
-Dez 14 18:14:30 knut kernel: BUG: kernel NULL pointer dereference, 
-address: 00000000000000a8
-Dez 14 18:14:30 knut kernel: #PF: supervisor write access in kernel mode
-Dez 14 18:14:30 knut kernel: #PF: error_code(0x0002) - not-present page
-Dez 14 18:14:30 knut kernel: PGD 0 P4D 0
-Dez 14 18:14:30 knut kernel: Oops: 0002 [#1] PREEMPT SMP PTI
-Dez 14 18:14:30 knut kernel: CPU: 1 PID: 506 Comm: mt76-usb-rx phy 
-Tainted: G            E      6.1.0-debian64x+1.7 #3
-Dez 14 18:14:30 knut kernel: Hardware name: ZOTAC 
-ZBOX-ID92/ZBOX-IQ01/ZBOX-ID92/ZBOX-IQ01, BIOS B220P007 05/21/2014
-Dez 14 18:14:30 knut kernel: RIP: 0010:ieee80211_deliver_skb+0x62/0x1f0 
-[mac80211]
-Dez 14 18:14:30 knut kernel: Code: 00 48 89 04 24 e8 9e a7 c3 df 89 c0 
-48 03 1c c5 a0 ea 39 a1 4c 01 6b 08 48 ff 03 48 83 7d 28 00 74 11 48 8b 
-45 30 48 63 55 44 <48> 83 84 d0 a8 00 00 00 01 41 8b 86 c0 11 00 00 8d 
-50 fd 83 fa 01
-Dez 14 18:14:30 knut kernel: RSP: 0018:ffff999040803b10 EFLAGS: 00010286
-Dez 14 18:14:30 knut kernel: RAX: 0000000000000000 RBX: ffffb9903f496480 
-RCX: 0000000000000000
-Dez 14 18:14:30 knut kernel: RDX: 0000000000000000 RSI: 0000000000000000 
-RDI: 0000000000000000
-Dez 14 18:14:30 knut kernel: RBP: ffff999040803ce0 R08: 0000000000000000 
-R09: 0000000000000000
-Dez 14 18:14:30 knut kernel: R10: 0000000000000000 R11: 0000000000000000 
-R12: ffff8d21828ac900
-Dez 14 18:14:30 knut kernel: R13: 000000000000004a R14: ffff8d2198ed89c0 
-R15: ffff8d2198ed8000
-Dez 14 18:14:30 knut kernel: FS:  0000000000000000(0000) 
-GS:ffff8d24afe80000(0000) knlGS:0000000000000000
-Dez 14 18:14:30 knut kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 
-0000000080050033
-Dez 14 18:14:30 knut kernel: CR2: 00000000000000a8 CR3: 0000000429810002 
-CR4: 00000000001706e0
-Dez 14 18:14:30 knut kernel: Call Trace:
-Dez 14 18:14:30 knut kernel:  <TASK>
-Dez 14 18:14:30 knut kernel:  __ieee80211_rx_h_amsdu+0x1b5/0x240 
-[mac80211]
-Dez 14 18:14:30 knut kernel:  ? 
-ieee80211_prepare_and_rx_handle+0xcdd/0x1320 [mac80211]
-Dez 14 18:14:30 knut kernel:  ? __local_bh_enable_ip+0x3b/0xa0
-Dez 14 18:14:30 knut kernel:  
-ieee80211_prepare_and_rx_handle+0xcdd/0x1320 [mac80211]
-Dez 14 18:14:30 knut kernel:  ? prepare_transfer+0x109/0x1a0 [xhci_hcd]
-Dez 14 18:14:30 knut kernel:  ieee80211_rx_list+0xa80/0xda0 [mac80211]
-Dez 14 18:14:30 knut kernel:  mt76_rx_complete+0x207/0x2e0 [mt76]
-Dez 14 18:14:30 knut kernel:  mt76_rx_poll_complete+0x357/0x5a0 [mt76]
-Dez 14 18:14:30 knut kernel:  mt76u_rx_worker+0x4f5/0x600 [mt76_usb]
-Dez 14 18:14:30 knut kernel:  ? mt76_get_min_avg_rssi+0x140/0x140 [mt76]
-Dez 14 18:14:30 knut kernel:  __mt76_worker_fn+0x50/0x80 [mt76]
-Dez 14 18:14:30 knut kernel:  kthread+0xed/0x120
-Dez 14 18:14:30 knut kernel:  ? kthread_complete_and_exit+0x20/0x20
-Dez 14 18:14:30 knut kernel:  ret_from_fork+0x22/0x30
-Dez 14 18:14:30 knut kernel:  </TASK>
-Dez 14 18:14:30 knut kernel: Modules linked in: cmac(E) ccm(E) sit(E) 
-tunnel4(E) ip_tunnel(E) bridge(E) tun(E) xt_hl(E) xt_LOG(E) 
-nf_log_syslog(E) xt_nat(E) xt_connmark(E) xt_addrtype(E) xt_multiport(E) 
-xt_tcpudp(E) xt_mark(E) xt_conntrack(E) xt_set(E) ip_set_hash_ip(E) 
-ip_set_hash_net(E) ip_set(E) arptable_filter(E) arp_tables(E) ebt_arp(E) 
-ebtable_nat(E) ebtable_broute(E) ebtable_filter(E) ebtables(E) 
-ip6table_nat(E) ip6table_filter(E) ip6table_mangle(E) ip6table_raw(E) 
-ip6_tables(E) iptable_nat(E) nf_nat(E) iptable_filter(E) 
-iptable_mangle(E) iptable_raw(E) xt_socket(E) nf_socket_ipv4(E) 
-nf_socket_ipv6(E) xt_helper(E) nf_conntrack_tftp(E) nf_conntrack_snmp(E) 
-nf_conntrack_broadcast(E) nf_conntrack_sip(E
+            +-------+       +-------+       +-----------+
+   PCIe     |       |       |       |       |           |
+   Tx/Rx    |       |       |       |  AXI  |           |
+ <=======>  | PCIE  | <===> | XDMA  | <====>| User Logic|
+            |       |       |       |       |           |
+            +-------+       +-------+       +-----------+
 
-) nf_conntrack_irc(E) nf_conntrack_h323(E) nf_conntrack_ftp(E) 
-nf_conntrack(E) dummy(E) nf_defrag_ipv6(E) nf_defrag_ipv4(E) 
-intel_rapl_msr(E) intel_rapl_common(E) x86_pkg_temp_thermal(E) 
-intel_powerclamp(E) coretemp(E) snd_hda_codec_hdmi(E) kvm_intel(E) 
-binfmt_misc(E) kvm(E) irqbypass(E)
-Dez 14 18:14:30 knut kernel:  polyval_clmulni(E) polyval_generic(E) 
-gf128mul(E) mt76x2u(E) snd_hda_codec_realtek(E) ghash_clmulni_intel(E) 
-mt76x2_common(E) snd_hda_codec_generic(E) sha512_ssse3(E) i915(E) 
-mt76x02_usb(E) ledtrig_audio(E) mt76_usb(E) aesni_intel(E) rt2800usb(E) 
-snd_hda_intel(E) drm_buddy(E) crypto_simd(E) btusb(E) cryptd(E) 
-snd_intel_dspcfg(E) btrtl(E) mt76x02_lib(E) iwlmvm(E) rt2x00usb(E) 
-rapl(E) btbcm(E) snd_intel_sdw_acpi(E) drm_display_helper(E) 
-rt2800lib(E) mt76(E) btintel(E) mei_pxp(E) intel_cstate(E) mei_hdcp(E) 
-snd_hda_codec(E) cec(E) rt2x00lib(E) btmtk(E) evdev(E) iwlwifi(E) 
-mac80211(E) iTCO_wdt(E) snd_hda_core(E) intel_uncore(E) ttm(E) 
-libarc4(E) intel_pmc_bxt(E) iTCO_vendor_support(E) snd_hwdep(E) 
-pcspkr(E) at24(E) bluetooth(E) ir_rc6_decoder(E) watchdog(E) 
-drm_kms_helper(E) snd_pcm(E) rtsx_usb_ms(E) mei_me(E) snd_timer(E) 
-cfg80211(E) ecdh_generic(E) rc_rc6_mce(E) memstick(E) snd(E) ecc(E) 
-rfkill(E) i2c_algo_bit(E) mei(E) soundcore(E) ite_cir(E) rc_core(E) 
-button(E) sg(E)
-Dez 14 18:14:30 knut kernel:  nf_tables(E) libcrc32c(E) nfnetlink(E) 
-it87(E) hwmon_vid(E) 8021q(E) garp(E) mrp(E) stp(E) llc(E) drm(E) 
-efi_pstore(E) fuse(E) configfs(E) ip_tables(E) x_tables(E) autofs4(E) 
-ext4(E) crc32c_generic(E) crc16(E) mbcache(E) jbd2(E) rtsx_usb_sdmmc(E) 
-mmc_core(E) rtsx_usb(E) sd_mod(E) t10_pi(E) crc64_rocksoft(E) crc64(E) 
-crc_t10dif(E) crct10dif_generic(E) ahci(E) libahci(E) xhci_pci(E) 
-r8169(E) libata(E) realtek(E) crct10dif_pclmul(E) crct10dif_common(E) 
-mdio_devres(E) ehci_pci(E) xhci_hcd(E) ehci_hcd(E) i2c_i801(E) 
-crc32_pclmul(E) crc32c_intel(E) scsi_mod(E) scsi_common(E) i2c_smbus(E) 
-libphy(E) usbcore(E) lpc_ich(E) usb_common(E) fan(E) video(E) wmi(E)
-Dez 14 18:14:30 knut kernel: CR2: 00000000000000a8
-Dez 14 18:14:30 knut kernel: ---[ end trace 0000000000000000 ]---
-====================================================
+The XDMA has been used for Xilinx Alveo PCIe devices.
+And it is also integrated into Versal ACAP DMA and Bridge Subsystem.
+    https://www.xilinx.com/products/boards-and-kits/alveo.html
+    https://docs.xilinx.com/r/en-US/pg344-pcie-dma-versal/Introduction-to-the-DMA-and-Bridge-Subsystems
 
-This happens when the wlan device is up (in AP mode). This device is 
-again part of a bridge.
+The device driver for any FPGA based PCIe device which leverages XDMA can
+call the standard dmaengine APIs to discover and use the XDMA subsystem
+without duplicating the XDMA driver code in its own driver.
 
-Regards,
+Changes since v10:
+- Added Tested-by Martin Tuma tumic@gpxsee.org
+
+Changes since v9:
+- Cleanup code based on review comments.
+
+Changes since v8:
+- Fixed test robot failure on s390.
+
+Changes since v7:
+- Used pci device pointer for dma_pool_create().
+
+Changes since v6:
+- Fixed descriptor filling bug.
+
+Changes since v5:
+- Modified user logic interrupt APIs to handle user logic IP which does not
+  have its own register to enable/disable interrupt.
+- Clean up code based on review comments.
+
+Changes since v4:
+- Modified user logic interrupt APIs.
+
+Changes since v3:
+- Added one patch to support user logic interrupt.
+
+Changes since v2:
+- Removed tasklet.
+- Fixed regression bug introduced to V2.
+- Test Robot warning.
+
+Changes since v1:
+- Moved filling hardware descriptor to xdma_prep_device_sg().
+- Changed hardware descriptor enum to "struct xdma_hw_desc".
+- Minor changes from code review comments.
+
+Lizhi Hou (2):
+  dmaengine: xilinx: xdma: Add xilinx xdma driver
+  dmaengine: xilinx: xdma: Add user logic interrupt support
+
+ MAINTAINERS                            |   11 +
+ drivers/dma/Kconfig                    |   14 +
+ drivers/dma/xilinx/Makefile            |    1 +
+ drivers/dma/xilinx/xdma-regs.h         |  173 ++++
+ drivers/dma/xilinx/xdma.c              | 1004 ++++++++++++++++++++++++
+ include/linux/dma/amd_xdma.h           |   16 +
+ include/linux/platform_data/amd_xdma.h |   34 +
+ 7 files changed, 1253 insertions(+)
+ create mode 100644 drivers/dma/xilinx/xdma-regs.h
+ create mode 100644 drivers/dma/xilinx/xdma.c
+ create mode 100644 include/linux/dma/amd_xdma.h
+ create mode 100644 include/linux/platform_data/amd_xdma.h
+
 -- 
-Wolfgang Walter
-Studentenwerk München
-Anstalt des öffentlichen Rechts
+2.27.0
+
