@@ -2,125 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360BD64DD84
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E1A64DD87
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbiLOPN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 10:13:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
+        id S229954AbiLOPOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 10:14:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbiLOPN1 (ORCPT
+        with ESMTP id S229928AbiLOPNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 10:13:27 -0500
-X-Greylist: delayed 524 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Dec 2022 07:12:44 PST
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA4932B8F;
-        Thu, 15 Dec 2022 07:12:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=3zeWx/VcZJ+nKDoxQSjrPrYjj2F0B/NTv4M2nB0Taxo=; b=XGVRecjPvKN1DiEoK3zrmKwJgf
-        dWEDw4jOTpFgBvU8dBgihUP5XjHpeVRupNcj9IXw94trWULMNnwKW6wd8vZm6vJvGCGOY2VGxY52j
-        vzJ+xy7fEf/F7RUY0ktMDb2XSAVik9jhS46pHut3Gv9K2eA6+iID9ubN+OgosU4QMFZc=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:48106 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1p5puc-0000OA-0h; Thu, 15 Dec 2022 10:12:42 -0500
-Date:   Thu, 15 Dec 2022 10:12:41 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <20221215101241.993999be8b51f133fb11bfba@hugovil.com>
-In-Reply-To: <Yiplnqlz2DSXCvi8@piout.net>
-References: <20220309162301.61679-1-alexandre.belloni@bootlin.com>
-        <20220309162301.61679-11-alexandre.belloni@bootlin.com>
-        <20220310110918.41a681474f5a0e11abdedc39@hugovil.com>
-        <Yiplnqlz2DSXCvi8@piout.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Thu, 15 Dec 2022 10:13:44 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81823134C
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 07:13:01 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id z9so8317982ilu.10
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 07:13:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ettxvkoo48TgHt23PLScA7ThZLMXBN9lSxI8bDks3GA=;
+        b=CulseMnsxDDcu8UWrwKdLaRzFiQJFVqNRgNAVYLhYWUp7xvEt1TgkJ4h8loklcSQTM
+         40S36jyd6ZZrNueS7BOXSe3V3xYQtHbCCtlkuEwCiy3DWvcYPcbQ1uEyBTzsF3Bw6vWJ
+         h6MrvpEetQT+I9d/6opAFfslyfGAO1egF5f1mNaAC+zoELw3bZYu5HgM814i8X3K4IKK
+         hQgmDjFFN9+oGQO5asivEqFqvGX+7dRlVcp3W553xizk7fHddDOZajEIo8KTydVO4hHH
+         HNYF2fzXmnnMFhOtdthDyClZCA/+C3ujsQMmsScQvbMNRUIdfU0crH8atjRmAxQcvhqL
+         +bFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ettxvkoo48TgHt23PLScA7ThZLMXBN9lSxI8bDks3GA=;
+        b=edfkYYuZtqr3hCvk3m9YMyKQM4NLP543bWtN3rkqnvzNr9aCb0sKKCBqHUJMLKS65m
+         Ltfo2gO91WU+9VitKls56YeG0+/yO6gedw4UuFVr/hS0SGOFVtE1U552kU5JdTJsC5OF
+         2ryhQMpfEBCe1R0XRxNZb28ObWoJbKStexlRrtB/Yuz5T8OT325pxYn4x0AfUHtsU7qq
+         lKg0+/ump9TL7XAlc7OaB7EJdWasVSbMQ7B0uRRMJ4pIZmAg9LQ5EJPmKY0Qyj0xuyNf
+         ASnU46xvt2XMBbU4pOQdzYZ1fMt+o0tNEWxhUH2iI+FcsgTKJTe+6VjlOxZstczV8PCY
+         cbKg==
+X-Gm-Message-State: ANoB5pmDf1Fwdgv10FfOY+MMlHKH4OJD0fFILs6KL5jWfYJxnbSOMZnL
+        08scs28slcJTWlP6QQHpaJk9KA==
+X-Google-Smtp-Source: AA0mqf7t5P4vPE4+oG1T9TGNc1CuX5DMzYvNEzYOz7NFAqNIUQPsrFjObobrYq6/3fi2KebfEyP9mA==
+X-Received: by 2002:a05:6e02:ed0:b0:304:ac4f:a79b with SMTP id i16-20020a056e020ed000b00304ac4fa79bmr2343674ilk.3.1671117180838;
+        Thu, 15 Dec 2022 07:13:00 -0800 (PST)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id bv23-20020a056638449700b0038a6d03db70sm2612714jab.34.2022.12.15.07.12.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 07:13:00 -0800 (PST)
+Message-ID: <2a413c11-5e5f-7aa2-4734-78cabf393ba2@kernel.dk>
+Date:   Thu, 15 Dec 2022 08:12:59 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH V10 0/8] block, bfq: extend bfq to support multi-actuator
+ drives
+Content-Language: en-US
+To:     Paolo Valente <paolo.valente@linaro.org>
+Cc:     Arie van der Hoeven <arie.vanderhoeven@seagate.com>,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Rory Chen <rory.c.chen@seagate.com>,
+        Glen Valante <glen.valante@linaro.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+References: <20221209094442.36896-1-paolo.valente@linaro.org>
+ <A0328388-7C6B-46A4-A05E-DCD6D91334AE@linaro.org>
+ <0bcf7776-59d7-53ef-bfd0-449940a05161@kernel.dk>
+ <PH7PR20MB50589A941F3F5A50C872E264F1E39@PH7PR20MB5058.namprd20.prod.outlook.com>
+ <7125ff61-bf11-6f8c-8496-f2603371c214@kernel.dk>
+ <3479E7A6-8CAD-4A32-A0BB-00A851883EA7@linaro.org>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <3479E7A6-8CAD-4A32-A0BB-00A851883EA7@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH 11/29] rtc: pcf2127: set RTC_FEATURE_ALARM_RES_2S
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022 21:58:49 +0100
-Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-
-> On 10/03/2022 11:09:18-0500, Hugo Villeneuve wrote:
-> > On Wed,  9 Mar 2022 17:22:42 +0100
-> > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> > 
-> > > The PCF2127 doesn't support UIE because setting an alarm to fire every
-> > > second confuses the chip and the fastest we can go is an alarm every 2
-> > > seconds.
-> > 
-> > Hi Alexandre,
-> > can you describe what "confuses the chip" means?
-> > 
-> > In my experimental PCF2131 driver, I activated UIE and it seems to be working fine at 1s intervals, but since it is similar to PCF2127, maybe there is still a problem and I just didn't see it.
-> > 
+On 12/15/22 8:04 AM, Paolo Valente wrote:
 > 
-> Did you remove uie_unsupported? Else, you may have been using uie
-> emulation. In my tests last year, the pcf2127 was failing to reassert
-> the interrupt if an alarm was set every second. The same happens on
-> other NXP based RTCs (i.e. including microcrystal ones).
 > 
-> I'm going to test again soon (and also reply to your series).
-
-Hi Alexandre,
-after 9 months, I decided to resend my PCF2131 driver serie (V3), rebased on your latest rtc-next branch. I would appreciate if you or someone could take a look at it and comment.
-
-Thank you,
-Hugo Villeneuve
-
-
-> > > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > > ---
-> > >  drivers/rtc/rtc-pcf2127.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > > index f8469b134411..63b275b014bd 100644
-> > > --- a/drivers/rtc/rtc-pcf2127.c
-> > > +++ b/drivers/rtc/rtc-pcf2127.c
-> > > @@ -656,6 +656,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> > >  	pcf2127->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> > >  	pcf2127->rtc->range_max = RTC_TIMESTAMP_END_2099;
-> > >  	pcf2127->rtc->set_start_time = true; /* Sets actual start to 1970 */
-> > > +	set_bit(RTC_FEATURE_ALARM_RES_2S, pcf2127->rtc->features);
-> > >  	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, pcf2127->rtc->features);
-> > >  	clear_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
-> > >  
-> > > -- 
-> > > 2.35.1
-> > > 
-> > 
-> > 
-> > -- 
-> > Hugo Villeneuve <hugo@hugovil.com>
+>> Il giorno 13 dic 2022, alle ore 18:17, Jens Axboe <axboe@kernel.dk> ha scritto:
+>>
+>> Please don't top post...
+>>
+>> On 12/13/22 10:10?AM, Arie van der Hoeven wrote:
+>>> We understand being conservative but the code paths only impact on a
+>>> product that is not yet in market.  This is version 10 spanning months
+>>> with many gaps waiting on review.  It's an interesting case study.
+>>
+>> That's a nice theory, but that's not how code works. As mentioned, the
+>> last version was posted 1-2 weeks later than would've been appropriate
+>> for inclusion.
+>>
 > 
-> -- 
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
+> So, what's the plan?
 
+Looks like 1/8 and 8/8 still need Damien to review it, then queue up for
+6.3 when ready. Not sure why this is even a question, it just means that
+inclusion is pushed a release out as it missed the current merge window.
 
 -- 
-Hugo Villeneuve <hugo@hugovil.com>
+Jens Axboe
+
+
