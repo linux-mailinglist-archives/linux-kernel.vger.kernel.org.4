@@ -2,97 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727BD64E084
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF97464E088
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbiLOSSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 13:18:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47322 "EHLO
+        id S230178AbiLOSTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 13:19:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbiLOSSk (ORCPT
+        with ESMTP id S230289AbiLOSTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 13:18:40 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4976A1FF95
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 10:18:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671128319; x=1702664319;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=l0/CnKczoIcW8sONWqRn+Ta4EJzy3U0AUrCPj/4T4P4=;
-  b=WanGPxF0qKQoKbFcAAOj1hy8HCkYz+0AAjXnQL3cBdR89e+8aDWhITfH
-   XZdRj5nQFF+l/uvLAifGzdfzHPv2JsffA0UNa0nygsJ1wJV3N2WI+uzJu
-   QfgBZu9ykeEHAEV6Gq4Tc5oL18T92reJ6Vda69UG9/nYfZ6ed26BoMg93
-   15Sxrequ9S1uGvkUmWe6c2p9J0fvzj64cQCmfA3lqtgLjP07E7knPK1eF
-   Re1iQLBDN4NEcRnIk4TFP8U+Cqr+wFZAlKPDlkBwLm4mp8cciPicflSEs
-   77liakMxbieYLW82bIzav7tjK2VKgTtzr7FqJSLEt8yXBRwuzI9tBvQsf
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="345845157"
-X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
-   d="scan'208";a="345845157"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 10:18:38 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="773816929"
-X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
-   d="scan'208";a="773816929"
-Received: from ajanssen-mobl.amr.corp.intel.com (HELO [10.209.22.168]) ([10.209.22.168])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 10:18:24 -0800
-Message-ID: <795d6e1d-c79c-b079-3412-69ca2f8ee874@intel.com>
-Date:   Thu, 15 Dec 2022 10:18:24 -0800
+        Thu, 15 Dec 2022 13:19:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC1248746;
+        Thu, 15 Dec 2022 10:19:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2A23B81C1F;
+        Thu, 15 Dec 2022 18:19:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67BEDC433D2;
+        Thu, 15 Dec 2022 18:18:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671128339;
+        bh=78tX3t6kUkY6BMXVJo5OYZXMdsWwwpj5lrEjbZ2nP5k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FskV9TVhDGw/J3zgBg0l/b33IrEveHitlVioGB/zPpBgsy+Rqi5GUybZXmQB+EPT/
+         MGo8+xWqRtpyI5EJpJmAtwbcP+WWKjKJ5cSKfRNS/R0OWeVhnOcscgK5+W9/ge/k8c
+         FKckAFwV/A/vWObAeBKHTZy9+oOuvoKKM9+Hj9SV4KyvMdkLC0q+hJVKVupUS0ghpO
+         8SYIt57hOCe7GOq141BQiwSW7Qe4IHyTnga7w5Jw4L4dvfUyKqR+gOMUFhC1njhh07
+         eZachBoK9k5ZPm+Xzt2DuLkOqMv3HluGy7fcPsPtb3q+kiMG+Nuy4OJDH5Im01BQOU
+         zYj2RdwEuXUyQ==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH] PM: runtime: Simplify __rpm_get_callback()
+Date:   Thu, 15 Dec 2022 12:18:48 -0600
+Message-Id: <20221215181848.129326-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 2/4] x86/tdx: Use ReportFatalError to report missing
- SEPT_VE_DISABLE
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
-        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221209132524.20200-1-kirill.shutemov@linux.intel.com>
- <20221209132524.20200-3-kirill.shutemov@linux.intel.com>
- <3121847d-d334-67fc-43d8-0670c08c64b6@intel.com>
- <20221215171254.3v4maexfhkdnbfk2@box.shutemov.name>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20221215171254.3v4maexfhkdnbfk2@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/22 09:12, Kirill A. Shutemov wrote:
->> Getting *all* users of panic this magic ability would be a lot better
->> than giving it to one call-site of panic().
->>
->> I'm all for making the panic() path as short and simple as possible, but
->> it would be nice if this fancy hypercall would get used in more than one
->> spot.
-> Well, I don't see an obvious way to integrate this into panic().
-> 
-> There is panic_notifier_list and it kinda/sorta works, see the patch
-> below.
-> 
-> But it breaks panic_notifier_list contract: the callback will never return
-> and no other callback will be able to do their stuff. panic_timeout is
-> also broken.
-> 
-> So ReportFatalError() is no good for the task. And I don't have anything
-> else :/
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-Do we *really* have to do a hard stop when SEPT_VE_DISABLE is missing?
+Simplify __rpm_get_callback() slightly by returning as soon as the return
+value is known.  No functional change intended.
 
-Wouldn't it be simpler to just defer the check until we can spit out a
-sane error message about it?
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+---
+ drivers/base/power/runtime.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-Or is there too much security exposure by continuing?
+diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+index 50e726b6c2cf..7171ed0668f3 100644
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -20,8 +20,7 @@ typedef int (*pm_callback_t)(struct device *);
+ 
+ static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
+ {
+-	pm_callback_t cb;
+-	const struct dev_pm_ops *ops;
++	const struct dev_pm_ops *ops = NULL;
+ 
+ 	if (dev->pm_domain)
+ 		ops = &dev->pm_domain->ops;
+@@ -31,18 +30,14 @@ static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
+ 		ops = dev->class->pm;
+ 	else if (dev->bus && dev->bus->pm)
+ 		ops = dev->bus->pm;
+-	else
+-		ops = NULL;
+ 
+ 	if (ops)
+-		cb = *(pm_callback_t *)((void *)ops + cb_offset);
+-	else
+-		cb = NULL;
++		return *(pm_callback_t *)((void *)ops + cb_offset);
+ 
+-	if (!cb && dev->driver && dev->driver->pm)
+-		cb = *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
++	if (dev->driver && dev->driver->pm)
++		return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+ 
+-	return cb;
++	return NULL;
+ }
+ 
+ #define RPM_GET_CALLBACK(dev, callback) \
+-- 
+2.25.1
+
