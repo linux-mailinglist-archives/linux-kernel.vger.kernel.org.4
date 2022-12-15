@@ -2,156 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 993F164D4D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFF064D4D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiLOAxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 19:53:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
+        id S229639AbiLOAy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 19:54:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiLOAxo (ORCPT
+        with ESMTP id S229755AbiLOAy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 19:53:44 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C77E31EDC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:53:43 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id x17-20020a17090a8a9100b002196a3b190cso624550pjn.6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:53:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rBQYa4W8A+AJiUwNOuc8Q7CyuPP2yMOoaSr+CBtkpMs=;
-        b=GdN50OAHp+Whl7EboNBqIJn7oMiw0wMD07/V3yhXDi6aM7BuLjNewzP+7YDBpsBJ+t
-         tJUZGFjcK+BXqCOAE5KeHD+NIjcRVsaGFUAxZJcZjE0kPoWv8u59DtRW6I8kOtHpzhKI
-         +HhVWr7TCZM6RyQbe9z3q6nIWW96S2SgUnyv9GkLnPtSFh5MypWdIpt4l4MHD59sm8FZ
-         QMDrkivQiAhZ7MHgT89D20umdttHAvZUFQnvyhXjR4PPagWsOwQTtnNLKHUibA4PzFgJ
-         qqP9K1gIEbt5z5ffT3bfajfodA37Rs56abzXE28EyLy3FX/hlHtL5BQcqPHbupdC2HdE
-         9PuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rBQYa4W8A+AJiUwNOuc8Q7CyuPP2yMOoaSr+CBtkpMs=;
-        b=o3OocnuIV8YZEJiJwTXsgw5YzoEKKjf3q0+c8XlUmWZd62oNKUUbp2O/kFFeie3XgV
-         mGAkFdtss8vUR54QCW6Rx5xtyGtm/KCNkF9lJreGh5DZla8wUWfp7JGARDieacnMA1Lq
-         kunLUayQal5Czf+jBPDIvaK9BtHOvTVWcjvbXqUZAsY0DgNUXgvibEhBrjJp4f4sUPrR
-         ssiHSHiQA8fefXiOyzJxY2QV6dTTtVUBKgririmwcd86TxAsuuvtDQ6wOINmC5O0smOk
-         zoTBaT/ezwE9jZ8ByCgGYCmFSRvkrNzMDMbJR59k0a4iXpEbVJZEW/3WUuOtSDyb4nW4
-         Js3w==
-X-Gm-Message-State: ANoB5pmyF509uNXy3BxkjBx8yRwgsBEbwSv/4eqJ/jpzfgQTro3tvQB2
-        rnv1/7HW50mpKVYaM1R8XpmIFW3+JpJK
-X-Google-Smtp-Source: AA0mqf7OAlNT6gA4JXc8GJ23UMKYjJ0gPupRWtT35R7PXd2xP7OzGAUljthjq0ETxT5v0v7oNQM8JmyAjrnD
-X-Received: from connoro.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:a99])
- (user=connoro job=sendgmr) by 2002:a05:6a00:e17:b0:576:1d9e:caa0 with SMTP id
- bq23-20020a056a000e1700b005761d9ecaa0mr35297738pfb.81.1671065622919; Wed, 14
- Dec 2022 16:53:42 -0800 (PST)
-Date:   Thu, 15 Dec 2022 00:53:15 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Message-ID: <20221215005315.186787-1-connoro@google.com>
-Subject: [PATCH bpf-next v2] bpf: btf: limit logging of ignored BTF mismatches
-From:   "Connor O'Brien" <connoro@google.com>
-To:     bpf@vger.kernel.org
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        linux-kernel@vger.kernel.org, "Connor O'Brien" <connoro@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 14 Dec 2022 19:54:56 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD0130F72;
+        Wed, 14 Dec 2022 16:54:55 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NXYfg1HG3z4xFy;
+        Thu, 15 Dec 2022 11:54:51 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1671065692;
+        bh=ia8Ymw3ROH5HiR4u67oEvyWecnEiZN7k81GIdr7sbss=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XD0r6z5rN3GyavNrF90Is7fzySKqcp98Durvze9tBes+kNyLUtnbmPEGdv1XBjDOP
+         b0Gvj5KgYRNqaTtgSaScsUd9D8fcAc7gDAqwhD4uANUbsioU82DoO/4yEw+RAQgrZ6
+         d/jCLhl0vDdX2vrS2BDCy43LUhZnm2kG2u51l2BYaHPKZCdurZNXWPlQUj6kXE2VMv
+         3mAWuqwQu0bbwyBRhD0NHkUVO5UQyu+8aYZlAIsGk0CLmZEKjQzl7T2biuxvN7IdrP
+         gUys+EexhhMgvTgLQ6o4X6evhzMyKRZbvu+qhWlomgsZ2yz1i2ge3snx7OHjxZAqMn
+         xtFCK3peDaq3g==
+Date:   Thu, 15 Dec 2022 11:54:49 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Trond Myklebust <trondmy@gmail.com>
+Cc:     minoura makoto <minoura@valinux.co.jp>,
+        Hiroshi Shimamoto <h-shimamoto@nec.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the nfs tree
+Message-ID: <20221215115449.71fa7b95@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/VpRRwdYiJ5cqKWlaMRHphmm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enabling CONFIG_MODULE_ALLOW_BTF_MISMATCH is an indication that BTF
-mismatches are expected and module loading should proceed
-anyway. Logging with pr_warn() on every one of these "benign"
-mismatches creates unnecessary noise when many such modules are
-loaded. Instead, handle this case with a single log warning that BTF
-info may be unavailable.
+--Sig_/VpRRwdYiJ5cqKWlaMRHphmm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Mismatches also result in calls to __btf_verifier_log() via
-__btf_verifier_log_type() or btf_verifier_log_member(), adding several
-additional lines of logging per mismatched module. Add checks to these
-paths to skip logging for module BTF mismatches in the "allow
-mismatch" case.
+Hi all,
 
-All existing logging behavior is preserved in the default
-CONFIG_MODULE_ALLOW_BTF_MISMATCH=n case.
+In commit
 
-Signed-off-by: Connor O'Brien <connoro@google.com>
----
-v2:
-- Use pr_warn_once instead of skipping logging entirely
-- Also skip btf verifier logs for ignored mismatches
+  405ab45b5afa ("SUNRPC: ensure the matching upcall is in-flight upon downc=
+all")
 
-v1: https://lore.kernel.org/bpf/20221109024155.2810410-1-connoro@google.com/
----
- kernel/bpf/btf.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+Fixes tag
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index f7dd8af06413..16b959b49595 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -1404,6 +1404,13 @@ __printf(4, 5) static void __btf_verifier_log_type(struct btf_verifier_env *env,
- 	if (log->level == BPF_LOG_KERNEL && !fmt)
- 		return;
- 
-+	/*
-+	 * Skip logging when loading module BTF with mismatches permitted
-+	 */
-+	if (env->btf->base_btf && env->btf->kernel_btf &&
-+	    IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
-+		return;
-+
- 	__btf_verifier_log(log, "[%u] %s %s%s",
- 			   env->log_type_id,
- 			   btf_type_str(t),
-@@ -1443,6 +1450,14 @@ static void btf_verifier_log_member(struct btf_verifier_env *env,
- 
- 	if (log->level == BPF_LOG_KERNEL && !fmt)
- 		return;
-+
-+	/*
-+	 * Skip logging when loading module BTF with mismatches permitted
-+	 */
-+	if (env->btf->base_btf && env->btf->kernel_btf &&
-+	    IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
-+		return;
-+
- 	/* The CHECK_META phase already did a btf dump.
- 	 *
- 	 * If member is logged again, it must hit an error in
-@@ -7260,11 +7275,14 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
- 		}
- 		btf = btf_parse_module(mod->name, mod->btf_data, mod->btf_data_size);
- 		if (IS_ERR(btf)) {
--			pr_warn("failed to validate module [%s] BTF: %ld\n",
--				mod->name, PTR_ERR(btf));
- 			kfree(btf_mod);
--			if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
-+			if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH)) {
-+				pr_warn("failed to validate module [%s] BTF: %ld\n",
-+					mod->name, PTR_ERR(btf));
- 				err = PTR_ERR(btf);
-+			} else {
-+				pr_warn_once("Kernel module BTF mismatch detected, BTF debug info may be unavailable for some modules\n");
-+			}
- 			goto out;
- 		}
- 		err = btf_alloc_id(btf);
--- 
-2.39.0.rc1.256.g54fd8350bd-goog
+  Fixes: Commit 9130b8dbc6ac ("SUNRPC: allow for upcalls for the same uid
 
+has these problem(s):
+
+  - leading word 'Commit' unexpected
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
+
+Please do not split Fixes tags over more than one line.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/VpRRwdYiJ5cqKWlaMRHphmm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOacFkACgkQAVBC80lX
+0GyXbgf/WHfLfSa8nTJcGdEn/Bwxm/szK5EORJuzCMZ+tUwlmBYvJE7HbtcfapX5
+O8V3pmScdNPYtxkX5emWmF2EksI5C6qMks2PMUTg7y+ExFdz9x9MmywddCN32wEz
+eIS9MAN3CyUxq7cEkX6wlfLuJmleUILrWAFBNXCfJ6saQv1wPjpg1smOeFdTXP7W
+DD9bn/sAAbR1MVmCbOeGVmdPLpsEuDF4P22SGTkD2B9WIwiUtZE3i4PFbGM19U4z
+n8R1AEuZoQEGKQi/pNDM8PArJ6PEfqkcM4gyU8sx9yTCcbm94pCRJVetz88Pq73/
+SwenAjnXB/CMXoAP1R3pRNf+T4uYQA==
+=iK+E
+-----END PGP SIGNATURE-----
+
+--Sig_/VpRRwdYiJ5cqKWlaMRHphmm--
