@@ -2,166 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D084D64DE12
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BAC564DE16
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiLOPvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 10:51:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
+        id S229883AbiLOPvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 10:51:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiLOPvf (ORCPT
+        with ESMTP id S229752AbiLOPvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 10:51:35 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2056.outbound.protection.outlook.com [40.107.244.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EB2286C2;
-        Thu, 15 Dec 2022 07:51:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i8hAB1OAP+j/mdzErl6pC7xnMg4ZI3vutl2J3XVog2mCLYZDKkLowih5egd4qA6PXZ46DhqPQd1i/bJuHM/no2S7hyeRyNTYtAfbkc/Sc8RFuXxZgmrfTNHdI/5MhoeubIKwxkzT+oNQu7ypNfzo+TNqOyGyhK4yzjiceSoPNkQdxoQe6X36IPvH7UoJiqQ6QGWVu6AfCDN6/6N4ppQU1Eg7DD4tePp5r5kKZ2bg8A1X0VNzSNh3XobCKBtNIOzFfsPQdxQY1+XHHIKGzfq0IEta9T7I6ElmHt99L16wh+BNuaRIU1RGEbav4F/OJpYfmal4u0Kezw77ld+BAJnSUg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nux/Es/CyH6oRdiqvlvwzvzhCqjwC77aoe2q9jZ0WOk=;
- b=Oaoe7jQtATg5H6XPMnoRi7hMQRYtR8a0pHiWpqygHgrS94LUT1OxXRz3Izp0KL2MXS6wnsuSDBxYdunVJE1n2Qksh79B6M2YH3yGRubKmusayrf9P7ysFJ8eUegQTzsFA26mAqHGM1BurzVelR0RkcI3Udf3j6eXcSX1FAcPFbk4bW9ni7cMfvTf+ZfVimN1AvWr2b6u4wx2ojuZqTGH3Bj5aB0xG0M7s3iHTMn9xgs+YwxdVeOsUZ3Dr1hLhN+D5j9WFXT/8tzyoOsGK1vfOORcPVLXqUUSs2qEe8CVVC51bmejSSmurdgYAmfQsE3WfdwW5sYch/FytuTrjodsYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nux/Es/CyH6oRdiqvlvwzvzhCqjwC77aoe2q9jZ0WOk=;
- b=IPh9AjXknA9kGebEZwb9EZeb8Yy9DyTPlqjQIZAam7hF8hfGGpR57cNrC+aDUgoJposuTjicl5uWc7PvkyMW4AYaSfDWtIRE4W5d8YB+TWjX/TNsX1P046Qunedzi8+bGwbrit4B/T6Iag+9LcieL6eZFF3zbexSVUfGUHJomiI=
-Received: from BN9PR03CA0753.namprd03.prod.outlook.com (2603:10b6:408:13a::8)
- by SJ1PR12MB6193.namprd12.prod.outlook.com (2603:10b6:a03:459::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12; Thu, 15 Dec
- 2022 15:51:32 +0000
-Received: from BL02EPF0000EE3D.namprd05.prod.outlook.com
- (2603:10b6:408:13a:cafe::79) by BN9PR03CA0753.outlook.office365.com
- (2603:10b6:408:13a::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12 via Frontend
- Transport; Thu, 15 Dec 2022 15:51:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF0000EE3D.mail.protection.outlook.com (10.167.241.134) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5880.8 via Frontend Transport; Thu, 15 Dec 2022 15:51:31 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 15 Dec
- 2022 09:51:30 -0600
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Robert Moore <robert.moore@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Lin Ming <ming.m.lin@intel.com>,
-        Len Brown <len.brown@intel.com>
-CC:     Mario Limonciello <mario.limonciello@amd.com>,
-        Len Brown <lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
-        <devel@acpica.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ACPICA: Drop port I/O validation for some regions
-Date:   Thu, 15 Dec 2022 09:51:20 -0600
-Message-ID: <20221215155120.2276-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 15 Dec 2022 10:51:45 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC6C2EF3B
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 07:51:44 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so2056781wma.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 07:51:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V2cRcfojGiF9qQEX9U8QFOzZLig/2FAjtxG+CBJEBFo=;
+        b=bVgJyDTvQ2d+crPVf0qEjj/SXvuxIZeFKQITUxl2atDfl2hEcbxwgt9LyrHVid2lUS
+         uIF78Zw09fK3Za5eMw03H0Tfgf6xXFVAtee5guOt6PU2dIgML8wI/QVuit8Kpmhi6p+1
+         7bUZH4srlxGuaBfE+k/GGTcv8bnM0yct37Jn0ECFYZBNGKN+iTW6Ywj/ZylY81SWbP2V
+         QpkDpq3+HsdbmHK82gn970aupr7h8L9oJ1NUJJ+/MMGtzIzYOKxxDYdOiBJcCyjpEMpG
+         kHPXwZUDFjkvO7DfXHxYcIdZZRWmVCvGHASdRW2D4gDqAFhfKzhuwUguMqzgVE/38a7Y
+         bqzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V2cRcfojGiF9qQEX9U8QFOzZLig/2FAjtxG+CBJEBFo=;
+        b=G3uOCbOJ+My+U/XgarNAkUjI4aVUCcF74CJoMXKh1OyAbHSaB3bXf5dvxZ35bmnMy/
+         6/kFQywNbWgjUy0/Yg7sNkE7xnRtjFIC4kJPaJXjAoMXohmi6ffu3bXMKcRhwsShY3OD
+         NBw7jKr2F3kjCAjczsoN9nzfxRlgC7cNSJ04rt8RyqdqJKsGblocGGGg3ViVQBeHnEtw
+         Rug4Gvmnxro5CPhYMS9vGKni1wm5e/20zIgzE8hQ3ln1MX1IplLPs0c2jH9Tn13e2KVz
+         TsjyWVn3PnqeBJLSL+ihFbs2fLF+c12uZA5VYBOsXE+EyCVGKT+S1lToPpv43cFGQnsT
+         rq4A==
+X-Gm-Message-State: ANoB5pkt/uoEyIgfK+O82Kw2sRPB7k1u2Y33JTaP9wXgCSvgz1ajrQWQ
+        BtsVwkptaP6DjpI3NADdpKSx7w==
+X-Google-Smtp-Source: AA0mqf5T28A1fwwJEdZX35EQu5OSksBT6KKYLBeLzZpR+52DmK8gZxNd3JNVBBNn8gPpdSKSQ71WGQ==
+X-Received: by 2002:a05:600c:2101:b0:3cf:e850:4451 with SMTP id u1-20020a05600c210100b003cfe8504451mr22559864wml.9.1671119502537;
+        Thu, 15 Dec 2022 07:51:42 -0800 (PST)
+Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
+        by smtp.gmail.com with ESMTPSA id n7-20020a05600c4f8700b003d1e90717ccsm8522883wmq.30.2022.12.15.07.51.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 07:51:41 -0800 (PST)
+Message-ID: <e2bc53fe-3a0c-cf24-8b29-ca377aba3721@baylibre.com>
+Date:   Thu, 15 Dec 2022 16:51:40 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 1/6] DONOTMERGE: arm64: dts: ti: Add TI TPS65219 PMIC
+ support for AM642 SK board.
+Content-Language: en-US
+To:     Wadim Egorov <W.Egorov@phytec.de>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>, "nm@ti.com" <nm@ti.com>,
+        "kristo@kernel.org" <kristo@kernel.org>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "tony@atomide.com" <tony@atomide.com>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        "marcel.ziswiler@toradex.com" <marcel.ziswiler@toradex.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "biju.das.jz@bp.renesas.com" <biju.das.jz@bp.renesas.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "jeff@labundy.com" <jeff@labundy.com>
+Cc:     "afd@ti.com" <afd@ti.com>,
+        "khilman@baylibre.com" <khilman@baylibre.com>,
+        "narmstrong@baylibre.com" <narmstrong@baylibre.com>,
+        "msp@baylibre.com" <msp@baylibre.com>,
+        "j-keerthy@ti.com" <j-keerthy@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>
+References: <20221104152311.1098603-1-jneanne@baylibre.com>
+ <20221104152311.1098603-2-jneanne@baylibre.com>
+ <d0d7e315-ce86-0420-8ef5-fe2e4aefd5b4@phytec.de>
+From:   jerome Neanne <jneanne@baylibre.com>
+In-Reply-To: <d0d7e315-ce86-0420-8ef5-fe2e4aefd5b4@phytec.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000EE3D:EE_|SJ1PR12MB6193:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0e985c0a-2ec2-4243-a346-08dadeb43c9f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nXK1Ob7QOHI2NdqhD755GL/xPEwO5hYpylI8s3DAqx6BolucpAP2Z2GfOBx9dOsDtuHI+sKEq+t2yFR+8XGrdJPa73uE09UAk0GehkDgWxWz+kioRadjbCcUsLYNKQ1Nk9DtpMqyNSc8X9WwajBB3sIfA0xgjIaVzbdrQ2jj9ai6MhuousgL560+ZBYHXQOF62FHyNJl2cqyjeKkXEGdyiwJueXBTQn3SPMYL0srr8fTLw5fX5WUIafg4cDUVGabwe5cBqy1wKdjBI4Q9QV4IPg8MmbdfsMCJKWoW3MyfMubKvGG29N+ZjBX77wjo4f88GG6y0o6JqWbJm8MJc51mAl9j6PBCTanJhjQ/wgnoevWAKo2qW7YdzmQIkWusDkUGQ8YE9CyJTuMzXPKNE2CkZ5viOfbgFPzYnaUqj0qwh1mZBWXESuDdcWvGe9s/XrqGgIt6MczfPDVf2yPFX7XOKP+wmfBpmL3w6aVFiIgb7FWFl2bG1sh40MQ0gk/n7AcvRjtyNV/JUPajn8dDKjXbS3wE2OMdgUQUHqPQks6Y1GOvlBoldCe+vmI7+xY7BBczv6XDrOe0HAj86xdU3JB4ecSbhp71ezD2QVdUA0xw2NXxumLyttpEZZzQOKhfJIAlLxm0oVBspIYQ71KrVwBfBVWbbcvj6SCeFlajIRuJSsrolMtTGkPStO9AOmteAOGRcdrRScfRe+2VCY91zp4ErSgzKhy+QkqZ3eTk/Yu+SPSx9DfgZqqB02T05vctH6Q97PRnV/Xu9MS1w68AsGlEA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:CA;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(396003)(346002)(39860400002)(451199015)(36840700001)(46966006)(40470700004)(86362001)(36756003)(4326008)(8676002)(45080400002)(70206006)(70586007)(316002)(54906003)(1076003)(2616005)(82740400003)(81166007)(426003)(47076005)(36860700001)(83380400001)(2906002)(40460700003)(966005)(336012)(82310400005)(16526019)(186003)(26005)(110136005)(478600001)(6666004)(356005)(7696005)(41300700001)(40480700001)(5660300002)(8936002)(44832011)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2022 15:51:31.8608
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e985c0a-2ec2-4243-a346-08dadeb43c9f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000EE3D.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6193
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Microsoft introduced support in Windows XP for blocking port I/O
-to various regions.  For Windows compatibility ACPICA has adopted
-the same protections and will disallow writes to those
-(presumably) the same regions.
 
-On some systems the AML included with the firmware will issue 4 byte
-long writes to 0x80.  These writes aren't making it over because of this
-blockage. The first 4 byte write attempt is rejected, and then
-subsequently 1 byte at a time each offset is tried. The first at 0x80
-works, but then the next 3 bytes are rejected.
 
-This manifests in bizarre failures for devices that expected the AML to
-write all 4 bytes.  Trying the same AML on Windows 10 or 11 doesn't hit
-this failure and all 4 bytes are written.
+On 15/12/2022 16:09, Wadim Egorov wrote:
+> Hi Jerome,
+> 
+> is this setup working for you on the AM642 SK board?
+> 
+> I am testing your PMIC patches on a AM62 based board with a similar setup and
+> running into the following error
+> 
+>      VDDSHV5_SDIO: bypassed regulator has no supply!
+>      VDDSHV5_SDIO: will resolve supply early: ldo1
+>      VDDSHV5_SDIO: supplied by regulator-dummy
+>      VDDSHV5_SDIO: failed to get the current voltage: -EINVAL
+> 
+> Have you noticed problems with LDO1 and bypass mode?
 
-Either some of these regions were wrong or some point after Windows XP
-some of these regions blocks have been lifted.
+Wadim,
 
-In the last 15 years there doesn't seem to be any reports popping up of
-this error in the Windows event viewer anymore.  There is no documentation
-at Microsoft's developer site indicating that Windows ACPI interpreter
-blocks these regions. Between the lack of documentation and the fact that
-the writes actually do work in Windows 10 and 11, it's quite likely
-Windows doesn't actually enforce this anymore.
+I did not noticed this on am642 board but IIRC this rail was not used. I 
+heard about similar issue reported to me by Nishanth M with a fix 
+proposal here:
+https://gist.github.com/nmenon/e4dd6ef6afe31bc9750fa6cbee8d3e25
 
-So to help the issue, only enforce Windows XP specific entries if the
-latest _OSI supported is Windows XP. Continue to enforce the
-ALWAYS_ILLEGAL entries.
+I did not have time yet to investigate on this but will do soon.
 
-Link: https://github.com/acpica/acpica/pull/817
-Fixes: 7f0719039085 ("ACPICA: New: I/O port protection")
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/acpi/acpica/hwvalid.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/acpi/acpica/hwvalid.c b/drivers/acpi/acpica/hwvalid.c
-index 915b26448d2c..0d392e7b0747 100644
---- a/drivers/acpi/acpica/hwvalid.c
-+++ b/drivers/acpi/acpica/hwvalid.c
-@@ -23,8 +23,8 @@ acpi_hw_validate_io_request(acpi_io_address address, u32 bit_width);
-  *
-  * The table is used to implement the Microsoft port access rules that
-  * first appeared in Windows XP. Some ports are always illegal, and some
-- * ports are only illegal if the BIOS calls _OSI with a win_XP string or
-- * later (meaning that the BIOS itelf is post-XP.)
-+ * ports are only illegal if the BIOS calls _OSI with nothing newer than
-+ * the specific _OSI strings.
-  *
-  * This provides ACPICA with the desired port protections and
-  * Microsoft compatibility.
-@@ -145,7 +145,8 @@ acpi_hw_validate_io_request(acpi_io_address address, u32 bit_width)
- 
- 			/* Port illegality may depend on the _OSI calls made by the BIOS */
- 
--			if (acpi_gbl_osi_data >= port_info->osi_dependency) {
-+			if (port_info->osi_dependency == ACPI_ALWAYS_ILLEGAL ||
-+			    acpi_gbl_osi_data == port_info->osi_dependency) {
- 				ACPI_DEBUG_PRINT((ACPI_DB_VALUES,
- 						  "Denied AML access to port 0x%8.8X%8.8X/%X (%s 0x%.4X-0x%.4X)\n",
- 						  ACPI_FORMAT_UINT64(address),
--- 
-2.34.1
-
+Regards,
+Jerome
