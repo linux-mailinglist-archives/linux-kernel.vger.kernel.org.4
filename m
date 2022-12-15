@@ -2,168 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77C764DCB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 15:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7211764DCB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 15:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiLOOGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 09:06:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
+        id S229808AbiLOOG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 09:06:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiLOOGR (ORCPT
+        with ESMTP id S229775AbiLOOG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 09:06:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AFC108E
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 06:05:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671113134;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f5mWqAZ4oKzRB/AUy0EFC6zsdw46PWyd5mKsEYBuVQc=;
-        b=TcrotNfJc3O6UqFnAq++yaE6B2rcQmwCxUFRQliaBDlpgzNiQZFdb6PuQNKJSW/uTWu41C
-        RtKOegkfdeD6FOCUNj9aK3AuX48oRoOcmtPiCmochmU97dllvkTH00UDFuxL20TjElBcYY
-        +GhiJqugHHU3jiPhp+gif4tXfof7Jlw=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-622-P0ykJ4aaP9GnSebUS04v-g-1; Thu, 15 Dec 2022 09:05:32 -0500
-X-MC-Unique: P0ykJ4aaP9GnSebUS04v-g-1
-Received: by mail-oo1-f69.google.com with SMTP id x20-20020a4a6214000000b004a36ed7679eso8208985ooc.15
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 06:05:31 -0800 (PST)
+        Thu, 15 Dec 2022 09:06:26 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9D0108E
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 06:06:26 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id i186so3556236ybc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 06:06:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZWJCCGajjnlcSU0ERtJA2Tzyvj1nNyfPvgyo5xOAnh8=;
+        b=ubJDRqoh84qjmY5+kL5diw37Q0xrZue0jX5Rml7ru2Qk59v6wd3pVEMfmLHkD1sje+
+         Fdb7O2f0IpcXKwkmBsU7ZQX2rQ0noHJPcOmsAoI5ukTgLjrVnK2+jj3CiONpwJru+uV6
+         MVjtZMhIqMRrpe3HAaSZdAkkKPSWV9Puoj3PjAHzC+fKM+2VXxelqwa4A5NfbGS6ZpQF
+         kDi3dsk3mSAOe5JZVmHcAAx8ZcUcE8XrjhIta/Y27F5EZKr3qKyIXwForPHsutViy7Kf
+         PBdSRsODCcSx2iy6F/jHBPMWNI//cr2THVaGyl7x1Q17Ysbszstw5dFN4jXvrm2I2TNr
+         sPyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f5mWqAZ4oKzRB/AUy0EFC6zsdw46PWyd5mKsEYBuVQc=;
-        b=i84nBu7kD32Cw48luyynt8ESiJwIh7wDAmq7MD0h5/uxjZa/0Pnv6FU0alJyxNa3gh
-         ROLFJ6VCXwAfyo9aZmph2odqbzIgAF+aJA9yiMmYSEpzkmffTSwtjCuhL1yjx/sdZiMD
-         sUW+U6cy8iqM23ym4TbkzdxtbbwuA4SOoiTIQA373+8ce1JxObxmMpu6u2BgoPNs19Z+
-         SWD9FnPUh5DZ6j9nUdfkxCnhFb7sc2Tw5rZ40GehA4yo8goRqrnDxpHJhd3ySIdsKWws
-         JAonHv9sCDTLk+JfCm+Gwmjvxjxmwg/ov5c66u6JPoTXxQelbGDY3o02iye3NK1nH9+t
-         UOrQ==
-X-Gm-Message-State: AFqh2koQeK92hB0bQ702ybUbMe2zqzxVpL6B/D5yjmBS/c38D69Tyh/v
-        sVwhK9+wFKgo6ONCB+QGEajjk3CX3cZ0yYi8F/EC665Jdg1WSYvpvzP6wNAd7JuUGtvgNLGKyLV
-        Kk2lSnQuJ3Qr2HN9maiKL+i54
-X-Received: by 2002:a05:6358:ee96:b0:e2:8961:31eb with SMTP id il22-20020a056358ee9600b000e2896131ebmr360087rwb.18.1671113131158;
-        Thu, 15 Dec 2022 06:05:31 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvONXi/dqYJVFx4n5Wjg35lK85YO/Ff/VaOFj8YDa8i+fVvbU4Ufo7cLZgI/t2BoMFIue5OPQ==
-X-Received: by 2002:a05:6358:ee96:b0:e2:8961:31eb with SMTP id il22-20020a056358ee9600b000e2896131ebmr360055rwb.18.1671113130807;
-        Thu, 15 Dec 2022 06:05:30 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-45-70-31-26-132.dsl.bell.ca. [70.31.26.132])
-        by smtp.gmail.com with ESMTPSA id y18-20020a37f612000000b006fa2cc1b0fbsm11948112qkj.11.2022.12.15.06.05.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 06:05:30 -0800 (PST)
-Date:   Thu, 15 Dec 2022 09:05:28 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>
-Subject: Re: [PATCH 2/2] mm: Fix a few rare cases of using swapin error pte
- marker
-Message-ID: <Y5spqIz3vAlqYIHK@x1n>
-References: <20221214200453.1772655-1-peterx@redhat.com>
- <20221214200453.1772655-3-peterx@redhat.com>
- <87bko5cf8y.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZWJCCGajjnlcSU0ERtJA2Tzyvj1nNyfPvgyo5xOAnh8=;
+        b=LAz59jv2XnyJAoNSyYkXndsOJoGG0hTQyADxxf0/phwdDDU+shKcvbVYyY54P7mRa0
+         jmrxQQ+K6ICpCv/ve3zYngf74NQY0oVo6WPlNapjjVIGvIq903BClVEheRul927sSCna
+         ToWmTD1AYgXEX8KfdnIMeHPY5+SWxMcexM5RCHX/yJNLcFOWCbdTfYFEgbv//eYHassJ
+         VihbYVfh54aUjKV4cPqS3BY0fPgXCDYcg0LJHvUsI+tZQcezjxeomEQhOh6wV2/IrszD
+         ciXPISM5bs3js3JjmZfVAS2/00WzhWV+Le5OM347EL8UBoHByB+rXrBykcbDzIAhVDzg
+         W5VA==
+X-Gm-Message-State: ANoB5pkhDVd6mpN/qPdN3bGN+GpqreN/EAuFtl2833NIu3J2tPRGvSqd
+        rr+uuYNALks4of2aEviYb4uVQlObXIQSLzWRkAvi0w==
+X-Google-Smtp-Source: AA0mqf5U7zUeucL6rTpOYLWEgHKQ98eZ+Z3r9sRKA3Dr2UNwEcOHPsyYDmrM6Wym9jMo7XUyPbYxIobVEOMzVTTw8GQ=
+X-Received: by 2002:a25:738c:0:b0:703:25b7:67f3 with SMTP id
+ o134-20020a25738c000000b0070325b767f3mr13142401ybc.54.1671113185408; Thu, 15
+ Dec 2022 06:06:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87bko5cf8y.fsf@yhuang6-desk2.ccr.corp.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221214142725.23881-1-hhhawa@amazon.com> <Y5n1U1lYbcbJ5U1k@smile.fi.intel.com>
+ <efa9171f-98ac-f518-e59e-f6c4d7d3d4e6@amazon.com> <Y5r2pZhe17dVBMme@smile.fi.intel.com>
+In-Reply-To: <Y5r2pZhe17dVBMme@smile.fi.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 15 Dec 2022 15:06:13 +0100
+Message-ID: <CACRpkdbawj+Wg2D75MdZavcfyjRa2JRAvqROnNLVH7oMcZTdMg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] i2c: designware: set pinctrl recovery information
+ from device pinctrl
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Hawa, Hanna" <hhhawa@amazon.com>, Wolfram Sang <wsa@kernel.org>,
+        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        jsd@semihalf.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dwmw@amazon.co.uk, benh@amazon.com,
+        ronenk@amazon.com, talel@amazon.com, jonnyc@amazon.com,
+        hanochu@amazon.com, farbere@amazon.com, itamark@amazon.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 03:12:13PM +0800, Huang, Ying wrote:
-> Peter Xu <peterx@redhat.com> writes:
-> 
-> > This patch should harden commit 15520a3f0469 ("mm: use pte markers for swap
-> > errors") on using pte markers for swapin errors on a few corner cases.
+On Thu, Dec 15, 2022 at 11:28 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> On Thu, Dec 15, 2022 at 10:15:35AM +0200, Hawa, Hanna wrote:
+> > On 12/14/2022 6:09 PM, Andy Shevchenko wrote:
+>
+> ...
+>
+> > > > +     if (dev->dev->pins && dev->dev->pins->p)
+> > > > +             rinfo->pinctrl = dev->dev->pins->p;
+> > > Hmm... I don't see how this field is being used.
+> > > Can you elaborate?
 > >
-> > 1. Propagate swapin errors across fork()s: if there're swapin errors in
-> >    the parent mm, after fork()s the child should sigbus too when an error
-> >    page is accessed.
-> >
-> > 2. Fix a rare condition race in pte_marker_clear() where a uffd-wp pte
-> >    marker can be quickly switched to a swapin error.
-> >
-> > 3. Explicitly ignore swapin error pte markers in change_protection().
-> >
-> > I mostly don't worry on (2) or (3) at all, but we should still have them.
-> > Case (1) is special because it can potentially cause silent data corrupt on
-> > child when parent has swapin error triggered with swapoff, but since swapin
-> > error is rare itself already it's probably not easy to trigger either.
-> >
-> > Currently there is a priority difference between the uffd-wp bit and the
-> > swapin error entry, in which the swapin error always has higher
-> > priority (e.g. we don't need to wr-protect a swapin error pte marker).
-> >
-> > If there will be a 3rd bit introduced, we'll probably need to consider a
-> > more involved approach so we may need to start operate on the bits.  Let's
-> > leave that for later.
-> >
-> > This patch is tested with case (1) explicitly where we'll get corrupted
-> > data before in the child if there's existing swapin error pte markers, and
-> > after patch applied the child can be rightfully killed.
-> >
-> > We don't need to copy stable for this one since 15520a3f0469 just landed as
-> > part of v6.2-rc1, only "Fixes" applied.
-> >
-> > Fixes: 15520a3f0469 ("mm: use pte markers for swap errors")
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >  mm/hugetlb.c  | 3 +++
-> >  mm/memory.c   | 8 ++++++--
-> >  mm/mprotect.c | 8 +++++++-
-> >  3 files changed, 16 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > index f5f445c39dbc..1e8e4eb10328 100644
-> > --- a/mm/hugetlb.c
-> > +++ b/mm/hugetlb.c
-> > @@ -4884,6 +4884,9 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
-> >  				entry = huge_pte_clear_uffd_wp(entry);
-> >  			set_huge_pte_at(dst, addr, dst_pte, entry);
-> >  		} else if (unlikely(is_pte_marker(entry))) {
-> > +			/* No swap on hugetlb */
-> > +			WARN_ON_ONCE(
-> > +			    is_swapin_error_entry(pte_to_swp_entry(entry)));
-> >  			/*
-> >  			 * We copy the pte marker only if the dst vma has
-> >  			 * uffd-wp enabled.
-> > diff --git a/mm/memory.c b/mm/memory.c
-> > index 032ef700c3e8..3e836fecd035 100644
-> > --- a/mm/memory.c
-> > +++ b/mm/memory.c
-> > @@ -828,7 +828,7 @@ copy_nonpresent_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
-> >  			return -EBUSY;
-> >  		return -ENOENT;
-> >  	} else if (is_pte_marker_entry(entry)) {
-> > -		if (userfaultfd_wp(dst_vma))
-> > +		if (is_swapin_error_entry(entry) || userfaultfd_wp(dst_vma))
-> 
-> Should we do this in [1/2]?  It appears that we introduce an issue in
-> [1/2] and fix it in [2/2]?
+> > This field is used in i2c_generic_scl_recovery(), if it's not NULL then the
+> > flow will set the state to GPIO before running the recovery mechanism.
+> >         if (bri->pinctrl)
+> >                 pinctrl_select_state(bri->pinctrl, bri->pins_gpio);
+>
+> OK, but why that function doesn't use the dev->pins->p if it's defined?
+> (As a fallback when rinfo->pinctrl is NULL.)
 
-Patch 1 copied stable with 5.19+, this one is not.
+I don't understand the context of these things so can't say much
+about it.
 
-So if we want to squash, we may want to squash both patches into one, then
-we'll need an explicit follow up on stable branch with something like patch
-1.  The current way works easier for stable, but I can also do the other.
+> > I saw that that the change failed in complication for SPARC architecture, as
+> > the pins field is wraparound with CONFIG_PINCTRL in device struct. I though
+> > on two options to solve the compilation error, first by adding wraparound of
+> > CONFIG_PINCTRL when accessing the pins field. And the second option is to
+> > add get function in pinctrl/devinfo.h file, which return the pins field, or
+> > NULL in case the PINCTRL is not defined. Which option you think we can go
+> > with?
+>
+> Getter with a stub sounds better to me, so you won't access some device core
+> fields.
+>
+> Linus, what do you think about all these (including previous paragraph)?
 
-Thanks,
+A getter may be a good solution, it depends, it can also be pushed
+somewhere local in the designware i2c driver can it not?
+I am thinking that the rest of the code that is using that field is
+certainly not going to work without pinctrl either.
 
--- 
-Peter Xu
-
+Yours,
+Linus Walleij
