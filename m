@@ -2,173 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780B964DE30
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 908B864DE31
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiLOQHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:07:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
+        id S229770AbiLOQI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:08:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiLOQHS (ORCPT
+        with ESMTP id S229978AbiLOQIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:07:18 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2125.outbound.protection.outlook.com [40.107.244.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215113135C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:07:18 -0800 (PST)
+        Thu, 15 Dec 2022 11:08:38 -0500
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2055.outbound.protection.outlook.com [40.107.247.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF64431DD6
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:08:35 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WN2118Zas79QcDnzZ26NDFqZuQfc/nLwssPgscD4MJ8Li1bInR1XnjStDWcUF8o7UDjcZn2bP9YqEh2S8r0QVVwv2UJudXGtvW6wSA1Lwdo2vyzjXugnQNeeni7T93+5IU5VXr9JcKHZ+XXDlEzJX9+hi1LIIlztyOgo6klfFYhEzTtCAXj9OLNGm8sbmHUY6Kq3j9wslsbIJf1iP++Rv3EKNDYJrxYAFRbwQStHSieElRxJcw5CRc0w7vHdKBJ0xNSPjcjI/WmnL1GIRa416l+wHAIn18868uOeZeap8gIqU7ilH54YJszl63DQKNfndThR9JsvniqYld/xSPh4mA==
+ b=XlA3M+9IDOoSsU8xqVdOFKraBlmtHY5f7aDFh5gBqrQlEXc+Qh8+nLqKhm9PTOmhXTE563C23qmqGYegFIpAJyI7CKBwOqAaOszDK9MFAMDaNEavdYuDFq71pKXjimJvg/t1K+cWVKdNCwb6P3ql9Qaxipl5F7e+NOyQTkgPCbnNvrpSMpcA9+rPe67xtuP8kIWCFJBvs4ECc1J5kx4xKNyeockzRq7n2WVRH6it5DmCHnjjbGfkufFSsgOlywY8D5SCIkwhC5McDtfxtzqGkbrrD6o3IeVqLkHqL9h3Fk/KRapYw4XhfkRkx9uh+qVWqfDtNeT3PxLnK8+N21nGjQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TmaaExN+98wx84MlxTV5KfSpFdzmFTLKLNcPaza5tkU=;
- b=UfB08WFFhmklCxe49LReR5B5+NVgjuH+MaEKSSfjZtyjq6uZB5bN61l2rLx+zLtd0r0XzKfWsk9yISN+TEx3S6QH7XOiGBhAG8yzRYLsMTedepAGJQ1w6H3AqqwDD+1OraxtaX4FOBg1/LOeNs7fkC9XIptEzmTMNYo48vCQkBjg0QyiMkyDDCHxaOjnLKcQPwg1TI5W7lQXg0xdIEXkLX+lfHR5PDPLyCKXMW7WWTJSZVGXNGHVXUwL1iGfsM+DTq3tYSh/J7MMmB0iJgmurZgoQyxEKFHrONqWpo0IfyZe/iMyDMuX/WnnzZKlWIBPENhHsugYMwV5+jylnshDTA==
+ bh=F9RMwUkW3d6whBW2iOEWFiWCXJrSQiCrBD/vFF20DxI=;
+ b=T+let/Gh6/duj0nEnVeOC78MeAZimyFpjq0U5lzndoBY7s15xsOkby52yJH9jki9+iDxbQqs91FG5SbDK7Qf/RWjwQ5lTh21c2ZyINHbznkaW/7gde7h1jorRHJIyE4DqT3/AF9b6J7DS2VhVUgVR7tetwlidljfxirH3h6O0PnB91+DtJKdc9uD48DRp3LEAhZdtvSDw1OlOz8N8ujIZa/pfbOu8X64Ys0g0opOb075qVCTaiySLgmhHiWsZFzevchIgxmbikJuvz9fJlYAbGr1W8LRAp+KrBqRNUhyKmuT+6Oa8y6cP1ieTZICGfa5u9SG8rJRDudQvaT9tJf6KA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=designlinxhs.com; dmarc=pass action=none
- header.from=designlinxhs.com; dkim=pass header.d=designlinxhs.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=designlinxhs.onmicrosoft.com; s=selector2-designlinxhs-onmicrosoft-com;
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TmaaExN+98wx84MlxTV5KfSpFdzmFTLKLNcPaza5tkU=;
- b=TfRNriO8B9SR5EO+0mOZBGW+HsBv8I6hHy+imYK1EK893HcT1vW3KXZk2nVDxLFhw4q1aZjE4Yr84sH2dmFP6kBV0vhxzGmu3huvVDnfK7dbzhrp7b4k+Gvk1XgvFeos57XxT01ofAc2sw/Mkd9+ctfkO8tLFbqAt7XszGS4lpY=
-Received: from SJ0P222MB0107.NAMP222.PROD.OUTLOOK.COM (2603:10b6:a03:3f3::10)
- by SA1P222MB0359.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:1fe::20) with
+ bh=F9RMwUkW3d6whBW2iOEWFiWCXJrSQiCrBD/vFF20DxI=;
+ b=DpnZADL2XcW6VDTS7mbyFhmEYaiqcrTvXfpn8AeXReosv7o9sMCvivmG/AiaH0PhD/LleltmGS7sSbvfu3NyTXuvuffhZ8SeH+PEGN4izh/BwaWo4Y0XesEW7HtwhA0LTT8elHNWQ82lTiDxRStKIqJ8Uy+TxYNGSjSVTGKi3ARXYta3dsaET2JdWvnWhGsX4xHhA0FZUaKv+iyBX0Wm2qIJU3j69V03guwmqhkPV1QGkCy2VmLbMCpl3Cr9lyHdBFM65bQEekW/cZ757Af8UrcFL18DvBWY8sRYyy0yJgY14FkcuHupRG7Vil1KNblDWx7HCRnMqSi1InXi4KpXHg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
+ by AM9PR03MB7790.eurprd03.prod.outlook.com (2603:10a6:20b:3df::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12; Thu, 15 Dec
- 2022 16:07:15 +0000
-Received: from SJ0P222MB0107.NAMP222.PROD.OUTLOOK.COM
- ([fe80::7c3b:bab5:a29:1731]) by SJ0P222MB0107.NAMP222.PROD.OUTLOOK.COM
- ([fe80::7c3b:bab5:a29:1731%9]) with mapi id 15.20.5924.011; Thu, 15 Dec 2022
- 16:07:15 +0000
-From:   Kenneth Sloat <ksloat@designlinxhs.com>
-To:     "sean.anderson@seco.com" <sean.anderson@seco.com>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.11; Thu, 15 Dec
+ 2022 16:08:32 +0000
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::2b95:1fe4:5d8f:22fb]) by DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::2b95:1fe4:5d8f:22fb%6]) with mapi id 15.20.5880.019; Thu, 15 Dec 2022
+ 16:08:32 +0000
+Message-ID: <423e3575-e8d2-f100-1f9c-43c195139f6b@seco.com>
+Date:   Thu, 15 Dec 2022 11:08:28 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [v2] pwm: xilinx: Fix u32 overflow issue in 32-bit width PWM
+ mode.
+Content-Language: en-US
+To:     Kenneth Sloat <ksloat@designlinxhs.com>,
         "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kenneth Sloat <ksloat@designlinxhs.com>
-Subject: [v2] pwm: xilinx: Fix u32 overflow issue in 32-bit width PWM mode.
-Thread-Topic: [v2] pwm: xilinx: Fix u32 overflow issue in 32-bit width PWM
- mode.
-Thread-Index: AQHZEJ7bv2gKFs5+xEGDSHiKdkn4og==
-Date:   Thu, 15 Dec 2022 16:07:15 +0000
-Message-ID: <SJ0P222MB0107490C5371B848EF04351CA1E19@SJ0P222MB0107.NAMP222.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=designlinxhs.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ0P222MB0107:EE_|SA1P222MB0359:EE_
-x-ms-office365-filtering-correlation-id: 23d6cb3f-520e-4fb6-260e-08dadeb66f36
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ELJWvuQXJtwmin4G6Su/PGc2KfCw+zXhIdW6TbOGEpw6eKDHqnOLH0FhXzczK8yGJNcybY01z2RCxUwJ/oHtX8l9RssZV57yt+t50zCkW5I9EwG/xDMWjSF9Vr6wOwCXj4NUV6Qx5lMvlRnFss/avzh9GNCySUv7OT1GFd9GMzSFBcJhJRouPvRrwohZGtjSTdm9dOs/3+PjxndgdxN5DkzjSTeQLNTJCxQEMGe3pvowQd8v4pF6zFIa75zAGYiT8Tyjd6hGCzltwTaTuqN5IdEsgdSK9gAQECmbeAeWuAZcpVZpz8BlfrNuX5umdnuoHkA3RvcloymFJEgkAmnsuhfFMEADaG9PdmwLA2Sz6PgHjMcpkmzTgrvaMZ6TPEpuGkcMjF2Pu2joTgA6ehPpSc7jvt0DMjeR8H9yDThA1nY68eFxxb4iUM2MKy2wGcuZPBUbHX8cPA4zqBW6CbkprVZ+ZI/YY2QmViUIafDxv3plI6vvMqgDA32i5fwyH2HLeZiYfJCFLtKSoXhumwuopTIWoKGcbYA1Sy7mo41r2viLDLsGzKXDBSMj+DlD0x2cVXluVBUQ8a63AlB+15sji6dLiZrLoKcZ/ljrOylLtQaKAXMpfAlijY6Ob4Pje+egaDX6VbmSzz22b2MYxG+ZpWSqs+v4PQ4l3QNwefUM55uuZ6VgufSXb2cF9pJwsXABIVXqLEA1N5eEllV0LcOBTg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0P222MB0107.NAMP222.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(396003)(366004)(376002)(39830400003)(136003)(346002)(451199015)(2906002)(5660300002)(8936002)(52536014)(38070700005)(316002)(41300700001)(8676002)(91956017)(66946007)(66446008)(76116006)(66556008)(66476007)(64756008)(55016003)(110136005)(33656002)(71200400001)(9686003)(478600001)(26005)(6506007)(122000001)(186003)(7696005)(86362001)(38100700002)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?cdM/1wk/x/x36tRU3Ee99LKPSE0T7AV/qySzQrVc3JZmyOMmcE3nPn0HqK?=
- =?iso-8859-1?Q?0SzH+Mg/BHyjwgV9hDXrN4ppZQiKPfajNPCUyz/cfTEz7IYJMS6TYBpPLO?=
- =?iso-8859-1?Q?fMw2v00WWFUPRx5eY9VYVJERaYq6xCBv4emhDrollBv4z80UjIm1QDXf3f?=
- =?iso-8859-1?Q?los2XJmdln+JkgS7UsMTpHIpvLmQgRCpd4PeSdgbC+avTrU03Ru2SKiEQF?=
- =?iso-8859-1?Q?UpEHcttXYJcMlhR24pta7U2cD97Cb989F6BW3ut+LK/4LDu+yiaQNiYOL3?=
- =?iso-8859-1?Q?CTRs7Npq621GxDY0fL1oTSCmuQKfzvgXxgdhwYfHAsCKH9m3iNKzavQSSv?=
- =?iso-8859-1?Q?vAyFw8d0t5woTbLhdnR3jgQg+FDht83FeTO1l/KjL2FAXnZ4QUKWsnqxeL?=
- =?iso-8859-1?Q?moy7KprnFrDeufH3FpQVfQ8NxaioUkvFjIN+//OSFK+k90C4uyzUf6GvtI?=
- =?iso-8859-1?Q?QknbUMA4h/EfC5KUzBFw2Y6qMdsZOGR7KR9e0woYJ037CRtxc0fAbdnTbi?=
- =?iso-8859-1?Q?Eu64q+BewkTS5qmIPknLqaEtWdec7n81dO1WNTn8fD8U3Y9jNsG5CbtzMK?=
- =?iso-8859-1?Q?77opzhREf4dzrlAi51WZA0VwdMkEGS2VIpp55i1Zo0x8U6VD4PUHCzWH+A?=
- =?iso-8859-1?Q?20mFpCXZCsXBwciVjnUkmxVghuhOvzaVWcWVBCsN3T4nloRJIsQ6P6kGNc?=
- =?iso-8859-1?Q?AM1rFnEthdyEb82u1p30r9P6KiVWxDqgESNoi/siQ2OCZPrlHA/MEzoJ7r?=
- =?iso-8859-1?Q?8d7IAREPNHZ0OqbsYsWI9lS3XjncDGlI6W0e4fZbrwlb/psGZcmKZ3ucW+?=
- =?iso-8859-1?Q?xsHJn4+v3zrFBsYXoeb8jW4YAZDcPXTJ8744QyGHSrJzsJpXbnbyRT6TPa?=
- =?iso-8859-1?Q?POXZ/RrsA7d/qVevjpzTTAo3ca/jwZqbQDseKsy51UTJh/BWomeUEeV6cq?=
- =?iso-8859-1?Q?M0NFkhlb5hjNdIGWkcoBoBbJCciuH0mAsBomQCbRRMyCAN0R6oAIocAjfg?=
- =?iso-8859-1?Q?woaGYhocLOqEJ6ihCnFpyo8idDq+D7gQUvSByBu3IBR+kCM+4gOYx1EDms?=
- =?iso-8859-1?Q?Nylr174QU+RmYmhxNDclEv4f0u/ZGdbFtpD3jeOyfMtA5sDI1yOoL62Fqp?=
- =?iso-8859-1?Q?ZzRq/7797aa8UQm3fLq4ew5L/qqg18eygZNz1hKQ+OK3iFMEGQJg0+96/x?=
- =?iso-8859-1?Q?GLHMZaOnUiIwzqT+PnxP8DG31rEC876w6xnVRHqZHuAhrUqq4JF4/SIgk6?=
- =?iso-8859-1?Q?2FjyZjUR9Vcs8jhlqDNADo7RDSzHrqkrl6qsOuLN5CDdAqN31fgz0y2Emd?=
- =?iso-8859-1?Q?FnynaqcuKNwhAJjU/kyjiKV3YaBtc7oSeUnrKe6HiS4hz+V9HW8FCFWP2T?=
- =?iso-8859-1?Q?5la05jyB48uOdAnD3hy1y/juzzcaswjlW9BiAI52Gi1kt5VPgkBF41bTKV?=
- =?iso-8859-1?Q?8HBmyILDShrPc9AD3V/M5Ue9WpyGZJBtlceYTQKQOHCf3hsiXgg1gzisC/?=
- =?iso-8859-1?Q?xde6YbuBKot3EuvMAtxb4AqD/E7jKO5WTMuDBhJ946y4ac4w1imrhgJs+6?=
- =?iso-8859-1?Q?uVxXNNDeJ5CutmWWyC4PwcXAhxtYB56JNjxTDzDl7RMN4mS2SnPAc/ow1n?=
- =?iso-8859-1?Q?/434XTLIczLK1FnY51PLNpsJ1JHmBjInx6?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <SJ0P222MB0107490C5371B848EF04351CA1E19@SJ0P222MB0107.NAMP222.PROD.OUTLOOK.COM>
+From:   Sean Anderson <sean.anderson@seco.com>
+In-Reply-To: <SJ0P222MB0107490C5371B848EF04351CA1E19@SJ0P222MB0107.NAMP222.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BLAPR03CA0027.namprd03.prod.outlook.com
+ (2603:10b6:208:32b::32) To DB9PR03MB8847.eurprd03.prod.outlook.com
+ (2603:10a6:10:3dd::13)
 MIME-Version: 1.0
-X-OriginatorOrg: designlinxhs.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|AM9PR03MB7790:EE_
+X-MS-Office365-Filtering-Correlation-Id: 06c1e0ce-98d3-4f2b-33dc-08dadeb69cdc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BuUqfogyLxxiwGhNdEoSn8ldT7KOJSKJFZgn7wh7Lcytb0U6NWkFAkKHOo2D5YDhvpsqc/o3UCGy3SqpT1JVaxm4cNjZLWFN4AZcHFE88Dhg5bxLEPuFfJ6xevAaNQC6glY11cIupvobPVoHRNsJBgfjHD1QOYyEPqT4KC8p8GWwYR9wuxTzvT+B2bAnLduOTNL339pEEP7WqMDJ3Joal1Q6B+Hr+/K1Ik4Fh5edN9dIut/TLCH/bXM2mCCvfzm/tc2KKU57wdcjsjlfA+ZStSAS6rDq4nYwzmIayh0p8ccLTUpqAnlUoet+TreAIPw3RBgr7J7Iwf5fhu4JMozfHxbCjyVomEi0j0o1UstvcChRGr40qGlLPFQre+h6yPgtqaU18K3pQ61gbJljQ7dsquD/QxVMIr7xFrp5GmHMjaYaeCzfLnKNQJ2UwzntJ6eQeYHy7nbNdSYicmluc6IeORm6yB9bU3avfroQF9CuoMbwtIIq2Mwy8FlMmvpTAX8A9fkVubP/APF6OnpODAbOaBZKrr/0LyARxGOUbag+lHW96Cs0Zi4HEmLLCYtGIOZc/7YA53AbtHebDMf3jMv7LeZkByG+5V3z+mENf+h/kBhyIXbwEehNCiJxZIUDpN8fV5TwbhegF//Fp9wK1xEY1LxahBLxYMIxmVYbP38Nn/oCrdGA+cX/usNT5Q4sEOaQyhux1DJsn0Km5k5yfdG5ml5zs/ubgYlRbJFiUtibqozvSwNcphd7dwx4TR0/NYtRJjX387qGpTiR14GI8s/0Jw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(376002)(366004)(39850400004)(136003)(451199015)(6512007)(6486002)(478600001)(26005)(52116002)(186003)(6666004)(53546011)(6506007)(316002)(110136005)(86362001)(31696002)(36756003)(2616005)(38100700002)(38350700002)(83380400001)(44832011)(8936002)(41300700001)(2906002)(31686004)(5660300002)(66476007)(66556008)(8676002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TC9YMkZjbDNSZTdEdS9yc05tako2djBqd3lHRmhtL0JaYVpDdzZaU0V6ZUJJ?=
+ =?utf-8?B?Rm5YNnplNTkxUUFsR1o5K1p6Qk1aNFB0RGdMbm1xUFdqTUNHaTM1Z3hsZnVm?=
+ =?utf-8?B?Y0RqQUprNkF0ZE91MEdXTUh3UnZwSEcrd0hCdGxtY3ZEeFBIdjh5VVpEN3RB?=
+ =?utf-8?B?RXFTQnFHbklud2w3SXhDcEFDVDlrUUtENnRjRG8rZXVCYkFvYW54NGF1Y0pt?=
+ =?utf-8?B?U3JkdVZwL0o0SHhwMHl1ZzJzTXA5SVhYd0ZZampPdllvaVJtQTBnRktrZ1dH?=
+ =?utf-8?B?TE84b1dlM0M2bWpoMmR3MUdBbHNDWit6UUxVckNBMk92SmtWVGZTQ3VPTHZa?=
+ =?utf-8?B?RUZkeERyaGJOQUZwZktBMWc5VW9QaEwwd2l3bnlaU0FHZlh0QlUwYmJKdDVz?=
+ =?utf-8?B?N2FBVUJzeHJySHVvUW9ZQ0hEcUZ5WGVJTm56ODR6RXd1YzZwK0kzVkJTaTJ0?=
+ =?utf-8?B?S0NkWkMvTXBvNUtzdDJLRzZQd0VhSlFYUkExYUltM1VJY3dNUndPSUIyajJM?=
+ =?utf-8?B?bzk2Z3FIWVZaZDFLOHU1SnFNS0d6eUlBNVRNdjVqb05wdmlJcE1XSHdPenEy?=
+ =?utf-8?B?NzJSRWRvQWt4aUJwSFYrU2tESjg3V0JOWU5nS29lR0pkNVNlcU1QTzdYU0dw?=
+ =?utf-8?B?QjcwRW1zbVBtN2hIZVpLNVVjUFYzdkU1aHF2d0wwempicWdzdXRiMXpvdmNO?=
+ =?utf-8?B?SjUydXVRSzRURUdlZTBKQksvVWtoaVphS2U5SjIzTmVpOFlaOWt3NGkyVEMr?=
+ =?utf-8?B?S1IzMklrR3o3amlZMSs2TlhwSk9GVmNjeTNwYXhiWHFHUUJ0VHNGMVpESnZt?=
+ =?utf-8?B?STNwTkYxclgzRytFeEFWZnZJd1VXK3cxajRzdm5UTHZqTXRmV1ZOQTZvSTJq?=
+ =?utf-8?B?M2tDQmFwcVprTitUWXpudmFjRUlsOE93SjZwUUlSQkwyWXRFQ08wRUsxNlNl?=
+ =?utf-8?B?U0dNOFByNFVOczJvbzUrb09kUEgwOE11cm9temxlcUtsS1RaWW8xTXVnNTVm?=
+ =?utf-8?B?NStRaE1wU0tYVXdjaFFQcGlBSmUxUTcrZlYwdkc5eGplalBYd0l6bC9yUmkx?=
+ =?utf-8?B?blU0ak9EZzhGRUdjVWFRcWxBUXMrNGIwRXVNOVN4Z0ZQbDFLNW5CRk0wMmhE?=
+ =?utf-8?B?ay9iOHpMNUwrbUhVYlZ2NEswN3M5VUloT252RlE3VW8xWWlyQUNLQWd0emF1?=
+ =?utf-8?B?RjkwRXRtSi9SV1JjeFBNcUozYjk3c2lxb1NmTWQyU0RxcjhpQy8yTjRESW5G?=
+ =?utf-8?B?QVI3VlB4bkNTNXFKTTNmS3RQeDdMclB1QnFXTTZTRVZwMDBoZGtmRGFXWXRy?=
+ =?utf-8?B?cnRkSHVzUWFzUVc5Z1M2OERLTFVZQWRscW9Yb0l5TGtIc1BNSGFCWm94NkdZ?=
+ =?utf-8?B?WHhtMEIydzQxbGp3bW5MdG5PNmYvemU4T3dJbnR2L3RRUzhvYW90blFwbXh6?=
+ =?utf-8?B?TkZrVHpMSzV3NjI0V2t6M1BVaVlSdlNOa0NlUnFuUzdaN2tvVnBPNVcrUjc1?=
+ =?utf-8?B?Z1BKaTd3VVd1Qk8vMmJVODFOYlU1K1FYT3kyZUNaN2xpcEd6SGtIUS9Faldq?=
+ =?utf-8?B?dzJTVWhGZ3FtTC81b25HSEdLN0oyWjZGbnpYNWVVbUxDcVp4V0Rxd0JTRXdr?=
+ =?utf-8?B?NnZodExOT3JZSE83ZjFwTVZoYVNqTzhGdlpUUllBb29NVzlMSHVpTEZhSllt?=
+ =?utf-8?B?a1hIN29ncm5RbzAzbWxHKzhuUHpoM1BTci9leVl2NjhmRkpiL29lUHpPNFNq?=
+ =?utf-8?B?OW9zWnRQZ1JvZ2NVTDhwblF2RWl2N1hqNmUrUjFmaW56WWd6Q0t1cmZDVXNM?=
+ =?utf-8?B?MnZ2Rkp1TE9hUm55amx0SWtBSWFZOTZONzRKYmFXaCtMRktzbnNGcTFaNjFW?=
+ =?utf-8?B?QXMrYmNDY3Y5T1E5YmRpZkYxS2ZtRnpXTGFaVU9WNXoxaVZyQUR4TGsvWkNn?=
+ =?utf-8?B?aVVISVdBVFdWRk0vYzA1TDRDR0hjZnEwMEdCL3YxOURxakFwU0xDSFMySzBh?=
+ =?utf-8?B?eFJvT0pMa042Vmk2MG9qYXE4aFQzNkVlMU9VbTVvcm9BZ1E2WTFrQyt1cGZu?=
+ =?utf-8?B?cmd5TkVqSjE5WVB3UDgxZ0FWa04xclc3Ty9KUlNPY1FhMHh3aXJPN2NWaXh3?=
+ =?utf-8?B?RWNqOW1qOERGUmo0V0gxQlBOOWY5cWFyRThqU3VHTm1ZQ3BPR0diM1hJY1JQ?=
+ =?utf-8?B?Z2c9PQ==?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 06c1e0ce-98d3-4f2b-33dc-08dadeb69cdc
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR03MB8847.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0P222MB0107.NAMP222.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23d6cb3f-520e-4fb6-260e-08dadeb66f36
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2022 16:07:15.7267
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2022 16:08:32.4999
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 21db78a4-85a8-43a2-9030-593b170ddfa9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qOAink/fv6odIvebhA1EWEX/CwE40amNCwDlI7T2gAMtPvjlq/FDRGULo0vy+9wJiVKy7YaonXlo/6T5V86Mfw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1P222MB0359
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,T_SPF_PERMERROR autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cMpHfQUcgkVnrwnOJAR0xunr4bwsJ1c33xu4HjTh5qKlxWU5r83pSDui5DtJIOQZXnfpHIUytoNAuHPXsmkmTw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR03MB7790
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ken Sloat <ksloat@designlinxhs.com>=0A=
-=0A=
-This timer HW supports 8, 16 and 32-bit timer widths. This=0A=
-driver currently uses a u32 to store the max possible value=0A=
-of the timer. However, statements perform addition of 2 in=0A=
-xilinx_pwm_apply() when calculating the period_cycles and=0A=
-duty_cycles values. Since priv->max is a u32, this will=0A=
-result in an overflow to 1 which will not only be incorrect=0A=
-but fail on range comparison. This results in making it=0A=
-impossible to set the PWM in this timer mode.=0A=
-=0A=
-There are two obvious solutions to the current problem:=0A=
-1. Cast each instance where overflow occurs to u64.=0A=
-2. Change priv->max from a u32 to a u64.=0A=
-=0A=
-Solution #1 requires more code modifications, and leaves=0A=
-opportunity to introduce similar overflows if other math=0A=
-statements are added in the future. These may also go=0A=
-undetected if running in non 32-bit timer modes.=0A=
-=0A=
-Solution #2 is the much smaller and cleaner approach and=0A=
-thus the chosen method in this patch.=0A=
-=0A=
-This was tested on a Zynq UltraScale+ with multiple=0A=
-instances of the PWM IP.=0A=
-=0A=
-Signed-off-by: Ken Sloat <ksloat@designlinxhs.com>=0A=
----=0A=
-Changes in v2:=0A=
-	-Update commit comments to explain specifically where this=0A=
- 	problem occurs as well as compare solutions.=0A=
-=0A=
----=0A=
- include/clocksource/timer-xilinx.h | 2 +-=0A=
- 1 file changed, 1 insertion(+), 1 deletion(-)=0A=
-=0A=
-diff --git a/include/clocksource/timer-xilinx.h b/include/clocksource/timer=
--xilinx.h=0A=
-index c0f56fe6d22a..d116f18de899 100644=0A=
---- a/include/clocksource/timer-xilinx.h=0A=
-+++ b/include/clocksource/timer-xilinx.h=0A=
-@@ -41,7 +41,7 @@ struct regmap;=0A=
- struct xilinx_timer_priv {=0A=
- 	struct regmap *map;=0A=
- 	struct clk *clk;=0A=
--	u32 max;=0A=
-+	u64 max;=0A=
- };=0A=
- =0A=
- /**=0A=
--- =0A=
-2.17.1=0A=
+On 12/15/22 11:07, Kenneth Sloat wrote:
+> From: Ken Sloat <ksloat@designlinxhs.com>
+> 
+> This timer HW supports 8, 16 and 32-bit timer widths. This
+> driver currently uses a u32 to store the max possible value
+> of the timer. However, statements perform addition of 2 in
+> xilinx_pwm_apply() when calculating the period_cycles and
+> duty_cycles values. Since priv->max is a u32, this will
+> result in an overflow to 1 which will not only be incorrect
+> but fail on range comparison. This results in making it
+> impossible to set the PWM in this timer mode.
+> 
+> There are two obvious solutions to the current problem:
+> 1. Cast each instance where overflow occurs to u64.
+> 2. Change priv->max from a u32 to a u64.
+> 
+> Solution #1 requires more code modifications, and leaves
+> opportunity to introduce similar overflows if other math
+> statements are added in the future. These may also go
+> undetected if running in non 32-bit timer modes.
+> 
+> Solution #2 is the much smaller and cleaner approach and
+> thus the chosen method in this patch.
+> 
+> This was tested on a Zynq UltraScale+ with multiple
+> instances of the PWM IP.
+> 
+> Signed-off-by: Ken Sloat <ksloat@designlinxhs.com>
+> ---
+> Changes in v2:
+> 	-Update commit comments to explain specifically where this
+>  	problem occurs as well as compare solutions.
+> 
+> ---
+>  include/clocksource/timer-xilinx.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/clocksource/timer-xilinx.h b/include/clocksource/timer-xilinx.h
+> index c0f56fe6d22a..d116f18de899 100644
+> --- a/include/clocksource/timer-xilinx.h
+> +++ b/include/clocksource/timer-xilinx.h
+> @@ -41,7 +41,7 @@ struct regmap;
+>  struct xilinx_timer_priv {
+>  	struct regmap *map;
+>  	struct clk *clk;
+> -	u32 max;
+> +	u64 max;
+>  };
+>  
+>  /**
+
+Reviewed-by: Sean Anderson <sean.anderson@seco.com>
