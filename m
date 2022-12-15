@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCCE64DC54
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 14:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5AE564DC57
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 14:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiLONgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 08:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
+        id S229894AbiLONgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 08:36:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiLONgf (ORCPT
+        with ESMTP id S229900AbiLONgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 08:36:35 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A56614B;
-        Thu, 15 Dec 2022 05:36:33 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id bj12so52226690ejb.13;
-        Thu, 15 Dec 2022 05:36:33 -0800 (PST)
+        Thu, 15 Dec 2022 08:36:42 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A64DECD
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 05:36:40 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id w15so3044049wrl.9
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 05:36:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jT7HJVIoupmg5Y21QSuOncD3NDSjnYDNv89SW9beZ/U=;
-        b=fq7i2oQ4kCQIvyyCM2oJDTi5KBfjXOU5mODFRLAI90+YnBCM1rr1s7NbIi5I6vOy2h
-         iH6FFu8de9yxfk5Uji5GsMY3TEzTgJLkUsjLIrA9Hs+ZG0IY93f33EWh4+HjgzZvomBr
-         TtwGWWZ2QnFQ/Gp2woOKcVM67pr8OkE9Q07CMuc34US4AfkN0YU9W0+Jbai5L7kpzoxm
-         WXIwJ4RnMfvWa6JLFOjiB2LEEDEbQ1xyIEG7gkTB1wD3YIvVzgINSGZMTW+DyCOa2ce9
-         tuYyzT279ljDfbVS9LvWAx/dukSBSkCiRqtVAzIA714/V4xC4+f16RB2kWFQlidCaWi+
-         P8sw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qbfBcU9A1qcZjZLYbdzPQwKvFqbEDNx+6TcqfmObulM=;
+        b=xSxqvWtrRrWeU7bLIs1demiCzLhGsuTmM+xAgDZ3pQmMHq41LUzKmB9oEpTpMKvyNF
+         J136QvZcaTBf4tEYPqK0/cvCMXPWKFbaN3V6saIHTNCFYgh15L3dK4Obm2YpbYxFGX1D
+         +7e4U9lZrW5fD8idyHCRMwAEPAyE9Uy+J4vVgcNv4RMopsGzcco/3SgWxICwpG30PktZ
+         jvQQny3aFcDyPqAgevQO39AqBaq8C8OUtHAwVjDSrLAuL1IO5mCJBBenQDt0P+TN4G+C
+         Ag7tMtgpKBH0eCyBiTgbTbVxWRi3lXgBMI48DzbiUblrKwGDvxfWSkvrA0IjrX8VXke3
+         TwWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jT7HJVIoupmg5Y21QSuOncD3NDSjnYDNv89SW9beZ/U=;
-        b=rlh4SxgaU1SvM1kM57Pv0IpvPGMix5fLAJrFb2rcKjl6OBs64ZC6wNAktewg8NGFYE
-         dXDbHvQSfSmLV8s705APxdXX+Uq2ppETTfkrvVgKBhZm9bvIJJ7vSVfshj0eue31qIWW
-         /3ITgriHD4MkkY5B8pD8rIaMInELUJllg/YahrkwkpicriYXJqhw3vOf6blT0Jnc/Ekg
-         tNB3ARPZbBbo8YmFTuwT6Eyl0P5hMcDhP87eObr55t7+8hLrAGwtG735U/fsmVVFgx3r
-         M54GwuYrad+UoF954Oa7DyS5Chc75t4Typh/BFZc8ddgoENAmhNjj3RQUxet9evzxw1e
-         +g4w==
-X-Gm-Message-State: ANoB5pn+eGnsMwDiTpL00cyohDl27Jir9Qe86aXPb/i0RLPFLA8l4NE6
-        u5tuWT8kgk/zuBEsc5Pv16JNTNdL9dkhTxQV
-X-Google-Smtp-Source: AA0mqf5UqnGI8UrmD8MiKudLAv9QQswJ7jkGOHAc+i4PkeipEyUbgd8djmZl9G7Q8dQDDdx+KvnmjQ==
-X-Received: by 2002:a17:907:a782:b0:7c1:6e82:35fc with SMTP id vx2-20020a170907a78200b007c16e8235fcmr25025941ejc.40.1671111392045;
-        Thu, 15 Dec 2022 05:36:32 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id l9-20020a1709060cc900b007b5903e595bsm7031780ejh.84.2022.12.15.05.36.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 05:36:31 -0800 (PST)
-Message-ID: <90b640af-1d81-64bf-96f7-24aa44cca2dd@gmail.com>
-Date:   Thu, 15 Dec 2022 21:36:19 +0800
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qbfBcU9A1qcZjZLYbdzPQwKvFqbEDNx+6TcqfmObulM=;
+        b=fWOT+PrMoOUm+67Dh4N/8tUCgWHbNVAZBBLHbdUWeqrYo8ijrlF8X0DSvMGT04bhqN
+         dpb34ZP2gCFrqP09kK2l1g8WmNqP6fNeqiYtyF9P9o1TgrIK/X/2NCBLpiXtVJX2ciBU
+         j3LBtgwujNdm9UKfgo5OLWtHrlPgWxbNHKRNBPBrmRtGhMeFc3AkEk1aM8l4rYONwEa0
+         340xaHluIInN1HxCAkSLpsIdMmwBq5FREoTFF8qeCe8CzdMNLI8KUAu0MYLS+b/14q55
+         yqKyV498wxd6AGrVJq24btWbwoQmxvYkKipAvUy/jntnXgdDjZpfPx6UVcOGc8Qxqh4P
+         bizA==
+X-Gm-Message-State: ANoB5pkG5E1FSi1WUjLagR6IkRQfnWmWbfB0c1o0atf3I6vLUxjlqPTP
+        2Zs5fPevN84Io4IUDwNAClHqOA==
+X-Google-Smtp-Source: AA0mqf5ZXBLizzx5vPqrVCYrI3ddotv22opYYEybkbq5yxVjFk5rwP1q5r7+TCgCn6Qx0cj8/izb1Q==
+X-Received: by 2002:a5d:470c:0:b0:24d:867f:10e3 with SMTP id y12-20020a5d470c000000b0024d867f10e3mr12593771wrq.0.1671111399103;
+        Thu, 15 Dec 2022 05:36:39 -0800 (PST)
+Received: from prec5560.. ([2001:bf7:830:a7a8:7e6a:e951:1d52:a2ae])
+        by smtp.gmail.com with ESMTPSA id e36-20020a5d5964000000b002425be3c9e2sm6019829wri.60.2022.12.15.05.36.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 05:36:38 -0800 (PST)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     allen <allen.chen@ite.com.tw>
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Hermes Wu <Hermes.Wu@ite.com.tw>,
+        open list <linux-kernel@vger.kernel.org>,
+        Pin-yen Lin <treapking@chromium.org>,
+        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
+        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v7 0/2] *** IT6505 driver read dt properties ***
+Date:   Thu, 15 Dec 2022 14:36:31 +0100
+Message-Id: <167111122676.1425386.1293802929297712782.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221103091243.96036-1-allen.chen@ite.com.tw>
+References: <20221103091243.96036-1-allen.chen@ite.com.tw>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH RFC 1/8] perf/core: Add *group_leader to
- perf_event_create_kernel_counter()
-Content-Language: en-US
-To:     Ravi Bangoria <ravi.bangoria@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, kvmarm@lists.linux.dev,
-        linux-perf-users@vger.kernel.org
-References: <20221212125844.41157-1-likexu@tencent.com>
- <20221212125844.41157-2-likexu@tencent.com>
- <4990ef71-734a-10cf-e7dc-51b33b26fd18@amd.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <4990ef71-734a-10cf-e7dc-51b33b26fd18@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2022 11:52 am, Ravi Bangoria wrote:
->> diff --git a/kernel/events/core.c b/kernel/events/core.c
->> index 7f04f995c975..f671b1a9a691 100644
->> --- a/kernel/events/core.c
->> +++ b/kernel/events/core.c
->> @@ -12674,12 +12674,14 @@ SYSCALL_DEFINE5(perf_event_open,
->>    * @attr: attributes of the counter to create
->>    * @cpu: cpu in which the counter is bound
->>    * @task: task to profile (NULL for percpu)
->> + * @group_leader: event group leader
->>    * @overflow_handler: callback to trigger when we hit the event
->>    * @context: context data could be used in overflow_handler callback
->>    */
->>   struct perf_event *
->>   perf_event_create_kernel_counter(struct perf_event_attr *attr, int cpu,
->>   				 struct task_struct *task,
->> +				 struct perf_event *group_leader,
->>   				 perf_overflow_handler_t overflow_handler,
->>   				 void *context)
->>   {
->> @@ -12694,7 +12696,7 @@ perf_event_create_kernel_counter(struct perf_event_attr *attr, int cpu,
->>   	if (attr->aux_output)
->>   		return ERR_PTR(-EINVAL);
->>   
->> -	event = perf_event_alloc(attr, cpu, task, NULL, NULL,
->> +	event = perf_event_alloc(attr, cpu, task, group_leader, NULL,
->>   				 overflow_handler, context, -1);
+On Thu, 3 Nov 2022 17:12:41 +0800, allen wrote:
+> This series let driver can read properties from dt to restrict dp output
+> bandwidth.
 > 
-> Grouping involves lot of complexities. Setting group_leader won't be sufficient.
-> Please see perf_event_open() syscall code for more detail.
+> Changes in v3:
+> -Rename property name.
 > 
-> Thanks,
-> Ravi
+> Changes in v4:
+> -Use data-lanes and link-frequencies instead of "ite,dp-output-data-lane-count" and "ite,dp-output-max-pixel-clock-mhz".
+> 
+> [...]
 
-This is the main reason why the RFC tag is added. More detailed professional 
-reviews is encouraged.
+Allen: The email name you use must exactly match Signed-off-by string,
+or there will be issues like the below when applying the patch.
 
-AFAI, there does exist a number of code gaps here to support grouped events in 
-the kernel,
-but there are also opportunities, as there may be other new use cases bringing 
-innovation.
+-:139: WARNING:FROM_SIGN_OFF_MISMATCH: From:/Signed-off-by: email name mismatch: 'From: allen chen <allen.chen@ite.com.tw>' != 'Signed-off-by: Allen chen <allen.chen@ite.com.tw>'
 
-I have to confirm this idea with maintainers first, the alternative is to create 
-yet another special
-perf_event similar to PMC_IDX_FIXED_VLBR, which schedules perf_metrics MSR for 
-KVM stuff.
 
-PeterZ, any input ?
+With that fixed, applied!
+
+Repo: https://cgit.freedesktop.org/drm/drm-misc/
+
+
+[1/2] dt-bindings: it6505: add properties to restrict output bandwidth
+      commit: 380d920b582d0f83852ac6885af868d93c38095b
+[2/2] drm/bridge: add it6505 driver to read data-lanes and link-frequencies from dt
+      commit: 380d920b582d0f83852ac6885af868d93c38095b
+
+
+
+Rob
+
