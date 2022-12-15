@@ -2,120 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B9064E19D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3760E64E17D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbiLOTO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 14:14:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58992 "EHLO
+        id S229873AbiLOTCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 14:02:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiLOTOy (ORCPT
+        with ESMTP id S231142AbiLOTCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 14:14:54 -0500
-X-Greylist: delayed 1068 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Dec 2022 11:14:53 PST
-Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090DE2C65F;
-        Thu, 15 Dec 2022 11:14:52 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id B56143C1F69;
-        Thu, 15 Dec 2022 18:57:00 +0000 (UTC)
-Received: from pdx1-sub0-mail-a228.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 268903C1F50;
-        Thu, 15 Dec 2022 18:57:00 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1671130620; a=rsa-sha256;
-        cv=none;
-        b=Zu95JO8kYnjIS7o3cYOs9NXpUYPeZyB3p8gSlHXTXLBYiwuR6OJeYB316GjdWsRjaZd0xc
-        PSNzb4cjSS5XLVRjb071/VysiISPpGgjHiZgl50pdBLvngv5Y2zYxW0xvubLtll9BFQH+t
-        tAi/30fkqms7Pjl17aMT/BqHWO8BDIgH0qtpt0q6o2TXuD5XQ4eKBLc8+sVQ/9WeAdx4LF
-        AfujlmBlNEJoMza6Wtus2rcbOF+itld/qe8wdcXs/R1H27hZc+xsQLN+0YWEGYhOHJUxGY
-        1VrXzOPr6xWFRsfqNw1JYiHw5cnvey5u8fzortBZ5tBALqWi7LORJBEu7fFeNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1671130620;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=pB5nxsEfrP8qPKjWc6t0G0+7wvacVCgVmTPM39QulFg=;
-        b=1qWo6A4V8mAwemJndwRmEfGsA0DoVhQkIlPqrVTK2wEVb7SKfGhajImB1GeXk+Wnc4wYOb
-        jxMaPc0hJlXEgAEXxqvjBQyHbaxD4YcbWYI/Xldw/43mbxcj/Q8ow8cPot2qMYq9LeYrUx
-        eMULEmKlclSinF8umM6RvhfvDO7Bm4q7PvV4ve07zhHAaucTzww4wCArv9uxUgqGHTh5G5
-        fr1cCGdk8xykjSe3YA/upFT2Njzjvm4aePkUQIMkPl7ByIqKyU8hLzvpNRnSdiTdGvwG5Y
-        Pq2bXO4+5Ot+5RCIxoBHcjNX7VCHlqx4fQQ0SDco+LYH5LoYgjwjHRtdZE5+xg==
-ARC-Authentication-Results: i=1;
-        rspamd-747d4f8b9f-kgg9h;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Battle-Belong: 511832d1486bb74c_1671130620501_672171423
-X-MC-Loop-Signature: 1671130620501:2016065834
-X-MC-Ingress-Time: 1671130620501
-Received: from pdx1-sub0-mail-a228.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.116.179.68 (trex/6.7.1);
-        Thu, 15 Dec 2022 18:57:00 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 15 Dec 2022 14:02:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E042D1FCED;
+        Thu, 15 Dec 2022 11:02:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a228.dreamhost.com (Postfix) with ESMTPSA id 4NY1gH0bmMz5y;
-        Thu, 15 Dec 2022 10:56:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1671130619;
-        bh=pB5nxsEfrP8qPKjWc6t0G0+7wvacVCgVmTPM39QulFg=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=U60iz7XqFpvs3HfbO6vCWddVzrlcgOOeeV/4UlHDr0RJEp5A1Of4UUSSzDQ9Gz8Kt
-         9wawq+ez2S59JmfUflsYYwJqO54XZiHy//YBU79ctzeKSgL9I/IcXc1tiDrzjqyzil
-         Xx4AKnsIX/8D8Ejq9I9zO+5jXP3i7O4JakGGdiL2LAzyRtLoDXM9D7wyOA0XiiPRlh
-         gbXnG+K5e52v0k2xyRwih6UCrOgh9/hhIwo9Jp1IuklN8Lp591PLz1OQMiq2deEhGi
-         o2q9e2dIM6YfFtcfEv5ie6YCIVFsJ3QEfR+6icAUdU9F6zRlawJELBucivMARyYC7M
-         xJbOzWSlAALKA==
-Date:   Thu, 15 Dec 2022 10:32:27 -0800
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        alison.schofield@intel.com, vishal.l.verma@intel.com,
-        ira.weiny@intel.com, bwidawsk@kernel.org, a.manzanares@samsung.com,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cxl/acpi: fix null dereference on probe for missing
- ACPI_COMPANION()
-Message-ID: <20221215183227.gqjiafhedsp2cwkk@offworld>
-References: <20221209062919.1096779-1-mcgrof@kernel.org>
- <63937afd72956_579c1294eb@dwillia2-xfh.jf.intel.com.notmuch>
- <6393a3a9d2882_579c1294b3@dwillia2-xfh.jf.intel.com.notmuch>
- <Y5kAt3WRgncTj26x@bombadil.infradead.org>
- <63991ec886e85_b05d1294a6@dwillia2-xfh.jf.intel.com.notmuch>
- <Y5pU4XTchSKVqkjx@bombadil.infradead.org>
- <20221215060410.2p653tgqw35q6wbz@offworld>
- <639b5adada2e6_b05d1294e4@dwillia2-xfh.jf.intel.com.notmuch>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 976B961EEB;
+        Thu, 15 Dec 2022 19:02:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6356C433EF;
+        Thu, 15 Dec 2022 19:02:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671130946;
+        bh=RvgQ0++wR/IOMA6LXXSWoZBj4HT01wsLNsnKu9rXtk8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BdNkBTkL8yaDMDg2xzwNtbyZhvzgsWiOTh3uq6lK69OX8BFuSe8mjq7V1zu4RYtQ+
+         1Aaik1kA/igxVryaLEy9lgudpZWXtzWVHa86MRsNQuOAkanoRXopGRYjM8hO8ZWBjZ
+         ppXGsj2CZtz8W+NQAWtu3H9WWXkOoy1lLHpf7iRAYUvZhg2Ceq5XQgDjLa0TuSZwFQ
+         KgSt7XAkKy9zi0SRX179LQvQxGNtRSOsW517432/44rNVMfwtv2akM/nOP6yKxyLaE
+         A+xZvMxQdE4y8v2I5OM9lD2qojDW+sq3neJ4DLRM4yVGDyFKxf8/lkIhE6u7rViB38
+         4O3C1uM4Y+wbQ==
+Date:   Thu, 15 Dec 2022 11:02:24 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Cc:     chao@kernel.org, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
+        fengnanchang@gmail.com, linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC PATCH] f2fs: Convert f2fs_write_cache_pages() to use
+ filemap_get_folios_tag()
+Message-ID: <Y5tvQKT8HWxngEnc@google.com>
+References: <0a95ba7b-9335-ce03-0f47-5d9f4cce988f@kernel.org>
+ <20221212191317.9730-1-vishal.moola@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <639b5adada2e6_b05d1294e4@dwillia2-xfh.jf.intel.com.notmuch>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221212191317.9730-1-vishal.moola@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022, Dan Williams wrote:
+On 12/12, Vishal Moola (Oracle) wrote:
+> Converted the function to use a folio_batch instead of pagevec. This is in
+> preparation for the removal of find_get_pages_range_tag().
+> 
+> Also modified f2fs_all_cluster_page_ready to take in a folio_batch instead
+> of pagevec. This does NOT support large folios. The function currently
+> only utilizes folios of size 1 so this shouldn't cause any issues right
+> now.
+> 
+> This version of the patch limits the number of pages fetched to
+> F2FS_ONSTACK_PAGES. If that ever happens, update the start index here
+> since filemap_get_folios_tag() updates the index to be after the last
+> found folio, not necessarily the last used page.
+> 
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> ---
+> 
+> Let me know if you prefer this version and I'll include it in v5
+> of the patch series when I rebase it after the merge window.
+> 
+> ---
+>  fs/f2fs/data.c | 86 ++++++++++++++++++++++++++++++++++----------------
+>  1 file changed, 59 insertions(+), 27 deletions(-)
+> 
+> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> index a71e818cd67b..1703e353f0e0 100644
+> --- a/fs/f2fs/data.c
+> +++ b/fs/f2fs/data.c
+> @@ -2939,6 +2939,7 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+>  	int ret = 0;
+>  	int done = 0, retry = 0;
+>  	struct page *pages[F2FS_ONSTACK_PAGES];
+> +	struct folio_batch fbatch;
+>  	struct f2fs_sb_info *sbi = F2FS_M_SB(mapping);
+>  	struct bio *bio = NULL;
+>  	sector_t last_block;
+> @@ -2959,6 +2960,7 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+>  		.private = NULL,
+>  	};
+>  #endif
+> +	int nr_folios, p, idx;
+>  	int nr_pages;
+>  	pgoff_t index;
+>  	pgoff_t end;		/* Inclusive */
+> @@ -2969,6 +2971,8 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+>  	int submitted = 0;
+>  	int i;
+>  
+> +	folio_batch_init(&fbatch);
+> +
+>  	if (get_dirty_pages(mapping->host) <=
+>  				SM_I(F2FS_M_SB(mapping))->min_hot_blocks)
+>  		set_inode_flag(mapping->host, FI_HOT_DATA);
+> @@ -2994,13 +2998,38 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+>  		tag_pages_for_writeback(mapping, index, end);
+>  	done_index = index;
+>  	while (!done && !retry && (index <= end)) {
+> -		nr_pages = find_get_pages_range_tag(mapping, &index, end,
+> -				tag, F2FS_ONSTACK_PAGES, pages);
+> -		if (nr_pages == 0)
+> +		nr_pages = 0;
+> +again:
+> +		nr_folios = filemap_get_folios_tag(mapping, &index, end,
+> +				tag, &fbatch);
 
->This will end up failing the unit tests because those want to have a
->clean kernel log from a "Call Trace" perspective. So either
->dev_warn_once() or just live with the noise since the message is more
->for awareness in production environments and test environments can
->ignore it.
+Can't folio handle this internally with F2FS_ONSTACK_PAGES and pages?
 
-Yeah I quickly realized that dev_warn_once() is what I wanted. I'll send
-a v2.
+> +		if (nr_folios == 0) {
+> +			if (nr_pages)
+> +				goto write;
+>  			break;
+> +		}
+>  
+> +		for (i = 0; i < nr_folios; i++) {
+> +			struct folio* folio = fbatch.folios[i];
+> +
+> +			idx = 0;
+> +			p = folio_nr_pages(folio);
+> +add_more:
+> +			pages[nr_pages] = folio_page(folio,idx);
+> +			folio_ref_inc(folio);
+> +			if (++nr_pages == F2FS_ONSTACK_PAGES) {
+> +				index = folio->index + idx + 1;
+> +				folio_batch_release(&fbatch);
+> +				goto write;
+> +			}
+> +			if (++idx < p)
+> +				goto add_more;
+> +		}
+> +		folio_batch_release(&fbatch);
+> +		goto again;
+> +write:
+>  		for (i = 0; i < nr_pages; i++) {
+>  			struct page *page = pages[i];
+> +			struct folio *folio = page_folio(page);
+>  			bool need_readd;
+>  readd:
+>  			need_readd = false;
+> @@ -3017,7 +3046,7 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+>  				}
+>  
+>  				if (!f2fs_cluster_can_merge_page(&cc,
+> -								page->index)) {
+> +								folio->index)) {
+>  					ret = f2fs_write_multi_pages(&cc,
+>  						&submitted, wbc, io_type);
+>  					if (!ret)
+> @@ -3026,27 +3055,28 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+>  				}
+>  
+>  				if (unlikely(f2fs_cp_error(sbi)))
+> -					goto lock_page;
+> +					goto lock_folio;
+>  
+>  				if (!f2fs_cluster_is_empty(&cc))
+> -					goto lock_page;
+> +					goto lock_folio;
+>  
+>  				if (f2fs_all_cluster_page_ready(&cc,
+>  					pages, i, nr_pages, true))
+> -					goto lock_page;
+> +					goto lock_folio;
+>  
+>  				ret2 = f2fs_prepare_compress_overwrite(
+>  							inode, &pagep,
+> -							page->index, &fsdata);
+> +							folio->index, &fsdata);
+>  				if (ret2 < 0) {
+>  					ret = ret2;
+>  					done = 1;
+>  					break;
+>  				} else if (ret2 &&
+>  					(!f2fs_compress_write_end(inode,
+> -						fsdata, page->index, 1) ||
+> +						fsdata, folio->index, 1) ||
+>  					 !f2fs_all_cluster_page_ready(&cc,
+> -						pages, i, nr_pages, false))) {
+> +						pages, i, nr_pages,
+> +						false))) {
+>  					retry = 1;
+>  					break;
+>  				}
+> @@ -3059,46 +3089,47 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+>  				break;
+>  			}
+>  #ifdef CONFIG_F2FS_FS_COMPRESSION
+> -lock_page:
+> +lock_folio:
+>  #endif
+> -			done_index = page->index;
+> +			done_index = folio->index;
+>  retry_write:
+> -			lock_page(page);
+> +			folio_lock(folio);
+>  
+> -			if (unlikely(page->mapping != mapping)) {
+> +			if (unlikely(folio->mapping != mapping)) {
+>  continue_unlock:
+> -				unlock_page(page);
+> +				folio_unlock(folio);
+>  				continue;
+>  			}
+>  
+> -			if (!PageDirty(page)) {
+> +			if (!folio_test_dirty(folio)) {
+>  				/* someone wrote it for us */
+>  				goto continue_unlock;
+>  			}
+>  
+> -			if (PageWriteback(page)) {
+> +			if (folio_test_writeback(folio)) {
+>  				if (wbc->sync_mode != WB_SYNC_NONE)
+> -					f2fs_wait_on_page_writeback(page,
+> +					f2fs_wait_on_page_writeback(
+> +							&folio->page,
+>  							DATA, true, true);
+>  				else
+>  					goto continue_unlock;
+>  			}
+>  
+> -			if (!clear_page_dirty_for_io(page))
+> +			if (!folio_clear_dirty_for_io(folio))
+>  				goto continue_unlock;
+>  
+>  #ifdef CONFIG_F2FS_FS_COMPRESSION
+>  			if (f2fs_compressed_file(inode)) {
+> -				get_page(page);
+> -				f2fs_compress_ctx_add_page(&cc, page);
+> +				folio_get(folio);
+> +				f2fs_compress_ctx_add_page(&cc, &folio->page);
+>  				continue;
+>  			}
+>  #endif
+> -			ret = f2fs_write_single_data_page(page, &submitted,
+> -					&bio, &last_block, wbc, io_type,
+> -					0, true);
+> +			ret = f2fs_write_single_data_page(&folio->page,
+> +					&submitted, &bio, &last_block,
+> +					wbc, io_type, 0, true);
+>  			if (ret == AOP_WRITEPAGE_ACTIVATE)
+> -				unlock_page(page);
+> +				folio_unlock(folio);
+>  #ifdef CONFIG_F2FS_FS_COMPRESSION
+>  result:
+>  #endif
+> @@ -3122,7 +3153,8 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+>  					}
+>  					goto next;
+>  				}
+> -				done_index = page->index + 1;
+> +				done_index = folio->index +
+> +					folio_nr_pages(folio);
+>  				done = 1;
+>  				break;
+>  			}
+> @@ -3136,7 +3168,7 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+>  			if (need_readd)
+>  				goto readd;
+>  		}
+> -		release_pages(pages, nr_pages);
+> +		release_pages(pages,nr_pages);
+>  		cond_resched();
+>  	}
+>  #ifdef CONFIG_F2FS_FS_COMPRESSION
+> -- 
+> 2.38.1
