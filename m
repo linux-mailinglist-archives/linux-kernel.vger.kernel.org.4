@@ -2,112 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30AB764E4CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 00:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7B264E4CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 00:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiLOXuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 18:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38820 "EHLO
+        id S229854AbiLOXvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 18:51:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiLOXuw (ORCPT
+        with ESMTP id S229510AbiLOXvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 18:50:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD9F18E16
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 15:50:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4BC0B81CD6
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:50:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D8AAC433F0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:50:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671148248;
-        bh=vhCk/jhWC29QkFTD80pz8AUTv2gvIAgPXs3xG9XzqsY=;
-        h=From:Date:Subject:To:Cc:From;
-        b=rNzRps6YMK0Gx4A0olYMuEBsYKksk09heDrxKrnscXrgoc/icB7vPUyKUjA6imA1R
-         7GJ8VvmIQhoYE1KqfXpsyUcgSVWNXAJJtoJw95ecaz8vGfpQwz1/eEOEusUpZIxOg6
-         9x0iaplivhOWMaVXgZz18dskOk1EXZAoKzPlG7fAXNI5KqpDt8KLd+NPJGtZcPI1L3
-         0uMiwL7tLlRFy0weIKKcwuhE+KBAGi3Bkj5oxp54nfDMtioCISYcPVcTbgWPSshMtD
-         d8/zljK4k6QLaC2RVmcrfg1BqtfBVCHt++bucnBlDtOOxye72PaRCSS5g6Krveajwa
-         QFopFNeyvHPkA==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1447c7aa004so1356988fac.11
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 15:50:48 -0800 (PST)
-X-Gm-Message-State: ANoB5pmILbFOXCJ3VObI//IP0bVP87z+4rUxv8hKVjFkMSbkJ/ztlVi3
-        zJ0xrS3VNUTyFWzPhcToUW3z6rPH7yKFHHfr7wA=
-X-Google-Smtp-Source: AMrXdXu+FfGhdkvcL10YfRfzKztz7LtWrKjXC2PCfClnCGWyBR1RbYuQqUpS36B4S+J+am+FvhORLoFU8r5o7kyUZv4=
-X-Received: by 2002:a05:6871:420d:b0:141:828c:12b5 with SMTP id
- li13-20020a056871420d00b00141828c12b5mr386793oab.8.1671148247628; Thu, 15 Dec
- 2022 15:50:47 -0800 (PST)
+        Thu, 15 Dec 2022 18:51:51 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A622CE0A
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 15:51:50 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id n63so491288iod.7
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 15:51:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ILYOzGOlcnUgJAYdg3KJrA0MBjq7Mpi0z4kbn89zmV8=;
+        b=EIS2cGv8LD9/kBmoKOj55rWq3IzpORr6ZL33Z9fGayOW5Q0gm5whglTj0RFgsYPAil
+         EAmFanxCA0beyFP858z2OxJgGsuEp05WE0nnvEba6qzsGTOqcvO+5VVUJp6fBSk7YyHa
+         d8FBL9+eobM2mi/2d2i5SNsiZNAQICjpH8dtM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ILYOzGOlcnUgJAYdg3KJrA0MBjq7Mpi0z4kbn89zmV8=;
+        b=qy3blZr9tr21Xs5Tt9M6J37Ke97wwd0KA87GlsOYeK7VtQZ/wbtJlJuRxD2VZ38Ljk
+         7G7Er3+m2nycO1dWXPDCeVT8oaQKfc2N8rNLeQ2Fk+DGA2iQ1aq+x9rRlbaShc9VzdVs
+         iUt6mE53bBkOGwUNy/yKc5fz6cZ/Ve62KRQ54eFfV5rgMetqvSc83+JnipzzZyJ5mxW+
+         vQcp5LXH0T36fn9Yl0ubisB65lHe/TChMG96zeW1q//8efVRF35N2vK6XQIjpe6kbAxm
+         GJjUwNxhbOh/fi/TUUbyzT3mWa8d1ICvE9OlSbRkhhxtrHjMCXy5aDjbaEyaj41GALu8
+         qKvA==
+X-Gm-Message-State: ANoB5pkId/Yab7ENnErfKhovRFlN9fKAQn6P4h0Tu7i7I7p6xUA+kSJR
+        QTXWNfs67qMLjRkuFS/0X6FPGQ==
+X-Google-Smtp-Source: AA0mqf4QVc0MpuqQNi5OeSMrV0I/CML3biumc7bMrEq4VWZB9Yt/1kWFkTSJlipkCzhzzy2IDDx55w==
+X-Received: by 2002:a6b:c415:0:b0:6cc:8b29:9a73 with SMTP id y21-20020a6bc415000000b006cc8b299a73mr3385501ioa.1.1671148310101;
+        Thu, 15 Dec 2022 15:51:50 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id f61-20020a0284c3000000b003717c1df569sm216114jai.165.2022.12.15.15.51.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 15:51:49 -0800 (PST)
+Message-ID: <2103e063-a758-f13a-1402-3a9570377912@linuxfoundation.org>
+Date:   Thu, 15 Dec 2022 16:51:48 -0700
 MIME-Version: 1.0
-Received: by 2002:a05:6839:1a4e:0:0:0:0 with HTTP; Thu, 15 Dec 2022 15:50:47
- -0800 (PST)
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Fri, 16 Dec 2022 08:50:47 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd9T3NxeotP7qmJvcF+abqu0yJGnfCySefnUPbKVCYZ_Wg@mail.gmail.com>
-Message-ID: <CAKYAXd9T3NxeotP7qmJvcF+abqu0yJGnfCySefnUPbKVCYZ_Wg@mail.gmail.com>
-Subject: [GIT PULL] exfat update for 6.2-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5.4 0/9] 5.4.228-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20221215172905.468656378@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221215172905.468656378@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 12/15/22 11:10, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.228 release.
+> There are 9 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 17 Dec 2022 17:28:57 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.228-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-This is exfat update pull request for v6.2-rc1. I add description of
-this pull request on below. Please pull exfat with following ones.
+Compiled and booted on my test system. No dmesg regressions.
 
-Thanks!
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-The following changes since commit 830b3c68c1fb1e9176028d02ef86f3cf76aa2476:
-
-  Linux 6.1 (2022-12-11 14:15:18 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/linkinjeon/exfat.git
-tags/exfat-for-6.2-rc1
-
-for you to fetch changes up to 36955d368dc101be885ad2c71618e3c3a93cd8ee:
-
-  exfat: reuse exfat_find_location() to simplify
-exfat_get_dentry_set() (2022-12-13 20:17:16 +0900)
-
-----------------------------------------------------------------
-Description for this pull request:
-- simplify and remove some redundant codes handing directory entries
-- optimize the size of exfat_entry_set_cache and its allocation policy
-- improve the performance for creating files and directories
-
-----------------------------------------------------------------
-Yuezhang Mo (14):
-      exfat: simplify empty entry hint
-      exfat: hint the empty entry which at the end of cluster chain
-      exfat: reduce the size of exfat_entry_set_cache
-      exfat: support dynamic allocate bh for exfat_entry_set_cache
-      exfat: move exfat_entry_set_cache from heap to stack
-      exfat: rename exfat_free_dentry_set() to exfat_put_dentry_set()
-      exfat: replace magic numbers with Macros
-      exfat: remove call ilog2() from exfat_readdir()
-      exfat: remove unneeded codes from __exfat_rename()
-      exfat: remove unnecessary arguments from exfat_find_dir_entry()
-      exfat: remove argument 'size' from exfat_truncate()
-      exfat: remove i_size_write() from __exfat_truncate()
-      exfat: fix overflow in sector and cluster conversion
-      exfat: reuse exfat_find_location() to simplify exfat_get_dentry_set()
-
- fs/exfat/dir.c      | 184 +++++++++++++++++++++++++++++-----------------------
- fs/exfat/exfat_fs.h |  56 +++++++++++-----
- fs/exfat/file.c     |  12 ++--
- fs/exfat/inode.c    |  17 +++--
- fs/exfat/namei.c    |  63 +++++++++---------
- 5 files changed, 187 insertions(+), 145 deletions(-)
+thanks,
+-- Shuah
