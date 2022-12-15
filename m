@@ -2,124 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02FF564D75A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2359264D75F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbiLOHkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 02:40:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
+        id S229908AbiLOHkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 02:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiLOHj5 (ORCPT
+        with ESMTP id S229726AbiLOHkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 02:39:57 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67752D1F8;
-        Wed, 14 Dec 2022 23:39:55 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p5iqQ-0006Su-Cb; Thu, 15 Dec 2022 08:39:54 +0100
-Message-ID: <95b6739b-6d8e-dc41-b637-e366ac883829@leemhuis.info>
-Date:   Thu, 15 Dec 2022 08:39:53 +0100
+        Thu, 15 Dec 2022 02:40:12 -0500
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E76230F6D
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 23:40:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=MXbGZi/uT236kTlDo/a7an6Zgc9j
+        j3vGUMDH7t/LADA=; b=NC7nWVv6RWI3U1eApcT+54ZynNQXYEgXlKVQ/3SNNsLt
+        hig76LkqBM78+BElQycqYB3XWnoZhqPCPs+wG29f5o3yef5ynQ/YEKg0xCgzh80u
+        MhhkJkO6hfcaron+Nhx4La68lWsVZovpG2+msxcQTO9YmzQX7D4PIMkzH5FczSA=
+Received: (qmail 2279799 invoked from network); 15 Dec 2022 08:40:08 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Dec 2022 08:40:08 +0100
+X-UD-Smtp-Session: l3s3148p1@vr1R9tjvOo4ujnt8
+Date:   Thu, 15 Dec 2022 08:40:07 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: Re: [PATCH 3/4] mmc: renesas_sdhi: Add RZ/V2M compatible string
+Message-ID: <Y5rPV0m5+8Dh6Bfe@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+References: <20221213230129.549968-1-fabrizio.castro.jz@renesas.com>
+ <20221213230129.549968-4-fabrizio.castro.jz@renesas.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [git pull] Input updates for v6.1-rc5
-Content-Language: en-US, de-DE
-To:     Aman Dhoot <amandhoot12@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>
-References: <Y3gwySzRvhCwdSgW@google.com>
- <824effa5-8b9a-c28a-82bb-9b0ab24623e1@kernel.org>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <824effa5-8b9a-c28a-82bb-9b0ab24623e1@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1671089995;3188d7e9;
-X-HE-SMSGID: 1p5iqQ-0006Su-Cb
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="IfgYU8RXIPQ3Ptmi"
+Content-Disposition: inline
+In-Reply-To: <20221213230129.549968-4-fabrizio.castro.jz@renesas.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
 
-On 13.12.22 12:41, Jiri Slaby wrote:
-> On 19. 11. 22, 2:26, Dmitry Torokhov wrote:
->> to receive updates for the input subsystem. You will get:
->>
->> - a fix for 8042 to stop leaking platform device on unload
->> - a fix for Goodix touchscreens on devices like Nanote UMPC-01 where we
->>    need to reset controller to load config from firmware
->> - a workaround for Acer Switch to avoid interrupt storm from home and
->>    power buttons
->> - a workaround for more ASUS ZenBook models to detect keyboard cnotroller
->> - a fix for iforce driver to properly handle communication errors
->> - touchpad on HP Laptop 15-da3001TU switched to RMI mode
->>
->> Changelog:
->> ---------
->>
->> Aman Dhoot (1):
->>        Input: synaptics - switch touchpad on HP Laptop 15-da3001TU to
->> RMI mode
-> 
-> This appears to break keyboard on HP's 15-da1xxx which appears to have
-> the same ID: SYN3286. This happens on 6.0.12.
+--IfgYU8RXIPQ3Ptmi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thx for forwarding that report. CCing Aman, who authored that commit
-(ac5408991ea6 in mainline, but it was backported to many stable kernels,
-too)
+On Tue, Dec 13, 2022 at 11:01:28PM +0000, Fabrizio Castro wrote:
+> The SDHI/eMMC IPs found with the RZ/V2M (a.k.a. r9a09g011), are
+> very similar to the ones found in R-Car Gen3, but they are not
+> exactly the same, and as a result need an SoC specific compatible
+> string for fine tuning driver support.
+>=20
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 
-Aman, could you look at this? If there is no easy fix in sight I wonder
-if it might be the best to revert this soonish, so that Greg can pick up
-that revert to stable quickly afterwards.
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> +static const struct renesas_sdhi_quirks sdhi_quirks_r9a09g011 =3D {
+> +	.fixed_addr_mode =3D true,
+> +	.hs400_disabled =3D true,
+> +};
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+Cool, seems like our quirk abstraction works reasonably well :)
 
-> synaptics excerpt from dmesg:
-> psmouse serio1: synaptics: Trying to set up SMBus access
-> psmouse serio1: synaptics: SMbus companion is not ready yet
-> ...
-> psmouse serio1: synaptics: queried max coordinates: x [..5648], y [..4826]
-> psmouse serio1: synaptics: queried min coordinates: x [1292..], y [1026..]
-> psmouse serio1: synaptics: Trying to set up SMBus access
-> rmi4_smbus 6-002c: registering SMbus-connected sensor
-> rmi4_f01 rmi4-00.fn01: found RMI device, manufacturer: Synaptics,
-> product: TM3320-003, fw id: 2659795
-> input: Synaptics TM3320-003 as
-> /devices/pci0000:00/0000:00:1f.4/i2c-6/6-002c/rmi4-00/input/input21
-> 
-> This was reported downstream as a regression between 6.0.10 and 6.0.12:
-> https://bugzilla.suse.com/show_bug.cgi?id=1206358
-> 
-> Full dmesgs available there too.
-> 
-> 
-> 6.0.10 has this instead of the above:
-> psmouse serio1: synaptics: queried max coordinates: x [..5648], y [..4826]
-> psmouse serio1: synaptics: queried min coordinates: x [1292..], y [1026..]
-> psmouse serio1: synaptics: Your touchpad (PNP: SYN3286 PNP0f13) says it
-> can support a different bus. If i2c-hid and hid-rmi are not used, you
-> might want to try setting psmouse.synaptics_intertouch to 1 and report
-> this to linux-input@vger.kernel.org.
-> psmouse serio1: synaptics: Touchpad model: 1, fw: 8.16, id: 0x1e2b1,
-> caps: 0xf00323/0x840300/0x2e800/0x400000, board id: 3320, fw id: 2659795
 
-P.P.S.: I for now assume that it's a problem that also is present in
-mainline and thus will track it as such.
+--IfgYU8RXIPQ3Ptmi
+Content-Type: application/pgp-signature; name="signature.asc"
 
-#regzbot introduced ac5408991ea6
-https://bugzilla.suse.com/show_bug.cgi?id=1206358
-#regzbot title input: synaptics: keyboard broken on HP's 15-da1xxx
-#regzbot ignore-activity
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmOaz1cACgkQFA3kzBSg
+Kbaw2RAAgL3RbR6t3/4u7yW4JYFKMjdthimKC9C2pKEy5N0poM/F/cTzTfFn+FTO
+qTkPwmcPKEUSNa0QUwGQ3wFDpFEEm4MV/86p+uaYzQV7XLp5Xcbx3g7de15FC8mf
+kU9UrLeWZg9ut62WaV9TVxo5lsiml1iGuG1/LsFkNy49OHqHY1ZHr7+NwcQDwAst
+toexiP4n2F47ZpW/JGubvZvbmuac+6Df6VzNaggfRj+q68hqjOmC42uQ3timJe7w
+Ts7/TgETLtSFMSHN5CKBUeNVzdumKIHX3DwHn/vSC8c+0SvW5QAu0/JiUc5ievx/
+jRvEr3t3WoHh7E3S9EUmQFI5MMOwob4atl7aGM887Ic8Fkhd2w9rcyJsqFV9aDlE
+C6TvVi5dwTC5wh5iOM5HroqnrXaf4btXMirULevey6pkM6nh93v20RRdJg1zNAFh
+Mz7d2/gJolSpNlkyhsOj3Ot4JxydIRtHfV9VsujzBYbTgrnW8IGsnjxTneg4J+Xf
+bwHGWjz1yqAjlbAf4P0dOgvjOqbRybWI0/2JW2JLseqOHBVOn2iiS1Oi4RogYNaf
+RwiCa+Bre4li1HVU1/WzD9ZrQdzG6Mj3a2bnj0Dam4HpuW507b+SjevZmeQHN2lz
+3s/8jJbWUgLEZMMo7QReNMB+TbspE3I81CZgeNTUpOT/qBz1EOA=
+=J7AR
+-----END PGP SIGNATURE-----
+
+--IfgYU8RXIPQ3Ptmi--
