@@ -2,64 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB86964D9B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21AB364D9AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiLOKq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 05:46:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
+        id S230173AbiLOKqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 05:46:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiLOKqw (ORCPT
+        with ESMTP id S229937AbiLOKqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 05:46:52 -0500
-Received: from mx1.veeam.com (mx1.veeam.com [216.253.77.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C5A1C410;
-        Thu, 15 Dec 2022 02:46:49 -0800 (PST)
-Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
+        Thu, 15 Dec 2022 05:46:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77101F629;
+        Thu, 15 Dec 2022 02:46:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.veeam.com (Postfix) with ESMTPS id D099241D42;
-        Thu, 15 Dec 2022 05:47:41 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
-        s=mx1-2022; t=1671101262;
-        bh=xhll34qBllbleKx66EAPbdWrQOO5TZUZ0637lrp11Nc=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
-        b=TKrwTfOBXBuHz/g0VqQ2IiMSFrcARyCoIRxkmMNuLSh3CfzQE5657obtdA8fxCebV
-         VR09826PnxKczE2lZv0AUwj2g7e1g0UJoxqpvMdHcOdk+paSt3nJORTW+kYmD3ZMC/
-         FFpjN6uHi2LuGH4aOVDc9mb05UUXP8W1CoGb9YrzmI9/9uJIoXnq9iRbUHYAOFjz/4
-         3zcWPe4GuMFHoZfSqu7artJAHbCTbLAzsLG+l+bbJY2u21J8STR9+OXhgLvak5Glxs
-         dqhFxDCLLCC1m/TQCOe0YSjPStdyUPu9S4NZAZyldw7Nj3OwWEbrHEnquUdBVbd7dz
-         pQBWfxyL+K7sg==
-Received: from [172.24.10.107] (172.24.10.107) by prgmbx01.amust.local
- (172.24.128.102) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Thu, 15 Dec
- 2022 11:46:43 +0100
-Message-ID: <28b715eb-f9bc-c0d3-8dfd-22d0f84080c0@veeam.com>
-Date:   Thu, 15 Dec 2022 11:46:35 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4478161D78;
+        Thu, 15 Dec 2022 10:46:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD9DC433EF;
+        Thu, 15 Dec 2022 10:46:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671101195;
+        bh=McOhDbVk0JP93y4a1SmXb8+7y052zP6zdNJ92f0ueYY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=p1bVSMqrrJ0RECFYWt4n/HzRckicS01Tm0Ej6X08MA9N1GvwIdNDgXmUU2HjcClFL
+         jDwV9CIluaPuPWw+EIoHbmr/KiNnKI51kGSKYUncmoy4JsiIIHvl8dIsInvsaD+a/a
+         wQ0joNp0ZdqGejIE4WPok8MmDS0PR1FwfAAe+A1bQ7T+2u8fYWQAm6+jykEsau6DHl
+         qqQT0O1E43Eos6rfgMx+ruXGZq72sLGrPUyzyaDEBjB3h4ax6RvctsVJgSfdk2aMs3
+         BvhJtohpP2nj9NQPJgYbtlz2BC9sdixiv1dvYMA96pJG+ygIYoOdhpvlhcxpu4HpO9
+         WoAShiFXBBrsQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1p5llZ-00059t-To; Thu, 15 Dec 2022 11:47:06 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Maciej Purski <m.purski@samsung.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH] regulator: core: fix deadlock on regulator enable
+Date:   Thu, 15 Dec 2022 11:46:46 +0100
+Message-Id: <20221215104646.19818-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 02/21] block, blkfilter: Block Device Filtering
- Mechanism
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-CC:     <axboe@kernel.dk>, <corbet@lwn.net>, <linux-block@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221209142331.26395-1-sergei.shtepa@veeam.com>
- <20221209142331.26395-3-sergei.shtepa@veeam.com>
- <Y5roR3jjhQwgFWVM@infradead.org>
-From:   Sergei Shtepa <sergei.shtepa@veeam.com>
-In-Reply-To: <Y5roR3jjhQwgFWVM@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.24.10.107]
-X-ClientProxiedBy: colmbx01.amust.local (172.18.0.171) To prgmbx01.amust.local
- (172.24.128.102)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A29240315566D7061
-X-Veeam-MMEX: True
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,9 +57,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am very glad to see your comments, Christoph.
-Thank you so much for the review.
+When updating the operating mode as part of regulator enable, the caller
+has already locked the regulator tree and drms_uA_update() must not try
+to do the same in order not to trigger a deadlock.
 
-I have read all the comments and agree with them.
-Now I see new ways to make the code of the filter and the blksnap module better.
-There seems to be a lot of work to be done. :)
+The lock inversion is reported by lockdep as:
+
+  ======================================================
+  WARNING: possible circular locking dependency detected
+  6.1.0-next-20221215 #142 Not tainted
+  ------------------------------------------------------
+  udevd/154 is trying to acquire lock:
+  ffffc11f123d7e50 (regulator_list_mutex){+.+.}-{3:3}, at: regulator_lock_dependent+0x54/0x280
+
+  but task is already holding lock:
+  ffff80000e4c36e8 (regulator_ww_class_acquire){+.+.}-{0:0}, at: regulator_enable+0x34/0x80
+
+  which lock already depends on the new lock.
+
+  ...
+
+   Possible unsafe locking scenario:
+
+         CPU0                    CPU1
+         ----                    ----
+    lock(regulator_ww_class_acquire);
+                                 lock(regulator_list_mutex);
+                                 lock(regulator_ww_class_acquire);
+    lock(regulator_list_mutex);
+
+   *** DEADLOCK ***
+
+just before probe of a Qualcomm UFS controller (occasionally) deadlocks
+when enabling one of its regulators.
+
+Fixes: 9243a195be7a ("regulator: core: Change voltage setting path")
+Fixes: f8702f9e4aa7 ("regulator: core: Use ww_mutex for regulators locking")
+Cc: stable@vger.kernel.org      # 5.0
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ drivers/regulator/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index 729c45393803..ae69e493913d 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -1002,7 +1002,7 @@ static int drms_uA_update(struct regulator_dev *rdev)
+ 		/* get input voltage */
+ 		input_uV = 0;
+ 		if (rdev->supply)
+-			input_uV = regulator_get_voltage(rdev->supply);
++			input_uV = regulator_get_voltage_rdev(rdev->supply->rdev);
+ 		if (input_uV <= 0)
+ 			input_uV = rdev->constraints->input_uV;
+ 
+-- 
+2.37.4
+
