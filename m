@@ -2,90 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB2164DC3A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 14:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8526B64DC3C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 14:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiLON0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 08:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
+        id S229990AbiLON1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 08:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiLON0i (ORCPT
+        with ESMTP id S229988AbiLON1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 08:26:38 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C2E16487;
-        Thu, 15 Dec 2022 05:26:35 -0800 (PST)
-Received: from [IPV6:2401:4900:1f3e:7d24:3f0:3e81:fb16:ab4d] (unknown [IPv6:2401:4900:1f3e:7d24:3f0:3e81:fb16:ab4d])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8CA6F327;
-        Thu, 15 Dec 2022 14:26:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671110794;
-        bh=HnKrMknUHi+HOs7MEYvKhXwHku+eB8f9y8CAAYYGjKo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lZI889/NbJHCxunwbjm8X/mClzS5rHT8R7Hor5toEc9vMbVD3uNTySZjaQ3UycrpQ
-         SjhL5m4vfmHv8VZefATVChzIm2mZqWAir/PSJLx4ZN4vfjRMiype6kF9u2qVULY4iB
-         L2qFr67Md1uMn8819/pE7LClnFhZLyYWHx1S3Uu4=
-Message-ID: <c20996aa-5c12-4af1-ae0d-838610cfee42@ideasonboard.com>
-Date:   Thu, 15 Dec 2022 18:56:24 +0530
+        Thu, 15 Dec 2022 08:27:14 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25112F016
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 05:27:10 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id q186so5245080oia.9
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 05:27:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JsIQaBLZ4y5c4SSVGkwIGpgdreDIGpJl4ZYxNL20OAk=;
+        b=GOsTQBHZJfSwCc7at+84Wne8VfHzLv+KhrFgkNn9pHjXjff4Rgb6TilqzYC8jSwxss
+         iweGLomFjCzQMNuFR7SgsaFblTsV7TUu+D/EjVl+fkifbNe0J0R5DMaOuYZIXouZjF+I
+         koF3xPPAEFKiWoxsQkAf/8N8ZTiIzLsimMlHDMp497CjLY8MXMQ4Reg6L+bUT4m0nUF/
+         ocm2ksXC1fJs3SH8T/9/MAtkg0w/hvUJr+eklmLnKxIsWHAFEgE+vArlEeVqUvSvZX1Q
+         eskt1U45Rez2uJe85ksPzc73FRCJFi4Rrwgxt4Beobh+FimXD/kiMc/n8c4zrYtWez6Q
+         6Jew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JsIQaBLZ4y5c4SSVGkwIGpgdreDIGpJl4ZYxNL20OAk=;
+        b=G6HGDZmdh99i6Ei/Gs8NgAQoczMVXuiiK5sFPFX9Jp+hZATY5byY69sKZIjOIZPSF8
+         k1975GQqHXqmreUNPSfg10G8Xnvz7H/zbtTYKWYlAzQ2h812Bsmd8e/xOb/7vERZR4NG
+         l21luiRlgkdN+sXy/V8Oxb2siefzkw/LSALwRQzKcttB/9vFmC1U8ixMJMj1kIAsJc4g
+         LMVhjlALkftU4Z2M1dROk4qDJkFr+aGlMpwyNMjONQqWEvgdlANu94gXvrRZcVc04uiy
+         fsW7Cvn5tQ4dpg35Q9330qXOOYhb1uQjMXzUJEb0R2dEhcFOpMozXx88anVr0yR9Md82
+         MGTg==
+X-Gm-Message-State: ANoB5pn8OhyZ/6SfyUICiuetcmUeUBYBt2uplQLXwLeEqOXkpwZG6kU+
+        L+0/YRSdtHnoDK/0pg+aJIavvWEFlVOGrpkuQgQ=
+X-Google-Smtp-Source: AA0mqf5ANCMNl2eZjVgVSbuVvv1FF+szBstOQkYO+AUUyOEfa0KeI7RIkJUhYM1mhLy4Q2jd3etfyB7Ix1Xb0/7xIWI=
+X-Received: by 2002:aca:b02:0:b0:35b:fe2a:a93b with SMTP id
+ 2-20020aca0b02000000b0035bfe2aa93bmr315587oil.60.1671110829956; Thu, 15 Dec
+ 2022 05:27:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 3/7] staging: vc04_services: Drop VCHIQ_ERROR usage
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-References: <20221215065853.34477-1-umang.jain@ideasonboard.com>
- <20221215065853.34477-4-umang.jain@ideasonboard.com>
- <5c963fd9-97c9-d513-a8ae-5d3f22ef57cc@i2se.com>
-Content-Language: en-US
-From:   Umang Jain <umang.jain@ideasonboard.com>
-In-Reply-To: <5c963fd9-97c9-d513-a8ae-5d3f22ef57cc@i2se.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Yz8rIxV7bVCcfZb0@kroah.com> <20221007013708.1946061-1-zyytlz.wz@163.com>
+ <CAPM=9ty0+ouf+rQWhM=9XSKFOA2zxKfa00MsNBvwrQGPQm2uPQ@mail.gmail.com>
+ <CAJedcCwxioxr+4TBTdrEjAZh97J3oroSHSgax+bxSNRXCBvkRg@mail.gmail.com>
+ <CAPM=9twhAL+c8mOLmidY_tEhEKwCh-CTjfs5yryOk8oGjMxuug@mail.gmail.com>
+ <167110126066.5360.11413014428644610672@jlahtine-mobl.ger.corp.intel.com> <da557524-02ff-2ac7-7960-6f710c2d41d6@intel.com>
+In-Reply-To: <da557524-02ff-2ac7-7960-6f710c2d41d6@intel.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Thu, 15 Dec 2022 21:26:57 +0800
+Message-ID: <CAJedcCxTMx1z2AWYdfzzsnDg_s22-o1enft44AmB9D+DHQsuvg@mail.gmail.com>
+Subject: Re: [PATCH v3] drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
+To:     "Wang, Zhi A" <zhi.a.wang@intel.com>
+Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Dave Airlie <airlied@gmail.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        "alex000young@gmail.com" <alex000young@gmail.com>,
+        "security@kernel.org" <security@kernel.org>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "1002992920@qq.com" <1002992920@qq.com>,
+        Zheng Wang <zyytlz.wz@163.com>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan,
+Hi Zhi,
 
-On 12/15/22 5:00 PM, Stefan Wahren wrote:
-> Hi Umang,
->
-> thanks for taking care of this.
->
-> Am 15.12.22 um 07:58 schrieb Umang Jain:
->> Drop the usage of VCHIQ_ERROR vchiq_status enum type. Replace it with
->> -EINVAL to report the error.
->
-> I would prefer to use adequate error codes like ENOMEM and so on. I 
-> agree simply replacing all VCHIQ_ERROR with -EINVAL is easier, but 
-> wasn't the real intention of the TODO item.
+Thanks for your reply and suggestion about fix. I am a little bit busy now.
+I will review the code as soon as possible. Also thanks
+Joonas for the reminding. We'll try to think out the new fix.
 
-I agree with you on that front - I am still trying to understand the 
-bits of pieces of the vchiq driver as you can see it's not obvious to me.
-
-I will try to address this is in v2 - after the series a bit more feedback.
->
-> The rest of the series looks good to me.
-
-Okay :-)
-Thanks for prompt review.
->
-> Best regards
->
-
+Best regards,
+Zheng Wang
