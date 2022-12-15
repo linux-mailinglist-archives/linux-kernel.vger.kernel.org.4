@@ -2,148 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DBB64D8F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:48:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7617A64D90F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:52:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbiLOJsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 04:48:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
+        id S229967AbiLOJwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 04:52:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiLOJrw (ORCPT
+        with ESMTP id S230237AbiLOJv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 04:47:52 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB28C537E1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:47:07 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id z26so14789314lfu.8
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:47:07 -0800 (PST)
+        Thu, 15 Dec 2022 04:51:29 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04905E03B;
+        Thu, 15 Dec 2022 01:51:28 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id b2so50951387eja.7;
+        Thu, 15 Dec 2022 01:51:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w0ykWWBKW8/ZBMZU3VIzhqp7T3vPa6pgVpq4cSGMlg0=;
-        b=fgs9z7V83Xphm9Tb2ZsNfDTHKudzIQGMDRXRybBuAd/t+P+YYElj4tBpeNKRq817P7
-         Xf7gv5n4xHLyZfvcHRxTx45qFv2tnVO/9XHgz7R8lWEW48qaOZKfAoMqA7z0h4esYwkI
-         HDmOFPzFQGDkEZHdiy4b0CKpzoqoKjK/b7rNWuKY0DRAeuviQQ0cUT8ANhG2127bVRjz
-         ZmVfTqdpNVYAPaiJOehXLkQRNTGkpruDhsH6tKhn6FuaDMlQ97xN3PT7bzKVzCMFv+zl
-         lxWJvyHsX+1Mg9wn0cl6RfRspA6tUBKiU0HZ0mCmrV4sMUw5+/J5fYpXuanJOa0DpN4F
-         zE0A==
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j84zMuJuK3HAp9zOgMIVL+Uq6tjz2z4EhGNGd4W418M=;
+        b=PKjKRu6qWEO5muTqlD2CVwbLvq2hdoDup0XgCi6Fncx3S9fWoO5WwlCMwVNLyTBEZL
+         M7EqDOFqiVKbf4vNolZfe2mBrpG6PPBvHkBcxmYCv3ePLgBjrkZZ9h308B1znZY/VGSo
+         q6bf/E1PCcJEzeSOf3kbfW/Gxj+7pY0JfjydStRpX7KeMMRayi0sAwLaN4XbcUpGdMel
+         +BISnAzi1N7MeHRPR7GwN3ccBy6CkcCNAPw7ydbAfa0jeQcCOdVizdKS4sBra4KymZRI
+         LPKVx8X7pcaNiS9z/s+yWA8RohNOL014IAMGVsEAF5EB5feqYiJHuFGj7cuAFwyfT9bW
+         FLag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w0ykWWBKW8/ZBMZU3VIzhqp7T3vPa6pgVpq4cSGMlg0=;
-        b=1bCPlzMCas0/jbxT73CMR55cSnuSJY5NXHtWjl4lK0mEpMvWbkc/56G6DngcFOkEs/
-         jHiRnKNfjoLOVzz7XWX63DcEI15129v+A/iNf5kPdHGCzhQDwFLiPKnCTthO9qe/Smak
-         Z13NC1QdUXV9Jo6E/SFE/fFkLRbAin7Gf4WXo/JZwZKdA/t/Hlh7JtQl/HV2O112fe1U
-         6ltBTUhsl9UDhvThkGoYdXFWeAYvds8TRHq8v/1c0P3mXlbEnICbed6Ekn7HvQrzCOsp
-         Lk/xkzpsBiUi/m2vAJA56gVNOUphmhLJ4mm2Ha8fIj4bge3soiXLiI+geQxmUSKmytOB
-         C57w==
-X-Gm-Message-State: ANoB5pkWb5Pjr1fzDst8Iv9FgmksuTMGcf7bdJymWnF2u+N/s/ZcW+6i
-        6nBHCDRCyfAV4olU/oZSBj0n8+AMp0ONbnU/kqqbxg==
-X-Google-Smtp-Source: AA0mqf505m+SddZABkA7fouzchAPJq45jpr0VwmD2u0n7HZnbMPDQTn6v6VHx1n2Or7OUL9zBeTAozudY0O570Zf6L4=
-X-Received: by 2002:a19:6b19:0:b0:4a2:740b:5b02 with SMTP id
- d25-20020a196b19000000b004a2740b5b02mr30983264lfa.122.1671097623236; Thu, 15
- Dec 2022 01:47:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20221214203124.564537-1-bhupesh.sharma@linaro.org>
- <20221214203124.564537-4-bhupesh.sharma@linaro.org> <f77cc097-56ac-845f-9882-e67aab82b02c@linaro.org>
-In-Reply-To: <f77cc097-56ac-845f-9882-e67aab82b02c@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Thu, 15 Dec 2022 15:16:51 +0530
-Message-ID: <CAH=2NtxeovBZq9UGUzS73iY5oXhb24vZgaq44-hcOOztZDsrAQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sm6115: Add USB SS qmp phy node
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org, andersson@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j84zMuJuK3HAp9zOgMIVL+Uq6tjz2z4EhGNGd4W418M=;
+        b=mlZeZlp44Rf70NQm0Oit5C2wk+fndI9g1agu0Rf/YzKYwTmeCgDO2ezNG4f3mvf77/
+         4KKM3Bt8jJ3E2IbNpOPhc11oVz2OyshJaw4CFm/UVj4TSRRY0o1TWIk1vovr6maaxRRq
+         D1ZUwGID3DDm/jh5hoZ+BnnLlmkufREShC8MKE5PmGg3cG4iwwhdXsALaUfWWWNqwhu7
+         m7PeIHv0Okrfd0/PE3X6Afk4QVhsIj/KM+QhKkdEtlnnRXv1X5hP7j1DNtsbdez6dcxx
+         EDHiN0y85Q/9loYo72MgVbQHuLZgeLvr2VjYp4oJHZhH+G+8wuw+tI3Dv2Y2wvm2e2aX
+         qVHQ==
+X-Gm-Message-State: ANoB5pkuRS+uV1zCY/iAIvuAUpl8G+mgujFIq4IOKzSKjt4Hujik/pek
+        0sGNcVwmWYLO2t0/WZArWIc=
+X-Google-Smtp-Source: AA0mqf6hdAWRiJ4Wp0UpbkZFyGdwENTU38QDaYDDmMcYPZA7OTVT2XhKysyK3tJnvku7Mh5FXOeNaA==
+X-Received: by 2002:a17:906:168a:b0:7c1:10b4:4742 with SMTP id s10-20020a170906168a00b007c110b44742mr21853116ejd.55.1671097886550;
+        Thu, 15 Dec 2022 01:51:26 -0800 (PST)
+Received: from felia.fritz.box (ipbcc1d920.dynamic.kabel-deutschland.de. [188.193.217.32])
+        by smtp.gmail.com with ESMTPSA id e9-20020a170906080900b007bfacaea851sm6787739ejd.88.2022.12.15.01.51.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 01:51:25 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] arm64: errata: refer to config ARM64_ERRATUM_2645198 to make workaround work
+Date:   Thu, 15 Dec 2022 10:48:11 +0100
+Message-Id: <20221215094811.23188-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 at 13:49, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 14/12/2022 21:31, Bhupesh Sharma wrote:
-> > Add USB superspeed qmp phy node to dtsi.
-> > Make sure that the oneplus board dts (which includes the
-> > sm4250.dtsi) continues to work as intended.
-> >
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  .../boot/dts/qcom/sm4250-oneplus-billie2.dts  |  3 ++
-> >  arch/arm64/boot/dts/qcom/sm6115.dtsi          | 38 ++++++++++++++++++-
-> >  2 files changed, 39 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> > index 3f39f25e0721e..4f0d65574448b 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> > +++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> > @@ -232,6 +232,9 @@ &usb {
-> >  &usb_dwc3 {
-> >       maximum-speed = "high-speed";
-> >       dr_mode = "peripheral";
-> > +
-> > +     phys = <&usb_hsphy>;
-> > +     phy-names = "usb2-phy";
-> >  };
-> >
-> >  &usb_hsphy {
-> > diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> > index e4ce135264f3d..15f311dcd289f 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> > @@ -579,6 +579,40 @@ usb_hsphy: phy@1613000 {
-> >                       status = "disabled";
-> >               };
-> >
-> > +             usb_qmpphy: phy@1615000 {
-> > +                     compatible = "qcom,sm6115-qmp-usb3-phy";
-> > +                     reg = <0x01615000 0x200>;
-> > +                     clocks = <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
-> > +                              <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
-> > +                              <&gcc GCC_AHB2PHY_USB_CLK>;
-> > +                     clock-names = "com_aux",
-> > +                                   "ref",
-> > +                                   "cfg_ahb";
-> > +                     resets = <&gcc GCC_USB3_PHY_PRIM_SP0_BCR>,
-> > +                              <&gcc GCC_USB3PHY_PHY_PRIM_SP0_BCR>;
-> > +                     reset-names = "phy", "phy_phy";
-> > +                     status = "disabled";
-> > +                     #clock-cells = <1>;
-> > +                     #address-cells = <1>;
-> > +                     #size-cells = <1>;
-> > +                     ranges;
-> > +
-> > +                     usb_ssphy: phy@1615200 {
-> > +                             reg = <0x01615200 0x200>,
-> > +                                   <0x01615400 0x200>,
-> > +                                   <0x01615c00 0x400>,
-> > +                                   <0x01615600 0x200>,
-> > +                                   <0x01615800 0x200>,
-> > +                                   <0x01615a00 0x100>;
-> > +                             #phy-cells = <0>;
-> > +                             #clock-cells = <1>;
-> > +                             clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
-> > +                             clock-names = "pipe0";
-> > +                             clock-output-names = "usb3_phy_pipe_clk_src";
-> > +                     };
-> > +             };
-> > +
-> > +
->
-> Still two blank lines.
+Commit 44ecda71fd8a ("arm64: errata: Workaround possible Cortex-A715
+[ESR|FAR]_ELx corruption") implements a workaround for arm64 erratum
+2645198. The arm64 cpucaps is called WORKAROUND_2645198; the kernel build
+configuration is called ARM64_ERRATUM_2645198.
 
-Ok, I have sent a fixed v3. Please help review.
+In the functions huge_ptep_modify_prot_start() and
+ptep_modify_prot_start(), the code accidently refers to the non-existing
+config CONFIG_ARM64_WORKAROUND_2645198. Note that the config name uses
+ERRATUM, not WORKAROUND. By this accidental misreference, this condition is
+always false, the branch of the workaround is not reachable and the
+workaround is effectively not implemented at all.
 
-Thanks,
-Bhupesh
+Refer to the intended config ARM64_ERRATUM_2645198 and make the intended
+workaround effectively work.
+
+Fixes: 44ecda71fd8a ("arm64: errata: Workaround possible Cortex-A715 [ESR|FAR]_ELx corruption")
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ arch/arm64/mm/hugetlbpage.c | 2 +-
+ arch/arm64/mm/mmu.c         | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+index cd8d96e1fa1a..95364e8bdc19 100644
+--- a/arch/arm64/mm/hugetlbpage.c
++++ b/arch/arm64/mm/hugetlbpage.c
+@@ -562,7 +562,7 @@ bool __init arch_hugetlb_valid_size(unsigned long size)
+ 
+ pte_t huge_ptep_modify_prot_start(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep)
+ {
+-	if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198) &&
++	if (IS_ENABLED(CONFIG_ARM64_ERRATUM_2645198) &&
+ 	    cpus_have_const_cap(ARM64_WORKAROUND_2645198)) {
+ 		/*
+ 		 * Break-before-make (BBM) is required for all user space mappings
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index 12915f379c22..d77c9f56b7b4 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -1633,7 +1633,7 @@ early_initcall(prevent_bootmem_remove_init);
+ 
+ pte_t ptep_modify_prot_start(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep)
+ {
+-	if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198) &&
++	if (IS_ENABLED(CONFIG_ARM64_ERRATUM_2645198) &&
+ 	    cpus_have_const_cap(ARM64_WORKAROUND_2645198)) {
+ 		/*
+ 		 * Break-before-make (BBM) is required for all user space mappings
+-- 
+2.17.1
+
