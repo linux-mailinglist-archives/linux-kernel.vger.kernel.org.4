@@ -2,99 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED0964D72E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EB064D73C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiLOHTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 02:19:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
+        id S229645AbiLOH0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 02:26:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiLOHTM (ORCPT
+        with ESMTP id S229496AbiLOH0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 02:19:12 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7084DCEB;
-        Wed, 14 Dec 2022 23:19:11 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so1827886pjo.3;
-        Wed, 14 Dec 2022 23:19:11 -0800 (PST)
+        Thu, 15 Dec 2022 02:26:01 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA71020363
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 23:25:58 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id o5so2129285wrm.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 23:25:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gNNEXVu8wt2zuNH1k1KAp/j5xACVIRsF33hCTFu+i90=;
-        b=ke0PMAQli34KzagT/iZlwE1G+uKztUSLuFSo0o7cOv4AecrTSxBF0OO4UpjcehSj/K
-         GWr83LJSbCF0siXy0+Tsc2J/2grwXzEZKtYThtuyh7cQb7Vls/Lr8TiwN81ocJrvHxdO
-         er59dswgGOeFX51hSVWXvbvh5mYpqSYRSUPnzk2BMSWktH+7E+ih+OXq0uXwIfNSVRDO
-         u31QH8N0sDTDQIfnKM0vxnH177cIRN1Dj6DUdVv3MX9vKqCYtj6D/2+Eq4CKs2TU0Y2F
-         Wme02BGLglHiiGcCjNkAnh9XF/SvGLNwXji90UU+BdWKxVzrGs2kWBpszuBQIPAmwKnj
-         FO9Q==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Mm2wMOJBU0KY5CK4G5XuPJWnbMPqw3bzwZnGj//J0bc=;
+        b=IJ027xJjO2+v9bEloG9slnX6gLRHg9t1MMvGfOevcGjukcWsGVH+SAPCaW5j18HGrf
+         mSgKQ8uYEIFewcYpKNLqjLRCJmDZ7Hf08tzaGsZCcYE3ktur3K1fNrOy4+PcNT2SAhRr
+         gxG5rA8umj7lHwqtDJIGp4Moa0b7Re2Z1+NGxDwQJJEn1DD7aj0XbCGfzk0ChWBYoAwE
+         jmpbTzF1TSUCKxVBlI90TX59HuE+t4WHUMgtFRg0V1tWTFMHs5sqE6azh0haI7p2DGCb
+         2uDakyUpVab9ClcmoHWANWAkdm8bHEQ1NARrvXHcu1d6HqcYaaBsYGqWEuKDVz7BEWXd
+         7YGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gNNEXVu8wt2zuNH1k1KAp/j5xACVIRsF33hCTFu+i90=;
-        b=eoPf0NoUlnTQ8k9XVcUgJy8SiImM8E2PWKiCHyrp8qBRUBuycqivCUJRX8zLeXviQO
-         9FODsDndcp6lnkJPS2gIFOJ8GM3u4CXp0g7+YT5USP1BYrB+Zo8XVnmzjC8+0n18yNAJ
-         EAed2mPHVd8J+dtgTxb/5lXNjykvl47Ul9TvQJWNMeqvNK7NKKpGkwoehuPqkfbdD1rO
-         nIlEfGH8mDQdy5mDDrA0/6fT6JfwiBSxcA7sx9BTYbeTGiyo1YmBL+K2NGikHgsBDo8w
-         1iSOM09kYPlIIeKi3szPSk4X0+9moKrANx0caf/IrWYbAO5MPx6ZdvOJc1E2wzl7cNFD
-         COeg==
-X-Gm-Message-State: ANoB5pku9RKdfkB4iAveQQoXM91zPLzKSgwMBps0k8Lqry+6dZy5l7BJ
-        6Lrbr9YZYAnwQxgHwPenq5o=
-X-Google-Smtp-Source: AA0mqf7MmXmaf/L+wigAXaOlCY44BwYrdpA2K+M67FvUPZ85+eGbZGssAOusmVHwWAkIDEiiIKdAcg==
-X-Received: by 2002:a17:903:24e:b0:188:8745:35af with SMTP id j14-20020a170903024e00b00188874535afmr49943612plh.63.1671088750984;
-        Wed, 14 Dec 2022 23:19:10 -0800 (PST)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id j14-20020a170903024e00b001897bfc9802sm3046141plh.93.2022.12.14.23.19.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 23:19:10 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] backlight: backlight: Fix doc for backlight_device_get_by_name
-Date:   Thu, 15 Dec 2022 11:19:01 +0400
-Message-Id: <20221215071902.424005-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mm2wMOJBU0KY5CK4G5XuPJWnbMPqw3bzwZnGj//J0bc=;
+        b=UpAzWGl+Xm9vAY/Gg0egrLsowRckjG4DDtOvqrpNz+KS3Se9tpP9EEb60g68aWSuAD
+         Mp2+VQlW/aruy442kDu9x2L17jqnOdqDTDMaspmPYG6RPQmnbHMdtaGT+zK/LtM3tphU
+         4yEH0/8WyeMuuaEfqNSmXtAfIQ0gZ5Po5tItxNw+nhDEBGnqRJuEuZLcd2Q3DHttqHNF
+         yUodNFVn8IFo/f2TXterKldwl34hQQ484Dkic/gDQUXPZDRuzOfQbHCW4N1a9p84LvMx
+         dxFx2cCNTVCFY3Bjjp0GmPTPvZx+NXzjLZESlWfnzHMq/YBe764p83tJ01LZ8ZsWw8ZJ
+         l6qg==
+X-Gm-Message-State: ANoB5pmiNAfRM2TLij0625kJAZ5hqlykGTD0un6ieBrPOgHZDMiRvq3o
+        d/dUNfEND4W4SUu0Pk2XRruQAw==
+X-Google-Smtp-Source: AA0mqf6FUW6cVCTyvzhNaccE170mxSEmlyha2ZZvhJLzGO2eAwd7HoAqxqtaPydtZy7SLmvbY+rnjg==
+X-Received: by 2002:a5d:5187:0:b0:242:9e8:84b6 with SMTP id k7-20020a5d5187000000b0024209e884b6mr16499660wrv.13.1671089157351;
+        Wed, 14 Dec 2022 23:25:57 -0800 (PST)
+Received: from [192.168.30.216] ([81.0.6.76])
+        by smtp.gmail.com with ESMTPSA id n9-20020a5d67c9000000b00228dbf15072sm5082277wrw.62.2022.12.14.23.25.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 23:25:56 -0800 (PST)
+Message-ID: <ac2d90e2-6fc3-98dc-8c73-936132b6c8d5@linaro.org>
+Date:   Thu, 15 Dec 2022 08:25:54 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH v2 2/2] docs: remoteproc: Update section header name
+ requirement
+Content-Language: en-US
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-remoteproc@vger.kernel.org, agross@kernel.org,
+        andersson@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@quicinc.com,
+        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
+        quic_rohkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski@linaro.org, mathieu.poirier@linaro.org,
+        corbet@lwn.net
+References: <1670924929-26507-1-git-send-email-quic_srivasam@quicinc.com>
+ <1670924929-26507-3-git-send-email-quic_srivasam@quicinc.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <1670924929-26507-3-git-send-email-quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-backlight_put() has been dropped, we should call put_device() to drop
-the reference taken by backlight_device_get_by_name().
+On 13/12/22 10:48, Srinivasa Rao Mandadapu wrote:
+> Add section header name requirement specification in elf segments.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> ---
+>   Documentation/staging/remoteproc.rst | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/staging/remoteproc.rst b/Documentation/staging/remoteproc.rst
+> index 348ee7e..3125030 100644
+> --- a/Documentation/staging/remoteproc.rst
+> +++ b/Documentation/staging/remoteproc.rst
+> @@ -245,6 +245,8 @@ if the remote processor is accessing memory directly).
+>   
+>   In addition to the standard ELF segments, most remote processors would
+>   also include a special section which we call "the resource table".
+> +This resource table section name may have anything appended after it,
+> +but it must start with ".resource_table"
 
-Fixes: 0f6a3256fd81 ("backlight: backlight: Drop backlight_put()")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/video/backlight/backlight.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+What do you think of:
 
-diff --git a/drivers/video/backlight/backlight.c b/drivers/video/backlight/backlight.c
-index b788ff3d0f45..6eea72aa8dbf 100644
---- a/drivers/video/backlight/backlight.c
-+++ b/drivers/video/backlight/backlight.c
-@@ -501,7 +501,7 @@ EXPORT_SYMBOL(backlight_device_get_by_type);
-  *
-  * This function looks up a backlight device by its name. It obtains a reference
-  * on the backlight device and it is the caller's responsibility to drop the
-- * reference by calling backlight_put().
-+ * reference by calling put_device().
-  *
-  * Returns:
-  * A pointer to the backlight device if found, otherwise NULL.
--- 
-2.25.1
+    In addition to the standard ELF segments, most remote processors would
+    also include a special section which we call the "resource table".
+    A "resource table" section name must start with the ".resource_table"
+    prefix, optionally having a more descriptive string appended. For
+    example, ".resource_table.my_rproc" is a valid section name.
 
+Regards,
+
+Phil.
