@@ -2,121 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC8D64E277
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 21:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FE164E241
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 21:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiLOUm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 15:42:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        id S229596AbiLOUSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 15:18:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiLOUm0 (ORCPT
+        with ESMTP id S229475AbiLOUSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 15:42:26 -0500
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED00C4A581;
-        Thu, 15 Dec 2022 12:42:24 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 0C7B78C16DC;
-        Thu, 15 Dec 2022 20:42:24 +0000 (UTC)
-Received: from pdx1-sub0-mail-a228.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 412018C2163;
-        Thu, 15 Dec 2022 20:42:23 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1671136943; a=rsa-sha256;
-        cv=none;
-        b=3Z6ZmfHUVrb7igXZCuvGBl6VhKEEFeWzkwjJv4vDK/d8gM+Wuyv/tVRfgqLqeNjyaGPOGv
-        q9dcuNqtrwmtMKae4pUgXbASpvAr8Nk7Xy5NguVi919gwd33nApZR0xQl1dVmMdWX8d+Oa
-        hGQgpdb9n33hGXyjJukR2cmAOxuU94JIDmoPd8sdnhNoSqtBD6yajzchOL0r+E1k2A7uh+
-        mgdC88itlmHN9WcyyZnp7BKLfq6r/+HUrlY6mCC+qn+gwmIevs0q5Rf6hGP9I6ydxht9ZC
-        ms2ysvRmSpbPuXSZBiuxrkkPzSTk+UR5e4zW1nqkjO1yQz7Vr9UgNfNnGAqP1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1671136943;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=4GyRKY3YSfdpIpa89ZXKkQRvCCOpmKnI4/N4QENiFPY=;
-        b=wQwzTPL2gNQx852ALwKz4DjE23jGHcT7ni3XY06H7NFQUKS+sgi1K65ClQecYtCqJlBRXO
-        YEgOQWOVhi5QnF9MmU1fjfdOgMArBt+q4RciWPd0XBihOL+is7TwomqX327QEDx5nPAIcf
-        1gPVXf4bJqbNhs1MOYoOGXiITzoV5lr2QISQq0wJZBbFjsiNzf6+hahMlDNtBlvAyCKP2N
-        RzbheSe+vcpKrfd7sRRh5lS3wr/phBmr9x1b9my51kO6w63dXiYp0TKf/mTVab1m0aBGrt
-        qCw3MJk+zr6hMY4+eG677JCLcSaXsVZCVzzcVDZV5uwcI86BbKgY7LuRiutBag==
-ARC-Authentication-Results: i=1;
-        rspamd-747d4f8b9f-z9kfm;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Ruddy-Illegal: 5cff925632607440_1671136943632_428128638
-X-MC-Loop-Signature: 1671136943632:1732326357
-X-MC-Ingress-Time: 1671136943631
-Received: from pdx1-sub0-mail-a228.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.116.179.68 (trex/6.7.1);
-        Thu, 15 Dec 2022 20:42:23 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 15 Dec 2022 15:18:08 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB1F31EC1;
+        Thu, 15 Dec 2022 12:18:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a228.dreamhost.com (Postfix) with ESMTPSA id 4NY40t25Qkz4r;
-        Thu, 15 Dec 2022 12:42:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1671136943;
-        bh=4GyRKY3YSfdpIpa89ZXKkQRvCCOpmKnI4/N4QENiFPY=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=ZRw4P5d79Z3C184Ocy245+dKfN+mYC56/a9jF1yiAzOUfRCVrx7t03ktSN9gEZ4p+
-         OlvxNCuZCXq648uo0dtVycPs0ICyGQQGP5kQ2AL87M65w5UL4t93swWqRimmpYkALN
-         r2EmpwWXDBwBEBf6s/I3BrHKtVh1MKT4x5GgAMVaI/cy/jeCLvJ56WrKcxlezIRVwt
-         oYdmUn1t7M5BRx1RLj7uQf5GuTZgWRnyUsuMZIDWhJbgfPOGPiwUQIzsJRiMzEyNk5
-         ryTlP1gBqH8O+/gouTuclnoaMFCMLr6t6vzpTkOQX49GwM6O1fwK/QGM9k3rXHTCeH
-         N+TliLAE8hMew==
-Date:   Thu, 15 Dec 2022 12:17:50 -0800
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Andre Almeida <andrealmeid@collabora.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Darren Hart <dvhart@infradead.org>, stable@vger.kernel.org
-Subject: Re: [RFC PATCH] futex: Fix futex_waitv() hrtimer debug object leak
- on kcalloc error
-Message-ID: <20221215201750.kefgg25ptsjbmq2u@offworld>
-References: <20221214222008.200393-1-mathieu.desnoyers@efficios.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id F326ECE1D03;
+        Thu, 15 Dec 2022 20:18:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F3BBC433F2;
+        Thu, 15 Dec 2022 20:17:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671135484;
+        bh=oel0ZlOiiQOwqlbEX/I6OlGQeXzpFhRh/Jy7Mv8nTSY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EdgEqLCxeDXAXzybpNlP+ffQ5ItI5gPQ7CTUCYBo8RvvtRESOQPBALRL+vW1IhqGq
+         BcZmyxEvj93MuMP9mlwbZPusjeAe/v/zLGehtYlDTIuxVTX01PGeaGOZY2+z1I85LG
+         m2h18sYLJRI/iaazBkEwL1ZsU8wM9jjwylN1zJTv9GeSurm08lFsQQroHPuzw2HUqB
+         1W+cUcwr8AwgyC4B0SmqQlB29+nAVpLTWym2WiveICJE5zAe4KNghI8cyHytPT6neX
+         9UztJTVoSwuB07T3lj+gERoqWbkO6IicFX0Ri1klvT1FE8TEbZRf/zukRFtKaaErM7
+         lZNGn8IQTaqcg==
+Date:   Thu, 15 Dec 2022 20:17:52 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>, kvm-riscv@lists.infradead.org,
+        kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
+        Eric Lin <eric.lin@sifive.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v2 05/11] RISC-V: KVM: Improve privilege mode filtering
+ for perf
+Message-ID: <Y5uA8CEoTKzIGoSy@dizzy>
+References: <20221215170046.2010255-1-atishp@rivosinc.com>
+ <20221215170046.2010255-6-atishp@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Kh96vCh7mb1vJCOA"
 Content-Disposition: inline
-In-Reply-To: <20221214222008.200393-1-mathieu.desnoyers@efficios.com>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221215170046.2010255-6-atishp@rivosinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Dec 2022, Mathieu Desnoyers wrote:
 
->In a scenario where kcalloc() fails to allocate memory, the futex_waitv
->system call immediately returns -ENOMEM without invoking
->destroy_hrtimer_on_stack(). When CONFIG_DEBUG_OBJECTS_TIMERS=y, this
->results in leaking a timer debug object.
->
->Fixes: bf69bad38cf6 ("futex: Implement sys_futex_waitv()")
->Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->Cc: Andre Almeida <andrealmeid@collabora.com>
->Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
->Cc: Thomas Gleixner <tglx@linutronix.de>
->Cc: Ingo Molnar <mingo@redhat.com>
->Cc: Darren Hart <dvhart@infradead.org>
->Cc: Davidlohr Bueso <dave@stgolabs.net>
->Cc: stable@vger.kernel.org # v5.16+
+--Kh96vCh7mb1vJCOA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+Hey Atish,
+
+On Thu, Dec 15, 2022 at 09:00:40AM -0800, Atish Patra wrote:
+> RISC-V: KVM: Improve privilege mode filtering for perf
+
+I almost marked this as "not applicable" in patchwork as I was mislead
+by the $subject. I know our perf driver is a real mixed bag, but should
+it not be something more like:
+"perf: RISC-V: Improve privilege mode filtering for KVM"?
+It was only when I noticed that the rest of the series had been marked
+as "Handled Elsewhere" that I realised that this must not be a KVM patch
+;)
+
+Thanks,
+Conor
+
+> Currently, the host driver doesn't have any method to identify if the
+> requested perf event is from kvm or bare metal. As KVM runs in HS
+> mode, there are no separate hypervisor privilege mode to distinguish
+> between the attributes for guest/host.
+>=20
+> Improve the privilege mode filtering by using the event specific
+> config1 field.
+>=20
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>  drivers/perf/riscv_pmu_sbi.c   | 27 ++++++++++++++++++++++-----
+>  include/linux/perf/riscv_pmu.h |  2 ++
+>  2 files changed, 24 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
+> index 65d4aa4..df795b7 100644
+> --- a/drivers/perf/riscv_pmu_sbi.c
+> +++ b/drivers/perf/riscv_pmu_sbi.c
+> @@ -298,6 +298,27 @@ int riscv_pmu_get_hpm_info(u32 *hw_ctr_width, u32 *n=
+um_hw_ctr)
+>  }
+>  EXPORT_SYMBOL(riscv_pmu_get_hpm_info);
+> =20
+> +static unsigned long pmu_sbi_get_filter_flags(struct perf_event *event)
+> +{
+> +	unsigned long cflags =3D 0;
+> +	bool guest_events =3D false;
+> +
+> +	if (event->attr.config1 & RISCV_KVM_PMU_CONFIG1_GUEST_EVENTS)
+> +		guest_events =3D true;
+> +	if (event->attr.exclude_kernel)
+> +		cflags |=3D guest_events ? SBI_PMU_CFG_FLAG_SET_VSINH : SBI_PMU_CFG_FL=
+AG_SET_SINH;
+> +	if (event->attr.exclude_user)
+> +		cflags |=3D guest_events ? SBI_PMU_CFG_FLAG_SET_VUINH : SBI_PMU_CFG_FL=
+AG_SET_UINH;
+> +	if (guest_events && event->attr.exclude_hv)
+> +		cflags |=3D SBI_PMU_CFG_FLAG_SET_SINH;
+> +	if (event->attr.exclude_host)
+> +		cflags |=3D SBI_PMU_CFG_FLAG_SET_UINH | SBI_PMU_CFG_FLAG_SET_SINH;
+> +	if (event->attr.exclude_guest)
+> +		cflags |=3D SBI_PMU_CFG_FLAG_SET_VSINH | SBI_PMU_CFG_FLAG_SET_VUINH;
+> +
+> +	return cflags;
+> +}
+> +
+>  static int pmu_sbi_ctr_get_idx(struct perf_event *event)
+>  {
+>  	struct hw_perf_event *hwc =3D &event->hw;
+> @@ -308,11 +329,7 @@ static int pmu_sbi_ctr_get_idx(struct perf_event *ev=
+ent)
+>  	uint64_t cbase =3D 0;
+>  	unsigned long cflags =3D 0;
+> =20
+> -	if (event->attr.exclude_kernel)
+> -		cflags |=3D SBI_PMU_CFG_FLAG_SET_SINH;
+> -	if (event->attr.exclude_user)
+> -		cflags |=3D SBI_PMU_CFG_FLAG_SET_UINH;
+> -
+> +	cflags =3D pmu_sbi_get_filter_flags(event);
+>  	/* retrieve the available counter index */
+>  #if defined(CONFIG_32BIT)
+>  	ret =3D sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_CFG_MATCH, cbase,
+> diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pm=
+u.h
+> index a1c3f77..1c42146 100644
+> --- a/include/linux/perf/riscv_pmu.h
+> +++ b/include/linux/perf/riscv_pmu.h
+> @@ -26,6 +26,8 @@
+> =20
+>  #define RISCV_PMU_STOP_FLAG_RESET 1
+> =20
+> +#define RISCV_KVM_PMU_CONFIG1_GUEST_EVENTS 0x1
+> +
+>  struct cpu_hw_events {
+>  	/* currently enabled events */
+>  	int			n_events;
+> --=20
+> 2.25.1
+>=20
+>=20
+
+--Kh96vCh7mb1vJCOA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY5uA5wAKCRB4tDGHoIJi
+0pnAAP9279BG2bKNaby4m7HVZ0iqkvu0RtJ6SIQ0JPGpdv+p1QEAtd4qbzkPg3u6
+Mw7SPMVU7YEk3w/xjU2fqUVQ1eTkxQU=
+=A5xN
+-----END PGP SIGNATURE-----
+
+--Kh96vCh7mb1vJCOA--
