@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B931E64D698
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 07:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7D164D687
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 07:39:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiLOGom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 01:44:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
+        id S229759AbiLOGjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 01:39:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiLOGoj (ORCPT
+        with ESMTP id S229626AbiLOGjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 01:44:39 -0500
+        Thu, 15 Dec 2022 01:39:39 -0500
 Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A112A8;
-        Wed, 14 Dec 2022 22:44:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F3CD123;
+        Wed, 14 Dec 2022 22:39:38 -0800 (PST)
 Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BF5WNe5008058;
-        Thu, 15 Dec 2022 06:44:32 GMT
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BF4lmth005669;
+        Thu, 15 Dec 2022 06:39:34 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pps0720;
- bh=PYQN3ytuJn0dQs8DSKCI+fAfzyfGVN+yH55pFifcuh4=;
- b=UcfuOmwDUGXCSjZfPDC/5Ot/twdn7oFswRQKZ6wq7nR2Q8vV9jtavqjTmvQpG4iuomdV
- XyFHw87n9sCkNwpEeKHAOdOt4aibfEK1FclDtx2XZi6rB0bLqcRz2xKBCvn8niJOZy19
- bDHeg0kqDEwlhbIRVe1+YFc9PoCy8z7FHK7ZXK4SC7EgZdrt5TdLIxw2rARmSwouOsky
- zIuhrZiALXJm5ygBAPI3NMUMT1KY/Z5yPGZL9HBxanefdPExia+B3a0ayAwPwX7K/fRR
- I4HTt3NG3mbPdq/QLHQ/kp6SCM4jyQ5z0vS3EA7x55W0UVcN6arYHryIA7XIdwEtncfY vA== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3mfvv2gp2k-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pps0720;
+ bh=f/yAIGZAl21ry5fdIJ+NNAxc3LjIthVSt9fLofKZrdA=;
+ b=LfcETOlnoqNV4NHzoin+u5/iCWsMjeyOoObuz17nxHUDHztMIQ8GL3KoccXPqTXD8SJD
+ sbu/Aye2Af5j3A3DlIqQU8qZu7jYXso2AZWsk6bOyp8BpPxjgb/aQU4R2f+QuCUDM+tx
+ luXRKtQnSlnarwe+9eBBocm3qxL/adH1BzY5y4j27sF4zUwZ/S7//4wnZ6NZhyjvIaCn
+ XWUoOcUQXmIeqq20i6/qxQ4e0GTt4EIwJMrB7/uoqfvZ689r1xLjNKdZP9Qnreelmr8Q
+ 3ZIOgP1YjjNRHDnnY7lZKvFfDaRN7jJelizaHkpeHo4mhTap7PDGL5mh35YwnbEa9vRB nQ== 
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3mfvv2gn1v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 06:44:32 +0000
+        Thu, 15 Dec 2022 06:39:34 +0000
 Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id E8C73807135;
-        Thu, 15 Dec 2022 06:39:31 +0000 (UTC)
+        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 938C53DE14;
+        Thu, 15 Dec 2022 06:39:33 +0000 (UTC)
 Received: from adevxp033-sys.us.rdlabs.hpecorp.net (unknown [16.231.227.36])
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 9820880D4AA;
-        Thu, 15 Dec 2022 06:39:31 +0000 (UTC)
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 445CC80BE0E;
+        Thu, 15 Dec 2022 06:39:33 +0000 (UTC)
 From:   Robert Elliott <elliott@hpe.com>
 To:     herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net,
         linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Robert Elliott <elliott@hpe.com>
-Subject: [PATCH 3/8] crypto: x86/sha - add kernel-doc comments to assembly
-Date:   Thu, 15 Dec 2022 00:38:52 -0600
-Message-Id: <20221215063857.161665-4-elliott@hpe.com>
+Subject: [PATCH 4/8] crypto: x86/crc - add kernel-doc comments to assembly
+Date:   Thu, 15 Dec 2022 00:38:53 -0600
+Message-Id: <20221215063857.161665-5-elliott@hpe.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221215063857.161665-1-elliott@hpe.com>
 References: <20221215063857.161665-1-elliott@hpe.com>
-X-Proofpoint-ORIG-GUID: MHi7IOsgq4lX9TIhyrTP89kTrJAO2OdL
-X-Proofpoint-GUID: MHi7IOsgq4lX9TIhyrTP89kTrJAO2OdL
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: AtKHbVl5kjAU14wxznI4BJ2vyVmgfE42
+X-Proofpoint-GUID: AtKHbVl5kjAU14wxznI4BJ2vyVmgfE42
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-15_03,2022-12-14_01,2022-06-22_01
+ definitions=2022-12-15_02,2022-12-14_01,2022-06-22_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- mlxlogscore=968 suspectscore=0 adultscore=0 mlxscore=0 bulkscore=0
+ mlxlogscore=999 suspectscore=0 adultscore=0 mlxscore=0 bulkscore=0
  impostorscore=0 malwarescore=0 spamscore=0 priorityscore=1501
  lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212150051
+ engine=8.12.0-2212070000 definitions=main-2212150050
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -77,534 +76,171 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Add kernel-doc comments for assembly language functions exported to
 C glue code.
 
-Remove .align directives that are overridden by SYM_FUNC_START
-(which includes .align 4).
-
 Signed-off-by: Robert Elliott <elliott@hpe.com>
 ---
- arch/x86/crypto/sha1_avx2_x86_64_asm.S | 32 +++++++++++------------
- arch/x86/crypto/sha1_ni_asm.S          | 22 +++++++++-------
- arch/x86/crypto/sha1_ssse3_asm.S       | 33 +++++++++++++++--------
- arch/x86/crypto/sha256-avx-asm.S       | 24 ++++++++++-------
- arch/x86/crypto/sha256-avx2-asm.S      | 25 +++++++++++-------
- arch/x86/crypto/sha256-ssse3-asm.S     | 26 +++++++++++--------
- arch/x86/crypto/sha256_ni_asm.S        | 25 +++++++++---------
- arch/x86/crypto/sha512-avx-asm.S       | 33 +++++++++++------------
- arch/x86/crypto/sha512-avx2-asm.S      | 34 ++++++++++++------------
- arch/x86/crypto/sha512-ssse3-asm.S     | 36 ++++++++++++--------------
- 10 files changed, 161 insertions(+), 129 deletions(-)
+ arch/x86/crypto/crc32-pclmul_asm.S        | 24 ++++++++++---------
+ arch/x86/crypto/crc32c-pcl-intel-asm_64.S | 29 ++++++++++++++---------
+ arch/x86/crypto/crct10dif-pcl-asm_64.S    | 24 +++++++++++++------
+ 3 files changed, 48 insertions(+), 29 deletions(-)
 
-diff --git a/arch/x86/crypto/sha1_avx2_x86_64_asm.S b/arch/x86/crypto/sha1_avx2_x86_64_asm.S
-index a96b2fd26dab..c3ee9334cb0f 100644
---- a/arch/x86/crypto/sha1_avx2_x86_64_asm.S
-+++ b/arch/x86/crypto/sha1_avx2_x86_64_asm.S
-@@ -62,11 +62,6 @@
-  *Visit http://software.intel.com/en-us/articles/
-  *and refer to improving-the-performance-of-the-secure-hash-algorithm-1/
-  *
-- *Updates 20-byte SHA-1 record at start of 'state', from 'input', for
-- *even number of 'blocks' consecutive 64-byte blocks.
-- *
-- *extern "C" void sha1_transform_avx2(
-- *	struct sha1_state *state, const u8* input, int blocks );
-  */
+diff --git a/arch/x86/crypto/crc32-pclmul_asm.S b/arch/x86/crypto/crc32-pclmul_asm.S
+index ca53e96996ac..f704b2067a80 100644
+--- a/arch/x86/crypto/crc32-pclmul_asm.S
++++ b/arch/x86/crypto/crc32-pclmul_asm.S
+@@ -17,7 +17,6 @@
  
  #include <linux/linkage.h>
-@@ -629,13 +624,22 @@ _loop3:
- 	_end:
  
- .endm
--/*
-- * macro implements SHA-1 function's body for several 64-byte blocks
-- * param: function's name
-- */
--.macro SHA1_VECTOR_ASM  name
--	SYM_FUNC_START(\name)
- 
-+.text
-+
-+/**
-+ * sha1_transform_avx2 - Calculate SHA1 hash using the x86 AVX2 feature set
-+ * @digest:	address of current 20-byte hash value (%rdi, CTX macro)
-+ * @data:	address of data (%rsi, BUF macro);
-+ *		data size must be a multiple of 64 bytes
-+ * @blocks:	number of 64-byte blocks (%rdx, CNT macro)
-+ *
-+ * This function supports 64-bit CPUs.
-+ *
-+ * Return:    none
-+ * Prototype: asmlinkage void sha1_transform_avx2(u32 *digest, const u8 *data, int blocks)
-+ */
-+SYM_FUNC_START(sha1_transform_avx2)
- 	push	%rbx
- 	push	%r12
- 	push	%r13
-@@ -675,9 +679,7 @@ _loop3:
- 	pop	%rbx
- 
- 	RET
 -
--	SYM_FUNC_END(\name)
--.endm
-+SYM_FUNC_END(sha1_transform_avx2)
- 
  .section .rodata
- 
-@@ -706,6 +708,4 @@ BSWAP_SHUFB_CTL:
- 	.long 0x04050607
- 	.long 0x08090a0b
- 	.long 0x0c0d0e0f
--.text
- 
--SHA1_VECTOR_ASM     sha1_transform_avx2
-diff --git a/arch/x86/crypto/sha1_ni_asm.S b/arch/x86/crypto/sha1_ni_asm.S
-index 2f94ec0e763b..4aa8507b15b4 100644
---- a/arch/x86/crypto/sha1_ni_asm.S
-+++ b/arch/x86/crypto/sha1_ni_asm.S
-@@ -71,9 +71,16 @@
- #define MSG3		%xmm6
- #define SHUF_MASK	%xmm7
- 
-+.text
- 
--/*
-- * Intel SHA Extensions optimized implementation of a SHA-1 update function
-+/**
-+ * sha1_transform_ni - Calculate SHA1 hash using the x86 SHA-NI feature set
-+ * @digest:	address of current 20-byte hash value (%rdi, DIGEST_PTR macro)
-+ * @data:	address of data (%rsi, DATA_PTR macro);
-+ *		data size must be a multiple of 64 bytes
-+ * @blocks:	number of 64-byte blocks (%rdx, NUM_BLKS macro)
-+ *
-+ * This function supports 64-bit CPUs.
-  *
-  * The function takes a pointer to the current hash values, a pointer to the
-  * input data, and a number of 64 byte blocks to process.  Once all blocks have
-@@ -85,15 +92,10 @@
-  * The indented lines in the loop are instructions related to rounds processing.
-  * The non-indented lines are instructions related to the message schedule.
-  *
-- * void sha1_ni_transform(uint32_t *digest, const void *data,
--		uint32_t numBlocks)
-- * digest : pointer to digest
-- * data: pointer to input data
-- * numBlocks: Number of blocks to process
-+ * Return:    none
-+ * Prototype: asmlinkage void sha1_transform_ni(u32 *digest, const u8 *data, int blocks)
-  */
--.text
--.align 32
--SYM_FUNC_START(sha1_ni_transform)
-+SYM_FUNC_START(sha1_transform_ni)
- 	push		%rbp
- 	mov		%rsp, %rbp
- 	sub		$FRAME_SIZE, %rsp
-diff --git a/arch/x86/crypto/sha1_ssse3_asm.S b/arch/x86/crypto/sha1_ssse3_asm.S
-index 263f916362e0..8151a079ba6c 100644
---- a/arch/x86/crypto/sha1_ssse3_asm.S
-+++ b/arch/x86/crypto/sha1_ssse3_asm.S
-@@ -450,20 +450,24 @@ BSWAP_SHUFB_CTL:
- 	.long 0x0c0d0e0f
- 
- 
--.section .text
--
- W_PRECALC_SSSE3
- .macro xmm_mov a, b
- 	movdqu	\a,\b
- .endm
- 
--/*
-- * SSSE3 optimized implementation:
-+.text
-+
-+/**
-+ * sha1_transform_ssse3 - Calculate SHA1 hash using the x86 SSSE3 feature set
-+ * @digest:	address of current 20-byte hash value (%rdi, CTX macro)
-+ * @data:	address of data (%rsi, BUF macro);
-+ *		data size must be a multiple of 64 bytes
-+ * @blocks:	number of 64-byte blocks (%rdx, CNT macro)
-  *
-- * extern "C" void sha1_transform_ssse3(struct sha1_state *state,
-- *					const u8 *data, int blocks);
-+ * This function supports 64-bit CPUs.
-  *
-- * Note that struct sha1_state is assumed to begin with u32 state[5].
-+ * Return:	none
-+ * Prototype:	asmlinkage void sha1_transform_ssse3(u32 *digest, const u8 *data, int blocks)
-  */
- SHA1_VECTOR_ASM     sha1_transform_ssse3
- 
-@@ -545,9 +549,16 @@ W_PRECALC_AVX
- 	vmovdqu	\a,\b
- .endm
+ .align 16
+ /*
+@@ -67,19 +66,22 @@
+ #define CRC     %ecx
+ #endif
  
 -
--/* AVX optimized implementation:
-- *  extern "C" void sha1_transform_avx(struct sha1_state *state,
-- *				       const u8 *data, int blocks);
-+/**
-+ * sha1_transform_avx - Calculate SHA1 hash using the x86 AVX feature set
-+ * @digest:	address of current 20-byte hash value (%rdi, CTX macro)
-+ * @data:	address of data (%rsi, BUF macro);
-+ *		data size must be a multiple of 64 bytes
-+ * @blocks:	number of 64-byte blocks (%rdx, CNT macro)
-+ *
-+ * This function supports 64-bit CPUs.
-+ *
-+ * Return:	none
-+ * Prototype:	asmlinkage void sha1_transform_avx(u32 *digest, const u8 *data, int blocks)
-  */
- SHA1_VECTOR_ASM     sha1_transform_avx
-diff --git a/arch/x86/crypto/sha256-avx-asm.S b/arch/x86/crypto/sha256-avx-asm.S
-index 3baa1ec39097..2a60af20a3ff 100644
---- a/arch/x86/crypto/sha256-avx-asm.S
-+++ b/arch/x86/crypto/sha256-avx-asm.S
-@@ -94,9 +94,9 @@ SHUF_00BA = %xmm10      # shuffle xBxA -> 00BA
- SHUF_DC00 = %xmm12      # shuffle xDxC -> DC00
- BYTE_FLIP_MASK = %xmm13
- 
--NUM_BLKS = %rdx   # 3rd arg
--INP = %rsi        # 2nd arg
- CTX = %rdi        # 1st arg
-+INP = %rsi        # 2nd arg
-+NUM_BLKS = %rdx   # 3rd arg
- 
- SRND = %rsi       # clobbers INP
- c = %ecx
-@@ -339,15 +339,21 @@ a = TMP_
-         ROTATE_ARGS
- .endm
- 
--########################################################################
--## void sha256_transform_avx(state sha256_state *state, const u8 *data, int blocks)
--## arg 1 : pointer to state
--## arg 2 : pointer to input data
--## arg 3 : Num blocks
--########################################################################
+-
  .text
-+
-+/**
-+ * sha256_transform_avx - Calculate SHA256 hash using the x86 AVX feature set
-+ * @digest:	address of current 32-byte hash value (%rdi, CTX macro)
-+ * @data:	address of data (%rsi, INP macro);
-+ *		data size must be a multiple of 64 bytes
-+ * @blocks:	number of 64-byte blocks (%rdx, NUM_BLKS macro)
+ /**
+- *      Calculate crc32
+- *      BUF - buffer (16 bytes aligned)
+- *      LEN - sizeof buffer (16 bytes aligned), LEN should be grater than 63
+- *      CRC - initial crc32
+- *      return %eax crc32
+- *      uint crc32_pclmul_le_16(unsigned char const *buffer,
+- *	                     size_t len, uint crc32)
++ * crc32_pclmul_le_16 - Calculate CRC32 using x86 PCLMULQDQ instructions
++ * @buffer:	address of data (32-bit %eax/64-bit %rdi, BUF macro);
++ *		must be aligned to a multiple of 16
++ * @len:	data size (32-bit %edx/64 bit %rsi, LEN macro);
++ *		must be a multiple of 16 and greater than 63
++ * @crc32:	initial CRC32 value (32-bit %ecx/64-bit $edx, CRC macro)
++ *		only uses lower 32 bits
 + *
-+ * This function supports 64-bit CPUs.
++ * This function supports both 32-bit and 64-bit CPUs.
++ * It requires data to be aligned and a minimum size.
 + *
-+ * Return:    none
-+ * Prototype: asmlinkage void sha256_transform_avx(u32 *digest, const u8 *data, int blocks)
-+ */
- SYM_FUNC_START(sha256_transform_avx)
--.align 32
- 	pushq   %rbx
- 	pushq   %r12
- 	pushq   %r13
-diff --git a/arch/x86/crypto/sha256-avx2-asm.S b/arch/x86/crypto/sha256-avx2-asm.S
-index 9bcdbc47b8b4..2f2d332f41a4 100644
---- a/arch/x86/crypto/sha256-avx2-asm.S
-+++ b/arch/x86/crypto/sha256-avx2-asm.S
-@@ -89,9 +89,9 @@ BYTE_FLIP_MASK = %ymm13
- 
- X_BYTE_FLIP_MASK = %xmm13 # XMM version of BYTE_FLIP_MASK
- 
--NUM_BLKS = %rdx	# 3rd arg
--INP	= %rsi  # 2nd arg
- CTX	= %rdi	# 1st arg
-+INP	= %rsi  # 2nd arg
-+NUM_BLKS = %rdx	# 3rd arg
- c	= %ecx
- d	= %r8d
- e       = %edx	# clobbers NUM_BLKS
-@@ -516,15 +516,22 @@ STACK_SIZE	= _CTX      + _CTX_SIZE
- 
- .endm
- 
--########################################################################
--## void sha256_transform_rorx(struct sha256_state *state, const u8 *data, int blocks)
--## arg 1 : pointer to state
--## arg 2 : pointer to input data
--## arg 3 : Num blocks
--########################################################################
- .text
-+
-+/**
-+ * sha256_transform_rorx - Calculate SHA512 hash using x86 AVX2 feature set
-+ *	including the RORX (rotate right logical without affecting flags) instruction
-+ * @digest:	address of current 32-byte hash value (%rdi, CTX macro)
-+ * @data:	address of data (%rsi, INP macro);
-+ *		data size must be a multiple of 64 bytes
-+ * @blocks:	number of 64-byte blocks (%rdx, NUM_BLKS macro)
-+ *
-+ * This function supports 64-bit CPUs.
-+ *
-+ * Return:	none
-+ * Prototype:	asmlinkage void sha256_transform_rorx(u32 *digest, const u8 *data, int blocks)
-+ */
- SYM_FUNC_START(sha256_transform_rorx)
--.align 32
- 	pushq	%rbx
- 	pushq	%r12
- 	pushq	%r13
-diff --git a/arch/x86/crypto/sha256-ssse3-asm.S b/arch/x86/crypto/sha256-ssse3-asm.S
-index c4a5db612c32..087d03fb10e1 100644
---- a/arch/x86/crypto/sha256-ssse3-asm.S
-+++ b/arch/x86/crypto/sha256-ssse3-asm.S
-@@ -87,9 +87,9 @@ SHUF_00BA = %xmm10      # shuffle xBxA -> 00BA
- SHUF_DC00 = %xmm11      # shuffle xDxC -> DC00
- BYTE_FLIP_MASK = %xmm12
- 
--NUM_BLKS = %rdx   # 3rd arg
--INP = %rsi        # 2nd arg
- CTX = %rdi        # 1st arg
-+INP = %rsi        # 2nd arg
-+NUM_BLKS = %rdx   # 3rd arg
- 
- SRND = %rsi       # clobbers INP
- c = %ecx
-@@ -346,17 +346,21 @@ a = TMP_
- 	ROTATE_ARGS
- .endm
- 
--########################################################################
--## void sha256_transform_ssse3(struct sha256_state *state, const u8 *data,
--##			       int blocks);
--## arg 1 : pointer to state
--##	   (struct sha256_state is assumed to begin with u32 state[8])
--## arg 2 : pointer to input data
--## arg 3 : Num blocks
--########################################################################
- .text
-+
-+/**
-+ * sha256_transform_ssse3 - Calculate SHA256 hash using the x86 SSSE3 feature set
-+ * @digest:	address of current 32-byte hash value (%rdi, CTX macro)
-+ * @data:	address of data (%rsi, INP macro);
-+ *		data size must be a multiple of 64 bytes
-+ * @blocks:	number of 64-byte blocks (%rdx, NUM_BLKS macro)
-+ *
-+ * This function supports 64-bit CPUs.
-+ *
-+ * Return:	none
-+ * Prototype:	asmlinkage void sha256_transform_ssse3(u32 *digest, const u8 *data, int blocks)
-+ */
- SYM_FUNC_START(sha256_transform_ssse3)
--.align 32
- 	pushq   %rbx
- 	pushq   %r12
- 	pushq   %r13
-diff --git a/arch/x86/crypto/sha256_ni_asm.S b/arch/x86/crypto/sha256_ni_asm.S
-index 94d50dd27cb5..a7b3f86cc127 100644
---- a/arch/x86/crypto/sha256_ni_asm.S
-+++ b/arch/x86/crypto/sha256_ni_asm.S
-@@ -75,8 +75,16 @@
- #define ABEF_SAVE	%xmm9
- #define CDGH_SAVE	%xmm10
- 
--/*
-- * Intel SHA Extensions optimized implementation of a SHA-256 update function
-+.text
-+
-+/**
-+ * sha256_transform_ni - Calculate SHA256 hash using the x86 SHA-NI feature set
-+ * @digest:	address of current 32-byte hash value (%rdi, DIGEST_PTR macro)
-+ * @data:	address of data (%rsi, DATA_PTR macro);
-+ *		data size must be a multiple of 64 bytes
-+ * @blocks:	number of 64-byte blocks (%rdx, NUM_BLKS macro)
-+ *
-+ * This function supports 64-bit CPUs.
-  *
-  * The function takes a pointer to the current hash values, a pointer to the
-  * input data, and a number of 64 byte blocks to process.  Once all blocks have
-@@ -88,17 +96,10 @@
-  * The indented lines in the loop are instructions related to rounds processing.
-  * The non-indented lines are instructions related to the message schedule.
-  *
-- * void sha256_ni_transform(uint32_t *digest, const void *data,
--		uint32_t numBlocks);
-- * digest : pointer to digest
-- * data: pointer to input data
-- * numBlocks: Number of blocks to process
-+ * Return:	none
-+ * Prototype:	asmlinkage void sha256_transform_ni(u32 *digest, const u8 *data, int blocks)
++ * Return:	(32-bit %eax/64-bit %rax) CRC32 value (in lower 32 bits)
++ * Prototype:	asmlinkage u32 crc32_pclmul_le_16(const u8 *buffer, size_t len, u32 crc32);
   */
 -
--.text
--.align 32
--SYM_FUNC_START(sha256_ni_transform)
+ SYM_FUNC_START(crc32_pclmul_le_16) /* buffer and buffer size are 16 bytes aligned */
+ 	movdqa  (BUF), %xmm1
+ 	movdqa  0x10(BUF), %xmm2
+diff --git a/arch/x86/crypto/crc32c-pcl-intel-asm_64.S b/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
+index ec35915f0901..3d646011d84b 100644
+--- a/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
++++ b/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
+@@ -70,22 +70,30 @@
+ .error "SMALL_ SIZE must be < 256"
+ .endif
+ 
+-# unsigned int crc_pcl(u8 *buffer, int len, unsigned int crc_init);
 -
-+SYM_FUNC_START(sha256_transform_ni)
- 	shl		$6, NUM_BLKS		/*  convert to bytes */
- 	jz		.Ldone_hash
- 	add		DATA_PTR, NUM_BLKS	/* pointer to end of data */
-diff --git a/arch/x86/crypto/sha512-avx-asm.S b/arch/x86/crypto/sha512-avx-asm.S
-index 1fefe6dd3a9e..145534a0c6f7 100644
---- a/arch/x86/crypto/sha512-avx-asm.S
-+++ b/arch/x86/crypto/sha512-avx-asm.S
-@@ -49,15 +49,10 @@
+ .text
++/**
++ * crc_pcl - Calculate CRC32C using x86 CRC32 and PCLMULQDQ instructions
++ * @buffer:	address of data (%rdi, bufp macro)
++ * @len:	data size (%rsi, len macro)
++ * @crc_init:	initial CRC32C value (%rdx, crc_init_arg macro);
++ *		only using lower 32 bits
++ *
++ * This function supports 64-bit CPUs.
++ * It loops on 8-byte aligned QWORDs, but also supports unaligned
++ * addresses and all length values.
++ *
++ * Return:	CRC32C value (upper 32 bits zero)(%rax)
++ * Prototype:	asmlinkage unsigned int crc_pcl(const u8 *buffer, unsigned int len,
++						unsigned int crc_init);
++ */
+ SYM_FUNC_START(crc_pcl)
+ #define    bufp		rdi
+-#define    bufp_dw	%edi
+-#define    bufp_w	%di
+-#define    bufp_b	%dil
+ #define    bufptmp	%rcx
+ #define    block_0	%rcx
+ #define    block_1	%rdx
+ #define    block_2	%r11
+ #define    len		%rsi
+ #define    len_dw	%esi
+-#define    len_w	%si
+-#define    len_b	%sil
+ #define    crc_init_arg %rdx
+ #define    tmp		%rbx
+ #define    crc_init	%r8
+@@ -97,7 +105,7 @@ SYM_FUNC_START(crc_pcl)
+ 	pushq   %rdi
+ 	pushq   %rsi
+ 
+-	## Move crc_init for Linux to a different
++	## Move crc_init for Linux to a different register
+ 	mov     crc_init_arg, crc_init
+ 
+ 	################################################################
+@@ -216,7 +224,7 @@ LABEL crc_ %i
+ 	## 4) Combine three results:
+ 	################################################################
+ 
+-	lea	(K_table-8)(%rip), %bufp		# first entry is for idx 1
++	lea	(K_table-8)(%rip), %bufp	# first entry is for idx 1
+ 	shlq    $3, %rax			# rax *= 8
+ 	pmovzxdq (%bufp,%rax), %xmm0		# 2 consts: K1:K2
+ 	leal	(%eax,%eax,2), %eax		# rax *= 3 (total *24)
+@@ -326,10 +334,9 @@ JMPTBL_ENTRY %i
+ 	i=i+1
+ .endr
+ 
+-
+ 	################################################################
+ 	## PCLMULQDQ tables
+-	## Table is 128 entries x 2 words (8 bytes) each
++	## Table is 128 entries x 8 bytes each
+ 	################################################################
+ .align 8
+ K_table:
+diff --git a/arch/x86/crypto/crct10dif-pcl-asm_64.S b/arch/x86/crypto/crct10dif-pcl-asm_64.S
+index 721474abfb71..88af572703b2 100644
+--- a/arch/x86/crypto/crct10dif-pcl-asm_64.S
++++ b/arch/x86/crypto/crct10dif-pcl-asm_64.S
+@@ -52,8 +52,6 @@
  
  #include <linux/linkage.h>
  
 -.text
 -
- # Virtual Registers
--# ARG1
--digest	= %rdi
--# ARG2
--msg	= %rsi
--# ARG3
--msglen	= %rdx
-+digest	= %rdi	# ARG1
-+msg	= %rsi	# ARG2
-+msglen	= %rdx	# ARG3
- T1	= %rcx
- T2	= %r8
- a_64	= %r9
-@@ -265,14 +260,20 @@ frame_size = frame_WK + WK_SIZE
- 	RotateState
+ #define		init_crc	%edi
+ #define		buf		%rsi
+ #define		len		%rdx
+@@ -89,11 +87,23 @@
+ 	xorps	\src_reg, \dst_reg
  .endm
  
--########################################################################
--# void sha512_transform_avx(sha512_state *state, const u8 *data, int blocks)
--# Purpose: Updates the SHA512 digest stored at "state" with the message
--# stored in "data".
--# The size of the message pointed to by "data" must be an integer multiple
--# of SHA512 message blocks.
--# "blocks" is the message length in SHA512 blocks
--########################################################################
+-#
+-# u16 crc_t10dif_pcl(u16 init_crc, const *u8 buf, size_t len);
+-#
+-# Assumes len >= 16.
+-#
 +.text
-+
 +/**
-+ * sha512_transform_avx - Calculate SHA512 hash using the x86 AVX feature set
-+ * @digest:	address of current 64-byte hash value (%rdi, digest macro)
-+ * @data:	address of data (%rsi, msg macro);
-+ *		data must be a multiple of 128 bytes
-+ * @blocks:	number of 128-byte blocks (%rdx, msglen macro)
++ * crc_t10dif_pcl - Calculate CRC16 per T10 DIF (data integrity format)
++ *		    using x86 PCLMULQDQ instructions
++ * @init_crc:	initial CRC16 value (%rdi, init_crc macro);
++ *		only uses lower 16 bits
++ * @buf:	address of data (%rsi, buf macro);
++ *		data buffer must be at least 16 bytes
++ * @len:	data size (%rdx, len macro);
++ *		must be >= 16
 + *
 + * This function supports 64-bit CPUs.
++ * It allows data to be at any offset.
 + *
-+ * Return:    none
-+ * Prototype: asmlinkage void sha512_transform_avx(u32 *digest, const u8 *data, int blocks)
++ * Return:	(%rax) CRC16 value (upper 48 bits zero)
++ * Prototype:	asmlinkage u16 crc_t10dif_pcl(u16 init_crc, const *u8 buf, size_t len);
 + */
- SYM_FUNC_START(sha512_transform_avx)
- 	test msglen, msglen
- 	je nowork
-diff --git a/arch/x86/crypto/sha512-avx2-asm.S b/arch/x86/crypto/sha512-avx2-asm.S
-index 5cdaab7d6901..bd9e08c8643d 100644
---- a/arch/x86/crypto/sha512-avx2-asm.S
-+++ b/arch/x86/crypto/sha512-avx2-asm.S
-@@ -51,8 +51,6 @@
- 
- #include <linux/linkage.h>
- 
--.text
--
- # Virtual Registers
- Y_0 = %ymm4
- Y_1 = %ymm5
-@@ -68,13 +66,10 @@ XFER  = YTMP0
- 
- BYTE_FLIP_MASK  = %ymm9
- 
--# 1st arg is %rdi, which is saved to the stack and accessed later via %r12
--CTX1        = %rdi
-+CTX1        = %rdi	# 1st arg, which is saved to the stack and accessed later via %r12
- CTX2        = %r12
--# 2nd arg
--INP         = %rsi
--# 3rd arg
--NUM_BLKS    = %rdx
-+INP         = %rsi	# 2nd arg
-+NUM_BLKS    = %rdx	# 3rd arg
- 
- c           = %rcx
- d           = %r8
-@@ -557,14 +552,21 @@ frame_size = frame_CTX + CTX_SIZE
- 
- .endm
- 
--########################################################################
--# void sha512_transform_rorx(sha512_state *state, const u8 *data, int blocks)
--# Purpose: Updates the SHA512 digest stored at "state" with the message
--# stored in "data".
--# The size of the message pointed to by "data" must be an integer multiple
--# of SHA512 message blocks.
--# "blocks" is the message length in SHA512 blocks
--########################################################################
-+.text
-+
-+/**
-+ * sha512_transform_rorx - Calculate SHA512 hash using the x86 AVX2 feature set
-+ *	including the RORX (rotate right logical without affecting flags) instruction
-+ * @digest:	address of 64-byte hash value (%rdi, CTX1 macro)
-+ * @data:	address of data (%rsi, INP macro);
-+ *		data must be a multiple of 128 bytes
-+ * @blocks:	number of 128-byte blocks (%rdx, NUM_BLKS macro)
-+ *
-+ * This function supports 64-bit CPUs.
-+ *
-+ * Return:    none
-+ * Prototype: asmlinkage void sha512_transform_rorx(u32 *digest, const u8 *data, int blocks)
-+ */
- SYM_FUNC_START(sha512_transform_rorx)
- 	# Save GPRs
- 	push	%rbx
-diff --git a/arch/x86/crypto/sha512-ssse3-asm.S b/arch/x86/crypto/sha512-ssse3-asm.S
-index b84c22e06c5f..cd6a0455d548 100644
---- a/arch/x86/crypto/sha512-ssse3-asm.S
-+++ b/arch/x86/crypto/sha512-ssse3-asm.S
-@@ -49,15 +49,10 @@
- 
- #include <linux/linkage.h>
- 
--.text
--
- # Virtual Registers
--# ARG1
--digest =	%rdi
--# ARG2
--msg =		%rsi
--# ARG3
--msglen =	%rdx
-+digest =	%rdi	# ARG1
-+msg =		%rsi	# ARG2
-+msglen =	%rdx	# ARG3
- T1 =		%rcx
- T2 =		%r8
- a_64 =		%r9
-@@ -264,18 +259,21 @@ frame_size = frame_WK + WK_SIZE
- 	RotateState
- .endm
- 
--########################################################################
--## void sha512_transform_ssse3(struct sha512_state *state, const u8 *data,
--##			       int blocks);
--# (struct sha512_state is assumed to begin with u64 state[8])
--# Purpose: Updates the SHA512 digest stored at "state" with the message
--# stored in "data".
--# The size of the message pointed to by "data" must be an integer multiple
--# of SHA512 message blocks.
--# "blocks" is the message length in SHA512 blocks.
--########################################################################
--SYM_FUNC_START(sha512_transform_ssse3)
-+.text
- 
-+/**
-+ * sha512_transform_ssse3 - Calculate SHA512 hash using x86 SSSE3 feature set
-+ * @digest:	address of current 64-byte hash value (%rdi, digest macro)
-+ * @data:	address of data (%rsi, msg macro);
-+ *		data size must be a multiple of 128 bytes
-+ * @blocks:	number of 128-byte blocks (%rdx, msglen macro)
-+ *
-+ * This function supports 64-bit CPUs.
-+ *
-+ * Return:    none
-+ * Prototype: asmlinkage void sha512_transform_ssse3(u32 *digest, const u8 *data, int blocks)
-+ */
-+SYM_FUNC_START(sha512_transform_ssse3)
- 	test msglen, msglen
- 	je nowork
+ .align 16
+ SYM_FUNC_START(crc_t10dif_pcl)
  
 -- 
 2.38.1
