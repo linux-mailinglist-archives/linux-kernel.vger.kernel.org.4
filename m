@@ -2,184 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B48264DE58
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 514BA64DE66
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229979AbiLOQQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
+        id S229877AbiLOQSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:18:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiLOQQA (ORCPT
+        with ESMTP id S229661AbiLOQSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:16:00 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2057.outbound.protection.outlook.com [40.107.22.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CC71CFC3;
-        Thu, 15 Dec 2022 08:15:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VrJ+wbYtZiJRrdK/U/8NASSN4tV2OwBUZQPNuX6DI6/Qeqeu1ZYpa9iCDMcEXLKqGhMe9K9uyPW4PutPKrhjyHXIzBeiNDgv3IdNq/t90O8p1qtt1C/CLDgb17/aEK3ZQ+RYy8Z/MFP6/zd7P5PgwbSglDWacKtmbYZbAss1wz3Rqfil/2mUKfWiJkqGfISfm7isR+fdsA7Ks2tJsxmVVWgKn/Dp25vD6PuWAGzKO/so5PaxlQeIYbVeMsiQWgOBTwHd6ET09bIJE+qgYD2p1LPfL2I6kx9A9sKukRUg6MSU1YVCMSBMhgpJ1+zVHeyfnLt1bHnTfGTulrBFel0/9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7QTeMo9xnkVFSJ5fGEDU6kMGHPfioPUjSiHb6gieXTo=;
- b=RPXoBM195TeqNnlXTx7fwpErGj2SBmQrKLV8gNEhFCkVmiaIwX8nxpAH9R4LykmtZcSQUUpNGk/oj3MhNMRBpUEnfwmCktUITbjsAHFRHHvDRw/PJZeSn++DLg9UR5QzAKbamtKrmZY6wVKd7PdbZs8D5c5psEatQcEUcJDMjfTfFYSnjn2HEskPXrPmVApqlybSPHnnibVVsTI7sIAKsZJECcRne/FG5A8URuLBOpDcCabQUw08YS5wXWlu7ZMCwEq97/xAseMfdCF6ddLxqUYNH8ZKCt+p88mCyDaYZaojqJxQ3/uqPIb4tTsAVSXMTdX2/95EEtDRujKwnKzK+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7QTeMo9xnkVFSJ5fGEDU6kMGHPfioPUjSiHb6gieXTo=;
- b=Ae3rrF95wxLMvs8CZih91a+LHCNYkKj4MYBBnWX6yh4Ny0M22kPturIyhb5qx2NNGrGYVmrjUuuTO2oqn+pJKbdcOxlZe/OE1mOLX/z21HWIz1Oky43qBXAm/9rm/sOGTKLnkor82JTfF8wayO546i21n56LZOqoi11kdXXQNsc=
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
- by DBBPR04MB7610.eurprd04.prod.outlook.com (2603:10a6:10:1f6::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.11; Thu, 15 Dec
- 2022 16:15:55 +0000
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::203a:e5da:a4a:7663]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::203a:e5da:a4a:7663%12]) with mapi id 15.20.5924.012; Thu, 15 Dec 2022
- 16:15:55 +0000
-From:   Frank Li <frank.li@nxp.com>
-To:     Chanh Nguyen <chanh@amperemail.onmicrosoft.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Chanh Nguyen <chanh@os.amperecomputing.com>
-CC:     OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Vacura <w36195@motorola.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Open Source Submission <patches@amperecomputing.com>,
-        Rondreis <linhaoguo86@gmail.com>
-Subject: RE: [EXT] Re: [PATCH] USB: gadget: Add ID numbers to configfs-gadget
- driver names
-Thread-Topic: [EXT] Re: [PATCH] USB: gadget: Add ID numbers to configfs-gadget
- driver names
-Thread-Index: AQHZD3LJSHwlmMbNUUCrwfAuH4QtB65sxxGAgAHjhgCAAGtCoA==
-Date:   Thu, 15 Dec 2022 16:15:55 +0000
-Message-ID: <HE1PR0401MB2331E31670508F5BD4B00E1688E19@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-References: <20221213041203.21080-1-chanh@os.amperecomputing.com>
- <720b814d-5102-04d3-4938-33a25e87a46d@wanadoo.fr>
- <6044a542-fbcd-0fe7-abd3-83f38b731ecc@amperemail.onmicrosoft.com>
- <HE1PR0401MB23315376796AF65DEB8B636B88E09@HE1PR0401MB2331.eurprd04.prod.outlook.com>
- <56581822-eb30-2e1b-169e-2bdee6f961f3@amperemail.onmicrosoft.com>
-In-Reply-To: <56581822-eb30-2e1b-169e-2bdee6f961f3@amperemail.onmicrosoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: HE1PR0401MB2331:EE_|DBBPR04MB7610:EE_
-x-ms-office365-filtering-correlation-id: 817cee2f-110b-4f8c-9e26-08dadeb7a51a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zopXdpylGkWjMOXWSK0+zyRONMJnxHmwoeOer05hZ6dI0CJQ0huyx96FuId8RXZNJL4uo/FvKeBaqHMWCwuFvY1Zu+rLgkE83S9t2CEy9juEhnVXMZxIW/0GXfSvelbFvtCJA9clljHuOCC8veao5cXBevepX9BcktwZPCzcx4fJVzOSc+lFlbByUsgqnEBezoJvV3mzQiRxcVlUXkm3OfckjDyuw78kiteerYZyG55MRqD3q1sF6EPvIYs/sEuR9U1lQN3ZFcgWdmMTE9c9YYWykqjT7mK8B9N9qrSuRPe6LXImkLs6is6mn5+yMz8AOg30avlJaOBHrqWm19aXqkxX2u8MusqJFOa5CCwc/b59UnaY9RXH1CZWFkUgqQzlhqMgJ7aefE6OPzyp6hKfeZ64egSx+6liD/V6C9atMkfwFhcfgImMlpZ/WRIqvesvrez0hgb0TMnCaj7xkaCQRKu+xnlVzE/ZgrOyTpOx8AP0e4W2HPzrVPY1nRKiqHSP0AbVkliffSnESdt8/u8AxRhXnOqNRUj6uWtRxXltSDDkxbEOpXFVxQxmEurlifLllztaszDDLVITdLmId/sDd1gVJRI+CO/hmm1iiCyQR2FEakULubVV8DZYvJjppOD6x+DajiWyX/5wP6uo3Zl5pPH4Bi9XVP3TZKncGwnrVvT7uQM1Jd14lZ60bVKKB5QTm8BWeGwPnpGyyHdATiM7SQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(346002)(376002)(39860400002)(136003)(451199015)(110136005)(41300700001)(38070700005)(44832011)(122000001)(5660300002)(8936002)(7416002)(38100700002)(52536014)(6506007)(33656002)(86362001)(55236004)(71200400001)(186003)(26005)(478600001)(7696005)(54906003)(64756008)(8676002)(66556008)(66476007)(66446008)(4326008)(296002)(66946007)(76116006)(316002)(9686003)(55016003)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OUx5eU5BOEVsTDZtVXlFVTQ4OGdmYzFXTFJGMVAvSmNtUjE3RTF1WlRKWmt0?=
- =?utf-8?B?RGU5ZUMxQnZEOUh0MmNLMUhNTFphRVRkK0x0YWdKSzdzYkJ2bExwMFhndlRO?=
- =?utf-8?B?Y2NKejBKSXkxUkxIcUtJQkZybzRIbk9VcS96aFBscFNzWW42dk83NXJhUDN1?=
- =?utf-8?B?Z0xCY2tidDA3RlBBdkFPMW1KWkVEWEdGU3U4WDhmSGNQdUJtdkV2TjRibE1j?=
- =?utf-8?B?VGlpZUFtNEROUzFjNGhNeXRQK0RlZTlKS3NhVXVieEJYejhpRTZqVXV1dDJi?=
- =?utf-8?B?SE5CUk42YWIzcHNLYTNYSEhBR2FIaFhmNXg4RnRGbXpKSHpNTkFtZEU5MUw0?=
- =?utf-8?B?ejJaSEVtU0lETlF5T0ZVTFpXYmpzSHkzZGFEbk4yT0RWczZTRDJZOEhDNk1Q?=
- =?utf-8?B?Vzg2RkdJbXpqZTdUdGsra3FsQzRlSXE4NTY4Z0htUXY5cEJRaGJJeVlzeERX?=
- =?utf-8?B?akFiSWQ0UzNYTktYZk42RXI1LytiVGlURUtYT3REQzhEY0pjMlVadkszNUxr?=
- =?utf-8?B?OFR2SGlwcHk1bTJBc2NQZTJPQUdGWUNMRE9jQmJhb0dSUHBaNjVML3lUU1B0?=
- =?utf-8?B?TlVCSC9GRkU3SU5WUWJzVEVQcWEvelFGSFd5bHhETUJxMjAzWTFSMGNldXZE?=
- =?utf-8?B?dUhsSGw0ZThVQXVNNFBmTXo0TjJPWUxZRUZ4dnRsKzFyTGhyRHFHVk1jVWxy?=
- =?utf-8?B?azVYbWNqeHZFT3BGOFpTSTI2NGVFOHpUS2g0RkZsNUk0SkdUaGVpNGNCR0Qy?=
- =?utf-8?B?UnVjbFY5R1hJWTc2VFRJYVFHY2diQXh4SE9YYjBzN21qbTI4NU1zRUFrNDY4?=
- =?utf-8?B?SC84RnJFTVFTUW9XbTBLTEticXIrdFI2eGcxMXVNaGJuamtXQWMvNndIUnRN?=
- =?utf-8?B?cmlzRVQwR25WclNsdnJiTFozcTY5bmh3Y0cyZTI4K1FMTjRnWVlhM3NlQUJi?=
- =?utf-8?B?RURIN241d1IrdThBMXFiY2p0WXhIaHhLOXR1QW03eXNrWk9Cc0xaYkorUFd3?=
- =?utf-8?B?UlJkMFZlU3ZRWXVudEt2VlM4NllXT3lNSXNsZnBxUk9XM1NKUDNxdmVTQlpF?=
- =?utf-8?B?OTdiSWtUYUxzUXpxUE5hRDBicnVHSzI3SG94YXI5RmFtaTh3VVczZHNzcXY3?=
- =?utf-8?B?bitJYVRwMFhRWWRSbEZCdHdlNm9nbjFVcnNjbTVmY3JhZ2lCTFRnRjVqYjBF?=
- =?utf-8?B?eVRGaHFTNlE3bzh4ZzFKR0EvVG5Vd3h4VEZ2M3FMZnpObEwyVUhnVHdzZGtB?=
- =?utf-8?B?U0hYMzdzMlpKVTFHQzdRcWlRMmpaU0ZsOC9QOXN3VjM0WmJWUlFpYjQ3YkU2?=
- =?utf-8?B?bFFXaHlWL0swVElLTzNveTRORk80NDBNUzNpSDRTZVd2QTRLZmhBRjBoalNO?=
- =?utf-8?B?WmFidW42dmpIZDI2ZmdwZXpoVWFaRDlQUTFuektUTVl6NEczeDdiNDFNZG9W?=
- =?utf-8?B?SDJTa3pRRWMwMDJXb09nRjlLUS9aaXhUaTZ6d3NTdkVBUHJGN1dPdHJaaEwr?=
- =?utf-8?B?QzhyQkp5ZS8vcWMxNnJvM3V1Y2ZMYzFOZktCaEg3VHFnK3BjTUJwRWd2OTdE?=
- =?utf-8?B?LzNtVUtzazRaNEVBcnBsWGNKZmhTbFdqaGl1ZEh6eHFseDR2WDFNUGNSdTVV?=
- =?utf-8?B?WUgvQ2ZTOTZKYmRmMmg4YldvQjdBaWdVc0czZXg0SEd6QlV6R2xEQmk0U0tz?=
- =?utf-8?B?V2EvK1NoSlBvWnc4eEltY3JhYzhEc0t1ODNWK0g5Ynl0dVQwQ1p3NEdnMFFG?=
- =?utf-8?B?WjV4d2lFL0hscEt4c3NIb05sK2VpZ1VKU1R5eHYwTWxBTlNwc3IxU1oyTFZv?=
- =?utf-8?B?S1J6c2ZHeXF4Skt3KzBjS1lBejlldGNKeUdkNDZZVlNWeVBNekVhd244MUxT?=
- =?utf-8?B?NkhxY1F5MVJoRzhOd1JLMXAxVXpwS0tudWFpN2Z6amt3WWNKYkwzV0VjNTBp?=
- =?utf-8?B?V0NaVjZ4NGY4VWFKL200S3d3djJ0RjNZVE4vWDQzVmFqcTFDR0dLV01CbjQr?=
- =?utf-8?B?OUF0eFVyNm5IZjZrZHRkQVo4TzFZMnVRMWtyRG1yd0p6SEkzSkJhZFY3akNO?=
- =?utf-8?B?SVNQUFgrbitnTXRLVlcxblRtUktxbXROU0lkR1h1UFQvQ0tNdnVTRUViVDl2?=
- =?utf-8?Q?hMXs=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 15 Dec 2022 11:18:30 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0562332BBA
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:18:28 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id b13so16444387lfo.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:18:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NUWi8X7N5NfAargziR2v2NwUWgt6sv76E1zQIWO6Rqc=;
+        b=rv6mwdv++zFy+FJxcI+ItLrfJeymvYqN757ya0wG69S1weGFbUEyzXLvr7yFY5koNH
+         kdOoQsopAyK7sQHXf7xS4sYInn3mBzyk250HOwT20hvGixLskmZB77cb4g2D6J76DUEV
+         TqEEMutsRAf6trkokcMK3z7EdTKY7w9i9XAVk82OhEIhngrLS/K9M7wKWwhOubEABt0c
+         cfn5GzMQF8CpexckTD680CicFCGwIjDDkViDXiTIRtcIwQ7fv3AjkcMx/WBL2c4xY+MV
+         qzw3gE3mRuBeRaK0hsJbmbLdhgd54werWqeYYlWtfNo3mP8marDVdyVKi709ezQGM6AU
+         MuCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NUWi8X7N5NfAargziR2v2NwUWgt6sv76E1zQIWO6Rqc=;
+        b=ijhsCzz2oGLTLYqfFLeNuk+Z0CpWG+zSN4HyQIGjTu49LfSFm7zgwSVENZMCjr7UMP
+         Yjaq6IG96xC4DsL36BrVZIXhEV694RJrRb7dnOI9fCy9CG+3jJqy/r64xN1nTk8OYBON
+         K9mS4MCVa6WqEmc+aowgUzP54vusmkrUgJIoLDuJxMu0eb3f7pEmQup/aNDYzQYJQBup
+         UIQlxBloeIg7Gg71b8c4FurXxnPFTZxe/HqANh84wg89ZdjZrFx6XhdLQcLHbzMdC6qN
+         Bp/9NDDyajDr70E4fModL0qpfNcfqFlvjEASl5qxxpJX2YY2NZRC0nBPZLt0LdMiIGXe
+         FrRQ==
+X-Gm-Message-State: ANoB5pl4rVcjNJBOJzEZf7J5Mk9n5BxtfiCpWjFqOcH8evqtMk7Q4igS
+        WOz/30CFkTAFjWQHU+ncCHkZcA==
+X-Google-Smtp-Source: AA0mqf74b2vGxIQtzSg0J6NlOmjL0nIDO8OQduiL+XyWle0of7H3QAdX1OGYFIRNgWr25V43vz2uPg==
+X-Received: by 2002:a05:6512:33c5:b0:4a4:68b7:f86d with SMTP id d5-20020a05651233c500b004a468b7f86dmr16486377lfg.17.1671121107277;
+        Thu, 15 Dec 2022 08:18:27 -0800 (PST)
+Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id h12-20020a056512054c00b004b577085688sm1200652lfl.82.2022.12.15.08.18.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 08:18:26 -0800 (PST)
+Message-ID: <875bd0a8-fc08-1d19-2c75-65713d9d2317@linaro.org>
+Date:   Thu, 15 Dec 2022 17:18:24 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 817cee2f-110b-4f8c-9e26-08dadeb7a51a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2022 16:15:55.6244
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gN+tP0U3PrLhXJU8C5RX5iZiBCDbR6Ybgjx7VBY1H4IcJ+Y0FZFmhhfCEG0BATJh7sngKWietfnhHV5NNTKsAQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7610
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 2/4] arm64: dts: qcom: sm6125: Add UFS nodes
+Content-Language: en-US
+To:     Lux Aliaga <they@mint.lgbt>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221215161258.355962-1-they@mint.lgbt>
+ <20221215161258.355962-2-they@mint.lgbt>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221215161258.355962-2-they@mint.lgbt>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-XQ0KPiA+DQo+ID4gTW92ZSBhbGwgZnJlZSBpbnRvIGdhZGdldF9pbmZvX2F0dHJfcmVsZWFzZSgp
-LCBqdXN0IGJlZm9yZSBrZnJlZShnaSkNCj4gPiBEcml2ZXIubmFtZSBhbmQgZ2kgY3JlYXRlIGF0
-IHRoZSBzYW1lIHBsYWNlLA0KPiA+IEZyZWUgc2hvdWxkIGJlIHRoZSBzYW1lIHBsYWNlIGFsc28u
-DQo+ID4NCj4gDQo+IFRoYW5rcyBhIGxvdCBmb3IgdGhlIHF1aWNrIHJldmlldyBjb21tZW50Lg0K
-PiANCj4gQXMgcGVyIG15IG9ic2VydmF0aW9uIHRocm91Z2ggdGhlIHRlc3QsIG9uIHRoZSBmaXJz
-dCBtb3VudCwgdGhlDQo+IHZpcnR1YWwtbWVkaWEgdGhlIGdhZGdldHNfbWFrZSgpIGlzIGNhbGxl
-ZCwgdGhlbiBsYXRlciwgd2hlbiB1bm1vdW50LA0KPiB0aGUgZ2FkZ2V0c19kcm9wKCkgaXMgY2Fs
-bGVkIGFuZCBmb2xsb3dlZCBieSBnYWRnZXRfaW5mb19hdHRyX3JlbGVhc2UoKS4NCj4gDQo+IFRo
-ZSBnYWRnZXRfaW5mb19hdHRyX3JlbGVhc2UoKSBpcyByZWdpc3RlcmVkIGFzIC5yZWxlYXNlKCkg
-b2YNCj4gZ2FkZ2V0X3Jvb3RfdHlwZSBmb3IgdGhlIGdpLT5ncm91cCB2aWEgdGhlIGNhbGwNCj4g
-ImNvbmZpZ19ncm91cF9pbml0X3R5cGVfbmFtZSgmZ2ktPmdyb3VwLCBuYW1lLCAmZ2FkZ2V0X3Jv
-b3RfdHlwZSk7Ig0KPiANCj4gSW4gZ2VuZXJhbCwgdGhlIC5yZWxlYXNlKCkgd2lsbCBiZSBjYWxs
-ZWQgb25seSBmb3IgdGhlIGdyb3VwLiBUaGVyZSBpcw0KPiBub3RoaW5nIHRvIGd1YXJhbnRlZSB0
-aGF0IHRoZSBncm91cCB3aWxsIGFsd2F5cyBiZSByZWdpc3RlcmVkLCBpZToNCj4gaW5jYXNlIHdp
-dGhvdXQgdGhlIGNhbGwgdG8gImNvbmZpZ19ncm91cF9pbml0X3R5cGVfbmFtZSgmZ2ktPmdyb3Vw
-LA0KPiBuYW1lLCAmZ2FkZ2V0X3Jvb3RfdHlwZSk7Ig0KPiANCj4gSW4gdGhpcyBwYXRjaCwgd2hh
-dCBpcyBhZGRlZCBpcyBhbiBpZGEgbnVtYmVyIHRvIGJlIHVzZWQgdG8gbWFrZSB1cCB0aGUNCj4g
-Y29tcG9zaXRlIGRyaXZlciBuYW1lLiBUaGlzIGlzIGRvbmUgaW4gZ2FkZ2V0c19tYWtlKCkgc28g
-d2UnZCBsaWtlIHRvDQo+IGFkZCB0aGUgY2xlYW51cCBjb2RlIHRvIGdhZGdldHNfZHJvcCgpIGFz
-IHRoZXkgYXJlIHJlZ2lzdGVyZWQgdG9nZXRoZXINCj4gaW4gdGhlIHNhbWUgcGxhY2UgYW5kIHdv
-dWxkIGJlIGEgbGl0dGxlIGVhc2llciB0byByZWFkIHRoYW4gYWRkaW5nIHRoZW0NCj4gdG8gX3Jl
-bGVhc2UoKSBhcyB0aGUgY29kZSBiZWxvdzoNCj4gDQo+ICAgICAgc3RhdGljIHN0cnVjdCBjb25m
-aWdmc19ncm91cF9vcGVyYXRpb25zIGdhZGdldHNfb3BzID0gew0KPiAgICAgICAgICAubWFrZV9n
-cm91cCA9ICZnYWRnZXRzX21ha2UsDQo+ICAgICAgICAgIC5kcm9wX2l0ZW0gPSAmZ2FkZ2V0c19k
-cm9wLA0KPiAgICAgIH07DQo+IA0KPiBBbnl3YXksIHdlIHN0aWxsIGRvdWJ0IHRoYXQgdGhlcmUg
-bWlnaHQgYmUgc29tZXRoaW5nIHRoYXQgd2UgaGF2ZSBtaXNzZWQNCj4gc28gcGxlYXNlIGxldCBt
-ZSBrbm93IHRoZSByZWFzb24gd2h5IHB1dHRpbmcgY2xlYW51cCBjb2RlcyB0byBfcmVsZWFzZSgp
-DQo+IHdvdWxkIGJlIGEgYmV0dGVyIHNvbHV0aW9uLg0KDQpMZXQncyBzaW1wbHkgdGhlIGxvZ2lj
-DQoNCkdhZGdldF9tYWtlKCkNCnsNCiAgICAgICAgZ2k9a2F6YWxsb2MoKTsNCiAgICAgICAgZ2kt
-PmNvbXBvc2l0ZS5nYWRnZXRfZHJpdmVyLmRyaXZlci5uYW1lID0ga2FzcHJpbnRmKCk7DQogICAg
-ICAgIGdpLT5jb21wb3NpdHIuZ2FkZ2V0X2RydmVyLmZ1bmN0aW9uID0ga3N0cmR1cCgpOw0KfQ0K
-DQp0aGlzIGlzIG9ubHkgcGxhY2UgdG8gY3JlYXRlIGdpIGFuZCBkcml2ZXIubmFtZS4gDQpubyBv
-dGhlciBwbGFjZSB0byBzZXQgZHJpdmVyLm5hbWUsICBzbyBJIHRoaW5rIGdpIHRha2Ugb3duc2hp
-cCBvZiBkcml2ZXIubmFtZS4gDQoNCnNvIHdlIG9ubHkgdHJhY2sgd2hlbiBnaSBmcmVlLCAgIGp1
-c3QgZnJlZSBkcml2ZXIubmFtZSBiZWZvcmUgZ2kgZnJlZS4gDQoNClJlbGF0ZWQgbWFsbG9jIGFu
-ZCBmcmVlIHNob3VsZCBiZSBwYWlyIHRvZ2V0aGVyLiANCg0KR2FkZ2V0X2luZm9fYXR0cl9yZWxl
-YXNlKCkNCnsNCglLZnJlZShnaS0+Y29tcG9zaXRlLmdhZGdldF9kcml2ZXIuZnVuY3Rpb24pDQoJ
-S2ZyZWUoZ2ktPmNvbXBvc2lzdGUuZ2FkZ2V0X2RyaXZlci5kcml2ZXIubmFtZSk7DQoJS2ZyZWUo
-Z2kpOw0KfQ0KDQpHYWRnZXRfZHJpdmVyLmRyaXZlci5uYW1lIHNob3VsZCBiZSBzaW1pbGFyIGFz
-IGdhZGdldF9kcml2ZXIuZnVuY3Rpb24NCg0KSWYgZHJpdmVyLm5hbWUgaXMgZnJlZWQgaW4gZ2Fk
-Z2V0X2Ryb3AoKSwgZ2kgY2FuIG5vdCBhY3R1YWxseSBiZSByZXVzZWQgYWdhaW4uDQoNCg0KDQo+
-IA0KPiBUaGFuayB5b3UgYW5kIGJlc3QgcmVnYXJkcywNCj4gLSBDaGFuaA0KPiANCj4gPg0KPiA+
-Pj4+ICAgICAgICBjb25maWdfaXRlbV9wdXQoaXRlbSk7DQo+ID4+Pj4gICAgfQ0KPiA+Pj4NCg==
+
+
+On 15.12.2022 17:12, Lux Aliaga wrote:
+> Adds a UFS host controller node and its corresponding PHY to
+> the sm6125 platform.
+> 
+> Signed-off-by: Lux Aliaga <they@mint.lgbt>
+> ---
+>  arch/arm64/boot/dts/qcom/sm6125.dtsi | 66 ++++++++++++++++++++++++++++
+>  1 file changed, 66 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> index 7e25a4f85594..6d4534c7a2fe 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> @@ -508,6 +508,72 @@ sdhc_2: mmc@4784000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		ufs_mem_hc: ufs@4804000 {
+> +			compatible = "qcom,sm6125-ufshc", "qcom,ufshc", "jedec,ufs-2.0";
+> +			reg = <0x04804000 0x3000>, <0x04810000 0x8000>;
+> +			reg-names = "std", "ice";
+> +			interrupts = <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>;
+> +			phys = <&ufs_mem_phy_lanes>;
+> +			phy-names = "ufsphy";
+> +			lanes-per-direction = <1>;
+> +			#reset-cells = <1>;
+> +			resets = <&gcc GCC_UFS_PHY_BCR>;
+> +			reset-names = "rst";
+> +
+> +			clock-names = "core_clk",
+> +				"bus_aggr_clk",
+> +				"iface_clk",
+> +				"core_clk_unipro",
+> +				"ref_clk",
+> +				"tx_lane0_sync_clk",
+> +				"rx_lane0_sync_clk",
+> +				"ice_core_clk";
+> +			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
+> +				<&gcc GCC_SYS_NOC_UFS_PHY_AXI_CLK>,
+> +				<&gcc GCC_UFS_PHY_AHB_CLK>,
+> +				<&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
+> +				<&rpmcc RPM_SMD_XO_CLK_SRC>,
+> +				<&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
+> +				<&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
+> +				<&gcc GCC_UFS_PHY_ICE_CORE_CLK>;
+> +			freq-table-hz = <50000000 240000000>,
+> +				<0 0>,
+> +				<0 0>,
+> +				<37500000 150000000>,
+> +				<0 0>,
+> +				<0 0>,
+> +				<0 0>,
+> +				<75000000 300000000>;
+The indentation is wrong. Make sure your tab size is set to 8
+and all the <> entries align with the first one.
+
+> +
+> +			non-removable;
+> +			status = "disabled";
+> +		};
+> +
+> +		ufs_mem_phy: phy@4807000 {
+> +			compatible = "qcom,sm6115-qmp-ufs-phy";
+> +			reg = <0x04807000 0x1c4>;
+
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+Please move these three properties last.
+
+Konrad
+> +
+> +			power-domains = <&gcc UFS_PHY_GDSC>;
+> +
+> +			clock-names = "ref", "ref_aux";
+> +			clocks = <&gcc GCC_UFS_MEM_CLKREF_CLK>,
+> +					 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
+> +
+> +			resets = <&ufs_mem_hc 0>;
+> +			reset-names = "ufsphy";
+> +			status = "disabled";
+> +
+> +			ufs_mem_phy_lanes: lanes@4807400 {
+> +				reg = <0x4807400 0x098>,
+> +				      <0x4807600 0x130>,
+> +				      <0x4807c00 0x16c>;
+> +				#phy-cells = <0>;
+> +			};
+> +		};
+> +
+>  		usb3: usb@4ef8800 {
+>  			compatible = "qcom,sm6125-dwc3", "qcom,dwc3";
+>  			reg = <0x04ef8800 0x400>;
