@@ -2,146 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD9E64DC75
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 14:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F5664DC85
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 14:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiLONvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 08:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
+        id S229795AbiLONyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 08:54:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiLONvJ (ORCPT
+        with ESMTP id S229488AbiLONy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 08:51:09 -0500
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2134.outbound.protection.outlook.com [40.107.15.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E00219039;
-        Thu, 15 Dec 2022 05:51:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EebpOLDYGWtq8MwrkxdrhJIXu5F3cxYafVMpJn97oWyxjGVLIerxIpuhIqjTb0kYtUa3DXr1Ma20872Tf5PcfmX/ATfNu/8J50rhaqvIMjeO4hjcXpoWCF99qZZ6XANC1547peJBmFsluSjRRBtG9Q8saK3DpEiEcBhKj2T437FV8wWrmrA3W6/MLZjc72ITMvqhnCMcK+4HYBgDxfsrVuFu7/5aNdDA/5qXqLWjOIMUZ0iKyu8XJCWqdJPX/h9k4LeLkbZqkvSUf9n/AWCh+Rup4HiYZmdc6nWhtLPqahAPUnf+HS6Ps0d9e7o5hNM75Nl7+CCT4KAuLUUjR0eXBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BVV9UAOTxc5i9aZkUJPifSu/K2KMCq4S2yXn+xdo9A8=;
- b=FINW0UziTOBr2/k3UZdWEulRVBrt5Tv7U1TEgADQMTu0h8n39+tZy88G67ey2o4N8TysdkMB9f1cgh5jJYiBgYTvAVOuMvpEvJ4ixj+X2Y0zwRNGgB+MdQc3tdXQPzdJj+oFxliKkhFW3nQiZJ4+cygQUTUYSRY+Px5LJLBHb+jQPVj5SrbCgz6Q5dXWljxQUUOqY/HCj3efUjCuE0SaqvtCJRaRVULgF3ysXfrQbGsIq5mVFbgH+1CbiOg7xZuGLfQJgaAVdyuXPeczur1t0vVeemAhbwmxt3wXz4HCTZMscppP+ADg/HcqYLptwT4oO106g4oiSGxc/uZYLTcOrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 217.111.95.7) smtp.rcpttodomain=microchip.com smtp.mailfrom=arri.de;
- dmarc=none action=none header.from=arri.de; dkim=none (message not signed);
- arc=none
+        Thu, 15 Dec 2022 08:54:28 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8559B2ED46
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 05:54:25 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id m5-20020a7bca45000000b003d2fbab35c6so1526594wml.4
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 05:54:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=arrigroup.onmicrosoft.com; s=selector1-arrigroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BVV9UAOTxc5i9aZkUJPifSu/K2KMCq4S2yXn+xdo9A8=;
- b=CQ4SP+wQQCO+7PZTsV7+bohSWjQdNxrzVC7Mwa/iTGE5yY7hgB2A4PlJqDAbQinuTMNxKCJuePvvG2hICtQXADkkO8SkDu2kyC9G2b8EeWny42vcJt1b25Q5XoAepGzitK/SpCDbItOuyap8Ex+F+8WmvROJF/q2eGDaNF/c5As=
-Received: from DU2PR04CA0045.eurprd04.prod.outlook.com (2603:10a6:10:234::20)
- by GV1PR07MB9023.eurprd07.prod.outlook.com (2603:10a6:150:86::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12; Thu, 15 Dec
- 2022 13:50:58 +0000
-Received: from DB5EUR02FT054.eop-EUR02.prod.protection.outlook.com
- (2603:10a6:10:234:cafe::a) by DU2PR04CA0045.outlook.office365.com
- (2603:10a6:10:234::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12 via Frontend
- Transport; Thu, 15 Dec 2022 13:50:58 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.7)
- smtp.mailfrom=arri.de; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arri.de;
-Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
- designate 217.111.95.7 as permitted sender) receiver=protection.outlook.com;
- client-ip=217.111.95.7; helo=mta.arri.de;
-Received: from mta.arri.de (217.111.95.7) by
- DB5EUR02FT054.mail.protection.outlook.com (10.13.59.10) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5924.12 via Frontend Transport; Thu, 15 Dec 2022 13:50:57 +0000
-Received: from n95hx1g2.localnet (10.30.4.179) by mta.arri.de (10.10.18.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 15 Dec
- 2022 14:50:57 +0100
-From:   Christian Eggers <ceggers@arri.de>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <linux@armlinux.org.uk>,
-        <Tristram.Ha@microchip.com>
-Subject: Re: [Patch net] net: dsa: microchip: remove IRQF_TRIGGER_FALLING in request_threaded_irq
-Date:   Thu, 15 Dec 2022 14:50:57 +0100
-Message-ID: <2280237.ElGaqSPkdT@n95hx1g2>
-Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
-In-Reply-To: <0d35858867ae1c3de899d6162aa39e013daff435.camel@redhat.com>
-References: <20221213101440.24667-1-arun.ramadoss@microchip.com> <0d35858867ae1c3de899d6162aa39e013daff435.camel@redhat.com>
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9OTgqMJ72hTY8DmgwqYKfCFn5Uuqu5CGzMqc6diHDoY=;
+        b=uRvXA3sWZXvyIXrliOdhwK6HbALAYO1yJfHGmadQChubshMyKVuUMe1LaRyVZT/p6g
+         vD2RwRQVrzQUTjhNkNbDq3VU6SmxfYEJc5woUO4YwpxrZJ+gvCjzWoRQLihCNmre8M6u
+         I+Pfo122gPGAO3HQHXnpaJuuuPb7fFOB7TihTG6uEWHvXMtMN4wOs9Mmkg1vdU5oR26O
+         fdcp+P/UxjHHsyZbh2Qww9sA6XIRYc6RKkpgI+ggCB0Xb3E0L8CjT5GXOiE7ERlWxpik
+         LQ47MaHFDob5Pzq3mfuoa4BXA0TIB8xpBOMytHBvQmZBizGh0iUo+FQOdRXV3nvnAK19
+         JAjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9OTgqMJ72hTY8DmgwqYKfCFn5Uuqu5CGzMqc6diHDoY=;
+        b=245vBbhZUmIuDDW7L05jgdNAVsND6IGPVjWpZxTTn4BN7kO8nVheljElQmB8yelfs/
+         SGER2Cu0briKQLeSvRyEAGrCsMKsmx6pi+bz4nsl89cdaRRYxi7yf/lwymdH8lqJF83a
+         eQTSiaVh64cmQMIHHCcvOxi0u66Cup7StJvKOmWhxsbL9ldnoKD4g4KUaY8X0fOTf5oM
+         BFt2aGj7BhB3dzaV+IWTS7aVBLugXjP+UcC/bYDMIEXzx/URub/SW/RHvBHi6BrNJrRF
+         5iyg+LhnmU/8EUdAamgDLLQt2SD2xv2estijQPslVcp16uxO3AR/rv9TcS14ZL69zaoZ
+         qhgA==
+X-Gm-Message-State: ANoB5pnkNyl9CZrg3pbws+8NSBzoDtClZtqWK2A/S+x9oQi7XuqOvR8V
+        Db3MU0b5ZSYt5JYc2OLToGNIZA==
+X-Google-Smtp-Source: AA0mqf7JVIcTPYdeX+DwIlk55rlpMShtycDHmgZrVZxgWpoACaOHyPw1OWw+dIhhtCWJetqZGFJ0Vg==
+X-Received: by 2002:a05:600c:3c92:b0:3cf:a851:d2f2 with SMTP id bg18-20020a05600c3c9200b003cfa851d2f2mr22167012wmb.21.1671112463881;
+        Thu, 15 Dec 2022 05:54:23 -0800 (PST)
+Received: from localhost ([82.66.159.240])
+        by smtp.gmail.com with ESMTPSA id w23-20020a05600c099700b003d1de805de5sm5632729wmp.16.2022.12.15.05.54.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 05:54:23 -0800 (PST)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Jason Andryuk <jandryuk@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     xen-devel@lists.xenproject.org, Jason Andryuk <jandryuk@gmail.com>,
+        Phillip Susi <phill@thesusis.net>, stable@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH v2] Input: xen-kbdfront - drop keys to shrink modalias
+In-Reply-To: <20221209142615.33574-1-jandryuk@gmail.com>
+References: <20221209142615.33574-1-jandryuk@gmail.com>
+Date:   Thu, 15 Dec 2022 14:54:22 +0100
+Message-ID: <87359gkc1d.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Originating-IP: [10.30.4.179]
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB5EUR02FT054:EE_|GV1PR07MB9023:EE_
-X-MS-Office365-Filtering-Correlation-Id: 876608d0-0cb4-4d1d-ccd3-08dadea364e5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UDa8oFv++UqO/QZQdTPlo5AB5abajgevseV3sjjt5pYUhmHt3f10hvr7BylHlNmxmrkr5YZsb4IY6mQX40jG8xP7zlRKmbkr5WsjJ86uZu5Ob69S44alt2I2C1jzAq0NyTXYqsCTCS3L+WjDpBYCsc0X3/AUpyj/L4iq18HrrW9Ine9gUDWYcio6qzSbfN4iVWgYEx8Hz1wAwzBkPrl2OlbeRSj03yiBFP8uGgnaUx3g/WgKpINj36jGVEcz2PO8ecBH9pvHqvuGJPc78RoXt+6EhsRYbPlarlG/Tfu99az3hgi+ZSySpxWw7nL0cf38aBBjzWcGMqIyDYeSw2UTYWguia1g8XzBXQFB1zFtyMNIwfUGxkpwGY/d90FIgUVsuXMDMUbINErQ4dIoOKbDPFFHVYPh7t8giay9o/JneWg/rw16QFC34P9PY/rdJsSZKhnY9ALf6UaSHRGDQW8nDGjwF4QbgFEkvu54vsjABGfSJh9U0pX0RLb44p6OFAf54I24aA38ilKlv9mEEQwV6Sxk0VH8IjgukBzmvCjGLb/4674aqqACOButZeYx9DlotnmRWLewMboD114F/LOaA79k2pK2Tvu81APK+zeb0FhPvXAChQZqlhAagqzcE67CNd1jMruyml1seS8R5C8mHURQWCqTl42KtOCq6wFVfUIU/k8e3uZ2FOZCpNi5fU3HgBqjMBXiWw8lM8JmZ/lMvgADshl/5OiackgNNoNv0AY=
-X-Forefront-Antispam-Report: CIP:217.111.95.7;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(39860400002)(396003)(451199015)(36840700001)(46966006)(47076005)(426003)(83380400001)(36860700001)(86362001)(82740400003)(81166007)(356005)(2906002)(5660300002)(4001150100001)(41300700001)(8936002)(82310400005)(7416002)(9576002)(40480700001)(33716001)(36916002)(4326008)(26005)(186003)(16526019)(9686003)(336012)(316002)(8676002)(70586007)(70206006)(54906003)(478600001)(966005)(110136005)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: arri.de
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2022 13:50:57.9538
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 876608d0-0cb4-4d1d-ccd3-08dadea364e5
-X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.7];Helo=[mta.arri.de]
-X-MS-Exchange-CrossTenant-AuthSource: DB5EUR02FT054.eop-EUR02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR07MB9023
+Content-Type: text/plain
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paolo,
+On Fri, Dec 09, 2022 at 09:26, Jason Andryuk <jandryuk@gmail.com> wrote:
 
-On Thursday, 15 December 2022, 12:29:22 CET, Paolo Abeni wrote:
-> On Tue, 2022-12-13 at 15:44 +0530, Arun Ramadoss wrote:
-> > KSZ swithes used interrupts for detecting the phy link up and down.
-> > During registering the interrupt handler, it used IRQF_TRIGGER_FALLING
-> > flag. But this flag has to be retrieved from device tree instead of hard
-> > coding in the driver, 
-> 
-> Out of sheer ignorance, why?
+> xen kbdfront registers itself as being able to deliver *any* key since
+> it doesn't know what keys the backend may produce.
+>
+> Unfortunately, the generated modalias gets too large and uevent creation
+> fails with -ENOMEM.
+>
+> This can lead to gdm not using the keyboard since there is no seat
+> associated [1] and the debian installer crashing [2].
+>
+> Trim the ranges of key capabilities by removing some BTN_* ranges.
+> While doing this, some neighboring undefined ranges are removed to trim
+> it further.
+>
+> An upper limit of KEY_KBD_LCD_MENU5 is still too large.  Use an upper
+> limit of KEY_BRIGHTNESS_MENU.
+>
+> This removes:
+> BTN_DPAD_UP(0x220)..BTN_DPAD_RIGHT(0x223)
+> Empty space 0x224..0x229
+>
+> Empty space 0x28a..0x28f
+> KEY_MACRO1(0x290)..KEY_MACRO30(0x2ad)
+> KEY_MACRO_RECORD_START          0x2b0
+> KEY_MACRO_RECORD_STOP           0x2b1
+> KEY_MACRO_PRESET_CYCLE          0x2b2
+> KEY_MACRO_PRESET1(0x2b3)..KEY_MACRO_PRESET3(0xb5)
+> Empty space 0x2b6..0x2b7
+> KEY_KBD_LCD_MENU1(0x2b8)..KEY_KBD_LCD_MENU5(0x2bc)
+> Empty space 0x2bd..0x2bf
+> BTN_TRIGGER_HAPPY(0x2c0)..BTN_TRIGGER_HAPPY40(0x2e7)
+> Empty space 0x2e8..0x2ff
+>
+> The modalias shrinks from 2082 to 1550 bytes.
+>
+> A chunk of keys need to be removed to allow the keyboard to be used.
+> This may break some functionality, but the hope is these macro keys are
+> uncommon and don't affect any users.
+>
+> [1] https://github.com/systemd/systemd/issues/22944
+> [2] https://lore.kernel.org/xen-devel/87o8dw52jc.fsf@vps.thesusis.net/T/
+>
+> Cc: Phillip Susi <phill@thesusis.net>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
 
-As far as I know, some IRQF_ flags should be set through the firmware
-(e.g. device tree) instead hard coding them into the driver. On my
-platform, I have to use IRQF_TRIGGER_LOW instead of IRQF_TRIGGER_FALLING.
-If the value is hard coded into the driver, the value from the driver
-will have precedence.
+Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
-See also: https://stackoverflow.com/a/40051191
-
-> > so removing the flag.
-> 
-> It looks like the device tree currently lack such item, so this is
-> effecivelly breaking phy linkup/linkdown?
-What is "the" device tree. Do you mean the device tree for your specific
-board, or the example under 
-Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml?
-The latter doesn't mention the irq at all.
-
-BTW: In my kernel log I get the following messages:
-
-> ksz9477-switch 0-005f: configuring for fixed/rmii link mode
-> ksz9477-switch 0-005f lan0 (uninitialized): PHY [dsa-0.0:00] driver [Microchip KSZ9477] (irq=POLL)
-> ksz9477-switch 0-005f: Link is Up - 100Mbps/Full - flow control off
-> ksz9477-switch 0-005f lan1 (uninitialized): PHY [dsa-0.0:01] driver [Microchip KSZ9477] (irq=POLL)
-
-Should I see something different than "irq=POLL" when an
-irq line is provided in the device tree?
-
-regards
-Christian
-
-
-
+> ---
+>  drivers/input/misc/xen-kbdfront.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> v2:
+> Remove more keys: v1 didn't remove enough and modalias was still broken.
+>
+> diff --git a/drivers/input/misc/xen-kbdfront.c b/drivers/input/misc/xen-kbdfront.c
+> index 8d8ebdc2039b..4ecb579df748 100644
+> --- a/drivers/input/misc/xen-kbdfront.c
+> +++ b/drivers/input/misc/xen-kbdfront.c
+> @@ -256,7 +256,14 @@ static int xenkbd_probe(struct xenbus_device *dev,
+>  		__set_bit(EV_KEY, kbd->evbit);
+>  		for (i = KEY_ESC; i < KEY_UNKNOWN; i++)
+>  			__set_bit(i, kbd->keybit);
+> -		for (i = KEY_OK; i < KEY_MAX; i++)
+> +		/* In theory we want to go KEY_OK..KEY_MAX, but that grows the
+> +		 * modalias line too long.  There is a gap of buttons from
+> +		 * BTN_DPAD_UP..BTN_DPAD_RIGHT and KEY_ALS_TOGGLE is the next
+> +		 * defined. Then continue up to KEY_BRIGHTNESS_MENU as an upper
+> +		 * limit. */
+> +		for (i = KEY_OK; i < BTN_DPAD_UP; i++)
+> +			__set_bit(i, kbd->keybit);
+> +		for (i = KEY_ALS_TOGGLE; i <= KEY_BRIGHTNESS_MENU; i++)
+>  			__set_bit(i, kbd->keybit);
+>  
+>  		ret = input_register_device(kbd);
+> -- 
+> 2.38.1
