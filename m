@@ -2,158 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D43364E283
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 21:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE11064E286
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 21:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiLOUop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 15:44:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
+        id S229695AbiLOUrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 15:47:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiLOUom (ORCPT
+        with ESMTP id S229524AbiLOUrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 15:44:42 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AB24A5AE;
-        Thu, 15 Dec 2022 12:44:41 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id fc4so1363591ejc.12;
-        Thu, 15 Dec 2022 12:44:41 -0800 (PST)
+        Thu, 15 Dec 2022 15:47:12 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397414D5D4
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:47:07 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id t17so1521697eju.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:47:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EpH1P3RlFxyKcBx3qkk+aQuDUHsrkTX+VkNJj0MZ9nk=;
-        b=AgXfi8McxnsNqZ8GZGCsYsgQTdu7EDDMtLK28lLAUziqm8EPL6B8vLha8g1i3lF0O3
-         PNfsK35HiYK4IUkDDth7EVp04YQYwDKAFbL7l35TEJMlDAUYy0RbQSEz/uxuX3xalmhi
-         YeU1Wc866Omt2a6x/urZHGckziTcE0nl4ECIbu3cH3oGc/ytGU1b2eqkHqE/JIN8LhYM
-         SjdNs5Azz2+FPc6ihBCcY7vCiWJQDfl+7nw4RVkxwFcuDbtqGOArpaDpFf2qSUHRF2Ns
-         eAGfJ0yDolA2kjcl+vL9ShLqCPi90j40DH4Hk6UD36GTl/TT0aNoH7yEkOlzgcYpDnHM
-         xfzA==
+        bh=VxVyPZKSysf+HLi7nhh+VUixxCogFeRsVo86ZrnztgQ=;
+        b=hxzxmAZbiyk38wc8gz9+Ee2T8BOYtvW5SiTPnrxwx4lOkojFHNVaj0lvh5AJI9zjSp
+         z1LbbrCXSyJnMlxM2SWfndRjFiopwVhc7pMCfEsmD2JaOTOxR8rXZmrwBoHCKySl7Hvg
+         dTFJBmC7oIU/73t9a6PjJcbym1vMucF0MPJdo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EpH1P3RlFxyKcBx3qkk+aQuDUHsrkTX+VkNJj0MZ9nk=;
-        b=AuQPSrCN3oz6YuQ7e9Ais2LW7+cfRNgbLY9zbu1XcRxf4qPixBWTc52dTml7z0rAFh
-         zeokKgvGrtgmKb7+cqdqp2UmJRLLXbIRSAzukS1poAeGhywSagc9e0xbrujkuYR7RpzT
-         u2uVIxoKi6C6nGJwO6ZuNSYsrKgq4UsbkePZ3EDUT2t0EbI8Gy+pxd8GW65rwU3G7dGR
-         3biCQSEC30K76fl1BRwHGCe1p6pJyExfKnesYCOsnbaZfHy4gwfry+p6tzL5L184t1r5
-         fzmq8bf3LnVc1z/if+PxTd1gkBpRuiz+emNwJRw0beDUWYOB8uAxmmhrPPzBlVlqU4dw
-         p8PQ==
-X-Gm-Message-State: ANoB5pmcRdlIBLoBakpMFFzZ9VU1OFBEzx4KKnCM2yhXjb5GCWQfi8w3
-        dICaNkIYBzlce7Cgp0+X78XJOJaila88c1iAi0kKr9NL1JY=
-X-Google-Smtp-Source: AA0mqf4syn4QkydfKh4/1mkewiJ/X+OZHLDFxoQMOKXTJQVzy8lgz6F901sz0OOKMDtbeceZiP3PE5iZbuGAu7vB1fQ=
-X-Received: by 2002:a17:906:5dcd:b0:7c1:80c2:4b69 with SMTP id
- p13-20020a1709065dcd00b007c180c24b69mr950458ejv.75.1671137080032; Thu, 15 Dec
- 2022 12:44:40 -0800 (PST)
+        bh=VxVyPZKSysf+HLi7nhh+VUixxCogFeRsVo86ZrnztgQ=;
+        b=g1GdkBl7yGNxEQHQdX4C5++byoNbZUlqutqpS1UJFUYFqpeW2G+XliJbmvWiwi0QyE
+         Rw2voEQGHbkmTlL7G1t9cCLAgnl3p6QG5BLz2LkwrkOBL+O1EXZ7vdEuahZ9RUOX/mYC
+         mFT8SSBzVrPHluGrfmDXoE/bzSCZqFnW6ILh//YOgK2cFaEYU5EJZ6nYgFCNkGHSeq3J
+         tlxrFiIEnkAVZRdt6M0eHlbCjDyJb0xCAfMNrnDoHeuUSacup1XVy2FDf6Z9orTlIqUB
+         mFc3cpgVFHcwRQw21sKer0ThUxE85p3OQB05xiAmgt7iJwUKt0NWN1gv3di5F7NSFg3N
+         rqFA==
+X-Gm-Message-State: ANoB5pnvCYjt0PX/5CnrTh24s7GJ5p+1JSu1SiNPilox1hkBGUlQ8meB
+        Wfpa9KKj1Yv7rLWTuJ4q6F5P5m5ELmT25suGuzM=
+X-Google-Smtp-Source: AA0mqf4Cs3lUtPRGHT/nhpKGAJL3UzNoIaJQEzpIhQBTXA4MNeXwAOmEfZ6A8ZnOejdRiOqJWz8kow==
+X-Received: by 2002:a17:907:c295:b0:78d:f455:c398 with SMTP id tk21-20020a170907c29500b0078df455c398mr14447612ejc.62.1671137225623;
+        Thu, 15 Dec 2022 12:47:05 -0800 (PST)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
+        by smtp.gmail.com with ESMTPSA id y2-20020a17090614c200b007c4f32726c4sm57851ejc.133.2022.12.15.12.47.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 12:47:03 -0800 (PST)
+Received: by mail-wm1-f54.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso2742728wme.5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:47:03 -0800 (PST)
+X-Received: by 2002:a05:600c:4153:b0:3d2:191d:2427 with SMTP id
+ h19-20020a05600c415300b003d2191d2427mr176059wmm.188.1671137223155; Thu, 15
+ Dec 2022 12:47:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20221205210354.11846-1-andrew.smirnov@gmail.com>
- <20221205210354.11846-2-andrew.smirnov@gmail.com> <CADyDSO6EBuKNZFTvuuhS9VM+dy8t8HOcHyodiQR8o_uXd8gXww@mail.gmail.com>
-In-Reply-To: <CADyDSO6EBuKNZFTvuuhS9VM+dy8t8HOcHyodiQR8o_uXd8gXww@mail.gmail.com>
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Thu, 15 Dec 2022 12:44:28 -0800
-Message-ID: <CAHQ1cqE17T+8Jvo1RnQ=KB77-nf9xBJFq+h6SQDJCmbUXG=GdA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] HID: uhid: Don't send the report ID if it's zero
-To:     David Rheinsberg <david.rheinsberg@gmail.com>
-Cc:     linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20221215165453.1864836-1-arnd@kernel.org>
+In-Reply-To: <20221215165453.1864836-1-arnd@kernel.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 15 Dec 2022 12:46:51 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=U6pfSk0nY+s-p4f43Gq6-arfr8hQe8d9NC0nS0ckMYKw@mail.gmail.com>
+Message-ID: <CAD=FV=U6pfSk0nY+s-p4f43Gq6-arfr8hQe8d9NC0nS0ckMYKw@mail.gmail.com>
+Subject: Re: [PATCH] tty: serial: qcom_geni: avoid duplicate struct member init
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Aniket Randive <quic_arandive@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-)
+Hi,
 
-On Mon, Dec 12, 2022 at 7:23 AM David Rheinsberg
-<david.rheinsberg@gmail.com> wrote:
+On Thu, Dec 15, 2022 at 8:55 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> Hi
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> On Mon, 5 Dec 2022 at 22:04, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
-> >
-> > Report ID of zero is a special case handling ID-less reports and in
-> > that case we should omit report ID from the payload being sent to the
-> > backend.
-> >
-> > Without this change UHID_DEV_NUMBERED_{FEATURE,OUTPUT}_REPORTS doesn't
-> > represent a semantical difference.
-> >
-> > Cc: David Rheinsberg <david.rheinsberg@gmail.com>
-> > Cc: Jiri Kosina <jikos@kernel.org>
-> > Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > Cc: linux-input@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: linux-usb@vger.kernel.org
-> > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> > ---
-> >  drivers/hid/uhid.c | 15 ++++++++++++---
-> >  1 file changed, 12 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/hid/uhid.c b/drivers/hid/uhid.c
-> > index 2a918aeb0af1..7551120215e8 100644
-> > --- a/drivers/hid/uhid.c
-> > +++ b/drivers/hid/uhid.c
-> > @@ -273,11 +273,11 @@ static int uhid_hid_get_report(struct hid_device *hid, unsigned char rnum,
-> >  }
-> >
-> >  static int uhid_hid_set_report(struct hid_device *hid, unsigned char rnum,
-> > -                              const u8 *buf, size_t count, u8 rtype)
-> > +                              u8 *buf, size_t count, u8 rtype)
-> >  {
-> >         struct uhid_device *uhid = hid->driver_data;
-> >         struct uhid_event *ev;
-> > -       int ret;
-> > +       int ret, skipped_report_id = 0;
-> >
-> >         if (!READ_ONCE(uhid->running) || count > UHID_DATA_MAX)
-> >                 return -EIO;
-> > @@ -286,6 +286,15 @@ static int uhid_hid_set_report(struct hid_device *hid, unsigned char rnum,
-> >         if (!ev)
-> >                 return -ENOMEM;
-> >
-> > +       /* Byte 0 is the report number. Report data starts at byte 1.*/
-> > +       buf[0] = rnum;
-> > +       if (buf[0] == 0x0) {
-> > +               /* Don't send the Report ID */
-> > +               buf++;
-> > +               count--;
-> > +               skipped_report_id = 1;
-> > +       }
-> > +
+> When -Woverride-init is enabled in a build, gcc points out that
+> qcom_geni_serial_pm_ops contains conflicting initializers:
 >
-> In HID core, the buffer is filled by a call to hid_output_report() in
-> __hid_request(). And hid_output_report() only writes the ID if it is
-> non-zero. So your patch looks like it is duplicating this logic?
-
-It would be in this scenario. But then I think it also means that
-USBHID will incorrectly strip an extra byte of the payload if it's
-zero for reports that don't have a report id, right? So maybe the fix
-for this is to get rid of payload adjustment in set/send paths in
-USBHID and move the adjustment to hidraw?
-
-> In which scenario is the report-ID not skipped exactly?
-
-The call chain in my use case is as follows:
-
-hidraw_ioctl(HIDIOCSFEATURE) -> hid_hw_raw_request() ->
-uhid_hid_raw_request() -> uhid_hid_set_report()
-
+> drivers/tty/serial/qcom_geni_serial.c:1586:20: error: initialized field overwritten [-Werror=override-init]
+>  1586 |         .restore = qcom_geni_serial_sys_hib_resume,
+>       |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/tty/serial/qcom_geni_serial.c:1586:20: note: (near initialization for 'qcom_geni_serial_pm_ops.restore')
+> drivers/tty/serial/qcom_geni_serial.c:1587:17: error: initialized field overwritten [-Werror=override-init]
+>  1587 |         .thaw = qcom_geni_serial_sys_hib_resume,
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 >
-> Regardless, if you want to mess with the buffer, you should do that
-> after the memcpy(). I don't see why we should mess with the buffer
-> from HID core, when we have our own, anyway.
+> Open-code the initializers with the version that was already used,
+> and use the pm_sleep_ptr() method to deal with unused ones,
+> in place of the __maybe_unused annotation.
 >
+> Fixes: 35781d8356a2 ("tty: serial: qcom-geni-serial: Add support for Hibernation feature")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/tty/serial/qcom_geni_serial.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index b487823f0e61..03dda47184d9 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -1516,7 +1516,7 @@ static int qcom_geni_serial_remove(struct platform_device *pdev)
+>         return 0;
+>  }
+>
+> -static int __maybe_unused qcom_geni_serial_sys_suspend(struct device *dev)
+> +static int qcom_geni_serial_sys_suspend(struct device *dev)
 
-I was just mimicking code from USBHID, to make it clear it served the
-same purpose, that
+Officially the removal of "__maybe_unused" could be a totally
+different patch, right? SET_SYSTEM_SLEEP_PM_OPS() already eventually
+used pm_sleep_ptr() even without your change, so the removal of these
+tags is unrelated to the rest of your change, right?
 
-buf[0] = rnum;
 
-isn't strictly necessary and could be dropped.
+>  {
+>         struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
+>         struct uart_port *uport = &port->uport;
+> @@ -1533,7 +1533,7 @@ static int __maybe_unused qcom_geni_serial_sys_suspend(struct device *dev)
+>         return uart_suspend_port(private_data->drv, uport);
+>  }
+>
+> -static int __maybe_unused qcom_geni_serial_sys_resume(struct device *dev)
+> +static int qcom_geni_serial_sys_resume(struct device *dev)
+>  {
+>         int ret;
+>         struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
+> @@ -1581,10 +1581,12 @@ static int qcom_geni_serial_sys_hib_resume(struct device *dev)
+>  }
+>
+>  static const struct dev_pm_ops qcom_geni_serial_pm_ops = {
+> -       SET_SYSTEM_SLEEP_PM_OPS(qcom_geni_serial_sys_suspend,
+> -                                       qcom_geni_serial_sys_resume)
+> -       .restore = qcom_geni_serial_sys_hib_resume,
+> -       .thaw = qcom_geni_serial_sys_hib_resume,
+> +       .suspend = pm_sleep_ptr(qcom_geni_serial_sys_suspend),
+> +       .resume = pm_sleep_ptr(qcom_geni_serial_sys_resume),
+> +       .freeze = pm_sleep_ptr(qcom_geni_serial_sys_suspend),
+> +       .poweroff = pm_sleep_ptr(qcom_geni_serial_sys_suspend),
+> +       .restore = pm_sleep_ptr(qcom_geni_serial_sys_hib_resume),
+> +       .thaw = pm_sleep_ptr(qcom_geni_serial_sys_hib_resume),
+
+Personally, the order you listed them is less intuitive than the order
+that SET_SYSTEM_SLEEP_PM_OPS() lists functions. IMO it's better to
+consistently alternate matching suspend/resume functions. ;-)
+
+Both of those are nits, so I'm also fine with:
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
