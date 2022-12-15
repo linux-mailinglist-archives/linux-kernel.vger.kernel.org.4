@@ -2,95 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC1364D9BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B092064D9C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiLOKuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 05:50:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
+        id S229471AbiLOKv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 05:51:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiLOKuf (ORCPT
+        with ESMTP id S229745AbiLOKvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 05:50:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EA22B274;
-        Thu, 15 Dec 2022 02:50:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43C3461CE0;
-        Thu, 15 Dec 2022 10:50:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E34C433EF;
-        Thu, 15 Dec 2022 10:50:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671101430;
-        bh=0tc8CxRTfC5rdugzN4jzLVxBoOycbgCTK5F8bKMJ9OY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gs66ooJqpNjWolvbm7j/gPGp2jEb3N7H2wVX6UJetNFK1WnUOkkN3qd4/eB+oKB+N
-         oxIDFCMbDoiYgr3MBRrD1w9q7mfd8YTCWP7ILz0G9qZYMQQ1gPke3rGO/AJysQfmv9
-         yWmg1sQbS2rquL30Vbo1p01cHJZhp44oNrHj08Bc3VfZvcu1G1SBjEUfP2I0Irj9cI
-         +pwycLOXOAWHiVjzS6KAXcAfftp9FcBD5Nv0AZVWriuHrfH+mXDAeX7P+tLkYmjDpv
-         D8ToXT0NLnIm08NoZz2/keL79quD3qMtxaHCpLpXK0gQeoOoV//hpvXCaJb5iEMpyV
-         Q+DN86iI3Z0gQ==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1p5loq-00CpAU-89;
-        Thu, 15 Dec 2022 10:50:28 +0000
+        Thu, 15 Dec 2022 05:51:52 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A15DBE;
+        Thu, 15 Dec 2022 02:51:51 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFAkA6B022392;
+        Thu, 15 Dec 2022 10:51:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=mime-version : date :
+ from : to : cc : subject : reply-to : in-reply-to : references :
+ message-id : content-type : content-transfer-encoding; s=pp1;
+ bh=/WJkFpYLA65qNga5mPVHx+sBgGM72eHalXyjc4AKLSM=;
+ b=aIUqakxRt4s/+DH/B+zsMGiyezkiFN2MDppIOn3b/5QgIzdh6eERKi/iviKujS5rYaBl
+ Vf1nZSEj4w5+ZWsw4MLeB7/Q4Y5A4Shl3Dhe4rqpu0tlCjoQ9GelTd1i8h7Lrf3fj3Q6
+ 84DDXnlJXEuGEnEMa50WrwcMUb3kYjK26sP1i85uazV9kqMoa++DQIysvq5K3j/VY9en
+ 2Moz6+5yf7HoJmC98BrLWTL1v7M7wzusmCVQo2uvM69Jb/O61OSskesUVgFiHlrPptH3
+ jLGywsEk2If+UvZlMUG8uAshBZWrHPWJmh71H870CVrNF0+qR0W7/jGVJOFk7gthVlch Dg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg24a0444-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 10:51:44 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BFAlDn3024896;
+        Thu, 15 Dec 2022 10:51:44 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg24a0433-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 10:51:44 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BF8Hl3Y011789;
+        Thu, 15 Dec 2022 10:51:43 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3meyyhw613-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 10:51:43 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BFApfeM4915954
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Dec 2022 10:51:41 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BA07C58065;
+        Thu, 15 Dec 2022 10:51:41 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3F3B25805A;
+        Thu, 15 Dec 2022 10:51:41 +0000 (GMT)
+Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 15 Dec 2022 10:51:41 +0000 (GMT)
 MIME-Version: 1.0
-Date:   Thu, 15 Dec 2022 10:50:28 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Jagan Teki <jagan@edgeble.ai>
-Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kever Yang <kever.yang@rock-chips.com>, kernel@collabora.com,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        Sugar Zhang <sugar.zhang@rock-chips.com>
-Subject: Re: [PATCHv6 3/7] arm64: dts: rockchip: Add base DT for rk3588 SoC
-In-Reply-To: <CA+VMnFzMgOC7sgcpQ7nZx2gaJfqqvRu8RxETguaBHN1Lg_nG_w@mail.gmail.com>
-References: <20221214182247.79824-1-sebastian.reichel@collabora.com>
- <20221214182247.79824-4-sebastian.reichel@collabora.com>
- <CA+VMnFzMgOC7sgcpQ7nZx2gaJfqqvRu8RxETguaBHN1Lg_nG_w@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <9a3cf2f1567f2a5990ed6dea9d6a5669@kernel.org>
-X-Sender: maz@kernel.org
+Date:   Thu, 15 Dec 2022 11:51:41 +0100
+From:   Harald Freudenberger <freude@linux.ibm.com>
+To:     Tony Krowiak <akrowiak@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, jjherne@linux.ibm.com, borntraeger@de.ibm.com,
+        cohuck@redhat.com, mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com
+Subject: Re: [PATCH 3/7] s390/vfio_ap: use TAPQ to verify reset in progress
+ completes
+Reply-To: freude@linux.ibm.com
+Mail-Reply-To: freude@linux.ibm.com
+In-Reply-To: <20221213154437.15480-4-akrowiak@linux.ibm.com>
+References: <20221213154437.15480-1-akrowiak@linux.ibm.com>
+ <20221213154437.15480-4-akrowiak@linux.ibm.com>
+Message-ID: <2541e0d3d4fb38af995e8bd91a34986d@linux.ibm.com>
+X-Sender: freude@linux.ibm.com
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: jagan@edgeble.ai, sebastian.reichel@collabora.com, heiko@sntech.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org, chris.obbard@collabora.com, benjamin.gaignard@collabora.com, linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, kever.yang@rock-chips.com, kernel@collabora.com, yifeng.zhao@rock-chips.com, zhangqing@rock-chips.com, sugar.zhang@rock-chips.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: XmT7JLhQ6ffq5hc-cRADki9C7VoYpLxA
+X-Proofpoint-ORIG-GUID: bl4qR1ZHy5FpDSG-lRpUFbDpAxnO3Mwr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-15_05,2022-12-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
+ clxscore=1015 spamscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0
+ phishscore=0 impostorscore=0 bulkscore=0 priorityscore=1501 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212150080
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-15 10:45, Jagan Teki wrote:
+On 2022-12-13 16:44, Tony Krowiak wrote:
+> To eliminate the repeated calls to the PQAP(ZAPQ) function to verify 
+> that
+> a reset in progress completed successfully and ensure that error 
+> response
+> codes get appropriately logged, let's call the apq_reset_check() 
+> function
+> when the ZAPQ response code indicates that a reset that is already in
+> progress.
+> 
+> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
+> ---
+>  drivers/s390/crypto/vfio_ap_ops.c | 24 +++++++++++++-----------
+>  1 file changed, 13 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/s390/crypto/vfio_ap_ops.c
+> b/drivers/s390/crypto/vfio_ap_ops.c
+> index a5530a46cf31..5bf2d93ae8af 100644
+> --- a/drivers/s390/crypto/vfio_ap_ops.c
+> +++ b/drivers/s390/crypto/vfio_ap_ops.c
+> @@ -33,7 +33,7 @@
+>  static int vfio_ap_mdev_reset_queues(struct ap_queue_table *qtable);
+>  static struct vfio_ap_queue *vfio_ap_find_queue(int apqn);
+>  static const struct vfio_device_ops vfio_ap_matrix_dev_ops;
+> -static int vfio_ap_mdev_reset_queue(struct vfio_ap_queue *q, unsigned
+> int retry);
+> +static int vfio_ap_mdev_reset_queue(struct vfio_ap_queue *q);
+> 
+>  /**
+>   * get_update_locks_for_kvm: Acquire the locks required to dynamically 
+> update a
+> @@ -1632,8 +1632,7 @@ static int apq_reset_check(struct vfio_ap_queue 
+> *q)
+>  	return ret;
+>  }
+> 
+> -static int vfio_ap_mdev_reset_queue(struct vfio_ap_queue *q,
+> -				    unsigned int retry)
+> +static int vfio_ap_mdev_reset_queue(struct vfio_ap_queue *q)
+>  {
+>  	struct ap_queue_status status;
+>  	int ret;
+> @@ -1648,12 +1647,15 @@ static int vfio_ap_mdev_reset_queue(struct
+> vfio_ap_queue *q,
+>  		ret = 0;
+>  		break;
+>  	case AP_RESPONSE_RESET_IN_PROGRESS:
+> -		if (retry--) {
+> -			msleep(20);
+> -			goto retry_zapq;
+> -		}
+> -		ret = -EBUSY;
+> -		break;
+> +		/*
+> +		 * There is a reset issued by another process in progress. Let's 
+> wait
+> +		 * for that to complete. Since we have no idea whether it was a RAPQ 
+> or
+> +		 * ZAPQ, then if it completes successfully, let's issue the ZAPQ.
+> +		 */
+> +		ret = apq_reset_check(q);
+> +		if (ret)
+> +			break;
+> +		goto retry_zapq;
+>  	case AP_RESPONSE_Q_NOT_AVAIL:
+>  	case AP_RESPONSE_DECONFIGURED:
+>  	case AP_RESPONSE_CHECKSTOPPED:
+> @@ -1688,7 +1690,7 @@ static int vfio_ap_mdev_reset_queues(struct
+> ap_queue_table *qtable)
+>  	struct vfio_ap_queue *q;
+> 
+>  	hash_for_each(qtable->queues, loop_cursor, q, mdev_qnode) {
+> -		ret = vfio_ap_mdev_reset_queue(q, 1);
+> +		ret = vfio_ap_mdev_reset_queue(q);
+>  		/*
+>  		 * Regardless whether a queue turns out to be busy, or
+>  		 * is not operational, we need to continue resetting
+> @@ -1931,7 +1933,7 @@ void vfio_ap_mdev_remove_queue(struct ap_device 
+> *apdev)
+>  		}
+>  	}
+> 
+> -	vfio_ap_mdev_reset_queue(q, 1);
+> +	vfio_ap_mdev_reset_queue(q);
+>  	dev_set_drvdata(&apdev->device, NULL);
+>  	kfree(q);
+>  	release_update_locks_for_mdev(matrix_mdev);
 
-> One nick with dtbs_check,
-> ethernet@fe1c0000: Unevaluated properties are not allowed ('reg',
-> 'interrupts', 'interrupt-names', 'power-domains', 'resets',
-> 'reset-names', 'snps,axi-config', 'snps,mixed-burst',
-> 'snps,mtl-rx-config', 'snps,mtl-tx-config', 'snps,tso', 'mdio',
-> 'stmmac-axi-config', 'rx-queues-config', 'tx-queues-config' were
-> unexpected)
-
-You did read the cover letter, right?
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
+Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
