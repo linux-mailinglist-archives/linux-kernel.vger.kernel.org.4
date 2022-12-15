@@ -2,90 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D3764E300
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C853B64E2FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiLOVVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 16:21:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
+        id S229910AbiLOVUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 16:20:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbiLOVUa (ORCPT
+        with ESMTP id S230155AbiLOVUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 16:20:30 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0DB59142
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 13:20:29 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id s9so907630qtx.6
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 13:20:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WXDb+EX2ESKhrLmNgSh5O2/NUh9lzJ+wI1bqpoxRmT0=;
-        b=YMDPnqtxIuxI1neTIAkMie4TAPfpOyhgO1ssJYOURo7uBlTUQR92WuobhFc/uthRdy
-         45pE4mHMxHqBiXQzVmrHddcoOG8L2BzwD/hQUxgy4PgIMWsZTDFSbiZSDydig7xY6yOL
-         azBFjJ9fV0w25rmhw3v2L9GT2ieCPa5C09LGE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WXDb+EX2ESKhrLmNgSh5O2/NUh9lzJ+wI1bqpoxRmT0=;
-        b=5ZIbAAKPAOvShkWnB4+6DBX8eWwtvQoD6ZyNaBg50AWMSsJNGn0WT5O9fshGT6+qvz
-         d0sNnadaiMXiJCZ8OiTyIHKiAWtEVfL8ctpbkRbllOIjRJ0vIOyvx+86kOevr/J9l0rb
-         nFaW/qa7fMOU35iu352wg4zl/hQaYQYdmlKU0gpHNElhbOlrgoOwMYopdZO39cXgaMu+
-         3xne4CD0OD/2bigUkAa7UxEdhujuQzv50nYtA2lOxZX/LdxoA4cwhWl9sNQzTcxUAlmG
-         8Uq1q78U1yeqZ9WhMORGk6Qru4WxbnsTQJ0vHWOmn7PNrMfQFvYgJgvS2ZrmdK2MDV5N
-         Ufhw==
-X-Gm-Message-State: ANoB5pmyWdBntm/kasglUg/khb2YpJbj5nR2WE0FwRLVYe2jauC9AASG
-        9crwf5blUhynTUcHkUxLnGs+f6LBRDt0x593
-X-Google-Smtp-Source: AA0mqf7PWEf6oR5P1urYc+UKt038/Y+GQmHvkydm3mouXMpgg13ANWrP8jGg63uWadDlio8lLosWIQ==
-X-Received: by 2002:ac8:6ed0:0:b0:3a8:27b9:5e18 with SMTP id f16-20020ac86ed0000000b003a827b95e18mr14730220qtv.67.1671139228585;
-        Thu, 15 Dec 2022 13:20:28 -0800 (PST)
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com. [209.85.222.170])
-        by smtp.gmail.com with ESMTPSA id x30-20020a05620a0b5e00b006fc94f65417sm23834qkg.40.2022.12.15.13.20.27
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 13:20:27 -0800 (PST)
-Received: by mail-qk1-f170.google.com with SMTP id k2so117132qkk.7
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 13:20:27 -0800 (PST)
-X-Received: by 2002:ae9:ef48:0:b0:6fe:d4a6:dcef with SMTP id
- d69-20020ae9ef48000000b006fed4a6dcefmr11108076qkg.594.1671139226956; Thu, 15
- Dec 2022 13:20:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20221215132415.07f82cda.alex.williamson@redhat.com>
-In-Reply-To: <20221215132415.07f82cda.alex.williamson@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 15 Dec 2022 13:20:11 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whQ48-RsU85vM+Kwi=pRNU9fX8JXmooqx4=c1QYOjv2uw@mail.gmail.com>
-Message-ID: <CAHk-=whQ48-RsU85vM+Kwi=pRNU9fX8JXmooqx4=c1QYOjv2uw@mail.gmail.com>
+        Thu, 15 Dec 2022 16:20:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DAC5C0EF;
+        Thu, 15 Dec 2022 13:20:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AA8461DF3;
+        Thu, 15 Dec 2022 21:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D17B9C433D2;
+        Thu, 15 Dec 2022 21:20:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671139215;
+        bh=GP7shHdk1ZTDNP6SobUegK31SbYKyc/TR/tgYY6unRA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=n2C1FIlw7w2qhL9JVQ0Zf3DlotraAbcUMhAYI5MOxOzy87RCCrpEAdLELZNKE98KD
+         VzJZf+BprILlsOGCqeZgtDCLxxRDiYum2B43d4QR7OxXqqIbOYbMZhBWUB3881LoYC
+         8w3Ydclmq+t/axcXl0Dt171tPvb/tV//uafVthtDlx0ap6j1kQVEAfWbFq8uG/MxNT
+         KJQKFQ3bDkIfhrcd56yqnnx50SmV4GqigGF1i9uvLcuSMr9/OJvEwMMWQToApErxxI
+         zN3C5luweYG315/BRWVD0Fg8y8+5kNr9hLO/uY647NsoCAM1aWbSrN6XkdHorMdw9C
+         234UG6l2xy7kw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AD7ADE4D028;
+        Thu, 15 Dec 2022 21:20:15 +0000 (UTC)
 Subject: Re: [GIT PULL] VFIO updates for v6.2-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221215132415.07f82cda.alex.williamson@redhat.com>
+References: <20221215132415.07f82cda.alex.williamson@redhat.com>
+X-PR-Tracked-List-Id: <kvm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221215132415.07f82cda.alex.williamson@redhat.com>
+X-PR-Tracked-Remote: https://github.com/awilliam/linux-vfio.git tags/vfio-v6.2-rc1
+X-PR-Tracked-Commit-Id: 70be6f322860d322ebcd120cf0c05402ead5c6de
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 785d21ba2f447fb26df4b22f45653763beb767ea
+Message-Id: <167113921567.15818.18296679987223463629.pr-tracker-bot@kernel.org>
+Date:   Thu, 15 Dec 2022 21:20:15 +0000
 To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
         "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 12:24 PM Alex Williamson
-<alex.williamson@redhat.com> wrote:
->
-> I've provided resolution of the conflict chunks here below
-> the diffstat.
+The pull request you sent on Thu, 15 Dec 2022 13:24:15 -0700:
 
-Ok, mine is slightly different, but the differences seem to be either
-irrelevant ordering differences (in the Makefile), and due to Jason
-apparently renaming the goto targets which I didn't do.
+> https://github.com/awilliam/linux-vfio.git tags/vfio-v6.2-rc1
 
-But hey,. maybe I messed up, so please do check out it and test. I
-verified that it all builds cleanly for me, but that's all the testing
-it has gotten.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/785d21ba2f447fb26df4b22f45653763beb767ea
 
-            Linus
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
