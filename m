@@ -2,120 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2359264D75F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6005E64D761
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiLOHkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 02:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
+        id S229749AbiLOHkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 02:40:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiLOHkM (ORCPT
+        with ESMTP id S229971AbiLOHkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 02:40:12 -0500
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E76230F6D
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 23:40:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=MXbGZi/uT236kTlDo/a7an6Zgc9j
-        j3vGUMDH7t/LADA=; b=NC7nWVv6RWI3U1eApcT+54ZynNQXYEgXlKVQ/3SNNsLt
-        hig76LkqBM78+BElQycqYB3XWnoZhqPCPs+wG29f5o3yef5ynQ/YEKg0xCgzh80u
-        MhhkJkO6hfcaron+Nhx4La68lWsVZovpG2+msxcQTO9YmzQX7D4PIMkzH5FczSA=
-Received: (qmail 2279799 invoked from network); 15 Dec 2022 08:40:08 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Dec 2022 08:40:08 +0100
-X-UD-Smtp-Session: l3s3148p1@vr1R9tjvOo4ujnt8
-Date:   Thu, 15 Dec 2022 08:40:07 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: Re: [PATCH 3/4] mmc: renesas_sdhi: Add RZ/V2M compatible string
-Message-ID: <Y5rPV0m5+8Dh6Bfe@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-References: <20221213230129.549968-1-fabrizio.castro.jz@renesas.com>
- <20221213230129.549968-4-fabrizio.castro.jz@renesas.com>
+        Thu, 15 Dec 2022 02:40:37 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A512CE38
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 23:40:27 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id b24-20020a056602219800b006e2bf9902cbso5236224iob.4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 23:40:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=beK/RyAk6JMkokDhacR9sWsAak3KfcE5cJn8YM9YfXo=;
+        b=GhKovFpleML+7ohekDp4tte2fnkoZqqOoNkIVKLMW1u/QrF2Dc1PVuczq+il+geFcA
+         AjautJ1vuSLUQd1Wj33ACxEOkYfHA5br0PgXU04Z22zdP53+C3PPJMcMFcQm3QYCnDWO
+         MrDv53buhnSp06WtXmKtOIRky7R/Sc25EVCCV/e5HEeCDPbOgkG2hHAMzvLQNoEe6sy+
+         J2e7BzZhRGNtvuVDiQrPnbNLy/3bB9L4EQRfM0D//7khghlNSZXruQUVIW6+pzRbipzA
+         9LHPNawKdp5a6rgdXUMHtVOfUZZZI7xpPvfyFFnMlXv4h16Z+MmTNwN4bzVx0aKEoPJo
+         YS/g==
+X-Gm-Message-State: ANoB5pkdGFMBI6rfINSgUqvog5lH+DELGgNOUbgEDFEXNHzg3nEsWxVX
+        1ruKzfTHfLCdSlDE1i6u/DSuRBgKqQuTB9hB9TerFZI1ntCj
+X-Google-Smtp-Source: AA0mqf5rjfC/qHzBvbu7vKT0UKU/G6DITpJJBSIEAgiV6RtdAfbCITH1DkIU9vyJGn1MMqwemKr6tiKHOU5jYJpBwRmrXrdiIwT2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="IfgYU8RXIPQ3Ptmi"
-Content-Disposition: inline
-In-Reply-To: <20221213230129.549968-4-fabrizio.castro.jz@renesas.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d185:0:b0:303:898e:3cf7 with SMTP id
+ z5-20020a92d185000000b00303898e3cf7mr4300613ilz.136.1671090027173; Wed, 14
+ Dec 2022 23:40:27 -0800 (PST)
+Date:   Wed, 14 Dec 2022 23:40:27 -0800
+In-Reply-To: <000000000000f2b07b05d5dc87cc@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000075205005efd8f711@google.com>
+Subject: Re: [syzbot] general protection fault in fscache_free_cookie
+From:   syzbot <syzbot+5b129e8586277719bab3@syzkaller.appspotmail.com>
+To:     dhowells@redhat.com, dvyukov@google.com,
+        linux-cachefs-bounces@redhat.com, linux-cachefs-owner@redhat.com,
+        linux-cachefs@redhat.com, linux-kernel@vger.kernel.org,
+        mudongliangabcd@gmail.com, nogikh@google.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---IfgYU8RXIPQ3Ptmi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Dec 13, 2022 at 11:01:28PM +0000, Fabrizio Castro wrote:
-> The SDHI/eMMC IPs found with the RZ/V2M (a.k.a. r9a09g011), are
-> very similar to the ones found in R-Car Gen3, but they are not
-> exactly the same, and as a result need an SoC specific compatible
-> string for fine tuning driver support.
->=20
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-> +static const struct renesas_sdhi_quirks sdhi_quirks_r9a09g011 =3D {
-> +	.fixed_addr_mode =3D true,
-> +	.hs400_disabled =3D true,
-> +};
-
-Cool, seems like our quirk abstraction works reasonably well :)
-
-
---IfgYU8RXIPQ3Ptmi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmOaz1cACgkQFA3kzBSg
-Kbaw2RAAgL3RbR6t3/4u7yW4JYFKMjdthimKC9C2pKEy5N0poM/F/cTzTfFn+FTO
-qTkPwmcPKEUSNa0QUwGQ3wFDpFEEm4MV/86p+uaYzQV7XLp5Xcbx3g7de15FC8mf
-kU9UrLeWZg9ut62WaV9TVxo5lsiml1iGuG1/LsFkNy49OHqHY1ZHr7+NwcQDwAst
-toexiP4n2F47ZpW/JGubvZvbmuac+6Df6VzNaggfRj+q68hqjOmC42uQ3timJe7w
-Ts7/TgETLtSFMSHN5CKBUeNVzdumKIHX3DwHn/vSC8c+0SvW5QAu0/JiUc5ievx/
-jRvEr3t3WoHh7E3S9EUmQFI5MMOwob4atl7aGM887Ic8Fkhd2w9rcyJsqFV9aDlE
-C6TvVi5dwTC5wh5iOM5HroqnrXaf4btXMirULevey6pkM6nh93v20RRdJg1zNAFh
-Mz7d2/gJolSpNlkyhsOj3Ot4JxydIRtHfV9VsujzBYbTgrnW8IGsnjxTneg4J+Xf
-bwHGWjz1yqAjlbAf4P0dOgvjOqbRybWI0/2JW2JLseqOHBVOn2iiS1Oi4RogYNaf
-RwiCa+Bre4li1HVU1/WzD9ZrQdzG6Mj3a2bnj0Dam4HpuW507b+SjevZmeQHN2lz
-3s/8jJbWUgLEZMMo7QReNMB+TbspE3I81CZgeNTUpOT/qBz1EOA=
-=J7AR
------END PGP SIGNATURE-----
-
---IfgYU8RXIPQ3Ptmi--
+This bug is marked as fixed by commit:
+fscache: fix GPF in fscache_free_cookie
+But I can't find it in any tested tree for more than 90 days.
+Is it a correct commit? Please update it by replying:
+#syz fix: exact-commit-title
+Until then the bug is still considered open and
+new crashes with the same signature are ignored.
