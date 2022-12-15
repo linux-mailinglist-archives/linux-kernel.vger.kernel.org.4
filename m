@@ -2,95 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F7364D52B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 03:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2242A64D53B
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 03:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiLOCCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 21:02:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
+        id S229575AbiLOCHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 21:07:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiLOCCF (ORCPT
+        with ESMTP id S229632AbiLOCHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 21:02:05 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9F933C26
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 18:02:04 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so1202185pje.5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 18:02:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=M4lAe37d4fe+tyUc8VHnbsRTRPV2Q4pwHpZC+HfReys=;
-        b=P35Nvhay6le5agNzNBEf8tekkHeu302a1sZXUJjDHaHDcC4xuOBspDQ0c6+u4Yfmmt
-         CGlQgMXlPJre6tr1YVR1CoIGOj417kUiP5Q3KzTnd5UOfRfn16ny8tUjjEYR5ifJCXq9
-         I7OGH7ect7bPCKpW6zc+LE11luOwJFi01LA7L+NLV2g3amhincPz8mcProN3oUMxMmvi
-         zaqrSYO92XpohfzlK2pZ1GzQvikFoe6Z/1sCbNqV4h+ZAz3QpkmfawBn75Ejmrtt6u6N
-         0dY2xWJqj+zxjIvTHHj2FkZVaoge+YVxBF0jgrwUpLXkApm0l4SAEBzl8n4u45iKS7OQ
-         Bjmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M4lAe37d4fe+tyUc8VHnbsRTRPV2Q4pwHpZC+HfReys=;
-        b=vLPrZgq1Hx+A3mJ0jtY8nvOrntRZ6QlSv8I04Ws3r6LSKNMB8lYOzrbFN9gVHt3mxY
-         rjUDJ+oprnn9VxHrP57qPfgRvn6ZBppk0kAzMoPU+9gdfdxwBPg2O6+6dnMsZkP+4K9K
-         3wKmcjJ5kebGu/cpAGI9oIuAd8gG77Zs5TT4ISQpyisB+z1wc/OjzqYVCQSFo4oxfPV9
-         TmFJQ3cm+hbG1a1KfBG/g8V1xprNQzxQJ/AjzCBM5LcUOz5seECoqGHqM8YF5vgZttaT
-         pz96jCbLM1jtoyN+1UAInvraRkRGGYTZ8Xo7FphDlHzBNl0xReB+taTN1k4Z0h0LvsN/
-         lMEA==
-X-Gm-Message-State: ANoB5pkjy8RMYALDmsX9I81Wxj0wrRtVM2n3OoVph8FFz7Xm0HaLioBI
-        5by4//xTpqsw5+NFvFNpn6OwbhI+PxrLqIZPWfEK7A==
-X-Google-Smtp-Source: AA0mqf5lj8c+Euh5wut1OwbP8aDqao93ETSKHYwJ3K6sefUbg3ZyS+xBinIIALWXZSKFDvNccQwaPw==
-X-Received: by 2002:a17:902:8347:b0:189:4bf4:2cfc with SMTP id z7-20020a170902834700b001894bf42cfcmr26691302pln.31.1671069724116;
-        Wed, 14 Dec 2022 18:02:04 -0800 (PST)
-Received: from ubuntu-haifeng.default.svc.cluster.local ([101.127.248.173])
-        by smtp.gmail.com with ESMTPSA id q8-20020a170902a3c800b00174c1855cd9sm2464431plb.267.2022.12.14.18.01.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 18:02:02 -0800 (PST)
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-To:     brauner@kernel.org
-Cc:     ebiederm@xmission.com, tglx@linutronix.de, luto@kernel.org,
-        bigeasy@linutronix.de, akpm@linux-foundation.org,
-        fenghua.yu@intel.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, Haifeng Xu <haifeng.xu@shopee.com>
-Subject: [PATCH] fork: Avoid inherit PF_IO_WORKER flag
-Date:   Thu, 15 Dec 2022 02:01:22 +0000
-Message-Id: <20221215020122.762684-1-haifeng.xu@shopee.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 14 Dec 2022 21:07:06 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DC336C42;
+        Wed, 14 Dec 2022 18:07:05 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BELoELT007319;
+        Thu, 15 Dec 2022 02:06:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=gE007DxYZgdgs2mVn1V5/kYJmCVeBF+/XYbJuzRSCfs=;
+ b=U95QCCl3JNSo7AE8GJeAgCSbEUiKI6YcqL/JbsDUIFFSB3eyJSEZyvTQ/WPkLlgoBaHB
+ Ehy9txYSaq4pRcYSbpQyDao44EM2E4UunhyWFPZ6MdvFycnNVhlXONbdxIlR+WdncMkF
+ VnkOx5VE6tGLmw+elYSOscjRcACX2LT0G81BFLkmGYP95RJLzu5T3Ed/dNVSZUsCDTKf
+ 1cw/u39VFMyefyx/GH93gic3XFZCpFH2TvNvU16kJZTZ+/p/4LTzyG891vKiKlJZ1UAK
+ Uuz5c73OfdZpjQjr5Nlyo6S9phTplHUJtFvhcmTH7/+whBGvz2M9wJG+hS8qMFPG/QAP UQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6rkjy79-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 02:06:42 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BF26f3I022214
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 02:06:41 GMT
+Received: from [10.253.35.151] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 14 Dec
+ 2022 18:06:37 -0800
+Message-ID: <4ebba197-b6b8-8acc-d5dc-e4b36c17a4c1@quicinc.com>
+Date:   Thu, 15 Dec 2022 10:06:22 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+Subject: Re: [PATCH v2 2/3] ufs: core: mcq: Add Event Specific Interrupt
+ enable and config APIs
+To:     Bart Van Assche <bvanassche@acm.org>, <quic_asutoshd@quicinc.com>,
+        <mani@kernel.org>, <stanley.chu@mediatek.com>,
+        <adrian.hunter@intel.com>, <beanhuo@micron.com>,
+        <avri.altman@wdc.com>, <junwoo80.lee@samsung.com>,
+        <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        "open list" <linux-kernel@vger.kernel.org>
+References: <1670990763-30806-1-git-send-email-quic_cang@quicinc.com>
+ <1670990763-30806-3-git-send-email-quic_cang@quicinc.com>
+ <1e224fa1-7cb3-25cb-8e63-df42b137e96a@acm.org>
+Content-Language: en-US
+From:   Can Guo <quic_cang@quicinc.com>
+In-Reply-To: <1e224fa1-7cb3-25cb-8e63-df42b137e96a@acm.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Pmb9Y0qZE_EftX02cQRFi07XvVrRn1TT
+X-Proofpoint-ORIG-GUID: Pmb9Y0qZE_EftX02cQRFi07XvVrRn1TT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-14_12,2022-12-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 bulkscore=0
+ adultscore=0 suspectscore=0 mlxlogscore=819 mlxscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212150013
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-copy_process examines arguments in kernel_clone_args to see if
-PF_IO_WORKER need to be set, so the flag should not inherit from
-parent process.
+Hi Bart,
 
-Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
----
- kernel/fork.c | 1 +
- 1 file changed, 1 insertion(+)
+On 12/15/2022 9:05 AM, Bart Van Assche wrote:
+> On 12/13/22 20:06, Can Guo wrote:
+>> Add two APIs to enable ESI and config ESI base addresses.
+>
+> If this patch is reposted, please change "APIs" into "functions" and 
+> add a sentence to explain that calls to the exported functions will be 
+> added by the next patch in this series.
+>
+> Thanks,
+>
+> Bart.
 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 947eb1a6399a..50498e5d10dd 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2088,6 +2088,7 @@ static __latent_entropy struct task_struct *copy_process(
- 	p->flags &= ~PF_KTHREAD;
- 	if (args->kthread)
- 		p->flags |= PF_KTHREAD;
-+	p->flags &= ~PF_IO_WORKER;
- 	if (args->io_thread) {
- 		/*
- 		 * Mark us an IO worker, and block any signal that isn't
--- 
-2.25.1
+
+Thank you Bart for your review. I will upload a new version to adopt 
+your comments.
+
+Best Regard,
+
+Can Guo.
 
