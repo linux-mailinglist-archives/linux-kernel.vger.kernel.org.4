@@ -2,62 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD1164D4B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECFC64D4B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:34:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiLOAfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 19:35:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48148 "EHLO
+        id S229944AbiLOAem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 19:34:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiLOAfF (ORCPT
+        with ESMTP id S229620AbiLOAej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 19:35:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6E431ED9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:34:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671064459;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aqeMywu3iT4ftxLMJbD0nCtsC2LYnymRthrhqGzevww=;
-        b=Bcq2oKMB6Ox3X0qzkt6zBq6+g9YpFVAH4rrZN9K2a2nXT5V1JWG06boZW0jZV2jqn19UY9
-        a6SW74obVYbEnDtCEJCelfRtuHhrY1WrgH1afG7g4f3uiTxZ40SoyPOeGLkyr0cGZ6OFG0
-        jqQcw3IzWiy55/q5Z3ElkBP8/Q2gZrM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-9-HCZZRf8fOYm2A6yCDzp3UQ-1; Wed, 14 Dec 2022 19:34:14 -0500
-X-MC-Unique: HCZZRf8fOYm2A6yCDzp3UQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1D294858F0E;
-        Thu, 15 Dec 2022 00:34:14 +0000 (UTC)
-Received: from T590 (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 199E4492C14;
-        Thu, 15 Dec 2022 00:34:09 +0000 (UTC)
-Date:   Thu, 15 Dec 2022 08:34:04 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Dennis Zhou <dennis@kernel.org>
-Cc:     Hillf Danton <hdanton@sina.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Zhong Jinghua <zhongjinghua@huawei.com>, ming.lei@redhat.com
-Subject: Re: [PATCH 3/3] lib/percpu-refcount: drain ->release() in
- perpcu_ref_exit()
-Message-ID: <Y5prfOjyyjQKUrtH@T590>
-References: <20221214025101.1268437-1-ming.lei@redhat.com>
- <20221214081651.954-1-hdanton@sina.com>
- <Y5nP4JC00zTepHue@T590>
- <Y5n0wBarpw7IEQX4@fedora>
+        Wed, 14 Dec 2022 19:34:39 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2038336C48
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:34:37 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id g10so5149452plo.11
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:34:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=z/1fVhdM3NBYMXBQfLHzy+1+572vRA9PCs2hB32i8rE=;
+        b=tdJFfFqmGXwvTNz7GXq3kJkLcGeqjAvDM167pZDfGZyich8NHDMQ/EFUsFMV/gHd9s
+         jwLcQNfKe2R7q9+q5CZFT1cRBSO9dIIwQmBFV/FBeODZE3fJpsthkt+LBdBdHrXO2+gB
+         wwQigHZRfuflKggdhkNMal/+J9SW21KA//wjcjidt4tgJhTC8prNNuDw9LVeOpacueI5
+         xz+r3DJIYpyvd4MXqR4suXoFPZV4BnK39OR4oXble+2s1O3HbZlhhA9X46GEkK8YviFa
+         NApnG4av4ur33LoOfPltEn0pmyB7Bn2ZWMKBmiiQpOyAgsxcKS6X+GeoT/TuzSZ30zub
+         RU+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z/1fVhdM3NBYMXBQfLHzy+1+572vRA9PCs2hB32i8rE=;
+        b=VYMXYvh52dQEUULGFlOMpHweciCb4YnvsjKRt7k4XBNzwc0sO7W8NjJcBt/qbvgv4E
+         Isa+5Cppb4K8YLw9mtxlBlrur7POyqXwRCo98VIhCLMASGASjYWQw9OtpkkFQkkepBaX
+         X+hJZvD6ZW9/fCVRZshufzCvxgbE7I2Xo/3QT+EgK5kfxNF42Hn1OktG3F+UvH/gIcXN
+         yW2upwc063kckcDMQuHSmfiBk6hdR59oPmqNYNw4wqyIhQNrpHB/BExKuTTexm6/jTG8
+         UPc7GdLVEE3MFbKTZR08sIWNb7tk6oTUkbcDHyQTwSlUZy1Yqq6R3vUWVBWixyLApGtv
+         NbUg==
+X-Gm-Message-State: AFqh2koL2Q3oIhs+VSrTUxmGpS2cn5SZGxA0KcOTy3r6nQ2Q1Hw38tXl
+        WbS9qQ3LxKh6J20MIidDNagCIA==
+X-Google-Smtp-Source: AMrXdXtYxIA/bhZSuNVKCq0zAPsRgjb1doOTAdvwdQTxgeqL8z5Qvt5q8Gq11GzIRsBGvIf/8wzMOQ==
+X-Received: by 2002:a17:902:a587:b0:189:6d32:afeb with SMTP id az7-20020a170902a58700b001896d32afebmr802994plb.1.1671064476465;
+        Wed, 14 Dec 2022 16:34:36 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id x22-20020a170902821600b00189a50d2a38sm2440781pln.38.2022.12.14.16.34.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 16:34:34 -0800 (PST)
+Date:   Thu, 15 Dec 2022 00:34:30 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     David Matlack <dmatlack@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Vipin Sharma <vipinsh@google.com>
+Subject: Re: [PATCH 2/7] KVM: x86/MMU: Move rmap_iterator to rmap.h
+Message-ID: <Y5prluKIKax5o8N9@google.com>
+References: <20221206173601.549281-1-bgardon@google.com>
+ <20221206173601.549281-3-bgardon@google.com>
+ <Y5O+/1CYivRishFE@google.com>
+ <CANgfPd8-i=B_c60MFn6symaqpUMXqu+HHJFDkQm8OuzOLnHQ+A@mail.gmail.com>
+ <Y5kf2KI5oharI0xZ@google.com>
+ <CANgfPd9xkRgm691Hy=Zbk=SAx-gaW-Hkk0XWQE0UsH9mJwLU-A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5n0wBarpw7IEQX4@fedora>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+In-Reply-To: <CANgfPd9xkRgm691Hy=Zbk=SAx-gaW-Hkk0XWQE0UsH9mJwLU-A@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,94 +78,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 08:07:28AM -0800, Dennis Zhou wrote:
-> Hello,
+On Wed, Dec 14, 2022, Ben Gardon wrote:
+> On Tue, Dec 13, 2022 at 4:59 PM Sean Christopherson <seanjc@google.com> wrote:
+> > And if we rename pte_list_head, then we might as well commit 100% and use consisnent
+> > nomenclature across the board, e.g. end up with
+
+...
+
+> I'd be happy to see some consistent SPTE-based naming in the Shadow
+> MMU and more or less get rid of the rmap naming scheme. Once you
+> change to spte_list_head or whatever, the use of the actual rmap (an
+> array of spte_list_heads) becomes super narrow.
+
+Yeah.  And at least for me, the more literal "walk a list of SPTEs" is much
+easier for me to wrap my head around than "walk rmaps".
+
+> Given the potential for enormous scope creep on what's already going
+> to be a long series, I'm inclined to split this work into two parts:
+> 1. Move code from mmu.c to shadow_mmu.c with minimal cleanups /
+> refactors / renames; just move the code
+> 2. Clean up naming conventions: make the functions exported in
+> shadow_mmu.h consistent, get rid of the whole rmap naming scheme, etc.
 > 
-> On Wed, Dec 14, 2022 at 09:30:08PM +0800, Ming Lei wrote:
-> > On Wed, Dec 14, 2022 at 04:16:51PM +0800, Hillf Danton wrote:
-> > > On 14 Dec 2022 10:51:01 +0800 Ming Lei <ming.lei@redhat.com>
-> > > > The pattern of wait_event(percpu_ref_is_zero()) has been used in several
-> > > 
-> > > For example?
-> > 
-> > blk_mq_freeze_queue_wait() and target_wait_for_sess_cmds().
-> > 
-> > > 
-> > > > kernel components, and this way actually has the following risk:
-> > > > 
-> > > > - percpu_ref_is_zero() can be returned just between
-> > > >   atomic_long_sub_and_test() and ref->data->release(ref)
-> > > > 
-> > > > - given the refcount is found as zero, percpu_ref_exit() could
-> > > >   be called, and the host data structure is freed
-> > > > 
-> > > > - then use-after-free is triggered in ->release() when the user host
-> > > >   data structure is freed after percpu_ref_exit() returns
-> > > 
-> > > The race between exit and the release callback should be considered at the
-> > > corresponding callsite, given the comment below, and closed for instance
-> > > by synchronizing rcu.
-> > > 
-> > > /**
-> > >  * percpu_ref_put_many - decrement a percpu refcount
-> > >  * @ref: percpu_ref to put
-> > >  * @nr: number of references to put
-> > >  *
-> > >  * Decrement the refcount, and if 0, call the release function (which was passed
-> > >  * to percpu_ref_init())
-> > >  *
-> > >  * This function is safe to call as long as @ref is between init and exit.
-> > >  */
-> > 
-> > Not sure if the above comment implies that the callsite should cover the
-> > race.
-> > 
-> > But blk-mq can really avoid the trouble by using the existed call_rcu():
-> > 
-> 
-> I struggle with the dependency on release(). release() itself should not
-> block, but a common pattern would be to through a call_rcu() in and
+> That way git-blame will preserve context around the renames /
+> refactors which would be obfuscated if we did 2 before 1,
 
-Yes, release() is called with rcu read lock, and I guess the trouble may
-be originated from the fact release() may do nothing related with
-actual data releasing.
++1
 
-> schedule additional work - see block/blk-cgroup.c, blkg_release().
+> and we can reduce merge conflicts.
 
-I believe the pattern is user specific, and the motivation of using call_rcu
-can't be just for avoiding such potential race between release() and
-percpu_ref_exit().
+That might be wishful thinking ;-)
 
-> 
-> I think the dependency really is the completion of release() and the
-> work scheduled on it's behalf rather than strictly starting the
-> release() callback. This series doesn't preclude that from happening.
-
-Yeah.
-
-For any additional work or sort of thing scheduled in release(), only
-the caller can guarantee they are drained before percpu_exit_ref(), so
-I agree now it is better for caller to avoid the race.
-
-> 
-> /**
->  * percpu_ref_exit - undo percpu_ref_init()
->  * @ref: percpu_ref to exit
->  *
->  * This function exits @ref.  The caller is responsible for ensuring that
->  * @ref is no longer in active use.  The usual places to invoke this
->  * function from are the @ref->release() callback or in init failure path
->  * where percpu_ref_init() succeeded but other parts of the initialization
->  * of the embedding object failed.
->  */
-> 
-> I think the percpu_ref_exit() comment explains the more common use case
-> approach to percpu refcounts. release() triggering percpu_ref_exit() is
-> the ideal case.
-
-But most of callers don't use in this way actually.
-
-
-Thanks, 
-Ming
-
+One thought for the rename would be to gather all the reviews and feedback, and
+then wait to send the final version until shortly before the merge window, i.e.
+wait for everything else to land so that only future development gets affected.
+That would give Paolo and I a bit of extra motiviation to get the x86 queue
+solidified sooner than later too...
