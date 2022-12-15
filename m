@@ -2,85 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF8764D883
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C7064D887
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiLOJ0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 04:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33350 "EHLO
+        id S229966AbiLOJ0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 04:26:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiLOJ0J (ORCPT
+        with ESMTP id S229898AbiLOJ0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 04:26:09 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2FB33C38
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:26:08 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso1219313wme.5
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:26:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rT5nYetbt/rUXKIwgJbVz9fS9IuJsFVtRBisMphoNoo=;
-        b=uuryZsdS88lObitkX7oxZa7cfGT9633pRc4WZIgl5bJUbG9D8CBtD15kZGCxNXmd8W
-         SRwLhAR2eiJIhtAEZS9smEviFkVCL4zLFUaDE7JDGN1o0y6dDq5KSuqrYfCGczRFjXLj
-         PRVNRc9lFvKfpmul5ElCdoG0EIX0ixYU9SENXyrO6n0qDwLTyWlK8mOiKjQ7ktNyxmUl
-         2RIPHyh1eqJzELF1iNAtxlDnABfR2/fXoi3rbIIMnqkxUTRC/8qhTx84nZajQjMSYIDm
-         gdF/kr5djm6fIGjajwNgGSaXkRThEWBLjPNuOWiBwU6h+w1/gQEknxYtY+LQMgPwu+rI
-         2kmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rT5nYetbt/rUXKIwgJbVz9fS9IuJsFVtRBisMphoNoo=;
-        b=r11MungFy6HYtuP3lb0CbBod9a6leZvUbgr/UIDU1EeG7n83hSu48RdDTRSxAZKHcm
-         IComSnesCHzr7qhk3C4ilXMi1YEYZUYyAdeJeXRAPCLw6QFHL22Usuv8blxBLLeXs2CZ
-         ljE9ybBvzcFrI45uoZBA3+JxVwkvYtj5W7kYZG4e3rMpxrv7OOn9lH9O2Ob54axhG2w1
-         3iRjZaucYU9u6HI6jf4vkkmdaMzWbUVtYeQbJzairTHKdNEbLZ2tFdqbcZCTIb7cdk0m
-         2DHIihUG54Ewng1lokSUMxrcRPbQYTyLRZIHzSdgIPMXs/J2ixvwCOQOFwhUheIunx2W
-         wVAg==
-X-Gm-Message-State: ANoB5pkd+ZkPfJ92NBFTzQh6GEVHdMa09OepjCXoAa2CdF9TtsLObRFz
-        eHKZcOc+1vhkiXjrWI7jhgjszQ==
-X-Google-Smtp-Source: AA0mqf40a/Y200wMJ6a9mSLz6nlNT4JTAlNOWT8f3KhBY+g472ukIetY/DrD+llEO7lEN4DsR6KLsQ==
-X-Received: by 2002:a05:600c:4f05:b0:3cf:85af:6a4a with SMTP id l5-20020a05600c4f0500b003cf85af6a4amr28838749wmq.25.1671096367213;
-        Thu, 15 Dec 2022 01:26:07 -0800 (PST)
-Received: from aspen.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id v6-20020a05600c15c600b003d33ab317dasm1152748wmf.14.2022.12.15.01.26.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 01:26:06 -0800 (PST)
-Date:   Thu, 15 Dec 2022 09:26:04 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] backlight: backlight: Fix doc for
- backlight_device_get_by_name
-Message-ID: <Y5roLFINjM/GjWPK@aspen.lan>
-References: <20221215071902.424005-1-linmq006@gmail.com>
+        Thu, 15 Dec 2022 04:26:39 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15B9642C;
+        Thu, 15 Dec 2022 01:26:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GlKnCyO4Mi0jZH6xjHBtY0wnuIzOta6O4BfJysiqLpw=; b=T+xm1z7f99NPj5wkzQHaX8wjGv
+        b7MbF1+63/hqaJOrU0PnWRrirKJogxwIekii7qXQKmUMd2LCknAzd1U7Aak6uM/B01CUtXWQpTX4K
+        Wgjou/c1zX0Ivih4VYIjmCiqALgTMoMiz+ubx7xb4ewoR+8EP9iKt87hHch8hIDGvWFHgga6dGoQV
+        JDB2wdO+J0l8UqR9CTYN2/PUtRFidgrwNq7fHOu1NE34ZrtO9VIF9sNWwvjY6/exJOnf80F/nkTnx
+        QIN1o3P2zeV++QUrtSSaFjZjn0c1OIis9jZ2Pl5CpAubI0MowdHip87IVdHkKqRZdIXQnC212h4aC
+        B/wuOW2w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p5kVb-008Evc-Vb; Thu, 15 Dec 2022 09:26:31 +0000
+Date:   Thu, 15 Dec 2022 01:26:31 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>
+Cc:     axboe@kernel.dk, corbet@lwn.net, linux-block@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 02/21] block, blkfilter: Block Device Filtering
+ Mechanism
+Message-ID: <Y5roR3jjhQwgFWVM@infradead.org>
+References: <20221209142331.26395-1-sergei.shtepa@veeam.com>
+ <20221209142331.26395-3-sergei.shtepa@veeam.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221215071902.424005-1-linmq006@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221209142331.26395-3-sergei.shtepa@veeam.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 11:19:01AM +0400, Miaoqian Lin wrote:
-> backlight_put() has been dropped, we should call put_device() to drop
-> the reference taken by backlight_device_get_by_name().
->
-> Fixes: 0f6a3256fd81 ("backlight: backlight: Drop backlight_put()")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+On Fri, Dec 09, 2022 at 03:23:12PM +0100, Sergei Shtepa wrote:
+> +	blk_mq_freeze_queue(bdev->bd_queue);
+> +	blk_mq_quiesce_queue(bdev->bd_queue);
 
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+I don't think we need the quiesce here (or in the detach path).
+quiesce works as the low-level blk-mq dispatch level, and we
+sit way above that.
+
+> +EXPORT_SYMBOL(bdev_filter_attach);
+
+Please use EXPORT_SYMBOL_GPL for new low-level block layer features.
+
+> +int bdev_filter_detach(struct block_device *bdev)
+> +{
+> +	int ret = 0;
+> +	struct bdev_filter *flt = NULL;
+> +
+> +	blk_mq_freeze_queue(bdev->bd_queue);
+> +	blk_mq_quiesce_queue(bdev->bd_queue);
+> +
+> +	flt = bdev->bd_filter;
+> +	if (flt)
+> +		bdev->bd_filter = NULL;
+> +	else
+> +		ret = -ENOENT;
+
+Not having a filter is a grave error that the caller can't do
+anything about.  So pleas just WARN_ON_ONCE for that case, and
+change the function to a void return.
+
+> +	if (bio->bi_bdev->bd_filter && !bio_flagged(bio, BIO_FILTERED)) {
+> +		bool pass;
+> +
+> +		pass = bio->bi_bdev->bd_filter->fops->submit_bio_cb(bio);
+> +		bio_set_flag(bio, BIO_FILTERED);
+> +		if (!pass) {
+> +			bio->bi_status = BLK_STS_OK;
+> +			bio_endio(bio);
+> +			return;
+> +		}
+
+Instead of ending the bio here for the !pass case it seems to me it
+would make more sense to just pass ownership to the filter driver and
+let the driver complete it.  That would allow error returns for that
+case, or handling it from a workqueue.  I'd also change the polarity
+so that true means "I've taken ownership".  I.e.:
+
+	if (bio->bi_bdev->bd_filter && !bio_flagged(bio, BIO_FILTERED)) {
+		bio_set_flag(bio, BIO_FILTERED);
+		if (bio->bi_bdev->bd_filter->fops->submit_bio_cb(bio))
+			return;
+	}
+
+> +struct bdev_filter_operations {
+> +	bool (*submit_bio_cb)(struct bio *bio);
+> +	void (*release_cb)(struct kref *kref);
+> +};
+
+Nit:  I don't think these _cb postfixes are very useful.  All methods
+in a method table are sort of callbacks.
+
+> +/**
+> + * bdev_filter_get - Increment reference counter.
+> + * @flt:
+> + *	Pointer to the &struct bdev_filter.
+> + *
+> + * Allows to ensure that the filter will not be released as long as there are
+> + * references to it.
+> + */
+> +static inline void bdev_filter_get(struct bdev_filter *flt)
+> +{
+> +	kref_get(&flt->kref);
+> +}
+
+Looking at the callers in blksnap I'm not sure this works.  The
+pattern seems to be the driver has a block device reference, and
+then uses bdev_filter_get to grab a filter reference.  But what
+prevents the filter from going away just bdev_filter_get is called?
+At a minimum we'd need a something:
+
+static inline struct bdev_filter *bdev_filter_get(struct block_device *bdev)
+{
+	struct bdev_filter *flt;
+
+	rcu_read_lock();
+	flt = rcu_dereference(bdev->bd_filter);
+	if (!refcount_inc_not_zero(&flt->refs))
+		flt = NULL;
+	rcu_read_unlock();
+
+	return flt;
+}
 
 
-Daniel.
+with bd_filter switched to __rcu annotation, the kref replaced with
+a refcount_t, updates switched to cmpxchg and a rcu_synchronize()
+after clearing bd_filter.
