@@ -2,163 +2,676 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A056C64DABD
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 12:58:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB2864DAC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 12:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiLOL6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 06:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58018 "EHLO
+        id S229496AbiLOL70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 06:59:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbiLOL6K (ORCPT
+        with ESMTP id S229674AbiLOL7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 06:58:10 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F2D2ED59
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 03:58:07 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id 65so6526925pfx.9
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 03:58:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pZOfOCT1uqUyQOZ3Q6ejDEihZSzQYrZucgCadknyvEo=;
-        b=TaTybFJOhH5EPK/eBhO184gTI9rZ6NpPjNfPTGQmv+4pde+ovnS4o3OcSTPB07hU3j
-         u8Gyneh47OfOatEVMn3wPktBWSiEx17Hm2qO/9QkhlOpPHF4cESHo62ysUOcZjFY1UgW
-         46qjT3Wvo4pE17HeOcATjOBvTJdy3LzoYMors5zHe7mX7B3BLz3LEP6fnNuGiKxaXZZY
-         KsH/VLtse+zcMYOJ2Mwrbu4HzaTUx12stdo25n1fyi4kfyjqVV/KGeFtufPgS4e4ZoQu
-         94kCq1g/b7CCX8aW/1AaQk1I6DccFrnHOdxDBPOTDmYJi1rAlE3T2tMbtlW2BhxhuP21
-         4Zcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pZOfOCT1uqUyQOZ3Q6ejDEihZSzQYrZucgCadknyvEo=;
-        b=AVsrsUVf8gy1PQDaqNpR+q+pXnnVYL3bPujp4Ip/JgvTLMaBKRBl6lO9+VUgT3BbeR
-         Sa56/KolTX0xEPhPoFR/uLMkk2qJWhIlFlxg2GLR1OLbmS1Rwa0WQMaHq2n5XoZUj3i5
-         4vSGjR5Mxy9lhCk0vl95XbDgAf0pXfuAYYFmMVh2S7zlQpCFBfyIwIlncrnhst0Yj+6+
-         jT5Vs1qDVM0hhmYFcrJXuRnc8AGIFCIvgEd53RlS9eBBxGELdbPW1lJgXiVWg9hLVtHO
-         J3ftvHDsS1O5MP2zyIHu9dWYi772yKwLXB2N99+qyY4KaP+z181YxcucOAeXg8J+FCxX
-         qXgQ==
-X-Gm-Message-State: ANoB5pnb6DBad2sLleyUGdJlk5eviOzA5rzMUy0z6cVW2Xxsmxg0gTRH
-        7kPloSXLd2JJRyKHlca43iui5g==
-X-Google-Smtp-Source: AA0mqf6zAOBI8FNjjz3fd3sqz5D+xV3IlJL7UUHXxCKfMPTOyHmWW9qt9YBU98dbCUcKtQgdAWvb4g==
-X-Received: by 2002:a62:e814:0:b0:577:271e:e66f with SMTP id c20-20020a62e814000000b00577271ee66fmr28704053pfi.27.1671105487018;
-        Thu, 15 Dec 2022 03:58:07 -0800 (PST)
-Received: from ?IPV6:2401:4900:1c5f:4e45:ae49:8018:6d22:e5b4? ([2401:4900:1c5f:4e45:ae49:8018:6d22:e5b4])
-        by smtp.gmail.com with ESMTPSA id h66-20020a62de45000000b00576145a9bd0sm1554392pfg.127.2022.12.15.03.57.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 03:58:06 -0800 (PST)
-Message-ID: <1d3d8169-1011-cdfd-f9f7-b7828acdc1ac@linaro.org>
-Date:   Thu, 15 Dec 2022 17:27:57 +0530
+        Thu, 15 Dec 2022 06:59:21 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D74F2A95A
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 03:59:19 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <pza@pengutronix.de>)
+        id 1p5mtQ-000452-Md; Thu, 15 Dec 2022 12:59:16 +0100
+Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <pza@pengutronix.de>)
+        id 1p5mtP-0001cb-H9; Thu, 15 Dec 2022 12:59:15 +0100
+Date:   Thu, 15 Dec 2022 12:59:15 +0100
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/2] drm/imx/lcdc: Implement DRM driver for imx21
+Message-ID: <20221215115915.GA32586@pengutronix.de>
+References: <20221214115921.1845994-1-u.kleine-koenig@pengutronix.de>
+ <20221214115921.1845994-3-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v5 1/8] dt-bindings: ufs: qcom: Add sm6115 binding
-Content-Language: en-US
-To:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221030094258.486428-1-iskren.chernev@gmail.com>
- <20221030094258.486428-2-iskren.chernev@gmail.com>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <20221030094258.486428-2-iskren.chernev@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221214115921.1845994-3-u.kleine-koenig@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: pza@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 10/30/22 3:12 PM, Iskren Chernev wrote:
-> Add SM6115 UFS to DT schema.
+On Wed, Dec 14, 2022 at 12:59:21PM +0100, Uwe Kleine-König wrote:
+> From: Marian Cichy <m.cichy@pengutronix.de>
 > 
-> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Add support for the LCD Controller found on i.MX21 and i.MX25.
+> 
+> It targets to be a drop in replacement for the imx-fb driver.
+> 
+> Signed-off-by: Marian Cichy <m.cichy@pengutronix.de>
+> [ukl: Rebase to v6.1, various smaller fixes]
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > ---
->   .../devicetree/bindings/ufs/qcom,ufs.yaml     | 26 +++++++++++++++++++
->   1 file changed, 26 insertions(+)
+>  drivers/gpu/drm/imx/Kconfig    |   7 +
+>  drivers/gpu/drm/imx/Makefile   |   2 +
+>  drivers/gpu/drm/imx/imx-lcdc.c | 610 +++++++++++++++++++++++++++++++++
+
+We are in the process of placing imx drivers in subdirectories,
+could you move this into drivers/gpu/drm/imx/lcdc/ ?
+
+>  3 files changed, 619 insertions(+)
+>  create mode 100644 drivers/gpu/drm/imx/imx-lcdc.c
 > 
-> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> index f2d6298d926c..b517d76215e3 100644
-> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> @@ -28,6 +28,7 @@ properties:
->             - qcom,msm8998-ufshc
->             - qcom,sc8280xp-ufshc
->             - qcom,sdm845-ufshc
-> +          - qcom,sm6115-ufshc
->             - qcom,sm6350-ufshc
->             - qcom,sm8150-ufshc
->             - qcom,sm8250-ufshc
-> @@ -178,6 +179,31 @@ allOf:
->             minItems: 1
->             maxItems: 1
->   
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm6115-ufshc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 8
-> +          maxItems: 8
-> +        clock-names:
-> +          items:
-> +            - const: core_clk
-> +            - const: bus_aggr_clk
-> +            - const: iface_clk
-> +            - const: core_clk_unipro
-> +            - const: ref_clk
-> +            - const: tx_lane0_sync_clk
-> +            - const: rx_lane0_sync_clk
-> +            - const: ice_core_clk
-> +        reg:
-> +          minItems: 2
-> +          maxItems: 2
+> diff --git a/drivers/gpu/drm/imx/Kconfig b/drivers/gpu/drm/imx/Kconfig
+> index fd5b2471fdf0..af5c6cb8c445 100644
+> --- a/drivers/gpu/drm/imx/Kconfig
+> +++ b/drivers/gpu/drm/imx/Kconfig
+> @@ -41,3 +41,10 @@ config DRM_IMX_HDMI
+>  	  Choose this if you want to use HDMI on i.MX6.
+>  
+>  source "drivers/gpu/drm/imx/dcss/Kconfig"
 > +
->       # TODO: define clock bindings for qcom,msm8994-ufshc
->   
->   unevaluatedProperties: false
+> +config DRM_IMX_LCDC
+> +	tristate "Freescale i.MX LCDC displays"
+> +	depends on DRM && (ARCH_MXC || COMPILE_TEST)
 
-Seems this hasn't made way to linux-next yet. Hence we get the following 
-error with $ make dtbs_check:
+Select DRM_GEM_DMA_HELPER for DEFINE_DRM_GEM_DMA_FOPS().
 
-arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dtb: ufs@4804000: 
-compatible:0: 'qcom,sm6115-ufshc' is not one of ['qcom,msm8994-ufshc', 
-'qcom,msm8996-ufshc', 'qcom,msm8998-ufshc', 'qcom,sc8280xp-ufshc', 
-'qcom,sdm845-ufshc', 'qcom,sm6350-ufshc', 'qcom,sm8150-ufshc', 
-'qcom,sm8250-ufshc', 'qcom,sm8350-ufshc', 'qcom,sm8450-ufshc']
-	From schema: Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> +	select DRM_KMS_CMA_HELPER
 
-arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dtb: ufs@4804000: 
-Unevaluated properties are not allowed ('compatible' was unexpected)
-	From schema: Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+Select DRM_KMS_HELPER instead, see commit 09717af7d13d ("drm: Remove
+CONFIG_DRM_KMS_CMA_HELPER option").
 
-If, it helps to get the review / merge happen:
+> +	help
+> +	  Found on i.MX1, i.MX21, i.MX25 and i.MX27.
+> diff --git a/drivers/gpu/drm/imx/Makefile b/drivers/gpu/drm/imx/Makefile
+> index b644deffe948..1f96de7f15b4 100644
+> --- a/drivers/gpu/drm/imx/Makefile
+> +++ b/drivers/gpu/drm/imx/Makefile
+> @@ -10,3 +10,5 @@ obj-$(CONFIG_DRM_IMX_LDB) += imx-ldb.o
+>  
+>  obj-$(CONFIG_DRM_IMX_HDMI) += dw_hdmi-imx.o
+>  obj-$(CONFIG_DRM_IMX_DCSS) += dcss/
+> +
+> +obj-$(CONFIG_DRM_IMX_LCDC) += imx-lcdc.o
+> diff --git a/drivers/gpu/drm/imx/imx-lcdc.c b/drivers/gpu/drm/imx/imx-lcdc.c
+> new file mode 100644
+> index 000000000000..14d4962cecfd
+> --- /dev/null
+> +++ b/drivers/gpu/drm/imx/imx-lcdc.c
+> @@ -0,0 +1,610 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +// SPDX-FileCopyrightText: 2020 Marian Cichy <M.Cichy@pengutronix.de>
+> +
+> +#include "drm/drm_fourcc.h"
 
-Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+#include <drm/drm_fourcc.h>
 
-@Rob, @Krzysztof: Please help merge this.
+and sort alphabetically?
 
-Thanks.
+> +#include <drm/drm_damage_helper.h>
+> +#include <drm/drm_drv.h>
+> +#include <drm/drm_fb_dma_helper.h>
+> +#include <drm/drm_fb_helper.h>
+> +#include <drm/drm_fourcc.h>
+> +#include <drm/drm_framebuffer.h>
+> +#include <drm/drm_gem_atomic_helper.h>
+> +#include <drm/drm_gem_dma_helper.h>
+> +#include <drm/drm_gem_framebuffer_helper.h>
+> +#include <drm/drm_of.h>
+> +#include <drm/drm_panel.h>
+> +#include <drm/drm_probe_helper.h>
+> +#include <drm/drm_simple_kms_helper.h>
+> +#include <drm/drm_vblank.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/clk.h>
+> +#include <linux/dma-mapping.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +
+> +#define IMX21LCDC_LSSAR         0x0000 /* LCDC Screen Start Address Register */
+> +#define IMX21LCDC_LSR           0x0004 /* LCDC Size Register */
+> +#define IMX21LCDC_LVPWR         0x0008 /* LCDC Virtual Page Width Register */
+> +#define IMX21LCDC_LCPR          0x000C /* LCDC Cursor Position Register */
+> +#define IMX21LCDC_LCWHB         0x0010 /* LCDC Cursor Width Height and Blink Register*/
+> +#define IMX21LCDC_LCCMR         0x0014 /* LCDC Color Cursor Mapping Register */
+> +#define IMX21LCDC_LPCR          0x0018 /* LCDC Panel Configuration Register */
+> +#define IMX21LCDC_LHCR          0x001C /* LCDC Horizontal Configuration Register */
+> +#define IMX21LCDC_LVCR          0x0020 /* LCDC Vertical Configuration Register */
+> +#define IMX21LCDC_LPOR          0x0024 /* LCDC Panning Offset Register */
+> +#define IMX21LCDC_LSCR          0x0028 /* LCDC Sharp Configuration Register */
+> +#define IMX21LCDC_LPCCR         0x002C /* LCDC PWM Contrast Control Register */
+> +#define IMX21LCDC_LDCR          0x0030 /* LCDC DMA Control Register */
+> +#define IMX21LCDC_LRMCR         0x0034 /* LCDC Refresh Mode Control Register */
+> +#define IMX21LCDC_LICR          0x0038 /* LCDC Interrupt Configuration Register */
+> +#define IMX21LCDC_LIER          0x003C /* LCDC Interrupt Enable Register */
+> +#define IMX21LCDC_LISR          0x0040 /* LCDC Interrupt Status Register */
+> +#define IMX21LCDC_LGWSAR        0x0050 /* LCDC Graphic Window Start Address Register */
+> +#define IMX21LCDC_LGWSR         0x0054 /* LCDC Graph Window Size Register */
+> +#define IMX21LCDC_LGWVPWR       0x0058 /* LCDC Graphic Window Virtual Page Width Register */
+> +#define IMX21LCDC_LGWPOR        0x005C /* LCDC Graphic Window Panning Offset Register */
+> +#define IMX21LCDC_LGWPR         0x0060 /* LCDC Graphic Window Position Register */
+> +#define IMX21LCDC_LGWCR         0x0064 /* LCDC Graphic Window Control Register */
+> +#define IMX21LCDC_LGWDCR        0x0068 /* LCDC Graphic Window DMA Control Register */
+> +#define IMX21LCDC_LAUSCR        0x0080 /* LCDC AUS Mode Control Register */
+> +#define IMX21LCDC_LAUSCCR       0x0084 /* LCDC AUS Mode Cursor Control Register */
+> +#define IMX21LCDC_BGLUT         0x0800 /* Background Lookup Table */
+> +#define IMX21LCDC_GWLUT         0x0C00 /* Graphic Window Lookup Table */
+> +
+> +#define IMX21LCDC_LCPR_CC0 BIT(30) /* Cursor Control Bit 0 */
+> +#define IMX21LCDC_LCPR_CC1 BIT(31) /* Cursor Control Bit 1 */
+> +
+> +/* Values HSYNC, VSYNC and Framesize Register */
+> +#define IMX21LCDC_LHCR_H_WIDTH(val)	(FIELD_PREP(GENMASK(31, 26), (val)))
+> +#define IMX21LCDC_LHCR_H_BPORCH(val)	(FIELD_PREP(GENMASK(7, 0), (val)))
+> +#define IMX21LCDC_LHCR_H_FPORCH(val)	(FIELD_PREP(GENMASK(15, 8), (val)))
+> +
+> +#define IMX21LCDC_LVCR_V_WIDTH(val)	(FIELD_PREP(GENMASK(31, 26), (val)))
+> +#define IMX21LCDC_LVCR_V_BPORCH(val)	(FIELD_PREP(GENMASK(7, 0), (val)))
+> +#define IMX21LCDC_LVCR_V_FPORCH(val)	(FIELD_PREP(GENMASK(15, 8), (val)))
+> +
+> +#define IMX21LCDC_FRAME_WIDTH(val)	(((val) / 16) << 20)
+> +#define IMX21LCDC_FRAME_HEIGHT(val)	(val)
+> +
+> +/* Values for LPCR Register */
+> +#define IMX21LCDC_PCD(val)		(FIELD_PREP(GENMASK(5, 0), --(val)))
+> +#define IMX21LCDC_SHARP(val)		(FIELD_PREP(GENMASK(6, 6), (val)))
+> +#define IMX21LCDC_SCLKSEL(val)		(FIELD_PREP(GENMASK(7, 7), (val)))
+> +#define IMX21LCDC_ACD(val)		(FIELD_PREP(GENMASK(14, 8), (val)))
+> +#define IMX21LCDC_ACDSEL(val)		(FIELD_PREP(GENMASK(15, 15), (val)))
+> +#define IMX21LCDC_REV_VS(val)		(FIELD_PREP(GENMASK(16, 16), (val)))
+> +#define IMX21LCDC_SWAP_SEL(val)	(FIELD_PREP(GENMASK(17, 17), (val)))
+> +#define IMX21LCDC_END_SEL(val)		(FIELD_PREP(GENMASK(18, 18), (val)))
+> +#define IMX21LCDC_SCLKIDLE(val)	(FIELD_PREP(GENMASK(19, 19), (val)))
+> +#define IMX21LCDC_OEPOL(val)		(FIELD_PREP(GENMASK(20, 20), (val)))
+> +#define IMX21LCDC_CLKPOL(val)		(FIELD_PREP(GENMASK(21, 21), (val)))
+> +#define IMX21LCDC_LPPOL(val)		(FIELD_PREP(GENMASK(22, 22), (val)))
+> +#define IMX21LCDC_FLMPOL(val)		(FIELD_PREP(GENMASK(23, 23), (val)))
+> +#define IMX21LCDC_PIXPOL(val)		(FIELD_PREP(GENMASK(24, 24), (val)))
+> +#define IMX21LCDC_BPIX(val)		(FIELD_PREP(GENMASK(27, 25), (val)))
+> +#define IMX21LCDC_PBSIZ(val)		(FIELD_PREP(GENMASK(29, 28), (val)))
+> +#define IMX21LCDC_COLOR(val)		(FIELD_PREP(GENMASK(30, 30), (val)))
+> +#define IMX21LCDC_TFT(val)		(FIELD_PREP(GENMASK(31, 31), (val)))
+> +
+> +#define INTR_EOF BIT(1) /* VBLANK Interrupt Bit */
+> +
+> +#define BPP_RGB565 0x05
+> +
+> +#define LCDC_MIN_XRES 64
+> +#define LCDC_MIN_YRES 64
+> +
+> +#define LCDC_MAX_XRES 1024
+> +#define LCDC_MAX_YRES 1024
+> +
+> +struct imx_lcdc {
+> +	struct drm_device drm;
+> +	struct drm_simple_display_pipe pipe;
+> +	const struct drm_display_mode *mode;
+> +	struct drm_connector connector;
+> +	struct drm_panel *panel;
+> +	struct drm_bridge *bridge;
+> +	void __iomem *base;
+> +
+> +	struct clk *clk_ipg;
+> +	struct clk *clk_ahb;
+> +	struct clk *clk_per;
+> +};
+> +
+> +static const u32 imx_lcdc_formats[] = {
+> +	DRM_FORMAT_RGB565,
+> +};
+> +
+> +static inline struct imx_lcdc *drm_to_lcdc(struct drm_device *drm)
+> +{
+> +	return container_of(drm, struct imx_lcdc, drm);
+> +}
+> +
+> +static unsigned int imx_lcdc_get_format(unsigned int drm_format)
+> +{
+> +	unsigned int bpp;
+> +
+> +	switch (drm_format) {
+> +	default:
+> +		DRM_WARN("Format not supported - fallback to RGB565\n");
+> +		fallthrough;
+> +	case DRM_FORMAT_RGB565:
+> +		bpp = BPP_RGB565;
+> +		break;
+> +	}
+> +
+> +	return bpp;
+> +}
+> +
+> +static int imx_lcdc_connector_get_modes(struct drm_connector *connector)
+> +{
+> +	struct imx_lcdc *lcdc = drm_to_lcdc(connector->dev);
+> +
+> +	if (lcdc->panel)
+> +		return drm_panel_get_modes(lcdc->panel, connector);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct drm_connector_helper_funcs imx_lcdc_connector_hfuncs = {
+> +	.get_modes = imx_lcdc_connector_get_modes,
+> +};
+> +
+> +static const struct drm_connector_funcs imx_lcdc_connector_funcs = {
+> +	.reset = drm_atomic_helper_connector_reset,
+> +	.fill_modes = drm_helper_probe_single_connector_modes,
+> +	.destroy = drm_connector_cleanup,
+> +	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
+> +	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
+> +};
+> +
+> +static void imx_lcdc_update_hw_registers(struct drm_simple_display_pipe *pipe,
+> +					 struct drm_plane_state *old_state,
+> +					 bool mode_set)
+> +{
+> +	struct drm_crtc *crtc = &pipe->crtc;
+> +	struct drm_plane_state *new_state = pipe->plane.state;
+> +	struct drm_framebuffer *fb = new_state->fb;
+> +	struct imx_lcdc *lcdc = drm_to_lcdc(pipe->crtc.dev);
+> +	unsigned int bpp;
+> +	unsigned int lvcr; /* LVCR-Register value */
+> +	unsigned int lhcr; /* LHCR-Register value */
+> +	unsigned int framesize;
+> +	dma_addr_t addr;
+> +
+> +	addr = drm_fb_dma_get_gem_addr(fb, new_state, 0);
+> +	/* The LSSAR register specifies the LCD screen start address (SSA). */
+> +	writel(addr, lcdc->base + IMX21LCDC_LSSAR);
+> +
+> +	if (!mode_set)
+> +		return;
+> +
+> +	/* Disable PER clock to make register write possible */
+> +	if (old_state && old_state->crtc && old_state->crtc->enabled)
+> +		clk_disable_unprepare(lcdc->clk_per);
+> +
+> +	/* Framesize */
+> +	framesize = IMX21LCDC_FRAME_WIDTH(crtc->mode.hdisplay);
+> +	framesize |= IMX21LCDC_FRAME_HEIGHT(crtc->mode.vdisplay);
+> +	writel(framesize, lcdc->base + IMX21LCDC_LSR);
+> +
+> +	/* HSYNC */
+> +	lhcr = IMX21LCDC_LHCR_H_FPORCH(crtc->mode.hsync_start - crtc->mode.hdisplay - 1);
+> +	lhcr |= IMX21LCDC_LHCR_H_WIDTH(crtc->mode.hsync_end - crtc->mode.hsync_start - 1);
+> +	lhcr |= IMX21LCDC_LHCR_H_BPORCH(crtc->mode.htotal - crtc->mode.hsync_end - 3);
+> +	writel(lhcr, lcdc->base + IMX21LCDC_LHCR);
+> +
+> +	/* VSYNC */
+> +	lvcr = IMX21LCDC_LVCR_V_FPORCH(crtc->mode.vsync_start - crtc->mode.vdisplay);
+> +	lvcr |= IMX21LCDC_LVCR_V_WIDTH(crtc->mode.vsync_end - crtc->mode.vsync_start);
+> +	lvcr |= IMX21LCDC_LVCR_V_BPORCH(crtc->mode.vtotal - crtc->mode.vsync_end);
+> +	writel(lvcr, lcdc->base + IMX21LCDC_LVCR);
+> +
+> +	bpp = imx_lcdc_get_format(fb->format->format);
+> +	writel(readl(lcdc->base + IMX21LCDC_LPCR) | IMX21LCDC_BPIX(bpp),
+> +	       lcdc->base + IMX21LCDC_LPCR);
+> +
+> +	/* Virtual Page Width */
+> +	writel(new_state->fb->pitches[0] / 4, lcdc->base + IMX21LCDC_LVPWR);
+> +
+> +	/* Enable PER clock */
+> +	if (new_state->crtc->enabled)
+> +		clk_prepare_enable(lcdc->clk_per);
+> +}
+> +
+> +static void imx_lcdc_pipe_enable(struct drm_simple_display_pipe *pipe,
+> +				 struct drm_crtc_state *crtc_state,
+> +				 struct drm_plane_state *plane_state)
+> +{
+> +	int ret;
+> +	int clk_div;
+> +	int bpp;
+> +	struct imx_lcdc *lcdc = drm_to_lcdc(pipe->crtc.dev);
+> +	struct drm_display_mode *mode = &pipe->crtc.mode;
+> +	struct drm_display_info *disp_info = &pipe->connector->display_info;
+> +	const int hsync_pol = (mode->flags & DRM_MODE_FLAG_PHSYNC) ? 0 : 1;
+> +	const int vsync_pol = (mode->flags & DRM_MODE_FLAG_PVSYNC) ? 0 : 1;
+> +	const int data_enable_pol =
+> +		(disp_info->bus_flags & DRM_BUS_FLAG_DE_HIGH) ? 0 : 1;
+> +	const int clk_pol =
+> +		(disp_info->bus_flags & DRM_BUS_FLAG_PIXDATA_DRIVE_POSEDGE) ? 0 : 1;
+> +
+> +	drm_panel_prepare(lcdc->panel);
+
+No error handling here ...
+
+> +	clk_div = DIV_ROUND_CLOSEST_ULL(clk_get_rate(lcdc->clk_per),
+> +					mode->clock * 1000);
+> +	bpp = imx_lcdc_get_format(plane_state->fb->format->format);
+> +
+> +	writel(IMX21LCDC_PCD(clk_div) | IMX21LCDC_LPPOL(hsync_pol) | IMX21LCDC_FLMPOL(vsync_pol) |
+> +	       IMX21LCDC_OEPOL(data_enable_pol) | IMX21LCDC_TFT(1) | IMX21LCDC_COLOR(1) |
+> +	       IMX21LCDC_PBSIZ(3) | IMX21LCDC_BPIX(bpp) | IMX21LCDC_SCLKSEL(1) |
+> +	       IMX21LCDC_PIXPOL(0) | IMX21LCDC_CLKPOL(clk_pol),
+> +	       lcdc->base + IMX21LCDC_LPCR);
+> +
+> +	/* 0px panning offset */
+> +	writel(0x00000000, lcdc->base + IMX21LCDC_LPOR);
+> +
+> +	/* disable hardware cursor */
+> +	writel(readl(lcdc->base + IMX21LCDC_LCPR) & ~(IMX21LCDC_LCPR_CC0 | IMX21LCDC_LCPR_CC1),
+> +	       lcdc->base + IMX21LCDC_LCPR);
+> +
+> +	ret = clk_prepare_enable(lcdc->clk_ipg);
+> +	if (ret) {
+> +		dev_err(pipe->crtc.dev->dev, "Cannot enable ipg clock: %pe\n", ERR_PTR(ret));
+> +		return;
+
+... but here seems inconsistent.
+
+> +	}
+> +	ret = clk_prepare_enable(lcdc->clk_ahb);
+> +	if (ret) {
+> +		dev_err(pipe->crtc.dev->dev, "Cannot enable ahb clock: %pe\n", ERR_PTR(ret));
+> +		clk_disable_unprepare(lcdc->clk_ipg);
+> +		return;
+> +	}
+> +
+> +	imx_lcdc_update_hw_registers(pipe, NULL, true);
+> +	drm_panel_enable(lcdc->panel);
+> +
+> +	/* Enable VBLANK Interrupt */
+> +	writel(INTR_EOF, lcdc->base + IMX21LCDC_LIER);
+> +}
+> +
+> +static void imx_lcdc_pipe_disable(struct drm_simple_display_pipe *pipe)
+> +{
+> +	struct imx_lcdc *lcdc = drm_to_lcdc(pipe->crtc.dev);
+> +	struct drm_panel *panel = lcdc->panel;
+> +	struct drm_crtc *crtc = &lcdc->pipe.crtc;
+> +	struct drm_pending_vblank_event *event;
+> +
+> +	drm_panel_disable(panel);
+> +
+> +	clk_disable_unprepare(lcdc->clk_ahb);
+> +	clk_disable_unprepare(lcdc->clk_ipg);
+> +
+> +	if (pipe->crtc.enabled)
+> +		clk_disable_unprepare(lcdc->clk_per);
+> +
+> +	drm_panel_unprepare(panel);
+> +
+> +	spin_lock_irq(&lcdc->drm.event_lock);
+> +	event = crtc->state->event;
+> +	if (event) {
+> +		crtc->state->event = NULL;
+> +		drm_crtc_send_vblank_event(crtc, event);
+> +	}
+> +	spin_unlock_irq(&lcdc->drm.event_lock);
+> +
+> +	/* Disable VBLANK Interrupt */
+> +	writel(0, lcdc->base + IMX21LCDC_LIER);
+> +}
+> +
+> +static int imx_lcdc_check_mode_change(struct drm_display_mode *new_mode,
+> +				      struct drm_display_mode *old_mode)
+> +{
+> +	if (old_mode->hdisplay != new_mode->hdisplay ||
+> +	    old_mode->vdisplay != new_mode->vdisplay)
+> +		return true;
+> +	return false;
+
+Could just
+
+        return (old_mode->hdisplay != new_mode->hdisplay ||
+                old_mode->vdisplay != new_mode->vdisplay);
+
+or fold this into the single use below.
+
+> +
+> +static int imx_lcdc_pipe_check(struct drm_simple_display_pipe *pipe,
+> +			       struct drm_plane_state *plane_state,
+> +			       struct drm_crtc_state *crtc_state)
+> +{
+> +	const struct drm_display_mode *mode = &crtc_state->mode;
+> +
+> +	if ((mode->hdisplay < LCDC_MIN_XRES || mode->hdisplay > LCDC_MAX_XRES) ||
+> +	    (mode->vdisplay < LCDC_MIN_YRES || mode->vdisplay > LCDC_MAX_YRES) ||
+> +	    (mode->hdisplay & 0x10)) { /* must be multiple of 16 */
+
+More parantheses than needed.
+
+> +		DRM_ERROR("unsupported display mode (%u x %u)\n",
+> +			  mode->hdisplay, mode->vdisplay);
+
+Could use drm_err() instead.
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	crtc_state->mode_changed = imx_lcdc_check_mode_change(&crtc_state->mode,
+> +							      &pipe->crtc.state->mode);
+> +
+> +	return 0;
+> +}
+> +
+> +static void imx_lcdc_pipe_update(struct drm_simple_display_pipe *pipe,
+> +				 struct drm_plane_state *old_state)
+> +{
+> +	struct drm_crtc *crtc = &pipe->crtc;
+> +	struct drm_pending_vblank_event *event = crtc->state->event;
+> +	struct drm_plane_state *new_state = pipe->plane.state;
+> +	struct drm_framebuffer *fb = new_state->fb;
+> +	struct drm_framebuffer *old_fb = old_state->fb;
+> +	struct drm_crtc *old_crtc = old_state->crtc;
+> +	bool mode_changed = false;
+> +
+> +	if (old_fb && old_fb->format != fb->format)
+> +		mode_changed = true;
+> +	else if (old_crtc != crtc)
+> +		mode_changed = true;
+> +
+> +	imx_lcdc_update_hw_registers(pipe, old_state, mode_changed);
+> +
+> +	if (event) {
+> +		crtc->state->event = NULL;
+> +
+> +		spin_lock_irq(&crtc->dev->event_lock);
+> +
+> +		if (crtc->state->active && drm_crtc_vblank_get(crtc) == 0)
+> +			drm_crtc_arm_vblank_event(crtc, event);
+> +		else
+> +			drm_crtc_send_vblank_event(crtc, event);
+> +
+> +		spin_unlock_irq(&crtc->dev->event_lock);
+> +	}
+> +}
+> +
+> +static const struct drm_simple_display_pipe_funcs imx_lcdc_pipe_funcs = {
+> +	.enable = imx_lcdc_pipe_enable,
+> +	.disable = imx_lcdc_pipe_disable,
+> +	.check = imx_lcdc_pipe_check,
+> +	.update = imx_lcdc_pipe_update,
+> +	.prepare_fb = drm_gem_simple_display_pipe_prepare_fb,
+> +};
+> +
+> +static const struct drm_mode_config_funcs imx_lcdc_mode_config_funcs = {
+> +	.fb_create = drm_gem_fb_create_with_dirty,
+> +	.atomic_check = drm_atomic_helper_check,
+> +	.atomic_commit = drm_atomic_helper_commit,
+> +};
+> +
+> +static const struct drm_mode_config_helper_funcs imx_lcdc_mode_config_helpers = {
+> +	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
+> +};
+> +
+> +static void imx_lcdc_release(struct drm_device *drm)
+> +{
+> +	struct imx_lcdc *lcdc = drm_to_lcdc(drm);
+> +
+> +	drm_kms_helper_poll_fini(drm);
+> +	kfree(lcdc);
+> +}
+> +
+> +DEFINE_DRM_GEM_DMA_FOPS(imx_lcdc_drm_fops);
+> +
+> +static struct drm_driver imx_lcdc_drm_driver = {
+> +	.driver_features = DRIVER_GEM | DRIVER_MODESET | DRIVER_ATOMIC,
+> +	.fops = &imx_lcdc_drm_fops,
+> +	DRM_GEM_DMA_DRIVER_OPS_VMAP,
+> +	.release = imx_lcdc_release,
+> +	.name = "imx-lcdc",
+> +	.desc = "i.MX LCDC driver",
+> +	.date = "20200716",
+> +};
+> +
+> +static const struct of_device_id imx_lcdc_of_dev_id[] = {
+> +	{
+> +		.compatible = "fsl,imx21-lcdc",
+> +	},
+> +	{
+> +		.compatible = "fsl,imx25-lcdc",
+> +	},
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, imx_lcdc_of_dev_id);
+> +
+> +static irqreturn_t irq_handler(int irq, void *arg)
+> +{
+> +	struct imx_lcdc *lcdc = (struct imx_lcdc *)arg;
+
+Unnecessary cast.
+
+> +	struct drm_crtc *crtc = &lcdc->pipe.crtc;
+> +	unsigned int status;
+> +
+> +	status = readl(lcdc->base + IMX21LCDC_LISR);
+> +
+> +	if (status & INTR_EOF) {
+> +		drm_crtc_handle_vblank(crtc);
+> +		return IRQ_HANDLED;
+> +	}
+> +
+> +	return IRQ_NONE;
+> +}
+> +
+> +static int imx_lcdc_probe(struct platform_device *pdev)
+> +{
+> +	struct imx_lcdc *lcdc;
+> +	struct drm_device *drm;
+> +	int irq;
+> +	int ret;
+> +	struct device *dev = &pdev->dev;
+> +
+> +	lcdc = devm_drm_dev_alloc(&pdev->dev, &imx_lcdc_drm_driver,
+
+Could use the local dev variable.
+
+> +				  struct imx_lcdc, drm);
+> +	if (!lcdc)
+> +		return -ENOMEM;
+> +
+> +	drm = &lcdc->drm;
+> +
+> +	lcdc->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(lcdc->base)) {
+> +		dev_err(dev, "Cannot get IO memory\n");
+> +		return PTR_ERR(lcdc->base);
+> +	}
+> +
+> +	/* Panel */
+> +	ret = drm_of_find_panel_or_bridge(dev->of_node, 0, 0, &lcdc->panel, &lcdc->bridge);
+> +	if (ret) {
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(dev, "Failed to find panel or bridge: %pe", ERR_PTR(ret));
+
+Could be simplified with dev_err_probe().
+
+> +		return ret;
+> +	}
+> +
+> +	/* Get Clocks */
+> +	lcdc->clk_ipg = devm_clk_get(dev, "ipg");
+> +	if (IS_ERR(lcdc->clk_ipg)) {
+> +		dev_err(dev, "Failed to get %s clk: %pe\n", "ipg",
+> +			lcdc->clk_ipg);
+> +		return PTR_ERR(lcdc->clk_ipg);
+
+Maybe also use dev_err_probe() for the clocks.
+
+> +	}
+> +
+> +	lcdc->clk_ahb = devm_clk_get(dev, "ahb");
+> +	if (IS_ERR(lcdc->clk_ahb)) {
+> +		dev_err(dev, "Failed to get %s clk: %pe\n", "ahb",
+> +			lcdc->clk_ahb);
+> +		return PTR_ERR(lcdc->clk_ahb);
+> +	}
+> +
+> +	lcdc->clk_per = devm_clk_get(dev, "per");
+> +	if (IS_ERR(lcdc->clk_per)) {
+> +		dev_err(dev, "Failed to get %s clk: %pe\n", "per",
+> +			lcdc->clk_per);
+> +		return PTR_ERR(lcdc->clk_per);
+> +	}
+> +
+> +	ret = dma_set_mask_and_coherent(drm->dev, DMA_BIT_MASK(32));
+> +	if (ret) {
+> +		dev_err(drm->dev, "Cannot set DMA Mask\n");
+> +		return ret;
+> +	}
+> +
+> +	/* Modeset init */
+> +	drm_mode_config_init(drm);
+
+Use drmm_mode_config_init() directly and handle the return value.
+
+> +
+> +	/* CRTC, Plane, Encoder */
+> +	ret = drm_simple_display_pipe_init(drm, &lcdc->pipe, &imx_lcdc_pipe_funcs, imx_lcdc_formats,
+> +					   ARRAY_SIZE(imx_lcdc_formats), NULL, &lcdc->connector);
+> +	if (ret < 0) {
+> +		dev_err(drm->dev, "Cannot setup simple display pipe\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = drm_vblank_init(drm, drm->mode_config.num_crtc);
+> +	if (ret < 0) {
+> +		dev_err(drm->dev, "Failed to initialize vblank\n");
+> +		return ret;
+> +	}
+> +
+> +	if (lcdc->bridge) {
+> +		ret = drm_simple_display_pipe_attach_bridge(&lcdc->pipe,
+> +							    lcdc->bridge);
+> +		if (ret) {
+> +			dev_err(drm->dev, "Cannot connect bridge: %pe\n",
+> +				ERR_PTR(ret));
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	/* Connector */
+> +	drm_connector_helper_add(&lcdc->connector, &imx_lcdc_connector_hfuncs);
+> +	drm_connector_init(drm, &lcdc->connector, &imx_lcdc_connector_funcs,
+> +			   DRM_MODE_CONNECTOR_DPI);
+
+Missing error handling.
+
+regards
+Philipp
