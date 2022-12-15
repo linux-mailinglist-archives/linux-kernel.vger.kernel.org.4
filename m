@@ -2,113 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4D764D661
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 07:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1142E64D674
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 07:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiLOGQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 01:16:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
+        id S229732AbiLOGbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 01:31:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiLOGQP (ORCPT
+        with ESMTP id S229652AbiLOGbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 01:16:15 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456755B5B4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 22:16:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AC085CE1BE6
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 06:16:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8B6AC433F0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 06:16:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671084968;
-        bh=i5u6MwDdjMbl5c62Ma9C2VxUrEeox5PSRWqUh/AyUOM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bYBxL/j3L6TZTDNkVK26+NjmtaT8e4t9QlRqZIyKMnZRdFpRD4gkOaJNqGj0nEVKL
-         OxlSvV8UNZSD6F4hIvwPU0iaMpfOHByI+/fsGLyn06LfpH4j/M7V5FFakVxHhgdqmq
-         Om7DgZgNrftZTF63PgUUllOliS6y4X2ppyFPRgiQSv8qhRTf1SGk3Yj+5SolSmrMJX
-         1AnmTbmUH0HcsZA5byz1DJbPBqnlJCHvu8InXZjyoJbyG7opD32/G5ccYr59Nxwq7f
-         dTXB1QPauz6DGBLfmzIdCdDer8hnctDwYF0l8wyOYLmmop3HCFYF4JyD4+2VLAKZt8
-         eltaXfdlJGrtQ==
-Received: by mail-ed1-f50.google.com with SMTP id i9so12798602edj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 22:16:08 -0800 (PST)
-X-Gm-Message-State: ANoB5pkzt1Ndo45ruShsD2IiRcpVhk6j8Xba7B2PqGiftLKV3EO1Kxjy
-        0NazyMJWD0wlYG7OY+SvKS0jYW0ydk1glj2m9BI=
-X-Google-Smtp-Source: AA0mqf6xmKh3r7oa6Lk2eyWTOlV7MSnF+EjabO7TglwWDZKTW0VKcmfj/+TaGNvJknxbhkD612pN97/NiknIXBa8Boc=
-X-Received: by 2002:a05:6402:5388:b0:46a:f4b0:2d23 with SMTP id
- ew8-20020a056402538800b0046af4b02d23mr46876515edb.78.1671084966816; Wed, 14
- Dec 2022 22:16:06 -0800 (PST)
+        Thu, 15 Dec 2022 01:31:37 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447B133C15
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 22:31:36 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id k189so4557745oif.7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 22:31:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=R+uLhg/j4swQoWWH6ZgV57Iaev5iuTF+RjvTIiZjWvA=;
+        b=pCYJR1igDmBsAzpv2EEToWh9NGFFQ+LRRbWDOQBUOMDcpBtZDIIRw2iE05SeF5lImE
+         j73O17FmU15k4k/0S/CsODs/MKLU1mRjFMJ5L4cUjLroncad6Vtq7HtsR0J535i8jun4
+         P3rlhO/xF2XRWGpxGMO9TEMnndDXRLN5eO1qaOmuirW6PeBT5vshwnhgqH/0skJ/1qHa
+         ZjTihQ9Dovi4xMT3gbnJD9FU1471b6zOAQD75lxVOv4HXm5lRWy2qFUl7dfRK2pP9D7e
+         n8cWlrrn/Ux2+1wLubBsCbzsw3ZWlv+K/9NBTJWg20a0hBw+VZvZ/yKyIYbf3rkJ0xfa
+         bEsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R+uLhg/j4swQoWWH6ZgV57Iaev5iuTF+RjvTIiZjWvA=;
+        b=HU2gMeIXdXQ42QhNJj3zIXlQFyhPkf2IZJcNb6+MO8iug16uqrLN8Cjy5WVT6reHp0
+         b7G2vdkcbnrFLVek7KRrvC1TRFlfLerzQd/EKZJAzmvL5kEAY5GqyM58S4aCxUQ24HTF
+         VJvyZ6gaXey6yUMyLZRwsgdph261lZv+NWHSku+JmsfPOqTcJ8/0AJtqXWk53k2/4Oe5
+         DnBUEGjoRXQSgyFZX/memcXqHJnSCdqV+TZKMT9SJh+hq8YLow/NRJoD2QdQZwHWShS7
+         iNPJVsv/XZnOSQqQqw2Kr6MAy/qtzCyXZjIsqqfTZQlFKRj1Ir3USFH7YW1I/MyF3F5B
+         utoA==
+X-Gm-Message-State: ANoB5pmthDJNRh6tsjxiLLklNwyDPEqcpiJl7bamTIUab5hyYtkULCiq
+        0x3omBVCWBowjEM1cVp7kG4=
+X-Google-Smtp-Source: AA0mqf5JcNpp9dkz3SXbGNlzirxaxdyYqB81wShl9WN0twjjSPLXDkubSfU6FeAb0PCkaBSKUjQxFA==
+X-Received: by 2002:a05:6808:23ce:b0:35b:9147:395d with SMTP id bq14-20020a05680823ce00b0035b9147395dmr16123583oib.33.1671085895568;
+        Wed, 14 Dec 2022 22:31:35 -0800 (PST)
+Received: from MBP ([68.74.118.125])
+        by smtp.gmail.com with ESMTPSA id 5-20020aca0605000000b0035a7fc53a26sm725526oig.42.2022.12.14.22.31.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 22:31:34 -0800 (PST)
+References: <20221115140233.21981-1-schspa@gmail.com>
+ <m2zgc2vzwx.fsf@gmail.com> <Y5a3rAm21mCf2xrG@bombadil.infradead.org>
+ <m2bko8c0yh.fsf@gmail.com> <m2pmcoag55.fsf@gmail.com>
+ <Y5kE2eAa8EZUxx5b@bombadil.infradead.org>
+ <Y5oqxh2jnarlEKNG@bombadil.infradead.org>
+User-agent: mu4e 1.8.10; emacs 29.0.60
+From:   Schspa Shi <schspa@gmail.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org,
+        syzbot+10d19d528d9755d9af22@syzkaller.appspotmail.com,
+        syzbot+70d5d5d83d03db2c813d@syzkaller.appspotmail.com,
+        syzbot+83cb0411d0fcf0a30fc1@syzkaller.appspotmail.com
+Subject: Re: [PATCH] umh: fix UAF when the process is being killed
+Date:   Thu, 15 Dec 2022 14:16:30 +0800
+In-reply-to: <Y5oqxh2jnarlEKNG@bombadil.infradead.org>
+Message-ID: <m2o7s55gan.fsf@gmail.com>
 MIME-Version: 1.0
-References: <20221215040141.18610-1-hejinyang@loongson.cn> <20221215040141.18610-6-hejinyang@loongson.cn>
-In-Reply-To: <20221215040141.18610-6-hejinyang@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 15 Dec 2022 14:15:57 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4QwWV+q_ROSbw10n3mj64BPsiAoErR7k_wZ4v0zG3nhw@mail.gmail.com>
-Message-ID: <CAAhV-H4QwWV+q_ROSbw10n3mj64BPsiAoErR7k_wZ4v0zG3nhw@mail.gmail.com>
-Subject: Re: [PATCH 5/6] LoongArch: Add raw_show_trace to enable guess
- unwinder default
-To:     Jinyang He <hejinyang@loongson.cn>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Qing Zhang <zhangqing@loongson.cn>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jinyang,
 
-Is this patch really necessary?
+Luis Chamberlain <mcgrof@kernel.org> writes:
 
-Huacai
+> Peter, Ingo, Steven would like you're review.
+>
+> On Tue, Dec 13, 2022 at 03:03:53PM -0800, Luis Chamberlain wrote:
+>> On Mon, Dec 12, 2022 at 09:38:31PM +0800, Schspa Shi wrote:
+>> > I'd like to upload a V2 patch with the new solution if you prefer the
+>> > following way.
+>> > 
+>> > diff --git a/kernel/umh.c b/kernel/umh.c
+>> > index 850631518665..8023f11fcfc0 100644
+>> > --- a/kernel/umh.c
+>> > +++ b/kernel/umh.c
+>> > @@ -452,6 +452,11 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
+>> >                 /* umh_complete() will see NULL and free sub_info */
+>> >                 if (xchg(&sub_info->complete, NULL))
+>> >                         goto unlock;
+>> > +               /*
+>> > +                * kthreadd (or new kernel thread) will call complete()
+>> > +                * shortly.
+>> > +                */
+>> > +               wait_for_completion(&done);
+>> >         }
+>> 
+>> Yes much better. Did you verify it fixes the splat found by the bots?
+>
+> Wait, I'm not sure yet why this would fix it... I first started thinking
+> that this may be a good example of a Coccinelle SmPL rule, something like:
+>
+> 	DECLARE_COMPLETION_ONSTACK(done);
+> 	foo *foo;
+> 	...
+> 	foo->completion = &done;
+> 	...
+> 	queue_work(system_unbound_wq, &foo->work);
+> 	....
+> 	ret = wait_for_completion_state(&done, state);
+> 	...
+> 	if (!ret)
+> 		S
+> 	...
+> 	+wait_for_completion(&done);
+>
+> But that is pretty complex, and while it may be useful to know how many
+> patterns we have like this, it begs the question if generalizing this
+> inside the callers is best for -ERESTARTSYS condition is best. What
+> do folks think?
+>
+> The rationale here is that if you queue stuff and give access to the
+> completion variable but its on-stack obviously you can end up with the
+> queued stuff complete() on a on-stack variable. The issue seems to
+> be that wait_for_completion_state() for -ERESTARTSYS still means
+> that the already scheduled queue'd work is *about* to run and
+> the process with the completion on-stack completed. So we race with
+> the end of the routine and the completion on-stack.
+>
+> It makes me wonder if wait_for_completion() above really is doing
+> something more, if it is just helping with timing and is still error
+> prone.
+>
+> The queued work will try the the completion as follows:
+>
+> static void umh_complete(struct subprocess_info *sub_info)
+> {
+> 	struct completion *comp = xchg(&sub_info->complete, NULL);              
+> 	/*
+> 	 * See call_usermodehelper_exec(). If xchg() returns NULL
+> 	 * we own sub_info, the UMH_KILLABLE caller has gone away
+> 	 * or the caller used UMH_NO_WAIT.
+> 	 */
+> 	if (comp)
+> 		complete(comp);
+> 	else
+> 		call_usermodehelper_freeinfo(sub_info);
+> }
+>
+> So the race is getting -ERESTARTSYS on the process with completion
+> on-stack and the above running complete(comp). Why would sprinkling
+> wait_for_completion(&done) *after* wait_for_completion_state(&done, state)
+> fix this UAF?
 
-On Thu, Dec 15, 2022 at 12:02 PM Jinyang He <hejinyang@loongson.cn> wrote:
->
-> Inspired by MIPS, add cmdline parameter named 'raw_show_trace' to
-> enable guess unwinder in prologue unwinder unwind_start() default.
-> In some cases the guess is more efficient than prologue.
->
-> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-> ---
->  arch/loongarch/kernel/unwind_prologue.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->
-> diff --git a/arch/loongarch/kernel/unwind_prologue.c b/arch/loongarch/kernel/unwind_prologue.c
-> index 9677e13c4b4c..441641227c10 100644
-> --- a/arch/loongarch/kernel/unwind_prologue.c
-> +++ b/arch/loongarch/kernel/unwind_prologue.c
-> @@ -122,11 +122,22 @@ static bool unwind_by_prologue(struct unwind_state *state)
->         return !!__kernel_text_address(state->pc);
->  }
->
-> +static int raw_show_trace;
-> +static int __init set_raw_show_trace(char *str)
-> +{
-> +       raw_show_trace = 1;
-> +       return 1;
-> +}
-> +__setup("raw_show_trace", set_raw_show_trace);
-> +
->  static void start(struct unwind_state *state, struct task_struct *task,
->                     struct pt_regs *regs)
+The wait_for_completion(&done) is added when xchg(&sub_info->complete,
+NULL) return NULL. When it returns NULL, it means the umh_complete was
+using the completion variable at the same time and will call complete
+in a very short time.
+
+Add wait_for_completion *after* wait_for_completion_state will make the
+interruptible/timeout version API not working anymore.
+
+> 												    }   
+> diff --git a/kernel/sched/completion.c b/kernel/sched/completion.c
+> index d57a5c1c1cd9..aa7031faca04 100644
+> --- a/kernel/sched/completion.c
+> +++ b/kernel/sched/completion.c
+> @@ -205,8 +205,10 @@ int __sched wait_for_completion_interruptible(struct completion *x)
 >  {
->         state->first = true;
->
-> +       if (raw_show_trace)
-> +               unwind_register_unwinder(state, guard_unwinder);
-> +
->         /*
->          * The current PC is not kernel text address, we cannot find its
->          * relative symbol. Thus, prologue analysis will be broken. Luckly,
-> --
-> 2.34.3
->
+>  	long t = wait_for_common(x, MAX_SCHEDULE_TIMEOUT, TASK_INTERRUPTIBLE);
+>  
+> -	if (t == -ERESTARTSYS)
+> +	if (t == -ERESTARTSYS) {
+> +		wait_for_completion(x);
+>  		return t;
+> +	}
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL(wait_for_completion_interruptible);
+> @@ -243,8 +245,10 @@ int __sched wait_for_completion_killable(struct completion *x)
+>  {
+>  	long t = wait_for_common(x, MAX_SCHEDULE_TIMEOUT, TASK_KILLABLE);
+>  
+> -	if (t == -ERESTARTSYS)
+> +	if (t == -ERESTARTSYS) {
+> +		wait_for_completion(x);
+>  		return t;
+> +	}
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL(wait_for_completion_killable);
+> @@ -253,8 +257,10 @@ int __sched wait_for_completion_state(struct completion *x, unsigned int state)
+>  {
+>  	long t = wait_for_common(x, MAX_SCHEDULE_TIMEOUT, state);
+>  
+> -	if (t == -ERESTARTSYS)
+> +	if (t == -ERESTARTSYS) {
+> +		wait_for_completion(x);
+>  		return t;
+> +	}
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL(wait_for_completion_state);
+
+If we want to make it a generic fix, syntactic sugar can be added to
+simplify usage for users.
+
+Consider the following patch.
+
+diff --git a/kernel/sched/completion.c b/kernel/sched/completion.c
+index d57a5c1c1cd9..67b7d02c0098 100644
+--- a/kernel/sched/completion.c
++++ b/kernel/sched/completion.c
+@@ -341,3 +341,33 @@ bool completion_done(struct completion *x)
+        return true;
+ }
+ EXPORT_SYMBOL(completion_done);
++
++void complete_on_stack(struct completion **x)
++{
++       struct completion *comp = xchg(*x, NULL);
++
++       if (comp)
++               complete(comp);
++}
++EXPORT_SYMBOL(complete_on_stack);
++
++int __sched wait_for_completion_state_on_stack(struct completion **x,
++                                       unsigned int state)
++{
++       struct completion *comp = *x;
++       int retval;
++
++       retval = wait_for_completion_state(comp, state);
++       if (retval) {
++               if (xchg(*x, NULL))
++                       return retval;
++
++               /*
++                * complete_on_stack will call complete shortly.
++                */
++               wait_for_completion(comp);
++       }
++
++       return retval;
++}
++EXPORT_SYMBOL(wait_for_completion_state_on_stack);
+
+-- 
+BRs
+Schspa Shi
