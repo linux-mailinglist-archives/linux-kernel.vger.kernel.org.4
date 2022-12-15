@@ -2,82 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4653164D4DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 02:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE6164D4E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 02:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbiLOBBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 20:01:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
+        id S229809AbiLOBHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 20:07:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiLOBB3 (ORCPT
+        with ESMTP id S229788AbiLOBHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 20:01:29 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D4D4664F
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 17:01:26 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id e205so4094692oif.11
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 17:01:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+AXpgMmuL3NSvfn8iBTUkD9z8GYz9GV/xJMhFU7McSc=;
-        b=Hj80HcFk1+wGgWdM0qYtfoEP118g7pnbDZ1iaONKLRyq7ALD/XEV7vVSxyeyG5C332
-         DuC73/7jKGMCEB1dULH+KLHOKSeumpkwpUW+GG68qvMmQss4v6sir0gMkHngJ4x1PdNs
-         8vdv6ESeeyQvXXjiXz48kEds4m3Lm1jtvmFWcha7pPVkxpn+OyzTG9/53OGVegS45kva
-         5BafxskuHY7iVDaqjM/QPv26NHNdJ8WRDt4flC21tJbgAsNeqEiTNTWmog0Muzakrg+B
-         VTXrP+16m5YsUQA7uxS09XE7vABC6lHuib020amhH4dBXy3QWuaWt/Jwty6r6MYSoUQT
-         6e1g==
+        Wed, 14 Dec 2022 20:07:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1254537C1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 17:06:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671066372;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6SX5ZzHEybWQrQxJLxiT9zanQMGhd2Al6flIE5ogWzk=;
+        b=AYdGixrkciaWbvzT+nFhWF4e/hVcNmE1JbFxzULKjovb9vIvA4rQXdyPtvsXcH01jrv5sc
+        jxAtrL9CJQtaEnQdI9XlOHkVcJYWs32k10hyqwTLtWUTllPuy1E0cYiSgTwHNXFCxWosXT
+        BN9KkQe1DhxpaZMvTsxNo08g6OCxQMg=
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
+ [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-271-KmlfliSmNeWXC7peGlZ-AQ-1; Wed, 14 Dec 2022 20:06:11 -0500
+X-MC-Unique: KmlfliSmNeWXC7peGlZ-AQ-1
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-3b0af5bcbd3so19175437b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 17:06:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+AXpgMmuL3NSvfn8iBTUkD9z8GYz9GV/xJMhFU7McSc=;
-        b=h0holgyGa+4CEOX6ZmI0euEfzdsXKSa80md6xMsEbZdx96BWpAlY+ezIUeje7ZLI5y
-         20IZcpWoXIrQjiP1yjc2NItOmUvottW1jTcWJP24zKWyRBTETCQyS61AagNbCyGcyjbf
-         oPL5X0otzYkJuo+IopjYc9qDZ6QU15CvmqkCmY6v4HZA100853te6/u6BWI4f7FCFJlF
-         Y9svt13OrOOP0KlymC+z5Ho7+vQ9fpCKhHJYXHpRu+c4nhTIQdf0e70wwuNxKWon+xH8
-         eHpmKsugVjbO4S7jGJnFNlee/R5Vbt5JBNwSk7qDM/9R6c67uvqOH3pbtdsapzwUi1T1
-         8BcQ==
-X-Gm-Message-State: ANoB5pmrZmYx5xZpKcx+9J3w3Anp+z59k6ThGNoFYcGyJID5pp2g7T+C
-        ixgkv0sOIy2NGZW7bjF3DX3ZNQ==
-X-Google-Smtp-Source: AA0mqf7KxsTUFtO5GJXQhQPOFp5+C1dzmEUY6YPXNbXSdYOeKDPdD1PHkb69Ov9jtK9L5BUY7Y7G2Q==
-X-Received: by 2002:a05:6808:2387:b0:35e:9bb3:b8fa with SMTP id bp7-20020a056808238700b0035e9bb3b8famr7121698oib.51.1671066085845;
-        Wed, 14 Dec 2022 17:01:25 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id i8-20020a05620a404800b006feea093006sm11137891qko.124.2022.12.14.17.01.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 17:01:24 -0800 (PST)
-Date:   Wed, 14 Dec 2022 17:01:13 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Michael Roth <michael.roth@amd.com>
-cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        harald@profian.com, Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH RFC v7 21/64] x86/fault: fix handle_split_page_fault()
- to work with memfd backed pages
-In-Reply-To: <20221214194056.161492-22-michael.roth@amd.com>
-Message-ID: <7f2228c4-1586-2934-7b92-1a9d23b6046@google.com>
-References: <20221214194056.161492-1-michael.roth@amd.com> <20221214194056.161492-22-michael.roth@amd.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6SX5ZzHEybWQrQxJLxiT9zanQMGhd2Al6flIE5ogWzk=;
+        b=drOfs/nvyMT6lijABeoup/oHqGQYWiSydhWUYNSxQi2L2aHIyeMKd30C9kU/+oA6zz
+         fPh6a7E2locRhuJoABYzl4QCF3DgwRYcwRnfw0rug5MmN9sVlN7/mcEmyq7YYBNvLRQY
+         T9/ADM/zsiRl/N2C9IaannEXbL6R33ICIFhZdFbhrGHwj0lJ/ilNqcToQ27JwKwS/wJZ
+         yhYVguSTau0h+n0hAD45CSwWzGzfKIqN2tD02Wa4eOEl/ZW4L2qpToBRAsP5d5UWVl8N
+         t998r2cAW6NOgPlU8pB/krQ4G1Z898jdGtJQ/qkEurWInWn+qXWd1lsQxYPQaHNDocN7
+         Db4Q==
+X-Gm-Message-State: ANoB5pl23Inz1Ygu+nobt9j7cMiKQpaI02s05NHWiZ/cRy9KGi3whxIP
+        Yh2Q9/5c9h34jO6ENFCNN7JKiARX1vR0odxMz/CwtsM3NwPQ2KnxU7tT5qX7N9YZ0IAmSV3AuR5
+        npyc8A9Z47xroa32vU6AGyhnc4qBoRhyi/qdQ/0wn
+X-Received: by 2002:a25:4008:0:b0:728:37a1:b4ac with SMTP id n8-20020a254008000000b0072837a1b4acmr1236361yba.63.1671066370847;
+        Wed, 14 Dec 2022 17:06:10 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4iReGa+vX68Fe0jrwCwf6H644+1hYm3UmS0ulsI8BPMFqUtrOd3jIFloeXiXXxYGe1/uo5NAtxXVx1aNp1CWo=
+X-Received: by 2002:a25:4008:0:b0:728:37a1:b4ac with SMTP id
+ n8-20020a254008000000b0072837a1b4acmr1236354yba.63.1671066370587; Wed, 14 Dec
+ 2022 17:06:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+References: <20221213234505.173468-1-npache@redhat.com> <Y5kPKpNp5qCnZEWy@monkey>
+ <CAA1CXcB653kDtF90oWUgVA3TDUrJHac-WPe1HdsQtRwtN5B3gA@mail.gmail.com>
+ <CAA1CXcDK=bpAbmkwyssja9d7eA3iEtNQ2aNaQo4DkdjV3YvOVA@mail.gmail.com>
+ <Y5kgoTVteXm0QFgT@monkey> <fb2fb91c-1e54-a4ee-bf69-299e9114ae1e@oracle.com>
+In-Reply-To: <fb2fb91c-1e54-a4ee-bf69-299e9114ae1e@oracle.com>
+From:   Nico Pache <npache@redhat.com>
+Date:   Wed, 14 Dec 2022 18:05:44 -0700
+Message-ID: <CAA1CXcDmhQErLnEvoVE2_8EeY0EGTBVWSTC4UXP5F2n-JOgvfw@mail.gmail.com>
+Subject: Re: [RFC V2] mm: add the zero case to page[1].compound_nr in set_compound_order
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        muchun.song@linux.dev, akpm@linux-foundation.org,
+        willy@infradead.org, gerald.schaefer@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,64 +78,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Dec 2022, Michael Roth wrote:
-> From: Hugh Dickins <hughd@google.com>
-> 
-> When the address is backed by a memfd, the code to split the page does
-> nothing more than remove the PMD from the page tables. So immediately
-> install a PTE to ensure that any other pages in that 2MB region are
-> brought back as in 4K pages.
-> 
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-> Cc: Hugh Dickins <hughd@google.com>
-> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
+On Tue, Dec 13, 2022 at 11:38 PM Sidhartha Kumar
+<sidhartha.kumar@oracle.com> wrote:
+>
+> On 12/13/22 5:02 PM, Mike Kravetz wrote:
+> > On 12/13/22 17:27, Nico Pache wrote:
+> >> According to the document linked the following approach is even faster
+> >> than the one I used due to CPU parallelization:
+> >
+> > I do not think we are very concerned with speed here.  This routine is being
+> > called in the creation of compound pages, and in the case of hugetlb the
+> > tear down of gigantic pages.  In general, creation and tear down of gigantic
+> > pages happens infrequently.  Usually only at system/application startup and
+> > system/application shutdown.
+> >
+> Hi Nico,
+>
+> I wrote a bpftrace script to track the time spent in
+> __prep_compound_gigantic_folio both with and without the branch in
+> folio_set_order() and resulting histogram was the same for both
+> versions. This is probably because the for loop through every base page
+> has a much higher overhead than the singular call to folio_set_order().
+> I am not sure what the performance difference for THP would be.
 
-Hah, it's good to see this again, but it was "Suggested-by" me, not
-"Signed-off-by" me.  And was a neat pragmatic one-liner workaround
-for the immediate problem we had, but came with caveats.
+Hi Sidhartha,
 
-The problem is that we have one wind blowing in the split direction,
-and another wind (khugepaged) blowing in the collapse direction, and
-who wins for how long depends on factors I've not fully got to grips
-with (and is liable to differ between kernel releases).
+Ok great! We may want to proactively implement a branchless version so
+once/if THP comes around to utilizing this we won't see a regression.
 
-Good and bad timing to see it.  I was just yesterday reviewing a patch
-to the collapsing wind, which reminded me of an improvement yet to be
-made there, thinking I'd like to try it sometime; but recallng that
-someone somewhere relies on the splitting wind, and doesn't want the
-collapsing wind to blow any harder - now you remind me who!
+Furthermore, Waiman brought up a good point off the list:
+This bitmath is needlessly complex and can be achieved with
+           page[1].compound_nr = (1U << order) & ~1U;
 
-Bad timing in that I don't have any quick answer on the right thing
-to do instead, and can't give it the thought it needs at the moment -
-perhaps others can chime in more usefully.
+Tested:
+order 0 output : 0
+order 1 output : 2
+order 2 output : 4
+order 3 output : 8
+order 4 output : 16
+order 5 output : 32
+order 6 output : 64
+order 7 output : 128
+order 8 output : 256
+order 9 output : 512
+order 10 output : 1024
 
-Hugh
 
-p.s. I don't know where "handle_split_page_fault" comes in, but
-"x86/fault" in the subject looks wrong, since this appears to be
-in generic code; and "memfd" seems inappropriate too, but perhaps you
-have a situation where only memfds can reach handle_split_page_fault().
+> Below is the script.
+> Thanks,
+> Sidhartha Kumar
 
-> ---
->  mm/memory.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index e68da7e403c6..33c9020ba1f8 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -4999,6 +4999,11 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
->  static int handle_split_page_fault(struct vm_fault *vmf)
->  {
->  	__split_huge_pmd(vmf->vma, vmf->pmd, vmf->address, false, NULL);
-> +	/*
-> +	 * Install a PTE immediately to ensure that any other pages in
-> +	 * this 2MB region are brought back in as 4K pages.
-> +	 */
-> +	__pte_alloc(vmf->vma->vm_mm, vmf->pmd);
->  	return 0;
->  }
->  
-> -- 
-> 2.25.1
+Thanks for the script!!
+Cheers,
+-- Nico
+
+> k:__prep_compound_gigantic_folio
+> {
+>          @prep_start[pid] = nsecs;
+> }
+>
+> kr:__prep_compound_gigantic_folio
+> {
+>          @prep_nsecs = hist((nsecs - @prep_start[pid]));
+>          delete(@prep_start[pid]);
+> }
+
