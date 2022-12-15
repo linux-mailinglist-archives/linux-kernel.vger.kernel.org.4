@@ -2,121 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0FBA64DE3F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A2464DE41
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiLOQMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:12:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
+        id S229976AbiLOQMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiLOQMH (ORCPT
+        with ESMTP id S229900AbiLOQMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:12:07 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2055.outbound.protection.outlook.com [40.107.22.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981CE31DEA;
-        Thu, 15 Dec 2022 08:12:06 -0800 (PST)
+        Thu, 15 Dec 2022 11:12:16 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2056.outbound.protection.outlook.com [40.107.237.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3C131EF7;
+        Thu, 15 Dec 2022 08:12:12 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mTob3zltP8dUCsx5fWvAlkZsHPA4JU+LEwcoDkYdMGNi+YDGtxfIC/IJ1yHo5tj8/xTZr17tGMTsMqKXhTiQnA9OdMb+QR6Q/GbiHk9JuV3yyNLf2r9Jm1X3IGsITNqtZd2MLsvlwflYNdThiQWJpvSJz/luTB+X4rhgT5ZF3w+0aZepA9jKOCwxwEQlTbb/KBgNtxBUj2T65x5U0W5xLf8ftPVtL8emBRmcR8ibPWsjoSdFz3QzwAqeQBU04vuXf3cQlrJdeh6uDOv5dlszPA1ihBogiRi3zt8bjLap2+a8Q4m3YRAr/FxKwJr+z6Pe+7lceMV7eA8HXAetOzQcgA==
+ b=N9n4ITIeETb6tXZc6NWzWyraHcmmZCqusVtm8A8ZoFlFsVtTb3k4jLNlwHYh3a0aPwklxmDQNUuPlNOCh1YNR1NmopbxUb2tZ9FjDDkv1TL9PXzlp8HMSksvjg4Oif3GHX+k+kRqOhWjFrSKWLF1rEouBW2Yk4lUYvTn2R8DBN9glc/xIPm4GS3scazjet+WJxJF/1u0Iecf/OCIXx1u/UgoZEQM+CV4JK7rh0BaSpwL6Mdfx1MGD7YFYzhIZGG/MXA+ZBAmkddP3G/sR61lK37ymVpvi7KyqTDp2TRp7EdKCdJO6dYe6JuO16su29kha3vyYZIuj8KcmW1a+g38pw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+Os/nQh+1dYYG28NTCM5kDDxxlafv/aashhIy2PwIlM=;
- b=T4PTKL/FE0WfzL2QNTLq3DwuFU5jZeGb/GzXgy5qcvgq11uPzbm+cQcqgFLjyYEno/6X+uCccrdmSzRTM1nbme+JEw0hEdB2tTA+tf3/PU7DuulhefEmrDsB/DJ0gEebs/rmXc2HIug1XNgJFWqRyfznt/kTA4NHxdGJgvnrolReItNIYG4+Si446v8Dc5LvZc1Up7Cr1ZqJLPQKs0ppOsOdMH0Y0ifJsU8NeY5MiUHFIRkY58wbRIRH6dkkLJfbi8sZkyaTytNV7aEF5079UXi14VUe3l/ezFVyLIPXrze1I66ZWz25F0OlpysIalUP1gzMP73INJSv2Uyey1HvyA==
+ bh=SyueMjgF0JEs6y63t3DR/bJoFMbkBu+bI1LmBFwknNs=;
+ b=JfYmHHraxL45BONnnzvaDa1/oSE6c1g7jIXxVz0g8SisHzzk1ZIQOQGgGpKHMniiZvZnlORCL8ch+KLhiz0AFMmbNxNixXxtmtBcqd0tFdh0Xy12SAwSPkmPm+exdCfKIA7JXRX/nFQezXjF3NHbUyDgbI6YruUmLcXMLXduK4cwi3OPAasNYCiSrCtAqBn8D6eopnSavCj4+J8W87w7jpVDblrFq+TPm6ANuUhLQ2v1CHbLwunS8NFRZ91GzFWZhfBvZ/J451AnomOP0Iw2lcjA7c5SQ1xk/3n76jIq0SPJr4NgKOGK/sB8psT0pyjOnC5xwMDcLDKVDELBOdncDw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+Os/nQh+1dYYG28NTCM5kDDxxlafv/aashhIy2PwIlM=;
- b=fQfR+8JGPW7UsLRwUtbME1Fkbka1dU1eURap1WPHl0U0nSf+fR+H7kkOP+pqxJPy61AKlZQpxdKLTCS0vZMML3ePfpe+5efoOQhbUH1DtUqqGhDVVp45t+MyQaLyketHKMArd951MpkQF0MSCm+CTnOD/vnPwoZr89CS1TjZEZk=
-Received: from VI1PR04MB5807.eurprd04.prod.outlook.com (2603:10a6:803:ec::21)
- by AS8PR04MB7591.eurprd04.prod.outlook.com (2603:10a6:20b:297::9) with
+ bh=SyueMjgF0JEs6y63t3DR/bJoFMbkBu+bI1LmBFwknNs=;
+ b=obfHZFx3pFv6vMNDpu+GikTj2JBv8sZ0JPx5F0ihfF7qVlwTXfJw74zF69/4pmkKU2jWhHEEJq3Q3pbYV10ucstnBxk8nHr1WEMLIYa1O1oqHXAcYwYdYHlkuQ3tiba73qL4ZuFb0FFKPJZ2n1avF6OjYLym5+R0544iRqJ029Y=
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
+ by MW4PR12MB5625.namprd12.prod.outlook.com (2603:10b6:303:168::6) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12; Thu, 15 Dec
- 2022 16:12:03 +0000
-Received: from VI1PR04MB5807.eurprd04.prod.outlook.com
- ([fe80::75ca:4956:79f9:6d69]) by VI1PR04MB5807.eurprd04.prod.outlook.com
- ([fe80::75ca:4956:79f9:6d69%7]) with mapi id 15.20.5880.019; Thu, 15 Dec 2022
- 16:12:02 +0000
-From:   Camelia Alexandra Groza <camelia.groza@nxp.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+ 2022 16:12:09 +0000
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::790c:da77:2d05:6098]) by MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::790c:da77:2d05:6098%5]) with mapi id 15.20.5880.019; Thu, 15 Dec 2022
+ 16:12:09 +0000
+From:   "Moger, Babu" <Babu.Moger@amd.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>
+CC:     "fenghua.yu@intel.com" <fenghua.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "chang.seok.bae@intel.com" <chang.seok.bae@intel.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "Das1, Sandipan" <Sandipan.Das@amd.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: RE: [PATCH net-next] powerpc: dts: t208x: Disable 10G on MAC1 and
- MAC2
-Thread-Topic: [PATCH net-next] powerpc: dts: t208x: Disable 10G on MAC1 and
- MAC2
-Thread-Index: AQHY78tRL3+xanEU+0uYmQH01S5oE65vWKRg
-Date:   Thu, 15 Dec 2022 16:12:02 +0000
-Message-ID: <VI1PR04MB5807CB6B0A348FD680AC420FF2E19@VI1PR04MB5807.eurprd04.prod.outlook.com>
-References: <20221103212854.2334393-1-sean.anderson@seco.com>
-In-Reply-To: <20221103212854.2334393-1-sean.anderson@seco.com>
-Accept-Language: en-GB, ro-RO, en-US
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "eranian@google.com" <eranian@google.com>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "quic_jiles@quicinc.com" <quic_jiles@quicinc.com>,
+        "peternewman@google.com" <peternewman@google.com>
+Subject: RE: [PATCH v9 00/13] Support for AMD QoS new features
+Thread-Topic: [PATCH v9 00/13] Support for AMD QoS new features
+Thread-Index: AQHZBZqdPWUZgGQn2kuXVfR31D91jq5vIToAgAAJUwCAAAoMYA==
+Date:   Thu, 15 Dec 2022 16:12:09 +0000
+Message-ID: <MW3PR12MB455339028B2B444B5068650995E19@MW3PR12MB4553.namprd12.prod.outlook.com>
+References: <166990882621.17806.16780480657453071426.stgit@bmoger-ubuntu>
+ <MW3PR12MB455392E4A81DB52A9B6B0DB195E19@MW3PR12MB4553.namprd12.prod.outlook.com>
+ <f44e1e4c-ef68-7818-d4e1-ffabc92087b3@intel.com>
+In-Reply-To: <f44e1e4c-ef68-7818-d4e1-ffabc92087b3@intel.com>
+Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-12-15T16:11:35Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=fc2c1442-9245-4225-ab01-e2b4e263b420;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-12-15T16:12:08Z
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: af2e729e-6bc5-47c5-8089-6d1e1331f906
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
+ header.d=none;dmarc=none action=none header.from=amd.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1PR04MB5807:EE_|AS8PR04MB7591:EE_
-x-ms-office365-filtering-correlation-id: 2aa8c7e4-a143-4655-9f18-08dadeb71a58
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-ms-traffictypediagnostic: MW3PR12MB4553:EE_|MW4PR12MB5625:EE_
+x-ms-office365-filtering-correlation-id: 605093a7-c116-44b0-33a6-08dadeb71e66
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3suUI9iVU2xaN5VrLsVw6F6p3GwrFP8UyX689GvRuUzhW6QzhnZGcCYrv4jXIwN76droEOc2JbSoMFJjm4lkuPUC7mAeJKbcPBPYuGMLge0/Pi8ZkYoni9uWd8y43kYkeb4SZs8VKtDmlsph73UnimHzCRSMAxszfWXHJzFO/mlSzMjIXqJx/zK3vv1HEE3BKPWb5+/24obi/lO/NWF0UbcfQKCp+oTcDPdlb+I4NfGdA2Xn/4wW6lX+DzJwTDjBGNhWNntsz/Dcj91DcFadk+0t22j+1EuL1zDe9kinLafBbTojHg92S1rvbSEc82oxKNHfuqGHM5J/qNPRgkwwwarjdeE3j6C6eqsNWHrTt/Fe4kfMLFB5qhWhZbInWGcqzvwGVIkvOcHd75r0EIcNlzGRvM5E93XqUZjOy/1E4cMhJ8ULlYQ9I1naZphZBYAJWldw9Duy30K+0eAzONM7n66KVYxQAPWQIzgUdIab5AMG+sFDLwJppBhg3zfaEKwcX7bOI5a5CiEr3h8FZ8covTaTCIIuPVEGBVXVce5nwh9HBShC9gbuyYH/1GKytUVB/oiwQoFDN/2BWn2V7jBCXTRTi/UOCH9oCjVghyVfCYHgTrBBu7T4oTVGN/NQma2ypXytpYxuh52SeQo7LeZYpstaseE/loHTzS/L6ZixVlLD3zyryjvs+l/JigJ1Sdu1rHELUgJAalBPjLiVsl668g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5807.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(366004)(346002)(396003)(39860400002)(451199015)(86362001)(66476007)(66556008)(4326008)(66946007)(64756008)(8676002)(66446008)(33656002)(316002)(54906003)(6916009)(38100700002)(76116006)(38070700005)(122000001)(2906002)(83380400001)(71200400001)(55236004)(26005)(186003)(53546011)(9686003)(478600001)(55016003)(41300700001)(6506007)(7696005)(7416002)(5660300002)(52536014)(8936002);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: pDSmotPJF678Pzbf4AqB7T4Ud4xRKQgtR75w2bCB96HtuFnu/RjVYHrSl/43TIIiNnrLLtdPX21uTInfbDGo5njDT7Uf/bfoELVtRTQutqezBR4gLk/TIRwq5mEth50jTKyclelLvWIpgqnUwUy9fKBeutCVLoWKmyObvqLfrAnUKJG5NHsAHPankzM190bfhxClhgxiku7kFTqpkTNEFHDU20dk4NTwJsgqEif87RvySiuNnCgeElnmjIfj1mlHyHJxGgBfu7K6yZeYaqsxViP5iu1SkoCaqTQuZ4ez8x0PV6d7RqiGn+QaXid06GzA3UORklU2ipVOC/XyoNt9NIMIdf6E9F0jS+HO8cTEvIobtFTlfiFWY4rJMTCzySfuFT42cnzVFao4vVA7Xm2mpCKUk0tDGDWhoA7el7tRU+BMPceY2nKUizAfuo/o7R4nYI+FkybAH8BDCLpfA+qD7hzXxG0u3IWSReZT88eeQvKWYHNX/v6QWNanJbCGybZ/uXEjL+Wgrfx+SS/wEn1t37vy+yeQ3kv4xdjKy4pqI0IBV9lb49s585pCDxM+jZ8ePz3KBNgU8yqg+x3pIpdi18hdlYKqq4rSQ8FSc2ufm8WSn/M13dCd/Wi9rcL549oUNb3fE1Q1J2a9ngpHINtvG2+L2EnGeNedQ+VNeG2/W6pD/KSX3LhB2KSvOLwEKElBsvrfS/KqeY3L7nTWRPhasb0s4RuXNu+oF7eK1b9QhGc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(366004)(376002)(136003)(346002)(451199015)(7406005)(7416002)(2906002)(5660300002)(8936002)(52536014)(38070700005)(316002)(41300700001)(8676002)(4326008)(66946007)(66446008)(76116006)(66556008)(66476007)(64756008)(55016003)(54906003)(966005)(45080400002)(110136005)(33656002)(71200400001)(9686003)(478600001)(26005)(6506007)(122000001)(186003)(53546011)(7696005)(86362001)(38100700002)(83380400001);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/LPs1nha30L38pvrriR7OTBro8iylcC6eSIMX7dxEQQWeSsAH6kfnPVrxPfP?=
- =?us-ascii?Q?kb0dH4xZTkirwlx9+wMO6KnPGrNsnsEYr2FmsToqJ9/cIF+4WRCHOPhwUlWk?=
- =?us-ascii?Q?TNGhlwjMK8a/ccjEqpmMNEBhM34HXo9FN/WU8VV4V0Z9zG5ExLMxJ5m7QEqL?=
- =?us-ascii?Q?fyZSOpFvylPPeleXNTdb/R1j5weF2JWuW3St8GRIHubacDLaK648ZLZmN+YU?=
- =?us-ascii?Q?bcmoOqZCNEJlKzOpba4/EODFFKGzEX+h3gTz7kFL6GlpJHFgta0ngYQ8Lg29?=
- =?us-ascii?Q?qH46sZA2IvUhP4JH7DSbP/Vg8bmhRmd/Zg28FRlG9nzFlw4f5M7I/Bivj3AT?=
- =?us-ascii?Q?Nuu+P2p7f+IZm7qhqv2nP68u8gQJie4+WFgjFxSS+qFKhgFg9icQaCvSH0ZU?=
- =?us-ascii?Q?xIlsaBn22cvcmt+DUUHel6sOrr6l6g3X0UtuiaF1DdyeO9zT2mWPhVrDSQ5+?=
- =?us-ascii?Q?5bCw2RpB6tH6D+NyEmy7viPVjgwjuPK6bsxhurYiRRnIqIeeWlljAFG7k24O?=
- =?us-ascii?Q?T0g1QYfYmbqqgRpnAk1plMJ/TDNVIzUQr6vKW5uMd8PD81cI/Yp5bsNcsy0K?=
- =?us-ascii?Q?mWOQCSjFcJoP4O51AhOls8DWIJRkYjXPw0gkKyttIC3gEkdgQbbzgfFyhWQh?=
- =?us-ascii?Q?lq+pHmyXzmB44SaBMYRfNNb/JyyR5c0IijDrsxNRr03V4q1ZamEeYGtMZqti?=
- =?us-ascii?Q?3OBTAHLRRFk3tHTICiBQ7cLQ1Y/P/o+lj1RBj4B0019z4jcNeLc2h3JtizYe?=
- =?us-ascii?Q?UCv1EhsBJXi/ARsqdJ1yUnrk9E09+j7ginCSPHFC2dd8yr8U2lugMOgY5UCN?=
- =?us-ascii?Q?DyiIeRHUj3ytUxxYEvEWeFQtLfNhGv0cFoNvNFhcdEyRhmo3qezUU+jGpVCW?=
- =?us-ascii?Q?OIbx02chZgPYLxExsdkFeM5Mxzd/Un9Nc9bD9kI/FFhPCJ5E+lYSpJyST5PQ?=
- =?us-ascii?Q?2/zRrkF9QJ2pJ+XQfKBPKwhL2rjx8Z74MpfVqeIV7oUeGmo7C9Q76AuQ7oS3?=
- =?us-ascii?Q?vlWGN8Kkz5euF7xO4xbNq9A7K3Dm+yvtSeRPS+lWh2ZWyB51vZCTXltQ/+S/?=
- =?us-ascii?Q?rZ3TcRZs7s8vgzgRVH/o/Fl40qLn5lNoNSgUztLnqCdsCT2uNw2qA+/80/c2?=
- =?us-ascii?Q?g1lu7P0jPxEgGk/4l/vujyx4ldrEwrWTWnzwYhFhMnuYZg36ehGTQaNOAezt?=
- =?us-ascii?Q?hTJvmV2Tb2h2PdwSFJ0lrtGVBGUCG62oIHpN3I5KzS2CHR7K+D4MNZ4uU2E7?=
- =?us-ascii?Q?hiuOO1nQ5pvRMJIzDdwCDYwxgt8Vry2AgIEhN+MyxGlhP0PSEyyeEgUg7JJ/?=
- =?us-ascii?Q?7ITZeH2ncO8Aq5ReMjcdoeUPIspZUloxGB1BuoGxuEPqjJzt4oy5feNG4O9n?=
- =?us-ascii?Q?MiyxHBhrszpynhU78T9SAX1QUoMecpwBEHsWitAOSCAcqBaWeSHfGY7Nu9wq?=
- =?us-ascii?Q?YNEH3N/19rVLw9cffZitPqe7m3Rh53bPdalH18+pdwoaZKevJO4DpaD/RLEI?=
- =?us-ascii?Q?tuStD9ePMgl3YzijWs3mX28A3s5gnpA2KUsReAqq7DeiVC8hspB2YdflBwyE?=
- =?us-ascii?Q?uWFz2N8HMw179dnk4cpwfEwWaUbqPY/HLdHQ/lVQ?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?EOqu+VrRNnSdzoieyBr/JRT2eJ2pa0/A6uClVgZDdyUunKel5fAAqQC/889W?=
+ =?us-ascii?Q?cz7SO8QVBlkSHbG7N2/RDrhsKRSr3nP3j+1MKBokwWlucavXMYwf7ops5xNn?=
+ =?us-ascii?Q?sJSwWhnTnDxXsf1gVXa8gBDLFXEcneyXmZ4O5XDwDiEVuZ9rGfoMBuRnN3do?=
+ =?us-ascii?Q?txlLRdKM2JCmWgl9zsDZtG2jb3pH6fK4WwlAZqvCXjdeyIig88kwVxXg5OHg?=
+ =?us-ascii?Q?Pt11GzFVmGvZ3t+bUufLeXwvI0xgbiUfQ83oebEVf3WlPTEapI/FQiN5pTyA?=
+ =?us-ascii?Q?NXAR2n1VdMXe1YjcNEowADbhAyvYMXl8U0cA0jg5YmsLKQce+rw56H+eYZ/j?=
+ =?us-ascii?Q?HuPUSpljigI1/tZ37e3giQHzWAmYdtfCGQy6+JWksqd/0Ii7cN6AK8aRN85l?=
+ =?us-ascii?Q?9goBiiBUV19HPd1w65Z63S4BAKHdWXmyEKmID/MZRBUqnkdKzX0Z1UawvKE6?=
+ =?us-ascii?Q?iF2f+dg85iFo8QZ5ryZ/ePJWQY7YA2tgDun0DhUVSWGXvLVq0DkGt+g/Ypny?=
+ =?us-ascii?Q?H6uj0DsGBk7KEi8NS0SooSIaFCODUiTW0PATMZUNfelJB1WwuoFwC1bI6Gbj?=
+ =?us-ascii?Q?/4rGhzD0Zingklpm6muX30yQSMBf9Voc35umrUiGeoTG3fmalXhCwDA2laC4?=
+ =?us-ascii?Q?8xX3YTbGSpKHSZBUIVpc4aDnpxkr04CSUj73+Af1Ucn7PAIdR7iEM/+MQd9k?=
+ =?us-ascii?Q?JO4rU4Ma+QR63+ou0iWoQ7GUmpHnNKXBgyyNjtMu4ScSNVtsY/XtwPh00Fm/?=
+ =?us-ascii?Q?uGClsu2GYDzaJU0wkHS3x1hnzBsohHOmFbMn5TBcy1QvKA09s3UgrW0Ts7iD?=
+ =?us-ascii?Q?fOL3RcZQvCREYriSxfNZw7x8CHVvcgg4IOofxhejigOfjjFkWTnlQG5mqB2A?=
+ =?us-ascii?Q?cf+DTK1cFyTYFvPPJ5Th4JNLyLlTzxGVWaQE7PeMD2o4PGIRzKncad8a4Cjn?=
+ =?us-ascii?Q?pU9bhCMkJmLoYuaKU0JDLVH1d0+FKWiIs+IiRE4SziVWxj+4jLGCZHc0WDEI?=
+ =?us-ascii?Q?7RiGXyd3Pd4l8z9qS218Bidx4j3GND2II/hgmVGKUNpl4vkW6mcb1DiR8n/2?=
+ =?us-ascii?Q?rsRsfMiHOkbYAmAZH8WMttVCWqZC+FavajKhAARivBT2JzXnSKRgG9kDK/CI?=
+ =?us-ascii?Q?2dqC00jv759shRWeu5eXilTMduy6Bl9VlT2ctgAsswQFx6iv9uPjGAUUUrJM?=
+ =?us-ascii?Q?euE9heA3xU21SfTbKq21oS5gPTMp3b+DnsVVoauxDEbdNIsUK4QGMKE4GjtD?=
+ =?us-ascii?Q?WwfVevDyTjqsa/FyBEsy9HWrBRuIiXJLhu7OZRyQG/cHwbulCfzmrdcFdTkj?=
+ =?us-ascii?Q?lZUuJlrrLVFL9DMCfS0dgLOpxY2tB72X/X43X5USPPOQP4rnHmn+wPT/4uZi?=
+ =?us-ascii?Q?sevQ/cdI5jPwYLiNEj0NBiSOfCDqb+sLjijkEh03bvwUyyQV1YXaWJrZOMSR?=
+ =?us-ascii?Q?+bSHSNRg9+0O/F/KtJn7lPDDHkR3l8CloOCYZBbAV2Bnaj3Hzoa01JsDvmF7?=
+ =?us-ascii?Q?P+IddwCMSgTMQUbrEzh+Kspg0BPj6KhVuRcAJqFTA00Je5418FN83+Qk1tR3?=
+ =?us-ascii?Q?+NBtLoVpYJ10dJqiKW0=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5807.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2aa8c7e4-a143-4655-9f18-08dadeb71a58
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2022 16:12:02.8118
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 605093a7-c116-44b0-33a6-08dadeb71e66
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2022 16:12:09.6273
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1Z8KyQedM1x5/I4lU/628ancn9geBqOjDcrfkjVQxJ63hqktFEVmSU5a1xA4QzqejPG4BvMVo6C1hzBSQbdQpw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7591
+X-MS-Exchange-CrossTenant-userprincipalname: BeTxiC+ytq4QtGM5E2eljLrX/JgMvSLd0v1Z6LjlVfT6h2pp1wQHsCbV4ZLDU1sF
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5625
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -127,187 +162,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[AMD Official Use Only - General]
+
+
+
 > -----Original Message-----
-> From: Sean Anderson <sean.anderson@seco.com>
-> Sent: Thursday, November 3, 2022 23:29
-> To: David S . Miller <davem@davemloft.net>; netdev@vger.kernel.org
-> Cc: devicetree@vger.kernel.org; Michael Ellerman <mpe@ellerman.id.au>;
-> linux-kernel@vger.kernel.org; Rob Herring <robh+dt@kernel.org>;
-> Christophe Leroy <christophe.leroy@csgroup.eu>; linuxppc-
-> dev@lists.ozlabs.org; Nicholas Piggin <npiggin@gmail.com>; Krzysztof
-> Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Sean Anderson
-> <sean.anderson@seco.com>; Camelia Alexandra Groza
-> <camelia.groza@nxp.com>
-> Subject: [PATCH net-next] powerpc: dts: t208x: Disable 10G on MAC1 and
-> MAC2
+> From: Reinette Chatre <reinette.chatre@intel.com>
+> Sent: Thursday, December 15, 2022 9:36 AM
+> To: Moger, Babu <Babu.Moger@amd.com>; corbet@lwn.net;
+> tglx@linutronix.de; mingo@redhat.com; bp@alien8.de
+> Cc: fenghua.yu@intel.com; dave.hansen@linux.intel.com; x86@kernel.org;
+> hpa@zytor.com; paulmck@kernel.org; akpm@linux-foundation.org;
+> quic_neeraju@quicinc.com; rdunlap@infradead.org;
+> damien.lemoal@opensource.wdc.com; songmuchun@bytedance.com;
+> peterz@infradead.org; jpoimboe@kernel.org; pbonzini@redhat.com;
+> chang.seok.bae@intel.com; pawan.kumar.gupta@linux.intel.com;
+> jmattson@google.com; daniel.sneddon@linux.intel.com; Das1, Sandipan
+> <Sandipan.Das@amd.com>; tony.luck@intel.com; james.morse@arm.com;
+> linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org;
+> bagasdotme@gmail.com; eranian@google.com; christophe.leroy@csgroup.eu;
+> jarkko@kernel.org; adrian.hunter@intel.com; quic_jiles@quicinc.com;
+> peternewman@google.com
+> Subject: Re: [PATCH v9 00/13] Support for AMD QoS new features
 >=20
-> There aren't enough resources to run these ports at 10G speeds. Just
-> keep the pcs changes, and revert the rest. This is not really correct,
-> since the hardware could support 10g in some other configuration...
+> Hi Babu,
 >=20
-> Fixes: 36926a7d70c2 ("powerpc: dts: t208x: Mark MAC1 and MAC2 as 10G")
-> Reported-by: Camelia Alexandra Groza <camelia.groza@nxp.com>
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> ---
+> On 12/15/2022 7:08 AM, Moger, Babu wrote:
+> > [AMD Official Use Only - General]
+> >
+> > Hi Reinette,
+> > I am planning refresh the series. I have couple of changes for patch 10=
+.
+> >
+> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flore.=
+kern
+> el.org%2Flkml%2FMW3PR12MB45538A17F57BF80C21BB46C4951D9%40MW3P
+> R12MB4553.namprd12.prod.outlook.com%2F&amp;data=3D05%7C01%7CBabu.M
+> oger%40amd.com%7C6d4c8dce8863452f553008dadeb20cd9%7C3dd8961fe488
+> 4e608e11a82d994e183d%7C0%7C0%7C638067153551495498%7CUnknown%7
+> CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLC
+> JXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3D1IDojcQCCWrhxHldDhKsUm
+> H41H3K4oU878bvSNhPh6Y%3D&amp;reserved=3D0
+> >
+> > Let me know if you have any other comments.
 >=20
+> Apologies for the delay. I have a few comments that I will post today.
 
-Hi Sean,
-
-I know I'm late, but there are a couple of issues with this patch. Do you i=
-ntend
-on sending a v2 or should I pick it up?
-
->  .../boot/dts/fsl/qoriq-fman3-0-10g-2.dtsi     | 45 -------------------
->  .../boot/dts/fsl/qoriq-fman3-0-10g-3.dtsi     | 45 -------------------
->  arch/powerpc/boot/dts/fsl/t2081si-post.dtsi   |  6 ++-
->  3 files changed, 4 insertions(+), 92 deletions(-)
->  delete mode 100644 arch/powerpc/boot/dts/fsl/qoriq-fman3-0-10g-2.dtsi
->  delete mode 100644 arch/powerpc/boot/dts/fsl/qoriq-fman3-0-10g-3.dtsi
->=20
-> diff --git a/arch/powerpc/boot/dts/fsl/qoriq-fman3-0-10g-2.dtsi
-> b/arch/powerpc/boot/dts/fsl/qoriq-fman3-0-10g-2.dtsi
-> deleted file mode 100644
-> index 6b3609574b0f..000000000000
-> --- a/arch/powerpc/boot/dts/fsl/qoriq-fman3-0-10g-2.dtsi
-> +++ /dev/null
-> @@ -1,45 +0,0 @@
-> -// SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-or-later
-> -/*
-> - * QorIQ FMan v3 10g port #2 device tree stub [ controller @ offset
-> 0x400000 ]
-> - *
-> - * Copyright 2022 Sean Anderson <sean.anderson@seco.com>
-> - * Copyright 2012 - 2015 Freescale Semiconductor Inc.
-> - */
-> -
-> -fman@400000 {
-> -	fman0_rx_0x08: port@88000 {
-> -		cell-index =3D <0x8>;
-> -		compatible =3D "fsl,fman-v3-port-rx";
-> -		reg =3D <0x88000 0x1000>;
-> -		fsl,fman-10g-port;
-> -	};
-> -
-> -	fman0_tx_0x28: port@a8000 {
-> -		cell-index =3D <0x28>;
-> -		compatible =3D "fsl,fman-v3-port-tx";
-> -		reg =3D <0xa8000 0x1000>;
-> -		fsl,fman-10g-port;
-> -	};
-> -
-> -	ethernet@e0000 {
-> -		cell-index =3D <0>;
-> -		compatible =3D "fsl,fman-memac";
-> -		reg =3D <0xe0000 0x1000>;
-> -		fsl,fman-ports =3D <&fman0_rx_0x08 &fman0_tx_0x28>;
-> -		ptp-timer =3D <&ptp_timer0>;
-> -		pcsphy-handle =3D <&pcsphy0>, <&pcsphy0>;
-> -		pcs-handle-names =3D "sgmii", "xfi";
-> -	};
-> -
-> -	mdio@e1000 {
-> -		#address-cells =3D <1>;
-> -		#size-cells =3D <0>;
-> -		compatible =3D "fsl,fman-memac-mdio", "fsl,fman-xmdio";
-> -		reg =3D <0xe1000 0x1000>;
-> -		fsl,erratum-a011043; /* must ignore read errors */
-> -
-> -		pcsphy0: ethernet-phy@0 {
-> -			reg =3D <0x0>;
-> -		};
-> -	};
-> -};
-> diff --git a/arch/powerpc/boot/dts/fsl/qoriq-fman3-0-10g-3.dtsi
-> b/arch/powerpc/boot/dts/fsl/qoriq-fman3-0-10g-3.dtsi
-> deleted file mode 100644
-> index 28ed1a85a436..000000000000
-> --- a/arch/powerpc/boot/dts/fsl/qoriq-fman3-0-10g-3.dtsi
-> +++ /dev/null
-> @@ -1,45 +0,0 @@
-> -// SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-or-later
-> -/*
-> - * QorIQ FMan v3 10g port #3 device tree stub [ controller @ offset
-> 0x400000 ]
-> - *
-> - * Copyright 2022 Sean Anderson <sean.anderson@seco.com>
-> - * Copyright 2012 - 2015 Freescale Semiconductor Inc.
-> - */
-> -
-> -fman@400000 {
-> -	fman0_rx_0x09: port@89000 {
-> -		cell-index =3D <0x9>;
-> -		compatible =3D "fsl,fman-v3-port-rx";
-> -		reg =3D <0x89000 0x1000>;
-> -		fsl,fman-10g-port;
-> -	};
-> -
-> -	fman0_tx_0x29: port@a9000 {
-> -		cell-index =3D <0x29>;
-> -		compatible =3D "fsl,fman-v3-port-tx";
-> -		reg =3D <0xa9000 0x1000>;
-> -		fsl,fman-10g-port;
-> -	};
-> -
-> -	ethernet@e2000 {
-> -		cell-index =3D <1>;
-> -		compatible =3D "fsl,fman-memac";
-> -		reg =3D <0xe2000 0x1000>;
-> -		fsl,fman-ports =3D <&fman0_rx_0x09 &fman0_tx_0x29>;
-> -		ptp-timer =3D <&ptp_timer0>;
-> -		pcsphy-handle =3D <&pcsphy1>, <&pcsphy1>;
-> -		pcs-handle-names =3D "sgmii", "xfi";
-> -	};
-> -
-> -	mdio@e3000 {
-> -		#address-cells =3D <1>;
-> -		#size-cells =3D <0>;
-> -		compatible =3D "fsl,fman-memac-mdio", "fsl,fman-xmdio";
-> -		reg =3D <0xe3000 0x1000>;
-> -		fsl,erratum-a011043; /* must ignore read errors */
-> -
-> -		pcsphy1: ethernet-phy@0 {
-> -			reg =3D <0x0>;
-> -		};
-> -	};
-> -};
-> diff --git a/arch/powerpc/boot/dts/fsl/t2081si-post.dtsi
-> b/arch/powerpc/boot/dts/fsl/t2081si-post.dtsi
-> index 74e17e134387..fed3879fa0aa 100644
-> --- a/arch/powerpc/boot/dts/fsl/t2081si-post.dtsi
-> +++ b/arch/powerpc/boot/dts/fsl/t2081si-post.dtsi
-> @@ -609,8 +609,8 @@ usb1: usb@211000 {
->  /include/ "qoriq-bman1.dtsi"
->=20
->  /include/ "qoriq-fman3-0.dtsi"
-> -/include/ "qoriq-fman3-0-10g-2.dtsi"
-> -/include/ "qoriq-fman3-0-10g-3.dtsi"
-> +/include/ "qoriq-fman3-0-1g-2.dtsi"
-> +/include/ "qoriq-fman3-0-1g-3.dtsi"
-
-These two should be qoriq-fman3-0-1g-0.dtsi and qoriq-fman3-0-1g-1.dtsi.
-You are including 1g-2.dtsi and 1g-3.dtsi twice.
-
->  /include/ "qoriq-fman3-0-1g-2.dtsi"
->  /include/ "qoriq-fman3-0-1g-3.dtsi"
->  /include/ "qoriq-fman3-0-1g-4.dtsi"
-> @@ -619,9 +619,11 @@ usb1: usb@211000 {
->  /include/ "qoriq-fman3-0-10g-1.dtsi"
->  	fman@400000 {
->  		enet0: ethernet@e0000 {
-> +			pcs-handle-names =3D "sgmii", "xfi";
->  		};
->=20
->  		enet1: ethernet@e2000 {
-> +			pcs-handle-names =3D "sgmii", "xfi";
-
-The second pcsphy for this port is still qsgmiia_pcs1 as described in
-qoriq-fman3-0-1g-1.dtsi. It should also be overwritten, not only the name
-property:
-	pcsphy-handle =3D <&pcsphy1>, <&pcsphy1>;
-
->  		};
->=20
->  		enet2: ethernet@e4000 {
-> --
-> 2.35.1.1320.gc452695387.dirty
-
+No problem.. Thank you.
