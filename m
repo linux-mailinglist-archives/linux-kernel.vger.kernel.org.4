@@ -2,92 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5AA64DF13
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:56:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C94564DF1B
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiLOQ4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:56:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
+        id S229603AbiLOQ5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbiLOQzy (ORCPT
+        with ESMTP id S230420AbiLOQ44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:55:54 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AEEF580
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:55:47 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id hd14-20020a17090b458e00b0021909875bccso6509651pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:55:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=26wecbxeZqysem2kCfPfSfQ1H20+x2gKeuxWkPpxmg8=;
-        b=Gq5bD60P4xpIsZ5io6BpMqjE1WBULHLHaYLy1LXIMvLkkx2ogEmPyNDFxDGulZdrWz
-         yqvITihxx0xLlJXcmaXAFvkm8CAMTUdb2BJ81Y1E1UBkXUukD2kJ/XYn3EyZc1yJcp9w
-         Ko71/Icf0ONtGylu5AUpaBB8Nx3NLW+U8QSWAMuTLPlpjdm7mDyk0YUEJkNVa9eX9ACX
-         3SQYx10oiuwVuiJHxI4fXwlbg+9Idib85lD+304i/mZSOi0Y+6N8B6uKb8lKX1I0VH+b
-         txRQ8LgPe3riXDqfgGRjpwzqmCD0CKwT/p+Sj670U0z3TDtCLcT7I+KoNsGz+eaHwYRr
-         GA0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=26wecbxeZqysem2kCfPfSfQ1H20+x2gKeuxWkPpxmg8=;
-        b=F9o4KuQFtv/MC0JDk1iylL/5zydwhow8ZQtxrxKp471EJyp1pBNWNHt6nM/QE9gv7y
-         gVsJNrkN0YtjVixtGzBDjlKwmxsCjkg9YRnhd2OMs5m7F8/pY0GKGga9wDqivN29lmDR
-         QbOV6OGpHWso46bIwdfbpAFDAwM0sEo2doEoNidnR9xSoqhu97fR5/6Oc75ezYmpcL6z
-         2X7ddU0xTtQXeRhYYPkz44SRjWmm9WwTScSM05Lr7VMhREB10DIyI3gH6QoVL/qyyaMr
-         rRUiYRnEc+Nj7q8LY4lzkNA3vyq4yWayFPBB7FV6C9tVBa7jrYi5L4DrdQWuQF591B4l
-         hrQQ==
-X-Gm-Message-State: ANoB5pm5T4/yFcmhDmgSU0K5nEMO6vJ/5OUcKpEOGmoTl4b2ZtgvpJJ9
-        L7nRSXVY8u3J1hgOV/39Gtb25agi5jj+LA==
-X-Google-Smtp-Source: AA0mqf6M1Ak1Szoks0KcYUj1nIyvMVg0V/iBWvjN5O6zOnbJ3chidJX0z5PAH5OtAm/f6fHbGPSsFw==
-X-Received: by 2002:a17:902:8487:b0:18f:9282:d8b0 with SMTP id c7-20020a170902848700b0018f9282d8b0mr16113658plo.53.1671123346468;
-        Thu, 15 Dec 2022 08:55:46 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id f21-20020a170902f39500b00186a6b63525sm4059718ple.120.2022.12.15.08.55.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 08:55:46 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 15 Dec 2022 06:55:44 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Li Lingfeng <lilingfeng3@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, jack@suse.cz, bingjingc@synology.com,
-        ebiggers@google.com, james.smart@broadcom.com, houtao1@huawei.com,
-        yi.zhang@huawei.com, yangerkun@huawei.com, yukuai3@huawei.com
-Subject: Re: [PATCH-next v2] lib: parser: optimize match_NUMER apis to use
- local array
-Message-ID: <Y5tRkKwnJbfwUP/o@slm.duckdns.org>
-References: <20221213141755.768643-1-lilingfeng3@huawei.com>
+        Thu, 15 Dec 2022 11:56:56 -0500
+Received: from amity.mint.lgbt (vmi888983.contaboserver.net [149.102.157.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64873D39C
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:56:52 -0800 (PST)
+Received: from amity.mint.lgbt (mx.mint.lgbt [127.0.0.1])
+        by amity.mint.lgbt (Postfix) with ESMTP id 4NXz0g3Tpbz1S5C8
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 11:56:51 -0500 (EST)
+Authentication-Results: amity.mint.lgbt (amavisd-new);
+        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
+        header.d=mint.lgbt
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mint.lgbt; h=
+        content-transfer-encoding:content-type:in-reply-to:from
+        :references:to:content-language:subject:user-agent:mime-version
+        :date:message-id; s=dkim; t=1671123408; x=1671987409; bh=tjNVkyH
+        xOJqidYPV+BTvYS5ENh1t/1Ue/IBzdpA5tYw=; b=Kx5UdYsFpC98GCHU4ntG2Ys
+        FA7ZQQx5vcwGM7ttxj55bVRUucqy1zj5mRjdLYVZG3z2GwODR2hRkIpBDmkYUi1S
+        P+mRiHNQEWJothIotGeXD0/DbiR0OR1rOSCc21S7xvEO3mdeRQ/dZbl4t+cmhEWf
+        S2gDfh+jGwdNG7alWv7JsdbKB2MUF8d6eC9n8xkX37qABrnAQjhQxiIqG/UEqj6w
+        jet15wpYPiMpyNXGbxFzh/x74OUzBhPoMTq9Yvvb/B6kje8LKnMHweUUroYuKeOi
+        p+FtXY0G8hwOEHXVHNekrS3JAc8Ml9etEeuVMo0BJoDTFOoEWRGQPMHIagmPuww=
+        =
+X-Virus-Scanned: amavisd-new at amity.mint.lgbt
+Received: from amity.mint.lgbt ([127.0.0.1])
+        by amity.mint.lgbt (amity.mint.lgbt [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 6bljda2iFwH8 for <linux-kernel@vger.kernel.org>;
+        Thu, 15 Dec 2022 11:56:48 -0500 (EST)
+Received: from [192.168.4.25] (unknown [190.196.92.66])
+        by amity.mint.lgbt (Postfix) with ESMTPSA id 4NXz0X6DF6z1S4yj;
+        Thu, 15 Dec 2022 11:56:44 -0500 (EST)
+Message-ID: <0c53ff07-8cf4-3e80-97fc-67dd2f2612f9@mint.lgbt>
+Date:   Thu, 15 Dec 2022 13:56:42 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221213141755.768643-1-lilingfeng3@huawei.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 2/4] arm64: dts: qcom: sm6125: Add UFS nodes
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221215161258.355962-1-they@mint.lgbt>
+ <20221215161258.355962-2-they@mint.lgbt>
+ <875bd0a8-fc08-1d19-2c75-65713d9d2317@linaro.org>
+From:   Lux Aliaga <they@mint.lgbt>
+In-Reply-To: <875bd0a8-fc08-1d19-2c75-65713d9d2317@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 10:17:55PM +0800, Li Lingfeng wrote:
-> Memory will be allocated to store substring_t in match_strdup(), which means
-> the caller of match_strdup() may need to be scheduled out to wait for reclaiming
-> memory.
-> 
-> Using local array to store substring_t to remove the restriction.
-> 
-> Link: https://lore.kernel.org/all/20221104023938.2346986-5-yukuai1@huaweicloud.com/
-> Signed-off-by: Li Lingfeng <lilingfeng3@huawei.com>
+On 15/12/2022 13:18, Konrad Dybcio wrote:
 
-Acked-by: Tejun Heo <tj@kernel.org>
-
-Thanks.
+> On 15.12.2022 17:12, Lux Aliaga wrote:
+>> Adds a UFS host controller node and its corresponding PHY to
+>> the sm6125 platform.
+>>
+>> Signed-off-by: Lux Aliaga <they@mint.lgbt>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sm6125.dtsi | 66 ++++++++++++++++++++++++++++
+>>   1 file changed, 66 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+>> index 7e25a4f85594..6d4534c7a2fe 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+>> @@ -508,6 +508,72 @@ sdhc_2: mmc@4784000 {
+>>   			status = "disabled";
+>>   		};
+>>   
+>> +		ufs_mem_hc: ufs@4804000 {
+>> +			compatible = "qcom,sm6125-ufshc", "qcom,ufshc", "jedec,ufs-2.0";
+>> +			reg = <0x04804000 0x3000>, <0x04810000 0x8000>;
+>> +			reg-names = "std", "ice";
+>> +			interrupts = <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>;
+>> +			phys = <&ufs_mem_phy_lanes>;
+>> +			phy-names = "ufsphy";
+>> +			lanes-per-direction = <1>;
+>> +			#reset-cells = <1>;
+>> +			resets = <&gcc GCC_UFS_PHY_BCR>;
+>> +			reset-names = "rst";
+>> +
+>> +			clock-names = "core_clk",
+>> +				"bus_aggr_clk",
+>> +				"iface_clk",
+>> +				"core_clk_unipro",
+>> +				"ref_clk",
+>> +				"tx_lane0_sync_clk",
+>> +				"rx_lane0_sync_clk",
+>> +				"ice_core_clk";
+>> +			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
+>> +				<&gcc GCC_SYS_NOC_UFS_PHY_AXI_CLK>,
+>> +				<&gcc GCC_UFS_PHY_AHB_CLK>,
+>> +				<&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
+>> +				<&rpmcc RPM_SMD_XO_CLK_SRC>,
+>> +				<&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
+>> +				<&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
+>> +				<&gcc GCC_UFS_PHY_ICE_CORE_CLK>;
+>> +			freq-table-hz = <50000000 240000000>,
+>> +				<0 0>,
+>> +				<0 0>,
+>> +				<37500000 150000000>,
+>> +				<0 0>,
+>> +				<0 0>,
+>> +				<0 0>,
+>> +				<75000000 300000000>;
+> The indentation is wrong. Make sure your tab size is set to 8
+> and all the <> entries align with the first one.
+Should I do this with clocks and clock-names too?
 
 -- 
-tejun
+Lux Aliaga
+https://nixgoat.me/
+
