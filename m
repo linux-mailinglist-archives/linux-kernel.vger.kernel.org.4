@@ -2,88 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF9964DF60
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB77164DF5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbiLORKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 12:10:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
+        id S231150AbiLORKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 12:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbiLORJf (ORCPT
+        with ESMTP id S229988AbiLORJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 12:09:35 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4954665B;
-        Thu, 15 Dec 2022 09:08:17 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFAx4PE032127;
-        Thu, 15 Dec 2022 17:08:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=M0OvoBEarEDDSW9TE5oRDZThFsRuINIsSjYUPWCjjWQ=;
- b=FBoFICHuxW+Zy7yyKyJIop8ZZmswoLcurntZVxSbuQSyleesRylbUOCH2Pweeo1v0ZRa
- LwUCO1IK4fYXSKa2/tLJyo4b6WXpUOl1QHWr7E8Y5IjWXPysj0nMK+xGf5kQsq0OIP3Y
- KqcOHYmpfTsj8Za+1VxOh06WnBvte3h4V7swpUZ9vc+HHuIJ313hoEBCaESt9lQ5HCa/
- q49ssUCacIr34aMITCeiTvJVO6474rxbjHRCGk6Pfnge6n73ULk8QTTKhWyz8qfwNESj
- sIl0A+FguAmC9qUuW7hFTPkltVlGd7czn/r4TuRBZYvDK9rvg72yGfl2+sR/TmxBsrq/ Og== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mfxse9svc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 17:08:07 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BFH86JD025829
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 17:08:06 GMT
-Received: from [10.110.66.74] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 15 Dec
- 2022 09:08:05 -0800
-Message-ID: <98cc6d55-f9c7-a369-6004-42b242d01339@quicinc.com>
-Date:   Thu, 15 Dec 2022 09:08:04 -0800
+        Thu, 15 Dec 2022 12:09:24 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A0F442E4
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 09:08:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=2TITkz+21gOhfI1DYPLlrOcE0ZQINnBR1iVS5gz6Ok4=; b=vzYHhK2qJ6WlZfBo9195RUu6Q+
+        4lBzljsgJ1+Tm6L1tVbU0232DVLxtpYEGMqfNjPyQUwUps7QiNQ4iz1Uc83IQCXF1sngTvPPft9yf
+        Xz7Nb/ujHk5Tio+Rg99+2AwwB/gUhT96FUtV+8iI5eQ9ccXvnilWGCSQgY36VuO7kt5pk3q22yclf
+        zLgyHYgGqcZxXlVLrM9DE13BXDyqqOTE6Nzp/WbkI9gTt9JgT0Zkwow+i1p5ftUCDnifzB9L8ycgx
+        m109hpQZ1LZhelo0EVFEhJAtFljiqCp500GZxTdzeBnOAo79vBHcE6LoqV0IRjN12X43ovICA3j3i
+        J0lnsxJA==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p5riK-00AU4p-Kr; Thu, 15 Dec 2022 17:08:08 +0000
+Message-ID: <6c8d0815-a64c-a4ea-4bc9-d38a2b6c3121@infradead.org>
+Date:   Thu, 15 Dec 2022 09:08:08 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH v12 2/5] dt-bindings: msm/dp: add data-lanes and
- link-frequencies property
+Subject: Re: [PATCH] reset: ti-sci: fix compile test dependencies
 Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <airlied@gmail.com>, <andersson@kernel.org>, <daniel@ffwll.ch>,
-        <devicetree@vger.kernel.org>, <dianders@chromium.org>,
-        <dmitry.baryshkov@linaro.org>, <dri-devel@lists.freedesktop.org>,
-        <konrad.dybcio@somainline.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robdclark@gmail.com>,
-        <robh+dt@kernel.org>, <sean@poorly.run>, <vkoul@kernel.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1670967848-31475-1-git-send-email-quic_khsieh@quicinc.com>
- <1670967848-31475-3-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n52eHYCqxUJqQXoaQ8vyqCk-QfouSun+zUp3yo5DufWbwg@mail.gmail.com>
- <b38af164-08bc-07e7-dfaf-fb4d6d89d7db@quicinc.com>
- <CAE-0n53Cb6TFGfM6AYup5aP4=24j0ujVPi463oVqmzfNV2B4RA@mail.gmail.com>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <CAE-0n53Cb6TFGfM6AYup5aP4=24j0ujVPi463oVqmzfNV2B4RA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 5LPWoTS4BoluYneg5ILBA4kZFgz2ChaE
-X-Proofpoint-GUID: 5LPWoTS4BoluYneg5ILBA4kZFgz2ChaE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-15_10,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- clxscore=1015 spamscore=0 phishscore=0 priorityscore=1501 malwarescore=0
- suspectscore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212150141
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+References: <20221215170036.2308972-1-arnd@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20221215170036.2308972-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,112 +54,43 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 12/14/2022 4:38 PM, Stephen Boyd wrote:
-> Quoting Kuogee Hsieh (2022-12-14 14:56:23)
->> On 12/13/2022 3:06 PM, Stephen Boyd wrote:
->>> Quoting Kuogee Hsieh (2022-12-13 13:44:05)
->>>> Add both data-lanes and link-frequencies property into endpoint
->>> Why do we care? Please tell us why it's important.
-> Any response?
-yes, i did that at my local patch already.
->
->>>> @@ -193,6 +217,8 @@ examples:
->>>>                    reg = <1>;
->>>>                    endpoint {
->>>>                        remote-endpoint = <&typec>;
->>>> +                    data-lanes = <0 1>;
->>>> +                    link-frequencies = /bits/ 64 <1620000000 2700000000 5400000000 8100000000>;
->>>>                    };
->>> So far we haven't used the output port on the DP controller in DT.
->>>
->>> I'm still not clear on what we should do in general for DP because
->>> there's a PHY that actually controls a lane count and lane mapping. In
->>> my mental model of the SoC, this DP controller's output port is
->>> connected to the DP PHY, which then sends the DP lanes out of the SoC to
->>> the next downstream device (i.e. a DP connector or type-c muxer). Having
->>> a remote-endpoint property with a phandle to typec doesn't fit my mental
->>> model. I'd expect it to be the typec PHY.
->> ack
->>> That brings up the question: when we have 2 lanes vs. 4 lanes will we
->>> duplicate the data-lanes property in the PHY binding? I suspect we'll
->>> have to. Hopefully that sort of duplication is OK?
->> Current we have limitation by reserve 2 data lanes for usb2, i am not
->> sure duplication to 4 lanes will work automatically.
->>> Similarly, we may have a redriver that limits the link-frequencies
->>> property further (e.g. only support <= 2.7GHz). Having multiple
->>> link-frequencies along the graph is OK, right? And isn't the
->>> link-frequencies property known here by fact that the DP controller
->>> tells us which SoC this controller is for, and thus we already know the
->>> supported link frequencies?
->>>
->>> Finally, I wonder if we should put any of this in the DP controller's
->>> output endpoint, or if we can put these sorts of properties in the DP
->>> PHY binding directly? Can't we do that and then when the DP controller
->>> tries to set 4 lanes, the PHY immediately fails the call and the link
->>> training algorithm does its thing and tries fewer lanes? And similarly,
->>> if link-frequencies were in the PHY's binding, the PHY could fail to set
->>> those frequencies during link training, returning an error to the DP
->>> controller, letting the training move on to a lower frequency. If we did
->>> that this patch series would largely be about modifying the PHY binding,
->>> updating the PHY driver to enforce constraints, and handling errors
->>> during link training in the DP controller (which may already be done? I
->>> didn't check).
->>
->> phy/pll have different configuration base on link lanes and rate.
->>
->> it has to be set up before link training can start.
->>
->> Once link training start, then there are no any interactions between
->> controller and phy during link training session.
-> What do you mean? The DP controller calls phy_configure() and changes
-> the link rate. The return value from phy_configure() should be checked
-> and link training should skip link rates that aren't supported and/or
-> number of lanes that aren't supported.
->
->> Link training only happen between dp controller and sink since link
->> status is reported by sink (read back from sink's dpcd register directly).
->>
->> T achieve link symbol locked, link training will start from reduce link
->> rate until lowest rate, if it still failed, then it will reduce lanes
->> with highest rate and start training  again.
->>
->> it will repeat same process until lowest lane (one lane), if it still
->> failed, then it will give up and declare link training failed.
-> Yes, that describes the link training algorithm. I don't see why
-> phy_configure() return value can't be checked and either number of lanes
-> or link frequencies be checked. If only two lanes are supported, then
-> phy_configure() will fail for the 4 link rates and the algorithm will
-> reduce the number of lanes and go back to the highest rate. Then when
-> the highest rate isn't supported it will drop link rate until the link
-> rate is supported.
->
->> Therefore I think add data-lanes and link-frequencies properties in the
->> DP PHY binding directly will not helps.
->>
-> I didn't follow your logic. Sorry.
 
-Sorry, probably i did not understand your proposal clearly.
+On 12/15/22 09:00, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The SCI reset driver can be compile testing on targets that
+> do not support the SCI firmware, but it fails to link when
+> the firmware driver is built as a module, and the reset driver
+> is built-in:
+> 
+> arm-linux-gnueabi-ld: drivers/reset/reset-ti-sci.o: in function `ti_sci_reset_probe':
+> reset-ti-sci.c:(.text+0x422): undefined reference to `devm_ti_sci_get_handle'
+> 
+> Prevent this configuration by limiting the compile test
+> to configurations without SCI firmware.
+> 
+> Fixes: a6af504184c9 ("reset: ti-sci: Allow building under COMPILE_TEST")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-1) move both data-lanes and link-frequencies property from dp controller 
-endpoint to phy
+https://lore.kernel.org/lkml/20221030055636.3139-1-rdunlap@infradead.org/
 
-2) phy_configure() return succeed if both data-lanes and link 
-frequencies are supported. otherwise return failed.
+> ---
+>  drivers/reset/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+> index de176c2fbad9..2a52c990d4fe 100644
+> --- a/drivers/reset/Kconfig
+> +++ b/drivers/reset/Kconfig
+> @@ -257,7 +257,7 @@ config RESET_SUNXI
+>  
+>  config RESET_TI_SCI
+>  	tristate "TI System Control Interface (TI-SCI) reset driver"
+> -	depends on TI_SCI_PROTOCOL || COMPILE_TEST
+> +	depends on TI_SCI_PROTOCOL || (COMPILE_TEST && TI_SCI_PROTOCOL=n)
+>  	help
+>  	  This enables the reset driver support over TI System Control Interface
+>  	  available on some new TI's SoCs. If you wish to use reset resources
 
-is above two summary items correct?
-
-Currently phy_configure()  is part of link training process and called 
-if link lanes or rate changes.
-
-however, since current phy_configure() implementation always return 0, 
-the return value is not checking.
-
-This proposal is new, can we discuss more detail at meeting and decide 
-to implement it or not.
-
-Meanwhile can we merge current implementation (both data-lanes and 
-link-frequqncies at dp controller end point) first?
-
-
-
-
+-- 
+~Randy
