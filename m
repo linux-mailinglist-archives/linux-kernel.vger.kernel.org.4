@@ -2,52 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A871D64D5A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 04:44:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA8064D5AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 04:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiLODoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 22:44:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47678 "EHLO
+        id S229601AbiLODsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 22:48:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiLODow (ORCPT
+        with ESMTP id S229484AbiLODsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 22:44:52 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD2A5289C
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 19:44:50 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1671075888;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ek1AWVDvL3uGjwPmVZLLu6V363bRYpZOhP1Lu8fyRnA=;
-        b=e4jSCMHBjLLS8F5I0zKPVXVejFpN80ydgHO0I78K+igtJzI85DkC/p6bhJPqPeBhgDFmVh
-        tuLiW6iAmFq0IHHAiSV+4XJEvIrk3CxTyb3bVpWoBg3M5kIUpIzYg40NqbZZQWWa9M7zGw
-        BnmA67tsVkOOEsnRrSvbPnxMG1wqgf8=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
-Subject: Re: [PATCH mm-unstable] mm: move folio_set_compound_order() to
- mm/internal.h
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20221213212053.106058-1-sidhartha.kumar@oracle.com>
-Date:   Thu, 15 Dec 2022 11:44:14 +0800
-Cc:     linux-kernel@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <0B650D64-1F64-4695-9365-CF695029C50C@linux.dev>
-References: <20221213212053.106058-1-sidhartha.kumar@oracle.com>
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        Wed, 14 Dec 2022 22:48:12 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFD34385E;
+        Wed, 14 Dec 2022 19:48:11 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1p5fE5-0003wP-G6; Thu, 15 Dec 2022 04:48:05 +0100
+Date:   Thu, 15 Dec 2022 03:47:59 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: [PATCH net v3] net: dsa: mt7530: remove redundant assignment
+Message-ID: <Y5qY7x6la5TxZxzX@makrotopia.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,31 +47,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Russell King correctly pointed out that the MAC_2500FD capability is
+already added for port 5 (if not in RGMII mode) and port 6 (which only
+supports SGMII) by mt7531_mac_port_get_caps. Remove the reduntant
+setting of this capability flag which was added by a previous commit.
 
+Fixes: e19de30d2080 ("net: dsa: mt7530: add support for in-band link status")
+Reported-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+Changes since v2: correct commit title 'reduntant' -> 'redundant'
+Changes since v1: Use 12 chars for fixes tag, fix Russell's contact
 
-> On Dec 14, 2022, at 05:20, Sidhartha Kumar =
-<sidhartha.kumar@oracle.com> wrote:
->=20
-> folio_set_compound_order() is moved to an mm-internal location so =
-external
-> folio users cannot misuse this function. Change the name of the =
-function
-> to folio_set_order() and use WARN_ON_ONCE() rather than BUG_ON. Also,
-> handle the case if a non-large folio is passed and add clarifying =
-comments
-> to the function.
->=20
-> Link: =
-https://lore.kernel.org/lkml/20221207223731.32784-1-sidhartha.kumar@oracle=
-.com/T/
-> Fixes: 9fd330582b2f ("mm: add folio dtor and order setter functions")
->=20
-> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-> Suggested-by: Mike Kravetz <mike.kravetz@oracle.com>
-> Suggested-by: Muchun Song <songmuchun@bytedance.com>
-> Suggested-by: Matthew Wilcox <willy@infradead.org>
-> Suggested-by: John Hubbard <jhubbard@nvidia.com>
+ drivers/net/dsa/mt7530.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+index e74c6b406172..908fa89444c9 100644
+--- a/drivers/net/dsa/mt7530.c
++++ b/drivers/net/dsa/mt7530.c
+@@ -2919,9 +2919,6 @@ static void mt753x_phylink_get_caps(struct dsa_switch *ds, int port,
+ 	config->mac_capabilities = MAC_ASYM_PAUSE | MAC_SYM_PAUSE |
+ 				   MAC_10 | MAC_100 | MAC_1000FD;
+ 
+-	if ((priv->id == ID_MT7531) && mt753x_is_mac_port(port))
+-		config->mac_capabilities |= MAC_2500FD;
+-
+ 	/* This driver does not make use of the speed, duplex, pause or the
+ 	 * advertisement in its mac_config, so it is safe to mark this driver
+ 	 * as non-legacy.
 
-Thanks.=
+base-commit: 7e68dd7d07a28faa2e6574dd6b9dbd90cdeaae91
+-- 
+2.39.0
+
