@@ -2,97 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AAE64D9CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2840564D9D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiLOKze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 05:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55274 "EHLO
+        id S229798AbiLOKzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 05:55:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiLOKzb (ORCPT
+        with ESMTP id S229471AbiLOKzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 05:55:31 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3313DBE
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:55:30 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id v126so1256777ybv.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:55:30 -0800 (PST)
+        Thu, 15 Dec 2022 05:55:38 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E835E6
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:55:36 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id db10-20020a0568306b0a00b0066d43e80118so3364910otb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:55:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MAzkART/K+H1BtBy2iGf2pMDNR/MlfcpKi3QLVUBijc=;
-        b=3XwC3z+7qmKuu3PPVK1x6/x3iu4IDgw/47F0Lq1kOaCXFWv8uu6uZuN0gLYi7w+3zm
-         kvOWLkPOSsh36KlrBfmKIhkfe/QDvyP3UP7uIXDDmxQdZDEa5EsMOvn6+lDuqPlMc6Fr
-         Ty4+PnXwXPwWp1sDc83bUv7lHZRyie5AddZzNEOK4QgPZwK/WTzIbp6ftggolib+6jsR
-         5JCm/goNnWG0lhyid5lCYJ/kZuOuwQKNSiY61WUFC/ksL09Lbg1JdIhY5rMzqAmXyItM
-         ow4QCkRMSJRujiAmdHAupsiQoE/3rZREJGls9+gGjPrA5XMDMLUjk4bovi7CdB3dvN2s
-         rkZQ==
+        bh=KCza8Y681Ao9e1rZQSUK5V1OXCO8eMctom4dqQfNHfc=;
+        b=fAB7Z9WfgmVcTkFWFzFuxR5lftYNCATZdu+ycm3oWGD8yZFVfpvyn2b90dZwd4q5Ro
+         BW1pBNqTY9SzYkA5f0b6VeyLzdjPdH6Jblhf4sNHuuv/jmwhNFN0YJnXFZEskaVWkl1J
+         B2LXpmfUf9OVko8KgujbHoKBZ5c5e+KTwwEz9tHHvvdNY/RFsnevCNf9OgCuQF4ZGey7
+         wYn3oFQlUB7vhJPBprKglwdDE+owiBu5VKppU+IT9ix8tFrlQS8pG+5hldjeUzoLkPvL
+         9puEy4LT93lvLyr3H843v84+otu09aBiATP0M17x/5P9l5EMJ8o03PYjUfx6ncFVIoZD
+         unQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MAzkART/K+H1BtBy2iGf2pMDNR/MlfcpKi3QLVUBijc=;
-        b=mzvfUawkGjPdVfgpviYn5c8W6mrdAkRJ/hbECjeJPkY0Q+S/pUNTflj6nAtGmk2wcq
-         VVt6W9unGC1VifpegYpN22t1JKgcS54Xi3lAKSqjCtg3q9JeUXGgJTWibeU83mhZicD0
-         /FEhl4qM2QybVbUe/r0F8L58UTaHS+5HSjgdW+N0BncX8AXjXI4GyNTIny8x3DKXWZrr
-         uPnl2imp2fRmOJL37xc0uoyeq5potwVLBjQ5seV2vGwP2eRlzS/YIuHmIHWPJkbfaGV/
-         JQFrU17od++j1+pbOALYyeOAllTcrU5AENBKNAlPUIkK+TYCXpzy+4CW/Q4FXxY8d8fg
-         Kugw==
-X-Gm-Message-State: ANoB5pk4BGqhd16Za5q/YlstwyHQSIFvO/OMyrT5I5VUU4T1lEVvz78U
-        Pq7lZZUzYGiS4RwCxfLLOqKg8GuO6iW2r47vK74sPQ==
-X-Google-Smtp-Source: AA0mqf5D2ka2OLSU6EKaH/KzAy3R9CDYQoDtyeqHkE52AM+pBVLuEEW2g1AXaXRdS9FL2SHNiUg+soG/TsJ0Rrphz/I=
-X-Received: by 2002:a5b:ac6:0:b0:702:5c2c:c9ee with SMTP id
- a6-20020a5b0ac6000000b007025c2cc9eemr14594410ybr.44.1671101729873; Thu, 15
- Dec 2022 02:55:29 -0800 (PST)
+        bh=KCza8Y681Ao9e1rZQSUK5V1OXCO8eMctom4dqQfNHfc=;
+        b=lw8tyReDrOW/Yf8BailpNd2/cQdYH86aBU/KZld0MbzkDtycEkd/A17qjDGnMfvtwD
+         igiAfLhKzNmrsSrRk3HlZKJ4zbzhs5NAY8t0UgMzElNMckQb6MlYetG85X+MPtnAogVX
+         Qrth2VkCnaEVADfeVRvePKqjG/oyLFdwEz77irtffaxNJpZpR8FGD1s7NNd9ZJcw71Kb
+         Ee8dazab+edQsFY14DYXYD+e5umye1gZgEvS3O0sGAukBKyWCZ5UiVxmSTboXGN+dxJm
+         m5eF9jvIA6zdrI/z3BeMpdSe5rq4xFonC/EWGbVuVWuZ2I83evYJQao8VZM4yZRPlcfU
+         UtAA==
+X-Gm-Message-State: ANoB5pnnRMib+APwOTnCEax8PKpeeNueN1KKOEWUnHN9jzBE9JYZkO9J
+        bUFYa9rKhesru9aV4xsEucvQA2gTk9NIF2bNo+TgVw==
+X-Google-Smtp-Source: AA0mqf6vsiFLO4/fq3hCYI2rVV8TLsFliRqkLUvOPWWBRTNBOF0C+HX+cqTaN7IbwDGYSImtaqxOh0Nf19rdCpKkX+Q=
+X-Received: by 2002:a9d:6a42:0:b0:66d:a838:aa60 with SMTP id
+ h2-20020a9d6a42000000b0066da838aa60mr46266563otn.104.1671101735831; Thu, 15
+ Dec 2022 02:55:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20221214182247.79824-1-sebastian.reichel@collabora.com>
- <20221214182247.79824-4-sebastian.reichel@collabora.com> <CA+VMnFzMgOC7sgcpQ7nZx2gaJfqqvRu8RxETguaBHN1Lg_nG_w@mail.gmail.com>
- <9a3cf2f1567f2a5990ed6dea9d6a5669@kernel.org>
-In-Reply-To: <9a3cf2f1567f2a5990ed6dea9d6a5669@kernel.org>
-From:   Jagan Teki <jagan@edgeble.ai>
-Date:   Thu, 15 Dec 2022 16:25:19 +0530
-Message-ID: <CA+VMnFxuzmP_7Rxp9UtUaeyZe=WCLCd2idqk8rorYsQWMSaF9g@mail.gmail.com>
-Subject: Re: [PATCHv6 3/7] arm64: dts: rockchip: Add base DT for rk3588 SoC
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Heiko Stuebner <heiko@sntech.de>,
+References: <20221214125821.12489-1-paul@crapouillou.net> <20221214125821.12489-2-paul@crapouillou.net>
+In-Reply-To: <20221214125821.12489-2-paul@crapouillou.net>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Thu, 15 Dec 2022 11:55:24 +0100
+Message-ID: <CAG3jFytgK0noWteGvXTdSm9as9Q=qfhf_ep3Z8Wv2ofmLzGb=A@mail.gmail.com>
+Subject: Re: [PATCH 01/10] dt-bindings: display: bridge: it66121: Add
+ compatible string for IT6610
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Phong LE <ple@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kever Yang <kever.yang@rock-chips.com>, kernel@collabora.com,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        Sugar Zhang <sugar.zhang@rock-chips.com>
+        list@opendingux.net, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 at 16:20, Marc Zyngier <maz@kernel.org> wrote:
+On Wed, 14 Dec 2022 at 13:58, Paul Cercueil <paul@crapouillou.net> wrote:
 >
-> On 2022-12-15 10:45, Jagan Teki wrote:
+> Add a new ite,it6610 compatible string to the IT66121 binding
+> documentation, since the two chips are very similar.
 >
-> > One nick with dtbs_check,
-> > ethernet@fe1c0000: Unevaluated properties are not allowed ('reg',
-> > 'interrupts', 'interrupt-names', 'power-domains', 'resets',
-> > 'reset-names', 'snps,axi-config', 'snps,mixed-burst',
-> > 'snps,mtl-rx-config', 'snps,mtl-tx-config', 'snps,tso', 'mdio',
-> > 'stmmac-axi-config', 'rx-queues-config', 'tx-queues-config' were
-> > unexpected)
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  .../devicetree/bindings/display/bridge/ite,it66121.yaml       | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 >
-> You did read the cover letter, right?
+> diff --git a/Documentation/devicetree/bindings/display/bridge/ite,it66121.yaml b/Documentation/devicetree/bindings/display/bridge/ite,it66121.yaml
+> index 1b2185be92cd..72957be0ba3c 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/ite,it66121.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/ite,it66121.yaml
+> @@ -17,7 +17,9 @@ description: |
+>
+>  properties:
+>    compatible:
+> -    const: ite,it66121
+> +    enum:
+> +      - ite,it66121
+> +      - ite,it6610
+>
+>    reg:
+>      maxItems: 1
+> --
+> 2.35.1
+>
 
-Now I checked, thanks. Seems a known issue to go.
-
-Jagan.
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
