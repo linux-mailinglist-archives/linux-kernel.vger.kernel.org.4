@@ -2,156 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7B964E1F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4911D64E1F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbiLOTtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 14:49:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
+        id S229925AbiLOTtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 14:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiLOTs7 (ORCPT
+        with ESMTP id S229820AbiLOTtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 14:48:59 -0500
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A794537E4;
-        Thu, 15 Dec 2022 11:48:57 -0800 (PST)
-Received: by mail-pl1-f179.google.com with SMTP id a9so72246pld.7;
-        Thu, 15 Dec 2022 11:48:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9eOU6MEweambJWhLMx1ZdTlxZcA9EV5qgVGex/uzwT4=;
-        b=UyeZh5iyF4B/yFV2rvW7Y8EzJKtL9J3gQXVWDq+miHCRl5CqSnH5Q9SB2qvSIfycAc
-         BQVv6mhmUJREO5FEkdwCLlYKCQt7brmPKwRsxIc0rAvyQAVPssxHbykngz9MC7BnroKL
-         Zuj080KYj/dY9mvlw7BH/YbIlKZFoU53e9MgOcxz0Ctl9ky4dTJ314PZufz8EApUdJr2
-         Gj5nHy+kj8AT0vH3Mvo8Cixc6eXUAHpD0NQ/K9Kflhi9ARlrxO05+PY1/Gap/tFNmjOG
-         XLmoBhkWjzM4pE3fyJ7OEk2iUOhoKXaI9+FBempVTlHSKXFvjp4RpzdBfRKMMkOVFEy7
-         kh0w==
-X-Gm-Message-State: ANoB5pnf9r/5SMWLtMrUEyKJGEyNW4jHBLpYNg1omKFofuxtS3+gsZJD
-        Dsfr3D69XxpgtpP8Qp3yM/XTvNCGKYmJZw==
-X-Google-Smtp-Source: AA0mqf4SbXV08kjq8kI0fvTb30YBd9e1QWqK9gmAPr9RmJw04k4J9c+RoSjfm3JAGOzvtBOa/YhI8Q==
-X-Received: by 2002:a17:902:7104:b0:189:bf5d:c951 with SMTP id a4-20020a170902710400b00189bf5dc951mr28087126pll.26.1671133736617;
-        Thu, 15 Dec 2022 11:48:56 -0800 (PST)
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com. [209.85.215.176])
-        by smtp.gmail.com with ESMTPSA id w15-20020a1709026f0f00b00172b87d9770sm36080plk.81.2022.12.15.11.48.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 11:48:56 -0800 (PST)
-Received: by mail-pg1-f176.google.com with SMTP id 36so308411pgp.10;
-        Thu, 15 Dec 2022 11:48:55 -0800 (PST)
-X-Received: by 2002:a05:6a00:16c6:b0:573:65d4:a104 with SMTP id
- l6-20020a056a0016c600b0057365d4a104mr89534235pfc.85.1671133735598; Thu, 15
- Dec 2022 11:48:55 -0800 (PST)
+        Thu, 15 Dec 2022 14:49:10 -0500
+Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE55537F8
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 11:49:08 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id 5uE3pbl9p4s3d5uE4pTEzM; Thu, 15 Dec 2022 20:49:07 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 15 Dec 2022 20:49:07 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <24af516c-53db-c4f5-6745-7e3a4a2fdf26@wanadoo.fr>
+Date:   Thu, 15 Dec 2022 20:49:03 +0100
 MIME-Version: 1.0
-References: <167112117887.152641.6194213035340041732.stgit@warthog.procyon.org.uk>
-In-Reply-To: <167112117887.152641.6194213035340041732.stgit@warthog.procyon.org.uk>
-From:   Marc Dionne <marc.dionne@auristor.com>
-Date:   Thu, 15 Dec 2022 15:48:44 -0400
-X-Gmail-Original-Message-ID: <CAB9dFdvY496bK=ZrvG6cjmo0hLgWSm_VGPwXjeG6ZSf-0ut75w@mail.gmail.com>
-Message-ID: <CAB9dFdvY496bK=ZrvG6cjmo0hLgWSm_VGPwXjeG6ZSf-0ut75w@mail.gmail.com>
-Subject: Re: [PATCH net 0/9] rxrpc: Fixes for I/O thread conversion/SACK table expansion
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, Dan Carpenter <error27@gmail.com>,
-        linux-afs@lists.infradead.org, Hillf Danton <hdanton@sina.com>,
-        syzbot+3538a6a72efa8b059c38@syzkaller.appspotmail.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] drm/amd/pm: avoid large variable on kernel stack
+Content-Language: fr
+From:   Marion & Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     arnd@kernel.org
+Cc:     Hawking.Zhang@amd.com, Jack.Gui@amd.com, KevinYang.Wang@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, alexander.deucher@amd.com,
+        amd-gfx@lists.freedesktop.org, arnd@arndb.de,
+        christian.koenig@amd.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, evan.quan@amd.com,
+        kenneth.feng@amd.com, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com
+References: <20221215163649.386750-1-arnd@kernel.org>
+ <bca79bc1-9e7c-b145-0b0b-0ce725d58821@wanadoo.fr>
+In-Reply-To: <bca79bc1-9e7c-b145-0b0b-0ce725d58821@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 12:20 PM David Howells <dhowells@redhat.com> wrote:
->
->
-> Here are some fixes for AF_RXRPC:
->
->  (1) Fix missing unlock in rxrpc's sendmsg.
->
->  (2) Fix (lack of) propagation of security settings to rxrpc_call.
->
->  (3) Fix NULL ptr deref in rxrpc_unuse_local().
->
->  (4) Fix problem with kthread_run() not invoking the I/O thread function if
->      the kthread gets stopped first.  Possibly this should actually be
->      fixed in the kthread code.
->
->  (5) Fix locking problem as putting a peer (which may be done from RCU) may
->      now invoke kthread_stop().
->
->  (6) Fix switched parameters in a couple of trace calls.
->
->  (7) Fix I/O thread's checking for kthread stop to make sure it completes
->      all outstanding work before returning so that calls are cleaned up.
->
->  (8) Fix an uninitialised var in the new rxperf test server.
->
->  (9) Fix the return value of rxrpc_new_incoming_call() so that the checks
->      on it work correctly.
->
-> The patches fix at least one syzbot bug[1] and probably some others that
-> don't have reproducers[2][3][4].  I think it also fixes another[5], but
-> that showed another failure during testing that was different to the
-> original.
->
-> There's also an outstanding bug in rxrpc_put_peer()[6] that is fixed by a
-> combination of several patches in my rxrpc-next branch, but I haven't
-> included that here.
->
-> The patches are tagged here:
->
->         git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git
->         rxrpc-fixes-20221215
->
-> and can also be found on the following branch:
->
->         https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=rxrpc-fixes
->
-> David
->
-> Link: https://syzkaller.appspot.com/bug?extid=3538a6a72efa8b059c38 [1]
-> Link: https://syzkaller.appspot.com/bug?extid=2a99eae8dc7c754bc16b [2]
-> Link: https://syzkaller.appspot.com/bug?extid=e1391a5bf3f779e31237 [3]
-> Link: https://syzkaller.appspot.com/bug?extid=2aea8e1c8e20cb27a01f [4]
-> Link: https://syzkaller.appspot.com/bug?extid=1eb4232fca28c0a6d1c2 [5]
-> Link: https://syzkaller.appspot.com/bug?extid=c22650d2844392afdcfd [6]
->
-> ---
-> David Howells (9):
->       rxrpc: Fix missing unlock in rxrpc_do_sendmsg()
->       rxrpc: Fix security setting propagation
->       rxrpc: Fix NULL deref in rxrpc_unuse_local()
->       rxrpc: Fix I/O thread startup getting skipped
->       rxrpc: Fix locking issues in rxrpc_put_peer_locked()
->       rxrpc: Fix switched parameters in peer tracing
->       rxrpc: Fix I/O thread stop
->       rxrpc: rxperf: Fix uninitialised variable
->       rxrpc: Fix the return value of rxrpc_new_incoming_call()
->
->
->  include/trace/events/rxrpc.h |  2 +-
->  net/rxrpc/ar-internal.h      |  8 ++++----
->  net/rxrpc/call_accept.c      | 18 +++++++++---------
->  net/rxrpc/call_object.c      |  1 +
->  net/rxrpc/conn_client.c      |  2 --
->  net/rxrpc/io_thread.c        | 10 +++++++---
->  net/rxrpc/local_object.c     |  5 ++++-
->  net/rxrpc/peer_event.c       | 10 +++++++---
->  net/rxrpc/peer_object.c      | 23 ++---------------------
->  net/rxrpc/rxperf.c           |  2 +-
->  net/rxrpc/security.c         |  6 +++---
->  net/rxrpc/sendmsg.c          |  2 +-
->  12 files changed, 40 insertions(+), 49 deletions(-)
 
-For the series:
 
-Tested-by: Marc Dionne <marc.dionne@auristor.com>
-Tested-by: kafs-testing+fedora36_64checkkafs-build-164@auristor.com
+Le 15/12/2022 à 20:46, Christophe JAILLET a écrit :
+> Le 15/12/2022 à 17:36, Arnd Bergmann a écrit :
+>> From: Arnd Bergmann <arnd-r2nGTMty4D4@public.gmane.org>
+>>
+>> The activity_monitor_external[] array is too big to fit on the
+>> kernel stack, resulting in this warning with clang:
+>>
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:1438:12: error: stack frame size (1040) exceeds limit (1024) in 'smu_v13_0_7_get_power_profile_mode' [-Werror,-Wframe-larger-than]
+>>
+>> Use dynamic allocation instead. It should also be possible to
+>> have single element here instead of the array, but this seems
+>> easier.
+>>
+>> Fixes: 334682ae8151 ("drm/amd/pm: enable workload type change on 
+>> smu_v13_0_7")
+>> Signed-off-by: Arnd Bergmann <arnd-r2nGTMty4D4@public.gmane.org>
+>> ---
+>>   .../drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c  | 21 ++++++++++++++-----
+>>   1 file changed, 16 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c 
+>> b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
+>> index c270f94a1b86..7eba854e09ec 100644
+>> --- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
+>> +++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
+>> @@ -1439,7 +1439,7 @@ static int smu_v13_0_7_get_power_limit(struct 
+>> smu_context *smu,
+>>   static int smu_v13_0_7_get_power_profile_mode(struct smu_context 
+>> *smu, char *buf)
+>>   {
+>> -    DpmActivityMonitorCoeffIntExternal_t 
+>> activity_monitor_external[PP_SMC_POWER_PROFILE_COUNT];
+>> +    DpmActivityMonitorCoeffIntExternal_t *activity_monitor_external;
+>>       uint32_t i, j, size = 0;
+>>       int16_t workload_type = 0;
+>>       int result = 0;
+>> @@ -1447,6 +1447,12 @@ static int 
+>> smu_v13_0_7_get_power_profile_mode(struct smu_context *smu, char *buf
+>>       if (!buf)
+>>           return -EINVAL;
+>> +    activity_monitor_external = 
+>> kcalloc(sizeof(activity_monitor_external),
+> 
+> Hi,
+> 
+> Before, 'activity_monitor_external' was not initialized.
+> Maybe kcalloc() is enough?
 
-Marc
+Read kmalloc_array()
+
+> 
+> sizeof(*activity_monitor_external)?
+>       ~~~~
+> 
+>> +                        PP_SMC_POWER_PROFILE_COUNT,
+>> +                        GFP_KERNEL);
+>> +    if (!activity_monitor_external)
+>> +        return -ENOMEM;
+>> +
+>>       size += sysfs_emit_at(buf, size, "                              ");
+>>       for (i = 0; i <= PP_SMC_POWER_PROFILE_WINDOW3D; i++)
+> 
+> Unrelated, but wouldn't it be more straightforward with "< 
+> PP_SMC_POWER_PROFILE_COUNT"?
+> 
+>>           size += sysfs_emit_at(buf, size, "%-14s%s", 
+>> amdgpu_pp_profile_name[i],
+>> @@ -1459,15 +1465,17 @@ static int 
+>> smu_v13_0_7_get_power_profile_mode(struct smu_context *smu, char *buf
+>>           workload_type = smu_cmn_to_asic_specific_index(smu,
+>>                                      CMN2ASIC_MAPPING_WORKLOAD,
+>>                                      i);
+>> -        if (workload_type < 0)
+>> -            return -EINVAL;
+>> +        if (workload_type < 0) {
+>> +            result = -EINVAL;
+>> +            goto out;
+>> +        }
+>>           result = smu_cmn_update_table(smu,
+>>                         SMU_TABLE_ACTIVITY_MONITOR_COEFF, workload_type,
+>>                         (void *)(&activity_monitor_external[i]), false);
+>>           if (result) {
+>>               dev_err(smu->adev->dev, "[%s] Failed to get activity 
+>> monitor!", __func__);
+>> -            return result;
+>> +            goto out;
+>>           }
+>>       }
+>> @@ -1495,7 +1503,10 @@ do 
+>> {                                                    \
+>>       PRINT_DPM_MONITOR(Fclk_BoosterFreq);
+>>   #undef PRINT_DPM_MONITOR
+>> -    return size;
+>> +    result = size;
+>> +out:
+>> +    kfree(activity_monitor_external);
+>> +    return result;
+>>   }
+>>   static int smu_v13_0_7_set_power_profile_mode(struct smu_context 
+>> *smu, long *input, uint32_t size)
+> 
+> 
