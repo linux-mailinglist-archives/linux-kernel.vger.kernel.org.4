@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C7D64D680
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 07:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C89264D681
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 07:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiLOGjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 01:39:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
+        id S229695AbiLOGjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 01:39:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiLOGjf (ORCPT
+        with ESMTP id S229510AbiLOGjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 01:39:35 -0500
+        Thu, 15 Dec 2022 01:39:36 -0500
 Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBDED123;
-        Wed, 14 Dec 2022 22:39:33 -0800 (PST)
-Received: from pps.filterd (m0150244.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BF5g9hf025715;
-        Thu, 15 Dec 2022 06:39:28 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E50B4876B;
+        Wed, 14 Dec 2022 22:39:35 -0800 (PST)
+Received: from pps.filterd (m0150245.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BF526gf014205;
+        Thu, 15 Dec 2022 06:39:30 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pps0720;
- bh=AwreCb2FvuuEWubhHPx773O18pE5ZTMx5D1GF3TAPjg=;
- b=ngpp21Xod+K2nWiKyQDna3/Z6pBZcd92zIK4x1ea39sh95GWtP0uAzF4CUY8kYM9vF+I
- K/IntpB7Ml+7rNroTBJH3Hkm82cbdSzRK0vXsYkZecb9BQxgFrRWi99Mavjhg0MGiMzE
- O6wpoMA6BrEMh6mqugYV39xQiK4MPoKJkhliRCcxi+k+c/RHu8gdkZZ5fapHFYa8BNOl
- dIuuL1LgiI+A7TIgSIBKmjAdxABZCjsicS62ZRQfbWQXgNTQw/lRK4UosVB+2hqTXIXE
- FKOmDTJBal6jTNNU2vIdbqrKW7dv3JmrxM3Be4k8yBQvPchbFjIXLhmeZPp06XEzMiI+ fw== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3mfgse5s4s-1
+ bh=1DDzeZH6s0CceZ3jMIt18KfkIYHpzJkKm7d81VrfBXE=;
+ b=i3lDLix5P3tQMPD96uhBr+F6D7KAmjM2hd0nUKZww7HIVpBSva42dLfOBCqsD0aQdNp0
+ CG8mQLCJFGYYUFxp0Ex3XD6hztrkcZePEDc5rtHNAVpJRGxy6YT3Nnu2tiZ/GfUDyk4z
+ K9bYbCRbvn/8AQgWFs7S/3vaX0VONDYnyA3T5EgE4c4hARwzAjkILKJVj8aBRzoCNiwo
+ mVQdToRW5tMEIV7UpH08hl0VJyHMWbWdZ8pvuqR6tB33j/2itiAeGbIPLmwyeG94J0KB
+ /gSkx4EqYE2zirM4mliqB3RlnrJ61cOjaWtbH8jJ3Im9TU12BOXuWGW8b31eZl2TyBqT 1Q== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3mfm57uu7k-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 06:39:28 +0000
+        Thu, 15 Dec 2022 06:39:30 +0000
 Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 0411A2FB34;
-        Thu, 15 Dec 2022 06:39:27 +0000 (UTC)
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id DC030807131;
+        Thu, 15 Dec 2022 06:39:29 +0000 (UTC)
 Received: from adevxp033-sys.us.rdlabs.hpecorp.net (unknown [16.231.227.36])
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id A2EC680C77C;
-        Thu, 15 Dec 2022 06:39:27 +0000 (UTC)
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 89CA380C77C;
+        Thu, 15 Dec 2022 06:39:29 +0000 (UTC)
 From:   Robert Elliott <elliott@hpe.com>
 To:     herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net,
         linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Robert Elliott <elliott@hpe.com>
-Subject: [PATCH 1/8] crypto: clean up kernel-doc headers
-Date:   Thu, 15 Dec 2022 00:38:50 -0600
-Message-Id: <20221215063857.161665-2-elliott@hpe.com>
+Subject: [PATCH 2/8] doc: support kernel-doc for asm functions
+Date:   Thu, 15 Dec 2022 00:38:51 -0600
+Message-Id: <20221215063857.161665-3-elliott@hpe.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221215063857.161665-1-elliott@hpe.com>
 References: <20221215063857.161665-1-elliott@hpe.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: cQSVZncTBhyRMChhrYIXioMIm6qAqrAs
-X-Proofpoint-GUID: cQSVZncTBhyRMChhrYIXioMIm6qAqrAs
+X-Proofpoint-GUID: T3aVu_cFQCLclcq6Mryyelc1M6rhVEW9
+X-Proofpoint-ORIG-GUID: T3aVu_cFQCLclcq6Mryyelc1M6rhVEW9
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-15_02,2022-12-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 mlxlogscore=999 bulkscore=0 spamscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1015 impostorscore=0
- adultscore=0 phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2212150050
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ mlxlogscore=999 clxscore=1015 spamscore=0 priorityscore=1501 mlxscore=0
+ phishscore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212150050
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -73,437 +73,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix these problems in the kernel-doc function header comments, as
-reported by running:
-	scripts/kernel-doc -man \
-		$(git grep -l '/\*\*' -- :^Documentation :^tools) \
-		| scripts/split-man.pl /tmp/man 2> err.log
-	cat err.log | grep crypto | grep -v drivers
+Support kernel-doc comments in assembly language files for functions
+called by C functions.
 
-arch/mips/cavium-octeon/crypto/octeon-crypto.c:18: warning: This comment starts with '/**', but isn't a kernel-doc comment.
-arch/mips/cavium-octeon/crypto/octeon-crypto.c:50: warning: This comment starts with '/**', but isn't a kernel-doc comment.
-arch/mips/cavium-octeon/crypto/octeon-crypto.c:60: warning: Function parameter or member 'crypto_flags' not described in 'octeon_crypto_disable'
-arch/mips/cavium-octeon/crypto/octeon-crypto.c:60: warning: Excess function parameter 'flags' description in 'octeon_crypto_disable'
+The comment must include a line containing:
+    * Prototype: asmlinkage ... rest of C prototype...
 
-crypto/asymmetric_keys/verify_pefile.c:420: warning: Function parameter or member 'trusted_keys' not described in 'verify_pefile_signature'
-crypto/asymmetric_keys/verify_pefile.c:420: warning: Excess function parameter 'trust_keys' description in 'verify_pefile_signature'
+and that function name must match the name used in line like:
+    SYM_FUNC_START(name)
+    SYM_FUNC_START_SOMETHING(name)
 
-crypto/async_tx/async_pq.c:19: warning: cannot understand function prototype: 'struct page *pq_scribble_page; '
-crypto/async_tx/async_pq.c:40: warning: Function parameter or member 'chan' not described in 'do_async_gen_syndrome'
-crypto/async_tx/async_pq.c:40: warning: Function parameter or member 'scfs' not described in 'do_async_gen_syndrome'
-crypto/async_tx/async_pq.c:40: warning: Function parameter or member 'disks' not described in 'do_async_gen_syndrome'
-crypto/async_tx/async_pq.c:40: warning: Function parameter or member 'unmap' not described in 'do_async_gen_syndrome'
-crypto/async_tx/async_pq.c:40: warning: Function parameter or member 'dma_flags' not described in 'do_async_gen_syndrome'
-crypto/async_tx/async_pq.c:40: warning: Function parameter or member 'submit' not described in 'do_async_gen_syndrome'
-crypto/async_tx/async_pq.c:109: warning: Function parameter or member 'blocks' not described in 'do_sync_gen_syndrome'
-crypto/async_tx/async_pq.c:109: warning: Function parameter or member 'offsets' not described in 'do_sync_gen_syndrome'
-crypto/async_tx/async_pq.c:109: warning: Function parameter or member 'disks' not described in 'do_sync_gen_syndrome'
-crypto/async_tx/async_pq.c:109: warning: Function parameter or member 'len' not described in 'do_sync_gen_syndrome'
-crypto/async_tx/async_pq.c:109: warning: Function parameter or member 'submit' not described in 'do_sync_gen_syndrome'
-crypto/async_tx/async_pq.c:302: warning: Excess function parameter 'offset' description in 'async_syndrome_val'
+or
+    SOMETHING name
 
-crypto/async_tx/async_tx.c:137: warning: cannot understand function prototype: 'enum submit_disposition '
-crypto/async_tx/async_tx.c:265: warning: Function parameter or member 'tx' not described in 'async_tx_quiesce'
-
-crypto/crypto_engine.c:514: warning: Excess function parameter 'engine' description in 'crypto_engine_alloc_init_and_set'
-
-include/crypto/acompress.h:219: warning: Function parameter or member 'cmpl' not described in 'acomp_request_set_callback'
-include/crypto/acompress.h:219: warning: Excess function parameter 'cmlp' description in 'acomp_request_set_callback'
-
-include/crypto/des.h:43: warning: Function parameter or member 'keylen' not described in 'des_expand_key'
-include/crypto/des.h:43: warning: Excess function parameter 'len' description in 'des_expand_key'
-include/crypto/des.h:56: warning: Function parameter or member 'keylen' not described in 'des3_ede_expand_key'
-include/crypto/des.h:56: warning: Excess function parameter 'len' description in 'des3_ede_expand_key'
-
-include/crypto/if_alg.h:160: warning: Function parameter or member 'wait' not described in 'af_alg_ctx'
-include/crypto/if_alg.h:178: warning: This comment starts with '/**', but isn't a kernel-doc comment.
-include/crypto/if_alg.h:193: warning: This comment starts with '/**', but isn't a kernel-doc comment.
-include/crypto/if_alg.h:204: warning: This comment starts with '/**', but isn't a kernel-doc comment.
-include/crypto/if_alg.h:219: warning: This comment starts with '/**', but isn't a kernel-doc comment.
-include/crypto/if_alg.h:184: warning: Function parameter or member 'sk' not described in 'af_alg_sndbuf'
-include/crypto/if_alg.h:199: warning: Function parameter or member 'sk' not described in 'af_alg_writable'
-include/crypto/if_alg.h:210: warning: Function parameter or member 'sk' not described in 'af_alg_rcvbuf'
-include/crypto/if_alg.h:225: warning: Function parameter or member 'sk' not described in 'af_alg_readable'
-
-include/crypto/internal/ecc.h:85: warning: Function parameter or member 'privkey' not described in 'ecc_gen_privkey'
-include/crypto/internal/ecc.h:85: warning: Excess function parameter 'private_key' description in 'ecc_gen_privkey'
-include/crypto/internal/ecc.h:184: warning: Function parameter or member 'right' not described in 'vli_sub'
-include/crypto/internal/ecc.h:246: warning: expecting prototype for ecc_aloc_point(). Prototype was for ecc_alloc_point() instead
-include/crypto/internal/ecc.h:262: warning: Function parameter or member 'point' not described in 'ecc_point_is_zero'
-include/crypto/internal/ecc.h:262: warning: Excess function parameter 'p' description in 'ecc_point_is_zero'
-
-include/crypto/internal/rsa.h:32: warning: cannot understand function prototype: 'struct rsa_key '
-
-include/crypto/kdf_sp800108.h:34: warning: Function parameter or member 'kmd' not described in 'crypto_kdf108_ctr_generate'
-include/crypto/kdf_sp800108.h:34: warning: Function parameter or member 'info' not described in 'crypto_kdf108_ctr_generate'
-include/crypto/kdf_sp800108.h:34: warning: Function parameter or member 'info_nvec' not described in 'crypto_kdf108_ctr_generate'
-include/crypto/kdf_sp800108.h:34: warning: Function parameter or member 'dst' not described in 'crypto_kdf108_ctr_generate'
-include/crypto/kdf_sp800108.h:34: warning: Function parameter or member 'dlen' not described in 'crypto_kdf108_ctr_generate'
-include/crypto/kdf_sp800108.h:34: warning: expecting prototype for Counter KDF generate operation according to SP800(). Prototype was for crypto_kdf108_ctr_generate() instead
-include/crypto/kdf_sp800108.h:37: warning: This comment starts with '/**', but isn't a kernel-doc comment.
-include/crypto/kdf_sp800108.h:37: warning: Function parameter or member 'info_nvec' not described in 'crypto_kdf108_ctr_generate'
-include/crypto/kdf_sp800108.h:37: warning: Excess function parameter 'info_vec' description in 'crypto_kdf108_ctr_generate'
+which is used in a few places in which SYM_FUNC_START is nested.
 
 Signed-off-by: Robert Elliott <elliott@hpe.com>
 ---
- .../mips/cavium-octeon/crypto/octeon-crypto.c | 19 ++++-----
- crypto/asymmetric_keys/verify_pefile.c        |  2 +-
- crypto/async_tx/async_pq.c                    | 11 +++---
- crypto/async_tx/async_tx.c                    |  4 +-
- crypto/crypto_engine.c                        |  2 +-
- include/crypto/acompress.h                    |  2 +-
- include/crypto/des.h                          |  4 +-
- include/crypto/if_alg.h                       | 26 ++++++-------
- include/crypto/internal/ecc.h                 |  8 ++--
- include/crypto/internal/rsa.h                 |  2 +-
- include/crypto/kdf_sp800108.h                 | 39 +++++++++++--------
- 11 files changed, 62 insertions(+), 57 deletions(-)
+ scripts/kernel-doc | 48 ++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 46 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/cavium-octeon/crypto/octeon-crypto.c b/arch/mips/cavium-octeon/crypto/octeon-crypto.c
-index cfb4a146cf17..c4badbf756b5 100644
---- a/arch/mips/cavium-octeon/crypto/octeon-crypto.c
-+++ b/arch/mips/cavium-octeon/crypto/octeon-crypto.c
-@@ -14,10 +14,11 @@
- #include "octeon-crypto.h"
+diff --git a/scripts/kernel-doc b/scripts/kernel-doc
+index aea04365bc69..f3a89301e3ab 100755
+--- a/scripts/kernel-doc
++++ b/scripts/kernel-doc
+@@ -174,6 +174,7 @@ my %nosymbol_table = ();
+ my $declaration_start_line;
+ my ($type, $declaration_name, $return_type);
+ my ($newsection, $newcontents, $prototype, $brcount, %source_map);
++my %asmprototypes;
  
- /**
-- * Enable access to Octeon's COP2 crypto hardware for kernel use. Wrap any
-- * crypto operations in calls to octeon_crypto_enable/disable in order to make
-- * sure the state of COP2 isn't corrupted if userspace is also performing
-- * hardware crypto operations. Allocate the state parameter on the stack.
-+ * octeon_crypto_enable - Enable access to Octeon's COP2 crypto hardware for kernel use.
-+ * Wrap any crypto operations in calls to octeon_crypto_enable/disable
-+ * in order to make sure the state of COP2 isn't corrupted if userspace
-+ * is also performing hardware crypto operations.
-+ * Allocate the state parameter on the stack.
-  * Returns with preemption disabled.
-  *
-  * @state: Pointer to state structure to store current COP2 state in.
-@@ -46,12 +47,12 @@ unsigned long octeon_crypto_enable(struct octeon_cop2_state *state)
- EXPORT_SYMBOL_GPL(octeon_crypto_enable);
+ if (defined($ENV{'KBUILD_VERBOSE'})) {
+ 	$verbose = "$ENV{'KBUILD_VERBOSE'}";
+@@ -248,7 +249,7 @@ my $doc_decl = $doc_com . '(\w+)';
+ # while trying to not match literal block starts like "example::"
+ #
+ my $doc_sect = $doc_com .
+-    '\s*(\@[.\w]+|\@\.\.\.|description|context|returns?|notes?|examples?)\s*:([^:].*)?$';
++    '\s*(\@[.\w]+|\@\.\.\.|description|context|returns?|prototype|notes?|examples?)\s*:([^:].*)?$';
+ my $doc_content = $doc_com_body . '(.*)';
+ my $doc_block = $doc_com . 'DOC:\s*(.*)?';
+ my $doc_inline_start = '^\s*/\*\*\s*$';
+@@ -277,6 +278,7 @@ my $section_intro = "Introduction";
+ my $section = $section_default;
+ my $section_context = "Context";
+ my $section_return = "Return";
++my $section_asmprototype = "Prototype";
  
- /**
-- * Disable access to Octeon's COP2 crypto hardware in the kernel. This must be
-- * called after an octeon_crypto_enable() before any context switch or return to
-- * userspace.
-+ * octeon_crypto_disable - Disable access to Octeon's COP2 crypto hardware in the kernel.
-+ * This must be called after an octeon_crypto_enable() before any
-+ * context switch or return to userspace.
-  *
-- * @state:	Pointer to COP2 state to restore
-- * @flags:	Return value from octeon_crypto_enable()
-+ * @state:		Pointer to COP2 state to restore
-+ * @crypto_flags:	Return value from octeon_crypto_enable()
-  */
- void octeon_crypto_disable(struct octeon_cop2_state *state,
- 			   unsigned long crypto_flags)
-diff --git a/crypto/asymmetric_keys/verify_pefile.c b/crypto/asymmetric_keys/verify_pefile.c
-index 7553ab18db89..148cad70fe79 100644
---- a/crypto/asymmetric_keys/verify_pefile.c
-+++ b/crypto/asymmetric_keys/verify_pefile.c
-@@ -387,7 +387,7 @@ static int pefile_digest_pe(const void *pebuf, unsigned int pelen,
-  * verify_pefile_signature - Verify the signature on a PE binary image
-  * @pebuf: Buffer containing the PE binary image
-  * @pelen: Length of the binary image
-- * @trust_keys: Signing certificate(s) to use as starting points
-+ * @trusted_keys: Signing certificate(s) to use as starting points
-  * @usage: The use to which the key is being put.
-  *
-  * Validate that the certificate chain inside the PKCS#7 message inside the PE
-diff --git a/crypto/async_tx/async_pq.c b/crypto/async_tx/async_pq.c
-index f9cdc5e91664..c95908d70f7e 100644
---- a/crypto/async_tx/async_pq.c
-+++ b/crypto/async_tx/async_pq.c
-@@ -11,9 +11,8 @@
- #include <linux/async_tx.h>
- #include <linux/gfp.h>
+ my $undescribed = "-- undescribed --";
  
--/**
-- * pq_scribble_page - space to hold throwaway P or Q buffer for
-- * synchronous gen_syndrome
-+/*
-+ * space to hold throwaway P or Q buffer for synchronous gen_syndrome
-  */
- static struct page *pq_scribble_page;
- 
-@@ -28,7 +27,7 @@ static struct page *pq_scribble_page;
- 
- #define MAX_DISKS 255
- 
--/**
-+/*
-  * do_async_gen_syndrome - asynchronously calculate P and/or Q
-  */
- static __async_inline struct dma_async_tx_descriptor *
-@@ -100,7 +99,7 @@ do_async_gen_syndrome(struct dma_chan *chan,
- 	return tx;
+@@ -468,6 +470,13 @@ sub dump_section {
+             $new_start_line = 0;
+ 	}
+     }
++
++    if ($name eq $section_asmprototype) {
++        # extract the function name for future matching to SYM_FUNC_START.*(name)
++        # since that doesn't include arguments like a C function call
++        my ($func) = ($contents =~ /^.*\s+(\S+)\(/);
++	$asmprototypes{$func} = $contents;
++    }
  }
  
--/**
-+/*
-  * do_sync_gen_syndrome - synchronously calculate a raid6 syndrome
-  */
- static void
-@@ -281,7 +280,7 @@ pq_val_chan(struct async_submit_ctl *submit, struct page **blocks, int disks, si
- /**
-  * async_syndrome_val - asynchronously validate a raid6 syndrome
-  * @blocks: source blocks from idx 0..disks-3, P @ disks-2 and Q @ disks-1
-- * @offset: common offset into each block (src and dest) to start transaction
-+ * @offsets: common offset into each block (src and dest) to start transaction
-  * @disks: number of blocks (including missing P or Q, see below)
-  * @len: length of operation in bytes
-  * @pqres: on val failure SUM_CHECK_P_RESULT and/or SUM_CHECK_Q_RESULT are set
-diff --git a/crypto/async_tx/async_tx.c b/crypto/async_tx/async_tx.c
-index 9256934312d7..ad72057a5e0d 100644
---- a/crypto/async_tx/async_tx.c
-+++ b/crypto/async_tx/async_tx.c
-@@ -124,7 +124,7 @@ async_tx_channel_switch(struct dma_async_tx_descriptor *depend_tx,
+ ##
+@@ -1848,9 +1857,31 @@ sub syscall_munge() {
+ sub process_proto_function($$) {
+     my $x = shift;
+     my $file = shift;
++    my $funcname;
  
+     $x =~ s@\/\/.*$@@gos; # strip C99-style comments to end of line
  
- /**
-- * submit_disposition - flags for routing an incoming operation
-+ * enum submit_disposition - flags for routing an incoming operation
-  * @ASYNC_TX_SUBMITTED: we were able to append the new operation under the lock
-  * @ASYNC_TX_CHANNEL_SWITCH: when the lock is dropped schedule a channel switch
-  * @ASYNC_TX_DIRECT_SUBMIT: when the lock is dropped submit directly
-@@ -258,7 +258,7 @@ EXPORT_SYMBOL_GPL(async_trigger_callback);
- 
- /**
-  * async_tx_quiesce - ensure tx is complete and freeable upon return
-- * @tx - transaction to quiesce
-+ * @tx: transaction to quiesce
-  */
- void async_tx_quiesce(struct dma_async_tx_descriptor **tx)
- {
-diff --git a/crypto/crypto_engine.c b/crypto/crypto_engine.c
-index bb8e77077f02..64dc9aa3ca24 100644
---- a/crypto/crypto_engine.c
-+++ b/crypto/crypto_engine.c
-@@ -499,7 +499,7 @@ EXPORT_SYMBOL_GPL(crypto_engine_stop);
-  *                This has the form:
-  *                callback(struct crypto_engine *engine)
-  *                where:
-- *                @engine: the crypto engine structure.
-+ *                engine: the crypto engine structure.
-  * @rt: whether this queue is set to run as a realtime task
-  * @qlen: maximum size of the crypto-engine queue
-  *
-diff --git a/include/crypto/acompress.h b/include/crypto/acompress.h
-index cb3d6b1c655d..8d50c19e0f8e 100644
---- a/include/crypto/acompress.h
-+++ b/include/crypto/acompress.h
-@@ -208,7 +208,7 @@ void acomp_request_free(struct acomp_req *req);
-  *
-  * @req:	request that the callback will be set for
-  * @flgs:	specify for instance if the operation may backlog
-- * @cmlp:	callback which will be called
-+ * @cmpl:	callback which will be called
-  * @data:	private data used by the caller
-  */
- static inline void acomp_request_set_callback(struct acomp_req *req,
-diff --git a/include/crypto/des.h b/include/crypto/des.h
-index 7812b4331ae4..2fcc72988843 100644
---- a/include/crypto/des.h
-+++ b/include/crypto/des.h
-@@ -34,7 +34,7 @@ void des3_ede_decrypt(const struct des3_ede_ctx *dctx, u8 *dst, const u8 *src);
-  * des_expand_key - Expand a DES input key into a key schedule
-  * @ctx: the key schedule
-  * @key: buffer containing the input key
-- * @len: size of the buffer contents
-+ * @keylen: size of the buffer contents
-  *
-  * Returns 0 on success, -EINVAL if the input key is rejected and -ENOKEY if
-  * the key is accepted but has been found to be weak.
-@@ -45,7 +45,7 @@ int des_expand_key(struct des_ctx *ctx, const u8 *key, unsigned int keylen);
-  * des3_ede_expand_key - Expand a triple DES input key into a key schedule
-  * @ctx: the key schedule
-  * @key: buffer containing the input key
-- * @len: size of the buffer contents
-+ * @keylen: size of the buffer contents
-  *
-  * Returns 0 on success, -EINVAL if the input key is rejected and -ENOKEY if
-  * the key is accepted but has been found to be weak. Note that weak keys will
-diff --git a/include/crypto/if_alg.h b/include/crypto/if_alg.h
-index a5db86670bdf..da66314d9bc7 100644
---- a/include/crypto/if_alg.h
-+++ b/include/crypto/if_alg.h
-@@ -124,7 +124,7 @@ struct af_alg_async_req {
-  * @tsgl_list:		Link to TX SGL
-  * @iv:			IV for cipher operation
-  * @aead_assoclen:	Length of AAD for AEAD cipher operations
-- * @completion:		Work queue for synchronous operation
-+ * @wait:		helper structure for async operation
-  * @used:		TX bytes sent to kernel. This variable is used to
-  *			ensure that user space cannot cause the kernel
-  *			to allocate too much memory in sendmsg operation.
-@@ -174,10 +174,10 @@ static inline struct alg_sock *alg_sk(struct sock *sk)
- }
- 
- /**
-- * Size of available buffer for sending data from user space to kernel.
-+ * af_alg_sndbuf - Size of available buffer for sending data from user space to kernel.
-  *
-- * @sk socket of connection to user space
-- * @return number of bytes still available
-+ * @sk: socket of connection to user space
-+ * @return: number of bytes still available
-  */
- static inline int af_alg_sndbuf(struct sock *sk)
- {
-@@ -189,10 +189,10 @@ static inline int af_alg_sndbuf(struct sock *sk)
- }
- 
- /**
-- * Can the send buffer still be written to?
-+ * af_alg_writable - Can the send buffer still be written to?
-  *
-- * @sk socket of connection to user space
-- * @return true => writable, false => not writable
-+ * @sk: socket of connection to user space
-+ * @return: true => writable, false => not writable
-  */
- static inline bool af_alg_writable(struct sock *sk)
- {
-@@ -200,10 +200,10 @@ static inline bool af_alg_writable(struct sock *sk)
- }
- 
- /**
-- * Size of available buffer used by kernel for the RX user space operation.
-+ * af_alg_rcvbuf - Size of available buffer used by kernel for the RX user space operation.
-  *
-- * @sk socket of connection to user space
-- * @return number of bytes still available
-+ * @sk: socket of connection to user space
-+ * @return: number of bytes still available
-  */
- static inline int af_alg_rcvbuf(struct sock *sk)
- {
-@@ -215,10 +215,10 @@ static inline int af_alg_rcvbuf(struct sock *sk)
- }
- 
- /**
-- * Can the RX buffer still be written to?
-+ * af_alg_readable - Can the RX buffer still be written to?
-  *
-- * @sk socket of connection to user space
-- * @return true => writable, false => not writable
-+ * @sk: socket of connection to user space
-+ * @return: true => writable, false => not writable
-  */
- static inline bool af_alg_readable(struct sock *sk)
- {
-diff --git a/include/crypto/internal/ecc.h b/include/crypto/internal/ecc.h
-index 4f6c1a68882f..4b8155fea03c 100644
---- a/include/crypto/internal/ecc.h
-+++ b/include/crypto/internal/ecc.h
-@@ -76,7 +76,7 @@ int ecc_is_key_valid(unsigned int curve_id, unsigned int ndigits,
-  * point G.
-  * @curve_id:		id representing the curve to use
-  * @ndigits:		curve number of digits
-- * @private_key:	buffer for storing the generated private key
-+ * @privkey:		buffer for storing the generated private key
-  *
-  * Returns 0 if the private key was generated successfully, a negative value
-  * if an error occurred.
-@@ -172,7 +172,7 @@ int vli_cmp(const u64 *left, const u64 *right, unsigned int ndigits);
-  *
-  * @result:		where to write result
-  * @left:		vli
-- * @right		vli
-+ * @right:		vli
-  * @ndigits:		length of all vlis
-  *
-  * Note: can modify in-place.
-@@ -236,7 +236,7 @@ void vli_mod_mult_slow(u64 *result, const u64 *left, const u64 *right,
- unsigned int vli_num_bits(const u64 *vli, unsigned int ndigits);
- 
- /**
-- * ecc_aloc_point() - Allocate ECC point.
-+ * ecc_alloc_point() - Allocate ECC point.
-  *
-  * @ndigits:		Length of vlis in u64 qwords.
-  *
-@@ -254,7 +254,7 @@ void ecc_free_point(struct ecc_point *p);
- /**
-  * ecc_point_is_zero() - Check if point is zero.
-  *
-- * @p:			Point to check for zero.
-+ * @point:		Point to check for zero.
-  *
-  * Return: true if point is the point at infinity, false otherwise.
-  */
-diff --git a/include/crypto/internal/rsa.h b/include/crypto/internal/rsa.h
-index e870133f4b77..78a7544aaa11 100644
---- a/include/crypto/internal/rsa.h
-+++ b/include/crypto/internal/rsa.h
-@@ -10,7 +10,7 @@
- #include <linux/types.h>
- 
- /**
-- * rsa_key - RSA key structure
-+ * struct rsa_key - RSA key structure
-  * @n           : RSA modulus raw byte stream
-  * @e           : RSA public exponent raw byte stream
-  * @d           : RSA private exponent raw byte stream
-diff --git a/include/crypto/kdf_sp800108.h b/include/crypto/kdf_sp800108.h
-index b7b20a778fb7..1c16343cd3fd 100644
---- a/include/crypto/kdf_sp800108.h
-+++ b/include/crypto/kdf_sp800108.h
-@@ -11,17 +11,20 @@
- #include <linux/uio.h>
- 
- /**
-- * Counter KDF generate operation according to SP800-108 section 5.1
-- * as well as SP800-56A section 5.8.1 (Single-step KDF).
-+ * crypto_kdf108_ctr_generate - Counter KDF generate operation
-+ *				according to SP800-108 section 5.1
-+ *				as well as SP800-56A section 5.8.1
-+ *				(Single-step KDF).
-  *
-- * @kmd Keyed message digest whose key was set with crypto_kdf108_setkey or
-- *	unkeyed message digest
-- * @info optional context and application specific information - this may be
-- *	 NULL
-- * @info_vec number of optional context/application specific information entries
-- * @dst destination buffer that the caller already allocated
-- * @dlen length of the destination buffer - the KDF derives that amount of
-- *	 bytes.
-+ * @kmd:	Keyed message digest whose key was set with
-+ *		crypto_kdf108_setkey or unkeyed message digest
-+ * @info:	optional context and application specific information -
-+ *		this may be NULL
-+ * @info_nvec:	number of optional context/application specific
-+ *		information entries
-+ * @dst:	destination buffer that the caller already allocated
-+ * @dlen:	length of the destination buffer -
-+ *		the KDF derives that amount of bytes.
-  *
-  * To comply with SP800-108, the caller must provide Label || 0x00 || Context
-  * in the info parameter.
-@@ -33,14 +36,16 @@ int crypto_kdf108_ctr_generate(struct crypto_shash *kmd,
- 			       u8 *dst, unsigned int dlen);
- 
- /**
-- * Counter KDF setkey operation
-+ * crypto_kdf108_setkey - Counter KDF setkey operation
-  *
-- * @kmd Keyed message digest allocated by the caller. The key should not have
-- *	been set.
-- * @key Seed key to be used to initialize the keyed message digest context.
-- * @keylen This length of the key buffer.
-- * @ikm The SP800-108 KDF does not support IKM - this parameter must be NULL
-- * @ikmlen This parameter must be 0.
-+ * @kmd:	Keyed message digest allocated by the caller.
-+ *		The key should not have been set.
-+ * @key:	Seed key to be used to initialize the
-+ *		keyed message digest context.
-+ * @keylen:	This length of the key buffer.
-+ * @ikm:	The SP800-108 KDF does not support IKM -
-+ *		this parameter must be NULL
-+ * @ikmlen:	This parameter must be 0.
-  *
-  * According to SP800-108 section 7.2, the seed key must be at least as large as
-  * the message digest size of the used keyed message digest. This limitation
++    # support asm functions declared with one of these starting in
++    # the first column:
++    #     SYM_FUNC_START(name)
++    #     SYM_FUNC_START_LOCAL(name)
++    #     SYM_FUNC_START_WEAK(name)
++    # or for nested macros:
++    #     SOMESTRING<whitespace>name
++    if ($file =~ /\.S$/) {
++        if ($x =~ /^SYM_FUNC_START/) {
++	    ($funcname) = ($x =~ /^SYM_FUNC_START.*\((.*)\)/);
++        } elsif ($x =~ /^[A-Za-z0-9_]+\s+[A-Za-z0-9_]+/) {
++	    ($funcname) = ($x =~ /^[A-Za-z0-9_]+\s+([A-Za-z0-9_]+)/);
++        }
++    }
++    if (defined $funcname) {
++	$prototype = $asmprototypes{$funcname};
++	dump_function($asmprototypes{$funcname}, $file);
++	reset_state();
++	return;
++    }
++
+     if ($x =~ m#\s*/\*\s+MACDOC\s*#io || ($x =~ /^#/ && $x !~ /^#\s*define/)) {
+ 	# do nothing
+     }
+@@ -2085,6 +2116,8 @@ sub process_body($$) {
+ 	    $newsection = $section_default;
+ 	} elsif ($newsection =~ m/^context$/i) {
+ 	    $newsection = $section_context;
++	} elsif ($newsection =~ m/^prototype$/i) {
++	    $newsection = $section_asmprototype;
+ 	} elsif ($newsection =~ m/^returns?$/i) {
+ 	    $newsection = $section_return;
+ 	} elsif ($newsection =~ m/^\@return$/) {
+@@ -2135,6 +2168,16 @@ sub process_body($$) {
+ 		$contents = "";
+ 		$new_start_line = $.;
+ 		$state = STATE_BODY;
++	    } elsif ($section eq $section_asmprototype) {
++		my ($protoline) = /Prototype:\s+(.+)$/;
++		my ($funcname) = $protoline =~ /Prototype\.*\s+(\S+)\(/;
++
++		$asmprototypes{$funcname} = $protoline;
++		dump_section($file, $section, $contents);
++		$section = $section_default;
++		$contents = "";
++		$new_start_line = $.;
++		$state = STATE_BODY;
+ 	    } else {
+ 		if ($section ne $section_default) {
+ 		    $state = STATE_BODY_WITH_BLANK_LINE;
+@@ -2150,7 +2193,7 @@ sub process_body($$) {
+ 	    $declaration_purpose =~ s/\s+/ /g;
+ 	} else {
+ 	    my $cont = $1;
+-	    if ($section =~ m/^@/ || $section eq $section_context) {
++	    if ($section =~ m/^@/ || $section eq $section_context || $section eq $section_asmprototype) {
+ 		if (!defined $leading_space) {
+ 		    if ($cont =~ m/^(\s+)/) {
+ 			$leading_space = $1;
+@@ -2286,6 +2329,7 @@ sub process_file($) {
+ 	}
+ 	# Replace tabs by spaces
+         while ($_ =~ s/\t+/' ' x (length($&) * 8 - length($`) % 8)/e) {};
++
+ 	# Hand this line to the appropriate state handler
+ 	if ($state == STATE_NORMAL) {
+ 	    process_normal();
 -- 
 2.38.1
 
