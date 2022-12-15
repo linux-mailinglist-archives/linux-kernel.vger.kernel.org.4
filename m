@@ -2,55 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868DF64DF10
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1254264DF0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbiLOQzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
+        id S229780AbiLOQzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:55:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiLOQzB (ORCPT
+        with ESMTP id S230110AbiLOQzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:55:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA09389FF;
-        Thu, 15 Dec 2022 08:54:59 -0800 (PST)
+        Thu, 15 Dec 2022 11:55:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BED937F90;
+        Thu, 15 Dec 2022 08:54:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B0DC61E50;
-        Thu, 15 Dec 2022 16:54:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27427C433F0;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E3AFB81C0E;
+        Thu, 15 Dec 2022 16:54:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40042C433D2;
         Thu, 15 Dec 2022 16:54:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671123299;
-        bh=ZKM76IKVl+oE/V0fQ6ck+h5jxYKKktSIJud+zEgrvtw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FUCD/0mGC+mr3xUpe1YDVg3Porf4rdwuX1j3GZbLYLmsTjoSJBArBSPXRWWMr18YM
-         +KCVjQWfZRGvxISu7QdnUE+ORzVgZstqZSyrXufueEmZphky1YTM45xgzczB5AxAIn
-         4iCRnmt3mV5vLaVJYl/+VOyKujyYwS1vQx+PEeRE7cwYx8GpmI9JP7jXvxH8Xh1l/a
-         rCil2nKv4khTnlniQ7uC/MuSekCXUc6Hjmf7MiqJvVF5FhT2yugGYujDS3TabPXiOk
-         aWEicCIQxvXf01s3v683x+mGYVkfVSudRvCh+vNi2bdCrwP9BRQYHCGhIXyytx7rhj
-         /2yMhk8sgtQIg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Aniket Randive <quic_arandive@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        s=k20201202; t=1671123295;
+        bh=+ERCEp+XeQUNXuVbXvVYV1Fyz7Xx1xxX4O1QV9ZMhBI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uos9iNVaUowdgauSz9llkV4BQPebgviJKtn0STKfLLSIoubYdkSfVhsvug0ziQxLM
+         Q7GIycAceDoXQtB461gKurycXNhjGCzZxNW9lWkLCXBYx+08DyEnZneWYoqaQgMR3a
+         OC9uYWjsZMzVX7WOq9WqpBEqg7trAhikLkwxG5eoPv8YGUikkeMQffN0TBAsC4LEir
+         7RfMEk/Joy0f12I7phv+6DmVXMXEA8+aTq3jRdl3JTor4Jg0qW9h9q8Lh4JB1fWOFs
+         8SpVxdoME4xKK2X5JbkVcucuso5cXEaCUp8/aKWYLLaHOpEHHG/kJye52csxYa5eS6
+         SYoiFVJJ4Lmuw==
+Date:   Thu, 15 Dec 2022 17:54:52 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     boqun.feng@gmail.com, joel@joelfernandes.org,
+        neeraj.iitr10@gmail.com, urezki@gmail.com, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] tty: serial: qcom_geni: avoid duplicate struct member init
-Date:   Thu, 15 Dec 2022 17:54:24 +0100
-Message-Id: <20221215165453.1864836-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.35.1
+Subject: Re: [PATCH RFC] srcu: Yet more detail for
+ srcu_readers_active_idx_check() comments
+Message-ID: <20221215165452.GA1957735@lothringen>
+References: <20221214191355.GA2596199@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221214191355.GA2596199@paulmck-ThinkPad-P17-Gen-1>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,68 +55,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Wed, Dec 14, 2022 at 11:13:55AM -0800, Paul E. McKenney wrote:
+> The comment in srcu_readers_active_idx_check() following the smp_mb()
+> is out of date, hailing from a simpler time when preemption was disabled
+> across the bulk of __srcu_read_lock().  The fact that preemption was
+> disabled meant that the number of tasks that had fetched the old index
+> but not yet incremented counters was limited by the number of CPUs.
+> 
+> In our more complex modern times, the number of CPUs is no longer a limit.
+> This commit therefore updates this comment, additionally giving more
+> memory-ordering detail.
+> 
+> Reported-by: Boqun Feng <boqun.feng@gmail.com>
+> Reported-by: Frederic Weisbecker <frederic@kernel.org>
 
-When -Woverride-init is enabled in a build, gcc points out that
-qcom_geni_serial_pm_ops contains conflicting initializers:
+Not really, while you guys were debating on that comment, I was still starring
+at the previous one (as usual).
 
-drivers/tty/serial/qcom_geni_serial.c:1586:20: error: initialized field overwritten [-Werror=override-init]
- 1586 |         .restore = qcom_geni_serial_sys_hib_resume,
-      |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/tty/serial/qcom_geni_serial.c:1586:20: note: (near initialization for 'qcom_geni_serial_pm_ops.restore')
-drivers/tty/serial/qcom_geni_serial.c:1587:17: error: initialized field overwritten [-Werror=override-init]
- 1587 |         .thaw = qcom_geni_serial_sys_hib_resume,
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Or to put it in an SRCU way, while you guys saw the flipped idx, I was still
+using the old one :)
 
-Open-code the initializers with the version that was already used,
-and use the pm_sleep_ptr() method to deal with unused ones,
-in place of the __maybe_unused annotation.
+> -	 * OK, how about nesting?  This does impose a limit on nesting
+> -	 * of floor(ULONG_MAX/NR_CPUS/2), which should be sufficient,
+> -	 * especially on 64-bit systems.
+> +	 * It can clearly do so once, given that it has already fetched
+> +	 * the old value of ->srcu_idx and is just about to use that value
+> +	 * to index its increment of ->srcu_lock_count[idx].  But as soon as
+> +	 * it leaves that SRCU read-side critical section, it will increment
+> +	 * ->srcu_unlock_count[idx], which must follow the updater's above
+> +	 * read from that same value.  Thus, as soon the reading task does
+> +	 * an smp_mb() and a later fetch from ->srcu_idx, that task will be
+> +	 * guaranteed to get the new index.  Except that the increment of
+> +	 * ->srcu_unlock_count[idx] in __srcu_read_unlock() is after the
+> +	 * smp_mb(), and the fetch from ->srcu_idx in __srcu_read_lock()
+> +	 * is before the smp_mb().  Thus, that task might not see the new
+> +	 * value of ->srcu_idx until the -second- __srcu_read_lock(),
+> +	 * which in turn means that this task might well increment
+> +	 * ->srcu_lock_count[idx] for the old value of ->srcu_idx twice,
+> +	 * not just once.
 
-Fixes: 35781d8356a2 ("tty: serial: qcom-geni-serial: Add support for Hibernation feature")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/tty/serial/qcom_geni_serial.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+You lost me on that one.
 
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index b487823f0e61..03dda47184d9 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -1516,7 +1516,7 @@ static int qcom_geni_serial_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static int __maybe_unused qcom_geni_serial_sys_suspend(struct device *dev)
-+static int qcom_geni_serial_sys_suspend(struct device *dev)
- {
- 	struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
- 	struct uart_port *uport = &port->uport;
-@@ -1533,7 +1533,7 @@ static int __maybe_unused qcom_geni_serial_sys_suspend(struct device *dev)
- 	return uart_suspend_port(private_data->drv, uport);
- }
- 
--static int __maybe_unused qcom_geni_serial_sys_resume(struct device *dev)
-+static int qcom_geni_serial_sys_resume(struct device *dev)
- {
- 	int ret;
- 	struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
-@@ -1581,10 +1581,12 @@ static int qcom_geni_serial_sys_hib_resume(struct device *dev)
- }
- 
- static const struct dev_pm_ops qcom_geni_serial_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(qcom_geni_serial_sys_suspend,
--					qcom_geni_serial_sys_resume)
--	.restore = qcom_geni_serial_sys_hib_resume,
--	.thaw = qcom_geni_serial_sys_hib_resume,
-+	.suspend = pm_sleep_ptr(qcom_geni_serial_sys_suspend),
-+	.resume = pm_sleep_ptr(qcom_geni_serial_sys_resume),
-+	.freeze = pm_sleep_ptr(qcom_geni_serial_sys_suspend),
-+	.poweroff = pm_sleep_ptr(qcom_geni_serial_sys_suspend),
-+	.restore = pm_sleep_ptr(qcom_geni_serial_sys_hib_resume),
-+	.thaw = pm_sleep_ptr(qcom_geni_serial_sys_hib_resume),
- };
- 
- static const struct of_device_id qcom_geni_serial_match_table[] = {
--- 
-2.35.1
+      UPDATER                               READER
+      -------                               ------
+      //srcu_readers_lock_idx               //srcu_read_lock
+      idx = ssp->srcu_idx;                  idx = ssp->srcu_idx;
+      READ srcu_lock_count[idx ^ 1]         srcu_lock_count[idx]++
+      smp_mb();                             smp_mb();
+      //flip_index                          /* srcu_read_unlock (ignoring on purpose) */
+      ssp->srcu_idx++;                      /* smp_mb(); */
+      smp_mb();                             /* srcu_unlock_count[old_idx]++ */
+      //srcu_readers_lock_idx               //srcu_read_lock again
+      idx = ssp->srcu_idx;                  idx = ssp->srcu_idx;
+      READ srcu_lock_count[idx ^ 1]
+                                            
 
+Scenario for the reader to increment the old idx once:
+
+_ Assume ssp->srcu_idx is initially 0.
+_ The READER reads idx that is 0
+_ The updater runs and flips the idx that is now 1
+_ The reader resumes with 0 as an index but on the next srcu_read_lock()
+  it will see the new idx which is 1
+
+What could be the scenario for it to increment the old idx twice?
+
+Thanks.
