@@ -2,55 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4A564D54B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 03:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C5F64D55A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 03:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiLOC1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 21:27:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
+        id S229575AbiLOCpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 21:45:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiLOC1h (ORCPT
+        with ESMTP id S229451AbiLOCpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 21:27:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495F455AAC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 18:27:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF67661BC8
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:27:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0791C433EF;
-        Thu, 15 Dec 2022 02:27:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671071255;
-        bh=6P0YU/kHb4MLrqdFcxUR9lquyd86rwTP5ITcamVK9p8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=D7k8vy9cvAV512lD8LMxtybCL0jRAFdoc2HUJYIhpYv8A9+vHKjh9MIsubO3UPllQ
-         F/9zGaBukJ1TS12KJSsH8l+RDBqQZFC8SX6NN1gEM3A9391sPCIauXsSZZNZTyXoQc
-         AvR44DOTInaumSEuansw+p6n7BV92eIOUV9M10zgM6cla08M74b/uRjyWDrrNlwtAY
-         YDNuJyDfETOsdo/hpe83xRuMfddTgSS3C/RPse3wJUnc0yy1a1V9Z8KJ9Pk3d/NN9C
-         i7NDMWucQE+lHBPEk9Pnj9sqtWO7SARRP18YeZMkC+Q7roi2F5P7uaPbBgmhsgT+xF
-         ssW4ifduEut2g==
-Message-ID: <ff5f1e9d-1f44-5a3b-4b76-d3cfa877b18b@kernel.org>
-Date:   Thu, 15 Dec 2022 10:27:32 +0800
+        Wed, 14 Dec 2022 21:45:13 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008D555A84;
+        Wed, 14 Dec 2022 18:45:10 -0800 (PST)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NXc1h6ctzzJpMM;
+        Thu, 15 Dec 2022 10:41:28 +0800 (CST)
+Received: from [10.174.176.219] (10.174.176.219) by
+ kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 15 Dec 2022 10:45:06 +0800
+Subject: Re: [RFC PATCH v2 1/1] ACPI: APEI: Make memory_failure() triggered by
+ synchronization errors execute in the current context
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     "rafael@kernel.org" <rafael@kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "xueshuai@linux.alibaba.com" <xueshuai@linux.alibaba.com>,
+        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
+        "xiezhipeng1@huawei.com" <xiezhipeng1@huawei.com>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        "xiexiuqi@huawei.com" <xiexiuqi@huawei.com>,
+        "tanxiaofei@huawei.com" <tanxiaofei@huawei.com>,
+        "cuibixuan@linux.alibaba.com" <cuibixuan@linux.alibaba.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+References: <20221209095407.383211-1-lvying6@huawei.com>
+ <20221209095407.383211-2-lvying6@huawei.com>
+ <20221215002520.GA2020717@hori.linux.bs1.fc.nec.co.jp>
+From:   Lv Ying <lvying6@huawei.com>
+Message-ID: <76038f5b-914c-7ae0-e89f-500bd0c7502f@huawei.com>
+Date:   Thu, 15 Dec 2022 10:45:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3] f2fs: deliver the accumulated 'issued' to
- __issue_discard_cmd_orderly() to meet the max_requests limit
+In-Reply-To: <20221215002520.GA2020717@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-To:     Yuwei Guan <Yuwei.Guan@zeekrlife.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>
-References: <20221213093419.134-1-Yuwei.Guan@zeekrlife.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20221213093419.134-1-Yuwei.Guan@zeekrlife.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.219]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,101 +69,292 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/13 17:34, Yuwei Guan wrote:
-> Any of the following scenarios will send more than the number of
-> max_requests at a time, which will not meet the design of the
-> max_requests limit.
+On 2022/12/15 8:26, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Fri, Dec 09, 2022 at 05:54:07PM +0800, Lv Ying wrote:
+>> The memory uncorrected error which is detected by an external component and
+>> notified via an IRQ, can be called asynchronization error. If an error is
+>> detected as a result of user-space process accessing a corrupt memory
+>> location, the CPU may take an abort. On arm64 this is a
+>> 'synchronous external abort', and on a firmware first system it is notified
+>> via NOTIFY_SEA, this can be called synchronization error.
+>>
 > 
-> - Set max_ordered_discard larger than discard_granularity from userspace.
-> - It is a small size device, discard_granularity can be tuned to 1 in
->    f2fs_tuning_parameters().
-> 
-> We need to deliver the accumulated @issued to __issue_discard_cmd_orderly()
-> to meet the max_requests limit.
-> 
-> BTW, convert the parameter type of @issued in __submit_discard_cmd().
-> 
-> Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
-> Cc: Bagas Sanjaya <bagasdotme@gmail.com>
+> "synchronization error" in this context looks weird to me, maybe you mean
+> "synchronous error" ?  There're many places using "synchronization", so
+> please use consistent wording.
 
-For the code part, it looks good to me.
+"synchronization error" in this context means "synchronous error", e.g 
+SEA. Thanks for your suggestion, I will use consistent wording - 
+"synchronous error".
 
-Reviewed-by: Chao Yu <chao@kernel.org>
-
-Thanks,
-
-> ---
->   fs/f2fs/segment.c | 24 +++++++++++-------------
->   1 file changed, 11 insertions(+), 13 deletions(-)
 > 
-> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> index a9099a754dd2..5268938466f5 100644
-> --- a/fs/f2fs/segment.c
-> +++ b/fs/f2fs/segment.c
-> @@ -1097,8 +1097,7 @@ static void __update_discard_tree_range(struct f2fs_sb_info *sbi,
->   /* this function is copied from blkdev_issue_discard from block/blk-lib.c */
->   static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
->   						struct discard_policy *dpolicy,
-> -						struct discard_cmd *dc,
-> -						unsigned int *issued)
-> +						struct discard_cmd *dc, int *issued)
->   {
->   	struct block_device *bdev = dc->bdev;
->   	unsigned int max_discard_blocks =
-> @@ -1379,8 +1378,8 @@ static void __queue_discard_cmd(struct f2fs_sb_info *sbi,
->   	mutex_unlock(&SM_I(sbi)->dcc_info->cmd_lock);
->   }
->   
-> -static unsigned int __issue_discard_cmd_orderly(struct f2fs_sb_info *sbi,
-> -					struct discard_policy *dpolicy)
-> +static void __issue_discard_cmd_orderly(struct f2fs_sb_info *sbi,
-> +					struct discard_policy *dpolicy, int *issued)
->   {
->   	struct discard_cmd_control *dcc = SM_I(sbi)->dcc_info;
->   	struct discard_cmd *prev_dc = NULL, *next_dc = NULL;
-> @@ -1388,7 +1387,6 @@ static unsigned int __issue_discard_cmd_orderly(struct f2fs_sb_info *sbi,
->   	struct discard_cmd *dc;
->   	struct blk_plug plug;
->   	unsigned int pos = dcc->next_pos;
-> -	unsigned int issued = 0;
->   	bool io_interrupted = false;
->   
->   	mutex_lock(&dcc->cmd_lock);
-> @@ -1415,9 +1413,9 @@ static unsigned int __issue_discard_cmd_orderly(struct f2fs_sb_info *sbi,
->   		}
->   
->   		dcc->next_pos = dc->lstart + dc->len;
-> -		err = __submit_discard_cmd(sbi, dpolicy, dc, &issued);
-> +		err = __submit_discard_cmd(sbi, dpolicy, dc, issued);
->   
-> -		if (issued >= dpolicy->max_requests)
-> +		if (*issued >= dpolicy->max_requests)
->   			break;
->   next:
->   		node = rb_next(&dc->rb_node);
-> @@ -1433,10 +1431,8 @@ static unsigned int __issue_discard_cmd_orderly(struct f2fs_sb_info *sbi,
->   
->   	mutex_unlock(&dcc->cmd_lock);
->   
-> -	if (!issued && io_interrupted)
-> -		issued = -1;
-> -
-> -	return issued;
-> +	if (!(*issued) && io_interrupted)
-> +		*issued = -1;
->   }
->   static unsigned int __wait_all_discard_cmd(struct f2fs_sb_info *sbi,
->   					struct discard_policy *dpolicy);
-> @@ -1464,8 +1460,10 @@ static int __issue_discard_cmd(struct f2fs_sb_info *sbi,
->   		if (i + 1 < dpolicy->granularity)
->   			break;
->   
-> -		if (i + 1 < dcc->max_ordered_discard && dpolicy->ordered)
-> -			return __issue_discard_cmd_orderly(sbi, dpolicy);
-> +		if (i + 1 < dcc->max_ordered_discard && dpolicy->ordered) {
-> +			__issue_discard_cmd_orderly(sbi, dpolicy, &issued);
-> +			return issued;
-> +		}
->   
->   		pend_list = &dcc->pend_list[i];
->   
+>> Currently, synchronization error and asynchronization error both use
+>> memory_failure_queue to schedule memory_failure() exectute in kworker
+>> context. Commit 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue
+>> for synchronous errors") make task_work pending to flush out the queue,
+>> cancel_work_sync() in memory_failure_queue_kick() will make
+>> memory_failure() exectute in kworker context first which will get
+> 
+> s/exectute/execute/
+
+Thank you for your detailed review, I will check again and fix the typos 
+and syntax errors in the patch.
+
+> 
+>> synchronization error info from kfifo, so task_work later will get nothing
+>> from kfifo which doesn't work as expected. Even worse, synchronization
+>> error notification has NMI like properties, (it can interrupt IRQ-masked
+>> code), task_work may get wrong kfifo entry from interrupted
+>> asynchronization error which is notified by IRQ.
+>>
+>> Since the memory_failure() triggered by a synchronous exception is
+>> executed in the kworker context, the early_kill mode of memory_failure()
+>> will send wrong si_code by SIGBUS signal: current process is kworker
+>> thread, the actual user-space process accessing the corrupt memory location
+>> will be collected by find_early_kill_thread(), and then send SIGBUS with
+>> BUS_MCEERR_AO si_code to the actual user-space process instead of
+>> BUS_MCEERR_AR. The machine-manager(kvm) use the si_code: BUS_MCEERR_AO for
+>> 'action optional' early notifications, and BUS_MCEERR_AR for
+>> 'action required' synchronous/late notifications.
+>>
+>> Make memory_failure() triggered by synchronization errors execute in the
+>> current context, we do not need workqueue for synchronization error
+>> anymore, use task_work handle synchronization errors directly. Since,
+>> synchronization errors and asynchronization errors share the same kfifo,
+>> use MF_ACTION_REQUIRED flag to distinguish them. And the asynchronization
+>> error keeps the same as before.
+>>
+>> Currently, it's hard to distinguish synchronization error in APEI. It
+>> can be determined that the SEA report synchronization error, so
+>> currently only the synchronization error reported by SEA is distinguished
+>> and handled in current context.
+>>
+>> Signed-off-by: Lv Ying <lvying6@huawei.com>
+>> ---
+>>   drivers/acpi/apei/ghes.c | 20 +++++++++-------
+>>   mm/memory-failure.c      | 50 +++++++++++++++++++++++++++++-----------
+>>   2 files changed, 48 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+>> index 9952f3a792ba..19d62ec2177f 100644
+>> --- a/drivers/acpi/apei/ghes.c
+>> +++ b/drivers/acpi/apei/ghes.c
+>> @@ -423,8 +423,8 @@ static void ghes_clear_estatus(struct ghes *ghes,
+>>   
+>>   /*
+>>    * Called as task_work before returning to user-space.
+>> - * Ensure any queued work has been done before we return to the context that
+>> - * triggered the notification.
+>> + * Ensure any queued corrupt page in synchronous errors has been handled before
+>> + * we return to the user context that triggered the notification.
+>>    */
+>>   static void ghes_kick_task_work(struct callback_head *head)
+>>   {
+>> @@ -461,7 +461,7 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
+>>   }
+>>   
+>>   static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
+>> -				       int sev)
+>> +				       int sev, int notify_type)
+>>   {
+>>   	int flags = -1;
+>>   	int sec_sev = ghes_severity(gdata->error_severity);
+>> @@ -475,7 +475,7 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
+>>   	    (gdata->flags & CPER_SEC_ERROR_THRESHOLD_EXCEEDED))
+>>   		flags = MF_SOFT_OFFLINE;
+>>   	if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE)
+>> -		flags = 0;
+>> +		flags = (notify_type == ACPI_HEST_NOTIFY_SEA) ? MF_ACTION_REQUIRED : 0;
+>>   
+>>   	if (flags != -1)
+>>   		return ghes_do_memory_failure(mem_err->physical_addr, flags);
+>> @@ -483,7 +483,8 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
+>>   	return false;
+>>   }
+>>   
+>> -static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int sev)
+>> +static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int sev,
+>> +		int notify_type)
+>>   {
+>>   	struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
+>>   	bool queued = false;
+>> @@ -510,7 +511,9 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
+>>   		 * and don't filter out 'corrected' error here.
+>>   		 */
+>>   		if (is_cache && has_pa) {
+>> -			queued = ghes_do_memory_failure(err_info->physical_fault_addr, 0);
+>> +			queued = ghes_do_memory_failure(err_info->physical_fault_addr,
+>> +					(notify_type == ACPI_HEST_NOTIFY_SEA) ?
+>> +					MF_ACTION_REQUIRED : 0);
+>>   			p += err_info->length;
+>>   			continue;
+>>   		}
+>> @@ -631,6 +634,7 @@ static bool ghes_do_proc(struct ghes *ghes,
+>>   	const guid_t *fru_id = &guid_null;
+>>   	char *fru_text = "";
+>>   	bool queued = false;
+>> +	int notify_type = ghes->generic->notify.type;
+>>   
+>>   	sev = ghes_severity(estatus->error_severity);
+>>   	apei_estatus_for_each_section(estatus, gdata) {
+>> @@ -648,13 +652,13 @@ static bool ghes_do_proc(struct ghes *ghes,
+>>   			ghes_edac_report_mem_error(sev, mem_err);
+>>   
+>>   			arch_apei_report_mem_error(sev, mem_err);
+>> -			queued = ghes_handle_memory_failure(gdata, sev);
+>> +			queued = ghes_handle_memory_failure(gdata, sev, notify_type);
+>>   		}
+>>   		else if (guid_equal(sec_type, &CPER_SEC_PCIE)) {
+>>   			ghes_handle_aer(gdata);
+>>   		}
+>>   		else if (guid_equal(sec_type, &CPER_SEC_PROC_ARM)) {
+>> -			queued = ghes_handle_arm_hw_error(gdata, sev);
+>> +			queued = ghes_handle_arm_hw_error(gdata, sev, notify_type);
+>>   		} else {
+>>   			void *err = acpi_hest_get_payload(gdata);
+>>   
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index bead6bccc7f2..82238ec86acd 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -2204,7 +2204,11 @@ struct memory_failure_cpu {
+>>   static DEFINE_PER_CPU(struct memory_failure_cpu, memory_failure_cpu);
+>>   
+>>   /**
+>> - * memory_failure_queue - Schedule handling memory failure of a page.
+>> + * memory_failure_queue
+>> + * - Schedule handling memory failure of a page for asynchronous error, memory
+>> + *   failure page will be executed in kworker thread
+>> + * - put corrupt memory info into kfifo for synchronous error, task_work will
+>> + *   handle them before returning to the user
+> 
+> I think that the top description of kernel-doc function documentation needs
+> to be brief, so could you move the above 2 items downward as details?
+> Maybe the first line can be updated like below (scheduling is done conditionally
+> with your change):
+> 
+> /**
+>   * memory_failure_queue - Queue memory failure event
+>   * @pfn: Page Number of the corrupted page
+>   * @flags: Flags for memory failure handling
+>   *
+>   * ... (full details)
+> 
+> And maybe existing comment in "full details" is obsolete since commit
+> 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue for synchronous
+> errors"), so could you update the whole description to explain the new
+> behavior with some background information as done in patch description?
+> 
+
+Thanks, your description is very concise and close to the meaning 
+expressed by the patch. I will fix it in the next patch.
+And I will update the whole description to explain the new behavior.
+
+>>    * @pfn: Page Number of the corrupted page
+>>    * @flags: Flags for memory failure handling
+>>    *
+>> @@ -2217,6 +2221,11 @@ static DEFINE_PER_CPU(struct memory_failure_cpu, memory_failure_cpu);
+>>    * happen outside the current execution context (e.g. when
+>>    * detected by a background scrubber)
+>>    *
+>> + * This function can also be used in synchronous errors which was detected as a
+> 
+> "... errors which was ..." seems unmatched in plurality.
+> 
+>> + * result of user-space accessing a corrupt memory location, just put memory
+> 
+> s/corrupt/corrupted/
+
+The typo and syntax error will be fixed in the next patch.
+
+> 
+>> + * error info into kfifo, and then, task_work get and handle it in current
+>> + * execution context instead of scheduling kworker to handle it
+> 
+> Please put a period at the end of sentence. kernel-doc comment is
+> converted to auto-generated documentation, so it needs to look like
+> natural English text.
+> See https://docs.kernel.org/doc-guide/kernel-doc.html#function-documentation
+> 
+
+Thanks, it help me a lot, I will update function comments as per the 
+kernel-doc.
+
+>> + *
+>>    * Can run in IRQ context.
+>>    */
+>> @@ -2230,9 +2239,10 @@ void memory_failure_queue(unsigned long pfn, int flags)
+>>   
+>>   	mf_cpu = &get_cpu_var(memory_failure_cpu);
+>>   	spin_lock_irqsave(&mf_cpu->lock, proc_flags);
+>> -	if (kfifo_put(&mf_cpu->fifo, entry))
+>> -		schedule_work_on(smp_processor_id(), &mf_cpu->work);
+>> -	else
+>> +	if (kfifo_put(&mf_cpu->fifo, entry)) {
+>> +		if (!(entry.flags & MF_ACTION_REQUIRED))
+>> +			schedule_work_on(smp_processor_id(), &mf_cpu->work);
+>> +	} else
+>>   		pr_err("buffer overflow when queuing memory failure at %#lx\n",
+>>   		       pfn);
+>>   	spin_unlock_irqrestore(&mf_cpu->lock, proc_flags);
+>> @@ -2240,12 +2250,15 @@ void memory_failure_queue(unsigned long pfn, int flags)
+>>   }
+>>   EXPORT_SYMBOL_GPL(memory_failure_queue);
+>>   
+>> -static void memory_failure_work_func(struct work_struct *work)
+>> +/*
+>> + * (a)synchronous error info should be consumed by the corresponding handler
+>> + */
+>> +static void __memory_failure_work_func(struct work_struct *work, bool sync)
+>>   {
+>>   	struct memory_failure_cpu *mf_cpu;
+>>   	struct memory_failure_entry entry = { 0, };
+>>   	unsigned long proc_flags;
+>> -	int gotten;
+>> +	int gotten, ret;
+>>   
+>>   	mf_cpu = container_of(work, struct memory_failure_cpu, work);
+>>   	for (;;) {
+>> @@ -2256,22 +2269,31 @@ static void memory_failure_work_func(struct work_struct *work)
+>>   			break;
+>>   		if (entry.flags & MF_SOFT_OFFLINE)
+>>   			soft_offline_page(entry.pfn, entry.flags);
+>> -		else
+>> -			memory_failure(entry.pfn, entry.flags);
+>> +		else {
+>> +			if (sync && (entry.flags & MF_ACTION_REQUIRED)) {
+>> +				ret = memory_failure(entry.pfn, entry.flags);
+>> +				if (ret == -EHWPOISON || ret == -EOPNOTSUPP)
+>> +					return;
+>> +
+>> +				pr_err("Memory error not recovered");
+>> +				force_sig(SIGBUS);
+>> +			} else if (!sync && !(entry.flags & MF_ACTION_REQUIRED))
+>> +				memory_failure(entry.pfn, entry.flags);
+> 
+> So if sync is true and MF_ACTION_REQUIRED is not set, memory_failure() is
+> not called.  Does that break something?
+> 
+> Thanks,
+> Naoya Horiguchi
+> 
+
+Only in synchronous error handle process, set sync true.
+As expected, MF_ACTION_REQUIRED should be set in synchronous error 
+handle process.
+
+Kfifo is shared by synchronous error and asynchronous error. 
+Asynchronous error will not set MF_ACTION_REQUIRED. This judgment is to 
+prevent synchronous error calls memory_failure() handle asynchronous 
+errors in kfifo. If __memory_failure_work_func() in synchronous error 
+get an asynchronous error info(sync is true and MF_ACTION_REQUIRED is 
+not set), just ignore it, it will break nothing.
+
+However, currently we can only confirm that SEA is
+synchronous error, just set MF_ACTION_REQUIRED in SEA, other 
+indeterminate synchronous error will miss memory_failure().
+
+
+-- 
+Thanks!
+Lv Ying
