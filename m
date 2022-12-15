@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF97464E088
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F2664E092
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiLOSTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 13:19:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
+        id S230230AbiLOSVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 13:21:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbiLOSTE (ORCPT
+        with ESMTP id S230191AbiLOSVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 13:19:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC1248746;
-        Thu, 15 Dec 2022 10:19:02 -0800 (PST)
+        Thu, 15 Dec 2022 13:21:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119714664C;
+        Thu, 15 Dec 2022 10:21:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2A23B81C1F;
-        Thu, 15 Dec 2022 18:19:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67BEDC433D2;
-        Thu, 15 Dec 2022 18:18:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C54F61EAC;
+        Thu, 15 Dec 2022 18:21:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C615FC433D2;
+        Thu, 15 Dec 2022 18:21:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671128339;
-        bh=78tX3t6kUkY6BMXVJo5OYZXMdsWwwpj5lrEjbZ2nP5k=;
+        s=k20201202; t=1671128505;
+        bh=vbeN8sZGNtAwPTy+oEVWXy95GJ/bslF/ppCbMLAUkxg=;
         h=From:To:Cc:Subject:Date:From;
-        b=FskV9TVhDGw/J3zgBg0l/b33IrEveHitlVioGB/zPpBgsy+Rqi5GUybZXmQB+EPT/
-         MGo8+xWqRtpyI5EJpJmAtwbcP+WWKjKJ5cSKfRNS/R0OWeVhnOcscgK5+W9/ge/k8c
-         FKckAFwV/A/vWObAeBKHTZy9+oOuvoKKM9+Hj9SV4KyvMdkLC0q+hJVKVupUS0ghpO
-         8SYIt57hOCe7GOq141BQiwSW7Qe4IHyTnga7w5Jw4L4dvfUyKqR+gOMUFhC1njhh07
-         eZachBoK9k5ZPm+Xzt2DuLkOqMv3HluGy7fcPsPtb3q+kiMG+Nuy4OJDH5Im01BQOU
-         zYj2RdwEuXUyQ==
+        b=d1Y3L/pUlMFo8wvKzX/cokeihdiyLOHfoACm5KoEM15bk8Ifb8nxIrTNc5QGBb0Ph
+         BjpDsRZhw1u2KX6Nqk/ChsUZKXSyarxdat6r9RGshO+u21oO4MML1K5jAVYgbo1otg
+         YqIa75DoOItkpm00gQOmCNpxLg3URnyUMew7u+yUAJWQAiWWmpxmwDpz/tJuz6pFKP
+         Q2bvTITyy1Kk/8bemsfPJV50rDQu4hRftX0gtsl2jwm21bDTSdUqiqoUzYIm2tkDIn
+         C4Iw5VuladXi4zS4RKHgZ5ib8dxI4uQYlYmGBLTIFsvN+RISZzf3ZXHsP0zNptrmuC
+         DN2Q3LJ57URWA==
 From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH] PM: runtime: Simplify __rpm_get_callback()
-Date:   Thu, 15 Dec 2022 12:18:48 -0600
-Message-Id: <20221215181848.129326-1-helgaas@kernel.org>
+Subject: [PATCH 0/2] PCI: switchtec: Trivial cleanups
+Date:   Thu, 15 Dec 2022 12:21:38 -0600
+Message-Id: <20221215182140.129559-1-helgaas@kernel.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -55,51 +54,19 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bjorn Helgaas <bhelgaas@google.com>
 
-Simplify __rpm_get_callback() slightly by returning as soon as the return
-value is known.  No functional change intended.
+Simplify switchtec_dma_mrpc_isr() slightly and remove some unused
+assignments in switchtec_dev_read().
 
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
----
- drivers/base/power/runtime.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+It's possible you want a different fix for the latter, e.g., actually
+returning the error values that are currently assigned but then ignored.
 
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 50e726b6c2cf..7171ed0668f3 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -20,8 +20,7 @@ typedef int (*pm_callback_t)(struct device *);
- 
- static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
- {
--	pm_callback_t cb;
--	const struct dev_pm_ops *ops;
-+	const struct dev_pm_ops *ops = NULL;
- 
- 	if (dev->pm_domain)
- 		ops = &dev->pm_domain->ops;
-@@ -31,18 +30,14 @@ static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
- 		ops = dev->class->pm;
- 	else if (dev->bus && dev->bus->pm)
- 		ops = dev->bus->pm;
--	else
--		ops = NULL;
- 
- 	if (ops)
--		cb = *(pm_callback_t *)((void *)ops + cb_offset);
--	else
--		cb = NULL;
-+		return *(pm_callback_t *)((void *)ops + cb_offset);
- 
--	if (!cb && dev->driver && dev->driver->pm)
--		cb = *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
-+	if (dev->driver && dev->driver->pm)
-+		return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
- 
--	return cb;
-+	return NULL;
- }
- 
- #define RPM_GET_CALLBACK(dev, callback) \
+Bjorn Helgaas (2):
+  PCI: switchtec: Simplify switchtec_dma_mrpc_isr()
+  PCI: switchtec: Remove useless assignments in switchtec_dev_read()
+
+ drivers/pci/switch/switchtec.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
+
 -- 
 2.25.1
 
