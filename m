@@ -2,101 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A33E64D492
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1EE064D497
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbiLOATx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 19:19:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
+        id S229629AbiLOAWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 19:22:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiLOATE (ORCPT
+        with ESMTP id S229488AbiLOAWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 19:19:04 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4B7316;
-        Wed, 14 Dec 2022 16:19:00 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id l8-20020a056830054800b006705fd35eceso2735634otb.12;
-        Wed, 14 Dec 2022 16:19:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=gdmHglzdWNf/DUwjqm59a2A1zMO/VnLL8Ae1GW4halg=;
-        b=cNMJuQ3GHcPni+psrYouPcOeYlibvBUryANLwnSj1GepFGyV/hpuoX1bqGSooVOyaX
-         kshiJtEW5stdMYib8vS0Iqnjc7Nngrz6wwatwZzWNPHH1oxMVtkHMimv18hXkMg2ZZ+Q
-         LkQQiLHRqh2dsNXVEoPBk8NljYsUaP4hZQ9E43b5CZBru3U1vC0E1LbOgVagrL1qtoWp
-         LOYQXN9meK4fg8c0PPms1h+YsShqRN+oyjrYMldktkiweUpxNqfvyyznTtylnkbl+WC4
-         o8BegIOv4WyWSWz9S/WyC122PXVHaJfq6mnRXIPBFXmcOA93K6poWOgnjY5lLHzS1itl
-         TGgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gdmHglzdWNf/DUwjqm59a2A1zMO/VnLL8Ae1GW4halg=;
-        b=A7QGS7PIdXRuwBUnJLcgaAu9CuRLlwUc24zmW6gzJFBESWQ1XvjiEZKV2VfkH86beK
-         193Xp1MkKleF6X42yan3zadwGtW3YYOj2pGMjxZJYzpz5zO2ZbhGccRHVUl0RROvyLwv
-         9F6ACAzfmUn/AvqeSRpeCXR4CDwLUTN0UtqhuFD6xGkXtrmNY6lho1UNIq4E5Tz+AkPK
-         H8YP7KkzN2hDwhi0Q58jxS10JXpLcstsLQZDs03NXzS5d7me0DsTSfgx6Dji5fG5kOyY
-         rYzWGUnLPdl/9sk01FEE2vtRMAztcys0O+Y/SIN4g46CzWHoSpDRuF6p13ciGkNcBbsK
-         /gbA==
-X-Gm-Message-State: ANoB5pkbcronbXP1jhkzWgScyC8Ms2BfV5cICj7rtldBlGz5Arha/V02
-        23qysfeoWDHQz2+fK3oTenxzJWy1IXc=
-X-Google-Smtp-Source: AA0mqf6ficMbbQGzbCauoQOMriZxh9SnxdqjhyGgX8lZJ8HIuOF2RhGRrQfBu+fDaouj6wUMsE8kcA==
-X-Received: by 2002:a05:6830:2015:b0:670:7757:173a with SMTP id e21-20020a056830201500b006707757173amr12772084otp.10.1671063539841;
-        Wed, 14 Dec 2022 16:18:59 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 96-20020a9d0869000000b00661b46cc26bsm2937444oty.9.2022.12.14.16.18.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 16:18:59 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <93732ff5-aa9d-3a90-efa5-ceaecdac82dd@roeck-us.net>
-Date:   Wed, 14 Dec 2022 16:18:57 -0800
+        Wed, 14 Dec 2022 19:22:45 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3EA33D;
+        Wed, 14 Dec 2022 16:22:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C2850CE1BA1;
+        Thu, 15 Dec 2022 00:22:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6100C433EF;
+        Thu, 15 Dec 2022 00:22:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671063759;
+        bh=bfB8V50v6OcR7ZKFZ6fJTBBezlJ1YwPl/3pfyrMdzjk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=e+nHh8DS7jyVJaTjxiIW3DYJySB04gadKq0YxmAHlZKAeIwj37SzydSBa+ijOEqb7
+         fMzBss16lbHgJ4ZuGPv+vD4gHLUHeoEMi71khI0fcCXi0s8xXsAP7P/B9xKDG0iTqN
+         Oe+IdC8D4yCnezrIq1i55ttO5LD5E0zb2TSLNcGF0no2/1VYBH9AuLi86LhcuOASbo
+         3ZxQLdcMbI6V/CD3KgrJlFWyd3j+5x8FywhSpN1Ost8MsdD05lKvuwXbtbGiULN1Pb
+         sFvB+/njA9BbYffVuRIEoYGpjPqnWN9lSgFxI6Xi12BZjSSH0oTTgyz1XwgjeGt2bc
+         QvIEVJT/oHWqQ==
+Received: by mail-vk1-f182.google.com with SMTP id o136so4005282vka.2;
+        Wed, 14 Dec 2022 16:22:39 -0800 (PST)
+X-Gm-Message-State: ANoB5pnC0Cxvi7AsAbQGKq6HCo4jCuYpM2tbGERgR1snNSh5qBF+9m3N
+        YeBGXyvUiRhWIsDN92PpUcitwVNdndHe5w/LPw==
+X-Google-Smtp-Source: AA0mqf6etgVsXqu0YC4dE4uscO5REGQ0oBZ9xZMPswn/iiFA51bJm1Nia0JZZqQjZPLEB3WFBuvouxs8CsL2NW1PZj8=
+X-Received: by 2002:a1f:2c01:0:b0:3c1:1c3b:c4d9 with SMTP id
+ s1-20020a1f2c01000000b003c11c3bc4d9mr876106vks.19.1671063758777; Wed, 14 Dec
+ 2022 16:22:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] hwmon: (oxp-sensors) Add AYANEO AIR and AIR Pro
-Content-Language: en-US
-To:     Joaquin Aramendia <samsagax@gmail.com>,
-        "Derek J. Clark" <derekjohn.clark@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221214153908.99926-1-derekjohn.clark@gmail.com>
- <CABgtM3ibh0k8LcEnSNUx7DwJBQfMK6K3G_Rhk4GR5oSsx+Rmaw@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CABgtM3ibh0k8LcEnSNUx7DwJBQfMK6K3G_Rhk4GR5oSsx+Rmaw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221213233050.GA218218@bhelgaas> <CAHk-=whC3-Q_-gt3NU8cfY4ivs2CsaON8Ci0aiD6qvT1xzVL=g@mail.gmail.com>
+In-Reply-To: <CAHk-=whC3-Q_-gt3NU8cfY4ivs2CsaON8Ci0aiD6qvT1xzVL=g@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 14 Dec 2022 18:22:27 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+Y1CN4BMhB-FXFunr1rFs62QEMi_zj3zmvjXrksCQ0sA@mail.gmail.com>
+Message-ID: <CAL_Jsq+Y1CN4BMhB-FXFunr1rFs62QEMi_zj3zmvjXrksCQ0sA@mail.gmail.com>
+Subject: Re: [GIT PULL] PCI changes for v6.2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Thierry Reding <treding@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/14/22 14:05, Joaquin Aramendia wrote:
->>   Currently the driver supports the following handhelds:
->>
->>    - AOK ZOE A1
->> + - Aya Neo AIR
->> + - Aya Neo AIR Pro
->>    - OneXPlayer AMD
->>    - OneXPlayer mini AMD
->>    - OneXPlayer mini AMD PRO
-> 
-> Since there is more support now for this type of device and not only
-> from one brand (even though it seems they all come from the same
-> manufacturer) I might be sending a patch to change the name of the
-> driver after this gets merged.
+On Wed, Dec 14, 2022 at 12:01 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, Dec 13, 2022 at 3:30 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > You will see a merge conflict in
+> > Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml between these:
+> >
+> >   5c3741492d2e ("dt-bindings: PCI: tegra234: Add ECAM support")
+> >   4cc13eedb892 ("dt-bindings: PCI: dwc: Add reg/reg-names common properties")
+> >
+> > 5c3741492d2e is already in your tree via arm-soc, and 4cc13eedb892 is in
+> > this pull request.  The resolution I suggest is to use 4cc13eedb892, which
+> > means we'll lose the addition of "ecam" from 5c3741492d2e.
+>
+> Heh. I only read this part once I had already resolved that thing differently.
+>
+> I dunno, I used my own - possibly bad - judgment to add a case for
+> that 'ecam' thing under the vendor-specific list.
+>
+> That was very much a "monkey see, monkey do" resolution, so some DT
+> person should check it out and possibly make fun of me and my dubious
+> ancestry. Rob? Thierry?
 
-No, please don't do that.
+Good job writing valid json-schema! :) It's close enough and better
+than just dropping which caused warnings. It is Tegra only ATM, but
+anyone else that sets up an ECAM region should use the same name.
 
-Guenter
-
+Rob
