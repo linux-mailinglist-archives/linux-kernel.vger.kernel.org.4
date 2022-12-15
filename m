@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 768A864D6D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE23C64D6D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiLOHAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 02:00:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
+        id S229958AbiLOHAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 02:00:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiLOG6i (ORCPT
+        with ESMTP id S229898AbiLOG7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 01:58:38 -0500
+        Thu, 15 Dec 2022 01:59:11 -0500
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D8C36D6E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 22:57:11 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3dddef6adb6so25624247b3.11
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 22:57:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDAC5FBB3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 22:57:19 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3d0465d32deso25397767b3.20
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 22:57:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yqt+3boJREqhU/IJbwsZUAwyTndbxmyM8dLYEA+keXM=;
-        b=ZRRIdlq+T+RdwvIPHzbexyNTDTBbVpnJ/dXzSzE8PGHx2k+Oc17nWVTAq+AnekTzZf
-         UDH/tDISG8x82WOez6KOYsuOumLkFYEsWEaUuSWRcaGEFLh1NUVrw6sASOyMGMj7btc/
-         P+EfM2S5btYnzqbj0UDGP4pzk5q7AfDg4a+nfPKpJUkuaxXpCZ76wg/Ca9A5KG6F0/aO
-         JsljdueBMhzx46pIA9LFJeboAwVKPNpKMlHUkHULmsGEVwrhVNDyWbRLY9zM0bNQFRrj
-         rAOiFW01IieVeNk7Xhqsu8l80bSCk+M6v3occ110hYforKRpyuelqkRp6kyX8svamsKJ
-         FxlQ==
+        bh=sadYZorE+pyyVlBzy22M9xfql/ALGqTCfuKLV86nmmg=;
+        b=B3cLM5y15I8RK15XRLmQmaLCORg+7ehRChaiDSKOPJ+VoDA60E9FVpQSM3LyFAeIut
+         Rk3aMCsRRT73Kn6APw7mqSiRJha8kHLIwvlUQtX3PDFL1dXbgYawyhwBHEVZHNsvaUQJ
+         CtubdYfF5dCArXagBTUrIoYLRkou4e5Yf8KPOjTh7E6fINMMn0tj8Hh2Tmnws1mt3K/d
+         QcsV4U2RL7f2pfUnbxFKJPhbWcrNcVWFISGc39VKF1wPdauExeP0Me17Y3fq2DtN95Ys
+         8IJLaHWS9uATETs1pDF0Ic0E6x08oM7uoNtAjo4S3StLyhXuc+mVGlVsKcDIyTstl9UF
+         C4UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yqt+3boJREqhU/IJbwsZUAwyTndbxmyM8dLYEA+keXM=;
-        b=TG+tUML3oPX0++rlKUakuGkbqzMPcbZ+Y131fwQ7Wi/WteRB9nypgitrFPlPFlCDFE
-         NkcTYMd2z/NCej3h+atkCLtKHW1EwdyMixCeJjv1rMnDCh4DOabqW8CIypbW+nB8zIfk
-         nz9g37KCQ9mw8f7WV/Floh+rv0CJ0kTKpdAhkrhVEggApC8ErfnAGVtANeNMpRdEmiCr
-         HX8fKvbFoF0tBVbnUcvg1e+SamsPhGY6S5Dsma82jCgVE2sgxvdX3M23xT4i/u4GvP2q
-         HtT0KRFqkO/QkPoDBt+d3nvVHmZNeSmSBRKqEs2VtkpvNjCWbT+VRPYmO/wHWg8zt/ut
-         hfnw==
-X-Gm-Message-State: ANoB5pl5xYSfdO2xOD9idI3SEMyQpRnmxoCag0iBNjRpxtFwrHLbJiu6
-        unkZ5rN2bv4e3uZh0zvrqjnJ2Q3/+tNj
-X-Google-Smtp-Source: AA0mqf7EGOFQ4H479epSqIy/wXxvtJd2wpWFfWrlkTbi+rolUVJ6PcOJBRC7gFW7JzPm9RA3Rg6Uv3S4zeXW
+        bh=sadYZorE+pyyVlBzy22M9xfql/ALGqTCfuKLV86nmmg=;
+        b=Q5u6+wnQ9riDWfvj3YD/TQ73sA9LGeKA4GFHp9aZics07DLtK2hopMos3awA30JW9g
+         1+clqeuUaQaHqU1ZU7O3ub2aPeXEwOJWDVrjq5dDcRzQp0EHmwg3FK0NkaKCiaJrBVL6
+         oS7xfUpiHQ4tc/RiFoBDO/MWP+cBhwx9Fhkw0cCGdaqTtvm2nC7sOEkaanKgLtHK48QR
+         5BTC1PuYxxWU/P4nfvdkTwkfwnjM8Fz+HIP3Vmb5ZQYwxuzIp93nbdJ8dmwmXcydYmpS
+         SYV+QHwk4nWBogNQWzfx2cV7sGNUwT240Q3uz6Z9KxLSz0akgxIwHz3Vv0gNcM9eN3lg
+         mYOw==
+X-Gm-Message-State: ANoB5pl4BBEfIVuORS5VWbaR7BoPpUKaPcqhiqChTKuCk5n1I2pQHMy5
+        aWyTf1z/P+uw/ZBjvVN2oZsYtw3KUPoM
+X-Google-Smtp-Source: AA0mqf5XrFJLAeuVTvTljvMoDoce5jhOxQr0MMpN8jogApixD4fW3IOV7Ik1NWgshSJWmhmtjCJOBpc8r6HL
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c7dc:d96f:4f9:f59d])
- (user=irogers job=sendgmr) by 2002:a5b:24b:0:b0:6ca:3b11:8d76 with SMTP id
- g11-20020a5b024b000000b006ca3b118d76mr74287764ybp.202.1671087431311; Wed, 14
- Dec 2022 22:57:11 -0800 (PST)
-Date:   Wed, 14 Dec 2022 22:54:59 -0800
+ (user=irogers job=sendgmr) by 2002:a81:6946:0:b0:3c0:a99e:9ac with SMTP id
+ e67-20020a816946000000b003c0a99e09acmr1506696ywc.223.1671087438415; Wed, 14
+ Dec 2022 22:57:18 -0800 (PST)
+Date:   Wed, 14 Dec 2022 22:55:00 -0800
 In-Reply-To: <20221215065510.1621979-1-irogers@google.com>
-Message-Id: <20221215065510.1621979-13-irogers@google.com>
+Message-Id: <20221215065510.1621979-14-irogers@google.com>
 Mime-Version: 1.0
 References: <20221215065510.1621979-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH v1 21/32] perf vendor events intel: Refresh nehalemep events
+Subject: [PATCH v1 22/32] perf vendor events intel: Refresh nehalemex events
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -81,7 +81,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the nehalemep events using the new tooling from:
+Update the nehalemex events using the new tooling from:
 https://github.com/intel/perfmon
 
 The events are unchanged but unused json values are removed. This
@@ -89,19 +89,19 @@ increases consistency across the json files.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- .../pmu-events/arch/x86/nehalemep/cache.json  | 524 ------------------
- .../arch/x86/nehalemep/floating-point.json    |  28 -
- .../arch/x86/nehalemep/frontend.json          |   3 -
- .../pmu-events/arch/x86/nehalemep/memory.json | 134 -----
- .../pmu-events/arch/x86/nehalemep/other.json  |  18 -
- .../arch/x86/nehalemep/pipeline.json          | 127 +----
- .../arch/x86/nehalemep/virtual-memory.json    |  13 -
- 7 files changed, 5 insertions(+), 842 deletions(-)
+ .../pmu-events/arch/x86/nehalemex/cache.json  | 519 ------------------
+ .../arch/x86/nehalemex/floating-point.json    |  28 -
+ .../arch/x86/nehalemex/frontend.json          |   3 -
+ .../pmu-events/arch/x86/nehalemex/memory.json | 134 -----
+ .../pmu-events/arch/x86/nehalemex/other.json  |  18 -
+ .../arch/x86/nehalemex/pipeline.json          | 127 +----
+ .../arch/x86/nehalemex/virtual-memory.json    |  13 -
+ 7 files changed, 5 insertions(+), 837 deletions(-)
 
-diff --git a/tools/perf/pmu-events/arch/x86/nehalemep/cache.json b/tools/perf/pmu-events/arch/x86/nehalemep/cache.json
-index 1ee91300baf9..1a132fcda964 100644
---- a/tools/perf/pmu-events/arch/x86/nehalemep/cache.json
-+++ b/tools/perf/pmu-events/arch/x86/nehalemep/cache.json
+diff --git a/tools/perf/pmu-events/arch/x86/nehalemex/cache.json b/tools/perf/pmu-events/arch/x86/nehalemex/cache.json
+index 01542c4ea678..a4142cd2ca86 100644
+--- a/tools/perf/pmu-events/arch/x86/nehalemex/cache.json
++++ b/tools/perf/pmu-events/arch/x86/nehalemex/cache.json
 @@ -1,7 +1,6 @@
  [
      {
@@ -964,52 +964,12 @@ index 1ee91300baf9..1a132fcda964 100644
 @@ -910,7 +802,6 @@
      },
      {
-         "BriefDescription": "Load instructions retired with a data source of local DRAM or locally homed remote hitm (Precise Event)",
--        "Counter": "0,1,2,3",
-         "EventCode": "0xF",
-         "EventName": "MEM_UNCORE_RETIRED.LOCAL_DRAM",
-         "PEBS": "1",
-@@ -919,7 +810,6 @@
-     },
-     {
-         "BriefDescription": "Load instructions retired that HIT modified data in sibling core (Precise Event)",
--        "Counter": "0,1,2,3",
-         "EventCode": "0xF",
-         "EventName": "MEM_UNCORE_RETIRED.OTHER_CORE_L2_HITM",
-         "PEBS": "1",
-@@ -928,7 +818,6 @@
-     },
-     {
-         "BriefDescription": "Load instructions retired remote cache HIT data source (Precise Event)",
--        "Counter": "0,1,2,3",
-         "EventCode": "0xF",
-         "EventName": "MEM_UNCORE_RETIRED.REMOTE_CACHE_LOCAL_HOME_HIT",
-         "PEBS": "1",
-@@ -937,7 +826,6 @@
-     },
-     {
-         "BriefDescription": "Load instructions retired remote DRAM and remote home-remote cache HITM (Precise Event)",
--        "Counter": "0,1,2,3",
-         "EventCode": "0xF",
-         "EventName": "MEM_UNCORE_RETIRED.REMOTE_DRAM",
-         "PEBS": "1",
-@@ -946,7 +834,6 @@
-     },
-     {
-         "BriefDescription": "Load instructions retired IO (Precise Event)",
--        "Counter": "0,1,2,3",
-         "EventCode": "0xF",
-         "EventName": "MEM_UNCORE_RETIRED.UNCACHEABLE",
-         "PEBS": "1",
-@@ -955,7 +842,6 @@
-     },
-     {
          "BriefDescription": "Offcore L1 data cache writebacks",
 -        "Counter": "0,1,2,3",
          "EventCode": "0xB0",
          "EventName": "OFFCORE_REQUESTS.L1D_WRITEBACK",
          "SampleAfterValue": "100000",
-@@ -963,7 +849,6 @@
+@@ -918,7 +809,6 @@
      },
      {
          "BriefDescription": "Offcore requests blocked due to Super Queue full",
@@ -1017,7 +977,7 @@ index 1ee91300baf9..1a132fcda964 100644
          "EventCode": "0xB2",
          "EventName": "OFFCORE_REQUESTS_SQ_FULL",
          "SampleAfterValue": "100000",
-@@ -971,2240 +856,1833 @@
+@@ -926,2240 +816,1833 @@
      },
      {
          "BriefDescription": "Offcore data reads satisfied by any cache or DRAM",
@@ -3258,7 +3218,7 @@ index 1ee91300baf9..1a132fcda964 100644
          "EventCode": "0xF4",
          "EventName": "SQ_MISC.SPLIT_LOCK",
          "SampleAfterValue": "2000000",
-@@ -3212,7 +2690,6 @@
+@@ -3167,7 +2650,6 @@
      },
      {
          "BriefDescription": "Loads delayed with at-Retirement block code",
@@ -3266,7 +3226,7 @@ index 1ee91300baf9..1a132fcda964 100644
          "EventCode": "0x6",
          "EventName": "STORE_BLOCKS.AT_RET",
          "SampleAfterValue": "200000",
-@@ -3220,7 +2697,6 @@
+@@ -3175,7 +2657,6 @@
      },
      {
          "BriefDescription": "Cacheable loads delayed with L1D block code",
@@ -3274,10 +3234,10 @@ index 1ee91300baf9..1a132fcda964 100644
          "EventCode": "0x6",
          "EventName": "STORE_BLOCKS.L1D_BLOCK",
          "SampleAfterValue": "200000",
-diff --git a/tools/perf/pmu-events/arch/x86/nehalemep/floating-point.json b/tools/perf/pmu-events/arch/x86/nehalemep/floating-point.json
+diff --git a/tools/perf/pmu-events/arch/x86/nehalemex/floating-point.json b/tools/perf/pmu-events/arch/x86/nehalemex/floating-point.json
 index 666e466d351c..c03f8990fa82 100644
---- a/tools/perf/pmu-events/arch/x86/nehalemep/floating-point.json
-+++ b/tools/perf/pmu-events/arch/x86/nehalemep/floating-point.json
+--- a/tools/perf/pmu-events/arch/x86/nehalemex/floating-point.json
++++ b/tools/perf/pmu-events/arch/x86/nehalemex/floating-point.json
 @@ -1,7 +1,6 @@
  [
      {
@@ -3502,10 +3462,10 @@ index 666e466d351c..c03f8990fa82 100644
          "EventCode": "0xFD",
          "EventName": "SIMD_INT_64.UNPACK",
          "SampleAfterValue": "200000",
-diff --git a/tools/perf/pmu-events/arch/x86/nehalemep/frontend.json b/tools/perf/pmu-events/arch/x86/nehalemep/frontend.json
+diff --git a/tools/perf/pmu-events/arch/x86/nehalemex/frontend.json b/tools/perf/pmu-events/arch/x86/nehalemex/frontend.json
 index c561ac24d91d..f7f28510e3ae 100644
---- a/tools/perf/pmu-events/arch/x86/nehalemep/frontend.json
-+++ b/tools/perf/pmu-events/arch/x86/nehalemep/frontend.json
+--- a/tools/perf/pmu-events/arch/x86/nehalemex/frontend.json
++++ b/tools/perf/pmu-events/arch/x86/nehalemex/frontend.json
 @@ -1,7 +1,6 @@
  [
      {
@@ -3530,10 +3490,10 @@ index c561ac24d91d..f7f28510e3ae 100644
          "EventCode": "0x19",
          "EventName": "TWO_UOP_INSTS_DECODED",
          "SampleAfterValue": "2000000",
-diff --git a/tools/perf/pmu-events/arch/x86/nehalemep/memory.json b/tools/perf/pmu-events/arch/x86/nehalemep/memory.json
+diff --git a/tools/perf/pmu-events/arch/x86/nehalemex/memory.json b/tools/perf/pmu-events/arch/x86/nehalemex/memory.json
 index 6e95de3f3409..f810880a295e 100644
---- a/tools/perf/pmu-events/arch/x86/nehalemep/memory.json
-+++ b/tools/perf/pmu-events/arch/x86/nehalemep/memory.json
+--- a/tools/perf/pmu-events/arch/x86/nehalemex/memory.json
++++ b/tools/perf/pmu-events/arch/x86/nehalemex/memory.json
 @@ -1,738 +1,604 @@
  [
      {
@@ -4273,10 +4233,10 @@ index 6e95de3f3409..f810880a295e 100644
          "SampleAfterValue": "100000",
          "UMask": "0x1"
      }
-diff --git a/tools/perf/pmu-events/arch/x86/nehalemep/other.json b/tools/perf/pmu-events/arch/x86/nehalemep/other.json
+diff --git a/tools/perf/pmu-events/arch/x86/nehalemex/other.json b/tools/perf/pmu-events/arch/x86/nehalemex/other.json
 index f6887b234b0e..fb706cb51832 100644
---- a/tools/perf/pmu-events/arch/x86/nehalemep/other.json
-+++ b/tools/perf/pmu-events/arch/x86/nehalemep/other.json
+--- a/tools/perf/pmu-events/arch/x86/nehalemex/other.json
++++ b/tools/perf/pmu-events/arch/x86/nehalemex/other.json
 @@ -1,7 +1,6 @@
  [
      {
@@ -4421,10 +4381,10 @@ index f6887b234b0e..fb706cb51832 100644
          "EventCode": "0xF6",
          "EventName": "SQ_FULL_STALL_CYCLES",
          "SampleAfterValue": "2000000",
-diff --git a/tools/perf/pmu-events/arch/x86/nehalemep/pipeline.json b/tools/perf/pmu-events/arch/x86/nehalemep/pipeline.json
+diff --git a/tools/perf/pmu-events/arch/x86/nehalemex/pipeline.json b/tools/perf/pmu-events/arch/x86/nehalemex/pipeline.json
 index 6fc1a6efd8e8..c45f2ffa861e 100644
---- a/tools/perf/pmu-events/arch/x86/nehalemep/pipeline.json
-+++ b/tools/perf/pmu-events/arch/x86/nehalemep/pipeline.json
+--- a/tools/perf/pmu-events/arch/x86/nehalemex/pipeline.json
++++ b/tools/perf/pmu-events/arch/x86/nehalemex/pipeline.json
 @@ -1,7 +1,6 @@
  [
      {
@@ -5304,10 +5264,10 @@ index 6fc1a6efd8e8..c45f2ffa861e 100644
          "EventCode": "0xDB",
          "EventName": "UOP_UNFUSION",
          "SampleAfterValue": "2000000",
-diff --git a/tools/perf/pmu-events/arch/x86/nehalemep/virtual-memory.json b/tools/perf/pmu-events/arch/x86/nehalemep/virtual-memory.json
+diff --git a/tools/perf/pmu-events/arch/x86/nehalemex/virtual-memory.json b/tools/perf/pmu-events/arch/x86/nehalemex/virtual-memory.json
 index e88c0802e679..c434cd4ef4f1 100644
---- a/tools/perf/pmu-events/arch/x86/nehalemep/virtual-memory.json
-+++ b/tools/perf/pmu-events/arch/x86/nehalemep/virtual-memory.json
+--- a/tools/perf/pmu-events/arch/x86/nehalemex/virtual-memory.json
++++ b/tools/perf/pmu-events/arch/x86/nehalemex/virtual-memory.json
 @@ -1,7 +1,6 @@
  [
      {
