@@ -2,132 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF4864D88C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A59A964D890
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229979AbiLOJ1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 04:27:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
+        id S229652AbiLOJ2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 04:28:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbiLOJ11 (ORCPT
+        with ESMTP id S230033AbiLOJ2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 04:27:27 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596FF379E3;
-        Thu, 15 Dec 2022 01:27:26 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id p8so14688298lfu.11;
-        Thu, 15 Dec 2022 01:27:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9La9jgaHqp+Q53gndZnYuaYp/FEo1ZcWn9yC9YZSwDo=;
-        b=Fumi66JD44K/pXFyuPaz/HTOflj5ks8FW9NiVI1BEg4N+TvgTdqkXQSxdCNrsbLEmC
-         C1mn4WiHR5rA3vXwFc+8Uya/SVtMBjx8Po8Bq490fTf5Gx0c1M5Rj5kxMCdaS31FOn7K
-         LxJq+V4unPjE+frXELKlijVktxr7AKsKNxG2uwJ9r0osfdgxcnaaNklAt9Z/Hpy/FkVK
-         qyB+eudWjrD0cFmhYRePsD1/UQnUTACos6VjSspQ9KdHX7M091lD3eDWSSYvIp556w29
-         S0gMyLF4zuiRb+DfuUSmVO3gVLp72C9qlaGoM0Iu83ePYM9k8fPz6lO09gCeXcD9pUEZ
-         qXvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9La9jgaHqp+Q53gndZnYuaYp/FEo1ZcWn9yC9YZSwDo=;
-        b=G0olSsu8Jru5y1RAz8nfA8K+TWcnMGMZ2anJWKqvPRFsQPmXQkx0mNja6xyfdmdhLL
-         SXyu/GeO1fhn4q4vg0SO4NsQHMImjBCt6lH8QBhmob2BcejnmBhmh3wkiDGGzAU/9DGK
-         Nq465MUzvaTuTXUN/K5FsTce4X64yAKQdgAxvXqhWrWshL2rNyJZCZr/knba8J2la8My
-         FCUbX4GEi3AVr4WNfj4QEuYgrF6TonOFshP/I+JP8CGZiOz9mMQomCGUc/3HR0fVGH0L
-         m2DlcFjPPDtgKgdTn0+tWXh/l4Or2VAzkwq8aXZMzoyCUci1DGy395MOFxTAqHL4WoUy
-         PyKg==
-X-Gm-Message-State: ANoB5plZ10EqdiAT6AeBu1qozZ4e4Bwi2fit2wabCmRK3LquMaTXnold
-        eCptFPiEk77p72H2sE7xjR0=
-X-Google-Smtp-Source: AA0mqf7fxh68zYgpFRncw4LL6gC4QXNqRfUNgapYJVjDjlahSZxTAKTmsXG5jW9b07okP9WSNCFtxw==
-X-Received: by 2002:ac2:443c:0:b0:4b5:5bc1:678c with SMTP id w28-20020ac2443c000000b004b55bc1678cmr7374717lfl.21.1671096444511;
-        Thu, 15 Dec 2022 01:27:24 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id q24-20020ac24a78000000b004a05767bc07sm1112526lfp.28.2022.12.15.01.27.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 01:27:23 -0800 (PST)
-Date:   Thu, 15 Dec 2022 12:27:21 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Christoph Hellwig <hch@infradead.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        caihuoqing <caihuoqing@baidu.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 23/25] PCI: dwc: Restore DMA-mask after MSI-data
- allocation
-Message-ID: <20221215092721.tvz3hpaql3kotgnu@mobilestation>
-References: <20221214235305.31744-1-Sergey.Semin@baikalelectronics.ru>
- <20221214235305.31744-24-Sergey.Semin@baikalelectronics.ru>
- <Y5rJJfZeVqliA5Rg@infradead.org>
+        Thu, 15 Dec 2022 04:28:03 -0500
+X-Greylist: delayed 134053 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Dec 2022 01:28:02 PST
+Received: from freundtech.com (freundtech.com [IPv6:2a01:4f8:c17:2d66::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDC44B989;
+        Thu, 15 Dec 2022 01:28:01 -0800 (PST)
+Received: from [IPV6:2a00:1398:9:fb03:bb56:abd8:c620:48e2] (unknown [IPv6:2a00:1398:9:fb03:bb56:abd8:c620:48e2])
+        by freundtech.com (Postfix) with ESMTPSA id C83461E38E3;
+        Thu, 15 Dec 2022 10:27:59 +0100 (CET)
+Message-ID: <3447483d-11bc-8ab2-8aba-96870b42281b@freund.io>
+Date:   Thu, 15 Dec 2022 10:27:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5rJJfZeVqliA5Rg@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] HID: amd_sfh: Add support for tablet-mode-switch sensor
+To:     kernel test robot <lkp@intel.com>, linux-input@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Basavaraj Natikar <basavaraj.natikar@amd.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Ivan Dovgal <iv.dovg@gmail.com>,
+        "Luke D . Jones" <luke@ljones.dev>
+References: <20221214214127.15347-1-adrian@freund.io>
+ <202212151621.e3OmYctb-lkp@intel.com>
+Content-Language: en-US
+From:   Adrian Freund <adrian@freund.io>
+In-Reply-To: <202212151621.e3OmYctb-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph
-
-On Wed, Dec 14, 2022 at 11:13:41PM -0800, Christoph Hellwig wrote:
-> On Thu, Dec 15, 2022 at 02:53:03AM +0300, Serge Semin wrote:
-> > DW PCIe Root Ports and End-points can be equipped with the DW eDMA engine.
-> > In that case it is critical to have the platform device pre-initialized
-> > with a valid DMA-mask so the drivers using the eDMA-engine would be able
-> > to allocate the DMA-able buffers. The MSI-capable data requires to be
-> > allocated from the lowest 4GB region. Since that procedure implies the
-> > DMA-mask change we need to restore the mask set by the low-level drivers
-> > after the MSI-data allocation is done.
-> 
-> You can't change the DMA mask when there are existing allocations.
-
-Em, what do you guys suggest for the DW PCIe devices with the embedded
-DMA-engine then? To live forever with the SWIOTLBs? I can't drop the
-DMA-mask update due to this commit 423511ec23e2 ("PCI: dwc: Drop
-dependency on ZONE_DMA32") and I can't change the mask after it's
-updated. Note it's updated for the memory allocation to which actually
-no DMA will be performed, see
-https://lore.kernel.org/linux-pci/20220825185026.3816331-2-willmcvicker@google.com/.
-My patches imply adding the real DMA operations support.
-
-We've discussed this a lot with Robin in various threads and I thought
-a workable solution was found. I was going to update the mask in
-another place, but basically it would still mean to have first setting
-the 32-bit mask here, and then change it to 64-bit one in the
-framework of the DW eDMA driver.
-
-So to speak I don't see a proper way out from the situation. Nothing I
-suggested was accepted and now we'll have to live with the SWIOTLBs
-used for the memory above 4GB. So please suggest a workable solution
-then. We need the next things:
-1. Somehow preserve a single DWORD of the PCIe bus memory for the
-iMSI-RX engine. (That's what is currently done the
-dw_pcie_msi_host_init() method by allocating the coherent memory.)
-2. Set the actual DMA-mask to the DW PCIe platform device so the
-DMA-engine clients would be able to allocate actually DMA-able memory.
-
-@Robin, please join the discussion.
-
--Serge(y)
+On 12/15/22 09:22, kernel test robot wrote:
+> Hi Adrian,
+>
+> Thank you for the patch! Perhaps something to improve:
+>
+> [auto build test WARNING on hid/for-next]
+> [also build test WARNING on linus/master v6.1 next-20221215]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Adrian-Freund/HID-amd_sfh-Add-support-for-tablet-mode-switch-sensor/20221215-054325
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+> patch link:    https://lore.kernel.org/r/20221214214127.15347-1-adrian%40freund.io
+> patch subject: [PATCH] HID: amd_sfh: Add support for tablet-mode-switch sensor
+> config: x86_64-allyesconfig
+> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+> reproduce (this is a W=1 build):
+>          # https://github.com/intel-lab-lkp/linux/commit/9523955771c5517417b71bdcb1a19d8fadbc946d
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Adrian-Freund/HID-amd_sfh-Add-support-for-tablet-mode-switch-sensor/20221215-054325
+>          git checkout 9523955771c5517417b71bdcb1a19d8fadbc946d
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hid/amd-sfh-hid/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+>     In file included from drivers/hid/amd-sfh-hid/sfh1_1/amd_sfh_desc.c:15:
+>>> drivers/hid/amd-sfh-hid/sfh1_1/../hid_descriptor/amd_sfh_hid_report_desc.h:649:17: warning: 'tms_report_descriptor' defined but not used [-Wunused-const-variable=]
+>       649 | static const u8 tms_report_descriptor[] = {
+>           |                 ^~~~~~~~~~~~~~~~~~~~~
+hid_descriptor/amd_sfh_hid_report_desc.h is included from both 
+hid_descriptor/amd_sfh_hid_desc.c and sfh1_1/amd_sfh_desc.c, the first 
+of which has 4 usages of tms_report_descriptor. The later is for sensor 
+fusion hub 1.1. I don't have access to a devices using sfh1.1, so I 
+can't add support for the tablet mode switch there, causing the variable 
+to be unused for that import.
+>
+> vim +/tms_report_descriptor +649 drivers/hid/amd-sfh-hid/sfh1_1/../hid_descriptor/amd_sfh_hid_report_desc.h
+>
+>     646	
+>     647	
+>     648	/* TABLET MODE SWITCH */
+>   > 649	static const u8 tms_report_descriptor[] = {
+>     650	0x06, 0x43, 0xFF,  // Usage Page (Vendor Defined 0xFF43)
+>     651	0x0A, 0x02, 0x02,  // Usage (0x0202)
+>     652	0xA1, 0x01, // Collection (Application)
+>     653	0x85, 0x11, //   Report ID (17)
+>     654	0x15, 0x00, //   Logical Minimum (0)
+>     655	0x25, 0x01, //   Logical Maximum (1)
+>     656	0x35, 0x00, //   Physical Minimum (0)
+>     657	0x45, 0x01, //   Physical Maximum (1)
+>     658	0x65, 0x00, //   Unit (None)
+>     659	0x55, 0x00, //   Unit Exponent (0)
+>     660	0x75, 0x01, //   Report Size (1)
+>     661	0x95, 0x98, //   Report Count (-104)
+>     662	0x81, 0x03, //   Input (Const,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
+>     663	0x91, 0x03, //   Output (Const,Var,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
+>     664	0xC1, 0x00, // End Collection
+>     665	};
+>     666	
+>
+Adrian
