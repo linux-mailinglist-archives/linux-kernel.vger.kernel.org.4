@@ -2,57 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C076B64D517
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 02:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B58DE64D519
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 02:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiLOBtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 20:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
+        id S229696AbiLOBtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 20:49:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiLOBsr (ORCPT
+        with ESMTP id S229596AbiLOBti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 20:48:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508FA537FC;
-        Wed, 14 Dec 2022 17:48:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D095561CD3;
-        Thu, 15 Dec 2022 01:48:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B56FDC433EF;
-        Thu, 15 Dec 2022 01:48:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671068925;
-        bh=ojlxsqHj3+udjuB/zrA6wUVW60/Z8ZKDNPvSfZT7Efw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dOd9p0hIwuZZIOBJQh5ug6BMt9lDvWcd6AUyY9paTGx2xxa9gHoWUE+aKWjZRsnwI
-         k5UdHjluDM1CEQbv0150adrYFUxyko/PBS9fJB9Tvu1kMZ5JNC86+sRmS/7I8iMytO
-         CwW4T1eyL+ImKY8ASgyk54byohY1nxG1maXQBkCzWoGQtasLa/EPTDxorocKr2dHHB
-         /9/3wX4gpJ0Sh71mwdByqZYaA13wHrhHgLMuN+GThj0c2E1iqM0Xx0h5NmUQQArsDu
-         pvIGbFRWIGl55UMnatv8rWT8iBIb0FO+UrJjA+XdwJFay6cCdV91dU10jmqYwk9OXI
-         oUYUdFN/yFZFg==
-Message-ID: <6770f692-490e-34fc-46f8-4f65aa071f58@kernel.org>
-Date:   Thu, 15 Dec 2022 09:48:41 +0800
+        Wed, 14 Dec 2022 20:49:38 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B782A26D;
+        Wed, 14 Dec 2022 17:49:37 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id j4so13490773lfk.0;
+        Wed, 14 Dec 2022 17:49:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2uR0itTVt/FczCT3tTCUIz7rhFERW4XLAvwXhZxOOck=;
+        b=H7ZRzaMERNL5e0UNCT3+KQPjY2LcFL9F9zkoihWkPRVjZfGwMFjsC9e2Qxu9AxAA1h
+         uc/If3AusNjZs8BEvwR/Ww6d5AXy6Z9R8eGKgwIQqi6C1Gk/FyPv+eFhAmaho38J1I8b
+         UIdoM9/1/v7zZNhAMWSs+nr1nFutrX+oDqDVRf7Miult/CzGhBvwBfDGxCv8leeohcCG
+         wGBU3sgjPbmrPYtHQlOM+NUxghtIf3/II7mkyaaqBb7JsQ/v/maiyqKk1vW/mHYk4kCs
+         NiUg1YCeagKUZ8Amy8C/KLm02VFvHCVyJQo4otMBTJnoanacgZcU1DwZE8BTp9crcIla
+         bUqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2uR0itTVt/FczCT3tTCUIz7rhFERW4XLAvwXhZxOOck=;
+        b=VAneozlRqbja/OMb/fEkyeEFLvWSC5k+tlOgKnyP/F1krgRzxvtbIXQUzsx2y3kszx
+         xylcnOedDIotPAN7cYMQVSfVZ3DS/MKzcXKWhMFwO3zp3fWfQJqD+fNB0kimW+b2g/tr
+         VHm6z2OEycTeFs3ultSbm/6duftXFGhpSc1IdTWjWOZkbfDmEkbDVQ888JQ/q+kKZK0V
+         1xlDwVL9oQ2iUb+mGwU/9IQhI1yKJ8D6VkrjfZawup9s6u89TuSACYFiE0lgj8hAGAeX
+         QTxN2tlbDT/tm2aMho1dsoEzJCLxqwsgyrSWW2Cxe5Wx+JTlDReJinJXhxcxoWvIU5Vv
+         /xHQ==
+X-Gm-Message-State: ANoB5plED8kWCB+4FfbgxhHCiYY9LJ2aVJfnW3d5cibMGQEVPj1g2UP1
+        pt/fHAGYIbQ796xQOseqpFDSTp5YH25LpPIlVNo=
+X-Google-Smtp-Source: AA0mqf5liwcVYnuCPTCNcyM6ilakhOG9gI5m3PiYoLX0ZL/wlDP38UbjqB7o4AkT/dwZPWZ5Y0fiC2BnhhPAAxuh7lY=
+X-Received: by 2002:ac2:59c6:0:b0:4b5:721f:f32f with SMTP id
+ x6-20020ac259c6000000b004b5721ff32fmr6830047lfn.383.1671068975395; Wed, 14
+ Dec 2022 17:49:35 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [RFC PATCH] f2fs: Convert f2fs_write_cache_pages() to use
- filemap_get_folios_tag()
-Content-Language: en-US
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
-        fengnanchang@gmail.com, linux-fsdevel@vger.kernel.org
-References: <0a95ba7b-9335-ce03-0f47-5d9f4cce988f@kernel.org>
- <20221212191317.9730-1-vishal.moola@gmail.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20221212191317.9730-1-vishal.moola@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221110112622.389332-1-Yuwei.Guan@zeekrlife.com> <3153dcb3-dd9b-7a2b-a15a-8244d805f246@huaweicloud.com>
+In-Reply-To: <3153dcb3-dd9b-7a2b-a15a-8244d805f246@huaweicloud.com>
+From:   Yuwei Guan <ssawgyw@gmail.com>
+Date:   Thu, 15 Dec 2022 09:48:59 +0800
+Message-ID: <CALJQGLmOaEnHawYvNz5fk_MtGhz6DPpW+8E-hgvmWxF--8V4zA@mail.gmail.com>
+Subject: Re: [PATCH v1] block, bfq: do the all counting of pending-request if
+ CONFIG_BFQ_GROUP_IOSCHED is enabled
+To:     Yu Kuai <yukuai1@huaweicloud.com>, Jan Kara <jack@suse.cz>
+Cc:     paolo.valente@linaro.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yuwei.Guan@zeekrlife.com, "yukuai (C)" <yukuai3@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,238 +71,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/13 3:13, Vishal Moola (Oracle) wrote:
-> Converted the function to use a folio_batch instead of pagevec. This is in
-> preparation for the removal of find_get_pages_range_tag().
-> 
-> Also modified f2fs_all_cluster_page_ready to take in a folio_batch instead
-> of pagevec. This does NOT support large folios. The function currently
-> only utilizes folios of size 1 so this shouldn't cause any issues right
-> now.
-> 
-> This version of the patch limits the number of pages fetched to
-> F2FS_ONSTACK_PAGES. If that ever happens, update the start index here
-> since filemap_get_folios_tag() updates the index to be after the last
-> found folio, not necessarily the last used page.
-> 
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> ---
-> 
-> Let me know if you prefer this version and I'll include it in v5
-> of the patch series when I rebase it after the merge window.
-> 
-> ---
->   fs/f2fs/data.c | 86 ++++++++++++++++++++++++++++++++++----------------
->   1 file changed, 59 insertions(+), 27 deletions(-)
-> 
-> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-> index a71e818cd67b..1703e353f0e0 100644
-> --- a/fs/f2fs/data.c
-> +++ b/fs/f2fs/data.c
-> @@ -2939,6 +2939,7 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
->   	int ret = 0;
->   	int done = 0, retry = 0;
->   	struct page *pages[F2FS_ONSTACK_PAGES];
-> +	struct folio_batch fbatch;
->   	struct f2fs_sb_info *sbi = F2FS_M_SB(mapping);
->   	struct bio *bio = NULL;
->   	sector_t last_block;
-> @@ -2959,6 +2960,7 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
->   		.private = NULL,
->   	};
->   #endif
-> +	int nr_folios, p, idx;
->   	int nr_pages;
->   	pgoff_t index;
->   	pgoff_t end;		/* Inclusive */
-> @@ -2969,6 +2971,8 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
->   	int submitted = 0;
->   	int i;
->   
-> +	folio_batch_init(&fbatch);
-> +
->   	if (get_dirty_pages(mapping->host) <=
->   				SM_I(F2FS_M_SB(mapping))->min_hot_blocks)
->   		set_inode_flag(mapping->host, FI_HOT_DATA);
-> @@ -2994,13 +2998,38 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
->   		tag_pages_for_writeback(mapping, index, end);
->   	done_index = index;
->   	while (!done && !retry && (index <= end)) {
-> -		nr_pages = find_get_pages_range_tag(mapping, &index, end,
-> -				tag, F2FS_ONSTACK_PAGES, pages);
-> -		if (nr_pages == 0)
-> +		nr_pages = 0;
-> +again:
-> +		nr_folios = filemap_get_folios_tag(mapping, &index, end,
-> +				tag, &fbatch);
-> +		if (nr_folios == 0) {
-> +			if (nr_pages)
-> +				goto write;
->   			break;
-> +		}
->   
-> +		for (i = 0; i < nr_folios; i++) {
-> +			struct folio* folio = fbatch.folios[i];
-> +
-> +			idx = 0;
-> +			p = folio_nr_pages(folio);
-> +add_more:
-> +			pages[nr_pages] = folio_page(folio,idx);
-> +			folio_ref_inc(folio);
+Yu Kuai <yukuai1@huaweicloud.com> =E4=BA=8E2022=E5=B9=B411=E6=9C=8814=E6=97=
+=A5=E5=91=A8=E4=B8=80 11:33=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Hi,
+>
+> =E5=9C=A8 2022/11/10 19:26, Yuwei Guan =E5=86=99=E9=81=93:
+> > The 'bfqd->num_groups_with_pending_reqs' is used when
+> > CONFIG_BFQ_GROUP_IOSCHED is enabled, so let the variables and processes
+> > take effect when ONFIG_BFQ_GROUP_IOSCHED is enabled.
+> >
+>
+> This patch looks good to me, fell free to add:
+> Reviewed-by: Yu Kuai <yukuai3@huawei.com>
+>
+> BTW, this patch need to be reviewed by Jan or Paolo before it can be
+> applied.
+>
+Hi Jan,
 
-It looks if CONFIG_LRU_GEN is not set, folio_ref_inc() does nothing. For those
-folios recorded in pages array, we need to call folio_get() here to add one more
-reference on each of them?
+Could you help to review this patch.
 
-> +			if (++nr_pages == F2FS_ONSTACK_PAGES) {
-> +				index = folio->index + idx + 1;
-> +				folio_batch_release(&fbatch);
+Thanks.
 
-Otherwise after folio_batch_release(), it may cause use-after-free issue
-when accessing pages array? Or am I missing something?
-
-> +				goto write;
-> +			}
-> +			if (++idx < p)
-> +				goto add_more;
-> +		}
-> +		folio_batch_release(&fbatch);
-> +		goto again;
-> +write:
->   		for (i = 0; i < nr_pages; i++) {
->   			struct page *page = pages[i];
-> +			struct folio *folio = page_folio(page);
->   			bool need_readd;
->   readd:
->   			need_readd = false;
-> @@ -3017,7 +3046,7 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
->   				}
->   
->   				if (!f2fs_cluster_can_merge_page(&cc,
-> -								page->index)) {
-> +								folio->index)) {
->   					ret = f2fs_write_multi_pages(&cc,
->   						&submitted, wbc, io_type);
->   					if (!ret)
-> @@ -3026,27 +3055,28 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
->   				}
->   
->   				if (unlikely(f2fs_cp_error(sbi)))
-> -					goto lock_page;
-> +					goto lock_folio;
->   
->   				if (!f2fs_cluster_is_empty(&cc))
-> -					goto lock_page;
-> +					goto lock_folio;
->   
->   				if (f2fs_all_cluster_page_ready(&cc,
->   					pages, i, nr_pages, true))
-> -					goto lock_page;
-> +					goto lock_folio;
->   
->   				ret2 = f2fs_prepare_compress_overwrite(
->   							inode, &pagep,
-> -							page->index, &fsdata);
-> +							folio->index, &fsdata);
->   				if (ret2 < 0) {
->   					ret = ret2;
->   					done = 1;
->   					break;
->   				} else if (ret2 &&
->   					(!f2fs_compress_write_end(inode,
-> -						fsdata, page->index, 1) ||
-> +						fsdata, folio->index, 1) ||
->   					 !f2fs_all_cluster_page_ready(&cc,
-> -						pages, i, nr_pages, false))) {
-> +						pages, i, nr_pages,
-> +						false))) {
->   					retry = 1;
->   					break;
->   				}
-> @@ -3059,46 +3089,47 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
->   				break;
->   			}
->   #ifdef CONFIG_F2FS_FS_COMPRESSION
-> -lock_page:
-> +lock_folio:
->   #endif
-> -			done_index = page->index;
-> +			done_index = folio->index;
->   retry_write:
-> -			lock_page(page);
-> +			folio_lock(folio);
->   
-> -			if (unlikely(page->mapping != mapping)) {
-> +			if (unlikely(folio->mapping != mapping)) {
->   continue_unlock:
-> -				unlock_page(page);
-> +				folio_unlock(folio);
->   				continue;
->   			}
->   
-> -			if (!PageDirty(page)) {
-> +			if (!folio_test_dirty(folio)) {
->   				/* someone wrote it for us */
->   				goto continue_unlock;
->   			}
->   
-> -			if (PageWriteback(page)) {
-> +			if (folio_test_writeback(folio)) {
->   				if (wbc->sync_mode != WB_SYNC_NONE)
-> -					f2fs_wait_on_page_writeback(page,
-> +					f2fs_wait_on_page_writeback(
-> +							&folio->page,
->   							DATA, true, true);
->   				else
->   					goto continue_unlock;
->   			}
->   
-> -			if (!clear_page_dirty_for_io(page))
-> +			if (!folio_clear_dirty_for_io(folio))
->   				goto continue_unlock;
->   
->   #ifdef CONFIG_F2FS_FS_COMPRESSION
->   			if (f2fs_compressed_file(inode)) {
-> -				get_page(page);
-> -				f2fs_compress_ctx_add_page(&cc, page);
-> +				folio_get(folio);
-> +				f2fs_compress_ctx_add_page(&cc, &folio->page);
->   				continue;
->   			}
->   #endif
-> -			ret = f2fs_write_single_data_page(page, &submitted,
-> -					&bio, &last_block, wbc, io_type,
-> -					0, true);
-> +			ret = f2fs_write_single_data_page(&folio->page,
-> +					&submitted, &bio, &last_block,
-> +					wbc, io_type, 0, true);
->   			if (ret == AOP_WRITEPAGE_ACTIVATE)
-> -				unlock_page(page);
-> +				folio_unlock(folio);
->   #ifdef CONFIG_F2FS_FS_COMPRESSION
->   result:
->   #endif
-> @@ -3122,7 +3153,8 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
->   					}
->   					goto next;
->   				}
-> -				done_index = page->index + 1;
-> +				done_index = folio->index +
-> +					folio_nr_pages(folio);
->   				done = 1;
->   				break;
->   			}
-> @@ -3136,7 +3168,7 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
->   			if (need_readd)
->   				goto readd;
->   		}
-> -		release_pages(pages, nr_pages);
-> +		release_pages(pages,nr_pages);
-
-No need to change?
-
-Thanks,
-
->   		cond_resched();
->   	}
->   #ifdef CONFIG_F2FS_FS_COMPRESSION
+> Thanks,
+> Kuai
+>
+> > Cc: Yu Kuai <yukuai3@huawei.com>
+> > Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
+> > ---
+> >   block/bfq-iosched.c | 2 ++
+> >   block/bfq-iosched.h | 4 ++++
+> >   block/bfq-wf2q.c    | 8 ++++----
+> >   3 files changed, 10 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> > index 2381cf220ba2..5f54091e7fe9 100644
+> > --- a/block/bfq-iosched.c
+> > +++ b/block/bfq-iosched.c
+> > @@ -7051,7 +7051,9 @@ static int bfq_init_queue(struct request_queue *q=
+, struct elevator_type *e)
+> >       bfqd->idle_slice_timer.function =3D bfq_idle_slice_timer;
+> >
+> >       bfqd->queue_weights_tree =3D RB_ROOT_CACHED;
+> > +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+> >       bfqd->num_groups_with_pending_reqs =3D 0;
+> > +#endif
+> >
+> >       INIT_LIST_HEAD(&bfqd->active_list);
+> >       INIT_LIST_HEAD(&bfqd->idle_list);
+> > diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> > index 9fa89577322d..41aa151ccc22 100644
+> > --- a/block/bfq-iosched.h
+> > +++ b/block/bfq-iosched.h
+> > @@ -197,8 +197,10 @@ struct bfq_entity {
+> >       /* flag, set to request a weight, ioprio or ioprio_class change  =
+*/
+> >       int prio_changed;
+> >
+> > +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+> >       /* flag, set if the entity is counted in groups_with_pending_reqs=
+ */
+> >       bool in_groups_with_pending_reqs;
+> > +#endif
+> >
+> >       /* last child queue of entity created (for non-leaf entities) */
+> >       struct bfq_queue *last_bfqq_created;
+> > @@ -491,6 +493,7 @@ struct bfq_data {
+> >        */
+> >       struct rb_root_cached queue_weights_tree;
+> >
+> > +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+> >       /*
+> >        * Number of groups with at least one process that
+> >        * has at least one request waiting for completion. Note that
+> > @@ -538,6 +541,7 @@ struct bfq_data {
+> >        * with no request waiting for completion.
+> >        */
+> >       unsigned int num_groups_with_pending_reqs;
+> > +#endif
+> >
+> >       /*
+> >        * Per-class (RT, BE, IDLE) number of bfq_queues containing
+> > diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+> > index b02b53658ed4..ea4c3d757fdd 100644
+> > --- a/block/bfq-wf2q.c
+> > +++ b/block/bfq-wf2q.c
+> > @@ -1612,28 +1612,28 @@ void bfq_requeue_bfqq(struct bfq_data *bfqd, st=
+ruct bfq_queue *bfqq,
+> >
+> >   void bfq_add_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+> >   {
+> > +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+> >       struct bfq_entity *entity =3D &bfqq->entity;
+> >
+> >       if (!entity->in_groups_with_pending_reqs) {
+> >               entity->in_groups_with_pending_reqs =3D true;
+> > -#ifdef CONFIG_BFQ_GROUP_IOSCHED
+> >               if (!(bfqq_group(bfqq)->num_queues_with_pending_reqs++))
+> >                       bfqq->bfqd->num_groups_with_pending_reqs++;
+> > -#endif
+> >       }
+> > +#endif
+> >   }
+> >
+> >   void bfq_del_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+> >   {
+> > +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+> >       struct bfq_entity *entity =3D &bfqq->entity;
+> >
+> >       if (entity->in_groups_with_pending_reqs) {
+> >               entity->in_groups_with_pending_reqs =3D false;
+> > -#ifdef CONFIG_BFQ_GROUP_IOSCHED
+> >               if (!(--bfqq_group(bfqq)->num_queues_with_pending_reqs))
+> >                       bfqq->bfqd->num_groups_with_pending_reqs--;
+> > -#endif
+> >       }
+> > +#endif
+> >   }
+> >
+> >   /*
+> >
+>
