@@ -2,162 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E53664E4AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 00:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C2B64E4B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 00:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiLOXab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 18:30:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
+        id S229793AbiLOXb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 18:31:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiLOXa2 (ORCPT
+        with ESMTP id S229665AbiLOXb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 18:30:28 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2043.outbound.protection.outlook.com [40.107.94.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FA960362;
-        Thu, 15 Dec 2022 15:30:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dBukrUDmJjAjFm5mG6O0pde+IKWSuI9KpkR3RvOV2ksW4ZSu5gisd1dQtMBVmYBxN9TC466nvaAC7MDWn+7BUqDS2fSS+iNmd9+I9lXZbfeVefMk2sn8OmESe+hKvRgoCdZja+Thai8uEEwmwj9CVzDE5tw6d7YwNda/XbHQvwoHh77Et3PaZAf7yPk35WgL008QQb8XjNIPuGQbXLGGHjUtsFGjOaJBbT3O8lQ7PAT4TnF3xWVgPVECbQFN4roZmT7e6ZVpKh7H7P4IbwDDyeYXvLCHfbFyi06BHXLdME18eP41Js6jJPauD6y3S/zZ9AVxu1x8p/JMY2vTONWkGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WyFGPQkxHTW4Tg3cy519NmAfNKhFRZxFcgCbDESkDGI=;
- b=RV99bJRk4otN/7VXCi7fL+ZAA1NpcM7SIKGV56UpZIKiZopb+SuJxEqK2eFPzvIk2SpsH6/vsRxm34oyANHVU6KCzaitpXzXYqhrnKagButcPE3z/+hz9uRvPircF2MFLMrf9Y56cvpZw9x/NKhPhzEHLIdfFEiusGJsE+T/G7T8tTMAv+YmKNtahV9qciZVzCbtieV3azdarmLJsrlNR1Dd8CiuY++x/+CdZ6om8lJxkae8JaXtDO6rCuft5vBLcdw4mjH5/kih9lDfngci0UtcBq0wGoQZSMP6g3RUIQHQ1rku2o2ocqBCY3N27HoeqgUOA4bu4bx8256HA38egQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WyFGPQkxHTW4Tg3cy519NmAfNKhFRZxFcgCbDESkDGI=;
- b=iA+zY8EhiF7H5ozpWx1V3mhP0ONjugKu8NpR9gtTB+Mikfeg/OsPYdQuNDlzC8LTlhWdjHatoB9eBiCAQiQ3HtGn8MXLotzS2zlE0S49u2bzTw8v5AQv4mDhPdpHYTpCRk+qguwdQ5KLqkxMytIWmOkY1VtbONt9S8rGBAbtBM5CuFciZcKtXa+p+teMf+FzozNicLx3wZKZkKgCiCbWuCaAlorXR1lWKw5mpd/lCrm5EFGbXiUxFtgcMC9JxQ3EmFsNjPMziN0V9exJn+WFwctdQucWtJ4rIAW2zPRtnl6e0aAyYX3R8hkZx9/BVdkspyeztHnPryPIAIos8PdrjQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA1PR12MB6604.namprd12.prod.outlook.com (2603:10b6:208:3a0::7)
- by DM4PR12MB6640.namprd12.prod.outlook.com (2603:10b6:8:8f::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Thu, 15 Dec
- 2022 23:30:25 +0000
-Received: from IA1PR12MB6604.namprd12.prod.outlook.com
- ([fe80::72da:3d0c:a811:be88]) by IA1PR12MB6604.namprd12.prod.outlook.com
- ([fe80::72da:3d0c:a811:be88%7]) with mapi id 15.20.5924.011; Thu, 15 Dec 2022
- 23:30:25 +0000
-Message-ID: <38f2d681-80a8-dc97-e5ed-4886e5e3bf7c@nvidia.com>
-Date:   Thu, 15 Dec 2022 15:30:21 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH] hte: tegra: fix 'struct of_device_id' build error
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221215164626.1209452-1-arnd@kernel.org>
-Content-Language: en-US
-X-Nvconfidentiality: public
-From:   Dipen Patel <dipenp@nvidia.com>
-In-Reply-To: <20221215164626.1209452-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0271.namprd03.prod.outlook.com
- (2603:10b6:a03:39e::6) To IA1PR12MB6604.namprd12.prod.outlook.com
- (2603:10b6:208:3a0::7)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6604:EE_|DM4PR12MB6640:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2fe162d7-759c-4418-f31f-08dadef457e2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sbNzyly3MB8vMbdjMpkJShVtuqGrHxCB9bvnl9kYwGNfPneGx3m+G1iOeYH29sesNQw39CWLInRy+Z+8Bq8NuKga7h1OIb1zAHC08GawDz0t/nuVH1GMyYC/z3gUTvXWwO6u7tn8gQVQvfgF+GnS9UEum/o/mYSSBCDtqjuvL/+NqzbegM8y5Ya+KtKkTIraCnlcmYrUf9alfPJomXYM2/iXETO15Iwy/bK9JPDUlyVrWbvWUjeB8d811/ZCi/PZTZoUro1GNG/l/kmSntp9B/Q8Z+JV6f/D+NlfdfPYnSMH5eq/H1GZ/CFC1xIOjznsUdRQXRBn9dkm5vqU2pjtmFX/47P56nm85w3/rql8NoalVLZt8xtOX4uajbyNuzNSYfaoEEQKHDdtVQzbQIfu77D0cJi7jGMy0luCGXub3lko50sTpZD+Yv/JapcNj4v4RSQw9A+ABHq2BOVHGoNt3JglZXhqQb68N2n0Op/iQr/HGtHsBAWu9QS0vK5E2C2cCBdjNV7q+d64L7InTVy6XI7dPjSWvnbPdtoeUf/qzrUvRekTDu3AH7MoWYM9FNx+lM9zEnmzRD3nY0EfQcsK7LvaIS36Be2W4CcgPZl17deE9jS2hiCN45SE4tNj5O5Uw6fTF36Rjfv4I/w+dbpstYcbeXtjYVaRGqtaJau5TD8VHmZ4Eqp6VvBa+PzHpnktG/D0WJ9HJFoI1rxmNUvuhmPA86umow9SR14CrRqk6hU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6604.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(366004)(396003)(346002)(376002)(451199015)(83380400001)(478600001)(53546011)(6486002)(6512007)(6506007)(110136005)(26005)(186003)(2616005)(6666004)(66476007)(4326008)(8676002)(86362001)(31696002)(2906002)(41300700001)(66946007)(54906003)(6636002)(316002)(66556008)(36756003)(5660300002)(31686004)(8936002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OGJpYmZKdnlEV0d4RjdBOU83THpSdG1kaCs2OUQvR1Bsa3Z3c3VFNG1sb0NM?=
- =?utf-8?B?QUVwTVJrTE94d2VvNVdWajhpTjByaTVaMnpuZU9seVpLdDhjUUZjVDF6clpF?=
- =?utf-8?B?MkliUCtEM1JDSVpEQVZKcjRncUs2ZGxmOXQ1MDJpYXhxMU5Ic0tJVVhTZHhG?=
- =?utf-8?B?MWczWFhFdGZPZ3MxcWdnU3I3NXQ5QnRvL3BYUTdUaHFuYjkwbmJVU0FkSHhp?=
- =?utf-8?B?ZjBLbCs0b1VYVjdQRWVaVTNJdmdxNjVkSFoxSFVJU0NqcUtEUzc2cDJyTDU1?=
- =?utf-8?B?Z1YvaitOY3RLazNnWXVLYzZKTlhpOGtCRWs0bnRxOUtTWlF6UTJzSU0xNHVh?=
- =?utf-8?B?SGNDMWJueDNSOVlTWDZCRDdvQmtvWGtoTTdLWm1hUlU5Y21OOVF5ajBDRENh?=
- =?utf-8?B?TlVNdDVUcWVldHQrSTFlK0dxMFVBbzlFcTNsbVpCbWVlb1NPaWN5bnBCMEpa?=
- =?utf-8?B?ODBiSHgvSVpPZnpNNWVWdXVpQ2xpT3B6c0sybWVTN2wweFMwUktBT2d5cVFE?=
- =?utf-8?B?YXZFWGJnb3FuMndBdTZtRFBkbW05VERVQWliOFhDR2ZRc2w1ZVlNYkFoZWRF?=
- =?utf-8?B?ak9JRzVsaW8xbk94NUdRaG80VE5YTTlWb0Q3Y0lKSDZGOUp2WWgyS0t5T25s?=
- =?utf-8?B?ZG5ZMlNBQ3BEVXMzdGVHL3pMTzdvMGMrc0RhbTZKRGJXQ09lMDBUZjh3YXdX?=
- =?utf-8?B?dU45NE1hcGJ4NW40eGNNQjh3MWdBT29wbFQyVzEwOXNhZUNSZHdYYWVPSXJw?=
- =?utf-8?B?T25sVXd0elRTRTBIZ3R1QURoRUhDWWRVdEFiSW05SGlJaDRzMlhOVHA0cFVs?=
- =?utf-8?B?Ylp1TGp0ZVkyb1ZYb3p1M1hvM0dqbGRQYWRFbUhJZTJFRFFZdVFMSmRReHNr?=
- =?utf-8?B?ODlBaVhNM0tqTTF2Q2llckpPUWZWNVU1c3FpUTYrRmFvV1lIV0ZqeTRKRnJZ?=
- =?utf-8?B?UGRCaFkrTnZTRUU5LzlGeTFpb2VBOTNxaCs0MGZCY1dUa0pKamhENGFnbENu?=
- =?utf-8?B?Sm03YnZxNVBya21VeCtKdWhKNVhOdWxZNnBBTzRvcDIyT0E3YXlDWGZTaVcz?=
- =?utf-8?B?UEVzMmlXQ2E2SVdBTW51cUpFNzVuRzNaTllYaEIyZEJQclFZcFM2SWtRZzRR?=
- =?utf-8?B?QVgyQnlSNEFCdzNrU05TL242eXFFQW5qeGNyUXhmczFzb3c4Ukpkd042Q0V4?=
- =?utf-8?B?NkNZb1dLZk5SRk8rY1RVWjR4MHo2S3g5bzNkay9EMTZXUHd0YWNoMkorcVVm?=
- =?utf-8?B?WmJGMmExSWpiWmJ1bWhBUGowU2lxSkEvYkw0a1hSVVFhOCs2eEkwVmN4anFk?=
- =?utf-8?B?eWJCVFpKOS9KUUxMdmszNHRyYkh6aWYrK25jcUJYakRCQWkwNzJ3b2xtZ2lZ?=
- =?utf-8?B?N0pwUFNvV1RSdGpLc0Vmd1ZDMjJnekdDSkpaSHlmb3ZPcUd5enZMakJVYnkr?=
- =?utf-8?B?VnFDSG9GTjFvc3E4UVROOUwxa1VPQmZBR2JBVjdLUWxMSzBvNHdydzEvUzZN?=
- =?utf-8?B?ci9QWUtId2RHejBrelNrbEtTdEhZdGRhOTZyVzJBR1c3bXJTaUZEY2FCcERh?=
- =?utf-8?B?cUhIQUpuamdoakRVZVBYcnNMVkpTTHhiZlVRcEx1YldOempKVnV3VmQ0ZW9l?=
- =?utf-8?B?b1dtVkpFRkU2Wk81YnpONXByd0ZSemRNOGVKS1JnNGJBaDZJMHMwMTdFRmg3?=
- =?utf-8?B?dTBkVTVid1pYQW5MNnJNK1Y1YWNTMGphWXZpWStqNjRqL2JzcjVlWVRHVzZJ?=
- =?utf-8?B?bitocnV2a3U0V3hRQ3BDYUJscnBZVVVyVnlOQnVUSWFocVVtTDJEdW44VWxm?=
- =?utf-8?B?MlZJYXNtekJNM3F0TWpqL0thV29ndHUzbndPWFl4VUZZdEtrVVpKNTRHU0RW?=
- =?utf-8?B?TnJsaC9pUEd2MStOREpjWkZ5cGpWOS95aE1PQXozcTJxV1ZCRkUxUXFoSHlS?=
- =?utf-8?B?QUI5LytSNkp0akNUeEZGYk4wdFlwNGZlMURmcHpBUEVZd2xHdS93K1lZemRa?=
- =?utf-8?B?d0swd3J1RUpORHVIVGNZamZLUVNvOHJNeERSa0ZlU0FUSWRWN1UxazFCQSsr?=
- =?utf-8?B?M2RDcUhUbEt3WUp5TFlHaXJZb3F2UTJURmRvUDJldHpVK2N5SnBtYkM2OC82?=
- =?utf-8?Q?fWa+4lnnOjfCc+jLDWuvk4Mqo?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2fe162d7-759c-4418-f31f-08dadef457e2
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6604.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2022 23:30:25.5473
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KgB1yCsRLd4A/3C7cNSwT2owwMafTG72bttiV5AGBbZHxZmN2xybypALReHFdlTnMLA/Gykn9kRRlm9mhljhqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6640
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 15 Dec 2022 18:31:26 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA14445EE6
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 15:31:24 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id g7so1478811qts.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 15:31:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Quy4xp0Nr4b9Vi+rHxNWIKjBfoywY5piFmXvp56GEDg=;
+        b=U7I/jU0mYhMGPbI33EouYrCOmhPrC86ydcTQj7Y2549mEFuIA3wF6hQ9WsjYLgChDR
+         cE7MVEEZlHP+cSyf1cY8khvTW2pByIrJXow9NY1z2d+N/uIFiA86Gya+diWdPOLcBgw6
+         WumH4ZbIMN1ueRFxohJhGl5SGcxkXdhmY1Cv8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Quy4xp0Nr4b9Vi+rHxNWIKjBfoywY5piFmXvp56GEDg=;
+        b=UQ9NXvF7NpSR6RL41mYsrDQjzBctH2e4/pae5qzfEXg+2kg5/MfTEFT5fDzFS0KbZV
+         PqCkwLyxL3hlfjz3OStvqcBANVli2yRJ1PT69NxrqaGIyBUPi/vj/yZUw3mxu7ngBivb
+         pVuEl0749DlXHzNoQCZc4g7OjyYTQICa9TWAekt03/1sOj4JpwftbrS5WkHXrbu35Vsy
+         x1Fhf/D6BN+vo4wJry2NooYCDFVIM2H0NhZVOFpMUx2CEULQAU9x5emPvLdwLrD+B9Ck
+         y+WJZPKH2T+Uk8tuMR16z4WIsCrlL1t0InGfYZryVIUhHttEsUHw31gPzQkF15SwFpQy
+         0PZw==
+X-Gm-Message-State: AFqh2kqcYF4+coIbHgvP1dZ0SlrS3c/uP2yYrP9A95TUDDs5FwOstdeL
+        Fnw0nJjoCYuH1SJiUhDFtfi2cw==
+X-Google-Smtp-Source: AMrXdXs1yPWWW3E/PgyJTpLW7j1XTWUV94mN2dyWeByFTLPP1Qo+8cMcTf4m0P7pjOwQ+/iKJepRNQ==
+X-Received: by 2002:ac8:7208:0:b0:3a7:f2b0:c4b7 with SMTP id a8-20020ac87208000000b003a7f2b0c4b7mr1225476qtp.57.1671147083630;
+        Thu, 15 Dec 2022 15:31:23 -0800 (PST)
+Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
+        by smtp.gmail.com with ESMTPSA id q17-20020ac87351000000b003a7fef41526sm236299qtp.77.2022.12.15.15.31.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 15:31:22 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH RFC 1/3] sched/pe: Exclude balance callback queuing during proxy()'s migrate
+Date:   Thu, 15 Dec 2022 18:31:12 -0500
+Message-Id: <51368AF7-A80D-45B5-8D0F-5956D4E002C4@joelfernandes.org>
+References: <CAEXW_YQdTgdoPbPWsf3zwvSdk=KPyPPEGG2m5aEWS4e5z9zo+Q@mail.gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel-team@android.com, John Stultz <jstultz@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Connor O'Brien <connoro@google.com>
+In-Reply-To: <CAEXW_YQdTgdoPbPWsf3zwvSdk=KPyPPEGG2m5aEWS4e5z9zo+Q@mail.gmail.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+X-Mailer: iPhone Mail (20B101)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/22 8:46 AM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Without the extra #include, this driver produces a build failure
-> in some configurations.
-> 
-> drivers/hte/hte-tegra194-test.c:96:34: error: array type has incomplete element type 'struct of_device_id'
->    96 | static const struct of_device_id tegra_hte_test_of_match[] = {
-> 
-> Fixes: 9a75a7cd03c9 ("hte: Add Tegra HTE test driver")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/hte/hte-tegra194-test.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/hte/hte-tegra194-test.c b/drivers/hte/hte-tegra194-test.c
-> index 5d776a185bd6..ce8c44e79221 100644
-> --- a/drivers/hte/hte-tegra194-test.c
-> +++ b/drivers/hte/hte-tegra194-test.c
-> @@ -6,6 +6,7 @@
->   */
->  
->  #include <linux/err.h>
-> +#include <linux/mod_devicetable.h>
->  #include <linux/module.h>
->  #include <linux/moduleparam.h>
->  #include <linux/interrupt.h>
 
-I will push this change from HTE tree. Thanks.
 
-Acked-by: Dipen Patel <dipenp@nvidia.com>
+> On Dec 15, 2022, at 6:12 PM, Joel Fernandes <joel@joelfernandes.org> wrote=
+:
+>=20
+> =EF=BB=BFOn Mon, Dec 12, 2022 at 9:39 AM Dietmar Eggemann
+> <dietmar.eggemann@arm.com> wrote:
+>>=20
+>> Hi Joel,
+>>=20
+>>> On 09/12/2022 17:52, Joel Fernandes wrote:
+>>> Hi Dietmar!
+>>>=20
+>>> On Fri, Dec 9, 2022 at 3:07 PM Dietmar Eggemann
+>>> <dietmar.eggemann@arm.com> wrote:
+>>>>=20
+>>>> On 23/11/2022 02:21, Joel Fernandes (Google) wrote:
+>>=20
+>> [...]
+>>=20
+>>>> You consider rt_mutex_setprio() and __sched_setscheduler() versus
+>>>> proxy() but what about all the other places like load_balance(),
+>>>> update_blocked_averages(),  __set_cpus_allowed_ptr() and many
+>>>> more in which we take the rq lock (via task_rq_lock() or
+>>>> rq_lock{_xxx}())?
+>>>=20
+>>> You are right. Those paths potentially need updates as well. Any
+>>=20
+>> IMHO, you would still have to lock the entire `queue->execute` (1)->(2)
+>> thing, like keeping the rq lock currently.
+>>=20
+>> __schedule()
+>>=20
+>>  pick_next_task()
+>>    pick_next_task_{rt/dl}()
+>>      set_next_task_{rt/dl}()
+>>       {rt/deadline}_queue_push_tasks()
+>>         queue_balance_callback() -->    (1)
+>>=20
+>>  proxy()                         ---    !!!
+>>=20
+>>  finish_lock_switch()
+>>    __balance_callbacks()         <--    (2)
+>>=20
+>>  __balance_callbacks(rq)         <--    (2)
+>=20
+> Instead of locking it throughout, I think we can keep my initial patch
+> and just execute the balance callbacks in proxy() before dropping the
+> rq lock. I *think* that will make it work properly, but I could be
+> missing something.
+>=20
+> Anyway I see the issue you bring up, I took care of balance CBs queued
+> from *other CPUs* while the rq lock is dropped, but the current CPU
+> executing proxy() could itself have queued balance callbacks. Dropping
+> the rq lock then causes other CPUs to see the proxy() CPU's balance
+> CBs in the callback list.
+>=20
+> Anyway I will try the above and get back to you. Thanks so much again
+> for the insights. Will test as you suggested below.
+
+Another option is to dequeue them before dropping the rq lock, and then requ=
+eue them later. Again not sure if that=E2=80=99s a can of worms. But the fir=
+st option appears to me safer in theory. Anyway, it looks like we have a cou=
+ple of options on the table here for me to try.
+
+ - Joel=20
+
+
+>=20
+> Thanks,
+>=20
+> - Joel
+>=20
+>=20
+>> Otherwise. something like this could happen:
+>>=20
+>> With `x-x` : smp_processor_id()-cpu_of(rq)
+>>=20
+>> lock_torture_wr-1745 [003] 338.270963: queue_balance_callback: 3-3->
+>> lock_torture_wr-1745 [003] 338.270965: queue_balance_callback: 3-3<-
+>>            cat-1726 [001] 338.270969: __schedule: proxy() 1-1->
+>> lock_torture_wr-1745 [003] 338.270971: __schedule: proxy() 3-3->
+>>            cat-1726 [001] 338.270972: __schedule: proxy() 1-1<-
+>> lock_torture_wr-1745 [003] 338.270979: __schedule: proxy() 3-3<-
+>>         <idle>-0    [002] 338.270981: __schedule: proxy() 2-2->
+>>         <idle>-0    [002] 338.270984: __schedule: proxy() 2-2<-
+>> lock_torture_wr-1745 [003] 338.270985: __schedule: proxy() 3-3->
+>>    migration/4-34   [004] 338.270989: active_load_balance_cpu_stop: rq_pi=
+n_lock() 4-3 <-- ! cb on CPU3 still enqueued
+>>=20
+>>> chance you could post stack traces or logs of those issues, just in
+>>> case they have new nuggets of information? If you don't have them,
+>>> don't bother, I'll reproduce it.
+>>=20
+>> insmod /lib/modules/torture.ko random_shuffle=3D1 lock_torture_writer_fif=
+o=3D1
+>> insmod /lib/modules/locktorture.ko torture_type=3Dmutex_lock nlocks=3D3
+>>=20
+>> [  447.046916] rq->balance_callback && rq->balance_callback !=3D &balance=
+_push_callback
+>> [  447.046926] WARNING: CPU: 1 PID: 1648 at kernel/sched/sched.h:1583 tas=
+k_rq_lock+0x148/0x170
+>> [  447.062914] Modules linked in: locktorture(O) torture(O)
+>> [  447.068254] CPU: 1 PID: 1648 Comm: torture_shuffle Tainted: G W  O 6.1=
+.0-rc2-00036-g397ce37b37a8-dirty #203
+>> [  447.079168] Hardware name: ARM Juno development board (r0) (DT)
+>> [  447.085106] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYP=
+E=3D--)
+>> [  447.092095] pc : task_rq_lock+0x148/0x170
+>> [  447.096121] lr : task_rq_lock+0x148/0x170
+>> [  447.100146] sp : ffff80000b85bd30
+>> ...
+>> [  447.175138] Call trace:
+>> [  447.177589]  task_rq_lock+0x148/0x170
+>> [  447.181267]  __set_cpus_allowed_ptr+0x34/0xc0
+>> [  447.185643]  set_cpus_allowed_ptr+0x30/0x60
+>> [  447.189843]  torture_shuffle+0x158/0x224 [torture]
+>> [  447.194666]  kthread+0x10c/0x110
+>> [  447.197906]  ret_from_fork+0x10/0x20
+>> ...
+>> [  447.233560] ---[ end trace 0000000000000000 ]---
+>>=20
+>>=20
+>> [  446.542532] ------------[ cut here ]------------
+>> [  446.553224] rq->balance_callback && rq->balance_callback !=3D &balance=
+_push_callback
+>> [  446.553243] WARNING: CPU: 3 PID: 0 at kernel/sched/sched.h:1583 update=
+_blocked_averages+0x784/0x78c
+>> [  446.576089] Modules linked in: locktorture(O+) torture(O)
+>> [  446.581551] CPU: 3 PID: 0 Comm: swapper/3 Tainted: G O 6.1.0-rc2-00036=
+-g397ce37b37a8-dirty #203
+>> [  446.591723] Hardware name: ARM Juno development board (r0) (DT)
+>> [  446.597691] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYP=
+E=3D--)
+>> [  446.604712] pc : update_blocked_averages+0x784/0x78c
+>> [  446.609723] lr : update_blocked_averages+0x784/0x78c
+>> [  446.614733] sp : ffff80000b403b70
+>> ...
+>> [  446.690142] Call trace:
+>> [  446.692609]  update_blocked_averages+0x784/0x78c
+>> [  446.697270]  newidle_balance+0x184/0x5f0
+>> [  446.701232]  pick_next_task_fair+0x2c/0x500
+>> [  446.705456]  __schedule+0x1d4/0x1084
+>> [  446.709070]  schedule_idle+0x28/0x4c
+>> [  446.712682]  do_idle+0x1d4/0x2d0
+>> [  446.715946]  cpu_startup_entry+0x28/0x30
+>> [  446.719909]  secondary_start_kernel+0x138/0x15c
+>> [  446.724486]  __secondary_switched+0xb0/0xb4
+>> ...
+>> [  446.765848] ---[ end trace 0000000000000000 ]---
+>>=20
+>>=20
+>> [   95.091675] ------------[ cut here ]------------
+>> [   95.096301] rq->balance_callback && rq->balance_callback !=3D &balance=
+_push_callback
+>> [   95.096322] WARNING: CPU: 5 PID: 39 at kernel/sched/sched.h:1583 load_=
+balance+0x644/0xdc0
+>> [   95.103135] mutex_lock-torture: Creating lock_torture_writer task
+>> [   95.103238] mutex_lock-torture: lock_torture_writer task started
+>> [   95.110692] Modules linked in: locktorture(O+) torture(O)
+>> [   95.136699] CPU: 5 PID: 39 Comm: migration/5 Tainted: G O 6.1.0-rc2-00=
+036-g397ce37b37a8-dirty #204
+>> [   95.147137] Hardware name: ARM Juno development board (r0) (DT)
+>> [   95.153105] Stopper: 0x0 <- 0x0
+>> [   95.156282] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYP=
+E=3D--)
+>> [   95.163306] pc : load_balance+0x644/0xdc0
+>> [   95.167356] lr : load_balance+0x644/0xdc0
+>> [   95.171405] sp : ffff80000b4cbaf0
+>> ...
+>> [   95.246833] Call trace:
+>> [   95.249300]  load_balance+0x644/0xdc0
+>> [   95.253000]  newidle_balance+0x290/0x6f0
+>> [   95.256963]  pick_next_task_fair+0x2c/0x510
+>> [   95.261188]  __schedule+0x1d4/0x1084
+>> [   95.264801]  schedule+0x64/0x11c
+>> [   95.268063]  smpboot_thread_fn+0xa4/0x270
+>> [   95.272115]  kthread+0x10c/0x110
+>> [   95.275375]  ret_from_fork+0x10/0x20
+>> ...
+>> [   95.316477] ---[ end trace 0000000000000000 ]---
+>>=20
+>>=20
+>> [  134.893379] ------------[ cut here ]------------
+>> [  134.898066] rq->balance_callback && rq->balance_callback !=3D &balance=
+_push_callback
+>> [  134.898088] WARNING: CPU: 4 PID: 0 at kernel/sched/sched.h:1583 sched_=
+rt_period_timer+0x1dc/0x3f0
+>> [  134.914683] Modules linked in: locktorture(O) torture(O)
+>> [  134.920059] CPU: 4 PID: 0 Comm: swapper/4 Tainted: G W  O 6.1.0-rc2-00=
+036-g397ce37b37a8-dirty #204
+>> [  134.930235] Hardware name: ARM Juno development board (r0) (DT)
+>> [  134.936205] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYP=
+E=3D--)
+>> [  134.943229] pc : sched_rt_period_timer+0x1dc/0x3f0
+>> [  134.948069] lr : sched_rt_period_timer+0x1dc/0x3f0
+>> [  134.952908] sp : ffff80000b2cbde0
+>> ...
+>> [  135.028342] Call trace:
+>> [  135.030810]  sched_rt_period_timer+0x1dc/0x3f0
+>> [  135.035300]  __hrtimer_run_queues+0x184/0x504
+>> [  135.039700]  hrtimer_interrupt+0xe8/0x244
+>> [  135.043749]  arch_timer_handler_phys+0x2c/0x44
+>> [  135.048239]  handle_percpu_devid_irq+0x8c/0x150
+>> [  135.052815]  generic_handle_domain_irq+0x2c/0x44
+>> [  135.057480]  gic_handle_irq+0x44/0xc4
+>> [  135.061180]  call_on_irq_stack+0x2c/0x5c
+>> [  135.065143]  do_interrupt_handler+0x80/0x84
+>> ...
+>> [  135.141122] ---[ end trace 0000000000000000 ]---
+>>=20
+>>>> With your changes to locktorture in {2-3}/3 you still run CFS
+>>>> lock_torture_writers but you should see the issue popping up
+>>>> in __set_cpus_allowed_ptr() (from torture_shuffle()) for example.
+>>>>=20
+>>>> Tried with:
+>>>>=20
+>>>> insmod /lib/modules/torture.ko
+>>>> insmod /lib/modules/locktorture.ko torture_type=3Dmutex_lock rt_boost=3D=
+1 rt_boost_factor=3D1 nlocks=3D3
+>>>>                                                                      ^^=
+^^^^^^^^^^^^^^^
+>>>>=20
+>>>> When changing all lock_torture_writer's to FIFO it becomes even
+>>>> more visible.
+>>>=20
+>>> Ok, thank you, I will make it more aggressively set to RT. The
+>>> previous locktorture was setting RT once every minute or so, at least
+>>> now that is down to 10 seconds ;-). But as you highlight with the
+>>> locktorture diff below, it needs to go further.
+>>=20
+>> Yeah, the test env is more aggressive this way and you spot potential
+>> issues quicker.
+>>=20
+>>> Anyway, this is going to be a nice holiday/Christmas project for me,
+>>> so thank you in advance for the holiday gift  :-)  ^_^
+>>=20
+>> Enjoy ;-)
