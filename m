@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CCC64E261
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 21:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 793D164E262
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 21:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiLOUcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 15:32:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36940 "EHLO
+        id S229728AbiLOUd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 15:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiLOUcr (ORCPT
+        with ESMTP id S229460AbiLOUdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 15:32:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B467D25C8;
-        Thu, 15 Dec 2022 12:32:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B23AB81AFA;
-        Thu, 15 Dec 2022 20:32:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E89BC433F1;
-        Thu, 15 Dec 2022 20:32:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671136362;
-        bh=y/3TLTR8alCyKtmxTcEVJqr0AUUfHrH/2E1FxBjfCdo=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=MidHzEP0HrIzPA5nOA5tEymalTfFPQ8rtCZBPbPsxQ0sXSNi0NeuFkVuAkElJLf+I
-         QWvT4huoJd4/6DQKUzl8b8wyC5kreTGxbF+AQxUL+98CUJFkChfll27/CEbE04rYJA
-         0tEn+neLFvJxZF3K8U+v9wwsAymXVVU9SgnlIyklnmuoxEUpv41Vq4vf5n2Ozo81Wy
-         9i+KZx2cMs8wVC0hUOpHsMo8aYeJNim/VpAkuXQOR9TBUKO9yF3AeyA9I5ei0OQEU8
-         UnkSzaIMu/PlYRb76qnZPbFyDfg57BArPoJ7O66lL4/07qCBENx+2LYJR1Z/szkYUg
-         KrHV0h6AlHX3A==
-Date:   Thu, 15 Dec 2022 12:32:06 -0800
-From:   Conor Dooley <conor@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>, palmer@dabbelt.com,
-        Arnd Bergmann <arnd@arndb.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Guo Ren <guoren@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v5_6/6=5D_soc=3A_renesas=3A_Add?= =?US-ASCII?Q?_L2_cache_management_for_RZ/Five_SoC?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAMuHMdUO7iFvh73u+m=EXYyxyePXHahJ=OVwQHdt0ap4vWDG4A@mail.gmail.com>
-References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221212115505.36770-7-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdUCkCyLOXbQEJyc7S2F08=ftNtPcEztRN3JWJv_FPmAVw@mail.gmail.com> <CA+V-a8vD=SOb6gPOwdPUE=kHeqa+oo2L-rbaW8zGjvw7YyQsqg@mail.gmail.com> <CAMuHMdWX4Yd52=Jv8kABtn+1B1V=dC2iXVZ81gNZBWNu4hb_3w@mail.gmail.com> <CA+V-a8t3+zzQ4yPftsAa51rkMGHr45NhMO4_2WmZ9BGg0wuQvw@mail.gmail.com> <Y5t7a2oZ64McjSSn@dizzy> <CAMuHMdUO7iFvh73u+m=EXYyxyePXHahJ=OVwQHdt0ap4vWDG4A@mail.gmail.com>
-Message-ID: <88D71672-7A1D-422C-97E8-5046FB1B48CD@kernel.org>
+        Thu, 15 Dec 2022 15:33:54 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4171C12D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:33:53 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id g7so270345lfv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:33:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8qqlXfGIzU/VNt4feEbI0o+f3b02zt3V3jQlCWIaHak=;
+        b=ghojc+OzDLr88cTONimsYx13zSlU8yBoxGyDHdCA3Zs5HzhVUhXT1ZdOGnCdRKxTp+
+         ibvguzA3sHLg4u60hUtR/+lU4VC5yUCKEU2YBTBl8wjdiY2xclHa7p2N+794gTdStd35
+         +cwO5EFx+f0aOKBx1v+4hbHJIFR2uArNi3fJc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8qqlXfGIzU/VNt4feEbI0o+f3b02zt3V3jQlCWIaHak=;
+        b=jlTURYvWIbamRW/0DUkU8Vp3vk0wSrUJNlhCJ94CpcqeByriZix6PslXO8iH69IO9V
+         xn8hMReS6pDfhvc/5SiX1M0utTRen0yipukraCMFpM0wGQ+aKyAK3x07/YtkFgQBUhq4
+         KDpML4qPdRq8xmkdOBRWY8ZYIT3SMMBZj5l0vFuRuESJxR3GQUND79xZJd9N/O83GX4R
+         LEuhHBhU2uKSXJs5PDGJ84WLnpVsrUcJC+bYO/PrNmuq9FvI9x0rknL2+XUsdWAlcTbT
+         y7lmL+B5hMhIrM7oatq3U0H5M1oalgSHST7izYb7hH237wwb177eDXwm02ROORl/qEen
+         UVjw==
+X-Gm-Message-State: ANoB5pnK4A1RacuRMJ1D3iLEBstr9ENPbacLolS+NYMB4aj9OJnNYh87
+        ugqYz7iUAM4oxvJJpLJDtSm6vv7jtwuc1l7V12kYVQ==
+X-Google-Smtp-Source: AA0mqf550WKtC84YH7YSU0aIML9lP/X0h56FM5X4YQztqAbrrSH+oCgfDzKKymm7ExPii8QF8BdTtQwkFI+mER59z5U=
+X-Received: by 2002:a05:6512:224c:b0:4b5:ad89:8174 with SMTP id
+ i12-20020a056512224c00b004b5ad898174mr2306563lfu.84.1671136431317; Thu, 15
+ Dec 2022 12:33:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20221214191355.GA2596199@paulmck-ThinkPad-P17-Gen-1>
+ <20221215165452.GA1957735@lothringen> <20221215170834.GH4001@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YTSW9kr3DsJm6hTQ0FfwVbVjzDa8=7H29+ysD10ZCbnHA@mail.gmail.com>
+ <20221215195854.GL4001@paulmck-ThinkPad-P17-Gen-1> <CAEXW_YSnwXA6Bn3Av3O0Tm=AnqKULGZJBA3Z7ZaLE814XABU6g@mail.gmail.com>
+In-Reply-To: <CAEXW_YSnwXA6Bn3Av3O0Tm=AnqKULGZJBA3Z7ZaLE814XABU6g@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 15 Dec 2022 15:33:39 -0500
+Message-ID: <CAEXW_YSGWgkesu7xz8HXVmH82=uN1ESUdPs2Qtkv4isNjGy-Ww@mail.gmail.com>
+Subject: Re: [PATCH RFC] srcu: Yet more detail for srcu_readers_active_idx_check()
+ comments
+To:     paulmck@kernel.org
+Cc:     Frederic Weisbecker <frederic@kernel.org>, boqun.feng@gmail.com,
+        neeraj.iitr10@gmail.com, urezki@gmail.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,147 +68,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 15 December 2022 12:17:38 GMT-08:00, Geert Uytterhoeven <geert@linux-m6=
-8k=2Eorg> wrote:
->Hi Conor,
+On Thu, Dec 15, 2022 at 3:03 PM Joel Fernandes <joel@joelfernandes.org> wrote:
 >
->On Thu, Dec 15, 2022 at 8:54 PM Conor Dooley <conor@kernel=2Eorg> wrote:
->> On Thu, Dec 15, 2022 at 05:46:42PM +0000, Lad, Prabhakar wrote:
->> > On Thu, Dec 15, 2022 at 11:10 AM Geert Uytterhoeven
->> > <geert@linux-m68k=2Eorg> wrote:
->> > > On Thu, Dec 15, 2022 at 12:06 PM Lad, Prabhakar
->> > > <prabhakar=2Ecsengg@gmail=2Ecom> wrote:
->> > > > On Thu, Dec 15, 2022 at 10:36 AM Geert Uytterhoeven
->> > > > <geert@linux-m68k=2Eorg> wrote:
->> > > > > On Mon, Dec 12, 2022 at 12:58 PM Prabhakar <prabhakar=2Ecsengg@=
-gmail=2Ecom> wrote:
->> > > > > > From: Lad Prabhakar <prabhakar=2Emahadev-lad=2Erj@bp=2Erenesa=
-s=2Ecom>
->> > > > > >
->> > > > > > I/O Coherence Port (IOCP) provides an AXI interface for conne=
-cting
->> > > > > > external non-caching masters, such as DMA controllers=2E The =
-accesses
->> > > > > > from IOCP are coherent with D-Caches and L2 Cache=2E
->> > > > > >
->> > > > > > IOCP is a specification option and is disabled on the Renesas=
- RZ/Five
->> > > > > > SoC due to this reason IP blocks using DMA will fail=2E
->> > > > > >
->> > > > > > The Andes AX45MP core has a Programmable Physical Memory Attr=
-ibutes (PMA)
->> > > > > > block that allows dynamic adjustment of memory attributes in =
-the runtime=2E
->> > > > > > It contains a configurable amount of PMA entries implemented =
-as CSR
->> > > > > > registers to control the attributes of memory locations in in=
-terest=2E
->> > > > > > Below are the memory attributes supported:
->> > > > > > * Device, Non-bufferable
->> > > > > > * Device, bufferable
->> > > > > > * Memory, Non-cacheable, Non-bufferable
->> > > > > > * Memory, Non-cacheable, Bufferable
->> > > > > > * Memory, Write-back, No-allocate
->> > > > > > * Memory, Write-back, Read-allocate
->> > > > > > * Memory, Write-back, Write-allocate
->> > > > > > * Memory, Write-back, Read and Write-allocate
->> > > > > >
->> > > > > > More info about PMA (section 10=2E3):
->> > > > > > Link: http://www=2Eandestech=2Ecom/wp-content/uploads/AX45MP-=
-1C-Rev=2E-5=2E0=2E0-Datasheet=2Epdf
->> > > > > >
->> > > > > > As a workaround for SoCs with IOCP disabled CMO needs to be h=
-andled by
->> > > > > > software=2E Firstly OpenSBI configures the memory region as
->> > > > > > "Memory, Non-cacheable, Bufferable" and passes this region as=
- a global
->> > > > > > shared dma pool as a DT node=2E With DMA_GLOBAL_POOL enabled =
-all DMA
->> > > > > > allocations happen from this region and synchronization callb=
-acks are
->> > > > > > implemented to synchronize when doing DMA transactions=2E
->> > > > > >
->> > > > > > Example PMA region passes as a DT node from OpenSBI:
->> > > > > >     reserved-memory {
->> > > > > >         #address-cells =3D <2>;
->> > > > > >         #size-cells =3D <2>;
->> > > > > >         ranges;
->> > > > > >
->> > > > > >         pma_resv0@58000000 {
->> > > > > >             compatible =3D "shared-dma-pool";
->> > > > > >             reg =3D <0x0 0x58000000 0x0 0x08000000>;
->> > > > > >             no-map;
->> > > > > >             linux,dma-default;
->> > > > > >         };
->> > > > > >     };
->> > > > > >
->> > > > > > Signed-off-by: Lad Prabhakar <prabhakar=2Emahadev-lad=2Erj@bp=
-=2Erenesas=2Ecom>
->> > > > >
->> > > > > Thanks for your patch!
->> > > > >
->> > > > > >  arch/riscv/include/asm/cacheflush=2Eh       |   8 +
->> > > > > >  arch/riscv/include/asm/errata_list=2Eh      |  28 ++-
->> > > > > >  drivers/soc/renesas/Kconfig               |   6 +
->> > > > > >  drivers/soc/renesas/Makefile              |   2 +
->> > > > > >  drivers/soc/renesas/rzfive/Kconfig        |   6 +
->> > > > > >  drivers/soc/renesas/rzfive/Makefile       |   3 +
->> > > > > >  drivers/soc/renesas/rzfive/ax45mp_cache=2Ec | 256 ++++++++++=
-++++++++++++
->> > > > >
->> > > > > Given this touches arch/riscv/include/asm/, I don't think the
->> > > > > code belongs under drivers/soc/renesas/=2E
->> > > > >
->> > > > Ok=2E Do you have any suggestions on where you want me to put thi=
-s code?
->> > >
->> > > As it plugs into core riscv functionality, I think it should be und=
-er
->> > > arch/riscv/=2E
->> > > if the RISC-V maintainers object to that, another option is
->> > > drivers/soc/andestech/ or (new) drivers/cache/
->> > >
->> > RISC-V maintainers had already made it clear to not to include vendor
->> > specific stuff in the arch/riscv folder, so I'll consider putting thi=
-s
->> > into drivers/cache/ folder to sync with the bindings=2E
->> >
->> > Conor/Palmer - do you have any objections/suggestions?
->>
->> I'm not its maintainer so sorta moot what I say, but having drivers in
->> arch/riscv makes little sense to me=2E=2E
->> Putting stuff in drivers/cache does sound like a good idea since the
->> binding is going there too=2E
->>
->> The SiFive ccache driver is in drivers/soc and it was suggested to me
->> this week that there's likely going to be a second SiFive cache driver
->> at some point in the near future=2E Plus Microchip are going to have to
->> add cache management stuff to the existing SiFive ccache driver=2E
->> Having them be their own thing makes sense in my mind - especially sinc=
-e
->> they're not tied to SoCs sold by Andes or SiFive=2E
->>
->> I had a quick, and I mean *quick* look through other soc drivers to see
->> if there were any other cache controller drivers but nothing stood out
->> to me=2E Maybe someone else has more of a clue there=2E Ditto for misc,=
- had
->> a look but nothing seemed obvious=2E
+> Hi Paul,
 >
->Usually they're under arch/:
->$ git ls-files -- "arch/*cache*" | wc -l
->148
->$ git ls-files -- "drivers/*cache*" | wc -l
->63
+> On Thu, Dec 15, 2022 at 2:58 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> [...]
+> > > If the first read section's srcu_read_unlock() and its corresponding
+> > > smp_mb()  happened before the flip, then the increment of old idx
+> > > would happen only once. The next srcu_read_lock() will read the new
+> > > index. If the srcu_read_unlock() and it's corresponding smp_mb()
+> > > happened after the flip, the old_idx will be sampled again and can be
+> > > incremented twice. So it depends on how the flip races with
+> > > srcu_read_unlock().
+> >
+> > I do understand that a number of people like reasoning about
+> > memory-barrier ordering, courtesy of the sequentially consistent portions
+> > of the C and C++ memory models, but thinking in terms of the accesses
+> > surrounding the memory barriers has been far less error-prone.
+>
+> Sure, but we are already talking in terms of the access to idx right?
+> That's what we're saying is visible by memory barriers and we are
+> trying to reason here about the ordering (flip does the write to idx
+> and followed by smp_mb(), and there is corresponding read of idx on
+> the srcu_read_lock() side. So we are indeed talking in terms of
+> access, but let me know if I missed something.
+>
+> > > Also, since this is all hard to reason about I started making some
+> > > diagrams, LOL. For your amusement, here is why need to scan both idx
+> > > during grace period detection: https://i.imgur.com/jz4bNKd.png
+> >
+> > Nice!
+> >
+> > I suggest placing a gap between GP 2 and GP 3.  That way, you can make it
+> > very clear that Reader 1's critical section starts after the end of GP 2
+> > (thus clearly never blocking GP 2) and before GP 3 (thus possibly having
+> > a reference to some data that is going to be freed at the end of GP 3).
+> >
+> > I also suggest coloring Reader 1 red and Reader 2 green, given that the
+> > color red generally indicates danger.
+>
+> Thanks for these suggestions! I will make the update. I am planning to
+> make a number of diagrams for other scenarios as well, as it helps
+> visualize. Google drawing is nice for these. I am happy to share these
+> with you all if there is interest :).
 
-That's for checking what I could not!
-Don't think my roaming data would cover a kernel clone!
+I made these updates, please see: https://i.imgur.com/hoKLvtt.png
 
->E=2Eg=2E arch/arm/mm/cache-l2x0=2Ec=2E
+Feel free to use the image for any purpose and thanks ;-)
 
-If that's where they usually go, is there a real reason not to do the same=
- here?
-Whatever about a limited set of riscv cache drivers, moving all the other =
-ones around to a new directory doesnt seem like a great idea=2E
-
+ - Joel
