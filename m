@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55AA164E0BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D6D64E0CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiLOS1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 13:27:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
+        id S229680AbiLOSaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 13:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiLOS1I (ORCPT
+        with ESMTP id S230520AbiLOS31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 13:27:08 -0500
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D3349B5B;
-        Thu, 15 Dec 2022 10:27:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=jqMEDeWBrjVZzXSeVS/jldK/d6kBDhQQz9ZteGOroFI=; b=krHv2dKaq7UsdCKaakpvQE8GzR
-        7nqDl2+YWnjcKiNTkSxM0eNtkVREAQN6rtZVejCbT1uggjHWW8w/CmUJgaPMHzfo4sNosLxcXdrjN
-        tb6sWy7OE5zMOqvMlMRiEstYfNcFGV+9GJ9X3cSJBt6Qs+TMbrTUHdIA6EqEWIoUwZEb+fqQUSqa0
-        AqKhGFyPZ9vMrpr/SZWpJAS/tvSkYVqsLJQHP0CzQ00cvRvT1yLTE7vEpjpja8mdi83UDzJpOPYjX
-        cjmjtZBrBkFv1OpGEljISLnWggy1RSY+TRuKjZnkcrC6Rwm5Hn01lrn74cIrpSeoi7OkUsoo7LUOP
-        a+dk/bYg==;
-Received: from s0106ac1f6bb1ecac.cg.shawcable.net ([70.73.163.230] helo=[192.168.11.155])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1p5swU-0094Mo-I5; Thu, 15 Dec 2022 11:26:51 -0700
-Message-ID: <f4f1f1b1-018f-dbee-eeba-ff84dfca899d@deltatee.com>
-Date:   Thu, 15 Dec 2022 11:26:49 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Kurt Schwemmer <kurt.schwemmer@microsemi.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20221215182140.129559-1-helgaas@kernel.org>
- <20221215182140.129559-2-helgaas@kernel.org>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <20221215182140.129559-2-helgaas@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.73.163.230
-X-SA-Exim-Rcpt-To: helgaas@kernel.org, kurt.schwemmer@microsemi.com, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, bhelgaas@google.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+        Thu, 15 Dec 2022 13:29:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654524876F;
+        Thu, 15 Dec 2022 10:28:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14A8EB81B0B;
+        Thu, 15 Dec 2022 18:28:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A6AA8C433D2;
+        Thu, 15 Dec 2022 18:28:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671128923;
+        bh=HO6pevyUao/aOCVkxHh+lrrFVCIdD2FxNhXwF4ECUmI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=dJvlzrPkN45yJyGGEzXanv277j5S64bdeAYcm+QaPeHocRYOkqNJ4e2jtskIqC7+k
+         FpuOIU3ZShIotkO4qGOvFsGrqDeG5o2mpizM0LIJyN/t3gBtPCWZCShkNPDDZ/6x24
+         X7ZGWXzNJcJ/oS5iPvSJB5KYBDv9jhkhVds5n0XHHKtX/A6E9n05kReu4cF50x4PuY
+         /FxKkTa7UziQnZv5U33HiuG33vgq6lI0uTtXsDA8n++3Ekywrff1B/UGcjUOebINzY
+         N3Y1RYRidk7DVUrzsJWUdoGn3U9VTri0IdohjYP86cOWeH4myCNBFXvrWER8m0ynZK
+         NgI6FFTLPhngA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9714BC197B4;
+        Thu, 15 Dec 2022 18:28:43 +0000 (UTC)
+Subject: Re: [GIT PULL] ksmbd server fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAH2r5mvfH2Kn_h2z+NsCoOdN8eBNw9_6=fFmgPvFOejwnCJMuA@mail.gmail.com>
+References: <CAH2r5mvfH2Kn_h2z+NsCoOdN8eBNw9_6=fFmgPvFOejwnCJMuA@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAH2r5mvfH2Kn_h2z+NsCoOdN8eBNw9_6=fFmgPvFOejwnCJMuA@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.samba.org/ksmbd.git tags/6.2-rc-ksmbd-server-fixes
+X-PR-Tracked-Commit-Id: 72ee45fd46d0d3578c4e6046f66fae3218543ce3
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 504a73d46bad8964be2cdaa63a2bedaef198ea3b
+Message-Id: <167112892361.20649.11546129183422634830.pr-tracker-bot@kernel.org>
+Date:   Thu, 15 Dec 2022 18:28:43 +0000
+To:     Steve French <smfrench@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH 1/2] PCI: switchtec: Simplify switchtec_dma_mrpc_isr()
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The pull request you sent on Wed, 14 Dec 2022 21:18:14 -0600:
 
+> git://git.samba.org/ksmbd.git tags/6.2-rc-ksmbd-server-fixes
 
-On 2022-12-15 11:21, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> The "ret" variable in switchtec_dma_mrpc_isr() is superfluous.  Remove it
-> and just return the value.  No functional change intended.
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/504a73d46bad8964be2cdaa63a2bedaef198ea3b
 
-Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+Thank you!
 
-Thanks,
-
-Logan
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
