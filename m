@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE8B64E1C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:28:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D25AA64E1C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiLOT2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 14:28:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
+        id S230265AbiLOT2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 14:28:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiLOT2Z (ORCPT
+        with ESMTP id S230024AbiLOT20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 14:28:25 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EE547310;
-        Thu, 15 Dec 2022 11:28:24 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so122588pjj.4;
-        Thu, 15 Dec 2022 11:28:24 -0800 (PST)
+        Thu, 15 Dec 2022 14:28:26 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E015A47310;
+        Thu, 15 Dec 2022 11:28:25 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id d7so1408pll.9;
+        Thu, 15 Dec 2022 11:28:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yJtu96UaLUbxmrQaw47zeCnhCw3DINxkl6YWOTS0s0A=;
-        b=qhgx6fDuh1uq//jERerz82Du7xXn0/9GhYjPUsjvIF1t/xm7f1Lbka9VnZKKN+VxBp
-         cyKtsGYFN4TR/bn23IlUg/8yMNINkiqCVjUC0AWbQCjaK3ml6Flq8PlNoDgVyXtXkhVq
-         v5acFGQ9D2WjVMuQ8pyeiwCwNIu2TLY7NLgF1tBdxT1kIRhbw5pSJUQDcp6+XnF3HXZH
-         T07wdy/kEZFErte0xjbrzXVZCi1bizWWPc5i1rer5w2FX0Dwcfc3WiMWtmUOmbuRP6AI
-         fFm4oPl7US12fKGCxeoDIX39wk7knGh8K2RPLkvkBu1UjduppoBwc3PYvQaBof4B7kGL
-         UrRw==
+        bh=PmvCh9yWugB6d0aTmM0VqqANfCxzP4Vie55qPJtB7BM=;
+        b=CeLAmgOiXHIHJn83Qhm5ixy1ObxMdDGRJ4N7S+Zg1RY0kHpTS85+DNblRtc3BhUPZl
+         m1V9YMC5Z+MCEYu1fiNjjpzZUdzLSb6EFz+USZtexhudhKn5jgM8y4qiBM2ZPv4SfMOU
+         gxfgxDlGPbnRBprjU8nBze+xAloxq5caTp+RufjQfwQ0ZJmyQpW4l8HgUczdUwq8nECy
+         K4ZsjIDeNuYH0u11lFU+yyEg5nz3x/r0oUC/Ul0wvhEdyquwGNbHBrawfWC1y/d2uA2x
+         WpH7uEQI1eqQMsrq+ENkq0YwaCxHl37umCz/GaYlXhBRvH7g5A8mfYUlRXMbOYJwQ50m
+         1Dsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=yJtu96UaLUbxmrQaw47zeCnhCw3DINxkl6YWOTS0s0A=;
-        b=HYocK/IPKds966oN+WWal8IkiBg6pwkfliLGjrCWUaUluwntnkjGx5WbVZOEeqj6Np
-         TIU1AH2kZjgjRavnvPo6i2R9S21VH9vFSWwpSYffI5qpybYGLDvBBUsiGPPAq/ekGzFh
-         vCzq1BISzW8Kr6PCC9vr3m4FX8Qv2VjjVmK000nnvfh21hJ21GOm1ZNnzNCAkNxHkyeq
-         y08XayEgrW56IHtv4Ix+MM4ptYX2FcH1E+aasx7U7QRvh4j0NX89Tbo2LYRxpMh2p61A
-         lMiL155eGRlItg81J0Uzeqzv1CC2IxfM2DDM08uIvX7chSCdx4mOJY7ry1PBR5hleO4e
-         zLIg==
-X-Gm-Message-State: ANoB5pnm5pFaMd4A7xqYskuoEov8vgC734MbMkEzIwx9A5+9zh1rIsL4
-        jD89+a3eRPmYFC4erTovRdKnKXY8kT8=
-X-Google-Smtp-Source: AA0mqf6w64z3r7k1xNh6B1RM4typbb1MMllIiAWQ0juBiASb4wgSyqo809egPFI3anEFOc+DF1zJEw==
-X-Received: by 2002:a17:90a:9b0b:b0:219:28b7:c580 with SMTP id f11-20020a17090a9b0b00b0021928b7c580mr29605270pjp.22.1671132504206;
-        Thu, 15 Dec 2022 11:28:24 -0800 (PST)
+        bh=PmvCh9yWugB6d0aTmM0VqqANfCxzP4Vie55qPJtB7BM=;
+        b=uF0KJBtRoNfsnyvNVQXlP9fN58AZvZ7u7ggvPPS8fdSG87UtXKyZinx0VLp5w5rZZj
+         WTrlro+04h49tbm5aBPtVLYXYYFvlyL3i2qJXL+3O8ynpDV3xjUgzPdU7T/UeVoczN2y
+         mWr64fCID/1q2Xt7gt/s1mDuDLqt5WB++JImVzw/IcfapjXddj3m2PZzTcRgEIp1bizV
+         z47QmPKmb/Df0ddtdTt83ZIpx0ceYXzO5W8/Zm2FfhizjIUxfvoIax3879giERUd/RTq
+         YHfV/AFwukExBlnXQquee3Bl/646Riq3hycN+/kRIiY+c/UCiHrCpRIVYw/EQvKcN6P/
+         cLrw==
+X-Gm-Message-State: ANoB5plIfaUtXMXQqXaN9mYDdXs/Zc1KQyoJKriNGxmTjz4G33QX7RcT
+        0sxFcDc4d6Oy5OCrgzH9pV0=
+X-Google-Smtp-Source: AA0mqf4wtz2yafBiL61XmWmsglECRXYgg003yapMm9cTEisqZTK2L7YZY2iN9FEs9nV39FaG20d0MQ==
+X-Received: by 2002:a17:90a:740e:b0:219:78e:9c3c with SMTP id a14-20020a17090a740e00b00219078e9c3cmr30076808pjg.39.1671132505350;
+        Thu, 15 Dec 2022 11:28:25 -0800 (PST)
 Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:ecc1:3e44:be34:129c])
-        by smtp.gmail.com with ESMTPSA id ep14-20020a17090ae64e00b00219cf5c3829sm3475129pjb.57.2022.12.15.11.28.23
+        by smtp.gmail.com with ESMTPSA id ep14-20020a17090ae64e00b00219cf5c3829sm3475129pjb.57.2022.12.15.11.28.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 11:28:23 -0800 (PST)
+        Thu, 15 Dec 2022 11:28:25 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -62,9 +62,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         linux-perf-users@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
         Milian Wolff <milian.wolff@kdab.com>,
         Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH 3/9] perf symbol: Add filename__has_section()
-Date:   Thu, 15 Dec 2022 11:28:11 -0800
-Message-Id: <20221215192817.2734573-4-namhyung@kernel.org>
+Subject: [PATCH 4/9] perf srcline: Skip srcline if .debug_line is missing
+Date:   Thu, 15 Dec 2022 11:28:12 -0800
+Message-Id: <20221215192817.2734573-5-namhyung@kernel.org>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 In-Reply-To: <20221215192817.2734573-1-namhyung@kernel.org>
 References: <20221215192817.2734573-1-namhyung@kernel.org>
@@ -80,80 +80,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The filename__has_section() is to check if the given section name is in
-the binary.  It'd be used for checking debug info for srcline.
+The srcline info is from the .debug_line section.  No need to setup
+addr2line subprocess if the section is missing.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/util/symbol-elf.c     | 28 ++++++++++++++++++++++++++++
- tools/perf/util/symbol-minimal.c |  5 +++++
- tools/perf/util/symbol.h         |  1 +
- 3 files changed, 34 insertions(+)
+ tools/perf/util/srcline.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index 80345695b136..96767d1b3f1c 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -233,6 +233,34 @@ Elf_Scn *elf_section_by_name(Elf *elf, GElf_Ehdr *ep,
- 	return NULL;
- }
+diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
+index 5319efb16a5a..2c212e2e1b65 100644
+--- a/tools/perf/util/srcline.c
++++ b/tools/perf/util/srcline.c
+@@ -550,6 +550,9 @@ static int addr2line(const char *dso_name, u64 addr,
+ 	size_t inline_count = 0;
  
-+bool filename__has_section(const char *filename, const char *sec)
-+{
-+	int fd;
-+	Elf *elf;
-+	GElf_Ehdr ehdr;
-+	GElf_Shdr shdr;
-+	bool found = false;
+ 	if (!a2l) {
++		if (!filename__has_section(dso_name, ".debug_line"))
++			goto out;
 +
-+	fd = open(filename, O_RDONLY);
-+	if (fd < 0)
-+		return false;
-+
-+	elf = elf_begin(fd, PERF_ELF_C_READ_MMAP, NULL);
-+	if (elf == NULL)
-+		goto out;
-+
-+	if (gelf_getehdr(elf, &ehdr) == NULL)
-+		goto elf_out;
-+
-+	found = !!elf_section_by_name(elf, &ehdr, &shdr, sec, NULL);
-+
-+elf_out:
-+	elf_end(elf);
-+out:
-+	close(fd);
-+	return found;
-+}
-+
- static int elf_read_program_header(Elf *elf, u64 vaddr, GElf_Phdr *phdr)
- {
- 	size_t i, phdrnum;
-diff --git a/tools/perf/util/symbol-minimal.c b/tools/perf/util/symbol-minimal.c
-index f9eb0bee7f15..de84da3b0d96 100644
---- a/tools/perf/util/symbol-minimal.c
-+++ b/tools/perf/util/symbol-minimal.c
-@@ -385,3 +385,8 @@ char *dso__demangle_sym(struct dso *dso __maybe_unused,
- {
- 	return NULL;
- }
-+
-+bool filename__has_section(const char *filename, const char *sec)
-+{
-+	return false;
-+}
-diff --git a/tools/perf/util/symbol.h b/tools/perf/util/symbol.h
-index e297de14184c..f735108c4d4e 100644
---- a/tools/perf/util/symbol.h
-+++ b/tools/perf/util/symbol.h
-@@ -165,6 +165,7 @@ int modules__parse(const char *filename, void *arg,
- 					 u64 start, u64 size));
- int filename__read_debuglink(const char *filename, char *debuglink,
- 			     size_t size);
-+bool filename__has_section(const char *filename, const char *sec);
- 
- struct perf_env;
- int symbol__init(struct perf_env *env);
+ 		dso->a2l = addr2line_subprocess_init(dso_name);
+ 		a2l = dso->a2l;
+ 	}
 -- 
 2.39.0.314.g84b9a713c41-goog
 
