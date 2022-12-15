@@ -2,198 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3ED264DCF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 15:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 824FB64DCF5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 15:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiLOOhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 09:37:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
+        id S229979AbiLOOiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 09:38:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbiLOOhl (ORCPT
+        with ESMTP id S229954AbiLOOiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 09:37:41 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68DC2E697
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 06:37:39 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id 3so3085507vsq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 06:37:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=criticallink.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sZ15fTarDAUKgAtZxdlUAO/HtntI26TxSHF6pnz8lQo=;
-        b=b9m1V265SGOkN31jd68sNj+j5fmo5HDI+hw3nbQZr1R02Ahnwd9JQdo99xOhAZtO9I
-         0hodzAQ+KIq24tKSKp8dOEpnJl/ZfJHlQVn5RM1tK/+HD1hrVRL4IaCiRNqr3VL+js7a
-         DG2v+3rv0oUiGi9LG/qrtBOfcxTeI+Pxd1K3chrFP8UYwofZ6oKKhiKVXCKiS7O8IIqC
-         GYcRmSIzM3JwDuQ+Mr55E7Tyrw28ygVpZrLxwdgsp0FCMvT68PEsABwo8xu148SfEPYI
-         w+vpNSPqRcpzg2URKvCVsxQBr8tQxfzdaNEIgY8NBrWBirkfwcgU99kWSPcuzcqCA5ql
-         uGZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sZ15fTarDAUKgAtZxdlUAO/HtntI26TxSHF6pnz8lQo=;
-        b=OP8sAJ/DgBI/zWRgK7xxg8LoHoNfhBMmwRf8QeR/hoBnw0qHNbxAZetRDFVnMkzO7X
-         HDjZbmDZdwZ32TReYhV+vEVlajwY60zkqpj71qgLBpBvcTlTar3t9t42/S5Ky1HmXkFc
-         3KUwxEiAth35PfTjPHsQ2qXIHYSpg5ZMjtfZxN6syKazwl5Fx3cSJAqyC++ydvc+KU7R
-         zPUKCHUG8brw22yZlwpfLIUmQg8ayFUzQ+1r2dT3F6TWL9y/fKBbVb//Ry/CkiWtsNQA
-         Smsa0ypUWSzmAQsn1TuzojNJQXtv10JMicGXiLjciBvlX7NFGq/ZZdsFWxvkc2wqvWC4
-         uqyQ==
-X-Gm-Message-State: ANoB5pk+rpJef41KUO355GuwL6mwvovoO3exeITpqvdXNmXD7kfV8wsz
-        7LQgTbjDPKKsO3fi6wUAWh3RfLQU377JFz3/jTjm/w==
-X-Google-Smtp-Source: AA0mqf4nXgavNXLmZisRGiafHkFikYttYt9CxLXkNHxbTBrRiHz8Qy0Px6pMKI3J0W1a1HDTxVJfB67KwVQbcKjnqTc=
-X-Received: by 2002:a05:6102:30b4:b0:3b3:10b1:8e64 with SMTP id
- y20-20020a05610230b400b003b310b18e64mr4089245vsd.42.1671115058703; Thu, 15
- Dec 2022 06:37:38 -0800 (PST)
+        Thu, 15 Dec 2022 09:38:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0814D2E68B
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 06:38:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B30161DD7
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 14:38:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2746C433EF;
+        Thu, 15 Dec 2022 14:38:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671115088;
+        bh=QRu+xIsFY/9uH7UhtSSOV68HhJrjuEUs3s69HAiHpmo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ELa52evv0WF30IwEMN4T+wKwb52eLJWyYc1ICwwF1sZrRAU7VO5uNWMM2iMdZ9aGs
+         eqdOzDDehLlzhNb6aj+l75vag9M3F5H6LBbadbTaWx8HnwOsdGJrXFo7FZf36BC9pH
+         wkszOMKjeZ1Wr0DzbaoR/5qNSJoaU9U7xglfxh91/I+p41R9Y3orsg+4RcvYPHah+o
+         mQF1YACW2YXKbuzqKb9TjzDVvawKE97krAtWAGj0jWM3bsJaXq+aAAb/NjhNkWzF9e
+         YaR1F4Z//he5QlvCThDB33RA5tmIMTJUVjrZL5HLynYhhr1HaAmf59mKdZEodRGUT7
+         by0K2lKTayC0w==
+Message-ID: <0fb160e1-6948-d805-9262-63d436c01ad4@kernel.org>
+Date:   Thu, 15 Dec 2022 22:38:05 +0800
 MIME-Version: 1.0
-References: <20221214220727.1350784-1-jcormier@criticallink.com>
- <20221214220727.1350784-2-jcormier@criticallink.com> <29f4e14f-a81a-d440-b564-5360f44c65c1@linaro.org>
- <CADL8D3ZUE5WbV0oS6hEVUNh9asrhTKQeGR4McR6Kh6qykSFw=Q@mail.gmail.com>
-In-Reply-To: <CADL8D3ZUE5WbV0oS6hEVUNh9asrhTKQeGR4McR6Kh6qykSFw=Q@mail.gmail.com>
-From:   Jon Cormier <jcormier@criticallink.com>
-Date:   Thu, 15 Dec 2022 09:37:27 -0500
-Message-ID: <CADL8D3ZT5znWjhpQpv6u-LTJfHNpkSrHZ-j-Hh_cgCZyTKw=Pg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: adi,ltc2945: Add binding
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bob Duke <bduke@criticallink.com>,
-        John Pruitt <jpruitt@criticallink.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] f2fs: add missing doc for fault injection sysfs
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20221215134844.12951-1-chao@kernel.org>
+ <20221215141412.66752-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20221215141412.66752-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Resending reply in plain text
+On 2022/12/15 22:14, Yangtao Li wrote:
+> Hi Chao,
+> 
+>> -What:		/sys/fs/f2fs/<disk>/gc_mode
+>> -Date:		October 2022
+>> -Contact:	"Yangtao Li" <frank.li@vivo.com>
+>> -Description:	Show the current gc_mode as a string.
+>> -		This is a read-only entry.
+>   
+>> -What:		/sys/fs/f2fs/<disk>/discard_urgent_util
+>> -Date:		November 2022
+>> -Contact:	"Yangtao Li" <frank.li@vivo.com>
+>> -Description:	When space utilization exceeds this, do background DISCARD aggressively.
+>> -		Does DISCARD forcibly in a period of given min_discard_issue_time when the number
+>> -		of discards is not 0 and set discard granularity to 1.
+>> -		Default: 80
+>> -
+>> -What:		/sys/fs/f2fs/<disk>/hot_data_age_threshold
+>> -Date:		November 2022
+>> -Contact:	"Ping Xiong" <xiongping1@xiaomi.com>
+>> -Description:	When DATA SEPARATION is on, it controls the age threshold to indicate
+>> -		the data blocks as hot. By default it was initialized as 262144 blocks
+>> -		(equals to 1GB).
+>> -
+>> -What:		/sys/fs/f2fs/<disk>/warm_data_age_threshold
+>> -Date:		November 2022
+>> -Contact:	"Ping Xiong" <xiongping1@xiaomi.com>
+>> -Description:	When DATA SEPARATION is on, it controls the age threshold to indicate
+>> -		the data blocks as warm. By default it was initialized as 2621440 blocks
+>> -		(equals to 10GB).
+> 
+> Why delete other node descriptions, mistake?
 
-On Thu, Dec 15, 2022 at 9:35 AM Jon Cormier <jcormier@criticallink.com> wrote:
->
-> On Thu, Dec 15, 2022 at 4:42 AM Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 14/12/2022 23:07, Cormier, Jonathan wrote:
->>
->> Missing commit msg. Describe hardware.
->
-> Thanks
->>
->>
->>
->>
->> > Signed-off-by: "Cormier, Jonathan" <jcormier@criticallink.com>
->> > ---
->> >  .../bindings/hwmon/adi,ltc2945.yaml           | 50 +++++++++++++++++++
->> >  1 file changed, 50 insertions(+)
->> >  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
->> >
->> > diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
->> > new file mode 100644
->> > index 000000000000..9ca7a886dec8
->> > --- /dev/null
->> > +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
->> > @@ -0,0 +1,50 @@
->> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> > +%YAML 1.2
->> > +---
->> > +$id: http://devicetree.org/schemas/hwmon/adi,ltc2945.yaml#
->> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> > +
->> > +title: Analog Devices LTC2945 wide range i2c power monitor
->> > +
->> > +maintainers:
->> > +  - Guenter Roeck <linux@roeck-us.net>
->> > +
->> > +description: |
->> > +  Analog Devices LTC2945 wide range i2c power monitor over I2C.
->> > +
->> > +  https://www.analog.com/media/en/technical-documentation/data-sheets/LTC2945.pdf
->> > +
->> > +properties:
->> > +  compatible:
->> > +    enum:
->> > +      - ltc2945
->>
->> That's not a correct compatible. Missing vendor prefix.
->>
-> Okay, I assume I'll need to update the driver as well to handle that.
->>
->> > +
->> > +  reg:
->> > +    maxItems: 1
->> > +
->> > +  shunt-resistor-micro-ohms:
->> > +    description:
->> > +      Shunt resistor value in micro-Ohms
->> > +    default: 1000
->> > +
->> > +required:
->> > +  - compatible
->> > +  - reg
->> > +
->> > +
->>
->> Just one blank line.
->>
->> > +additionalProperties: false
->> > +
->> > +examples:
->> > +  - |
->> > +    i2c {
->> > +           #address-cells = <1>;
->> > +           #size-cells = <0>;
->>
->> Use 4 spaces for example indentation.
->>
->> > +
->> > +           ltc2945_i2c: ltc2945@6e {
->>
->> Node names should be generic.
->> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
->>
->> > +              compatible = "ltc2945";
->> > +              reg = <0x6e>;
->> > +              /* 10 milli-Ohm shunt resistor */
->> > +              shunt-resistor-micro-ohms = <10000>;
->> > +           };
->> > +    };
->> > +...
->>
->> Best regards,
->> Krzysztof
->>
->
->
-> --
-> Jonathan Cormier
-> Software Engineer
->
-> Voice:  315.425.4045 x222
->
->
->
-> http://www.CriticalLink.com
-> 6712 Brooklawn Parkway, Syracuse, NY 13211
->
->
+Oh, my bad, I missed to handle merge confilct correctly, will
+fix in v2.
 
+Thanks,
 
-
--- 
-Jonathan Cormier
-Software Engineer
-
-Voice:  315.425.4045 x222
-
-
-
-http://www.CriticalLink.com
-6712 Brooklawn Parkway, Syracuse, NY 13211
+> 
+> Thx,
+> Yangtao
