@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEEF64DC1C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 14:19:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC6064DC20
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 14:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiLONTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 08:19:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48950 "EHLO
+        id S229948AbiLONTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 08:19:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiLONTI (ORCPT
+        with ESMTP id S229737AbiLONTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 08:19:08 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C0C2DA9F
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 05:19:06 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id c1so15613069lfi.7
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 05:19:06 -0800 (PST)
+        Thu, 15 Dec 2022 08:19:49 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C092ED69
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 05:19:46 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id q6so15585142lfm.10
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 05:19:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=UuBRmTDLtgN417FwD87ZJbkr08uM4dGETokmcGbpo7E=;
-        b=ytjX+7PTI6Cdm71113ZX7kZNcgf/RLASDtbesNbb+Jf/EJUxMiZi1nu5fr+MRhpcZb
-         YVu9cVdMPojZQGnk7V2R4olUCgh5xsj4dSwbCzDbttUOzFbS3RjHftXjk71rAQpFJ1Do
-         TvmT81kL9tiRNl9K4QhKETZJh2aqIHo84yYmzK2McHW41rW3zEiQdl48wDCkNMH1bD6e
-         DI4VpevoUQ4QB9IcdmfHMK6GINoqRyZgoe2/vhSgcC7MbKJQqriNDwBrN0CDQ2F+1IC3
-         uPAjNBOfD/qc39uG7WNGpqHxjlw364ubp7BvHI8FY9eJFLcjVe6zl1DWH89h05doYvU+
-         RYoQ==
+        bh=cF1K8h19SwoaL+H+wMzf1igK2zwK+4CVmKGZfHMVXA0=;
+        b=CYhqFp9awOtIqq88padY/BvYAEbNELfE1BReY1kkBo0kwVO4/9gAhkVxYepRGZH5s3
+         O8uks3Ia6HvRGgxX4NQjcAtFd4QyR2tAftLa8ZatC9gtLhbimhSKd7b1m2rxI8NXAVce
+         pnsCqs9+wUxXrhUrgMJMomMPTm3sJbU0ukgBUxPBv36UkvlBDs0w8IccGoBV3wB+ytcW
+         yIluAPF96EsEpFbHoSYnYBOn7ekh1mJrcyWvEfdPX4oEWnpsZaBHg7/4Djhdr7FQKfVt
+         PRkw/B+h6y7KgfikAbTAw9S1yR0SAiRjZz/pFVZ3Ke2ZigjEbs0Vuhe894OhbjJYW2lv
+         nF7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UuBRmTDLtgN417FwD87ZJbkr08uM4dGETokmcGbpo7E=;
-        b=tFpVvmW0k/cU7ellKliQlyIx+msNFp3KbOrClW02pVVraiyjqFH7cfKBhlB1AgkwZk
-         zzii0Gxu5LRmE92a7GeA7Iu2rFRO2aYRGONdpi36U1iqKwKuMoxaq4TxxaBSTNPGn3hG
-         0yJHtfr66KOLGPqfL132pixu+v9ctulklW/nvB4iPzj47PaenKZj+a3JT5rp5wjAc0W8
-         7zsSbXhjs5MhEwvL56qpPSyR8IHeJpfIL4lfUxUBz+kvCtSlpEp/IQUfv39d76oZ6JEq
-         tGdtxEkkeaAooL2rvbBLu0d69a0QwfVAG5U7fm/wif0EA6J8yfHn+0MX9+AlMTz9bjpL
-         6leQ==
-X-Gm-Message-State: ANoB5pnNyGCfKmAmURE5ACw45QjfmY9Zd4c78iuw5p/LJSkDhBdSXghR
-        4c2Nr+XCqgNHMkx6Ykz3GXs/bg==
-X-Google-Smtp-Source: AA0mqf6iQYvcqNP0orxkQWx0Eynf+/41JdVbnwDQn7uXd60nNEyRXvjFJUsyt8ZHcmvmRjL8XnunRg==
-X-Received: by 2002:a05:6512:b81:b0:4a4:68b9:66bf with SMTP id b1-20020a0565120b8100b004a468b966bfmr10978494lfv.10.1671110344797;
-        Thu, 15 Dec 2022 05:19:04 -0800 (PST)
+        bh=cF1K8h19SwoaL+H+wMzf1igK2zwK+4CVmKGZfHMVXA0=;
+        b=rsTeizrYvUFpb+heiImv+OeHauYnpRH1iQTjpF0Xw1SPjL5W0gn4gT+Cims8IxyW2F
+         Hs06g21h9b539sR1a7sI+cxd5sx+twu6i/8U6jIdSPwYTTQRIEWdmfe2BGxFdsOyWPyv
+         hkw3tYgPRvgH+xASw3o/hd1JoEC99NHxQefIlPZSNvqw3dhZxQJJdzkVj89VHNyfct+7
+         +H5s+zIiB2lfu7ZeiVhLRmxzw7X6KmNtJcUgUkqemkiH/FOJgVEKExYwl37WwH35WTsR
+         9WLI8or/YsGV0H4hXwOTrRAxWc7KDrZWEH1y91iRbwo71YFKIv2MKP9NSRf1sWyVmCAF
+         gl+g==
+X-Gm-Message-State: ANoB5pnzLwWEVNAakz4AepSAA4QwyUHhno91RuXWHW2GApq6V+YvRakq
+        oL7ISwTzXkl7C35eiuHX1hAmnQ==
+X-Google-Smtp-Source: AA0mqf4Im1g9A1hT9ddgBaf9F7aGA+qWQlnhSMZrmcYwrVqvzzJwnWohYxeeekauBPQZmn/wu/Aj/A==
+X-Received: by 2002:a05:6512:3d2a:b0:4b5:98ca:548 with SMTP id d42-20020a0565123d2a00b004b598ca0548mr11228556lfv.39.1671110384410;
+        Thu, 15 Dec 2022 05:19:44 -0800 (PST)
 Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id j6-20020ac25506000000b004b53eb60e3csm1155212lfk.256.2022.12.15.05.19.02
+        by smtp.gmail.com with ESMTPSA id b12-20020a0565120b8c00b0048a8c907fe9sm1157238lfv.167.2022.12.15.05.19.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 05:19:04 -0800 (PST)
-Message-ID: <62c91a41-c4e0-340d-f564-3c909a5363f9@linaro.org>
-Date:   Thu, 15 Dec 2022 14:19:02 +0100
+        Thu, 15 Dec 2022 05:19:43 -0800 (PST)
+Message-ID: <60a40ace-d4e9-df74-88f9-4354d80efaac@linaro.org>
+Date:   Thu, 15 Dec 2022 14:19:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH 3/6] arm64: dts: qcom: pmi8950: Add missing ADC channels
+Subject: Re: [PATCH 4/6] arm64: dts: qcom: msm8976: Declare and use SDC1 pins
 Content-Language: en-US
 To:     Marijn Suijten <marijn.suijten@somainline.org>,
         phone-devel@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>
@@ -75,9 +75,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20221214232049.703484-1-marijn.suijten@somainline.org>
- <20221214232049.703484-4-marijn.suijten@somainline.org>
+ <20221214232049.703484-5-marijn.suijten@somainline.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221214232049.703484-4-marijn.suijten@somainline.org>
+In-Reply-To: <20221214232049.703484-5-marijn.suijten@somainline.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -93,51 +93,86 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 15.12.2022 00:20, Marijn Suijten wrote:
-> These seem to have previously been excluded due to either not residing
-> on the test board, and/or lacking VADC_USB_DP/VADC_USB_DM definitions.
-> Now that the channel constants are included in dt-bindings, add the
-> channels to DT as well.
+> Add the pinctrl states for SDC1 and use them on sdhc_1.
 > 
 > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>  arch/arm64/boot/dts/qcom/msm8976.dtsi | 55 +++++++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8976.dtsi b/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> index 05dcb30b0779..7d4c7548882c 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> @@ -508,6 +508,56 @@ tlmm: pinctrl@1000000 {
+>  			interrupt-controller;
+>  			#interrupt-cells = <2>;
+>  
+> +			sdc1_off_state: sdc1-off-state {
+> +				clk-pins {
+> +					pins = "sdc1_clk";
+> +					drive-strength = <2>;
+> +					bias-disable;
+> +				};
+> +
+> +				cmd-pins {
+> +					pins = "sdc1_cmd";
+> +					drive-strength = <2>;
+> +					bias-pull-up;
+> +				};
+> +
+> +				data-pins {
+> +					pins = "sdc1_data";
+> +					drive-strength = <2>;
+> +					bias-pull-up;
+> +				};
+> +
+> +				rclk-pins {
+> +					pins = "sdc1_rclk";
+> +					bias-pull-down;
+> +				};
+> +			};
+> +
+> +			sdc1_on_state: sdc1-on-state {
+> +				clk-pins {
+> +					pins = "sdc1_clk";
+> +					drive-strength = <16>;
+> +					bias-disable;
+> +				};
+> +
+> +				cmd-pins {
+> +					pins = "sdc1_cmd";
+> +					drive-strength = <10>;
+> +					bias-pull-up;
+> +				};
+> +
+> +				data-pins {
+> +					pins = "sdc1_data";
+> +					drive-strength = <10>;
+> +					bias-pull-up;
+> +				};
+> +
+> +				rclk-pins {
+> +					pins = "sdc1_rclk";
+> +					bias-pull-down;
+> +				};
+> +			};
+> +
+>  			spi1_default: spi0-default-state {
+>  				spi-pins {
+>  					pins = "gpio0", "gpio1", "gpio3";
+> @@ -680,6 +730,11 @@ sdhc_1: mmc@7824000 {
+>  				 <&gcc GCC_SDCC1_APPS_CLK>,
+>  				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+>  			clock-names = "iface", "core", "xo";
+> +
+> +			pinctrl-0 = <&sdc1_on_state>;
+> +			pinctrl-1 = <&sdc1_off_state>;
+> +			pinctrl-names = "default", "sleep";
+pinctrl-names usually goes before pinctrl-N
 
 Konrad
->  arch/arm64/boot/dts/qcom/pmi8950.dtsi | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/pmi8950.dtsi b/arch/arm64/boot/dts/qcom/pmi8950.dtsi
-> index 7a857b2f3a5a..42a867685275 100644
-> --- a/arch/arm64/boot/dts/qcom/pmi8950.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/pmi8950.dtsi
-> @@ -69,6 +69,30 @@ adc-chan@d {
->  				qcom,pre-scaling = <1 1>;
->  				label = "chg_temp";
->  			};
 > +
-> +			adc-chan@e {
-> +				reg = <VADC_GND_REF>;
-> +				qcom,pre-scaling = <1 1>;
-> +				label = "ref_gnd";
-> +			};
-> +
-> +			adc-chan@f {
-> +				reg = <VADC_VDD_VADC>;
-> +				qcom,pre-scaling = <1 1>;
-> +				label = "ref_vdd";
-> +			};
-> +
-> +			adc-chan@43 {
-> +				reg = <VADC_USB_DP>;
-> +				qcom,pre-scaling = <1 1>;
-> +				label = "usb_dp";
-> +			};
-> +
-> +			adc-chan@44 {
-> +				reg = <VADC_USB_DM>;
-> +				qcom,pre-scaling = <1 1>;
-> +				label = "usb_dm";
-> +			};
+>  			status = "disabled";
 >  		};
 >  
->  		pmi8950_mpps: mpps@a000 {
