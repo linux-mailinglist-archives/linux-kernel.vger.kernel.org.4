@@ -2,153 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 873CD64D7B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 09:24:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6BF64D7B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 09:24:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiLOIYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 03:24:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
+        id S229691AbiLOIYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 03:24:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiLOIY1 (ORCPT
+        with ESMTP id S229610AbiLOIYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 03:24:27 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCECE2D1F7;
-        Thu, 15 Dec 2022 00:24:26 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so1962842pje.5;
-        Thu, 15 Dec 2022 00:24:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:references:in-reply-to:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=p1Kmh8wc8B768hb6NEwxEyoQrVxe7sg2+tN2PZX5I48=;
-        b=ZUU6fRFAgDHWMOOBwLjYmWgSBGlGPLj4j9IhUifgPy48cmwsioOZ5sdfYqx1kA5X8v
-         O1SV1490pzV8ti7HOlXU+xnw+f60w+sreKkrlPNmSWSYWI5o/NwbfSsZRNS/aZPx+oJ4
-         2Ur1AC6EzqYScIUDJ6wFsaiUONLIAWmJhZHoptn+ESiMNcGMg/9On/LbY6OfRE96UybT
-         IWscjxu8vVOvc+KasOnZy3EqIjv1DzI/0PiNxJCu93MCtGlVrb1T7OKYP+6ZRuVRZvjD
-         JiWyZzti++qhiTvrimQsdc+mMyIcDjx1WVWr7d4aDAlyUqn4Q6w6LVV+AgcQNI/eg25y
-         1vBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:references:in-reply-to:message-id:date
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p1Kmh8wc8B768hb6NEwxEyoQrVxe7sg2+tN2PZX5I48=;
-        b=uMZhFk38AIXFJRD0e3skecyNYOHe+k00l2NMsriRK4MecBhfWJ78RmDkECLFrguu+I
-         wapk0lSlqgp+dGV2a+mpTMXryVEn1qEX6rBOE7cJ50EXRS9AjhV86Q96jYGOe3k6xv6S
-         NDdFYaQBuK2t/RKi0DcjCAmGyLlFrcB+sGaXcX26DGmSl4hMmgag39U5iNlc/x4Gd4Ub
-         T/KMchWvgyB7s/EPM4/0yL3Qr/q8OaL03Ss92LN0bK6zeSJGtaKZ6rauFWZq3ArNncLD
-         oyQX2zxlVDHUBXomhpWpWtbkmfgW6M+n+2IC87L+8BgR5BgcxzyKbhq7ihdMaiiRG9DV
-         RA7A==
-X-Gm-Message-State: ANoB5pnB+aej5YEdBEmOgneLW/XQiWEKqJODsn40ytnfEbkZSds+y5fg
-        DMQu/mAu1HyiGyZpXNtmKbQ=
-X-Google-Smtp-Source: AA0mqf4H0xtf9PlO/ezZzhfvfMwH42TTqZAVpNPj+UUZjOqyfBIClcGHZKe61nqT7FufFf6yywo45g==
-X-Received: by 2002:a17:90a:6845:b0:218:cbf6:733 with SMTP id e5-20020a17090a684500b00218cbf60733mr27943740pjm.21.1671092666157;
-        Thu, 15 Dec 2022 00:24:26 -0800 (PST)
-Received: from localhost.localdomain ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id k14-20020a17090a404e00b0020aacde1964sm2594606pjg.32.2022.12.15.00.24.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Dec 2022 00:24:25 -0800 (PST)
-From:   Li-hao Kuo <lhjeff911@gmail.com>
-To:     rafael@kernel.org, krzk@kernel.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amitk@kernel.org, robh+dt@kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     lh.kuo@sunplus.com, Li-hao Kuo <lhjeff911@gmail.com>
-Subject: [PATCH v14 2/2] dt-bindings: thermal: Add Sunplus schema
-Date:   Thu, 15 Dec 2022 16:23:50 +0800
-Message-Id: <038211f33e4d5dd5129712aef2738a83577c7745.1665990345.git.lhjeff911@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1665990345.git.lhjeff911@gmail.com>
-References: <cover.1665990345.git.lhjeff911@gmail.com>
-In-Reply-To: <cover.1665990345.git.lhjeff911@gmail.com>
-References: <cover.1665990345.git.lhjeff911@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 15 Dec 2022 03:24:25 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F379F303FC;
+        Thu, 15 Dec 2022 00:24:22 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BF8KcR4029248;
+        Thu, 15 Dec 2022 08:24:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=mime-version : date :
+ from : to : cc : subject : reply-to : in-reply-to : references :
+ message-id : content-type : content-transfer-encoding; s=pp1;
+ bh=fSarSj5L5MZiEmrgPFVE7BZPrSy9rM5N5jE72zOVApA=;
+ b=YPienDNC3wdG2lmqHhkVQj8hzF4SFciBvgp2rvSyTB4PQsKC9cT2KkHjS+v9FBqBd0aS
+ jTG1zzhzLiazxwVBRBa6i1veT2o5Buges35Jsn2JTSwZJYrvuPngrguQArqNoZJCuJin
+ 9Z1xhQAQHyBtjqrfbJzMjdwqYDP6LSkRS/hcYerZQQwaI6i0+TNt+0J2HGX9KvtdvZMq
+ XVc4J75bYqOcfJs7+RzE/RT3m9ERZEblsAu7NFBiX9oM3aKOdYnXKq2U+BuTkb791+BB
+ lw6AFUVs8jh7LhpGtr8V/mFMbleVjARzZJgDc0J1t8NiQzx7qUQMCvBws51VotuxGXFq LA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg00581j7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 08:24:20 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BF8Ko06029777;
+        Thu, 15 Dec 2022 08:24:19 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg00581j2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 08:24:19 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BF6AMaB017089;
+        Thu, 15 Dec 2022 08:24:18 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3mf07gm5hy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 08:24:18 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BF8OGe449676724
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Dec 2022 08:24:17 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A1F8758061;
+        Thu, 15 Dec 2022 08:24:16 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 26AA35803F;
+        Thu, 15 Dec 2022 08:24:16 +0000 (GMT)
+Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 15 Dec 2022 08:24:16 +0000 (GMT)
+MIME-Version: 1.0
+Date:   Thu, 15 Dec 2022 09:24:15 +0100
+From:   Harald Freudenberger <freude@linux.ibm.com>
+To:     Tony Krowiak <akrowiak@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, jjherne@linux.ibm.com, borntraeger@de.ibm.com,
+        cohuck@redhat.com, mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com
+Subject: Re: [PATCH 1/7] s390/vfio-ap: verify reset complete in separate
+ function
+Reply-To: freude@linux.ibm.com
+Mail-Reply-To: freude@linux.ibm.com
+In-Reply-To: <20221213154437.15480-2-akrowiak@linux.ibm.com>
+References: <20221213154437.15480-1-akrowiak@linux.ibm.com>
+ <20221213154437.15480-2-akrowiak@linux.ibm.com>
+Message-ID: <29a5eb8259fc9735aa3a7de5334d9919@linux.ibm.com>
+X-Sender: freude@linux.ibm.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: xZrHYeajwHwHApuwJ2WmmVQy7yA9wc1I
+X-Proofpoint-ORIG-GUID: a9Sk0ZNp1o0GqpjcjId-Oe1aZJndJ72Q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-15_03,2022-12-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
+ phishscore=0 mlxscore=0 suspectscore=0 priorityscore=1501 bulkscore=0
+ lowpriorityscore=0 mlxlogscore=999 spamscore=0 malwarescore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212150064
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for Sunplus thermal driver
+On 2022-12-13 16:44, Tony Krowiak wrote:
+> The vfio_ap_mdev_reset_queue() function contains a loop to verify that 
+> the
+> reset successfully completes within 40ms. This patch moves that loop 
+> into
+> a separate function.
+> 
+> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
+> ---
+>  drivers/s390/crypto/vfio_ap_ops.c | 30 +++++++++++++++++++++---------
+>  1 file changed, 21 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/s390/crypto/vfio_ap_ops.c
+> b/drivers/s390/crypto/vfio_ap_ops.c
+> index 0b4cc8c597ae..83ff94a38102 100644
+> --- a/drivers/s390/crypto/vfio_ap_ops.c
+> +++ b/drivers/s390/crypto/vfio_ap_ops.c
+> @@ -1587,12 +1587,30 @@ static struct vfio_ap_queue
+> *vfio_ap_find_queue(int apqn)
+>  	return q;
+>  }
+> 
+> +static int apq_reset_check(struct vfio_ap_queue *q)
+> +{
+> +	int iters = 2;
+> +	struct ap_queue_status status;
+> +
+> +	while (iters--) {
+> +		msleep(20);
+> +		status = ap_tapq(q->apqn, NULL);
+> +		if (status.queue_empty && !status.irq_enabled)
+> +			return 0;
+> +	}
+> +	WARN_ONCE(iters <= 0,
+> +		  "timeout verifying reset of queue %02x.%04x (%u, %u, %u)",
+> +		  AP_QID_CARD(q->apqn), AP_QID_QUEUE(q->apqn),
+> +		  status.queue_empty, status.irq_enabled, status.response_code);
+> +
+> +	return -EBUSY;
+> +}
+> +
+>  static int vfio_ap_mdev_reset_queue(struct vfio_ap_queue *q,
+>  				    unsigned int retry)
+>  {
+>  	struct ap_queue_status status;
+>  	int ret;
+> -	int retry2 = 2;
+> 
+>  	if (!q)
+>  		return 0;
+> @@ -1629,14 +1647,8 @@ static int vfio_ap_mdev_reset_queue(struct
+> vfio_ap_queue *q,
+>  	}
+> 
+>  	/* wait for the reset to take effect */
+> -	while (retry2--) {
+> -		if (status.queue_empty && !status.irq_enabled)
+> -			break;
+> -		msleep(20);
+> -		status = ap_tapq(q->apqn, NULL);
+> -	}
+> -	WARN_ONCE(retry2 <= 0, "unable to verify reset of queue %02x.%04x",
+> -		  AP_QID_CARD(q->apqn), AP_QID_QUEUE(q->apqn));
+> +	if (!status.queue_empty && status.irq_enabled)
 
-Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
----
-Changes in v12:
- - no change.
+Hm, you check for
+   a) status.queue_empty and
+   b) !status.irq_enabled
+   which is (status.queue_empty && !status.irq_enabled)
+   and now let's negate this to:
+   !(status.queue_empty && !status.irq_enabled)
+   with de-morgan this gives:
+   (!status.queue_empty || status.irq_enabled)
 
-Changes in v13:
- - no change.
+> +		ret = apq_reset_check(q);
+> 
+>  free_resources:
+>  	vfio_ap_free_aqic_resources(q);
 
- .../bindings/thermal/sunplus,sp7021-thermal.yaml   | 43 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml
-
-diff --git a/Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml b/Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml
-new file mode 100644
-index 0000000..98b5674
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml
-@@ -0,0 +1,43 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/sunplus,sp7021-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sunplus Thermal controller
-+
-+maintainers:
-+  - Li-hao Kuo <lhjeff911@gmail.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - sunplus,sp7021-thermal
-+
-+  reg:
-+    maxItems: 1
-+
-+  nvmem-cells:
-+    maxItems: 1
-+
-+  nvmem-cell-names:
-+    const: calib
-+
-+required:
-+  - compatible
-+  - reg
-+  - nvmem-cells
-+  - nvmem-cell-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    thermal@9c000280 {
-+        compatible = "sunplus,sp7021-thermal";
-+        reg = <0x9c000280 0xc>;
-+        nvmem-cells = <&calib>;
-+        nvmem-cell-names = "calib";
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bf22c53..f41e625 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19757,6 +19757,7 @@ SUNPLUS THERMAL DRIVER
- M:	Li-hao Kuo <lhjeff911@gmail.com>
- L:	linux-pm@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml
- F:	drivers/thermal/sunplus_thermal.c
- 
- SUNPLUS UART DRIVER
--- 
-2.7.4
-
+Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
