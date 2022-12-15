@@ -2,146 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFFB64DFAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABDEE64DFCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbiLORbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 12:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
+        id S230051AbiLORhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 12:37:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbiLORbD (ORCPT
+        with ESMTP id S229480AbiLORhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 12:31:03 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2048.outbound.protection.outlook.com [40.107.237.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA6D26574;
-        Thu, 15 Dec 2022 09:31:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FgVu1BYqJw15iDtAvPpa6W+jQV9Ul2bXrpGDZ+bqG6fY8c8V4EEHVSjmvSSznvIKVrrbvLBolnfPht6+/Df3cWuXCHfcU6vP9wkCc7kMG4A0W269vzxiuySd1UVvEyr2gtUBFCYtbtJpv6LDhGbJdK1J7thQHCt+py/xLVps2/HYh7t/Hct2xdHl2gr6shSnZGaPT2zFr5job+iXlmTkjI5hTXYK6bweF6iJtJOvFxnN1kvQ50mCyG2zQuUCBrr8aujF8eeqOGQg2TZzk08AxZlCkjP0agnFonC875/E7qGfS8XzBko6ZEx+LbrHaJCA13+ftBIj14Z95lJiY0Z5RA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4kE3EEoROF8TRC85LHQNVGLLOGk4/ncwzq/kMy+zm2w=;
- b=VlmzZhHLIpW3YRmW2NYrHzr7+Me3Hkfld0/chEgpO+Q9tqiKKc3503fn/C7MPtbaAudFPIzdsC3so4osW69lqTNtboK6OJqxxaZ53YEX5LKADT8cla5mE1FCbwGQ59IvSkiOGMAl0uuOG7/iYxPkYZktpi4UsTGfywx4hYS/iJwA28LLTiTUbrU6smH4mOxAR8hvcafhMDAgwoEsbReUH+aTv0Sl4gjU5iJ8qzCbl0t+IKAEU7uFXBPqFLElP4THooSbADqyNYKmHiX1EWLHOH4PuNpvqh1JVLlfpURxLSfzveiGe2JRh7340x97r+uGEqirFK/KUgOy88LGvZdftw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4kE3EEoROF8TRC85LHQNVGLLOGk4/ncwzq/kMy+zm2w=;
- b=qKyCeHAG1nugpTi6wA2pJ1NURuqJqEmMVVcyE0Ip0Xk6uY/937rbhl0NPlijKcWkKlXkQHz3sQEurQrgizrHd1D/eyl726+U2x3YvLNPRDiFfm8FYLBxJl3ZB17ey3Z4LDeTlA53ZU6zsLyPf63MukX9kPJcL4dWNXK1fcn/qDA=
-Received: from MW4PR04CA0134.namprd04.prod.outlook.com (2603:10b6:303:84::19)
- by DM4PR12MB5748.namprd12.prod.outlook.com (2603:10b6:8:5f::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Thu, 15 Dec
- 2022 17:30:57 +0000
-Received: from CO1NAM11FT020.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:84:cafe::ee) by MW4PR04CA0134.outlook.office365.com
- (2603:10b6:303:84::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12 via Frontend
- Transport; Thu, 15 Dec 2022 17:30:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1NAM11FT020.mail.protection.outlook.com (10.13.174.149) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5924.12 via Frontend Transport; Thu, 15 Dec 2022 17:30:56 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 15 Dec
- 2022 11:30:53 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB08.amd.com
- (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 15 Dec
- 2022 09:30:53 -0800
-Received: from xsjlizhih40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Thu, 15 Dec 2022 11:30:52 -0600
-From:   Lizhi Hou <lizhi.hou@amd.com>
-To:     <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <robh@kernel.org>,
-        <frowand.list@gmail.com>, <helgaas@kernel.org>
-CC:     Lizhi Hou <lizhi.hou@amd.com>, <clement.leger@bootlin.com>,
-        <max.zhen@amd.com>, <sonal.santan@amd.com>, <larry.liu@amd.com>,
-        <brian.xu@amd.com>, <stefano.stabellini@xilinx.com>,
-        <trix@redhat.com>
-Subject: [PATCH V5 3/3] PCI: Add PCI quirks to generate device tree node for Xilinx Alveo U50
-Date:   Thu, 15 Dec 2022 09:30:46 -0800
-Message-ID: <1671125446-57584-4-git-send-email-lizhi.hou@amd.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1671125446-57584-1-git-send-email-lizhi.hou@amd.com>
-References: <1671125446-57584-1-git-send-email-lizhi.hou@amd.com>
+        Thu, 15 Dec 2022 12:37:21 -0500
+X-Greylist: delayed 380 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Dec 2022 09:37:19 PST
+Received: from email.studentenwerk.mhn.de (mailin.studentenwerk.mhn.de [141.84.225.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4670629CB5;
+        Thu, 15 Dec 2022 09:37:19 -0800 (PST)
+Received: from mailhub.studentenwerk.mhn.de (mailhub.studentenwerk.mhn.de [127.0.0.1])
+        by email.studentenwerk.mhn.de (Postfix) with ESMTPS id 4NXzm00N79zRhTg;
+        Thu, 15 Dec 2022 18:30:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwm.de; s=stwm-20170627;
+        t=1671125456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=O/PT2ChNLGC2cux6NliV6PIJ2JFRP5aYtPit3o1VDkA=;
+        b=GEF6JMhFscQy35Rg9BO+oaXXEpfTltnyC3ewyYhSSNAoLGhAMCGL8dngTNvFGWXmbba9Ay
+        yNZkZR2z2pBqzMaZf9IgK410xg3vUL2XHpoxrAr4cOqJF0D5kuh5NC81xfmtGbo/0JaGbO
+        D59G4skkjloTp62srvs/N6dpEk7OMCdpmpsce1TRbukbJJXdHBMhCEui7hqiIEFXsTW5nm
+        2YORKTemf7Cr+h4IQqvJ94R6K99dTe04XQICNSy40mI/gKPl9dSseQbFdwVCO0ZGqYXeb5
+        4LDJDN6Du06+dGz8fFoC+oxHW0SlBAdXV8OlzF/p3C4Dy/ApsGm9y7vRkGQEeg==
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT020:EE_|DM4PR12MB5748:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6a50fd04-5bbc-4d74-23b8-08dadec22005
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hh2K+rmWdvIjRLLJ7H8KujR/aGWjw1lxNDUxGUzS6g+z1lFL4zvL2CQey7AQiEWuGg2TxcP2VsYpyZ5Xq663/3W0Rm2QVutyKVsQZVXgjLM6H7j6rgzXLux4UZL1nxXGKNATHiDG29SKxLtmpfdNR8fsWgzC+31PFZvTrs6s/YR8vcWEz8YejtrepbUQ639e+TICy+5VX/BYmFD2QPRwsxPElhGggXTjswXqIe/QM8eEufwjeSVjneoJr5OEbEQbX6hNWVCXUx+KDXM1EIpP9/A9+eN/ue3juHpspZ4DCz1BZ095H5OaTwJF5KYLNx8e0/st4eXBaqITtKhB690X9Y0bhYDfS3g0xwmE8umqvO7pSV4e9tIKnQDifR8h5Aim6rV98M1b6mCKbQk4Skhdi+Ffp0P90YNZF1OhQzE8WpJkJ29mm5LZM7IJM3Bb8AtmxpJ+AxoKQ+B4z4LlflZYBpO1CgIYM0HyeKZ6lbmC7tpI/b7sBKGvgopbm1v5VxA5FJcTJeX4OfVCTgnSd3+a6oJDUEbLXgOcHFJBoklY2cfLWHxGRupSwwI639gjOXALScIqY186+z2kzDdPBlbOPeBv0eXf8vj1/2jt5BnkPrW1vmTBtpNDbCm0M0ZTvFBBfnkUogVv+XkoRWykt/NwECm4H/+/+rbfPWzzESzdIiu5/yM5/IEzJIeO16CYKhSMfBf3XIpdbZuZoUHOUWU9u24Kq7zrLy7K7ahWpiLWSRc=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:CA;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(346002)(396003)(136003)(451199015)(36840700001)(40470700004)(46966006)(316002)(4326008)(5660300002)(110136005)(54906003)(8936002)(70586007)(70206006)(6666004)(36756003)(82310400005)(41300700001)(26005)(86362001)(2616005)(426003)(47076005)(36860700001)(186003)(336012)(40460700003)(478600001)(8676002)(82740400003)(2906002)(356005)(40480700001)(81166007)(44832011)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2022 17:30:56.7013
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a50fd04-5bbc-4d74-23b8-08dadec22005
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT020.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5748
+Date:   Thu, 15 Dec 2022 18:31:16 +0100
+From:   Wolfgang Walter <linux@stwm.de>
+To:     linux-wireless@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: kernel v6.1: NULL pointer dereference in ieee80211_deliver_skb
+Message-ID: <1585238f2dee5e2daafe28ba0606b6a4@stwm.de>
+X-Sender: linux@stwm.de
+Organization: =?UTF-8?Q?Studentenwerk_M=C3=BCnchen?=
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Xilinx Alveo U50 PCI card exposes multiple hardware peripherals on
-its PCI BAR. The card firmware provides a flattened device tree to
-describe the hardware peripherals on its BARs. This allows U50 driver to
-load the flattened device tree and generate the device tree node for
-hardware peripherals underneath.
+Hello,
 
-To generate device tree node for U50 card, added PCI quirks to call
-of_pci_make_dev_node() for U50.
+with kernel v6.1 I always get the following oops when running on a small 
+router:
 
-Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
-Signed-off-by: Sonal Santan <sonal.santan@amd.com>
-Signed-off-by: Max Zhen <max.zhen@amd.com>
-Reviewed-by: Brian Xu <brian.xu@amd.com>
----
- drivers/pci/quirks.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+====================================================
+Dez 14 18:14:29 knut systemd[1]: Started LSB: DHCP relay.
+Dez 14 18:14:30 knut kernel: BUG: kernel NULL pointer dereference, 
+address: 00000000000000a8
+Dez 14 18:14:30 knut kernel: #PF: supervisor write access in kernel mode
+Dez 14 18:14:30 knut kernel: #PF: error_code(0x0002) - not-present page
+Dez 14 18:14:30 knut kernel: PGD 0 P4D 0
+Dez 14 18:14:30 knut kernel: Oops: 0002 [#1] PREEMPT SMP PTI
+Dez 14 18:14:30 knut kernel: CPU: 1 PID: 506 Comm: mt76-usb-rx phy 
+Tainted: G            E      6.1.0-debian64x+1.7 #3
+Dez 14 18:14:30 knut kernel: Hardware name: ZOTAC 
+ZBOX-ID92/ZBOX-IQ01/ZBOX-ID92/ZBOX-IQ01, BIOS B220P007 05/21/2014
+Dez 14 18:14:30 knut kernel: RIP: 0010:ieee80211_deliver_skb+0x62/0x1f0 
+[mac80211]
+Dez 14 18:14:30 knut kernel: Code: 00 48 89 04 24 e8 9e a7 c3 df 89 c0 
+48 03 1c c5 a0 ea 39 a1 4c 01 6b 08 48 ff 03 48 83 7d 28 00 74 11 48 8b 
+45 30 48 63 55 44 <48> 83 84 d0 a8 00 00 00 01 41 8b 86 c0 11 00 00 8d 
+50 fd 83 fa 01
+Dez 14 18:14:30 knut kernel: RSP: 0018:ffff999040803b10 EFLAGS: 00010286
+Dez 14 18:14:30 knut kernel: RAX: 0000000000000000 RBX: ffffb9903f496480 
+RCX: 0000000000000000
+Dez 14 18:14:30 knut kernel: RDX: 0000000000000000 RSI: 0000000000000000 
+RDI: 0000000000000000
+Dez 14 18:14:30 knut kernel: RBP: ffff999040803ce0 R08: 0000000000000000 
+R09: 0000000000000000
+Dez 14 18:14:30 knut kernel: R10: 0000000000000000 R11: 0000000000000000 
+R12: ffff8d21828ac900
+Dez 14 18:14:30 knut kernel: R13: 000000000000004a R14: ffff8d2198ed89c0 
+R15: ffff8d2198ed8000
+Dez 14 18:14:30 knut kernel: FS:  0000000000000000(0000) 
+GS:ffff8d24afe80000(0000) knlGS:0000000000000000
+Dez 14 18:14:30 knut kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 
+0000000080050033
+Dez 14 18:14:30 knut kernel: CR2: 00000000000000a8 CR3: 0000000429810002 
+CR4: 00000000001706e0
+Dez 14 18:14:30 knut kernel: Call Trace:
+Dez 14 18:14:30 knut kernel:  <TASK>
+Dez 14 18:14:30 knut kernel:  __ieee80211_rx_h_amsdu+0x1b5/0x240 
+[mac80211]
+Dez 14 18:14:30 knut kernel:  ? 
+ieee80211_prepare_and_rx_handle+0xcdd/0x1320 [mac80211]
+Dez 14 18:14:30 knut kernel:  ? __local_bh_enable_ip+0x3b/0xa0
+Dez 14 18:14:30 knut kernel:  
+ieee80211_prepare_and_rx_handle+0xcdd/0x1320 [mac80211]
+Dez 14 18:14:30 knut kernel:  ? prepare_transfer+0x109/0x1a0 [xhci_hcd]
+Dez 14 18:14:30 knut kernel:  ieee80211_rx_list+0xa80/0xda0 [mac80211]
+Dez 14 18:14:30 knut kernel:  mt76_rx_complete+0x207/0x2e0 [mt76]
+Dez 14 18:14:30 knut kernel:  mt76_rx_poll_complete+0x357/0x5a0 [mt76]
+Dez 14 18:14:30 knut kernel:  mt76u_rx_worker+0x4f5/0x600 [mt76_usb]
+Dez 14 18:14:30 knut kernel:  ? mt76_get_min_avg_rssi+0x140/0x140 [mt76]
+Dez 14 18:14:30 knut kernel:  __mt76_worker_fn+0x50/0x80 [mt76]
+Dez 14 18:14:30 knut kernel:  kthread+0xed/0x120
+Dez 14 18:14:30 knut kernel:  ? kthread_complete_and_exit+0x20/0x20
+Dez 14 18:14:30 knut kernel:  ret_from_fork+0x22/0x30
+Dez 14 18:14:30 knut kernel:  </TASK>
+Dez 14 18:14:30 knut kernel: Modules linked in: cmac(E) ccm(E) sit(E) 
+tunnel4(E) ip_tunnel(E) bridge(E) tun(E) xt_hl(E) xt_LOG(E) 
+nf_log_syslog(E) xt_nat(E) xt_connmark(E) xt_addrtype(E) xt_multiport(E) 
+xt_tcpudp(E) xt_mark(E) xt_conntrack(E) xt_set(E) ip_set_hash_ip(E) 
+ip_set_hash_net(E) ip_set(E) arptable_filter(E) arp_tables(E) ebt_arp(E) 
+ebtable_nat(E) ebtable_broute(E) ebtable_filter(E) ebtables(E) 
+ip6table_nat(E) ip6table_filter(E) ip6table_mangle(E) ip6table_raw(E) 
+ip6_tables(E) iptable_nat(E) nf_nat(E) iptable_filter(E) 
+iptable_mangle(E) iptable_raw(E) xt_socket(E) nf_socket_ipv4(E) 
+nf_socket_ipv6(E) xt_helper(E) nf_conntrack_tftp(E) nf_conntrack_snmp(E) 
+nf_conntrack_broadcast(E) nf_conntrack_sip(E
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 4944798e75b5..5d76932f59ec 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -5956,3 +5956,14 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56b1, aspm_l1_acceptable_latency
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c0, aspm_l1_acceptable_latency);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c1, aspm_l1_acceptable_latency);
- #endif
-+
-+/*
-+ * For PCI device which have multiple downstream devices, its driver may use
-+ * a flattened device tree to describe the downstream devices.
-+ * To overlay the flattened device tree, the PCI device and all its ancestor
-+ * devices need to have device tree nodes on system base device tree. Thus,
-+ * before driver probing, it might need to add a device tree node as the final
-+ * fixup.
-+ */
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_XILINX, 0x5020, of_pci_make_dev_node);
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_XILINX, 0x5021, of_pci_make_dev_node);
+) nf_conntrack_irc(E) nf_conntrack_h323(E) nf_conntrack_ftp(E) 
+nf_conntrack(E) dummy(E) nf_defrag_ipv6(E) nf_defrag_ipv4(E) 
+intel_rapl_msr(E) intel_rapl_common(E) x86_pkg_temp_thermal(E) 
+intel_powerclamp(E) coretemp(E) snd_hda_codec_hdmi(E) kvm_intel(E) 
+binfmt_misc(E) kvm(E) irqbypass(E)
+Dez 14 18:14:30 knut kernel:  polyval_clmulni(E) polyval_generic(E) 
+gf128mul(E) mt76x2u(E) snd_hda_codec_realtek(E) ghash_clmulni_intel(E) 
+mt76x2_common(E) snd_hda_codec_generic(E) sha512_ssse3(E) i915(E) 
+mt76x02_usb(E) ledtrig_audio(E) mt76_usb(E) aesni_intel(E) rt2800usb(E) 
+snd_hda_intel(E) drm_buddy(E) crypto_simd(E) btusb(E) cryptd(E) 
+snd_intel_dspcfg(E) btrtl(E) mt76x02_lib(E) iwlmvm(E) rt2x00usb(E) 
+rapl(E) btbcm(E) snd_intel_sdw_acpi(E) drm_display_helper(E) 
+rt2800lib(E) mt76(E) btintel(E) mei_pxp(E) intel_cstate(E) mei_hdcp(E) 
+snd_hda_codec(E) cec(E) rt2x00lib(E) btmtk(E) evdev(E) iwlwifi(E) 
+mac80211(E) iTCO_wdt(E) snd_hda_core(E) intel_uncore(E) ttm(E) 
+libarc4(E) intel_pmc_bxt(E) iTCO_vendor_support(E) snd_hwdep(E) 
+pcspkr(E) at24(E) bluetooth(E) ir_rc6_decoder(E) watchdog(E) 
+drm_kms_helper(E) snd_pcm(E) rtsx_usb_ms(E) mei_me(E) snd_timer(E) 
+cfg80211(E) ecdh_generic(E) rc_rc6_mce(E) memstick(E) snd(E) ecc(E) 
+rfkill(E) i2c_algo_bit(E) mei(E) soundcore(E) ite_cir(E) rc_core(E) 
+button(E) sg(E)
+Dez 14 18:14:30 knut kernel:  nf_tables(E) libcrc32c(E) nfnetlink(E) 
+it87(E) hwmon_vid(E) 8021q(E) garp(E) mrp(E) stp(E) llc(E) drm(E) 
+efi_pstore(E) fuse(E) configfs(E) ip_tables(E) x_tables(E) autofs4(E) 
+ext4(E) crc32c_generic(E) crc16(E) mbcache(E) jbd2(E) rtsx_usb_sdmmc(E) 
+mmc_core(E) rtsx_usb(E) sd_mod(E) t10_pi(E) crc64_rocksoft(E) crc64(E) 
+crc_t10dif(E) crct10dif_generic(E) ahci(E) libahci(E) xhci_pci(E) 
+r8169(E) libata(E) realtek(E) crct10dif_pclmul(E) crct10dif_common(E) 
+mdio_devres(E) ehci_pci(E) xhci_hcd(E) ehci_hcd(E) i2c_i801(E) 
+crc32_pclmul(E) crc32c_intel(E) scsi_mod(E) scsi_common(E) i2c_smbus(E) 
+libphy(E) usbcore(E) lpc_ich(E) usb_common(E) fan(E) video(E) wmi(E)
+Dez 14 18:14:30 knut kernel: CR2: 00000000000000a8
+Dez 14 18:14:30 knut kernel: ---[ end trace 0000000000000000 ]---
+====================================================
+
+This happens when the wlan device is up (in AP mode). This device is 
+again part of a bridge.
+
+Regards,
 -- 
-2.17.1
-
+Wolfgang Walter
+Studentenwerk München
+Anstalt des öffentlichen Rechts
