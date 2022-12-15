@@ -2,126 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC70064DD35
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA0A64DD37
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiLOPCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 10:02:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S229885AbiLOPDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 10:03:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiLOPCr (ORCPT
+        with ESMTP id S229484AbiLOPDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 10:02:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31322C76D;
-        Thu, 15 Dec 2022 07:02:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 15 Dec 2022 10:03:15 -0500
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB6C186D6;
+        Thu, 15 Dec 2022 07:03:13 -0800 (PST)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B78C7B81BAD;
-        Thu, 15 Dec 2022 15:02:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5B57C433D2;
-        Thu, 15 Dec 2022 15:02:42 +0000 (UTC)
-Date:   Thu, 15 Dec 2022 10:02:41 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] tracing: Do not synchronize freeing of trigger filter
- on boot up
-Message-ID: <20221215100241.73a30da8@gandalf.local.home>
-In-Reply-To: <20221214200333.GA3208104@paulmck-ThinkPad-P17-Gen-1>
-References: <20221213172429.7774f4ba@gandalf.local.home>
-        <20221214084954.e759647a2f5f1a38bc78b371@kernel.org>
-        <20221214200333.GA3208104@paulmck-ThinkPad-P17-Gen-1>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 71E3D60293A85;
+        Thu, 15 Dec 2022 16:03:11 +0100 (CET)
+Message-ID: <a2420e60-b0da-d3b0-88b4-04fcac950285@molgen.mpg.de>
+Date:   Thu, 15 Dec 2022 16:03:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+To:     Heiko Stuebner <heiko@sntech.de>
+Subject: Pine64 Pinebook Pro (rk3399): debugfs: File
+ ':interrupt-controller@fee00000' in directory 'domains' already present!
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Dec 2022 12:03:33 -0800
-"Paul E. McKenney" <paulmck@kernel.org> wrote:
-
-> > > Avoid calling the synchronization function when system_state is
-> > > SYSTEM_BOOTING.  
-> > 
-> > Shouldn't this be done inside tracepoint_synchronize_unregister()?
-> > Then, it will prevent similar warnings if we expand boot time feature.  
-> 
-> How about the following wide-spectrum fix within RCU_LOCKDEP_WARN()?
-> Just in case there are ever additional issues of this sort?
-
-Adding more tracing command line parameters is triggering this more. I now
-hit:
-
-[    0.213442] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
-[    0.214653] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=8
-[    0.232023] ------------[ cut here ]------------
-[    0.232704] WARNING: CPU: 0 PID: 0 at kernel/rcu/tree.c:1410 rcu_poll_gp_seq_start_unlocked+0x8a/0xa0
-[    0.234241] Modules linked in:
-[    0.234715] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.1.0-rc6-test-00046-ga0ca17bfe724-dirty #63
-[    0.236069] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
-[    0.237549] RIP: 0010:rcu_poll_gp_seq_start_unlocked+0x8a/0xa0
-[    0.238495] Code: 02 0f 0b 48 89 ee 5b 48 c7 c7 00 ca b1 b3 5d e9 cc 0f c1 00 65 8b 05 85 f3 dd 4d 85 c0 75 a1 65 8b 05 d6 f0 dd 4d 85 c0 75 96 <0f> 0b eb 92 5b 5d e9 eb 18 fc 00 66 66 2e 0f 1f 84 00 00 00 00 00
-[    0.241433] RSP: 0000:ffffffffb3a03d28 EFLAGS: 00010046
-[    0.242289] RAX: 0000000000000000 RBX: ffffffffb3bcfc48 RCX: 0000000000000001
-[    0.243355] RDX: 0000000080000001 RSI: 0000000000000001 RDI: ffffffffb3bcfc48
-[    0.244421] RBP: 0000000000000000 R08: ffff97a3c012b8f8 R09: fffffffffffffffe
-[    0.245569] R10: ffffffffb3a03e78 R11: 00000000ffffffff R12: 0000000000000040
-[    0.246752] R13: ffffffffb3a30500 R14: ffffffffb3be6180 R15: ffff97a3c0355d10
-[    0.247826] FS:  0000000000000000(0000) GS:ffff97a537c00000(0000) knlGS:0000000000000000
-[    0.249084] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    0.250012] CR2: ffff97a51e201000 CR3: 000000025c826001 CR4: 00000000000606b0
-[    0.251122] Call Trace:
-[    0.251491]  <TASK>
-[    0.251810]  synchronize_rcu+0xb6/0x1e0
-[    0.252393]  ? smp_call_function_many_cond+0x36d/0x3b0
-[    0.253243]  ? enable_trace_buffered_event+0x10/0x10
-[    0.254021]  trace_buffered_event_disable+0x7c/0x140
-[    0.254786]  __ftrace_event_enable_disable+0x11c/0x250
-[    0.255559]  __ftrace_set_clr_event_nolock+0xe3/0x130
-[    0.256321]  ftrace_set_clr_event+0x9a/0xe0
-[    0.256976]  early_enable_events+0x64/0xa8
-[    0.257647]  trace_event_init+0xd6/0x2dd
-[    0.258305]  start_kernel+0x760/0x9e0
-[    0.258862]  secondary_startup_64_no_verify+0xe5/0xeb
-[    0.259634]  </TASK>
-[    0.259966] irq event stamp: 0
-[    0.260427] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
-[    0.261448] hardirqs last disabled at (0): [<0000000000000000>] 0x0
-[    0.262424] softirqs last  enabled at (0): [<0000000000000000>] 0x0
-[    0.263402] softirqs last disabled at (0): [<0000000000000000>] 0x0
-[    0.264345] ---[ end trace 0000000000000000 ]---
-[    0.265088] ------------[ cut here ]------------
-
-Where kernel/rcu/tree.c:1410 is at:
-
-// Make the polled API aware of the beginning of a grace period, but
-// where caller does not hold the root rcu_node structure's lock.
-static void rcu_poll_gp_seq_start_unlocked(unsigned long *snap)
-{
-	unsigned long flags;
-	struct rcu_node *rnp = rcu_get_root();
-
-	if (rcu_init_invoked()) {
-		lockdep_assert_irqs_enabled(); <<-------------- 1410
-		raw_spin_lock_irqsave_rcu_node(rnp, flags);
-	}
-	rcu_poll_gp_seq_start(snap);
-	if (rcu_init_invoked())
-		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-}
+Dear Linux folks,
 
 
--- Steve
+Starting Manjaro ARM on a Pine64 Pinebook Pro, Linux 6.0.7 logs:
+
+```
+[    0.000000] Linux version 6.0.7-2-MANJARO-ARM 
+(builduser@fh-mjr-build-lon-xlarge) (gcc (GCC) 12.1.0, GNU ld (GNU 
+Binutils) 2.38) #1 SMP PREEMPT Sun Nov 6 23:15:01 UTC 2022
+[…]
+[    0.406267] debugfs: File ':interrupt-controller@fee00000' in 
+directory 'domains' already present!
+[    0.406973] debugfs: File ':interrupt-controller@fee00000' in 
+directory 'domains' already present!
+[    0.406992] debugfs: File ':interrupt-controller@fee00000' in 
+directory 'domains' already present!
+[    0.406999] debugfs: File ':interrupt-controller@fee00000' in 
+directory 'domains' already present!
+[    0.407007] debugfs: File ':interrupt-controller@fee00000' in 
+directory 'domains' already present!
+[    0.407014] debugfs: File ':interrupt-controller@fee00000' in 
+directory 'domains' already present!
+[    0.407024] debugfs: File ':interrupt-controller@fee00000' in 
+directory 'domains' already present!
+[    0.407032] debugfs: File ':interrupt-controller@fee00000' in 
+directory 'domains' already present!
+[    0.407039] debugfs: File ':interrupt-controller@fee00000' in 
+directory 'domains' already present!
+[    0.407047] debugfs: File ':interrupt-controller@fee00000' in 
+directory 'domains' already present!
+[    0.407054] debugfs: File ':interrupt-controller@fee00000' in 
+directory 'domains' already present!
+[    0.407061] debugfs: File ':interrupt-controller@fee00000' in 
+directory 'domains' already present!
+[    0.407068] debugfs: File ':interrupt-controller@fee00000' in 
+directory 'domains' already present!
+[    0.407075] debugfs: File ':interrupt-controller@fee00000' in 
+directory 'domains' already present!
+[    0.407082] debugfs: File ':interrupt-controller@fee00000' in 
+directory 'domains' already present!
+```
+
+I found a corresponding definition in the devicetree 
+`arch/arm64/boot/dts/rockchip/rk3399.dtsi`:
+
+```
+         gic: interrupt-controller@fee00000 {
+                 compatible = "arm,gic-v3";
+                 #interrupt-cells = <4>;
+                 #address-cells = <2>;
+                 #size-cells = <2>;
+                 ranges;
+                 interrupt-controller;
+
+                 reg = <0x0 0xfee00000 0 0x10000>, /* GICD */
+                       <0x0 0xfef00000 0 0xc0000>, /* GICR */
+                       <0x0 0xfff00000 0 0x10000>, /* GICC */
+                       <0x0 0xfff10000 0 0x10000>, /* GICH */
+                       <0x0 0xfff20000 0 0x10000>; /* GICV */
+                 interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH 0>;
+                 its: interrupt-controller@fee20000 {
+                         compatible = "arm,gic-v3-its";
+                         msi-controller;
+                         #msi-cells = <1>;
+                         reg = <0x0 0xfee20000 0x0 0x20000>;
+                 };
+
+                 ppi-partitions {
+                         ppi_cluster0: interrupt-partition-0 {
+                                 affinity = <&cpu_l0 &cpu_l1 &cpu_l2 
+&cpu_l3>;
+                         };
+
+                         ppi_cluster1: interrupt-partition-1 {
+                                 affinity = <&cpu_b0 &cpu_b1>;
+                         };
+                 };
+         };
+```
+
+
+Kind regards,
+
+Paul
