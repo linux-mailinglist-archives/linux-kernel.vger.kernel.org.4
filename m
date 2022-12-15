@@ -2,152 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF24B64DDDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC1864DDE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiLOPeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 10:34:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
+        id S230164AbiLOPei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 10:34:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiLOPd6 (ORCPT
+        with ESMTP id S229656AbiLOPef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 10:33:58 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9F327936
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 07:33:57 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso3152878pjt.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 07:33:57 -0800 (PST)
+        Thu, 15 Dec 2022 10:34:35 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64F227DD0;
+        Thu, 15 Dec 2022 07:34:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Oy98eREJ/U08Ijl7nb4a4sr3FJDv3ahMiFs+yTIRwyI=;
-        b=Mf9dxrCd6+/PMgzE3s7B4l27HdANlE/bJp9sooJz4AdKA8nSHD+uztdexBXL7UWrOP
-         a65Y5iU74zojj+edTgqcepO93YEw6AYVGKASOlABYPZ4bV56LMiJQ/NKqb6uMtYEwX/v
-         7+kLDjCPMG3RKAcr9JEh2tKPhjGEQXFnQZiijc8sViu6E+yoIUs79b0x9GB76jYdz8Mn
-         1tKRYtDm9CG9i0or+S73JGLR+XhZLbOHhwIiuBXQqG2WXC5r8KnbEdmmKp9ZZ7yiPIJp
-         CNLm5kHPKJFdaQDHylQrCzHfm9oqFWYRu8wwwAOiKgbfiUVbOMNQB21i61+kKqrjckFY
-         6zhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oy98eREJ/U08Ijl7nb4a4sr3FJDv3ahMiFs+yTIRwyI=;
-        b=gKChjoJs5bgPVD3JRzXneVb9FBw6BNOIac6toRq3m/qIPnuaercbF/oHKBHdnSyEx5
-         lzOofM+gtv+9HYBvlZgBk6Dt5XaCGueV4EXfelGmdH5w5CnHXxts+ZmwUn1Scj7rnlNz
-         ElGElbNzeY06uXOEiV3yNs+adENjdkluQb6KTrj5OZR56ow5LkMRPBGvRl9dbtnqZcbt
-         7dp6R/13KVS4D4ZifeNF1Sk7RjpKduHoKYjua19ZXJo2b9rTd72rhnJ3MuoWG5ZqA+Ic
-         7G/Jb/P+wtvACw02xH51ExM728+zOaG0SfXiyt+QIo9K3u4R8qK6P9cNWZvWXgopneng
-         pjSw==
-X-Gm-Message-State: ANoB5pnxweQf0Phcwe2xf3qHt0TCLP4uWHtDp+Q6FH2nPGMgrmcToBOI
-        w35O/Wa5ltnxICz1nM4WMyiJXg==
-X-Google-Smtp-Source: AA0mqf5KODDCvZ+aTJxkTD/kZbAZbzu4afb2pnxx0S6C9GpDTpjhZd7JDbhoGi6S29YagehPHmPedw==
-X-Received: by 2002:a05:6a20:4925:b0:ac:6543:d65d with SMTP id ft37-20020a056a20492500b000ac6543d65dmr34962768pzb.24.1671118437319;
-        Thu, 15 Dec 2022 07:33:57 -0800 (PST)
-Received: from ?IPV6:2602:47:d48c:8101:a80f:54a1:edc3:6cb4? ([2602:47:d48c:8101:a80f:54a1:edc3:6cb4])
-        by smtp.gmail.com with ESMTPSA id p15-20020a654bcf000000b00478fd9bb6c7sm1714007pgr.75.2022.12.15.07.33.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 07:33:56 -0800 (PST)
-Message-ID: <24a1a812-95a9-ed97-abd1-c0ff259726d2@linaro.org>
-Date:   Thu, 15 Dec 2022 07:33:53 -0800
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1671118473; x=1702654473;
+  h=from:to:subject:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding;
+  bh=Pbv+9uskzHcZxO+SbrV0Ayv08NAC2/6QX40jMpNz+ec=;
+  b=iDngaLkLdUadayjQuoS6OgbWNyXU+NwKkpckDLc/WZfCrqII92N/5nek
+   X59uHkMArlbTIu7K90Hf9D8weYdbT1snFIr7gSgrEYvLBtpOqZhoRnooI
+   hcgAA8tPQtjvJcrfMrBzwxphmrXlHP3v6CZ4KRSa57AEmAR32+hyUrHQR
+   Y+pe7LLFEyBu2JN5jkyrLlMpNZsro50w61THYTegbwgF4Wvjagp423s30
+   l0MovMpZpWUNGwYxCs7nPzIn8gTBJYFYYO5/LLprzt1seZhAUIPZTid11
+   2Nbfo2brszjWDavl1MSLrZGqHQVXEw78302/zLJBLFtn3bVXmftNFBh2G
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,247,1665439200"; 
+   d="scan'208";a="27979871"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 15 Dec 2022 16:34:31 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 15 Dec 2022 16:34:31 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 15 Dec 2022 16:34:31 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1671118471; x=1702654471;
+  h=from:to:subject:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding;
+  bh=Pbv+9uskzHcZxO+SbrV0Ayv08NAC2/6QX40jMpNz+ec=;
+  b=M4S91W/h+ejIrLfU6Ue1puG4c+60xSJGg6ZTF9jDtf9xJTinCZ2mnKhn
+   NMdANXj7C2U/UH8bnCh53dLkhM9CFpE4DhEqBd2WKG3XwRbJtitziUjJn
+   mffeisT7krO2qzC7BT12s1tYvxvmuA2nn/b4xwz/MZo8gZABvXHiuwysC
+   Ek/MEFu0C+SNo8GvVCtEumHHGPLctRcUMpTLEgSICYeI8BnPB1bRfyXmz
+   z3hEwcLucmOpJSU8swB36fVaTwD22vjtunOVVdlWCv5gq3YLj0rZFqdaW
+   NAcLVdgjao1SEQZnFg7rcvjiBiMVORR3kbSDrov9N1/j0wvOygdxHeTSV
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,247,1665439200"; 
+   d="scan'208";a="27979870"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 15 Dec 2022 16:34:30 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 9F3C0280071;
+        Thu, 15 Dec 2022 16:34:30 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Christian Marangi <ansuelsmth@gmail.com>
+Subject: Re: [PATCH v7 00/11] Adds support for PHY LEDs with offload triggers
+Date:   Thu, 15 Dec 2022 16:34:30 +0100
+Message-ID: <2379211.Icojqenx9y@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20221214235438.30271-1-ansuelsmth@gmail.com>
+References: <20221214235438.30271-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: RISCV Vector unit disabled by default for new task (was Re:
- [PATCH v12 17/17] riscv: prctl to enable vector commands)
-Content-Language: en-US
-To:     Florian Weimer <fweimer@redhat.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc:     Darius Rad <darius@bluespec.com>,
-        Vineet Gupta <vineetg@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Andrew Waterman <andrew@sifive.com>, stillson@rivosinc.com,
-        Paul Walmsley <paul.walmsley@sifive.com>, anup@brainfault.org,
-        atishp@atishpatra.org, guoren@kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        greentime.hu@sifive.com, vincent.chen@sifive.com,
-        andy.chiu@sifive.com, arnd@kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        libc-alpha@sourceware.org, christoph.muellner@vrull.eu,
-        Aaron Durbin <adurbin@rivosinc.com>, linux@rivosinc.com
-References: <mhng-975b1d7b-7b3f-4e88-804c-8b22787f9588@palmer-ri-x1c9>
- <e9cf13a9-561a-3438-00f0-41fe2631888d@rivosinc.com>
- <Y5irn63DQkwumfvW@bruce.bluespec.com>
- <8fe9cfaf-2cbc-8de6-3928-067de9113bfc@rivosinc.com>
- <Y5qByfCtpV0uNID3@bruce.bluespec.com>
- <877cysx4yf.fsf@all.your.base.are.belong.to.us>
- <87h6xwdf5g.fsf@oldenburg.str.redhat.com>
-From:   Richard Henderson <richard.henderson@linaro.org>
-In-Reply-To: <87h6xwdf5g.fsf@oldenburg.str.redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/22 04:28, Florian Weimer via Libc-alpha wrote:
-> * Björn Töpel:
+Hi,
+
+thanks for the new series.
+
+Am Donnerstag, 15. Dezember 2022, 00:54:27 CET schrieb Christian Marangi:
+> This is another attempt on adding this feature on LEDs, hoping this is
+> the right time and someone finally notice this.
+
+Unfortunately I'm out of office from next week on, so there is only limited 
+feedback from my side.
+
+> Most of the times Switch/PHY have connected multiple LEDs that are
+> controlled by HW based on some rules/event. Currently we lack any
+> support for a generic way to control the HW part and normally we
+> either never implement the feature or only add control for brightness
+> or hw blink.
 > 
->>> For SVE, it is in fact disabled by default in the kernel.  When a thread
->>> executes the first SVE instruction, it will cause an exception, the kernel
->>> will allocate memory for SVE state and enable TIF_SVE.  Further use of SVE
->>> instructions will proceed without exceptions.  Although SVE is disabled by
->>> default, it is enabled automatically.  Since this is done automatically
->>> during an exception handler, there is no opportunity for memory allocation
->>> errors to be reported, as there are in the AMX case.
->>
->> Glibc has an SVE optimized memcpy, right? Doesn't that mean that pretty
->> much all processes on an SVE capable system will enable SVE (lazily)? If
->> so, that's close to "enabled by default" (unless SVE is disabled system
->> wide).
+> This is based on Marek idea of providing some API to cled but use a
+> different implementation that in theory should be more generilized.
 > 
-> Yes, see sysdeps/aarch64/multiarch/memcpy.c:
+> The current idea is:
+> - LED driver implement 3 API (hw_control_status/start/stop).
+>   They are used to put the LED in hardware mode and to configure the
+>   various trigger.
+> - We have hardware triggers that are used to expose to userspace the
+>   supported hardware mode and set the hardware mode on trigger
+>   activation.
+> - We can also have triggers that both support hardware and software mode.
+> - The LED driver will declare each supported hardware blink mode and
+>   communicate with the trigger all the supported blink modes that will
+>   be available by sysfs.
+> - A trigger will use blink_set to configure the blink mode to active
+>   in hardware mode.
+> - On hardware trigger activation, only the hardware mode is enabled but
+>   the blink modes are not configured. The LED driver should reset any
+>   link mode active by default.
+
+I'm a bit confused about that blink mode is supposed to mean. I don't know 
+what to implement for blink_set. Reading qca8k_cled_blink_set it seems to just 
+configure the blink interval for the corresponding LED.
+Unfortunately that's not possible for all PHYs. In my case, DP83867, I can 
+configure the blink interval only globally. I'm not sure how this will fit 
+into this LED trigger.
+
+> Each LED driver will have to declare explicit support for the offload
+> trigger (or return not supported error code) as we the trigger_data that
+> the LED driver will elaborate and understand what is referring to (based
+> on the current active trigger).
 > 
->    static inline __typeof (__redirect_memcpy) *
->    select_memcpy_ifunc (void)
->    {
->      INIT_ARCH ();
->    
->      if (sve && HAVE_AARCH64_SVE_ASM)
->        {
->          if (IS_A64FX (midr))
->            return __memcpy_a64fx;
->          return __memcpy_sve;
->        }
->    
->      if (IS_THUNDERX (midr))
->        return __memcpy_thunderx;
->    
->      if (IS_THUNDERX2 (midr) || IS_THUNDERX2PA (midr))
->        return __memcpy_thunderx2;
->    
->      if (IS_FALKOR (midr) || IS_PHECDA (midr))
->        return __memcpy_falkor;
->    
->      return __memcpy_generic;
->    }
->    
-> And the __memcpy_sve implementation actually uses SVE.
+> I posted a user for this new implementation that will benefit from this
+> and will add a big feature to it. Currently qca8k can have up to 3 LEDs
+> connected to each PHY port and we have some device that have only one of
+> them connected and the default configuration won't work for that.
+
+My DP83867 proof of concept implementation also supports several LEDs, but my 
+actual hardware also only has 2 of them attached (LED0 and LED2).
+
+Best regards,
+Alexander
+
+> The netdev trigger is expanded and it does now support hardware only
+> triggers.
+> The idea is to use hardware mode when a device_name is not defined.
+> An additional sysfs entry is added to give some info about the available
+> trigger modes supported in the current configuration.
 > 
-> If there were a prctl to select the vector width and enable the vector
-> extension, we'd have to pick a width in glibc anyway.
+> 
+> It was reported that at least 3 other switch family would benefits by
+> this as they all lack support for a generic way to setup their leds and
+> netdev team NACK each try to add special code to support LEDs present
+> on switch in favor of a generic solution.
+> 
+> v7:
+> - Rebase on top of net-next (for qca8k changes)
+> - Fix some typo in commit description
+> - Fix qca8k leds documentation warning
+> - Remove RFC tag
+> v6:
+> - Back to RFC.
+> - Drop additional trigger
+> - Rework netdev trigger to support common modes used by switch and
+>   hardware only triggers
+> - Refresh qca8k leds logic and driver
+> v5:
+> - Move out of RFC. (no comments from Andrew this is the right path?)
+> - Fix more spelling mistake (thx Randy)
+> - Fix error reported by kernel test bot
+> - Drop the additional HW_CONTROL flag. It does simplify CONFIG
+>   handling and hw control should be available anyway to support
+>   triggers as module.
+> v4:
+> - Rework implementation and drop hw_configure logic.
+>   We now expand blink_set.
+> - Address even more spelling mistake. (thx a lot Randy)
+> - Drop blink option and use blink_set delay.
+> - Rework phy-activity trigger to actually make the groups dynamic.
+> v3:
+> - Rework start/stop as Andrew asked.
+> - Introduce more logic to permit a trigger to run in hardware mode.
+> - Add additional patch with netdev hardware support.
+> - Use test_bit API to check flag passed to hw_control_configure.
+> - Added a new cmd to hw_control_configure to reset any active blink_mode.
+> - Refactor all the patches to follow this new implementation.
+> v2:
+> - Fix spelling mistake (sorry)
+> - Drop patch 02 "permit to declare supported offload triggers".
+>   Change the logic, now the LED driver declare support for them
+>   using the configure_offload with the cmd TRIGGER_SUPPORTED.
+> - Rework code to follow this new implementation.
+> - Update Documentation to better describe how this offload
+>   implementation work.
+> 
+> Christian Marangi (11):
+>   leds: add support for hardware driven LEDs
+>   leds: add function to configure hardware controlled LED
+>   leds: trigger: netdev: drop NETDEV_LED_MODE_LINKUP from mode
+>   leds: trigger: netdev: rename and expose NETDEV trigger enum modes
+>   leds: trigger: netdev: convert device attr to macro
+>   leds: trigger: netdev: add hardware control support
+>   leds: trigger: netdev: use mutex instead of spinlocks
+>   leds: trigger: netdev: add available mode sysfs attr
+>   leds: trigger: netdev: add additional hardware only triggers
+>   net: dsa: qca8k: add LEDs support
+>   dt-bindings: net: dsa: qca8k: add LEDs definition example
+> 
+>  .../devicetree/bindings/net/dsa/qca8k.yaml    |  24 ++
+>  Documentation/leds/leds-class.rst             |  53 +++
+>  drivers/leds/Kconfig                          |  11 +
+>  drivers/leds/led-class.c                      |  27 ++
+>  drivers/leds/led-triggers.c                   |  29 ++
+>  drivers/leds/trigger/ledtrig-netdev.c         | 385 ++++++++++++-----
+>  drivers/net/dsa/qca/Kconfig                   |   9 +
+>  drivers/net/dsa/qca/Makefile                  |   1 +
+>  drivers/net/dsa/qca/qca8k-8xxx.c              |   4 +
+>  drivers/net/dsa/qca/qca8k-leds.c              | 406 ++++++++++++++++++
+>  drivers/net/dsa/qca/qca8k.h                   |  62 +++
+>  include/linux/leds.h                          | 103 ++++-
+>  12 files changed, 1015 insertions(+), 99 deletions(-)
+>  create mode 100644 drivers/net/dsa/qca/qca8k-leds.c
 
-There *is* a prctl to adjust the SVE vector width, but glibc does not need to select 
-because SVE dynamically adjusts to the currently enabled width.  The kernel selects a 
-default width that fits within the default signal frame size.
-
-The other thing of note for SVE is that, with the default function ABI all of the SVE 
-state is call-clobbered, which allows the kernel to drop instead of save state across 
-system calls.  (There is a separate vector function call ABI when SVE types are used.)
-
-So while strcpy may enable SVE for the thread, the next syscall may disable it again.
 
 
-r~
+
