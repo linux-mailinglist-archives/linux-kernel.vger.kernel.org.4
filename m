@@ -2,164 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DF664E132
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33FAB64E134
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbiLOSp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 13:45:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
+        id S229955AbiLOSqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 13:46:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbiLOSpa (ORCPT
+        with ESMTP id S230286AbiLOSpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 13:45:30 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F1527CD0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 10:45:29 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1433ef3b61fso369069fac.10
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 10:45:29 -0800 (PST)
+        Thu, 15 Dec 2022 13:45:42 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B08260B
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 10:45:39 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id a16so263083qtw.10
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 10:45:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WEfPevdP7TJjnOIQtPsy+AcNppPJSiCKzyrt/O+WxJM=;
-        b=j6kGh3ykV4NImJgI7b18PBsKNjvgGeK3aR+cZp5W/GhzrtxBO4uxn9oFBS+5IJn7hC
-         wDNGjiaLz1b7Rb9LOEtYldzbpWAwEENBtSkknMRlSYdwkgZ547nKZtuDweUyNOMNtYAx
-         TFfkpCycfKp9sikmP2gSadcGfBzp4dsBms2+HZ/AM1FiG7hrZLZt4olXVuDyM8uFh2Z5
-         h7jkjX7L52UMfE2UCBQjC7vZfi66ulCitQ2yl1EoFvWj4xJe/06p1QRLzMXpbtfUUY2R
-         psSQf5Kw5OQcgvWLswPDD+wUZNb4Oia5qqHjFN97IZuH2BOjDKQdtAXynDfNmD8oxxry
-         Usww==
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+8kdbca7RYmzghu3wrDFH9WKgOWAt7+jGRtzBcbGXvg=;
+        b=RDxuf4vWN8ZO5ssFcc25XiKKo/4GxNXFK5YWWvzMeoCeWVtkwg58xezK7KBo9Ss9xz
+         cRmdZLa3PiR4GXoO+r7xTAIKFue3kCyWjSE9qpLAFUpETnMGbso2nsUUG+D7ToOMdWMt
+         aeuSy8tbFKDtZg9a5LPo8i60QdC0Nq7oz1EM8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WEfPevdP7TJjnOIQtPsy+AcNppPJSiCKzyrt/O+WxJM=;
-        b=1JJaHcbDj3Ca05v8ZAey2YIwUMhbCtJB1WMQyhea+sd9tojKH+c0tqztiuIucSlN/Y
-         MUH8VBtqOlgancwvJAMMaV33wnLVRmeZWuoRfyyh762VMsEnnNpCS88EJUFxmt4tV7bO
-         GFeeVxKjEM/259aIT25msGTEajyqgtZAOIQzrFGGBsYqU7f/2ehwJMeqEBMBoRwz3mlh
-         KC7WSN3Ht31tfNJczoglFXhZr4aE9Z6DpM7/2x3NXoUaPDL7xW8T0NBIRcC4nri0XedI
-         m6UZCNIThdCdrQeAPuQz8ZtaoJNnG00UJ0obwCqTY6+E8oT+k2VG8ErR4BT/fZD1JvTO
-         mXNg==
-X-Gm-Message-State: AFqh2kpRjflcFMH/UjAHx9I1kT6C4dXFqUNd2lF8QXz+I1V/H7SIHtby
-        uRApYynW8RMj7G6qdIFze1vDOEuuWh4XTEH3Dc0=
-X-Google-Smtp-Source: AMrXdXv8rSwR8qAQ1zJL/wkH8q0sS2srKc8zr4Ipi/FlQ13g+Lo7yphFOfIVlXGX86Y1SMSSxP5pUbKDL4g4sLXPdFA=
-X-Received: by 2002:a05:6870:8091:b0:148:3c8f:15ab with SMTP id
- q17-20020a056870809100b001483c8f15abmr360847oab.46.1671129928331; Thu, 15 Dec
- 2022 10:45:28 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+8kdbca7RYmzghu3wrDFH9WKgOWAt7+jGRtzBcbGXvg=;
+        b=PwnO5Ms5wJsS72r7+h7Awuw0HxOdJg0m0ercigQKAIUGUzS5x8NJoBlJIYrlRERtdR
+         ylcTg9ZCgWluTG6gG4QP25LG6CFF3spxaKoIQzOobDF5M4NU+lvOOQqNO5pfAwnk25Ko
+         FESEkKXmckzLDv4B+p2i+95DyBhb15itYLCVC2Nc4BuiPSIlunCEN3zQA6J6hwPbik1b
+         jr0schNscN4yPpeFacEyBt157Z8L1uxKbM4cLSp6VcJBELCQ9JI5eqCk3rd+MkZDh31V
+         4qe4Dq1xZ6JM7+Vu+lS7ilRWz6CVVldg0Em8+Sb6hxwVYE1+gU94DDpCY+vVqI1k0OX7
+         ig7Q==
+X-Gm-Message-State: AFqh2konzVna+7Nw/hNqUn8BG5Rntk0BpPKOu28soZzt2UmemK88FE+E
+        yDBsnOiJ/CuathpeG0JdO6cavQ==
+X-Google-Smtp-Source: AMrXdXtKc1qXGEu1lpOg9q/lsex/RBhHmz2vLTrGw4eI73/gi/6Pee1y9Cx54AsGsN+fgApbcwCoyQ==
+X-Received: by 2002:ac8:668d:0:b0:3a9:1ada:930f with SMTP id d13-20020ac8668d000000b003a91ada930fmr4932696qtp.23.1671129938658;
+        Thu, 15 Dec 2022 10:45:38 -0800 (PST)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id w5-20020a05620a444500b006eed75805a2sm13009205qkp.126.2022.12.15.10.45.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 10:45:37 -0800 (PST)
+Date:   Thu, 15 Dec 2022 18:45:37 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        linux-acpi@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Brian Norris <briannorris@chromium.org>,
+        Ross Zwisler <zwisler@google.com>,
+        Ching-lin Yu <chinglinyu@google.com>
+Subject: Re: [RFC][PATCH] ACPI: tracing: Have ACPI debug go to tracing ring
+ buffer
+Message-ID: <Y5trUep9IvCv1Uwy@google.com>
+References: <20221214233106.69b2c01b@gandalf.local.home>
 MIME-Version: 1.0
-References: <20221215163649.386750-1-arnd@kernel.org>
-In-Reply-To: <20221215163649.386750-1-arnd@kernel.org>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 15 Dec 2022 13:45:16 -0500
-Message-ID: <CADnq5_P0M5fYCbqt+PwLSGzdeMy3YCvkaRW9sm+z7rC0Ra8_mw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/pm: avoid large variable on kernel stack
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Evan Quan <evan.quan@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Kenneth Feng <kenneth.feng@amd.com>,
-        Yang Wang <KevinYang.Wang@amd.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Chengming Gui <Jack.Gui@amd.com>, Tom Rix <trix@redhat.com>,
-        llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221214233106.69b2c01b@gandalf.local.home>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+Hi Steve,
 
-Alex
-
-On Thu, Dec 15, 2022 at 11:37 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The activity_monitor_external[] array is too big to fit on the
-> kernel stack, resulting in this warning with clang:
->
-> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:1438:12: error: stack frame size (1040) exceeds limit (1024) in 'smu_v13_0_7_get_power_profile_mode' [-Werror,-Wframe-larger-than]
->
-> Use dynamic allocation instead. It should also be possible to
-> have single element here instead of the array, but this seems
-> easier.
->
-> Fixes: 334682ae8151 ("drm/amd/pm: enable workload type change on smu_v13_0_7")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Wed, Dec 14, 2022 at 11:31:06PM -0500, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> While debugging some firmware that was taking a bit of time to initialize,
+> I enabled ACPI_DEBUG and added a bit too much info to the debug_layer and
+> debug_level acpi command line options, and it made the computer not be
+> able to boot (too much info! or too much printk).
+> 
+> I decided that this would be easier to handle if the acpi output was
+> written instead into the trace buffer. This also has the added benefit of
+> adding other trace events and seeing how ACPI interacts with the rest of
+> the system.
+> 
+> Ideally, the ACPI trace should have proper trace events where data can be
+> stored more efficiently and be filtered and parsed better. But for now,
+> just writing the debug string into the buffer will suffice.  This makes it
+> possible to enable all ACPI output (setting triggers on other events to
+> stop tracing, to not lose the data you are looking for).
+> 
+> Even with all APCI debugging enable, the system continues to run perfectly
+> fine.
+> 
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 > ---
->  .../drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c  | 21 ++++++++++++++-----
->  1 file changed, 16 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
-> index c270f94a1b86..7eba854e09ec 100644
-> --- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
-> +++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
-> @@ -1439,7 +1439,7 @@ static int smu_v13_0_7_get_power_limit(struct smu_context *smu,
->
->  static int smu_v13_0_7_get_power_profile_mode(struct smu_context *smu, char *buf)
->  {
-> -       DpmActivityMonitorCoeffIntExternal_t activity_monitor_external[PP_SMC_POWER_PROFILE_COUNT];
-> +       DpmActivityMonitorCoeffIntExternal_t *activity_monitor_external;
->         uint32_t i, j, size = 0;
->         int16_t workload_type = 0;
->         int result = 0;
-> @@ -1447,6 +1447,12 @@ static int smu_v13_0_7_get_power_profile_mode(struct smu_context *smu, char *buf
->         if (!buf)
->                 return -EINVAL;
->
-> +       activity_monitor_external = kcalloc(sizeof(activity_monitor_external),
-> +                                           PP_SMC_POWER_PROFILE_COUNT,
-> +                                           GFP_KERNEL);
-> +       if (!activity_monitor_external)
-> +               return -ENOMEM;
+> 
+>  drivers/acpi/Kconfig        | 13 +++++++++++++
+>  drivers/acpi/osl.c          |  9 ++++++++-
+>  include/trace/events/acpi.h | 30 ++++++++++++++++++++++++++++++
+>  3 files changed, 51 insertions(+), 1 deletion(-)
+>  create mode 100644 include/trace/events/acpi.h
+> 
+> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> index 473241b5193f..2dfeb3bf79a7 100644
+> --- a/drivers/acpi/Kconfig
+> +++ b/drivers/acpi/Kconfig
+> @@ -389,6 +389,19 @@ config ACPI_DEBUG
+>  	  Documentation/admin-guide/kernel-parameters.rst to control the type and
+>  	  amount of debug output.
+>  
+> +config ACPI_TRACE_PRINT
+> +	bool "Write debug into trace buffer"
+> +	depends on ACPI_DEBUG
+> +	help
+> +	  Instead of writing to the console, write to the trace ring buffer.
+> +	  This is much faster than writing to the console, and can handle
+> +	  all events.
 > +
->         size += sysfs_emit_at(buf, size, "                              ");
->         for (i = 0; i <= PP_SMC_POWER_PROFILE_WINDOW3D; i++)
->                 size += sysfs_emit_at(buf, size, "%-14s%s", amdgpu_pp_profile_name[i],
-> @@ -1459,15 +1465,17 @@ static int smu_v13_0_7_get_power_profile_mode(struct smu_context *smu, char *buf
->                 workload_type = smu_cmn_to_asic_specific_index(smu,
->                                                                CMN2ASIC_MAPPING_WORKLOAD,
->                                                                i);
-> -               if (workload_type < 0)
-> -                       return -EINVAL;
-> +               if (workload_type < 0) {
-> +                       result = -EINVAL;
-> +                       goto out;
-> +               }
->
->                 result = smu_cmn_update_table(smu,
->                                           SMU_TABLE_ACTIVITY_MONITOR_COEFF, workload_type,
->                                           (void *)(&activity_monitor_external[i]), false);
->                 if (result) {
->                         dev_err(smu->adev->dev, "[%s] Failed to get activity monitor!", __func__);
-> -                       return result;
-> +                       goto out;
->                 }
->         }
->
-> @@ -1495,7 +1503,10 @@ do {                                                                                                     \
->         PRINT_DPM_MONITOR(Fclk_BoosterFreq);
->  #undef PRINT_DPM_MONITOR
->
-> -       return size;
-> +       result = size;
-> +out:
-> +       kfree(activity_monitor_external);
-> +       return result;
->  }
->
->  static int smu_v13_0_7_set_power_profile_mode(struct smu_context *smu, long *input, uint32_t size)
-> --
+> +	  Use the acpi.debug_layer and acpi.debug_level kernel command-line
+> +	  parameters documented in Documentation/firmware-guide/acpi/debug.rst and
+> +	  Documentation/admin-guide/kernel-parameters.rst to control the type and
+> +	  amount of debug output.
+> +
+>  config ACPI_PCI_SLOT
+>  	bool "PCI slot detection driver"
+>  	depends on SYSFS && PCI
+> diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
+> index 3269a888fb7a..eeed5fd782ab 100644
+> --- a/drivers/acpi/osl.c
+> +++ b/drivers/acpi/osl.c
+> @@ -35,6 +35,9 @@
+>  #include <linux/uaccess.h>
+>  #include <linux/io-64-nonatomic-lo-hi.h>
+>  
+> +#define CREATE_TRACE_POINTS
+> +#include <trace/events/acpi.h>
+> +
+>  #include "acpica/accommon.h"
+>  #include "internal.h"
+>  
+> @@ -158,6 +161,8 @@ void acpi_os_vprintf(const char *fmt, va_list args)
+>  #ifdef ENABLE_DEBUGGER
+>  	if (acpi_in_debugger) {
+>  		kdb_printf("%s", buffer);
+> +	} else if (IS_ENABLED(CONFIG_ACPI_TRACE_PRINT)) {
+> +		trace_acpi_print(buffer);
+
+Wouldn't it be better to also check trace_acpi_print_enabled() here in the
+else if() condition, along with IS_ENABLED()? That way if the CONFIG is
+enabled but the tracepoint is not enabled, at least the messages will go to
+dmesg instead of skipped.
+
+>  	} else {
+>  		if (printk_get_level(buffer))
+>  			printk("%s", buffer);
+> @@ -165,7 +170,9 @@ void acpi_os_vprintf(const char *fmt, va_list args)
+>  			printk(KERN_CONT "%s", buffer);
+>  	}
+>  #else
+> -	if (acpi_debugger_write_log(buffer) < 0) {
+> +	if (IS_ENABLED(CONFIG_ACPI_TRACE_PRINT)) {
+> +		trace_acpi_print(buffer);
+> +	} else if (acpi_debugger_write_log(buffer) < 0) {
+
+Ditto.
+
+
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+
+thanks,
+
+ - Joel
+
+
+
+>  		if (printk_get_level(buffer))
+>  			printk("%s", buffer);
+>  		else
+> diff --git a/include/trace/events/acpi.h b/include/trace/events/acpi.h
+> new file mode 100644
+> index 000000000000..dab4dd42b5d7
+> --- /dev/null
+> +++ b/include/trace/events/acpi.h
+> @@ -0,0 +1,30 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +#undef TRACE_SYSTEM
+> +#define TRACE_SYSTEM acpi
+> +
+> +#if !defined(_TRACE_ACPI_H) || defined(TRACE_HEADER_MULTI_READ)
+> +#define _TRACE_ACPI_H
+> +
+> +#include <linux/tracepoint.h>
+> +
+> +TRACE_EVENT(acpi_print,
+> +
+> +	TP_PROTO(const char *buffer),
+> +
+> +	TP_ARGS(buffer),
+> +
+> +	TP_STRUCT__entry(
+> +		__string(buffer, buffer)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__assign_str(buffer, buffer);
+> +	),
+> +
+> +	TP_printk("%s", __get_str(buffer))
+> +);
+> +
+> +#endif /* _TRACE_SOCK_H */
+> +
+> +/* This part must be outside protection */
+> +#include <trace/define_trace.h>
+> -- 
 > 2.35.1
->
+> 
