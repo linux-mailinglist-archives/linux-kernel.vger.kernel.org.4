@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A24C64DF42
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1054064DF46
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbiLORCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 12:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
+        id S231142AbiLORDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 12:03:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbiLORCN (ORCPT
+        with ESMTP id S230433AbiLORDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 12:02:13 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4667622280
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 09:02:11 -0800 (PST)
+        Thu, 15 Dec 2022 12:03:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6272D40470;
+        Thu, 15 Dec 2022 09:02:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 24F64CE1BC0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 17:02:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B7EDC433D2;
-        Thu, 15 Dec 2022 17:02:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48D6A61E60;
+        Thu, 15 Dec 2022 17:02:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B7A5C433D2;
+        Thu, 15 Dec 2022 17:02:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671123728;
-        bh=aZPP5Ds69HdaOxy+6a8OrUz2MqCG1aXCDs4UKolW/As=;
+        s=k20201202; t=1671123759;
+        bh=up3Hy4XDtmZzsp1AKu2LrDJlblNutNEGvR1TiT4xtdY=;
         h=From:To:Cc:Subject:Date:From;
-        b=l0tpiBK+b9s4IrxHju9S2phe8M9Eex7yQTuPXrR+Vv0qVD1fKN3TZCZS4/Zkeof9S
-         1EuDmyi66XvSafhDdW5J0EVGCpH8l7uhZOkLZ0oP+ne8YT1H860ndqgvNVPk8FAmCB
-         c+mSLLVzxgpjnVuPY16B3q7IfYZkTh6eEEh6fYyw5VjQpdgbutJ+E60WGDWE1KJ/M7
-         Dhqjb2Xf9Y1p0bbRhKhFnH7NVGzUJBpz7z7lWyfbiaKiW+XgBpcaWbXgaovUcix59C
-         xKT/cnOZ/QNchOpmvKXlql2qSMf8ifx6umv78Uvjzhdcae2FKjrwlw3Fow5EgVWprP
-         MZl/XyyS+ZlzQ==
+        b=SP+uNSHNYfDK7HipQd4t16gNSi4+NWrg12BC3jWhWv0GEyFfn/1Pp/lZtNuH7VJ/3
+         MonD7cwwre1mfclf50B4ZaJxbUItApR2PR0ffTIphUm+R8dluEM5jqmJboAn7Oeylc
+         jm+R0vpTAaYnfHAIhrr/wqvlVn0M94AoqINhxSUZju5fG8ZusdivPNUOSCiRkBOx/k
+         9pqvR2qyss7hqNOptNPf5LuYWGyONo6ghplPC5jbD5En1LgetLS3KPEE7I3FoEcOQd
+         KBw0NkRaDviB0pqJhkhCViucgrmEELqYEy+WUk/KSLTt+91WdoHLCAkJ/hRHzcPdVs
+         od8B8hhT0zlNQ==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Nathan Rossi <nathan.rossi@digi.com>
+To:     Helge Deller <deller@gmx.de>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] irqchip: armada: suppress unused-function warning
-Date:   Thu, 15 Dec 2022 18:01:57 +0100
-Message-Id: <20221215170202.2441960-1-arnd@kernel.org>
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        linux-omap@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] fbdev: omapfb: avoid stack overflow warning
+Date:   Thu, 15 Dec 2022 18:02:28 +0100
+Message-Id: <20221215170234.2515030-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -59,38 +55,92 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-armada_370_xp_msi_reenable_percpu is only defined when CONFIG_PCI_MSI
-is enabled, and only called when SMP is enabled.
+The dsi_irq_stats structure is a little too big to fit on the
+stack of a 32-bit task, depending on the specific gcc options:
 
-Without CONFIG_SMP, there are no callers, so we get a build time
-warning instead:
+fbdev/omap2/omapfb/dss/dsi.c: In function 'dsi_dump_dsidev_irqs':
+fbdev/omap2/omapfb/dss/dsi.c:1621:1: error: the frame size of 1064 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
 
-drivers/irqchip/irq-armada-370-xp.c:319:13: error: 'armada_370_xp_msi_reenable_percpu' defined but not used [-Werror=unused-function]
-  319 | static void armada_370_xp_msi_reenable_percpu(void) {}
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Since this is only a debugfs file, performance is not critical,
+so just dynamically allocate it, and print an error message
+in there in place of a failure code when the allocation fails.
 
-Mark the function as __maybe_unused to avoid adding more complexity
-to the #ifdefs.
-
-Fixes: 8ca61cde32c1 ("irqchip/armada-370-xp: Enable MSI affinity configuration")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/irqchip/irq-armada-370-xp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/video/fbdev/omap2/omapfb/dss/dsi.c | 28 ++++++++++++++--------
+ 1 file changed, 18 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/irqchip/irq-armada-370-xp.c b/drivers/irqchip/irq-armada-370-xp.c
-index ee18eb3e72b7..178ff63f8e93 100644
---- a/drivers/irqchip/irq-armada-370-xp.c
-+++ b/drivers/irqchip/irq-armada-370-xp.c
-@@ -316,7 +316,7 @@ static int armada_370_xp_msi_init(struct device_node *node,
- 	return 0;
- }
- #else
--static void armada_370_xp_msi_reenable_percpu(void) {}
-+static __maybe_unused void armada_370_xp_msi_reenable_percpu(void) {}
+diff --git a/drivers/video/fbdev/omap2/omapfb/dss/dsi.c b/drivers/video/fbdev/omap2/omapfb/dss/dsi.c
+index 54b0f034c2ed..7cddb7b8ae34 100644
+--- a/drivers/video/fbdev/omap2/omapfb/dss/dsi.c
++++ b/drivers/video/fbdev/omap2/omapfb/dss/dsi.c
+@@ -1536,22 +1536,28 @@ static void dsi_dump_dsidev_irqs(struct platform_device *dsidev,
+ {
+ 	struct dsi_data *dsi = dsi_get_dsidrv_data(dsidev);
+ 	unsigned long flags;
+-	struct dsi_irq_stats stats;
++	struct dsi_irq_stats *stats;
++
++	stats = kzalloc(sizeof(*stats), GFP_KERNEL);
++	if (!stats) {
++		seq_printf(s, "out of memory\n");
++		return;
++	}
  
- static inline int armada_370_xp_msi_init(struct device_node *node,
- 					 phys_addr_t main_int_phys_base)
+ 	spin_lock_irqsave(&dsi->irq_stats_lock, flags);
+ 
+-	stats = dsi->irq_stats;
++	*stats = dsi->irq_stats;
+ 	memset(&dsi->irq_stats, 0, sizeof(dsi->irq_stats));
+ 	dsi->irq_stats.last_reset = jiffies;
+ 
+ 	spin_unlock_irqrestore(&dsi->irq_stats_lock, flags);
+ 
+ 	seq_printf(s, "period %u ms\n",
+-			jiffies_to_msecs(jiffies - stats.last_reset));
++			jiffies_to_msecs(jiffies - stats->last_reset));
+ 
+-	seq_printf(s, "irqs %d\n", stats.irq_count);
++	seq_printf(s, "irqs %d\n", stats->irq_count);
+ #define PIS(x) \
+-	seq_printf(s, "%-20s %10d\n", #x, stats.dsi_irqs[ffs(DSI_IRQ_##x)-1])
++	seq_printf(s, "%-20s %10d\n", #x, stats->dsi_irqs[ffs(DSI_IRQ_##x)-1])
+ 
+ 	seq_printf(s, "-- DSI%d interrupts --\n", dsi->module_id + 1);
+ 	PIS(VC0);
+@@ -1575,10 +1581,10 @@ static void dsi_dump_dsidev_irqs(struct platform_device *dsidev,
+ 
+ #define PIS(x) \
+ 	seq_printf(s, "%-20s %10d %10d %10d %10d\n", #x, \
+-			stats.vc_irqs[0][ffs(DSI_VC_IRQ_##x)-1], \
+-			stats.vc_irqs[1][ffs(DSI_VC_IRQ_##x)-1], \
+-			stats.vc_irqs[2][ffs(DSI_VC_IRQ_##x)-1], \
+-			stats.vc_irqs[3][ffs(DSI_VC_IRQ_##x)-1]);
++			stats->vc_irqs[0][ffs(DSI_VC_IRQ_##x)-1], \
++			stats->vc_irqs[1][ffs(DSI_VC_IRQ_##x)-1], \
++			stats->vc_irqs[2][ffs(DSI_VC_IRQ_##x)-1], \
++			stats->vc_irqs[3][ffs(DSI_VC_IRQ_##x)-1]);
+ 
+ 	seq_printf(s, "-- VC interrupts --\n");
+ 	PIS(CS);
+@@ -1594,7 +1600,7 @@ static void dsi_dump_dsidev_irqs(struct platform_device *dsidev,
+ 
+ #define PIS(x) \
+ 	seq_printf(s, "%-20s %10d\n", #x, \
+-			stats.cio_irqs[ffs(DSI_CIO_IRQ_##x)-1]);
++			stats->cio_irqs[ffs(DSI_CIO_IRQ_##x)-1]);
+ 
+ 	seq_printf(s, "-- CIO interrupts --\n");
+ 	PIS(ERRSYNCESC1);
+@@ -1618,6 +1624,8 @@ static void dsi_dump_dsidev_irqs(struct platform_device *dsidev,
+ 	PIS(ULPSACTIVENOT_ALL0);
+ 	PIS(ULPSACTIVENOT_ALL1);
+ #undef PIS
++
++	kfree(stats);
+ }
+ 
+ static void dsi1_dump_irqs(struct seq_file *s)
 -- 
 2.35.1
 
