@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A93464D9E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9442464D9E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiLOK5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 05:57:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
+        id S230183AbiLOK56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 05:57:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiLOK5g (ORCPT
+        with ESMTP id S229842AbiLOK5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 05:57:36 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B175A188
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:57:35 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id x22so51318014ejs.11
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:57:35 -0800 (PST)
+        Thu, 15 Dec 2022 05:57:38 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7615D26C5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:57:37 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id r26so26464148edc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:57:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DSkI969AHN6FFgkQLh7KNbMW382SQo147AqPdkQUANc=;
-        b=Ej+zTKwJUgg4TQWirbZ4KOY/mptHTiT4TdeLugCDuxSCz4cVDU5A7S0uFZWLkjIFLe
-         MP73trke32qu+WAa+tWyD75qUxpPpPPIWsra8g46CxVsOl3mo+F+Y9D4JCLZHc6xGrHm
-         uyWZz9803YUAY7/RUGPaJgQWISRomX0tDn2o8=
+        bh=nVpkR7nzdDvqq9ThIq7raRqr04KfTuTxFaaMR2ZBzxs=;
+        b=kpjvcXC8ePJw1pblrCprk4rmsoduvzf4teubLQ6D9CFIXkwkFWSlCGNktOxDHjcdow
+         dMhQLEJc3eEZ/cjATyakfNmQcIZNJVpBUXDdKctRPXhqUr+1IdLZlFagmALGowIhHQMl
+         dwtXqQf6s+J6KqZIShzzYC3PftLV25ub9tOcI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DSkI969AHN6FFgkQLh7KNbMW382SQo147AqPdkQUANc=;
-        b=0xuuHYeEH5uzy6ld+9Y7ixE1Csnl3cW2wGiULGBEZCArVk7u2arDH1xtc266md4cnh
-         XO4G2SgLbGq530CugtimJiuzMYMDZf5NKls5GkuUCQ5i8xf7b/QiiL8dTik37m98GBme
-         GhfZJpXT2NNufTfG3AhYfH4vyMcg1svyeT9cd3deTGereO+Qk8/lPTwwgb0OxGaYPnBG
-         IJfcw1UB8WOR1B4O27O2bvOvCsi348/voNhum3GZu58ttgG2Yg1I2GMazi01CqhgoEM9
-         rgpO2sS1KlzGOm5H5NjHTIA4z+qOqgvejK4G3SKaK/KXLvb2IXt1JTCA2RW2qFSKPGyl
-         1Uig==
-X-Gm-Message-State: ANoB5pm7SrvxHfQDTxiLrvuGWWK3EUOrd7ripnRCQLc54BjOh+yP4HKt
-        k9lEhVKSWBp8tiZxKlnEo3Uohg==
-X-Google-Smtp-Source: AA0mqf6v38I0uTBudjuoFkaJOo97DQ5LXesDeT1nCRhEEV12oIN1tIBKABpbZ3jr4arFcuAd4M6rbA==
-X-Received: by 2002:a17:907:2e01:b0:7c1:4785:d650 with SMTP id ig1-20020a1709072e0100b007c14785d650mr18801907ejc.26.1671101854165;
-        Thu, 15 Dec 2022 02:57:34 -0800 (PST)
+        bh=nVpkR7nzdDvqq9ThIq7raRqr04KfTuTxFaaMR2ZBzxs=;
+        b=xVuA9fFGWuTZWEe1geBc9N55gstA7agiZY6nCveF15PQ9JZT7XN6rjHmgPkUUPoPzc
+         bG5P/6J3iGk/OAdAuePji3IRr3iUsml46GfXebawkUyhiYIxTJKT2h5kys418SqmpqCN
+         XcN2K9zOuFLcoTREH0+ayEueALnf2l08ezHk+fVePy/8XDlkUGP9M5gbx4U0dGSfQKZN
+         CjG1VCmRpcKOMEoNJtYp++jX2wjTuaeVKsA8N0Jd3Na0q7HMLzmF5Ei+cNk5UrCTMotz
+         UM6DlgyCYlrYGUif6kAyM9vJp/AiJHa72kfUzL6R8bSd31ncnNKyg8QpTAvzzXZbKEIx
+         1RVg==
+X-Gm-Message-State: ANoB5pkmTEnA3DXFeegxRxBLs98V0lH5lcs241Y/p7MMc+ZkIVMc5KZO
+        QZTQC0tsQ18eqyq4JphXV1jUew==
+X-Google-Smtp-Source: AA0mqf5eS3fBHMNRNRCLiTXjs6BcVvuQc9tbALuA+jTHpQIEfBU03ivY0xsHBGHOm9/5eK0+PUnKXg==
+X-Received: by 2002:aa7:d48d:0:b0:46f:9fa5:ec14 with SMTP id b13-20020aa7d48d000000b0046f9fa5ec14mr17682649edr.35.1671101856038;
+        Thu, 15 Dec 2022 02:57:36 -0800 (PST)
 Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id e8-20020a056402148800b0046c5dda6b32sm7339381edv.31.2022.12.15.02.57.33
+        by smtp.gmail.com with ESMTPSA id e8-20020a056402148800b0046c5dda6b32sm7339381edv.31.2022.12.15.02.57.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 02:57:33 -0800 (PST)
+        Thu, 15 Dec 2022 02:57:35 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Thu, 15 Dec 2022 11:57:18 +0100
-Subject: [PATCH v3 1/2] media: uvcvideo: Remove void casting for the status endpoint
+Date:   Thu, 15 Dec 2022 11:57:19 +0100
+Subject: [PATCH v3 2/2] media: uvcvideo: Do not alloc dev->status
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221214-uvc-status-alloc-v3-1-9a67616cc549@chromium.org>
+Message-Id: <20221214-uvc-status-alloc-v3-2-9a67616cc549@chromium.org>
 References: <20221214-uvc-status-alloc-v3-0-9a67616cc549@chromium.org>
 In-Reply-To: <20221214-uvc-status-alloc-v3-0-9a67616cc549@chromium.org>
 To:     Max Staudt <mstaudt@chromium.org>,
@@ -68,256 +68,127 @@ Cc:     Ricardo Ribalda <ribalda@chromium.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7076; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=V2rWcnBqmgk8lCWa8FIMO2ca3bxD5e+bR0IB5Ki3LKM=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjmv2ZA9iSgIJW6eeXeNsSgMogcujTczALIPQC4dBK
- u/6XlqiJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY5r9mQAKCRDRN9E+zzrEiN0+D/
- 9q/rNcfR8rRrnw7gRtOiaRPHugT7LydH2Qs8WUcTblgiq8xPuIpHb75IGmBJk0KLK9TaiWrDa+OMgY
- g+BosDK16sTsVTHS1I8z0DXtX+FyktW2ElO81FpG8i6Nogvz2khesTfuR0xL4ovuTCaQoFhYRJBIcv
- 0hhUOcKo5mUczEdBwyY734g1A3Oa1CElDFqJjl3Xh6oPItJwkUNWcY508r3FPp0vZuZOT0YZvnKydL
- 7CdEM3jQY+g592QUczc8KynZWs1+1QvKf1z9dsaSJUiik/hUxXH5nkfW4uSLrBLENWfSfg5ZI1uLLy
- Nyli8nBZ8w8pjjaNMh3/AQ3eRlWhWMofr3/ryCgvYAZEwYRgEzVAqMBjHYmTfSqFcA+yghWe5aj30p
- 29mMmVyS7cPODNdMhM8ge/5Z+wCOpx/vGXITDUJuuHOlVDWppEd91ZkH0JWLILX79++iTTNsZWrPdk
- FjcTWX9oqSmyWc4u3/Q6DXNb72P+ZD1Baw/SSwdbqgFmooGjQQLEPntuNFUyDmJCFe6htcKhh7yR9A
- 5Iym2S/PmC63IlNML2bm2VvjFZiYfJKYSf3+0I7SakJ5j1hQqo0aEdWmjfiD8nc+3krdLQx9tAyTzk
- y8eJ3P+e3h7VB+/FtelzLbCKLSPgHA6ugQci0IRxandjamYkcObdmqQxAYuA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3132; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=3ziZXBiTod/vgWEUcMgPrcOKQxKsAh+gKxICZKDjQIg=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjmv2aAadu/Gf1dCOFnLIpwOuKRuBSaAieIESTtWaM
+ suZFPbyJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY5r9mgAKCRDRN9E+zzrEiKRPD/
+ 43yl2W6E1uT891+8t8ZsBebhq3k9+Sl2usBDut2XK6HffRg1/yNaJCBeBq4EmfovAzUmt6sTKlVVUI
+ qSKMvsZF4aXqcdgPxo5dV0HJjjQrkMPXe5jP/j7PWLY9I7d1PHmwSVjk9DGPQyXYDBVXbNlw9N8y1H
+ GHojNW227hCZY5IQflihYSLnU9RBdnUR80/kGHJXK7mbiwt0YYXAuxJG7AjcR4An45jcvebm/y8ReD
+ WzxfuftwZYN1PK6jLtBr/ZKWEBw2+gTOxpBnfAnkn/1HTTp/fy8sNVd35cLIONFy0SiHCgjb+1uRBk
+ ++chwrQCX7v2yQNIuyDXxaW8zQ1tgTV5FTDWhXx6JDJkbtbvQao7NT5kCTJcJqAbXT8ISRVJETdD2S
+ NpOjEGa6Ky9Bz2WnFgzKC+JgYXJy8C5grfZeIm3A2ARQWZAa2ewSruW86+nDrbivlzOtSREFj1lkfM
+ /q9K5Cz/Nb/M1p9O3nnGEd4TsQI+ojUwLWN59b7KrulNeKE5r/BjRV6p3/jLRs8gzeXY8REZ+eJiYm
+ eKvQ56hDAb4uEgDD50EYbkktr1jqnDEjfpTRC961hsEbi5xB6ekkGdBKccjjfVHFdND9yJqLiZCYr5
+ wweUUmjkWA0nP/qVEOt04KYT13LvAYE/sTAgmzIPVSTn5uAIChMF31DzhuFA==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the code more resiliant, by replacing the castings with proper
-structure definitions and using offsetof() instead of open coding the
-location of the data.
+UVC_MAX_STATUS_SIZE is 16 bytes, it makes more sense to have it inlined
+than dynamically allocate it.
 
-Suggested-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+To avoid issues with non-coherent DMAs, give the memory the same
+allocation as kmalloc.
+
+This patch kind of reverts:
+a31a4055473b ("V4L/DVB:usbvideo:don't use part of buffer for USB transfer #4")
+
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_status.c | 64 +++++++++++++-------------------------
- drivers/media/usb/uvc/uvcvideo.h   | 25 +++++++++++++--
- 2 files changed, 44 insertions(+), 45 deletions(-)
+ drivers/media/usb/uvc/uvc_status.c | 19 ++++++-------------
+ drivers/media/usb/uvc/uvcvideo.h   |  6 +++++-
+ 2 files changed, 11 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
-index 7518ffce22ed..dbaa9b07d77f 100644
+index dbaa9b07d77f..adf63e7616c9 100644
 --- a/drivers/media/usb/uvc/uvc_status.c
 +++ b/drivers/media/usb/uvc/uvc_status.c
-@@ -73,38 +73,24 @@ static void uvc_input_report_key(struct uvc_device *dev, unsigned int code,
- /* --------------------------------------------------------------------------
-  * Status interrupt endpoint
-  */
--struct uvc_streaming_status {
--	u8	bStatusType;
--	u8	bOriginator;
--	u8	bEvent;
--	u8	bValue[];
--} __packed;
--
--struct uvc_control_status {
--	u8	bStatusType;
--	u8	bOriginator;
--	u8	bEvent;
--	u8	bSelector;
--	u8	bAttribute;
--	u8	bValue[];
--} __packed;
--
- static void uvc_event_streaming(struct uvc_device *dev,
--				struct uvc_streaming_status *status, int len)
-+				struct uvc_status *status, int len)
- {
--	if (len < 3) {
-+	if (len <= offsetof(struct uvc_status, bEvent)) {
- 		uvc_dbg(dev, STATUS,
- 			"Invalid streaming status event received\n");
- 		return;
- 	}
- 
- 	if (status->bEvent == 0) {
--		if (len < 4)
-+		if (len <= offsetof(struct uvc_status, streaming))
- 			return;
-+
- 		uvc_dbg(dev, STATUS, "Button (intf %u) %s len %d\n",
- 			status->bOriginator,
--			status->bValue[0] ? "pressed" : "released", len);
--		uvc_input_report_key(dev, KEY_CAMERA, status->bValue[0]);
-+			status->streaming.button ? "pressed" : "released", len);
-+		uvc_input_report_key(dev, KEY_CAMERA,
-+				     status->streaming.button);
- 	} else {
- 		uvc_dbg(dev, STATUS, "Stream %u error event %02x len %d\n",
- 			status->bOriginator, status->bEvent, len);
-@@ -131,7 +117,7 @@ static struct uvc_control *uvc_event_entity_find_ctrl(struct uvc_entity *entity,
- }
- 
- static struct uvc_control *uvc_event_find_ctrl(struct uvc_device *dev,
--					const struct uvc_control_status *status,
-+					const struct uvc_status *status,
- 					struct uvc_video_chain **chain)
- {
- 	list_for_each_entry((*chain), &dev->chains, list) {
-@@ -143,7 +129,7 @@ static struct uvc_control *uvc_event_find_ctrl(struct uvc_device *dev,
- 				continue;
- 
- 			ctrl = uvc_event_entity_find_ctrl(entity,
--							  status->bSelector);
-+						     status->control.bSelector);
- 			if (ctrl)
- 				return ctrl;
- 		}
-@@ -153,7 +139,7 @@ static struct uvc_control *uvc_event_find_ctrl(struct uvc_device *dev,
- }
- 
- static bool uvc_event_control(struct urb *urb,
--			      const struct uvc_control_status *status, int len)
-+			      const struct uvc_status *status, int len)
- {
- 	static const char *attrs[] = { "value", "info", "failure", "min", "max" };
- 	struct uvc_device *dev = urb->context;
-@@ -161,24 +147,24 @@ static bool uvc_event_control(struct urb *urb,
- 	struct uvc_control *ctrl;
- 
- 	if (len < 6 || status->bEvent != 0 ||
--	    status->bAttribute >= ARRAY_SIZE(attrs)) {
-+	    status->control.bAttribute >= ARRAY_SIZE(attrs)) {
- 		uvc_dbg(dev, STATUS, "Invalid control status event received\n");
- 		return false;
- 	}
- 
- 	uvc_dbg(dev, STATUS, "Control %u/%u %s change len %d\n",
--		status->bOriginator, status->bSelector,
--		attrs[status->bAttribute], len);
-+		status->bOriginator, status->control.bSelector,
-+		attrs[status->control.bAttribute], len);
- 
- 	/* Find the control. */
- 	ctrl = uvc_event_find_ctrl(dev, status, &chain);
- 	if (!ctrl)
- 		return false;
- 
--	switch (status->bAttribute) {
-+	switch (status->control.bAttribute) {
- 	case UVC_CTRL_VALUE_CHANGE:
- 		return uvc_ctrl_status_event_async(urb, chain, ctrl,
--						   status->bValue);
-+						   status->control.bValue);
- 
- 	case UVC_CTRL_INFO_CHANGE:
- 	case UVC_CTRL_FAILURE_CHANGE:
-@@ -214,28 +200,22 @@ static void uvc_status_complete(struct urb *urb)
+@@ -200,22 +200,22 @@ static void uvc_status_complete(struct urb *urb)
  
  	len = urb->actual_length;
  	if (len > 0) {
--		switch (dev->status[0] & 0x0f) {
-+		switch (dev->status->bStatusType & 0x0f) {
+-		switch (dev->status->bStatusType & 0x0f) {
++		switch (dev->status.bStatusType & 0x0f) {
  		case UVC_STATUS_TYPE_CONTROL: {
--			struct uvc_control_status *status =
--				(struct uvc_control_status *)dev->status;
--
--			if (uvc_event_control(urb, status, len))
-+			if (uvc_event_control(urb, dev->status, len))
+-			if (uvc_event_control(urb, dev->status, len))
++			if (uvc_event_control(urb, &dev->status, len))
  				/* The URB will be resubmitted in work context. */
  				return;
  			break;
  		}
  
  		case UVC_STATUS_TYPE_STREAMING: {
--			struct uvc_streaming_status *status =
--				(struct uvc_streaming_status *)dev->status;
--
--			uvc_event_streaming(dev, status, len);
-+			uvc_event_streaming(dev, dev->status, len);
+-			uvc_event_streaming(dev, dev->status, len);
++			uvc_event_streaming(dev, &dev->status, len);
  			break;
  		}
  
  		default:
  			uvc_dbg(dev, STATUS, "Unknown status event type %u\n",
--				dev->status[0]);
-+				dev->status->bStatusType);
+-				dev->status->bStatusType);
++				dev->status.bStatusType);
  			break;
  		}
  	}
-@@ -259,12 +239,12 @@ int uvc_status_init(struct uvc_device *dev)
+@@ -239,15 +239,9 @@ int uvc_status_init(struct uvc_device *dev)
  
  	uvc_input_init(dev);
  
--	dev->status = kzalloc(UVC_MAX_STATUS_SIZE, GFP_KERNEL);
-+	dev->status = kzalloc(sizeof(*dev->status), GFP_KERNEL);
- 	if (dev->status == NULL)
- 		return -ENOMEM;
- 
+-	dev->status = kzalloc(sizeof(*dev->status), GFP_KERNEL);
+-	if (dev->status == NULL)
+-		return -ENOMEM;
+-
  	dev->int_urb = usb_alloc_urb(0, GFP_KERNEL);
--	if (dev->int_urb == NULL) {
-+	if (!dev->int_urb) {
- 		kfree(dev->status);
+-	if (!dev->int_urb) {
+-		kfree(dev->status);
++	if (!dev->int_urb)
  		return -ENOMEM;
- 	}
-@@ -281,7 +261,7 @@ int uvc_status_init(struct uvc_device *dev)
+-	}
+ 
+ 	pipe = usb_rcvintpipe(dev->udev, ep->desc.bEndpointAddress);
+ 
+@@ -261,7 +255,7 @@ int uvc_status_init(struct uvc_device *dev)
  		interval = fls(interval) - 1;
  
  	usb_fill_int_urb(dev->int_urb, dev->udev, pipe,
--		dev->status, UVC_MAX_STATUS_SIZE, uvc_status_complete,
-+		dev->status, sizeof(dev->status), uvc_status_complete,
+-		dev->status, sizeof(dev->status), uvc_status_complete,
++		&dev->status, sizeof(dev->status), uvc_status_complete,
  		dev, interval);
  
  	return 0;
+@@ -276,7 +270,6 @@ void uvc_status_unregister(struct uvc_device *dev)
+ void uvc_status_cleanup(struct uvc_device *dev)
+ {
+ 	usb_free_urb(dev->int_urb);
+-	kfree(dev->status);
+ }
+ 
+ int uvc_status_start(struct uvc_device *dev, gfp_t flags)
 diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index df93db259312..84326991ec36 100644
+index 84326991ec36..b0abc70ca58e 100644
 --- a/drivers/media/usb/uvc/uvcvideo.h
 +++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -51,8 +51,6 @@
- #define UVC_URBS		5
- /* Maximum number of packets per URB. */
- #define UVC_MAX_PACKETS		32
--/* Maximum status buffer size in bytes of interrupt URB. */
--#define UVC_MAX_STATUS_SIZE	16
- 
- #define UVC_CTRL_CONTROL_TIMEOUT	5000
- #define UVC_CTRL_STREAMING_TIMEOUT	5000
-@@ -527,6 +525,26 @@ struct uvc_device_info {
- 	const struct uvc_control_mapping **mappings;
- };
- 
-+struct uvc_status_streaming {
-+	u8	button;
-+} __packed;
-+
-+struct uvc_status_control {
-+	u8	bSelector;
-+	u8	bAttribute;
-+	u8	bValue[11];
-+} __packed;
-+
-+struct uvc_status {
-+	u8	bStatusType;
-+	u8	bOriginator;
-+	u8	bEvent;
-+	union {
-+		struct uvc_status_control control;
-+		struct uvc_status_streaming streaming;
-+	};
-+} __packed;
-+
- struct uvc_device {
- 	struct usb_device *udev;
- 	struct usb_interface *intf;
-@@ -559,7 +577,8 @@ struct uvc_device {
+@@ -577,7 +577,11 @@ struct uvc_device {
  	/* Status Interrupt Endpoint */
  	struct usb_host_endpoint *int_ep;
  	struct urb *int_urb;
--	u8 *status;
-+	struct uvc_status *status;
-+
+-	struct uvc_status *status;
++	/*
++	 * Ensure that status is aligned, making it safe to use with
++	 * non-coherent DMA.
++	 */
++	struct uvc_status status __aligned(ARCH_KMALLOC_MINALIGN);
+ 
  	struct input_dev *input;
  	char input_phys[64];
- 
 
 -- 
 2.39.0.314.g84b9a713c41-goog-b4-0.11.0-dev-696ae
