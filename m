@@ -2,139 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A9F64DA15
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 12:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 882D664DA25
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 12:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiLOLKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 06:10:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36776 "EHLO
+        id S229537AbiLOLRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 06:17:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiLOLKe (ORCPT
+        with ESMTP id S229704AbiLOLRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 06:10:34 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39731240B5
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 03:10:33 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-14449b7814bso20488115fac.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 03:10:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aRto0bZxVVcjkpJwpAaqpQJPNIkhGaRdbAHEq1bO1W4=;
-        b=tguM4k0ZVIq7MU6CANzSDbUbT8H5e9aNxOzp+qDUd5q5zsp2P5k8iBa2SMlTOQTeLe
-         mpIqpdPvPWzmZThOeMVVwSBI9D0/2V0qDtCb0JQx93xw1j5pR7h4M1zGL8s0P46Ha+Pp
-         1KAN8cqTnT9RczsO38nIDF+1OxIGOYEhUqZRZ2batQgmoRxrkxplV63iwj54NthqLVxh
-         Zbq002RWJpPzm6Ebgc0UXX9K1E+i5l6VoieK+aLzbertOiRlt0Cq9h84H4SNmR772p1z
-         47Luk6LdxO2NnAwvGcegP2/gNmqKwyshy/pmdZQZWzFGXPEovVmVxcmcMcLjGsfJ+jHY
-         7GOw==
+        Thu, 15 Dec 2022 06:17:41 -0500
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94ECF9FD1;
+        Thu, 15 Dec 2022 03:17:40 -0800 (PST)
+Received: by mail-ot1-f53.google.com with SMTP id i26-20020a9d68da000000b00672301a1664so2638432oto.6;
+        Thu, 15 Dec 2022 03:17:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aRto0bZxVVcjkpJwpAaqpQJPNIkhGaRdbAHEq1bO1W4=;
-        b=K5Ktwp2t44HPupb6y0RNlV+rv/vmDGrJRWEKY9LJ6x8vKDpeqLI3vKz6Yk+OO6GH/1
-         Sz9aZ0wTGsQppShg+8e2qnVzi5HsB3EcIBcbdYtOHNOwjKwNpVhnI2OgF6Lem/jo/XxX
-         +vT7cyRjJQG9/jMOV+kwKGa71NO5TcuOUagdyzWQL8fMKDLV2hbx1t7D2kVj3bYz2eVE
-         6oXckJr/lEm4c0CY2DO/7j8ALKBeqeE1q+Gf55rQ8j5KUV1ydlg9VLWtDz3CndkNC7iR
-         NFd6UpMImnPyTUfg24KPBqJXdV9qTBV/TrIOl0IhzxZOYCvn+ObaEUTwa/4uRhLG1iDZ
-         QHCA==
-X-Gm-Message-State: AFqh2ko93jD4hUunSy1/O8mDZllAJ42g7sPlLFhfNibF/gqeIwecPDiq
-        FtiXDLkuyAx4fpqmjk9cBd3qYytWHs7X7yhwTpQ6bw==
-X-Google-Smtp-Source: AA0mqf68Sk+5tLWaXbcHhE/bSQNqfhEV2ngdiH+3BTGVVdHM1vDmMlOvk1gMHnYUv8mmj005k0gjGg/4n7TupCvCbD0=
-X-Received: by 2002:a05:6870:2393:b0:144:b04d:1669 with SMTP id
- e19-20020a056870239300b00144b04d1669mr182044oap.155.1671102632452; Thu, 15
- Dec 2022 03:10:32 -0800 (PST)
+        bh=Si7SDKWic3Uv1+g6HsphPYpn2S25iGUgPbeTE6s5eQM=;
+        b=H2FbJBbxljz6aoCrgTON7mU/ReP5WB6JcDj89uGYVmAXQ9RPvXYNXLhue1ZrIjjqjq
+         R9dYtEeSQ/qIqLGCGhRbBMgphHfLpgsPbZY2G/NvwGbQ+g7wnT4QzCNvyxFfQGl5IcT6
+         GHTYfuA6ecCPBNPL92SK4INbh3cZjhnKv6nSjKZ7+d6S37dkkIybAM5XKwYi3cuDGsH1
+         8du1D1N9/xJIZQ1q9386ClupyTZeb49mZYIC+wyo5Rgb+98HYczx0W6V+voCWK7L8hjF
+         3szTTr3qRcuOlwhBXsG4oGh+hOYBOyWlEgtgqNf7Na/UrSHbSL/70DyRaOV6WA7ImLFw
+         lyrA==
+X-Gm-Message-State: ANoB5pmhYGqU6ES2Jb3ttDLg2804Fq51PpzTM8Z9754u6gJk8It/N1u/
+        ZR4nRjt6TjQCleWd9MssbUT76HOqnxIg4Q==
+X-Google-Smtp-Source: AA0mqf6tZZodQYcvnzPRX8GqwUwNK83yiyk+q7u8LSaUjOmcBMzU/l4lF7sqXDoMzsI0gmbGcN//JA==
+X-Received: by 2002:a05:6830:2701:b0:671:70ce:4199 with SMTP id j1-20020a056830270100b0067170ce4199mr6615926otu.2.1671103059673;
+        Thu, 15 Dec 2022 03:17:39 -0800 (PST)
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com. [209.85.210.41])
+        by smtp.gmail.com with ESMTPSA id v18-20020a9d5a12000000b0066f7e1188f0sm3307043oth.68.2022.12.15.03.17.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 03:17:39 -0800 (PST)
+Received: by mail-ot1-f41.google.com with SMTP id db10-20020a0568306b0a00b0066d43e80118so3394210otb.1;
+        Thu, 15 Dec 2022 03:17:39 -0800 (PST)
+X-Received: by 2002:a0d:cb4c:0:b0:38e:e541:d8ca with SMTP id
+ n73-20020a0dcb4c000000b0038ee541d8camr23940870ywd.283.1671102643962; Thu, 15
+ Dec 2022 03:10:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20221214125821.12489-1-paul@crapouillou.net> <20221214125821.12489-5-paul@crapouillou.net>
-In-Reply-To: <20221214125821.12489-5-paul@crapouillou.net>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Thu, 15 Dec 2022 12:10:21 +0100
-Message-ID: <CAG3jFyubct-L6vr3G0r+1+DX7D43raG-Rgx2-xi+JP7bVPesNQ@mail.gmail.com>
-Subject: Re: [PATCH 04/10] drm: bridge: it66121: Write AVI infoframe with regmap_bulk_write()
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Phong LE <ple@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
+References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221212115505.36770-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdUCkCyLOXbQEJyc7S2F08=ftNtPcEztRN3JWJv_FPmAVw@mail.gmail.com> <CA+V-a8vD=SOb6gPOwdPUE=kHeqa+oo2L-rbaW8zGjvw7YyQsqg@mail.gmail.com>
+In-Reply-To: <CA+V-a8vD=SOb6gPOwdPUE=kHeqa+oo2L-rbaW8zGjvw7YyQsqg@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 15 Dec 2022 12:10:32 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWX4Yd52=Jv8kABtn+1B1V=dC2iXVZ81gNZBWNu4hb_3w@mail.gmail.com>
+Message-ID: <CAMuHMdWX4Yd52=Jv8kABtn+1B1V=dC2iXVZ81gNZBWNu4hb_3w@mail.gmail.com>
+Subject: Re: [PATCH v5 6/6] soc: renesas: Add L2 cache management for RZ/Five SoC
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Guo Ren <guoren@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        list@opendingux.net, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Dec 2022 at 13:58, Paul Cercueil <paul@crapouillou.net> wrote:
->
-> Since all AVI infoframe registers are contiguous in the address space,
-> the AVI infoframe can be written in one go with regmap_bulk_write().
->
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  drivers/gpu/drm/bridge/ite-it66121.c | 27 +++++++--------------------
->  1 file changed, 7 insertions(+), 20 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/ite-it66121.c b/drivers/gpu/drm/bridge/ite-it66121.c
-> index 12222840df30..0a4fdfd7af44 100644
-> --- a/drivers/gpu/drm/bridge/ite-it66121.c
-> +++ b/drivers/gpu/drm/bridge/ite-it66121.c
-> @@ -773,24 +773,9 @@ void it66121_bridge_mode_set(struct drm_bridge *bridge,
->                              const struct drm_display_mode *mode,
->                              const struct drm_display_mode *adjusted_mode)
->  {
-> -       int ret, i;
->         u8 buf[HDMI_INFOFRAME_SIZE(AVI)];
->         struct it66121_ctx *ctx = container_of(bridge, struct it66121_ctx, bridge);
-> -       const u16 aviinfo_reg[HDMI_AVI_INFOFRAME_SIZE] = {
-> -               IT66121_AVIINFO_DB1_REG,
-> -               IT66121_AVIINFO_DB2_REG,
-> -               IT66121_AVIINFO_DB3_REG,
-> -               IT66121_AVIINFO_DB4_REG,
-> -               IT66121_AVIINFO_DB5_REG,
-> -               IT66121_AVIINFO_DB6_REG,
-> -               IT66121_AVIINFO_DB7_REG,
-> -               IT66121_AVIINFO_DB8_REG,
-> -               IT66121_AVIINFO_DB9_REG,
-> -               IT66121_AVIINFO_DB10_REG,
-> -               IT66121_AVIINFO_DB11_REG,
-> -               IT66121_AVIINFO_DB12_REG,
-> -               IT66121_AVIINFO_DB13_REG
-> -       };
-> +       int ret;
->
->         mutex_lock(&ctx->lock);
->
-> @@ -810,10 +795,12 @@ void it66121_bridge_mode_set(struct drm_bridge *bridge,
->         }
->
->         /* Write new AVI infoframe packet */
-> -       for (i = 0; i < HDMI_AVI_INFOFRAME_SIZE; i++) {
-> -               if (regmap_write(ctx->regmap, aviinfo_reg[i], buf[i + HDMI_INFOFRAME_HEADER_SIZE]))
-> -                       goto unlock;
-> -       }
-> +       ret = regmap_bulk_write(ctx->regmap, IT66121_AVIINFO_DB1_REG,
-> +                               &buf[HDMI_INFOFRAME_HEADER_SIZE],
-> +                               HDMI_AVI_INFOFRAME_SIZE);
-> +       if (ret)
-> +               goto unlock;
-> +
->         if (regmap_write(ctx->regmap, IT66121_AVIINFO_CSUM_REG, buf[3]))
->                 goto unlock;
->
-> --
-> 2.35.1
->
+Hi Prabhakar,
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+On Thu, Dec 15, 2022 at 12:06 PM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+> On Thu, Dec 15, 2022 at 10:36 AM Geert Uytterhoeven
+> <geert@linux-m68k.org> wrote:
+> > On Mon, Dec 12, 2022 at 12:58 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > I/O Coherence Port (IOCP) provides an AXI interface for connecting
+> > > external non-caching masters, such as DMA controllers. The accesses
+> > > from IOCP are coherent with D-Caches and L2 Cache.
+> > >
+> > > IOCP is a specification option and is disabled on the Renesas RZ/Five
+> > > SoC due to this reason IP blocks using DMA will fail.
+> > >
+> > > The Andes AX45MP core has a Programmable Physical Memory Attributes (PMA)
+> > > block that allows dynamic adjustment of memory attributes in the runtime.
+> > > It contains a configurable amount of PMA entries implemented as CSR
+> > > registers to control the attributes of memory locations in interest.
+> > > Below are the memory attributes supported:
+> > > * Device, Non-bufferable
+> > > * Device, bufferable
+> > > * Memory, Non-cacheable, Non-bufferable
+> > > * Memory, Non-cacheable, Bufferable
+> > > * Memory, Write-back, No-allocate
+> > > * Memory, Write-back, Read-allocate
+> > > * Memory, Write-back, Write-allocate
+> > > * Memory, Write-back, Read and Write-allocate
+> > >
+> > > More info about PMA (section 10.3):
+> > > Link: http://www.andestech.com/wp-content/uploads/AX45MP-1C-Rev.-5.0.0-Datasheet.pdf
+> > >
+> > > As a workaround for SoCs with IOCP disabled CMO needs to be handled by
+> > > software. Firstly OpenSBI configures the memory region as
+> > > "Memory, Non-cacheable, Bufferable" and passes this region as a global
+> > > shared dma pool as a DT node. With DMA_GLOBAL_POOL enabled all DMA
+> > > allocations happen from this region and synchronization callbacks are
+> > > implemented to synchronize when doing DMA transactions.
+> > >
+> > > Example PMA region passes as a DT node from OpenSBI:
+> > >     reserved-memory {
+> > >         #address-cells = <2>;
+> > >         #size-cells = <2>;
+> > >         ranges;
+> > >
+> > >         pma_resv0@58000000 {
+> > >             compatible = "shared-dma-pool";
+> > >             reg = <0x0 0x58000000 0x0 0x08000000>;
+> > >             no-map;
+> > >             linux,dma-default;
+> > >         };
+> > >     };
+> > >
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Thanks for your patch!
+> >
+> > >  arch/riscv/include/asm/cacheflush.h       |   8 +
+> > >  arch/riscv/include/asm/errata_list.h      |  28 ++-
+> > >  drivers/soc/renesas/Kconfig               |   6 +
+> > >  drivers/soc/renesas/Makefile              |   2 +
+> > >  drivers/soc/renesas/rzfive/Kconfig        |   6 +
+> > >  drivers/soc/renesas/rzfive/Makefile       |   3 +
+> > >  drivers/soc/renesas/rzfive/ax45mp_cache.c | 256 ++++++++++++++++++++++
+> >
+> > Given this touches arch/riscv/include/asm/, I don't think the
+> > code belongs under drivers/soc/renesas/.
+> >
+> Ok. Do you have any suggestions on where you want me to put this code?
+
+As it plugs into core riscv functionality, I think it should be under
+arch/riscv/.
+
+if the RISC-V maintainers object to that, another option is
+drivers/soc/andestech/ or (new) drivers/cache/
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
