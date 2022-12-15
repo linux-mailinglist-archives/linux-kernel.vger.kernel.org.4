@@ -2,133 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A2264D70C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE5864D710
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbiLOHNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 02:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
+        id S229927AbiLOHNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 02:13:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiLOHMg (ORCPT
+        with ESMTP id S229786AbiLOHMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 02:12:36 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2078.outbound.protection.outlook.com [40.107.94.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDF45EDE5;
-        Wed, 14 Dec 2022 23:08:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=itGvjB66FfJRneLV4aGEOSiBe3m/y0f0x8aSbwk5D/KQsSaj93Xo7XUdW9Bv4eNxGW0dFzGfD8m+mdkwVR3BAnENjxh8yGeZcV0hQVp5X6JuRiJ6T7l575e5WyeHjflDiDDfyArKFd52heEanUcaAuph0p6W8S9yu+z+Tg1J33MlaYWhz583blEErQ44mBZAjjlVoryaQ/3WjLWoUiUIMi1WeCNq9Trhq+W0fiZd0n+dEWbw1AVOZNEdyb2UDe6hlgHeX4pjv20GxaKrbLo985+xIIHFUKEKibSrmyPoeXOnt7eQg4RCQphbE0z8AO4Bp8e+D7662Q+lmJqGpWKSjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aGUTMQTCBqAIVbtnD/rqgiycYM9XFp8tSeleWzZjPYs=;
- b=VcknSP8JHvBBYoolXUwMhuY6W/XkLnSOf00WOd6O0viad1Sb98QV9v+fDERcYNIYlFOrcRIvf4A6SIl9ftOVYTapNZC2JleMydGQwjSXCtierafCLlMzgTleh6icbl6Kij3nCZ06r38jkHbkZhFv4FmiLZZLM+5TcQIr5M64GrZqJREr8z7hOzJnWW4oQZz0gtcRGOc/OG3iObwAhdYrtwcYZfiHPXbdeuLXyVMQ9VB9ZzVyZ3QKSjRHjlAcBGJbO9VJNFFuxUQ2Tc7RJKgEyTq21a29X2d5BJ5C8NmPbnRjSjcPAoW0mrxvTQCwKMQw54a2814lkZKhvT2Pl3lOfg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aGUTMQTCBqAIVbtnD/rqgiycYM9XFp8tSeleWzZjPYs=;
- b=gYSO367CokG3RKefLWYVyMn1DMA7suNpBWWTGoQWjlDnMy6qgH38tvNQe1ME+BqtT+kR4W6frgKOuEK0ztZuDs29iPTrGbQ+xgZopUvSMa5CCfnX6td5n3CtZMiCn7WYl1VNIrox8pZ+MMqYpmunZgvxaKU5nU6WqcE0/S8nSFc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5825.namprd12.prod.outlook.com (2603:10b6:208:394::20)
- by DS7PR12MB5765.namprd12.prod.outlook.com (2603:10b6:8:74::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.11; Thu, 15 Dec
- 2022 07:08:01 +0000
-Received: from BL1PR12MB5825.namprd12.prod.outlook.com
- ([fe80::2e66:40bf:438e:74b]) by BL1PR12MB5825.namprd12.prod.outlook.com
- ([fe80::2e66:40bf:438e:74b%9]) with mapi id 15.20.5880.019; Thu, 15 Dec 2022
- 07:08:01 +0000
-Message-ID: <01edfee3-3704-1698-ac19-fa003f41bea2@amd.com>
-Date:   Thu, 15 Dec 2022 12:37:48 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH net-next 04/11] sfc: implement vDPA management device
- operations
-Content-Language: en-US
-To:     Jason Wang <jasowang@redhat.com>,
-        Gautam Dawar <gautam.dawar@amd.com>
-Cc:     linux-net-drivers@amd.com, netdev@vger.kernel.org,
-        eperezma@redhat.com, tanuj.kamde@amd.com, Koushik.Dutta@amd.com,
-        harpreet.anand@amd.com, Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-References: <20221207145428.31544-1-gautam.dawar@amd.com>
- <20221207145428.31544-5-gautam.dawar@amd.com>
- <CACGkMEsgxi1MsS-F_uhCoEoJg50-1nxKEi0qz0-oSQRwQDRyKA@mail.gmail.com>
-From:   Gautam Dawar <gdawar@amd.com>
-In-Reply-To: <CACGkMEsgxi1MsS-F_uhCoEoJg50-1nxKEi0qz0-oSQRwQDRyKA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0092.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:9b::10) To BL1PR12MB5825.namprd12.prod.outlook.com
- (2603:10b6:208:394::20)
+        Thu, 15 Dec 2022 02:12:47 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728E933C14;
+        Wed, 14 Dec 2022 23:11:10 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BF6h3sK029611;
+        Thu, 15 Dec 2022 07:10:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type : subject :
+ from : in-reply-to : date : cc : message-id : references : to :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=YoXeRK8PNf2mo1wc3dbqLnRFymgEaaTENZSaOZIK0fI=;
+ b=r3hRjeoq6gXGytiBqlvvPkUzarQlBEU+mWuIBf107ijIKFtifiJ4HKKHyOSYGHYBlG/M
+ IDNsJAlb7ED5WExYSE3Zx8i5VY5M0lJUk0HiBOJpdc17XV5PHDi+sSerAEsMs6tVvB3/
+ FDCS0Lrn38jCGgrgPSwbDT8ZArsvmERektOZCPYUM9m/HvQYGzSGqdXyESKoJrsOmjv2
+ p74iVy2dVpMNDNd8KYBQlO5emzNOKSd5Ow2sRush4voOAgwozryM30j05hE3MoJ74JWl
+ fm4lHbDo3y9dL+0Uc3bW1wr+o65yfNu8o2to9Og2esC7wRTmcO9f/qLSJzzeQqful9Az zQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mfxj7gq2x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 07:10:50 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BF6iQUJ000408;
+        Thu, 15 Dec 2022 07:10:49 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mfxj7gq1p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 07:10:49 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BF5q67Z027949;
+        Thu, 15 Dec 2022 07:10:47 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3meyxm9w8u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 07:10:47 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BF7Af8715991544
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Dec 2022 07:10:41 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 768C420040;
+        Thu, 15 Dec 2022 07:10:41 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BBBD32004B;
+        Thu, 15 Dec 2022 07:10:38 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.125.219])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Thu, 15 Dec 2022 07:10:38 +0000 (GMT)
+Content-Type: text/plain;
+        charset=utf-8
+Subject: Re: [PATCH 2/3] perf build: Use libtraceevent from the system
+From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+In-Reply-To: <CAP-5=fVVPDo_3cjKmumEVKDN2Zssz-ZU=nYVQFNr1xUGHxx-PQ@mail.gmail.com>
+Date:   Thu, 15 Dec 2022 12:40:36 +0530
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Message-Id: <346AAE98-7BB0-4639-A63D-3FBC331C721A@linux.vnet.ibm.com>
+References: <Y491d1wEW4TfUi5f@kernel.org> <Y4921D+36UGdhK92@kernel.org>
+ <Y494TNa0ZyPH9YSD@kernel.org> <Y498YP2N3gvFSr/X@kernel.org>
+ <C9F248C8-AF8D-40A1-A1AD-BCC39FBA01C7@linux.vnet.ibm.com>
+ <Y5DNBZNC5rBBqlJW@kernel.org>
+ <36CD1041-0CAE-41C1-8086-C17854531B3E@linux.vnet.ibm.com>
+ <Y5JfgyN59dSeKbUP@kernel.org> <Y5Jl8MeW90DXy1wT@kernel.org>
+ <8F6F0C27-53F3-4837-A19C-845768253249@linux.vnet.ibm.com>
+ <Y5cxyk3OdgFXlyhS@kernel.org>
+ <BB236C92-3505-4DAB-AE28-A55F74EDE161@linux.vnet.ibm.com>
+ <CAP-5=fVVPDo_3cjKmumEVKDN2Zssz-ZU=nYVQFNr1xUGHxx-PQ@mail.gmail.com>
+To:     Ian Rogers <irogers@google.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: CF1x41Udj_jMm7mo92TMntrTXFzl-BpG
+X-Proofpoint-GUID: L05R6ctm4kma_Jmn0QnKyE5aUhjlMdOI
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5825:EE_|DS7PR12MB5765:EE_
-X-MS-Office365-Filtering-Correlation-Id: 019b4941-ab70-48e3-c69b-08dade6b1a2c
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IJ56uQij4sFHiChM+0EYcgvZZ494yi94MEd5G+3GIqKnpbuiJB8HTws0aPzUJhouf2EvUqTVMjFYkkfT2fZ8/zwXUM271qfvRkyMBHtfo5cmOTtWYlqE7vEpDoowfOS2y4eOUhiOAfbi7nmzzJz8sqgh5g2+bnSHYvGM4SnW6FcqzfASMW5qVDF5MwRe/jir3tzWTiAReA9XwuHF+2oa8UTmIDX6kHMU9g53Q0RybtK6p1ukU/XnF5YsaqvNOXok8SJXbJvurKDbN7FyzCcQXtOeLoK35K2v5GZFSo8SjaifjbqqLAutXoKPFvEEB1hkylzkdse0yRt9tslg3uJWD6268gmN0N1vs4eaGku2EKwnPU2MmvGvW9zO12P+PghDT6F6Y1lSyKPJuuIRNjfdCu0woeEZQRoIK0ZfkHc4OndWBacvjS7LJUtIz/Z3tODWCFVMTiGFy1TlfK3OkNwlfWXl2UfJFyMaoMe+g8oBatqY0h8S1WLKLiQzQxAjgk/rl+SS1O3g3phqzqRSAGECDZFFdT5KptEDxKSRjWI3AMHTAxzxAOwC57vWA44jQuU488ANQcAXTLKWadIcqqElewG3ppA+wcs9p+p/s4rph2hZJ64qhPPKaDHt4lsDxjWCLr1QVRQwKoEI/gmveRsapX5rXpfR+mYMU+aTwefJqYTyoEuxMNTDAh5Xj10JOh3L5TsJwK0dU2fxO5xMqY78JtMcs+PvF65Khv18MLPaLzJoXwk0dLEhL2w1ZCUbEgPY
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5825.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(396003)(136003)(346002)(376002)(451199015)(8676002)(4326008)(66476007)(66946007)(66556008)(83380400001)(36756003)(41300700001)(186003)(26005)(53546011)(6636002)(6666004)(6486002)(316002)(6512007)(54906003)(31696002)(478600001)(110136005)(2616005)(2906002)(31686004)(6506007)(8936002)(7416002)(5660300002)(38100700002)(30864003)(2004002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aVdWVG8wbmpMcGF4V004eGJ5clFkQTZYNDVQdlZPM0FGakxkNmovaWZ1YTdj?=
- =?utf-8?B?T0R1eE1kNkJUallMOGxjbDVacWxGbGVDc0RVTzBxT0VYaVhYVFdtclY4MVMz?=
- =?utf-8?B?cFlNNVNFR3V5K0xXTVVKNzBGNks4Q0gwVXNCKy9nbXh4UGFyYm9SeDVYTXlq?=
- =?utf-8?B?WTlUbU92eDVnZzZVVDJ2WHNnVlQxbzF2QkNkVVhoR0RSTnV6cXhsT2szcHB3?=
- =?utf-8?B?OFZ2NmpFcXk0bWNtajcyRktTUk5YbzRMcmpVMmlvSHlNanBEWmk4blFaREdH?=
- =?utf-8?B?aGluNno2Z0RXQ2xPK1dyaXlFVzdWdWFJbHEzblloaUZ3Z0p0VXZEUkgwVEhG?=
- =?utf-8?B?OXFqTDlWUks4SCt4ZWMrRHNRdWdwNTZjWVlBdklaOUtMMVBpR1NnR2h4LzFm?=
- =?utf-8?B?UDFySFRlbVN0bzV6eVpoVFFteWlQeGQvcjR1TmNlRFV3M01GV1VMY1B3NG5C?=
- =?utf-8?B?VGE0UXU4dE9CeHYza1VabkJjSUlUQWw5OTdiL0NMR2JBekVydkEyUGtkNkxJ?=
- =?utf-8?B?RHQvak1SSEZUNzRPb2tKWFAwYVM1THBhVHVQRUZ5Q0cxelE0eVN4Y0ZLMVVp?=
- =?utf-8?B?UkExMmU4NkEydFlIVWs3cm4wTGZGWnJJUHloZUNWV1RGQkxPbmdZb3QzWTdX?=
- =?utf-8?B?ZHRWSTVwTWVRY2VCUUJvc0lsTlcxVVJqN2p3WTQ4Nk5iYmlEOCs4Wi9ERE9H?=
- =?utf-8?B?QmdpQU1uYU9mN2cwVXdvK0ppb0VkR2pVanFNQmVtU0UrSmhVS1RKNjJRVkJ5?=
- =?utf-8?B?ZFRTcExHK1lZS041NHVlT0JxMERIRE9hL0Z5czJWRVEvK0Y4ZDRnb0dWRmtq?=
- =?utf-8?B?Uzc1STg3Yk9QL2RyYWRyTkJCc1BLU3NQaVFEbGcwb011SnNnVFI0d0ZsWjZk?=
- =?utf-8?B?UmpHa3hPQnp5Y0ZiNnA4ZHNkL2ozZjZXUDBYejAxQTRCaEl5cGtockdHcFJm?=
- =?utf-8?B?eGdJWDlMZFBnNW5KZUdxbm5Ta1VHWUxuVUVNbHM0ZHZpS1pSK2taNlZTbFhl?=
- =?utf-8?B?aWxUNnROTmg1dFlpUmc2QURNVFJBUlZEMERKV0JxOG1oMk5Fd2hXN2ZxY21r?=
- =?utf-8?B?YjMvRzhGWmFaYU1KTlZDY09CM3AyTG5IY2hTR3ZjYnBRd290T1FUeWx2cnB1?=
- =?utf-8?B?UXRYQ0trWTZ1RlJQNlltdDR0UDJXSUEyT0pSWnViQXFCak5kSmp6amNUcjRZ?=
- =?utf-8?B?aEVlRU5yNWh6NW9MbjdoV2J1RjVlT0Nraml4STAwTVNwN01PTHhwY2RFZFdu?=
- =?utf-8?B?MXFvbXIxb0Fmb1pIbGRqUUROWkc1amNXaVpvRVlsZTJiNWtWb1VEa3lQR1p3?=
- =?utf-8?B?b2dHTUNCS283R1V3dnJ2czFYTXdIRFEyRHBvSUExcmppaE55TlRjV2E5TUlD?=
- =?utf-8?B?eGlYeUdoWkVGTVBiSnhkNFREZWluMUlIQmpLdGhtV2ZOVnRvaGNaYWQ5WkNE?=
- =?utf-8?B?RzFyR0FHQTI3R21KYkFpb2VrYVZGWHByK2V3YVpMTTRseFpzYlpjT3l0dlQ3?=
- =?utf-8?B?OXVtWERGZmZaVkdGckdBcWtFSDEvblNocFpUb085VFFwTmhMRjFqWHphSmZ4?=
- =?utf-8?B?WmZzSDNWeEdJRTZSK2hWa3pWVmYxTkJDZ3pNU3Naek5DaS9aaWN0WG5BNG1Y?=
- =?utf-8?B?YlV3RE5mQnB6V3hScnh1V2VDZmFrdUVpdlFCVjRtQm1RKy84NlcxeW9wZ1Zw?=
- =?utf-8?B?S1BlMlRTcFhGNll6WTlxdFliMVZVd2ZRNWhzdkRuU2xacE9RWmI4V3NrL3V0?=
- =?utf-8?B?N3RkMWp6MVRjNjZFVE9CbW5XYXppcjFZRHhkYlZsekVlZXNxMUU5NzF1aUpm?=
- =?utf-8?B?SExieXVGRTJOZjJHb0lOUi81S2NaeC94YUJ3YVZ6T2FDcHhUNVI1a2c5cWV1?=
- =?utf-8?B?MFluZW94cDNSYS94L1ZrYi9WTGx5OGI2a2Vyd0o1bVQrYUJRc3gyeHEyZndL?=
- =?utf-8?B?c3hGQ3B1eDd2Zm9XNTdmTFpZSlROQy9ORWcwSjFUTUR1SDV1SHd2K1I2UVoy?=
- =?utf-8?B?T0pQV2JmZ1g5YnQrUnlVZ3FjeHVJemFlVXhoOVV0aUVYZGprV3plTmtrK0x2?=
- =?utf-8?B?azhVbWxWdXYwTUtKcnZoYXBXazNodW5SZSthSzF5bVFPbEJJV3hrdStGRWtt?=
- =?utf-8?Q?tfIPFZ6cd+78DXlrs5mdzBzIw?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 019b4941-ab70-48e3-c69b-08dade6b1a2c
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5825.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2022 07:08:01.2261
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VCyQCkw8d3mh7vuXFwpR9lNBik1pxODlA1DqPDZLvJDfodjI81ddP7GXftgZo65Q
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5765
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-15_02,2022-12-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ bulkscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 suspectscore=0 impostorscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212150050
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -136,601 +112,197 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 12/14/22 12:13, Jason Wang wrote:
-> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
->
->
-> On Wed, Dec 7, 2022 at 10:56 PM Gautam Dawar <gautam.dawar@amd.com> wrote:
->> To allow vDPA device creation and deletion, add a vDPA management
->> device per function. Currently, the vDPA devices can be created
->> only on a VF. Also, for now only network class of vDPA devices
->> are supported.
->>
->> Signed-off-by: Gautam Dawar <gautam.dawar@amd.com>
->> ---
->>   drivers/net/ethernet/sfc/Makefile         |   2 +-
->>   drivers/net/ethernet/sfc/ef10.c           |   2 +-
->>   drivers/net/ethernet/sfc/ef100_nic.c      |  24 ++-
->>   drivers/net/ethernet/sfc/ef100_nic.h      |  11 +
->>   drivers/net/ethernet/sfc/ef100_vdpa.c     | 232 ++++++++++++++++++++++
->>   drivers/net/ethernet/sfc/ef100_vdpa.h     |  84 ++++++++
->>   drivers/net/ethernet/sfc/ef100_vdpa_ops.c |  28 +++
->>   drivers/net/ethernet/sfc/mcdi_functions.c |   9 +-
->>   drivers/net/ethernet/sfc/mcdi_functions.h |   3 +-
->>   drivers/net/ethernet/sfc/net_driver.h     |   6 +
->>   10 files changed, 394 insertions(+), 7 deletions(-)
->>   create mode 100644 drivers/net/ethernet/sfc/ef100_vdpa_ops.c
->>
->> diff --git a/drivers/net/ethernet/sfc/Makefile b/drivers/net/ethernet/sfc/Makefile
->> index 84c9f0590368..a10eac91ab23 100644
->> --- a/drivers/net/ethernet/sfc/Makefile
->> +++ b/drivers/net/ethernet/sfc/Makefile
->> @@ -11,7 +11,7 @@ sfc-$(CONFIG_SFC_MTD) += mtd.o
->>   sfc-$(CONFIG_SFC_SRIOV)        += sriov.o ef10_sriov.o ef100_sriov.o ef100_rep.o \
->>                              mae.o tc.o tc_bindings.o tc_counters.o
->>
->> -sfc-$(CONFIG_SFC_VDPA) += mcdi_vdpa.o ef100_vdpa.o
->> +sfc-$(CONFIG_SFC_VDPA) += mcdi_vdpa.o ef100_vdpa.o ef100_vdpa_ops.o
->>   obj-$(CONFIG_SFC)      += sfc.o
->>
->>   obj-$(CONFIG_SFC_FALCON) += falcon/
->> diff --git a/drivers/net/ethernet/sfc/ef10.c b/drivers/net/ethernet/sfc/ef10.c
->> index 7022fb2005a2..366ecd3c80b1 100644
->> --- a/drivers/net/ethernet/sfc/ef10.c
->> +++ b/drivers/net/ethernet/sfc/ef10.c
->> @@ -589,7 +589,7 @@ static int efx_ef10_probe(struct efx_nic *efx)
->>          if (rc)
->>                  goto fail4;
->>
->> -       rc = efx_get_pf_index(efx, &nic_data->pf_index);
->> +       rc = efx_get_fn_info(efx, &nic_data->pf_index, NULL);
->>          if (rc)
->>                  goto fail5;
->>
->> diff --git a/drivers/net/ethernet/sfc/ef100_nic.c b/drivers/net/ethernet/sfc/ef100_nic.c
->> index 41175eb00326..41811c519275 100644
->> --- a/drivers/net/ethernet/sfc/ef100_nic.c
->> +++ b/drivers/net/ethernet/sfc/ef100_nic.c
->> @@ -1160,7 +1160,7 @@ static int ef100_probe_main(struct efx_nic *efx)
->>          if (rc)
->>                  goto fail;
->>
->> -       rc = efx_get_pf_index(efx, &nic_data->pf_index);
->> +       rc = efx_get_fn_info(efx, &nic_data->pf_index, &nic_data->vf_index);
->>          if (rc)
->>                  goto fail;
->>
->> @@ -1247,13 +1247,33 @@ int ef100_probe_netdev_pf(struct efx_nic *efx)
->>
->>   int ef100_probe_vf(struct efx_nic *efx)
->>   {
->> -       return ef100_probe_main(efx);
->> +#if defined(CONFIG_SFC_VDPA)
->> +       int err;
->> +#endif
->> +       int rc;
->> +
->> +       rc = ef100_probe_main(efx);
->> +       if (rc)
->> +               return rc;
->> +
->> +#if defined(CONFIG_SFC_VDPA)
->> +       err = ef100_vdpa_register_mgmtdev(efx);
->> +       if (err)
->> +               pci_warn(efx->pci_dev,
->> +                        "vdpa_register_mgmtdev failed, err: %d\n", err);
->> +#endif
->> +       return 0;
->>   }
->>
->>   void ef100_remove(struct efx_nic *efx)
->>   {
->>          struct ef100_nic_data *nic_data = efx->nic_data;
->>
->> +#if defined(CONFIG_SFC_VDPA)
->> +       if (efx_vdpa_supported(efx))
->> +               ef100_vdpa_unregister_mgmtdev(efx);
->> +#endif
->> +
->>          efx_mcdi_detach(efx);
->>          efx_mcdi_fini(efx);
->>          if (nic_data) {
->> diff --git a/drivers/net/ethernet/sfc/ef100_nic.h b/drivers/net/ethernet/sfc/ef100_nic.h
->> index 5ed693fbe79f..730c8bb932b0 100644
->> --- a/drivers/net/ethernet/sfc/ef100_nic.h
->> +++ b/drivers/net/ethernet/sfc/ef100_nic.h
->> @@ -68,6 +68,13 @@ enum ef100_bar_config {
->>          EF100_BAR_CONFIG_VDPA,
->>   };
->>
->> +#ifdef CONFIG_SFC_VDPA
->> +enum ef100_vdpa_class {
->> +       EF100_VDPA_CLASS_NONE,
->> +       EF100_VDPA_CLASS_NET,
->> +};
->> +#endif
->> +
->>   struct ef100_nic_data {
->>          struct efx_nic *efx;
->>          struct efx_buffer mcdi_buf;
->> @@ -75,7 +82,11 @@ struct ef100_nic_data {
->>          u32 datapath_caps2;
->>          u32 datapath_caps3;
->>          unsigned int pf_index;
->> +       unsigned int vf_index;
->>          u16 warm_boot_count;
->> +#ifdef CONFIG_SFC_VDPA
->> +       enum ef100_vdpa_class vdpa_class;
->> +#endif
->>          u8 port_id[ETH_ALEN];
->>          DECLARE_BITMAP(evq_phases, EFX_MAX_CHANNELS);
->>          enum ef100_bar_config bar_config;
->> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa.c b/drivers/net/ethernet/sfc/ef100_vdpa.c
->> index 5e215cee585a..ff4bb61e598e 100644
->> --- a/drivers/net/ethernet/sfc/ef100_vdpa.c
->> +++ b/drivers/net/ethernet/sfc/ef100_vdpa.c
->> @@ -11,11 +11,17 @@
->>   #include <linux/err.h>
->>   #include <linux/vdpa.h>
->>   #include <linux/virtio_net.h>
->> +#include <uapi/linux/vdpa.h>
->>   #include "ef100_vdpa.h"
->>   #include "mcdi_vdpa.h"
->>   #include "mcdi_filters.h"
->>   #include "ef100_netdev.h"
->>
->> +static struct virtio_device_id ef100_vdpa_id_table[] = {
->> +       { .device = VIRTIO_ID_NET, .vendor = PCI_VENDOR_ID_REDHAT_QUMRANET },
->> +       { 0 },
->> +};
->> +
->>   int ef100_vdpa_init(struct efx_probe_data *probe_data)
->>   {
->>          struct efx_nic *efx = &probe_data->efx;
->> @@ -42,17 +48,243 @@ int ef100_vdpa_init(struct efx_probe_data *probe_data)
->>          return rc;
->>   }
->>
->> +static void ef100_vdpa_delete(struct efx_nic *efx)
->> +{
->> +       if (efx->vdpa_nic) {
->> +               /* replace with _vdpa_unregister_device later */
->> +               put_device(&efx->vdpa_nic->vdpa_dev.dev);
->> +               efx->vdpa_nic = NULL;
->> +       }
->> +}
->> +
->>   void ef100_vdpa_fini(struct efx_probe_data *probe_data)
->>   {
->>          struct efx_nic *efx = &probe_data->efx;
->> +       struct ef100_nic_data *nic_data;
->>
->>          if (efx->state != STATE_VDPA && efx->state != STATE_DISABLED) {
->>                  pci_err(efx->pci_dev, "Invalid efx state %u", efx->state);
->>                  return;
->>          }
->>
->> +       /* Handle vdpa device deletion, if not done explicitly */
->> +       ef100_vdpa_delete(efx);
->> +       nic_data = efx->nic_data;
->> +       nic_data->vdpa_class = EF100_VDPA_CLASS_NONE;
->>          efx->state = STATE_PROBED;
->>          down_write(&efx->filter_sem);
->>          efx_mcdi_filter_table_remove(efx);
->>          up_write(&efx->filter_sem);
->>   }
->> +
->> +static int get_net_config(struct ef100_vdpa_nic *vdpa_nic)
->> +{
->> +       struct efx_nic *efx = vdpa_nic->efx;
->> +       u16 mtu;
->> +       int rc;
->> +
->> +       vdpa_nic->net_config.max_virtqueue_pairs =
->> +               cpu_to_efx_vdpa16(vdpa_nic, vdpa_nic->max_queue_pairs);
->> +
->> +       rc = efx_vdpa_get_mtu(efx, &mtu);
->> +       if (rc) {
->> +               dev_err(&vdpa_nic->vdpa_dev.dev,
->> +                       "%s: Get MTU for vf:%u failed:%d\n", __func__,
->> +                       vdpa_nic->vf_index, rc);
->> +               return rc;
->> +       }
->> +       vdpa_nic->net_config.mtu = cpu_to_efx_vdpa16(vdpa_nic, mtu);
->> +       vdpa_nic->net_config.status = cpu_to_efx_vdpa16(vdpa_nic,
->> +                                                       VIRTIO_NET_S_LINK_UP);
->> +       return 0;
->> +}
->> +
->> +static struct ef100_vdpa_nic *ef100_vdpa_create(struct efx_nic *efx,
->> +                                               const char *dev_name,
->> +                                               enum ef100_vdpa_class dev_type,
->> +                                               const u8 *mac)
->> +{
->> +       struct ef100_nic_data *nic_data = efx->nic_data;
->> +       struct ef100_vdpa_nic *vdpa_nic;
->> +       struct device *dev;
->> +       int rc;
->> +
->> +       nic_data->vdpa_class = dev_type;
->> +       vdpa_nic = vdpa_alloc_device(struct ef100_vdpa_nic,
->> +                                    vdpa_dev, &efx->pci_dev->dev,
->> +                                    &ef100_vdpa_config_ops,
->> +                                    1, 1,
->> +                                    dev_name, false);
->> +       if (!vdpa_nic) {
->> +               pci_err(efx->pci_dev,
->> +                       "vDPA device allocation failed for vf: %u\n",
->> +                       nic_data->vf_index);
->> +               nic_data->vdpa_class = EF100_VDPA_CLASS_NONE;
->> +               return ERR_PTR(-ENOMEM);
->> +       }
->> +
->> +       mutex_init(&vdpa_nic->lock);
->> +       dev = &vdpa_nic->vdpa_dev.dev;
->> +       efx->vdpa_nic = vdpa_nic;
->> +       vdpa_nic->vdpa_dev.dma_dev = &efx->pci_dev->dev;
->> +       vdpa_nic->vdpa_dev.mdev = efx->mgmt_dev;
->> +       vdpa_nic->efx = efx;
->> +       vdpa_nic->pf_index = nic_data->pf_index;
->> +       vdpa_nic->vf_index = nic_data->vf_index;
->> +       vdpa_nic->vdpa_state = EF100_VDPA_STATE_INITIALIZED;
->> +       vdpa_nic->mac_address = (u8 *)&vdpa_nic->net_config.mac;
->> +       ether_addr_copy(vdpa_nic->mac_address, mac);
->> +       vdpa_nic->mac_configured = true;
->> +
->> +       rc = get_net_config(vdpa_nic);
->> +       if (rc)
->> +               goto err_put_device;
->> +
->> +       /* _vdpa_register_device when its ready */
->> +
->> +       return vdpa_nic;
->> +
->> +err_put_device:
->> +       /* put_device invokes ef100_vdpa_free */
->> +       put_device(&vdpa_nic->vdpa_dev.dev);
->> +       return ERR_PTR(rc);
->> +}
->> +
->> +static void ef100_vdpa_net_dev_del(struct vdpa_mgmt_dev *mgmt_dev,
->> +                                  struct vdpa_device *vdev)
->> +{
->> +       struct ef100_nic_data *nic_data;
->> +       struct efx_nic *efx;
->> +       int rc;
->> +
->> +       efx = pci_get_drvdata(to_pci_dev(mgmt_dev->device));
->> +       nic_data = efx->nic_data;
->> +
->> +       rc = efx_ef100_set_bar_config(efx, EF100_BAR_CONFIG_EF100);
->> +       if (rc)
->> +               pci_err(efx->pci_dev,
->> +                       "set_bar_config EF100 failed, err: %d\n", rc);
->> +       else
->> +               pci_dbg(efx->pci_dev,
->> +                       "vdpa net device deleted, vf: %u\n",
->> +                       nic_data->vf_index);
->> +}
->> +
->> +static int ef100_vdpa_net_dev_add(struct vdpa_mgmt_dev *mgmt_dev,
->> +                                 const char *name,
->> +                                 const struct vdpa_dev_set_config *config)
->> +{
->> +       struct ef100_vdpa_nic *vdpa_nic;
->> +       struct ef100_nic_data *nic_data;
->> +       struct efx_nic *efx;
->> +       int rc, err;
->> +
->> +       efx = pci_get_drvdata(to_pci_dev(mgmt_dev->device));
->> +       if (efx->vdpa_nic) {
->> +               pci_warn(efx->pci_dev,
->> +                        "vDPA device already exists on this VF\n");
->> +               return -EEXIST;
->> +       }
->> +
->> +       if (config->mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MACADDR)) {
->> +               if (!is_valid_ether_addr(config->net.mac)) {
->> +                       pci_err(efx->pci_dev, "Invalid MAC address %pM\n",
->> +                               config->net.mac);
->> +                       return -EINVAL;
->> +               }
->> +       } else {
->> +               pci_err(efx->pci_dev, "MAC address parameter missing\n");
-> Does this mean ef100 vf doesn't have a given mac address?
-We are working on adding support to configure VF MAC addresses using 
-devlink port and once that is available, we can get rid of this 
-restriction of specifying the MAC address at vdpa device creation time.
->
->
->
->> +               return -EIO;
->> +       }
->> +
->> +       nic_data = efx->nic_data;
->> +
->> +       rc = efx_ef100_set_bar_config(efx, EF100_BAR_CONFIG_VDPA);
->> +       if (rc) {
->> +               pci_err(efx->pci_dev,
->> +                       "set_bar_config vDPA failed, err: %d\n", rc);
->> +               goto err_set_bar_config;
->> +       }
->> +
->> +       vdpa_nic = ef100_vdpa_create(efx, name, EF100_VDPA_CLASS_NET,
->> +                                    (const u8 *)config->net.mac);
->> +       if (IS_ERR(vdpa_nic)) {
->> +               pci_err(efx->pci_dev,
->> +                       "vDPA device creation failed, vf: %u, err: %ld\n",
->> +                       nic_data->vf_index, PTR_ERR(vdpa_nic));
->> +               rc = PTR_ERR(vdpa_nic);
->> +               goto err_set_bar_config;
->> +       } else {
->> +               pci_dbg(efx->pci_dev,
->> +                       "vdpa net device created, vf: %u\n",
->> +                       nic_data->vf_index);
->> +               pci_warn(efx->pci_dev,
->> +                        "Use QEMU versions 6.1.0 and later with vhost-vdpa\n");
->> +       }
->> +
->> +       return 0;
->> +
->> +err_set_bar_config:
->> +       err = efx_ef100_set_bar_config(efx, EF100_BAR_CONFIG_EF100);
->> +       if (err)
->> +               pci_err(efx->pci_dev,
->> +                       "set_bar_config EF100 failed, err: %d\n", err);
->> +
->> +       return rc;
->> +}
->> +
->> +static const struct vdpa_mgmtdev_ops ef100_vdpa_net_mgmtdev_ops = {
->> +       .dev_add = ef100_vdpa_net_dev_add,
->> +       .dev_del = ef100_vdpa_net_dev_del
->> +};
->> +
->> +int ef100_vdpa_register_mgmtdev(struct efx_nic *efx)
->> +{
->> +       struct vdpa_mgmt_dev *mgmt_dev;
->> +       u64 features;
->> +       int rc;
->> +
->> +       mgmt_dev = kzalloc(sizeof(*mgmt_dev), GFP_KERNEL);
->> +       if (!mgmt_dev)
->> +               return -ENOMEM;
->> +
->> +       rc = efx_vdpa_get_features(efx, EF100_VDPA_DEVICE_TYPE_NET, &features);
->> +       if (rc) {
->> +               pci_err(efx->pci_dev, "%s: MCDI get features error:%d\n",
->> +                       __func__, rc);
->> +               goto err_get_features;
->> +       }
->> +
->> +       efx->mgmt_dev = mgmt_dev;
->> +       mgmt_dev->device = &efx->pci_dev->dev;
->> +       mgmt_dev->id_table = ef100_vdpa_id_table;
->> +       mgmt_dev->ops = &ef100_vdpa_net_mgmtdev_ops;
->> +       mgmt_dev->supported_features = features;
->> +       mgmt_dev->max_supported_vqs = EF100_VDPA_MAX_QUEUES_PAIRS * 2;
->> +       mgmt_dev->config_attr_mask = BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MACADDR);
->> +
->> +       rc = vdpa_mgmtdev_register(mgmt_dev);
->> +       if (rc) {
->> +               pci_err(efx->pci_dev,
->> +                       "vdpa_mgmtdev_register failed, err: %d\n", rc);
->> +               goto err_mgmtdev_register;
->> +       }
->> +
->> +       return 0;
->> +
->> +err_mgmtdev_register:
->> +err_get_features:
->> +       kfree(mgmt_dev);
->> +       efx->mgmt_dev = NULL;
->> +
->> +       return rc;
->> +}
->> +
->> +void ef100_vdpa_unregister_mgmtdev(struct efx_nic *efx)
->> +{
->> +       if (efx->mgmt_dev) {
->> +               vdpa_mgmtdev_unregister(efx->mgmt_dev);
->> +               kfree(efx->mgmt_dev);
->> +               efx->mgmt_dev = NULL;
->> +       }
->> +}
->> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa.h b/drivers/net/ethernet/sfc/ef100_vdpa.h
->> index 6b51a05becd8..83f6d819f6a5 100644
->> --- a/drivers/net/ethernet/sfc/ef100_vdpa.h
->> +++ b/drivers/net/ethernet/sfc/ef100_vdpa.h
->> @@ -18,6 +18,24 @@
->>
->>   #if defined(CONFIG_SFC_VDPA)
->>
->> +/* Max queue pairs currently supported */
->> +#define EF100_VDPA_MAX_QUEUES_PAIRS 1
->> +
->> +/**
->> + * enum ef100_vdpa_nic_state - possible states for a vDPA NIC
->> + *
->> + * @EF100_VDPA_STATE_INITIALIZED: State after vDPA NIC created
->> + * @EF100_VDPA_STATE_NEGOTIATED: State after feature negotiation
->> + * @EF100_VDPA_STATE_STARTED: State after driver ok
->> + * @EF100_VDPA_STATE_NSTATES: Number of VDPA states
->> + */
->> +enum ef100_vdpa_nic_state {
->> +       EF100_VDPA_STATE_INITIALIZED,
->> +       EF100_VDPA_STATE_NEGOTIATED,
->> +       EF100_VDPA_STATE_STARTED,
->> +       EF100_VDPA_STATE_NSTATES
->> +};
->> +
->>   enum ef100_vdpa_device_type {
->>          EF100_VDPA_DEVICE_TYPE_NET,
->>   };
->> @@ -28,7 +46,73 @@ enum ef100_vdpa_vq_type {
->>          EF100_VDPA_VQ_NTYPES
->>   };
->>
->> +/**
->> + *  struct ef100_vdpa_nic - vDPA NIC data structure
->> + *
->> + * @vdpa_dev: vdpa_device object which registers on the vDPA bus.
->> + * @vdpa_state: NIC state machine governed by ef100_vdpa_nic_state
->> + * @efx: pointer to the VF's efx_nic object
->> + * @lock: Managing access to vdpa config operations
->> + * @pf_index: PF index of the vDPA VF
->> + * @vf_index: VF index of the vDPA VF
->> + * @status: device status as per VIRTIO spec
->> + * @features: negotiated feature bits
->> + * @max_queue_pairs: maximum number of queue pairs supported
->> + * @net_config: virtio_net_config data
->> + * @mac_address: mac address of interface associated with this vdpa device
->> + * @mac_configured: true after MAC address is configured
->> + */
->> +struct ef100_vdpa_nic {
->> +       struct vdpa_device vdpa_dev;
->> +       enum ef100_vdpa_nic_state vdpa_state;
->> +       struct efx_nic *efx;
->> +       /* for synchronizing access to vdpa config operations */
->> +       struct mutex lock;
->> +       u32 pf_index;
->> +       u32 vf_index;
->> +       u8 status;
->> +       u64 features;
->> +       u32 max_queue_pairs;
->> +       struct virtio_net_config net_config;
->> +       u8 *mac_address;
->> +       bool mac_configured;
->> +};
->> +
->>   int ef100_vdpa_init(struct efx_probe_data *probe_data);
->>   void ef100_vdpa_fini(struct efx_probe_data *probe_data);
->> +int ef100_vdpa_register_mgmtdev(struct efx_nic *efx);
->> +void ef100_vdpa_unregister_mgmtdev(struct efx_nic *efx);
->> +
->> +static inline bool efx_vdpa_is_little_endian(struct ef100_vdpa_nic *vdpa_nic)
->> +{
->> +       return virtio_legacy_is_little_endian() ||
->> +               (vdpa_nic->features & (1ULL << VIRTIO_F_VERSION_1));
->> +}
->> +
->> +static inline u16 efx_vdpa16_to_cpu(struct ef100_vdpa_nic *vdpa_nic,
->> +                                   __virtio16 val)
->> +{
->> +       return __virtio16_to_cpu(efx_vdpa_is_little_endian(vdpa_nic), val);
->> +}
->> +
->> +static inline __virtio16 cpu_to_efx_vdpa16(struct ef100_vdpa_nic *vdpa_nic,
->> +                                          u16 val)
->> +{
->> +       return __cpu_to_virtio16(efx_vdpa_is_little_endian(vdpa_nic), val);
->> +}
->> +
->> +static inline u32 efx_vdpa32_to_cpu(struct ef100_vdpa_nic *vdpa_nic,
->> +                                   __virtio32 val)
->> +{
->> +       return __virtio32_to_cpu(efx_vdpa_is_little_endian(vdpa_nic), val);
->> +}
->> +
->> +static inline __virtio32 cpu_to_efx_vdpa32(struct ef100_vdpa_nic *vdpa_nic,
->> +                                          u32 val)
->> +{
->> +       return __cpu_to_virtio32(efx_vdpa_is_little_endian(vdpa_nic), val);
->> +}
->> +
->> +extern const struct vdpa_config_ops ef100_vdpa_config_ops;
->>   #endif /* CONFIG_SFC_VDPA */
->>   #endif /* __EF100_VDPA_H__ */
->> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa_ops.c b/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
->> new file mode 100644
->> index 000000000000..31952931c198
->> --- /dev/null
->> +++ b/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
->> @@ -0,0 +1,28 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/* Driver for Xilinx network controllers and boards
->> + * Copyright(C) 2020-2022 Xilinx, Inc.
->> + * Copyright(C) 2022 Advanced Micro Devices, Inc.
->> + *
->> + * This program is free software; you can redistribute it and/or modify it
->> + * under the terms of the GNU General Public License version 2 as published
->> + * by the Free Software Foundation, incorporated herein by reference.
->> + */
->> +
->> +#include <linux/vdpa.h>
->> +#include "ef100_vdpa.h"
->> +
->> +static struct ef100_vdpa_nic *get_vdpa_nic(struct vdpa_device *vdev)
->> +{
->> +       return container_of(vdev, struct ef100_vdpa_nic, vdpa_dev);
->> +}
->> +
->> +static void ef100_vdpa_free(struct vdpa_device *vdev)
->> +{
->> +       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
->> +
->> +       mutex_destroy(&vdpa_nic->lock);
->> +}
->> +
->> +const struct vdpa_config_ops ef100_vdpa_config_ops = {
->> +       .free                = ef100_vdpa_free,
->> +};
->> diff --git a/drivers/net/ethernet/sfc/mcdi_functions.c b/drivers/net/ethernet/sfc/mcdi_functions.c
->> index d3e6d8239f5c..4415f19cf68f 100644
->> --- a/drivers/net/ethernet/sfc/mcdi_functions.c
->> +++ b/drivers/net/ethernet/sfc/mcdi_functions.c
->> @@ -413,7 +413,8 @@ int efx_mcdi_window_mode_to_stride(struct efx_nic *efx, u8 vi_window_mode)
->>          return 0;
->>   }
->>
->> -int efx_get_pf_index(struct efx_nic *efx, unsigned int *pf_index)
->> +int efx_get_fn_info(struct efx_nic *efx, unsigned int *pf_index,
->> +                   unsigned int *vf_index)
->>   {
->>          MCDI_DECLARE_BUF(outbuf, MC_CMD_GET_FUNCTION_INFO_OUT_LEN);
->>          size_t outlen;
->> @@ -426,6 +427,10 @@ int efx_get_pf_index(struct efx_nic *efx, unsigned int *pf_index)
->>          if (outlen < sizeof(outbuf))
->>                  return -EIO;
->>
->> -       *pf_index = MCDI_DWORD(outbuf, GET_FUNCTION_INFO_OUT_PF);
->> +       if (pf_index)
->> +               *pf_index = MCDI_DWORD(outbuf, GET_FUNCTION_INFO_OUT_PF);
->> +
->> +       if (efx->type->is_vf && vf_index)
->> +               *vf_index = MCDI_DWORD(outbuf, GET_FUNCTION_INFO_OUT_VF);
->>          return 0;
->>   }
->> diff --git a/drivers/net/ethernet/sfc/mcdi_functions.h b/drivers/net/ethernet/sfc/mcdi_functions.h
->> index b0e2f53a0d9b..76dc0a13463e 100644
->> --- a/drivers/net/ethernet/sfc/mcdi_functions.h
->> +++ b/drivers/net/ethernet/sfc/mcdi_functions.h
->> @@ -28,6 +28,7 @@ void efx_mcdi_rx_remove(struct efx_rx_queue *rx_queue);
->>   void efx_mcdi_rx_fini(struct efx_rx_queue *rx_queue);
->>   int efx_fini_dmaq(struct efx_nic *efx);
->>   int efx_mcdi_window_mode_to_stride(struct efx_nic *efx, u8 vi_window_mode);
->> -int efx_get_pf_index(struct efx_nic *efx, unsigned int *pf_index);
->> +int efx_get_fn_info(struct efx_nic *efx, unsigned int *pf_index,
->> +                   unsigned int *vf_index);
->>
->>   #endif
->> diff --git a/drivers/net/ethernet/sfc/net_driver.h b/drivers/net/ethernet/sfc/net_driver.h
->> index ffda80a95221..79356d614109 100644
->> --- a/drivers/net/ethernet/sfc/net_driver.h
->> +++ b/drivers/net/ethernet/sfc/net_driver.h
->> @@ -1182,6 +1182,12 @@ struct efx_nic {
->>
->>          unsigned int mem_bar;
->>          u32 reg_base;
->> +#ifdef CONFIG_SFC_VDPA
->> +       /** @mgmt_dev: vDPA Management device */
->> +       struct vdpa_mgmt_dev *mgmt_dev;
->> +       /** @vdpa_nic: vDPA device structure (EF100) */
->> +       struct ef100_vdpa_nic *vdpa_nic;
->> +#endif
->>
->>          /* The following fields may be written more often */
->>
->> --
->> 2.30.1
->>
+
+> On 14-Dec-2022, at 3:39 AM, Ian Rogers <irogers@google.com> wrote:
+>=20
+> On Tue, Dec 13, 2022 at 1:53 AM Athira Rajeev
+> <atrajeev@linux.vnet.ibm.com> wrote:
+>>=20
+>>=20
+>>=20
+>>> On 12-Dec-2022, at 7:21 PM, Arnaldo Carvalho de Melo <acme@kernel.org> =
+wrote:
+>>>=20
+>>> Em Fri, Dec 09, 2022 at 12:04:18PM +0530, Athira Rajeev escreveu:
+>>>>=20
+>>>>=20
+>>>>> On 09-Dec-2022, at 4:02 AM, Arnaldo Carvalho de Melo <acme@kernel.org=
+> wrote:
+>>>>>=20
+>>>>> Em Thu, Dec 08, 2022 at 07:04:52PM -0300, Arnaldo Carvalho de Melo es=
+creveu:
+>>>>>> Em Thu, Dec 08, 2022 at 12:21:20PM +0530, Athira Rajeev escreveu:
+>>>>>>>> On 07-Dec-2022, at 10:57 PM, Arnaldo Carvalho de Melo <acme@kernel=
+.org> wrote:
+>>>>>>>> Can you try again? tmp.perf/core? That "tmp." part means its a for=
+ce
+>>>>>>>> pushed branch, so I just force pushed with some arch specific fixe=
+s, now
+>>>>>>>> I'm down to (removing the successful builds and unrelated failures=
+, now
+>>>>>>>> related to libbpf's F_DUPFD_CLOEXEC kaboom):
+>>>>>>=20
+>>>>>>> Ok Arnaldo, Sure, I will check with updated branch
+>>>>>>=20
+>>>>>>>> 5     7.38 fedora:34                     : FAIL gcc version 11.3.1=
+ 20220421 (Red Hat 11.3.1-2) (GCC)
+>>>>>>>> /git/perf-6.1.0-rc6/tools/perf/util/evsel.c: In function =E2=80=98=
+evsel__rawptr=E2=80=99:
+>>>>>>>> /git/perf-6.1.0-rc6/tools/perf/util/evsel.c:2787:36: error: =E2=80=
+=98TEP_FIELD_IS_RELATIVE=E2=80=99 undeclared (first use in this function); =
+did you mean =E2=80=98TEP_FIELD_IS_FLAG=E2=80=99?
+>>>>>>>>  2787 |                 if (field->flags & TEP_FIELD_IS_RELATIVE)
+>>>>>>>>       |                                    ^~~~~~~~~~~~~~~~~~~~~
+>>>>>>>>       |                                    TEP_FIELD_IS_FLAG
+>>>>>>=20
+>>>>>>> I observed same issue as updated here:
+>>>>>>> https://lore.kernel.org/lkml/10476A85-3F75-4C91-AB5B-E5B136F31297@l=
+inux.vnet.ibm.com/
+>>>>>>=20
+>>>>>>> Looks like TEP_FIELD_IS_RELATIVE is not defined in header file of t=
+he system installed version.
+>>>>>>> whereas it is there in header file in tools/lib/traceevent
+>>>>>>=20
+>>>>>>> # grep TEP_FIELD_IS_RELATIVE /usr/include/traceevent/event-parse.h
+>>>>>>> # grep TEP_FIELD_IS_RELATIVE ../lib/traceevent/event-parse.h
+>>>>>>>  TEP_FIELD_IS_RELATIVE   =3D 256,
+>>>>>>=20
+>>>>>> Right, I had noticed that as well, so as a prep patch I'm adding the
+>>>>>> patch below, before Ian's. Please check and provide an
+>>>>>> Acked-by/Tested-by/Reviewed-by if possible.
+>>>>>=20
+>>>>> I ended up with the one below, _after_ Ian's patch as I had some trou=
+ble grafting
+>>>>> it before and had already tested it this way multiple times, I'm push=
+ing
+>>>>> this to tmp/perf.core.
+>>>>>=20
+>>>>> - Arnaldo
+>>>>=20
+>>>>=20
+>>>> Hi Arnaldo, Ian
+>>>>=20
+>>>> Thanks for the fixes.
+>>>>=20
+>>>> Since we changed =E2=80=9CCONFIG_TRACEEVENT=E2=80=9D to =E2=80=9CCONFI=
+G_LIBTRACEEVENT=E2=80=9D,
+>>>> below change is also needed in =E2=80=9Carch/powerpc/util/Build=E2=80=
+=9D
+>>>>=20
+>>>> diff --git a/tools/perf/arch/powerpc/util/Build b/tools/perf/arch/powe=
+rpc/util/Build
+>>>> index 71e57f28abda..9889245c555c 100644
+>>>> --- a/tools/perf/arch/powerpc/util/Build
+>>>> +++ b/tools/perf/arch/powerpc/util/Build
+>>>> @@ -1,5 +1,5 @@
+>>>> perf-y +=3D header.o
+>>>> -perf-$(CONFIG_TRACEEVENT) +=3D kvm-stat.o
+>>>> +perf-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
+>>>> perf-y +=3D perf_regs.o
+>>>> perf-y +=3D mem-events.o
+>>>> perf-y +=3D sym-handling.o
+>>>>=20
+>>>> With this change, I could successfully compile in these environment:
+>>>> - Without libtraceevent-devel installed
+>>>> - With libtraceevent-devel installed
+>>>> - With =E2=80=9Cmake NO_LIBTRACEEVENT=3D1=E2=80=9D
+>>>>=20
+>>>> With above change,
+>>>> Acked-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+>>>=20
+>>> I did that and the same thing for other architectures, thanks for
+>>> testing!
+>>>=20
+>>> I'll now give a try at implementing it without
+>>> tools/build/feature/test-libtraceevent-tep_field_is_relative.c, using
+>>> just the version of libtraceevent, as Ian suggested.
+>>>=20
+>>> It would be great if you could test it again then,
+>>>=20
+>>=20
+>> Sure Arnaldo, I will test with updated code.
+>>=20
+>> Thanks
+>> Athira
+>=20
+>=20
+> Thanks Athira and Arnaldo. It is a little strange to me to be using
+
+
+Hi Arnaldo, Ian
+
+Compile tested with updated tmp.perf/core and results are good
+
+Thanks
+Athira
+
+> the shell to do a version number test. The intent was to be doing
+> these in the code:
+> #if LIBRTRACEEVENT_VERSION >=3D MAKE_LIBTRACEEVENT_VERSION(1, 5, 0)
+> vs
+> ...
+> LIBTRACEEVENT_VERSION_WITH_TEP_FIELD_IS_RELATIVE :=3D $(shell expr 1 \*
+> 255 \* 255 + 5 \* 255 + 0) # 1.5.0
+> ifeq ($(shell test $(LIBTRACEEVENT_VERSION_CPP) -gt
+> $(LIBTRACEEVENT_VERSION_WITH_TEP_FIELD_IS_RELATIVE); echo $$?),0)
+> CFLAGS +=3D -DHAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
+> endif
+> ...
+> #ifdef HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
+> I'm a little selfish as I'm maintaining a bazel build and a single
+> version number to maintain is easier than lots of HAVE_... tests. I'm
+> happy to follow Arnaldo's lead. I think the test should also be
+> greater-equal rather than greater-than:
+> https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/tree/inclu=
+de/traceevent/event-parse.h?h=3Dlibtraceevent-v1.5#n128
+>=20
+> Thanks,
+> Ian
+>=20
+>=20
+> Ian
+>=20
+>>> Thanks,
+>>>=20
+>>> - Arnaldo
+>>>=20
+>>>=20
+>>> diff --git a/tools/perf/arch/arm64/util/Build b/tools/perf/arch/arm64/u=
+til/Build
+>>> index 88553c578ed7a1c4..78ef7115be3d91a7 100644
+>>> --- a/tools/perf/arch/arm64/util/Build
+>>> +++ b/tools/perf/arch/arm64/util/Build
+>>> @@ -3,7 +3,7 @@ perf-y +=3D machine.o
+>>> perf-y +=3D perf_regs.o
+>>> perf-y +=3D tsc.o
+>>> perf-y +=3D pmu.o
+>>> -perf-$(CONFIG_TRACEEVENT) +=3D kvm-stat.o
+>>> +perf-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
+>>> perf-$(CONFIG_DWARF)     +=3D dwarf-regs.o
+>>> perf-$(CONFIG_LOCAL_LIBUNWIND) +=3D unwind-libunwind.o
+>>> perf-$(CONFIG_LIBDW_DWARF_UNWIND) +=3D unwind-libdw.o
+>>> diff --git a/tools/perf/arch/powerpc/util/Build b/tools/perf/arch/power=
+pc/util/Build
+>>> index 71e57f28abdac7e9..9889245c555c4cfb 100644
+>>> --- a/tools/perf/arch/powerpc/util/Build
+>>> +++ b/tools/perf/arch/powerpc/util/Build
+>>> @@ -1,5 +1,5 @@
+>>> perf-y +=3D header.o
+>>> -perf-$(CONFIG_TRACEEVENT) +=3D kvm-stat.o
+>>> +perf-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
+>>> perf-y +=3D perf_regs.o
+>>> perf-y +=3D mem-events.o
+>>> perf-y +=3D sym-handling.o
+>>> diff --git a/tools/perf/arch/s390/util/Build b/tools/perf/arch/s390/uti=
+l/Build
+>>> index aa8a5f05c9cb4706..db68840869979f2c 100644
+>>> --- a/tools/perf/arch/s390/util/Build
+>>> +++ b/tools/perf/arch/s390/util/Build
+>>> @@ -1,5 +1,5 @@
+>>> perf-y +=3D header.o
+>>> -perf-$(CONFIG_TRACEEVENT) +=3D kvm-stat.o
+>>> +perf-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
+>>> perf-y +=3D perf_regs.o
+>>>=20
+>>> perf-$(CONFIG_DWARF) +=3D dwarf-regs.o
+
