@@ -2,284 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A1664E13F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9A064E140
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiLOSrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 13:47:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
+        id S229496AbiLOSrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 13:47:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbiLOSrM (ORCPT
+        with ESMTP id S230318AbiLOSrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 13:47:12 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CA24B9B3
+        Thu, 15 Dec 2022 13:47:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1E44D5CD
         for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 10:46:45 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id p8so17033541lfu.11
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 10:46:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ow/jl7Lq41cBFQ0kKYmK3RpwA+PwdFmm0JCIINqkeK0=;
-        b=PdRHvaroyyS1RdpumfsfR6h4Wj9Lu9gS/2+GiHYn0w0gdLNVkPwX7FmIcY67+eLRUI
-         M6zO+sKFhu76hMlzRNbAmhGibi8Cp5uhwF1xKhRMP0LIbZx+3ZWrfPG5oov2XIJrnLrB
-         rCLgtPgM5q083f8xPuyeIN0Q8sxH9rMMF2fjyc8+1soo4NvPkusUz/OC2pN+QDuJJPuI
-         bBuQeuC8JUcvQODphD+ceDTSoY1kdXbbksdhqFMQSZjJwkGBuHA1lhx9Zrj0XTK3TUbb
-         aUa7O0ckOwF89ju+CIFtmnECwLtGrwmdVFqG3OlMJGmYcR7zNX3RrkAb806NT/P6fZXo
-         XMMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ow/jl7Lq41cBFQ0kKYmK3RpwA+PwdFmm0JCIINqkeK0=;
-        b=Um9dOLB0PCxwQ//52oYhnRL9jYxj0jP0fS+fjDx7XQJWuOr6BNBLreqBRsfx5NX6CG
-         DOdHadelkTKrw6yDnLunDArkore+G1/BM9St9tpbZtw1/hI+NDy1zFfJu9jkN16CC82D
-         +fbNpeTdN0NBxrzsDcdvlfsX2AtnCub4VQQHUJDacpzDyEJHycECOGiiykB+FaR3iZ7Q
-         JHmkHUmOS7y/oQBjmrGKwA6yKdYMJIVktU5mT2za2+JEPaF7WlHAotXv6ufOLpTTrSnD
-         AMjv5nspRT0V0QsnmEU+KaUWcItb0oMAQgTI6KB07pFXKeYMa7/Uu32qD2YoJfVgMtdC
-         MoOg==
-X-Gm-Message-State: ANoB5pmVmLbBj+0yiJQOrCaPvm4my6IHIg9C2ZQmvJQIGOaqey0T4/2/
-        sJe4Z/yBvz75a84HDoMMS/XcvA==
-X-Google-Smtp-Source: AA0mqf7SeygvyCy/5X5fmIjhgJWnrVBU9vsPrvMp3HwiuIP9qbAaMQeoO/WKQxgAYzcVKUrpIDjcKg==
-X-Received: by 2002:a05:6512:15a7:b0:4b6:e494:a98d with SMTP id bp39-20020a05651215a700b004b6e494a98dmr7751372lfb.44.1671130003399;
-        Thu, 15 Dec 2022 10:46:43 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id c15-20020a056512074f00b004b5774726dcsm1225419lfs.236.2022.12.15.10.46.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 10:46:42 -0800 (PST)
-Message-ID: <ca15a54b-8040-5e4f-a78e-12b7f8a554e1@linaro.org>
-Date:   Thu, 15 Dec 2022 20:46:42 +0200
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCFD761ED2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 18:46:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 089D4C433EF;
+        Thu, 15 Dec 2022 18:46:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671130004;
+        bh=x9bWYzUxgKuZhJ+ojrxhQJDtwuVcFG5HzxB5nLuRHKY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sujr8PWeAcvVFmpdLc0aXAJetCLKKUuNwx4IITPhRJ9LXXsJn5Z+AKi8V9fDKc/wl
+         1/lDsqXJgY2uTHOcO/vu+75GRhpveQ/1a7b5cPewN7Br8hLh7kOqn/PKpuvrF4B6GI
+         eMMT7uT48j7XHl4dGAR9BeKze+/FaCLTitqsohoptkgbN48I2OHVC46CziNOyxxRFz
+         uBBGzbN0aqgUj6/XwrjROwtu+B1LtGMcfBl1sUSJIli1msi+dabmk9364+UyOSVbm5
+         zNSoO5dGwm+5Tka5uFiVGaWLv1hPaPKtKCz+CtT30TpO8kp0xtIZXt1679hwbhih+X
+         1fD+9eM9DZoNA==
+Date:   Thu, 15 Dec 2022 10:46:42 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Add f2fs's patchwork and add Yangtao as a
+ reviewer of f2fs
+Message-ID: <Y5trkmRJ2LIV2u3V@google.com>
+References: <20221215172020.8115-1-frank.li@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2] drm/msm/dp: do not complete dp_aux_cmd_fifo_tx() if
- irq is not for aux transfer
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1671129159-31105-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1671129159-31105-1-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221215172020.8115-1-frank.li@vivo.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/12/2022 20:32, Kuogee Hsieh wrote:
-> There are 3 possible interrupt sources are handled by DP controller,
-> HPDstatus, Controller state changes and Aux read/write transaction.
-> At every irq, DP controller have to check isr status of every interrupt
-> sources and service the interrupt if its isr status bits shows interrupts
-> are pending. There is potential race condition may happen at current aux
-> isr handler implementation since it is always complete dp_aux_cmd_fifo_tx()
-> even irq is not for aux read or write transaction. This may cause aux read
-> transaction return premature if host aux data read is in the middle of
-> waiting for sink to complete transferring data to host while irq happen.
-> This will cause host's receiving buffer contains unexpected data. This
-> patch fixes this problem by checking aux isr and return immediately at
-> aux isr handler if there are no any isr status bits set.
+On 12/16, Yangtao Li wrote:
+> >From now on, f2fs also has its own patchwork link, thanks to Jaegeuk
+> for starting this tool. Let's update it to f2fs entry.
 > 
-> Current there is a bug report regrading eDP edid corruption happen during
-> system booting up. After lengthy debugging to found that VIDEO_READY
-> interrupt was continuously firing during system booting up which cause
-> dp_aux_isr() to complete dp_aux_cmd_fifo_tx() prematurely to retrieve data
-> from aux hardware buffer which is not yet contains complete data transfer
-> from sink. This cause edid corruption.
+> I've been focusing on android storage (especially f2fs) for the past
+> two years. And I volunteered to be a f2fs reviewer, add my email address
+> in maintainship entry of f2fs.
 > 
-> Follows are the signature at kernel logs when problem happen,
-> EDID has corrupt header
-> panel-simple-dp-aux aux-aea0000.edp: Couldn't identify panel via EDID
-> panel-simple-dp-aux aux-aea0000.edp: error -EIO: Couldn't detect panel nor find a fallback
-> 
-> Changes in v2:
-> -- do complete if (ret == IRQ_HANDLED) ay dp-aux_isr()
-> -- add more commit text
-
-Usually it's a single dash.
-
-> 
-> Fixes: c943b4948b58 ("drm/msm/dp: add displayPort driver support")
-> 
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-
-There should be no empty lines between the tags.
-
-> Tested-by: Douglas Anderson <dianders@chromium.org>
-> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 > ---
->   drivers/gpu/drm/msm/dp/dp_aux.c | 87 +++++++++++++++++++++++++++++------------
->   1 file changed, 63 insertions(+), 24 deletions(-)
+>  MAINTAINERS | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_aux.c b/drivers/gpu/drm/msm/dp/dp_aux.c
-> index d030a93..f31e5c1 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_aux.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_aux.c
-> @@ -162,45 +162,78 @@ static ssize_t dp_aux_cmd_fifo_rx(struct dp_aux_private *aux,
->   	return i;
->   }
->   
-> -static void dp_aux_native_handler(struct dp_aux_private *aux, u32 isr)
-> +static irqreturn_t dp_aux_native_handler(struct dp_aux_private *aux, u32 isr)
->   {
-> -	if (isr & DP_INTR_AUX_I2C_DONE)
-> +	irqreturn_t ret = IRQ_NONE;
-> +
-> +	if (isr & DP_INTR_AUX_I2C_DONE) {
->   		aux->aux_error_num = DP_AUX_ERR_NONE;
-> -	else if (isr & DP_INTR_WRONG_ADDR)
-> +		ret = IRQ_HANDLED;
-> +	} else if (isr & DP_INTR_WRONG_ADDR) {
->   		aux->aux_error_num = DP_AUX_ERR_ADDR;
-> -	else if (isr & DP_INTR_TIMEOUT)
-> +		ret = IRQ_HANDLED;
-> +	} else if (isr & DP_INTR_TIMEOUT) {
->   		aux->aux_error_num = DP_AUX_ERR_TOUT;
-> -	if (isr & DP_INTR_NACK_DEFER)
-> +		ret = IRQ_HANDLED;
-> +	}
-> +
-> +	if (isr & DP_INTR_NACK_DEFER) {
->   		aux->aux_error_num = DP_AUX_ERR_NACK;
-> +		ret = IRQ_HANDLED;
-> +	}
-> +
->   	if (isr & DP_INTR_AUX_ERROR) {
->   		aux->aux_error_num = DP_AUX_ERR_PHY;
->   		dp_catalog_aux_clear_hw_interrupts(aux->catalog);
-> +		ret = IRQ_HANDLED;
->   	}
-> +
-> +	return ret;
->   }
->   
-> -static void dp_aux_i2c_handler(struct dp_aux_private *aux, u32 isr)
-> +static irqreturn_t dp_aux_i2c_handler(struct dp_aux_private *aux, u32 isr)
->   {
-> +	irqreturn_t ret = IRQ_NONE;
-> +
->   	if (isr & DP_INTR_AUX_I2C_DONE) {
->   		if (isr & (DP_INTR_I2C_NACK | DP_INTR_I2C_DEFER))
->   			aux->aux_error_num = DP_AUX_ERR_NACK;
->   		else
->   			aux->aux_error_num = DP_AUX_ERR_NONE;
-> -	} else {
-> -		if (isr & DP_INTR_WRONG_ADDR)
-> -			aux->aux_error_num = DP_AUX_ERR_ADDR;
-> -		else if (isr & DP_INTR_TIMEOUT)
-> -			aux->aux_error_num = DP_AUX_ERR_TOUT;
-> -		if (isr & DP_INTR_NACK_DEFER)
-> -			aux->aux_error_num = DP_AUX_ERR_NACK_DEFER;
-> -		if (isr & DP_INTR_I2C_NACK)
-> -			aux->aux_error_num = DP_AUX_ERR_NACK;
-> -		if (isr & DP_INTR_I2C_DEFER)
-> -			aux->aux_error_num = DP_AUX_ERR_DEFER;
-> -		if (isr & DP_INTR_AUX_ERROR) {
-> -			aux->aux_error_num = DP_AUX_ERR_PHY;
-> -			dp_catalog_aux_clear_hw_interrupts(aux->catalog);
-> -		}
-> +
-> +		return IRQ_HANDLED;
-> +	}
-> +
-> +	if (isr & DP_INTR_WRONG_ADDR) {
-> +		aux->aux_error_num = DP_AUX_ERR_ADDR;
-> +		ret = IRQ_HANDLED;
-> +	} else if (isr & DP_INTR_TIMEOUT) {
-> +		aux->aux_error_num = DP_AUX_ERR_TOUT;
-> +		ret = IRQ_HANDLED;
->   	}
-> +
-> +	if (isr & DP_INTR_NACK_DEFER) {
-> +		aux->aux_error_num = DP_AUX_ERR_NACK_DEFER;
-> +		ret = IRQ_HANDLED;
-> +	}
-> +
-> +	if (isr & DP_INTR_I2C_NACK) {
-> +		aux->aux_error_num = DP_AUX_ERR_NACK;
-> +		ret = IRQ_HANDLED;
-> +	}
-> +
-> +	if (isr & DP_INTR_I2C_DEFER) {
-> +		aux->aux_error_num = DP_AUX_ERR_DEFER;
-> +		ret = IRQ_HANDLED;
-> +	}
-> +
-> +	if (isr & DP_INTR_AUX_ERROR) {
-> +		aux->aux_error_num = DP_AUX_ERR_PHY;
-> +		dp_catalog_aux_clear_hw_interrupts(aux->catalog);
-> +		ret = IRQ_HANDLED;
-> +	}
-> +
-> +	return ret;
->   }
->   
->   static void dp_aux_update_offset_and_segment(struct dp_aux_private *aux,
-> @@ -413,6 +446,7 @@ void dp_aux_isr(struct drm_dp_aux *dp_aux)
->   {
->   	u32 isr;
->   	struct dp_aux_private *aux;
-> +	irqreturn_t ret = IRQ_NONE;
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a608f19da3a9..655a8b68b332 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7886,9 +7886,11 @@ F:	drivers/iommu/exynos-iommu.c
+>  F2FS FILE SYSTEM
+>  M:	Jaegeuk Kim <jaegeuk@kernel.org>
+>  M:	Chao Yu <chao@kernel.org>
+> +R:	Yangtao Li <frank.li@vivo.com>
 
-No need to assign a value here. It will be overwritten in both of code 
-branches.
+Sorry, I don't see the level of your work to reach out to this.
 
->   
->   	if (!dp_aux) {
->   		DRM_ERROR("invalid input\n");
-> @@ -423,15 +457,20 @@ void dp_aux_isr(struct drm_dp_aux *dp_aux)
->   
->   	isr = dp_catalog_aux_get_irq(aux->catalog);
->   
-> +	/* no interrupts pending, return immediately */
-> +	if (!isr)
-> +		return;
-> +
-
-A separate commit please.
-
->   	if (!aux->cmd_busy)
->   		return;
->   
->   	if (aux->native)
-> -		dp_aux_native_handler(aux, isr);
-> +		ret = dp_aux_native_handler(aux, isr);
->   	else
-> -		dp_aux_i2c_handler(aux, isr);
-> +		ret = dp_aux_i2c_handler(aux, isr);
->   
-> -	complete(&aux->comp);
-> +	if (ret == IRQ_HANDLED)
-> +		complete(&aux->comp);
-
-Can you just move the complete() into the individual handling functions? 
-Then you won't have to return the error code from dp_aux_*_handler() at 
-all. You can check `isr' in that function and call complete if there was 
-any error.
-
-Also could you please describe, why is it necessary to complete() 
-condition at all? Judging from your commit message the `if (!isr) 
-return;' part should be enough.
-
->   }
->   
->   void dp_aux_reconfig(struct drm_dp_aux *dp_aux)
-
--- 
-With best wishes
-Dmitry
-
+>  L:	linux-f2fs-devel@lists.sourceforge.net
+>  S:	Maintained
+>  W:	https://f2fs.wiki.kernel.org/
+> +Q:	https://patchwork.kernel.org/project/f2fs/list/
+>  B:	https://bugzilla.kernel.org/enter_bug.cgi?product=File%20System&component=f2fs
+>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git
+>  F:	Documentation/ABI/testing/sysfs-fs-f2fs
+> -- 
+> 2.25.1
