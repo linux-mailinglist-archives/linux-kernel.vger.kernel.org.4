@@ -2,116 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21AB364D9AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:46:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D087964D9B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbiLOKqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 05:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
+        id S229596AbiLOKsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 05:48:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbiLOKqh (ORCPT
+        with ESMTP id S230183AbiLOKr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 05:46:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77101F629;
-        Thu, 15 Dec 2022 02:46:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4478161D78;
-        Thu, 15 Dec 2022 10:46:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD9DC433EF;
-        Thu, 15 Dec 2022 10:46:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671101195;
-        bh=McOhDbVk0JP93y4a1SmXb8+7y052zP6zdNJ92f0ueYY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=p1bVSMqrrJ0RECFYWt4n/HzRckicS01Tm0Ej6X08MA9N1GvwIdNDgXmUU2HjcClFL
-         jDwV9CIluaPuPWw+EIoHbmr/KiNnKI51kGSKYUncmoy4JsiIIHvl8dIsInvsaD+a/a
-         wQ0joNp0ZdqGejIE4WPok8MmDS0PR1FwfAAe+A1bQ7T+2u8fYWQAm6+jykEsau6DHl
-         qqQT0O1E43Eos6rfgMx+ruXGZq72sLGrPUyzyaDEBjB3h4ax6RvctsVJgSfdk2aMs3
-         BvhJtohpP2nj9NQPJgYbtlz2BC9sdixiv1dvYMA96pJG+ygIYoOdhpvlhcxpu4HpO9
-         WoAShiFXBBrsQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1p5llZ-00059t-To; Thu, 15 Dec 2022 11:47:06 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Maciej Purski <m.purski@samsung.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] regulator: core: fix deadlock on regulator enable
-Date:   Thu, 15 Dec 2022 11:46:46 +0100
-Message-Id: <20221215104646.19818-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.37.4
+        Thu, 15 Dec 2022 05:47:56 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA96A2C644
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:47:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671101270; x=1702637270;
+  h=mime-version:content-transfer-encoding:in-reply-to:
+   references:cc:to:from:subject:message-id:date;
+  bh=zXYj1X5CN56Thb0qJ7a7VOyNGgqdnnoyOz96f3OSkIQ=;
+  b=jZ6A/j4yFy7whgeFxYQz0GlO650IZDGeymAqnSaojPizKSKuDOKu93Tx
+   UBhDi36WeLRxurJgJxmMfDinkI9OKFAci4Wh4cp2B5eM2UxULg5UgMolV
+   da3HmzIqpihS9oz5rdweZ7tHv6kG/yBvinNEHe6/y9eFK+txK6XFNBN/J
+   0bIM24XNLU0ADjo5BXDHEic1R2gth3OwG43P7/8Z0mBjsFTiaVO8HszE5
+   dQxGMbw5Eay6UKpCCzCYgBRi9TRfgDta2/KW0Nu+h1R8JScxckfw6yhOp
+   MbB4gpPSOeXVUxs8jt6ahNloa5cZWqfUvP3beJ5zzw1u2b07aBUu+YVoy
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="318688887"
+X-IronPort-AV: E=Sophos;i="5.96,247,1665471600"; 
+   d="scan'208";a="318688887"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 02:47:50 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="712856394"
+X-IronPort-AV: E=Sophos;i="5.96,247,1665471600"; 
+   d="scan'208";a="712856394"
+Received: from wokeeffe-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.6.24])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 02:47:43 -0800
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAPM=9twhAL+c8mOLmidY_tEhEKwCh-CTjfs5yryOk8oGjMxuug@mail.gmail.com>
+References: <Yz8rIxV7bVCcfZb0@kroah.com> <20221007013708.1946061-1-zyytlz.wz@163.com> <CAPM=9ty0+ouf+rQWhM=9XSKFOA2zxKfa00MsNBvwrQGPQm2uPQ@mail.gmail.com> <CAJedcCwxioxr+4TBTdrEjAZh97J3oroSHSgax+bxSNRXCBvkRg@mail.gmail.com> <CAPM=9twhAL+c8mOLmidY_tEhEKwCh-CTjfs5yryOk8oGjMxuug@mail.gmail.com>
+Cc:     alex000young@gmail.com, security@kernel.org, airlied@linux.ie,
+        gregkh@linuxfoundation.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        1002992920@qq.com, Zheng Wang <zyytlz.wz@163.com>,
+        intel-gvt-dev@lists.freedesktop.org, zhi.a.wang@intel.com
+To:     Dave Airlie <airlied@gmail.com>,
+        Zheng Hacker <hackerzheng666@gmail.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+From:   Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Subject: Re: [PATCH v3] drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Message-ID: <167110126066.5360.11413014428644610672@jlahtine-mobl.ger.corp.intel.com>
+User-Agent: alot/0.8.1
+Date:   Thu, 15 Dec 2022 12:47:40 +0200
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When updating the operating mode as part of regulator enable, the caller
-has already locked the regulator tree and drms_uA_update() must not try
-to do the same in order not to trigger a deadlock.
+(+ Tvrtko as FYI)
 
-The lock inversion is reported by lockdep as:
+Zhenyu, can you take a look at the patch ASAP.
 
-  ======================================================
-  WARNING: possible circular locking dependency detected
-  6.1.0-next-20221215 #142 Not tainted
-  ------------------------------------------------------
-  udevd/154 is trying to acquire lock:
-  ffffc11f123d7e50 (regulator_list_mutex){+.+.}-{3:3}, at: regulator_lock_dependent+0x54/0x280
+Regards, Joonas
 
-  but task is already holding lock:
-  ffff80000e4c36e8 (regulator_ww_class_acquire){+.+.}-{0:0}, at: regulator_enable+0x34/0x80
-
-  which lock already depends on the new lock.
-
-  ...
-
-   Possible unsafe locking scenario:
-
-         CPU0                    CPU1
-         ----                    ----
-    lock(regulator_ww_class_acquire);
-                                 lock(regulator_list_mutex);
-                                 lock(regulator_ww_class_acquire);
-    lock(regulator_list_mutex);
-
-   *** DEADLOCK ***
-
-just before probe of a Qualcomm UFS controller (occasionally) deadlocks
-when enabling one of its regulators.
-
-Fixes: 9243a195be7a ("regulator: core: Change voltage setting path")
-Fixes: f8702f9e4aa7 ("regulator: core: Use ww_mutex for regulators locking")
-Cc: stable@vger.kernel.org      # 5.0
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/regulator/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 729c45393803..ae69e493913d 100644
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -1002,7 +1002,7 @@ static int drms_uA_update(struct regulator_dev *rdev)
- 		/* get input voltage */
- 		input_uV = 0;
- 		if (rdev->supply)
--			input_uV = regulator_get_voltage(rdev->supply);
-+			input_uV = regulator_get_voltage_rdev(rdev->supply->rdev);
- 		if (input_uV <= 0)
- 			input_uV = rdev->constraints->input_uV;
- 
--- 
-2.37.4
-
+Quoting Dave Airlie (2022-10-27 08:12:31)
+> On Thu, 27 Oct 2022 at 13:26, Zheng Hacker <hackerzheng666@gmail.com> wro=
+te:
+> >
+> > Dave Airlie <airlied@gmail.com> =E4=BA=8E2022=E5=B9=B410=E6=9C=8827=E6=
+=97=A5=E5=91=A8=E5=9B=9B 08:01=E5=86=99=E9=81=93=EF=BC=9A
+> > >
+> > > On Fri, 7 Oct 2022 at 11:38, Zheng Wang <zyytlz.wz@163.com> wrote:
+> > > >
+> > > > If intel_gvt_dma_map_guest_page failed, it will call
+> > > > ppgtt_invalidate_spt, which will finally free the spt.
+> > > > But the caller does not notice that, it will free spt again in erro=
+r path.
+> > > >
+> > > > Fix this by spliting invalidate and free in ppgtt_invalidate_spt.
+> > > > Only free spt when in good case.
+> > > >
+> > > > Reported-by: Zheng Wang <hackerzheng666@gmail.com>
+> > > > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > >
+> > > Has this landed in a tree yet, since it's a possible CVE, might be
+> > > good to merge it somewhere.
+> > >
+> > > Dave.
+> > >
+> >
+> > Hi Dave,
+> >
+> > This patched hasn't been merged yet. Could you please help with this?
+>=20
+> I'll add some more people who can probably look at it.
+>=20
+> Dave.
