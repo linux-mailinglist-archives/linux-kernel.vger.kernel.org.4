@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FAB64E134
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A1664E13F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiLOSqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 13:46:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
+        id S230354AbiLOSrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 13:47:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiLOSpm (ORCPT
+        with ESMTP id S230316AbiLOSrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 13:45:42 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B08260B
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 10:45:39 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id a16so263083qtw.10
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 10:45:39 -0800 (PST)
+        Thu, 15 Dec 2022 13:47:12 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CA24B9B3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 10:46:45 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id p8so17033541lfu.11
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 10:46:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+8kdbca7RYmzghu3wrDFH9WKgOWAt7+jGRtzBcbGXvg=;
-        b=RDxuf4vWN8ZO5ssFcc25XiKKo/4GxNXFK5YWWvzMeoCeWVtkwg58xezK7KBo9Ss9xz
-         cRmdZLa3PiR4GXoO+r7xTAIKFue3kCyWjSE9qpLAFUpETnMGbso2nsUUG+D7ToOMdWMt
-         aeuSy8tbFKDtZg9a5LPo8i60QdC0Nq7oz1EM8=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ow/jl7Lq41cBFQ0kKYmK3RpwA+PwdFmm0JCIINqkeK0=;
+        b=PdRHvaroyyS1RdpumfsfR6h4Wj9Lu9gS/2+GiHYn0w0gdLNVkPwX7FmIcY67+eLRUI
+         M6zO+sKFhu76hMlzRNbAmhGibi8Cp5uhwF1xKhRMP0LIbZx+3ZWrfPG5oov2XIJrnLrB
+         rCLgtPgM5q083f8xPuyeIN0Q8sxH9rMMF2fjyc8+1soo4NvPkusUz/OC2pN+QDuJJPuI
+         bBuQeuC8JUcvQODphD+ceDTSoY1kdXbbksdhqFMQSZjJwkGBuHA1lhx9Zrj0XTK3TUbb
+         aUa7O0ckOwF89ju+CIFtmnECwLtGrwmdVFqG3OlMJGmYcR7zNX3RrkAb806NT/P6fZXo
+         XMMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+8kdbca7RYmzghu3wrDFH9WKgOWAt7+jGRtzBcbGXvg=;
-        b=PwnO5Ms5wJsS72r7+h7Awuw0HxOdJg0m0ercigQKAIUGUzS5x8NJoBlJIYrlRERtdR
-         ylcTg9ZCgWluTG6gG4QP25LG6CFF3spxaKoIQzOobDF5M4NU+lvOOQqNO5pfAwnk25Ko
-         FESEkKXmckzLDv4B+p2i+95DyBhb15itYLCVC2Nc4BuiPSIlunCEN3zQA6J6hwPbik1b
-         jr0schNscN4yPpeFacEyBt157Z8L1uxKbM4cLSp6VcJBELCQ9JI5eqCk3rd+MkZDh31V
-         4qe4Dq1xZ6JM7+Vu+lS7ilRWz6CVVldg0Em8+Sb6hxwVYE1+gU94DDpCY+vVqI1k0OX7
-         ig7Q==
-X-Gm-Message-State: AFqh2konzVna+7Nw/hNqUn8BG5Rntk0BpPKOu28soZzt2UmemK88FE+E
-        yDBsnOiJ/CuathpeG0JdO6cavQ==
-X-Google-Smtp-Source: AMrXdXtKc1qXGEu1lpOg9q/lsex/RBhHmz2vLTrGw4eI73/gi/6Pee1y9Cx54AsGsN+fgApbcwCoyQ==
-X-Received: by 2002:ac8:668d:0:b0:3a9:1ada:930f with SMTP id d13-20020ac8668d000000b003a91ada930fmr4932696qtp.23.1671129938658;
-        Thu, 15 Dec 2022 10:45:38 -0800 (PST)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id w5-20020a05620a444500b006eed75805a2sm13009205qkp.126.2022.12.15.10.45.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 10:45:37 -0800 (PST)
-Date:   Thu, 15 Dec 2022 18:45:37 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        linux-acpi@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Brian Norris <briannorris@chromium.org>,
-        Ross Zwisler <zwisler@google.com>,
-        Ching-lin Yu <chinglinyu@google.com>
-Subject: Re: [RFC][PATCH] ACPI: tracing: Have ACPI debug go to tracing ring
- buffer
-Message-ID: <Y5trUep9IvCv1Uwy@google.com>
-References: <20221214233106.69b2c01b@gandalf.local.home>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ow/jl7Lq41cBFQ0kKYmK3RpwA+PwdFmm0JCIINqkeK0=;
+        b=Um9dOLB0PCxwQ//52oYhnRL9jYxj0jP0fS+fjDx7XQJWuOr6BNBLreqBRsfx5NX6CG
+         DOdHadelkTKrw6yDnLunDArkore+G1/BM9St9tpbZtw1/hI+NDy1zFfJu9jkN16CC82D
+         +fbNpeTdN0NBxrzsDcdvlfsX2AtnCub4VQQHUJDacpzDyEJHycECOGiiykB+FaR3iZ7Q
+         JHmkHUmOS7y/oQBjmrGKwA6yKdYMJIVktU5mT2za2+JEPaF7WlHAotXv6ufOLpTTrSnD
+         AMjv5nspRT0V0QsnmEU+KaUWcItb0oMAQgTI6KB07pFXKeYMa7/Uu32qD2YoJfVgMtdC
+         MoOg==
+X-Gm-Message-State: ANoB5pmVmLbBj+0yiJQOrCaPvm4my6IHIg9C2ZQmvJQIGOaqey0T4/2/
+        sJe4Z/yBvz75a84HDoMMS/XcvA==
+X-Google-Smtp-Source: AA0mqf7SeygvyCy/5X5fmIjhgJWnrVBU9vsPrvMp3HwiuIP9qbAaMQeoO/WKQxgAYzcVKUrpIDjcKg==
+X-Received: by 2002:a05:6512:15a7:b0:4b6:e494:a98d with SMTP id bp39-20020a05651215a700b004b6e494a98dmr7751372lfb.44.1671130003399;
+        Thu, 15 Dec 2022 10:46:43 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id c15-20020a056512074f00b004b5774726dcsm1225419lfs.236.2022.12.15.10.46.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 10:46:42 -0800 (PST)
+Message-ID: <ca15a54b-8040-5e4f-a78e-12b7f8a554e1@linaro.org>
+Date:   Thu, 15 Dec 2022 20:46:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221214233106.69b2c01b@gandalf.local.home>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2] drm/msm/dp: do not complete dp_aux_cmd_fifo_tx() if
+ irq is not for aux transfer
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1671129159-31105-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1671129159-31105-1-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,151 +80,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steve,
+On 15/12/2022 20:32, Kuogee Hsieh wrote:
+> There are 3 possible interrupt sources are handled by DP controller,
+> HPDstatus, Controller state changes and Aux read/write transaction.
+> At every irq, DP controller have to check isr status of every interrupt
+> sources and service the interrupt if its isr status bits shows interrupts
+> are pending. There is potential race condition may happen at current aux
+> isr handler implementation since it is always complete dp_aux_cmd_fifo_tx()
+> even irq is not for aux read or write transaction. This may cause aux read
+> transaction return premature if host aux data read is in the middle of
+> waiting for sink to complete transferring data to host while irq happen.
+> This will cause host's receiving buffer contains unexpected data. This
+> patch fixes this problem by checking aux isr and return immediately at
+> aux isr handler if there are no any isr status bits set.
+> 
+> Current there is a bug report regrading eDP edid corruption happen during
+> system booting up. After lengthy debugging to found that VIDEO_READY
+> interrupt was continuously firing during system booting up which cause
+> dp_aux_isr() to complete dp_aux_cmd_fifo_tx() prematurely to retrieve data
+> from aux hardware buffer which is not yet contains complete data transfer
+> from sink. This cause edid corruption.
+> 
+> Follows are the signature at kernel logs when problem happen,
+> EDID has corrupt header
+> panel-simple-dp-aux aux-aea0000.edp: Couldn't identify panel via EDID
+> panel-simple-dp-aux aux-aea0000.edp: error -EIO: Couldn't detect panel nor find a fallback
+> 
+> Changes in v2:
+> -- do complete if (ret == IRQ_HANDLED) ay dp-aux_isr()
+> -- add more commit text
 
-On Wed, Dec 14, 2022 at 11:31:06PM -0500, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Usually it's a single dash.
+
 > 
-> While debugging some firmware that was taking a bit of time to initialize,
-> I enabled ACPI_DEBUG and added a bit too much info to the debug_layer and
-> debug_level acpi command line options, and it made the computer not be
-> able to boot (too much info! or too much printk).
+> Fixes: c943b4948b58 ("drm/msm/dp: add displayPort driver support")
 > 
-> I decided that this would be easier to handle if the acpi output was
-> written instead into the trace buffer. This also has the added benefit of
-> adding other trace events and seeing how ACPI interacts with the rest of
-> the system.
-> 
-> Ideally, the ACPI trace should have proper trace events where data can be
-> stored more efficiently and be filtered and parsed better. But for now,
-> just writing the debug string into the buffer will suffice.  This makes it
-> possible to enable all ACPI output (setting triggers on other events to
-> stop tracing, to not lose the data you are looking for).
-> 
-> Even with all APCI debugging enable, the system continues to run perfectly
-> fine.
-> 
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+
+There should be no empty lines between the tags.
+
+> Tested-by: Douglas Anderson <dianders@chromium.org>
+> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 > ---
+>   drivers/gpu/drm/msm/dp/dp_aux.c | 87 +++++++++++++++++++++++++++++------------
+>   1 file changed, 63 insertions(+), 24 deletions(-)
 > 
->  drivers/acpi/Kconfig        | 13 +++++++++++++
->  drivers/acpi/osl.c          |  9 ++++++++-
->  include/trace/events/acpi.h | 30 ++++++++++++++++++++++++++++++
->  3 files changed, 51 insertions(+), 1 deletion(-)
->  create mode 100644 include/trace/events/acpi.h
-> 
-> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
-> index 473241b5193f..2dfeb3bf79a7 100644
-> --- a/drivers/acpi/Kconfig
-> +++ b/drivers/acpi/Kconfig
-> @@ -389,6 +389,19 @@ config ACPI_DEBUG
->  	  Documentation/admin-guide/kernel-parameters.rst to control the type and
->  	  amount of debug output.
->  
-> +config ACPI_TRACE_PRINT
-> +	bool "Write debug into trace buffer"
-> +	depends on ACPI_DEBUG
-> +	help
-> +	  Instead of writing to the console, write to the trace ring buffer.
-> +	  This is much faster than writing to the console, and can handle
-> +	  all events.
+> diff --git a/drivers/gpu/drm/msm/dp/dp_aux.c b/drivers/gpu/drm/msm/dp/dp_aux.c
+> index d030a93..f31e5c1 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_aux.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_aux.c
+> @@ -162,45 +162,78 @@ static ssize_t dp_aux_cmd_fifo_rx(struct dp_aux_private *aux,
+>   	return i;
+>   }
+>   
+> -static void dp_aux_native_handler(struct dp_aux_private *aux, u32 isr)
+> +static irqreturn_t dp_aux_native_handler(struct dp_aux_private *aux, u32 isr)
+>   {
+> -	if (isr & DP_INTR_AUX_I2C_DONE)
+> +	irqreturn_t ret = IRQ_NONE;
 > +
-> +	  Use the acpi.debug_layer and acpi.debug_level kernel command-line
-> +	  parameters documented in Documentation/firmware-guide/acpi/debug.rst and
-> +	  Documentation/admin-guide/kernel-parameters.rst to control the type and
-> +	  amount of debug output.
+> +	if (isr & DP_INTR_AUX_I2C_DONE) {
+>   		aux->aux_error_num = DP_AUX_ERR_NONE;
+> -	else if (isr & DP_INTR_WRONG_ADDR)
+> +		ret = IRQ_HANDLED;
+> +	} else if (isr & DP_INTR_WRONG_ADDR) {
+>   		aux->aux_error_num = DP_AUX_ERR_ADDR;
+> -	else if (isr & DP_INTR_TIMEOUT)
+> +		ret = IRQ_HANDLED;
+> +	} else if (isr & DP_INTR_TIMEOUT) {
+>   		aux->aux_error_num = DP_AUX_ERR_TOUT;
+> -	if (isr & DP_INTR_NACK_DEFER)
+> +		ret = IRQ_HANDLED;
+> +	}
 > +
->  config ACPI_PCI_SLOT
->  	bool "PCI slot detection driver"
->  	depends on SYSFS && PCI
-> diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
-> index 3269a888fb7a..eeed5fd782ab 100644
-> --- a/drivers/acpi/osl.c
-> +++ b/drivers/acpi/osl.c
-> @@ -35,6 +35,9 @@
->  #include <linux/uaccess.h>
->  #include <linux/io-64-nonatomic-lo-hi.h>
->  
-> +#define CREATE_TRACE_POINTS
-> +#include <trace/events/acpi.h>
+> +	if (isr & DP_INTR_NACK_DEFER) {
+>   		aux->aux_error_num = DP_AUX_ERR_NACK;
+> +		ret = IRQ_HANDLED;
+> +	}
 > +
->  #include "acpica/accommon.h"
->  #include "internal.h"
->  
-> @@ -158,6 +161,8 @@ void acpi_os_vprintf(const char *fmt, va_list args)
->  #ifdef ENABLE_DEBUGGER
->  	if (acpi_in_debugger) {
->  		kdb_printf("%s", buffer);
-> +	} else if (IS_ENABLED(CONFIG_ACPI_TRACE_PRINT)) {
-> +		trace_acpi_print(buffer);
+>   	if (isr & DP_INTR_AUX_ERROR) {
+>   		aux->aux_error_num = DP_AUX_ERR_PHY;
+>   		dp_catalog_aux_clear_hw_interrupts(aux->catalog);
+> +		ret = IRQ_HANDLED;
+>   	}
+> +
+> +	return ret;
+>   }
+>   
+> -static void dp_aux_i2c_handler(struct dp_aux_private *aux, u32 isr)
+> +static irqreturn_t dp_aux_i2c_handler(struct dp_aux_private *aux, u32 isr)
+>   {
+> +	irqreturn_t ret = IRQ_NONE;
+> +
+>   	if (isr & DP_INTR_AUX_I2C_DONE) {
+>   		if (isr & (DP_INTR_I2C_NACK | DP_INTR_I2C_DEFER))
+>   			aux->aux_error_num = DP_AUX_ERR_NACK;
+>   		else
+>   			aux->aux_error_num = DP_AUX_ERR_NONE;
+> -	} else {
+> -		if (isr & DP_INTR_WRONG_ADDR)
+> -			aux->aux_error_num = DP_AUX_ERR_ADDR;
+> -		else if (isr & DP_INTR_TIMEOUT)
+> -			aux->aux_error_num = DP_AUX_ERR_TOUT;
+> -		if (isr & DP_INTR_NACK_DEFER)
+> -			aux->aux_error_num = DP_AUX_ERR_NACK_DEFER;
+> -		if (isr & DP_INTR_I2C_NACK)
+> -			aux->aux_error_num = DP_AUX_ERR_NACK;
+> -		if (isr & DP_INTR_I2C_DEFER)
+> -			aux->aux_error_num = DP_AUX_ERR_DEFER;
+> -		if (isr & DP_INTR_AUX_ERROR) {
+> -			aux->aux_error_num = DP_AUX_ERR_PHY;
+> -			dp_catalog_aux_clear_hw_interrupts(aux->catalog);
+> -		}
+> +
+> +		return IRQ_HANDLED;
+> +	}
+> +
+> +	if (isr & DP_INTR_WRONG_ADDR) {
+> +		aux->aux_error_num = DP_AUX_ERR_ADDR;
+> +		ret = IRQ_HANDLED;
+> +	} else if (isr & DP_INTR_TIMEOUT) {
+> +		aux->aux_error_num = DP_AUX_ERR_TOUT;
+> +		ret = IRQ_HANDLED;
+>   	}
+> +
+> +	if (isr & DP_INTR_NACK_DEFER) {
+> +		aux->aux_error_num = DP_AUX_ERR_NACK_DEFER;
+> +		ret = IRQ_HANDLED;
+> +	}
+> +
+> +	if (isr & DP_INTR_I2C_NACK) {
+> +		aux->aux_error_num = DP_AUX_ERR_NACK;
+> +		ret = IRQ_HANDLED;
+> +	}
+> +
+> +	if (isr & DP_INTR_I2C_DEFER) {
+> +		aux->aux_error_num = DP_AUX_ERR_DEFER;
+> +		ret = IRQ_HANDLED;
+> +	}
+> +
+> +	if (isr & DP_INTR_AUX_ERROR) {
+> +		aux->aux_error_num = DP_AUX_ERR_PHY;
+> +		dp_catalog_aux_clear_hw_interrupts(aux->catalog);
+> +		ret = IRQ_HANDLED;
+> +	}
+> +
+> +	return ret;
+>   }
+>   
+>   static void dp_aux_update_offset_and_segment(struct dp_aux_private *aux,
+> @@ -413,6 +446,7 @@ void dp_aux_isr(struct drm_dp_aux *dp_aux)
+>   {
+>   	u32 isr;
+>   	struct dp_aux_private *aux;
+> +	irqreturn_t ret = IRQ_NONE;
 
-Wouldn't it be better to also check trace_acpi_print_enabled() here in the
-else if() condition, along with IS_ENABLED()? That way if the CONFIG is
-enabled but the tracepoint is not enabled, at least the messages will go to
-dmesg instead of skipped.
+No need to assign a value here. It will be overwritten in both of code 
+branches.
 
->  	} else {
->  		if (printk_get_level(buffer))
->  			printk("%s", buffer);
-> @@ -165,7 +170,9 @@ void acpi_os_vprintf(const char *fmt, va_list args)
->  			printk(KERN_CONT "%s", buffer);
->  	}
->  #else
-> -	if (acpi_debugger_write_log(buffer) < 0) {
-> +	if (IS_ENABLED(CONFIG_ACPI_TRACE_PRINT)) {
-> +		trace_acpi_print(buffer);
-> +	} else if (acpi_debugger_write_log(buffer) < 0) {
+>   
+>   	if (!dp_aux) {
+>   		DRM_ERROR("invalid input\n");
+> @@ -423,15 +457,20 @@ void dp_aux_isr(struct drm_dp_aux *dp_aux)
+>   
+>   	isr = dp_catalog_aux_get_irq(aux->catalog);
+>   
+> +	/* no interrupts pending, return immediately */
+> +	if (!isr)
+> +		return;
+> +
 
-Ditto.
+A separate commit please.
 
+>   	if (!aux->cmd_busy)
+>   		return;
+>   
+>   	if (aux->native)
+> -		dp_aux_native_handler(aux, isr);
+> +		ret = dp_aux_native_handler(aux, isr);
+>   	else
+> -		dp_aux_i2c_handler(aux, isr);
+> +		ret = dp_aux_i2c_handler(aux, isr);
+>   
+> -	complete(&aux->comp);
+> +	if (ret == IRQ_HANDLED)
+> +		complete(&aux->comp);
 
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Can you just move the complete() into the individual handling functions? 
+Then you won't have to return the error code from dp_aux_*_handler() at 
+all. You can check `isr' in that function and call complete if there was 
+any error.
 
-thanks,
+Also could you please describe, why is it necessary to complete() 
+condition at all? Judging from your commit message the `if (!isr) 
+return;' part should be enough.
 
- - Joel
+>   }
+>   
+>   void dp_aux_reconfig(struct drm_dp_aux *dp_aux)
 
+-- 
+With best wishes
+Dmitry
 
-
->  		if (printk_get_level(buffer))
->  			printk("%s", buffer);
->  		else
-> diff --git a/include/trace/events/acpi.h b/include/trace/events/acpi.h
-> new file mode 100644
-> index 000000000000..dab4dd42b5d7
-> --- /dev/null
-> +++ b/include/trace/events/acpi.h
-> @@ -0,0 +1,30 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM acpi
-> +
-> +#if !defined(_TRACE_ACPI_H) || defined(TRACE_HEADER_MULTI_READ)
-> +#define _TRACE_ACPI_H
-> +
-> +#include <linux/tracepoint.h>
-> +
-> +TRACE_EVENT(acpi_print,
-> +
-> +	TP_PROTO(const char *buffer),
-> +
-> +	TP_ARGS(buffer),
-> +
-> +	TP_STRUCT__entry(
-> +		__string(buffer, buffer)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__assign_str(buffer, buffer);
-> +	),
-> +
-> +	TP_printk("%s", __get_str(buffer))
-> +);
-> +
-> +#endif /* _TRACE_SOCK_H */
-> +
-> +/* This part must be outside protection */
-> +#include <trace/define_trace.h>
-> -- 
-> 2.35.1
-> 
