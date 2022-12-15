@@ -2,272 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C9C64DF70
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:13:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC8464DF62
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiLORNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 12:13:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
+        id S230490AbiLORKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 12:10:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbiLORNV (ORCPT
+        with ESMTP id S230484AbiLORKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 12:13:21 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CB4186;
-        Thu, 15 Dec 2022 09:13:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671124399; x=1702660399;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=4YvhqLOJDWAuSYIMkp9pK280F5H2HKNbRVaI1ZR9BaE=;
-  b=mi7agT+903+QeaBqBWcjIs9UQiXlUTgxn/Smu/tCg+hvdevfK1fJ1RTr
-   fP9H3jfebm1C4DnX6fXeqaAG2I5Lu8z8w4GtAUYiY0YJRdVQum/H+zkum
-   iAHByypm9GcNf8XvO66rJ2Owf44POAEhlDYMBHi3V5lw0tgatH28zF30r
-   iyoyvXDk/Mxw1/uvPDAN1CLnhS/UuJWe+TK5ymUov+U+wLycKkpamZBxN
-   OSuYpKtfiEyiKHIGBNTpDK+4P8R8UgC932Klc72X/fcFcm83zbJB3m60N
-   iWRKitLayLrejX0wxNuCEzA98cYOo+rNp4KmBnF+vwJdqgh7gIRcK483U
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="299083621"
-X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
-   d="scan'208";a="299083621"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 09:09:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="680157844"
-X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
-   d="scan'208";a="680157844"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga008.jf.intel.com with ESMTP; 15 Dec 2022 09:09:00 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 15 Dec 2022 09:08:59 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 15 Dec 2022 09:08:59 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.173)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 15 Dec 2022 09:08:59 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CgujMzQvFMyxxX4y/bT8WCDYNnL/c0mZUbnPLAumLdrqovCS8b4LDpbMuXktFVTdkHRzuGMMv6rrO1VeTHxlHzcqMMY4vhBwdOD/HFewU4o9ZRAgO2m/tJRe1+u8vchEWJNvWqHejwEM6O1ZpH1T9N2ZfqvPpBA9jIx4CGWgEWyALtWCEWOyFvd67D3GuAmtLUG3jMjB06AT5xRwCdkyx1iwfHL0soN5Zt4T1QKBt5Gt4xlvUY16Vp2GXos+Jm/Ljy+lF24q+gJxSRqcFfWSPg8g7+dukXvkq0Ookv4iddADJCgYHMCKxDJkKAmdFjn+839mr8I2daOuyGi8VnlknQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NEvOSK8kHe5ViccYxCasOmoZxq84hmkV33xJql2B9Ok=;
- b=OS8NrO7dlVN50CwfIosDADVA4ctnJaqmb2HtixoivqrI18ze45nTYMPfDrE4wYm+UEuuSQYfqEiP5pFny13YoSONewHtamWqF0K9MEnX8aKV+Z8dEOb3Agwe8MLI6NZh8G7YI9eEJIdAtwoWxDroo2Zjz0tvUxuL7AF5FXrxleY9sLVyAldFK4n1qYBS7j+r193SoNEIve2jrxGN6v6roF9fAAy1r/GXsGZ9CXogfsHnQKmPgjPyDB5wZmwGYyNoZ61fFMkCCHXHkP9OQAgvX5QqePwQwmW7GqBs8UAeUNdUjIPh137hhJJAaenyS3sqlkxcGmHpH/7n0Gc2o7FfWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by DM4PR11MB7374.namprd11.prod.outlook.com (2603:10b6:8:102::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.11; Thu, 15 Dec
- 2022 17:08:53 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::a1f7:e4c4:e60:c5b3]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::a1f7:e4c4:e60:c5b3%6]) with mapi id 15.20.5924.012; Thu, 15 Dec 2022
- 17:08:52 +0000
-Message-ID: <8b6b0e74-3af6-b5ba-8496-eb0614c9f148@intel.com>
-Date:   Thu, 15 Dec 2022 09:08:48 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [PATCH v9 01/13] x86/cpufeatures: Add Slow Memory Bandwidth
- Allocation feature flag
+        Thu, 15 Dec 2022 12:10:00 -0500
+Received: from mailout2.w2.samsung.com (mailout2.w2.samsung.com [211.189.100.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE245646C;
+        Thu, 15 Dec 2022 09:09:19 -0800 (PST)
+Received: from uscas1p2.samsung.com (unknown [182.198.245.207])
+        by mailout2.w2.samsung.com (KnoxPortal) with ESMTP id 20221215170916usoutp0263dccaab00684a7722a3f74269686e2c~xBpDqaU6X0458404584usoutp02R;
+        Thu, 15 Dec 2022 17:09:16 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w2.samsung.com 20221215170916usoutp0263dccaab00684a7722a3f74269686e2c~xBpDqaU6X0458404584usoutp02R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1671124156;
+        bh=1CPzB2AnkGJmXFPeKz23Hypwvq07se7M+6QmDyIqBKo=;
+        h=From:To:CC:Subject:Date:References:From;
+        b=WartrFhiLHwPQXrYZePou+Z7Y5Sht9x5I95+WwEbC7TUxsI2vqm0bVZkbmu99s2jK
+         4WWAKSXGcNEWKUmlkrMteWDnZlmZIdVW+XuwsgkZNGZLlkeAz5bwthfw8SIB3dN+QW
+         H4FtRfRvLrDb7VDdVDssGXS2O60zRjx+w8stTBgw=
+Received: from ussmges2new.samsung.com (u111.gpu85.samsung.co.kr
+        [203.254.195.111]) by uscas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20221215170915uscas1p230d68b1bfaee439fc5be80ca2147bcba~xBpDO8lFe0844108441uscas1p2n;
+        Thu, 15 Dec 2022 17:09:15 +0000 (GMT)
+Received: from uscas1p1.samsung.com ( [182.198.245.206]) by
+        ussmges2new.samsung.com (USCPEMTA) with SMTP id 0D.9C.09670.BB45B936; Thu,
+        15 Dec 2022 12:09:15 -0500 (EST)
+Received: from ussmgxs1new.samsung.com (u89.gpu85.samsung.co.kr
+        [203.254.195.89]) by uscas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20221215170915uscas1p262ccdf32fb2ccd3840189376c2793d06~xBpC5NJXN3167731677uscas1p2-;
+        Thu, 15 Dec 2022 17:09:15 +0000 (GMT)
+X-AuditID: cbfec36f-5b1ff700000025c6-48-639b54bbb8bc
+Received: from SSI-EX3.ssi.samsung.com ( [105.128.2.145]) by
+        ussmgxs1new.samsung.com (USCPEXMTA) with SMTP id BF.95.09588.AB45B936; Thu,
+        15 Dec 2022 12:09:15 -0500 (EST)
+Received: from SSI-EX2.ssi.samsung.com (105.128.2.227) by
+        SSI-EX3.ssi.samsung.com (105.128.2.228) with Microsoft SMTP Server
+        (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+        15.1.2375.24; Thu, 15 Dec 2022 09:09:14 -0800
+Received: from SSI-EX2.ssi.samsung.com ([105.128.2.227]) by
+        SSI-EX2.ssi.samsung.com ([105.128.2.227]) with mapi id 15.01.2375.024; Thu,
+        15 Dec 2022 09:09:14 -0800
+From:   Fan Ni <fan.ni@samsung.com>
+To:     "alison.schofield@intel.com" <alison.schofield@intel.com>,
+        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
+        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>
+CC:     "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Fan Ni <fan.ni@samsung.com>
+Subject: [PATCH] cxl/region: Fix null pointer dereference for resetting
+ decoder
+Thread-Topic: [PATCH] cxl/region: Fix null pointer dereference for resetting
+        decoder
+Thread-Index: AQHZEKf1Iv1EVp5Dik+XycKcRUXbBg==
+Date:   Thu, 15 Dec 2022 17:09:14 +0000
+Message-ID: <20221215170909.2650271-1-fan.ni@samsung.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Babu Moger <babu.moger@amd.com>, <corbet@lwn.net>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>
-CC:     <fenghua.yu@intel.com>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <hpa@zytor.com>, <paulmck@kernel.org>,
-        <akpm@linux-foundation.org>, <quic_neeraju@quicinc.com>,
-        <rdunlap@infradead.org>, <damien.lemoal@opensource.wdc.com>,
-        <songmuchun@bytedance.com>, <peterz@infradead.org>,
-        <jpoimboe@kernel.org>, <pbonzini@redhat.com>,
-        <chang.seok.bae@intel.com>, <pawan.kumar.gupta@linux.intel.com>,
-        <jmattson@google.com>, <daniel.sneddon@linux.intel.com>,
-        <sandipan.das@amd.com>, <tony.luck@intel.com>,
-        <james.morse@arm.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bagasdotme@gmail.com>,
-        <eranian@google.com>, <christophe.leroy@csgroup.eu>,
-        <jarkko@kernel.org>, <adrian.hunter@intel.com>,
-        <quic_jiles@quicinc.com>, <peternewman@google.com>
-References: <166990882621.17806.16780480657453071426.stgit@bmoger-ubuntu>
- <166990896023.17806.9274990355490405865.stgit@bmoger-ubuntu>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <166990896023.17806.9274990355490405865.stgit@bmoger-ubuntu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR04CA0023.namprd04.prod.outlook.com
- (2603:10b6:a03:1d0::33) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [105.128.2.176]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|DM4PR11MB7374:EE_
-X-MS-Office365-Filtering-Correlation-Id: 69f1cd77-8383-4ac5-3ec5-08dadebf0a99
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mIHDJ+22UUwA2XACdsTlzIsKEUh+iYOki8/KFHHsjcNUhLzVuHSowgOi/Q1bSbWEMXwyAsD/HIBB5AL9xZzeNcWSg4VEo3SwafBOMxUk+0jM5BfhxBMtd/XgqFSm2TGW8ip59FtZnmE5pmSbaOU3DSzIhG2xkFIWJQmKqFQynWBlQRyYbMEakKohkoZQ7kfExK3W3VlwyKJUNyrcSO7bvx6UUBAqMvg5hpJXR6BhLOuZlBeV+OvcG053z9xmgUsOdinh9Cxgl+nXvUnahYj5aXzorKZ3vcWQNVbiAOr9/yAr6nxLRtsCYi+xWbAElN1mz031pryAIF71Sg8+E6tAaxPjJcgYEhRCljME4+nqUHakss2S7Gw2E3k9Q9CV8KzNT0K4o5JX9ZD4dffMgQ1Om3MQnZCcVRuKTKl/pzf16gJGvwVNsJank95NcILacgiZAfd4148Y7WS2T/0lG0UmyGV1Wz1XDsL789KONO3asVfE2jDJBihrOqFadMuuaaZN6hXzpb+g7o4gwdfnauLhx+vEyHaSb/9yKxx+AYKUHrnIyFBKv3b7h7RIernSmL8ZD2bqmUSwTcZb9e/KdlGYA+UAYT0hnyzz0emum3pNDlWlv549iTKO3hhX9EFx+c08RGK79r+qWyuNog2IrdT1mQDexZ+yngFqu83iAs3Qe1croghLdQakXOAzwxyHAdPXxEvMZEJEPMypjOb55EDubl/ZwuN2Pef0AQcgDGzwv0EWdlbT7AqK3ssbP7U7dhJKp2ign5yHbsS9TSX/zf0sZhEjyf6RKvpVmH9KS2qlQXM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(39860400002)(376002)(136003)(366004)(451199015)(478600001)(86362001)(31686004)(6666004)(31696002)(6486002)(38100700002)(966005)(6506007)(53546011)(6512007)(26005)(186003)(82960400001)(8936002)(41300700001)(7406005)(44832011)(83380400001)(316002)(36756003)(2906002)(7416002)(2616005)(8676002)(66476007)(4326008)(66946007)(66556008)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WXlGcGxVZjVBSlJ6TTNnUHIwOHYzTXNzTXdEaXlNTlhzRzM5S2tRbWVTUzl2?=
- =?utf-8?B?eGVVY2xSOVRwSks1MU04MGk1SjFnVmtTY0Y1Wk43WVFmb3lNOFdnZnVNdVZL?=
- =?utf-8?B?UTdIWEg2dVRLRG1ud1BJaXRvdVUvT3hnNVR0TXYxNGhiT1FWbHhULzM4d2k3?=
- =?utf-8?B?YTVVZXJHVVE0T0Fzd1owRFZzTC9JUXpKL3NHS0JvNEpNaHFja2FkdEsvUFNW?=
- =?utf-8?B?VHNGcm9kR0ZaVmJhRENWVUN4YXBuWVVXNjRtQ2VhMmxOUXVPbDZMOWdPT2hy?=
- =?utf-8?B?bWxaODF3d01HNjVLNWtkakRZNFhNUlhMaW5OZUVCbFljNE1UVGVBYzBpMUNP?=
- =?utf-8?B?TzMwNVNTU2gxd1VINXMwNWdwOU1BMS9ia3hmUUExV1FWdEliQlRRa3VYaEZJ?=
- =?utf-8?B?dzhNR1BTS2hiUUplbTdEMXFaaDl1Slp6KzhjTzRSc3RmU29YVk1ROTlFVCtj?=
- =?utf-8?B?a0U3Q2FWOXBUK1NOakVSSzhLK1h0bFdtT09mUVlQR1VjNlZocjJ1Sno3V1NL?=
- =?utf-8?B?MFQ0aFBjRDFMNHRWRXFEL014OTRFUU9RZ3M2eE1qS1JQSmUrdjA1M0o4N2h3?=
- =?utf-8?B?ZnNtcFp2R2ZEWVl3ZTk5c01KbThTUS9jZVBvRkJoU0ZLSzVjSXN1ZStSVGNF?=
- =?utf-8?B?MVdxTVFWMktjc2l4MkZpeExSY2FZa0JvNFZ3Wlo1R29YY2xNSnpzamZJcjhy?=
- =?utf-8?B?bS9YRFVqcFdLWkNwbDN1MlRpV2YvV1hEMmxBTkQ3NlAvekpZcVJNNHdpK25G?=
- =?utf-8?B?RHZkeStBak9vY3MvQk1DdEMrWFJ0VlR0R3JKdDJpclRGaW5RQ3pvSFNkWXdu?=
- =?utf-8?B?dkpvWFVGS0sxVHNKbEh6d1JSSVZrOUpYUWhvZU5rMXRONGwzSElyUVdiR1ly?=
- =?utf-8?B?NTFJUXlWUkxDd2E2ZGhGeXFFUUxTeEpva0taNkhDempuWkRBeUpUQ3dUZG1y?=
- =?utf-8?B?V3JHZlZDWS9LazRweGIzcWM2ZW10Z3VoSmhzWnpYZnExNUUvY3hHdXVZUW5l?=
- =?utf-8?B?VEtQL0pHaFd0cGxhS2xLeXMvRHRFSWJ4NjI4S0liMEhST2pHZDlIaHNjdHhN?=
- =?utf-8?B?dk03ODRZdm82RXFZV0FJc2l1b2hqelRXNGVTMW1QZXVRZ0dqaTdOcmZuR0Rp?=
- =?utf-8?B?dTlXZ3JJZVVGZGVlVzMzNVVHa2NweVFOa2hvb1hLcjVCUHg5N1ZrM2dhQ2RR?=
- =?utf-8?B?ZXBrMFNxclF6b2R4OTk1MG5oS3RvUmlhV1BmbERHUlRkVk5ZLzAwQXMrZEdB?=
- =?utf-8?B?RmRjaks1aWRubVdKemdvdlh5T1NZWU5UMHE3c0R4SEYrS01yUjUyRHUrWXI2?=
- =?utf-8?B?ZC9qVE82NW5mVXBBUE42TWZQdGJHNVlVRjFTSlNhVzNPc0ttN1NWT0FWMXRj?=
- =?utf-8?B?VW9PcGNtY0tuU2Y5bUdMWHR2TjBlK3JIeEk0c1JHdmtMbkhESHYwUUJpRUQ5?=
- =?utf-8?B?Nml6Q2Q2OUZVU2MvQjZRZE1LVkVubjF0NE9ubEtIRDhxcDJhelYvZFlwbERw?=
- =?utf-8?B?OWxscFNCOTlnVmZtMXkwRTFWZE9RbDBGLyttWGxBd0UrMDkwNnZVU2REWjE4?=
- =?utf-8?B?TnJmSy9kbjEwWCs3ZS9WRGlvc1BvWHQwWVJGa2lOT0p0Nyt1RGRFbjMwc2lU?=
- =?utf-8?B?WlNxYlUwZkY0enl3WllXdldmdHpVMGRGdEs4Vll4ZHZZdDY5cGFwZ1FBME42?=
- =?utf-8?B?WGxhODYvbnkyZmtXUW5sQ2xhYWFTZWVUVjQ4TXBwbkhCaDlJY200L1EycG54?=
- =?utf-8?B?QXdVSXNJbzUvRXNYUDBDNzM5b2NYV1dobTdBNTFIUk05MVd2ekh5b09GVXdV?=
- =?utf-8?B?eWVXYkZzWE92aEgxWDJyTEhaYnFtVkJPMFZZeitsbWRFcFhJcGEwR01adDRt?=
- =?utf-8?B?R29SYUxsSWFod2xpWjhLRmxDc2hRYjRNelVrK0lDNUpENkt4eVFnNEhCalor?=
- =?utf-8?B?akQ5K2ZZRzlCMEUrUmIvdGU0S0luVnJsNERaWkM5bkVQL3hiaWhKMjBHcmV4?=
- =?utf-8?B?UHZHQ2ZrQjcyOUJQMHR4YWNuSFI5eUdZL2JOL2tpTjdjQkNaclp3MVVxcEhy?=
- =?utf-8?B?WXcrMzBuT01iOVY4SnowK3lMZlVYcG10YVpTbVNQMExKZnpuazlZNGljYlpy?=
- =?utf-8?B?UXVvNVA4YitFeFJ2aDFzYVM3TnVWUjg2WE5GZWl4b1MyMTJSSTlsWkpxd0hv?=
- =?utf-8?B?Q3c9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69f1cd77-8383-4ac5-3ec5-08dadebf0a99
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2022 17:08:52.7250
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: miuZHNESK2DNB26ypMDhkuESRKTkIKRnWmHzcWH+Nhyb9BKK4xdFccc3oXjzKMTzP4CmmrMoo/1uA/JUvfWUktS7jkWurb+RworUEi4RRWs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB7374
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrEKsWRmVeSWpSXmKPExsWy7djXc7q7Q2YnGzS0qlvcfXyBzaJ58mJG
+        i9f/prNYTJ96gdFi9c01jBb7nz5nsVi18BqbxflZp1gsLu+aw2Zxa8IxJgcuj5Yjb1k9Fu95
+        yeSxaVUnm8fHp7dYPKbOrvf4vEkugC2KyyYlNSezLLVI3y6BK2NNQwdzwVmhipuHDrE3MH7m
+        62Lk5JAQMJE4NqmJvYuRi0NIYCWjxIJtW9kgnFYmiYb5k1hhql5sOwFVtZZRYk/7H0YI5xOj
+        xNGvx6FaljFKfGj9xQ7SwiagKLGvaztYQkSgmVni7c7JYC3MIC3POjcxgVQJCwRKfPm9Hcjm
+        AKoKk7g0xQvC1JN4cUcVpIJFQFXiyMMHYGfwClhKPO3aAmYzCohJfD+1BmwKs4C4xK0n85kg
+        ThWUWDR7DzOELSbxb9dDNghbUeL+95fsEPV6EjemTmGDsLUlli18zQwxX1Di5MwnLBD1khIH
+        V9xgATlZQuACh8Sr0+fZQG6TEHCRWD7ZBKJGWuLq9alQu3wkemYvYIewMyTe3+2BittLzHrz
+        igViF5/E31+PGCHG8Ep0tAlNYFSaheSDWUium4XkullIrlvAyLKKUby0uDg3PbXYKC+1XK84
+        Mbe4NC9dLzk/dxMjMFmd/nc4fwfj9Vsf9Q4xMnEwHmKU4GBWEuENeDorWYg3JbGyKrUoP76o
+        NCe1+BCjNAeLkjjvmikdyUIC6YklqdmpqQWpRTBZJg5OqQam0h0vuJP/zs/o0T6/55Oe5lpj
+        2QgzXnZDva6Tsnu1Aw8tcQw1XnAj6sTShzqZx4TuN1fUqljy2RecWHfTKXnlbuXHgWY/hFPu
+        NbW4v7Vk0zZp7qhwfXA+7+EnduHfuz9zq5WvKvN//P2nyjm7axXHn3p/E2s2qatYd9WBQyrS
+        8ei3+hNP6lbfqdhenHBqdYNo/9XTR9alnPerCFg/bevzFesd3ruV3Ck7ktFft3cu3xG/rRIS
+        PRcD5Ltlfdc/93mQ7rXuwbLZs69wtnof1F1o/aNtRunE46Z28p/+fGE9wf5UzVhv5XOVlS+P
+        KhxwfKnP/uZQANPLtCdBBwstTy+yMdn3u2bWpOoIA6OAC1sslViKMxINtZiLihMBhhxmPMUD
+        AAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHIsWRmVeSWpSXmKPExsWS2cA0UXd3yOxkgy9z+C3uPr7AZtE8eTGj
+        xet/01kspk+9wGix+uYaRov9T5+zWKxaeI3N4vysUywWl3fNYbO4NeEYkwOXR8uRt6wei/e8
+        ZPLYtKqTzePj01ssHlNn13t83iQXwBbFZZOSmpNZllqkb5fAlbGmoYO54KxQxc1Dh9gbGD/z
+        dTFyckgImEi82HaCvYuRi0NIYDWjRO+lqywQzidGiTldNxkhnGWMEvP/fWcEaWETUJTY17Wd
+        DSQhItDMLPF252SwKmaQlmedm5hAqoQFAiW+/N4OZosIhEns//cFaC4HkK0n8eKOKkiYRUBV
+        4sjDB6wgNq+ApcTTri1gNqOAmMT3U2vAWpkFxCVuPZnPBHGrgMSSPeeZIWxRiZeP/7FC2IoS
+        97+/ZIeo15O4MXUKG4StLbFs4WtmiPmCEidnPmGBqJeUOLjiBssERtFZSFbMQtI+C0n7LCTt
+        CxhZVjGKlxYX56ZXFBvmpZbrFSfmFpfmpesl5+duYgRG6el/hyN3MB699VHvECMTB+MhRgkO
+        ZiUR3oCns5KFeFMSK6tSi/Lji0pzUosPMUpzsCiJ8wq5TowXEkhPLEnNTk0tSC2CyTJxcEo1
+        MK21dy8unnVxK4tyW4LL+scn7u26E33d4K2B89ezGhM9sk7n+0Xmmep94Yu8WPfuPe+mVcor
+        FY+q9n47frL6ZuxhO7/LF7onav/gqXogtvnR91VTngczf5w5UXLT56/r/ylzXpgtVe8y3znl
+        jNrEPufPlumHNuwI50tkSj0vLfIgR6n8x4RU1+Taeq6iTrlFyxbvDjOwM9v46X7PDkGmjplS
+        IQ+3bF/y/ndRt4Nz7N4mi/ZlD6RE+o+aCRmsmOEinNw46+7J2h0OXju9TOal5nXwb8xfJd11
+        IaaNW6W48YP4O6tTW9fmBTTXuG9tknk9+UrvkhdbAhvqjjgFXrPcNX9B0H8+g+ZbHG1T4w+7
+        cSmxFGckGmoxFxUnAgClbyL3QQMAAA==
+X-CMS-MailID: 20221215170915uscas1p262ccdf32fb2ccd3840189376c2793d06
+CMS-TYPE: 301P
+X-CMS-RootMailID: 20221215170915uscas1p262ccdf32fb2ccd3840189376c2793d06
+References: <CGME20221215170915uscas1p262ccdf32fb2ccd3840189376c2793d06@uscas1p2.samsung.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Babu,
+Not all decoders have a reset callback.
 
-On 12/1/2022 7:36 AM, Babu Moger wrote:
-> Add the new AMD feature X86_FEATURE_SMBA. With this feature, the QOS
-> enforcement policies can be applied to external slow memory connected
-> to the host. QOS enforcement is accomplished by assigning a Class Of
-> Service (COS) to a processor and specifying allocations or limits for
-> that COS for each resource to be allocated.
-> 
-> This feature is identified by the CPUID Function 8000_0020_EBX_x0.
-> 
-> CPUID Fn8000_0020_EBX_x0 AMD Bandwidth Enforcement Feature Identifiers
-> (ECX=0)
-> 
-> Bits    Field Name      Description
-> 2       L3SBE           L3 external slow memory bandwidth enforcement
-> 
-> CXL.memory is the only supported "slow" memory device. With the support
-> of SMBA feature, the hardware enables bandwidth allocation on the slow
-> memory devices. If there are multiple slow memory devices in the system,
-> then the throttling logic groups all the slow sources together and
-> applies the limit on them as a whole.
-> 
-> The presence of the SMBA feature(with CXL.memory) is independent of
-> whether slow memory device is actually present in the system. If there
-> is no slow memory in the system, then setting a SMBA limit will have no
-> impact on the performance of the system.
-> 
-> Presence of CXL memory can be identified by numactl command.
-> 
-> $numactl -H
-> available: 2 nodes (0-1)
-> node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
-> node 0 size: 63678 MB node 0 free: 59542 MB
-> node 1 cpus:
-> node 1 size: 16122 MB
-> node 1 free: 15627 MB
-> node distances:
-> node   0   1
->    0:  10  50
->    1:  50  10
-> 
-> CPU list for CXL memory will be empty. The cpu-cxl node distance is
-> greater than cpu-to-cpu distances. Node 1 has the CXL memory in this
-> case. CXL memory can also be identified using ACPI SRAT table and
-> memory maps.
-> 
-> Feature description is available in the specification, "AMD64
-> Technology Platform Quality of Service Extensions, Revision: 1.03
-> Publication # 56375 Revision: 1.03 Issue Date: February 2022".
-> 
-> Link: https://www.amd.com/en/support/tech-docs/amd64-technology-platform-quality-service-extensions
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=206537
-> Signed-off-by: Babu Moger <babu.moger@amd.com>
+The CXL specification allows a host bridge with a single root port to
+have no explicit HDM decoders. Currently the region driver assumes there
+are none.  As such the CXL core creates a special pass through decoder
+instance without a commit/reset callback.
 
-According to "Ordering of commit tags" in Documentation/process/maintainer-tip.rst
-the "Link:" tags should be after "Signed-off-by:". Could you please re-order
-these to ensure this series is ready for the next stage?
+Prior to this patch, the ->reset() callback was called unconditionally when
+calling cxl_region_decode_reset. Thus a configuration with 1 Host Bridge,
+1 Root Port, and one directly attached CXL type 3 device or multiple CXL
+type 3 devices attached to downstream ports of a switch can cause a null
+pointer dereference.
 
-> ---
->  arch/x86/include/asm/cpufeatures.h |    1 +
->  arch/x86/kernel/cpu/scattered.c    |    1 +
->  2 files changed, 2 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index 11a0e06362e4..b6a45e56cd0c 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -307,6 +307,7 @@
->  #define X86_FEATURE_SGX_EDECCSSA	(11*32+18) /* "" SGX EDECCSSA user leaf function */
->  #define X86_FEATURE_CALL_DEPTH		(11*32+19) /* "" Call depth tracking for RSB stuffing */
->  #define X86_FEATURE_MSR_TSX_CTRL	(11*32+20) /* "" MSR IA32_TSX_CTRL (Intel) implemented */
-> +#define X86_FEATURE_SMBA		(11*32+21) /* Slow Memory Bandwidth Allocation */
->  
->  /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
->  #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
-> diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
-> index f53944fb8f7f..d925753084fb 100644
-> --- a/arch/x86/kernel/cpu/scattered.c
-> +++ b/arch/x86/kernel/cpu/scattered.c
-> @@ -45,6 +45,7 @@ static const struct cpuid_bit cpuid_bits[] = {
->  	{ X86_FEATURE_CPB,		CPUID_EDX,  9, 0x80000007, 0 },
->  	{ X86_FEATURE_PROC_FEEDBACK,    CPUID_EDX, 11, 0x80000007, 0 },
->  	{ X86_FEATURE_MBA,		CPUID_EBX,  6, 0x80000008, 0 },
-> +	{ X86_FEATURE_SMBA,		CPUID_EBX,  2, 0x80000020, 0 },
->  	{ X86_FEATURE_PERFMON_V2,	CPUID_EAX,  0, 0x80000022, 0 },
->  	{ X86_FEATURE_AMD_LBR_V2,	CPUID_EAX,  1, 0x80000022, 0 },
->  	{ 0, 0, 0, 0, 0 }
-> 
-> 
+Before the fix, a kernel crash was observed when we destroy the region, and
+a pass through decoder is reset.
 
-With the tag ordering addressed:
+The issue can be reproduced as below,
+    1) create a region with a CXL setup which includes a HB with a
+    single root port under which a memdev is attached directly.
+    2) destroy the region with cxl destroy-region regionX -f.
 
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+Fixes: 176baefb2eb5 ("cxl/hdm: Commit decoder state to hardware")
+Signed-off-by: Fan Ni <fan.ni@samsung.com>
+---
+ drivers/cxl/core/region.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Thank you
-
-Reinette
+diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
+index f9ae5ad284ff..3931793a13ac 100644
+--- a/drivers/cxl/core/region.c
++++ b/drivers/cxl/core/region.c
+@@ -131,7 +131,7 @@ static int cxl_region_decode_reset(struct cxl_region *c=
+xlr, int count)
+ 		struct cxl_memdev *cxlmd =3D cxled_to_memdev(cxled);
+ 		struct cxl_port *iter =3D cxled_to_port(cxled);
+ 		struct cxl_ep *ep;
+-		int rc;
++		int rc =3D 0;
+=20
+ 		while (!is_cxl_root(to_cxl_port(iter->dev.parent)))
+ 			iter =3D to_cxl_port(iter->dev.parent);
+@@ -143,7 +143,8 @@ static int cxl_region_decode_reset(struct cxl_region *c=
+xlr, int count)
+=20
+ 			cxl_rr =3D cxl_rr_load(iter, cxlr);
+ 			cxld =3D cxl_rr->decoder;
+-			rc =3D cxld->reset(cxld);
++			if (cxld->reset)
++				rc =3D cxld->reset(cxld);
+ 			if (rc)
+ 				return rc;
+ 		}
+@@ -186,7 +187,8 @@ static int cxl_region_decode_commit(struct cxl_region *=
+cxlr)
+ 			     iter =3D ep->next, ep =3D cxl_ep_load(iter, cxlmd)) {
+ 				cxl_rr =3D cxl_rr_load(iter, cxlr);
+ 				cxld =3D cxl_rr->decoder;
+-				cxld->reset(cxld);
++				if (cxld->reset)
++					cxld->reset(cxld);
+ 			}
+=20
+ 			cxled->cxld.reset(&cxled->cxld);
+--=20
+2.25.1
