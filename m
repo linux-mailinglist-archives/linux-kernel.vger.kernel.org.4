@@ -2,91 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D215664E2AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 21:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8EE64E2B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:00:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiLOU7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 15:59:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46442 "EHLO
+        id S229928AbiLOVA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 16:00:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiLOU7k (ORCPT
+        with ESMTP id S229932AbiLOVAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 15:59:40 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C35954343;
-        Thu, 15 Dec 2022 12:59:40 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id gt4so433052pjb.1;
-        Thu, 15 Dec 2022 12:59:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xJBNVirIxjRTnviyLQ3VvNqsXr9KTaq6mCTY4+eqgXk=;
-        b=QSJYi0LX3T2XajNmp04PqUS/ym18CnV7ysHk8CCn7goYsLo/Barc400KJWRTWEQVj0
-         Z3tcGNcz7LggzZLgeUL5TWtjFRp/fK9o9qgD4iTFDQ6+i61JpswrZn8Du3Oa6gJ3n78y
-         qw6AB0ygqnFF69JyjAVleZQ1I+1kbRZ05qJv6NsC4aOPkSWF4Ii9ABtMJtNVRS0De6mR
-         BT6XamFPgcPUPB+7LQkNfQZV0yL7MDLqLgB+CX6aaiKm1okC2QuYXfTkQbDzaMTgoJG3
-         a4+64AwU4jcqiOlzuKcUPAlnsoG6nTC9bvyuIwxVID9w1KoLXTdRMOYbENYUuoSloRQI
-         QQBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xJBNVirIxjRTnviyLQ3VvNqsXr9KTaq6mCTY4+eqgXk=;
-        b=2Xxley2lQZDDgQpaNGoIJEqX0EBEe4JBEA2g9FaFmuT6GI+8PbFgUtuoZg4eYVjw//
-         FtU6wxmJaM175QoYFF6Q9ahDQvto/YrTJrKPxOlMdCxji0BL0J5AaZO1dBB9/EX1RnAs
-         WOD2Mq4OhVCM3jLs8BXTlNhLROzUwrjqoeXm1GSmUbv4CPCkWRMbMe/LT1UKqYExiX5T
-         OVo892BY5LMuRMak5vPSQwvUNvnnVL7Es/YtyXAbQwYorTfjEEju+USZZn8BdnHa4UMX
-         75V8zKQJyUC4HPJoL38Ie5MYWTZ+kjt/xTk5RjaCKUx4n7Cz7WyiDEU8mHCYNhoQo25/
-         bgwg==
-X-Gm-Message-State: ANoB5pmPCXcwoxhv1tIXT6qhfHxTf2qqWoVwgwZCOFDpP1jQ8geNzphv
-        VxU6l6jchmLvs03IEQuxfU0=
-X-Google-Smtp-Source: AA0mqf4A24INIOURF2H6vKjJnv7ul8OtPhF92AG1def34dGvTwoQK5yUZlk5DlaUCn1RtjkAZRX9Ew==
-X-Received: by 2002:a17:90a:7e93:b0:219:6626:3b63 with SMTP id j19-20020a17090a7e9300b0021966263b63mr31328420pjl.25.1671137979344;
-        Thu, 15 Dec 2022 12:59:39 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id gw14-20020a17090b0a4e00b00218a7808ec9sm86046pjb.8.2022.12.15.12.59.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 12:59:38 -0800 (PST)
-Date:   Thu, 15 Dec 2022 12:59:37 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        pbonzini@redhat.com, erdemaktas@google.com, seanjc@google.com,
-        sagis@google.com, dmatlack@google.com,
-        sean.j.christopherson@intel.com, kai.huang@intel.com
-Subject: Re: [PATCH v10 016/108] KVM: TDX: create/destroy VM structure
-Message-ID: <20221215205937.GF3632095@ls.amr.corp.intel.com>
-References: <fb337a67e17715977e46523d1344cb2a7f46a37a.1667110240.git.isaku.yamahata@intel.com>
- <diqz4ju4wfqg.fsf@google.com>
+        Thu, 15 Dec 2022 16:00:21 -0500
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4DD5437E
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 13:00:15 -0800 (PST)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 115EF3F319;
+        Thu, 15 Dec 2022 22:00:12 +0100 (CET)
+Date:   Thu, 15 Dec 2022 22:00:10 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     phone-devel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/6] arm64: dts: qcom: msm8976: Declare and use SDC1 pins
+Message-ID: <20221215210010.on44gmoefbnsokvt@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        phone-devel@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        Luca Weiss <luca@z3ntu.xyz>, Adam Skladowski <a39.skl@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221214232049.703484-1-marijn.suijten@somainline.org>
+ <20221214232049.703484-5-marijn.suijten@somainline.org>
+ <60a40ace-d4e9-df74-88f9-4354d80efaac@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <diqz4ju4wfqg.fsf@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <60a40ace-d4e9-df74-88f9-4354d80efaac@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 11:15:35AM -0800,
-Ackerley Tng <ackerleytng@google.com> wrote:
-
+On 2022-12-15 14:19:41, Konrad Dybcio wrote:
 > 
-> In tdx_vm_init, it is possible to have a double-reclaim, which
-> eventually causes a host crash. I have a selftest that reliably
-> reproduces this, and I believe the problem is that withiin
-> tdx_vm_free(), we don't reset kvm->tdcs = NULL and kvm->tdr.added to
-> false.
+> 
+> On 15.12.2022 00:20, Marijn Suijten wrote:
+> > Add the pinctrl states for SDC1 and use them on sdhc_1.
+> > 
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/msm8976.dtsi | 55 +++++++++++++++++++++++++++
+> >  1 file changed, 55 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/msm8976.dtsi b/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> > index 05dcb30b0779..7d4c7548882c 100644
+> > --- a/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> > @@ -508,6 +508,56 @@ tlmm: pinctrl@1000000 {
+> >  			interrupt-controller;
+> >  			#interrupt-cells = <2>;
+> >  
+> > +			sdc1_off_state: sdc1-off-state {
+> > +				clk-pins {
+> > +					pins = "sdc1_clk";
+> > +					drive-strength = <2>;
+> > +					bias-disable;
+> > +				};
+> > +
+> > +				cmd-pins {
+> > +					pins = "sdc1_cmd";
+> > +					drive-strength = <2>;
+> > +					bias-pull-up;
+> > +				};
+> > +
+> > +				data-pins {
+> > +					pins = "sdc1_data";
+> > +					drive-strength = <2>;
+> > +					bias-pull-up;
+> > +				};
+> > +
+> > +				rclk-pins {
+> > +					pins = "sdc1_rclk";
+> > +					bias-pull-down;
+> > +				};
+> > +			};
+> > +
+> > +			sdc1_on_state: sdc1-on-state {
+> > +				clk-pins {
+> > +					pins = "sdc1_clk";
+> > +					drive-strength = <16>;
+> > +					bias-disable;
+> > +				};
+> > +
+> > +				cmd-pins {
+> > +					pins = "sdc1_cmd";
+> > +					drive-strength = <10>;
+> > +					bias-pull-up;
+> > +				};
+> > +
+> > +				data-pins {
+> > +					pins = "sdc1_data";
+> > +					drive-strength = <10>;
+> > +					bias-pull-up;
+> > +				};
+> > +
+> > +				rclk-pins {
+> > +					pins = "sdc1_rclk";
+> > +					bias-pull-down;
+> > +				};
+> > +			};
+> > +
+> >  			spi1_default: spi0-default-state {
+> >  				spi-pins {
+> >  					pins = "gpio0", "gpio1", "gpio3";
+> > @@ -680,6 +730,11 @@ sdhc_1: mmc@7824000 {
+> >  				 <&gcc GCC_SDCC1_APPS_CLK>,
+> >  				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+> >  			clock-names = "iface", "core", "xo";
+> > +
+> > +			pinctrl-0 = <&sdc1_on_state>;
+> > +			pinctrl-1 = <&sdc1_off_state>;
+> > +			pinctrl-names = "default", "sleep";
+> pinctrl-names usually goes before pinctrl-N
 
-Thanks for the fix. Did you use error injection to trigger the error path?
+I thought I had seen them _after_ nowadays, same for reg-names,
+phy-names, interrupt-names and clock-names.  What is it?
 
-Thanks,
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Regardless, I'd rather keep this consistent across this file (sdc2 also
+has it after, same for other *-names) and correct it at once in a
+separate patch, if someone really cares.
+
+But really, we should have a checker/autoformatter for these "rules",
+instead of all this manual back-and-forth (is this order already set in
+stone under Documentation/ or something?).
+
+- Marijn
