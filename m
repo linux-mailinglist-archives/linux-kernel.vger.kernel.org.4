@@ -2,263 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A787E64D76B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35B864D76E
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:51:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiLOHtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 02:49:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
+        id S229724AbiLOHv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 02:51:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiLOHtp (ORCPT
+        with ESMTP id S229488AbiLOHvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 02:49:45 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3332CC94;
-        Wed, 14 Dec 2022 23:49:43 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id f3so3643402pgc.2;
-        Wed, 14 Dec 2022 23:49:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=638eiuU0ZsFEhpJsO+Ri4XHiM7p1FTomBDcD/XaCVLM=;
-        b=jf6G6bI7ybe1rVTs0YPCuWFsqnsanYnALt3PZJhHFjnccY6ahEEDVPB145hAyw0CVK
-         ZA4OHN0dz8W20bSqtamEeoYWZutaBFki14pDGT8yJI2lwthNhhidZ54oCR3cvOa1rcko
-         jguCpKUsfikpJFOfTvKVSyp3Qg5AMZhXVrU25/rgjAJKNamDGYDnQ6frQPpcL93+C3EL
-         cjFPFjULc6CIOE8FyjTShHKuxMVXmfWUEBaXrcTo1cu3tVy6HGd1YDvwLQeVhfvGsCkR
-         61YsS/pKBwFz4IUCEqRxei6dLyVCb7DBKYQtDw38OMDcITvaQ/cf92AuAA8KKg0ngLqL
-         5KhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=638eiuU0ZsFEhpJsO+Ri4XHiM7p1FTomBDcD/XaCVLM=;
-        b=J9U4w8aPn1jBKZM+6uf54wvSIFi5urpeJTn7SEZjR1zQbz+M4TxXe6bC9B+u9XT23d
-         HzMEjIrOPPC2gGdQ+3eLBh+8FDADeluteSrX7qZv6UvgqMsaiFZjvl+P+dxJJ9jT1p6X
-         VORexkraIxbUyBA/YfgyfE1BPgo7up1jpvrXOjLgeVvNDZ8UAHSD0yBB4PVlusw5ANwn
-         h7DvLWL93aSFBCsZAYWNHFuHxCnm0Ff6sHq3qp3TyQ+I4dAr+hTSFHOzfP/LSBWEPO3H
-         25YXKOS1SDDs96Elf1ourYy64vFMD3DIlHFaQbJZw1ZHT+cEIGU+Uq6y6GTBNwYvOl8U
-         E4yw==
-X-Gm-Message-State: ANoB5pmDDo4UyhbEdcZnfc5Iy1KMy4djogWPyyzJ7z0Jcccf0MtCXyWp
-        6oqb9JzQT+gIYiJccvTEwbMwWsnBNcYWnerxjA8ju8xt3A==
-X-Google-Smtp-Source: AA0mqf5vZtoNJpQG4tjOHARM5i456I5xNknn9VZ4Zt8cqvsb6OQ/yWmhJLtDYfKnvOSxRnAfBUYKiZ0QWEwMEGzjPOA=
-X-Received: by 2002:a63:5f83:0:b0:478:ab05:4da9 with SMTP id
- t125-20020a635f83000000b00478ab054da9mr20716217pgb.369.1671090582719; Wed, 14
- Dec 2022 23:49:42 -0800 (PST)
+        Thu, 15 Dec 2022 02:51:22 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D64420995;
+        Wed, 14 Dec 2022 23:51:21 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6AFA120CA9;
+        Thu, 15 Dec 2022 07:51:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1671090679; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ApTPtm4BpVUmJDkiZyC1YdPf5EgpdLIlVfUqGS4nvKM=;
+        b=a41MyVNd5CeVoWrJcB4xuBEUNfYo4yDh603pgccImOnX5OCtr1gya9icfuLNk75R7Tk1id
+        gSDLYnn/xsqXVWQ/tro/OCo9PqlVcQRku5Sc/vAZfPj2iATPKyx+oom9eFMvCeJ+2W3Tsm
+        /ufa51Ym/t8u3pVUN7hd/OkttdwJEH0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4203A138E5;
+        Thu, 15 Dec 2022 07:51:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 0LftDffRmmMJewAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 15 Dec 2022 07:51:19 +0000
+Date:   Thu, 15 Dec 2022 08:51:18 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andi Kleen <ak@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Huang Ying <ying.huang@intel.com>, linux-api@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [RFC PATCH] mm/mempolicy: Fix memory leak in
+ set_mempolicy_home_node system call
+Message-ID: <Y5rR9n5HSvlATV5A@dhcp22.suse.cz>
+References: <20221214222110.200487-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-From:   Hao Sun <sunhao.th@gmail.com>
-Date:   Thu, 15 Dec 2022 15:49:31 +0800
-Message-ID: <CACkBjsbS0jeOUFzxWH-bBay9=cTQ_S2JbMnAa7V2sHpp_19PPw@mail.gmail.com>
-Subject: KASAN: use-after-free Read in ___bpf_prog_run
-To:     bpf <bpf@vger.kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221214222110.200487-1-mathieu.desnoyers@efficios.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed 14-12-22 17:21:10, Mathieu Desnoyers wrote:
+> When encountering any vma in the range with policy other than MPOL_BIND
+> or MPOL_PREFERRED_MANY, an error is returned without issuing a mpol_put
+> on the policy just allocated with mpol_dup().
+> 
+> This allows arbitrary users to leak kernel memory.
+> 
+> Fixes: c6018b4b2549 ("mm/mempolicy: add set_mempolicy_home_node syscall")
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> Cc: Ben Widawsky <ben.widawsky@intel.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Feng Tang <feng.tang@intel.com>
+> Cc: Michal Hocko <mhocko@kernel.org>
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: Mel Gorman <mgorman@techsingularity.net>
+> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Andi Kleen <ak@linux.intel.com>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Huang Ying <ying.huang@intel.com>
+> Cc: <linux-api@vger.kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: stable@vger.kernel.org # 5.17+
 
-The following KASAN report can be triggered by loading and test
-running this simple BPF prog with a random data/ctx:
+Acked-by: Michal Hocko <mhocko@suse.com>
+Thanks for catching this!
 
-0: r0 = bpf_get_current_task_btf      ;
-R0_w=trusted_ptr_task_struct(off=0,imm=0)
-1: r0 = *(u32 *)(r0 +8192)       ;
-R0_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff))
-2: exit
-
-I've simplified the C reproducer but didn't find the root cause.
-JIT was disabled, and the interpreter triggered UAF when executing
-the load insn. A slab-out-of-bound read can also be triggered:
-https://pastebin.com/raw/g9zXr8jU
-
-This can be reproduced on:
-
-HEAD commit: b148c8b9b926 selftests/bpf: Add few corner cases to test
-padding handling of btf_dump
-git tree: bpf-next
-console log: https://pastebin.com/raw/1EUi9tJe
-kernel config: https://pastebin.com/raw/rgY3AJDZ
-C reproducer: https://pastebin.com/raw/cfVGuCBm
-
-==================================================================
-BUG: KASAN: use-after-free in ___bpf_prog_run+0x7f35/0x8fd0
-kernel/bpf/core.c:1937
-Read of size 4 at addr ffff88801f1f2000 by task a.out/7137
-
-CPU: 3 PID: 7137 Comm: a.out Not tainted
-6.1.0-rc8-02212-gef3911a3e4d6-dirty #137
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch Linux
-1.16.1-1-1 04/01/2014
-Call Trace:
-<TASK>
-__dump_stack lib/dump_stack.c:88 [inline]
-dump_stack_lvl+0x100/0x178 lib/dump_stack.c:106
-print_address_description mm/kasan/report.c:284 [inline]
-print_report+0x167/0x46c mm/kasan/report.c:395
-kasan_report+0xbf/0x1e0 mm/kasan/report.c:495
-___bpf_prog_run+0x7f35/0x8fd0 kernel/bpf/core.c:1937
-__bpf_prog_run32+0x9d/0xe0 kernel/bpf/core.c:2045
-bpf_dispatcher_nop_func include/linux/bpf.h:1082 [inline]
-__bpf_prog_run include/linux/filter.h:600 [inline]
-bpf_prog_run include/linux/filter.h:607 [inline]
-bpf_test_run+0x38e/0x980 net/bpf/test_run.c:402
-bpf_prog_test_run_skb+0xb67/0x1dc0 net/bpf/test_run.c:1187
-bpf_prog_test_run kernel/bpf/syscall.c:3644 [inline]
-__sys_bpf+0x1293/0x5840 kernel/bpf/syscall.c:4997
-__do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
-__se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
-__x64_sys_bpf+0x78/0xc0 kernel/bpf/syscall.c:5081
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fb8adae4469
-Code: 00 f3 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 8b 0d ff 49 2b 00 f7 d8 64 89 01 48
-RSP: 002b:00007fff514ad148 EFLAGS: 00000203 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb8adae4469
-RDX: 0000000000000025 RSI: 0000000020000200 RDI: 000000000000000a
-RBP: 00007fff514ae2f0 R08: 00007fb8adb2dd70 R09: 00000b4100000218
-R10: e67c061720b91d86 R11: 0000000000000203 R12: 000055ed87c00760
-R13: 00007fff514ae3d0 R14: 0000000000000000 R15: 0000000000000000
-</TASK>
-
-Allocated by task 7128:
-kasan_save_stack+0x20/0x40 mm/kasan/common.c:45
-kasan_set_track+0x25/0x30 mm/kasan/common.c:52
-__kasan_slab_alloc+0x84/0x90 mm/kasan/common.c:325
-kasan_slab_alloc include/linux/kasan.h:201 [inline]
-slab_post_alloc_hook mm/slab.h:737 [inline]
-slab_alloc_node mm/slub.c:3398 [inline]
-kmem_cache_alloc_node+0x166/0x410 mm/slub.c:3443
-alloc_task_struct_node kernel/fork.c:171 [inline]
-dup_task_struct kernel/fork.c:966 [inline]
-copy_process+0x5db/0x6f40 kernel/fork.c:2084
-kernel_clone+0xe8/0x980 kernel/fork.c:2671
-__do_sys_clone+0xc0/0x100 kernel/fork.c:2812
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 0:
-kasan_save_stack+0x20/0x40 mm/kasan/common.c:45
-kasan_set_track+0x25/0x30 mm/kasan/common.c:52
-kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:511
-____kasan_slab_free mm/kasan/common.c:236 [inline]
-____kasan_slab_free+0x15e/0x1b0 mm/kasan/common.c:200
-kasan_slab_free include/linux/kasan.h:177 [inline]
-slab_free_hook mm/slub.c:1724 [inline]
-slab_free_freelist_hook+0x10b/0x1e0 mm/slub.c:1750
-slab_free mm/slub.c:3661 [inline]
-kmem_cache_free+0xee/0x5b0 mm/slub.c:3683
-put_task_struct include/linux/sched/task.h:119 [inline]
-delayed_put_task_struct+0x274/0x3e0 kernel/exit.c:178
-rcu_do_batch kernel/rcu/tree.c:2250 [inline]
-rcu_core+0x835/0x1980 kernel/rcu/tree.c:2510
-__do_softirq+0x1f7/0xaf6 kernel/softirq.c:571
-
-Last potentially related work creation:
-kasan_save_stack+0x20/0x40 mm/kasan/common.c:45
-__kasan_record_aux_stack+0xbf/0xd0 mm/kasan/generic.c:481
-call_rcu+0x9e/0x790 kernel/rcu/tree.c:2798
-put_task_struct_rcu_user kernel/exit.c:184 [inline]
-put_task_struct_rcu_user+0x83/0xc0 kernel/exit.c:181
-release_task+0xe9e/0x1ae0 kernel/exit.c:234
-wait_task_zombie kernel/exit.c:1136 [inline]
-wait_consider_task+0x17d8/0x3e70 kernel/exit.c:1363
-do_wait_thread kernel/exit.c:1426 [inline]
-do_wait+0x75f/0xdc0 kernel/exit.c:1543
-kernel_wait4+0x153/0x260 kernel/exit.c:1706
-__do_sys_wait4+0x147/0x160 kernel/exit.c:1734
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Second to last potentially related work creation:
-kasan_save_stack+0x20/0x40 mm/kasan/common.c:45
-__kasan_record_aux_stack+0xbf/0xd0 mm/kasan/generic.c:481
-call_rcu+0x9e/0x790 kernel/rcu/tree.c:2798
-put_task_struct_rcu_user kernel/exit.c:184 [inline]
-put_task_struct_rcu_user+0x83/0xc0 kernel/exit.c:181
-release_task+0xe9e/0x1ae0 kernel/exit.c:234
-wait_task_zombie kernel/exit.c:1136 [inline]
-wait_consider_task+0x17d8/0x3e70 kernel/exit.c:1363
-do_wait_thread kernel/exit.c:1426 [inline]
-do_wait+0x75f/0xdc0 kernel/exit.c:1543
-kernel_wait4+0x153/0x260 kernel/exit.c:1706
-__do_sys_wait4+0x147/0x160 kernel/exit.c:1734
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff88801f1f1d80
-which belongs to the cache task_struct of size 7240
-The buggy address is located 640 bytes inside of
-7240-byte region [ffff88801f1f1d80, ffff88801f1f39c8)
-
-The buggy address belongs to the physical page:
-page:ffffea00007c7c00 refcount:1 mapcount:0 mapping:0000000000000000
-index:0x0 pfn:0x1f1f0
-head:ffffea00007c7c00 order:3 compound_mapcount:0 compound_pincount:0
-memcg:ffff888013b2c081
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffffea00005e4200 dead000000000002 ffff88801322a000
-raw: 0000000000000000 0000000080040004 00000001ffffffff ffff888013b2c081
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask
-0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC),
-pid 16, tgid 16 (kworker/u17:1), ts 3731671201, free_ts 0
-prep_new_page mm/page_alloc.c:2539 [inline]
-get_page_from_freelist+0x10ce/0x2db0 mm/page_alloc.c:4291
-__alloc_pages+0x1c8/0x5c0 mm/page_alloc.c:5558
-alloc_pages+0x1a9/0x270 mm/mempolicy.c:2285
-alloc_slab_page mm/slub.c:1794 [inline]
-allocate_slab+0x24e/0x340 mm/slub.c:1939
-new_slab mm/slub.c:1992 [inline]
-___slab_alloc+0x89a/0x1400 mm/slub.c:3180
-__slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3279
-slab_alloc_node mm/slub.c:3364 [inline]
-kmem_cache_alloc_node+0x12e/0x410 mm/slub.c:3443
-alloc_task_struct_node kernel/fork.c:171 [inline]
-dup_task_struct kernel/fork.c:966 [inline]
-copy_process+0x5db/0x6f40 kernel/fork.c:2084
-kernel_clone+0xe8/0x980 kernel/fork.c:2671
-user_mode_thread+0xb4/0xf0 kernel/fork.c:2747
-call_usermodehelper_exec_work kernel/umh.c:175 [inline]
-call_usermodehelper_exec_work+0xcb/0x170 kernel/umh.c:161
-process_one_work+0xa33/0x1720 kernel/workqueue.c:2289
-worker_thread+0x67d/0x10e0 kernel/workqueue.c:2436
-kthread+0x2e4/0x3a0 kernel/kthread.c:376
-ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-page_owner free stack trace missing
-
-Memory state around the buggy address:
-ffff88801f1f1f00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-ffff88801f1f1f80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88801f1f2000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-^
-ffff88801f1f2080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-ffff88801f1f2100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+Btw. looking at the code again it seems rather pointless to duplicate
+the policy just to throw it away anyway. A slightly bigger diff but this
+looks more reasonable to me. What do you think? I can also send it as a
+clean up on top of your fix.
+---
+diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+index 61aa9aedb728..918cdc8a7f0c 100644
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -1489,7 +1489,7 @@ SYSCALL_DEFINE4(set_mempolicy_home_node, unsigned long, start, unsigned long, le
+ {
+ 	struct mm_struct *mm = current->mm;
+ 	struct vm_area_struct *vma;
+-	struct mempolicy *new;
++	struct mempolicy *new. *old;
+ 	unsigned long vmstart;
+ 	unsigned long vmend;
+ 	unsigned long end;
+@@ -1521,30 +1521,28 @@ SYSCALL_DEFINE4(set_mempolicy_home_node, unsigned long, start, unsigned long, le
+ 		return 0;
+ 	mmap_write_lock(mm);
+ 	for_each_vma_range(vmi, vma, end) {
+-		vmstart = max(start, vma->vm_start);
+-		vmend   = min(end, vma->vm_end);
+-		new = mpol_dup(vma_policy(vma));
+-		if (IS_ERR(new)) {
+-			err = PTR_ERR(new);
+-			break;
+-		}
+-		/*
+-		 * Only update home node if there is an existing vma policy
+-		 */
+-		if (!new)
+-			continue;
+-
+ 		/*
+ 		 * If any vma in the range got policy other than MPOL_BIND
+ 		 * or MPOL_PREFERRED_MANY we return error. We don't reset
+ 		 * the home node for vmas we already updated before.
+ 		 */
+-		if (new->mode != MPOL_BIND && new->mode != MPOL_PREFERRED_MANY) {
++		old = vma_policy(vma);
++		if (!old)
++			continue;
++		if (old->mode != MPOL_BIND && old->mode != MPOL_PREFERRED_MANY) {
+ 			err = -EOPNOTSUPP;
+ 			break;
+ 		}
+ 
++		new = mpol_dup(vma_policy(vma));
++		if (IS_ERR(new)) {
++			err = PTR_ERR(new);
++			break;
++		}
++
+ 		new->home_node = home_node;
++		vmstart = max(start, vma->vm_start);
++		vmend   = min(end, vma->vm_end);
+ 		err = mbind_range(mm, vmstart, vmend, new);
+ 		mpol_put(new);
+ 		if (err)
+-- 
+Michal Hocko
+SUSE Labs
