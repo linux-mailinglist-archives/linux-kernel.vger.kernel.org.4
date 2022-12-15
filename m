@@ -2,115 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22EFA64E21A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 21:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A580A64E221
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 21:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbiLOUFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 15:05:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
+        id S231225AbiLOUIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 15:08:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbiLOUEe (ORCPT
+        with ESMTP id S229545AbiLOUIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 15:04:34 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2802DF9
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:03:47 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id y4so80817ljc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:03:47 -0800 (PST)
+        Thu, 15 Dec 2022 15:08:47 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807911F2D7;
+        Thu, 15 Dec 2022 12:08:46 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id w23so96455ply.12;
+        Thu, 15 Dec 2022 12:08:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lY/BfT2XK0AeQGmS9Zw04MeEqG0LziE9KtlXrbZpLXY=;
-        b=RVtcCB/PTRx/1MvGPEkrfk1tkvUKwY5J4Hfj3tSYHrJUruOGTq78GEsbgSINXn+eM1
-         viw2feS1BWK/wkO6cRcaOW1FhILndT44zEn5psrLG5VRlAYYbsx0EnDgHPHODlJQoZcS
-         m7B8Ha0zAvXpJSG54wQDhixNy7M3+p+zT3L3M=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YVtEfAAkfXkktaXEDmW98q7dKYMVq3c7HgdRun7NHcI=;
+        b=qYnyJfkwGdBgLHrEyGda+TFGttzKbqzE2ZIH+TgsxQPuucaiv1Y6UbU99o8qshRYNo
+         tpYoFkG6bUIES7g5ubypGfc4AsJexXOIn+wE8h2VuU9uNp51u00wTnWYT2aCzCd3Cuii
+         8S2CfnBsaBuNXOGpSvEoPcpIs6vizNYUfqsahs3EneQBCcauHLDUMZnsnDwJDoGjdz1L
+         fOh29ShkWgUp3M/qYyu82OB1/qZsDolD+6PB6TZDithKVl9Oy0bWrugUk1NkfV98a4WQ
+         Nz0P3K/QTZzWxJ4sh2sN+yBIkEmi3nRWjUIN3c630EgPe2gLj2E9ShRQNLAKoT8/gZMH
+         mYDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lY/BfT2XK0AeQGmS9Zw04MeEqG0LziE9KtlXrbZpLXY=;
-        b=fUud+mO5TQk6TLk8z2I1zQ+pzhF/qn/hPLj7CiCvDPFriHdMoKHgSi6SGwz5dKl9Uw
-         7L9im4eypjNx8lsHHzXZb+ZzL/63HJToRNhkdwMSd2pnFnmf6Avn8flPVkkRC3nUBPvF
-         Iu60qkICXnVETZ7GwA9cAMZsmTOg1xuR2HVAYGYWvhDiHK2uqH0zQAIamwVU9TDpIz8M
-         /qpWF+Qy+enMf1SyDO2Ka4VGgAd70pluVMcjv2KEpYOTu3RU4sHcZp8I/eNDoIMMIGtT
-         X3KBjunN+wnEGuRFDWjqG9N/PpUh9Q5AlOXHlyLYZB0YUax3vn6wfU8dKUrsG7sh/V+s
-         KQtg==
-X-Gm-Message-State: ANoB5pkGpSArUNEf76kp6tdSzeciIMxNPCJwlNSHrwJxGbrZTI4FyGHn
-        IIb2vc3535QWensKtvsJ/oGTawQ2gbKFSve+kZsF9g==
-X-Google-Smtp-Source: AA0mqf73MUOxTV7lhbeAxqVSOs1BBDngxFeHDdheKL26HOjaRXjnyyL7C45+L5PuHkqzZxnJC3u9kMgzlkV+C4MBmzs=
-X-Received: by 2002:a05:651c:124c:b0:279:f45e:ccd6 with SMTP id
- h12-20020a05651c124c00b00279f45eccd6mr7841671ljh.483.1671134625941; Thu, 15
- Dec 2022 12:03:45 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YVtEfAAkfXkktaXEDmW98q7dKYMVq3c7HgdRun7NHcI=;
+        b=rdHsyPpOJez4DMYl4RyPvQWZOKwZx+h/pqwuN9zypKo5tMSOLgxBMP+IFpLXsFi00m
+         s/KosOXBExoZ50TnGo0QRC+IJverlQEqf28N29YycFDbNbQPqec3WZpqTRPRtzVy973E
+         KAfwHTRds1ILpChvOVBBaX1SBtQvCvCIZsgWIOKYH4wXVdDO5ZgZFDZthJKXrDWHgpGE
+         TXilUvU8YxkqqxP3Vdt/796IAb+BfS5syzXDCLN6/s0ONrpbXUVAtAR+sTTBmEh8o1S8
+         aUlnJxQwvZ9/3WHuKwbcvHvLgKkW+UVFwamqBbhxmzTu9oYB4wUg+qwo5uAPS4POgB+D
+         jJbA==
+X-Gm-Message-State: AFqh2koLCwXZOuiSNx9AjO3bQrTwq+zWCmdBo13b0MBYKb4gFpPj/kfg
+        lZg103nfCFYSmLpzJggwmiYr5mJTTJ4rhNvj+5A=
+X-Google-Smtp-Source: AMrXdXt+N8GVGay+OUSvh76f4W8y9ZhJwxSkqK3MSgsAI4LNNGCiaEYEpIwgwNiwOm2JSI2mraZZ4K9ig+UpRSz+3OI=
+X-Received: by 2002:a17:90a:5996:b0:219:aea7:1db8 with SMTP id
+ l22-20020a17090a599600b00219aea71db8mr294223pji.211.1671134925990; Thu, 15
+ Dec 2022 12:08:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20221214191355.GA2596199@paulmck-ThinkPad-P17-Gen-1>
- <20221215165452.GA1957735@lothringen> <20221215170834.GH4001@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YTSW9kr3DsJm6hTQ0FfwVbVjzDa8=7H29+ysD10ZCbnHA@mail.gmail.com> <20221215195854.GL4001@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20221215195854.GL4001@paulmck-ThinkPad-P17-Gen-1>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Thu, 15 Dec 2022 15:03:34 -0500
-Message-ID: <CAEXW_YSnwXA6Bn3Av3O0Tm=AnqKULGZJBA3Z7ZaLE814XABU6g@mail.gmail.com>
-Subject: Re: [PATCH RFC] srcu: Yet more detail for srcu_readers_active_idx_check()
- comments
-To:     paulmck@kernel.org
-Cc:     Frederic Weisbecker <frederic@kernel.org>, boqun.feng@gmail.com,
-        neeraj.iitr10@gmail.com, urezki@gmail.com, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20221214232059.760233-1-decot+git@google.com> <7211782676442c6679d8a016813fd62d44cbebad.camel@gmail.com>
+ <CAG88wWZNaKqDXWrXanfSpM_h6LP7s3F5PppyWqwWRyA7g=+p_g@mail.gmail.com>
+In-Reply-To: <CAG88wWZNaKqDXWrXanfSpM_h6LP7s3F5PppyWqwWRyA7g=+p_g@mail.gmail.com>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Thu, 15 Dec 2022 12:08:34 -0800
+Message-ID: <CAKgT0Uea8JztZfKsR_FUAjt5iXEyRhjySwysZSoeeobWv3Cizw@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 1/1] net: neigh: persist proxy config across
+ link flaps
+To:     David Decotigny <decot@google.com>
+Cc:     David Decotigny <decot+git@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        David Ahern <dsahern@kernel.org>,
+        "Denis V. Lunev" <den@openvz.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
-
-On Thu, Dec 15, 2022 at 2:58 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-[...]
-> > If the first read section's srcu_read_unlock() and its corresponding
-> > smp_mb()  happened before the flip, then the increment of old idx
-> > would happen only once. The next srcu_read_lock() will read the new
-> > index. If the srcu_read_unlock() and it's corresponding smp_mb()
-> > happened after the flip, the old_idx will be sampled again and can be
-> > incremented twice. So it depends on how the flip races with
-> > srcu_read_unlock().
+On Thu, Dec 15, 2022 at 9:29 AM David Decotigny <decot@google.com> wrote:
 >
-> I do understand that a number of people like reasoning about
-> memory-barrier ordering, courtesy of the sequentially consistent portions
-> of the C and C++ memory models, but thinking in terms of the accesses
-> surrounding the memory barriers has been far less error-prone.
-
-Sure, but we are already talking in terms of the access to idx right?
-That's what we're saying is visible by memory barriers and we are
-trying to reason here about the ordering (flip does the write to idx
-and followed by smp_mb(), and there is corresponding read of idx on
-the srcu_read_lock() side. So we are indeed talking in terms of
-access, but let me know if I missed something.
-
-> > Also, since this is all hard to reason about I started making some
-> > diagrams, LOL. For your amusement, here is why need to scan both idx
-> > during grace period detection: https://i.imgur.com/jz4bNKd.png
 >
-> Nice!
+> (comments inline below)
 >
-> I suggest placing a gap between GP 2 and GP 3.  That way, you can make it
-> very clear that Reader 1's critical section starts after the end of GP 2
-> (thus clearly never blocking GP 2) and before GP 3 (thus possibly having
-> a reference to some data that is going to be freed at the end of GP 3).
 >
-> I also suggest coloring Reader 1 red and Reader 2 green, given that the
-> color red generally indicates danger.
+> On Thu, Dec 15, 2022 at 8:24 AM Alexander H Duyck <alexander.duyck@gmail.=
+com> wrote:
+>>
+>> On Wed, 2022-12-14 at 15:20 -0800, David Decotigny wrote:
+>> > From: David Decotigny <ddecotig@google.com>
+>> >
+>> > Without this patch, the 'ip neigh add proxy' config is lost when the
+>> > cable or peer disappear, ie. when the link goes down while staying
+>> > admin up. When the link comes back, the config is never recovered.
+>> >
+>> > This patch makes sure that such an nd proxy config survives a switch
+>> > or cable issue.
+>> >
+>> > Signed-off-by: David Decotigny <ddecotig@google.com>
+>> >
+>> >
+>> > ---
+>> > v1: initial revision
+>> > v2: same as v1, except rebased on top of latest net-next, and includes=
+ "net-next" in the description
+>> >
+>> >  net/core/neighbour.c | 5 ++++-
+>> >  1 file changed, 4 insertions(+), 1 deletion(-)
+>> >
+>> > diff --git a/net/core/neighbour.c b/net/core/neighbour.c
+>> > index f00a79fc301b..f4b65bbbdc32 100644
+>> > --- a/net/core/neighbour.c
+>> > +++ b/net/core/neighbour.c
+>> > @@ -426,7 +426,10 @@ static int __neigh_ifdown(struct neigh_table *tbl=
+, struct net_device *dev,
+>> >  {
+>> >       write_lock_bh(&tbl->lock);
+>> >       neigh_flush_dev(tbl, dev, skip_perm);
+>> > -     pneigh_ifdown_and_unlock(tbl, dev);
+>> > +     if (skip_perm)
+>> > +             write_unlock_bh(&tbl->lock);
+>> > +     else
+>> > +             pneigh_ifdown_and_unlock(tbl, dev);
+>> >       pneigh_queue_purge(&tbl->proxy_queue, dev ? dev_net(dev) : NULL,
+>> >                          tbl->family);
+>> >       if (skb_queue_empty_lockless(&tbl->proxy_queue))
+>>
+>> This seems like an agressive approach since it applies to all entries
+>> in the table, not just the permenant ones like occurs in
+>> neigh_flush_dev.
+>>
+>> I don't have much experience in this area of the code but it seems like
+>> you would specifically be wanting to keep only the permanant entries.
+>> Would it make sense ot look at rearranging pneigh_ifdown_and_unlock so
+>> that the code functioned more like neigh_flush_dev where it only
+>> skipped the permanant entries when skip_perm was set?
+>>
+>
+> The reason I am proposing this patch like it is is because these "proxy" =
+entries appear to be a configuration attribute (similar to ip routes, comin=
+g from the sysadmin config), and not cached data (like ip neigh "normal" en=
+tries essentially coming from the outside). So I view them as fundamentally=
+ different kinds of objects [1], which they actually are in the code. And t=
+hey are also updated from a vastly different context (sysadmin vs traffic).=
+ IMHO, it would seem natural that these proxy attributes (considered config=
+ attributes) would survive link flaps, whereas normal ip neigh cached entri=
+es without NUD_PERMANENT should not. And neither should survive admin down,=
+ the same way ip route does not survive admin down. This is what this patch=
+ proposes.
+>
+> Honoring NUD_PERMANENT (I assume that's what you are alluding to) would a=
+lso work, and (with current iproute2 implementation [2]) would lead to the =
+same result. But please consider the above. If really honoring NUD_PERMANEN=
+T is the required approach here, I am happy to revisit this patch. Please l=
+et me know.
 
-Thanks for these suggestions! I will make the update. I am planning to
-make a number of diagrams for other scenarios as well, as it helps
-visualize. Google drawing is nice for these. I am happy to share these
-with you all if there is interest :).
-
-Thanks!
-
- - Joel
+Yeah, I was referring to basically just limiting your changes to honor
+NUD_PERMANANT. Looking at pneigh_ifdown_and_unlock and comparing it to
+neigh_flush_dev it seems like it would make sense to just add the
+skip_perm argument there and then add the same logic at the start of
+the loop to eliminate the items you aren't going to flush/free. That
+way we aren't keeping around any more entries than those specifically
+that are supposed to be permanent.
