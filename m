@@ -2,118 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8585364DDBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B7264DDBD
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:24:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiLOPWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 10:22:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46208 "EHLO
+        id S229736AbiLOPYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 10:24:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbiLOPWT (ORCPT
+        with ESMTP id S230162AbiLOPWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 10:22:19 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE9463B2;
-        Thu, 15 Dec 2022 07:20:46 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFEg8iZ016907;
-        Thu, 15 Dec 2022 15:20:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=xdF95zfdlqQe0Hxg5x6UNWrnW1o+HxaeSMyj1IkXHF8=;
- b=ByzoE5MkR3T9Ezoq16/klZGWm/reu6YkwI8Ys1gQkHhC3lNtIezyKf3iiKBy6gT3yv8C
- cSUNRsj5dTz8gciiS6s22PGtCODdwPj5LB2PmM4E2fPXfzGM2jJqoLjBiSPl6GRqOFWj
- 3cw50hwWmcEaa8H1Q989ICXZyIHuuNc9LJVZ0WUwlTGhw427poot8rCDMx6aJNdSIcHT
- jhFHjoOmwt6yHHlng7GJH9cn5VswrTSyMLIPoBKFw7qJ2VJNA4JCSm08Vo/FPOrA/mht
- mBZgyqtKW+EYYjSSYF4cJDjc5tsdCnJsmSG42x227aPKMezoLllr5vUUH7UqTYsUgvtO CA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg3x0vhr9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 15:20:41 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BFF0otj012486;
-        Thu, 15 Dec 2022 15:20:41 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg3x0vhqt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 15:20:41 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFE7emx006734;
-        Thu, 15 Dec 2022 15:20:40 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3mf08eupw3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 15:20:40 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BFFKdGC54002034
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Dec 2022 15:20:39 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EA2505804C;
-        Thu, 15 Dec 2022 15:20:38 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4D19658067;
-        Thu, 15 Dec 2022 15:20:38 +0000 (GMT)
-Received: from sig-9-65-242-118.ibm.com (unknown [9.65.242.118])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 15 Dec 2022 15:20:38 +0000 (GMT)
-Message-ID: <473749e7a302d0fbb790956e8e1423835a46987a.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: add check for khdr->buffer_size
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     "iuppiterlucas@gmail.com" <iuppiterlucas@gmail.com>,
-        =?UTF-8?B??= <dmitry.kasatkin@gmail.com>,
-        =?UTF-8?B??= <paul@paul-moore.com>,
-        =?UTF-8?B??= <jmorris@namei.org>,
-        =?UTF-8?B??= <serge@hallyn.com>,
-        =?UTF-8?B??= <akpm@linux-foundation.org>,
-        =?UTF-8?B??= <linux-integrity@vger.kernel.org>,
-        =?UTF-8?B??= <linux-security-module@vger.kernel.org>,
-        =?UTF-8?B??= <linux-kernel@vger.kernel.org>
-Date:   Thu, 15 Dec 2022 10:20:37 -0500
-In-Reply-To: <639b3953.170a0220.35d95.65e9@mx.google.com>
-References: <639b3953.170a0220.35d95.65e9@mx.google.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Thu, 15 Dec 2022 10:22:21 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADE85FEA;
+        Thu, 15 Dec 2022 07:20:44 -0800 (PST)
+Received: from dggpemm500017.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NXwrg15MmzJqb0;
+        Thu, 15 Dec 2022 23:19:47 +0800 (CST)
+Received: from [10.174.178.220] (10.174.178.220) by
+ dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 15 Dec 2022 23:20:42 +0800
+Message-ID: <8cba5193-6628-43ba-b9e8-46f78da3e53b@huawei.com>
+Date:   Thu, 15 Dec 2022 23:20:41 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2] ata:libata-eh:Cleanup ata_scsi_cmd_error_handler
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <liuzhiqiang26@huawei.com>, <linfeilong@huawei.com>
+References: <20221215105747.1927412-1-haowenchao@huawei.com>
+ <f552f2ab-895a-14dd-d391-a7b1c9930c88@gmail.com>
+ <d991d4fd-3b5f-f0ef-5c96-2352a08e1262@opensource.wdc.com>
+From:   Wenchao Hao <haowenchao@huawei.com>
+In-Reply-To: <d991d4fd-3b5f-f0ef-5c96-2352a08e1262@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: OvkvSI3i0S_NwEOEm5W-aYJkTb3XlxWZ
-X-Proofpoint-ORIG-GUID: h6Dj1SUFIdLa_aKdR5nMxiHwY6OCDkj5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-15_08,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- mlxlogscore=692 priorityscore=1501 malwarescore=0 phishscore=0
- suspectscore=0 mlxscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212150122
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.220]
+X-ClientProxiedBy: dggpeml100013.china.huawei.com (7.185.36.238) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lucas,
 
-On Thu, 2022-12-15 at 23:12 +0800, iuppiterlucas@gmail.com wrote:
-> When khdr->buffer_size > size, continuing to use ima_parse_buf
+On 2022/12/15 19:34, Damien Le Moal wrote:
+> On 12/15/22 20:30, Sergei Shtylyov wrote:
+>> Hello!
+>>
+>>   The subject should really look like "ata: libata-eh: Cleanup
+>> ata_scsi_cmd_error_handler()"...
+>>
+>> On 12/15/22 1:57 PM, Wenchao Hao wrote:
+>>
+>>> If ap->ops->error_handler is NULL, just return.
+>>>
+>>> V2:
+>>> - Check ap->ops->error_handler without taking the spin lock
+>>
+>>    This normally belongs under ---...
 > 
-> may cause memory access out of bounds.
+> I should read all emails before replying. I commented exactly the same :)
 > 
+>>
+>>> Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
+>>> ---
+>>>  drivers/ata/libata-eh.c | 96 ++++++++++++++++++++---------------------
+>>>  1 file changed, 48 insertions(+), 48 deletions(-)
+>>>
+>>> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
+>>> index 34303ce67c14..c445c272e77f 100644
+>>> --- a/drivers/ata/libata-eh.c
+>>> +++ b/drivers/ata/libata-eh.c
+>> [...]
+>>> @@ -584,62 +589,57 @@ void ata_scsi_cmd_error_handler(struct Scsi_Host *host, struct ata_port *ap,
+>>>  	 * timed out iff its associated qc is active and not failed.
+>>>  	 */
+>>>  	spin_lock_irqsave(ap->lock, flags);
+>>> -	if (ap->ops->error_handler) {
+>>> -		struct scsi_cmnd *scmd, *tmp;
+>>> -		int nr_timedout = 0;
+>>> -
+>>> -		/* This must occur under the ap->lock as we don't want
+>>> -		   a polled recovery to race the real interrupt handler
+>>> -
+>>> -		   The lost_interrupt handler checks for any completed but
+>>> -		   non-notified command and completes much like an IRQ handler.
+>>>  
+>>> -		   We then fall into the error recovery code which will treat
+>>> -		   this as if normal completion won the race */
+>>> -
+>>> -		if (ap->ops->lost_interrupt)
+>>> -			ap->ops->lost_interrupt(ap);
+>>> +	/* This must occur under the ap->lock as we don't want
+>>
+>>    The multi-line comments should start with /* on its own line...
+>>
+>>> +	 * a polled recovery to race the real interrupt handler
+>>> +	 *
+>>> +	 * The lost_interrupt handler checks for any completed but
+>>> +	 * non-notified command and completes much like an IRQ handler.
+>>> +	 *
+>>> +	 * We then fall into the error recovery code which will treat
+>>> +	 * this as if normal completion won the race
+>>> +	 */
+>>> +	if (ap->ops->lost_interrupt)
+>>> +		ap->ops->lost_interrupt(ap);
+>>>  
+>>> -		list_for_each_entry_safe(scmd, tmp, eh_work_q, eh_entry) {
+>>> -			struct ata_queued_cmd *qc;
+>>> +	list_for_each_entry_safe(scmd, tmp, eh_work_q, eh_entry) {
+>>> +		struct ata_queued_cmd *qc;
+>>>  
+>>> -			ata_qc_for_each_raw(ap, qc, i) {
+>>> -				if (qc->flags & ATA_QCFLAG_ACTIVE &&
+>>> -				    qc->scsicmd == scmd)
+>>> -					break;
+>>> -			}
+>>> +		ata_qc_for_each_raw(ap, qc, i) {
+>>> +			if (qc->flags & ATA_QCFLAG_ACTIVE &&
+>>> +			    qc->scsicmd == scmd)
+>>> +				break;
+>>> +		}
+>>>  
+>>> -			if (i < ATA_MAX_QUEUE) {
+>>> -				/* the scmd has an associated qc */
+>>> -				if (!(qc->flags & ATA_QCFLAG_FAILED)) {
+>>> -					/* which hasn't failed yet, timeout */
+>>> -					qc->err_mask |= AC_ERR_TIMEOUT;
+>>> -					qc->flags |= ATA_QCFLAG_FAILED;
+>>> -					nr_timedout++;
+>>> -				}
+>>> -			} else {
+>>> -				/* Normal completion occurred after
+>>> -				 * SCSI timeout but before this point.
+>>> -				 * Successfully complete it.
+>>> -				 */
+>>> -				scmd->retries = scmd->allowed;
+>>> -				scsi_eh_finish_cmd(scmd, &ap->eh_done_q);
+>>> +		if (i < ATA_MAX_QUEUE) {
+>>> +			/* the scmd has an associated qc */
+>>> +			if (!(qc->flags & ATA_QCFLAG_FAILED)) {
+>>> +				/* which hasn't failed yet, timeout */
+>>> +				qc->err_mask |= AC_ERR_TIMEOUT;
+>>> +				qc->flags |= ATA_QCFLAG_FAILED;
+>>> +				nr_timedout++;
+>>>  			}
+>>> +		} else {
+>>> +			/* Normal completion occurred after
+>>
+>>    Here as well...
+>>
+>>> +			 * SCSI timeout but before this point.
+>>> +			 * Successfully complete it.
+>>> +			 */
+>>> +			scmd->retries = scmd->allowed;
+>>> +			scsi_eh_finish_cmd(scmd, &ap->eh_done_q);
+>>>  		}
+>>> +	}
+>>>  
+>>> -		/* If we have timed out qcs.  They belong to EH from
+>>> -		 * this point but the state of the controller is
+>>> -		 * unknown.  Freeze the port to make sure the IRQ
+>>> -		 * handler doesn't diddle with those qcs.  This must
+>>> -		 * be done atomically w.r.t. setting QCFLAG_FAILED.
+>>> -		 */
+>>> -		if (nr_timedout)
+>>> -			__ata_port_freeze(ap);
+>>> -
+>>> +	/* If we have timed out qcs.  They belong to EH from
+>>
+>>    And here...
+>>
+>> [...]
+>>
+>> MBR, Sergey
 > 
-> Fixes: 94c3aac567a9 ("ima: on soft reboot, restore the measurement list")
-> 
-> 
-> Signed-off-by: Lucas Iuppiter <iuppiterlucas@gmail.com>
 
-When posting patches to the linux-integrity mailing list, patches
-should be posted in plain text, not mime encoded.
-
-thanks,
-
-Mimi
-
+Thanks a lot for review, I would update them.
