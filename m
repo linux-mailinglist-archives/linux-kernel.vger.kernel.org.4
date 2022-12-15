@@ -2,54 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7157464D9D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7D864D93D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiLOK4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 05:56:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
+        id S230177AbiLOKGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 05:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiLOK4D (ORCPT
+        with ESMTP id S229945AbiLOKG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 05:56:03 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4DE2CE30;
-        Thu, 15 Dec 2022 02:55:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671101759; x=1702637759;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ewl61zMt+xWW5epCxoSU4VxrJv8NtqxzsHSTsrgEojM=;
-  b=Fc+1KKWOsfXPARZwYjGtaBOdAlr6JI+aM0vd3Os/jYSIyJpCEMVd3RuF
-   XgOMhFcFNUqpr7PGaxMaj1YqvUjGlPuqRZWrYTisS6R+HzV2Tz7ch19ML
-   yI51Dgemqb20HGURjAFhGFZrnOxdqFn6wjqJvg66nQE30Boyxp0KM3P1E
-   I6tQbSKpr4WcxCwe7snlTFTwVgeydB4xDPMqnE8D+A2JTmO9m/06cY3ks
-   iMNfiU9k0M6StttNUkSjvK5YxIdknFbmVUqI0X7vAX2UVsqp0k5mZro74
-   CqZWK2hKZnHZP9v+EDI+xDBnGTA3VN8KC3jYkLdqe1e0X+f+kdNx4e/iG
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="316285437"
-X-IronPort-AV: E=Sophos;i="5.96,247,1665471600"; 
-   d="scan'208";a="316285437"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 02:55:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="738054024"
-X-IronPort-AV: E=Sophos;i="5.96,247,1665471600"; 
-   d="scan'208";a="738054024"
-Received: from skxmcp01.bj.intel.com ([10.240.193.86])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Dec 2022 02:55:57 -0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     pbonzini@redhat.com, seanjc@google.com, kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: nVMX: Remove outdated comments in nested_vmx_setup_ctls_msrs().
-Date:   Thu, 15 Dec 2022 18:05:58 +0800
-Message-Id: <20221215100558.1202615-1-yu.c.zhang@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 15 Dec 2022 05:06:27 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C76FDD;
+        Thu, 15 Dec 2022 02:06:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=iRzkPWuCkQml6FYGQ4TeSDfpbXjzHlPcMLaQkvZAaQE=; b=2V1qG2uHmplQmT3bRDjmbko+Ot
+        HY9m8IrWLuV49vQ/8DgONSsiWewojZXnbLNKHm/FdweSHW90r6i7onM+uXP9jPMahqSBNW+RiE6Ix
+        jnE9iIFRM+4hRDUhauomEVtIo2ZRZ2qE5w0hxa/Cw1xOoLPLzwNhTUFx41OACjAgdO3o5wjvaRK1J
+        DVtqQC7NAiVFfF4ik3p/Y61CtKdO7jVliVCIEEJ8VYSy1G/lLfi1MqIkVFRkB0Dk0/w8E2+WxKmQ0
+        /GnElXVHFDtAU0TSJgq1gVova4ZCO/X8a0OFn6ehKzhFSUjwHQj+dceCySI9ibpAqAUD0cnapqLUV
+        0SRsX12A==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p5l8A-008ffS-Mn; Thu, 15 Dec 2022 10:06:22 +0000
+Date:   Thu, 15 Dec 2022 02:06:22 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>
+Cc:     axboe@kernel.dk, corbet@lwn.net, linux-block@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 13/21] block, blksnap: functions and structures for
+ performing block I/O operations
+Message-ID: <Y5rxnsKpQga5GRzY@infradead.org>
+References: <20221209142331.26395-1-sergei.shtepa@veeam.com>
+ <20221209142331.26395-14-sergei.shtepa@veeam.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221209142331.26395-14-sergei.shtepa@veeam.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,43 +51,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-nested_vmx_setup_ctls_msrs() initializes the vmcs_conf.nested,
-which stores the global VMX MSR configurations when nested is
-supported, regardless of any particular CPUID settings for one
-VM.
+> +	bio = bio_alloc_bioset(diff_region->bdev, nr_iovecs, opf, gfp_mask,
+> +			       &diff_io_bioset);
+> +	if (unlikely(!bio)) {
+> +		if (is_nowait)
+> +			ret = -EAGAIN;
+> +		else
+> +			ret = -ENOMEM;
+> +		goto fail;
 
-Commit 6defc591846d ("KVM: nVMX: include conditional controls
-in /dev/kvm KVM_GET_MSRS") added the some feature flags for
-secondary proc-based controls, so that those features can be
-available in KVM_GET_MSRS. Yet this commit did not remove the
-obsolete comments in nested_vmx_setup_ctls_msrs().
-
-Just fix the comments, and no functional change intended.
-
-Fixes: 6defc591846d ("KVM: nVMX: include conditional controls in /dev/kvm KVM_GET_MSRS")
-Reported-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
----
- arch/x86/kvm/vmx/nested.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index b6f4411b613e..76cca5d5aa6b 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -6854,11 +6854,7 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
- 	msrs->procbased_ctls_low &=
- 		~(CPU_BASED_CR3_LOAD_EXITING | CPU_BASED_CR3_STORE_EXITING);
- 
--	/*
--	 * secondary cpu-based controls.  Do not include those that
--	 * depend on CPUID bits, they are added later by
--	 * vmx_vcpu_after_set_cpuid.
--	 */
-+	/* secondary cpu-based controls */
- 	msrs->secondary_ctls_low = 0;
- 
- 	msrs->secondary_ctls_high = vmcs_conf->cpu_based_2nd_exec_ctrl;
--- 
-2.17.1
-
+bio_alloc_bioset can't fail for the !is_nowait case.
