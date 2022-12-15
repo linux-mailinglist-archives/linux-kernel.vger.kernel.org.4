@@ -2,118 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5CD64D8B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B62364D8BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:39:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiLOJhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 04:37:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S229636AbiLOJjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 04:39:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiLOJgq (ORCPT
+        with ESMTP id S229471AbiLOJjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 04:36:46 -0500
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727DF3B9D5;
-        Thu, 15 Dec 2022 01:36:42 -0800 (PST)
-Received: by mail-qt1-f179.google.com with SMTP id h16so4711169qtu.2;
-        Thu, 15 Dec 2022 01:36:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g2NPyqXJNNNln99iz2q7S9fU77v53XVtuYkV5/riHK4=;
-        b=rvRZgTky8JfMbrRMuRuLemz7U44fGeqT5+zWcZasq/EF0wo2M4EPpQEchxrOzfzFWD
-         hd3e1pVcF4lm3RQDsSWkHV80MsJf7LB7Aag+u2TroTK4ffghVfCe6zDw0bWdrUlSPR/p
-         zLHgQRBFIqATgtjGVsAssW6xgaC11aWbI+kUaNGYEXkFWw0jl/l1Hs1B1vaxW9mDjEXi
-         wcTioP3IS4z28iPggYibZQnqdVifqVFRhMhEx7LMaf3shBUQukhgcLWv94hvGCwCU2M9
-         8hgmo2HJjieXSWKn+tz7/l6mjP0bmIHhLnn4hkmmsUttSNueDfmYjg7mZIKLinBh+9WU
-         uWzw==
-X-Gm-Message-State: ANoB5pm2mX6tZZVGBAOErpxix3cL1iOAuvBHCbddrmirwnrJdK/w+j70
-        w19ugasWuXBIKbDiaCw7gFmsxJQIenSnlQ==
-X-Google-Smtp-Source: AA0mqf74faInuqayWHSXly9Xm3tR6H7DAvKLkrxaBS3NNiKKkkkwCJOkkZWSt6fPuKuRS8aR81HzFQ==
-X-Received: by 2002:ac8:541a:0:b0:3a5:24fc:4bbb with SMTP id b26-20020ac8541a000000b003a524fc4bbbmr16080672qtq.7.1671097001447;
-        Thu, 15 Dec 2022 01:36:41 -0800 (PST)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id ay42-20020a05620a17aa00b006ef1a8f1b81sm11706323qkb.5.2022.12.15.01.36.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 01:36:41 -0800 (PST)
-Received: by mail-yb1-f170.google.com with SMTP id 186so2801147ybe.8;
-        Thu, 15 Dec 2022 01:36:40 -0800 (PST)
-X-Received: by 2002:a25:7104:0:b0:702:90b4:2e24 with SMTP id
- m4-20020a257104000000b0070290b42e24mr13831647ybc.365.1671097000657; Thu, 15
- Dec 2022 01:36:40 -0800 (PST)
+        Thu, 15 Dec 2022 04:39:47 -0500
+Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B06B1BEA5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:39:43 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id DA6A61863D96;
+        Thu, 15 Dec 2022 12:39:38 +0300 (MSK)
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id LOgah4IMWUXS; Thu, 15 Dec 2022 12:39:38 +0300 (MSK)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id 84C451863C60;
+        Thu, 15 Dec 2022 12:39:38 +0300 (MSK)
+X-Virus-Scanned: amavisd-new at astralinux.ru
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id E2TjqXzuL3PY; Thu, 15 Dec 2022 12:39:38 +0300 (MSK)
+Received: from rbta-msk-lt-106062.astralinux.ru (unknown [10.177.20.20])
+        by mail.astralinux.ru (Postfix) with ESMTPSA id CAFF61863D96;
+        Thu, 15 Dec 2022 12:39:37 +0300 (MSK)
+From:   Anastasia Belova <abelova@astralinux.ru>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Anastasia Belova <abelova@astralinux.ru>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: [PATCH] mm: Add check for NULL for unlocked in fixup_user_fault
+Date:   Thu, 15 Dec 2022 12:39:30 +0300
+Message-Id: <20221215093930.22026-1-abelova@astralinux.ru>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <cad03d25-0ea0-32c4-8173-fd1895314bce@I-love.SAKURA.ne.jp>
-In-Reply-To: <cad03d25-0ea0-32c4-8173-fd1895314bce@I-love.SAKURA.ne.jp>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 15 Dec 2022 10:36:29 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUH4CU9EfoirSxjivg08FDimtstn7hizemzyQzYeq6b6g@mail.gmail.com>
-Message-ID: <CAMuHMdUH4CU9EfoirSxjivg08FDimtstn7hizemzyQzYeq6b6g@mail.gmail.com>
-Subject: Re: [PATCH] fbcon: Use kzalloc() in fbcon_prepare_logo()
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Handa-san,
+Check unlocked for NULL before dereference.
 
-On Thu, Nov 17, 2022 at 4:32 PM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
-> A kernel built with syzbot's config file reported that
->
->   scr_memcpyw(q, save, array3_size(logo_lines, new_cols, 2))
->
-> causes uninitialized "save" to be copied.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Fixes: d92725256b4f ("mm: avoid unnecessary page fault retires on shared =
+memory types")
+Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+---
+ mm/gup.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thanks for your patch, which is now commit a6a00d7e8ffd78d1
-("fbcon: Use kzalloc() in fbcon_prepare_logo()") in v6.1-rc7,
-and which is being backported to stable.
+diff --git a/mm/gup.c b/mm/gup.c
+index f212d571b563..905d5fb64c4c 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -1282,7 +1282,8 @@ int fixup_user_fault(struct mm_struct *mm,
+ 		 * could tell the callers so they do not need to unlock.
+ 		 */
+ 		mmap_read_lock(mm);
+-		*unlocked =3D true;
++		if (unlocked)
++			*unlocked =3D true;
+ 		return 0;
+ 	}
+=20
+--=20
+2.30.2
 
-> --- a/drivers/video/fbdev/core/fbcon.c
-> +++ b/drivers/video/fbdev/core/fbcon.c
-> @@ -577,7 +577,7 @@ static void fbcon_prepare_logo(struct vc_data *vc, struct fb_info *info,
->                 if (scr_readw(r) != vc->vc_video_erase_char)
->                         break;
->         if (r != q && new_rows >= rows + logo_lines) {
-> -               save = kmalloc(array3_size(logo_lines, new_cols, 2),
-> +               save = kzalloc(array3_size(logo_lines, new_cols, 2),
->                                GFP_KERNEL);
->                 if (save) {
->                         int i = min(cols, new_cols);
-
-The next line is:
-
-                        scr_memsetw(save, erase,
-array3_size(logo_lines, new_cols, 2));
-
-So how can this turn out to be uninitialized later below?
-
-                scr_memcpyw(q, save, array3_size(logo_lines, new_cols, 2));
-
-What am I missing?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
