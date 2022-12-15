@@ -2,85 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7C364DEED
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:46:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4999F64DEF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbiLOQqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:46:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41378 "EHLO
+        id S229974AbiLOQrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:47:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiLOQqd (ORCPT
+        with ESMTP id S230346AbiLOQq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:46:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3C21D661;
-        Thu, 15 Dec 2022 08:46:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DEE761DE1;
-        Thu, 15 Dec 2022 16:46:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E17A3C433EF;
-        Thu, 15 Dec 2022 16:46:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671122791;
-        bh=A2zo+YEzj0mCFsWZY3hiedXJIbbizcIeakCXEv54ohE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LrDKRPEe12gso8I2SvBntC/pI7NoJbNtlrgEo3CCmh0mc/lqWZcW3xgKCr6is0K6T
-         9lUYv42xu5J+puXNEqQM4wJsV2dh0SQEDX357DieOSofoQ4/4ldbr4oauLjRNwDyPT
-         lkikrhIKCzBZ6KI3HuIuQoEN3UsHpAOEjWfk59lAvCd0MU/pttJ+uPJCjXa6VP38rk
-         qUDLP1hyMShDP/wYLaRdcTN3WLSO5Z7vf7hRl7psErbQoqDpxrrMJSmjrNAaqOdea+
-         4eV3w0fRv+sHQzSE7VthmIOvrPM8OLopLIEpluNEuVr26J4nRzs9CZlUQxo4e8LyQA
-         ofB6/aFlR+Axw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Dipen Patel <dipenp@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hte: tegra: fix  'struct of_device_id' build error
-Date:   Thu, 15 Dec 2022 17:46:19 +0100
-Message-Id: <20221215164626.1209452-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Thu, 15 Dec 2022 11:46:58 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CF72A953;
+        Thu, 15 Dec 2022 08:46:58 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id gt4so11098189pjb.1;
+        Thu, 15 Dec 2022 08:46:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NtuasfiQwAVb7T7lHLup3YJ84O51YLi79K4mOD3jS5A=;
+        b=hZ4Cot94gaF1e87/TucVOwB8o680736L461Il3xZ+KPnmu5CDTodnJjoxNhGI8jm/P
+         ezzK6dmlX/iVzaI7KzXIoaOBAJ5qVX+ZsNI1FmMinXUp7f25Ja3zydw9ku6cOyd3u3+N
+         j4nsXWLh/j2KY6m/XKiuAkRuwaLR7sGHukq0kX3UPrF00AMnQQTj5WRPw7fqziSIWjtD
+         FS821KiSlWhilmJ2BKonUoauhCstgpIzJcskq9dEH0djxjxX7IwfuBbzIj/EFqkYwvRa
+         9g5rakZUJwAy+N1If+4CzOizhNWKm/7dRP1W/6Cu7Zmriycj7YQjkSssTxulOU7U6ZrK
+         HZGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NtuasfiQwAVb7T7lHLup3YJ84O51YLi79K4mOD3jS5A=;
+        b=Gu+MwE9Pcz6M4a4vfV2AdC7FrykQ4Vr2hXtOtvT/1v78o2/F26+f02cgggGA3CgnEf
+         4Wi3R81x8XUb5/o1h9v5yKQEYma71POXGqEAPF+jOsmEdKl6mH9eXws4pZoXJaZ0CH23
+         3x08Ur863J/tOrmAwil/IhfKS6GZ5/9kHql8+7ac4dOODDjLdwzad9x/EZRInhUJmq67
+         oSizJJz06NFY4alIfghDwF+YKgTjtHEoodgSESqKj/ztNLtjjezKGiB8Oe2Q6Gd30xu4
+         lChs7aAjYwO3WKLzSe55D8NJpEF61TJo3iB3FPgwzAWvjhN4ytXj7nsSQDF8xyjBvyPZ
+         IGTg==
+X-Gm-Message-State: ANoB5pl3t1SRY3WVFCmeGShpf/dBUjcWMgN++kus+RHWiBfR92m1Wx+0
+        SDfz/xpuGvyKQcEqTr8noNwepXPM9M0CsA==
+X-Google-Smtp-Source: AA0mqf62eTzXyDSBZkE/AtV0fC7U8HTdv0sT57bbTCTkhk2WzwAApDGDQRoS8K8YGJBnVcAhA+Xtwg==
+X-Received: by 2002:a05:6a20:d492:b0:a5:df86:f2c3 with SMTP id im18-20020a056a20d49200b000a5df86f2c3mr34110935pzb.32.1671122817363;
+        Thu, 15 Dec 2022 08:46:57 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id r7-20020a17090a1bc700b00217090ece49sm3376132pjr.31.2022.12.15.08.46.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 08:46:55 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 15 Dec 2022 06:46:54 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     hanjinke <hanjinke.666@bytedance.com>
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [External] Re: [RFC PATCH] blk-throtl: Introduce sync queue for
+ write ios
+Message-ID: <Y5tPftzjXN6RcswM@slm.duckdns.org>
+References: <20221206163826.10700-1-hanjinke.666@bytedance.com>
+ <Y5et48VryiKgL/eD@slm.duckdns.org>
+ <1e53592f-b1f1-df85-3edb-eba4c5a5f989@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1e53592f-b1f1-df85-3edb-eba4c5a5f989@bytedance.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hello,
 
-Without the extra #include, this driver produces a build failure
-in some configurations.
+On Wed, Dec 14, 2022 at 12:02:53PM +0800, hanjinke wrote:
+> Should we keep the main category of io based READ and WRITE, and within READ
+> / WRITE the subcategory were SYNC and ASYNC ? This may give less intrusion
+> into existing frameworks.
 
-drivers/hte/hte-tegra194-test.c:96:34: error: array type has incomplete element type 'struct of_device_id'
-   96 | static const struct of_device_id tegra_hte_test_of_match[] = {
+Ah, you haven't posted yet. So, yeah, let's do this. The code was a bit odd
+looking after adding the sync queue on the side. For reads, we can just
+consider everything synchrnous (or maybe treat SYNC the same way, I don't
+know whether reads actually use SYNC flags tho).
 
-Fixes: 9a75a7cd03c9 ("hte: Add Tegra HTE test driver")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/hte/hte-tegra194-test.c | 1 +
- 1 file changed, 1 insertion(+)
+Thanks.
 
-diff --git a/drivers/hte/hte-tegra194-test.c b/drivers/hte/hte-tegra194-test.c
-index 5d776a185bd6..ce8c44e79221 100644
---- a/drivers/hte/hte-tegra194-test.c
-+++ b/drivers/hte/hte-tegra194-test.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include <linux/err.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/moduleparam.h>
- #include <linux/interrupt.h>
 -- 
-2.35.1
-
+tejun
