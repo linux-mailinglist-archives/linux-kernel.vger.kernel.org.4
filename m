@@ -2,134 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C94564DF1B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8838664DF1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:58:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiLOQ5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:57:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
+        id S229770AbiLOQ56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:57:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbiLOQ44 (ORCPT
+        with ESMTP id S230433AbiLOQ5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:56:56 -0500
-Received: from amity.mint.lgbt (vmi888983.contaboserver.net [149.102.157.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64873D39C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:56:52 -0800 (PST)
-Received: from amity.mint.lgbt (mx.mint.lgbt [127.0.0.1])
-        by amity.mint.lgbt (Postfix) with ESMTP id 4NXz0g3Tpbz1S5C8
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 11:56:51 -0500 (EST)
-Authentication-Results: amity.mint.lgbt (amavisd-new);
-        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
-        header.d=mint.lgbt
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mint.lgbt; h=
-        content-transfer-encoding:content-type:in-reply-to:from
-        :references:to:content-language:subject:user-agent:mime-version
-        :date:message-id; s=dkim; t=1671123408; x=1671987409; bh=tjNVkyH
-        xOJqidYPV+BTvYS5ENh1t/1Ue/IBzdpA5tYw=; b=Kx5UdYsFpC98GCHU4ntG2Ys
-        FA7ZQQx5vcwGM7ttxj55bVRUucqy1zj5mRjdLYVZG3z2GwODR2hRkIpBDmkYUi1S
-        P+mRiHNQEWJothIotGeXD0/DbiR0OR1rOSCc21S7xvEO3mdeRQ/dZbl4t+cmhEWf
-        S2gDfh+jGwdNG7alWv7JsdbKB2MUF8d6eC9n8xkX37qABrnAQjhQxiIqG/UEqj6w
-        jet15wpYPiMpyNXGbxFzh/x74OUzBhPoMTq9Yvvb/B6kje8LKnMHweUUroYuKeOi
-        p+FtXY0G8hwOEHXVHNekrS3JAc8Ml9etEeuVMo0BJoDTFOoEWRGQPMHIagmPuww=
-        =
-X-Virus-Scanned: amavisd-new at amity.mint.lgbt
-Received: from amity.mint.lgbt ([127.0.0.1])
-        by amity.mint.lgbt (amity.mint.lgbt [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 6bljda2iFwH8 for <linux-kernel@vger.kernel.org>;
-        Thu, 15 Dec 2022 11:56:48 -0500 (EST)
-Received: from [192.168.4.25] (unknown [190.196.92.66])
-        by amity.mint.lgbt (Postfix) with ESMTPSA id 4NXz0X6DF6z1S4yj;
-        Thu, 15 Dec 2022 11:56:44 -0500 (EST)
-Message-ID: <0c53ff07-8cf4-3e80-97fc-67dd2f2612f9@mint.lgbt>
-Date:   Thu, 15 Dec 2022 13:56:42 -0300
+        Thu, 15 Dec 2022 11:57:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CCB1F2DA;
+        Thu, 15 Dec 2022 08:57:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 750B7B81BA1;
+        Thu, 15 Dec 2022 16:57:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F04BEC433D2;
+        Thu, 15 Dec 2022 16:57:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671123452;
+        bh=oxPz7HtXrfByGYf3eU7B6+A8T/7fxcrvKYYneerUSm4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=givVkMtFWaotvmJ1+XDJbSdN2Na3UB6kWl4YGwo8W6P71kfN/7Ea8/LI8qyhouhMp
+         diMEiY+Z0QzZdDcMgz1eyM/A6y3hbTxmiI3CHqr+aTpeuZ0fKIqAy3mfYr9LMFGjJA
+         8AXyX97+eKRCCJlIqXv7XBu4AHz+oK1oL64lQ/rmEjr9SXjxPVFoF0IUt8S9PB3gc5
+         8rT1oo0pvJ7fZf5qeKtp296FnPq6XMINzi4THJkiO008w/KB40nBRaLXBR+fwtWug9
+         L2wFt7duf9lvdAfk3XJqX2KcHh9SawDeGTLiCT8tpV5m3jfGXQgQnKPvm1/kfkS/hj
+         I4aSs8GaOxQ4g==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: fotg210: fix OTG-only build
+Date:   Thu, 15 Dec 2022 17:57:20 +0100
+Message-Id: <20221215165728.2062984-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 2/4] arm64: dts: qcom: sm6125: Add UFS nodes
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221215161258.355962-1-they@mint.lgbt>
- <20221215161258.355962-2-they@mint.lgbt>
- <875bd0a8-fc08-1d19-2c75-65713d9d2317@linaro.org>
-From:   Lux Aliaga <they@mint.lgbt>
-In-Reply-To: <875bd0a8-fc08-1d19-2c75-65713d9d2317@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/12/2022 13:18, Konrad Dybcio wrote:
+From: Arnd Bergmann <arnd@arndb.de>
 
-> On 15.12.2022 17:12, Lux Aliaga wrote:
->> Adds a UFS host controller node and its corresponding PHY to
->> the sm6125 platform.
->>
->> Signed-off-by: Lux Aliaga <they@mint.lgbt>
->> ---
->>   arch/arm64/boot/dts/qcom/sm6125.dtsi | 66 ++++++++++++++++++++++++++++
->>   1 file changed, 66 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
->> index 7e25a4f85594..6d4534c7a2fe 100644
->> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
->> @@ -508,6 +508,72 @@ sdhc_2: mmc@4784000 {
->>   			status = "disabled";
->>   		};
->>   
->> +		ufs_mem_hc: ufs@4804000 {
->> +			compatible = "qcom,sm6125-ufshc", "qcom,ufshc", "jedec,ufs-2.0";
->> +			reg = <0x04804000 0x3000>, <0x04810000 0x8000>;
->> +			reg-names = "std", "ice";
->> +			interrupts = <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>;
->> +			phys = <&ufs_mem_phy_lanes>;
->> +			phy-names = "ufsphy";
->> +			lanes-per-direction = <1>;
->> +			#reset-cells = <1>;
->> +			resets = <&gcc GCC_UFS_PHY_BCR>;
->> +			reset-names = "rst";
->> +
->> +			clock-names = "core_clk",
->> +				"bus_aggr_clk",
->> +				"iface_clk",
->> +				"core_clk_unipro",
->> +				"ref_clk",
->> +				"tx_lane0_sync_clk",
->> +				"rx_lane0_sync_clk",
->> +				"ice_core_clk";
->> +			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
->> +				<&gcc GCC_SYS_NOC_UFS_PHY_AXI_CLK>,
->> +				<&gcc GCC_UFS_PHY_AHB_CLK>,
->> +				<&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
->> +				<&rpmcc RPM_SMD_XO_CLK_SRC>,
->> +				<&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
->> +				<&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
->> +				<&gcc GCC_UFS_PHY_ICE_CORE_CLK>;
->> +			freq-table-hz = <50000000 240000000>,
->> +				<0 0>,
->> +				<0 0>,
->> +				<37500000 150000000>,
->> +				<0 0>,
->> +				<0 0>,
->> +				<0 0>,
->> +				<75000000 300000000>;
-> The indentation is wrong. Make sure your tab size is set to 8
-> and all the <> entries align with the first one.
-Should I do this with clocks and clock-names too?
+The fotg210 module combines the HCD and OTG drivers, which then
+fails to build when only the USB gadget support is enabled
+in the kernel but host support is not:
 
+aarch64-linux-ld: drivers/usb/fotg210/fotg210-core.o: in function `fotg210_init':
+fotg210-core.c:(.init.text+0xc): undefined reference to `usb_disabled'
+
+Move the check for usb_disabled() after the check for the HCD module,
+and let the OTG driver still be probed in this configuration.
+
+A nicer approach might be to have the common portion built as a
+library module, with the two platform other files registering
+their own platform_driver instances separately.
+
+Fixes: ddacd6ef44ca ("usb: fotg210: Fix Kconfig for USB host modules")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/usb/fotg210/fotg210-core.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/usb/fotg210/fotg210-core.c b/drivers/usb/fotg210/fotg210-core.c
+index 8a54edf921ac..ee740a6da463 100644
+--- a/drivers/usb/fotg210/fotg210-core.c
++++ b/drivers/usb/fotg210/fotg210-core.c
+@@ -144,10 +144,7 @@ static struct platform_driver fotg210_driver = {
+ 
+ static int __init fotg210_init(void)
+ {
+-	if (usb_disabled())
+-		return -ENODEV;
+-
+-	if (IS_ENABLED(CONFIG_USB_FOTG210_HCD))
++	if (IS_ENABLED(CONFIG_USB_FOTG210_HCD) && !usb_disabled())
+ 		fotg210_hcd_init();
+ 	return platform_driver_register(&fotg210_driver);
+ }
 -- 
-Lux Aliaga
-https://nixgoat.me/
+2.35.1
 
