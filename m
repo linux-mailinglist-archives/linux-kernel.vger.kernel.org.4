@@ -2,118 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3AF64E17A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B9064E19D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbiLOTCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 14:02:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
+        id S229873AbiLOTO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 14:14:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbiLOTCL (ORCPT
+        with ESMTP id S229460AbiLOTOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 14:02:11 -0500
-Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2333C164B2;
-        Thu, 15 Dec 2022 11:02:09 -0800 (PST)
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id 149C521903;
-        Thu, 15 Dec 2022 21:02:07 +0200 (EET)
-Received: from ink.ssi.bg (unknown [193.238.174.40])
-        by mg.ssi.bg (Proxmox) with ESMTP id B2E30217C8;
-        Thu, 15 Dec 2022 21:02:05 +0200 (EET)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id 795763C043D;
-        Thu, 15 Dec 2022 21:02:02 +0200 (EET)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 2BFJ1xvf099033;
-        Thu, 15 Dec 2022 21:01:59 +0200
-Date:   Thu, 15 Dec 2022 21:01:59 +0200 (EET)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Arnd Bergmann <arnd@kernel.org>
-cc:     Simon Horman <horms@verge.net.au>, Arnd Bergmann <arnd@arndb.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jiri Wiesner <jwiesner@suse.de>, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ipvs: use div_s64 for signed division
-In-Reply-To: <20221215170324.2579685-1-arnd@kernel.org>
-Message-ID: <e1fea67-7425-f13d-e5bd-3d80d9a8afb8@ssi.bg>
-References: <20221215170324.2579685-1-arnd@kernel.org>
+        Thu, 15 Dec 2022 14:14:54 -0500
+X-Greylist: delayed 1068 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Dec 2022 11:14:53 PST
+Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090DE2C65F;
+        Thu, 15 Dec 2022 11:14:52 -0800 (PST)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id B56143C1F69;
+        Thu, 15 Dec 2022 18:57:00 +0000 (UTC)
+Received: from pdx1-sub0-mail-a228.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 268903C1F50;
+        Thu, 15 Dec 2022 18:57:00 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1671130620; a=rsa-sha256;
+        cv=none;
+        b=Zu95JO8kYnjIS7o3cYOs9NXpUYPeZyB3p8gSlHXTXLBYiwuR6OJeYB316GjdWsRjaZd0xc
+        PSNzb4cjSS5XLVRjb071/VysiISPpGgjHiZgl50pdBLvngv5Y2zYxW0xvubLtll9BFQH+t
+        tAi/30fkqms7Pjl17aMT/BqHWO8BDIgH0qtpt0q6o2TXuD5XQ4eKBLc8+sVQ/9WeAdx4LF
+        AfujlmBlNEJoMza6Wtus2rcbOF+itld/qe8wdcXs/R1H27hZc+xsQLN+0YWEGYhOHJUxGY
+        1VrXzOPr6xWFRsfqNw1JYiHw5cnvey5u8fzortBZ5tBALqWi7LORJBEu7fFeNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1671130620;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=pB5nxsEfrP8qPKjWc6t0G0+7wvacVCgVmTPM39QulFg=;
+        b=1qWo6A4V8mAwemJndwRmEfGsA0DoVhQkIlPqrVTK2wEVb7SKfGhajImB1GeXk+Wnc4wYOb
+        jxMaPc0hJlXEgAEXxqvjBQyHbaxD4YcbWYI/Xldw/43mbxcj/Q8ow8cPot2qMYq9LeYrUx
+        eMULEmKlclSinF8umM6RvhfvDO7Bm4q7PvV4ve07zhHAaucTzww4wCArv9uxUgqGHTh5G5
+        fr1cCGdk8xykjSe3YA/upFT2Njzjvm4aePkUQIMkPl7ByIqKyU8hLzvpNRnSdiTdGvwG5Y
+        Pq2bXO4+5Ot+5RCIxoBHcjNX7VCHlqx4fQQ0SDco+LYH5LoYgjwjHRtdZE5+xg==
+ARC-Authentication-Results: i=1;
+        rspamd-747d4f8b9f-kgg9h;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Battle-Belong: 511832d1486bb74c_1671130620501_672171423
+X-MC-Loop-Signature: 1671130620501:2016065834
+X-MC-Ingress-Time: 1671130620501
+Received: from pdx1-sub0-mail-a228.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.116.179.68 (trex/6.7.1);
+        Thu, 15 Dec 2022 18:57:00 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a228.dreamhost.com (Postfix) with ESMTPSA id 4NY1gH0bmMz5y;
+        Thu, 15 Dec 2022 10:56:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1671130619;
+        bh=pB5nxsEfrP8qPKjWc6t0G0+7wvacVCgVmTPM39QulFg=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=U60iz7XqFpvs3HfbO6vCWddVzrlcgOOeeV/4UlHDr0RJEp5A1Of4UUSSzDQ9Gz8Kt
+         9wawq+ez2S59JmfUflsYYwJqO54XZiHy//YBU79ctzeKSgL9I/IcXc1tiDrzjqyzil
+         Xx4AKnsIX/8D8Ejq9I9zO+5jXP3i7O4JakGGdiL2LAzyRtLoDXM9D7wyOA0XiiPRlh
+         gbXnG+K5e52v0k2xyRwih6UCrOgh9/hhIwo9Jp1IuklN8Lp591PLz1OQMiq2deEhGi
+         o2q9e2dIM6YfFtcfEv5ie6YCIVFsJ3QEfR+6icAUdU9F6zRlawJELBucivMARyYC7M
+         xJbOzWSlAALKA==
+Date:   Thu, 15 Dec 2022 10:32:27 -0800
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        alison.schofield@intel.com, vishal.l.verma@intel.com,
+        ira.weiny@intel.com, bwidawsk@kernel.org, a.manzanares@samsung.com,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cxl/acpi: fix null dereference on probe for missing
+ ACPI_COMPANION()
+Message-ID: <20221215183227.gqjiafhedsp2cwkk@offworld>
+References: <20221209062919.1096779-1-mcgrof@kernel.org>
+ <63937afd72956_579c1294eb@dwillia2-xfh.jf.intel.com.notmuch>
+ <6393a3a9d2882_579c1294b3@dwillia2-xfh.jf.intel.com.notmuch>
+ <Y5kAt3WRgncTj26x@bombadil.infradead.org>
+ <63991ec886e85_b05d1294a6@dwillia2-xfh.jf.intel.com.notmuch>
+ <Y5pU4XTchSKVqkjx@bombadil.infradead.org>
+ <20221215060410.2p653tgqw35q6wbz@offworld>
+ <639b5adada2e6_b05d1294e4@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <639b5adada2e6_b05d1294e4@dwillia2-xfh.jf.intel.com.notmuch>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 15 Dec 2022, Dan Williams wrote:
 
-	Hello,
+>This will end up failing the unit tests because those want to have a
+>clean kernel log from a "Call Trace" perspective. So either
+>dev_warn_once() or just live with the noise since the message is more
+>for awareness in production environments and test environments can
+>ignore it.
 
-On Thu, 15 Dec 2022, Arnd Bergmann wrote:
-
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> do_div() is only well-behaved for positive numbers, and now warns
-> when the first argument is a an s64:
-> 
-> net/netfilter/ipvs/ip_vs_est.c: In function 'ip_vs_est_calc_limits':
-> include/asm-generic/div64.h:222:35: error: comparison of distinct pointer types lacks a cast [-Werror]
->   222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
->       |                                   ^~
-> net/netfilter/ipvs/ip_vs_est.c:694:17: note: in expansion of macro 'do_div'
->   694 |                 do_div(val, loops);
-
-	net-next already contains fix for this warning
-and changes val to u64.
-
-> Convert to using the more appropriate div_s64(), which also
-> simplifies the code a bit.
-> 
-> Fixes: 705dd3444081 ("ipvs: use kthreads for stats estimation")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  net/netfilter/ipvs/ip_vs_est.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/net/netfilter/ipvs/ip_vs_est.c b/net/netfilter/ipvs/ip_vs_est.c
-> index ce2a1549b304..dbc32f8cf1f9 100644
-> --- a/net/netfilter/ipvs/ip_vs_est.c
-> +++ b/net/netfilter/ipvs/ip_vs_est.c
-> @@ -691,15 +691,13 @@ static int ip_vs_est_calc_limits(struct netns_ipvs *ipvs, int *chain_max)
->  		}
->  		if (diff >= NSEC_PER_SEC)
->  			continue;
-> -		val = diff;
-> -		do_div(val, loops);
-> +		val = div_s64(diff, loops);
-
-	On CONFIG_X86_32 both versions execute single divl
-for our case but div_s64 is not inlined. I'm not expert in
-this area but if you think div_u64 is more appropriate then
-post another patch. Note that now val is u64 and
-min_est is still s32 (can be u32).
-
->  		if (!min_est || val < min_est) {
->  			min_est = val;
->  			/* goal: 95usec per chain */
->  			val = 95 * NSEC_PER_USEC;
->  			if (val >= min_est) {
-> -				do_div(val, min_est);
-> -				max = (int)val;
-> +				max = div_s64(val, min_est);
->  			} else {
->  				max = 1;
->  			}
-> -- 
-> 2.35.1
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
-
+Yeah I quickly realized that dev_warn_once() is what I wanted. I'll send
+a v2.
