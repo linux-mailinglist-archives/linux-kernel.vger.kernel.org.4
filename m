@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D561264DB08
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 13:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE9564DAF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 13:17:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbiLOMRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 07:17:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
+        id S229731AbiLOMR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 07:17:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiLOMRL (ORCPT
+        with ESMTP id S230163AbiLOMRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 15 Dec 2022 07:17:11 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8574523178;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C6D2E9DE;
         Thu, 15 Dec 2022 04:17:10 -0800 (PST)
 Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4D0C112EF;
-        Thu, 15 Dec 2022 13:17:07 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 221221837;
+        Thu, 15 Dec 2022 13:17:08 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671106627;
-        bh=y/7z+exO+3f1Axqi62tJwCC4d2zlinCaszJ+iZVM2HQ=;
+        s=mail; t=1671106628;
+        bh=Cbv0CfEc2onUj77PJDrZ/pV314ETPod9lBOtQKlyLVQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sxQm40+dUXFZC+9IauWEXMecv+PvTb9oTjOAf/PzrQEVs5TFUnvhsVUaDIbSvpj/p
-         dyHYr+say1Du6XHw3uoBtj3UCBOR/nv06HXA+ncZ6mBezaGDgtW9qGzwrp1W85b+fE
-         rGSr9eo7InysXwRLCDVODgeojwGf8+Dv1f0Aa+KE=
+        b=Gk93o5HaH3B0Gl3eR2nsQOB8OJvEkIABaUsx63mMm77J/AToRaA4PctyeezeqZSJh
+         TLHzFxhyu/98HyQcusHJg4ZM2Z5bup1XGiN43KVREhpSLvABiTV6T4REsFOn79djiS
+         Usd6n/uxMRJu0j4wGnKbJP8d/Ps/JfUziZxbC4C8=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         sakari.ailus@linux.intel.com,
@@ -35,9 +35,9 @@ To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v16 02/20] media: add V4L2_SUBDEV_FL_STREAMS
-Date:   Thu, 15 Dec 2022 14:16:16 +0200
-Message-Id: <20221215121634.287100-3-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v16 03/20] media: add V4L2_SUBDEV_CAP_STREAMS
+Date:   Thu, 15 Dec 2022 14:16:17 +0200
+Message-Id: <20221215121634.287100-4-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221215121634.287100-1-tomi.valkeinen@ideasonboard.com>
 References: <20221215121634.287100-1-tomi.valkeinen@ideasonboard.com>
@@ -52,36 +52,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add subdev flag V4L2_SUBDEV_FL_STREAMS. It is used to indicate that the
-subdev supports the new API with multiplexed streams (routing, stream
-configs).
+Add a subdev capability flag to expose to userspace if a subdev supports
+multiplexed streams.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- include/media/v4l2-subdev.h | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/media/v4l2-core/v4l2-subdev.c | 5 ++++-
+ include/uapi/linux/v4l2-subdev.h      | 3 +++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index 2f80c9c818ed..4be0a590c7c7 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -879,6 +879,17 @@ struct v4l2_subdev_internal_ops {
-  * should set this flag.
-  */
- #define V4L2_SUBDEV_FL_HAS_EVENTS		(1U << 3)
-+/*
-+ * Set this flag if this subdev supports multiplexed streams. This means
-+ * that the driver supports routing and handles the stream parameter in its
-+ * v4l2_subdev_pad_ops handlers. More specifically, this means:
-+ *
-+ * - Centrally managed subdev active state is enabled
-+ * - Legacy pad config is _not_ supported (state->pads is NULL)
-+ * - Routing ioctls are available
-+ * - Multiple streams per pad are supported
-+ */
-+#define V4L2_SUBDEV_FL_STREAMS			(1U << 4)
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index ca5b764d796d..8983d33fdb4b 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -431,6 +431,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+ 	struct v4l2_subdev *sd = vdev_to_v4l2_subdev(vdev);
+ 	struct v4l2_fh *vfh = file->private_data;
+ 	bool ro_subdev = test_bit(V4L2_FL_SUBDEV_RO_DEVNODE, &vdev->flags);
++	bool streams_subdev = sd->flags & V4L2_SUBDEV_FL_STREAMS;
+ 	int rval;
  
- struct regulator_bulk_data;
+ 	switch (cmd) {
+@@ -439,7 +440,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+ 
+ 		memset(cap->reserved, 0, sizeof(cap->reserved));
+ 		cap->version = LINUX_VERSION_CODE;
+-		cap->capabilities = ro_subdev ? V4L2_SUBDEV_CAP_RO_SUBDEV : 0;
++		cap->capabilities =
++			(ro_subdev ? V4L2_SUBDEV_CAP_RO_SUBDEV : 0) |
++			(streams_subdev ? V4L2_SUBDEV_CAP_STREAMS : 0);
+ 
+ 		return 0;
+ 	}
+diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
+index 658106f5b5dc..89af27f50a41 100644
+--- a/include/uapi/linux/v4l2-subdev.h
++++ b/include/uapi/linux/v4l2-subdev.h
+@@ -188,6 +188,9 @@ struct v4l2_subdev_capability {
+ /* The v4l2 sub-device video device node is registered in read-only mode. */
+ #define V4L2_SUBDEV_CAP_RO_SUBDEV		0x00000001
+ 
++/* The v4l2 sub-device supports routing and multiplexed streams. */
++#define V4L2_SUBDEV_CAP_STREAMS			0x00000002
++
+ /* Backwards compatibility define --- to be removed */
+ #define v4l2_subdev_edid v4l2_edid
  
 -- 
 2.34.1
