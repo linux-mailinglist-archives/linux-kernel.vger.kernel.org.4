@@ -2,195 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7721C64D645
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 06:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD79564D64A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 06:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbiLOFvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 00:51:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
+        id S229674AbiLOF4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 00:56:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiLOFvR (ORCPT
+        with ESMTP id S229459AbiLOF4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 00:51:17 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EAF2B1A3;
-        Wed, 14 Dec 2022 21:51:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671083476; x=1702619476;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=Vy1nnsBUMyfJdWB0HL7AxX9ZAnGiu08F+Oqh6ALowk0=;
-  b=Y0f6k6Ob/PVLCF7ZV8Cn8u4/Y1FeG0TEP0ks29g7L98rs+pRQZAf2s8Y
-   isvFerH0xEt7LpCCtQhIKfSkyOdnMtCjlSHnRlo9UAz+pD7ppom6yf6tx
-   yJUrPh6QisJo/160AOUnw6Tae0JrP7H/8dunmntoAiruoKWdUyfidhzaV
-   M4TvNwcONIR0ApnfGb32+Cv61rkwDp4Sn9Dp/jPVVpgsOb/dyDU39luec
-   KaL+8l1IDb4V7QdvHHbmMVQ86EFqb1GvypxhYFb/OzC3RxbJTILNta/qi
-   WRVbKIgyUiYrEcQXV2UW/5l4BN2RpDoJcaewaKWR1DrIEYeJITWO/YO1E
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="320448563"
-X-IronPort-AV: E=Sophos;i="5.96,246,1665471600"; 
-   d="scan'208";a="320448563"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 21:51:15 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="978080190"
-X-IronPort-AV: E=Sophos;i="5.96,246,1665471600"; 
-   d="scan'208";a="978080190"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 21:51:10 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
-        fvdl@google.com, bagasdotme@gmail.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v3] mm: Add nodes= arg to memory.reclaim
-References: <20221202223533.1785418-1-almasrymina@google.com>
-        <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz>
-        <CAHS8izM-XdLgFrQ1k13X-4YrK=JGayRXV_G3c3Qh4NLKP7cH_g@mail.gmail.com>
-        <87k02volwe.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <Y5h+gHBneexFQcR3@cmpxchg.org> <Y5iGJ/9PMmSCwqLj@dhcp22.suse.cz>
-        <CAHS8izOuT_-p-N1xPApi+BPJQ+P--2YVSUeiWBROGvGinN0vcg@mail.gmail.com>
-        <Y5mkJL6I5Zlc1k97@dhcp22.suse.cz>
-Date:   Thu, 15 Dec 2022 13:50:14 +0800
-In-Reply-To: <Y5mkJL6I5Zlc1k97@dhcp22.suse.cz> (Michal Hocko's message of
-        "Wed, 14 Dec 2022 11:23:32 +0100")
-Message-ID: <87mt7pdxm1.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 15 Dec 2022 00:56:01 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 651BEB4A7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 21:55:54 -0800 (PST)
+Received: from loongson.cn (unknown [111.9.175.10])
+        by gateway (Coremail) with SMTP id _____8DxuurptppjLL8FAA--.13427S3;
+        Thu, 15 Dec 2022 13:55:53 +0800 (CST)
+Received: from [10.136.12.26] (unknown [111.9.175.10])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxY+XmtppjDSoAAA--.1345S3;
+        Thu, 15 Dec 2022 13:55:52 +0800 (CST)
+Subject: Re: [PATCH 1/6] LoongArch: Get frame info in unwind_start when regs
+ is not supported
+To:     Qing Zhang <zhangqing@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+References: <20221215040141.18610-1-hejinyang@loongson.cn>
+ <20221215040141.18610-2-hejinyang@loongson.cn>
+ <d3c5aa06-0cc3-b1a4-18b9-858e8f1216de@loongson.cn>
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <e4d39bdb-827a-8a9c-0aeb-fcc919743826@loongson.cn>
+Date:   Thu, 15 Dec 2022 13:55:40 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d3c5aa06-0cc3-b1a4-18b9-858e8f1216de@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8AxY+XmtppjDSoAAA--.1345S3
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3Jw1DGw1UCw1UZr4DGr47CFg_yoW7Aw43pF
+        1kArW5GrWUWrn7Jr17Jr1UXr98Jr1kCwnrGFyktFy5KF47AFy2gryUXryq9F4UA3y8Gw48
+        Xr15XrnI9anrJaUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        baAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
+        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1D
+        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
+        AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
+        cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
+        80aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI
+        43ZEXa7IU8yrW7UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michal Hocko <mhocko@suse.com> writes:
+On 2022-12-15 13:24, Qing Zhang wrote:
 
-> On Tue 13-12-22 11:29:45, Mina Almasry wrote:
->> On Tue, Dec 13, 2022 at 6:03 AM Michal Hocko <mhocko@suse.com> wrote:
->> >
->> > On Tue 13-12-22 14:30:40, Johannes Weiner wrote:
->> > > On Tue, Dec 13, 2022 at 02:30:57PM +0800, Huang, Ying wrote:
->> > [...]
->> > > > After these discussion, I think the solution maybe use different
->> > > > interfaces for "proactive demote" and "proactive reclaim".  That is,
->> > > > reconsider "memory.demote".  In this way, we will always uncharge the
->> > > > cgroup for "memory.reclaim".  This avoid the possible confusion there.
->> > > > And, because demotion is considered aging, we don't need to disable
->> > > > demotion for "memory.reclaim", just don't count it.
->> > >
->> > > Hm, so in summary:
->> > >
->> > > 1) memory.reclaim would demote and reclaim like today, but it would
->> > >    change to only count reclaimed pages against the goal.
->> > >
->> > > 2) memory.demote would only demote.
->> > >
->> 
->> If the above 2 points are agreeable then yes, this sounds good to me
->> and does address our use case.
->> 
->> > >    a) What if the demotion targets are full? Would it reclaim or fail?
->> > >
->> 
->> Wei will chime in if he disagrees, but I think we _require_ that it
->> fails, not falls back to reclaim. The interface is asking for
->> demotion, and is called memory.demote. For such an interface to fall
->> back to reclaim would be very confusing to userspace and may trigger
->> reclaim on a high priority job that we want to shield from proactive
->> reclaim.
+> Hi, Jinyang
 >
-> But what should happen if the immediate demotion target is full but
-> lower tiers are still usable. Should the first one demote before
-> allowing to demote from the top tier?
->  
->> > > 3) Would memory.reclaim and memory.demote still need nodemasks?
->> 
->> memory.demote will need a nodemask, for sure. Today the nodemask would
->> be useful if there is a specific node in the top tier that is
->> overloaded and we want to reduce the pressure by demoting. In the
->> future there will be N tiers and the nodemask says which tier to
->> demote from.
+> On 2022/12/15 下午12:01, Jinyang He wrote:
+>> At unwind_start, it is better to try to get its frame info even we not
+>> support regs rather than get them outside. So that we can simply use
+>> unwind_{start, next_frame, done} outside.
+>>
+>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+>> ---
+>>   arch/loongarch/kernel/process.c         | 12 +++---------
+>>   arch/loongarch/kernel/unwind_guess.c    |  6 ++++++
+>>   arch/loongarch/kernel/unwind_prologue.c | 16 +++++++++++++---
+>>   3 files changed, 22 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/arch/loongarch/kernel/process.c 
+>> b/arch/loongarch/kernel/process.c
+>> index 502b8b950057..6ef45174ad35 100644
+>> --- a/arch/loongarch/kernel/process.c
+>> +++ b/arch/loongarch/kernel/process.c
+>> @@ -197,20 +197,14 @@ int copy_thread(struct task_struct *p, const 
+>> struct kernel_clone_args *args)
+>>     unsigned long __get_wchan(struct task_struct *task)
+>>   {
+>> -    unsigned long pc;
+>> +    unsigned long pc = 0;
+>>       struct unwind_state state;
+>>         if (!try_get_task_stack(task))
+>>           return 0;
+>>   -    unwind_start(&state, task, NULL);
+>> -    state.sp = thread_saved_fp(task);
+>> -    get_stack_info(state.sp, state.task, &state.stack_info);
+>> -    state.pc = thread_saved_ra(task);
+>> -#ifdef CONFIG_UNWINDER_PROLOGUE
+>> -    state.type = UNWINDER_PROLOGUE;
+>> -#endif
+>> -    for (; !unwind_done(&state); unwind_next_frame(&state)) {
+>> +    for (unwind_start(&state, task, NULL); !unwind_done(&state);
+>> +         unwind_next_frame(&state)) {
+>>           pc = unwind_get_return_address(&state);
+>>           if (!pc)
+>>               break;
+>> diff --git a/arch/loongarch/kernel/unwind_guess.c 
+>> b/arch/loongarch/kernel/unwind_guess.c
+>> index e2d2e4f3001f..e03864511582 100644
+>> --- a/arch/loongarch/kernel/unwind_guess.c
+>> +++ b/arch/loongarch/kernel/unwind_guess.c
+>> @@ -26,6 +26,12 @@ void unwind_start(struct unwind_state *state, 
+>> struct task_struct *task,
+>>       if (regs) {
+>>           state->sp = regs->regs[3];
+>>           state->pc = regs->csr_era;
+>> +    } else if (task == current) {
+>> +        state->sp = (unsigned long)__builtin_frame_address(0);
+>> +        state->pc = (unsigned long)__builtin_return_address(0);
+>> +    } else {
+>> +        state->sp = thread_saved_fp(task);
+>> +        state->pc = thread_saved_ra(task);
+> The case for tasks is already handled in stacktrace.c, which is 
+> reusable code:
+> void arch_stack_walk(stack_trace_consume_fn consume_entry, void *cookie,
+>              struct task_struct *task, struct pt_regs *regs)
+> {
+> ...
 >
-> OK, so what is the exact semantic of the node mask. Does it control
-> where to demote from or to or both?
+>     if (task == current) {
+>         regs->regs[3] = (unsigned long)__builtin_frame_address(0);
+>         regs->csr_era = (unsigned long)__builtin_return_address(0);
+>     } else {
+>         regs->regs[3] = thread_saved_fp(task);
+>         regs->csr_era = thread_saved_ra(task);
+>     }
+> ...
+>     for (unwind_start(&state, task, regs);
+>           !unwind_done(&state); unwind_next_frame(&state)) {
+>         addr = unwind_get_return_address(&state);
+> ...
+> }
 >
->> I don't think memory.reclaim would need a nodemask anymore? At least I
->> no longer see the use for it for us.
->> 
->> > >    Would
->> > >    they return -EINVAL if a) memory.reclaim gets passed only toptier
->> > >    nodes or b) memory.demote gets passed any lasttier nodes?
->> >
->> 
->> Honestly it would be great if memory.reclaim can force reclaim from a
->> top tier nodes. It breaks the aginig pipeline, yes, but if the user is
->> specifically asking for that because they decided in their usecase
->> it's a good idea then the kernel should comply IMO. Not a strict
->> requirement for us. Wei will chime in if he disagrees.
->
-> That would require a nodemask to say which nodes to reclaim, no? The
-> default behavior should be in line with what standard memory reclaim
-> does. If the demotion is a part of that process so should be
-> memory.reclaim part of it. If we want to have a finer control then a
-> nodemask is really a must and then the nodemaks should constrain both
-> agining and reclaim.
->
->> memory.demote returning -EINVAL for lasttier nodes makes sense to me.
->> 
->> > I would also add
->> > 4) Do we want to allow to control the demotion path (e.g. which node to
->> >    demote from and to) and how to achieve that?
->> 
->> We care deeply about specifying which node to demote _from_. That
->> would be some node that is approaching pressure and we're looking for
->> proactive saving from. So far I haven't seen any reason to control
->> which nodes to demote _to_. The kernel deciding that based on the
->> aging pipeline and the node distances sounds good to me. Obviously
->> someone else may find that useful.
->
-> Please keep in mind that the interface should be really prepared for
-> future extensions so try to abstract from your immediate usecases.
+>>         state->task = task;
+>> diff --git a/arch/loongarch/kernel/unwind_prologue.c 
+>> b/arch/loongarch/kernel/unwind_prologue.c
+>> index 0f8d1451ebb8..9d51ea37782e 100644
+>> --- a/arch/loongarch/kernel/unwind_prologue.c
+>> +++ b/arch/loongarch/kernel/unwind_prologue.c
+>> @@ -141,12 +141,22 @@ void unwind_start(struct unwind_state *state, 
+>> struct task_struct *task,
+>>               struct pt_regs *regs)
+>>   {
+>>       memset(state, 0, sizeof(*state));
+>> +    state->type = UNWINDER_PROLOGUE;
+>>   -    if (regs && __kernel_text_address(regs->csr_era)) {
+>> -        state->pc = regs->csr_era;
+>> +    if (regs) {
+>>           state->sp = regs->regs[3];
+>> +        state->pc = regs->csr_era;
+>>           state->ra = regs->regs[1];
+>> -        state->type = UNWINDER_PROLOGUE;
+>> +        if (!__kernel_text_address(state->pc))
+>> +            state->type = UNWINDER_GUESS;
+>> +    } else if (task == current) {
+>> +        state->sp = (unsigned long)__builtin_frame_address(0);
+>> +        state->pc = (unsigned long)__builtin_return_address(0);
+>> +        state->ra = 0;
+>> +    } else {
+>> +        state->sp = thread_saved_fp(task);
+>> +        state->pc = thread_saved_ra(task);
+>> +        state->ra = 0;
+>>       }
+> also...
+>>       state->task = task;
+>>
+That looks similar, but stacktrace actually provides the regs parameter.
+Unwind_{start, next_frame, get_return_address} is API to others, such the
+GPL module. Btw, if we want to drop the redundant codes in arch_stack_walk
+and keep same result, use "cookie->skip += 1", I think, but beyond this 
+series.
 
-I see two requirements here, one is to control the demotion source, that
-is, which nodes to free memory.  The other is to control the demotion
-path.  I think that we can use two different parameters for them, for
-example, "from=<demotion source nodes>" and "to=<demotion target
-nodes>".  In most cases we don't need to control the demotion path.
-Because in current implementation, the nodes in the lower tiers in the
-same socket (local nodes) will be preferred.  I think that this is
-the desired behavior in most cases.
 
->> > 5) Is the demotion api restricted to multi-tier systems or any numa
->> >    configuration allowed as well?
->> >
->> 
->> demotion will of course not work on single tiered systems. The
->> interface may return some failure on such systems or not be available
->> at all.
->
-> Is there any strong reason for that? We do not have any interface to
-> control NUMA balancing from userspace. Why cannot we use the interface
-> for that purpose? 
+Thanks,
 
-Do you mean to demote the cold pages from the specified source nodes to
-the specified target nodes in different sockets?  We don't do that to
-avoid loop in the demotion path.  If we prevent the target nodes from
-demoting cold pages to the source nodes at the same time, it seems
-doable.
+Jinyang
 
-Best Regards,
-Huang, Ying
