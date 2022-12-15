@@ -2,98 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1112864DDFC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D22D64DE10
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbiLOPsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 10:48:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
+        id S229972AbiLOPuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 10:50:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiLOPr4 (ORCPT
+        with ESMTP id S229742AbiLOPuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 10:47:56 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2049.outbound.protection.outlook.com [40.107.96.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96B31706F
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 07:47:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=niA2bz9oaQXj4zneBgoL13SOeMsdOIZrcu2TwkT2Tem+f/Rwr8S430n3ypbNOgL23kmnsP2hExIHtUuhmz2CEu8y6Eh4q8IwR87AdBqoNur8/pxA/xIi3wiXoYs8UFA3X6s3szJh/T90BVvewlu81u9jY+bpkiutZy6dg4DqMoWWaFwtmlSulyE9Ccw/m3PaCa1NIVrkm4BiJf5QLvtVU93xRPnKkUi/5CxZaBGa8NMli2laZSBQH0ZVQ6HczQxPkoSf908EmrJ6o/bRdxEvnVKN6iG5Mi/knuv3mF3hfB9bUsfkjTAXf1UCjiBku7EqHRR7S/ikqWCHyMphZjW6gA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Iwqb8crrzs/joKAehvIcJV2770jp4VSSERO9eC4OZhU=;
- b=ICKkgqVjBbMxnZ6Axia+FN7DJY3rYa1CgmZF81FVj+7IwILQAGZ/+ftJv3nDCUfhhe4J7wkkl0GUM35yLlhiya5lqTM05OK7Af+sLtcyYRL6bA/9xXBBbZA9nFPhC/qBkdBMNV2ygMMuUExbI2JdqfawCS2BPummYR2uPpNGVi5fTE/LDV1png0O/HJI5/MZ+c+nj9k4PlXqunaA2Cu0dOQrDDbT7Inpkoow/pSD2ZDaQO7CUNyybGFNqzHQMHz1DY0o7aUNBeMMBlymW1tDMeErX/7DsNCDF72bKZ0VUtBHXCkbYAP3reabOreT63pgbnUUWLjuRCOHc0dpQ/SVnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Iwqb8crrzs/joKAehvIcJV2770jp4VSSERO9eC4OZhU=;
- b=UQxk28531m6qxjssdpZrGGWvMkkUQJgRBLWJtwn5kpKrmiCXEVcGOnHOpO2/nVR6OHomOEWJdu5UH0e73oKDjXbdi/fbJF8FHeISziCvuRIQ4Rm+w4fKrJPl2TYvGfMKWQMELzSDiQm+nzU+zrYGcS1+TB7y5q3Blbg4mLFqbVw=
-Received: from MN2PR16CA0040.namprd16.prod.outlook.com (2603:10b6:208:234::9)
- by MW3PR12MB4459.namprd12.prod.outlook.com (2603:10b6:303:56::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12; Thu, 15 Dec
- 2022 15:47:53 +0000
-Received: from BL02EPF0000EE3C.namprd05.prod.outlook.com
- (2603:10b6:208:234:cafe::b3) by MN2PR16CA0040.outlook.office365.com
- (2603:10b6:208:234::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12 via Frontend
- Transport; Thu, 15 Dec 2022 15:47:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF0000EE3C.mail.protection.outlook.com (10.167.241.132) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5880.8 via Frontend Transport; Thu, 15 Dec 2022 15:47:47 +0000
-Received: from [10.254.241.50] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 15 Dec
- 2022 09:47:43 -0600
-Message-ID: <df62e073-1b99-dac7-081e-cb957ef05d94@amd.com>
-Date:   Thu, 15 Dec 2022 16:47:41 +0100
+        Thu, 15 Dec 2022 10:50:05 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D272DAB1;
+        Thu, 15 Dec 2022 07:50:04 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id fy4so10949051pjb.0;
+        Thu, 15 Dec 2022 07:50:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=k8G/8RXiEhOzMc/81TIBBs+LW8Zpaz/v5O7f5fWpB04=;
+        b=XM0kUwkqZi5hGnkSkjz2Cpud2SoXkmiX8yNV2ZZY0SzzaLFqDihi8ID/XChVRbxNqU
+         2MeFUHFzOroqNGzWZKtWMVXwXagYJ9Fj8TB2Jur/qWlLB/Ifz808O5Pje9sURKIrJN1O
+         1MKrw4uKPf+DeT3faCfN6wR9hWXRAq0fY4rdLetO1RAk5+Op1jq+acItfMbJxzxfVjFN
+         //si2stfabeXgokfVbNRKMa58wN00SIHqEH08AyMtU6HRZ97DRRzPM67GFpHw9VKUjDI
+         LT2mRmr0XcSNBfg4ZyjA3OUzYGoK6/1pyrWON0Hdt3/UxJNxSk6z2bck74KpfnqdKxlt
+         CcsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k8G/8RXiEhOzMc/81TIBBs+LW8Zpaz/v5O7f5fWpB04=;
+        b=PCghuCjbbbZx3hE9UhwZMJbhIoca86zVqo8fzeGc/4EsaE3s+zs3ldgIHacYxvZtah
+         ClP1a63d166mJvo/B2bKf522BMzAd9VZotQuUWA9XQHE9KVDH+ywq1s8tE3RiHqxkaXH
+         ip91DwvlTjw4f8nidAneUz2HoEpOuuG9lO0CP7wb6499dlZu9HyiU5spFXqywGs7G2T0
+         i2RTYiBiFuojqjiZLzImhTZk+U6wBgoXjuepixxGy+/qhmeIT7fRPd0/JJqp/JfQCWV2
+         5EAYYmD1cP9XLguqsTM5BpHwo9J8LApJRkkeRFiVeznBkhHMLOU6jxYXPfu4ZOebb2SP
+         TmwQ==
+X-Gm-Message-State: ANoB5pk0Tj6ZAH03mgNkWiN+wExm3f1tZQF6dERf6/oewo0+fwXePKVg
+        vVLdh6DCOvktIp0oz/o441M=
+X-Google-Smtp-Source: AA0mqf65vw2X2wrKCt69D9VuyzNWu7U2N1te/d7g2e/bDiApq9HFSP9xcL4dE0SQSLGQvtPEju2TJw==
+X-Received: by 2002:a17:902:ea91:b0:189:6f76:9b61 with SMTP id x17-20020a170902ea9100b001896f769b61mr28207711plb.39.1671119402897;
+        Thu, 15 Dec 2022 07:50:02 -0800 (PST)
+Received: from [192.168.0.128] ([98.97.42.38])
+        by smtp.googlemail.com with ESMTPSA id n15-20020a170902d2cf00b00176b84eb29asm3931682plc.301.2022.12.15.07.50.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 07:50:02 -0800 (PST)
+Message-ID: <3bc9c4dab64860fde7405fd589375f0ae087afe9.camel@gmail.com>
+Subject: Re: [PATCH v7] igb: Assign random MAC address instead of fail in
+ case of invalid one
+From:   Alexander H Duyck <alexander.duyck@gmail.com>
+To:     =?UTF-8?Q?=E6=A2=81=E7=A4=BC=E5=AD=A6?= <lianglixuehao@126.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Netdev <netdev@vger.kernel.org>
+Date:   Thu, 15 Dec 2022 07:49:59 -0800
+In-Reply-To: <2D8AD99A-E29B-40CC-AFEC-3D9D4AC80C14@126.com>
+References: <20221213074726.51756-1-lianglixuehao@126.com>
+         <Y5l5pUKBW9DvHJAW@unreal> <20221214085106.42a88df1@kernel.org>
+         <Y5obql8TVeYEsRw8@unreal> <20221214125016.5a23c32a@kernel.org>
+         <4576ee79-1040-1998-6d91-7ef836ae123b@gmail.com>
+         <CAKgT0UdZUmFD8qYdF6k47ZmRgB0jS-graOYgB5Se+y+4fKqW8w@mail.gmail.com>
+         <2D8AD99A-E29B-40CC-AFEC-3D9D4AC80C14@126.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] firmware: xilinx: Remove kernel-doc marking in the code
-Content-Language: en-US
-To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-        <michal.simek@xilinx.com>, <git@xilinx.com>
-CC:     <linux-arm-kernel@lists.infradead.org>
-References: <f4c61cd5e45fab345c366a15766101408fbc3bcd.1670502727.git.michal.simek@amd.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <f4c61cd5e45fab345c366a15766101408fbc3bcd.1670502727.git.michal.simek@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000EE3C:EE_|MW3PR12MB4459:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1511bff0-4f78-4e65-aa48-08dadeb3b8bc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 28SIt35F6U5gSea+cN9FLgGg3YV5S4qI6Aqq4MmKULbZGw591hjozAj+DF/AsAkJW3kt1/ySmC3R258wGuHkG9wH7P8qsZouk+dSdyv3vK2E1KFJmvGxLTnWBkOTPsiuWm5EqLDgcVKjL0ejP/H2UTkSgu37VRslybl3IkLtWVHmgpgmQOe2nWxOTu3f6vRY/mETL2xY+aioDeeWb6UXoccvpb2VbFPYar7h4XKphza+6LGo4EPKQYErgrQGUIne4kT67sZ5yGJzryDMHVbkpZEUHMjMI/IabS9pae8OHQIwRExyheFqsp2xRlsw/vlODWzGKRrvahaLHvzGEIsn4BbPD1BwbmqrPEE7xgOPVUhXoKCU+wufk5PVbTPPh2KebqFn0p5dVjcysgpGp+rk8iFe5pu3PISbBht8sJk1IalShG5OMhNMNGMxdeMH8n4zQangYIJpZ+llRWN2Orxn+69EbdKSomE0x3XYA7e+ZA2ij5OKDJb1QwW7DNYsZLqcm7vxEywANkAPRfhEQ2pNx3iZTEPyY9ytweN/2OL9jyppKMM135ifK6nhemlyYgHq7MloKaxcNWSIixIjw5p+47yo88TUQCyg+JeeGhIzOPITYpiWnDFjBpChJdTs6McAbXzJJO6VibxL8PLuURXNgOreNwcHX3GgkQVWQkzkBLc5mzLxzUgQjqeIA7zlzjNZpJc+I/Gaw1HrZmaOnJXKO8incniO/XQuGRHZI78aQ8aPP51nsJ0Yzf4kx7H0KsQ3rx5c5oSnimlgQoGpk4wHzbLgVGiKzX0BSzQH0dNAtKc=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:CA;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(346002)(396003)(451199015)(36840700001)(46966006)(40470700004)(356005)(81166007)(82740400003)(44832011)(4744005)(5660300002)(8936002)(2906002)(186003)(53546011)(26005)(36756003)(83380400001)(70206006)(70586007)(4326008)(41300700001)(8676002)(36860700001)(40460700003)(336012)(16526019)(2616005)(82310400005)(40480700001)(31686004)(86362001)(16576012)(426003)(478600001)(110136005)(47076005)(31696002)(316002)(36900700001)(2101003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2022 15:47:47.9043
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1511bff0-4f78-4e65-aa48-08dadeb3b8bc
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000EE3C.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4459
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,30 +87,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2022-12-15 at 11:24 +0800, =E6=A2=81=E7=A4=BC=E5=AD=A6 wrote:
+> The module parameter method does bring some inconvenience to the user,=
+=20
+> especially the parameter needs to be specified when the module is loaded.=
+=20
+> But as alexander said, if the net device is not successfully registered,=
+=20
+> the user has no chance to modify the invalid MAC address in the current E=
+EPROM.=20
+> At present, the read/write of EEPROM is bundled with the net driver.=20
+> I am not sure if there is any other way to complete the modification of E=
+EPROM=20
+> independently of the network driver;
+>=20
+> Is it necessary to bind the registration of net device to the judgment of=
+ invalid MAC?
+> I personally think that MAC configuration is not the capability or functi=
+on of the device,=20
+> this should not affect the registration of the device;
+> Can the invalid MAC be judged in the up stage of the network device?=20
+> In this way, the net driver can continue to be loaded successfully,=20
+> and the MAC can be changed using ethtool, and it will not increase the di=
+fficulty of debugging for users.
+>=20
+> Thanks
+
+The problem is that the decision all depends on use case. For a small
+embedded device or desktop system it probably doesn't care as it will
+always just default to DHCP most likely anyway so it doesn't really
+care about maintaining a static MAC configuration.
+
+However the igb device covers a range of products including workstation
+and some server. The issue is that changing the MAC address on server
+setups can trigger significant issues depending on the setup as things
+like static IP reservations can be lost due to either a static DHCP
+reservation or sysconfig potentially being lost. I know on older redhat
+systems random MACs would lead to a buildup up sysconfig files as it
+would generate a new one every time the MAC changed. It is one of the
+reasons why Intel stopped using random MAC on VFs if I recall
+correctly.
+
+Lastly one thing that occurs to me is that there is support for
+providing a MAC address via eth_platform_get_mac_address() as some of
+the smaller embedded parts have an option to run without an EEPROM. I
+wonder if there isn't a way to work around this by providing a
+devicetree overlay on problematic systems.
 
 
-On 12/8/22 13:32, Michal Simek wrote:
-> Trivial fix.
-> 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
-> 
->   drivers/soc/xilinx/zynqmp_pm_domains.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/xilinx/zynqmp_pm_domains.c b/drivers/soc/xilinx/zynqmp_pm_domains.c
-> index fcce2433bd6d..69d03ad4cf1e 100644
-> --- a/drivers/soc/xilinx/zynqmp_pm_domains.c
-> +++ b/drivers/soc/xilinx/zynqmp_pm_domains.c
-> @@ -227,7 +227,7 @@ static struct generic_pm_domain *zynqmp_gpd_xlate
->   			goto done;
->   	}
->   
-> -	/**
-> +	/*
->   	 * Add index in empty node_id of power domain list as no existing
->   	 * power domain found for current index.
->   	 */
 
-Applied.
-M
