@@ -2,66 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDBDD64D74A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0253D64D750
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiLOHeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 02:34:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
+        id S229741AbiLOHhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 02:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiLOHeU (ORCPT
+        with ESMTP id S229558AbiLOHha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 02:34:20 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961452A24C;
-        Wed, 14 Dec 2022 23:34:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1671089644; bh=7zUfFLAsv5BwM3QMGuwZSLFemhuXLiMBGDJ7SGzoB/I=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=OOD5ti6VdDaR+rcFwkynf2gjPkrmX5HJPfX0SbqP7mcYd802XdXs5uQwL81d4asuM
-         sTkeYkU+dlamdevRriMazZcnrcPlMyaZb1OVS2vldJpqcfNq/uM1QelijdPkeO9XOS
-         pkbcLLKlcBvCth1SzG2YslNOkjgtAefFe0nTB5Av3c46iX3IgB45fSx5QjUUF7gWAG
-         hY4yKJNgrr5/m9bgpJNMgqYHZJGetwRnXpqkY6wNO/V7lZrRJp/DB/KbzhjyqRgZzm
-         ogOMptD9ssoWG4YzqSRiYdIxtZJ3Rtw6fZMeomX3R7YqqVPcHG3tshOLygx1w3XMNK
-         CByVhLq7hevvA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from ls3530 ([92.116.161.210]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MGQj7-1p9KiH15oL-00Gqik; Thu, 15
- Dec 2022 08:34:04 +0100
-Date:   Thu, 15 Dec 2022 08:34:00 +0100
-From:   Helge Deller <deller@gmx.de>
+        Thu, 15 Dec 2022 02:37:30 -0500
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2091.outbound.protection.outlook.com [40.107.8.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1EB2CC88;
+        Wed, 14 Dec 2022 23:37:27 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Kg8JcfrKX27+lw2c2p87RvEKb/Y2L2KBjv1Nc6o6EaiCv3pt4+GJu3ipH0/JjOaZPGOB/70rB4rs0Lqf370dB3OMwGkc3ZTI4GH9v3wEVA3kKwrSmJpAEdF6y8wF8DDcGRvMZJmMpxLHshqwfNmm2YMC8RduM6RZ7O65fwnSEJkcLWCpJSA/1Gcgm2DSu9T99oFR6MqPKWz3k8U0ir/hhw6DVkedXELLdJFJj1FZr3fnsCgJx/A1lfJ0zLNeJJUcKrKEIVzlL73t7KT3pSFKoh8PC0rfS1CNa6uvk7lEW469h+Hsg/WvhjjLZD6N4Unf8ppDetGTz/Rddy8imtxM2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IFg0m+DAvWoVumOTqcULiiYDa2WxmgOdj3ivRzU1rx8=;
+ b=c7jgn7vMxJJvKrrkGhkK4ZlLDvDxWoTi78aqxOQdYQOvHzIKYIBn2a2WuZ01Qnzq1aG+ip7g93RrluaDSv2iW+03r+ziPV4i2QB+uVQQADR1SnvJAaZ5kLYOR34jhaNrY+0HJFAPt1vWI4WzCnrqN8xJ9H2NkNEcNej3xiDA9Ea3c2G8SU63U3q+bIw7E3VOkcsXgoPMPhTtn0XJyKLfQv2l2tXTzdGzrKEzbsF4cx1ru7rsGHGPajdz/WGOVUFQvPrqrul9OgDwTwADd24d/QUqnh65s4y6xD+XcR1PbIsNCL/Wzd5qf+4s3+bFf9foppLikESw2OhhWyrE96rp9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=prevas.dk; dmarc=pass action=none header.from=prevas.dk;
+ dkim=pass header.d=prevas.dk; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.dk;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IFg0m+DAvWoVumOTqcULiiYDa2WxmgOdj3ivRzU1rx8=;
+ b=CUuFocCNZVXuO3+HN47sM0ai6CaLFuKRPIsZBUD+H0gYiRGOeqB5JS1WbRthmaEp3Y1RmrH5MOC54S9IKgs/+BLaf8+w+TW+NITsocI1VXqxfX91DcUSC98EOUqEtak9548RKUJ0KKy02HOywv2SwNdei3Q5U6FZbjBv6jkXB7E=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=prevas.dk;
+Received: from DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:34a::22)
+ by AM0PR10MB3234.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:182::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12; Thu, 15 Dec
+ 2022 07:37:25 +0000
+Received: from DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::722b:5d41:9862:10e5]) by DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::722b:5d41:9862:10e5%7]) with mapi id 15.20.5924.011; Thu, 15 Dec 2022
+ 07:37:24 +0000
+Message-ID: <68e6091d-e665-bcd7-0c19-ccd80635078e@prevas.dk>
+Date:   Thu, 15 Dec 2022 08:37:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [GIT PULL] vfsuid updates for v6.2
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [GIT PULL] fbdev fixes and updates for v6.2-rc1
-Message-ID: <Y5rN6CT8genL6wQc@ls3530>
+        Christian Brauner <brauner@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221212123348.169903-1-brauner@kernel.org>
+ <CAHk-=wj4BpEwUd=OkTv1F9uykvSrsBNZJVHMp+p_+e2kiV71_A@mail.gmail.com>
+Content-Language: en-US, da
+From:   Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+In-Reply-To: <CAHk-=wj4BpEwUd=OkTv1F9uykvSrsBNZJVHMp+p_+e2kiV71_A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MM0P280CA0026.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:190:a::25) To DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:10:34a::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:SJKW3VdumEyfRXaGPuMgEugdQ28y1gGugzzxmGlhUPdfZe2lmwB
- RjkLBiB8DfeFAGF2O2evCIyfas6ccVSVg9LU2joUz7JZFC5Y8xlcHPhergLvf85Bxwfim54
- XjENivD2T2kz32zxQ2IwZnKzQvi2PVeQNbD06sa2GHHce378lXJELK8RoGjjopRWy00/quJ
- YLyvI4BuR/MU5gqKA29Gw==
-UI-OutboundReport: notjunk:1;M01:P0:EWKHmqdbQ80=;ZmrZIcg34/MRqa9ksMn3dYo+Ozp
- qcOLgk/lQUF3P2gWjlllkf52NQGu7frshakJFogGgMiEUNm9E0S7HcVQwb7g8/RhvqZtI8HpY
- 8zLH0QEEzl0K3MxUbJpArY+arS+EsKFConp0OnDMLc7btbJTk8LgpZwUrHZTQWOJz6u2T0nXy
- 6kh4eT6PEUhspzkA5CsuEPIO8S9hOXeEaOrBiRsKsWK8ml7etnhClPuN5OKTxpEKHekYL8BxQ
- xlxkH7Qfrka85Wqyy7dTNTipt6L/O0Ug18coThKXGUsDs6NJAclwn1gC9P9ueI+VZMBErSwyq
- R2FZnBk9oyZrRrfQt88ws2qOYch4Pidd2vNBoYumaqnOzc+9K4nEnNdTXWfPJ+bXvU4zHlmq6
- s7ryWSwPm/8iMReoQgpyjvDUq6JFTIAW07XoaJO7c0zE7AWlBlpKEFXXAPfu/8oJgPVc2IH23
- hx6APp9Wmi1HKar4TDdcX+M6hN5QQ0cKUZE8J13+bpjq/inWknphZwoT8YaNmbIs+av6dt+hZ
- he2pVAnmD4hX8QtxzR3uv5hUi0Dq90WHl88btsEzAZERo3rwCHneG2MwXpJMknlNGeU3sKpln
- 2WomdaOKAGUS+eeP3hVNfuSErOlIHFaYgj2nQfAEPy61Uhj/ZJzVT6nU4CekLoFeLsiZcob3E
- waCXGDR4jrPVzmcJehaVfwlaecqbhpx8iLdI2YaIzkRz5y6GIsE7fglFfZ2yJjQviZdSxuzFb
- mOHJ+r6gPpdbt+afEV0nEW3e7M4KYES9BgHT1SzvZIXnGfvcTZgZmNJOYuNDs4IbW+p9bmISU
- LBG0Li3uspT1iCw/OqfmJhBOtAZtUOUZwBzZ/HCBuWySxYPuNE7wZJxAwOhP8+RA+vWYCgt9g
- AcR8RWMSK/gkjZNs2olxFCkRLnRXIiwu4BaIuVVWF43OHiyJ9FZ4Ix5WkKH6Deyxq5+Y9Rquu
- /NiQ/Q==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR10MB5266:EE_|AM0PR10MB3234:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9a2b41c0-37cf-48d8-74da-08dade6f3565
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8FlXPqllhNWLzdlkLzt6gUl4cbgdvPi1cFSDgrLzfwEsUSTVdU7BEOvz8jK182TQUmvD7dHBWiX4xoEuF9EeWsYCIBXDbTuggCJ1sL8lxyGoac3dWvITT2OuAk1wsTN1xqMJWiqcTHrXQwV7Q0bYZe8ahd30H5o602NTUrpsiz7AmzXyp0TtY87jUNXKagS+6heaeoo6MCdrszQ+hbEljolCckoaIYS7DlNc2wx+u2b8IlerPSFr+VjxI3MK6sI+D/HT2nsxhtT5HDF/RBs8AmO737Vf2Tn9ZGSuvTSQBFwB2pEz51ePd8E2UnOZFLfyhzIHeXGp2ujsew8WJc3vY1GdY4xpndHeVjWWXyBV6mo4CMby4NBSfYvW8eHlgUm2Yklcl9q8LdxYhI0FMLNC9KLTZGNbwKhIxeIOjO2odMyjZqjzf4xY6WXxrwXRvNG/+IXFHVLDuPQNFbo2FW46PtKTGMpF3Ajzem34SSMABZ4juOJGdFShwjI1pYylvNdkfG74STEolt5Mb2SVY2AhWL3fUhy1GBht2fdCJ7rO7xSP47PrRwDa6auUj6h4OLazCSwgFPnDGvhq3N9+Gz/2LIQG0uftJCg9+HodXtSUOqoWQcs82vGGIz+bQcZSpDEyCBXVwgNFDSBznWP6IoitcKepgfIxfRM4WyaGpzX+/PWc4HxTe0l+xMyGAUkW73HhWKVaNhxtF3Kn2V6iNMA7hFWOJLy7yqEaD1HitrR7njVjBPszWtIHr6tadCEk+tb3
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(346002)(396003)(366004)(39850400004)(451199015)(6512007)(53546011)(52116002)(186003)(6506007)(26005)(478600001)(6486002)(36756003)(31696002)(38100700002)(38350700002)(86362001)(2616005)(83380400001)(31686004)(8976002)(8936002)(44832011)(4326008)(66946007)(41300700001)(5660300002)(66556008)(66476007)(8676002)(110136005)(2906002)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?djV3bVBuZmFOa3N6OVVOSFkxSFFOaWtGM1JaM05tZ1RTY0hNTmJ6M1hBWXd5?=
+ =?utf-8?B?RW1uWG1xTGFXemduNEFSQmdxWlQybFVGYmRuTHNoVXFFaG5DcGRSd0pJQ05T?=
+ =?utf-8?B?ZGN1ckE5WWtGQXZxSkpqTWwvTkJ6WWVhL0d6V3lYWDhFakVOYkc5dVh2QWtn?=
+ =?utf-8?B?QnpEdWR0UnRiNDZQMlZhRk5oRVlOeGVDSll1S2xZdnoyUlUwVCszMDc3SzMr?=
+ =?utf-8?B?V1lzVnMrZWYrZFFqSzZEMGgwZ3BhbmVRUnN2cm1tVDJiWGNPK05oWVQ4aUhF?=
+ =?utf-8?B?ejVxRWxVaURJUXpualB4VS9Mb2p3eml6NDZtbVh0UlF6cHU0Ui9Jc2c3bVUy?=
+ =?utf-8?B?WWxPUWhibFIrU2VTWHBucEdKQUR2cjhUNUpoaCtXdktwcXljcG93eUt1RTMz?=
+ =?utf-8?B?eXcreUtPeExtV3ZSdWlOayt2UEZpY3A4VTNnNjErY002dFpLU2hXUmZ3djNT?=
+ =?utf-8?B?SXZJWkE4K2o2YWtMTWlReUJhNlJCNTZOaHdCdTJUTmIraHdsWHZyclZROU92?=
+ =?utf-8?B?enNxOG5KbWZHc2VUQXhKQ2Mwc1B1bGcxS0FyNVhYUEhQWlhRMDdaR2JDTXBE?=
+ =?utf-8?B?Q05vUnpHc3BVeVBIeXowdS9veDRNWUlIdGx1ajJaZllZMWJyQjM5MWM4UGZ5?=
+ =?utf-8?B?dEtER1NDV1VIaURMVzVpWTVVZFpDcWcxcVU5RnFnMTIza1pHaGRqejA5UWVw?=
+ =?utf-8?B?bVdZaWdpMUJ3OGxZVklDZjhQVjVjOGZVSmk0anQ0c3RObS9hUEtyTWh1blVT?=
+ =?utf-8?B?VDZCc2lxOVBjRURIYXVNVFpsMDViQ3o1OGt3NGhVTGtxSU1hMDJwMEF2VVor?=
+ =?utf-8?B?RnBxYWQxcU1zb0sxLzNoQjFsWmQ1anF2T3d1SkdFWG5YT2Y3UkpIL2ozL2dT?=
+ =?utf-8?B?OE5ucG5ZaDBtakt6ZFQxUk5VVkM3UUY2TGFFemFDNTRqcXg0YU82QTE2SzRG?=
+ =?utf-8?B?SjJGTWJ0MmErN1BKNFNyTHBiQVZhdlAwUTlrSFBOQVVIKzhPYmlMT1RKRzcw?=
+ =?utf-8?B?TEdwRU9wUExLa3Fud1h0QUpDMzkzN2NQNU1IdDZXc0ZPMUZVTW1na2lGMHFQ?=
+ =?utf-8?B?bHd1V0R0KzJJclFFdDZqaVJ1dVNIby91MHFza2lxK0tRUGp2RlJtczZxcElD?=
+ =?utf-8?B?REpYY3pFditScTVZdlo1Q2xoNnE5OVkrMVRDRVdsUklTbldRcFY3c0FOU052?=
+ =?utf-8?B?TXo2bU1NaTV2YnJBNnUxTWZIUlpVVmhDZjc0Z1VTSWcrV3ZVdU1iRmlnamNH?=
+ =?utf-8?B?TmZDNVpFRHFZYUkvMTBFd2M1VklpQ0RLZFZscEduc2JPcU85UWpoemF2ejk1?=
+ =?utf-8?B?WmtoREcwWHdDUnJXdzcwcHVGYzlOVGxmY0xYSkUrYlZKUFNrVUZLT3U5U1d3?=
+ =?utf-8?B?ZmhBZ0FycWxqWG1NeHllcXVCdy9ZMm40c0NudHlBZDlIVGJGMyt6a3RqK1Zq?=
+ =?utf-8?B?T1NqblJtYjJLQjQvRlZKWjEyVUVmbTcwYzlNMmg2UmlQazh5UGZiMUtNNVBx?=
+ =?utf-8?B?VnhMQ2FKVlFqREZBVi8zN0xMUkp1cVVZVk4xenhucktjNzNIUkZ6TXJzR0k4?=
+ =?utf-8?B?MmNOVmxWR2ZkZ0FYNTAxWFVHakZkQ01QQjlGTnpzOVM0UjZLckpTODVKVS9J?=
+ =?utf-8?B?MitDTjU2RGZwWUhPQVNKNnFJek9naEpsNU0rc3V1RGRQcmd2QnhjR1pDdDFO?=
+ =?utf-8?B?U2ZJUG55TEREYnB0VjRReEIveDg0UHRncUorRWNGeVZieE03MnJKWjZyVFM0?=
+ =?utf-8?B?S0tUdjVxK3QxVnF4Vmp5TlAraFFkOGtCWVdkU3hjTlN6WExOZ3M0WkV4bzRS?=
+ =?utf-8?B?Mk5YSVN3VXdyamd4UkEzRkdkeHlqeTkyTjZ3djVwUlNjeFpVVkVUdzY1YkNh?=
+ =?utf-8?B?blBuZG9VWDIwSXE1aWg2K2ozZDlwRDlQdjNDZ1lLL09TbFhadkVhdDl5VUsw?=
+ =?utf-8?B?UitIMzFpMml3WTZBVVZDRzRmVFZvWnYvZ3JHbVNJMUFLMXllOXM0blJRZUNI?=
+ =?utf-8?B?dEZjU0xNTFFYZTd1V0RKV3FRL0xuVk4vSUhueGNLUTRiSEpkT3JZK3VBZXUx?=
+ =?utf-8?B?b1VVdzZzbkdWTG5iM2dKRXNCSmI5V29Ja0FTbVp5Nnh6c0JZMDNtTG44NnJv?=
+ =?utf-8?B?eWhoNmdwRE9nZkdYb21QTVBJT0NrejFNc04yTWxnajRnZDNISm91bjFNcWFS?=
+ =?utf-8?B?N0E9PQ==?=
+X-OriginatorOrg: prevas.dk
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a2b41c0-37cf-48d8-74da-08dade6f3565
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2022 07:37:24.7579
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d350cf71-778d-4780-88f5-071a4cb1ed61
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YNc3sc3jerg9gD6uyYexgd6WIPVrjkSusWnRrxrbyhW/BLIx6lMW4Oe6QCJcCoPkaeoH8TU3bXhjztECeZfBFkSYGoVKw1nDE3yOrqcCvtM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB3234
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,137 +127,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 13/12/2022 04.28, Linus Torvalds wrote:
+> On Mon, Dec 12, 2022 at 4:34 AM Christian Brauner <brauner@kernel.org> wrote:
+>>
+>> This pull request converts all remaining places that still make use of non-type
+>> safe idmapping helpers to rely on the new type safe vfs{g,u}id based helpers.
+>> Afterwards it removes all the old non-type safe helpers.
+> 
+> So I've pulled this, but I'm not entirely happy about some of those
+> crazy helpers.
+> 
+> In particular, the whole "ordering" helpers are really not something
+> that should be used in general, I feel. I'm talking about
+> vfsuid_gt_kuid() and friends - it's an entirely insane operation and
+> makes no sense at all.
+> 
+> Yes, yes, I understand why they exist (those crazy IMA rules), but I
+> feel that those functions *really* shouldn't be exposed to anybody
+> else.
+> 
+> IOW, making those insane functions available in <linux/idmapping.h>
+> really seems wrong to me. They are crazy special cases, and I think
+> they should exist purely in that crazy ima_security file.
 
-please pull fbdev fixes and updates for kernel 6.2-rc1.
+Yeah. Aside from assigning any semantics to < or > of [ug]ids, which is
+something IMA apparently wants to do, taking the address of a static
+inline in the first place is a code smell; that obviously forces the
+compiler to emit a copy in the current TU. But the code compares stored
+pointers to addresses of those static inlines, which would be completely
+broken if this didn't happen to all be contained in a single TU. That's
+quite subtle, and probably fowner_op would be better as an enum.
 
-Most relevant are the patches from Dmitry Torokhov to switch omapfb to
-the gpiod API.
-The other patches are small and fix e.g. UML build issues, improve
-the error paths and cleanup code.
+Rasmus
 
-Thanks,
-Helge
-
-
-The following changes since commit c7020e1b346d5840e93b58cc4f2c67fc645d8df=
-9:
-
-  Merge tag 'pci-v6.2-changes' of git://git.kernel.org/pub/scm/linux/kerne=
-l/git/helgaas/pci (2022-12-14 09:54:10 -0800)
-
-are available in the Git repository at:
-
-  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git ta=
-gs/fbdev-for-6.2-rc1
-
-for you to fetch changes up to 3c3bfb8586f848317ceba5d777e11204ba3e5758:
-
-  fbdev: fbcon: release buffer when fbcon_do_set_font() failed (2022-12-14=
- 20:01:51 +0100)
-
-=2D---------------------------------------------------------------
-fbdev updates and fixes for kernel 6.2-rc1:
-
-Switch omapfb to the gpiod API, some failure path fixes and
-UML build fixes.
-
-=2D---------------------------------------------------------------
-Andy Shevchenko (2):
-      fbdev: ssd1307fb: Drop optional dependency
-      fbdev: ssd1307fb: Drop duplicate NULL checks for PWM APIs
-
-Christophe JAILLET (2):
-      fbdev: uvesafb: Fixes an error handling path in uvesafb_probe()
-      fbdev: uvesafb: Simplify uvesafb_remove()
-
-Colin Ian King (1):
-      fbdev: omapfb: remove redundant variable checksum
-
-Dmitry Torokhov (13):
-      fbdev: omapfb: connector-hdmi: switch to using gpiod API
-      fbdev: omapfb: panel-sony-acx565akm: remove support for platform dat=
-a
-      fbdev: omapfb: panel-sony-acx565akm: switch to using gpiod API
-      fbdev: omapfb: encoder-tfp410: switch to using gpiod API
-      fbdev: omapfb: panel-dsi-cm: switch to using gpiod API
-      fbdev: omapfb: panel-tpo-td043mtea1: switch to using gpiod API
-      fbdev: omapfb: panel-nec-nl8048hl11: switch to using gpiod API
-      fbdev: omapfb: panel-dpi: remove support for platform data
-      fbdev: omapfb: connector-analog-tv: remove support for platform data
-      fbdev: omapfb: encoder-opa362: fix included headers
-      fbdev: omapfb: panel-lgphilips-lb035q02: remove backlight GPIO handl=
-ing
-      fbdev: omapfb: panel-tpo-td028ttec1: stop including gpio.h
-      fbdev: omapfb: panel-sharp-ls037v7dw01: fix included headers
-
-Dongliang Mu (2):
-      fbdev: smscufx: fix error handling code in ufx_usb_probe
-      fbdev: da8xx-fb: add missing regulator_disable() in fb_probe
-
-Gaosheng Cui (1):
-      fbdev: ep93xx-fb: Add missing clk_disable_unprepare in ep93xxfb_prob=
-e()
-
-Randy Dunlap (2):
-      fbdev: geode: don't build on UML
-      fbdev: uvesafb: don't build on UML
-
-Shang XiaoJing (1):
-      fbdev: via: Fix error in via_core_init()
-
-Tetsuo Handa (1):
-      fbdev: fbcon: release buffer when fbcon_do_set_font() failed
-
-Uwe Kleine-K=F6nig (1):
-      fbdev: matroxfb: Convert to i2c's .probe_new()
-
-Xiongfeng Wang (1):
-      fbdev: vermilion: decrease reference count in error path
-
-Yang Yingliang (1):
-      fbdev: pm2fb: fix missing pci_disable_device()
-
-Yu Zhe (1):
-      fbdev: controlfb: fix spelling mistake "paramaters"->"parameters"
-
-wangkailong@jari.cn (1):
-      fbdev: pxafb: Remove unnecessary print function dev_err()
-
-ye xingchen (2):
-      fbdev: uvesafb: use sysfs_emit() to instead of scnprintf()
-      fbdev: sh_mobile_lcdcfb: use sysfs_emit() to instead of scnprintf()
-
- drivers/video/fbdev/Kconfig                        |   2 +-
- drivers/video/fbdev/controlfb.c                    |   2 +-
- drivers/video/fbdev/core/fbcon.c                   |   3 +-
- drivers/video/fbdev/da8xx-fb.c                     |   7 +-
- drivers/video/fbdev/ep93xx-fb.c                    |   4 +-
- drivers/video/fbdev/geode/Kconfig                  |   1 +
- drivers/video/fbdev/matrox/matroxfb_maven.c        |   5 +-
- .../omap2/omapfb/displays/connector-analog-tv.c    |  60 ++---------
- .../fbdev/omap2/omapfb/displays/connector-hdmi.c   |  49 +++------
- .../fbdev/omap2/omapfb/displays/encoder-opa362.c   |   4 +-
- .../fbdev/omap2/omapfb/displays/encoder-tfp410.c   |  67 ++++--------
- .../video/fbdev/omap2/omapfb/displays/panel-dpi.c  |  83 ++-------------
- .../fbdev/omap2/omapfb/displays/panel-dsi-cm.c     | 116 ++++++++--------=
------
- .../omapfb/displays/panel-lgphilips-lb035q02.c     |  21 +---
- .../omap2/omapfb/displays/panel-nec-nl8048hl11.c   |  72 ++++---------
- .../omapfb/displays/panel-sharp-ls037v7dw01.c      |   3 +-
- .../omap2/omapfb/displays/panel-sony-acx565akm.c   | 105 ++++++----------=
----
- .../omap2/omapfb/displays/panel-tpo-td028ttec1.c   |   1 -
- .../omap2/omapfb/displays/panel-tpo-td043mtea1.c   |  59 +++--------
- drivers/video/fbdev/omap2/omapfb/dss/hdmi5_core.c  |   2 -
- drivers/video/fbdev/pm2fb.c                        |   9 +-
- drivers/video/fbdev/pxafb.c                        |   1 -
- drivers/video/fbdev/sh_mobile_lcdcfb.c             |   8 +-
- drivers/video/fbdev/smscufx.c                      |  46 +++++---
- drivers/video/fbdev/ssd1307fb.c                    |  12 +--
- drivers/video/fbdev/uvesafb.c                      |  39 ++++---
- drivers/video/fbdev/vermilion/vermilion.c          |   4 +-
- drivers/video/fbdev/via/via-core.c                 |   9 +-
- include/video/omap-panel-data.h                    |  71 -------------
- 29 files changed, 261 insertions(+), 604 deletions(-)
- delete mode 100644 include/video/omap-panel-data.h
