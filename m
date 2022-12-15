@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8352564E1C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF95964E1C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbiLOT24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 14:28:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
+        id S230342AbiLOT3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 14:29:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbiLOT2b (ORCPT
+        with ESMTP id S230111AbiLOT2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 15 Dec 2022 14:28:31 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5085847310;
-        Thu, 15 Dec 2022 11:28:29 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id m4so31385pls.4;
-        Thu, 15 Dec 2022 11:28:29 -0800 (PST)
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F104B9A1;
+        Thu, 15 Dec 2022 11:28:30 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id 4so36842plj.3;
+        Thu, 15 Dec 2022 11:28:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rlyNdOzS6lefhSSM/VlTz3GSPTVPpMK1oqgfJv5rmjM=;
-        b=ZgWLJedYJWqeU21kwV1U4jSCjyytuO7e/mc+L1bD3knCJBNvT/LsCEKT6X6UdBTzHr
-         r2krlBSmYgKXcS0AFPDmeL8MvSFznFYDZ/ok4Mqk+lbvEWY9B6VFOfSxJzyWmKockKtp
-         JJGmfdApCm1DAAzmEixI6JdkgSIFJFJELW0PAIwqodbenS2sESq41Oi6C16eoSLRmes5
-         +Ibka/Nv7i+L2jgddMoYZILVURo6IylI2QYDbVLXUCZdj/LFw+Xpn14mtUg1C+TnxG0x
-         WiEKYPZP88XIbw1UuhG53wklEG/ttt2T7wvXTcY2/Oy8PH90Kh4argzwCNvb25grFv4i
-         qPpg==
+        bh=lRJhsYD6Q8d3CjTB733ncypYkegZvAGinKhexPwhiRs=;
+        b=Om7CYEY7dnjsSshVnzhztwQx5Wx7srg6j2+WpPqCN1ZKgkMHQ+mEVG7lE5zle0hmAX
+         nCzlvchTjD5/hNptvIT4pQ+UZUN/CW/FWrWpVLWhA+ayzc3eCrGt0YO2W9ffWBNab+Mu
+         p6SHupNBRrQ1Kb1viujAuVgjFmzgudeA0wG2ewKq89ti4t0UtJi/vhL33gBKdYCZxA0K
+         D2C1udzxGBPCVyQgPIY7hHVHq398+47QYU7Ux79H+R6IPwAh4DXUAOK7UB1636U63hMY
+         5Q9BUOr+PW6XZ5SGfzRfsNyMI18hWUkGihMjfqh11Avuq22i1j0gRIZn2lGTm1ONeO5I
+         aCYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=rlyNdOzS6lefhSSM/VlTz3GSPTVPpMK1oqgfJv5rmjM=;
-        b=NnGW9fpBhG//zG61/eYqlXCRp8dSdQqxz94NKiuwz8Sh4F6eMWOSEfnDsAcIX/EBlr
-         SzvG1Dh78RebHRKBNwUQgFfFeP+ltKCeNKpnmB/U7gdYRoNozO6ju0+ZbTa2CDnB4vB5
-         7oo2yRY7Gl3udR/8qTilW2DFSW5rrGuDsNWqjY2xVveARgHKrTEEVevS9WvP1+h8+TH7
-         lfASYj4JP3AvrbmS6IEWQ7gnqa67R0CIRrBReOjropmBscDeaAOFwchCldpPsX/ICGpy
-         X3emMx4PMM+q+xJnmRypd1UrEUWA31M3uTnpiNU8RxeLR2N2Yvj0OURa3HdbGAyPatec
-         rY3g==
-X-Gm-Message-State: ANoB5pn2uly5KD0zRHAErSTnN2fiDu22xjWugHdF06l/L1u7qYPXihEO
-        idMmtjR4yEvXLfVMM8fUuto=
-X-Google-Smtp-Source: AA0mqf4mJLL40VGDcnosZch6InOpLE0yZmjOD9tt56/lEPgL4rxXCVkK2uJ1B9JBg7ErCtkXg3GEgQ==
-X-Received: by 2002:a17:90b:2315:b0:219:8b27:e065 with SMTP id mt21-20020a17090b231500b002198b27e065mr36884986pjb.17.1671132508708;
-        Thu, 15 Dec 2022 11:28:28 -0800 (PST)
+        bh=lRJhsYD6Q8d3CjTB733ncypYkegZvAGinKhexPwhiRs=;
+        b=U5rVzb+10U/ins+bLuoNWSQBpi7cqoiy/H7H7JkBmbcfPL4B7wC7eYdUoiNUeceo/f
+         KRJOQZpULeSYzQq8sDy8JVt2dXOOn+IJ9xVCxFQfwn33jpFAQ+ZibDkJX+LlVNlXQo/w
+         bPVe7hVDlTvVj+yfC9jNDKQT6MfxYI/s4V6vT2fXgcDyE+f2IQSNTIq441ke9D4E1JRH
+         T+kHnlrWU6GaK6wzG1sr6p7eOiZO2sv4JFSQyexbue5AEGwsOvRDtj+LtSoV6N672kg/
+         bOrwNuquYYqx3fAbcQlJnptMsQouv3bJ0A+Pj/9/sg8W48lYttdK3tzGeBUR5jnfDxWy
+         yqMg==
+X-Gm-Message-State: ANoB5pmJPH5mKjYxhhkV/74h3txBd2xkeuYzXwp8g3RJ75vct4IRrvDS
+        wTCQ3O0jC9l/cpVBaos0xXs=
+X-Google-Smtp-Source: AA0mqf5Lm+1UkoW8s8mQkmLI6b68vjTrnFHEfYIFV0K6KAEpTWuAocOSKYWdpne0rjHZ1QELAXX6+w==
+X-Received: by 2002:a05:6a20:9589:b0:9d:efbf:785d with SMTP id iu9-20020a056a20958900b0009defbf785dmr10620141pzb.18.1671132509823;
+        Thu, 15 Dec 2022 11:28:29 -0800 (PST)
 Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:ecc1:3e44:be34:129c])
-        by smtp.gmail.com with ESMTPSA id ep14-20020a17090ae64e00b00219cf5c3829sm3475129pjb.57.2022.12.15.11.28.27
+        by smtp.gmail.com with ESMTPSA id ep14-20020a17090ae64e00b00219cf5c3829sm3475129pjb.57.2022.12.15.11.28.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 11:28:28 -0800 (PST)
+        Thu, 15 Dec 2022 11:28:29 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -62,9 +62,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         linux-perf-users@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
         Milian Wolff <milian.wolff@kdab.com>,
         Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH 7/9] perf hist: Improve srcline sort key performance
-Date:   Thu, 15 Dec 2022 11:28:15 -0800
-Message-Id: <20221215192817.2734573-8-namhyung@kernel.org>
+Subject: [PATCH 8/9] perf hist: Improve srcfile sort key performance
+Date:   Thu, 15 Dec 2022 11:28:16 -0800
+Message-Id: <20221215192817.2734573-9-namhyung@kernel.org>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 In-Reply-To: <20221215192817.2734573-1-namhyung@kernel.org>
 References: <20221215192817.2734573-1-namhyung@kernel.org>
@@ -80,79 +80,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sort_entry->cmp() will be called for eventy sample data to find a
-matching entry.  When it has 'srcline' sort key, that means it needs to
-call addr2line or libbfd everytime.
-
-This is not optimal because many samples will have same address and it
-just can call addr2line once.  So postpone the actual srcline check to
-the sort_entry->collpase() and compare addresses in ->cmp().
-
-Also it needs to add ->init() callback to make sure it has srcline info.
-If a sample has a unique data, chances are the entry can be sorted out
-by other (previous) keys and callbacks in sort_srcline never called.
+Likewise, modify ->cmp() callback to compare sample address and map
+address.  And add ->collapse() and ->sort() to check the actual
+srcfile string.  Also add ->init() to make sure it has the srcfile.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/util/sort.c | 29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+ tools/perf/util/sort.c | 27 +++++++++++++++++++++++++--
+ 1 file changed, 25 insertions(+), 2 deletions(-)
 
 diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
-index f6333b3dca35..913045c5b2b2 100644
+index 913045c5b2b2..c290539dcf43 100644
 --- a/tools/perf/util/sort.c
 +++ b/tools/perf/util/sort.c
-@@ -373,6 +373,18 @@ char *hist_entry__srcline(struct hist_entry *he)
- 
- static int64_t
- sort__srcline_cmp(struct hist_entry *left, struct hist_entry *right)
-+{
-+	int64_t ret;
-+
-+	ret = _sort__addr_cmp(left->ip, right->ip);
-+	if (ret)
-+		return ret;
-+
-+	return sort__dso_cmp(left, right);
-+}
-+
-+static int64_t
-+sort__srcline_collapse(struct hist_entry *left, struct hist_entry *right)
- {
- 	if (!left->srcline)
- 		left->srcline = hist_entry__srcline(left);
-@@ -382,18 +394,31 @@ sort__srcline_cmp(struct hist_entry *left, struct hist_entry *right)
- 	return strcmp(right->srcline, left->srcline);
+@@ -569,18 +569,41 @@ sort__srcfile_cmp(struct hist_entry *left, struct hist_entry *right)
+ 	return strcmp(right->srcfile, left->srcfile);
  }
  
--static int hist_entry__srcline_snprintf(struct hist_entry *he, char *bf,
+-static int hist_entry__srcfile_snprintf(struct hist_entry *he, char *bf,
 -					size_t size, unsigned int width)
 +static int64_t
-+sort__srcline_sort(struct hist_entry *left, struct hist_entry *right)
++sort__srcfile_collapse(struct hist_entry *left, struct hist_entry *right)
 +{
-+	return sort__srcline_collapse(left, right);
++	if (!left->srcfile)
++		left->srcfile = hist_entry__get_srcfile(left);
++	if (!right->srcfile)
++		right->srcfile = hist_entry__get_srcfile(right);
++
++	return strcmp(right->srcfile, left->srcfile);
 +}
 +
-+static void
-+sort__srcline_init(struct hist_entry *he)
++static int64_t
++sort__srcfile_sort(struct hist_entry *left, struct hist_entry *right)
++{
++	return sort__srcfile_collapse(left, right);
++}
++
++static void sort__srcfile_init(struct hist_entry *he)
  {
- 	if (!he->srcline)
- 		he->srcline = hist_entry__srcline(he);
+ 	if (!he->srcfile)
+ 		he->srcfile = hist_entry__get_srcfile(he);
 +}
  
-+static int hist_entry__srcline_snprintf(struct hist_entry *he, char *bf,
++static int hist_entry__srcfile_snprintf(struct hist_entry *he, char *bf,
 +					size_t size, unsigned int width)
 +{
- 	return repsep_snprintf(bf, size, "%-.*s", width, he->srcline);
+ 	return repsep_snprintf(bf, size, "%-.*s", width, he->srcfile);
  }
  
- struct sort_entry sort_srcline = {
- 	.se_header	= "Source:Line",
- 	.se_cmp		= sort__srcline_cmp,
-+	.se_collapse	= sort__srcline_collapse,
-+	.se_sort	= sort__srcline_sort,
-+	.se_init	= sort__srcline_init,
- 	.se_snprintf	= hist_entry__srcline_snprintf,
- 	.se_width_idx	= HISTC_SRCLINE,
+ struct sort_entry sort_srcfile = {
+ 	.se_header	= "Source File",
+ 	.se_cmp		= sort__srcfile_cmp,
++	.se_collapse	= sort__srcfile_collapse,
++	.se_sort	= sort__srcfile_sort,
++	.se_init	= sort__srcfile_init,
+ 	.se_snprintf	= hist_entry__srcfile_snprintf,
+ 	.se_width_idx	= HISTC_SRCFILE,
  };
 -- 
 2.39.0.314.g84b9a713c41-goog
