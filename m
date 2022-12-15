@@ -2,50 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4882864DEE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:44:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 411A164DEE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbiLOQoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:44:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
+        id S229480AbiLOQqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:46:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiLOQoS (ORCPT
+        with ESMTP id S229816AbiLOQqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:44:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74B6379F7;
-        Thu, 15 Dec 2022 08:44:16 -0800 (PST)
+        Thu, 15 Dec 2022 11:46:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FFC14D34
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:46:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83CF261DE1;
-        Thu, 15 Dec 2022 16:44:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A7FC433EF;
-        Thu, 15 Dec 2022 16:44:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E356B81AAC
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 16:46:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C28C433D2;
+        Thu, 15 Dec 2022 16:45:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671122655;
-        bh=nx+NAAzYOuwGZhcQwQLKlwkWqZKRCHdBqu/CAuLJa14=;
+        s=k20201202; t=1671122761;
+        bh=aNi+MDukcWClJUpGNHicqsKzCYbsXQMr0xrEnMsi1Ts=;
         h=From:To:Cc:Subject:Date:From;
-        b=Ao6n1DJ+me4j4PoHQeoEXJWDSB1xNi9od41FnsE+u/QY5tbwsq8cSD6Qlqqh+mTXs
-         ac0qwYwE65VmDxv0mvhiwAGE1uwpgo3fdjQpYDC5Ve1FFlkRLSmoImN0mFm+VpV8az
-         zmJJvvwbI57uuftyIZdhv9j82bWS7bB5OB+V+dfxG8AASHp0U+FmY2ARQSd351MNWw
-         U496RJ4RH6p2NOejGpgZttehF96d2bQMVTj9qI2UXDCi/xNNR2+vF4hsqDSScP4XQC
-         Aw6de5547wDYh5XB38+8i+BiDrqkeB8JLYk/h6V4zw5MKpDJPzUHOjODtVyO5eWYpv
-         8L6VKq0vzZlXA==
+        b=p32bcg5JZOWdcq6LRNSuomdYw4Xuu/fO3b8cx0vILTMUqsLZ0+QxZ8LyZ2b6qk/sU
+         DK4rjWufN/ywpUM5+ZWqONZd7yoLfU8kU9nXeaYiaisv2wfkPnwdREpGoJTIrqXtHw
+         cFlF8rOWX2Aash/2xiNLlbfGvAVpBnrnuc7aH7XHBMpC42XA28xwfdnAp9N/9esM6/
+         5SVW03nnnN2i76DAIcn51k6Jx/HBAxw9FNAzyx0oTAjy8VJsTnQ8ykug9OdDqi3TmA
+         v2XGRdQocpyrZLX9dlNLn237Ady1yssU7TP9RXW1oWA3A7RslJ/dLqZS/CxE8wO/wk
+         T0NKYJuTSyUKQ==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] coredump: move dump_emit_page() into CONFIG_ELF_CORE check
-Date:   Thu, 15 Dec 2022 17:44:02 +0100
-Message-Id: <20221215164409.1025791-1-arnd@kernel.org>
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Charlene Liu <Charlene.Liu@amd.com>,
+        Alex Hung <alex.hung@amd.com>, Roman Li <roman.li@amd.com>,
+        Duncan Ma <duncan.ma@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Michael Strauss <michael.strauss@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amd/display: fix duplicate assignments
+Date:   Thu, 15 Dec 2022 17:45:25 +0100
+Message-Id: <20221215164537.1126692-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -60,85 +67,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-If CONFIG_ELF_CORE is disabled, dump_emit_page() is unused, which
-causes a warning:
+The .set_odm_combine callback pointer was added twice, causing
+a harmless -Wextra warning:
 
-fs/coredump.c:834:12: error: 'dump_emit_page' defined but not used [-Werror=unused-function]
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn314/dcn314_optc.c:258:36: error: initialized field overwritten [-Werror=override-init]
+  258 |                 .set_odm_combine = optc314_set_odm_combine,
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn314/dcn314_optc.c:258:36: note: (near initialization for 'dcn314_tg_funcs.set_odm_combine')
 
-There is only one caller, so move the definition next to it.
-
-Fixes: 06bbaa6dc53c ("[coredump] don't use __kernel_write() on kmap_local_page()")
+Fixes: 5ade1b951dec ("drm/amd/display: Add OTG/ODM functions")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- fs/coredump.c | 48 ++++++++++++++++++++++++------------------------
- 1 file changed, 24 insertions(+), 24 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dcn314/dcn314_optc.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/fs/coredump.c b/fs/coredump.c
-index de78bde2991b..a25ecec9ca7c 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -838,6 +838,30 @@ static int __dump_skip(struct coredump_params *cprm, size_t nr)
- 	}
- }
- 
-+int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
-+{
-+	if (cprm->to_skip) {
-+		if (!__dump_skip(cprm, cprm->to_skip))
-+			return 0;
-+		cprm->to_skip = 0;
-+	}
-+	return __dump_emit(cprm, addr, nr);
-+}
-+EXPORT_SYMBOL(dump_emit);
-+
-+void dump_skip_to(struct coredump_params *cprm, unsigned long pos)
-+{
-+	cprm->to_skip = pos - cprm->pos;
-+}
-+EXPORT_SYMBOL(dump_skip_to);
-+
-+void dump_skip(struct coredump_params *cprm, size_t nr)
-+{
-+	cprm->to_skip += nr;
-+}
-+EXPORT_SYMBOL(dump_skip);
-+
-+#ifdef CONFIG_ELF_CORE
- static int dump_emit_page(struct coredump_params *cprm, struct page *page)
- {
- 	struct bio_vec bvec = {
-@@ -871,30 +895,6 @@ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
- 	return 1;
- }
- 
--int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
--{
--	if (cprm->to_skip) {
--		if (!__dump_skip(cprm, cprm->to_skip))
--			return 0;
--		cprm->to_skip = 0;
--	}
--	return __dump_emit(cprm, addr, nr);
--}
--EXPORT_SYMBOL(dump_emit);
--
--void dump_skip_to(struct coredump_params *cprm, unsigned long pos)
--{
--	cprm->to_skip = pos - cprm->pos;
--}
--EXPORT_SYMBOL(dump_skip_to);
--
--void dump_skip(struct coredump_params *cprm, size_t nr)
--{
--	cprm->to_skip += nr;
--}
--EXPORT_SYMBOL(dump_skip);
--
--#ifdef CONFIG_ELF_CORE
- int dump_user_range(struct coredump_params *cprm, unsigned long start,
- 		    unsigned long len)
- {
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_optc.c b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_optc.c
+index f246aab23050..0086cafb0f7a 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_optc.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_optc.c
+@@ -241,7 +241,6 @@ static struct timing_generator_funcs dcn314_tg_funcs = {
+ 		.set_dsc_config = optc3_set_dsc_config,
+ 		.get_dsc_status = optc2_get_dsc_status,
+ 		.set_dwb_source = NULL,
+-		.set_odm_combine = optc314_set_odm_combine,
+ 		.get_optc_source = optc2_get_optc_source,
+ 		.set_out_mux = optc3_set_out_mux,
+ 		.set_drr_trigger_window = optc3_set_drr_trigger_window,
 -- 
 2.35.1
 
