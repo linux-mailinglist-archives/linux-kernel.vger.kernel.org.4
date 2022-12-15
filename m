@@ -2,132 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0FB264DD16
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 15:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4867E64DD1A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 15:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiLOOqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 09:46:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56288 "EHLO
+        id S229782AbiLOOrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 09:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiLOOp4 (ORCPT
+        with ESMTP id S229695AbiLOOro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 09:45:56 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60D42F679;
-        Thu, 15 Dec 2022 06:45:54 -0800 (PST)
-Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id C761C852F3;
-        Thu, 15 Dec 2022 15:45:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1671115553;
-        bh=f3UHy07jTlRF7dVA/RF3Ch0ZoUXUoIRuvgnYN3KwaGc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TzpZWtu1+Cwz8yKT8khD/PXaNg83UBIBMhoAVTi6FEbdWzpuWP7RF1paFNvQIq6CH
-         50JC674BpDYQwLSQLERhmJmhvtAUSPQO29t/zI+2MOmw9dFb1TCUCd2eOmgjeARUDX
-         0TlIzIm0cML1pLHDD/AeLYtw3B5SL4EkC9Rr+Hnodwvzcwznpmk9y/nt8rFfzWTHcD
-         La8x+KW7jltJlW9bRTQHu9/eaI79oDQIaf40STKeOsPgMohaJcZYimuhAqsL/twFqf
-         go/ucT0DfFSce/Oa0v8IYh11bLerpVmFTXKTmY1CacNH7VyLrMnoiWBJ6Rmua4kmca
-         dxj9qkJFkAwyQ==
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lukasz Majewski <lukma@denx.de>
-Subject: [PATCH v2 3/3] net: dsa: mv88e6xxx: add support for MV88E6071 switch
-Date:   Thu, 15 Dec 2022 15:45:36 +0100
-Message-Id: <20221215144536.3810578-3-lukma@denx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221215144536.3810578-1-lukma@denx.de>
-References: <20221215144536.3810578-1-lukma@denx.de>
+        Thu, 15 Dec 2022 09:47:44 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675E72F644
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 06:47:42 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id g7so16029125lfv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 06:47:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FCbBNla3B4qzufgNiT6xhAilFk4aUOoKfWfCbflNpl0=;
+        b=GGpwGlA19P0rfy9huqWJGAyESey4vV3uts6zp1U9TMfB6CdZE1djzJyX2IlWeg0Fsi
+         helS6xvaZfoKmgFDvcbaJPgATyp8pcPB/HWMY/tKJIeQ3idJLE6YBzRhQoYNWX4qRFGj
+         IeA9JaHh31wnd2Nzy8vXoZyW2d+WadWX2vzOCHTAStnD9Nh2puGDXFf/3lBcOOV81DQw
+         gTf2XCInIBo/S5uzKnJL3G7LELdeajNHzyUWCiMWReUQAUroiLYGIlnsGnkcafrBF/zs
+         OXRP66OWecySoo3pdkoonSJREzdwBsGpuMWgBwrrHNHwLvB7qypS1/7gy0TmKZlMpwfq
+         2sGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FCbBNla3B4qzufgNiT6xhAilFk4aUOoKfWfCbflNpl0=;
+        b=mvToEqolI/Ii/AQI2a1usdnSuCEbJssWhcKZZ4BTwAXermzvyYsWr615wnsf38Qq1r
+         Sm7OlcytoWUwOzvXeI1HjmqTI0x0zXlKbdegXHTm/OL7SHl774IiUAAAJm38ykZXrnp3
+         N/bpKDI1X10HfDkPZ2soU4hCujINMOCRHmfi/G92GEZFfwURjUq+OYuREw73F/UGYQbf
+         9HujmAbrGZgBlFb++lFWuX6niRkC+FjbH8QG9EGNg7cat123PhwgdD4sVVmDL56AsO09
+         kDOPYF5d7mJZ7iAo/wxBhS7e9ChRqgK4nGtF/YZcl4S7C+zF8rQNkXcYRlpJBpYshifv
+         cJ3w==
+X-Gm-Message-State: ANoB5pkMioWHSb6OpWWCEWqzDvSUJ1DmY+iM9Y6qOMQZmFBPgvnf3fjQ
+        anJITuK7aPU1K3ieNyDdNxkLlw==
+X-Google-Smtp-Source: AA0mqf5gvjiIw+ORFu7EYu5CDzi6Lcsv22WBWXZZz52qXpJJYm8x2JBbk2HS05E8NYd1MUyiy39YiA==
+X-Received: by 2002:a05:6512:224b:b0:4a4:68b7:dedb with SMTP id i11-20020a056512224b00b004a468b7dedbmr10078925lfu.55.1671115660796;
+        Thu, 15 Dec 2022 06:47:40 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id s23-20020a056512315700b004b5812207dbsm1176577lfi.201.2022.12.15.06.47.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 06:47:40 -0800 (PST)
+Message-ID: <0157bea5-2173-3f45-564d-a0d26b2bffb5@linaro.org>
+Date:   Thu, 15 Dec 2022 16:47:39 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] arm64: defconfig: enable crypto userspace API
+To:     Brian Masney <bmasney@redhat.com>, catalin.marinas@arm.com,
+        will@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20221214174607.2948497-1-bmasney@redhat.com>
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221214174607.2948497-1-bmasney@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A mv88e6250 family (i.e. LinkStreet) switch with 5 internal PHYs,
-2 RMIIs and no PTP support.
+On 14/12/2022 19:46, Brian Masney wrote:
+> Enable CONFIG_CRYPTO_USER so that libkcapi can be used. This was tested
+> using kcapi-rng on a Qualcomm SA8540p automotive development board.
+> 
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
+> ---
+>   arch/arm64/configs/defconfig | 1 +
+>   1 file changed, 1 insertion(+)
 
-Signed-off-by: Lukasz Majewski <lukma@denx.de>
----
-Changes for v2:
-- Update commit message
-- Add information about max frame size
----
- drivers/net/dsa/mv88e6xxx/chip.c | 21 +++++++++++++++++++++
- drivers/net/dsa/mv88e6xxx/chip.h |  1 +
- drivers/net/dsa/mv88e6xxx/port.h |  1 +
- 3 files changed, 23 insertions(+)
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index ac0794e405bd..4277216af1cf 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -5044,6 +5044,27 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
- 		.ops = &mv88e6250_ops,
- 	},
- 
-+	[MV88E6071] = {
-+		.prod_num = MV88E6XXX_PORT_SWITCH_ID_PROD_6071,
-+		.family = MV88E6XXX_FAMILY_6250,
-+		.name = "Marvell 88E6071",
-+		.num_databases = 64,
-+		.num_ports = 7,
-+		.num_internal_phys = 5,
-+		.max_vid = 4095,
-+		.max_frame_size = 2048,
-+		.port_base_addr = 0x08,
-+		.phy_base_addr = 0x00,
-+		.global1_addr = 0x0f,
-+		.global2_addr = 0x07,
-+		.age_time_coeff = 15000,
-+		.g1_irqs = 9,
-+		.g2_irqs = 5,
-+		.atu_move_port_mask = 0xf,
-+		.dual_chip = true,
-+		.ops = &mv88e6250_ops,
-+	},
-+
- 	[MV88E6085] = {
- 		.prod_num = MV88E6XXX_PORT_SWITCH_ID_PROD_6085,
- 		.family = MV88E6XXX_FAMILY_6097,
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
-index 58cf1e633ce3..a0fb2b465400 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.h
-+++ b/drivers/net/dsa/mv88e6xxx/chip.h
-@@ -54,6 +54,7 @@ enum mv88e6xxx_frame_mode {
- /* List of supported models */
- enum mv88e6xxx_model {
- 	MV88E6020,
-+	MV88E6071,
- 	MV88E6085,
- 	MV88E6095,
- 	MV88E6097,
-diff --git a/drivers/net/dsa/mv88e6xxx/port.h b/drivers/net/dsa/mv88e6xxx/port.h
-index 862d1fe1aa15..08e544bf54c5 100644
---- a/drivers/net/dsa/mv88e6xxx/port.h
-+++ b/drivers/net/dsa/mv88e6xxx/port.h
-@@ -107,6 +107,7 @@
- #define MV88E6XXX_PORT_SWITCH_ID		0x03
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_MASK	0xfff0
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6020	0x0200
-+#define MV88E6XXX_PORT_SWITCH_ID_PROD_6071	0x0710
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6085	0x04a0
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6095	0x0950
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6097	0x0990
 -- 
-2.37.3
+With best wishes
+Dmitry
 
