@@ -2,94 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD8564DFC1
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A0564DF81
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiLORfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 12:35:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
+        id S229895AbiLORQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 12:16:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiLORfk (ORCPT
+        with ESMTP id S229836AbiLORQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 12:35:40 -0500
-X-Greylist: delayed 596 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Dec 2022 09:35:34 PST
-Received: from mail.toke.dk (mail.toke.dk [IPv6:2a0c:4d80:42:2001::664])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA7A37213;
-        Thu, 15 Dec 2022 09:35:34 -0800 (PST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-        t=1671124565; bh=ywaJJZXUkkSmvUs71ktwaaz2k3Du019540IdT+fmclA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=lFYnBSKUda8fTO3gAbCmR7Cm1KVjKu5VJNHbmHUExk5fwnG5SFVcP5G9bkGULjEBI
-         E3qadxDVg2kCO0wVSoNsE6kN+6HdsoZIUM6Rvkm7+UzStBz5jS1FBMPF+udvS5E9Jj
-         3nrqwJCflvVf6QKrhItD4DCr4hVAe/m5dgH6jJ5vGQ2aUldH4xj6smUmlgJHW5ki+L
-         LNPTWxwTDBC1OLLWu02+yobpeOiUGM0IoeKYCY/UtiTDsR1xQVxLMNVrtaZZq1kHJ3
-         pK2f5hikWoiiqeIv/2+nUplmo0z23CwM1jesRrGfABsXnjhOUssR/0ZPvw7hCZMgKY
-         9s1cuzwq01yoA==
-To:     Arnd Bergmann <arnd@kernel.org>, Kalle Valo <kvalo@kernel.org>,
-        Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ath9k: use proper statements in conditionals
-In-Reply-To: <20221215165553.1950307-1-arnd@kernel.org>
-References: <20221215165553.1950307-1-arnd@kernel.org>
-Date:   Thu, 15 Dec 2022 18:16:04 +0100
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <87k02sd1uz.fsf@toke.dk>
+        Thu, 15 Dec 2022 12:16:50 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C5B7FAE9
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 09:16:49 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8CAB5FEC;
+        Thu, 15 Dec 2022 09:17:29 -0800 (PST)
+Received: from [10.57.88.90] (unknown [10.57.88.90])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A6F673F5A1;
+        Thu, 15 Dec 2022 09:16:47 -0800 (PST)
+Message-ID: <c10c9742-06d6-f56b-ea55-47f99b06ca32@arm.com>
+Date:   Thu, 15 Dec 2022 17:16:41 +0000
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] iommu/renesas: Support riscv compile
+Content-Language: en-GB
+To:     guoren@kernel.org, palmer@dabbelt.com,
+        prabhakar.mahadev-lad.rj@bp.renesas.com
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        iommu@lists.linux.dev, Guo Ren <guoren@linux.alibaba.com>,
+        kernel test robot <lkp@intel.com>
+References: <20221215073212.1966823-1-guoren@kernel.org>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20221215073212.1966823-1-guoren@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Arnd Bergmann <arnd@kernel.org> writes:
+On 2022-12-15 07:32, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> After riscv selects ARCH_RENESAS, we need to add ARM64 || ARM
+> dependency here.
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> A previous cleanup patch accidentally broke some conditional
-> expressions by replacing the safe "do {} while (0)" constructs
-> with empty macros. gcc points this out when extra warnings
-> are enabled:
->
-> drivers/net/wireless/ath/ath9k/hif_usb.c: In function 'ath9k_skb_queue_complete':
-> drivers/net/wireless/ath/ath9k/hif_usb.c:251:57: error: suggest braces around empty body in an 'else' statement [-Werror=empty-body]
->   251 |                         TX_STAT_INC(hif_dev, skb_failed);
->
-> Make both sets of macros proper expressions again.
->
-> Fixes: d7fc76039b74 ("ath9k: htc: clean up statistics macros")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+This effectively removes all the extra COMPILE_TEST coverage we've been 
+enjoying. FWIW I prefer Geert's suggestion to separate the real 
+functional dependency from implicit assumptions about ARCH_RENESAS, with 
+something like:
+
+	depends on ARCH_RENESAS || COMPILE_TEST
+	depends on !GENERIC_ATOMIC64	#for IOMMU_IO_PGTABLE_LPAE
+
+Thanks,
+Robin.
+
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
 > ---
->  drivers/net/wireless/ath/ath9k/htc.h | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/net/wireless/ath/ath9k/htc.h b/drivers/net/wireless/ath/ath9k/htc.h
-> index 30f0765fb9fd..237f4ec2cffd 100644
-> --- a/drivers/net/wireless/ath/ath9k/htc.h
-> +++ b/drivers/net/wireless/ath/ath9k/htc.h
-> @@ -327,9 +327,9 @@ static inline struct ath9k_htc_tx_ctl *HTC_SKB_CB(struct sk_buff *skb)
->  }
->  
->  #ifdef CONFIG_ATH9K_HTC_DEBUGFS
-> -#define __STAT_SAFE(hif_dev, expr)	((hif_dev)->htc_handle->drv_priv ? (expr) : 0)
-> -#define CAB_STAT_INC(priv)		((priv)->debug.tx_stats.cab_queued++)
-> -#define TX_QSTAT_INC(priv, q)		((priv)->debug.tx_stats.queue_stats[q]++)
-> +#define __STAT_SAFE(hif_dev, expr)	do { ((hif_dev)->htc_handle->drv_priv ? (expr) : 0); } while (0)
-> +#define CAB_STAT_INC(priv)		do { ((priv)->debug.tx_stats.cab_queued++); } while (0)
-> +#define TX_QSTAT_INC(priv, q)		do { ((priv)->debug.tx_stats.queue_stats[q]++); } while (0)
-
-Hmm, is it really necessary to wrap these in do/while constructs? AFAICT
-they're all simple statements already?
-
--Toke
+>   drivers/iommu/Kconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
+> index dc5f7a156ff5..746b95b9f345 100644
+> --- a/drivers/iommu/Kconfig
+> +++ b/drivers/iommu/Kconfig
+> @@ -283,6 +283,7 @@ config EXYNOS_IOMMU_DEBUG
+>   
+>   config IPMMU_VMSA
+>   	bool "Renesas VMSA-compatible IPMMU"
+> +	depends on ARM64 || ARM
+>   	depends on ARCH_RENESAS || (COMPILE_TEST && !GENERIC_ATOMIC64)
+>   	select IOMMU_API
+>   	select IOMMU_IO_PGTABLE_LPAE
