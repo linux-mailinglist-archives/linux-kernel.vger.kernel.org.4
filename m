@@ -2,115 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22EB064D73C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E442564D73E
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiLOH0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 02:26:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        id S229731AbiLOH20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 02:28:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiLOH0B (ORCPT
+        with ESMTP id S229496AbiLOH2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 02:26:01 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA71020363
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 23:25:58 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id o5so2129285wrm.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 23:25:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Mm2wMOJBU0KY5CK4G5XuPJWnbMPqw3bzwZnGj//J0bc=;
-        b=IJ027xJjO2+v9bEloG9slnX6gLRHg9t1MMvGfOevcGjukcWsGVH+SAPCaW5j18HGrf
-         mSgKQ8uYEIFewcYpKNLqjLRCJmDZ7Hf08tzaGsZCcYE3ktur3K1fNrOy4+PcNT2SAhRr
-         gxG5rA8umj7lHwqtDJIGp4Moa0b7Re2Z1+NGxDwQJJEn1DD7aj0XbCGfzk0ChWBYoAwE
-         jmpbTzF1TSUCKxVBlI90TX59HuE+t4WHUMgtFRg0V1tWTFMHs5sqE6azh0haI7p2DGCb
-         2uDakyUpVab9ClcmoHWANWAkdm8bHEQ1NARrvXHcu1d6HqcYaaBsYGqWEuKDVz7BEWXd
-         7YGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mm2wMOJBU0KY5CK4G5XuPJWnbMPqw3bzwZnGj//J0bc=;
-        b=UpAzWGl+Xm9vAY/Gg0egrLsowRckjG4DDtOvqrpNz+KS3Se9tpP9EEb60g68aWSuAD
-         Mp2+VQlW/aruy442kDu9x2L17jqnOdqDTDMaspmPYG6RPQmnbHMdtaGT+zK/LtM3tphU
-         4yEH0/8WyeMuuaEfqNSmXtAfIQ0gZ5Po5tItxNw+nhDEBGnqRJuEuZLcd2Q3DHttqHNF
-         yUodNFVn8IFo/f2TXterKldwl34hQQ484Dkic/gDQUXPZDRuzOfQbHCW4N1a9p84LvMx
-         dxFx2cCNTVCFY3Bjjp0GmPTPvZx+NXzjLZESlWfnzHMq/YBe764p83tJ01LZ8ZsWw8ZJ
-         l6qg==
-X-Gm-Message-State: ANoB5pmiNAfRM2TLij0625kJAZ5hqlykGTD0un6ieBrPOgHZDMiRvq3o
-        d/dUNfEND4W4SUu0Pk2XRruQAw==
-X-Google-Smtp-Source: AA0mqf6FUW6cVCTyvzhNaccE170mxSEmlyha2ZZvhJLzGO2eAwd7HoAqxqtaPydtZy7SLmvbY+rnjg==
-X-Received: by 2002:a5d:5187:0:b0:242:9e8:84b6 with SMTP id k7-20020a5d5187000000b0024209e884b6mr16499660wrv.13.1671089157351;
-        Wed, 14 Dec 2022 23:25:57 -0800 (PST)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id n9-20020a5d67c9000000b00228dbf15072sm5082277wrw.62.2022.12.14.23.25.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 23:25:56 -0800 (PST)
-Message-ID: <ac2d90e2-6fc3-98dc-8c73-936132b6c8d5@linaro.org>
-Date:   Thu, 15 Dec 2022 08:25:54 +0100
+        Thu, 15 Dec 2022 02:28:23 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91F320379
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 23:28:18 -0800 (PST)
+X-UUID: 61a369f9bbfb49e0b5fa4bf61e90ca89-20221215
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=pCM8kpp83jUjDaOHyYh0cwJtN8y3ihXPCiYGpXfTnPQ=;
+        b=Uf7oLPq1wTUmrEJx+HkeiacM0GjS2Xa/ZLd35KUOJY9iU50RtJByX5B708KJqat8BeHQ28BLZQyy6yGMj7EYAG9F5q46j0yI09iZ0tLHYYhH5wdQ2phEDteDnkDRJkYkfgE2Il5z5yCPcSa4K1wCjeKvFCWAkFdsCTccy+Hf2rs=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:21f9a7ec-79fa-4cda-b966-10386d9318aa,IP:0,U
+        RL:0,TC:0,Content:100,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:100
+X-CID-META: VersionHash:dcaaed0,CLOUDID:5072a9b4-d2e2-434d-b6d3-aeae88dfcc78,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:801|102,TC:nil,Content:3,EDM:-3,IP:n
+        il,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 61a369f9bbfb49e0b5fa4bf61e90ca89-20221215
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <yongqiang.niu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 30007516; Thu, 15 Dec 2022 15:28:10 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 15 Dec 2022 15:28:09 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs13n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 15 Dec 2022 15:28:08 +0800
+From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>
+Subject: [PATCH v11, 0/4] mailbox: mtk-cmdq: add MT8186 support
+Date:   Thu, 15 Dec 2022 15:28:02 +0800
+Message-ID: <20221215072806.10224-1-yongqiang.niu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH v2 2/2] docs: remoteproc: Update section header name
- requirement
-Content-Language: en-US
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        linux-remoteproc@vger.kernel.org, agross@kernel.org,
-        andersson@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@quicinc.com,
-        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        quic_rohkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski@linaro.org, mathieu.poirier@linaro.org,
-        corbet@lwn.net
-References: <1670924929-26507-1-git-send-email-quic_srivasam@quicinc.com>
- <1670924929-26507-3-git-send-email-quic_srivasam@quicinc.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <1670924929-26507-3-git-send-email-quic_srivasam@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/22 10:48, Srinivasa Rao Mandadapu wrote:
-> Add section header name requirement specification in elf segments.
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> ---
->   Documentation/staging/remoteproc.rst | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/staging/remoteproc.rst b/Documentation/staging/remoteproc.rst
-> index 348ee7e..3125030 100644
-> --- a/Documentation/staging/remoteproc.rst
-> +++ b/Documentation/staging/remoteproc.rst
-> @@ -245,6 +245,8 @@ if the remote processor is accessing memory directly).
->   
->   In addition to the standard ELF segments, most remote processors would
->   also include a special section which we call "the resource table".
-> +This resource table section name may have anything appended after it,
-> +but it must start with ".resource_table"
+change since v10:
+rebase base linux-next/master, tag: next-20221215
 
-What do you think of:
+Yongqiang Niu (4):
+  mailbox: mtk-cmdq: Use GCE_CTRL_BY_SW definition instead of number
+  mailbox: mtk-cmdq: add gce software ddr enable private data
+  mailbox: mtk-cmdq: add gce ddr enable support flow
+  mailbox: mtk-cmdq: add MT8186 support
 
-    In addition to the standard ELF segments, most remote processors would
-    also include a special section which we call the "resource table".
-    A "resource table" section name must start with the ".resource_table"
-    prefix, optionally having a more descriptive string appended. For
-    example, ".resource_table.my_rproc" is a valid section name.
+ drivers/mailbox/mtk-cmdq-mailbox.c | 45 +++++++++++++++++++++++++++++-
+ 1 file changed, 44 insertions(+), 1 deletion(-)
 
-Regards,
+-- 
+2.25.1
 
-Phil.
