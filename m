@@ -2,81 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8530E64D748
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBDD64D74A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiLOHce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 02:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        id S229702AbiLOHeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 02:34:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiLOHc0 (ORCPT
+        with ESMTP id S229558AbiLOHeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 02:32:26 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478B02A435
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 23:32:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1EE78CE1B44
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 07:32:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD64C43396;
-        Thu, 15 Dec 2022 07:32:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671089541;
-        bh=IuVFclXBC2xjRNMPRTtq1KAZ9dbUziFQCUjGxBXpNv0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=up1c8ix9evWyaIMVotw+FBoA3JiiMPOQLHfXEwVt3x77Nriis+Zm6svfODeRCKBN9
-         7c2P5ndXAZ1jbzSJIo/s3/e6KywByC4vonLI08eGglyWEY3umhcUUsBBLXqZnyoGk5
-         wGd+B+au8iNgkco3LADOjNSIkEqFGs5z0QF9M6NfQ4mokYfA4KvrSqfJz/ZipEx2WU
-         ku7C83aDCGn0GmT/OQPVVNFUYC9wem9jHynrYBGH9JQ94ULEoLvWxC+svkB8+kY/Nj
-         KqSkQahr89gkKfeLUq/L2qFN2LA/Kijh+jlGJ4ErSLDlgzVGYsHUMTrESTNpmsM+Dt
-         t0qQZAzNpYGtQ==
-From:   guoren@kernel.org
-To:     palmer@dabbelt.com, prabhakar.mahadev-lad.rj@bp.renesas.com
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        iommu@lists.linux.dev, Guo Ren <guoren@linux.alibaba.com>,
-        kernel test robot <lkp@intel.com>,
-        Guo Ren <guoren@kernel.org>
-Subject: [PATCH] iommu/renesas: Support riscv compile
-Date:   Thu, 15 Dec 2022 02:32:12 -0500
-Message-Id: <20221215073212.1966823-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Thu, 15 Dec 2022 02:34:20 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961452A24C;
+        Wed, 14 Dec 2022 23:34:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1671089644; bh=7zUfFLAsv5BwM3QMGuwZSLFemhuXLiMBGDJ7SGzoB/I=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=OOD5ti6VdDaR+rcFwkynf2gjPkrmX5HJPfX0SbqP7mcYd802XdXs5uQwL81d4asuM
+         sTkeYkU+dlamdevRriMazZcnrcPlMyaZb1OVS2vldJpqcfNq/uM1QelijdPkeO9XOS
+         pkbcLLKlcBvCth1SzG2YslNOkjgtAefFe0nTB5Av3c46iX3IgB45fSx5QjUUF7gWAG
+         hY4yKJNgrr5/m9bgpJNMgqYHZJGetwRnXpqkY6wNO/V7lZrRJp/DB/KbzhjyqRgZzm
+         ogOMptD9ssoWG4YzqSRiYdIxtZJ3Rtw6fZMeomX3R7YqqVPcHG3tshOLygx1w3XMNK
+         CByVhLq7hevvA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from ls3530 ([92.116.161.210]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MGQj7-1p9KiH15oL-00Gqik; Thu, 15
+ Dec 2022 08:34:04 +0100
+Date:   Thu, 15 Dec 2022 08:34:00 +0100
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [GIT PULL] fbdev fixes and updates for v6.2-rc1
+Message-ID: <Y5rN6CT8genL6wQc@ls3530>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:SJKW3VdumEyfRXaGPuMgEugdQ28y1gGugzzxmGlhUPdfZe2lmwB
+ RjkLBiB8DfeFAGF2O2evCIyfas6ccVSVg9LU2joUz7JZFC5Y8xlcHPhergLvf85Bxwfim54
+ XjENivD2T2kz32zxQ2IwZnKzQvi2PVeQNbD06sa2GHHce378lXJELK8RoGjjopRWy00/quJ
+ YLyvI4BuR/MU5gqKA29Gw==
+UI-OutboundReport: notjunk:1;M01:P0:EWKHmqdbQ80=;ZmrZIcg34/MRqa9ksMn3dYo+Ozp
+ qcOLgk/lQUF3P2gWjlllkf52NQGu7frshakJFogGgMiEUNm9E0S7HcVQwb7g8/RhvqZtI8HpY
+ 8zLH0QEEzl0K3MxUbJpArY+arS+EsKFConp0OnDMLc7btbJTk8LgpZwUrHZTQWOJz6u2T0nXy
+ 6kh4eT6PEUhspzkA5CsuEPIO8S9hOXeEaOrBiRsKsWK8ml7etnhClPuN5OKTxpEKHekYL8BxQ
+ xlxkH7Qfrka85Wqyy7dTNTipt6L/O0Ug18coThKXGUsDs6NJAclwn1gC9P9ueI+VZMBErSwyq
+ R2FZnBk9oyZrRrfQt88ws2qOYch4Pidd2vNBoYumaqnOzc+9K4nEnNdTXWfPJ+bXvU4zHlmq6
+ s7ryWSwPm/8iMReoQgpyjvDUq6JFTIAW07XoaJO7c0zE7AWlBlpKEFXXAPfu/8oJgPVc2IH23
+ hx6APp9Wmi1HKar4TDdcX+M6hN5QQ0cKUZE8J13+bpjq/inWknphZwoT8YaNmbIs+av6dt+hZ
+ he2pVAnmD4hX8QtxzR3uv5hUi0Dq90WHl88btsEzAZERo3rwCHneG2MwXpJMknlNGeU3sKpln
+ 2WomdaOKAGUS+eeP3hVNfuSErOlIHFaYgj2nQfAEPy61Uhj/ZJzVT6nU4CekLoFeLsiZcob3E
+ waCXGDR4jrPVzmcJehaVfwlaecqbhpx8iLdI2YaIzkRz5y6GIsE7fglFfZ2yJjQviZdSxuzFb
+ mOHJ+r6gPpdbt+afEV0nEW3e7M4KYES9BgHT1SzvZIXnGfvcTZgZmNJOYuNDs4IbW+p9bmISU
+ LBG0Li3uspT1iCw/OqfmJhBOtAZtUOUZwBzZ/HCBuWySxYPuNE7wZJxAwOhP8+RA+vWYCgt9g
+ AcR8RWMSK/gkjZNs2olxFCkRLnRXIiwu4BaIuVVWF43OHiyJ9FZ4Ix5WkKH6Deyxq5+Y9Rquu
+ /NiQ/Q==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+Hi Linus,
 
-After riscv selects ARCH_RENESAS, we need to add ARM64 || ARM
-dependency here.
+please pull fbdev fixes and updates for kernel 6.2-rc1.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
+Most relevant are the patches from Dmitry Torokhov to switch omapfb to
+the gpiod API.
+The other patches are small and fix e.g. UML build issues, improve
+the error paths and cleanup code.
+
+Thanks,
+Helge
+
+
+The following changes since commit c7020e1b346d5840e93b58cc4f2c67fc645d8df=
+9:
+
+  Merge tag 'pci-v6.2-changes' of git://git.kernel.org/pub/scm/linux/kerne=
+l/git/helgaas/pci (2022-12-14 09:54:10 -0800)
+
+are available in the Git repository at:
+
+  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git ta=
+gs/fbdev-for-6.2-rc1
+
+for you to fetch changes up to 3c3bfb8586f848317ceba5d777e11204ba3e5758:
+
+  fbdev: fbcon: release buffer when fbcon_do_set_font() failed (2022-12-14=
+ 20:01:51 +0100)
+
+=2D---------------------------------------------------------------
+fbdev updates and fixes for kernel 6.2-rc1:
+
+Switch omapfb to the gpiod API, some failure path fixes and
+UML build fixes.
+
+=2D---------------------------------------------------------------
+Andy Shevchenko (2):
+      fbdev: ssd1307fb: Drop optional dependency
+      fbdev: ssd1307fb: Drop duplicate NULL checks for PWM APIs
+
+Christophe JAILLET (2):
+      fbdev: uvesafb: Fixes an error handling path in uvesafb_probe()
+      fbdev: uvesafb: Simplify uvesafb_remove()
+
+Colin Ian King (1):
+      fbdev: omapfb: remove redundant variable checksum
+
+Dmitry Torokhov (13):
+      fbdev: omapfb: connector-hdmi: switch to using gpiod API
+      fbdev: omapfb: panel-sony-acx565akm: remove support for platform dat=
+a
+      fbdev: omapfb: panel-sony-acx565akm: switch to using gpiod API
+      fbdev: omapfb: encoder-tfp410: switch to using gpiod API
+      fbdev: omapfb: panel-dsi-cm: switch to using gpiod API
+      fbdev: omapfb: panel-tpo-td043mtea1: switch to using gpiod API
+      fbdev: omapfb: panel-nec-nl8048hl11: switch to using gpiod API
+      fbdev: omapfb: panel-dpi: remove support for platform data
+      fbdev: omapfb: connector-analog-tv: remove support for platform data
+      fbdev: omapfb: encoder-opa362: fix included headers
+      fbdev: omapfb: panel-lgphilips-lb035q02: remove backlight GPIO handl=
+ing
+      fbdev: omapfb: panel-tpo-td028ttec1: stop including gpio.h
+      fbdev: omapfb: panel-sharp-ls037v7dw01: fix included headers
+
+Dongliang Mu (2):
+      fbdev: smscufx: fix error handling code in ufx_usb_probe
+      fbdev: da8xx-fb: add missing regulator_disable() in fb_probe
+
+Gaosheng Cui (1):
+      fbdev: ep93xx-fb: Add missing clk_disable_unprepare in ep93xxfb_prob=
+e()
+
+Randy Dunlap (2):
+      fbdev: geode: don't build on UML
+      fbdev: uvesafb: don't build on UML
+
+Shang XiaoJing (1):
+      fbdev: via: Fix error in via_core_init()
+
+Tetsuo Handa (1):
+      fbdev: fbcon: release buffer when fbcon_do_set_font() failed
+
+Uwe Kleine-K=F6nig (1):
+      fbdev: matroxfb: Convert to i2c's .probe_new()
+
+Xiongfeng Wang (1):
+      fbdev: vermilion: decrease reference count in error path
+
+Yang Yingliang (1):
+      fbdev: pm2fb: fix missing pci_disable_device()
+
+Yu Zhe (1):
+      fbdev: controlfb: fix spelling mistake "paramaters"->"parameters"
+
+wangkailong@jari.cn (1):
+      fbdev: pxafb: Remove unnecessary print function dev_err()
+
+ye xingchen (2):
+      fbdev: uvesafb: use sysfs_emit() to instead of scnprintf()
+      fbdev: sh_mobile_lcdcfb: use sysfs_emit() to instead of scnprintf()
+
+ drivers/video/fbdev/Kconfig                        |   2 +-
+ drivers/video/fbdev/controlfb.c                    |   2 +-
+ drivers/video/fbdev/core/fbcon.c                   |   3 +-
+ drivers/video/fbdev/da8xx-fb.c                     |   7 +-
+ drivers/video/fbdev/ep93xx-fb.c                    |   4 +-
+ drivers/video/fbdev/geode/Kconfig                  |   1 +
+ drivers/video/fbdev/matrox/matroxfb_maven.c        |   5 +-
+ .../omap2/omapfb/displays/connector-analog-tv.c    |  60 ++---------
+ .../fbdev/omap2/omapfb/displays/connector-hdmi.c   |  49 +++------
+ .../fbdev/omap2/omapfb/displays/encoder-opa362.c   |   4 +-
+ .../fbdev/omap2/omapfb/displays/encoder-tfp410.c   |  67 ++++--------
+ .../video/fbdev/omap2/omapfb/displays/panel-dpi.c  |  83 ++-------------
+ .../fbdev/omap2/omapfb/displays/panel-dsi-cm.c     | 116 ++++++++--------=
+-----
+ .../omapfb/displays/panel-lgphilips-lb035q02.c     |  21 +---
+ .../omap2/omapfb/displays/panel-nec-nl8048hl11.c   |  72 ++++---------
+ .../omapfb/displays/panel-sharp-ls037v7dw01.c      |   3 +-
+ .../omap2/omapfb/displays/panel-sony-acx565akm.c   | 105 ++++++----------=
 ---
- drivers/iommu/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-index dc5f7a156ff5..746b95b9f345 100644
---- a/drivers/iommu/Kconfig
-+++ b/drivers/iommu/Kconfig
-@@ -283,6 +283,7 @@ config EXYNOS_IOMMU_DEBUG
- 
- config IPMMU_VMSA
- 	bool "Renesas VMSA-compatible IPMMU"
-+	depends on ARM64 || ARM
- 	depends on ARCH_RENESAS || (COMPILE_TEST && !GENERIC_ATOMIC64)
- 	select IOMMU_API
- 	select IOMMU_IO_PGTABLE_LPAE
--- 
-2.36.1
-
+ .../omap2/omapfb/displays/panel-tpo-td028ttec1.c   |   1 -
+ .../omap2/omapfb/displays/panel-tpo-td043mtea1.c   |  59 +++--------
+ drivers/video/fbdev/omap2/omapfb/dss/hdmi5_core.c  |   2 -
+ drivers/video/fbdev/pm2fb.c                        |   9 +-
+ drivers/video/fbdev/pxafb.c                        |   1 -
+ drivers/video/fbdev/sh_mobile_lcdcfb.c             |   8 +-
+ drivers/video/fbdev/smscufx.c                      |  46 +++++---
+ drivers/video/fbdev/ssd1307fb.c                    |  12 +--
+ drivers/video/fbdev/uvesafb.c                      |  39 ++++---
+ drivers/video/fbdev/vermilion/vermilion.c          |   4 +-
+ drivers/video/fbdev/via/via-core.c                 |   9 +-
+ include/video/omap-panel-data.h                    |  71 -------------
+ 29 files changed, 261 insertions(+), 604 deletions(-)
+ delete mode 100644 include/video/omap-panel-data.h
