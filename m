@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D3B64E1C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8352564E1C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbiLOT2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 14:28:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
+        id S230331AbiLOT24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 14:28:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiLOT23 (ORCPT
+        with ESMTP id S230091AbiLOT2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 14:28:29 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98E84B986;
-        Thu, 15 Dec 2022 11:28:28 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id n4so47874plp.1;
-        Thu, 15 Dec 2022 11:28:28 -0800 (PST)
+        Thu, 15 Dec 2022 14:28:31 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5085847310;
+        Thu, 15 Dec 2022 11:28:29 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id m4so31385pls.4;
+        Thu, 15 Dec 2022 11:28:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2SWq8tpcCrwysvBsmnobWfCEN7jq3OKGDHoAjUmZcKM=;
-        b=aI78gKJvL9S+95167GkI3Ge1ockEbEzp6hvrNPojeC288sACCfBe0NfmVWti/N6Qra
-         z4PwACXjYHvbob9q1bOpJx39/U8LDs+vQxdT7QWb3jMkdQhb0/efj5n6SjPqwcsvzfla
-         ajcrukOfh0ikfnFu0QObh1O4VLNk1FnlXRSnpZKRYu/qQ7lgyu1WCsBbLq+lR49wkMh9
-         M73PoOxV6lhJROKx4UNK81Vc1Zr5v90FbtUiYeV4uLvsLoScPPhNiDIrGvc/dDb2aXNB
-         +v3NkQtUNyqZD3vCHf32vrQYYjbDr5T7WpfFhf/Ke3owKbPfx0KkvXWuI2/7As6O89Y8
-         eRFw==
+        bh=rlyNdOzS6lefhSSM/VlTz3GSPTVPpMK1oqgfJv5rmjM=;
+        b=ZgWLJedYJWqeU21kwV1U4jSCjyytuO7e/mc+L1bD3knCJBNvT/LsCEKT6X6UdBTzHr
+         r2krlBSmYgKXcS0AFPDmeL8MvSFznFYDZ/ok4Mqk+lbvEWY9B6VFOfSxJzyWmKockKtp
+         JJGmfdApCm1DAAzmEixI6JdkgSIFJFJELW0PAIwqodbenS2sESq41Oi6C16eoSLRmes5
+         +Ibka/Nv7i+L2jgddMoYZILVURo6IylI2QYDbVLXUCZdj/LFw+Xpn14mtUg1C+TnxG0x
+         WiEKYPZP88XIbw1UuhG53wklEG/ttt2T7wvXTcY2/Oy8PH90Kh4argzwCNvb25grFv4i
+         qPpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=2SWq8tpcCrwysvBsmnobWfCEN7jq3OKGDHoAjUmZcKM=;
-        b=cb95U2ZbXl1xtLadDkjJNz8swlIjSLAHr0PH3bY9ghzvCxdxpu2BHWhce4bwQihHL5
-         13oTQrKktUQAPIQfHCxyTUzYfrhv/CeznPMA2uOKAduECy6Qu3RwuapkgPJNbAIjLAtl
-         Ihj0pU3BY90T+83tqXmxNL+D6QipOJ5n4VfSI6YZbvTSSAKczg3Wm0WqNyz/D55z41yq
-         vS56HaAN+CorBg5c3ObzF6wPjf86ONxXHzxFGCXW3v9ii1A//WiWFUKcu3mjxDUvNvdQ
-         yfSvI7ZaU8pX4veQ6rkTi8TfXK7mgeGCjSb8RgdJjOe4VKhtAogBlFHwalUFryYJGUKh
-         CaYg==
-X-Gm-Message-State: ANoB5plIinCPsC7sUI3RcxJ4IXM2KdwwxDjnLK5UvA+JVg7RdCm5d/jF
-        QYU/LY7rV7AZAqAqhnSTtUQ=
-X-Google-Smtp-Source: AA0mqf6zi7kYyr9raMdbSzI8wyUMKPLqfFq/52pamjhXxaXRct+BGGIiFpFX/cdZWJIA+F8BeouW3g==
-X-Received: by 2002:a17:90a:348e:b0:219:8cbb:c158 with SMTP id p14-20020a17090a348e00b002198cbbc158mr30920771pjb.5.1671132507614;
-        Thu, 15 Dec 2022 11:28:27 -0800 (PST)
+        bh=rlyNdOzS6lefhSSM/VlTz3GSPTVPpMK1oqgfJv5rmjM=;
+        b=NnGW9fpBhG//zG61/eYqlXCRp8dSdQqxz94NKiuwz8Sh4F6eMWOSEfnDsAcIX/EBlr
+         SzvG1Dh78RebHRKBNwUQgFfFeP+ltKCeNKpnmB/U7gdYRoNozO6ju0+ZbTa2CDnB4vB5
+         7oo2yRY7Gl3udR/8qTilW2DFSW5rrGuDsNWqjY2xVveARgHKrTEEVevS9WvP1+h8+TH7
+         lfASYj4JP3AvrbmS6IEWQ7gnqa67R0CIRrBReOjropmBscDeaAOFwchCldpPsX/ICGpy
+         X3emMx4PMM+q+xJnmRypd1UrEUWA31M3uTnpiNU8RxeLR2N2Yvj0OURa3HdbGAyPatec
+         rY3g==
+X-Gm-Message-State: ANoB5pn2uly5KD0zRHAErSTnN2fiDu22xjWugHdF06l/L1u7qYPXihEO
+        idMmtjR4yEvXLfVMM8fUuto=
+X-Google-Smtp-Source: AA0mqf4mJLL40VGDcnosZch6InOpLE0yZmjOD9tt56/lEPgL4rxXCVkK2uJ1B9JBg7ErCtkXg3GEgQ==
+X-Received: by 2002:a17:90b:2315:b0:219:8b27:e065 with SMTP id mt21-20020a17090b231500b002198b27e065mr36884986pjb.17.1671132508708;
+        Thu, 15 Dec 2022 11:28:28 -0800 (PST)
 Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:ecc1:3e44:be34:129c])
-        by smtp.gmail.com with ESMTPSA id ep14-20020a17090ae64e00b00219cf5c3829sm3475129pjb.57.2022.12.15.11.28.26
+        by smtp.gmail.com with ESMTPSA id ep14-20020a17090ae64e00b00219cf5c3829sm3475129pjb.57.2022.12.15.11.28.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 11:28:27 -0800 (PST)
+        Thu, 15 Dec 2022 11:28:28 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -62,9 +62,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         linux-perf-users@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
         Milian Wolff <milian.wolff@kdab.com>,
         Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH 6/9] perf hist: Add perf_hpp_fmt->init() callback
-Date:   Thu, 15 Dec 2022 11:28:14 -0800
-Message-Id: <20221215192817.2734573-7-namhyung@kernel.org>
+Subject: [PATCH 7/9] perf hist: Improve srcline sort key performance
+Date:   Thu, 15 Dec 2022 11:28:15 -0800
+Message-Id: <20221215192817.2734573-8-namhyung@kernel.org>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 In-Reply-To: <20221215192817.2734573-1-namhyung@kernel.org>
 References: <20221215192817.2734573-1-namhyung@kernel.org>
@@ -80,142 +80,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In __hists__insert_output_entry(), it calls fmt->sort() for dynamic
-entries with NULL to update column width for tracepoint fields.
-But it's a hacky abuse of the sort callback, better to have a proper
-callback for that.  I'll add more use cases later.
+The sort_entry->cmp() will be called for eventy sample data to find a
+matching entry.  When it has 'srcline' sort key, that means it needs to
+call addr2line or libbfd everytime.
+
+This is not optimal because many samples will have same address and it
+just can call addr2line once.  So postpone the actual srcline check to
+the sort_entry->collpase() and compare addresses in ->cmp().
+
+Also it needs to add ->init() callback to make sure it has srcline info.
+If a sample has a unique data, chances are the entry can be sorted out
+by other (previous) keys and callbacks in sort_srcline never called.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/util/hist.c | 10 +++++-----
- tools/perf/util/hist.h |  1 +
- tools/perf/util/sort.c | 31 ++++++++++++++++++++++++++-----
- tools/perf/util/sort.h |  1 +
- 4 files changed, 33 insertions(+), 10 deletions(-)
+ tools/perf/util/sort.c | 29 +++++++++++++++++++++++++++--
+ 1 file changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
-index 17a05e943b44..b6e4b4edde43 100644
---- a/tools/perf/util/hist.c
-+++ b/tools/perf/util/hist.c
-@@ -1781,8 +1781,8 @@ static void hierarchy_insert_output_entry(struct rb_root_cached *root,
- 
- 	/* update column width of dynamic entry */
- 	perf_hpp_list__for_each_sort_list(he->hpp_list, fmt) {
--		if (perf_hpp__is_dynamic_entry(fmt))
--			fmt->sort(fmt, he, NULL);
-+		if (fmt->init)
-+			fmt->init(fmt, he);
- 	}
- }
- 
-@@ -1879,10 +1879,10 @@ static void __hists__insert_output_entry(struct rb_root_cached *entries,
- 	rb_link_node(&he->rb_node, parent, p);
- 	rb_insert_color_cached(&he->rb_node, entries, leftmost);
- 
-+	/* update column width of dynamic entries */
- 	perf_hpp_list__for_each_sort_list(&perf_hpp_list, fmt) {
--		if (perf_hpp__is_dynamic_entry(fmt) &&
--		    perf_hpp__defined_dynamic_entry(fmt, he->hists))
--			fmt->sort(fmt, he, NULL);  /* update column width */
-+		if (fmt->init)
-+			fmt->init(fmt, he);
- 	}
- }
- 
-diff --git a/tools/perf/util/hist.h b/tools/perf/util/hist.h
-index ebd8a8f783ee..d93a4e510dc7 100644
---- a/tools/perf/util/hist.h
-+++ b/tools/perf/util/hist.h
-@@ -272,6 +272,7 @@ struct perf_hpp_fmt {
- 		      struct hists *hists, int line, int *span);
- 	int (*width)(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
- 		     struct hists *hists);
-+	void (*init)(struct perf_hpp_fmt *fmt, struct hist_entry *he);
- 	int (*color)(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
- 		     struct hist_entry *he);
- 	int (*entry)(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
 diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
-index 0ecc2cb13792..f6333b3dca35 100644
+index f6333b3dca35..913045c5b2b2 100644
 --- a/tools/perf/util/sort.c
 +++ b/tools/perf/util/sort.c
-@@ -2251,6 +2251,19 @@ static void hse_free(struct perf_hpp_fmt *fmt)
- 	free(hse);
- }
+@@ -373,6 +373,18 @@ char *hist_entry__srcline(struct hist_entry *he)
  
-+static void hse_init(struct perf_hpp_fmt *fmt, struct hist_entry *he)
+ static int64_t
+ sort__srcline_cmp(struct hist_entry *left, struct hist_entry *right)
 +{
-+	struct hpp_sort_entry *hse;
++	int64_t ret;
 +
-+	if (!perf_hpp__is_sort_entry(fmt))
-+		return;
++	ret = _sort__addr_cmp(left->ip, right->ip);
++	if (ret)
++		return ret;
 +
-+	hse = container_of(fmt, struct hpp_sort_entry, hpp);
-+
-+	if (hse->se->se_init)
-+		hse->se->se_init(he);
++	return sort__dso_cmp(left, right);
 +}
 +
- static struct hpp_sort_entry *
- __sort_dimension__alloc_hpp(struct sort_dimension *sd, int level)
++static int64_t
++sort__srcline_collapse(struct hist_entry *left, struct hist_entry *right)
  {
-@@ -2274,6 +2287,7 @@ __sort_dimension__alloc_hpp(struct sort_dimension *sd, int level)
- 	hse->hpp.sort = __sort__hpp_sort;
- 	hse->hpp.equal = __sort__hpp_equal;
- 	hse->hpp.free = hse_free;
-+	hse->hpp.init = hse_init;
- 
- 	INIT_LIST_HEAD(&hse->hpp.list);
- 	INIT_LIST_HEAD(&hse->hpp.sort_list);
-@@ -2556,11 +2570,6 @@ static int64_t __sort__hde_cmp(struct perf_hpp_fmt *fmt,
- 
- 	hde = container_of(fmt, struct hpp_dynamic_entry, hpp);
- 
--	if (b == NULL) {
--		update_dynamic_len(hde, a);
--		return 0;
--	}
--
- 	field = hde->field;
- 	if (field->flags & TEP_FIELD_IS_DYNAMIC) {
- 		unsigned long long dyn;
-@@ -2610,6 +2619,17 @@ static void hde_free(struct perf_hpp_fmt *fmt)
- 	free(hde);
+ 	if (!left->srcline)
+ 		left->srcline = hist_entry__srcline(left);
+@@ -382,18 +394,31 @@ sort__srcline_cmp(struct hist_entry *left, struct hist_entry *right)
+ 	return strcmp(right->srcline, left->srcline);
  }
  
-+static void __sort__hde_init(struct perf_hpp_fmt *fmt, struct hist_entry *he)
+-static int hist_entry__srcline_snprintf(struct hist_entry *he, char *bf,
+-					size_t size, unsigned int width)
++static int64_t
++sort__srcline_sort(struct hist_entry *left, struct hist_entry *right)
 +{
-+	struct hpp_dynamic_entry *hde;
-+
-+	if (!perf_hpp__is_dynamic_entry(fmt))
-+		return;
-+
-+	hde = container_of(fmt, struct hpp_dynamic_entry, hpp);
-+	update_dynamic_len(hde, he);
++	return sort__srcline_collapse(left, right);
 +}
 +
- static struct hpp_dynamic_entry *
- __alloc_dynamic_entry(struct evsel *evsel, struct tep_format_field *field,
- 		      int level)
-@@ -2632,6 +2652,7 @@ __alloc_dynamic_entry(struct evsel *evsel, struct tep_format_field *field,
- 	hde->hpp.entry  = __sort__hde_entry;
- 	hde->hpp.color  = NULL;
++static void
++sort__srcline_init(struct hist_entry *he)
+ {
+ 	if (!he->srcline)
+ 		he->srcline = hist_entry__srcline(he);
++}
  
-+	hde->hpp.init = __sort__hde_init;
- 	hde->hpp.cmp = __sort__hde_cmp;
- 	hde->hpp.collapse = __sort__hde_cmp;
- 	hde->hpp.sort = __sort__hde_cmp;
-diff --git a/tools/perf/util/sort.h b/tools/perf/util/sort.h
-index 04ff8b61a2a7..921715e6aec4 100644
---- a/tools/perf/util/sort.h
-+++ b/tools/perf/util/sort.h
-@@ -282,6 +282,7 @@ struct sort_entry {
- 	int	(*se_snprintf)(struct hist_entry *he, char *bf, size_t size,
- 			       unsigned int width);
- 	int	(*se_filter)(struct hist_entry *he, int type, const void *arg);
-+	void	(*se_init)(struct hist_entry *he);
- 	u8	se_width_idx;
++static int hist_entry__srcline_snprintf(struct hist_entry *he, char *bf,
++					size_t size, unsigned int width)
++{
+ 	return repsep_snprintf(bf, size, "%-.*s", width, he->srcline);
+ }
+ 
+ struct sort_entry sort_srcline = {
+ 	.se_header	= "Source:Line",
+ 	.se_cmp		= sort__srcline_cmp,
++	.se_collapse	= sort__srcline_collapse,
++	.se_sort	= sort__srcline_sort,
++	.se_init	= sort__srcline_init,
+ 	.se_snprintf	= hist_entry__srcline_snprintf,
+ 	.se_width_idx	= HISTC_SRCLINE,
  };
- 
 -- 
 2.39.0.314.g84b9a713c41-goog
 
