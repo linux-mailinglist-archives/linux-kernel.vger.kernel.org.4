@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E0E64D724
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AED0964D72E
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 08:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiLOHQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 02:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
+        id S229543AbiLOHTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 02:19:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiLOHQF (ORCPT
+        with ESMTP id S229496AbiLOHTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 02:16:05 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083CE32B8B;
-        Wed, 14 Dec 2022 23:16:03 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so1821064pjo.3;
-        Wed, 14 Dec 2022 23:16:03 -0800 (PST)
+        Thu, 15 Dec 2022 02:19:12 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7084DCEB;
+        Wed, 14 Dec 2022 23:19:11 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so1827886pjo.3;
+        Wed, 14 Dec 2022 23:19:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hoxgf87k7oGSQfRPP7qLhzJhwylhRbiW8KymAGd+A14=;
-        b=IYh5Sm/czZpi1R4mT+Otvt+OGW809SPf9AyY6EEHpdCiIhOg/DuGffBGsUc4xa8G4f
-         VaJZkYPTtMu4RPblzWsdEYi/pwv5YiTrWqBUqI6LpKhnqVNnRRkYprzzo5h7rYR/xfuO
-         pVHS2QJLRjv/jIO6okYrkiWRlHAD10RPQ6zv9Wn5XYVmR0ZMHsXFnCc6ytc22etUs9Q9
-         SYHwS3f0yt/0PqOFUXT42awssR+aX4jzRTY1MTTmAkV58SnSEtejOnvKHLGziqFpIjgz
-         iPCG5EIiD2BfZLhJMEtURHoTqbfu+ZVJSWSEoI/1hK6BFdHp32qL5Hz1ZkgjZ1p4msJv
-         tDnQ==
+        bh=gNNEXVu8wt2zuNH1k1KAp/j5xACVIRsF33hCTFu+i90=;
+        b=ke0PMAQli34KzagT/iZlwE1G+uKztUSLuFSo0o7cOv4AecrTSxBF0OO4UpjcehSj/K
+         GWr83LJSbCF0siXy0+Tsc2J/2grwXzEZKtYThtuyh7cQb7Vls/Lr8TiwN81ocJrvHxdO
+         er59dswgGOeFX51hSVWXvbvh5mYpqSYRSUPnzk2BMSWktH+7E+ih+OXq0uXwIfNSVRDO
+         u31QH8N0sDTDQIfnKM0vxnH177cIRN1Dj6DUdVv3MX9vKqCYtj6D/2+Eq4CKs2TU0Y2F
+         Wme02BGLglHiiGcCjNkAnh9XF/SvGLNwXji90UU+BdWKxVzrGs2kWBpszuBQIPAmwKnj
+         FO9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Hoxgf87k7oGSQfRPP7qLhzJhwylhRbiW8KymAGd+A14=;
-        b=Bs88Z7XUx5koYhwIGQBKsOg7tDei7Gk+b/xVwOvTPUxh5zJPuK8mF0B4A5+AXvCA3e
-         KZGWpFebL/RaFOqEmsSJthJ1NFe0irvt+35btHbRqhNmZxUJ1b4xiYD1ijConmw9NkIY
-         Oe65Pc/0/pVjQFTqml/5fyz1tOXTb/hcHkSr2V1W6ya1lIYT8btWoOZaIECJkGTqAdN1
-         jfWC0Bb8KVynfVNx/kVFbje927KQDnbd+9cp+0HDC44B5GFBzQVSsxUlRP3i2k53r5gL
-         PiBPWyMITnrUniVMbioX4fjvu/qV4SSR9Dg8pZ3QBhHnGQJVcRLZSzbuVu0htZBAqjbn
-         b0+Q==
-X-Gm-Message-State: ANoB5plRTFtuWbPVJ9z/MnX99RdufCIn2GXUrNuj1yFJcfSGA1CdsBbi
-        Jqf0Pp0guKh6l5YWEBJ3/z0=
-X-Google-Smtp-Source: AA0mqf5wf+l9IHlVkaliyQmToRixFaNwiYY+zHzpGKjnnYqmhaQAQtVsSQKMtqCxTXHWbOLm5et2Xg==
-X-Received: by 2002:a05:6a20:102a:b0:a4:7077:5a01 with SMTP id a42-20020a056a20102a00b000a470775a01mr43710095pzd.13.1671088562411;
-        Wed, 14 Dec 2022 23:16:02 -0800 (PST)
+        bh=gNNEXVu8wt2zuNH1k1KAp/j5xACVIRsF33hCTFu+i90=;
+        b=eoPf0NoUlnTQ8k9XVcUgJy8SiImM8E2PWKiCHyrp8qBRUBuycqivCUJRX8zLeXviQO
+         9FODsDndcp6lnkJPS2gIFOJ8GM3u4CXp0g7+YT5USP1BYrB+Zo8XVnmzjC8+0n18yNAJ
+         EAed2mPHVd8J+dtgTxb/5lXNjykvl47Ul9TvQJWNMeqvNK7NKKpGkwoehuPqkfbdD1rO
+         nIlEfGH8mDQdy5mDDrA0/6fT6JfwiBSxcA7sx9BTYbeTGiyo1YmBL+K2NGikHgsBDo8w
+         1iSOM09kYPlIIeKi3szPSk4X0+9moKrANx0caf/IrWYbAO5MPx6ZdvOJc1E2wzl7cNFD
+         COeg==
+X-Gm-Message-State: ANoB5pku9RKdfkB4iAveQQoXM91zPLzKSgwMBps0k8Lqry+6dZy5l7BJ
+        6Lrbr9YZYAnwQxgHwPenq5o=
+X-Google-Smtp-Source: AA0mqf7MmXmaf/L+wigAXaOlCY44BwYrdpA2K+M67FvUPZ85+eGbZGssAOusmVHwWAkIDEiiIKdAcg==
+X-Received: by 2002:a17:903:24e:b0:188:8745:35af with SMTP id j14-20020a170903024e00b00188874535afmr49943612plh.63.1671088750984;
+        Wed, 14 Dec 2022 23:19:10 -0800 (PST)
 Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id e8-20020aa798c8000000b005769b244c2fsm992170pfm.40.2022.12.14.23.15.57
+        by smtp.googlemail.com with ESMTPSA id j14-20020a170903024e00b001897bfc9802sm3046141plh.93.2022.12.14.23.19.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 23:16:01 -0800 (PST)
+        Wed, 14 Dec 2022 23:19:10 -0800 (PST)
 From:   Miaoqian Lin <linmq006@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Petr Machata <petrm@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, Sam Ravnborg <sam@ravnborg.org>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     linmq006@gmail.com
-Subject: [PATCH] net: Fix documentation for unregister_netdevice_notifier_net
-Date:   Thu, 15 Dec 2022 11:15:49 +0400
-Message-Id: <20221215071551.421451-1-linmq006@gmail.com>
+Subject: [PATCH] backlight: backlight: Fix doc for backlight_device_get_by_name
+Date:   Thu, 15 Dec 2022 11:19:01 +0400
+Message-Id: <20221215071902.424005-1-linmq006@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -76,28 +73,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-unregister_netdevice_notifier_net() is used for unregister a notifier
-registered by register_netdevice_notifier_net().
+backlight_put() has been dropped, we should call put_device() to drop
+the reference taken by backlight_device_get_by_name().
 
-Fixes: a30c7b429f2d ("net: introduce per-netns netdevice notifiers")
+Fixes: 0f6a3256fd81 ("backlight: backlight: Drop backlight_put()")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- net/core/dev.c | 2 +-
+ drivers/video/backlight/backlight.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index b76fb37b381e..85c6c095a1b6 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -1840,7 +1840,7 @@ EXPORT_SYMBOL(register_netdevice_notifier_net);
-  * @nb: notifier
+diff --git a/drivers/video/backlight/backlight.c b/drivers/video/backlight/backlight.c
+index b788ff3d0f45..6eea72aa8dbf 100644
+--- a/drivers/video/backlight/backlight.c
++++ b/drivers/video/backlight/backlight.c
+@@ -501,7 +501,7 @@ EXPORT_SYMBOL(backlight_device_get_by_type);
   *
-  * Unregister a notifier previously registered by
-- * register_netdevice_notifier(). The notifier is unlinked into the
-+ * register_netdevice_notifier_net(). The notifier is unlinked into the
-  * kernel structures and may then be reused. A negative errno code
-  * is returned on a failure.
+  * This function looks up a backlight device by its name. It obtains a reference
+  * on the backlight device and it is the caller's responsibility to drop the
+- * reference by calling backlight_put().
++ * reference by calling put_device().
   *
+  * Returns:
+  * A pointer to the backlight device if found, otherwise NULL.
 -- 
 2.25.1
 
