@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1054064DF46
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:03:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBD664DF4A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbiLORDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 12:03:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
+        id S230498AbiLORFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 12:05:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbiLORDV (ORCPT
+        with ESMTP id S230510AbiLOREj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 12:03:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6272D40470;
-        Thu, 15 Dec 2022 09:02:40 -0800 (PST)
+        Thu, 15 Dec 2022 12:04:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD73947318;
+        Thu, 15 Dec 2022 09:03:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48D6A61E60;
-        Thu, 15 Dec 2022 17:02:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B7A5C433D2;
-        Thu, 15 Dec 2022 17:02:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDF6061E60;
+        Thu, 15 Dec 2022 17:03:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2ED6C433F0;
+        Thu, 15 Dec 2022 17:03:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671123759;
-        bh=up3Hy4XDtmZzsp1AKu2LrDJlblNutNEGvR1TiT4xtdY=;
+        s=k20201202; t=1671123784;
+        bh=+j5/PKCDX4da27Gaivbi0EyxiiyB/ME/Rriq9u2O0TY=;
         h=From:To:Cc:Subject:Date:From;
-        b=SP+uNSHNYfDK7HipQd4t16gNSi4+NWrg12BC3jWhWv0GEyFfn/1Pp/lZtNuH7VJ/3
-         MonD7cwwre1mfclf50B4ZaJxbUItApR2PR0ffTIphUm+R8dluEM5jqmJboAn7Oeylc
-         jm+R0vpTAaYnfHAIhrr/wqvlVn0M94AoqINhxSUZju5fG8ZusdivPNUOSCiRkBOx/k
-         9pqvR2qyss7hqNOptNPf5LuYWGyONo6ghplPC5jbD5En1LgetLS3KPEE7I3FoEcOQd
-         KBw0NkRaDviB0pqJhkhCViucgrmEELqYEy+WUk/KSLTt+91WdoHLCAkJ/hRHzcPdVs
-         od8B8hhT0zlNQ==
+        b=Rdhphr6zRApiRnlYm2ku5gSx7V/yGOq92PaGnKYjhZPPUVQdH59PWSgjC0XCU6Q5N
+         YeHalqiRnE/nHreZTmbvVyhEnNzkyRuhPFhGuH3ZkzOGUHsfwRHyXoek+iMr070KGh
+         Ym9FLBs2zeY7chwGn6vkid5iuAu6MMiL7AfWiQKM1l/8Y0IWV+eYSkVVZz+2XIMPqN
+         pJj2gYM/PKhx8cYvWI1L7IxAo6Vr3itYmj9SGLgm8CUX9z59X2Ys3jRsDa6kcXw3xC
+         RILQmpNwwPj0FPZanru6qWAOG4BNYGLu3xUBOUEWVJ0Be1aT6nban6HUVz3GLK/WbJ
+         bIuoYHVAcItWg==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Helge Deller <deller@gmx.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        linux-omap@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] fbdev: omapfb: avoid stack overflow warning
-Date:   Thu, 15 Dec 2022 18:02:28 +0100
-Message-Id: <20221215170234.2515030-1-arnd@kernel.org>
+To:     David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jarkko Sakkinen <jarkko@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Vitaly Chikunov <vt@altlinux.org>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] crypto: certs: fix FIPS selftest depenency
+Date:   Thu, 15 Dec 2022 18:02:52 +0100
+Message-Id: <20221215170259.2553400-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -55,92 +58,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The dsi_irq_stats structure is a little too big to fit on the
-stack of a 32-bit task, depending on the specific gcc options:
+The selftest code is built into the x509_key_parser module, and depends
+on the pkcs7_message_parser module, which in turn has a dependency on
+the key parser, creating a dependency loop and a resulting link
+failure when the pkcs7 code is a loadable module:
 
-fbdev/omap2/omapfb/dss/dsi.c: In function 'dsi_dump_dsidev_irqs':
-fbdev/omap2/omapfb/dss/dsi.c:1621:1: error: the frame size of 1064 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+ld: crypto/asymmetric_keys/selftest.o: in function `fips_signature_selftest':
+crypto/asymmetric_keys/selftest.c:205: undefined reference to `pkcs7_parse_message'
+ld: crypto/asymmetric_keys/selftest.c:209: undefined reference to `pkcs7_supply_detached_data'
+ld: crypto/asymmetric_keys/selftest.c:211: undefined reference to `pkcs7_verify'
+ld: crypto/asymmetric_keys/selftest.c:215: undefined reference to `pkcs7_validate_trust'
+ld: crypto/asymmetric_keys/selftest.c:219: undefined reference to `pkcs7_free_message'
 
-Since this is only a debugfs file, performance is not critical,
-so just dynamically allocate it, and print an error message
-in there in place of a failure code when the allocation fails.
+Avoid this by only allowing the selftest to be enabled when either
+both parts are loadable modules, or both are built-in.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/video/fbdev/omap2/omapfb/dss/dsi.c | 28 ++++++++++++++--------
- 1 file changed, 18 insertions(+), 10 deletions(-)
+ crypto/asymmetric_keys/Kconfig        | 2 +-
+ crypto/asymmetric_keys/pkcs7_verify.c | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/video/fbdev/omap2/omapfb/dss/dsi.c b/drivers/video/fbdev/omap2/omapfb/dss/dsi.c
-index 54b0f034c2ed..7cddb7b8ae34 100644
---- a/drivers/video/fbdev/omap2/omapfb/dss/dsi.c
-+++ b/drivers/video/fbdev/omap2/omapfb/dss/dsi.c
-@@ -1536,22 +1536,28 @@ static void dsi_dump_dsidev_irqs(struct platform_device *dsidev,
- {
- 	struct dsi_data *dsi = dsi_get_dsidrv_data(dsidev);
- 	unsigned long flags;
--	struct dsi_irq_stats stats;
-+	struct dsi_irq_stats *stats;
-+
-+	stats = kzalloc(sizeof(*stats), GFP_KERNEL);
-+	if (!stats) {
-+		seq_printf(s, "out of memory\n");
-+		return;
-+	}
+diff --git a/crypto/asymmetric_keys/Kconfig b/crypto/asymmetric_keys/Kconfig
+index 3df3fe4ed95f..1ef3b46d6f6e 100644
+--- a/crypto/asymmetric_keys/Kconfig
++++ b/crypto/asymmetric_keys/Kconfig
+@@ -83,6 +83,6 @@ config FIPS_SIGNATURE_SELFTEST
+ 	  for FIPS.
+ 	depends on KEYS
+ 	depends on ASYMMETRIC_KEY_TYPE
+-	depends on PKCS7_MESSAGE_PARSER
++	depends on PKCS7_MESSAGE_PARSER=X509_CERTIFICATE_PARSER
  
- 	spin_lock_irqsave(&dsi->irq_stats_lock, flags);
- 
--	stats = dsi->irq_stats;
-+	*stats = dsi->irq_stats;
- 	memset(&dsi->irq_stats, 0, sizeof(dsi->irq_stats));
- 	dsi->irq_stats.last_reset = jiffies;
- 
- 	spin_unlock_irqrestore(&dsi->irq_stats_lock, flags);
- 
- 	seq_printf(s, "period %u ms\n",
--			jiffies_to_msecs(jiffies - stats.last_reset));
-+			jiffies_to_msecs(jiffies - stats->last_reset));
- 
--	seq_printf(s, "irqs %d\n", stats.irq_count);
-+	seq_printf(s, "irqs %d\n", stats->irq_count);
- #define PIS(x) \
--	seq_printf(s, "%-20s %10d\n", #x, stats.dsi_irqs[ffs(DSI_IRQ_##x)-1])
-+	seq_printf(s, "%-20s %10d\n", #x, stats->dsi_irqs[ffs(DSI_IRQ_##x)-1])
- 
- 	seq_printf(s, "-- DSI%d interrupts --\n", dsi->module_id + 1);
- 	PIS(VC0);
-@@ -1575,10 +1581,10 @@ static void dsi_dump_dsidev_irqs(struct platform_device *dsidev,
- 
- #define PIS(x) \
- 	seq_printf(s, "%-20s %10d %10d %10d %10d\n", #x, \
--			stats.vc_irqs[0][ffs(DSI_VC_IRQ_##x)-1], \
--			stats.vc_irqs[1][ffs(DSI_VC_IRQ_##x)-1], \
--			stats.vc_irqs[2][ffs(DSI_VC_IRQ_##x)-1], \
--			stats.vc_irqs[3][ffs(DSI_VC_IRQ_##x)-1]);
-+			stats->vc_irqs[0][ffs(DSI_VC_IRQ_##x)-1], \
-+			stats->vc_irqs[1][ffs(DSI_VC_IRQ_##x)-1], \
-+			stats->vc_irqs[2][ffs(DSI_VC_IRQ_##x)-1], \
-+			stats->vc_irqs[3][ffs(DSI_VC_IRQ_##x)-1]);
- 
- 	seq_printf(s, "-- VC interrupts --\n");
- 	PIS(CS);
-@@ -1594,7 +1600,7 @@ static void dsi_dump_dsidev_irqs(struct platform_device *dsidev,
- 
- #define PIS(x) \
- 	seq_printf(s, "%-20s %10d\n", #x, \
--			stats.cio_irqs[ffs(DSI_CIO_IRQ_##x)-1]);
-+			stats->cio_irqs[ffs(DSI_CIO_IRQ_##x)-1]);
- 
- 	seq_printf(s, "-- CIO interrupts --\n");
- 	PIS(ERRSYNCESC1);
-@@ -1618,6 +1624,8 @@ static void dsi_dump_dsidev_irqs(struct platform_device *dsidev,
- 	PIS(ULPSACTIVENOT_ALL0);
- 	PIS(ULPSACTIVENOT_ALL1);
- #undef PIS
-+
-+	kfree(stats);
+ endif # ASYMMETRIC_KEY_TYPE
+diff --git a/crypto/asymmetric_keys/pkcs7_verify.c b/crypto/asymmetric_keys/pkcs7_verify.c
+index f6321c785714..4fa769c4bcdb 100644
+--- a/crypto/asymmetric_keys/pkcs7_verify.c
++++ b/crypto/asymmetric_keys/pkcs7_verify.c
+@@ -485,3 +485,4 @@ int pkcs7_supply_detached_data(struct pkcs7_message *pkcs7,
+ 	pkcs7->data_len = datalen;
+ 	return 0;
  }
- 
- static void dsi1_dump_irqs(struct seq_file *s)
++EXPORT_SYMBOL_GPL(pkcs7_supply_detached_data);
 -- 
 2.35.1
 
