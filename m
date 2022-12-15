@@ -2,125 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111E964D467
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A69E864D470
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiLOANx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 19:13:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34132 "EHLO
+        id S230180AbiLOAOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 19:14:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiLOAN0 (ORCPT
+        with ESMTP id S229540AbiLOANl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 19:13:26 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF82264A9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:11:20 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id d15so5133568pls.6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:11:20 -0800 (PST)
+        Wed, 14 Dec 2022 19:13:41 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F9C532D8
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:12:14 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so990446pjo.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:12:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=By2H8KrcS73TgVcFpcBg3X+JL35qHHiqAcd05o2uzfM=;
-        b=GAXN/2bmoZkHKTd0ZYUgx9wn6o9YuXABH35nYYEloOMzKYc80wpxlootj2StNok7eG
-         IaNNd21+mRxm1kcwbIaaUWm51BQnP/jhq516l2Fdp4jLB5MYwvygRdSk6N/hKOxDlmKM
-         FUD4XHMWAMrJ7xrtT26owlWkLss0j9TWh1yQv/aF37no6lMKcydEELIaLWy7KyxDWXoa
-         2E/RTImkl3NsrjinkQ9I1Ll/eQVK0aqRmvz0i5SpB3hLmOewP3K3BpoF5GZkl75VH0e7
-         yuVtrbVHyTca1zHafJ4Ur9JyIMYt1Q6UpZr4xeORNQWDzJCXYTo/v3eM2CVkPhQ2xW7c
-         Re8A==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5JdRkrY4AHyx5V8nEAerxJVsYW5SOsjwL/9h06jnfpo=;
+        b=CgO9jXmXzNorxxCMtt58UeRi5g6/jidHsD3ynHjxaWxA8VdHsZJSxDrf+YAy5/+4rQ
+         F0DOwu5R5L6IOCPs5dHRKeQXGZk6Kh4bxTWV9oyybTWUcY19oJZv1nYIn8SB8/kMT96W
+         +UtNwSduBVXSD/fBZm3EIsNZoK1klg+cu/Qn0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=By2H8KrcS73TgVcFpcBg3X+JL35qHHiqAcd05o2uzfM=;
-        b=W4nXeEdqlYLn2uRGkcB6bZx9PrymeuqvTymPeJ2lQR+d7n/I2tJ2Z6gSOZWpnVss1Z
-         Yemjtwx9uhKP2f5iZeHQUZCfk2dSYk+kVtClgeU10u82zrjOIp79Vv4dVCCjZIoB9l22
-         8ju9TdrDVQKZOA8wISeK1lIgBbfcauYvI5L+2g2JXY0jxSPpfOTDWMTS9IRGZFtE3tOA
-         2WBRFUBe0oPPMUX+AATKAMQKuQ2GPT1OgvaM2l9/SfaxOsh2qdfi1zW375k4rt8uw2s9
-         fi9ZKEypMD+3Vqhg5v9KWreWvb6VfF6ua1ou+8l8JTwyD1yN1/SkORW93QwEoaBnhhF5
-         Mo0A==
-X-Gm-Message-State: ANoB5pn0EKeyJgv2vLuUE3IPrnnXArEPWeAbUtGkjYfELFwVn3wQ3Rto
-        Cb6O5mFwpZMTkmrKQYUjoGRopQ==
-X-Google-Smtp-Source: AA0mqf4NUM27a7k0zaNJQPsSZvzkFd1XtpJga5zvSGj0zyc48rI6Ngzb2+KIH3GCtWSoS8qQtH9bWw==
-X-Received: by 2002:a17:90b:3685:b0:219:d1eb:b8ad with SMTP id mj5-20020a17090b368500b00219d1ebb8admr963836pjb.2.1671063079947;
-        Wed, 14 Dec 2022 16:11:19 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id v9-20020a17090a520900b00218e8143380sm1955302pjh.28.2022.12.14.16.11.18
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5JdRkrY4AHyx5V8nEAerxJVsYW5SOsjwL/9h06jnfpo=;
+        b=uMYKl6ndm6VC1TgeoT7gzcd9Q9rTEzAI6nf/IK+7Jr240/x7U4HlQNzMQyOxSoZhPb
+         n3RJxOqcv42jbKH0FQO1whmWCH+iooqTTkJhBaGEI+WeqSMy75BmwyZtKySZNdeZtdsI
+         o+acftmP0ZUyL71MPR06kacMdJj5b7Cy39GnVosZfskDBvFgIyKgu3OtXjH4KtBSEo5m
+         inVTFg42wU5pEWzRqHMvGyx9Cfo7/WkYJubXzM73TzeK63kegCKVMa+DK1GPdiQWlP9n
+         z4VuPCJsCOpPNsxEVpUIyQjYq7r2yEAKMgHZEi2sH8TPhjUV4UEeCXU9zQkQkqgQD9Ym
+         XKhA==
+X-Gm-Message-State: ANoB5pmECmvE9IwDIyofXFImJRWUTBjdwV+GZW+XQz2TeAXZsExQOGUo
+        205fo5RgttkNJqzwS2CvdMAjvA==
+X-Google-Smtp-Source: AA0mqf4gee2qnCLPj8VfLX1RD5pYa2Fu0Or+JQAcmS/nGUkyo0mE3KIi2PFynQkN56elG1XnNi/IHQ==
+X-Received: by 2002:a17:90a:ee8a:b0:219:b034:9415 with SMTP id i10-20020a17090aee8a00b00219b0349415mr27482016pjz.12.1671063133657;
+        Wed, 14 Dec 2022 16:12:13 -0800 (PST)
+Received: from jeffxud.c.googlers.com.com (30.202.168.34.bc.googleusercontent.com. [34.168.202.30])
+        by smtp.gmail.com with ESMTPSA id 3-20020a17090a08c300b0021937b2118bsm1845738pjn.54.2022.12.14.16.12.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 16:11:19 -0800 (PST)
-Date:   Thu, 15 Dec 2022 00:11:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Robert Hoo <robert.hu@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Greg Thelen <gthelen@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Subject: Re: [PATCH 3/5] KVM: x86/mmu: Re-check under lock that TDP MMU SP
- hugepage is disallowed
-Message-ID: <Y5pmI6xwJhvrWXJ8@google.com>
-References: <20221213033030.83345-1-seanjc@google.com>
- <20221213033030.83345-4-seanjc@google.com>
- <247fcfc6de8ec08d0667de125e707046dce903fc.camel@linux.intel.com>
+        Wed, 14 Dec 2022 16:12:13 -0800 (PST)
+From:   jeffxu@chromium.org
+To:     skhan@linuxfoundation.org, keescook@chromium.org
+Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v8 0/5] mm/memfd: introduce MFD_NOEXEC_SEAL and MFD_EXEC
+Date:   Thu, 15 Dec 2022 00:12:00 +0000
+Message-Id: <20221215001205.51969-1-jeffxu@google.com>
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <247fcfc6de8ec08d0667de125e707046dce903fc.camel@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022, Robert Hoo wrote:
-> On Tue, 2022-12-13 at 03:30 +0000, Sean Christopherson wrote:
-> > ---
-> >  arch/x86/kvm/mmu/tdp_mmu.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> > index e2e197d41780..fd4ae99790d7 100644
-> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> > @@ -1203,7 +1203,8 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu,
-> > struct kvm_page_fault *fault)
-> >  		if (fault->huge_page_disallowed &&
-> >  		    fault->req_level >= iter.level) {
-> >  			spin_lock(&kvm->arch.tdp_mmu_pages_lock);
-> > -			track_possible_nx_huge_page(kvm, sp);
-> > +			if (sp->nx_huge_page_disallowed)
-> > +				track_possible_nx_huge_page(kvm, sp);
-> >  			spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
-> >  		}
-> >  	}
-> 
-> Is this possible?
-> The aforementioned situation happened, i.e. before above hunk
-> track_possible_nx_huge_page(), the sp is zapped by some other task,
-> tdp_mmu_unlink_sp() --> untrack_possible_nx_huge_page(kvm, sp):
+From: Jeff Xu <jeffxu@google.com>
 
-It's possible for untrack_possible_nx_huge_page() to be called before the above
-snippet, but the stat won't be decremented in that case since the page won't be on
-the list of possible NX huge pages, i.e. list_empty() will be true.
+Since Linux introduced the memfd feature, memfd have always had their
+execute bit set, and the memfd_create() syscall doesn't allow setting
+it differently.
 
-  void untrack_possible_nx_huge_page(struct kvm *kvm, struct kvm_mmu_page *sp)
-  {
-	if (list_empty(&sp->possible_nx_huge_page_link))
-		return;
+However, in a secure by default system, such as ChromeOS, (where all
+executables should come from the rootfs, which is protected by Verified
+boot), this executable nature of memfd opens a door for NoExec bypass
+and enables “confused deputy attack”.  E.g, in VRP bug [1]: cros_vm
+process created a memfd to share the content with an external process,
+however the memfd is overwritten and used for executing arbitrary code
+and root escalation. [2] lists more VRP in this kind.
 
-	--kvm->stat.nx_lpage_splits;
+On the other hand, executable memfd has its legit use, runc uses memfd’s
+seal and executable feature to copy the contents of the binary then
+execute them, for such system, we need a solution to differentiate runc's
+use of  executable memfds and an attacker's [3].
 
-And by not calling track_possible_nx_huge_page() (this bug fix), nx_lpage_splits
-won't be incorrectly incremented.
+To address those above, this set of patches add following:
+1> Let memfd_create() set X bit at creation time.
+2> Let memfd to be sealed for modifying X bit.
+3> A new pid namespace sysctl: vm.memfd_noexec to control the behavior of
+   X bit.For example, if a container has vm.memfd_noexec=2, then
+   memfd_create() without MFD_NOEXEC_SEAL will be rejected.
+4> A new security hook in memfd_create(). This make it possible to a new
+LSM, which rejects or allows executable memfd based on its security policy.
 
-> 
-> --kvm->stat.nx_lpage_splits;
-> 
-> But looks like the stat for this sp hasn't been increased yet.
-> 
+Change history:
+v8:
+- Update ref bug in cover letter.
+- Add Reviewed-by field.
+- Remove security hook (security_memfd_create) patch, which will have
+  its own patch set in future.
+
+v7:
+- patch 2/6: remove #ifdef and MAX_PATH (memfd_test.c).
+- patch 3/6: check capability (CAP_SYS_ADMIN) from userns instead of
+		global ns (pid_sysctl.h). Add a tab (pid_namespace.h).
+- patch 5/6: remove #ifdef (memfd_test.c)
+- patch 6/6: remove unneeded security_move_mount(security.c).
+
+v6:https://lore.kernel.org/lkml/20221206150233.1963717-1-jeffxu@google.com/
+- Address comment and move "#ifdef CONFIG_" from .c file to pid_sysctl.h
+
+v5:https://lore.kernel.org/lkml/20221206152358.1966099-1-jeffxu@google.com/
+- Pass vm.memfd_noexec from current ns to child ns.
+- Fix build issue detected by kernel test robot.
+- Add missing security.c
+
+v3:https://lore.kernel.org/lkml/20221202013404.163143-1-jeffxu@google.com/
+- Address API design comments in v2.
+- Let memfd_create() to set X bit at creation time.
+- A new pid namespace sysctl: vm.memfd_noexec to control behavior of X bit.
+- A new security hook in memfd_create().
+
+v2:https://lore.kernel.org/lkml/20220805222126.142525-1-jeffxu@google.com/
+- address comments in V1.
+- add sysctl (vm.mfd_noexec) to set the default file permissions of
+  memfd_create to be non-executable.
+
+v1:https://lwn.net/Articles/890096/
+
+[1] https://crbug.com/1305267
+[2] https://bugs.chromium.org/p/chromium/issues/list?q=type%3Dbug-security%20memfd%20escalation&can=1
+[3] https://lwn.net/Articles/781013/
+
+Daniel Verkamp (2):
+  mm/memfd: add F_SEAL_EXEC
+  selftests/memfd: add tests for F_SEAL_EXEC
+
+Jeff Xu (3):
+  mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+  mm/memfd: Add write seals when apply SEAL_EXEC to executable memfd
+  selftests/memfd: add tests for MFD_NOEXEC_SEAL MFD_EXEC
+
+ include/linux/pid_namespace.h              |  19 ++
+ include/uapi/linux/fcntl.h                 |   1 +
+ include/uapi/linux/memfd.h                 |   4 +
+ kernel/pid_namespace.c                     |   5 +
+ kernel/pid_sysctl.h                        |  59 ++++
+ mm/memfd.c                                 |  56 +++-
+ mm/shmem.c                                 |   6 +
+ tools/testing/selftests/memfd/fuse_test.c  |   1 +
+ tools/testing/selftests/memfd/memfd_test.c | 341 ++++++++++++++++++++-
+ 9 files changed, 489 insertions(+), 3 deletions(-)
+ create mode 100644 kernel/pid_sysctl.h
+
+
+base-commit: eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
+-- 
+2.39.0.rc1.256.g54fd8350bd-goog
+
