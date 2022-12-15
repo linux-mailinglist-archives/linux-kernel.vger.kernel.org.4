@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9A464E2F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C87664E2F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:18:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiLOVSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 16:18:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
+        id S230076AbiLOVSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 16:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiLOVSD (ORCPT
+        with ESMTP id S229996AbiLOVSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 15 Dec 2022 16:18:03 -0500
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8325259142;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF10059156;
         Thu, 15 Dec 2022 13:18:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1671139082; x=1702675082;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=aRw8JrUibr2BZHp3e7ft45UdfvnTap5W0KSsdC4zYxU=;
-  b=JAUZ7DCzF3bxV53TocT9ZlGnMyLX0en/O2G5eHnAZl17QEsFpH98FxCn
-   jDTsiuEAymdICB6WhdYragYEffE7tSBdVtwLPUwW+a6R8w4z5d1uKU9+U
-   ghp/IBEE/YZY8FNlritXaxyL+ABM7mhQmN2AW9lzN3tDPmzrdx+Vv/peU
-   SsvYsHLqWQd290qRqPb5xsuszL/FegNMS0LpKOTY3If1MltjcrUNxYd1W
-   +WarGG/aIekXe8cG5eLL9LQA3B//v8+xyeZ5mQjmqzXlV7sWFbmjb0EiD
-   A/oTOpyubPF4w4AG3QxaANVgp39t9y1xCfoLLzP1rQEXqtsMvZoY363KF
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="302230307"
+  bh=SMyW+MRrTkyrFYxqA8ddxUtmVsGx3eQy/KpbR7JQwsM=;
+  b=ML/SC9j8yESPMBrCWSBXWpVmdnBqctYbcUZOZvfrLNmDjoe5LqiN2aB9
+   f7oCDe7pANAoXNLboFh+ouaCHQEA6bNLJPZWjkKGWw/JuyLbk+PXa4qUI
+   CJv1DcvLiJIvzz5hyklkqZyXxE6ZswvOekkUMBZaCyLj0A9s6rmUmh5ak
+   dx4wesNTlYeKIbrb9v+Jk6sn+xicolG9Dl71LvBZNMaj6z4XSymtckXW0
+   ZgPEJ7XDO6uYogjaZjWQn9hWhuA0JJd6D1uyb4WHGBZe5kzfdhlhuCznW
+   zXbGRGpTP/CiEoP3R44mMmyJQEU2yJT721jAbm+zpYQ9BurzRomn5VyN5
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="302230315"
 X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
-   d="scan'208";a="302230307"
+   d="scan'208";a="302230315"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 13:17:53 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="649570086"
+X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="649570089"
 X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
-   d="scan'208";a="649570086"
+   d="scan'208";a="649570089"
 Received: from aschofie-mobl2.amr.corp.intel.com (HELO localhost) ([10.209.55.178])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 13:17:52 -0800
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 13:17:53 -0800
 From:   alison.schofield@intel.com
 To:     Dan Williams <dan.j.williams@intel.com>,
         Ira Weiny <ira.weiny@intel.com>,
@@ -48,9 +48,9 @@ To:     Dan Williams <dan.j.williams@intel.com>,
 Cc:     Alison Schofield <alison.schofield@intel.com>,
         linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v4 4/5] cxl/region: Add trigger_poison_list sysfs attribute
-Date:   Thu, 15 Dec 2022 13:17:46 -0800
-Message-Id: <35395936fc9b8fdcb1d75bf13c770dab3b2f94a9.1671135967.git.alison.schofield@intel.com>
+Subject: [PATCH v4 5/5] tools/testing/cxl: Mock support for Get Poison List
+Date:   Thu, 15 Dec 2022 13:17:47 -0800
+Message-Id: <c4117df0cc50b10f204827d0d2df84aae9d760cd.1671135967.git.alison.schofield@intel.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <cover.1671135967.git.alison.schofield@intel.com>
 References: <cover.1671135967.git.alison.schofield@intel.com>
@@ -67,95 +67,107 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alison Schofield <alison.schofield@intel.com>
 
-When a boolean 'true' is written to this attribute the region driver
-retrieves the poison list for the capacity each device contributes
-to this region. The list consists of addresses that are poisoned,
-or would result in poison if accessed, and the source of the poison.
-The retrieved errors are logged as kernel trace events with the
-label 'cxl_poison'.
+Make mock memdevs support the Get Poison List mailbox command.
+Return a fake poison error record when the get poison list command
+is issued.
 
-Devices not supporting the poison list capability are ignored.
+This supports testing the kernel tracing and cxl list capabilities
+for media errors.
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Alison Schofield <alison.schofield@intel.com>
 ---
- Documentation/ABI/testing/sysfs-bus-cxl | 14 +++++++++++
- drivers/cxl/core/region.c               | 33 +++++++++++++++++++++++++
- 2 files changed, 47 insertions(+)
+ tools/testing/cxl/test/mem.c | 42 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-cxl b/Documentation/ABI/testing/sysfs-bus-cxl
-index df40ed09ea67..b715a4609718 100644
---- a/Documentation/ABI/testing/sysfs-bus-cxl
-+++ b/Documentation/ABI/testing/sysfs-bus-cxl
-@@ -402,3 +402,17 @@ Description:
- 		attribute is only visible for devices supporting the
- 		capability. The retrieved errors are logged as kernel
- 		trace events with the label 'cxl_poison'.
+diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
+index 5e4ecd93f1d2..9bbbad083ede 100644
+--- a/tools/testing/cxl/test/mem.c
++++ b/tools/testing/cxl/test/mem.c
+@@ -7,6 +7,7 @@
+ #include <linux/delay.h>
+ #include <linux/sizes.h>
+ #include <linux/bits.h>
++#include <asm/unaligned.h>
+ #include <cxlmem.h>
+ 
+ #define LSA_SIZE SZ_128K
+@@ -38,6 +39,10 @@ static struct cxl_cel_entry mock_cel[] = {
+ 		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_HEALTH_INFO),
+ 		.effect = cpu_to_le16(0),
+ 	},
++	{
++		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_POISON),
++		.effect = cpu_to_le16(0),
++	},
+ };
+ 
+ /* See CXL 2.0 Table 181 Get Health Info Output Payload */
+@@ -141,6 +146,8 @@ static int mock_id(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
+ 			cpu_to_le64(DEV_SIZE / CXL_CAPACITY_MULTIPLIER),
+ 	};
+ 
++	put_unaligned_le24(CXL_POISON_LIST_MAX, id.poison_list_max_mer);
 +
-+
-+What:		/sys/bus/cxl/devices/regionZ/trigger_poison_list
-+Date:		November, 2022
-+KernelVersion:	v6.2
-+Contact:	linux-cxl@vger.kernel.org
-+Description:
-+		(WO) When a boolean 'true' is written to this attribute the
-+		region driver retrieves the poison list for the capacity
-+		each device contributes to this region. The list consists
-+		of addresses that are poisoned, or would result in poison
-+		if accessed, and the source of the poison. The retrieved
-+		errors are logged as kernel trace events with the label
-+		'cxl_poison'.
-diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-index 02f28da519e3..62ba9aa6bbf8 100644
---- a/drivers/cxl/core/region.c
-+++ b/drivers/cxl/core/region.c
-@@ -72,6 +72,38 @@ static int is_dup(struct device *match, void *data)
+ 	if (cmd->size_out < sizeof(id))
+ 		return -EINVAL;
+ 
+@@ -558,6 +565,34 @@ static int mock_health_info(struct cxl_dev_state *cxlds,
  	return 0;
  }
  
-+static ssize_t trigger_poison_list_store(struct device *dev,
-+					 struct device_attribute *attr,
-+					 const char *buf, size_t len)
++static int mock_get_poison(struct cxl_dev_state *cxlds,
++			   struct cxl_mbox_cmd *cmd)
 +{
-+	struct cxl_region *cxlr = to_cxl_region(dev);
-+	struct cxl_region_params *p = &cxlr->params;
-+	struct cxl_endpoint_decoder *cxled;
-+	struct cxl_memdev *cxlmd;
-+	u64 offset, length;
-+	int rc, i;
-+	bool tmp;
++	struct cxl_mbox_poison_payload_in *pi = cmd->payload_in;
 +
-+	if (kstrtobool(buf, &tmp))
++	/* Mock one poison record at pi.offset for 64 bytes */
++	struct {
++		struct cxl_mbox_poison_payload_out po;
++		struct cxl_poison_record record;
++	} mock_plist = {
++		.po = {
++			.count = cpu_to_le16(1),
++		},
++		.record = {
++			.length = cpu_to_le32(1),
++			.address = cpu_to_le64(pi->offset |
++					       CXL_POISON_SOURCE_INTERNAL),
++		},
++	};
++
++	if (cmd->size_out < sizeof(mock_plist))
 +		return -EINVAL;
 +
-+	for (i = 0; i <  p->nr_targets; i++) {
-+		cxled = p->targets[i];
-+		cxlmd = cxled_to_memdev(cxled);
-+		if (!test_bit(CXL_MEM_COMMAND_ID_GET_POISON,
-+			      cxlmd->cxlds->enabled_cmds))
-+			continue;
-+
-+		offset = cxl_dpa_resource_start(cxled);
-+		length = cxl_dpa_size(cxled);
-+		rc = cxl_mem_get_poison(cxlmd, offset, length, cxlr);
-+		if (rc)
-+			return rc;
-+	}
-+	return len;
++	memcpy(cmd->payload_out, &mock_plist, sizeof(mock_plist));
++	cmd->size_out = sizeof(mock_plist);
++	return 0;
 +}
-+static DEVICE_ATTR_WO(trigger_poison_list);
 +
- static ssize_t uuid_store(struct device *dev, struct device_attribute *attr,
- 			  const char *buf, size_t len)
+ static int cxl_mock_mbox_send(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
  {
-@@ -570,6 +602,7 @@ static struct attribute *cxl_region_attrs[] = {
- 	&dev_attr_interleave_granularity.attr,
- 	&dev_attr_resource.attr,
- 	&dev_attr_size.attr,
-+	&dev_attr_trigger_poison_list.attr,
- 	NULL,
- };
+ 	struct device *dev = cxlds->dev;
+@@ -606,6 +641,9 @@ static int cxl_mock_mbox_send(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *
+ 	case CXL_MBOX_OP_PASSPHRASE_SECURE_ERASE:
+ 		rc = mock_passphrase_secure_erase(cxlds, cmd);
+ 		break;
++	case CXL_MBOX_OP_GET_POISON:
++		rc = mock_get_poison(cxlds, cmd);
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -664,6 +702,10 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
+ 	if (rc)
+ 		return rc;
  
++	rc = cxl_poison_state_init(cxlds);
++	if (rc)
++		return rc;
++
+ 	rc = cxl_dev_state_identify(cxlds);
+ 	if (rc)
+ 		return rc;
 -- 
 2.37.3
 
