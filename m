@@ -2,98 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCE864D7C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 09:31:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E28A64D7D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 09:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiLOIb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 03:31:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
+        id S229632AbiLOIdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 03:33:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiLOIbW (ORCPT
+        with ESMTP id S229448AbiLOIdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 03:31:22 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720A02229C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 00:31:21 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id j4so14582703lfk.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 00:31:21 -0800 (PST)
+        Thu, 15 Dec 2022 03:33:04 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FC521882
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 00:33:03 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3b5d9050e48so32058667b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 00:33:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KKUhNhQH++1Xun++fQkRwkhy0b3MHO05OmMRhmu9zi8=;
-        b=zL+QrLnzYv+Qac0DF9ntrmlsgAl/1xBeYvtBVGHaLe4geGB0HLzH+vUszM8t52eGUM
-         RaVebbtKWxG57fl2FZQ/cveGIqHI759h3CrrWffn4y/iS0BiBLqZpQ0Vr8+Ivzd3sT1W
-         AAuMMnfPWJ9RjZBAn5SA16FYXCniktz9yEAMAWZuCtoEnbjmONmk3NDeK+FiLdfWH5aN
-         +RLtiiL2zBNkkGqr5zbuhXM/Ps4kf+bvLh5gZHsPPJ3hrEZaj8mNc7D4qZpqeSQU06KI
-         cwaeXZTzxIurCdH6uT2kNPlShNJR0WFv+KYGOxboa7kxttitArBo4o1UgSpNG1doEKv/
-         Hjwg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zw/RhO20UZoC9G6TTtJdTuGGtmTIwLpJWlVSECXA/JQ=;
+        b=gcsIYuVB82zmxWO/jv48MxPYs/gdG0Rzgpy4wX731BSR6Ttm6idl29NDWcRjsNF2Fw
+         KM3t76IuqbWGol7of0hQGE0hHket69xGNdMfpqVWd8Ec4c4wIcV7CylfuKzhKOHKg6yh
+         pK4VsYzt/CuGw0wlVvfQWeImLnu1VtMQGODFp3UUiLMGJ1WdH8+umfjBSGtNUSYss9rV
+         vYX4NRdzDPMvtbcC3HpAotwqT86gCotG5RM1KTgPGSmadSZoriXzdSpdmODGSEm4YDD/
+         892saize8LGzjzv2uXxazAbI7+oio/WylRwWh/5jhPzLnzLYa/CSjiTyWhSCd2R2NglO
+         MDRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KKUhNhQH++1Xun++fQkRwkhy0b3MHO05OmMRhmu9zi8=;
-        b=lnU8CvxOxQcmhI1zOm+SNty3DOYEQAU0YJr0Qwjub6vwJa3peqpFpfBMb12ctkpPS1
-         zEjJHiDZIlrdwQ84eY9CuWC6+brFWhqBQycuI2xp61I90TL47Lk5B5Etmiqf6hVYhYrs
-         QGLrgm82sw88ph07jbQ6jgRw5Qd/792rlw/LhdwOvLEnH5tlUPk/5gY1afsJ4EM9Met8
-         pRf/1PmsC94rOchQfcWoJiTPwG4bWGjpapFhL3W1jB1pcEbvIFN0mH5aIUMyYUPepKks
-         SSg6wPv5HBVtQihfvPYvPynRZA0KwUXlV7NWPLgKRQjydfOj8l01ANMwSOBA1A6NfFvj
-         iJew==
-X-Gm-Message-State: ANoB5pmvggsgJOlkl9IBV+Z9bGZn87OH3AmWSP2rnx1iwcsN2iP+e6ZD
-        S8Tlv3KAsWF1W0t70cpO00ecqA==
-X-Google-Smtp-Source: AA0mqf6Hs7t4qi61Om1D5VAY2gh28XWZbr4n4AOXJ8z0MRKzpAaCAp4aeCiECNnhbcG63SdrWjsc7w==
-X-Received: by 2002:a05:6512:29b:b0:4b5:6f7b:8cfe with SMTP id j27-20020a056512029b00b004b56f7b8cfemr8007443lfp.41.1671093079799;
-        Thu, 15 Dec 2022 00:31:19 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a4-20020a056512200400b00498f00420e9sm1090374lfb.194.2022.12.15.00.31.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 00:31:19 -0800 (PST)
-Message-ID: <245b1554-5f61-3f1b-c04e-fd8326e62e8e@linaro.org>
-Date:   Thu, 15 Dec 2022 09:31:18 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zw/RhO20UZoC9G6TTtJdTuGGtmTIwLpJWlVSECXA/JQ=;
+        b=V/qhF64IQximKw785Hvu/SAPA45seQ9jhn1STZhhUlxoP4OMCjuEpsl1g1FtmmwtxF
+         4c1vrSNUtBi7hWveljxaN04wlZkACajwqPUTv/rrimLnZSZPv4Siks7jS7adKUYo+oyQ
+         ITlOnTZGA5tCwetZPXxEdVRh6RxqKqvrzXrUoM4Dm2Y2kKovRsDdfT0RyZyTILQ/8Qt9
+         G6+D/6FS3qqj+kSUtaiHxoKOUZj6eRjM7O5xn4DGVwuGBxP+yy7c+9qUNH+G2T9PVlUd
+         mQa2gDuDEuE26+89SFOqy8ST9IKj6icNShZTtGVVmdeZKb1yiMkP8E3nUg4OWLYQ6E3p
+         INKA==
+X-Gm-Message-State: ANoB5pmYnuahkzePRGKzXdl+5MKrnWVtLDsYj2ItP4wF4ZMq68EzmnMV
+        M8iDqvrQiIQjq8LO7P2yyCuIEhDMvyIYhvTxQZPm8A==
+X-Google-Smtp-Source: AA0mqf6cRDw1YzTC3hDYy0SnSaLdyQgBIFRKlD+OEaTHlI7sxKEzblretR0JoOMFb3J2KB25ISksl50/IuhdDqdsXRM=
+X-Received: by 2002:a81:9188:0:b0:379:3bb4:596f with SMTP id
+ i130-20020a819188000000b003793bb4596fmr26819268ywg.238.1671093181145; Thu, 15
+ Dec 2022 00:33:01 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm6125: Initial support for
- xiaomi-laurel_sprout
-Content-Language: en-US
-To:     Lux Aliaga <they@mint.lgbt>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221214093342.153479-1-they@mint.lgbt>
- <ea20c58f-3a53-7cdd-8669-228c4acac49a@linaro.org>
- <5a511002-5cd2-b95b-a45a-faaf78e2f4a7@mint.lgbt>
- <cd025494-862b-70ec-a008-4be219f7f72f@mint.lgbt>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <cd025494-862b-70ec-a008-4be219f7f72f@mint.lgbt>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CA+G9fYvcmmOh93nOti72+woKvE+XvLg7apCYDUfu6oKtjPkHKw@mail.gmail.com>
+In-Reply-To: <CA+G9fYvcmmOh93nOti72+woKvE+XvLg7apCYDUfu6oKtjPkHKw@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 15 Dec 2022 09:32:24 +0100
+Message-ID: <CANpmjNOwsvfnJXzaFOUCYFRT_TM-z1YWqHv-nx3DY_V2f3xBhg@mail.gmail.com>
+Subject: Re: BUG: KCSAN: data-race in do_page_fault / spectre_v4_enable_task_mitigation
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        rcu <rcu@vger.kernel.org>, kunit-dev@googlegroups.com,
+        lkft-triage@lists.linaro.org,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2022 18:45, Lux Aliaga wrote:
-> Ok. I think that comment is incorrect. Changing the node name on 
-> extcon_usb breaks the "extcon" property in &usb3_dwc3, even after 
-> changing the reference.
+On Thu, 15 Dec 2022 at 08:32, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> [Please ignore if it is already reported, and not an expert of KCSAN]
+>
+> On Linux next-20221215 tag arm64 allmodconfig boot failed due to following
+> data-race reported by KCSAN.
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> [    0.000000][    T0] Booting Linux on physical CPU 0x0000000000 [0x410fd034]
+> [    0.000000][    T0] Linux version 6.1.0-next-20221214
+> (tuxmake@tuxmake) (aarch64-linux-gnu-gcc (Debian 12.2.0-9) 12.2.0, GNU
+> ld (GNU Binutils for Debian) 2.39) #2 SMP PREEMPT_DYNAMIC @1671022464
+> [    0.000000][    T0] random: crng init done
+> [    0.000000][    T0] Machine model: linux,dummy-virt
+> ...
+> [ 1067.461794][  T132] BUG: KCSAN: data-race in do_page_fault /
+> spectre_v4_enable_task_mitigation
+> [ 1067.467529][  T132]
+> [ 1067.469146][  T132] write to 0xffff80000f00bfb8 of 8 bytes by task
+> 93 on cpu 0:
+> [ 1067.473790][  T132]  spectre_v4_enable_task_mitigation+0x2f8/0x340
+> [ 1067.477964][  T132]  __switch_to+0xc4/0x200
 
-You top-post and I have no clue what do you refer to. Don't top-post.
+Please provide line numbers with all reports - you can use the script
+scripts/decode_stacktrace.sh (requires the vmlinux you found this
+with) to do so.
 
-Best regards,
-Krzysztof
+It would be good to do this immediately, because having anyone else do
+so is nearly impossible - and without line numbers this report will
+very likely be ignored.
 
+Thanks,
+-- Marco
+
+> [ 1067.480877][  T132]  __schedule+0x5ec/0x6c0
+> [ 1067.483764][  T132]  schedule+0x6c/0x100
+> [ 1067.486526][  T132]  worker_thread+0x7d8/0x8c0
+> [ 1067.489581][  T132]  kthread+0x1b8/0x200
+> [ 1067.492483][  T132]  ret_from_fork+0x10/0x20
+> [ 1067.495450][  T132]
+> [ 1067.497034][  T132] read to 0xffff80000f00bfb8 of 8 bytes by task
+> 132 on cpu 0:
+> [ 1067.501684][  T132]  do_page_fault+0x568/0xa40
+> [ 1067.504938][  T132]  do_mem_abort+0x7c/0x180
+> [ 1067.508051][  T132]  el0_da+0x64/0x100
+> [ 1067.510712][  T132]  el0t_64_sync_handler+0x90/0x180
+> [ 1067.514191][  T132]  el0t_64_sync+0x1a4/0x1a8
+> [ 1067.517200][  T132]
+> [ 1067.518758][  T132] 1 lock held by (udevadm)/132:
+> [ 1067.521883][  T132]  #0: ffff00000b802c28
+> (&mm->mmap_lock){++++}-{3:3}, at: do_page_fault+0x480/0xa40
+> [ 1067.528399][  T132] irq event stamp: 1461
+> [ 1067.531041][  T132] hardirqs last  enabled at (1460):
+> [<ffff80000af83e40>] preempt_schedule_irq+0x40/0x100
+> [ 1067.537176][  T132] hardirqs last disabled at (1461):
+> [<ffff80000af82c84>] __schedule+0x84/0x6c0
+> [ 1067.542788][  T132] softirqs last  enabled at (1423):
+> [<ffff800008020688>] fpsimd_restore_current_state+0x148/0x1c0
+> [ 1067.549480][  T132] softirqs last disabled at (1421):
+> [<ffff8000080205fc>] fpsimd_restore_current_state+0xbc/0x1c0
+> [ 1067.556127][  T132]
+> [ 1067.557687][  T132] value changed: 0x0000000060000000 -> 0x0000000060001000
+> [ 1067.562039][  T132]
+> [ 1067.563631][  T132] Reported by Kernel Concurrency Sanitizer on:
+> [ 1067.567480][  T132] CPU: 0 PID: 132 Comm: (udevadm) Tainted: G
+>           T  6.1.0-next-20221214 #2
+> 4185b46758ba972fed408118afddb8c426bff43a
+> [ 1067.575669][  T132] Hardware name: linux,dummy-virt (DT)
+>
+>
+> metadata:
+>   repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/?h=next-20221214
+>   config: allmodconfig
+>   arch: arm64
+>   Build details:
+> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221214/
+>
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
