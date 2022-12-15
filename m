@@ -2,88 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B61C64DF12
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:55:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A021A64DF19
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbiLOQzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:55:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
+        id S230327AbiLOQ4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:56:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiLOQzb (ORCPT
+        with ESMTP id S230323AbiLOQ4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:55:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F107A33C15;
-        Thu, 15 Dec 2022 08:55:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D2BC61E58;
-        Thu, 15 Dec 2022 16:55:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95C4BC433D2;
-        Thu, 15 Dec 2022 16:55:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671123330;
-        bh=e0u79or8elEwsfwUpsz+c2l+wQJQhYf3g9q0SWliS3o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZyCSXA/j9R+dQ0abQp+TVmCEjDUd7CT1NRuxnu/QKvU1RMGpcHhDXg1nZmDSVYMoH
-         xiYgapFtnTkNpnnuEzBBkJA1xCDGz64P00EseuYDIjzAD2O9Fy/AmeZw/YCsw4Vq4A
-         LwpzCAd6RYAh8G8NY900KKzQVFyBRLhXjVcgU+DbZc35YxAA6w0OYQMh4PZJVI4RJn
-         PsFe4KAAM8NSEk9sUwaNUd86njS4LXQeLgVVdn64pEeT4xVuSbZZuHksTJ9vImeQc8
-         EeiUDOOt4QuD92+YoyWs9qpQ4EgMJOHjDFh7JnsuhGaulmo8qBSDa/LmFBD246j6NS
-         s1ue4rzNpJ1UQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Marc Zyngier <maz@kernel.org>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: apple: remove duplicate intializer
-Date:   Thu, 15 Dec 2022 17:55:15 +0100
-Message-Id: <20221215165523.1920672-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Thu, 15 Dec 2022 11:56:09 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DCBD70
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:56:04 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so3262754pjm.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:56:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DOs+4sldiwGC1XG54dp5mVgT4uLPOQwpbZy8XgG5P7U=;
+        b=BwAd8aLPF5gd7FIHoISnAe0Zyh/n9acpz7ASV5bArM8hi+12M+FokUGMCFBYex8YYT
+         nxAxlAOtheavS0XJFp986uZEh6iP0Ge1ESokWEFBokuizRQABamacozxfHoHFFmuc1ig
+         og9sJEbM9bDah05cislLrAkqozwsfBmeI2c0IATzpQQH3Shewyh+bhXQoOzGvx/VhhF4
+         q0IchDuQ9ETeLCwyhWh4KMyKbH1/EIDfepr0bi0OHiqJSTjhJ7A3Nxt8kXYoynQWbMgP
+         NFZaNJrEnOv3E7GDTrJU47AoUmR++UPFYGrV0RFmWai23NVv2rwcyUqZetoHP0TjnvhP
+         tb3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DOs+4sldiwGC1XG54dp5mVgT4uLPOQwpbZy8XgG5P7U=;
+        b=5JwFo1jXOBKPxhZSOYALuBJEMvLhVcs9KLICCJLTyz92ptIYdKB1N4TIP9jauHogBO
+         aJguoS2Aypa0f5IEEsIRtaI9Ynk9tT9enwneeCliKHWGXDDZQsondk8MO7drGR+0ulhb
+         pb6UkNQfU3A/H/+xfdyih6XYxVjT5rvHS2Qy8FKGK39YhwL92e3/qYVv4bBULLoY4HME
+         GeFEsT3WPqy/vlSiN2870LVQy6kOhmhgLmCZTrEs+l/yBtCkZZOEfBXlRFteN/B62Gnv
+         Z80KrAw9mD+Pq1Q1Wz6AvAMSzq+0Av5yMXI9b+GJTNDkicGxscGHw1KjpoTyLXBQwknz
+         z7Jw==
+X-Gm-Message-State: AFqh2kqifr1ooEdPcf80cVX6kMbS3O2ZwUSLHx98eA6W6VWlKsDQ76cv
+        263CTXdqiCG7kpkNCI7tADoflmDHoObxMeJXlH3zwg==
+X-Google-Smtp-Source: AMrXdXtENt/mhPma/+EbgzmxkFLEmcOUooUWEz4dux8uEyqEYR9PwvfNgIzmFBek41FGvcb4TrN/AF2YjFTKl7rw3wI=
+X-Received: by 2002:a17:90a:4612:b0:219:a43b:1006 with SMTP id
+ w18-20020a17090a461200b00219a43b1006mr786360pjg.195.1671123363557; Thu, 15
+ Dec 2022 08:56:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221209160453.3246150-1-jeffxu@google.com> <202212141053.7F5D1F6@keescook>
+ <CALmYWFss4hGOgJaeah8p7q86xmE7AOwOazxggGCuY=A+ZUVWhQ@mail.gmail.com> <202212141607.D2D986C076@keescook>
+In-Reply-To: <202212141607.D2D986C076@keescook>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Thu, 15 Dec 2022 08:55:26 -0800
+Message-ID: <CALmYWFvJv_4yLxnv=8Bpx0mE_WLi0yGVxR-ybN8VAatEwmM+iQ@mail.gmail.com>
+Subject: Re: [PATCH v7 0/6] mm/memfd: introduce MFD_NOEXEC_SEAL and MFD_EXEC
+To:     Kees Cook <keescook@chromium.org>
+Cc:     akpm@linux-foundation.org, jeffxu@chromium.org,
+        skhan@linuxfoundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com,
+        linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Wed, Dec 14, 2022 at 4:08 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Wed, Dec 14, 2022 at 03:32:16PM -0800, Jeff Xu wrote:
+> > On Wed, Dec 14, 2022 at 10:54 AM Kees Cook <keescook@chromium.org> wrot=
+e:
+> > >
+> > > On Fri, Dec 09, 2022 at 04:04:47PM +0000, jeffxu@chromium.org wrote:
+> > > > From: Jeff Xu <jeffxu@google.com>
+> > > >
+> > > > Since Linux introduced the memfd feature, memfd have always had the=
+ir
+> > > > execute bit set, and the memfd_create() syscall doesn't allow setti=
+ng
+> > > > it differently.
+> > > >
+> > > > However, in a secure by default system, such as ChromeOS, (where al=
+l
+> > > > executables should come from the rootfs, which is protected by Veri=
+fied
+> > > > boot), this executable nature of memfd opens a door for NoExec bypa=
+ss
+> > > > and enables =E2=80=9Cconfused deputy attack=E2=80=9D.  E.g, in VRP =
+bug [1]: cros_vm
+> > > > process created a memfd to share the content with an external proce=
+ss,
+> > > > however the memfd is overwritten and used for executing arbitrary c=
+ode
+> > > > and root escalation. [2] lists more VRP in this kind.
+> > > >
+> > > > On the other hand, executable memfd has its legit use, runc uses me=
+mfd=E2=80=99s
+> > > > seal and executable feature to copy the contents of the binary then
+> > > > execute them, for such system, we need a solution to differentiate =
+runc's
+> > > > use of  executable memfds and an attacker's [3].
+> > > >
+> > > > To address those above, this set of patches add following:
+> > > > 1> Let memfd_create() set X bit at creation time.
+> > > > 2> Let memfd to be sealed for modifying X bit.
+> > > > 3> A new pid namespace sysctl: vm.memfd_noexec to control the behav=
+ior of
+> > > >    X bit.For example, if a container has vm.memfd_noexec=3D2, then
+> > > >    memfd_create() without MFD_NOEXEC_SEAL will be rejected.
+> > > > 4> A new security hook in memfd_create(). This make it possible to =
+a new
+> > > > LSM, which rejects or allows executable memfd based on its security=
+ policy.
+> > >
+> > > I think patch 1-5 look good to land. The LSM hook seems separable, an=
+d
+> > > could continue on its own. Thoughts?
+> > >
+> > Agreed.
+> >
+> > > (Which tree should memfd change go through?)
+> > >
+> > I'm not sure, is there a recommendation ?
+>
+> It looks like it's traditionally through akpm's tree. Andrew, will you
+> carry patches 1-5?
+>
+Hi Andrew, if you are taking this, V8 is the latest that contains patch 1-5=
+.
 
-When -Woverride-init is enabled, gcc notices that the .attr
-field is initialized twice:
+Thanks
+Jeff
 
-drivers/cpufreq/apple-soc-cpufreq.c:331:27: error: initialized field overwritten [-Werror=override-init]
-  331 |         .attr           = apple_soc_cpufreq_hw_attr,
-      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~
-
-Remove the first one, since this is not actually used.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/cpufreq/apple-soc-cpufreq.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/cpufreq/apple-soc-cpufreq.c b/drivers/cpufreq/apple-soc-cpufreq.c
-index d1801281cdd9..6f26395184c4 100644
---- a/drivers/cpufreq/apple-soc-cpufreq.c
-+++ b/drivers/cpufreq/apple-soc-cpufreq.c
-@@ -321,7 +321,6 @@ static struct cpufreq_driver apple_soc_cpufreq_driver = {
- 	.flags		= CPUFREQ_HAVE_GOVERNOR_PER_POLICY |
- 			  CPUFREQ_NEED_INITIAL_FREQ_CHECK | CPUFREQ_IS_COOLING_DEV,
- 	.verify		= cpufreq_generic_frequency_table_verify,
--	.attr		= cpufreq_generic_attr,
- 	.get		= apple_soc_cpufreq_get_rate,
- 	.init		= apple_soc_cpufreq_init,
- 	.exit		= apple_soc_cpufreq_exit,
--- 
-2.35.1
-
+> Thanks!
+>
+> --
+> Kees Cook
