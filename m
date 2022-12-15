@@ -2,119 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C4E64D98F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F0E64D993
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiLOK33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 05:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
+        id S229782AbiLOKbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 05:31:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiLOK3S (ORCPT
+        with ESMTP id S229524AbiLOKbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 05:29:18 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536AD2C107
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:29:17 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-144bd860fdbso20433807fac.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:29:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oXw7NIVPJMG8+PM6AqoYuOzdnbApW+aYda86CP39V/M=;
-        b=pbR+AoUW7XkzVI6hslj50b+8n6ZYADDBFfvCJcr09vYPd6isxF1bPgdBNd9uc1FmhK
-         yzh2Ox2m4cLaLOFJPVq/Rozw6gnxCxyAfPg9kIgETBr7+4hrzG0vr0km0TO/4wdQmJOD
-         Qh48Lwudg/JBlCNnTDep5CCPrNMaXeRP5pnMw7UMThzd2UkV1E6+mh7RnAJFQ61g1Avx
-         8wmJu61Tc4A7zqnh2TnV5XslS0hMgZJhbYe8e+U0Ami6cqP+YtRvn2CeIlfjvZF0vADi
-         5MprXybHopawd9lKWPNJcXUtICWmB948C2lEITpWgnwI4UBy2huybTVbD4OVcSuHDkpU
-         B/pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oXw7NIVPJMG8+PM6AqoYuOzdnbApW+aYda86CP39V/M=;
-        b=NVm/ESpLvOK0EW8US/d5VR0jNlSkjaFHXPo/p8J3FrsxbxMk6VEziHNfizLNXZVHNk
-         rPKGIoH/TBt31NUfJm221uakRY/wP6rhNVoeWY51MlACIMZSDYMtOAHjwK3bkiic80ma
-         7SsySfVEltQa2hojSHYsIhhuSU4Fw+S6APbR0KCHzHxCo+jCddF/oNA6Od+FcoQbdoKB
-         NSWE6W2ydeGRovqY98RV2oZTwt7Fe57CGXLFaNtCyhyFMpCo8db3DolYpRkGnuE95tDg
-         xXyOTrS9DdMAPuFtwVYu0yFJsu2mFlzyT5nvwag5F9ZuB7DWM3cBUU76d6dn0U9EC4Ko
-         O8lA==
-X-Gm-Message-State: AFqh2kpPDP6/dq9Bp3xs+ZoIQ3dYKoJHXlWnOuPBGX3yo4/V/RNWYWOX
-        0Ai7ljbOHqb+bJF1rkQq7DAwopbM9E2AZX9tsfYBlA==
-X-Google-Smtp-Source: AA0mqf48x0Ly0lTHVC6+zanhcKAfhc9CQQ27Yszl1vpQXNwpDj4LShgOnGxn/oMFV65gE+GYqDp1jb5049WikZUWkXI=
-X-Received: by 2002:a05:6870:2393:b0:144:b04d:1669 with SMTP id
- e19-20020a056870239300b00144b04d1669mr170374oap.155.1671100155842; Thu, 15
- Dec 2022 02:29:15 -0800 (PST)
+        Thu, 15 Dec 2022 05:31:16 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45C52CC81
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:31:15 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 689146602C5F;
+        Thu, 15 Dec 2022 10:31:13 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671100274;
+        bh=WIDaz+drK8oF/b9fCu9/41JRPOIXp254wSJ84sWVcpo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GtPBVrT9VvU5Nf3Fdnb3oE7wiZTu+ZLYId5RN1LJmUrey5rm8QajhLVbf0Z38uf90
+         B2b4hDi8Xje+fO3bI86h+8/hGSeGrnNh3jGocVQw+MTAu2wTLDVhktrCS8UKLhIg/j
+         L92zjN95nh15jDys2iegzxct6Jz+nHv5cc5iKMD9xs4FD2fFPu6JDuBDn42qxvaVh9
+         ooXV3i2nIUFqrUBnXacnYDOxtRsCI3ZzbRT2kfD2uOYB6Xa0sPrC/6eXmuZ73MvNww
+         4leYuWdo1YbTervvIs0+KgdF/UQVrmvAO3nr1EDhyIXsI9ebdnD2IUIJg/fQjIYyB5
+         NfG5hvkMkT1Ng==
+Message-ID: <7e8edf6f-9971-c704-4299-be9f7098d1cd@collabora.com>
+Date:   Thu, 15 Dec 2022 11:31:10 +0100
 MIME-Version: 1.0
-References: <20221115112720.911158-1-treapking@chromium.org>
- <167103665890.995711.9267085599513513874.b4-ty@linaro.org> <CAEXTbpfgCVWNE=ao5=d8_Bo1YHmfb7e08aeMCaz38Tvt0jAcTw@mail.gmail.com>
-In-Reply-To: <CAEXTbpfgCVWNE=ao5=d8_Bo1YHmfb7e08aeMCaz38Tvt0jAcTw@mail.gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Thu, 15 Dec 2022 11:29:05 +0100
-Message-ID: <CAG3jFysB_nWvJ7pqJj_jRNvncK58Rw=kHgdWu=ek7msHGi4E2w@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: it6505: Add caching for EDID
-To:     Pin-yen Lin <treapking@chromium.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        allen chen <allen.chen@ite.com.tw>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] ASoC: SOF: mediatek: mt8195: remove a redundant
+ comparison of sram
+Content-Language: en-US
+To:     YC Hung <yc.hung@mediatek.com>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunxu Li <chunxu.li@mediatek.com>,
+        Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Curtis Malainey <cujomalainey@chromium.org>
+References: <20221215061046.16934-1-yc.hung@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221215061046.16934-1-yc.hung@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 at 09:36, Pin-yen Lin <treapking@chromium.org> wrote:
->
-> Hi Robert,
->
-> Thanks for the review.
->
-> I didn't see this patch on drm-misc-next, but my another patch merged
-> instead: https://cgit.freedesktop.org/drm/drm-misc/commit/?id=5eb9a4314053bda7642643f70f49a2b415920812
->
-> Did something go wrong? Or is it me missing something?
+Il 15/12/22 07:10, YC Hung ha scritto:
+> DSP SRAM is not used for audio shared buffer between host and DSP so
+> TOTAL_SIZE_SHARED_SRAM_FROM_TAIL is zero. Remove the definition and
+> redundant comparison to fix coverity "unsigned compared against 0".
+> 
+> Signed-off-by: YC Hung <yc.hung@mediatek.com>
 
-This is my mistake. I'm switching to a 'b4 ty' based workflow, and the
-wrong thank you message got sent out.
+Reviewed-by: AngeloGioacchino Del Regno <angeloigoacchino.delregno@collabora.com>
 
-Let me have a look at this patch too.
 
->
-> Regards,
-> Pin-yen
->
-> On Thu, Dec 15, 2022 at 12:51 AM Robert Foss <robert.foss@linaro.org> wrote:
-> >
-> > On Tue, 15 Nov 2022 19:27:20 +0800, Pin-yen Lin wrote:
-> > > Add caching when EDID is read, and invalidate the cache until the
-> > > bridge detects HPD low or sink count changes on HPD_IRQ.
-> > >
-> > > It takes 1.2s for IT6505 bridge to read a 3-block EDID, and skipping
-> > > one EDID read would be a notable difference on user experience.
-> > >
-> > >
-> > > [...]
-> >
-> > Applied, thanks!
-> >
-> > Repo: https://cgit.freedesktop.org/drm/drm-misc/
-> >
-> >
-> > [1/1] drm/bridge: it6505: Add caching for EDID
-> >       (no commit info)
-> >
-> >
-> >
-> > rob
-> >
