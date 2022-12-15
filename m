@@ -2,148 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A021A64DF19
+	by mail.lfdr.de (Postfix) with ESMTP id 55C2664DF18
 	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbiLOQ4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:56:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
+        id S230400AbiLOQ4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:56:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiLOQ4J (ORCPT
+        with ESMTP id S230336AbiLOQ4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:56:09 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DCBD70
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:56:04 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so3262754pjm.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:56:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DOs+4sldiwGC1XG54dp5mVgT4uLPOQwpbZy8XgG5P7U=;
-        b=BwAd8aLPF5gd7FIHoISnAe0Zyh/n9acpz7ASV5bArM8hi+12M+FokUGMCFBYex8YYT
-         nxAxlAOtheavS0XJFp986uZEh6iP0Ge1ESokWEFBokuizRQABamacozxfHoHFFmuc1ig
-         og9sJEbM9bDah05cislLrAkqozwsfBmeI2c0IATzpQQH3Shewyh+bhXQoOzGvx/VhhF4
-         q0IchDuQ9ETeLCwyhWh4KMyKbH1/EIDfepr0bi0OHiqJSTjhJ7A3Nxt8kXYoynQWbMgP
-         NFZaNJrEnOv3E7GDTrJU47AoUmR++UPFYGrV0RFmWai23NVv2rwcyUqZetoHP0TjnvhP
-         tb3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DOs+4sldiwGC1XG54dp5mVgT4uLPOQwpbZy8XgG5P7U=;
-        b=5JwFo1jXOBKPxhZSOYALuBJEMvLhVcs9KLICCJLTyz92ptIYdKB1N4TIP9jauHogBO
-         aJguoS2Aypa0f5IEEsIRtaI9Ynk9tT9enwneeCliKHWGXDDZQsondk8MO7drGR+0ulhb
-         pb6UkNQfU3A/H/+xfdyih6XYxVjT5rvHS2Qy8FKGK39YhwL92e3/qYVv4bBULLoY4HME
-         GeFEsT3WPqy/vlSiN2870LVQy6kOhmhgLmCZTrEs+l/yBtCkZZOEfBXlRFteN/B62Gnv
-         Z80KrAw9mD+Pq1Q1Wz6AvAMSzq+0Av5yMXI9b+GJTNDkicGxscGHw1KjpoTyLXBQwknz
-         z7Jw==
-X-Gm-Message-State: AFqh2kqifr1ooEdPcf80cVX6kMbS3O2ZwUSLHx98eA6W6VWlKsDQ76cv
-        263CTXdqiCG7kpkNCI7tADoflmDHoObxMeJXlH3zwg==
-X-Google-Smtp-Source: AMrXdXtENt/mhPma/+EbgzmxkFLEmcOUooUWEz4dux8uEyqEYR9PwvfNgIzmFBek41FGvcb4TrN/AF2YjFTKl7rw3wI=
-X-Received: by 2002:a17:90a:4612:b0:219:a43b:1006 with SMTP id
- w18-20020a17090a461200b00219a43b1006mr786360pjg.195.1671123363557; Thu, 15
- Dec 2022 08:56:03 -0800 (PST)
+        Thu, 15 Dec 2022 11:56:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CE6E088;
+        Thu, 15 Dec 2022 08:56:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D5C1B81C03;
+        Thu, 15 Dec 2022 16:56:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69E0BC433EF;
+        Thu, 15 Dec 2022 16:55:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671123359;
+        bh=tVhkH/FcY9gESy+V3xeK947kCGObkEYr+sAE3pHakis=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LXoIjw5ra7kHRbvYTXP6NigITE4JtnJBxLDqJvA4kbg7jKh7PCVIvaWKZXXlEpAA+
+         Ha1v4BRa9Gnf6/ruDAN2j/Y/EXBz65z2x77sh3ozb/BZoeP263lObyomW2MW75Rqcr
+         vd0uZ6dtjPt3xtmRkG5sSdNQ3v+0FWP8UtQ9YCYnXzb+5QzogKJOfxyaLbZ1thQayo
+         lWfWdEIsOCy8HMjoI+z68/JlRbUVoxxgC2y8rFRfUZ7ofb3ujdTtH90M0KxjoJ8rXb
+         wqQ1Qj5F2Uni/kMo6MwlxGch9dneycHhG96i0Qglyy8DH+ufc+U6+CH3Vqcsz2/qUh
+         2Yumvup4npcjw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <kvalo@kernel.org>,
+        Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ath9k: use proper statements in conditionals
+Date:   Thu, 15 Dec 2022 17:55:42 +0100
+Message-Id: <20221215165553.1950307-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221209160453.3246150-1-jeffxu@google.com> <202212141053.7F5D1F6@keescook>
- <CALmYWFss4hGOgJaeah8p7q86xmE7AOwOazxggGCuY=A+ZUVWhQ@mail.gmail.com> <202212141607.D2D986C076@keescook>
-In-Reply-To: <202212141607.D2D986C076@keescook>
-From:   Jeff Xu <jeffxu@google.com>
-Date:   Thu, 15 Dec 2022 08:55:26 -0800
-Message-ID: <CALmYWFvJv_4yLxnv=8Bpx0mE_WLi0yGVxR-ybN8VAatEwmM+iQ@mail.gmail.com>
-Subject: Re: [PATCH v7 0/6] mm/memfd: introduce MFD_NOEXEC_SEAL and MFD_EXEC
-To:     Kees Cook <keescook@chromium.org>
-Cc:     akpm@linux-foundation.org, jeffxu@chromium.org,
-        skhan@linuxfoundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, jannh@google.com,
-        linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 4:08 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Wed, Dec 14, 2022 at 03:32:16PM -0800, Jeff Xu wrote:
-> > On Wed, Dec 14, 2022 at 10:54 AM Kees Cook <keescook@chromium.org> wrot=
-e:
-> > >
-> > > On Fri, Dec 09, 2022 at 04:04:47PM +0000, jeffxu@chromium.org wrote:
-> > > > From: Jeff Xu <jeffxu@google.com>
-> > > >
-> > > > Since Linux introduced the memfd feature, memfd have always had the=
-ir
-> > > > execute bit set, and the memfd_create() syscall doesn't allow setti=
-ng
-> > > > it differently.
-> > > >
-> > > > However, in a secure by default system, such as ChromeOS, (where al=
-l
-> > > > executables should come from the rootfs, which is protected by Veri=
-fied
-> > > > boot), this executable nature of memfd opens a door for NoExec bypa=
-ss
-> > > > and enables =E2=80=9Cconfused deputy attack=E2=80=9D.  E.g, in VRP =
-bug [1]: cros_vm
-> > > > process created a memfd to share the content with an external proce=
-ss,
-> > > > however the memfd is overwritten and used for executing arbitrary c=
-ode
-> > > > and root escalation. [2] lists more VRP in this kind.
-> > > >
-> > > > On the other hand, executable memfd has its legit use, runc uses me=
-mfd=E2=80=99s
-> > > > seal and executable feature to copy the contents of the binary then
-> > > > execute them, for such system, we need a solution to differentiate =
-runc's
-> > > > use of  executable memfds and an attacker's [3].
-> > > >
-> > > > To address those above, this set of patches add following:
-> > > > 1> Let memfd_create() set X bit at creation time.
-> > > > 2> Let memfd to be sealed for modifying X bit.
-> > > > 3> A new pid namespace sysctl: vm.memfd_noexec to control the behav=
-ior of
-> > > >    X bit.For example, if a container has vm.memfd_noexec=3D2, then
-> > > >    memfd_create() without MFD_NOEXEC_SEAL will be rejected.
-> > > > 4> A new security hook in memfd_create(). This make it possible to =
-a new
-> > > > LSM, which rejects or allows executable memfd based on its security=
- policy.
-> > >
-> > > I think patch 1-5 look good to land. The LSM hook seems separable, an=
-d
-> > > could continue on its own. Thoughts?
-> > >
-> > Agreed.
-> >
-> > > (Which tree should memfd change go through?)
-> > >
-> > I'm not sure, is there a recommendation ?
->
-> It looks like it's traditionally through akpm's tree. Andrew, will you
-> carry patches 1-5?
->
-Hi Andrew, if you are taking this, V8 is the latest that contains patch 1-5=
-.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Thanks
-Jeff
+A previous cleanup patch accidentally broke some conditional
+expressions by replacing the safe "do {} while (0)" constructs
+with empty macros. gcc points this out when extra warnings
+are enabled:
 
-> Thanks!
->
-> --
-> Kees Cook
+drivers/net/wireless/ath/ath9k/hif_usb.c: In function 'ath9k_skb_queue_complete':
+drivers/net/wireless/ath/ath9k/hif_usb.c:251:57: error: suggest braces around empty body in an 'else' statement [-Werror=empty-body]
+  251 |                         TX_STAT_INC(hif_dev, skb_failed);
+
+Make both sets of macros proper expressions again.
+
+Fixes: d7fc76039b74 ("ath9k: htc: clean up statistics macros")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/net/wireless/ath/ath9k/htc.h | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/net/wireless/ath/ath9k/htc.h b/drivers/net/wireless/ath/ath9k/htc.h
+index 30f0765fb9fd..237f4ec2cffd 100644
+--- a/drivers/net/wireless/ath/ath9k/htc.h
++++ b/drivers/net/wireless/ath/ath9k/htc.h
+@@ -327,9 +327,9 @@ static inline struct ath9k_htc_tx_ctl *HTC_SKB_CB(struct sk_buff *skb)
+ }
+ 
+ #ifdef CONFIG_ATH9K_HTC_DEBUGFS
+-#define __STAT_SAFE(hif_dev, expr)	((hif_dev)->htc_handle->drv_priv ? (expr) : 0)
+-#define CAB_STAT_INC(priv)		((priv)->debug.tx_stats.cab_queued++)
+-#define TX_QSTAT_INC(priv, q)		((priv)->debug.tx_stats.queue_stats[q]++)
++#define __STAT_SAFE(hif_dev, expr)	do { ((hif_dev)->htc_handle->drv_priv ? (expr) : 0); } while (0)
++#define CAB_STAT_INC(priv)		do { ((priv)->debug.tx_stats.cab_queued++); } while (0)
++#define TX_QSTAT_INC(priv, q)		do { ((priv)->debug.tx_stats.queue_stats[q]++); } while (0)
+ 
+ #define TX_STAT_INC(hif_dev, c) \
+ 		__STAT_SAFE((hif_dev), (hif_dev)->htc_handle->drv_priv->debug.tx_stats.c++)
+@@ -378,10 +378,10 @@ void ath9k_htc_get_et_stats(struct ieee80211_hw *hw,
+ 			    struct ethtool_stats *stats, u64 *data);
+ #else
+ 
+-#define TX_STAT_INC(hif_dev, c)
+-#define TX_STAT_ADD(hif_dev, c, a)
+-#define RX_STAT_INC(hif_dev, c)
+-#define RX_STAT_ADD(hif_dev, c, a)
++#define TX_STAT_INC(hif_dev, c)		do { } while (0)
++#define TX_STAT_ADD(hif_dev, c, a)	do { } while (0)
++#define RX_STAT_INC(hif_dev, c)		do { } while (0)
++#define RX_STAT_ADD(hif_dev, c, a)	do { } while (0)
+ 
+ #define CAB_STAT_INC(priv)
+ #define TX_QSTAT_INC(priv, c)
+-- 
+2.35.1
+
