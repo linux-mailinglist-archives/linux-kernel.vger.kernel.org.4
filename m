@@ -2,77 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1101764E22D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 21:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 611AC64E232
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 21:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiLOUMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 15:12:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57202 "EHLO
+        id S229545AbiLOUM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 15:12:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiLOUMi (ORCPT
+        with ESMTP id S230163AbiLOUMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 15:12:38 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245DE2EF6A
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:12:34 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id f20so126745lja.4
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:12:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
-         :from:references:in-reply-to:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ma29jYxLICPfJYdRmS8iS0Sz2Ww6x0xzpK34aJyoY38=;
-        b=WAMocIyQLya3cZ3eoRREWyL3BJuNCw4hHzTN4zu8lxDR5ZNKjTqCzsxYDNl+EGJJam
-         gwjij75zZhMjukUfT79v+h+7g9RMduI6pfuM5dCQ9kFJGj914ZIi+iCdEMUkSEN3iKvZ
-         Kjh0w0DYmCEhqLYN6dcPY+roorUbtIZ7LGas8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
-         :from:references:in-reply-to:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Ma29jYxLICPfJYdRmS8iS0Sz2Ww6x0xzpK34aJyoY38=;
-        b=q99EeitVZ1VqePr2KSE6nrWQ2RWd6Mo5m4ZqjhNxIN/FTZL1klRZbmNaEkzh05eOSE
-         S7Dk4XGOtpr/oZ2hy1kegamULUIh4MX2R5izOQVaKcpZmgyOsSIM7YACWF3s0URPvCxj
-         kj1RYTP45pmAtnrBNod/ePiKXCoKVRUnqTf9cieYrhrt34el6s3z7A46fcn8szz0HOah
-         yx6Bp6X3d77kbhSyEzwpVnFl7C+Pm7LNelESY38EZ2P59qq9epuUuk3DqYsnseC68nLv
-         ScsiRoAcKx4Rywhepp6zhFo3dWZQ2ZTtEamcypyh3Ay9ZEeMwNar0W4YoUCWpZR2vntc
-         i1Qg==
-X-Gm-Message-State: AFqh2koj1MRAtP+uZX9aJ+/eveaNFOgY17dR3fAYI2eNpXjWae/o/mwK
-        PCXGrnqHAzQ2GvAtf9zWDth2cyfpTK3Da0Cx9p64Dg==
-X-Google-Smtp-Source: AMrXdXt3ybfdYsbW+NzMUL4sJXmfO6ubzbiioxX2yF9TmOb2VxGIBXIKmk+OiSkMyH6erDrmmUsl31yNVnS26c1UhTo=
-X-Received: by 2002:a05:651c:3c7:b0:27d:75b3:8fd0 with SMTP id
- f7-20020a05651c03c700b0027d75b38fd0mr510146ljp.39.1671135152456; Thu, 15 Dec
- 2022 12:12:32 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 15 Dec 2022 15:12:31 -0500
+        Thu, 15 Dec 2022 15:12:53 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FE630F71;
+        Thu, 15 Dec 2022 12:12:51 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFJJGUJ008515;
+        Thu, 15 Dec 2022 20:12:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=H0acbQg628jCJ14xWyI9iBRkRK9Ra8NqbTczgtjgjTI=;
+ b=P+OtBFi3J6/osYXdi2IuYiVGlCHkLflXd9k/RrWUYY4ZBv+PNMfIhCgKJPPDnyhl7OU0
+ biPiv8hO+qd77M3n9+o3UXBBLAgW1UEXBrh4/8ksnpbGwM1sE47jD+sSTEelQPWw3hV7
+ u4ms8A40IWUeQTuuw1w1ANkEu+LpXrSUGAA9zq2OAHxnaJgnMObhmJ1OGpPefePH8urd
+ IglmQeMZR+0IZXoQ57ETsxEEo9AVoHTSFRM3myTtVa+KiTXgwmrxiMi3CpRbnk1MbVpT
+ KX/hHO5SFCX5li/szgpbjt+WMCR25OVPIKbfOlyR2VDTPvTyFrL06umC+2s1hd9osC8L ag== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mg8e68cub-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 20:12:43 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BFKCgQ2022112
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 20:12:42 GMT
+Received: from [10.110.66.74] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 15 Dec
+ 2022 12:12:41 -0800
+Message-ID: <7f7b644d-54f1-85cd-1b35-86ba9421c39d@quicinc.com>
+Date:   Thu, 15 Dec 2022 12:12:40 -0800
 MIME-Version: 1.0
-In-Reply-To: <98cc6d55-f9c7-a369-6004-42b242d01339@quicinc.com>
-References: <1670967848-31475-1-git-send-email-quic_khsieh@quicinc.com>
- <1670967848-31475-3-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n52eHYCqxUJqQXoaQ8vyqCk-QfouSun+zUp3yo5DufWbwg@mail.gmail.com>
- <b38af164-08bc-07e7-dfaf-fb4d6d89d7db@quicinc.com> <CAE-0n53Cb6TFGfM6AYup5aP4=24j0ujVPi463oVqmzfNV2B4RA@mail.gmail.com>
- <98cc6d55-f9c7-a369-6004-42b242d01339@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 15 Dec 2022 15:12:31 -0500
-Message-ID: <CAE-0n52j8vYYTRSpBo82MHqLiSjxikL=2P6NQwa0-DW__sc6WA@mail.gmail.com>
-Subject: Re: [PATCH v12 2/5] dt-bindings: msm/dp: add data-lanes and
- link-frequencies property
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@gmail.com, andersson@kernel.org, daniel@ffwll.ch,
-        devicetree@vger.kernel.org, dianders@chromium.org,
-        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
-        konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
-        robdclark@gmail.com, robh+dt@kernel.org, sean@poorly.run,
-        vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2] drm/msm/dp: do not complete dp_aux_cmd_fifo_tx() if
+ irq is not for aux transfer
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <agross@kernel.org>, <airlied@gmail.com>, <andersson@kernel.org>,
+        <daniel@ffwll.ch>, <dianders@chromium.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <vkoul@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1671129159-31105-1-git-send-email-quic_khsieh@quicinc.com>
+ <ca15a54b-8040-5e4f-a78e-12b7f8a554e1@linaro.org>
+ <CAE-0n53bREwEMV4aP=ySPuPP8mMbDr=Unbjw_bW0MNN7hTsWRw@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAE-0n53bREwEMV4aP=ySPuPP8mMbDr=Unbjw_bW0MNN7hTsWRw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: SEWFHKJ4I1kUqK-qpNNjchgGayIMoCXQ
+X-Proofpoint-ORIG-GUID: SEWFHKJ4I1kUqK-qpNNjchgGayIMoCXQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-15_11,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=773 priorityscore=1501 lowpriorityscore=0 spamscore=0
+ suspectscore=0 clxscore=1015 phishscore=0 mlxscore=0 adultscore=0
+ bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2212150168
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,45 +87,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-12-15 09:08:04)
->
-> On 12/14/2022 4:38 PM, Stephen Boyd wrote:
-> > Quoting Kuogee Hsieh (2022-12-14 14:56:23)
-> >> On 12/13/2022 3:06 PM, Stephen Boyd wrote:
-> >>> Quoting Kuogee Hsieh (2022-12-13 13:44:05)
-> >
-> >> Therefore I think add data-lanes and link-frequencies properties in th=
-e
-> >> DP PHY binding directly will not helps.
-> >>
-> > I didn't follow your logic. Sorry.
->
-> Sorry, probably i did not understand your proposal clearly.
->
-> 1) move both data-lanes and link-frequencies property from dp controller
-> endpoint to phy
->
-> 2) phy_configure() return succeed if both data-lanes and link
-> frequencies are supported. otherwise return failed.
->
-> is above two summary items correct?
 
-Yes.
-
->
-> Currently phy_configure()=C2=A0 is part of link training process and call=
-ed
-> if link lanes or rate changes.
->
-> however, since current phy_configure() implementation always return 0,
-> the return value is not checking.
->
-> This proposal is new, can we discuss more detail at meeting and decide
-> to implement it or not.
->
-> Meanwhile can we merge current implementation (both data-lanes and
-> link-frequqncies at dp controller end point) first?
->
-
-I don't think we can merge this patch because it depends on a DT binding
-change. If the PHY approach works then I'd prefer we just go with that.
+On 12/15/2022 12:10 PM, Stephen Boyd wrote:
+> Quoting Dmitry Baryshkov (2022-12-15 10:46:42)
+>> On 15/12/2022 20:32, Kuogee Hsieh wrote:
+>>>        if (!aux->cmd_busy)
+>>>                return;
+>>>
+>>>        if (aux->native)
+>>> -             dp_aux_native_handler(aux, isr);
+>>> +             ret = dp_aux_native_handler(aux, isr);
+>>>        else
+>>> -             dp_aux_i2c_handler(aux, isr);
+>>> +             ret = dp_aux_i2c_handler(aux, isr);
+>>>
+>>> -     complete(&aux->comp);
+>>> +     if (ret == IRQ_HANDLED)
+>>> +             complete(&aux->comp);
+>> Can you just move the complete() into the individual handling functions?
+>> Then you won't have to return the error code from dp_aux_*_handler() at
+>> all. You can check `isr' in that function and call complete if there was
+>> any error.
+> I'd prefer we apply my patch and pass the irqreturn_t variable to the
+> caller of this function so spurious irqs are shutdown. Should I send it
+> as a proper patch?
+yes, please
