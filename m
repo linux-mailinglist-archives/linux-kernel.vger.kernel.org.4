@@ -2,133 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA3864DD2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 15:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD19F64DDB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiLOOwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 09:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
+        id S229864AbiLOPUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 10:20:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiLOOwc (ORCPT
+        with ESMTP id S230062AbiLOPTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 09:52:32 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0739E2F03A;
-        Thu, 15 Dec 2022 06:52:32 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFEfuMo020469;
-        Thu, 15 Dec 2022 14:52:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=r+X72MD81XNUgAPaVDg/P7jJrUiBIuV0IsuJB8WYRYs=;
- b=Oay979FmnYk1l5v2Z/P7W4jzlFYPHvb7fG7HQeucGurpbtgofPQFp/p2kT/KVheDwRgy
- C3udsnA0po8omwtkbZR7mzlwic+NEEJXE1G2CDJbhRCZvgvrV1yz5YOVD5w9PpkNcqGz
- xrk30LwZDwyxfGECpGv9dA5tjhXmt3I+Ejbx/As66soFBcjk1x4oDbMyDrSOYFZY9Shm
- EZ7+xcZbWqNHS8cFkC3SGclROZxs9HBYTWQNYNs/CzAH4o/y/jAR4lGOMKkga4E67Ljz
- v62KzVzXhP2TachkOBILacvmVuOrf7cutAGjyNeetntZjYMemRdL7TRcnwSQcWOOyWsz 6g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg5jr896y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 14:52:30 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BFEo6CG022151;
-        Thu, 15 Dec 2022 14:52:30 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg5jr896a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 14:52:30 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFDmBac017104;
-        Thu, 15 Dec 2022 14:52:29 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3mf07gpdk0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 14:52:29 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BFEqRCN7996126
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Dec 2022 14:52:27 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C63745803F;
-        Thu, 15 Dec 2022 14:52:27 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA05758056;
-        Thu, 15 Dec 2022 14:52:26 +0000 (GMT)
-Received: from [9.160.108.96] (unknown [9.160.108.96])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 15 Dec 2022 14:52:26 +0000 (GMT)
-Message-ID: <8b86ec00-2112-0c00-993e-dad2c816833b@linux.ibm.com>
-Date:   Thu, 15 Dec 2022 08:52:26 -0600
+        Thu, 15 Dec 2022 10:19:54 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26B032B8B;
+        Thu, 15 Dec 2022 07:18:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
+        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=USYqznAH4SDqUevncPOHC9VofBQznPJDAAswThOanBE=; b=H
+        LMplgt81ZSsISkJ2Fta+lVkPgewzjrt6F/34vbmwcWgLOk9wRLhytxMBD2tNM4yv15XybMtglwjZx
+        pqI7XYOejDOoYw7yFqLZ7f2OuBK8m8LYXHBqOI/gkTtGKruavQtN+wmICMQhqmDG8xkz5x/ib7+um
+        5gfftwAIZCTiYiB8=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:48102 helo=pettiford.lan)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1p5pm2-0000EC-4n; Thu, 15 Dec 2022 10:03:50 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hugo@hugovil.com,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Date:   Thu, 15 Dec 2022 10:02:01 -0500
+Message-Id: <20221215150214.1109074-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] Input: ibm-panel - fix typo in comment
-Content-Language: en-US
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        =?UTF-8?B?QWxkYXMgVGFyYcWha2V2acSNaXVz?= <aldas60@gmail.com>,
-        dmitry.torokhov@gmail.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <20221213194855.260-1-aldas60@gmail.com>
- <87wn6sixd0.fsf@baylibre.com>
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <87wn6sixd0.fsf@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3R9LAlX9s6FzcI8tQutxQKq7a6QN6mRk
-X-Proofpoint-ORIG-GUID: bO0dCly1KWyen7Mke5Z7wOJCRqOOoHml
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-15_08,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- suspectscore=0 mlxlogscore=999 malwarescore=0 spamscore=0 clxscore=1011
- adultscore=0 lowpriorityscore=0 mlxscore=0 priorityscore=1501 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212150117
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v3 00/14] rtc: pcf2127: add PCF2131 driver
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-On 12/15/22 07:56, Mattijs Korpershoek wrote:
-> On Tue, Dec 13, 2022 at 21:48, Aldas Taraškevičius <aldas60@gmail.com> wrote:
->
->> "set the index to it's largest possible value" -> "set the index to its
->> largest possible value"
+Hello,
+this patch series adds the driver for the PCF2131 real-time clock.
 
+This RTC is very similar in functionality to the PCF2127/29 with the
+following differences:
+  -supports two new control registers at offsets 4 and 5
+  -supports a new reset register
+  -supports 4 tamper detection functions instead of 1
+  -has no nvmem (like the PCF2129)
+  -has two output interrupt pins instead of one
+  -has 1/100th seconds capabilities (not supported in this driver)
+  -pcf2127 has watchdog clock sources: 1/60,   1, 64 and 4096Hz
+   pcf2131 has watchdog clock sources: 1/64, 1/4,  4 and   64Hz
+  -watchdog value register cannot be read after being set
 
-Thanks!
+Most of the register addresses are very different, although they still
+follow the same layout. For example, the time/date and tamper registers
+have a different base address, but the offsets are all the same.
+Consequently, the source code of the PCF2127 driver can be easily adapted
+to support this new device.
 
-Reviewed-by: Eddie James <eajames@linux.ibm.com>
+Patches 1 to 6 modify the existing pcf2127 driver to make it more generic
+and able to support multiple variants, like the PCF2131. This is done
+mostly by using offsets instead of absolute hardcoded register addresses.
 
+Patch 7 add actual support for the PCF2131.
 
->>
->> Signed-off-by: Aldas Taraškevičius <aldas60@gmail.com>
-> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
->
->> ---
->>   drivers/input/misc/ibm-panel.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/input/misc/ibm-panel.c b/drivers/input/misc/ibm-panel.c
->> index a8fba0054..6be60bc8d 100644
->> --- a/drivers/input/misc/ibm-panel.c
->> +++ b/drivers/input/misc/ibm-panel.c
->> @@ -101,7 +101,7 @@ static int ibm_panel_i2c_slave_cb(struct i2c_client *client,
->>   		else
->>   			/*
->>   			 * The command is too long and therefore invalid, so set the index
->> -			 * to it's largest possible value. When a STOP is finally received,
->> +			 * to its largest possible value. When a STOP is finally received,
->>   			 * the command will be rejected upon processing.
->>   			 */
->>   			panel->idx = U8_MAX;
->> -- 
->> 2.37.2
+Patch 8 configures all interrupt sources to go through the INT A pin.
+
+Patch 9 changes the PWRMNG bits to be the same with the PCF2131 as they
+      are with the PCF2127/29 (different default values).
+
+Patch 10 allow to confirm PCF2131 device presence by reading the reset
+      register fixed pattern.
+
+Patch 11 adapt the time/date registers write sequence for PCF2131 (STOP and
+      CPR bits).
+
+Patch 12 add support for generic watchdog timing configuration.
+
+Patch 13 add a new flag to identify if device has read support for reading
+      watchdog register value.
+      Since the watchdog value register cannot be read on the PCF2131 after
+      being set, it seems that we cannot detect if watchdog timer was
+      started by bootloader. I am not sure what is the best way to handle
+      this situation, suggestions are welcomed.
+
+Patch 14 add the dt-bindings for the PCF2131.
+
+I have tested the driver using a PCF2131-ARD evaluation board connected to
+an NXP imx8mp evaluation board:
+  - Time get/set ok;
+  - Alarms get/set ok
+  - Timestamp 1 to 4 ok
+  - IRQ alarm ok
+  - Watchdog ok
+  - Also tested successfully with "RTC Driver Test Example" from
+    Documentation/rtc.txt
+
+I have also tested the driver on a custom PCF2129 adapter board connected to a
+beaglebone black.
+
+Thank you.
+
+Link: [v1] https://patchwork.ozlabs.org/project/rtc-linux/patch/20220125200009.900660-2-hugo@hugovil.com/
+Link: [v2] https://patchwork.ozlabs.org/project/rtc-linux/list/?series=285734
+
+Changes for V3:
+- Rebased for kernel v6.1
+
+Changes for V2:
+- In general, fix and improvements after I have tested on real hardware
+- Fix alarm interrupt A/B mask setting for PCF2131:
+  PCF2131_BIT_INT_AIE must be cleared, not set, to enable interrupt.
+- Remove low_reg validation: only check if TS interrupt flag is
+  defined, as low_reg is defined at address 0 for PCF2127/29.
+- Change PWRMNG value for PCF2131: default is different than PCF2127/29.
+- Adapt time/date registers write sequence for PCF2131 (STOP and CPR bits).
+- Map all interrupt sources to INT A pin
+- Read and validate PCF2131 device presence from RESET register
+- Adapt watchdog configuration for PCF2131
+
+Hugo Villeneuve (14):
+  rtc: pcf2127: add variant-specific configuration structure
+  rtc: pcf2127: adapt for time/date registers at any offset
+  rtc: pcf2127: adapt for alarm registers at any offset
+  rtc: pcf2127: adapt for WD registers at any offset
+  rtc: pcf2127: adapt for CLKOUT register at any offset
+  rtc: pcf2127: add support for multiple TS functions
+  rtc: pcf2127: add support for PCF2131 RTC
+  rtc: pcf2127: add support for PCF2131 interrupts on output INT_A
+  rtc: pcf2127: set PWRMNG value for PCF2131
+  rtc: pcf2127: read and validate PCF2131 device signature
+  rtc: pcf2127: adapt time/date registers write sequence for PCF2131
+  rtc: pcf2127: support generic watchdog timing configuration
+  rtc: pcf2127: add flag for watchdog register value read support
+  dt-bindings: rtc: pcf2127: add PCF2131
+
+ .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |   4 +-
+ drivers/rtc/Kconfig                           |   4 +-
+ drivers/rtc/rtc-pcf2127.c                     | 939 ++++++++++++++----
+ 3 files changed, 752 insertions(+), 195 deletions(-)
+
+-- 
+2.30.2
+
