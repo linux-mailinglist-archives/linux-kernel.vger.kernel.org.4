@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6FE64D5F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 05:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7961764D5F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 05:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiLOEri convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Dec 2022 23:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41288 "EHLO
+        id S229713AbiLOEtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 23:49:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiLOErg (ORCPT
+        with ESMTP id S229626AbiLOEs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 23:47:36 -0500
-Received: from mail.securityeng.com (mail.securityeng.com [195.112.223.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF1F37F8F
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 20:47:34 -0800 (PST)
-Received: from [10.244.179.48] (195.112.223.38) by SEC-EX.SecurityEng.com
- (192.168.0.2) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.2375.34; Thu, 15
- Dec 2022 06:45:52 +0200
-Content-Type: text/plain; charset="iso-8859-1"
+        Wed, 14 Dec 2022 23:48:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C11137F8F;
+        Wed, 14 Dec 2022 20:48:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 486B4B81A26;
+        Thu, 15 Dec 2022 04:48:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 362ACC433EF;
+        Thu, 15 Dec 2022 04:48:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671079732;
+        bh=n5a5d/H8ulIQkozqDLE2F1ns4k/z46ZF4QvyLXMqdDQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XK1xQmL18+qWIY+/FcJKpt+gq2m/riva7HjLNyOcyNyeXv8J3PmrpIfbQql6W968p
+         TbEv8eTFDkBQRkXGlqEF6A4CStSWrNVeaXsI1bqaq7K88SMEMB2+QF8ZFe0JZLMPr1
+         aJqOKv1+akB+vk2+NA35Ww2bVX7Uf3aQLb3zFk1mxsl2mYtGF495YK01glOYsA9afM
+         fwMT4u7B3n83W8ym/zT5rvUWGdFC7o/g64TtNZG/8jfe5XstNUJncsdcBkcM7oKXXr
+         6LXvE7WXh7cexR3JHmpArKWcYNxCs2Pu9oeOZdb+yVDnHWpWsByBG+sSv1Ujyy9aba
+         8L6K7++v6ji8Q==
+Date:   Wed, 14 Dec 2022 20:48:51 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     David Decotigny <decot+git@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        David Ahern <dsahern@kernel.org>,
+        "Denis V. Lunev" <den@openvz.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        David Decotigny <ddecotig@google.com>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
+Subject: Re: [PATCH v1 1/1] net: neigh: persist proxy config across link
+ flaps
+Message-ID: <20221214204851.2102ba31@kernel.org>
+In-Reply-To: <20221213073801.361500-1-decot+git@google.com>
+References: <20221213073801.361500-1-decot+git@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: You Have Won
-To:     Recipients <qf.qatarorg@qf.org.qa>
-From:   Qatar Foundation <qf.qatarorg@qf.org.qa>
-Date:   Wed, 14 Dec 2022 20:46:54 -0800
-Reply-To: <qf.qatarorg@gmail.com>
-X-Antivirus: Avast (VPS 221214-6, 12/14/2022), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <b1fa4d81-6f73-4c91-95d0-05b256c78b70@SEC-EX.SecurityEng.com>
-X-ClientProxiedBy: SEC-EX.SecurityEng.com (192.168.0.2) To
- SEC-EX.SecurityEng.com (192.168.0.2)
-X-EndpointSecurity-0xde81-EV: v:7.7.2.228, d:inc, a:y, w:t, t:17, sv:1671067676, ts:1671079569
-X-Spam-Status: Yes, score=7.6 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
-        BAYES_50,DEAR_BENEFICIARY,FREEMAIL_FORGED_REPLYTO,LOTS_OF_MONEY,
-        MONEY_FRAUD_3,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -2.3 RCVD_IN_DNSWL_MED RBL: Sender listed at https://www.dnswl.org/,
-        *       medium trust
-        *      [195.112.223.38 listed in list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 RCVD_IN_MSPIKE_H3 RBL: Good reputation (+3)
-        *      [195.112.223.38 listed in wl.mailspike.net]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
-        *  1.4 DEAR_BENEFICIARY BODY: Dear Beneficiary:
-        *  0.0 RCVD_IN_MSPIKE_WL Mailspike good senders
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-        *  1.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  2.5 MONEY_FRAUD_3 Lots of money and several fraud phrases
-        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: *******
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Beneficiary,
+On Mon, 12 Dec 2022 23:38:01 -0800 David Decotigny wrote:
+> From: David Decotigny <ddecotig@google.com>
+> 
+> Without this patch, the 'ip neigh add proxy' config is lost when the
+> cable or peer disappear, ie. when the link goes down while staying
+> admin up. When the link comes back, the config is never recovered.
+> 
+> This patch makes sure that such an nd proxy config survives a switch
+> or cable issue.
 
-You have been selected to receive (995,000.00 EUROS) as charity donations / aid from the Qatar Foundation. Therefore, you are required to Reply back for more information.
+Hm, how does this square with the spirit of 859bd2ef1fc11 ?
 
-Yours sincerely,
-Herr Rashid Al-Naimi.®
-
-Chief Executive Officer of Qatar Foundation Endowment.
-
--- 
-This email has been checked for viruses by Avast antivirus software.
-www.avast.com
-
-________________________
-This email was scanned by Bitdefender
+Would be great to hear from David, IDK if he's around or off until 
+next year.
