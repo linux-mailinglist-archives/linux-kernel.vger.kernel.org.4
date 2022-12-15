@@ -2,209 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C8964D875
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C9964D89A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiLOJVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 04:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
+        id S230004AbiLOJa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 04:30:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiLOJV3 (ORCPT
+        with ESMTP id S229911AbiLOJaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 04:21:29 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD07D44;
-        Thu, 15 Dec 2022 01:21:27 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7F0A0211BC;
-        Thu, 15 Dec 2022 09:21:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1671096086; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZpJ8bIqa20K6AOQSS7MjDOb2ROLXcd/4UFBcK5ftzSw=;
-        b=eStTkJ4Uq2IaY7/wCaPTH9ZTh4+3JGTku6CGhbtuZLS958Geom0iaf7W2iiUzNK5LbTGcX
-        fisjHOWN54atCAiwvEUptpoTczjynBXeFvyAVHuvnoRkllvJpx8BOYRpODeZQCEreh1j0Y
-        sn1IlFHHWGpFQDwiUze/1vv1wT4xnM8=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5A9B413434;
-        Thu, 15 Dec 2022 09:21:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FelCExbnmmNjLAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 15 Dec 2022 09:21:26 +0000
-Date:   Thu, 15 Dec 2022 10:21:25 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
-        fvdl@google.com, bagasdotme@gmail.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v3] mm: Add nodes= arg to memory.reclaim
-Message-ID: <Y5rnFbOqHQUT5da7@dhcp22.suse.cz>
-References: <20221202223533.1785418-1-almasrymina@google.com>
- <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz>
- <CAHS8izM-XdLgFrQ1k13X-4YrK=JGayRXV_G3c3Qh4NLKP7cH_g@mail.gmail.com>
- <87k02volwe.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Y5h+gHBneexFQcR3@cmpxchg.org>
- <Y5iGJ/9PMmSCwqLj@dhcp22.suse.cz>
- <CAHS8izOuT_-p-N1xPApi+BPJQ+P--2YVSUeiWBROGvGinN0vcg@mail.gmail.com>
- <Y5mkJL6I5Zlc1k97@dhcp22.suse.cz>
- <87mt7pdxm1.fsf@yhuang6-desk2.ccr.corp.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mt7pdxm1.fsf@yhuang6-desk2.ccr.corp.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 15 Dec 2022 04:30:21 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A592446665;
+        Thu, 15 Dec 2022 01:30:18 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id bj12so50784979ejb.13;
+        Thu, 15 Dec 2022 01:30:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QgD/IhEryTzLI7fgwREjgsiNZnMhiP+O1KnPg96xGtU=;
+        b=BgCDQ/OHqHTPrhxas7wzRIuA6tFpxWfaC4H4YmVy/ZbAZnCAbSjLiwzbCUOLwzZmUJ
+         IGhvwlYuZgThpR9zR3gUV4gjbzB7/3SWBWNgH4oz3R+Ede8egmLu4r6yDKAvTNyrreLz
+         Ia7442M3FClbdBvIIDteq2EQsduzET6IOmvDJvtWAnzLOffUJJc+qBnC0V1t8pE7JIeI
+         JocZ9FtoSDxMXgQqPbgwXjnb0CEDM91MKlQj1UOdhYrAnsGeXAxF+zInZEprXGl5X4OV
+         VXo3m92pCUDpGC6I9fW7OgM+yqwgKULmqyzK3vyTNJ/RHePhLfEXTZ3E5w4ufunyylCR
+         vekA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QgD/IhEryTzLI7fgwREjgsiNZnMhiP+O1KnPg96xGtU=;
+        b=n4DONNL/sLefmGBLd1c5NbUZsD6l0WlQ/ZpCViIpLme/xkgwMbXHziROjQPPD93eyR
+         DA4DdN5SWK8sy2BnQgIP2D8UCUNUCoTp8TIBUiGIvhBUg78V/xyZYnM0JaG7DYv0/D7T
+         xi0RzXCkWhiqcjGSmaDdV7AxT47+2+rou5c32nL4sfeRY6dZz7nEeMlzM3T6awpK8YQe
+         Aardf2tFSYevYRqoQvNbb7QEhcL10v6nALRlSkgEhnToLdPD3mp8KyKWUj1yMMqr/NaD
+         sEUm1uWKPE2DmiGb5U9R+Ib20LNBBcK9oOlmnOdyRFM3O29iwuJI6sSft8Zcaf5k/xyC
+         K4fg==
+X-Gm-Message-State: ANoB5pnsEnBHD9v0FLqwO9W+65Pvj0EPxjvsWG5ZA34VTg81GJzZ1yiV
+        NWnjPgwEEokZqURcKC996Cs=
+X-Google-Smtp-Source: AA0mqf7VephO2wPiq66MWYE5WIf/bbAOFq2wAt45qgFs4lIAV/YzGeJ3uSSllU+WnM7K8ccJdtJ2UA==
+X-Received: by 2002:a17:907:9208:b0:7c0:d605:fe42 with SMTP id ka8-20020a170907920800b007c0d605fe42mr17670532ejb.18.1671096617080;
+        Thu, 15 Dec 2022 01:30:17 -0800 (PST)
+Received: from felia.fritz.box (ipbcc1d920.dynamic.kabel-deutschland.de. [188.193.217.32])
+        by smtp.gmail.com with ESMTPSA id ko12-20020a170907986c00b00781be3e7badsm6859873ejc.53.2022.12.15.01.30.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 01:30:16 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] pinctrl: mxs: avoid defines prefixed with CONFIG
+Date:   Thu, 15 Dec 2022 10:21:28 +0100
+Message-Id: <20221215092128.3954-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 15-12-22 13:50:14, Huang, Ying wrote:
-> Michal Hocko <mhocko@suse.com> writes:
-> 
-> > On Tue 13-12-22 11:29:45, Mina Almasry wrote:
-> >> On Tue, Dec 13, 2022 at 6:03 AM Michal Hocko <mhocko@suse.com> wrote:
-> >> >
-> >> > On Tue 13-12-22 14:30:40, Johannes Weiner wrote:
-> >> > > On Tue, Dec 13, 2022 at 02:30:57PM +0800, Huang, Ying wrote:
-> >> > [...]
-> >> > > > After these discussion, I think the solution maybe use different
-> >> > > > interfaces for "proactive demote" and "proactive reclaim".  That is,
-> >> > > > reconsider "memory.demote".  In this way, we will always uncharge the
-> >> > > > cgroup for "memory.reclaim".  This avoid the possible confusion there.
-> >> > > > And, because demotion is considered aging, we don't need to disable
-> >> > > > demotion for "memory.reclaim", just don't count it.
-> >> > >
-> >> > > Hm, so in summary:
-> >> > >
-> >> > > 1) memory.reclaim would demote and reclaim like today, but it would
-> >> > >    change to only count reclaimed pages against the goal.
-> >> > >
-> >> > > 2) memory.demote would only demote.
-> >> > >
-> >> 
-> >> If the above 2 points are agreeable then yes, this sounds good to me
-> >> and does address our use case.
-> >> 
-> >> > >    a) What if the demotion targets are full? Would it reclaim or fail?
-> >> > >
-> >> 
-> >> Wei will chime in if he disagrees, but I think we _require_ that it
-> >> fails, not falls back to reclaim. The interface is asking for
-> >> demotion, and is called memory.demote. For such an interface to fall
-> >> back to reclaim would be very confusing to userspace and may trigger
-> >> reclaim on a high priority job that we want to shield from proactive
-> >> reclaim.
-> >
-> > But what should happen if the immediate demotion target is full but
-> > lower tiers are still usable. Should the first one demote before
-> > allowing to demote from the top tier?
-> >  
-> >> > > 3) Would memory.reclaim and memory.demote still need nodemasks?
-> >> 
-> >> memory.demote will need a nodemask, for sure. Today the nodemask would
-> >> be useful if there is a specific node in the top tier that is
-> >> overloaded and we want to reduce the pressure by demoting. In the
-> >> future there will be N tiers and the nodemask says which tier to
-> >> demote from.
-> >
-> > OK, so what is the exact semantic of the node mask. Does it control
-> > where to demote from or to or both?
-> >
-> >> I don't think memory.reclaim would need a nodemask anymore? At least I
-> >> no longer see the use for it for us.
-> >> 
-> >> > >    Would
-> >> > >    they return -EINVAL if a) memory.reclaim gets passed only toptier
-> >> > >    nodes or b) memory.demote gets passed any lasttier nodes?
-> >> >
-> >> 
-> >> Honestly it would be great if memory.reclaim can force reclaim from a
-> >> top tier nodes. It breaks the aginig pipeline, yes, but if the user is
-> >> specifically asking for that because they decided in their usecase
-> >> it's a good idea then the kernel should comply IMO. Not a strict
-> >> requirement for us. Wei will chime in if he disagrees.
-> >
-> > That would require a nodemask to say which nodes to reclaim, no? The
-> > default behavior should be in line with what standard memory reclaim
-> > does. If the demotion is a part of that process so should be
-> > memory.reclaim part of it. If we want to have a finer control then a
-> > nodemask is really a must and then the nodemaks should constrain both
-> > agining and reclaim.
-> >
-> >> memory.demote returning -EINVAL for lasttier nodes makes sense to me.
-> >> 
-> >> > I would also add
-> >> > 4) Do we want to allow to control the demotion path (e.g. which node to
-> >> >    demote from and to) and how to achieve that?
-> >> 
-> >> We care deeply about specifying which node to demote _from_. That
-> >> would be some node that is approaching pressure and we're looking for
-> >> proactive saving from. So far I haven't seen any reason to control
-> >> which nodes to demote _to_. The kernel deciding that based on the
-> >> aging pipeline and the node distances sounds good to me. Obviously
-> >> someone else may find that useful.
-> >
-> > Please keep in mind that the interface should be really prepared for
-> > future extensions so try to abstract from your immediate usecases.
-> 
-> I see two requirements here, one is to control the demotion source, that
-> is, which nodes to free memory.  The other is to control the demotion
-> path.  I think that we can use two different parameters for them, for
-> example, "from=<demotion source nodes>" and "to=<demotion target
-> nodes>".  In most cases we don't need to control the demotion path.
-> Because in current implementation, the nodes in the lower tiers in the
-> same socket (local nodes) will be preferred.  I think that this is
-> the desired behavior in most cases.
+Defines prefixed with "CONFIG" should be limited to proper Kconfig options,
+that are introduced in a Kconfig file.
 
-Even if the demotion path is not really required at the moment we should
-keep in mind future potential extensions. E.g. when a userspace based
-balancing is to be implemented because the default behavior cannot
-capture userspace policies (one example would be enforcing a
-prioritization of containers when some container's demoted pages would
-need to be demoted further to free up a space for a different
-workload). 
+Here, expressions to convert pin configurations to booleans for pull-up,
+voltage and mA are macro definitions that begin with "CONFIG".
+
+To avoid defines prefixed with "CONFIG", rename these defines to begin with
+"PIN_CONFIG" instead.
+
+No functional change.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ drivers/pinctrl/freescale/pinctrl-mxs.c | 6 +++---
+ drivers/pinctrl/freescale/pinctrl-mxs.h | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/pinctrl/freescale/pinctrl-mxs.c b/drivers/pinctrl/freescale/pinctrl-mxs.c
+index 9f78c9b29ddd..cf3f4d2e0c16 100644
+--- a/drivers/pinctrl/freescale/pinctrl-mxs.c
++++ b/drivers/pinctrl/freescale/pinctrl-mxs.c
+@@ -269,9 +269,9 @@ static int mxs_pinconf_group_set(struct pinctrl_dev *pctldev,
+ 	for (n = 0; n < num_configs; n++) {
+ 		config = configs[n];
  
-> >> > 5) Is the demotion api restricted to multi-tier systems or any numa
-> >> >    configuration allowed as well?
-> >> >
-> >> 
-> >> demotion will of course not work on single tiered systems. The
-> >> interface may return some failure on such systems or not be available
-> >> at all.
-> >
-> > Is there any strong reason for that? We do not have any interface to
-> > control NUMA balancing from userspace. Why cannot we use the interface
-> > for that purpose? 
-> 
-> Do you mean to demote the cold pages from the specified source nodes to
-> the specified target nodes in different sockets?  We don't do that to
-> avoid loop in the demotion path.  If we prevent the target nodes from
-> demoting cold pages to the source nodes at the same time, it seems
-> doable.
-
-Loops could be avoid by properly specifying from and to nodes if this is
-going to be a fine grained interface to control demotion.
+-		ma = CONFIG_TO_MA(config);
+-		vol = CONFIG_TO_VOL(config);
+-		pull = CONFIG_TO_PULL(config);
++		ma = PIN_CONFIG_TO_MA(config);
++		vol = PIN_CONFIG_TO_VOL(config);
++		pull = PIN_CONFIG_TO_PULL(config);
+ 
+ 		for (i = 0; i < g->npins; i++) {
+ 			bank = PINID_TO_BANK(g->pins[i]);
+diff --git a/drivers/pinctrl/freescale/pinctrl-mxs.h b/drivers/pinctrl/freescale/pinctrl-mxs.h
+index ab9f834b03e6..5b26511d56aa 100644
+--- a/drivers/pinctrl/freescale/pinctrl-mxs.h
++++ b/drivers/pinctrl/freescale/pinctrl-mxs.h
+@@ -44,9 +44,9 @@
+ #define VOL_SHIFT		3
+ #define MA_PRESENT		(1 << 2)
+ #define MA_SHIFT		0
+-#define CONFIG_TO_PULL(c)	((c) >> PULL_SHIFT & 0x1)
+-#define CONFIG_TO_VOL(c)	((c) >> VOL_SHIFT & 0x1)
+-#define CONFIG_TO_MA(c)		((c) >> MA_SHIFT & 0x3)
++#define PIN_CONFIG_TO_PULL(c)	((c) >> PULL_SHIFT & 0x1)
++#define PIN_CONFIG_TO_VOL(c)	((c) >> VOL_SHIFT & 0x1)
++#define PIN_CONFIG_TO_MA(c)	((c) >> MA_SHIFT & 0x3)
+ 
+ struct mxs_function {
+ 	const char *name;
 -- 
-Michal Hocko
-SUSE Labs
+2.17.1
+
