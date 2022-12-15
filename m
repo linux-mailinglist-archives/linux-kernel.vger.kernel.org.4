@@ -2,119 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 793D164E262
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 21:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8C364E267
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 21:37:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiLOUd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 15:33:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
+        id S229774AbiLOUhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 15:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiLOUdy (ORCPT
+        with ESMTP id S229484AbiLOUhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 15:33:54 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4171C12D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:33:53 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id g7so270345lfv.5
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:33:53 -0800 (PST)
+        Thu, 15 Dec 2022 15:37:11 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119B54A588
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:37:10 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id c184so343498vsc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 12:37:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8qqlXfGIzU/VNt4feEbI0o+f3b02zt3V3jQlCWIaHak=;
-        b=ghojc+OzDLr88cTONimsYx13zSlU8yBoxGyDHdCA3Zs5HzhVUhXT1ZdOGnCdRKxTp+
-         ibvguzA3sHLg4u60hUtR/+lU4VC5yUCKEU2YBTBl8wjdiY2xclHa7p2N+794gTdStd35
-         +cwO5EFx+f0aOKBx1v+4hbHJIFR2uArNi3fJc=
+        bh=XbLIsSB3dgqBgwoNc09sfFG6OJsgoRxnvFWyrHHQZqU=;
+        b=c9Nb78oCpV/p+MBfA8FnPsQj9CMC094HBaLTo0ntmu0G73JVtV8u6mwaNjPCbFve5h
+         L6LshCbm5hbgrEXyym8rIYxSGEzCWuQIQDSAGjAWYVzOnJd9DNWHcmEyUowO7Oq4JZTX
+         ghof8LE4D1ez3ylUa4kiEjLxVypA5q/e+MXK/PKi0YjjE9zlTzGyg08WST5Lq847jrls
+         FjpWSukNoeh939gembuhVWVQDP6rB81Tru/eT00j1YSYnZZCXbXYEiRPAfrFJrKduxHT
+         gbsu85M4BYyrXSrNgevlcNAPVQUmOMs1Oy9dAAK41fnAX0xW9tPFgN/oE9FDmTpRCtD8
+         QQ2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8qqlXfGIzU/VNt4feEbI0o+f3b02zt3V3jQlCWIaHak=;
-        b=jlTURYvWIbamRW/0DUkU8Vp3vk0wSrUJNlhCJ94CpcqeByriZix6PslXO8iH69IO9V
-         xn8hMReS6pDfhvc/5SiX1M0utTRen0yipukraCMFpM0wGQ+aKyAK3x07/YtkFgQBUhq4
-         KDpML4qPdRq8xmkdOBRWY8ZYIT3SMMBZj5l0vFuRuESJxR3GQUND79xZJd9N/O83GX4R
-         LEuhHBhU2uKSXJs5PDGJ84WLnpVsrUcJC+bYO/PrNmuq9FvI9x0rknL2+XUsdWAlcTbT
-         y7lmL+B5hMhIrM7oatq3U0H5M1oalgSHST7izYb7hH237wwb177eDXwm02ROORl/qEen
-         UVjw==
-X-Gm-Message-State: ANoB5pnK4A1RacuRMJ1D3iLEBstr9ENPbacLolS+NYMB4aj9OJnNYh87
-        ugqYz7iUAM4oxvJJpLJDtSm6vv7jtwuc1l7V12kYVQ==
-X-Google-Smtp-Source: AA0mqf550WKtC84YH7YSU0aIML9lP/X0h56FM5X4YQztqAbrrSH+oCgfDzKKymm7ExPii8QF8BdTtQwkFI+mER59z5U=
-X-Received: by 2002:a05:6512:224c:b0:4b5:ad89:8174 with SMTP id
- i12-20020a056512224c00b004b5ad898174mr2306563lfu.84.1671136431317; Thu, 15
- Dec 2022 12:33:51 -0800 (PST)
+        bh=XbLIsSB3dgqBgwoNc09sfFG6OJsgoRxnvFWyrHHQZqU=;
+        b=uM0nrarbhUz3WFzwUzDFh805B3FJVn/fBcL/waW6ccgn2rllFItdGqI6vN4sgHfdti
+         IpA9VlmoZLhkCjZN/AnMZvTbk1qKWT8uX604lz/JkdnlGK/hfJxYPfvsCpgm1Iy0gnGS
+         qof+wHg98y+91HEpT8y4hs6iUXg3ZnHik6ln2+YS+gd67WObaV0k0S99QljD3vTYPoZv
+         9S2dj2cfI2qXjA7sL85iIBVENnxASO2hx99YhfHR6qR84Jk8msfVCYBwg28It4CB3m+D
+         GsmjEyP3tKXE6yLjxL0sPFVjzeH4UR6uD9dluWT4HNO+FJNELKsAp3F4PlVzF5hqELzC
+         LBaA==
+X-Gm-Message-State: ANoB5pnoZqzfT5saY7xdW+nbAPoXk27TUKGWFCErVKrSyuhvt8tgqSFo
+        S3tTq5EX1UqXO7V/UIEkgEH52xIYI8lVTaV0YTXTPg==
+X-Google-Smtp-Source: AA0mqf6wD6OR5yE6mzuBWbtVy3Ifu04HAug/G5d0E3OdzvIaHPfQKJgOSmhuPMwGVhOr1S3Zwqa9a9ykU6+8ArN+RnE=
+X-Received: by 2002:a05:6102:5ee:b0:3b1:a1c:3cab with SMTP id
+ w14-20020a05610205ee00b003b10a1c3cabmr19263442vsf.46.1671136629034; Thu, 15
+ Dec 2022 12:37:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20221214191355.GA2596199@paulmck-ThinkPad-P17-Gen-1>
- <20221215165452.GA1957735@lothringen> <20221215170834.GH4001@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YTSW9kr3DsJm6hTQ0FfwVbVjzDa8=7H29+ysD10ZCbnHA@mail.gmail.com>
- <20221215195854.GL4001@paulmck-ThinkPad-P17-Gen-1> <CAEXW_YSnwXA6Bn3Av3O0Tm=AnqKULGZJBA3Z7ZaLE814XABU6g@mail.gmail.com>
-In-Reply-To: <CAEXW_YSnwXA6Bn3Av3O0Tm=AnqKULGZJBA3Z7ZaLE814XABU6g@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Thu, 15 Dec 2022 15:33:39 -0500
-Message-ID: <CAEXW_YSGWgkesu7xz8HXVmH82=uN1ESUdPs2Qtkv4isNjGy-Ww@mail.gmail.com>
-Subject: Re: [PATCH RFC] srcu: Yet more detail for srcu_readers_active_idx_check()
- comments
-To:     paulmck@kernel.org
-Cc:     Frederic Weisbecker <frederic@kernel.org>, boqun.feng@gmail.com,
-        neeraj.iitr10@gmail.com, urezki@gmail.com, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20221213073801.361500-1-decot+git@google.com> <20221214204851.2102ba31@kernel.org>
+ <CAF2d9jh_O0-uceNq=AP5rqPm9xcn=9y8bVxMD-2EiJ3bD_mZsQ@mail.gmail.com>
+ <CAG88wWbZ3eXCFJBZ8mrfvddKiVihF-GfEOYAOmT_7VX_AeOoqQ@mail.gmail.com> <20221215110544.7e832e41@kernel.org>
+In-Reply-To: <20221215110544.7e832e41@kernel.org>
+From:   David Decotigny <ddecotig@google.com>
+Date:   Thu, 15 Dec 2022 12:36:32 -0800
+Message-ID: <CAG88wWYA72sij4iaWowLpawzM7tJdYdHCKQnE0bjndGO74vROw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] net: neigh: persist proxy config across link flaps
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Ahern <dsahern@kernel.org>,
+        =?UTF-8?B?TWFoZXNoIEJhbmRld2FyICjgpK7gpLngpYfgpLYg4KSs4KSC4KSh4KWH4KS14KS+4KSwKQ==?= 
+        <maheshb@google.com>, David Decotigny <decot+git@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        "Denis V. Lunev" <den@openvz.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 3:03 PM Joel Fernandes <joel@joelfernandes.org> wrote:
->
-> Hi Paul,
->
-> On Thu, Dec 15, 2022 at 2:58 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> [...]
-> > > If the first read section's srcu_read_unlock() and its corresponding
-> > > smp_mb()  happened before the flip, then the increment of old idx
-> > > would happen only once. The next srcu_read_lock() will read the new
-> > > index. If the srcu_read_unlock() and it's corresponding smp_mb()
-> > > happened after the flip, the old_idx will be sampled again and can be
-> > > incremented twice. So it depends on how the flip races with
-> > > srcu_read_unlock().
-> >
-> > I do understand that a number of people like reasoning about
-> > memory-barrier ordering, courtesy of the sequentially consistent portions
-> > of the C and C++ memory models, but thinking in terms of the accesses
-> > surrounding the memory barriers has been far less error-prone.
->
-> Sure, but we are already talking in terms of the access to idx right?
-> That's what we're saying is visible by memory barriers and we are
-> trying to reason here about the ordering (flip does the write to idx
-> and followed by smp_mb(), and there is corresponding read of idx on
-> the srcu_read_lock() side. So we are indeed talking in terms of
-> access, but let me know if I missed something.
->
-> > > Also, since this is all hard to reason about I started making some
-> > > diagrams, LOL. For your amusement, here is why need to scan both idx
-> > > during grace period detection: https://i.imgur.com/jz4bNKd.png
-> >
-> > Nice!
-> >
-> > I suggest placing a gap between GP 2 and GP 3.  That way, you can make it
-> > very clear that Reader 1's critical section starts after the end of GP 2
-> > (thus clearly never blocking GP 2) and before GP 3 (thus possibly having
-> > a reference to some data that is going to be freed at the end of GP 3).
-> >
-> > I also suggest coloring Reader 1 red and Reader 2 green, given that the
-> > color red generally indicates danger.
->
-> Thanks for these suggestions! I will make the update. I am planning to
-> make a number of diagrams for other scenarios as well, as it helps
-> visualize. Google drawing is nice for these. I am happy to share these
-> with you all if there is interest :).
+(answer below)
 
-I made these updates, please see: https://i.imgur.com/hoKLvtt.png
+On Thu, Dec 15, 2022 at 11:05 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Wed, 14 Dec 2022 22:18:04 -0800 David Decotigny wrote:
+> > I don't think this patch is changing that part of the behavior: we still
+> > flush the cached nd entries when the link flaps. What we don't remove are
+> > the pneigh_entry-es (ip neigh add proxy ...) attached to the device where
+> > the link flaps: those are configured once and this patch ensures that they
+> > survive the link flaps as long as the netdev stays admin-up. When
+> > the netdev is brought admin-down, we keep the behavior we had before the
+> > patch.
+>
+> Makes sense. This is not urgent, tho, right?
 
-Feel free to use the image for any purpose and thanks ;-)
+Not that kind of urgent.
 
- - Joel
+FTR, in the v2 you suggested to use NUD_PERMANENT, I can try to see
+how this would look like. Note that this will make the patch larger
+and more intrusive, and with potentially a behavior change for whoever
+uses the netlink API directly instead of the iproute2 implementation
+for ip neigh X proxy things.
+
+>
+> David A, do you agree and should we treat this as a fix with
+>
+> Fixes: 859bd2ef1fc1 ("net: Evict neighbor entries on carrier down")
+
+Thanks.
+
+>
+> added?
+>
+> Reminder: please bottom post on the list
