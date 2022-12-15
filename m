@@ -2,179 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BE464D4C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B67DD64D4C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiLOAiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 19:38:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50552 "EHLO
+        id S229448AbiLOAlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 19:41:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiLOAiJ (ORCPT
+        with ESMTP id S229451AbiLOAlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 19:38:09 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0C54D5ED
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:38:06 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id s25so8466584lji.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:38:06 -0800 (PST)
+        Wed, 14 Dec 2022 19:41:08 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F90511EF
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:41:05 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id 124so5703883pfy.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:41:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
-         :from:references:in-reply-to:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SaXTzEJKmgLz+SAFN0DeG64y723tiZblK0P+iFI17hA=;
-        b=nXgdMXMlXc4YZNcKifowoGMKNa+co1HPUWTVq27PRY6w89JZ3Ejc2212MRdAFIYUhy
-         rKkdpqfNS7kdTebj4RVOgs9+ajsaVD1JqxFXnQllO/yuel6HEDH7DdO+g8uVNPJ/2cZj
-         Icos7gQxPO6B9djSw6RJdPjG4OMUWfPs35k/Q=
+        d=atishpatra.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=l1+9aFWIywW24+fuTbx+Qyc1HRmi+jILztX+FivWx3Q=;
+        b=jb2ClHC0JzlU6/A7oG9wX2lIjW163wYAAsnuD7z6vHKLAJ6WCABdC0zHaJgH+vW1cJ
+         X85wm2u0tBa3ucj4A9xYBR14n5W4lrDo4Z776KQYkYdhCQEQVA9T1mvhctnbGmU3BE4C
+         WARNv31LD1wabhMMu+06rdt20q9faYRYxU+FQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
-         :from:references:in-reply-to:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SaXTzEJKmgLz+SAFN0DeG64y723tiZblK0P+iFI17hA=;
-        b=NGDP3r1AxAW/bSoXth7y7zPQ4Qjo248Oat0RyQTnYOKx7ASh5dawHJzAJVdNQYekey
-         1ClrZebqYMSVnLVa0pDre2OoHRyipsPtjfGP5+JJLMK0xezmUwWw41CRFe7aqmXyqZ8m
-         O7LGUYtxJfQ4F6Wi4QksWe3/lCE/NCbzKG4cViX5NEatp943KcphBckndzgz6l5yDeOL
-         W3ztgIsz3Wquyk2os7OAMCYBktwx0QU0gsIUY5wjuEkPaT1K1YiLdxy1tIKRxlyldfHc
-         n+RWqOmX6YrVskKFRacfu3AIoNkzwoE0alpYGgRrNJTl9c1e3hrkXtJkQIl1iSz5qWFI
-         4rBw==
-X-Gm-Message-State: ANoB5pmh2YBDYccR/fImmjJl1WxZpIlCOLa9+EPYZkE8k1PdPhh6mxx/
-        S/CyH2w+IPf/Z8Y/JB6Xvt0Rswmo7TJDKu2hY/stOg==
-X-Google-Smtp-Source: AA0mqf4VcPwauzdtgPycgk8YSzSnpCLwL/tuuSk9YZ6/aN69rAyE9+MaT6XlGF2IV6qyZaGEtZp4gqVNb6T4m84M1vA=
-X-Received: by 2002:a2e:a544:0:b0:278:f5b8:82c8 with SMTP id
- e4-20020a2ea544000000b00278f5b882c8mr26380240ljn.228.1671064684762; Wed, 14
- Dec 2022 16:38:04 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 14 Dec 2022 19:38:04 -0500
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l1+9aFWIywW24+fuTbx+Qyc1HRmi+jILztX+FivWx3Q=;
+        b=seC/ITr2vedH4mSAcHeGOA+3OzZVsvbBSL12MZ0pwxoyOpxNjpl7gCyAB4wKHJA8NY
+         EAJhcIb0xSUHiylewlGSErKWyfUpqIFLM+XQh0spGvS3WlAokpD5j8W/KlpfN5/vMvdl
+         4zeOl2lqYDYkzap/tG9YOi+3i3rZmbKGF8R0yjg2foWdqzHuLGJ+fo3iKxED76IhDL4G
+         CKFggTdhWw7/FWJX9Rbr6vET3t6/xn0x3/TBphBtPphgXztj2ItuhDonYFTpKoqlkj2A
+         O8vhfsoKEv5hJBIErlsff5bE+aoSqYSxmqIioSCjq1WNmvJ6VU+yxlqmDXknAJrBv5io
+         QvFw==
+X-Gm-Message-State: ANoB5pnxZXMSGCVlEGQmvx4k2oVAe/kt6DTuSgd/oqhECg/czIHyfqe8
+        FujIzvuiGT0Ohkm9hIxdXcnDWEUMbq3hmTlcMspZ
+X-Google-Smtp-Source: AA0mqf41r0jXtY+/17AH27nqYNOeQ6pZv+/Uw7fREISQYROGD50E5EiI8tulDjCBbhcj8fUBC5QzNKLSVNd4DxlDuwc=
+X-Received: by 2002:a63:f4b:0:b0:46f:98cf:3bb6 with SMTP id
+ 11-20020a630f4b000000b0046f98cf3bb6mr68618832pgp.332.1671064864426; Wed, 14
+ Dec 2022 16:41:04 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <b38af164-08bc-07e7-dfaf-fb4d6d89d7db@quicinc.com>
-References: <1670967848-31475-1-git-send-email-quic_khsieh@quicinc.com>
- <1670967848-31475-3-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n52eHYCqxUJqQXoaQ8vyqCk-QfouSun+zUp3yo5DufWbwg@mail.gmail.com> <b38af164-08bc-07e7-dfaf-fb4d6d89d7db@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 14 Dec 2022 19:38:04 -0500
-Message-ID: <CAE-0n53Cb6TFGfM6AYup5aP4=24j0ujVPi463oVqmzfNV2B4RA@mail.gmail.com>
-Subject: Re: [PATCH v12 2/5] dt-bindings: msm/dp: add data-lanes and
- link-frequencies property
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@gmail.com, andersson@kernel.org, daniel@ffwll.ch,
-        devicetree@vger.kernel.org, dianders@chromium.org,
-        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
-        konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
-        robdclark@gmail.com, robh+dt@kernel.org, sean@poorly.run,
-        vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220921214439.1491510-1-stillson@rivosinc.com> <20220921214439.1491510-4-stillson@rivosinc.com>
+In-Reply-To: <20220921214439.1491510-4-stillson@rivosinc.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Wed, 14 Dec 2022 16:40:52 -0800
+Message-ID: <CAOnJCULtT-y9vo6YhW7bW9XyKRdod-hvFfr02jHVamR_LcsKdA@mail.gmail.com>
+Subject: Re: [PATCH v12 04/17] riscv: Add vector feature to compile
+To:     Chris Stillson <stillson@rivosinc.com>
+Cc:     Guo Ren <guoren@linux.alibaba.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Anup Patel <anup@brainfault.org>,
+        Oleg Nesterov <oleg@redhat.com>, Guo Ren <guoren@kernel.org>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Dao Lu <daolu@rivosinc.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Han-Kuan Chen <hankuan.chen@sifive.com>,
+        Changbin Du <changbin.du@intel.com>,
+        Li Zhengyu <lizhengyu3@huawei.com>,
+        Alexander Graf <graf@amazon.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Myrtle Shah <gatecat@ds0.me>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Colin Cross <ccross@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Barret Rhoden <brho@google.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-12-14 14:56:23)
+On Wed, Sep 21, 2022 at 2:47 PM Chris Stillson <stillson@rivosinc.com> wrote:
 >
-> On 12/13/2022 3:06 PM, Stephen Boyd wrote:
-> > Quoting Kuogee Hsieh (2022-12-13 13:44:05)
-> >> Add both data-lanes and link-frequencies property into endpoint
-> > Why do we care? Please tell us why it's important.
-
-Any response?
-
-> >> @@ -193,6 +217,8 @@ examples:
-> >>                   reg =3D <1>;
-> >>                   endpoint {
-> >>                       remote-endpoint =3D <&typec>;
-> >> +                    data-lanes =3D <0 1>;
-> >> +                    link-frequencies =3D /bits/ 64 <1620000000 270000=
-0000 5400000000 8100000000>;
-> >>                   };
-> > So far we haven't used the output port on the DP controller in DT.
-> >
-> > I'm still not clear on what we should do in general for DP because
-> > there's a PHY that actually controls a lane count and lane mapping. In
-> > my mental model of the SoC, this DP controller's output port is
-> > connected to the DP PHY, which then sends the DP lanes out of the SoC t=
-o
-> > the next downstream device (i.e. a DP connector or type-c muxer). Havin=
-g
-> > a remote-endpoint property with a phandle to typec doesn't fit my menta=
-l
-> > model. I'd expect it to be the typec PHY.
-> ack
-> >
-> > That brings up the question: when we have 2 lanes vs. 4 lanes will we
-> > duplicate the data-lanes property in the PHY binding? I suspect we'll
-> > have to. Hopefully that sort of duplication is OK?
-> Current we have limitation by reserve 2 data lanes for usb2, i am not
-> sure duplication to 4 lanes will work automatically.
-> >
-> > Similarly, we may have a redriver that limits the link-frequencies
-> > property further (e.g. only support <=3D 2.7GHz). Having multiple
-> > link-frequencies along the graph is OK, right? And isn't the
-> > link-frequencies property known here by fact that the DP controller
-> > tells us which SoC this controller is for, and thus we already know the
-> > supported link frequencies?
-> >
-> > Finally, I wonder if we should put any of this in the DP controller's
-> > output endpoint, or if we can put these sorts of properties in the DP
-> > PHY binding directly? Can't we do that and then when the DP controller
-> > tries to set 4 lanes, the PHY immediately fails the call and the link
-> > training algorithm does its thing and tries fewer lanes? And similarly,
-> > if link-frequencies were in the PHY's binding, the PHY could fail to se=
-t
-> > those frequencies during link training, returning an error to the DP
-> > controller, letting the training move on to a lower frequency. If we di=
-d
-> > that this patch series would largely be about modifying the PHY binding=
-,
-> > updating the PHY driver to enforce constraints, and handling errors
-> > during link training in the DP controller (which may already be done? I
-> > didn't check).
+> From: Guo Ren <guoren@linux.alibaba.com>
 >
+> This patch adds a new config option which could enable assembler's
+> vector feature.
 >
-> phy/pll have different configuration base on link lanes and rate.
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Co-developed-by: Greentime Hu <greentime.hu@sifive.com>
+> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
+> ---
+>  arch/riscv/Kconfig  | 15 +++++++++++++--
+>  arch/riscv/Makefile |  1 +
+>  2 files changed, 14 insertions(+), 2 deletions(-)
 >
-> it has to be set up before link training can start.
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index ed66c31e4655..e294d85bfb7d 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -432,7 +432,17 @@ config FPU
 >
-> Once link training start, then there are no any interactions between
-> controller and phy during link training session.
-
-What do you mean? The DP controller calls phy_configure() and changes
-the link rate. The return value from phy_configure() should be checked
-and link training should skip link rates that aren't supported and/or
-number of lanes that aren't supported.
-
+>           If you don't know what to do here, say Y.
 >
-> Link training only happen between dp controller and sink since link
-> status is reported by sink (read back from sink's dpcd register directly)=
-.
+> -endmenu # "Platform type"
+> +config VECTOR
+> +       bool "VECTOR support"
+> +       depends on GCC_VERSION >= 120000 || CLANG_VERSION >= 130000
+> +       default n
+> +       help
+> +         Say N here if you want to disable all vector related procedure
+> +         in the kernel.
+> +
+> +         If you don't know what to do here, say Y.
+> +
+> +endmenu
 >
-> T achieve link symbol locked, link training will start from reduce link
-> rate until lowest rate, if it still failed, then it will reduce lanes
-> with highest rate and start training=C2=A0 again.
+>  menu "Kernel features"
 >
-> it will repeat same process until lowest lane (one lane), if it still
-> failed, then it will give up and declare link training failed.
-
-Yes, that describes the link training algorithm. I don't see why
-phy_configure() return value can't be checked and either number of lanes
-or link frequencies be checked. If only two lanes are supported, then
-phy_configure() will fail for the 4 link rates and the algorithm will
-reduce the number of lanes and go back to the highest rate. Then when
-the highest rate isn't supported it will drop link rate until the link
-rate is supported.
-
+> @@ -556,6 +566,7 @@ config CMDLINE_EXTEND
+>           cases where the provided arguments are insufficient and
+>           you don't want to or cannot modify them.
 >
-> Therefore I think add data-lanes and link-frequencies properties in the
-> DP PHY binding directly will not helps.
+> +
+>  config CMDLINE_FORCE
+>         bool "Always use the default kernel command string"
+>         help
+> @@ -648,7 +659,7 @@ config XIP_PHYS_ADDR
+>           be linked for and stored to.  This address is dependent on your
+>           own flash usage.
+>
+> -endmenu # "Boot options"
+> +endmenu
+>
+>  config BUILTIN_DTB
+>         bool
+> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> index 3fa8ef336822..1ec17f3d6d09 100644
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@ -50,6 +50,7 @@ riscv-march-$(CONFIG_ARCH_RV32I)      := rv32ima
+>  riscv-march-$(CONFIG_ARCH_RV64I)       := rv64ima
+>  riscv-march-$(CONFIG_FPU)              := $(riscv-march-y)fd
+>  riscv-march-$(CONFIG_RISCV_ISA_C)      := $(riscv-march-y)c
+> +riscv-march-$(CONFIG_VECTOR)           := $(riscv-march-y)v
+>
+>  # Newer binutils versions default to ISA spec version 20191213 which moves some
+>  # instructions from the I extension to the Zicsr and Zifencei extensions.
+> --
+> 2.25.1
 >
 
-I didn't follow your logic. Sorry.
+Kernel boot hangs if compiled LLVM and vector enabled. Because LLVM
+enables auto vectorization by default and it inserts
+random vector instructions.
+
+We need to add "-mno-implicit-float" for llvm builds to disable auto
+vectorization. Thanks Vineet and Saleem for the hint :).
+
+-- 
+Regards,
+Atish
