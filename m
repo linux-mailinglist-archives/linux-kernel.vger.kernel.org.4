@@ -2,127 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFB864DA2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 12:20:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E08E64DA30
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 12:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiLOLUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 06:20:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
+        id S229847AbiLOLWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 06:22:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiLOLUk (ORCPT
+        with ESMTP id S229537AbiLOLWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 06:20:40 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B47AC54
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 03:20:39 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id m204so5002934oib.6
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 03:20:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cmk0PdpBMK0sped7JhGYOwBdXV8EVeBAiY0Lb6X/myc=;
-        b=Wka0wIlExft4VpGS8jLFeSOPzzT8wmggrLJis4x7Mzie5Z9AOositkhMfK3TP+uYp5
-         GoDJf5iXgh5+zRRcH/yoaJIKf324F84RXMUJdNtpEnsHw8N2n5+/JD8VUy71QlKUxqox
-         RCJe4e99/CdKLeDsymFfMT+sIqdgtB0pbc48X4x+/rob6dpe4zYBN2NH0814BQTTf4/r
-         gUOPPDYNFRqNX3qzI2rYHlwnUin2LYQQfQbMgjL/R8fUzxAiirfK/qNbOe2DJNVNKnAX
-         9NK6rA9Zv5lWo2VBZd1Q73gRRiOZsjRRXSU4HCpTIniKnP9tJnTMcYjingezIYH2wRa0
-         d4MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cmk0PdpBMK0sped7JhGYOwBdXV8EVeBAiY0Lb6X/myc=;
-        b=Od+hB7vTPilJitL4bVWVqfk3YqszYCXMDPeXbPs6dvbeyHds1QdhbAEExRrHFIJvRm
-         xSOPsp6NVXBjhIt6ZRlVer407KyVLbBDShjM57uTDnDItol/M2sTo/qDZqei9KjC3zu+
-         uLKFsT/xBq9AbBGE57eN37sojSqlejn1d1xwUFEHYpWCghCHe1kwctcr+GV9Rv89YSJM
-         DUPXgAbRy/zpd/Drf1V9Z4mpA5lbbhd99bkBOGgkkaj2L0P87OxXuGXClkXH9WgWPIrr
-         vpvAzKVlix9pwynxNJf8O5wRlGQAa2gWbylm+6/xj2HY2uZiL/rIfGqA8hyUDKSUJmEO
-         mwgw==
-X-Gm-Message-State: ANoB5plqfhh7mY30gaQcjKJc1XSoIvFKB8JHI60mYOFiFaxfD6JBRtlL
-        abzi8lSgU5AN/JzJGYvfMk4ZuHS6WNc3W3xODShA0w==
-X-Google-Smtp-Source: AA0mqf6ul9+QZU4hm6yqMhWx9ryWax/rv5tjNs1P8UrwxuqP7LLLD/URmkKdihtN7/JQhAlX2g6zMdxTJ2U46P3YUvo=
-X-Received: by 2002:aca:1c07:0:b0:359:ef86:2f4f with SMTP id
- c7-20020aca1c07000000b00359ef862f4fmr308690oic.14.1671103238656; Thu, 15 Dec
- 2022 03:20:38 -0800 (PST)
+        Thu, 15 Dec 2022 06:22:38 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2085.outbound.protection.outlook.com [40.107.244.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349761E708;
+        Thu, 15 Dec 2022 03:22:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QgDcCu18rNc6OclTRu87QOk/Qzym7X7yNDZ1lleNamr3VxeeGk3oBsuU0l2P0xyeTaVZnzoPZWPQlaH3HIm+wRmjBRmWBThwE5j/AnqiJpEcsfjh6mv9bBI9yFsOAI31EflG0m6m97ZLm21uxRR5G+FJJDLXVhsjyVa5SoFo7V8xV7iXkWLmkv8WB0h4SdMrLmQD8OGPgR2lXKqOB06vRVMotT0DczMo8U6V5llHvbH7z+4vx+r1VhnN23yTeieWilO+Vm/lZQByhoHK3tQfdk3XR1nlhxZ62sqml3iHR6viP9ehoVRr5MX28ETsy0rM+bFClUs6HRxsgotPlgWb5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zhTHdYMVKrhX4EQAcmfzpoGJnxscsloVi4RUuC1BRe4=;
+ b=MZoGyu73GeeO7HvwICyEd9Ea39lWwo+LN8PMVaQpgDhL3U94Eo0W3zsdxRE+V3MzJVG3imR8piKDawm2dVNdyA9UogRghgMKqGTqdkfRwD132A4tYuBkTRE5n/0G/iLQpUvVz5B7JAqoo+BDyiUgk58rbYJ5EicIH4ZyR0pMOcoN+dGu+YGFjRRAJNqDR5eeMcDpPzhVSaJ6TIAa6X2JPgcLEp5uqmwQu16PH6Fa2Udy0S4/Qs1CbT9JKGMfJg0DLbKyqubQ3zlqwXCYOs0LtNA6fBMzZbZ6/akdHsD+Ar0yj5mepDP+/888qJWFmc5wOQuJ5GnWzgk6J43Nwm1Kqw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zhTHdYMVKrhX4EQAcmfzpoGJnxscsloVi4RUuC1BRe4=;
+ b=Akrt/aSbAhCMYUyBqaEhEdgQAEVvV1/jO2Z+I8p+/ftSsWaEAp7d0ntJYVr8bnO79W/+CDNS+BFqxohAbXrLy860qIsQRm1gCBPUdDR8ipsHMo8NNYalt7CtWw7TXhXBuYLGF83jFQrPJD3CXlEPqLyszb3OrhgSjXVF4eOyrgxm7O4YHInXoodha1nZDvG3xQ8dB2TfVdfYYYdTL4oAnfBCMnpM1fbAp9qFTv5aiCEGOjPV7RLp/Klm7Yrs7bMEJVvghrJ3y8aFSGhelig176w+2nwhH/aK9vMeUc7bZEQam3hNiQSE6VHMS2LbXw9BzMickTSMVbv9a6q6J4uo/g==
+Received: from DM6PR04CA0002.namprd04.prod.outlook.com (2603:10b6:5:334::7) by
+ PH7PR12MB7794.namprd12.prod.outlook.com (2603:10b6:510:276::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.11; Thu, 15 Dec
+ 2022 11:22:35 +0000
+Received: from DS1PEPF0000B075.namprd05.prod.outlook.com
+ (2603:10b6:5:334:cafe::ac) by DM6PR04CA0002.outlook.office365.com
+ (2603:10b6:5:334::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12 via Frontend
+ Transport; Thu, 15 Dec 2022 11:22:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DS1PEPF0000B075.mail.protection.outlook.com (10.167.17.6) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5924.8 via Frontend Transport; Thu, 15 Dec 2022 11:22:35 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 15 Dec
+ 2022 03:22:26 -0800
+Received: from yaviefel (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 15 Dec
+ 2022 03:22:20 -0800
+References: <20221215071551.421451-1-linmq006@gmail.com>
+User-agent: mu4e 1.6.6; emacs 28.1
+From:   Petr Machata <petrm@nvidia.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Menglong Dong <imagedong@tencent.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Petr Machata <petrm@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net: Fix documentation for
+ unregister_netdevice_notifier_net
+Date:   Thu, 15 Dec 2022 12:20:59 +0100
+In-Reply-To: <20221215071551.421451-1-linmq006@gmail.com>
+Message-ID: <87h6xwap3t.fsf@nvidia.com>
 MIME-Version: 1.0
-References: <20221214125821.12489-1-paul@crapouillou.net> <20221214125821.12489-8-paul@crapouillou.net>
-In-Reply-To: <20221214125821.12489-8-paul@crapouillou.net>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Thu, 15 Dec 2022 12:20:27 +0100
-Message-ID: <CAG3jFytqa7h2kYJAz4meYvCfVK7BJp6KXZvvFY+bSNCuNGvOoA@mail.gmail.com>
-Subject: Re: [PATCH 07/10] drm: bridge: it66121: Don't clear DDC FIFO twice
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Phong LE <ple@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        list@opendingux.net, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000B075:EE_|PH7PR12MB7794:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7a807613-f902-430c-23f0-08dade8eaa6e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gyI6w9qa+d2xjFSpgi2BO0dTgBquhzbDCP8bWIBElF900B+K8KdAXblFe7m+2O9V5LXtpdVVgzdfESS3yMYDAg5i3w2mabUzwM8QYeO3N8l75Xsn4iIMpcsYwRyVG/6Z2twhilgJ8wvhOo5EjRslejVDlijgnBsPKXB2DvWPG/ywAruzqwe7sXlJuMQdjSJ+mJmFMXwsgqjcochH8AEO6uLqpf8+888N+KjN+FVWTdfoXy9q6HG+9/PAE8PhkH0qF3WxVRMOCVRJrXQ0S73o89iBo2KQGcBL9HF/q5Hobv3U1moBUeOwWikYMNFmjpZzO/iEEWZdcmDyq4oWUOME3lZpQGyCOqz6qBic1OY1Mu3ifFy/zZZatGEK98he/nimLCJ+ErIW4dGQ7DVUmpghqb/cJZ6zXenVSXNmXco7yaDnzeLH78fzdWCo3XRzSIZTkG70Cl7g8wIKFm05+Dzm1vZS4QiHkbTqVniRfh+FB682DGWn3hWW9LfR6KRrrbsFXxhNCFrZ5SH6E/0ymkhl6iiBB0pAIsHzs70zpY+DzBOQEX16uF8AxRdPUz35REl1mXuYWdHoSoSJ2P/Yq0DCDlSpifFUA6lo6MPrwuD2+GclKZLbuCoHMCAkH0hyfcZYPmGOK4cWOfX0Qh6z5boxKLaM0eFbFlRl8MTC3Ipm5S2+yTberPV3zA1YC4Y+ECxd+GyDRPTp8TRmScThIsLLDg==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(39860400002)(396003)(451199015)(40470700004)(46966006)(36840700001)(36756003)(40460700003)(6666004)(41300700001)(478600001)(82310400005)(86362001)(36860700001)(82740400003)(40480700001)(356005)(7636003)(426003)(47076005)(336012)(16526019)(70206006)(316002)(8676002)(4326008)(83380400001)(6916009)(5660300002)(54906003)(70586007)(26005)(4744005)(186003)(8936002)(2616005)(7416002)(2906002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2022 11:22:35.1007
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a807613-f902-430c-23f0-08dade8eaa6e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000B075.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7794
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Dec 2022 at 13:59, Paul Cercueil <paul@crapouillou.net> wrote:
->
-> The DDC FIFO was cleared before the loop in it66121_get_edid_block(),
-> and at the beginning of each iteration; which means that it did not have
-> to be cleared before the loop.
->
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  drivers/gpu/drm/bridge/ite-it66121.c | 16 ----------------
->  1 file changed, 16 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/ite-it66121.c b/drivers/gpu/drm/bridge/ite-it66121.c
-> index 06fa59ae5ffc..5335d4abd7c5 100644
-> --- a/drivers/gpu/drm/bridge/ite-it66121.c
-> +++ b/drivers/gpu/drm/bridge/ite-it66121.c
-> @@ -456,18 +456,6 @@ static inline int it66121_wait_ddc_ready(struct it66121_ctx *ctx)
->         return 0;
->  }
->
-> -static int it66121_clear_ddc_fifo(struct it66121_ctx *ctx)
-> -{
-> -       int ret;
-> -
-> -       ret = it66121_preamble_ddc(ctx);
-> -       if (ret)
-> -               return ret;
-> -
-> -       return regmap_write(ctx->regmap, IT66121_DDC_COMMAND_REG,
-> -                           IT66121_DDC_COMMAND_FIFO_CLR);
-> -}
-> -
->  static int it66121_abort_ddc_ops(struct it66121_ctx *ctx)
->  {
->         int ret;
-> @@ -515,10 +503,6 @@ static int it66121_get_edid_block(void *context, u8 *buf,
->         offset = (block % 2) * len;
->         block = block / 2;
->
-> -       ret = it66121_clear_ddc_fifo(ctx);
-> -       if (ret)
-> -               return ret;
-> -
->         while (remain > 0) {
->                 cnt = (remain > IT66121_EDID_FIFO_SIZE) ?
->                                 IT66121_EDID_FIFO_SIZE : remain;
-> --
-> 2.35.1
->
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Miaoqian Lin <linmq006@gmail.com> writes:
+
+> unregister_netdevice_notifier_net() is used for unregister a notifier
+> registered by register_netdevice_notifier_net().
+>
+> Fixes: a30c7b429f2d ("net: introduce per-netns netdevice notifiers")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  net/core/dev.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index b76fb37b381e..85c6c095a1b6 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -1840,7 +1840,7 @@ EXPORT_SYMBOL(register_netdevice_notifier_net);
+>   * @nb: notifier
+>   *
+>   * Unregister a notifier previously registered by
+> - * register_netdevice_notifier(). The notifier is unlinked into the
+> + * register_netdevice_notifier_net(). The notifier is unlinked into the
+
+Since you are touching the line anyway, please also s/into/from/.
