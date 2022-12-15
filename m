@@ -2,105 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F4E64D9A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6873B64D9AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiLOKp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 05:45:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
+        id S230071AbiLOKqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 05:46:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiLOKpX (ORCPT
+        with ESMTP id S229937AbiLOKqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 05:45:23 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0D21F624
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:45:22 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so1398778wma.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:45:22 -0800 (PST)
+        Thu, 15 Dec 2022 05:46:01 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5BF1A23B
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:46:00 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id g4so2987176ybg.7
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 02:46:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KHuddhTs1woKQMA5yxy2mTLY+wNV6WvVLa7elkBE4tw=;
-        b=vkk0Z84jrKQRm876NHO6IUZ/gtYYo3q7FnC1uP+EyV2QxKZ3VeWyN+x2wUriqyW07k
-         gKhLpngEf5ukIXa2tlu9NbZrQxiZSvpZlqMpGS1OH72wv80WzJMG2mJbM3eVfg2S/Jfh
-         cs8NEvYSzUmAbxL3szMKEoVmwxe8Fho2Yj3D3ZFi386cyq0PLOlg30BFfHSIz6WqwrGr
-         2Ef5xsIC9DhHlTbyqEMnkhDFt9b4ryWhnjVeAhSSNkIMHp5xHvrTCzhoL+MFRAsw7xKu
-         WAj/P2WYxMICJO9H3YYeRaasNOjsvB4RRJb2gUxVU9JPOmBQ+te+cyQPWKhofnECAdeu
-         4AhA==
+        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=g4OANl98v7AsQNyM9MzFGjzQDPVC11SlfN97nYRM26M=;
+        b=HATD9ebn1O4Qe9c48sjUXAUACDR2u0tYEcJ04UcaOb0gqbvdOEQy2WjU0t1s3K2D+d
+         hTGexmJ2/+rL6tOQkJQ/3tejDSjhAmBG8VRo4cm155V0nitfr4/bQmeoNi077uwsxJry
+         Oj18WXHOfkY2k34B49RLNqdRYMEAXcdsm7S9ovabE7u89CgLSVoIfpPVrg4GKeHMdxv8
+         uU44PZhK8mLJGaxZYdUaW+31l66+FxLUC2QYr2xBEzGB1JRWXSNPhoqSXNyG+xjwEsM+
+         FFkfBnC5jXmnkDy9HxV6UXMDhr0atuXFz4P1NmkeU4G2NVrRMhOq6k7HLMF2ix5C2L4e
+         mY1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KHuddhTs1woKQMA5yxy2mTLY+wNV6WvVLa7elkBE4tw=;
-        b=5WAQWTitgZcyLQiPbJqChV5/9K6IXLWhZAY04SqdHl1sE07K9ayePa0yUnbKpPwBeT
-         i4m1mpitc524uRLjKBLe1D8Ed7qvyUwbTRUrCqceFHYiJ3oOtEk+157cx4FebGR1y1RP
-         gP5gpebRV0E4TMwOhpRazLrijDX1q8ktyTNT9cR1WuVA+uZbNfBwjfW0uwtPN8pM3AjJ
-         xvI/WqMvkG2sSR07ffy/UgeIvsM5oW9U17QR3Fm1304Fu0xnlfyDXjCrik2/QN8nUbLR
-         XwIuUtTdpGl4MjG0xFmPcWA04WsPtMXviwvfMxMqMDuwOnkde8iLVqiOjQCW56g7IcP5
-         QNqw==
-X-Gm-Message-State: ANoB5pkcmZgtuNRANx0EnYnRLqppaahacP5nJ64Gh5kLj/F4t9pINsdv
-        +BEthgs+V9m8Xv3Y/5Mep9+TVg==
-X-Google-Smtp-Source: AA0mqf61J2YEn7tAitSvNv7cg8MsrjGIppG7rPDoRjCfzx+1rPn+1m9vchRs7d/GhhC+bfyHG2RTxA==
-X-Received: by 2002:a05:600c:310e:b0:3cf:b07a:cd2f with SMTP id g14-20020a05600c310e00b003cfb07acd2fmr21041676wmo.37.1671101120589;
-        Thu, 15 Dec 2022 02:45:20 -0800 (PST)
-Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
-        by smtp.gmail.com with ESMTPSA id m17-20020a7bce11000000b003d2157627a8sm5919771wmc.47.2022.12.15.02.45.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 02:45:19 -0800 (PST)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Pin-yen Lin <treapking@chromium.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Robert Foss <robert.foss@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        allen chen <allen.chen@ite.com.tw>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/bridge: it6505: Add caching for EDID
-Date:   Thu, 15 Dec 2022 11:45:10 +0100
-Message-Id: <167110107985.909515.966397009406015766.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221115112720.911158-1-treapking@chromium.org>
-References: <20221115112720.911158-1-treapking@chromium.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g4OANl98v7AsQNyM9MzFGjzQDPVC11SlfN97nYRM26M=;
+        b=xk4TUMTiCncTW5mCdxVqqUQKI9d9xskTeMsdnB+x1OTBw5JQODT6sGQM536dQrPRYw
+         pjAo5NlDUHZBJkBXi0WebCg/wYQw26pEad5nmhb7y4VcLqcr1sPVnQNuVRoyQfSgO9cO
+         jHzCwki8vUSnXHOOsI3OJZVBIiuJDHMBLwKrntPJxQcXn384pjLKF1b022u5Ae4/BEMU
+         KEshOAVl/VjBpWd8x5rf3ybRiMOEWsAzqWJgXGeV1tErpE+Ab5IhhCtgGnal3ZQQRWgM
+         BVFy8xE4Cdwx6Bg0RPBsHlH4Us4pP1DHQLyEOLu8IX5CJMqTEFGxCn+mnYvzEteb1l1b
+         PbYQ==
+X-Gm-Message-State: ANoB5pleyuqXJC6PtNaNbgSSEGy2Lg5L/T4Oxpy2PR1JcfQY2Hvodf59
+        Zx621pQrUMcQkgdZgtrtCMAIh2Y+Y0hvX/JAVUpndA==
+X-Google-Smtp-Source: AA0mqf7Z4XI6vc3xWXyspQ0xcWrrGQnaStwZknIY6SMWJ6WCjrysAtVnuDCBX1G9UHn5YWlcNtdhi44B/vwv4QrYGIY=
+X-Received: by 2002:a25:8084:0:b0:700:331d:69b4 with SMTP id
+ n4-20020a258084000000b00700331d69b4mr19031068ybk.101.1671101159112; Thu, 15
+ Dec 2022 02:45:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+References: <20221214182247.79824-1-sebastian.reichel@collabora.com> <20221214182247.79824-4-sebastian.reichel@collabora.com>
+In-Reply-To: <20221214182247.79824-4-sebastian.reichel@collabora.com>
+From:   Jagan Teki <jagan@edgeble.ai>
+Date:   Thu, 15 Dec 2022 16:15:47 +0530
+Message-ID: <CA+VMnFzMgOC7sgcpQ7nZx2gaJfqqvRu8RxETguaBHN1Lg_nG_w@mail.gmail.com>
+Subject: Re: [PATCHv6 3/7] arm64: dts: rockchip: Add base DT for rk3588 SoC
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christopher Obbard <chris.obbard@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kever Yang <kever.yang@rock-chips.com>, kernel@collabora.com,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Sugar Zhang <sugar.zhang@rock-chips.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 19:27:20 +0800, Pin-yen Lin wrote:
-> Add caching when EDID is read, and invalidate the cache until the
-> bridge detects HPD low or sink count changes on HPD_IRQ.
-> 
-> It takes 1.2s for IT6505 bridge to read a 3-block EDID, and skipping
-> one EDID read would be a notable difference on user experience.
-> 
-> 
-> [...]
+On Wed, 14 Dec 2022 at 23:53, Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+>
+> From: Kever Yang <kever.yang@rock-chips.com>
+>
+> This initial version supports (single core) CPU, dma, interrupts, timers,
+> UART and SDHCI. In short - everything necessary to boot Linux on this
+> system on chip.
+>
+> The DT is split into rk3588 and rk3588s, which is a reduced version
+> (i.e. with less peripherals) of the former.
+>
+> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+> Signed-off-by: Sugar Zhang <sugar.zhang@rock-chips.com>
+> Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
+> [rebase, squash and reword commit message]
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  arch/arm64/boot/dts/rockchip/rk3588.dtsi  |   58 +
+>  arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 1703 +++++++++++++++++++++
+>  2 files changed, 1761 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3588.dtsi
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3588.dtsi b/arch/arm64/boot/dts/rockchip/rk3588.dtsi
+> new file mode 100644
+> index 000000000000..d085e57fbc4c
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3588.dtsi
+> @@ -0,0 +1,58 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
 
-Applied, thanks!
+< snip>
 
-Repo: https://cgit.freedesktop.org/drm/drm-misc/
+> +       qos_vop_m0: qos@fdf82000 {
+> +               compatible = "rockchip,rk3588-qos", "syscon";
+> +               reg = <0x0 0xfdf82000 0x0 0x20>;
+> +       };
+> +
+> +       qos_vop_m1: qos@fdf82200 {
+> +               compatible = "rockchip,rk3588-qos", "syscon";
+> +               reg = <0x0 0xfdf82200 0x0 0x20>;
+> +       };
+> +
+> +       gmac1: ethernet@fe1c0000 {
+> +               compatible = "rockchip,rk3588-gmac", "snps,dwmac-4.20a";
+> +               reg = <0x0 0xfe1c0000 0x0 0x10000>;
+> +               interrupts = <GIC_SPI 234 IRQ_TYPE_LEVEL_HIGH 0>,
+> +                            <GIC_SPI 233 IRQ_TYPE_LEVEL_HIGH 0>;
+> +               interrupt-names = "macirq", "eth_wake_irq";
+> +               clocks = <&cru CLK_GMAC_125M>, <&cru CLK_GMAC_50M>,
+> +                        <&cru PCLK_GMAC1>, <&cru ACLK_GMAC1>,
+> +                        <&cru CLK_GMAC1_PTP_REF>;
+> +               clock-names = "stmmaceth", "clk_mac_ref",
+> +                             "pclk_mac", "aclk_mac",
+> +                             "ptp_ref";
+> +               power-domains = <&power RK3588_PD_GMAC>;
+> +               resets = <&cru SRST_A_GMAC1>;
+> +               reset-names = "stmmaceth";
+> +               rockchip,grf = <&sys_grf>;
+> +               rockchip,php-grf = <&php_grf>;
+> +               snps,axi-config = <&gmac1_stmmac_axi_setup>;
+> +               snps,mixed-burst;
+> +               snps,mtl-rx-config = <&gmac1_mtl_rx_setup>;
+> +               snps,mtl-tx-config = <&gmac1_mtl_tx_setup>;
+> +               snps,tso;
+> +               status = "disabled";
+> +
+> +               mdio1: mdio {
+> +                       compatible = "snps,dwmac-mdio";
+> +                       #address-cells = <0x1>;
+> +                       #size-cells = <0x0>;
+> +               };
 
+One nick with dtbs_check,
+ethernet@fe1c0000: Unevaluated properties are not allowed ('reg',
+'interrupts', 'interrupt-names', 'power-domains', 'resets',
+'reset-names', 'snps,axi-config', 'snps,mixed-burst',
+'snps,mtl-rx-config', 'snps,mtl-tx-config', 'snps,tso', 'mdio',
+'stmmac-axi-config', 'rx-queues-config', 'tx-queues-config' were
+unexpected)
 
-[1/1] drm/bridge: it6505: Add caching for EDID
-      commit: 11feaef69d0cb81278294299bbfd86f94c2004e3
-
-
-
-Rob
-
+Jagan.
