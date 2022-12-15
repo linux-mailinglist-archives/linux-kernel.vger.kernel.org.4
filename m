@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7A964E2F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D385364E2F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbiLOVSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 16:18:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
+        id S230020AbiLOVSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 16:18:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiLOVSC (ORCPT
+        with ESMTP id S229991AbiLOVSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 16:18:02 -0500
+        Thu, 15 Dec 2022 16:18:03 -0500
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60E6554F3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E0655A8B;
         Thu, 15 Dec 2022 13:18:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1671139081; x=1702675081;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=jAD7HB86AdlfinGuo2cHQHHsynQAWJBHzs/IYe0sxy4=;
-  b=Tt0tx0PY28AElQj9yCdeued4N0aKUsGSCD5h8+6LiFGklpHTlFC04ij4
-   DfeOse1Xizn8y6JdDj0yl+D8ZLSfgfHxMKRkEpcm7fn51xanXjr1FPtj6
-   PQvgUwARpiUo0HOD02v1MtQKKPvpHK/lfYbaZGZISJgQID9yVxA62uTzp
-   F9htJUGPc1EXoi/Jfi49H+mu93joUuYeq7/WshlZ+LykiU2mQaCzixJ7G
-   9eBQ+tQhHDCX+heXr5jnpkwo+3HNMYAPG+S29qjvfE/Wq1g32gElX+zEq
-   DOoWJnSK/aoWmu6xhd3cEG1zzpyluXh0S9FC8VoYWGBBE2mX85ANHq+v4
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="302230297"
+  bh=v6DX+flXm++eiMCOQrPkWRYABHnX0vxtX2uRfeiLesU=;
+  b=AOq/H945rYgjJZ+WAXwbNDGviMZYNh0w7+REOIcQ6hH/t1QZZml8PhMM
+   4uPB61WTjWVBljiQe0GpcPre+pGlXLJiInlvyTPNR2xMw1sn2oxY115+I
+   RJFqrrJaAB1ZdJCCbkQZIPAwTFPoRpJBielr77aiFkoyLzx38D6ZN1U88
+   iQQf9SkwWysioSUdhG4I/N2Ymvc8J2+fyaZldlQGXZuUk0WQNrSoUchdg
+   6KmZZXdfPyZbRdbyfEM/AriDcWTMC7THSS0I8jA9c5sLhtEp9uzuhEUFO
+   HO0HC424PWqL6PFNxRwQ7WJ9o92y+fqjwZ0jaa+bfSt8P80K/xituQl1s
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="302230302"
 X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
-   d="scan'208";a="302230297"
+   d="scan'208";a="302230302"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 13:17:51 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="649570080"
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 13:17:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="649570083"
 X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
-   d="scan'208";a="649570080"
+   d="scan'208";a="649570083"
 Received: from aschofie-mobl2.amr.corp.intel.com (HELO localhost) ([10.209.55.178])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 13:17:50 -0800
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 13:17:51 -0800
 From:   alison.schofield@intel.com
 To:     Dan Williams <dan.j.williams@intel.com>,
         Ira Weiny <ira.weiny@intel.com>,
@@ -46,11 +46,10 @@ To:     Dan Williams <dan.j.williams@intel.com>,
         Ben Widawsky <bwidawsk@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>
 Cc:     Alison Schofield <alison.schofield@intel.com>,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v4 2/5] cxl/trace: Add TRACE support for CXL media-error records
-Date:   Thu, 15 Dec 2022 13:17:44 -0800
-Message-Id: <3417fd29fda6cd60b5a93a8f77dc57ad71693fa8.1671135967.git.alison.schofield@intel.com>
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 3/5] cxl/memdev: Add trigger_poison_list sysfs attribute
+Date:   Thu, 15 Dec 2022 13:17:45 -0800
+Message-Id: <965d66486eb3ebbca6b1b265678130edd66f105e.1671135967.git.alison.schofield@intel.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <cover.1671135967.git.alison.schofield@intel.com>
 References: <cover.1671135967.git.alison.schofield@intel.com>
@@ -67,147 +66,124 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alison Schofield <alison.schofield@intel.com>
 
-CXL devices may support the retrieval of a device poison list.
-Add a new trace event that the CXL subsystem may use to log
-the media-error records returned in the poison list.
+When a boolean 'true' is written to this attribute the memdev driver
+retrieves the poison list from the device. The list consists of
+addresses that are poisoned, or would result in poison if accessed,
+and the source of the poison. This attribute is only visible for
+devices supporting the capability. The retrieved errors are logged
+as kernel trace events with the label 'cxl_poison'.
 
-Log each media-error record as a trace event of type 'cxl_poison'.
-
-When the poison list is requested by region, include the region name
-and uuid in the trace event.
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Alison Schofield <alison.schofield@intel.com>
 ---
- drivers/cxl/core/mbox.c  |  6 ++-
- drivers/cxl/core/trace.h | 83 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 88 insertions(+), 1 deletion(-)
+ Documentation/ABI/testing/sysfs-bus-cxl | 14 ++++++++
+ drivers/cxl/core/memdev.c               | 45 +++++++++++++++++++++++++
+ drivers/cxl/cxlmem.h                    |  2 +-
+ 3 files changed, 60 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-index dfe24a2adfdb..c345af8a4afd 100644
---- a/drivers/cxl/core/mbox.c
-+++ b/drivers/cxl/core/mbox.c
-@@ -10,6 +10,7 @@
- #include <cxl.h>
+diff --git a/Documentation/ABI/testing/sysfs-bus-cxl b/Documentation/ABI/testing/sysfs-bus-cxl
+index 8494ef27e8d2..df40ed09ea67 100644
+--- a/Documentation/ABI/testing/sysfs-bus-cxl
++++ b/Documentation/ABI/testing/sysfs-bus-cxl
+@@ -388,3 +388,17 @@ Description:
+ 		1), and checks that the hardware accepts the commit request.
+ 		Reading this value indicates whether the region is committed or
+ 		not.
++
++
++What:		/sys/bus/cxl/devices/memX/trigger_poison_list
++Date:		November, 2022
++KernelVersion:	v6.2
++Contact:	linux-cxl@vger.kernel.org
++Description:
++		(WO) When a boolean 'true' is written to this attribute the
++		memdev driver retrieves the poison list from the device. The
++		list consists of addresses that are poisoned, or would result
++		in poison if accessed, and the source of the poison. This
++		attribute is only visible for devices supporting the
++		capability. The retrieved errors are logged as kernel
++		trace events with the label 'cxl_poison'.
+diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
+index a74a93310d26..e0af7e9c9989 100644
+--- a/drivers/cxl/core/memdev.c
++++ b/drivers/cxl/core/memdev.c
+@@ -106,12 +106,49 @@ static ssize_t numa_node_show(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RO(numa_node);
  
- #include "core.h"
-+#include "trace.h"
++static ssize_t trigger_poison_list_store(struct device *dev,
++					 struct device_attribute *attr,
++					 const char *buf, size_t len)
++{
++	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
++	struct cxl_dev_state *cxlds = cxlmd->cxlds;
++	u64 offset, length;
++	bool tmp;
++	int rc;
++
++	if (kstrtobool(buf, &tmp))
++		return -EINVAL;
++
++	/* CXL 3.0 Spec 8.2.9.8.4.1 Separate pmem and ram poison requests */
++	if (resource_size(&cxlds->pmem_res)) {
++		offset = cxlds->pmem_res.start;
++		length = resource_size(&cxlds->pmem_res);
++		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
++		if (rc)
++			return rc;
++	}
++	if (resource_size(&cxlds->ram_res)) {
++		offset = cxlds->ram_res.start;
++		length = resource_size(&cxlds->ram_res);
++		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
++		/*
++		 * Invalid Physical Address is not an error for
++		 * volatile addresses. Device support is optional.
++		 */
++		if (rc && rc != -EFAULT)
++			return rc;
++	}
++	return len;
++}
++static DEVICE_ATTR_WO(trigger_poison_list);
++
+ static struct attribute *cxl_memdev_attributes[] = {
+ 	&dev_attr_serial.attr,
+ 	&dev_attr_firmware_version.attr,
+ 	&dev_attr_payload_max.attr,
+ 	&dev_attr_label_storage_size.attr,
+ 	&dev_attr_numa_node.attr,
++	&dev_attr_trigger_poison_list.attr,
+ 	NULL,
+ };
  
- static bool cxl_raw_allow_all;
+@@ -130,6 +167,14 @@ static umode_t cxl_memdev_visible(struct kobject *kobj, struct attribute *a,
+ {
+ 	if (!IS_ENABLED(CONFIG_NUMA) && a == &dev_attr_numa_node.attr)
+ 		return 0;
++
++	if (a == &dev_attr_trigger_poison_list.attr) {
++		struct device *dev = kobj_to_dev(kobj);
++
++		if (!test_bit(CXL_MEM_COMMAND_ID_GET_POISON,
++			      to_cxl_memdev(dev)->cxlds->enabled_cmds))
++			return 0;
++	}
+ 	return a->mode;
+ }
  
-@@ -899,7 +900,10 @@ int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
- 		if (rc)
- 			break;
- 
--		/* TODO TRACE the media error records */
-+		for (int i = 0; i < le16_to_cpu(po->count); i++)
-+			trace_cxl_poison(cxlmd, to_pci_dev(cxlds->dev),
-+					 cxlr, &po->record[i], po->flags,
-+					 po->overflow_t);
- 
- 		/* Protect against an uncleared _FLAG_MORE */
- 		nr_records = nr_records + le16_to_cpu(po->count);
-diff --git a/drivers/cxl/core/trace.h b/drivers/cxl/core/trace.h
-index 20ca2fe2ca8e..c7958311ce5f 100644
---- a/drivers/cxl/core/trace.h
-+++ b/drivers/cxl/core/trace.h
-@@ -8,6 +8,9 @@
- 
- #include <cxl.h>
- #include <linux/tracepoint.h>
-+#include <linux/pci.h>
-+
-+#include <cxlmem.h>
- 
- #define CXL_RAS_UC_CACHE_DATA_PARITY	BIT(0)
- #define CXL_RAS_UC_CACHE_ADDR_PARITY	BIT(1)
-@@ -103,6 +106,86 @@ TRACE_EVENT(cxl_aer_correctable_error,
- 	)
- );
- 
-+#define __show_poison_source(source)                          \
-+	__print_symbolic(source,                              \
-+		{ CXL_POISON_SOURCE_UNKNOWN,   "Unknown"  },  \
-+		{ CXL_POISON_SOURCE_EXTERNAL,  "External" },  \
-+		{ CXL_POISON_SOURCE_INTERNAL,  "Internal" },  \
-+		{ CXL_POISON_SOURCE_INJECTED,  "Injected" },  \
-+		{ CXL_POISON_SOURCE_VENDOR,    "Vendor"   })
-+
-+#define show_poison_source(source)			     \
-+	(((source > CXL_POISON_SOURCE_INJECTED) &&	     \
-+	 (source != CXL_POISON_SOURCE_VENDOR)) ? "Reserved"  \
-+	 : __show_poison_source(source))
-+
-+#define show_poison_flags(flags)                             \
-+	__print_flags(flags, "|",                            \
-+		{ CXL_POISON_FLAG_MORE,      "More"     },   \
-+		{ CXL_POISON_FLAG_OVERFLOW,  "Overflow"  },  \
-+		{ CXL_POISON_FLAG_SCANNING,  "Scanning"  })
-+
-+#define __cxl_poison_addr(record)					\
-+	(le64_to_cpu(record->address))
-+#define cxl_poison_record_dpa(record)					\
-+	(__cxl_poison_addr(record) & CXL_POISON_START_MASK)
-+#define cxl_poison_record_source(record)				\
-+	(__cxl_poison_addr(record)  & CXL_POISON_SOURCE_MASK)
-+#define cxl_poison_record_length(record)				\
-+	(le32_to_cpu(record->length) * CXL_POISON_LEN_MULT)
-+#define cxl_poison_overflow(flags, time)				\
-+	(flags & CXL_POISON_FLAG_OVERFLOW ? le64_to_cpu(time) : 0)
-+
-+TRACE_EVENT(cxl_poison,
-+
-+	    TP_PROTO(struct cxl_memdev *memdev, const struct pci_dev *pcidev,
-+		     struct cxl_region *region,
-+		     const struct cxl_poison_record *record,
-+		     u8 flags, __le64 overflow_t),
-+
-+	    TP_ARGS(memdev, pcidev, region, record, flags, overflow_t),
-+
-+	    TP_STRUCT__entry(
-+		__string(memdev, dev_name(&memdev->dev))
-+		__string(pcidev, dev_name(&pcidev->dev))
-+		__string(region, region)
-+		__field(u64, overflow_t)
-+		__field(u64, dpa)
-+		__field(u32, length)
-+		__array(char, uuid, 16)
-+		__field(u8, source)
-+		__field(u8, flags)
-+	    ),
-+
-+	    TP_fast_assign(
-+		__assign_str(memdev, dev_name(&memdev->dev));
-+		__assign_str(pcidev, dev_name(&pcidev->dev));
-+		__entry->overflow_t = cxl_poison_overflow(flags, overflow_t);
-+		__entry->dpa = cxl_poison_record_dpa(record);
-+		__entry->length = cxl_poison_record_length(record);
-+		__entry->source = cxl_poison_record_source(record);
-+		__entry->flags = flags;
-+		if (region) {
-+			__assign_str(region, dev_name(&region->dev));
-+			memcpy(__entry->uuid, &region->params.uuid, 16);
-+		} else {
-+			__assign_str(region, "");
-+			memset(__entry->uuid, 0, 16);
-+		}
-+	    ),
-+
-+	    TP_printk("memdev=%s pcidev=%s region=%s region_uuid=%pU dpa=0x%llx length=0x%x source=%s flags=%s overflow_time=%llu",
-+		__get_str(memdev),
-+		__get_str(pcidev),
-+		__get_str(region),
-+		__entry->uuid,
-+		__entry->dpa,
-+		__entry->length,
-+		show_poison_source(__entry->source),
-+		show_poison_flags(__entry->flags),
-+		__entry->overflow_t)
-+);
-+
- #endif /* _CXL_EVENTS_H */
- 
- #define TRACE_INCLUDE_FILE trace
+diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+index f53fae20f502..28ba0cd8f2d3 100644
+--- a/drivers/cxl/cxlmem.h
++++ b/drivers/cxl/cxlmem.h
+@@ -139,7 +139,7 @@ struct cxl_mbox_cmd {
+ 	C(FWROLLBACK, -ENXIO, "rolled back to the previous active FW"),         \
+ 	C(FWRESET, -ENXIO, "FW failed to activate, needs cold reset"),		\
+ 	C(HANDLE, -ENXIO, "one or more Event Record Handles were invalid"),     \
+-	C(PADDR, -ENXIO, "physical address specified is invalid"),		\
++	C(PADDR, -EFAULT, "physical address specified is invalid"),		\
+ 	C(POISONLMT, -ENXIO, "poison injection limit has been reached"),        \
+ 	C(MEDIAFAILURE, -ENXIO, "permanent issue with the media"),		\
+ 	C(ABORT, -ENXIO, "background cmd was aborted by device"),               \
 -- 
 2.37.3
 
