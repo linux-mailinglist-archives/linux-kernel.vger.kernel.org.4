@@ -2,109 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3779964E1F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2F564E1F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiLOTqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 14:46:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45000 "EHLO
+        id S229962AbiLOTro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 14:47:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbiLOTqe (ORCPT
+        with ESMTP id S229544AbiLOTrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 14:46:34 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2D252149;
-        Thu, 15 Dec 2022 11:46:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1671133590;
-        bh=vhXovAdMFvjGdI7fvSIRELXEjd78VENxVI/4IdKMMb8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ncnIb0WfhtEKF/kGA0uSnMmTXuI1l6JC9LQo0I6g4fETpGHCgxttX9WGWkYyDKqNd
-         9zcrYKXVjeuoDVDqA85XRhQxqgcVvDyAjDxyksOIqLj/L8vLnw2Nc3WXgHJ0lJwHNY
-         2lvDXcL7e0cY/5AVqL5qaJeMgecKnv1PxfWJ9GbQmi/UxORTXN5RCLaVTubrnzvhod
-         7rsyLENiWhIkh2pVtl2jN1FfUCDYW/xWglJjORi7zYr6C63AbyXAbqDWp2JmJaMh1H
-         hoLjjwfTdeAtfpYLchBMfEFNFHv3wG7hX/sfEjeynMOzEMyeH+yn9jRp9K6hy+vGCk
-         8jJ3W40iqr5Rw==
-Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NY2mQ0KT9zbb6;
-        Thu, 15 Dec 2022 14:46:30 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andi Kleen <ak@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-api@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org
-Subject: [PATCH] mm/mempolicy: Fix memory leak in set_mempolicy_home_node system call
-Date:   Thu, 15 Dec 2022 14:46:21 -0500
-Message-Id: <20221215194621.202816-1-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 15 Dec 2022 14:47:42 -0500
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9454B53EF1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 11:47:40 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id i20so433796qtw.9
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 11:47:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KPYxTZTqJC2cdh9DTW09sHVEq0B/4FV+Y1mjGIsAm28=;
+        b=JgupwQ0M+cS5odKFWl56mZ7K5YiFNnaWBWQklLgq/ittQi07poJfGSkTnet2ShdGvP
+         ghKJiwO+7INPwfEwJueoVvRzvJdkJEQLRrITMCraE8npHanYxQ4s4m4oglXvMJ4ifENq
+         FyVJONH8prG9SjuJgfiToWT0D/FBUL++KQMmZjeEV/lBUpwF2eC8XHcDtJg01WrbfsFw
+         uZkuXmPPdY4sqa6SDqiJAdNxoxSyWiQ2sxBZVG22JDv0WHlFhk09gvYW3dqF0AfFrUIf
+         SQqJkayH92MDwA+UgfLBuNSFFWpv3glYA/wZccfEB0RoyAPs3T1+zANvu7KRdRYWAc+V
+         K3qw==
+X-Gm-Message-State: ANoB5pm3aXL0xUCxn3HvY0qz2SdDWHgXPcUX0hi+p/ctOffKaDQZMhbf
+        3QexQDfCrn4xG4KxsoFKeWkd/l4ugEd3HA==
+X-Google-Smtp-Source: AA0mqf5YliKDaZmyulY8+r/Smc00K+rvpaQgSEwikqNl7v/EqUnbTT3PWQ0kwxIbZ3tE0UYVrn/CXQ==
+X-Received: by 2002:ac8:58ca:0:b0:3a8:a8e:c0e0 with SMTP id u10-20020ac858ca000000b003a80a8ec0e0mr46378634qta.8.1671133659380;
+        Thu, 15 Dec 2022 11:47:39 -0800 (PST)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id hg6-20020a05622a610600b003a50248b89esm3896506qtb.26.2022.12.15.11.47.38
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 11:47:38 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id g4so4813645ybg.7
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 11:47:38 -0800 (PST)
+X-Received: by 2002:a5b:24b:0:b0:6ca:3b11:8d76 with SMTP id
+ g11-20020a5b024b000000b006ca3b118d76mr74538346ybp.202.1671133658135; Thu, 15
+ Dec 2022 11:47:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221215164109.761427-1-arnd@kernel.org>
+In-Reply-To: <20221215164109.761427-1-arnd@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 15 Dec 2022 20:47:27 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWi-LYfEiSTG1Oa_DyjmA-t1_WW_HfL6adt_TXTrzEx-A@mail.gmail.com>
+Message-ID: <CAMuHMdWi-LYfEiSTG1Oa_DyjmA-t1_WW_HfL6adt_TXTrzEx-A@mail.gmail.com>
+Subject: Re: [PATCH] irqchip: build IMX_MU_MSI only on ARM
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Frank Li <Frank.Li@nxp.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When encountering any vma in the range with policy other than MPOL_BIND
-or MPOL_PREFERRED_MANY, an error is returned without issuing a mpol_put
-on the policy just allocated with mpol_dup().
+Hi Arnd,
 
-This allows arbitrary users to leak kernel memory.
+On Thu, Dec 15, 2022 at 5:41 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> compile-testing IMX_MU_MSI on x86 without PCI_MSI support results
+> in a build failure:
+>
+> arch/x86/kernel/hpet.c:520:46: error: 'msi_alloc_info_t' {aka 'struct irq_alloc_info'} has no member named 'hwirq'
+>   520 |         irq_domain_set_info(domain, virq, arg->hwirq, info->chip, NULL,
+>       |                                              ^~
+> arch/x86/kernel/hpet.c:521:49: error: 'msi_alloc_info_t' {aka 'struct irq_alloc_info'} has no member named 'data'
+>   521 |                             handle_edge_irq, arg->data, "edge");
+>       |                                                 ^~
+> arch/x86/kernel/hpet.c: In function 'hpet_create_irq_domain':
+> arch/x86/kernel/hpet.c:550:13: error: 'x86_vector_domain' undeclared (first use in this function)
+>   550 |         if (x86_vector_domain == NULL)
+>       |             ^~~~~~~~~~~~~~~~~
+> arch/x86/kernel/hpet.c:550:13: note: each undeclared identifier is reported only once for each function it appears in
+> arch/x86/kernel/hpet.c: In function 'hpet_assign_irq':
+> arch/x86/kernel/hpet.c:600:9: error: implicit declaration of function 'init_irq_alloc_info' [-Werror=implicit-function-declaration]
+>   600 |         init_irq_alloc_info(&info, NULL);
+>
+> Tighten the dependency further to only allow compile testing on Arm.
+> This could be refined further to allow certain x86 configs.
 
-Fixes: c6018b4b2549 ("mm/mempolicy: add set_mempolicy_home_node syscall")
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
-Reviewed-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
-Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Feng Tang <feng.tang@intel.com>
-Cc: Michal Hocko <mhocko@kernel.org>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Mel Gorman <mgorman@techsingularity.net>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Andi Kleen <ak@linux.intel.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Huang Ying <ying.huang@intel.com>
-Cc: <linux-api@vger.kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: stable@vger.kernel.org # 5.17+
----
- mm/mempolicy.c | 1 +
- 1 file changed, 1 insertion(+)
+Thanks for your patch!
 
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index 61aa9aedb728..02c8a712282f 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -1540,6 +1540,7 @@ SYSCALL_DEFINE4(set_mempolicy_home_node, unsigned long, start, unsigned long, le
- 		 * the home node for vmas we already updated before.
- 		 */
- 		if (new->mode != MPOL_BIND && new->mode != MPOL_PREFERRED_MANY) {
-+			mpol_put(new);
- 			err = -EOPNOTSUPP;
- 			break;
- 		}
--- 
-2.25.1
+> Fixes: 6c9f7434159b ("irqchip: IMX_MU_MSI should depend on ARCH_MXC")
 
+This is not the commit that introduced the issue.
+
+Fixes: 70afdab904d2d1e6 ("irqchip: Add IMX MU MSI controller driver")
+
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/irqchip/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> index caa952c40ff9..4ebf4d566e6f 100644
+> --- a/drivers/irqchip/Kconfig
+> +++ b/drivers/irqchip/Kconfig
+> @@ -484,7 +484,7 @@ config IMX_INTMUX
+>  config IMX_MU_MSI
+>         tristate "i.MX MU used as MSI controller"
+>         depends on OF && HAS_IOMEM
+> -       depends on ARCH_MXC || COMPILE_TEST
+> +       depends on ARCH_MXC || ((ARM || ARM64) && COMPILE_TEST)
+
+I think adding a separate line
+
+    depends on ARM || ARM64
+
+is easier to read (and easier to extend).
+
+>         default m if ARCH_MXC
+>         select IRQ_DOMAIN
+>         select IRQ_DOMAIN_HIERARCHY
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
