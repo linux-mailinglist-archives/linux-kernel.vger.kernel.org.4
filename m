@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5132864D89C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C865264D8A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:32:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiLOJas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 04:30:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
+        id S230026AbiLOJca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 04:32:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiLOJak (ORCPT
+        with ESMTP id S230016AbiLOJbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 04:30:40 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A6A47330;
-        Thu, 15 Dec 2022 01:30:34 -0800 (PST)
-X-UUID: 946220893ddb4fe6b9e803e59dae0231-20221215
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=iUpXfVshjq64D/vPuflrKozWJV+i90PR4zI/zWYnb50=;
-        b=jyqgkHECrFtZvDyXc2sL0d9YgXcv2zMYyDqajCW/7BFuK7HPqvfdlf4MmlP1G29Jpa0QnJch8Aex+4octvRsK9FI0W/UTMBo9p3+FmUJS/IBI9UK0hUrozNGqPDZ2iYKJ/OLcv+8rRNzLqig8ow1dKw4U1jz1RS53F+xIZ75GK8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:296c8b89-7f5f-41d0-9922-3e8ec0ba17fd,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.14,REQID:296c8b89-7f5f-41d0-9922-3e8ec0ba17fd,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:dcaaed0,CLOUDID:9a84adb4-d2e2-434d-b6d3-aeae88dfcc78,B
-        ulkID:221215173031H616DXAG,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 946220893ddb4fe6b9e803e59dae0231-20221215
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 478658547; Thu, 15 Dec 2022 17:30:31 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 15 Dec 2022 17:30:29 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 15 Dec 2022 17:30:28 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nicolas.dufresne@collabora.com>, kyrie wu <kyrie.wu@mediatek.com>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
-        <maoguang.meng@mediatek.com>, Irui Wang <irui.wang@mediatek.com>
-Subject: [PATCH] media: jpeg: refactor multi-hw judgement
-Date:   Thu, 15 Dec 2022 17:30:26 +0800
-Message-ID: <20221215093026.12322-1-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 15 Dec 2022 04:31:52 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E545113D71
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:31:50 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id u10so1556999qvp.4
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:31:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=a3EptiNNYz54B6ALuBWXOFkTd9baua/QSniBYKYKUZY=;
+        b=d341/ShCuNm10nw7YXEAqsyxMI1C9+zYWCuxWP6KtFLWgNL1luRsAMab4cG331bjiF
+         ecGvAPHxwavOY3dWh/uHTy6ZzCeHYX5xarp1CBq2xRMd+YM2rUqUkQ81muxHi6hq9AvS
+         8XitkIVk/iec2mh+T3HoI3VF7oe4e27dAcGlk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a3EptiNNYz54B6ALuBWXOFkTd9baua/QSniBYKYKUZY=;
+        b=3msA7CIkG2lfPfEjEYQIrn2j+2pTzlA6X+u+1ax81EOWhtQuHSZ7/TPwP+pvrV2EPz
+         fxIy9jIVtK+gXr81LNpD0EO+9HJ3jTXI6HDT1zXDiCDdfT0joWDwH6RawNYH8DqKUEs5
+         aaw2WxSTLl9Rz2rvJ8wtqfCA2YUkx40Qa3Og7Rdgmig7v/jD/4akgXdhy4FxYPrCf/cU
+         OpaVjHn/f8RZ3XraePUaXOGOwvFKFivuRR+9b39E62+XGFmBLEs+PeBOlpFnSHI+cfBv
+         fCNFQ22Ym8uQ6iAyiIo7aLfj7atgrAzRN0KzFMBEsHHsY0wT/hwNuyd1B4+IEO3ijN8a
+         EmAg==
+X-Gm-Message-State: ANoB5pmcSnafA8UXZfW9rvuAHxpyCQRXYPrYFnPcljaV3VJbVXtZu5N4
+        /ARKjVvNlEsEfTLoghdcdgq4TwDgpOXLWrO96+fPDA==
+X-Google-Smtp-Source: AA0mqf4MjWdBgRV6+uwFHEh1nlyzpA7P1m0VMHF4xYlbLdYqgj/mBMj62ZjpW/dyQJKfHN5RHUtk2CKEOv5B6fQnj7w=
+X-Received: by 2002:a05:6214:4281:b0:4c6:8e11:b1ea with SMTP id
+ og1-20020a056214428100b004c68e11b1eamr69618854qvb.18.1671096709828; Thu, 15
+ Dec 2022 01:31:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+References: <20221209140150.1453-1-johan+linaro@kernel.org>
+In-Reply-To: <20221209140150.1453-1-johan+linaro@kernel.org>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Thu, 15 Dec 2022 17:31:24 +0800
+Message-ID: <CAJMQK-ht8_dvdCOQXfUMGGa6ZcPJSXf_AjDd0OLi79WF43NYGA@mail.gmail.com>
+Subject: Re: [PATCH v3 00/19] irqdomain: fix mapping race and clean up locking
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,85 +67,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kyrie wu <kyrie.wu@mediatek.com>
+On Thu, Dec 15, 2022 at 5:22 PM Johan Hovold <johan+linaro@kernel.org> wrote:
+>
+> Parallel probing (e.g. due to asynchronous probing) of devices that
+> share interrupts can currently result in two mappings for the same
+> hardware interrupt to be created.
+>
+> This series fixes this mapping race and clean up the irqdomain locking
+> so that in the end the global irq_domain_mutex is only used for managing
+> the likewise global irq_domain_list, while domain operations (e.g.
+> IRQ allocations) use per-domain (hierarchy) locking.
+>
+> Johan
+>
+>
+> Changes in v2
+>  - split out redundant-lookup cleanup (1/4)
+>  - use a per-domain mutex to address mapping race (2/4)
+>  - move kernel-doc to exported function (2/4)
+>  - fix association race (3/4, new)
+>  - use per-domain mutex for associations (4/4, new)
+>
+> Changes in v3
+>  - drop dead and bogus code (1--3/19, new)
+>  - fix racy mapcount accesses (5/19, new)
+>  - drop revmap mutex (6/19, new)
+>  - use irq_domain_mutex to address mapping race (9/19)
+>  - clean up irq_domain_push/pop_irq() (10/19, new)
+>  - use irq_domain_create_hierarchy() to construct hierarchies
+>    (11--18/19, new)
+>  - switch to per-domain locking (19/19, new)
+>
+>
+> Johan Hovold (19):
+>   irqdomain: Drop bogus fwspec-mapping error handling
+>   irqdomain: Drop dead domain-name assignment
+>   irqdomain: Drop leftover brackets
+>   irqdomain: Fix association race
+>   irqdomain: Fix disassociation race
+>   irqdomain: Drop revmap mutex
+>   irqdomain: Look for existing mapping only once
+>   irqdomain: Refactor __irq_domain_alloc_irqs()
+>   irqdomain: Fix mapping-creation race
+>   irqdomain: Clean up irq_domain_push/pop_irq()
+>   x86/ioapic: Use irq_domain_create_hierarchy()
+>   x86/apic: Use irq_domain_create_hierarchy()
+>   irqchip/alpine-msi: Use irq_domain_add_hierarchy()
+>   irqchip/gic-v2m: Use irq_domain_create_hierarchy()
+>   irqchip/gic-v3-its: Use irq_domain_create_hierarchy()
+>   irqchip/gic-v3-mbi: Use irq_domain_create_hierarchy()
+>   irqchip/loongson-pch-msi: Use irq_domain_create_hierarchy()
+>   irqchip/mvebu-odmi: Use irq_domain_create_hierarchy()
+>   irqdomain: Switch to per-domain locking
+>
+>  arch/x86/kernel/apic/io_apic.c         |   8 +-
+>  arch/x86/platform/uv/uv_irq.c          |   7 +-
+>  drivers/irqchip/irq-alpine-msi.c       |   8 +-
+>  drivers/irqchip/irq-gic-v2m.c          |   5 +-
+>  drivers/irqchip/irq-gic-v3-its.c       |  13 +-
+>  drivers/irqchip/irq-gic-v3-mbi.c       |   5 +-
+>  drivers/irqchip/irq-loongson-pch-msi.c |   9 +-
+>  drivers/irqchip/irq-mvebu-odmi.c       |  13 +-
+>  include/linux/irqdomain.h              |   6 +-
+>  kernel/irq/irqdomain.c                 | 328 ++++++++++++++-----------
+>  10 files changed, 220 insertions(+), 182 deletions(-)
+>
+> --
 
-some chips have multi-hw, but others have only one,
-modify the condition of multi-hw judgement
+Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
 
-Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-Signed-off-by: irui wang <irui.wang@mediatek.com>
----
- drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c |  5 +++--
- drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h | 12 ++++++++++++
- 2 files changed, 15 insertions(+), 2 deletions(-)
+The series solves a race issue when having non-populated 2nd source
+components that share the same irq on ARM devices:
+Previously we would see
+[    0.476357] irq: type mismatch, failed to map hwirq-11 for pinctrl@10005000!
+and the component failed to probe.
 
-diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-index 4a5c6415ad08..37db8b81a935 100644
---- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-@@ -1695,8 +1695,7 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
- 		return -EINVAL;
-  	}
- 
--
--	if (list_empty(&pdev->dev.devres_head)) {
-+	if (!jpeg->variant->hw_arch) {
- 		INIT_DELAYED_WORK(&jpeg->job_timeout_work,
- 				  mtk_jpeg_job_timeout_work);
- 
-@@ -1890,6 +1889,7 @@ static struct mtk_jpeg_variant mtk8195_jpegenc_drvdata = {
- 	.ioctl_ops = &mtk_jpeg_enc_ioctl_ops,
- 	.out_q_default_fourcc = V4L2_PIX_FMT_YUYV,
- 	.cap_q_default_fourcc = V4L2_PIX_FMT_JPEG,
-+	.hw_arch = MTK_JPEG_HW_MULTI_CORE,
- };
- 
- static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
-@@ -1901,6 +1901,7 @@ static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
- 	.ioctl_ops = &mtk_jpeg_dec_ioctl_ops,
- 	.out_q_default_fourcc = V4L2_PIX_FMT_JPEG,
- 	.cap_q_default_fourcc = V4L2_PIX_FMT_YUV420M,
-+	.hw_arch = MTK_JPEG_HW_MULTI_CORE,
- };
- 
- #if defined(CONFIG_OF)
-diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
-index b9126476be8f..ec04a8ce73cf 100644
---- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
-+++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
-@@ -46,6 +46,16 @@ enum mtk_jpeg_ctx_state {
- 	MTK_JPEG_SOURCE_CHANGE,
- };
- 
-+/**
-+ * enum mtk_jpeg_hw_arch - arch of the jpeg hw
-+ * @MTK_JPEG_HW_SINGLE_CORE:	jpeg hw is single core
-+ * @MTK_JPEG_HW_MULTI_CORE:		jpeg hw is mluti-core
-+ */
-+enum mtk_jpeg_hw_arch {
-+	MTK_JPEG_HW_SINGLE_CORE = 0,
-+	MTK_JPEG_HW_MULTI_CORE = 1,
-+};
-+
- /**
-  * struct mtk_jpeg_variant - mtk jpeg driver variant
-  * @clks:			clock names
-@@ -60,6 +70,7 @@ enum mtk_jpeg_ctx_state {
-  * @ioctl_ops:			the callback of jpeg v4l2_ioctl_ops
-  * @out_q_default_fourcc:	output queue default fourcc
-  * @cap_q_default_fourcc:	capture queue default fourcc
-+ * @hw_arch:            mark jpeg hw arch
-  */
- struct mtk_jpeg_variant {
- 	struct clk_bulk_data *clks;
-@@ -74,6 +85,7 @@ struct mtk_jpeg_variant {
- 	const struct v4l2_ioctl_ops *ioctl_ops;
- 	u32 out_q_default_fourcc;
- 	u32 cap_q_default_fourcc;
-+	enum mtk_jpeg_hw_arch hw_arch;
- };
- 
- struct mtk_jpeg_src_buf {
--- 
-2.18.0
 
+> 2.37.4
+>
