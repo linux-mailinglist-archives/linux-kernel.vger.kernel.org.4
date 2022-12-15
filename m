@@ -2,93 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D6864DA08
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 12:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A12F764DA0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 12:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiLOLIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 06:08:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
+        id S229991AbiLOLKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 06:10:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiLOLIb (ORCPT
+        with ESMTP id S229830AbiLOLJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 06:08:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6EE23147
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 03:08:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 15 Dec 2022 06:09:58 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921BD23E84;
+        Thu, 15 Dec 2022 03:09:57 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6465161D74
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 11:08:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7F06C433EF;
-        Thu, 15 Dec 2022 11:08:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671102509;
-        bh=otXxm55EM0gptTM4VLPHIyJ/tLPdBuolhb0wODRxQCQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lx+5SojMH5fis6ZcnVj5HLBZCgmYcUwLC/eplUDlxbSOwrzCrMfp511K+Qmh4+k3f
-         0TeSWNVEbGokD1O0cD+HPh3XUI/3HInp2wJne6bcHVy9yevrQbqYb6YK8aCyHsfOxx
-         BFAJgaXilny7T8DoZAHjclIXd1SEovEHXTSPRfDvXwTwQ7uD52YKfGTCT7QPgamUtb
-         4Gh0CoypR7uJ0nJn4uE9RTizZWeJ0sHF5BtFPut8sCogrRihgx4WDYPTpPOrr0CsAE
-         TPs/ttlxnccV3Mxnopsbyr3uG63QMwEZQqfKyc04EPPWYw+BVy6F9T9T7hcRnUrnZ5
-         k8Xtu13arpQ4w==
-Date:   Thu, 15 Dec 2022 11:08:24 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Stephen Kitt <steve@sk2.org>,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] ASoC: wm8940: Remove warning when no plat data
- present
-Message-ID: <Y5sAKNV4p4G5VVtP@sirena.org.uk>
-References: <20221214123743.3713843-1-lukma@denx.de>
- <20221215093615.3794156-1-lukma@denx.de>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 76AE26602C62;
+        Thu, 15 Dec 2022 11:09:55 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671102596;
+        bh=OiEexPLSc3VRGJggDVHCDD4pkJJ10eF0O12K6/3xdP0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FpQj6WOlDhF7nut5vD1Ey7TTuDdhPbAdMVE+vUMB43+yT16a+p3vjYZizvtpDP/94
+         PIRaAqnT0issGZYkeVoOGXYM+TmeuL9k9FtQUImujf59jo9v3u1WurHxEh+EKzY8u1
+         cODuFHqpM2MTjvtRxjmge0oEL2L/3KzNrduRLMo+oEVcHQDLE8EHUfEqSHl0LiaMS/
+         5Qm/kVapBq4ZIahEsgXCVCE/A1P9FOR7hFVTmwlzxgoZ+8h1SJTv6+MEvx+vZsEm9m
+         6C0ZFgvha2q+gfxlIKsbAOKqvIww3Tb4u37OlKlKN3uIrwAUF+8kXrrPGIquQYX4sk
+         SAG4M/lZmRQlA==
+Message-ID: <9a7434ba-2d42-cf15-334b-637b5f1b01a3@collabora.com>
+Date:   Thu, 15 Dec 2022 12:09:52 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SFRj7qQIoixq6PZz"
-Content-Disposition: inline
-In-Reply-To: <20221215093615.3794156-1-lukma@denx.de>
-X-Cookie: Today is what happened to yesterday.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] media: jpeg: refactor multi-hw judgement
+Content-Language: en-US
+To:     =?UTF-8?B?Sm9obnNvbiBXYW5nICjnjovogZbpkasp?= 
+        <Johnson.Wang@mediatek.com>,
+        "nicolas.dufresne@collabora.com" <nicolas.dufresne@collabora.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        =?UTF-8?B?S3lyaWUgV3UgKOWQtOaZlyk=?= <Kyrie.Wu@mediatek.com>,
+        =?UTF-8?B?SXJ1aSBXYW5nICjnjovnkZ4p?= <Irui.Wang@mediatek.com>,
+        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "tfiga@chromium.org" <tfiga@chromium.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        =?UTF-8?B?TWFvZ3VhbmcgTWVuZyAo5a2f5q+b5bm/KQ==?= 
+        <Maoguang.Meng@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?WGlhIEppYW5nICjmsZ/pnJ4p?= <Xia.Jiang@mediatek.com>
+References: <20221215093026.12322-1-irui.wang@mediatek.com>
+ <1895ff3f71fe7fe6c228d76dd046ea4f43b3dbf5.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <1895ff3f71fe7fe6c228d76dd046ea4f43b3dbf5.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 15/12/22 11:50, Johnson Wang (王聖鑫) ha scritto:
+> On Thu, 2022-12-15 at 17:30 +0800, Irui Wang wrote:
+>> From: kyrie wu <kyrie.wu@mediatek.com>
+>>
+>> some chips have multi-hw, but others have only one,
+>> modify the condition of multi-hw judgement
+>>
+>> Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
+>> Signed-off-by: irui wang <irui.wang@mediatek.com>
+>> ---
+>>   drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c |  5 +++--
+>>   drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h | 12 ++++++++++++
+>>   2 files changed, 15 insertions(+), 2 deletions(-)
+>>
+> 
+> This may conflict with kernel mainline since mtk-jpeg folder doesn't
+> exist.
+> Please fix it.
+> 
+> BRs,
+> Johnson Wang
 
---SFRj7qQIoixq6PZz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ouch. I just noticed that the folder is mismatching; this didn't deserve
+a R-b tag. I'll be more careful next time.
 
-On Thu, Dec 15, 2022 at 10:36:13AM +0100, Lukasz Majewski wrote:
-> The lack of platform data in the contemporary Linux
-> shall not be the reason to display warnings to the
-> kernel logs.
-
-Please don't send new patches in reply to old patches or serieses, this
-makes it harder for both people and tools to understand what is going
-on - it can bury things in mailboxes and make it difficult to keep track
-of what current patches are, both for the new patches and the old ones.
-
---SFRj7qQIoixq6PZz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmObACcACgkQJNaLcl1U
-h9DSXQf9EkpxJ5dy2QkgnI9yJH0jtMm/WEJp0BP3BJ9Ka5U3Hc1MI7QlSJSZzisW
-DNpojEv9KQAa44ZApBjCVSmtf5gcS3nH6hGKTa3Ry8Q3MrJlGNJoroTSzefJOONw
-1h1Fvo4VLGqqHwmZeJ78nYPUlANvu6AITv/BxrOORiMMoCwgHGX2wRbd9rcHIn3b
-OyADFZdv/oCT+pwJ4iFhgmO3f2OWyHRa/CyydB+q+7wMUolWYMQBlHMhp0RjXeUk
-trDz7kDK4O/DI0d7lbexgjevycQLZFHqMD7L4lgfPermbNbvYwX7/kcMJ+YZZInI
-9ib5D8iy4OfhxlLtfpme7Z5spcPrPA==
-=0n0n
------END PGP SIGNATURE-----
-
---SFRj7qQIoixq6PZz--
