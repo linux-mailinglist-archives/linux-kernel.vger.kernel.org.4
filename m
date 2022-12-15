@@ -2,176 +2,407 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E30A64DBA5
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 13:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6C064DBAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 13:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiLOMvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 07:51:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
+        id S229798AbiLOMxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 07:53:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiLOMvt (ORCPT
+        with ESMTP id S229680AbiLOMxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 07:51:49 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1CB23E8C;
-        Thu, 15 Dec 2022 04:51:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=eVhFf5MIvGoSrecefTzQcMQnYbPEvxCOEUrQeN+dgu4=; b=chgIZqKedLA0pkL9yfaHto3jZ2
-        yVdZKJm1iO213hDaw2ZTSAVzZJww8Mlx6jxxyWfI9m32uQZ2/BNiGFpocGXzt4wjgp8t1NMkPlztz
-        ok0o2FVGB6BzAe4Y60hPtnUOuPYjV6mC1AGyDIT8eddyWdiv+o2211ZtdTL13la80kNrlHAq7e96Z
-        +I8gldGuh6oZcLU2ZMYzciA07PhpFAM073IfVmR6ZaoTbJ8SM2Oiso9QsJFgDOFSYb9aqnZEObr2s
-        PhhGHvalDZNkygrp4uVMSOEiW8UuWAAdrwphObYR4pzyVGWhEh3lXgInAuhl5lE0oHHJfU8uh2J14
-        pWmDXVUg==;
-Received: from [188.21.169.252] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p5ni0-009SxX-QO; Thu, 15 Dec 2022 12:51:33 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jonathan Corbet <corbet@lwn.net>, axboe@meta.com, sagi@grimberg.me,
-        kbusch@kernel.org
-Cc:     linux-nvme@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH] docs, nvme: add a feature and quirk policy document
-Date:   Thu, 15 Dec 2022 13:51:30 +0100
-Message-Id: <20221215125130.261098-1-hch@lst.de>
-X-Mailer: git-send-email 2.35.1
+        Thu, 15 Dec 2022 07:53:05 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9A7286DA
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 04:53:02 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id g7so15515995lfv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 04:53:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ptGRtK+Ib6emho74ijoc4hQMZ7OQDoXaebgGIFze/iw=;
+        b=p14y9a+UIQUX6OjSmkSg3f1Bopt591BcI3r9N+jCAhRhPbKG+aELEQJT78nMlNgKcT
+         crDq0MDvxGleL/HSka9K9rL/XabBPH5u121/Goxp40htnMiQ2fzfqjS3v+SVEY1vnClc
+         t19fjASNBpY22I/FDLw2dHb//t5ohTmNM9mGp/H9RhqRx2Uq+wUrhAgpLGEimIQaopms
+         FFG/eYlQ0xmINPqhAp8Oxf7ENa1eEpNLvNQtoJXp8jz4WfoGvIYhsFDz/aKiGxwKg2V7
+         hYs5g3d/jVkQuYEudSNotGa0MYXOfZLOhyak6poB/p59+HenzOMJwfKwggcVGixA1WK4
+         xVLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ptGRtK+Ib6emho74ijoc4hQMZ7OQDoXaebgGIFze/iw=;
+        b=AebNH7615Thz+oJ1pR45ZKn6uX2PF0ny8OZNh+pQXessZH95QG4HnE7En6gGqBykpa
+         W3Of9b5NJv5S8X4y1bTmZqqC/voPzQ7fkphDnNXCZU8eIfg76B3x0un/tNMVYSMblZ53
+         h1dLR8WsapVxOa+Xjgr+g/4xRm2xDKwyrt72LBfq2FDrniYqSRIW+a1IFRVH8C/DIDFT
+         twmw2FoICLgvs/HFFBSOdDcQ5+5VjMzlqbpl009bjIy65i2jZtLP92hx/TXJM1zNwYEg
+         lVhu8WKtYP/2kyKNWRtFcF4nloZtygyL3M3c1QQYHLYRWh8MiuG5IesiKQT3xIXFMoCy
+         UDVA==
+X-Gm-Message-State: ANoB5pm4eZcVT+4aBaaYn+KK/EfVu32pyg3nqw8vRZcOCyEqMgTi3mDj
+        R/iKDSt2ykbiDSBHp0YdwBTvoQ==
+X-Google-Smtp-Source: AA0mqf44/kkeK0V0oc13RssATRClhel9qXC+DIGZQH54zeTqWE2SQb+jAqqo0TXGnbctF7gCMR2Q1A==
+X-Received: by 2002:a05:6512:b91:b0:4a4:68b8:c2e4 with SMTP id b17-20020a0565120b9100b004a468b8c2e4mr11455248lfv.59.1671108781282;
+        Thu, 15 Dec 2022 04:53:01 -0800 (PST)
+Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id p8-20020ac24ec8000000b004b4e4671212sm1147174lfr.232.2022.12.15.04.52.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 04:53:00 -0800 (PST)
+Message-ID: <504dcfd0-2b37-922f-9638-6255741a3060@linaro.org>
+Date:   Thu, 15 Dec 2022 13:52:58 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 2/7] arm64: dts: qcom: sc8280xp: rename qup2_i2c5 to
+ i2c21
+Content-Language: en-US
+To:     Brian Masney <bmasney@redhat.com>, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     quic_shazhuss@quicinc.com, robh+dt@kernel.org,
+        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ahalaney@redhat.com, echanude@redhat.com
+References: <20221214171145.2913557-1-bmasney@redhat.com>
+ <20221214171145.2913557-3-bmasney@redhat.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221214171145.2913557-3-bmasney@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a document about what specification features are supported by
-the Linux NVMe driver, and what qualifies for a quirk if an implementation
-has problems following the specification.
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Keith Busch <kbusch@kernel.org>
-Signed-off-by: Sagi Grimberg <sagi@grimberg.me>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- Documentation/process/index.rst               |  1 +
- .../process/nvme-feature-and-quirk-policy.rst | 77 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 3 files changed, 79 insertions(+)
- create mode 100644 Documentation/process/nvme-feature-and-quirk-policy.rst
 
-diff --git a/Documentation/process/index.rst b/Documentation/process/index.rst
-index d4b6217472b0a0..0dc33994ddefc5 100644
---- a/Documentation/process/index.rst
-+++ b/Documentation/process/index.rst
-@@ -50,6 +50,7 @@ Other guides to the community that are of interest to most developers are:
-    embargoed-hardware-issues
-    maintainers
-    researcher-guidelines
-+   nvme-feature-and-quirk-policy
- 
- These are some overall technical guides that have been put here for now for
- lack of a better place.
-diff --git a/Documentation/process/nvme-feature-and-quirk-policy.rst b/Documentation/process/nvme-feature-and-quirk-policy.rst
-new file mode 100644
-index 00000000000000..eee19f3d9904bd
---- /dev/null
-+++ b/Documentation/process/nvme-feature-and-quirk-policy.rst
-@@ -0,0 +1,77 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=======================================
-+Linux NVMe feature and and quirk policy
-+=======================================
-+
-+This file explains the policy used to decide what is supported by the
-+Linux NVMe driver and what is not.
-+
-+
-+Introduction
-+============
-+
-+NVM Express is an open collection of standards and information.
-+
-+The Linux NVMe host driver in drivers/nvme/host/ supports devices
-+implementing the NVM Express (NVMe) family of specifications, which
-+currently consists of a number of documents:
-+
-+ - the NVMe Base specification
-+ - various Command Set specifications (e.g. NVM Command Set)
-+ - various Transport specifications (e.g. PCIe, Fibre Channel, RDMA, TCP)
-+ - the NVMe Management Interface specification
-+
-+See https://nvmexpress.org/developers/ for the NVMe specifications.
-+
-+
-+Supported features
-+==================
-+
-+NVMe is a large suite of specifications, and contains features that are only
-+useful or suitable for specific use-cases. It is important to note that Linux
-+does not aim to implement every feature in the specification.  Every additional
-+feature implemented introduces more code, more maintenance and potentially more
-+bugs.  Hence there is an inherent tradeoff between functionality and
-+maintainability of the NVMe host driver.
-+
-+Any feature implemented in the Linux NVMe host driver must support the
-+following requirements:
-+
-+  1. The feature is specified in a release version of an official NVMe
-+     specification, or in a ratified Technical Proposal (TP) that is
-+     available on NVMe website. Or if it is not directly related to the
-+     on-wire protocol, does not contradict any of the NVMe specifications.
-+  2. Does not conflict with the Linux architecture, nor the design of the
-+     NVMe host driver.
-+  3. Has a clear, indisputable value-proposition and a wide consensus across
-+     the community.
-+
-+Vendor specific extensions are generally not supported in the NVMe host
-+driver.
-+
-+It is strongly recommended to work with the Linux NVMe and block layer
-+maintainers and get feedback on specification changes that are intended
-+to be used by the Linux NVMe host driver in order to avoid conflict at a
-+later stage.
-+
-+
-+Quirks
-+======
-+
-+Sometimes implementations of open standards fail to correctly implement parts
-+of the standards.  Linux uses identifiers based quirks to work around such
-+implementation bugs.  The intent of quirks is to deal with widely available
-+hardware, usually consumer, which Linux users can't use without these quirks.
-+Typically these implementations are not or only superficially tested with Linux
-+by the hardware manufacturer.
-+
-+The Linux NVMe maintainers decide ad hoc whether to quirk implementations
-+based on the impact of the problem to Linux users and how it impacts
-+maintainability of the driver.  In general quirks are a last resort, if no
-+firmware updates or other workarounds are available from the vendor.
-+
-+Quirks will not be added to the Linux kernel for hardware that isn't available
-+on the mass market.  Hardware that fails qualification for enterprise Linux
-+distributions, ChromeOS, Android or other consumers of the Linux kernel
-+should be fixed before it is shipped instead of rely on Linux quirk.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bb77a3ed9d5423..59e9f2dfa842ad 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14827,6 +14827,7 @@ L:	linux-nvme@lists.infradead.org
- S:	Supported
- W:	http://git.infradead.org/nvme.git
- T:	git://git.infradead.org/nvme.git
-+F:	Documentation/process/nvme-feature-and-quirk-policy.rst
- F:	drivers/nvme/host/
- F:	drivers/nvme/common/
- F:	include/linux/nvme*
--- 
-2.35.1
+On 14.12.2022 18:11, Brian Masney wrote:
+> In preparation for adding the missing SPI and I2C nodes to
+> sc8280xp.dtsi, it was decided to rename all of the existing qupX_
+> uart, spi, and i2c nodes to drop the qupX_ prefix. Let's go ahead
+> and rename qup2_i2c5 to i2c21. Under the old name, this was the 5th
+> index under qup2, which starts at index 16. Note that some nodes are
+> moved in the file by this patch to preserve the expected sort order in
+> the file.
+> 
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
+> Link: https://lore.kernel.org/lkml/20221212182314.1902632-1-bmasney@redhat.com/
+> ---
+> This is a new patch that's introduced in v2.
+> 
+>  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts     |  90 ++++++-------
+>  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 120 +++++++++---------
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |   2 +-
+>  3 files changed, 106 insertions(+), 106 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> index db273face248..0de1bdb68e2c 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> @@ -228,6 +228,43 @@ vreg_l9d: ldo9 {
+>  	};
+>  };
+>  
+> +&i2c21 {
+> +	clock-frequency = <400000>;
+> +
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&i2c21_default>;
+> +
+> +	status = "okay";
+> +
+> +	touchpad@15 {
+> +		compatible = "hid-over-i2c";
+> +		reg = <0x15>;
+> +
+> +		hid-descr-addr = <0x1>;
+> +		interrupts-extended = <&tlmm 182 IRQ_TYPE_LEVEL_LOW>;
+> +		vdd-supply = <&vreg_misc_3p3>;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&tpad_default>;
+> +
+> +		wakeup-source;
+> +	};
+> +
+> +	keyboard@68 {
+> +		compatible = "hid-over-i2c";
+> +		reg = <0x68>;
+> +
+> +		hid-descr-addr = <0x1>;
+> +		interrupts-extended = <&tlmm 104 IRQ_TYPE_LEVEL_LOW>;
+> +		vdd-supply = <&vreg_misc_3p3>;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&kybd_default>;
+> +
+> +		wakeup-source;
+> +	};
+> +};
+> +
+>  &pcie2a {
+>  	perst-gpios = <&tlmm 143 GPIO_ACTIVE_LOW>;
+>  	wake-gpios = <&tlmm 145 GPIO_ACTIVE_LOW>;
+> @@ -326,43 +363,6 @@ &qup2 {
+>  	status = "okay";
+>  };
+>  
+> -&qup2_i2c5 {
+> -	clock-frequency = <400000>;
+> -
+> -	pinctrl-names = "default";
+> -	pinctrl-0 = <&qup2_i2c5_default>;
+> -
+> -	status = "okay";
+> -
+> -	touchpad@15 {
+> -		compatible = "hid-over-i2c";
+> -		reg = <0x15>;
+> -
+> -		hid-descr-addr = <0x1>;
+> -		interrupts-extended = <&tlmm 182 IRQ_TYPE_LEVEL_LOW>;
+> -		vdd-supply = <&vreg_misc_3p3>;
+> -
+> -		pinctrl-names = "default";
+> -		pinctrl-0 = <&tpad_default>;
+> -
+> -		wakeup-source;
+> -	};
+> -
+> -	keyboard@68 {
+> -		compatible = "hid-over-i2c";
+> -		reg = <0x68>;
+> -
+> -		hid-descr-addr = <0x1>;
+> -		interrupts-extended = <&tlmm 104 IRQ_TYPE_LEVEL_LOW>;
+> -		vdd-supply = <&vreg_misc_3p3>;
+> -
+> -		pinctrl-names = "default";
+> -		pinctrl-0 = <&kybd_default>;
+> -
+> -		wakeup-source;
+> -	};
+> -};
+> -
+>  &remoteproc_adsp {
+>  	firmware-name = "qcom/sc8280xp/qcadsp8280.mbn";
+>  
+> @@ -494,6 +494,14 @@ hastings_reg_en: hastings-reg-en-state {
+>  &tlmm {
+>  	gpio-reserved-ranges = <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
+>  
+> +	i2c21_default: i2c21-default-state {
+> +		pins = "gpio81", "gpio82";
+> +		function = "qup21";
+> +
+> +		bias-disable;
+> +		drive-strength = <16>;
+This is rather nitty, but other DTs usually do
 
+pins
+function
+drive-strength
+bias-
+in/output-
+
+
+I see this patch just moves things around, but if you were to
+send a v(n+1), please consider shuffling these properties
+around.
+
+Regardless of that:
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+> +	};
+> +
+>  	kybd_default: kybd-default-state {
+>  		disable-pins {
+>  			pins = "gpio102";
+> @@ -598,14 +606,6 @@ qup0_i2c4_default: qup0-i2c4-default-state {
+>  		drive-strength = <16>;
+>  	};
+>  
+> -	qup2_i2c5_default: qup2-i2c5-default-state {
+> -		pins = "gpio81", "gpio82";
+> -		function = "qup21";
+> -
+> -		bias-disable;
+> -		drive-strength = <16>;
+> -	};
+> -
+>  	tpad_default: tpad-default-state {
+>  		int-n-pins {
+>  			pins = "gpio182";
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> index 568c6be1ceaa..d7af2040cbcb 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> @@ -282,6 +282,59 @@ vreg_l9d: ldo9 {
+>  	};
+>  };
+>  
+> +&i2c21 {
+> +	clock-frequency = <400000>;
+> +
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&i2c21_default>;
+> +
+> +	status = "okay";
+> +
+> +	touchpad@15 {
+> +		compatible = "hid-over-i2c";
+> +		reg = <0x15>;
+> +
+> +		hid-descr-addr = <0x1>;
+> +		interrupts-extended = <&tlmm 182 IRQ_TYPE_LEVEL_LOW>;
+> +		vdd-supply = <&vreg_misc_3p3>;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&tpad_default>;
+> +
+> +		wakeup-source;
+> +
+> +		status = "disabled";
+> +	};
+> +
+> +	touchpad@2c {
+> +		compatible = "hid-over-i2c";
+> +		reg = <0x2c>;
+> +
+> +		hid-descr-addr = <0x20>;
+> +		interrupts-extended = <&tlmm 182 IRQ_TYPE_LEVEL_LOW>;
+> +		vdd-supply = <&vreg_misc_3p3>;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&tpad_default>;
+> +
+> +		wakeup-source;
+> +	};
+> +
+> +	keyboard@68 {
+> +		compatible = "hid-over-i2c";
+> +		reg = <0x68>;
+> +
+> +		hid-descr-addr = <0x1>;
+> +		interrupts-extended = <&tlmm 104 IRQ_TYPE_LEVEL_LOW>;
+> +		vdd-supply = <&vreg_misc_3p3>;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&kybd_default>;
+> +
+> +		wakeup-source;
+> +	};
+> +};
+> +
+>  &pcie2a {
+>  	perst-gpios = <&tlmm 143 GPIO_ACTIVE_LOW>;
+>  	wake-gpios = <&tlmm 145 GPIO_ACTIVE_LOW>;
+> @@ -531,59 +584,6 @@ &qup2 {
+>  	status = "okay";
+>  };
+>  
+> -&qup2_i2c5 {
+> -	clock-frequency = <400000>;
+> -
+> -	pinctrl-names = "default";
+> -	pinctrl-0 = <&qup2_i2c5_default>;
+> -
+> -	status = "okay";
+> -
+> -	touchpad@15 {
+> -		compatible = "hid-over-i2c";
+> -		reg = <0x15>;
+> -
+> -		hid-descr-addr = <0x1>;
+> -		interrupts-extended = <&tlmm 182 IRQ_TYPE_LEVEL_LOW>;
+> -		vdd-supply = <&vreg_misc_3p3>;
+> -
+> -		pinctrl-names = "default";
+> -		pinctrl-0 = <&tpad_default>;
+> -
+> -		wakeup-source;
+> -
+> -		status = "disabled";
+> -	};
+> -
+> -	touchpad@2c {
+> -		compatible = "hid-over-i2c";
+> -		reg = <0x2c>;
+> -
+> -		hid-descr-addr = <0x20>;
+> -		interrupts-extended = <&tlmm 182 IRQ_TYPE_LEVEL_LOW>;
+> -		vdd-supply = <&vreg_misc_3p3>;
+> -
+> -		pinctrl-names = "default";
+> -		pinctrl-0 = <&tpad_default>;
+> -
+> -		wakeup-source;
+> -	};
+> -
+> -	keyboard@68 {
+> -		compatible = "hid-over-i2c";
+> -		reg = <0x68>;
+> -
+> -		hid-descr-addr = <0x1>;
+> -		interrupts-extended = <&tlmm 104 IRQ_TYPE_LEVEL_LOW>;
+> -		vdd-supply = <&vreg_misc_3p3>;
+> -
+> -		pinctrl-names = "default";
+> -		pinctrl-0 = <&kybd_default>;
+> -
+> -		wakeup-source;
+> -	};
+> -};
+> -
+>  &remoteproc_adsp {
+>  	firmware-name = "qcom/sc8280xp/LENOVO/21BX/qcadsp8280.mbn";
+>  
+> @@ -698,6 +698,13 @@ hall_int_n_default: hall-int-n-state {
+>  		bias-disable;
+>  	};
+>  
+> +	i2c21_default: i2c21-default-state {
+> +		pins = "gpio81", "gpio82";
+> +		function = "qup21";
+> +		bias-disable;
+> +		drive-strength = <16>;
+> +	};
+> +
+>  	kybd_default: kybd-default-state {
+>  		disable-pins {
+>  			pins = "gpio102";
+> @@ -801,13 +808,6 @@ qup0_i2c4_default: qup0-i2c4-default-state {
+>  		drive-strength = <16>;
+>  	};
+>  
+> -	qup2_i2c5_default: qup2-i2c5-default-state {
+> -		pins = "gpio81", "gpio82";
+> -		function = "qup21";
+> -		bias-disable;
+> -		drive-strength = <16>;
+> -	};
+> -
+>  	tpad_default: tpad-default-state {
+>  		int-n-pins {
+>  			pins = "gpio182";
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 951cb1b6fcc4..929365cff555 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -827,7 +827,7 @@ uart17: serial@884000 {
+>  				status = "disabled";
+>  			};
+>  
+> -			qup2_i2c5: i2c@894000 {
+> +			i2c21: i2c@894000 {
+>  				compatible = "qcom,geni-i2c";
+>  				reg = <0 0x00894000 0 0x4000>;
+>  				clock-names = "se";
