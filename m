@@ -2,50 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DFCE64D867
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:18:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 178B164D870
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:20:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbiLOJSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 04:18:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
+        id S229910AbiLOJUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 04:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiLOJSE (ORCPT
+        with ESMTP id S229785AbiLOJUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 04:18:04 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2754732C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:18:02 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1p5kNA-0007jH-PM; Thu, 15 Dec 2022 10:17:48 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1p5kN9-0001pe-Jb; Thu, 15 Dec 2022 10:17:47 +0100
-Date:   Thu, 15 Dec 2022 10:17:47 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rouven Czerwinski <r.czerwinski@pengutronix.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, kernel@pengutronix.de,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] ASoC: max98088: fix initial dai mute state
-Message-ID: <20221215091747.xn3f7ecrwoc7ssyo@pengutronix.de>
-References: <20221213095328.122309-1-r.czerwinski@pengutronix.de>
- <20221213095328.122309-2-r.czerwinski@pengutronix.de>
- <Y5hpqWH2WuSIUHil@sirena.org.uk>
+        Thu, 15 Dec 2022 04:20:12 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007733F04A
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:20:10 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so2080626pjj.4
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:20:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shopee.com; s=shopee.com;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Wu5pKKt/tYg5j4ptIlawG89Bmd9AY8kHRaAGqPqkAs=;
+        b=QFKuTxlmPSvSiGvceKI4jRcxQaPyAjRxEIe0jeAsm9mJMiBq4DitPskSJWUUIb4B3w
+         Smq+oC/Sz4TApQ7i4RMCOwudRKNzT/ErbL+9E8ebSRVa9h1nO25UAc4SIBSSFhssMpa1
+         Dun3NPFKzDk4ylkMUEPnMux4UJCxWM3rpzY8klpS57EKwJG15KH41hXr96Ojped9mj9S
+         IKt3vhb7yUx46syZ8OB4D6Eiz7vxQvN2kF5HpaamIlywYdVBGiW234HXFT9RGq8DYvaS
+         T8pIp7dw91J9GUx1aHr67DFfP+V6xKoqmakiltZ33fGFh6NaYmwwQ7At/x8CXsL3RXe4
+         w9KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0Wu5pKKt/tYg5j4ptIlawG89Bmd9AY8kHRaAGqPqkAs=;
+        b=AiX7QgBwvgyqkeuRe7JobAbSG29Iy/NJBx6BET1KFydjkRfbH8NUCVGRjVo1cMXg0Z
+         H54zGqrQLfQ6sM9Wt2eILsQRC0B4XQSUC48gCflnFR/5p4oRpulJN4dBXnRDcFuWNaUb
+         GBecNrCZtr0ITJ2q1/rVsY2/uH8yVpw1Vb9mcA1Wj87SMbhOABOjPYCNXwIQzmUcBcA6
+         x8fiRRcgugQ25QAfawamADiOzl5OZbxFV0UASxGOv9IxWPzan0sCzhaFSYrBn0DU6IXQ
+         cZAQXvYadLJ7rSME/sKkm8Bpvi9V+pBu7FwMdtWJBrfHPMHHcSMDKiC831WoJ25Wn/G2
+         MEHQ==
+X-Gm-Message-State: ANoB5plJ8Ya0DP6MvyvL6eAdeT1jThRruhj/jNKbkks3pqQ2mu2CWd2a
+        4vnAs3jWZhgIWBZYDvuomjezvA==
+X-Google-Smtp-Source: AA0mqf70RQs4sQ5MceUFw8rJq3Pan6mecsXIuJiWTtzNDL4Zj6BVMoEbSzC2IGLD52G5Dj5oAUME7Q==
+X-Received: by 2002:a17:903:4283:b0:189:7100:c50e with SMTP id ju3-20020a170903428300b001897100c50emr29499311plb.48.1671096010440;
+        Thu, 15 Dec 2022 01:20:10 -0800 (PST)
+Received: from ubuntu-haifeng.default.svc.cluster.local ([101.127.248.173])
+        by smtp.gmail.com with ESMTPSA id n15-20020a170903110f00b00188f8badbcdsm3302643plh.137.2022.12.15.01.20.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 01:20:10 -0800 (PST)
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+To:     akpm@linux-foundation.org
+Cc:     shakeelb@google.com, roman.gushchin@linux.dev,
+        songmuchun@bytedance.com, hannes@cmpxchg.org, vbabka@suse.cz,
+        willy@infradead.org, vasily.averin@linux.dev,
+        linux-kernel@vger.kernel.org, Haifeng Xu <haifeng.xu@shopee.com>
+Subject: [PATCH] mm/memcontrol: Skip root memcg in memcg_memory_event_mm
+Date:   Thu, 15 Dec 2022 09:19:07 +0000
+Message-Id: <20221215091907.763801-1-haifeng.xu@shopee.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5hpqWH2WuSIUHil@sirena.org.uk>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,32 +70,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+The memory events aren't supported on root cgroup, so there is no need
+to account MEMCG_OOM_KILL on root memcg.
 
-On 22-12-13, Mark Brown wrote:
-> On Tue, Dec 13, 2022 at 10:53:28AM +0100, Rouven Czerwinski wrote:
-> 
-> > To fix that we need to explicit set the mute state. Now the first
-> > playback request gets played correctly.
-> 
-> > +++ b/sound/soc/codecs/max98088.c
-> > @@ -1710,6 +1710,11 @@ static int max98088_probe(struct snd_soc_component *component)
-> >         snd_soc_component_write(component, M98088_REG_1E_DAI2_IOCFG,
-> >                 M98088_S2NORMAL|M98088_SDATA);
-> >  
-> > +       snd_soc_component_update_bits(component, M98088_REG_2F_LVL_DAI1_PLAY,
-> > +               M98088_DAI_MUTE_MASK, M98088_DAI_MUTE);
-> > +       snd_soc_component_update_bits(component, M98088_REG_31_LVL_DAI2_PLAY,
-> > +               M98088_DAI_MUTE_MASK, M98088_DAI_MUTE);
-> > +
-> 
-> Won't this be broken again after suspend?  The device gets powered off
-> over suspend, then when it powers on again with the output unmuted
-> nothing will do another write since the register is already in the state
-> in the cache.
+Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+---
+ include/linux/memcontrol.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I didn't found any suspend logic within the driver. Is this handled
-within the ASoC core?
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 567f12323f55..09f75161a3bc 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -1142,7 +1142,7 @@ static inline void memcg_memory_event_mm(struct mm_struct *mm,
+ 
+ 	rcu_read_lock();
+ 	memcg = mem_cgroup_from_task(rcu_dereference(mm->owner));
+-	if (likely(memcg))
++	if (likely(memcg && !mem_cgroup_is_root(memcg)))
+ 		memcg_memory_event(memcg, event);
+ 	rcu_read_unlock();
+ }
+-- 
+2.25.1
 
-Regards,
-  Marco
