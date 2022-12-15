@@ -2,112 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E0764E1EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6A464E1EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiLOTo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 14:44:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
+        id S230170AbiLOTpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 14:45:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiLOToX (ORCPT
+        with ESMTP id S229448AbiLOTpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 14:44:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA6E511CB;
-        Thu, 15 Dec 2022 11:44:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E86EB81B9E;
-        Thu, 15 Dec 2022 19:44:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94038C433D2;
-        Thu, 15 Dec 2022 19:44:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671133459;
-        bh=DN7Ky2ByqlL7lH1aNikrWtAHE0Y0hbmJhJ4JoipwVeY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IQZG5r+wv+dyf0U9C9ex8PfNrturX/5mj2Jomp3qebm3sVEqhXfnuz0usqieo9HxW
-         3mb1TvROeRiBdkS+K2j47ah46Ax54/TIqDLWWQ7xkDMNNL0YsZeu7Iq0CY9pXYgXR0
-         shDI/TpSoYNaSf8iYlRsNfvJR6pfo4OHxtsVp7WAeylSRWSzBNuAuO/NylUxPPj9iU
-         jjWz9AD6TPKuGJckyLieRSs03RKsHQQr7NTwRDu1qthJsG5wfWC3sIdMz8r3Gy+bS4
-         1xf8rM9eYz2uG9Z3upaxhzLeIT1zoQoSoS/dNKjzlltwabteTj4M+y+PSgQXt9Crvh
-         WLFRYrGscF1Xw==
-Date:   Thu, 15 Dec 2022 19:44:14 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: errata: refer to config ARM64_ERRATUM_2645198 to
- make workaround work
-Message-ID: <20221215194413.GA8094@willie-the-truck>
-References: <20221215094811.23188-1-lukas.bulwahn@gmail.com>
- <20221215105745.GA7711@willie-the-truck>
- <b6f61241-e436-5db1-1053-3b441080b8d6@arm.com>
+        Thu, 15 Dec 2022 14:45:22 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244EC511CE;
+        Thu, 15 Dec 2022 11:45:21 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso201661pjh.1;
+        Thu, 15 Dec 2022 11:45:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Uan2hxIVFGpaAzm8yWbumiX1BUKNnPwbkIQk8xgSHc=;
+        b=pdb9LqgSsAQzWo52jBrj63MNfYkepe8sHph27S2SslJhMQ8lvQZKzcyVS9xiV2gf/U
+         jm8OySNgQl9WvqwQ3cdPy8/6spDqJepo/ao52QorB//Bg13KqJ/AJeWwAgSFsixNbfTg
+         QpHXuyGE/bX5oyFCzAUdvXaRH6k8tRZg2vQ2rR6JAN3E7aq8DInMRvamV2p36x8YXgbu
+         Mp1Jm2fRb0fELyjQxR0BsZN7M62hM+Z1FwiJlOvwPf+K7o00/MsnByVLONiPazmWfeYy
+         oB8Hr5si/4SKvckN3rZvCcxpTdQdFNgBxklIAMwSQ4sJUsMVgQk0hmj8cdC6u8Pp/uY5
+         NhIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0Uan2hxIVFGpaAzm8yWbumiX1BUKNnPwbkIQk8xgSHc=;
+        b=hAqsuwhvovW/6RUD2n76ffu+9IXbQx+/kDjBDGWs3DMKndFxqbbUvJwUaEPgu7TQMT
+         DDEya7xoI0GtbcpM67JTj0iyUYhim9Zyb3UgJXkWVECprPiZkJUh+0N61Xpbsnb9PXZY
+         Cwgen8QLCOMGIJC8OQ+Mjvd84fjjom247tLeJ4jikP51WtTmw2tWUSQDbDaQzMi+GuKU
+         sWD5DNOp9nTUA9+hn30j5uXcURWgwnc1CF7Vnx0FQ02GS8vfnAEGzdbhR2LUiFtrWniX
+         YTv+p1g+np1rvmg7z2mnOF+c+iYE4Nn2nWRWk/VbPiAO00nXF6/cndw8q1LGSRXUE1Mf
+         uVog==
+X-Gm-Message-State: AFqh2kqoIEGv1nRq/71aSV/t/c6dSLMzyMXulkKPotr1dLJPloLN+eqg
+        ukEJ8vIorw4YrE7xn6FzmD0=
+X-Google-Smtp-Source: AMrXdXs19x+y1Qgsw1lVqFiIU71in7HC7bDE66JgLhNoJZyUDKgQyg86pb0+Z7GeBl/Q+DgvSX/mcA==
+X-Received: by 2002:a17:902:ef89:b0:190:dcdd:edcb with SMTP id iz9-20020a170902ef8900b00190dcddedcbmr9572364plb.56.1671133520369;
+        Thu, 15 Dec 2022 11:45:20 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id a4-20020a170902ecc400b001895d871c95sm35992plh.70.2022.12.15.11.45.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 11:45:19 -0800 (PST)
+Date:   Thu, 15 Dec 2022 11:45:18 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        zhi.a.wang@intel.com
+Subject: Re: [PATCH v10 011/108] KVM: TDX: Add C wrapper functions for
+ SEAMCALLs to the TDX module
+Message-ID: <20221215194518.GD3632095@ls.amr.corp.intel.com>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+ <5f1a80e9ab037fa88d8821a6548638d282070f1d.1667110240.git.isaku.yamahata@intel.com>
+ <20221123120047.00001a9d@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <b6f61241-e436-5db1-1053-3b441080b8d6@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221123120047.00001a9d@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 04:59:20PM +0530, Anshuman Khandual wrote:
-> On 12/15/22 16:27, Will Deacon wrote:
-> > On Thu, Dec 15, 2022 at 10:48:11AM +0100, Lukas Bulwahn wrote:
-> >> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-> >> index cd8d96e1fa1a..95364e8bdc19 100644
-> >> --- a/arch/arm64/mm/hugetlbpage.c
-> >> +++ b/arch/arm64/mm/hugetlbpage.c
-> >> @@ -562,7 +562,7 @@ bool __init arch_hugetlb_valid_size(unsigned long size)
-> >>  
-> >>  pte_t huge_ptep_modify_prot_start(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep)
-> >>  {
-> >> -	if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198) &&
-> >> +	if (IS_ENABLED(CONFIG_ARM64_ERRATUM_2645198) &&
-> >>  	    cpus_have_const_cap(ARM64_WORKAROUND_2645198)) {
-> >>  		/*
-> >>  		 * Break-before-make (BBM) is required for all user space mappings
-> >> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> >> index 12915f379c22..d77c9f56b7b4 100644
-> >> --- a/arch/arm64/mm/mmu.c
-> >> +++ b/arch/arm64/mm/mmu.c
-> >> @@ -1633,7 +1633,7 @@ early_initcall(prevent_bootmem_remove_init);
-> >>  
-> >>  pte_t ptep_modify_prot_start(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep)
-> >>  {
-> >> -	if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198) &&
-> >> +	if (IS_ENABLED(CONFIG_ARM64_ERRATUM_2645198) &&
-> >>  	    cpus_have_const_cap(ARM64_WORKAROUND_2645198)) {
-> >>  		/*
-> >>  		 * Break-before-make (BBM) is required for all user space mappings
-> > 
-> > Grr, this bug seems to exist in all three versions of the patch reviewed on
-> > the list, so I can only draw the conclusion that this code has never been
+On Wed, Nov 23, 2022 at 12:00:47PM +0200,
+Zhi Wang <zhi.wang.linux@gmail.com> wrote:
+
+> On Sat, 29 Oct 2022 23:22:12 -0700
+> isaku.yamahata@intel.com wrote:
 > 
-> Ohh, my bad, apologies. I did not have a real system with this erratum, although
-> had emulated and tested this workaround path via some other debug changes (which
-> might have just forced the first condition to always evaluate true).
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > 
+> > A VMM interacts with the TDX module using a new instruction
+> > (SEAMCALL).  A TDX VMM uses SEAMCALLs where a VMX VMM would have
+> > directly interacted with VMX instructions.  For instance, a TDX VMM
+> > does not have full access to the VM control structure corresponding
+> > to VMX VMCS.  Instead, a VMM induces the TDX module to act on behalf
+> > via SEAMCALLs.
+> > 
+> > Export __seamcall and define C wrapper functions for SEAMCALLs for
+> > readability.  Some SEAMCALL APIs donates pages to TDX module or guest
+> > TD. The pages are encrypted with TDX private host key id set in high
+> 
+> It seems a little bit confusing here.
+> 
+> I guess you are talking about the host pages donated to TDX module will
+> be encrypted with TDX module global key id, which is used to
+> encrypted the pages only used by TDX module. For pages donated to the
+> TD guest, the pages are encrypted with TD guest prviate key id?
 
-"might have"?
+Basically yes. Only TDR is encrypted with the global key id.
 
-> > tested. Consequently, I'm more inclined to _revert_ the change for now and
-> > we can bring it back as a fix once somebody has checked that it actually
-> > works properly.
-> Please do not revert this change if possible.
 
-I've gone ahead with the revert anyway, just because it's the easy thing to
-do and we can bring back a fixed version of the patch as a fix in the new
-year. So please send a new version with this fix folded in after you've
-tested that it doesn't cause regressions for systems without the erratum.
+> It might be better that you can talk about the actual reaason instead of
+> the key id stuff. For example Some SEMCALL APIs will zap or write the
+> pages donated by VMM via MOVDIR64B, which requires the VMM to flush the
+> cachelines.
 
-Cheers,
+How about the followings?
 
-Will
+Some SEAMCALL APIs donates host pages to TDX module or guest TD and the
+donated pages are encrypted.  Some of such SEAMCALLs flush cache lines
+(typically by movdir64b instruction), some don't.  Those that doesn't
+clear cache lines require the VMM to flush the cache lines to avoid cache
+line alias.
+
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
