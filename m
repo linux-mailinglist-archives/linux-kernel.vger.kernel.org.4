@@ -2,356 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EE764DAD3
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 13:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A0364DAD6
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 13:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiLOMFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 07:05:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
+        id S229869AbiLOMGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 07:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiLOMFB (ORCPT
+        with ESMTP id S229551AbiLOMGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 07:05:01 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE855263A
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 04:04:57 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxaepoDZtjgNEFAA--.9961S3;
-        Thu, 15 Dec 2022 20:04:56 +0800 (CST)
-Received: from [10.130.0.63] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxb+RmDZtjs3UAAA--.1958S3;
-        Thu, 15 Dec 2022 20:04:55 +0800 (CST)
-Subject: Re: [PATCH 6/6] LoongArch: Add generic ex-handler unwind in prologue
- unwinder
-To:     Jinyang He <hejinyang@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-References: <20221215040141.18610-1-hejinyang@loongson.cn>
- <20221215040141.18610-7-hejinyang@loongson.cn>
-From:   Qing Zhang <zhangqing@loongson.cn>
-Message-ID: <2aa963e1-e202-73b8-725f-3ca207d622a7@loongson.cn>
-Date:   Thu, 15 Dec 2022 20:04:54 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 15 Dec 2022 07:06:41 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2087.outbound.protection.outlook.com [40.107.95.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4925A29C8A;
+        Thu, 15 Dec 2022 04:06:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LcYVbhzcqYx8uKpHH+4TFRrDBF6HZL2VWgt/x9KYq0cp/60em/UV4+yZZ6FBq97vfHM6SI+5TKkAPkmjBpD/EGnjYAq0H64PE4DLRZaxQNHNCfnUHYAtnbnkqVH/wDJEE7Q9dvb4C+JrP7CfA/X3yNoU3tAsiwC1W+AecylApAzE6H3m5NWaN8b0kP6NowW4cvXYUddzEQfm2NmoS2UpfwiRTrIM1MouX9BjpepC3A/Ngx728bQpcVwBFu+q4i8yM4pujxpZfWsTRDTJU0QMotrkc7HvdBgvN9u1tA0KsbHmiyZewn4AWreUcE9g7KTEz3+X3tdTylSEJMfuWN5vvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KlyU+ni7aLodMJcACHGf+aAo5A+Hup9VNHTj7aA13og=;
+ b=dGZgKsBeykx06V4RafP/5exNlgvRuufdZY6zdJrIZcUJAd7SBnyzNoGUbgd96yvVm3BoVMtttPWbzWaeJL/XE6npa8ySDnwGtitJ1JZRkKcQpklT6Dp++BjPYW8phcztPtORgw//K7WBwDUIBDjlPs0gWMRtNvGAjbRpjrePreqT9Cd93MBtJMC+DKcZtOwas+X8t0INHEoEC4Mf7KbDMn+AzajdX8ddxAGoAS8yWeURdWRo+Y3dt/IgEc9VnroGQBmIGXY7AfUJjKye65mcOOPyk8CMmCiMF7czOlu9SZOawShSF8dNKjgDljwz0v2+MLEOY24O4uzuul+t8lAF7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KlyU+ni7aLodMJcACHGf+aAo5A+Hup9VNHTj7aA13og=;
+ b=f/tpyfOSl20RpfeFxzj6AMOBq1znQFQ0WoSbaWBp01mW7zgAC8VlbUYHJfl+aKA1FEvRm3jCqmjrbZwBQ9pqQQGcF22A3pJMetYw3NVu15cKQ00AwbJF/eMkDXRuuean8C/2em4VTCyCTItviz5lT2GUqdNbjuhMIsnmqk6TsBj04WsbgTZ5WOdgY8JVy6FBeu5A1M817BqBLtPs7DosVij06KINYQ6ocEkfRgnQhC5SGDnjXJYPTSp6XdE5CcKdcvfol4VWyQPwn9fkFRWcGkFV1tzsy3JM+S6upRt3S9Q5M2LRmb4ZN6V/8uu59nCX11vJXCjn2Z4jfRTS3difMA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM8PR12MB5413.namprd12.prod.outlook.com (2603:10b6:8:3b::8) by
+ MN2PR12MB4533.namprd12.prod.outlook.com (2603:10b6:208:266::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.11; Thu, 15 Dec
+ 2022 12:06:38 +0000
+Received: from DM8PR12MB5413.namprd12.prod.outlook.com
+ ([fe80::f76a:b86b:c6a:b4c0]) by DM8PR12MB5413.namprd12.prod.outlook.com
+ ([fe80::f76a:b86b:c6a:b4c0%8]) with mapi id 15.20.5880.021; Thu, 15 Dec 2022
+ 12:06:38 +0000
+Date:   Thu, 15 Dec 2022 13:06:29 +0100
+From:   Thierry Reding <treding@nvidia.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Rob Herring <robh@kernel.org>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the pci tree with the arm-soc tree
+Message-ID: <Y5sNxY1ibaSK5lND@orome>
+References: <20221213195313.GA200257@bhelgaas>
+ <20221213200733.GA201693@bhelgaas>
+ <20221213233649.zmmiskezdponleuc@mobilestation>
+ <Y5nfr+AXofk9Ch2m@orome>
+ <20221214220735.5fv6agbkwamvfmbv@mobilestation>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="LSp9OVivsvvQ9GYN"
+Content-Disposition: inline
+In-Reply-To: <20221214220735.5fv6agbkwamvfmbv@mobilestation>
+X-NVConfidentiality: public
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-ClientProxiedBy: FR2P281CA0002.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a::12) To DM8PR12MB5413.namprd12.prod.outlook.com
+ (2603:10b6:8:3b::8)
 MIME-Version: 1.0
-In-Reply-To: <20221215040141.18610-7-hejinyang@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bxb+RmDZtjs3UAAA--.1958S3
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3ZF1fWF4fKF1DZr4furyDJrb_yoWDuF4rpF
-        90yrs5Gr48Kryqvr47JF1UZrn8Z3ZruF47AayDKryUAFn2qr13Xr1vy34q9r1DCrWUWFyI
-        qFnxJrnIka17t3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42
-        xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
-        GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI4
-        8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4U
-        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I
-        8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcrWFUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM8PR12MB5413:EE_|MN2PR12MB4533:EE_
+X-MS-Office365-Filtering-Correlation-Id: ba7f00b3-2586-4aab-b57d-08dade94d0d4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CgOQQ6rt7013mCyQXcVp2hwE1uj5IAfTExTfwQOPGM9INcsulOFHdTnfRTdkOf4DM3Px1vFQVgN56M5dFIcLThvX3dgMw9Mn+1gKiAIOKnnuYoaXu7EhwR233P/6Tp8ca3XCIVME2iQX1fMUj98tgHUhZrAaBZ98vUOuz2+4tTrT4BBq9JR196YY5FThuOEssHEClYdZQFRrMumHcYQe7re4jjdnoGm82FlTOgJJq/bBQKeCLCeRqQyFikqkaphgs0lpdHIEKL+Ej8dMuCcXdlfwzoH/8jAknk1bNYrlaB4i/d8oDMBW3sDeomjk0hU5IWtVB4giDYsNk+HiIYpYlD9j9jfXGwwIXVmvu2hivYr3gc1I3izqjlO1QRj9GhvuZF/dQTa33L3IgJN/MuLDrAgGvPOgtUa0ZyR1u6AHT59g6wFUqgXr6xLTb4lbAvrviUgil0mvxNMv2uwJgCx1ytZ3BkbxqM0ueW1O5nqnvgIRsDE7u3Cvl3dpM5fjDR1kvOi2mSz6Vt9zF7GPfSgwYc93njYlKT2fIOWUqIF9ZU0YH51Rp6OYsRRz3i83QgENn1kBiYki/u8RvP0e2UEzlGaFrlMGRYzE7I2vyfh5qVK6OQcZx0Ays0CA/yW2AJR+uA7rvf5zsqPgKU3zePHs7UE+fYpSNT5y7Vhbgw2smG16VTw1oz01zoSwKKCYZBtG81+HEJl4g0MlFSFtZ34fK1+BAHkgaKcLQE5S9WRFrBmrGpzNy1lEBnvTTD+y6LSkVGvkNAcsBtZSGQnOyAVwwLgHsBaY4sNQ0GDpocdkn50dd3R/AhpDKoPYwEpHDLa1
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5413.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(376002)(396003)(346002)(136003)(39860400002)(366004)(451199015)(6916009)(54906003)(21480400003)(8676002)(2906002)(41300700001)(83380400001)(4326008)(66476007)(66556008)(66946007)(5660300002)(316002)(7416002)(6486002)(66899015)(478600001)(86362001)(6666004)(8936002)(33716001)(6512007)(186003)(38100700002)(966005)(44144004)(9686003)(6506007)(2700100001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CqMTy6Jz0nyTOube9DTpoV7+/mYR4D9FA4MhGMphErbUKhcd+6L/2eTuJjmx?=
+ =?us-ascii?Q?zAsVfCC8yv/v+TcBpZ5spDmfThJGv1RItRcSK2DELvPAgs1v2mUEXVxR5aUL?=
+ =?us-ascii?Q?FqR4sqsPi/Xi+3SaYZqJIhOrVZtCaRATJwv0qhKWMeFOtvC+kaIL2ACt9Nvg?=
+ =?us-ascii?Q?v02w5lBq9mOJYeDrMFkHm9gJJZiZBxYYQekHOTd2dAFaxU9EJJnQNiExzzUO?=
+ =?us-ascii?Q?h66MgnJD1q8pFlXyHFznoHPS1AJxTNVbi+gerU4Rj9wGmzutIZt71CB5jhka?=
+ =?us-ascii?Q?Zh30mamVV9/7p858QQhSqLO0wZ5+luZXM80vb3awpYmByD3g4djIkWu17GC+?=
+ =?us-ascii?Q?EMm/3zF564rA+lyfnbk+3cZgHqnF+MY9L1y+44UC39iZ9li3JRbEQgdTBZbq?=
+ =?us-ascii?Q?SNe1d1MZzYYdvweruZr6oHv8vATp4VynrtewZPWvaa5ia1EzKKMD4MKjz5QP?=
+ =?us-ascii?Q?KANL1+R5DxcueYtB/s17bV5PvcFNnaUGSKdP9LLHgLnrQn5Iq4CUdKewz7ne?=
+ =?us-ascii?Q?XLk73blIFTnhjBBANf6kgUtOsdQsZZDgs3Wn+i1rPcWFd0YI+Dp0dAHotViv?=
+ =?us-ascii?Q?SyLRl+Mg3D1jKm91SWNY2kean+FsNBLiDvn62Oe12H2nc0BDQZulBHYpv2Wl?=
+ =?us-ascii?Q?ONm8wkpINXfeY5K4fqrrM7dkJND2rfU/FWLPbUWvxnpG6fQFmj234bOMFIvU?=
+ =?us-ascii?Q?IkuvyvRPqXCKT5KIssOQKxEdvf5KNDhhSu3SJRvFmyHesAbfs6q8kYcQC474?=
+ =?us-ascii?Q?sdEu2MpiN2DD+L0SUXdgJTrPWY4tuZQ5nP7utwNJVdmVoVpz+K6gWqID3yVG?=
+ =?us-ascii?Q?ufbH5dLGrn2ntHHjm5eeL/hI1+s2st0rFlYYkFS1hJGsHlAjKTNstZh40ilx?=
+ =?us-ascii?Q?ecGaIBIVjip5kCQRsJnmW2PnAR/if8PgJ9P7c8sra1IoRpOv2rY3C3Pd/bCH?=
+ =?us-ascii?Q?9lRWpAlCE7NCQwr1zw6HEKX6eMl3wEmQSXXJOd43FDCp9Eqwum2symHdxw3o?=
+ =?us-ascii?Q?lrsIXB1XuJV0Ky/6x0a0L4ARu1ytkzGwamXTsDxt58mFq2HhSAN1U0hyd9UY?=
+ =?us-ascii?Q?jvLLkCsl6E0T1TQ15h5mp3dzDjiG5qS4WcDS4Jfchwmb1RvW0wBiZj4mUu4E?=
+ =?us-ascii?Q?m9yUfO1ejJGd0oazIsZtnm8PYonAdiLchzZfb2GUyLpbpjQuAGwuD9lRd8fr?=
+ =?us-ascii?Q?Kwd6jLMOKCvyup1u39glESW1CX6sS9nOAJlJnbWACyx0rq5zTR1Fbiux+be2?=
+ =?us-ascii?Q?/WI0dDgW1SHOXph5HsP5zSezIQp3CjyZcMHQheDvCA+GOzwR88nZcl7Wofdx?=
+ =?us-ascii?Q?razP7RDB4o/v5va+7xRgKLIPds5bnftn3hWNiNHTkswjp7Fj/iKmSwBuGTne?=
+ =?us-ascii?Q?iyP9Lzo7Ww+PtsTySJZLdRkadmrmKaFGHr0EwX1ykgpK9M6tBNb21ibVymxp?=
+ =?us-ascii?Q?gDL15SYCk1hVCPu0X8e64TMYud0/v+i0r3LBYZW1Kw6Li8e3oiV1MVOaXi/0?=
+ =?us-ascii?Q?yA1n8dohzmWcQlVf3kbz8hWODD/E0oww4Lp22pGaL5GjxEkiLg8cHWDbkbej?=
+ =?us-ascii?Q?wxY7fQInyZiRST/7ZGB4EL8fOr8rYkXABtCo2hDCGANl76FhH3NxkMXHvTZr?=
+ =?us-ascii?Q?651Awu1aD/+aICusUaVhh941P6lBz11/0FfYhUsSqPew?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba7f00b3-2586-4aab-b57d-08dade94d0d4
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5413.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2022 12:06:38.0546
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5VseP1TbPkVW7ayMdlZRKHXXLljXh7xJH9eXJWQckmSu097CGACJNFwZ6c2tHqj9dJ4wabmK3HWESP1wvwSrKw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4533
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jinyang
+--LSp9OVivsvvQ9GYN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2022/12/15 下午12:01, Jinyang He wrote:
-> When exception is triggered, code flow go handle_\exception in some
-> cases. One of stackframe in this case as follows,
-> 
-> high -> +-------+
->          | REGS  |  <- a pt_regs
->          |       |
->          |       |  <- ex trigger
->          | REGS  |  <- ex pt_regs   <-+
->          |       |                    |
->          |       |                    |
-> low  -> +-------+           ->unwind-+
-> 
-> When unwinder unwind to handler_\exception it cannot go on prologue
-> analysis. It is asynchronous code flow, we should get the next frame
-> PC from regs->csr_era but not from regs->regs[1]. And we copy the
-> handler codes to eentry in the early time and copy the handler codes
-> to NUMA-relative memory named pcpu_handlers if NUMA is enabled. Thus,
-> unwinder cannot unwind normally. Therefore, try to give some hint in
-> handler_\exception and fixup it in unwind_next_frame.
-> 
-> Reported-by: Qing Zhang <zhangqing@loongson.cn>
-> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-> ---
->   arch/loongarch/include/asm/unwind.h     |   2 +-
->   arch/loongarch/kernel/genex.S           |   3 +
->   arch/loongarch/kernel/unwind_prologue.c | 100 +++++++++++++++++++++---
->   arch/loongarch/mm/tlb.c                 |   2 +-
->   4 files changed, 92 insertions(+), 15 deletions(-)
-> 
-The others look good to me, but there is still a small problem:
-When I tested hw_breakpoint.ko with prologue unwinder,
-sometimes output address [<9000000100302724>] 0x9000000100302724, eg: 
-CPU: 3 PID: 0
-But some processes are normal, eg: CPU: 0 PID: 0
+On Thu, Dec 15, 2022 at 01:07:35AM +0300, Serge Semin wrote:
+> On Wed, Dec 14, 2022 at 03:37:35PM +0100, Thierry Reding wrote:
+> > On Wed, Dec 14, 2022 at 02:36:49AM +0300, Serge Semin wrote:
+> > > On Tue, Dec 13, 2022 at 02:07:33PM -0600, Bjorn Helgaas wrote:
+> > > > On Tue, Dec 13, 2022 at 01:53:13PM -0600, Bjorn Helgaas wrote:
+> > > > > On Tue, Dec 13, 2022 at 10:03:10PM +0300, Serge Semin wrote:
+> > > > > > On Tue, Dec 13, 2022 at 05:48:53PM +0100, Thierry Reding wrote:
+> > > > > > > On Tue, Dec 13, 2022 at 10:21:03AM -0600, Bjorn Helgaas wrote:
+> > > > > > > > On Mon, Dec 05, 2022 at 09:57:38AM +1100, Stephen Rothwell =
+wrote:
+> > > > > > > > > Hi all,
+> > > > > > > > >=20
+> > > > > > > > > Today's linux-next merge of the pci tree got a conflict i=
+n:
+> > > > > > > > >=20
+> > > > > > > > >   Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+> > > > > > > > >=20
+> > > > > > > > > between commit:
+> > > > > > > > >=20
+> > > > > > > > >   5c3741492d2e ("dt-bindings: PCI: tegra234: Add ECAM sup=
+port")
+> > > > > > > > >=20
+> > > > > > > > > from the arm-soc tree and commit:
+> > > > > > > > >=20
+> > > > > > > > >   4cc13eedb892 ("dt-bindings: PCI: dwc: Add reg/reg-names=
+ common properties")
+> > > > > > > > >=20
+> > > > > > > > > from the pci tree.
+> > > > > > > > >=20
+> > > > > > > > > I didn't know how to fix this up, so I just used the latt=
+er (and so lost
+> > > > > > > > > the addition of "ecam").
+> > > > > > > >=20
+> > > > > > > > Did I miss a suggested resolution for this?
+> > > > > >=20
+> > > > > > > We had a brief discussion about this in another thread. So ba=
+sically
+> > > > > > > Stephen's resolution is fine here and the plan is to instead =
+add the
+> > > > > > > ECAM bits that the Tegra patch does in a separate patch on to=
+p of
+> > > > > > > Serge's patch. I should get around to sending that patch tomo=
+rrow.
+> > > > > >=20
+> > > > > > Actually the discussion still goes. I haven't got a respond to =
+my
+> > > > > > last suggestion which seems to me more reasonable than extendin=
+g the
+> > > > > > DT-bindings with another vendor-specific reg-name. @Bjorn, plea=
+se join
+> > > > > > the discussion here:
+> > > > > > https://lore.kernel.org/linux-pci/20221114155333.234496-2-jonat=
+hanh@nvidia.com/
+> > > > >=20
+> > >=20
+> > > > > Sorry, it's really too late for discussion.  I need to send the v=
+6.2
+> > > > > pull request today or at the very latest, tomorrow, so the only t=
+hing
+> > > > > to decide is how to resolve the merge conflict in the simplest
+> > > > > possible way.  Unless there's a very compelling reason to resolve=
+ it
+> > > > > differently than Stephen did, that's going to be the answer.
+> > >=20
+> > > Sigh... One more redundant vendor-specific name. I wish I was in the
+> > > Cc-list of the original series.
+> > >=20
+> > > >=20
+> > > > To be more specific, the current answer is this (which is the same =
+as
+> > > > what's in next-20221213):
+> > > >=20
+> > > >   https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/tree=
+/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml?id=3Df64171fdd171
+> > >=20
+> > > Thanks. I've got it from the @Stephen message. @Thierry will submit a
+> > > new patch with the same 'ecam'-names change rebased on top of the
+> > > updated DT-schema.
+> >=20
+>=20
+> > If Rob doesn't mind this being broken in linux-next for a few more days,
+> > I can discuss this internally with our PCI and UEFI teams and find out
+> > if your proposal could be made to work.
+>=20
+> That would be awesome if you managed to work with the already defined
+> 'config' reg-name so the DT-schema would look a bit cleaner. Thanks
+> in advance.
 
-[27.655549] CPU: 3 PID: 0 Comm: swapper/3 Not tainted 6.1.0-rc8 #9
-[27.655552] Hardware name: Loongson Loongson-3A5000-7A1000-1w-A2101/
-Loongson-LS3A5000-7A1000-1w-A2101,  BIOS 
-vUDK2018-LoongArch-V2.0.pre-beta8 06/15/2022
+Looks like Linus has now pulled this in and resolved the conflict
+himself. I think there is some benefit in "ecam" being more specific
+than "config" and with ECAM being a PCIe standard mapping, it doesn't
+seem like it's worth overcomplicating things by overloading the meaning
+of "config".
 
-[27.655604]...
-[27.655606] Call Trace:
-[27.655607] [<9000000000222f88>] show_stack+0x60/0x184
-[27.655613] [<90000000010e9b8c>] dump_stack_lvl+0x60/0x88
-[27.655618] [] sample_hbp_handler+0x30/0x4c [data_breakpoint]
-[27.655626] [<900000000037c8a0>] __perf_event_overflow+0x84/0x26c
-[27.655629] [<900000000038980c>] perf_bp_event+0xc0/0xc8
-[27.655633] [<900000000022e3bc>] watchpoint_handler+0x54/0x88
-[27.655637] [<90000000010ea2f8>] do_watch+0x30/0x48
-[27.655640] [<9000000100302724>] 0x9000000100302724      // Not natural
-[27.655642] [<9000000000ab4cbc>] add_interrupt_randomness+0x60/0xbc
-[27.655646] [<90000000002a0fa0>] handle_irq_event_percpu+0x28/0x70
-[27.655650] [<90000000002a6f9c>] handle_percpu_irq+0x54/0x88
-[27.655652] [<90000000002a025c>] generic_handle_domain_irq+0x28/0x40
-[27.655655] [<9000000000995458>] handle_cpu_irq+0x68/0xa4
-[27.655658] [<90000000010ea8dc>] handle_loongarch_irq+0x34/0x4c
-[27.655661] [<90000000010ea974>] do_vint+0x80/0xb4
-[27.655664] [<90000000002216a0>] __arch_cpu_idle+0x20/0x24
-[27.655667] [<90000000010f8178>] default_idle_call+0x30/0x58
-[27.655670] [<90000000002825cc>] do_idle+0xb4/0x118
-[27.655674] [<900000000028281c>] cpu_startup_entry+0x20/0x24
-[27.655677] [<900000000022b198>] start_secondary+0x9c/0xa4
-[27.655679] [<90000000010eb124>] smpboot_entry+0x60/0x64
+Thierry
 
+--LSp9OVivsvvQ9GYN
+Content-Type: application/pgp-signature; name="signature.asc"
 
-[27.658940] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.1.0-rc8 #9
-...
-[28.229978] Call Trace:
-[28.229979] [<9000000000222f88>] show_stack+0x60/0x184
-[28.237503] [<90000000010e9b8c>] dump_stack_lvl+0x60/0x88
-[28.242866] [] sample_hbp_handler+0x30/0x4c [data_breakpoint]
-[28.250132] [<900000000037c8a0>] __perf_event_overflow+0x84/0x26c
-[28.256186] [<900000000038980c>] perf_bp_event+0xc0/0xc8
-[28.261462] [<900000000022e3bc>] watchpoint_handler+0x54/0x88
-[28.267170] [<90000000010ea2f8>] do_watch+0x30/0x48
-[28.272013] [<90000000017d2724>] exception_handlers+0x2724/0x1000  //...
-[28.278155] [<9000000000ab4cbc>] add_interrupt_randomness+0x60/0xbc
-[28.284381] [<90000000002a0fa0>] handle_irq_event_percpu+0x28/0x70
-[28.290520] [<90000000002a6f9c>] handle_percpu_irq+0x54/0x88
-[28.296140] [<90000000002a025c>] generic_handle_domain_irq+0x28/0x40
-[28.302452] [<9000000000995458>] handle_cpu_irq+0x68/0xa4
-[28.307813] [<90000000010ea8dc>] handle_loongarch_irq+0x34/0x4c
-[28.313693] [<90000000010ea974>] do_vint+0x80/0xb4
-[28.318450] [<90000000002216a0>] __arch_cpu_idle+0x20/0x24
-[28.323897] [<90000000010f8178>] default_idle_call+0x30/0x58
-[28.329518] [<90000000002825cc>] do_idle+0xb4/0x118
-[28.334361] [<900000000028281c>] cpu_startup_entry+0x20/0x24
-[28.339982] [<90000000010ec0dc>] kernel_init+0x0/0x110
-[28.345085] [<90000000011106f8>] arch_post_acpi_subsys_init+0x0/0x4
+-----BEGIN PGP SIGNATURE-----
 
-Maybe sometimes assembly kallsyms is not recognized, let me think...
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmObDcMACgkQ3SOs138+
+s6HdDBAAgn9ECxpC+S2bftxloqfL+QXcJy0O6lFSiTHUT7bHM7RcWw6mJPcno2X9
+dCthjOygQSyiwuatyksQ0Z4MuYeVbWIZffaWNeMh4jV3MEt4olVJS7Nmg0Uy3QnE
+Jrl7/jyQluG6j4kRDtcRekGQDUXmLd3FPX8MEEhFlUg4FpgsjhgOCNMJ3piaQbFo
+LBglfBPPFnfg2aaUu0//fNo9V9cACQoj4XTmE2pmA8n4HHVLlpbdUXZR5YQMYbcf
+5BwZ02J2NvVrWZX5zKjuohMkNuFTOaYfUts33/kuCv+fhQgGBPxwPEiOf21HJyVw
+KKTmFga7WRBa6BgYsV/uYXis2ZeR1FEhJ5AArQukKvF5rFGJ4VwUZfs8osxOY0X3
+KMOE9f6jiWI1cjp1r/E3bS9Zuyt1eTds8ZvGrKth1LTXPKgv+34VxmM7wfUyA8QO
+TJev0KT6NDYqd//RUZ6pj9SFADltcDZpsfiSrGYvR2a/Mx83wxoL3I1xHpCKKlK1
+RLfPvLWOMRmsSFIYSVpCDxQ0Gag6Si53EW/Tw+5ilZjmGuHQxzrADxZSB4JFf+ji
+yZlONa81gcfghSiveF7uvjOltlnarOwfQqBpO8f7lWSmC/Sj+qq+/xCTlguKormb
++zINTJmewBVv+2Vr41iSxPecVzJ9K6fvny39aAqO5mRMRK6UVtg=
+=nbiA
+-----END PGP SIGNATURE-----
 
-Thanks,
--Qing
-
-> diff --git a/arch/loongarch/include/asm/unwind.h b/arch/loongarch/include/asm/unwind.h
-> index a16aff1d086a..c02cb3b39fe2 100644
-> --- a/arch/loongarch/include/asm/unwind.h
-> +++ b/arch/loongarch/include/asm/unwind.h
-> @@ -24,7 +24,7 @@ struct unwind_state {
->   	char type; /* UNWINDER_XXX */
->   	struct stack_info stack_info;
->   	struct task_struct *task;
-> -	bool first, error, is_ftrace;
-> +	bool first, error, reset;
->   	int graph_idx;
->   	unsigned long sp, pc, ra;
->   	const struct unwinder_ops *ops;
-> diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
-> index 75e5be807a0d..7e5c293ed89f 100644
-> --- a/arch/loongarch/kernel/genex.S
-> +++ b/arch/loongarch/kernel/genex.S
-> @@ -67,14 +67,17 @@ SYM_FUNC_END(except_vec_cex)
->   	.macro	BUILD_HANDLER exception handler prep
->   	.align	5
->   	SYM_FUNC_START(handle_\exception)
-> +	666:
->   	BACKUP_T0T1
->   	SAVE_ALL
->   	build_prep_\prep
->   	move	a0, sp
->   	la.abs	t0, do_\handler
->   	jirl	ra, t0, 0
-> +	668:
->   	RESTORE_ALL_AND_RET
->   	SYM_FUNC_END(handle_\exception)
-> +	SYM_DATA(unwind_hint_\exception, .word 668b - 666b)
->   	.endm
->   
->   	BUILD_HANDLER ade ade badv
-> diff --git a/arch/loongarch/kernel/unwind_prologue.c b/arch/loongarch/kernel/unwind_prologue.c
-> index 441641227c10..c34bb035ac56 100644
-> --- a/arch/loongarch/kernel/unwind_prologue.c
-> +++ b/arch/loongarch/kernel/unwind_prologue.c
-> @@ -2,23 +2,102 @@
->   /*
->    * Copyright (C) 2022 Loongson Technology Corporation Limited
->    */
-> +#include <linux/cpumask.h>
->   #include <linux/ftrace.h>
->   #include <linux/kallsyms.h>
->   
->   #include <asm/inst.h>
-> +#include <asm/loongson.h>
->   #include <asm/ptrace.h>
-> +#include <asm/setup.h>
->   #include <asm/unwind.h>
->   
->   static const struct unwinder_ops *guard_unwinder = &unwinder_guess;
->   
-> -static inline void unwind_state_fixup(struct unwind_state *state)
-> +extern const int unwind_hint_ade;
-> +extern const int unwind_hint_ale;
-> +extern const int unwind_hint_bp;
-> +extern const int unwind_hint_fpe;
-> +extern const int unwind_hint_fpu;
-> +extern const int unwind_hint_lsx;
-> +extern const int unwind_hint_lasx;
-> +extern const int unwind_hint_lbt;
-> +extern const int unwind_hint_ri;
-> +extern const int unwind_hint_watch;
-> +extern unsigned long eentry;
-> +#ifdef CONFIG_NUMA
-> +extern unsigned long pcpu_handlers[NR_CPUS];
-> +#endif
-> +
-> +static inline bool scan_handler(unsigned long entry_offset)
->   {
-> -#ifdef CONFIG_DYNAMIC_FTRACE
-> -	static unsigned long ftrace = (unsigned long)ftrace_call + 4;
-> +	int idx, offset;
->   
-> -	if (state->pc == ftrace)
-> -		state->is_ftrace = true;
-> +	if (entry_offset >= EXCCODE_INT_START * VECSIZE)
-> +		return false;
-> +
-> +	idx = entry_offset / VECSIZE;
-> +	offset = entry_offset % VECSIZE;
-> +	switch (idx) {
-> +	case EXCCODE_ADE:
-> +		return offset == unwind_hint_ade;
-> +	case EXCCODE_ALE:
-> +		return offset == unwind_hint_ale;
-> +	case EXCCODE_BP:
-> +		return offset == unwind_hint_bp;
-> +	case EXCCODE_FPE:
-> +		return offset == unwind_hint_fpe;
-> +	case EXCCODE_FPDIS:
-> +		return offset == unwind_hint_fpu;
-> +	case EXCCODE_LSXDIS:
-> +		return offset == unwind_hint_lsx;
-> +	case EXCCODE_LASXDIS:
-> +		return offset == unwind_hint_lasx;
-> +	case EXCCODE_BTDIS:
-> +		return offset == unwind_hint_lbt;
-> +	case EXCCODE_INE:
-> +		return offset == unwind_hint_ri;
-> +	case EXCCODE_WATCH:
-> +		return offset == unwind_hint_watch;
-> +	default:
-> +		return false;
-> +	}
-> +}
-> +
-> +static inline bool fix_exceptions(unsigned long pc)
-> +{
-> +#ifdef CONFIG_NUMA
-> +	int cpu;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		if (!pcpu_handlers[cpu])
-> +			continue;
-> +		if (scan_handler(pc - pcpu_handlers[cpu]))
-> +			return true;
-> +	}
->   #endif
-> +	return scan_handler(pc - eentry);
-> +}
-> +
-> +/*
-> + * As we meet ftrace_regs_entry, reset first flag like first doing
-> + * tracing. Prologue analysis will stop soon because PC is at entry.
-> + */
-> +static inline bool fix_ftrace(unsigned long pc)
-> +{
-> +#ifdef CONFIG_DYNAMIC_FTRACE
-> +	return pc == (unsigned long)ftrace_call + LOONGARCH_INSN_SIZE;
-> +#else
-> +	return false;
-> +#endif
-> +}
-> +
-> +static inline bool unwind_state_fixup(struct unwind_state *state)
-> +{
-> +	if (!fix_exceptions(state->pc) && !fix_ftrace(state->pc))
-> +		return false;
-> +	state->reset = true;
-> +	return true;
->   }
->   
->   static unsigned long get_return_address(struct unwind_state *state)
-> @@ -46,14 +125,10 @@ static bool unwind_by_prologue(struct unwind_state *state)
->   	if (state->sp >= info->end || state->sp < info->begin)
->   		return false;
->   
-> -	if (state->is_ftrace) {
-> -		/*
-> -		 * As we meet ftrace_regs_entry, reset first flag like first doing
-> -		 * tracing. Prologue analysis will stop soon because PC is at entry.
-> -		 */
-> +	if (state->reset) {
->   		regs = (struct pt_regs *)state->sp;
->   		state->first = true;
-> -		state->is_ftrace = false;
-> +		state->reset = false;
->   		state->pc = regs->csr_era;
->   		state->ra = regs->regs[1];
->   		state->sp = regs->regs[3];
-> @@ -118,8 +193,7 @@ static bool unwind_by_prologue(struct unwind_state *state)
->   
->   out:
->   	state->first = false;
-> -	unwind_state_fixup(state);
-> -	return !!__kernel_text_address(state->pc);
-> +	return unwind_state_fixup(state) || __kernel_text_address(state->pc);
->   }
->   
->   static int raw_show_trace;
-> diff --git a/arch/loongarch/mm/tlb.c b/arch/loongarch/mm/tlb.c
-> index da3681f131c8..8bad6b0cff59 100644
-> --- a/arch/loongarch/mm/tlb.c
-> +++ b/arch/loongarch/mm/tlb.c
-> @@ -251,7 +251,7 @@ static void output_pgtable_bits_defines(void)
->   }
->   
->   #ifdef CONFIG_NUMA
-> -static unsigned long pcpu_handlers[NR_CPUS];
-> +unsigned long pcpu_handlers[NR_CPUS];
->   #endif
->   extern long exception_handlers[VECSIZE * 128 / sizeof(long)];
->   
-> 
-
+--LSp9OVivsvvQ9GYN--
