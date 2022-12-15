@@ -2,144 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8E664DD53
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F3A64DD5A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiLOPKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 10:10:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
+        id S229629AbiLOPKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 10:10:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiLOPJ6 (ORCPT
+        with ESMTP id S229596AbiLOPKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 10:09:58 -0500
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01C0303F1;
-        Thu, 15 Dec 2022 07:09:56 -0800 (PST)
-Received: by mail-qk1-f180.google.com with SMTP id p18so2770681qkg.2;
-        Thu, 15 Dec 2022 07:09:56 -0800 (PST)
+        Thu, 15 Dec 2022 10:10:52 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358942A94B
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 07:10:51 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id g7so16138993lfv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 07:10:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=petCtMT6h9gBTrPqM4wSXPuKYj7TltVBXvRJZq1Vl4A=;
+        b=wxAxGHVqRSAWNyWfmK7P70u9SxsXJSH1r5fH7taXrSq+Rfu6lZsny9oPYIOPs8dfUI
+         Au5EXXc7iW4c4KkVhWpjHc0/brvLjJ5i2+OG2OBKvIhvzP24oce4CpugSmER6l54FebS
+         7W1RwoY/HEFeVHT0lyCyC2RZuR+XSsYgDB+sHt2UWdcBiKMWcT4IA6x6bvN72p29Hdgg
+         krpL0Fr8Y+DroU3qi9xpQHisGZfOcIBstLZ2jXAClrCKcOPF+xZ3P9Qdx8c/UN7BJ78P
+         VwJ0NyhO1g2gQjnvd6Tuc3hd/sY0p7OhuMy04LH2xjvkjAqomlNP/VnfiEL2sRdNMwMi
+         Tbdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VRK7b4YTFDqD0ddpHKV1yukQyR96FeHvIOON11LsLBg=;
-        b=3OEhIwMkX1t8DWtD8yncIFq73+f8jlmBye01D7jXXHe6vCzQr99WfP2QrEyLaWzAEg
-         biyC/uoMpWgTOTPOeo95QKVYAXSPhpBYIa2ojuGGey/IHczQl1yFD6g5nNR1IdYYFnNs
-         /l+JEHp2fYjYFYHBcB6sm6ADbw2qyA+YUuD525A9xxQTV9mpNziaSFEphEi66jDsTRqF
-         bcIvDwrpqL+aSQZQpr2TjgI42I9y3y1KcZ5nDM+/qrvOk0DB6klfy01PF2HHdzpe5fuT
-         +5BjZM8Gc55hd40R3kiUsPOB4zLh76iSezbsznc+G0TEK0cHZWI2/qXKgyqU88prSX/P
-         cWtw==
-X-Gm-Message-State: ANoB5pkLXfwOe6O40qq1ETwdT11+otcNOOWbFndBXwQaWCn+UL8FHi+2
-        d5C5awkT1mgwOrkAPMYA+m9ob2udWtzjrMEp8dc=
-X-Google-Smtp-Source: AA0mqf7wusuKMs1Q8WwRWT/Pt548QltdxupyQSw7BdWJWLp7RFWt/7IPy4nNx0f8dhf5aJlnBUqxaT4CuGH14pvSFhE=
-X-Received: by 2002:a05:620a:4611:b0:6fa:af7e:927c with SMTP id
- br17-20020a05620a461100b006faaf7e927cmr82807384qkb.443.1671116995879; Thu, 15
- Dec 2022 07:09:55 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=petCtMT6h9gBTrPqM4wSXPuKYj7TltVBXvRJZq1Vl4A=;
+        b=QU4AUn4+B5QGEuJ8uNtRRusW7ZMvKYzQ6JW+c0QaD8n5YyapT9f87RrbiraOQnlbct
+         wYeZCvQy8IYHd/v4sVUaPOfgUEZY+SiMi8eup3x25ZyNMVcwH8fecluzEEFRtgsiJ4mw
+         A+si7rYIpatR/CIMa+pQPXYIIHieejFK4SDdNd0kxWgHMi4O4160jjnjT215ZkDMZQmN
+         LVScapS2xIZrPpYL7G4XSMu6gxjA75UGQGGlFiQU9LEUd0zENMjnMrNL10MLWn5pjTcV
+         OQGHrUoD8r24oX8eKqhFC9JyQRZ0HZT0fnb0GfGQPjVygWuc9GRoqxLMzLVJPQYJE6gp
+         mI9A==
+X-Gm-Message-State: ANoB5pnLqqLyVr6fxUnR8fBDwPrHdQJCvmJgsXPnl3avGV57RXzSfFN2
+        8E8IHcpfJuh/JvNdwa+zHAyNmw==
+X-Google-Smtp-Source: AA0mqf4mYmzjbcewsbtx2GMO4Z0urxIS7tt5k3wtucHMuRDUfjlTrJFPUq3Rj8Jakr44QpceqaDxVw==
+X-Received: by 2002:ac2:4e4e:0:b0:4a4:68b9:608a with SMTP id f14-20020ac24e4e000000b004a468b9608amr6993443lfr.21.1671117049557;
+        Thu, 15 Dec 2022 07:10:49 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id w5-20020a05651234c500b004b0b131453csm1183121lfr.49.2022.12.15.07.10.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 07:10:48 -0800 (PST)
+Message-ID: <9e94c0b9-f901-5ac9-2abb-40e958cbe5a2@linaro.org>
+Date:   Thu, 15 Dec 2022 17:10:48 +0200
 MIME-Version: 1.0
-References: <2262737.ElGaqSPkdT@kreacher> <1df12728a2e788788fd387588bac62023e123d16.camel@hadess.net>
- <2145955.irdbgypaU6@kreacher> <CAJZ5v0ic+pm+NWD8g4O2MwQEvi+xuB-W9Wpd6c1RhprhoxuK1g@mail.gmail.com>
- <8281ddcc16cc950f9cde4b196cf208adcc798319.camel@hadess.net>
- <CAJZ5v0gjAGZFS6ap+NAbsi96hq7y9MRGE0h_A-n6xfB1CMs=2g@mail.gmail.com>
- <cd8b2a2160f5d36d1b73bc0567cd0f6e7e5751c4.camel@hadess.net>
- <CAJZ5v0gRm1NG=QuDFDFdcZgTu7Q0Z3cW3fwGg09sD+3BBV8E1A@mail.gmail.com>
- <91367d07a72ecb2065faebe974c54ebd966e0d59.camel@hadess.net>
- <CAJZ5v0ghW2DdC0quVQ-+Oad7bR95Pyp4Uhd9=XUYk9SQrXKj5w@mail.gmail.com>
- <b356b5684cc631513c0498f18d7c185b77416f85.camel@hadess.net> <6b5e878265958fb0201178fc3c1d75ef06c826ec.camel@hadess.net>
-In-Reply-To: <6b5e878265958fb0201178fc3c1d75ef06c826ec.camel@hadess.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 15 Dec 2022 16:09:44 +0100
-Message-ID: <CAJZ5v0j3c33q_X-RoUxT4NnE=zoONvHCmMECz507E0XXRpOczA@mail.gmail.com>
-Subject: Re: [Regression] Logitech BT mouse unusable after commit 532223c8ac57
- (still in 6.1-rc8)
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v5 5/8] iommu/arm-smmu-qcom: Add SM6115 support
+Content-Language: en-GB
+To:     Iskren Chernev <iskren.chernev@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Emma Anholt <emma@anholt.net>,
+        Rob Clark <robdclark@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20221030094258.486428-1-iskren.chernev@gmail.com>
+ <20221030094258.486428-6-iskren.chernev@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221030094258.486428-6-iskren.chernev@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 5:14 PM Bastien Nocera <hadess@hadess.net> wrote:
->
-> On Thu, 2022-12-08 at 16:20 +0100, Bastien Nocera wrote:
-> > On Wed, 2022-12-07 at 18:44 +0100, Rafael J. Wysocki wrote:
-> > > On Wed, Dec 7, 2022 at 6:19 PM Bastien Nocera <hadess@hadess.net>
-> > > wrote:
-> > > >
-> > > > On Wed, 2022-12-07 at 12:07 +0100, Rafael J. Wysocki wrote:
-> > > > > # hidpp-list-features /dev/hidraw1
-> > > > > Bluetooth Mouse M336/M337/M535 (046d:b016) is a HID++ 4.5
-> > > > > device
-> > > > > Feature 0x01: [0x0001] Feature set
-> > > > > Feature 0x02: [0x0003] Device FW version
-> > > > > Feature 0x03: [0x0005] Device name
-> > > > > Feature 0x04: [0x0020] Reset
-> > > > > Feature 0x05: [0x1e00] Enable hidden features (hidden)
-> > > > > Feature 0x06: [0x1800] Generic Test (hidden, internal)
-> > > > > Feature 0x07: [0x1000] Battery status
-> > > > > Feature 0x08: [0x1b04] Reprog controls v4
-> > > > > Feature 0x09: [0x2100] Vertical scrolling
-> > > > > Feature 0x0a: [0x2200] Mouse pointer
-> > > > > Feature 0x0b: [0x2205] Pointer speed
-> > > > > Feature 0x0c: [0x18b1] ? (hidden, internal)
-> > > > > Feature 0x0d: [0x2121] Hi-res wheel
-> > > > > Feature 0x0e: [0x1f03] ? (hidden, internal)
-> > > >
-> > > > Would you be able to enable debugging for the hid subsystem to
-> > > > get
-> > > > some
-> > > > debug data when getting the version from the device fails?
-> > >
-> > > I guess I could, but I think that the device is just quirky.
-> > >
-> > > At least the BT layer appears to think that it is connected.
-> > >
-> > > Anyway, what exactly do you need?
-> > >
-> > > > I can't see any problems in there that wouldn't also have
-> > > > impacted
-> > > > all
-> > > > the other Logitech Bluetooth devices listed in the support
-> > > > devices
-> > > > list.
-> > > >
-> > > > If the problem is a timeout, maybe we should lower the timeouts
-> > > > we
-> > > > currently have (5*HZ = 5 seconds, right?), so we can retry 5
-> > > > times
-> > > > one
-> > > > second instead.
-> > >
-> > > No, it doesn't take 5 sec to get a response from it.  It rather
-> > > looks
-> > > like __hidpp_send_report() returns an error.
-> >
-> > Adding "debug" on the kernel command-line should be enough to get
-> > debug
-> > out of hidpp_send_message_sync():
-> > https://stackoverflow.com/a/63682160
-> >
-> > Either that or turn all the dbg_hid() into hid_err() if you're going
-> > to
-> > be compiling the kernel.
-> >
-> > We're mainly interested in the error code from the device, as that's
-> > what I'm guessing is caused the error to propagate.
->
-> Can you also check whether you had:
-> https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git/commit/?id=8b7e58409b1813c58eea542d9f3b8db35b4ac1f7
-> in your git tree?
->
-> Would be great to know whether that commit helps at all.
+On 30/10/2022 11:42, Iskren Chernev wrote:
+> From: Adam Skladowski <a39.skl@gmail.com>
+> 
+> Add the Qualcomm SM6115 platform to the list of compatible,
+> this target uses MMU500 for both APSS and GPU.
+> 
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
 
-No, it's not present in the kernels I've tested so far.
+This needs to rebased on linux-next (or 6.2-rc1 once it's out).
+
+> ---
+>   drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> index b2708de25ea3..526fec79b4fe 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> @@ -432,6 +432,7 @@ static const struct of_device_id __maybe_unused qcom_smmu_impl_of_match[] = {
+>   	{ .compatible = "qcom,sc8280xp-smmu-500" },
+>   	{ .compatible = "qcom,sdm630-smmu-v2" },
+>   	{ .compatible = "qcom,sdm845-smmu-500" },
+> +	{ .compatible = "qcom,sm6115-smmu-500" },
+>   	{ .compatible = "qcom,sm6125-smmu-500" },
+>   	{ .compatible = "qcom,sm6350-smmu-500" },
+>   	{ .compatible = "qcom,sm6375-smmu-500" },
+
+-- 
+With best wishes
+Dmitry
+
