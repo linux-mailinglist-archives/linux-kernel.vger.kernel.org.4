@@ -2,125 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6A464E1EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D3B64E1EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbiLOTpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 14:45:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
+        id S229637AbiLOTqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 14:46:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiLOTpW (ORCPT
+        with ESMTP id S229448AbiLOTqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 14:45:22 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244EC511CE;
-        Thu, 15 Dec 2022 11:45:21 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso201661pjh.1;
-        Thu, 15 Dec 2022 11:45:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Uan2hxIVFGpaAzm8yWbumiX1BUKNnPwbkIQk8xgSHc=;
-        b=pdb9LqgSsAQzWo52jBrj63MNfYkepe8sHph27S2SslJhMQ8lvQZKzcyVS9xiV2gf/U
-         jm8OySNgQl9WvqwQ3cdPy8/6spDqJepo/ao52QorB//Bg13KqJ/AJeWwAgSFsixNbfTg
-         QpHXuyGE/bX5oyFCzAUdvXaRH6k8tRZg2vQ2rR6JAN3E7aq8DInMRvamV2p36x8YXgbu
-         Mp1Jm2fRb0fELyjQxR0BsZN7M62hM+Z1FwiJlOvwPf+K7o00/MsnByVLONiPazmWfeYy
-         oB8Hr5si/4SKvckN3rZvCcxpTdQdFNgBxklIAMwSQ4sJUsMVgQk0hmj8cdC6u8Pp/uY5
-         NhIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0Uan2hxIVFGpaAzm8yWbumiX1BUKNnPwbkIQk8xgSHc=;
-        b=hAqsuwhvovW/6RUD2n76ffu+9IXbQx+/kDjBDGWs3DMKndFxqbbUvJwUaEPgu7TQMT
-         DDEya7xoI0GtbcpM67JTj0iyUYhim9Zyb3UgJXkWVECprPiZkJUh+0N61Xpbsnb9PXZY
-         Cwgen8QLCOMGIJC8OQ+Mjvd84fjjom247tLeJ4jikP51WtTmw2tWUSQDbDaQzMi+GuKU
-         sWD5DNOp9nTUA9+hn30j5uXcURWgwnc1CF7Vnx0FQ02GS8vfnAEGzdbhR2LUiFtrWniX
-         YTv+p1g+np1rvmg7z2mnOF+c+iYE4Nn2nWRWk/VbPiAO00nXF6/cndw8q1LGSRXUE1Mf
-         uVog==
-X-Gm-Message-State: AFqh2kqoIEGv1nRq/71aSV/t/c6dSLMzyMXulkKPotr1dLJPloLN+eqg
-        ukEJ8vIorw4YrE7xn6FzmD0=
-X-Google-Smtp-Source: AMrXdXs19x+y1Qgsw1lVqFiIU71in7HC7bDE66JgLhNoJZyUDKgQyg86pb0+Z7GeBl/Q+DgvSX/mcA==
-X-Received: by 2002:a17:902:ef89:b0:190:dcdd:edcb with SMTP id iz9-20020a170902ef8900b00190dcddedcbmr9572364plb.56.1671133520369;
-        Thu, 15 Dec 2022 11:45:20 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id a4-20020a170902ecc400b001895d871c95sm35992plh.70.2022.12.15.11.45.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 11:45:19 -0800 (PST)
-Date:   Thu, 15 Dec 2022 11:45:18 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        zhi.a.wang@intel.com
-Subject: Re: [PATCH v10 011/108] KVM: TDX: Add C wrapper functions for
- SEAMCALLs to the TDX module
-Message-ID: <20221215194518.GD3632095@ls.amr.corp.intel.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <5f1a80e9ab037fa88d8821a6548638d282070f1d.1667110240.git.isaku.yamahata@intel.com>
- <20221123120047.00001a9d@gmail.com>
+        Thu, 15 Dec 2022 14:46:09 -0500
+Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691DB52147
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 11:46:08 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id 5uB9pvVWgQkxd5uB9pr0fK; Thu, 15 Dec 2022 20:46:06 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 15 Dec 2022 20:46:06 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <bca79bc1-9e7c-b145-0b0b-0ce725d58821@wanadoo.fr>
+Date:   Thu, 15 Dec 2022 20:46:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221123120047.00001a9d@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] drm/amd/pm: avoid large variable on kernel stack
+Content-Language: fr, en-US
+To:     arnd@kernel.org
+Cc:     Hawking.Zhang@amd.com, Jack.Gui@amd.com, KevinYang.Wang@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, alexander.deucher@amd.com,
+        amd-gfx@lists.freedesktop.org, arnd@arndb.de,
+        christian.koenig@amd.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, evan.quan@amd.com,
+        kenneth.feng@amd.com, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com
+References: <20221215163649.386750-1-arnd@kernel.org>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20221215163649.386750-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 12:00:47PM +0200,
-Zhi Wang <zhi.wang.linux@gmail.com> wrote:
-
-> On Sat, 29 Oct 2022 23:22:12 -0700
-> isaku.yamahata@intel.com wrote:
+Le 15/12/2022 à 17:36, Arnd Bergmann a écrit :
+> From: Arnd Bergmann <arnd-r2nGTMty4D4@public.gmane.org>
 > 
-> > From: Isaku Yamahata <isaku.yamahata@intel.com>
-> > 
-> > A VMM interacts with the TDX module using a new instruction
-> > (SEAMCALL).  A TDX VMM uses SEAMCALLs where a VMX VMM would have
-> > directly interacted with VMX instructions.  For instance, a TDX VMM
-> > does not have full access to the VM control structure corresponding
-> > to VMX VMCS.  Instead, a VMM induces the TDX module to act on behalf
-> > via SEAMCALLs.
-> > 
-> > Export __seamcall and define C wrapper functions for SEAMCALLs for
-> > readability.  Some SEAMCALL APIs donates pages to TDX module or guest
-> > TD. The pages are encrypted with TDX private host key id set in high
+> The activity_monitor_external[] array is too big to fit on the
+> kernel stack, resulting in this warning with clang:
 > 
-> It seems a little bit confusing here.
+> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:1438:12: error: stack frame size (1040) exceeds limit (1024) in 'smu_v13_0_7_get_power_profile_mode' [-Werror,-Wframe-larger-than]
 > 
-> I guess you are talking about the host pages donated to TDX module will
-> be encrypted with TDX module global key id, which is used to
-> encrypted the pages only used by TDX module. For pages donated to the
-> TD guest, the pages are encrypted with TD guest prviate key id?
+> Use dynamic allocation instead. It should also be possible to
+> have single element here instead of the array, but this seems
+> easier.
+> 
+> Fixes: 334682ae8151 ("drm/amd/pm: enable workload type change on smu_v13_0_7")
+> Signed-off-by: Arnd Bergmann <arnd-r2nGTMty4D4@public.gmane.org>
+> ---
+>   .../drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c  | 21 ++++++++++++++-----
+>   1 file changed, 16 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
+> index c270f94a1b86..7eba854e09ec 100644
+> --- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
+> +++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
+> @@ -1439,7 +1439,7 @@ static int smu_v13_0_7_get_power_limit(struct smu_context *smu,
+>   
+>   static int smu_v13_0_7_get_power_profile_mode(struct smu_context *smu, char *buf)
+>   {
+> -	DpmActivityMonitorCoeffIntExternal_t activity_monitor_external[PP_SMC_POWER_PROFILE_COUNT];
+> +	DpmActivityMonitorCoeffIntExternal_t *activity_monitor_external;
+>   	uint32_t i, j, size = 0;
+>   	int16_t workload_type = 0;
+>   	int result = 0;
+> @@ -1447,6 +1447,12 @@ static int smu_v13_0_7_get_power_profile_mode(struct smu_context *smu, char *buf
+>   	if (!buf)
+>   		return -EINVAL;
+>   
+> +	activity_monitor_external = kcalloc(sizeof(activity_monitor_external),
 
-Basically yes. Only TDR is encrypted with the global key id.
+Hi,
 
+Before, 'activity_monitor_external' was not initialized.
+Maybe kcalloc() is enough?
 
-> It might be better that you can talk about the actual reaason instead of
-> the key id stuff. For example Some SEMCALL APIs will zap or write the
-> pages donated by VMM via MOVDIR64B, which requires the VMM to flush the
-> cachelines.
+sizeof(*activity_monitor_external)?
+      ~~~~
 
-How about the followings?
+> +					    PP_SMC_POWER_PROFILE_COUNT,
+> +					    GFP_KERNEL);
+> +	if (!activity_monitor_external)
+> +		return -ENOMEM;
+> +
+>   	size += sysfs_emit_at(buf, size, "                              ");
+>   	for (i = 0; i <= PP_SMC_POWER_PROFILE_WINDOW3D; i++)
 
-Some SEAMCALL APIs donates host pages to TDX module or guest TD and the
-donated pages are encrypted.  Some of such SEAMCALLs flush cache lines
-(typically by movdir64b instruction), some don't.  Those that doesn't
-clear cache lines require the VMM to flush the cache lines to avoid cache
-line alias.
+Unrelated, but wouldn't it be more straightforward with "< 
+PP_SMC_POWER_PROFILE_COUNT"?
 
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+>   		size += sysfs_emit_at(buf, size, "%-14s%s", amdgpu_pp_profile_name[i],
+> @@ -1459,15 +1465,17 @@ static int smu_v13_0_7_get_power_profile_mode(struct smu_context *smu, char *buf
+>   		workload_type = smu_cmn_to_asic_specific_index(smu,
+>   							       CMN2ASIC_MAPPING_WORKLOAD,
+>   							       i);
+> -		if (workload_type < 0)
+> -			return -EINVAL;
+> +		if (workload_type < 0) {
+> +			result = -EINVAL;
+> +			goto out;
+> +		}
+>   
+>   		result = smu_cmn_update_table(smu,
+>   					  SMU_TABLE_ACTIVITY_MONITOR_COEFF, workload_type,
+>   					  (void *)(&activity_monitor_external[i]), false);
+>   		if (result) {
+>   			dev_err(smu->adev->dev, "[%s] Failed to get activity monitor!", __func__);
+> -			return result;
+> +			goto out;
+>   		}
+>   	}
+>   
+> @@ -1495,7 +1503,10 @@ do {													\
+>   	PRINT_DPM_MONITOR(Fclk_BoosterFreq);
+>   #undef PRINT_DPM_MONITOR
+>   
+> -	return size;
+> +	result = size;
+> +out:
+> +	kfree(activity_monitor_external);
+> +	return result;
+>   }
+>   
+>   static int smu_v13_0_7_set_power_profile_mode(struct smu_context *smu, long *input, uint32_t size)
+
