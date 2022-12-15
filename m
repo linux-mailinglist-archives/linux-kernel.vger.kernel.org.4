@@ -2,77 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBA664DB9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 13:51:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E30A64DBA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 13:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiLOMvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 07:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
+        id S229913AbiLOMvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 07:51:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiLOMvc (ORCPT
+        with ESMTP id S229821AbiLOMvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 07:51:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DE323E8C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 04:50:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671108651;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aBno//7WjcOWMRUrIz42bHzL1ShN20yQGU3sgB16aK0=;
-        b=hm3a1jIoN/TuLd2bVkwLiB45xa773vyfUljIfBeH1N5cwNGgJ+gJWoWKGAptw32S+oX93S
-        x7d/hVcUeBzKwXcNLZ+v/5i4XJUhwA0qTu4Yi6o53x+gy6l/WT8PkUXc7OIbgrBMqV1lTc
-        h1pPTjgh4LlMvftUNsd0RgPefo282qI=
-Received: from mail-vk1-f198.google.com (mail-vk1-f198.google.com
- [209.85.221.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-15-7nkxPHfXPDuZ7kTC2XxFUA-1; Thu, 15 Dec 2022 07:50:50 -0500
-X-MC-Unique: 7nkxPHfXPDuZ7kTC2XxFUA-1
-Received: by mail-vk1-f198.google.com with SMTP id n20-20020a1fa414000000b003bc585c7d50so3602665vke.16
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 04:50:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=aBno//7WjcOWMRUrIz42bHzL1ShN20yQGU3sgB16aK0=;
-        b=05nUUOWV7yq6JtdxUx3BZ2kFL/fGjc/t8pWw3Yn8TGSuhpatq26fwYtL8rx+LNssjU
-         yO1PJe37R/vBqQ5CZDyyU6YF1YqiPpoDR9Lmx3o0UBF9wqFrvwPjjaTmZvgoqDIWO+xK
-         t6c25bCOfeJHxm2qJ5YBmh/SWQ1RItewlNjS7Fuha16oR/LOUGptJ5Bal4xONvXIhOCg
-         y6ByDQdMwAjrCTliXvV9zy2Q63HtPQW8mVlFfT89X2rTFaPd/giJG0ym63Pd3TzkOXfa
-         RBRpIPGGNcikefJikvR3n2CnjCdCJS490Y3m6H9n0voYeOFnqrevhpAp+5uhq8ctYLrN
-         F2yg==
-X-Gm-Message-State: AFqh2krW4BCKriUofUtdKDwmT9XwLsWxYOihzXfoaSj7OkO8z2ic/M9+
-        aysa1Okj6K/qQb/H4oYNIaorSN6VsXU+zlSVUUFM2EUROmRnPmxMGGBOLrJkX26YVU759iI6rBp
-        zmz7eHcG5sDsa0bUp57APCjr3
-X-Received: by 2002:a05:6122:45d:b0:3c6:bdf4:6959 with SMTP id f29-20020a056122045d00b003c6bdf46959mr548677vkk.10.1671108649496;
-        Thu, 15 Dec 2022 04:50:49 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXu6DWo44NHcFV0orc///SSNVKIMZBmZgZHKCvvb1pzUQmok7MEpYkdW7V3f5Pd8o/lMvdjSfQ==
-X-Received: by 2002:a05:6122:45d:b0:3c6:bdf4:6959 with SMTP id f29-20020a056122045d00b003c6bdf46959mr548583vkk.10.1671108647752;
-        Thu, 15 Dec 2022 04:50:47 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-97-87.dyn.eolo.it. [146.241.97.87])
-        by smtp.gmail.com with ESMTPSA id do39-20020a05620a2b2700b006fcc3858044sm11916151qkb.86.2022.12.15.04.50.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 04:50:47 -0800 (PST)
-Message-ID: <f8af2b70e3c2074de04b2117100b2cdc5ec4ec6d.camel@redhat.com>
-Subject: Re: [PATCH net v2] net: sched: ematch: reject invalid data
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jun Nie <jun.nie@linaro.org>, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 15 Dec 2022 13:50:43 +0100
-In-Reply-To: <20221214022058.3625300-1-jun.nie@linaro.org>
-References: <20221214022058.3625300-1-jun.nie@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Thu, 15 Dec 2022 07:51:49 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1CB23E8C;
+        Thu, 15 Dec 2022 04:51:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=eVhFf5MIvGoSrecefTzQcMQnYbPEvxCOEUrQeN+dgu4=; b=chgIZqKedLA0pkL9yfaHto3jZ2
+        yVdZKJm1iO213hDaw2ZTSAVzZJww8Mlx6jxxyWfI9m32uQZ2/BNiGFpocGXzt4wjgp8t1NMkPlztz
+        ok0o2FVGB6BzAe4Y60hPtnUOuPYjV6mC1AGyDIT8eddyWdiv+o2211ZtdTL13la80kNrlHAq7e96Z
+        +I8gldGuh6oZcLU2ZMYzciA07PhpFAM073IfVmR6ZaoTbJ8SM2Oiso9QsJFgDOFSYb9aqnZEObr2s
+        PhhGHvalDZNkygrp4uVMSOEiW8UuWAAdrwphObYR4pzyVGWhEh3lXgInAuhl5lE0oHHJfU8uh2J14
+        pWmDXVUg==;
+Received: from [188.21.169.252] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p5ni0-009SxX-QO; Thu, 15 Dec 2022 12:51:33 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jonathan Corbet <corbet@lwn.net>, axboe@meta.com, sagi@grimberg.me,
+        kbusch@kernel.org
+Cc:     linux-nvme@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] docs, nvme: add a feature and quirk policy document
+Date:   Thu, 15 Dec 2022 13:51:30 +0100
+Message-Id: <20221215125130.261098-1-hch@lst.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,83 +50,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-12-14 at 10:20 +0800, Jun Nie wrote:
-> syzbot reported below bug. Refuse to compare for invalid data case to fix
-> it.
-> 
-> general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-> CPU: 0 PID: 6 Comm: kworker/0:0 Not tainted 5.15.77-syzkaller-00764-g7048384c9872 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> Workqueue: wg-crypt-wg2 wg_packet_tx_worker
-> RIP: 0010:em_cmp_match+0x4e/0x5f0 net/sched/em_cmp.c:25
-> Call Trace:
->  <TASK>
->  tcf_em_match net/sched/ematch.c:492 [inline]
->  __tcf_em_tree_match+0x194/0x720 net/sched/ematch.c:518
->  tcf_em_tree_match include/net/pkt_cls.h:463 [inline]
->  basic_classify+0xd8/0x250 net/sched/cls_basic.c:48
->  __tcf_classify net/sched/cls_api.c:1549 [inline]
->  tcf_classify+0x161/0x430 net/sched/cls_api.c:1589
->  prio_classify net/sched/sch_prio.c:42 [inline]
->  prio_enqueue+0x1d3/0x6a0 net/sched/sch_prio.c:75
->  dev_qdisc_enqueue net/core/dev.c:3792 [inline]
->  __dev_xmit_skb+0x35c/0x1650 net/core/dev.c:3876
->  __dev_queue_xmit+0x8f3/0x1b50 net/core/dev.c:4193
->  dev_queue_xmit+0x17/0x20 net/core/dev.c:4261
->  neigh_hh_output include/net/neighbour.h:508 [inline]
->  neigh_output include/net/neighbour.h:522 [inline]
->  ip_finish_output2+0xc0f/0xf00 net/ipv4/ip_output.c:228
->  __ip_finish_output+0x163/0x370
->  ip_finish_output+0x20b/0x220 net/ipv4/ip_output.c:316
->  NF_HOOK_COND include/linux/netfilter.h:299 [inline]
->  ip_output+0x1e9/0x410 net/ipv4/ip_output.c:430
->  dst_output include/net/dst.h:450 [inline]
->  ip_local_out+0x92/0xb0 net/ipv4/ip_output.c:126
->  iptunnel_xmit+0x4a2/0x890 net/ipv4/ip_tunnel_core.c:82
->  udp_tunnel_xmit_skb+0x1b6/0x2c0 net/ipv4/udp_tunnel_core.c:175
->  send4+0x78d/0xd20 drivers/net/wireguard/socket.c:85
->  wg_socket_send_skb_to_peer+0xd5/0x1d0 drivers/net/wireguard/socket.c:175
->  wg_packet_create_data_done drivers/net/wireguard/send.c:251 [inline]
->  wg_packet_tx_worker+0x202/0x560 drivers/net/wireguard/send.c:276
->  process_one_work+0x6db/0xc00 kernel/workqueue.c:2313
->  worker_thread+0xb3e/0x1340 kernel/workqueue.c:2460
->  kthread+0x41c/0x500 kernel/kthread.c:319
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-> 
-> Reported-by: syzbot+963f7637dae8becc038f@syzkaller.appspotmail.com
-> Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
+This adds a document about what specification features are supported by
+the Linux NVMe driver, and what qualifies for a quirk if an implementation
+has problems following the specification.
 
-Very likely this is not the correct fixes tag.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Keith Busch <kbusch@kernel.org>
+Signed-off-by: Sagi Grimberg <sagi@grimberg.me>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ Documentation/process/index.rst               |  1 +
+ .../process/nvme-feature-and-quirk-policy.rst | 77 +++++++++++++++++++
+ MAINTAINERS                                   |  1 +
+ 3 files changed, 79 insertions(+)
+ create mode 100644 Documentation/process/nvme-feature-and-quirk-policy.rst
 
-> Signed-off-by: Jun Nie <jun.nie@linaro.org>
-> ---
->  net/sched/em_cmp.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/sched/em_cmp.c b/net/sched/em_cmp.c
-> index f17b049ea530..0284394be53f 100644
-> --- a/net/sched/em_cmp.c
-> +++ b/net/sched/em_cmp.c
-> @@ -22,9 +22,14 @@ static int em_cmp_match(struct sk_buff *skb, struct tcf_ematch *em,
->  			struct tcf_pkt_info *info)
->  {
->  	struct tcf_em_cmp *cmp = (struct tcf_em_cmp *) em->data;
-> -	unsigned char *ptr = tcf_get_base_ptr(skb, cmp->layer) + cmp->off;
-> +	unsigned char *ptr;
->  	u32 val = 0;
->  
-> +	if (!cmp)
-> +		return 0;
-
-It feels like this is papering over the real issue. Why em->data is
-NULL here? why other ematches are not afflicted by this issue? 
-
-is em->data really NULL or some small value instead? KASAN seams to
-tell it's a small value, not 0, so this patch should not avoid the
-oops. Have you tested it vs the reproducer?
-
-Thanks,
-
-Paolo
+diff --git a/Documentation/process/index.rst b/Documentation/process/index.rst
+index d4b6217472b0a0..0dc33994ddefc5 100644
+--- a/Documentation/process/index.rst
++++ b/Documentation/process/index.rst
+@@ -50,6 +50,7 @@ Other guides to the community that are of interest to most developers are:
+    embargoed-hardware-issues
+    maintainers
+    researcher-guidelines
++   nvme-feature-and-quirk-policy
+ 
+ These are some overall technical guides that have been put here for now for
+ lack of a better place.
+diff --git a/Documentation/process/nvme-feature-and-quirk-policy.rst b/Documentation/process/nvme-feature-and-quirk-policy.rst
+new file mode 100644
+index 00000000000000..eee19f3d9904bd
+--- /dev/null
++++ b/Documentation/process/nvme-feature-and-quirk-policy.rst
+@@ -0,0 +1,77 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=======================================
++Linux NVMe feature and and quirk policy
++=======================================
++
++This file explains the policy used to decide what is supported by the
++Linux NVMe driver and what is not.
++
++
++Introduction
++============
++
++NVM Express is an open collection of standards and information.
++
++The Linux NVMe host driver in drivers/nvme/host/ supports devices
++implementing the NVM Express (NVMe) family of specifications, which
++currently consists of a number of documents:
++
++ - the NVMe Base specification
++ - various Command Set specifications (e.g. NVM Command Set)
++ - various Transport specifications (e.g. PCIe, Fibre Channel, RDMA, TCP)
++ - the NVMe Management Interface specification
++
++See https://nvmexpress.org/developers/ for the NVMe specifications.
++
++
++Supported features
++==================
++
++NVMe is a large suite of specifications, and contains features that are only
++useful or suitable for specific use-cases. It is important to note that Linux
++does not aim to implement every feature in the specification.  Every additional
++feature implemented introduces more code, more maintenance and potentially more
++bugs.  Hence there is an inherent tradeoff between functionality and
++maintainability of the NVMe host driver.
++
++Any feature implemented in the Linux NVMe host driver must support the
++following requirements:
++
++  1. The feature is specified in a release version of an official NVMe
++     specification, or in a ratified Technical Proposal (TP) that is
++     available on NVMe website. Or if it is not directly related to the
++     on-wire protocol, does not contradict any of the NVMe specifications.
++  2. Does not conflict with the Linux architecture, nor the design of the
++     NVMe host driver.
++  3. Has a clear, indisputable value-proposition and a wide consensus across
++     the community.
++
++Vendor specific extensions are generally not supported in the NVMe host
++driver.
++
++It is strongly recommended to work with the Linux NVMe and block layer
++maintainers and get feedback on specification changes that are intended
++to be used by the Linux NVMe host driver in order to avoid conflict at a
++later stage.
++
++
++Quirks
++======
++
++Sometimes implementations of open standards fail to correctly implement parts
++of the standards.  Linux uses identifiers based quirks to work around such
++implementation bugs.  The intent of quirks is to deal with widely available
++hardware, usually consumer, which Linux users can't use without these quirks.
++Typically these implementations are not or only superficially tested with Linux
++by the hardware manufacturer.
++
++The Linux NVMe maintainers decide ad hoc whether to quirk implementations
++based on the impact of the problem to Linux users and how it impacts
++maintainability of the driver.  In general quirks are a last resort, if no
++firmware updates or other workarounds are available from the vendor.
++
++Quirks will not be added to the Linux kernel for hardware that isn't available
++on the mass market.  Hardware that fails qualification for enterprise Linux
++distributions, ChromeOS, Android or other consumers of the Linux kernel
++should be fixed before it is shipped instead of rely on Linux quirk.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bb77a3ed9d5423..59e9f2dfa842ad 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14827,6 +14827,7 @@ L:	linux-nvme@lists.infradead.org
+ S:	Supported
+ W:	http://git.infradead.org/nvme.git
+ T:	git://git.infradead.org/nvme.git
++F:	Documentation/process/nvme-feature-and-quirk-policy.rst
+ F:	drivers/nvme/host/
+ F:	drivers/nvme/common/
+ F:	include/linux/nvme*
+-- 
+2.35.1
 
