@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5264564DF3E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE3B64DF40
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbiLORCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 12:02:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
+        id S230486AbiLORCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 12:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbiLORBd (ORCPT
+        with ESMTP id S230361AbiLORBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 12:01:33 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AD827CFF
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 09:01:21 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id fa4-20020a17090af0c400b002198d1328a0so6789795pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 09:01:21 -0800 (PST)
+        Thu, 15 Dec 2022 12:01:34 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F7A27FEC
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 09:01:22 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id q17-20020a17090aa01100b002194cba32e9so3364974pjp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 09:01:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=K7O8/7ogKx8WzzRgxh6e6gC9a0ALFnBxrPW4Tv+K91E=;
-        b=rx5/T0r+M+q8zEdlugSYmMVCXj3c21Bm2FfgOzoyHwc+8Jl8/RpTpMXSOEzG+i62mg
-         Q1KskwJXn+ytDChd+aW75GbgLkL9lr70oeZXw6iqxWVXLlJZ9QMX6IEBdLU8qjdheZi3
-         E/uQ7AHH53sLZrdrevjBMOJNz9LhgJdFhOdIyvFy7ij4O2/UJ9CmNY7ueRA2DnuIRIZ3
-         aDo7Wwzp6f5FW2tJPVGUnUOKyhoekaAsmy9mE/pPzTZWEye66pJitiioktZEy9TWx8Hv
-         ql+fLIg7uF8vcCxW8MEjrangKuAIhb59R6clhGfh5qluqS2StQzO4YrEf9LVbGyXHgKe
-         iPmg==
+        bh=Xd4EliKq7RGLoGsrWDsqLSSvOown03UCv03d22ew7cY=;
+        b=7aM70M89maU4rC8RoZOzNOc4Cypbe/3jpfgvF5KGf+DoFhgrk5PWKdM6aFcvLJxs7X
+         s/vvFRVZyvRhTUrb7WyKk4LnxL7WJys1tTwX7ijtUucRf9y7H1MeyipCJNmVrfAgfKJA
+         L4DjVhF5/krCg3I2U4iF2J9+WFTUoCvWzZZInPrRJIyLwaYEIrgoGdn96LRFitAK8ako
+         YZJ0qVFh6Oz6JhZ/oVTgSPKEw3i436Sosoc3z0VFRoWW7KEVf0sRlLAWi3dQHjAdIxbr
+         JqDOIyE/oAEgdNNO0m063ifsiJd68kSzJBvMnwnUvCm47tkjENGDTPXqitTVE2JmY4D3
+         OErw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=K7O8/7ogKx8WzzRgxh6e6gC9a0ALFnBxrPW4Tv+K91E=;
-        b=6Utt7hxYhD+8B3g7j6ImKsZrNHtkjdZf5oMoq12TM/b1oA7Z4YPfSO28dT4tFST0A+
-         F3eeQAJ7VduPWHDrs7848I0GM9qq5hzrNxGDx5TczS0dlVFwIhBUSQdCUcbg2auMppp7
-         s2uHuPU04LY6MLf8sXaR48syXjJbJJLi1YGmZwCA0XKsXBRb+8yUfrmU7ep/HkyOWrbv
-         VUfpgy8d/thIo6GxFgxqikyqIJ64qfMR/25Tdt05W5xMHpuliRs+S3/7KSHICfbifZvg
-         ZjKjeNebtbIpeiqxVsUv0c+1aurT1Y5b4QYB5fAa9i9mpgWqKH7n3CHEQjYjiY0iuqYZ
-         96kg==
-X-Gm-Message-State: ANoB5pmf2MEP7pYm80Y+VK3zINQHVpN/D928ccdINHScAOmkE85DLQHG
-        BJyOY4JPoFc0dFWzpIUzUd6oRHBw+/jTk0kf
-X-Google-Smtp-Source: AA0mqf4TLyGoJXHjVVtP4w82MegmT9LdD5zX1zlasjVB4tCX+Jv61apQFV8x8y6zeXa83IWHB2TgoA==
-X-Received: by 2002:a17:902:e54c:b0:189:c1b4:8fe6 with SMTP id n12-20020a170902e54c00b00189c1b48fe6mr40417449plf.53.1671123680764;
-        Thu, 15 Dec 2022 09:01:20 -0800 (PST)
+        bh=Xd4EliKq7RGLoGsrWDsqLSSvOown03UCv03d22ew7cY=;
+        b=VvRejtU2J6bpTB1xygPT6Sskdx1sSgve2N+D0a+wwXVbExtIm0a5Oa9VR64YaW/V0p
+         4pd/UlQ4GJpv7WPkaj6b5/1Re9y7f7c4C4N1ZH5jPnXJboS0GEsptmkEtExp/ab3eo4R
+         mHwmLw3Wf0KaYbn0KoiGD8cJpKDW1KP2Q76F4C6uTCy5HQR/I1m4xF/kwk2zOYqHehBa
+         zfgsoBnPNcQijUIJgvfPvHaKtWNOrgigNdMvfD4VRmw7+bsk+Z8WVvke6Qi67/YYQPia
+         Pw5rlvfi6zXHLDuWAVzBcrw9Jcuq14wTLNU9TjuOtBW/dIl86NGj3hpmIPEigdmv8YCR
+         51Pg==
+X-Gm-Message-State: AFqh2krM8UoJiE0GVfg+jrpy1OQE1EWHn95XBGKj2cFhXuMtzoVis/qU
+        Ll59azY6RpeUMXp9aTsmO3KVyKnI32ZCHYhD
+X-Google-Smtp-Source: AMrXdXvQYU82N+iVubdoY963p+S/kLC/NfFUJryN/aBDIrEtRm2bFUCcxGUDizonKgdpgBRh/bjKew==
+X-Received: by 2002:a17:902:b201:b0:189:ea4c:e414 with SMTP id t1-20020a170902b20100b00189ea4ce414mr4445034plr.61.1671123681604;
+        Thu, 15 Dec 2022 09:01:21 -0800 (PST)
 Received: from atishp.ba.rivosinc.com ([66.220.2.162])
         by smtp.gmail.com with ESMTPSA id p10-20020a170902780a00b001897bfc9800sm4067449pll.53.2022.12.15.09.01.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 09:01:20 -0800 (PST)
+        Thu, 15 Dec 2022 09:01:21 -0800 (PST)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Atish Patra <atishp@rivosinc.com>,
@@ -63,50 +63,143 @@ Cc:     Atish Patra <atishp@rivosinc.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
         Eric Lin <eric.lin@sifive.com>, Will Deacon <will@kernel.org>
-Subject: [PATCH v2 08/11] RISC-V: KVM: Disable all hpmcounter access for VS/VU mode
-Date:   Thu, 15 Dec 2022 09:00:43 -0800
-Message-Id: <20221215170046.2010255-9-atishp@rivosinc.com>
+Subject: [PATCH v2 09/11] RISC-V: KVM: Implement trap & emulate for hpmcounters
+Date:   Thu, 15 Dec 2022 09:00:44 -0800
+Message-Id: <20221215170046.2010255-10-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221215170046.2010255-1-atishp@rivosinc.com>
 References: <20221215170046.2010255-1-atishp@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Any guest must not get access to any hpmcounter including cycle/instret
-without any checks. We achieve that by disabling all the bits except TM
-bit in hcountern.
-
-However, instret and cycle access for guest userspace can be enabled
-upon explicit request (via ONE REG) or on first trap from VU mode
-to maintain ABI requirement in the future. This patch doesn't support
-that as ONE REG inteface is not settled yet.
+As the KVM guests only see the virtual PMU counters, all hpmcounter
+access should trap and KVM emulates the read access on behalf of guests.
 
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/kvm/main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/riscv/include/asm/kvm_vcpu_pmu.h | 16 ++++++++++
+ arch/riscv/kvm/vcpu_insn.c            |  4 ++-
+ arch/riscv/kvm/vcpu_pmu.c             | 44 ++++++++++++++++++++++++++-
+ 3 files changed, 62 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
-index 58c5489..9c2efd3 100644
---- a/arch/riscv/kvm/main.c
-+++ b/arch/riscv/kvm/main.c
-@@ -49,7 +49,8 @@ int kvm_arch_hardware_enable(void)
- 	hideleg |= (1UL << IRQ_VS_EXT);
- 	csr_write(CSR_HIDELEG, hideleg);
+diff --git a/arch/riscv/include/asm/kvm_vcpu_pmu.h b/arch/riscv/include/asm/kvm_vcpu_pmu.h
+index 6a8c0f7..7a9a8e6 100644
+--- a/arch/riscv/include/asm/kvm_vcpu_pmu.h
++++ b/arch/riscv/include/asm/kvm_vcpu_pmu.h
+@@ -43,6 +43,19 @@ struct kvm_pmu {
+ #define vcpu_to_pmu(vcpu) (&(vcpu)->arch.pmu)
+ #define pmu_to_vcpu(pmu)  (container_of((pmu), struct kvm_vcpu, arch.pmu))
  
--	csr_write(CSR_HCOUNTEREN, -1UL);
-+	/* VS should access only TM bit. Everything else should trap */
-+	csr_write(CSR_HCOUNTEREN, 0x02);
++#if defined(CONFIG_32BIT)
++#define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
++{ .base = CSR_CYCLEH,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm }, \
++{ .base = CSR_CYCLE,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm },
++#else
++#define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
++{ .base = CSR_CYCLE,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm },
++#endif
++
++int kvm_riscv_vcpu_pmu_read_hpm(struct kvm_vcpu *vcpu, unsigned int csr_num,
++				unsigned long *val, unsigned long new_val,
++				unsigned long wr_mask);
++
+ int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu, struct kvm_vcpu_sbi_ext_data *edata);
+ int kvm_riscv_vcpu_pmu_ctr_info(struct kvm_vcpu *vcpu, unsigned long cidx,
+ 				struct kvm_vcpu_sbi_ext_data *edata);
+@@ -65,6 +78,9 @@ void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu);
+ #else
+ struct kvm_pmu {
+ };
++#define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
++{ .base = 0,      .count = 0, .func = NULL },
++
  
- 	csr_write(CSR_HVIP, 0);
+ static inline int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
+ {
+diff --git a/arch/riscv/kvm/vcpu_insn.c b/arch/riscv/kvm/vcpu_insn.c
+index 1ff2649..f689337 100644
+--- a/arch/riscv/kvm/vcpu_insn.c
++++ b/arch/riscv/kvm/vcpu_insn.c
+@@ -213,7 +213,9 @@ struct csr_func {
+ 		    unsigned long wr_mask);
+ };
+ 
+-static const struct csr_func csr_funcs[] = {};
++static const struct csr_func csr_funcs[] = {
++	KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS
++};
+ 
+ /**
+  * kvm_riscv_vcpu_csr_return -- Handle CSR read/write after user space
+diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
+index 0f0748f1..53c4163 100644
+--- a/arch/riscv/kvm/vcpu_pmu.c
++++ b/arch/riscv/kvm/vcpu_pmu.c
+@@ -17,6 +17,43 @@
+ 
+ #define kvm_pmu_num_counters(pmu) ((pmu)->num_hw_ctrs + (pmu)->num_fw_ctrs)
+ 
++static int pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
++			unsigned long *out_val)
++{
++	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
++	struct kvm_pmc *pmc;
++	u64 enabled, running;
++
++	pmc = &kvpmu->pmc[cidx];
++	if (!pmc->perf_event)
++		return -EINVAL;
++
++	pmc->counter_val += perf_event_read_value(pmc->perf_event, &enabled, &running);
++	*out_val = pmc->counter_val;
++
++	return 0;
++}
++
++int kvm_riscv_vcpu_pmu_read_hpm(struct kvm_vcpu *vcpu, unsigned int csr_num,
++				unsigned long *val, unsigned long new_val,
++				unsigned long wr_mask)
++{
++	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
++	int cidx, ret = KVM_INSN_CONTINUE_NEXT_SEPC;
++
++	if (!kvpmu || !kvpmu->init_done)
++		return KVM_INSN_EXIT_TO_USER_SPACE;
++
++	if (wr_mask)
++		return KVM_INSN_ILLEGAL_TRAP;
++	cidx = csr_num - CSR_CYCLE;
++
++	if (pmu_ctr_read(vcpu, cidx, val) < 0)
++		return KVM_INSN_EXIT_TO_USER_SPACE;
++
++	return ret;
++}
++
+ int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu, struct kvm_vcpu_sbi_ext_data *edata)
+ {
+ 	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+@@ -69,7 +106,12 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_ba
+ int kvm_riscv_vcpu_pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
+ 				struct kvm_vcpu_sbi_ext_data *edata)
+ {
+-	/* TODO */
++	int ret;
++
++	ret = pmu_ctr_read(vcpu, cidx, &edata->out_val);
++	if (ret == -EINVAL)
++		edata->err_val = SBI_ERR_INVALID_PARAM;
++
+ 	return 0;
+ }
  
 -- 
 2.25.1
