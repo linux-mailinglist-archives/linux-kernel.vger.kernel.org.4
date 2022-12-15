@@ -2,83 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA8064D5AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 04:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B808D64D5B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 04:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiLODsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 22:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
+        id S229536AbiLODtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 22:49:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiLODsM (ORCPT
+        with ESMTP id S229451AbiLODtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 22:48:12 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFD34385E;
-        Wed, 14 Dec 2022 19:48:11 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1p5fE5-0003wP-G6; Thu, 15 Dec 2022 04:48:05 +0100
-Date:   Thu, 15 Dec 2022 03:47:59 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [PATCH net v3] net: dsa: mt7530: remove redundant assignment
-Message-ID: <Y5qY7x6la5TxZxzX@makrotopia.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 14 Dec 2022 22:49:36 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F380D532EB;
+        Wed, 14 Dec 2022 19:49:33 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id 17so5599797pll.0;
+        Wed, 14 Dec 2022 19:49:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WoGErgG0tPjEmHbvShVDwwWrf8srDtoKq+kmmat95m4=;
+        b=X/gzNQ0eQQmf65T1aVS5FnWeKPIqq7d5KelstASURwfxQbb4bBxhD17W9QzQdWuoiO
+         lcwQWTXobQ12aI7Qpm2Dn/rv6LuKHGln+mV+xuxKy+slrKmmlxWeWplqNXpdgjDHxaYg
+         O4lMbHrOM0m+VC/iijnAgmsA0zUakdui9e+p2Tf3TX2ASTPa+Cz+nEVcMloS/MVpPG4f
+         mddWGnIclG7v2RGyO5j5CJjeh4eYJkWy5KdZJEPfch4N4JRn4dOdmSdnD4jsYukl5Vze
+         zhlAoAoFaiOuiPEC07jmmJ2aeSAPavLbQA3DWjUk1aoQUtRnRtxd8HYYyhjIIGH+ERQl
+         Tfrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WoGErgG0tPjEmHbvShVDwwWrf8srDtoKq+kmmat95m4=;
+        b=gbXSxvlQXJOKZ10rAK7OHeDoj6w2NuG3r5YR8ZZ769SzQLxNbG0kZhyXnIS+kag2vX
+         nw9yN36nPrD/5j5eaHmn33XeGHptS4x0NtYXykvHrsa+zR99usg3dwmuzLbYg2T2+/UO
+         j12EYjD5a4Sb/y3v85Ao9KvTdV4dF0tzsexOJc0WlQZ6XPPoGZzVFug/E9yHjYUBzC/t
+         CTfFFR+EY2GFXlwBnYXD2DYWqmOjKayEwdCpaBdVlna3PuECorgf+/Kx2D9qeDuz7VRp
+         rWglQLn/z4M/Wxj7DDznN9Ppj54p7ilJs7q6MoES5gG4SiVyLYIUJu+IOY/Wwfd/ozEV
+         sUag==
+X-Gm-Message-State: ANoB5pmjA14MrG9pizwmrsyCPCgfjs7nLJ9BWyy+wn3aKsYHkOzCNXLy
+        JSPpoS/lvCQSW4czRwzt5kA=
+X-Google-Smtp-Source: AA0mqf5FN9N2BagNPjFbLCKWMwGh2ybPt7IpL3XwDFlzON8j/WcEg0aF3EKVbrnrhHM2ktFkHbJN1Q==
+X-Received: by 2002:a05:6a20:9c93:b0:a5:6e3d:1055 with SMTP id mj19-20020a056a209c9300b000a56e3d1055mr30770655pzb.16.1671076173361;
+        Wed, 14 Dec 2022 19:49:33 -0800 (PST)
+Received: from dell-cros.hitronhub.home ([119.77.166.223])
+        by smtp.gmail.com with ESMTPSA id o15-20020a170902d4cf00b0018980f14940sm2577852plg.178.2022.12.14.19.49.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 19:49:32 -0800 (PST)
+From:   Ron Lee <ron.lee.intel@gmail.com>
+X-Google-Original-From: Ron Lee <ron.lee@intel.com>
+To:     bhelgaas@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        lmajczak@google.com, rajatja@google.com,
+        Ron Lee <ron.lee@intel.com>
+Subject: [PATCH] PCI: Fix up L1SS capability for Intel Apollolake PCIe bridge
+Date:   Thu, 15 Dec 2022 11:48:57 +0800
+Message-Id: <20221215034857.9076-1-ron.lee@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Russell King correctly pointed out that the MAC_2500FD capability is
-already added for port 5 (if not in RGMII mode) and port 6 (which only
-supports SGMII) by mt7531_mac_port_get_caps. Remove the reduntant
-setting of this capability flag which was added by a previous commit.
+On Google Coral and Reef family chromebooks, the PCIe bridge lost its
+L1 PM Substates capability after resumed from D3cold, and identify that
+the pointer to the this capability and capapability header are missing
+from the capability list.
 
-Fixes: e19de30d2080 ("net: dsa: mt7530: add support for in-band link status")
-Reported-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+....
+Capabilities: [150 v0] Null
+Capabilities: [200 v1] L1 PM Substates
+        L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+ ...
+                  PortCommonModeRestoreTime=40us PortTPowerOnTime=10us
+        L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+
+                   T_CommonMode=40us LTR1.2_Threshold=98304ns
+        L1SubCtl2: T_PwrOn=60us
+...
+
+This patch fix up the header and the pointer to the L1SS capability
+after resuming from D3Cold.
+
+Signed-off-by: Ron Lee <ron.lee@intel.com>
 ---
-Changes since v2: correct commit title 'reduntant' -> 'redundant'
-Changes since v1: Use 12 chars for fixes tag, fix Russell's contact
+ drivers/pci/quirks.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
- drivers/net/dsa/mt7530.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index e74c6b406172..908fa89444c9 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -2919,9 +2919,6 @@ static void mt753x_phylink_get_caps(struct dsa_switch *ds, int port,
- 	config->mac_capabilities = MAC_ASYM_PAUSE | MAC_SYM_PAUSE |
- 				   MAC_10 | MAC_100 | MAC_1000FD;
- 
--	if ((priv->id == ID_MT7531) && mt753x_is_mac_port(port))
--		config->mac_capabilities |= MAC_2500FD;
--
- 	/* This driver does not make use of the speed, duplex, pause or the
- 	 * advertisement in its mac_config, so it is safe to mark this driver
- 	 * as non-legacy.
-
-base-commit: 7e68dd7d07a28faa2e6574dd6b9dbd90cdeaae91
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 285acc4aaccc..e538f6d066f7 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -5992,3 +5992,18 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2d, dpc_log_size);
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2f, dpc_log_size);
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a31, dpc_log_size);
+ #endif
++
++static void chromeos_fixup_apl_bridge_l1ss_capability(struct pci_dev *pdev)
++{
++	if (!dmi_match(DMI_SYS_VENDOR, "Google") ||
++		(!dmi_match(DMI_PRODUCT_FAMILY, "Google_Coral") &&
++		 !dmi_match(DMI_PRODUCT_FAMILY, "Google_Reef")))
++		return;
++
++	pci_info(pdev, "Fix up L1SS Capability\n");
++	/* Fix up the L1SS Capability Header*/
++	pci_write_config_dword(pdev, pdev->l1ss, (0x220 << 20) | (1 << 16) | (PCI_EXT_CAP_ID_L1SS));
++	/* Fix up the pointer to L1SS Capability*/
++	pci_write_config_dword(pdev, 0x150, pdev->l1ss << 20);
++}
++DECLARE_PCI_FIXUP_RESUME(PCI_VENDOR_ID_INTEL, 0x5ad6, chromeos_fixup_apl_bridge_l1ss_capability);
 -- 
-2.39.0
+2.17.1
 
