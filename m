@@ -2,169 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6BF64E364
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 862E064E360
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbiLOVmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 16:42:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
+        id S229639AbiLOVmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 16:42:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiLOVmj (ORCPT
+        with ESMTP id S229583AbiLOVm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 16:42:39 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BACA5C76B;
-        Thu, 15 Dec 2022 13:42:34 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BFLfnha052913;
-        Thu, 15 Dec 2022 15:41:49 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1671140509;
-        bh=WLpVP2bWfliAogzAGVvfrb8O9z6xT+DatR+7Ps4pVB8=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=YkRW9VrIYluAbll9dwl1NaXdtykQ7/RwaMYW9TfyfocH17R2Oxf/oe4ljablDsk/y
-         9UlFYgkNzoEhKp8WSsbOz8FJ3YrvKGoM5/qTXEXUa2IhZHLu0AmWmRzwG5U8ew57Kf
-         2R+TII0CdC9MeRqbpfF+76gxynynnU7qQj+W4C4M=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BFLfncA110061
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Dec 2022 15:41:49 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 15
- Dec 2022 15:41:49 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 15 Dec 2022 15:41:49 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BFLfnGb072680;
-        Thu, 15 Dec 2022 15:41:49 -0600
-Date:   Thu, 15 Dec 2022 15:41:49 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     jerome Neanne <jneanne@baylibre.com>,
-        Wadim Egorov <W.Egorov@phytec.de>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "kristo@kernel.org" <kristo@kernel.org>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "tony@atomide.com" <tony@atomide.com>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "marcel.ziswiler@toradex.com" <marcel.ziswiler@toradex.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "biju.das.jz@bp.renesas.com" <biju.das.jz@bp.renesas.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "jeff@labundy.com" <jeff@labundy.com>, "afd@ti.com" <afd@ti.com>,
-        "khilman@baylibre.com" <khilman@baylibre.com>,
-        "narmstrong@baylibre.com" <narmstrong@baylibre.com>,
-        "msp@baylibre.com" <msp@baylibre.com>,
-        "j-keerthy@ti.com" <j-keerthy@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>
-Subject: Re: [PATCH v7 1/6] DONOTMERGE: arm64: dts: ti: Add TI TPS65219 PMIC
- support for AM642 SK board.
-Message-ID: <20221215214149.whcjdphxxvvedrih@affront>
-References: <20221104152311.1098603-1-jneanne@baylibre.com>
- <20221104152311.1098603-2-jneanne@baylibre.com>
- <d0d7e315-ce86-0420-8ef5-fe2e4aefd5b4@phytec.de>
- <e2bc53fe-3a0c-cf24-8b29-ca377aba3721@baylibre.com>
- <Y5tGzjgcAWPqdFNE@sirena.org.uk>
- <20221215175411.znxy3d6ussq2iq5h@grieving>
- <Y5tl3+2pJispcXy6@sirena.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y5tl3+2pJispcXy6@sirena.org.uk>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 15 Dec 2022 16:42:29 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4B41E70C
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 13:42:27 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id s14so354143qvo.11
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 13:42:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HyAul30Dlo0Qi+nZ6ABNWPasZot+uvnehOd4uveE51s=;
+        b=H+NwbDuKB8t7a45P51soZAPjRShYDJZObTcUg6/L9Y1QhFZqDsFY8MiCfqy11zQsKS
+         slt8mdd2YftNZ3pudujwwF/CDoDew3Z9NtvwZD1jAINu0ldUOv/6AD3yf3PVTDd9aase
+         A7ni6Bb+TW+6/haELJtEdkc/oVqoeJVwA2IwM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HyAul30Dlo0Qi+nZ6ABNWPasZot+uvnehOd4uveE51s=;
+        b=JtqV4eQPc6BnxKTuQSjU16PwIEMSJnH14sjk7L9SMebwQg1FpKocR+BAsj6MaiTXBQ
+         9MRcD3JkwmTPp4VFvFo4B+FsmpsOzgf/Q4hQqotdxjEkaDtbQtSTXrmKAKqa2yz9c83K
+         bG5XOorHne6dY7juvOf+I9afsyjHCg6QIuaunF6eSAtRERjL0NpbEyFXATUsNcy6W5Le
+         B1Pl1aE4W8e0tsPXPY3IQphOWinHJvWjWEZwEbuiapbCP8E6C8xzNViPxCFvSZQQiEqY
+         RlmUN54n0LpStKeR8g7I//fGwqleJR6mMyJi/7ozG5MH+RuhWs/k20WkC63XaEtGgysP
+         /3ew==
+X-Gm-Message-State: ANoB5pn7nESwXypFaAIYHquU4uMTAJW8u/rmKHOkVjZLoPlFhindseJ0
+        TfSFonOYXqzYxd0HcdlyAx84Gg==
+X-Google-Smtp-Source: AA0mqf4fuiqcqjjGtJ4rS+jP/30QgZUorBODzGY2oEGCOwIvpJ9BokPpw0JVW3/Bf2XI6vOxOH4bqQ==
+X-Received: by 2002:a05:6214:390a:b0:4c9:8d2e:33d1 with SMTP id nh10-20020a056214390a00b004c98d2e33d1mr43329402qvb.35.1671140546920;
+        Thu, 15 Dec 2022 13:42:26 -0800 (PST)
+Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
+        by smtp.gmail.com with ESMTPSA id u25-20020a37ab19000000b006feea093006sm15711qke.124.2022.12.15.13.42.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 13:42:25 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH RFC] srcu: Yet more detail for srcu_readers_active_idx_check() comments
+Date:   Thu, 15 Dec 2022 16:42:15 -0500
+Message-Id: <8E05ED42-A391-48D3-97B3-FBD667E72D10@joelfernandes.org>
+References: <20221215213900.GQ4001@paulmck-ThinkPad-P17-Gen-1>
+Cc:     Frederic Weisbecker <frederic@kernel.org>, boqun.feng@gmail.com,
+        neeraj.iitr10@gmail.com, urezki@gmail.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221215213900.GQ4001@paulmck-ThinkPad-P17-Gen-1>
+To:     paulmck@kernel.org
+X-Mailer: iPhone Mail (20B101)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18:22-20221215, Mark Brown wrote:
-> On Thu, Dec 15, 2022 at 11:54:11AM -0600, Nishanth Menon wrote:
-> > On 16:09-20221215, Mark Brown wrote:
-> 
-> > > That proposal looks really non-idiomatic and quite unusual, if there's a
-> > > fixed voltage supply to the LDO I'd expect to see it modeled as a fixed
-> > > voltage regulator.  I'm not sure what the use of bypass here is trying
-> > > to accomplish TBH.
-> 
-> > The problem is this - the default NVM in the PMIC is setup such that
-> > VSET value =3.3v and bypass bit set (makes sense since the vin=3.3v).
-> 
-> This implies no voltage drop over the LDO?  Sounds a bit suspect.
-
-Not the choice I'd probably have made ;)
-
-> 
-> > Now the constraint is bypass bit cannot be changed without the LDO
-> > being switched off.
-> 
-> > regulator-allow-bypass property allows us to control bypass bit, but we
-> > should'nt toggle it when LDO is active. Not providing the property
-> > implies the bit wont be toggled by regulator core either.
-> 
-> > What we need is a scheme that will disable the bypass bit with the
-> > intent of operating the LDO with just the vset field. I did'nt find it
-> > possible atm.. unless I am mistaken..
-> 
-> Can the consumer just disable the supply as part of startup?  Though
-> that's starting to feel rather board specific.  There's not really a
-
-Yeah - this happens to be SDcard supply (at least in my case).. I'd
-rather not change the mmc host or core layer to handle a case where
-LDO happened to be in bypass. it is a regulator driver's problem, IMHO
-how to provide the stated voltage OR fail to transition the voltage.
-
-In this driver's case, it happily accepts and set the VSET voltage - for
-example to 1.8V, but then, since the bypass bit is set, well, voltage
-sticks around at 3.3v.
-
-> good place to put a board specific setup process like that in the kernel
-> at the minute, you'd ideally want the firmware to leave the device at
-> least disabled if not actually out of bypass on startup so we don't have
-> to deal with this.  Ugh...
-
-Yeah - that would be the other option - I could plug this bypass clear
-in the u-boot or someplace early so that the LDO behaves
-
-Also the reason why I did'nt send the mentioned patch (or the like
-upstream and the patch was done just a couple of days back) were the following
-questions:
-a) Why would'nt we handle the case where bypass bit
-   is set AND voltage change implies bypass bit needs to be disabled? (i
-   would expect it to fail but if i did provide regulator-allow-bypass,
-   then if bypass is set AND requested-voltage != vin-supply, then i'd
-   have expected framework to probably disable bypass and switch voltage
-   to new voltage - which this driver, based on it's constraint will say
-   "nope, cant do" - but that would be better than silently telling me
-   all good, setting vset and leaving the bypass bit on.)
-b) If I wanted the LDO to poweroff the bypass bit at start (define the
-   startup hardware condition), I dont seem to have a description for
-   that either.
 
 
+> On Dec 15, 2022, at 4:39 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+>=20
+> =EF=BB=BFOn Thu, Dec 15, 2022 at 03:33:39PM -0500, Joel Fernandes wrote:
+>>> On Thu, Dec 15, 2022 at 3:03 PM Joel Fernandes <joel@joelfernandes.org> w=
+rote:
+>>>=20
+>>> Hi Paul,
+>>>=20
+>>>> On Thu, Dec 15, 2022 at 2:58 PM Paul E. McKenney <paulmck@kernel.org> w=
+rote:
+>>> [...]
+>>>>> If the first read section's srcu_read_unlock() and its corresponding
+>>>>> smp_mb()  happened before the flip, then the increment of old idx
+>>>>> would happen only once. The next srcu_read_lock() will read the new
+>>>>> index. If the srcu_read_unlock() and it's corresponding smp_mb()
+>>>>> happened after the flip, the old_idx will be sampled again and can be
+>>>>> incremented twice. So it depends on how the flip races with
+>>>>> srcu_read_unlock().
+>>>>=20
+>>>> I do understand that a number of people like reasoning about
+>>>> memory-barrier ordering, courtesy of the sequentially consistent portio=
+ns
+>>>> of the C and C++ memory models, but thinking in terms of the accesses
+>>>> surrounding the memory barriers has been far less error-prone.
+>>>=20
+>>> Sure, but we are already talking in terms of the access to idx right?
+>>> That's what we're saying is visible by memory barriers and we are
+>>> trying to reason here about the ordering (flip does the write to idx
+>>> and followed by smp_mb(), and there is corresponding read of idx on
+>>> the srcu_read_lock() side. So we are indeed talking in terms of
+>>> access, but let me know if I missed something.
+>>>=20
+>>>>> Also, since this is all hard to reason about I started making some
+>>>>> diagrams, LOL. For your amusement, here is why need to scan both idx
+>>>>> during grace period detection: https://i.imgur.com/jz4bNKd.png
+>>>>=20
+>>>> Nice!
+>>>>=20
+>>>> I suggest placing a gap between GP 2 and GP 3.  That way, you can make i=
+t
+>>>> very clear that Reader 1's critical section starts after the end of GP 2=
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+>>>> (thus clearly never blocking GP 2) and before GP 3 (thus possibly havin=
+g
+>>>> a reference to some data that is going to be freed at the end of GP 3).=
+
+>>>>=20
+>>>> I also suggest coloring Reader 1 red and Reader 2 green, given that the=
+
+>>>> color red generally indicates danger.
+>>>=20
+>>> Thanks for these suggestions! I will make the update. I am planning to
+>>> make a number of diagrams for other scenarios as well, as it helps
+>>> visualize. Google drawing is nice for these. I am happy to share these
+>>> with you all if there is interest :).
+>>=20
+>> I made these updates, please see: https://i.imgur.com/hoKLvtt.png
+>>=20
+>> Feel free to use the image for any purpose and thanks ;-)
+>=20
+> Very good, thank you!
+>=20
+> Would it be possible to have an arrow marked "X" or "reference to X"
+> from the beginning of the 'Mark "x" for GC' box to the box labeled
+> 'Enter RSCS (access "X")'?
+
+I am currently away from desk. I shared the google drawing with you. Could y=
+ou check and make the change, if that=E2=80=99s ok with you?
+
+Thank you so much,
+
+ - Joel
+
+>=20
+>                            Thanx, Paul
