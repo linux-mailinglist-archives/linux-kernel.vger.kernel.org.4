@@ -2,165 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF97064D4CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:52:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 993F164D4D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiLOAwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 19:52:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
+        id S229787AbiLOAxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 19:53:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiLOAwH (ORCPT
+        with ESMTP id S229786AbiLOAxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 19:52:07 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6367E31372
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:52:04 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id y25so13244749lfa.9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:52:04 -0800 (PST)
+        Wed, 14 Dec 2022 19:53:44 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C77E31EDC
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:53:43 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id x17-20020a17090a8a9100b002196a3b190cso624550pjn.6
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:53:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=S6mAIVbE3TYfe/sfWszMjsZBqUjDt0fQZqgGBAUpy8I=;
-        b=ByXnkyrSsttOE9yaSrHKJ9PTVsP8OSTXEDlhVcK0vltwTJpeofa/qPcGMhuYp9yqUX
-         e7cgOS1KawYLWjYOEivEru4sKz9XjVOIwc6/cN5MseSeoqF1tM+t3cmKtXx8D7E5gSzP
-         qh79npKk4m7i71hW8tTyrFNtVL0iY2Isz71f6eoK7UU1X0HjSaoLVmBZvottVJX8ztkj
-         tCOpD9Dq5NQhTVZNJthrNy6xKzaF6vibEF34dWjpDrQciyvsCT+tpHS+oJhw/11LUoQL
-         Fi8/Ve2xf2PvX100VbCj5bh5jKZ6febAW7ufjg+hENZG+h0lZXvALwuyI3BLHcRMm9fH
-         Zbfw==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rBQYa4W8A+AJiUwNOuc8Q7CyuPP2yMOoaSr+CBtkpMs=;
+        b=GdN50OAHp+Whl7EboNBqIJn7oMiw0wMD07/V3yhXDi6aM7BuLjNewzP+7YDBpsBJ+t
+         tJUZGFjcK+BXqCOAE5KeHD+NIjcRVsaGFUAxZJcZjE0kPoWv8u59DtRW6I8kOtHpzhKI
+         +HhVWr7TCZM6RyQbe9z3q6nIWW96S2SgUnyv9GkLnPtSFh5MypWdIpt4l4MHD59sm8FZ
+         QMDrkivQiAhZ7MHgT89D20umdttHAvZUFQnvyhXjR4PPagWsOwQTtnNLKHUibA4PzFgJ
+         qqP9K1gIEbt5z5ffT3bfajfodA37Rs56abzXE28EyLy3FX/hlHtL5BQcqPHbupdC2HdE
+         9PuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S6mAIVbE3TYfe/sfWszMjsZBqUjDt0fQZqgGBAUpy8I=;
-        b=B1q1HQ0Cyx2o8lMvgfEI79F9PtBFvRLSKpae6/tGsnuUcA1G8/8DxdjJ4Q490zNc5z
-         1jCUlbmO5aeXe7YRuCwvCtLa3w2RdNf9E9GwfCHj8pbARD9Bk+LIzDFCPleRDQwDFC4n
-         ITPGdPBaZUP+CdKvV1qUgvAjqFFcxHSMjbSILrnotgvHA3KVXcxqjV58SwMzIfThSZXI
-         xe3d87D7rUycZ2SA5pKLRCJb1IMconeLH/c131d+qjo0koXu0L1Ji58DOw3ecxrYCc7C
-         G+2mHqJj9dDuhScBJjRya8b9EWWWs+oh7W8h3kGB0J7oBDdaFy5J3QMkmiMgQIhhtwBd
-         u+lg==
-X-Gm-Message-State: ANoB5pnoasNs23VyZyxhjAFICarYasyrnGWaqRxeye4uGuOhzSMO+LmC
-        HIAO/OKTi+ub+EpGQ+htpbEG7w==
-X-Google-Smtp-Source: AA0mqf4t5Y8GMiTGp+fKIC782S6ls3TtAofUfVlKy6Q2R1OccaJr26S2ArFTXFMKWtDcenAd/6Nudg==
-X-Received: by 2002:a05:6512:159c:b0:4b4:f212:6173 with SMTP id bp28-20020a056512159c00b004b4f2126173mr7866197lfb.4.1671065522702;
-        Wed, 14 Dec 2022 16:52:02 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id d3-20020ac24c83000000b004947984b385sm986881lfl.87.2022.12.14.16.52.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 16:52:02 -0800 (PST)
-Message-ID: <560508a2-9ff5-16b5-ac50-efe9a2afbddb@linaro.org>
-Date:   Thu, 15 Dec 2022 02:52:01 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [RFC PATCH 0/6] drm/msm: DSC Electric Boogaloo for sm8[12]50
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        sunliming <sunliming@kylinos.cn>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221213232207.113607-1-marijn.suijten@somainline.org>
- <154b2e08-25a0-c8b7-1dc8-2d41b8787f05@linaro.org>
- <20221214192322.vs4tvhlzjc265bva@SoMainline.org>
-Content-Language: en-GB
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221214192322.vs4tvhlzjc265bva@SoMainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rBQYa4W8A+AJiUwNOuc8Q7CyuPP2yMOoaSr+CBtkpMs=;
+        b=o3OocnuIV8YZEJiJwTXsgw5YzoEKKjf3q0+c8XlUmWZd62oNKUUbp2O/kFFeie3XgV
+         mGAkFdtss8vUR54QCW6Rx5xtyGtm/KCNkF9lJreGh5DZla8wUWfp7JGARDieacnMA1Lq
+         kunLUayQal5Czf+jBPDIvaK9BtHOvTVWcjvbXqUZAsY0DgNUXgvibEhBrjJp4f4sUPrR
+         ssiHSHiQA8fefXiOyzJxY2QV6dTTtVUBKgririmwcd86TxAsuuvtDQ6wOINmC5O0smOk
+         zoTBaT/ezwE9jZ8ByCgGYCmFSRvkrNzMDMbJR59k0a4iXpEbVJZEW/3WUuOtSDyb4nW4
+         Js3w==
+X-Gm-Message-State: ANoB5pmyF509uNXy3BxkjBx8yRwgsBEbwSv/4eqJ/jpzfgQTro3tvQB2
+        rnv1/7HW50mpKVYaM1R8XpmIFW3+JpJK
+X-Google-Smtp-Source: AA0mqf7OAlNT6gA4JXc8GJ23UMKYjJ0gPupRWtT35R7PXd2xP7OzGAUljthjq0ETxT5v0v7oNQM8JmyAjrnD
+X-Received: from connoro.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:a99])
+ (user=connoro job=sendgmr) by 2002:a05:6a00:e17:b0:576:1d9e:caa0 with SMTP id
+ bq23-20020a056a000e1700b005761d9ecaa0mr35297738pfb.81.1671065622919; Wed, 14
+ Dec 2022 16:53:42 -0800 (PST)
+Date:   Thu, 15 Dec 2022 00:53:15 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
+Message-ID: <20221215005315.186787-1-connoro@google.com>
+Subject: [PATCH bpf-next v2] bpf: btf: limit logging of ignored BTF mismatches
+From:   "Connor O'Brien" <connoro@google.com>
+To:     bpf@vger.kernel.org
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        linux-kernel@vger.kernel.org, "Connor O'Brien" <connoro@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2022 21:23, Marijn Suijten wrote:
-> On 2022-12-14 20:40:06, Dmitry Baryshkov wrote:
->> On 14/12/2022 01:22, Marijn Suijten wrote:
->>> This preliminary Display Stream Compression support package for
->>> (initially tested on) sm8[12]50 is based on comparing DSC behaviour
->>> between downstream and mainline.  Some new callbacks are added (for
->>> binding blocks on active CTLs), logic bugs are corrected, zeroed struct
->>> members are now assigned proper values, and RM allocation and hw block
->>> retrieval now hand out (or not) DSC blocks without causing null-pointer
->>> dereferences.
->>>
->>> Unfortunately it is not yet enough to get rid of completely corrupted
->>> display output on the boards I tested here:
->>> - Sony Xperia 1 (sm8150), 1644x3840 or 1096x2560 pixels;
->>> - Sony Xperia 5II (sm8250), 1080x2520, at 60 or 120Hz;
->>> - (can include more Xperia boards if desired)
->>>
->>> Both devices use the DUALPIPE_DSCMERGE topology downstream: dual LM, PP
->>> and DSC, but only a single INTF/encoder/DSI-link.
->>>
->>> Hopefully this spawns some community/upstream interest to help rootcause
->>> our corruption issues (after we open a drm/msm report on GitLab for more
->>> appropriate tracking).
->>>
->>> The Sony Xperia XZ3 (sdm845) was fully tested and validated with this
->>> series to not cause any regressions (an one of the math fixes now allows
->>> us to change slice_count in the panel driver, which would corrupt
->>> previously).
->>>
->>> Marijn Suijten (6):
->>>     drm/msm/dpu1: Implement DSC binding to PP block for CTL V1
->>>     drm/msm/dpu1: Add DSC config for sm8150 and sm8250
->>>     drm/msm/dpu1: Wire up DSC mask for active CTL configuration
->>>     drm/msm/dsi: Use DSC slice(s) packet size to compute word count
->>>     drm/msm/dsi: Flip greater-than check for slice_count and
->>>       slice_per_intf
->>>     drm/msm/dpu: Disallow unallocated (DSC) resources to be returned
->>
->> General comment: patches with Fixes ideally should come first. Usually
->> they are picked into -fixes and/or stable kernels. If the Fixes patches
->> are in the middle of the series, one can not be sure that they do not
->> have dependencies on previous patches. If there is one, it should
->> probably be stated clearly to ease work on backporting them.
-> 
-> Ack, I may have rushed these RFC patches straight off my branches onto
-> the lists in hopes of sparking some suggestions on what may still be
-> broken or missing to get DSC working on sm[12]50, but will keep this in
-> mind for v2 after receiving some more review.
-> 
-> That said, any suggestions?
+Enabling CONFIG_MODULE_ALLOW_BTF_MISMATCH is an indication that BTF
+mismatches are expected and module loading should proceed
+anyway. Logging with pr_warn() on every one of these "benign"
+mismatches creates unnecessary noise when many such modules are
+loaded. Instead, handle this case with a single log warning that BTF
+info may be unavailable.
 
+Mismatches also result in calls to __btf_verifier_log() via
+__btf_verifier_log_type() or btf_verifier_log_member(), adding several
+additional lines of logging per mismatched module. Add checks to these
+paths to skip logging for module BTF mismatches in the "allow
+mismatch" case.
 
- From what I've noticed lately:
+All existing logging behavior is preserved in the default
+CONFIG_MODULE_ALLOW_BTF_MISMATCH=n case.
 
-- set dsc_version_major/dsc_version_minor
-- try using dsc params from 1.2 rater than 1.1 version spec (there is 
-small difference there)
+Signed-off-by: Connor O'Brien <connoro@google.com>
+---
+v2:
+- Use pr_warn_once instead of skipping logging entirely
+- Also skip btf verifier logs for ignored mismatches
 
+v1: https://lore.kernel.org/bpf/20221109024155.2810410-1-connoro@google.com/
+---
+ kernel/bpf/btf.c | 24 +++++++++++++++++++++---
+ 1 file changed, 21 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index f7dd8af06413..16b959b49595 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -1404,6 +1404,13 @@ __printf(4, 5) static void __btf_verifier_log_type(struct btf_verifier_env *env,
+ 	if (log->level == BPF_LOG_KERNEL && !fmt)
+ 		return;
+ 
++	/*
++	 * Skip logging when loading module BTF with mismatches permitted
++	 */
++	if (env->btf->base_btf && env->btf->kernel_btf &&
++	    IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
++		return;
++
+ 	__btf_verifier_log(log, "[%u] %s %s%s",
+ 			   env->log_type_id,
+ 			   btf_type_str(t),
+@@ -1443,6 +1450,14 @@ static void btf_verifier_log_member(struct btf_verifier_env *env,
+ 
+ 	if (log->level == BPF_LOG_KERNEL && !fmt)
+ 		return;
++
++	/*
++	 * Skip logging when loading module BTF with mismatches permitted
++	 */
++	if (env->btf->base_btf && env->btf->kernel_btf &&
++	    IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
++		return;
++
+ 	/* The CHECK_META phase already did a btf dump.
+ 	 *
+ 	 * If member is logged again, it must hit an error in
+@@ -7260,11 +7275,14 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+ 		}
+ 		btf = btf_parse_module(mod->name, mod->btf_data, mod->btf_data_size);
+ 		if (IS_ERR(btf)) {
+-			pr_warn("failed to validate module [%s] BTF: %ld\n",
+-				mod->name, PTR_ERR(btf));
+ 			kfree(btf_mod);
+-			if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
++			if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH)) {
++				pr_warn("failed to validate module [%s] BTF: %ld\n",
++					mod->name, PTR_ERR(btf));
+ 				err = PTR_ERR(btf);
++			} else {
++				pr_warn_once("Kernel module BTF mismatch detected, BTF debug info may be unavailable for some modules\n");
++			}
+ 			goto out;
+ 		}
+ 		err = btf_alloc_id(btf);
 -- 
-With best wishes
-Dmitry
+2.39.0.rc1.256.g54fd8350bd-goog
 
