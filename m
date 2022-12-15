@@ -2,204 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B9164DDC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8E664DD53
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbiLOPZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 10:25:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
+        id S229906AbiLOPKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 10:10:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiLOPZh (ORCPT
+        with ESMTP id S229838AbiLOPJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 10:25:37 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A7827E;
-        Thu, 15 Dec 2022 07:25:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671117934; x=1702653934;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=U/vFzWlQOr6DEDJM/bvotElVQnhcnvC1D09ECQrMdsc=;
-  b=bUPabGcOzotR7DVhz7cBrJoxkZHv3XUlyh4PuMwjE5qt0p4K8gBLDyu3
-   yaAEf2fDhxXnLFWuL1XTJUm0dXadwDyK5uNxIvR+nS4/swfLGJPUCV31d
-   EKb4ZhZVxUBoJaktltcfbWmBhXS806HyEz3mjiBO9PntMFXHo04Vy+TFS
-   lkE7CixX4sW7pQCUjJfMdNjiE/LzueSrZVLuqWJsviAxtLRvRyoWv9Zk3
-   Rz1idE7YUYvPo3xH65GbEXznUtSmh8tvg1+U9JRk0Wjm7Md7x74jxwYxZ
-   TroHURiEdTtlEy2FjaxLx7vaK/TA+BcSa5k1PF11IROM6PxwJjoAnXhC8
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="320580099"
-X-IronPort-AV: E=Sophos;i="5.96,247,1665471600"; 
-   d="scan'208";a="320580099"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 07:09:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="651568484"
-X-IronPort-AV: E=Sophos;i="5.96,247,1665471600"; 
-   d="scan'208";a="651568484"
-Received: from mylly.fi.intel.com (HELO [10.237.72.68]) ([10.237.72.68])
-  by fmsmga007.fm.intel.com with ESMTP; 15 Dec 2022 07:09:15 -0800
-Message-ID: <a467bab2-c3b0-0515-cb4a-66711b972115@linux.intel.com>
-Date:   Thu, 15 Dec 2022 17:09:15 +0200
+        Thu, 15 Dec 2022 10:09:58 -0500
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01C0303F1;
+        Thu, 15 Dec 2022 07:09:56 -0800 (PST)
+Received: by mail-qk1-f180.google.com with SMTP id p18so2770681qkg.2;
+        Thu, 15 Dec 2022 07:09:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VRK7b4YTFDqD0ddpHKV1yukQyR96FeHvIOON11LsLBg=;
+        b=3OEhIwMkX1t8DWtD8yncIFq73+f8jlmBye01D7jXXHe6vCzQr99WfP2QrEyLaWzAEg
+         biyC/uoMpWgTOTPOeo95QKVYAXSPhpBYIa2ojuGGey/IHczQl1yFD6g5nNR1IdYYFnNs
+         /l+JEHp2fYjYFYHBcB6sm6ADbw2qyA+YUuD525A9xxQTV9mpNziaSFEphEi66jDsTRqF
+         bcIvDwrpqL+aSQZQpr2TjgI42I9y3y1KcZ5nDM+/qrvOk0DB6klfy01PF2HHdzpe5fuT
+         +5BjZM8Gc55hd40R3kiUsPOB4zLh76iSezbsznc+G0TEK0cHZWI2/qXKgyqU88prSX/P
+         cWtw==
+X-Gm-Message-State: ANoB5pkLXfwOe6O40qq1ETwdT11+otcNOOWbFndBXwQaWCn+UL8FHi+2
+        d5C5awkT1mgwOrkAPMYA+m9ob2udWtzjrMEp8dc=
+X-Google-Smtp-Source: AA0mqf7wusuKMs1Q8WwRWT/Pt548QltdxupyQSw7BdWJWLp7RFWt/7IPy4nNx0f8dhf5aJlnBUqxaT4CuGH14pvSFhE=
+X-Received: by 2002:a05:620a:4611:b0:6fa:af7e:927c with SMTP id
+ br17-20020a05620a461100b006faaf7e927cmr82807384qkb.443.1671116995879; Thu, 15
+ Dec 2022 07:09:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [PATCH v2] i2c: designware: Fix unbalanced suspended flag
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com, wsa@kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-References: <20221213144524.368297-1-rf@opensource.cirrus.com>
- <8cf30cb2-6dec-b21b-ba15-f21490546426@redhat.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <8cf30cb2-6dec-b21b-ba15-f21490546426@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <2262737.ElGaqSPkdT@kreacher> <1df12728a2e788788fd387588bac62023e123d16.camel@hadess.net>
+ <2145955.irdbgypaU6@kreacher> <CAJZ5v0ic+pm+NWD8g4O2MwQEvi+xuB-W9Wpd6c1RhprhoxuK1g@mail.gmail.com>
+ <8281ddcc16cc950f9cde4b196cf208adcc798319.camel@hadess.net>
+ <CAJZ5v0gjAGZFS6ap+NAbsi96hq7y9MRGE0h_A-n6xfB1CMs=2g@mail.gmail.com>
+ <cd8b2a2160f5d36d1b73bc0567cd0f6e7e5751c4.camel@hadess.net>
+ <CAJZ5v0gRm1NG=QuDFDFdcZgTu7Q0Z3cW3fwGg09sD+3BBV8E1A@mail.gmail.com>
+ <91367d07a72ecb2065faebe974c54ebd966e0d59.camel@hadess.net>
+ <CAJZ5v0ghW2DdC0quVQ-+Oad7bR95Pyp4Uhd9=XUYk9SQrXKj5w@mail.gmail.com>
+ <b356b5684cc631513c0498f18d7c185b77416f85.camel@hadess.net> <6b5e878265958fb0201178fc3c1d75ef06c826ec.camel@hadess.net>
+In-Reply-To: <6b5e878265958fb0201178fc3c1d75ef06c826ec.camel@hadess.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 15 Dec 2022 16:09:44 +0100
+Message-ID: <CAJZ5v0j3c33q_X-RoUxT4NnE=zoONvHCmMECz507E0XXRpOczA@mail.gmail.com>
+Subject: Re: [Regression] Logitech BT mouse unusable after commit 532223c8ac57
+ (still in 6.1-rc8)
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On Tue, Dec 13, 2022 at 5:14 PM Bastien Nocera <hadess@hadess.net> wrote:
+>
+> On Thu, 2022-12-08 at 16:20 +0100, Bastien Nocera wrote:
+> > On Wed, 2022-12-07 at 18:44 +0100, Rafael J. Wysocki wrote:
+> > > On Wed, Dec 7, 2022 at 6:19 PM Bastien Nocera <hadess@hadess.net>
+> > > wrote:
+> > > >
+> > > > On Wed, 2022-12-07 at 12:07 +0100, Rafael J. Wysocki wrote:
+> > > > > # hidpp-list-features /dev/hidraw1
+> > > > > Bluetooth Mouse M336/M337/M535 (046d:b016) is a HID++ 4.5
+> > > > > device
+> > > > > Feature 0x01: [0x0001] Feature set
+> > > > > Feature 0x02: [0x0003] Device FW version
+> > > > > Feature 0x03: [0x0005] Device name
+> > > > > Feature 0x04: [0x0020] Reset
+> > > > > Feature 0x05: [0x1e00] Enable hidden features (hidden)
+> > > > > Feature 0x06: [0x1800] Generic Test (hidden, internal)
+> > > > > Feature 0x07: [0x1000] Battery status
+> > > > > Feature 0x08: [0x1b04] Reprog controls v4
+> > > > > Feature 0x09: [0x2100] Vertical scrolling
+> > > > > Feature 0x0a: [0x2200] Mouse pointer
+> > > > > Feature 0x0b: [0x2205] Pointer speed
+> > > > > Feature 0x0c: [0x18b1] ? (hidden, internal)
+> > > > > Feature 0x0d: [0x2121] Hi-res wheel
+> > > > > Feature 0x0e: [0x1f03] ? (hidden, internal)
+> > > >
+> > > > Would you be able to enable debugging for the hid subsystem to
+> > > > get
+> > > > some
+> > > > debug data when getting the version from the device fails?
+> > >
+> > > I guess I could, but I think that the device is just quirky.
+> > >
+> > > At least the BT layer appears to think that it is connected.
+> > >
+> > > Anyway, what exactly do you need?
+> > >
+> > > > I can't see any problems in there that wouldn't also have
+> > > > impacted
+> > > > all
+> > > > the other Logitech Bluetooth devices listed in the support
+> > > > devices
+> > > > list.
+> > > >
+> > > > If the problem is a timeout, maybe we should lower the timeouts
+> > > > we
+> > > > currently have (5*HZ = 5 seconds, right?), so we can retry 5
+> > > > times
+> > > > one
+> > > > second instead.
+> > >
+> > > No, it doesn't take 5 sec to get a response from it.  It rather
+> > > looks
+> > > like __hidpp_send_report() returns an error.
+> >
+> > Adding "debug" on the kernel command-line should be enough to get
+> > debug
+> > out of hidpp_send_message_sync():
+> > https://stackoverflow.com/a/63682160
+> >
+> > Either that or turn all the dbg_hid() into hid_err() if you're going
+> > to
+> > be compiling the kernel.
+> >
+> > We're mainly interested in the error code from the device, as that's
+> > what I'm guessing is caused the error to propagate.
+>
+> Can you also check whether you had:
+> https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git/commit/?id=8b7e58409b1813c58eea542d9f3b8db35b4ac1f7
+> in your git tree?
+>
+> Would be great to know whether that commit helps at all.
 
-On 12/14/22 13:28, Hans de Goede wrote:
-> Hi Richard,
-> 
-> On 12/13/22 15:45, Richard Fitzgerald wrote:
->> Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
->> i2c_mark_adapter_resumed().
->>
->> dw_i2c_plat_resume() must always be called, so that
->> i2c_mark_adapter_resumed() is called. This is not compatible with
->> DPM_FLAG_MAY_SKIP_RESUME.
->>
->> The pairing of pm_runtime_force_suspend() and pm_runtime_force_resume()
->> can replace this. If nothing is using the driver, and it is not currently
->> suspended, it will be put into runtime-suspend and will be left in
->> runtime-suspend during the system resume.
->>
->> pm_runtime_force_suspend() is not compatible with DPM_FLAG_SMART_SUSPEND
->> so this must also be removed. DPM_FLAG_SMART_SUSPEND will set the device
->> back to pm_runtime_active() during resume_noirq if it cannot skip resume.
->> This would lead to the inconsistent state where the driver runtime_suspend
->> has been called (by force_suspend()) but it is marked active (by PM core).
->>
->> The unbalanced suspended flag was introduced by
->> commit c57813b8b288 ("i2c: designware: Lock the adapter while setting the
->> suspended flag")
->>
->> Before that commit, the system and runtime PM used the same functions. The
->> DPM_FLAG_MAY_SKIP_RESUME was used to skip the system resume if the driver
->> had been in runtime-suspend. If system resume was skipped, the suspended
->> flag would be cleared by the next runtime resume. The check of the
->> suspended flag was _after_ the call to pm_runtime_get_sync() in
->> i2c_dw_xfer(). So either a system resume or a runtime resume would clear
->> the flag before it was checked.
->>
->> Having introduced the unbalanced suspended flag with that commit, a further
->> commit 80704a84a9f8 ("i2c: designware: Use the
->> i2c_mark_adapter_suspended/resumed() helpers")
->>
->> changed from using a local suspended flag to using the
->> i2c_mark_adapter_suspended/resumed() functions. These use a flag that is
->> checked by I2C core code before issuing the transfer to the bus driver, so
->> there was no opportunity for the bus driver to runtime resume itself before
->> the flag check.
->>
->> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
->> Fixes: c57813b8b288 ("i2c: designware: Lock the adapter while setting the suspended flag")
-> 
-> Thank you. I like the new approach in this version.
-> 
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> 
-I noticed a resume regression with this patch but not all machines and 
-only when resuming from s2idle. After resume all devices on those 
-machines are in D0 even their runtime state show they are suspended. 
-Works with v6.1.
-
-- Baytrail based MRD7 with one I2C bus shared with PUNIT
-
-After boot. All ok (5th bus is shared with PUNIT and not power managed)
-
-cat /sys/bus/platform/devices/80860F41\:0*/power/runtime_status
-suspended
-suspended
-suspended
-suspended
-active
-
-cat /sys/bus/platform/devices/80860F41\:0*/firmware_node/power_state
-D3hot
-D3hot
-D3hot
-D3hot
-D0
-
-After suspend-to-idle (s2idle) resume cycle. Devices stay in D0
-
-cat /sys/bus/platform/devices/80860F41\:0*/power/runtime_status
-suspended
-suspended
-suspended
-suspended
-active
-
-cat /sys/bus/platform/devices/80860F41\:0*/firmware_node/power_state
-D0
-D0
-D0
-D0
-D0
-
-- Braswell based reference board
-
-After boot or after suspend-to-ram resume. All ok
-cat /sys/bus/platform/devices/808622C1\:0*/power/runtime_status
-suspended
-suspended
-suspended
-suspended
-suspended
-suspended
-
-cat /sys/bus/platform/devices/808622C1\:0*/firmware_node/power_state
-D3hot
-D3hot
-D3hot
-D3hot
-D3hot
-D3hot
-
-After suspend-to-idle resume. Devices stay in D0
-
-cat /sys/bus/platform/devices/808622C1\:0*/power/runtime_status
-suspended
-suspended
-suspended
-suspended
-suspended
-suspended
-
-cat /sys/bus/platform/devices/808622C1\:0*/firmware_node/power_state
-D0
-D0
-D0
-D0
-D0
-D0
-
-- Newer machines (Skylake and newer) where i2c-designware is part of 
-Intel Low Power Subsystem (LPSS)
-
-Patch doesn't seem to cause regression and after s2idle resume I2C 
-devices are in D3hot.
-
-Jarkko
+No, it's not present in the kernels I've tested so far.
