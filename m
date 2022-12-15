@@ -2,135 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BAC564DE16
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF22B64DE20
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 16:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbiLOPvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 10:51:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
+        id S229752AbiLOP5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 10:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiLOPvp (ORCPT
+        with ESMTP id S229480AbiLOP5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 10:51:45 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC6C2EF3B
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 07:51:44 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so2056781wma.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 07:51:43 -0800 (PST)
+        Thu, 15 Dec 2022 10:57:51 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5612B262
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 07:57:50 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bp15so16287804lfb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 07:57:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V2cRcfojGiF9qQEX9U8QFOzZLig/2FAjtxG+CBJEBFo=;
-        b=bVgJyDTvQ2d+crPVf0qEjj/SXvuxIZeFKQITUxl2atDfl2hEcbxwgt9LyrHVid2lUS
-         uIF78Zw09fK3Za5eMw03H0Tfgf6xXFVAtee5guOt6PU2dIgML8wI/QVuit8Kpmhi6p+1
-         7bUZH4srlxGuaBfE+k/GGTcv8bnM0yct37Jn0ECFYZBNGKN+iTW6Ywj/ZylY81SWbP2V
-         QpkDpq3+HsdbmHK82gn970aupr7h8L9oJ1NUJJ+/MMGtzIzYOKxxDYdOiBJcCyjpEMpG
-         kHPXwZUDFjkvO7DfXHxYcIdZZRWmVCvGHASdRW2D4gDqAFhfKzhuwUguMqzgVE/38a7Y
-         bqzw==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7k/AHx9sIHaw32Pe0dA2eE03z43VrbqeQoa3ShJCk/k=;
+        b=pLz0jTSycXFgOHwa8XCsuJC8wZc+R0cGlgWphKESpF4Gi75FxLs6MFYAthhzoF9ucL
+         4ZY+nrPRbDbiWOFGKv15/QXvU0Tz13Jf1SYp+zyo1r/I9fNlEyILPg12I4QQGEKKZyUR
+         ORv4Kl2Hjn/oV5WFudPN3Hl4BLOe2oRujyOTm3LizYoMJ5Ikyk32L1NVfmz0KfBtHzzS
+         RecSKueHf8MfidzChdKoIZnqu7C5o5kKb4ddRHcky/xat8jMH0n4fnoP4EZstq+zFvnQ
+         +TeI8+2MJKkT5gtKnN1K2MrqJRtmfX45QBA2UOc6lmYzifIMbPF3EKqeP/6xl3kI7HCj
+         Tt2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V2cRcfojGiF9qQEX9U8QFOzZLig/2FAjtxG+CBJEBFo=;
-        b=G3uOCbOJ+My+U/XgarNAkUjI4aVUCcF74CJoMXKh1OyAbHSaB3bXf5dvxZ35bmnMy/
-         6/kFQywNbWgjUy0/Yg7sNkE7xnRtjFIC4kJPaJXjAoMXohmi6ffu3bXMKcRhwsShY3OD
-         NBw7jKr2F3kjCAjczsoN9nzfxRlgC7cNSJ04rt8RyqdqJKsGblocGGGg3ViVQBeHnEtw
-         Rug4Gvmnxro5CPhYMS9vGKni1wm5e/20zIgzE8hQ3ln1MX1IplLPs0c2jH9Tn13e2KVz
-         TsjyWVn3PnqeBJLSL+ihFbs2fLF+c12uZA5VYBOsXE+EyCVGKT+S1lToPpv43cFGQnsT
-         rq4A==
-X-Gm-Message-State: ANoB5pkt/uoEyIgfK+O82Kw2sRPB7k1u2Y33JTaP9wXgCSvgz1ajrQWQ
-        BtsVwkptaP6DjpI3NADdpKSx7w==
-X-Google-Smtp-Source: AA0mqf5T28A1fwwJEdZX35EQu5OSksBT6KKYLBeLzZpR+52DmK8gZxNd3JNVBBNn8gPpdSKSQ71WGQ==
-X-Received: by 2002:a05:600c:2101:b0:3cf:e850:4451 with SMTP id u1-20020a05600c210100b003cfe8504451mr22559864wml.9.1671119502537;
-        Thu, 15 Dec 2022 07:51:42 -0800 (PST)
-Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
-        by smtp.gmail.com with ESMTPSA id n7-20020a05600c4f8700b003d1e90717ccsm8522883wmq.30.2022.12.15.07.51.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 07:51:41 -0800 (PST)
-Message-ID: <e2bc53fe-3a0c-cf24-8b29-ca377aba3721@baylibre.com>
-Date:   Thu, 15 Dec 2022 16:51:40 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7k/AHx9sIHaw32Pe0dA2eE03z43VrbqeQoa3ShJCk/k=;
+        b=rZl+sQTpbVzjAwGDdfvPK3RSRUXMvT0F1naRDPdPazyzUcDWieNjaILjnmeE7aWfyS
+         ldz8NRyF5Ye+eFyAar6lV8NRSBthAcQBoWw1Tlh6kDy1mReKo6CpcFaDcXnHpjVJUh8a
+         3GpTqgBZZrsVGoQtp2u37pC3SWyOIw6XmOHmuM1KSD76NOS0DLED7SoIIGvDzXri9lZs
+         wPScIYM0ytn47esHM8gjbSEv4j/PJq+irzEOtEi1KoZ8mnQzNIbbdq3rrf/RaiTh+S86
+         hAF4N6AZC2WYrsPDaxn/YQSY+ve0erUTsde272ftKh35kPK9GcAlT3WES7WGz/OmION6
+         0grw==
+X-Gm-Message-State: ANoB5pnGbSaTmv4xDcuebvGJvvD1bjVSbF2cGBqsTEA9AUIwNrwlvm5z
+        qoYqmXjM7m0axBfEi70G2LlwL1GoSSH6En80zNiCXQ==
+X-Google-Smtp-Source: AA0mqf6DQQ9SfaJViAGGy3snbd9DuSVfN7MeD8Unnxs+XD3ETc6xAtXlqll2YOYrwIT+R+/pJtwz7jCCVod+oeRktF4=
+X-Received: by 2002:a05:6512:104e:b0:4b5:604a:5b24 with SMTP id
+ c14-20020a056512104e00b004b5604a5b24mr9608434lfb.550.1671119868440; Thu, 15
+ Dec 2022 07:57:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 1/6] DONOTMERGE: arm64: dts: ti: Add TI TPS65219 PMIC
- support for AM642 SK board.
-Content-Language: en-US
-To:     Wadim Egorov <W.Egorov@phytec.de>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>, "nm@ti.com" <nm@ti.com>,
-        "kristo@kernel.org" <kristo@kernel.org>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "tony@atomide.com" <tony@atomide.com>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "marcel.ziswiler@toradex.com" <marcel.ziswiler@toradex.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "biju.das.jz@bp.renesas.com" <biju.das.jz@bp.renesas.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "jeff@labundy.com" <jeff@labundy.com>
-Cc:     "afd@ti.com" <afd@ti.com>,
-        "khilman@baylibre.com" <khilman@baylibre.com>,
-        "narmstrong@baylibre.com" <narmstrong@baylibre.com>,
-        "msp@baylibre.com" <msp@baylibre.com>,
-        "j-keerthy@ti.com" <j-keerthy@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>
-References: <20221104152311.1098603-1-jneanne@baylibre.com>
- <20221104152311.1098603-2-jneanne@baylibre.com>
- <d0d7e315-ce86-0420-8ef5-fe2e4aefd5b4@phytec.de>
-From:   jerome Neanne <jneanne@baylibre.com>
-In-Reply-To: <d0d7e315-ce86-0420-8ef5-fe2e4aefd5b4@phytec.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221214221643.1286585-1-mathieu.poirier@linaro.org>
+In-Reply-To: <20221214221643.1286585-1-mathieu.poirier@linaro.org>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Thu, 15 Dec 2022 08:57:37 -0700
+Message-ID: <CANLsYkwPvkr8bujPsRD+4g2Lrwiu5dB7-k-biXaQRMm70ANBVg@mail.gmail.com>
+Subject: Re: [PATCH] remoteproc: Make rproc_get_by_phandle() work for clusters
+To:     Suman Anna <s-anna@ti.com>, Devarsh Thakkar <devarsht@ti.com>,
+        Hari Nagalla <hnagalla@ti.com>,
+        "Bajjuri, Praneeth" <praneeth@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>, a-bhatia1@ti.com,
+        j-luthra@ti.com
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ben.levinsky@xilinx.com, andersson@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+People at TI - please test this patch for AM3352.  Theoretically
+things should be fine but I would certainly appreciate a T-B from
+someone at TI.
 
+Thanks,
+Mathieu
 
-On 15/12/2022 16:09, Wadim Egorov wrote:
-> Hi Jerome,
-> 
-> is this setup working for you on the AM642 SK board?
-> 
-> I am testing your PMIC patches on a AM62 based board with a similar setup and
-> running into the following error
-> 
->      VDDSHV5_SDIO: bypassed regulator has no supply!
->      VDDSHV5_SDIO: will resolve supply early: ldo1
->      VDDSHV5_SDIO: supplied by regulator-dummy
->      VDDSHV5_SDIO: failed to get the current voltage: -EINVAL
-> 
-> Have you noticed problems with LDO1 and bypass mode?
-
-Wadim,
-
-I did not noticed this on am642 board but IIRC this rail was not used. I 
-heard about similar issue reported to me by Nishanth M with a fix 
-proposal here:
-https://gist.github.com/nmenon/e4dd6ef6afe31bc9750fa6cbee8d3e25
-
-I did not have time yet to investigate on this but will do soon.
-
-Regards,
-Jerome
+On Wed, 14 Dec 2022 at 15:16, Mathieu Poirier
+<mathieu.poirier@linaro.org> wrote:
+>
+> Multi-cluster remoteproc designs typically have the following DT
+> declaration:
+>
+>         remoteproc_cluster {
+>                 compatible = "soc,remoteproc-cluster";
+>
+>                 core0: core0 {
+>                         compatible = "soc,remoteproc-core"
+>                         memory-region;
+>                         sram;
+>                 };
+>
+>                 core1: core1 {
+>                         compatible = "soc,remoteproc-core"
+>                         memory-region;
+>                         sram;
+>                 }
+>         };
+>
+> A driver exists for the cluster rather than the individual cores
+> themselves so that operation mode and HW specific configurations
+> applicable to the cluster can be made.
+>
+> Because the driver exists at the cluster level and not the individual
+> core level, function rproc_get_by_phandle() fails to return the
+> remoteproc associated with the phandled it is called for.
+>
+> This patch enhances rproc_get_by_phandle() by looking for the cluster's
+> driver when the driver for the immediate remoteproc's parent is not
+> found.
+>
+> Reported-by: Ben Levinsky <ben.levinsky@xilinx.com>
+> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> ---
+>  drivers/remoteproc/remoteproc_core.c | 28 +++++++++++++++++++++++++++-
+>  1 file changed, 27 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index 1cd4815a6dd1..91f82886add9 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -33,6 +33,7 @@
+>  #include <linux/idr.h>
+>  #include <linux/elf.h>
+>  #include <linux/crc32.h>
+> +#include <linux/of_platform.h>
+>  #include <linux/of_reserved_mem.h>
+>  #include <linux/virtio_ids.h>
+>  #include <linux/virtio_ring.h>
+> @@ -2110,7 +2111,9 @@ EXPORT_SYMBOL(rproc_detach);
+>  #ifdef CONFIG_OF
+>  struct rproc *rproc_get_by_phandle(phandle phandle)
+>  {
+> +       struct platform_device *cluster_pdev;
+>         struct rproc *rproc = NULL, *r;
+> +       struct device_driver *driver;
+>         struct device_node *np;
+>
+>         np = of_find_node_by_phandle(phandle);
+> @@ -2121,7 +2124,30 @@ struct rproc *rproc_get_by_phandle(phandle phandle)
+>         list_for_each_entry_rcu(r, &rproc_list, node) {
+>                 if (r->dev.parent && device_match_of_node(r->dev.parent, np)) {
+>                         /* prevent underlying implementation from being removed */
+> -                       if (!try_module_get(r->dev.parent->driver->owner)) {
+> +
+> +                       /*
+> +                        * If the remoteproc's parent has a driver, the
+> +                        * remoteproc is not part of a cluster and we can use
+> +                        * that driver.
+> +                        */
+> +                       driver = r->dev.parent->driver;
+> +
+> +                       /*
+> +                        * If the remoteproc's parent does not have a driver,
+> +                        * look for the driver associated with the cluster.
+> +                        */
+> +                       if (!driver) {
+> +                               cluster_pdev = of_find_device_by_node(np->parent);
+> +                               if (!cluster_pdev) {
+> +                                       dev_err(&r->dev, "can't get parent\n");
+> +                                       break;
+> +                               }
+> +
+> +                               driver = cluster_pdev->dev.driver;
+> +                               put_device(&cluster_pdev->dev);
+> +                       }
+> +
+> +                       if (!try_module_get(driver->owner)) {
+>                                 dev_err(&r->dev, "can't get owner\n");
+>                                 break;
+>                         }
+> --
+> 2.25.1
+>
