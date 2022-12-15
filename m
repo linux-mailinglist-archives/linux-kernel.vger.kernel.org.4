@@ -2,284 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7984F64DF5C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF9964DF60
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230441AbiLORJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 12:09:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
+        id S231165AbiLORKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 12:10:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiLORJK (ORCPT
+        with ESMTP id S230512AbiLORJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 12:09:10 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14F7419B2;
-        Thu, 15 Dec 2022 09:07:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=v5d0bQGPRoYnLsq5BgFVSq7oqPOujJNfyKS9Udb3ZkY=; b=ZQ+dKL4q1ZP+44k8iuDugTNdWz
-        F8XRtShc6OTIfEvFvh5kGrXM7WzzImJH4d3C6l7kGbS9Rlb+7fpX9c2DSUokpNmJBv58K4nJa+Tt/
-        yHHmYUELmoqCgTl+5x5uarPJsBY7bm2GfAOgZQ4BHXkodn+ooDFuV4h/AO3Q+owmTI0FKzqIte4HP
-        +pIBZnUoHWMY19Qt9XjRbndb83j2A4bfU3ZToADTIgWfPOcovx3VGeCPqmFpY3B2KL5HxZ42L1ijZ
-        yPcTMfAIuF/qTwL29r2f1jTW8tLvG7aycqwHorqlOvaAjKU/gsvpOIzRBX6lUreky5Mdl+v5j/iU0
-        yzVvCBdQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35726)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1p5rhm-0003R8-SN; Thu, 15 Dec 2022 17:07:34 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1p5rhj-0008Vc-U9; Thu, 15 Dec 2022 17:07:31 +0000
-Date:   Thu, 15 Dec 2022 17:07:31 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Subject: Re: [PATCH v7 06/11] leds: trigger: netdev: add hardware control
- support
-Message-ID: <Y5tUU5zA/lkYJza+@shell.armlinux.org.uk>
-References: <20221214235438.30271-1-ansuelsmth@gmail.com>
- <20221214235438.30271-7-ansuelsmth@gmail.com>
+        Thu, 15 Dec 2022 12:09:35 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4954665B;
+        Thu, 15 Dec 2022 09:08:17 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFAx4PE032127;
+        Thu, 15 Dec 2022 17:08:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=M0OvoBEarEDDSW9TE5oRDZThFsRuINIsSjYUPWCjjWQ=;
+ b=FBoFICHuxW+Zy7yyKyJIop8ZZmswoLcurntZVxSbuQSyleesRylbUOCH2Pweeo1v0ZRa
+ LwUCO1IK4fYXSKa2/tLJyo4b6WXpUOl1QHWr7E8Y5IjWXPysj0nMK+xGf5kQsq0OIP3Y
+ KqcOHYmpfTsj8Za+1VxOh06WnBvte3h4V7swpUZ9vc+HHuIJ313hoEBCaESt9lQ5HCa/
+ q49ssUCacIr34aMITCeiTvJVO6474rxbjHRCGk6Pfnge6n73ULk8QTTKhWyz8qfwNESj
+ sIl0A+FguAmC9qUuW7hFTPkltVlGd7czn/r4TuRBZYvDK9rvg72yGfl2+sR/TmxBsrq/ Og== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mfxse9svc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 17:08:07 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BFH86JD025829
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 17:08:06 GMT
+Received: from [10.110.66.74] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 15 Dec
+ 2022 09:08:05 -0800
+Message-ID: <98cc6d55-f9c7-a369-6004-42b242d01339@quicinc.com>
+Date:   Thu, 15 Dec 2022 09:08:04 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221214235438.30271-7-ansuelsmth@gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v12 2/5] dt-bindings: msm/dp: add data-lanes and
+ link-frequencies property
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <airlied@gmail.com>, <andersson@kernel.org>, <daniel@ffwll.ch>,
+        <devicetree@vger.kernel.org>, <dianders@chromium.org>,
+        <dmitry.baryshkov@linaro.org>, <dri-devel@lists.freedesktop.org>,
+        <konrad.dybcio@somainline.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robdclark@gmail.com>,
+        <robh+dt@kernel.org>, <sean@poorly.run>, <vkoul@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1670967848-31475-1-git-send-email-quic_khsieh@quicinc.com>
+ <1670967848-31475-3-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n52eHYCqxUJqQXoaQ8vyqCk-QfouSun+zUp3yo5DufWbwg@mail.gmail.com>
+ <b38af164-08bc-07e7-dfaf-fb4d6d89d7db@quicinc.com>
+ <CAE-0n53Cb6TFGfM6AYup5aP4=24j0ujVPi463oVqmzfNV2B4RA@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAE-0n53Cb6TFGfM6AYup5aP4=24j0ujVPi463oVqmzfNV2B4RA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 5LPWoTS4BoluYneg5ILBA4kZFgz2ChaE
+X-Proofpoint-GUID: 5LPWoTS4BoluYneg5ILBA4kZFgz2ChaE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-15_10,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ clxscore=1015 spamscore=0 phishscore=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212150141
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 12:54:33AM +0100, Christian Marangi wrote:
-> Add hardware control support for the Netdev trigger.
-> The trigger on config change will check if the requested trigger can set
-> to blink mode using LED hardware mode and if every blink mode is supported,
-> the trigger will enable hardware mode with the requested configuration.
-> If there is at least one trigger that is not supported and can't run in
-> hardware mode, then software mode will be used instead.
-> A validation is done on every value change and on fail the old value is
-> restored and -EINVAL is returned.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  drivers/leds/trigger/ledtrig-netdev.c | 155 +++++++++++++++++++++++++-
->  1 file changed, 149 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/leds/trigger/ledtrig-netdev.c b/drivers/leds/trigger/ledtrig-netdev.c
-> index dd63cadb896e..ed019cb5867c 100644
-> --- a/drivers/leds/trigger/ledtrig-netdev.c
-> +++ b/drivers/leds/trigger/ledtrig-netdev.c
-> @@ -37,6 +37,7 @@
->   */
->  
->  struct led_netdev_data {
-> +	enum led_blink_modes blink_mode;
->  	spinlock_t lock;
->  
->  	struct delayed_work work;
-> @@ -53,11 +54,105 @@ struct led_netdev_data {
->  	bool carrier_link_up;
->  };
->  
-> +struct netdev_led_attr_detail {
-> +	char *name;
-> +	bool hardware_only;
-> +	enum led_trigger_netdev_modes bit;
-> +};
-> +
-> +static struct netdev_led_attr_detail attr_details[] = {
-> +	{ .name = "link", .bit = TRIGGER_NETDEV_LINK},
-> +	{ .name = "tx", .bit = TRIGGER_NETDEV_TX},
-> +	{ .name = "rx", .bit = TRIGGER_NETDEV_RX},
-> +};
-> +
-> +static bool validate_baseline_state(struct led_netdev_data *trigger_data)
-> +{
-> +	struct led_classdev *led_cdev = trigger_data->led_cdev;
-> +	struct netdev_led_attr_detail *detail;
-> +	u32 hw_blink_mode_supported = 0;
-> +	bool force_sw = false;
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(attr_details); i++) {
-> +		detail = &attr_details[i];
-> +
-> +		/* Mode not active, skip */
-> +		if (!test_bit(detail->bit, &trigger_data->mode))
-> +			continue;
-> +
-> +		/* Hardware only mode enabled on software controlled led */
-> +		if (led_cdev->blink_mode == SOFTWARE_CONTROLLED &&
-> +		    detail->hardware_only)
-> +			return false;
-> +
-> +		/* Check if the mode supports hardware mode */
-> +		if (led_cdev->blink_mode != SOFTWARE_CONTROLLED) {
-> +			/* With a net dev set, force software mode.
-> +			 * With modes are handled by hardware, led will blink
-> +			 * based on his own events and will ignore any event
-> +			 * from the provided dev.
-> +			 */
-> +			if (trigger_data->net_dev) {
-> +				force_sw = true;
-> +				continue;
-> +			}
-> +
-> +			/* With empty dev, check if the mode is supported */
-> +			if (led_trigger_blink_mode_is_supported(led_cdev, detail->bit))
-> +				hw_blink_mode_supported |= BIT(detail->bit);
-> +		}
-> +	}
-> +
-> +	/* We can't run modes handled by both software and hardware.
-> +	 * Check if we run hardware modes and check if all the modes
-> +	 * can be handled by hardware.
-> +	 */
-> +	if (hw_blink_mode_supported && hw_blink_mode_supported != trigger_data->mode)
-> +		return false;
-> +
-> +	/* Modes are valid. Decide now the running mode to later
-> +	 * set the baseline.
-> +	 * Software mode is enforced with net_dev set. With an empty
-> +	 * one hardware mode is selected by default (if supported).
-> +	 */
-> +	if (force_sw || led_cdev->blink_mode == SOFTWARE_CONTROLLED)
-> +		trigger_data->blink_mode = SOFTWARE_CONTROLLED;
-> +	else
-> +		trigger_data->blink_mode = HARDWARE_CONTROLLED;
-> +
-> +	return true;
-> +}
-> +
->  static void set_baseline_state(struct led_netdev_data *trigger_data)
->  {
-> +	int i;
->  	int current_brightness;
-> +	struct netdev_led_attr_detail *detail;
->  	struct led_classdev *led_cdev = trigger_data->led_cdev;
->  
-> +	/* Modes already validated. Directly apply hw trigger modes */
-> +	if (trigger_data->blink_mode == HARDWARE_CONTROLLED) {
-> +		/* We are refreshing the blink modes. Reset them */
-> +		led_cdev->hw_control_configure(led_cdev, BIT(TRIGGER_NETDEV_LINK),
-> +					       BLINK_MODE_ZERO);
-> +
-> +		for (i = 0; i < ARRAY_SIZE(attr_details); i++) {
-> +			detail = &attr_details[i];
-> +
-> +			if (!test_bit(detail->bit, &trigger_data->mode))
-> +				continue;
-> +
-> +			led_cdev->hw_control_configure(led_cdev, BIT(detail->bit),
-> +						       BLINK_MODE_ENABLE);
-> +		}
-> +
-> +		led_cdev->hw_control_start(led_cdev);
-> +
-> +		return;
-> +	}
-> +
-> +	/* Handle trigger modes by software */
->  	current_brightness = led_cdev->brightness;
->  	if (current_brightness)
->  		led_cdev->blink_brightness = current_brightness;
-> @@ -100,10 +195,15 @@ static ssize_t device_name_store(struct device *dev,
->  				 size_t size)
->  {
->  	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
-> +	struct net_device *old_net = trigger_data->net_dev;
-> +	char old_device_name[IFNAMSIZ];
->  
->  	if (size >= IFNAMSIZ)
->  		return -EINVAL;
->  
-> +	/* Backup old device name */
-> +	memcpy(old_device_name, trigger_data->device_name, IFNAMSIZ);
-> +
->  	cancel_delayed_work_sync(&trigger_data->work);
->  
->  	spin_lock_bh(&trigger_data->lock);
-> @@ -122,6 +222,19 @@ static ssize_t device_name_store(struct device *dev,
->  		trigger_data->net_dev =
->  		    dev_get_by_name(&init_net, trigger_data->device_name);
->  
-> +	if (!validate_baseline_state(trigger_data)) {
-> +		/* Restore old net_dev and device_name */
-> +		if (trigger_data->net_dev)
-> +			dev_put(trigger_data->net_dev);
-> +
-> +		dev_hold(old_net);
-> +		trigger_data->net_dev = old_net;
-> +		memcpy(trigger_data->device_name, old_device_name, IFNAMSIZ);
-> +
-> +		spin_unlock_bh(&trigger_data->lock);
-> +		return -EINVAL;
 
-I'm not sure this is the best way... putting the net_dev but holding a
-reference, to leter regain the reference via dev_hold() just feels
-wrong. Also, I wonder what happens if two threads try to change the
-netdev together - will the read of the old device name be potentially
-corrupted (since we're not holding the trigger's lock?)
+On 12/14/2022 4:38 PM, Stephen Boyd wrote:
+> Quoting Kuogee Hsieh (2022-12-14 14:56:23)
+>> On 12/13/2022 3:06 PM, Stephen Boyd wrote:
+>>> Quoting Kuogee Hsieh (2022-12-13 13:44:05)
+>>>> Add both data-lanes and link-frequencies property into endpoint
+>>> Why do we care? Please tell us why it's important.
+> Any response?
+yes, i did that at my local patch already.
+>
+>>>> @@ -193,6 +217,8 @@ examples:
+>>>>                    reg = <1>;
+>>>>                    endpoint {
+>>>>                        remote-endpoint = <&typec>;
+>>>> +                    data-lanes = <0 1>;
+>>>> +                    link-frequencies = /bits/ 64 <1620000000 2700000000 5400000000 8100000000>;
+>>>>                    };
+>>> So far we haven't used the output port on the DP controller in DT.
+>>>
+>>> I'm still not clear on what we should do in general for DP because
+>>> there's a PHY that actually controls a lane count and lane mapping. In
+>>> my mental model of the SoC, this DP controller's output port is
+>>> connected to the DP PHY, which then sends the DP lanes out of the SoC to
+>>> the next downstream device (i.e. a DP connector or type-c muxer). Having
+>>> a remote-endpoint property with a phandle to typec doesn't fit my mental
+>>> model. I'd expect it to be the typec PHY.
+>> ack
+>>> That brings up the question: when we have 2 lanes vs. 4 lanes will we
+>>> duplicate the data-lanes property in the PHY binding? I suspect we'll
+>>> have to. Hopefully that sort of duplication is OK?
+>> Current we have limitation by reserve 2 data lanes for usb2, i am not
+>> sure duplication to 4 lanes will work automatically.
+>>> Similarly, we may have a redriver that limits the link-frequencies
+>>> property further (e.g. only support <= 2.7GHz). Having multiple
+>>> link-frequencies along the graph is OK, right? And isn't the
+>>> link-frequencies property known here by fact that the DP controller
+>>> tells us which SoC this controller is for, and thus we already know the
+>>> supported link frequencies?
+>>>
+>>> Finally, I wonder if we should put any of this in the DP controller's
+>>> output endpoint, or if we can put these sorts of properties in the DP
+>>> PHY binding directly? Can't we do that and then when the DP controller
+>>> tries to set 4 lanes, the PHY immediately fails the call and the link
+>>> training algorithm does its thing and tries fewer lanes? And similarly,
+>>> if link-frequencies were in the PHY's binding, the PHY could fail to set
+>>> those frequencies during link training, returning an error to the DP
+>>> controller, letting the training move on to a lower frequency. If we did
+>>> that this patch series would largely be about modifying the PHY binding,
+>>> updating the PHY driver to enforce constraints, and handling errors
+>>> during link training in the DP controller (which may already be done? I
+>>> didn't check).
+>>
+>> phy/pll have different configuration base on link lanes and rate.
+>>
+>> it has to be set up before link training can start.
+>>
+>> Once link training start, then there are no any interactions between
+>> controller and phy during link training session.
+> What do you mean? The DP controller calls phy_configure() and changes
+> the link rate. The return value from phy_configure() should be checked
+> and link training should skip link rates that aren't supported and/or
+> number of lanes that aren't supported.
+>
+>> Link training only happen between dp controller and sink since link
+>> status is reported by sink (read back from sink's dpcd register directly).
+>>
+>> T achieve link symbol locked, link training will start from reduce link
+>> rate until lowest rate, if it still failed, then it will reduce lanes
+>> with highest rate and start training  again.
+>>
+>> it will repeat same process until lowest lane (one lane), if it still
+>> failed, then it will give up and declare link training failed.
+> Yes, that describes the link training algorithm. I don't see why
+> phy_configure() return value can't be checked and either number of lanes
+> or link frequencies be checked. If only two lanes are supported, then
+> phy_configure() will fail for the 4 link rates and the algorithm will
+> reduce the number of lanes and go back to the highest rate. Then when
+> the highest rate isn't supported it will drop link rate until the link
+> rate is supported.
+>
+>> Therefore I think add data-lanes and link-frequencies properties in the
+>> DP PHY binding directly will not helps.
+>>
+> I didn't follow your logic. Sorry.
 
-Maybe instead:
+Sorry, probably i did not understand your proposal clearly.
 
-+	struct net_device *old_net;
-...
--	if (trigger_data->net_dev) {
--		dev_put(trigger_data->net_dev);
--		trigger_data->net_dev = NULL;
--	}
-+	old_net = trigger_data->net_dev;
-+	trigger_data->net_dev = NULL;
-+	memcpy(old_device_name, trigger_data->device_name, IFNAMSIZ);
-...
-	... extract out the setup of trigger_data->device_name
-...
-+	if (!validate_baseline_state(trigger_data)) {
-+		if (trigger_data->net_dev)
-+			dev_put(trigger_data->net_dev);
-+
-+		/* Restore device settings */
-+		trigger_data->net_dev = old_dev;
-+		memcpy(trigger_data->device_name, old_device_name, IFNAMSIZ);
-+		spin_unlock_bh(&trigger_data->lock);
-+		return -EINVAL;
-+	} else {
-+		dev_put(old_net);
-+	}
+1) move both data-lanes and link-frequencies property from dp controller 
+endpoint to phy
 
-would be safer all round?
+2) phy_configure() return succeed if both data-lanes and link 
+frequencies are supported. otherwise return failed.
 
-One thought on this approach though - if one has a PHY that supports
-"activity" but not independent "rx" and "tx" activity indications
-and it doesn't support software control, how would one enable activity
-mode? There isn't a way to simultaneously enable both at the same
-time... However, I need to check whether there are any PHYs that fall
-into this category.
+is above two summary items correct?
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Currently phy_configure()  is part of link training process and called 
+if link lanes or rate changes.
+
+however, since current phy_configure() implementation always return 0, 
+the return value is not checking.
+
+This proposal is new, can we discuss more detail at meeting and decide 
+to implement it or not.
+
+Meanwhile can we merge current implementation (both data-lanes and 
+link-frequqncies at dp controller end point) first?
+
+
+
+
