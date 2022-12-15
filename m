@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFEE64DEDD
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4882864DEE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbiLOQnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:43:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39324 "EHLO
+        id S230254AbiLOQoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:44:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbiLOQnn (ORCPT
+        with ESMTP id S230263AbiLOQoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:43:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11CB33C3D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:43:41 -0800 (PST)
+        Thu, 15 Dec 2022 11:44:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74B6379F7;
+        Thu, 15 Dec 2022 08:44:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89713B81AAC
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 16:43:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53611C433EF;
-        Thu, 15 Dec 2022 16:43:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83CF261DE1;
+        Thu, 15 Dec 2022 16:44:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A7FC433EF;
+        Thu, 15 Dec 2022 16:44:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671122619;
-        bh=TxCuOHUdPv/ZjT1o8pDBjUpfoJT0BDExlgCRyV+RKbk=;
+        s=k20201202; t=1671122655;
+        bh=nx+NAAzYOuwGZhcQwQLKlwkWqZKRCHdBqu/CAuLJa14=;
         h=From:To:Cc:Subject:Date:From;
-        b=NAWV6Z8gS7Ck5a7+95VJ4ZB+uuC+BSD0++Pf3Rir7sHOmfxX0HaT5M5zmOA7W2apR
-         C1M+j96VB9y1Voqn6/wDmcVGQ5PGwAKT2sTGB1GSifkJ1rMqfXeToKv8DFbdubh7uU
-         6tqyNj4tLhdSPu4Vcfps4zN4MGd05TgpztXioLDk4Xv2DY5OhP1dBSAJNHEdR2whSR
-         2hhM6XES7JIdlGTvPpcsbIx6rWKlArDV7yF3y2J0SikmV/vwYj3R0YGtBNlp8X1emY
-         qYimC4+Y0WjFAtWxI79sY9l5TNotXhkvyesm4PYGqGsEbAfDYN6RBWJdw4UaeHvA6w
-         /AXlgP6tiVvbA==
+        b=Ao6n1DJ+me4j4PoHQeoEXJWDSB1xNi9od41FnsE+u/QY5tbwsq8cSD6Qlqqh+mTXs
+         ac0qwYwE65VmDxv0mvhiwAGE1uwpgo3fdjQpYDC5Ve1FFlkRLSmoImN0mFm+VpV8az
+         zmJJvvwbI57uuftyIZdhv9j82bWS7bB5OB+V+dfxG8AASHp0U+FmY2ARQSd351MNWw
+         U496RJ4RH6p2NOejGpgZttehF96d2bQMVTj9qI2UXDCi/xNNR2+vF4hsqDSScP4XQC
+         Aw6de5547wDYh5XB38+8i+BiDrqkeB8JLYk/h6V4zw5MKpDJPzUHOjODtVyO5eWYpv
+         8L6VKq0vzZlXA==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, "H. Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] x86: callthunks: fix incorrect init section references
-Date:   Thu, 15 Dec 2022 17:43:23 +0100
-Message-Id: <20221215164334.968863-1-arnd@kernel.org>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] coredump: move dump_emit_page() into CONFIG_ELF_CORE check
+Date:   Thu, 15 Dec 2022 17:44:02 +0100
+Message-Id: <20221215164409.1025791-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,44 +60,85 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The addition of callthunks_translate_call_dest means that
-skip_addr() and patch_dest() can no longer be discarded
-as part of the __init section freeing:
+If CONFIG_ELF_CORE is disabled, dump_emit_page() is unused, which
+causes a warning:
 
-WARNING: modpost: vmlinux.o: section mismatch in reference: callthunks_translate_call_dest.cold (section: .text.unlikely) -> skip_addr (section: .init.text)
-WARNING: modpost: vmlinux.o: section mismatch in reference: callthunks_translate_call_dest.cold (section: .text.unlikely) -> patch_dest (section: .init.text)
-WARNING: modpost: vmlinux.o: section mismatch in reference: is_callthunk.cold (section: .text.unlikely) -> skip_addr (section: .init.text)
-ERROR: modpost: Section mismatches detected.
-Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
+fs/coredump.c:834:12: error: 'dump_emit_page' defined but not used [-Werror=unused-function]
 
-Fixes: b2e9dfe54be4 ("x86/bpf: Emit call depth accounting if required")
+There is only one caller, so move the definition next to it.
+
+Fixes: 06bbaa6dc53c ("[coredump] don't use __kernel_write() on kmap_local_page()")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/x86/kernel/callthunks.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/coredump.c | 48 ++++++++++++++++++++++++------------------------
+ 1 file changed, 24 insertions(+), 24 deletions(-)
 
-diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
-index 7d2c75ec9a8c..ffea98f9064b 100644
---- a/arch/x86/kernel/callthunks.c
-+++ b/arch/x86/kernel/callthunks.c
-@@ -119,7 +119,7 @@ static bool is_coretext(const struct core_text *ct, void *addr)
- 	return within_module_coretext(addr);
+diff --git a/fs/coredump.c b/fs/coredump.c
+index de78bde2991b..a25ecec9ca7c 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -838,6 +838,30 @@ static int __dump_skip(struct coredump_params *cprm, size_t nr)
+ 	}
  }
  
--static __init_or_module bool skip_addr(void *dest)
-+static bool skip_addr(void *dest)
++int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
++{
++	if (cprm->to_skip) {
++		if (!__dump_skip(cprm, cprm->to_skip))
++			return 0;
++		cprm->to_skip = 0;
++	}
++	return __dump_emit(cprm, addr, nr);
++}
++EXPORT_SYMBOL(dump_emit);
++
++void dump_skip_to(struct coredump_params *cprm, unsigned long pos)
++{
++	cprm->to_skip = pos - cprm->pos;
++}
++EXPORT_SYMBOL(dump_skip_to);
++
++void dump_skip(struct coredump_params *cprm, size_t nr)
++{
++	cprm->to_skip += nr;
++}
++EXPORT_SYMBOL(dump_skip);
++
++#ifdef CONFIG_ELF_CORE
+ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
  {
- 	if (dest == error_entry)
- 		return true;
-@@ -181,7 +181,7 @@ static const u8 nops[] = {
- 	0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
- };
+ 	struct bio_vec bvec = {
+@@ -871,30 +895,6 @@ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
+ 	return 1;
+ }
  
--static __init_or_module void *patch_dest(void *dest, bool direct)
-+static void *patch_dest(void *dest, bool direct)
+-int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
+-{
+-	if (cprm->to_skip) {
+-		if (!__dump_skip(cprm, cprm->to_skip))
+-			return 0;
+-		cprm->to_skip = 0;
+-	}
+-	return __dump_emit(cprm, addr, nr);
+-}
+-EXPORT_SYMBOL(dump_emit);
+-
+-void dump_skip_to(struct coredump_params *cprm, unsigned long pos)
+-{
+-	cprm->to_skip = pos - cprm->pos;
+-}
+-EXPORT_SYMBOL(dump_skip_to);
+-
+-void dump_skip(struct coredump_params *cprm, size_t nr)
+-{
+-	cprm->to_skip += nr;
+-}
+-EXPORT_SYMBOL(dump_skip);
+-
+-#ifdef CONFIG_ELF_CORE
+ int dump_user_range(struct coredump_params *cprm, unsigned long start,
+ 		    unsigned long len)
  {
- 	unsigned int tsize = SKL_TMPL_SIZE;
- 	u8 *pad = dest - tsize;
 -- 
 2.35.1
 
