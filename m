@@ -2,158 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4911D64E1F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:49:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB84B64E202
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiLOTtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 14:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46362 "EHLO
+        id S229901AbiLOTxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 14:53:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbiLOTtK (ORCPT
+        with ESMTP id S229691AbiLOTxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 14:49:10 -0500
-Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE55537F8
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 11:49:08 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id 5uE3pbl9p4s3d5uE4pTEzM; Thu, 15 Dec 2022 20:49:07 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 15 Dec 2022 20:49:07 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <24af516c-53db-c4f5-6745-7e3a4a2fdf26@wanadoo.fr>
-Date:   Thu, 15 Dec 2022 20:49:03 +0100
+        Thu, 15 Dec 2022 14:53:04 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C9D537E4
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 11:53:01 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id f20so75722lja.4
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 11:53:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7WnaZc2bs26QE2S1hFU0wWVtk2SkMXSSpzkb6FSS1RI=;
+        b=aGblDN6+LiroAi5Ce2HI0sla+sv/MZ0o1VnWUgJkTxIOUl93xZYtZDnsd8zl1DABm2
+         OfhiFJBPHg9RSV8cw+9sGyvjAUzHb9igov4etIG+PT6jB8if72VmeESBXHF3IHsiLc5M
+         b2CmaXYJsYqhGPOOzKvG2srf3DxtCyWSKXn2E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7WnaZc2bs26QE2S1hFU0wWVtk2SkMXSSpzkb6FSS1RI=;
+        b=L3pOJjBuhqPh8Gy2hg2Bpqj6+4xWdx1V5WnvD1w5gFIsoF/KKl8Bvd1xkNZ9KlAPLA
+         RgACEXYKfbuaxrL3bxScKRHn+cLbPmeHWrDXNgi3EPh2N1RboQWT1oGSpMmKoop/UzSm
+         yMUPTe5PGkGSGhtNh/7unO69qqVb+sPhjbHV93iiwdNk3KylraANWyJWLYsC0/5vor+7
+         ihpONcV6i8qxwkgOjVyXzfqcX0E9DvgFVBLZtqJesqUZJb0Gvq37jqKEdz7VhDjZfChs
+         DbCFVdK1UGY7BxJnLcst09Zs1q6vixdE9rf+ECw1Chpsg5/hSBMfsyeSGjAHCbxustbn
+         j2KQ==
+X-Gm-Message-State: ANoB5pkF6CqCpKpUr3CZcvu73l+3SLtUw5RzQwTnguzOuuBhGNN0rhde
+        Nx/k7SLB/bktZ8gLBpkXZrvwcYwgx6fYt8oiJhWr5Q==
+X-Google-Smtp-Source: AA0mqf4FW9H2CtluhofbPQJiA6xZ7ZdK14RZtc7ewZw8cqvcl+H7LOmqZe+1wc0FJ8tx6X3g9uIC6DD8PJrYGi5UrrE=
+X-Received: by 2002:a05:651c:124c:b0:279:f45e:ccd6 with SMTP id
+ h12-20020a05651c124c00b00279f45eccd6mr7839328ljh.483.1671133979884; Thu, 15
+ Dec 2022 11:52:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] drm/amd/pm: avoid large variable on kernel stack
-Content-Language: fr
-From:   Marion & Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     arnd@kernel.org
-Cc:     Hawking.Zhang@amd.com, Jack.Gui@amd.com, KevinYang.Wang@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, alexander.deucher@amd.com,
-        amd-gfx@lists.freedesktop.org, arnd@arndb.de,
-        christian.koenig@amd.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, evan.quan@amd.com,
-        kenneth.feng@amd.com, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        trix@redhat.com
-References: <20221215163649.386750-1-arnd@kernel.org>
- <bca79bc1-9e7c-b145-0b0b-0ce725d58821@wanadoo.fr>
-In-Reply-To: <bca79bc1-9e7c-b145-0b0b-0ce725d58821@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221214233106.69b2c01b@gandalf.local.home> <Y5trUep9IvCv1Uwy@google.com>
+ <20221215141146.6ceb7cf2@gandalf.local.home>
+In-Reply-To: <20221215141146.6ceb7cf2@gandalf.local.home>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 15 Dec 2022 14:52:48 -0500
+Message-ID: <CAEXW_YQLtK=4LMJ+LHPVWU0wbV-027HJoCEKTjZvBZ6krrn6vw@mail.gmail.com>
+Subject: Re: [RFC][PATCH] ACPI: tracing: Have ACPI debug go to tracing ring buffer
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        linux-acpi@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Brian Norris <briannorris@chromium.org>,
+        Ross Zwisler <zwisler@google.com>,
+        Ching-lin Yu <chinglinyu@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 15, 2022 at 2:11 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Thu, 15 Dec 2022 18:45:37 +0000
+> Joel Fernandes <joel@joelfernandes.org> wrote:
+>
+> > Wouldn't it be better to also check trace_acpi_print_enabled() here in the
+> > else if() condition, along with IS_ENABLED()? That way if the CONFIG is
+> > enabled but the tracepoint is not enabled, at least the messages will go to
+> > dmesg instead of skipped.
+>
+> I really don't want that. This was purposely done to be mutually exclusive.
+> The reason I added this in the first place, is because too much enabled
+> will render the system useless if printk() is used.
+>
+> After boot up, if I had enabled all debug events and then I were to disable
+> the acpi tracepoint, it will likely render the system useless again if it
+> were to switch over to printk.
 
+Ok, sure. I see where you were going. So you want no debugging
+messages at all if the trace event is disabled. That's fine with me. I
+would also add a note about the need to enable the specific trace
+event, in the Kconfig message and/or the Documentation. Otherwise, you
+might get someone say, "hey I enabled the CONFIG option but I see
+nothing in the trace buffer".
 
-Le 15/12/2022 à 20:46, Christophe JAILLET a écrit :
-> Le 15/12/2022 à 17:36, Arnd Bergmann a écrit :
->> From: Arnd Bergmann <arnd-r2nGTMty4D4@public.gmane.org>
->>
->> The activity_monitor_external[] array is too big to fit on the
->> kernel stack, resulting in this warning with clang:
->>
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:1438:12: error: stack frame size (1040) exceeds limit (1024) in 'smu_v13_0_7_get_power_profile_mode' [-Werror,-Wframe-larger-than]
->>
->> Use dynamic allocation instead. It should also be possible to
->> have single element here instead of the array, but this seems
->> easier.
->>
->> Fixes: 334682ae8151 ("drm/amd/pm: enable workload type change on 
->> smu_v13_0_7")
->> Signed-off-by: Arnd Bergmann <arnd-r2nGTMty4D4@public.gmane.org>
->> ---
->>   .../drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c  | 21 ++++++++++++++-----
->>   1 file changed, 16 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c 
->> b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
->> index c270f94a1b86..7eba854e09ec 100644
->> --- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
->> +++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
->> @@ -1439,7 +1439,7 @@ static int smu_v13_0_7_get_power_limit(struct 
->> smu_context *smu,
->>   static int smu_v13_0_7_get_power_profile_mode(struct smu_context 
->> *smu, char *buf)
->>   {
->> -    DpmActivityMonitorCoeffIntExternal_t 
->> activity_monitor_external[PP_SMC_POWER_PROFILE_COUNT];
->> +    DpmActivityMonitorCoeffIntExternal_t *activity_monitor_external;
->>       uint32_t i, j, size = 0;
->>       int16_t workload_type = 0;
->>       int result = 0;
->> @@ -1447,6 +1447,12 @@ static int 
->> smu_v13_0_7_get_power_profile_mode(struct smu_context *smu, char *buf
->>       if (!buf)
->>           return -EINVAL;
->> +    activity_monitor_external = 
->> kcalloc(sizeof(activity_monitor_external),
-> 
-> Hi,
-> 
-> Before, 'activity_monitor_external' was not initialized.
-> Maybe kcalloc() is enough?
+Another approach could be to always enable the trace event by default,
+if the CONFIG is turned on. Or do a printk() telling the user about
+the event to enable, so they know why their trace buffer is empty.
 
-Read kmalloc_array()
+Up to you and the ACPI maintainers. ;-)
 
-> 
-> sizeof(*activity_monitor_external)?
->       ~~~~
-> 
->> +                        PP_SMC_POWER_PROFILE_COUNT,
->> +                        GFP_KERNEL);
->> +    if (!activity_monitor_external)
->> +        return -ENOMEM;
->> +
->>       size += sysfs_emit_at(buf, size, "                              ");
->>       for (i = 0; i <= PP_SMC_POWER_PROFILE_WINDOW3D; i++)
-> 
-> Unrelated, but wouldn't it be more straightforward with "< 
-> PP_SMC_POWER_PROFILE_COUNT"?
-> 
->>           size += sysfs_emit_at(buf, size, "%-14s%s", 
->> amdgpu_pp_profile_name[i],
->> @@ -1459,15 +1465,17 @@ static int 
->> smu_v13_0_7_get_power_profile_mode(struct smu_context *smu, char *buf
->>           workload_type = smu_cmn_to_asic_specific_index(smu,
->>                                      CMN2ASIC_MAPPING_WORKLOAD,
->>                                      i);
->> -        if (workload_type < 0)
->> -            return -EINVAL;
->> +        if (workload_type < 0) {
->> +            result = -EINVAL;
->> +            goto out;
->> +        }
->>           result = smu_cmn_update_table(smu,
->>                         SMU_TABLE_ACTIVITY_MONITOR_COEFF, workload_type,
->>                         (void *)(&activity_monitor_external[i]), false);
->>           if (result) {
->>               dev_err(smu->adev->dev, "[%s] Failed to get activity 
->> monitor!", __func__);
->> -            return result;
->> +            goto out;
->>           }
->>       }
->> @@ -1495,7 +1503,10 @@ do 
->> {                                                    \
->>       PRINT_DPM_MONITOR(Fclk_BoosterFreq);
->>   #undef PRINT_DPM_MONITOR
->> -    return size;
->> +    result = size;
->> +out:
->> +    kfree(activity_monitor_external);
->> +    return result;
->>   }
->>   static int smu_v13_0_7_set_power_profile_mode(struct smu_context 
->> *smu, long *input, uint32_t size)
-> 
-> 
+thanks,
+
+ - Joel
