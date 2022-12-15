@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4889264E354
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF0164E358
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiLOVjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 16:39:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
+        id S229689AbiLOVj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 16:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiLOVjS (ORCPT
+        with ESMTP id S229678AbiLOVjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 16:39:18 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983605C746
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 13:39:15 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so458887pjo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 13:39:15 -0800 (PST)
+        Thu, 15 Dec 2022 16:39:53 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4FC2C675
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 13:39:52 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so453703pjj.4
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 13:39:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nTU5fQoqjwEXrOChYxVMfOo8SjuSN+m4eM0Q5QXQ60Y=;
-        b=J9JiEdPeUqhUsC4Nrmpy7egHFxBJu4LlHV0DiEb+/wfg8LQ3ylko6Jg1nKZjbCDYbQ
-         YNb7W7yzzbtW5L4J/hR6rIY5EkeQruBD/OMNNBoITnQPXKF4z9Q8UsTUO95cuUB8V7qu
-         GvTCa3tgcNXy8t1QK14adYD67Rj/iiPmLPgG+8O0bNbw4hfmTQz5adJS7TuJDF8yLPc6
-         kh9l13u3kSMem9W+Y+JRGsfEByXxc+gkhfDwLSYiyYguAArry7sDVd6J+pokvThuSdhu
-         puC7Castd05B9JXHqK2FMHzP8ynJVXdRkceTR30izCxi8qUo1roJQGtYmSZR5MCkj3JD
-         SY2g==
+        bh=19xNB36z4ZF2bSOjVbfFWgPYWyBtIik4jiGmk9PMfXw=;
+        b=RRk9pzsFQBiKFV3biL+KXLKYF02p/45lQPdYqs7nlVzrsFs454g+4bdGm8uM9DixI7
+         Oz2JzWFwPF4eM7wyOV4AosMUj3bXhJ5jcz/zbc9GvzILjVRrOLryHGNYBJQP7QHna45H
+         7zs2jcLM5zXZNC/jgW7SdkZJNgITl7MSVVXR//um8E5alg1f/1nRNSMvfQc3zAnQuK9j
+         RUQ2KxZkVh5u4grEWMDiIdvvdE37xnQqg+XgTl0TwbZkQwMctl33SGI1By6OuxZ7SAOg
+         VqREzBEBnqUUAz5moJ5dON8vch0ttXfxZtJWm4dCrapHeq5mL6qWO1FmXCHmi6db2o5D
+         f7Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nTU5fQoqjwEXrOChYxVMfOo8SjuSN+m4eM0Q5QXQ60Y=;
-        b=OTe6HjD9Cz+kxXvr91NiqKjGbaY+eTdSXatlwu3+L422kLquktsiJCfeuKf7QxixFI
-         UN8LiqLyjzbU6KeQzroFDnmLgp4GflbTjpEI9K9zBoCEhmUPgOEv8WkF1HuCE26ejWes
-         2418jposFnhioXdz/yBKHwgoT4qJZPATIQlT5o/0faJMheEWHBYhihvPJzql3ETNhKdT
-         b9qGCyb5d2h0wYBMBHqnVee9xoxLJJTU8q7J9r/1Tf+OgQjtRQrh/CewhTiHO5w/UZjH
-         OXlSCK9hFYYYlGe5K34rnW30LSlzlAUa5E1eIqYXXeOJVuItDLK9Rt/o56o1HQJJ9ruL
-         2rLw==
-X-Gm-Message-State: ANoB5pm1uDPRt8lVgImFkfoXJmFtx5esUco+tk37ZRo8XQMkaROMkekg
-        YUjFrSwKIOZWnxAXhRDiiJ39M8PMkZIoUsPw4XAwdA==
-X-Google-Smtp-Source: AA0mqf4xS0mNui+iwtI2uABIiecA8axv+muy3th2pg7V3KYEh2UpXjp4O/+hm4slZjBqV110jo7/JiezXYxhAlIY1rM=
-X-Received: by 2002:a17:903:2290:b0:189:93bf:b5d5 with SMTP id
- b16-20020a170903229000b0018993bfb5d5mr49516613plh.145.1671140355121; Thu, 15
- Dec 2022 13:39:15 -0800 (PST)
+        bh=19xNB36z4ZF2bSOjVbfFWgPYWyBtIik4jiGmk9PMfXw=;
+        b=M9ktd8aZMVNBVK6TAiMB4+g8Bjwyr87i9qP8lR3ojKGwjqshOHOhBpteKQzHM3COUX
+         s49GYMQxMzpKVCRug+1xlDBgf4JaHFReIiua2ELu8Vcih9oWCGPCgo/75snnR5ILYRe6
+         wz6g2DMSfFb9BWk1nrcTxLSFuI0sg+KkzXzd675GPW8dRgwlGlLsEVaH6PC/gAxx1nuZ
+         s1j1aoPE2buIWoe/kXejf5fk0s30EUSf8iv8CzJ+Z1T5Ll8bbYncpynAn7yQ32yFz1qA
+         Fk0hVz6FVeKezIOkW6HvDxLemNbp7GNyJrTXEuFSdgLVWcnF58K9KJshHBLr8IPz31gb
+         LGZA==
+X-Gm-Message-State: AFqh2kq6fN3ZUKRfzVQiu+6lHLBPj+/cBDusawuBHLano0gZeFeepaUb
+        OAJr/vpDrFB8Lbamtpo87SnmcbGrQb9N2REhF90ljA==
+X-Google-Smtp-Source: AMrXdXtCpBntfTL1jGJNjn/ZrqmxPTpShg/Qixzul1m0G+k8RWaFw2Rz+RgOFA2O/fFU4iaHCHe8EO3I+LBYQxMdsDg=
+X-Received: by 2002:a17:90a:5d93:b0:21f:eb8:f6f0 with SMTP id
+ t19-20020a17090a5d9300b0021f0eb8f6f0mr703026pji.4.1671140391669; Thu, 15 Dec
+ 2022 13:39:51 -0800 (PST)
 MIME-Version: 1.0
-References: <CGME20221214044423epcas5p2920e87930665345169745002ec6993c3@epcas5p2.samsung.com>
- <20221214044342.49766-1-sriranjani.p@samsung.com> <20221214044342.49766-2-sriranjani.p@samsung.com>
-In-Reply-To: <20221214044342.49766-2-sriranjani.p@samsung.com>
+References: <CGME20221214044427epcas5p39131549dc4529ea41d9916d81d3d5fce@epcas5p3.samsung.com>
+ <20221214044342.49766-1-sriranjani.p@samsung.com> <20221214044342.49766-3-sriranjani.p@samsung.com>
+In-Reply-To: <20221214044342.49766-3-sriranjani.p@samsung.com>
 From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Thu, 15 Dec 2022 15:39:03 -0600
-Message-ID: <CAPLW+4=+31Zaq4=FYyMF26fpU7wAbi-+GMsY8Wctw-S9Vtr8vw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] dt-bindings: soc: samsung: exynos-sysreg: add
- dedicated SYSREG compatibles to Exynos850
+Date:   Thu, 15 Dec 2022 15:39:40 -0600
+Message-ID: <CAPLW+4kez4s2QHH9PdfVq563_=Rg-LZw6o-QbdrhUX0kDfiMyg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] arm64: dts: exynos: add dedicated SYSREG
+ compatibles to Exynos850
 To:     Sriranjani P <sriranjani.p@samsung.com>
 Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         devicetree@vger.kernel.org, alim.akhtar@samsung.com,
@@ -64,8 +64,7 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,8 +73,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Tue, 13 Dec 2022 at 22:47, Sriranjani P <sriranjani.p@samsung.com> wrote:
 >
-> Exynos850 has two different SYSREGs, hence add dedicated compatibles for
-> them and deprecate usage of generic Exynos850 compatible alone.
+> Exynos850 has two different SYSREGs, so use dedicated compatibles for them.
 >
 > Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
 > ---
@@ -84,50 +82,31 @@ Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 
 Thanks!
 
->  .../soc/samsung/samsung,exynos-sysreg.yaml        | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
+>  arch/arm64/boot/dts/exynos/exynos850.dtsi | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >
-> diff --git a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> index 4954790eda6c..427df05224e5 100644
-> --- a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> +++ b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> @@ -17,7 +17,6 @@ properties:
->                - samsung,exynos3-sysreg
->                - samsung,exynos4-sysreg
->                - samsung,exynos5-sysreg
-> -              - samsung,exynos850-sysreg
->                - samsung,exynosautov9-sysreg
->                - tesla,fsd-cam-sysreg
->                - tesla,fsd-fsys0-sysreg
-> @@ -33,9 +32,17 @@ properties:
->            - const: samsung,exynos5433-sysreg
->            - const: syscon
->        - items:
-> -          - const: samsung,exynos5433-sysreg
-> +          - enum:
-> +              - samsung,exynos5433-sysreg
-> +              - samsung,exynos850-sysreg
-> +          - const: syscon
-> +            deprecated: true
-> +      - items:
-> +          - enum:
-> +              - samsung,exynos850-cmgp-sysreg
-> +              - samsung,exynos850-peri-sysreg
-> +          - const: samsung,exynos850-sysreg
->            - const: syscon
-> -        deprecated: true
+> diff --git a/arch/arm64/boot/dts/exynos/exynos850.dtsi b/arch/arm64/boot/dts/exynos/exynos850.dtsi
+> index c61441f3a89a..a38fe5129937 100644
+> --- a/arch/arm64/boot/dts/exynos/exynos850.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/exynos850.dtsi
+> @@ -549,13 +549,15 @@
+>                 };
 >
->    reg:
->      maxItems: 1
-> @@ -53,6 +60,8 @@ allOf:
->          compatible:
->            contains:
->              enum:
-> +              - samsung,exynos850-cmgp-sysreg
-> +              - samsung,exynos850-peri-sysreg
->                - samsung,exynos850-sysreg
->      then:
->        required:
+>                 sysreg_peri: syscon@10020000 {
+> -                       compatible = "samsung,exynos850-sysreg", "syscon";
+> +                       compatible = "samsung,exynos850-peri-sysreg",
+> +                                    "samsung,exynos850-sysreg", "syscon";
+>                         reg = <0x10020000 0x10000>;
+>                         clocks = <&cmu_peri CLK_GOUT_SYSREG_PERI_PCLK>;
+>                 };
+>
+>                 sysreg_cmgp: syscon@11c20000 {
+> -                       compatible = "samsung,exynos850-sysreg", "syscon";
+> +                       compatible = "samsung,exynos850-cmgp-sysreg",
+> +                                    "samsung,exynos850-sysreg", "syscon";
+>                         reg = <0x11c20000 0x10000>;
+>                         clocks = <&cmu_cmgp CLK_GOUT_SYSREG_CMGP_PCLK>;
+>                 };
 > --
 > 2.17.1
 >
