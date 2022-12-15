@@ -2,206 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CED864D459
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:10:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 320B964D45D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiLOAKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 19:10:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
+        id S230004AbiLOAMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 19:12:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiLOAKM (ORCPT
+        with ESMTP id S230014AbiLOALy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 19:10:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B37E750B0;
-        Wed, 14 Dec 2022 16:01:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2DC2CB81AA9;
-        Thu, 15 Dec 2022 00:01:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF5F9C433EF;
-        Thu, 15 Dec 2022 00:01:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671062497;
-        bh=1LeoSAuSI09MIIQgCe2g5+a7buNfDKMa+AnqpAyiNa0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ft6bREINVRAf82Kr0u8a2dlcq4d8linzVNKVx0NboRXDfVEyeYFBSC9OXVZAPsNzi
-         ZvTZ73DFFx8jBahmQQh7cOkH0ukoEIkjNjK104P6DVRgD+92dE97i2WrAJdd6NWC5R
-         qIXtSmQ5DslgyGJ4iKW+c+rFf1JR7nT+2xJaK+LfHMNiJ//E4uZUNQmTOyLeQUkJWc
-         8wlWwHKIVbG1yPnu6CaPWwBC6jFGweSaakNfAaSZYjNzm2kjhuGbidQaQdE3sNwMHa
-         jXJ5by9vOReCDM5n+WyELJTE24fy31EMelMs57FRG3TpaxUPQLKkf1OUpCh3qgQSvX
-         HGwXIMsLPzKVQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4DEA05C0A6A; Wed, 14 Dec 2022 16:01:37 -0800 (PST)
-Date:   Wed, 14 Dec 2022 16:01:37 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     boqun.feng@gmail.com, frederic@kernel.org, neeraj.iitr10@gmail.com,
-        urezki@gmail.com, rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] srcu: Yet more detail for
- srcu_readers_active_idx_check() comments
-Message-ID: <20221215000137.GC4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221214191355.GA2596199@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YTztHvaXJG9jQmQ13tF2HdCy8+TbvBDCYWd98tMrsE-vw@mail.gmail.com>
- <20221214212455.GA4001@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQp5K2iy0ULnFOVKQit3T+OM_vY29ZcLu6drNEt-ex1QQ@mail.gmail.com>
+        Wed, 14 Dec 2022 19:11:54 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B46754344;
+        Wed, 14 Dec 2022 16:03:28 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id b3so13146495lfv.2;
+        Wed, 14 Dec 2022 16:03:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xyTRtxLK9nOjvSiLHoGTWK+tByNJjpdgrWmjL9ZEwQc=;
+        b=Joxw7UUQke3lmR3h+YHOkfFRovKyevEvAgKjIbriMUPy0B/7YWsVo1iXSCbj/Y0PM8
+         0PNh65da1G2U8oVnXsUxcvGjX1J/bXayUvUNkjOrdCBAGAdBiVFbZhtfnWP75PDvHaBT
+         es8ZznvU6ExZQE/l5R/89YyAC+UH6NrPmHxDgkjEisFCkY201fhSUo/zV15gVlMi0K5c
+         oO+ckDzEaiRFQ1kk5MgCTBjll5vjOHdnuG5W0JdJQ6w/8tJ91Vvz+7znc0aABuYLLSvE
+         YdWtVUfQS0w7qS8Yz0qPA57SikPbZYYhhR0QdX+sSEpZziQ7+B8O8wNZJ2DEljHD2dno
+         pkIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xyTRtxLK9nOjvSiLHoGTWK+tByNJjpdgrWmjL9ZEwQc=;
+        b=DBeKKc356ZaqfJqWQLqbYaCdDjoeVTgKHiCcYyv46S5HuJfJEdMAsRMrKCyw2Rlx/Y
+         Zq7M4ObRb8SYgy836cFP1u1+/IRDl9dX+Z1qvndfvXrVuc+dkhSq9uQOBD8T6rplRSuO
+         uFqKcH/JG8aKvw0h/P6xY8vOPghpXmsG0uAHfaxgEXVPzV/uoq0EZsEGbLm/PFpqU5gB
+         ALMDGzTMdHC6NcF1+j3kXbHlumstUg2ashv4QgLeKhxQ5MV8Ssc8MZ74Z/6mxZsfhTTg
+         ww76EHqY0Bg1xGQjYmfO2JhG/59EZ2ZAQhfjZmV4B9TzIfGYavt5OI4cJfipNpPz53FF
+         bhEw==
+X-Gm-Message-State: AFqh2krH0hUcty1QVeI+gJSJrEp+82SvFrw5L3KVixpRHBI7YzA6Z5c7
+        inD440kMs4cp20N/raSUKA4=
+X-Google-Smtp-Source: AMrXdXtt3aEW2Jg//O90nzVhrcgYitUZeQUtYxKsW9jy71g3Vjpd+0i2T5VH5+YXWwQHGEju2kU2+w==
+X-Received: by 2002:a05:6512:400d:b0:4bb:70b2:6f50 with SMTP id br13-20020a056512400d00b004bb70b26f50mr303425lfb.52.1671062606848;
+        Wed, 14 Dec 2022 16:03:26 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id m1-20020ac24ac1000000b00498f23c249dsm977465lfp.74.2022.12.14.16.03.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 16:03:26 -0800 (PST)
+Date:   Thu, 15 Dec 2022 03:03:23 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 23/25] PCI: dwc: Restore DMA-mask after MSI-data
+ allocation
+Message-ID: <20221215000323.ixqqngxxdm7p2el6@mobilestation>
+References: <20221214235305.31744-1-Sergey.Semin@baikalelectronics.ru>
+ <20221214235305.31744-24-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEXW_YQp5K2iy0ULnFOVKQit3T+OM_vY29ZcLu6drNEt-ex1QQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221214235305.31744-24-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 11:07:52PM +0000, Joel Fernandes wrote:
-> On Wed, Dec 14, 2022 at 9:24 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Wed, Dec 14, 2022 at 03:51:54PM -0500, Joel Fernandes wrote:
-> > > Hi Paul,
-> > >
-> > > On Wed, Dec 14, 2022 at 2:13 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > >
-> > > > The comment in srcu_readers_active_idx_check() following the smp_mb()
-> > > > is out of date, hailing from a simpler time when preemption was disabled
-> > > > across the bulk of __srcu_read_lock().  The fact that preemption was
-> > > > disabled meant that the number of tasks that had fetched the old index
-> > > > but not yet incremented counters was limited by the number of CPUs.
-> [...]
-> > > > +        * TREE01 rcutorture run reported this size to be no less than
-> > > > +        * 9408 bytes, allowing up to 4704 levels of nesting, which is
-> > > > +        * comfortably beyond excessive.  Especially on 64-bit systems,
-> > > > +        * which are unlikely to be configured with an address space fully
-> > > > +        * populated with memory, at least not anytime soon.
-> > > >          */
-> > >
-> > > Below is a summary from my point of view. Please correct me if I'm
-> > > wrong. I was trying to reason that we only need to care about waiting
-> > > for readers that sample idx *after* srcu_read_lock() issued smp_mb().
-> > >
-> > > The case to consider a race between readers and
-> > > srcu_readers_active_idx_check() IMO is when a reader samples idx,
-> >
-> > I would instead say "when a reader has sampled ->srcu_idx, but has not
-> > yet executed the smp_mb() or incremented ->srcu_lock_count".
+Hi Robin
+
+On Thu, Dec 15, 2022 at 02:53:03AM +0300, Serge Semin wrote:
+> DW PCIe Root Ports and End-points can be equipped with the DW eDMA engine.
+> In that case it is critical to have the platform device pre-initialized
+> with a valid DMA-mask so the drivers using the eDMA-engine would be able
+> to allocate the DMA-able buffers. The MSI-capable data requires to be
+> allocated from the lowest 4GB region. Since that procedure implies the
+> DMA-mask change we need to restore the mask set by the low-level drivers
+> after the MSI-data allocation is done.
+
+I dropped the patch
+[PATCH v6 22/24] dmaengine: dw-edma: Bypass dma-ranges mapping for the local setup
+Link: https://lore.kernel.org/linux-pci/20221107210438.1515-23-Sergey.Semin@baikalelectronics.ru/
+from the series. It has turned to be useless since your commit
+f1ad5338a4d5 ("of: Fix "dma-ranges" handling for bus controllers").
+Instead I added the patches
+[PATCH v7 23/25] PCI: dwc: Restore DMA-mask after MSI-data allocation
+and
+[PATCH v7 24/25] PCI: bt1: Set 64-bit DMA-mask
+to this patchset in order to properly handle the DMA-mask.
+
+Could you please give your opinion on these patches?
+
+-Serge(y)
+
 > 
-> If it has not yet executed smp_mb(), then I am missing why this
-> read-side critical section matters as far as being waited for. If it
-> is waited for due to a race, great, just a slightly higher delay. If
-> it is not waited for, then no one should care AFAICS, it is too late
-> and the next grace period will anyway scan both the idx to track it.
-
-From the viewpoints of other CPUs, it matters not whether that task has
-or has not executed smp_mb().  Unless and until it also executes something
-following that smp_mb(), that smp_mb() has zero software-visible effect.
-
-To see this, try creating an LKMM litmus test in which it matters whether
-a given process has or doesn't have an smp_mb() at the very end of that
-process, that is, that smp_mb(), if present is the very last thing that
-the process executes.
-
-> > > issues smp_mb() enters its RSCS. If it does not do smp_mb(), its RSCS
-> > > need not be waited on as it is not considered to be entered from a
-> > > global memory PoV.  Assuming it did issue the smp_mb() in
-> > > srcu_read_lock() and then got preempted (which IMO is the only case to
-> > > care about the reader for), and say the first scan failed to track
-> > > down this in-flight RSCS.
-> >
-> > Except that this smp_mb() is not externally visible to software.
-> > Other CPUs have to have seen and access following that smp_mb() for it
-> > to matter from a software viewpoint.
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > 
-> Sure, that second pairing smp_mb() will be in
-> srcu_readers_active_idx_check(). I am definitely considering it in
-> pairs here in the reasoning, and not on its own.
-
-Very good.
-
-But you need more than pairs.  You also need memory accesses on both
-sides of each smp_mb() in that pairing.
-
-> > >                           The first scan can fail to track the RSCS
-> > > for 2 reasons:
-> > >
-> > > #1. The idx being scanned in the first scan is the one that the reader
-> > > did not sample.
-> > > #2. The smp_mb() in the first scan's srcu_readers_active_idx_check()
-> > > happened *before* the smp_mb() post-counter increment in
-> > > srcu_read_lock().
-> >
-> > Again, software cannot see the smp_mb() in and of itself.  What
-> > matters is the increment of ->srcu_lock_count and the updater's
-> > scan of this same counter.
+> ---
 > 
-> Yes, and that scan of the counter happens after a write-side smp_mb() AFAICS.
+> Changelog v7:
+> - This is a new patch added on v7 stage of the series. (@Robin)
+> ---
+>  drivers/pci/controller/dwc/pcie-designware-host.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
 > 
-> > #3. The reader still hasn't gotten around to incrementing
-> > ->srcu_lock_count.
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> index 5762bd306261..1a3dae1f6aa2 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> @@ -326,7 +326,7 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
+>  	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+>  	struct device *dev = pci->dev;
+>  	struct platform_device *pdev = to_platform_device(dev);
+> -	u64 *msi_vaddr;
+> +	u64 *msi_vaddr, dma_mask;
+>  	int ret;
+>  	u32 ctrl, num_ctrls;
+>  
+> @@ -366,6 +366,13 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
+>  						    dw_chained_msi_isr, pp);
+>  	}
+>  
+> +	/*
+> +	 * Save and then restore the DMA-mask pre-set by the low-level drivers
+> +	 * after allocating the MSI-capable region. The mask might be useful for
+> +	 * the controllers with the embedded eDMA engine.
+> +	 */
+> +	dma_mask = dma_get_mask(dev);
+> +
+>  	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+>  	if (ret)
+>  		dev_warn(dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
+> @@ -378,6 +385,10 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
+>  		return -ENOMEM;
+>  	}
+>  
+> +	ret = dma_set_mask_and_coherent(dev, dma_mask);
+> +	if (ret)
+> +		dev_warn(dev, "Failed to re-store DMA-mask\n");
+> +
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.38.1
 > 
-> Then it has not executed an smp_mb() on the read-side yet, so it
-> should not be taken into consideration AFAICS.
 > 
-> > > In case of #2, the first scan was too early and the second scan will
-> > > not even look at this idx as it gets flipped. So we can safely assume
-> > > in #2 that this RSCS need not be waited on and was too early. IOW, the
-> > > grace period started before the RSCS, so tough luck for that RSCS.
-> >
-> > And the point of a number of the memory barriers is to ensure that when
-> > this happens, the critical section is guaranteed to see anything that
-> > happened before the start of the current grace period.
-> 
-> Sure.
-> 
-> > > So AFAICS, case #1 is the only one that matters for consideration of
-> > > race. In this case, we will rely on the second scan and assume that we
-> > > "need to do the right thing" for the case where the srcu_read_lock()'s
-> > > smp_mb() happened *before* the second scan's smp_mb() and the idx
-> > > being reader-occupied is supposed to be properly nailed down by the
-> > > second scan. In this case, the second scan *will* see the lock count
-> > > increment of all in-flight readers, preempted or otherwise, because of
-> > > the smp_mb() it issues prior to sampling all the lock counts of the
-> > > flipped idx.  And upto Nt number of increments can be "caught" by the
-> > > second scan, before a wrap around fools it into believing the Nt
-> > > readers don't need any love, quiet to their detriment.
-> >
-> > Both #1 and #3 must be handled, right?
-> 
-> This is the part I am not sure, that #3 matters, but I could be
-> missing something.
-
-My kneejerk reaction, right or wrong, is that you are thinking in terms
-of a globally agreed-upon timeline.
-
-> > > I also did not get why you care about readers that come and ago (you
-> > > mentioned the first reader seeing incorrect idx and the second reader
-> > > seeing the right flipped one, etc). Those readers are irrelevant
-> > > AFAICS since they came and went, and need not be waited on , right?.
-> >
-> > The comment is attempting to show (among other things) that we don't
-> > need to care about readers that come and go more than twice during that
-> > critical interval of time during the counter scans.
-> 
-> Why do we need to care about readers that come and go even once? Once
-> they are gone, they have already done an unlock() and their RSCS is
-> over, so they need to be considered AFAICS.
-
-Because if a given reader could come and go 2^32-1 times while always
-using the same ->srcu_idx, then the updater could incorrectly lose track
-of some other SRCU read-side critical section, and could thus end the
-grace period prematurely.
-
-> Again, sorry if my comments are nonsense, I will try to reason more.
-> The goal of asking questions is to learn ;-)
-
-Try setting up some LKMM litmus tests.  Those could be good documentation
-in any case.  (Note that you have to cheat to make counter wrap happen,
-and you need really small counters to avoid overflowing herd7's
-capabilities.)
-
-							Thanx, Paul
