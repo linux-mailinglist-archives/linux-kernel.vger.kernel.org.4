@@ -2,153 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261F164D833
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:03:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C698464D837
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiLOJDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 04:03:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
+        id S229829AbiLOJEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 04:04:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiLOJDr (ORCPT
+        with ESMTP id S229809AbiLOJEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 04:03:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4670C43876
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:02:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671094977;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uwD8NOGTwYs5ieTi5qX1aPfmwnbaS+5RWWUvD/filRE=;
-        b=WKcxcGnDrRGVCmEfnImlEQ8do2JO5IuRT1xQwQuqSEYiu5e5lHk0KRpiSK2XV2P974Db0t
-        1pRSs8ZWCHaZMHONfZw+G0RtErmZ+zdf/3u7zz0FPUPl/xw9lcVeMuZ/y7KEcLHyk/x6GX
-        yNKRonKdic+HL+2qGIRS3V/RYvAnlvg=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-15-nqZ-jfTCOGCAOOBnnCCnkg-1; Thu, 15 Dec 2022 04:02:56 -0500
-X-MC-Unique: nqZ-jfTCOGCAOOBnnCCnkg-1
-Received: by mail-wr1-f70.google.com with SMTP id w11-20020adfbacb000000b002418a90da01so503248wrg.16
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:02:56 -0800 (PST)
+        Thu, 15 Dec 2022 04:04:00 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7803D935
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:03:59 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id q6so14600882lfm.10
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:03:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jqxdj5fkQ9n2cYs252oV4AVXARcQ/xHiN+6tj2DwePk=;
+        b=Qk6ae4zTc3LXGtko9Wztdy21PIr2TF55TvkJJ7Yq2vFKuMnXlzlsHZ4ObXzy2MENUO
+         vEWI7NKfeyMu+uDrlMUqmFEUnBg1vyu76gcXRhEcjwwQzN1rQCSyXRmfYMUq6NZSPgbn
+         Q6FyFhhVcI5RbvVd3dPpamm9fFhexIkFvHBTz1OjswAYYYLcrHca/mCgL3KHWSkT0LDc
+         5gwLhc9IzB2bUA0AC4W+znO5y+fMKjBoY/BSz1x1wjx7LJIXbLqNBdxPk+M8JtAKIuB1
+         k62kTUNR58WPULlvIE2Js+BjVhOoERKnM/qRZITcFJO7/A52IuewBjCBwvwTOwdGLcT0
+         Nwjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uwD8NOGTwYs5ieTi5qX1aPfmwnbaS+5RWWUvD/filRE=;
-        b=YbdWTqFPhexlEY8jayPpH9yXiYEKkpDB5Bs56ogyHYyLiJadD85Hm6g1nKiyF6rNQ2
-         GFzOavVk20qDYm7Ui3WyIeo6ysUUS2Oof6+meSuJYQKuikno64K0T+EA7b0wKayl2lN1
-         QfLuanZ3Mg0wxhGtyhjh23K/SBErJ5nKyVQ9bztyS+RB7+MGY0OG4cdwGAsWBoPVhTym
-         KZXuy8YrqaGwIs1O2S465HXOdfgTsMHVby1i+QJu7jUwYaLHk23oZc+rLJ4rnR3OvYTY
-         YTB64qIiQLi0QJOdoH/ZLZnoOG7wO76mt/ALPoyIxSk4xtDJgJdpM965xcD+bzd0+NpQ
-         6wyQ==
-X-Gm-Message-State: ANoB5pnN5wK79fmR4otAcskK8cqlLqy+2KS7ceHCuQuFCBQwFy3ury3h
-        YMysXBoq7yALpUyWPPvUv2QNVlXXM0JAc+9jopvtaV1okAHJOyWjIsRGrAsCHlm7ICAuv+R7YYg
-        Ml3h0rSs1rP+S5g8aE277DKDf
-X-Received: by 2002:a05:6000:1290:b0:242:733b:af28 with SMTP id f16-20020a056000129000b00242733baf28mr22015732wrx.5.1671094975069;
-        Thu, 15 Dec 2022 01:02:55 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7qzb9+a/uvtxVcEC9zmWpJUTR422PGn73vR3sy+XJdK14+q15lG471pPpuDffznLF34RdQqg==
-X-Received: by 2002:a05:6000:1290:b0:242:733b:af28 with SMTP id f16-20020a056000129000b00242733baf28mr22015704wrx.5.1671094974758;
-        Thu, 15 Dec 2022 01:02:54 -0800 (PST)
-Received: from redhat.com ([2a02:14f:179:247f:e426:6c6e:c44d:93b])
-        by smtp.gmail.com with ESMTPSA id x12-20020a5d650c000000b002415dd45320sm5151669wru.112.2022.12.15.01.02.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 01:02:54 -0800 (PST)
-Date:   Thu, 15 Dec 2022 04:02:49 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xuanzhuo@linux.alibaba.com
-Subject: Re: [PATCH net V2] virtio-net: correctly enable callback during
- start_xmit
-Message-ID: <20221215034740-mutt-send-email-mst@kernel.org>
-References: <20221215032719.72294-1-jasowang@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jqxdj5fkQ9n2cYs252oV4AVXARcQ/xHiN+6tj2DwePk=;
+        b=j6vUEagT45BQVZxInhnXu/ceYDxBkbQyqC4833V6IYaKWGw2k6RYqhIdqYGZGrdJn0
+         tZ07mx5h9O3Y/82ROGzJudIdI/7qRB8L9ac5quBowcnnLPHfPKj1rIDD5RS0JhgzSWv+
+         C7lUGIGV881XNUFDUfHEYll+w966mYNhLkP4b0Fc6InZsyPpME7JCuLLTOOTQ95VHZOj
+         Z87vN5+x8noLT0SPLAvLZYRm+vAABbDwK8AXbRyBv6HFAwJQIwQaN29dAebjplwrP1nZ
+         8VIDOTWWbMZNX1CvbnS62NvXQqq3NLKgk/OyGj7/38+/D6xnL5qwQGTzVZAEJ68E8b8E
+         YNBA==
+X-Gm-Message-State: ANoB5pl9L+jXfE15PnVbvByb8qyrCo2x2MNsypOntQh5gO7HDD1WnWcA
+        46OYTLLBq4GgdPlBt94+jybiFg==
+X-Google-Smtp-Source: AA0mqf6+hgKCqvG8MOaHrXDFYxCb6yCspua/Y4A0lxEvIcU/Em2K/ShTHloB+t+iJXrw3dU95EEFPg==
+X-Received: by 2002:ac2:5148:0:b0:4b5:830d:12ba with SMTP id q8-20020ac25148000000b004b5830d12bamr7119720lfd.14.1671095037655;
+        Thu, 15 Dec 2022 01:03:57 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id k10-20020ac257ca000000b004b55075f813sm1095847lfo.227.2022.12.15.01.03.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 01:03:57 -0800 (PST)
+Message-ID: <7e67b2d1-394e-2353-df37-5ae3cac64b9c@linaro.org>
+Date:   Thu, 15 Dec 2022 10:03:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221215032719.72294-1-jasowang@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v8 2/7] media: dt-binding: nuvoton: Add bindings for NPCM
+ VCD and ECE engine
+Content-Language: en-US
+To:     Marvin Lin <milkfafa@gmail.com>, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     openbmc@lists.ozlabs.org, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, kwliu@nuvoton.com,
+        kflin@nuvoton.com
+References: <20221214092636.810883-1-milkfafa@gmail.com>
+ <20221214092636.810883-3-milkfafa@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221214092636.810883-3-milkfafa@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 11:27:19AM +0800, Jason Wang wrote:
-> Commit a7766ef18b33("virtio_net: disable cb aggressively") enables
-> virtqueue callback via the following statement:
+On 14/12/2022 10:26, Marvin Lin wrote:
+> Add dt-binding document for Video Capture/Differentiation Engine (VCD)
+> and Encoding Compression Engine (ECE) present on Nuvoton NPCM SoCs.
+
+Subject: drop second, redundant "bindings for".
+
 > 
->         do {
->            ......
-> 	} while (use_napi && kick &&
->                unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
-> 
-> When NAPI is used and kick is false, the callback won't be enabled
-> here. And when the virtqueue is about to be full, the tx will be
-> disabled, but we still don't enable tx interrupt which will cause a TX
-> hang. This could be observed when using pktgen with burst enabled.
-> 
-> Fixing this by trying to enable tx interrupt after we disable TX when
-> we're not using napi or kick is false.
-> 
-> Fixes: a7766ef18b33 ("virtio_net: disable cb aggressively")
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> Signed-off-by: Marvin Lin <milkfafa@gmail.com>
 > ---
-> The patch is needed for -stable.
-> Changes since V1:
-> - enable tx interrupt after we disable tx
-> ---
->  drivers/net/virtio_net.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../bindings/media/nuvoton,npcm-ece.yaml      | 44 ++++++++++++
+>  .../bindings/media/nuvoton,npcm-vcd.yaml      | 72 +++++++++++++++++++
+>  2 files changed, 116 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/nuvoton,npcm-ece.yaml
+>  create mode 100644 Documentation/devicetree/bindings/media/nuvoton,npcm-vcd.yaml
 > 
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 86e52454b5b5..dcf3a536d78a 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -1873,7 +1873,7 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
->  	 */
->  	if (sq->vq->num_free < 2+MAX_SKB_FRAGS) {
->  		netif_stop_subqueue(dev, qnum);
-> -		if (!use_napi &&
-> +		if ((!use_napi || !kick) &&
->  		    unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
->  			/* More just got used, free them then recheck. */
->  			free_old_xmit_skbs(sq, false);
+> diff --git a/Documentation/devicetree/bindings/media/nuvoton,npcm-ece.yaml b/Documentation/devicetree/bindings/media/nuvoton,npcm-ece.yaml
+> new file mode 100644
+> index 000000000000..d12b76d137d9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/nuvoton,npcm-ece.yaml
+> @@ -0,0 +1,44 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +
 
-This will work but the following lines are:
+Drop blank line.
 
-                       if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
-                                netif_start_subqueue(dev, qnum);
-                                virtqueue_disable_cb(sq->vq);
-                        }
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/nuvoton,npcm-ece.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton NPCM Encoding Compression Engine
+> +
+> +maintainers:
+> +  - Joseph Liu <kwliu@nuvoton.com>
+> +  - Marvin Lin <kflin@nuvoton.com>
+> +
+> +description: |
+> +  Video Encoding Compression Engine (ECE) present on Nuvoton NPCM SoCs.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nuvoton,npcm750-ece
+> +      - nuvoton,npcm845-ece
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - resets
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/reset/nuvoton,npcm7xx-reset.h>
+> +
+> +    ece: ece@f0820000 {
 
+If this is video codec, then generic node name: "video-codec". "ece" is
+specific, not generic.
 
-and I thought we are supposed to keep callbacks enabled with napi?
-One of the ideas of napi is to free on napi callback, not here
-immediately.
+> +        compatible = "nuvoton,npcm750-ece";
+> +        reg = <0xf0820000 0x2000>;
+> +        resets = <&rstc NPCM7XX_RESET_IPSRST2 NPCM7XX_RESET_ECE>;
+> +    };
+> diff --git a/Documentation/devicetree/bindings/media/nuvoton,npcm-vcd.yaml b/Documentation/devicetree/bindings/media/nuvoton,npcm-vcd.yaml
+> new file mode 100644
+> index 000000000000..2d8da8f36506
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/nuvoton,npcm-vcd.yaml
+> @@ -0,0 +1,72 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +
 
-I think it is easier to just do a separate branch here. Along the
-lines of:
+Drop blank line.
 
-		if (use_napi) {
-			if (unlikely(!virtqueue_enable_cb_delayed(sq->vq)))
-				virtqueue_napi_schedule(napi, vq);
-		} else {
-			... old code ...
-		}
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/nuvoton,npcm-vcd.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton NPCM Video Capture/Differentiation Engine
+> +
+> +maintainers:
+> +  - Joseph Liu <kwliu@nuvoton.com>
+> +  - Marvin Lin <kflin@nuvoton.com>
+> +
+> +description: |
+> +  Video Capture/Differentiation Engine (VCD) present on Nuvoton NPCM SoCs.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nuvoton,npcm750-vcd
+> +      - nuvoton,npcm845-vcd
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  nuvoton,sysgcr:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to access GCR (Global Control Register) registers.
+> +
+> +  nuvoton,sysgfxi:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to access GFXI (Graphics Core Information) registers.
+> +
+> +  nuvoton,ece:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to access ECE (Encoding Compression Engine) registers.
+> +
+> +  memory-region:
+> +    description:
+> +      CMA pool to use for buffers allocation instead of the default CMA pool.
 
-also reduces chances of regressions on !napi (which is not well tested)
-and keeps callbacks off while we free skbs.
+maxItems: 1
 
-No?
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - resets
+> +  - nuvoton,sysgcr
+> +  - nuvoton,sysgfxi
+> +  - nuvoton,ece
+> +
+> +additionalProperties: false
+> +
+> 
 
-
-> -- 
-> 2.25.1
+Best regards,
+Krzysztof
 
