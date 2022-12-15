@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C5F64D55A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 03:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E25864D55B
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 03:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiLOCpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 21:45:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
+        id S229496AbiLOCtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 21:49:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiLOCpN (ORCPT
+        with ESMTP id S229451AbiLOCtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 21:45:13 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008D555A84;
-        Wed, 14 Dec 2022 18:45:10 -0800 (PST)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NXc1h6ctzzJpMM;
-        Thu, 15 Dec 2022 10:41:28 +0800 (CST)
-Received: from [10.174.176.219] (10.174.176.219) by
- kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 15 Dec 2022 10:45:06 +0800
-Subject: Re: [RFC PATCH v2 1/1] ACPI: APEI: Make memory_failure() triggered by
- synchronization errors execute in the current context
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-CC:     "rafael@kernel.org" <rafael@kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "xueshuai@linux.alibaba.com" <xueshuai@linux.alibaba.com>,
-        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
-        "xiezhipeng1@huawei.com" <xiezhipeng1@huawei.com>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "xiexiuqi@huawei.com" <xiexiuqi@huawei.com>,
-        "tanxiaofei@huawei.com" <tanxiaofei@huawei.com>,
-        "cuibixuan@linux.alibaba.com" <cuibixuan@linux.alibaba.com>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-References: <20221209095407.383211-1-lvying6@huawei.com>
- <20221209095407.383211-2-lvying6@huawei.com>
- <20221215002520.GA2020717@hori.linux.bs1.fc.nec.co.jp>
-From:   Lv Ying <lvying6@huawei.com>
-Message-ID: <76038f5b-914c-7ae0-e89f-500bd0c7502f@huawei.com>
-Date:   Thu, 15 Dec 2022 10:45:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Wed, 14 Dec 2022 21:49:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C222A727
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 18:48:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671072512;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=INZk4QyU/GabhLmYOY8H9CyYTVqKGsj2eitoXgep5KA=;
+        b=bEhJewZFtiX0LXo6+OOv9PIFvBjNfe4+D2giMHe9lOUdAE5QAHhIkx27VEd3DSVtEf3HxJ
+        l7K75qm3qpmQcudSYk86aAdoFhhp192gWT5/co2XliatrDrn4Eewo9TzPwiJdFdyMmnzyH
+        rLuABnq4QDUeSXOMRHxduwTY3jEYF00=
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
+ [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-408-UsxsXDZaPZCjcVHVzZx2oQ-1; Wed, 14 Dec 2022 21:48:31 -0500
+X-MC-Unique: UsxsXDZaPZCjcVHVzZx2oQ-1
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-3b5da1b3130so20855527b3.5
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 18:48:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=INZk4QyU/GabhLmYOY8H9CyYTVqKGsj2eitoXgep5KA=;
+        b=2GVESMLatHQrfNRiR4lXZ8qprrTvPg8CAgrWV9Y8hWDVg8uXodulvchzidq7SulMZQ
+         4pO4ebg1pjQ+Wv5EL+l6JMbMMxUX/wWV4QvdhQ9cfdAeqODpEXeOwzU4aRuVDUhu944x
+         NAN4aPdqTpFjzRcyuoW000+8SWp3I5VSHXUxKDK3/JEBYgHhIfobZeG7Qtk2xAXIJnRC
+         3z9XJ3OCYfK2zm1ggY5d062vOjRLItwVYQEqg7+Qfldk6ggJT5u5ffYS+im2Z++nWFbV
+         Gw/VLDvzCtNtIKbmVX9XawAJZMRjDe+uTJyzOub+/Y09vIcWGBLVnrpXDG2gE5wvRWOx
+         iPCw==
+X-Gm-Message-State: ANoB5pnAg6o3ehkvtN+GJxJ4XuMnYZszHK7lphN5bT9FfVWnmLzi64vX
+        KhY3H/Vhy+dGGOh8QBMiedOF2KLrmrNCgknILKfK/Qpl+92fUQrnUK/ANlisIzOnHO+g92uLA4c
+        bY5HZEQ3Erpt2F2lrI5JfQgJNgIkUKVtvq/XxAHYE
+X-Received: by 2002:a0d:dd15:0:b0:3d7:66df:9b62 with SMTP id g21-20020a0ddd15000000b003d766df9b62mr40259611ywe.133.1671072510606;
+        Wed, 14 Dec 2022 18:48:30 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6+ZmVxnvKAoOCYUA8ExTUb3sOOn4uVq7rQovIxLjR5QCBDn/Um3Q+b6l4tYeK71js1u+y+Xqg3tixj+yT0u+s=
+X-Received: by 2002:a0d:dd15:0:b0:3d7:66df:9b62 with SMTP id
+ g21-20020a0ddd15000000b003d766df9b62mr40259603ywe.133.1671072510279; Wed, 14
+ Dec 2022 18:48:30 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20221215002520.GA2020717@hori.linux.bs1.fc.nec.co.jp>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.219]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221213234505.173468-1-npache@redhat.com> <Y5oCD0gFV+Cq1JqJ@casper.infradead.org>
+In-Reply-To: <Y5oCD0gFV+Cq1JqJ@casper.infradead.org>
+From:   Nico Pache <npache@redhat.com>
+Date:   Wed, 14 Dec 2022 19:48:04 -0700
+Message-ID: <CAA1CXcA2dGeG2tzc+-OZ77eMVpnSN2SKkdtz9LqpLPywhJMOwA@mail.gmail.com>
+Subject: Re: [RFC V2] mm: add the zero case to page[1].compound_nr in set_compound_order
+To:     Matthew Wilcox <willy@infradead.org>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        muchun.song@linux.dev, mike.kravetz@oracle.com,
+        akpm@linux-foundation.org, gerald.schaefer@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URI_DOTEDU autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,292 +75,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/15 8:26, HORIGUCHI NAOYA(堀口 直也) wrote:
-> On Fri, Dec 09, 2022 at 05:54:07PM +0800, Lv Ying wrote:
->> The memory uncorrected error which is detected by an external component and
->> notified via an IRQ, can be called asynchronization error. If an error is
->> detected as a result of user-space process accessing a corrupt memory
->> location, the CPU may take an abort. On arm64 this is a
->> 'synchronous external abort', and on a firmware first system it is notified
->> via NOTIFY_SEA, this can be called synchronization error.
->>
-> 
-> "synchronization error" in this context looks weird to me, maybe you mean
-> "synchronous error" ?  There're many places using "synchronization", so
-> please use consistent wording.
+On Wed, Dec 14, 2022 at 10:04 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Tue, Dec 13, 2022 at 04:45:05PM -0700, Nico Pache wrote:
+> > Since commit 1378a5ee451a ("mm: store compound_nr as well as
+> > compound_order") the page[1].compound_nr must be explicitly set to 0 if
+> > calling set_compound_order(page, 0).
+> >
+> > This can lead to bugs if the caller of set_compound_order(page, 0) forgets
+> > to explicitly set compound_nr=0. An example of this is commit ba9c1201beaa
+> > ("mm/hugetlb: clear compound_nr before freeing gigantic pages")
+> >
+> > Collapse these calls into the set_compound_order by utilizing branchless
+> > bitmaths [1].
+> >
+> > [1] https://graphics.stanford.edu/~seander/bithacks.html#ConditionalSetOrClearBitsWithoutBranching
+> >
+> > V2: slight changes to commit log and remove extra '//' in the comments
+>
+> We don't usually use // comments anywhere in the kernel other than
+> the SPDX header.
 
-"synchronization error" in this context means "synchronous error", e.g 
-SEA. Thanks for your suggestion, I will use consistent wording - 
-"synchronous error".
+Whoops!
 
-> 
->> Currently, synchronization error and asynchronization error both use
->> memory_failure_queue to schedule memory_failure() exectute in kworker
->> context. Commit 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue
->> for synchronous errors") make task_work pending to flush out the queue,
->> cancel_work_sync() in memory_failure_queue_kick() will make
->> memory_failure() exectute in kworker context first which will get
-> 
-> s/exectute/execute/
+> >  static inline void set_compound_order(struct page *page, unsigned int order)
+> >  {
+> > +     unsigned long shift = (1U << order);
+>
+> Shift is a funny name for this variable.  order is the shift.  this is 'nr'.
 
-Thank you for your detailed review, I will check again and fix the typos 
-and syntax errors in the patch.
+Good point! Waiman found an even better/cleaner solution that would
+avoid needing an extra variable.
+    page[1].compound_nr = (1U << order) & ~1U;
 
-> 
->> synchronization error info from kfifo, so task_work later will get nothing
->> from kfifo which doesn't work as expected. Even worse, synchronization
->> error notification has NMI like properties, (it can interrupt IRQ-masked
->> code), task_work may get wrong kfifo entry from interrupted
->> asynchronization error which is notified by IRQ.
->>
->> Since the memory_failure() triggered by a synchronous exception is
->> executed in the kworker context, the early_kill mode of memory_failure()
->> will send wrong si_code by SIGBUS signal: current process is kworker
->> thread, the actual user-space process accessing the corrupt memory location
->> will be collected by find_early_kill_thread(), and then send SIGBUS with
->> BUS_MCEERR_AO si_code to the actual user-space process instead of
->> BUS_MCEERR_AR. The machine-manager(kvm) use the si_code: BUS_MCEERR_AO for
->> 'action optional' early notifications, and BUS_MCEERR_AR for
->> 'action required' synchronous/late notifications.
->>
->> Make memory_failure() triggered by synchronization errors execute in the
->> current context, we do not need workqueue for synchronization error
->> anymore, use task_work handle synchronization errors directly. Since,
->> synchronization errors and asynchronization errors share the same kfifo,
->> use MF_ACTION_REQUIRED flag to distinguish them. And the asynchronization
->> error keeps the same as before.
->>
->> Currently, it's hard to distinguish synchronization error in APEI. It
->> can be determined that the SEA report synchronization error, so
->> currently only the synchronization error reported by SEA is distinguished
->> and handled in current context.
->>
->> Signed-off-by: Lv Ying <lvying6@huawei.com>
->> ---
->>   drivers/acpi/apei/ghes.c | 20 +++++++++-------
->>   mm/memory-failure.c      | 50 +++++++++++++++++++++++++++++-----------
->>   2 files changed, 48 insertions(+), 22 deletions(-)
->>
->> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
->> index 9952f3a792ba..19d62ec2177f 100644
->> --- a/drivers/acpi/apei/ghes.c
->> +++ b/drivers/acpi/apei/ghes.c
->> @@ -423,8 +423,8 @@ static void ghes_clear_estatus(struct ghes *ghes,
->>   
->>   /*
->>    * Called as task_work before returning to user-space.
->> - * Ensure any queued work has been done before we return to the context that
->> - * triggered the notification.
->> + * Ensure any queued corrupt page in synchronous errors has been handled before
->> + * we return to the user context that triggered the notification.
->>    */
->>   static void ghes_kick_task_work(struct callback_head *head)
->>   {
->> @@ -461,7 +461,7 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
->>   }
->>   
->>   static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
->> -				       int sev)
->> +				       int sev, int notify_type)
->>   {
->>   	int flags = -1;
->>   	int sec_sev = ghes_severity(gdata->error_severity);
->> @@ -475,7 +475,7 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
->>   	    (gdata->flags & CPER_SEC_ERROR_THRESHOLD_EXCEEDED))
->>   		flags = MF_SOFT_OFFLINE;
->>   	if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE)
->> -		flags = 0;
->> +		flags = (notify_type == ACPI_HEST_NOTIFY_SEA) ? MF_ACTION_REQUIRED : 0;
->>   
->>   	if (flags != -1)
->>   		return ghes_do_memory_failure(mem_err->physical_addr, flags);
->> @@ -483,7 +483,8 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
->>   	return false;
->>   }
->>   
->> -static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int sev)
->> +static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int sev,
->> +		int notify_type)
->>   {
->>   	struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
->>   	bool queued = false;
->> @@ -510,7 +511,9 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
->>   		 * and don't filter out 'corrected' error here.
->>   		 */
->>   		if (is_cache && has_pa) {
->> -			queued = ghes_do_memory_failure(err_info->physical_fault_addr, 0);
->> +			queued = ghes_do_memory_failure(err_info->physical_fault_addr,
->> +					(notify_type == ACPI_HEST_NOTIFY_SEA) ?
->> +					MF_ACTION_REQUIRED : 0);
->>   			p += err_info->length;
->>   			continue;
->>   		}
->> @@ -631,6 +634,7 @@ static bool ghes_do_proc(struct ghes *ghes,
->>   	const guid_t *fru_id = &guid_null;
->>   	char *fru_text = "";
->>   	bool queued = false;
->> +	int notify_type = ghes->generic->notify.type;
->>   
->>   	sev = ghes_severity(estatus->error_severity);
->>   	apei_estatus_for_each_section(estatus, gdata) {
->> @@ -648,13 +652,13 @@ static bool ghes_do_proc(struct ghes *ghes,
->>   			ghes_edac_report_mem_error(sev, mem_err);
->>   
->>   			arch_apei_report_mem_error(sev, mem_err);
->> -			queued = ghes_handle_memory_failure(gdata, sev);
->> +			queued = ghes_handle_memory_failure(gdata, sev, notify_type);
->>   		}
->>   		else if (guid_equal(sec_type, &CPER_SEC_PCIE)) {
->>   			ghes_handle_aer(gdata);
->>   		}
->>   		else if (guid_equal(sec_type, &CPER_SEC_PROC_ARM)) {
->> -			queued = ghes_handle_arm_hw_error(gdata, sev);
->> +			queued = ghes_handle_arm_hw_error(gdata, sev, notify_type);
->>   		} else {
->>   			void *err = acpi_hest_get_payload(gdata);
->>   
->> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->> index bead6bccc7f2..82238ec86acd 100644
->> --- a/mm/memory-failure.c
->> +++ b/mm/memory-failure.c
->> @@ -2204,7 +2204,11 @@ struct memory_failure_cpu {
->>   static DEFINE_PER_CPU(struct memory_failure_cpu, memory_failure_cpu);
->>   
->>   /**
->> - * memory_failure_queue - Schedule handling memory failure of a page.
->> + * memory_failure_queue
->> + * - Schedule handling memory failure of a page for asynchronous error, memory
->> + *   failure page will be executed in kworker thread
->> + * - put corrupt memory info into kfifo for synchronous error, task_work will
->> + *   handle them before returning to the user
-> 
-> I think that the top description of kernel-doc function documentation needs
-> to be brief, so could you move the above 2 items downward as details?
-> Maybe the first line can be updated like below (scheduling is done conditionally
-> with your change):
-> 
-> /**
->   * memory_failure_queue - Queue memory failure event
->   * @pfn: Page Number of the corrupted page
->   * @flags: Flags for memory failure handling
->   *
->   * ... (full details)
-> 
-> And maybe existing comment in "full details" is obsolete since commit
-> 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue for synchronous
-> errors"), so could you update the whole description to explain the new
-> behavior with some background information as done in patch description?
-> 
+> >       page[1].compound_order = order;
+> >  #ifdef CONFIG_64BIT
+> > -     page[1].compound_nr = 1U << order;
+> > +     // Branchless conditional:
+> > +     // order  > 0 --> compound_nr = shift
+> > +     // order == 0 --> compound_nr = 0
+> > +     page[1].compound_nr = shift ^ (-order  ^ shift) & shift;
+>
+> Can the compiler see through this?  Before, the compiler sees:
+>
+>         page[1].compound_order = 0;
+>         page[1].compound_nr = 1U << 0;
+> ...
+>         page[1].compound_nr = 0;
+>
+> and it can eliminate the first store.
 
-Thanks, your description is very concise and close to the meaning 
-expressed by the patch. I will fix it in the next patch.
-And I will update the whole description to explain the new behavior.
+This may be the case at the moment, but with:
+https://lore.kernel.org/linux-mm/20221213212053.106058-1-sidhartha.kumar@oracle.com/
+we will have a branch instead. Sidhartha tested it and found no
+regression; the concern is that if THPs get implemented using this
+callpath then we may end up seeing a slowdown.
 
->>    * @pfn: Page Number of the corrupted page
->>    * @flags: Flags for memory failure handling
->>    *
->> @@ -2217,6 +2221,11 @@ static DEFINE_PER_CPU(struct memory_failure_cpu, memory_failure_cpu);
->>    * happen outside the current execution context (e.g. when
->>    * detected by a background scrubber)
->>    *
->> + * This function can also be used in synchronous errors which was detected as a
-> 
-> "... errors which was ..." seems unmatched in plurality.
-> 
->> + * result of user-space accessing a corrupt memory location, just put memory
-> 
-> s/corrupt/corrupted/
+After doing my analysis below I dont think this is the case for the
+destroy case(at least on x86).
+In the destroy case for both the branch and branchless approach we see
+the compiler optimizing away the bitmath and the branch and setting
+the variable to zero.
+In the prep case we see the introduction of a test and cmovne
+instruction, implying a branch.
 
-The typo and syntax error will be fixed in the next patch.
+> Now the compiler sees:
+>         unsigned long shift = (1U << 0);
+>         page[1].compound_order = order;
+>         page[1].compound_nr = shift ^ (0  ^ shift) & shift;
+>
+> Does it do the maths at compile-time, knowing that order is 0 at this
+> callsite and deducing that it can just store a 0?
+>
+> I think it might, since shift is constant-1,
+>
+>         page[1].compound_nr = 1 ^ (0 ^ 1) & 1;
+> ->      page[1].compound_nr = 1 ^ 1 & 1;
+> ->      page[1].compound_nr = 0 & 1;
+> ->      page[1].compound_nr = 0;
+>
+> But you should run it through the compiler and check the assembly
+> output for __destroy_compound_gigantic_page().
 
-> 
->> + * error info into kfifo, and then, task_work get and handle it in current
->> + * execution context instead of scheduling kworker to handle it
-> 
-> Please put a period at the end of sentence. kernel-doc comment is
-> converted to auto-generated documentation, so it needs to look like
-> natural English text.
-> See https://docs.kernel.org/doc-guide/kernel-doc.html#function-documentation
-> 
+Yep it does look like it gets optimized away for the destroy case:
 
-Thanks, it help me a lot, I will update function comments as per the 
-kernel-doc.
+Bitmath Case (destroy)
+---------------------------------
+Dump of assembler code for function __update_and_free_page:
+...
+mov    %rsi,%rbp //move 2nd arg (page) to rbp
+...
+movb   $0x0,0x51(%rbp) //page[1].compound_order = 0
+movl   $0x0,0x5c(%rbp)  //page[1].compound_nr = 0
+...
 
->> + *
->>    * Can run in IRQ context.
->>    */
->> @@ -2230,9 +2239,10 @@ void memory_failure_queue(unsigned long pfn, int flags)
->>   
->>   	mf_cpu = &get_cpu_var(memory_failure_cpu);
->>   	spin_lock_irqsave(&mf_cpu->lock, proc_flags);
->> -	if (kfifo_put(&mf_cpu->fifo, entry))
->> -		schedule_work_on(smp_processor_id(), &mf_cpu->work);
->> -	else
->> +	if (kfifo_put(&mf_cpu->fifo, entry)) {
->> +		if (!(entry.flags & MF_ACTION_REQUIRED))
->> +			schedule_work_on(smp_processor_id(), &mf_cpu->work);
->> +	} else
->>   		pr_err("buffer overflow when queuing memory failure at %#lx\n",
->>   		       pfn);
->>   	spin_unlock_irqrestore(&mf_cpu->lock, proc_flags);
->> @@ -2240,12 +2250,15 @@ void memory_failure_queue(unsigned long pfn, int flags)
->>   }
->>   EXPORT_SYMBOL_GPL(memory_failure_queue);
->>   
->> -static void memory_failure_work_func(struct work_struct *work)
->> +/*
->> + * (a)synchronous error info should be consumed by the corresponding handler
->> + */
->> +static void __memory_failure_work_func(struct work_struct *work, bool sync)
->>   {
->>   	struct memory_failure_cpu *mf_cpu;
->>   	struct memory_failure_entry entry = { 0, };
->>   	unsigned long proc_flags;
->> -	int gotten;
->> +	int gotten, ret;
->>   
->>   	mf_cpu = container_of(work, struct memory_failure_cpu, work);
->>   	for (;;) {
->> @@ -2256,22 +2269,31 @@ static void memory_failure_work_func(struct work_struct *work)
->>   			break;
->>   		if (entry.flags & MF_SOFT_OFFLINE)
->>   			soft_offline_page(entry.pfn, entry.flags);
->> -		else
->> -			memory_failure(entry.pfn, entry.flags);
->> +		else {
->> +			if (sync && (entry.flags & MF_ACTION_REQUIRED)) {
->> +				ret = memory_failure(entry.pfn, entry.flags);
->> +				if (ret == -EHWPOISON || ret == -EOPNOTSUPP)
->> +					return;
->> +
->> +				pr_err("Memory error not recovered");
->> +				force_sig(SIGBUS);
->> +			} else if (!sync && !(entry.flags & MF_ACTION_REQUIRED))
->> +				memory_failure(entry.pfn, entry.flags);
-> 
-> So if sync is true and MF_ACTION_REQUIRED is not set, memory_failure() is
-> not called.  Does that break something?
-> 
-> Thanks,
-> Naoya Horiguchi
-> 
+Math for movl : 0x5c (92) - 64 (sizeof page[0]) = 28
+pahole page: unsigned int compound_nr;        /*    28     4 */
 
-Only in synchronous error handle process, set sync true.
-As expected, MF_ACTION_REQUIRED should be set in synchronous error 
-handle process.
+Bitmath Case (prep)
+---------------------------------
+In the case of prep_compound_gigantic_page the bitmath is being computed
+   0xffffffff8134f17d <+13>:    mov    %rdi,%r12
+   0xffffffff8134f180 <+16>:    push   %rbp
+   0xffffffff8134f181 <+17>:    mov    $0x1,%ebp
+   0xffffffff8134f186 <+22>:    shl    %cl,%ebp
+   0xffffffff8134f188 <+24>:    neg    %ecx
+   0xffffffff8134f18a <+26>:    push   %rbx
+   0xffffffff8134f18b <+27>:    and    %ebp,%ecx
+   0xffffffff8134f18d <+29>:    mov    %sil,0x51(%rdi)
+   0xffffffff8134f191 <+33>:    mov    %ecx,0x5c(%rdi) //set page[1].compound_nr
 
-Kfifo is shared by synchronous error and asynchronous error. 
-Asynchronous error will not set MF_ACTION_REQUIRED. This judgment is to 
-prevent synchronous error calls memory_failure() handle asynchronous 
-errors in kfifo. If __memory_failure_work_func() in synchronous error 
-get an asynchronous error info(sync is true and MF_ACTION_REQUIRED is 
-not set), just ignore it, it will break nothing.
+Now to break down the approach with the branch:
 
-However, currently we can only confirm that SEA is
-synchronous error, just set MF_ACTION_REQUIRED in SEA, other 
-indeterminate synchronous error will miss memory_failure().
+Branch Case (destroy)
+---------------------------------
+  No branch utilized to determine the following instructions.
+   0xffffffff813507bc <+236>:    movb   $0x0,0x51(%rbp)
+   0xffffffff813507c0 <+240>:    movl   $0x0,0x5c(%rbp)
+
+Branch  Case (prep)
+---------------------------------
+The branch is being computed with the introduction of a cmovne instruction.
+   0xffffffff8134f15d <+13>:    mov    %rdi,%r12
+   0xffffffff8134f160 <+16>:    push   %rbp
+   0xffffffff8134f161 <+17>:    mov    $0x1,%ebp
+   0xffffffff8134f166 <+22>:    shl    %cl,%ebp
+   0xffffffff8134f168 <+24>:    test   %esi,%esi             //test
+   0xffffffff8134f16a <+26>:    push   %rbx
+   0xffffffff8134f16b <+27>:    cmovne %ebp,%ecx     //branch evaluation
+   0xffffffff8134f16e <+30>:    mov    %sil,0x51(%rdi)
+   0xffffffff8134f172 <+34>:    mov    %ecx,0x5c(%rdi)
+
+So it looks like in the destruction of compound pages we'll see no
+gain or loss between the bitmath or branch approach.
+However, in the prep case we may see some performance loss once/if THP
+utilizes this path due to the branch and the loss of CPU
+parallelization that can be achieved utilizing the bitmath approach.
+
+Cheers,
+-- Nico
 
 
--- 
-Thanks!
-Lv Ying
+
+>
+
