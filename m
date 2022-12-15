@@ -2,65 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6747A64E193
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF4E64E195
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiLOTGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 14:06:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
+        id S229784AbiLOTH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 14:07:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbiLOTGD (ORCPT
+        with ESMTP id S229469AbiLOTHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 14:06:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2D0FD1F;
-        Thu, 15 Dec 2022 11:05:46 -0800 (PST)
+        Thu, 15 Dec 2022 14:07:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00271BA8;
+        Thu, 15 Dec 2022 11:07:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6895361E19;
-        Thu, 15 Dec 2022 19:05:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE27C433EF;
-        Thu, 15 Dec 2022 19:05:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99F7B61EEC;
+        Thu, 15 Dec 2022 19:07:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3009C433D2;
+        Thu, 15 Dec 2022 19:07:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671131145;
-        bh=TaHHwY1ARYaNL2Cdz/MrisJvKrtH05ORVveDZYFPvpw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TKm/LI0/ks3ugJyN3sD8LLRskHUy3lCxhPppBOE0FNW8hg4oJEyJf5Xy86wAWjHz8
-         0cvDYvQ1Lf6oynyh5eKfr2PLd3pkVTbRcS6bucPJsN0jZTkZ0CkUKjix5ShRSR7sh1
-         stZfFui76enBZA8DVQLieLCN7tIfoefkxCqhrX0SleqCx/LiQPVwywEA3XLqp4IEXl
-         9f9RKmETQwkeTyj6BXtdWNXUYdb+VUfM+JppLXuhNsd37F9cn2Dedh/pANK9/yDr08
-         eP5tVGa0d4pk8tQWYKiixy+GvIyLFc4ig/WPjhW2PJoSHHn+5ExgZvkpEyuJEAMS9n
-         m0UngUI9yCIwg==
-Date:   Thu, 15 Dec 2022 11:05:44 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     David Decotigny <ddecotig@google.com>,
-        David Ahern <dsahern@kernel.org>
-Cc:     "Mahesh Bandewar (=?UTF-8?B?4KSu4KS54KWH4KS2IOCkrOCkguCkoeClh+CktQ==?=
-        =?UTF-8?B?4KS+4KSw?=)" <maheshb@google.com>,
-        David Decotigny <decot+git@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        "Denis V. Lunev" <den@openvz.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
-Subject: Re: [PATCH v1 1/1] net: neigh: persist proxy config across link
- flaps
-Message-ID: <20221215110544.7e832e41@kernel.org>
-In-Reply-To: <CAG88wWbZ3eXCFJBZ8mrfvddKiVihF-GfEOYAOmT_7VX_AeOoqQ@mail.gmail.com>
-References: <20221213073801.361500-1-decot+git@google.com>
-        <20221214204851.2102ba31@kernel.org>
-        <CAF2d9jh_O0-uceNq=AP5rqPm9xcn=9y8bVxMD-2EiJ3bD_mZsQ@mail.gmail.com>
-        <CAG88wWbZ3eXCFJBZ8mrfvddKiVihF-GfEOYAOmT_7VX_AeOoqQ@mail.gmail.com>
+        s=k20201202; t=1671131271;
+        bh=h8JfC6i/Etf/A0VZB4U7ZnSzUI6uc5JDwfPInE3rOBE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=jtlIaYOmXM+ds2W4lFb+mfeulD0UIf9efRBGRvfLndj+vYr2bd9Sshw/yCD99CfGe
+         ZrPbUDKjvgQQOVjhMvZEKDj9tyX0BiGe5jLQVX/t95cbzr+la5aRqOFJyFc9/Qitz1
+         F0NX2871cNJ07o9gORiw7DnlwKrodIhGvY/woHV2lcBDjVLM24zEQcYljYuAiMIkD2
+         DZxN3DCNLUhP5yixxhRDWYTpSrFi+4SkORE4VMCCnhKtsgEpIkMxxMdnNPPuaXd0xV
+         XvgtyqU0hvVX8fxRms5SkdtJOiVSEjf0XkGmPjwbHZQv0k5onB0Eo+Xytdl2v6+bNN
+         X7lO3S0lKKl/Q==
+Date:   Thu, 15 Dec 2022 13:07:49 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH 2/2] PCI: switchtec: Remove useless assignments in
+ switchtec_dev_read()
+Message-ID: <20221215190749.GA132793@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <81a72082-94ec-4011-1e54-3b278317a44e@deltatee.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,21 +54,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Dec 2022 22:18:04 -0800 David Decotigny wrote:
-> I don't think this patch is changing that part of the behavior: we still
-> flush the cached nd entries when the link flaps. What we don't remove are
-> the pneigh_entry-es (ip neigh add proxy ...) attached to the device where
-> the link flaps: those are configured once and this patch ensures that they
-> survive the link flaps as long as the netdev stays admin-up. When
-> the netdev is brought admin-down, we keep the behavior we had before the
-> patch.
+On Thu, Dec 15, 2022 at 11:34:06AM -0700, Logan Gunthorpe wrote:
+> On 2022-12-15 11:21, Bjorn Helgaas wrote:
+> > From: Bjorn Helgaas <bhelgaas@google.com>
+> > 
+> > Some switchtec_dev_read() error cases assign to "rc", then branch to "out".
+> > But the code at "out" never uses "rc".  Drop the useless assignments.  No
+> > functional change intended.
+> 
+> Ah, hmm, yes. I think if copy_to_user() fails, the function should
+> probably return -EFAULT. So perhaps an unlock and specific return as is
+> done in previous conditions in the same function?
 
-Makes sense. This is not urgent, tho, right?
-
-David A, do you agree and should we treat this as a fix with
-
-Fixes: 859bd2ef1fc1 ("net: Evict neighbor entries on carrier down")
-
-added?
-
-Reminder: please bottom post on the list
+Sure, I'll post a v2 that does that.
