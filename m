@@ -2,173 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24EF764D92D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:01:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F90264D932
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:02:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiLOKB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 05:01:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
+        id S230124AbiLOKCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 05:02:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiLOKBY (ORCPT
+        with ESMTP id S230231AbiLOKBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 05:01:24 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFEA2036F;
-        Thu, 15 Dec 2022 02:01:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wkAghe3ZNHLtMkd0SpeOhPk85q8HVfUfHIWkbKQ6Tjs=; b=Hvp+NvWQs5Luk958wA57VbeRNK
-        OMTEG4yA7yQFAXaOHiEClUFOcpr8R2ndbIlSlETpKMTWVrJdB+1xovmDAeVAKvI48kpqhBwcWAJwj
-        JZANyR1PLRmtLYM3JiEZEQF/GtMXeeVt60oO59kNv6lGYmuqk41ljxzBRQJahnQX7Y4UDLbY3zF21
-        hBjLWXEkvipV1HSKqCK9pmkQ9XMOqIlHl/vP7cygXrhE7TQQzmNUKR+fxyCmzGoMvsmnJYtwSLsnH
-        zFnt1DnoBMJt6OGpXPXUrOr/icR8B/Jmviw8bwjL5QyermsF5Fx+f9C58xG7QmfTH2noGbyiU4XUh
-        rnyFmlLg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p5l3D-008daE-QI; Thu, 15 Dec 2022 10:01:15 +0000
-Date:   Thu, 15 Dec 2022 02:01:15 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Sergei Shtepa <sergei.shtepa@veeam.com>
-Cc:     axboe@kernel.dk, corbet@lwn.net, linux-block@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 09/21] block, blksnap: attaching and detaching the
- filter and handling I/O units
-Message-ID: <Y5rwa6m3yqo40vz1@infradead.org>
-References: <20221209142331.26395-1-sergei.shtepa@veeam.com>
- <20221209142331.26395-10-sergei.shtepa@veeam.com>
+        Thu, 15 Dec 2022 05:01:46 -0500
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AFD2A961;
+        Thu, 15 Dec 2022 02:01:45 -0800 (PST)
+Received: by mail-qt1-f171.google.com with SMTP id fu10so4801627qtb.0;
+        Thu, 15 Dec 2022 02:01:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JhtBCHHNjoXXg4T30Sb3fCu73wDFb0l1hMsSAjF0/fc=;
+        b=I4RFIuWgbHzPtr412BtFDCfKDHQ8ZvNbodm5TTanssloIpgUoCf8VG5EysLabbDXOu
+         PbH+aOxOZxDMinbn98lfCXnZcBc9MgDhURLo12ZsP9+DUjJJj+r5n0K8oVIu1yd1SHev
+         u61TspyPTvhdeSOM7EBC+oQ6jdxlNhcErx9iQM2eMYTDV6S2ZPccBIqcs7JeKpyedXKi
+         7xAGmYnUb3fm/f4D3HKrHqB9lcifEKToVC3I4DG2jplClsnc3sgN5SQWGXTJn5Cl8HGR
+         s1hPQyLfvIihcd+LJi+AaDilOkwt6JtZnEdyHH+Q811FQf/5rMWQgH9Ii+twkqw+O5cS
+         dzhg==
+X-Gm-Message-State: ANoB5pk0u0fzhlcclAA3BmwZb6FJKIX1paNdsJJR/nYqYJKdji+yMU/r
+        WhS3fZag5365g1XMeNh4PkbIUdNte5tEtQ==
+X-Google-Smtp-Source: AA0mqf5IkZdrOBZF4otQcCnpnY6ghJ5HQxT2GUgozP8oMpULmRVMDD/FomiRwYpxQaQbgUY5SvSk6A==
+X-Received: by 2002:a05:622a:488c:b0:3a7:ed31:a618 with SMTP id fc12-20020a05622a488c00b003a7ed31a618mr42865401qtb.7.1671098504492;
+        Thu, 15 Dec 2022 02:01:44 -0800 (PST)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id l14-20020ac84cce000000b0038b684a1642sm3190217qtv.32.2022.12.15.02.01.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 02:01:43 -0800 (PST)
+Received: by mail-yb1-f172.google.com with SMTP id d131so2896458ybh.4;
+        Thu, 15 Dec 2022 02:01:43 -0800 (PST)
+X-Received: by 2002:a25:7204:0:b0:6f0:9ff5:1151 with SMTP id
+ n4-20020a257204000000b006f09ff51151mr66067110ybc.543.1671098503649; Thu, 15
+ Dec 2022 02:01:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221209142331.26395-10-sergei.shtepa@veeam.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221213133302.218955-1-herve.codina@bootlin.com> <20221213133302.218955-2-herve.codina@bootlin.com>
+In-Reply-To: <20221213133302.218955-2-herve.codina@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 15 Dec 2022 11:01:32 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV7x_-PGfOnHxuXhE-cqSKeugscTe4b_9-_tF2MsSJGPg@mail.gmail.com>
+Message-ID: <CAMuHMdV7x_-PGfOnHxuXhE-cqSKeugscTe4b_9-_tF2MsSJGPg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] dt-bindings: usb: add the Renesas RZ/N1 USBF controller
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static bool tracker_submit_bio_cb(struct bio *bio)
-> +{
-> +	struct bdev_filter *flt = bio->bi_bdev->bd_filter;
-> +	struct bio_list bio_list_on_stack[2] = { };
-> +	struct bio *new_bio;
-> +	bool ret = true;
-> +	struct tracker *tracker = container_of(flt, struct tracker, flt);
-> +	int err;
-> +	sector_t sector;
-> +	sector_t count;
-> +	unsigned int current_flag;
-> +
-> +	WARN_ON_ONCE(!flt);
-> +	if (unlikely(!flt))
-> +		return true;
+On Tue, Dec 13, 2022 at 2:33 PM Herve Codina <herve.codina@bootlin.com> wrote:
+> The Renesas RZ/N1 USBF controller is an USB2.0 device controller
+> (UDC) available in the Renesas r9a06g032 SoC (RZ/N1 family).
+>
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 
-We're called through the filter, so checking this again here (twice)
-is a bit silly.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-> +	if (bio->bi_opf & REQ_NOWAIT) {
-> +		if (!percpu_down_read_trylock(&tracker_submit_lock)) {
-> +			bio_wouldblock_error(bio);
-> +			return false;
-> +		}
-> +	} else
-> +		percpu_down_read(&tracker_submit_lock);
+Gr{oetje,eeting}s,
 
-Does it make sense to make this a global lock vs per-struct tracker?
+                        Geert
 
-> +	if (!op_is_write(bio_op(bio)))
-> +		goto out;
-> +
-> +	count = bio_sectors(bio);
-> +	if (!count)
-> +		goto out;
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Just nitpicking, but what about moving all the code below here
-into a separate helper that is only called for op_is_write &&
-bio_sectors?  It's not going to change anything functionally, but
-would make the code easier to follow.
-
-> +	current_flag = memalloc_noio_save();
-> +	bio_list_init(&bio_list_on_stack[0]);
-> +	current->bio_list = bio_list_on_stack;
-> +	barrier();
-
-barrier is just a compiler barrier, so it is unlikely to do what
-you want. But without a comment I can't even figure out what it is
-trying to do.
-
-> +static int tracker_filter_attach(struct block_device *bdev,
-> +				 struct tracker *tracker)
-> +{
-> +	int ret;
-> +	bool is_frozen = false;
-> +
-> +	pr_debug("Tracker attach filter\n");
-> +
-> +	if (freeze_bdev(bdev))
-> +		pr_err("Failed to freeze device [%u:%u]\n", MAJOR(bdev->bd_dev),
-> +		       MINOR(bdev->bd_dev));
-
-I think you need to fail the attachment if we can't freeze the device.
-
-> +static int tracker_filter_detach(struct block_device *bdev)
-> +{
-> +	int ret;
-> +	bool is_frozen = false;
-> +
-> +	pr_debug("Tracker delete filter\n");
-> +	if (freeze_bdev(bdev))
-> +		pr_err("Failed to freeze device [%u:%u]\n", MAJOR(bdev->bd_dev),
-> +		       MINOR(bdev->bd_dev));
-
-Same here.
-
-> +/**
-> + * tracker_wait_for_release - Waiting for all trackers are released.
-> + *
-> + * Trackers are released in the worker thread. So, this function allows to wait
-> + * for the end of the process of releasing trackers.
-> + */
-> +static void tracker_wait_for_release(void)
-
-This defeats the reason to move it to the workqueue first, as you
-can still deadlock on whatever problem that tried to solve, just
-out of reach of lockdep.
-
-> +struct tracker *tracker_create_or_get(dev_t dev_id)
-> +{
-> +	struct tracker *tracker;
-> +	struct block_device *bdev;
-> +	struct tracked_device *tr_dev;
-> +
-> +	bdev = blkdev_get_by_dev(dev_id, 0, NULL);
-
-These blkdev_get_by_dev calls are a little problematic, as they
-bypass any access restriction (LSMs, containers, etc).  That's
-why the kernel generally does a blkdev_get_by_name based on the
-actual file name, which does all the proper checks.  I think the
-tracker creation also needs to happen based on names to fit into this
-security model.  Passing in names should also be much easier for
-userspace to start with.
-
-
-Now for remove, and the other operations on the tracked device:
-Is there any reason to not simply add an ioctl method to
-bdev_filter_operations, so that you can issue these ioctls against the
-tracked device?  That removes the need to find the tracked device
-entirely and should simplify a lot of things.
-
-In fact thinking wonder if attachment of a filter driver should
-go through the block layer using an ioctl on the tracked device
-as well, i.e.
-
- - add a name field to bdev_filter_operations
- - keep a list of all bdev_filter_operations in the block core
- - new core block layer ioctl to associate a block device with a
-   bdev_filter_operations
- - everything after that is done through bdev_filter_operations->ioctl.
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
