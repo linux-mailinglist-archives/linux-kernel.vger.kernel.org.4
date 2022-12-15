@@ -2,86 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6254C64DEDA
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7EE64DED9
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbiLOQmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:42:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
+        id S229616AbiLOQmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbiLOQmj (ORCPT
+        with ESMTP id S229453AbiLOQmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:42:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7F02F029
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:42:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7764261DE1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 16:42:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C8AEC433D2;
-        Thu, 15 Dec 2022 16:42:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671122557;
-        bh=k+D2QBSlKI6hPk7Hqyn2WSrMF81848vCoxcbS8XEPPE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Omragm4ED0mXgPuLWTB7oX4v7uNQnvi8sD0kYVaSTArFG0Tot+MCTElzjZkztyWvm
-         2ofzVnOmtou6KNuJULR7HJ0Xc7L/Rb+AYy5mJeBj0nu834YzonWEosaKLaRXq/7IZT
-         Np0gaq06Z3rhMnwmY2JvoOEvIAko+yyOQ+QzzqozfqJ+f0LPL/PrAUuGJBOjaakDYS
-         /1gTUq7Z71hRXT8RYdR0/ngmPYyh4wpba/t/VIhlcfB8pI6WeYbZWWShp2zGT6WtVV
-         pzxCJwxkRHKoMydVCZUPgR7LjVl/hdUnLhkEKIz73dvMhg+IN3p4lRCWCyPF1AcXPH
-         lRBqBQ4UesOaA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] phy: AM654: fix serdes dependencies
-Date:   Thu, 15 Dec 2022 17:42:27 +0100
-Message-Id: <20221215164233.890351-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Thu, 15 Dec 2022 11:42:37 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD6BDC9;
+        Thu, 15 Dec 2022 08:42:37 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id gt4so11084747pjb.1;
+        Thu, 15 Dec 2022 08:42:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bOgxA915+/U8If37/BdnD3/XyRRRxssxQl2Z8drtlFU=;
+        b=ZHs0yZHmhddja5efzdbesgNr+m1zlfrN/YnHS6P0Z9lKUWafZeZemyjvbv59Df4vm4
+         1H3d2fteVrh7ot92Y4AEg/5PaWOQjNcNvtm3ufmh+NZy+lEw8UQTqypTjW6Uba9HYdOC
+         Adc5NJpWZnYgdy+Z18uk8a+TL+5SUFsmCS3enZ0ySxtDthzjCT7Soi493FLds+qPgyMO
+         wrPjkAID2X7+1g3hCwbqrdASUGvcE2uXkRWN/B6GNtNGeUhjVzp56GfUhZtBQES8/e/h
+         0OHDBVXAM+d5X06CKGVFFP06/2AFhOLlBF6PGksx+XmNVbSkp8GOnplhm5Gaxem3x4Yq
+         RMmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bOgxA915+/U8If37/BdnD3/XyRRRxssxQl2Z8drtlFU=;
+        b=TYb3ErbesVuX4BjnHwh224XjwDRwbhoB2/IAfye1pss0NlcqK4dwocFakFnVOk2fc6
+         5dDPYggsolVqM67zYt7MxUawJ8X9BDdYJi4lYoBjCeNQVabLXBkOT56D7Y4QRDQNZ+Er
+         PMBEl5Zq7uv5njHOL4FU94D9fgJEqWaneqXLMUoE/GXSNK6WdSQ/r8B8J5uc+HqTYqFg
+         mizmlQ3r5QIPrbNiuYYTXH4Goe+wojPWf02IXw1I3l2lzcyZAbLYdgCBpCDiAbJDfoZd
+         3erlJSk8YztSWVF7TY/JJNk+OiubdYWZgTwDV4qqYBZRjPvOWOAy8IzoaYp7QJbwzhPW
+         OBlg==
+X-Gm-Message-State: ANoB5pkyeOQcURSHbN70w3TXICT801xHkGLjUCtLJzggJYS+LVLetVOg
+        wOXE5/X4iUiuqEfJOv6EPAU=
+X-Google-Smtp-Source: AA0mqf4kdbHwbg++bGG7FdiFr2cls3H5dmAFo/sDDniIAMc2bbfL5XpzzLHPZsNz7Xom8amp2jjPQA==
+X-Received: by 2002:a17:902:bb98:b0:188:6b9c:d17d with SMTP id m24-20020a170902bb9800b001886b9cd17dmr20204086pls.16.1671122556178;
+        Thu, 15 Dec 2022 08:42:36 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id y20-20020a170902e19400b0018980f14ecfsm4074051pla.115.2022.12.15.08.42.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 08:42:35 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 15 Dec 2022 06:42:34 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     hanjinke <hanjinke.666@bytedance.com>
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [External] Re: [RFC PATCH] blk-throtl: Introduce sync queue for
+ write ios
+Message-ID: <Y5tOejLZrpMzH8/w@slm.duckdns.org>
+References: <20221206163826.10700-1-hanjinke.666@bytedance.com>
+ <Y5et48VryiKgL/eD@slm.duckdns.org>
+ <f42d81c1-47c8-e283-1259-8c554bf46c46@bytedance.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <f42d81c1-47c8-e283-1259-8c554bf46c46@bytedance.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hello,
 
-Building without CONFIG_OF leads to a harmless Kconfig warning:
+Sorry about the delay.
 
-WARNING: unmet direct dependencies detected for MUX_MMIO
-  Depends on [n]: MULTIPLEXER [=y] && OF [=n]
-  Selected by [y]:
-  - PHY_AM654_SERDES [=y] && (OF [=n] && ARCH_K3 || COMPILE_TEST [=y]) && COMMON_CLK [=y]
+On Tue, Dec 13, 2022 at 11:55:16AM +0800, hanjinke wrote:
+> If sq->queue[] were only classfied SYNC and ASYNC, some things may become a
+> little difficult to handle。As we put sync write and read together into SYNC
+> queue, the two may influence each other.
+> Whit wbps=1M and rbps=100M configured, sync io likely be throtled while read
+> ios after it may can be dispatched within the limit. In that case,
+> maybe we should scan the whole SYNC queue to check read io.
 
-Change the dependency to limit compile testing to OF-enabled
-builds.
+Ah, yeah, you're right. The configuration per-rw so we have to split within.
+Will review your latest patch.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/phy/ti/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks.
 
-diff --git a/drivers/phy/ti/Kconfig b/drivers/phy/ti/Kconfig
-index 15a3bcf32308..381bc499053e 100644
---- a/drivers/phy/ti/Kconfig
-+++ b/drivers/phy/ti/Kconfig
-@@ -23,7 +23,7 @@ config PHY_DM816X_USB
- 
- config PHY_AM654_SERDES
- 	tristate "TI AM654 SERDES support"
--	depends on OF && ARCH_K3 || COMPILE_TEST
-+	depends on OF && (ARCH_K3 || COMPILE_TEST)
- 	depends on COMMON_CLK
- 	select GENERIC_PHY
- 	select MULTIPLEXER
 -- 
-2.35.1
-
+tejun
