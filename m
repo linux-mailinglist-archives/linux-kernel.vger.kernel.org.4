@@ -2,171 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE00464DE28
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE1664DE2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiLOQEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:04:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
+        id S229874AbiLOQGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:06:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiLOQD7 (ORCPT
+        with ESMTP id S229488AbiLOQGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:03:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA2F2EF5D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:03:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671120195;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Eek5YPddR+rdvDYmWL3WCwvTt/kh6fJNelSHfFXusYg=;
-        b=GXWX9rFKJx+pkcgQjak20S8RHHN/1Ooe4v4S+NHGJnAKeGdfpZvZ2ifAz35h/hR0QrPxBr
-        r3Ef0mLuymf3O4NM96On/NVUv75hYDoHnMMn0pxBp34smR4Dem6hjRm+4knkgAXFSe1z6L
-        4q/igSlYdYWo96hAf+uVtkJXLw71xuU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-74--JlN4jZHNsufKEb23_Ljsg-1; Thu, 15 Dec 2022 11:03:09 -0500
-X-MC-Unique: -JlN4jZHNsufKEb23_Ljsg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 459BA857F82;
-        Thu, 15 Dec 2022 16:03:09 +0000 (UTC)
-Received: from llong.com (unknown [10.22.9.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0123C4085720;
-        Thu, 15 Dec 2022 16:03:08 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v2 2/2] mm/kmemleak: Fix UAF bug in kmemleak_scan()
-Date:   Thu, 15 Dec 2022 11:02:59 -0500
-Message-Id: <20221215160259.261136-3-longman@redhat.com>
-In-Reply-To: <20221215160259.261136-1-longman@redhat.com>
-References: <20221215160259.261136-1-longman@redhat.com>
+        Thu, 15 Dec 2022 11:06:33 -0500
+Received: from amity.mint.lgbt (vmi888983.contaboserver.net [149.102.157.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2685E31353
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:06:31 -0800 (PST)
+Received: from amity.mint.lgbt (mx.mint.lgbt [127.0.0.1])
+        by amity.mint.lgbt (Postfix) with ESMTP id 4NXxtY5xt1z1S5D1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 11:06:29 -0500 (EST)
+Authentication-Results: amity.mint.lgbt (amavisd-new);
+        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
+        header.d=mint.lgbt
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mint.lgbt; h=
+        content-transfer-encoding:content-type:in-reply-to:subject:from
+        :references:to:content-language:user-agent:mime-version:date
+        :message-id; s=dkim; t=1671120388; x=1671984389; bh=7D6doDStC7gK
+        c0KFHyAb+1CP6XE+sVmchO92TAxtxJA=; b=FLb4uV+2Nbm8lCpkHgPl6gx+dPjp
+        kF16PTm5OhsE6NUveS1vChwccFN3ndZjBcC3H0ggUsL4MO+P95Z1ovSapmhkUIYU
+        DbgmVlRhwsQmwNp4VUzBliwdBAFkDDTVnNoeZ7ejcgaMe0aNJ9L+BTsvxj/DsWZu
+        cgY6NXiiZ24S8EHZBWlOkk2zGAYAjghRyCiteTvgyr4o55MHAl0iPcVTzUtGzHCV
+        SQTsgqWqVTAP59EqOwqiTYTEw/JZuxOFlOmpuwc7neqC4GdlTd64KcrVQAvGykp+
+        Qime8jfOadwm5RKe1Gzfa8sG05c63i4dTRM9ljoTzRiJFoDgcS55s62QDg==
+X-Virus-Scanned: amavisd-new at amity.mint.lgbt
+Received: from amity.mint.lgbt ([127.0.0.1])
+        by amity.mint.lgbt (amity.mint.lgbt [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Dt7ZbEmkbBlF for <linux-kernel@vger.kernel.org>;
+        Thu, 15 Dec 2022 11:06:28 -0500 (EST)
+Received: from [192.168.4.25] (unknown [190.196.92.66])
+        by amity.mint.lgbt (Postfix) with ESMTPSA id 4NXxtQ22Qbz1S4t9;
+        Thu, 15 Dec 2022 11:06:21 -0500 (EST)
+Message-ID: <4fb08532-47b5-b5e8-07ad-a5e3f42b93aa@mint.lgbt>
+Date:   Thu, 15 Dec 2022 13:06:19 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221214093342.153479-1-they@mint.lgbt>
+ <ea20c58f-3a53-7cdd-8669-228c4acac49a@linaro.org>
+ <5a511002-5cd2-b95b-a45a-faaf78e2f4a7@mint.lgbt>
+ <cd025494-862b-70ec-a008-4be219f7f72f@mint.lgbt>
+ <245b1554-5f61-3f1b-c04e-fd8326e62e8e@linaro.org>
+From:   Lux Aliaga <they@mint.lgbt>
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm6125: Initial support for
+ xiaomi-laurel_sprout
+In-Reply-To: <245b1554-5f61-3f1b-c04e-fd8326e62e8e@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6edda04ccc7c ("mm/kmemleak: prevent soft lockup in first
-object iteration loop of kmemleak_scan()") fixes soft lockup problem
-in kmemleak_scan() by periodically doing a cond_resched(). It does
-take a reference of the current object before doing it. Unfortunately,
-if the object has been deleted from the object_list, the next object
-pointed to by its next pointer may no longer be valid after coming
-back from cond_resched(). This can result in use-after-free and other
-nasty problem.
+On 15/12/2022 05:31, Krzysztof Kozlowski wrote:
 
-Fix this problem by adding a del_state flag into kmemleak_object
-structure to synchronize the object deletion process between
-kmemleak_cond_resched() and __remove_object() to make sure that the
-object remained in the object_list in the duration of the cond_resched()
-call.
+> On 14/12/2022 18:45, Lux Aliaga wrote:
+>> Ok. I think that comment is incorrect. Changing the node name on
+>> extcon_usb breaks the "extcon" property in &usb3_dwc3, even after
+>> changing the reference.
+> You top-post and I have no clue what do you refer to. Don't top-post.
 
-Fixes: 6edda04ccc7c ("mm/kmemleak: prevent soft lockup in first object iteration loop of kmemleak_scan()")
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- mm/kmemleak.c | 35 +++++++++++++++++++++++++++++------
- 1 file changed, 29 insertions(+), 6 deletions(-)
+My apologies. I replied a bit too quickly and didn't check if the 
+concerns I proposed were redacted correctly. An email you sent already 
+answered my concern, so I'll proceed to send a new version of the patchset.
 
-diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-index e7cb521236bf..0ece170fc9ef 100644
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -13,11 +13,12 @@
-  *
-  * The following locks and mutexes are used by kmemleak:
-  *
-- * - kmemleak_lock (raw_spinlock_t): protects the object_list modifications and
-- *   accesses to the object_tree_root (or object_phys_tree_root). The
-- *   object_list is the main list holding the metadata (struct kmemleak_object)
-- *   for the allocated memory blocks. The object_tree_root and object_phys_tree_root
-- *   are red black trees used to look-up metadata based on a pointer to the
-+ * - kmemleak_lock (raw_spinlock_t): protects the object_list as well as
-+ *   del_state modifications and accesses to the object_tree_root (or
-+ *   object_phys_tree_root). The object_list is the main list holding the
-+ *   metadata (struct kmemleak_object) for the allocated memory blocks.
-+ *   The object_tree_root and object_phys_tree_root are red
-+ *   black trees used to look-up metadata based on a pointer to the
-  *   corresponding memory block. The object_phys_tree_root is for objects
-  *   allocated with physical address. The kmemleak_object structures are
-  *   added to the object_list and object_tree_root (or object_phys_tree_root)
-@@ -147,6 +148,7 @@ struct kmemleak_object {
- 	struct rcu_head rcu;		/* object_list lockless traversal */
- 	/* object usage count; object freed when use_count == 0 */
- 	atomic_t use_count;
-+	unsigned int del_state;		/* deletion state */
- 	unsigned long pointer;
- 	size_t size;
- 	/* pass surplus references to this pointer */
-@@ -177,6 +179,11 @@ struct kmemleak_object {
- /* flag set for object allocated with physical address */
- #define OBJECT_PHYS		(1 << 4)
- 
-+/* set when __remove_object() called */
-+#define DELSTATE_REMOVED	(1 << 0)
-+/* set to temporarily prevent deletion from object_list */
-+#define DELSTATE_NO_DELETE	(1 << 1)
-+
- #define HEX_PREFIX		"    "
- /* number of bytes to print per line; must be 16 or 32 */
- #define HEX_ROW_SIZE		16
-@@ -567,7 +574,9 @@ static void __remove_object(struct kmemleak_object *object)
- 	rb_erase(&object->rb_node, object->flags & OBJECT_PHYS ?
- 				   &object_phys_tree_root :
- 				   &object_tree_root);
--	list_del_rcu(&object->object_list);
-+	if (!(object->del_state & DELSTATE_NO_DELETE))
-+		list_del_rcu(&object->object_list);
-+	object->del_state |= DELSTATE_REMOVED;
- }
- 
- /*
-@@ -633,6 +642,7 @@ static void __create_object(unsigned long ptr, size_t size,
- 	object->count = 0;			/* white color initially */
- 	object->jiffies = jiffies;
- 	object->checksum = 0;
-+	object->del_state = 0;
- 
- 	/* task information */
- 	if (in_hardirq()) {
-@@ -1470,9 +1480,22 @@ static void kmemleak_cond_resched(struct kmemleak_object *object)
- 	if (!get_object(object))
- 		return;	/* Try next object */
- 
-+	raw_spin_lock_irq(&kmemleak_lock);
-+	if (object->del_state & DELSTATE_REMOVED)
-+		goto unlock_put;	/* Object removed */
-+	object->del_state |= DELSTATE_NO_DELETE;
-+	raw_spin_unlock_irq(&kmemleak_lock);
-+
- 	rcu_read_unlock();
- 	cond_resched();
- 	rcu_read_lock();
-+
-+	raw_spin_lock_irq(&kmemleak_lock);
-+	if (object->del_state & DELSTATE_REMOVED)
-+		list_del_rcu(&object->object_list);
-+	object->del_state &= ~DELSTATE_NO_DELETE;
-+unlock_put:
-+	raw_spin_unlock_irq(&kmemleak_lock);
- 	put_object(object);
- }
- 
+Kind regards.
+
 -- 
-2.31.1
+Lux Aliaga
+https://nixgoat.me/
 
