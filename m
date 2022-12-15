@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE28A64D45F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BECE64D461
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbiLOAMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 19:12:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
+        id S230060AbiLOAND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 19:13:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiLOAMF (ORCPT
+        with ESMTP id S229480AbiLOAMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 19:12:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F69554EB;
-        Wed, 14 Dec 2022 16:04:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90980B819B0;
-        Thu, 15 Dec 2022 00:04:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29EECC433D2;
-        Thu, 15 Dec 2022 00:04:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671062674;
-        bh=6zdqv7Q8vPqfC1s6lXlTSp0z37xOGozf4pV1uPfE9b4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=RcOMqxLsW0m76iF/DD3ge96L0j5jl66w4BTseO5hUDYboMtPpGretDEbf1SOCa+yF
-         kbFICx8Xt3lpbvy4LJ/fhOJLj5Gr9LTuR7hEvyfAhAHQRBDnU+WaWdh4/av56iyFpb
-         vSA0+GPkksYIOxt+gcRKvkzySm/tlikcAXxn99zw0NfXtgOkYy0pSxNZGhlmyI7dL6
-         Qv0rQGkspJ9gI/nsGWWAkAIJDMtUB3vjkyYD4k2Qk5ewVUGnO5XV/osN4TN82nauX3
-         jBypUpy0THA0Ql7SvLNlKRbq53BQbtvJmk3tBo5RMJzwBY37k/PoETxr5FjflQDeJt
-         RKC4YjxrU3OGA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id BC4125C0A6A; Wed, 14 Dec 2022 16:04:33 -0800 (PST)
-Date:   Wed, 14 Dec 2022 16:04:33 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     boqun.feng@gmail.com, frederic@kernel.org, neeraj.iitr10@gmail.com,
-        urezki@gmail.com, rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] srcu: Yet more detail for
- srcu_readers_active_idx_check() comments
-Message-ID: <20221215000433.GD4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221214191355.GA2596199@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YTztHvaXJG9jQmQ13tF2HdCy8+TbvBDCYWd98tMrsE-vw@mail.gmail.com>
- <20221214212455.GA4001@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQp5K2iy0ULnFOVKQit3T+OM_vY29ZcLu6drNEt-ex1QQ@mail.gmail.com>
- <CAEXW_YRvSrD40WJ+8GicWB5NN8QyLLoUzRS9j8Tc9CMvojKO0g@mail.gmail.com>
- <CAEXW_YQx78ge_U7asX4YHcsi1EDZSRo_wGN_DJmWnXcAYjHWgQ@mail.gmail.com>
+        Wed, 14 Dec 2022 19:12:35 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738C756D7A
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:06:46 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so979666pjo.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 16:06:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Io4os3gTaCz4PVaBpjHUj2dUPT6iCaDC19vKypF5Q6s=;
+        b=i/gqh+ULBL84l7W+HaI+YPVA3abaIfQIMOgVOnljOmr/KVA68zwjp++CaIKotf3jQg
+         ZUOzQKPjmqqy4B/7LyynthiKp6gDWwdZ0BWj+GzLXpD3URXB/Z683HOwIBXxeh93b6GF
+         S1iZx+2M8h1CY+bK9AdVvDyvmaaHb+Ig46C2A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Io4os3gTaCz4PVaBpjHUj2dUPT6iCaDC19vKypF5Q6s=;
+        b=Bf4GYSB3ZVinVJ/bAOi1vnq3cJR0N51uZ5GmRKDnylQURqMDIkepyNZknnvK6LbiA/
+         RX6tZexRSSu2jQjAwEMfQ4KUs4sc6tVjNiJwoG7IJH01fBbbSal9CCC9IAYJwsfohW0+
+         CMDs72vlMWyvAiVSxoaygPnuMlL1f+6t82AZH12ykSbB60Z1/1gU2DkE7H/kj0X4K3RI
+         T1bCeNgWw+EIdsABUAC87DtErurJaMjb1r6LLeAd/nXpcztGIigHb8nTa6Skca77mnzU
+         lBcHvLM+S8lYhqwjq8IDAimK+Xt+LXV5zZdWeFz8+8WzTTVb/zv+n6/IS3J2nGAqb9DJ
+         CyuA==
+X-Gm-Message-State: ANoB5plVsWAI2U4qhaVKhcx4DBsBGGPEGCyLKIz//WevXJCnk2m2QkmT
+        4vgV9q3rfwPcIKntJYUpYfkqO8WSh7FeFlIy
+X-Google-Smtp-Source: AA0mqf7K90bP3UUUfX9ygJAAX4zTnSIy4/T4H3TdPQBfKafxMyTh8efvMuJMEGl3HGTGWDSfjK9dew==
+X-Received: by 2002:a17:90a:b908:b0:21a:8c6:c89e with SMTP id p8-20020a17090ab90800b0021a08c6c89emr27261520pjr.2.1671062806002;
+        Wed, 14 Dec 2022 16:06:46 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id gj1-20020a17090b108100b002086ac07041sm1910624pjb.44.2022.12.14.16.06.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 16:06:45 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     ndesaulniers@google.com, nathan@kernel.org
+Cc:     Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
+        trix@redhat.com, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org, patches@lists.linux.dev,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] security: Restrict CONFIG_ZERO_CALL_USED_REGS to gcc or clang > 15.0.6
+Date:   Wed, 14 Dec 2022 16:06:19 -0800
+Message-Id: <167106277582.3571286.12639413013649335692.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221214232602.4118147-1-nathan@kernel.org>
+References: <20221214232602.4118147-1-nathan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEXW_YQx78ge_U7asX4YHcsi1EDZSRo_wGN_DJmWnXcAYjHWgQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,35 +71,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 11:14:48PM +0000, Joel Fernandes wrote:
-> On Wed, Dec 14, 2022 at 11:10 PM Joel Fernandes <joel@joelfernandes.org> wrote:
-> >
-> > On Wed, Dec 14, 2022 at 11:07 PM Joel Fernandes <joel@joelfernandes.org> wrote:
-> > >
-> > > On Wed, Dec 14, 2022 at 9:24 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > > I also did not get why you care about readers that come and ago (you
-> > > > > mentioned the first reader seeing incorrect idx and the second reader
-> > > > > seeing the right flipped one, etc). Those readers are irrelevant
-> > > > > AFAICS since they came and went, and need not be waited on , right?.
-> > > >
-> > > > The comment is attempting to show (among other things) that we don't
-> > > > need to care about readers that come and go more than twice during that
-> > > > critical interval of time during the counter scans.
-> > >
-> > > Why do we need to care about readers that come and go even once? Once
-> > > they are gone, they have already done an unlock() and their RSCS is
-> > > over, so they need to be considered AFAICS.
-> > >
-> >
-> > Aargh, I meant: "so they need to be considered AFAICS".
+On Wed, 14 Dec 2022 16:26:03 -0700, Nathan Chancellor wrote:
+> A bad bug in clang's implementation of -fzero-call-used-regs can result
+> in NULL pointer dereferences (see the links above the check for more
+> information). Restrict CONFIG_CC_HAS_ZERO_CALL_USED_REGS to either a
+> supported GCC version or a clang newer than 15.0.6, which will catch
+> both a theoretical 15.0.7 and the upcoming 16.0.0, which will both have
+> the bug fixed.
 > 
-> Trying again: "so they need not be considered AFAICS".
+> [...]
 
-Give or take counter wrap, which can make it appear that still-present
-readers have finished.
+Applied to for-next/hardening, thanks! (And I'll send it for v6.2-rc1 too.)
 
-> Anyway, my 1 year old son is sick so signing off for now. Thanks.
+[1/1] security: Restrict CONFIG_ZERO_CALL_USED_REGS to gcc or clang > 15.0.6
+      https://git.kernel.org/kees/c/d6a9fb87e9d1
 
-Ouch!  I hope he recovers quickly and completely!!!
+-- 
+Kees Cook
 
-							Thanx, Paul
