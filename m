@@ -2,120 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E415F64DC2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 14:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE3364DC33
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 14:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiLONYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 08:24:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
+        id S229901AbiLONYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 08:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiLONYB (ORCPT
+        with ESMTP id S229482AbiLONYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 08:24:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1115E2AFF;
-        Thu, 15 Dec 2022 05:24:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F1BBB81AAC;
-        Thu, 15 Dec 2022 13:23:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E785C433D2;
-        Thu, 15 Dec 2022 13:23:47 +0000 (UTC)
-Date:   Thu, 15 Dec 2022 08:23:45 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] trace: allocate space from temparary trace
- sequence buffer
-Message-ID: <20221215082345.56276315@gandalf.local.home>
-In-Reply-To: <1671078807-20748-2-git-send-email-quic_linyyuan@quicinc.com>
-References: <1671078807-20748-1-git-send-email-quic_linyyuan@quicinc.com>
-        <1671078807-20748-2-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 15 Dec 2022 08:24:41 -0500
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90E39FD8;
+        Thu, 15 Dec 2022 05:24:40 -0800 (PST)
+Received: by mail-oi1-f172.google.com with SMTP id k189so5252606oif.7;
+        Thu, 15 Dec 2022 05:24:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fLeOe2K/YN9RjRUtZcg/drKhPf5cFdW7mguDPxEIWPA=;
+        b=eI34k+jA+juUN0uyPYSSHXuZqR+E98Mp2zog5KVlJ0tL6W7B98pS1jYFiUXmPqsp1E
+         +qfW/cZ5wsRLu6ETL94W/7WxbJdF8HsRrrqCe8pfiHAGJoYF+RL2WvSGQUUrbjbK5Sl3
+         rndRHXbzIWGHncuXP3w2cIAcdXxolB9Sx31UOHENAy4n+SfAhBOX3W2vMrP+NKpJ8eF2
+         HzAfAQBjoCGmRUfRJsVtQ4XelS0oYxgBshShYB+TDtiufltDio2ZvAVSk12sVven+C14
+         bQLOVVAOD2PaaHA6CNN05mw8AReyI3rqMl+eoorn9ZwsPToaXrQQtPxo3ir3/WD4ITpR
+         5VuQ==
+X-Gm-Message-State: ANoB5pm7McEnFZeenOhQgBJp2zgu6jhCqTzo82bwXdtxQA4DD1Sl+Ffk
+        EHZjrUjSjMtapuChRl6SlA==
+X-Google-Smtp-Source: AA0mqf6kjJ4LETUKvqU3gTYQ9EImomN8A6T5Ha5fVcxnOBne/uUX6Rwfwp4vLhVj2CksQeIRlJqI2A==
+X-Received: by 2002:aca:bfd7:0:b0:355:91e3:52e3 with SMTP id p206-20020acabfd7000000b0035591e352e3mr11955895oif.22.1671110680162;
+        Thu, 15 Dec 2022 05:24:40 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f13-20020a056870d14d00b00140d421445bsm4060492oac.11.2022.12.15.05.24.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 05:24:39 -0800 (PST)
+Received: (nullmailer pid 3142465 invoked by uid 1000);
+        Thu, 15 Dec 2022 13:24:38 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        devicetree@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org
+In-Reply-To: <20221214222024.951984-1-alexander.sverdlin@gmail.com>
+References: <20221214222024.951984-1-alexander.sverdlin@gmail.com>
+Message-Id: <167111060894.3140769.6100399745035758019.robh@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: iio: adc: ep93xx: Add cirrus,ep9301-adc
+ description
+Date:   Thu, 15 Dec 2022 07:24:38 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 12:33:27 +0800
-Linyu Yuan <quic_linyyuan@quicinc.com> wrote:
 
-> --- a/include/linux/trace_seq.h
-> +++ b/include/linux/trace_seq.h
-> @@ -95,6 +95,7 @@ extern void trace_seq_bitmask(struct trace_seq *s, const unsigned long *maskp,
->  extern int trace_seq_hex_dump(struct trace_seq *s, const char *prefix_str,
->  			      int prefix_type, int rowsize, int groupsize,
->  			      const void *buf, size_t len, bool ascii);
-> +void *trace_seq_alloc_buffer(struct trace_seq *s, int len);
+On Wed, 14 Dec 2022 23:20:23 +0100, Alexander Sverdlin wrote:
+> Add device tree bindings for Cirrus Logic EP9301/EP9302 internal SoCs' ADC
+> block.
+> 
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> ---
+>  .../bindings/iio/adc/cirrus,ep9301-adc.yaml   | 58 +++++++++++++++++++
+>  MAINTAINERS                                   |  2 +
+>  2 files changed, 60 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
+> 
 
-So, I really don't like the name with "alloc" in it. That makes the
-assumption that it also needs to be freed. Which it does not, and why it
-confused me last night.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-A better name would be trace_seq_acquire(s, len);
+yamllint warnings/errors:
 
-And it should return a char *, as it it process stings and not arbitrary
-binary data.
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.example.dts:21:18: fatal error: dt-bindings/clock/cirrus,ep93xx-clock.h: No such file or directory
+   21 |         #include <dt-bindings/clock/cirrus,ep93xx-clock.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1492: dt_binding_check] Error 2
 
-> +/**
-> + * trace_seq_alloc_buffer - allocate seq buffer with size len
-> + * @s: trace sequence descriptor
-> + * @len: size of buffer to be allocated
-> + *
-> + * allocate space with size of @len from seq buffer for output usage,
-> + * On success, it returns start address of the allocated buffer,
-> + * user can fill data start from the address, user should make sure the
-> + * data length not exceed the @len, if it exceed, behavior is undefined.
-> + *
-> + * Returns NULL if no buffer can be allocated, it also means system will
-> + * crash, it is user responsiblity to make sure total buffer used will
-> + * not exceed PAGE_SIZE.
-> + *
-> + * it allow multiple usage in one trace output function call.
-> + */
-> +void *trace_seq_alloc_buffer(struct trace_seq *s, int len)
+doc reference errors (make refcheckdocs):
 
-char *trace_seq_acquire(struct trace_seq *s, int len)
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221214222024.951984-1-alexander.sverdlin@gmail.com
 
-> +{
-> +	char *buf = trace_seq_buffer_ptr(s);
-> +
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-You need to check the length first before committing:
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-	if (seq_buf_buffer_left(&s->seq) < len)
-		return NULL;
+pip3 install dtschema --upgrade
 
-	
-> +	seq_buf_commit(&s->seq, len);
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
-Because the above is a bug if len is too big.
-
-> +
-> +	if (unlikely(seq_buf_has_overflowed(&s->seq))) {
-
-And then we don't need this either.
-
-I must apologize for the response last night. It was past my normal bed
-time, and I must really avoid reviewing patches when I should be going to
-bed ;-)
-
--- Steve
-
-
-> +		s->full = 1;
-> +		return NULL;
-> +	}
-> +
-> +	return (void *)buf;
-> +}
-> +EXPORT_SYMBOL(trace_seq_alloc_buffer);
