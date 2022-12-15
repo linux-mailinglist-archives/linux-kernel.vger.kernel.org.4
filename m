@@ -2,151 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CCF464D50D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 02:39:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F24D864D50F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 02:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiLOBjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 20:39:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40526 "EHLO
+        id S229631AbiLOBoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 20:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiLOBjm (ORCPT
+        with ESMTP id S229506AbiLOBoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 20:39:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB371EAE0;
-        Wed, 14 Dec 2022 17:39:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35407B81AD3;
-        Thu, 15 Dec 2022 01:39:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C96F0C433F0;
-        Thu, 15 Dec 2022 01:39:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671068378;
-        bh=s6b0uszi3DpFRj6ZPXGBLSj2n0806qTbbl7XXYe9TSw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=obsJuRgco9TTNdcWHiJmTFbt3bu81Pjuf7EuJfmhooUlDQyBiNnLDqaJc5Qw67xVs
-         9joX6AkbHN/I69XqpylEyti2JvGoEg2j1jwieDXhcOCgPOMo0Xv6LEZ4AfTov5LRWD
-         PNv4wteumSDMDVSA8SPv7dsr8FIp35LKqXynHlZ0Xw3ZzVz3IZqjIVPPInBi4BigV5
-         rnPCno/cExZVdEGvJXSd9FWM/sk6XnSmlzYfxVnCCAxpeyJzwToZLHhJSDRP83xQE+
-         xbcWpTByJv4t/zsf1PbNLPSfan6WOsum/7CHM3B70P7vVPa2/+NO6xIWg0TEacQi9l
-         IJSfa7bhZ7Qnw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 657165C0A6A; Wed, 14 Dec 2022 17:39:38 -0800 (PST)
-Date:   Wed, 14 Dec 2022 17:39:38 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     boqun.feng@gmail.com, frederic@kernel.org, neeraj.iitr10@gmail.com,
-        urezki@gmail.com, rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] srcu: Yet more detail for
- srcu_readers_active_idx_check() comments
-Message-ID: <20221215013938.GF4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221214191355.GA2596199@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YTztHvaXJG9jQmQ13tF2HdCy8+TbvBDCYWd98tMrsE-vw@mail.gmail.com>
- <20221214212455.GA4001@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQp5K2iy0ULnFOVKQit3T+OM_vY29ZcLu6drNEt-ex1QQ@mail.gmail.com>
- <CAEXW_YRvSrD40WJ+8GicWB5NN8QyLLoUzRS9j8Tc9CMvojKO0g@mail.gmail.com>
- <CAEXW_YQx78ge_U7asX4YHcsi1EDZSRo_wGN_DJmWnXcAYjHWgQ@mail.gmail.com>
- <20221215000433.GD4001@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQsJCcK7+fMaXQ9rLWt05+s9NrKT=uGrUaSe9HzfbM5sg@mail.gmail.com>
+        Wed, 14 Dec 2022 20:44:10 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8372CE28
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 17:44:05 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so1167708pjj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 17:44:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WmAkvDBKMNNGormxiR/sVMbcrKMt/tgyZJoKB0gFsB0=;
+        b=ijXibnLuHzRzsqBDk+Xk86VZwXDIofKPWnvJrpJv5mIoZ1MCKwUyISd4IpTz6xhsB3
+         DAse7DyLkBtjgJ2Mf8YzyfA9h6QaR8xrcN4fz0VHgaMqCg4DjmIUI5/EYqX3M0I7T6TX
+         GGhS2V6XP5u5EVFXbu2f/kkDc3MQ8pRkmO4AAa/WdVE1TuW+AkdRMn0xDk51qeOke2Qi
+         dvzDkj1Oe+dsEwezKfilIZLsILhVJFfUbTj9j5fxlohHdkySCJYM7bOYVmRrMDq0AqRY
+         5jrDvk1pxjB7k/XzrPyAQgrQBncj3JbAjDmak6pkT9Uav/gvIWQN53ruIigm1x64DuE9
+         Ed4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WmAkvDBKMNNGormxiR/sVMbcrKMt/tgyZJoKB0gFsB0=;
+        b=vhH4hSlSPqxwbUW+79BmixUGPTa91zkWzNjrEaZ78FEkdkeCLBwRcJA/wtkYqgpVpR
+         iljFL8jcbr8C54qQFZFLrCJKn6r9nxRlS8cS2q+DNI/B1h8iY2aPIDpXubasDocNrUKl
+         9SdfjHNii0kui2VXCnT8pllpg9xP3ukuEdc/WbcR5CMudSH1sPkQ3Ax0t/tI6ryTrqbS
+         OIFy/EM/OFnh0YqTiVW9a1HDNviCQvlrTDrs0q5sVm7O0uiPWTdiMsER2QFd73DYh+z9
+         mNM6NHP55Gh8dVyO0nWYvGL10GTWUsYm7FPFJY5eSog2t/uVZhqg8bRTcPOHgGJJjFF3
+         a1ng==
+X-Gm-Message-State: ANoB5pnP3Ax2RKnpK13BFl+Nxn5Z7vqfqDqcICOK7wlQjeJNdkQLtmaB
+        ccic/F0ZbKYUgyi0hfZ9TUWZCQ==
+X-Google-Smtp-Source: AA0mqf7+pQUOfbHT3BZLML0xqnDfuCi4zbmc2bJpy7XuurL1h+qED3gKG8yW2nFnqm74YWJZtVP6ZA==
+X-Received: by 2002:a17:90a:384e:b0:212:de1a:3505 with SMTP id l14-20020a17090a384e00b00212de1a3505mr27535065pjf.28.1671068645033;
+        Wed, 14 Dec 2022 17:44:05 -0800 (PST)
+Received: from leoy-yangtze.lan ([152.70.116.104])
+        by smtp.gmail.com with ESMTPSA id k13-20020a17090a910d00b00218b47be793sm1979303pjo.3.2022.12.14.17.43.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 17:44:04 -0800 (PST)
+Date:   Thu, 15 Dec 2022 09:43:55 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kevin Nomura <nomurak@google.com>
+Subject: Re: [PATCH] perf stat: Do not delay the workload with --delay
+Message-ID: <Y5p723KMYBI2W6vs@leoy-yangtze.lan>
+References: <20221212230820.901382-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEXW_YQsJCcK7+fMaXQ9rLWt05+s9NrKT=uGrUaSe9HzfbM5sg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221212230820.901382-1-namhyung@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 08:34:03PM -0500, Joel Fernandes wrote:
-> On Wed, Dec 14, 2022 at 7:04 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Wed, Dec 14, 2022 at 11:14:48PM +0000, Joel Fernandes wrote:
-> > > On Wed, Dec 14, 2022 at 11:10 PM Joel Fernandes <joel@joelfernandes.org> wrote:
-> > > >
-> > > > On Wed, Dec 14, 2022 at 11:07 PM Joel Fernandes <joel@joelfernandes.org> wrote:
-> > > > >
-> > > > > On Wed, Dec 14, 2022 at 9:24 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > > > > I also did not get why you care about readers that come and ago (you
-> > > > > > > mentioned the first reader seeing incorrect idx and the second reader
-> > > > > > > seeing the right flipped one, etc). Those readers are irrelevant
-> > > > > > > AFAICS since they came and went, and need not be waited on , right?.
-> > > > > >
-> > > > > > The comment is attempting to show (among other things) that we don't
-> > > > > > need to care about readers that come and go more than twice during that
-> > > > > > critical interval of time during the counter scans.
-> > > > >
-> > > > > Why do we need to care about readers that come and go even once? Once
-> > > > > they are gone, they have already done an unlock() and their RSCS is
-> > > > > over, so they need to be considered AFAICS.
-> > > > >
-> > > >
-> > > > Aargh, I meant: "so they need to be considered AFAICS".
-> > >
-> > > Trying again: "so they need not be considered AFAICS".
-> >
-> > Give or take counter wrap, which can make it appear that still-present
-> > readers have finished.
+On Mon, Dec 12, 2022 at 03:08:20PM -0800, Namhyung Kim wrote:
+> The -D/--delay option is to delay the measure after the program starts.
+> But the current code goes to sleep before starting the program so the
+> program is delayed too.  This is not the intention, let's fix it.
 > 
-> Ah you mean those flood of readers affect the counter wrapping and not
-> that those readers have to be waited on or anything, they just happen
-> to have a side-effect on *existing readers* which need to be waited
-> on.
-
-Exactly, that flood of readers could potentially result in a
-counter-wrap-induced too-short SRCU grace period, and it is SRCU's job
-to avoid that, and specifically the job of the code that this comment
-lives in.
-
-> Thanks a lot for this explanation, this part I agree. Readers that
-> sampled the idx before the flip happened, and then did their
-> lock+unlock counter increments both after the flip, and after the
-> second unlock counter scan (second scan), can mess up the lock
-> counters such that the second scan found lock==unlock, even though it
-> is not to be due to pre-existing readers. But as you pointed out,
-> there have to be a substantially large number of these to cause the
-> equality check to match. This might be another reason why it is
-> important to scan the unlocks first, because the locks are what have
-> to cause the wrap around of the lock counter. Instead if you counted
-> locks first, then the unlocks would have to do the catching up to the
-> locks which are much fewer than a full wrap around.
-
-True enough!
-
-> I still don't see why this affects only the first reader. There could
-> be more than 1 reader that needs to be waited on (the readers that
-> started before the grace period started). Say there are 5 of them.
-> When the grace period starts, the interfering readers (2^32 of them or
-> so) could have sampled the old idx before the flip, and then do
-> lock+unlock (on that old pre-flip() idx) in quick succession after the
-> smp_mb() in the second srcu_readers_active_idx_check(). That causes
-> those 5 poor readers to not be waited on. Granted, any new readers
-> after this thundering herd should see the new idx and will not be
-> affected, thanks to the memory barriers.
-
-Yes, there could be quite a few such readers, but it only takes one
-messed-up reader to constitute a bug in SRCU.  ;-)
-
-> Still confused, but hey I'll take it little at a time ;-) Also thanks
-> for the suggestions for litmus tests.
-
-Agreed, setting this sort of thing aside for a bit and then coming back
-to it can be helpful.
-
-							Thanx, Paul
-
-> Cheers,
+> Before:
 > 
->  - Joel
+>   $ time sudo ./perf stat -a -e cycles -D 3000 sleep 4
+>   Events disabled
+>   Events enabled
 > 
-> > > Anyway, my 1 year old son is sick so signing off for now. Thanks.
-> >
-> > Ouch!  I hope he recovers quickly and completely!!!
-> >
-> >                                                         Thanx, Paul
+>    Performance counter stats for 'system wide':
+> 
+>        4,326,949,337      cycles
+> 
+>          4.007494118 seconds time elapsed
+> 
+>   real	0m7.474s
+>   user	0m0.356s
+>   sys	0m0.120s
+> 
+> It ran the workload for 4 seconds and gave the 3 second delay.  So it
+> should skip the first 3 second and measure the last 1 second only.  But
+> as you can see, it delays 3 seconds and ran the workload after that for
+> 4 seconds.  So the total time (real) was 7 seconds.
+> 
+> After:
+> 
+>   $ time sudo ./perf stat -a -e cycles -D 3000 sleep 4
+>   Events disabled
+>   Events enabled
+> 
+>    Performance counter stats for 'system wide':
+> 
+>        1,063,551,013      cycles
+> 
+>          1.002769510 seconds time elapsed
+> 
+>   real	0m4.484s
+>   user	0m0.385s
+>   sys	0m0.086s
+> 
+> The bug was introduced when it changed enablement of system-wide events
+> with a command line workload.  But it should've considered the initial
+> delay case.  The code was reworked since then (in bb8bc52e7578) so I'm
+> afraid it won't be applied cleanly.
+> 
+> Fixes: d0a0a511493d ("perf stat: Fix forked applications enablement of counters")
+> Cc: Sumanth Korikkar <sumanthk@linux.ibm.com>
+> Cc: Thomas Richter <tmricht@linux.ibm.com>
+> Reported-by: Kevin Nomura <nomurak@google.com>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
