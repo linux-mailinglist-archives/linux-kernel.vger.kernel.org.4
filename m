@@ -2,101 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A12F764DA0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 12:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 909DF64DA12
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 12:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbiLOLKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 06:10:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
+        id S230044AbiLOLKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 06:10:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiLOLJ6 (ORCPT
+        with ESMTP id S229603AbiLOLKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 06:09:58 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921BD23E84;
-        Thu, 15 Dec 2022 03:09:57 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 76AE26602C62;
-        Thu, 15 Dec 2022 11:09:55 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671102596;
-        bh=OiEexPLSc3VRGJggDVHCDD4pkJJ10eF0O12K6/3xdP0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FpQj6WOlDhF7nut5vD1Ey7TTuDdhPbAdMVE+vUMB43+yT16a+p3vjYZizvtpDP/94
-         PIRaAqnT0issGZYkeVoOGXYM+TmeuL9k9FtQUImujf59jo9v3u1WurHxEh+EKzY8u1
-         cODuFHqpM2MTjvtRxjmge0oEL2L/3KzNrduRLMo+oEVcHQDLE8EHUfEqSHl0LiaMS/
-         5Qm/kVapBq4ZIahEsgXCVCE/A1P9FOR7hFVTmwlzxgoZ+8h1SJTv6+MEvx+vZsEm9m
-         6C0ZFgvha2q+gfxlIKsbAOKqvIww3Tb4u37OlKlKN3uIrwAUF+8kXrrPGIquQYX4sk
-         SAG4M/lZmRQlA==
-Message-ID: <9a7434ba-2d42-cf15-334b-637b5f1b01a3@collabora.com>
-Date:   Thu, 15 Dec 2022 12:09:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] media: jpeg: refactor multi-hw judgement
-Content-Language: en-US
-To:     =?UTF-8?B?Sm9obnNvbiBXYW5nICjnjovogZbpkasp?= 
-        <Johnson.Wang@mediatek.com>,
-        "nicolas.dufresne@collabora.com" <nicolas.dufresne@collabora.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        =?UTF-8?B?S3lyaWUgV3UgKOWQtOaZlyk=?= <Kyrie.Wu@mediatek.com>,
-        =?UTF-8?B?SXJ1aSBXYW5nICjnjovnkZ4p?= <Irui.Wang@mediatek.com>,
-        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "tfiga@chromium.org" <tfiga@chromium.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        =?UTF-8?B?TWFvZ3VhbmcgTWVuZyAo5a2f5q+b5bm/KQ==?= 
-        <Maoguang.Meng@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        =?UTF-8?B?WGlhIEppYW5nICjmsZ/pnJ4p?= <Xia.Jiang@mediatek.com>
-References: <20221215093026.12322-1-irui.wang@mediatek.com>
- <1895ff3f71fe7fe6c228d76dd046ea4f43b3dbf5.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1895ff3f71fe7fe6c228d76dd046ea4f43b3dbf5.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 15 Dec 2022 06:10:30 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FD123E84;
+        Thu, 15 Dec 2022 03:10:29 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFB1E47008360;
+        Thu, 15 Dec 2022 11:10:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=rUYLvmFOgFDqDQdDN12wI1WE4ZOCsYwtI8WfEJp0Fvo=;
+ b=YEScXS8FUo6JWnAJrvXZcb2SHKVXpimUP6tpakgNBI6zeOXxC9widnbXE1LWmU2M3h8U
+ wJZkyp8zEA3nlrLlN9+v3D8DmTvZF/IzUiaHJzJF5wJMymqKov4TIH+sK2vujfbTVwZK
+ OYnxz4HTK6EoEXaU77UFpmmODpjraO7G0Tsk4yIW8zQJzPtTUBbOA14j/8ud/aQVIlAF
+ ADxqTtQ7ptVp+7Cb6einjqScSfX1pmLirDN/EJzOir8tEbQVPQWnR1A4aVRpgxRoP6Yb
+ 1zC+ux90a1duY5pIyjaVki1a2cznvlAJ9Hq0gG5jw0HrWi+9Dk6hnT8/em6fk/zrPkob 4w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg2bcg7pc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 11:10:11 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BFB2aOr018669;
+        Thu, 15 Dec 2022 11:10:10 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg2bcg7n4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 11:10:10 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BF8kKHk019328;
+        Thu, 15 Dec 2022 11:10:09 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3mf03ad5ax-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 11:10:09 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BFBA7WS38994298
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Dec 2022 11:10:08 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9AC2158064;
+        Thu, 15 Dec 2022 11:10:07 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 683415805E;
+        Thu, 15 Dec 2022 11:10:05 +0000 (GMT)
+Received: from sig-9-65-242-118.ibm.com (unknown [9.65.242.118])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 15 Dec 2022 11:10:05 +0000 (GMT)
+Message-ID: <b0f29738b919e2705d770017f2f1eb0542c2fad4.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 03/10] KEYS: X.509: Parse Basic Constraints for CA
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, jarkko@kernel.org
+Cc:     dhowells@redhat.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, pvorel@suse.cz, noodles@fb.com, tiwai@suse.de,
+        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
+        erpalmer@linux.vnet.ibm.com, coxu@redhat.com,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Thu, 15 Dec 2022 06:10:04 -0500
+In-Reply-To: <20221214003401.4086781-4-eric.snowberg@oracle.com>
+References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
+         <20221214003401.4086781-4-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 7hrEsgPkc-5WyJ_M4FHbjv-cUSKcs8f0
+X-Proofpoint-ORIG-GUID: 85H4ZOaWVoU9OVfFfNcY9xwzHIR2SHYr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-15_05,2022-12-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ adultscore=0 lowpriorityscore=0 mlxlogscore=999 clxscore=1015 mlxscore=0
+ bulkscore=0 suspectscore=0 priorityscore=1501 spamscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212150086
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/12/22 11:50, Johnson Wang (王聖鑫) ha scritto:
-> On Thu, 2022-12-15 at 17:30 +0800, Irui Wang wrote:
->> From: kyrie wu <kyrie.wu@mediatek.com>
->>
->> some chips have multi-hw, but others have only one,
->> modify the condition of multi-hw judgement
->>
->> Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
->> Signed-off-by: irui wang <irui.wang@mediatek.com>
->> ---
->>   drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c |  5 +++--
->>   drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h | 12 ++++++++++++
->>   2 files changed, 15 insertions(+), 2 deletions(-)
->>
-> 
-> This may conflict with kernel mainline since mtk-jpeg folder doesn't
-> exist.
-> Please fix it.
-> 
-> BRs,
-> Johnson Wang
+> diff --git a/crypto/asymmetric_keys/x509_parser.h b/crypto/asymmetric_keys/x509_parser.h
+> index a299c9c56f40..7c5c0ad1c22e 100644
+> --- a/crypto/asymmetric_keys/x509_parser.h
+> +++ b/crypto/asymmetric_keys/x509_parser.h
+> @@ -38,6 +38,7 @@ struct x509_certificate {
+>  	bool		self_signed;		/* T if self-signed (check unsupported_sig too) */
+>  	bool		unsupported_sig;	/* T if signature uses unsupported crypto */
+>  	bool		blacklisted;
+> +	bool		root_ca;		/* T if basic constraints CA is set */
+>  }; 
 
-Ouch. I just noticed that the folder is mismatching; this didn't deserve
-a R-b tag. I'll be more careful next time.
+The variable "root_ca" should probably be renamed to just "ca", right?
+
+-- 
+
+thanks,
+
+Mimi
 
