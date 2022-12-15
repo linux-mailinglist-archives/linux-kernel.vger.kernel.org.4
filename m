@@ -2,95 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178B164D870
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:20:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDD764D86F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 10:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiLOJUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 04:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
+        id S229898AbiLOJUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 04:20:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiLOJUM (ORCPT
+        with ESMTP id S229678AbiLOJUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 04:20:12 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007733F04A
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:20:10 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so2080626pjj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 01:20:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Wu5pKKt/tYg5j4ptIlawG89Bmd9AY8kHRaAGqPqkAs=;
-        b=QFKuTxlmPSvSiGvceKI4jRcxQaPyAjRxEIe0jeAsm9mJMiBq4DitPskSJWUUIb4B3w
-         Smq+oC/Sz4TApQ7i4RMCOwudRKNzT/ErbL+9E8ebSRVa9h1nO25UAc4SIBSSFhssMpa1
-         Dun3NPFKzDk4ylkMUEPnMux4UJCxWM3rpzY8klpS57EKwJG15KH41hXr96Ojped9mj9S
-         IKt3vhb7yUx46syZ8OB4D6Eiz7vxQvN2kF5HpaamIlywYdVBGiW234HXFT9RGq8DYvaS
-         T8pIp7dw91J9GUx1aHr67DFfP+V6xKoqmakiltZ33fGFh6NaYmwwQ7At/x8CXsL3RXe4
-         w9KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0Wu5pKKt/tYg5j4ptIlawG89Bmd9AY8kHRaAGqPqkAs=;
-        b=AiX7QgBwvgyqkeuRe7JobAbSG29Iy/NJBx6BET1KFydjkRfbH8NUCVGRjVo1cMXg0Z
-         H54zGqrQLfQ6sM9Wt2eILsQRC0B4XQSUC48gCflnFR/5p4oRpulJN4dBXnRDcFuWNaUb
-         GBecNrCZtr0ITJ2q1/rVsY2/uH8yVpw1Vb9mcA1Wj87SMbhOABOjPYCNXwIQzmUcBcA6
-         x8fiRRcgugQ25QAfawamADiOzl5OZbxFV0UASxGOv9IxWPzan0sCzhaFSYrBn0DU6IXQ
-         cZAQXvYadLJ7rSME/sKkm8Bpvi9V+pBu7FwMdtWJBrfHPMHHcSMDKiC831WoJ25Wn/G2
-         MEHQ==
-X-Gm-Message-State: ANoB5plJ8Ya0DP6MvyvL6eAdeT1jThRruhj/jNKbkks3pqQ2mu2CWd2a
-        4vnAs3jWZhgIWBZYDvuomjezvA==
-X-Google-Smtp-Source: AA0mqf70RQs4sQ5MceUFw8rJq3Pan6mecsXIuJiWTtzNDL4Zj6BVMoEbSzC2IGLD52G5Dj5oAUME7Q==
-X-Received: by 2002:a17:903:4283:b0:189:7100:c50e with SMTP id ju3-20020a170903428300b001897100c50emr29499311plb.48.1671096010440;
-        Thu, 15 Dec 2022 01:20:10 -0800 (PST)
-Received: from ubuntu-haifeng.default.svc.cluster.local ([101.127.248.173])
-        by smtp.gmail.com with ESMTPSA id n15-20020a170903110f00b00188f8badbcdsm3302643plh.137.2022.12.15.01.20.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 01:20:10 -0800 (PST)
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-To:     akpm@linux-foundation.org
-Cc:     shakeelb@google.com, roman.gushchin@linux.dev,
-        songmuchun@bytedance.com, hannes@cmpxchg.org, vbabka@suse.cz,
-        willy@infradead.org, vasily.averin@linux.dev,
-        linux-kernel@vger.kernel.org, Haifeng Xu <haifeng.xu@shopee.com>
-Subject: [PATCH] mm/memcontrol: Skip root memcg in memcg_memory_event_mm
-Date:   Thu, 15 Dec 2022 09:19:07 +0000
-Message-Id: <20221215091907.763801-1-haifeng.xu@shopee.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 15 Dec 2022 04:20:03 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1932B47329;
+        Thu, 15 Dec 2022 01:20:01 -0800 (PST)
+Received: from dggpemm500017.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NXmrS49cZzJqZr;
+        Thu, 15 Dec 2022 17:19:04 +0800 (CST)
+Received: from [10.174.178.220] (10.174.178.220) by
+ dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 15 Dec 2022 17:19:59 +0800
+Message-ID: <44f7297f-6f3a-cba9-ada1-c59188a98c9a@huawei.com>
+Date:   Thu, 15 Dec 2022 17:19:58 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] ata:libata-eh:Cleanup ata_scsi_cmd_error_handler
+Content-Language: en-US
+To:     Niklas Cassel <Niklas.Cassel@wdc.com>
+CC:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "liuzhiqiang26@huawei.com" <liuzhiqiang26@huawei.com>,
+        "linfeilong@huawei.com" <linfeilong@huawei.com>
+References: <20221215050416.1891113-1-haowenchao@huawei.com>
+ <Y5rgrhJuX6xCDEa3@x1-carbon>
+From:   Wenchao Hao <haowenchao@huawei.com>
+In-Reply-To: <Y5rgrhJuX6xCDEa3@x1-carbon>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.220]
+X-ClientProxiedBy: dggpeml100019.china.huawei.com (7.185.36.175) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memory events aren't supported on root cgroup, so there is no need
-to account MEMCG_OOM_KILL on root memcg.
+On 2022/12/15 16:54, Niklas Cassel wrote:
+> On Thu, Dec 15, 2022 at 01:04:16PM +0800, Wenchao Hao wrote:
+>> If ap->ops->error_handler is NULL, just go out and release the
+>> spinlock. This patch is just a cleanup, which would not change
+>> the origin error handle logic.
+>>
+>> Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
+>> ---
+>>  drivers/ata/libata-eh.c | 96 ++++++++++++++++++++---------------------
+>>  1 file changed, 48 insertions(+), 48 deletions(-)
+>>
+>> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
+>> index 34303ce67c14..66ca3ac7cd58 100644
+>> --- a/drivers/ata/libata-eh.c
+>> +++ b/drivers/ata/libata-eh.c
+>> @@ -565,6 +565,8 @@ void ata_scsi_cmd_error_handler(struct Scsi_Host *host, struct ata_port *ap,
+>>  {
+>>  	int i;
+>>  	unsigned long flags;
+>> +	struct scsi_cmnd *scmd, *tmp;
+>> +	int nr_timedout = 0;
+>>  
+>>  	/* make sure sff pio task is not running */
+>>  	ata_sff_flush_pio_task(ap);
+>> @@ -584,62 +586,60 @@ void ata_scsi_cmd_error_handler(struct Scsi_Host *host, struct ata_port *ap,
+>>  	 * timed out iff its associated qc is active and not failed.
+>>  	 */
+>>  	spin_lock_irqsave(ap->lock, flags);
+>> -	if (ap->ops->error_handler) {
+>> -		struct scsi_cmnd *scmd, *tmp;
+>> -		int nr_timedout = 0;
+>> -
+>> -		/* This must occur under the ap->lock as we don't want
+>> -		   a polled recovery to race the real interrupt handler
+>> -
+>> -		   The lost_interrupt handler checks for any completed but
+>> -		   non-notified command and completes much like an IRQ handler.
+>> -
+>> -		   We then fall into the error recovery code which will treat
+>> -		   this as if normal completion won the race */
+>> +	if (!ap->ops->error_handler)
+>> +		goto out;
+> 
+> Nice cleanup!
+> 
+> However, I don't think there is any point in taking the spin lock if there is
+> no error_handler.
+> 
+> So I think that you can do similar to the skip_eh label in ata_port_detach():
+> https://github.com/torvalds/linux/blob/master/drivers/ata/libata-core.c#L5904
+> 
+> 
+> Kind regards,
+> Niklas
+> 
 
-Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
----
- include/linux/memcontrol.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I did not want to change the origin logic. But it looks unnecessary to take 
+the spin lock, would update.
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 567f12323f55..09f75161a3bc 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -1142,7 +1142,7 @@ static inline void memcg_memory_event_mm(struct mm_struct *mm,
- 
- 	rcu_read_lock();
- 	memcg = mem_cgroup_from_task(rcu_dereference(mm->owner));
--	if (likely(memcg))
-+	if (likely(memcg && !mem_cgroup_is_root(memcg)))
- 		memcg_memory_event(memcg, event);
- 	rcu_read_unlock();
- }
--- 
-2.25.1
+>>  
+>> -		if (ap->ops->lost_interrupt)
+>> -			ap->ops->lost_interrupt(ap);
+>> +	/* This must occur under the ap->lock as we don't want
+>> +	 * a polled recovery to race the real interrupt handler
+>> +	 *
+>> +	 * The lost_interrupt handler checks for any completed but
+>> +	 * non-notified command and completes much like an IRQ handler.
+>> +	 *
+>> +	 * We then fall into the error recovery code which will treat
+>> +	 * this as if normal completion won the race
+>> +	 */
+>> +	if (ap->ops->lost_interrupt)
+>> +		ap->ops->lost_interrupt(ap);
+>>  
+>> -		list_for_each_entry_safe(scmd, tmp, eh_work_q, eh_entry) {
+>> -			struct ata_queued_cmd *qc;
+>> +	list_for_each_entry_safe(scmd, tmp, eh_work_q, eh_entry) {
+>> +		struct ata_queued_cmd *qc;
+>>  
+>> -			ata_qc_for_each_raw(ap, qc, i) {
+>> -				if (qc->flags & ATA_QCFLAG_ACTIVE &&
+>> -				    qc->scsicmd == scmd)
+>> -					break;
+>> -			}
+>> +		ata_qc_for_each_raw(ap, qc, i) {
+>> +			if (qc->flags & ATA_QCFLAG_ACTIVE &&
+>> +			    qc->scsicmd == scmd)
+>> +				break;
+>> +		}
+>>  
+>> -			if (i < ATA_MAX_QUEUE) {
+>> -				/* the scmd has an associated qc */
+>> -				if (!(qc->flags & ATA_QCFLAG_FAILED)) {
+>> -					/* which hasn't failed yet, timeout */
+>> -					qc->err_mask |= AC_ERR_TIMEOUT;
+>> -					qc->flags |= ATA_QCFLAG_FAILED;
+>> -					nr_timedout++;
+>> -				}
+>> -			} else {
+>> -				/* Normal completion occurred after
+>> -				 * SCSI timeout but before this point.
+>> -				 * Successfully complete it.
+>> -				 */
+>> -				scmd->retries = scmd->allowed;
+>> -				scsi_eh_finish_cmd(scmd, &ap->eh_done_q);
+>> +		if (i < ATA_MAX_QUEUE) {
+>> +			/* the scmd has an associated qc */
+>> +			if (!(qc->flags & ATA_QCFLAG_FAILED)) {
+>> +				/* which hasn't failed yet, timeout */
+>> +				qc->err_mask |= AC_ERR_TIMEOUT;
+>> +				qc->flags |= ATA_QCFLAG_FAILED;
+>> +				nr_timedout++;
+>>  			}
+>> +		} else {
+>> +			/* Normal completion occurred after
+>> +			 * SCSI timeout but before this point.
+>> +			 * Successfully complete it.
+>> +			 */
+>> +			scmd->retries = scmd->allowed;
+>> +			scsi_eh_finish_cmd(scmd, &ap->eh_done_q);
+>>  		}
+>> +	}
+>>  
+>> -		/* If we have timed out qcs.  They belong to EH from
+>> -		 * this point but the state of the controller is
+>> -		 * unknown.  Freeze the port to make sure the IRQ
+>> -		 * handler doesn't diddle with those qcs.  This must
+>> -		 * be done atomically w.r.t. setting QCFLAG_FAILED.
+>> -		 */
+>> -		if (nr_timedout)
+>> -			__ata_port_freeze(ap);
+>> -
+>> +	/* If we have timed out qcs.  They belong to EH from
+>> +	 * this point but the state of the controller is
+>> +	 * unknown.  Freeze the port to make sure the IRQ
+>> +	 * handler doesn't diddle with those qcs.  This must
+>> +	 * be done atomically w.r.t. setting QCFLAG_FAILED.
+>> +	 */
+>> +	if (nr_timedout)
+>> +		__ata_port_freeze(ap);
+>>  
+>> -		/* initialize eh_tries */
+>> -		ap->eh_tries = ATA_EH_MAX_TRIES;
+>> -	}
+>> +	/* initialize eh_tries */
+>> +	ap->eh_tries = ATA_EH_MAX_TRIES;
+>> +out:
+>>  	spin_unlock_irqrestore(ap->lock, flags);
+>>  
+>>  }
+>> -- 
+>> 2.32.0
+>> .
 
