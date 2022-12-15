@@ -2,256 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CB864E3BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 23:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7789664E3C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 23:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiLOWWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 17:22:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
+        id S229864AbiLOW2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 17:28:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiLOWWf (ORCPT
+        with ESMTP id S229517AbiLOW2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 17:22:35 -0500
+        Thu, 15 Dec 2022 17:28:20 -0500
 Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17200140D2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 14:22:34 -0800 (PST)
-Received: by mail-vs1-xe29.google.com with SMTP id h26so659684vsr.5
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 14:22:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80EB52893;
+        Thu, 15 Dec 2022 14:28:18 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id i2so697317vsc.1;
+        Thu, 15 Dec 2022 14:28:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6clAxsZStafJlycBrg0Ky96wQRhZ+hjCree5wij5Ncw=;
-        b=N9Ka//VSuzCs5fpMDqj9Utl6+Iv91jDM0mgYOImXF4qYUKG3hOWMTiMYmaJUtxOPry
-         18pgryV1J28q9L8AHmRlqs6fFb4ODew20pW1iixfh13jFI2hFNnEboMRb7ewZx3sAMgG
-         WJcdHH0N9UIT5wVvk+U3yZDzWUzXzhypstvvo=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=BeeoUpgGt/MPbxOGv0VEbjDZPJYNatcbVlmhWAWl2cg=;
+        b=fKob0I/dhTXJuxwx1/TIFFz4WldvYlD7r2Al7EDu43B9qs/3XzH1CpzGFwa9XTlguE
+         uJbek9wB1Ni60G/edbKsf/BdIMU8SM4wHs78eQOt073834XCeTfnMCHQCax/qZy9nFYN
+         XK/dbCwFTDcqtJpBl70vImfmW0cNJ5QJ7fyUP0tXFPTOJT3qwFQAf7/OuBXAabazeK/3
+         Xxm+r9s8+zU9NoGUpCbqO8wxWKDDJSeC8uFdlHtHJl5QkWVtSf9iHebjyoImLDT2UNg/
+         qTeu4fzXC7epaztrLXqooGPM5+UWkxXmj7wt//yOyLFNPfdfAfFzDLSBvDCNAVeY9oV5
+         +ffA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6clAxsZStafJlycBrg0Ky96wQRhZ+hjCree5wij5Ncw=;
-        b=5DieTTCEiMbuj0BKTagRY5QhSlUzwGPH9Ls9lMZAp+QAhktWREChNmgyoe3yz5/3gr
-         YR84eJG62EKJ6CrQVEj+GCZizMQyZQuPs+oL5AYbXkff/SQBlemqWr2fHQRf+IgVXMHm
-         in1RDArjOjsWio6RXkbnVT9wcyPKdxdMtokC2Tgs++8lrwO2PoBrc91C2aNYPM39wZTi
-         ox61+XTP0QEbkJxtRS8Z4gi7Nm9nXKqFXIe9v76EYgQZtGP3c5xwBOSn7ajrOpP+esII
-         C6o/I/abNZ3jCzyQsKiifnCEPJBAqek1ZhrqIk3H7eZ34PL3H/kvkuupIyKOSGuJYNf5
-         gytw==
-X-Gm-Message-State: ANoB5pnlsEv5Cl9R/mnM0PmqTFtgbIfs2i73uiyMs0bXlZKI7mHQMm+K
-        UmJs3pjiFkBzKG6hGDuX7fL/ww==
-X-Google-Smtp-Source: AA0mqf5bqjEbkF2qYjJXpaPGw8I/HpJBkdJKb2G2f72/CvHdcOWfJaEpfTKG+wzrFJntTNtVfCh0uw==
-X-Received: by 2002:a67:6f07:0:b0:3aa:5967:ec20 with SMTP id k7-20020a676f07000000b003aa5967ec20mr16157853vsc.3.1671142953035;
-        Thu, 15 Dec 2022 14:22:33 -0800 (PST)
-Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
-        by smtp.gmail.com with ESMTPSA id br36-20020a05620a462400b006fed58fc1a3sm85123qkb.119.2022.12.15.14.22.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 14:22:32 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH RFC] srcu: Yet more detail for srcu_readers_active_idx_check() comments
-Date:   Thu, 15 Dec 2022 17:22:21 -0500
-Message-Id: <07A65F0F-89CE-481B-BD6C-6D4946E70482@joelfernandes.org>
-References: <EE4EC3CC-395E-475D-BEBE-545955AB97C8@joelfernandes.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>, boqun.feng@gmail.com,
-        neeraj.iitr10@gmail.com, urezki@gmail.com, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <EE4EC3CC-395E-475D-BEBE-545955AB97C8@joelfernandes.org>
-To:     paulmck@kernel.org
-X-Mailer: iPhone Mail (20B101)
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BeeoUpgGt/MPbxOGv0VEbjDZPJYNatcbVlmhWAWl2cg=;
+        b=0p05PBLzKbfY0YfiXFoLY9ht8m7lr0lsl0I1l8mOD3vRcabWAKD5Yq0FHGkAF4+e8P
+         ztS+Yh5VwlIpnbVkUjG5oDJeTKTk7Dne50O7QVxw4tlmj0riJssL1vbyD665Xsf78m4R
+         3ego0R2UvcCpPQXzkp7NX9S0ASVR2PCNnAWPxzWNB3odjFeUkYsRTeARWLgpVpGKNN6H
+         sVah7YO2UrelYs7Ccq9/fP0GOFoAQGa3yRC6NtZQHa1CC2sv58WibSCS/vk+FGFRb+D4
+         QXLfZG2eIyYlyHaFnhUVAZCj0/wX8HqWUKhcZcjLXn659STV0CzCCjG71U6hzSaAnvPA
+         K4yg==
+X-Gm-Message-State: ANoB5pl1bF0qHIyuDiq77dXG59yMoiXFnUANofBq07hesw6uC76p7dil
+        msjeDmboL5Qb5zf/3XU0ypAVXJPANugAXOJ/CidKp3rJUQw=
+X-Google-Smtp-Source: AA0mqf4WKW1cFXvn4tD5UlOEmeYF6QStEqY7tXh94L4BuV3RNomL9ZCrY5HphF4dmF1adpsG/QqohO5BYj5XjJE907Y=
+X-Received: by 2002:a05:6102:2121:b0:3b0:5094:5b55 with SMTP id
+ f1-20020a056102212100b003b050945b55mr28331007vsg.87.1671143297497; Thu, 15
+ Dec 2022 14:28:17 -0800 (PST)
+MIME-Version: 1.0
+From:   Kyle Sanderson <kyle.leet@gmail.com>
+Date:   Thu, 15 Dec 2022 14:28:07 -0800
+Message-ID: <CACsaVZL6ykbsVvEaV2Cv3r6m_jKt04MEUOw5=mSnR5AYTyE7qg@mail.gmail.com>
+Subject: igc: 5.10.146 Kernel BUG at 0xffffffff813ce19f
+To:     Linux-Kernal <linux-kernel@vger.kernel.org>
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+(Un)fortunately I can reproduce this bug by simply removing the
+ethernet cable from the box while there is traffic flowing. kprint
+below from a console line. Please CC / to me for any additional
+information I can provide for this panic.
 
+[  156.707054] igc 0000:01:00.0 eth0: NIC Link is Down
+[  156.712981] br-lan: port 1(eth0) entered disabled state
+[  156.719246] igc 0000:01:00.0 eth0: Register Dump
+[  156.724784] igc 0000:01:00.0 eth0: Register Name   Value
+[  156.731067] igc 0000:01:00.0 eth0: CTRL            181c0641
+[  156.737607] igc 0000:01:00.0 eth0: STATUS          00380681
+[  156.744133] igc 0000:01:00.0 eth0: CTRL_EXT        100000c0
+[  156.750759] igc 0000:01:00.0 eth0: MDIC            18017949
+[  156.757258] igc 0000:01:00.0 eth0: ICR             00000001
+[  156.763785] igc 0000:01:00.0 eth0: RCTL            0440803a
+[  156.770324] igc 0000:01:00.0 eth0: RDLEN[0-3]      00001000
+00001000 00001000 00001000
+[  156.779457] igc 0000:01:00.0 eth0: RDH[0-3]        000000ef
+000000a1 00000092 000000ba
+[  156.788500] igc 0000:01:00.0 eth0: RDT[0-3]        000000ee
+000000a0 00000091 000000b9
+[  156.797650] igc 0000:01:00.0 eth0: RXDCTL[0-3]     02040808
+02040808 02040808 02040808
+[  156.806688] igc 0000:01:00.0 eth0: RDBAL[0-3]      02f43000
+02180000 02e7f000 02278000
+[  156.815781] igc 0000:01:00.0 eth0: RDBAH[0-3]      00000001
+00000001 00000001 00000001
+[  156.824928] igc 0000:01:00.0 eth0: TCTL            a503f0fa
+[  156.831587] igc 0000:01:00.0 eth0: TDBAL[0-3]      02f43000
+02180000 02e7f000 02278000
+[  156.840637] igc 0000:01:00.0 eth0: TDBAH[0-3]      00000001
+00000001 00000001 00000001
+[  156.849753] igc 0000:01:00.0 eth0: TDLEN[0-3]      00001000
+00001000 00001000 00001000
+[  156.858760] igc 0000:01:00.0 eth0: TDH[0-3]        000000d4
+0000003d 000000af 0000002a
+[  156.867771] igc 0000:01:00.0 eth0: TDT[0-3]        000000e4
+0000005a 000000c8 0000002a
+[  156.876864] igc 0000:01:00.0 eth0: TXDCTL[0-3]     02100108
+02100108 02100108 02100108
+[  156.885905] igc 0000:01:00.0 eth0: Reset adapter
+[  160.307195] igc 0000:01:00.0 eth0: NIC Link is Up 1000 Mbps Full
+Duplex, Flow Control: RX/TX
+[  160.317974] br-lan: port 1(eth0) entered blocking state
+[  160.324532] br-lan: port 1(eth0) entered forwarding state
+[  161.197263] ------------[ cut here ]------------
+[  161.202669] Kernel BUG at 0xffffffff813ce19f [verbose debug info unavailable]
+[  161.210769] invalid opcode: 0000 [#1] SMP NOPTI
+[  161.216022] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.10.146 #0
+[  161.222980] Hardware name: Default string Default string/Default
+string, BIOS 5.19 09/23/2022
+[  161.232546] RIP: 0010:0xffffffff813ce19f
+[  161.237167] Code: 03 01 4c 89 48 58 e9 2f ff ff ff 85 db 41 0f 95
+c2 45 39 d9 41 0f 95 c1 45 84 ca 74 05 45 85 e4 78 0a 44 89 c2 e9 10
+ff ff ff <0f> 0b 01 d2 45 89 c1 41 29 d1 ba 00 00 00 00 44 0f 48 ca eb
+80 cc
+[  161.258651] RSP: 0018:ffffc90000118e88 EFLAGS: 00010283
+[  161.264736] RAX: ffff888101f8f200 RBX: ffffc900006f9bd0 RCX: 000000000000050e
+[  161.272837] RDX: ffff888101fec000 RSI: 0000000000000a1c RDI: 0000000000061a10
+[  161.280942] RBP: ffffc90000118ef8 R08: 0000000000000000 R09: 0000000000061502
+[  161.289089] R10: 0000000000000000 R11: 0000000000000000 R12: 00000000ffffff3f
+[  161.297229] R13: ffff888101f8f140 R14: 0000000000000000 R15: ffff888100ad9b00
+[  161.305345] FS:  0000000000000000(0000) GS:ffff88903fe80000(0000)
+knlGS:00000 00000000000
+[  161.314492] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  161.321139] CR2: 00007f941ad43a9b CR3: 000000000340a000 CR4: 0000000000350ee0
+[  161.329284] Call Trace:
+[  161.332373]  <IRQ>
+[  161.334981]  ? 0xffffffffa0185f78 [igc@00000000f400031b+0x13000]
+[  161.341949]  0xffffffff8185b047
+[  161.345797]  0xffffffff8185b2ca
+[  161.349637]  0xffffffff81e000bb
+[  161.353465]  0xffffffff81c0109f
+[  161.357304]  </IRQ>
+[  161.359988]  0xffffffff8102cdac
+[  161.363783]  0xffffffff810bfdaf
+[  161.367584]  0xffffffff81a2e616
+[  161.371374]  0xffffffff81c00c9e
+[  161.375192] RIP: 0010:0xffffffff817e331b
+[  161.379840] Code: 21 90 ff 65 8b 3d 45 23 83 7e e8 80 20 90 ff 31
+ff 49 89 c6 e8 26 2d 90 ff 80 7d d7 00 0f 85 9e 01 00 00 fb 66 0f 1f
+44 00 00 <45> 85 ff 0f 88 cf 00 00 00 49 63 cf 48 8d 04 49 48 8d 14 81
+48 c1
+[  161.401397] RSP: 0018:ffffc900000d3e80 EFLAGS: 00000246
+[  161.407493] RAX: ffff88903fea5180 RBX: ffff88903feadf00 RCX: 000000000000001f
+[  161.415648] RDX: 0000000000000000 RSI: 0000000046ec0743 RDI: 0000000000000000
+[  161.423811] RBP: ffffc900000d3eb8 R08: 00000025881a3b81 R09: ffff888100317340
+[  161.432003] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000003
+[  161.440154] R13: ffffffff824c7bc0 R14: 00000025881a3b81 R15: 0000000000000003
+[  161.448285]  0xffffffff817e357f
+[  161.452123]  0xffffffff810e6258
+[  161.455938]  0xffffffff810e63fb
+[  161.459746]  0xffffffff8104bec0
+[  161.463526]  0xffffffff810000f5
+[  161.467290] Modules linked in: pppoe ppp_async nft_fib_inet
+nf_flow_table_ipv 6 nf_flow_table_ipv4 nf_flow_table_inet wireguard
+pppox ppp_generic nft_reject_i pv6 nft_reject_ipv4 nft_reject_inet
+nft_reject nft_redir nft_quota nft_objref nf t_numgen nft_nat nft_masq
+nft_log nft_limit nft_hash nft_flow_offload nft_fib_ip v6 nft_fib_ipv4
+nft_fib nft_ct nft_counter nft_chain_nat nf_tables nf_nat nf_flo
+w_table nf_conntrack libchacha20poly1305 curve25519_x86_64
+chacha_x86_64 slhc r8 169 poly1305_x86_64 nfnetlink nf_reject_ipv6
+nf_reject_ipv4 nf_log_ipv6 nf_log_i pv4 nf_log_common nf_defrag_ipv6
+nf_defrag_ipv4 libcurve25519_generic libcrc32c libchacha igc forcedeth
+e1000e crc_ccitt bnx2 i2c_dev ixgbe e1000 amd_xgbe ip6_u dp_tunnel
+udp_tunnel mdio nls_utf8 ena kpp nls_iso8859_1 nls_cp437 vfat fat igb
+button_hotplug tg3 ptp realtek pps_core mii
+[  161.550507] ---[ end trace b1cb18ab2d1741bd ]---
+[  161.555938] RIP: 0010:0xffffffff813ce19f
+[  161.560634] Code: 03 01 4c 89 48 58 e9 2f ff ff ff 85 db 41 0f 95
+c2 45 39 d9 41 0f 95 c1 45 84 ca 74 05 45 85 e4 78 0a 44 89 c2 e9 10
+ff ff ff <0f> 0b 01 d2 45 89 c1 41 29 d1 ba 00 00 00 00 44 0f 48 ca eb
+80 cc
+[  161.582281] RSP: 0018:ffffc90000118e88 EFLAGS: 00010283
+[  161.588426] RAX: ffff888101f8f200 RBX: ffffc900006f9bd0 RCX: 000000000000050e
+[  161.596668] RDX: ffff888101fec000 RSI: 0000000000000a1c RDI: 0000000000061a10
+[  161.604860] RBP: ffffc90000118ef8 R08: 0000000000000000 R09: 0000000000061502
+[  161.613052] R10: 0000000000000000 R11: 0000000000000000 R12: 00000000ffffff3f
+[  161.621291] R13: ffff888101f8f140 R14: 0000000000000000 R15: ffff888100ad9b00
+[  161.629505] FS:  0000000000000000(0000) GS:ffff88903fe80000(0000)
+knlGS:00000 00000000000
+[  161.638781] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  161.645549] CR2: 00007f941ad43a9b CR3: 000000000340a000 CR4: 0000000000350ee0
+[  161.653841] Kernel panic - not syncing: Fatal exception in interrupt
+[  161.661287] Kernel Offset: disabled
+[  161.665644] Rebooting in 3 seconds..
+[  164.670313] ACPI MEMORY or I/O RESET_REG.
 
-> On Dec 15, 2022, at 5:13 PM, Joel Fernandes <joel@joelfernandes.org> wrote=
-:
->=20
-> =EF=BB=BF
->=20
->> On Dec 15, 2022, at 3:13 PM, Paul E. McKenney <paulmck@kernel.org> wrote:=
-
->>=20
->> =EF=BB=BFOn Thu, Dec 15, 2022 at 05:58:14PM +0000, Joel Fernandes wrote:
->>>> On Thu, Dec 15, 2022 at 5:48 PM Joel Fernandes <joel@joelfernandes.org>=
- wrote:
->>>>=20
->>>>>> On Thu, Dec 15, 2022 at 5:08 PM Paul E. McKenney <paulmck@kernel.org>=
- wrote:
->>>>>=20
->>>>>>> Scenario for the reader to increment the old idx once:
->>>>>>>=20
->>>>>>> _ Assume ssp->srcu_idx is initially 0.
->>>>>>> _ The READER reads idx that is 0
->>>>>>> _ The updater runs and flips the idx that is now 1
->>>>>>> _ The reader resumes with 0 as an index but on the next srcu_read_lo=
-ck()
->>>>>>> it will see the new idx which is 1
->>>>>>>=20
->>>>>>> What could be the scenario for it to increment the old idx twice?
->>>>>>=20
->>>>>> Unless I am missing something, the reader must reference the
->>>>>> srcu_unlock_count[old_idx] and then do smp_mb() before it will be
->>>>>> absolutely guaranteed of seeing the new value of ->srcu_idx.
->>>>>=20
->>>>> I think both of you are right depending on how the flip raced with the=
-
->>>>> first reader's unlock in that specific task.
->>>>>=20
->>>>> If the first read section's srcu_read_unlock() and its corresponding
->>>>> smp_mb()  happened before the flip, then the increment of old idx
->>>>> would happen only once. The next srcu_read_lock() will read the new
->>>>> index. If the srcu_read_unlock() and it's corresponding smp_mb()
->>>>> happened after the flip, the old_idx will be sampled again and can be
->>>>> incremented twice. So it depends on how the flip races with
->>>>> srcu_read_unlock().
->>>=20
->>> I am sorry this is inverted, but my statement's gist stands I believe:
->>>=20
->>> 1. Flip+smp_mb() happened before unlock's smp_mb() -- reader will not
->>> increment old_idx the second time.
->>=20
->> By "increment old_idx" you mean "increment ->srcu_lock_count[old_idx]",
->> correct?
->=20
-> Yes sorry for confusing, i indeed meant lock count increment corresponding=
- to the old index.
->>=20
->> Again, the important ordering isn't the smp_mb(), but the accesses,
->> in this case, the accesses to ->srcu_unlock_count[idx].
->=20
-> I was talking about ordering of the flip of index (write) with respect to b=
-oth the reading of the old index  in the rcu_read_lock() and its subsequent l=
-ock count increment corresponding to that index. I believe we are talking he=
-r about how this race can effect the wrap around issues when scanning for re=
-aders in the pre flip index, and we concluded that there can be at most 2 of=
- these on the SAME task. The third time, reader will always see the new flip=
-ped index because of the memory barriers on both sides. IOW, the same task c=
-annot overflow the lock counter on the preflipped index and cause issues. Ho=
-wever there can be Nt different tasks so perhaps you can have 2*Nt number of=
- preempted
-
-Sorry, to be more precise, I mean you have Nt preempted readers, which owing=
- to memory barriers, if you have at least Nt CPUs, and they each ran on thos=
-e CPUs, then you can have 2*Nt increments on the lock count at the old index=
-.=20
-
-Or something.
-
-Thanks.
-
-
-
-
-> readers that had sampled the old index and now will do a lock and unlock o=
-n that old index, potentially causing a lock=3D=3Dunlock match when there sh=
-ould not be a match.
->=20
->>=20
->>> 2. unlock()'s smp_mb() happened before Flip+smp_mb() , now the reader
->>> has no new smp_mb() that happens AFTER the flip happened. So it can
->>> totally sample the old idx again -- that particular reader will
->>> increment twice, but the next time, it will see the flipped one.
->>=20
->> I will let you transliterate both.  ;-)
->=20
-> I think I see what you mean now :)
->=20
-> I believe the access I am referring to is the read of idx on one side and t=
-he write to idx on the other. However that is incomplete and I need to pair t=
-hat with some of other access on both sides.
->=20
-> So perhaps this:
->=20
-> Writer does flip + smp_mb + read unlock counts [1]
->=20
-> Reader does:
-> read idx + smp_mb() + increment lock counts [2]
->=20
-> And subsequently reader does
-> Smp_mb() + increment unlock count. [3]
->=20
-> So [1] races with either [2] or [2]+[3].
->=20
-> Is that fair?
->=20
->>> Did I get that right? Thanks.
->>=20
->> So why am I unhappy with orderings of smp_mb()?
->>=20
->> To see this, let's take the usual store-buffering litmus test:
->>=20
->>   CPU 0            CPU 1
->>   WRITE_ONCE(x, 1);    WRITE_ONCE(y, 1);
->>   smp_mb();        smp_mb();
->>   r0 =3D READ_ONCE(y);    r1 =3D READ_ONCE(x);
->>=20
->> Suppose CPU 0's smp_mb() happens before that of CPU 1:
->>=20
->>   CPU 0            CPU 1
->>   WRITE_ONCE(x, 1);    WRITE_ONCE(y, 1);
->>   smp_mb();
->>               smp_mb();
->>   r0 =3D READ_ONCE(y);    r1 =3D READ_ONCE(x);
->>=20
->> We get r0 =3D=3D r1 =3D=3D 1.
->>=20
->> Compare this to CPU 1's smp_mb() happening before that of CPU 0:
->>=20
->>   CPU 0            CPU 1
->>   WRITE_ONCE(x, 1);    WRITE_ONCE(y, 1);
->>               smp_mb();
->>   smp_mb();
->>   r0 =3D READ_ONCE(y);    r1 =3D READ_ONCE(x);
->>=20
->> We still get r0 =3D=3D r1 =3D=3D 1.  Reversing the order of the two smp_m=
-b()
->> calls changed nothing.
->>=20
->> But, if we order CPU 1's write to follow CPU 0's read, then we have
->> this:
->>=20
->>   CPU 0            CPU 1
->>   WRITE_ONCE(x, 1);
->>   smp_mb();
->>   r0 =3D READ_ONCE(y);
->>               WRITE_ONCE(y, 1);
->>               smp_mb();
->>               r1 =3D READ_ONCE(x);
->>=20
->> Here, given that r0 had the final value of zero, we know that
->> r1 must have a final value of 1.
->>=20
->> And suppose we reverse this:
->>=20
->>   CPU 0            CPU 1
->>               WRITE_ONCE(y, 1);
->>               smp_mb();
->>               r1 =3D READ_ONCE(x);
->>   WRITE_ONCE(x, 1);
->>   smp_mb();
->>   r0 =3D READ_ONCE(y);
->>=20
->> Now there is a software-visible difference in behavior.  The value of
->> r0 is now 1 instead of zero and the value of r1 is now 0 instead of 1.
->>=20
->> Does this make sense?
->=20
-> Yes I see what you mean. In first case, smp_mb() ordering didn=E2=80=99t m=
-atter. But in the second case it does.
->=20
-> Thanks,
->=20
-> - Joel
->=20
->=20
->>=20
->>                           Thanx, Paul
+Kyle.
