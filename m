@@ -2,147 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C8A64D673
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 07:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5104764D658
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 07:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiLOG2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 01:28:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
+        id S229652AbiLOGHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 01:07:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiLOG2v (ORCPT
+        with ESMTP id S229451AbiLOGHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 01:28:51 -0500
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923A240460;
-        Wed, 14 Dec 2022 22:28:47 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 6D84C201651;
-        Thu, 15 Dec 2022 06:28:46 +0000 (UTC)
-Received: from pdx1-sub0-mail-a287.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id A8E0B2016CD;
-        Thu, 15 Dec 2022 06:28:40 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1671085720; a=rsa-sha256;
-        cv=none;
-        b=nGj6FT9KVCXxA2zur75cDXE9fb9MVRxceO+jmve6QMPO8SLrYP2qpSmIKifep8RU8lUJg9
-        UplQJ7eqlP0iRK5fCwY55UXjWMqaK9f+Hxht+B5KSS12oOwXmwkAslTTnQXotHDVRNYQSx
-        7UAJ4sZ1gfGnuW3V2dQqjPyjt4r523rfgyoHtm+8yAET4KjM5BqtvYaGHMGmIIc3M/Zy7+
-        YHd6CqpUUMj8MgOejU3L+67Gu+ewgpxUcGjdl/zu9uI0HMiQ+7q8hkEy18flzHFDt8lXuO
-        I4BdIgk7T/RFsCTgtdWg61OVjD4L8LocGcZVXRAEdfr873FMV3Zt8bf6I0yJSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1671085720;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=rTg/hrEgFnTmjf3jWgL2o0w4H6DYsDRlWCqZWD+vU08=;
-        b=wFfvpSoh7aJxCWRehUhLD8a0CwZzGuI0bi8+xkCiYDUN4gVlEhs24sl3uWL4WmV0WGpCJ7
-        GRsGmbzAd+FfatAHoJreTvP0gcTe18AZ4vldZYbEf5O/6FgXOLU0ftXqI3Cg3WnGuuh17t
-        2vVPU4hzYBaH5PU1ZlkW3brJg8lnt2dZxlQ+X+f6Hkm8kuRAKUHZuNL64x5tL6c2EJ4A8u
-        0UJTbwU0g7JSjPrh/AjUa/DwaQKVLNGjGz3IGfawtDNcvfbLYlt6w9S6UObSPvdejU/xJM
-        IIX7oyc4FvpyrASuAWHydfKFWSn72pilH3zv/AtNcz17GA/JAVjtxwwfaPvcxw==
-ARC-Authentication-Results: i=1;
-        rspamd-747d4f8b9f-86xsz;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Skirt-Tank: 297de34a4db54a2a_1671085722687_1858771830
-X-MC-Loop-Signature: 1671085722687:1469500728
-X-MC-Ingress-Time: 1671085722687
-Received: from pdx1-sub0-mail-a287.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.97.48.82 (trex/6.7.1);
-        Thu, 15 Dec 2022 06:28:42 +0000
-Received: from offworld (unknown [104.36.25.11])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 15 Dec 2022 01:07:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F209E3FB92
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 22:07:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a287.dreamhost.com (Postfix) with ESMTPSA id 4NXj3q6TY4z6m;
-        Wed, 14 Dec 2022 22:28:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1671085720;
-        bh=rTg/hrEgFnTmjf3jWgL2o0w4H6DYsDRlWCqZWD+vU08=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=Cxw4MW8q6z72K+MdjUQdUo6gh/5iRtIMhwEQuthgHvtKpX+I/qVDkzLDpGx1XBqH4
-         zVFJ+Xg+IQ44cULLWjmMgMThs/H3w6zKaLhBYkCE3Y0xj+4+euj7i2u5Vc36Yo7ip+
-         ho6oLZAHBZY+qzrYO6zwEOsKx2bDQGobUDk6JOGBobIOYDQBKD3Xwk8LO6j0bciTEE
-         hTjWg4gTP0ddh7reyblAm6awrY/aJBWj1XuUDBLgDDczVMDEaBoIKFGbw6Zyragt/R
-         i81frbhCM/kH5fwMl472EognxiiMh2TXjIup7R1vTa2ExkSpEaXd7PHh7jrxb2o+3y
-         Z2wmgn6LWfw7Q==
-Date:   Wed, 14 Dec 2022 22:04:10 -0800
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        alison.schofield@intel.com, vishal.l.verma@intel.com,
-        ira.weiny@intel.com, bwidawsk@kernel.org, a.manzanares@samsung.com,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cxl/acpi: fix null dereference on probe for missing
- ACPI_COMPANION()
-Message-ID: <20221215060410.2p653tgqw35q6wbz@offworld>
-References: <20221209062919.1096779-1-mcgrof@kernel.org>
- <63937afd72956_579c1294eb@dwillia2-xfh.jf.intel.com.notmuch>
- <6393a3a9d2882_579c1294b3@dwillia2-xfh.jf.intel.com.notmuch>
- <Y5kAt3WRgncTj26x@bombadil.infradead.org>
- <63991ec886e85_b05d1294a6@dwillia2-xfh.jf.intel.com.notmuch>
- <Y5pU4XTchSKVqkjx@bombadil.infradead.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AC9861CEF
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 06:07:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EB02C433EF;
+        Thu, 15 Dec 2022 06:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671084451;
+        bh=0NfiFGHwkJcI8GSlY2A4QfANtLqFrxyrmqMzhDsZ/xc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gpvHGCZ8lTCvgxjC5Q4uB9Op/tcFUsTagOu1u1dPeR5vjVpkk38ebnaALGp3g5Ljf
+         skLYRpkWsR7Y+7SKulZytW4qMHP99pZ9yWm7D3O7utIk/P5nF9DJr0WhtGoddaEDbm
+         kxeplIwvM0ybFMd91BZ8dCPJmj8rFqInKKbQcsdYSwaGUSDB/dBfvpz3x4Pe6UzErX
+         2V9KwDIpkuM6sZzg5+gnRyTRE2B/HwIOf3NsC7Apms1D1QVAYbqYfgN626jUWe1/RT
+         YPI/+dp0jry6vUDOfdImprs0iKx9mJ1mRno62UlLuAGRSOtdLO438UpTRoRKZmO3Ni
+         WW+16V/FTsLpg==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>
+Subject: [PATCH] f2fs: avoid to check PG_error flag
+Date:   Thu, 15 Dec 2022 14:05:06 +0800
+Message-Id: <20221215060506.3454508-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Y5pU4XTchSKVqkjx@bombadil.infradead.org>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Dec 2022, Luis Chamberlain wrote:
+After below changes:
+commit 14db0b3c7b83 ("fscrypt: stop using PG_error to track error status")
+commit 98dc08bae678 ("fsverity: stop using PG_error to track error status")
 
->Groovy thanks. Progress, but still fails now on the cxl-xor-region.sh line 29
->
->https://gist.github.com/mcgrof/aeac639365a651bd77f143cf38eb7493
+There is no place in f2fs we will set PG_error flag in page, let's remove
+other PG_error usage in f2fs, as a step towards freeing the PG_error flag
+for other uses.
 
-Unrelated, but looking at this log I noticed that we should limit the amount
-of noise "Bypassing cpu_cache_invalidate_memregion() for testing" emits.
-
-Thanks,
-Davidlohr
-
------8<-------------------------------------
-[PATCH] cxl/region: Only warn about cpu_cache_invalidate_memregion() once
-
-No need for more than once per region.
-
-Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
+Cc: Eric Biggers <ebiggers@kernel.org>
+Signed-off-by: Chao Yu <chao@kernel.org>
 ---
-  drivers/cxl/core/region.c | 3 +--
-  1 file changed, 1 insertion(+), 2 deletions(-)
+ fs/f2fs/data.c    | 2 --
+ fs/f2fs/gc.c      | 1 -
+ fs/f2fs/inline.c  | 1 -
+ fs/f2fs/node.c    | 3 ---
+ fs/f2fs/segment.c | 1 -
+ 5 files changed, 8 deletions(-)
 
-diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-index b1281f528d7f..f367d1c10357 100644
---- a/drivers/cxl/core/region.c
-+++ b/drivers/cxl/core/region.c
-@@ -2006,8 +2006,7 @@ static int cxl_region_invalidate_memregion(struct cxl_region *cxlr)
-  
-  	if (!cpu_cache_has_invalidate_memregion()) {
-  		if (IS_ENABLED(CONFIG_CXL_REGION_INVALIDATION_TEST)) {
--			dev_warn(
--				&cxlr->dev,
-+			dev_WARN_ONCE(&cxlr->dev, 1,
-  				"Bypassing cpu_cache_invalidate_memregion() for testing!\n");
-  			clear_bit(CXL_REGION_F_INCOHERENT, &cxlr->flags);
-  			return 0;
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 6e43e19c7d1c..78e8745b91c5 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -2700,7 +2700,6 @@ int f2fs_do_write_data_page(struct f2fs_io_info *fio)
+ 			goto out_writepage;
+ 
+ 		set_page_writeback(page);
+-		ClearPageError(page);
+ 		f2fs_put_dnode(&dn);
+ 		if (fio->need_lock == LOCK_REQ)
+ 			f2fs_unlock_op(fio->sbi);
+@@ -2736,7 +2735,6 @@ int f2fs_do_write_data_page(struct f2fs_io_info *fio)
+ 		goto out_writepage;
+ 
+ 	set_page_writeback(page);
+-	ClearPageError(page);
+ 
+ 	if (fio->compr_blocks && fio->old_blkaddr == COMPRESS_ADDR)
+ 		f2fs_i_compr_blocks_update(inode, fio->compr_blocks - 1, false);
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index 6e2cae3d2e71..43c461b80209 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1365,7 +1365,6 @@ static int move_data_block(struct inode *inode, block_t bidx,
+ 		dec_page_count(fio.sbi, F2FS_DIRTY_META);
+ 
+ 	set_page_writeback(fio.encrypted_page);
+-	ClearPageError(page);
+ 
+ 	fio.op = REQ_OP_WRITE;
+ 	fio.op_flags = REQ_SYNC;
+diff --git a/fs/f2fs/inline.c b/fs/f2fs/inline.c
+index 21a495234ffd..08e302d32118 100644
+--- a/fs/f2fs/inline.c
++++ b/fs/f2fs/inline.c
+@@ -174,7 +174,6 @@ int f2fs_convert_inline_page(struct dnode_of_data *dn, struct page *page)
+ 
+ 	/* write data page to try to make data consistent */
+ 	set_page_writeback(page);
+-	ClearPageError(page);
+ 	fio.old_blkaddr = dn->data_blkaddr;
+ 	set_inode_flag(dn->inode, FI_HOT_DATA);
+ 	f2fs_outplace_write_data(dn, &fio);
+diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+index dde4c0458704..558b318f7316 100644
+--- a/fs/f2fs/node.c
++++ b/fs/f2fs/node.c
+@@ -1650,7 +1650,6 @@ static int __write_node_page(struct page *page, bool atomic, bool *submitted,
+ 	}
+ 
+ 	set_page_writeback(page);
+-	ClearPageError(page);
+ 
+ 	fio.old_blkaddr = ni.blk_addr;
+ 	f2fs_do_write_node_page(nid, &fio);
+@@ -2079,8 +2078,6 @@ int f2fs_wait_on_node_pages_writeback(struct f2fs_sb_info *sbi,
+ 		spin_unlock_irqrestore(&sbi->fsync_node_lock, flags);
+ 
+ 		f2fs_wait_on_page_writeback(page, NODE, true, false);
+-		if (TestClearPageError(page))
+-			ret = -EIO;
+ 
+ 		put_page(page);
+ 
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 25ddea478fc1..0134d8c166e9 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -3423,7 +3423,6 @@ void f2fs_do_write_meta_page(struct f2fs_sb_info *sbi, struct page *page,
+ 		fio.op_flags &= ~REQ_META;
+ 
+ 	set_page_writeback(page);
+-	ClearPageError(page);
+ 	f2fs_submit_page_write(&fio);
+ 
+ 	stat_inc_meta_count(sbi, page->index);
 -- 
-2.38.1
-
+2.25.1
 
