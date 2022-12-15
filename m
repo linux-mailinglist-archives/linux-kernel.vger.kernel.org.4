@@ -2,171 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B5064E15F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 385B864E162
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbiLOSxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 13:53:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
+        id S230452AbiLOSxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 13:53:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiLOSx2 (ORCPT
+        with ESMTP id S229665AbiLOSxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 13:53:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB72389CB;
-        Thu, 15 Dec 2022 10:53:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 796DB61EDC;
-        Thu, 15 Dec 2022 18:53:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D32C433EF;
-        Thu, 15 Dec 2022 18:53:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671130406;
-        bh=MauNfRz26VJBHARJ7ov5c1TiEJ+W8IKVW8aeToN+6Yg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=c+dHaEvuLCkQ+FyASN6Y3SQacyYOUQ0JNdnWlB6A3gxwE/vDhLymmky0H0ExE/wse
-         ypS3wiIQbo39AkOC59SROKiRRX5NYzIpTqROLnopPZRcLQhThVqgQgj/xm63QibBW5
-         Ulvr+rWtAhWdrnEOLKXPHPpvPSg+oUm70wm6nK4fyNG9ayC0w/CY3mOB6t6qW+rBJT
-         pSXkPLycSvm3tngwj0cewGbugkMh+t8br6YPPUNuLkK0ddqr6P/6Mpdg4XLvHK7qVo
-         /6ka0mvV9R8Xdwm0AyrcPUGE4s0yAiriUMhGW8NUS2FczSyh5MfNSpx3hZqkD6CraJ
-         KfCmoADwy981A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7E1F75C09D0; Thu, 15 Dec 2022 10:53:26 -0800 (PST)
-Date:   Thu, 15 Dec 2022 10:53:26 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     boqun.feng@gmail.com, joel@joelfernandes.org,
-        neeraj.iitr10@gmail.com, urezki@gmail.com, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] srcu: Yet more detail for
- srcu_readers_active_idx_check() comments
-Message-ID: <20221215185326.GJ4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221214191355.GA2596199@paulmck-ThinkPad-P17-Gen-1>
- <20221215165452.GA1957735@lothringen>
- <20221215170834.GH4001@paulmck-ThinkPad-P17-Gen-1>
- <20221215175830.GA1958071@lothringen>
+        Thu, 15 Dec 2022 13:53:48 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86F937225;
+        Thu, 15 Dec 2022 10:53:47 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFBRhK7007448;
+        Thu, 15 Dec 2022 18:53:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=X4+Wss1oWAfIh82TyUWECs+jRW05yRh2D8M9j9TbQH8=;
+ b=JrGSOVZmBfQWBRe+oE3e2g3ogVGHkKohRU2IfCNhoeWly50hIrwy+UwwblESvMB6EQxr
+ wqZlwv22NnDJAfffo/QEMe1FLMzpEQ0Mm0T0gem+I/06kWriTAEKDqBzrhtIBngh0meO
+ hOyYD6BYUgeW1UNsCChO3qbaYJ1R31oBJa+ctbZhlQ1pVYXkVLGuJ9HoUBwcizRLC8K/
+ VnbMdG9vXTOBNJ+ZGkjaOO2hpYQkhWiS4iNynGefa7XpGVaHo045hq5q03s4gfXavQ+Q
+ FvOfx9VFHaZBCMa1twTJpjavt4smL7UXoxXTBtl2qBuEDqYvcALHNTH8nAxLyonUN7q2 tA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mg2891sj1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 18:53:44 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BFIrhlt008512
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 18:53:43 GMT
+Received: from [10.110.78.226] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 15 Dec
+ 2022 10:53:42 -0800
+Message-ID: <6cbf5cb8-f34a-af94-85b3-6acaf76f3f14@quicinc.com>
+Date:   Thu, 15 Dec 2022 10:53:42 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221215175830.GA1958071@lothringen>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 2/2] arm64: dts: qcom: Add base QDU1000/QRU1000 IDP DTs
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221118192241.29384-1-quic_molvera@quicinc.com>
+ <20221118192241.29384-3-quic_molvera@quicinc.com>
+ <20221202033721.4slwz2utw5u6rv7b@builder.lan>
+ <9e4e6149-bc24-b727-fff7-3fb7038fc066@quicinc.com>
+ <5cd9e71c-8147-2ce1-b137-0342e271031b@linaro.org>
+ <82620abd-105a-6ebc-ae58-e77fa058852b@quicinc.com>
+ <fd8b7bbb-088c-59ce-2b2a-c6c9edb3f1af@linaro.org>
+From:   Melody Olvera <quic_molvera@quicinc.com>
+In-Reply-To: <fd8b7bbb-088c-59ce-2b2a-c6c9edb3f1af@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ZhTWLLyUzCfIiyjWRMVrg_8R8OaZaCVv
+X-Proofpoint-ORIG-GUID: ZhTWLLyUzCfIiyjWRMVrg_8R8OaZaCVv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-15_11,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 spamscore=0 priorityscore=1501 phishscore=0
+ impostorscore=0 suspectscore=0 malwarescore=0 adultscore=0 mlxlogscore=921
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212150157
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 06:58:30PM +0100, Frederic Weisbecker wrote:
-> On Thu, Dec 15, 2022 at 09:08:34AM -0800, Paul E. McKenney wrote:
-> > On Thu, Dec 15, 2022 at 05:54:52PM +0100, Frederic Weisbecker wrote:
-> > > On Wed, Dec 14, 2022 at 11:13:55AM -0800, Paul E. McKenney wrote:
-> > > > The comment in srcu_readers_active_idx_check() following the smp_mb()
-> > > > is out of date, hailing from a simpler time when preemption was disabled
-> > > > across the bulk of __srcu_read_lock().  The fact that preemption was
-> > > > disabled meant that the number of tasks that had fetched the old index
-> > > > but not yet incremented counters was limited by the number of CPUs.
-> > > > 
-> > > > In our more complex modern times, the number of CPUs is no longer a limit.
-> > > > This commit therefore updates this comment, additionally giving more
-> > > > memory-ordering detail.
-> > > > 
-> > > > Reported-by: Boqun Feng <boqun.feng@gmail.com>
-> > > > Reported-by: Frederic Weisbecker <frederic@kernel.org>
-> > > 
-> > > Not really, while you guys were debating on that comment, I was still starring
-> > > at the previous one (as usual).
-> > > 
-> > > Or to put it in an SRCU way, while you guys saw the flipped idx, I was still
-> > > using the old one :)
-> > > 
-> > > > -	 * OK, how about nesting?  This does impose a limit on nesting
-> > > > -	 * of floor(ULONG_MAX/NR_CPUS/2), which should be sufficient,
-> > > > -	 * especially on 64-bit systems.
-> > > > +	 * It can clearly do so once, given that it has already fetched
-> > > > +	 * the old value of ->srcu_idx and is just about to use that value
-> > > > +	 * to index its increment of ->srcu_lock_count[idx].  But as soon as
-> > > > +	 * it leaves that SRCU read-side critical section, it will increment
-> > > > +	 * ->srcu_unlock_count[idx], which must follow the updater's above
-> > > > +	 * read from that same value.  Thus, as soon the reading task does
-> > > > +	 * an smp_mb() and a later fetch from ->srcu_idx, that task will be
-> > > > +	 * guaranteed to get the new index.  Except that the increment of
-> > > > +	 * ->srcu_unlock_count[idx] in __srcu_read_unlock() is after the
-> > > > +	 * smp_mb(), and the fetch from ->srcu_idx in __srcu_read_lock()
-> > > > +	 * is before the smp_mb().  Thus, that task might not see the new
-> > > > +	 * value of ->srcu_idx until the -second- __srcu_read_lock(),
-> > > > +	 * which in turn means that this task might well increment
-> > > > +	 * ->srcu_lock_count[idx] for the old value of ->srcu_idx twice,
-> > > > +	 * not just once.
-> > > 
-> > > You lost me on that one.
-> > > 
-> > >       UPDATER                               READER
-> > >       -------                               ------
-> > >       //srcu_readers_lock_idx               //srcu_read_lock
-> > >       idx = ssp->srcu_idx;                  idx = ssp->srcu_idx;
-> > >       READ srcu_lock_count[idx ^ 1]         srcu_lock_count[idx]++
-> > 
-> > Shouldn't this be "READ srcu_unlock_count[idx ^ 1]"?
-> > 
-> > And then the above paragraph assumes that the updater gets stuck here...
-> 
-> Right I ignored the unlock part on purpose. But ok let's add it (later note: just switch
-> directly to the next paragraph to see how I realize I'm wrong)
 
-I do know that feeling!  There are very few things that instill a healthy
-sense of humility quite like working with concurrent code.  ;-)
 
->       UPDATER                               READER
->       -------                               ------
->       idx = ssp->srcu_idx;                  idx = ssp->srcu_idx;
->       READ srcu_unlock_count[idx ^ 1]       srcu_lock_count[idx]++
->       smp_mb();                             smp_mb();
->       READ srcu_lock_count[idx ^ 1]         // read side crit
->       smp_mb();                             smp_mb();
->       idx = ssp->srcu_idx;                  srcu_unlock_count[old_idx]++
->       ssp->srcu_idx++;                      idx = ssp->srcu_idx;
->       smp_mb();                             
->       READ srcu_unlock_count[idx ^ 1]
->       smp_mb();
->       READ srcu_lock_count[idx ^ 1]  
-> 
-> > Unless I am missing something, the reader must reference the
-> > srcu_unlock_count[old_idx] and then do smp_mb() before it will be
-> > absolutely guaranteed of seeing the new value of ->srcu_idx.
-> > 
-> > So what am I missing?
-> 
-> But there is the smp_mb() between the srcu_lock_count[idx]++ of the 1st
-> srcu_read_lock() and the idx READ from the second srcu_read_lock():
-> 
->          WRITER                                READER
->          -----                                 -------
->          WRITE idx                             WRITE srcu_lock_count[old_idx]
->          smp_mb()                              smp_mb()
->          READ srcu_lock_count[new_idx]         READ idx
-> 
-> Ah wait! On SCAN2 we are reading the count from the _new_ idx, not the old one, ok
-> that's why it doesn't work. So then for it to write twice on the old idx we have:
-> 
-> _ idx is initially 0
-> _ READER fetches idx (idx=0) and is preempted
-> _ New GP: Updater goes through its whole thing and flips idx
-> _ Yet another new GP: Updater goes again but is preempted in the middle of
-> SCAN1: it has read unlock_count but not yet lock_count
-> _ READER increments lock_count, then unlock_count, for the old idx (0).
-> _ New READER: indeed we don't have a barrier between unlock_count and idx read.
->   So we read again the idx unordered against the previous WRITE to unlock_count.
->   So this may be still the old idx (0): we increment lock_count, there goes the
->   desired smp_mb(), we increment unlock_count of the old idx (0).
-> _ Yet another READER: finally we see the new idx (1).
-> 
-> Phew! Did I get it right this time? :))
+On 12/15/2022 10:47 AM, Dmitry Baryshkov wrote:
+> On 15/12/2022 19:56, Melody Olvera wrote:
+>>
+>>
+>> On 12/15/2022 12:44 AM, Krzysztof Kozlowski wrote:
+>>> On 14/12/2022 19:59, Melody Olvera wrote:
+>>>>>> +            #clock-cells = <0>;
+>>>>>> +        };
+>>>>>> +
+>>>>>> +        sleep_clk: sleep-clk {
+>>>>>> +            compatible = "fixed-clock";
+>>>>>> +            clock-frequency = <32000>;
+>>>>>> +            #clock-cells = <0>;
+>>>>>> +        };
+>>>>>> +
+>>>>>> +        pcie_0_pipe_clk: pcie-0-pipe-clk {
+>>>>> Afaict these clocks are not referenced anywhere, so please skip them.
+>>>> Yes, so I included them to be consistent with the bindings. They will be needed later;
+>>>> should I still remove?
+>>>>
+>>> If they are not referenced anywhere, how is it consistent with bindings?
+>>> Where do the bindings require defining such nodes?
+>>
+>> These bindings here: https://lore.kernel.org/all/20221118181826.28269-2-quic_molvera@quicinc.com/
+>> I believe you commented that we either have these clocks or we don't, correct? I added them to
+>> the dt since these clocks exist and will be needed later when USB and PCIE nodes are added.
+>> As Konrad noted, these technically belong in the PHYs, but I was told to put stub fixed
+>> clocks instead here: https://lore.kernel.org/lkml/2c8c4642-8aee-3da3-7698-5e08b4c5894d@linaro.org/
+>>
+>> How is this to be handled? Should I remove the clocks from the dt and the bindings and add them
+>> later when we need them? Do I leave stub clocks here with frequency 0 until needed? I am
+>> very confused right now.
+>
+> You were told to use stub clocks in the bindings, not in the dtsi file. You can use <0> in the dtsi instead.
 
-Either you got it right or we both got it wrong in the same way.  ;-)
+Oh ok that makes more sense. I appreciate the clarification.
 
-							Thanx, Paul
+Thanks,
+Melody
+>
+>>
+>> Thanks,
+>> Melody
+>>
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>>
+>>
+>
+
