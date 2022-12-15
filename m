@@ -2,40 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B3064DE27
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73FE564DE29
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:04:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiLOQEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:04:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
+        id S229864AbiLOQEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:04:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiLOQD6 (ORCPT
+        with ESMTP id S229811AbiLOQEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:03:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584FD1AA07
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:03:12 -0800 (PST)
+        Thu, 15 Dec 2022 11:04:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C1B2EF47
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:03:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671120191;
+        s=mimecast20190719; t=1671120194;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=wHW291lHqyZueeOZojJhSJ9Wkscs64vZJ6pNmv0fUDk=;
-        b=eNkvhrZf1MESYljOrECVY/m+I3SPCO6NO7mFpLbRCfulPgMEiOC9Cjiw3EW+CUN9BxsszF
-        0dfBqQ7XW3EhV5kzLLk0GFEWFgG6ygzn9a+P1s5hH/4xSn0NMdB20w2YW0KLFgrw6moBjV
-        xmfNCjz4H8KPloQX1JNPFIJOr5iSOwI=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YFRn2G3kICVUTv0CVX/GON7X4LfKNre2jK8Ma2QSF+o=;
+        b=AFOPgwOttGX+ZAfqNfvUIbj1YUrejtL56Vum0NlBK7KkauuYI9j/Ih4DO0bxav5X50F9iR
+        xgTBQIMA+xSq8nFuEfWAFaCltJoHHKcLzQFUA5mEagR88kn+WUV9eFhRmNxbCNFOY3Mxw6
+        Cmkwxi3CjICT9euKmYpBJoTa6yMBIkg=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-244-UV1-hDmNP22VFnpWwnjtpA-1; Thu, 15 Dec 2022 11:03:09 -0500
-X-MC-Unique: UV1-hDmNP22VFnpWwnjtpA-1
+ us-mta-453-b2qMVZfhMqyIfPZeJDNE2g-1; Thu, 15 Dec 2022 11:03:09 -0500
+X-MC-Unique: b2qMVZfhMqyIfPZeJDNE2g-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 97D28858F09;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7EF8100F901;
         Thu, 15 Dec 2022 16:03:08 +0000 (UTC)
 Received: from llong.com (unknown [10.22.9.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 184C24085721;
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A4BBE4085720;
         Thu, 15 Dec 2022 16:03:08 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -43,9 +44,11 @@ To:     Catalin Marinas <catalin.marinas@arm.com>,
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Muchun Song <songmuchun@bytedance.com>,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH v2 0/2] mm/kmemleak: Simplify kmemleak_cond_resched() & fix UAF
-Date:   Thu, 15 Dec 2022 11:02:57 -0500
-Message-Id: <20221215160259.261136-1-longman@redhat.com>
+Subject: [PATCH v2 1/2] mm/kmemleak: Simplify kmemleak_cond_resched() usage
+Date:   Thu, 15 Dec 2022 11:02:58 -0500
+Message-Id: <20221215160259.261136-2-longman@redhat.com>
+In-Reply-To: <20221215160259.261136-1-longman@redhat.com>
+References: <20221215160259.261136-1-longman@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
@@ -59,28 +62,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was found that a KASAN use-after-free error was reported in the
-kmemleak_scan() function. After further examination, it is believe
-that even though a reference is taken from the current object, it does
-not prevent the object pointed to by the next pointer from going away
-after a cond_resched().
+The presence of a pinned argument and the 64k loop count make
+kmemleak_cond_resched() a bit more complex to read. The pinned argument
+is used only by first kmemleak_scan() loop.
 
-To fix that, additional flags are added to make sure that the current
-object won't be removed from the object_list during the duration of
-the cond_resched() to ensure the validity of the next pointer.
+Simplify the usage of kmemleak_cond_resched() by removing the pinned
+argument and always do a get_object()/put_object() sequence. In
+addition, the 64k loop is removed by using need_resched() to decide if
+kmemleak_cond_resched() should be called.
 
-While making the change, I also simplify the current usage of
-kmemleak_cond_resched() to make it easier to understand.
+Signed-off-by: Waiman Long <longman@redhat.com>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+---
+ mm/kmemleak.c | 48 ++++++++++++------------------------------------
+ 1 file changed, 12 insertions(+), 36 deletions(-)
 
-Waiman Long (2):
-  mm/kmemleak: Simplify kmemleak_cond_resched() usage
-  mm/kmemleak: Fix UAF bug in kmemleak_scan()
-
- [v2: Update patch 2 to prevent object_list removal of current object]
-
- mm/kmemleak.c | 83 +++++++++++++++++++++++++--------------------------
- 1 file changed, 41 insertions(+), 42 deletions(-)
-
+diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+index 267332904354..e7cb521236bf 100644
+--- a/mm/kmemleak.c
++++ b/mm/kmemleak.c
+@@ -1463,22 +1463,17 @@ static void scan_gray_list(void)
+ /*
+  * Conditionally call resched() in an object iteration loop while making sure
+  * that the given object won't go away without RCU read lock by performing a
+- * get_object() if !pinned.
+- *
+- * Return: false if can't do a cond_resched() due to get_object() failure
+- *	   true otherwise
++ * get_object() if necessaary.
+  */
+-static bool kmemleak_cond_resched(struct kmemleak_object *object, bool pinned)
++static void kmemleak_cond_resched(struct kmemleak_object *object)
+ {
+-	if (!pinned && !get_object(object))
+-		return false;
++	if (!get_object(object))
++		return;	/* Try next object */
+ 
+ 	rcu_read_unlock();
+ 	cond_resched();
+ 	rcu_read_lock();
+-	if (!pinned)
+-		put_object(object);
+-	return true;
++	put_object(object);
+ }
+ 
+ /*
+@@ -1492,15 +1487,12 @@ static void kmemleak_scan(void)
+ 	struct zone *zone;
+ 	int __maybe_unused i;
+ 	int new_leaks = 0;
+-	int loop_cnt = 0;
+ 
+ 	jiffies_last_scan = jiffies;
+ 
+ 	/* prepare the kmemleak_object's */
+ 	rcu_read_lock();
+ 	list_for_each_entry_rcu(object, &object_list, object_list) {
+-		bool obj_pinned = false;
+-
+ 		raw_spin_lock_irq(&object->lock);
+ #ifdef DEBUG
+ 		/*
+@@ -1526,19 +1518,13 @@ static void kmemleak_scan(void)
+ 
+ 		/* reset the reference count (whiten the object) */
+ 		object->count = 0;
+-		if (color_gray(object) && get_object(object)) {
++		if (color_gray(object) && get_object(object))
+ 			list_add_tail(&object->gray_list, &gray_list);
+-			obj_pinned = true;
+-		}
+ 
+ 		raw_spin_unlock_irq(&object->lock);
+ 
+-		/*
+-		 * Do a cond_resched() every 64k objects to avoid soft lockup.
+-		 */
+-		if (!(++loop_cnt & 0xffff) &&
+-		    !kmemleak_cond_resched(object, obj_pinned))
+-			loop_cnt--; /* Try again on next object */
++		if (need_resched())
++			kmemleak_cond_resched(object);
+ 	}
+ 	rcu_read_unlock();
+ 
+@@ -1605,14 +1591,9 @@ static void kmemleak_scan(void)
+ 	 * scan and color them gray until the next scan.
+ 	 */
+ 	rcu_read_lock();
+-	loop_cnt = 0;
+ 	list_for_each_entry_rcu(object, &object_list, object_list) {
+-		/*
+-		 * Do a cond_resched() every 64k objects to avoid soft lockup.
+-		 */
+-		if (!(++loop_cnt & 0xffff) &&
+-		    !kmemleak_cond_resched(object, false))
+-			loop_cnt--;	/* Try again on next object */
++		if (need_resched())
++			kmemleak_cond_resched(object);
+ 
+ 		/*
+ 		 * This is racy but we can save the overhead of lock/unlock
+@@ -1647,14 +1628,9 @@ static void kmemleak_scan(void)
+ 	 * Scanning result reporting.
+ 	 */
+ 	rcu_read_lock();
+-	loop_cnt = 0;
+ 	list_for_each_entry_rcu(object, &object_list, object_list) {
+-		/*
+-		 * Do a cond_resched() every 64k objects to avoid soft lockup.
+-		 */
+-		if (!(++loop_cnt & 0xffff) &&
+-		    !kmemleak_cond_resched(object, false))
+-			loop_cnt--;	/* Try again on next object */
++		if (need_resched())
++			kmemleak_cond_resched(object);
+ 
+ 		/*
+ 		 * This is racy but we can save the overhead of lock/unlock
 -- 
 2.31.1
 
