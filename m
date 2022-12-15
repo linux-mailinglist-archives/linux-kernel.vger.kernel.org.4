@@ -2,197 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65DF164E2DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BE864E2DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:14:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiLOVNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 16:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
+        id S229816AbiLOVNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 16:13:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiLOVMy (ORCPT
+        with ESMTP id S229613AbiLOVNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 16:12:54 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C201554EF
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 13:12:52 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id m29so183695lfo.11
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 13:12:52 -0800 (PST)
+        Thu, 15 Dec 2022 16:13:33 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF921705C;
+        Thu, 15 Dec 2022 13:13:33 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso4070591pjt.0;
+        Thu, 15 Dec 2022 13:13:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oDfDciBtjqio6Aoq7U3wQ0SeOeVeyEYOG//I4W1fW38=;
-        b=UnXXlWM8X/g13GA0rI98mTs2FE1YDDEZD2wA/ssKIOF7/XkbeKEv9UstQYRte2vasf
-         CCLXPKyjny6tD96g+fMA8chLChQ0H+zUN4owm0zKn9Z3unBEJDx5SvAq2g4vrVqK9Q9B
-         EM9Kdenx2jK/NYzjrQ632TtlcjJXXNdV4IQXiQPp5p6KcRy7eZugU8zM/FUrsuIetAeX
-         a+gZG+sfl+HastflB3ripCVU0UuQhypmXVdetGhSotKDC27MOGnio2dDkWbHd/sLBpH+
-         8QGyUISJ24T9E1UAdNlV1uoxRHEDvozJEp5994KysBuRF8rACvgh7XppkYhpllmam8Rs
-         0C/A==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1GRyBXwIl/yIj6DjGjuLYR4NV25MWL4dlrs9/synEW4=;
+        b=L9mroEBZVJmwpUbs0cjhBI8GcxztTfJESPxIow5xqm7kwOthC3Z9UVqDagpD4SPV8H
+         2pdAMGH0gxx97RwCm71WG6cWJZc2xdheEBF5fppqjXJvyfOlXAVBa82TNaO9ECfr0lTU
+         tWnIY9O/VBIjNciO8JRsCeNPsT25c6fKtFy4u8X5X5NyDR87bZbVX3gPyl5gGZ3xDuaf
+         VJjKH3MwQeSNyFcBEJb73Dc73YHMV8+qS+hqjxZ9xCxfImuXxpXjIgG+U4h6EncGqG4/
+         HpvOTKJ0LE3K2iY2ra/CYQY8geLOPetbniTT7ek3Otm/MfWx8OUYhn77Fz6NF5owPZ11
+         pYQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oDfDciBtjqio6Aoq7U3wQ0SeOeVeyEYOG//I4W1fW38=;
-        b=yd7v5X6z8MrOZPlnP9eCK6R1wK5mkv/pl8yeaWRnlLh3/gwyvkOr1XUTJWWD4pguvm
-         14aP45ISh/lIRE8JlFoQuNMKW9MV8VvnrDamyFVuV5h3JxDH0+niuTawYLk+X2HeYHOX
-         NZQF4Z6Y78N89U/t+E6S2bfxgV4wHoG6fahHl48Ur+GgUeAnKu9Rn8Q4FVxALtDzyZEH
-         KP+WyXn2w22/xc1rgF/J3ggyjdXBzigd74yNCIk/eRienDR2sP/ZKkHKJQOuPHCvoDpn
-         51WZBbT8iHjH8Gmi0kape4jDH9n3981q0fNrHVjbUMbQg/2lMev2yM1biuie4K9Y/9Wq
-         ScYw==
-X-Gm-Message-State: AFqh2kp4VbpgE3S9bBwZQo2BEdqWS/dxJngIe1sz/Im+rptHsmeqFa6d
-        e8kuzSiy9X+216K6OnkUHYKpNg==
-X-Google-Smtp-Source: AMrXdXvcBK0ZRDgSr8CNfaYfL6EIyq4QaWK6endXNbC4xNmAE0sgU4YT/cpftdG7G9hAOqvPWOR0tw==
-X-Received: by 2002:a05:6512:1048:b0:4bc:df73:445c with SMTP id c8-20020a056512104800b004bcdf73445cmr1302727lfb.32.1671138770365;
-        Thu, 15 Dec 2022 13:12:50 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id a15-20020a056512200f00b004a46a9cebe2sm12674lfb.289.2022.12.15.13.12.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 13:12:49 -0800 (PST)
-Message-ID: <011c1ce3-605a-1ad5-d7df-b91e8c6808bc@linaro.org>
-Date:   Thu, 15 Dec 2022 23:12:49 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1GRyBXwIl/yIj6DjGjuLYR4NV25MWL4dlrs9/synEW4=;
+        b=0455fNkVmiiUO6oANfKEC+RTITd9gkf0NyTzckrcAQJgvXj1zgpZpfB00JHw/kzCS8
+         g89kaW4zY5nF6EAikWeX3EFO4WhbJCVFz+SaST5+X63aSnWG1/5uvCLa6N254H+Gwd8j
+         vPVIavzkS2B4buRCrb+8A7dU5Z0kJbJu4CRPnbhb6OMntdQJSrys5wuZRQ+9DDGJDGnO
+         3KmfxyR/CFpzb6bNVyashW2KByra8qa4ZoUGXNbbfcGQ2xbXsapoiXDhN8R8v9pbtkJJ
+         8RiFazx2M3G3n8x9fMjTGw7DY+kcZmPBXCV+xIIJ3b3/Xui1DySRIrSKYYcmwI2VjQx3
+         Z3KA==
+X-Gm-Message-State: ANoB5plXHXRHx9reJaWUEg1LSuO5lOJZwDBMbW6m5VHLOhCO5rvvG2A8
+        z5Q/mfkXaOit+0B/+2nYHgk=
+X-Google-Smtp-Source: AA0mqf7CRRvqdGzgLS7omdB/ZLh8/ndysbNNv7QZyL65PuY8F+NTrIknSlXs9iqnYZzsWIcyWl/rtA==
+X-Received: by 2002:a17:902:dacb:b0:189:e687:b373 with SMTP id q11-20020a170902dacb00b00189e687b373mr8741535plx.0.1671138812710;
+        Thu, 15 Dec 2022 13:13:32 -0800 (PST)
+Received: from mail.google.com ([103.229.249.253])
+        by smtp.gmail.com with ESMTPSA id y2-20020a17090264c200b00190efb4071dsm81293pli.160.2022.12.15.13.13.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 13:13:32 -0800 (PST)
+Date:   Fri, 16 Dec 2022 10:13:25 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] [next] pcmcia: synclink_cs: replace 1-element array with
+ flex-array member
+Message-ID: <Y5uN9Rr3v1uWH765@mail.google.com>
+References: <Y5mMWEtHWKOiPVU+@mail.google.com>
+ <202212141124.736E3DE2A8@keescook>
+ <Y5otilaHc6HBPCAF@mail.google.com>
+ <CAHp75VdHU3g_t8u-hr1C=mttvEq-jWmMuCwaQqXToP-kH3xstQ@mail.gmail.com>
+ <202212141347.9AD66DEBC8@keescook>
+ <CAHp75VdqUMs1uz8zeyDi6rJKayFt6UMrm0A=-Hp8tQpCUSGujQ@mail.gmail.com>
+ <Y5qim07QaqyvAtRX@mail.google.com>
+ <CAHp75VcSnRPfmk9gAgz+hb7VYtL5buzDi_1e53u8b8+PrtxAvQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v12 2/5] dt-bindings: msm/dp: add data-lanes and
- link-frequencies property
-Content-Language: en-GB
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@gmail.com, andersson@kernel.org, daniel@ffwll.ch,
-        devicetree@vger.kernel.org, dianders@chromium.org,
-        dri-devel@lists.freedesktop.org, konrad.dybcio@somainline.org,
-        krzysztof.kozlowski+dt@linaro.org, robdclark@gmail.com,
-        robh+dt@kernel.org, sean@poorly.run, vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1670967848-31475-1-git-send-email-quic_khsieh@quicinc.com>
- <1670967848-31475-3-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n52eHYCqxUJqQXoaQ8vyqCk-QfouSun+zUp3yo5DufWbwg@mail.gmail.com>
- <b38af164-08bc-07e7-dfaf-fb4d6d89d7db@quicinc.com>
- <CAE-0n53Cb6TFGfM6AYup5aP4=24j0ujVPi463oVqmzfNV2B4RA@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAE-0n53Cb6TFGfM6AYup5aP4=24j0ujVPi463oVqmzfNV2B4RA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75VcSnRPfmk9gAgz+hb7VYtL5buzDi_1e53u8b8+PrtxAvQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/12/2022 02:38, Stephen Boyd wrote:
-> Quoting Kuogee Hsieh (2022-12-14 14:56:23)
->>
->> On 12/13/2022 3:06 PM, Stephen Boyd wrote:
->>> Quoting Kuogee Hsieh (2022-12-13 13:44:05)
->>>> Add both data-lanes and link-frequencies property into endpoint
->>> Why do we care? Please tell us why it's important.
+On Thu, Dec 15, 2022 at 10:57:57AM +0200, Andy Shevchenko wrote:
+> On Thu, Dec 15, 2022 at 6:29 AM Paulo Miguel Almeida
+> <paulo.miguel.almeida.rodenas@gmail.com> wrote:
+> > On Thu, Dec 15, 2022 at 12:06:46AM +0200, Andy Shevchenko wrote:
+> > > On Wed, Dec 14, 2022 at 11:49 PM Kees Cook <keescook@chromium.org> wrote:
+> > > > On Wed, Dec 14, 2022 at 10:39:52PM +0200, Andy Shevchenko wrote:
 > 
-> Any response?
+> ...
 > 
->>>> @@ -193,6 +217,8 @@ examples:
->>>>                    reg = <1>;
->>>>                    endpoint {
->>>>                        remote-endpoint = <&typec>;
->>>> +                    data-lanes = <0 1>;
->>>> +                    link-frequencies = /bits/ 64 <1620000000 2700000000 5400000000 8100000000>;
->>>>                    };
->>> So far we haven't used the output port on the DP controller in DT.
->>>
->>> I'm still not clear on what we should do in general for DP because
->>> there's a PHY that actually controls a lane count and lane mapping. In
->>> my mental model of the SoC, this DP controller's output port is
->>> connected to the DP PHY, which then sends the DP lanes out of the SoC to
->>> the next downstream device (i.e. a DP connector or type-c muxer). Having
->>> a remote-endpoint property with a phandle to typec doesn't fit my mental
->>> model. I'd expect it to be the typec PHY.
->> ack
->>>
->>> That brings up the question: when we have 2 lanes vs. 4 lanes will we
->>> duplicate the data-lanes property in the PHY binding? I suspect we'll
->>> have to. Hopefully that sort of duplication is OK?
->> Current we have limitation by reserve 2 data lanes for usb2, i am not
->> sure duplication to 4 lanes will work automatically.
->>>
->>> Similarly, we may have a redriver that limits the link-frequencies
->>> property further (e.g. only support <= 2.7GHz). Having multiple
->>> link-frequencies along the graph is OK, right? And isn't the
->>> link-frequencies property known here by fact that the DP controller
->>> tells us which SoC this controller is for, and thus we already know the
->>> supported link frequencies?
->>>
->>> Finally, I wonder if we should put any of this in the DP controller's
->>> output endpoint, or if we can put these sorts of properties in the DP
->>> PHY binding directly? Can't we do that and then when the DP controller
->>> tries to set 4 lanes, the PHY immediately fails the call and the link
->>> training algorithm does its thing and tries fewer lanes? And similarly,
->>> if link-frequencies were in the PHY's binding, the PHY could fail to set
->>> those frequencies during link training, returning an error to the DP
->>> controller, letting the training move on to a lower frequency. If we did
->>> that this patch series would largely be about modifying the PHY binding,
->>> updating the PHY driver to enforce constraints, and handling errors
->>> during link training in the DP controller (which may already be done? I
->>> didn't check).
->>
->>
->> phy/pll have different configuration base on link lanes and rate.
->>
->> it has to be set up before link training can start.
->>
->> Once link training start, then there are no any interactions between
->> controller and phy during link training session.
+> > > > > Yes, and Try to make it work with __packed. As I said, the problem is
+> > > > > that the code is relying on something which is architecture dependent
+> > > > > strictly speaking. And hence I disagree with Kees that v2 is okay to
+> > > > > go.
+> > > >
+> > > > I meant that v2 is functionally identical to the existing code.
+> > >
+> > > Ah, sorry for misunderstanding.
+> >
+> > I agree with using __packed attribute to remove the extra padding (and
+> > for the reasons you mentioned before). That would reduce the sizeof(RXBUF)
+> > from 8 to 5 (which is good) but that is still 1 byte "too much".
 > 
-> What do you mean? The DP controller calls phy_configure() and changes
-> the link rate. The return value from phy_configure() should be checked
-> and link training should skip link rates that aren't supported and/or
-> number of lanes that aren't supported.
+> What I meant with the above is that the code has to work properly with
+> or without __packed. It's just to show you that this code has flaws if
+> it relies on the padding.
+> 
 
-I'd toss another coin into the argument. We have previously discussed 
-using the link-frequencies property in the context of limiting link 
-speeds for the DSI. There we have both hardware (SoC) limitations and 
-the board limitations as in some cases the DSI lanes can not sustain 
-some high rate. I still hope for these patches to materialize at some point.
+Right - that would work just as well. I will work on v3 with the
+suggestions given by you (sizing calculation amendments using overflow.h
+macros) and kees (adding the notes regarding the padding) then.
 
-For the DP this is more or less the same story. We have the hardware 
-(SoC, PHY, etc) limitations, but also we have the board/device 
-limitations. For example some of the board might not be able to support 
-HBR3 e.g. because of the PCB design. And while it might be logical to 
-also add the 'max bit rate' support to the eDP & combo PHYs, it 
-definitely makes sense to be able to limit the rate on the DP <-> 
-`something' link.
-
-Now, for all the practical purposes this `something' for the DP is the 
-DP connector, the eDP panel or the USB-C mux (with the possible 
-redrivers in the middle).
-
-Thus I'd support Kuogee's proposal to have link-frequencies in the DP's 
-outbound endpoint. This is the link which will be driven by the data 
-stream from the Linux point of view. The PHY is linked through the 
-'phys' property, but it doesn't participate in the USB-C (or in the 
-connector/panel) graph.
-
-Now let's discuss the data lanes. Currently we have them in the DP 
-property itself. Please correct me if I'm wrong, but I think that we can 
-drop it for all the practical purposes. Judging by the DP compat string 
-the driver can determine if it uses 2 lanes (eDP) or 4 lanes 
-(full-featured DP). In case of USB-C when the altmode dictates whether 
-to use 2 or 4 lanes, the TCPM (Type-C Port Manager) will negotiate the 
-mode and pin configuration, then inform the DP controller about the 
-selected amount of lanes. Then DP informs the PHY about the selection 
-(note, PHY doesn't have control at all in this scenario).
-
-The only problematic case is the mixed mode ports, which if I understand 
-correctly, can be configured either to eDP or DP modes. I'm not sure who 
-specifies and limits the amount of lanes available to the DP controller.
-
--- 
-With best wishes
-Dmitry
+- Paulo A.
 
