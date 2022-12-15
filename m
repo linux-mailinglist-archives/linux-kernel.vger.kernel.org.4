@@ -2,113 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF11A64E2C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:06:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6C064E2C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 22:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiLOVGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 16:06:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
+        id S229680AbiLOVJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 16:09:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiLOVGD (ORCPT
+        with ESMTP id S229469AbiLOVJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 16:06:03 -0500
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9E0389E9;
-        Thu, 15 Dec 2022 13:06:02 -0800 (PST)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 606363F321;
-        Thu, 15 Dec 2022 22:06:00 +0100 (CET)
-Date:   Thu, 15 Dec 2022 22:05:59 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     phone-devel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] arm64: dts: qcom: msm8976: Declare and use SDC2 pins
-Message-ID: <20221215210559.px53d22a7jsth7cx@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        phone-devel@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        Luca Weiss <luca@z3ntu.xyz>, Adam Skladowski <a39.skl@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221214232049.703484-1-marijn.suijten@somainline.org>
- <20221214232049.703484-6-marijn.suijten@somainline.org>
- <33fe1249-34b4-443b-4258-586ed8c5f0e6@linaro.org>
+        Thu, 15 Dec 2022 16:09:14 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F7732BBA
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 13:09:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671138552; x=1702674552;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fYu3VSMSVSFNCj8pshMBFs+p2fAnlKCwaMc/dyMskqk=;
+  b=NYeTcw9cTNABQ4ANHNTSfnRdu+C9WulJOrmb7nMF2A4VvHbdNEx3a+RW
+   R1zeLVSgT2p8GI6KeIB0ouAEnKbP6PmCfL0LZ5UAXiMkMclXycTqMweA5
+   aISqCM0gGFXjNGSQQcYJVS8bLz6jVtitJiHrNuOj5EUfQuHL/pP6jdscj
+   2NoJENEcNQRIdO45l7XDWWQOm9Dhk5ltWOx+ywfCFyBneVYnK46Nabhs0
+   K5H0th8/V7fImTM9tM6yijkvA0nxMsQC5yittOsr6l9lHHMGbm5adGuY4
+   8vdyS/iyqOr3Wqwp0tzXtSXTWVPqnyRBhuYJ/3TXgHVukDj4HDDMb1lgY
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="299144432"
+X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
+   d="scan'208";a="299144432"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 13:09:11 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="756495436"
+X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
+   d="scan'208";a="756495436"
+Received: from ajanssen-mobl.amr.corp.intel.com (HELO [10.209.22.168]) ([10.209.22.168])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 13:09:11 -0800
+Message-ID: <b19600bd-d5cf-3359-60d8-1ecd9c1ff4f5@intel.com>
+Date:   Thu, 15 Dec 2022 13:09:10 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <33fe1249-34b4-443b-4258-586ed8c5f0e6@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 2/4] x86/tdx: Use ReportFatalError to report missing
+ SEPT_VE_DISABLE
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
+        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221209132524.20200-1-kirill.shutemov@linux.intel.com>
+ <20221209132524.20200-3-kirill.shutemov@linux.intel.com>
+ <3121847d-d334-67fc-43d8-0670c08c64b6@intel.com>
+ <20221215171254.3v4maexfhkdnbfk2@box.shutemov.name>
+ <795d6e1d-c79c-b079-3412-69ca2f8ee874@intel.com>
+ <20221215185144.tjctmkwp5vodep3u@box>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20221215185144.tjctmkwp5vodep3u@box>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-15 14:20:30, Konrad Dybcio wrote:
-> 
-> 
-> On 15.12.2022 00:20, Marijn Suijten wrote:
-> > Add the pinctrl states for SDC2 and use them on sdhc_2 to support SD
-> > Cards on the currently mainlined Sony Loire platform.
-> > 
-> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > ---
-> >  .../qcom/msm8956-sony-xperia-loire-kugo.dts   |  6 +++
-> >  .../dts/qcom/msm8956-sony-xperia-loire.dtsi   |  6 +++
-> >  arch/arm64/boot/dts/qcom/msm8976.dtsi         | 45 +++++++++++++++++++
-> >  3 files changed, 57 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire-kugo.dts b/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire-kugo.dts
-> > index 3fb8e23e4330..9178943e2ee1 100644
-> > --- a/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire-kugo.dts
-> > +++ b/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire-kugo.dts
-> > @@ -33,3 +33,9 @@ &pm8950_l1 {
-> >  	regulator-min-microvolt = <1100000>;
-> >  	regulator-max-microvolt = <1300000>;
-> >  };
-> > +
-> > +&sdc2_on_state {
-> > +	data-pins {
-> > +		drive-strength = <8>;
-> > +	};
-> > +};
-> You can add a label to the data-pins subnode.
+On 12/15/22 10:51, Kirill A. Shutemov wrote:
+>>> So ReportFatalError() is no good for the task. And I don't have anything
+>>> else :/
+>> Do we *really* have to do a hard stop when SEPT_VE_DISABLE is missing?
+>>
+>> Wouldn't it be simpler to just defer the check until we can spit out a
+>> sane error message about it?
+>>
+>> Or is there too much security exposure by continuing?
+> Well, I guess we can. We always have attestation as a backstop. No
+> sensitive user data has to be exposed to the TD before it passed
+> the attestation.
 
-I prefer this simplicity as the sdc2_*_state labels are already
-available and will be extended later with sd-cd-pins regardless. I'll
-change this if others share the same opinion.
+OK, so let's just pretend that SEPT_VE_DISABLE=0 is a blatant root hole
+that lets the VMM compromise the TDX guest (I know it's not, but let's
+just pretend it is).
 
-However, you're also right this way of writing makes it unclear to the
-reader whether data-pins already exists or has to exist; that would not
-be the case when a label is explicitly assigned to data-pins.
+The guest starts up, the VMM compromises it after the attestation has
+run.  The now compromised guest send along its report.  But, since the
+report contains (or implies???) SEPT_VE_DISABLE=0, the guest will be
+assumed to be compromised and won't get any secrets provisioned?
 
-- Marijn
+That assumes that the attestation service knows that SEPT_VE_DISABLE==0
+plus Linux is bad.  Is that a good assumption?
+
+> Do you prefer to have a separate initcall just to check SEPT_VE_DISABLE?
+
+I don't feel strongly about where the check should be as long as it can
+get a message out to the console.
