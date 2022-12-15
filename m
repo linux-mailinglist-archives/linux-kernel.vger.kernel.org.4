@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C46864DF30
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9493364DF33
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 18:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbiLORBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 12:01:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
+        id S230460AbiLORBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 12:01:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiLORBS (ORCPT
+        with ESMTP id S230359AbiLORBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 15 Dec 2022 12:01:18 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527BD25EAB
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEEB19C1E
         for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 09:01:16 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id x2so6184191plb.13
+Received: by mail-pj1-x1031.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso3283061pjh.1
         for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 09:01:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Oe+UropDcs41uZsJl5UoQsMteKaso09Ma6XjETIRZjA=;
-        b=pv5pECr+7yhCoGDeSuvAT6ApQZ4t2eT4MBkXtO3ghYvONHQbcMSuQGcD9oGpIsBLnY
-         /xLSkLLvxmyncb6xOOfdWjHyOw/ArLKeJf/3mj4P6+7Bmr4tkGvqunp9WMoatiCBSwD7
-         hND+BjAF9VNuICeGf4XADiRiWjW71fp1xI/2HaFUI174oykQvLOPa1/Ny/anECFnDjB5
-         7HzLQhqbjKh0RSmKFzwZRjmBSXmLk4JKeO5oXCoP50lXYLrIu2fOkOlWaspGWkaDYpGk
-         3GpeYxJjVG0fGpyj4ohFiMTZpw/FCZy/Hqm++CmBZ36Zz+0jR4sUxHU15x5dHYBOEEOP
-         L1fw==
+        bh=GmOKelhxXQczHTID3SM97kUHKPqlhsoeVDKTVsi4pDE=;
+        b=M/x6Webfdw2/xEVgUjm/3euBweIF6ONa/tPWCh85rYYCknuNs2Zud5/f8I3G/wZU5b
+         rrrNYegH6IFVTS4KlbBgDjZgb+iuoJwEWJLqoKvZxFEsIOb52j4dO9L0o1AGK8fb7O81
+         BI2fI848yBcMDT1j0MPDQaKV/1/PBvWFrsQ/L4wDih29c1+VHAfsfSAqGJ9fO/pVZcmj
+         mHbTjQjK0medb6WIp2rZ9joI3XtSc5NJvFlRKREO2F/6e/kQx21y933t1IJtMEkSdW+l
+         Np3flGCnWtOpAO8HZbH34eX36OLMgW8MmER1SLfSfqID6dgu/xV/SA4vGF4yTHmHPuVZ
+         3+/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Oe+UropDcs41uZsJl5UoQsMteKaso09Ma6XjETIRZjA=;
-        b=sDH6yQr9LulkLFqUw1FfYPIrtjNBT+awMOawK/jKUAn/jfUIf5p5U3NlVWtxXE4Hru
-         MELW4vlz7P2M/xpwdAvT8iy8E81GoMhgNMiZmqcLx58etMY/2AK7yQgG0vxDjDMABn4E
-         kKmHkycF5bKTw5kUQpZCw14yvsQgbVgGQqA/4TW4Xxqx5wX49rn1Ggv43s1rMLJgbCfH
-         nxM95fQmngZzrBKMKLCw/OLxthVmZ8D2mTIqLYuOf9wDK3juYzw9yM8qjt8QjqwaHt8b
-         D6J80c2+VdB6cdGPrADq5oheb8+ymfyRPxZOf+fxeYlXM8r+dV1cuQO4fVgKNic5afpm
-         WVxA==
-X-Gm-Message-State: ANoB5pkEwfsYURlf/C9DARPw46I8fyVbaDprW9XWnOkprHmzKk9bRxdN
-        grLHHvuOcGEhPJLIEgCqRv7WEoz1toAg5dzJ
-X-Google-Smtp-Source: AA0mqf7rpf1DYdCy6MEJCPXmVFu1iVBoY4PGgeIxOVYoUigt1rdcD6Iks5r7UqhKDjTl7/0JeAcqkg==
-X-Received: by 2002:a17:902:7044:b0:186:ada3:c1a0 with SMTP id h4-20020a170902704400b00186ada3c1a0mr27971825plt.45.1671123675053;
+        bh=GmOKelhxXQczHTID3SM97kUHKPqlhsoeVDKTVsi4pDE=;
+        b=3lxLiUxqxaUPsBnN7eZogy1nGKb5B25xf9zHN0MWQm/nwDHAZsesI4pFHohx4vLy3i
+         8YVUdysPod1Tddc6R11BIraOnlQLdLn96F5ArCBj36j1nkE+7rvrWvSe9GJKesjwD5pV
+         yTruSJqBeX6Umih3So+U1IPqrREJNoRbyQnlr+z1iWRwjg4oE3yGOADy2pITw5ILjk0k
+         7CskSJ/GIMYiKTx4Nn/BrLPwuzk8uscS87Xx2DZDKEQNmrSBDeM7nE5LUYdc9QqZT4G7
+         nSRQY1/eHQ+yq2myP2ZT+hx8dgQNGaon873yJ7F2vJILgoL3nAtbr1Yfsj29zhG8RblL
+         SCbQ==
+X-Gm-Message-State: ANoB5pmVIG63VPdGHWEg1bDW/QnrBmQNpI8yJm+EdL1x63B2DyjRinXh
+        fWVniFU5XfHHsuZoHQmOCS5/XK/L6K+jXo5c
+X-Google-Smtp-Source: AA0mqf4TLCt2teX6XTB8t7vev1QAhHcvWBHIfgCgZ8onADiiluFB6jj7/tzzvBe40YjGUu2C1tDaRg==
+X-Received: by 2002:a17:902:7005:b0:189:dc47:fe40 with SMTP id y5-20020a170902700500b00189dc47fe40mr28685531plk.15.1671123675948;
         Thu, 15 Dec 2022 09:01:15 -0800 (PST)
 Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id p10-20020a170902780a00b001897bfc9800sm4067449pll.53.2022.12.15.09.01.14
+        by smtp.gmail.com with ESMTPSA id p10-20020a170902780a00b001897bfc9800sm4067449pll.53.2022.12.15.09.01.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 09:01:14 -0800 (PST)
+        Thu, 15 Dec 2022 09:01:15 -0800 (PST)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Atish Patra <atishp@rivosinc.com>,
@@ -63,82 +63,47 @@ Cc:     Atish Patra <atishp@rivosinc.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
         Eric Lin <eric.lin@sifive.com>, Will Deacon <will@kernel.org>
-Subject: [PATCH v2 02/11] RISC-V: KVM: Define a probe function for SBI extension data structures
-Date:   Thu, 15 Dec 2022 09:00:37 -0800
-Message-Id: <20221215170046.2010255-3-atishp@rivosinc.com>
+Subject: [PATCH v2 03/11] RISC-V: KVM: Return correct code for hsm stop function
+Date:   Thu, 15 Dec 2022 09:00:38 -0800
+Message-Id: <20221215170046.2010255-4-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221215170046.2010255-1-atishp@rivosinc.com>
 References: <20221215170046.2010255-1-atishp@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the probe function just checks if an SBI extension is
-registered or not. However, the extension may not want to advertise
-itself depending on some other condition.
-An additional extension specific probe function will allow
-extensions to decide if they want to be advertised to the caller or
-not. Any extension that does not require additional dependency checks
-can avoid implementing this function.
+According to the SBI specification, the stop function can only
+return error code SBI_ERR_FAILED. However, currently it returns
+-EINVAL which will be mapped SBI_ERR_INVALID_PARAM.
+
+Return the appropriate linux error code.
 
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/include/asm/kvm_vcpu_sbi.h |  3 +++
- arch/riscv/kvm/vcpu_sbi_base.c        | 13 +++++++++++--
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ arch/riscv/kvm/vcpu_sbi_hsm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-index f79478a..61dac1b 100644
---- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
-+++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-@@ -29,6 +29,9 @@ struct kvm_vcpu_sbi_extension {
- 	int (*handler)(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 		       unsigned long *out_val, struct kvm_cpu_trap *utrap,
- 		       bool *exit);
-+
-+	/* Extension specific probe function */
-+	unsigned long (*probe)(struct kvm_vcpu *vcpu, unsigned long extid);
- };
- 
- void kvm_riscv_vcpu_sbi_forward(struct kvm_vcpu *vcpu, struct kvm_run *run);
-diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
-index 5d65c63..89e2415 100644
---- a/arch/riscv/kvm/vcpu_sbi_base.c
-+++ b/arch/riscv/kvm/vcpu_sbi_base.c
-@@ -19,6 +19,7 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+diff --git a/arch/riscv/kvm/vcpu_sbi_hsm.c b/arch/riscv/kvm/vcpu_sbi_hsm.c
+index 2e915ca..0f8d9fe 100644
+--- a/arch/riscv/kvm/vcpu_sbi_hsm.c
++++ b/arch/riscv/kvm/vcpu_sbi_hsm.c
+@@ -42,7 +42,7 @@ static int kvm_sbi_hsm_vcpu_start(struct kvm_vcpu *vcpu)
+ static int kvm_sbi_hsm_vcpu_stop(struct kvm_vcpu *vcpu)
  {
- 	int ret = 0;
- 	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
-+	const struct kvm_vcpu_sbi_extension *sbi_ext;
+ 	if (vcpu->arch.power_off)
+-		return -EINVAL;
++		return -EPERM;
  
- 	switch (cp->a6) {
- 	case SBI_EXT_BASE_GET_SPEC_VERSION:
-@@ -43,8 +44,16 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 			 */
- 			kvm_riscv_vcpu_sbi_forward(vcpu, run);
- 			*exit = true;
--		} else
--			*out_val = kvm_vcpu_sbi_find_ext(cp->a0) ? 1 : 0;
-+		} else {
-+			sbi_ext = kvm_vcpu_sbi_find_ext(cp->a0);
-+			if (sbi_ext) {
-+				if (sbi_ext->probe)
-+					*out_val = sbi_ext->probe(vcpu, cp->a0);
-+				else
-+					*out_val = 1;
-+			} else
-+				*out_val = 0;
-+		}
- 		break;
- 	case SBI_EXT_BASE_GET_MVENDORID:
- 		*out_val = vcpu->arch.mvendorid;
+ 	kvm_riscv_vcpu_power_off(vcpu);
+ 
 -- 
 2.25.1
 
