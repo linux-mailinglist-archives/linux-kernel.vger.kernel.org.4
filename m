@@ -2,65 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F04764D7EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 09:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB1C64D7F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 09:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiLOImI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 03:42:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
+        id S229635AbiLOIms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 03:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiLOImB (ORCPT
+        with ESMTP id S229634AbiLOImi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 03:42:01 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833A32A700
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 00:42:00 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id 192so2673248ybt.6
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 00:42:00 -0800 (PST)
+        Thu, 15 Dec 2022 03:42:38 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F040A3B9D7
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 00:42:36 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bp15so14507701lfb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 00:42:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HXhudpMG5ipoBTmDLzbqLq8C65gsSAGF3azolDiFn1I=;
-        b=oS7MvThUFU/JGOGYBihO3JXdurEUA6AetFLg9F1AnzodZpwdxJ17GYUjSqGNCzoTGp
-         CRuFzoKrac00hc011hygTaS6JwiED8YasNIiSyZOwO7Rr2BVjvDSPNZ2jW+55SXgL37h
-         zS6tDMdtBWFqggnFJiu/bgOLD6DBI6onfSgpbJOitHJdVcPWTCDFAYwazw/7H8ZBL9Ud
-         AFOFTA2S1zpGlxZ8fdoJeDXulzQWRXncyFQDnM4Af34bO2NwHMXQoF1R1nNbw0+pdP5o
-         2yTopVMiLG76IUn8j6mKOuDmJj2ULCmX8EJyryF4gVzwlQtyLCBOMWPY0wZlTC8TJ9p8
-         GxWg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ghZrTLqof/7uXaABRC9VXiX8vno10E0SDlDFHThQ0JQ=;
+        b=IvbGhfYRcE9Ej4dgWstBSKGExQ0XadtXWMI/RukqZQSVvCNvQTzZB9WsYKHbgr6rmf
+         W5wfv5GxT5Z/KczEmWarounmcphhsdE0qSZs15jchtAHKFeqsMnia64ej1m42NH2Cjwd
+         ZU+qIS4F+YUrYdpDPhk0kLvSwp3ofkm32rnfEGxE7I+q7ULnNCPv/d3fWpfam/vVowg4
+         EMwEYC9fAz+NZLFlvoICOn9QMOG5dYnLsw0zyCCUEKTsGwatsG9X13jCM8ZdnJGtTv7C
+         GWUoq3UUqF6P6TE1VldZCZs4Fw6r+bhfsUB7G04qIWM2Fi3Oll5AhYBKfT+rnQPVkZnr
+         1rfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HXhudpMG5ipoBTmDLzbqLq8C65gsSAGF3azolDiFn1I=;
-        b=586mFIgwVgrezz+lS8ONYDf2O06e2+N23JhWsG7aJU9V2dfV62TS2l+Q4KyY+ByC0D
-         RZHOwlL+w4FjUaRANIwuOphQ5fEhTJjLcXZxOnb8b04Z+m3WJmbWQA9r6q0HGbecFKE0
-         PaLP3uD/m8tANCxvsiQtjWqzMQ8Wjc6P9ld1FoCdjtY6teeYCDuM/Eev6LGqWo65XXlI
-         nlOGPxPmzcOFuaKObyjdR192hy3x/NHXV+71RcpRPiiIwpIZL1s8UqHS1kfzmgsIiqfu
-         S2m5E/OrmOErWe5sGDfEgeLJe0589g+Dl8C173K4xDiykC/CQkAv3H9JPxrGPDXYTO7t
-         26Dw==
-X-Gm-Message-State: ANoB5plpxG+dpzkEPtJh/W9ppvYARzFSbBKZ4drnX13UMz2NJEPkr7OP
-        eKB/6JgNmshmqGwNQ/kiFmpaoN+3QRTL64TRgoRiTA==
-X-Google-Smtp-Source: AA0mqf4x35ybJ0oUwOo6o569NEGQzeowDVqPBuoUY4Xc84d7hRJqGGcAdp6C8e04o0YEL7GfLMl3vaM3+xKvTlpWnG0=
-X-Received: by 2002:a25:7648:0:b0:6fe:54d5:2524 with SMTP id
- r69-20020a257648000000b006fe54d52524mr24020034ybc.522.1671093719699; Thu, 15
- Dec 2022 00:41:59 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ghZrTLqof/7uXaABRC9VXiX8vno10E0SDlDFHThQ0JQ=;
+        b=Vy4kgcoYIDrAnmn2RfHermEF0EQl4XjBeID91SqypSukFiGJDAhxmpz2sBzIovfGtQ
+         VZ4VJwbEMDl2/kV012spnikEbSl9yExpmvDIbBmF8I69mbZCmy/w4X2O6mBes9CXrnBh
+         IWuyBut9Jbsf68rYiKLDsoP+Vr8XBuR/2Fw92G7v8+46FcJJtXB42zcAyEV6vgjHUKGH
+         EHT6WLLJKq+wrUrDamVG+3RaEBxQRCIySi/qFccCFGqXL0kVdyxKPaz9vZtsjmQZcX+q
+         z7WzTB7ZqnfseBSHdr5D5nxXTsVg/oOEnEJTPSCNfQMH5AhZNS5fDJDbzxyJrS60nqIn
+         GOMw==
+X-Gm-Message-State: ANoB5pl7h95sPKD2ttQcXO85Ezyy4XROvPNzWNMEOS+s9IDrdlQaXoD9
+        CYPn5fmLlT+Vd8jnl70vmxXwJA==
+X-Google-Smtp-Source: AA0mqf6XangecSmY0mz5fiU3fBRv5zdhvdBpprxnLqLecZduE7R5QbWLtR7/ZzJ6CDB+ScTNFb4vkA==
+X-Received: by 2002:a05:6512:6d1:b0:4a4:7cab:3bad with SMTP id u17-20020a05651206d100b004a47cab3badmr9144434lff.28.1671093755306;
+        Thu, 15 Dec 2022 00:42:35 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id j1-20020a056512344100b004b48cc444ccsm1114148lfr.100.2022.12.15.00.42.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 00:42:34 -0800 (PST)
+Message-ID: <8bb988fc-54d2-2528-e34f-0097c0654b7d@linaro.org>
+Date:   Thu, 15 Dec 2022 09:42:33 +0100
 MIME-Version: 1.0
-References: <20221214110037.149387-1-cbranchereau@gmail.com> <20221214110037.149387-2-cbranchereau@gmail.com>
-In-Reply-To: <20221214110037.149387-2-cbranchereau@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 15 Dec 2022 09:41:48 +0100
-Message-ID: <CACRpkdag1ZDyHRu5FqLWrsiqbmVuX2Wj5z67yhkg_=ooFqsboQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] drm/panel: add the orisetech ota5601a
-To:     Christophe Branchereau <cbranchereau@gmail.com>
-Cc:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 1/2] dt-bindings: iio: adc: ep93xx: Add cirrus,ep9301-adc
+ description
+Content-Language: en-US
+To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        linux-iio@vger.kernel.org
+Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221214222024.951984-1-alexander.sverdlin@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221214222024.951984-1-alexander.sverdlin@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,146 +81,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
-
-thanks for your patch!
-
-On Wed, Dec 14, 2022 at 12:01 PM Christophe Branchereau
-<cbranchereau@gmail.com> wrote:
-
-> Add the orisetech ota5601a ic driver
->
-> For now it only supports the focaltech gpt3 3" 640x480 ips panel
-> found in the ylm rg300x handheld.
->
-> Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
-(...)
-> +config DRM_PANEL_ORISETECH_OTA5601A
-> +       tristate "Orise Technology ota5601a RGB/SPI panel"
-> +       depends on OF && SPI
-> +       depends on BACKLIGHT_CLASS_DEVICE
-> +       select REGMAP_SPI
-
-Nice use of regmap in this driver.
-
-> +static const struct reg_sequence ota5601a_panel_regs[] = {
-> +       { 0xfd, 0x00 },
-> +       { 0x02, 0x00 },
+On 14/12/2022 23:20, Alexander Sverdlin wrote:
+> Add device tree bindings for Cirrus Logic EP9301/EP9302 internal SoCs' ADC
+> block.
+> 
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> ---
+>  .../bindings/iio/adc/cirrus,ep9301-adc.yaml   | 58 +++++++++++++++++++
+>  MAINTAINERS                                   |  2 +
+>  2 files changed, 60 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml b/Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
+> new file mode 100644
+> index 000000000000..d0fd24d1be04
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
+> @@ -0,0 +1,58 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/adc/cirrus,ep9301-adc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +       { 0x18, 0x00 },
-> +       { 0x34, 0x20 },
+> +title: Cirrus Logic EP930x internal ADC
 > +
-> +       { 0x0c, 0x01 },
-> +       { 0x0d, 0x48 },
-> +       { 0x0e, 0x48 },
-> +       { 0x0f, 0x48 },
-> +       { 0x07, 0x40 },
-> +       { 0x08, 0x33 },
-> +       { 0x09, 0x3a },
+> +description: |
+> +  Cirrus Logic EP9301/EP9302 SoCs' internal ADC block.
 > +
-> +       { 0x16, 0x01 },
-> +       { 0x19, 0x8d },
-> +       { 0x1a, 0x28 },
-> +       { 0x1c, 0x00 },
+> +  User's manual:
+> +  https://cdn.embeddedts.com/resource-attachments/ts-7000_ep9301-ug.pdf
 > +
-> +       { 0xfd, 0xc5 },
-> +       { 0x82, 0x0c },
-> +       { 0xa2, 0xb4 },
+> +maintainers:
+> +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
 > +
-> +       { 0xfd, 0xc4 },
-> +       { 0x82, 0x45 },
+> +properties:
+> +  compatible:
+> +    const: cirrus,ep9301-adc
 > +
-> +       { 0xfd, 0xc1 },
-> +       { 0x91, 0x02 },
+> +  reg:
+> +    maxItems: 1
 > +
-> +       { 0xfd, 0xc0 },
-> +       { 0xa1, 0x01 },
-> +       { 0xa2, 0x1f },
-> +       { 0xa3, 0x0b },
-> +       { 0xa4, 0x38 },
-> +       { 0xa5, 0x00 },
-> +       { 0xa6, 0x0a },
-> +       { 0xa7, 0x38 },
-> +       { 0xa8, 0x00 },
-> +       { 0xa9, 0x0a },
-> +       { 0xaa, 0x37 },
+> +  clocks:
+> +    maxItems: 1
 > +
-> +       { 0xfd, 0xce },
-> +       { 0x81, 0x18 },
-> +       { 0x82, 0x43 },
-> +       { 0x83, 0x43 },
-> +       { 0x91, 0x06 },
-> +       { 0x93, 0x38 },
-> +       { 0x94, 0x02 },
-> +       { 0x95, 0x06 },
-> +       { 0x97, 0x38 },
-> +       { 0x98, 0x02 },
-> +       { 0x99, 0x06 },
-> +       { 0x9b, 0x38 },
-> +       { 0x9c, 0x02 },
+> +  clock-names:
+> +    const: ep93xx-adc
+
+One entry with same name as device is not really useful, so maybe just
+drop it?
+
 > +
-> +       { 0xfd, 0x00 },
-> +};
-
-If these are registers, why is register 0xfd written 7 times with different
-values?
-
-This is rather a jam table or intializations sequence, so it should be
-names something like that and a comment about undocumented
-registers added probably as well.
-
-> +static int ota5601a_enable(struct drm_panel *drm_panel)
-> +{
-> +       struct ota5601a *panel = to_ota5601a(drm_panel);
-> +       int err;
+> +  interrupts:
+> +    maxItems: 1
 > +
-> +       err = regmap_write(panel->map, 0x01, 0x01);
-
-Since you know what this register does, what about:
-
-#include <linux/bits.h>
-
-#define OTA5601A_CTL 0x01
-#define OTA5601A_CTL_OFF 0x00
-#define OTA5601A_CTL_ON BIT(0)
-
-> +static int ota5601a_get_modes(struct drm_panel *drm_panel,
-> +                            struct drm_connector *connector)
-> +{
-> +       struct ota5601a *panel = to_ota5601a(drm_panel);
-> +       const struct ota5601a_panel_info *panel_info = panel->panel_info;
-> +       struct drm_display_mode *mode;
-> +       unsigned int i;
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
 > +
-> +       for (i = 0; i < panel_info->num_modes; i++) {
-> +               mode = drm_mode_duplicate(connector->dev,
-> +                                         &panel_info->display_modes[i]);
-> +               if (!mode)
-> +                       return -ENOMEM;
+> +additionalProperties: false
 > +
-> +               drm_mode_set_name(mode);
-> +
-> +               mode->type = DRM_MODE_TYPE_DRIVER;
-> +               if (panel_info->num_modes == 1)
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/cirrus,ep93xx-clock.h>
+> +    soc {
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
 
-But ... you have just added an array that contains 2 elements, you
-KNOW it will not be 1.
+I think you do not need the soc node as examples are built with
+address/size-cells=1
 
-> +                       mode->type |= DRM_MODE_TYPE_PREFERRED;
+Best regards,
+Krzysztof
 
-I think you should probably set this on the preferred resolution
-anyways, take the one you actually use.
-
-> +static const struct of_device_id ota5601a_of_match[] = {
-> +       { .compatible = "focaltech,gpt3", .data = &gpt3_info },
-> +       { /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ota5601a_of_match);
-
-Does this mean the display controller is ota5601a and the display
-manufacturer and product is focaltech gpt3? Then it's fine.
-
-Overall the driver looks very good, just the above little details.
-
-Yours,
-Linus Walleij
