@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D5E64DE98
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C62B664DE9F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:29:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbiLOQ2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:28:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
+        id S230272AbiLOQ3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:29:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiLOQ1g (ORCPT
+        with ESMTP id S230244AbiLOQ2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:27:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359EF28738
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:27:18 -0800 (PST)
+        Thu, 15 Dec 2022 11:28:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A4313D2D;
+        Thu, 15 Dec 2022 08:28:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5C51B81C0D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 16:27:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFDD6C433D2;
-        Thu, 15 Dec 2022 16:27:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DA6A61E58;
+        Thu, 15 Dec 2022 16:28:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9524AC433D2;
+        Thu, 15 Dec 2022 16:28:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671121635;
-        bh=BfenddMZffflFBpCkDgdfkrr1/054jtaefDkr+14vh0=;
+        s=k20201202; t=1671121688;
+        bh=Ftx0VJqQ/+fSyw2rH/KASxALEE3T+b2McIeIvddmZzA=;
         h=From:To:Cc:Subject:Date:From;
-        b=PhIKLFHQF1/QaV/w9RvkMZvMSUJgufPsRjMPyXjFbqqHD5H9goy6aF3ADPYMlHK5s
-         1Q9wtEKdpV/qtBSWm1kGjv5OBuT1/muOGIMBVNI/w6yL5xb+svnVqAR+S0T1wWU/7T
-         LWfz0EuWAJS3F7obfqbbSVX4Wq7OfIEt/UIML2en/tuyoz01xCIjp+T/fIktjK34ei
-         81Tp3KgT8teG9QGpj1FgIz4A+xQX5Yngc7UqU1B5wLBkzpflxkqYMPqkiTGzeKNhzb
-         s7XsbK4seovcB2oaE6EtWQJDaAQm5Xxci6+xNh3XgFBQjZ/woX5mRJhNBik2GZEUYA
-         Qn3oncftF4WuQ==
+        b=e0XBV1r0zWcJu0n2d4qSajU11xPT3DE71JiEWFEu4b/m4lw3lld4W/tWSp7TgqTx0
+         EKHDZ4+qVSIVTVW+CSt5NXSK75KIuRoHK84h+EARII30o2IpXn4OC4OV+vNPEfNP/j
+         F5QWLQcwyymCwiPIoonCw5ZWUUiiiLPeiXeMpG9yYXbK9JWLtKfGnVk6LE2BLVIDSZ
+         rY82j+5PzzxWt7YR2dICth28bJXNhtsyO7DIo1BfGZStwWH2WZnVabADCwyiqRDx1Q
+         vpG2w9ZRlj2BiS+Z+kVGvM7f2pG0sXtF/G/hc2PLj5JGavJy7juUTNEypuIxXnND7M
+         nCsEA3U2/B7pw==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] kmsan: export kmsan_handle_urb
-Date:   Thu, 15 Dec 2022 17:26:57 +0100
-Message-Id: <20221215162710.3802378-1-arnd@kernel.org>
+To:     reiserfs-devel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Subject: [PATCH] reiserfs: avoid objtool warning after panic
+Date:   Thu, 15 Dec 2022 17:27:53 +0100
+Message-Id: <20221215162759.3883282-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -55,31 +52,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-USB support can be in a loadable module, and this causes a link
-failure with KMSAN:
+Calling reiserfs_panic() leaves the calling function in an
+undefined state that objtool complains about, because of the
+__noreturn attribute:
 
-ERROR: modpost: "kmsan_handle_urb" [drivers/usb/core/usbcore.ko] undefined!
+fs/reiserfs/do_balan.o: warning: objtool: balance_leaf+0x109fb: stack state mismatch: cfa1=4+576 cfa2=4+584
+fs/reiserfs/ibalance.o: warning: objtool: balance_internal+0x6099: stack state mismatch: cfa1=4+512 cfa2=4+536
+fs/reiserfs/ibalance.o: warning: objtool: internal_insert_key+0xa1c: stack state mismatch: cfa1=4+224 cfa2=4+216
 
-Export the symbol so it can be used by this module.
+Avoid that by removing the attribute, at the possible cost of
+a few extra cycles. Mark the panic and error functions as __cold
+instead to at least give the compiler a hint that this is not
+the fast path.
 
-Fixes: 553a80188a5d ("kmsan: handle memory sent to/from USB")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- mm/kmsan/hooks.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/reiserfs/reiserfs.h | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/mm/kmsan/hooks.c b/mm/kmsan/hooks.c
-index 35f6b6e6a908..3807502766a3 100644
---- a/mm/kmsan/hooks.c
-+++ b/mm/kmsan/hooks.c
-@@ -260,6 +260,7 @@ void kmsan_handle_urb(const struct urb *urb, bool is_out)
- 					       urb->transfer_buffer_length,
- 					       /*checked*/ false);
- }
-+EXPORT_SYMBOL_GPL(kmsan_handle_urb);
+diff --git a/fs/reiserfs/reiserfs.h b/fs/reiserfs/reiserfs.h
+index 3aa928ec527a..1c22f48235c2 100644
+--- a/fs/reiserfs/reiserfs.h
++++ b/fs/reiserfs/reiserfs.h
+@@ -3185,12 +3185,11 @@ int fix_nodes(int n_op_mode, struct tree_balance *tb,
+ void unfix_nodes(struct tree_balance *);
  
- static void kmsan_handle_dma_page(const void *addr, size_t size,
- 				  enum dma_data_direction dir)
+ /* prints.c */
+-void __reiserfs_panic(struct super_block *s, const char *id,
+-		      const char *function, const char *fmt, ...)
+-    __attribute__ ((noreturn));
++void __cold __reiserfs_panic(struct super_block *s, const char *id,
++		      const char *function, const char *fmt, ...);
+ #define reiserfs_panic(s, id, fmt, args...) \
+ 	__reiserfs_panic(s, id, __func__, fmt, ##args)
+-void __reiserfs_error(struct super_block *s, const char *id,
++void __cold __reiserfs_error(struct super_block *s, const char *id,
+ 		      const char *function, const char *fmt, ...);
+ #define reiserfs_error(s, id, fmt, args...) \
+ 	 __reiserfs_error(s, id, __func__, fmt, ##args)
 -- 
 2.35.1
 
