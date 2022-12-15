@@ -2,130 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 059C264E036
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E47AE64E038
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 19:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiLOSIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 13:08:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
+        id S230211AbiLOSKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 13:10:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLOSIg (ORCPT
+        with ESMTP id S229469AbiLOSKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 13:08:36 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341F13B9C8
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 10:08:35 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id u12so16860wrr.11
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 10:08:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ByuG98ZwLJHBzjuVb4YMRLtWuLmRZHcl+yVnvda45G0=;
-        b=fQJxJx2j21x6TIPo/MlAFafl25T/N5xrD9/4zOOOsiEgdQMHhBVPl0pgXEWodm+eLH
-         OnbXiUVU3PExydereiUgThfTB/eNQla8/vuW7pl0nvsApbnX5nixk3Z1+9YRdvFT95Ke
-         Onvs28Fb86W24CNLEhmr0kHK0AQGmSEsHnFQdLMuGUB7x/gywUfABssUAobluwUAIaVz
-         tQoP4P2QerB2YeAV5i2J7EYs2ByJvnF1mimxm6DWkiVT7e+M11xPN+982vmd8KAs0y7a
-         d9O0abl4bZ0cDTNHreRtqWuo4Rg6seYesZYRO3/qNuYqIwi8rqtt1gvzv2eoP9jpnfnR
-         +4jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ByuG98ZwLJHBzjuVb4YMRLtWuLmRZHcl+yVnvda45G0=;
-        b=aqoVELS2dJN3nJ7mOgQey7cbmiVkg9eQrT88KydWPsMrbCbFKa8xy76CPQ2l31q/u7
-         p2eGzZTPL6VQjtAgUwzQY+krOpeUHn8gk0/cmvaeVEWt+AC9usS2scHlvVbPcZBncUgM
-         W9ZB9cQF/s8WInUHOz7c2YIOCKctdeSQ1zKKz4y7uWLsvequfQ95lyjxvAL90MqSPApG
-         f7is0SNB2f6EiXlPJt7yNI2p+aTOIpcXgtS52n6m7geXgToBTA7ndTSRkMrubcTNoH7b
-         kaHm1h09i7sIRSfNlN9KCaR+B/PO8c+5ciQU+/UmqR8gWdUT7LpIpkBQQ+SmTNG2W1tT
-         GNSw==
-X-Gm-Message-State: ANoB5pkpYivllPi4SeXV5Z3BevmHdKvx3I7rerj2DdfG2AMOK2KLpmfx
-        9Ztcp84EHjMkpy8+mQ5ur6XqdHrmTX0uSt2hgiwLCA==
-X-Google-Smtp-Source: AA0mqf7V0T72DWZZAp9Pphy9uCgIwIrirFh/Mq8PQcVYpyPrXGgBPjGD1agtjH36riACaZzUJE9jl4BUxsQEs7i36T4=
-X-Received: by 2002:a5d:524f:0:b0:242:dee:716c with SMTP id
- k15-20020a5d524f000000b002420dee716cmr33401675wrc.664.1671127713681; Thu, 15
- Dec 2022 10:08:33 -0800 (PST)
+        Thu, 15 Dec 2022 13:10:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD926147;
+        Thu, 15 Dec 2022 10:10:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06B8461E59;
+        Thu, 15 Dec 2022 18:10:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8153C433EF;
+        Thu, 15 Dec 2022 18:10:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671127839;
+        bh=F4U0ZFdAXj+74LYC3BcBLmMk6whq3qdqz6xNXMglYQg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jp6X1cIgtebuLvE011BNyCyt8TF2yuy4/qkxLSoYHnyWCYoG+UhV3GbHucDU0BZAz
+         PIQ+A3C8fc3UQ06CBw8hTigEOaBwZt0Mo/0p5XImT/tYOF7gT8QNm1pap4OvZErzlV
+         jNGNLO2Wcu/1nciDTfGuNwwkusefED9YWK5EJ+2Y=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: [PATCH 5.4 0/9] 5.4.228-rc1 review
+Date:   Thu, 15 Dec 2022 19:10:27 +0100
+Message-Id: <20221215172905.468656378@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20221021163703.3218176-1-jthoughton@google.com>
- <20221021163703.3218176-9-jthoughton@google.com> <Y5fDwH6XiM808oUM@monkey>
- <CADrL8HU9sQuh_W3Qx4dvGV44VLYNbt300cpWLU--BqLo3Xxgpw@mail.gmail.com> <Y5teuidKlbKWbT/S@monkey>
-In-Reply-To: <Y5teuidKlbKWbT/S@monkey>
-From:   James Houghton <jthoughton@google.com>
-Date:   Thu, 15 Dec 2022 13:08:21 -0500
-Message-ID: <CADrL8HXaw9ci59QvZROEcWsj53QrCFRqsL1=YHrSt8Y2-JE=Kg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 08/47] hugetlb: add HGM enablement functions
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.228-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.4.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.4.228-rc1
+X-KernelTest-Deadline: 2022-12-17T17:29+00:00
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 12:52 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
->
-> On 12/13/22 10:49, James Houghton wrote:
-> > On Mon, Dec 12, 2022 at 7:14 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
-> > >
-> > > On 10/21/22 16:36, James Houghton wrote:
-> > > > Currently it is possible for all shared VMAs to use HGM, but it must be
-> > > > enabled first. This is because with HGM, we lose PMD sharing, and page
-> > > > table walks require additional synchronization (we need to take the VMA
-> > > > lock).
-> > >
-> > > Not sure yet, but I expect Peter's series will help with locking for
-> > > hugetlb specific page table walks.
-> >
-> > It should make things a little bit cleaner in this series; I'll rebase
-> > HGM on top of those patches this week (and hopefully get a v1 out
-> > soon).
-> >
-> > I don't think it's possible to implement MADV_COLLAPSE with RCU alone
-> > (as implemented in Peter's series anyway); we still need the VMA lock.
->
-> As I continue going through the series, I realize that I am not exactly
-> sure what synchronization by the vma lock is required by HGM.  As you are
-> aware, it was originally designed to protect against someone doing a
-> pmd_unshare and effectively removing part of the page table.  However,
-> since pmd sharing is disabled for vmas with HGM enabled (I think?), then
-> it might be a good idea to explicitly say somewhere the reason for using
-> the lock.
+This is the start of the stable review cycle for the 5.4.228 release.
+There are 9 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-It synchronizes MADV_COLLAPSE for hugetlb (hugetlb_collapse).
-MADV_COLLAPSE will take it for writing and free some page table pages,
-and high-granularity walks will generally take it for reading. I'll
-make this clear in a comment somewhere and in commit messages.
+Responses should be made by Sat, 17 Dec 2022 17:28:57 +0000.
+Anything received after that time might be too late.
 
-It might be easier if hugetlb_collapse() had the exact same
-synchronization as huge_pmd_unshare, where we not only take the VMA
-lock for writing, we also take the i_mmap_rw_sem for writing, so
-anywhere where hugetlb_walk() is safe, high-granularity walks are also
-safe. I think I should just do that for the sake of simplicity.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.228-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+and the diffstat can be found below.
 
-- James
+thanks,
 
-> --
-> Mike Kravetz
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.4.228-rc1
+
+Yasushi SHOJI <yasushi.shoji@gmail.com>
+    can: mcba_usb: Fix termination command argument
+
+Heiko Schocher <hs@denx.de>
+    can: sja1000: fix size of OCR_MODE_MASK define
+
+Ricardo Ribalda <ribalda@chromium.org>
+    pinctrl: meditatek: Startup with the IRQs disabled
+
+Mark Brown <broonie@kernel.org>
+    ASoC: ops: Check bounds for second channel in snd_soc_put_volsw_sx()
+
+Jialiang Wang <wangjialiang0806@163.com>
+    nfp: fix use-after-free in area_cache_get()
+
+Ming Lei <ming.lei@redhat.com>
+    block: unhash blkdev part inode when the part is deleted
+
+Baolin Wang <baolin.wang@linux.alibaba.com>
+    mm/hugetlb: fix races when looking up a CONT-PTE/PMD size hugetlb page
+
+Paul E. McKenney <paulmck@kernel.org>
+    x86/smpboot: Move rcu_cpu_starting() earlier
+
+Lorenzo Colitti <lorenzo@google.com>
+    net: bpf: Allow TC programs to call BPF_FUNC_skb_change_head
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                           |  4 +--
+ arch/x86/kernel/cpu/mtrr/mtrr.c                    |  2 --
+ arch/x86/kernel/smpboot.c                          |  1 +
+ block/partition-generic.c                          |  7 +++++
+ drivers/net/can/usb/mcba_usb.c                     | 10 +++++---
+ .../ethernet/netronome/nfp/nfpcore/nfp_cppcore.c   |  3 ++-
+ drivers/pinctrl/mediatek/mtk-eint.c                |  9 ++++---
+ include/linux/can/platform/sja1000.h               |  2 +-
+ include/linux/hugetlb.h                            |  6 ++---
+ mm/gup.c                                           | 13 +++++++++-
+ mm/hugetlb.c                                       | 30 +++++++++++-----------
+ net/core/filter.c                                  |  2 ++
+ sound/soc/soc-ops.c                                |  6 +++++
+ 13 files changed, 64 insertions(+), 31 deletions(-)
+
+
