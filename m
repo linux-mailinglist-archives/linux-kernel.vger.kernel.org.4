@@ -2,76 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8106B64DEF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7AE64DEF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 17:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiLOQsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 11:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42502 "EHLO
+        id S230386AbiLOQtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 11:49:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiLOQsO (ORCPT
+        with ESMTP id S230336AbiLOQtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:48:14 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79252A953;
-        Thu, 15 Dec 2022 08:48:12 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id w23so7427916ply.12;
-        Thu, 15 Dec 2022 08:48:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tqbyrz2HDPwuRFgnegWH1TadErj2Xf8yg6MvsofKkIQ=;
-        b=Y3rjBqnkXKdqQUKDqyNOLcxf54Disfcei/kcMFNwQoS8WKUKjWGdtZNNuuWWn1Fcn2
-         hkAb2X1ziEmw/EYoHIAS7cJDZDBd0hUdie3BIvphqs12+AsG+TOzFiVuPaknc4AS2RuD
-         Lwy54FGuSjbSmx3DUb1Rh6Z5njDQzw/sjNIWqDlfKUL2v0oMlRyF5AgaFf9V/dyl3vHq
-         TG5gJ8mI3tUqW4xWzf5ZCW4JG2E5z5+mI8+Rc+sv7NAGIJboDWdxGRxhEvu9ya7zCkfr
-         rZ+IVHVDsuTc1XK951BJPBGuLquCYCUdPKBoNo2HGzQHYpYXRA0YFmufqpsh7VBnpKki
-         q8IQ==
+        Thu, 15 Dec 2022 11:49:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C1B28E3F
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:48:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671122900;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AeRjj+8MmWxdEAxV6EReDqV2Agf4+dnbFZCe9Hm4o40=;
+        b=HMemZ0jXpmTWxyTVjuq9MsEtKw2AcQMguoG7WY+LwvbA7JkaIGBxZY/4G61YuGG9yVTjCu
+        zXAndzez0Uu5HJzVhzSFoqKwIbkn7vHHx75GLHHSy52n7kCUb/HZXh6ozDj6buL36S2SGi
+        l4gjDUFpF5vQwGHpnMo4LDlyfnGbpDo=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-104-bv-F7urUPxO32L38EuCpGQ-1; Thu, 15 Dec 2022 11:48:17 -0500
+X-MC-Unique: bv-F7urUPxO32L38EuCpGQ-1
+Received: by mail-wr1-f71.google.com with SMTP id a7-20020adfbc47000000b002421f817287so820810wrh.4
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 08:48:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tqbyrz2HDPwuRFgnegWH1TadErj2Xf8yg6MvsofKkIQ=;
-        b=rRLzxJ+kKyBiN0zVDA2iPKHW/qoZIipxkux/sUkFt7/ZPfcRloSam3mRjHi+9zPT0r
-         fdRb8iYeC9Sa10orirHG0VK3Uo+8yj+mSPmoivw/7u/fACpjQSEqslehjhwCxBwK3vDe
-         L4WlrxYjT6ZCVXUjPTh4W75LfNtXCMExmqup8fDyJmQYP/IY/1EsoSPJo86sITGHPXpT
-         BBEKFvR9RWNZprQJX09+jVLU+fUfFBoH+OExuFRpInNClT6kEbyNNintqHJJavT//d1k
-         LS4RuQFFfIFrECwOwQNg/7JCgQ8fc5S4+u9lvAe2g9qYeCyruCichSP8bqSxeWzhPl0J
-         EpwQ==
-X-Gm-Message-State: ANoB5pnn/VToeruV41oJawSWCX3vlwfJxzUcCVEu9NdbeJDI2zxzGC6y
-        hrKtDgb0thssdvi7ffi62Yk=
-X-Google-Smtp-Source: AA0mqf7LldEBXXl/VKtVxa+Pst9zFuUCi1CSp+rkAc/esE10GQboY2il34gu9ZrUIWzfCneWWyXGUg==
-X-Received: by 2002:a17:902:ecc2:b0:18b:271e:5804 with SMTP id a2-20020a170902ecc200b0018b271e5804mr50367520plh.59.1671122892250;
-        Thu, 15 Dec 2022 08:48:12 -0800 (PST)
-Received: from [192.168.0.128] ([98.97.42.38])
-        by smtp.googlemail.com with ESMTPSA id h8-20020a170902680800b00172f6726d8esm4036366plk.277.2022.12.15.08.48.11
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AeRjj+8MmWxdEAxV6EReDqV2Agf4+dnbFZCe9Hm4o40=;
+        b=kxUGRK9IRGD8e96z745tJpaA43Cttf/xq0RZE+gwtfUOywzs6003O8oPNOeJou7cUN
+         vjTXPQJBXLqQLSLkm+g25ZuPB6s1G0xJEpbW3vmu/aOqOtB4MxTHvNs9XWaNAnVBhzzV
+         8l0GiguifPAgYlu89FrQqMpO4DLi6T7la7gPrqOq5pfJbw5Mp42gTedu8NDPkgWqCkze
+         9bJUn0aHdSgQ0TuAf6VLblUwr6PByXL0YK/jYNOD8zHmdkn31KP1OLIJ45z3Cj8oWvaO
+         VfkitO1vyPQo64WI5w2DiePi+GhnIuaX+vcoB0cpJHCIIY0E7C/0xgWr3FD0gmhH/Yyt
+         Ibuw==
+X-Gm-Message-State: ANoB5pkHGsNEoP83zNFrADpiC/RjPpzH5OIiexLsdXrHwivQAv1b6zm9
+        TxKvpiN137sBNi1OyNek1oR0nJWfYJmTBnkbCyPB39K9/TLhTHHGJwbIGUF/MpU0a6kdajzPyzq
+        iJp8GsJW++oOw/a/ry5Wy/z6T
+X-Received: by 2002:a5d:6543:0:b0:242:13bf:29de with SMTP id z3-20020a5d6543000000b0024213bf29demr17989487wrv.52.1671122896256;
+        Thu, 15 Dec 2022 08:48:16 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6DRv5Bp89myhWTqGPIdEFD+SPDYJgrUlDzaMfNYrkf2hJCJ0XC7Q1Yl/SsB6Z+vWgeMXDuYw==
+X-Received: by 2002:a5d:6543:0:b0:242:13bf:29de with SMTP id z3-20020a5d6543000000b0024213bf29demr17989469wrv.52.1671122896017;
+        Thu, 15 Dec 2022 08:48:16 -0800 (PST)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id l18-20020a5d4bd2000000b00236488f62d6sm6397672wrt.79.2022.12.15.08.48.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 08:48:11 -0800 (PST)
-Message-ID: <4d16ffd327d193f8c1f7c40f968fda90a267348e.camel@gmail.com>
-Subject: Re: [PATCH v2 1/3] dsa: marvell: Provide per device information
- about max frame size
-From:   Alexander H Duyck <alexander.duyck@gmail.com>
-To:     Lukasz Majewski <lukma@denx.de>, Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 15 Dec 2022 08:48:10 -0800
-In-Reply-To: <20221215144536.3810578-1-lukma@denx.de>
-References: <20221215144536.3810578-1-lukma@denx.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Thu, 15 Dec 2022 08:48:15 -0800 (PST)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v2 5/7] x86/sched: Remove SD_ASYM_PACKING from the "SMT"
+ domain
+In-Reply-To: <20221214165900.GA972@ranerica-svr.sc.intel.com>
+References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
+ <20221122203532.15013-6-ricardo.neri-calderon@linux.intel.com>
+ <Y5IKuJTjE6Pjrw9I@arm.com>
+ <20221214165900.GA972@ranerica-svr.sc.intel.com>
+Date:   Thu, 15 Dec 2022 16:48:14 +0000
+Message-ID: <xhsmhwn6s62b5.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,56 +92,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-12-15 at 15:45 +0100, Lukasz Majewski wrote:
-> Different Marvell DSA switches support different size of max frame
-> bytes to be sent.
->=20
-> For example mv88e6185 supports max 1632 bytes, which is now in-driver
-> standard value. On the other hand - mv88e6250 supports 2048 bytes.
->=20
-> As this value is internal and may be different for each switch IC,
-> new entry in struct mv88e6xxx_info has been added to store it.
->=20
-> Signed-off-by: Lukasz Majewski <lukma@denx.de>
-> ---
-> Changes for v2:
-> - Define max_frame_size with default value of 1632 bytes,
-> - Set proper value for the mv88e6250 switch SoC (linkstreet) family
-> ---
->  drivers/net/dsa/mv88e6xxx/chip.c | 13 ++++++++++++-
->  drivers/net/dsa/mv88e6xxx/chip.h |  1 +
->  2 files changed, 13 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx=
-/chip.c
-> index 2ca3cbba5764..7ae4c389ce50 100644
-> --- a/drivers/net/dsa/mv88e6xxx/chip.c
-> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
-> @@ -3093,7 +3093,9 @@ static int mv88e6xxx_get_max_mtu(struct dsa_switch =
-*ds, int port)
->  	if (chip->info->ops->port_set_jumbo_size)
->  		return 10240 - VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN;
->  	else if (chip->info->ops->set_max_frame_size)
-> -		return 1632 - VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN;
-> +		return (chip->info->max_frame_size  - VLAN_ETH_HLEN
-> +			- EDSA_HLEN - ETH_FCS_LEN);
-> +
->  	return 1522 - VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN;
->  }
->=20
->=20
+On 14/12/22 08:59, Ricardo Neri wrote:
+> On Thu, Dec 08, 2022 at 04:03:04PM +0000, Ionela Voinescu wrote:
+>> Based on:
+>>
+>> kernel/sched/topology.c:
+>> sd = highest_flag_domain(cpu, SD_ASYM_PACKING);
+>> rcu_assign_pointer(per_cpu(sd_asym_packing, cpu), sd);
+>>
+>> and described at:
+>>
+>> include/linux/sched/sd_flags.h:
+>> /*
+>>  * Place busy tasks earlier in the domain
+>>  *
+>>  * SHARED_CHILD: Usually set on the SMT level. Technically could be set further
+>>  *               up, but currently assumed to be set from the base domain
+>>  *               upwards (see update_top_cache_domain()).
+>>  * NEEDS_GROUPS: Load balancing flag.
+>>  */
+>> SD_FLAG(SD_ASYM_PACKING, SDF_SHARED_CHILD | SDF_NEEDS_GROUPS)
+>>
+>> doesn't your change result in sd_asym_packing being NULL?
+>
+> Yes. This is a good catch. Thanks!
+>
 
-Is there any specific reason for triggering this based on the existance
-of the function call? Why not just replace:
-	else if (chip->info->ops->set_max_frame_size)
-with:
-	else if (chip->info->max_frame_size)
+Nice to see those being useful :-) FYI if you run your kernel with
+CONFIG_SCHED_DEBUG=y and sched_debug on the cmdline, you should get a
+warning at boot time from the topology debug code checking assertions
+against those flags.
 
-Otherwise my concern is one gets defined without the other leading to a
-future issue as 0 - extra headers will likely wrap and while the return
-value may be a signed int, it is usually stored in an unsigned int so
-it would effectively uncap the MTU.
+>>
+>> The SD_ASYM_PACKING flag requires all children of a domain to have it set
+>> as well. So having SMT not setting the flag, while CLUSTER and MC having
+>> set the flag would result in a broken topology, right?
+>
+> I'd say that highest_flag_domain(..., flag) requires all children to have
+> `flag`, but clearly the comment you quote allows for SD_ASYM_PACKING to
+> be located in upper domains.
+>
+> Perhaps this can be fixed with a variant of highest_flag_domain() that do
+> not require all children to have the flag?
+>
 
-Actually you could take this one step further since all values should
-be 1522 or greater you could just drop the else/if and replace the last
-line with "max_t(int, chip->info->max_frame_size, 1522) - (headers)".
+So I gave that flag SDF_SHARED_CHILD because its cached SD pointer was set
+up using highest_flag_domain(). Looking for the highest level where it is
+set matches how it is used in nohz_balancer_kick(), so you might want a new
+helper.
+
+With that said, so far all but one flag (SD_PREFER_SIBLING, and that's
+because of big.LITTLE woes) follow the SDF_SHARED_{CHILD, PARENT} pattern,
+if SD_ASYM_PACKING no longer does then we need to think whether we're
+trying to make it do funky things. I need to look at the rest of your
+series to get an idea, that unfortunately won't be today but it's now in my
+todolist.
+
+> Thanks and BR,
+> Ricardo
+
