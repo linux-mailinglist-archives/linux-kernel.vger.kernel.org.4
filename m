@@ -2,56 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A1C64E3D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 23:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BC264E3D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 23:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbiLOWhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 17:37:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
+        id S229809AbiLOWhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 17:37:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLOWhD (ORCPT
+        with ESMTP id S229939AbiLOWhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 17:37:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5EBC4A065
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 14:37:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 15 Dec 2022 17:37:35 -0500
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [5.144.164.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA005EDC0;
+        Thu, 15 Dec 2022 14:37:34 -0800 (PST)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F09A61F74
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 22:37:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E210C433D2;
-        Thu, 15 Dec 2022 22:37:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1671143821;
-        bh=sORse0IGcAma0YoG8+CcwCQtsnysD6EbRJIA+wtE9w8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=niC/oyILOGo3MMNQvkGHvvoqVsyhtdU1p11c2bskUgZjejn1o90RAZ0Xi6vMU7ij8
-         qqheuoYvO55WC1r3mF3EvMltIcxQ30KoeVgY5yKSrMxU+rcKL8WKbUBI45CoW4/GTJ
-         RS8/kwoEjrlusZ8clwbrQAC6JQjkgZbpr6/nheGE=
-Date:   Thu, 15 Dec 2022 14:37:00 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>
-Subject: Re: [PATCH 1/2] hugetlb: really allocate vma lock for all sharable
- vmas
-Message-Id: <20221215143700.232f7ef0084167269f7068df@linux-foundation.org>
-In-Reply-To: <20221212235042.178355-1-mike.kravetz@oracle.com>
-References: <20221212235042.178355-1-mike.kravetz@oracle.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 1D61E1F676;
+        Thu, 15 Dec 2022 23:37:32 +0100 (CET)
+Date:   Thu, 15 Dec 2022 23:37:30 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/7] arm64: dts: qcom: sm8150: Add GPU speedbin support
+Message-ID: <20221215223730.4bijpy3qyplruksi@SoMainline.org>
+References: <20221213002423.259039-1-konrad.dybcio@linaro.org>
+ <20221213002423.259039-7-konrad.dybcio@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221213002423.259039-7-konrad.dybcio@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,23 +45,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Dec 2022 15:50:41 -0800 Mike Kravetz <mike.kravetz@oracle.com> wrote:
-
-> Commit bbff39cc6cbc ("hugetlb: allocate vma lock for all sharable vmas")
-> removed the pmd sharable checks in the vma lock helper routines.
-> However, it left the functional version of helper routines behind #ifdef
-> CONFIG_ARCH_WANT_HUGE_PMD_SHARE.  Therefore, the vma lock is not being
-> used for sharable vmas on architectures that do not support pmd sharing.
-> On these architectures, a potential fault/truncation race is exposed
-> that could leave pages in a hugetlb file past i_size until the file is
-> removed.
+On 2022-12-13 01:24:22, Konrad Dybcio wrote:
+> SM8150 has (at least) two GPU speed bins. With the support added on the
+> driver side, wire up bin detection in the DTS to restrict lower-quality
+> SKUs from running at frequencies they were not validated at.
 > 
-> Move the functional vma lock helpers outside the ifdef, and remove the
-> non-functional stubs.  Since the vma lock is not just for pmd sharing,
-> rename the routine __vma_shareable_flags_pmd.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm8150.dtsi | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
 > 
-> Fixes: bbff39cc6cbc ("hugetlb: allocate vma lock for all sharable vmas")
+> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> index e160acb47cd9..3f940cc3f32b 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> @@ -936,6 +936,17 @@ ethernet: ethernet@20000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		qfprom: efuse@784000 {
+> +			compatible = "qcom,sm8150-qfprom", "qcom,qfprom";
+> +			reg = <0 0x00784000 0 0x8ff>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +
+> +			gpu_speed_bin: gpu_speed_bin@133 {
+> +				reg = <0x133 0x1>;
+> +				bits = <5 3>;
+> +			};
+> +		};
+>  
+>  		qupv3_id_0: geniqup@8c0000 {
+>  			compatible = "qcom,geni-se-qup";
+> @@ -2137,6 +2148,9 @@ gpu: gpu@2c00000 {
+>  
+>  			qcom,gmu = <&gmu>;
+>  
+> +			nvmem-cells = <&gpu_speed_bin>;
+> +			nvmem-cell-names = "speed_bin";
+> +
+>  			status = "disabled";
+>  
+>  			zap-shader {
+> @@ -2150,31 +2164,37 @@ gpu_opp_table: opp-table {
 
-So I assume we want this backported to 6.1?  I added a cc:stable.
+Just like sm8250, you can probably delete the:
 
-The [2/2] patch is, I think, 6.3-rc1 material?
+    /* note: downstream checks gpu binning for 675 Mhz */
+
+comment right above this node.
+
+- Marijn
+
+>  				opp-675000000 {
+>  					opp-hz = /bits/ 64 <675000000>;
+>  					opp-level = <RPMH_REGULATOR_LEVEL_NOM_L1>;
+> +					opp-supported-hw = <0x2>;
+>  				};
+>  
+>  				opp-585000000 {
+>  					opp-hz = /bits/ 64 <585000000>;
+>  					opp-level = <RPMH_REGULATOR_LEVEL_NOM>;
+> +					opp-supported-hw = <0x3>;
+>  				};
+>  
+>  				opp-499200000 {
+>  					opp-hz = /bits/ 64 <499200000>;
+>  					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L2>;
+> +					opp-supported-hw = <0x3>;
+>  				};
+>  
+>  				opp-427000000 {
+>  					opp-hz = /bits/ 64 <427000000>;
+>  					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
+> +					opp-supported-hw = <0x3>;
+>  				};
+>  
+>  				opp-345000000 {
+>  					opp-hz = /bits/ 64 <345000000>;
+>  					opp-level = <RPMH_REGULATOR_LEVEL_SVS>;
+> +					opp-supported-hw = <0x3>;
+>  				};
+>  
+>  				opp-257000000 {
+>  					opp-hz = /bits/ 64 <257000000>;
+>  					opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
+> +					opp-supported-hw = <0x3>;
+>  				};
+>  			};
+>  		};
+> -- 
+> 2.39.0
+> 
