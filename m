@@ -2,122 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4ED64D677
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 07:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B76F064D678
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 07:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiLOGfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 01:35:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
+        id S229722AbiLOGgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 01:36:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiLOGfX (ORCPT
+        with ESMTP id S229448AbiLOGgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 01:35:23 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246EF2E682;
-        Wed, 14 Dec 2022 22:35:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671086122; x=1702622122;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=6BhKwxLoiCEkdX7Mxu8xhjidUeUgBzn2t+PJF3ARK68=;
-  b=XqGrx1b2G2rUFQo9A1FJgIMtpLUx/xBjJRgggbBqO4DlhhQLAgQG4A1z
-   1FiXbtuNr7m16nNJoq58uzryqhI9184xcQYHmAOortwPX71pjX5nm+u5q
-   PIN9v+lrBC+3YjSUzH+By0Fl961eQMdgtoE9dPIUC28D/jb1Mm2Jh9JRB
-   HqZorp2ZCZd1PsJ5Zo3cRnNaP5gcBmuUfWrxLkTf2L65kIlkEnt8lxV3n
-   vCe03+cN7tnIIcNWKAwLde+s5lUJ5W/M5bT0GGMCsgAhfP6+CwegXVRpe
-   RqpKws9Kh7KXoouX3yLPazeoQPPe9+GzV1BHpA/S973psOdS7vQAO8HLs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="317312612"
-X-IronPort-AV: E=Sophos;i="5.96,246,1665471600"; 
-   d="scan'208";a="317312612"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 22:35:21 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="680005274"
-X-IronPort-AV: E=Sophos;i="5.96,246,1665471600"; 
-   d="scan'208";a="680005274"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 22:35:17 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andi Kleen <ak@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-api@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [RFC PATCH] mm/mempolicy: Fix memory leak in
- set_mempolicy_home_node system call
-References: <20221214222110.200487-1-mathieu.desnoyers@efficios.com>
-Date:   Thu, 15 Dec 2022 14:34:28 +0800
-In-Reply-To: <20221214222110.200487-1-mathieu.desnoyers@efficios.com> (Mathieu
-        Desnoyers's message of "Wed, 14 Dec 2022 17:21:10 -0500")
-Message-ID: <87k02tcgzv.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 15 Dec 2022 01:36:00 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A38AB1CD;
+        Wed, 14 Dec 2022 22:35:59 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id d82so6042663pfd.11;
+        Wed, 14 Dec 2022 22:35:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Zntq683qGGW9uGqNJUwpXpXMNNKQE/pGbpUuo9i8rA=;
+        b=guyIeSLZpY8xMW9BqgiBAuwBAeuy4bh5lN7jmOI1KyQAWeiGe+rYvJiYtZP8ehiFTw
+         M6RlR+Hwkcb+l+IHxUVOAiBJpANiV0oCdRqH9W3Qbw3oimOtQG7RptutNUtfBud0Cn/J
+         JkRPM091LtaXylCndoUIKe9gfMcFrPQW2b0wf3MooFotzQl94+8EMrtxVKMU+UooUEHl
+         0Bv0rnP1c7EBp5nAyBjN1MRno7HPEAQrZdv30wMpyzJ2dlSqplCEIYp4Scr7ALdI3W6q
+         KII3vTiKLKVxVi7Pp0CopY3FV7YQpl4ljXCLvGQb7z2x5zqARoB7TmdJjdGY8Nm71ZaZ
+         3raA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+Zntq683qGGW9uGqNJUwpXpXMNNKQE/pGbpUuo9i8rA=;
+        b=gOYcCafbccFwRXKl5gfe99yfO61pmHuCYDojjb/b9zqY5WLmPXpUI5aQAnpNspftIi
+         Mw0cW8DSnDk5HFT6B35XS56+VTIIIlzEPq9vDTJA+8Dw+Q+VTQwdyrBkusgZx53p96Jt
+         ymDr/IWSEu9KpCtvbdb3afj4w8nwgm6jrydi0+zCuliu393ZOkrFLESujEHqK9zp75VA
+         ApNoHb9Myu5hBsejHxL4Am5eomNSIF20tiWfQI8R/DLKD8rnEqoGoKxzus33ceABntQo
+         YSHN6iMH1gXMjImtG3UhNzxvsT+oj/wg2OmAWakeKEh2YTaJzcddiwrKxoImQYPV0v2t
+         hNXQ==
+X-Gm-Message-State: ANoB5pkBmcphU0jRtUENR/3VkfhJ26dIRyOV1TCu/dMbKBiXMXFlpq2T
+        xYtoNfOyqggSe7kDjyeysTw=
+X-Google-Smtp-Source: AA0mqf5JgZozvKq87LDQbHlR0OP/IEDZxtyuCWF8YtZEY8Ml4kbCpZ5+ZkNiWYn2Up22K3+XT4o7hg==
+X-Received: by 2002:aa7:99d0:0:b0:576:f200:bf1b with SMTP id v16-20020aa799d0000000b00576f200bf1bmr5537207pfi.3.1671086158996;
+        Wed, 14 Dec 2022 22:35:58 -0800 (PST)
+Received: from mail.google.com (125-237-37-88-fibre.sparkbb.co.nz. [125.237.37.88])
+        by smtp.gmail.com with ESMTPSA id 202-20020a6214d3000000b005774f19b41csm898549pfu.88.2022.12.14.22.35.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 22:35:58 -0800 (PST)
+Date:   Thu, 15 Dec 2022 19:35:52 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] [next] pcmcia: synclink_cs: replace 1-element array with
+ flex-array member
+Message-ID: <Y5rASDcHCzsiF+Iw@mail.google.com>
+References: <Y5mMWEtHWKOiPVU+@mail.google.com>
+ <202212141124.736E3DE2A8@keescook>
+ <Y5otilaHc6HBPCAF@mail.google.com>
+ <CAHp75VdHU3g_t8u-hr1C=mttvEq-jWmMuCwaQqXToP-kH3xstQ@mail.gmail.com>
+ <202212141347.9AD66DEBC8@keescook>
+ <CAHp75VdqUMs1uz8zeyDi6rJKayFt6UMrm0A=-Hp8tQpCUSGujQ@mail.gmail.com>
+ <Y5qim07QaqyvAtRX@mail.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5qim07QaqyvAtRX@mail.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mathieu Desnoyers <mathieu.desnoyers@efficios.com> writes:
+On Thu, Dec 15, 2022 at 05:29:15PM +1300, Paulo Miguel Almeida wrote:
+> On Thu, Dec 15, 2022 at 12:06:46AM +0200, Andy Shevchenko wrote:
+> > On Wed, Dec 14, 2022 at 11:49 PM Kees Cook <keescook@chromium.org> wrote:
+> > > On Wed, Dec 14, 2022 at 10:39:52PM +0200, Andy Shevchenko wrote:
+> > > > Yes, and Try to make it work with __packed. As I said, the problem is
+> > > > that the code is relying on something which is architecture dependent
+> > > > strictly speaking. And hence I disagree with Kees that v2 is okay to
+> > > > go.
+> > >
+> > > I meant that v2 is functionally identical to the existing code.
+> > 
+> > Ah, sorry for misunderstanding.
+> > 
+> 
+> I agree with using __packed attribute to remove the extra padding (and
+> for the reasons you mentioned before). That would reduce the sizeof(RXBUF)
+> from 8 to 5 (which is good) but that is still 1 byte "too much".
+> 
+> Piggying back on a suggestion Kees gave before:
+> 
+> -       info->rx_buf_size = sizeof(RXBUF) + info->max_frame_size;
+> +       info->rx_buf_size = sizeof(RXBUF) - 1 + info->max_frame_size;
+> 
+> That way RXBUF->data will point to the first byte of the frame_size 
+> (MGSLPC_INFO->max_frame_size) which is what is actually needed.
+> 
 
-> When encountering any vma in the range with policy other than MPOL_BIND
-> or MPOL_PREFERRED_MANY, an error is returned without issuing a mpol_put
-> on the policy just allocated with mpol_dup().
->
-> This allows arbitrary users to leak kernel memory.
->
-> Fixes: c6018b4b2549 ("mm/mempolicy: add set_mempolicy_home_node syscall")
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> Cc: Ben Widawsky <ben.widawsky@intel.com>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Feng Tang <feng.tang@intel.com>
-> Cc: Michal Hocko <mhocko@kernel.org>
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: Mel Gorman <mgorman@techsingularity.net>
-> Cc: Mike Kravetz <mike.kravetz@oracle.com>
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Andi Kleen <ak@linux.intel.com>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Huang Ying <ying.huang@intel.com>
-> Cc: <linux-api@vger.kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: stable@vger.kernel.org # 5.17+
+I chose my words poorly here... sorry my brain is a bit fried today.
 
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+Let me rephrase that last sentence. After that change (or similar
+change), RXBUF->data will point to the first byte of the buffer
+allocated during the initialisation process. (which is
+limited/controlled by the size of MGSLPC_INFO->max_frame_size)...
+so no 'extra byte/padding' will be there.
 
-Thanks!
+- Paulo A.
 
-> ---
->  mm/mempolicy.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> index 61aa9aedb728..02c8a712282f 100644
-> --- a/mm/mempolicy.c
-> +++ b/mm/mempolicy.c
-> @@ -1540,6 +1540,7 @@ SYSCALL_DEFINE4(set_mempolicy_home_node, unsigned long, start, unsigned long, le
->  		 * the home node for vmas we already updated before.
->  		 */
->  		if (new->mode != MPOL_BIND && new->mode != MPOL_PREFERRED_MANY) {
-> +			mpol_put(new);
->  			err = -EOPNOTSUPP;
->  			break;
->  		}
+> > > > The full change should be something like
+> > > >
+> > > > check_add(sizeof(), max_frame_size)
+> > > > kcalloc(8, size)
+> > >
+> > > Right -- this would fix the existing mistakes in size calculation (and
+> > > is certainly better).
+> > 
+> > Glad to hear that we are on the same page.
+> > 
+> 
+> That makes sense to me.
+> 
+> thanks!
+> 
+> - Paulo A.
