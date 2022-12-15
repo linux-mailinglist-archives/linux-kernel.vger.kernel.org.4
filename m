@@ -2,107 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB84B64E202
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C258664E205
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 20:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbiLOTxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 14:53:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
+        id S230043AbiLOTyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 14:54:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiLOTxE (ORCPT
+        with ESMTP id S229691AbiLOTyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 14:53:04 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C9D537E4
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 11:53:01 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id f20so75722lja.4
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 11:53:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7WnaZc2bs26QE2S1hFU0wWVtk2SkMXSSpzkb6FSS1RI=;
-        b=aGblDN6+LiroAi5Ce2HI0sla+sv/MZ0o1VnWUgJkTxIOUl93xZYtZDnsd8zl1DABm2
-         OfhiFJBPHg9RSV8cw+9sGyvjAUzHb9igov4etIG+PT6jB8if72VmeESBXHF3IHsiLc5M
-         b2CmaXYJsYqhGPOOzKvG2srf3DxtCyWSKXn2E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7WnaZc2bs26QE2S1hFU0wWVtk2SkMXSSpzkb6FSS1RI=;
-        b=L3pOJjBuhqPh8Gy2hg2Bpqj6+4xWdx1V5WnvD1w5gFIsoF/KKl8Bvd1xkNZ9KlAPLA
-         RgACEXYKfbuaxrL3bxScKRHn+cLbPmeHWrDXNgi3EPh2N1RboQWT1oGSpMmKoop/UzSm
-         yMUPTe5PGkGSGhtNh/7unO69qqVb+sPhjbHV93iiwdNk3KylraANWyJWLYsC0/5vor+7
-         ihpONcV6i8qxwkgOjVyXzfqcX0E9DvgFVBLZtqJesqUZJb0Gvq37jqKEdz7VhDjZfChs
-         DbCFVdK1UGY7BxJnLcst09Zs1q6vixdE9rf+ECw1Chpsg5/hSBMfsyeSGjAHCbxustbn
-         j2KQ==
-X-Gm-Message-State: ANoB5pkF6CqCpKpUr3CZcvu73l+3SLtUw5RzQwTnguzOuuBhGNN0rhde
-        Nx/k7SLB/bktZ8gLBpkXZrvwcYwgx6fYt8oiJhWr5Q==
-X-Google-Smtp-Source: AA0mqf4FW9H2CtluhofbPQJiA6xZ7ZdK14RZtc7ewZw8cqvcl+H7LOmqZe+1wc0FJ8tx6X3g9uIC6DD8PJrYGi5UrrE=
-X-Received: by 2002:a05:651c:124c:b0:279:f45e:ccd6 with SMTP id
- h12-20020a05651c124c00b00279f45eccd6mr7839328ljh.483.1671133979884; Thu, 15
- Dec 2022 11:52:59 -0800 (PST)
+        Thu, 15 Dec 2022 14:54:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC52537E4;
+        Thu, 15 Dec 2022 11:54:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 276F761F0C;
+        Thu, 15 Dec 2022 19:54:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECD6C433D2;
+        Thu, 15 Dec 2022 19:54:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671134073;
+        bh=ckwM35u8cerjGpaLFMeUOx5oE039VsBuJcmMfvvst9M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G5nG8iDiZZuL2LPrGytvdfukZKf6P+anpailBuQ2RRlomnbwKP+iuRcgbMAjDaSsZ
+         v8H3ps4EkdRv2ZquX1bNFPrC8kaeco1orJN/B3yMplh3DxPMZ2HkNDGFARv0/Izfcj
+         Vi16eeEnv9hEEqR+JxmkmSwNd/c/LmmivxUKsMfz58tumfW4VfNIpSXlTNKmzt7aek
+         Cdx5IgGdeYC4LCL+D4DDrxnSUjbohaMSRunzR16AG08fp5JK9EEcixMZxdyCVH98qF
+         c7QKZqBRNVW7aFNhbzk7vS/RonObdL3qV3FaR6fItN6zFcPlD+K2iNvI4nRGX/HeSv
+         PkFUBafkFo9Zw==
+Date:   Thu, 15 Dec 2022 19:54:19 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>, palmer@dabbelt.com,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Guo Ren <guoren@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v5 6/6] soc: renesas: Add L2 cache management for RZ/Five
+ SoC
+Message-ID: <Y5t7a2oZ64McjSSn@dizzy>
+References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221212115505.36770-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdUCkCyLOXbQEJyc7S2F08=ftNtPcEztRN3JWJv_FPmAVw@mail.gmail.com>
+ <CA+V-a8vD=SOb6gPOwdPUE=kHeqa+oo2L-rbaW8zGjvw7YyQsqg@mail.gmail.com>
+ <CAMuHMdWX4Yd52=Jv8kABtn+1B1V=dC2iXVZ81gNZBWNu4hb_3w@mail.gmail.com>
+ <CA+V-a8t3+zzQ4yPftsAa51rkMGHr45NhMO4_2WmZ9BGg0wuQvw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221214233106.69b2c01b@gandalf.local.home> <Y5trUep9IvCv1Uwy@google.com>
- <20221215141146.6ceb7cf2@gandalf.local.home>
-In-Reply-To: <20221215141146.6ceb7cf2@gandalf.local.home>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Thu, 15 Dec 2022 14:52:48 -0500
-Message-ID: <CAEXW_YQLtK=4LMJ+LHPVWU0wbV-027HJoCEKTjZvBZ6krrn6vw@mail.gmail.com>
-Subject: Re: [RFC][PATCH] ACPI: tracing: Have ACPI debug go to tracing ring buffer
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        linux-acpi@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Brian Norris <briannorris@chromium.org>,
-        Ross Zwisler <zwisler@google.com>,
-        Ching-lin Yu <chinglinyu@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="6r5CB1uLC9RYX2o6"
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8t3+zzQ4yPftsAa51rkMGHr45NhMO4_2WmZ9BGg0wuQvw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 2:11 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Thu, 15 Dec 2022 18:45:37 +0000
-> Joel Fernandes <joel@joelfernandes.org> wrote:
->
-> > Wouldn't it be better to also check trace_acpi_print_enabled() here in the
-> > else if() condition, along with IS_ENABLED()? That way if the CONFIG is
-> > enabled but the tracepoint is not enabled, at least the messages will go to
-> > dmesg instead of skipped.
->
-> I really don't want that. This was purposely done to be mutually exclusive.
-> The reason I added this in the first place, is because too much enabled
-> will render the system useless if printk() is used.
->
-> After boot up, if I had enabled all debug events and then I were to disable
-> the acpi tracepoint, it will likely render the system useless again if it
-> were to switch over to printk.
 
-Ok, sure. I see where you were going. So you want no debugging
-messages at all if the trace event is disabled. That's fine with me. I
-would also add a note about the need to enable the specific trace
-event, in the Kconfig message and/or the Documentation. Otherwise, you
-might get someone say, "hey I enabled the CONFIG option but I see
-nothing in the trace buffer".
+--6r5CB1uLC9RYX2o6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Another approach could be to always enable the trace event by default,
-if the CONFIG is turned on. Or do a printk() telling the user about
-the event to enable, so they know why their trace buffer is empty.
+On Thu, Dec 15, 2022 at 05:46:42PM +0000, Lad, Prabhakar wrote:
+> Hi Geert,
+>=20
+> On Thu, Dec 15, 2022 at 11:10 AM Geert Uytterhoeven
+> <geert@linux-m68k.org> wrote:
+> >
+> > Hi Prabhakar,
+> >
+> > On Thu, Dec 15, 2022 at 12:06 PM Lad, Prabhakar
+> > <prabhakar.csengg@gmail.com> wrote:
+> > > On Thu, Dec 15, 2022 at 10:36 AM Geert Uytterhoeven
+> > > <geert@linux-m68k.org> wrote:
+> > > > On Mon, Dec 12, 2022 at 12:58 PM Prabhakar <prabhakar.csengg@gmail.=
+com> wrote:
+> > > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > >
+> > > > > I/O Coherence Port (IOCP) provides an AXI interface for connecting
+> > > > > external non-caching masters, such as DMA controllers. The access=
+es
+> > > > > from IOCP are coherent with D-Caches and L2 Cache.
+> > > > >
+> > > > > IOCP is a specification option and is disabled on the Renesas RZ/=
+Five
+> > > > > SoC due to this reason IP blocks using DMA will fail.
+> > > > >
+> > > > > The Andes AX45MP core has a Programmable Physical Memory Attribut=
+es (PMA)
+> > > > > block that allows dynamic adjustment of memory attributes in the =
+runtime.
+> > > > > It contains a configurable amount of PMA entries implemented as C=
+SR
+> > > > > registers to control the attributes of memory locations in intere=
+st.
+> > > > > Below are the memory attributes supported:
+> > > > > * Device, Non-bufferable
+> > > > > * Device, bufferable
+> > > > > * Memory, Non-cacheable, Non-bufferable
+> > > > > * Memory, Non-cacheable, Bufferable
+> > > > > * Memory, Write-back, No-allocate
+> > > > > * Memory, Write-back, Read-allocate
+> > > > > * Memory, Write-back, Write-allocate
+> > > > > * Memory, Write-back, Read and Write-allocate
+> > > > >
+> > > > > More info about PMA (section 10.3):
+> > > > > Link: http://www.andestech.com/wp-content/uploads/AX45MP-1C-Rev.-=
+5.0.0-Datasheet.pdf
+> > > > >
+> > > > > As a workaround for SoCs with IOCP disabled CMO needs to be handl=
+ed by
+> > > > > software. Firstly OpenSBI configures the memory region as
+> > > > > "Memory, Non-cacheable, Bufferable" and passes this region as a g=
+lobal
+> > > > > shared dma pool as a DT node. With DMA_GLOBAL_POOL enabled all DMA
+> > > > > allocations happen from this region and synchronization callbacks=
+ are
+> > > > > implemented to synchronize when doing DMA transactions.
+> > > > >
+> > > > > Example PMA region passes as a DT node from OpenSBI:
+> > > > >     reserved-memory {
+> > > > >         #address-cells =3D <2>;
+> > > > >         #size-cells =3D <2>;
+> > > > >         ranges;
+> > > > >
+> > > > >         pma_resv0@58000000 {
+> > > > >             compatible =3D "shared-dma-pool";
+> > > > >             reg =3D <0x0 0x58000000 0x0 0x08000000>;
+> > > > >             no-map;
+> > > > >             linux,dma-default;
+> > > > >         };
+> > > > >     };
+> > > > >
+> > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas=
+=2Ecom>
+> > > >
+> > > > Thanks for your patch!
+> > > >
+> > > > >  arch/riscv/include/asm/cacheflush.h       |   8 +
+> > > > >  arch/riscv/include/asm/errata_list.h      |  28 ++-
+> > > > >  drivers/soc/renesas/Kconfig               |   6 +
+> > > > >  drivers/soc/renesas/Makefile              |   2 +
+> > > > >  drivers/soc/renesas/rzfive/Kconfig        |   6 +
+> > > > >  drivers/soc/renesas/rzfive/Makefile       |   3 +
+> > > > >  drivers/soc/renesas/rzfive/ax45mp_cache.c | 256 ++++++++++++++++=
+++++++
+> > > >
+> > > > Given this touches arch/riscv/include/asm/, I don't think the
+> > > > code belongs under drivers/soc/renesas/.
+> > > >
+> > > Ok. Do you have any suggestions on where you want me to put this code?
+> >
+> > As it plugs into core riscv functionality, I think it should be under
+> > arch/riscv/.
+> > if the RISC-V maintainers object to that, another option is
+> > drivers/soc/andestech/ or (new) drivers/cache/
+> >
+> RISC-V maintainers had already made it clear to not to include vendor
+> specific stuff in the arch/riscv folder, so I'll consider putting this
+> into drivers/cache/ folder to sync with the bindings.
+>=20
+> Conor/Palmer - do you have any objections/suggestions?
 
-Up to you and the ACPI maintainers. ;-)
+I'm not its maintainer so sorta moot what I say, but having drivers in
+arch/riscv makes little sense to me..
+Putting stuff in drivers/cache does sound like a good idea since the
+binding is going there too.
 
-thanks,
+The SiFive ccache driver is in drivers/soc and it was suggested to me
+this week that there's likely going to be a second SiFive cache driver
+at some point in the near future. Plus Microchip are going to have to
+add cache management stuff to the existing SiFive ccache driver.
+Having them be their own thing makes sense in my mind - especially since
+they're not tied to SoCs sold by Andes or SiFive.
 
- - Joel
+I had a quick, and I mean *quick* look through other soc drivers to see
+if there were any other cache controller drivers but nothing stood out
+to me. Maybe someone else has more of a clue there. Ditto for misc, had
+a look but nothing seemed obvious.
+
+If we do do drivers/cache & move the SiFive stuff there too, someone
+needs to look after it. I guess I can if noone else feels strongly
+since I seem to be the Responsible Adult for the SiFive ones already?
+
+
+--6r5CB1uLC9RYX2o6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY5t7ZgAKCRB4tDGHoIJi
+0rnuAP9U0I47Qq0z4SYHsxpLE2Y+u93t5qPUcXHSNlAx4Z7qGgD9HPx/YrpFO71+
+sRuKb85le8iGHUV440lqpw1Yckpveg8=
+=8usm
+-----END PGP SIGNATURE-----
+
+--6r5CB1uLC9RYX2o6--
