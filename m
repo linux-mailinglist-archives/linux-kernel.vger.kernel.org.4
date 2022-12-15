@@ -2,160 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820EF64DC2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 14:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB1D64DC26
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 14:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiLONUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 08:20:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49954 "EHLO
+        id S229471AbiLONUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 08:20:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiLONUn (ORCPT
+        with ESMTP id S229695AbiLONUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 08:20:43 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D9F25F;
-        Thu, 15 Dec 2022 05:20:42 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id t17so52212484eju.1;
-        Thu, 15 Dec 2022 05:20:42 -0800 (PST)
+        Thu, 15 Dec 2022 08:20:37 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08C72DA9F
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 05:20:34 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id bf43so2326733lfb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 05:20:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UHG2DQ/q3tdCjR3+JAIlJLfOPaVrBzMAXmKA5muIVjo=;
-        b=O2u/MK0hQn54Ffs39OhuZsWMjYRlhWISZrALEx40MtN2rVh3iFJ64EJczYyr2rewRl
-         aPN/F5LQ+mCwSH74U7YN6jO9KYtnH+6J452jQI7qWzMNj98SaGFmrOW6jYs2/kRWiylF
-         kGLgX1Z8sUu7Pku4wluW64TXDnNHB611nMpRMvXXOUZDgvdkfTVt+fpYFQ4mhSSj1nh4
-         VFnoTEw5CQIzQ/OejJFqeUMxEQFeZBe0jaiA5VZRzNTJQqXWV4PgF0CKy57SMLUq2wih
-         YBMkFFn77J5pU806AHEBBfy2NS+AD9VHki9nNXtLhgrlunQr66wQg9k+Hc9NMhSB/1A8
-         Vssw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ilerhl9aB5wldZrGi6JAgqg6pC5+HsK4xqZHdd6qSDQ=;
+        b=cwIRbjabiTAM/XKcFoAozZBIgY2TmT4pmJeGjO/WYqhQctpp4UjGeDHE1/u4Hl5q0I
+         6IFMCv6ct0755kRKSvAwmJ7i5Sih27uziVxexSL4OetAC5oDPRA8OfCv7AzA7U9S/Bca
+         d8NHqzvSXNr0jxlCYMxCZPwONJCEQ4gMEHnGKjqOPUxDfo+w12ofxUblc9+Qdg75ijgm
+         jyjf7twPWXwfwak2kC2TIAQJbWqeb1DVw1Wqgv6ys7haZw9DVcv17r4k3qUh4HMJ8/PJ
+         LehfHsTnXINxibMAtsRE9oY3sHcAPC0Fg/yh0Frhj27gQTwM5tXnrf0Qfi6/c0WI1bdt
+         Ms6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UHG2DQ/q3tdCjR3+JAIlJLfOPaVrBzMAXmKA5muIVjo=;
-        b=TGuSwnOdlP+FR+yfZMBW56A590XXkb9RX3fN9A8DduDuakq1VYjG5zDFX1YvVwjWJQ
-         wvy2Z4GWSmQIwAAW9N7QGa0r4gCoXApCWCRlwdQoPbcMWBsiks473Wkz5fV7bvC0c3Pk
-         QnGxZR0JIRg7wuOHveSXKbPY3+uw8Bpw6tRjpUg6Ql5aqLfrZOk4GFqBtMVe9aZmKA6b
-         FW8Zaju/MmldIHvE1YbMm5gF9jpLjg70vuWf0cXsGY89fFVIsJOxC8QzeRe2yM/ain4c
-         LAX2cl6aanV+3No71dXAVrCseVgq+jCLUnv+AuFtI9XOeHAOlsBZRUjQX/n4fLZOMpMB
-         Apvg==
-X-Gm-Message-State: ANoB5pnpgoWWvCzcCy2ypHZgUVGX6vRgkM718aRlfPcqf8E79QIbQRuZ
-        Zc1t9M3HAuU37Txo6W/nwYtmayE3Pa7iSUt5ylw=
-X-Google-Smtp-Source: AA0mqf7CwzjnS9VrR+9xfqWcAfIDbwxwTeK7REnuDbDXTRA+q+Wc9kzW/kiM0XtlZN2oqPpJxLNrZ2iq+4TIQdmIySg=
-X-Received: by 2002:a17:907:a074:b0:7c1:bb5:5705 with SMTP id
- ia20-20020a170907a07400b007c10bb55705mr11708113ejc.544.1671110440722; Thu, 15
- Dec 2022 05:20:40 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ilerhl9aB5wldZrGi6JAgqg6pC5+HsK4xqZHdd6qSDQ=;
+        b=RC+fKsOI2YinsyjgCYiNrKYtbq/Lf44/10E5u4zemlTtSW4gJBZkOteMYjg0JEzZq8
+         xVy41g9UV+uMsb02upomUXD14pm7LxFafXtSlN13oDmq1KZhcHSe+ds9XdNU5PbMQe0Z
+         0Ob1hYWnP6axfDB8v/yjSleoIym7HdA4pNFACCEn1iSF7OOq+rEf7NZJXbXiexJOjbxj
+         kaJZFeRJRHPOrytxaCJvYKC+ALTD3McIXXNn3lDgimG+Ickbx4MNwuzR5mC0OjSczr26
+         w55p7niaeOeiKeJll9hu9W8V4ipJN+aKjZhffwxfkPfi8t382iD/Q9kaBgGrHqonZ+ao
+         O1Kg==
+X-Gm-Message-State: ANoB5pmNnzXnHa3QvL3/+6G79ksHc8R1WbEdNJ5tVBMq+pujc2Dq0wyU
+        7HPkWhxsJ2T2Cb/TFH3+2sLWDg==
+X-Google-Smtp-Source: AA0mqf7RT8oY59cf+Be3rLYgLtjU2DX4Etj8BCthJJuaJRchwXq8CyN2TyAqyBsJDjQnRL9mUF2CCw==
+X-Received: by 2002:a05:6512:b91:b0:4b6:ed8b:4f16 with SMTP id b17-20020a0565120b9100b004b6ed8b4f16mr6433868lfv.52.1671110433312;
+        Thu, 15 Dec 2022 05:20:33 -0800 (PST)
+Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id p15-20020a056512328f00b004a46f92a15bsm1153210lfe.41.2022.12.15.05.20.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 05:20:32 -0800 (PST)
+Message-ID: <33fe1249-34b4-443b-4258-586ed8c5f0e6@linaro.org>
+Date:   Thu, 15 Dec 2022 14:20:30 +0100
 MIME-Version: 1.0
-References: <20221214033512.659913-1-xiubli@redhat.com> <20221214033512.659913-2-xiubli@redhat.com>
-In-Reply-To: <20221214033512.659913-2-xiubli@redhat.com>
-From:   Ilya Dryomov <idryomov@gmail.com>
-Date:   Thu, 15 Dec 2022 14:20:29 +0100
-Message-ID: <CAOi1vP9Je-DnqUdYcBi_zSDUgj30aYrTeGq1MSwS66E7ptaTSg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] ceph: switch to vfs_inode_has_locks() to fix file
- lock bug
-To:     xiubli@redhat.com
-Cc:     jlayton@kernel.org, ceph-devel@vger.kernel.org,
-        mchangir@redhat.com, lhenriques@suse.de, viro@zeniv.linux.org.uk,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 5/6] arm64: dts: qcom: msm8976: Declare and use SDC2 pins
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221214232049.703484-1-marijn.suijten@somainline.org>
+ <20221214232049.703484-6-marijn.suijten@somainline.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221214232049.703484-6-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 4:35 AM <xiubli@redhat.com> wrote:
->
-> From: Xiubo Li <xiubli@redhat.com>
->
-> For the POSIX locks they are using the same owner, which is the
-> thread id. And multiple POSIX locks could be merged into single one,
-> so when checking whether the 'file' has locks may fail.
->
-> For a file where some openers use locking and others don't is a
-> really odd usage pattern though. Locks are like stoplights -- they
-> only work if everyone pays attention to them.
->
-> Just switch ceph_get_caps() to check whether any locks are set on
-> the inode. If there are POSIX/OFD/FLOCK locks on the file at the
-> time, we should set CHECK_FILELOCK, regardless of what fd was used
-> to set the lock.
->
-> Cc: stable@vger.kernel.org
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Fixes: ff5d913dfc71 ("ceph: return -EIO if read/write against filp that lost file locks")
-> Reviewed-by: Jeff Layton <jlayton@kernel.org>
-> Signed-off-by: Xiubo Li <xiubli@redhat.com>
+
+
+On 15.12.2022 00:20, Marijn Suijten wrote:
+> Add the pinctrl states for SDC2 and use them on sdhc_2 to support SD
+> Cards on the currently mainlined Sony Loire platform.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 > ---
->  fs/ceph/caps.c  | 2 +-
->  fs/ceph/locks.c | 4 ----
->  fs/ceph/super.h | 1 -
->  3 files changed, 1 insertion(+), 6 deletions(-)
->
-> diff --git a/fs/ceph/caps.c b/fs/ceph/caps.c
-> index 065e9311b607..948136f81fc8 100644
-> --- a/fs/ceph/caps.c
-> +++ b/fs/ceph/caps.c
-> @@ -2964,7 +2964,7 @@ int ceph_get_caps(struct file *filp, int need, int want, loff_t endoff, int *got
->
->         while (true) {
->                 flags &= CEPH_FILE_MODE_MASK;
-> -               if (atomic_read(&fi->num_locks))
-> +               if (vfs_inode_has_locks(inode))
->                         flags |= CHECK_FILELOCK;
->                 _got = 0;
->                 ret = try_get_cap_refs(inode, need, want, endoff,
-> diff --git a/fs/ceph/locks.c b/fs/ceph/locks.c
-> index 3e2843e86e27..b191426bf880 100644
-> --- a/fs/ceph/locks.c
-> +++ b/fs/ceph/locks.c
-> @@ -32,18 +32,14 @@ void __init ceph_flock_init(void)
->
->  static void ceph_fl_copy_lock(struct file_lock *dst, struct file_lock *src)
->  {
-> -       struct ceph_file_info *fi = dst->fl_file->private_data;
->         struct inode *inode = file_inode(dst->fl_file);
->         atomic_inc(&ceph_inode(inode)->i_filelock_ref);
-> -       atomic_inc(&fi->num_locks);
->  }
->
->  static void ceph_fl_release_lock(struct file_lock *fl)
->  {
-> -       struct ceph_file_info *fi = fl->fl_file->private_data;
->         struct inode *inode = file_inode(fl->fl_file);
->         struct ceph_inode_info *ci = ceph_inode(inode);
-> -       atomic_dec(&fi->num_locks);
->         if (atomic_dec_and_test(&ci->i_filelock_ref)) {
->                 /* clear error when all locks are released */
->                 spin_lock(&ci->i_ceph_lock);
-> diff --git a/fs/ceph/super.h b/fs/ceph/super.h
-> index 14454f464029..e7662ff6f149 100644
-> --- a/fs/ceph/super.h
-> +++ b/fs/ceph/super.h
-> @@ -804,7 +804,6 @@ struct ceph_file_info {
->         struct list_head rw_contexts;
->
->         u32 filp_gen;
-> -       atomic_t num_locks;
+>  .../qcom/msm8956-sony-xperia-loire-kugo.dts   |  6 +++
+>  .../dts/qcom/msm8956-sony-xperia-loire.dtsi   |  6 +++
+>  arch/arm64/boot/dts/qcom/msm8976.dtsi         | 45 +++++++++++++++++++
+>  3 files changed, 57 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire-kugo.dts b/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire-kugo.dts
+> index 3fb8e23e4330..9178943e2ee1 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire-kugo.dts
+> +++ b/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire-kugo.dts
+> @@ -33,3 +33,9 @@ &pm8950_l1 {
+>  	regulator-min-microvolt = <1100000>;
+>  	regulator-max-microvolt = <1300000>;
 >  };
->
->  struct ceph_dir_file_info {
-> --
-> 2.31.1
->
+> +
+> +&sdc2_on_state {
+> +	data-pins {
+> +		drive-strength = <8>;
+> +	};
+> +};
+You can add a label to the data-pins subnode.
 
-Hi Xiubo,
 
-You marked this for stable but there is an obvious dependency on
-vfs_inode_has_locks() that just got merged for 6.2-rc1.  Are you
-intending to take it into stable kernels as well?
+> diff --git a/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire.dtsi b/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire.dtsi
+> index 700583a56a0e..2253fb05f1c9 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire.dtsi
+> @@ -264,6 +264,12 @@ &sdhc_1 {
+>  	status = "okay";
+>  };
+>  
+> +&sdc2_on_state {
+> +	clk-pins {
+> +		drive-strength = <10>;
+> +	};
+> +};
+> +
+>  &sdhc_2 {
+>  	bus-width = <4>;
+>  	cd-gpios = <&tlmm 100 GPIO_ACTIVE_HIGH>;
+> diff --git a/arch/arm64/boot/dts/qcom/msm8976.dtsi b/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> index 7d4c7548882c..f3371eaa2940 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> @@ -558,6 +558,46 @@ rclk-pins {
+>  				};
+>  			};
+>  
+> +			sdc2_off_state: sdc2-off-state {
+> +				clk-pins {
+> +					pins = "sdc2_clk";
+> +					drive-strength = <2>;
+> +					bias-disable;
+> +				};
+> +
+> +				cmd-pins {
+> +					pins = "sdc2_cmd";
+> +					drive-strength = <2>;
+> +					bias-pull-up;
+> +				};
+> +
+> +				data-pins {
+> +					pins = "sdc2_data";
+> +					drive-strength = <2>;
+> +					bias-pull-up;
+> +				};
+> +			};
+> +
+> +			sdc2_on_state: sdc2-on-state {
+> +				clk-pins {
+> +					pins = "sdc2_clk";
+> +					drive-strength = <16>;
+> +					bias-disable;
+> +				};
+> +
+> +				cmd-pins {
+> +					pins = "sdc2_cmd";
+> +					drive-strength = <10>;
+> +					bias-pull-up;
+> +				};
+> +
+> +				data-pins {
+> +					pins = "sdc2_data";
+> +					drive-strength = <10>;
+> +					bias-pull-up;
+> +				};
+> +			};
+> +
+>  			spi1_default: spi0-default-state {
+>  				spi-pins {
+>  					pins = "gpio0", "gpio1", "gpio3";
+> @@ -751,6 +791,11 @@ sdhc_2: mmc@7864000 {
+>  				 <&gcc GCC_SDCC2_APPS_CLK>,
+>  				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+>  			clock-names = "iface", "core", "xo";
+> +
+> +			pinctrl-0 = <&sdc2_on_state>;
+> +			pinctrl-1 = <&sdc2_off_state>;
+> +			pinctrl-names = "default", "sleep";
+Ditto (prev patch)
 
-Thanks,
-
-                Ilya
+Konrad
+> +
+>  			status = "disabled";
+>  		};
+>  
