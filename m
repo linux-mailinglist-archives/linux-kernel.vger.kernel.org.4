@@ -2,82 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D633164D982
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:27:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BE064D986
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 11:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiLOK0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 05:26:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
+        id S229774AbiLOK1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 05:27:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiLOK0t (ORCPT
+        with ESMTP id S229744AbiLOK1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 05:26:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570532E4;
-        Thu, 15 Dec 2022 02:26:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 15 Dec 2022 05:27:11 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529952E4;
+        Thu, 15 Dec 2022 02:27:10 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5C5061D51;
-        Thu, 15 Dec 2022 10:26:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3973EC433EF;
-        Thu, 15 Dec 2022 10:26:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671100007;
-        bh=BLExdwvBmXZ2P7ZABWJyTRWc1Fir1N+SQnl5ofyV3SE=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=JPHsIO6wbV1ihtJBhWXaHpaO+7bDOmFEVsqT098twHxMWuGJCEXjpPg6E3IW7v7qg
-         2gd4w7yzvJ2ixeTQckUdZ2MIH2446e+OW/auL39wtNxmJqFGJZvfOEaqxnYNlgAmgL
-         QF7u5yg2vJOnphO2o+U6HWuDXZYgT1GIWaTiEZmoez1jRER+1DpcVLorhYcy2yzB7p
-         SI8NYL4AhKqMe4n8RUaXgFxGNaKbCupxAFmA8bdCTRAl9PgnNy7ZGN7WRhwDYmCUgy
-         RJs4HvS95uALvbPFlSn9Q0rDpm4h5EvKGb6VWljkpCLzO2061fkqiOWpZJZB94rwgj
-         +vykIuQ5yotrA==
-Date:   Thu, 15 Dec 2022 11:26:46 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Adrian Freund <adrian@freund.io>
-cc:     kernel test robot <lkp@intel.com>, linux-input@vger.kernel.org,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Basavaraj Natikar <basavaraj.natikar@amd.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Ivan Dovgal <iv.dovg@gmail.com>,
-        "Luke D . Jones" <luke@ljones.dev>
-Subject: Re: [PATCH] HID: amd_sfh: Add support for tablet-mode-switch
- sensor
-In-Reply-To: <3447483d-11bc-8ab2-8aba-96870b42281b@freund.io>
-Message-ID: <nycvar.YFH.7.76.2212151125090.9000@cbobk.fhfr.pm>
-References: <20221214214127.15347-1-adrian@freund.io> <202212151621.e3OmYctb-lkp@intel.com> <3447483d-11bc-8ab2-8aba-96870b42281b@freund.io>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BBE9520F72;
+        Thu, 15 Dec 2022 10:27:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1671100028; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yi1j32638121uUkrd5VI1ko6llH+YBRN+da4F96TPoY=;
+        b=AhbyzMrL5rrJBm0s+wy3Kan0wdkB9iIFNKUdWwX5DOeDZrFjSiA5LncheEpslE2Eud/rS3
+        vTXIcmioFqcyBar23lVjjor87q4fA5WjuPEoNZKnUr6LDjCb9vNNStQmtbCTLP7iA0vcxO
+        ZJPUuv9/D8pEESbvSjbard/1Cuovni4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1671100028;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yi1j32638121uUkrd5VI1ko6llH+YBRN+da4F96TPoY=;
+        b=0jz0jEeGSk/napn+mrIoVfrNaoa4XcTGVBeY2lUEQOiO5AAxhnF4fQHNHQ0xhLwjP8Gtk9
+        5NFVwUEEH+1DG3Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A5F1F138E5;
+        Thu, 15 Dec 2022 10:27:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rCx0KHz2mmNGUAAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 15 Dec 2022 10:27:08 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 7ABF2A0727; Thu, 15 Dec 2022 11:27:07 +0100 (CET)
+Date:   Thu, 15 Dec 2022 11:27:07 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Yuwei Guan <ssawgyw@gmail.com>
+Cc:     Yu Kuai <yukuai1@huaweicloud.com>, Jan Kara <jack@suse.cz>,
+        paolo.valente@linaro.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yuwei.Guan@zeekrlife.com, "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH v1] block, bfq: do the all counting of pending-request if
+ CONFIG_BFQ_GROUP_IOSCHED is enabled
+Message-ID: <20221215102707.hvnhzwd425f3dccy@quack3>
+References: <20221110112622.389332-1-Yuwei.Guan@zeekrlife.com>
+ <3153dcb3-dd9b-7a2b-a15a-8244d805f246@huaweicloud.com>
+ <CALJQGLmOaEnHawYvNz5fk_MtGhz6DPpW+8E-hgvmWxF--8V4zA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALJQGLmOaEnHawYvNz5fk_MtGhz6DPpW+8E-hgvmWxF--8V4zA@mail.gmail.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022, Adrian Freund wrote:
+Hello Yuwei!
 
-> >     In file included from drivers/hid/amd-sfh-hid/sfh1_1/amd_sfh_desc.c:15:
-> >>> drivers/hid/amd-sfh-hid/sfh1_1/../hid_descriptor/amd_sfh_hid_report_desc.h:649:17:
-> >>> warning: 'tms_report_descriptor' defined but not used
-> >>> [-Wunused-const-variable=]
-> >       649 | static const u8 tms_report_descriptor[] = {
-> >           |                 ^~~~~~~~~~~~~~~~~~~~~
-> hid_descriptor/amd_sfh_hid_report_desc.h is included from both
-> hid_descriptor/amd_sfh_hid_desc.c and sfh1_1/amd_sfh_desc.c, the first of
-> which has 4 usages of tms_report_descriptor. The later is for sensor fusion
-> hub 1.1. I don't have access to a devices using sfh1.1, so I can't add support
-> for the tablet mode switch there, causing the variable to be unused for that
-> import.
+On Thu 15-12-22 09:48:59, Yuwei Guan wrote:
+> Yu Kuai <yukuai1@huaweicloud.com> 于2022年11月14日周一 11:33写道：
+> >
+> > Hi,
+> >
+> > 在 2022/11/10 19:26, Yuwei Guan 写道:
+> > > The 'bfqd->num_groups_with_pending_reqs' is used when
+> > > CONFIG_BFQ_GROUP_IOSCHED is enabled, so let the variables and processes
+> > > take effect when ONFIG_BFQ_GROUP_IOSCHED is enabled.
+> > >
+> >
+> > This patch looks good to me, fell free to add:
+> > Reviewed-by: Yu Kuai <yukuai3@huawei.com>
+> >
+> > BTW, this patch need to be reviewed by Jan or Paolo before it can be
+> > applied.
+> 
+> Could you help to review this patch.
 
-I'd say either move the rdesc directly to 
-hid_descriptor/amd_sfh_hid_desc.c, or alternatively mark it with 
-__attribute__((used)).
+Yeah, the patch looks good to me. Feel free to add:
 
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
 -- 
-Jiri Kosina
-SUSE Labs
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
