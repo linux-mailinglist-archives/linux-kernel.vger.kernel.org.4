@@ -2,132 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D3164E8EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 10:54:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CF064E8F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 10:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbiLPJyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 04:54:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
+        id S230264AbiLPJyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 04:54:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbiLPJxs (ORCPT
+        with ESMTP id S230344AbiLPJyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 04:53:48 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC79950D79;
-        Fri, 16 Dec 2022 01:53:41 -0800 (PST)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2D56D1C000D;
-        Fri, 16 Dec 2022 09:53:37 +0000 (UTC)
-Message-ID: <8f00ae9463b07fbd789af3840cd59a9e99caff34.camel@hadess.net>
-Subject: Re: [PATCH] hid: Support for Litra Glow
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Andreas Bergmeier <abergmeier@gmx.net>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 16 Dec 2022 10:53:37 +0100
-In-Reply-To: <9fca69c7-cc24-63d0-98f6-80c28fc69a5@9300>
-References: <9fca69c7-cc24-63d0-98f6-80c28fc69a5@9300>
-Content-Type: multipart/mixed; boundary="=-Sr8f35irKMU9aZI4Whjo"
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Fri, 16 Dec 2022 04:54:20 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADB04A584;
+        Fri, 16 Dec 2022 01:54:18 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3080D33E77;
+        Fri, 16 Dec 2022 09:54:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1671184457; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=o617ymahCBDUwg/ibQ5ik0Q09yiBjUX5QeeGEwl2TXE=;
+        b=lCWlA0AXi7lajIa0bWupQp2+/gi28z78NIK2swJw8lh8KpFjPTZ4ZaTk0mK112E7+MSsPI
+        OB20DoDFdf6gY9J7upFs2toz4RTqUkFiL5AxM14paMqtlMWvhuUOCfiwX8VCHM1thSf3Ca
+        WzqdvrrfEz6HD+wF3xSOGC/66X4SKxs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1DA20138F0;
+        Fri, 16 Dec 2022 09:54:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bA9rBklAnGOkWgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 16 Dec 2022 09:54:17 +0000
+Date:   Fri, 16 Dec 2022 10:54:16 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mina Almasry <almasrymina@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
+        fvdl@google.com, bagasdotme@gmail.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH] Revert "mm: add nodes= arg to memory.reclaim"
+Message-ID: <Y5xASNe1x8cusiTx@dhcp22.suse.cz>
+References: <20221202223533.1785418-1-almasrymina@google.com>
+ <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-Sr8f35irKMU9aZI4Whjo
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Andrew,
+I have noticed that the patch made it into Linus tree already. Can we
+please revert it because the semantic is not really clear and we should
+really not create yet another user API maintenance problem. I am
+proposing to revert the nodemask extension for now before we grow any
+upstream users. Deeper in the email thread are some proposals how to
+move forward with that.
+--- 
+From 7c5285f1725d5abfcae5548ab0d73be9ceded2a1 Mon Sep 17 00:00:00 2001
+From: Michal Hocko <mhocko@suse.com>
+Date: Fri, 16 Dec 2022 10:46:33 +0100
+Subject: [PATCH] Revert "mm: add nodes= arg to memory.reclaim"
 
-On Thu, 2022-12-15 at 22:09 +0100, Andreas Bergmeier wrote:
-> Tries to implement as general support for Illumination Light as
-> possible. Note that it is singular, which means by Logitech spec we
-> are
-> fine off with just handling one capability/device.
+This reverts commit 12a5d3955227b0d7e04fb793ccceeb2a1dd275c5.
 
-Your email client absolutely trashed the patch's indentation, it's
-unreadable as-is.
+Although it is recognized that a finer grained pro-active reclaim is
+something we need and want the semantic of this implementation is really
+ambiguous.
 
-> Implementation currently only exposes Brightness and On/Off controls.
-> Does currently not expose Color Temperature because LEDs does not
-> support it.
->=20
-> Introduces HIDPP_QUIRK_CLASS_SIMPLE_START to prevent reconnect on
-> startup. Could not get Glow to work with that.
+From a follow up discussion it became clear that there are two essential
+usecases here. One is to use memory.reclaim to pro-actively reclaim
+memory and expectation is that the requested and reported amount of memory is
+uncharged from the memcg. Another usecase focuses on pro-active demotion
+when the memory is merely shuffled around to demotion targets while the
+overall charged memory stays unchanged.
 
-I'd really rather we didn't introduce a new quirk, but instead fixed
-the fact that we need to restart the HID transport to support 3 (!)
-devices.
+The current implementation considers demoted pages as reclaimed and that
+break both usecases. [1] has tried to address the reporting part but
+there are more issues with that summarized in [2] and follow up emails.
 
-Would something like the attached patch work? I haven't tested it yet,
-but if it works for you, I'll test it on the devices I have here.
+Let's revert the nodemask based extension of the memcg pro-active
+reclaim for now until we settle with a more robust semantic.
 
-Cheers
+[1] http://lkml.kernel.org/r/http://lkml.kernel.org/r/20221206023406.3182800-1-almasrymina@google.com
+[2] http://lkml.kernel.org/r/Y5bsmpCyeryu3Zz1@dhcp22.suse.cz
+Signed-off-by: Michal Hocko <mhocko@suse.com>
+---
+ Documentation/admin-guide/cgroup-v2.rst | 15 +++---
+ include/linux/swap.h                    |  3 +-
+ mm/memcontrol.c                         | 67 +++++--------------------
+ mm/vmscan.c                             |  4 +-
+ 4 files changed, 21 insertions(+), 68 deletions(-)
 
---=-Sr8f35irKMU9aZI4Whjo
-Content-Disposition: attachment;
-	filename*0=0001-HID-logitech-hidpp-Don-t-restart-communication-if-no.pat;
-	filename*1=ch
-Content-Type: text/x-patch;
-	name="0001-HID-logitech-hidpp-Don-t-restart-communication-if-no.patch";
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index c8ae7c897f14..74cec76be9f2 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -1245,13 +1245,17 @@ PAGE_SIZE multiple when read back.
+ 	This is a simple interface to trigger memory reclaim in the
+ 	target cgroup.
+ 
+-	This file accepts a string which contains the number of bytes to
+-	reclaim.
++	This file accepts a single key, the number of bytes to reclaim.
++	No nested keys are currently supported.
+ 
+ 	Example::
+ 
+ 	  echo "1G" > memory.reclaim
+ 
++	The interface can be later extended with nested keys to
++	configure the reclaim behavior. For example, specify the
++	type of memory to reclaim from (anon, file, ..).
++
+ 	Please note that the kernel can over or under reclaim from
+ 	the target cgroup. If less bytes are reclaimed than the
+ 	specified amount, -EAGAIN is returned.
+@@ -1263,13 +1267,6 @@ PAGE_SIZE multiple when read back.
+ 	This means that the networking layer will not adapt based on
+ 	reclaim induced by memory.reclaim.
+ 
+-	This file also allows the user to specify the nodes to reclaim from,
+-	via the 'nodes=' key, for example::
+-
+-	  echo "1G nodes=0,1" > memory.reclaim
+-
+-	The above instructs the kernel to reclaim memory from nodes 0,1.
+-
+   memory.peak
+ 	A read-only single value file which exists on non-root
+ 	cgroups.
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index 2787b84eaf12..0ceed49516ad 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -418,8 +418,7 @@ extern unsigned long try_to_free_pages(struct zonelist *zonelist, int order,
+ extern unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+ 						  unsigned long nr_pages,
+ 						  gfp_t gfp_mask,
+-						  unsigned int reclaim_options,
+-						  nodemask_t *nodemask);
++						  unsigned int reclaim_options);
+ extern unsigned long mem_cgroup_shrink_node(struct mem_cgroup *mem,
+ 						gfp_t gfp_mask, bool noswap,
+ 						pg_data_t *pgdat,
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index ab457f0394ab..73afff8062f9 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -63,7 +63,6 @@
+ #include <linux/resume_user_mode.h>
+ #include <linux/psi.h>
+ #include <linux/seq_buf.h>
+-#include <linux/parser.h>
+ #include "internal.h"
+ #include <net/sock.h>
+ #include <net/ip.h>
+@@ -2393,8 +2392,7 @@ static unsigned long reclaim_high(struct mem_cgroup *memcg,
+ 		psi_memstall_enter(&pflags);
+ 		nr_reclaimed += try_to_free_mem_cgroup_pages(memcg, nr_pages,
+ 							gfp_mask,
+-							MEMCG_RECLAIM_MAY_SWAP,
+-							NULL);
++							MEMCG_RECLAIM_MAY_SWAP);
+ 		psi_memstall_leave(&pflags);
+ 	} while ((memcg = parent_mem_cgroup(memcg)) &&
+ 		 !mem_cgroup_is_root(memcg));
+@@ -2685,8 +2683,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 
+ 	psi_memstall_enter(&pflags);
+ 	nr_reclaimed = try_to_free_mem_cgroup_pages(mem_over_limit, nr_pages,
+-						    gfp_mask, reclaim_options,
+-						    NULL);
++						    gfp_mask, reclaim_options);
+ 	psi_memstall_leave(&pflags);
+ 
+ 	if (mem_cgroup_margin(mem_over_limit) >= nr_pages)
+@@ -3506,8 +3503,7 @@ static int mem_cgroup_resize_max(struct mem_cgroup *memcg,
+ 		}
+ 
+ 		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
+-					memsw ? 0 : MEMCG_RECLAIM_MAY_SWAP,
+-					NULL)) {
++					memsw ? 0 : MEMCG_RECLAIM_MAY_SWAP)) {
+ 			ret = -EBUSY;
+ 			break;
+ 		}
+@@ -3618,8 +3614,7 @@ static int mem_cgroup_force_empty(struct mem_cgroup *memcg)
+ 			return -EINTR;
+ 
+ 		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
+-						  MEMCG_RECLAIM_MAY_SWAP,
+-						  NULL))
++						  MEMCG_RECLAIM_MAY_SWAP))
+ 			nr_retries--;
+ 	}
+ 
+@@ -6429,8 +6424,7 @@ static ssize_t memory_high_write(struct kernfs_open_file *of,
+ 		}
+ 
+ 		reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages - high,
+-					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP,
+-					NULL);
++					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP);
+ 
+ 		if (!reclaimed && !nr_retries--)
+ 			break;
+@@ -6479,8 +6473,7 @@ static ssize_t memory_max_write(struct kernfs_open_file *of,
+ 
+ 		if (nr_reclaims) {
+ 			if (!try_to_free_mem_cgroup_pages(memcg, nr_pages - max,
+-					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP,
+-					NULL))
++					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP))
+ 				nr_reclaims--;
+ 			continue;
+ 		}
+@@ -6603,54 +6596,21 @@ static ssize_t memory_oom_group_write(struct kernfs_open_file *of,
+ 	return nbytes;
+ }
+ 
+-enum {
+-	MEMORY_RECLAIM_NODES = 0,
+-	MEMORY_RECLAIM_NULL,
+-};
+-
+-static const match_table_t if_tokens = {
+-	{ MEMORY_RECLAIM_NODES, "nodes=%s" },
+-	{ MEMORY_RECLAIM_NULL, NULL },
+-};
+-
+ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+ 			      size_t nbytes, loff_t off)
+ {
+ 	struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
+ 	unsigned int nr_retries = MAX_RECLAIM_RETRIES;
+ 	unsigned long nr_to_reclaim, nr_reclaimed = 0;
+-	unsigned int reclaim_options = MEMCG_RECLAIM_MAY_SWAP |
+-				       MEMCG_RECLAIM_PROACTIVE;
+-	char *old_buf, *start;
+-	substring_t args[MAX_OPT_ARGS];
+-	int token;
+-	char value[256];
+-	nodemask_t nodemask = NODE_MASK_ALL;
+-
+-	buf = strstrip(buf);
+-
+-	old_buf = buf;
+-	nr_to_reclaim = memparse(buf, &buf) / PAGE_SIZE;
+-	if (buf == old_buf)
+-		return -EINVAL;
++	unsigned int reclaim_options;
++	int err;
+ 
+ 	buf = strstrip(buf);
++	err = page_counter_memparse(buf, "", &nr_to_reclaim);
++	if (err)
++		return err;
+ 
+-	while ((start = strsep(&buf, " ")) != NULL) {
+-		if (!strlen(start))
+-			continue;
+-		token = match_token(start, if_tokens, args);
+-		match_strlcpy(value, args, sizeof(value));
+-		switch (token) {
+-		case MEMORY_RECLAIM_NODES:
+-			if (nodelist_parse(value, nodemask) < 0)
+-				return -EINVAL;
+-			break;
+-		default:
+-			return -EINVAL;
+-		}
+-	}
+-
++	reclaim_options	= MEMCG_RECLAIM_MAY_SWAP | MEMCG_RECLAIM_PROACTIVE;
+ 	while (nr_reclaimed < nr_to_reclaim) {
+ 		unsigned long reclaimed;
+ 
+@@ -6667,8 +6627,7 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+ 
+ 		reclaimed = try_to_free_mem_cgroup_pages(memcg,
+ 						nr_to_reclaim - nr_reclaimed,
+-						GFP_KERNEL, reclaim_options,
+-						&nodemask);
++						GFP_KERNEL, reclaim_options);
+ 
+ 		if (!reclaimed && !nr_retries--)
+ 			return -EAGAIN;
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index aba991c505f1..546540bc770a 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -6757,8 +6757,7 @@ unsigned long mem_cgroup_shrink_node(struct mem_cgroup *memcg,
+ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+ 					   unsigned long nr_pages,
+ 					   gfp_t gfp_mask,
+-					   unsigned int reclaim_options,
+-					   nodemask_t *nodemask)
++					   unsigned int reclaim_options)
+ {
+ 	unsigned long nr_reclaimed;
+ 	unsigned int noreclaim_flag;
+@@ -6773,7 +6772,6 @@ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+ 		.may_unmap = 1,
+ 		.may_swap = !!(reclaim_options & MEMCG_RECLAIM_MAY_SWAP),
+ 		.proactive = !!(reclaim_options & MEMCG_RECLAIM_PROACTIVE),
+-		.nodemask = nodemask,
+ 	};
+ 	/*
+ 	 * Traverse the ZONELIST_FALLBACK zonelist of the current node to put
+-- 
+2.30.2
 
-RnJvbSBlZDY2NmIwMjk4MzZiNjVjODJmNjFiN2EyMTE3YzJjMTQ0ZTJiZTVkIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBCYXN0aWVuIE5vY2VyYSA8aGFkZXNzQGhhZGVzcy5uZXQ+CkRh
-dGU6IEZyaSwgMTYgRGVjIDIwMjIgMTA6NDE6MTYgKzAxMDAKU3ViamVjdDogW1BBVENIXSBISUQ6
-IGxvZ2l0ZWNoLWhpZHBwOiBEb24ndCByZXN0YXJ0IGNvbW11bmljYXRpb24gaWYgbm90CiBuZWNl
-c3NhcnkKCkRvbid0IHN0b3AgYW5kIHJlc3RhcnQgY29tbXVuaWNhdGlvbiB3aXRoIHRoZSBkZXZp
-Y2UgdW5sZXNzIHdlIG5lZWQgdG8KbW9kaWZ5IHRoZSBjb25uZWN0IGZsYWdzIHVzZWQgYmVjYXVz
-ZSBvZiBhIGRldmljZSBxdWlyay4KLS0tCiBkcml2ZXJzL2hpZC9oaWQtbG9naXRlY2gtaGlkcHAu
-YyB8IDMwICsrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDE4
-IGluc2VydGlvbnMoKyksIDEyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvaGlk
-L2hpZC1sb2dpdGVjaC1oaWRwcC5jIGIvZHJpdmVycy9oaWQvaGlkLWxvZ2l0ZWNoLWhpZHBwLmMK
-aW5kZXggN2Y5MTg3MjAxOTEzLi4wNTUzMmVkZmEwMWEgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvaGlk
-L2hpZC1sb2dpdGVjaC1oaWRwcC5jCisrKyBiL2RyaXZlcnMvaGlkL2hpZC1sb2dpdGVjaC1oaWRw
-cC5jCkBAIC00MzEwLDYgKzQzMTAsNyBAQCBzdGF0aWMgaW50IGhpZHBwX3Byb2JlKHN0cnVjdCBo
-aWRfZGV2aWNlICpoZGV2LCBjb25zdCBzdHJ1Y3QgaGlkX2RldmljZV9pZCAqaWQpCiAJYm9vbCBj
-b25uZWN0ZWQ7CiAJdW5zaWduZWQgaW50IGNvbm5lY3RfbWFzayA9IEhJRF9DT05ORUNUX0RFRkFV
-TFQ7CiAJc3RydWN0IGhpZHBwX2ZmX3ByaXZhdGVfZGF0YSBkYXRhOworCWJvb2wgd2lsbF9yZXN0
-YXJ0ID0gZmFsc2U7CiAKIAkvKiByZXBvcnRfZml4dXAgbmVlZHMgZHJ2ZGF0YSB0byBiZSBzZXQg
-YmVmb3JlIHdlIGNhbGwgaGlkX3BhcnNlICovCiAJaGlkcHAgPSBkZXZtX2t6YWxsb2MoJmhkZXYt
-PmRldiwgc2l6ZW9mKCpoaWRwcCksIEdGUF9LRVJORUwpOwpAQCAtNDM2MCw2ICs0MzYxLDkgQEAg
-c3RhdGljIGludCBoaWRwcF9wcm9iZShzdHJ1Y3QgaGlkX2RldmljZSAqaGRldiwgY29uc3Qgc3Ry
-dWN0IGhpZF9kZXZpY2VfaWQgKmlkKQogCQkJcmV0dXJuIHJldDsKIAl9CiAKKwlpZiAoaGlkcHAt
-PnF1aXJrcyAmIEhJRFBQX1FVSVJLX0RFTEFZRURfSU5JVCkKKwkJd2lsbF9yZXN0YXJ0ID0gdHJ1
-ZTsKKwogCUlOSVRfV09SSygmaGlkcHAtPndvcmssIGRlbGF5ZWRfd29ya19jYik7CiAJbXV0ZXhf
-aW5pdCgmaGlkcHAtPnNlbmRfbXV0ZXgpOwogCWluaXRfd2FpdHF1ZXVlX2hlYWQoJmhpZHBwLT53
-YWl0KTsKQEAgLTQzNzQsNyArNDM3OCw3IEBAIHN0YXRpYyBpbnQgaGlkcHBfcHJvYmUoc3RydWN0
-IGhpZF9kZXZpY2UgKmhkZXYsIGNvbnN0IHN0cnVjdCBoaWRfZGV2aWNlX2lkICppZCkKIAkgKiBQ
-bGFpbiBVU0IgY29ubmVjdGlvbnMgbmVlZCB0byBhY3R1YWxseSBjYWxsIHN0YXJ0IGFuZCBvcGVu
-CiAJICogb24gdGhlIHRyYW5zcG9ydCBkcml2ZXIgdG8gYWxsb3cgaW5jb21pbmcgZGF0YS4KIAkg
-Ki8KLQlyZXQgPSBoaWRfaHdfc3RhcnQoaGRldiwgMCk7CisJcmV0ID0gaGlkX2h3X3N0YXJ0KGhk
-ZXYsIHdpbGxfcmVzdGFydCA/IDAgOiBjb25uZWN0X21hc2spOwogCWlmIChyZXQpIHsKIAkJaGlk
-X2VycihoZGV2LCAiaHcgc3RhcnQgZmFpbGVkXG4iKTsKIAkJZ290byBoaWRfaHdfc3RhcnRfZmFp
-bDsKQEAgLTQ0MjUsMTkgKzQ0MjksMjEgQEAgc3RhdGljIGludCBoaWRwcF9wcm9iZShzdHJ1Y3Qg
-aGlkX2RldmljZSAqaGRldiwgY29uc3Qgc3RydWN0IGhpZF9kZXZpY2VfaWQgKmlkKQogCiAJaGlk
-cHBfY29ubmVjdF9ldmVudChoaWRwcCk7CiAKLQkvKiBSZXNldCB0aGUgSElEIG5vZGUgc3RhdGUg
-Ki8KLQloaWRfZGV2aWNlX2lvX3N0b3AoaGRldik7Ci0JaGlkX2h3X2Nsb3NlKGhkZXYpOwotCWhp
-ZF9od19zdG9wKGhkZXYpOworCWlmICh3aWxsX3Jlc3RhcnQpIHsKKwkJLyogUmVzZXQgdGhlIEhJ
-RCBub2RlIHN0YXRlICovCisJCWhpZF9kZXZpY2VfaW9fc3RvcChoZGV2KTsKKwkJaGlkX2h3X2Ns
-b3NlKGhkZXYpOworCQloaWRfaHdfc3RvcChoZGV2KTsKIAotCWlmIChoaWRwcC0+cXVpcmtzICYg
-SElEUFBfUVVJUktfTk9fSElESU5QVVQpCi0JCWNvbm5lY3RfbWFzayAmPSB+SElEX0NPTk5FQ1Rf
-SElESU5QVVQ7CisJCWlmIChoaWRwcC0+cXVpcmtzICYgSElEUFBfUVVJUktfTk9fSElESU5QVVQp
-CisJCQljb25uZWN0X21hc2sgJj0gfkhJRF9DT05ORUNUX0hJRElOUFVUOwogCi0JLyogTm93IGV4
-cG9ydCB0aGUgYWN0dWFsIGlucHV0cyBhbmQgaGlkcmF3IG5vZGVzIHRvIHRoZSB3b3JsZCAqLwot
-CXJldCA9IGhpZF9od19zdGFydChoZGV2LCBjb25uZWN0X21hc2spOwotCWlmIChyZXQpIHsKLQkJ
-aGlkX2VycihoZGV2LCAiJXM6aGlkX2h3X3N0YXJ0IHJldHVybmVkIGVycm9yXG4iLCBfX2Z1bmNf
-Xyk7Ci0JCWdvdG8gaGlkX2h3X3N0YXJ0X2ZhaWw7CisJCS8qIE5vdyBleHBvcnQgdGhlIGFjdHVh
-bCBpbnB1dHMgYW5kIGhpZHJhdyBub2RlcyB0byB0aGUgd29ybGQgKi8KKwkJcmV0ID0gaGlkX2h3
-X3N0YXJ0KGhkZXYsIGNvbm5lY3RfbWFzayk7CisJCWlmIChyZXQpIHsKKwkJCWhpZF9lcnIoaGRl
-diwgIiVzOmhpZF9od19zdGFydCByZXR1cm5lZCBlcnJvclxuIiwgX19mdW5jX18pOworCQkJZ290
-byBoaWRfaHdfc3RhcnRfZmFpbDsKKwkJfQogCX0KIAogCWlmIChoaWRwcC0+cXVpcmtzICYgSElE
-UFBfUVVJUktfQ0xBU1NfRzkyMCkgewotLSAKMi4zOC4xCgo=
-
-
---=-Sr8f35irKMU9aZI4Whjo--
+-- 
+Michal Hocko
+SUSE Labs
