@@ -2,191 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4190B64EFC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C30E264EFC8
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbiLPQwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 11:52:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
+        id S231362AbiLPQw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 11:52:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiLPQvy (ORCPT
+        with ESMTP id S230462AbiLPQwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 11:51:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32C4EE;
-        Fri, 16 Dec 2022 08:51:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DCDB6218C;
-        Fri, 16 Dec 2022 16:51:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87019C433D2;
-        Fri, 16 Dec 2022 16:51:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671209504;
-        bh=0hb/MJls16WL36VuUKuWGxKZpEmgVcdJEgDtAMt34GQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=SQKLkqy0iGnLoq3dZ7fi5Ctww6L1vl4qFurAYaHlZZtGnA3LQJ5nfYTyHEx8XLhqz
-         z/yu4YXGh/TPrQ5uqt+43Cqsms74PWfIWFibZF8ANtSM1a8aYJPxN5GOxqPulxzS5I
-         402Rglycu6IMcei7UUqgYjWo57YTzAF8yFwbgi2z9UIjyJrtA6hoc8hu/xYVm9rGiv
-         o/BVybtGgnaUA+oIxILxijRDX9bqQ/m//tTXbAO66G99jHw9Jbc2rU0k5ZJrsZMdBj
-         HH1TP0HZZYjrTImp6QEFDg66RBp1SA5Y7VGvhzu1DrWA1HvpmCsGLqWDLfEYRhOoDa
-         qeQCUrpUdrIAQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 2AD3E5C0AC7; Fri, 16 Dec 2022 08:51:44 -0800 (PST)
-Date:   Fri, 16 Dec 2022 08:51:44 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>, boqun.feng@gmail.com,
-        neeraj.iitr10@gmail.com, urezki@gmail.com, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] srcu: Yet more detail for
- srcu_readers_active_idx_check() comments
-Message-ID: <20221216165144.GA4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221215201356.GM4001@paulmck-ThinkPad-P17-Gen-1>
- <EE4EC3CC-395E-475D-BEBE-545955AB97C8@joelfernandes.org>
- <20221216010914.GX4001@paulmck-ThinkPad-P17-Gen-1>
- <Y5ydp2YPRqGHq+eM@google.com>
+        Fri, 16 Dec 2022 11:52:17 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58AE7DFAC;
+        Fri, 16 Dec 2022 08:52:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=8951IwQXDwezIFfuE4x8rlkg+QlEDpYrWM0TEkzABwY=; b=os1lxoQnJ/FgOhbm9lnOQ366gf
+        OvE/CZFMFe9nNIuIOMEOtxWGfZOfGGL4t+1hI1vAN/jywV1dusglwtoSZRaNwQgRTNrHJqbEuN005
+        ivWfk78PuQIfjyycn03Ru193lpTOqCc7NbtqleOW+1L394v/S3sf6cWqT3mo+y20QCDrkeKoNDRLL
+        WpZG9l8zCXqEayoiAO8sU0BfWAwFJKbHt8XvzGeEIsiIQ+1RCU66aBPLYd/CfbTcYlMf1cqmkD+hY
+        geIGvFaa+Z0k3ihuPejMBYOl/rj9EsgjjdhmgOiw9pY2sSHZZd/LGYZjOqhRei48ATAzBOP+RHg15
+        MhYSwuow==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35744)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1p6DwI-00089K-IK; Fri, 16 Dec 2022 16:52:02 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1p6DwE-00012J-OM; Fri, 16 Dec 2022 16:51:58 +0000
+Date:   Fri, 16 Dec 2022 16:51:58 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Subject: Re: [PATCH v7 01/11] leds: add support for hardware driven LEDs
+Message-ID: <Y5yiLhTt2+AV1G0N@shell.armlinux.org.uk>
+References: <20221214235438.30271-1-ansuelsmth@gmail.com>
+ <20221214235438.30271-2-ansuelsmth@gmail.com>
+ <Y5tHjwx1Boj3xMok@shell.armlinux.org.uk>
+ <639ca0a4.050a0220.99395.8fd3@mx.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5ydp2YPRqGHq+eM@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <639ca0a4.050a0220.99395.8fd3@mx.google.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 04:32:39PM +0000, Joel Fernandes wrote:
-> On Thu, Dec 15, 2022 at 05:09:14PM -0800, Paul E. McKenney wrote:
-> [...]
-> > > >> 2. unlock()'s smp_mb() happened before Flip+smp_mb() , now the reader
-> > > >> has no new smp_mb() that happens AFTER the flip happened. So it can
-> > > >> totally sample the old idx again -- that particular reader will
-> > > >> increment twice, but the next time, it will see the flipped one.
-> > > > 
-> > > > I will let you transliterate both.  ;-)
-> > > 
-> > > I think I see what you mean now :)
-> > > 
-> > > I believe the access I am referring to is the read of idx on one side and
-> > > the write to idx on the other. However that is incomplete and I need to
-> > > pair that with some of other access on both sides.
-> > > 
-> > > So perhaps this:
-> > > 
-> > > Writer does flip + smp_mb + read unlock counts [1]
-> > > 
-> > > Reader does:
-> > >  read idx + smp_mb() + increment lock counts [2]
-> > > 
-> > > And subsequently reader does
-> > > Smp_mb() + increment unlock count. [3]
-> > > 
-> > > So [1] races with either [2] or [2]+[3].
-> > > 
-> > > Is that fair?
+On Fri, Dec 16, 2022 at 05:45:25PM +0100, Christian Marangi wrote:
+> On Thu, Dec 15, 2022 at 04:13:03PM +0000, Russell King (Oracle) wrote:
+> > Hi Christian,
 > > 
-> > That does look much better, thank you!
+> > Thanks for the patch.
+> > 
+> > I think Andrew's email is offline at the moment.
+> >
 > 
-> Perhaps a comment with an ASCII diagram will help?
-> 
-> 
-> Case 2:
-> Both the reader and the updater see each other's writes too late, but because
-> of memory barriers on both sides, they will eventually see each other's write
-> with respect to their own. This is similar to the store-buffer problem. This
-> let's a single reader contribute a maximum (unlock minus lock) imbalance of 2.
-> 
-> The following diagram shows the subtle worst case followed by a simplified
-> store-buffer explanation.
-> 
-> READER                  UPDATER
-> -------------           ----------
->                            // idx is initially 0.
-> read_lock() {
->   READ(idx) = 0;
->   lock[0]++; --------------------------------------------,
->                            flip() {                      |               
->                               smp_mb();                  |
->   smp_mb();                                              |
-> }                                                        |
->                                                          |
-> // RSCS                                                  |
->                                                          |
-> read_unlock() {                                          |
->   smp_mb();                                              |
->                               idx++;  // P               |
->                               smp_mb();                  |
->                            }                             |
->                                                          |
->                            scan_readers_idx(0) {         |
->                                count all unlock[0];      |
->                                    |                     |
->                                    |                     |
->   unlock[0]++; //X <--not-counted--`-----,               |
->                                          |               |
-> }                                        V               `------,
->                                // Will make sure next scan      |
->                                // will not miss this unlock (X) |
->                                // if other side saw flip (P) ,--`
->                                // Call this MB [1]           |
->                                // Order write(idx) with      |
->                                // next scan's unlock.        |
->                                smp_mb();                 ,---`
-> read_lock() {                                            |
->   READ(idx)=0;                                           |
->   lock[0]++; ----------------> count all lock[0];        |
->   smp_mb();         |     }                              |
-> }     |             |                                    V
->       |             `---> // Incorrect contribution to lock counting
->       |                   // upto a maximum of 2 times.
->       |
->        `---> // Pairs with MB [1]. Makes sure that
->              // the next read_lock()'s' idx read (Y) is ordered
->              // with above write to unlock[0] (X).
->                             |
-> rcu_read_unlock() {         |
->   smp_mb(); <---------------`
->   unlock[0]++; 
-> }
-> 
-> read_lock() {
->   READ(idx) = 1; //Y
->   lock[1]++;
->   ...
-> }
->                            scan_readers_idx(0) {
->                                count all unlock[0]; //Q
->                                ...
-> 
-> 
-> thanks,
-> 
->  - Joel
-> 
->                           }
-> 
-> This makes it similar to the store buffer pattern. Using X, Y, P and Q
-> annotated above, we get:
-> 
-> READER                    UPDATER
-> X (write)                 P (write)
-> 
-> smp_mb();                 smp_mb();
-> 
-> Y (read)                  Q (read)
+> Notice by gmail spamming me "I CAN'T SEND IT AHHHHH"
+> Holidy times I guess?
 
-Given that this diagram is more than 50 lines long, it might go better in
-a design document describing this part of RCU.  Perhaps less detail or
-segmented, but the same general idea as this guy:
+Sadly, Andrew's email has done this a number of times - and Andrew
+used to be on IRC so I could prod him about it, but it seems he
+doesn't hang out on IRC anymore. It's been like it a few days now.
 
-Documentation/RCU/Design/Memory-Ordering/Tree-RCU-Memory-Ordering.rst
+> > On Thu, Dec 15, 2022 at 12:54:28AM +0100, Christian Marangi wrote:
+> > > @@ -188,6 +213,10 @@ int led_trigger_set(struct led_classdev *led_cdev, struct led_trigger *trig)
+> > >  		led_set_brightness(led_cdev, LED_OFF);
+> > >  	}
+> > >  	if (trig) {
+> > > +		/* Make sure the trigger support the LED blink mode */
+> > > +		if (!led_trigger_is_supported(led_cdev, trig))
+> > > +			return -EINVAL;
+> > 
+> > Shouldn't validation happen before we start taking any actions? In other
+> > words, before we remove the previous trigger?
+> > 
+> 
+> trigger_set first remove any trigger and set the led off. Then apply the
+> new trigger. So the validation is done only when a trigger is actually
+> applied. Think we should understand the best case here.
 
-Thoughts?
+I think this is a question that needs to be answered by the LEDs folk,
+as it's an interface behaviour / quality of implementation issue.
 
-						Thanx, Paul
+> > > @@ -350,12 +381,26 @@ static inline bool led_sysfs_is_disabled(struct led_classdev *led_cdev)
+> > >  
+> > >  #define TRIG_NAME_MAX 50
+> > >  
+> > > +enum led_trigger_blink_supported_modes {
+> > > +	SOFTWARE_ONLY = SOFTWARE_CONTROLLED,
+> > > +	HARDWARE_ONLY = HARDWARE_CONTROLLED,
+> > > +	SOFTWARE_HARDWARE = SOFTWARE_HARDWARE_CONTROLLED,
+> > 
+> > I suspect all these generic names are asking for eventual namespace
+> > clashes. Maybe prefix them with LED_ ?
+> 
+> Agree they are pretty generic so I can see why... My only concern was
+> making them too long... Maybe reduce them to SW or HW? LEDS_SW_ONLY...
+> LEDS_SW_CONTROLLED?
+
+Seems sensible to me - and as a bonus they get shorter than the above!
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
