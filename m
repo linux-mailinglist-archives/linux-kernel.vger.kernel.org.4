@@ -2,90 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC4D64F1CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 20:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7184564F1CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 20:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbiLPT12 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Dec 2022 14:27:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
+        id S231361AbiLPT3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 14:29:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbiLPT1M (ORCPT
+        with ESMTP id S229453AbiLPT3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 14:27:12 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC0B20BEC
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 11:27:11 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-232-f6oopNjgN3u_Fg6iRUy8Sg-1; Fri, 16 Dec 2022 19:27:08 +0000
-X-MC-Unique: f6oopNjgN3u_Fg6iRUy8Sg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 16 Dec
- 2022 19:27:06 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Fri, 16 Dec 2022 19:27:06 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Steven Rostedt' <rostedt@goodmis.org>
-CC:     'Andreas Schwab' <schwab@linux-m68k.org>,
-        "'Leizhen (ThunderTown)'" <thunder.leizhen@huawei.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        "Joe Lawrence" <joe.lawrence@redhat.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: RE: [PATCH v9] kallsyms: Add self-test facility
-Thread-Topic: [PATCH v9] kallsyms: Add self-test facility
-Thread-Index: AQHZEWkbzV5WljPUpEGVjsixemOWL65wtOBggAAGFACAAAApIIAADHsSgAAbgaA=
-Date:   Fri, 16 Dec 2022 19:27:06 +0000
-Message-ID: <83701d57c0064c709669c03cecc38356@AcuMS.aculab.com>
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
-        <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
-        <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
-        <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
-        <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
-        <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
-        <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
-        <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com>
-        <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
-        <592dce7a0de24c62bd31c29f86ce6c1b@AcuMS.aculab.com>
-        <87pmcjidfe.fsf@igel.home>
-        <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com>
-        <87len7ibtt.fsf@igel.home>
-        <c7cebe9da0474eb880ab14124ba290d0@AcuMS.aculab.com>
-        <87fsdfib07.fsf@igel.home>
-        <819801284eb745d9a4189759bad297f5@AcuMS.aculab.com>
-        <20221216115314.6120beb7@gandalf.local.home>
-        <ecf4939dbff84709a1782a8e8851b29f@AcuMS.aculab.com>
-        <20221216121947.7d03b651@gandalf.local.home>
- <20221216123805.6eba002c@gandalf.local.home>
-In-Reply-To: <20221216123805.6eba002c@gandalf.local.home>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 16 Dec 2022 14:29:47 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC989FC7;
+        Fri, 16 Dec 2022 11:29:44 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id s9so3495427qtx.6;
+        Fri, 16 Dec 2022 11:29:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ivm4Ys7XgJf3YYzv4BAQtpAC/aUCSXOPDDFKz4AguEI=;
+        b=T2KjADE3vFRdeeLM3QPEW1ZQxBrwrazAjdzbOtVetkqh5X2egPgvfF4W4abf2+hFt7
+         tJJ53H4xNxgVnLzCoH9DyeXWUmrYWx2JvmWhfwNmbOkc+zFOTvGN+BM3h40zHll6N/GK
+         Cm2Ou4Qb1L0CV87Nluev0yXYuQxqECe2YaNUIZknKnhjfdZj+vPyGuuOOmsMDiXhlEaE
+         rWwpltSuLXzrDOpBGrHRy8I40xQQOK2gYwO6PJAU3TmB5CdOpO9sh6cJc4Z1TE3q4B2F
+         2Qxf3jSOrIXtT60nhds+Orh9UuZ1Dd29bNuqvhFnDzDSLRxfIR+gyRowiokookQutO06
+         drig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ivm4Ys7XgJf3YYzv4BAQtpAC/aUCSXOPDDFKz4AguEI=;
+        b=YSPbIB9G0YKzNNMp3qdPKZRYVa/zAOajdAHB4XeS7SNXUTmmDvGLlnf16TFp4jnGRz
+         +CKzh6y2OatSQrY7izVon3cw0ua96Ik9U9BWtEBXJl4F4W3L9JMWvyWHqfrkBSkG0Vkf
+         ccYTkjlNq7NXMQsnWm4V2W4JP/cKtHcsv9wVojXR12TYRt66a7L//Mw4KTbRHK4pOUtC
+         j7qzqlvbgGSSF3Hwk5i5gLk6HLatBFy7apDr5/RaP9j1hDPRZbMJd6A6Nsx0rbW7Nof+
+         mn8KG7EBvLVArnJtZ0dQ8yjpwZgC1ouj9s+S33RJrS4MFnLpjZ85MQF2WaeTa7ub2auG
+         YVBQ==
+X-Gm-Message-State: ANoB5pkFlqhKRzNXzTxeNIkSd2bEN5DvAqZ8dKY+5gd8conMSSvwmeQV
+        hVeiSOhtODyouaku9xEe4oGdPMyHRX+Xlg==
+X-Google-Smtp-Source: AA0mqf4a2wZSscbBjBMTalnfXiZzcPcbJkPZ2m+oVUABZ87B+JtRN8O6gr7/XDLHldFWYTmheWXkvg==
+X-Received: by 2002:a05:622a:5a19:b0:39c:fa1a:af56 with SMTP id fy25-20020a05622a5a1900b0039cfa1aaf56mr43429727qtb.56.1671218983813;
+        Fri, 16 Dec 2022 11:29:43 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id h3-20020a05620a244300b006fc9847d207sm2058098qkn.79.2022.12.16.11.29.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 11:29:43 -0800 (PST)
+Message-ID: <c25d4315-c609-2fc6-0812-12c9980c1b70@gmail.com>
+Date:   Fri, 16 Dec 2022 11:29:40 -0800
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5.10 00/15] 5.10.160-rc1 review
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221215172906.638553794@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221215172906.638553794@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,54 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt
-> Sent: 16 December 2022 17:38
+On 12/15/22 10:10, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.160 release.
+> There are 15 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> On Fri, 16 Dec 2022 12:19:47 -0500
-> Steven Rostedt <rostedt@goodmis.org> wrote:
+> Responses should be made by Sat, 17 Dec 2022 17:28:57 +0000.
+> Anything received after that time might be too late.
 > 
-> > I assumed that "memory" was for memory unrelated to the input constraints.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.160-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
 > 
-> Well, it looks like you do need a "memory" barrier.
+> thanks,
 > 
->   https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html
-> 
-> "memory"
-> 
->       The "memory" clobber tells the compiler that the assembly code
->       performs memory reads or writes to items other than those listed in
->       the input and output operands (for example, accessing the memory
->       pointed to by one of the input parameters). To ensure memory contains
->       correct values, GCC may need to flush specific register values to
->       memory before executing the asm. Further, the compiler does not
->       assume that any values read from memory before an asm remain
->       unchanged after that asm; it reloads them as needed. Using the
->       "memory" clobber effectively forms a read/write memory barrier for
->       the compiler.
-> 
-> As the "(for example, accessing the memory pointed to by one of the input
-> parameters)" is exactly this case.
+> greg k-h
 
-Without the memory clobber code like:
-int f(const char *s)
-{
-	char c[4] = "abc";
-	return strcmp(s, c);
-}
-is very like to get optimised so that c[] is never written.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-However, in this case, the strings have all existed for ages.
-So that won't be the problem.
-
-It might be obvious what is wrong from the asm output.
-Although the binary-chop lookup is suspect I'd also check
-that the sorted index is plausible - just tracing the first
-20 entries might be enough.
-No point peering at the search code if the setup is wrong.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
