@@ -2,94 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7A564EFF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:01:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3884464EFF5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbiLPRBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 12:01:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
+        id S231239AbiLPRCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 12:02:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbiLPRBo (ORCPT
+        with ESMTP id S231298AbiLPRC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 12:01:44 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE16DFF8;
-        Fri, 16 Dec 2022 09:01:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=VulHPZjdideXJ2MoIe3TAQIC0Llz0yGDa0eRzLoIHH8=; b=nZ7j8WP5k/rmdFjogJDFQODTe0
-        5DA91Yi36cWatusZerFBxrSxwspOQYrPugKOZWsIKTLmzdPaoq+HIqhITNXXkrL/KqXe95Vdkemfn
-        E+xNNM8CxG5CvP5OYpP2BVMFig1z8QOj8GI9g60biZR8YfW3bdC4eUO90+XCvqI7K8yFWgBXe9IJ+
-        /NKAaO1KB4GTk4igxO9EYlRxpgVitosU1WY11uc5IjOvSNsrxaxhoy1K+GWnm6g0//NXbr6TA/3NE
-        EPGRnJh0WiSCeADnYjGwM4mS76JGW+2tc9MnIoW5piUa0r+yhsxWbVDwo17E4zbvlFnqLZuST5xQq
-        XN+OIMnQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35748)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1p6E5c-0008CF-4u; Fri, 16 Dec 2022 17:01:40 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1p6E5a-00012e-TD; Fri, 16 Dec 2022 17:01:38 +0000
-Date:   Fri, 16 Dec 2022 17:01:38 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next v4 4/4] phy: aquantia: Determine rate adaptation
- support from registers
-Message-ID: <Y5ykcmRUv22l7BRt@shell.armlinux.org.uk>
-References: <20221216164851.2932043-1-sean.anderson@seco.com>
- <20221216164851.2932043-5-sean.anderson@seco.com>
+        Fri, 16 Dec 2022 12:02:28 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6848D69AB3;
+        Fri, 16 Dec 2022 09:02:27 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id b3so4401886lfv.2;
+        Fri, 16 Dec 2022 09:02:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YvIfsISoMi61fZIHo8kJ4vyzTDQDCae9rjQPs2pxnSo=;
+        b=V0jRl/QcELRmFTTg86syErEuttrQ6ycEZqcexQUv12q32Y19nQWELh+WzFHaPaAIEU
+         aqPVBNvIklnYA5FQU0BhVPCaa53X4QwxH2Y2nVEdtZwuN4Ix25fT+3UtED2S14dHUmmG
+         z4YvmXu67bl7JkK+XgrikH/lD1rEzXi+loun6dK0ZvE9FCgXsXu3Pb+wJFeGTGUekZB/
+         +33IY6zg5lbtaOFNn8BK2SWKa8NGqprJXlPnj0n98EH2PYsRGxiH0qoxZgIO3/BSrWww
+         eC1fEJ9hCJ9RhlkwFmaonVb9v0J9vAhcfrthcKyQXIz2t4hr4ZnozqkSK0ZGRUCgbb+U
+         58XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YvIfsISoMi61fZIHo8kJ4vyzTDQDCae9rjQPs2pxnSo=;
+        b=ZRxGIZ5SLZ6F7hkoddEduTUqVHMA2EBoMax7F9XQtAotaexsW+ofxZppEi26uLKc5Q
+         6V3yT6xVwTWLJun75/nOFZ/eDJX7F6TLCN1qL3D9BOXTY7NFUzXahvOufnjiEUu6ffuY
+         Yj8NW9XOr9Wy5KzLISCkA4mTEiFWrXTRgRc4nxLtg0pEcJEQ6ODuP/1Ft0QAWsI9Spm3
+         6MIE/SaH2pMTrGH5p6wPodzVaNxkbyVli6wnCJNkQocHPXLTkLTVbJslpDcGxTUur86c
+         wHgVAuP4vZDBtQzZ3F5xZmd8WneR9Z4ROhkFKiVLLUDrAyM+YWUHgpsDSIfid4CcEaUh
+         CfmA==
+X-Gm-Message-State: ANoB5pkeTq3nq4AkW+KLKE9l1Iz3gFzksyH8AjbHg+7daERZyOtd9pgn
+        tcMrTaUZbeEEtRJh84Lq+4c=
+X-Google-Smtp-Source: AA0mqf6SobV6R2EEDo2I2nbAzIa37w0+8FgbaQiSSK9pfgqgJk4H05rlJZtTb0zl6xUr0jD+4tSdyg==
+X-Received: by 2002:a05:6512:3e20:b0:4b6:e64c:aec1 with SMTP id i32-20020a0565123e2000b004b6e64caec1mr8671896lfv.53.1671210145688;
+        Fri, 16 Dec 2022 09:02:25 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id w12-20020a05651234cc00b00498f23c249dsm262057lfr.74.2022.12.16.09.02.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 09:02:25 -0800 (PST)
+Date:   Fri, 16 Dec 2022 20:02:22 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 23/25] PCI: dwc: Restore DMA-mask after MSI-data
+ allocation
+Message-ID: <20221216170222.5vv6bdfrejesbvs5@mobilestation>
+References: <20221214235305.31744-24-Sergey.Semin@baikalelectronics.ru>
+ <Y5rJJfZeVqliA5Rg@infradead.org>
+ <20221215092721.tvz3hpaql3kotgnu@mobilestation>
+ <07ec7610-f1be-9b5c-416d-17781a22427d@arm.com>
+ <20221215235218.wsuwy5uckqfxjnb6@mobilestation>
+ <Y5wgvdnMWQDxkUd+@infradead.org>
+ <20221216093423.4bettdxisserdzsh@mobilestation>
+ <Y5w/MkA4N857+AWQ@infradead.org>
+ <20221216101827.owq7qpakjduf3rit@mobilestation>
+ <22bae859-58ee-80cd-f31b-2313c2e47531@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221216164851.2932043-5-sean.anderson@seco.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <22bae859-58ee-80cd-f31b-2313c2e47531@arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 11:48:51AM -0500, Sean Anderson wrote:
-> When autonegotiation completes, the phy interface will be set based on
-> the global config register for that speed. If the SERDES mode is set to
-> something which the MAC does not support, then the link will not come
-> up. To avoid this, validate each combination of interface speed and link
-> speed which might be configured. This way, we ensure that we only
-> consider rate adaptation in our advertisement when we can actually use
-> it.
+On Fri, Dec 16, 2022 at 02:01:20PM +0000, Robin Murphy wrote:
+> On 2022-12-16 10:18, Serge Semin wrote:
+> > On Fri, Dec 16, 2022 at 01:49:38AM -0800, Christoph Hellwig wrote:
+> > > On Fri, Dec 16, 2022 at 12:34:23PM +0300, Serge Semin wrote:
+> > > > What about instead of save/restore pattern I'll just change the
+> > > > dma_set_mask_and_coherent() method with the dma_set_coherent_mask()
+> > > > function call? It seems cleaner. Like this:
+> > > 
+> > > > Thus the platform-specific streaming DMA mask would be preserved.
+> > > > Since it's PCIe then having the streaming DMA-mask less than 32-bits
+> > > > wide is very much improbable. Moreover DW PCIe AXI-interface can be
+> > > > synthesize only with one out of two address bus widths: 32 and 64.
+> > > 
+> > 
+> > > Where platform-specific means the dwc subdriver?
+> > 
+> > Right. I meant the streaming DMA-mask set by the low-level DWC PCIe drivers
+> > (like pcie-qcom(-ep)?.c, pcie-bt1.c, etc). It's very much important to
+> > have the real DMA-mask (at least the streaming one) set for the eDMA-capable
+> > controllers so the DMA-engine clients would work with the best performance.
+> > 
+> > > Yes, that seems to work.
+> > 
+> > Ok. I'll just use the direct dma_set_coherent_mask() method here then.
+> > 
+> > > Alternatively have a flag that says which streaming mask
+> > > to set.
+> > 
+> > I'd prefer to have more flexibility here relying on the low-level
+> > drivers to set the mask(s) instead of adding the new flag, just in case
+> > if there is vendor-specific IP-core/platform changes in the address
+> > bus width.
 > 
-> The API for get_rate_matching requires that PHY_INTERFACE_MODE_NA be
-> handled properly.
 
-This is no longer true. phy_get_rate_matching() used to be called with
-PHY_INTERFACE_MODE_NA in phylink_bringup_phy(), but that no longer
-happens as we need to know whether rate matching will be used to avoid
-breaking stuff. See commit 7642cc28fd37 ("net: phylink: fix PHY
-validation with rate adaption").
+> Presumably the low-level glue drivers could pass a bus size or mask value in
+> struct dw_pcie_rp/dw_pcie, so the actual dma_set_mask() call itself could be
+> centralised? I guess there's also an argument that only glue drivers which
+> care about eDMA need to care about setting a mask at all, so I don't have a
+> string preference either way.
 
-The purpose of PHY_INTERFACE_MODE_NA in phylink_bringup_phy() was to
-deal with PHYs which switch their MAC-facing interface mode, but we
-know that if a PHY uses rate adaption, the assumption now is that it
-won't switch its MAC-facing interface, which fixes a problem that
-Tim Harvey was having with the rate adaption code - and I believe
-you agreed with.
+There is another peculiarity here due to which the centralized
+approach turns to be less suitable. The dw_pcie_msi_host_init()
+method, which currently updates the mask, isn't always executed. It's
+run only if pci_msi_enabled() returns true and there is no
+platform-specific dw_pci_rp.msi_host_init callback specified. Thus if
+we got to implement the centralized DMA-mask setting up procedure then
+it should have been done in the always executed place. That code would
+have also implied the 32-bit coherent DMA-mask if the generic iMSI-RX
+config is required. Thus the iMSI-RX-specific setups (data allocation
+and the mask settings) would have been split up into different places
+which would be less maintainable.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Moreover as you correctly noted the real DMA-mask setting up is only
+needed for the eDMA-capable controllers. Meanwhile in the most of the
+cases there is no eDMA embedded in the PCIe controller, but due to the
+centralized approach we would need to set some mask anyway. Since I
+don't know the real address bus width of all the already available DW
+PCIe platforms  we'll have to fallback to using some default mask
+value, which might incorrectly describe the actual device capability
+(and possible cause some side-effects/regressions).
+
+To sum up weighing up pros and cons the centralized approach seems to
+me more complex, less maintainable and less flexible. In my opinion
+relying on the glue-drivers to set the mask if it's needed to be set
+(that is there is the embedded eDMA) is the best and the simplest
+choice.
+
+> If you'd rather stick with that approach then
+> it might be worth a brief comment at each site to clarify why the other mask
+> is being set from an entirely different place, just in case anyone comes
+> along and tries to "fix" it.
+
+Exactly what I was going to do. I'll add a brief comment why the
+coherent DMA-mask is updated in the dw_pcie_msi_host_init() method.
+
+-Serge(y)
+> 
+> Cheers,
+> Robin.
