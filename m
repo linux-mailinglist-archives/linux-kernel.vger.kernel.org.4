@@ -2,51 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD1B64E778
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2DD264E798
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:10:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiLPHEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 02:04:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S230057AbiLPHKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 02:10:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiLPHEl (ORCPT
+        with ESMTP id S230052AbiLPHJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 02:04:41 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BF736C42;
-        Thu, 15 Dec 2022 23:04:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Bdn3uI2+vY5pQpRy4ybJdHr0gzTwg0wCHFdFjlS66os=; b=bLfJhBuvLnKfTacOfntkdpS2po
-        uAg/4/QhYMKzf4mZgSJhDGyiG4KkB7RTxyWxK+FqZuwCXC8tpmImbDTEiVw8UVc+KvhOJZwd+TbOc
-        7kpyqxiSfd89La05577BSU/N1Pm2w8f8wLgenw8HtpqxFH6ll6ph504SagudlnHyZx6qJMo1qy6jn
-        AfwOY34DFkgeTgN3TI/aAh9YaQOP8l5RlBs5skn91XVAHisw2DYcVEtJH7x1Y9BkNfvRDnZIPnSpG
-        kZI+PpexyIt88X90R0K4QYbleTEnC5uzu9vnCte4RRH8VN4oR6+1PeqqWzbpC1HI80DUDcbOla61k
-        qNV6+6Ag==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p64ln-00DJ0d-Mf; Fri, 16 Dec 2022 07:04:35 +0000
-Date:   Thu, 15 Dec 2022 23:04:35 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Sergei Shtepa <sergei.shtepa@veeam.com>
-Cc:     Christoph Hellwig <hch@infradead.org>, axboe@kernel.dk,
-        corbet@lwn.net, linux-block@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 02/21] block, blkfilter: Block Device Filtering
- Mechanism
-Message-ID: <Y5wYgwtFYPj2xq/m@infradead.org>
-References: <20221209142331.26395-1-sergei.shtepa@veeam.com>
- <20221209142331.26395-3-sergei.shtepa@veeam.com>
- <Y5roR3jjhQwgFWVM@infradead.org>
- <28b715eb-f9bc-c0d3-8dfd-22d0f84080c0@veeam.com>
+        Fri, 16 Dec 2022 02:09:25 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA84747FB
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:07:04 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 7A84268BEB; Fri, 16 Dec 2022 08:06:22 +0100 (CET)
+Date:   Fri, 16 Dec 2022 08:06:21 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Phil Chang =?utf-8?B?KOW8teS4luWLsyk=?= 
+        <Phil.Chang@mediatek.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH 2/4] tee: Remove vmalloc page support
+Message-ID: <20221216070621.GA24832@lst.de>
+References: <20221002002326.946620-1-ira.weiny@intel.com> <20221002002326.946620-3-ira.weiny@intel.com> <CAFA6WYOGT1sJLA4c_B88NaXgxv4fm-idi5QMYvXdXB0acCF3sw@mail.gmail.com> <TYZPR03MB65279558CC22F5130B710EA8FB5D9@TYZPR03MB6527.apcprd03.prod.outlook.com> <CAFA6WYMT9S1Di6DN_UXc823f0ZTkqerE1PB=oG6wmfx28vEbDg@mail.gmail.com> <CAHk-=whVyH-wSWLd=Zn4rwo+91T+qzRvfMPC2yFX98GxykOqOw@mail.gmail.com> <CAHUa44GkTLCzuSij5FbjBXFBM1CCQROtrCtHHtj70ZRi-3K7uA@mail.gmail.com> <Y5u+oOLkJs6jehik@iweiny-desk3>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <28b715eb-f9bc-c0d3-8dfd-22d0f84080c0@veeam.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <Y5u+oOLkJs6jehik@iweiny-desk3>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,15 +48,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 11:46:35AM +0100, Sergei Shtepa wrote:
-> I am very glad to see your comments, Christoph.
-> Thank you so much for the review.
-> 
-> I have read all the comments and agree with them.
-> Now I see new ways to make the code of the filter and the blksnap module better.
+On Thu, Dec 15, 2022 at 04:41:04PM -0800, Ira Weiny wrote:
+> Overall I feel like submitting this series again with Christoph and Al's
+> comments addressed is the best way forward to get rid of kmap_to_page().  I
+> would really like to get moving on that to avoid any further issues with the
+> kmap conversions.
 
-Sorry for being so late, but I was stuck onder a pile of work last
-time you posted it.  But compared to the versions before I think we've
-made a lot of progress and we'll get there.  Also feel free to ask me
-for input on changes before the sending the whole series if you have any
-questions.
+Yes.  While the flag is really odd, killing kmap_to_page should be the
+priority.
+
