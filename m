@@ -2,197 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD3764E6D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 06:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EEC64E6E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 06:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiLPFKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 00:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
+        id S229837AbiLPF0p convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Dec 2022 00:26:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiLPFJ5 (ORCPT
+        with ESMTP id S229480AbiLPF0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 00:09:57 -0500
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A46B49B5B
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 21:09:56 -0800 (PST)
-Received: by mail-vk1-xa32.google.com with SMTP id z23so642350vkb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 21:09:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sgu7X5BHX9sTfJbpXF2aHjOSGbnmcd7dkZy4Cb0etJk=;
-        b=M1w027DTaUSOaUT+L0Q2TD5xvofS9C+uRrhU6fy9jmJTJ5XKICEYETUFU7LCyVvJA6
-         ZQuO4aVw7Q00TnyOzLx0vBWJhGbWOADFrkWM4miPXND6LquO5OlLRjYgB9RhC7q9MQ/Y
-         EPb7anG9uNw51P/mZVpFfY5s05mI73Aj4v2luZFlLfuGaX1Xk0s/mcP5+XI2tQRd3fKs
-         XdvPXlZll9xO/MZD/p9PJ+vnz+9n/Dpcl3gRe2RHBqLRvtlqKphWHPRO0gHbGYW3updE
-         ZY89H7SFkuoU/pT37Z6+pYgT9jZYsM/7eMqO2DfMAdWtKeoMl8JZ7GY+TWM7qa33AI6H
-         a0mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Sgu7X5BHX9sTfJbpXF2aHjOSGbnmcd7dkZy4Cb0etJk=;
-        b=q0dTmgwKI3Whh8SEz71wzx2RVcqZdb5tE9vLzWFKBmAj4lU/56rkOtuYo1nIkdkm38
-         uXfqATebc/e58iwyaUOmI8m63EKYscsg/YHcBCzhMdREFEZe3hbCPQidm+QzfxOG6r1K
-         PgTMncxd4vAYsFTkltc0pE/12n/Qy96cf4pEENqOUz6fgJlugjFm3ICqF0Hi90AH0fKN
-         5/ZyxgoiLvrEOxPdscvtS0mnKbFFu79r+pKb2wecdcmZRCfGQJe2ygm279pnUWIoSdCY
-         TGm6F6Xecjy/GXfmQzKY9LfSotns8mH3J0Lm0ut5Ae7UQTYYWB+USdaYGQLLIoTIcv50
-         tSKA==
-X-Gm-Message-State: ANoB5pkesU8pe7bh3gPqkDqV+FaZrZ7NgyVtqYObIPOSunBtrZy9ZOow
-        gjMEPJZfkEvI8JLlLglleuWKe9jyLFRAMAwojwet8w==
-X-Google-Smtp-Source: AA0mqf4Tnqsv1nPsCoELHu7nULwdsh55iwL8noXBFP2vaVOSypvSridY498rb7ry9fMro1J8aFbQyed5l/AvCnPCAgg=
-X-Received: by 2002:a05:6122:41e:b0:3bd:ad7c:b3ec with SMTP id
- e30-20020a056122041e00b003bdad7cb3ecmr12932777vkd.0.1671167395589; Thu, 15
- Dec 2022 21:09:55 -0800 (PST)
+        Fri, 16 Dec 2022 00:26:42 -0500
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805B613DCA;
+        Thu, 15 Dec 2022 21:26:40 -0800 (PST)
+Received: from [127.0.0.1] (adsl-d248.84-47-10.t-com.sk [84.47.10.248])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id C1ADC1F955;
+        Fri, 16 Dec 2022 06:26:38 +0100 (CET)
+Date:   Fri, 16 Dec 2022 06:26:38 +0100
+From:   Martin Botka <martin.botka@somainline.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+CC:     martin.botka1@gmail.com,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jami Kettunen <jamipkettunen@somainline.org>,
+        Paul Bouchara <paul.bouchara@somainline.org>,
+        Jan Trmal <jtrmal@gmail.com>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        linux-sunxi <linux-sunxi@lists.linux.dev>
+Subject: Re: [PATCH v5 3/3] regulator: axp20x: Add support for AXP1530 variant
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20221215231615.6a4fa710@slackpad.lan>
+References: <20221214190305.3354669-1-martin.botka@somainline.org> <20221214190305.3354669-4-martin.botka@somainline.org> <20221215231615.6a4fa710@slackpad.lan>
+Message-ID: <F47BD077-BB4B-4866-B5E7-445D6CCE4FCE@somainline.org>
 MIME-Version: 1.0
-References: <20221002002326.946620-1-ira.weiny@intel.com> <20221002002326.946620-3-ira.weiny@intel.com>
- <CAFA6WYOGT1sJLA4c_B88NaXgxv4fm-idi5QMYvXdXB0acCF3sw@mail.gmail.com>
- <TYZPR03MB65279558CC22F5130B710EA8FB5D9@TYZPR03MB6527.apcprd03.prod.outlook.com>
- <CAFA6WYMT9S1Di6DN_UXc823f0ZTkqerE1PB=oG6wmfx28vEbDg@mail.gmail.com>
- <CAHk-=whVyH-wSWLd=Zn4rwo+91T+qzRvfMPC2yFX98GxykOqOw@mail.gmail.com>
- <CAHUa44GkTLCzuSij5FbjBXFBM1CCQROtrCtHHtj70ZRi-3K7uA@mail.gmail.com> <Y5u+oOLkJs6jehik@iweiny-desk3>
-In-Reply-To: <Y5u+oOLkJs6jehik@iweiny-desk3>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Fri, 16 Dec 2022 10:39:44 +0530
-Message-ID: <CAFA6WYNMRymyqkqfASYAPVoL0iR2kw0h9YKZ1gBTdeSuHMOAtQ@mail.gmail.com>
-Subject: Re: [PATCH 2/4] tee: Remove vmalloc page support
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        =?UTF-8?B?UGhpbCBDaGFuZyAo5by15LiW5YuzKQ==?= 
-        <Phil.Chang@mediatek.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,RCVD_IN_SORBS_HTTP,
+        RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Dec 2022 at 06:11, Ira Weiny <ira.weiny@intel.com> wrote:
->
-> On Fri, Oct 07, 2022 at 10:12:57AM +0200, Jens Wiklander wrote:
-> > On Thu, Oct 6, 2022 at 8:20 PM Linus Torvalds
-> > <torvalds@linux-foundation.org> wrote:
-> > >
-> > > On Wed, Oct 5, 2022 at 11:24 PM Sumit Garg <sumit.garg@linaro.org> wrote:
-> > > >
-> > > > Sorry but you need to get your driver mainline in order to support
-> > > > vmalloc interface.
-> > >
-> > > Actually, I think even then we shouldn't support vmalloc - and
-> > > register_shm_helper() just needs to be changed to pass in an array of
-> > > actual page pointers instead.
-> >
-> > register_shm_helper() is an internal function, I suppose it's what's
-> > passed to tee_shm_register_user_buf() and especially
-> > tee_shm_register_kernel_buf() in this case.
-> >
-> > So the gain is that in the kernel it becomes the caller's
-> > responsibility to provide the array of page pointers and the TEE
-> > subsystem doesn't need to care about what kind of kernel memory it is
-> > any longer. Yes, that should avoid eventual complexities with
-> > vmalloc() etc.
->
-> I finally spent some time digging into this again.
->
-> Overall I'm not opposed to trying to clean up the code more but I feel like the
-> removal of TEE_SHM_USER_MAPPED is too complex for the main goal; to remove a
-> caller of kmap_to_page().
->
-> Not only is that flag used in release_registered_pages() but it is also used in
-> tee_shm_fop_mmap().  I'm not following exactly why.  I think this is to allow
-> mmap of the tee_shm's allocated by kernel users?
 
-No, its rather to allow mmap of tee_shm allocated via
-tee_shm_alloc_user_buf(). Have a look at its user-space usage here
-[1]. So overall I agree here that we can't get rid of
-TEE_SHM_USER_MAPPED completely as it has a valid mmap use-case.
 
-[1] https://github.com/OP-TEE/optee_client/blob/master/libteec/src/tee_client_api.c#L907
+On December 16, 2022 12:16:15 AM GMT+01:00, Andre Przywara <andre.przywara@arm.com> wrote:
+>On Wed, 14 Dec 2022 20:03:05 +0100
+>Martin Botka <martin.botka@somainline.org> wrote:
+>
+>Hi Martin,
+>
+>> AXP1530 has a few regulators that are controlled via I2C Bus.
+>> 
+>> Add support for them.
+>
+>thanks for putting this together!
+>After coming up with a very similar patch based on the AXP313A313
+>datasheet, I realised that those two must indeed be *somewhat*
+>compatible, so I am going to compare my patch with yours ;-)
+>
+Hello Andre,
+Thanks so much for looking at this.
+>> 
+>> Signed-off-by: Martin Botka <martin.botka@somainline.org>
+>> ---
+>>  drivers/regulator/axp20x-regulator.c | 44 ++++++++++++++++++++++++++++
+>>  1 file changed, 44 insertions(+)
+>> 
+>> diff --git a/drivers/regulator/axp20x-regulator.c b/drivers/regulator/axp20x-regulator.c
+>> index d260c442b788..9420839ff4f9 100644
+>> --- a/drivers/regulator/axp20x-regulator.c
+>> +++ b/drivers/regulator/axp20x-regulator.c
+>> @@ -1001,6 +1001,40 @@ static const struct regulator_desc axp813_regulators[] = {
+>>  		    AXP22X_PWR_OUT_CTRL2, AXP22X_PWR_OUT_DC1SW_MASK),
+>>  };
+>>  
+>> +static const struct linear_range axp1530_dcdc1_ranges[] = {
+>> +	REGULATOR_LINEAR_RANGE(500000, 0x0, 0x46, 10000),
+>
+>The AXP313A manual mentions "steps", in decimal
+>(0.5~1.2V，10mV/step，71steps), so I wonder if we should follow suit
+>here and describe the min_sel and max_sel members in decimal?
+>
+Ack. We definitely can :)
+>> +	REGULATOR_LINEAR_RANGE(1220000, 0x47, 0x57, 20000),
+>> +	REGULATOR_LINEAR_RANGE(1600000, 0x58, 0x6A, 100000),
+>> +};
+>> +
+>> +static const struct linear_range axp1530_dcdc2_ranges[] = {
+>> +	REGULATOR_LINEAR_RANGE(500000, 0x0, 0x46, 10000),
+>> +	REGULATOR_LINEAR_RANGE(1220000, 0x47, 0x57, 20000),
+>> +};
+>
+>The values up till here match exactly what I extracted from the AXP313A
+>manual.
+>
+>> +
+>> +static const struct linear_range axp1530_dcdc3_ranges[] = {
+>> +	REGULATOR_LINEAR_RANGE(500000, 0x0, 0x46, 10000),
+>> +	REGULATOR_LINEAR_RANGE(1220000, 0x47, 0x66, 20000),
+>> +};
+>
+>Can you double check that those are the values for DCDC3?
+>The AXP313A manual uses different ranges, essentially:
+>    REGULATOR_LINEAR_RANGE(800000, 0, 32, 10000),
+>    REGULATOR_LINEAR_RANGE(1140000, 33, 68, 20000),
+>So starting from 800mV, and using a slightly different split point.
+>
+>I would just hope that's this doesn't turn out to be an incompatible register.
+>
+Interesting. The unfortunate thing with 1530 is that i could not find any datasheet referencing it. The actual PMIC that is on the device i have here is 313A. Do i think it would be best if i rename this driver to 313A and follow the 313A datasheet which is public.
 
->  Which I _think_ is
-> orthogonal to the callers of tee_shm_register_kernel_buf()?
+This was already proposed in one of my device tree series.
+What do you think of this idea Andre ?
+>> +
+>> +static const struct regulator_desc axp1530_regulators[] = {
+>> +	AXP_DESC_RANGES(AXP1530, DCDC1, "dcdc1", "vin1", axp1530_dcdc1_ranges,
+>> +					0x6B, AXP1530_DCDC1_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
 >
-> >
-> > >
-> > > At that point TEE_SHM_USER_MAPPED should also go away, because then
-> > > it's the caller that should just do either the user space page
-> > > pinning, or pass in the kernel page pointer.
-> > >
-> > > JensW, is there some reason that wouldn't work?
-> >
-> > We still need to know if it's kernel or user pages in
-> > release_registered_pages().
+>Again I would code the steps in decimal. The other regulators use a
+>preprocessor constant, which helps the reader to get its meaning.
+>And please use at least GENMASK(6, 0) instead of 0x7f, or #define this
+>(can be shared for all DCDCs and the LDOs).
 >
-> Yes.
+Ack. Will use GENMASK.
+>> +					BIT(0)),
+>> +	AXP_DESC_RANGES(AXP1530, DCDC2, "dcdc2", "vin2", axp1530_dcdc2_ranges,
+>> +					0x58, AXP1530_DCDC2_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
+>> +					BIT(1)),
+>> +	AXP_DESC_RANGES(AXP1530, DCDC3, "dcdc3", "vin3", axp1530_dcdc3_ranges,
+>> +					0x58, AXP1530_DCDC3_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
+>> +					BIT(2)),
+>> +	AXP_DESC(AXP1530, LDO1, "ldo1", "ldo1in", 500, 3500, 100,
+>> +					AXP1530_ALDO1_CONRTOL, 0x1f, AXP1530_OUTPUT_CONTROL,
+>> +					BIT(3)),
+>> +	AXP_DESC(AXP1530, LDO2, "ldo2", "ldo2in", 500, 3500, 100,
+>> +					AXP1530_DLDO1_CONRTOL, 0x1f, AXP1530_OUTPUT_CONTROL,
+>> +					BIT(4)),
 >
-> As I dug into this it seemed ok to define a tee_shm_kernel_free().  Pull out
-> the allocation of the page array from register_shm_helper() such that it could
-> be handled by tee_shm_register_kernel_buf() and this new tee_shm_kernel_free().
+>Does this miss the fixed RTC-LDO? Or does the AXP1530 not have that?
+>        AXP_DESC_FIXED(AXP313, RTC_LDO, "rtc-ldo", "ips", 1800),
+>The AXP313A manual mentions that the voltage is customisable, either
+>1.8V or 3.3V. I don't know how to model that, exactly. Should this be a
+>DT property, then? Or do we fix it to one voltage, covering the value
+>that's used out there?
 >
+This is what always struck me as weird. This driver is based upon downstream version it indeed does miss the rtc-ldo.
 
-+1
-
-> This seems reasonable because the only callers of tee_shm_register_kernel_buf()
-> are in trusted_tee.c and they all call tee_shm_free() on the registered memory
-> prior to returning.
+Afaik this may be the only difference between 1530 and 313 (other then what you pointed out the dcdc3 registers)
+>> +};
+>> +
+>>  static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
+>>  {
+>>  	struct axp20x_dev *axp20x = dev_get_drvdata(pdev->dev.parent);
+>> @@ -1040,6 +1074,12 @@ static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
+>>  		def = 3000;
+>>  		step = 150;
+>>  		break;
+>> +	case AXP1530_ID:
+>> +		/*
+>> +		 * Do not set the DCDC frequency on AXP1530
 >
-> Other callers[*] of tee_shm_free() obtained tee_shm from
-> tee_shm_alloc_kernel_buf() which AFAICT avoids all this nonsense.
+>This should say that the frequency is fixed and cannot be programmed.
+>I also added a warning if the frequency is not 3 MHz.
+>Either this, or we make the "x-powers,dcdc-freq" DT property optional.
 >
-> [*] such as .../drivers/firmware/broadcom/tee_bnxt_fw.c.
+Ack. Will reword and add warning.
+>Cheers,
+>Andre
 >
-> >
-> > The struct tee_shm:s acquired with syscalls from user space are
-> > reference counted. As are the kernel tee_shm:s, but I believe we could
-> > separate them to avoid reference counting tee_shm:s used by kernel
-> > clients if needed. I'll need to look closer at this if we're going to
-> > use that approach.
-> >
-> > Without reference counting the caller of tee_shm_free() can be certain
-> > that the secure world is done with the memory so we could delegate the
-> > kernel pages part of release_registered_pages() to the caller instead.
-> >
+Cheers,
+Martin
+>> +		 */
+>> +		return 0;
+>> +		break;
+>>  	default:
+>>  		dev_err(&pdev->dev,
+>>  			"Setting DCDC frequency for unsupported AXP variant\n");
+>> @@ -1220,6 +1260,10 @@ static int axp20x_regulator_probe(struct platform_device *pdev)
+>>  	bool drivevbus = false;
+>>  
+>>  	switch (axp20x->variant) {
+>> +	case AXP1530_ID:
+>> +		regulators = axp1530_regulators;
+>> +		nregulators = AXP1530_REG_ID_MAX;
+>> +		break;
+>>  	case AXP202_ID:
+>>  	case AXP209_ID:
+>>  		regulators = axp20x_regulators;
 >
-> I'm not sure I follow you here.  Would this be along the lines of creating a
-> tee_shm_free_kernel() to be used in trusted_tee.c for those specific kernel
-> data?
-
-I can't find a reason/use-case for the TEE subsystem to keep a
-refcount of memory registered by other kernel drivers like
-trusted_tee.c. So yes I think it should be safe to directly free that
-shm via tee_shm_free_kernel(). Also with that we can simplify shm
-registration by kernel clients via directly passing page pointers to
-tee_shm_register_kernel_buf() (I would rather rename this API as
-tee_shm_register_kernel_pages()).
-
--Sumit
-
->
-> Overall I feel like submitting this series again with Christoph and Al's
-> comments addressed is the best way forward to get rid of kmap_to_page().  I
-> would really like to get moving on that to avoid any further issues with the
-> kmap conversions.
->
-> But if folks feel strongly enough about removing that flag I can certainly try
-> to do so.
->
-> Ira
->
-> > Cheers,
-> > Jens
-> >
-> > >
-> > >                  Linus
