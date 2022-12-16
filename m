@@ -2,177 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6FE64EC9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E17564ECA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:10:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiLPOGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:06:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
+        id S230470AbiLPOKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:10:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230466AbiLPOGF (ORCPT
+        with ESMTP id S229547AbiLPOKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:06:05 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432D256D62
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:06:02 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id 1so3622798lfz.4
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:06:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gtA0ZnaQhbMLk3LEMHJjdC9Cb2rxaaaRDqfkUATltms=;
-        b=bTZU/vwvJCwBk4fsZcI21p3jJiSyNGS1XC3uUNc/1fed0UfOy7CHVry5XtZWKcQCAF
-         G8A7TgrydnFwYCIiqZBGFV9782syeaCaLeehYPmTMCnxXKa/rE4UrHvnZ75bXoeHEFhQ
-         XLl87yV135SZGFyG9aGGTUin/KLYgNA2Iw/GYVJpMaO/gf5HtG4UO6D//xCO5Ujb/0o3
-         7i8AfIO/clDfT10xYqxJHdCd9WeiD2GqffCQujyRSXWkzUou14uwT+VAPrkZmH9DlH98
-         v/UxPn2t+6CY4kc1NNIyrZSMiFFdvOGCYpQRY9JWJZBLLZ1eHm+Et5x3dXl80jEcGetm
-         7Mdw==
+        Fri, 16 Dec 2022 09:10:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCAE2B25A
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:09:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671199758;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RA/Yc5ZHRE6FrNcZRlkstCVubCNeOdRMPGJUgVDRano=;
+        b=CegE4+uA0rYgeBHDzWKZOk4cNy4LGZ8Oboc3pGQEm+BnfRZbqNAvbe2toKrkWMwrYeLoco
+        Ddj5L1E+Bu4iILNjV8ZqTAhu8GDlcvCw6dAUr8jio9v66BuUdDOAzBfCwv95+elkKsoOAg
+        OC9HbjcC9B/TjrU1NwctV4BkoQpUTa4=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-475-jwTnpwj3PuOAoqw3A4jdRA-1; Fri, 16 Dec 2022 09:09:17 -0500
+X-MC-Unique: jwTnpwj3PuOAoqw3A4jdRA-1
+Received: by mail-pl1-f198.google.com with SMTP id z10-20020a170902ccca00b001898329db72so1759054ple.21
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:09:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gtA0ZnaQhbMLk3LEMHJjdC9Cb2rxaaaRDqfkUATltms=;
-        b=DIvnVrJi5/m+jCroOvpvkIbAQIX5cVyrXTHBaoNoG3JpD4u4pCqzufCxeXQ6YIp4Eb
-         wxNT955Q/7lZt46fsLyKFpxXcH8jEbjncD19SidsHCMyHa5jFa8eFtXLo6N20c9GQlgG
-         cFaqUoTlVdKYLpnwbFguUSX4Kzbdka+nhHIz4zvdGbma1bY1LJgL85yOqw+aXcVpoCkL
-         C4dXdPVSm4iCv+6bui8+r/Ajoq1mlUHGw1gEAguWYnMRCiPyUYM1jd0qylanWmXDTuiH
-         SapGfnsjnLnU06z/nforc06o/DgIuG3FTSktp8bRDOQ94oa0v5e14TX6dmsTGXmWzRYB
-         2FaA==
-X-Gm-Message-State: ANoB5pnieMlUQQ5Z/i9wKSe0JKQb7d7vvp8vMv6gjoRi7L4HPwl34aUj
-        ZWqvs/19i126nWHoTu0YkLE58g==
-X-Google-Smtp-Source: AA0mqf4rbB8R8MVzYSQXNJsJHXzC5O6kwcoW/TDFbuL80e27flg1hDbgAL/xzaUiq75HvYIvYpmBZg==
-X-Received: by 2002:ac2:539b:0:b0:4b5:5efb:7d26 with SMTP id g27-20020ac2539b000000b004b55efb7d26mr8138734lfh.37.1671199561242;
-        Fri, 16 Dec 2022 06:06:01 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id p2-20020ac24ec2000000b004b0b131453csm227585lfr.49.2022.12.16.06.05.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 06:06:00 -0800 (PST)
-Message-ID: <525fd984-0b67-8e11-d13c-7c4ee1853c4e@linaro.org>
-Date:   Fri, 16 Dec 2022 15:05:59 +0100
+        bh=RA/Yc5ZHRE6FrNcZRlkstCVubCNeOdRMPGJUgVDRano=;
+        b=2qRBINjt3WfWYnDQ90YRU/URzSuAdzCDCeABafHUKs5McdRZdN2RrTNylrCFtSDh5p
+         z0gPPxihdmXJpIt7FK+RcTUesdn9A68X13R7hBNn0eGmzPwM3R5O7R+Iq5/HkxNykFl+
+         2objXI9vFNDBHd/q3uH5Ok9o0Yd44Yj5YV6c4E02N82jtIYOucdcN4jT7PIAR15BLHjD
+         gk9EN9qxVcEhnlWKVJqXovgpar2GA9qIcQ/7U62YRNBq0fDkwYWSPSeg5Xqak7/nVr0y
+         Sts/gzJJHLQl2BA8NQ9pCpcBeOnSWQgdDBUnioDrJfrLHYHhAaONbFQdm986JmDBwg8/
+         olyg==
+X-Gm-Message-State: ANoB5pljVS4q2Ot4XI8NAU/HOvETTEbl8dhkwebtp9DOuuMgeI0wa4p3
+        Il1MEyLbtDyx79uXyjyXLXgEIADPeS9ZZBvx6Zi9XbbEytBZ7l4TxhdsN8RHyPbhvvJFyqwyF4E
+        8jHoLXAcq0QR+gvBmQ6/DjHa7
+X-Received: by 2002:a05:6a21:999d:b0:9d:efd3:66f2 with SMTP id ve29-20020a056a21999d00b0009defd366f2mr49385980pzb.57.1671199756399;
+        Fri, 16 Dec 2022 06:09:16 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4QvH51tl1mP7UPtNO+GFRJLHBLli6PFxppfCqFl8Wt05sNUw4tDC0RTAnYyFUqUPkWRn6nSA==
+X-Received: by 2002:a05:6a21:999d:b0:9d:efd3:66f2 with SMTP id ve29-20020a056a21999d00b0009defd366f2mr49385943pzb.57.1671199755949;
+        Fri, 16 Dec 2022 06:09:15 -0800 (PST)
+Received: from localhost ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id l10-20020a63f30a000000b00470275c8d6dsm1515027pgh.10.2022.12.16.06.09.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 06:09:15 -0800 (PST)
+Date:   Fri, 16 Dec 2022 22:06:48 +0800
+From:   Coiby Xu <coxu@redhat.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "pvorel@suse.cz" <pvorel@suse.cz>,
+        "noodles@fb.com" <noodles@fb.com>, "tiwai@suse.de" <tiwai@suse.de>,
+        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
+        Konrad Wilk <konrad.wilk@oracle.com>,
+        Elaine Palmer <erpalmer@linux.vnet.ibm.com>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v3 00/10] Add CA enforcement keyring restrictions
+Message-ID: <20221216140648.h32gn5qf3igorpzi@Rk>
+References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
+ <b8e54d077da633132eb6da03ea536face095a425.camel@linux.ibm.com>
+ <4CE6F17D-9D87-4024-9E1A-FDFE7C29D5FC@oracle.com>
+ <1c51910a35a1d113256494827fd66ccc7473632e.camel@linux.ibm.com>
+ <17855993-519C-4DAC-B62F-9DB473CF249B@oracle.com>
+ <7df94da37c100c160436892a6996ba30e3fd6dc8.camel@linux.ibm.com>
+ <21E52C3E-0778-4908-AF44-F65D57BEC4E0@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v16 2/3] dt-bindings: edac: nuvoton: Add document for NPCM
- memory controller
-Content-Language: en-US
-To:     Marvin Lin <milkfafa@gmail.com>, linux-edac@vger.kernel.org,
-        rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
-        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     openbmc@lists.ozlabs.org, benjaminfair@google.com,
-        yuenn@google.com, venture@google.com, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, avifishman70@gmail.com, tmaimon77@gmail.com,
-        tali.perry1@gmail.com, ctcchien@nuvoton.com, kflin@nuvoton.com,
-        Rob Herring <robh@kernel.org>
-References: <20221216073141.3289309-1-milkfafa@gmail.com>
- <20221216073141.3289309-3-milkfafa@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221216073141.3289309-3-milkfafa@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <21E52C3E-0778-4908-AF44-F65D57BEC4E0@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/12/2022 08:31, Marvin Lin wrote:
-> Add dt-bindings document for Nuvoton NPCM memory controller.
-> 
-> Signed-off-by: Marvin Lin <milkfafa@gmail.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+Hi Eric and Mimi,
 
-So this is a 16th version but through this entire year you never Cced
-the maintainers... You did not send a single version to the memory
-controller maintainers.
+On Thu, Dec 15, 2022 at 09:45:37PM +0000, Eric Snowberg wrote:
+>
+>
+>>>>>>> A CA cert shall be defined as any X509 certificate that contains the
+>>>>>>> keyCertSign key usage and has the CA bit set to true.
+>>>>>>
+>>>>>> Hi Eric,
+>>>>>>
+>>>>>> Allowing CA certificates with the digitalSignature key usage flag
+>>>>>> enabled defeats the purpose of the new Kconfig.  Please update the
+>>>>>> above definition to exclude the digitalSignature key usage flag and
+>>>>>> modify the code accordingly.
+>>>>>
+>>>>> Within v2, the request was made to allow Intermediate CA certificates to be
+>>>>> loaded directly.  The Intermediate CA referenced was the one used by kernel.org.
+>>>>> This Intermediate CA contains both digitalSignature and keyCertSign.  If the code
+>>>>> is changed to exclude this certificate, now the root CA has to be loaded again.  Is that
+>>>>> the intent?
+>>>>
+>>>> That definitely was not the intent.  Nor would it address the issue of
+>>>> a particular intermediate CA certificate having both keyCertSign and
+>>>> digitalSignature.
+>>>
+>>> Sorry, I’m not following.  Why is it an issue that an intermediate CA certificate contains
+>>> both keyCertSign and digitalSignature? Why would we want to exclude an Intermediate
+>>> CA cert like the one used on kernel.org?
+>>
+>> I must be missing something.  Isn't the purpose of "keyUsage" to
+>> minimize how a certificate may be used?   Why would we want the same
+>> certificate to be used for both certificate signing and code signing?
+>
+>Every 3rd party intermediate CA I have looked at so far contains both set. Most have CRLSign set.
+>Typically the root CA contains keyCertSign and CRLSign, but some also have digitalSignature
+>set.  Finding a 3rd party Intermediate CA without digitalSignature set is probably going to be
+>challenging and will severely limit usage.
 
-I don't know why it is so big problem to use scripts/get_maintainers.pl.
+How about allowing both keyCertSign and digitalSignature asserted but
+issuing a warning for this case?
 
-> ---
->  .../memory-controllers/nuvoton,npcm-mc.yaml   | 54 +++++++++++++++++++
->  1 file changed, 54 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/memory-controllers/nuvoton,npcm-mc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/nuvoton,npcm-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nuvoton,npcm-mc.yaml
-> new file mode 100644
-> index 000000000000..0e752a673453
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/memory-controllers/nuvoton,npcm-mc.yaml
+Here's my rationale for this proposal.
 
-filename based on compatibles, so nuvoton,npcm-memory-controller.yaml
+I assume we should conform to some X.509 specifications. So I checked
+"RFC 5280: Internet X.509 Public Key Infrastructure Certificate and
+Certificate Revocation List (CRL) Profile" [1] and ITU-T X.509 (2012-10)
+[2].
 
-> @@ -0,0 +1,54 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +
+[1] states in 4.2.1.3. Key Usage,
+    "If the keyUsage extension is present, then the subject public key
+    MUST NOT be used to verify signatures on certificates or CRLs unless
+    the corresponding keyCertSign or cRLSign bit is set.  If the subject
+    public key is only to be used for verifying signatures on
+    certificates and/or CRLs, then the digitalSignature and
+    nonRepudiation bits SHOULD NOT be set.  However, the digitalSignature
+    and/or nonRepudiation bits MAY be set in addition to the keyCertSign
+    and/or cRLSign bits if the subject public key is to be used to verify
+    signatures on certificates and/or CRLs as well as other objects."
 
-No blank lines.
+and [2] states in 8.2.2.3 Key usage extension that,
+   "More than one bit may be set in an instance of the keyUsage extension.
+   The setting of multiple bits shall not change the meaning of each
+   individual bit but shall indicate that the certificate may be used for
+   all of the purposes indicated by the set bits. There may be risks
+   incurred when setting multiple bits. A review of those risks is
+   documented in Annex I."
 
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/memory-controllers/nuvoton,npcm-mc.yaml#
+I interpret the above texts as we should allow both keyCertSign and
+digitalSignature. However [2] warns about the risks of setting multiple
+bits. Quoting Annex I,
+
+   "Combining the contentCommitment bit in the keyUsage certificate
+   extension with other keyUsage bits may have security implications
+   depending on the security environment in which the certificate is to be
+   used. If the subject's environment can be fully controlled and trusted,
+   then there are no specific security implications. For example, in cases
+   where the subject is fully confident about exactly which data is signed
+   or cases where the subject is fully confident about the security
+   characteristics of the authentication protocol being used. If the
+   subject's environment is not fully controlled or not fully trusted, then
+   unintentional signing of commitments is possible. Examples include the
+   use of badly formed authentication exchanges and the use of a rogue
+   software component. If untrusted environments are used by a subject,
+   these security implications can be limited through use of the following
+   measures:   
+    – to not combine the contentCommitment key usage setting in
+      certificates with any other key usage setting and to use the
+      corresponding private key only with this certificate;   
+      
+    – to limit the use of private keys associated with certificates that
+      have the contentCommitment key usage bit set, to environments which
+      are considered adequately controlled and trustworthy"
+
+So maybe it's useful to add a warning if both keyCertSign and
+digitalSignature are asserted.
 
 
-
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Nuvoton NPCM Memory Controller
-> +
-> +maintainers:
-> +  - Marvin Lin <kflin@nuvoton.com>
-> +  - Stanley Chu <yschu@nuvoton.com>
-> +
-> +description: |
-> +  The Nuvoton BMC SoC supports DDR4 memory with and without ECC (error
-> +  correction check).
-> +
-> +  The memory controller supports single bit error correction, double bit
-> +  error detection (in-line ECC in which a section (1/8th) of the memory
-> +  device used to store data is used for ECC storage).
-> +
-> +  Note, the bootloader must configure ECC mode for the memory controller.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nuvoton,npcm750-memory-controller
-> +      - nuvoton,npcm845-memory-controller
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    ahb {
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-
-Why do you need this node in the example?
-
-> +        mc: memory-controller@f0824000 {
-> +            compatible = "nuvoton,npcm750-memory-controller";
-> +            reg = <0xf0824000 0x1000>;
-> +            interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> +        };
-> +    };
-
+-- 
 Best regards,
-Krzysztof
+Coiby
 
