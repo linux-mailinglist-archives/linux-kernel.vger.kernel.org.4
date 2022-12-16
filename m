@@ -2,72 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836CE64EE23
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F2764EE26
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbiLPPtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 10:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
+        id S231426AbiLPPt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 10:49:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiLPPss (ORCPT
+        with ESMTP id S229863AbiLPPty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 10:48:48 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215265FB92
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:48:47 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id v21so625140uam.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:48:47 -0800 (PST)
+        Fri, 16 Dec 2022 10:49:54 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8C150D6A
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:49:52 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id 4so2722982plj.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:49:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sYyw641UQlhdY1HWQGXj9TtCUKC82UQ9QI48yzSo1is=;
-        b=rPYrTc6DvNr/X7Oi9wM8LYTYjVShddq9aQ+JRdNQYkWUujHxfHoC+0KZtpdCivvRj/
-         jDVkRekXW7rVRelvVCxP3Jwnfqf3HFn4xkNE/s/JGe2vkeXDmNH2kBX7aIdYoOViGeFM
-         gpGVlH8DAzI1beEs8QtvDg5VyaWf3fgO+InZ2d26nfkoOevGYsTK0CQDYpHFvt/yUHCo
-         XQ20h7TkP7tnyoALGGNCNIljth4pLdw2f+nLGjTRatdU/3dAq2006hgcltktomK3YYs8
-         IUt3WneZAz7gURpcdiVgTE18odWgAsis7p1WS5QhLf4YW6KsfRUgYZzb6CGEG5CF1pvs
-         Y5nw==
+        d=compal-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=x3qpEO5lHSZJwEeaighoCmCCXRBl2IrYmRYFiqgKpIw=;
+        b=ALUB5kNDC2Ru+bNPAbdn8rSB56VCGbnjykUtqJIjZAZM36nSTuFjrrI1kQ4eiJy0lV
+         AX36TnHO8u682Jt1uLYulk7vhIi8OsAXZtdccQAASLLzEJnexixvrjv29NV499gL/zSi
+         Xis1yOCWUu3LXS9HHogIxskSZhuxtIVDmVSGXV/b/Ol13T8BKNfqzROLB5CJiWngaZwy
+         fpEKb/j1dYSd71o0q1eptDRJz052ELBNEStfj7nqIi1oqfc/jicNQQd7g+lRZYEB2Jh4
+         B7DCRVDEVZ3YsM36WVdLuMEm6C1acU4YIeZEBQTBg0sAFF+8l2arzfFJeYoMh+SYS0ik
+         oR/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sYyw641UQlhdY1HWQGXj9TtCUKC82UQ9QI48yzSo1is=;
-        b=wMRQ+QCvbDz53q7o6gYMHh36BzYc+yrU26yIcxY3WB3UvKcxlkj9hLK90PoaT9qMk7
-         4DNxFksy+POLtZphbtlpGC3VRy2+UGD0EmKiIOY6QGCyvGDrhtYdRdx2LDbhorlLc8na
-         tKgwdscDEnRSIPq43ihLMOvtznfBSgYO2P6dCkHyf6UpNF6sMff5PhDge7uDTjiuHCTs
-         kfrOaUvCeRCYS0AYVEmcrmV4pOBt2kyqGF2kocupFwguU0GhJ0yDRBn2XhaBBLSn1XfO
-         DJVyckrPlQhyjKzFQAiJtI2qrrN2MmOjS5UhsgcnoXkn1NI5ZUQZe/c5VObRjPjvokcK
-         NFKA==
-X-Gm-Message-State: ANoB5pmWRsPPKduiNchymCi8qxSmRp1ugswjcZQjUFbRPGx4CFCON08m
-        g0uAH169VJOb0OOMXcOB4Z3/yKYqCSTq42Q4pJyVN5tauZsB622U
-X-Google-Smtp-Source: AA0mqf4T5nbzgu+TCh9N6EOi6miuOG5tQBOYekxMbZim3irFSGgi+QEZadNXAL8LsMVD4hMNKHK4R//ELrG7VbFYIoQ=
-X-Received: by 2002:ab0:700c:0:b0:42f:70c2:593b with SMTP id
- k12-20020ab0700c000000b0042f70c2593bmr1966770ual.50.1671205726107; Fri, 16
- Dec 2022 07:48:46 -0800 (PST)
+        bh=x3qpEO5lHSZJwEeaighoCmCCXRBl2IrYmRYFiqgKpIw=;
+        b=OiM54KAXvLSVmyYxD1zTUtIhVJNMtF1wFeF+FsRyYX9j04VnSKl//QD3F2TGEFbpUr
+         gm3qkWCkyI5sQ+KFpvkHeNnpQQsHtIr6QnoC5kYbvF/XDFHPNOeUBdl/Q8ryIasGGkYE
+         eIEvPjlT0oRwI0EkcIWOiOBjMv7+wQIecNo0yI2w/EvohbNmSrZk4/FQ5iHqUJCnXWtT
+         y2uatc/Kn55sdWSbiXmHICsDEHM/SOJUhjgLNXG5OpwZH95vb7hX4ZW9+GQw2xKLOK4E
+         oy65qSoowT8bq8o+hq5uORIp3xYN16ElDOOkP7wsfBkKg+sTPKWS0bb05ZWHHcjtV0P6
+         NHOA==
+X-Gm-Message-State: ANoB5pnWAERNTZCE7IpSQcWip8Cxrb5w0BuY/Mcwrww/qVEs4vh4tIZM
+        p6xXcOs1U6hJmPba5zN5NK7zFbCxmG0hItYqgz4=
+X-Google-Smtp-Source: AA0mqf75RsyhgBAwKuey2DzSvP1/d3AiH7wmMlxnJig/9nbHpTV/V0QPqvnwI/rvRwkbg/5fUS4aIw==
+X-Received: by 2002:a17:903:1209:b0:186:7608:1880 with SMTP id l9-20020a170903120900b0018676081880mr45954540plh.36.1671205792024;
+        Fri, 16 Dec 2022 07:49:52 -0800 (PST)
+Received: from ajye-OMEN-by-HP-Laptop-S.hitronhub.home (123-195-117-216.dynamic.kbronet.com.tw. [123.195.117.216])
+        by smtp.gmail.com with ESMTPSA id o1-20020a170902d4c100b0017f7c4e260fsm1797897plg.150.2022.12.16.07.49.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 07:49:51 -0800 (PST)
+From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Muralidhar Reddy <muralidhar.reddy@intel.com>,
+        "balamurugan . c" <balamurugan.c@intel.com>,
+        Libin Yang <libin.yang@intel.com>,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        David Lin <CTLIN0@nuvoton.com>, Brent Lu <brent.lu@intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        alsa-devel@alsa-project.org
+Subject: [PATCH v2] ASoC: Intel: sof_nau8825: add variant with nau8318 amplifier.
+Date:   Fri, 16 Dec 2022 23:49:38 +0800
+Message-Id: <20221216154938.9426-1-ajye_huang@compal.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221211002908.2210-1-hdanton@sina.com> <00000000000025ff8d05ef842be6@google.com>
- <20221211075612.2486-1-hdanton@sina.com> <20221211102208.2600-1-hdanton@sina.com>
- <20221212032911.2965-1-hdanton@sina.com> <Y5d565XVsinbNNL2@mit.edu>
- <CANpmjNNCQEXpJt1PQptyr8mrBbhWpToCRfvUT+RXmw5EA5EwVw@mail.gmail.com> <Y5fY6BRTB9OfwFU0@ZenIV>
-In-Reply-To: <Y5fY6BRTB9OfwFU0@ZenIV>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Fri, 16 Dec 2022 16:48:34 +0100
-Message-ID: <CANp29Y4x8zoXW0z-HarX3xZ6o8OHzWnGyHw8+JGsbLJKDWUgGA@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in do_mkdirat
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Marco Elver <elver@google.com>, "Theodore Ts'o" <tytso@mit.edu>,
-        Hillf Danton <hdanton@sina.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        syzbot <syzbot+919c5a9be8433b8bf201@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,75 +85,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 2:44 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Mon, Dec 12, 2022 at 08:29:10PM +0100, Marco Elver wrote:
->
-> > > > Given the call trace above, how do you know the ntfs3 guys should be also
-> > > > Cced in addition to AV? What if it would take more than three months for
-> > > > syzbot to learn the skills in your mind?
->
-> Depends.  If you really are talking about the *BOT* learning to do
-> that on its own, it certainly would take more than 3 months; strong AI
-> is hard.  If, OTOH, it is not an AI research project and intervention of
-> somebody capable of passing the Turing test does not violate the purity
-> of experiment...  Surely converting "if it mounts an image as filesystem
-> of type $T, grep the tree for "MODULE_ALIAS_FS($T)" and treat that
-> as if a function from the resulting file had been found in stack trace"
-> into something usable for the bot should not take more than 3 months,
-> should it?
->
-> If expressing that rule really takes "more than three months", I would
-> suggest that something is very wrong with the bot architecture...
->
-> > Teaching a bot the pattern matching skills of a human is non-trivial.
-> > The current design will likely do the simplest thing: regex match
-> > reproducers and map a match to some kernel source dir, for which the
-> > maintainers are Cc'd. If you have better suggestions on how to
-> > mechanize subsystem selection based on a reproducer, please shout.
->
-> Er...  Yes?  Look, it's really that simple -
-> for i in `sed -ne 's/.*syz_mount_image$\([_[:alnum:]]*\).*/\1/p' <$REPRO`; do
->         git grep -l "MODULE_ALIAS_FS(\"$i\")"
-> done | sort | uniq
-> gets you the list of files.  No, I'm not suggesting to go for that kind
-> of shell use, but it's clearly doable with regex and search over the source
-> for fixed strings.  Unless something's drastically wrong with the way the
-> bot is written, it should be capable of something as basic as that...
->
-> If it can't do that kind of mapping, precalculating it for given tree is
-> also not hard:
-> git grep 'MODULE_ALIAS_FS("'|sed -ne 's/\(.*\):.*MODULE_ALIAS_FS("\([_[:alnum:]]*\)".*/syz_mount_image$\2:\1/p'
-> will yield lines like
-> syz_mount_image$ext2:fs/ext2/super.c
-> syz_mount_image$ext2:fs/ext4/super.c
-> syz_mount_image$ext3:fs/ext4/super.c
-> syz_mount_image$ext4:fs/ext4/super.c
-> etc.  Surely turning *that* into whatever form the bot wants can't
-> be terribly hard? [*]
->
-> All of that assumes that pattern-matching in syzkaller reproducer is
-> expressible; if "we must do everything by call trace alone" is
-> a real limitation, we are SOL; stack trace simply doesn't have
-> that information.  Is there such an architectural limitation?
+This patch adds the driver data for two nau8318 speaker amplifiers on
+SSP1 and nau8825 on SSP0 for ADL platform.
 
-Thanks for the feedback, and we regret the inconvenience this may have caused.
+The nau8315 and nau8318 are both Nuvoton Amp chips. They use the same
+Amp driver nau8315.c. The acpi_device_id for nau8315 is "NVTN2010",
+for nau8318 is "NVTN2012".
+The nau8825 is one of Nuvoton headset codec, and its acpi_device_id is
+"10508825".
 
-We've deployed a simple short term solution to the immediate issue:
-syzbot will extract the involved filesystems from reproducers and use
-this information to construct the email subject line and Cc the
-related people/mailing lists. This should take effect starting next
-week.
+Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+---
 
-That being said, in response to the original feedback we have already
-been planning comprehensive improvements to the subsystem selection
-process that will support more than just filesystems. But
-unfortunately, this is going to take longer to become available.
+ sound/soc/intel/boards/Kconfig                |  1 +
+ sound/soc/intel/boards/sof_nau8825.c          | 23 +++++++++++++++++++
+ .../intel/common/soc-acpi-intel-adl-match.c   | 12 ++++++++++
+ 3 files changed, 36 insertions(+)
 
---
-Aleksandr
+diff --git a/sound/soc/intel/boards/Kconfig b/sound/soc/intel/boards/Kconfig
+index a472de1909f4..3f68e9edd853 100644
+--- a/sound/soc/intel/boards/Kconfig
++++ b/sound/soc/intel/boards/Kconfig
+@@ -554,6 +554,7 @@ config SND_SOC_INTEL_SOF_NAU8825_MACH
+ 	select SND_SOC_RT1015P
+ 	select SND_SOC_MAX98373_I2C
+ 	select SND_SOC_MAX98357A
++	select SND_SOC_NAU8315
+ 	select SND_SOC_DMIC
+ 	select SND_SOC_HDAC_HDMI
+ 	select SND_SOC_INTEL_HDA_DSP_COMMON
+diff --git a/sound/soc/intel/boards/sof_nau8825.c b/sound/soc/intel/boards/sof_nau8825.c
+index 27880224359d..0936450be153 100644
+--- a/sound/soc/intel/boards/sof_nau8825.c
++++ b/sound/soc/intel/boards/sof_nau8825.c
+@@ -48,6 +48,7 @@
+ #define SOF_MAX98373_SPEAKER_AMP_PRESENT	BIT(15)
+ #define SOF_MAX98360A_SPEAKER_AMP_PRESENT	BIT(16)
+ #define SOF_RT1015P_SPEAKER_AMP_PRESENT	BIT(17)
++#define SOF_NAU8318_SPEAKER_AMP_PRESENT	BIT(18)
+ 
+ static unsigned long sof_nau8825_quirk = SOF_NAU8825_SSP_CODEC(0);
+ 
+@@ -338,6 +339,13 @@ static struct snd_soc_dai_link_component rt1019p_component[] = {
+ 	}
+ };
+ 
++static struct snd_soc_dai_link_component nau8318_components[] = {
++	{
++		.name = "NVTN2012:00",
++		.dai_name = "nau8315-hifi",
++	}
++};
++
+ static struct snd_soc_dai_link_component dummy_component[] = {
+ 	{
+ 		.name = "snd-soc-dummy",
+@@ -486,6 +494,11 @@ static struct snd_soc_dai_link *sof_card_dai_links_create(struct device *dev,
+ 			max_98360a_dai_link(&links[id]);
+ 		} else if (sof_nau8825_quirk & SOF_RT1015P_SPEAKER_AMP_PRESENT) {
+ 			sof_rt1015p_dai_link(&links[id]);
++		} else if (sof_nau8825_quirk &
++				SOF_NAU8318_SPEAKER_AMP_PRESENT) {
++			links[id].codecs = nau8318_components;
++			links[id].num_codecs = ARRAY_SIZE(nau8318_components);
++			links[id].init = speaker_codec_init;
+ 		} else {
+ 			goto devm_err;
+ 		}
+@@ -657,6 +670,16 @@ static const struct platform_device_id board_ids[] = {
+ 					SOF_BT_OFFLOAD_SSP(2) |
+ 					SOF_SSP_BT_OFFLOAD_PRESENT),
+ 	},
++	{
++		.name = "adl_nau8318_nau8825",
++		.driver_data = (kernel_ulong_t)(SOF_NAU8825_SSP_CODEC(0) |
++					SOF_SPEAKER_AMP_PRESENT |
++					SOF_NAU8318_SPEAKER_AMP_PRESENT |
++					SOF_NAU8825_SSP_AMP(1) |
++					SOF_NAU8825_NUM_HDMIDEV(4) |
++					SOF_BT_OFFLOAD_SSP(2) |
++					SOF_SSP_BT_OFFLOAD_PRESENT),
++	},
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(platform, board_ids);
+diff --git a/sound/soc/intel/common/soc-acpi-intel-adl-match.c b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
+index 60aee56f94bd..1a69cd8c5e18 100644
+--- a/sound/soc/intel/common/soc-acpi-intel-adl-match.c
++++ b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
+@@ -450,6 +450,11 @@ static const struct snd_soc_acpi_codecs adl_lt6911_hdmi = {
+ 	.codecs = {"INTC10B0"}
+ };
+ 
++static const struct snd_soc_acpi_codecs adl_nau8318_amp = {
++	.num_codecs = 1,
++	.codecs = {"NVTN2012"}
++};
++
+ struct snd_soc_acpi_mach snd_soc_acpi_intel_adl_machines[] = {
+ 	{
+ 		.comp_ids = &adl_rt5682_rt5682s_hp,
+@@ -507,6 +512,13 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_adl_machines[] = {
+ 		.quirk_data = &adl_rt1015p_amp,
+ 		.sof_tplg_filename = "sof-adl-rt1015-nau8825.tplg",
+ 	},
++	{
++		.id = "10508825",
++		.drv_name = "adl_nau8318_nau8825",
++		.machine_quirk = snd_soc_acpi_codec_list,
++		.quirk_data = &adl_nau8318_amp,
++		.sof_tplg_filename = "sof-adl-nau8318-nau8825.tplg",
++	},
+ 	{
+ 		.id = "10508825",
+ 		.drv_name = "sof_nau8825",
+-- 
+2.25.1
 
->
-> [*] depending upon config, ext2 could be mounted by ext2.ko and ext4.ko;
-> both have the same maillist for bug reports, so this ambiguity doesn't
-> matter - either match would do.
