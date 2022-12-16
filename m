@@ -2,65 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3788964E9DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 720D864E9E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbiLPLA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:00:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
+        id S230070AbiLPLCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:02:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiLPLAY (ORCPT
+        with ESMTP id S229680AbiLPLCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:00:24 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A77653ED2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:00:23 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id x11so2326033qtv.13
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:00:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k1MArKAOM+urebegyWsy4WNkzN1RERPKIZE7UIlq5Ls=;
-        b=O+egyYiNPXuY7maexntNNrb9vVTa13ZU+tuiL1zrp4rciqHdF9qEXG57HR9eN0DAtC
-         17SNouJipCmzrRYIYjNQwSN7dO68erJwv7Ja0do+EusGrbevsCsvIsojMUG0FgR23gXA
-         013TSs636Xg7VGoEO1IXd2W02ifGk772/OGTI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k1MArKAOM+urebegyWsy4WNkzN1RERPKIZE7UIlq5Ls=;
-        b=OgsWjndKFhjqY+mY9CdLnuUvP4afow8Sx/M7Asob9q/XMR9eHF2jfvU/T0CGF1wVVI
-         TAYMHWzdwZcQTjiR6x+fZWeAbmAa4AuD960+Ts2k8C4vupZCtDFeSwXPTxPnUE1+fdjv
-         qMnVHlRvoJBoNhh1d+LsylJDcevN015cNio8p2DyDLiszZtkQcjnYP6ZdR0yukKgnTRH
-         DU1fbXwsrjyeEz8Rqy3ejqKGEywpReHTjygDW5zTNmOU7c3dwXma20OtPc0N3bK1DByK
-         RoKJxak44c7mJvzJ3q4hieZAGXjN3lRBjcmz3WcOsNC1FGN4Ro1tJcTFgL9yoRRBJFBD
-         ZQpw==
-X-Gm-Message-State: ANoB5plrlMP21rsMOw3DR5UcPJU9rCNfbVrl6JEuZpX7Fk6XohsgESJL
-        LaJt4Rzz9/nMa759cDp9IvHvqvPiLvTINdkMoFr4Rw==
-X-Google-Smtp-Source: AA0mqf4xtARx2pPM0l3bTE0DN6T5GabCjvxl7BAtHhBMi/dSJDbNIxBrO80BUq106XsPBtl75V/YCMEHVFJB2bD4f6k=
-X-Received: by 2002:ac8:4a87:0:b0:3a7:f5e4:87dc with SMTP id
- l7-20020ac84a87000000b003a7f5e487dcmr5617640qtq.562.1671188422166; Fri, 16
- Dec 2022 03:00:22 -0800 (PST)
+        Fri, 16 Dec 2022 06:02:45 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9522BD2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:02:44 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1p68U0-0001Mb-Uw; Fri, 16 Dec 2022 12:02:28 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1p68Tz-0003Yt-O1; Fri, 16 Dec 2022 12:02:27 +0100
+Date:   Fri, 16 Dec 2022 12:02:27 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Primoz Fiser <primoz.fiser@norik.com>
+Cc:     Marco Felsch <m.felsch@pengutronix.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, upstream@lists.phytec.de
+Subject: Re: [PATCH] i2c: imx: increase retries on arbitration loss
+Message-ID: <20221216110227.GA12327@pengutronix.de>
+References: <20221216084511.2576786-1-primoz.fiser@norik.com>
+ <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
+ <bb4882a9-8be6-5255-6256-aa1253362e59@norik.com>
 MIME-Version: 1.0
-References: <20220527045353.2483042-1-hsinyi@chromium.org> <CAJMQK-jWwDm4dy-ELzJ5gzLby37Ztqn9qhGT9zqFhmowdok51g@mail.gmail.com>
- <e7f8b106-b71e-eac9-c2a0-83579382f0f4@linaro.org>
-In-Reply-To: <e7f8b106-b71e-eac9-c2a0-83579382f0f4@linaro.org>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Fri, 16 Dec 2022 18:59:56 +0800
-Message-ID: <CAJMQK-h=H9c+sEhVs27PH4CGvefjNuXcLbXCuSkiekL-C9eucA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: mt8183: kukui: Split out keyboard node and
- describe detachables
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bb4882a9-8be6-5255-6256-aa1253362e59@norik.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,30 +62,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 6:58 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 16/12/2022 11:54, Hsin-Yi Wang wrote:
-> > On Fri, May 27, 2022 at 12:54 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
-> >>
-> >> Kukui devices krane, kodana, and kakadu use detachable keyboards, which
-> >> only have switches to be registered.
-> >>
-> >> Change the keyboard node's compatible of those boards to the newly
-> >> introduced "google,cros-ec-keyb-switches", which won't include matrix
-> >> properties.
-> >>
-> >> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> >> ---
-> >
-> > hi Matthias,
-> >
-> > Kindly ping on this patch. Thanks.
->
-> It's a merge window, so for what do you ping now?
->
-Okay I should ping after the merge window.
+On Fri, Dec 16, 2022 at 11:41:08AM +0100, Primoz Fiser wrote:
+> Hi Marco,
+> 
+> On 16. 12. 22 10:45, Marco Felsch wrote:
+> > Hi Primoz,
+> > 
+> > On 22-12-16, Primoz Fiser wrote:
+> > > By default, retries value is set to 0 (no retries). Set retries to more
+> > > sensible value of 3 to allow i2c core to re-attempt transfer in case of
+> > > i2c arbitration loss (i2c-imx returns -EAGAIN errno is such case).
+> > 
+> > apart the fact that the number of retries vary a lot and so the client
+> > driver behaviour can vary a lot which is not good IMHO, why do you think
+> > that 3 is a sufficient number?
+> 
+> IMHO it is better than leaving it at 0 (no retries)?
+> 
+> Setting it to sensible value like 3 will at least attempt to make transfer
+> in case arbitration-loss occurs.
+> 
+> > 
+> > If an arbitration loss happen, why do you think that retrying it 3 times
+> > changes that?
+> 
+> I our case, setting retries to non-zero value solves issues with PMIC
+> shutdown on phyboard-mira which in some rare cases fails with "Failed to
+> shutdown (err =  -11)" (-EAGAIN).
+> 
+> To me it makes common sense retries is set to non-zero value especially for
+> such rare conditions/situations.
 
-> Best regards,
-> Krzysztof
->
+https://lore.kernel.org/all/Ys1bw9zuIwWS+bqw@shikoro/
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
