@@ -2,102 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCA664E995
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC72964E999
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbiLPKkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 05:40:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33660 "EHLO
+        id S230297AbiLPKlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 05:41:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiLPKkL (ORCPT
+        with ESMTP id S230193AbiLPKlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 05:40:11 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D8E3B9EE
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:40:09 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-146-QJ7PLL3zPnyq8AQFxhkC5g-1; Fri, 16 Dec 2022 10:40:07 +0000
-X-MC-Unique: QJ7PLL3zPnyq8AQFxhkC5g-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 16 Dec
- 2022 10:40:05 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Fri, 16 Dec 2022 10:40:05 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Geert Uytterhoeven' <geert@linux-m68k.org>,
-        "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: RE: [PATCH v9] kallsyms: Add self-test facility
-Thread-Topic: [PATCH v9] kallsyms: Add self-test facility
-Thread-Index: AQHZEIinzV5WljPUpEGVjsixemOWL65wUNlQ
-Date:   Fri, 16 Dec 2022 10:40:04 +0000
-Message-ID: <d2d6feddc28b4c12af06da84bd48d900@AcuMS.aculab.com>
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
- <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
- <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
- <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
- <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
- <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
-In-Reply-To: <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 16 Dec 2022 05:41:14 -0500
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A132F09;
+        Fri, 16 Dec 2022 02:41:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=QkE6cvAGTPArZRIQb5KHMBKk1af+ie9psS4oH/B3U4Q=; b=GhspP+XWxgi6fXsKUhROMbA1yF
+        v/jCVu02cfZOHjib/20VZ5E+IahOs27Baj9nQBkRvDwRRWwGNpbgYWnq5rRXSTUtghLV5afZkyw9o
+        gik7t7DIhRVsNO5ewNcWMzrZj/JsvBD60/svyssBij/qFGVdD1z8bhsRfRakOkskVlNmJyZt9ZMWv
+        70p4LqLMKUo3BT26cQRT8mFY7mQ++AbPJQjQu/kLetQeEOLGhIRjoyxJDNK19qfNn6aadkqzpt9qv
+        OGLXn9lfjkgPWpl/qE9TUXM1eiRfUO58+KgjKzlme/MQvLQX9HMYWEIyyWreybjmxaIpIkiVHUWEW
+        unojokkw==;
+Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:49226 helo=[192.168.69.116])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <primoz.fiser@norik.com>)
+        id 1p689C-005DG8-32;
+        Fri, 16 Dec 2022 11:41:05 +0100
+Message-ID: <bb4882a9-8be6-5255-6256-aa1253362e59@norik.com>
+Date:   Fri, 16 Dec 2022 11:41:08 +0100
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] i2c: imx: increase retries on arbitration loss
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, upstream@lists.phytec.de
+References: <20221216084511.2576786-1-primoz.fiser@norik.com>
+ <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
+From:   Primoz Fiser <primoz.fiser@norik.com>
+In-Reply-To: <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: primoz.fiser@norik.com
+X-Authenticated-Sender: cpanel.siel.si: primoz.fiser@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogR2VlcnQgVXl0dGVyaG9ldmVuIA0KPiBTZW50OiAxNSBEZWNlbWJlciAyMDIyIDEzOjI1
-DQouLi4NCj4gTG9va3MgbGlrZSBjb21taXQgM2JjNzUzYzA2ZGQwMmEzNSAoImtidWlsZDogdHJl
-YXQgY2hhciBhcyBhbHdheXMNCj4gdW5zaWduZWQiKSBpcyB0byBibGFtZS4NCj4gDQo+IENoYW5n
-aW5nOg0KPiANCj4gICAgIC0tLSBhL2FyY2gvbTY4ay9pbmNsdWRlL2FzbS9zdHJpbmcuaA0KPiAg
-ICAgKysrIGIvYXJjaC9tNjhrL2luY2x1ZGUvYXNtL3N0cmluZy5oDQo+ICAgICBAQCAtNDIsNyAr
-NDIsNyBAQCBzdGF0aWMgaW5saW5lIGNoYXIgKnN0cm5jcHkoY2hhciAqZGVzdCwgY29uc3QNCj4g
-Y2hhciAqc3JjLCBzaXplX3QgbikNCj4gICAgICAjZGVmaW5lIF9fSEFWRV9BUkNIX1NUUkNNUA0K
-PiAgICAgIHN0YXRpYyBpbmxpbmUgaW50IHN0cmNtcChjb25zdCBjaGFyICpjcywgY29uc3QgY2hh
-ciAqY3QpDQo+ICAgICAgew0KPiAgICAgLSAgICAgICBjaGFyIHJlczsNCj4gICAgICsgICAgICAg
-c2lnbmVkIGNoYXIgcmVzOw0KPiANCj4gICAgICAgICAgICAgYXNtICgiXG4iDQo+ICAgICAgICAg
-ICAgICAgICAgICAgIjE6ICAgICBtb3ZlLmIgICglMCkrLCUyXG4iICAgICAvKiBnZXQgKmNzICov
-DQo+IA0KPiBmaXhlcyBzdHJjbXAsIGJ1dCB0aGUgdGVzdCBzdGlsbCBmYWlsczoNCg0KVHJ5ICdp
-bnQgcmVzOycgYW5kIGFuIGV4cGxpY2l0IHNpZ24gZXh0ZW5kIChJIHRoaW5rKToNCgkiMzogZXh0
-YiAlMlxuIg0KDQpUaGUgc3RyY21wKCkgaXMgc3RpbGwgd3JvbmcgaWYgZWl0aGVyIGlucHV0IHN0
-cmluZw0KaGFzIGNoYXJhY3RlcnMgd2l0aCB0aGUgdG9wIGJpdCBzZXQuDQpUaGUgcmVzdWx0IG5l
-ZWRzIHRvIGJlIGJhc2VkIG9mIHRoZSBjYXJyeSBmbGFnIG5vdA0KdGhlIHNpZ24gb2YgdGhlIGJ5
-dGUgc3VidHJhY3QuDQoNCkl0IGlzIHRvbyBsb25nIHNpbmNlIEkndmUgd3JpdHRlbiBtNjhrIGFz
-bS4NCkkndmUgY2hlY2tlZCwgYWxsIGJ5dGUgb3BlcmF0aW9ucyBsZWF2ZSB0aGUgaGlnaCAyNGJp
-dHMNCnVuY2hhbmdlZC4NClNvIGl0IGlzIHBvc3NpYmxlIHRoYXQgZ2NjIGlzIG1ha2luZyBhc3N1
-bXB0aW9ucyBhbmQNCnNraXBwaW5nIHRoZSBzaWduIGV4dGVuZCB1bmRlciBzb21lIGNpcmN1bXN0
-YW5jZXMuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1s
-ZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJh
-dGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+Hi Marco,
+
+On 16. 12. 22 10:45, Marco Felsch wrote:
+> Hi Primoz,
+> 
+> On 22-12-16, Primoz Fiser wrote:
+>> By default, retries value is set to 0 (no retries). Set retries to more
+>> sensible value of 3 to allow i2c core to re-attempt transfer in case of
+>> i2c arbitration loss (i2c-imx returns -EAGAIN errno is such case).
+> 
+> apart the fact that the number of retries vary a lot and so the client
+> driver behaviour can vary a lot which is not good IMHO, why do you think
+> that 3 is a sufficient number?
+
+IMHO it is better than leaving it at 0 (no retries)?
+
+Setting it to sensible value like 3 will at least attempt to make 
+transfer in case arbitration-loss occurs.
+
+> 
+> If an arbitration loss happen, why do you think that retrying it 3 times
+> changes that?
+
+I our case, setting retries to non-zero value solves issues with PMIC 
+shutdown on phyboard-mira which in some rare cases fails with "Failed to
+shutdown (err =  -11)" (-EAGAIN).
+
+To me it makes common sense retries is set to non-zero value especially 
+for such rare conditions/situations.
+
+BR,
+Primoz
+
+> 
+> Regards,
+>    Marco
+> 
+> 
+>>
+>> Signed-off-by: Primoz Fiser <primoz.fiser@norik.com>
+>> ---
+>>   drivers/i2c/busses/i2c-imx.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+>> index cf5bacf3a488..6a5694cfe1cc 100644
+>> --- a/drivers/i2c/busses/i2c-imx.c
+>> +++ b/drivers/i2c/busses/i2c-imx.c
+>> @@ -1478,6 +1478,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
+>>   	i2c_imx->adapter.dev.parent	= &pdev->dev;
+>>   	i2c_imx->adapter.nr		= pdev->id;
+>>   	i2c_imx->adapter.dev.of_node	= pdev->dev.of_node;
+>> +	i2c_imx->adapter.retries	= 3;
+>>   	i2c_imx->base			= base;
+>>   	ACPI_COMPANION_SET(&i2c_imx->adapter.dev, ACPI_COMPANION(&pdev->dev));
+>>   
+>> -- 
+>> 2.25.1
+>>
+>>
+>>
 
