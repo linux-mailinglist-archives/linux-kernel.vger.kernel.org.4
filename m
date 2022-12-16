@@ -2,49 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A12764E59D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 02:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB4564E5A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 02:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiLPB0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 20:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
+        id S229782AbiLPB35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 20:29:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiLPB0c (ORCPT
+        with ESMTP id S229480AbiLPB3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 20:26:32 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2355B5D6A6;
-        Thu, 15 Dec 2022 17:26:31 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NYBJj1ssHz4xGR;
-        Fri, 16 Dec 2022 12:26:29 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1671153989;
-        bh=aVx99TG7U4oYgNg9cvJlV5weqq71jApbrlwQiqe2VRg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=L+mfCjADmYtHhHZ5GtCN25H9l/fxntPmx2TiJYI0kyN8puGp1aAan5491dZyzOWBg
-         jVt5HPN3hrZUnlZ6Tv6sH3Xpzz2f0X0jHLmCm81bGV/l4coQzM1TMzUwUWbMWEbnw6
-         mJbNBrc2jHabh6VNYQD6O5Di3A5uWby5W5sFiyLLlSNnHQ++YHKaTksuW9m7zNuzHG
-         9tC3K4aHdswFQhC36uKDH/4rOsmp2TVcnfNOUrW7HlL+qTc6V8HjdKPvLXuPJpO0fT
-         SERU1YGhqOSwrAZteCIG0a8V3uYJCuXay5YaJYDoKN+bRF2z4n9zgLwtywhpBCiwt0
-         LBGaB3IPpSKUw==
-Date:   Fri, 16 Dec 2022 12:26:27 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Daniel Verkamp <dverkamp@chromium.org>,
-        Jeff Xu <jeffxu@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm tree
-Message-ID: <20221216122627.6a3ded39@canb.auug.org.au>
+        Thu, 15 Dec 2022 20:29:55 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494415D6AD;
+        Thu, 15 Dec 2022 17:29:54 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so933566pjm.2;
+        Thu, 15 Dec 2022 17:29:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LJSmv0UFlP6EYpGJWz3ikOzgR8N+8F3GrJeQ0tKCU6k=;
+        b=mIoboXgtiHAxXIpZzmeYK0QTBWz9isKFcJ2J4sQgKRbIqMrZ8y6BV3KHbB4LAQDJdV
+         AAZ5omCrBcgSCvy/xKRh97is42TjdLIOPqPuG5oLykQhO4dG3gOPPkXqg8EcZDd+M9jp
+         Hb9JOYS/7q2WJE2BHk6Rsj9FsTvHD2yECL1vI+H2e0aFRbhA7fyu2cfWSubu04lBcmiR
+         N+zX9M+Y/h/cFYa8oRnbqKDX8fED5Eh32ZKOsopEarhrd3WzpI+DUL9KWQpWaRIEbrwt
+         t9czMdFhRoMNq9IOIX2tQ7XdL1UAnFX7kordlEWYoKlqPBcCVr6JD2CE0qZFD08RiUvY
+         Jlgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LJSmv0UFlP6EYpGJWz3ikOzgR8N+8F3GrJeQ0tKCU6k=;
+        b=EsBQbemBuePAhZp4rWoWMiG2N67mB28Ao+xpIXU5f3ZA6zMvoOSSqdwmJ0deohtuYp
+         j0Tf1oAn1DvWt6BotRI2Ampp5i1IqYyqGa25KK0pUpXa9qaTO9NLRZRE0qCMjpWGwyU8
+         r7ammWHKqfw/AMZLox88zJLRQjP34VI3Pzu8GhDbubJsZ1+uTrjrmcBVdxnbKCtnNeRL
+         MNOTMMGo7fnPe3fUMxGGzS2TLOCejaJTG8M3eqsbZ3yBPBQ3C4/1ukphV9EJM90q/5Aw
+         ExBkcIgCeMJS79OV6L6wBItcebu/YBIhH0imdP/d93vRRVYjIIMyI6I1uOO1dAqgwEKR
+         E6wA==
+X-Gm-Message-State: AFqh2kqIKSIPMPDHW5oti8mTuYZzRczDwGXglz/yawcYkHNSn/roHy+y
+        UuekA4P8aXEvFHh+Njmkub8=
+X-Google-Smtp-Source: AMrXdXsD6yfV8WcA0+ZzUCSQIAMBREIA0hyw33rv8WtaJ+03vc75ZZtG5haUDyF6cx/scNLyL0zrKg==
+X-Received: by 2002:a17:902:ead5:b0:190:f25a:2549 with SMTP id p21-20020a170902ead500b00190f25a2549mr6277066pld.14.1671154193569;
+        Thu, 15 Dec 2022 17:29:53 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id c9-20020a170903234900b0017f73caf588sm257815plh.218.2022.12.15.17.29.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 17:29:53 -0800 (PST)
+Date:   Thu, 15 Dec 2022 17:29:51 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Binbin Wu <binbin.wu@linux.intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v10 098/108] KVM: TDX: Implement callbacks for MSR
+ operations for TDX
+Message-ID: <20221216012951.GB527635@ls.amr.corp.intel.com>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+ <1cacbda18e3c7dcccd92a7390b0ca7f4ba073f85.1667110240.git.isaku.yamahata@intel.com>
+ <a9832926-8353-fd47-45aa-a6a5b85183e3@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oV5U1ZkIftJdRxiOF=tWbm=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a9832926-8353-fd47-45aa-a6a5b85183e3@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,54 +78,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/oV5U1ZkIftJdRxiOF=tWbm=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Nov 23, 2022 at 10:25:11PM +0800,
+Binbin Wu <binbin.wu@linux.intel.com> wrote:
 
-Hi all,
+> 
+> On 10/30/2022 2:23 PM, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > 
+> > Implements set_msr/get_msr/has_emulated_msr methods for TDX to handle
+> > hypercall from guest TD for paravirtualized rdmsr and wrmsr.  The TDX
+> > module virtualizes MSRs.  For some MSRs, it injects #VE to the guest TD
+> > upon RDMSR or WRMSR.  The exact list of such MSRs are defined in the spec.
+> 
+> How does KVM handle the case that the userland wants to get the TD MSR list?
+> 
+> KVM_GET_MSR_INDEX_LIST will return the global KVM MSR list, which is
+> different from the TD version.
 
-After merging the mm tree, today's linux-next build (sparc defconfig)
-failed like this:
+Do you mean user space VMM (e.g. qemu) by "the userland"?
+There are three classes of MSRs virtualization.
+- non-configurable: TDX module directly virtualizes it. VMM can't configure.
+  the value set by KVM_SET_MSR_INDEX_LIST is ignored.
+- configurable: TDX module directly virtualizes it. VMM can configure at the
+  VM creation time.
+  the value set by KVM_SET_MSR_INDEX_LIST is used.
+- #VE
+  VMM handles the MSR hypercall by guest TD issues. The value set by
+  KVM_SET_MSR_INDEX_LIST is used.
 
-kernel/pid_namespace.c: In function 'create_pid_namespace':
-kernel/pid_namespace.c:114:9: error: implicit declaration of function 'init=
-ialize_memfd_noexec_scope'; did you mean 'set_memfd_noexec_scope'? [-Werror=
-=3Dimplicit-function-declaration]
-  114 |         initialize_memfd_noexec_scope(ns);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |         set_memfd_noexec_scope
-kernel/pid_namespace.c: In function 'pid_namespaces_init':
-kernel/pid_namespace.c:462:9: error: implicit declaration of function 'regi=
-ster_pid_ns_sysctl_table_vm'; did you mean 'register_pid_ns_ctl_table_vm'? =
-[-Werror=3Dimplicit-function-declaration]
-  462 |         register_pid_ns_sysctl_table_vm();
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |         register_pid_ns_ctl_table_vm
 
-Caused by commit
+> > Upon #VE, the guest TD may execute hypercalls,
+> > TDG.VP.VMCALL<INSTRUCTION.RDMSR> and TDG.VP.VMCALL<INSTRUCTION.WRMSR>,
+> > which are defined in GHCI (Guest-Host Communication Interface) so that the
+> > host VMM (e.g. KVM) can virtualizes
+> can virtualize
 
-  70ebb551866e ("mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC")
-
-I have reverted that commit (and the following 2) for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/oV5U1ZkIftJdRxiOF=tWbm=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmObyUMACgkQAVBC80lX
-0GzPjgf/R7PJ8TLM1xHHJYCAbThuIafQH0e5Cn4fCpny7NPoLKq7vsNjafg57D9O
-cl83f9u4MkvVHK00egRd0ClXa04JgWD+WBv2VrY/xGS4g7eaIBWEv+60hqQQxqlY
-x4XWLuDzO88k7gt5/iNYDNZM/GgPDnWquvk60IG6DKwb0NAytgs/J2MLdvSEQeK/
-d3zMWud94kWu5T9UXnk3ktftoHbkZuj2bnQWPeASsFn3pVy6NrRR3nFz2ZXmUcJg
-/UjPSoWrlIIPbBnQ4MNkvdQf5Jg+0hWyapDoqQmQ4+tZ7kYrQ+aM/Zwfm045pZ3m
-iKB8qRorzfUtkTvHhB3OjslSzAh/DA==
-=C1fl
------END PGP SIGNATURE-----
-
---Sig_/oV5U1ZkIftJdRxiOF=tWbm=--
+Yes, will fix.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
