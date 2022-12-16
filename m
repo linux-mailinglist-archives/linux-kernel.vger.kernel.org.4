@@ -2,79 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0752164E7DA
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9391D64E7DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiLPHkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 02:40:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51648 "EHLO
+        id S229730AbiLPHmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 02:42:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLPHkL (ORCPT
+        with ESMTP id S229627AbiLPHmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 02:40:11 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438413B9DF;
-        Thu, 15 Dec 2022 23:40:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8blW/F/+PwS1X5UjK3Cc7amh31WnyYbXAljrienDktY=; b=E5OMUfst49yaCfkqXi77SZaxJT
-        0H2MxSDDIR0HbIiad0RvN2WLGjqw/Rj7X4um9Swgb4Yp3aupHCobR28+O6bVV+bF+AV2dFzCKP+g9
-        d76Hvr7umyrkD2EbX1FjwwB60EiiYIwH6D96oIr2fuks0pBvn1yh1ZOmwgwpwKPixL5RwMQIUfmPV
-        po1+ZVueIWcbMfwp0zOkSHb8fPV2DSADfFkcP5UEf33/Mnz0juOefPyMz3sEoaDB4E7ax3+ixF00L
-        PTb7IBzIXnWLxNmCWvflpKt+2FMBnOkThFcHplIJQbmRFL002F8uLZ5x4Ek8lqGV4L2Q7qDaAOjhT
-        V+A9amNA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p65Jm-00DPrG-0W; Fri, 16 Dec 2022 07:39:42 +0000
-Date:   Thu, 15 Dec 2022 23:39:41 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        caihuoqing <caihuoqing@baidu.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 23/25] PCI: dwc: Restore DMA-mask after MSI-data
- allocation
-Message-ID: <Y5wgvdnMWQDxkUd+@infradead.org>
-References: <20221214235305.31744-1-Sergey.Semin@baikalelectronics.ru>
- <20221214235305.31744-24-Sergey.Semin@baikalelectronics.ru>
- <Y5rJJfZeVqliA5Rg@infradead.org>
- <20221215092721.tvz3hpaql3kotgnu@mobilestation>
- <07ec7610-f1be-9b5c-416d-17781a22427d@arm.com>
- <20221215235218.wsuwy5uckqfxjnb6@mobilestation>
+        Fri, 16 Dec 2022 02:42:19 -0500
+Received: from out30-7.freemail.mail.aliyun.com (out30-7.freemail.mail.aliyun.com [115.124.30.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF143F05A;
+        Thu, 15 Dec 2022 23:42:17 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R831e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VXQCLih_1671176534;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VXQCLih_1671176534)
+          by smtp.aliyun-inc.com;
+          Fri, 16 Dec 2022 15:42:15 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] media: v4l2-ctrls: clean up some inconsistent indentings
+Date:   Fri, 16 Dec 2022 15:42:12 +0800
+Message-Id: <20221216074212.45386-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221215235218.wsuwy5uckqfxjnb6@mobilestation>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 02:52:18AM +0300, Serge Semin wrote:
-> Got it. Thanks for clarification. I'll resubmit the series with only
-> the streaming DMA mask restoration.
+clean up some inconsistent indentings to improve the readability of the
+code.
 
-Note that even for that we need to make sure there are no outstanding
-mappings when you change the mask.
+drivers/media/v4l2-core/v4l2-ctrls-api.c:154 user_to_new() warn: inconsistent indenting
+
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3503
+Fixes: 73278d483378 ("media: v4l2-ctrls-api.c: add back dropped ctrl->is_new = 1")
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/media/v4l2-core/v4l2-ctrls-api.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-api.c b/drivers/media/v4l2-core/v4l2-ctrls-api.c
+index 3d3b6dc24ca6..3bee4ad5be7c 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-api.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-api.c
+@@ -150,8 +150,8 @@ static int user_to_new(struct v4l2_ext_control *c, struct v4l2_ctrl *ctrl)
+ 			 * then return an error.
+ 			 */
+ 			if (strlen(ctrl->p_new.p_char) == ctrl->maximum && last)
+-			ctrl->is_new = 1;
+-				return -ERANGE;
++				ctrl->is_new = 1;
++			return -ERANGE;
+ 		}
+ 		return ret;
+ 	default:
+-- 
+2.20.1.7.g153144c
 
