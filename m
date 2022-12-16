@@ -2,74 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E366764EE71
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B059B64EE7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbiLPQCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 11:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
+        id S232630AbiLPQE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 11:04:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbiLPQCG (ORCPT
+        with ESMTP id S232541AbiLPQEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 11:02:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D623D70BAF
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:00:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6AE262166
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 16:00:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 88C02C433F1;
-        Fri, 16 Dec 2022 16:00:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671206421;
-        bh=a2bt3ssJdPRv3ViouOAraNWuBQ2e3+pMiHngmtpfNBo=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=tDqYMiQZD1+feRqFTqO3Sut6s0tl3iESJP9R8jiWFQA8FxUcWkAOFpBO0xB1RtC9m
-         K9s3ZDOOAa09Ykh5HNJ6AORi7UIlG4TUe4Ry598FF86Tk0xGx4dlghiASnFhGH60M3
-         1cuH2f+kBmY1EuAlfivGST1pRm5CAzskJq783qNOEYqsEZkYHVW/m16LA0lUef3I23
-         09E1TUnh+n5JQLTekmsgJfTNOLPFKEqZf5BVL/WmbJuCj8oZraSG1OQHE5C5UFi4Hd
-         Gy1II2wuYYPQ7ZGfuWzxQ9Dfg43N//ctNhE9bSAW4iqcpGWSVnRYKdkZW04VQXLra5
-         YGg0bMnD04WDg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 75760E4D00B;
-        Fri, 16 Dec 2022 16:00:21 +0000 (UTC)
-Subject: Re: [GIT PULL] Char/Misc driver changes for 6.2-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y5wwE2YWlzzG6VkA@kroah.com>
-References: <Y5wwE2YWlzzG6VkA@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y5wwE2YWlzzG6VkA@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-6.2-rc1
-X-PR-Tracked-Commit-Id: f361c96c75184d0272572087c7d9874e0f64b870
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ba54ff1fb662215de683777f815b9e96276d55cf
-Message-Id: <167120642147.30725.10254793477948634057.pr-tracker-bot@kernel.org>
-Date:   Fri, 16 Dec 2022 16:00:21 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Fri, 16 Dec 2022 11:04:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744B56F0C8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:01:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671206476;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QXlf0fi95Q9sDBDXZydRV0Mu2EmJPmkK+rvU5zY6sMw=;
+        b=EaPLLB8FgdeJJO9HMWX6O54zU2Zk86pp3UDoP9KE1zl9KOrm3luvHgNKaAWvv8cKiNBHvL
+        I1r87pDm7cV5zY98ngfu8K7CO+18XlmlpDS3crcCvWgB2ZkgVyhEPO4OB6Dq2GIsgwCIi5
+        hueiN5UvvYDO6wshlAUAXxPViWTw9nY=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-626-Kti8YBBMO92mwMvps3DwpQ-1; Fri, 16 Dec 2022 11:01:13 -0500
+X-MC-Unique: Kti8YBBMO92mwMvps3DwpQ-1
+Received: by mail-wm1-f71.google.com with SMTP id r129-20020a1c4487000000b003d153a83d27so1397529wma.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:01:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QXlf0fi95Q9sDBDXZydRV0Mu2EmJPmkK+rvU5zY6sMw=;
+        b=Sl/WzsE07QOKe8pHdqiWe/0OxScczijwRmhzzc85ThqAYowNum8CbA9Mvi3zhlWpzM
+         PxsJA+80VnsfRjEPklW6blotXDSx1jOLsS92Tw8Bj1Rbh2VLlXgl4NJKJhcQ9z49XQ8B
+         8uKvOa7tNZzpyicZAE3tLawjsxiaapyKh3C0F2llZXxPQiYSIPAQZgtNHsiukOnilNiB
+         H7f74if4C0+G8qBFC0sUHCfeE+Q77HS9jvp4+CyXMYHWFDnJlPaUMxbBkoKiK6Q3G1UN
+         8Qee+JF/4kigwv2e3NYbZ7+eRA+zVkYswlfFLPabVGY7wtkOWI3Rn5Qs/FSZ7F08xH1H
+         K3aA==
+X-Gm-Message-State: ANoB5pl3+mA4sqiKP6HUMBsjanmjJL2jetLA8aGAm2j1skGrkIBVVrMW
+        5MSVDvUg2HNn0Q8Ek4+j/6kNIx2NXlhC3q5LUF/04MIHiBcQSqvo7FQcNm8hKG/7kfyJq8l2mUP
+        OnsF0EdHwgN0im17Lt9TPyLtl
+X-Received: by 2002:a05:600c:34cd:b0:3cf:c2a5:5abc with SMTP id d13-20020a05600c34cd00b003cfc2a55abcmr26467202wmq.17.1671206472022;
+        Fri, 16 Dec 2022 08:01:12 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7lP7tl2S6qgLTN3bZPyt+ZwVs1l98BARX/cmvswH+dKAX/0oE28TgKvm09gJrmULjrIem4HQ==
+X-Received: by 2002:a05:600c:34cd:b0:3cf:c2a5:5abc with SMTP id d13-20020a05600c34cd00b003cfc2a55abcmr26467138wmq.17.1671206471395;
+        Fri, 16 Dec 2022 08:01:11 -0800 (PST)
+Received: from [192.168.3.108] (p4ff23686.dip0.t-ipconnect.de. [79.242.54.134])
+        by smtp.gmail.com with ESMTPSA id s20-20020a7bc394000000b003d1da8c7854sm2877335wmj.45.2022.12.16.08.01.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 08:01:10 -0800 (PST)
+Message-ID: <b3898fb8-3aed-8392-7063-1e58c06d6d5d@redhat.com>
+Date:   Fri, 16 Dec 2022 17:01:09 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 2/2] mm: Fix a few rare cases of using swapin error pte
+ marker
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     Andrea Arcangeli <aarcange@redhat.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Huang Ying <ying.huang@intel.com>
+References: <20221214200453.1772655-1-peterx@redhat.com>
+ <20221214200453.1772655-3-peterx@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221214200453.1772655-3-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 16 Dec 2022 09:45:07 +0100:
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 032ef700c3e8..3e836fecd035 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -828,7 +828,7 @@ copy_nonpresent_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+>   			return -EBUSY;
+>   		return -ENOENT;
+>   	} else if (is_pte_marker_entry(entry)) {
+> -		if (userfaultfd_wp(dst_vma))
+> +		if (is_swapin_error_entry(entry) || userfaultfd_wp(dst_vma))
+>   			set_pte_at(dst_mm, addr, dst_pte, pte);
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-6.2-rc1
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ba54ff1fb662215de683777f815b9e96276d55cf
-
-Thank you!
+As discussed, it would be great if we could in the future avoid such 
+allow lists and instead have default allow and only handle problematic 
+cases. Maybe we can do that in the future with selective clearing of 
+markers.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+
+David / dhildenb
+
