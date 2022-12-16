@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B8264ED45
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:59:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9E964ED47
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbiLPO66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:58:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33626 "EHLO
+        id S230240AbiLPO7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:59:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbiLPO6h (ORCPT
+        with ESMTP id S231289AbiLPO6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:58:37 -0500
+        Fri, 16 Dec 2022 09:58:44 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8565EDE9;
-        Fri, 16 Dec 2022 06:58:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280546036B;
+        Fri, 16 Dec 2022 06:58:38 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3370A3431A;
-        Fri, 16 Dec 2022 14:58:31 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C4D0734319;
+        Fri, 16 Dec 2022 14:58:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1671202711; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1671202716; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DdtkNadGDanVmd8kJX65xjdddaLea0RGEwD4P1a+J98=;
-        b=lODXEK7ebePxLiw4PLu3KgzPfwzpEJ8IAv4i/mfs4SKHCuKJrxjbYg1qOAihkqBC6oD+9U
-        nhSOPxk8HT/dVvpZHdqnBP9Yo3K27sS+sbEM7f/LIiYFCQXYHMP0OtPzTqT1jic8TKGPY9
-        KjNkKTIBe7WLq0e05vK4e9zGRsdkFbs=
+        bh=x36AuY9fdrueTpOox7l4aH9J7+eTrfGAHM9OlY2CQHU=;
+        b=SpGCTUY9+p3OSfiSSP0kSXj9iihsB9mtnEn6ajE8dHqS/FXFp5u52Ir2MnnMN0A0cCXhCR
+        /nXL0RpYDQ5qQuU2FRxvLaqebBWdRkl6u08yKZs+ggqLcW7K2N/SgFEgEOusM82T6Xk9rN
+        7dJmWlPYvDa0JU/uSa6/ZfB3W7Wi8OE=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EB6A1138FD;
-        Fri, 16 Dec 2022 14:58:30 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 93C0B138FD;
+        Fri, 16 Dec 2022 14:58:36 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id D5wpOJaHnGPAeAAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 16 Dec 2022 14:58:30 +0000
+        id ccTCIpyHnGPPeAAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 16 Dec 2022 14:58:36 +0000
 From:   Juergen Gross <jgross@suse.com>
 To:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
 Cc:     Juergen Gross <jgross@suse.com>,
         =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
         Jens Axboe <axboe@kernel.dk>, xen-devel@lists.xenproject.org
-Subject: [PATCH 2/4] xen/blkback: remove stale prototype
-Date:   Fri, 16 Dec 2022 15:58:14 +0100
-Message-Id: <20221216145816.27374-3-jgross@suse.com>
+Subject: [PATCH 3/4] xen/blkback: simplify free_persistent_gnts() interface
+Date:   Fri, 16 Dec 2022 15:58:15 +0100
+Message-Id: <20221216145816.27374-4-jgross@suse.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20221216145816.27374-1-jgross@suse.com>
 References: <20221216145816.27374-1-jgross@suse.com>
@@ -62,26 +62,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no function xen_blkif_purge_persistent(), so remove its
-prototype from common.h.
+The interface of free_persistent_gnts() can be simplified, as there is
+only a single caller of free_persistent_gnts() and the 2nd and 3rd
+parameters are easily obtainable via the ring pointer, which is passed
+as the first parameter anyway.
 
 Signed-off-by: Juergen Gross <jgross@suse.com>
 ---
- drivers/block/xen-blkback/common.h | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/block/xen-blkback/blkback.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/block/xen-blkback/common.h b/drivers/block/xen-blkback/common.h
-index 9a13a6b420a6..fab8a8dee0da 100644
---- a/drivers/block/xen-blkback/common.h
-+++ b/drivers/block/xen-blkback/common.h
-@@ -384,7 +384,6 @@ void xen_blkif_xenbus_fini(void);
+diff --git a/drivers/block/xen-blkback/blkback.c b/drivers/block/xen-blkback/blkback.c
+index 6e2163aaf362..243712b59a05 100644
+--- a/drivers/block/xen-blkback/blkback.c
++++ b/drivers/block/xen-blkback/blkback.c
+@@ -239,9 +239,9 @@ static void put_persistent_gnt(struct xen_blkif_ring *ring,
+ 	atomic_dec(&ring->persistent_gnt_in_use);
+ }
  
- irqreturn_t xen_blkif_be_int(int irq, void *dev_id);
- int xen_blkif_schedule(void *arg);
--int xen_blkif_purge_persistent(void *arg);
- void xen_blkbk_free_caches(struct xen_blkif_ring *ring);
+-static void free_persistent_gnts(struct xen_blkif_ring *ring, struct rb_root *root,
+-                                 unsigned int num)
++static void free_persistent_gnts(struct xen_blkif_ring *ring)
+ {
++	struct rb_root *root = &ring->persistent_gnts;
+ 	struct gnttab_unmap_grant_ref unmap[BLKIF_MAX_SEGMENTS_PER_REQUEST];
+ 	struct page *pages[BLKIF_MAX_SEGMENTS_PER_REQUEST];
+ 	struct persistent_gnt *persistent_gnt;
+@@ -249,6 +249,9 @@ static void free_persistent_gnts(struct xen_blkif_ring *ring, struct rb_root *ro
+ 	int segs_to_unmap = 0;
+ 	struct gntab_unmap_queue_data unmap_data;
  
- int xen_blkbk_flush_diskcache(struct xenbus_transaction xbt,
++	if (RB_EMPTY_ROOT(root))
++		return;
++
+ 	unmap_data.pages = pages;
+ 	unmap_data.unmap_ops = unmap;
+ 	unmap_data.kunmap_ops = NULL;
+@@ -277,9 +280,11 @@ static void free_persistent_gnts(struct xen_blkif_ring *ring, struct rb_root *ro
+ 
+ 		rb_erase(&persistent_gnt->node, root);
+ 		kfree(persistent_gnt);
+-		num--;
++		ring->persistent_gnt_c--;
+ 	}
+-	BUG_ON(num != 0);
++
++	BUG_ON(!RB_EMPTY_ROOT(&ring->persistent_gnts));
++	BUG_ON(ring->persistent_gnt_c != 0);
+ }
+ 
+ void xen_blkbk_unmap_purged_grants(struct work_struct *work)
+@@ -631,12 +636,7 @@ int xen_blkif_schedule(void *arg)
+ void xen_blkbk_free_caches(struct xen_blkif_ring *ring)
+ {
+ 	/* Free all persistent grant pages */
+-	if (!RB_EMPTY_ROOT(&ring->persistent_gnts))
+-		free_persistent_gnts(ring, &ring->persistent_gnts,
+-			ring->persistent_gnt_c);
+-
+-	BUG_ON(!RB_EMPTY_ROOT(&ring->persistent_gnts));
+-	ring->persistent_gnt_c = 0;
++	free_persistent_gnts(ring);
+ 
+ 	/* Since we are shutting down remove all pages from the buffer */
+ 	gnttab_page_cache_shrink(&ring->free_pages, 0 /* All */);
 -- 
 2.35.3
 
