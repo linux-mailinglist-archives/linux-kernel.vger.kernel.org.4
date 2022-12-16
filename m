@@ -2,166 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559F864F368
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 22:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C607964F375
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 22:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiLPVp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 16:45:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
+        id S229562AbiLPVr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 16:47:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiLPVpb (ORCPT
+        with ESMTP id S229744AbiLPVrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 16:45:31 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BD16BCA7;
-        Fri, 16 Dec 2022 13:45:30 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGLIOPf027431;
-        Fri, 16 Dec 2022 21:45:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=D8mQaUr11uzwiRfKn/NUkh8jxLn0rwEAYG1hxGjXyqk=;
- b=ckqi2hKmDJkYjMiuz4nNoXvliGyedTi8Tntwk9DXp5YmJFfq+ERKO7hiasZNyWmfFmaB
- gpCb8SzDi2ZB233LCzYmL1wSa0GvXGfbVHL0X9NGGqg35kfyCInC3vQJ9hfbHQVO0sUC
- cWLaSaOTHxQwntEE0e5p/n2M3iF70ZmBjduNTUA9HaUYlnnR7AaHYwqEzwFnnnXNbV3G
- vwhLNag6fexxujkPQEmm+3rRYwaRP6AndxUyVd6o4H5mHIFC8+Jl5UUh8VLrbM6F7hFG
- YPRmeHdIZAACN4gSeXQFF9VtoucLwhvxVFkI3fDKeMZpcCUxMB6eloMub9NbMslMYu74 Vg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mgvecrs70-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 21:45:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BGLjLn3027618
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 21:45:21 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 16 Dec 2022 13:45:20 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>,
-        <konrad.dybcio@somainline.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <airlied@gmail.com>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v15 5/5] drm/msm/dp: add support of max dp link rate
-Date:   Fri, 16 Dec 2022 13:45:02 -0800
-Message-ID: <1671227102-21717-6-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1671227102-21717-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1671227102-21717-1-git-send-email-quic_khsieh@quicinc.com>
+        Fri, 16 Dec 2022 16:47:43 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F4227F
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 13:47:36 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id 4so3607373plj.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 13:47:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6nVEs5xFKdjJrb7rw+tJ+EGskEE/XSoBaU5tE1Of2UM=;
+        b=imch457wLU85EdPzcALjROdhazTLRL8lGUTPNwvtmi9e/Zx5tvC5qObvSwlPANkyp7
+         IbI5E4saBVEEk8pKdB8uc9IxGwWPBvM9xjE8D9Opdg1/orL++y/vOMdMKASdhvX0/1mt
+         cQ8ks02Vdm62J08IecNC24yv+sglbd382CWEybZDHpvlzWPAcR7m8k8CaYYL+7bY/Fsd
+         U+wIMsGKUpqvjcTyRzT8D1vT+Yx/q0ViD/qBaWXyVKjK69WcKqRySzzK4a4iOaX60vWU
+         tw1r1xQAEiAzoK/2AARS4tOiF/Uwf6la+eYVZNPyuaTrycHB9PtkJ9brVbyAreybaBbo
+         Wi4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6nVEs5xFKdjJrb7rw+tJ+EGskEE/XSoBaU5tE1Of2UM=;
+        b=Wvi0NPMbGNB93wT+7ihYgWVaKlEtyw8iryN+CVnyEOPd49WQWUzHZg3kobYBUpdaHC
+         TsHyZhxYQY/PnYXduPgkwEXOQOuUyimQeOXfxvJGpvc7GbJZpQqpgiCoPVRtYjyL6Ot3
+         ELj6x1PENLmWh1UAXLGJS2seKV+p5Bm8RHHwwdAXgabuNDSpkuBnLxHDD5Uvya8mt6hd
+         jTsd5twpgd9asKiC0FZeT/pAR0g0Tmd4BrVUPlHXHmbPrVk/QDmYrfw5peV/o1h40Mui
+         J2EQO8Dqn3LbgscIAex0e9ApsUF5upYdT+3uLOFinpE5cCVIkp8j95usCFFTQmNxyn/I
+         S5Hg==
+X-Gm-Message-State: AFqh2kqP3h44klmz8mSBw+7igFIzi7gljD32a4l7nKLny20/3rEgsPuo
+        Iw30G15mFQHKGu6YnaUTBpmCnU+Z9chPG4Ddr6EOOw==
+X-Google-Smtp-Source: AMrXdXujucDbis+jisu/8phFW07nKafYIDiwu/+Zr6WdeALYIoQUEtnKDq4oRFNwWnebww/zp5jU4JPy+wNaMFqJTKM=
+X-Received: by 2002:a17:90a:4612:b0:219:a43b:1006 with SMTP id
+ w18-20020a17090a461200b00219a43b1006mr1266289pjg.195.1671227255426; Fri, 16
+ Dec 2022 13:47:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ElunmeELkkPos7daNDzivSj92SK7LAgL
-X-Proofpoint-ORIG-GUID: ElunmeELkkPos7daNDzivSj92SK7LAgL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-16_14,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=999 priorityscore=1501
- bulkscore=0 suspectscore=0 malwarescore=0 mlxscore=0 clxscore=1015
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212160194
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221207154939.2532830-1-jeffxu@google.com> <20221207154939.2532830-4-jeffxu@google.com>
+ <202212080821.5AE7EE99@keescook> <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
+ <Y5yS8wCnuYGLHMj4@x1n> <CALmYWFsDhX76zbcyhYAW-u0BBwD+m+TKpt4_pZTMt+22zHhrGQ@mail.gmail.com>
+ <20221216094259.bec91e4abd6cf54a05ce2813@linux-foundation.org>
+ <CALmYWFsNp87a5uVQUAb4PG0khFN8Xxd=ibh9Q7g-Y0XW1Mn-8Q@mail.gmail.com> <202212161233.85C9783FB@keescook>
+In-Reply-To: <202212161233.85C9783FB@keescook>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Fri, 16 Dec 2022 13:46:58 -0800
+Message-ID: <CALmYWFuENPRvCAOF6of=Ufct5jjAbJ=iDyH7eODhdbm24uAK3Q@mail.gmail.com>
+Subject: Re: [PATCH v6 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Peter Xu <peterx@redhat.com>, jeffxu@chromium.org,
+        skhan@linuxfoundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com,
+        linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By default, HBR2 (5.4G) is the max link rate be supported. This patch
-uses the actual limit specified by DT and removes the artificial
-limitation to 5.4 Gbps. Supporting HBR3 is a consequence of that.
+On Fri, Dec 16, 2022 at 12:35 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Fri, Dec 16, 2022 at 10:11:44AM -0800, Jeff Xu wrote:
+> > Once per boot seems too little, it would be nice if we can list all processes.
+> > I agree ratelimited might be too much.
+> > There is a feature gap here for logging.
+> >
+> > Kees, what do you think ?
+>
+> I agree once per boot is kind of frustrating "I fixed the one warning,
+> oh, now it's coming from a different process". But ratelimit is, in
+> retrospect, still too often.
+>
+> Let's go with per boot -- this should be noisy "enough" to get the
+> changes in API into the callers without being too much of a hassle.
+>
+Agreed.  Let's go with per boot.
 
-Changes in v2:
--- add max link rate from dtsi
+Hi Andrew, what is your preference ? I can send a patch  or you
+directly fix it in mm-unstable ?
 
-Changes in v3:
--- parser max_data_lanes and max_dp_link_rate from dp_out endpoint
+Thanks
+-Jeff
 
-Changes in v4:
--- delete unnecessary pr_err
-
-Changes in v5:
--- split parser function into different patch
-
-Changes in v9:
--- revised commit test
-
-Changes in v13:
--- repalced "properity" with "property"
-
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/gpu/drm/msm/dp/dp_display.c | 4 ++++
- drivers/gpu/drm/msm/dp/dp_panel.c   | 7 ++++---
- drivers/gpu/drm/msm/dp/dp_panel.h   | 1 +
- 3 files changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index bfd0aef..edee550 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -390,6 +390,10 @@ static int dp_display_process_hpd_high(struct dp_display_private *dp)
- 	struct edid *edid;
- 
- 	dp->panel->max_dp_lanes = dp->parser->max_dp_lanes;
-+	dp->panel->max_dp_link_rate = dp->parser->max_dp_link_rate;
-+
-+	drm_dbg_dp(dp->drm_dev, "max_lanes=%d max_link_rate=%d\n",
-+		dp->panel->max_dp_lanes, dp->panel->max_dp_link_rate);
- 
- 	rc = dp_panel_read_sink_caps(dp->panel, dp->dp_display.connector);
- 	if (rc)
-diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
-index 5149ceb..1800d89 100644
---- a/drivers/gpu/drm/msm/dp/dp_panel.c
-+++ b/drivers/gpu/drm/msm/dp/dp_panel.c
-@@ -75,12 +75,13 @@ static int dp_panel_read_dpcd(struct dp_panel *dp_panel)
- 	link_info->rate = drm_dp_bw_code_to_link_rate(dpcd[DP_MAX_LINK_RATE]);
- 	link_info->num_lanes = dpcd[DP_MAX_LANE_COUNT] & DP_MAX_LANE_COUNT_MASK;
- 
-+	/* Limit data lanes from data-lanes of endpoint property of dtsi */
- 	if (link_info->num_lanes > dp_panel->max_dp_lanes)
- 		link_info->num_lanes = dp_panel->max_dp_lanes;
- 
--	/* Limit support upto HBR2 until HBR3 support is added */
--	if (link_info->rate >= (drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4)))
--		link_info->rate = drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4);
-+	/* Limit link rate from link-frequencies of endpoint property of dtsi */
-+	if (link_info->rate > dp_panel->max_dp_link_rate)
-+		link_info->rate = dp_panel->max_dp_link_rate;
- 
- 	drm_dbg_dp(panel->drm_dev, "version: %d.%d\n", major, minor);
- 	drm_dbg_dp(panel->drm_dev, "link_rate=%d\n", link_info->rate);
-diff --git a/drivers/gpu/drm/msm/dp/dp_panel.h b/drivers/gpu/drm/msm/dp/dp_panel.h
-index d861197a..f04d021 100644
---- a/drivers/gpu/drm/msm/dp/dp_panel.h
-+++ b/drivers/gpu/drm/msm/dp/dp_panel.h
-@@ -50,6 +50,7 @@ struct dp_panel {
- 
- 	u32 vic;
- 	u32 max_dp_lanes;
-+	u32 max_dp_link_rate;
- 
- 	u32 max_bw_code;
- };
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+> --
+> Kees Cook
