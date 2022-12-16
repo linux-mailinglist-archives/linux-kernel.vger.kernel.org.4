@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA92564EC24
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 14:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22DE364EC23
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 14:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiLPNbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 08:31:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
+        id S230103AbiLPNbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 08:31:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbiLPNbb (ORCPT
+        with ESMTP id S230421AbiLPNba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 08:31:31 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9527718B27
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 05:31:30 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id a4-20020a5b0004000000b006fdc6aaec4fso2594206ybp.20
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 05:31:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=mGkn4hSq2I1CrIC6jits2ZltjIfFLPapjY5ehR6Imtg=;
-        b=em04It3V5ypOLrAQENzwgihctcJkIQbrcrYLF3PbrSYR7jBxMNXFItI7e1Gfx1/cVU
-         aer6JQvyR1i/+p8d/r1iyZDwENn5RAG7wv1aausS2BIBHVuoaopYLYJyzfJD+HF/l+ix
-         m6c6vRrBTjerzCE5FiCcHP2U29cvkQI1u5DhxGLqi+JEZnOTYkNE4CDWf5/bAZgb6+nb
-         pnz4Tg9nPwrOfJrBxNh0iaMqlO9MIyKDpnCdIGZic9m6oUI8qiUgcOrf7HpMhwwL4Ich
-         F0jENiesiGToTgV556Q8RnsPG9bmFctdiDSEtCejU8OWkzmNO54eUEtRwF7RxbN0ck8m
-         MwGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mGkn4hSq2I1CrIC6jits2ZltjIfFLPapjY5ehR6Imtg=;
-        b=ueQIi7ECyV/pZaC41WMgscovD3vimKK1DvSrhy5gy5lebhnMrKfx5WrMHRAJlZJaxk
-         UUnf1rPUvGor5BQ7ckTcGi88lNLU4FfeUgf/d4JsicMVWKVZ4BPpUSGJWfdabSS8zJQI
-         m/fHQLBljIh0+bvDmtlOyjsh7vEQHKNSpfujE0GbxrP5tbRBRe8URlzBSSNrfF+l62Cl
-         Rpw6i8XxQgzpjPnDHyidYghAqx9ZWi4Y32/rcSn2rHQ3jDLdtYyaiYNz4W8x+vKp5Izs
-         QPvRN2qgKtx56z4ofAzq3sxYfVhrooQcSsCEhfcsf2BIDNCw8LYMyecwxP/KettcJQwK
-         tV6A==
-X-Gm-Message-State: ANoB5pn0RvolhqnmzBhpR4M/+h2C+NHpRqfgtyWKkNhiFIukaSjHY4ct
-        TScV/j04GnqxP/jAMgwHdFTyhxrJ/ALU9oVcaw==
-X-Google-Smtp-Source: AA0mqf7wJg7bCXK5M5geSxw1lvEY7MrWbroWjCOngpadjn4N95aS+wxgdXR+o6NKvvr6/7/P18Mfnf0QLsQ5LAShSQ==
-X-Received: from peternewman10.zrh.corp.google.com ([2a00:79e0:9d:6:996f:f64e:1a0c:cc8c])
- (user=peternewman job=sendgmr) by 2002:a0d:f7c4:0:b0:370:2d8c:8193 with SMTP
- id h187-20020a0df7c4000000b003702d8c8193mr8573031ywf.221.1671197489843; Fri,
- 16 Dec 2022 05:31:29 -0800 (PST)
-Date:   Fri, 16 Dec 2022 14:31:25 +0100
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221216133125.3159406-1-peternewman@google.com>
-Subject: [PATCH v6] x86/resctrl: Fix task CLOSID/RMID update race
-From:   Peter Newman <peternewman@google.com>
-To:     reinette.chatre@intel.com, fenghua.yu@intel.com
-Cc:     bp@alien8.de, derkling@google.com, eranian@google.com,
-        hpa@zytor.com, james.morse@arm.com, jannh@google.com,
-        kpsingh@google.com, linux-kernel@vger.kernel.org, mingo@redhat.com,
-        tglx@linutronix.de, x86@kernel.org,
-        Peter Newman <peternewman@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Fri, 16 Dec 2022 08:31:30 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C874D18373;
+        Fri, 16 Dec 2022 05:31:29 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NYVN21pMJz16Lcg;
+        Fri, 16 Dec 2022 21:30:26 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 16 Dec 2022 21:31:26 +0800
+Subject: Re: [PATCH v9] kallsyms: Add self-test facility
+To:     Andreas Schwab <schwab@linux-m68k.org>
+CC:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Laight <David.Laight@aculab.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
+ <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
+ <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
+ <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
+ <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
+ <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
+ <87len7k1yn.fsf@igel.home> <9f2d4035-c647-4bd9-ffff-b970a88bcc88@huawei.com>
+ <87a63njzf7.fsf@igel.home>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <7a7713d1-a06e-ab48-48de-a6557c0149b0@huawei.com>
+Date:   Fri, 16 Dec 2022 21:31:25 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <87a63njzf7.fsf@igel.home>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,137 +74,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the user moves a running task to a new rdtgroup using the tasks
-file interface or by deleting its rdtgroup, the resulting change in
-CLOSID/RMID must be immediately propagated to the PQR_ASSOC MSR on the
-task(s) CPUs.
 
-x86 allows reordering loads with prior stores, so if the task starts
-running between a task_curr() check that the CPU hoisted before the
-stores in the CLOSID/RMID update then it can start running with the old
-CLOSID/RMID until it is switched again because __rdtgroup_move_task()
-failed to determine that it needs to be interrupted to obtain the new
-CLOSID/RMID.
 
-Refer to the diagram below:
+On 2022/12/16 20:39, Andreas Schwab wrote:
+> On Dez 16 2022, Leizhen (ThunderTown) wrote:
+> 
+>> Why consider the high bit? It is not memcmp(). If the high bit is set,
+>> it is the user's fault.
+> 
+> Nope, the semantics of strcmp are defined on the full CHAR_MIN to
+> CHAR_MAX range.
 
-CPU 0                                   CPU 1
------                                   -----
-__rdtgroup_move_task():
-  curr <- t1->cpu->rq->curr
-                                        __schedule():
-                                          rq->curr <- t1
-                                        resctrl_sched_in():
-                                          t1->{closid,rmid} -> {1,1}
-  t1->{closid,rmid} <- {2,2}
-  if (curr == t1) // false
-   IPI(t1->cpu)
+OK, I got it.
 
-A similar race impacts rdt_move_group_tasks(), which updates tasks in a
-deleted rdtgroup.
+> 
 
-In a memory bandwidth-metered compute host, malicious jobs could exploit
-this race to remain in a previous CLOSID or RMID in order to dodge a
-class-of-service downgrade imposed by an admin or to steal bandwidth.
-
-In both cases, use smp_mb() to order the task_struct::{closid,rmid}
-stores before the loads in task_curr().  In particular, in the
-rdt_move_group_tasks() case, simply execute an smp_mb() on every
-iteration with a matching task.
-
-It is possible to use a single smp_mb() in rdt_move_group_tasks(), but
-this would require two passes and a means of remembering which
-task_structs were updated in the first loop. However, benchmarking
-results below showed too little performance impact in the simple
-approach to justify implementing the two-pass approach.
-
-Times below were collected using `perf stat` to measure the time to
-remove a group containing a 1600-task, parallel workload.
-
-CPU: Intel(R) Xeon(R) Platinum P-8136 CPU @ 2.00GHz (112 threads)
-
- # mkdir /sys/fs/resctrl/test
- # echo $$ > /sys/fs/resctrl/test/tasks
- # perf bench sched messaging -g 40 -l 100000
-
-task-clock time ranges collected using:
-
- # perf stat rmdir /sys/fs/resctrl/test
-
-Baseline:                     1.54 - 1.60 ms
-smp_mb() every matching task: 1.57 - 1.67 ms
-
-Fixes: ae28d1aae48a ("x86/resctrl: Use an IPI instead of task_work_add() to update PQR_ASSOC MSR")
-Fixes: 0efc89be9471 ("x86/intel_rdt: Update task closid immediately on CPU in rmdir and unmount")
-Signed-off-by: Peter Newman <peternewman@google.com>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-Cc: stable@vger.kernel.org
----
-Patch history:
-
-v6:
- - Explain exploit case in changelog for stable
- - Add Fixes: lines
-v5:
- - Just put an smp_mb() between CLOSID/RMID stores and task_curr() calls
- - Add a diagram detailing the race to the changelog
-v4:
- - Reorder the patches so that justification for sending more IPIs can
-   reference the patch fixing __rdtgroup_move_task().
- - Correct tense of wording used in changelog and comments
-v3:
- - Split the handling of multi-task and single-task operations into
-   separate patches, now that they're handled differently.
- - Clarify justification in the commit message, including moving some of
-   it out of inline code comment.
-v2:
- - Following Reinette's suggestion: use task_call_func() for single
-   task, IPI broadcast for group movements.
- - Rebased to v6.1-rc4
-
-v1: https://lore.kernel.org/lkml/20221103141641.3055981-1-peternewman@google.com/
-v2: https://lore.kernel.org/lkml/20221110135346.2209839-1-peternewman@google.com/
-v3: https://lore.kernel.org/lkml/20221115141953.816851-1-peternewman@google.com/
-v4: https://lore.kernel.org/lkml/20221129111055.953833-1-peternewman@google.com/
-v5: https://lore.kernel.org/lkml/20221214114447.1935755-1-peternewman@google.com/
-
----
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index e5a48f05e787..5993da21d822 100644
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -580,8 +580,10 @@ static int __rdtgroup_move_task(struct task_struct *tsk,
- 	/*
- 	 * Ensure the task's closid and rmid are written before determining if
- 	 * the task is current that will decide if it will be interrupted.
-+	 * This pairs with the full barrier between the rq->curr update and
-+	 * resctrl_sched_in() during context switch.
- 	 */
--	barrier();
-+	smp_mb();
-
- 	/*
- 	 * By now, the task's closid and rmid are set. If the task is current
-@@ -2401,6 +2403,14 @@ static void rdt_move_group_tasks(struct rdtgroup *from, struct rdtgroup *to,
- 			WRITE_ONCE(t->closid, to->closid);
- 			WRITE_ONCE(t->rmid, to->mon.rmid);
-
-+			/*
-+			 * Order the closid/rmid stores above before the loads
-+			 * in task_curr(). This pairs with the full barrier
-+			 * between the rq->curr update and resctrl_sched_in()
-+			 * during context switch.
-+			 */
-+			smp_mb();
-+
- 			/*
- 			 * If the task is on a CPU, set the CPU in the mask.
- 			 * The detection is inaccurate as tasks might move or
-
-base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
---
-2.39.0.314.g84b9a713c41-goog
-
+-- 
+Regards,
+  Zhen Lei
