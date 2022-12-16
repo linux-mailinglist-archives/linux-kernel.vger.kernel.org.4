@@ -2,91 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E806B64F3A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 23:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADEC364F3B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 23:06:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiLPWAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 17:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
+        id S229704AbiLPWGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 17:06:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiLPWAJ (ORCPT
+        with ESMTP id S229480AbiLPWGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 17:00:09 -0500
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413D91A39A
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 14:00:07 -0800 (PST)
-Received: from localhost.localdomain (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 16 Dec 2022 17:06:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB63111E;
+        Fri, 16 Dec 2022 14:06:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id A74832017E;
-        Fri, 16 Dec 2022 23:00:05 +0100 (CET)
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Lux Aliaga <they@mint.lgbt>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v4 4/4] arm64: dts: qcom: sm6125: Add IOMMU context to DWC3
-Date:   Fri, 16 Dec 2022 22:58:19 +0100
-Message-Id: <20221216215819.1164973-5-marijn.suijten@somainline.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221216215819.1164973-1-marijn.suijten@somainline.org>
-References: <20221216215819.1164973-1-marijn.suijten@somainline.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47FC962253;
+        Fri, 16 Dec 2022 22:06:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2891EC433D2;
+        Fri, 16 Dec 2022 22:06:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1671228402;
+        bh=ztxC0tZ3LHE1E0QxQeFuDNowIFY2kavlk+wi+c1cZ9I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gtx8hPdkfa55IusM8ya2E+vD6klwp3mnVQ6Wox4M/3rNmhsnH6CJE0Hm+IWC1a+mP
+         Zwc9vZhKss135hy9KXIxO4ptZOrGtvAlrlaY5o9haT4x/eCRjgK7FY1HfZBf3av/OP
+         0JsxdsaIHur80B5Y4+o6CvqIIl1ZDBOUaH5sR0lo=
+Date:   Fri, 16 Dec 2022 14:06:41 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Jeff Xu <jeffxu@google.com>
+Cc:     Kees Cook <keescook@chromium.org>, Peter Xu <peterx@redhat.com>,
+        jeffxu@chromium.org, skhan@linuxfoundation.org,
+        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v6 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+Message-Id: <20221216140641.bf6e47b7c4f5a53f34c8cf9a@linux-foundation.org>
+In-Reply-To: <CALmYWFuENPRvCAOF6of=Ufct5jjAbJ=iDyH7eODhdbm24uAK3Q@mail.gmail.com>
+References: <20221207154939.2532830-1-jeffxu@google.com>
+        <20221207154939.2532830-4-jeffxu@google.com>
+        <202212080821.5AE7EE99@keescook>
+        <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
+        <Y5yS8wCnuYGLHMj4@x1n>
+        <CALmYWFsDhX76zbcyhYAW-u0BBwD+m+TKpt4_pZTMt+22zHhrGQ@mail.gmail.com>
+        <20221216094259.bec91e4abd6cf54a05ce2813@linux-foundation.org>
+        <CALmYWFsNp87a5uVQUAb4PG0khFN8Xxd=ibh9Q7g-Y0XW1Mn-8Q@mail.gmail.com>
+        <202212161233.85C9783FB@keescook>
+        <CALmYWFuENPRvCAOF6of=Ufct5jjAbJ=iDyH7eODhdbm24uAK3Q@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+On Fri, 16 Dec 2022 13:46:58 -0800 Jeff Xu <jeffxu@google.com> wrote:
 
-Add an IOMMU context to the USB DWC3 controller, required to get USB
-functionality upon enablement of apps_smmu.
+> On Fri, Dec 16, 2022 at 12:35 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Fri, Dec 16, 2022 at 10:11:44AM -0800, Jeff Xu wrote:
+> > > Once per boot seems too little, it would be nice if we can list all processes.
+> > > I agree ratelimited might be too much.
+> > > There is a feature gap here for logging.
+> > >
+> > > Kees, what do you think ?
+> >
+> > I agree once per boot is kind of frustrating "I fixed the one warning,
+> > oh, now it's coming from a different process". But ratelimit is, in
+> > retrospect, still too often.
+> >
+> > Let's go with per boot -- this should be noisy "enough" to get the
+> > changes in API into the callers without being too much of a hassle.
+> >
+> Agreed.  Let's go with per boot.
+> 
+> Hi Andrew, what is your preference ? I can send a patch  or you
+> directly fix it in mm-unstable ?
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
----
- arch/arm64/boot/dts/qcom/sm6125.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+Like this?
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-index f560499cc0ca..a205121ab4a7 100644
---- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-@@ -542,6 +542,7 @@ usb3_dwc3: usb@4e00000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x04e00000 0xcd00>;
- 				interrupts = <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>;
-+				iommus = <&apps_smmu 0x100 0x0>;
- 				phys = <&hsusb_phy1>;
- 				phy-names = "usb2-phy";
- 				snps,dis_u2_susphy_quirk;
--- 
-2.39.0
+--- a/mm/memfd.c~mm-memfd-add-mfd_noexec_seal-and-mfd_exec-fix-3
++++ a/mm/memfd.c
+@@ -308,7 +308,7 @@ SYSCALL_DEFINE2(memfd_create,
+ 			flags |= MFD_NOEXEC_SEAL;
+ 			break;
+ 		default:
+-			pr_warn_ratelimited(
++			pr_warn_once(
+ 				"memfd_create(): MFD_NOEXEC_SEAL is enforced, pid=%d '%s'\n",
+ 				task_pid_nr(current), get_task_comm(comm, current));
+ 			return -EINVAL;
+@@ -316,7 +316,7 @@ SYSCALL_DEFINE2(memfd_create,
+ #else
+ 		flags |= MFD_EXEC;
+ #endif
+-		pr_warn_ratelimited(
++		pr_warn_once(
+ 			"memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=%d '%s'\n",
+ 			task_pid_nr(current), get_task_comm(comm, current));
+ 	}
+_
 
