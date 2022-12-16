@@ -2,106 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDC264E8A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 10:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E90AE64E8AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 10:34:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbiLPJdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 04:33:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
+        id S229506AbiLPJeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 04:34:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbiLPJdJ (ORCPT
+        with ESMTP id S229964AbiLPJeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 04:33:09 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 001521B790
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 01:33:07 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Dx_+tSO5xjexAGAA--.13875S3;
-        Fri, 16 Dec 2022 17:33:06 +0800 (CST)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxHuRQO5xj1FwBAA--.3730S3;
-        Fri, 16 Dec 2022 17:33:04 +0800 (CST)
-Subject: Re: [PATCH v10 2/4] LoongArch: Add kprobe support
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-References: <1670575981-14389-1-git-send-email-yangtiezhu@loongson.cn>
- <1670575981-14389-3-git-send-email-yangtiezhu@loongson.cn>
- <20221214162847.1f9481fd2cf5212657a0fd58@kernel.org>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        Fri, 16 Dec 2022 04:34:31 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A163527B16;
+        Fri, 16 Dec 2022 01:34:28 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id g14so1536829ljh.10;
+        Fri, 16 Dec 2022 01:34:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ajS60FHCOraRSy8GVeM0KvjRVHlpoPWjTxbDEzWh1vs=;
+        b=eL9aRNvcRFyAvtODMuo8DH3M6KHRE3k7BVK4DcKbTnv3i+zndzEpu0+f4FOs+QtMfT
+         xxCuOQa2fRmo3BjQgl8UQFKCY3CWR0MWISiG40LgWuF1HKTdLqURz0SP7NJ0OIB6H8u2
+         3l+38eLpf5vEN1o9YOq2OCr0qGYfsd340mxszFMYwZQy/aWcvwmdZxW/YXYvO/TQDV9s
+         AIKxz1FHytsy06LGH+fWsECA09lwk3c5hCWEk9n45fm22+ebtFgERO3I3VaUS6zRsgsZ
+         Avy5AwOAg+LygYI1D1OWEElF6S2ItA+L4BIeUrBiyZlKvtHekMwLbF/ZY3ZIVQd2JJba
+         fKyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ajS60FHCOraRSy8GVeM0KvjRVHlpoPWjTxbDEzWh1vs=;
+        b=iacemoKEQ62fgJ5QD7LMaQSGjU7RrerFB5jNtqdeSr7t/J2QgXKoigCo/NH+BIwEjg
+         tzk8zmZyXA8W+ixwssJ0O9389O1J9Q1jAIiZ/o91SEZJJKK10j/FNp9Oui5mAvfd4D0w
+         uUzkIR4Xsv3k94bLXmETiJBC6J2H8AZ9epQzbwZWFpVak8OLWINbaAvf3Us6YLpGhXIj
+         vEcCNJEZdQiYs2XtpRGEzYQjdJZ5bDLOEInfmysNgl8LKPJFfsONovmQQwhWB/Qm2kkz
+         Wep6QF17/Hoq5dryhIqJ8QbOg593d0YXZ+zaQ3LMJ2eBgp9ceEMjOMAdsFv7wTlIq9kr
+         ha6g==
+X-Gm-Message-State: ANoB5pl5xcslIqRvy+2wPokkHX/S64CPBVWvoeRS+eR9RyajjFg+JAM5
+        4+zixG/Lli+jKM20eNLNXfI=
+X-Google-Smtp-Source: AA0mqf4E67l6f7gi3gDkTu9VweV0mymHXT5HP1zlpF8KWBziLDVOiPxiLA7VHWoUWV5KzKjmOGo0oQ==
+X-Received: by 2002:a2e:a90c:0:b0:26f:db35:2e93 with SMTP id j12-20020a2ea90c000000b0026fdb352e93mr13448674ljq.5.1671183266880;
+        Fri, 16 Dec 2022 01:34:26 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id f26-20020a05651c03da00b0026c42f67eb8sm109335ljp.7.2022.12.16.01.34.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 01:34:26 -0800 (PST)
+Date:   Fri, 16 Dec 2022 12:34:23 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
         linux-kernel@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <0a135b50-ca96-8ee1-6f33-29efcdb256ed@loongson.cn>
-Date:   Fri, 16 Dec 2022 17:33:04 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+Subject: Re: [PATCH v7 23/25] PCI: dwc: Restore DMA-mask after MSI-data
+ allocation
+Message-ID: <20221216093423.4bettdxisserdzsh@mobilestation>
+References: <20221214235305.31744-1-Sergey.Semin@baikalelectronics.ru>
+ <20221214235305.31744-24-Sergey.Semin@baikalelectronics.ru>
+ <Y5rJJfZeVqliA5Rg@infradead.org>
+ <20221215092721.tvz3hpaql3kotgnu@mobilestation>
+ <07ec7610-f1be-9b5c-416d-17781a22427d@arm.com>
+ <20221215235218.wsuwy5uckqfxjnb6@mobilestation>
+ <Y5wgvdnMWQDxkUd+@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <20221214162847.1f9481fd2cf5212657a0fd58@kernel.org>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8AxHuRQO5xj1FwBAA--.3730S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoWrtw4ruF4DGF1kZr1kGFyfWFg_yoWkKwbE93
-        WfJrn7G348JF4UG3WFgr4rZF1DWayUGF9Yy34FvrZ3Aa45Jw4fWrs7Cwn0yF15JrZ7CFZI
-        krs8XF1kZryavjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        47kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7
-        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
-        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm
-        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04
-        k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
-        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr4
-        1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l
-        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
-        A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU83UUUUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5wgvdnMWQDxkUd+@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 15, 2022 at 11:39:41PM -0800, Christoph Hellwig wrote:
+> On Fri, Dec 16, 2022 at 02:52:18AM +0300, Serge Semin wrote:
+> > Got it. Thanks for clarification. I'll resubmit the series with only
+> > the streaming DMA mask restoration.
+> 
+> Note that even for that we need to make sure there are no outstanding
+> mappings when you change the mask.
+> 
 
+What about instead of save/restore pattern I'll just change the
+dma_set_mask_and_coherent() method with the dma_set_coherent_mask()
+function call? It seems cleaner. Like this:
 
-On 12/14/2022 03:28 PM, Masami Hiramatsu (Google) wrote:
-> Hi,
->
-> On Fri,  9 Dec 2022 16:52:59 +0800
-> Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->
->> Kprobes allows you to trap at almost any kernel address and
->> execute a callback function, this commit adds kprobe support
->> for LoongArch.
+< --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+< +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+< @@ -366,10 +366,10 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
+<  						    dw_chained_msi_isr, pp);
+<  	}
+<  
+< -	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+< +	ret = dma_set_coherent_mask(dev, DMA_BIT_MASK(32));
+<  	if (ret)
+<  		dev_warn(dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
+<  
+<  	msi_vaddr = dmam_alloc_coherent(dev, sizeof(u64), &pp->msi_data,
+<  					GFP_KERNEL);
 
-...
+Thus the platform-specific streaming DMA mask would be preserved.
+Since it's PCIe then having the streaming DMA-mask less than 32-bits
+wide is very much improbable. Moreover DW PCIe AXI-interface can be
+synthesize only with one out of two address bus widths: 32 and 64.
 
->> +	case KPROBE_HIT_ACTIVE:
->> +	case KPROBE_HIT_SSDONE:
->
-> Recently, I removed these cases because this page fault will be finally
-> handled by the generic pagefault handler.
->
-
-Hi Masami,
-
-I have addressed all your comments on my local machine, the code logic
-looks much more clear now, thank you very much.
-
-When I test kprobe_example.ko with a C function like "kernel_clone",
-it works well, but the kernel hangs [1] when test with an assembler
-function like "__memset_fast" [2].
-
-Just did some quick research and it seems the bug is related with
-kallsyms_lookup_name(), I'm looking for a solution.
-
-[1] 
-https://lore.kernel.org/loongarch/CAEr6+EC2wPAtK8zb3=e1mUiya3gv0UhqF9J_ySYx9p_96pB+tg@mail.gmail.com/
-[2] 
-https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/tree/arch/loongarch/lib/memset.S?h=loongarch-next#n56
-
-Thanks,
-Tiezhu
-
+-Serge(y)
