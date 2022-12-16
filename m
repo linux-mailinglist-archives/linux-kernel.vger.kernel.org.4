@@ -2,106 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE3264E7B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9879B64E7C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:32:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiLPH3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 02:29:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
+        id S229627AbiLPHcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 02:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiLPH3A (ORCPT
+        with ESMTP id S229537AbiLPHcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 02:29:00 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5681128704
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:28:59 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id 36so1193766pgp.10
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:28:59 -0800 (PST)
+        Fri, 16 Dec 2022 02:32:06 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671253B9D5;
+        Thu, 15 Dec 2022 23:32:05 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id t18so1190746pfq.13;
+        Thu, 15 Dec 2022 23:32:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xk0u/fsK//K35bE+fJDRok4VI4cGX4B4sl0r4z8VDaE=;
-        b=OiZdvo74yyMj5/p+qzZgj3Tp0fBmxhvS1lowJ+DUyKYoXeAJjZ4FdYFP+Fx0z6bQdC
-         c9asdLRTYXcvhciX5jOAhoe5HbQR78qNqOcaddCYDb9waECuNoFRQQdDjzbUcyql35PU
-         Ynffjdta9Swo44sB9GANXSaOi7MhNdXWMb8xDXiBvRbE9LLTE+EK7d6tsn4q9sKI/qog
-         FarxZ3WyJ3cMT1buEs9dmqwrQfxhgIYY990/H1UGSzeDkfqlkeXqv6yDU1K3O3uCXZhE
-         h4jXIEwTC2vrdlpWp5kzuXmGAvRiyE3tXdH6c+QYFiiqucpRp5GIuBByZitIVHQEGabe
-         3Y1w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WivkawWqftfG9cwjjZTcLDoOGcI8ZfyTyq38lUwyeaY=;
+        b=E9+GJVu5jahV/qnD7b5BlMzb5S9DmG5setb7JajP3fVezDN8emP3EYVrfrikM2r2f4
+         c738p6sSHPOFguw5+HhvpzSgBtK2FrkwTSS+gu3LVkKWlyZnEsUBhu/gz2KVSTwtIOEG
+         U9qQ7eg+iNLfDn8ieq/IxiqILNkp9W4EqcW19LoQRUjndtv37kp4ZUx0Pzn+msS35yrM
+         zmnkDR61s0SS9YvUHZKGht8Xi7FUiqSRkC83YXzorMF3k6aO8qeX+XHJfzkXp2ikPwz4
+         wjGXIs4QAWkdfHo9s6b2e+bcPminNncasbIzQ/k+HCSEw1I1pTFUvBmVQzZgr64Yp41p
+         ccOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xk0u/fsK//K35bE+fJDRok4VI4cGX4B4sl0r4z8VDaE=;
-        b=JL44hjy6ic6QzOkTwufEuDYzrjiP1b2f2kVlqdD6kN3VzMY0gfD1xUPMrvq+EgRafa
-         9PSvAP+2XOF/B/0dwn5NFXjrlO9iPTdW4Vea+btengdqYnGQQKv7FkrpW4XoSWwNfPwd
-         Cm1LGHHoaJIS0wGHUuwBChZLlgtLqTEBUB84GvPOeUPb+ajbfi9VxpQ//FxqBBdImyY0
-         yI35WzaxaeLxF9m/URq9NROVCRX4QdjTLLfj4NoRk2Y+aqXEjx7fbpU6f7XbqMcKkyCP
-         pscMs/TaxklmZqMxEbEllz/IWN4eW8becTQyHreSBkmLDA2MFvOHsrUfBjPfeM4KFbwc
-         7fKA==
-X-Gm-Message-State: ANoB5pnN/CAU2luimvykG/QXKIQvQWYwnbcw58zYNVF50LRj/73QvAOS
-        Gv/uSdAv/HSbzsi4KD2YP3/o1w==
-X-Google-Smtp-Source: AA0mqf7womHwruX+p5ZggubQKq4gsXElIqAdSFAChs5yASYITGqYogrKU6vzzzwmXGnLuxcqz0OFKQ==
-X-Received: by 2002:a05:6a00:188b:b0:576:9eed:61de with SMTP id x11-20020a056a00188b00b005769eed61demr42376468pfh.4.1671175738671;
-        Thu, 15 Dec 2022 23:28:58 -0800 (PST)
-Received: from [10.54.29.146] ([143.92.118.2])
-        by smtp.gmail.com with ESMTPSA id e14-20020aa7980e000000b00575fbe1cf2esm786845pfl.109.2022.12.15.23.28.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 23:28:58 -0800 (PST)
-Message-ID: <13c73151-4b28-4324-afd5-8b84b82bc25d@shopee.com>
-Date:   Fri, 16 Dec 2022 15:28:53 +0800
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WivkawWqftfG9cwjjZTcLDoOGcI8ZfyTyq38lUwyeaY=;
+        b=v4CfNfR1Wd9F+v6ej4ReP8ZwKnFajqDcs00cfqoQF14TGVg1vwrjMcQ5P+wTi0zZ+A
+         8R9ToHA+adZGwPqvnPUps55isM3RJsxufM6RESPyr+oaa4IMVzjtCzcXmiNkQqZEXU9d
+         wIwnHH+txJphY7a/sWoUMC7TPaDQjier6TkRSr0J8I3zMlmKwf3daySCIhRcFF+U75si
+         fLzGkyz/3I7Eh9bpktVBcmIIeLYyqui/cOOJj9JvBHBe9gyOqMI9rn77+Zio+9zyo53h
+         QFfzgUDArW6Iu+jqTkRBtuUm3dQFQ7URmqAr/4niaKj6hcOVFsQH/h79I9yyEilawunZ
+         ysiA==
+X-Gm-Message-State: ANoB5plZCtGRl/4wHJSHixhtnC4xp8qzoQt66Is8RmNnOap4UrXI68XU
+        qVYcdyKzCPXstkeABgNOFFwEz3dpAKMJug==
+X-Google-Smtp-Source: AA0mqf7khtd2QiDF1uOXxGGs2YuY8T+Bx4nJEyTA1tddpi43KwrjwB0rnKY9V6NMNNm6uHGAbZwRNQ==
+X-Received: by 2002:a62:4e96:0:b0:574:1d8a:d4f with SMTP id c144-20020a624e96000000b005741d8a0d4fmr30989136pfb.16.1671175924640;
+        Thu, 15 Dec 2022 23:32:04 -0800 (PST)
+Received: from hcdev-d520mt2.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id 193-20020a6217ca000000b00574cf11aaf3sm770123pfx.208.2022.12.15.23.32.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 23:32:04 -0800 (PST)
+From:   Marvin Lin <milkfafa@gmail.com>
+To:     linux-edac@vger.kernel.org, rric@kernel.org, james.morse@arm.com,
+        tony.luck@intel.com, mchehab@kernel.org, bp@alien8.de,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     openbmc@lists.ozlabs.org, benjaminfair@google.com,
+        yuenn@google.com, venture@google.com, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, avifishman70@gmail.com, tmaimon77@gmail.com,
+        tali.perry1@gmail.com, ctcchien@nuvoton.com, kflin@nuvoton.com,
+        Marvin Lin <milkfafa@gmail.com>
+Subject: [PATCH v16 0/3] EDAC/nuvoton: Add NPCM memory controller driver
+Date:   Fri, 16 Dec 2022 15:31:38 +0800
+Message-Id: <20221216073141.3289309-1-milkfafa@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.0
-Subject: Re: [PATCH] mm/memcontrol: Skip root memcg in memcg_memory_event_mm
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     akpm@linux-foundation.org, roman.gushchin@linux.dev,
-        songmuchun@bytedance.com, hannes@cmpxchg.org, vbabka@suse.cz,
-        willy@infradead.org, vasily.averin@linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20221215091907.763801-1-haifeng.xu@shopee.com>
- <20221215181803.ome46pkh6g7qu3t4@google.com>
- <abec13da-c74a-0fd8-74e0-3cdc547e4e08@shopee.com>
- <20221216064210.krxtxebuwc7dijzu@google.com>
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-In-Reply-To: <20221216064210.krxtxebuwc7dijzu@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series add DTS node, dt-bindings document and driver for memory
+controller present on Nuvoton NPCM SoCs.
 
+The memory controller supports single bit error correction and double bit
+error detection (in-line ECC in which a section 1/8th of the memory device
+used to store data is used for ECC storage).
 
-On 2022/12/16 14:42, Shakeel Butt wrote:
-> On Fri, Dec 16, 2022 at 09:43:02AM +0800, Haifeng Xu wrote:
->>
->>
->> On 2022/12/16 02:18, Shakeel Butt wrote:
->>> On Thu, Dec 15, 2022 at 09:19:07AM +0000, Haifeng Xu wrote:
->>>> The memory events aren't supported on root cgroup, so there is no need
->>>> to account MEMCG_OOM_KILL on root memcg.
->>>>
->>>
->>> Can you explain the scenario where this is happening and causing issue
->>> for you?
->>>
->> If the victim selected by oom killer belongs to root memcg, memcg_memory_event_mm
->> still counts the MEMCG_OOM_KILL event. This behavior is meaningless because the
->> flag of events/events.local in memory_files is CFTYPE_NOT_ON_ROOT. The root memcg
->> does not count any memory event.
->>
-> 
-> What about v1's memory.oom_control?
->
- 
-The memory.oom_control doesn't set the CFTYPE_NOT_ON_ROOT flag. But oom_kill_disable or
-under_oom actually only support non-root memcg, so the memory_events should be consistent
-with them.
+Changes in v16:
+  - Correct dt-bindings document path in MAINTAINERS.
+  - Fix wrong indentation in driver.
+
+Changes in v15:
+  - Move dt-bindings document to memory-controllers directory and remove
+    superfluous string in content title.
+
+Changes in v14:
+  - Fix compile warnings.
+
+Changes in v13:
+  - Support error injection via debugfs.
+  - Fix coding style issues.
+
+Marvin Lin (3):
+  Arm: dts: nuvoton: Add node for NPCM memory controller
+  dt-bindings: edac: nuvoton: Add document for NPCM memory controller
+  EDAC/npcm: Add NPCM memory controller driver
+
+ .../memory-controllers/nuvoton,npcm-mc.yaml   |  54 ++
+ MAINTAINERS                                   |   7 +
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   7 +
+ drivers/edac/Kconfig                          |  11 +
+ drivers/edac/Makefile                         |   1 +
+ drivers/edac/npcm_edac.c                      | 520 ++++++++++++++++++
+ 6 files changed, 600 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/nuvoton,npcm-mc.yaml
+ create mode 100644 drivers/edac/npcm_edac.c
+
+-- 
+2.34.1
+
