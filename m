@@ -2,59 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE0864EFFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD6664F002
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiLPRFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 12:05:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
+        id S230071AbiLPRFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 12:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbiLPRFN (ORCPT
+        with ESMTP id S231655AbiLPRF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 12:05:13 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A9C69ABF
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:05:12 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2BGH4tFH017214
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 12:04:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1671210298; bh=czyZa4h4xnG1V2lFwz0kam2aIsqEihy+AZSfIfZu/AY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=KvOaE/9hc3wBmqQYhQFxe6AuvtCcPhKHEh9QBl1oQgL/pTsVUkHNLxzTggMMcMLqd
-         i+XOmb4YWd/KI7Z2HU/F81WV6tBI6d/fdZNqDBb/xigPS2Z/Ms+Wd5+BHnykxt/iIS
-         pGqVYGXAwtdDxmJiUcIc4H3fg13OOvvgRpdT51t5SVaDFo7DL1JPv/TNNKQG1x5D1+
-         IoOWtbG+k7bEq5VP9YSTjAWj/VM9kuO0c1cY8mHlZ90Xx4+9372a78jYN2xFMg/2pw
-         krgWbFFpjHLZByuOqZpCSsHwNfmRB6g8l470apqUcLDnX/EL4upEPkzC1a4Hmv+/ly
-         ozWT4d3npKD+g==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 4F0E415C40A2; Fri, 16 Dec 2022 12:04:55 -0500 (EST)
-Date:   Fri, 16 Dec 2022 12:04:55 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     Lee Jones <lee@kernel.org>,
-        syzbot <syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, gregkh@linuxfoundation.org,
-        lczerner@redhat.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sashal@kernel.org,
-        stable@vger.kernel.org, syzkaller-android-bugs@googlegroups.com,
-        tadeusz.struk@linaro.org
-Subject: Re: kernel BUG in ext4_free_blocks (2)
-Message-ID: <Y5ylNxoN2p7dmcRD@mit.edu>
-References: <0000000000006c411605e2f127e5@google.com>
- <000000000000b60c1105efe06dea@google.com>
- <Y5vTyjRX6ZgIYxgj@mit.edu>
- <Y5xsIkpIznpObOJL@google.com>
- <CANp29Y6KHBE-fpfJCXeN5Ju_qSOfUYAp2n+cNrGj25QtU0X=sA@mail.gmail.com>
+        Fri, 16 Dec 2022 12:05:27 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45306C70D
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:05:25 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id 124so2238305pfy.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:05:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=d6OCT2ZdbDad/BMX0pnYZXGlc+e0Af4ihyKy0ZnG13g=;
+        b=Z0kmH3yeP9Pw0NncQFCv47w2VUJEbyqW6wCtFqkqD35DzlnQjOymTL+UIizo91OQJV
+         cb0kZr+GoPvoKk7VIQcBxGOOKum+LwY304gfBuOFvktTcQ6eucNVWmwasTR+x5mrxlVm
+         gnkRdOPRq4ruRtwFXXARRsU13Njjzms5ldIpvk3E/COI4DMoiOu9FldaJbUDbM3KPhLC
+         3z+O/MQW6suHxTx+ukoHtZAEtChDXTCoe0OOSFcA/TvX6DhappkvNrejJMbPPrqlG0l0
+         fhUqJ93Dp6iPHkyFu5Fq51DzpAepYTiuFjdBpvyAIo6b/6LKeUxI04HggIUgvV/nzfNS
+         Y8+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d6OCT2ZdbDad/BMX0pnYZXGlc+e0Af4ihyKy0ZnG13g=;
+        b=2uQ9yyM3Ic43q38efa8ES2ndioT40qEMGK/SRohYI8SadIJkaEjQat8SG1GWX9+xdy
+         teuMBdQXMa6OwGp8gCS3jQAYWRkndKbZFp0KiUVABzwcaP3XxmbBZa9UUn9KCR6l1VK7
+         Xt2KlCsxLZf96hsyTEoehMS1p7LzplO5ENqngSJ8Gco/PKkY/H6fQtl2gzTicATeggdq
+         TICq/JqGcYHODU7Q2dq6vdgc4T9YZ4Pn54TJWProb4Gx2ccU1saXqyJQ/BYWW+2FFl4p
+         RSyRtyB66qjT5TaAAzBxVQm1JqW9QOPu7SUzcrPMe0q6ih2w5cUc0rOD7FsO4dMb8CgM
+         3YZQ==
+X-Gm-Message-State: ANoB5pmcj7jwMM27ZR8jlm0waH3//mlon9hmrOMjv53AcZvU9CxbmW/r
+        DBl4sMIC4EoLmtxNAvNUCAuOqDuCvzXiPaxfX7ry
+X-Google-Smtp-Source: AA0mqf456SOTI8h5405bjuHYKyboskc6RX/a1Ar+YL3tEroIPWZYM0tvvsDsxRnA/dxrNyn4bb9+vxyTCfLgcpe9goM=
+X-Received: by 2002:a63:64c5:0:b0:479:2109:506 with SMTP id
+ y188-20020a6364c5000000b0047921090506mr1494989pgb.92.1671210325149; Fri, 16
+ Dec 2022 09:05:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANp29Y6KHBE-fpfJCXeN5Ju_qSOfUYAp2n+cNrGj25QtU0X=sA@mail.gmail.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+References: <cover.1670606054.git.rgb@redhat.com> <45da8423b9b1e8fc7abd68cd2269acff8cf9022a.1670606054.git.rgb@redhat.com>
+ <20221216164342.ojcbdifdmafq5njw@quack3>
+In-Reply-To: <20221216164342.ojcbdifdmafq5njw@quack3>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 16 Dec 2022 12:05:14 -0500
+Message-ID: <CAHC9VhQCQJ6_0RtHQHuA2FDje-3ick3b3ar8K8NAnuMF=ww2cA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] fanotify: define struct members to hold response
+ decision context
+To:     Jan Kara <jack@suse.cz>
+Cc:     Richard Guy Briggs <rgb@redhat.com>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Amir Goldstein <amir73il@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,53 +73,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 03:09:04PM +0100, Aleksandr Nogikh wrote:
-> 
-> Syzbot is actually reacting here to this bug from the Android namespace:
-> 
-> https://syzkaller.appspot.com/bug?id=5266d464285a03cee9dbfda7d2452a72c3c2ae7c
+On Fri, Dec 16, 2022 at 11:43 AM Jan Kara <jack@suse.cz> wrote:
+>
+> On Mon 12-12-22 09:06:10, Richard Guy Briggs wrote:
+> > This patch adds a flag, FAN_INFO and an extensible buffer to provide
+> > additional information about response decisions.  The buffer contains
+> > one or more headers defining the information type and the length of the
+> > following information.  The patch defines one additional information
+> > type, FAN_RESPONSE_INFO_AUDIT_RULE, to audit a rule number.  This will
+> > allow for the creation of other information types in the future if other
+> > users of the API identify different needs.
+> >
+> > Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> > Link: https://lore.kernel.org/r/2745105.e9J7NaK4W3@x2
+> > Suggested-by: Jan Kara <jack@suse.cz>
+> > Link: https://lore.kernel.org/r/20201001101219.GE17860@quack2.suse.cz
+> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+>
+> Thanks for the patches. They look very good to me. Just two nits below. I
+> can do the small updates on commit if there would be no other changes. But
+> I'd like to get some review from audit guys for patch 3/3 before I commit
+> this.
 
-Thanks for the clarification; stupid question, though -- I see
-"upstream" is listed on the dashboard link above.  Assuming that
-"usptream" is "Linus's tree", why was it still saying, "I can't find
-this patch in any of my trees"?  What about the upstream tree?
+It's in my review queue, but it's a bit lower in the pile as my
+understanding is that the linux-next folks don't like to see new
+things in the next branches until after the merge window closes.
 
-> > Although this does appear to be a Stable candidate, I do not see it
-> > in any of the Stable branches yet.  So I suspect the answer here is to
-> > wait for the fix to filter down.
-
-The reason why it's not hit any of the long-term stable trees is
-because the patch doesn't apply cleanly, because there are
-pre-requisite commits that were required.  Here are the required
-commits for 5.15:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git ext4_for_5.15.83
-
-% git log --reverse --oneline  v5.15.83..
-96d070a12a7c ext4: refactor ext4_free_blocks() to pull out ext4_mb_clear_bb()
-    [ Upstream commit 8ac3939db99f99667b8eb670cf4baf292896e72d ]
-2fa7a1780ecd ext4: add ext4_sb_block_valid() refactored out of ext4_inode_block_valid()
-    [ Upstream commit 6bc6c2bdf1baca6522b8d9ba976257d722423085 ]
-8dc76aa246b1 ext4: add strict range checks while freeing blocks
-    [ Upstream commit a00b482b82fb098956a5bed22bd7873e56f152f1 ]
-deb2e1554497 ext4: block range must be validated before use in ext4_mb_clear_bb()
-    [ Upstream commit 1e1c2b86ef86a8477fd9b9a4f48a6bfe235606f6 ]
-
-Further backports to LTS kernels for 5.10, 5.4, etc., are left as an
-exercise to the reader.  :-)
-
-	     	   	      	       	     - Ted
-					     
-P.S.  I have not tried to run gce-xfstests regressions yet. so the
-only QA done on these backports is "it builds, ship it!"  (And it
-fixes the syzbot reproducers.)  Then again, we're not running this
-kind of regression tests on the LTS kernels.
-
-P.P.S.  If anyone is willing to volunteer to be an ext4 backports
-maintainer, please contact me.  The job description is (a) dealing
-with the stable backport failures and addressing the patch conflicts,
-potentially by dragging in patch prerequisites, and (b) running
-"gce-xfstests ltm -c ext4/all -g auto" and making sure there are no
-regressions.
-
-	     	   		  	      - Ted
+-- 
+paul-moore.com
