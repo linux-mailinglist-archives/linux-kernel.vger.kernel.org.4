@@ -2,82 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F4B64EB0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C683264EB13
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 13:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbiLPL6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:58:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
+        id S230343AbiLPL77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:59:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbiLPL6N (ORCPT
+        with ESMTP id S230309AbiLPL7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:58:13 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319D2419A2;
-        Fri, 16 Dec 2022 03:58:12 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id gh17so5604610ejb.6;
-        Fri, 16 Dec 2022 03:58:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nD3t5Xg86pWfgvKQ0karJrpnH0Km5Gvy1OvnVne8e6c=;
-        b=OIVypMCStpFJDwnQPZwBz6MibYg0LnS+3dXXD3ddefadsnlVCLott852qgJymHALFH
-         xdnWaSLD/AvG/EIL/z0QNnj6IodbiGTlWJkCRLAVRB4TT0ISWhEWeKbq5tbxTCWe9ZIF
-         k/S5GyNdjWlADDApTVRT0KWVNEVB1KUagD9LiXUo3SpD6ImRQmukSfE2rcdgIgVNt2Ej
-         JFWZGD47YWyDDnvZ8JDreWQnLqUPXo7sa3f3vr5i9M1qwbSUe52rptx9qdb1sEJabYVg
-         uxHgE04vX7EZzlkZvJLJAVipv8BzPnP5ks0Qo7UfCerxBLqIptgqUjf6hgLi2S3HXwMH
-         TtoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nD3t5Xg86pWfgvKQ0karJrpnH0Km5Gvy1OvnVne8e6c=;
-        b=p46+nMqRB0Xkl57JMEvImrqB2YGCYp/jI8uW4fXDlFatmJw3pRvliTOrQpLOSYLB7x
-         L+kVhDFv2/erpd/i1CF5g3dYobJWzKOkyi8mxW4e85VTPH8v27sNy7NelvAh4cg+lP7Q
-         gpa80RY6frPkkcWvJZbjM+xmLnkWtMuXLmsF3xhMKpgZPEvVMEV9BrByz1+PrwtxCUX/
-         kHKXIbujRTiJ5dU89aPe+gLfhb/tbeeplU3ZM9i5Y6nNepIWP7hFbNSQHxD0rV2DJXjL
-         3T1n6vJJ9nNeYOm35KJrNNPlK7xfSB8aD2Y+zAyFtGsDZawFx1GFnC5IrqExpwiEy+5m
-         TJ5w==
-X-Gm-Message-State: ANoB5pljgmTqrV9kTgWM5JnZ4WWVN2LOI+wFRwG6m6DdbzUuypeee22y
-        uqyMa9XqdaIpqn5arihTQF8=
-X-Google-Smtp-Source: AA0mqf6Qr6JCbTvn30yE3CWo6miOLsTIe2eS/4Lgs7jO1XL7U1Bc6dyg5yUiyoqbXTLh7G6TdWFRuA==
-X-Received: by 2002:a17:906:6a84:b0:78d:f454:37a6 with SMTP id p4-20020a1709066a8400b0078df45437a6mr22540809ejr.73.1671191890513;
-        Fri, 16 Dec 2022 03:58:10 -0800 (PST)
-Received: from ?IPV6:2a01:c23:c47e:dc00:5d:c867:d92c:e0f3? (dynamic-2a01-0c23-c47e-dc00-005d-c867-d92c-e0f3.c23.pool.telefonica.de. [2a01:c23:c47e:dc00:5d:c867:d92c:e0f3])
-        by smtp.googlemail.com with ESMTPSA id 9-20020a170906318900b0077a8fa8ba55sm750629ejy.210.2022.12.16.03.58.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 03:58:10 -0800 (PST)
-Message-ID: <2542ec57-9de7-880c-c0d4-35f0aef738bc@gmail.com>
-Date:   Fri, 16 Dec 2022 12:58:05 +0100
+        Fri, 16 Dec 2022 06:59:32 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE96340467;
+        Fri, 16 Dec 2022 03:59:30 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGBNMiq018266;
+        Fri, 16 Dec 2022 11:59:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=h7RK8T8taq4CuuKj6hSyg+dTmQ/jogpwEizyJ2NFvGI=;
+ b=k9leIK4B68/T/Wbiu/oreFVOivTZil3pHjBMMBwV5J4YMpFYEsWQqtCanjMES5BixpyR
+ /renbNe/1sJVBP4JBYIcjij1QP3clks5ozqLdJeGbOfJaAcuz+gStnUBuDM3jU8M9HjA
+ GdK7H62wC+LU1IIT+6C8lPvUBzt78SP73rH2FmB2WkaXE4XKsKBGEikK/Wk/nog36slN
+ J+ELUkgF3cl7ePtx26NmZg2FD7CcGrXhoa+kSjHp68WUgZw7zyiYKztdN+HH9p6RZbCG
+ SC450L9GORZpzSdM8rihiGtosePK8K/xdGpTYQszoSZW3vnuvcDDsqbrqaI+Y5UUzMQM GA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mgqrm8rnv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Dec 2022 11:59:19 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BG2Z7ja008206;
+        Fri, 16 Dec 2022 11:59:18 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3mfs5yj7r1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Dec 2022 11:59:17 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BGBxE2Z22348452
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Dec 2022 11:59:14 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 254F420040;
+        Fri, 16 Dec 2022 11:59:14 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DD3A420043;
+        Fri, 16 Dec 2022 11:59:13 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 16 Dec 2022 11:59:13 +0000 (GMT)
+From:   Thomas Richter <tmricht@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, gor@linux.ibm.com, sandipan.das@amd.com,
+        sumanthk@linux.ibm.com
+Cc:     svens@linux.ibm.com, hca@linux.ibm.com,
+        Thomas Richter <tmricht@linux.ibm.com>
+Subject: [PATCH 1/2 v2] perf/test: Fix perf test 84 on s390
+Date:   Fri, 16 Dec 2022 12:59:09 +0100
+Message-Id: <20221216115910.369093-1-tmricht@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-To:     Yanhong Wang <yanhong.wang@starfivetech.com>,
-        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Peter Geis <pgwipeout@gmail.com>
-References: <20221216070632.11444-1-yanhong.wang@starfivetech.com>
- <20221216070632.11444-7-yanhong.wang@starfivetech.com>
-Content-Language: en-US
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v2 6/9] net: phy: motorcomm: Add YT8531 phy support
-In-Reply-To: <20221216070632.11444-7-yanhong.wang@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: UiQJLMspSXVLaYOTEO8Ylg3ntU6Jnibv
+X-Proofpoint-GUID: UiQJLMspSXVLaYOTEO8Ylg3ntU6Jnibv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-16_07,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 spamscore=0 bulkscore=0 mlxscore=0 priorityscore=1501
+ clxscore=1011 impostorscore=0 adultscore=0 malwarescore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212160102
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,309 +82,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.12.2022 08:06, Yanhong Wang wrote:
-> This adds basic support for the Motorcomm YT8531
-> Gigabit Ethernet PHY.
-> 
-> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
-> ---
->  drivers/net/phy/Kconfig     |   3 +-
->  drivers/net/phy/motorcomm.c | 202 ++++++++++++++++++++++++++++++++++++
->  2 files changed, 204 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-> index c57a0262fb64..86399254d9ff 100644
-> --- a/drivers/net/phy/Kconfig
-> +++ b/drivers/net/phy/Kconfig
-> @@ -258,9 +258,10 @@ config MICROSEMI_PHY
->  
->  config MOTORCOMM_PHY
->  	tristate "Motorcomm PHYs"
-> +	default SOC_STARFIVE
+perf test '84: probe libc's inet_pton & backtrace it with ping'
+fails on s390. Debugging revealed a changed stack trace for the
+ping command using probes:
 
-Both are completely independent. This default should be removed.
+ping 35729 [002]  8006.365063: probe_libc:inet_pton: (3ff9603e7c0)
+                  13e7c0 __GI___inet_pton+0x0 (/usr/lib64/libc.so.6)
+          --->    104371 text_to_binary_address+0xef1 (inlined)
+                  104371 gaih_inet+0xef1 (inlined)
+                  104371 __GI_getaddrinfo+0xef1 (inlined)
+                    5d4b main+0x139b (/usr/bin/ping)
 
->  	help
->  	  Enables support for Motorcomm network PHYs.
-> -	  Currently supports the YT8511 gigabit PHY.
-> +	  Currently supports the YT8511 and YT8531 gigabit PHYs.
->  
+The line ---> text_to_binary_address ...
+is new. It was introduced with glibc version 2.36.7.2 released
+with Fedora 37 for s390.
 
-This doesn't apply. Parts of your patch exist already in net-next.
-Support for YT8531S has been added in the meantime. Please rebase
-your patch on net-next and annotate your patch as net-next.
+Output before
+ # ./perf test 84
+ 84: probe libc's inet_pton & backtrace it with ping   : FAILED!
+ #
 
->  config NATIONAL_PHY
->  	tristate "National Semiconductor PHYs"
-> diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
-> index 7e6ac2c5e27e..bca03185b338 100644
-> --- a/drivers/net/phy/motorcomm.c
-> +++ b/drivers/net/phy/motorcomm.c
-> @@ -3,13 +3,17 @@
->   * Driver for Motorcomm PHYs
->   *
->   * Author: Peter Geis <pgwipeout@gmail.com>
-> + *
->   */
->  
-> +#include <linux/bitops.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> +#include <linux/of.h>
->  #include <linux/phy.h>
->  
->  #define PHY_ID_YT8511		0x0000010a
-> +#define PHY_ID_YT8531		0x4f51e91b
->  
->  #define YT8511_PAGE_SELECT	0x1e
->  #define YT8511_PAGE		0x1f
-> @@ -17,6 +21,10 @@
->  #define YT8511_EXT_DELAY_DRIVE	0x0d
->  #define YT8511_EXT_SLEEP_CTRL	0x27
->  
-> +#define YTPHY_EXT_SMI_SDS_PHY		0xa000
-> +#define YTPHY_EXT_CHIP_CONFIG		0xa001
-> +#define YTPHY_EXT_RGMII_CONFIG1	0xa003
-> +
->  /* 2b00 25m from pll
->   * 2b01 25m from xtl *default*
->   * 2b10 62.m from pll
-> @@ -38,6 +46,51 @@
->  #define YT8511_DELAY_FE_TX_EN	(0xf << 12)
->  #define YT8511_DELAY_FE_TX_DIS	(0x2 << 12)
->  
-> +struct ytphy_reg_field {
-> +	char *name;
-> +	u32 mask;
-> +	u8	dflt;	/* Default value */
-> +};
-> +
-> +struct ytphy_priv_t {
-> +	u32 tx_inverted_1000;
-> +	u32 tx_inverted_100;
-> +	u32 tx_inverted_10;
-> +};
-> +
-> +/* rx_delay_sel: RGMII rx clock delay train configuration, about 150ps per
-> + *               step. Delay = 150ps * N
-> + *
-> + * tx_delay_sel_fe: RGMII tx clock delay train configuration when speed is
-> + *                  100Mbps or 10Mbps, it's 150ps per step. Delay = 150ps * N
-> + *
-> + * tx_delay_sel: RGMII tx clock delay train configuration when speed is
-> + *               1000Mbps, it's 150ps per step. Delay = 150ps * N
-> + */
-> +static const struct ytphy_reg_field ytphy_rxtxd_grp[] = {
-> +	{ "rx_delay_sel", GENMASK(13, 10), 0x0 },
-> +	{ "tx_delay_sel_fe", GENMASK(7, 4), 0xf },
-> +	{ "tx_delay_sel", GENMASK(3, 0), 0x1 }
-> +};
-> +
-> +/* tx_inverted_x: Use original or inverted RGMII TX_CLK to drive the RGMII
-> + *                TX_CLK delay train configuration when speed is
-> + *                xMbps(10/100/1000Mbps).
-> + *                0: original,  1: inverted
-> + */
-> +static const struct ytphy_reg_field ytphy_txinver_grp[] = {
-> +	{ "tx_inverted_1000", BIT(14), 0x0 },
-> +	{ "tx_inverted_100", BIT(14), 0x0 },
-> +	{ "tx_inverted_10", BIT(14), 0x0 }
+Output after:
+ # ./perf test 84
+ 84: probe libc's inet_pton & backtrace it with ping   : Ok
+ #
 
-Copy & Paste error that mask is the same for all entries?
+Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+---
+ tools/perf/tests/shell/record+probe_libc_inet_pton.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +};
-> +
-> +/* rxc_dly_en: RGMII clk 2ns delay control bit.
-> + *             0: disable   1: enable
-> + */
-> +static const struct ytphy_reg_field ytphy_rxden_grp[] = {
-> +	{ "rxc_dly_en", BIT(8), 0x1 }
-> +};
-> +
->  static int yt8511_read_page(struct phy_device *phydev)
->  {
->  	return __phy_read(phydev, YT8511_PAGE_SELECT);
-> @@ -48,6 +101,33 @@ static int yt8511_write_page(struct phy_device *phydev, int page)
->  	return __phy_write(phydev, YT8511_PAGE_SELECT, page);
->  };
->  
-> +static int ytphy_read_ext(struct phy_device *phydev, u32 regnum)
-> +{
-> +	int ret;
-> +	int val;
-> +
-> +	ret = __phy_write(phydev, YT8511_PAGE_SELECT, regnum);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	val = __phy_read(phydev, YT8511_PAGE);
-> +
-> +	return val;
-> +}
-> +
-> +static int ytphy_write_ext(struct phy_device *phydev, u32 regnum, u16 val)
-> +{
-> +	int ret;
-> +
-> +	ret = __phy_write(phydev, YT8511_PAGE_SELECT, regnum);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = __phy_write(phydev, YT8511_PAGE, val);
-> +
-> +	return ret;
-> +}
-> +
->  static int yt8511_config_init(struct phy_device *phydev)
->  {
->  	int oldpage, ret = 0;
-> @@ -111,6 +191,116 @@ static int yt8511_config_init(struct phy_device *phydev)
->  	return phy_restore_page(phydev, oldpage, ret);
->  }
->  
-> +static int ytphy_config_init(struct phy_device *phydev)
-> +{
-> +	struct device_node *of_node;
-> +	u32 val;
-> +	u32 mask;
-> +	u32 cfg;
-> +	int ret;
-> +	int i = 0;
-> +
-> +	of_node = phydev->mdio.dev.of_node;
-> +	if (of_node) {
-> +		ret = of_property_read_u32(of_node, ytphy_rxden_grp[0].name, &cfg);
-> +		if (!ret) {
-> +			mask = ytphy_rxden_grp[0].mask;
-> +			val = ytphy_read_ext(phydev, YTPHY_EXT_CHIP_CONFIG);
-> +
-> +			/* check the cfg overflow or not */
-> +			cfg = cfg > mask >> (ffs(mask) - 1) ? mask : cfg;
-> +
-> +			val &= ~mask;
-> +			val |= FIELD_PREP(mask, cfg);
-> +			ytphy_write_ext(phydev, YTPHY_EXT_CHIP_CONFIG, val);
-
-This is the unlocked version. MDIO bus locking is missing.
-
-> +		}
-> +
-> +		val = ytphy_read_ext(phydev, YTPHY_EXT_RGMII_CONFIG1);
-> +		for (i = 0; i < ARRAY_SIZE(ytphy_rxtxd_grp); i++) {
-> +			ret = of_property_read_u32(of_node, ytphy_rxtxd_grp[i].name, &cfg);
-> +			if (!ret) {
-> +				mask = ytphy_rxtxd_grp[i].mask;
-> +
-> +				/* check the cfg overflow or not */
-> +				cfg = cfg > mask >> (ffs(mask) - 1) ? mask : cfg;
-> +
-> +				val &= ~mask;
-> +				val |= cfg << (ffs(mask) - 1);
-> +			}
-> +		}
-> +		return ytphy_write_ext(phydev, YTPHY_EXT_RGMII_CONFIG1, val);
-> +	}
-> +
-> +	phydev_err(phydev, "Get of node fail\n");
-> +
-
-Please consider that the PHY may be used on non-DT systems.
-
-> +	return -EINVAL;
-> +}
-> +
-> +static void ytphy_link_change_notify(struct phy_device *phydev)
-> +{
-> +	u32 val;
-> +	struct ytphy_priv_t *ytphy_priv = phydev->priv;
-> +
-> +	if (phydev->speed < 0)
-> +		return;
-> +
-> +	val = ytphy_read_ext(phydev, YTPHY_EXT_RGMII_CONFIG1);
-> +	switch (phydev->speed) {
-> +	case SPEED_1000:
-> +		val  &= ~ytphy_txinver_grp[0].mask;
-> +		val |= FIELD_PREP(ytphy_txinver_grp[0].mask,
-> +				ytphy_priv->tx_inverted_1000);
-> +		break;
-> +
-> +	case SPEED_100:
-> +		val  &= ~ytphy_txinver_grp[1].mask;
-> +		val |= FIELD_PREP(ytphy_txinver_grp[1].mask,
-> +				ytphy_priv->tx_inverted_100);
-> +		break;
-> +
-> +	case SPEED_10:
-> +		val  &= ~ytphy_txinver_grp[2].mask;
-> +		val |= FIELD_PREP(ytphy_txinver_grp[2].mask,
-> +				ytphy_priv->tx_inverted_10);
-> +		break;
-> +
-> +	default:
-> +		break;
-> +	}
-> +
-> +	ytphy_write_ext(phydev, YTPHY_EXT_RGMII_CONFIG1, val);
-> +}
-> +
-> +static int yt8531_probe(struct phy_device *phydev)
-> +{
-> +	struct ytphy_priv_t *priv;
-> +	const struct device_node *of_node;
-> +	u32 val;
-> +	int ret;
-> +
-> +	priv = devm_kzalloc(&phydev->mdio.dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	of_node = phydev->mdio.dev.of_node;
-> +	if (of_node) {
-> +		ret = of_property_read_u32(of_node, ytphy_txinver_grp[0].name, &val);
-> +		if (!ret)
-> +			priv->tx_inverted_1000 = val;
-> +
-> +		ret = of_property_read_u32(of_node, ytphy_txinver_grp[1].name, &val);
-> +		if (!ret)
-> +			priv->tx_inverted_100 = val;
-> +
-> +		ret = of_property_read_u32(of_node, ytphy_txinver_grp[2].name, &val);
-> +		if (!ret)
-> +			priv->tx_inverted_10 = val;
-> +	}
-> +	phydev->priv = priv;
-> +
-> +	return 0;
-> +}
-> +
->  static struct phy_driver motorcomm_phy_drvs[] = {
->  	{
->  		PHY_ID_MATCH_EXACT(PHY_ID_YT8511),
-> @@ -120,6 +310,17 @@ static struct phy_driver motorcomm_phy_drvs[] = {
->  		.resume		= genphy_resume,
->  		.read_page	= yt8511_read_page,
->  		.write_page	= yt8511_write_page,
-> +	}, {
-> +		PHY_ID_MATCH_EXACT(PHY_ID_YT8531),
-> +		.name		= "YT8531 Gigabit Ethernet",
-> +		.probe		= yt8531_probe,
-> +		.config_init	= ytphy_config_init,
-> +		.read_status	= genphy_read_status,
-> +		.suspend	= genphy_suspend,
-> +		.resume		= genphy_resume,
-> +		.read_page	= yt8511_read_page,
-> +		.write_page	= yt8511_write_page,
-> +		.link_change_notify = ytphy_link_change_notify,
->  	},
->  };
->  
-> @@ -131,6 +332,7 @@ MODULE_LICENSE("GPL");
->  
->  static const struct mdio_device_id __maybe_unused motorcomm_tbl[] = {
->  	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8511) },
-> +	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8531) },
->  	{ /* sentinal */ }
->  };
->  
+diff --git a/tools/perf/tests/shell/record+probe_libc_inet_pton.sh b/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
+index f12a4e217968..0f01c62cbee9 100755
+--- a/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
++++ b/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
+@@ -37,6 +37,7 @@ trace_libc_inet_pton_backtrace() {
+ 	case "$(uname -m)" in
+ 	s390x)
+ 		eventattr='call-graph=dwarf,max-stack=4'
++		echo "text_to_binary_address.*\+0x[[:xdigit:]]+[[:space:]]\($libc|inlined\)$" >> $expected
+ 		echo "gaih_inet.*\+0x[[:xdigit:]]+[[:space:]]\($libc|inlined\)$" >> $expected
+ 		echo "(__GI_)?getaddrinfo\+0x[[:xdigit:]]+[[:space:]]\($libc|inlined\)$" >> $expected
+ 		echo "main\+0x[[:xdigit:]]+[[:space:]]\(.*/bin/ping.*\)$" >> $expected
+-- 
+2.38.1
 
