@@ -2,40 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EFC264E842
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 09:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B1864E844
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 09:44:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiLPInr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 03:43:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S229835AbiLPIoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 03:44:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLPInq (ORCPT
+        with ESMTP id S229863AbiLPIoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 03:43:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA4F37209;
-        Fri, 16 Dec 2022 00:43:44 -0800 (PST)
+        Fri, 16 Dec 2022 03:44:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693F437FAB
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 00:44:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 149FB61CFF;
-        Fri, 16 Dec 2022 08:43:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C9EDC433EF;
-        Fri, 16 Dec 2022 08:43:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6172B81D1C
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:44:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE716C433EF;
+        Fri, 16 Dec 2022 08:44:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1671180223;
-        bh=Yp2wfQuq6b42j2Cw+q5cMw1sNl+rSndGW331mgoM+/Q=;
+        s=korg; t=1671180256;
+        bh=OfJhBZBAJgXNzymqXWfKReheipdGIlaWFBoYm6JPQKU=;
         h=Date:From:To:Cc:Subject:From;
-        b=BpGbLSXzc+8+BZ39ybKk66s8AQdwWcoKD6IqBDpG7g9nqhgvUZakWNpxMwuQPjbMi
-         9J/L9nVg3XWBLpWMC7yxuvt7+/rcS4dLNGG8p+GdwR6WLiHsNKL3ws1R1tG2vlD5QD
-         RmHQ+4aFXosEdFfGASy/ad9L29I1ExdJS1To3mOg=
-Date:   Fri, 16 Dec 2022 09:43:40 +0100
+        b=lY9xaoMW9z/6i9WQ80g2lt6j9QAbBnsfRPhXPPfUsXjEEwHKhQKIVnRVBidiVen6Y
+         P+ghK5r8K8WrRYkWUwud1CqveJCLskDgn6rOqE6+Z64ARYY9QHL6jSxnNehc4k9HjT
+         jjC8oqJT+Jqmep0ftCqinzIYnVbscIxAR0bfHfMk=
+Date:   Fri, 16 Dec 2022 09:44:13 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB/Thunderbolt driver changes for 6.2-rc1
-Message-ID: <Y5wvvK08gUxb7feH@kroah.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: [GIT PULL] Staging driver changes for 6.2-rc1
+Message-ID: <Y5wv3SDxQMwtuKvx@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
@@ -49,37 +50,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit b7b275e60bcd5f89771e865a8239325f86d9927d:
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-  Linux 6.1-rc7 (2022-11-27 13:31:48 -0800)
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.2-rc1
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git tags/staging-6.2-rc1
 
-for you to fetch changes up to 81c25247a2a03a0f97e4805d7aff7541ccff6baa:
+for you to fetch changes up to 37aa6b98237082a4bf882b4d986329b94ebd447d:
 
-  usb: gadget: uvc: Rename bmInterfaceFlags -> bmInterlaceFlags (2022-12-08 16:53:47 +0100)
+  vme: Use root_device_register() not underlined version (2022-12-08 17:00:18 +0100)
 
 ----------------------------------------------------------------
-USB/Thunderbolt driver changes for 6.2-rc1
+Staging driver changes for 6.2-rc1
 
-Here is the large set of USB and Thunderbolt driver changes for 6.2-rc1.
-Overall, thanks to the removal of a driver, more lines were removed than
-added, a nice change.  Highlights include:
-  - removal of the sisusbvga driver that was not used by anyone anymore
-  - minor thunderbolt driver changes and tweaks
-  - chipidea driver updates
-  - usual set of typec driver features and hardware support added
-  - musb minor driver fixes
-  - fotg210 driver fixes, bringing that hardware back from the "dead"
-  - minor dwc3 driver updates
-  - addition, and then removal, of a list.h helper function for many USB
-    and other subsystem drivers, that ended up breaking the build.  That
-    will come back for 6.3-rc1, it missed this merge window.
-  - usual xhci updates and enhancements
-  - usb-serial driver updates and support for new devices
-  - other minor USB driver updates
+Here is the large set of staging driver changes for 6.2-rc1.
+
+Another round of cleanups for staging drivers with no big additions.
+Overall more lines were removed than added, always a nice sign, with
+nothing happening in here other than general coding style cleanups and
+minor fixes in the drivers.  Full, boring, details are in the shortlog.
 
 All of these have been in linux-next for a while with no reported
 problems.
@@ -87,472 +78,446 @@ problems.
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ----------------------------------------------------------------
-Abel Vesa (1):
-      dt-bindings: usb: dwc3: Add SM8550 compatible
+Aaron Lawrence (16):
+      Staging: rtl8192e: rtl819x_HTProc: fixed missing blank space
+      Staging: rtl8192e: rtl819x_HTProc: fixed alignment matching open parenthesis
+      Staging: rtl8192e: rtl819x_HTProc: fixed unnecessary parentheses
+      Staging: rtl8192e: rtllib_tx: fixed multiple blank lines
+      Staging: rtl8192e: rtllib_tx: fixed alignment matching open parenthesis
+      Staging: rtl8192e: rtllib_tx: added spaces around operators
+      Staging: rtl8192e: rtllib_tx: fixed lines ending with an open parenthesis
+      Staging: rtl8192e: rtllib_tx: removed unnecessary blank line before a close brace
+      staging: rtl8192e: rtllib_crypt_wep: multiple blank lines removal
+      staging: rtl8192e: rtllib_module: remove unnecessary parentheses
+      staging: rtl8192e: rtllib_crypt_tkip: multiple blank lines removal
+      staging: rtl8192e: rtllib_crypt_tkip: blank line before close brace removal
+      staging: rtl8192e: rtllib_crypt_tkip: fixed alignment matching open parentheses
+      staging: rtl8192e: rtllib_crypt_tkip: fixes on unbalanced braces
+      staging: rtl8192e: rtllib_crypt_tkip: split multiple assignments
+      staging: rtl8192e: rtllib_crypt_tkip: rewritten comparison to NULL
 
-Alan Stern (1):
-      USB: core: Change configuration warnings to notices
+Anjandev Momi (4):
+      Staging: rtl8192e: remove unnecessary parentheses
+      Staging: rtl8192e: remove multiple blank lines
+      Staging: rtl8192e: make alignment match open parenthesis
+      Staging: rtl8192e: add blank line after function declaration
 
-Allen-KH Cheng (1):
-      dt-bindings: usb: mtu3: add compatible for mt8186
+Brent Pappas (1):
+      staging: gdm724x: Replace macro GDM_TTY_READY with static inline function
 
-Andrzej Pietrasiewicz (1):
-      usb: gadget: function: Simplify diagnostic messaging in printer
+Chen Zhongjin (2):
+      vme: Fix error not catched in fake_init()
+      vme: Use root_device_register() not underlined version
 
-Andy Shevchenko (5):
-      thunderbolt: Use str_enabled_disabled() helper
-      i915: Move list_count() to list.h for broader use
-      usb: gadget: hid: Convert to use list_count()
-      usb: gadget: udc: bcm63xx: Convert to use list_count()
-      xhci: Convert to use list_count()
+Colin Ian King (7):
+      staging: rtl8192u: Fix spelling mistake athros -> Atheros and fix grammer
+      staging: rtl8723bs: Remove redundant initialization of variable efuseValue
+      staging: sm750fb: Kconfig: Fix spelling mistake "accelearion" -> "acceleration"
+      staging: octeon: remove redundant variable total_freed
+      staging: rtl8712: Remove variable xcnt
+      staging: rtl8192e: rtl819x_HTProc: make arrays const and one static
+      staging: rtl8192e: Fix spelling mistake "ContryIE" -> "CountryIE"
 
-Arnd Bergmann (1):
-      usb: musb: remove unused davinci support
+Dan Carpenter (1):
+      staging: rtl8192u: Fix use after free in ieee80211_rx()
 
-Bhupesh Sharma (1):
-      tools: usb: ffs-aio-example: Fix build error with aarch64-*-gnu-gcc toolchain(s)
+Danijel Korent (1):
+      staging: rtl8192e: Added spaces around operators in rtl_cam.c/rtl_eeprom.c
 
-Brian Norris (2):
-      usb: ehci-pci: Set PROBE_PREFER_ASYNCHRONOUS
-      usb: xhci-pci: Set PROBE_PREFER_ASYNCHRONOUS
+Deepak R Varma (32):
+      staging: iio: frequency: ad9834: merge unnecessary split lines
+      staging: most: dim2: correct misleading struct type name
+      staging: r8188eu: use Linux kernel variable naming convention
+      staging: r8188eu: reformat long computation lines
+      staging: r8188eu: remove {} for single statement blocks
+      staging: r8188eu: use htons macro instead of __constant_htons
+      staging: r8188eu: correct misspelled words in comments
+      staging: r8188eu: Add space between function & macro parameters
+      staging: r8188eu: Associate pointer symbol with parameter name
+      staging: r8188eu: replace leading spaces by tabs
+      staging: r8188eu: Put '{" on the symbol declaration line
+      staging: r8188eu: Correct missing or extra space in the statements
+      staging: r8188eu: Remove unused macros
+      staging: wlan-ng: remove commented debug printk messages
+      staging: rtl8192u: remove unnecessary function implementation
+      staging: wlan-ng: Remove unused struct wlan_ie_ssid references
+      staging: wlan-ng: Remove unused struct wlan_ie_supp_rates references
+      staging: wlan-ng: Remove unused struct wlan_ie_tim references
+      staging: wlan-ng: Remove unused struct wlan_ie_ibss_parms references
+      staging: wlan-ng: Remove unused struct p80211macarray definition
+      staging: wlan-ng: Remove unused function declarations
+      staging: wlan-ng: Remove unused structure definitions
+      staging: rtl8192e: Use min_t/max_t macros for variable comparison
+      staging: rtl8723bs: Use min/max macros for variable comparison
+      staging: r8188eu: remove unused ijk_matrix_regs_set implementation
+      staging: rtl8723bs: replace underutilized struct by array variable
+      staging: emxx_udc: use min helper macro for variable comparison
+      staging: r8188eu: remove unused struct declarations
+      staging: r8188eu: simplify complex pointer casting
+      staging: r8188eu: remove unnecessary casting
+      staging: fieldbus: use sysfs_emit() in show functions
+      staging: rtl8192u: remove redundant macro definitions
 
-Bruno Thomsen (1):
-      USB: serial: cp210x: add Kamstrup RF sniffer PIDs
+Dragan Cvetic (3):
+      staging: rtl8192e: Remove single statement braces
+      staging: rtl8192e: Rename CurSTAConnectState and PreSTAConnectState
+      staging: rtl8192e: Rename Op, Length and Value
 
-Christophe JAILLET (3):
-      usb: core: Use kstrtobool() instead of strtobool()
-      usb: gadget: Use kstrtobool() instead of strtobool()
-      usb: fotg210-udc: Remove a useless assignment
+Duoming Zhou (1):
+      drivers: staging: r8188eu: Fix sleep-in-atomic-context bug in rtw_join_timeout_handler
 
-Christophe Leroy (1):
-      usb: Check !irq instead of irq == NO_IRQ
+Emily Peri (8):
+      staging: rtl8723bs: Removed extra tabs in conditional statements
+      staging: rtl8723bs: align block comment stars
+      staging: rtl8723bs: remove unnecessary parenthesis
+      staging: rtl8723bs: remove tab in variable definition
+      staging: rtl8723bs: add newline after variable declaration
+      staging: rtl8723bs: use tab instead of spaces for indent
+      staging: rtl8723bs: Fix indentation in conditional statements
+      staging: rtl8723bs: replace ternary statement with min_t macro
 
-Chunfeng Yun (2):
-      usb: host: xhci-mtk: omit shared hcd if either root hub has no ports
-      usb: xhci-mtk: fix leakage of shared hcd when fail to set wakeup irq
+Gabhyun Kim (1):
+      staging: rtl8192e: Remove line breaks to match coding style
 
-Colin Ian King (4):
-      usb: ftdi-elan: remove variable err_count
-      USB: host: Kconfig: Fix spelling mistake "firwmare" -> "firmware"
-      thunderbolt: Remove redundant assignment to variable len
-      usb: ftdi-elan: remove variable l
-
-Daniel Scally (1):
-      usb: gadget: uvc: Rename bmInterfaceFlags -> bmInterlaceFlags
-
-Dongliang Mu (1):
-      usb: cdns3: adjust the partial logic of cdnsp_pci_remove
-
-Duke Xin (1):
-      USB: serial: option: add Quectel EM05-G modem
-
-Ferry Toth (2):
-      usb: ulpi: defer ulpi_register on ulpi_read_id timeout
-      usb: dwc3: core: defer probe on ulpi_read_id timeout
-
-Frank Wunderlich (1):
-      dt-bindings: usb: mtk-xhci: add support for mt7986
+Gaosheng Cui (1):
+      staging: vme_user: Fix possible UAF in tsi148_dma_list_add
 
 Geert Uytterhoeven (1):
-      usb: USB_FOTG210 should depend on ARCH_GEMINI
+      staging: octeon: cvmx_ptr_to_phys() should return physaddr_t
 
-Greg Kroah-Hartman (10):
-      Merge 6.1-rc3 into usb-next
-      Merge 6.1-rc6 into usb-next
-      Merge 6.1-rc7 into usb-next
-      Merge tag 'thunderbolt-for-v6.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
-      Revert "xhci: Convert to use list_count()"
-      Revert "usb: gadget: udc: bcm63xx: Convert to use list_count()"
-      Revert "usb: gadget: hid: Convert to use list_count()"
-      Revert "i915: Move list_count() to list.h for broader use"
-      Merge tag 'usb-serial-6.1-rc8' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-next
-      Merge tag 'usb-serial-6.2-rc1' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-next
+Gustavo A. R. Silva (1):
+      staging: ks7010: Avoid clashing function prototypes
 
-Heikki Krogerus (3):
-      usb: typec: retimer: Use device type for matching
-      thunderbolt: ACPI: Use the helper fwnode_find_reference()
-      usb: typec: ucsi: Resume in separate work
+Jack Schofield (3):
+      staging: greybus: loopback_test: Add blank line after declaration.
+      staging: greybus: loopback_test: Remove void function return statement
+      staging: greybus: loopback_test: Remove extra blank lines
 
-Henry Tian (1):
-      usb: gadget: aspeed: fix buffer overflow
+Kang Minchul (4):
+      staging: r8188eu: remove unnecessary variable in ioctl_linux
+      staging: r8188eu: remove unnecessary vaiable in rtw_recv
+      staging: r8188eu: remove unnecessary variable in rtl8188eu_xmit
+      staging: r8188eu: make rtw_sta_flush to void
 
-Icenowy Zheng (3):
-      dt-bindings: vendor-prefixes: add Genesys Logic
-      dt-bindings: usb: Add binding for Genesys Logic GL850G hub controller
-      usb: misc: onboard_usb_hub: add Genesys Logic GL850G hub support
+Larry Finger (1):
+      staging: rtl8192e: Fix divide fault when calculating beacon age
 
-Ivaylo Dimitrov (1):
-      usb: musb: remove extra check in musb_gadget_vbus_draw
+Martin Kaiser (97):
+      staging: r8188eu: remove bLedLinkBlinkInProgress
+      staging: r8188eu: replace one GetAddr3Ptr call
+      staging: r8188eu: get reason code from mgmt struct
+      staging: r8188eu: clarify the bBusyTraffic assignment
+      staging: r8188eu: use sa instead of Addr2
+      staging: r8188eu: get bssid from mgmt struct
+      staging: r8188eu: exit for deauth from unknown station
+      staging: r8188eu: remove unnecessary return
+      staging: r8188eu: summarize two flags checks
+      staging: r8188eu: ignore_received_deauth is a boolean
+      staging: r8188eu: fix led register settings
+      staging: r8188eu: handle rtw_write8 errors in SwLedOn
+      staging: r8188eu: fix status updates in SwLedOff
+      staging: r8188eu: SwLedOn needs no padapter parameter
+      staging: r8188eu: SwLedOff needs no padapter parameter
+      staging: r8188eu: remove two unused defines
+      staging: r8188eu: don't include rtw_led.h from rtw_cmd.h
+      staging: r8188eu: remove padapter from struct led_priv
+      staging: r8188eu: set two more state variables
+      staging: r8188eu: summarize tx/rx and scan blinking
+      staging: r8188eu: restructure mlme subfunction handling
+      staging: r8188eu: make OnAssocReq static
+      staging: r8188eu: make OnAssocRsp static
+      staging: r8188eu: make OnProbeReq static
+      staging: r8188eu: make OnProbeRsp static
+      staging: r8188eu: make OnBeacon static
+      staging: r8188eu: make OnDisassoc static
+      staging: r8188eu: make OnAuthClient static
+      staging: r8188eu: make OnDeAuth static
+      staging: r8188eu: make OnAction static
+      staging: r8188eu: make OnAuth static
+      staging: r8188eu: change mlme handlers to void
+      staging: r8188eu: remove unnecessary label
+      staging: r8188eu: remove unnecessary else branch
+      staging: r8188eu: remove unnecessary return
+      staging: r8188eu: remove an else branch
+      staging: r8188eu: go2asoc is not needed
+      staging: r8188eu: use standard multicast addr check
+      staging: r8188eu: don't set pcmd_obj components to 0
+      staging: r8188eu: NetworkTypeInUse is not in use
+      staging: r8188eu: remove wait_ack param from _issue_probereq_p2p
+      staging: r8188eu: bCardDisableWOHSM is write-only
+      staging: r8188eu: replace get_da with ieee80211_get_DA
+      staging: r8188eu: remove get_da
+      staging: r8188eu: replace a GetAddr1Ptr call
+      staging: r8188eu: remove duplicate category check
+      staging: r8188eu: make on_action_public static void
+      staging: r8188eu: make OnAction_back static void
+      staging: r8188eu: make OnAction_p2p static void
+      staging: r8188eu: remove category check in OnAction_p2p
+      staging: r8188eu: replace switch-case with if
+      staging: r8188eu: replace GetAddr1Ptr call in OnAction_p2p
+      staging: r8188eu: clean up on_action_public
+      staging: r8188eu: remove return value from on_action_public_vendor
+      staging: r8188eu: remove return value from on_action_public_default
+      staging: r8188eu: rtw_action_public_decache's token is a u8
+      staging: r8188eu: check destination address in OnAction
+      staging: r8188eu: use ether_addr_equal for address comparison
+      staging: r8188eu: use hdr->frame_control instead of fc
+      staging: r8188eu: use ieee80211_get_SA
+      staging: r8188eu: use ether_addr_equal in OnAction
+      staging: r8188eu: don't store addba request
+      staging: r8188eu: remove some obsolete comments
+      staging: r8188eu: reorder assignments, clarify the header format
+      staging: r8188eu: reformat a function header
+      staging: r8188eu: remove state checks in rtw_led_control
+      staging: r8188eu: clean up rtw_hal_init
+      staging: r8188eu: remove get_fwstate
+      staging: r8188eu: merge two rtw_free_network_nolock functions
+      staging: r8188eu: remove checks in dump_mgntframe
+      staging: r8188eu: use a qos_hdr in validate_recv_data_frame
+      staging: r8188eu: drop another removal/stop check
+      staging: r8188eu: drop removal/stop check in dump_mgntframe_and_wait_ack
+      staging: r8188eu: drop return value from issue_probereq_ex
+      staging: r8188eu: remove wait_ms parameter
+      staging: r8188eu: fix the number of probereq retries
+      staging: r8188eu: simplify the checks for zero address
+      staging: r8188eu: use ieee80211 helper for protected bit
+      staging: r8188eu: replace one GetAddr3Ptr call
+      staging: r8188eu: read timestamp from ieee80211_mgmt
+      staging: r8188eu: replace GetAddr2Ptr calls
+      staging: r8188eu: pass only ies to process_p2p_ps_ie
+      staging: r8188eu: use ie buffer in update_beacon_info
+      staging: r8188eu: simplify update_sta_support_rate params
+      staging: r8188eu: exit if beacon is not from our bss
+      staging: r8188eu: stop beacon processing if kmalloc fails
+      staging: r8188eu: simplify error handling for missing station
+      staging: r8188eu: remove a variable
+      staging: r8188eu: use ieee80211_mgmt to parse addresses
+      staging: r8188eu: read reason code from ieee80211_mgmt
+      staging: r8188eu: move bBusyTraffic update
+      staging: r8188eu: handle the non-ap case first
+      staging: r8188eu: simplify err handling for unknown station
+      staging: r8188eu: merge two probereq_p2p functions
+      staging: r8188eu: remove unused da parameter
+      staging: r8188eu: use subtype helpers in collect_bss_info
+      staging: r8188eu: use subtype helper in rtw_check_bcn_info
 
-Jean Delvare (2):
-      usb: misc: onboard_usb_hub: Drop obsolete dependency on COMPILE_TEST
-      usb: gadget: udc: drop obsolete dependencies on COMPILE_TEST
+Matt Jan (1):
+      staging: vme_user: remove multiple blank lines
 
-Jiantao Zhang (1):
-      USB: gadget: Fix use-after-free during usb config switch
+Michael Straube (19):
+      staging: r8188eu: merge odm_types.h into other headers
+      staging: r8188eu: convert rtw_init_evt_priv() to common error logic
+      staging: r8188eu: convert rtw_init_cmd_priv() to common error logic
+      staging: r8188eu: convert rtw_init_mlme_priv() to common error logic
+      staging: r8188eu: convert _rtw_init_sta_priv() to common error logic
+      staging: r8188eu: convert rtw_reset_drv_sw() to void
+      staging: r8188eu: convert rtw_free_drv_sw() to void
+      staging: r8188eu: remove unused macros from wifi.h
+      staging: r8188eu: use min() instead of ternary operator
+      staging: r8188eu: replace ternary operator with min, max, abs macros
+      staging: r8188eu: remove extern from function prototypes
+      staging: r8188eu: convert rtw_free_stainfo() to void
+      staging: r8188eu: convert three functions to bool
+      staging: r8188eu: clean up error handling in rtw_start_drv_threads()
+      staging: r8188eu: rename three functions
+      staging: r8188eu: convert aes_cipher() to void
+      staging: r8188eu: convert rtw_xmit_resource_alloc() to common error logic
+      staging: r8188eu: convert _rtw_init_xmit_priv() to common error logic
+      staging: r8188eu: binstallGrpkey is set to _FAIL
 
-Jiasheng Jiang (1):
-      usb: storage: Add check for kcalloc
+Nam Cao (4):
+      Revert "staging: r8712u: Tracking kmemleak false positives."
+      staging: rtl8712: check for alloc fail in _r8712_init_recv_priv()
+      staging: rtl8712: check for return value of _r8712_init_xmit_priv()
+      staging: rtl8712: fix potential memory leak
 
-Jiri Slaby (SUSE) (3):
-      USB: sisusbvga: remove console support
-      USB: sisusbvga: rename sisusb.c to sisusbvga.c
-      USB: sisusbvga: use module_usb_driver()
+Peter Robinson (4):
+      staging: rtl8192u: Provide a TODO file for this driver
+      staging: rtl8192e: Update the TODO file for this driver
+      staging: ks7010: Update the TODO file for this driver
+      staging: wlan-ng: Provide a TODO file for this driver
 
-Johan Hovold (4):
-      USB: serial: cp210x: add support for B0 hangup
-      USB: serial: f81232: fix division by zero on line-speed change
-      USB: serial: f81534: fix division by zero on line-speed change
-      USB: serial: xr: avoid requesting zero DTE rate
+Philipp Hortmann (25):
+      staging: rtl8192e: Remove unchanged variable bFwCtrlLPS
+      staging: rtl8192e: Remove unchanged variable bInactivePs
+      staging: rtl8192e: Remove unused variable bIPSModeBackup
+      staging: rtl8192e: Remove unused variable bInPowerSaveMode
+      staging: rtl8192e: Remove unused variable isRFOff
+      staging: rtl8192e: Remove unchanged variable RegRfOff
+      staging: rtl8192e: Remove unchanged variable bDisableNormalResetCheck
+      staging: rtl8192e: Remove unused variable bForcedSilentReset
+      staging: rtl8192e: Remove unused variable ScanDelay
+      staging: rtl8192e: Remove unused variable bDriverIsGoingToUnload
+      staging: rtl8192e: Rename bTxDisableRate.., RegMaxLPSAwa.. and bTxUseD..
+      staging: rtl8192e: Rename Regdot11HTOper.., bSupportM.. and PowerSaveCo..
+      staging: rtl8192e: Rename Regdot11TxHT.., dot11HTOpera.. and RegHTSuppRa..
+      staging: rtl8192e: Rename pPSC
+      staging: rtl8192e: Rename RFInProgres.., bEnableHT and RegChannelPlan
+      staging: rtl8192e: Rename LinkDetectInfo
+      staging: rtl8192e: Rename bNetPromisc.., IntelPromiscu.. and bPromiscu..
+      staging: rtl8192e: Rename bFilterSour.., CCKPresentAt.. and ResetProg..
+      staging: rtl8192e: Rename InterruptLog, RxCounter and bHwRfOffAction
+      staging: rtl8192e: Rename pHTInfo
+      staging: rtl8192e: Remove unchanged variable AcmMethod
+      staging: rtl8192e: Remove unused variable skb_aggQ
+      staging: rtl8192e: Remove unused variable initialized_at_probe
+      staging: rtl8192e: Remove unused variable ChannelAccessSetting
+      staging: rtl8192e: Remove unused variable int_log
 
-John Keeping (3):
-      usb: gadget: f_hid: fix f_hidg lifetime vs cdev
-      usb: gadget: f_hid: fix refcount leak on error path
-      usb: gadget: f_hid: tidy error handling in hidg_alloc
+Phillip Potter (2):
+      staging: r8188eu: convert rtw_setdatarate_cmd to correct error semantics
+      staging: r8188eu: change return type of rtw_set_802_11_disassociate to void
 
-Jonathan Neuschäfer (1):
-      usb: chipidea: ci_hdrc_imx: Fix a typo ("regualator")
+Rigel Di Scala (1):
+      Staging: rtl8192e: fix a brace style issue
 
-Jose Ignacio Tornos Martinez (1):
-      USB: usbip: missing lock in stub down
+Rui Li (1):
+      staging: rtl8192e: remove unnecessary braces for single statement blocks
 
-Jules Irenge (1):
-      usbip: vudc: Convert snprintf() to sysfs_emit()
+Tanjuate Brunostar (3):
+      staging: rts5208: split long line of code
+      staging: vt6655: change variable name wTimeStampOff
+      staging: vt6655: change 2 variable names wFB_Opt0 and wFB_Opt1
 
-Li Jun (6):
-      usb: chipidea: usbmisc: group usbmisc operations for PM
-      usb: chipidea: usbmisc: add power lost check for imx6sx
-      usb: chipidea: usbmisc: add power lost check for imx7d
-      usb: chipidea: usbmisc: add power lost check for imx7ulp
-      dt-bindings: usb: usb-nop-xceiv: add wakeup-source property
-      usb: phy: generic: Add wakeup capability
+Umang Jain (3):
+      Revert "staging: mmal-vchiq: Avoid use of bool in structures"
+      vc04_services: mmal-vchiq: Use bool for vchiq_mmal_component.in_use
+      vc04_services: bcm2835-camera: Use bool values for mmal_fmt.remove_padding
 
-Linus Walleij (12):
-      dt-bindings: usb: dwc2: Add some missing Lantiq variants
-      usb: phy: phy-gpio-vbus-usb: Add device tree probing
-      usb: fotg210: Collect pieces of dual mode controller
-      usb: fotg210: Compile into one module
-      usb: fotg210: Select subdriver by mode
-      usb: fotg2: add Gemini-specific handling
-      usb: fotg210-udc: Fix ages old endianness issues
-      usb: fotg210: Fix Kconfig for USB host modules
-      fotg210-udc: Use dev pointer in probe and dev_messages
-      fotg210-udc: Support optional external PHY
-      fotg210-udc: Handle PCLK
-      fotg210-udc: Get IRQ using platform_get_irq()
+Uwe Kleine-König (3):
+      staging: most: i2c: Convert to i2c's .probe_new()
+      staging: olpc_dcon: Convert to i2c's .probe_new()
+      staging: iio: ade7854: Convert to i2c's .probe_new()
 
-Longfang Liu (1):
-      xhci: print warning when HCE was set
+Yogesh Hegde (1):
+      staging: rtl8192e: Rename variables rateIndex and rateBitmap to avoid CamelCase
 
-Lukas Bulwahn (3):
-      usb: musb: remove left-over after USB_TI_CPPI_DMA removal
-      MAINTAINERS: rectify entry for MICROCHIP USB251XB DRIVER
-      usb: dwc3: improve the config dependency of USB_DWC3_XILINX
+YueHaibing (1):
+      staging: rtl8192e: Fix potential use-after-free in rtllib_rx_Monitor()
 
-Marek Vasut (2):
-      dt-bindings: usb: usb251xb: Convert to YAML schema
-      extcon: usbc-tusb320: Update state on probe even if no IRQ pending
-
-Mathias Nyman (4):
-      xhci: export two xhci_hub functions for xhci-pci module usage
-      xhci: disable U3 suspended ports in S4 hibernate poweroff_late stage
-      xhci: Prevent infinite loop in transaction errors recovery for streams
-      xhci: remove unused stream_id parameter from xhci_handle_halted_endpoint()
-
-Miaoqian Lin (1):
-      usb: dwc3: qcom: Fix memory leak in dwc3_qcom_interconnect_init
-
-Michael Grzeschik (2):
-      usb: gadget: uvc: default the ctrl request interface offsets
-      usb: gadget: at91-udc: simplify at91rm9200_udc_pullup callback
-
-Paul Cercueil (7):
-      usb: musb: Add and use inline functions musb_{get,set}_state
-      usb: musb: Add and use inline function musb_otg_state_string
-      usb: musb: Allow running without CONFIG_USB_PHY
-      usb: musb: Support setting OTG mode using generic PHY
-      usb: musb: jz4740: Don't disable external hubs
-      usb: musb: jz4740: Support the generic PHY framework
-      usb: phy: jz4770: Remove driver
-
-Pawel Laszczak (1):
-      usb: cdnsp: fix lack of ZLP for ep0
-
-Peng Fan (1):
-      dt-bindings: phy: imx8mq-usb: add power-domains property
-
-Prashant Malani (2):
-      usb: typec: Add partner PD object wrapper
-      platform/chrome: cros_ec_typec: Set parent of partner PD object
-
-Quentin Schulz (2):
-      usb: dwc2: disable lpm feature on Rockchip SoCs
-      usb: dwc2: power on/off phy for peripheral mode in dual-role mode
-
-Rajat Khandelwal (1):
-      thunderbolt: Add wake on connect/disconnect on USB4 ports
-
-Ray Chi (1):
-      usb: core: stop USB enumeration if too many retries
-
-Reka Norman (1):
-      xhci: Apply XHCI_RESET_TO_DEFAULT quirk to ADL-N
-
-Sascha Hauer (3):
-      usb: phy: generic: make vcc regulator optional
-      usb: gadget: u_ether: Do not make UDC parent of the net device
-      usb: gadget: f_ecm: Always set current gadget in ecm_bind()
-
-Shruthi Sanil (1):
-      usb: dwc3: pci: Update PCIe device ID for USB3 controller on CPU sub-system for Raptor Lake
-
-Shuah Khan (1):
-      usb/usbip: Fix v_recv_cmd_submit() to use PIPE_BULK define
-
-Sven Peter (7):
-      usb: typec: Check for ops->exit instead of ops->enter in altmode_exit
-      usb: typec: tipd: Cleanup resources if devm_tps6598_psy_register fails
-      usb: typec: tipd: Fix spurious fwnode_handle_put in error path
-      usb: typec: tipd: Fix typec_unregister_port error paths
-      usb: typec: tipd: Move tps6598x_disconnect error path to its own label
-      usb: dwc3: Fix race between dwc3_set_mode and __dwc3_set_mode
-      usb: typec: tipd: Set mode of operation for USB Type-C connector
-
-Szymon Heidrich (1):
-      usb: gadget: uvc: Prevent buffer overflow in setup handler
-
-Thierry Reding (1):
-      dt-bindings: usb: usb-drd: Describe default dual-role mode
-
-Thinh Nguyen (1):
-      usb: dwc3: gadget: Reduce TRB IOC settings
-
-Tony Lindgren (2):
-      usb: musb: omap2430: Fix probe regression for missing resources
-      usb: musb: Drop old unused am35x glue layer
-
-Uwe Kleine-König (14):
-      usb: dwc2: platform: Improve error reporting for problems during .remove()
-      usb: typec: ucsi: stm32g0: Convert to i2c's .probe_new()
-      usb: typec: ucsi/ucsi_ccg: Convert to i2c's .probe_new()
-      usb: typec: tcpm/tcpci_rt1711h: Convert to i2c's .probe_new()
-      usb: typec: tcpm/tcpci_maxim: Convert to i2c's .probe_new()
-      usb: typec: tcpm/tcpci: Convert to i2c's .probe_new()
-      usb: typec: tcpm/fusb302: Convert to i2c's .probe_new()
-      usb: typec: hd3ss3220: Convert to i2c's .probe_new()
-      usb: typec: anx7411: Convert to i2c's .probe_new()
-      usb: phy: isp1301: Convert to i2c's .probe_new()
-      usb: isp1301-omap: Convert to i2c's .probe_new()
-      usb: usb4604: Convert to i2c's .probe_new()
-      usb: misc: usb3503: Convert to i2c's .probe_new()
-      usb: usb251xb: Convert to i2c's .probe_new()
-
-Vincent Mailhol (1):
-      usb: add usb_set_intfdata() documentation
-
-Xu Yang (7):
-      usb: chipidea: core: handle usb role switch in a common way
-      usb: chipidea: core: add controller resume support when controller is powered off
-      usb: chipidea: core: handle suspend/resume for each role
-      usb: chipidea: host: add suspend/resume support for host controller
-      usb: chipidea: udc: add suspend/resume support for device controller
-      usb: chipidea: core: wrap ci_handle_power_lost() with CONFIG_PM_SLEEP
-      usb: host: fix a typo in ehci.h
-
-Xuezhi Zhang (1):
-      usbip: convert sysfs snprintf to sysfs_emit
-
-Yang Yingliang (5):
-      Documentation: devres: add missing PHY helpers
-      usb: typec: tcpci: fix of node refcount leak in tcpci_register_port()
-      usb: roles: fix of node refcount leak in usb_role_switch_is_parent()
-      usb: core: hcd: Fix return value check in usb_hcd_setup_local_mem()
-      usb: typec: wusb3801: fix fwnode refcount leak in wusb3801_probe()
-
-Yi Yang (1):
-      usb: fotg210-udc: fix potential memory leak in fotg210_udc_probe()
-
- Documentation/ABI/testing/configfs-usb-gadget-uvc  |    4 +-
- Documentation/ABI/testing/sysfs-bus-usb            |   11 +
- .../bindings/phy/fsl,imx8mq-usb-phy.yaml           |    3 +
- Documentation/devicetree/bindings/usb/dwc2.yaml    |    3 +
- .../devicetree/bindings/usb/genesys,gl850g.yaml    |   48 +
- .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml |    1 +
- .../devicetree/bindings/usb/mediatek,mtu3.yaml     |    1 +
- .../devicetree/bindings/usb/qcom,dwc3.yaml         |    3 +
- Documentation/devicetree/bindings/usb/usb-drd.yaml |    1 +
- .../devicetree/bindings/usb/usb-nop-xceiv.yaml     |    5 +
- Documentation/devicetree/bindings/usb/usb251xb.txt |   89 --
- .../devicetree/bindings/usb/usb251xb.yaml          |  271 ++++
- .../devicetree/bindings/vendor-prefixes.yaml       |    2 +
- Documentation/driver-api/driver-model/devres.rst   |    2 +
- MAINTAINERS                                        |    8 +-
- arch/powerpc/configs/ppc6xx_defconfig              |    1 -
- arch/sh/configs/landisk_defconfig                  |    1 -
- drivers/extcon/extcon-usbc-tusb320.c               |   17 +-
- drivers/platform/chrome/cros_ec_typec.c            |    2 +-
- drivers/thunderbolt/acpi.c                         |   12 +-
- drivers/thunderbolt/switch.c                       |    5 +-
- drivers/thunderbolt/tb_regs.h                      |    2 +
- drivers/thunderbolt/usb4.c                         |   33 +-
- drivers/thunderbolt/usb4_port.c                    |    3 +
- drivers/thunderbolt/xdomain.c                      |    4 +-
- drivers/usb/Kconfig                                |    4 +
- drivers/usb/Makefile                               |    2 +
- drivers/usb/cdns3/cdnsp-pci.c                      |    8 +-
- drivers/usb/cdns3/cdnsp-ring.c                     |   42 +-
- drivers/usb/chipidea/ci.h                          |    4 +
- drivers/usb/chipidea/ci_hdrc_imx.c                 |   51 +-
- drivers/usb/chipidea/ci_hdrc_imx.h                 |    4 +-
- drivers/usb/chipidea/core.c                        |  143 +-
- drivers/usb/chipidea/host.c                        |   16 +
- drivers/usb/chipidea/otg.c                         |    2 +-
- drivers/usb/chipidea/otg.h                         |    1 +
- drivers/usb/chipidea/udc.c                         |   32 +
- drivers/usb/chipidea/usbmisc_imx.c                 |  160 +-
- drivers/usb/common/ulpi.c                          |    2 +-
- drivers/usb/core/config.c                          |   82 +-
- drivers/usb/core/hcd-pci.c                         |   13 +
- drivers/usb/core/hcd.c                             |    6 +-
- drivers/usb/core/hub.c                             |   60 +
- drivers/usb/core/hub.h                             |    4 +
- drivers/usb/core/port.c                            |   30 +-
- drivers/usb/core/sysfs.c                           |    7 +-
- drivers/usb/dwc2/gadget.c                          |    6 +-
- drivers/usb/dwc2/params.c                          |    4 +
- drivers/usb/dwc2/platform.c                        |    5 +-
- drivers/usb/dwc3/Kconfig                           |    4 +-
- drivers/usb/dwc3/core.c                            |   23 +-
- drivers/usb/dwc3/dwc3-pci.c                        |    2 +-
- drivers/usb/dwc3/dwc3-qcom.c                       |   13 +-
- drivers/usb/dwc3/gadget.c                          |   14 +-
- drivers/usb/fotg210/Kconfig                        |   38 +
- drivers/usb/fotg210/Makefile                       |   10 +
- drivers/usb/fotg210/fotg210-core.c                 |  166 +++
- drivers/usb/{host => fotg210}/fotg210-hcd.c        |   51 +-
- .../usb/{host/fotg210.h => fotg210/fotg210-hcd.h}  |    0
- drivers/usb/{gadget/udc => fotg210}/fotg210-udc.c  |  164 ++-
- .../udc/fotg210.h => fotg210/fotg210-udc.h}        |    3 +
- drivers/usb/fotg210/fotg210.h                      |   42 +
- drivers/usb/gadget/configfs.c                      |    3 +-
- drivers/usb/gadget/function/f_ecm.c                |   22 +-
- drivers/usb/gadget/function/f_hid.c                |   60 +-
- drivers/usb/gadget/function/f_mass_storage.c       |    3 +-
- drivers/usb/gadget/function/f_printer.c            |    9 +-
- drivers/usb/gadget/function/f_uvc.c                |   20 +-
- drivers/usb/gadget/function/storage_common.c       |    9 +-
- drivers/usb/gadget/function/u_ether.c              |    4 -
- drivers/usb/gadget/function/u_serial.c             |    3 +-
- drivers/usb/gadget/function/uvc_configfs.c         |   12 +-
- drivers/usb/gadget/legacy/serial.c                 |    3 +-
- drivers/usb/gadget/legacy/webcam.c                 |    4 +-
- drivers/usb/gadget/udc/Kconfig                     |   15 +-
- drivers/usb/gadget/udc/Makefile                    |    1 -
- drivers/usb/gadget/udc/aspeed-vhub/core.c          |    2 +-
- drivers/usb/gadget/udc/aspeed-vhub/epn.c           |   16 +-
- drivers/usb/gadget/udc/at91_udc.c                  |    5 +-
- drivers/usb/gadget/udc/core.c                      |   12 +-
- drivers/usb/host/Kconfig                           |   13 +-
- drivers/usb/host/Makefile                          |    1 -
- drivers/usb/host/ehci-grlib.c                      |    2 +-
- drivers/usb/host/ehci-pci.c                        |    7 +-
- drivers/usb/host/ehci-ppc-of.c                     |    2 +-
- drivers/usb/host/ehci.h                            |    2 +-
- drivers/usb/host/fhci-hcd.c                        |    2 +-
- drivers/usb/host/ohci-ppc-of.c                     |    2 +-
- drivers/usb/host/uhci-grlib.c                      |    2 +-
- drivers/usb/host/xhci-hub.c                        |   22 +-
- drivers/usb/host/xhci-mtk.c                        |   73 +-
- drivers/usb/host/xhci-pci.c                        |   63 +-
- drivers/usb/host/xhci-ring.c                       |   42 +-
- drivers/usb/host/xhci.h                            |    2 +-
- drivers/usb/misc/Kconfig                           |    2 +-
- drivers/usb/misc/ftdi-elan.c                       |    4 -
- drivers/usb/misc/onboard_usb_hub.c                 |    2 +
- drivers/usb/misc/onboard_usb_hub.h                 |    5 +
- drivers/usb/misc/sisusbvga/Kconfig                 |   34 -
- drivers/usb/misc/sisusbvga/Makefile                |    3 -
- drivers/usb/misc/sisusbvga/sisusb.h                |   21 -
- drivers/usb/misc/sisusbvga/sisusb_con.c            | 1496 -------------------
- drivers/usb/misc/sisusbvga/sisusb_init.c           |  955 ------------
- drivers/usb/misc/sisusbvga/sisusb_init.h           |  180 ---
- .../usb/misc/sisusbvga/{sisusb.c => sisusbvga.c}   |  289 +---
- drivers/usb/misc/usb251xb.c                        |    5 +-
- drivers/usb/misc/usb3503.c                         |    5 +-
- drivers/usb/misc/usb4604.c                         |    5 +-
- drivers/usb/musb/Kconfig                           |   18 -
- drivers/usb/musb/Makefile                          |    3 -
- drivers/usb/musb/am35x.c                           |  610 --------
- drivers/usb/musb/cppi_dma.c                        | 1547 --------------------
- drivers/usb/musb/davinci.c                         |  606 --------
- drivers/usb/musb/davinci.h                         |  103 --
- drivers/usb/musb/jz4740.c                          |   62 +-
- drivers/usb/musb/musb_core.c                       |  107 +-
- drivers/usb/musb/musb_core.h                       |   24 +
- drivers/usb/musb/musb_debugfs.c                    |    6 +-
- drivers/usb/musb/musb_dma.h                        |   13 +-
- drivers/usb/musb/musb_gadget.c                     |   61 +-
- drivers/usb/musb/musb_host.c                       |   18 +-
- drivers/usb/musb/musb_virthub.c                    |   33 +-
- drivers/usb/musb/omap2430.c                        |   54 +
- drivers/usb/phy/Kconfig                            |   14 +-
- drivers/usb/phy/Makefile                           |    1 -
- drivers/usb/phy/phy-generic.c                      |   18 +-
- drivers/usb/phy/phy-gpio-vbus-usb.c                |   12 +
- drivers/usb/phy/phy-isp1301-omap.c                 |    4 +-
- drivers/usb/phy/phy-isp1301.c                      |    5 +-
- drivers/usb/phy/phy-jz4770.c                       |  353 -----
- drivers/usb/roles/class.c                          |    5 +-
- drivers/usb/serial/cp210x.c                        |   21 +-
- drivers/usb/serial/f81232.c                        |   12 +-
- drivers/usb/serial/f81534.c                        |   12 +-
- drivers/usb/serial/option.c                        |    3 +
- drivers/usb/serial/xr_serial.c                     |    2 -
- drivers/usb/storage/alauda.c                       |    2 +
- drivers/usb/typec/anx7411.c                        |    5 +-
- drivers/usb/typec/bus.c                            |    2 +-
- drivers/usb/typec/class.c                          |   19 +
- drivers/usb/typec/hd3ss3220.c                      |    5 +-
- drivers/usb/typec/retimer.c                        |   16 +-
- drivers/usb/typec/retimer.h                        |    4 +
- drivers/usb/typec/tcpm/fusb302.c                   |    5 +-
- drivers/usb/typec/tcpm/tcpci.c                     |   10 +-
- drivers/usb/typec/tcpm/tcpci_maxim.c               |    4 +-
- drivers/usb/typec/tcpm/tcpci_rt1711h.c             |    5 +-
- drivers/usb/typec/tipd/core.c                      |   20 +-
- drivers/usb/typec/ucsi/ucsi.c                      |   17 +-
- drivers/usb/typec/ucsi/ucsi.h                      |    1 +
- drivers/usb/typec/ucsi/ucsi_ccg.c                  |    5 +-
- drivers/usb/typec/ucsi/ucsi_stm32g0.c              |    4 +-
- drivers/usb/typec/wusb3801.c                       |    2 +-
- drivers/usb/usb-skeleton.c                         |    1 -
- drivers/usb/usbip/stub_dev.c                       |    4 +-
- drivers/usb/usbip/vudc_rx.c                        |    4 +-
- drivers/usb/usbip/vudc_sysfs.c                     |    2 +-
- include/linux/usb.h                                |   12 +
- include/linux/usb/hcd.h                            |    3 +
- include/linux/usb/typec.h                          |    4 +
- include/uapi/linux/usb/g_uvc.h                     |    3 +
- include/uapi/linux/usb/video.h                     |    4 +-
- .../ffs-aio-example/simple/device_app/aio_simple.c |   44 +-
- 163 files changed, 2079 insertions(+), 7049 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
- delete mode 100644 Documentation/devicetree/bindings/usb/usb251xb.txt
- create mode 100644 Documentation/devicetree/bindings/usb/usb251xb.yaml
- create mode 100644 drivers/usb/fotg210/Kconfig
- create mode 100644 drivers/usb/fotg210/Makefile
- create mode 100644 drivers/usb/fotg210/fotg210-core.c
- rename drivers/usb/{host => fotg210}/fotg210-hcd.c (99%)
- rename drivers/usb/{host/fotg210.h => fotg210/fotg210-hcd.h} (100%)
- rename drivers/usb/{gadget/udc => fotg210}/fotg210-udc.c (89%)
- rename drivers/usb/{gadget/udc/fotg210.h => fotg210/fotg210-udc.h} (99%)
- create mode 100644 drivers/usb/fotg210/fotg210.h
- delete mode 100644 drivers/usb/misc/sisusbvga/sisusb_con.c
- delete mode 100644 drivers/usb/misc/sisusbvga/sisusb_init.c
- delete mode 100644 drivers/usb/misc/sisusbvga/sisusb_init.h
- rename drivers/usb/misc/sisusbvga/{sisusb.c => sisusbvga.c} (91%)
- delete mode 100644 drivers/usb/musb/am35x.c
- delete mode 100644 drivers/usb/musb/cppi_dma.c
- delete mode 100644 drivers/usb/musb/davinci.c
- delete mode 100644 drivers/usb/musb/davinci.h
- delete mode 100644 drivers/usb/phy/phy-jz4770.c
+ arch/mips/include/asm/octeon/cvmx.h                |   4 +-
+ drivers/staging/emxx_udc/emxx_udc.c                |   5 +-
+ drivers/staging/fieldbus/dev_core.c                |  17 +-
+ drivers/staging/gdm724x/gdm_tty.c                  |  13 +-
+ drivers/staging/greybus/tools/loopback_test.c      |  15 +-
+ drivers/staging/iio/frequency/ad9834.c             |   6 +-
+ drivers/staging/iio/meter/ade7854-i2c.c            |   5 +-
+ drivers/staging/ks7010/TODO                        |   3 +
+ drivers/staging/ks7010/ks_wlan_net.c               | 248 +++----
+ drivers/staging/most/dim2/dim2.c                   |   4 +-
+ drivers/staging/most/dim2/hal.c                    |   4 +-
+ drivers/staging/most/dim2/hal.h                    |   6 +-
+ drivers/staging/most/i2c/i2c.c                     |   4 +-
+ drivers/staging/octeon/ethernet-tx.c               |   2 -
+ drivers/staging/octeon/octeon-stubs.h              |   2 +-
+ drivers/staging/olpc_dcon/olpc_dcon.c              |   4 +-
+ drivers/staging/r8188eu/core/rtw_ap.c              |   7 +-
+ drivers/staging/r8188eu/core/rtw_br_ext.c          | 126 ++--
+ drivers/staging/r8188eu/core/rtw_cmd.c             |  34 +-
+ drivers/staging/r8188eu/core/rtw_ioctl_set.c       |   6 +-
+ drivers/staging/r8188eu/core/rtw_led.c             |  79 +--
+ drivers/staging/r8188eu/core/rtw_mlme.c            |  51 +-
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c        | 747 ++++++++-------------
+ drivers/staging/r8188eu/core/rtw_p2p.c             |  19 +-
+ drivers/staging/r8188eu/core/rtw_pwrctrl.c         |   2 +-
+ drivers/staging/r8188eu/core/rtw_recv.c            |  27 +-
+ drivers/staging/r8188eu/core/rtw_security.c        |   4 +-
+ drivers/staging/r8188eu/core/rtw_sta_mgt.c         |  16 +-
+ drivers/staging/r8188eu/core/rtw_wlan_util.c       |  36 +-
+ drivers/staging/r8188eu/core/rtw_xmit.c            |  54 +-
+ drivers/staging/r8188eu/hal/HalPhyRf_8188e.c       |  12 +-
+ drivers/staging/r8188eu/hal/hal_intf.c             |  19 +-
+ drivers/staging/r8188eu/hal/odm_RTL8188E.c         |   6 +-
+ drivers/staging/r8188eu/hal/rtl8188e_hal_init.c    |   8 +-
+ drivers/staging/r8188eu/hal/rtl8188e_phycfg.c      |  16 +-
+ drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c      |  28 +-
+ drivers/staging/r8188eu/hal/rtl8188eu_xmit.c       |   3 +-
+ drivers/staging/r8188eu/include/Hal8188EPhyReg.h   |   4 +-
+ drivers/staging/r8188eu/include/drv_types.h        |   1 -
+ drivers/staging/r8188eu/include/odm.h              |  10 +-
+ drivers/staging/r8188eu/include/odm_RTL8188E.h     |   7 +
+ drivers/staging/r8188eu/include/odm_types.h        |  16 -
+ drivers/staging/r8188eu/include/osdep_intf.h       |   6 +-
+ drivers/staging/r8188eu/include/osdep_service.h    |   6 +-
+ drivers/staging/r8188eu/include/rtl8188e_hal.h     |   7 +-
+ drivers/staging/r8188eu/include/rtl8188e_spec.h    |  18 +-
+ drivers/staging/r8188eu/include/rtw_ap.h           |   2 +-
+ drivers/staging/r8188eu/include/rtw_cmd.h          |  71 +-
+ drivers/staging/r8188eu/include/rtw_io.h           |  16 +-
+ drivers/staging/r8188eu/include/rtw_ioctl_set.h    |   6 +-
+ drivers/staging/r8188eu/include/rtw_led.h          |   3 -
+ drivers/staging/r8188eu/include/rtw_mlme.h         |  29 +-
+ drivers/staging/r8188eu/include/rtw_mlme_ext.h     |  58 +-
+ drivers/staging/r8188eu/include/rtw_recv.h         |   4 +-
+ drivers/staging/r8188eu/include/rtw_xmit.h         |   4 +-
+ drivers/staging/r8188eu/include/sta_info.h         |  18 +-
+ drivers/staging/r8188eu/include/wifi.h             |  77 +--
+ drivers/staging/r8188eu/include/wlan_bssdef.h      |  51 --
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c       |  28 +-
+ drivers/staging/r8188eu/os_dep/os_intfs.c          |  41 +-
+ drivers/staging/rtl8192e/TODO                      |  18 +-
+ drivers/staging/rtl8192e/rtl8192e/r8190P_def.h     |  15 -
+ drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c     |  55 +-
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c     |  50 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_cam.c        |  43 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c       | 191 +++---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h       |  36 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c         | 123 ++--
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.h         |  10 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_eeprom.c     |   2 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_ps.c         |  95 ++-
+ drivers/staging/rtl8192e/rtl8192e/rtl_wx.c         |  94 ++-
+ drivers/staging/rtl8192e/rtl819x_BAProc.c          |  38 +-
+ drivers/staging/rtl8192e/rtl819x_HT.h              |   2 +-
+ drivers/staging/rtl8192e/rtl819x_HTProc.c          | 405 ++++++-----
+ drivers/staging/rtl8192e/rtl819x_Qos.h             |   7 -
+ drivers/staging/rtl8192e/rtl819x_TSProc.c          |   2 +-
+ drivers/staging/rtl8192e/rtllib.h                  |  51 +-
+ drivers/staging/rtl8192e/rtllib_crypt_tkip.c       |  52 +-
+ drivers/staging/rtl8192e/rtllib_crypt_wep.c        |   8 -
+ drivers/staging/rtl8192e/rtllib_module.c           |   8 +-
+ drivers/staging/rtl8192e/rtllib_rx.c               |  38 +-
+ drivers/staging/rtl8192e/rtllib_softmac.c          | 173 +++--
+ drivers/staging/rtl8192e/rtllib_softmac_wx.c       |  19 +-
+ drivers/staging/rtl8192e/rtllib_tx.c               | 120 ++--
+ drivers/staging/rtl8192e/rtllib_wx.c               |   6 +-
+ drivers/staging/rtl8192u/TODO                      |  16 +
+ drivers/staging/rtl8192u/ieee80211/ieee80211.h     |  64 --
+ .../rtl8192u/ieee80211/ieee80211_crypt_tkip.c      |   6 -
+ .../staging/rtl8192u/ieee80211/ieee80211_module.c  |   3 -
+ drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c  |   6 +-
+ drivers/staging/rtl8712/os_intfs.c                 |  27 +-
+ drivers/staging/rtl8712/recv_osdep.h               |   8 +-
+ drivers/staging/rtl8712/rtl8712_recv.c             |   7 +-
+ drivers/staging/rtl8712/rtl8712_xmit.c             |   3 +-
+ drivers/staging/rtl8712/rtl871x_recv.c             |  16 +-
+ drivers/staging/rtl8723bs/core/rtw_efuse.c         |   2 +-
+ drivers/staging/rtl8723bs/core/rtw_ieee80211.c     |  12 +-
+ drivers/staging/rtl8723bs/core/rtw_ioctl_set.c     |  17 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme.c          |  30 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme_ext.c      |   2 +-
+ drivers/staging/rtl8723bs/core/rtw_recv.c          |   6 +-
+ drivers/staging/rtl8723bs/core/rtw_sta_mgt.c       |   2 +-
+ drivers/staging/rtl8723bs/core/rtw_wlan_util.c     |  12 +-
+ drivers/staging/rtl8723bs/hal/HalPhyRf_8723B.c     |  21 +-
+ drivers/staging/rtl8723bs/hal/odm.h                |  12 +-
+ drivers/staging/rtl8723bs/hal/odm_DIG.c            |   5 +-
+ drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c  |   2 +-
+ drivers/staging/rts5208/sd.c                       |   3 +-
+ drivers/staging/sm750fb/Kconfig                    |   2 +-
+ .../vc04_services/bcm2835-camera/bcm2835-camera.c  |  30 +-
+ .../staging/vc04_services/vchiq-mmal/mmal-vchiq.c  |  18 +-
+ .../staging/vc04_services/vchiq-mmal/mmal-vchiq.h  |   6 +-
+ drivers/staging/vme_user/vme.h                     |   2 -
+ drivers/staging/vme_user/vme_fake.c                |   9 +-
+ drivers/staging/vme_user/vme_tsi148.c              |   7 +-
+ drivers/staging/vme_user/vme_tsi148.h              |   7 -
+ drivers/staging/vt6655/rxtx.c                      |  36 +-
+ drivers/staging/wlan-ng/TODO                       |  16 +
+ drivers/staging/wlan-ng/p80211mgmt.h               | 301 ---------
+ drivers/staging/wlan-ng/p80211netdev.c             |  22 -
+ drivers/staging/wlan-ng/p80211types.h              |   6 -
+ 122 files changed, 1741 insertions(+), 2789 deletions(-)
+ delete mode 100644 drivers/staging/r8188eu/include/odm_types.h
+ create mode 100644 drivers/staging/rtl8192u/TODO
+ create mode 100644 drivers/staging/wlan-ng/TODO
