@@ -2,149 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB4F64E867
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 10:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D22464E82F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 09:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiLPJAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 04:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
+        id S229782AbiLPIh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 03:37:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiLPJAT (ORCPT
+        with ESMTP id S229655AbiLPIhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 04:00:19 -0500
-X-Greylist: delayed 1408 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 16 Dec 2022 01:00:17 PST
-Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E64BEE;
-        Fri, 16 Dec 2022 01:00:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=87aWwPPjK19BvtHVTIVboj/uOUAwcf66BPCr/bQAgog=; b=QKCiMpWWv9MV2soRPTwd0LYaC9
-        vK8RSvKKzsIDdI65zdjiOLVISol8ouOPP98/y7ENY23IZjuNZjnqAVPEHpxExT4S3bq5lNyJiw5fy
-        Cb7Gd+wpo5fLu3aDzFMRaRgVftuVefnRmzit5hblWBuJGYUlSA8nbs0mWkGYBhUwNPJajOBtnbbrd
-        C7pATXkK+3PsiupAOEK0euz+6imQU8lkpF2f6S+yKt0HChKRS+MZoLIefN6m3AEkQghPsfPCLpBh9
-        AZozyGkc24OPUs5E45kNZPDOY/Wo4tONmllIbmpPtXZTRCbQTfwmbrsGvqV31FC3YdUYP2LEIwD67
-        xWCnpRwQ==;
-Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:44022 helo=z840.regau.abatec.at)
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <primoz.fiser@norik.com>)
-        id 1p66Cq-004psH-2n;
-        Fri, 16 Dec 2022 09:36:43 +0100
-From:   Primoz Fiser <primoz.fiser@norik.com>
-To:     Support Opensource <support.opensource@diasemi.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     upstream@lists.phytec.de
-Subject: [PATCH] watchdog: da9062: da9063: use unlocked xfer function in restart
-Date:   Fri, 16 Dec 2022 09:36:45 +0100
-Message-Id: <20221216083645.2574077-1-primoz.fiser@norik.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 16 Dec 2022 03:37:54 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC1236C50
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 00:37:53 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id n4so1662582plp.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 00:37:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shopee.com; s=shopee.com;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J2qNfvt65JwdwwMrbQB5NaE92K4Di8NRU5gAuThxsfA=;
+        b=PMl1YQNQ+YwdUAZjP9JXJpeNsZknWwPh2b8M/gX3nCWz1X8lbhbmwu0iWPo1ENQ/BP
+         SeW33qBrB5xq09MVP+6C57uJvt4MKlhhFmrXgdMBgKe7IDF1pEpP0IHocAq7SL76JTSV
+         9aIxhVGRYVHPl/4dwKnZj8R6dpULUY18kfSod3Nftq6X/7y3gd0cClsmHTQCh2vncnK1
+         OZY+MylS7T8zagT9DjwlaGSWw2ZBnJB6VUriuVM+oC0DcbQgK1nMoMShXerLiwrihnL9
+         LEcAAWP1UEnLiuWTxXavquASt7v0PHN3JwenvGLRggURgev6oyic94gKR+DUYaa0ql+3
+         Waqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=J2qNfvt65JwdwwMrbQB5NaE92K4Di8NRU5gAuThxsfA=;
+        b=i/Ew/aBJiNvMGJy2FuUw71GRi7kLNcB0Hgvg7YmVihtstMlSes5MXZbMukVVaWxT5d
+         LN+6SWbVCDnjiIHz6FUco8C6LJutPx33+NIcCaCog1WjsGt3S/BkyaneLqCbcwtAm3R3
+         c/almJsVVB5SAFmdD5RJNIokYig+IiA5fqq7m0BKht6bT4Fl3Qj3yD29VJVNcxGZgV3X
+         xjDrpm83EM7q40TN1yR/2BPc/FZAVlKkVhVTbqVUm4sqJrh2NjueByRfWElW+KBThFAB
+         QA558pLalYwiKshOZR8sccJ/xcNHF/Lf4ugkb+4KpdGsT+k2+ovOIDCKsp8AYIFAI/c3
+         84NA==
+X-Gm-Message-State: ANoB5pmOIOIxA61Es9nUYBYG7Obs1a2JcvOb0tz8SFQgaZWesNbAbiN0
+        dHqpPcbIqL/O5bM8d7q9EElM1Q==
+X-Google-Smtp-Source: AA0mqf7Phzd/ndVYygqV1A2ma/zXcczqaZFCmSOL0pNPc7c/aOMACjXSWZi4/t82ug2FT+xPLx/K+A==
+X-Received: by 2002:a17:90a:7890:b0:221:4338:a6ae with SMTP id x16-20020a17090a789000b002214338a6aemr22720466pjk.33.1671179872809;
+        Fri, 16 Dec 2022 00:37:52 -0800 (PST)
+Received: from [10.54.29.146] (static-ip-147-99-134-202.rev.dyxnet.com. [202.134.99.147])
+        by smtp.gmail.com with ESMTPSA id x20-20020a17090ab01400b00219186abd7csm899082pjq.16.2022.12.16.00.37.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 00:37:52 -0800 (PST)
+Message-ID: <c1d2cf16-8fba-4c79-4c1e-f95e5685e509@shopee.com>
+Date:   Fri, 16 Dec 2022 16:37:49 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: primoz.fiser@norik.com
-X-Authenticated-Sender: cpanel.siel.si: primoz.fiser@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.0
+Subject: Re: [PATCH] mm/memcontrol: Skip root memcg in memcg_memory_event_mm
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     akpm@linux-foundation.org, roman.gushchin@linux.dev,
+        songmuchun@bytedance.com, hannes@cmpxchg.org, vbabka@suse.cz,
+        willy@infradead.org, vasily.averin@linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20221215091907.763801-1-haifeng.xu@shopee.com>
+ <20221215181803.ome46pkh6g7qu3t4@google.com>
+ <abec13da-c74a-0fd8-74e0-3cdc547e4e08@shopee.com>
+ <20221216064210.krxtxebuwc7dijzu@google.com>
+ <13c73151-4b28-4324-afd5-8b84b82bc25d@shopee.com>
+ <20221216073640.xjtpsyigoej77v5h@google.com>
+ <a1b0d3c8-d6c2-2f22-5269-92a32f78614e@shopee.com>
+ <20221216081716.7o4o33sg3eof2iww@google.com>
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+In-Reply-To: <20221216081716.7o4o33sg3eof2iww@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Machine resets via da9062/da9063 PMICs are challenging since one needs
-to use special i2c atomic transfers due to the fact interrupts are
-disabled in such late system stages. This is the reason both PMICs don't
-use regmap and have instead opted for i2c_smbus_write_byte_data() in
-restart handlers.
 
-However extensive testing revealed that even using atomic safe function
-is not enough and occasional resets fail with error message "Failed to
-shutdown (err =  -11)". This is due to the fact that function
-i2c_smbus_write_byte_data() in turn calls __i2c_lock_bus_helper()
-which might fail with -EAGAIN when bus lock is already taken and cannot
-be released anymore.
 
-Thus replace i2c_smbus_write_byte_data() with unlocked flavor of
-i2c_smbus_xfer() function to avoid above dead-lock scenario. At this
-system stage we don't care about proper locking anymore and only want
-proper machine reset to be carried out.
+On 2022/12/16 16:17, Shakeel Butt wrote:
+> On Fri, Dec 16, 2022 at 03:50:49PM +0800, Haifeng Xu wrote:
+>>
+>>
+>> On 2022/12/16 15:36, Shakeel Butt wrote:
+>>> On Fri, Dec 16, 2022 at 03:28:53PM +0800, Haifeng Xu wrote:
+>>>>
+>>>>
+>>>> On 2022/12/16 14:42, Shakeel Butt wrote:
+>>>>> On Fri, Dec 16, 2022 at 09:43:02AM +0800, Haifeng Xu wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 2022/12/16 02:18, Shakeel Butt wrote:
+>>>>>>> On Thu, Dec 15, 2022 at 09:19:07AM +0000, Haifeng Xu wrote:
+>>>>>>>> The memory events aren't supported on root cgroup, so there is no need
+>>>>>>>> to account MEMCG_OOM_KILL on root memcg.
+>>>>>>>>
+>>>>>>>
+>>>>>>> Can you explain the scenario where this is happening and causing issue
+>>>>>>> for you?
+>>>>>>>
+>>>>>> If the victim selected by oom killer belongs to root memcg, memcg_memory_event_mm
+>>>>>> still counts the MEMCG_OOM_KILL event. This behavior is meaningless because the
+>>>>>> flag of events/events.local in memory_files is CFTYPE_NOT_ON_ROOT. The root memcg
+>>>>>> does not count any memory event.
+>>>>>>
+>>>>>
+>>>>> What about v1's memory.oom_control?
+>>>>>
+>>>>  
+>>>> The memory.oom_control doesn't set the CFTYPE_NOT_ON_ROOT flag. But oom_kill_disable or
+>>>> under_oom actually only support non-root memcg, so the memory_events should be consistent
+>>>> with them.
+>>>
+>>> Did you take a look at mem_cgroup_oom_control_read()? It is displaying
+>>> MEMCG_OOM_KILL for root memcg. Irrespective it makes sense or not, you
+>>> want to change behavior of user visible interface. If you really want to
+>>> then propose for the deprecation of that interface.
+>>
+>> Yes, I have see it in mem_cgroup_oom_control_read() and I think that 
+>> showing MEMCG_OOM_KILL for root memcg doesn't make much sense.
+>>
+> 
+> It doesn't matter as there might already be users using it.
+> 
+>> Shoud I add the CFTYPE_NOT_ON_ROOT flag for cgroup v1?
+>>
+> 
+> Before doing anything, I am still not seeing why we really need this
+> patch? What exactly is the issue this patch is trying to solve? To me
+> this patch is negatively impacting the readability of the code. Unless
+> you are seeing some real production issues, I don't think we need to add
+> any special casing for MEMCG_OOM_KILL here.
 
-Signed-off-by: Primoz Fiser <primoz.fiser@norik.com>
----
- drivers/watchdog/da9062_wdt.c | 15 ++++++++++++---
- drivers/watchdog/da9063_wdt.c | 15 ++++++++++++---
- 2 files changed, 24 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
-index f02cbd530538..1ec33b4bd2f2 100644
---- a/drivers/watchdog/da9062_wdt.c
-+++ b/drivers/watchdog/da9062_wdt.c
-@@ -155,11 +155,20 @@ static int da9062_wdt_restart(struct watchdog_device *wdd, unsigned long action,
- {
- 	struct da9062_watchdog *wdt = watchdog_get_drvdata(wdd);
- 	struct i2c_client *client = to_i2c_client(wdt->hw->dev);
-+	union i2c_smbus_data msg;
- 	int ret;
- 
--	/* Don't use regmap because it is not atomic safe */
--	ret = i2c_smbus_write_byte_data(client, DA9062AA_CONTROL_F,
--					DA9062AA_SHUTDOWN_MASK);
-+	/*
-+	 * Don't use regmap because it is not atomic safe. Additionally, use
-+	 * unlocked flavor of i2c_smbus_xfer to avoid scenario where i2c bus
-+	 * might be previously locked by some process unable to release the
-+	 * lock due to interrupts already being disabled at this late stage.
-+	 */
-+	msg.byte = DA9062AA_SHUTDOWN_MASK;
-+	ret = __i2c_smbus_xfer(client->adapter, client->addr, client->flags,
-+			I2C_SMBUS_WRITE, DA9062AA_CONTROL_F,
-+			I2C_SMBUS_BYTE_DATA, &msg);
-+
- 	if (ret < 0)
- 		dev_alert(wdt->hw->dev, "Failed to shutdown (err = %d)\n",
- 			  ret);
-diff --git a/drivers/watchdog/da9063_wdt.c b/drivers/watchdog/da9063_wdt.c
-index 09a4af4c58fc..684667469b10 100644
---- a/drivers/watchdog/da9063_wdt.c
-+++ b/drivers/watchdog/da9063_wdt.c
-@@ -174,11 +174,20 @@ static int da9063_wdt_restart(struct watchdog_device *wdd, unsigned long action,
- {
- 	struct da9063 *da9063 = watchdog_get_drvdata(wdd);
- 	struct i2c_client *client = to_i2c_client(da9063->dev);
-+	union i2c_smbus_data msg;
- 	int ret;
- 
--	/* Don't use regmap because it is not atomic safe */
--	ret = i2c_smbus_write_byte_data(client, DA9063_REG_CONTROL_F,
--					DA9063_SHUTDOWN);
-+	/*
-+	 * Don't use regmap because it is not atomic safe. Additionally, use
-+	 * unlocked flavor of i2c_smbus_xfer to avoid scenario where i2c bus
-+	 * might previously be locked by some process unable to release the
-+	 * lock due to interrupts already being disabled at this late stage.
-+	 */
-+	msg.byte = DA9063_SHUTDOWN;
-+	ret = __i2c_smbus_xfer(client->adapter, client->addr, client->flags,
-+			I2C_SMBUS_WRITE, DA9063_REG_CONTROL_F,
-+			I2C_SMBUS_BYTE_DATA, &msg);
-+
- 	if (ret < 0)
- 		dev_alert(da9063->dev, "Failed to shutdown (err = %d)\n",
- 			  ret);
--- 
-2.25.1
-
+As we can see in memcg_memory_event(), memory event never be count in root
+memcg. Passing the root memcg to it seems somewhat self-contradictory. Also,
+cgroup v2 doesn't need this.
