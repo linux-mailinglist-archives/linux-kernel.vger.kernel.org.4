@@ -2,189 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99F064F01B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:13:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E4064F020
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbiLPRNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 12:13:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S231614AbiLPROB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 12:14:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbiLPRNA (ORCPT
+        with ESMTP id S231361AbiLPRN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 12:13:00 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B566F486
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:12:59 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id m4so2947508pls.4
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:12:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HuDbHiC4wUMVj9QO97VUpzw7NXrq4bdUCfaP1cTSs0U=;
-        b=WcOcOJw5+G8O4M68UYnLFzUz3S99KUX6f5ZH/Nf8CaU6u8BtfWjRzmbyb5Fb0N+kVm
-         6esJ6YnepFU9jGqIj972QkgTwBu3E3LmF6cmjkHRctEr30bI50C3iAk8InUfJ2270hR8
-         D8/qa//Wu10zvybrwVMsw9Tu9AlD6h+GHDlHlOL0ag/8BRMiTKVf6Y0M3pdsNpIVR/i4
-         2rbkDGikJPYWQi+hgDJgbJhRRpQXXVYObmjkpGZgm30vTOvFu8d1Kl+n07pcNsYyjs+X
-         fb/jFoWeCpOA6adoXNbqc3zRHJguHv6O20rIJvLl8+Dr6bwL/KBPbfwkEvbMiHeDI46p
-         +CIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HuDbHiC4wUMVj9QO97VUpzw7NXrq4bdUCfaP1cTSs0U=;
-        b=3nRKm44BLg//Jhf4aMDNjCiAxdAUakbNmTISdQaE7NskKgygd1XjwlYp2FqKcDiiZc
-         zT5xjKY5L3CmJrko1JXrTRbLmcXdYgPjElbXwa5hfeeksrsiH1jowCQFpp0EcX+b4kUQ
-         6gtLwS5Qg05fXWV+5yY5uAmpNByrXG2yXlaHyTLA42eFPS23icl2LwjqEM3bAwPaLBfU
-         l+9t/Nd7cpykcj/qq1HE+MIb+CX3Ot9VYD461YbXOi6rkycYNdp7sJ5bLjfucNq8HNcu
-         Dqs8XnTapOcRMSb/QqA+D3mIoZPlYWo8FaayjHntaovF5ZAVRvMO/6mO0CbZO52Q9kEW
-         BQYQ==
-X-Gm-Message-State: AFqh2kqHnRhv+Yaaur4AADZf4oFQuYrj4xErlez/u8bMiLWlBuqI81nA
-        xhUBGWjIbQ6dobLhIaer0U+9vA==
-X-Google-Smtp-Source: AMrXdXtSx3HWa2OwLDpVxSDrwtppmU5ZjjUlo2AW/Pr+SGauyUDXatDO/Ws8iFne7Nq0LT3Wx5ufQA==
-X-Received: by 2002:a17:902:680c:b0:189:a3de:ea2d with SMTP id h12-20020a170902680c00b00189a3deea2dmr652654plk.2.1671210779284;
-        Fri, 16 Dec 2022 09:12:59 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id ja5-20020a170902efc500b001873aa85e1fsm1848933plb.305.2022.12.16.09.12.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 09:12:57 -0800 (PST)
-Date:   Fri, 16 Dec 2022 17:12:53 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Wei Wang <wei.w.wang@intel.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        Fri, 16 Dec 2022 12:13:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B863D6F486;
+        Fri, 16 Dec 2022 09:13:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5618D61FD7;
+        Fri, 16 Dec 2022 17:13:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADAC8C43392;
+        Fri, 16 Dec 2022 17:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671210833;
+        bh=Ak/KrxWAvOEGVghN8qPaao3p3gxmWCwZ3TbtWtqLEss=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Y83nK8Pe0WSMx5wUME8cdVo9TlXuMvitz9j1r8ztbcdAq31xiN3aXcvOq+I6dtRlL
+         7Gadqf44vdHjfcBYiF4h6MN84u6QzzswYYq5CUa7hotFarC8Ajp8pWqXk65lkhZ5Ps
+         7qBLp5MTJeOhPgGfV6YlGkZP5duV8qEZzTXewzz/r/ZdqowWay9cD574Y6kpKN/XOB
+         iX2KcRCcCm3SYuYnj6fRILh0P0DpBno7Fn4NOco5T+4otWqByZc+58sUTAaRpBe0cw
+         /NKNaYW3dAlgrzNw+fZOWP1NzOHoVbiEQApIGDE3cRsexcG7AqRrUr8XGacV8vYaIt
+         jXyVPTYrscDCw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 4CBEB5C0AC7; Fri, 16 Dec 2022 09:13:53 -0800 (PST)
+Date:   Fri, 16 Dec 2022 09:13:53 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>, boqun.feng@gmail.com,
+        neeraj.iitr10@gmail.com, urezki@gmail.com, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] KVM: x86: add KVM_CAP_DEVICE_CTRL
-Message-ID: <Y5ynFUdZXpN5HP7F@google.com>
-References: <20221215115207.14784-1-wei.w.wang@intel.com>
+Subject: Re: [PATCH RFC] srcu: Yet more detail for
+ srcu_readers_active_idx_check() comments
+Message-ID: <20221216171353.GC4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221216165144.GA4001@paulmck-ThinkPad-P17-Gen-1>
+ <54F1102C-2577-4238-83B3-D38BA7ED9087@joelfernandes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221215115207.14784-1-wei.w.wang@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <54F1102C-2577-4238-83B3-D38BA7ED9087@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022, Wei Wang wrote:
-> KVM_CAP_DEVICE_CTRL allows userspace to create emulated device in KVM.
-> For example, userspace VFIO implementation needs to create a kvm_device
-> (i.e. KVM_DEV_TYPE_VFIO) on x86. So add the cap to allow userspace for
-> such use cases.
+On Fri, Dec 16, 2022 at 11:54:19AM -0500, Joel Fernandes wrote:
 > 
-> Signed-off-by: Wei Wang <wei.w.wang@intel.com>
-> ---
->  arch/x86/kvm/x86.c | 1 +
->  1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 69227f77b201..1cdc4469652c 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -4410,6 +4410,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  	case KVM_CAP_VAPIC:
->  	case KVM_CAP_ENABLE_CAP:
->  	case KVM_CAP_VM_DISABLE_NX_HUGE_PAGES:
-> +	case KVM_CAP_DEVICE_CTRL:
+> > On Dec 16, 2022, at 11:51 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > 
+> > ﻿On Fri, Dec 16, 2022 at 04:32:39PM +0000, Joel Fernandes wrote:
+> >> On Thu, Dec 15, 2022 at 05:09:14PM -0800, Paul E. McKenney wrote:
+> >> [...]
+> >>>>>> 2. unlock()'s smp_mb() happened before Flip+smp_mb() , now the reader
+> >>>>>> has no new smp_mb() that happens AFTER the flip happened. So it can
+> >>>>>> totally sample the old idx again -- that particular reader will
+> >>>>>> increment twice, but the next time, it will see the flipped one.
+> >>>>> 
+> >>>>> I will let you transliterate both.  ;-)
+> >>>> 
+> >>>> I think I see what you mean now :)
+> >>>> 
+> >>>> I believe the access I am referring to is the read of idx on one side and
+> >>>> the write to idx on the other. However that is incomplete and I need to
+> >>>> pair that with some of other access on both sides.
+> >>>> 
+> >>>> So perhaps this:
+> >>>> 
+> >>>> Writer does flip + smp_mb + read unlock counts [1]
+> >>>> 
+> >>>> Reader does:
+> >>>> read idx + smp_mb() + increment lock counts [2]
+> >>>> 
+> >>>> And subsequently reader does
+> >>>> Smp_mb() + increment unlock count. [3]
+> >>>> 
+> >>>> So [1] races with either [2] or [2]+[3].
+> >>>> 
+> >>>> Is that fair?
+> >>> 
+> >>> That does look much better, thank you!
+> >> 
+> >> Perhaps a comment with an ASCII diagram will help?
+> >> 
+> >> 
+> >> Case 2:
+> >> Both the reader and the updater see each other's writes too late, but because
+> >> of memory barriers on both sides, they will eventually see each other's write
+> >> with respect to their own. This is similar to the store-buffer problem. This
+> >> let's a single reader contribute a maximum (unlock minus lock) imbalance of 2.
+> >> 
+> >> The following diagram shows the subtle worst case followed by a simplified
+> >> store-buffer explanation.
+> >> 
+> >> READER                  UPDATER
+> >> -------------           ----------
+> >>                           // idx is initially 0.
+> >> read_lock() {
+> >>  READ(idx) = 0;
+> >>  lock[0]++; --------------------------------------------,
+> >>                           flip() {                      |               
+> >>                              smp_mb();                  |
+> >>  smp_mb();                                              |
+> >> }                                                        |
+> >>                                                         |
+> >> // RSCS                                                  |
+> >>                                                         |
+> >> read_unlock() {                                          |
+> >>  smp_mb();                                              |
+> >>                              idx++;  // P               |
+> >>                              smp_mb();                  |
+> >>                           }                             |
+> >>                                                         |
+> >>                           scan_readers_idx(0) {         |
+> >>                               count all unlock[0];      |
+> >>                                   |                     |
+> >>                                   |                     |
+> >>  unlock[0]++; //X <--not-counted--`-----,               |
+> >>                                         |               |
+> >> }                                        V               `------,
+> >>                               // Will make sure next scan      |
+> >>                               // will not miss this unlock (X) |
+> >>                               // if other side saw flip (P) ,--`
+> >>                               // Call this MB [1]           |
+> >>                               // Order write(idx) with      |
+> >>                               // next scan's unlock.        |
+> >>                               smp_mb();                 ,---`
+> >> read_lock() {                                            |
+> >>  READ(idx)=0;                                           |
+> >>  lock[0]++; ----------------> count all lock[0];        |
+> >>  smp_mb();         |     }                              |
+> >> }     |             |                                    V
+> >>      |             `---> // Incorrect contribution to lock counting
+> >>      |                   // upto a maximum of 2 times.
+> >>      |
+> >>       `---> // Pairs with MB [1]. Makes sure that
+> >>             // the next read_lock()'s' idx read (Y) is ordered
+> >>             // with above write to unlock[0] (X).
+> >>                            |
+> >> rcu_read_unlock() {         |
+> >>  smp_mb(); <---------------`
+> >>  unlock[0]++; 
+> >> }
+> >> 
+> >> read_lock() {
+> >>  READ(idx) = 1; //Y
+> >>  lock[1]++;
+> >>  ...
+> >> }
+> >>                           scan_readers_idx(0) {
+> >>                               count all unlock[0]; //Q
+> >>                               ...
+> >> 
+> >> 
+> >> thanks,
+> >> 
+> >> - Joel
+> >> 
+> >>                          }
+> >> 
+> >> This makes it similar to the store buffer pattern. Using X, Y, P and Q
+> >> annotated above, we get:
+> >> 
+> >> READER                    UPDATER
+> >> X (write)                 P (write)
+> >> 
+> >> smp_mb();                 smp_mb();
+> >> 
+> >> Y (read)                  Q (read)
+> > 
+> > Given that this diagram is more than 50 lines long, it might go better in
+> > a design document describing this part of RCU.  Perhaps less detail or
+> > segmented, but the same general idea as this guy:
+> > 
+> > Documentation/RCU/Design/Memory-Ordering/Tree-RCU-Memory-Ordering.rst
+> 
+> Yes, this sounds like a good place to add it and perhaps we refer to
+> it from the C source file? I can take this up to do over the holidays,
+> if you prefer.
 
-Rather than hardcode this in x86, I think it would be better to add an #ifdef'd
-version in the generic check.  E.g. if MIPS or RISC-V ever gains KVM_VFIO support
-then they'll need to enumerate KVM_CAP_DEVICE_CTRL too, and odds are we'll forget
-to to do.
+Indeed, that comment is quite large already, arguably obscuring the code!
+It would be good to offload some of it.
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 13e88297f999..f70b9cea95d9 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -4525,6 +4525,10 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
-        case KVM_CAP_BINARY_STATS_FD:
-        case KVM_CAP_SYSTEM_EVENT_DATA:
-                return 1;
-+#ifdef CONFIG_KVM_VFIO
-+       case KVM_CAP_DEVICE_CTRL:
-+               return 1;
-+#endif
-        default:
-                break;
-        }
-
-The other potentially bad idea would be to detect the presence of a device_ops and
-delete all of the arch hooks, e.g. 
-
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 9c5573bc4614..190e9c3b10a7 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -212,7 +212,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
-                r = vgic_present;
-                break;
-        case KVM_CAP_IOEVENTFD:
--       case KVM_CAP_DEVICE_CTRL:
-        case KVM_CAP_USER_MEMORY:
-        case KVM_CAP_SYNC_MMU:
-        case KVM_CAP_DESTROY_MEMORY_REGION_WORKS:
-diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-index 04494a4fb37a..21f9fbe96f6a 100644
---- a/arch/powerpc/kvm/powerpc.c
-+++ b/arch/powerpc/kvm/powerpc.c
-@@ -541,7 +541,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
-        case KVM_CAP_ENABLE_CAP:
-        case KVM_CAP_ONE_REG:
-        case KVM_CAP_IOEVENTFD:
--       case KVM_CAP_DEVICE_CTRL:
-        case KVM_CAP_IMMEDIATE_EXIT:
-        case KVM_CAP_SET_GUEST_DEBUG:
-                r = 1;
-diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
-index 65a964d7e70d..6efe93b282e1 100644
---- a/arch/riscv/kvm/vm.c
-+++ b/arch/riscv/kvm/vm.c
-@@ -57,7 +57,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 
-        switch (ext) {
-        case KVM_CAP_IOEVENTFD:
--       case KVM_CAP_DEVICE_CTRL:
-        case KVM_CAP_USER_MEMORY:
-        case KVM_CAP_SYNC_MMU:
-        case KVM_CAP_DESTROY_MEMORY_REGION_WORKS:
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index e4890e04b210..191d220b6a30 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -567,7 +567,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
-        case KVM_CAP_ENABLE_CAP:
-        case KVM_CAP_S390_CSS_SUPPORT:
-        case KVM_CAP_IOEVENTFD:
--       case KVM_CAP_DEVICE_CTRL:
-        case KVM_CAP_S390_IRQCHIP:
-        case KVM_CAP_VM_ATTRIBUTES:
-        case KVM_CAP_MP_STATE:
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 13e88297f999..99e3da9ce42d 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -4525,6 +4525,15 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
-        case KVM_CAP_BINARY_STATS_FD:
-        case KVM_CAP_SYSTEM_EVENT_DATA:
-                return 1;
-+       case KVM_CAP_DEVICE_CTRL: {
-+               int i;
-+
-+               for (i = 0; i < ARRAY_SIZE(kvm_device_ops_table); ++) {
-+                       if (kvm_device_ops_table[i])
-+                               return 1;
-+               }
-+               return 0;
-+       }
-        default:
-                break;
-        }
-
-
-
+							Thanx, Paul
