@@ -2,147 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B9B64F0E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 19:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7226564F0F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 19:27:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbiLPSZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 13:25:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
+        id S231655AbiLPS1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 13:27:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbiLPSZd (ORCPT
+        with ESMTP id S230089AbiLPS1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 13:25:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430A553EF8;
-        Fri, 16 Dec 2022 10:25:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E20C6B81DD8;
-        Fri, 16 Dec 2022 18:25:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BF4EC433D2;
-        Fri, 16 Dec 2022 18:25:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671215126;
-        bh=4XtEoEvMYyg+OLEZfHG9djBuFTM7o2ZQCFES+gxEroE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aD2KCvdg3kKv09BaCnVXMz09pfqHt+WN5mHE937fM/UB7lIsiumYRFq2gH3p2ubL0
-         b+v9L0fuJZyXwbcykzfXKi1zWwno00rdfpGtd8WLU+TTNfE3LdHP9FredI46xwgi03
-         kx1euGydfduw0D5ttm419X9ds07l5WaKr4vD5OaRGW/+5PeSIVWexnE0Zu7PjcOMR6
-         88sF0++26Ul5MhBADAKPp/gstCMHmfrirVYMMelP8ecI4/BiYSBW60rE6wV9L1WQrs
-         YayESk9QhiMXchYskO9jbZ4GHhk2HKLfMpH+CI3tBm2b52fBYX6psvP4Ko6ej2N9x8
-         3+pL0cOPNLbWg==
-Received: by pali.im (Postfix)
-        id 22897711; Fri, 16 Dec 2022 19:25:24 +0100 (CET)
-Date:   Fri, 16 Dec 2022 19:25:24 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [v2 PATCH] PCI: aardvark: switch to using
- devm_gpiod_get_optional()
-Message-ID: <20221216182524.s6a4uihgavji7bti@pali>
-References: <Y3KMEZFv6dpxA+Gv@google.com>
- <20221207143351.GA1439513@bhelgaas>
+        Fri, 16 Dec 2022 13:27:07 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFBC655F;
+        Fri, 16 Dec 2022 10:27:06 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id o66so1219975oia.6;
+        Fri, 16 Dec 2022 10:27:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H0BbxwVHNwnSrMPUgguGHD04mtg+HPKRQ7WxnV2HF38=;
+        b=biwKZPVPRDWVDg8cbMLT+e9pIkZmNGSZ4+p/pPdCb3bqm64i3tTm4BzwAMVTyRExAc
+         5mv4THP+c0qpUpKDyoK7zoh9OozdEngsVQR6IBFdTS748NIymMdRgGu2KoAwXxHXygF1
+         IQtBNU+QN8hs3vUToyW1ALsxoMjebCNBNQfYVQVS8ztmzmfbZsG9xP+xOb+7L5APKqKj
+         rpANIyh0bQr5T0VsTjjsvzk3j1RTBAmOSnalj0hCaI9xn7vznEPoOis8Q3chtrCaUnAe
+         tBVjWz465ZxzGfmNETc8E9ZVwUAwyYKsiihiCfFG2yUBY5XBtsOncxHWQNthxh3Yycjr
+         JENQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H0BbxwVHNwnSrMPUgguGHD04mtg+HPKRQ7WxnV2HF38=;
+        b=j4IFDTApYRzQvJLJlbUlxa5xwkQmKRgJGvEk+fr2vFfsPaEppm/Ft7p+ErDxO/Rayk
+         iuxZnl6fSBnviyh3JkxJM2Aw7BOmjg5EP7cf/nYWrp00xPX1ywu+bvPchISqJYXsAIeG
+         QWrrdOrobrHh2FhBnv4Zlf2JmkGpLyna2Afbs408Hstl7fuJv2f3gegjJN88Uu5AJ2GJ
+         wfIT4GbO+Wz7FKKHBqKT+1X1wRHjHO60NqsRvI2cPIiRV9oLikXYFP1Kj36x3OV9P5JP
+         NndtRCmhABgIFA22J7L8GGABxn2mJh9JGLMMGodBcrnza6rbogudyPU2+j8RrOGH+zLz
+         sU2g==
+X-Gm-Message-State: ANoB5plsPe6hrBTn39e3PRSBCM5Z9Q4kMo8d+QVbGHSUsu2ZDomjLjP3
+        0cNZsR4mU+iex04HMyGyBaoz95Dn8WYXYSRtEgI=
+X-Google-Smtp-Source: AA0mqf63J78Q9RFPzckC3oK1B2mFXsXDeCOwaZCxtQLiEnahGwTCF+DmDFsb0l9h/8xCYCRWEJM5TC2Uy4GT8jLuT7c=
+X-Received: by 2002:a05:6808:108:b0:354:74a1:d0a with SMTP id
+ b8-20020a056808010800b0035474a10d0amr733796oie.204.1671215225622; Fri, 16 Dec
+ 2022 10:27:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221207143351.GA1439513@bhelgaas>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221216174927.1008629-1-wei.liu@kernel.org>
+In-Reply-To: <20221216174927.1008629-1-wei.liu@kernel.org>
+From:   Wedson Almeida Filho <wedsonaf@gmail.com>
+Date:   Fri, 16 Dec 2022 18:26:57 +0000
+Message-ID: <CANeycqo2qKUnyh6XVkBHyAcVjvN9NKJ9sb9bTzkHq7jC1C-B0w@mail.gmail.com>
+Subject: Re: [PATCH] rust: kernel: drop repetition in offset_of macro
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     rust-for-linux@vger.kernel.org,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 07 December 2022 08:33:51 Bjorn Helgaas wrote:
-> On Mon, Nov 14, 2022 at 10:42:25AM -0800, Dmitry Torokhov wrote:
-> > Switch the driver to the generic version of gpiod API (and away from
-> > OF-specific variant), so that we can stop exporting
-> > devm_gpiod_get_from_of_node().
-> > 
-> > Acked-by: Pali Rohár <pali@kernel.org>
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> 
-> This is unrelated to other pending aardvark changes and will help
-> unblock the API removal, so I applied this to pci/ctrl/aardvark for
-> v6.2, thanks!
+On Fri, 16 Dec 2022 at 17:49, Wei Liu <wei.liu@kernel.org> wrote:
+>
+> It doesn't make sense to allow multiple fields to be specified in
+> offset_of.
 
-I'm disappointed that such unimportant change is prioritized and taken
-before any other important changes which are fixing real issue and
-waiting for applying about half of year.
+Why do you say it doesn't make sense?
 
-> > ---
-> > 
-> > v2:
-> >  - collected reviewed-by/acked-by tags
-> >  - updated commit description to remove incorrect assumption of why
-> >    devm_gpiod_get_from_of_node() was used in the first place
-> > 
-> > This is the last user of devm_gpiod_get_from_of_node() in the mainline
-> > (next), it would be great to have it in so that we can remove the API in
-> > the next release cycle.
-> > 
-> > Thanks!
-> > 
-> > 
-> >  drivers/pci/controller/pci-aardvark.c | 23 +++++++++++------------
-> >  1 file changed, 11 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-> > index ba36bbc5897d..5ecfac23c9fc 100644
-> > --- a/drivers/pci/controller/pci-aardvark.c
-> > +++ b/drivers/pci/controller/pci-aardvark.c
-> > @@ -1859,20 +1859,19 @@ static int advk_pcie_probe(struct platform_device *pdev)
-> >  		return ret;
-> >  	}
-> >  
-> > -	pcie->reset_gpio = devm_gpiod_get_from_of_node(dev, dev->of_node,
-> > -						       "reset-gpios", 0,
-> > -						       GPIOD_OUT_LOW,
-> > -						       "pcie1-reset");
-> > +	pcie->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
-> >  	ret = PTR_ERR_OR_ZERO(pcie->reset_gpio);
-> >  	if (ret) {
-> > -		if (ret == -ENOENT) {
-> > -			pcie->reset_gpio = NULL;
-> > -		} else {
-> > -			if (ret != -EPROBE_DEFER)
-> > -				dev_err(dev, "Failed to get reset-gpio: %i\n",
-> > -					ret);
-> > -			return ret;
-> > -		}
-> > +		if (ret != -EPROBE_DEFER)
-> > +			dev_err(dev, "Failed to get reset-gpio: %i\n",
-> > +				ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	ret = gpiod_set_consumer_name(pcie->reset_gpio, "pcie1-reset");
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to set reset gpio name: %d\n", ret);
-> > +		return ret;
-> >  	}
-> >  
-> >  	ret = of_pci_get_max_link_speed(dev->of_node);
-> > -- 
-> > 2.38.1.431.g37b22c650d-goog
-> > 
-> > 
-> > -- 
-> > Dmitry
-> > 
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Here's what I had in mind:
+```
+    struct Y {
+        z: u32
+    }
+    struct X {
+        y: Y
+    }
+    offset_of!(X, y.z)
+```
+
+Which is something very plausible.
+
+> No functional change.
+>
+> Signed-off-by: Wei Liu <wei.liu@kernel.org>
+> ---
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Alex Gaynor <alex.gaynor@gmail.com>
+> Cc: Wedson Almeida Filho <wedsonaf@gmail.com>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Gary Guo <gary@garyguo.net>
+> Cc: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
+> ---
+>  rust/kernel/lib.rs | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+>
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index 6a322effa60c..2f3601e4e27e 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -208,7 +208,7 @@ impl<'a> Drop for KParamGuard<'a> {
+>  /// ```
+>  #[macro_export]
+>  macro_rules! offset_of {
+> -    ($type:ty, $($f:tt)*) =3D> {{
+> +    ($type:ty, $f:tt) =3D> {{
+>          let tmp =3D core::mem::MaybeUninit::<$type>::uninit();
+>          let outer =3D tmp.as_ptr();
+>          // To avoid warnings when nesting `unsafe` blocks.
+> @@ -216,12 +216,14 @@ macro_rules! offset_of {
+>          // SAFETY: The pointer is valid and aligned, just not initialise=
+d; `addr_of` ensures that
+>          // we don't actually read from `outer` (which would be UB) nor c=
+reate an intermediate
+>          // reference.
+> -        let inner =3D unsafe { core::ptr::addr_of!((*outer).$($f)*) } as=
+ *const u8;
+> +        let inner =3D unsafe { core::ptr::addr_of!((*outer).$f) } as *co=
+nst u8;
+>          // To avoid warnings when nesting `unsafe` blocks.
+>          #[allow(unused_unsafe)]
+>          // SAFETY: The two pointers are within the same allocation block=
+.
+> -        unsafe { inner.offset_from(outer as *const u8) }
+> -    }}
+> +        unsafe {
+> +            inner.offset_from(outer as *const u8)
+> +        }
+> +    }};
+>  }
+>
+>  /// Produces a pointer to an object from a pointer to one of its fields.
+> --
+> 2.35.1
+>
