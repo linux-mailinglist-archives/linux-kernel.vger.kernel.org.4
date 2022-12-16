@@ -2,102 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150A664EE49
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E14AD64EE53
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231673AbiLPPyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 10:54:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
+        id S231586AbiLPP5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 10:57:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231608AbiLPPyM (ORCPT
+        with ESMTP id S231612AbiLPP5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 10:54:12 -0500
-Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2912251C;
-        Fri, 16 Dec 2022 07:54:10 -0800 (PST)
-Received: from frontend03.mail.m-online.net (unknown [192.168.6.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4NYYYs2T0Bz1r15j;
-        Fri, 16 Dec 2022 16:54:09 +0100 (CET)
-Received: from localhost (dynscan3.mnet-online.de [192.168.6.84])
-        by mail.m-online.net (Postfix) with ESMTP id 4NYYYr6hBnz1qqlS;
-        Fri, 16 Dec 2022 16:54:08 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan3.mail.m-online.net [192.168.6.84]) (amavisd-new, port 10024)
-        with ESMTP id eeIhuVM2PYYq; Fri, 16 Dec 2022 16:54:07 +0100 (CET)
-X-Auth-Info: IokKxDyfsmKnj/UNbNpukrp2esch72dvMzNGZb0m0793aVz1AxsKNjBAocx5UOrY
-Received: from igel.home (aftr-62-216-205-197.dynamic.mnet-online.de [62.216.205.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Fri, 16 Dec 2022 16:54:07 +0100 (CET)
-Received: by igel.home (Postfix, from userid 1000)
-        id 049FA2C32FE; Fri, 16 Dec 2022 16:54:06 +0100 (CET)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     "'Leizhen (ThunderTown)'" <thunder.leizhen@huawei.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Jiri Olsa" <jolsa@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH v9] kallsyms: Add self-test facility
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
-        <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
-        <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
-        <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
-        <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
-        <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
-        <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
-        <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
-        <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
-        <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
-        <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
-        <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
-        <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com>
-        <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
-        <592dce7a0de24c62bd31c29f86ce6c1b@AcuMS.aculab.com>
-        <87pmcjidfe.fsf@igel.home>
-        <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com>
-X-Yow:  My nose feels like a bad Ronald Reagan movie...
-Date:   Fri, 16 Dec 2022 16:54:06 +0100
-In-Reply-To: <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com> (David
-        Laight's message of "Fri, 16 Dec 2022 15:25:42 +0000")
-Message-ID: <87len7ibtt.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Fri, 16 Dec 2022 10:57:16 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA5510C9
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:57:14 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3b56782b3f6so38188117b3.13
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:57:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1DGsGWjQ0lY/lk24i4F5eJ6jE9F8/BmfTUTGv89WjOU=;
+        b=eYlfeoDL1t77ii7tGk4s1m6jM3NBiZzn4Y5SBnG53bj48asOTxITgykqMQ/xZvB3r3
+         4CBeyy8duebT6/vX+PIbqh1elpnC6H7IHzG/r5QzZYY55Tz48fd9GLLyDOt0UCOa8jj/
+         7uwUdIQKk77jI8eTGYmGFDjzwd+910cdcxBzH5q2f3dVb5LSB9RyMqZQ5ot4c9ICBbba
+         xwlFPs9npFsoTpalFmwj770pXORzpe3Dd7dlaosTl3eW+4ZADgB5cJE3CHONb6rK0EWV
+         LaM4HZ+fkmDllfBQ1TEx1zQMkBtItezLUdjxksjLJiIZHBJPsaygZharnDmDGxaSwMJr
+         7yYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1DGsGWjQ0lY/lk24i4F5eJ6jE9F8/BmfTUTGv89WjOU=;
+        b=brhETNBk7OgwW51EVc8zS9UgN9XJnsb4qv+qC8yOc7tZB5B32iDQdk2wLMfxbSsRwp
+         CZI+O2sjYAUg6vbdNI5iPYsx5+/v6G27LqarWw7gNoqeYSNJrvzO+QSZhudmkfBskMjH
+         ZZzHsQFQahWEtOJoInEvj9uJidzWI8zCLMFv9x+i4OWV1w6H8aA8rJCKdAdlWZ5a6wcP
+         j30nlusuyTdEOUy5rGfHSGvxejYLaY7ytyF2GTpkTeOb82VCjCxie/OxiWjIu7WxxBl/
+         63vFDphYzJ/N3zj3ljc9Q7aBzmhg8O6oewDM7LoT6xqCVfKNbabCXZt3thdb+kEeCiV/
+         XC9A==
+X-Gm-Message-State: ANoB5pmOpGA8EPoYiZcodhyD5jz7JtxHRCc+dZVxi+pt5QBMUvLqsqS9
+        uZsIXjYuIH4LIW9EEbU1FvKByD4YqZLt/AxND79Jii1nX9gghYafLUA=
+X-Google-Smtp-Source: AA0mqf7zGwo31RP+2Xxyawt8Dub0IXytMy+goLFzNzvCDBBqB0ZbozYOJp3bY07v0+jktvVL5wk2C+QblJ4aQYv4xOE=
+X-Received: by 2002:a81:9a95:0:b0:3f2:6ea8:f435 with SMTP id
+ r143-20020a819a95000000b003f26ea8f435mr17498515ywg.277.1671206233242; Fri, 16
+ Dec 2022 07:57:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20221216154938.9426-1-ajye_huang@compal.corp-partner.google.com>
+In-Reply-To: <20221216154938.9426-1-ajye_huang@compal.corp-partner.google.com>
+From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+Date:   Fri, 16 Dec 2022 23:57:02 +0800
+Message-ID: <CALprXBYwNaHCe+EO9G_SvWg2HNVAz62KzaaxGCb1PssJshXUzQ@mail.gmail.com>
+Subject: Re: [PATCH v2] ASoC: Intel: sof_nau8825: add variant with nau8318 amplifier.
+To:     linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Muralidhar Reddy <muralidhar.reddy@intel.com>,
+        "balamurugan . c" <balamurugan.c@intel.com>,
+        Libin Yang <libin.yang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        David Lin <CTLIN0@nuvoton.com>, Brent Lu <brent.lu@intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Dez 16 2022, David Laight wrote:
+Hi Pierre
 
-> Right, but the 'output' values aren't needed and get
+On Fri, Dec 16, 2022 at 11:49 PM Ajye Huang
+<ajye_huang@compal.corp-partner.google.com> wrote:
 
-Yes, they are, because the inline asm modifies them.
+Based on the suggestions you provided in v1,
+> Suggested edit:
+>
+> ASoC: Intel: sof_nau8825: add variant with nau8318 amplifier.
+>
+> That should be added in the commit message please.
+>
 
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+The v2 includes:
+changes from v1->v2:
+* Modify title and add explanations in commit messages .
+* Use new topology file "sof-adl-nau8318-nau8825.tplg" instead of
+sof-adl-max98360a-nau8825.tplg.
+
+Thanks for your suggestions.
