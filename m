@@ -2,105 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E3B64EEB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA6564EEB8
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232004AbiLPQNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 11:13:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45698 "EHLO
+        id S230220AbiLPQOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 11:14:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231728AbiLPQM2 (ORCPT
+        with ESMTP id S231823AbiLPQNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 11:12:28 -0500
-Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA99C19C;
-        Fri, 16 Dec 2022 08:11:55 -0800 (PST)
-Received: from frontend03.mail.m-online.net (unknown [192.168.6.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4NYYyL243Zz1qyc6;
-        Fri, 16 Dec 2022 17:11:54 +0100 (CET)
-Received: from localhost (dynscan3.mnet-online.de [192.168.6.84])
-        by mail.m-online.net (Postfix) with ESMTP id 4NYYyK6FSFz1qqlR;
-        Fri, 16 Dec 2022 17:11:53 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan3.mail.m-online.net [192.168.6.84]) (amavisd-new, port 10024)
-        with ESMTP id yoD-Zq-D6t7a; Fri, 16 Dec 2022 17:11:52 +0100 (CET)
-X-Auth-Info: 7xyE/EYZgGd+zh6w1xyLkFzUICHd8CH1OWjRZbea9vz//EsWmCH5DLi7Q2SSnPMQ
-Received: from igel.home (aftr-62-216-205-197.dynamic.mnet-online.de [62.216.205.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Fri, 16 Dec 2022 17:11:52 +0100 (CET)
-Received: by igel.home (Postfix, from userid 1000)
-        id 4FEF02C32FE; Fri, 16 Dec 2022 17:11:52 +0100 (CET)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     "'Leizhen (ThunderTown)'" <thunder.leizhen@huawei.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Jiri Olsa" <jolsa@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH v9] kallsyms: Add self-test facility
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
-        <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
-        <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
-        <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
-        <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
-        <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
-        <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
-        <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
-        <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
-        <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
-        <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
-        <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
-        <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com>
-        <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
-        <592dce7a0de24c62bd31c29f86ce6c1b@AcuMS.aculab.com>
-        <87pmcjidfe.fsf@igel.home>
-        <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com>
-        <87len7ibtt.fsf@igel.home>
-        <c7cebe9da0474eb880ab14124ba290d0@AcuMS.aculab.com>
-X-Yow:  Somewhere in suburban Honolulu, an unemployed bellhop is whipping up
- a batch of illegal psilocybin chop suey!!
-Date:   Fri, 16 Dec 2022 17:11:52 +0100
-In-Reply-To: <c7cebe9da0474eb880ab14124ba290d0@AcuMS.aculab.com> (David
-        Laight's message of "Fri, 16 Dec 2022 16:09:04 +0000")
-Message-ID: <87fsdfib07.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Fri, 16 Dec 2022 11:13:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B13C29A
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:12:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671207138;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PXgTNglDwNw3QzRYt0nVKdXtcIWSnTSnLY/hNQFklA8=;
+        b=ZBGAJtR3jO7bLgW1cFl+Z76pfJtR6QRWAOJSJlg/Jy+ZfPXKQdWvPPPHTFE7Qajkub4Cmt
+        c3zLq1eUmokI9IUul2RSSRtJ6Qda+HbHXtnVzXjlA+ySokFpIwN5b1BGa7ZShlqGPFaexm
+        2XMs5ABRojUN8XCLqT0bX23/iszXKFY=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-592-qWHA3TLVOJ6Qa7KAGsM7Ag-1; Fri, 16 Dec 2022 11:12:15 -0500
+X-MC-Unique: qWHA3TLVOJ6Qa7KAGsM7Ag-1
+Received: by mail-wr1-f70.google.com with SMTP id r10-20020adfa14a000000b0025ba73dff40so450496wrr.12
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:12:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PXgTNglDwNw3QzRYt0nVKdXtcIWSnTSnLY/hNQFklA8=;
+        b=se/rSjbWpZPvGEiGOROrVz04WNBwHApFP74Bn1+n0o7bRZyTbtO9r5JfeYL3s94fSe
+         4a5NHA2Uwh887m15xAQiMHHBX2ZUgKgoXiN+tuKwNtHLMIovAPX0inIXaFYUY7XCNr2q
+         OLWdCKo4Pd0Pu+0YPPYkuSJ7zWvbT9rGckcejrle9rW6h4m/1hinSKgXMZ8tStHmmJXF
+         CsN1Ev3H8bO93L7wdTn03D4Tbfjpd5e6DZoO/3Xx0E4eeG33kcVleuC0xWcJO/6Hownf
+         MISTobK01KTzaaQ0vhK4IxcrZ0fhJtTXlzTexaClpieqAkFW1q4CU+BWge8yOMV0pdnq
+         JnwQ==
+X-Gm-Message-State: ANoB5plFOBjqHcxTBJxBZVtBhE+ow893EdSumA/W4DqkM1z0TA8KMgSl
+        4MduB7ljFBSh6pFGuUspYGVyvTtMS7jmGEPwKpHSzBHtIub5pUsRrZ2KI4wu2qtsfgIyTAs9vgS
+        jGvbamBq6phKkhBE9IUzzC67J
+X-Received: by 2002:a05:600c:3d12:b0:3cf:7903:5646 with SMTP id bh18-20020a05600c3d1200b003cf79035646mr26187482wmb.24.1671207134415;
+        Fri, 16 Dec 2022 08:12:14 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6BgraJ7ZC9QDnyV4jiSVGe5oF3oq7KBvgD7xPmW94b3HB58zDKJ25FA8Jg3t/JBZCZA8FMbA==
+X-Received: by 2002:a05:600c:3d12:b0:3cf:7903:5646 with SMTP id bh18-20020a05600c3d1200b003cf79035646mr26187462wmb.24.1671207134189;
+        Fri, 16 Dec 2022 08:12:14 -0800 (PST)
+Received: from ?IPV6:2003:cb:c71c:3900:7211:d436:8d8b:531c? (p200300cbc71c39007211d4368d8b531c.dip0.t-ipconnect.de. [2003:cb:c71c:3900:7211:d436:8d8b:531c])
+        by smtp.gmail.com with ESMTPSA id m22-20020a05600c3b1600b003cfd4cf0761sm11944714wms.1.2022.12.16.08.12.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 08:12:13 -0800 (PST)
+Message-ID: <0616b909-b851-0f00-2bd9-f86562af6342@redhat.com>
+Date:   Fri, 16 Dec 2022 17:12:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v4 9/9] mm/hugetlb: Introduce hugetlb_walk()
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     John Hubbard <jhubbard@nvidia.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Jann Horn <jannh@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20221216155100.2043537-1-peterx@redhat.com>
+ <20221216155229.2043750-1-peterx@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221216155229.2043750-1-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Dez 16 2022, David Laight wrote:
+On 16.12.22 16:52, Peter Xu wrote:
+> huge_pte_offset() is the main walker function for hugetlb pgtables.  The
+> name is not really representing what it does, though.
+> 
+> Instead of renaming it, introduce a wrapper function called hugetlb_walk()
+> which will use huge_pte_offset() inside.  Assert on the locks when walking
+> the pgtable.
+> 
+> Note, the vma lock assertion will be a no-op for private mappings.
+> 
+> Document the last special case in the page_vma_mapped_walk() path where we
+> don't need any more lock to call hugetlb_walk().
 
-> The other issue is a missing "memory" clobber.
+That looks cleaner and the lock assertions are IMHO a very good idea.
 
-strcmp is a pure read-only operation.
+Reviewed-by: David Hildenbrand <david@redhat.com>
+
 
 -- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+Thanks,
+
+David / dhildenb
+
