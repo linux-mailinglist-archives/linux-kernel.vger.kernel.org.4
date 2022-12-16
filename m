@@ -2,71 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0BA64F44A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 23:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B93664F44C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 23:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbiLPWzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 17:55:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
+        id S229886AbiLPW5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 17:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiLPWzf (ORCPT
+        with ESMTP id S229674AbiLPW5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 17:55:35 -0500
-Received: from mx4.securetransport.de (mx4.securetransport.de [178.254.6.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B4C61D50
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 14:55:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1671231276;
-        bh=7bVgmZChliTvwSwfBxnI3U/uct5kJwc1JUGp4KNH7l0=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=Hu7XCLYXmgiFaAyxzUK3LOm0snI1kaSlfipDEYLGvOuPULgtiPW23hffTCMahCcN5
-         xR5z2CnaarfDIiBEppDJSHpJTD8yMzuq/Es8eXQ7QaNuw890/Bs3WuvFd3ndfVshNP
-         t36DSapzxBcjhQRCH49DF1teYUr3NcAoCwDt6NzUABN5CCigj7+DjaBmTZxFoFsrCl
-         Z3G+FwzObuxuotV5QDDwv3CtBanRrfd54zaAccIQaGvm1UewzKoJ5Tb8sT2/bdJMws
-         k+wWLORY8qPOXkG67vtlxtl3WoCnjNXWsfLbJv7wm6XzxssaCpnQG6Wr+wCNeg4oV8
-         6sG7kFAgjqWfQ==
-X-secureTransport-forwarded: yes
-From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Complaints-To: abuse@cubewerk.de
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-CC:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shawn Guo <shawnguo@kernel.org>
-Subject: RE: No matching files for file entry added in MAINTAINERS
-Thread-Topic: No matching files for file entry added in MAINTAINERS
-Thread-Index: AQHZETV3L48iYdVPikW6g2xOmHUlRa5xHofA
-Date:   Fri, 16 Dec 2022 22:54:33 +0000
-Message-ID: <df35a27cca8444b884e35b1b9387beb2@dh-electronics.com>
-References: <CAKXUXMxpWOXCUY-dd02P4ckAhF211VJtPTFeTriCMozZon7A5w@mail.gmail.com>
-In-Reply-To: <CAKXUXMxpWOXCUY-dd02P4ckAhF211VJtPTFeTriCMozZon7A5w@mail.gmail.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 16 Dec 2022 17:57:06 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2077.outbound.protection.outlook.com [40.107.237.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADCB6E9F6
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 14:57:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FDStdDbVlaMGEN9gptssgtBCUgoQ2GoiMZ+hwK+BMEXg3Mb6pl7ehvxzL/LPjf1W8H37DaLFiwnjoZhVDp12gNdAR54cFDqB6bg60WSEaUTAoWgVruxLC55oYmv9mm3Occ4rcmmfm6UVXpJRcWGzYcKEjSiUjFd10CGmBVAEiMtyRmKAYcemsnLbZQKEYzsQxGZEuYptcbFiVuysXf2/Cs3GIMU1HLYfhRRWuDuxCmKE1G6LpD4tpciU3Cv86col01rtSSNmSxnwaEcadNqnhpA0EX1H+uCcSbov+GN25HVW5aaHpPZfMjVDih/m3WaJcZwaK8JcJfP8GW1zVvVfig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2EUv0V4VM5gI0P51Kae8hR/xvnjEhuuKqx9LwiQ3CZE=;
+ b=QXmhKvzMsHU+6Ru9Mv1v0qO4WZxAXbuHGOt0XV70az9oLrZu43Nv9cRyLS8p8MeALdUWzoZLfVoYA6+CT+5qUtXl4+YZa3pJ6zVoPO9TsIQlDVsEWQfa8vzn8MNpBJ77fHp5qGP+V1vtLN9yKTiJEU3Y1jmBzPluHGxz+s0DhiyGvs2VGGgqKoZCpJdRM4aOCf7dPc8ALJD56FziwNDAtiMzzayCWDrtuBa2L1WlQIsyMVH8hJdOIBWllcAWJ+4YvSmBUVMzEmCvIFwGx0LRc2EtO4ts/lAZEjrtVjYhfGntVHxGkOTlo+EyTtp8HtzN+P3N2S7l+yZrTdxrqrqQiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2EUv0V4VM5gI0P51Kae8hR/xvnjEhuuKqx9LwiQ3CZE=;
+ b=OC3vwV/YRHKNzjG6TU+oa7AkShUKvQTQmSzfzt8UP6Px4zHlg/P2mpfksC8SeU9P+JnU+k4aJ168/q4WHwPTT8F+30kGf9pFCydywhL2tGjWFRau4Cudm2hQZhUQmsR6ZOfpzf1hRBMtScMv+ntK9lfEExRj3qLsGvAdgyGpQUQq41Tf+fnu7FynuZQXUjAwaoTrDhW20gbQvz4tVUKRdGb91wihoZoPbuTLNIcqntlm9jph2xGY8NK5rA+fTsG0swQdmRs8pofKvx6/sJ01+BxufqpafRwOheX0C/fLyLmukKEEFqkLWEmB73KKHmwF0y6eR1AfQ5W5WVe3msmGHA==
+Received: from DS7PR07CA0006.namprd07.prod.outlook.com (2603:10b6:5:3af::16)
+ by SN7PR12MB7105.namprd12.prod.outlook.com (2603:10b6:806:2a0::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Fri, 16 Dec
+ 2022 22:57:03 +0000
+Received: from DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3af:cafe::f4) by DS7PR07CA0006.outlook.office365.com
+ (2603:10b6:5:3af::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.15 via Frontend
+ Transport; Fri, 16 Dec 2022 22:57:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT014.mail.protection.outlook.com (10.13.173.132) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5924.16 via Frontend Transport; Fri, 16 Dec 2022 22:57:02 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 16 Dec
+ 2022 14:56:49 -0800
+Received: from [10.110.48.28] (10.126.230.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 16 Dec
+ 2022 14:56:48 -0800
+Message-ID: <963ba9b4-6ddf-39bc-85cf-2feef542029d@nvidia.com>
+Date:   Fri, 16 Dec 2022 14:56:47 -0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH mm-unstable] mm: move folio_set_compound_order() to
+ mm/internal.h
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <songmuchun@bytedance.com>, <mike.kravetz@oracle.com>,
+        <willy@infradead.org>
+References: <20221213212053.106058-1-sidhartha.kumar@oracle.com>
+ <20221216142733.e2a716a4cd7ea55240d98391@linux-foundation.org>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20221216142733.e2a716a4cd7ea55240d98391@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.230.37]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT014:EE_|SN7PR12MB7105:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6984869c-c414-4ca9-1245-08dadfb8d8d2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jQI42SaBUUhEBcvYADue9fgarLuyuk6MAGuxC+5dr4C6nHvmcfh4kuWsKKRMk0+b51ZTk3Rp3PZK9jznbwLyG1ROmgwAJ99BbAB7g+Lqh7NFNAhWjJncw1AaTynyjz9eF2TYtNpxVSKKKK3C0UlP2zpwclF6p0fvOZJbGpM+NaVn2UR0aif6nzsa2HzzSMd+cnS3P+0AY3qqQCXwIx2nfp+Cjy3/ni762lQtG9WNXBr+G00BJcWvd0jh2aN43AQBZ7SAm87/PkdW2QXUeyMBBTI3kSQSniemup3gGqmQfisli2w57/cAgs8zm1HpYBq9ejXSQZaUOEeXXPJdmbsZK5P1SYUCzegKOQsz17AI9u4iqLAu2MBG4AApN7tNkthvkj89CcmfIjlyzvlz/HYWrBvaZiSZzV4FdClsEpui3BcXdXjOpJXiRkUvSMrGH1slQTSWeDGgFeKeSXCZoR5PA+k0ehq79L/3GFVuZxesIGBGJx2jtYvajXWCeJ9t65tJb6feQu5IctQrtmIMFk25lVnN1j2oHgGUwdWau9LW9MCtOaTGcrSEdwGM+nApbX0pIQ6n0InGzuUq2zEulLNc/ECA+YJdS84bimXnzRhMGbtMJWOhNVr3aLzTlqhhw9l0sxS3zjHzOaP8OF9cJUqo+eAly67nO9B9fyKu71nPxQ8H8zIxREURAGTSJW0abk2162vLAs+KgX4aC4n98cC8qaI9raBK1fuRhgDzg0NX5nc=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(39860400002)(376002)(396003)(451199015)(36840700001)(40470700004)(46966006)(16576012)(54906003)(31696002)(70586007)(110136005)(8936002)(53546011)(5660300002)(8676002)(36756003)(4326008)(316002)(26005)(82310400005)(47076005)(41300700001)(70206006)(16526019)(83380400001)(336012)(186003)(40460700003)(2616005)(426003)(478600001)(36860700001)(86362001)(2906002)(7636003)(356005)(31686004)(82740400003)(40480700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2022 22:57:02.9562
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6984869c-c414-4ca9-1245-08dadfb8d8d2
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7105
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTHVrYXMgQnVsd2FobiBbbWFpbHRvOmx1a2FzLmJ1bHdhaG5AZ21haWwuY29tXQ0KU2Vu
-dDogRnJpZGF5LCBEZWNlbWJlciAxNiwgMjAyMiAxMTowMiBBTQ0KPiANCj4gRGVhciBDaHJpc3Rv
-cGgsDQo+IA0KPiB3aXRoIGNvbW1pdCA4OTQ3OTllMWY0OTYgKCJNQUlOVEFJTkVSUzogQWRkIERI
-Q09SIHRvIHRoZSBESCBlbGVjdHJvbmljDQo+IGkuTVg2IGJvYXJkIHN1cHBvcnQiKSwgb3JpZ2lu
-YXRpbmcgZnJvbQ0KPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sLzIwMjIxMTE3MTA1MTMx
-LjcwNTktMS1jbmllZGVybWFpZXJAZGgtZWxlY3Ryb25pY3MuY29tLywNCj4geW91IGhhdmUgYWRk
-ZWQgYSBmaWxlIGVudHJ5IHRvIERIIEVMRUNUUk9OSUNTIElNWDYgREhDT00vREhDT1IgQk9BUkQN
-Cj4gU1VQUE9SVCwgYnV0IHRoZXJlIGlzIG5vIGZpbGUgbWF0Y2hpbmcgdGhpcyBlbnRyeSBpbiB0
-aGUgcmVwb3NpdG9yeS4NCj4gDQo+IEFyZSB0aGVyZSBzdGlsbCBmaWxlcyB0byBjb21lIG9yIHNo
-b3VsZCB0aGlzIHBhdHRlcm4gYWN0dWFsbHkgbWF0Y2gNCj4gY2VydGFpbiBmaWxlcyBpbiB0aGUg
-cmVwb3NpdG9yeSwgYnV0IHRoZXkgYXJlIG5hbWVkIHNsaWdodGx5DQo+IGRpZmZlcmVudD8NCj4g
-DQo+IA0KDQpBdCBsZWFzdCBvbmUgREhDT1IgZmlsZSBzaG91bGQgY29tZSBzb29uIGhvcGVmdWxs
-eToNCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LWFybS1rZXJuZWwvMjAyMjExMjMxNzM2
-MDEuMTMyOTEtMi1jbmllZGVybWFpZXJAZGgtZWxlY3Ryb25pY3MuY29tLw0KDQoNCkJlc3QgcmVn
-YXJkcw0KQ2hyaXN0b3BoDQo=
+On 12/16/22 14:27, Andrew Morton wrote:
+> On Tue, 13 Dec 2022 13:20:53 -0800 Sidhartha Kumar <sidhartha.kumar@oracle.com> wrote:
+> 
+>> folio_set_compound_order() is moved to an mm-internal location so external
+>> folio users cannot misuse this function. Change the name of the function
+>> to folio_set_order() and use WARN_ON_ONCE() rather than BUG_ON. Also,
+>> handle the case if a non-large folio is passed and add clarifying comments
+>> to the function.
+>>
+> 
+> This differs from the version I previously merged:
+> 
+> --- a/mm/internal.h~mm-move-folio_set_compound_order-to-mm-internalh-update
+> +++ a/mm/internal.h
+> @@ -384,8 +384,10 @@ int split_free_page(struct page *free_pa
+>    */
+>   static inline void folio_set_order(struct folio *folio, unsigned int order)
+>   {
+> -	if (WARN_ON_ONCE(!folio_test_large(folio)))
+> +	if (!folio_test_large(folio)) {
+> +		WARN_ON_ONCE(order);
+>   		return;
+> +	}
+
+I think that's out of date?
+
+We eventually settled on the version that is (as of this a few minutes
+ago) already in mm-unstable (commit fdea060a130d: "mm: move
+folio_set_compound_order() to mm/internal.h"), which has it like this:
+
+        if (WARN_ON_ONCE(!folio_test_large(folio)))
+                return;
+
+>   
+>   	folio->_folio_order = order;
+>   #ifdef CONFIG_64BIT
+> 
+> Makes sense.  But wouldn't
+> 
+> 	if (WARN_ON_ONCE(order && !folio_test_large(folio)))
+> 
+> be clearer?
+
+That's a little narrower of a check. But maybe that's desirable. Could
+someone (Mike, Muchun, Sidhartha) comment on which behavior is
+preferable, please? I think I'm a little dizzy at this point. :)
+
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
