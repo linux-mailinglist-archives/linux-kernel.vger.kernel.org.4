@@ -2,117 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88EC64ED1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF23E64ED27
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbiLPOqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:46:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S230468AbiLPOxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:53:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiLPOqs (ORCPT
+        with ESMTP id S230385AbiLPOxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:46:48 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FBD5D6AB;
-        Fri, 16 Dec 2022 06:46:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671202008; x=1702738008;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=lLgU8iAuD97bVOvHLDwFY8Y2D9mQMfGe1vN1MfsUUjk=;
-  b=CCtex0BP3MTzXJl8XyMwsd62Ka1BVKwvEN1GHNC0yBCkL6Zgnckg9avi
-   UJgJPicFSaacVtl/273xSoJYwWPqVh5VC83Rn4obLXH1lsvXeS3TfqJuF
-   PUsqo/oWDdstyJvWuNNzQhpImRCe6Y4YR6Z9jIa7y/+B1BmFfrfG1YWc1
-   V7hO0hpxAQ6i/RhlWTwwYQk4yUxiyEE1ddx2CvhH1kStaN28NN/o31vYk
-   ju6qiJUtodqdIpyQWSAwXAi5/uqr5YmmRDHVFXUImv2UrpvJY5SAQ6iLr
-   RgrL22QLXn7cWdlrPRxfEk9h5bXCB1rSk0YWXfKwsQOeW8r38zYul8p5J
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="298649829"
-X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="298649829"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 06:46:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="792096757"
-X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="792096757"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Dec 2022 06:46:43 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p6Bz0-00Atfy-0W;
-        Fri, 16 Dec 2022 16:46:42 +0200
-Date:   Fri, 16 Dec 2022 16:46:41 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Hawa, Hanna" <hhhawa@amazon.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dwmw@amazon.co.uk, benh@amazon.com,
-        ronenk@amazon.com, talel@amazon.com, jonnyc@amazon.com,
-        hanochu@amazon.com, farbere@amazon.com, itamark@amazon.com
-Subject: Re: [PATCH v2 1/1] i2c: designware: set pinctrl recovery information
- from device pinctrl
-Message-ID: <Y5yE0SsfGrwaB5zA@smile.fi.intel.com>
-References: <20221214142725.23881-1-hhhawa@amazon.com>
- <Y5n1U1lYbcbJ5U1k@smile.fi.intel.com>
- <efa9171f-98ac-f518-e59e-f6c4d7d3d4e6@amazon.com>
- <Y5r2pZhe17dVBMme@smile.fi.intel.com>
- <1408bbef-10e3-f76b-b66d-b95e84748e18@amazon.com>
+        Fri, 16 Dec 2022 09:53:46 -0500
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4304A583;
+        Fri, 16 Dec 2022 06:53:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1671202421;
+        bh=jZDXR8e62xNvD/8p2kavm0Ey/5UImO2+MAK5HacDaNk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OvR3iewGUvOqa/KjBCiGuK78vahB0Zihnn1ivyQbNgcOv11YN6U/+TPzZqESC6df5
+         cXhqwodTgZ22uPVvVyRjiQTaIOatgFqk2saMV5/RG+/jo4+08+NG41gGdhQ1Fs7/s/
+         viKJVwJ8HdUCJsiIjPT39JHB75o3T8l6U1n6YbW/hfxvYSa6e0lTs8kIljdqWaGJew
+         phZMn9w7FGK9guqsGIosv2N6snxqQ0nMoETlZK+zGDvr58ieYlX20pKyQkv6/MUzGd
+         FNoRagaj5aBMimTeU5AVp6Xdj6NTtEOyhHEQUaL4uosbdOCRHAmYWrkl48rkCRcRL4
+         vB6dVl9ZDLj/g==
+Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NYXD54TMszbSc;
+        Fri, 16 Dec 2022 09:53:41 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@ACULAB.COM,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Chris Kennelly <ckennelly@google.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH for tip queue/sched/core] selftests/rseq: Add mm_numa_cid to test script
+Date:   Fri, 16 Dec 2022 09:53:32 -0500
+Message-Id: <20221216145332.205095-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1408bbef-10e3-f76b-b66d-b95e84748e18@amazon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 03:50:19PM +0200, Hawa, Hanna wrote:
-> On 12/15/2022 12:27 PM, Andy Shevchenko wrote:
-> > OK, but why that function doesn't use the dev->pins->p if it's defined?
-> > (As a fallback when rinfo->pinctrl is NULL. >
-> 
-> The solution will look like the below diff (get_device_pinctrl() is new
-> function that i've added that return the dev->pins->p)
+Add mm_numa_cid tests to the run_param_test.sh test script.
 
-Naming is not aligned with a namespace.
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ tools/testing/selftests/rseq/run_param_test.sh | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-I would rather name it dev_pinctrl() and locate it in pinctrl/devinfo.h.
-
-...
-
-> -       struct pinctrl *p = bri->pinctrl;
-> +       struct pinctrl *p;
-> +
-> +       if (!bri->pinctrl)
-> +               bri->pinctrl = get_device_pinctrl(dev->parent);
-> +       p = bri->pinctrl;
-
-Can be simplified with help of Elvis:
-
-	p = bri->pinctrl ?: dev_pinctrl(dev->parent);
-
-> > Wolfram?
-> > 
-> > Hanna, it seems you missed I²C maintainer to Cc...
-> 
-> I based my CC/TO on get_maintainer.pl script. Will make sure that Wolfram on
-> CC next time.
-
-All the same about Linus W., who is pin control subsystem maintainer, and be
-sure the respective mailing lists are also included.
-
+diff --git a/tools/testing/selftests/rseq/run_param_test.sh b/tools/testing/selftests/rseq/run_param_test.sh
+index 8d31426ab41f..603b3b69d20c 100755
+--- a/tools/testing/selftests/rseq/run_param_test.sh
++++ b/tools/testing/selftests/rseq/run_param_test.sh
+@@ -47,6 +47,11 @@ function do_tests()
+ 		./param_test_mm_cid ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
+ 		echo "Running mm_cid compare-twice test ${TEST_NAME[$i]}"
+ 		./param_test_mm_cid_compare_twice ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
++
++		echo "Running mm_numa_cid test ${TEST_NAME[$i]}"
++		./param_test_mm_numa_cid ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
++		echo "Running mm_numa_cid compare-twice test ${TEST_NAME[$i]}"
++		./param_test_mm_numa_cid_compare_twice ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
+ 		let "i++"
+ 	done
+ }
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
