@@ -2,97 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF6664E8C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 10:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D0564E8CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 10:46:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbiLPJpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 04:45:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35770 "EHLO
+        id S230216AbiLPJqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 04:46:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiLPJpd (ORCPT
+        with ESMTP id S229613AbiLPJqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 04:45:33 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C70A2FBED
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 01:45:32 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1p67HM-0000CN-6A; Fri, 16 Dec 2022 10:45:20 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1p67HK-0006IN-VK; Fri, 16 Dec 2022 10:45:18 +0100
-Date:   Fri, 16 Dec 2022 10:45:18 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Primoz Fiser <primoz.fiser@norik.com>
-Cc:     Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, upstream@lists.phytec.de
-Subject: Re: [PATCH] i2c: imx: increase retries on arbitration loss
-Message-ID: <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
-References: <20221216084511.2576786-1-primoz.fiser@norik.com>
+        Fri, 16 Dec 2022 04:46:13 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B946D11C1C;
+        Fri, 16 Dec 2022 01:46:10 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id BF11115D7;
+        Fri, 16 Dec 2022 10:46:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1671183968;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=S9k3p+tGla8AZA78altCt53cceGmdNh0wK9bpwDdkkc=;
+        b=0A7cY46hdof1/UJo6hDmGKUOTyEIy1zAWWFCZK1VZazOQ7jPUxVsdqbtwI35h7fLaERKx9
+        OHas81hZtHLmh7ZQRazsX0+RBm2ptUOMCd8Voe8t23KKx0M/qaKi3e/RMdGuhMGT17LykP
+        LTdiAFjmAd9O3g6uyOnBfYe6hXgahioDol3MTX1GM51I2xZcsWIz1i6rGkHi06K8wVz3Wd
+        ECzhe3aKdbkCrolZBnnneL+KXfmlxutCws+p29OUamjeva98afjoWaeVCUFi35qu31fugZ
+        6ZLSxgJ+uqqtNaXGWC9fVjiWyqbku/c2ugHPnUD2JwZ0vdNgRr5UXL+EXjsyFw==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221216084511.2576786-1-primoz.fiser@norik.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Date:   Fri, 16 Dec 2022 10:46:08 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Xu Liang <lxu@maxlinear.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v1 4/4] net: phy: mxl-gpy: disable interrupts on
+ GPY215 by default
+In-Reply-To: <Y4uzYVSRiE9feD01@lunn.ch>
+References: <20221202151204.3318592-1-michael@walle.cc>
+ <20221202151204.3318592-5-michael@walle.cc> <Y4pHCQrDbXXmOT+A@lunn.ch>
+ <69e0468cf192455fd2dc7fc93194a8ff@walle.cc> <Y4uzYVSRiE9feD01@lunn.ch>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <34dc81b01930e594ca4773ddb8c24160@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Primoz,
-
-On 22-12-16, Primoz Fiser wrote:
-> By default, retries value is set to 0 (no retries). Set retries to more
-> sensible value of 3 to allow i2c core to re-attempt transfer in case of
-> i2c arbitration loss (i2c-imx returns -EAGAIN errno is such case).
-
-apart the fact that the number of retries vary a lot and so the client
-driver behaviour can vary a lot which is not good IMHO, why do you think
-that 3 is a sufficient number?
-
-If an arbitration loss happen, why do you think that retrying it 3 times
-changes that?
-
-Regards,
-  Marco
-
-
+Am 2022-12-03 21:36, schrieb Andrew Lunn:
+>> > > @@ -290,6 +291,10 @@ static int gpy_probe(struct phy_device *phydev)
+>> > >  	phydev->priv = priv;
+>> > >  	mutex_init(&priv->mbox_lock);
+>> > >
+>> > > +	if (gpy_has_broken_mdint(phydev) &&
+>> > > +	    !device_property_present(dev,
+>> > > "maxlinear,use-broken-interrupts"))
+>> > > +		phydev->irq = PHY_POLL;
+>> > > +
+>> >
+>> > I'm not sure of ordering here. It could be phydev->irq is set after
+>> > probe. The IRQ is requested as part of phy_connect_direct(), which is
+>> > much later.
+>> 
+>> I've did it that way, because phy_probe() also sets phydev->irq = 
+>> PHY_POLL
+>> in some cases and the phy driver .probe() is called right after it.
 > 
-> Signed-off-by: Primoz Fiser <primoz.fiser@norik.com>
-> ---
->  drivers/i2c/busses/i2c-imx.c | 1 +
->  1 file changed, 1 insertion(+)
+> Yes, it is a valid point to do this check, but on its own i don't
+> think it is sufficient.
+
+Care to elaborate a bit? E.g. what is the difference to the case
+the phy would have an interrupt described but no .config_intr()
+op.
+
+>> > I think a better place for this test is in gpy_config_intr(), return
+>> > -EOPNOTSUPP. phy_enable_interrupts() failing should then cause
+>> > phy_request_interrupt() to use polling.
+>> 
+>> Which will then print a warning, which might be misleading.
+>> Or we disable the warning if -EOPNOTSUPP is returned?
 > 
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index cf5bacf3a488..6a5694cfe1cc 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -1478,6 +1478,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
->  	i2c_imx->adapter.dev.parent	= &pdev->dev;
->  	i2c_imx->adapter.nr		= pdev->id;
->  	i2c_imx->adapter.dev.of_node	= pdev->dev.of_node;
-> +	i2c_imx->adapter.retries	= 3;
->  	i2c_imx->base			= base;
->  	ACPI_COMPANION_SET(&i2c_imx->adapter.dev, ACPI_COMPANION(&pdev->dev));
->  
-> -- 
-> 2.25.1
-> 
-> 
-> 
+> Disabling the warning is the right thing to do.
+
+There is more to this. .config_intr() is also used in
+phy_init_hw() and phy_drv_supports_irq(). The latter would
+still return true in our case. I'm not sure that is correct.
+
+After trying your suggestion, I'm still in favor of somehow
+tell the phy core to force polling mode during probe() of the
+driver. The same way it's done if there is no .config_intr().
+
+It's not like we'd need change the mode after probe during
+runtime. Also with your proposed changed the attachment print
+is wrong/misleading as it still prints the original irq instead
+of PHY_POLL.
+
+-michael
