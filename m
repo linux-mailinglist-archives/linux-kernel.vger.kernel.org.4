@@ -2,128 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839F464EAFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 187A364EB05
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbiLPL4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:56:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
+        id S230165AbiLPL5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLPL4W (ORCPT
+        with ESMTP id S229469AbiLPL5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:56:22 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31C433F;
-        Fri, 16 Dec 2022 03:56:21 -0800 (PST)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        Fri, 16 Dec 2022 06:57:09 -0500
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A3B264F;
+        Fri, 16 Dec 2022 03:57:08 -0800 (PST)
+Received: from frontend03.mail.m-online.net (unknown [192.168.6.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4NYSJK5z16z1r15N;
+        Fri, 16 Dec 2022 12:57:05 +0100 (CET)
+Received: from localhost (dynscan3.mnet-online.de [192.168.6.84])
+        by mail.m-online.net (Postfix) with ESMTP id 4NYSJK33KXz1qqlR;
+        Fri, 16 Dec 2022 12:57:05 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan3.mail.m-online.net [192.168.6.84]) (amavisd-new, port 10024)
+        with ESMTP id qdIf7S9_5Cgo; Fri, 16 Dec 2022 12:57:03 +0100 (CET)
+X-Auth-Info: I9LqOxI019SRTRCJIUeMssxvg6YNOJZppYTy2eQwvJzS6pIPt2lkGXfejHqM6Sjd
+Received: from igel.home (aftr-62-216-205-197.dynamic.mnet-online.de [62.216.205.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 1ADD684CBD;
-        Fri, 16 Dec 2022 12:56:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1671191780;
-        bh=W2uwhnM1KnHLWHQOAr+kuaasVA13yupWdZfCcozE3jg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=P6Al+RuGcliK0ANlkmWfTIP7XF9QSHrti6BUfQknagNdCVrdkf63JJGRWBD9YjdFU
-         roP5qqh1zX61St7RVBWXo/XW1KzlZRUe53w3zJQ6hxcQU0uu0kOK4MZcmqUR9SyLGa
-         VMhFzmf1XSIsGx+vatpkkX23GPtRXtX+OFIqX+8Q1Hn7idf8kX7T+v7WwvXOIKE//0
-         8vPB0GK6+AJRqj2OydXqGjx64y6Efk6qaoXKpr2djx5roBiFbQwdWN0BtBjmWPefLZ
-         Gv2mOgj0ttuJc8Xx0804JyuYV64jqg1OHAksaTNwASo3XuDmDZaf7xR9LTiJfFHb97
-         Sg+TnGwSpHzlQ==
-Date:   Fri, 16 Dec 2022 12:56:12 +0100
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dsa: marvell: Provide per device information
- about max frame size
-Message-ID: <20221216125612.3183fe07@wsk>
-In-Reply-To: <20221215202017.4432ef25@kernel.org>
-References: <20221215144536.3810578-1-lukma@denx.de>
-        <20221215202017.4432ef25@kernel.org>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Fri, 16 Dec 2022 12:57:03 +0100 (CET)
+Received: by igel.home (Postfix, from userid 1000)
+        id AA35E2C31C2; Fri, 16 Dec 2022 12:57:03 +0100 (CET)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Laight <David.Laight@aculab.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: Re: [PATCH v9] kallsyms: Add self-test facility
+References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
+        <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
+        <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
+        <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
+        <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
+        <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
+        <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
+        <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
+        <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
+        <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
+        <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
+X-Yow:  Is there something I should be DOING with a GLAZED DONUT??
+Date:   Fri, 16 Dec 2022 12:57:03 +0100
+In-Reply-To: <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com> (Leizhen's
+        message of "Fri, 16 Dec 2022 17:36:30 +0800")
+Message-ID: <87h6xvk1dc.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/c3k.U7=FBMLow==QLU7n83=";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/c3k.U7=FBMLow==QLU7n83=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Dez 16 2022, Leizhen (ThunderTown) wrote:
 
-Hi Jakub,
+> It seems that the problem is still strcmp(). After I commented strcmp() in
+> arch/m68k/include/asm/string.h, and force it to use the one in lib/string.c,
+> it works well.
 
-> On Thu, 15 Dec 2022 15:45:34 +0100 Lukasz Majewski wrote:
-> > Different Marvell DSA switches support different size of max frame
-> > bytes to be sent.
-> >=20
-> > For example mv88e6185 supports max 1632 bytes, which is now
-> > in-driver standard value. On the other hand - mv88e6250 supports
-> > 2048 bytes.
-> >=20
-> > As this value is internal and may be different for each switch IC,
-> > new entry in struct mv88e6xxx_info has been added to store it. =20
->=20
-> # Form letter - net-next is closed
->=20
+Does that help?
 
-I see....
+diff --git a/arch/m68k/include/asm/string.h b/arch/m68k/include/asm/string.h
+index f759d944c449..cdafd67774e0 100644
+--- a/arch/m68k/include/asm/string.h
++++ b/arch/m68k/include/asm/string.h
+@@ -42,18 +42,19 @@ static inline char *strncpy(char *dest, const char *src, size_t n)
+ #define __HAVE_ARCH_STRCMP
+ static inline int strcmp(const char *cs, const char *ct)
+ {
+-	char res;
++	int res = 0, tmp = 0;
+ 
+ 	asm ("\n"
+ 		"1:	move.b	(%0)+,%2\n"	/* get *cs */
+-		"	cmp.b	(%1)+,%2\n"	/* compare a byte */
++		"	move.b	(%1)+,%3\n"	/* get *ct */
++		"	cmp.b	%3,%2\n"	/* compare a byte */
+ 		"	jne	2f\n"		/* not equal, break out */
+ 		"	tst.b	%2\n"		/* at end of cs? */
+ 		"	jne	1b\n"		/* no, keep going */
+ 		"	jra	3f\n"		/* strings are equal */
+-		"2:	sub.b	-(%1),%2\n"	/* *cs - *ct */
++		"2:	sub.l	%3,%2\n"	/* *cs - *ct */
+ 		"3:"
+-		: "+a" (cs), "+a" (ct), "=d" (res));
++		: "+a" (cs), "+a" (ct), "+d" (res), "+d" (tmp));
+ 	return res;
+ }
+ #endif /* CONFIG_COLDFIRE */
 
-> We have already submitted the networking pull request to Linus
-> for v6.2 and therefore net-next is closed for new drivers, features,
-> code refactoring and optimizations. We are currently accepting
-> bug fixes only.
-
-Ok.
-
->=20
-> Please repost when net-next reopens after Jan 2nd.
->=20
-> RFC patches sent for review only are obviously welcome at any time.
-
-I hope that the discussion regarding those patches will be done by this
-time.
-
-
-Best regards,
-
-Lukasz Majewski
-
---
-
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/c3k.U7=FBMLow==QLU7n83=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmOcXNwACgkQAR8vZIA0
-zr0n1Af+MK+dO8fYjl5t/EZTNMXBCaqMjorxgNDdU61LEUhVXhSzyrizCIOIR7RB
-zTAAMtJNvQBiN9xmCulYVwN9iBowwpEaVVUQrzgTJSBYxuLdc5RKa6cNpaWS2vgx
-H8ciOO7KYJOeYtVw9FYRXQsvQLo4nE06rvQiyKXcW3p8oq1wiqB6kZ2OZ+EbiMPT
-7mpIXZ0O4q50wYqv5i0m96xUyRpWtPncs6f/YeviMfkjkOssI3pTWXxobz2itbxK
-OB5Gauf/MnHB5zRKOH7wMjeW7y8LCkageAEcPIRF40/CKvevVRd35G5vqOnXWaHp
-2TXQmT4Skl9BagTMc4C7Y2CD3lViHA==
-=+0+v
------END PGP SIGNATURE-----
-
---Sig_/c3k.U7=FBMLow==QLU7n83=--
+-- 
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."
