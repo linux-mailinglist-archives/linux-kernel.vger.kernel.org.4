@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B46C64E96D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5473264E969
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiLPK0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 05:26:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55970 "EHLO
+        id S230103AbiLPKZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 05:25:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiLPK0O (ORCPT
+        with ESMTP id S230396AbiLPKYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 05:26:14 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709732980F
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:26:13 -0800 (PST)
-Received: from kwepemm600014.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NYQGG5BtZz16Lj2;
-        Fri, 16 Dec 2022 18:25:10 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.175.28) by
- kwepemm600014.china.huawei.com (7.193.23.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 16 Dec 2022 18:26:10 +0800
-From:   Yi Yang <yiyang13@huawei.com>
-To:     <harry.wentland@amd.com>, <sunpeng.li@amd.com>,
-        <Rodrigo.Siqueira@amd.com>, <alexander.deucher@amd.com>,
-        <christian.koenig@amd.com>, <Xinhui.Pan@amd.com>,
-        <airlied@gmail.com>, <daniel@ffwll.ch>, <yiyang13@huawei.com>
-CC:     <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] drm/amd/display: Remove redundant assignment to variable dc
-Date:   Fri, 16 Dec 2022 18:23:18 +0800
-Message-ID: <20221216102318.197994-1-yiyang13@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 16 Dec 2022 05:24:44 -0500
+Received: from outbound-smtp39.blacknight.com (outbound-smtp39.blacknight.com [46.22.139.222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72AD250D4B
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:24:17 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
+        by outbound-smtp39.blacknight.com (Postfix) with ESMTPS id 04C951C61
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 10:24:16 +0000 (GMT)
+Received: (qmail 5411 invoked from network); 16 Dec 2022 10:24:15 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 16 Dec 2022 10:24:15 -0000
+Date:   Fri, 16 Dec 2022 10:24:10 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     "Akira Naribayashi (Fujitsu)" <a.naribayashi@fujitsu.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] mm, compaction: fix fast_isolate_around() to stay within
+ boundaries
+Message-ID: <20221216102410.hem6wxqyqf43vnnp@techsingularity.net>
+References: <20221027132557.5f724149bd5753036f41512a@linux-foundation.org>
+ <20221031073559.36021-1-a.naribayashi@fujitsu.com>
+ <TYCPR01MB77752C15C512BB7EC952F05BE53C9@TYCPR01MB7775.jpnprd01.prod.outlook.com>
+ <20221107154350.34brdl3ms2ve5wud@techsingularity.net>
+ <TYCPR01MB7775D957483C895456CFE146E53E9@TYCPR01MB7775.jpnprd01.prod.outlook.com>
+ <20221123102550.kbsd3xclsr6o27up@techsingularity.net>
+ <OS3PR01MB7779E069E3F269349D4EEA3AE51C9@OS3PR01MB7779.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.28]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600014.china.huawei.com (7.193.23.54)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <OS3PR01MB7779E069E3F269349D4EEA3AE51C9@OS3PR01MB7779.jpnprd01.prod.outlook.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,33 +52,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch report warning as follows:
+On Fri, Dec 09, 2022 at 09:19:37AM +0000, Akira Naribayashi (Fujitsu) wrote:
+> On Wed, 23 Nov 2022 10:26:05 +0000, Mei Gorman wrote:
+> > On Wed, Nov 09, 2022 at 05:41:12AM +0000, Akira Naribayashi (Fujitsu) wrote:
+> > > On Mon, 7 Nov 2022 15:43:56 +0000, Mei Gorman wrote:
+> > > > On Mon, Nov 07, 2022 at 12:32:34PM +0000, Akira Naribayashi (Fujitsu) wrote:
+> > > > > > Under what circumstances will this panic occur?  I assume those
+> > > > > > circumstnces are pretty rare, give that 6e2b7044c1992 was nearly two
+> > > > > > years ago.
+> > > > > > 
+> > > > > > Did you consider the desirability of backporting this fix into earlier
+> > > > > > kernels?
+> > > > > 
+> > > > > 
+> > > > > Panic can occur on systems with multiple zones in a single pageblock.
+> > > > > 
+> > > > 
+> > > > Please provide an example of the panic and the zoneinfo.
+> > > 
+> > > This issue is occurring in our customer's environment and cannot 
+> > > be shared publicly as it contains customer information.
+> > > Also, the panic is occurring with the kernel in RHEL and may not 
+> > > panic with Upstream's community kernel.
+> > > In other words, it is possible to panic on older kernels.
+> > > I think this fix should be backported to stable kernel series.
+> > > 
+> > > > > The reason it is rare is that it only happens in special configurations.
+> > > > 
+> > > > How is this special configuration created?
+> > > 
+> > > This is the case when the node boundary is not aligned to pageblock boundary.
+> > 
+> > In that case, does this work to avoid rescanning an area that was already
+> > isolated?
+> 
+> In the case of your patch, I think I need to clamp the isolated_end as well.
+> Because sometimes isolated_end < start_pfn(value before entering Scan after) < end_pfn.
+> 
+> After re-reading the source, I think the problem is that min_pfn and low_pfn
+> can be out of range in fast_isolate_freepages.
+> How about the following patch?
+> 
 
-Line 53679: drivers/gpu/drm/amd/display/dc/core/dc_stream.c:402
-dc_stream_set_cursor_position() warn: variable dereferenced before
-check 'stream'
+Ok, makes sense and it is a condition that could happen because of pageblock
+alignment.
 
-The value of 'dc' has been assigned after check whether 'stream' is
-NULL. Fix it by remove redundant assignment.
-
-Signed-off-by: Yi Yang <yiyang13@huawei.com>
----
- drivers/gpu/drm/amd/display/dc/core/dc_stream.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-index 20e534f73513..78d31bb875d1 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-@@ -408,7 +408,7 @@ bool dc_stream_set_cursor_position(
- 	struct dc_stream_state *stream,
- 	const struct dc_cursor_position *position)
- {
--	struct dc  *dc = stream->ctx->dc;
-+	struct dc *dc;
- 	bool reset_idle_optimizations = false;
- 
- 	if (NULL == stream) {
 -- 
-2.17.1
-
+Mel Gorman
+SUSE Labs
