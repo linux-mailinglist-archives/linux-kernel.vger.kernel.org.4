@@ -2,70 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC41D64EAC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:41:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8A464EAC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbiLPLlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:41:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
+        id S230509AbiLPLlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:41:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiLPLlA (ORCPT
+        with ESMTP id S230391AbiLPLlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:41:00 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951A41658C;
-        Fri, 16 Dec 2022 03:40:57 -0800 (PST)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NYRwT59tyzmWjQ;
-        Fri, 16 Dec 2022 19:39:53 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 16 Dec 2022 19:40:54 +0800
-Subject: Re: [PATCH v9] kallsyms: Add self-test facility
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Geert Uytterhoeven' <geert@linux-m68k.org>
-CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
- <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
- <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
- <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
- <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
- <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
- <d2d6feddc28b4c12af06da84bd48d900@AcuMS.aculab.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <75b4f3be-1e79-5602-5774-aa1fab3f07ce@huawei.com>
-Date:   Fri, 16 Dec 2022 19:40:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Fri, 16 Dec 2022 06:41:05 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B77011442
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:41:03 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F19081042;
+        Fri, 16 Dec 2022 03:41:43 -0800 (PST)
+Received: from [10.57.88.234] (unknown [10.57.88.234])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2AF4B3F73B;
+        Fri, 16 Dec 2022 03:41:02 -0800 (PST)
+Message-ID: <a76cb262-a24f-e113-5680-2025aa143ee6@arm.com>
+Date:   Fri, 16 Dec 2022 11:40:57 +0000
 MIME-Version: 1.0
-In-Reply-To: <d2d6feddc28b4c12af06da84bd48d900@AcuMS.aculab.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [6.2][regression] after commit
+ ffcb754584603adf7039d7972564fbf6febdc542 all sound devices disappeared (due
+ BUG at mm/page_alloc.c:3592!)
+Content-Language: en-GB
+To:     Christoph Hellwig <hch@lst.de>,
+        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc:     Takashi Iwai <tiwai@suse.de>, alsa-devel@alsa-project.org,
+        m.szyprowski@samsung.com,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        iommu@lists.linux.dev
+References: <CABXGCsPnpu0TGHnvXM1we7q1t3tJAOYW2rA=AMvf7ZahcYvpRQ@mail.gmail.com>
+ <20221216064645.GA24446@lst.de>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20221216064645.GA24446@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,81 +51,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-12-16 06:46, Christoph Hellwig wrote:
+> Ok, it seems like the sound noncontig alloc code that I already
+> commented on as potentially bogus GFP_GOMP mapping trips this.  I think
+> for now the right thing would be to revert the hunk in dma-iommu.c
+> (see patch below).  The other thing to try would be to remove both
+> uses GFP_COMP in sound/core/memalloc.c, which should have the same
+> effect.
 
+Or we explicitly strip the flag in dma_alloc_noncontiguous() (and maybe 
+dma_alloc_pages() as well) for consistency with dma_alloc_attrs(). That 
+seems like it might be the most robust option.
 
-On 2022/12/16 18:40, David Laight wrote:
-> From: Geert Uytterhoeven 
->> Sent: 15 December 2022 13:25
-> ...
->> Looks like commit 3bc753c06dd02a35 ("kbuild: treat char as always
->> unsigned") is to blame.
->>
->> Changing:
->>
->>     --- a/arch/m68k/include/asm/string.h
->>     +++ b/arch/m68k/include/asm/string.h
->>     @@ -42,7 +42,7 @@ static inline char *strncpy(char *dest, const
->> char *src, size_t n)
->>      #define __HAVE_ARCH_STRCMP
->>      static inline int strcmp(const char *cs, const char *ct)
->>      {
->>     -       char res;
->>     +       signed char res;
->>
->>             asm ("\n"
->>                     "1:     move.b  (%0)+,%2\n"     /* get *cs */
->>
->> fixes strcmp, but the test still fails:
-> 
-> Try 'int res;' and an explicit sign extend (I think):
-> 	"3: extb %2\n"
+Robin.
 
-Compilation failed. I tried "return (int)(signed char)res;", it's still failed.
-
-> 
-> The strcmp() is still wrong if either input string
-> has characters with the top bit set.
-> The result needs to be based of the carry flag not
-> the sign of the byte subtract.
-> 
-> It is too long since I've written m68k asm.
-> I've checked, all byte operations leave the high 24bits
-> unchanged.
-
-Currently, only ASCCIs. So it won't be the reason.
-
-> So it is possible that gcc is making assumptions and
-> skipping the sign extend under some circumstances.
-
-Wow, because compare_symbol_name() works properly during the previous binary
-search, the compiler must have done something bad. So I add 'volatile' to prevent
-compiler optimizations, and it's OK now.
-
-diff --git a/arch/m68k/include/asm/string.h b/arch/m68k/include/asm/string.h
-index f759d944c449940..3db81e5a783c72a 100644
---- a/arch/m68k/include/asm/string.h
-+++ b/arch/m68k/include/asm/string.h
-@@ -42,9 +42,9 @@ static inline char *strncpy(char *dest, const char *src, size_t n)
- #define __HAVE_ARCH_STRCMP
- static inline int strcmp(const char *cs, const char *ct)
- {
--       char res;
-+       signed char res;
-
--       asm ("\n"
-+       asm volatile ("\n"
-                "1:     move.b  (%0)+,%2\n"     /* get *cs */
-                "       cmp.b   (%1)+,%2\n"     /* compare a byte */
-                "       jne     2f\n"           /* not equal, break out */
-
-> 
-> 	David
-> 
+> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+> index 9297b741f5e80e..f798c44e090337 100644
+> --- a/drivers/iommu/dma-iommu.c
+> +++ b/drivers/iommu/dma-iommu.c
+> @@ -744,9 +744,6 @@ static struct page **__iommu_dma_alloc_pages(struct device *dev,
+>   	/* IOMMU can map any pages, so himem can also be used here */
+>   	gfp |= __GFP_NOWARN | __GFP_HIGHMEM;
+>   
+> -	/* It makes no sense to muck about with huge pages */
+> -	gfp &= ~__GFP_COMP;
 > -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+>   	while (count) {
+>   		struct page *page = NULL;
+>   		unsigned int order_size;
 > 
-
--- 
-Regards,
-  Zhen Lei
