@@ -2,149 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E8264EA73
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D33864EA69
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:29:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbiLPLaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:30:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
+        id S231172AbiLPL31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:29:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231190AbiLPLaP (ORCPT
+        with ESMTP id S229655AbiLPL3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:30:15 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53C15C774;
-        Fri, 16 Dec 2022 03:30:14 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGAU6js012202;
-        Fri, 16 Dec 2022 11:30:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=eO9tJ+sOHm8csCMqmAek613rWc3qmqB+k/bvtCllRIg=;
- b=h8eokYaRlgRCyEurF69bSZNnxb2ycqVrly4YPxrV3PTzmH7j2jNBv1+3RpntOkRUJeUZ
- 2sphjzY9jVP9chHOvw9iFkphrFamYnZYCtF/icEobnxBVJT6J0uPPCEjAPbQb65fTC0f
- eTn0NEEM6ENz4MVkyGftfXRkr9eam3bazu6EEVQvvT7ADDGMLC4GvekDI2PmoXhd6Es3
- yOGQWWJZ0TV/DFzID5ppfrbW61tsGSLLsoElaTsIS2CYjr4E/qgFoWYXoOIJgab2au0f
- r+a/0Wrutu6aAUFcML1msgTsw+G8IbsMctLSV07qxQiUGU4JQqHy+Syx8Q5m21Bmkjx5 Ng== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mg2894097-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 11:30:10 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BGBU98A024920
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 11:30:09 GMT
-Received: from blr-ubuntu-173.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 16 Dec 2022 03:30:05 -0800
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <konrad.dybcio@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dianders@chromium.org>,
-        <mka@chromium.org>, Rajendra Nayak <quic_rjendra@quicinc.com>
-Subject: [PATCH v4 2/2] arm64: dts: qcom: sc7280: Add a herobrine CRD Pro SKU
-Date:   Fri, 16 Dec 2022 16:59:18 +0530
-Message-ID: <20221216112918.1243-2-quic_rjendra@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221216112918.1243-1-quic_rjendra@quicinc.com>
-References: <20221216112918.1243-1-quic_rjendra@quicinc.com>
+        Fri, 16 Dec 2022 06:29:25 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B415B5AA;
+        Fri, 16 Dec 2022 03:29:24 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id i187-20020a1c3bc4000000b003d1e906ca23so979240wma.3;
+        Fri, 16 Dec 2022 03:29:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GpaZuAjuThZlRnxKVIKAQ0qtHdJgyrsxdPIII0CXp90=;
+        b=mtPEMKQHC49rkYm08SN7j+aZwE8oH/Dfcl0zxcEud0XrB9fRQY8dX8IcspXsHJId6n
+         kWEXzbqtkYKTFLxjBX8o+I4YntjcX/ZjlAw/zpZ7Zdqku6PiWDARV4Oeba/tqCHMqz3V
+         9sDZYIP5TAGVL7oz9KzO6lQbYnM9j8KYANcD+mgCqJIVUY3a7U6V/5tWaN5r9f3+ub9Z
+         +q3hSddbuiGFqQj49l/oKfjfDMeeOmzhMhrHHLBr5zePDXKzRjWzXUThyhRBRc6baFka
+         fAlkrjxFUQdPqWjR9E1hi65AzC7mreNFqYgr26gvOS1K0jC9v29OK2wdAjcQknXfAgbe
+         NI6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GpaZuAjuThZlRnxKVIKAQ0qtHdJgyrsxdPIII0CXp90=;
+        b=mH0vurqq4p4EcFEdrsSXQq1lSePjSbZgxLAidQoL5WfR/v8QY3+PUHnizeASwoG+en
+         LNBvWzg9EA9bDYdiCJdthxRPjcaXpccOGxc1Wq6GNZwf2lwB1M/Q0oWXCAx0jJY9am+x
+         FEwwXgmACobhKJeQghp153PHP/xIZHs2/SAKqD0MfAo2/glPEyRbYMkTP3YjXu+2n2aG
+         dH44wYBVS9JhDXlYAly01kTT8+JaSAoQZbWP8VaOOlAviVhD+wfAxxPP6goLdOoz4w9S
+         id07rZT2tGKd000/3o1IsHhiv0XODVT6Nz6C1XX74S5YSmUtskj9m8twvfxCWhz9Iz6E
+         TWkA==
+X-Gm-Message-State: ANoB5pkjZybgV+fuK4xY3mf024PS7RMMKI9YQOhatobJci/v8r/vjmNo
+        HIf3ISgOmGp9OM1zG2SWOmY=
+X-Google-Smtp-Source: AA0mqf50vgGgC0E+2Bl73SKnO7Rm9G5Kboue3lmjZtVDqghVtmFE3ITyL4Y94fjiMAmnbOWmSCsVCQ==
+X-Received: by 2002:a7b:cd17:0:b0:3d2:2d2a:d58f with SMTP id f23-20020a7bcd17000000b003d22d2ad58fmr12911627wmj.2.1671190163034;
+        Fri, 16 Dec 2022 03:29:23 -0800 (PST)
+Received: from [192.168.1.132] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id q14-20020a1cf30e000000b003cf6a55d8e8sm2256748wmq.7.2022.12.16.03.29.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 03:29:22 -0800 (PST)
+Message-ID: <ec30d7c3-39af-197b-58df-440dcdb27a36@gmail.com>
+Date:   Fri, 16 Dec 2022 12:29:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 5nP_s860p_75eVnM5f_bGliQCgTVCdny
-X-Proofpoint-ORIG-GUID: 5nP_s860p_75eVnM5f_bGliQCgTVCdny
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-16_07,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- lowpriorityscore=0 bulkscore=0 spamscore=0 priorityscore=1501 phishscore=0
- impostorscore=0 suspectscore=0 malwarescore=0 adultscore=0 mlxlogscore=795
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212160101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 0/4] arm64: dts: mediatek: Fix systimer clock description
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
+        <nfraprado@collabora.com>
+References: <20221201084229.3464449-1-wenst@chromium.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221201084229.3464449-1-wenst@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some of the qualcomm qcard based herobrine devices can come with
-a Pro variant of the chipset on the qcard. Such Pro qcards have
-the smps9 from pm8350c ganged up with smps7 and smps8, so add a
-.dtsi for pro skus that deletes the smps9 node and include it from
-the new dts for the CRD Pro
 
-Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
----
-v4 changes:
-Added the zoglin-sku1536 compatible along with hoglin-sku1536.
-Zoglin is same as the Hoglin variant, with the SPI Flash reduced
-from 64MB to 8MB
 
- arch/arm64/boot/dts/qcom/Makefile                  |  1 +
- .../boot/dts/qcom/sc7280-herobrine-crd-pro.dts     | 14 ++++++++++++++
- .../boot/dts/qcom/sc7280-herobrine-pro-sku.dtsi    |  8 ++++++++
- 3 files changed, 23 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-crd-pro.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-pro-sku.dtsi
+On 01/12/2022 09:42, Chen-Yu Tsai wrote:
+> Hi,
+> 
+> This series fixes the clock description for the systimer block. The
+> systimer is fed by the main 26 MHz oscillator, and internally divides
+> the clock, normally by 2.
+> 
+> However this ended up being modeled in various incorrect ways, such as
+> the clock divider being in the TOPCKGEN block, or as a standalone 13 MHz
+> oscillator.
+> 
+> This series fixes the description of the systimer clock input in an ABI
+> compatible way, i.e. the clock rate of the input clock remains the same
+> at 13 MHz. The clock is now modeled as a divide-by-2 fixed factor clock
+> being fed by the main oscillator.
+> 
+> An added benefit is that in Linux the systimer no longer requires the
+> main SoC clk driver to do an early init dance.
+> 
+> Please have a look.
+> 
+> The next step would be to fix up the systimer driver in a backward
+> compatible way and have it read the divider value from hardware.
+> 
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index d7669a7cee9f..0d0ed0d06e4a 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -104,6 +104,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1-lte.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-crd.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-crd-pro.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-evoker-r0.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r0.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd-pro.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd-pro.dts
-new file mode 100644
-index 000000000000..4ee5f0b0a5de
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd-pro.dts
-@@ -0,0 +1,14 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * sc7280 CRD 3+ Pro board device tree source
-+ *
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#include "sc7280-herobrine-crd.dts"
-+#include "sc7280-herobrine-pro-sku.dtsi"
-+
-+/ {
-+	model = "Qualcomm Technologies, Inc. sc7280 CRD Pro platform (rev5+)";
-+	compatible = "google,zoglin-sku1536", "google,hoglin-sku1536", "qcom,sc7280";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-pro-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-pro-sku.dtsi
-new file mode 100644
-index 000000000000..fb4bbe8aeda0
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-pro-sku.dtsi
-@@ -0,0 +1,8 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Google Herobrine dts fragment for PRO SKUs
-+ *
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+/delete-node/ &vreg_s9c_0p676;
--- 
-2.17.1
+Whole series applied, thanks!
 
+> 
+> Regards
+> ChenYu
+> 
+> Chen-Yu Tsai (4):
+>    arm64: dts: mediatek: mt8183: Fix systimer 13 MHz clock description
+>    arm64: dts: mediatek: mt8192: Fix systimer 13 MHz clock description
+>    arm64: dts: mediatek: mt8195: Fix systimer 13 MHz clock description
+>    arm64: dts: mediatek: mt8186: Fix systimer 13 MHz clock description
+> 
+>   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 12 ++++++++++--
+>   arch/arm64/boot/dts/mediatek/mt8186.dtsi |  8 +++++---
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 12 ++++++++++--
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 11 ++++++++++-
+>   4 files changed, 35 insertions(+), 8 deletions(-)
+> 
