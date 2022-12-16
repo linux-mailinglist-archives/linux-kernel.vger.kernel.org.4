@@ -2,117 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA6564EEB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D5F64EEC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:15:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbiLPQOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 11:14:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45590 "EHLO
+        id S232025AbiLPQOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 11:14:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbiLPQNf (ORCPT
+        with ESMTP id S231757AbiLPQO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 11:13:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B13C29A
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:12:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671207138;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PXgTNglDwNw3QzRYt0nVKdXtcIWSnTSnLY/hNQFklA8=;
-        b=ZBGAJtR3jO7bLgW1cFl+Z76pfJtR6QRWAOJSJlg/Jy+ZfPXKQdWvPPPHTFE7Qajkub4Cmt
-        c3zLq1eUmokI9IUul2RSSRtJ6Qda+HbHXtnVzXjlA+ySokFpIwN5b1BGa7ZShlqGPFaexm
-        2XMs5ABRojUN8XCLqT0bX23/iszXKFY=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-592-qWHA3TLVOJ6Qa7KAGsM7Ag-1; Fri, 16 Dec 2022 11:12:15 -0500
-X-MC-Unique: qWHA3TLVOJ6Qa7KAGsM7Ag-1
-Received: by mail-wr1-f70.google.com with SMTP id r10-20020adfa14a000000b0025ba73dff40so450496wrr.12
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:12:15 -0800 (PST)
+        Fri, 16 Dec 2022 11:14:28 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF578FEF;
+        Fri, 16 Dec 2022 08:14:26 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id 4so2792331plj.3;
+        Fri, 16 Dec 2022 08:14:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nRLE0KwusSvAiIcLR1vSOUa6NaXkWQIhEtVspgyp8bM=;
+        b=ArFOblj7GBSNP1bX2BEOHs3j5CV+HIMEX6xuqSPMbb5kMug16IN2fmgbXY9AsrpD3A
+         qGMR2zm4kt/Np8Ls/76e4VoRDPHy89b/gT9Y/OlyC4BhYPDMRLm0LXKtaERaR+gadXn1
+         Dg8hZyO0FUXBEp7X+j2tyTBlgXuVnMhqfjN2c9V1/Cx7ur0lMi9QrU8HPODuDaRmtrgn
+         YGX9lbVy4VUtvbzmBYNi/d2FnrZ5YB9ryV270huDwwhJNPCrTuSjdyPuE3og8t12d8/5
+         qzWFXaEjFfnE2Fxca/XjqfQHBqsXsYfNM+4D9NwWuHZkHoyVc5ErVzI9bZilnXTB6iFn
+         xpng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PXgTNglDwNw3QzRYt0nVKdXtcIWSnTSnLY/hNQFklA8=;
-        b=se/rSjbWpZPvGEiGOROrVz04WNBwHApFP74Bn1+n0o7bRZyTbtO9r5JfeYL3s94fSe
-         4a5NHA2Uwh887m15xAQiMHHBX2ZUgKgoXiN+tuKwNtHLMIovAPX0inIXaFYUY7XCNr2q
-         OLWdCKo4Pd0Pu+0YPPYkuSJ7zWvbT9rGckcejrle9rW6h4m/1hinSKgXMZ8tStHmmJXF
-         CsN1Ev3H8bO93L7wdTn03D4Tbfjpd5e6DZoO/3Xx0E4eeG33kcVleuC0xWcJO/6Hownf
-         MISTobK01KTzaaQ0vhK4IxcrZ0fhJtTXlzTexaClpieqAkFW1q4CU+BWge8yOMV0pdnq
-         JnwQ==
-X-Gm-Message-State: ANoB5plFOBjqHcxTBJxBZVtBhE+ow893EdSumA/W4DqkM1z0TA8KMgSl
-        4MduB7ljFBSh6pFGuUspYGVyvTtMS7jmGEPwKpHSzBHtIub5pUsRrZ2KI4wu2qtsfgIyTAs9vgS
-        jGvbamBq6phKkhBE9IUzzC67J
-X-Received: by 2002:a05:600c:3d12:b0:3cf:7903:5646 with SMTP id bh18-20020a05600c3d1200b003cf79035646mr26187482wmb.24.1671207134415;
-        Fri, 16 Dec 2022 08:12:14 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6BgraJ7ZC9QDnyV4jiSVGe5oF3oq7KBvgD7xPmW94b3HB58zDKJ25FA8Jg3t/JBZCZA8FMbA==
-X-Received: by 2002:a05:600c:3d12:b0:3cf:7903:5646 with SMTP id bh18-20020a05600c3d1200b003cf79035646mr26187462wmb.24.1671207134189;
-        Fri, 16 Dec 2022 08:12:14 -0800 (PST)
-Received: from ?IPV6:2003:cb:c71c:3900:7211:d436:8d8b:531c? (p200300cbc71c39007211d4368d8b531c.dip0.t-ipconnect.de. [2003:cb:c71c:3900:7211:d436:8d8b:531c])
-        by smtp.gmail.com with ESMTPSA id m22-20020a05600c3b1600b003cfd4cf0761sm11944714wms.1.2022.12.16.08.12.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 08:12:13 -0800 (PST)
-Message-ID: <0616b909-b851-0f00-2bd9-f86562af6342@redhat.com>
-Date:   Fri, 16 Dec 2022 17:12:12 +0100
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nRLE0KwusSvAiIcLR1vSOUa6NaXkWQIhEtVspgyp8bM=;
+        b=sXvMO2jJms02RgO5GjUcjbwL6kpG1TMOXS7sFXn1UoyhRmIKIpvEHFHK6+nIG+5cM5
+         bPqr/61kkR0y+sJOEd4Iol1ZJDWtNVCGl0+WAg3FTkRC1U/ykvjzTvyXJ0+YQlkNGNyM
+         xC1Aj+fwDm9oSNa6aevv/vgUbAdxZOqpKd5qQK4jQKbXFV47KXBfFDTHwMQ0g5pW3lw8
+         CH/si3Bc7jn5vDXXFjUsd+a7MgKb2Km/v3cDMukABArxSiNaL4aYSdJj5fFTFVkQrMjx
+         Dd09ZwlH/UNKw/NCJgX60yowkB1G3k5/9Ab1C796KDjRvIJ4KxOzbAo0OBsH93hugliz
+         BdVg==
+X-Gm-Message-State: ANoB5pkwRETTYrrC7ABekQN0x2w990JlpRdXLsDLqbkRdgle9rbgHqDC
+        F8dTuoDxhtOMeS7ej42NMzc=
+X-Google-Smtp-Source: AA0mqf4P2LoVShFvOZHi2uHuICHfln15BegIiCEq3wUWrIAqfaIv0mPsq8OEIhrB1seVN4Aar5yp6g==
+X-Received: by 2002:a05:6a20:9f96:b0:a3:9f32:a9d1 with SMTP id mm22-20020a056a209f9600b000a39f32a9d1mr42376731pzb.31.1671207266337;
+        Fri, 16 Dec 2022 08:14:26 -0800 (PST)
+Received: from [192.168.0.128] ([98.97.117.20])
+        by smtp.googlemail.com with ESMTPSA id f10-20020a631f0a000000b004790f514f15sm1648371pgf.22.2022.12.16.08.14.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 08:14:25 -0800 (PST)
+Message-ID: <b72b0f7692e5693f214d6acea33b878bfb3a372c.camel@gmail.com>
+Subject: Re: [PATCH] net: ethernet: ti: am65-cpsw: fix CONFIG_PM #ifdef
+From:   Alexander H Duyck <alexander.duyck@gmail.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Roger Quadros <rogerq@kernel.org>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>,
+        Jiri Pirko <jiri@nvidia.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 16 Dec 2022 08:14:24 -0800
+In-Reply-To: <20221215163918.611609-1-arnd@kernel.org>
+References: <20221215163918.611609-1-arnd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v4 9/9] mm/hugetlb: Introduce hugetlb_walk()
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Jann Horn <jannh@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20221216155100.2043537-1-peterx@redhat.com>
- <20221216155229.2043750-1-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20221216155229.2043750-1-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.12.22 16:52, Peter Xu wrote:
-> huge_pte_offset() is the main walker function for hugetlb pgtables.  The
-> name is not really representing what it does, though.
-> 
-> Instead of renaming it, introduce a wrapper function called hugetlb_walk()
-> which will use huge_pte_offset() inside.  Assert on the locks when walking
-> the pgtable.
-> 
-> Note, the vma lock assertion will be a no-op for private mappings.
-> 
-> Document the last special case in the page_vma_mapped_walk() path where we
-> don't need any more lock to call hugetlb_walk().
+On Thu, 2022-12-15 at 17:39 +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> The #ifdef check is incorrect and leads to a warning:
+>=20
+> drivers/net/ethernet/ti/am65-cpsw-nuss.c:1679:13: error: 'am65_cpsw_nuss_=
+remove_rx_chns' defined but not used [-Werror=3Dunused-function]
+>  1679 | static void am65_cpsw_nuss_remove_rx_chns(void *data)
+>=20
+> It's better to remove the #ifdef here and use the modern
+> SYSTEM_SLEEP_PM_OPS() macro instead.
+>=20
+> Fixes: 24bc19b05f1f ("net: ethernet: ti: am65-cpsw: Add suspend/resume su=
+pport")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ether=
+net/ti/am65-cpsw-nuss.c
+> index 9decb0c7961b..ecbde83b5243 100644
+> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> @@ -2878,7 +2878,6 @@ static int am65_cpsw_nuss_remove(struct platform_de=
+vice *pdev)
+>  	return 0;
+>  }
+> =20
+> -#ifdef CONFIG_PM_SLEEP
+>  static int am65_cpsw_nuss_suspend(struct device *dev)
+>  {
+>  	struct am65_cpsw_common *common =3D dev_get_drvdata(dev);
+> @@ -2964,10 +2963,9 @@ static int am65_cpsw_nuss_resume(struct device *de=
+v)
+> =20
+>  	return 0;
+>  }
+> -#endif /* CONFIG_PM_SLEEP */
+> =20
+>  static const struct dev_pm_ops am65_cpsw_nuss_dev_pm_ops =3D {
+> -	SET_SYSTEM_SLEEP_PM_OPS(am65_cpsw_nuss_suspend, am65_cpsw_nuss_resume)
+> +	SYSTEM_SLEEP_PM_OPS(am65_cpsw_nuss_suspend, am65_cpsw_nuss_resume)
+>  };
+> =20
+>  static struct platform_driver am65_cpsw_nuss_driver =3D {
 
-That looks cleaner and the lock assertions are IMHO a very good idea.
+Looks good to me.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
