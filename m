@@ -2,231 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED7B64EB14
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 13:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6F464EB20
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 13:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbiLPMAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 07:00:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
+        id S230364AbiLPMCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 07:02:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbiLPL7d (ORCPT
+        with ESMTP id S231215AbiLPMBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:59:33 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5601F419AE;
-        Fri, 16 Dec 2022 03:59:32 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGBgA4Z028571;
-        Fri, 16 Dec 2022 11:59:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=XlyXheKBqLs4ZdNolNXtSllPLJQwYNwvMeQdQJI7KoA=;
- b=ZJqEg1e/hyZzTqkED8+K3WPXZbMVdDjvDzx0eng0+KMz7J9Aeba0HtZLzs7IurQTx4Ik
- OUzCj5pSTAT/qTPC664VZlHLWe5EzN2U3cCGaohL4vY6SXObmtZcpJ1mE++WTmPvgJwZ
- FajtDMGi3n78zlwPT2pyWpqSYFOQ1t0gUUlAQWmq3VewovcPM4O/KW0xeyvq9RklTAM/
- 1wX2d5jOxXzhwUnnKi1MXkCXpNPKdC8Pot4bier4N3jfyyGnHJdX0gxA8By27J2v4iCh
- ZqXx8MUgqn7k4JMTCI2ofgeH77jK32pwCbbNqL7+b5KKCa9TgBnZmvquj5fcXCVP0BDq 0w== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mgr1bra2p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 11:59:21 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BG2YvXt026978;
-        Fri, 16 Dec 2022 11:59:18 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3meyjbmdv2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 11:59:18 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BGBxFZh40567270
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Dec 2022 11:59:15 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 44D3020043;
-        Fri, 16 Dec 2022 11:59:15 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0A8BB20040;
-        Fri, 16 Dec 2022 11:59:15 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 16 Dec 2022 11:59:14 +0000 (GMT)
-From:   Thomas Richter <tmricht@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, gor@linux.ibm.com, sandipan.das@amd.com,
-        sumanthk@linux.ibm.com
-Cc:     svens@linux.ibm.com, hca@linux.ibm.com,
-        Thomas Richter <tmricht@linux.ibm.com>
-Subject: [PATCH 2/2 v2] perf/test: Fix test case 89 for x86
-Date:   Fri, 16 Dec 2022 12:59:10 +0100
-Message-Id: <20221216115910.369093-2-tmricht@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221216115910.369093-1-tmricht@linux.ibm.com>
-References: <20221216115910.369093-1-tmricht@linux.ibm.com>
+        Fri, 16 Dec 2022 07:01:44 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9751D3F045;
+        Fri, 16 Dec 2022 04:01:42 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NYSJc28k9zqSxx;
+        Fri, 16 Dec 2022 19:57:20 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 16 Dec 2022 20:01:38 +0800
+Subject: Re: [PATCH v9] kallsyms: Add self-test facility
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Laight <David.Laight@aculab.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
+ <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
+ <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
+ <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
+ <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
+ <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
+ <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
+ <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
+ <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
+ <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
+ <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
+ <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com>
+Date:   Fri, 16 Dec 2022 20:01:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: MZBCshCv1kWbzPgIQkFsddBkVb_h98KW
-X-Proofpoint-GUID: MZBCshCv1kWbzPgIQkFsddBkVb_h98KW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-16_07,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- suspectscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0
- bulkscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212160102
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-perf test '89: probe libc's inet_pton & backtrace it with ping'
-fails on x86. Debugging revealed a changed stack trace for the
-ping command using probes:
 
-ping 35729 [002]  8006.365063: probe_libc:inet_pton: (3ff9603e7c0)
-                  12be50 __GI___inet_pton+0x0 (/usr/lib64/libc.so.6)
-                  4fca main+0x139b (/usr/bin/ping)
 
-The line getaddrinfo.... in the call stack is gone.
-It was introduced with glibc version 2.36.8 released
-with Fedora 37.
+On 2022/12/16 19:28, Geert Uytterhoeven wrote:
+> Hi Zhen,
+> 
+> On Fri, Dec 16, 2022 at 10:43 AM Leizhen (ThunderTown)
+> <thunder.leizhen@huawei.com> wrote:
+>> On 2022/12/16 15:42, Leizhen (ThunderTown) wrote:
+>>> On 2022/12/15 22:51, Geert Uytterhoeven wrote:
+>>>> On 30f3bb09778de64 with your debug patch v2:
+>>> I've set up the qemu environment, and I'll try to solve it by tomorrow at the latest.
+>>
+>> It seems that the problem is still strcmp(). After I commented strcmp() in
+>> arch/m68k/include/asm/string.h, and force it to use the one in lib/string.c,
+>> it works well.
+> 
+> I can confirm that.
+> 
+> One difference is that the one in lib/string.c always return -1/0/1,
+> while the m68k version can return other negative or positive numbers.
+> 
+> However, adding:
+> 
+>        if (res < 0) return -1;
+>        if (res > 0) return 1;
+> 
+> to the m68k version doesn't make a difference.
+> 
+> Renaming the m68k version (changed to -1/0/1) to m68k_strcmp(), and
+> the generic version to lib_strcmp(), and adding a wrapper that calls
+> and compares both, shows that both functions do return the same value,
+> and the test succeeds.
+> 
+> Moving the m68k version inside lib/string.c makes the test pass, too.
+> So it must be related to the function being inline, and gcc making
+> (incorrect) assumptions...
 
-To make the test case more robust to glibc changes resulting in changed
-call stack, redesign the test completely.
-Read the output lines from the perf probe of the ping command.
-Create an array of expected patterns. Each array entry specifies a
-pattern that may appear in the perf probe output.
-Check that each probe output line is matched in the expected
-patterns array. If there is no match it is an error.
-However not every pattern in the expected pattern array must be hit
-as there may be redundant entries.
+Yes, it's the compiler's fault. I just replied David Laight:
 
-This scheme does not test the sequence of the call stack but the
-patterns itself are long and complicated enough.
+I added 'volatile' to prevent compiler optimizations, and it's OK now.
 
-Output before on x86
- # ./perf test 89
- 89: probe libc's inet_pton & backtrace it with ping   : FAILED!
- #
+diff --git a/arch/m68k/include/asm/string.h b/arch/m68k/include/asm/string.h
+index f759d944c449940..3db81e5a783c72a 100644
+--- a/arch/m68k/include/asm/string.h
++++ b/arch/m68k/include/asm/string.h
+@@ -42,9 +42,9 @@ static inline char *strncpy(char *dest, const char *src, size_t n)
+ #define __HAVE_ARCH_STRCMP
+ static inline int strcmp(const char *cs, const char *ct)
+ {
+-       char res;
++       signed char res;
 
-Output after on x86
- # ./perf test 89
- 89: probe libc's inet_pton & backtrace it with ping   : Ok
- #
+-       asm ("\n"
++       asm volatile ("\n"
+                "1:     move.b  (%0)+,%2\n"     /* get *cs */
+                "       cmp.b   (%1)+,%2\n"     /* compare a byte */
+                "       jne     2f\n"           /* not equal, break out */
 
-Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
----
- .../shell/record+probe_libc_inet_pton.sh      | 71 ++++++++++++++-----
- 1 file changed, 52 insertions(+), 19 deletions(-)
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+> 
+> .
+> 
 
-diff --git a/tools/perf/tests/shell/record+probe_libc_inet_pton.sh b/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
-index 0f01c62cbee9..4edb2a1ce06b 100755
---- a/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
-+++ b/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
-@@ -30,28 +30,35 @@ add_libc_inet_pton_event() {
- 
- trace_libc_inet_pton_backtrace() {
- 
--	expected=`mktemp -u /tmp/expected.XXX`
-+	declare -a expected
-+	local -i idx=0
- 
--	echo "ping[][0-9 \.:]+$event_name: \([[:xdigit:]]+\)" > $expected
--	echo ".*inet_pton\+0x[[:xdigit:]]+[[:space:]]\($libc|inlined\)$" >> $expected
-+	expected[0]='ping[][0-9 \.:]+'"$event_name"': \([[:xdigit:]]+\)'
-+	expected[1]='.*inet_pton\+0x[[:xdigit:]]+[[:space:]]\('"$libc"'|inlined\)$'
- 	case "$(uname -m)" in
- 	s390x)
- 		eventattr='call-graph=dwarf,max-stack=4'
--		echo "text_to_binary_address.*\+0x[[:xdigit:]]+[[:space:]]\($libc|inlined\)$" >> $expected
--		echo "gaih_inet.*\+0x[[:xdigit:]]+[[:space:]]\($libc|inlined\)$" >> $expected
--		echo "(__GI_)?getaddrinfo\+0x[[:xdigit:]]+[[:space:]]\($libc|inlined\)$" >> $expected
--		echo "main\+0x[[:xdigit:]]+[[:space:]]\(.*/bin/ping.*\)$" >> $expected
-+		expected[2]='text_to_binary_address.*\+0x[[:xdigit:]]+[[:space:]]\($libc|inlined\)$'
-+		expected[3]='gaih_inet.*\+0x[[:xdigit:]]+[[:space:]]\('"$libc"'|inlined\)$'
-+		expected[4]='(__GI_)?getaddrinfo\+0x[[:xdigit:]]+[[:space:]]\('"$libc"'|inlined\)$'
-+		expected[5]='main\+0x[[:xdigit:]]+[[:space:]]\(.*/bin/ping.*\)$'
- 		;;
- 	ppc64|ppc64le)
- 		eventattr='max-stack=4'
--		echo "gaih_inet.*\+0x[[:xdigit:]]+[[:space:]]\($libc\)$" >> $expected
--		echo "getaddrinfo\+0x[[:xdigit:]]+[[:space:]]\($libc\)$" >> $expected
--		echo ".*(\+0x[[:xdigit:]]+|\[unknown\])[[:space:]]\(.*/bin/ping.*\)$" >> $expected
-+		expected[2]='gaih_inet.*\+0x[[:xdigit:]]+[[:space:]]\('"$libc"'\)$'
-+		expected[3]='getaddrinfo\+0x[[:xdigit:]]+[[:space:]]\('"$libc"'\)$'
-+		# Line valid with glibc 2.35.x with fedora 36
-+		expected[4]='.*(\+0x[[:xdigit:]]+|\[unknown\])[[:space:]]\(.*/bin/ping.*\)$'
-+		# New line introduced with glibc 2.36.x with fedora 37, replaces previous line
-+		expected[5]='[[:xdigit:]]+[[:space:]](\[unknown\]|main)\+0x[[:xdigit:]]+.*\(.*/bin/ping.*\)$'
- 		;;
- 	*)
- 		eventattr='max-stack=3'
--		echo "getaddrinfo\+0x[[:xdigit:]]+[[:space:]]\($libc\)$" >> $expected
--		echo ".*(\+0x[[:xdigit:]]+|\[unknown\])[[:space:]]\(.*/bin/ping.*\)$" >> $expected
-+		expected[2]='getaddrinfo\+0x[[:xdigit:]]+[[:space:]]\('"$libc"'\)$'
-+		# Line valid with glibc 2.35.x with fedora 36
-+		expected[3]='.*(\+0x[[:xdigit:]]+|\[unknown\])[[:space:]]\(.*/bin/ping.*\)$'
-+		# New line introduced with glibc 2.36.x with fedora 37, replaces previous line
-+		expected[4]='[[:xdigit:]]+[[:space:]](\[unknown\]|main)\+0x[[:xdigit:]]+.*\(.*/bin/ping.*\)$'
- 		;;
- 	esac
- 
-@@ -60,16 +67,42 @@ trace_libc_inet_pton_backtrace() {
- 	perf record -e $event_name/$eventattr/ -o $perf_data ping -6 -c 1 ::1 > /dev/null 2>&1
- 	perf script -i $perf_data > $perf_script
- 
-+	# To make the call stack checking more robust to changes in the glibc
-+	# just check that each probe output line appears in the expected
-+	# patterns array.
-+	# This scheme does not check the sequence as before but tests
-+	# that every line in the call stack is expected. Considering the
-+	# long patterns this should be save too.
-+	declare -a linehit linein
- 	exec 3<$perf_script
--	exec 4<$expected
--	while read line <&3 && read -r pattern <&4; do
--		[ -z "$pattern" ] && break
--		echo $line
--		echo "$line" | egrep -q "$pattern"
--		if [ $? -ne 0 ] ; then
--			printf "FAIL: expected backtrace entry \"%s\" got \"%s\"\n" "$pattern" "$line"
-+
-+	# Number of input lines to check, take value from max-stack attribute
-+	lines_to_check="${eventattr##*=}"
-+	while read line <&3; do
-+		[ "$idx" -ge "$lines_to_check" ] && break
-+		[ -z "$line" ] && break
-+
-+		for pattern in "${expected[@]}"
-+		do
-+			# echo PATTERN "$pattern"
-+			linehit[$idx]=0
-+			echo "$line" | egrep -q "$pattern"
-+			[ $? -eq 0 ] && { linehit[$idx]=1; break; }
-+		done
-+		linein[$idx]="$line"
-+		echo HIT "${linehit[$idx]}" LINE "'"$line"'"
-+		((++idx))
-+	done
-+	# Now check that every input line was expected
-+	idx=0
-+	for hit in "${linehit[@]}"
-+	do
-+		if [ "$hit" -eq 0 ]
-+		then
-+			printf "FAIL: missing backtrace entry for line \"%s\"" "${linein[$idx]}"
- 			return 1
- 		fi
-+		((++idx))
- 	done
- 
- 	# If any statements are executed from this point onwards,
 -- 
-2.38.1
-
+Regards,
+  Zhen Lei
