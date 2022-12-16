@@ -2,111 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950CE64EA24
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6194F64EA29
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbiLPLTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:19:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
+        id S230515AbiLPLUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:20:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbiLPLTj (ORCPT
+        with ESMTP id S230504AbiLPLTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:19:39 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8678F58F
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:19:38 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id g7so2998306lfv.5
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:19:38 -0800 (PST)
+        Fri, 16 Dec 2022 06:19:54 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EAE566E4
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:19:52 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id ay40so1637731wmb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:19:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LMQ7FpzOBZak5beUJf6CKIqGy2hYvzKsc2zFOmDZfvI=;
-        b=VajkuKQ58L51MwGIWzeMZwYkKycZ9q0wbkB1HOl/hNWLovr27Lwx/zr4ybvlMmx8TJ
-         r3AGkzqvSPRKpIAjeq0l8ashsfg49oXwhgiIMyKL5JZnxct2+2R4Lx5iJK7g7oHvbR+g
-         8stREbOkWE/EmW7/8p/rLR8h9fXX9lCcWF6w1/altSMURpQvN5fedvRZ9fAiC7D6SZzN
-         wxghaIQkrOtU7qVoIHBZi0TBjnPGOFARn+BOMkZUSPrOTTHPZo1ijgpUKTZXwuVPBc0k
-         pDbaiCKRDxWMKNRdUjKVdQegrIQGE+Trcij+1COkAukUJxXs0yPUbU2Ovt1Ro53kdDb3
-         Bl3g==
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yTqI/CbUV6jX5wui5JlBloMcUYv0mbcJiOcRypXtbrA=;
+        b=PCIQzT4VelcoRW6FLNL6ix0D1MEvir/ty9yEjUivHY/4Aq2UqohEsun4e4TVjc4aI+
+         HQ1JVqKmffKvBJE8+NpYDcJTKQbaZspIS7Kip5cBDTFcdnJnpi6q4UTaY9WW2dm9YLlU
+         N7NQ6qIHu0FoDmfQwAK2spJGEJyyw9HpWDgzdSxfaK7jiPGiJll+lovvCoBHgSgj/VLO
+         s2sGvdQyWLPUYzSeBYj45LBZ7jsLIvnQr2bGi8mNRadiIY0gW6OUAzfQMFcdaG62XKYh
+         a2Rky7gWgQQXSI664j75HPyc9qkIYPIHS8PovfyKile0OWlNfdqbuyUgxtXGeWOuMWz8
+         FrJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LMQ7FpzOBZak5beUJf6CKIqGy2hYvzKsc2zFOmDZfvI=;
-        b=2DyGbSPSHQp0s2RiiOwu1XxxA/9gf20U9gEkryIbeU98LQhZm5nmFhoVb9Mhg/Bh1O
-         yDH/43YzRnzCS80cdF+L06HYRpiwczuq25RLP2URAuk2aVjuiAuE6n8flgEP8hbnD7+g
-         zfE37ko9P3WmBnc4nNqen4lj7k/HT+uCiacIhrbZ8RT9bYvICo45GUBk/UwEWQfLGrfH
-         kFXlVwSeKGZchGnhCZ8GIL3qP89SxYPYOhC+LOCVvrkrd0VdF72/bhmgs97NGvvxbvF6
-         b+zJOq3/p5z/B/2lRcIaQBCjOM9Oj/3XvzZuIny9xRL51+hYQXcnSZlfLvurFkPcWAPg
-         0QYg==
-X-Gm-Message-State: ANoB5pnT5UGLIOAMTgGSgWwdrVJ4k7uiWhbIcDwFNMuoothxeetjPvmN
-        2c9U6pLFV9qwevruxsYPWR+k7A==
-X-Google-Smtp-Source: AA0mqf6E6R7NQ3gUyV3W6qibunKn/6TjbRWAoTtVX70oaOyFl1rGOA7DpTMXfyBr3vwnp2Szdebr7A==
-X-Received: by 2002:ac2:4f0a:0:b0:4ac:ec52:e063 with SMTP id k10-20020ac24f0a000000b004acec52e063mr8769192lfr.29.1671189577159;
-        Fri, 16 Dec 2022 03:19:37 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id k11-20020ac257cb000000b004b55da01d3csm190489lfo.191.2022.12.16.03.19.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 03:19:36 -0800 (PST)
-Message-ID: <332ccb85-fb71-cf4e-0516-50b30420c49a@linaro.org>
-Date:   Fri, 16 Dec 2022 12:19:35 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 7/9] net: stmmac: Add glue layer for StarFive JH71x0
- SoCs
-Content-Language: en-US
-To:     Yanhong Wang <yanhong.wang@starfivetech.com>,
-        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yTqI/CbUV6jX5wui5JlBloMcUYv0mbcJiOcRypXtbrA=;
+        b=2q6Rw+8W1OpuHYyRxk0s0WlqWG2TsZ8B7F406lrcSGIU7ZivsenlOep3HbkDoV/yGa
+         womjX377s4R0SeTjcGYHj+Z/1Ayd5czDXott06oPdjRm/Ejc2pw9Dh+qXv7ngGvzMsI4
+         jFpytMeOYNXsLH+0YcKopS0K4xJX0e0X/KUxPB0sA9aWtSic/YJ/2JNCAR5of49NbGls
+         RTdMTVfWQZH2psvBSjrKNdwiy4tPeJkW1U0kJnddxmJtdEwzi9J5fgqb+aBox9xYtJ3q
+         ze5vn90tKK9kWtKuE4CovCGOkZgDXr4QhGDScUngGjaX//L8e9Fr28lDXL7LZ8i/FJ47
+         DStQ==
+X-Gm-Message-State: ANoB5pk9YCAbPGovdiw33VMaQEzilPd7DPc4xYQTmXer4jXWSEtif8Lv
+        5ICE4AWao/Z12g7bI91ta9bPAA==
+X-Google-Smtp-Source: AA0mqf6Mf9CTSxZ3ImnQysNj0CvMXjr990uEVF3HpCsC9SxxmPGmrBCVq5wr7QtdHX28vgEdaWa5Kg==
+X-Received: by 2002:a1c:f315:0:b0:3cf:a5df:8bb0 with SMTP id q21-20020a1cf315000000b003cfa5df8bb0mr25853743wmq.37.1671189590508;
+        Fri, 16 Dec 2022 03:19:50 -0800 (PST)
+Received: from localhost ([86.61.181.4])
+        by smtp.gmail.com with ESMTPSA id y18-20020a5d4ad2000000b002365cd93d05sm2032160wrs.102.2022.12.16.03.19.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 03:19:49 -0800 (PST)
+Date:   Fri, 16 Dec 2022 12:19:48 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20221216070632.11444-1-yanhong.wang@starfivetech.com>
- <20221216070632.11444-8-yanhong.wang@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221216070632.11444-8-yanhong.wang@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Menglong Dong <imagedong@tencent.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Petr Machata <petrm@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: Fix documentation for
+ unregister_netdevice_notifier_net
+Message-ID: <Y5xUVF4tL5sM2iBx@nanopsycho>
+References: <20221216094838.683379-1-linmq006@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221216094838.683379-1-linmq006@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/12/2022 08:06, Yanhong Wang wrote:
-> This adds StarFive dwmac driver support on the StarFive JH71x0 SoCs.
-> 
-> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
-> Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+Fri, Dec 16, 2022 at 10:48:35AM CET, linmq006@gmail.com wrote:
+>unregister_netdevice_notifier_net() is used for unregister a notifier
+>registered by register_netdevice_notifier_net(). Also s/into/from/.
+>
+>Fixes: a30c7b429f2d ("net: introduce per-netns netdevice notifiers")
 
+Hmm, I believe that comment fixes should not contain the fixes tag not
+to confuse anyone (bot) as this is not fixing a bug. This is net-next
+tree material, please mark it as such in the patch subject line:
+[PATCH net-next v2] ...
 
-> +
-> +static const struct of_device_id starfive_eth_plat_match[] = {
-> +	{
-> +		.compatible = "starfive,jh7110-dwmac"
-> +	},
-> +	{
-> +		.compatible = "starfive,jh7100-dwmac",
-
-NAK.
-
-This wasn't even checked with checkpatch.
-
-Best regards,
-Krzysztof
-
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>
