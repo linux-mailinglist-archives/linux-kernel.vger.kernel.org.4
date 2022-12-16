@@ -2,141 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79ED64E82B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 09:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB4F64E867
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 10:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiLPIgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 03:36:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
+        id S230012AbiLPJAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 04:00:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiLPIgS (ORCPT
+        with ESMTP id S229625AbiLPJAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 03:36:18 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C3431DE4
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 00:36:17 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4NYMrb43BGz9swJ;
-        Fri, 16 Dec 2022 09:36:15 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ZVV7Q_2gDyTG; Fri, 16 Dec 2022 09:36:15 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4NYMrb37jZz9svq;
-        Fri, 16 Dec 2022 09:36:15 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5B9E58B77D;
-        Fri, 16 Dec 2022 09:36:15 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id q8d1mazGsJcf; Fri, 16 Dec 2022 09:36:15 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.183])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2217B8B764;
-        Fri, 16 Dec 2022 09:36:15 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2BG8Zvwu1184359
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 09:35:57 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2BG8ZtRh1184326;
-        Fri, 16 Dec 2022 09:35:55 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: [PATCH v2] powerpc: Pass correct CPU reference to assembler
-Date:   Fri, 16 Dec 2022 09:35:50 +0100
-Message-Id: <01fe73614988e2402a7526fb6b6e903bc3777bb5.1671179743.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.38.1
+        Fri, 16 Dec 2022 04:00:19 -0500
+X-Greylist: delayed 1408 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 16 Dec 2022 01:00:17 PST
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E64BEE;
+        Fri, 16 Dec 2022 01:00:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=87aWwPPjK19BvtHVTIVboj/uOUAwcf66BPCr/bQAgog=; b=QKCiMpWWv9MV2soRPTwd0LYaC9
+        vK8RSvKKzsIDdI65zdjiOLVISol8ouOPP98/y7ENY23IZjuNZjnqAVPEHpxExT4S3bq5lNyJiw5fy
+        Cb7Gd+wpo5fLu3aDzFMRaRgVftuVefnRmzit5hblWBuJGYUlSA8nbs0mWkGYBhUwNPJajOBtnbbrd
+        C7pATXkK+3PsiupAOEK0euz+6imQU8lkpF2f6S+yKt0HChKRS+MZoLIefN6m3AEkQghPsfPCLpBh9
+        AZozyGkc24OPUs5E45kNZPDOY/Wo4tONmllIbmpPtXZTRCbQTfwmbrsGvqV31FC3YdUYP2LEIwD67
+        xWCnpRwQ==;
+Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:44022 helo=z840.regau.abatec.at)
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <primoz.fiser@norik.com>)
+        id 1p66Cq-004psH-2n;
+        Fri, 16 Dec 2022 09:36:43 +0100
+From:   Primoz Fiser <primoz.fiser@norik.com>
+To:     Support Opensource <support.opensource@diasemi.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     upstream@lists.phytec.de
+Subject: [PATCH] watchdog: da9062: da9063: use unlocked xfer function in restart
+Date:   Fri, 16 Dec 2022 09:36:45 +0100
+Message-Id: <20221216083645.2574077-1-primoz.fiser@norik.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1671179748; l=4545; s=20211009; h=from:subject:message-id; bh=uEgRQbc9vmLV1F3vTqBoGDj7Z21M05//0e1ScoBT3gE=; b=Bq+rjTOnTECHkVN81bSpCar4bIIeCHQ7VmxGgghh8JjLFXyDjGF25i5JtCvg4NdGcds+dSypyLqy a+lxgg85COsubDLG4SWeMlO85sZifyOufOgjDQMIhwlBhqkPIfa3
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: primoz.fiser@norik.com
+X-Authenticated-Sender: cpanel.siel.si: primoz.fiser@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jan-Benedict reported issue with building ppc64e_defconfig
-with mainline GCC work:
+Machine resets via da9062/da9063 PMICs are challenging since one needs
+to use special i2c atomic transfers due to the fact interrupts are
+disabled in such late system stages. This is the reason both PMICs don't
+use regmap and have instead opted for i2c_smbus_write_byte_data() in
+restart handlers.
 
-  powerpc64-linux-gcc -Wp,-MMD,arch/powerpc/kernel/vdso/.gettimeofday-64.o.d -nostdinc -I./arch/powerpc/include -I./arch/powerpc/include/generated  -I./include -I./arch/powerpc/include/uapi -I./arch/powerpc/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/compiler-version.h -include ./include/linux/kconfig.h -D__KERNEL__ -I ./arch/powerpc -DHAVE_AS_ATHIGH=1 -fmacro-prefix-map=./= -D__ASSEMBLY__ -fno-PIE -m64 -Wl,-a64 -mabi=elfv1 -Wa,-me500 -Wa,-me500mc -mabi=elfv1 -mbig-endian    -Wl,-soname=linux-vdso64.so.1 -D__VDSO64__ -s -c -o arch/powerpc/kernel/vdso/gettimeofday-64.o arch/powerpc/kernel/vdso/gettimeofday.S
-	arch/powerpc/kernel/vdso/gettimeofday.S: Assembler messages:
-	arch/powerpc/kernel/vdso/gettimeofday.S:72: Error: unrecognized opcode: `stdu'
-	arch/powerpc/kernel/vdso/gettimeofday.S:72: Error: unrecognized opcode: `stdu'
-	arch/powerpc/kernel/vdso/gettimeofday.S:72: Error: unrecognized opcode: `std'
-	arch/powerpc/kernel/vdso/gettimeofday.S:72: Error: unrecognized opcode: `std'
-	arch/powerpc/kernel/vdso/gettimeofday.S:72: Error: unrecognized opcode: `ld'
-	arch/powerpc/kernel/vdso/gettimeofday.S:72: Error: unrecognized opcode: `ld'
-	...
-	make[1]: *** [arch/powerpc/kernel/vdso/Makefile:76: arch/powerpc/kernel/vdso/gettimeofday-64.o] Error 1
-	make: *** [arch/powerpc/Makefile:387: vdso_prepare] Error 2
+However extensive testing revealed that even using atomic safe function
+is not enough and occasional resets fail with error message "Failed to
+shutdown (err =  -11)". This is due to the fact that function
+i2c_smbus_write_byte_data() in turn calls __i2c_lock_bus_helper()
+which might fail with -EAGAIN when bus lock is already taken and cannot
+be released anymore.
 
-This is due to assembler being called with -me500mc which is
-a 32 bits target.
+Thus replace i2c_smbus_write_byte_data() with unlocked flavor of
+i2c_smbus_xfer() function to avoid above dead-lock scenario. At this
+system stage we don't care about proper locking anymore and only want
+proper machine reset to be carried out.
 
-The problem comes from the fact that CONFIG_PPC_E500MC is selected for
-both the e500mc (32 bits) and the e5500 (64 bits), and therefore the
-following makefile rule is wrong:
-
-  cpu-as-$(CONFIG_PPC_E500MC)    += $(call as-option,-Wa$(comma)-me500mc)
-
-Today we have CONFIG_TARGET_CPU which provides the identification of the
-expected CPU, it is used for GCC. Use it as well for the assembler.
-
-With that change (And also commit 825eada7717c ("powerpc/64: Set
-default CPU in Kconfig")), it now is:
-
-  powerpc64-linux-gcc -Wp,-MMD,arch/powerpc/kernel/vdso/.gettimeofday-64.o.d -nostdinc -I./arch/powerpc/include -I./arch/powerpc/include/generated  -I./include -I./arch/powerpc/include/uapi -I./arch/powerpc/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/compiler-version.h -include ./include/linux/kconfig.h -D__KERNEL__ -I ./arch/powerpc -DHAVE_AS_ATHIGH=1 -fmacro-prefix-map=./= -D__ASSEMBLY__ -fno-PIE -m64 -Wl,-a64 -mabi=elfv1 -mcpu=e500mc64 -Wa,-me500mc64 -mabi=elfv1 -mbig-endian    -Wl,-soname=linux-vdso64.so.1 -D__VDSO64__ -s -c -o arch/powerpc/kernel/vdso/gettimeofday-64.o arch/powerpc/kernel/vdso/gettimeofday.S
-
-Reported-by: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Primoz Fiser <primoz.fiser@norik.com>
 ---
-v2: When target cpu is powerpc, the option to be used is -mppc
+ drivers/watchdog/da9062_wdt.c | 15 ++++++++++++---
+ drivers/watchdog/da9063_wdt.c | 15 ++++++++++++---
+ 2 files changed, 24 insertions(+), 6 deletions(-)
 
-Commit 825eada7717c is in powerpc/next-test branch. Make sure the SHA doesn't change when it goes into powerpc/next
----
- arch/powerpc/Makefile | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-index bf5f0a998273..528452ce80b4 100644
---- a/arch/powerpc/Makefile
-+++ b/arch/powerpc/Makefile
-@@ -201,18 +201,20 @@ KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
- # often slow when they are implemented at all
- KBUILD_CFLAGS		+= $(call cc-option,-mno-string)
+diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
+index f02cbd530538..1ec33b4bd2f2 100644
+--- a/drivers/watchdog/da9062_wdt.c
++++ b/drivers/watchdog/da9062_wdt.c
+@@ -155,11 +155,20 @@ static int da9062_wdt_restart(struct watchdog_device *wdd, unsigned long action,
+ {
+ 	struct da9062_watchdog *wdt = watchdog_get_drvdata(wdd);
+ 	struct i2c_client *client = to_i2c_client(wdt->hw->dev);
++	union i2c_smbus_data msg;
+ 	int ret;
  
--cpu-as-$(CONFIG_40x)		+= -Wa,-m405
--cpu-as-$(CONFIG_44x)		+= -Wa,-m440
- cpu-as-$(CONFIG_ALTIVEC)	+= $(call as-option,-Wa$(comma)-maltivec)
--cpu-as-$(CONFIG_PPC_E500)		+= -Wa,-me500
+-	/* Don't use regmap because it is not atomic safe */
+-	ret = i2c_smbus_write_byte_data(client, DA9062AA_CONTROL_F,
+-					DA9062AA_SHUTDOWN_MASK);
++	/*
++	 * Don't use regmap because it is not atomic safe. Additionally, use
++	 * unlocked flavor of i2c_smbus_xfer to avoid scenario where i2c bus
++	 * might be previously locked by some process unable to release the
++	 * lock due to interrupts already being disabled at this late stage.
++	 */
++	msg.byte = DA9062AA_SHUTDOWN_MASK;
++	ret = __i2c_smbus_xfer(client->adapter, client->addr, client->flags,
++			I2C_SMBUS_WRITE, DA9062AA_CONTROL_F,
++			I2C_SMBUS_BYTE_DATA, &msg);
 +
-+ifeq ($(CONFIG_TARGET_CPU),powerpc)
-+cpu-as-$(CONFIG_TARGET_CPU_BOOL)	+= -Wa,-mppc
-+else
-+cpu-as-$(CONFIG_TARGET_CPU_BOOL)	+= -Wa,-m$(CONFIG_TARGET_CPU)
-+endif
+ 	if (ret < 0)
+ 		dev_alert(wdt->hw->dev, "Failed to shutdown (err = %d)\n",
+ 			  ret);
+diff --git a/drivers/watchdog/da9063_wdt.c b/drivers/watchdog/da9063_wdt.c
+index 09a4af4c58fc..684667469b10 100644
+--- a/drivers/watchdog/da9063_wdt.c
++++ b/drivers/watchdog/da9063_wdt.c
+@@ -174,11 +174,20 @@ static int da9063_wdt_restart(struct watchdog_device *wdd, unsigned long action,
+ {
+ 	struct da9063 *da9063 = watchdog_get_drvdata(wdd);
+ 	struct i2c_client *client = to_i2c_client(da9063->dev);
++	union i2c_smbus_data msg;
+ 	int ret;
  
- # When using '-many -mpower4' gas will first try and find a matching power4
- # mnemonic and failing that it will allow any valid mnemonic that GAS knows
- # about. GCC will pass -many to GAS when assembling, clang does not.
- # LLVM IAS doesn't understand either flag: https://github.com/ClangBuiltLinux/linux/issues/675
- # but LLVM IAS only supports ISA >= 2.06 for Book3S 64 anyway...
--cpu-as-$(CONFIG_PPC_BOOK3S_64)	+= $(call as-option,-Wa$(comma)-mpower4) $(call as-option,-Wa$(comma)-many)
--cpu-as-$(CONFIG_PPC_E500MC)	+= $(call as-option,-Wa$(comma)-me500mc)
-+cpu-as-$(CONFIG_PPC_BOOK3S_64)	+= $(call as-option,-Wa$(comma)-many)
- 
- KBUILD_AFLAGS += $(cpu-as-y)
- KBUILD_CFLAGS += $(cpu-as-y)
+-	/* Don't use regmap because it is not atomic safe */
+-	ret = i2c_smbus_write_byte_data(client, DA9063_REG_CONTROL_F,
+-					DA9063_SHUTDOWN);
++	/*
++	 * Don't use regmap because it is not atomic safe. Additionally, use
++	 * unlocked flavor of i2c_smbus_xfer to avoid scenario where i2c bus
++	 * might previously be locked by some process unable to release the
++	 * lock due to interrupts already being disabled at this late stage.
++	 */
++	msg.byte = DA9063_SHUTDOWN;
++	ret = __i2c_smbus_xfer(client->adapter, client->addr, client->flags,
++			I2C_SMBUS_WRITE, DA9063_REG_CONTROL_F,
++			I2C_SMBUS_BYTE_DATA, &msg);
++
+ 	if (ret < 0)
+ 		dev_alert(da9063->dev, "Failed to shutdown (err = %d)\n",
+ 			  ret);
 -- 
-2.38.1
+2.25.1
 
