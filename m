@@ -2,86 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7984C64E5DA
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 03:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DABD64E5DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 03:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiLPCKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 21:10:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
+        id S229811AbiLPCLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 21:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiLPCKR (ORCPT
+        with ESMTP id S229667AbiLPCLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 21:10:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E04F5E0AB
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 18:10:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B24A8B81D19
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 572B9C433F0;
-        Fri, 16 Dec 2022 02:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671156615;
-        bh=r3sBrHx/zaZovOEhaJd9mvTdncuUw416tDea/t1E2P4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=eRelWOqhsMjhGHdx5I7PthSgg+sdKixgI0C2XoNkm7Boa0qLebQb0frCG1o5b0DyA
-         21wpModoMHivszyW/YpfMd4AmLgQ6FZyeGfQvs+0MlzvBGpO7H2rm5ozAzGDqFCpvq
-         5m3jxUdaKLyfYc0ZxFoBGQGXI1auVoDGAd+zzJNmiLm2DHU1g1bNBCdiLDWxy5WDQV
-         y4Cy5dvPk/KJ+cEkiJB9rYxhf3NWRMk3WtF0ZnhlrP0NhdXTQ7yV5nOSUhsdGwHHNO
-         9ua1bucDy/kHagOiHUBuyHJNCC6DOMa7ok99Zbc/TLnsgFhZucaejOtZ8BI/k6ikzp
-         kcYhhVYI6E8bA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 43B1DE451BC;
-        Fri, 16 Dec 2022 02:10:15 +0000 (UTC)
-Subject: Re: [GIT PULL] tracing: Updates for 6.2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221215202548.554bd268@gandalf.local.home>
-References: <20221215202548.554bd268@gandalf.local.home>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221215202548.554bd268@gandalf.local.home>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git trace-v6.2
-X-PR-Tracked-Commit-Id: eb9d58947d40699d93e5e69e1ddc54e41da7e132
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: fe36bb8736ee9e38fa6173e1271ed8c5cf7bc907
-Message-Id: <167115661525.4870.17704962676478167558.pr-tracker-bot@kernel.org>
-Date:   Fri, 16 Dec 2022 02:10:15 +0000
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Chuang Wang <nashuiliang@gmail.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Ross Zwisler <zwisler@chromium.org>,
-        Song Chen <chensong_2000@189.cn>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Zheng Yejian <zhengyejian1@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 15 Dec 2022 21:11:44 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71913FB93
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 18:11:43 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2BG2BMNq009691
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Dec 2022 21:11:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1671156685; bh=e02A3aKKE1KFtmTpiDh0G9R+xSN1Czem5UA155kzumk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Gy0di33jqH4RW1/P2M/zt/kI5vJa6AopjA3rbIFhWiWiWftWk1H3lWGBEuoJiU7v8
+         Xk2y/tvY8Cj8R71Pkx36zeWRhN0gndP8kL/2vIF61QxVO4I5jwbK8TLOWCfsehcrL6
+         rWFQskdFARu2CQohek4PtWq0MSh1CQN6bIT1BVnPERG92dg8CmO+rmnMChTebwxy4z
+         eHMvkSmeVgVBwrhQRhL3YiN6SjFCaonqd8vqeiPvl4atn7G2dcppfBgEuB5UdnXFg+
+         wkEM9EETSp8l92rI89M3Z6grkboB1+BwIcNHVFJrDOp7PRqVnfQfpJNiD7SB5OatZj
+         8a4zaLSfdu8VA==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 8834915C40A2; Thu, 15 Dec 2022 21:11:22 -0500 (EST)
+Date:   Thu, 15 Dec 2022 21:11:22 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     syzbot <syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com>
+Cc:     adilger.kernel@dilger.ca, gregkh@linuxfoundation.org,
+        lczerner@redhat.com, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sashal@kernel.org,
+        stable@vger.kernel.org, syzkaller-android-bugs@googlegroups.com,
+        tadeusz.struk@linaro.org
+Subject: Re: kernel BUG in ext4_free_blocks (2)
+Message-ID: <Y5vTyjRX6ZgIYxgj@mit.edu>
+References: <0000000000006c411605e2f127e5@google.com>
+ <000000000000b60c1105efe06dea@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000b60c1105efe06dea@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 15 Dec 2022 20:25:48 -0500:
+On Thu, Dec 15, 2022 at 08:34:35AM -0800, syzbot wrote:
+> This bug is marked as fixed by commit:
+> ext4: block range must be validated before use in ext4_mb_clear_bb()
+> But I can't find it in any tested tree for more than 90 days.
+> Is it a correct commit? Please update it by replying:
+> #syz fix: exact-commit-title
+> Until then the bug is still considered open and
+> new crashes with the same signature are ignored.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git trace-v6.2
+I don't know what is going on with syzkaller's commit detection, but
+commit 1e1c2b86ef86 ("ext4: block range must be validated before use
+in ext4_mb_clear_bb()") is an exact match for the commit title, and
+it's been in the upstream kernel since v6.0.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/fe36bb8736ee9e38fa6173e1271ed8c5cf7bc907
+How do we make syzkaller accept this?  I'll try this again, but I
+don't hold out much hope.
 
-Thank you!
+#syz fix: ext4: block range must be validated before use in ext4_mb_clear_bb()
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Syzkaller, go home, you're drunk.
+
+					- Ted
