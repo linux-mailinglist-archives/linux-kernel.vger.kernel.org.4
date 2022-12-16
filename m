@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F41B64F515
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 00:30:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B08564F518
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 00:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiLPXaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 18:30:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
+        id S230009AbiLPXaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 18:30:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiLPX3x (ORCPT
+        with ESMTP id S229910AbiLPXaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 18:29:53 -0500
+        Fri, 16 Dec 2022 18:30:04 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82F12B61D
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:28:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D75E67D85
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:29:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671233337;
+        s=mimecast20190719; t=1671233349;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZraKQ8zpXaq21f6Xh7MkKwT51QM1mBosAn+IIPTlXH0=;
-        b=XSEBkj+OCitMlgS2gwB+CMUYyG56T8Z5WYnbyXNL+2b+or+l+IlmXmZTSirF1PbIDaMEUi
-        FHHRkPATunt3wKC3+On55MJ3zNMfexLSk5vfUsaf/5nCgNCN1kjhUeZq2gpCC+NHHB6a0Q
-        ymVT1pLFdg1tHLvkkHBGZRWvYtldHP8=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=KiNEfpGaBG3teD1hO8rk7pFV8NF3plZeCu2feOarOPI=;
+        b=D/ayihgmGz26YPUIOplc5BhdyNAr7isJRIslX0Er0atBgk2XX0oloOLa5qzeq7R8fc93yB
+        3hvp9N8e8MkU54is4CjP1105rOHX+5d95S+loKZCgagGIVxpZPfAihVZirRbkdxywMR4un
+        CUo17/aNgVpaxJbgTpZMX4C+AIYmsPY=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-611-XbPdoI-PO7yNn21_yWTLbg-1; Fri, 16 Dec 2022 18:28:56 -0500
-X-MC-Unique: XbPdoI-PO7yNn21_yWTLbg-1
-Received: by mail-qt1-f198.google.com with SMTP id bt4-20020ac86904000000b003a96b35e7a8so2381913qtb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:28:56 -0800 (PST)
+ us-mta-495-SEMtAU2hOOucM-Zl307kXQ-1; Fri, 16 Dec 2022 18:29:01 -0500
+X-MC-Unique: SEMtAU2hOOucM-Zl307kXQ-1
+Received: by mail-qv1-f70.google.com with SMTP id oo9-20020a056214450900b004cfdcb99fa5so2328992qvb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:29:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZraKQ8zpXaq21f6Xh7MkKwT51QM1mBosAn+IIPTlXH0=;
-        b=dnnVfYs0dBr6eGPrx8Y5QBSbwT69NoLvMDLUu56sZiHmbwBwzTqq6Fr+Jr+eIqAnhP
-         Rqvm01w7c1SXq7UR11dNoOA4WCoRPrZrJLeNlXvnUqdNAlNnPlwiwwAu0Z3Nv+ifWSOt
-         1B03UKJs9dRSmOtjGQmoeV6uX80pmv6kmuYwOtd45538lyaAO+OtOnuVPanc03oT8Ouz
-         UmL+2/syAolSWJFaDARJDYQh3aSe6tyB34Nl143/1aClqAW47ob+WfMRloYx5tn9icsE
-         UAAKjfwO2UWcwv0Jwtc6tnwkA1ID6snvYdfp4ZzakwdDRNsO9RRRbxq+6LItkHKoVo9T
-         Qp4g==
-X-Gm-Message-State: ANoB5pkw6DA4Pr6mRFngDkrVGMk5tXQvere4EuQCjWcrUwJnIMDflSkT
-        0+R8RnM8IkyV86wEe27LmcnbRlg1ftjjlrwHrCs+fHMRqIGWk8AT74s6otdtq9EtNaajdza2PdQ
-        qM9PVJ/e4lA0qIeM5Hmw+efzZ
-X-Received: by 2002:a05:6214:5848:b0:4c7:1c71:e7da with SMTP id ml8-20020a056214584800b004c71c71e7damr43264473qvb.17.1671233335922;
-        Fri, 16 Dec 2022 15:28:55 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4JAVWjbkYBvXicruCl97xmCX2tyHqRd2/+2yW1r+Sod2aNzAhammkHTIOpCR2Pn7/S3J8BSA==
-X-Received: by 2002:a05:6214:5848:b0:4c7:1c71:e7da with SMTP id ml8-20020a056214584800b004c71c71e7damr43264462qvb.17.1671233335708;
-        Fri, 16 Dec 2022 15:28:55 -0800 (PST)
+        bh=KiNEfpGaBG3teD1hO8rk7pFV8NF3plZeCu2feOarOPI=;
+        b=ILT+RQkDN/Jl9BVTVsUOO2+fNDyqReSPCPtsbCuVhu7Lip4SjSxtFiVeDfo/vHa/tP
+         gFPHWKZnKI+5J3pswBIQDMHqkdxr4xZB6anPIamrrEbzZBqNlMQ3yteUZGnCne5fX08l
+         agj3orJHlGMi0llK6rBwLqIxa8ULMH91m0mgDlnTi2tW6lo179m/xPwebztMST7xWJi8
+         69PhwdynpS6MQx7Q/Dyio0YNWM2wgejwQZllgci7mZ6bv9msSPohcK4NLMMFVF79MOHI
+         7IGfzrO6Y89Vw9E5I3cr+8j07cwxEfwixRE7AT64f7liKftFW7amljzckj4n+1ioW21l
+         sJ0Q==
+X-Gm-Message-State: ANoB5pm4J+PwV3+hyptDxbhVeItaqjwBBpdajguonoBTHFb5KxCjydKx
+        53N5HKQZ9k0CeZPmjP5FiSmMGNzJbHAnW0GxqHLD0BoQ+HJ//Vr8wT6p416O/Xzj1PDL55jQX+W
+        Av1PyDQUDEvEZIPfIJScE2RdN
+X-Received: by 2002:a05:622a:1309:b0:3a5:258c:d6a5 with SMTP id v9-20020a05622a130900b003a5258cd6a5mr62238053qtk.12.1671233340626;
+        Fri, 16 Dec 2022 15:29:00 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7/8dbu0njX5TZtiTTddppjlgg2Gwd1BgAe/Jel7JEjJTLPajh1BgAGO/rtNV0KG83pWdcD6A==
+X-Received: by 2002:a05:622a:1309:b0:3a5:258c:d6a5 with SMTP id v9-20020a05622a130900b003a5258cd6a5mr62238029qtk.12.1671233340403;
+        Fri, 16 Dec 2022 15:29:00 -0800 (PST)
 Received: from localhost (pool-71-184-142-128.bstnma.fios.verizon.net. [71.184.142.128])
-        by smtp.gmail.com with ESMTPSA id z189-20020a3765c6000000b006f3e6933bacsm2349799qkb.113.2022.12.16.15.28.54
+        by smtp.gmail.com with ESMTPSA id p12-20020ac8460c000000b003a7ef7a758dsm2099936qtn.59.2022.12.16.15.28.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 15:28:54 -0800 (PST)
+        Fri, 16 Dec 2022 15:28:59 -0800 (PST)
 From:   Eric Chanudet <echanude@redhat.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -66,9 +66,9 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
         Brian Masney <bmasney@redhat.com>,
         Eric Chanudet <echanude@redhat.com>
-Subject: [PATCH v3 3/4] arm64: dts: qcom: sa8295p-adp: use sa8540p-pmics
-Date:   Fri, 16 Dec 2022 18:26:05 -0500
-Message-Id: <20221216232606.2123341-4-echanude@redhat.com>
+Subject: [PATCH v3 4/4] arm64: dts: qcom: pm8941-rtc add alarm register
+Date:   Fri, 16 Dec 2022 18:26:06 -0500
+Message-Id: <20221216232606.2123341-5-echanude@redhat.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221216232606.2123341-1-echanude@redhat.com>
 References: <20221216232606.2123341-1-echanude@redhat.com>
@@ -85,111 +85,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Include the dtsi to use a single pmic descriptions.
-Both sa8295p-adp and sa8540p-adp have the same spmi pmic apparently.
+A few descriptions including a qcom,pm8941-rtc describe two reg-names
+for the "rtc" and "alarm" register banks, but only one offset. For
+consistency with reg-names, add the "alarm" register offset. No
+functional change is expected from this.
 
 Signed-off-by: Eric Chanudet <echanude@redhat.com>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 79 +-----------------------
- 1 file changed, 1 insertion(+), 78 deletions(-)
+ arch/arm64/boot/dts/qcom/pm8150.dtsi      | 2 +-
+ arch/arm64/boot/dts/qcom/pm8916.dtsi      | 3 ++-
+ arch/arm64/boot/dts/qcom/pm8950.dtsi      | 2 +-
+ arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi | 2 +-
+ arch/arm64/boot/dts/qcom/pmp8074.dtsi     | 2 +-
+ arch/arm64/boot/dts/qcom/pms405.dtsi      | 2 +-
+ 6 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-index 84cb6f3eeb56..c8437efe8235 100644
---- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-@@ -11,6 +11,7 @@
- #include <dt-bindings/spmi/spmi.h>
+diff --git a/arch/arm64/boot/dts/qcom/pm8150.dtsi b/arch/arm64/boot/dts/qcom/pm8150.dtsi
+index 574fa95a2871..db90c55fa2cf 100644
+--- a/arch/arm64/boot/dts/qcom/pm8150.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm8150.dtsi
+@@ -121,7 +121,7 @@ pm8150_adc_tm: adc-tm@3500 {
  
- #include "sa8540p.dtsi"
-+#include "sa8540p-pmics.dtsi"
- 
- / {
- 	model = "Qualcomm SA8295P ADP";
-@@ -260,84 +261,6 @@ &remoteproc_nsp1 {
- 	status = "okay";
- };
- 
--&spmi_bus {
--	pm8450a: pmic@0 {
--		compatible = "qcom,pm8150", "qcom,spmi-pmic";
--		reg = <0x0 SPMI_USID>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--
--		rtc@6000 {
--			compatible = "qcom,pm8941-rtc";
+ 		rtc@6000 {
+ 			compatible = "qcom,pm8941-rtc";
 -			reg = <0x6000>;
--			reg-names = "rtc", "alarm";
--			interrupts = <0x0 0x61 0x1 IRQ_TYPE_NONE>;
--			wakeup-source;
--		};
--
--		pm8450a_gpios: gpio@c000 {
--			compatible = "qcom,pm8150-gpio", "qcom,spmi-gpio";
--			reg = <0xc000>;
--			gpio-controller;
--			gpio-ranges = <&pm8450a_gpios 0 0 10>;
--			#gpio-cells = <2>;
--			interrupt-controller;
--			#interrupt-cells = <2>;
--		};
--	};
--
--	pm8450c: pmic@4 {
--		compatible = "qcom,pm8150", "qcom,spmi-pmic";
--		reg = <0x4 SPMI_USID>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--
--		pm8450c_gpios: gpio@c000 {
--			compatible = "qcom,pm8150-gpio", "qcom,spmi-gpio";
--			reg = <0xc000>;
--			gpio-controller;
--			gpio-ranges = <&pm8450c_gpios 0 0 10>;
--			#gpio-cells = <2>;
--			interrupt-controller;
--			#interrupt-cells = <2>;
--		};
--	};
--
--	pm8450e: pmic@8 {
--		compatible = "qcom,pm8150", "qcom,spmi-pmic";
--		reg = <0x8 SPMI_USID>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--
--		pm8450e_gpios: gpio@c000 {
--			compatible = "qcom,pm8150-gpio", "qcom,spmi-gpio";
--			reg = <0xc000>;
--			gpio-controller;
--			gpio-ranges = <&pm8450e_gpios 0 0 10>;
--			#gpio-cells = <2>;
--			interrupt-controller;
--			#interrupt-cells = <2>;
--		};
--	};
--
--	pm8450g: pmic@c {
--		compatible = "qcom,pm8150", "qcom,spmi-pmic";
--		reg = <0xc SPMI_USID>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--
--		pm8450g_gpios: gpio@c000 {
--			compatible = "qcom,pm8150-gpio", "qcom,spmi-gpio";
--			reg = <0xc000>;
--			gpio-controller;
--			gpio-ranges = <&pm8450g_gpios 0 0 10>;
--			#gpio-cells = <2>;
--			interrupt-controller;
--			#interrupt-cells = <2>;
--		};
--	};
--};
--
- &ufs_mem_hc {
- 	reset-gpios = <&tlmm 228 GPIO_ACTIVE_LOW>;
++			reg = <0x6000>, <0x6100>;
+ 			reg-names = "rtc", "alarm";
+ 			interrupts = <0x0 0x61 0x1 IRQ_TYPE_NONE>;
+ 		};
+diff --git a/arch/arm64/boot/dts/qcom/pm8916.dtsi b/arch/arm64/boot/dts/qcom/pm8916.dtsi
+index 08f9ca006e72..e2a6b66d8847 100644
+--- a/arch/arm64/boot/dts/qcom/pm8916.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm8916.dtsi
+@@ -93,7 +93,8 @@ adc-chan@f {
  
+ 		rtc@6000 {
+ 			compatible = "qcom,pm8941-rtc";
+-			reg = <0x6000>;
++			reg = <0x6000>, <0x6100>;
++			reg-names = "rtc", "alarm";
+ 			interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
+ 		};
+ 
+diff --git a/arch/arm64/boot/dts/qcom/pm8950.dtsi b/arch/arm64/boot/dts/qcom/pm8950.dtsi
+index 07c3896bd36f..d7df4ad60509 100644
+--- a/arch/arm64/boot/dts/qcom/pm8950.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm8950.dtsi
+@@ -126,7 +126,7 @@ xo-therm-buf@3c {
+ 
+ 		rtc@6000 {
+ 			compatible = "qcom,pm8941-rtc";
+-			reg = <0x6000>;
++			reg = <0x6000>, <0x6100>;
+ 			reg-names = "rtc", "alarm";
+ 			interrupts = <0x0 0x61 0x1 IRQ_TYPE_NONE>;
+ 		};
+diff --git a/arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi b/arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi
+index 20c5d60c8c2c..ee1e428d3a6e 100644
+--- a/arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi
++++ b/arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi
+@@ -108,7 +108,7 @@ pmm8155au_1_adc_tm: adc-tm@3500 {
+ 
+ 		pmm8155au_1_rtc: rtc@6000 {
+ 			compatible = "qcom,pm8941-rtc";
+-			reg = <0x6000>;
++			reg = <0x6000>, <0x6100>;
+ 			reg-names = "rtc", "alarm";
+ 			interrupts = <0x0 0x61 0x1 IRQ_TYPE_NONE>;
+ 
+diff --git a/arch/arm64/boot/dts/qcom/pmp8074.dtsi b/arch/arm64/boot/dts/qcom/pmp8074.dtsi
+index ceb2e6358b3d..580684411d74 100644
+--- a/arch/arm64/boot/dts/qcom/pmp8074.dtsi
++++ b/arch/arm64/boot/dts/qcom/pmp8074.dtsi
+@@ -74,7 +74,7 @@ vph-pwr@131 {
+ 
+ 		pmp8074_rtc: rtc@6000 {
+ 			compatible = "qcom,pm8941-rtc";
+-			reg = <0x6000>;
++			reg = <0x6000>, <0x6100>;
+ 			reg-names = "rtc", "alarm";
+ 			interrupts = <0x0 0x61 0x1 IRQ_TYPE_NONE>;
+ 			allow-set-time;
+diff --git a/arch/arm64/boot/dts/qcom/pms405.dtsi b/arch/arm64/boot/dts/qcom/pms405.dtsi
+index ffe9e33808d0..22edb47c6a84 100644
+--- a/arch/arm64/boot/dts/qcom/pms405.dtsi
++++ b/arch/arm64/boot/dts/qcom/pms405.dtsi
+@@ -125,7 +125,7 @@ xo_therm: xo_temp@76 {
+ 
+ 		rtc@6000 {
+ 			compatible = "qcom,pm8941-rtc";
+-			reg = <0x6000>;
++			reg = <0x6000>, <0x6100>;
+ 			reg-names = "rtc", "alarm";
+ 			interrupts = <0x0 0x61 0x1 IRQ_TYPE_NONE>;
+ 		};
 -- 
 2.38.1
 
