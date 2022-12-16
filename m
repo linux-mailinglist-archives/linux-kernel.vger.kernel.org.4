@@ -2,81 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284E664E6E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 06:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6857464E6EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 06:31:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiLPF0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 00:26:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
+        id S229868AbiLPFbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 00:31:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiLPF0r (ORCPT
+        with ESMTP id S229480AbiLPFbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 00:26:47 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D56936D60;
-        Thu, 15 Dec 2022 21:26:45 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id t18so1035189pfq.13;
-        Thu, 15 Dec 2022 21:26:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LP4ffXoiDO65KIjVIcDAkvN8bi+1ldsaOGyKaP67OqU=;
-        b=Nc/v7HgHfvIrS1eZ6VDfSd6TVmIZxuBH4WdtykfA/0ZNQNVVNLgvaUKK2MYG1tAtny
-         9cFrsXYpifcdrn7v0CSNYDev5j0PesePa39Ttv2cDtZUyN6VutywkII5/kG1l1Py/t36
-         8Uxi+ooq7Zl/oP2gfZsXjjiYIaPuMg15kx4KiNLvsg8E3XwQv4bdP6VnrEngvEd2ZIk+
-         Gg7HcJHKbQeMLQPlP9bH9gMvYdx8S+26nMprOeBf5VzMhHKj/5xtevrDLLKWkOAjblVO
-         a8NJKYWOdqk4UeLIZpVlvcL9BH7tABfj1GvUU30siiDQVHCJoBMfxbupBBGYeQa0tfYS
-         lJ/w==
+        Fri, 16 Dec 2022 00:31:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBB736D60
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 21:30:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671168626;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3+XU3NOi5/AH6byjyKh3uKPQGZdUxmKJMRxGY2jtMG4=;
+        b=PsCw/RwCsCp7tYJDaVEUPEKE3+tejVgSyv6JvL7+UnVLtGrcDFGIoD+x3BAahZdAvlx6iA
+        bWR6eLkJ+H8uCRmRPa2YybDA2MVr2iHXlLO9BFrbxnu1WKS0zPdwWYCOzI+aubmM5wL7Ns
+        0zyBw39dix7Y33JZz0JOMX7ciJ0hTIg=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-602-g01Npib2O96Lk7HC00BxuA-1; Fri, 16 Dec 2022 00:30:24 -0500
+X-MC-Unique: g01Npib2O96Lk7HC00BxuA-1
+Received: by mail-oi1-f197.google.com with SMTP id p133-20020acaf18b000000b0035b236c8554so400443oih.15
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 21:30:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LP4ffXoiDO65KIjVIcDAkvN8bi+1ldsaOGyKaP67OqU=;
-        b=3jVCJnehbOmPXWHlJAgH12XqNTb6FE8yUs72Yd9FSME3j0d/EAbR6lcvEJgXYcptPG
-         QD2ce0/OCWFmxSd13mkMFRw2pCbvGQ/PYvTMs3qm5lIt3oW0TH+vg7r5G4RDFUsZZlfC
-         H+lr6/epZRx8b5dJmOzIA5aGezJ+2ux5Cn5ZP4ZaHn0mei8yZKhoSxzY2pcGrCo9Q5IF
-         xXq0EcrcLjPMzDuQeXQf94mj4+o9BBSGziJuxlqxCdriPNBnE3nI3YH13RevVYDuezEE
-         i3PYNcKQb3twFFFr9hZOhegH+6PwU9vygU0yCc2IM5jbODTdnW9KqXBLpaVpUgP+gwBX
-         iNkA==
-X-Gm-Message-State: ANoB5pkcvNrubmjPz2ETCdLBTSZXnkXisrCnw6IIogFKPgLRYyc+GIui
-        q4/ZiI9qSZFPkvIHP07REb0=
-X-Google-Smtp-Source: AA0mqf6lIpA85WoHjZGzQWzPaLy0pwvIo54KDzSw1r9f+3dE75IaK1s8W5XOOw5NX0+3E7TLf4nJTg==
-X-Received: by 2002:aa7:911a:0:b0:577:5afa:6321 with SMTP id 26-20020aa7911a000000b005775afa6321mr34819434pfh.26.1671168404629;
-        Thu, 15 Dec 2022 21:26:44 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id i73-20020a62874c000000b0056bc5ad4862sm533894pfe.28.2022.12.15.21.26.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 21:26:44 -0800 (PST)
-Date:   Thu, 15 Dec 2022 21:26:42 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v10 105/108] KVM: TDX: Add methods to ignore accesses to
- CPU state
-Message-ID: <20221216052642.GF527635@ls.amr.corp.intel.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <282dd5a8edbee0aa87cdf035088ecd8558b0b999.1667110240.git.isaku.yamahata@intel.com>
- <5dc0263aa963534bb049b61adbfb18dec3f65f00.camel@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3+XU3NOi5/AH6byjyKh3uKPQGZdUxmKJMRxGY2jtMG4=;
+        b=axb9WmXrw5VAg1qv2Y0BpCJjNGpULF43MdHuZqojxozNe2veNxUnMv4D13K0eQvAT1
+         DtvWuGwbmgZEpLusQYbKBNv1243FxBaFjWfroMrg+Sblf2+2xlOBcf4m72Xj8U2X3MV3
+         1zgTM1Ri5T7MsXkr+lqvbg+vT8mnSmBWk6oe0icf6VTpNln5ZmdJRSIxursgtCwc8tlY
+         6p1mLQHmUqXE5zUL3VT7PlAeGvHoNpN7Ep+ZlBJothaqlhGP8/l3gYbqtqV0EGcpUMHm
+         WMPCICwMSFZqn6zMN1XLZwXR3pGkB/S7m/KM/jBADC4dOq1AGqO6JSD8xvn6aJbCvBDj
+         VJsw==
+X-Gm-Message-State: ANoB5pkCyzgC+2Of3QvZQF3TEjFdzhNrTPjqvKn8HnsO6RXEjPUDSx8n
+        yJUpEmv1Kjs8QNHh/bl7MM7qTYW1p50yZ4pb3Lg/gSGBTmiZ2jAD+duViWJVfJg9ayWSAJEjXuj
+        o1LoryPuEZ//Z52hiIpt/sbg8WxxT5ingYqOb9qk3
+X-Received: by 2002:a05:6830:6505:b0:66c:fb5b:4904 with SMTP id cm5-20020a056830650500b0066cfb5b4904mr49184173otb.237.1671168624165;
+        Thu, 15 Dec 2022 21:30:24 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6BrOptlv6D9XDmrSx9Gl/+QASruxbWSD27Gp2XJqBb4LkjXk5a8WbVpb7gaZS4dCUJ7gxwKJDDAhCpCBzolGs=
+X-Received: by 2002:a05:6830:6505:b0:66c:fb5b:4904 with SMTP id
+ cm5-20020a056830650500b0066cfb5b4904mr49184168otb.237.1671168623904; Thu, 15
+ Dec 2022 21:30:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5dc0263aa963534bb049b61adbfb18dec3f65f00.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221205084127.535-1-xieyongji@bytedance.com> <20221205085846.741-1-xieyongji@bytedance.com>
+In-Reply-To: <20221205085846.741-1-xieyongji@bytedance.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 16 Dec 2022 13:30:12 +0800
+Message-ID: <CACGkMEuhYO3neFmxwiBp8C0QTaa+Mb13kken+RZ9QuruMct6tA@mail.gmail.com>
+Subject: Re: [PATCH v2 06/11] vduse: Support automatic irq callback affinity
+To:     Xie Yongji <xieyongji@bytedance.com>
+Cc:     mst@redhat.com, tglx@linutronix.de, hch@lst.de,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,92 +74,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 11:43:14AM +0000,
-"Huang, Kai" <kai.huang@intel.com> wrote:
+On Mon, Dec 5, 2022 at 4:59 PM Xie Yongji <xieyongji@bytedance.com> wrote:
+>
+> This brings current interrupt affinity spreading mechanism
+> to vduse device. We will make use of irq_create_affinity_masks()
+> to create an irq callback affinity mask for each virtqueue of
+> vduse device. Then we will choose the CPU which has the lowest
+> number of interrupt allocated in the affinity mask to run the
+> irq callback.
 
-> On Sat, 2022-10-29 at 23:23 -0700, isaku.yamahata@intel.com wrote:
-> > +static u8 vt_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
-> > +{
-> > +	if (is_td_vcpu(vcpu)) {
-> > +		if (is_mmio)
-> > +			return MTRR_TYPE_UNCACHABLE << VMX_EPT_MT_EPTE_SHIFT;
-> > +		return  MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT;
-> > +	}
-> > +
-> > +	return vmx_get_mt_mask(vcpu, gfn, is_mmio);
-> > +}
-> 
-> So you are returning WB for _ALL_ guest memory, including shared.  Wouldn't this
-> break MTRR handling for shared memory?  For instance, IIUC we can still support
-> assigning a device to a TDX guest while the VT-d doesn't support coherent
-> memory, in which case guest's MTRR/PAT are honored.  I think this should also
-> apply to TDX guest's shared memory?
+This seems a balance mechanism but it might not be the semantic of the
+affinity or any reason we need to do this? I guess we should use at
+least round-robin in this case.
 
-You're right. So here is the updated change.
---- a/arch/x86/kvm/vmx/main.c
-+++ b/arch/x86/kvm/vmx/main.c
-@@ -798,11 +798,8 @@ static int vt_set_identity_map_addr(struct kvm *kvm, u64 ident_addr)
- 
- static u8 vt_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
- {
--       if (is_td_vcpu(vcpu)) {
--               if (is_mmio)
--                       return MTRR_TYPE_UNCACHABLE << VMX_EPT_MT_EPTE_SHIFT;
--               return  MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT;
--       }
-+       if (is_td_vcpu(vcpu))
-+               return tdx_get_mt_mask(vcpu, gfn, is_mmio);
- 
-        return vmx_get_mt_mask(vcpu, gfn, is_mmio);
- }
-diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-index ac47b20e4e91..f1842eb32d6c 100644
---- a/arch/x86/kvm/vmx/tdx.c
-+++ b/arch/x86/kvm/vmx/tdx.c
-@@ -568,7 +568,31 @@ int tdx_vm_init(struct kvm *kvm)
-        return 0;
- }
- 
-+u8 tdx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
-+{
-+       if (is_mmio)
-+               return MTRR_TYPE_UNCACHABLE << VMX_EPT_MT_EPTE_SHIFT;
-+
-+       if (!kvm_arch_has_noncoherent_dma(vcpu->kvm))
-+               return (MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT) | VMX_EPT_IPAT_BIT;
-+
-+       /* Guest CR0 is unknown.  Assume CR0.CD = 0. */
-+
-+       /* TDX private GPA is always WB. */
-+       if (gfn & kvm_gfn_shared_mask(vcpu->kvm))
-+               return  MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT;
-+
-+       /*
-+        * Because the definition of MTRR MSR is unaware of shared-bit,
-+        * clear shared-bit.
-+        */
-+       gfn = kvm_gfn_private(vcpu->kvm, gfn);
-+       return kvm_mtrr_get_guest_memory_type(vcpu, gfn) << VMX_EPT_MT_EPTE_SHIFT;
-+}
-+
- int tdx_vcpu_create(struct kvm_vcpu *vcpu)
-+
-+
- {
-        struct kvm_tdx *kvm_tdx = to_kvm_tdx(vcpu->kvm);
-        struct vcpu_tdx *tdx = to_tdx(vcpu);
-diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-index 96f5546194d4..38fb888e1be9 100644
---- a/arch/x86/kvm/vmx/x86_ops.h
-+++ b/arch/x86/kvm/vmx/x86_ops.h
-@@ -168,6 +168,7 @@ int tdx_handle_exit(struct kvm_vcpu *vcpu,
- void tdx_deliver_interrupt(struct kvm_lapic *apic, int delivery_mode,
-                           int trig_mode, int vector);
- void tdx_inject_nmi(struct kvm_vcpu *vcpu);
-+u8 tdx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
- void tdx_get_exit_info(struct kvm_vcpu *vcpu, u32 *reason,
-                u64 *info1, u64 *info2, u32 *intr_info, u32 *error_code);
- bool tdx_is_emulated_msr(u32 index, bool write);
+>
+> Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+> ---
+>  drivers/vdpa/vdpa_user/vduse_dev.c | 50 ++++++++++++++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+>
+> diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+> index d126f3e32a20..90c2896039d9 100644
+> --- a/drivers/vdpa/vdpa_user/vduse_dev.c
+> +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/nospec.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/sched/mm.h>
+> +#include <linux/interrupt.h>
+>  #include <uapi/linux/vduse.h>
+>  #include <uapi/linux/vdpa.h>
+>  #include <uapi/linux/virtio_config.h>
+> @@ -58,6 +59,8 @@ struct vduse_virtqueue {
+>         struct work_struct inject;
+>         struct work_struct kick;
+>         int irq_effective_cpu;
+> +       struct cpumask irq_affinity;
+> +       spinlock_t irq_affinity_lock;
 
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Ok, I'd suggest to squash this into patch 5 to make it more easier to
+be reviewed.
+
+>  };
+>
+>  struct vduse_dev;
+> @@ -123,6 +126,7 @@ struct vduse_control {
+>
+>  static DEFINE_MUTEX(vduse_lock);
+>  static DEFINE_IDR(vduse_idr);
+> +static DEFINE_PER_CPU(unsigned long, vduse_allocated_irq);
+>
+>  static dev_t vduse_major;
+>  static struct class *vduse_class;
+> @@ -710,6 +714,49 @@ static u32 vduse_vdpa_get_generation(struct vdpa_device *vdpa)
+>         return dev->generation;
+>  }
+>
+> +static void vduse_vq_update_effective_cpu(struct vduse_virtqueue *vq)
+> +{
+> +       unsigned int cpu, best_cpu;
+> +       unsigned long allocated, allocated_min = UINT_MAX;
+> +
+> +       spin_lock(&vq->irq_affinity_lock);
+> +
+> +       best_cpu = vq->irq_effective_cpu;
+> +       if (best_cpu != -1)
+> +               per_cpu(vduse_allocated_irq, best_cpu) -= 1;
+> +
+> +       for_each_cpu(cpu, &vq->irq_affinity) {
+> +               allocated = per_cpu(vduse_allocated_irq, cpu);
+> +               if (!cpu_online(cpu) || allocated >= allocated_min)
+> +                       continue;
+> +
+> +               best_cpu = cpu;
+> +               allocated_min = allocated;
+> +       }
+> +       vq->irq_effective_cpu = best_cpu;
+> +       per_cpu(vduse_allocated_irq, best_cpu) += 1;
+> +
+> +       spin_unlock(&vq->irq_affinity_lock);
+> +}
+> +
+> +static void vduse_vdpa_set_irq_affinity(struct vdpa_device *vdpa,
+> +                                       struct irq_affinity *desc)
+> +{
+> +       struct vduse_dev *dev = vdpa_to_vduse(vdpa);
+> +       struct irq_affinity_desc *affd = NULL;
+> +       int i;
+> +
+> +       affd = irq_create_affinity_masks(dev->vq_num, desc);
+> +       if (!affd)
+
+Let's add a comment on the vdpa config ops to say set_irq_affinity()
+is best effort.
+
+Thanks
+
+> +               return;
+> +
+> +       for (i = 0; i < dev->vq_num; i++) {
+> +               cpumask_copy(&dev->vqs[i]->irq_affinity, &affd[i].mask);
+> +               vduse_vq_update_effective_cpu(dev->vqs[i]);
+> +       }
+> +       kfree(affd);
+> +}
+> +
+>  static int vduse_vdpa_set_map(struct vdpa_device *vdpa,
+>                                 unsigned int asid,
+>                                 struct vhost_iotlb *iotlb)
+> @@ -760,6 +807,7 @@ static const struct vdpa_config_ops vduse_vdpa_config_ops = {
+>         .get_config             = vduse_vdpa_get_config,
+>         .set_config             = vduse_vdpa_set_config,
+>         .get_generation         = vduse_vdpa_get_generation,
+> +       .set_irq_affinity       = vduse_vdpa_set_irq_affinity,
+>         .reset                  = vduse_vdpa_reset,
+>         .set_map                = vduse_vdpa_set_map,
+>         .free                   = vduse_vdpa_free,
+> @@ -1380,6 +1428,8 @@ static int vduse_dev_init_vqs(struct vduse_dev *dev, u32 vq_align, u32 vq_num)
+>                 INIT_WORK(&dev->vqs[i]->kick, vduse_vq_kick_work);
+>                 spin_lock_init(&dev->vqs[i]->kick_lock);
+>                 spin_lock_init(&dev->vqs[i]->irq_lock);
+> +               spin_lock_init(&dev->vqs[i]->irq_affinity_lock);
+> +               cpumask_setall(&dev->vqs[i]->irq_affinity);
+>         }
+>
+>         return 0;
+> --
+> 2.20.1
+>
+
