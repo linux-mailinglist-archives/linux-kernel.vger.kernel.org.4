@@ -2,126 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D6A64EA09
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C90664EA10
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiLPLO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:14:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        id S230328AbiLPLPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:15:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiLPLOV (ORCPT
+        with ESMTP id S230383AbiLPLPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:14:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FB4FAE4;
-        Fri, 16 Dec 2022 03:14:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B866B62064;
-        Fri, 16 Dec 2022 11:14:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89C57C433D2;
-        Fri, 16 Dec 2022 11:14:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671189259;
-        bh=F6mkBD3k8By0N8IqHeptAGTd0S0qSxTQIRpDfm7tUwI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eFoxH/aX7aRHjx01I4fPpwlE6eU4b881eTVzLdGxVQDdwQLm07O59evOP14+CVd6M
-         uOpq7FdmUoXbPfrlf9EDYYEVq159dyemBKE2YEsoQgWAVgAG7QiYKNZKbdgWLZsry8
-         YVW/bIcVLgahs1CqRZPGbxVJflIDPCrcS1oj7QqICdTjTQa0GrzweBGp4CacWoE33n
-         d1ZwmCe8eudse9k7ZJkrp0GjDSqL+F+AnTUj3ryZ7PNxU5blJ+gzbAIMBsbuvxDT95
-         8EPBXwZo1VACo2FsHOluulF1Wu1AxUB4SFSO37/FrqRXjxN0Zd6s7BpDtGD8CF3WeO
-         mt/Gs+Ovd+ajw==
-Date:   Fri, 16 Dec 2022 11:14:12 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>, Jan Kara <jack@suse.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-RT <linux-rt-users@vger.kernel.org>
-Subject: Re: [PATCH] rtmutex: Add acquire semantics for rtmutex lock
- acquisition
-Message-ID: <20221216111412.GA8666@willie-the-truck>
-References: <20221202100223.6mevpbl7i6x5udfd@techsingularity.net>
- <Y4nfopZfBxR4lJ6G@linutronix.de>
- <20221202150158.xzgovoy7wuic6vvk@techsingularity.net>
+        Fri, 16 Dec 2022 06:15:37 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EA2379E7
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:15:34 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id z4so1787763ljq.6
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:15:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XNmN8YSKMj8sewHmvzrRIH5jM9zSiZZ/kn+ymwWEngE=;
+        b=EVpOLThGVmDOAFHwste+9mKNye5vUKeVIh74RNp6XeKz8XddVc9K2rx8ZGTx/WY8pe
+         YfH29ku09sCGD8k37Cys5pS2COm6I7OU6/4ITJxHwSmdbkJDTUI8U5fbudaeCdh7Kl5p
+         vdyr+VK+A9dFD1bvxjM1fEM3CavybkuqMf661K9AYpxQ1jHRdYJQFh3al0taLwCz52xU
+         giW5qCP6GnolIVNwlDskg70vMgkAh9sfQW9yVDQxSLWwbpKzQd68I9vn1Fy2AQs1npi/
+         ssvazCNj4uevDXF6qweG8bFgD7auqEWvXOo1TTriQSwQO4mLlaPat0JRh68uYLNOIcRL
+         n/Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XNmN8YSKMj8sewHmvzrRIH5jM9zSiZZ/kn+ymwWEngE=;
+        b=tvgXpziriaNEuN+F6hr9L6eWDZBkjXEYQ0kDChdiR8z2ChcnOFGbdmvx2UtA+EPi2o
+         OcYhea8NvPwqlfjekmJPEZIpRfYZ1jlHEPGn7InIO5lYOC4k9RwIlj+rMbOm2iTMmE9h
+         0cPAgopmarHnl1tbmhgrgqBp4NdsIuXAw+Eg8OmKXbIS+lPBTMHMUl3GR5vpDl1ynxqR
+         iqIQ8CPXpE8qPYsCqfFpdFG9nLlvs73p5BgyeMxmTfcSF02+oZYj6710bNdPukkRwwez
+         nN8rUdFW88asaYnsCRU2VtjQFj/cAYXrpAWQWo321exqlnN9A3XtHCzBUny+XaPCJQiJ
+         CXoQ==
+X-Gm-Message-State: ANoB5ple8BgVBMUvMk4pV0NUbPPPiDaJtPYj8M1/sqzL0nhTGIxXwT11
+        wBp356FxyH1JOB1F2fj05ya4Dg==
+X-Google-Smtp-Source: AA0mqf5ZxNILozi/59eThvqaQDUVp7Rne/3dA+LV9B3+gi9zpnKCGbBvH4+liRRo6GkSgJCU7hemVA==
+X-Received: by 2002:a2e:2a83:0:b0:279:c58a:817c with SMTP id q125-20020a2e2a83000000b00279c58a817cmr7758749ljq.39.1671189333181;
+        Fri, 16 Dec 2022 03:15:33 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id i5-20020a2ea365000000b002771057e0e5sm127207ljn.76.2022.12.16.03.15.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 03:15:32 -0800 (PST)
+Message-ID: <994718d8-f3ee-af5e-bda7-f913f66597ce@linaro.org>
+Date:   Fri, 16 Dec 2022 12:15:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221202150158.xzgovoy7wuic6vvk@techsingularity.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 5/9] dt-bindings: net: motorcomm: add support for
+ Motorcomm YT8531
+Content-Language: en-US
+To:     Yanhong Wang <yanhong.wang@starfivetech.com>,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20221216070632.11444-1-yanhong.wang@starfivetech.com>
+ <20221216070632.11444-6-yanhong.wang@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221216070632.11444-6-yanhong.wang@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 03:01:58PM +0000, Mel Gorman wrote:
-> On Fri, Dec 02, 2022 at 12:21:06PM +0100, Sebastian Andrzej Siewior wrote:
-> > On 2022-12-02 10:02:23 [+0000], Mel Gorman wrote:
-> > > The lock owner is updated with an IRQ-safe raw spinlock held but the
-> > > spin_unlock does not provide acquire semantics which are needed when
-> > > acquiring a mutex. This patch adds the necessary acquire semantics for a
-> > > lock operation when the lock owner is updated. It successfully completed
-> > > 10 iterations of the dbench workload while the vanilla kernel fails on
-> > > the first iteration.
-> > 
-> > I *think* it is
-> > 
-> > Fixes: 700318d1d7b38 ("locking/rtmutex: Use acquire/release semantics")
-> > 
+On 16/12/2022 08:06, Yanhong Wang wrote:
+> Add support for Motorcomm Technology YT8531 10/100/1000 Ethernet PHY.
+> The document describe details of clock delay train configuration.
 > 
-> Adding Davidlohr to cc.
+> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+
+Missing vendor prefix documentation. I don't think you tested this at
+all with checkpatch and dt_binding_check.
+
+> ---
+>  .../bindings/net/motorcomm,yt8531.yaml        | 111 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  2 files changed, 112 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/motorcomm,yt8531.yaml
 > 
-> It might have made the problem worse but even then rt_mutex_set_owner was
-> just a plain assignment and while I didn't check carefully, at a glance
-> try_to_take_rt_mutex didn't look like it guaranteed ACQUIRE semantics.
-> 
-> > Before that, it did cmpxchg() which should be fine.
-> > 
-> > Regarding mark_rt_mutex_waiters(). Isn't acquire semantic required in
-> > order for the lock-owner not perform the fastpath but go to the slowpath
-> > instead?
-> > 
-> 
-> Good spot, it does. While the most straight-forward solution is to use
-> cmpxchg_acquire, I think it is overkill because it could incur back-to-back
-> ACQUIRE operations in the event of contention. There could be a smp_wmb
-> after the cmpxchg_relaxed but that impacts all arches and a non-paired
-> smp_wmb is generally frowned upon.
-> 
-> I'm thinking this on top of the patch should be sufficient even though
-> it's a heavier operation than is necesary for ACQUIRE as well as being
-> "not typical" according to Documentation/atomic_t.txt. Will, as this
-> affects ARM primarily do you have any preference?
-> 
-> diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-> index 35212f260148..af0dbe4d5e97 100644
-> --- a/kernel/locking/rtmutex.c
-> +++ b/kernel/locking/rtmutex.c
-> @@ -238,6 +238,13 @@ static __always_inline void mark_rt_mutex_waiters(struct rt_mutex_base *lock)
->  		owner = *p;
->  	} while (cmpxchg_relaxed(p, owner,
->  				 owner | RT_MUTEX_HAS_WAITERS) != owner);
+> diff --git a/Documentation/devicetree/bindings/net/motorcomm,yt8531.yaml b/Documentation/devicetree/bindings/net/motorcomm,yt8531.yaml
+> new file mode 100644
+> index 000000000000..c5b8a09a78bb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/motorcomm,yt8531.yaml
+> @@ -0,0 +1,111 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/motorcomm,yt8531.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	/*
-> +	 * The cmpxchg loop above is relaxed to avoid back-to-back ACQUIRE
-> +	 * operations in the event of contention. Ensure the successful
-> +	 * cmpxchg is visible.
-> +	 */
-> +	smp_mb__after_atomic();
+> +title: Motorcomm YT8531 Gigabit Ethernet PHY
+> +
+> +maintainers:
+> +  - Yanhong Wang <yanhong.wang@starfivetech.com>
+> +
 
-Could we use smp_acquire__after_ctrl_dep() instead?
+Why there is no reference to ethernet-phy.yaml?
 
-Will
+> +select:
+> +  properties:
+> +    $nodename:
+> +      pattern: "^ethernet-phy(@[a-f0-9]+)?$"
+
+I don't think that's correct approach. You know affect all phys.
+
+> +
+> +  required:
+> +    - $nodename
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^ethernet-phy(@[a-f0-9]+)?$"
+
+Just reference ethernet-phy.yaml.
+
+> +
+> +  reg:
+> +    minimum: 0
+> +    maximum: 31
+> +    description:
+> +      The ID number for the PHY.
+
+Drop duplicated properties.
+
+> +
+> +  rxc_dly_en:
+
+No underscores in node names. Missing vendor prefix. Both apply to all
+your other custom properties, unless they are not custom but generic.
+
+Missing ref.
+
+> +    description: |
+> +      RGMII Receive PHY Clock Delay defined with fixed 2ns.This is used for
+
+After every full stop goes space.
+
+> +      PHY that have configurable RX internal delays. If this property set
+> +      to 1, then automatically add 2ns delay pad for Receive PHY clock.
+
+Nope, this is wrong. You wrote now boolean property as enum.
+
+> +    enum: [0, 1]
+> +    default: 0
+> +
+> +  rx_delay_sel:
+> +    description: |
+> +      This is supplement to rxc_dly_en property,and it can
+> +      be specified in 150ps(pico seconds) steps. The effective
+> +      delay is: 150ps * N.
+
+Nope. Use proper units and drop all this register stuff.
+
+> +    minimum: 0
+> +    maximum: 15
+> +    default: 0
+> +
+> +  tx_delay_sel_fe:
+> +    description: |
+> +      RGMII Transmit PHY Clock Delay defined in pico seconds.This is used for
+> +      PHY's that have configurable TX internal delays when speed is 100Mbps
+> +      or 10Mbps. It can be specified in 150ps steps, the effective delay
+> +      is: 150ps * N.
+
+The binding is in very poor shape. Please look carefully in
+example-schema. All my previous comments apply everywhere.
+
+> +    minimum: 0
+> +    maximum: 15
+> +    default: 15
+> +
+> +  tx_delay_sel:
+> +    description: |
+> +      RGMII Transmit PHY Clock Delay defined in pico seconds.This is used for
+> +      PHY's that have configurable TX internal delays when speed is 1000Mbps.
+> +      It can be specified in 150ps steps, the effective delay is: 150ps * N.
+> +    minimum: 0
+> +    maximum: 15
+> +    default: 1
+> +
+> +  tx_inverted_10:
+> +    description: |
+> +      Use original or inverted RGMII Transmit PHY Clock to drive the RGMII
+> +      Transmit PHY Clock delay train configuration when speed is 10Mbps.
+> +      0: original   1: inverted
+> +    enum: [0, 1]
+> +    default: 0
+> +
+> +  tx_inverted_100:
+> +    description: |
+> +      Use original or inverted RGMII Transmit PHY Clock to drive the RGMII
+> +      Transmit PHY Clock delay train configuration when speed is 100Mbps.
+> +      0: original   1: inverted
+> +    enum: [0, 1]
+> +    default: 0
+> +
+> +  tx_inverted_1000:
+> +    description: |
+> +      Use original or inverted RGMII Transmit PHY Clock to drive the RGMII
+> +      Transmit PHY Clock delay train configuration when speed is 1000Mbps.
+> +      0: original   1: inverted
+> +    enum: [0, 1]
+> +    default: 0
+> +
+> +required:
+> +  - reg
+> +
+> +additionalProperties: true
+
+This must be false. After referencing ethernet-phy this should be
+unevaluatedProperties: false.
+
+
+Best regards,
+Krzysztof
+
