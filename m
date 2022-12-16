@@ -2,104 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C1F64EC9F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B09064ECA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbiLPOIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
+        id S229730AbiLPOJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:09:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbiLPOIG (ORCPT
+        with ESMTP id S229547AbiLPOJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:08:06 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED792B274
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:08:04 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id z26so3604164lfu.8
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:08:04 -0800 (PST)
+        Fri, 16 Dec 2022 09:09:17 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E085E2B274
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:09:16 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id h26so2363600vsr.5
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:09:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E7rnlHGI8UN0z1G/4uZqIH5FqitWJ4bCQ8PKnzhEumA=;
-        b=no9qkEjyPsSwHJ8KWezcBHzFRemjLu2fgQlmmct3Pj5Kw7Mp5cqsq49NkdHb61et4G
-         ItQk8HCzJfJCY8+nVduYvzMm3uZUxcAv9LH7LQGt1JYz6WPbBxhhHPOHBP2a6MKv/XzK
-         Yamy9iMPIrwf5PLaMLvHpP1JnJ8TYfEF2UZuhrCwHFs8QEVyZ2ES90VOHfK8oJoI5U0d
-         0e7cSaJsMs3O9Yk0Q8/eunFUHibgHeSl66FQbzwVMAQ2NUbT3k2CK9sU58DzfCH4HgDZ
-         I3S+Rw6LDMbVB2MSGGcthhOxKemJO6hBSmqCy4zt8pvz37roHiCZXKTo7SqoiBO0iW9n
-         tFSA==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FnRfmSoVrweCHiDP2b0XcKWHIVQTBT4Xkvqu5EsIIQ0=;
+        b=VOwauKxPWCtAmTi3Wi1n4svZrbY1EFqlnEPgFCNRcge0fMzBZ4PPgHSZMe1lB0S47S
+         W+eJaRe5NkVfzYfu1zXvThwENTXqsx40U+O8K0rMWmg3MaxgcP5EHS3t+ZoQKhU/J+C/
+         Wp+eIcCdsTqgXxbkrBWkA3ssnd3cciVmALdtwQu1n40TDg1pupS5XEoNOIclfyjcstfw
+         Db1iFNlwt1ujdTOFsGpC6COskmi2QiOHK+Y3WSGhO+X68RTW/QyPYhHsJnQ4WscNTKDw
+         2tO19hncdHNAEtoatz2T7zTdvB6wyAJKbkOqMejJ8Qm7POyhANbF6/QHY34tqWneQekz
+         TbrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E7rnlHGI8UN0z1G/4uZqIH5FqitWJ4bCQ8PKnzhEumA=;
-        b=yYCQ9ZA3UkmkTD6Au1nu5BBkyzup6I795VH5qQYZa0Kts4q17Ho9bLNKf5TxmOPYfJ
-         zhs1z4ySwVKp/yy5UX4bdyFGfvq8omnGKpSBdJX/JCfvHbQg6e1cwx11V0BBz6aC37dq
-         TrGgYRY9x2Vn1WMI7o5nRmTZVF5keT4TMHTUZPFtJN5Nd/rbejt7EZKAGRU/6EOUOiMk
-         15VyzBwYUkUsD/cjcQNNpUn6ExXxUHXJ8lohrPRzPSdsnmysNhQD0r9/5W2LgIB7vSqd
-         0Esll+1tN3Oma3jRlzUlo7cLupeh7ldYnTO7DSftL8TXPaTBP+5ThaI6WdnFxvmyJGfm
-         qfCg==
-X-Gm-Message-State: ANoB5pkWBuSb+GQi4t+X2HK6opxG2sG6XWJFZoU3SuT1WZUjriwBcu6r
-        dGk1mRsch+e1yV/ZTHSGGKv7MA==
-X-Google-Smtp-Source: AA0mqf4V28jx/U9NcnEY+r7qKoPQzTh7qAeK4cMVSE/XoxtGZ3WdPx2eHidPvXyk3Pi92ZkuYMZBxw==
-X-Received: by 2002:a05:6512:3c82:b0:4b5:5bc1:16da with SMTP id h2-20020a0565123c8200b004b55bc116damr11657584lfv.39.1671199682494;
-        Fri, 16 Dec 2022 06:08:02 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id p10-20020a2eba0a000000b0026fc79fd67dsm163265lja.74.2022.12.16.06.08.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 06:08:02 -0800 (PST)
-Message-ID: <22a055a9-a14b-e8b7-84e2-b091a05a3ba4@linaro.org>
-Date:   Fri, 16 Dec 2022 15:08:00 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FnRfmSoVrweCHiDP2b0XcKWHIVQTBT4Xkvqu5EsIIQ0=;
+        b=III8Qcp7obKdYcM4pYiakf3AqHwBNOXQs5GJYesz4QkKaOvdhfCkpn8PRRoVYMo6HG
+         HRBolDiooY66tZNY/4ages06n3ykAhUUnww2mcPdbb7gswda1L6Cs2ma624ExQFoLIq4
+         0zvXLSOlhjz13FpI/dKQ+UCguDPza3QRtTZJjCYczWIZBxOzQA4vr/lPi2o5bWpjBAlJ
+         K7x8Mum/7Pmx5R6Gs+EqL/3edlvMZ3EamVM2Z1KyKk+AK0W9Nr4Z/fWicVMokTNkIT4r
+         II8MIajvNTrpBpuxHVz14yczlWrEaRQNONCPHKSDZ9tnBDqccxdVkn4iPmBFzZBFDdGD
+         fRqA==
+X-Gm-Message-State: ANoB5pl4NycmLOKjgeSi9Alh9Xuv9vcrCLINLBNmGSPhXIpbunkz0Ris
+        jkhWmcJDwAYaWkbMfn8WDI+xmCrLe6iBy5g8E1FnZQ==
+X-Google-Smtp-Source: AA0mqf5juU3gdTbuCO9BuR51VBuKiOzXTXd5L1I41olQyxcEgnnVdsr0IFsJjjwuLnykSLE3YaQflJM0w+2POr9y134=
+X-Received: by 2002:a67:be11:0:b0:3b1:27f1:ab21 with SMTP id
+ x17-20020a67be11000000b003b127f1ab21mr18748024vsq.48.1671199755907; Fri, 16
+ Dec 2022 06:09:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v16 2/3] dt-bindings: edac: nuvoton: Add document for NPCM
- memory controller
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Marvin Lin <milkfafa@gmail.com>, linux-edac@vger.kernel.org,
-        rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
-        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     openbmc@lists.ozlabs.org, benjaminfair@google.com,
-        yuenn@google.com, venture@google.com, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, avifishman70@gmail.com, tmaimon77@gmail.com,
-        tali.perry1@gmail.com, ctcchien@nuvoton.com, kflin@nuvoton.com,
-        Rob Herring <robh@kernel.org>
-References: <20221216073141.3289309-1-milkfafa@gmail.com>
- <20221216073141.3289309-3-milkfafa@gmail.com>
- <525fd984-0b67-8e11-d13c-7c4ee1853c4e@linaro.org>
-In-Reply-To: <525fd984-0b67-8e11-d13c-7c4ee1853c4e@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <0000000000006c411605e2f127e5@google.com> <000000000000b60c1105efe06dea@google.com>
+ <Y5vTyjRX6ZgIYxgj@mit.edu> <Y5xsIkpIznpObOJL@google.com>
+In-Reply-To: <Y5xsIkpIznpObOJL@google.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Fri, 16 Dec 2022 15:09:04 +0100
+Message-ID: <CANp29Y6KHBE-fpfJCXeN5Ju_qSOfUYAp2n+cNrGj25QtU0X=sA@mail.gmail.com>
+Subject: Re: kernel BUG in ext4_free_blocks (2)
+To:     Lee Jones <lee@kernel.org>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        syzbot <syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, gregkh@linuxfoundation.org,
+        lczerner@redhat.com, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sashal@kernel.org,
+        stable@vger.kernel.org, syzkaller-android-bugs@googlegroups.com,
+        tadeusz.struk@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/12/2022 15:05, Krzysztof Kozlowski wrote:
-> On 16/12/2022 08:31, Marvin Lin wrote:
->> Add dt-bindings document for Nuvoton NPCM memory controller.
->>
->> Signed-off-by: Marvin Lin <milkfafa@gmail.com>
->> Reviewed-by: Rob Herring <robh@kernel.org>
-> 
-> So this is a 16th version but through this entire year you never Cced
-> the maintainers... You did not send a single version to the memory
-> controller maintainers.
-> 
-> I don't know why it is so big problem to use scripts/get_maintainers.pl.
+On Fri, Dec 16, 2022 at 2:01 PM Lee Jones <lee@kernel.org> wrote:
+>
+> On Thu, 15 Dec 2022, Theodore Ts'o wrote:
+>
+> > On Thu, Dec 15, 2022 at 08:34:35AM -0800, syzbot wrote:
+> > > This bug is marked as fixed by commit:
+> > > ext4: block range must be validated before use in ext4_mb_clear_bb()
+> > > But I can't find it in any tested tree for more than 90 days.
+> > > Is it a correct commit? Please update it by replying:
+> > > #syz fix: exact-commit-title
+> > > Until then the bug is still considered open and
+> > > new crashes with the same signature are ignored.
+> >
+> > I don't know what is going on with syzkaller's commit detection, but
+> > commit 1e1c2b86ef86 ("ext4: block range must be validated before use
+> > in ext4_mb_clear_bb()") is an exact match for the commit title, and
+> > it's been in the upstream kernel since v6.0.
+> >
+> > How do we make syzkaller accept this?  I'll try this again, but I
+> > don't hold out much hope.
+>
+> I don't see the original bug report (was it posted to a lore
+> associated list?), so there is no way to tell what branch syzbot was
+> fuzzing at the time.  My assumption is that it was !Mainline.
 
-Although maybe the reason for this is that it was being put in edac
-directory... eh...
+Syzbot is actually reacting here to this bug from the Android namespace:
 
-Best regards,
-Krzysztof
+https://syzkaller.appspot.com/bug?id=3D5266d464285a03cee9dbfda7d2452a72c3c2=
+ae7c
 
+>
+> Although this does appear to be a Stable candidate, I do not see it
+> in any of the Stable branches yet.  So I suspect the answer here is to
+> wait for the fix to filter down.
+>
+> In the mean time, I guess we should discuss whether syzbot should
+> really be posting scans of downstream trees to upstream lists.
+
+In this particular case, syzbot has captured all the recipients from
+the patch email [1], because that email Cc'd
+syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com. To syzbot, all
+these people were involved in the original bug discussion, and so it
+notified them about the problem.
+
+FWIW I've sent a PR[2] to make the "I can't find it in any tested
+tree" message include the link to the syzkaller dashboard. Hopefully
+it will help resolve such confusions faster.
+
+[1] https://lore.kernel.org/all/20220713185904.64138-1-tadeusz.struk@linaro=
+.org/
+[2] https://github.com/google/syzkaller/pull/3591
+
+--
+Aleksandr
+
+
+>
+> > #syz fix: ext4: block range must be validated before use in ext4_mb_cle=
+ar_bb()
+> >
+> > Syzkaller, go home, you're drunk.
+>
+> =3D:-)
+>
+> --
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "syzkaller-android-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to syzkaller-android-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/syzkaller-android-bugs/Y5xsIkpIznpObOJL%40google.com.
