@@ -2,81 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1CE64EA3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C9A64EA49
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiLPLXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:23:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
+        id S230525AbiLPLYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:24:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbiLPLXp (ORCPT
+        with ESMTP id S230515AbiLPLYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:23:45 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB35163E8;
-        Fri, 16 Dec 2022 03:23:43 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id w15so2150345wrl.9;
-        Fri, 16 Dec 2022 03:23:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VAWXZ5dwyU4nYzKu6dG0EcB7QJGqDFnb5rKrT6m3dlQ=;
-        b=YIIoVlfk6+N9Dbv6UCADP+/Bd66InxDSiBgDL/pp4oE2qCfDcfYSu69isft+voaHrE
-         Ywpy6B2xaM3+ri25Rvxc6rNCqM/je85KxvHRRDR73dNAlcS9UyFF9AQekXDYCn33UpMA
-         G0RHJkKnoZjmsBoUn0h0n/UZNvW8+rXW9kxCknJiLigfPguCoRPvv2inPOGJuSp8EeqH
-         kirpg1188XOrFMgC1+dg9pEY1RkQ3YeCQleVpuJuwZsqyut5k4aKqO0bv789stxc+IHP
-         89CUQ46QffrANtTdFgQ6nbWJ1lKAFiSZjinsKgDF3jjVx54Z/l5o8V/y5ExMl+GN+rSt
-         9wzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VAWXZ5dwyU4nYzKu6dG0EcB7QJGqDFnb5rKrT6m3dlQ=;
-        b=Noi0yefqOsPZIE1vrvQPi3oPjOjKApqyRN2k1aMK4ufGZ6rnG02jc/BCUjDr5YSvRP
-         5z7N7CscLLZWYF/XCuAS3To2ZiXz2/9NdXyK9Z7gwRL++EtK8EmZrC9vbtF92Kbkfveo
-         vBCOn8/SEalGR9npuGfhWDyEAReA88ctUhXBKLoyqR6JHTHxvaaM2s3zA58i04MEtFvU
-         OTs3326v8kj6JCdj6pBuN7kBZ1SsVeYEh50vVGoC+v/cyGWNtDzNo9aH3gs02sWUnvdy
-         8I6uWT60TPdiVCwZ2nma9fcfOgsscnBnWXDRiNVlQ2Ms8UtImiznnMk7aUeWY48fU1LM
-         ccTw==
-X-Gm-Message-State: ANoB5pnmp+bvpBgXPhNCmwZRbidKm7yi0beHpXce6/Et/aWbYeygbN/b
-        Wv1Hd8+Uy3xoIB2ztdgNWJ8=
-X-Google-Smtp-Source: AA0mqf48S1sZqP77x7fQ3pVk52VBeYECSdS87vyjHpCEQNGm5ug0+c7NB5eA1qSwlxtF3t3FplvarQ==
-X-Received: by 2002:a5d:4242:0:b0:242:5ed6:a09f with SMTP id s2-20020a5d4242000000b002425ed6a09fmr19661776wrr.44.1671189822253;
-        Fri, 16 Dec 2022 03:23:42 -0800 (PST)
-Received: from [192.168.1.132] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id f4-20020a5d58e4000000b002425be3c9e2sm1985229wrd.60.2022.12.16.03.23.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 03:23:41 -0800 (PST)
-Message-ID: <bfdb30b7-8540-15e9-678c-3bf0541425b4@gmail.com>
-Date:   Fri, 16 Dec 2022 12:23:39 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3 01/10] arm64: dts: mt8183: Fix Mali GPU clock
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, wenst@chromium.org,
-        miles.chen@mediatek.com, rex-bc.chen@mediatek.com,
-        nfraprado@collabora.com, chun-jie.chen@mediatek.com,
-        jose.exposito89@gmail.com, drinkcat@chromium.org,
-        weiyi.lu@mediatek.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-References: <20220927101128.44758-1-angelogioacchino.delregno@collabora.com>
- <20220927101128.44758-2-angelogioacchino.delregno@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220927101128.44758-2-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 16 Dec 2022 06:24:39 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E560C116F;
+        Fri, 16 Dec 2022 03:24:38 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id A162832005D8;
+        Fri, 16 Dec 2022 06:24:37 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 16 Dec 2022 06:24:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1671189877; x=1671276277; bh=64TMHd9mCM
+        xlohGzvyOHHYDGzPMMW5ePInqTBtIjYdk=; b=VsF9DdcyJT9XCBQ/qNusAupwue
+        44Rl2EOQGWItRfsBUCTBoaHn4g8Ra1HFz88POOmJTsD7A/9wjDwYq4Y4aU+ptnCc
+        XXmUUQC9sAXHCbiVE7/NX+YlxjSxnR3CMf1yWd/3iHQHCDUA+97d822o4WHYRScF
+        HxIRNc8JN4rbRymDbV7uJeEauYXXMm79JNB692DPPC46jWi2iCyg0EgmfG8Pxno/
+        CYj7SH0CLMmOegEKnaECCtgc2NS4sy15JGqF5gtbM/RGMUBKsURT5nY7xpLvZ7Oq
+        joxe8Rvdb5gyVdQkNJnNEoe0J2ptnN9Vy34eGuvgrPMzdobfAvKK19oYn0Rw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1671189877; x=1671276277; bh=64TMHd9mCMxlohGzvyOHHYDGzPMM
+        W5ePInqTBtIjYdk=; b=K70/qCvoSdbAWKVRz2ukFfBC92/UqdnvlOLb3gMasrh+
+        METHyE9dna6KBwcNfF55fEHALvWHR9sejwulAGXfm1r+wwKRs20DstEf8wXVEhPa
+        IB5e6FBOiSue95W2sCNBCUJna5g2kp+ON+Q1N1NlFPgEyCWw6Y3HUPZpehKzB5ft
+        aJhmNJmFvKoLJkY2rmRdljp7SxNFkfIBWWPVwCAXNlzBwHmtkcLPocRmjA5gZ+rM
+        olF1Uu7vm2dSZOoUSqTO2uTMKywN4K9KWJHohNpV6eajO0NcSOtiDwqi2eAe5dY1
+        W3eSfP5myBzrQ2zL2KASNEUNzPH14UvlsGvVjgnEHQ==
+X-ME-Sender: <xms:c1WcY6KEwMVEF3zUUQCf-FaVuuiwzXRKhl7jfMG161usujl_oEWD3Q>
+    <xme:c1WcYyIhcDOiDpQuqPWK6r-9upBqd-OCKvLAII0yYwt-gZC6QJZVRxsFzRxi4pCwY
+    0BdvZK-xQHk545nfrA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejgddvjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:c1WcY6v_OqPTHlL7pP07WFByXlkUbKI8i1eoVBwm_Fk70om8xdaoyA>
+    <xmx:c1WcY_bpWcKVOdxpqeUwaZbWabwKgR5-NEJG9cqJ2mUUUfyCIHWSRg>
+    <xmx:c1WcYxZmh8cVSFyqfpOZGzUcFQhwFzXRhXR9eCMeFkoe2Hm5O23HWg>
+    <xmx:dVWcYzl0NW3tLmuqJabNnWj2vwmN8w5d3V68oPAd-iXzPNOZ0KupRA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 8B6D8B60086; Fri, 16 Dec 2022 06:24:35 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <e17c7340-8973-417a-a334-01e96e5bbe73@app.fastmail.com>
+In-Reply-To: <Y5xEITNJkry8uy/h@salvia>
+References: <20221215170324.2579685-1-arnd@kernel.org>
+ <e1fea67-7425-f13d-e5bd-3d80d9a8afb8@ssi.bg> <Y5xEITNJkry8uy/h@salvia>
+Date:   Fri, 16 Dec 2022 12:24:15 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Pablo Neira Ayuso" <pablo@netfilter.org>,
+        "Julian Anastasov" <ja@ssi.bg>
+Cc:     "Arnd Bergmann" <arnd@kernel.org>,
+        "Simon Horman" <horms@verge.net.au>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Jiri Wiesner" <jwiesner@suse.de>, Netdev <netdev@vger.kernel.org>,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ipvs: use div_s64 for signed division
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,39 +90,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 16, 2022, at 11:10, Pablo Neira Ayuso wrote:
+> Hi Julian,
+>
+> On Thu, Dec 15, 2022 at 09:01:59PM +0200, Julian Anastasov wrote:
+>> 
+>> 	Hello,
+>> 
+>> On Thu, 15 Dec 2022, Arnd Bergmann wrote:
+>> 
+>> > From: Arnd Bergmann <arnd@arndb.de>
+>> > 
+>> > do_div() is only well-behaved for positive numbers, and now warns
+>> > when the first argument is a an s64:
+>> > 
+>> > net/netfilter/ipvs/ip_vs_est.c: In function 'ip_vs_est_calc_limits':
+>> > include/asm-generic/div64.h:222:35: error: comparison of distinct pointer types lacks a cast [-Werror]
+>> >   222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+>> >       |                                   ^~
+>> > net/netfilter/ipvs/ip_vs_est.c:694:17: note: in expansion of macro 'do_div'
+>> >   694 |                 do_div(val, loops);
+>> 
+>> 	net-next already contains fix for this warning
+>> and changes val to u64.
+>
+> Arnd's patch applies fine on top of net-next, maybe he is addressing
+> something else?
 
+No, it's the same bug. I had prepared my patch before the other fix
+went in, and only one of the two is needed.
 
-On 27/09/2022 12:11, AngeloGioacchino Del Regno wrote:
-> From: Chen-Yu Tsai <wenst@chromium.org>
-> 
-> The actual clock feeding into the Mali GPU on the MT8183 is from the
-> clock gate in the MFGCFG block, not CLK_TOP_MFGPLL_CK from the TOPCKGEN
-> block, which itself is simply a pass-through placeholder for the MFGPLL
-> in the APMIXEDSYS block.
-> 
-> Fix the hardware description with the correct clock reference.
-> 
-> Fixes: a8168cebf1bc ("arm64: dts: mt8183: Add node for the Mali GPU")
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+FWIW, I find my version slightly more readable, but Jakub's fix
+is probably more efficient, because the unsigned 64-bit division
+is better optimized on 32-bit, while div_s64() goes through an
+extern function.
 
-Both patches applied, thanks!
-
-> ---
->   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> index a70b669c49ba..402136bfd535 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> @@ -1678,7 +1678,7 @@ gpu: gpu@13040000 {
->   				<GIC_SPI 278 IRQ_TYPE_LEVEL_LOW>;
->   			interrupt-names = "job", "mmu", "gpu";
->   
-> -			clocks = <&topckgen CLK_TOP_MFGPLL_CK>;
-> +			clocks = <&mfgcfg CLK_MFG_BG3D>;
->   
->   			power-domains =
->   				<&spm MT8183_POWER_DOMAIN_MFG_CORE0>,
+     Arnd
