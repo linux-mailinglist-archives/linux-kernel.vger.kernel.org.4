@@ -2,78 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D0D64F0AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E598364F0B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbiLPR41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 12:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
+        id S231250AbiLPR5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 12:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiLPR4X (ORCPT
+        with ESMTP id S229863AbiLPR5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 12:56:23 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB46D1A81E;
-        Fri, 16 Dec 2022 09:56:22 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id p24-20020a0568301d5800b0066e6dc09be5so1799809oth.8;
-        Fri, 16 Dec 2022 09:56:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sg/vF4pR6tcjNNEhvl0wJKi+FI4xcwfuJ2cK0XbWF10=;
-        b=HOKV3uf941kc3JAn3x7pnDzcGDY47PHkqTIh+I8NAnI8/z88OqufgZneYXjevyovNf
-         GPnrZi0hAmwzD/O1ASBUQhZWnNgwlq6x1wU7drjTgZpSBn2eaJ8fLgzlQeXYnRUgdMRv
-         ge8KvVhlV2VrqFIkYOjn6L00DwTq9JlCUe32z9MZKqtjf2ukNmkG6GJJXkIBOzpZp4pr
-         RwexnIQV0WSppEz733YDPMlR8epZ9heo2OHnFSgZtzC2QgOlg0+Ho2JeizRP2WcXitoi
-         tDwxJz6WqyO5LnVskuS3TwvH3jNNHdA7nZ7153Y6cUExbw9swwmR76+Q60K7GqZe7PL4
-         7Xug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Sg/vF4pR6tcjNNEhvl0wJKi+FI4xcwfuJ2cK0XbWF10=;
-        b=bHa5G7AkHtNkJNNqUce8775ITzFkvGLbL1FB4Z03KfHP05JGNBJ0QgUzAVv1tTzJB1
-         O3YOIqkNoutsjZRMgHsCc2YzPaexmPtFdwkXn7TwLRwDQrAinSy62Q1K5k8o3+B93k07
-         PxGZGVUBLjmlz04C8jLMbbVAh6syvib5s1NV4KAbYVj+Le2MM3+s3JMoGhGh32ZwUr/0
-         yDCGCORXiVtnnxp16Wps5udrGUMkkJ4J2is7d96akBXQfX8lUMWoTp+Mm8XsjqPTgo3T
-         avfK+4Zco23OIZIFKQR46QvaHAz7nvGamSjycwcISDjh3NzHRdM7CG7tndQjxdtLznpx
-         9djg==
-X-Gm-Message-State: ANoB5pmsxqX6ILtMloGtEy7DRBa0W4V3+ZeFaPWkiZ0vuutyj1rwGm0k
-        1fsgWasg/shN4RoUdWuX4PE=
-X-Google-Smtp-Source: AA0mqf65/yj7iz9g6D3KkV9AD7W8AdFAwgPKVXRTytpNttRwUh+ZefU9bCJI24DQFoL0eXq9R4bumQ==
-X-Received: by 2002:a9d:7f0f:0:b0:670:666b:3472 with SMTP id j15-20020a9d7f0f000000b00670666b3472mr15976311otq.5.1671213382164;
-        Fri, 16 Dec 2022 09:56:22 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r44-20020a05683044ac00b0066e7e4b2f76sm1123870otv.17.2022.12.16.09.56.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 09:56:21 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <34dc4244-4e62-0b73-b6f9-430e4ee1a1e6@roeck-us.net>
-Date:   Fri, 16 Dec 2022 09:56:20 -0800
+        Fri, 16 Dec 2022 12:57:52 -0500
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2053.outbound.protection.outlook.com [40.107.9.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097C51A81E
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:57:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IJboDSN2m5Q0/jnXpP2t2sXCm54Ts07LhjJ5FG+lg8LATy7MKmt2pMjnIcbUTmGX3hCK/0enUAYi0LIDQxlHXt4dvxorJJ3p7MkrD6K4OugYYuZpF1XvHBJOwRG08l0G2wh61W45dpo5I5q598+Ql0xUSo/+9KF7QaA4KZlhOw3JeE4D9yh5jjweFFmzLYew55bLIHeaB+vWDf+PFg7bu59wuYjOZ1fwsPirbwISXWDUCXvKP27WGCleLtrxlL5CbzpdIxDkZET8s3xz9K8+0iDiqVi9g3sC473VFi/ocP0aTRpaO0a/UCEtyRDLrKdQMeoyNOP0IjFIsyfZ1mW8dQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d5ACZDrKjzrMSOjiqA4FneoowjvDaSWRo066fpY+6ZM=;
+ b=PYrjsj43ur43ThDBulxDHf2GZJY0OzssPW1WtTX/o4mgdJcJe8y4d4HFOKbRbl8rQ6Zp2brkmpLenRodZGEim5ZvcILc5xT3wovg7D6wz4cKcx6wx1PBufB5SDGRKNye1jSQhm60z8cMhm6vuXuufhXdMR25+mzsVSbTcx7mMyhCo8T4kik0HzKPC39zDMv3FGe5cnaEYv9sRotzkE4tEv/s+PefWImI+Mx4CPwFCNzguRn+u7PC6jI3OTNzCZaYYEa+S/9LDsx2QVSq9AjpyTaZxzWqxEiffpVuj/ODVCUUZKVN5UD6lBu1rvrzhnwK2SUxhxkqVV//o6xSL5hz2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d5ACZDrKjzrMSOjiqA4FneoowjvDaSWRo066fpY+6ZM=;
+ b=aL6dpugokhC/9Vv+ycZxkKz4dDVNZ6vfIFZMwRSTz1MwWJ39wm4Q+Ow3kxSEBQKeI+XXV67zReQxGer+LJpaGn2zy/Bt3smvfif6VLAOUKLIZixWobkQEJrRAne+ko9Z3Qd9zH7lKbvK6WPFOI6ccOBQNrl0hhMj2pdYMaykxLUl/zwy0P22qwJyYtfmdPcI3r60ntPUXoMKyg8s4MtOmJxH2EbYLM3DaIUCKhDxH2dPEr9GPD8hGJd2mn2w7h2iB9au2Rm3fuxl20E/hjOFgvhNI5+2GAYA2P5Y0IC9rSJ+TlpU8AHZXk3Onvalq8kxglT4GLGS3nQce3YZ6OFXdw==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB2404.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:35::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12; Fri, 16 Dec
+ 2022 17:57:46 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::8e8b:856e:12eb:ff9d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::8e8b:856e:12eb:ff9d%7]) with mapi id 15.20.5880.021; Fri, 16 Dec 2022
+ 17:57:46 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+CC:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jan-Benedict Glaw <jbglaw@lug-owl.de>,
+        Joel Stanley <joel@jms.id.au>
+Subject: Re: [PATCH v2] powerpc: Pass correct CPU reference to assembler
+Thread-Topic: [PATCH v2] powerpc: Pass correct CPU reference to assembler
+Thread-Index: AQHZESl3h6uoWW5dBEO6rDYbx87kha5wwneAgAALBAA=
+Date:   Fri, 16 Dec 2022 17:57:46 +0000
+Message-ID: <73fc1107-b540-bec3-7625-c6e6d0641bbb@csgroup.eu>
+References: <01fe73614988e2402a7526fb6b6e903bc3777bb5.1671179743.git.christophe.leroy@csgroup.eu>
+ <20221216171821.GA25951@gate.crashing.org>
+In-Reply-To: <20221216171821.GA25951@gate.crashing.org>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MR1P264MB2404:EE_
+x-ms-office365-filtering-correlation-id: f79878ad-f7ed-4941-64be-08dadf8f0a12
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wIVH+h8X0hPGFGRKZF/GzbGLpVKsgprp4qHQAj9J2IGXx9G9bU9dWVfUeh6KWLrOd+TYfFtZP7Y04aIWVQyN/P3BCV4urIWFI6MheArbS85YJsLHl6DPdZG/6F0NZJ5KVUmfHp2vtaz7MjPSGYaLM4Ib7J3e1lNyA0CBwAAbo7Q1QCRnD8o3fdT08KAa4h/SHNQuc1RDuFP22uel6qMuRVSAv7NChJbEHzZSx03ogqTclqYECh4CwC16bZLn8cNSiARLSkdX0agTa55cpXJmHKJgsx6h+RRdf9lE+HqJsydGsuFw7oefWtWjTS9+yBrGC2B0+siMs+w6/qVrkwnLCyytfL6JV4ilGFi7ReVq+Q20F/AvPyf4L5hRYWCxL/7F4lAaT7GswhxcFTgMBh+yF73K3VUxkgS9/3iTNuBsXNx2dMrlRo4wJymPVsddHBfMt82zc/aoxeIG62PVNdw8zn6onKSvu6vauzWHVgrdKeMBynneIhcygsK1OatnwTnktI1vEL3jF5vF0tXTGdKcYQlIXqPeHnJC8YFz/1hAasIiGv22jTRfv2wVWozv0m4obPUacc6eT5iC5TiAMLJSk4F1xcIUDmImurX/nNZt79aIPkQFUU48kZZ7XXMrLa95HFqqfPCvU7iBDT2XWnHN5DVR+feVKedb4vhXzMvKNLRYjkwvZCY1qavhjvQsTc6ctoZaVtixqIZZvb+EOEefFIYAIgtSvPeFOpWvzmOkAXG627T7jfwIgnFXhB5tMkcHb1py4zJs/vsTfsBLQfkJ+w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(396003)(366004)(346002)(136003)(451199015)(36756003)(2906002)(38070700005)(41300700001)(8936002)(5660300002)(122000001)(38100700002)(86362001)(31696002)(6916009)(31686004)(478600001)(6486002)(54906003)(71200400001)(44832011)(26005)(91956017)(4326008)(76116006)(316002)(66556008)(64756008)(66946007)(2616005)(66446008)(6506007)(66476007)(186003)(8676002)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VVU4RS9ZbS9raTN2K2creE5LQldSY2JuZjVRLzV3SDZyT1B4R0ZGUWxYM0lG?=
+ =?utf-8?B?UTM5cHdXWGQvOXRxaFNDa29sRGtNektvblVIVnM3NC9ZOWtlMUhvQyt5ay9P?=
+ =?utf-8?B?TENUU3pPbzliaHlwdjV0YVRUbnV0Tm5VWFE2S2RyNm0yNkNoZXJSajd3LzMy?=
+ =?utf-8?B?Kzl5M1V2dm5DSzd6N2RReGtpU3NJc0xocmNKK29oa2FSK0pMUVVHSUFlY3VH?=
+ =?utf-8?B?bUF0ZXAxYWRvT3BJK1J6QnByTFhRNy8zU2ZOcm1HeXJOWm9ldXpFM1pnWW1D?=
+ =?utf-8?B?ZXQ4c0lKR1o3K1hLTFl6NDl2MktRWFo5blpmV0UxMHhna1NTMytZYk9pSjY3?=
+ =?utf-8?B?VnhtOGc2WXRFSmptbCtUSlprSFJTNmQzczlLSXNBVVRJUEU2WXZFT1lGci96?=
+ =?utf-8?B?VEh1U1hTSlYwcFVOdFhBSWlZR2lLZU9oYmwzRWZnRUM5aktpMklXbzdCRWZY?=
+ =?utf-8?B?dnJwWlhQN3JyVHdLWFFBMTBrajVXaGZZeGJGWnBpK3ZCZUFNSEprQmNUUHFN?=
+ =?utf-8?B?WUxWM3FNa0NTKzJPSXY3S2xxalFyU2xycFAwNmNEWGpKWmMvQnNUcDJIcFoz?=
+ =?utf-8?B?bkZmSGZQL2NhbmdUVlltc2t2K0tvNjlIRWR2ZDR6Vzlrb2Z5OEdmQnRFdFFJ?=
+ =?utf-8?B?UWhoWVV3emM0aFhsc3Y0SEVrNzNLL2FnY1o3RVIvS0UyREVJVFRhaHR2UFRn?=
+ =?utf-8?B?NW81d0lqNHRLUXBGUXpwNXlXUXlFMkxJN2wyemV6TG5mbmZlUFd4d0ZhRVUy?=
+ =?utf-8?B?OW1JNnR1TzRHdy81YVowZFBaZm1oaXl1UmpFWllFNXhGcXZyZUJSZEJiMm5G?=
+ =?utf-8?B?OXNjTlYvMmZoMGtMTGlRaWdFTTdNMlFaWGlXaXpZZVNVYlZtZWVWU1dZK3BF?=
+ =?utf-8?B?QS9MQ0pETUs4Y2xjTjBLdE1CUDNXMWQyQUZNQ2M2dmJVKzJHYnFOQnVHckVj?=
+ =?utf-8?B?c1d4VUFEU2lWYTFBZ29oN3pFczB1U0dHdUJCTXBPU0dkL1lSWlZjTTcyM1Vi?=
+ =?utf-8?B?emtlM1JKKy9aazU1ZmdqeVBTQm1saWpJc1ZzR1hhZVlCQjBVcDg0T2VwR1VW?=
+ =?utf-8?B?MzVPR0x5WmJiVXFObDZ2dzh2aHQzSndrZzVJTFNnQmJkTnZhYStnLzBEbHo1?=
+ =?utf-8?B?MXZUS3h5TW9LWmtrdmQ0Q0loNXRmcG1ZSWF0Z2J4aEJ1TUpuZ0tXR1RpY01I?=
+ =?utf-8?B?b1J2WHVDcnRiS3hCY2R6UXhFR1A5U3Z3Q3daMU9FT0Y1bEltaTEwRFVrK2RM?=
+ =?utf-8?B?NnBnOUQxdHk4UGJnUklwTnVvQW1QT0tEKzAzWDNEZUJoa2hYWUZ1bVU5UVRM?=
+ =?utf-8?B?MkJwclNXeTJtMnJPL21PSEYxcUtKWStvb1RsaTNwcVR1endncU05QTFOUFdO?=
+ =?utf-8?B?V2pYWnhJbWMwOFFOeVFhK1VhV3dzRWNLc04rZ2k4MmZUM3lqNEhHREdpSXBW?=
+ =?utf-8?B?aVQwbmpyYzdBY01YZklPa0kzMGtVZjBldEtYUC9YMk5DeFpDZzQzaUsyc29l?=
+ =?utf-8?B?WjJoY29WejhRZ1JPL2EzVkF4UVVTNXkzMGkvZG9tNHd0R09KcWpzZ3BhdEYx?=
+ =?utf-8?B?Ull3UTNMdTJqQm80WWJqcWE3d3NTRGFNbkN3OXI3WEFJRW1IaGNCaW9nWVhp?=
+ =?utf-8?B?cUtqK3R0NXcweXZXY3ovQkpiczdRSkxxdWRvQUY1dkxETXV6dzVkdTBYaGEz?=
+ =?utf-8?B?d1dlMFYycXBJbTN2RG5EMWc4YWZPNThsdW9uQS92QzJrQTRYaDRhNEFyaXFL?=
+ =?utf-8?B?ZTg0NS8yMHFRV202UUdTeDJIU3drdFhsU0hnWEhIWUQ2ZXpWdjZEZDFCRm9O?=
+ =?utf-8?B?dG1CSkdHMWFPbXhzNTlrRXpnWEdnNFk5WEdINnMyVEJ0TFMxY01jZzJ1UUZ2?=
+ =?utf-8?B?RTdMSHIwVWFDdmFBMzZZYUN1NzVYQVVKZFBVTnR4T1JVZTFsWlVsOUFxUk9H?=
+ =?utf-8?B?RHk1dE85eGhXQ1BkTTExd3dUWmpuM0QwK2QxUlRCNUVxOGZ0WEJYU0c0c1Bw?=
+ =?utf-8?B?bk5aZE1aZk0yRnJvdkZSRENGamEwNFZrdHJNNDg5QVJkNVhKVk1kQTFidGV5?=
+ =?utf-8?B?REN1UTV5cVA1V1ZJN3F0dDJRWCtqWWdkbTcxV3ZiZGgwNUVRa0UrYUwwS0pr?=
+ =?utf-8?B?eGovcFAza2Z5KytCYTQ4TWlrR1VNTG1oQ3c5NGoyL3E3bmFIMnByMG5LejBy?=
+ =?utf-8?B?Y0E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A6B39866BFB1124B97648EB56BC5CD22@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] hwmon: coretemp: avoid RDMSR interruptions to isolated
- CPUs
-Content-Language: en-US
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>
-References: <Y5sWMEG0xCl9bgEi@tpad>
- <68f76ac7-5edd-d437-8bef-e233f2876660@roeck-us.net> <Y5x7hXGGLkcmejKq@tpad>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <Y5x7hXGGLkcmejKq@tpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: f79878ad-f7ed-4941-64be-08dadf8f0a12
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Dec 2022 17:57:46.8172
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KSwnWGQIWhUar0k+Hb0boHck3j9zOJibgtpAiZLniYjV3E8iuhtNKIKFKBBRuspeDylnl4iGbJkUf1H/akUQ6/uQ980Hu00rIWtLbHkqYgs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2404
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,68 +134,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/16/22 06:07, Marcelo Tosatti wrote:
-> 
-> The coretemp driver uses rdmsr_on_cpu calls to read
-> MSR_IA32_PACKAGE_THERM_STATUS/MSR_IA32_THERM_STATUS registers,
-> which contain information about current core temperature.
-> 
-> For certain low latency applications, the RDMSR interruption exceeds
-> the applications requirements.
-> 
-> So disallow reading of crit_alarm and temp files via /sys, returning
-> -EINVAL, in case CPU isolation is enabled.
-> 
-> Temperature information from the housekeeping cores should be
-> sufficient to infer die temperature.
-> 
-> Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-> 
-> ---
-> v2: improve changelog to mention that an error is returned,
->      and sysfs file is not disabled (Guenter Roeck)
-> 
-
-You did not address my feedback. I requested a code change.
-Returning -EINVAL is unacceptable, and a solution not creating
-the sysfs attributes to start with would be preferred.
-
-Guenter
-
-> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> index 9bee4d33fbdf..30a35f4130d5 100644
-> --- a/drivers/hwmon/coretemp.c
-> +++ b/drivers/hwmon/coretemp.c
-> @@ -27,6 +27,7 @@
->   #include <asm/msr.h>
->   #include <asm/processor.h>
->   #include <asm/cpu_device_id.h>
-> +#include <linux/sched/isolation.h>
->   
->   #define DRVNAME	"coretemp"
->   
-> @@ -121,6 +122,10 @@ static ssize_t show_crit_alarm(struct device *dev,
->   	struct platform_data *pdata = dev_get_drvdata(dev);
->   	struct temp_data *tdata = pdata->core_data[attr->index];
->   
-> +
-> +	if (!housekeeping_cpu(tdata->cpu, HK_TYPE_MISC))
-> +		return -EINVAL;
-> +
->   	mutex_lock(&tdata->update_lock);
->   	rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax, &edx);
->   	mutex_unlock(&tdata->update_lock);
-> @@ -158,6 +163,8 @@ static ssize_t show_temp(struct device *dev,
->   
->   	/* Check whether the time interval has elapsed */
->   	if (!tdata->valid || time_after(jiffies, tdata->last_updated + HZ)) {
-> +		if (!housekeeping_cpu(tdata->cpu, HK_TYPE_MISC))
-> +			return -EINVAL;
->   		rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax, &edx);
->   		/*
->   		 * Ignore the valid bit. In all observed cases the register
-> 
-> 
-> 
-> 
-
+Q0MgSm9lbCBmb3IgdGhlIC1tYW55IHN1YmplY3QuDQoNCkxlIDE2LzEyLzIwMjIgw6AgMTg6MTgs
+IFNlZ2hlciBCb2Vzc2Vua29vbCBhIMOpY3JpdMKgOg0KPiBIaSENCj4gDQo+IE9uIEZyaSwgRGVj
+IDE2LCAyMDIyIGF0IDA5OjM1OjUwQU0gKzAxMDAsIENocmlzdG9waGUgTGVyb3kgd3JvdGU6DQo+
+PiBUaGUgcHJvYmxlbSBjb21lcyBmcm9tIHRoZSBmYWN0IHRoYXQgQ09ORklHX1BQQ19FNTAwTUMg
+aXMgc2VsZWN0ZWQgZm9yDQo+PiBib3RoIHRoZSBlNTAwbWMgKDMyIGJpdHMpIGFuZCB0aGUgZTU1
+MDAgKDY0IGJpdHMpLCBhbmQgdGhlcmVmb3JlIHRoZQ0KPj4gZm9sbG93aW5nIG1ha2VmaWxlIHJ1
+bGUgaXMgd3Jvbmc6DQo+Pg0KPj4gICAgY3B1LWFzLSQoQ09ORklHX1BQQ19FNTAwTUMpICAgICs9
+ICQoY2FsbCBhcy1vcHRpb24sLVdhJChjb21tYSktbWU1MDBtYykNCj4gDQo+IFllcy4NCj4gDQo+
+PiBUb2RheSB3ZSBoYXZlIENPTkZJR19UQVJHRVRfQ1BVIHdoaWNoIHByb3ZpZGVzIHRoZSBpZGVu
+dGlmaWNhdGlvbiBvZiB0aGUNCj4+IGV4cGVjdGVkIENQVSwgaXQgaXMgdXNlZCBmb3IgR0NDLiBV
+c2UgaXQgYXMgd2VsbCBmb3IgdGhlIGFzc2VtYmxlci4NCj4gDQo+IFdoeSBkbyB5b3UgdXNlIC1X
+YSwgYXQgYWxsIGZvciB0aGlzPyAgVGhlIGNvbXBpbGVyIHNob3VsZCBhbHJlYWR5IHBhc3MNCj4g
+cHJvcGVyIG9wdGlvbnMgYWx3YXlzIQ0KDQpUaGF0J3MgaGlzdG9yaWNhbCBJIGd1ZXNzLiBDb21l
+cyBmcm9tIGNvbW1pdCAxNGNmMTFhZjZjZjYgKCJwb3dlcnBjOiANCk1lcmdlIGVub3VnaCB0byBz
+dGFydCBidWlsZGluZyBpbiBhcmNoL3Bvd2VycGMuIikNCg0KPiANCj4+ICtjcHUtYXMtJChDT05G
+SUdfUFBDX0JPT0szU182NCkJKz0gJChjYWxsIGFzLW9wdGlvbiwtV2EkKGNvbW1hKS1tYW55KQ0K
+PiANCj4gV2hhdCBpcyB0aGlzIGZvcj8gIFVzaW5nIC1tYW55IGlzIGEgaHVnZSBzdGVwIGJhY2ss
+IGl0IGhpZGVzIG1hbnkNCj4gcHJvYmxlbXMgOi0oDQoNClRoZSBvbmx5IHRoaW5nIEkgZGlkIGlz
+IHJlbW92ZWQgdGhlIC1XYSwtbXBvd2VyNCBmcm9tIHRoZSBsaW5lLCBsZWF2aW5nIA0KdGhlIHJl
+bWFpbmluZyBwYXJ0LiBJbml0aWFseSBpdCB3YXM6DQoNCmNwdS1hcy0kKENPTkZJR19QUENfQk9P
+SzNTXzY0KSArPSAkKGNhbGwgYXMtb3B0aW9uLC1XYSQoY29tbWEpLW1wb3dlcjQpIA0KJChjYWxs
+IGFzLW9wdGlvbiwtV2EkKGNvbW1hKS1tYW55KQ0KDQpJdCB3YXMgYWRkZWQgaW4gMjAxOCBieSBj
+b21taXQgOTYwZTMwMDI5ODYzICgicG93ZXJwYy9NYWtlZmlsZTogRml4IA0KUFBDX0JPT0szU182
+NCBBU0ZMQUdTIikuIFRoZXJlIGlzIGEgbG9uZyBleHBsYW5hdGlvbiBpdCB0aGUgY29tbWl0Lg0K
+DQpTaG91bGQgd2UgcmVtb3ZlIGl0ID8NCg0KQ2hyaXN0b3BoZQ0K
