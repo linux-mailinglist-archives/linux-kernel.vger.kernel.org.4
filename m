@@ -2,107 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E68364EDD0
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF08064EDD4
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbiLPPYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 10:24:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S230307AbiLPPZy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Dec 2022 10:25:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiLPPYv (ORCPT
+        with ESMTP id S229928AbiLPPZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 10:24:51 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A27D60374
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:24:50 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id j4so4030259lfk.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:24:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=uZJQlztl4lvsQKxdHLWxG7Zzk/r0Lb2ClxI+AKIGcBE=;
-        b=qQG6V6kiTPCQ0HJL8CdU5LdNSYGX7IKBc16WgH0a5PBIqCfLZ1ymGZIO8j/YW7EZGk
-         NF8tF4VtFPd5cmQOUI6vYvWBGzGbjsP/jDlf8u67N587kDi8fPCp1U6nZ8m3jaSyH2QD
-         1lQubTh1aYr8L8qfUlO7TXfXf0Uy1sd2pigsQDsPtUDnd080xxKT9LBLqlLCbrrEEjYN
-         CWVEZ4YKJfrL7qeGHc/Qe+ZAxPJmCTDzdTGMbvk48yt9+wHbqjX0sEA0vZcwkxqJxj4+
-         fG89q1dd+DIlhzIaTFaKVYRrLTIPUrlw9DChD6E80RRWTj5DEX5EkiBgFY7O5DVcyOyb
-         hckw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uZJQlztl4lvsQKxdHLWxG7Zzk/r0Lb2ClxI+AKIGcBE=;
-        b=cMqbEsl8MShC2/f5MCciahp5ormPUzvf59qeuhgj3DFJfFGsqKdm88aMHSDMFYFFpq
-         ojlQoy+f2luMgtGo6al5sQbcCvcrv+0R8CcfVttd9P5on4u0Ce/44muKLAradmoNgPnn
-         ozG88pi7yMYa/ZIbwnoltAaWL7B5wgE09NvWYIGUQt1/ksMZCgzYr33eAeRBfFKogr3J
-         P8Cr2ZGzJKLrvqmnT9C7JLmCQHp/gXohFiZ3slOcvtrPhRLSr2dNmZS3JSojKHjrI5kQ
-         Iydbk+i0yGOc0f9ZvhGdbBoOZQKZObvHwb3Zhd+wszNtYNZRsE5Fnooc/NrAkDbKeJLQ
-         2gog==
-X-Gm-Message-State: ANoB5pkjeb6Q3Ep2wzu1YXDHSPsKbUEZ1y5WlTd2ZvN9N/vB10Tm+UaU
-        /BYFukquMdx5Z4OZmGO750nevFXkxuaOjgp0d44=
-X-Google-Smtp-Source: AA0mqf7a9dTp9L8Xlobshk4qucXr21vqP0hthy1d8bfiuD1UV2iVnN7fhYGXvVy+we4ZOfDqLr9sqkZE24X/73PlPsQ=
-X-Received: by 2002:a05:6512:3990:b0:4b6:f1af:4263 with SMTP id
- j16-20020a056512399000b004b6f1af4263mr945776lfu.114.1671204288241; Fri, 16
- Dec 2022 07:24:48 -0800 (PST)
+        Fri, 16 Dec 2022 10:25:50 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DAB21255
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:25:48 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-80-_OXu78BEO5abMLAtHBU1jQ-1; Fri, 16 Dec 2022 15:25:46 +0000
+X-MC-Unique: _OXu78BEO5abMLAtHBU1jQ-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 16 Dec
+ 2022 15:25:42 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Fri, 16 Dec 2022 15:25:42 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Andreas Schwab' <schwab@linux-m68k.org>
+CC:     "'Leizhen (ThunderTown)'" <thunder.leizhen@huawei.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Jiri Olsa" <jolsa@kernel.org>, Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: RE: [PATCH v9] kallsyms: Add self-test facility
+Thread-Topic: [PATCH v9] kallsyms: Add self-test facility
+Thread-Index: AQHZEWHMzV5WljPUpEGVjsixemOWL65wodIQ
+Date:   Fri, 16 Dec 2022 15:25:42 +0000
+Message-ID: <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com>
+References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
+        <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
+        <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
+        <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
+        <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
+        <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
+        <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
+        <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
+        <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
+        <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
+        <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
+        <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
+        <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com>
+        <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
+        <592dce7a0de24c62bd31c29f86ce6c1b@AcuMS.aculab.com>
+ <87pmcjidfe.fsf@igel.home>
+In-Reply-To: <87pmcjidfe.fsf@igel.home>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Received: by 2002:a05:6520:25d6:b0:22f:2dde:6e8 with HTTP; Fri, 16 Dec 2022
- 07:24:47 -0800 (PST)
-From:   Wang Chen <wangc6084@gmail.com>
-Date:   Fri, 16 Dec 2022 04:24:47 -1100
-Message-ID: <CALuFy5GdNjPUNKYjmM1VqnORmDrJaomsjR3RBcs=oiXY+TvhHg@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.0 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
-        MONEY_FORM_SHORT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_FILL_THIS_FORM_SHORT,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:132 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5079]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [wangc6084[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [wangc6084[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  1.0 FREEMAIL_REPLY From and body contain different freemails
-        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
-        *      information
-        *  0.0 MONEY_FORM_SHORT Lots of money if you fill out a short form
-        *  3.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: ******
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We are writing this message to you from the World Health
-Organization-Palliative Center meanwhile Your email Contact was
-provided to us by the Network Service Provider and you have been
-Chosen as our Representative in your Country to distribute the total
-sum of ($600,000. US Dollars) For the yearly Empowerment Donation in
-order to help the Sick people and Old people in your Country.
+From: Andreas Schwab <schwab@linux-m68k.org>
+> Sent: 16 December 2022 15:20
+> 
+> On Dez 16 2022, David Laight wrote:
+> 
+> > 'cs' and 'ct' should be input parameters.
+> 
+> They are (and output as well).
 
-If you receive this message kindly send your CV or your Personal
-Details Your Full Name, Your Address, Your Occupation, to ( Dr James
-Edmond ) through this Email:
-(drjames1890@yahoo.com) for more Details.
+Right, but the 'output' values aren't needed and get
+discarded because the asm block in inside a static inline.
+
+It could be a recipe just waiting to go wrong.
+
+But I bet the actual problem is the output register
+aliasing one of the inputs and then reading from very
+low user addresses - I bet they don't fault on m68k.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
