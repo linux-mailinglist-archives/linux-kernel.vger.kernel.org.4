@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5683F64F563
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 00:57:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C819E64F56C
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 00:59:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiLPX5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 18:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
+        id S229848AbiLPX7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 18:59:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbiLPX5e (ORCPT
+        with ESMTP id S229518AbiLPX72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 18:57:34 -0500
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7999555A9A;
-        Fri, 16 Dec 2022 15:57:33 -0800 (PST)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-3cbdd6c00adso54072007b3.11;
-        Fri, 16 Dec 2022 15:57:33 -0800 (PST)
+        Fri, 16 Dec 2022 18:59:28 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E8557B59
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:59:27 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id vv4so9769444ejc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:59:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=z0jxoLmhjzdQFU4Rcca6h1zELOoOj2Hhrq5sWSEt7V8=;
-        b=HKVw5J3noI9XmTp4k5G5m6+ylCn+yW93A8XQkAdG6J0nZjK32B+jT+rwcdWmz1pT5V
-         UJwEz+vfCU+EunGlHsDGZekb7UkXj6gVB0LX6AB+lfgWsLwCwmhEA1MqUOGTpZxs87ix
-         N9w//MYY/k3CER6eOJaRf1C+TR+HSZfOm4UwvXN12W2ka5cex6o29Tuk6neAyxkBuNeA
-         VpZA+HQvEXyUZzNMRYxz0ERRm0ThKupJphUHgMhZMWW2mq5ob/6tmc+aErEt9z1VrI7G
-         OuM4mZrax5w+/tRQWaFFjaYToTDXhvXv0It8FToCuaYw0Ot3FhLjA/mpLiwC/rQm/Tfp
-         PgXA==
+        bh=oIKXv0RMSOh4Zj5JXJ0H7+d/0M4R06dAaYKh+BMHd2A=;
+        b=juvIkT8vcatHsAuX5x/9pLyDEsPoOL7IqGfGxQxp6rjBVO4P/tlEBTqvfVLkkNKYGv
+         3CEaP8RDEXyHYSAi+1pUD1n+RTt0ogvvYz3AYEtllQKtJPlB3YwxLqHkaVku92HXBPr5
+         OJAS83LHruNjFBDASNQkVdRo7uNHrmFOhWWLJNlSn1UFXP6HSHn6iAHH76LFkysVK2iS
+         NqEeUicB6AO8M/MZpRezry/sYvEu8rsW+19+sJCRjDx102ABSOlasQ4qnabMXUYHoueq
+         xJH2tHVUZOY6KIs+JzPQxEWWZOgSkkHx0iBuZh4lZwrOjsA1gkyUurc0zHAWZaE7dmr9
+         hJWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=z0jxoLmhjzdQFU4Rcca6h1zELOoOj2Hhrq5sWSEt7V8=;
-        b=0iES4Db0XONHT+IFPNBHgWst67tWDu4ZrNfnNAoNYYoFj/p0sz53SDpITlM86X2+TM
-         vE3RvgxzFPHddOR9xsJVgpmcnD3YDhMLFWglBRoWFNtyrDfZOJfiQWloo4QPo+Tyzyr9
-         CfCvUpUZfniv45SmCGbtmS5nPRLnD6dYpvYg0qpZMIHgF9P3k13nffXvxNKd3N18JrTM
-         jMzR9IlwYWMlkvEacm0x8cKEiHOKY50rMP6g/ZLvILnWK5gN6oOESMZzhnKCjy9Z77T0
-         Z1jsg5S+Sn848IDvyDprufVPz5cE/CWPthIds2MpDw6oWd81Sc826EBCzZ25j6yRKIHG
-         xB3Q==
-X-Gm-Message-State: ANoB5pntWuFNh1nCpd0jaqLk2ejDDKuDUQsIdsTQmeCb0bZxcvAyc8cW
-        hHr5nDChKK6cWzqTVi27wAu2WtavpjJe+xTUxMczLYEffflbpw==
-X-Google-Smtp-Source: AA0mqf6MPZLiYnqnGy6wTGkTNxkB7D4Tgsi4gjQvQRggN39XsKevSR1CQmjsI822xDdkBkoiPfoeSOHvvuBZq25FqYI=
-X-Received: by 2002:a0d:eb15:0:b0:3b8:7fc6:c06b with SMTP id
- u21-20020a0deb15000000b003b87fc6c06bmr3567855ywe.129.1671235052681; Fri, 16
- Dec 2022 15:57:32 -0800 (PST)
+        bh=oIKXv0RMSOh4Zj5JXJ0H7+d/0M4R06dAaYKh+BMHd2A=;
+        b=f+aZRY3O5kWfoW/lT2liHoC7zAwnR+zYnazwhPOPUYJ8De9cCKMcByzTMziGAd4Iod
+         2fYHqIdMqM4Ut0MPm6U5oLGB8KBNyC+6cs5jJBbjlAaTq7EzfDUq+Jbl9yhiiZIR8cm7
+         3C6hnxwBJm/4br81Wf+wumO402A6Vi+R0zq3i3jqV21QVOaVB2rkM6muxWdtBAYK4cK8
+         VuunAo8btoJJPxl7Bj2lychZ842Hfh+Hmw+KZYCr8lwdfdC8NR2HYTiZ1CbkTGCOYIUA
+         kVRl9QEM1ATsGcqAlRLBebcUcUHRvgRyjurNusVQfYXHKPJTM4W+LfM2b92+KGWQ/i/y
+         cJZA==
+X-Gm-Message-State: ANoB5pmUZWWGpjgUN/UIJUjUuVEmqvgdKfD4g+jJehE+41031wvGLHEx
+        cHQS0+qIq7IWvRCjJog9HskC5D/9nKORRYTHAYNDG2jLftFRbA==
+X-Google-Smtp-Source: AA0mqf6wIOamTnfqwHnHk7jBVTZApRrd3OSb9bKxdGI5zvUlM4wOFJiCeCifrb0GpusvxsjJ/sAFf4y8ghxYFJLgfUM=
+X-Received: by 2002:a17:906:840e:b0:7c0:d94c:7384 with SMTP id
+ n14-20020a170906840e00b007c0d94c7384mr23051046ejx.109.1671235165720; Fri, 16
+ Dec 2022 15:59:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20221216174927.1008629-1-wei.liu@kernel.org> <CANeycqo2qKUnyh6XVkBHyAcVjvN9NKJ9sb9bTzkHq7jC1C-B0w@mail.gmail.com>
- <Y5zt9PSUD6d1MTyZ@boqun-archlinux> <Y5z/msA6FWH0Bgmq@liuwe-devbox-debian-v2>
-In-Reply-To: <Y5z/msA6FWH0Bgmq@liuwe-devbox-debian-v2>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 17 Dec 2022 00:57:21 +0100
-Message-ID: <CANiq72krvm2bT3suU9ecxpECZYNZ99+ed5y65tUDpNiqGvWKOw@mail.gmail.com>
-Subject: Re: [PATCH] rust: kernel: drop repetition in offset_of macro
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        rust-for-linux@vger.kernel.org,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+References: <20221216233355.542197-1-robdclark@gmail.com>
+In-Reply-To: <20221216233355.542197-1-robdclark@gmail.com>
+From:   Chia-I Wu <olvaffe@gmail.com>
+Date:   Fri, 16 Dec 2022 15:59:14 -0800
+Message-ID: <CAPaKu7RP281inKJKNWWTnETCU+giwU2YajzwH6AUVeTDXQoWWg@mail.gmail.com>
+Subject: Re: [PATCH] drm/panfrost: Fix GEM handle creation UAF
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -74,18 +71,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 17, 2022 at 12:30 AM Wei Liu <wei.liu@kernel.org> wrote:
+On Fri, Dec 16, 2022 at 3:34 PM Rob Clark <robdclark@gmail.com> wrote:
 >
-> What will be  even better is someone please contribute such a macro to
-> libcore so that I don't have to replicate the code snippet everywhere.
-> :-)
+> From: Rob Clark <robdclark@chromium.org>
+>
+> Relying on an unreturned handle to hold a reference to an object we
+> dereference is not safe.  Userspace can guess the handle and race us
+> by closing the handle from another thread.  The _create_with_handle()
+> that returns an object ptr is pretty much a pattern to avoid.  And
+> ideally creating the handle would be done after any needed dererencing.
+> But in this case creation of the mapping is tied to the handle creation.
+> Fortunately the mapping is refcnt'd and holds a reference to the object,
+> so we can drop the handle's reference once we hold a mapping reference.
+>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>  drivers/gpu/drm/panfrost/panfrost_drv.c |  7 +++++++
+>  drivers/gpu/drm/panfrost/panfrost_gem.c | 10 +++++++---
+>  2 files changed, 14 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> index 2fa5afe21288..aa5848de647c 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> @@ -98,6 +98,13 @@ static int panfrost_ioctl_create_bo(struct drm_device *dev, void *data,
+>                 return PTR_ERR(bo);
+>
+>         mapping = panfrost_gem_mapping_get(bo, priv);
+> +
+> +       /*
+> +        * Now that the mapping holds a reference to the bo until we no longer
+> +        * need it, we can safely drop the handle's reference.
+> +        */
+Not too familiar with panfrost, but I don't see
+panfrost_gem_mapping_get hold a reference to the bo?
 
-It is happening! :-) See https://github.com/rust-lang/rfcs/pull/3308,
-currently at the end of the FCP ("final comment period"), i.e. the RFC
-is likely getting accepted soon.
+> +       drm_gem_object_put(&bo->base.base);
+> +
+>         if (!mapping) {
+>                 drm_gem_object_put(&bo->base.base);
+>                 return -EINVAL;
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.c b/drivers/gpu/drm/panfrost/panfrost_gem.c
+> index 293e799e2fe8..e3e21c500d24 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_gem.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_gem.c
+> @@ -234,6 +234,10 @@ struct drm_gem_object *panfrost_gem_create_object(struct drm_device *dev, size_t
+>         return &obj->base.base;
+>  }
+>
+> +/*
+> + * NOTE: if this succeeds, both the handle and the returned object have
+> + * an outstanding reference.
+> + */
+I might suggest dropping the "_with_handle" suffix.
 
-We track it at https://github.com/Rust-for-Linux/linux/issues/514 (one
-of the sub-lists in issue #2).
+The naming convention is used in several drivers.  I think we should
+make it the case that the _with_handle variants always return the
+handle without the pointer.  (And with the change, it immediately
+becomes clear that qxl and vmwgfx also have similar issues).
 
-Cheers,
-Miguel
+>  struct panfrost_gem_object *
+>  panfrost_gem_create_with_handle(struct drm_file *file_priv,
+>                                 struct drm_device *dev, size_t size,
+> @@ -261,10 +265,10 @@ panfrost_gem_create_with_handle(struct drm_file *file_priv,
+>          * and handle has the id what user can see.
+>          */
+>         ret = drm_gem_handle_create(file_priv, &shmem->base, handle);
+> -       /* drop reference from allocate - handle holds it now. */
+> -       drm_gem_object_put(&shmem->base);
+> -       if (ret)
+> +       if (ret) {
+> +               drm_gem_object_put(&shmem->base);
+>                 return ERR_PTR(ret);
+> +       }
+>
+>         return bo;
+>  }
+> --
+> 2.38.1
+>
