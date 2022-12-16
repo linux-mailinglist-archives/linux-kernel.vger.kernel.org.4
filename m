@@ -2,76 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB2864EA02
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7541264EA07
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbiLPLKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:10:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
+        id S230052AbiLPLNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:13:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLPLKU (ORCPT
+        with ESMTP id S229453AbiLPLNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:10:20 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D39EA0;
-        Fri, 16 Dec 2022 03:10:19 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id o5-20020a05600c510500b003d21f02fbaaso3844637wms.4;
-        Fri, 16 Dec 2022 03:10:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KzKAQT6vbiepszrD0+VM2G1/oJOVdJ1k4cSZtQrnzhw=;
-        b=qahHQ2hQalVG872kBe//5V/5jaRnbx1APMf+vUt061g35sTwdMPn3BycY6jv3Mmw9v
-         OoAButwJzIftdTe9KRxADOVdCx+G5hwxB7VN97DRsuatS7MZu0x567dCjJBdyKH8FaeT
-         hcAZ1lzjaZjaTz+yTk5HYPNofw/XAXuAE38uhYBXWKE0mB6tUw0eJdhrrFGx3zydzcWn
-         hrum2AUR7t1Uf18qYdkgeOvwaXPx88jvoDjXgllierTHz8yx/CYP35Zc2VNmimZUwE+/
-         Q5GyYC4Xk22dOdMY9LuOnx7WFJHtQ+jYxZoRbrUoNELGQPMTXxPWQSaWpEgphxIiFqXV
-         TYtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KzKAQT6vbiepszrD0+VM2G1/oJOVdJ1k4cSZtQrnzhw=;
-        b=0xWh1CbCTLE/4FQYAkfcUCeBNlzan/YJB62WiJg+xF3JCB/aAR2NjFA2YK5xF5aUiJ
-         PMyXIfY3+5WgAjM+CUJjzJRCNLWFXrMPh9UWgG/zwj+pU9uQNMQHA05drCVXtIA2vNn0
-         fcOtuDFMoghsPmz2XPF2/IOYNeXwgvdPek6JJSb3QjXrsAtgWQfjIzsVPsm86LrHAl35
-         CpNemDPWay2uaFLwNOQbXCun1jgZMjqMogkNPhxXjtISflUVaXkDEvXpFY+gc5CYrkiv
-         IW8oirHE0C6cDknJbpx3LsqsgkXFy3a9z66y7O6BPFmhV1BPRh0m71kZb1xxQRvzU6U+
-         avzA==
-X-Gm-Message-State: ANoB5pmeJKXztOdw0rMOXpiNmJ52bAsvioi2xfncofZpJwRoEhB8GuE3
-        O/nlKMEhO3SBn1Np++A4Snc=
-X-Google-Smtp-Source: AA0mqf6IEVWiFLjp3/9w60Cwc4bWOIs5zm16vVKKgTK3FaHKykwos7vm3VPEVfd3JcJxgK0bqXR+gw==
-X-Received: by 2002:a05:600c:6549:b0:3cf:497c:c59e with SMTP id dn9-20020a05600c654900b003cf497cc59emr24959984wmb.6.1671189017920;
-        Fri, 16 Dec 2022 03:10:17 -0800 (PST)
-Received: from [192.168.1.132] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id bi7-20020a05600c3d8700b003d1e051f671sm2199552wmb.9.2022.12.16.03.10.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 03:10:16 -0800 (PST)
-Message-ID: <d2585fef-98b1-39ae-876d-523e385aebe9@gmail.com>
-Date:   Fri, 16 Dec 2022 12:10:15 +0100
+        Fri, 16 Dec 2022 06:13:21 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69E7FAE4
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:13:18 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p68eM-0003CF-7T; Fri, 16 Dec 2022 12:13:10 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p68eK-004uR2-4X; Fri, 16 Dec 2022 12:13:08 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p68eK-005WBB-8a; Fri, 16 Dec 2022 12:13:08 +0100
+Date:   Fri, 16 Dec 2022 12:13:08 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Primoz Fiser <primoz.fiser@norik.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        upstream@lists.phytec.de, Marco Felsch <m.felsch@pengutronix.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: imx: increase retries on arbitration loss
+Message-ID: <20221216111308.wckibotr5d3q6ree@pengutronix.de>
+References: <20221216084511.2576786-1-primoz.fiser@norik.com>
+ <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
+ <bb4882a9-8be6-5255-6256-aa1253362e59@norik.com>
+ <20221216110227.GA12327@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] arm64: dts: mt8183: kukui: Split out keyboard node and
- describe detachables
-Content-Language: en-US
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220527045353.2483042-1-hsinyi@chromium.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220527045353.2483042-1-hsinyi@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t5quojaruzjimkrf"
+Content-Disposition: inline
+In-Reply-To: <20221216110227.GA12327@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,98 +63,74 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--t5quojaruzjimkrf
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 27/05/2022 06:53, Hsin-Yi Wang wrote:
-> Kukui devices krane, kodana, and kakadu use detachable keyboards, which
-> only have switches to be registered.
-> 
-> Change the keyboard node's compatible of those boards to the newly
-> introduced "google,cros-ec-keyb-switches", which won't include matrix
-> properties.
-> 
-> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+On Fri, Dec 16, 2022 at 12:02:27PM +0100, Oleksij Rempel wrote:
+> On Fri, Dec 16, 2022 at 11:41:08AM +0100, Primoz Fiser wrote:
+> > Hi Marco,
+> >=20
+> > On 16. 12. 22 10:45, Marco Felsch wrote:
+> > > Hi Primoz,
+> > >=20
+> > > On 22-12-16, Primoz Fiser wrote:
+> > > > By default, retries value is set to 0 (no retries). Set retries to =
+more
+> > > > sensible value of 3 to allow i2c core to re-attempt transfer in cas=
+e of
+> > > > i2c arbitration loss (i2c-imx returns -EAGAIN errno is such case).
+> > >=20
+> > > apart the fact that the number of retries vary a lot and so the client
+> > > driver behaviour can vary a lot which is not good IMHO, why do you th=
+ink
+> > > that 3 is a sufficient number?
+> >=20
+> > IMHO it is better than leaving it at 0 (no retries)?
+> >=20
+> > Setting it to sensible value like 3 will at least attempt to make trans=
+fer
+> > in case arbitration-loss occurs.
+> >=20
+> > >=20
+> > > If an arbitration loss happen, why do you think that retrying it 3 ti=
+mes
+> > > changes that?
+> >=20
+> > I our case, setting retries to non-zero value solves issues with PMIC
+> > shutdown on phyboard-mira which in some rare cases fails with "Failed to
+> > shutdown (err =3D  -11)" (-EAGAIN).
+> >=20
+> > To me it makes common sense retries is set to non-zero value especially=
+ for
+> > such rare conditions/situations.
+>=20
+> https://lore.kernel.org/all/Ys1bw9zuIwWS+bqw@shikoro/
 
-Applied, thanks!
+Also in the same thread there is the question about better setting it in
+the i2c core if 3 instead of 0 is a good idea for the imx driver.
 
-> ---
->   arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi | 2 ++
->   arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi  | 6 ++++++
->   arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi  | 6 ++++++
->   arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi   | 6 ++++++
->   arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi         | 1 -
->   5 files changed, 20 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
-> index 2d7a193272ae..981c889a22ea 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
-> @@ -4,6 +4,8 @@
->    */
->   
->   #include "mt8183-kukui.dtsi"
-> +/* Must come after mt8183-kukui.dtsi to modify cros_ec */
-> +#include <arm/cros-ec-keyboard.dtsi>
->   
->   / {
->   	panel: panel {
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi
-> index 28966a65391b..4b419623c8dc 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi
-> @@ -372,6 +372,12 @@ pen_eject {
->   	};
->   };
->   
-> +&cros_ec {
-> +	keyboard-controller {
-> +		compatible = "google,cros-ec-keyb-switches";
-> +	};
-> +};
-> +
->   &qca_wifi {
->   	qcom,ath10k-calibration-variant = "GO_KAKADU";
->   };
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
-> index 06f8c80bf553..4864c39e53a4 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
-> @@ -339,6 +339,12 @@ touch_pin_reset: pin_reset {
->   	};
->   };
->   
-> +&cros_ec {
-> +	keyboard-controller {
-> +		compatible = "google,cros-ec-keyb-switches";
-> +	};
-> +};
-> +
->   &qca_wifi {
->   	qcom,ath10k-calibration-variant = "GO_KODAMA";
->   };
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
-> index a7b0cb3ff7b0..d5f41c6c9881 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
-> @@ -343,6 +343,12 @@ rst_pin {
->   	};
->   };
->   
-> +&cros_ec {
-> +	keyboard-controller {
-> +		compatible = "google,cros-ec-keyb-switches";
-> +	};
-> +};
-> +
->   &qca_wifi {
->   	qcom,ath10k-calibration-variant = "LE_Krane";
->   };
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> index 8d5bf73a9099..db1388550f98 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> @@ -986,5 +986,4 @@ hub@1 {
->   	};
->   };
->   
-> -#include <arm/cros-ec-keyboard.dtsi>
->   #include <arm/cros-ec-sbs.dtsi>
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--t5quojaruzjimkrf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOcUsEACgkQwfwUeK3K
+7AmZpQf/QPr4vmlMM4tyMO/DysXCLIEhHfw8fw1LDdG9X1mC7X6Wk8imUlftYuOO
+/0+/xpvMPv7lPr3CRL5n96At1Q83ir9CNX4xRBtjZ7KbZfMlJekvlXh+lx3IzJFM
+hcoaWG1UvuJ3mpsGwmvzg0QxN6PO/gaRi8VXodAIOcQDUsKW/ywqzx278bER03zJ
+Shbk0vvTkc3Nds/P57LGPtgjZimuQdfW0k3aPKRsUm3SnLwoYcAffjU9EiYNLDw7
+GrF/wlam/n+z2z8dgLtTdCOvFep3qptKoTntg7tQL/iNU78ObU+o4B79y1VBCK+R
+rwJjBZqACqAiwJWQADITAWM8DKkc1w==
+=h1Rd
+-----END PGP SIGNATURE-----
+
+--t5quojaruzjimkrf--
