@@ -2,257 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C13564E974
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:28:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DF064E973
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbiLPK2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 05:28:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        id S230145AbiLPK2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 05:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiLPK2g (ORCPT
+        with ESMTP id S229625AbiLPK2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 05:28:36 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BA43B9EE
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:28:34 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id a66so1855246vsa.6
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:28:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J6ucSlUIJQ1T3Xb8zYhLtjAYkfGqwkT9BaXxaN/wQuo=;
-        b=gMfd2gTvW04YnqnIMeJRl/g9+viviOSHV1A9IATAforecynFRMDvhmK5Q1b6ATS32H
-         PUYk/qWTmUHDd8cjI8jpr+qXRVptrMAhzOiHSlQP/GNEZ1t9isqSSjM50/DPF4Zhsimd
-         +ko8TnAWVKtNQMsDe0G34TF94hVrbbiK+agt6hol8Wp0jT1bwJbGrTo+ttqZQ7bJWaB/
-         1zQKIHV32EHo1ttz7QgZgP225V3BPjhiiuDra/wMJlG/qa4kSMzRSWWiomJeZI7tfQMc
-         +7ozw44233/ReTAxpCs32keIFtSLZJH61LzJglNLjAnjfg6jV60fePEggccq3Dq8mDOF
-         BXfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J6ucSlUIJQ1T3Xb8zYhLtjAYkfGqwkT9BaXxaN/wQuo=;
-        b=JFsIAUueDMo/W7ujiUCWIRBlaBYgLw9NfvFKUtSBJ+PwFwJsJQVXTET44L8AA10LJq
-         xOmeuUVtvYonKkN9YbcrJUOaK7opESaxj/HywXNedgHT3u5LwN7Y3L1YSEIqImo0sYIH
-         qmABlEfqtNy9GXln9hvvHXXBxiqqcm8tvRLw2qn/OCdfwaJ5yvLhCmIKnIV0pgfUybs3
-         BrIu+sTIrcEAt65qkCsCJCWloCMkLxe/a5ugWKpSLxv1A1QqFzEEhmNMvD7iA2pWiPeQ
-         dqhewL6VX+GBFPwUJjBM6Qh6BORQ408Al8MpBXGQCY04JXiJ1JkKW3DRmmEONluZtkPk
-         +ECw==
-X-Gm-Message-State: ANoB5pluABhOmO44LFPAor/AiQg/infUk+ardA8mJsKRkhsRsjCV1eVB
-        Wz4ookf1VzVjCo0wOM2rWRqoE0pzTK6YK84ib7NWEw==
-X-Google-Smtp-Source: AA0mqf6TJQJ9eK8Gx851LWOtKrRuasSPlzLPwyKt2bRX8shUEn11JHjjCB6Smgy0dJKYqIaxfXPORs5xGOIxACVX4xw=
-X-Received: by 2002:a05:6102:21b6:b0:3b5:21d5:5a0b with SMTP id
- i22-20020a05610221b600b003b521d55a0bmr1434849vsb.34.1671186513626; Fri, 16
- Dec 2022 02:28:33 -0800 (PST)
+        Fri, 16 Dec 2022 05:28:35 -0500
+Received: from email.studentenwerk.mhn.de (mailin.studentenwerk.mhn.de [141.84.225.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5D32A949;
+        Fri, 16 Dec 2022 02:28:33 -0800 (PST)
+Received: from mailhub.studentenwerk.mhn.de (mailhub.studentenwerk.mhn.de [127.0.0.1])
+        by email.studentenwerk.mhn.de (Postfix) with ESMTPS id 4NYQL75rsLzRhTk;
+        Fri, 16 Dec 2022 11:28:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwm.de; s=stwm-20170627;
+        t=1671186511;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E+gRcYlkBgTay2aKzTpNSiy4Bv0vPYNnKAOHTra8+TA=;
+        b=KeCzDtlUlzb9pVuW9+EWbOhJxPZLsfG1MAjx5r91bCPgq7EecIJpgyB2pCOZ8fomYF8N9S
+        LtJonhpeAVm/y4oGw6QPyedR+kPd0RzxKllhXm3HsuyuoL6QiXvMpNB2xNV1uRPLucQ4NS
+        xA/J9NpE5Tb5LNIs7O1GxAt1GjR85kLV2N7YxYyVVGhq0Wenpb2NE6S/24/gH9wzoMyX+p
+        a91tGuel322VpHzTVWott7vqhZcjuSojGKf/PEPefE5cjiyWM9QXM8iVB5C5Jddi5jmY63
+        J5PRLEBq/W+yEYaH9Bd/lMZauWtVlDQFm3IIMUJ5jM68h5BWtGO/v2uPX7sVCg==
 MIME-Version: 1.0
-References: <20221215172908.162858817@linuxfoundation.org>
-In-Reply-To: <20221215172908.162858817@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 16 Dec 2022 15:58:22 +0530
-Message-ID: <CA+G9fYueQerxtbA5ztU+UmS8fuO-3mdCtmyxozTkXq7ph-snFQ@mail.gmail.com>
-Subject: Re: [PATCH 6.0 00/16] 6.0.14-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 16 Dec 2022 11:28:54 +0100
+From:   Wolfgang Walter <linux@stwm.de>
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: kernel v6.1: NULL pointer dereference in ieee80211_deliver_skb
+In-Reply-To: <5ef22539-7a99-0c12-a5b0-a5ea643fe635@nbd.name>
+References: <1585238f2dee5e2daafe28ba0606b6a4@stwm.de>
+ <5ef22539-7a99-0c12-a5b0-a5ea643fe635@nbd.name>
+Message-ID: <2eb2bdca943c9acfdbadd6ae44a517dc@stwm.de>
+X-Sender: linux@stwm.de
+Organization: =?UTF-8?Q?Studentenwerk_M=C3=BCnchen?=
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 at 23:43, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.0.14 release.
-> There are 16 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 17 Dec 2022 17:28:57 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.0.14-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Am 2022-12-15 20:27, schrieb Felix Fietkau:
+> On 15.12.22 18:31, Wolfgang Walter wrote:
+>> Hello,
+>> 
+>> with kernel v6.1 I always get the following oops when running on a 
+>> small
+>> router:
+> Please try this fix that I just posted:
+> https://patchwork.kernel.org/project/linux-wireless/patch/20221215190503.79904-1-nbd@nbd.name/
+> 
+> - Felix
 
+Thanks al lot, that fixed the problem.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 6.0.14-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.0.y
-* git commit: 8173f9d249ceafc174d1a8ef6e57cc081050e705
-* git describe: v6.0.13-17-g8173f9d249ce
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.1=
-3-17-g8173f9d249ce
-
-## Test Regressions (compared to v6.0.13)
-
-## Metric Regressions (compared to v6.0.13)
-
-## Test Fixes (compared to v6.0.13)
-
-## Metric Fixes (compared to v6.0.13)
-
-## Test result summary
-total: 148752, pass: 129979, fail: 3354, skip: 14961, xfail: 458
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 151 total, 146 passed, 5 failed
-* arm64: 49 total, 48 passed, 1 failed
-* i386: 39 total, 36 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 32 passed, 6 failed
-* riscv: 16 total, 16 passed, 0 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 42 total, 41 passed, 1 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Regards
+-- 
+Wolfgang Walter
+Studentenwerk München
+Anstalt des öffentlichen Rechts
