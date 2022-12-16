@@ -2,200 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E4064F020
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2F064F029
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbiLPROB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 12:14:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
+        id S229680AbiLPRPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 12:15:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbiLPRN7 (ORCPT
+        with ESMTP id S230449AbiLPRPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 12:13:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B863D6F486;
-        Fri, 16 Dec 2022 09:13:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5618D61FD7;
-        Fri, 16 Dec 2022 17:13:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADAC8C43392;
-        Fri, 16 Dec 2022 17:13:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671210833;
-        bh=Ak/KrxWAvOEGVghN8qPaao3p3gxmWCwZ3TbtWtqLEss=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Y83nK8Pe0WSMx5wUME8cdVo9TlXuMvitz9j1r8ztbcdAq31xiN3aXcvOq+I6dtRlL
-         7Gadqf44vdHjfcBYiF4h6MN84u6QzzswYYq5CUa7hotFarC8Ajp8pWqXk65lkhZ5Ps
-         7qBLp5MTJeOhPgGfV6YlGkZP5duV8qEZzTXewzz/r/ZdqowWay9cD574Y6kpKN/XOB
-         iX2KcRCcCm3SYuYnj6fRILh0P0DpBno7Fn4NOco5T+4otWqByZc+58sUTAaRpBe0cw
-         /NKNaYW3dAlgrzNw+fZOWP1NzOHoVbiEQApIGDE3cRsexcG7AqRrUr8XGacV8vYaIt
-         jXyVPTYrscDCw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4CBEB5C0AC7; Fri, 16 Dec 2022 09:13:53 -0800 (PST)
-Date:   Fri, 16 Dec 2022 09:13:53 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>, boqun.feng@gmail.com,
-        neeraj.iitr10@gmail.com, urezki@gmail.com, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] srcu: Yet more detail for
- srcu_readers_active_idx_check() comments
-Message-ID: <20221216171353.GC4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221216165144.GA4001@paulmck-ThinkPad-P17-Gen-1>
- <54F1102C-2577-4238-83B3-D38BA7ED9087@joelfernandes.org>
+        Fri, 16 Dec 2022 12:15:03 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6C06F4B7
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:15:02 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id t5so2887112vsh.8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:15:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZtMTy3xD/YIIJO7mogDtwIJ/KFVv5XuLkhBv3fM/Tn8=;
+        b=lyj42c62QPSypdqG7GLNN3i2/cQoZpa+utzANMIFx97g8gqQMRmMZHX790g36afuiu
+         Q4EPORPLYwnd56QHiMbRb4x7OWPQid0pP5vAwIEGxaXr53pcKN7ACTIbw/LAUKVprpYC
+         rRakx+eLmwTqpj3I6wRKVaxbe2wOy7CUmZMbcULvIF7U/7ogbcaW8iBau9XGyY8a3z0H
+         KZJbg6Vw32CoU+BJiAB89sFkRqbhFgqUPk5LDnsdGoyEmhc/D9MLTdRjQ1bbmEQtF131
+         UN83FonIYdEcW0BLkzQpR7GONe24epAHIchTdyBtICVOwSZG7BkqBEmMduvXBaiqaL9U
+         mwhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZtMTy3xD/YIIJO7mogDtwIJ/KFVv5XuLkhBv3fM/Tn8=;
+        b=Hcr8v5U++4Auo1QqmeG/8SET+GrMsrC9g67V27iLe+xBtZGUTT0pz/TMfF7NW8+QhS
+         dhCsf1+bCxCawpSkgfKcTWErcmidZ0x6vpX77RnOlf2Z0BHN+gPou0LIZufw5kdClp6R
+         yst8hHF/YAzZsqauyYKl1s2WsGLkvr3VJQg7djBhNxFzs4ny7hNiJCTGYEkyj6oDRERS
+         l13VwIjb9kdGxn2WxhfrOvV0MSC352DwhL/3VKHnjbF8q8bt8bF3vpe+D3v0m2U2XJic
+         fWIyzb8VmxH3UJhVsAwf/48FUVy/FSCaB3S+S4YKlHLLK7AVyhZ+mZfzx3a4PPdkxI7Z
+         XrGg==
+X-Gm-Message-State: ANoB5plcaHnyM43oUVgJPbC1X0/RGLMVvbErQsw6VB++VtYjrcBtG1oS
+        tSYtwWaA5z8d4LDlriG1MCy8B4jysufnSwKJOlSfHA==
+X-Google-Smtp-Source: AA0mqf6BLokz7R9cQcWdhXwpvwEVngT1W67P7kJHUedJP0xJL3QcWm9I1GLdaBqKhgaamYVtXl4pd8gAH5NDwF0srac=
+X-Received: by 2002:a67:eb8b:0:b0:3b5:23b1:e56 with SMTP id
+ e11-20020a67eb8b000000b003b523b10e56mr1887743vso.51.1671210901695; Fri, 16
+ Dec 2022 09:15:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <54F1102C-2577-4238-83B3-D38BA7ED9087@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <0000000000006c411605e2f127e5@google.com> <000000000000b60c1105efe06dea@google.com>
+ <Y5vTyjRX6ZgIYxgj@mit.edu> <Y5xsIkpIznpObOJL@google.com> <CANp29Y6KHBE-fpfJCXeN5Ju_qSOfUYAp2n+cNrGj25QtU0X=sA@mail.gmail.com>
+ <Y5ylNxoN2p7dmcRD@mit.edu>
+In-Reply-To: <Y5ylNxoN2p7dmcRD@mit.edu>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Fri, 16 Dec 2022 18:14:50 +0100
+Message-ID: <CANp29Y4QVp1G83pSqpxeETbw_+kQQ5CZUz+Vgi767WxE8AuhHQ@mail.gmail.com>
+Subject: Re: kernel BUG in ext4_free_blocks (2)
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     Lee Jones <lee@kernel.org>,
+        syzbot <syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, gregkh@linuxfoundation.org,
+        lczerner@redhat.com, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sashal@kernel.org,
+        stable@vger.kernel.org, syzkaller-android-bugs@googlegroups.com,
+        tadeusz.struk@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 11:54:19AM -0500, Joel Fernandes wrote:
-> 
-> 
-> > On Dec 16, 2022, at 11:51 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > 
-> > ﻿On Fri, Dec 16, 2022 at 04:32:39PM +0000, Joel Fernandes wrote:
-> >> On Thu, Dec 15, 2022 at 05:09:14PM -0800, Paul E. McKenney wrote:
-> >> [...]
-> >>>>>> 2. unlock()'s smp_mb() happened before Flip+smp_mb() , now the reader
-> >>>>>> has no new smp_mb() that happens AFTER the flip happened. So it can
-> >>>>>> totally sample the old idx again -- that particular reader will
-> >>>>>> increment twice, but the next time, it will see the flipped one.
-> >>>>> 
-> >>>>> I will let you transliterate both.  ;-)
-> >>>> 
-> >>>> I think I see what you mean now :)
-> >>>> 
-> >>>> I believe the access I am referring to is the read of idx on one side and
-> >>>> the write to idx on the other. However that is incomplete and I need to
-> >>>> pair that with some of other access on both sides.
-> >>>> 
-> >>>> So perhaps this:
-> >>>> 
-> >>>> Writer does flip + smp_mb + read unlock counts [1]
-> >>>> 
-> >>>> Reader does:
-> >>>> read idx + smp_mb() + increment lock counts [2]
-> >>>> 
-> >>>> And subsequently reader does
-> >>>> Smp_mb() + increment unlock count. [3]
-> >>>> 
-> >>>> So [1] races with either [2] or [2]+[3].
-> >>>> 
-> >>>> Is that fair?
-> >>> 
-> >>> That does look much better, thank you!
-> >> 
-> >> Perhaps a comment with an ASCII diagram will help?
-> >> 
-> >> 
-> >> Case 2:
-> >> Both the reader and the updater see each other's writes too late, but because
-> >> of memory barriers on both sides, they will eventually see each other's write
-> >> with respect to their own. This is similar to the store-buffer problem. This
-> >> let's a single reader contribute a maximum (unlock minus lock) imbalance of 2.
-> >> 
-> >> The following diagram shows the subtle worst case followed by a simplified
-> >> store-buffer explanation.
-> >> 
-> >> READER                  UPDATER
-> >> -------------           ----------
-> >>                           // idx is initially 0.
-> >> read_lock() {
-> >>  READ(idx) = 0;
-> >>  lock[0]++; --------------------------------------------,
-> >>                           flip() {                      |               
-> >>                              smp_mb();                  |
-> >>  smp_mb();                                              |
-> >> }                                                        |
-> >>                                                         |
-> >> // RSCS                                                  |
-> >>                                                         |
-> >> read_unlock() {                                          |
-> >>  smp_mb();                                              |
-> >>                              idx++;  // P               |
-> >>                              smp_mb();                  |
-> >>                           }                             |
-> >>                                                         |
-> >>                           scan_readers_idx(0) {         |
-> >>                               count all unlock[0];      |
-> >>                                   |                     |
-> >>                                   |                     |
-> >>  unlock[0]++; //X <--not-counted--`-----,               |
-> >>                                         |               |
-> >> }                                        V               `------,
-> >>                               // Will make sure next scan      |
-> >>                               // will not miss this unlock (X) |
-> >>                               // if other side saw flip (P) ,--`
-> >>                               // Call this MB [1]           |
-> >>                               // Order write(idx) with      |
-> >>                               // next scan's unlock.        |
-> >>                               smp_mb();                 ,---`
-> >> read_lock() {                                            |
-> >>  READ(idx)=0;                                           |
-> >>  lock[0]++; ----------------> count all lock[0];        |
-> >>  smp_mb();         |     }                              |
-> >> }     |             |                                    V
-> >>      |             `---> // Incorrect contribution to lock counting
-> >>      |                   // upto a maximum of 2 times.
-> >>      |
-> >>       `---> // Pairs with MB [1]. Makes sure that
-> >>             // the next read_lock()'s' idx read (Y) is ordered
-> >>             // with above write to unlock[0] (X).
-> >>                            |
-> >> rcu_read_unlock() {         |
-> >>  smp_mb(); <---------------`
-> >>  unlock[0]++; 
-> >> }
-> >> 
-> >> read_lock() {
-> >>  READ(idx) = 1; //Y
-> >>  lock[1]++;
-> >>  ...
-> >> }
-> >>                           scan_readers_idx(0) {
-> >>                               count all unlock[0]; //Q
-> >>                               ...
-> >> 
-> >> 
-> >> thanks,
-> >> 
-> >> - Joel
-> >> 
-> >>                          }
-> >> 
-> >> This makes it similar to the store buffer pattern. Using X, Y, P and Q
-> >> annotated above, we get:
-> >> 
-> >> READER                    UPDATER
-> >> X (write)                 P (write)
-> >> 
-> >> smp_mb();                 smp_mb();
-> >> 
-> >> Y (read)                  Q (read)
-> > 
-> > Given that this diagram is more than 50 lines long, it might go better in
-> > a design document describing this part of RCU.  Perhaps less detail or
-> > segmented, but the same general idea as this guy:
-> > 
-> > Documentation/RCU/Design/Memory-Ordering/Tree-RCU-Memory-Ordering.rst
-> 
-> Yes, this sounds like a good place to add it and perhaps we refer to
-> it from the C source file? I can take this up to do over the holidays,
-> if you prefer.
+On Fri, Dec 16, 2022 at 6:05 PM Theodore Ts'o <tytso@mit.edu> wrote:
+>
+> On Fri, Dec 16, 2022 at 03:09:04PM +0100, Aleksandr Nogikh wrote:
+> >
+> > Syzbot is actually reacting here to this bug from the Android namespace:
+> >
+> > https://syzkaller.appspot.com/bug?id=5266d464285a03cee9dbfda7d2452a72c3c2ae7c
+>
+> Thanks for the clarification; stupid question, though -- I see
+> "upstream" is listed on the dashboard link above.  Assuming that
+> "usptream" is "Linus's tree", why was it still saying, "I can't find
+> this patch in any of my trees"?  What about the upstream tree?
 
-Indeed, that comment is quite large already, arguably obscuring the code!
-It would be good to offload some of it.
+Bugs from different namespaces are treated independently, so in this
+particular case syzbot was expecting the fixing commit to reach the
+Android trees that it fuzzes.
 
-							Thanx, Paul
+--
+Aleksandr
+
+>
+> > > Although this does appear to be a Stable candidate, I do not see it
+> > > in any of the Stable branches yet.  So I suspect the answer here is to
+> > > wait for the fix to filter down.
+>
+> The reason why it's not hit any of the long-term stable trees is
+> because the patch doesn't apply cleanly, because there are
+> pre-requisite commits that were required.  Here are the required
+> commits for 5.15:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git ext4_for_5.15.83
+>
+> % git log --reverse --oneline  v5.15.83..
+> 96d070a12a7c ext4: refactor ext4_free_blocks() to pull out ext4_mb_clear_bb()
+>     [ Upstream commit 8ac3939db99f99667b8eb670cf4baf292896e72d ]
+> 2fa7a1780ecd ext4: add ext4_sb_block_valid() refactored out of ext4_inode_block_valid()
+>     [ Upstream commit 6bc6c2bdf1baca6522b8d9ba976257d722423085 ]
+> 8dc76aa246b1 ext4: add strict range checks while freeing blocks
+>     [ Upstream commit a00b482b82fb098956a5bed22bd7873e56f152f1 ]
+> deb2e1554497 ext4: block range must be validated before use in ext4_mb_clear_bb()
+>     [ Upstream commit 1e1c2b86ef86a8477fd9b9a4f48a6bfe235606f6 ]
+>
+> Further backports to LTS kernels for 5.10, 5.4, etc., are left as an
+> exercise to the reader.  :-)
+>
+>                                              - Ted
+>
+> P.S.  I have not tried to run gce-xfstests regressions yet. so the
+> only QA done on these backports is "it builds, ship it!"  (And it
+> fixes the syzbot reproducers.)  Then again, we're not running this
+> kind of regression tests on the LTS kernels.
+>
+> P.P.S.  If anyone is willing to volunteer to be an ext4 backports
+> maintainer, please contact me.  The job description is (a) dealing
+> with the stable backport failures and addressing the patch conflicts,
+> potentially by dragging in patch prerequisites, and (b) running
+> "gce-xfstests ltm -c ext4/all -g auto" and making sure there are no
+> regressions.
+>
+>                                               - Ted
