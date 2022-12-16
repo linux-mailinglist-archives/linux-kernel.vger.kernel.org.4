@@ -2,76 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5D764F077
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACCF764F080
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbiLPRij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 12:38:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
+        id S231724AbiLPRl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 12:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbiLPRie (ORCPT
+        with ESMTP id S230096AbiLPRly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 12:38:34 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6774046A;
-        Fri, 16 Dec 2022 09:38:32 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGGl4HJ024811;
-        Fri, 16 Dec 2022 17:38:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=zvx71KrV2LmSl2ZPn2MfklBoJ/9bDIChVxCtNYbUrgI=;
- b=KkpP0oekqWOEc+TBWGUO/5T4Ym4M0MwWdMEFaVLduCvatQkJwNumuKJvrlL5MCiQYI4i
- UDnSroZ17iDLYzC6MkEZpVNXYUoPZ2gkFBWM1//yCg2wCqMCYj51tU17cdGYPzUxKw/4
- utqa3pYWsdGifj+BLhEiyXOAp/r7tK/W1UqOKmAyRd7VZHmwXKYSgeMAUWQZMKqYgiOa
- 8GiBHQP/przSfnRsZZfaPVFiGt7ASc3+y0SSoVt369F1Lz97QkLCAmFm30VOWkVaY1n7
- 3KtEwP/glU0XukHFcFlmTtpKheW/Mq6l2FDvJ9HAK5c+Y3GfbqYCkF1sgKNbnthx1rOz 6w== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mgmv11hb6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 17:38:23 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2BGHcJb6016047;
-        Fri, 16 Dec 2022 17:38:19 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3mck6kxv5n-1;
-        Fri, 16 Dec 2022 17:38:19 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BGHcJGC016039;
-        Fri, 16 Dec 2022 17:38:19 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 2BGHcIcv016038;
-        Fri, 16 Dec 2022 17:38:19 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
-        id 13E233D72; Fri, 16 Dec 2022 23:08:18 +0530 (+0530)
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        vkoul@kernel.org, linux-arm-msm@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
-        swboyd@chromium.org, quic_vtanuku@quicinc.com,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Subject: [V2] dmaengine: qcom: gpi: Set link_rx bit on GO TRE for rx operation
-Date:   Fri, 16 Dec 2022 23:08:13 +0530
-Message-Id: <1671212293-14767-1-git-send-email-quic_vnivarth@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -LpND4nb_KBVeun0hVtawLFVdBSBJOK_
-X-Proofpoint-ORIG-GUID: -LpND4nb_KBVeun0hVtawLFVdBSBJOK_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-16_12,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- mlxlogscore=816 adultscore=0 phishscore=0 impostorscore=0 malwarescore=0
- suspectscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212160152
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Fri, 16 Dec 2022 12:41:54 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5814A5C0CC;
+        Fri, 16 Dec 2022 09:41:53 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7FD41042;
+        Fri, 16 Dec 2022 09:42:33 -0800 (PST)
+Received: from [10.57.88.234] (unknown [10.57.88.234])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA5E33F5A1;
+        Fri, 16 Dec 2022 09:41:45 -0800 (PST)
+Message-ID: <2db73405-464f-6980-a7c1-7fe232611331@arm.com>
+Date:   Fri, 16 Dec 2022 17:41:40 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 0/2] drm: Add component_match_add_of and convert users of
+ drm_of_component_match_add
+Content-Language: en-GB
+To:     Sean Anderson <sean.anderson@seco.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Brian Starkey <brian.starkey@arm.com>,
+        Chen Feng <puck.chen@hisilicon.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        John Stultz <jstultz@google.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Mali DP Maintainers <malidp@foss.arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mihail Atanassov <mihail.atanassov@arm.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Samuel Holland <samuel@sholland.org>,
+        Sean Paul <sean@poorly.run>, Takashi Iwai <tiwai@suse.com>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Yong Wu <yong.wu@mediatek.com>, alsa-devel@alsa-project.org,
+        etnaviv@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-sunxi@lists.linux.dev
+References: <20221103182222.2247724-1-sean.anderson@seco.com>
+ <68562aca-5256-9e4b-bcd5-983e43408a7d@seco.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <68562aca-5256-9e4b-bcd5-983e43408a7d@seco.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,35 +88,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rx operation on SPI GSI DMA is currently not working.
-As per GSI spec, link_rx bit is to be set on GO TRE on tx
-channel whenever there is going to be a DMA TRE on rx
-channel. This is currently set for duplex operation only.
+On 2022-12-16 17:08, Sean Anderson wrote:
+> On 11/3/22 14:22, Sean Anderson wrote:
+>> This series adds a new function component_match_add_of to simplify the
+>> common case of calling component_match_add_release with
+>> component_release_of and component_compare_of. There is already
+>> drm_of_component_match_add, which allows for a custom compare function.
+>> However, all existing users just use component_compare_of (or an
+>> equivalent).
+>>
+>> I can split the second commit up if that is easier to review.
+>>
+>>
+>> Sean Anderson (2):
+>>    component: Add helper for device nodes
+>>    drm: Convert users of drm_of_component_match_add to
+>>      component_match_add_of
+>>
+>>   .../gpu/drm/arm/display/komeda/komeda_drv.c   |  6 ++--
+>>   drivers/gpu/drm/arm/hdlcd_drv.c               |  9 +-----
+>>   drivers/gpu/drm/arm/malidp_drv.c              | 11 +------
+>>   drivers/gpu/drm/armada/armada_drv.c           | 10 ++++---
+>>   drivers/gpu/drm/drm_of.c                      | 29 +++----------------
+>>   drivers/gpu/drm/etnaviv/etnaviv_drv.c         |  4 +--
+>>   .../gpu/drm/hisilicon/kirin/kirin_drm_drv.c   |  3 +-
+>>   drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  3 +-
+>>   drivers/gpu/drm/mediatek/mtk_drm_drv.c        |  4 +--
+>>   drivers/gpu/drm/msm/msm_drv.c                 | 14 ++++-----
+>>   drivers/gpu/drm/sti/sti_drv.c                 |  3 +-
+>>   drivers/gpu/drm/sun4i/sun4i_drv.c             |  3 +-
+>>   drivers/gpu/drm/tilcdc/tilcdc_external.c      | 10 ++-----
+>>   drivers/iommu/mtk_iommu.c                     |  3 +-
+>>   drivers/iommu/mtk_iommu_v1.c                  |  3 +-
+>>   include/drm/drm_of.h                          | 12 --------
+>>   include/linux/component.h                     |  9 ++++++
+>>   sound/soc/codecs/wcd938x.c                    |  6 ++--
+>>   18 files changed, 46 insertions(+), 96 deletions(-)
+>>
+> 
+> ping?
+> 
+> Should I send a v2 broken up like Mark suggested?
 
-Set the bit for rx operation as well.
-This is part of changes required to bring up Rx.
+FWIW you'll need to rebase the IOMMU changes on 6.2-rc1 anyway - 
+mtk_iommu stops using component_match_add_release() at all.
 
-Fixes: 94b8f0e58fa1 ("dmaengine: qcom: gpi: set chain and link flag for duplex")
-Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
----
-v1 -> v2:
-- updated change description
----
- drivers/dma/qcom/gpi.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
-index 061add8..59a36cb 100644
---- a/drivers/dma/qcom/gpi.c
-+++ b/drivers/dma/qcom/gpi.c
-@@ -1756,6 +1756,7 @@ static int gpi_create_spi_tre(struct gchan *chan, struct gpi_desc *desc,
- 		tre->dword[3] = u32_encode_bits(TRE_TYPE_GO, TRE_FLAGS_TYPE);
- 		if (spi->cmd == SPI_RX) {
- 			tre->dword[3] |= u32_encode_bits(1, TRE_FLAGS_IEOB);
-+			tre->dword[3] |= u32_encode_bits(1, TRE_FLAGS_LINK);
- 		} else if (spi->cmd == SPI_TX) {
- 			tre->dword[3] |= u32_encode_bits(1, TRE_FLAGS_CHAIN);
- 		} else { /* SPI_DUPLEX */
--- 
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
-
+Thanks,
+Robin.
