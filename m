@@ -2,94 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F0064E7E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A0664E7E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiLPHom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 02:44:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
+        id S229863AbiLPHqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 02:46:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiLPHok (ORCPT
+        with ESMTP id S229632AbiLPHq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 02:44:40 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C877D40466
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:44:39 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id c140so1467549ybf.11
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:44:39 -0800 (PST)
+        Fri, 16 Dec 2022 02:46:28 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A473F1A830
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:46:27 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-40b40ff39f1so22524047b3.10
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:46:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iB0g31kIx7VaA2NoMT/LCOrwGHXhyI2Tl4nmAYaudHM=;
-        b=eHNXV0sESw66UesXX9FIBGUDzVJZdw1NziDG5wsXB5q6k/uBmJXS5fXr+qOAv+a2GP
-         pwbPd39uur7vTE5I5o772lteXPWZgXnUrtqHS5ig8c2sbH07endJMrkpgHwB5VT89sBb
-         NiIuQddoTfGYG54IA8IPdQc1tz3u2TlHZZEJkJSH9EM52/VBvTZoFenPPKeYl/LvzC2L
-         I2Wps3ifa7oUlNP9MJD/QJAQ9/OP2dqN89lXDIC2DXrk3LzrCwZRksP44jyq+lwgl/Ge
-         /BtDja3bOEbyOfSMDKTTewT7TUCia4K6Sg9m2qX3RzlWMm45BrUXfsZnXAv1Kahj23Ua
-         pmrA==
+        bh=ARIVIEhVzMm1WujOb1fU30+/MTpfDpTpcOdBHHIxXDk=;
+        b=Z5PSY+rr0YZJxo/46BRMCBdB4+s9PPJNaHDSr458cvabhd/8lnV55pEzoVPmA8SnhX
+         70edyROSqmwWqi0xkou5GKw2I12PGy6+CrstPQ00LQcsLJLV7tqSOnu6fc17gggNY2l3
+         DX+XP0IImJ8Iaf7zwKbZMBQ82m2WLv1jLwOxCgF5OXHt6+egWBzxB88wxhf08y18dEvd
+         S5+4YXDkf9TKmemBuMSui5mAjqx3XulBR/HwoWjz+kQyyOQZq5ARw3Ys03j0GL+pW6fI
+         lq9uNEZUjqE1p+OmlTyo1rKgDlXERWBfduoYdOscFhvrPzsTpPRfrpliARIg3X1kjxG4
+         dhqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iB0g31kIx7VaA2NoMT/LCOrwGHXhyI2Tl4nmAYaudHM=;
-        b=f3NOmi6ZSj9dEKMjGLqajrdkxX6LQxozvBUOa2F5YaKrSEo1Ixqj3ocS0304KGUEaN
-         BUjyxa030Fe4ABrIxRVP/4+waGlbl0REQiE12ZQjNcGFz/29wM40XVRGqGosnJAvRvsN
-         alhDRA8C19x+Lk0Ar6qWsNq6JNr/A4b0M1BI020r3N6kTiMlFeLuLtkPoCwHyLZ/qYd2
-         gVDVmwmUJSjjMm01ehB97XpX/7wf8mP5RwHFzzree1ySEAFvsLb1klhYuyRCM8m6tNGI
-         OhFK1Denin8xf4RoG985gqRhdDzv47eoZ42urUJvq/MoVWyxGcvuwQxbz87GDQ185dNN
-         oiig==
-X-Gm-Message-State: ANoB5pm3KtnirqbvO9QOkZNRq+Btee0ihiW/WUj82hZS0ckHSuwrhDt/
-        xmbwsefrqM1kcJfOpypXrAk2DrnMsqYMaw4W051gsA==
-X-Google-Smtp-Source: AA0mqf4aOJq72axMei8yRuRCQgM1U84CIyWRdlNSBV4BGxhBGs5mvy0EVOnJ3HSVRARYCpSLcBYA1cf2aEHjXX+xBV0=
-X-Received: by 2002:a25:8e82:0:b0:6d2:70d5:3ed0 with SMTP id
- q2-20020a258e82000000b006d270d53ed0mr97954892ybl.457.1671176679014; Thu, 15
- Dec 2022 23:44:39 -0800 (PST)
+        bh=ARIVIEhVzMm1WujOb1fU30+/MTpfDpTpcOdBHHIxXDk=;
+        b=UtMiFnrqAcN7+biDSVutUoXrD+uph+4d1c8232u0b1MtPUGAj2+2G9icQfBip5rTzf
+         +Oo01HaxiAwZlw1aq87XTsND9ZawEyXQDME3rqLJKIxROTI8xjlX9Wzt/nLZDsv/hL8y
+         RTZV0H6QWfWC3Pz7UszE+Vpfe81ZE0xh16yqIGNArDu3Jna+rbBfPwzqEXb4NbqKpnIK
+         8OCVuzRXxOEcNhZFbbxkTp2wmaoB0GcoUT8w/DFp7Q7xxR8j5Fy0SKZDywuLOapwqHDv
+         fcTIbz4M/ZoMkMBbnbkQqrG8V0MAamhcjSrWPJrQNApXtQuXiMpYg1fqpHij9fpsvf3F
+         +2XA==
+X-Gm-Message-State: ANoB5pn14FzzF8HvG7Ty65wxiY5LYl+Sk2owBEgtS8TCgH2ZRAPSUCuD
+        EaYvSKP19Zo4YFmV3jQUWeMHN2BzkT1UK3PkOsvhvA==
+X-Google-Smtp-Source: AA0mqf6Hom5y28YCRuuXJUd45mqxKlr9fHvmLaBYR1OjpL6PudA+t7yhbCi5diIApiEcgIqa90KLoklYtPsFdIZARjc=
+X-Received: by 2002:a81:6fd5:0:b0:402:3dcf:a262 with SMTP id
+ k204-20020a816fd5000000b004023dcfa262mr6776445ywc.31.1671176786835; Thu, 15
+ Dec 2022 23:46:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20221215165728.2062984-1-arnd@kernel.org>
-In-Reply-To: <20221215165728.2062984-1-arnd@kernel.org>
+References: <20221215170347.2612403-1-arnd@kernel.org>
+In-Reply-To: <20221215170347.2612403-1-arnd@kernel.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 16 Dec 2022 08:44:27 +0100
-Message-ID: <CACRpkda3V2Fv9aOxxcuQ5NKv3sWic9-skQU_z7=0S692h_WhnQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: fotg210: fix OTG-only build
+Date:   Fri, 16 Dec 2022 08:46:16 +0100
+Message-ID: <CACRpkdZf15MxtqpTRVq6bYwZoCM6dTFJc2khRt=+cfxf-sOnow@mail.gmail.com>
+Subject: Re: [PATCH] RDMA/siw: fix pointer cast warning
 To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Bernard Metzler <bmt@zurich.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 5:57 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Thu, Dec 15, 2022 at 6:03 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> The fotg210 module combines the HCD and OTG drivers, which then
-> fails to build when only the USB gadget support is enabled
-> in the kernel but host support is not:
+> The previous build fix left a remaining issue in configurations
+> with 64-bit dma_addr_t on 32-bit architectures:
 >
-> aarch64-linux-ld: drivers/usb/fotg210/fotg210-core.o: in function `fotg210_init':
-> fotg210-core.c:(.init.text+0xc): undefined reference to `usb_disabled'
+> drivers/infiniband/sw/siw/siw_qp_tx.c: In function 'siw_get_pblpage':
+> drivers/infiniband/sw/siw/siw_qp_tx.c:32:37: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+>    32 |                 return virt_to_page((void *)paddr);
+>       |                                     ^
 >
-> Move the check for usb_disabled() after the check for the HCD module,
-> and let the OTG driver still be probed in this configuration.
+> Use the same double cast here that the driver uses elsewhere
+> to convert between dma_addr_t and void*.
 >
-> A nicer approach might be to have the common portion built as a
-> library module, with the two platform other files registering
-> their own platform_driver instances separately.
+> It took me a while to figure out why this driver does it
+> like this, as there is no hardware access and it just stores
+> kernel pointers in place of device addresses when communicating
+> with the rdma core and with user space.
 >
-> Fixes: ddacd6ef44ca ("usb: fotg210: Fix Kconfig for USB host modules")
+> Fixes: 0d1b756acf60 ("RDMA/siw: Pass a pointer to virt_to_page()")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-My mistake, I thought this function was a generic USB function
-and not related to host. I might just push it down to the host again.
+This driver is a big confusion for me too.
 
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
