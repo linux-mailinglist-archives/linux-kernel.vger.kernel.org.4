@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B74564EAB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9F264EAB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbiLPLi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:38:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
+        id S230287AbiLPLir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:38:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiLPLix (ORCPT
+        with ESMTP id S230042AbiLPLio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:38:53 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC8E22B0D;
-        Fri, 16 Dec 2022 03:38:52 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4NYRvG3wZ9z9sqg;
-        Fri, 16 Dec 2022 12:38:50 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id UsdrRS_F0m-m; Fri, 16 Dec 2022 12:38:50 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4NYRvG37fyz9sTF;
-        Fri, 16 Dec 2022 12:38:50 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5B0128B780;
-        Fri, 16 Dec 2022 12:38:50 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id YSjPfFpHUnZN; Fri, 16 Dec 2022 12:38:50 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.183])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 245128B764;
-        Fri, 16 Dec 2022 12:38:50 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2BGBcasZ1205738
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 12:38:36 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2BGBcY7t1205731;
-        Fri, 16 Dec 2022 12:38:34 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     FRANJOU Stephane <stephane.franjou@csgroup.eu>,
-        gregkh@linuxfoundation.org, stable@vger.kernel.org
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Tony Jones <tonyj@suse.de>, Jiri Olsa <jolsa@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        Seeteena Thoufeek <s1seetee@linux.vnet.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH] [Backport for 4.14] perf script python: Remove explicit shebang from tests/attr.c
-Date:   Fri, 16 Dec 2022 12:38:12 +0100
-Message-Id: <3ca0515edb717e0f394f973f3cbbe2c80abb35e4.1671190496.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.38.1
+        Fri, 16 Dec 2022 06:38:44 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AA321807
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:38:43 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p692x-0007kU-FG; Fri, 16 Dec 2022 12:38:35 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p692u-004uXs-HA; Fri, 16 Dec 2022 12:38:33 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p692u-005WRG-EK; Fri, 16 Dec 2022 12:38:32 +0100
+Date:   Fri, 16 Dec 2022 12:38:32 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: display: imx: Describe drm binding
+ for fsl,imx-lcdc
+Message-ID: <20221216113832.6qvyzlrwfzrlhker@pengutronix.de>
+References: <20221214115921.1845994-1-u.kleine-koenig@pengutronix.de>
+ <20221214115921.1845994-2-u.kleine-koenig@pengutronix.de>
+ <0f3e755f-954a-9722-6898-181170deb2c3@linaro.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1671190687; l=1110; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=WfhwuICpkYsCAPjFTSL2xadbipjhMYjzCdLwRf2aTus=; b=ImqOKirkns5rivDho31j4TrXihIe12Fn9rgoJHLogExFhaMaMowiRdPZEfE40tBwsxd1cSlwvDXQ TFdUBq/4A7r0QJZaTUbchNKuwib1ha6OjCRSpnt7QMqYdiNQcWmv
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vomqdkuv5b6duabq"
+Content-Disposition: inline
+In-Reply-To: <0f3e755f-954a-9722-6898-181170deb2c3@linaro.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Jones <tonyj@suse.de>
 
-[Upstream commit d72eadbc1d2866fc047edd4535ffb0298fe240be]
+--vomqdkuv5b6duabq
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-tests/attr.c invokes attr.py via an explicit invocation of Python
-($PYTHON) so there is therefore no need for an explicit shebang.
+On Fri, Dec 16, 2022 at 11:41:30AM +0100, Krzysztof Kozlowski wrote:
+> On 14/12/2022 12:59, Uwe Kleine-K=F6nig wrote:
+> > Modify the existing (fb-like) binding to support the drm-like binding in
+> > parallel.
+>=20
+> Aren't you now adding two compatibles to the same hardware, just for two
+> Linux drivers? One hardware should have one compatible, regardless of
+> Linux display implementation.
 
-Also most distros follow pep-0394 which recommends that /usr/bin/python
-refer only to v2 and so may not exist on the system (if PYTHON=python3).
+The (up to now unopposed) idea was to use the opportunity to pick a
+better name for the compatible. The hardware component is called LCDC
+and I guess fsl,imx21-fb was only picked because the linux driver is
+called imxfb. Unless I understood Rob wrong, he insisted to describe
+both variants in a single binding document only.
 
-Signed-off-by: Tony Jones <tonyj@suse.de>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
-Cc: Seeteena Thoufeek <s1seetee@linux.vnet.ibm.com>
-Link: http://lkml.kernel.org/r/20190124005229.16146-5-tonyj@suse.de
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- tools/perf/tests/attr.py | 1 -
- 1 file changed, 1 deletion(-)
+> > +if:
+>=20
+> Put it under allOf. It grows pretty often so this would avoid future
+> re-indents.
 
-diff --git a/tools/perf/tests/attr.py b/tools/perf/tests/attr.py
-index 6c68435585c7..3e07eee33b10 100644
---- a/tools/perf/tests/attr.py
-+++ b/tools/perf/tests/attr.py
-@@ -1,4 +1,3 @@
--#! /usr/bin/env python
- # SPDX-License-Identifier: GPL-2.0
- 
- import os
--- 
-2.38.1
+ok.
 
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--vomqdkuv5b6duabq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOcWLUACgkQwfwUeK3K
+7Al9/wf/ZOo18OuIXv1lM+hxI9+4bUYsHMvey+G65EOqkXqkRZfOFZjeVsypRYEX
+rk9Ws23MqhB6lYN7sUVwxiwtFJxtgJJ4rzwSisF83nCfnEnTiA1nkj1N5aJLAoEy
+nzBN4aWkSmUisjB1dUgz702jYUAdEwaPqf7Mbe+jqTKFhm99A4pPCCfYWqJSGDKI
+c8IupblZq2X59wlWnRKRbfIJQXujGomVE/lTzBdLvQDuiyYpXTqDVjM/bx7DTwtF
+k2U8AEDM/DSl5ByO5esfQcCDV1Z/jjZh1F+OI1IFn60cI7j194c34m6cK5uIENPu
+D6XB0+QlReZYOa72RW/ejUDOTgpyQA==
+=tu0Y
+-----END PGP SIGNATURE-----
+
+--vomqdkuv5b6duabq--
