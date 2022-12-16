@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C414D64ED57
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1646464EF84
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:39:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiLPPCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 10:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
+        id S231890AbiLPQj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 11:39:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiLPPCK (ORCPT
+        with ESMTP id S231488AbiLPQij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 10:02:10 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2B528735
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:02:09 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id ud5so6807358ejc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:02:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=x/bGOCyr2U74G8JrDumnZakquFNkr7cJkIvDVURxj9k=;
-        b=hms42lLTCYuxcUThnU/6aUWYzZOHEV5cYNX4WglixQWkfEhy0EPEdoLDTYF90esKiM
-         8y/wgvPKWBjweiycEAqf2lgwEcqGv+8Iu3i9zbphpy2fnlTSyHStoFDp8kT2vt8/X/Gm
-         kMa8p2HbmwI4fh3vA00p+KFyXc7dEzmYVVcgJ7cC2BCFbOfrDPfJVEPXxu9koKBvowyX
-         hKpfoMSqB48NQmSCS+1hWSMwi518Tw62CP/LdL8bFO8GTn4ZG9VgT81OZX/SMPmcszaI
-         1B6YgmqGw2hvp6i7RpF3sMRL53AktYGXBaTZcErh9++317zTPr9wxSUjWQaT1rKxa+Qv
-         cLww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=x/bGOCyr2U74G8JrDumnZakquFNkr7cJkIvDVURxj9k=;
-        b=BVQLYpCnOg3dq5T6wRgJ0HGu6/b4RwlTcyW5NfnRwPpVPgmbfsoUZ1B7cLRO7Ion6q
-         GFYjGuO3WtsV6pLiTbCMTtYF5YiHJg3z30taVoqiGaChZDYn6oJbnjBZi9RvTwzEj5pO
-         ruBYzUN+91w6EEBmyKZRaBeZ3YPOy5BPxNV+HEwHkAsB2ZpFJnRLWwDcpDRy6hEe3Bpn
-         K4UsMSsozOWTZw7Mxw5DYZSom6ZjNFxkIthAqiK2cO6j8JkXMEPCfh0i0Dr6eNDjU2Rp
-         5TcG9C58tTat/YczszQuU8UscjP4JbQ2NyBHls/UWZIQSIx0bkp7vDoV8NnN18XxITMI
-         vuUA==
-X-Gm-Message-State: ANoB5pmTI74J6frao4oRzX6AGblCD99d4GMJCeJvDMl7b/eiAuPL1B3W
-        SK50Fc41p1MHFe5c1Htf6nPiQqlH9drwDK0w
-X-Google-Smtp-Source: AA0mqf6b+jYXmM+d6czWXobm1jeVPL5F7HFVFvYjaRMSdKrQbaYDL36jwhDffkmH/aTEzzYQ7z/VzA==
-X-Received: by 2002:a17:906:25c7:b0:7c1:8ba6:6eb3 with SMTP id n7-20020a17090625c700b007c18ba66eb3mr18327115ejb.35.1671202927203;
-        Fri, 16 Dec 2022 07:02:07 -0800 (PST)
-Received: from localhost.localdomain (p200300d9973eac0005dbc67c2510e9a9.dip0.t-ipconnect.de. [2003:d9:973e:ac00:5db:c67c:2510:e9a9])
-        by smtp.googlemail.com with ESMTPSA id z19-20020a1709067e5300b007a4e02e32ffsm946924ejr.60.2022.12.16.07.02.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 07:02:06 -0800 (PST)
-From:   Manfred Spraul <manfred@colorfullife.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     1vier1@web.de, Manfred Spraul <manfred@colorfullife.com>
-Subject: [PATCH 0/3] various irq handling fixes/docu updates
-Date:   Fri, 16 Dec 2022 16:01:52 +0100
-Message-Id: <20221216150155.200389-1-manfred@colorfullife.com>
-X-Mailer: git-send-email 2.38.1
+        Fri, 16 Dec 2022 11:38:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123812E687
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:37:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671208672;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iYWX1JVBYSUKLXVYpGQr+eXLajFPQi0WiXT4Nb6R2Yo=;
+        b=cj1BqK0e0nhFk1HvRAq05kbMPbZBqoKjHPFZCsTPqzDlq7ju4aCUYfPasmBD3YlR4GIkdl
+        3/zzFzlRNWVRn+/Pkbop+Ihzz8fMncY2KTNmcMUwqmcXZ3h9JucCyJUTOE5z2/3gYQIcSd
+        4UkKsnIJ6OBG8yTuDYlTpwFEL6+jSbU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-663-CI_Xdn4APQSUGfk2Kx0WoQ-1; Fri, 16 Dec 2022 11:37:48 -0500
+X-MC-Unique: CI_Xdn4APQSUGfk2Kx0WoQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 71487857F82;
+        Fri, 16 Dec 2022 16:37:47 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 45A451401C34;
+        Fri, 16 Dec 2022 16:37:47 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 66F9B40416677; Fri, 16 Dec 2022 11:07:01 -0300 (-03)
+Date:   Fri, 16 Dec 2022 11:07:01 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: [PATCH v2] hwmon: coretemp: avoid RDMSR interruptions to isolated
+ CPUs
+Message-ID: <Y5x7hXGGLkcmejKq@tpad>
+References: <Y5sWMEG0xCl9bgEi@tpad>
+ <68f76ac7-5edd-d437-8bef-e233f2876660@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <68f76ac7-5edd-d437-8bef-e233f2876660@roeck-us.net>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,34 +65,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-I found three patches from two topics in my outbox.
+The coretemp driver uses rdmsr_on_cpu calls to read
+MSR_IA32_PACKAGE_THERM_STATUS/MSR_IA32_THERM_STATUS registers,
+which contain information about current core temperature.
 
-* 0001-lib-percpu_counter-percpu_counter_add_batch-overflow.patch
-* 0002-include-linux-percpu_counter.h-Race-in-uniprocessor-.patch
+For certain low latency applications, the RDMSR interruption exceeds
+the applications requirements.
 
-  The percpu_counter code does take interrupt into account properly,
-  this could result in corrupted counters.
+So disallow reading of crit_alarm and temp files via /sys, returning 
+-EINVAL, in case CPU isolation is enabled.
 
-0003-kernel-irq-manage.c-disable_irq-might-sleep.patch
+Temperature information from the housekeeping cores should be
+sufficient to infer die temperature.
 
-  The disable_irq() documentation does not take threaded interrupt
-  handlers into account.
+Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
 
-I've not added cc stable, the races are not really likely:
+---
+v2: improve changelog to mention that an error is returned,
+    and sysfs file is not disabled (Guenter Roeck)
 
-- #002 is probably the most likely case: UP systems that use
-  percpu_counters from interrupt should observe corruptions.
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index 9bee4d33fbdf..30a35f4130d5 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -27,6 +27,7 @@
+ #include <asm/msr.h>
+ #include <asm/processor.h>
+ #include <asm/cpu_device_id.h>
++#include <linux/sched/isolation.h>
+ 
+ #define DRVNAME	"coretemp"
+ 
+@@ -121,6 +122,10 @@ static ssize_t show_crit_alarm(struct device *dev,
+ 	struct platform_data *pdata = dev_get_drvdata(dev);
+ 	struct temp_data *tdata = pdata->core_data[attr->index];
+ 
++
++	if (!housekeeping_cpu(tdata->cpu, HK_TYPE_MISC))
++		return -EINVAL;
++
+ 	mutex_lock(&tdata->update_lock);
+ 	rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax, &edx);
+ 	mutex_unlock(&tdata->update_lock);
+@@ -158,6 +163,8 @@ static ssize_t show_temp(struct device *dev,
+ 
+ 	/* Check whether the time interval has elapsed */
+ 	if (!tdata->valid || time_after(jiffies, tdata->last_updated + HZ)) {
++		if (!housekeeping_cpu(tdata->cpu, HK_TYPE_MISC))
++			return -EINVAL;
+ 		rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax, &edx);
+ 		/*
+ 		 * Ignore the valid bit. In all observed cases the register
 
-- #001 is fairly theoretical
 
-- #003 is a docu update and thus out of scope for stable.
 
-@Andrew: Could you add them to -mm and -next?
-Especially #003 should be in -next for a few months, to check what the
-might_sleep() encounters.
-
---
-	Manfred
 
