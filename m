@@ -2,182 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C61064EBD6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 14:06:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E63F64EBDA
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 14:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbiLPNGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 08:06:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
+        id S230388AbiLPNGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 08:06:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbiLPNFr (ORCPT
+        with ESMTP id S230419AbiLPNGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 08:05:47 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACF725EE;
-        Fri, 16 Dec 2022 05:05:38 -0800 (PST)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id A4C9384881;
-        Fri, 16 Dec 2022 14:05:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1671195937;
-        bh=v2hyP2ZH/dKnNRKXD+eheCejY2sZlWVOdtlMHVrs2lc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=zpUCmv+f/PKfpiFBdXAbepeTZPQkKaPxD9EZ0X+idM5hgFRm7rxDKL34Pi5ltGvQA
-         cvBcm0JaqHVGB2/JhQHNXWTkfCztmUXxM/7wh718ahkBri1wjPAwendW+GdXs4qNfc
-         LNfl/7E8zaOtBWy1cng1X/g4oTYySgTLUwJepragKQxvP+AtBEo8e32Od++lNbULkU
-         lF0z1QFdHGSqHFlHzQjng1siEXd7EQ6dvkqGwaorFyP6S01BUGGU5KmfkMRl2pJV7F
-         s7iI2rPBO01oKfdFi1QQdisv5VQ7m1k2W9+DfF0X7wR3YZyQUKdPc2bF0KiMWxH+xV
-         GIPcYDIx4A+SA==
-Date:   Fri, 16 Dec 2022 14:05:26 +0100
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Alexander H Duyck <alexander.duyck@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dsa: marvell: Provide per device information
- about max frame size
-Message-ID: <20221216140526.799bd82f@wsk>
-In-Reply-To: <4d16ffd327d193f8c1f7c40f968fda90a267348e.camel@gmail.com>
-References: <20221215144536.3810578-1-lukma@denx.de>
-        <4d16ffd327d193f8c1f7c40f968fda90a267348e.camel@gmail.com>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 16 Dec 2022 08:06:01 -0500
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B052A960;
+        Fri, 16 Dec 2022 05:06:00 -0800 (PST)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-43ea87d0797so3742007b3.5;
+        Fri, 16 Dec 2022 05:06:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jXF9c7i/pRZwb/zK4b3gP0kYwDE/+CkuRpF8ttFbdN4=;
+        b=l6PATB868fr4d3YF83iMoL9gZrL0DVm5wVxcQGRgLaPJWSjgEyZ2i/DNHtmiWYnfFp
+         05+Y7EpMmJahQTNDiusfHkkfykV163RdO7IZbZe+4s6rMl9wWmC4wz9yybZh5Ff/EhmU
+         Ox1i9LDd4rt4VUQUE22W2tDjONMjM5LnKOzD5Pc2MKf9D26t1/jbg49/64+uavx7HDgP
+         7hT4xWheJ/8jS2mTnxxc7FBvm8Z6zRLgKWAfU1PiCOIsnIi5UnJyOctvdqXgZF10sFIi
+         scgsukm03YXe8RnXnp0o9EprOpEQJ9NQbAUByBOywwUuk1dyXJwSqMECoQAOntmSEdPN
+         Id0A==
+X-Gm-Message-State: ANoB5pkkpc6C2jvYlGU3a5A4o3hFPQsXNCugvdtzuysPs7fOwvuKAXIa
+        OlO3Qlepr5xMOVUT3jiBXjFOhn5WQTfFPA==
+X-Google-Smtp-Source: AA0mqf4Aq6ticabG5QcKLKfzwPbPLtx4dun+78K6CTRoPxjqhcg6sfe+5ucaM8hs9nnK0HvaWDlGHg==
+X-Received: by 2002:a05:7500:579f:b0:eb:5db:86f4 with SMTP id bz31-20020a057500579f00b000eb05db86f4mr4204563gab.62.1671195959208;
+        Fri, 16 Dec 2022 05:05:59 -0800 (PST)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id y18-20020a37f612000000b006fefa5f7fcesm1465631qkj.10.2022.12.16.05.05.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 05:05:58 -0800 (PST)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-3f15a6f72d0so32136857b3.1;
+        Fri, 16 Dec 2022 05:05:58 -0800 (PST)
+X-Received: by 2002:a0d:dd4b:0:b0:370:61f5:b19e with SMTP id
+ g72-20020a0ddd4b000000b0037061f5b19emr28600389ywe.316.1671195958287; Fri, 16
+ Dec 2022 05:05:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nCzLGEgU8x4RN6D+MU=naZZ";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221215170234.2515030-1-arnd@kernel.org>
+In-Reply-To: <20221215170234.2515030-1-arnd@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 16 Dec 2022 14:05:46 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWZX9_c7Wvpbu2E9JSm4eoh6S4U+aNfPQ-kk0zyEQdj7A@mail.gmail.com>
+Message-ID: <CAMuHMdWZX9_c7Wvpbu2E9JSm4eoh6S4U+aNfPQ-kk0zyEQdj7A@mail.gmail.com>
+Subject: Re: [PATCH] fbdev: omapfb: avoid stack overflow warning
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        linux-omap@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/nCzLGEgU8x4RN6D+MU=naZZ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Arnd,
 
-Hi Alexander,
+On Thu, Dec 15, 2022 at 6:05 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The dsi_irq_stats structure is a little too big to fit on the
+> stack of a 32-bit task, depending on the specific gcc options:
+>
+> fbdev/omap2/omapfb/dss/dsi.c: In function 'dsi_dump_dsidev_irqs':
+> fbdev/omap2/omapfb/dss/dsi.c:1621:1: error: the frame size of 1064 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+>
+> Since this is only a debugfs file, performance is not critical,
+> so just dynamically allocate it, and print an error message
+> in there in place of a failure code when the allocation fails.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-> On Thu, 2022-12-15 at 15:45 +0100, Lukasz Majewski wrote:
-> > Different Marvell DSA switches support different size of max frame
-> > bytes to be sent.
-> >=20
-> > For example mv88e6185 supports max 1632 bytes, which is now
-> > in-driver standard value. On the other hand - mv88e6250 supports
-> > 2048 bytes.
-> >=20
-> > As this value is internal and may be different for each switch IC,
-> > new entry in struct mv88e6xxx_info has been added to store it.
-> >=20
-> > Signed-off-by: Lukasz Majewski <lukma@denx.de>
-> > ---
-> > Changes for v2:
-> > - Define max_frame_size with default value of 1632 bytes,
-> > - Set proper value for the mv88e6250 switch SoC (linkstreet) family
-> > ---
-> >  drivers/net/dsa/mv88e6xxx/chip.c | 13 ++++++++++++-
-> >  drivers/net/dsa/mv88e6xxx/chip.h |  1 +
-> >  2 files changed, 13 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/net/dsa/mv88e6xxx/chip.c
-> > b/drivers/net/dsa/mv88e6xxx/chip.c index 2ca3cbba5764..7ae4c389ce50
-> > 100644 --- a/drivers/net/dsa/mv88e6xxx/chip.c
-> > +++ b/drivers/net/dsa/mv88e6xxx/chip.c
-> > @@ -3093,7 +3093,9 @@ static int mv88e6xxx_get_max_mtu(struct
-> > dsa_switch *ds, int port) if (chip->info->ops->port_set_jumbo_size)
-> >  		return 10240 - VLAN_ETH_HLEN - EDSA_HLEN -
-> > ETH_FCS_LEN; else if (chip->info->ops->set_max_frame_size)
-> > -		return 1632 - VLAN_ETH_HLEN - EDSA_HLEN -
-> > ETH_FCS_LEN;
-> > +		return (chip->info->max_frame_size  - VLAN_ETH_HLEN
-> > +			- EDSA_HLEN - ETH_FCS_LEN);
-> > +
-> >  	return 1522 - VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN;
-> >  }
-> >=20
-> >  =20
->=20
-> Is there any specific reason for triggering this based on the
-> existance of the function call?=20
+Thanks for your patch!
 
-This was the original code in this driver.
+> --- a/drivers/video/fbdev/omap2/omapfb/dss/dsi.c
+> +++ b/drivers/video/fbdev/omap2/omapfb/dss/dsi.c
+> @@ -1536,22 +1536,28 @@ static void dsi_dump_dsidev_irqs(struct platform_device *dsidev,
+>  {
+>         struct dsi_data *dsi = dsi_get_dsidrv_data(dsidev);
+>         unsigned long flags;
+> -       struct dsi_irq_stats stats;
+> +       struct dsi_irq_stats *stats;
+> +
+> +       stats = kzalloc(sizeof(*stats), GFP_KERNEL);
+> +       if (!stats) {
+> +               seq_printf(s, "out of memory\n");
 
-This value (1632 or 2048 bytes) is SoC (family) specific.
+I guess this is futile?
+No need to increase kernel size for OOM messages.
 
-By checking which device defines set_max_frame_size callback, I could
-fill the chip->info->max_frame_size with 1632 value.
+> +               return;
+> +       }
+>
+>         spin_lock_irqsave(&dsi->irq_stats_lock, flags);
 
-> Why not just replace:
-> 	else if (chip->info->ops->set_max_frame_size)
-> with:
-> 	else if (chip->info->max_frame_size)
->=20
+Gr{oetje,eeting}s,
 
-I think that the callback check is a bit "defensive" approach -> 1522B
-is the default value and 1632 (or 10240 - jumbo) can be set only when
-proper callback is defined.
-
-> Otherwise my concern is one gets defined without the other leading to
-> a future issue as 0 - extra headers will likely wrap and while the
-> return value may be a signed int, it is usually stored in an unsigned
-> int so it would effectively uncap the MTU.
-
-Please correct me if I misunderstood something:
-
-The problem is with new mv88eXXXX devices, which will not provide
-max_frame_size information to their chip->info struct?
-
-Or is there any other issue?
-
->=20
-> Actually you could take this one step further since all values should
-> be 1522 or greater you could just drop the else/if and replace the
-> last line with "max_t(int, chip->info->max_frame_size, 1522) -
-> (headers)".
-
-This would be possible, yes.
-
-However, then we will not check if the proper callback (e.g.
-chip->info->ops->set_max_frame_size) is available for specific SoC.
-
-If this is OK for maintainers for this driver, then I don't mind.
-
-
-Best regards,
-
-Lukasz Majewski
+                        Geert
 
 --
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/nCzLGEgU8x4RN6D+MU=naZZ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmOcbRcACgkQAR8vZIA0
-zr38sggAoqoz/XJ1GyUjOFPHF9eVrTISta2YQ/2HM9q8L5hN3Hkh32xkYCI/62HO
-OsoE2qrYUMLsaa0ei0qu6Qv5NnUBEpazOt6XcMFoyawmUjAZdvboxGO7eFZoFd9J
-hk5kcJBTdXEHDEDsYY7ynpJIbHDGKhYj2uvGr9fRR7Lx4xfCOIZ7G5hc49HGS7y5
-lBJuQxhmLCVwUiQmCANSWaeuQfHnldehxrS7gdrEkbMIlT+jVnaQ9G+z2mm0UjA0
-K+euWcWwgDosk/j8KP/XU1Gw6i1hiMG/CyiK3z7l7iFC/F/7HjPR0iclzvCpU+PI
-vDR1hTdvFTyvphpaQyaZyk7d8C4a6Q==
-=tt9B
------END PGP SIGNATURE-----
-
---Sig_/nCzLGEgU8x4RN6D+MU=naZZ--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
