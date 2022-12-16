@@ -2,82 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57AB464EF33
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E58864EF4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbiLPQeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 11:34:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
+        id S231589AbiLPQiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 11:38:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbiLPQdg (ORCPT
+        with ESMTP id S230219AbiLPQiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 11:33:36 -0500
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54886DFE;
-        Fri, 16 Dec 2022 08:33:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=pkOah91FWw2zIXdbgJ+5cGA7IqUInyi1ED6BkRpVt2w=; b=X4d2AWuAO7i4v62BNt8er3HKQ2
-        JxeZ6nhPuYVs/A13U4Fy+driLai4ChNoyypKRPbE7KprX3sApBIb8H2laNevBq1G0RHfiLIZhabm6
-        sb4I22hw+M9rp98ruQ8cryLH+V8SFTsGlnZMQMKskIMsOD8CGp17or9948uySAXTlY9H2W09oLmTG
-        xMggJcCDFlk9HD4XP0Le3Vkrzz/OrYg1Eh9kNJR2plK2BhQHXeDrQs6Z4TxG07Iy2bmvWBVyro/3L
-        g8M9WmeNVHLk9Eyo+gURK7ciAm7H0MbF32lHlyrdh+ka+ecYw2WIyQhRJU9kRHJhWUepJZHLay+dG
-        2bY9/IaA==;
-Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1p6DeD-009ppe-5F; Fri, 16 Dec 2022 09:33:24 -0700
-Message-ID: <9fdae348-3416-6227-e059-5cd70369e4be@deltatee.com>
-Date:   Fri, 16 Dec 2022 09:33:19 -0700
+        Fri, 16 Dec 2022 11:38:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7884B871
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:37:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671208648;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qKpV/VqJnDWZ/oVpmuV6caL/79sgF/1JHTzTx6G1qmI=;
+        b=Q8qDUksMC01wGcr8hdCmpnfbvkCYKMXZtAMouiwFkRorX6dwqGUJjuuPhIngIh22lt6uBH
+        wzucYuaijhOMXB8gOrn+jTaSwWuzaY4PJqg79LxV8Xnq/ufllG7vyxhilR2sXUI7qB4qeO
+        nx2HkbrFbNJY9gh/lM9jFv2bQ2KE0M0=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-605-gty2jWNdOM2GqJMXJqiK6Q-1; Fri, 16 Dec 2022 11:37:26 -0500
+X-MC-Unique: gty2jWNdOM2GqJMXJqiK6Q-1
+Received: by mail-wr1-f71.google.com with SMTP id x1-20020adfbb41000000b002426b33b618so621945wrg.7
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:37:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qKpV/VqJnDWZ/oVpmuV6caL/79sgF/1JHTzTx6G1qmI=;
+        b=gHnB/GOm9s00FZ9hzfbnifMdOlkbcOuWZU4XQmz2KU+ERsvT255EWTxNOnFgcZ21xO
+         i0ACMzD8YiRBk5fLViBAWTkIVTUhKJY9WHoHt5+c3ulUtAbOyzickbEe7XZOPRgR9Uw3
+         esiT2Pr4FEP0Lcb5oMYV6I6d9er7ZeV6EsTTpg9xVYvEwF1u43SbOmn5iHuwbCuLMJXK
+         FQ+6BfnSQRYht7v7l4wUt0tLwVawpaE3RDLFEdalncTUMmnbPtVPIeIXMdeG6HHk+28F
+         h7pci7Z9YLe1yfGylPFBd31iu6V6mMwt0pDW4ANp8fL/bJLgZSvkeJgVzVD5VzV5fpaR
+         clzw==
+X-Gm-Message-State: AFqh2kp/KRAie44lmT92bb8IhQj7AKsEQ7NMEO+ZMXaGrurMWt2/+CwL
+        McmFXrdmKCruTspzZkrZh2ddMfKsQPZBlxdYikpc27lAlYs4UwPtgHhj/fmkcS1wqXEIe9CDng3
+        qmj1ME1P8LwQoSUDglBJ313Qf
+X-Received: by 2002:a05:600c:1d06:b0:3d3:4aa6:4fe6 with SMTP id l6-20020a05600c1d0600b003d34aa64fe6mr121472wms.3.1671208645699;
+        Fri, 16 Dec 2022 08:37:25 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsWRJhHoFiViQpkEdyT8L9CVxpuBTZfVTyGNx3xoccjDeKiUopQOKgssEF482JY1V6yVJ+q0g==
+X-Received: by 2002:a05:600c:1d06:b0:3d3:4aa6:4fe6 with SMTP id l6-20020a05600c1d0600b003d34aa64fe6mr121455wms.3.1671208645494;
+        Fri, 16 Dec 2022 08:37:25 -0800 (PST)
+Received: from [192.168.3.108] (p4ff23686.dip0.t-ipconnect.de. [79.242.54.134])
+        by smtp.gmail.com with ESMTPSA id i6-20020a05600c290600b003cf5ec79bf9sm2867736wmd.40.2022.12.16.08.37.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 08:37:24 -0800 (PST)
+Message-ID: <19b49f1f-9d2d-6cf1-e764-ca4219b22ab9@redhat.com>
+Date:   Fri, 16 Dec 2022 17:37:23 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Content-Language: en-CA
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Kurt Schwemmer <kurt.schwemmer@microsemi.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20221216162126.207863-1-helgaas@kernel.org>
- <20221216162126.207863-3-helgaas@kernel.org>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <20221216162126.207863-3-helgaas@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 1/2] mm/uffd: Fix pte marker when fork() without fork
+ event
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Huang Ying <ying.huang@intel.com>, stable@vger.kernel.org
+References: <20221214200453.1772655-1-peterx@redhat.com>
+ <20221214200453.1772655-2-peterx@redhat.com>
+ <618b69be-0e99-e35f-04b3-9c63d78ece50@redhat.com> <Y5yGp6ToQD+eYrv/@x1n>
+ <8c36dd0a-90be-91bf-0ded-55b34ee0a770@redhat.com> <Y5ybyFa5U9VzVcwg@x1n>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Y5ybyFa5U9VzVcwg@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 24.64.144.200
-X-SA-Exim-Rcpt-To: helgaas@kernel.org, kurt.schwemmer@microsemi.com, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, bhelgaas@google.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v2 2/2] PCI: switchtec: Return -EFAULT for copy_to_user()
- errors
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-12-16 09:21, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
+On 16.12.22 17:24, Peter Xu wrote:
+> On Fri, Dec 16, 2022 at 04:57:33PM +0100, David Hildenbrand wrote:
+>> I'm more concerned about backports, when one backports #1 but not #2. In
+>> theory, patch #2 fixes patch #1, because that introduced IMHO a real
+>> regression -- a possible memory corruption when discarding a hwpoison
+>> marker. Warnings are not nice but at least indicate that something needs a
+>> second look.
 > 
-> switchtec_dev_read() didn't handle copy_to_user() errors correctly: it
-> assigned "rc = -EFAULT", but actually returned either "size", -ENXIO, or
-> -EBADMSG instead.
+> Note that backporting patch 1 only is exactly what I wanted to do here - it
+> means his/her tree should not have the swapin error pte markers at all.
 > 
-> Update the failure cases to unlock mrpc_mutex and return -EFAULT directly.
-> 
-> Fixes: 080b47def5e5 ("MicroSemi Switchtec management interface driver")
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> The swapin error pte marker change only existed for a few days in Linus's
+> tree, so no one should be backporting patch 2.
 
-Looks good to me thanks!
+Right, and these patches are supposed to land in 6.2 as well. Makes 
+sense to me then.
 
-Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+Especially, the other parts in patch #2 are worth being in a separate patch.
 
-Logan
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
+
