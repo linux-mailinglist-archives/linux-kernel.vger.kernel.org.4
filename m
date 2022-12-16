@@ -2,101 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0657564EC8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:03:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C527A64EC91
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:03:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbiLPODc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:03:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
+        id S230375AbiLPODn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:03:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiLPOD3 (ORCPT
+        with ESMTP id S229453AbiLPODj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:03:29 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE6EA19D;
-        Fri, 16 Dec 2022 06:03:28 -0800 (PST)
-Received: from fsav315.sakura.ne.jp (fsav315.sakura.ne.jp [153.120.85.146])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2BGE30pY022162;
-        Fri, 16 Dec 2022 23:03:00 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav315.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp);
- Fri, 16 Dec 2022 23:03:00 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2BGE2xnN022155
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 16 Dec 2022 23:03:00 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <86bdfea2-7125-2e54-c2c0-920f28ff80ce@I-love.SAKURA.ne.jp>
-Date:   Fri, 16 Dec 2022 23:02:56 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] fbcon: Use kzalloc() in fbcon_prepare_logo()
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <cad03d25-0ea0-32c4-8173-fd1895314bce@I-love.SAKURA.ne.jp>
- <CAMuHMdUH4CU9EfoirSxjivg08FDimtstn7hizemzyQzYeq6b6g@mail.gmail.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <CAMuHMdUH4CU9EfoirSxjivg08FDimtstn7hizemzyQzYeq6b6g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 16 Dec 2022 09:03:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB061A3A9;
+        Fri, 16 Dec 2022 06:03:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E7CC62122;
+        Fri, 16 Dec 2022 14:03:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFAE8C433EF;
+        Fri, 16 Dec 2022 14:03:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671199417;
+        bh=NgWOLwOJiLMaC1Qbs4VrQAUuhPBGlg0ueOxm6XwNJr4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=px9gvbKMj8/A2/VM6w70X9PUFbcL7Rtukqu7UnQcuTN6SvTPzEqua8Iu99pgqEbrW
+         6avryIIu1sORmrw9toXL0UMaVewQ7vnNWTYp2MDDgNowtuD7jpJ3ZzYVxCsWp82aPg
+         Sw8Wyoik2klQdQs8lVHYfYf/I9mfYVsa635/STWaYhhDDOS8SSPQODyzSIpVNFuas6
+         O4c+jVp0PmVtiWJYT/u1NmEorLIZVCrMtpgqY+c9jrfkFFjYROXlC3YhO68mJamttN
+         6Tdscedm1OXGxKsgOhxGym9Q0W9hMoqmFiHTy7YjD9v5OFuHFwGm4GHwIMz2u1zcTY
+         xIQZf8WiGg6Sg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p6BJH-00D5TB-Ea;
+        Fri, 16 Dec 2022 14:03:35 +0000
+Date:   Fri, 16 Dec 2022 14:03:34 +0000
+Message-ID: <86tu1vphs9.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>
+Subject: Re: [patch V3 09/33] genirq/msi: Add range checking to msi_insert_desc()
+In-Reply-To: <86v8mbphzw.wl-maz@kernel.org>
+References: <20221124230505.073418677@linutronix.de>
+        <20221124232325.798556374@linutronix.de>
+        <20221213190425.GA3943240@roeck-us.net>
+        <4e0a129855490febb1c57e7e979bcfb579d39054.camel@linux.ibm.com>
+        <87fsdgzpqs.ffs@tglx>
+        <e570e70d-19bc-101b-0481-ff9a3cab3504@linux.ibm.com>
+        <86wn6rptdu.wl-maz@kernel.org>
+        <0acb8c63-7f6c-6df6-cb40-66b265a6e6ce@linux.ibm.com>
+        <86v8mbphzw.wl-maz@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mjrosato@linux.ibm.com, tglx@linutronix.de, schnelle@linux.ibm.com, linux@roeck-us.net, linux-kernel@vger.kernel.org, x86@kernel.org, joro@8bytes.org, will@kernel.org, linux-pci@vger.kernel.org, bhelgaas@google.com, lorenzo.pieralisi@arm.com, gregkh@linuxfoundation.org, jgg@mellanox.com, dave.jiang@intel.com, alex.williamson@redhat.com, kevin.tian@intel.com, dan.j.williams@intel.com, logang@deltatee.com, ashok.raj@intel.com, jdmason@kudzu.us, allenbh@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/15 18:36, Geert Uytterhoeven wrote:
-> The next line is:
+On Fri, 16 Dec 2022 13:58:59 +0000,
+Marc Zyngier <maz@kernel.org> wrote:
 > 
->         scr_memsetw(save, erase, array3_size(logo_lines, new_cols, 2));
-> 
-> So how can this turn out to be uninitialized later below?
-> 
->         scr_memcpyw(q, save, array3_size(logo_lines, new_cols, 2));
-> 
-> What am I missing?
+> I'll update Thomas' patch. Once Guenter confirms that PPC is OK, I'll
+> send it out.
 
-Good catch. It turned out that this was a KMSAN problem (i.e. a false positive report).
+And FWIW, the branch is at [1].
 
-On x86_64, scr_memsetw() is implemented as
+Thanks,
 
-        static inline void scr_memsetw(u16 *s, u16 c, unsigned int count)
-        {
-                memset16(s, c, count / 2);
-        }
+	M.
 
-and memset16() is implemented as
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/msi-fixes-6.2
 
-        static inline void *memset16(uint16_t *s, uint16_t v, size_t n)
-        {
-        	long d0, d1;
-        	asm volatile("rep\n\t"
-        		     "stosw"
-        		     : "=&c" (d0), "=&D" (d1)
-        		     : "a" (v), "1" (s), "0" (n)
-        		     : "memory");
-        	return s;
-        }
-
-. Plain memset() in arch/x86/include/asm/string_64.h is redirected to __msan_memset()
-but memsetXX() are not redirected to __msan_memsetXX(). That is, memory initialization
-via memsetXX() results in KMSAN's shadow memory being not updated.
-
-KMSAN folks, how should we fix this problem?
-Redirect assembly-implemented memset16(size) to memset(size*2) if KMSAN is enabled?
-
+-- 
+Without deviation from the norm, progress is not possible.
