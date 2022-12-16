@@ -2,139 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9093C64ECFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E969964ECFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbiLPOgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:36:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
+        id S230521AbiLPOiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:38:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbiLPOga (ORCPT
+        with ESMTP id S231251AbiLPOhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:36:30 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265AD5C774;
-        Fri, 16 Dec 2022 06:36:30 -0800 (PST)
-Received: from beast.luon.net (simons.connected.by.freedominter.net [45.83.240.172])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sjoerd)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D7C956602C97;
-        Fri, 16 Dec 2022 14:36:28 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671201389;
-        bh=gwg+FXKZU5KF0sKSHfukB4xVb0UPjDiYXwiEsS4bEsc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N32LXhPL5oNa5NdOonz6odUH/VoH3wd3dBTp39dg1ipLkBsCjHCy1BbzIImlPt5lK
-         2dIOj1RlpbCjnMoMU/gTrkuCbJpdk+PXJSVN15i/ZZ5zrMY5+YjrnvMNqdu9fXRZLK
-         LFJzXP+qGvAslsAnWsM/L/P/QhViC8vbCV6L0bTX2e42mgCAFdkuJloNThtaEAhArN
-         Vap6tKGIPLytrLAizqL0Ep3TK2AOx5w8eDQkM2DOTE6ajlNLd8HU0rWKZJ6YEDEPib
-         cz8KJbDwM76QoD9wg4908499gxBkUX67C8I9U4rXQGxK+4rn3vrTJINR1vzjntJIgc
-         bh1kn7mjFoLIA==
-Received: by beast.luon.net (Postfix, from userid 1000)
-        id B31B75E3315A; Fri, 16 Dec 2022 15:36:26 +0100 (CET)
-From:   Sjoerd Simons <sjoerd@collabora.com>
-To:     Nishanth Menon <nm@ti.com>
-Cc:     martyn.welch@collabora.com, Nitin Yadav <n-yadav@ti.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] arm64: dts: ti: k3-am625-sk: Add support for USB
-Date:   Fri, 16 Dec 2022 15:36:23 +0100
-Message-Id: <20221216143624.23708-4-sjoerd@collabora.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221216143624.23708-1-sjoerd@collabora.com>
-References: <20221216143624.23708-1-sjoerd@collabora.com>
+        Fri, 16 Dec 2022 09:37:55 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6005B5E09B;
+        Fri, 16 Dec 2022 06:37:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1671201449; x=1702737449;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wMHFw5uiriRq1CxOroTGwEkfbMo+ViwT/l1yTeHdqjE=;
+  b=P04BaM4a73XLi5Q7RqvGc1KleZJUmJU+w5RRynnF63nArZZCzF3BBhXe
+   B8LVLsr+rfBMnwtujHl8poGxidXZQeKl1OmptcoApwVwFz44DS0sPUi8K
+   27IHuxM6UsduG4dnRo/Em5IyzriV+bpXqL5/BhvH0NrZap8v3VU6MJxhO
+   C8+a7D9GxL8yubRHVxFG6+jFCA1A65fl8Pd4bWQcqN7sKr5UL95GYGav1
+   Yc4uOvf9cw24K4FOnCqiKTcRv8TCIA+qxcf3iiYkdsNwv/PUAvWD21AU1
+   Zqpov/3/kKjT1u+cexOjQpVwK16Ju2vbl2ahMAEcihorlwR/SuhfcWjDp
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
+   d="scan'208";a="128506510"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Dec 2022 07:37:27 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 16 Dec 2022 07:37:24 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Fri, 16 Dec 2022 07:37:22 -0700
+From:   Eugen Hristev <eugen.hristev@microchip.com>
+To:     <linux-media@vger.kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <luis.oliveira@synopsys.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>
+Subject: [PATCH v5 0/4] media: dwc: add csi2host driver
+Date:   Fri, 16 Dec 2022 16:37:13 +0200
+Message-ID: <20221216143717.1002015-1-eugen.hristev@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aswath Govindraju <a-govindraju@ti.com>
+Hi,
 
-AM62 SoC has two instances of USB and they are brought on to the board
-in the following way,
+This is a respin of this abandoned series of patches here:
+https://lore.kernel.org/lkml/1560280855-18085-1-git-send-email-luis.oliveira@synopsys.com/
 
--> USB0 instance
- - This is brought out to a USB TypeC connector on board through TPS6598 PD
-   controller. The PD controller should decide the role based on CC pin in
-   the connector. Unfortunately the irq line for the TPS isn't hooked up
-   which is a mode not yet support by the driver (some patches were
-   submitted earlier this year[0]). So for now the PD controller is left
-   out and periphal mode chosen.
+I have been using this driver for the past few years, and I have reworked
+much of it to cope with latest kernel changes.
+The series is surely not perfect, and there is still plenty of room for
+improvement.
+I did not implement all the required changes from v4.
+I fixed several bugs in the driver, and implemented few things that were
+needed to run in our system (required clocks, etc.)
+The CSI2HOST block is present in at91 product named sama7g5 , and we have been
+testing it with the sama7g5 Evaluation Kit board.
 
--> USB1 instance
- - This is brought out to a USB TypeA connector on board.
+I do not think I will have the time to implement further changes to this driver.
+I am sharing this with the community to try to help others, and maybe
+someone will pick up this work and continue the upstreaming process.
 
-Therefore, add the required device tree support for the above in the board
-dts file.
+One of the big reworks is the binding document which I converted to yaml
+and added the properties that were needed in our product.
+The PHY binding is still in txt format as originally sent by Luis.
+Since I reworked most of the binding, I added myself as author to it.
+The rest of the driver keeps Luis as author and I added myself as
+Co-developer on the driver which I mostly improved. The commit log
+will contain information about everything that I have added to it.
 
-0: https://lore.kernel.org/lkml/f714ee55-ef47-317d-81b9-57020dda064b@ti.com/T/
+P.S. I have not kept the history change log. Sorry
 
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-[merge from vendor bsp, drop TPS6598 support, reword commit message]
-Signed-off-by: Sjoerd Simons <sjoerd@collabora.com>
+Eugen
 
----
 
- arch/arm64/boot/dts/ti/k3-am625-sk.dts | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Eugen Hristev (1):
+  dt-bindings: media: Document bindings for DW MIPI CSI-2 Host
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-index 93a5f0817efc..c165fa0a4109 100644
---- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-@@ -24,6 +24,8 @@ aliases {
- 		spi0 = &ospi0;
- 		ethernet0 = &cpsw_port1;
- 		ethernet1 = &cpsw_port2;
-+		usb0 = &usb0;
-+		usb1 = &usb1;
- 	};
- 
- 	chosen {
-@@ -275,6 +277,12 @@ main_gpio1_ioexp_intr_pins_default: main-gpio1-ioexp-intr-pins-default {
- 			AM62X_IOPAD(0x01d4, PIN_INPUT, 7) /* (B15) UART0_RTSn.GPIO1_23 */
- 		>;
- 	};
-+
-+	main_usb1_pins_default: main-usb1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x0258, PIN_OUTPUT, 0) /* (F18) USB1_DRVVBUS */
-+		>;
-+	};
- };
- 
- &wkup_uart0 {
-@@ -514,3 +522,17 @@ &epwm1 {
- &epwm2 {
- 	status = "disabled";
- };
-+
-+&usbss0 {
-+	ti,vbus-divider;
-+};
-+
-+&usb0 {
-+	dr_mode = "peripheral";
-+};
-+
-+&usb1 {
-+	dr_mode = "host";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_usb1_pins_default>;
-+};
+Luis Oliveira (3):
+  dt-bindings: phy: Document the Synopsys MIPI DPHY Rx bindings
+  media: platform: dwc: Add MIPI CSI-2 controller driver
+  media: platform: dwc: Add DW MIPI DPHY Rx driver
+
+ .../bindings/media/snps,dw-csi.yaml           | 149 ++++
+ .../bindings/phy/snps,dw-dphy-rx.txt          |  29 +
+ MAINTAINERS                                   |  11 +
+ drivers/media/platform/Kconfig                |   1 +
+ drivers/media/platform/Makefile               |   1 +
+ drivers/media/platform/dwc/Kconfig            |  41 ++
+ drivers/media/platform/dwc/Makefile           |  15 +
+ drivers/media/platform/dwc/dw-csi-plat.c      | 667 ++++++++++++++++++
+ drivers/media/platform/dwc/dw-csi-plat.h      | 102 +++
+ drivers/media/platform/dwc/dw-csi-sysfs.c     | 623 ++++++++++++++++
+ drivers/media/platform/dwc/dw-dphy-plat.c     | 224 ++++++
+ drivers/media/platform/dwc/dw-dphy-rx.c       | 625 ++++++++++++++++
+ drivers/media/platform/dwc/dw-dphy-rx.h       | 212 ++++++
+ drivers/media/platform/dwc/dw-dphy-sysfs.c    | 232 ++++++
+ drivers/media/platform/dwc/dw-mipi-csi.c      | 570 +++++++++++++++
+ drivers/media/platform/dwc/dw-mipi-csi.h      | 294 ++++++++
+ include/media/dwc/dw-csi-data.h               |  26 +
+ include/media/dwc/dw-dphy-data.h              |  32 +
+ include/media/dwc/dw-mipi-csi-pltfrm.h        | 104 +++
+ 19 files changed, 3958 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/snps,dw-csi.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/snps,dw-dphy-rx.txt
+ create mode 100644 drivers/media/platform/dwc/Kconfig
+ create mode 100644 drivers/media/platform/dwc/Makefile
+ create mode 100644 drivers/media/platform/dwc/dw-csi-plat.c
+ create mode 100644 drivers/media/platform/dwc/dw-csi-plat.h
+ create mode 100644 drivers/media/platform/dwc/dw-csi-sysfs.c
+ create mode 100644 drivers/media/platform/dwc/dw-dphy-plat.c
+ create mode 100644 drivers/media/platform/dwc/dw-dphy-rx.c
+ create mode 100644 drivers/media/platform/dwc/dw-dphy-rx.h
+ create mode 100644 drivers/media/platform/dwc/dw-dphy-sysfs.c
+ create mode 100644 drivers/media/platform/dwc/dw-mipi-csi.c
+ create mode 100644 drivers/media/platform/dwc/dw-mipi-csi.h
+ create mode 100644 include/media/dwc/dw-csi-data.h
+ create mode 100644 include/media/dwc/dw-dphy-data.h
+ create mode 100644 include/media/dwc/dw-mipi-csi-pltfrm.h
+
 -- 
-2.39.0
+2.25.1
 
