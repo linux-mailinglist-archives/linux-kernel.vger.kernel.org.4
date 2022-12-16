@@ -2,151 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C819E64F56C
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 00:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F49C64F570
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 01:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiLPX7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 18:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
+        id S230228AbiLQAAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 19:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiLPX72 (ORCPT
+        with ESMTP id S230108AbiLPX7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 18:59:28 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E8557B59
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:59:27 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id vv4so9769444ejc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:59:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oIKXv0RMSOh4Zj5JXJ0H7+d/0M4R06dAaYKh+BMHd2A=;
-        b=juvIkT8vcatHsAuX5x/9pLyDEsPoOL7IqGfGxQxp6rjBVO4P/tlEBTqvfVLkkNKYGv
-         3CEaP8RDEXyHYSAi+1pUD1n+RTt0ogvvYz3AYEtllQKtJPlB3YwxLqHkaVku92HXBPr5
-         OJAS83LHruNjFBDASNQkVdRo7uNHrmFOhWWLJNlSn1UFXP6HSHn6iAHH76LFkysVK2iS
-         NqEeUicB6AO8M/MZpRezry/sYvEu8rsW+19+sJCRjDx102ABSOlasQ4qnabMXUYHoueq
-         xJH2tHVUZOY6KIs+JzPQxEWWZOgSkkHx0iBuZh4lZwrOjsA1gkyUurc0zHAWZaE7dmr9
-         hJWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oIKXv0RMSOh4Zj5JXJ0H7+d/0M4R06dAaYKh+BMHd2A=;
-        b=f+aZRY3O5kWfoW/lT2liHoC7zAwnR+zYnazwhPOPUYJ8De9cCKMcByzTMziGAd4Iod
-         2fYHqIdMqM4Ut0MPm6U5oLGB8KBNyC+6cs5jJBbjlAaTq7EzfDUq+Jbl9yhiiZIR8cm7
-         3C6hnxwBJm/4br81Wf+wumO402A6Vi+R0zq3i3jqV21QVOaVB2rkM6muxWdtBAYK4cK8
-         VuunAo8btoJJPxl7Bj2lychZ842Hfh+Hmw+KZYCr8lwdfdC8NR2HYTiZ1CbkTGCOYIUA
-         kVRl9QEM1ATsGcqAlRLBebcUcUHRvgRyjurNusVQfYXHKPJTM4W+LfM2b92+KGWQ/i/y
-         cJZA==
-X-Gm-Message-State: ANoB5pmUZWWGpjgUN/UIJUjUuVEmqvgdKfD4g+jJehE+41031wvGLHEx
-        cHQS0+qIq7IWvRCjJog9HskC5D/9nKORRYTHAYNDG2jLftFRbA==
-X-Google-Smtp-Source: AA0mqf6wIOamTnfqwHnHk7jBVTZApRrd3OSb9bKxdGI5zvUlM4wOFJiCeCifrb0GpusvxsjJ/sAFf4y8ghxYFJLgfUM=
-X-Received: by 2002:a17:906:840e:b0:7c0:d94c:7384 with SMTP id
- n14-20020a170906840e00b007c0d94c7384mr23051046ejx.109.1671235165720; Fri, 16
- Dec 2022 15:59:25 -0800 (PST)
-MIME-Version: 1.0
-References: <20221216233355.542197-1-robdclark@gmail.com>
-In-Reply-To: <20221216233355.542197-1-robdclark@gmail.com>
-From:   Chia-I Wu <olvaffe@gmail.com>
-Date:   Fri, 16 Dec 2022 15:59:14 -0800
-Message-ID: <CAPaKu7RP281inKJKNWWTnETCU+giwU2YajzwH6AUVeTDXQoWWg@mail.gmail.com>
-Subject: Re: [PATCH] drm/panfrost: Fix GEM handle creation UAF
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 16 Dec 2022 18:59:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2908973B34;
+        Fri, 16 Dec 2022 15:59:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2F41B81E4C;
+        Fri, 16 Dec 2022 23:59:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21543C433EF;
+        Fri, 16 Dec 2022 23:59:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1671235189;
+        bh=ZpoFq55Y77qd6uUfcxBgUK1ahaF0X0CW4r+vmI/epIU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PXLQLKOleQNajfC41/4kxoBQYi2lNdL4QOwCY2P0hsWiwMWTu2PJtuVvGj6hRWI2b
+         Coyjuev7HUBKyL3kYNG/NBdSHrxdzZvicb7Yd+n4B5gnAAJvVAgUfcWAGVCh3KUL/R
+         3rLKqUxW8QEEyHqQeyfc9KiHM8nnfH4EM8cLh0Gw=
+Date:   Fri, 16 Dec 2022 15:59:48 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/11] implement DAMOS filtering for anon pages and
+Message-Id: <20221216155948.54023e407679736afcf00d9f@linux-foundation.org>
+In-Reply-To: <20221205230830.144349-1-sj@kernel.org>
+References: <20221205230830.144349-1-sj@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 3:34 PM Rob Clark <robdclark@gmail.com> wrote:
->
-> From: Rob Clark <robdclark@chromium.org>
->
-> Relying on an unreturned handle to hold a reference to an object we
-> dereference is not safe.  Userspace can guess the handle and race us
-> by closing the handle from another thread.  The _create_with_handle()
-> that returns an object ptr is pretty much a pattern to avoid.  And
-> ideally creating the handle would be done after any needed dererencing.
-> But in this case creation of the mapping is tied to the handle creation.
-> Fortunately the mapping is refcnt'd and holds a reference to the object,
-> so we can drop the handle's reference once we hold a mapping reference.
->
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->  drivers/gpu/drm/panfrost/panfrost_drv.c |  7 +++++++
->  drivers/gpu/drm/panfrost/panfrost_gem.c | 10 +++++++---
->  2 files changed, 14 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
-> index 2fa5afe21288..aa5848de647c 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
-> @@ -98,6 +98,13 @@ static int panfrost_ioctl_create_bo(struct drm_device *dev, void *data,
->                 return PTR_ERR(bo);
->
->         mapping = panfrost_gem_mapping_get(bo, priv);
-> +
-> +       /*
-> +        * Now that the mapping holds a reference to the bo until we no longer
-> +        * need it, we can safely drop the handle's reference.
-> +        */
-Not too familiar with panfrost, but I don't see
-panfrost_gem_mapping_get hold a reference to the bo?
+On Mon,  5 Dec 2022 23:08:19 +0000 SeongJae Park <sj@kernel.org> wrote:
 
-> +       drm_gem_object_put(&bo->base.base);
-> +
->         if (!mapping) {
->                 drm_gem_object_put(&bo->base.base);
->                 return -EINVAL;
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.c b/drivers/gpu/drm/panfrost/panfrost_gem.c
-> index 293e799e2fe8..e3e21c500d24 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_gem.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_gem.c
-> @@ -234,6 +234,10 @@ struct drm_gem_object *panfrost_gem_create_object(struct drm_device *dev, size_t
->         return &obj->base.base;
->  }
->
-> +/*
-> + * NOTE: if this succeeds, both the handle and the returned object have
-> + * an outstanding reference.
-> + */
-I might suggest dropping the "_with_handle" suffix.
+> Subject: [PATCH 00/11] implement DAMOS filtering for anon pages and
 
-The naming convention is used in several drivers.  I think we should
-make it the case that the _with_handle variants always return the
-handle without the pointer.  (And with the change, it immediately
-becomes clear that qxl and vmwgfx also have similar issues).
+I rewrote this to
 
->  struct panfrost_gem_object *
->  panfrost_gem_create_with_handle(struct drm_file *file_priv,
->                                 struct drm_device *dev, size_t size,
-> @@ -261,10 +265,10 @@ panfrost_gem_create_with_handle(struct drm_file *file_priv,
->          * and handle has the id what user can see.
->          */
->         ret = drm_gem_handle_create(file_priv, &shmem->base, handle);
-> -       /* drop reference from allocate - handle holds it now. */
-> -       drm_gem_object_put(&shmem->base);
-> -       if (ret)
-> +       if (ret) {
-> +               drm_gem_object_put(&shmem->base);
->                 return ERR_PTR(ret);
-> +       }
->
->         return bo;
->  }
-> --
-> 2.38.1
->
+implement DAMOS filtering for anon pages and/or specific memory cgroups
