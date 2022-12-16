@@ -2,133 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F01064EF9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B273D64EFA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiLPQpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 11:45:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
+        id S231294AbiLPQpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 11:45:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbiLPQow (ORCPT
+        with ESMTP id S229547AbiLPQp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 11:44:52 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B944FA
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:44:50 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 374341042;
-        Fri, 16 Dec 2022 08:45:31 -0800 (PST)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.27.147])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F8F83F5A1;
-        Fri, 16 Dec 2022 08:44:49 -0800 (PST)
-Date:   Fri, 16 Dec 2022 16:44:43 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     will@kernel.org, catalin.marinas@arm.com,
-        daniel.thompson@linaro.org, dianders@chromium.org,
-        liwei391@huawei.com, mhiramat@kernel.org, maz@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] arm64: entry: Skip single stepping into interrupt
- handlers
-Message-ID: <Y5yge52LQGp0uhIF@FVFF77S0Q05N.cambridge.arm.com>
-References: <20221215142903.2624142-1-sumit.garg@linaro.org>
- <20221215142903.2624142-2-sumit.garg@linaro.org>
+        Fri, 16 Dec 2022 11:45:27 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866CDBB;
+        Fri, 16 Dec 2022 08:45:26 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id v7so2329571wmn.0;
+        Fri, 16 Dec 2022 08:45:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=eX9gDMrjb0dlm+fGeQpaJwpVRDJbiB+iKFD2Hgyaj8E=;
+        b=bZMV8GuerKAJ+RvZ9hN4D5/EWQgjcT4qIXCuUmTPrf+HzWvkNr8mKi/TGANpUaFDqF
+         8PGe5k8BUrif0ZryGwPOQrsJsq1nE5tLZ+Hrd3rWSnCFIOMBDLJdmj/ZrmDpn3q2GvxG
+         4+ShLoets4QEEKR5hUDfg63v5rAofZaC0yH4HbnsKy6pJfEZBiRMQZ6Rvw0DhB06S5uq
+         ObssY3c5tGyQPL3TAMpPBbNDRP9C4JA13wFw56/Qbkric78It98RCTAcQl0yic1utIHm
+         bGDBivV/pnnMEFYzoKJP5xOFqIT5Yk69/qegrNeXfwg04Ozt1HqzIQpFGlkDxDNaljV9
+         Rt7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eX9gDMrjb0dlm+fGeQpaJwpVRDJbiB+iKFD2Hgyaj8E=;
+        b=g2j1Srp62u4FeyM21nmbDRofyxVMXJoPYQkliWUydNjTMu5KraGZnfJDYDzEH/M5x/
+         9hUrBA0wzcLhTydq6LAm7Ag+2FArKbRWGunq7tAhu0diEiqPWOsksSyaAIu/2Px6iWgM
+         etmJqBntqg4aHsMOsE4iyzeCLsFTu/SDiXrYVphIBaeBO1ro1v2npPRnmKY651S9TVC9
+         oHTxlE/9GpE01DPhKxtgMm1hbNuIJOY73ju8DAXgdqLpVytJqZYMOg5qbAxKbnWS0yh+
+         Qt+Byig/GVuwcOz0Nr0Ffn+AW1HX8LGlOPdSlbs3YUZDEVeBnOXcDfMVw3ZEbwJrMxkQ
+         k+rQ==
+X-Gm-Message-State: ANoB5plVyTg7/sTXUy79lT/MDzM3DIGPm/bBL7w+WMBMdazngld141qb
+        BN1iLnZRVu2jSxfh0rHJtTY=
+X-Google-Smtp-Source: AA0mqf7BCsGOdSCOzoOY4kmYeOoNyyvOd3kkyowbLNaIe2ZXJin3XxGqYFY4hDH/XNSRDTtIOZdJYA==
+X-Received: by 2002:a05:600c:6015:b0:3cf:ea76:1823 with SMTP id az21-20020a05600c601500b003cfea761823mr25891458wmb.41.1671209124853;
+        Fri, 16 Dec 2022 08:45:24 -0800 (PST)
+Received: from Ansuel-xps. (93-42-71-18.ip85.fastwebnet.it. [93.42.71.18])
+        by smtp.gmail.com with ESMTPSA id i12-20020a05600c354c00b003cfd64b6be1sm13870055wmq.27.2022.12.16.08.45.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 08:45:24 -0800 (PST)
+Message-ID: <639ca0a4.050a0220.99395.8fd3@mx.google.com>
+X-Google-Original-Message-ID: <Y5ygpT/2JqHREJ7L@Ansuel-xps.>
+Date:   Fri, 16 Dec 2022 17:45:25 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Subject: Re: [PATCH v7 01/11] leds: add support for hardware driven LEDs
+References: <20221214235438.30271-1-ansuelsmth@gmail.com>
+ <20221214235438.30271-2-ansuelsmth@gmail.com>
+ <Y5tHjwx1Boj3xMok@shell.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221215142903.2624142-2-sumit.garg@linaro.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y5tHjwx1Boj3xMok@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 07:59:02PM +0530, Sumit Garg wrote:
-> Currently on systems where the timer interrupt (or any other
-> fast-at-human-scale periodic interrupt) is active then it is impossible
-> to step any code with interrupts unlocked because we will always end up
-> stepping into the timer interrupt instead of stepping the user code.
+On Thu, Dec 15, 2022 at 04:13:03PM +0000, Russell King (Oracle) wrote:
+> Hi Christian,
 > 
-> The common user's goal while single stepping is that when they step then
-> the system will stop at PC+4 or PC+I for a branch that gets taken
-> relative to the instruction they are stepping. So, fix broken single step
-> implementation via skipping single stepping into interrupt handlers.
+> Thanks for the patch.
 > 
-> The methodology is when we receive an interrupt from EL1, check if we
-> are single stepping (pstate.SS). If yes then we save MDSCR_EL1.SS and
-> clear the register bit if it was set. Then unmask only D and leave I set.
-> On return from the interrupt, set D and restore MDSCR_EL1.SS. Along with
-> this skip reschedule if we were stepping.
+> I think Andrew's email is offline at the moment.
+>
+
+Notice by gmail spamming me "I CAN'T SEND IT AHHHHH"
+Holidy times I guess?
+
+> On Thu, Dec 15, 2022 at 12:54:28AM +0100, Christian Marangi wrote:
+> > +static bool led_trigger_is_supported(struct led_classdev *led_cdev,
+> > +				     struct led_trigger *trigger)
+> > +{
+> > +	switch (led_cdev->blink_mode) {
+> > +	case SOFTWARE_CONTROLLED:
+> > +		if (trigger->supported_blink_modes == HARDWARE_ONLY)
+> > +			return 0;
+> > +		break;
+> > +	case HARDWARE_CONTROLLED:
+> > +		if (trigger->supported_blink_modes == SOFTWARE_ONLY)
+> > +			return 0;
+> > +		break;
+> > +	case SOFTWARE_HARDWARE_CONTROLLED:
+> > +		break;
+> > +	default:
+> > +		return 0;
+> > +	}
+> > +
+> > +	return 1;
 > 
-> Suggested-by: Will Deacon <will@kernel.org>
-> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-> Tested-by: Douglas Anderson <dianders@chromium.org>
-
-FWIW, this looks reasonable to me; I have a couple of minor style/structure
-comments below.
-
-> ---
->  arch/arm64/kernel/entry-common.c | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
+> Should be returning true/false. I'm not sure I'm a fan of the style of
+> this though - wouldn't the following be easier to read?
 > 
-> diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
-> index cce1167199e3..53bcb1902f2f 100644
-> --- a/arch/arm64/kernel/entry-common.c
-> +++ b/arch/arm64/kernel/entry-common.c
-> @@ -471,19 +471,35 @@ static __always_inline void __el1_irq(struct pt_regs *regs,
->  	do_interrupt_handler(regs, handler);
->  	irq_exit_rcu();
->  
-> -	arm64_preempt_schedule_irq();
-> +	/* Don't reschedule in case we are single stepping */
-> +	if (!(regs->pstate & DBG_SPSR_SS))
-> +		arm64_preempt_schedule_irq();
+> 	switch (led_cdev->blink_mode) {
+> 	case SOFTWARE_CONTROLLED:
+> 		return trigger->supported_blink_modes != HARDWARE_ONLY;
+> 
+> 	case HARDWARE_CONTROLLED:
+> 		return trigger->supported_blink_modes != SOFTWARE_ONLY;
+> 
+> 	case SOFTWARE_HARDWARE_CONTROLLED:
+> 		return true;
+> 	}
+> ?
 
-Please change arm64_preempt_schedule_irq() to take the regs as an argument, and
-put this test inside arm64_preempt_schedule_irq(). That way all the
-decision-making about whether to preempt is in one place.
+Much better!
 
-That can go immediately after the need_irq_preemption() test.
+> 
+> Also, does it really need a default case - without it, when the
+> led_blink_modes enum is expanded and the switch statement isn't
+> updated, we'll get a compiler warning which will prompt this to be
+> updated - whereas, with a default case, it won't.
+> 
 
->  
->  	exit_to_kernel_mode(regs);
->  }
-> +
->  static void noinstr el1_interrupt(struct pt_regs *regs,
->  				  void (*handler)(struct pt_regs *))
->  {
-> +	unsigned long reg;
+I added the default just to mute some compiler warning. But guess if
+every enum is handled the warning should not be reported.
 
-Please s/reg/mdscr/. That way it's harder to confuse with 'regs', it's clearer
-that it's the MDSCR_ELx value, and if we have to save/restore any other
-registers in future it'll be obvious how to name things.
+> > @@ -188,6 +213,10 @@ int led_trigger_set(struct led_classdev *led_cdev, struct led_trigger *trig)
+> >  		led_set_brightness(led_cdev, LED_OFF);
+> >  	}
+> >  	if (trig) {
+> > +		/* Make sure the trigger support the LED blink mode */
+> > +		if (!led_trigger_is_supported(led_cdev, trig))
+> > +			return -EINVAL;
+> 
+> Shouldn't validation happen before we start taking any actions? In other
+> words, before we remove the previous trigger?
+> 
 
-Thanks,
-Mark.
+trigger_set first remove any trigger and set the led off. Then apply the
+new trigger. So the validation is done only when a trigger is actually
+applied. Think we should understand the best case here.
 
-> +
-> +	/* Disable single stepping within interrupt handler */
-> +	if (regs->pstate & DBG_SPSR_SS) {
-> +		reg = read_sysreg(mdscr_el1);
-> +		write_sysreg(reg & ~DBG_MDSCR_SS, mdscr_el1);
-> +	}
-> +
->  	write_sysreg(DAIF_PROCCTX_NOIRQ, daif);
->  
->  	if (IS_ENABLED(CONFIG_ARM64_PSEUDO_NMI) && !interrupts_enabled(regs))
->  		__el1_pnmi(regs, handler);
->  	else
->  		__el1_irq(regs, handler);
-> +
-> +	if (regs->pstate & DBG_SPSR_SS) {
-> +		write_sysreg(DAIF_PROCCTX_NOIRQ | PSR_D_BIT, daif);
-> +		write_sysreg(reg, mdscr_el1);
-> +	}
->  }
->  
->  asmlinkage void noinstr el1h_64_irq_handler(struct pt_regs *regs)
+> > @@ -350,12 +381,26 @@ static inline bool led_sysfs_is_disabled(struct led_classdev *led_cdev)
+> >  
+> >  #define TRIG_NAME_MAX 50
+> >  
+> > +enum led_trigger_blink_supported_modes {
+> > +	SOFTWARE_ONLY = SOFTWARE_CONTROLLED,
+> > +	HARDWARE_ONLY = HARDWARE_CONTROLLED,
+> > +	SOFTWARE_HARDWARE = SOFTWARE_HARDWARE_CONTROLLED,
+> 
+> I suspect all these generic names are asking for eventual namespace
+> clashes. Maybe prefix them with LED_ ?
+
+Agree they are pretty generic so I can see why... My only concern was
+making them too long... Maybe reduce them to SW or HW? LEDS_SW_ONLY...
+LEDS_SW_CONTROLLED?
+
+> 
+> Thanks.
+> 
 > -- 
-> 2.34.1
-> 
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+
+-- 
+	Ansuel
