@@ -2,57 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C59B64F0DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 19:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6E564F0DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 19:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231607AbiLPSVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 13:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
+        id S231393AbiLPSWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 13:22:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbiLPSVW (ORCPT
+        with ESMTP id S229547AbiLPSWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 13:21:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD683723E;
-        Fri, 16 Dec 2022 10:21:21 -0800 (PST)
+        Fri, 16 Dec 2022 13:22:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236DB37FB1;
+        Fri, 16 Dec 2022 10:22:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F07F7B81DD8;
-        Fri, 16 Dec 2022 18:21:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23513C433D2;
-        Fri, 16 Dec 2022 18:21:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9943E621D1;
+        Fri, 16 Dec 2022 18:22:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 077AAC433EF;
+        Fri, 16 Dec 2022 18:22:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671214878;
-        bh=YRi61dvd+vhc0Jt2d3wnuf9Egv+wh7RlYmZmkXnVfU8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KY0rxR6fWzb/AcL6/G2C8c+1D3GmHWy4GRD4fb+VhOfY6dgMYG8p2CqGw6l5tWLZZ
-         lZMqIbSkyMAtZBDxSrW9h5ZKISBzzh0HOaFWRpl7YZA7SWL0+fDP0gWCPNbamMIkzJ
-         /9FHLpawB/dGp0Embw7y8BWxG3W7NEjq+xpNnE1GDZe1/EjDGtUrbeCArTtU5RjkUw
-         KiG4ecAs6tmPf5j00bBi1EE9EcZpd5GhOdThQ+q2YP5PQfZEmhcIUYZ6s9eSu+C411
-         CBLJX6HMRGfNNTkcNwGhv3rlb8lFyImrKwBFvvYK1TcTGE0En593S08Uzsn913pzF/
-         7GsXmw9qLKEKQ==
-Received: by pali.im (Postfix)
-        id AB499711; Fri, 16 Dec 2022 19:21:15 +0100 (CET)
-Date:   Fri, 16 Dec 2022 19:21:15 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Gregory Clement <gregory.clement@bootlin.com>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: marvell: Fix compatible strings for Armada
- 3720 boards
-Message-ID: <20221216182115.whsahozgifg5c2k7@pali>
-References: <20220713125644.3117-1-pali@kernel.org>
- <20220930233802.wjfzk3xkphm565uz@pali>
- <20221009120639.hds2nhdynwdzjizr@pali>
- <20221101224457.vyraefpfyphvnv4p@pali>
- <20221128182127.jq6255cwa44lnmxv@pali>
+        s=k20201202; t=1671214954;
+        bh=WcpiSQBig1AiMsghPaAPcivsTzSqVtCX6MpwJVHU5fg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=csDZAsIRjcmF9g22vcI1LgtJXuHcdgXulHvMQCBTfxICApnkufWZ/eoOb1cNkVeFF
+         8HXsFNG/FpFdzJiez0071VOagduyugSxkfDVM+EZ8GW4coC4dhXAX+LGjwEvh2qdxk
+         4MTYE+kMmcN8Oo510dWd9XZZxGRaaTxsZ6f730B+pDWA9Z10WiZZ3RWElfE1NuxWOg
+         mO6wl3pPFJdPDnraOAGxFohFMWODi3tofbKyfexRf+qoM6WG/GZ6YeAi8IToDQSL6x
+         XXBi64bq3Ye/w3TqzcdAMU2dJAiOf1iEQIq60yRoHtLOeB3DoJsm9iK+EkqDwLj4yv
+         /6GTdq7Mg3w7A==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p6FLr-00D8Vv-NV;
+        Fri, 16 Dec 2022 18:22:31 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221128182127.jq6255cwa44lnmxv@pali>
-User-Agent: NeoMutt/20180716
+Date:   Fri, 16 Dec 2022 18:22:31 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        tglx@linutronix.de
+Subject: Re: [irqchip: irq/irqchip-next] irqchip/ls-extirq: Fix endianness
+ detection
+In-Reply-To: <8e8bfa5e-f713-4590-95db-66ed6454881b@seco.com>
+References: <20221201212807.616191-1-sean.anderson@seco.com>
+ <167023926482.4906.17012979311813913704.tip-bot2@tip-bot2>
+ <8e8bfa5e-f713-4590-95db-66ed6454881b@seco.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <9a7ef68d94e7d0ca879b9f55f7634df5@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: sean.anderson@seco.com, linux-kernel@vger.kernel.org, stable@vger.kernel.org, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,144 +69,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PING?
-
-On Monday 28 November 2022 19:21:27 Pali Rohár wrote:
-> PING?
+On 2022-12-16 16:37, Sean Anderson wrote:
+> Hi Stable maintainers,
 > 
-> On Tuesday 01 November 2022 23:44:57 Pali Rohár wrote:
-> > PING?
-> > 
-> > On Sunday 09 October 2022 14:06:39 Pali Rohár wrote:
-> > > PING
-> > > 
-> > > On Saturday 01 October 2022 01:38:02 Pali Rohár wrote:
-> > > > Gregory: ping
-> > > > 
-> > > > On Wednesday 13 July 2022 14:56:44 Pali Rohár wrote:
-> > > > > All Armada 3720 boards have Armada 3720 processor which is of Armada 3700
-> > > > > family and do not have Armada 3710 processor. So none of them should have
-> > > > > compatible string for Armada 3710 processor.
-> > > > > 
-> > > > > Fix compatible string for all these boards by removing wrong processor
-> > > > > string "marvell,armada3710" and adding family string "marvell,armada3700"
-> > > > > as the last one. (Note that this is same way how are defined Armada 3710
-> > > > > DTS files).
-> > > > > 
-> > > > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > > > ---
-> > > > >  arch/arm64/boot/dts/marvell/armada-3720-db.dts                  | 2 +-
-> > > > >  arch/arm64/boot/dts/marvell/armada-3720-espressobin-emmc.dts    | 2 +-
-> > > > >  arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts   | 2 +-
-> > > > >  arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7-emmc.dts | 2 +-
-> > > > >  arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7.dts      | 2 +-
-> > > > >  arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts         | 2 +-
-> > > > >  arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts          | 2 +-
-> > > > >  arch/arm64/boot/dts/marvell/armada-372x.dtsi                    | 2 +-
-> > > > >  8 files changed, 8 insertions(+), 8 deletions(-)
-> > > > > 
-> > > > > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-db.dts b/arch/arm64/boot/dts/marvell/armada-3720-db.dts
-> > > > > index bd4e61d5448e..0cfb38492021 100644
-> > > > > --- a/arch/arm64/boot/dts/marvell/armada-3720-db.dts
-> > > > > +++ b/arch/arm64/boot/dts/marvell/armada-3720-db.dts
-> > > > > @@ -18,7 +18,7 @@
-> > > > >  
-> > > > >  / {
-> > > > >  	model = "Marvell Armada 3720 Development Board DB-88F3720-DDR3";
-> > > > > -	compatible = "marvell,armada-3720-db", "marvell,armada3720", "marvell,armada3710";
-> > > > > +	compatible = "marvell,armada-3720-db", "marvell,armada3720", "marvell,armada3700";
-> > > > >  
-> > > > >  	chosen {
-> > > > >  		stdout-path = "serial0:115200n8";
-> > > > > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-emmc.dts b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-emmc.dts
-> > > > > index 5c4d8f379704..6715a19c1483 100644
-> > > > > --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-emmc.dts
-> > > > > +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-emmc.dts
-> > > > > @@ -18,7 +18,7 @@
-> > > > >  / {
-> > > > >  	model = "Globalscale Marvell ESPRESSOBin Board (eMMC)";
-> > > > >  	compatible = "globalscale,espressobin-emmc", "globalscale,espressobin",
-> > > > > -		     "marvell,armada3720", "marvell,armada3710";
-> > > > > +		     "marvell,armada3720", "marvell,armada3700";
-> > > > >  };
-> > > > >  
-> > > > >  &sdhci0 {
-> > > > > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
-> > > > > index 070725b81be5..447760b69850 100644
-> > > > > --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
-> > > > > +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
-> > > > > @@ -13,7 +13,7 @@
-> > > > >  / {
-> > > > >  	model = "Globalscale Marvell ESPRESSOBin Ultra Board";
-> > > > >  	compatible = "globalscale,espressobin-ultra", "marvell,armada3720",
-> > > > > -		     "marvell,armada3710";
-> > > > > +		     "marvell,armada3700";
-> > > > >  
-> > > > >  	aliases {
-> > > > >  		/* ethernet1 is WAN port */
-> > > > > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7-emmc.dts b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7-emmc.dts
-> > > > > index 75401eab4d42..2a8aa3901a9f 100644
-> > > > > --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7-emmc.dts
-> > > > > +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7-emmc.dts
-> > > > > @@ -19,7 +19,7 @@
-> > > > >  	model = "Globalscale Marvell ESPRESSOBin Board V7 (eMMC)";
-> > > > >  	compatible = "globalscale,espressobin-v7-emmc", "globalscale,espressobin-v7",
-> > > > >  		     "globalscale,espressobin", "marvell,armada3720",
-> > > > > -		     "marvell,armada3710";
-> > > > > +		     "marvell,armada3700";
-> > > > >  
-> > > > >  	aliases {
-> > > > >  		/* ethernet1 is wan port */
-> > > > > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7.dts b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7.dts
-> > > > > index 48a7f50fb427..b03af87611a9 100644
-> > > > > --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7.dts
-> > > > > +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7.dts
-> > > > > @@ -18,7 +18,7 @@
-> > > > >  / {
-> > > > >  	model = "Globalscale Marvell ESPRESSOBin Board V7";
-> > > > >  	compatible = "globalscale,espressobin-v7", "globalscale,espressobin",
-> > > > > -		     "marvell,armada3720", "marvell,armada3710";
-> > > > > +		     "marvell,armada3720", "marvell,armada3700";
-> > > > >  
-> > > > >  	aliases {
-> > > > >  		/* ethernet1 is wan port */
-> > > > > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts b/arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts
-> > > > > index 1542d836c090..c5a834b33b77 100644
-> > > > > --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts
-> > > > > +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts
-> > > > > @@ -16,5 +16,5 @@
-> > > > >  
-> > > > >  / {
-> > > > >  	model = "Globalscale Marvell ESPRESSOBin Board";
-> > > > > -	compatible = "globalscale,espressobin", "marvell,armada3720", "marvell,armada3710";
-> > > > > +	compatible = "globalscale,espressobin", "marvell,armada3720", "marvell,armada3700";
-> > > > >  };
-> > > > > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-> > > > > index caf9c8529fca..5840ed129309 100644
-> > > > > --- a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-> > > > > +++ b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-> > > > > @@ -14,7 +14,7 @@
-> > > > >  / {
-> > > > >  	model = "CZ.NIC Turris Mox Board";
-> > > > >  	compatible = "cznic,turris-mox", "marvell,armada3720",
-> > > > > -		     "marvell,armada3710";
-> > > > > +		     "marvell,armada3700";
-> > > > >  
-> > > > >  	aliases {
-> > > > >  		spi0 = &spi0;
-> > > > > diff --git a/arch/arm64/boot/dts/marvell/armada-372x.dtsi b/arch/arm64/boot/dts/marvell/armada-372x.dtsi
-> > > > > index 5ce55bdbb995..02ae1e153288 100644
-> > > > > --- a/arch/arm64/boot/dts/marvell/armada-372x.dtsi
-> > > > > +++ b/arch/arm64/boot/dts/marvell/armada-372x.dtsi
-> > > > > @@ -13,7 +13,7 @@
-> > > > >  
-> > > > >  / {
-> > > > >  	model = "Marvell Armada 3720 SoC";
-> > > > > -	compatible = "marvell,armada3720", "marvell,armada3710";
-> > > > > +	compatible = "marvell,armada3720", "marvell,armada3700";
-> > > > >  
-> > > > >  	cpus {
-> > > > >  		cpu1: cpu@1 {
-> > > > > -- 
-> > > > > 2.20.1
-> > > > > 
+> On 12/5/22 06:21, irqchip-bot for Sean Anderson wrote:
+>> The following commit has been merged into the irq/irqchip-next branch 
+>> of irqchip:
+>> 
+>> Commit-ID:     3ae977d0e4e3a2a2ccc912ca2d20c9430508ecdd
+>> Gitweb:        
+>> https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/3ae977d0e4e3a2a2ccc912ca2d20c9430508ecdd
+>> Author:        Sean Anderson <sean.anderson@seco.com>
+>> AuthorDate:    Thu, 01 Dec 2022 16:28:07 -05:00
+>> Committer:     Marc Zyngier <maz@kernel.org>
+>> CommitterDate: Mon, 05 Dec 2022 10:39:52
+>> 
+>> irqchip/ls-extirq: Fix endianness detection
+>> 
+>> parent is the interrupt parent, not the parent of node. Use
+>> node->parent. This fixes endianness detection on big-endian platforms.
+>> 
+>> Fixes: 1b00adce8afd ("irqchip/ls-extirq: Fix invalid wait context by 
+>> avoiding to use regmap")
+>> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+>> Signed-off-by: Marc Zyngier <maz@kernel.org>
+>> Link: 
+>> https://lore.kernel.org/r/20221201212807.616191-1-sean.anderson@seco.com
+>> ---
+>>  drivers/irqchip/irq-ls-extirq.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>> 
+>> diff --git a/drivers/irqchip/irq-ls-extirq.c 
+>> b/drivers/irqchip/irq-ls-extirq.c
+>> index d8d48b1..139f26b 100644
+>> --- a/drivers/irqchip/irq-ls-extirq.c
+>> +++ b/drivers/irqchip/irq-ls-extirq.c
+>> @@ -203,7 +203,7 @@ ls_extirq_of_init(struct device_node *node, struct 
+>> device_node *parent)
+>>         if (ret)
+>>                 goto err_parse_map;
+>> 
+>> -       priv->big_endian = of_device_is_big_endian(parent);
+>> +       priv->big_endian = of_device_is_big_endian(node->parent);
+>>         priv->is_ls1021a_or_ls1043a = of_device_is_compatible(node, 
+>> "fsl,ls1021a-extirq") ||
+>>                                       of_device_is_compatible(node, 
+>> "fsl,ls1043a-extirq");
+>>         raw_spin_lock_init(&priv->lock);
+> 
+> This patch has made it into linux/master, but it should also get
+> backported to 6.1. Just want to make sure this doesn't fall through the
+> cracks, since this was a really annoying bug to deal with (causes an 
+> IRQ
+> storm).
+
+If you wanted it backported, why didn't it have a Cc: stable
+the first place? In any case, if you want a backport to happen,
+you'll have to post that backport.
+
+Thanks,
+
+         M.
+-- 
+Jazz is not dead. It just smells funny...
