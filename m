@@ -2,402 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5F264E58A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 02:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5266764E58B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 02:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiLPBIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 20:08:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
+        id S229809AbiLPBJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 20:09:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiLPBIM (ORCPT
+        with ESMTP id S229554AbiLPBJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 20:08:12 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B778B59162;
-        Thu, 15 Dec 2022 17:08:07 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id BE7163200926;
-        Thu, 15 Dec 2022 20:08:04 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 15 Dec 2022 20:08:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pjd.dev; h=cc:cc
-        :content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1671152884; x=
-        1671239284; bh=blN/pt1VHUAedbxU0+7qmPGtXmOp01WbD8zdhO1Q+vg=; b=X
-        BmJsQ3B4YJeZLvJsYTnYbbUolXtXKL837JUAnKSRqghmq6gAcI/KbAmXr2yA1YG9
-        qzrYDqTYAHhM9T6BumHNNIVzWssJsm5U5hCZL+2iwUaSYjjQjNqfoDicZb74bFBk
-        9sya4TZiQW0DqrI1u1Vx3bpYgHZMa6v0hkdzhx+k+1oouvK7rfjRO8mo5yB899fB
-        tKaVMIBhMBDGsvGys/3plBRROHCmCTvAbiloaThq/4h3mj8r9qSFYOnxP9bu9jXr
-        oEBGAmUcELN16VZOsUMLqb4Jb+AL/x4KrrQYZvkCWR2EfgwQGJvr64mclJog6WII
-        5JpHx4h4IAF06RVccvTHA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1671152884; x=
-        1671239284; bh=blN/pt1VHUAedbxU0+7qmPGtXmOp01WbD8zdhO1Q+vg=; b=U
-        IMOeI8t33HP/o1ziJ2fdHh+wSUPGjRV0OUQ0KCwm6yk9bdMxhelElGLoE5FYtLy8
-        z4fzdF+lVuwTED6mVE5HCwI8Ml/mk+ECmYVZFNhpTsmjR5TfV0g69x/sjVPKWDkY
-        vkQujQnUiNc93pj7UwBwQNw1Cot6d7Am2GHLKk5PODUrNxsXUI4NJkvbcJ68gjHV
-        SOzJRULuWZ0zab3EZoUxhRd/TLditJVesjZM57KBWyaVXqeIdIFSGgnr43OTtDze
-        VhVSiTtcFvpFwmcs6jl3rIOgiaxejTFzzKdLMcaFgPYLqX7oGS1rbtvnXABo0gLf
-        vQDAPHp+kEizasLQPWfYg==
-X-ME-Sender: <xms:9MSbY3lMt7IjuOkmGC25uSzlWpr6aVqRHDvLcWC8VEfJdMppNrze8w>
-    <xme:9MSbY61hQnzh8UoA7q4eGoYA1nFFndizrQuLGOOXIQmIE3wjG7B9PeObniLWk-EfJ
-    rI6bJsbHooKY8JA6T8>
-X-ME-Received: <xmr:9MSbY9pc4ZRkn5eF5gA3idpkUfwgfDjADa3oYQE1XQkzzqPvTFa5cB9unu7knqDWfNietbU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeigddvkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenog
-    fuuhhsphgvtghtffhomhgrihhnucdlgeelmdenucfjughrpegtggfuhfgjffevgffkfhfv
-    ofesthhqmhdthhdtjeenucfhrhhomheprfgvthgvrhcuffgvlhgvvhhorhihrghsuceoph
-    gvthgvrhesphhjugdruggvvheqnecuggftrfgrthhtvghrnhepgeeghfduheeiuddvjeel
-    udehhedttdetjeffhfdutddtueekhedtteefuefhgfejnecuffhomhgrihhnpehtihhnhi
-    hurhhlrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
-    rhhomhepphgvthgvrhesphhjugdruggvvh
-X-ME-Proxy: <xmx:9MSbY_nQO8f9FgrWH3HgeAy_0EkdNlCRBwBdnqlcjWoSrq1V3e5d8w>
-    <xmx:9MSbY110B2KwadXmETPrpCTTRaMxwR9b34x6HHjzhmJMionQZLvtVA>
-    <xmx:9MSbY-u1WtxPuctyiW6W02xpxASQ9kDmMYHAsM1PnC04s8NVZN9e-g>
-    <xmx:9MSbYymxaybiTkAJtjfog675eLwAIshlymc5qf5PxCOevpO1SABq9Q>
-Feedback-ID: i9e814621:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 15 Dec 2022 20:08:03 -0500 (EST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
-Subject: Re: [PATCH] net/ncsi: Always use unicast source MAC address
-From:   Peter Delevoryas <peter@pjd.dev>
-In-Reply-To: <ac48b381b11c875cf36a471002658edafe04d9b9.camel@gmail.com>
-Date:   Thu, 15 Dec 2022 17:07:51 -0800
-Cc:     Peter Delevoryas <peter@pjd.dev>, sam@mendozajonas.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
+        Thu, 15 Dec 2022 20:09:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9087B59162;
+        Thu, 15 Dec 2022 17:09:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50A12B81C34;
+        Fri, 16 Dec 2022 01:09:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2D58C433D2;
+        Fri, 16 Dec 2022 01:09:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671152955;
+        bh=X8ckF3pMSIDU85SvyTVCSI76pOPRlxgwJxlKvpO8HKI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=cLUlT8n7Bc58n6ywTsfkt4OwPjLZkPDSk9rUzAGXuwJznqEk7DaMlDQjzo6n5uEfr
+         zdk7k4QPWsMWLDU+dlqt+4Ed5MkdGJZtbvpuD8UCPPr8y6GGJiuSCO6wJvYxMeix6u
+         xiLz7+Mk4ck1nXX/2AiLeJFIhv8Fp3PJYMMQnqWFkQd/SXeDqixujWNDdAn60Xohfz
+         rcR3nBZA29NNigLuVOvewcavqa4FZ11h3uMFwzoVT/UNSSPO9SxFZ4XW+kb/3BQJNv
+         IamGmdkae9W8T6f0R5jLOSo8W1IW5enFawI+c58pRJj/LbpXuKTBxD4t111e+5tfhj
+         EGTMTvFmBkUrw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 8A7C45C1C5B; Thu, 15 Dec 2022 17:09:14 -0800 (PST)
+Date:   Thu, 15 Dec 2022 17:09:14 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>, boqun.feng@gmail.com,
+        neeraj.iitr10@gmail.com, urezki@gmail.com, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <7A3DBE8E-C13D-430D-B851-207779148A77@pjd.dev>
-References: <20221213004754.2633429-1-peter@pjd.dev>
- <ac48b381b11c875cf36a471002658edafe04d9b9.camel@gmail.com>
-To:     Alexander H Duyck <alexander.duyck@gmail.com>
-X-Mailer: Apple Mail (2.3731.200.110.1.12)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_PDS_SHORTFWD_URISHRT_QP autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH RFC] srcu: Yet more detail for
+ srcu_readers_active_idx_check() comments
+Message-ID: <20221216010914.GX4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221215201356.GM4001@paulmck-ThinkPad-P17-Gen-1>
+ <EE4EC3CC-395E-475D-BEBE-545955AB97C8@joelfernandes.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <EE4EC3CC-395E-475D-BEBE-545955AB97C8@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 15, 2022 at 05:13:47PM -0500, Joel Fernandes wrote:
+> > On Dec 15, 2022, at 3:13 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > ﻿On Thu, Dec 15, 2022 at 05:58:14PM +0000, Joel Fernandes wrote:
+> >>> On Thu, Dec 15, 2022 at 5:48 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> >>> 
+> >>>> On Thu, Dec 15, 2022 at 5:08 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >>> 
+> >>>>> Scenario for the reader to increment the old idx once:
+> >>>>> 
+> >>>>> _ Assume ssp->srcu_idx is initially 0.
+> >>>>> _ The READER reads idx that is 0
+> >>>>> _ The updater runs and flips the idx that is now 1
+> >>>>> _ The reader resumes with 0 as an index but on the next srcu_read_lock()
+> >>>>>  it will see the new idx which is 1
+> >>>>> 
+> >>>>> What could be the scenario for it to increment the old idx twice?
+> >>>> 
+> >>>> Unless I am missing something, the reader must reference the
+> >>>> srcu_unlock_count[old_idx] and then do smp_mb() before it will be
+> >>>> absolutely guaranteed of seeing the new value of ->srcu_idx.
+> >>> 
+> >>> I think both of you are right depending on how the flip raced with the
+> >>> first reader's unlock in that specific task.
+> >>> 
+> >>> If the first read section's srcu_read_unlock() and its corresponding
+> >>> smp_mb()  happened before the flip, then the increment of old idx
+> >>> would happen only once. The next srcu_read_lock() will read the new
+> >>> index. If the srcu_read_unlock() and it's corresponding smp_mb()
+> >>> happened after the flip, the old_idx will be sampled again and can be
+> >>> incremented twice. So it depends on how the flip races with
+> >>> srcu_read_unlock().
+> >> 
+> >> I am sorry this is inverted, but my statement's gist stands I believe:
+> >> 
+> >> 1. Flip+smp_mb() happened before unlock's smp_mb() -- reader will not
+> >> increment old_idx the second time.
+> > 
+> > By "increment old_idx" you mean "increment ->srcu_lock_count[old_idx]",
+> > correct?
+> 
+> Yes sorry for confusing, i indeed meant lock count increment corresponding to the old index.
 
+I guessed correctly!!!  Don't worry, it won't happen again.  ;-)
 
-> On Dec 13, 2022, at 8:41 AM, Alexander H Duyck =
-<alexander.duyck@gmail.com> wrote:
->=20
-> On Mon, 2022-12-12 at 16:47 -0800, Peter Delevoryas wrote:
->> I use QEMU for development, and I noticed that NC-SI packets get =
-dropped by
->> the Linux software bridge[1] because we use a broadcast source MAC =
-address
->> for the first few NC-SI packets.
->=20
-> Normally NC-SI packets should never be seen by a bridge.
+> > Again, the important ordering isn't the smp_mb(), but the accesses,
+> > in this case, the accesses to ->srcu_unlock_count[idx].
+> 
+> I was talking about ordering of the flip of index (write) with respect
+> to both the reading of the old index  in the rcu_read_lock() and its
+> subsequent lock count increment corresponding to that index. I believe
+> we are talking her about how this race can effect the wrap around issues
+> when scanning for readers in the pre flip index, and we concluded that
+> there can be at most 2 of these on the SAME task.
 
-True, and it=E2=80=99s good to keep this in context. I=E2=80=99m trying =
-to make this change
-to support simulation environments, but any change in NC-SI could easily
-result in the out-of-band network connection to BMC=E2=80=99s in real =
-data centers
-failing to come up, which can be really bad and usually impossible to
-recover remotely.
+Agreed.
 
-> Isn't NC-SI
-> really supposed to just be between the BMC and the NIC firmware?
+>                                                   The third time, reader
+> will always see the new flipped index because of the memory barriers on
+> both sides. IOW, the same task cannot overflow the lock counter on the
+> preflipped index and cause issues. However there can be Nt different
+> tasks so perhaps you can have 2*Nt number of preempted readers that had
+> sampled the old index and now will do a lock and unlock on that old index,
+> potentially causing a lock==unlock match when there should not be a match.
 
-Yep
+So each task can do one old-index ->srcu_lock_count[] increment, and Nc of
+them can do a second one, where Nc is the number of CPUs.  This is because
+a given task's smp_mb() applies to all later code executed by that task
+and also to code executed by other tasks running later on that same CPU.
 
-> Depending on your setup it might make more sense to use something like
-> macvtap or a socket connection to just bypass the need for the bridge
-> entirely.
+> >> 2. unlock()'s smp_mb() happened before Flip+smp_mb() , now the reader
+> >> has no new smp_mb() that happens AFTER the flip happened. So it can
+> >> totally sample the old idx again -- that particular reader will
+> >> increment twice, but the next time, it will see the flipped one.
+> > 
+> > I will let you transliterate both.  ;-)
+> 
+> I think I see what you mean now :)
+> 
+> I believe the access I am referring to is the read of idx on one side and the write to idx on the other. However that is incomplete and I need to pair that with some of other access on both sides.
+> 
+> So perhaps this:
+> 
+> Writer does flip + smp_mb + read unlock counts [1]
+> 
+> Reader does:
+>  read idx + smp_mb() + increment lock counts [2]
+> 
+> And subsequently reader does
+> Smp_mb() + increment unlock count. [3]
+> 
+> So [1] races with either [2] or [2]+[3].
+> 
+> Is that fair?
 
-For unicast, yes, but I want to test multiple NIC=E2=80=99s sharing an =
-RMII
-link and verifying the broadcast behavior, and the failover behavior
-when an RX or TX channel goes down.
+That does look much better, thank you!
 
-The multicast UDP socket backend _does_ work, but I was getting some
-recirculation problems or some kind of buffering thing. I managed
-to get tap0 + tap1 + br0 working faster.
+> >> Did I get that right? Thanks.
+> > 
+> > So why am I unhappy with orderings of smp_mb()?
+> > 
+> > To see this, let's take the usual store-buffering litmus test:
+> > 
+> >    CPU 0            CPU 1
+> >    WRITE_ONCE(x, 1);    WRITE_ONCE(y, 1);
+> >    smp_mb();        smp_mb();
+> >    r0 = READ_ONCE(y);    r1 = READ_ONCE(x);
+> > 
+> > Suppose CPU 0's smp_mb() happens before that of CPU 1:
+> > 
+> >    CPU 0            CPU 1
+> >    WRITE_ONCE(x, 1);    WRITE_ONCE(y, 1);
+> >    smp_mb();
+> >                smp_mb();
+> >    r0 = READ_ONCE(y);    r1 = READ_ONCE(x);
+> > 
+> > We get r0 == r1 == 1.
+> > 
+> > Compare this to CPU 1's smp_mb() happening before that of CPU 0:
+> > 
+> >    CPU 0            CPU 1
+> >    WRITE_ONCE(x, 1);    WRITE_ONCE(y, 1);
+> >                smp_mb();
+> >    smp_mb();
+> >    r0 = READ_ONCE(y);    r1 = READ_ONCE(x);
+> > 
+> > We still get r0 == r1 == 1.  Reversing the order of the two smp_mb()
+> > calls changed nothing.
+> > 
+> > But, if we order CPU 1's write to follow CPU 0's read, then we have
+> > this:
+> > 
+> >    CPU 0            CPU 1
+> >    WRITE_ONCE(x, 1);
+> >    smp_mb();
+> >    r0 = READ_ONCE(y);
+> >                WRITE_ONCE(y, 1);
+> >                smp_mb();
+> >                r1 = READ_ONCE(x);
+> > 
+> > Here, given that r0 had the final value of zero, we know that
+> > r1 must have a final value of 1.
+> > 
+> > And suppose we reverse this:
+> > 
+> >    CPU 0            CPU 1
+> >                WRITE_ONCE(y, 1);
+> >                smp_mb();
+> >                r1 = READ_ONCE(x);
+> >    WRITE_ONCE(x, 1);
+> >    smp_mb();
+> >    r0 = READ_ONCE(y);
+> > 
+> > Now there is a software-visible difference in behavior.  The value of
+> > r0 is now 1 instead of zero and the value of r1 is now 0 instead of 1.
+> > 
+> > Does this make sense?
+> 
+> Yes I see what you mean. In first case, smp_mb() ordering didn’t matter. But in the second case it does.
 
->=20
->> The spec requires that the destination MAC address is =
-FF:FF:FF:FF:FF:FF,
->> but it doesn't require anything about the source MAC address as far =
-as I
->> know. =46rom testing on a few different NC-SI NIC's (Broadcom 57502, =
-Nvidia
->> CX4, CX6) I don't think it matters to the network card. I mean, Meta =
-has
->> been using this in mass production with millions of BMC's [2].
->>=20
->> In general, I think it's probably just a good idea to use a unicast =
-MAC.
->=20
-> I'm not sure I agree there. What is the initial value of the address?
+Yes, there have to be accesses for the software to even see the effects
+of a given smp_mb().
 
-Ok so, to be honest, I thought that the BMC=E2=80=99s FTGMAC100 =
-peripherals
-came with addresses provisioned from the factory, and that we were just
-discarding that value and using an address provisioned through the NIC,
-because I hadn=E2=80=99t really dug into the FTGMAC100 datasheet fully. =
-I see now
-that the MAC address register I thought was a read-only manufacturing
-value is actually 8 different MAC address r/w registers for filtering.
-*facepalm*
-
-It suddenly makes a lot more sense why all these OEM Get MAC Address
-commands exist: the BMC chip doesn=E2=80=99t come with any MAC addresses =
-from
-manufacturing. It=E2=80=99s a necessity, not some convenience =
-artifact/etc.
-
-So, tracing some example systems to see what shows up:
-
-One example:
-INIT: Entering runlevel: 5
-Configuring network interfaces... [   25.893118] 8021q: adding VLAN 0 to =
-HW filter on device eth0
-[   25.904809] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-[   25.917307] ftgmac100 1e660000.ethernet eth0: NCSI: Handler for =
-packet type 0x82 returned -19
-[   25.958096] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-[   25.978124] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-[   25.990559] ftgmac100 1e660000.ethernet eth0: NCSI: 'bad' packet =
-ignored for type 0xd0
-[   26.018180] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-[   26.030631] ftgmac100 1e660000.ethernet eth0: NCSI: 'bad' packet =
-ignored for type 0xd0
-[   26.046594] ftgmac100 1e660000.ethernet eth0: NCSI: transmit cmd 0x50 =
-ncsi_oem_sma_mlx success during probe
-[   26.168109] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-[   26.198101] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-[   26.238237] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-[   26.272011] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-[   26.308155] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-[   26.320504] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-done.
-[   26.408094] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-[   26.438100] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-[   26.450537] ftgmac100 1e660000.ethernet eth0: NCSI: bcm_gmac16 MAC =
-RE:DA:CT:ED:HE:HE
-Starting random number generator[   26.472388] NCSI: =
-source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
- daemon[   26.518241] NCSI: source=3Dff:ff:ff:ff:ff:ff =
-dest=3Dff:ff:ff:ff:ff:ff
-[   26.559504] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-.
-[   26.608229] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-Setup dhclient for IPv6... done.
-[   26.681879] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-[   26.730523] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-[   26.808191] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-[   26.855689] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
-
-Oddly, due to that code you mentioned, all NC-SI packets are using
-a broadcast source MAC address, even after the Get MAC Address sequence
-gets the MAC provisioned for the BMC from the Broadcom NIC.
-
-root@bmc-oob:~# ifconfig
-eth0      Link encap:Ethernet  HWaddr RE:DA:CT:ED:HE:HE
-          inet addr:XXXXXXX  Bcast:XXXXXXXX  Mask:XXXXXXXX
-          inet6 addr: XXXXXXXX Scope:Global
-          inet6 addr: XXXXXXXX Scope:Link
-          inet6 addr: XXXXXXXX Scope:Global
-          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
-          RX packets:2965 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:637 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:1000
-          RX bytes:872759 (852.3 KiB)  TX bytes:59936 (58.5 KiB)
-          Interrupt:19
-
-But, that=E2=80=99s a system using the 5.0 kernel with lots of old hacks
-on top. A system using a 5.15 kernel with this change included:
-
-INIT: Entering runlevel: 5
-Configuring network interfaces... [    6.596537] 8021q: adding VLAN 0 to =
-HW filter on device eth0
-[    6.609264] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
-[    6.622913] ftgmac100 1e690000.ftgmac eth0: NCSI: Handler for packet =
-type 0x82 returned -19
-[    6.641447] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
-[    6.662543] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
-[    6.680454] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
-[    6.694114] ftgmac100 1e690000.ftgmac eth0: NCSI: transmit cmd 0x50 =
-ncsi_oem_sma_mlx success during probe
-[    6.715722] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
-done.
-[    6.741372] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
-[    6.741451] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
-[    6.768714] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
-Starting random [    6.782599] NCSI: source=3DRE:DA:CT:ED:AD:DR =
-dest=3Dff:ff:ff:ff:ff:ff
-number generator[    6.799321] NCSI: source=3DRE:DA:CT:ED:AD:DR =
-dest=3Dff:ff:ff:ff:ff:ff
- daemon[    6.815680] NCSI: source=3DRE:DA:CT:ED:AD:DR =
-dest=3Dff:ff:ff:ff:ff:ff
-[    6.831388] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
-.
-[    6.846921] ftgmac100 1e690000.ftgmac eth0: NCSI: Network controller =
-supports NC-SI 1.1, querying MAC address through OEM(0x8119) command
-Setup dhclient for IPv6... done.
-[    6.908921] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
-reloading rsyslo[    6.933085] NCSI: source=3DRE:DA:CT:ED:AD:DR =
-dest=3Dff:ff:ff:ff:ff:ff
-
-So, this BMC already had the provisioned MAC address somehow,
-even before the Nvidia Get MAC Address command towards the bottom.
-
-Adding tracing to ftgmac100:
-
-[    2.018672] ftgmac100_initial_mac
-[    2.026090] Read MAC address from FTGMAC100 register: =
-RE:DA:CT:ED:AD:DR
-[    2.040771] ftgmac100 1e690000.ftgmac: Read MAC address =
-RE:DA:CT:ED:AD:DR from chip
-[    2.057774] ftgmac100 1e690000.ftgmac: Using NCSI interface
-[    2.070957] ftgmac100 1e690000.ftgmac eth0: irq 33, mapped at =
-(ptrval)
-
-Now, after rewriting the FTGMAC100 register to fa:ce:b0:0c:20:22 and =
-rebooting:
-
-root@dhcp6-2620-10d-c0b9-4b08-0-0-0-e4e:~# devmem 0x1e690008 32 =
-0x0000face
-root@dhcp6-2620-10d-c0b9-4b08-0-0-0-e4e:~# devmem 0x1e690008
-0x0000FACE
-root@dhcp6-2620-10d-c0b9-4b08-0-0-0-e4e:~# devmem 0x1e69000c 32 =
-0xb00c2022
-root@dhcp6-2620-10d-c0b9-4b08-0-0-0-e4e:~# devmem 0x1e69000c
-0xB00C2022
-
-[    2.001304] ftgmac100_initial_mac
-[    2.008727] Read MAC address from FTGMAC100 register: =
-fa:ce:b0:0c:20:22
-[    2.023373] ftgmac100 1e690000.ftgmac: Read MAC address =
-fa:ce:b0:0c:20:22 from chip
-[    2.040367] ftgmac100 1e690000.ftgmac: Using NCSI interface
-
-[    6.581239] ftgmac100_reset_mac
-[    6.589193] ftgmac100_reset_mac
-[    6.596727] 8021q: adding VLAN 0 to HW filter on device eth0
-[    6.609462] NCSI: source=3Dfa:ce:b0:0c:20:22 dest=3Dff:ff:ff:ff:ff:ff
-[    6.623117] ftgmac100 1e690000.ftgmac eth0: NCSI: Handler for packet =
-type 0x82 returned -19
-[    6.641647] NCSI: source=3Dfa:ce:b0:0c:20:22 dest=3Dff:ff:ff:ff:ff:ff
-[    6.662398] NCSI: source=3Dfa:ce:b0:0c:20:22 dest=3Dff:ff:ff:ff:ff:ff
-[    6.680380] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
-[    6.694000] ftgmac100 1e690000.ftgmac eth0: NCSI: transmit cmd 0x50 =
-ncsi_oem_sma_mlx success during probe
-[    6.715700] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
-[    6.729528] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
-
-So, it looks like whatever is initialized in ftgmac100_initial_mac =
-becomes
-the address we use for the NCSI queries initially.
-
-The Aspeed datasheet says the FTGMAC100 MAC address registers are =
-initialized to zero,
-and in that case the ftgmac100 driver initializes it to something random
-with eth_hw_addr_random().
-
-So, I mean correct me if I=E2=80=99m wrong, but I think it all seems =
-fine?
-
-On a hard power cycle (instead of just resetting the ARM cores, which =
-doesn=E2=80=99t seem to
-have reset the peripherals), maybe it would actually be zero, and get =
-initialized
-to the random value. I=E2=80=99ll test that, need to do some more debug =
-image building to do it
-remotely.
-
-> If I am not mistaken the gma_flag is used to indicate that the MAC
-> address has been acquired isn't it?
-
-That=E2=80=99s correct.
-
-> If using the broadcast is an issue
-> the maybe an all 0's MAC address might be more appropriate.
-
-Possibly yeah, although that would also be dropped by the Linux bridge =
-lol,
-so it wouldn=E2=80=99t solve my simulation problem.
-
-> My main
-> concern would be that the dev_addr is not initialized for those first
-> few messages so you may be leaking information.
->=20
->> This might have the effect of causing the NIC to learn 2 MAC =
-addresses from
->> an NC-SI link if the BMC uses OEM Get MAC Address commands to change =
-its
->> initial MAC address, but it shouldn't really matter. Who knows if =
-NIC's
->> even have MAC learning enabled from the out-of-band BMC link, lol.
->>=20
->> [1]: https://tinyurl.com/4933mhaj
->> [2]: https://tinyurl.com/mr3tyadb
->=20
-> The thing is the OpenBMC approach initializes the value themselves to
-> broadcast[3]. As a result the two code bases are essentially doing the
-> same thing since mac_addr is defaulted to the broadcast address when
-> the ncsi interface is registered.
-
-That=E2=80=99s a very good point, thanks for pointing that out, I =
-hadn=E2=80=99t
-even noticed that!
-
-Anyways, let me know what you think of the traces I added above.
-Sorry for the delay, I=E2=80=99ve just been busy with some other stuff,
-but I do really actually care about upstreaming this (and several
-other NC-SI changes I=E2=80=99ll submit after this one, which are =
-unrelated
-but more useful).
-
-Thanks,
-Peter
-
->=20
-> [3]: tinyurl.com/mr3cxf3b
->=20
->>=20
->> Signed-off-by: Peter Delevoryas <peter@pjd.dev>
->> ---
->> net/ncsi/ncsi-cmd.c | 10 +---------
->> 1 file changed, 1 insertion(+), 9 deletions(-)
->>=20
->> diff --git a/net/ncsi/ncsi-cmd.c b/net/ncsi/ncsi-cmd.c
->> index dda8b76b7798..fd090156cf0d 100644
->> --- a/net/ncsi/ncsi-cmd.c
->> +++ b/net/ncsi/ncsi-cmd.c
->> @@ -377,15 +377,7 @@ int ncsi_xmit_cmd(struct ncsi_cmd_arg *nca)
->> eh =3D skb_push(nr->cmd, sizeof(*eh));
->> eh->h_proto =3D htons(ETH_P_NCSI);
->> eth_broadcast_addr(eh->h_dest);
->> -
->> - /* If mac address received from device then use it for
->> - * source address as unicast address else use broadcast
->> - * address as source address
->> - */
->> - if (nca->ndp->gma_flag =3D=3D 1)
->> - memcpy(eh->h_source, nca->ndp->ndev.dev->dev_addr, ETH_ALEN);
->> - else
->> - eth_broadcast_addr(eh->h_source);
->> + memcpy(eh->h_source, nca->ndp->ndev.dev->dev_addr, ETH_ALEN);
->>=20
->> /* Start the timer for the request that might not have
->> * corresponding response. Given NCSI is an internal
->=20
-
+							Thanx, Paul
