@@ -2,91 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0CD264F131
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 19:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5CF64F136
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 19:46:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231747AbiLPSoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 13:44:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
+        id S231755AbiLPSqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 13:46:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbiLPSoE (ORCPT
+        with ESMTP id S231824AbiLPSqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 13:44:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAA1289;
-        Fri, 16 Dec 2022 10:44:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 383B6621D1;
-        Fri, 16 Dec 2022 18:44:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A426C433D2;
-        Fri, 16 Dec 2022 18:44:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671216242;
-        bh=vXaRsUEz+ZU8atzp08Gu7TMGOkHET3ojPGwll8eK0S0=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=tGo8OHTV3CB03XAOEEgy1LKM4ohkr0fVmRfCega/FzvnUSuCVoJ+CDhUpjIBdre9c
-         bf2gOLmN6g3k085im1FXmhLt7h5Hug/Y5A1mKl3g5SKLWP3tqIP0zBTx1FF6Xmbh0S
-         fo5p20JfswWi214OwwDiwMBNRghWmB8gfqQR6u2ryZ5jQbtdjhNULoip0TfaxkoSIG
-         66WtsvwamBuCGdO+2WRko2xfwOhUEvL9F0r6QyipLdIgoDYmFXXFsNrnuN03sShRaE
-         +np/w+rgP9EpZkwSe0PC7KqaZfK52ywIsiV0Se+dyMYH53jO1xe5YEZ42lULFcelxi
-         xnSbomOAZruxg==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 16 Dec 2022 13:46:14 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEF227B37
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 10:46:11 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2BGIjlov020254
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Dec 2022 13:45:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1671216350; bh=0ide3HOJSrViN20xczF1Lt88DnIce25P4e17wke2XSM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=L67a+VJrOjI8MJDnUZ3P412ybi+mdUtqNGzdz0Q19atGUsE2Tmbbq02ThviVCatDr
+         3ACLUMbdaRTnpfiR/OnnkxFaGrJfXLq/Mqp3giSScJdxbpK1XN38euO7xISS1iCpS7
+         436DWZodGTKz8tYWjACJXT40UhiTZqSX7xklVcZx4c/R79ZXms52bu60uztS9leDCx
+         4CMLRGAvflf4t4BQZgnRNRGjIP6HiBLYvymJ4DcMFf0fbkLsZQ6QcyDV2Y39UX6utv
+         rKrwOYd/n03Pw3tv9EYdKAvsDVeWy9fTH+x7jRSdsUhcu4nQus0GGWgS3am9fy0YE2
+         fefjmXxO44sHA==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id CD0DD15C40A2; Fri, 16 Dec 2022 13:45:47 -0500 (EST)
+Date:   Fri, 16 Dec 2022 13:45:47 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Aleksandr Nogikh <nogikh@google.com>
+Cc:     Lee Jones <lee@kernel.org>,
+        syzbot <syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, gregkh@linuxfoundation.org,
+        lczerner@redhat.com, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sashal@kernel.org,
+        stable@vger.kernel.org, syzkaller-android-bugs@googlegroups.com,
+        tadeusz.struk@linaro.org
+Subject: Re: kernel BUG in ext4_free_blocks (2)
+Message-ID: <Y5y824gPqZo+vcxb@mit.edu>
+References: <0000000000006c411605e2f127e5@google.com>
+ <000000000000b60c1105efe06dea@google.com>
+ <Y5vTyjRX6ZgIYxgj@mit.edu>
+ <Y5xsIkpIznpObOJL@google.com>
+ <CANp29Y6KHBE-fpfJCXeN5Ju_qSOfUYAp2n+cNrGj25QtU0X=sA@mail.gmail.com>
+ <Y5ylNxoN2p7dmcRD@mit.edu>
+ <CANp29Y4QVp1G83pSqpxeETbw_+kQQ5CZUz+Vgi767WxE8AuhHQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221211204324.169991-2-tmaimon77@gmail.com>
-References: <20221211204324.169991-1-tmaimon77@gmail.com> <20221211204324.169991-2-tmaimon77@gmail.com>
-Subject: Re: [PATCH v14 1/1] clk: npcm8xx: add clock controller
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     openbmc@lists.ozlabs.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tomer Maimon <tmaimon77@gmail.com>
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        benjaminfair@google.com, joel@jms.id.au, mturquette@baylibre.com,
-        tali.perry1@gmail.com, venture@google.com, yuenn@google.com
-Date:   Fri, 16 Dec 2022 10:44:00 -0800
-User-Agent: alot/0.10
-Message-Id: <20221216184402.8A426C433D2@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANp29Y4QVp1G83pSqpxeETbw_+kQQ5CZUz+Vgi767WxE8AuhHQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Tomer Maimon (2022-12-11 12:43:24)
-> diff --git a/drivers/clk/clk-npcm8xx.c b/drivers/clk/clk-npcm8xx.c
-> new file mode 100644
-> index 000000000000..08ee7bea6f3a
-> --- /dev/null
-> +++ b/drivers/clk/clk-npcm8xx.c
-> @@ -0,0 +1,650 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-[...]
-> +#define NPCM8XX_CLK_S_RCP        "rcp"
-> +
-> +static const u32 pll_mux_table[] =3D { 0, 1, 2, 3 };
-> +static const struct clk_parent_data pll_mux_parents[] =3D {
-> +       { .fw_name =3D NPCM8XX_CLK_S_PLL0, .name =3D NPCM8XX_CLK_S_PLL0 },
+On Fri, Dec 16, 2022 at 06:14:50PM +0100, Aleksandr Nogikh wrote:
+> > Thanks for the clarification; stupid question, though -- I see
+> > "upstream" is listed on the dashboard link above.  Assuming that
+> > "usptream" is "Linus's tree", why was it still saying, "I can't find
+> > this patch in any of my trees"?  What about the upstream tree?
+> 
+> Bugs from different namespaces are treated independently, so in this
+> particular case syzbot was expecting the fixing commit to reach the
+> Android trees that it fuzzes.
 
-As this is a new driver either you should only have .fw_name here. The
-.name field is a backup to migrate code over to a new binding. When
-.fw_name is used there should be an associated DT binding update. I
-doubt the usage of .fw_name is correct though, because aren't these clks
-internal to the controller? The .fw_name field is about describing
-parents that are an input to the clk controller node in DT (because the
-controller is a consumer of these clks that are external to the device).
+Is there a way someone can look at the dashboard link to determine
+which (a) what namespace a particular syzkaller report is in, and (b)
+what trees are included in a particular namespace?
 
-So can you use the .hw field for these internal clks? Check out
-CLK_HW_INIT_HWS() macro and friends for a possible way to initialize
-this.
+Adding a link to the e-mail to the dashboard page may not help if it's
+not obvious why the dashboard mentions "upstream" and yet it's not in
+"any of the trees".  Maybe the e-mail should explicitly list the trees
+that syzkaller will be searching?
 
-> +       { .fw_name =3D NPCM8XX_CLK_S_PLL1, .name =3D NPCM8XX_CLK_S_PLL1 },
-> +       { .fw_name =3D NPCM8XX_CLK_S_REFCLK, .name =3D NPCM8XX_CLK_S_REFC=
-LK },
+And it would seem that it would be a *feature* if looking at a syzbot
+dashboard from Android namespace could expose the fact that particular
+patch is in any of the LTS trees or Linus's upstream tree, no?
 
-Maybe this is external? If so, it would be great to have this in the
-binding as a `clocks` property.
+Also, what is the reason for Android for being in a separate
+namespace?  Is it running on a separate syzbot VM?  I can understand
+why from a feature perspective, that Fuschia and OpenBSD should be in
+separate namespaces; but what are the reasons that there are separate
+namespaces for Android versus the upstream kernel?  Especially since
+the Android dashboard is apparently referencing the upstream kernel?
+What's up with that?
+
+Put another way, while I think it's super useful to have a link to
+Syzbot dashboard page, in the e-mail, I'm not sure it's going to be a
+complete solution to the confusion that was inspired by this case.
+
+That being said, in general I think a link to the Dashboard is useful;
+in fact, it might be nice if we could encourage upstream developers
+put in the commit trailer:
+
+Link: https://syzkaller.appspot.com/bug?id=5266d464285a03cee9dbfda7d2452a72c3c2ae7c
+
+in addition to, or better yet, instead of:
+
+Reported-by: syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com
+
+... and have Syzbot be able to translate from the Link: tag as being
+equivalent to the Reported-by: link.  That's becase the Link is going
+to be much more useful to humans than the Reported-by --- we've had a
+number of cases where as part of the patch review, we really wanted to
+get back to the Dashboard page, and it's not easy to get to the
+Dashboard from the Reported-by tag.
+
+Thanks,
+
+						- Ted
+
