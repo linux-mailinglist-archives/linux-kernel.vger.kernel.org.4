@@ -2,138 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F90D64E64A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 04:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C57B664E64C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 04:18:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiLPDQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 22:16:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
+        id S229956AbiLPDS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 22:18:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiLPDPP (ORCPT
+        with ESMTP id S230125AbiLPDSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 22:15:15 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C706C70C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 19:14:14 -0800 (PST)
-X-UUID: fc73e221f67c4dc3a45f384dffe76cdf-20221216
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=F+2XiVV/hxebtLq5aHTxlzUZ5HkY+iv5QheRMxy1dWI=;
-        b=aqce60Wp1yYtaA3hJsAn/RbepSC0FC0Pf2dopxilP2Dl5dIZ8MtLvlM/RXEohI0EzEVcsEOmu4NcnaS1yOQoLuX+LOzOyeC+4ZfwL1/de3MZkiDce5wImyn1Z9EXhEoQj12IpKnpEsyegh2Q7TrYTk2iYzzO9NTTew7OIF8LYFY=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:908eb929-55b0-43b1-8b0a-5e91248137da,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:dcaaed0,CLOUDID:4c40cbaf-9f02-4d44-9c44-6e4bb4e4f412,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:1,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: fc73e221f67c4dc3a45f384dffe76cdf-20221216
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <alice.chao@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1576592472; Fri, 16 Dec 2022 11:14:06 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 16 Dec 2022 11:14:05 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 16 Dec 2022 11:14:05 +0800
-From:   Alice Chao <alice.chao@mediatek.com>
-To:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
-        <matthias.bgg@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-CC:     <stanley.chu@mediatek.com>, <peter.wang@mediatek.com>,
-        <chun-hung.wu@mediatek.com>, <alice.chao@mediatek.com>,
-        <powen.kao@mediatek.com>, <naomi.chu@mediatek.com>,
-        <cc.chou@mediatek.com>, <chaotian.jing@mediatek.com>,
-        <jiajie.hao@mediatek.com>, <qilin.tan@mediatek.com>,
-        <lin.gui@mediatek.com>, <yanxu.wei@mediatek.com>,
-        <tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
-        <wsd_upstream@mediatek.com>
-Subject: [PATCH 1/1] scsi: Add length check to prevent invalid memory access
-Date:   Fri, 16 Dec 2022 11:13:22 +0800
-Message-ID: <20221216031320.2634-1-alice.chao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Thu, 15 Dec 2022 22:18:08 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D945FB93
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 19:17:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671160637; x=1702696637;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=V7nMACfvQKW9NVbyjcAlrDxmwIs/5qIqkQZBaVPjfTQ=;
+  b=LH0DTbnhIGesmPMNYGB7xKH/WOAs5N1HpL4LCAkw67S69n8VwKB6JZmW
+   sy8cI0Y//XupcIVyqUGb9CNd5cJFGLyATlBa1Dfx++ctZWFmlcEYcT9/D
+   TbZTIkYpPv4q6fEwWTYOAls1g/ptNVD1MsnUoOn0oNUaMOxchmzRghJp6
+   DsJzPx+QE/SHl0MIz1I1t79/Mtl5rStHHNCbgBihcWTmc67OhTjQzuzll
+   FTQsRa5EhmOnAZ5d357+zgyj6CRLCUTJm5yrk02pSPjiWkYTOGNW+iOeq
+   CIfyM8/fN70PF7xgEa0/Y58Uv9kRfr+4UUg4tbzhQ5KKPCuhm5t2ImM9y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="299209615"
+X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
+   d="scan'208";a="299209615"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 19:17:16 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="713147851"
+X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
+   d="scan'208";a="713147851"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 19:17:14 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Yang Shi <shy828301@gmail.com>, Wei Xu <weixugc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: memcg reclaim demotion wrt. isolation
+References: <Y5idFucjKVbjatqc@dhcp22.suse.cz> <Y5ik+CCmvapf87Mb@cmpxchg.org>
+        <Y5maoIUuH79KrfJt@dhcp22.suse.cz>
+        <87edt1dwd2.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <Y5rZSRxcgQzQQVbS@cmpxchg.org>
+Date:   Fri, 16 Dec 2022 11:16:26 +0800
+In-Reply-To: <Y5rZSRxcgQzQQVbS@cmpxchg.org> (Johannes Weiner's message of
+        "Thu, 15 Dec 2022 09:22:33 +0100")
+Message-ID: <877cys9gxh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Device reset thread uses kobject_uevent_env() to get kobj.parent(kobj.p)
-, and it races with device init thread which calls device_add() to add
-kobj.parent before kobject_uevent_env().
+Johannes Weiner <hannes@cmpxchg.org> writes:
 
-Device init call:           Device reset call:
-scsi_probe_and_add_lun()    scsi_evt_thread()
-  scsi_add_lun()             scsi_evt_emit()
-   scsi_sysfs_add_sdev()      kobject_uevent_env() //get kobj.parent
-    scsi_target_add()           kobject_get_path()
-                                 len = get_kobj_path_length ()
-                                 //len=1 because parent hasn't created yet
-    device_add() // add kobj.parent
-      kobject_uevent_env()
-       kobject_get_path()         path = kzalloc()
-        fill_kobj_path()           fill_kobj_path()
-                            // --length; length -= cur is a negative value
-                         memcpy(path + length, kobject_name(parent), cur);
-                         // slab OOB!
+> On Thu, Dec 15, 2022 at 02:17:13PM +0800, Huang, Ying wrote:
+>> Michal Hocko <mhocko@suse.com> writes:
+>> 
+>> > On Tue 13-12-22 17:14:48, Johannes Weiner wrote:
+>> >> On Tue, Dec 13, 2022 at 04:41:10PM +0100, Michal Hocko wrote:
+>> >> > Hi,
+>> >> > I have just noticed that that pages allocated for demotion targets
+>> >> > includes __GFP_KSWAPD_RECLAIM (through GFP_NOWAIT). This is the case
+>> >> > since the code has been introduced by 26aa2d199d6f ("mm/migrate: demote
+>> >> > pages during reclaim"). I suspect the intention is to trigger the aging
+>> >> > on the fallback node and either drop or further demote oldest pages.
+>> >> > 
+>> >> > This makes sense but I suspect that this wasn't intended also for
+>> >> > memcg triggered reclaim. This would mean that a memory pressure in one
+>> >> > hierarchy could trigger paging out pages of a different hierarchy if the
+>> >> > demotion target is close to full.
+>> >> 
+>> >> This is also true if you don't do demotion. If a cgroup tries to
+>> >> allocate memory on a full node (i.e. mbind()), it may wake kswapd or
+>> >> enter global reclaim directly which may push out the memory of other
+>> >> cgroups, regardless of the respective cgroup limits.
+>> >
+>> > You are right on this. But this is describing a slightly different
+>> > situaton IMO. 
+>> >
+>> >> The demotion allocations don't strike me as any different. They're
+>> >> just allocations on behalf of a cgroup. I would expect them to wake
+>> >> kswapd and reclaim physical memory as needed.
+>> >
+>> > I am not sure this is an expected behavior. Consider the currently
+>> > discussed memory.demote interface when the userspace can trigger
+>> > (almost) arbitrary demotions. This can deplete fallback nodes without
+>> > over-committing the memory overall yet push out demoted memory from
+>> > other workloads. From the user POV it would look like a reclaim while
+>> > the overall memory is far from depleted so it would be considered as
+>> > premature and a warrant a bug report.
+>> >
+>> > The reclaim behavior would make more sense to me if it was constrained
+>> > to the allocating memcg hierarchy so unrelated lruvecs wouldn't be
+>> > disrupted.
+>> 
+>> When we reclaim/demote some pages from a memcg proactively, what is our
+>> goal?  To free up some memory in this memcg for other memcgs to use?  If
+>> so, it sounds reasonable to keep the pages of other memcgs as many as
+>> possible.
+>
+> The goal of proactive aging is to free up any resources that aren't
+> needed to meet the SLAs (e.g. end-to-end response time of webserver).
+> Meaning, to run things as leanly as possible within spec. Into that
+> free space, another container can then be co-located.
+>
+> This means that the goal is to free up as many resources as possible,
+> starting with the coveted hightier. If a container has been using
+> all-hightier memory but is able demote to lowtier, there are 3 options
+> for existing memory in the lower tier:
+>
+> 1) Colder/stale memory - should be displaced
+>
+> 2) Memory that can be promoted once the hightier is free -
+>    reclaim/demotion of the coldest pages needs to happen at least
+>    temporarily, or the tierswap is in stale mate.
+>
+> 3) Equally hot memory - if this exceeds capacity of the lower tier,
+>    the hottest overall pages should stay, the excess demoted/reclaimed.
+>
+> You can't know what scenario you're in until you put the demoted pages
+> in direct LRU competition with what's already there. And in all three
+> scenarios, direct LRU competition also produces the optimal outcome.
 
-Above backtrace describes the problem, device reset thread will get wrong
-kobj.parent when device init thread didn't add kobj/parent yet. When this
-racing happened, it triggers the a KASAN dump on the final iteration:
+If my understanding were correct, your preferred semantics is to be memcg
+specific in the higher tier, and global in the lower tier.
 
-BUG: KASAN: slab-out-of-bounds in kobject_get_path+0xf8/0x1b8
-Write of size 11 at addr ffffff80d6bb94f5 by task kworker/3:1/58
-<snip>
+Another choice is to add another global "memory.reclaim" knob, for
+example, as /sys/devices/virtual/memory_tiering/memory_tier<N>/memory.reclaim ?
+Then we can trigger global memory reclaim in lower tiers firstly.  Then
+trigger memcg specific memory reclaim in higher tier for the specified
+memcg.
 
-Call trace:
- __kasan_report+0x124/0x1c8
- kasan_report+0x54/0x84
- kasan_check_range+0x200/0x208
- memcpy+0xb8/0xf0
- kobject_get_path+0xf8/0x1b8
- kobject_uevent_env+0x228/0xa88
- scsi_evt_thread+0x2d0/0x5b0
- process_one_work+0x570/0xf94
- worker_thread+0x7cc/0xf80
- kthread+0x2c4/0x388
+The cons of this choice is that you need 2 steps to finish the work.
+The pros is that you don't need to combine memcg-specific and global
+behavior in one interface.
 
-These two jobs are scheduled asynchronously, we can't guaranteed that
-kobj.parent will be created in device init thread before device reset
-thread calls kobject_get_path().
-
-To prevent length -= cur from being a negative value, we add length
-check in fill_kobj_path() to prevent invalid memory access.
-
-Signed-off-by: Alice Chao <alice.chao@mediatek.com>
----
- lib/kobject.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/lib/kobject.c b/lib/kobject.c
-index af1f5f2954d4..3cccb8e88d4e 100644
---- a/lib/kobject.c
-+++ b/lib/kobject.c
-@@ -121,6 +121,10 @@ static void fill_kobj_path(struct kobject *kobj, char *path, int length)
- 		int cur = strlen(kobject_name(parent));
- 		/* back up enough to print this name with '/' */
- 		length -= cur;
-+
-+		if (length <= 0)
-+			break;
-+
- 		memcpy(path + length, kobject_name(parent), cur);
- 		*(path + --length) = '/';
- 	}
--- 
-2.18.0
-
+Best Regards,
+Huang, Ying
