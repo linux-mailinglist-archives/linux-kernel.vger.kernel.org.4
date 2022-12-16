@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0857C64EA13
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9746D64EA18
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiLPLQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
+        id S230467AbiLPLQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:16:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiLPLQC (ORCPT
+        with ESMTP id S230463AbiLPLQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:16:02 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94B12BD3;
-        Fri, 16 Dec 2022 03:15:49 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso3850053wme.5;
-        Fri, 16 Dec 2022 03:15:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TduGez5okMoaMoWtG+a/gDZ6K+tMIFN63iCFQSQsXnc=;
-        b=poGvMOI+DZhFnvewifa7xuMgoYfEN6GfdHixircewhmNWI1wf7jJRpF6FLe2k+gBh+
-         BfaBVFfBiZmo8WvNNTkM1KA2ip8M8Inf32AtLoX875ooAjtN+w5lJ+waGJsab2ThhKAj
-         m1+vBp3R5kwpep77ei/Pid7DFabFUTtpheALbrtR8L9+2DQHbgiS7k+HVUshCj0mZy4A
-         z2B7TSCqZHlCM0+sgeWTfBf34NWB+670zIUaIMF4rVYWbIq0lFLpY0P06BQmT6rfRItw
-         lDrc2JcsKGgGiVgw516DWiUEqgVltFg1DfjtTCYkzoThvNDSJv8VIghV9G0SoUfnSVE6
-         Qkrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TduGez5okMoaMoWtG+a/gDZ6K+tMIFN63iCFQSQsXnc=;
-        b=NmXB377L1I+hEzbK8OqIH2u4D6WH5YyAh5V3Wq8BISMAbS/ugYzyqU2/bt2WZbOzaP
-         CNJA+SSj06wCXuYVQI6gnmDyL31RQnDohZHWjPiQ6mWSJksru4n+nwdiX9aCPvh/2EKM
-         yc/YTlTugxaINu4G+1uZOSXCinZVtj5uyPNCpK9+GXEz4hWjt2gmJRDDnvCvKcXzJHg0
-         lDqwav2hn4xbblG0WTrulNyIX/LMRyRZiRYEpF2hOjXtKfyKtoLuQ0zv/cyLQHFOR7qK
-         uc9KxDdzFcSFWbw78eYIJzblUce1/X+SZX3+VOQT6UXmKvwwbIubkV7odP8wQiGh39Xb
-         Hz5w==
-X-Gm-Message-State: ANoB5pmY0YDKX/CCv/sjFhCvUJam0lbNo25rbuxodOdBl1wAtV4by2zj
-        RsB4cqgZK154/6f8UQcnHcDm7O0iXgQ=
-X-Google-Smtp-Source: AA0mqf7JMvc5A1nsCgHMY4tDpIPErZEnQUIERlUiYi0wkELvSsM/N+Zzruki8wtc4cD0x7K7L0Oilg==
-X-Received: by 2002:a05:600c:3555:b0:3d0:8643:caf1 with SMTP id i21-20020a05600c355500b003d08643caf1mr17299280wmq.16.1671189347575;
-        Fri, 16 Dec 2022 03:15:47 -0800 (PST)
-Received: from [192.168.1.132] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id i26-20020a1c541a000000b003c6c182bef9sm11257713wmb.36.2022.12.16.03.15.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 03:15:46 -0800 (PST)
-Message-ID: <9511c5b1-203b-a7e3-b96b-614e1c52639a@gmail.com>
-Date:   Fri, 16 Dec 2022 12:15:44 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 2/4] soc: mediatek: pm-domains: Add ADSP power domain data
- for MT8192
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ikjoon Jang <ikjn@chromium.org>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        angelogioacchino.delregno@collabora.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>
-References: <20221215120016.26611-1-allen-kh.cheng@mediatek.com>
- <20221215120016.26611-3-allen-kh.cheng@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221215120016.26611-3-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 16 Dec 2022 06:16:41 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC9B566F2;
+        Fri, 16 Dec 2022 03:16:41 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 0790732005B5;
+        Fri, 16 Dec 2022 06:16:39 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 16 Dec 2022 06:16:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1671189399; x=
+        1671275799; bh=urmZCaqP5uUKG9f3w/5JTsr/NxjJLfj/bS5O5zJbL3k=; b=B
+        P9QPaWyUZsW0J7NWwNNXiRe/NP294gh+txwjjTkkU7clAeWF6FQVMwjQPV++4p1G
+        7zFWR2NZpqnvdtedG0DPxcX0WJ5f1gT450S+q96g0V7/x8i1qpxhKnnQFLO3QAfS
+        sKp/ijlHu1aKWKhWG3rt6l42y1GQxjdALSSObWQH1iPo+1dEBoF/J+lr7N8Sst32
+        fNnN98J8FL767UA7dMHFGUxba6wuqILe4HlKqwngxvEWCfCWVoA70R13rKvAytDa
+        pvY//qtyEeKZvD7dtLw5bG/u6lJl0g/uUEn3PC2rmoremmWGeEnCoTKj+5YVTHuX
+        NTpScNCJLj0Veh/qWENzg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1671189399; x=
+        1671275799; bh=urmZCaqP5uUKG9f3w/5JTsr/NxjJLfj/bS5O5zJbL3k=; b=h
+        JIGQ2wRfu8pouckzEfxNWbPfRSPaO6SywY5VipBipFb0SYlKTf2BU8rQETn7goSG
+        ZuxIpeT9eDYAza2ft8WopgRVO8PQsRJYejVHzw1l/7WrzETdahgwh1dqKoj8gRhk
+        zjKxAnrdOQH1s8vgq1Pcxjf4LkpU1pxVakRPnprG+IurIzY8pMXgmCGII3trEqqF
+        wtuZRnlvP7SXRhNZr4ShfO+zGsYmWpdBQipfyMVfY+BJvoquqpC8ms4Bz6gxQvE6
+        NP/fQPmjyv2ZKdpMCJS1XRSfC0CSylaOVKRkDIK9Ojy1bZad6S25sf36DPHbsl8B
+        kBY6Jv0MDpVr6tNR8VcBQ==
+X-ME-Sender: <xms:llOcYyL18Ft-JhsVdpqThXN3ciCGyoPjree7-ZSiqUKwI-iVCFQiuw>
+    <xme:llOcY6IHI2ErJgRxFa7y5Ta25FW5I7Agjy_16qzgYiZpHjehyclz5LeS3mNiOHVah
+    rSIE1oZntNowtGQ1h0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejgddvgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudektdfg
+    jeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:llOcYyskflETP8t1zefHbbyYYHF2Uce1IHgY2irqUlMRMKLH1P3tNA>
+    <xmx:llOcY3Z0u-2oIYML-ikr6AGGk4c9eEZPJQ5z0MSS-3YpDQY39XnCkA>
+    <xmx:llOcY5ZefpA51A6Ke9qK5v6ptX6wpZkzmJzdnzJaNB8W0oLhM2rkWA>
+    <xmx:l1OcY7meDvbcNTtSMtNfYLNJraVZY_-_AxQX_DzFIrNdCymRfxvT_Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D009AB60086; Fri, 16 Dec 2022 06:16:38 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <486f9bc9-408f-4c29-b675-cbd61673f58c@app.fastmail.com>
+In-Reply-To: <87k02sd1uz.fsf@toke.dk>
+References: <20221215165553.1950307-1-arnd@kernel.org>
+ <87k02sd1uz.fsf@toke.dk>
+Date:   Fri, 16 Dec 2022 12:16:17 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        "Arnd Bergmann" <arnd@kernel.org>, "Kalle Valo" <kvalo@kernel.org>,
+        "Pavel Skripkin" <paskripkin@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Tetsuo Handa" <penguin-kernel@i-love.sakura.ne.jp>,
+        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ath9k: use proper statements in conditionals
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,46 +94,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 15, 2022, at 18:16, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> index 30f0765fb9fd..237f4ec2cffd 100644
+>> --- a/drivers/net/wireless/ath/ath9k/htc.h
+>> +++ b/drivers/net/wireless/ath/ath9k/htc.h
+>> @@ -327,9 +327,9 @@ static inline struct ath9k_htc_tx_ctl *HTC_SKB_CB=
+(struct sk_buff *skb)
+>>  }
+>> =20
+>>  #ifdef CONFIG_ATH9K_HTC_DEBUGFS
+>> -#define __STAT_SAFE(hif_dev, expr)	((hif_dev)->htc_handle->drv_priv =
+? (expr) : 0)
+>> -#define CAB_STAT_INC(priv)		((priv)->debug.tx_stats.cab_queued++)
+>> -#define TX_QSTAT_INC(priv, q)		((priv)->debug.tx_stats.queue_stats[q=
+]++)
+>> +#define __STAT_SAFE(hif_dev, expr)	do { ((hif_dev)->htc_handle->drv_=
+priv ? (expr) : 0); } while (0)
+>> +#define CAB_STAT_INC(priv)		do { ((priv)->debug.tx_stats.cab_queued+=
++); } while (0)
+>> +#define TX_QSTAT_INC(priv, q)		do { ((priv)->debug.tx_stats.queue_st=
+ats[q]++); } while (0)
+>
+> Hmm, is it really necessary to wrap these in do/while constructs? AFAI=
+CT
+> they're all simple statements already?
 
+It's generally safer to do the same thing on both side of the #ifdef.
 
-On 15/12/2022 13:00, Allen-KH Cheng wrote:
-> Add ADSP pm-domains (mtcmos) data for MT8192 SoC.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> ---
->   drivers/soc/mediatek/mt8192-pm-domains.h | 16 ++++++++++++++++
->   1 file changed, 16 insertions(+)
-> 
-> diff --git a/drivers/soc/mediatek/mt8192-pm-domains.h b/drivers/soc/mediatek/mt8192-pm-domains.h
-> index b97b2051920f..19e58f0ca1df 100644
-> --- a/drivers/soc/mediatek/mt8192-pm-domains.h
-> +++ b/drivers/soc/mediatek/mt8192-pm-domains.h
-> @@ -287,6 +287,22 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8192[] = {
->   		.sram_pdn_bits = GENMASK(8, 8),
->   		.sram_pdn_ack_bits = GENMASK(12, 12),
->   	},
-> +	[MT8192_POWER_DOMAIN_ADSP] = {
-> +		.name = "adsp",
-> +		.sta_mask = BIT(22),
-> +		.ctl_offs = 0x0358,
-> +		.sram_pdn_bits = GENMASK(8, 8),
-> +		.sram_pdn_ack_bits = GENMASK(12, 12),
-> +		.ext_buck_iso_offs = 0x039C,
-> +		.ext_buck_iso_mask = BIT(2),
+The "do { } while (0)" is an empty statement that is needed to fix
+the bug on the #else side. The expressions you have on the #ifdef
+side can be used as values, and wrapping them in do{}while(0)
+turns them into statements (without a value) as well, so fewer
+things can go wrong when you only test one side.
 
-Not defined in upstream. It seems we are missing something here.
+I suppose the best solution would be to just use inline functions
+for all of them and get rid of the macros.
 
-Regards,
-Matthias
-
-> +		.bp_infracfg = {
-> +			BUS_PROT_WR(MT8192_TOP_AXI_PROT_EN_2_ADSP,
-> +				    MT8192_TOP_AXI_PROT_EN_2_SET,
-> +				    MT8192_TOP_AXI_PROT_EN_2_CLR,
-> +				    MT8192_TOP_AXI_PROT_EN_2_STA1),
-> +		},
-> +		.caps = MTK_SCPD_SRAM_ISO | MTK_SCPD_EXT_BUCK_ISO,
-> +	},
->   	[MT8192_POWER_DOMAIN_CAM] = {
->   		.name = "cam",
->   		.sta_mask = BIT(23),
+     Arnd
