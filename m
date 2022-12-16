@@ -2,97 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E307164F22E
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 21:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F6F64F232
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 21:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231906AbiLPULm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 15:11:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
+        id S231703AbiLPUN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 15:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbiLPULk (ORCPT
+        with ESMTP id S231315AbiLPUNY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 15:11:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AA032B82;
-        Fri, 16 Dec 2022 12:11:39 -0800 (PST)
+        Fri, 16 Dec 2022 15:13:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253775FBA8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:13:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3A9EB81DFF;
-        Fri, 16 Dec 2022 20:11:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 359ADC433EF;
-        Fri, 16 Dec 2022 20:11:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671221496;
-        bh=c36cyYZ6f9o0WhZCEckS0zAx9IQ/4jg44Mug8y2mRQU=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=iFQs0uGzwd6R1tS+LzZe4DWr011uE8YAZeSx+qLLd1tjTLz5I29/zRqumOrv9DMwg
-         yXdPXhzPgS2PLcjkMqri/HDiFuC0CNwkkIAD3i7y41TK1aQK6FqFqNkmXv1pf5U9Y+
-         mVZ9BuNNndHYesCrnZG3g+TziBTW4G4kdJbBeubuSIfyhrvdEwPnqtwQJjjTXacUdp
-         r6oqm2XNchVhXqfqmIBQjaL6I2/ca/ynMqEfgbifWYnidZlT9tHlunAbnzptNjTP13
-         Rk6hGIWXR4mIGQiweb0SiSNhQa4Y0aYcIfMR7RLggD8Vnx9E63MNUJHZ2qR9DABAG/
-         E//NS/7qZtcjw==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8E1BB81D0A
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 20:13:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67368C433D2;
+        Fri, 16 Dec 2022 20:13:20 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="FEzTZh0O"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1671221598;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gfhwJ6//z17DhbqPjt4GStlAmZRA8zNf6DoXoNXFZJ8=;
+        b=FEzTZh0OtZxJwBg1Y0K0ePQES8bJscXR10V8Hg2sM+QywGXmtchc7T1kqRKrSwumB3QVYd
+        zE9rTMMbessnj2bW/1V8xHHf5/sNtWUzGGWznJIPGADtOYYdfHMYr82hiysBNTxHzMCCHL
+        /Do26QHCokSZlm/0aa6d7rdLkIPkQWk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5bc2dd0d (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 16 Dec 2022 20:13:17 +0000 (UTC)
+Date:   Fri, 16 Dec 2022 13:13:02 -0700
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ath9k: use proper statements in conditionals
-References: <20221215165553.1950307-1-arnd@kernel.org>
-        <87cz8jbeq8.fsf@toke.dk>
-Date:   Fri, 16 Dec 2022 22:11:29 +0200
-In-Reply-To: <87cz8jbeq8.fsf@toke.dk> ("Toke \=\?utf-8\?Q\?H\=C3\=B8iland-J\?\=
- \=\?utf-8\?Q\?\=C3\=B8rgensen\=22's\?\= message of
-        "Fri, 16 Dec 2022 15:33:19 +0100")
-Message-ID: <87359fkt1q.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Subject: Re: [PATCH v2] x86: lib: Separate instruction decoder MMIO type from
+ MMIO trace
+Message-ID: <Y5zRTqDmjeJzjeFf@zx2c4.com>
+References: <Y5oy0vwZQAwzkDkr@zx2c4.com>
+ <20221214203454.337299-1-Jason@zx2c4.com>
+ <20221214213015.GA16072@ranerica-svr.sc.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20221214213015.GA16072@ranerica-svr.sc.intel.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk> writes:
+On Wed, Dec 14, 2022 at 01:30:15PM -0800, Ricardo Neri wrote:
+> On Wed, Dec 14, 2022 at 01:34:54PM -0700, Jason A. Donenfeld wrote:
+> > Both mmiotrace.h and insn-eval.h define various MMIO_ enum constants.
+> > Rename the insn ones to have a INSN_ prefix, so that the headers can be
+> > used from the same source file.
+> > 
+> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> 
+> FWIW: Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 
-> Arnd Bergmann <arnd@kernel.org> writes:
->
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> A previous cleanup patch accidentally broke some conditional
->> expressions by replacing the safe "do {} while (0)" constructs
->> with empty macros. gcc points this out when extra warnings
->> are enabled:
->>
->> drivers/net/wireless/ath/ath9k/hif_usb.c: In function 'ath9k_skb_queue_c=
-omplete':
->> drivers/net/wireless/ath/ath9k/hif_usb.c:251:57: error: suggest braces a=
-round empty body in an 'else' statement [-Werror=3Dempty-body]
->>   251 |                         TX_STAT_INC(hif_dev, skb_failed);
->>
->> Make both sets of macros proper expressions again.
->>
->> Fixes: d7fc76039b74 ("ath9k: htc: clean up statistics macros")
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk>
+Thanks. Any chance this can get in for 6.2?
 
-I'll queue this to v6.2.
-
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes
+Jason
