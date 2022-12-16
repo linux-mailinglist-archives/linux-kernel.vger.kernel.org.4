@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B8564F346
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 22:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D59B64F348
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 22:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiLPVi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 16:38:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
+        id S229668AbiLPVj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 16:39:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiLPVi5 (ORCPT
+        with ESMTP id S229471AbiLPVjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 16:38:57 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41E815F23
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 13:38:54 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id j28so1914139ila.9
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 13:38:54 -0800 (PST)
+        Fri, 16 Dec 2022 16:39:53 -0500
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3145715F2E;
+        Fri, 16 Dec 2022 13:39:52 -0800 (PST)
+Received: by mail-vk1-xa35.google.com with SMTP id b81so1765066vkf.1;
+        Fri, 16 Dec 2022 13:39:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s5TaqJbUnyGhuPZZS5UNZKhBWRtutQq3cE9SHhAW1+Y=;
-        b=AOcpZMj9vOMtGGDfZKG7d7Yg+7nxDSrZWtnGF04EUv0esZ7U3zu7kmN9WZarij09DB
-         rpDdPRGk+ppGyeFFd9hFbPmdIheD4DwIBMmD/YqiHn+iuBBF/VL09QO2ytWrPMNoczEx
-         vB6/PomDUKVKfpw+y9rchIGX79t4wBW8AcpwuwNwD7TG3r08GsksNdbSD7dsWiov+way
-         fWKMkOkFxSiFr2Oz65BUK3N+ySO6HIcQQUtUDt7ySwxhcMMBBJWbMqHppojXoitLM9pg
-         ceYrePwsOKv7lG2vuiI9gmrzYVaXbmD2FPf/J0IKnAaP6dYxO6C9gHF+0zffERYTt36/
-         ie2w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2YwHluyp3ck6gPBrjl88W1jVft6fBZI+9SdreHduMN0=;
+        b=GtGWVbz0c2WgE+RG3BiXxLNwl9nZXPjfa5FYmWxDRsdWg+qdUGF4gup7cMciZSOm65
+         aQ0Fo9m4WEc/aWx8COWkmnw+hrNrUqBSLUf4IWlXXFCygc0qbQBD3rskaE5tIM7PrDwn
+         dIYB47y7W1XWuQFb/NxXqh+ykWVDDwFzdORYwvZtW5ISa2Eco/BDqZJbSjZzrtYFn/DK
+         IQXYo1I+M5WWzTW0ss475sY8S88Z5zs0befRTApEk5YweiHoXAk3PzVPfYV8D+Jxbf9t
+         +rb09waY6JHBp2tVRcZTQG6C9sHTMKmH6KG7RormYh77I65UJP++1NBWjhkpSSRD/67g
+         O6OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s5TaqJbUnyGhuPZZS5UNZKhBWRtutQq3cE9SHhAW1+Y=;
-        b=wxKANW8Q1eOV/rsh1d4Ix7SMkTuuIdAJFW6vxRQIwfNmLBo8fX/W6MUXKYjk8bxfDI
-         H6Ro/ekziqEoWgGc+lCq3hNiwvH7I2/fMzqsCOU4c7w9Ygonc5yliUaf1su5mCabavCt
-         URmLmDfLFEzJP6txVh1gII5WyCW51UJKcI39sXlbBF27wxd05Tdy8DfVLURW/+dGsSzV
-         nwUUVOd56wBDGoKi7KPRgPxbCZEWC0aTkw62C8YWGiC3uokBvGXygGdWG1i6AadUY5XN
-         ifW65q6MZUJHEPNoZFHxCGzhmI4+7O/CfM+rbbZoLbWfB5JrbZ/9JL4Pw7AK6gT/HUiu
-         6KSA==
-X-Gm-Message-State: AFqh2kqU+STYnwk5y2Zq8UdyGk86JfJcKKnpyoSAlP7YtQi7vZJFGbvE
-        SB+Rvepx3BJShCuCMQwkMVpUkA==
-X-Google-Smtp-Source: AMrXdXt+NHicpunxcqTvC73xwn58fXmuR8zZdjlFz5HXD2WxIxU2j7AgXazccgwhoowSaO3IgMvXdA==
-X-Received: by 2002:a05:6e02:ec7:b0:305:dee9:bcb4 with SMTP id i7-20020a056e020ec700b00305dee9bcb4mr7117271ilk.26.1671226733873;
-        Fri, 16 Dec 2022 13:38:53 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:a41d:a9ca:1f95:c2e6])
-        by smtp.gmail.com with ESMTPSA id b14-20020a92db0e000000b002fc323a2902sm974855iln.62.2022.12.16.13.38.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 13:38:53 -0800 (PST)
-Date:   Fri, 16 Dec 2022 14:38:49 -0700
-From:   Ross Zwisler <zwisler@google.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: Re: [PATCH] tracing: Add a way to filter function addresses to
- function names
-Message-ID: <Y5zlaWEVdBSJhQR/@google.com>
-References: <20221214125209.09d736dd@gandalf.local.home>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2YwHluyp3ck6gPBrjl88W1jVft6fBZI+9SdreHduMN0=;
+        b=yXzBIBkwdPRc+Q9knnMwoeCAEWEVs+Zo1IWpoTqqsSZbwSkzukX5Q0wu2dcFrs/TMl
+         SKHrx8xtG64tiNDpsjP4X5jQiGQSm9LJ3GEj33CrJRdOp63RJr/LJvUAV4N0DlQTqtoh
+         NesUq0u53Jm8g/1+D2TvcjaPXcYCQyLTkk8hyHRJCKor1qwlj+bowJLOahBq19smyd6W
+         zi8HdU3Zdf96Zt0aImLwb7hgPuJ7FLri7E2/g01ZoBGpMZkuG0IqUSEWuwQ/uNfnniuq
+         cww/je5C9M3xjLGm8OVBEzYh7noVeJ2vBoSgUJluhpm95iz7p5uitABVaQV2WBHNn41h
+         8tTg==
+X-Gm-Message-State: ANoB5pmcAbT8rJ0Ei4rQgEuYNmkd18pl+hNKFP1rTUbHepYvcEuiGoC8
+        knRHzfO/4/D8egc8nf+RcW3nLIW8H+dfUKcKjRLHUGIs28WooQ==
+X-Google-Smtp-Source: AA0mqf48eDYlvrjk/0EJkS9A6SI+FR+Sf30IMBeLcCft/jWeVbWdmcXlU6ZLBtCoPY497SmK9xYxo2/sPrrmcAsjyV4=
+X-Received: by 2002:a1f:9b03:0:b0:3c1:780:3bfe with SMTP id
+ d3-20020a1f9b03000000b003c107803bfemr2597787vke.26.1671226791221; Fri, 16 Dec
+ 2022 13:39:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221214125209.09d736dd@gandalf.local.home>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+References: <20221216211124.154459-1-tegongkang@gmail.com> <941d8fa9-9c7b-8e06-e87a-b1c9ed80a639@ieee.org>
+In-Reply-To: <941d8fa9-9c7b-8e06-e87a-b1c9ed80a639@ieee.org>
+From:   Kang Minchul <tegongkang@gmail.com>
+Date:   Sat, 17 Dec 2022 06:39:42 +0900
+Message-ID: <CA+uqrQCChwyE--PDxvrGMnfk9W1Nf0C4kS9fW0Ozmx-mQpyH8w@mail.gmail.com>
+Subject: Re: [PATCH net-next v3] net: ipa: Remove redundant comparison with zero
+To:     Alex Elder <elder@ieee.org>
+Cc:     Alex Elder <elder@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,116 +71,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 12:52:09PM -0500, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> There's been several times where an event records a function address in
-> its field and I needed to filter on that address for a specific function
-> name. It required looking up the function in kallsyms, finding its size,
-> and doing a compare of "field >= function_start && field < function_end".
+2022=EB=85=84 12=EC=9B=94 17=EC=9D=BC (=ED=86=A0) =EC=98=A4=EC=A0=84 6:34, =
+Alex Elder <elder@ieee.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> On 12/16/22 3:11 PM, Kang Minchul wrote:
+> > platform_get_irq_byname() returns non-zero IRQ number on success,
+> > and negative error number on failure.
+> >
+> > So comparing return value with zero is unnecessary.
+> >
+> > Signed-off-by: Kang Minchul <tegongkang@gmail.com>
+> > ---
+> >   drivers/net/ipa/gsi.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/net/ipa/gsi.c b/drivers/net/ipa/gsi.c
+> > index bea2da1c4c51..e05e94bd9ba0 100644
+> > --- a/drivers/net/ipa/gsi.c
+> > +++ b/drivers/net/ipa/gsi.c
+> > @@ -1302,7 +1302,7 @@ static int gsi_irq_init(struct gsi *gsi, struct p=
+latform_device *pdev)
+> >       int ret;
+> >
+> >       ret =3D platform_get_irq_byname(pdev, "gsi");
+> > -     if (ret <=3D 0)
+> > +     if (ret < 0)
+> >               return ret ? : -EINVAL;
+>
+> In doing this, you assume platform_get_irq_byname() never
+> returns 0.  I accept that assumption now.  But in that case,
+> ret will *always* be non-zero if the branch is taken, so the
+> next line should simply be:
+>
+>                 return ret;
+>
+> There are two other places in the IPA driver that follow exactly
+> the same pattern of getting the IRQ number and handling the
+> possibility that the value returned is (erroneously) 0.  If
+> you're making this change in one place, please do so in all
+> of them.
+>
+> Frankly though, I think this change adds little value, and I
+> would be content to just leave everything as-is...
+>
+>                                         -Alex
+>
+> >
+> >       gsi->irq =3D ret;
+>
 
-This is amazingly useful!
+Hmm, yes.
+I think you're right.
+I don't think this code is worth much either.
+Please ignore this patch and leave everything as-is.
 
-> But this would change from boot to boot and is unreliable in scripts.
-> Also, it is useful to have this at boot up, where the addresses will not
-> be known. For example, on the boot command line:
-> 
->   trace_trigger="initcall_finish.traceoff if initcall_finish.function == acpi_init"
+Thanks for your feedback though :)
 
-I think this should actually be:
-
-  trace_trigger="initcall_finish.traceoff if func.function == acpi_init"
-                                             ^^^^
-
-right?  'func' is the function pointer in the format:
-
-  [ /sys/kernel/debug/tracing/events/initcall/initcall_finish ]
-  # cat format
-  name: initcall_finish
-  ID: 20
-  format:
-          field:unsigned short common_type;	offset:0;	size:2;	signed:0;
-          field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
-          field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
-          field:int common_pid;	offset:4;	size:4;	signed:1;
-
-          field:initcall_t func;	offset:8;	size:8;	signed:0;
-          field:int ret;	offset:16;	size:4;	signed:1;
-
-  print fmt: "func=%pS ret=%d", REC->func, REC->ret
-
-> To implement this, add a ".function" prefix, that will check that the
-> field is of size long, and the only operations allowed (so far) are "=="
-> and "!=".
-> 
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
-
-<>
-
-> @@ -1393,6 +1414,12 @@ static int parse_pred(const char *str, void *data,
->  		i += len;
->  	}
->  
-> +	/* See if the field is a user space string */
-
-Is this comment correct, or was it just copied from the .ustring handling
-above?  We aren't doing any string sanitization (strncpy_from_kernel_nofault()
-and friends) AFAICT, just doing a kernel symbol lookup.
-
-Maybe:
-
-  /* See if this is a kernel function name */
-
-?
-
-> +	if ((len = str_has_prefix(str + i, ".function"))) {
-> +		function = true;
-> +		i += len;
-> +	}
-> +
->  	while (isspace(str[i]))
->  		i++;
->  
-> @@ -1423,7 +1450,57 @@ static int parse_pred(const char *str, void *data,
->  	pred->offset = field->offset;
->  	pred->op = op;
->  
-> -	if (ftrace_event_is_function(call)) {
-> +	if (function) {
-> +		/* The field must be the same size as long */
-> +		if (field->size != sizeof(long)) {
-> +			parse_error(pe, FILT_ERR_ILLEGAL_FIELD_OP, pos + i);
-> +			goto err_free;
-> +		}
-> +
-> +		/* Function only works with '==' or '!=' and an unquoted string */
-> +		switch (op) {
-> +		case OP_NE:
-> +		case OP_EQ:
-> +			break;
-> +		default:
-> +			parse_error(pe, FILT_ERR_INVALID_OP, pos + i);
-> +			goto err_free;
-> +		}
-> +
-> +		if (isdigit(str[i])) {
-> +			ret = kstrtol(num_buf, 0, &ip);
-> +			if (ret) {
-> +				parse_error(pe, FILT_ERR_INVALID_VALUE, pos + i);
-> +				goto err_free;
-> +			}
-
-Maybe I'm holding it by the wrong end, but can we actually use this to filter
-based on an address?  Hex doesn't work (as you'd expect from looking at
-kstrol()), but decimal doesn't work for me either:
-
-  [ /sys/kernel/debug/tracing/events/kmem/kmalloc ]
-  # echo "traceoff:1 if call_site.function == 0xffffffff96ca4240" > trigger
-
-  [ /sys/kernel/debug/tracing/events/kmem/kmalloc ]
-  # echo "traceoff:1 if call_site.function == 18446744071944421952" > trigger
-  bash: echo: write error: Invalid argument
-
-Should this interface insist that users use function names that we can look
-up?
+Kang Minchul
