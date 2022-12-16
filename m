@@ -2,152 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6EC64EED2
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCADF64EEDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:21:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbiLPQSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 11:18:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51618 "EHLO
+        id S231404AbiLPQVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 11:21:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232145AbiLPQR5 (ORCPT
+        with ESMTP id S231681AbiLPQUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 11:17:57 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA52BC02;
-        Fri, 16 Dec 2022 08:17:57 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id v7so2273668wmn.0;
-        Fri, 16 Dec 2022 08:17:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K32EyFMV6FUh1aAwdxHu1pne9VDoC7iSSDyRiO1hCEI=;
-        b=NCdHnRpUbtKwoVmvh4fXZfCpg9PMvdqa4PlkaI3MhlXL/6X99OgI143iir4lw9RmhR
-         I5KexamjUSYDgMPyinyf7k22onnd591fjOSm+E2B6V0U4ZgtkziBG4AUmGvXs6KQ1ZPX
-         ym4Y89iMRCOAagC4VXhpK7K12+Ln5ww0p/XLnhUATYPdBicpn855U88kdcJFJCbd28bB
-         1g/x5GwoLY3UngAo1o2Q0Yci43j72j4B07Wm3oJ7v9Tly/C5AbOvWN6mPMrd4CUU85Hs
-         FF0MaM0ivqQZxAn6HorvEPm5KWOs+DvSJNfExi0/kEyhi9GKU96GKfthWh9UUoKIdmk6
-         AOGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K32EyFMV6FUh1aAwdxHu1pne9VDoC7iSSDyRiO1hCEI=;
-        b=SCcc/y1E9NLpB4yNcACboxAwjpdSbDJfmWuetZz+KdqY98JwsoR8PvP/UPBea+EHnm
-         ZdcyMBlL+s2LFlc80MGXCyUVzcxcTtn7CArLZiwi1e57txD63CHAUF9FJU/XtckYFQyj
-         ReQTfSSV+JUAX7pbG9uyRNAmlyiGuE9dwV/tflVQOjmNN4n3zOFT7v3YFy6jttEDut3g
-         GqPB4dpty7ic/xBzVaqf07ObMKVzb2Vz2qsL+NBXLudLf1lGU5udfZT6lYwVJE4np3ia
-         k2n2FY3yb/bQxYvl1YakJMchSR2OpUfKcSozs8gRRyc0MSjSXauiSQP4+qRP63yfCCPt
-         Gn9g==
-X-Gm-Message-State: ANoB5plodnLw4mqFkPWR71YIBC4VXTSnVEs+T/seXVC/8n/AZghHtYLf
-        wToHfNvxCxpvAW+OxJ33NBA=
-X-Google-Smtp-Source: AA0mqf7wYGqWC7bfiRafmQGtA3gojbHSNlvgDLnCFR1CKkxWwRTwl1oPnMIbUVWut0na8wLloShIsg==
-X-Received: by 2002:a05:600c:1d9f:b0:3cf:a80d:69ab with SMTP id p31-20020a05600c1d9f00b003cfa80d69abmr25843506wms.31.1671207475415;
-        Fri, 16 Dec 2022 08:17:55 -0800 (PST)
-Received: from localhost.localdomain (93-42-71-18.ip85.fastwebnet.it. [93.42.71.18])
-        by smtp.googlemail.com with ESMTPSA id bj19-20020a0560001e1300b002238ea5750csm3079720wrb.72.2022.12.16.08.17.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 08:17:55 -0800 (PST)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ronald Wahl <ronald.wahl@raritan.com>
-Subject: [net PATCH 5/5] net: dsa: qca8k: improve mdio master read/write by using single lo/hi
-Date:   Fri, 16 Dec 2022 17:17:21 +0100
-Message-Id: <20221216161721.23863-5-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221216161721.23863-1-ansuelsmth@gmail.com>
-References: <20221216161721.23863-1-ansuelsmth@gmail.com>
+        Fri, 16 Dec 2022 11:20:31 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7281DF0B;
+        Fri, 16 Dec 2022 08:20:18 -0800 (PST)
+Date:   Fri, 16 Dec 2022 17:20:14 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1671207615;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+MEibrmmCh/iophEg5CPI5D8t7JQfVecU9sRiaAK93A=;
+        b=cEVV8iwST4jB0LztH86xpKsLGAedVX4PqoLvh9iyG/LPIXAmCN4CY2fEFIiV8HuYdQi43p
+        RHW6rod4xspj+V25qLaQn4r9/K3xdBCiuHLJjree/R8lCuF5v+vGbGYFouT2zCd77oBnIP
+        WM4gv2VB73rGKKk72NXCdpqf04BdScspQGbRJVKWQxDyY3rN+IttB9LbDKZBrTeVM+a0h5
+        UtWgI6s2b8TKpmYcknTFCX5blQm9NHPFiLzh4tKyy5DxLGgc/YI8MAq5MUmMwSij9Sdscp
+        GVliHFE9UT8iLBXrtVZ52WaYejG/2gRVOB42/97AxIIRd9ikQHdQcaOmL7l1FA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1671207615;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+MEibrmmCh/iophEg5CPI5D8t7JQfVecU9sRiaAK93A=;
+        b=hHeeO2kRBdDp/EV4zb6aWIKp74+nvyVb6wRQWDxW491yTRyRsIxQuUSghinXev+IYZ8fDo
+        hZWeOwRinb7cUaBw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Will Deacon <will@kernel.org>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Peter Zijlstra <peterz@infradead.org>, Jan Kara <jack@suse.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-RT <linux-rt-users@vger.kernel.org>
+Subject: Re: [PATCH] rtmutex: Add acquire semantics for rtmutex lock
+ acquisition
+Message-ID: <Y5yavm77lWLH+IWj@linutronix.de>
+References: <20221202100223.6mevpbl7i6x5udfd@techsingularity.net>
+ <Y4nfopZfBxR4lJ6G@linutronix.de>
+ <20221202150158.xzgovoy7wuic6vvk@techsingularity.net>
+ <20221216111412.GA8666@willie-the-truck>
+ <20221216135548.itw2xrqbvuldk35y@techsingularity.net>
+ <20221216155803.GB8949@willie-the-truck>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221216155803.GB8949@willie-the-truck>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Improve mdio master read/write by using singe mii read/write lo/hi.
+On 2022-12-16 15:58:04 [+0000], Will Deacon wrote:
+> I guess bigeasy can give the weaker barrier a try if he has the time, but
+> otherwise we can leave the change as-is.
 
-In a read and write we need to poll the mdio master regs in a busy loop
-to check for a specific bit present in the upper half of the reg. We can
-ignore the other half since it won't contain useful data. This will save
-an additional useless read for each read and write operation.
+I can't give a try because I have no HW. All I contributed here so far
+was based on what you wrote in the previous email and then I spotted the
+lack of the barrier of any sorts and asked about it.
+I _would_ assume that the cmpxchg_barrier() here would work but I'm far
+from knowing.
+If the explicit barrier after the cmpxchg_relaxed() is what you two
+agree on and it is better/ cheaper/ more obvious then fine. Do it ;)
 
-In a read operation the returned data is present in the mdio master reg
-lower half. We can ignore the other half since it won't contain useful
-data. This will save an additional useless read for each read operation.
+> Cheers,
+> 
+> Will
 
-In a read operation it's needed to just set the hi half of the mdio
-master reg as the lo half will be replaced by the result. This will save
-an additional useless write for each read operation.
-
-Tested-by: Ronald Wahl <ronald.wahl@raritan.com>
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/net/dsa/qca/qca8k-8xxx.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/dsa/qca/qca8k-8xxx.c b/drivers/net/dsa/qca/qca8k-8xxx.c
-index 92c4bfef7c97..2f224b166bbb 100644
---- a/drivers/net/dsa/qca/qca8k-8xxx.c
-+++ b/drivers/net/dsa/qca/qca8k-8xxx.c
-@@ -740,9 +740,9 @@ qca8k_mdio_busy_wait(struct mii_bus *bus, u32 reg, u32 mask)
- 
- 	qca8k_split_addr(reg, &r1, &r2, &page);
- 
--	ret = read_poll_timeout(qca8k_mii_read32, ret1, !(val & mask), 0,
-+	ret = read_poll_timeout(qca8k_mii_read_hi, ret1, !(val & mask), 0,
- 				QCA8K_BUSY_WAIT_TIMEOUT * USEC_PER_MSEC, false,
--				bus, 0x10 | r2, r1, &val);
-+				bus, 0x10 | r2, r1 + 1, &val);
- 
- 	/* Check if qca8k_read has failed for a different reason
- 	 * before returnting -ETIMEDOUT
-@@ -784,7 +784,7 @@ qca8k_mdio_write(struct qca8k_priv *priv, int phy, int regnum, u16 data)
- 
- exit:
- 	/* even if the busy_wait timeouts try to clear the MASTER_EN */
--	qca8k_mii_write32(bus, 0x10 | r2, r1, 0);
-+	qca8k_mii_write_hi(bus, 0x10 | r2, r1 + 1, 0);
- 
- 	mutex_unlock(&bus->mdio_lock);
- 
-@@ -814,18 +814,18 @@ qca8k_mdio_read(struct qca8k_priv *priv, int phy, int regnum)
- 	if (ret)
- 		goto exit;
- 
--	qca8k_mii_write32(bus, 0x10 | r2, r1, val);
-+	qca8k_mii_write_hi(bus, 0x10 | r2, r1 + 1, val);
- 
- 	ret = qca8k_mdio_busy_wait(bus, QCA8K_MDIO_MASTER_CTRL,
- 				   QCA8K_MDIO_MASTER_BUSY);
- 	if (ret)
- 		goto exit;
- 
--	ret = qca8k_mii_read32(bus, 0x10 | r2, r1, &val);
-+	ret = qca8k_mii_read_lo(bus, 0x10 | r2, r1, &val);
- 
- exit:
- 	/* even if the busy_wait timeouts try to clear the MASTER_EN */
--	qca8k_mii_write32(bus, 0x10 | r2, r1, 0);
-+	qca8k_mii_write_hi(bus, 0x10 | r2, r1 + 1, 0);
- 
- 	mutex_unlock(&bus->mdio_lock);
- 
--- 
-2.37.2
-
+Sebastian
