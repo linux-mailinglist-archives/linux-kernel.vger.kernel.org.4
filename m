@@ -2,217 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5273264E59B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 02:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A12764E59D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 02:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiLPBZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 20:25:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40838 "EHLO
+        id S229639AbiLPB0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 20:26:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiLPBZz (ORCPT
+        with ESMTP id S229480AbiLPB0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 20:25:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0185D69F
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 17:25:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 15 Dec 2022 20:26:32 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2355B5D6A6;
+        Thu, 15 Dec 2022 17:26:31 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87F4E61FDB
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 01:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CCBDC433EF;
-        Fri, 16 Dec 2022 01:25:51 +0000 (UTC)
-Date:   Thu, 15 Dec 2022 20:25:48 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Chuang Wang <nashuiliang@gmail.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Ross Zwisler <zwisler@chromium.org>,
-        Song Chen <chensong_2000@189.cn>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Zheng Yejian <zhengyejian1@huawei.com>
-Subject: [GIT PULL] tracing: Updates for 6.2
-Message-ID: <20221215202548.554bd268@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NYBJj1ssHz4xGR;
+        Fri, 16 Dec 2022 12:26:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1671153989;
+        bh=aVx99TG7U4oYgNg9cvJlV5weqq71jApbrlwQiqe2VRg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=L+mfCjADmYtHhHZ5GtCN25H9l/fxntPmx2TiJYI0kyN8puGp1aAan5491dZyzOWBg
+         jVt5HPN3hrZUnlZ6Tv6sH3Xpzz2f0X0jHLmCm81bGV/l4coQzM1TMzUwUWbMWEbnw6
+         mJbNBrc2jHabh6VNYQD6O5Di3A5uWby5W5sFiyLLlSNnHQ++YHKaTksuW9m7zNuzHG
+         9tC3K4aHdswFQhC36uKDH/4rOsmp2TVcnfNOUrW7HlL+qTc6V8HjdKPvLXuPJpO0fT
+         SERU1YGhqOSwrAZteCIG0a8V3uYJCuXay5YaJYDoKN+bRF2z4n9zgLwtywhpBCiwt0
+         LBGaB3IPpSKUw==
+Date:   Fri, 16 Dec 2022 12:26:27 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Daniel Verkamp <dverkamp@chromium.org>,
+        Jeff Xu <jeffxu@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mm tree
+Message-ID: <20221216122627.6a3ded39@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/oV5U1ZkIftJdRxiOF=tWbm=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/oV5U1ZkIftJdRxiOF=tWbm=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Linus,
+Hi all,
 
-Tracing updates for 6.2:
+After merging the mm tree, today's linux-next build (sparc defconfig)
+failed like this:
 
-- Add options to the osnoise tracer
-  o panic_on_stop option that panics the kernel if osnoise is greater than some
-    user defined threshold.
-  o preempt option, to test noise while preemption is disabled
-  o irq option, to test noise when interrupts are disabled
+kernel/pid_namespace.c: In function 'create_pid_namespace':
+kernel/pid_namespace.c:114:9: error: implicit declaration of function 'init=
+ialize_memfd_noexec_scope'; did you mean 'set_memfd_noexec_scope'? [-Werror=
+=3Dimplicit-function-declaration]
+  114 |         initialize_memfd_noexec_scope(ns);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         set_memfd_noexec_scope
+kernel/pid_namespace.c: In function 'pid_namespaces_init':
+kernel/pid_namespace.c:462:9: error: implicit declaration of function 'regi=
+ster_pid_ns_sysctl_table_vm'; did you mean 'register_pid_ns_ctl_table_vm'? =
+[-Werror=3Dimplicit-function-declaration]
+  462 |         register_pid_ns_sysctl_table_vm();
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         register_pid_ns_ctl_table_vm
 
-- Add .percent and .graph suffix to histograms to give different outputs
+Caused by commit
 
-- Add nohitcount to disable showing hitcount in histogram output
+  70ebb551866e ("mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC")
 
-- Add new __cpumask() to trace event fields to annotate that a unsigned long
-  array is a cpumask to user space and should be treated as one.
+I have reverted that commit (and the following 2) for today.
 
-- Add trace_trigger kernel command line parameter to enable trace event
-  triggers at boot up. Useful to trace stack traces, disable tracing and take
-  snapshots.
+--=20
+Cheers,
+Stephen Rothwell
 
-- Fix x86/kmmio mmio tracer to work with the updates to lockdep
+--Sig_/oV5U1ZkIftJdRxiOF=tWbm=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-- Unify the panic and die notifiers
+-----BEGIN PGP SIGNATURE-----
 
-- Add back ftrace_expect reference that is used to extract more information in
-  the ftrace_bug() code.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmObyUMACgkQAVBC80lX
+0GzPjgf/R7PJ8TLM1xHHJYCAbThuIafQH0e5Cn4fCpny7NPoLKq7vsNjafg57D9O
+cl83f9u4MkvVHK00egRd0ClXa04JgWD+WBv2VrY/xGS4g7eaIBWEv+60hqQQxqlY
+x4XWLuDzO88k7gt5/iNYDNZM/GgPDnWquvk60IG6DKwb0NAytgs/J2MLdvSEQeK/
+d3zMWud94kWu5T9UXnk3ktftoHbkZuj2bnQWPeASsFn3pVy6NrRR3nFz2ZXmUcJg
+/UjPSoWrlIIPbBnQ4MNkvdQf5Jg+0hWyapDoqQmQ4+tZ7kYrQ+aM/Zwfm045pZ3m
+iKB8qRorzfUtkTvHhB3OjslSzAh/DA==
+=C1fl
+-----END PGP SIGNATURE-----
 
-- Have trigger filter parsing errors show up in the tracing error log.
-
-- Updated MAINTAINERS file to add kernel tracing  mailing list and patchwork
-  info
-
-- Use IDA to keep track of event type numbers.
-
-- And minor fixes and clean ups
-
-
-Please pull the latest trace-v6.2 tree, which can be found at:
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-trace-v6.2
-
-Tag SHA1: 2b786b778a6ab43d5cff51a437d4fd1ad5cdc7b2
-Head SHA1: eb9d58947d40699d93e5e69e1ddc54e41da7e132
-
-
-Bagas Sanjaya (1):
-      Documentation/osnoise: Escape underscore of NO_ prefix
-
-Beau Belgrave (1):
-      tracing/user_events: Fix call print_fmt leak
-
-Chuang Wang (1):
-      tracing/perf: Use strndup_user instead of kzalloc/strncpy_from_user
-
-Daniel Bristot de Oliveira (7):
-      tracing/osnoise: Add osnoise/options file
-      tracing/osnoise: Add OSNOISE_WORKLOAD option
-      Documentation/osnoise: Add osnoise/options documentation
-      tracing/osnoise: Make osnoise_options static
-      tracing/osnoise: Add PANIC_ON_STOP option
-      tracing/osnoise: Add preempt and/or irq disabled options
-      Documentation/osnoise: Add osnoise/options documentation
-
-David Howells (1):
-      tracing: Fix some checker warnings
-
-Guilherme G. Piccoli (2):
-      ftrace: Prevent RCU stall on PREEMPT_VOLUNTARY kernels
-      tracing: Improve panic/die notifiers
-
-Masami Hiramatsu (Google) (5):
-      tracing: Add .percent suffix option to histogram values
-      tracing: Add .graph suffix option to histogram value
-      tracing: Add nohitcount option for suppressing display of raw hitcount
-      tracing: docs: Update histogram doc for .percent/.graph and 'nohitcount'
-      tracing: Fix complicated dependency of CONFIG_TRACER_MAX_TRACE
-
-Ross Zwisler (1):
-      tracing: remove unnecessary trace_trigger ifdef
-
-Song Chen (2):
-      ring_buffer: Remove unused "event" parameter
-      trace/kprobe: remove duplicated calls of ring_buffer_event_data
-
-Steven Rostedt (3):
-      x86/mm/kmmio: Switch to arch_spin_lock()
-      x86/mm/kmmio: Use rcu_read_lock_sched_notrace()
-      ring-buffer: Handle resize in early boot up
-
-Steven Rostedt (Google) (11):
-      tracing: Add __cpumask to denote a trace event field that is a cpumask_t
-      tracing: Add trace_trigger kernel command line option
-      ftrace: Avoid needless updates of the ftrace function call
-      tracing: Update MAINTAINERS file for new patchwork and mailing list
-      ftrace/x86: Add back ftrace_expected for ftrace bug reports
-      tracing/probes: Handle system names with hyphens
-      x86/mm/kmmio: Remove redundant preempt_disable()
-      tracing: Have trigger filter parsing errors show up in error_log
-      tracing: Remove pointer (asterisk) and brackets from cpumask_t field
-      tracing: Do not synchronize freeing of trigger filter on boot up
-      tracing: Fix cpumask() example typo
-
-Tom Zanussi (1):
-      tracing: Allow multiple hitcount values in histograms
-
-Xiu Jianfeng (1):
-      tracing: Make tracepoint_print_iter static
-
-Yang Jihong (1):
-      tracing: Fix infinite loop in tracing_read_pipe on overflowed print_trace_line
-
-Zheng Yejian (6):
-      ftrace: Clean comments related to FTRACE_OPS_FL_PER_CPU
-      tracing: Optimize event type allocation with IDA
-      tracing/hist: Fix wrong return value in parse_action_params()
-      tracing/hist: Fix out-of-bound write on 'action_data.var_ref_idx'
-      tracing: Fix issue of missing one synthetic field
-      tracing/hist: Fix issue of losting command info in error_log
-
-----
- Documentation/admin-guide/kernel-parameters.txt |  19 ++
- Documentation/trace/histogram.rst               |  10 +-
- Documentation/trace/osnoise-tracer.rst          |  32 +++-
- MAINTAINERS                                     |   9 +
- arch/x86/kernel/ftrace.c                        |   2 +
- arch/x86/mm/kmmio.c                             |  50 +++--
- include/linux/ring_buffer.h                     |   3 +-
- include/linux/trace_events.h                    |   4 +-
- include/linux/trace_seq.h                       |   3 +-
- include/trace/bpf_probe.h                       |   6 +
- include/trace/perf.h                            |   6 +
- include/trace/stages/stage1_struct_define.h     |   6 +
- include/trace/stages/stage2_data_offsets.h      |   6 +
- include/trace/stages/stage3_trace_output.h      |   6 +
- include/trace/stages/stage4_event_fields.h      |  12 ++
- include/trace/stages/stage5_get_offsets.h       |   6 +
- include/trace/stages/stage6_event_callback.h    |  20 ++
- include/trace/stages/stage7_class_define.h      |   2 +
- kernel/trace/Kconfig                            |   2 +
- kernel/trace/ftrace.c                           |  28 ++-
- kernel/trace/ring_buffer.c                      |  44 +++--
- kernel/trace/ring_buffer_benchmark.c            |   2 +-
- kernel/trace/trace.c                            | 104 ++++++----
- kernel/trace/trace.h                            |  31 +--
- kernel/trace/trace_event_perf.c                 |  16 +-
- kernel/trace/trace_events.c                     |  66 ++++++-
- kernel/trace/trace_events_hist.c                | 190 +++++++++++++++---
- kernel/trace/trace_events_synth.c               |   2 +-
- kernel/trace/trace_events_trigger.c             |  19 +-
- kernel/trace/trace_events_user.c                |   1 +
- kernel/trace/trace_kprobe.c                     |   2 -
- kernel/trace/trace_osnoise.c                    | 244 +++++++++++++++++++++++-
- kernel/trace/trace_output.c                     |  71 ++-----
- kernel/trace/trace_probe.c                      |   2 +-
- samples/trace_events/trace-events-sample.c      |   2 +-
- samples/trace_events/trace-events-sample.h      |  34 +++-
- 36 files changed, 843 insertions(+), 219 deletions(-)
----------------------------
+--Sig_/oV5U1ZkIftJdRxiOF=tWbm=--
