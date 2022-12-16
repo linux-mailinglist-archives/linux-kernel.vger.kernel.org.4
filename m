@@ -2,96 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A158064E9ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B712264E9F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbiLPLDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:03:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
+        id S230451AbiLPLDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:03:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbiLPLDE (ORCPT
+        with ESMTP id S230426AbiLPLDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:03:04 -0500
-Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70612A25A
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:03:03 -0800 (PST)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 7A88220094;
-        Fri, 16 Dec 2022 12:03:01 +0100 (CET)
-Date:   Fri, 16 Dec 2022 12:03:00 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] arm64: dts: qcom: Use labels with generic node names
- for ADC channels
-Message-ID: <20221216110300.rnlblgfjuojhlxny@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Jonathan Cameron <jic23@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221209215308.1781047-1-marijn.suijten@somainline.org>
- <3d5b29f3-8d8d-93a7-a485-5261e2d8891d@linaro.org>
- <20221210165434.3hhen5mgtvflghks@SoMainline.org>
- <0bc1eba8-bc26-0bdb-16bf-78160c27c57b@linaro.org>
- <20221214205556.jdbcv3e4fkvm7f3y@SoMainline.org>
- <49be7501-916a-8d84-9757-fd31fab991dd@linaro.org>
+        Fri, 16 Dec 2022 06:03:15 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F8F54474
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:03:11 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id p36so2892702lfa.12
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:03:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d7nxly20Q+LIVX2HmOxQ1kGTZsAtQ7HVnD/+lRVkLcY=;
+        b=vnZVddSwK8YrdASi377ehaE4VrYO3wUPvQFEPjVKRpnAIfCK+XqC0pvzUair0sN2qE
+         iY/b1b+0ou2Q/iBUxcy7H1n9fq/SnuTe6xbbpWKmFoTbi6znOa8tgMqfJuLg9x/DpfNV
+         5lECBlZOsk1XK6QiefewW9dkhuKDPprIbWvls7h47dV/PkrawfzuAVDCvEggpmAZRcFV
+         JfdGdQjnhfR8Od6QqxrGUaoC4ZuzPV555VLxxRF1yCMaajaw42XRxXBoXq5yvU1b6UT2
+         YUf7EO5N0xHcuqM5+PV19XaHVLOrpwFZDwD5r206/lzKvEzB5VbS+rDKPrIrTwQEzvFi
+         7FkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d7nxly20Q+LIVX2HmOxQ1kGTZsAtQ7HVnD/+lRVkLcY=;
+        b=PiltkIl4xYQ8AobC0HoijW/WdPSTGAHyVng2+BulyAgRfMO8WE+7rQYIYCEEg7VY+h
+         Zm4aE04pWqvdmbDlxukGMZZoUJc1BUGZxZ+OPXHEm8dj+42sbrJX/xov5eVZFm8BsAgg
+         gMkTb+lYAk2EuQHCrGkl7CeiRYum+1jeQhMKR3oyXvUxbsAjxCWE0R2ZIvYLAt6Rrep5
+         Oxnoq2v6Z08TYb6vrHhsjEYOGRi0Y1oUXUPjljW2G5hgnAdjoB5crpzcRqflzdp9F/bG
+         SvIJvIH9YQbArDZ9Pi3o/IMISxdV4hFCr9ovGqga/IE714zlCGk1vEY2xHRi+2ABUCKB
+         zLHQ==
+X-Gm-Message-State: AFqh2kpcl2JwdrjUIiPIsi8+CCYccTMgh/MoEfSm9736Kl7waN1u1aRs
+        NKIBuv7S/U46OOLBRWcldNQ6HQ==
+X-Google-Smtp-Source: AMrXdXtzOYGUjuX1gxXuTmAU3msYzGH4XwL6Xg8wCGYSpE/H9JfkksbAt5csrE1WhWp9OYhyGEMCaw==
+X-Received: by 2002:ac2:5a1c:0:b0:4c0:2c1e:1d5b with SMTP id q28-20020ac25a1c000000b004c02c1e1d5bmr439383lfn.63.1671188589735;
+        Fri, 16 Dec 2022 03:03:09 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056512118600b00494a603953dsm191605lfr.89.2022.12.16.03.03.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 03:03:09 -0800 (PST)
+Message-ID: <040b56b1-c65c-34c3-e4a1-5cae4428d1d2@linaro.org>
+Date:   Fri, 16 Dec 2022 12:03:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <49be7501-916a-8d84-9757-fd31fab991dd@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 2/9] dt-bindings: net: snps,dwmac: Update the maxitems
+ number of resets and reset-names
+Content-Language: en-US
+To:     Yanhong Wang <yanhong.wang@starfivetech.com>,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20221216070632.11444-1-yanhong.wang@starfivetech.com>
+ <20221216070632.11444-3-yanhong.wang@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221216070632.11444-3-yanhong.wang@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-16 11:49:09, Krzysztof Kozlowski wrote:
-> [..]
-> > My commit message explains why the ADC5/VADC driver should really
-> > receive a label property instead of using the node name.
+On 16/12/2022 08:06, Yanhong Wang wrote:
+> Some boards(such as StarFive VisionFive v2) require more than one value
+> which defined by resets property, so the original definition can not
+> meet the requirements. In order to adapt to different requirements,
+> adjust the maxitems number from 1 to 3..
 > 
-> The reason "unpleasant file-browsing experience" is usually OS specific,
-> so it does not justify requiring a label property. Label is just a
-> helper for the users.
+> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+> ---
+>  .../devicetree/bindings/net/snps,dwmac.yaml       | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> index e26c3e76ebb7..7870228b4cd3 100644
+> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> @@ -133,12 +133,19 @@ properties:
+>          - ptp_ref
+>  
+>    resets:
+> -    maxItems: 1
+> -    description:
+> -      MAC Reset signal.
+> +    minItems: 1
+> +    maxItems: 3
+> +    additionalItems: true
+> +    items:
+> +      - description: MAC Reset signal
+>  
+>    reset-names:
+> -    const: stmmaceth
+> +    minItems: 1
+> +    maxItems: 3
+> +    additionalItems: true
+> +    contains:
+> +      enum:
+> +        - stmmaceth
 
-Ack.  Then it's up to the driver to figure out what's best here.  My
-suggestion on top of the proposed handling by Jonathan:
+No, this is highly unspecific and you know affect all the schemas using
+snps,dwmac.yaml. Both lists must be specific - for your device and for
+others.
 
-a) Use label if present.
-b) Use node name if it's not adc-chan but strip the @xxx off it.
-c) Use (currently unused) hardcoded name in the driver.
+Best regards,
+Krzysztof
 
-Unfortunately we have two drivers (VADC and ADC5) to deal with, where the
-VADC driver is not affected by any of these filename problems, nor won't
-be.  It doesn't have a label in Linux at all yet so there's no userspace
-ABI to (un)break, only DT ABI.
-
-- Marijn
