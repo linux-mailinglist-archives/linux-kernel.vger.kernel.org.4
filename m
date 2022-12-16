@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A45A64E689
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 05:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9EA64E696
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 05:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiLPEAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 23:00:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
+        id S230125AbiLPEDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 23:03:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiLPEAS (ORCPT
+        with ESMTP id S230036AbiLPEDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 23:00:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCEB74B9AB
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 19:59:33 -0800 (PST)
+        Thu, 15 Dec 2022 23:03:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9767FC7
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 20:02:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671163173;
+        s=mimecast20190719; t=1671163371;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=yWnuzCbPG4uJ1dxev0ulzuRMdlEdDNxB2uAT7N/aH2A=;
-        b=eqoIF9lw1b4alUMyxfnQ82Ifk52TLFReA7VY6wu6ATf59Z7ifBJHOP5X+MInaKr0T1YwzR
-        0/nbMS50RL0CLOGSE/rQNOMoeosw8o9uesY2DRKCBFZpoCCCmmNaOsDIl5g9W+pwerFZhh
-        Y4JnVfM79IwMWEjlTQr/FU3dhCnrwII=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=bUg7DCrpGftfeECU7OexNPwbmvxXhls2VyJtY/quv18=;
+        b=WJQDS0rJwV7FlNbKEZuoxpFaZ50wJH9LI2o5GM3npjjKmYlEYepC6JpOrnm+8YHL8NUR5y
+        BgFX3XUu4Rc4MwPgXnkV82xGfj/i+y9d09BeCu2KhfWBgw64g71oX6v6CaETmvsjP+zrsB
+        r87944Zsgm8Z5NVE/GOu1LAhf3uoRXM=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-641-0zNnmQSyPD2JgxA8HDljTg-1; Thu, 15 Dec 2022 22:59:30 -0500
-X-MC-Unique: 0zNnmQSyPD2JgxA8HDljTg-1
-Received: by mail-ot1-f70.google.com with SMTP id v17-20020a9d7d11000000b0066c33c3e0easo686318otn.11
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 19:59:30 -0800 (PST)
+ us-mta-370-qPuyYvI2MWG4GJqqDFdYQA-1; Thu, 15 Dec 2022 23:02:50 -0500
+X-MC-Unique: qPuyYvI2MWG4GJqqDFdYQA-1
+Received: by mail-ot1-f71.google.com with SMTP id s22-20020a9d7596000000b0066eb4e77127so683837otk.13
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 20:02:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yWnuzCbPG4uJ1dxev0ulzuRMdlEdDNxB2uAT7N/aH2A=;
-        b=P2Yflwzb7zgQNdIaUh0QN6+oGSU2Q9UzAkOoI/PEY97p6+xMq+Y4sCpWh0lJ6+9gJG
-         vrlufSlQxagclwdo4GOH/Tx5/AQ7HZI0TAkiPWDWgP5aP0SaZUhhLyRYA/DQW/dSdclZ
-         z/W1tuVMmuZjZHNaBomDl2yjYu4tMyM8EcNbEwtwKQmrhfqOFw2pjyphnmmpW3OtfO2e
-         8NZTOV1L7pueBAE2P6PW8XVAVBIDufQWfpNzzIk2Z9eecyHJdBlDQ4j8gdac9uQqiTKB
-         GOJUDX9mamBh50GoKxr7s/MDu4RlyimWI65qEIVauhoY2D7lvL6udG54/bCzibKQr8jr
-         v4XA==
-X-Gm-Message-State: AFqh2kpJvskEPcXwTn0BAYMOuloEXpn2z9May1S61PnpzGHDCCCIVpC7
-        TOkRIZybiSmXpy5qsdlYPORBYZ+bbJjMflaFKqG+kBPIqEY0r6xXwpxxlU5XNZbPTAP6ZRsKuVb
-        fBhs/w3N4W6U9n2E/FGmET6pZkLzPKIVZNNqZqBJ/
-X-Received: by 2002:a05:6870:bb1a:b0:144:b22a:38d3 with SMTP id nw26-20020a056870bb1a00b00144b22a38d3mr834758oab.280.1671163170051;
-        Thu, 15 Dec 2022 19:59:30 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuJhmlBeVhUrrBQ9gVMjQ0Kw5grrbESGD6xQnAEUSaxQgQjL8QLt8cHd0ivBYoaaaaJd4aIT6bS6U/KayXfxas=
-X-Received: by 2002:a05:6870:bb1a:b0:144:b22a:38d3 with SMTP id
- nw26-20020a056870bb1a00b00144b22a38d3mr834756oab.280.1671163169810; Thu, 15
- Dec 2022 19:59:29 -0800 (PST)
+        bh=bUg7DCrpGftfeECU7OexNPwbmvxXhls2VyJtY/quv18=;
+        b=aGCrwi1qXYKEZK9WucGAYDNHIgh0cRecZRTT6XWWRGoYnkMKwHESRQjnlkzUHsys+T
+         YAsxu9UkaAcfnr73KZ/O8CxBltnzP0sd+KuA7X5qgzvUgx9lMfrjQbvnmgkx3xYXQMkZ
+         NkznYHr6qPyArtDHVb8JTyFaKobJRAkZJVjxvr3sKtosGKw5OQYZHhE3Ja3O8Ab9Wtai
+         l57B64IylDpRhJauQ59Ed/69JTRFaGwQbpsMgjIKh4zWKg23iAorWzWqnQWvsjhz1fo9
+         0UthcUkG2gBrv9RifgJajJ8qr0/O5CSoIR6nkK7NJgV5mNWKCbhNtQj0TuPzxISShIHZ
+         Ii6A==
+X-Gm-Message-State: ANoB5plKZX3a24+epBgcxvIJvEsCsDiRx1S0DRCJdAFn3aKJByNft+DX
+        yMC8tBoiLggdHp/8i/mdvZful0LgcPuw6xMIbZwusmWa8o2WKI3lpZ57k+Btajie5Vu+0IDMEBL
+        2ju3HLSZIpxfeK/rQCdfidIqQ856fUkC1R/YnBopC
+X-Received: by 2002:a05:6870:9e8f:b0:144:a97b:1ae2 with SMTP id pu15-20020a0568709e8f00b00144a97b1ae2mr321606oab.35.1671163369629;
+        Thu, 15 Dec 2022 20:02:49 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5ZbwN5SVcsG0tViudVD/KQAyGrKDv3T5sIawOHS5yWS6RLlOfxyro6WW/aLtbbno06tb2xhhPHHBslw0F0D2M=
+X-Received: by 2002:a05:6870:9e8f:b0:144:a97b:1ae2 with SMTP id
+ pu15-20020a0568709e8f00b00144a97b1ae2mr321604oab.35.1671163369422; Thu, 15
+ Dec 2022 20:02:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20221205084127.535-1-xieyongji@bytedance.com> <20221205084127.535-5-xieyongji@bytedance.com>
-In-Reply-To: <20221205084127.535-5-xieyongji@bytedance.com>
+References: <20221205084127.535-1-xieyongji@bytedance.com> <20221205084127.535-6-xieyongji@bytedance.com>
+In-Reply-To: <20221205084127.535-6-xieyongji@bytedance.com>
 From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 16 Dec 2022 11:59:18 +0800
-Message-ID: <CACGkMEtpFUp_1KdEiPnp75wvvDw6Qyu7CGeuHu3L+O6yfU9-mw@mail.gmail.com>
-Subject: Re: [PATCH v2 04/11] vduse: Refactor allocation for vduse virtqueues
+Date:   Fri, 16 Dec 2022 12:02:38 +0800
+Message-ID: <CACGkMEvkTJn7Hm5u=79nDNHQG_gakS3Cbvi=JpO38ndjHy_fog@mail.gmail.com>
+Subject: Re: [PATCH v2 05/11] vduse: Introduce bound workqueue for irq injection
 To:     Xie Yongji <xieyongji@bytedance.com>
 Cc:     mst@redhat.com, tglx@linutronix.de, hch@lst.de,
         virtualization@lists.linux-foundation.org,
@@ -76,272 +76,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, Dec 5, 2022 at 4:44 PM Xie Yongji <xieyongji@bytedance.com> wrote:
 >
-> Allocate memory for vduse virtqueues one by one instead of
-> doing one allocation for all of them.
->
-> This is a preparation for adding sysfs interface for virtqueues.
+> This introduces a bound workqueue to support running
+> irq callback in a specified cpu.
 >
 > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-
-Acked-by: Jason Wang <jasowang@redhat.com>
-
-Thanks
-
 > ---
->  drivers/vdpa/vdpa_user/vduse_dev.c | 98 ++++++++++++++++++++----------
->  1 file changed, 66 insertions(+), 32 deletions(-)
+>  drivers/vdpa/vdpa_user/vduse_dev.c | 29 ++++++++++++++++++++++-------
+>  1 file changed, 22 insertions(+), 7 deletions(-)
 >
 > diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-> index 35dceee3ed56..37809bfcb7ef 100644
+> index 37809bfcb7ef..d126f3e32a20 100644
 > --- a/drivers/vdpa/vdpa_user/vduse_dev.c
 > +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-> @@ -76,7 +76,7 @@ struct vduse_umem {
->  struct vduse_dev {
->         struct vduse_vdpa *vdev;
->         struct device *dev;
-> -       struct vduse_virtqueue *vqs;
-> +       struct vduse_virtqueue **vqs;
->         struct vduse_iova_domain *domain;
->         char *name;
->         struct mutex lock;
-> @@ -434,7 +434,7 @@ static void vduse_dev_reset(struct vduse_dev *dev)
->         flush_work(&dev->inject);
->
->         for (i = 0; i < dev->vq_num; i++) {
-> -               struct vduse_virtqueue *vq = &dev->vqs[i];
-> +               struct vduse_virtqueue *vq = dev->vqs[i];
->
->                 vq->ready = false;
->                 vq->desc_addr = 0;
-> @@ -466,7 +466,7 @@ static int vduse_vdpa_set_vq_address(struct vdpa_device *vdpa, u16 idx,
->                                 u64 device_area)
->  {
->         struct vduse_dev *dev = vdpa_to_vduse(vdpa);
-> -       struct vduse_virtqueue *vq = &dev->vqs[idx];
-> +       struct vduse_virtqueue *vq = dev->vqs[idx];
->
->         vq->desc_addr = desc_area;
->         vq->driver_addr = driver_area;
-> @@ -500,7 +500,7 @@ static void vduse_vq_kick_work(struct work_struct *work)
->  static void vduse_vdpa_kick_vq(struct vdpa_device *vdpa, u16 idx)
->  {
->         struct vduse_dev *dev = vdpa_to_vduse(vdpa);
-> -       struct vduse_virtqueue *vq = &dev->vqs[idx];
-> +       struct vduse_virtqueue *vq = dev->vqs[idx];
->
->         if (!eventfd_signal_allowed()) {
->                 schedule_work(&vq->kick);
-> @@ -513,7 +513,7 @@ static void vduse_vdpa_set_vq_cb(struct vdpa_device *vdpa, u16 idx,
->                               struct vdpa_callback *cb)
->  {
->         struct vduse_dev *dev = vdpa_to_vduse(vdpa);
-> -       struct vduse_virtqueue *vq = &dev->vqs[idx];
-> +       struct vduse_virtqueue *vq = dev->vqs[idx];
->
->         spin_lock(&vq->irq_lock);
->         vq->cb.callback = cb->callback;
-> @@ -524,7 +524,7 @@ static void vduse_vdpa_set_vq_cb(struct vdpa_device *vdpa, u16 idx,
->  static void vduse_vdpa_set_vq_num(struct vdpa_device *vdpa, u16 idx, u32 num)
->  {
->         struct vduse_dev *dev = vdpa_to_vduse(vdpa);
-> -       struct vduse_virtqueue *vq = &dev->vqs[idx];
-> +       struct vduse_virtqueue *vq = dev->vqs[idx];
->
->         vq->num = num;
->  }
-> @@ -533,7 +533,7 @@ static void vduse_vdpa_set_vq_ready(struct vdpa_device *vdpa,
->                                         u16 idx, bool ready)
->  {
->         struct vduse_dev *dev = vdpa_to_vduse(vdpa);
-> -       struct vduse_virtqueue *vq = &dev->vqs[idx];
-> +       struct vduse_virtqueue *vq = dev->vqs[idx];
->
->         vq->ready = ready;
->  }
-> @@ -541,7 +541,7 @@ static void vduse_vdpa_set_vq_ready(struct vdpa_device *vdpa,
->  static bool vduse_vdpa_get_vq_ready(struct vdpa_device *vdpa, u16 idx)
->  {
->         struct vduse_dev *dev = vdpa_to_vduse(vdpa);
-> -       struct vduse_virtqueue *vq = &dev->vqs[idx];
-> +       struct vduse_virtqueue *vq = dev->vqs[idx];
->
->         return vq->ready;
->  }
-> @@ -550,7 +550,7 @@ static int vduse_vdpa_set_vq_state(struct vdpa_device *vdpa, u16 idx,
->                                 const struct vdpa_vq_state *state)
->  {
->         struct vduse_dev *dev = vdpa_to_vduse(vdpa);
-> -       struct vduse_virtqueue *vq = &dev->vqs[idx];
-> +       struct vduse_virtqueue *vq = dev->vqs[idx];
->
->         if (dev->driver_features & BIT_ULL(VIRTIO_F_RING_PACKED)) {
->                 vq->state.packed.last_avail_counter =
-> @@ -569,7 +569,7 @@ static int vduse_vdpa_get_vq_state(struct vdpa_device *vdpa, u16 idx,
->                                 struct vdpa_vq_state *state)
->  {
->         struct vduse_dev *dev = vdpa_to_vduse(vdpa);
-> -       struct vduse_virtqueue *vq = &dev->vqs[idx];
-> +       struct vduse_virtqueue *vq = dev->vqs[idx];
->
->         if (dev->driver_features & BIT_ULL(VIRTIO_F_RING_PACKED))
->                 return vduse_dev_get_vq_state_packed(dev, vq, &state->packed);
-> @@ -624,8 +624,8 @@ static u16 vduse_vdpa_get_vq_num_max(struct vdpa_device *vdpa)
->         int i;
->
->         for (i = 0; i < dev->vq_num; i++)
-> -               if (num_max < dev->vqs[i].num_max)
-> -                       num_max = dev->vqs[i].num_max;
-> +               if (num_max < dev->vqs[i]->num_max)
-> +                       num_max = dev->vqs[i]->num_max;
->
->         return num_max;
->  }
-> @@ -863,7 +863,7 @@ static int vduse_kickfd_setup(struct vduse_dev *dev,
->                 return -EINVAL;
->
->         index = array_index_nospec(eventfd->index, dev->vq_num);
-> -       vq = &dev->vqs[index];
-> +       vq = dev->vqs[index];
->         if (eventfd->fd >= 0) {
->                 ctx = eventfd_ctx_fdget(eventfd->fd);
->                 if (IS_ERR(ctx))
-> @@ -889,7 +889,7 @@ static bool vduse_dev_is_ready(struct vduse_dev *dev)
->         int i;
->
->         for (i = 0; i < dev->vq_num; i++)
-> -               if (!dev->vqs[i].num_max)
-> +               if (!dev->vqs[i]->num_max)
->                         return false;
->
->         return true;
-> @@ -1130,7 +1130,7 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
->                         break;
->
->                 index = array_index_nospec(config.index, dev->vq_num);
-> -               dev->vqs[index].num_max = config.max_size;
-> +               dev->vqs[index]->num_max = config.max_size;
->                 ret = 0;
->                 break;
->         }
-> @@ -1148,7 +1148,7 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
->                         break;
->
->                 index = array_index_nospec(vq_info.index, dev->vq_num);
-> -               vq = &dev->vqs[index];
-> +               vq = dev->vqs[index];
->                 vq_info.desc_addr = vq->desc_addr;
->                 vq_info.driver_addr = vq->driver_addr;
->                 vq_info.device_addr = vq->device_addr;
-> @@ -1198,7 +1198,7 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
->                         break;
->
->                 index = array_index_nospec(index, dev->vq_num);
-> -               ret = vduse_dev_queue_irq_work(dev, &dev->vqs[index].inject);
-> +               ret = vduse_dev_queue_irq_work(dev, &dev->vqs[index]->inject);
->                 break;
->         }
->         case VDUSE_IOTLB_REG_UMEM: {
-> @@ -1339,6 +1339,49 @@ static const struct file_operations vduse_dev_fops = {
->         .llseek         = noop_llseek,
+> @@ -57,6 +57,7 @@ struct vduse_virtqueue {
+>         struct vdpa_callback cb;
+>         struct work_struct inject;
+>         struct work_struct kick;
+> +       int irq_effective_cpu;
+
+I wonder why it's a cpu number instead of a cpumask. The latter seems
+more flexible, e.g when using NUMA.
+
 >  };
 >
-> +static void vduse_dev_deinit_vqs(struct vduse_dev *dev)
-> +{
-> +       int i;
-> +
-> +       if (!dev->vqs)
-> +               return;
-> +
-> +       for (i = 0; i < dev->vq_num; i++)
-> +               kfree(dev->vqs[i]);
-> +       kfree(dev->vqs);
-> +}
-> +
-> +static int vduse_dev_init_vqs(struct vduse_dev *dev, u32 vq_align, u32 vq_num)
-> +{
-> +       int i;
-> +
-> +       dev->vq_align = vq_align;
-> +       dev->vq_num = vq_num;
-> +       dev->vqs = kcalloc(dev->vq_num, sizeof(*dev->vqs), GFP_KERNEL);
-> +       if (!dev->vqs)
-> +               return -ENOMEM;
-> +
-> +       for (i = 0; i < vq_num; i++) {
-> +               dev->vqs[i] = kzalloc(sizeof(*dev->vqs[i]), GFP_KERNEL);
-> +               if (!dev->vqs[i])
-> +                       goto err;
-> +
-> +               dev->vqs[i]->index = i;
-> +               INIT_WORK(&dev->vqs[i]->inject, vduse_vq_irq_inject);
-> +               INIT_WORK(&dev->vqs[i]->kick, vduse_vq_kick_work);
-> +               spin_lock_init(&dev->vqs[i]->kick_lock);
-> +               spin_lock_init(&dev->vqs[i]->irq_lock);
-> +       }
-> +
-> +       return 0;
-> +err:
-> +       while (i--)
-> +               kfree(dev->vqs[i]);
-> +       kfree(dev->vqs);
-> +       dev->vqs = NULL;
-> +       return -ENOMEM;
-> +}
-> +
->  static struct vduse_dev *vduse_dev_create(void)
+>  struct vduse_dev;
+> @@ -128,6 +129,7 @@ static struct class *vduse_class;
+>  static struct cdev vduse_ctrl_cdev;
+>  static struct cdev vduse_cdev;
+>  static struct workqueue_struct *vduse_irq_wq;
+> +static struct workqueue_struct *vduse_irq_bound_wq;
+>
+>  static u32 allowed_device_id[] = {
+>         VIRTIO_ID_BLOCK,
+> @@ -917,7 +919,8 @@ static void vduse_vq_irq_inject(struct work_struct *work)
+>  }
+>
+>  static int vduse_dev_queue_irq_work(struct vduse_dev *dev,
+> -                                   struct work_struct *irq_work)
+> +                                   struct work_struct *irq_work,
+> +                                   int irq_effective_cpu)
 >  {
->         struct vduse_dev *dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-> @@ -1396,7 +1439,7 @@ static int vduse_destroy_dev(char *name)
->         device_destroy(vduse_class, MKDEV(MAJOR(vduse_major), dev->minor));
->         idr_remove(&vduse_idr, dev->minor);
->         kvfree(dev->config);
-> -       kfree(dev->vqs);
-> +       vduse_dev_deinit_vqs(dev);
->         vduse_domain_destroy(dev->domain);
->         kfree(dev->name);
->         vduse_dev_destroy(dev);
-> @@ -1483,7 +1526,7 @@ ATTRIBUTE_GROUPS(vduse_dev);
->  static int vduse_create_dev(struct vduse_dev_config *config,
->                             void *config_buf, u64 api_version)
->  {
-> -       int i, ret;
-> +       int ret;
->         struct vduse_dev *dev;
+>         int ret = -EINVAL;
 >
->         ret = -EEXIST;
-> @@ -1510,19 +1553,10 @@ static int vduse_create_dev(struct vduse_dev_config *config,
+> @@ -926,7 +929,11 @@ static int vduse_dev_queue_irq_work(struct vduse_dev *dev,
+>                 goto unlock;
 >
->         dev->config = config_buf;
->         dev->config_size = config->config_size;
-> -       dev->vq_align = config->vq_align;
-> -       dev->vq_num = config->vq_num;
-> -       dev->vqs = kcalloc(dev->vq_num, sizeof(*dev->vqs), GFP_KERNEL);
-> -       if (!dev->vqs)
-> -               goto err_vqs;
->
-> -       for (i = 0; i < dev->vq_num; i++) {
-> -               dev->vqs[i].index = i;
-> -               INIT_WORK(&dev->vqs[i].inject, vduse_vq_irq_inject);
-> -               INIT_WORK(&dev->vqs[i].kick, vduse_vq_kick_work);
-> -               spin_lock_init(&dev->vqs[i].kick_lock);
-> -               spin_lock_init(&dev->vqs[i].irq_lock);
-> -       }
-> +       ret = vduse_dev_init_vqs(dev, config->vq_align, config->vq_num);
-> +       if (ret)
-> +               goto err_vqs;
->
->         ret = idr_alloc(&vduse_idr, dev, 1, VDUSE_DEV_MAX, GFP_KERNEL);
->         if (ret < 0)
-> @@ -1543,7 +1577,7 @@ static int vduse_create_dev(struct vduse_dev_config *config,
->  err_dev:
->         idr_remove(&vduse_idr, dev->minor);
->  err_idr:
-> -       kfree(dev->vqs);
-> +       vduse_dev_deinit_vqs(dev);
->  err_vqs:
->         vduse_domain_destroy(dev->domain);
->  err_domain:
-> --
-> 2.20.1
->
+>         ret = 0;
+> -       queue_work(vduse_irq_wq, irq_work);
+> +       if (irq_effective_cpu == -1)
+
+Is it better to have a macro for this magic number?
+
+Thanks
 
