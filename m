@@ -2,81 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8A464EAC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E6164EAC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbiLPLlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
+        id S230525AbiLPLl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiLPLlF (ORCPT
+        with ESMTP id S230391AbiLPLlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:41:05 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B77011442
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:41:03 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F19081042;
-        Fri, 16 Dec 2022 03:41:43 -0800 (PST)
-Received: from [10.57.88.234] (unknown [10.57.88.234])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2AF4B3F73B;
-        Fri, 16 Dec 2022 03:41:02 -0800 (PST)
-Message-ID: <a76cb262-a24f-e113-5680-2025aa143ee6@arm.com>
-Date:   Fri, 16 Dec 2022 11:40:57 +0000
+        Fri, 16 Dec 2022 06:41:24 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368C425C48
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:41:23 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id c1so3064185lfi.7
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:41:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=17MNm39bbqpug3RvcPpT95MRkN2EavjuIF9h7FQ+Qn8=;
+        b=VHCXQboZaHQaUmlcf4ptNuIES6oqD4kY6gXjy6RCuZSKl7IBGJP1j0CIhSv/4lssnQ
+         /x8eEWu56rpZiR+8cLxh68WgXJgu+DaHx7W3oL3K7HQdb9ltmmCrXIhu/WDUvg6OJ72Y
+         wRymzcON01Qja7mEKdR6ykpr2noJhH9kDNDtfC9b8ANxIvMbPP8w9MaLnROmIWD+i2nA
+         ZwIzv2kfIlDnAiP6a2FK2HUm63jOBbpTFAojLBEV/QBrtQPsUsZEQNsHPvacqdxpbD+b
+         CFyliRO8cgw940w/eZOMLI8JJGtCLd72ct0W5fyoFnXS60kTWyvnrRYlSCoMjPcDGPi6
+         Sc2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=17MNm39bbqpug3RvcPpT95MRkN2EavjuIF9h7FQ+Qn8=;
+        b=csAaX2uhwPiUZUej/6EEbWy/ldhVNiIazjIcJKe1POSVes4Ak3vVhJafLclfdcd4rL
+         2Ey0Z6PlAOVYEQ1JGQSWqppjDvKp0Oxvr9jCqIV4a1oC3CdJi+ShJiBrBLZknHJ17rv2
+         1ofyNMBky/vVzCBC9v0P+hDIfB9HLARFJXY8r+a6MSdPXL50CO4rLDJkCsg/ghhvJJ/M
+         Fhwczz04lMvIKncTP9BptgB8ICAtQs3tAA+LSzlVBa50c3ID6LLVWiW76kcUkwkpqZa6
+         zXQS3D0d6B3b1W6SsParlqb8aAA77tujVPYamoWGfvaXNv0rYSD0KPZ6/hk9UGFFyQ8a
+         TaBQ==
+X-Gm-Message-State: ANoB5pkc6/uETh6a4/p+wv9PiQqq1xGTasvVrqRP01TOoFXvMe0XezBw
+        vHe+LIW444PskVaEAam1pSd+Zw==
+X-Google-Smtp-Source: AA0mqf6c1DPQoSUCYsU9ogB0mXF+R4gaLIaqfsP5TyLkbE0lKXJzvkHIC3TXLU+LjxkJGD27QCsmWg==
+X-Received: by 2002:a05:6512:22d2:b0:4a4:68b7:e718 with SMTP id g18-20020a05651222d200b004a468b7e718mr11045785lfu.2.1671190881610;
+        Fri, 16 Dec 2022 03:41:21 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id m5-20020a056512358500b00498fc3d4cfdsm197067lfr.189.2022.12.16.03.41.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 03:41:21 -0800 (PST)
+Message-ID: <e71e9254-07e3-a6d6-00db-ac42325f6138@linaro.org>
+Date:   Fri, 16 Dec 2022 12:41:19 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [6.2][regression] after commit
- ffcb754584603adf7039d7972564fbf6febdc542 all sound devices disappeared (due
- BUG at mm/page_alloc.c:3592!)
-Content-Language: en-GB
-To:     Christoph Hellwig <hch@lst.de>,
-        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc:     Takashi Iwai <tiwai@suse.de>, alsa-devel@alsa-project.org,
-        m.szyprowski@samsung.com,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        iommu@lists.linux.dev
-References: <CABXGCsPnpu0TGHnvXM1we7q1t3tJAOYW2rA=AMvf7ZahcYvpRQ@mail.gmail.com>
- <20221216064645.GA24446@lst.de>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20221216064645.GA24446@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 1/2] dt-bindings: display: imx: Describe drm binding
+ for fsl,imx-lcdc
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20221214115921.1845994-1-u.kleine-koenig@pengutronix.de>
+ <20221214115921.1845994-2-u.kleine-koenig@pengutronix.de>
+ <0f3e755f-954a-9722-6898-181170deb2c3@linaro.org>
+ <20221216113832.6qvyzlrwfzrlhker@pengutronix.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221216113832.6qvyzlrwfzrlhker@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-16 06:46, Christoph Hellwig wrote:
-> Ok, it seems like the sound noncontig alloc code that I already
-> commented on as potentially bogus GFP_GOMP mapping trips this.  I think
-> for now the right thing would be to revert the hunk in dma-iommu.c
-> (see patch below).  The other thing to try would be to remove both
-> uses GFP_COMP in sound/core/memalloc.c, which should have the same
-> effect.
-
-Or we explicitly strip the flag in dma_alloc_noncontiguous() (and maybe 
-dma_alloc_pages() as well) for consistency with dma_alloc_attrs(). That 
-seems like it might be the most robust option.
-
-Robin.
-
-> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-> index 9297b741f5e80e..f798c44e090337 100644
-> --- a/drivers/iommu/dma-iommu.c
-> +++ b/drivers/iommu/dma-iommu.c
-> @@ -744,9 +744,6 @@ static struct page **__iommu_dma_alloc_pages(struct device *dev,
->   	/* IOMMU can map any pages, so himem can also be used here */
->   	gfp |= __GFP_NOWARN | __GFP_HIGHMEM;
->   
-> -	/* It makes no sense to muck about with huge pages */
-> -	gfp &= ~__GFP_COMP;
-> -
->   	while (count) {
->   		struct page *page = NULL;
->   		unsigned int order_size;
+On 16/12/2022 12:38, Uwe Kleine-König wrote:
+> On Fri, Dec 16, 2022 at 11:41:30AM +0100, Krzysztof Kozlowski wrote:
+>> On 14/12/2022 12:59, Uwe Kleine-König wrote:
+>>> Modify the existing (fb-like) binding to support the drm-like binding in
+>>> parallel.
+>>
+>> Aren't you now adding two compatibles to the same hardware, just for two
+>> Linux drivers? One hardware should have one compatible, regardless of
+>> Linux display implementation.
 > 
+> The (up to now unopposed) idea was to use the opportunity to pick a
+> better name for the compatible. The hardware component is called LCDC
+> and I guess fsl,imx21-fb was only picked because the linux driver is
+> called imxfb. Unless I understood Rob wrong, he insisted to describe
+> both variants in a single binding document only.
+
+OK, I'll leave it then to Rob.
+
+Best regards,
+Krzysztof
+
