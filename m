@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4145264ED0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A664E64ED0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbiLPOip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
+        id S231194AbiLPOil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:38:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbiLPOiC (ORCPT
+        with ESMTP id S230527AbiLPOiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:38:02 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD4F5FB84;
-        Fri, 16 Dec 2022 06:37:42 -0800 (PST)
+        Fri, 16 Dec 2022 09:38:01 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8516E5EDF6;
+        Fri, 16 Dec 2022 06:37:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1671201462; x=1702737462;
+  t=1671201455; x=1702737455;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=pZwUFO/fisItXe3PDLkYw8yunurX0Ml19ZrpEme0R3Y=;
-  b=p/ezpoJs1Go35Yhe5DMNgnzi/FlNokylQ/AniCnT/iX/O5yJ7gmNagxk
-   zcHD7KwjiccFqhXyqI99PPTRzhDen3ri0xngmdIvUIcGi8ULuGKGpkj+n
-   PUgMdStp55aewt6HAltk4N7JoMhFvVqqD+52ZxByhdrWWNMr1XDRorlb1
-   WI8z8Hha7jNToomejHaDnbuNXDdnxRrgAD79jpOXweNXVwYXZnYP/cpZI
-   H5J2d1We2a6qLUrQYyFByB/bUxat2GUNtLnjAYU8y3kDd24buRTAguahn
-   U5xNVeuCkayP5MLwKQ0ctxiEWw1y3mez8ZMtPzfk9qG1riZun3rlfhOGG
-   A==;
+  bh=J0mdrmfLxlHEcCr5e4Fi4cUVYAJmnyZqi9HwlYY6NOw=;
+  b=MZFcg2NuTtzlJ7wgkNDlY5EcyC+YxmS5/JjF6jqIW/MSXUIbUfnFR/aP
+   tHN7XdjPc1zmaNyeRZ1G/tqn7HIZgU5coG+KEsTr74jiNqtAkRqvePktK
+   xDOz/K6K1xpVAECBxjxsjML9I5hur7m8CE8H3rVcrKnIFAeLQQ25UM/xI
+   fhlC2iqhksHq9L2CDBVQ1MUSOSjhnPSql5A1yViJToV372zM2uZE4eVmm
+   egX70rVC534xpvQfrJRPbTAV45Bqc11gl1139GGJhDuSPA1wu6nYTSxKT
+   TvTGa3HQtNowOyUBPJce9v0qQI817JFHsw/1vUxKkWn3RJ9e+a3i2yELc
+   w==;
 X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="128506546"
+   d="scan'208";a="193386527"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Dec 2022 07:37:37 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Dec 2022 07:37:34 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 16 Dec 2022 07:37:30 -0700
+ 15.1.2507.16; Fri, 16 Dec 2022 07:37:33 -0700
 Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Fri, 16 Dec 2022 07:37:28 -0700
+ 15.1.2507.16 via Frontend Transport; Fri, 16 Dec 2022 07:37:31 -0700
 From:   Eugen Hristev <eugen.hristev@microchip.com>
 To:     <linux-media@vger.kernel.org>
 CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-phy@lists.infradead.org>, <luis.oliveira@synopsys.com>,
         Luis Oliveira <Luis.Oliveira@synopsys.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v5 3/4] media: platform: dwc: Add MIPI CSI-2 controller driver
-Date:   Fri, 16 Dec 2022 16:37:16 +0200
-Message-ID: <20221216143717.1002015-4-eugen.hristev@microchip.com>
+        Eugen Hristev <eugen.hristev@microchip.com>
+Subject: [PATCH v5 4/4] media: platform: dwc: Add DW MIPI DPHY Rx driver
+Date:   Fri, 16 Dec 2022 16:37:17 +0200
+Message-ID: <20221216143717.1002015-5-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221216143717.1002015-1-eugen.hristev@microchip.com>
 References: <20221216143717.1002015-1-eugen.hristev@microchip.com>
@@ -67,2569 +66,1454 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Luis Oliveira <Luis.Oliveira@synopsys.com>
 
-Add the Synopsys MIPI CSI-2 controller driver. This
-controller driver is divided in platform functions and core functions.
-This way it serves as platform for future DesignWare drivers.
+Add of Synopsys MIPI D-PHY in RX mode support.
+Separated in the implementation are platform dependent probing functions.
 
 Signed-off-by: Luis Oliveira <luis.oliveira@synopsys.com>
-Co-developed-by: Eugen Hristev <eugen.hristev@microchip.com>
-[eugen.hristev@microchip.com:
-Add format SRGGB10 to supported format list.
-Write the data type to the correct register DATA_IDS_1.
-Changed dev_info to dev_dbg to remove extra chatty messages
-Avoid overwriting static array of formats]
+[eugen.hristev@microchip.com: add stop state check :
+After coming out of reset, the PHY must have the lanes in stop state.
+Wait for stop state to be active, and if it's not, print out a message.]
 Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-[luis.oliveira@synopsys.com: Add MIPI CSI-2 platform data]
+[luis.oliveira@synopsys.com: Add platform data support to D-Phy]
 Signed-off-by: Luis Oliveira <luis.oliveira@synopsys.com>
-[eugen.hristev@microchip.com:
-Add support for periph clock and phy clock
-Fix enum_mbus function
-Implement get_mbus_config
-Implement media controller
-Update to use fwnode API
-In s_stream, first start/stop the sensor
-remove chatty 'number of lanes' message]
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-[conor.dooley@microchip.com: fix potential uninitialized variable use]
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-[eugen.hristev@microchip.com: port to kernel 5.16, 5.17]
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 ---
- MAINTAINERS                               |   9 +
- drivers/media/platform/Kconfig            |   1 +
- drivers/media/platform/Makefile           |   1 +
- drivers/media/platform/dwc/Kconfig        |  19 +
- drivers/media/platform/dwc/Makefile       |   9 +
- drivers/media/platform/dwc/dw-csi-plat.c  | 667 ++++++++++++++++++++++
- drivers/media/platform/dwc/dw-csi-plat.h  | 102 ++++
- drivers/media/platform/dwc/dw-csi-sysfs.c | 623 ++++++++++++++++++++
- drivers/media/platform/dwc/dw-mipi-csi.c  | 570 ++++++++++++++++++
- drivers/media/platform/dwc/dw-mipi-csi.h  | 294 ++++++++++
- include/media/dwc/dw-csi-data.h           |  26 +
- include/media/dwc/dw-mipi-csi-pltfrm.h    | 104 ++++
- 12 files changed, 2425 insertions(+)
- create mode 100644 drivers/media/platform/dwc/Kconfig
- create mode 100644 drivers/media/platform/dwc/Makefile
- create mode 100644 drivers/media/platform/dwc/dw-csi-plat.c
- create mode 100644 drivers/media/platform/dwc/dw-csi-plat.h
- create mode 100644 drivers/media/platform/dwc/dw-csi-sysfs.c
- create mode 100644 drivers/media/platform/dwc/dw-mipi-csi.c
- create mode 100644 drivers/media/platform/dwc/dw-mipi-csi.h
- create mode 100644 include/media/dwc/dw-csi-data.h
- create mode 100644 include/media/dwc/dw-mipi-csi-pltfrm.h
+ MAINTAINERS                                |   2 +
+ drivers/media/platform/dwc/Kconfig         |  24 +-
+ drivers/media/platform/dwc/Makefile        |   6 +
+ drivers/media/platform/dwc/dw-dphy-plat.c  | 224 ++++++++
+ drivers/media/platform/dwc/dw-dphy-rx.c    | 625 +++++++++++++++++++++
+ drivers/media/platform/dwc/dw-dphy-rx.h    | 212 +++++++
+ drivers/media/platform/dwc/dw-dphy-sysfs.c | 232 ++++++++
+ include/media/dwc/dw-dphy-data.h           |  32 ++
+ 8 files changed, 1356 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/media/platform/dwc/dw-dphy-plat.c
+ create mode 100644 drivers/media/platform/dwc/dw-dphy-rx.c
+ create mode 100644 drivers/media/platform/dwc/dw-dphy-rx.h
+ create mode 100644 drivers/media/platform/dwc/dw-dphy-sysfs.c
+ create mode 100644 include/media/dwc/dw-dphy-data.h
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index a608f19da3a9..a425dcb734db 100644
+index a425dcb734db..2fc3c4d39c8d 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -20126,6 +20126,15 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
- F:	drivers/dma/dw-axi-dmac/
+@@ -20133,7 +20133,9 @@ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
+ F:	drivers/media/platform/dwc
+ F:	Documentation/devicetree/bindings/media/snps,dw-csi.yaml
++F:	Documentation/devicetree/bindings/phy/snps,dw-dphy-rx.txt
+ F:	include/media/dwc/dw-csi-data.h
++F:	include/media/dwc/dw-dphy-data.h
  
-+SYNOPSYS DESIGNWARE MIPI DPHY CSI-2 HOST DRIVER
-+M:	Luis Oliveira <luis.oliveira@synopsys.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+T:	git git://linuxtv.org/media_tree.git
-+F:	drivers/media/platform/dwc
-+F:	Documentation/devicetree/bindings/media/snps,dw-csi.yaml
-+F:	include/media/dwc/dw-csi-data.h
-+
  SYNOPSYS DESIGNWARE DMAC DRIVER
  M:	Viresh Kumar <vireshk@kernel.org>
- R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index ee579916f874..bc8969d20167 100644
---- a/drivers/media/platform/Kconfig
-+++ b/drivers/media/platform/Kconfig
-@@ -69,6 +69,7 @@ source "drivers/media/platform/aspeed/Kconfig"
- source "drivers/media/platform/atmel/Kconfig"
- source "drivers/media/platform/cadence/Kconfig"
- source "drivers/media/platform/chips-media/Kconfig"
-+source "drivers/media/platform/dwc/Kconfig"
- source "drivers/media/platform/intel/Kconfig"
- source "drivers/media/platform/marvell/Kconfig"
- source "drivers/media/platform/mediatek/Kconfig"
-diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 5453bb868e67..d5c5e02f7855 100644
---- a/drivers/media/platform/Makefile
-+++ b/drivers/media/platform/Makefile
-@@ -12,6 +12,7 @@ obj-y += aspeed/
- obj-y += atmel/
- obj-y += cadence/
- obj-y += chips-media/
-+obj-y += dwc/
- obj-y += intel/
- obj-y += marvell/
- obj-y += mediatek/
 diff --git a/drivers/media/platform/dwc/Kconfig b/drivers/media/platform/dwc/Kconfig
-new file mode 100644
-index 000000000000..508ac216e29d
---- /dev/null
+index 508ac216e29d..b42219df2418 100644
+--- a/drivers/media/platform/dwc/Kconfig
 +++ b/drivers/media/platform/dwc/Kconfig
-@@ -0,0 +1,19 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+#  Synopsys DWC Platform drivers
-+#	Drivers here are currently for MIPI CSI-2 support
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ #
+ #  Synopsys DWC Platform drivers
+-#	Drivers here are currently for MIPI CSI-2 support
++#	Drivers here are currently for MIPI CSI-2 and MIPI DPHY support
+ 
+ config DWC_MIPI_CSI2_HOST
+ 	tristate "Synopsys DesignWare CSI-2 Host Controller support"
+@@ -17,3 +17,25 @@ config DWC_MIPI_CSI2_HOST
+ 	  If you have a controller with this interface, say Y.
+ 
+ 	   If unsure, say N.
 +
-+config DWC_MIPI_CSI2_HOST
-+	tristate "Synopsys DesignWare CSI-2 Host Controller support"
-+	select VIDEO_DEV
-+	select VIDEO_V4L2
-+	select VIDEO_V4L2_SUBDEV_API
-+	select V4L2_FWNODE
++config DWC_MIPI_DPHY_GEN3
++	tristate "DesignWare platform support using a Gen3 D-PHY"
++	select GENERIC_PHY
 +	help
-+	  This selects the DesignWare MIPI CSI-2 host controller support. This
-+	  controller gives access to control a CSI-2 receiver acting as a V4L2
-+	  subdevice.
++	 Synopsys MIPI D-PHY Generation 3 reference driver. This driver supports
++	 all Generation 3 D-PHYs. Choose Y or M if you have a platform with this
++	 block.
 +
-+	  If you have a controller with this interface, say Y.
++	  If unsure, say N.
 +
-+	   If unsure, say N.
++if DWC_MIPI_DPHY_GEN3
++
++config DWC_MIPI_TC_DPHY_GEN3
++	bool "Platform support using a Synopsys Test Chip"
++	help
++	 Synopsys Test Chip is for prototyping purposes. This enables extra
++	 features that exist only in prototyping and/or for debug purposes.
++
++	  If unsure, say N.
++
++endif # DWC_MIPI_DPHY_GEN3
 diff --git a/drivers/media/platform/dwc/Makefile b/drivers/media/platform/dwc/Makefile
-new file mode 100644
-index 000000000000..057f137b733c
---- /dev/null
+index 057f137b733c..9af4dfb92e12 100644
+--- a/drivers/media/platform/dwc/Makefile
 +++ b/drivers/media/platform/dwc/Makefile
-@@ -0,0 +1,9 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Makefile for Synopsys DWC Platform drivers
-+#
-+dw-csi-objs := dw-csi-plat.o dw-mipi-csi.o
+@@ -7,3 +7,9 @@ ifeq ($(CONFIG_DWC_MIPI_TC_DPHY_GEN3),y)
+ 	dw-csi-objs += dw-csi-sysfs.o
+ endif
+ obj-$(CONFIG_DWC_MIPI_CSI2_HOST) += dw-csi.o
++
++dw-dphy-objs := dw-dphy-plat.o dw-dphy-rx.o
 +ifeq ($(CONFIG_DWC_MIPI_TC_DPHY_GEN3),y)
-+	dw-csi-objs += dw-csi-sysfs.o
++	dw-dphy-objs += dw-dphy-sysfs.o
 +endif
-+obj-$(CONFIG_DWC_MIPI_CSI2_HOST) += dw-csi.o
-diff --git a/drivers/media/platform/dwc/dw-csi-plat.c b/drivers/media/platform/dwc/dw-csi-plat.c
++obj-$(CONFIG_DWC_MIPI_DPHY_GEN3) += dw-dphy.o
+diff --git a/drivers/media/platform/dwc/dw-dphy-plat.c b/drivers/media/platform/dwc/dw-dphy-plat.c
 new file mode 100644
-index 000000000000..dacf72fe89dc
+index 000000000000..34d9caf957d0
 --- /dev/null
-+++ b/drivers/media/platform/dwc/dw-csi-plat.c
-@@ -0,0 +1,667 @@
++++ b/drivers/media/platform/dwc/dw-dphy-plat.c
+@@ -0,0 +1,224 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (c) 2018-2019 Synopsys, Inc. and/or its affiliates.
 + *
-+ * Synopsys DesignWare MIPI CSI-2 Host controller driver.
++ * Synopsys DesignWare MIPI D-PHY controller driver.
 + * Platform driver
 + *
 + * Author: Luis Oliveira <luis.oliveira@synopsys.com>
 + */
 +
-+#include <media/dwc/dw-csi-data.h>
 +#include <media/dwc/dw-dphy-data.h>
++#include <media/dwc/dw-csi-data.h>
 +
-+#include "dw-csi-plat.h"
-+#include <linux/clk.h>
++#include "dw-dphy-rx.h"
 +
-+const struct mipi_dt csi_dt[] = {
-+	{
-+		.hex = CSI_2_YUV420_8,
-+		.name = "YUV420_8bits",
-+	}, {
-+		.hex = CSI_2_YUV420_10,
-+		.name = "YUV420_10bits",
-+	}, {
-+		.hex = CSI_2_YUV420_8_LEG,
-+		.name = "YUV420_8bits_LEGACY",
-+	}, {
-+		.hex = CSI_2_YUV420_8_SHIFT,
-+		.name = "YUV420_8bits_SHIFT",
-+	}, {
-+		.hex = CSI_2_YUV420_10_SHIFT,
-+		.name = "YUV420_10bits_SHIFT",
-+	}, {
-+		.hex = CSI_2_YUV422_8,
-+		.name = "YUV442_8bits",
-+	}, {
-+		.hex = CSI_2_YUV422_10,
-+		.name = "YUV442_10bits",
-+	}, {
-+		.hex = CSI_2_RGB444,
-+		.name = "RGB444",
-+	}, {
-+		.hex = CSI_2_RGB555,
-+		.name = "RGB555",
-+	}, {
-+		.hex = CSI_2_RGB565,
-+		.name = "RGB565",
-+	}, {
-+		.hex = CSI_2_RGB666,
-+		.name = "RGB666",
-+	}, {
-+		.hex = CSI_2_RGB888,
-+		.name = "RGB888",
-+	}, {
-+		.hex = CSI_2_RAW6,
-+		.name = "RAW6",
-+	}, {
-+		.hex = CSI_2_RAW7,
-+		.name = "RAW7",
-+	}, {
-+		.hex = CSI_2_RAW8,
-+		.name = "RAW8",
-+	}, {
-+		.hex = CSI_2_RAW10,
-+		.name = "RAW10",
-+	}, {
-+		.hex = CSI_2_RAW12,
-+		.name = "RAW12",
-+	}, {
-+		.hex = CSI_2_RAW14,
-+		.name = "RAW14",
-+	}, {
-+		.hex = CSI_2_RAW16,
-+		.name = "RAW16",
-+	},
++static struct phy_ops dw_dphy_ops = {
++	.init = dw_dphy_init,
++	.reset = dw_dphy_reset,
++	.power_on = dw_dphy_power_on,
++	.power_off = dw_dphy_power_off,
++	.owner = THIS_MODULE,
 +};
 +
-+static struct mipi_fmt *
-+find_dw_mipi_csi_format(struct v4l2_mbus_framefmt *mf)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(dw_mipi_csi_formats); i++)
-+		if (mf->code == dw_mipi_csi_formats[i].mbus_code)
-+			return &dw_mipi_csi_formats[i];
-+
-+	return NULL;
-+}
-+
-+static int dw_mipi_csi_enum_mbus_code(struct v4l2_subdev *sd,
-+				      struct v4l2_subdev_state *sd_state,
-+				      struct v4l2_subdev_mbus_code_enum *code)
-+{
-+	if (code->index >= ARRAY_SIZE(dw_mipi_csi_formats))
-+		return -EINVAL;
-+
-+	code->code = dw_mipi_csi_formats[code->index].mbus_code;
-+	return 0;
-+}
-+
-+static struct mipi_fmt *
-+dw_mipi_csi_try_format(struct v4l2_mbus_framefmt *mf)
-+{
-+	struct mipi_fmt *fmt;
-+
-+	fmt = find_dw_mipi_csi_format(mf);
-+	if (!fmt)
-+		fmt = &dw_mipi_csi_formats[0];
-+
-+	mf->code = fmt->mbus_code;
-+
-+	return fmt;
-+}
-+
-+static struct v4l2_mbus_framefmt *
-+dw_mipi_csi_get_format(struct dw_csi *dev, struct v4l2_subdev_state *sd_state,
-+		       enum v4l2_subdev_format_whence which)
-+{
-+	if (which == V4L2_SUBDEV_FORMAT_TRY)
-+		return sd_state->pads ? v4l2_subdev_get_try_format(&dev->sd,
-+							sd_state,
-+							0) : NULL;
-+	dev_dbg(dev->dev,
-+		"%s got v4l2_mbus_pixelcode. 0x%x\n", __func__,
-+		dev->format.code);
-+	dev_dbg(dev->dev,
-+		"%s got width. 0x%x\n", __func__,
-+		dev->format.width);
-+	dev_dbg(dev->dev,
-+		"%s got height. 0x%x\n", __func__,
-+		dev->format.height);
-+	return &dev->format;
-+}
-+
-+static int
-+dw_mipi_csi_set_fmt(struct v4l2_subdev *sd,
-+		    struct v4l2_subdev_state *sd_state,
-+		    struct v4l2_subdev_format *fmt)
-+{
-+	struct dw_csi *dev = sd_to_mipi_csi_dev(sd);
-+	struct mipi_fmt *dev_fmt;
-+	struct v4l2_mbus_framefmt *mf = dw_mipi_csi_get_format(dev, sd_state,
-+							       fmt->which);
-+	int i;
-+
-+	dev_fmt = dw_mipi_csi_try_format(&fmt->format);
-+
-+	if (dev_fmt) {
-+		*mf = fmt->format;
-+		if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE)
-+			dev->fmt = dev_fmt;
-+		dw_mipi_csi_set_ipi_fmt(dev);
-+	}
-+
-+	if (fmt->format.width > 0 && fmt->format.height > 0) {
-+		dw_mipi_csi_fill_timings(dev, fmt);
-+	} else {
-+		dev_vdbg(dev->dev, "%s unacceptable values 0x%x.\n",
-+			 __func__, fmt->format.width);
-+		dev_vdbg(dev->dev, "%s unacceptable values 0x%x.\n",
-+			 __func__, fmt->format.height);
-+		return -EINVAL;
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(csi_dt); i++)
-+		if (csi_dt[i].hex == dev->ipi_dt) {
-+			dev_vdbg(dev->dev, "Using data type %s\n",
-+				 csi_dt[i].name);
-+		}
-+	return 0;
-+}
-+
-+static int
-+dw_mipi_csi_get_fmt(struct v4l2_subdev *sd,
-+		    struct v4l2_subdev_state *sd_state,
-+		    struct v4l2_subdev_format *fmt)
-+{
-+	struct dw_csi *dev = sd_to_mipi_csi_dev(sd);
-+	struct v4l2_mbus_framefmt *mf;
-+
-+	mf = dw_mipi_csi_get_format(dev, sd_state, fmt->which);
-+	if (!mf)
-+		return -EINVAL;
-+
-+	mutex_lock(&dev->lock);
-+	fmt->format = *mf;
-+	mutex_unlock(&dev->lock);
-+
-+	return 0;
-+}
-+
-+static int
-+dw_mipi_csi_log_status(struct v4l2_subdev *sd)
-+{
-+	struct dw_csi *dev = sd_to_mipi_csi_dev(sd);
-+
-+	dw_mipi_csi_dump(dev);
-+
-+	return 0;
-+}
-+
-+#if IS_ENABLED(CONFIG_VIDEO_ADV_DEBUG)
-+static int
-+dw_mipi_csi_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register *reg)
-+{
-+	struct dw_csi *dev = sd_to_mipi_csi_dev(sd);
-+
-+	dev_vdbg(dev->dev, "%s: reg=%llu\n", __func__, reg->reg);
-+	reg->val = dw_mipi_csi_read(dev, reg->reg);
-+
-+	return 0;
-+}
-+#endif
-+
-+static int dw_mipi_csi_init_cfg(struct v4l2_subdev *sd,
-+				struct v4l2_subdev_state *sd_state)
-+{
-+	struct v4l2_mbus_framefmt *format =
-+	    v4l2_subdev_get_try_format(sd, sd_state, 0);
-+
-+	format->colorspace = V4L2_COLORSPACE_SRGB;
-+	format->code = MEDIA_BUS_FMT_RGB888_1X24;
-+	format->field = V4L2_FIELD_NONE;
-+
-+	return 0;
-+}
-+
-+static int dw_mipi_csi_s_stream(struct v4l2_subdev *sd, int enable)
-+{
-+	struct dw_csi *dev = sd_to_mipi_csi_dev(sd);
-+	int ret = v4l2_subdev_call(dev->input_sd, video, s_stream, enable);
-+
-+	if (enable) {
-+		dw_mipi_csi_hw_stdby(dev);
-+		dw_mipi_csi_start(dev);
-+	}  else {
-+		phy_power_off(dev->phy);
-+		dw_mipi_csi_mask_irq_power_off(dev);
-+		/* reset data type */
-+		dev->ipi_dt = 0x0;
-+	}
-+	return ret;
-+}
-+
-+static const struct v4l2_subdev_core_ops dw_mipi_csi_core_ops = {
-+	.log_status = dw_mipi_csi_log_status,
-+#if IS_ENABLED(CONFIG_VIDEO_ADV_DEBUG)
-+	.g_register = dw_mipi_csi_g_register,
-+#endif
-+};
-+
-+static int dw_get_mbus_config(struct v4l2_subdev *sd, unsigned int pad,
-+			      struct v4l2_mbus_config *cfg)
-+{
-+	cfg->bus.mipi_csi2.num_data_lanes = 2;
-+	cfg->type = V4L2_MBUS_CSI2_DPHY;
-+
-+	return 0;
-+}
-+
-+static int dw_enum_frame_size(struct v4l2_subdev *sd,
-+			      struct v4l2_subdev_state *sd_state,
-+			      struct v4l2_subdev_frame_size_enum *fse)
-+{
-+	if (fse->index)
-+		return -EINVAL;
-+
-+	fse->min_width = 16;
-+	fse->max_width = 4000;
-+	fse->min_height = 16;
-+	fse->max_height = 3000;
-+
-+	return 0;
-+}
-+
-+static struct v4l2_subdev_pad_ops dw_mipi_csi_pad_ops = {
-+	.init_cfg = dw_mipi_csi_init_cfg,
-+	.enum_mbus_code = dw_mipi_csi_enum_mbus_code,
-+	.enum_frame_size = dw_enum_frame_size,
-+	.get_fmt = dw_mipi_csi_get_fmt,
-+	.set_fmt = dw_mipi_csi_set_fmt,
-+	.get_mbus_config = dw_get_mbus_config,
-+};
-+
-+static const struct v4l2_subdev_video_ops dw_mipi_csi_video_ops = {
-+	.s_stream = dw_mipi_csi_s_stream,
-+};
-+
-+static const struct v4l2_subdev_ops dw_mipi_csi_subdev_ops = {
-+	.core = &dw_mipi_csi_core_ops,
-+	.pad = &dw_mipi_csi_pad_ops,
-+	.video = &dw_mipi_csi_video_ops,
-+};
-+
-+static irqreturn_t dw_mipi_csi_irq1(int irq, void *dev_id)
-+{
-+	struct dw_csi *csi_dev = dev_id;
-+
-+	dw_mipi_csi_irq_handler(csi_dev);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int dw_async_bound(struct v4l2_async_notifier *notifier,
-+			  struct v4l2_subdev *subdev,
-+			  struct v4l2_async_subdev *asd)
-+{
-+	struct dw_csi *dw = container_of(notifier,
-+					struct dw_csi, notifier);
-+	int ret;
-+	int pad;
-+
-+	dev_dbg(dw->dev, "async bound\n");
-+	dw->input_sd = subdev;
-+
-+	pad = media_entity_get_fwnode_pad(&subdev->entity,
-+					  asd->match.fwnode,
-+					  MEDIA_PAD_FL_SOURCE);
-+	if (pad < 0) {
-+		dev_err(dw->dev, "Failed to find pad for %s\n",
-+			dw->sd.name);
-+		return pad;
-+	}
-+
-+	dw->remote_pad = pad;
-+
-+	ret = media_create_pad_link(&dw->input_sd->entity, dw->remote_pad,
-+				    &dw->sd.entity, 0, MEDIA_LNK_FL_ENABLED);
-+
-+	if (ret < 0) {
-+		dev_err(dw->dev,
-+			"Failed to create pad link: %s to %s\n",
-+			dw->input_sd->entity.name, dw->sd.entity.name);
-+		return ret;
-+	}
-+
-+	dev_dbg(dw->dev, "link with %s pad: %d\n",
-+		dw->input_sd->name, dw->remote_pad);
-+
-+	return ret;
-+}
-+
-+static const struct v4l2_async_notifier_operations csi2host_async_ops = {
-+	.bound = dw_async_bound,
-+};
-+
-+static int
-+dw_mipi_csi_parse_dt(struct platform_device *pdev, struct dw_csi *dev)
-+{
-+	struct device_node *of_node = pdev->dev.of_node;
-+	struct fwnode_handle *input_fwnode, *output_fwnode;
-+	struct v4l2_fwnode_endpoint ep = { .bus_type = V4L2_MBUS_CSI2_DPHY };
-+	struct v4l2_fwnode_endpoint ep2 = { };
-+	struct v4l2_async_subdev *asd;
-+	int ret = 0;
-+
-+	if (of_property_read_u32(of_node, "snps,output-type",
-+				 &dev->hw.output))
-+		dev->hw.output = 2;
-+
-+	input_fwnode = fwnode_graph_get_next_endpoint(of_fwnode_handle(of_node),
-+						      NULL);
-+	if (!input_fwnode) {
-+		dev_err(&pdev->dev,
-+			"missing port node at %pOF, input node is mandatory.\n",
-+			of_node);
-+		return -EINVAL;
-+	}
-+
-+	/* Get port node and validate MIPI-CSI channel id. */
-+	ret = v4l2_fwnode_endpoint_parse(input_fwnode, &ep);
-+	if (ret)
-+		goto err;
-+
-+	dev->index = ep.base.port - 1;
-+	if (dev->index >= CSI_MAX_ENTITIES) {
-+		ret = -ENXIO;
-+		goto err;
-+	}
-+	dev->hw.num_lanes = ep.bus.mipi_csi2.num_data_lanes;
-+
-+	output_fwnode = fwnode_graph_get_next_endpoint
-+				(of_fwnode_handle(of_node), input_fwnode);
-+
-+	if (output_fwnode) {
-+		ret = v4l2_fwnode_endpoint_parse(output_fwnode,
-+						 &ep2);
-+
-+		fwnode_handle_put(output_fwnode);
-+	}
-+
-+	if (!output_fwnode || ret) {
-+		dev_info(&pdev->dev,
-+			 "missing output node at %pOF\n", of_node);
-+	}
-+
-+	v4l2_async_nf_init(&dev->notifier);
-+	asd = v4l2_async_nf_add_fwnode_remote(&dev->notifier, input_fwnode,
-+					      struct v4l2_async_subdev);
-+
-+	if (IS_ERR(asd)) {
-+		ret = PTR_ERR(asd);
-+		goto err;
-+	}
-+
-+	if (ret) {
-+		dev_err(&pdev->dev, "failed to add async notifier.\n");
-+		goto err;
-+	}
-+
-+	dev->notifier.ops = &csi2host_async_ops;
-+
-+	ret = v4l2_async_subdev_nf_register(&dev->sd, &dev->notifier);
-+
-+	if (ret) {
-+		dev_err(&pdev->dev, "fail to register async notifier.\n");
-+		goto err;
-+	}
-+
-+err:
-+	of_node_put(of_node);
-+	return ret;
-+}
-+
-+static const struct of_device_id dw_mipi_csi_of_match[];
-+
-+static int dw_csi_probe(struct platform_device *pdev)
-+{
-+	const struct of_device_id *of_id = NULL;
-+	struct dw_csih_pdata *pdata = NULL;
-+	struct device *dev = &pdev->dev;
-+	struct resource *res = NULL;
-+	struct dw_csi *csi;
-+	struct v4l2_subdev *sd;
-+	int ret;
-+
-+	if (!IS_ENABLED(CONFIG_OF))
-+		pdata = pdev->dev.platform_data;
-+
-+	dev_dbg(dev, "Probing started\n");
-+
-+	/* Resource allocation */
-+	csi = devm_kzalloc(dev, sizeof(*csi), GFP_KERNEL);
-+	if (!csi)
-+		return -ENOMEM;
-+
-+	mutex_init(&csi->lock);
-+	spin_lock_init(&csi->slock);
-+	csi->dev = dev;
-+
-+	csi->perclk = devm_clk_get(dev, "perclk");
-+	if (IS_ERR(csi->perclk)) {
-+		ret = PTR_ERR(csi->perclk);
-+		dev_err(dev, "failed to get perclk: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = clk_prepare_enable(csi->perclk);
-+	if (ret) {
-+		dev_err(dev, "failed to enable perclk: %d\n", ret);
-+		return ret;
-+	}
-+
-+	csi->phyclk = devm_clk_get(dev, "phyclk");
-+	if (IS_ERR(csi->perclk)) {
-+		ret = PTR_ERR(csi->phyclk);
-+		dev_err(dev, "failed to get phyclk: %d\n", ret);
-+		goto csi2host_phyclk_err;
-+	}
-+
-+	ret = clk_prepare_enable(csi->phyclk);
-+	if (ret) {
-+		dev_err(dev, "failed to enable phyclk: %d\n", ret);
-+		goto csi2host_phyclk_err;
-+	}
-+
-+	if (dev->of_node) {
-+		of_id = of_match_node(dw_mipi_csi_of_match, dev->of_node);
-+		if (!of_id) {
-+			ret = -EINVAL;
-+			goto csi2host_reg_err;
-+		}
-+
-+		ret = dw_mipi_csi_parse_dt(pdev, csi);
-+		if (ret < 0)
-+			goto csi2host_reg_err;
-+
-+		csi->phy = devm_of_phy_get(dev, dev->of_node, NULL);
-+		if (IS_ERR(csi->phy)) {
-+			dev_dbg(dev, "No DPHY available\n");
-+			ret = -EPROBE_DEFER; /* attempt to defer */
-+			goto csi2host_defer_err;
-+		}
-+	} else {
-+		if (!pdata)
-+			goto csi2host_reg_err;
-+
-+		csi->phy = devm_phy_get(dev, phys[pdata->id].name);
-+		if (IS_ERR(csi->phy)) {
-+			dev_err(dev, "No '%s' DPHY available\n",
-+				phys[pdata->id].name);
-+			return PTR_ERR(csi->phy);
-+		}
-+		dev_vdbg(dev, "got D-PHY %s with id %d\n", phys[pdata->id].name,
-+			 csi->phy->id);
-+	}
-+	/* Registers mapping */
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res) {
-+		ret = -ENXIO;
-+		goto csi2host_defer_err;
-+	}
-+
-+	csi->base_address = devm_ioremap_resource(dev, res);
-+	if (IS_ERR(csi->base_address)) {
-+		dev_err(dev, "Base address not set.\n");
-+		ret = PTR_ERR(csi->base_address);
-+		goto csi2host_defer_err;
-+	}
-+
-+	csi->ctrl_irq_number = platform_get_irq(pdev, 0);
-+	if (csi->ctrl_irq_number < 0) {
-+		dev_err(dev, "irq number %d not set.\n", csi->ctrl_irq_number);
-+		ret = csi->ctrl_irq_number;
-+		goto end;
-+	}
-+
-+	csi->rst = devm_reset_control_get_optional_shared(dev, NULL);
-+	if (IS_ERR(csi->rst)) {
-+		dev_err(dev, "error getting reset control %d\n", ret);
-+		ret =  PTR_ERR(csi->rst);
-+		goto end;
-+	}
-+
-+	ret = devm_request_irq(dev, csi->ctrl_irq_number,
-+			       dw_mipi_csi_irq1, IRQF_SHARED,
-+			       dev_name(dev), csi);
-+	if (ret) {
-+		if (dev->of_node)
-+			dev_err(dev, "irq csi %s failed\n", of_id->name);
-+	else
-+		dev_err(dev, "irq csi %d failed\n", pdata->id);
-+
-+		goto end;
-+	}
-+
-+	sd = &csi->sd;
-+	v4l2_subdev_init(sd, &dw_mipi_csi_subdev_ops);
-+	csi->sd.owner = THIS_MODULE;
-+	csi->sd.fwnode = of_fwnode_handle(dev->of_node);
-+
-+	if (dev->of_node) {
-+		snprintf(sd->name, sizeof(sd->name), "%s.%d",
-+			 "dw-csi", csi->index);
-+
-+		csi->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-+	} else {
-+		strlcpy(sd->name, dev_name(dev), sizeof(sd->name));
-+	}
-+	csi->fmt = &dw_mipi_csi_formats[0];
-+	csi->format.code = dw_mipi_csi_formats[0].mbus_code;
-+
-+	sd->entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
-+
-+	if (dev->of_node) {
-+		csi->pads[CSI_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
-+		csi->pads[CSI_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
-+
-+		ret = media_entity_pads_init(&csi->sd.entity,
-+					     CSI_PADS_NUM, csi->pads);
-+		if (ret < 0) {
-+			dev_err(dev, "media entity init failed\n");
-+			goto end;
-+		}
-+	} else {
-+		csi->hw.num_lanes = pdata->lanes;
-+		csi->hw.pclk = pdata->pclk;
-+		csi->hw.fps = pdata->fps;
-+		csi->hw.dphy_freq = pdata->hs_freq;
-+	}
-+	v4l2_set_subdevdata(&csi->sd, pdev);
-+	platform_set_drvdata(pdev, &csi->sd);
-+	dev_set_drvdata(dev, sd);
-+
-+	if (csi->rst)
-+		reset_control_deassert(csi->rst);
++static struct phy_provider *phy_provider;
 +
 +#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
-+	dw_csi_create_capabilities_sysfs(pdev);
++static u8 get_config_8l(struct device *dev, struct dw_dphy_rx *dphy)
++{
++	if (IS_ENABLED(CONFIG_OF) && dev->of_node) {
++		dphy->config_8l = of_get_gpio(dev->of_node, 0);
++		if (!gpio_is_valid(dphy->config_8l)) {
++			dev_warn(dev,
++				 "failed to parse 8l config, default is 0\n");
++			dphy->config_8l = 0;
++		}
++	} else {
++		struct dw_phy_pdata *pdata = dev->platform_data;
++
++		dphy->config_8l = pdata->config_8l;
++	}
++	return dphy->config_8l;
++}
 +#endif
-+	dw_mipi_csi_get_version(csi);
-+	dw_mipi_csi_specific_mappings(csi);
-+	dw_mipi_csi_mask_irq_power_off(csi);
++static int get_resources(struct device *dev, struct dw_dphy_rx *dphy)
++{
++	int ret = 0;
 +
-+	dev_info(dev, "DW MIPI CSI-2 Host registered successfully HW v%u.%u\n",
-+		 csi->hw_version_major, csi->hw_version_minor);
++	if (IS_ENABLED(CONFIG_OF) && dev->of_node) {
++		if (of_property_read_u32(dev->of_node, "snps,dphy-frequency",
++					 &dphy->dphy_freq)) {
++			dev_err(dev, "failed to find dphy frequency\n");
++			ret = -EINVAL;
++		}
++		if (of_property_read_u32(dev->of_node, "bus-width",
++					 &dphy->dphy_te_len)) {
++			dev_err(dev, "failed to find dphy te length\n");
++			ret = -EINVAL;
++		}
++		if (of_property_read_u32(dev->of_node, "snps,phy_type",
++					 &dphy->phy_type)) {
++			dev_err(dev, "failed to find dphy type\n");
++			ret = -EINVAL;
++		}
++	} else {
++		struct dw_phy_pdata *pdata = dev->platform_data;
 +
-+	phy_init(csi->phy);
++		dphy->dphy_freq = pdata->dphy_frequency;
++		dphy->dphy_te_len = pdata->dphy_te_len;
++		dphy->dphy_gen = pdata->dphy_gen;
++	}
++	dev_set_drvdata(dev, dphy);
 +
-+	ret = v4l2_async_register_subdev(&csi->sd);
-+
-+	if (ret)
-+		dev_dbg(csi->dev, "failed to register the subdevice\n");
-+
-+	return ret;
-+end:
-+#if IS_ENABLED(CONFIG_OF)
-+	media_entity_cleanup(&csi->sd.entity);
-+#endif
-+csi2host_defer_err:
-+	v4l2_async_nf_unregister(&csi->notifier);
-+	v4l2_async_nf_cleanup(&csi->notifier);
-+
-+csi2host_reg_err:
-+	clk_disable_unprepare(csi->phyclk);
-+csi2host_phyclk_err:
-+	clk_disable_unprepare(csi->perclk);
 +	return ret;
 +}
 +
-+/**
-+ * @short Exit routine - Exit point of the driver
-+ * @param[in] pdev pointer to the platform device structure
-+ * @return 0 on success
-+ */
-+static int dw_csi_remove(struct platform_device *pdev)
++static int phy_register(struct device *dev)
 +{
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *mipi_csi = sd_to_mipi_csi_dev(sd);
++	int ret = 0;
 +
-+	dev_dbg(&pdev->dev, "Removing DW MIPI CSI-2 Host module\n");
++	if (IS_ENABLED(CONFIG_OF) && dev->of_node) {
++		phy_provider = devm_of_phy_provider_register(dev,
++							     dw_dphy_xlate);
++		if (IS_ERR(phy_provider)) {
++			dev_err(dev, "error getting phy provider\n");
++			ret = PTR_ERR(phy_provider);
++		}
++	} else {
++		struct dw_phy_pdata *pdata = dev->platform_data;
++		struct dw_dphy_rx *dphy = dev_get_drvdata(dev);
 +
-+	if (mipi_csi->rst)
-+		reset_control_assert(mipi_csi->rst);
-+#if IS_ENABLED(CONFIG_OF)
-+	media_entity_cleanup(&mipi_csi->sd.entity);
++		ret = phy_create_lookup(dphy->phy,
++					phys[pdata->id].name,
++					csis[pdata->id].name);
++		if (ret)
++			dev_err(dev, "Failed to create dphy lookup\n");
++		else
++			dev_warn(dev,
++				 "Created dphy lookup [%s] --> [%s]\n",
++				 phys[pdata->id].name, csis[pdata->id].name);
++	}
++	return ret;
++}
++
++static void phy_unregister(struct device *dev)
++{
++	if (!dev->of_node) {
++		struct dw_dphy_rx *dphy = dev_get_drvdata(dev);
++
++		phy_remove_lookup(dphy->phy, "dw-dphy", "dw-csi");
++	}
++}
++
++static int dw_dphy_rx_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct dw_dphy_rx *dphy;
++	struct resource *res;
++
++	dphy = devm_kzalloc(&pdev->dev, sizeof(*dphy), GFP_KERNEL);
++	if (!dphy)
++		return -ENOMEM;
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	dphy->base_address = devm_ioremap(&pdev->dev,
++					  res->start, resource_size(res));
++	if (IS_ERR(dphy->base_address)) {
++		dev_err(&pdev->dev, "error requesting base address\n");
++		return PTR_ERR(dphy->base_address);
++	}
++
++#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
++
++	dphy->dphy1_if_addr = devm_ioremap_resource(&pdev->dev, res);
++	if (IS_ERR(dphy->dphy1_if_addr)) {
++		dev_err(&pdev->dev, "error requesting dphy 1 if regbank\n");
++		return PTR_ERR(dphy->dphy1_if_addr);
++	}
++
++	dphy->max_lanes =
++		dw_dphy_if_read_msk(dphy, DPHYID, DPHY_ID_LANE_SUPPORT, 4);
++
++	dphy->dphy_gen = dw_dphy_if_read_msk(dphy, DPHYID, DPHY_ID_GEN, 4);
++
++	dev_info(&pdev->dev, "DPHY GEN %s with maximum %s lanes\n",
++		 dphy->dphy_gen == GEN3 ? "3" : "2",
++		 dphy->max_lanes == CTRL_8_LANES ? "8" : "4");
++
++	if (dphy->max_lanes == CTRL_8_LANES) {
++		res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
++		dphy->dphy2_if_addr =
++			devm_ioremap(&pdev->dev,
++				     res->start, resource_size(res));
++
++		if (IS_ERR(dphy->dphy2_if_addr)) {
++			dev_err(&pdev->dev,
++				"error requesting dphy 2 if regbank\n");
++			return PTR_ERR(dphy->dphy2_if_addr);
++		}
++		dphy->config_8l = get_config_8l(&pdev->dev, dphy);
++	}
++#endif
++	if (get_resources(dev, dphy)) {
++		dev_err(dev, "failed to parse PHY resources\n");
++		return -EINVAL;
++	}
++
++	dphy->phy = devm_phy_create(dev, NULL, &dw_dphy_ops);
++	if (IS_ERR(dphy->phy)) {
++		dev_err(dev, "failed to create PHY\n");
++		return PTR_ERR(dphy->phy);
++	}
++
++	platform_set_drvdata(pdev, dphy);
++	phy_set_drvdata(dphy->phy, dphy);
++
++	if (phy_register(dev)) {
++		dev_err(dev, "failed to register PHY\n");
++		return -EINVAL;
++	}
++
++	dphy->lp_time = 1000; /* 1000 ns */
++	dphy->lanes_config = dw_dphy_setup_config(dphy);
++
++	dev_info(dev, "Probing dphy finished\n");
++#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
++	dw_dphy_create_capabilities_sysfs(pdev);
 +#endif
 +
 +	return 0;
 +}
 +
++static int dw_dphy_rx_remove(struct platform_device *pdev)
++{
++	phy_unregister(&pdev->dev);
++
++	return 0;
++}
++
 +#if IS_ENABLED(CONFIG_OF)
-+static const struct of_device_id dw_mipi_csi_of_match[] = {
-+	{ .compatible = "snps,dw-csi" },
++static const struct of_device_id dw_dphy_rx_of_match[] = {
++	{ .compatible = "snps,dw-dphy-rx" },
 +	{},
 +};
 +
-+MODULE_DEVICE_TABLE(of, dw_mipi_csi_of_match);
++MODULE_DEVICE_TABLE(of, dw_dphy_rx_of_match);
 +#endif
 +
-+static struct platform_driver dw_mipi_csi_driver = {
-+	.remove = dw_csi_remove,
-+	.probe = dw_csi_probe,
++static struct platform_driver dw_dphy_rx_driver = {
++	.probe = dw_dphy_rx_probe,
++	.remove = dw_dphy_rx_remove,
 +	.driver = {
-+		.name = "dw-csi",
-+		.owner = THIS_MODULE,
 +#if IS_ENABLED(CONFIG_OF)
-+		.of_match_table = of_match_ptr(dw_mipi_csi_of_match),
++		.of_match_table = of_match_ptr(dw_dphy_rx_of_match),
 +#endif
-+	},
++		.name = "dw-dphy",
++		.owner = THIS_MODULE,
++	}
 +};
++module_platform_driver(dw_dphy_rx_driver);
 +
-+module_platform_driver(dw_mipi_csi_driver);
-+
++MODULE_DESCRIPTION("Synopsys DesignWare MIPI DPHY Rx driver");
++MODULE_AUTHOR("Luis Oliveira <lolivei@synopsys.com>");
 +MODULE_LICENSE("GPL v2");
-+MODULE_AUTHOR("Luis Oliveira <luis.oliveira@synopsys.com>");
-+MODULE_DESCRIPTION("Synopsys DesignWare MIPI CSI-2 Host Platform driver");
-diff --git a/drivers/media/platform/dwc/dw-csi-plat.h b/drivers/media/platform/dwc/dw-csi-plat.h
+diff --git a/drivers/media/platform/dwc/dw-dphy-rx.c b/drivers/media/platform/dwc/dw-dphy-rx.c
 new file mode 100644
-index 000000000000..3a349230c8eb
+index 000000000000..1dd0d81feb61
 --- /dev/null
-+++ b/drivers/media/platform/dwc/dw-csi-plat.h
-@@ -0,0 +1,102 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2018 Synopsys, Inc.
-+ *
-+ * Synopsys DesignWare MIPI CSI-2 Host controller driver.
-+ * Supported bus formats
-+ *
-+ * Author: Luis Oliveira <Luis.Oliveira@synopsys.com>
-+ */
-+
-+#ifndef _DW_CSI_PLAT_H__
-+#define _DW_CSI_PLAT_H__
-+
-+#include "dw-mipi-csi.h"
-+
-+/* Video formats supported by the MIPI CSI-2 */
-+struct mipi_fmt dw_mipi_csi_formats[] = {
-+	{
-+		/* RAW 8 */
-+		.mbus_code = MEDIA_BUS_FMT_SBGGR8_1X8,
-+		.depth = 8,
-+	}, {
-+		/* RAW 10 */
-+		.mbus_code = MEDIA_BUS_FMT_SBGGR10_1X10,
-+		.depth = 10,
-+	}, {
-+		/* RAW 10 */
-+		.mbus_code = MEDIA_BUS_FMT_SRGGB10_1X10,
-+		.depth = 10,
-+
-+	}, {
-+		/* RAW 12 */
-+		.mbus_code = MEDIA_BUS_FMT_SBGGR12_1X12,
-+		.depth = 12,
-+	}, {
-+		/* RAW 14 */
-+		.mbus_code = MEDIA_BUS_FMT_SBGGR14_1X14,
-+		.depth = 14,
-+	}, {
-+		/* RAW 16 */
-+		.mbus_code = MEDIA_BUS_FMT_SBGGR16_1X16,
-+		.depth = 16,
-+	}, {
-+		/* RGB 666 */
-+		.mbus_code = MEDIA_BUS_FMT_RGB666_1X18,
-+		.depth = 18,
-+	}, {
-+		/* RGB 565 */
-+		.mbus_code = MEDIA_BUS_FMT_RGB565_2X8_BE,
-+		.depth = 16,
-+	}, {
-+		/* BGR 565 */
-+		.mbus_code = MEDIA_BUS_FMT_RGB565_2X8_LE,
-+		.depth = 16,
-+	}, {
-+		/* RGB 555 */
-+		.mbus_code = MEDIA_BUS_FMT_RGB555_2X8_PADHI_BE,
-+		.depth = 16,
-+	}, {
-+		/* BGR 555 */
-+		.mbus_code = MEDIA_BUS_FMT_RGB555_2X8_PADHI_LE,
-+		.depth = 16,
-+	}, {
-+		/* RGB 444 */
-+		.mbus_code = MEDIA_BUS_FMT_RGB444_2X8_PADHI_BE,
-+		.depth = 16,
-+	}, {
-+		/* RGB 444 */
-+		.mbus_code = MEDIA_BUS_FMT_RGB444_2X8_PADHI_LE,
-+		.depth = 16,
-+	}, {
-+		/* RGB 888 */
-+		.mbus_code = MEDIA_BUS_FMT_RGB888_2X12_LE,
-+		.depth = 24,
-+	}, {
-+		/* BGR 888 */
-+		.mbus_code = MEDIA_BUS_FMT_RGB888_2X12_BE,
-+		.depth = 24,
-+	}, {
-+		/* BGR 888 */
-+		.mbus_code = MEDIA_BUS_FMT_RGB888_1X24,
-+		.depth = 24,
-+	}, {
-+		/* YUV 422 8-bit */
-+		.mbus_code = MEDIA_BUS_FMT_VYUY8_1X16,
-+		.depth = 16,
-+	}, {
-+		/* YUV 422 10-bit */
-+		.mbus_code = MEDIA_BUS_FMT_VYUY10_2X10,
-+		.depth = 20,
-+	}, {
-+		/* YUV 420 8-bit LEGACY */
-+		.mbus_code = MEDIA_BUS_FMT_Y8_1X8,
-+		.depth = 8,
-+	}, {
-+		/* YUV 420 10-bit */
-+		.mbus_code = MEDIA_BUS_FMT_Y10_1X10,
-+		.depth = 10,
-+	},
-+};
-+
-+#endif	/* _DW_CSI_PLAT_H__ */
-diff --git a/drivers/media/platform/dwc/dw-csi-sysfs.c b/drivers/media/platform/dwc/dw-csi-sysfs.c
-new file mode 100644
-index 000000000000..7e167d69b0f9
---- /dev/null
-+++ b/drivers/media/platform/dwc/dw-csi-sysfs.c
-@@ -0,0 +1,623 @@
++++ b/drivers/media/platform/dwc/dw-dphy-rx.c
+@@ -0,0 +1,625 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (c) 2018-2019 Synopsys, Inc. and/or its affiliates.
 + *
-+ * Synopsys DesignWare MIPI CSI-2 Host controller driver.
-+ * SysFS components for the platform driver
++ * Synopsys DesignWare MIPI D-PHY controller driver
++ * Core functions
 + *
-+ * Author: Luis Oliveira <Luis.Oliveira@synopsys.com>
++ * Author: Luis Oliveira <luis.oliveira@synopsys.com>
 + */
 +
-+#include "dw-mipi-csi.h"
-+
-+static ssize_t core_version_show(struct device *dev,
-+				 struct device_attribute *attr,
-+				 char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	char buffer[10];
-+
-+	snprintf(buffer, 10, "v.%d.%d*\n", csi_dev->hw_version_major,
-+		 csi_dev->hw_version_minor);
-+
-+	return strlcpy(buf, buffer, PAGE_SIZE);
-+}
-+
-+static ssize_t n_lanes_store(struct device *dev, struct device_attribute *attr,
-+			     const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned long lanes;
-+
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	ret = kstrtoul(buf, 10, &lanes);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (lanes > 8) {
-+		dev_err(dev, "Invalid number of lanes %lu\n", lanes);
-+		return count;
-+	}
-+
-+	dev_info(dev, "Lanes %lu\n", lanes);
-+	csi_dev->hw.num_lanes = lanes;
-+
-+	return count;
-+}
-+
-+static ssize_t n_lanes_show(struct device *dev,
-+			    struct device_attribute *attr,
-+			    char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	char buffer[10];
-+
-+	snprintf(buffer, 10, "%d\n", csi_dev->hw.num_lanes);
-+
-+	return strlcpy(buf, buffer, PAGE_SIZE);
-+}
-+
-+static ssize_t core_reset_show(struct device *dev,
-+			       struct device_attribute *attr,
-+			       char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	char buffer[10];
-+
-+	/* Reset Controller and DPHY */
-+	phy_reset(csi_dev->phy);
-+	dw_mipi_csi_reset(csi_dev);
-+
-+	snprintf(buffer, 10, "Reset\n");
-+
-+	return strlcpy(buf, buffer, PAGE_SIZE);
-+}
-+
-+static ssize_t data_type_store(struct device *dev,
-+			       struct device_attribute *attr,
-+			       const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned long dt;
-+
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	ret = kstrtoul(buf, 16, &dt);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (dt < 0x18 || dt > 0x2F) {
-+		dev_err(dev, "Invalid data type %lx\n", dt);
-+		return count;
-+	}
-+
-+	dev_info(dev, "Data type 0x%lx\n", dt);
-+	csi_dev->ipi_dt = dt;
-+
-+	return count;
-+}
-+
-+static ssize_t data_type_show(struct device *dev,
-+			      struct device_attribute *attr,
-+			      char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	char buffer[10];
-+
-+	snprintf(buffer, 10, "%x\n", csi_dev->ipi_dt);
-+
-+	return strlcpy(buf, buffer, PAGE_SIZE);
-+}
-+
-+static ssize_t hsa_store(struct device *dev,
-+			 struct device_attribute *attr,
-+			 const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned long hsa;
-+
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	ret = kstrtoul(buf, 16, &hsa);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (hsa > 0xFFF) {
-+		dev_err(dev, "Invalid HSA time %lx\n", hsa);
-+		return count;
-+	}
-+
-+	dev_info(dev, "HSA time 0x%lx\n", hsa);
-+	csi_dev->hw.hsa = hsa;
-+
-+	return count;
-+}
-+
-+static ssize_t hsa_show(struct device *dev,
-+			struct device_attribute *attr,
-+			char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	char buffer[10];
-+
-+	snprintf(buffer, 10, "%x\n", csi_dev->hw.hsa);
-+
-+	return strlcpy(buf, buffer, PAGE_SIZE);
-+}
-+
-+static ssize_t hbp_store(struct device *dev,
-+			 struct device_attribute *attr,
-+			 const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned long hbp;
-+
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	ret = kstrtoul(buf, 16, &hbp);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (hbp > 0xFFF) {
-+		dev_err(dev, "Invalid HBP time %lx\n", hbp);
-+		return count;
-+	}
-+
-+	dev_info(dev, "HBP time 0x%lx\n", hbp);
-+	csi_dev->hw.hbp = hbp;
-+
-+	return count;
-+}
-+
-+static ssize_t hbp_show(struct device *dev,
-+			struct device_attribute *attr,
-+			char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	char buffer[10];
-+
-+	snprintf(buffer, 10, "%x\n", csi_dev->hw.hbp);
-+
-+	return strlcpy(buf, buffer, PAGE_SIZE);
-+}
-+
-+static ssize_t hsd_store(struct device *dev,
-+			 struct device_attribute *attr,
-+			 const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned long hsd;
-+
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	ret = kstrtoul(buf, 16, &hsd);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (hsd > 0xFF) {
-+		dev_err(dev, "Invalid HSD time %lx\n", hsd);
-+		return count;
-+	}
-+
-+	dev_info(dev, "HSD time 0x%lx\n", hsd);
-+	csi_dev->hw.hsd = hsd;
-+
-+	return count;
-+}
-+
-+static ssize_t hsd_show(struct device *dev,
-+			struct device_attribute *attr,
-+			char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	char buffer[10];
-+
-+	snprintf(buffer, 10, "%x\n", csi_dev->hw.hsd);
-+
-+	return strlcpy(buf, buffer, PAGE_SIZE);
-+}
-+
-+static ssize_t vsa_store(struct device *dev,
-+			 struct device_attribute *attr,
-+			 const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned long vsa;
-+
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	ret = kstrtoul(buf, 16, &vsa);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (vsa > 0x3FF) {
-+		dev_err(dev, "Invalid VSA period %lx\n", vsa);
-+		return count;
-+	}
-+
-+	dev_info(dev, "VSA period 0x%lx\n", vsa);
-+	csi_dev->hw.vsa = vsa;
-+
-+	return count;
-+}
-+
-+static ssize_t vsa_show(struct device *dev,
-+			struct device_attribute *attr,
-+			char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	char buffer[10];
-+
-+	snprintf(buffer, 10, "%x\n", csi_dev->hw.vsa);
-+
-+	return strlcpy(buf, buffer, PAGE_SIZE);
-+}
-+
-+static ssize_t vbp_store(struct device *dev,
-+			 struct device_attribute *attr,
-+			 const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned long vbp;
-+
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	ret = kstrtoul(buf, 16, &vbp);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (vbp > 0x2FF) {
-+		dev_err(dev, "Invalid VBP period %lx\n", vbp);
-+		return count;
-+	}
-+
-+	dev_info(dev, "VBP period 0x%lx\n", vbp);
-+	csi_dev->hw.vbp = vbp;
-+
-+	return count;
-+}
-+
-+static ssize_t vbp_show(struct device *dev,
-+			struct device_attribute *attr,
-+			char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	char buffer[10];
-+
-+	snprintf(buffer, 10, "%x\n", csi_dev->hw.vbp);
-+
-+	return strlcpy(buf, buffer, PAGE_SIZE);
-+}
-+
-+static ssize_t vfp_store(struct device *dev,
-+			 struct device_attribute *attr,
-+			 const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned long vfp;
-+
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	ret = kstrtoul(buf, 16, &vfp);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (vfp > 0x3ff) {
-+		dev_err(dev, "Invalid VFP period %lx\n", vfp);
-+		return count;
-+	}
-+
-+	dev_info(dev, "VFP period 0x%lx\n", vfp);
-+	csi_dev->hw.vfp = vfp;
-+
-+	return count;
-+}
-+
-+static ssize_t vfp_show(struct device *dev,
-+			struct device_attribute *attr,
-+			char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	char buffer[10];
-+
-+	snprintf(buffer, 10, "%x\n", csi_dev->hw.vfp);
-+
-+	return strlcpy(buf, buffer, PAGE_SIZE);
-+}
-+
-+static ssize_t virtual_channel_store(struct device *dev,
-+				     struct device_attribute *attr,
-+				     const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned long virtual_ch;
-+
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	ret = kstrtoul(buf, 10, &virtual_ch);
-+	if (ret < 0)
-+		return ret;
-+
-+	if ((signed int)virtual_ch < 0 || (signed int)virtual_ch > 8) {
-+		dev_err(dev, "Invalid Virtual Channel %lu\n", virtual_ch);
-+		return count;
-+	}
-+
-+	dev_info(dev, "Virtual Channel %lu\n", virtual_ch);
-+	csi_dev->hw.virtual_ch = virtual_ch;
-+
-+	return count;
-+}
-+
-+static ssize_t virtual_channel_show(struct device *dev,
-+				    struct device_attribute *attr,
-+				    char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	char buffer[10];
-+
-+	snprintf(buffer, 10, "%d\n", csi_dev->hw.virtual_ch);
-+
-+	return strlcpy(buf, buffer, PAGE_SIZE);
-+}
-+
-+static ssize_t ipi_color_mode_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned long ipi_color_mode;
-+
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	ret = kstrtoul(buf, 10, &ipi_color_mode);
-+	if (ret < 0)
-+		return ret;
-+
-+	if ((signed int)ipi_color_mode < 0 || (signed int)ipi_color_mode > 1) {
-+		dev_err(dev,
-+			"Wrong Color Mode %lu, (48 bits -> 0 or 16 bits -> 1\n",
-+			ipi_color_mode);
-+		return count;
-+	}
-+
-+	dev_info(dev, "IPI Color mode %lu\n", ipi_color_mode);
-+	csi_dev->hw.ipi_color_mode = ipi_color_mode;
-+
-+	return count;
-+}
-+
-+static ssize_t ipi_color_mode_show(struct device *dev,
-+				   struct device_attribute *attr,
-+				   char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	char buffer[10];
-+
-+	snprintf(buffer, 10, "%d\n", csi_dev->hw.ipi_color_mode);
-+
-+	return strlcpy(buf, buffer, PAGE_SIZE);
-+}
-+
-+static ssize_t ipi_auto_flush_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned long ipi_auto_flush;
-+
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	ret = kstrtoul(buf, 10, &ipi_auto_flush);
-+	if (ret < 0)
-+		return ret;
-+
-+	if ((signed int)ipi_auto_flush < 0 || (signed int)ipi_auto_flush > 1) {
-+		dev_err(dev,
-+			"Invalid Auto Flush Mode %lu, (No -> 0 or Yes -> 1\n",
-+			ipi_auto_flush);
-+		return count;
-+	}
-+
-+	dev_info(dev, "IPI Auto Flush %lu\n", ipi_auto_flush);
-+	csi_dev->hw.ipi_auto_flush = ipi_auto_flush;
-+
-+	return count;
-+}
-+
-+static ssize_t ipi_auto_flush_show(struct device *dev,
-+				   struct device_attribute *attr,
-+				   char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	char buffer[10];
-+
-+	snprintf(buffer, 10, "%d\n", csi_dev->hw.ipi_auto_flush);
-+
-+	return strlcpy(buf, buffer, PAGE_SIZE);
-+}
-+
-+static ssize_t ipi_timings_mode_store(struct device *dev,
-+				      struct device_attribute *attr,
-+				      const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned long ipi_mode;
-+
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	ret = kstrtoul(buf, 10, &ipi_mode);
-+	if (ret < 0)
-+		return ret;
-+
-+	if ((signed int)ipi_mode < 0 || (signed int)ipi_mode > 1) {
-+		dev_err(dev,
-+			"Invalid Timing Source %lu (Camera:0|Controller:1)\n",
-+			ipi_mode);
-+		return count;
-+	}
-+
-+	dev_info(dev, "IPI Color mode %lu\n", ipi_mode);
-+	csi_dev->hw.ipi_mode = ipi_mode;
-+
-+	return count;
-+}
-+
-+static ssize_t ipi_timings_mode_show(struct device *dev,
-+				     struct device_attribute *attr,
-+				     char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	char buffer[10];
-+
-+	snprintf(buffer, 10, "%d\n", csi_dev->hw.ipi_mode);
-+
-+	return strlcpy(buf, buffer, PAGE_SIZE);
-+}
-+
-+static ssize_t output_type_store(struct device *dev,
-+				 struct device_attribute *attr,
-+				 const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned long output;
-+
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	ret = kstrtoul(buf, 10, &output);
-+	if (ret < 0)
-+		return ret;
-+
-+	if ((signed int)output < 0 || (signed int)output > 1) {
-+		dev_err(dev,
-+			"Invalid Core output %lu to be used (IPI-> 0 or IDI->1 or BOTH- 2\n",
-+			output);
-+		return count;
-+	}
-+
-+	dev_info(dev, "IPI Color mode %lu\n", output);
-+	csi_dev->hw.output = output;
-+
-+	return count;
-+}
-+
-+static ssize_t output_type_show(struct device *dev,
-+				struct device_attribute *attr,
-+				char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
-+	struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
-+
-+	char buffer[10];
-+
-+	snprintf(buffer, 10, "%d\n", csi_dev->hw.output);
-+
-+	return strlcpy(buf, buffer, PAGE_SIZE);
-+}
-+
-+static DEVICE_ATTR_RO(core_version);
-+static DEVICE_ATTR_RO(core_reset);
-+static DEVICE_ATTR_RW(n_lanes);
-+static DEVICE_ATTR_RW(data_type);
-+static DEVICE_ATTR_RW(hsa);
-+static DEVICE_ATTR_RW(hbp);
-+static DEVICE_ATTR_RW(hsd);
-+static DEVICE_ATTR_RW(vsa);
-+static DEVICE_ATTR_RW(vbp);
-+static DEVICE_ATTR_RW(vfp);
-+static DEVICE_ATTR_RW(virtual_channel);
-+static DEVICE_ATTR_RW(ipi_color_mode);
-+static DEVICE_ATTR_RW(ipi_auto_flush);
-+static DEVICE_ATTR_RW(ipi_timings_mode);
-+static DEVICE_ATTR_RW(output_type);
-+
-+int dw_csi_create_capabilities_sysfs(struct platform_device *pdev)
-+{
-+	device_create_file(&pdev->dev, &dev_attr_core_version);
-+	device_create_file(&pdev->dev, &dev_attr_core_reset);
-+	device_create_file(&pdev->dev, &dev_attr_n_lanes);
-+	device_create_file(&pdev->dev, &dev_attr_data_type);
-+	device_create_file(&pdev->dev, &dev_attr_hsa);
-+	device_create_file(&pdev->dev, &dev_attr_hbp);
-+	device_create_file(&pdev->dev, &dev_attr_hsd);
-+	device_create_file(&pdev->dev, &dev_attr_vsa);
-+	device_create_file(&pdev->dev, &dev_attr_vbp);
-+	device_create_file(&pdev->dev, &dev_attr_vfp);
-+	device_create_file(&pdev->dev, &dev_attr_virtual_channel);
-+	device_create_file(&pdev->dev, &dev_attr_ipi_color_mode);
-+	device_create_file(&pdev->dev, &dev_attr_ipi_auto_flush);
-+	device_create_file(&pdev->dev, &dev_attr_ipi_timings_mode);
-+	device_create_file(&pdev->dev, &dev_attr_output_type);
-+
-+	return 0;
-+}
-diff --git a/drivers/media/platform/dwc/dw-mipi-csi.c b/drivers/media/platform/dwc/dw-mipi-csi.c
-new file mode 100644
-index 000000000000..50e3b4a58fdf
---- /dev/null
-+++ b/drivers/media/platform/dwc/dw-mipi-csi.c
-@@ -0,0 +1,570 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2018-2019 Synopsys, Inc. and/or its affiliates.
-+ *
-+ * Synopsys DesignWare MIPI CSI-2 Host controller driver
-+ * Core MIPI CSI-2 functions
-+ *
-+ * Author: Luis Oliveira <Luis.Oliveira@synopsys.com>
-+ */
-+
-+#include "dw-mipi-csi.h"
-+
-+static struct R_CSI2 reg = {
-+	.VERSION = 0x00,
-+	.N_LANES = 0x04,
-+	.CTRL_RESETN = 0x08,
-+	.INTERRUPT = 0x0C,
-+	.DATA_IDS_1 = 0x10,
-+	.DATA_IDS_2 = 0x14,
-+	.IPI_MODE = 0x80,
-+	.IPI_VCID = 0x84,
-+	.IPI_DATA_TYPE = 0x88,
-+	.IPI_MEM_FLUSH = 0x8C,
-+	.IPI_HSA_TIME = 0x90,
-+	.IPI_HBP_TIME = 0x94,
-+	.IPI_HSD_TIME = 0x98,
-+	.IPI_HLINE_TIME = 0x9C,
-+	.IPI_SOFTRSTN = 0xA0,
-+	.IPI_ADV_FEATURES = 0xAC,
-+	.IPI_VSA_LINES = 0xB0,
-+	.IPI_VBP_LINES = 0xB4,
-+	.IPI_VFP_LINES = 0xB8,
-+	.IPI_VACTIVE_LINES = 0xBC,
-+	.INT_PHY_FATAL = 0xe0,
-+	.MASK_INT_PHY_FATAL = 0xe4,
-+	.FORCE_INT_PHY_FATAL = 0xe8,
-+	.INT_PKT_FATAL = 0xf0,
-+	.MASK_INT_PKT_FATAL = 0xf4,
-+	.FORCE_INT_PKT_FATAL = 0xf8,
-+	.INT_PHY = 0x110,
-+	.MASK_INT_PHY = 0x114,
-+	.FORCE_INT_PHY = 0x118,
-+	.INT_LINE = 0x130,
-+	.MASK_INT_LINE = 0x134,
-+	.FORCE_INT_LINE = 0x138,
-+	.INT_IPI = 0x140,
-+	.MASK_INT_IPI = 0x144,
-+	.FORCE_INT_IPI = 0x148,
++#include "dw-dphy-rx.h"
++
++struct range_dphy_gen2 {
++	u32 freq;
++	u8 hsfregrange;
 +};
 +
-+struct interrupt_type csi_int = {
-+	.PHY_FATAL = BIT(0),
-+	.PKT_FATAL = BIT(1),
-+	.PHY = BIT(16),
++struct range_dphy_gen2 range_gen2[] = {
++	{ 80, 0x00 }, { 90, 0x10 }, { 100, 0x20 }, { 110, 0x30 },
++	{ 120, 0x01 }, { 130, 0x11 }, { 140, 0x21 }, { 150, 0x31 },
++	{ 160, 0x02 }, { 170, 0x12 }, { 180, 0x22 }, { 190, 0x32 },
++	{ 205, 0x03 }, { 220, 0x13 }, { 235, 0x23 }, { 250, 0x33 },
++	{ 275, 0x04 }, { 300, 0x14 }, { 325, 0x05 }, { 350, 0x15 },
++	{ 400, 0x25 }, { 450, 0x06 }, { 500, 0x16 }, { 550, 0x07 },
++	{ 600, 0x17 }, { 650, 0x08 }, { 700, 0x18 }, { 750, 0x09 },
++	{ 800, 0x19 }, { 850, 0x29 }, { 900, 0x39 }, { 950, 0x0A },
++	{ 1000, 0x1A }, { 1050, 0x2A }, { 1100, 0x3A }, { 1150, 0x0B },
++	{ 1200, 0x1B }, { 1250, 0x2B }, { 1300, 0x3B }, { 1350, 0x0C },
++	{ 1400, 0x1C }, { 1450, 0x2C }, { 1500, 0x3C }, { 1550, 0x0D },
++	{ 1600, 0x1D }, { 1650, 0x2D }, { 1700, 0x0E }, { 1750, 0x1E },
++	{ 1800, 0x2E }, { 1850, 0x3E }, { 1900, 0x0F }, { 1950, 0x1F },
++	{ 2000, 0x2F },
 +};
 +
-+#define dw_print(VAR) \
-+	dev_info(csi_dev->dev, "%s: 0x%x: %X\n", "#VAR#",\
-+	VAR, dw_mipi_csi_read(csi_dev, VAR))
++struct range_dphy_gen3 {
++	u32 freq;
++	u8 hsfregrange;
++	u32 osc_freq_target;
++};
 +
-+void dw_mipi_csi_write_part(struct dw_csi *dev, u32 address, u32 data,
-+			    u8 shift, u8 width)
++struct range_dphy_gen3 range_gen3[] = {
++	{ 80, 0x00, 0x1B6 }, { 90, 0x10, 0x1B6 }, { 100, 0x20, 0x1B6 },
++	{ 110, 0x30, 0x1B6 }, { 120, 0x01, 0x1B6 }, { 130, 0x11, 0x1B6 },
++	{ 140, 0x21, 0x1B6 }, { 150, 0x31, 0x1B6 }, { 160, 0x02, 0x1B6 },
++	{ 170, 0x12, 0x1B6 }, { 180, 0x22, 0x1B6 }, { 190, 0x32, 0x1B6 },
++	{ 205, 0x03, 0x1B6 }, { 220, 0x13, 0x1B6 }, { 235, 0x23, 0x1B6 },
++	{ 250, 0x33, 0x1B6 }, { 275, 0x04, 0x1B6 }, { 300, 0x14, 0x1B6 },
++	{ 325, 0x25, 0x1B6 }, { 350, 0x35, 0x1B6 }, { 400, 0x05, 0x1B6 },
++	{ 450, 0x16, 0x1B6 }, { 500, 0x26, 0x1B6 }, { 550, 0x37, 0x1B6 },
++	{ 600, 0x07, 0x1B6 }, { 650, 0x18, 0x1B6 }, { 700, 0x28, 0x1B6 },
++	{ 750, 0x39, 0x1B6 }, { 800, 0x09, 0x1B6 }, { 850, 0x19, 0x1B6 },
++	{ 900, 0x29, 0x1B6 }, { 950, 0x3A, 0x1B6 }, { 1000, 0x0A, 0x1B6 },
++	{ 1050, 0x1A, 0x1B6 }, { 1100, 0x2A, 0x1B6 }, { 1150, 0x3B, 0x1B6 },
++	{ 1200, 0x0B, 0x1B6 }, { 1250, 0x1B, 0x1B6 }, { 1300, 0x2B, 0x1B6 },
++	{ 1350, 0x3C, 0x1B6 }, { 1400, 0x0C, 0x1B6 }, { 1450, 0x1C, 0x1B6 },
++	{ 1500, 0x2C, 0x1B6 }, { 1550, 0x3D, 0x10F }, { 1600, 0x0D, 0x118 },
++	{ 1650, 0x1D, 0x121 }, { 1700, 0x2E, 0x12A }, { 1750, 0x3E, 0x132 },
++	{ 1800, 0x0E, 0x13B }, { 1850, 0x1E, 0x144 }, { 1900, 0x2F, 0x14D },
++	{ 1950, 0x3F, 0x155 }, { 2000, 0x0F, 0x15E }, { 2050, 0x40, 0x167 },
++	{ 2100, 0x41, 0x170 }, { 2150, 0x42, 0x178 }, { 2200, 0x43, 0x181 },
++	{ 2250, 0x44, 0x18A }, { 2300, 0x45, 0x193 }, { 2350, 0x46, 0x19B },
++	{ 2400, 0x47, 0x1A4 }, { 2450, 0x48, 0x1AD }, { 2500, 0x49, 0x1B6 }
++};
++
++u8 dw_dphy_setup_config(struct dw_dphy_rx *dphy)
 +{
++#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
++	int ret;
++
++	if (dphy->max_lanes == CTRL_4_LANES) {
++		dev_vdbg(&dphy->phy->dev, "CONFIG 4L\n");
++		return CTRL_4_LANES;
++	}
++	if (IS_ENABLED(CONFIG_OF)) {
++		ret = gpio_request(dphy->config_8l, "config");
++		if (ret < 0) {
++			dev_vdbg(&dphy->phy->dev,
++				 "could not acquire config (err=%d)\n", ret);
++			return ret;
++		}
++		ret = gpio_get_value(dphy->config_8l);
++		gpio_free(dphy->config_8l);
++	} else {
++		ret = dphy->config_8l;
++	}
++
++	dev_vdbg(&dphy->phy->dev,
++		 "Booting in [%s] mode\n",
++		 ret == CTRL_8_LANES ? "8L" : "4+4L");
++	return ret;
++
++#endif /* CONFIG_DWC_MIPI_TC_DPHY_GEN3 */
++	return CTRL_4_LANES;
++}
++
++#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
++void dw_dphy_if_write(struct dw_dphy_rx *dphy, u32 address, u32 data)
++{
++	writel(data, dphy->dphy1_if_addr + address);
++
++	if (dphy->lanes_config == CTRL_4_LANES)
++		return;
++
++	iowrite32(data, dphy->dphy2_if_addr + address);
++}
++
++u32 dw_dphy_if_read(struct dw_dphy_rx *dphy, u32 address)
++{
++	u32 if1 = 0, if2 = 0;
++
++	if1 = readl(dphy->dphy1_if_addr + address);
++
++	if (dphy->lanes_config == CTRL_4_LANES)
++		goto end;
++
++	if (dphy->lanes_config == DPHYID)
++		goto end;
++
++	if2 = readl(dphy->dphy2_if_addr + address);
++
++	if (if1 != if2)
++		dev_vdbg(&dphy->phy->dev,
++			 "Values read different for each interface\n");
++end:
++	return if1;
++}
++#endif
++
++void dw_dphy_write(struct dw_dphy_rx *dphy, u32 address, u32 data)
++{
++	iowrite32(data, dphy->base_address + address);
++
++	if (dphy->lanes_config == CTRL_4_LANES)
++		return;
++
++	if (address == R_CSI2_DPHY_TST_CTRL0)
++		iowrite32(data, dphy->base_address + R_CSI2_DPHY2_TST_CTRL0);
++	else if (address == R_CSI2_DPHY_TST_CTRL1)
++		iowrite32(data, dphy->base_address + R_CSI2_DPHY2_TST_CTRL1);
++}
++
++u32 dw_dphy_read(struct dw_dphy_rx *dphy, u32 address)
++{
++	int dphy1 = 0, dphy2 = 0;
++
++	dphy1 = ioread32(dphy->base_address + address);
++
++	if (dphy->lanes_config == CTRL_4_LANES)
++		goto end;
++
++	if (address == R_CSI2_DPHY_TST_CTRL0)
++		dphy2 = ioread32(dphy->base_address + R_CSI2_DPHY2_TST_CTRL0);
++	else if (address == R_CSI2_DPHY_TST_CTRL1)
++		dphy2 = ioread32(dphy->base_address + R_CSI2_DPHY2_TST_CTRL1);
++	else
++		return -ENODEV;
++end:
++	return dphy1;
++}
++
++void dw_dphy_write_msk(struct dw_dphy_rx *dev, u32 address, u32 data, u8 shift,
++		       u8 width)
++{
++	u32 temp = dw_dphy_read(dev, address);
 +	u32 mask = (1 << width) - 1;
-+	u32 temp = dw_mipi_csi_read(dev, address);
 +
 +	temp &= ~(mask << shift);
 +	temp |= (data & mask) << shift;
-+	dw_mipi_csi_write(dev, address, temp);
++	dw_dphy_write(dev, address, temp);
 +}
 +
-+void dw_mipi_csi_reset(struct dw_csi *csi_dev)
++static void dw_dphy_te_12b_write(struct dw_dphy_rx *dphy, u16 addr, u8 data)
 +{
-+	dw_mipi_csi_write(csi_dev, reg.CTRL_RESETN, 0);
-+	usleep_range(100, 200);
-+	dw_mipi_csi_write(csi_dev, reg.CTRL_RESETN, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 0, PHY_TESTEN, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 1, PHY_TESTEN, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 1, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 0x00, PHY_TESTDIN, 8);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 0, PHY_TESTEN, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, (u8)(addr >> 8),
++			  PHY_TESTDIN, 8);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 1, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 1, PHY_TESTEN, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 1, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, (u8)addr, PHY_TESTDIN,
++			  8);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 0, PHY_TESTEN, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, (u8)data, PHY_TESTDIN,
++			  8);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 1, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLK, 1);
 +}
 +
-+int dw_mipi_csi_mask_irq_power_off(struct dw_csi *csi_dev)
++static void dw_dphy_te_8b_write(struct dw_dphy_rx *dphy, u8 addr, u8 data)
 +{
-+	if (csi_dev->hw_version_major == 1) {
-+		/* set only one lane (lane 0) as active (ON) */
-+		dw_mipi_csi_write(csi_dev, reg.N_LANES, 0);
-+		dw_mipi_csi_write(csi_dev, reg.MASK_INT_PHY_FATAL, 0);
-+		dw_mipi_csi_write(csi_dev, reg.MASK_INT_PKT_FATAL, 0);
-+		dw_mipi_csi_write(csi_dev, reg.MASK_INT_PHY, 0);
-+		dw_mipi_csi_write(csi_dev, reg.MASK_INT_LINE, 0);
-+		dw_mipi_csi_write(csi_dev, reg.MASK_INT_IPI, 0);
-+
-+		/* only for version 1.30 */
-+		if (csi_dev->hw_version_minor == 30)
-+			dw_mipi_csi_write(csi_dev,
-+					  reg.MASK_INT_FRAME_FATAL, 0);
-+
-+		dw_mipi_csi_write(csi_dev, reg.CTRL_RESETN, 0);
-+
-+		/* only for version 1.40 */
-+		if (csi_dev->hw_version_minor == 40) {
-+			dw_mipi_csi_write(csi_dev,
-+					  reg.MSK_BNDRY_FRAME_FATAL, 0);
-+			dw_mipi_csi_write(csi_dev,
-+					  reg.MSK_SEQ_FRAME_FATAL, 0);
-+			dw_mipi_csi_write(csi_dev,
-+					  reg.MSK_CRC_FRAME_FATAL, 0);
-+			dw_mipi_csi_write(csi_dev, reg.MSK_PLD_CRC_FATAL, 0);
-+			dw_mipi_csi_write(csi_dev, reg.MSK_DATA_ID, 0);
-+			dw_mipi_csi_write(csi_dev, reg.MSK_ECC_CORRECT, 0);
-+		}
-+	}
-+
-+	return 0;
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 1, PHY_TESTCLK, 1);
++	dw_dphy_write(dphy, R_CSI2_DPHY_TST_CTRL1, addr);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 1, PHY_TESTEN, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 0, PHY_TESTEN, 1);
++	dw_dphy_write(dphy, R_CSI2_DPHY_TST_CTRL1, data);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 1, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLK, 1);
 +}
 +
-+int dw_mipi_csi_hw_stdby(struct dw_csi *csi_dev)
++static void dw_dphy_te_write(struct dw_dphy_rx *dphy, u16 addr, u8 data)
 +{
-+	if (csi_dev->hw_version_major == 1) {
-+		/* set only one lane (lane 0) as active (ON) */
-+		dw_mipi_csi_reset(csi_dev);
-+		dw_mipi_csi_write(csi_dev, reg.N_LANES, 0);
-+		phy_init(csi_dev->phy);
-+
-+		/* only for version 1.30 */
-+		if (csi_dev->hw_version_minor == 30)
-+			dw_mipi_csi_write(csi_dev,
-+					  reg.MASK_INT_FRAME_FATAL,
-+					  GENMASK(31, 0));
-+
-+		/* common */
-+		dw_mipi_csi_write(csi_dev, reg.MASK_INT_PHY_FATAL,
-+				  GENMASK(8, 0));
-+		dw_mipi_csi_write(csi_dev, reg.MASK_INT_PKT_FATAL,
-+				  GENMASK(1, 0));
-+		dw_mipi_csi_write(csi_dev, reg.MASK_INT_PHY, GENMASK(23, 0));
-+		dw_mipi_csi_write(csi_dev, reg.MASK_INT_LINE, GENMASK(23, 0));
-+		dw_mipi_csi_write(csi_dev, reg.MASK_INT_IPI, GENMASK(5, 0));
-+
-+		/* only for version 1.40 */
-+		if (csi_dev->hw_version_minor == 40) {
-+			dw_mipi_csi_write(csi_dev,
-+					  reg.MSK_BNDRY_FRAME_FATAL,
-+					  GENMASK(31, 0));
-+			dw_mipi_csi_write(csi_dev,
-+					  reg.MSK_SEQ_FRAME_FATAL,
-+					  GENMASK(31, 0));
-+			dw_mipi_csi_write(csi_dev,
-+					  reg.MSK_CRC_FRAME_FATAL,
-+					  GENMASK(31, 0));
-+			dw_mipi_csi_write(csi_dev,
-+					  reg.MSK_PLD_CRC_FATAL,
-+					  GENMASK(31, 0));
-+			dw_mipi_csi_write(csi_dev,
-+					  reg.MSK_DATA_ID, GENMASK(31, 0));
-+			dw_mipi_csi_write(csi_dev,
-+					  reg.MSK_ECC_CORRECT, GENMASK(31, 0));
-+		}
-+	}
-+	return 0;
++	if (dphy->dphy_te_len == BIT12)
++		dw_dphy_te_12b_write(dphy, addr, data);
++	else
++		dw_dphy_te_8b_write(dphy, addr, data);
 +}
 +
-+void dw_mipi_csi_set_ipi_fmt(struct dw_csi *csi_dev)
++static int dw_dphy_te_12b_read(struct dw_dphy_rx *dphy, u32 addr)
 +{
-+	struct device *dev = csi_dev->dev;
++	u8 ret;
 +
-+	if (csi_dev->ipi_dt) {
-+		dw_mipi_csi_write(csi_dev, reg.IPI_DATA_TYPE, csi_dev->ipi_dt);
-+		switch (csi_dev->ipi_dt) {
-+		case CSI_2_YUV420_8:
-+		case CSI_2_YUV420_8_LEG:
-+		case CSI_2_YUV420_8_SHIFT:
-+		break;
-+		case CSI_2_YUV420_10:
-+		case CSI_2_YUV420_10_SHIFT:
-+		break;
-+		}
-+	} else {
-+		switch (csi_dev->fmt->mbus_code) {
-+		/* RGB 666 */
-+		case MEDIA_BUS_FMT_RGB666_1X18:
-+		csi_dev->ipi_dt =  CSI_2_RGB666;
-+		break;
-+		/* RGB 565 */
-+		case MEDIA_BUS_FMT_RGB565_2X8_BE:
-+		case MEDIA_BUS_FMT_RGB565_2X8_LE:
-+		csi_dev->ipi_dt = CSI_2_RGB565;
-+		break;
-+		/* RGB 555 */
-+		case MEDIA_BUS_FMT_RGB555_2X8_PADHI_BE:
-+		case MEDIA_BUS_FMT_RGB555_2X8_PADHI_LE:
-+		csi_dev->ipi_dt = CSI_2_RGB555;
-+		break;
-+		/* RGB 444 */
-+		case MEDIA_BUS_FMT_RGB444_2X8_PADHI_BE:
-+		case MEDIA_BUS_FMT_RGB444_2X8_PADHI_LE:
-+		csi_dev->ipi_dt = CSI_2_RGB444;
-+		break;
-+		/* RGB 888 */
-+		break;
-+		case MEDIA_BUS_FMT_RGB888_2X12_LE:
-+		case MEDIA_BUS_FMT_RGB888_2X12_BE:
-+		csi_dev->ipi_dt = CSI_2_RGB888;
-+		break;
-+		/* RAW 10 */
-+		case MEDIA_BUS_FMT_SBGGR10_1X10:
-+		case MEDIA_BUS_FMT_SRGGB10_1X10:
-+		case MEDIA_BUS_FMT_SBGGR10_2X8_PADHI_BE:
-+		csi_dev->ipi_dt = CSI_2_RAW10;
-+		break;
-+		/* RAW 12 */
-+		case MEDIA_BUS_FMT_SBGGR12_1X12:
-+		csi_dev->ipi_dt = CSI_2_RAW12;
-+		break;
-+		/* RAW 14 */
-+		case MEDIA_BUS_FMT_SBGGR14_1X14:
-+		csi_dev->ipi_dt = CSI_2_RAW14;
-+		break;
-+		/* RAW 16 */
-+		case MEDIA_BUS_FMT_SBGGR16_1X16:
-+		csi_dev->ipi_dt = CSI_2_RAW16;
-+		break;
-+		/* RAW 8 */
-+		case MEDIA_BUS_FMT_SBGGR8_1X8:
-+		csi_dev->ipi_dt = CSI_2_RAW8;
-+		break;
-+		/* YUV 422 8-bit */
-+		case MEDIA_BUS_FMT_YVYU8_2X8:
-+		csi_dev->ipi_dt = CSI_2_RAW8;
-+		break;
-+		/* YUV 422 10-bit */
-+		case MEDIA_BUS_FMT_VYUY8_1X16:
-+		csi_dev->ipi_dt = CSI_2_YUV422_8;
-+		break;
-+		/* YUV 420 8-bit LEGACY */
-+		case MEDIA_BUS_FMT_Y8_1X8:
-+		csi_dev->ipi_dt = CSI_2_RAW8;
-+		break;
-+		/* YUV 420 10-bit */
-+		case MEDIA_BUS_FMT_Y10_1X10:
-+		csi_dev->ipi_dt = CSI_2_RAW8;
-+		break;
-+		default:
-+		break;
-+		}
-+		dw_mipi_csi_write(csi_dev, reg.DATA_IDS_1, csi_dev->ipi_dt);
-+	}
-+	dev_dbg(dev, "Selected IPI Data Type 0x%X\n", csi_dev->ipi_dt);
++	dw_dphy_write(dphy, R_CSI2_DPHY_SHUTDOWNZ, 0);
++	dw_dphy_write(dphy, R_CSI2_DPHY_RSTZ, 0);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 0, PHY_TESTEN, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 1, PHY_TESTEN, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 1, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 0x00, PHY_TESTDIN, 8);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 0, PHY_TESTEN, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, (u8)(addr >> 8),
++			  PHY_TESTDIN, 8);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 1, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 1, PHY_TESTEN, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 1, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, (u8)addr, PHY_TESTDIN,
++			  8);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 0x00, 0, PHY_TESTDIN);
++	ret = dw_dphy_read_msk(dphy, R_CSI2_DPHY_TST_CTRL1, PHY_TESTDOUT, 8);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 0, PHY_TESTEN, 1);
++	dw_dphy_write(dphy, R_CSI2_DPHY_RSTZ, 1);
++	dw_dphy_write(dphy, R_CSI2_DPHY_SHUTDOWNZ, 1);
++
++	return ret;
 +}
 +
-+void dw_mipi_csi_fill_timings(struct dw_csi *dev,
-+			      struct v4l2_subdev_format *fmt)
++static int dw_dphy_te_8b_read(struct dw_dphy_rx *dphy, u32 addr)
 +{
-+	/* expected values */
-+	dev->hw.virtual_ch = 0;
-+	dev->hw.ipi_color_mode = COLOR48;
-+	dev->hw.ipi_auto_flush = 1;
-+	dev->hw.ipi_mode = CAMERA_TIMING;
-+	dev->hw.ipi_cut_through = CTINACTIVE;
-+	dev->hw.ipi_adv_features = LINE_EVENT_SELECTION(EVSELAUTO);
-+	dev->hw.htotal = fmt->format.width + dev->hw.hsa +
-+			 dev->hw.hbp + dev->hw.hsd;
-+	dev->hw.vactive = fmt->format.height;
-+	dev->hw.output = 2;
++	u8 ret;
 +
-+	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
-+		dev_dbg(dev->dev, "*********** timings *********\n");
-+		dev_dbg(dev->dev, "Horizontal Sync Active: %d\n", dev->hw.hsa);
-+		dev_dbg(dev->dev, "Horizontal Back Porch: %d\n", dev->hw.hbp);
-+		dev_dbg(dev->dev, "Horizontal Width: %d\n", fmt->format.width);
-+		dev_dbg(dev->dev, "Horizontal Total: %d\n", dev->hw.htotal);
-+		dev_dbg(dev->dev, "Vertical Sync Active: %d\n", dev->hw.vsa);
-+		dev_dbg(dev->dev, "Vertical Back Porch: %d\n", dev->hw.vbp);
-+		dev_dbg(dev->dev, "Vertical Front Porch: %d\n", dev->hw.vfp);
-+		dev_dbg(dev->dev, "Vertical Active: %d\n", dev->hw.vactive);
-+	}
++	dw_dphy_write(dphy, R_CSI2_DPHY_SHUTDOWNZ, 0);
++	dw_dphy_write(dphy, R_CSI2_DPHY_RSTZ, 0);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 1, PHY_TESTEN, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 1, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, addr, PHY_TESTDIN, 8);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLK, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 0, PHY_TESTEN, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL1, 0, PHY_TESTDIN, 8);
++	ret = dw_dphy_read_msk(dphy, R_CSI2_DPHY_TST_CTRL1, PHY_TESTDOUT, 8);
++	dw_dphy_write(dphy, R_CSI2_DPHY_RSTZ, 1);
++	dw_dphy_write(dphy, R_CSI2_DPHY_SHUTDOWNZ, 1);
++
++	return ret;
 +}
 +
-+void dw_mipi_csi_start(struct dw_csi *csi_dev)
++int dw_dphy_te_read(struct dw_dphy_rx *dphy, u32 addr)
 +{
-+	struct device *dev = csi_dev->dev;
++	int ret;
 +
-+	dw_mipi_csi_write(csi_dev, reg.N_LANES, (csi_dev->hw.num_lanes - 1));
-+	dev_dbg(dev, "number of lanes: %d\n", csi_dev->hw.num_lanes);
++	if (dphy->dphy_te_len == BIT12)
++		ret = dw_dphy_te_12b_read(dphy, addr);
++	else
++		ret = dw_dphy_te_8b_read(dphy, addr);
 +
-+	/* IPI Related Configuration */
-+	if (csi_dev->hw.output == IPI_OUT || csi_dev->hw.output == BOTH_OUT) {
-+		if (csi_dev->hw_version_major >= 1) {
-+			if (csi_dev->hw_version_minor >= 20)
-+				dw_mipi_csi_write(csi_dev,
-+						  reg.IPI_ADV_FEATURES,
-+						  csi_dev->hw.ipi_adv_features);
-+			if (csi_dev->hw_version_minor >= 30)
-+				dw_mipi_csi_write(csi_dev,
-+						  reg.IPI_SOFTRSTN, 0x1);
-+		}
-+		/*  address | data, | shift | width */
-+		dw_mipi_csi_write_part(csi_dev, reg.IPI_MODE, 1, 24, 1);
-+		dw_mipi_csi_write_part(csi_dev,
-+				       reg.IPI_MODE,
-+				       csi_dev->hw.ipi_mode,
-+				       0, 1);
-+		if (csi_dev->hw.ipi_mode == CAMERA_TIMING) {
-+			dw_mipi_csi_write(csi_dev,
-+					  reg.IPI_ADV_FEATURES,
-+					  LINE_EVENT_SELECTION(EVSELPROG) |
-+					  EN_VIDEO |
-+					  EN_LINE_START |
-+					  EN_NULL |
-+					  EN_BLANKING |
-+					  EN_EMBEDDED);
-+		}
-+		dw_mipi_csi_write_part(csi_dev,
-+				       reg.IPI_MODE,
-+				       csi_dev->hw.ipi_color_mode,
-+				       8, 1);
-+		dw_mipi_csi_write_part(csi_dev,
-+				       reg.IPI_MODE,
-+				       csi_dev->hw.ipi_cut_through,
-+				       16, 1);
-+		dw_mipi_csi_write_part(csi_dev,
-+				       reg.IPI_VCID,
-+				       csi_dev->hw.virtual_ch,
-+				       0, 2);
-+		dw_mipi_csi_write_part(csi_dev,
-+				       reg.IPI_MEM_FLUSH,
-+				       csi_dev->hw.ipi_auto_flush,
-+				       8, 1);
-+
-+		dev_vdbg(dev, "*********** config *********\n");
-+		dev_vdbg(dev, "IPI enable: %s\n",
-+			 csi_dev->hw.output ? "YES" : "NO");
-+		dev_vdbg(dev, "video mode transmission type: %s timming\n",
-+			 csi_dev->hw.ipi_mode ? "controller" : "camera");
-+		dev_vdbg(dev, "Color Mode: %s\n",
-+			 csi_dev->hw.ipi_color_mode ? "16 bits" : "48 bits");
-+		dev_vdbg(dev, "Cut Through Mode: %s\n",
-+			 csi_dev->hw.ipi_cut_through ? "enable" : "disable");
-+		dev_vdbg(dev, "Virtual Channel: %d\n",
-+			 csi_dev->hw.virtual_ch);
-+		dev_vdbg(dev, "Auto-flush: %d\n",
-+			 csi_dev->hw.ipi_auto_flush);
-+		dw_mipi_csi_write(csi_dev, reg.IPI_SOFTRSTN, 1);
-+
-+		if (csi_dev->hw.ipi_mode == AUTO_TIMING)
-+			phy_power_on(csi_dev->phy);
-+
-+		dw_mipi_csi_write(csi_dev,
-+				  reg.IPI_HSA_TIME, csi_dev->hw.hsa);
-+		dw_mipi_csi_write(csi_dev,
-+				  reg.IPI_HBP_TIME, csi_dev->hw.hbp);
-+		dw_mipi_csi_write(csi_dev,
-+				  reg.IPI_HSD_TIME, csi_dev->hw.hsd);
-+		dw_mipi_csi_write(csi_dev,
-+				  reg.IPI_HLINE_TIME, csi_dev->hw.htotal);
-+		dw_mipi_csi_write(csi_dev,
-+				  reg.IPI_VSA_LINES, csi_dev->hw.vsa);
-+		dw_mipi_csi_write(csi_dev,
-+				  reg.IPI_VBP_LINES, csi_dev->hw.vbp);
-+		dw_mipi_csi_write(csi_dev,
-+				  reg.IPI_VFP_LINES, csi_dev->hw.vfp);
-+		dw_mipi_csi_write(csi_dev,
-+				  reg.IPI_VACTIVE_LINES, csi_dev->hw.vactive);
-+	}
-+	phy_power_on(csi_dev->phy);
++	return ret;
 +}
-+
-+int dw_mipi_csi_irq_handler(struct dw_csi *csi_dev)
-+{
-+	struct device *dev = csi_dev->dev;
-+	u32 global_int_status, i_sts;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&csi_dev->slock, flags);
-+	global_int_status = dw_mipi_csi_read(csi_dev, reg.INTERRUPT);
-+
-+	if (global_int_status & csi_int.PHY_FATAL) {
-+		i_sts = dw_mipi_csi_read(csi_dev, reg.INT_PHY_FATAL);
-+		dev_err_ratelimited(dev, "int %08X: PHY FATAL: %08X\n",
-+				    reg.INT_PHY_FATAL, i_sts);
-+	}
-+
-+	if (global_int_status & csi_int.PKT_FATAL) {
-+		i_sts = dw_mipi_csi_read(csi_dev, reg.INT_PKT_FATAL);
-+		dev_err_ratelimited(dev, "int %08X: PKT FATAL: %08X\n",
-+				    reg.INT_PKT_FATAL, i_sts);
-+	}
-+
-+	if (global_int_status & csi_int.FRAME_FATAL &&
-+	    csi_dev->hw_version_major == 1 &&
-+	    csi_dev->hw_version_minor == 30) {
-+		i_sts = dw_mipi_csi_read(csi_dev, reg.INT_FRAME_FATAL);
-+		dev_err_ratelimited(dev, "int %08X: FRAME FATAL: %08X\n",
-+				    reg.INT_FRAME_FATAL, i_sts);
-+	}
-+
-+	if (global_int_status & csi_int.PHY) {
-+		i_sts = dw_mipi_csi_read(csi_dev, reg.INT_PHY);
-+		dev_err_ratelimited(dev, "int %08X: PHY: %08X\n",
-+				    reg.INT_PHY, i_sts);
-+	}
-+
-+	if (global_int_status & csi_int.PKT &&
-+	    csi_dev->hw_version_major == 1 &&
-+	    csi_dev->hw_version_minor <= 30) {
-+		i_sts = dw_mipi_csi_read(csi_dev, reg.INT_PKT);
-+		dev_err_ratelimited(dev, "int %08X: PKT: %08X\n",
-+				    reg.INT_PKT, i_sts);
-+	}
-+
-+	if (global_int_status & csi_int.LINE) {
-+		i_sts = dw_mipi_csi_read(csi_dev, reg.INT_LINE);
-+		dev_err_ratelimited(dev, "int %08X: LINE: %08X\n",
-+				    reg.INT_LINE, i_sts);
-+	}
-+
-+	if (global_int_status & csi_int.IPI) {
-+		i_sts = dw_mipi_csi_read(csi_dev, reg.INT_IPI);
-+		dev_err_ratelimited(dev, "int %08X: IPI: %08X\n",
-+				    reg.INT_IPI, i_sts);
-+	}
-+
-+	if (global_int_status & csi_int.BNDRY_FRAME_FATAL) {
-+		i_sts = dw_mipi_csi_read(csi_dev, reg.ST_BNDRY_FRAME_FATAL);
-+		dev_err_ratelimited(dev,
-+				    "int %08X: ST_BNDRY_FRAME_FATAL: %08X\n",
-+				    reg.ST_BNDRY_FRAME_FATAL, i_sts);
-+	}
-+
-+	if (global_int_status & csi_int.SEQ_FRAME_FATAL) {
-+		i_sts = dw_mipi_csi_read(csi_dev, reg.ST_SEQ_FRAME_FATAL);
-+		dev_err_ratelimited(dev,
-+				    "int %08X: ST_SEQ_FRAME_FATAL: %08X\n",
-+				    reg.ST_SEQ_FRAME_FATAL, i_sts);
-+	}
-+
-+	if (global_int_status & csi_int.CRC_FRAME_FATAL) {
-+		i_sts = dw_mipi_csi_read(csi_dev, reg.ST_CRC_FRAME_FATAL);
-+		dev_err_ratelimited(dev,
-+				    "int %08X: ST_CRC_FRAME_FATAL: %08X\n",
-+				    reg.ST_CRC_FRAME_FATAL, i_sts);
-+	}
-+
-+	if (global_int_status & csi_int.PLD_CRC_FATAL) {
-+		i_sts = dw_mipi_csi_read(csi_dev, reg.ST_PLD_CRC_FATAL);
-+		dev_err_ratelimited(dev,
-+				    "int %08X: ST_PLD_CRC_FATAL: %08X\n",
-+				    reg.ST_PLD_CRC_FATAL, i_sts);
-+	}
-+
-+	if (global_int_status & csi_int.DATA_ID) {
-+		i_sts = dw_mipi_csi_read(csi_dev, reg.ST_DATA_ID);
-+		dev_err_ratelimited(dev, "int %08X: ST_DATA_ID: %08X\n",
-+				    reg.ST_DATA_ID, i_sts);
-+	}
-+
-+	if (global_int_status & csi_int.ECC_CORRECTED) {
-+		i_sts = dw_mipi_csi_read(csi_dev, reg.ST_ECC_CORRECT);
-+		dev_err_ratelimited(dev, "int %08X: ST_ECC_CORRECT: %08X\n",
-+				    reg.ST_ECC_CORRECT, i_sts);
-+	}
-+
-+	spin_unlock_irqrestore(&csi_dev->slock, flags);
-+
-+	return 1;
-+}
-+
-+void dw_mipi_csi_get_version(struct dw_csi *csi_dev)
-+{
-+	u32 hw_version;
-+
-+	hw_version = dw_mipi_csi_read(csi_dev, reg.VERSION);
-+	csi_dev->hw_version_major = (u8)((hw_version >> 24) - '0');
-+	csi_dev->hw_version_minor = (u8)((hw_version >> 16) - '0');
-+	csi_dev->hw_version_minor = csi_dev->hw_version_minor * 10;
-+	csi_dev->hw_version_minor += (u8)((hw_version >> 8) - '0');
-+}
-+
-+int dw_mipi_csi_specific_mappings(struct dw_csi *csi_dev)
-+{
-+	struct device *dev = csi_dev->dev;
-+
-+	if (csi_dev->hw_version_major == 1) {
-+		if (csi_dev->hw_version_minor == 30) {
-+			/*
-+			 * Hardware registers that were
-+			 * exclusive to version < 1.40
-+			 */
-+			reg.INT_FRAME_FATAL = 0x100;
-+			reg.MASK_INT_FRAME_FATAL = 0x104;
-+			reg.FORCE_INT_FRAME_FATAL = 0x108;
-+			reg.INT_PKT = 0x120;
-+			reg.MASK_INT_PKT = 0x124;
-+			reg.FORCE_INT_PKT = 0x128;
-+
-+			/* interrupt source present until this release */
-+			csi_int.PKT = BIT(17);
-+			csi_int.LINE = BIT(18);
-+			csi_int.IPI = BIT(19);
-+			csi_int.FRAME_FATAL = BIT(2);
-+
-+		} else if (csi_dev->hw_version_minor == 40) {
-+			/*
-+			 * HW registers that were added
-+			 * to version 1.40
-+			 */
-+			reg.ST_BNDRY_FRAME_FATAL = 0x280;
-+			reg.MSK_BNDRY_FRAME_FATAL = 0x284;
-+			reg.FORCE_BNDRY_FRAME_FATAL = 0x288;
-+			reg.ST_SEQ_FRAME_FATAL = 0x290;
-+			reg.MSK_SEQ_FRAME_FATAL	= 0x294;
-+			reg.FORCE_SEQ_FRAME_FATAL = 0x298;
-+			reg.ST_CRC_FRAME_FATAL = 0x2a0;
-+			reg.MSK_CRC_FRAME_FATAL	= 0x2a4;
-+			reg.FORCE_CRC_FRAME_FATAL = 0x2a8;
-+			reg.ST_PLD_CRC_FATAL = 0x2b0;
-+			reg.MSK_PLD_CRC_FATAL = 0x2b4;
-+			reg.FORCE_PLD_CRC_FATAL = 0x2b8;
-+			reg.ST_DATA_ID = 0x2c0;
-+			reg.MSK_DATA_ID = 0x2c4;
-+			reg.FORCE_DATA_ID = 0x2c8;
-+			reg.ST_ECC_CORRECT = 0x2d0;
-+			reg.MSK_ECC_CORRECT = 0x2d4;
-+			reg.FORCE_ECC_CORRECT = 0x2d8;
-+			reg.DATA_IDS_VC_1 = 0x0;
-+			reg.DATA_IDS_VC_2 = 0x0;
-+			reg.VC_EXTENSION = 0x0;
-+
-+			/* interrupts map were changed */
-+			csi_int.LINE = BIT(17);
-+			csi_int.IPI = BIT(18);
-+			csi_int.BNDRY_FRAME_FATAL = BIT(2);
-+			csi_int.SEQ_FRAME_FATAL	= BIT(3);
-+			csi_int.CRC_FRAME_FATAL = BIT(4);
-+			csi_int.PLD_CRC_FATAL = BIT(5);
-+			csi_int.DATA_ID = BIT(6);
-+			csi_int.ECC_CORRECTED = BIT(7);
-+
-+		} else {
-+			dev_info(dev, "Version minor not supported.");
-+		}
-+	} else {
-+		dev_info(dev, "Version major not supported.");
-+	}
-+	return 0;
-+}
-+
-+void dw_mipi_csi_dump(struct dw_csi *csi_dev)
-+{
-+	dw_print(reg.VERSION);
-+	dw_print(reg.N_LANES);
-+	dw_print(reg.CTRL_RESETN);
-+	dw_print(reg.INTERRUPT);
-+	dw_print(reg.DATA_IDS_1);
-+	dw_print(reg.DATA_IDS_2);
-+	dw_print(reg.IPI_MODE);
-+	dw_print(reg.IPI_VCID);
-+	dw_print(reg.IPI_DATA_TYPE);
-+	dw_print(reg.IPI_MEM_FLUSH);
-+	dw_print(reg.IPI_HSA_TIME);
-+	dw_print(reg.IPI_HBP_TIME);
-+	dw_print(reg.IPI_HSD_TIME);
-+	dw_print(reg.IPI_HLINE_TIME);
-+	dw_print(reg.IPI_SOFTRSTN);
-+	dw_print(reg.IPI_ADV_FEATURES);
-+	dw_print(reg.IPI_VSA_LINES);
-+	dw_print(reg.IPI_VBP_LINES);
-+	dw_print(reg.IPI_VFP_LINES);
-+	dw_print(reg.IPI_VACTIVE_LINES);
-+	dw_print(reg.IPI_DATA_TYPE);
-+	dw_print(reg.VERSION);
-+	dw_print(reg.IPI_ADV_FEATURES);
-+}
-diff --git a/drivers/media/platform/dwc/dw-mipi-csi.h b/drivers/media/platform/dwc/dw-mipi-csi.h
-new file mode 100644
-index 000000000000..e4420ee16753
---- /dev/null
-+++ b/drivers/media/platform/dwc/dw-mipi-csi.h
-@@ -0,0 +1,294 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2018-2019 Synopsys, Inc. and/or its affiliates.
-+ *
-+ * Synopsys DesignWare MIPI CSI-2 Host controller driver
-+ *
-+ * Author: Luis Oliveira <Luis.Oliveira@synopsys.com>
-+ */
-+
-+#ifndef _DW_MIPI_CSI_H__
-+#define _DW_MIPI_CSI_H__
-+
-+#include <linux/delay.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/io.h>
-+#include <linux/phy/phy.h>
-+#include <linux/delay.h>
-+#include <linux/interrupt.h>
-+#include <linux/of.h>
-+#include <linux/of_graph.h>
-+#include <linux/platform_device.h>
-+#include <linux/ratelimit.h>
-+#include <linux/reset.h>
-+#include <linux/videodev2.h>
-+#include <linux/wait.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-fwnode.h>
-+#include <media/dwc/dw-mipi-csi-pltfrm.h>
-+
-+/* Advanced features */
-+#define IPI_DT_OVERWRITE BIT(0)
-+#define DATA_TYPE_OVERWRITE(dt) (((dt) & GENMASK(5, 0)) << 8)
-+#define LINE_EVENT_SELECTION(n) ((n) << 16)
-+
-+enum line_event {
-+	EVSELAUTO = 0,
-+	EVSELPROG = 1,
-+};
-+
-+#define EN_VIDEO BIT(17)
-+#define EN_LINE_START BIT(18)
-+#define EN_NULL BIT(19)
-+#define EN_BLANKING BIT(20)
-+#define EN_EMBEDDED BIT(21)
-+#define IPI_SYNC_EVENT_MODE(n) ((n) << 24)
-+
-+enum sync_event {
-+	SYNCEVFSN = 0,
-+	SYNCEVFS = 1,
-+};
-+
-+/* DW MIPI CSI-2 register addresses*/
-+
-+struct R_CSI2 {
-+	u16 VERSION;
-+	u16 N_LANES;
-+	u16 CTRL_RESETN;
-+	u16 INTERRUPT;
-+	u16 DATA_IDS_1;
-+	u16 DATA_IDS_2;
-+	u16 DATA_IDS_VC_1;
-+	u16 DATA_IDS_VC_2;
-+	u16 IPI_MODE;
-+	u16 IPI_VCID;
-+	u16 IPI_DATA_TYPE;
-+	u16 IPI_MEM_FLUSH;
-+	u16 IPI_HSA_TIME;
-+	u16 IPI_HBP_TIME;
-+	u16 IPI_HSD_TIME;
-+	u16 IPI_HLINE_TIME;
-+	u16 IPI_SOFTRSTN;
-+	u16 IPI_ADV_FEATURES;
-+	u16 IPI_VSA_LINES;
-+	u16 IPI_VBP_LINES;
-+	u16 IPI_VFP_LINES;
-+	u16 IPI_VACTIVE_LINES;
-+	u16 VC_EXTENSION;
-+	u16 INT_PHY_FATAL;
-+	u16 MASK_INT_PHY_FATAL;
-+	u16 FORCE_INT_PHY_FATAL;
-+	u16 INT_PKT_FATAL;
-+	u16 MASK_INT_PKT_FATAL;
-+	u16 FORCE_INT_PKT_FATAL;
-+	u16 INT_FRAME_FATAL;
-+	u16 MASK_INT_FRAME_FATAL;
-+	u16 FORCE_INT_FRAME_FATAL;
-+	u16 INT_PHY;
-+	u16 MASK_INT_PHY;
-+	u16 FORCE_INT_PHY;
-+	u16 INT_PKT;
-+	u16 MASK_INT_PKT;
-+	u16 FORCE_INT_PKT;
-+	u16 INT_LINE;
-+	u16 MASK_INT_LINE;
-+	u16 FORCE_INT_LINE;
-+	u16 INT_IPI;
-+	u16 MASK_INT_IPI;
-+	u16 FORCE_INT_IPI;
-+	u16 ST_BNDRY_FRAME_FATAL;
-+	u16 MSK_BNDRY_FRAME_FATAL;
-+	u16 FORCE_BNDRY_FRAME_FATAL;
-+	u16 ST_SEQ_FRAME_FATAL;
-+	u16 MSK_SEQ_FRAME_FATAL;
-+	u16 FORCE_SEQ_FRAME_FATAL;
-+	u16 ST_CRC_FRAME_FATAL;
-+	u16 MSK_CRC_FRAME_FATAL;
-+	u16 FORCE_CRC_FRAME_FATAL;
-+	u16 ST_PLD_CRC_FATAL;
-+	u16 MSK_PLD_CRC_FATAL;
-+	u16 FORCE_PLD_CRC_FATAL;
-+	u16 ST_DATA_ID;
-+	u16 MSK_DATA_ID;
-+	u16 FORCE_DATA_ID;
-+	u16 ST_ECC_CORRECT;
-+	u16 MSK_ECC_CORRECT;
-+	u16 FORCE_ECC_CORRECT;
-+};
-+
-+/* Interrupt Masks */
-+struct interrupt_type {
-+	u32 PHY_FATAL;
-+	u32 PKT_FATAL;
-+	u32 FRAME_FATAL;
-+	u32 PHY;
-+	u32 PKT;
-+	u32 LINE;
-+	u32 IPI;
-+	u32 BNDRY_FRAME_FATAL;
-+	u32 SEQ_FRAME_FATAL;
-+	u32 CRC_FRAME_FATAL;
-+	u32 PLD_CRC_FATAL;
-+	u32 DATA_ID;
-+	u32 ECC_CORRECTED;
-+};
-+
-+/* IPI Data Types */
-+enum data_type {
-+	CSI_2_YUV420_8 = 0x18,
-+	CSI_2_YUV420_10 = 0x19,
-+	CSI_2_YUV420_8_LEG = 0x1A,
-+	CSI_2_YUV420_8_SHIFT = 0x1C,
-+	CSI_2_YUV420_10_SHIFT = 0x1D,
-+	CSI_2_YUV422_8 = 0x1E,
-+	CSI_2_YUV422_10 = 0x1F,
-+	CSI_2_RGB444 = 0x20,
-+	CSI_2_RGB555 = 0x21,
-+	CSI_2_RGB565 = 0x22,
-+	CSI_2_RGB666 = 0x23,
-+	CSI_2_RGB888 = 0x24,
-+	CSI_2_RAW6 = 0x28,
-+	CSI_2_RAW7 = 0x29,
-+	CSI_2_RAW8 = 0x2A,
-+	CSI_2_RAW10 = 0x2B,
-+	CSI_2_RAW12 = 0x2C,
-+	CSI_2_RAW14 = 0x2D,
-+	CSI_2_RAW16 = 0x2E,
-+	CSI_2_RAW20 = 0x2F,
-+	USER_DEFINED_1 = 0x30,
-+	USER_DEFINED_2 = 0x31,
-+	USER_DEFINED_3 = 0x32,
-+	USER_DEFINED_4 = 0x33,
-+	USER_DEFINED_5 = 0x34,
-+	USER_DEFINED_6 = 0x35,
-+	USER_DEFINED_7 = 0x36,
-+	USER_DEFINED_8 = 0x37,
-+};
-+
-+/* DWC MIPI CSI-2 output types */
-+enum output {
-+	IPI_OUT = 0,
-+	IDI_OUT = 1,
-+	BOTH_OUT = 2
-+};
-+
-+/* IPI color components */
-+enum color_mode {
-+	COLOR48 = 0,
-+	COLOR16 = 1
-+};
-+
-+/* IPI cut through */
-+enum cut_through {
-+	CTINACTIVE = 0,
-+	CTACTIVE = 1
-+};
-+
-+/* IPI output types */
-+enum ipi_output {
-+	CAMERA_TIMING = 0,
-+	AUTO_TIMING = 1
-+};
-+
-+/* Format template */
-+struct mipi_fmt {
-+	u32 mbus_code;
-+	u8 depth;
-+};
-+
-+struct mipi_dt {
-+	u32 hex;
-+	char *name;
-+};
-+
-+/* CSI specific configuration */
-+struct csi_data {
-+	u32 num_lanes;
-+	u32 dphy_freq;
-+	u32 pclk;
-+	u32 fps;
-+	u32 bpp;
-+	u32 output;
-+	u32 ipi_mode;
-+	u32 ipi_adv_features;
-+	u32 ipi_cut_through;
-+	u32 ipi_color_mode;
-+	u32 ipi_auto_flush;
-+	u32 virtual_ch;
-+	u32 hsa;
-+	u32 hbp;
-+	u32 hsd;
-+	u32 htotal;
-+	u32 vsa;
-+	u32 vbp;
-+	u32 vfp;
-+	u32 vactive;
-+};
-+
-+/* Structure to embed device driver information */
-+struct dw_csi {
-+	struct v4l2_subdev sd;
-+	struct video_device vdev;
-+	struct v4l2_device v4l2_dev;
-+	struct device *dev;
-+	struct clk *perclk, *phyclk;
-+	struct media_pad pads[CSI_PADS_NUM];
-+	struct mipi_fmt *fmt;
-+	struct v4l2_mbus_framefmt format;
-+	void __iomem *base_address;
-+	void __iomem *demo;
-+	void __iomem *csc;
-+	int ctrl_irq_number;
-+	int demosaic_irq;
-+	struct csi_data hw;
-+	struct reset_control *rst;
-+	struct phy *phy;
-+	struct dw_csih_pdata *config;
-+	struct mutex lock; /* protect resources sharing */
-+	spinlock_t slock; /* interrupt handling lock */
-+	u8 ipi_dt;
-+	u8 index;
-+	u8 hw_version_major;
-+	u16 hw_version_minor;
-+
-+	struct v4l2_async_notifier notifier;
-+
-+	u32 remote_pad;
-+
-+	struct v4l2_subdev *input_sd;
-+};
-+
-+static inline struct dw_csi *sd_to_mipi_csi_dev(struct v4l2_subdev *sdev)
-+{
-+	return container_of(sdev, struct dw_csi, sd);
-+}
-+
-+void dw_mipi_csi_reset(struct dw_csi *csi_dev);
-+int dw_mipi_csi_mask_irq_power_off(struct dw_csi *csi_dev);
-+int dw_mipi_csi_hw_stdby(struct dw_csi *csi_dev);
-+void dw_mipi_csi_set_ipi_fmt(struct dw_csi *csi_dev);
-+void dw_mipi_csi_start(struct dw_csi *csi_dev);
-+int dw_mipi_csi_irq_handler(struct dw_csi *csi_dev);
-+void dw_mipi_csi_get_version(struct dw_csi *csi_dev);
-+int dw_mipi_csi_specific_mappings(struct dw_csi *csi_dev);
-+void dw_mipi_csi_fill_timings(struct dw_csi *dev,
-+			      struct v4l2_subdev_format *fmt);
-+void dw_mipi_csi_dump(struct dw_csi *csi_dev);
 +
 +#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
-+int dw_csi_create_capabilities_sysfs(struct platform_device *pdev);
++static void dw_dphy_if_init(struct dw_dphy_rx *dphy)
++{
++	dw_dphy_if_write(dphy, DPHYGLUEIFTESTER, RESET);
++	dw_dphy_if_write(dphy, DPHYGLUEIFTESTER, TX_PHY);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 1, PHY_TESTCLR, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLR, 1);
++	dw_dphy_if_write(dphy, DPHYZCALCTRL, 0);
++	dw_dphy_if_write(dphy, DPHYZCALCTRL, 1);
++	dw_dphy_if_write(dphy, DPHYGLUEIFTESTER, RESET);
++	dw_dphy_if_write(dphy, DPHYGLUEIFTESTER, GLUELOGIC);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 1, PHY_TESTCLR, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLR, 1);
++	dw_dphy_if_write(dphy, DPHYZCALCTRL, 0);
++	dw_dphy_if_write(dphy, DPHYZCALCTRL, 1);
++	dw_dphy_if_write(dphy, DPHYGLUEIFTESTER, RESET);
++	dw_dphy_if_write(dphy, DPHYGLUEIFTESTER, RX_PHY);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 1, PHY_TESTCLR, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLR, 1);
++	dw_dphy_if_write(dphy, DPHYZCALCTRL, 0);
++	dw_dphy_if_write(dphy, DPHYZCALCTRL, 1);
++}
 +#endif
 +
-+static inline void dw_mipi_csi_write(struct dw_csi *dev,
-+				     u32 address, u32 data)
++static void dw_dphy_gen3_12bit_tc_power_up(struct dw_dphy_rx *dphy)
 +{
-+	writel(data, dev->base_address + address);
++#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
++	dw_dphy_if_write(dphy, DPHYGLUEIFTESTER, RESET);
++	dw_dphy_if_write(dphy, DPHYGLUEIFTESTER, GLUELOGIC);
++#endif
++	dw_dphy_te_write(dphy, CFGCLKFREQRANGE_TX, 0x1C);
++
++	/* CLKSEL | UPDATEPLL | SHADOW_CLEAR | SHADOW_CTRL | FORCEPLL */
++	dw_dphy_te_write(dphy, BYPASS, 0x3F);
++
++	/* IO_DS3 | IO_DS2 | IO_DS1 | IO_DS0 */
++	if (dphy->dphy_freq > 1500)
++		dw_dphy_te_write(dphy, IO_DS, 0x0F);
++#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
++	dw_dphy_if_write(dphy, DPHYGLUEIFTESTER, RESET);
++	dw_dphy_if_write(dphy, DPHYGLUEIFTESTER, RX_PHY);
++#endif
 +}
 +
-+static inline u32 dw_mipi_csi_read(struct dw_csi *dev, u32 address)
++static void dw_dphy_gen3_8bit_tc_power_up(struct dw_dphy_rx *dphy)
 +{
-+	return readl(dev->base_address + address);
++	u32 input_freq = dphy->dphy_freq / 1000;
++#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
++	dw_dphy_if_write(dphy, DPHYGLUEIFTESTER, RESET);
++	dw_dphy_if_write(dphy, DPHYGLUEIFTESTER, GLUELOGIC);
++	dw_dphy_te_write(dphy, CFGCLKFREQRANGE_RX, 0x1C);
++	dw_dphy_if_write(dphy, DPHYGLUEIFTESTER, RESET);
++	dw_dphy_if_write(dphy, DPHYGLUEIFTESTER, RX_PHY);
++#endif
++	dw_dphy_te_write(dphy, OSC_FREQ_TARGET_RX0_MSB, 0x03);
++	dw_dphy_te_write(dphy, OSC_FREQ_TARGET_RX0_LSB, 0x02);
++	dw_dphy_te_write(dphy, OSC_FREQ_TARGET_RX1_MSB, 0x03);
++	dw_dphy_te_write(dphy, OSC_FREQ_TARGET_RX1_LSB, 0x02);
++	dw_dphy_te_write(dphy, OSC_FREQ_TARGET_RX2_MSB, 0x03);
++	dw_dphy_te_write(dphy, OSC_FREQ_TARGET_RX2_LSB, 0x02);
++	dw_dphy_te_write(dphy, OSC_FREQ_TARGET_RX3_MSB, 0x03);
++	dw_dphy_te_write(dphy, OSC_FREQ_TARGET_RX3_LSB, 0x02);
++	dw_dphy_te_write(dphy, BANDGAP_CTRL, 0x80);
++
++	if (input_freq < 2000)
++		dw_dphy_te_write(dphy, HS_RX_CTRL_LANE0, 0xC0);
++
++	if (input_freq < 1000) {
++		dw_dphy_te_write(dphy, HS_RX_CTRL_LANE1, 0xC0);
++		dw_dphy_te_write(dphy, HS_RX_CTRL_LANE2, 0xC0);
++		dw_dphy_te_write(dphy, HS_RX_CTRL_LANE3, 0xC0);
++	}
 +}
 +
-+#endif /*_DW_MIPI_CSI_H__ */
-diff --git a/include/media/dwc/dw-csi-data.h b/include/media/dwc/dw-csi-data.h
++int dw_dphy_g118_settle(struct dw_dphy_rx *dphy)
++{
++	u32 input_freq, total_settle, settle_time, byte_clk, lp_time;
++
++	lp_time = dphy->lp_time;
++	input_freq = dphy->dphy_freq / 1000;
++
++	settle_time = (8 * (1000000 / (input_freq))) + 115000;
++	byte_clk = (8000000 / (input_freq));
++	total_settle = (settle_time + lp_time * 1000) / byte_clk;
++
++	if (total_settle > 0xFF)
++		total_settle = 0xFF;
++
++	return total_settle;
++}
++
++static void dw_dphy_pwr_down(struct dw_dphy_rx *dphy)
++{
++	dw_dphy_write(dphy, R_CSI2_DPHY_RSTZ, 0);
++
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLK, 1);
++	if (dphy->lanes_config == CTRL_8_LANES)
++		dw_dphy_write_msk(dphy, R_CSI2_DPHY2_TST_CTRL0, 0, PHY_TESTCLK,
++				  1);
++
++	dw_dphy_write(dphy, R_CSI2_DPHY_SHUTDOWNZ, 0);
++}
++
++static void dw_dphy_pwr_up(struct dw_dphy_rx *dphy)
++{
++	u32 state = 0, wait = 0;
++
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 1, PHY_TESTCLK, 1);
++	if (dphy->lanes_config == CTRL_8_LANES)
++		dw_dphy_write_msk(dphy, R_CSI2_DPHY2_TST_CTRL0, 1, PHY_TESTCLK,
++				  1);
++	dev_vdbg(&dphy->phy->dev, "DPHY power up.\n");
++	dw_dphy_write(dphy, R_CSI2_DPHY_SHUTDOWNZ, 1);
++	usleep_range(100, 500);
++	dw_dphy_write(dphy, R_CSI2_DPHY_RSTZ, 1);
++
++	while (state != 0x10003) {
++		state = dw_dphy_read(dphy, R_CSI2_DPHY_STOPSTATE);
++		usleep_range(100, 500);
++		wait++;
++		if (wait > 10)
++			break;
++	}
++	if (state != 0x10003)
++		dev_warn(&dphy->phy->dev, "PHY Stop state not reached %x\n",
++			 state);
++}
++
++static int dw_dphy_gen3_12bit_configure(struct dw_dphy_rx *dphy)
++{
++	u32 input_freq = dphy->dphy_freq;
++	u8 range = 0;
++
++	dev_vdbg(&dphy->phy->dev, "12bit: PHY GEN 3: Freq: %u\n", input_freq);
++	for (range = 0; (range < ARRAY_SIZE(range_gen3) - 1) &&
++	     ((input_freq / 1000) > range_gen3[range].freq);
++	     range++)
++		;
++
++	dw_dphy_gen3_12bit_tc_power_up(dphy);
++	dw_dphy_te_write(dphy, RX_SYS_1, range_gen3[range].hsfregrange);
++	dw_dphy_te_write(dphy, RX_SYS_0, 0x20);
++	dw_dphy_te_write(dphy, RX_RX_STARTUP_OVR_2,
++			 (u8)range_gen3[range].osc_freq_target);
++	dw_dphy_te_write(dphy, RX_RX_STARTUP_OVR_3,
++			 (u8)(range_gen3[range].osc_freq_target >> 8));
++	dw_dphy_te_write(dphy, RX_RX_STARTUP_OVR_4, 0x01);
++
++	if (dphy->phy_type) {
++		dw_dphy_te_write(dphy, RX_RX_STARTUP_OVR_1, 0x01);
++		dw_dphy_te_write(dphy, RX_RX_STARTUP_OVR_0, 0x80);
++	}
++
++	if (dphy->phy_type || input_freq <= 1500)
++		dw_dphy_te_write(dphy, RX_SYS_7, 0x38);
++
++	return 0;
++}
++
++static int dw_dphy_gen3_8bit_configure(struct dw_dphy_rx *dphy)
++{
++	u32 input_freq = dphy->dphy_freq;
++	u8 data;
++	u8 range = 0;
++
++	dev_vdbg(&dphy->phy->dev, "8bit: PHY GEN 3: Freq: %u\n", input_freq);
++	for (range = 0; (range < ARRAY_SIZE(range_gen3) - 1) &&
++	     ((input_freq / 1000) > range_gen3[range].freq);
++	     range++)
++		;
++
++	dw_dphy_te_write(dphy, RX_SKEW_CAL, dw_dphy_g118_settle(dphy));
++	data = 1 << 7 | range_gen3[range].hsfregrange;
++	dw_dphy_te_write(dphy, HSFREQRANGE_8BIT, data);
++	dw_dphy_gen3_8bit_tc_power_up(dphy);
++
++	return 0;
++}
++
++static int dw_dphy_gen2_configure(struct dw_dphy_rx *dphy)
++{
++	u32 input_freq = dphy->dphy_freq;
++	u8 data;
++	u8 range = 0;
++
++	/* provide an initial active-high test clear pulse in TESTCLR  */
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 1, PHY_TESTCLR, 1);
++	dw_dphy_write_msk(dphy, R_CSI2_DPHY_TST_CTRL0, 0, PHY_TESTCLR, 1);
++
++	dev_vdbg(&dphy->phy->dev, "PHY GEN 2: Freq: %u\n", input_freq);
++	for (range = 0; (range < ARRAY_SIZE(range_gen2) - 1) &&
++	     ((input_freq / 1000) > range_gen2[range].freq); range++)
++		;
++
++	data = range_gen2[range].hsfregrange << 1;
++	dw_dphy_te_write(dphy, HSFREQRANGE_8BIT, data);
++
++	return 0;
++}
++
++static int dw_dphy_configure(struct dw_dphy_rx *dphy)
++{
++	dw_dphy_pwr_down(dphy);
++
++	if (dphy->dphy_gen == GEN3) {
++#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
++		dw_dphy_if_init(dphy);
++#endif
++		if (dphy->dphy_te_len == BIT12)
++			dw_dphy_gen3_12bit_configure(dphy);
++		else
++			dw_dphy_gen3_8bit_configure(dphy);
++	} else {
++		dw_dphy_gen2_configure(dphy);
++	}
++	dw_dphy_pwr_up(dphy);
++
++	return 0;
++}
++
++#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
++int dw_dphy_if_set_idelay(struct dw_dphy_rx *dphy, u8 dly, u8 cells)
++{
++	u32 val = 0;
++
++	dw_dphy_if_write(dphy, IDLYCFG, 0);
++	dw_dphy_if_write(dphy, IDLYSEL, cells);
++	dw_dphy_if_write(dphy, IDLYCNTINVAL, dly);
++
++	/* Pulse Value Set */
++	dw_dphy_if_write(dphy, IDLYCFG, 1);
++	usleep_range(10, 20);
++	dw_dphy_if_write(dphy, IDLYCFG, 0);
++
++	/* Pulse IDELAY CTRL Reset */
++	dw_dphy_if_write(dphy, DPHY1REGRSTN, 0);
++	usleep_range(10, 20);
++	dw_dphy_if_write(dphy, DPHY1REGRSTN, 1);
++
++	/* Get Value*/
++	val = dw_dphy_if_read(dphy, IDLYCNTOUTVAL);
++
++	if (val != dly) {
++		dev_vdbg(&dphy->phy->dev,
++			 "odelay config failed, set %d get %d", dly, val);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++int dw_dphy_if_get_idelay(struct dw_dphy_rx *dphy)
++{
++	return dw_dphy_if_read(dphy, IDLYCNTOUTVAL);
++}
++
++int dw_dphy_if_set_idelay_lane(struct dw_dphy_rx *dphy, u8 dly, u8 lane)
++{
++	int cell;
++
++	switch (lane) {
++	case 0:
++		for (cell = 3; cell <= 10; cell++)
++			dw_dphy_if_set_idelay(dphy, dly, cell);
++		break;
++	case 1:
++		for (cell = 14; cell <= 21; cell++)
++			dw_dphy_if_set_idelay(dphy, dly, cell);
++		break;
++	case 2:
++		for (cell = 24; cell <= 31; cell++)
++			dw_dphy_if_set_idelay(dphy, dly, cell);
++		break;
++	case 3:
++		for (cell = 34; cell <= 41; cell++)
++			dw_dphy_if_set_idelay(dphy, dly, cell);
++		break;
++	case 4: /* ALL */
++		dw_dphy_if_set_idelay(dphy, dly, 0x7F);
++		break;
++	default:
++		dev_err(&dphy->phy->dev, "Lane Value not recognized\n");
++		return -1;
++	}
++	return 0;
++}
++#endif
++
++int dw_dphy_init(struct phy *phy)
++{
++	struct dw_dphy_rx *dphy = phy_get_drvdata(phy);
++
++	dev_vdbg(&dphy->phy->dev, "Init DPHY.\n");
++
++	dw_dphy_write(dphy, R_CSI2_DPHY_RSTZ, 0);
++	dw_dphy_write(dphy, R_CSI2_DPHY_SHUTDOWNZ, 0);
++
++	return 0;
++}
++
++static int dw_dphy_set_phy_state(struct dw_dphy_rx *dphy, u32 on)
++{
++	u8 hs_freq;
++
++	dphy->lanes_config = dw_dphy_setup_config(dphy);
++
++	if (dphy->dphy_te_len == BIT12)
++		hs_freq = RX_SYS_1;
++	else
++		hs_freq = HSFREQRANGE_8BIT;
++
++	if (on) {
++		dw_dphy_configure(dphy);
++		dev_vdbg(&dphy->phy->dev,
++			 "HS Code: 0X%x\n", dw_dphy_te_read(dphy, hs_freq));
++	} else {
++		dw_dphy_write(dphy, R_CSI2_DPHY_SHUTDOWNZ, 0);
++		dw_dphy_write(dphy, R_CSI2_DPHY_RSTZ, 0);
++	}
++
++	return 0;
++}
++
++int dw_dphy_power_on(struct phy *phy)
++{
++	struct dw_dphy_rx *dphy = phy_get_drvdata(phy);
++
++	return dw_dphy_set_phy_state(dphy, 1);
++}
++
++int dw_dphy_power_off(struct phy *phy)
++{
++	struct dw_dphy_rx *dphy = phy_get_drvdata(phy);
++
++	return dw_dphy_set_phy_state(dphy, 0);
++}
++
++int dw_dphy_reset(struct phy *phy)
++{
++	struct dw_dphy_rx *dphy = phy_get_drvdata(phy);
++
++	dw_dphy_write(dphy, R_CSI2_DPHY_RSTZ, 0);
++	usleep_range(100, 200);
++	dw_dphy_write(dphy, R_CSI2_DPHY_RSTZ, 1);
++
++	return 0;
++}
+diff --git a/drivers/media/platform/dwc/dw-dphy-rx.h b/drivers/media/platform/dwc/dw-dphy-rx.h
 new file mode 100644
-index 000000000000..87942ab45869
+index 000000000000..2e8d68c914c1
 --- /dev/null
-+++ b/include/media/dwc/dw-csi-data.h
-@@ -0,0 +1,26 @@
++++ b/drivers/media/platform/dwc/dw-dphy-rx.h
+@@ -0,0 +1,212 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (c) 2018-2019 Synopsys, Inc. and/or its affiliates.
 + *
-+ * Synopsys DesignWare MIPI CSI-2 platform data
++ * Synopsys DesignWare MIPI D-PHY controller driver
++ *
++ * Author: Luis Oliveira <luis.oliveira@synopsys.com>
++ */
++
++#ifndef __PHY_SNPS_DPHY_RX_H__
++#define __PHY_SNPS_DPHY_RX_H__
++
++#include <linux/debugfs.h>
++#include <linux/delay.h>
++#include <linux/gpio.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_address.h>
++#include <linux/of_gpio.h>
++#include <linux/phy/phy.h>
++#include <linux/phy/phy-mipi-dphy.h>
++#include <linux/platform_device.h>
++#include <linux/spinlock.h>
++
++/* DPHY interface register bank*/
++
++#define R_CSI2_DPHY_SHUTDOWNZ 0x0
++#define R_CSI2_DPHY_RSTZ 0x4
++#define R_CSI2_DPHY_RX 0x8
++#define	R_CSI2_DPHY_STOPSTATE 0xC
++#define R_CSI2_DPHY_TST_CTRL0 0x10
++#define R_CSI2_DPHY_TST_CTRL1 0x14
++#define R_CSI2_DPHY2_TST_CTRL0 0x18
++#define R_CSI2_DPHY2_TST_CTRL1 0x1C
++
++enum dphy_id_mask {
++	DPHY_ID_LANE_SUPPORT = 0,
++	DPHY_ID_IF = 4,
++	DPHY_ID_GEN = 8,
++};
++
++enum dphy_gen_values {
++	GEN1,
++	GEN2,
++	GEN3,
++};
++
++enum dphy_interface_length {
++	BIT8 = 8,
++	BIT12 = 12,
++};
++
++enum tst_ctrl0 {
++	PHY_TESTCLR,
++	PHY_TESTCLK,
++};
++
++enum tst_ctrl1 {
++	PHY_TESTDIN = 0,
++	PHY_TESTDOUT = 8,
++	PHY_TESTEN = 16,
++};
++
++enum lanes_config_values {
++	CTRL_4_LANES,
++	CTRL_8_LANES,
++};
++
++enum dphy_tc {
++	CFGCLKFREQRANGE_TX = 0x02,
++	CFGCLKFREQRANGE_RX = 0x05,
++	BYPASS = 0x20,
++	IO_DS = 0x30,
++};
++
++enum dphy_8bit_interface_addr {
++	BANDGAP_CTRL = 0x24,
++	HS_RX_CTRL_LANE0 = 0x42,
++	HSFREQRANGE_8BIT = 0x44,
++	OSC_FREQ_TARGET_RX0_LSB	= 0x4e,
++	OSC_FREQ_TARGET_RX0_MSB	= 0x4f,
++	HS_RX_CTRL_LANE1 = 0x52,
++	OSC_FREQ_TARGET_RX1_LSB	= 0x5e,
++	OSC_FREQ_TARGET_RX1_MSB	= 0x5f,
++	RX_SKEW_CAL = 0x7e,
++	HS_RX_CTRL_LANE2 = 0x82,
++	OSC_FREQ_TARGET_RX2_LSB	= 0x8e,
++	OSC_FREQ_TARGET_RX2_MSB	= 0x8f,
++	HS_RX_CTRL_LANE3 = 0x92,
++	OSC_FREQ_TARGET_RX3_LSB	= 0x9e,
++	OSC_FREQ_TARGET_RX3_MSB	= 0x9f,
++};
++
++enum dphy_12bit_interface_addr {
++	RX_SYS_0 = 0x01,
++	RX_SYS_1 = 0x02,
++	RX_SYS_7 = 0x08,
++	RX_RX_STARTUP_OVR_0 = 0xe0,
++	RX_RX_STARTUP_OVR_1 = 0xe1,
++	RX_RX_STARTUP_OVR_2 = 0xe2,
++	RX_RX_STARTUP_OVR_3 = 0xe3,
++	RX_RX_STARTUP_OVR_4 = 0xe4,
++};
++
++#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
++/* Testchip interface register bank */
++#define IDLYCFG	0x00
++#define IDLYSEL	0x04
++#define IDLYCNTINVAL 0x08
++#define IDLYCNTOUTVAL 0x0c
++#define DPHY1REGRSTN 0x10
++#define DPHYZCALSTAT 0x14
++#define DPHYZCALCTRL 0x18
++#define DPHYLANE0STAT 0x1c
++#define DPHYLANE1STAT 0x20
++#define DPHYLANE2STAT 0x24
++#define DPHYLANE3STAT 0x28
++#define DPHYCLKSTAT 0x2c
++#define DPHYZCLKCTRL 0x30
++#define TCGENPURPOSOUT 0x34
++#define TCGENPURPOSIN 0x38
++#define DPHYGENERICOUT 0x3c
++#define DPHYGENERICIN 0x40
++#define DPHYGLUEIFTESTER 0x44
++#define DPHYID 0x100
++
++#define DPHY_DEFAULT_FREQ 300000
++
++enum glueiftester {
++	RESET = 0x0,
++	TX_PHY = 0x1,
++	RX_PHY = 0x2,
++	GLUELOGIC = 0x4,
++};
++#endif
++
++/**
++ * struct phy		specifies associated phy component
++ * struct cfg		to pass mipi dphy specific configurations
++ * @lanes_config	lanes configuration
++ * @dphy_freq		operating frequency of the d-phy (mbps)
++ * @phy_type		dphy can be of two types, passed here
++ * @dphy_gen		dphy can be of three generations, passed here
++ * @dphy_te_len		bus width
++ * @max_lanes		maximum number of lanes
++ * @lp_time		time in low-power
++ * @base_address	memmory address of dphy test interface
++ * @dphy1_if_addr	gluelogic dphy 1 memmory address of interface
++ * @dphy2_if_addr	gluelogic dphy 2 memmory address of interface
++ * @config_8l		eight lanes configuration
++ */
++
++struct dw_dphy_rx {
++	struct phy *phy;
++	struct phy_configure_opts_mipi_dphy *cfg;
++	u32 lanes_config;
++	u32 dphy_freq;
++	u32 phy_type;
++	u32 dphy_gen;
++	u32 dphy_te_len;
++	u32 max_lanes;
++	u32 lp_time;
++	void __iomem *base_address;
++#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
++	void __iomem *dphy1_if_addr;
++	void __iomem *dphy2_if_addr;
++	u8 config_8l;
++	u8 (*get_config_8l)(struct device *dev, struct dw_dphy_rx *dphy);
++#endif
++	u8 (*phy_register)(struct device *dev);
++	void (*phy_unregister)(struct device *dev);
++};
++
++int dw_dphy_init(struct phy *phy);
++int dw_dphy_reset(struct phy *phy);
++int dw_dphy_power_off(struct phy *phy);
++int dw_dphy_power_on(struct phy *phy);
++u8 dw_dphy_setup_config(struct dw_dphy_rx *dphy);
++void dw_dphy_write(struct dw_dphy_rx *dphy, u32 address, u32 data);
++u32 dw_dphy_read(struct dw_dphy_rx *dphy, u32 address);
++int dw_dphy_te_read(struct dw_dphy_rx *dphy, u32 addr);
++
++#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
++u32 dw_dphy_if_read(struct dw_dphy_rx *dphy, u32 address);
++int dw_dphy_if_get_idelay(struct dw_dphy_rx *dphy);
++int dw_dphy_if_set_idelay_lane(struct dw_dphy_rx *dphy, u8 dly, u8 lane);
++int dw_dphy_create_capabilities_sysfs(struct platform_device *pdev);
++
++static inline
++u32 dw_dphy_if_read_msk(struct dw_dphy_rx *dphy,
++			u32 address, u8 shift, u8 width)
++{
++	return (dw_dphy_if_read(dphy, address) >> shift) & ((1 << width) - 1);
++}
++#endif /*IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)*/
++
++static inline struct phy *dw_dphy_xlate(struct device *dev,
++					struct of_phandle_args *args)
++{
++	struct dw_dphy_rx *dphy = dev_get_drvdata(dev);
++
++	return dphy->phy;
++}
++
++static inline
++u32 dw_dphy_read_msk(struct dw_dphy_rx *dev, u32 address, u8 shift,  u8 width)
++{
++	return (dw_dphy_read(dev, address) >> shift) & ((1 << width) - 1);
++}
++#endif /*__PHY_SNPS_DPHY_RX_H__*/
+diff --git a/drivers/media/platform/dwc/dw-dphy-sysfs.c b/drivers/media/platform/dwc/dw-dphy-sysfs.c
+new file mode 100644
+index 000000000000..416dec85cc49
+--- /dev/null
++++ b/drivers/media/platform/dwc/dw-dphy-sysfs.c
+@@ -0,0 +1,232 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2018-2019 Synopsys, Inc. and/or its affiliates.
++ *
++ * Synopsys DesignWare MIPI D-PHY controller driver.
++ * SysFS components for the platform driver
++ *
++ * Author: Luis Oliveira <luis.oliveira@synopsys.com>
++ */
++
++#include "dw-dphy-rx.h"
++
++static ssize_t dphy_reset_show(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct dw_dphy_rx *dphy = platform_get_drvdata(pdev);
++	char buffer[15];
++
++	dw_dphy_write(dphy, R_CSI2_DPHY_RSTZ, 0);
++	usleep_range(100, 200);
++	dw_dphy_write(dphy, R_CSI2_DPHY_RSTZ, 1);
++
++	return strlcpy(buf, buffer, PAGE_SIZE);
++}
++
++static ssize_t dphy_freq_store(struct device *dev,
++			       struct device_attribute *attr,
++			       const char *buf,
++			       size_t count)
++{
++	int ret;
++	unsigned long freq;
++
++	struct platform_device *pdev = to_platform_device(dev);
++	struct dw_dphy_rx *dphy = platform_get_drvdata(pdev);
++
++	ret = kstrtoul(buf, 10, &freq);
++	if (ret < 0)
++		return ret;
++
++	if (freq > 2500) {
++		dev_info(dev, "Freq must be under 2500 Mhz\n");
++		return count;
++	}
++	if (freq < 80) {
++		dev_info(dev, "Freq must be over 80 Mhz\n");
++		return count;
++	}
++
++	dev_vdbg(dev, "Data Rate %lu Mbps\n", freq);
++	dphy->dphy_freq = freq;
++
++	return count;
++}
++
++static ssize_t dphy_freq_show(struct device *dev, struct device_attribute *attr,
++			      char *buf)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct dw_dphy_rx *dphy = platform_get_drvdata(pdev);
++	char buffer[15];
++
++	snprintf(buffer,
++		 sizeof(buffer),
++		 "Freq %d\n", dphy->dphy_freq);
++
++	return strlcpy(buf, buffer, PAGE_SIZE);
++}
++
++static ssize_t dphy_addr_store(struct device *dev,
++			       struct device_attribute *attr,
++			       const char *buf,
++			       size_t count)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct dw_dphy_rx *dphy = platform_get_drvdata(pdev);
++	unsigned long val;
++	u8 addr, payload;
++	int ret;
++
++	ret = kstrtoul(buf, 32, &val);
++	if (ret < 0)
++		return ret;
++
++	payload = (u16)val;
++	addr = (u16)(val >> 16);
++
++	dev_vdbg(dev, "addr 0x%lX\n", val);
++	dev_vdbg(dev, "payload: 0x%X\n", addr);
++	dev_vdbg(dev, "Addr [0x%x] -> 0x%x\n", (unsigned int)addr,
++		 dw_dphy_te_read(dphy, addr));
++
++	return count;
++}
++
++#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
++static ssize_t idelay_show(struct device *dev, struct device_attribute *attr,
++			   char *buf)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct dw_dphy_rx *dphy = platform_get_drvdata(pdev);
++	char buffer[15];
++
++	snprintf(buffer,
++		 sizeof(buffer), "idelay %d\n", dw_dphy_if_get_idelay(dphy));
++
++	return strlcpy(buf, buffer, PAGE_SIZE);
++}
++
++static ssize_t idelay_store(struct device *dev, struct device_attribute *attr,
++			    const char *buf, size_t count)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct dw_dphy_rx *dphy = platform_get_drvdata(pdev);
++	unsigned long val;
++	u8 lane, delay;
++	int ret;
++
++	ret = kstrtoul(buf, 16, &val);
++	if (ret < 0)
++		return ret;
++
++	lane = (u8)val;
++	delay = (u8)(val >> 8);
++
++	dev_vdbg(dev, "Lanes %u\n", lane);
++	dev_vdbg(dev, "Delay %u\n", delay);
++
++	dw_dphy_if_set_idelay_lane(dphy, delay, lane);
++
++	return count;
++}
++#endif
++
++static ssize_t len_config_store(struct device *dev,
++				struct device_attribute *attr,
++				const char *buf,
++				size_t count)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct dw_dphy_rx *dphy = platform_get_drvdata(pdev);
++	unsigned long length;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &length);
++	if (ret < 0)
++		return ret;
++
++	if (length == BIT8)
++		dev_vdbg(dev, "Configured for 8-bit interface\n");
++	else if (length == BIT12)
++		dev_vdbg(dev, "Configured for 12-bit interface\n");
++	else
++		return count;
++
++	dphy->dphy_te_len = length;
++
++	return count;
++}
++
++static ssize_t len_config_show(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct dw_dphy_rx *dphy = platform_get_drvdata(pdev);
++	char buffer[20];
++
++	snprintf(buffer, sizeof(buffer), "Length %d\n", dphy->dphy_te_len);
++
++	return strlcpy(buf, buffer, PAGE_SIZE);
++}
++
++static ssize_t dw_dphy_g118_settle_store(struct device *dev,
++					 struct device_attribute *attr,
++					 const char *buf, size_t count)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct dw_dphy_rx *dphy = platform_get_drvdata(pdev);
++	unsigned long lp_time;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &lp_time);
++	if (ret < 0)
++		return ret;
++
++	if (lp_time > 1 && lp_time < 10000) {
++		dphy->lp_time = lp_time;
++	} else {
++		dev_vdbg(dev, "Invalid Value configuring for 1000 ns\n");
++		dphy->lp_time = 1000;
++	}
++
++	dphy->lp_time = lp_time;
++
++	return count;
++}
++
++static ssize_t dw_dphy_g118_settle_show(struct device *dev,
++					struct device_attribute *attr,
++					char *buf)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct dw_dphy_rx *dphy = platform_get_drvdata(pdev);
++	char buffer[10];
++
++	snprintf(buffer, sizeof(buffer), "Settle %d ns\n", dphy->lp_time);
++
++	return strlcpy(buf, buffer, PAGE_SIZE);
++}
++
++static DEVICE_ATTR_RO(dphy_reset);
++static DEVICE_ATTR_RW(dphy_freq);
++static DEVICE_ATTR_WO(dphy_addr);
++#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
++static DEVICE_ATTR_RW(idelay);
++#endif
++static DEVICE_ATTR_RW(len_config);
++static DEVICE_ATTR_RW(dw_dphy_g118_settle);
++
++int dw_dphy_create_capabilities_sysfs(struct platform_device *pdev)
++{
++	device_create_file(&pdev->dev, &dev_attr_dphy_reset);
++	device_create_file(&pdev->dev, &dev_attr_dphy_freq);
++	device_create_file(&pdev->dev, &dev_attr_dphy_addr);
++#if IS_ENABLED(CONFIG_DWC_MIPI_TC_DPHY_GEN3)
++	device_create_file(&pdev->dev, &dev_attr_idelay);
++#endif
++	device_create_file(&pdev->dev, &dev_attr_len_config);
++	device_create_file(&pdev->dev, &dev_attr_dw_dphy_g118_settle);
++	return 0;
++}
+diff --git a/include/media/dwc/dw-dphy-data.h b/include/media/dwc/dw-dphy-data.h
+new file mode 100644
+index 000000000000..c8d6c0f90935
+--- /dev/null
++++ b/include/media/dwc/dw-dphy-data.h
+@@ -0,0 +1,32 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2018-2019 Synopsys, Inc. and/or its affiliates.
++ *
++ * Synopsys DesignWare MIPI D-PHY platform data
 + *
 + * Author: Luis Oliveira <Luis.Oliveira@synopsys.com>
 + */
 +
++#include <linux/phy/phy.h>
 +#include <linux/kernel.h>
 +#include <media/dwc/dw-mipi-csi-pltfrm.h>
 +
-+struct dw_csih_pdata {
-+	u8 eotp_enabled;
-+	u32 hs_freq;
-+	u32 lanes;
-+	u32 pclk;
-+	u32 fps;
-+	u32 bpp;
++struct dw_phy_pdata {
++	u32 dphy_frequency;
++	u8 dphy_te_len;
++	u32 config_8l;
++	u8 dphy_gen;
++	u8 phy_type;
 +	u8 id;
 +};
 +
-+static const struct pdata_names csis[] = {
-+	{ .name = "dw-csi.0", },
-+	{ .name = "dw-csi.1", },
-+};
-diff --git a/include/media/dwc/dw-mipi-csi-pltfrm.h b/include/media/dwc/dw-mipi-csi-pltfrm.h
-new file mode 100644
-index 000000000000..948db4e5397e
---- /dev/null
-+++ b/include/media/dwc/dw-mipi-csi-pltfrm.h
-@@ -0,0 +1,104 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2018-2019 Synopsys, Inc. and/or its affiliates.
-+ *
-+ * Synopsys DesignWare MIPI CSI-2 Host media entities
-+ *
-+ * Author: Luis Oliveira <Luis.Oliveira@synopsys.com>
-+ */
-+
-+#ifndef __DW_MIPI_CSI_PLTFRM_INCLUDES_H_
-+#define __DW_MIPI_CSI_PLTFRM_INCLUDES_H_
-+
-+#include <media/media-entity.h>
-+#include <media/v4l2-dev.h>
-+#include <media/v4l2-mediabus.h>
-+#include <media/v4l2-subdev.h>
-+
-+#define MAX_WIDTH	3280
-+#define MAX_HEIGHT	1852
-+
-+/* The subdevices' group IDs. */
-+#define GRP_ID_SENSOR		(10)
-+#define GRP_ID_CSI		(20)
-+#define GRP_ID_VIF		(30)
-+#define GRP_ID_VIDEODEV		(40)
-+
-+#define CSI_MAX_ENTITIES	(2)
-+#define VIF_MAX_ENTITIES	(2)
-+#define PLAT_MAX_SENSORS	(2)
-+
-+struct pdata_names {
-+	char *name;
++static const struct pdata_names phys[] = {
++	{ .name = "phy-dw-dphy.0.0", },
++	{ .name = "phy-dw-dphy.1.1", },
 +};
 +
-+enum video_dev_pads {
-+	VIDEO_DEV_SD_PAD_SINK_VIF1,
-+	VIDEO_DEV_SD_PAD_SINK_VIF2,
-+	VIDEO_DEV_SD_PAD_SOURCE_DMA,
-+	VIDEO_DEV_SD_PADS_NUM,
++struct dw_dphy_rx;
++
++struct plat_dw_dphy {
++	int (*get_resources)(struct device *dev, struct dw_dphy_rx *dphy);
 +};
-+
-+enum vif_pads {
-+	VIF_PAD_SINK_CSI,
-+	VIF_PAD_SOURCE_DMA,
-+	VIF_PADS_NUM,
-+};
-+
-+enum mipi_csi_pads {
-+	CSI_PAD_SINK,
-+	CSI_PAD_SOURCE,
-+	CSI_PADS_NUM,
-+};
-+
-+struct plat_csi_source_info {
-+	u16 flags;
-+	u16 mux_id;
-+};
-+
-+struct plat_csi_fmt {
-+	char *name;
-+	u32 mbus_code;
-+	u32 fourcc;
-+	u8 depth;
-+};
-+
-+struct plat_csi_media_pipeline;
-+
-+/*
-+ * Media pipeline operations to be called from within a video node,  i.e. the
-+ * last entity within the pipeline. Implemented by related media device driver.
-+ */
-+struct plat_csi_media_pipeline_ops {
-+	int (*prepare)(struct plat_csi_media_pipeline *p,
-+		       struct media_entity *me);
-+	int (*unprepare)(struct plat_csi_media_pipeline *p);
-+	int (*open)(struct plat_csi_media_pipeline *p, struct media_entity *me,
-+		    bool resume);
-+	int (*close)(struct plat_csi_media_pipeline *p);
-+	int (*set_stream)(struct plat_csi_media_pipeline *p, bool state);
-+	int (*set_format)(struct plat_csi_media_pipeline *p,
-+			  struct v4l2_subdev_format *fmt);
-+};
-+
-+struct plat_csi_video_entity {
-+	struct video_device vdev;
-+	struct plat_csi_media_pipeline *pipe;
-+};
-+
-+struct plat_csi_media_pipeline {
-+	struct media_pipeline mp;
-+	const struct plat_csi_media_pipeline_ops *ops;
-+};
-+
-+static inline struct plat_csi_video_entity
-+*vdev_to_plat_csi_video_entity(struct video_device *vdev)
-+{
-+	return container_of(vdev, struct plat_csi_video_entity, vdev);
-+}
-+
-+#define plat_csi_pipeline_call(ent, op, args...)			  \
-+	(!(ent) ? -ENOENT : (((ent)->pipe->ops && (ent)->pipe->ops->op) ? \
-+	(ent)->pipe->ops->op(((ent)->pipe), ##args) : -ENOIOCTLCMD))	  \
-+
-+#endif /* __DW_MIPI_CSI_PLTFRM_INCLUDES_H_ */
 -- 
 2.25.1
 
