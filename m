@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3CD64E664
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 04:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3845164E65F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 04:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiLPDgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 22:36:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54914 "EHLO
+        id S229774AbiLPDeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 22:34:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiLPDgH (ORCPT
+        with ESMTP id S229544AbiLPDeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 22:36:07 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9ADD6564;
-        Thu, 15 Dec 2022 19:36:06 -0800 (PST)
-Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NYF605SPLzJpPf;
-        Fri, 16 Dec 2022 11:32:24 +0800 (CST)
-Received: from localhost.localdomain (10.67.165.24) by
- dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
+        Thu, 15 Dec 2022 22:34:07 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9858F379C3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 19:34:06 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NYF6j3NyVz16LYJ;
+        Fri, 16 Dec 2022 11:33:01 +0800 (CST)
+Received: from mdc.huawei.com (10.175.112.208) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 16 Dec 2022 11:36:04 +0800
-From:   Xingui Yang <yangxingui@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <john.g.garry@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <yangxingui@huawei.com>,
-        <prime.zeng@hisilicon.com>, <kangfenglong@huawei.com>
-Subject: [PATCH] scsi: libsas: Directly kick-off EH when ATA device fell off
-Date:   Fri, 16 Dec 2022 03:29:36 +0000
-Message-ID: <20221216032936.17841-1-yangxingui@huawei.com>
+ 15.1.2375.34; Fri, 16 Dec 2022 11:34:01 +0800
+From:   Chen Jun <chenjun102@huawei.com>
+To:     <cl@linux.com>, <penberg@kernel.org>, <rientjes@google.com>,
+        <iamjoonsoo.kim@lge.com>, <akpm@linux-foundation.org>,
+        <vbabka@suse.cz>, <roman.gushchin@linux.dev>,
+        <42.hyeyoo@gmail.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <xuqiang36@huawei.com>
+Subject: [PATCH] mm, slub: fix uninitialized variable in __slab_free
+Date:   Fri, 16 Dec 2022 03:31:19 +0000
+Message-ID: <20221216033119.14159-1-chenjun102@huawei.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500012.china.huawei.com (7.185.36.89)
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -46,31 +47,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the ATA device fell off, call sas_ata_device_link_abort() directly and
-mark all outstanding QCs as failed and kick-off EH Immediately. This avoids
-having to wait for block layer timeouts.
+new.frozen is not initialized before it is used.
 
-Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+Fixes: 2cfb7455d223 ("slub: Rework allocator fastpaths")
+Signed-off-by: Chen Jun <chenjun102@huawei.com>
 ---
- drivers/scsi/libsas/sas_discover.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ mm/slub.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/libsas/sas_discover.c b/drivers/scsi/libsas/sas_discover.c
-index d5bc1314c341..bd22741daa99 100644
---- a/drivers/scsi/libsas/sas_discover.c
-+++ b/drivers/scsi/libsas/sas_discover.c
-@@ -362,6 +362,11 @@ static void sas_destruct_ports(struct asd_sas_port *port)
+diff --git a/mm/slub.c b/mm/slub.c
+index 13459c69095a..8628c88875b6 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -3593,6 +3593,7 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+ 		return;
+ 	}
  
- void sas_unregister_dev(struct asd_sas_port *port, struct domain_device *dev)
- {
-+	if (test_bit(SAS_DEV_GONE, &dev->state) &&
-+	    (dev->dev_type == SAS_SATA_DEV ||
-+	    (dev->tproto & SAS_PROTOCOL_STP)))
-+		sas_ata_device_link_abort(dev, false);
-+
- 	if (!test_bit(SAS_DEV_DESTROY, &dev->state) &&
- 	    !list_empty(&dev->disco_list_node)) {
- 		/* this rphy never saw sas_rphy_add */
++	new.frozen = 0;
+ 	do {
+ 		if (unlikely(n)) {
+ 			spin_unlock_irqrestore(&n->list_lock, flags);
 -- 
 2.17.1
 
