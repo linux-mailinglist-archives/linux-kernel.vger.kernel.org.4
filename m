@@ -2,114 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D1464EC85
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0657564EC8F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbiLPOBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:01:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
+        id S230267AbiLPODc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:03:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiLPOBb (ORCPT
+        with ESMTP id S229453AbiLPOD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:01:31 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0280A14012;
-        Fri, 16 Dec 2022 06:01:28 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D59411042;
-        Fri, 16 Dec 2022 06:02:08 -0800 (PST)
-Received: from [10.57.88.234] (unknown [10.57.88.234])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2ABC83F5A1;
-        Fri, 16 Dec 2022 06:01:25 -0800 (PST)
-Message-ID: <22bae859-58ee-80cd-f31b-2313c2e47531@arm.com>
-Date:   Fri, 16 Dec 2022 14:01:20 +0000
+        Fri, 16 Dec 2022 09:03:29 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE6EA19D;
+        Fri, 16 Dec 2022 06:03:28 -0800 (PST)
+Received: from fsav315.sakura.ne.jp (fsav315.sakura.ne.jp [153.120.85.146])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2BGE30pY022162;
+        Fri, 16 Dec 2022 23:03:00 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav315.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp);
+ Fri, 16 Dec 2022 23:03:00 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2BGE2xnN022155
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 16 Dec 2022 23:03:00 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <86bdfea2-7125-2e54-c2c0-920f28ff80ce@I-love.SAKURA.ne.jp>
+Date:   Fri, 16 Dec 2022 23:02:56 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v7 23/25] PCI: dwc: Restore DMA-mask after MSI-data
- allocation
-Content-Language: en-GB
-To:     Serge Semin <fancer.lancer@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        caihuoqing <caihuoqing@baidu.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221214235305.31744-1-Sergey.Semin@baikalelectronics.ru>
- <20221214235305.31744-24-Sergey.Semin@baikalelectronics.ru>
- <Y5rJJfZeVqliA5Rg@infradead.org>
- <20221215092721.tvz3hpaql3kotgnu@mobilestation>
- <07ec7610-f1be-9b5c-416d-17781a22427d@arm.com>
- <20221215235218.wsuwy5uckqfxjnb6@mobilestation>
- <Y5wgvdnMWQDxkUd+@infradead.org>
- <20221216093423.4bettdxisserdzsh@mobilestation>
- <Y5w/MkA4N857+AWQ@infradead.org>
- <20221216101827.owq7qpakjduf3rit@mobilestation>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20221216101827.owq7qpakjduf3rit@mobilestation>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] fbcon: Use kzalloc() in fbcon_prepare_logo()
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <cad03d25-0ea0-32c4-8173-fd1895314bce@I-love.SAKURA.ne.jp>
+ <CAMuHMdUH4CU9EfoirSxjivg08FDimtstn7hizemzyQzYeq6b6g@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <CAMuHMdUH4CU9EfoirSxjivg08FDimtstn7hizemzyQzYeq6b6g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-16 10:18, Serge Semin wrote:
-> On Fri, Dec 16, 2022 at 01:49:38AM -0800, Christoph Hellwig wrote:
->> On Fri, Dec 16, 2022 at 12:34:23PM +0300, Serge Semin wrote:
->>> What about instead of save/restore pattern I'll just change the
->>> dma_set_mask_and_coherent() method with the dma_set_coherent_mask()
->>> function call? It seems cleaner. Like this:
->>
->>> Thus the platform-specific streaming DMA mask would be preserved.
->>> Since it's PCIe then having the streaming DMA-mask less than 32-bits
->>> wide is very much improbable. Moreover DW PCIe AXI-interface can be
->>> synthesize only with one out of two address bus widths: 32 and 64.
->>
+On 2022/12/15 18:36, Geert Uytterhoeven wrote:
+> The next line is:
 > 
->> Where platform-specific means the dwc subdriver?
+>         scr_memsetw(save, erase, array3_size(logo_lines, new_cols, 2));
 > 
-> Right. I meant the streaming DMA-mask set by the low-level DWC PCIe drivers
-> (like pcie-qcom(-ep)?.c, pcie-bt1.c, etc). It's very much important to
-> have the real DMA-mask (at least the streaming one) set for the eDMA-capable
-> controllers so the DMA-engine clients would work with the best performance.
+> So how can this turn out to be uninitialized later below?
 > 
->> Yes, that seems to work.
+>         scr_memcpyw(q, save, array3_size(logo_lines, new_cols, 2));
 > 
-> Ok. I'll just use the direct dma_set_coherent_mask() method here then.
-> 
->> Alternatively have a flag that says which streaming mask
->> to set.
-> 
-> I'd prefer to have more flexibility here relying on the low-level
-> drivers to set the mask(s) instead of adding the new flag, just in case
-> if there is vendor-specific IP-core/platform changes in the address
-> bus width.
+> What am I missing?
 
-Presumably the low-level glue drivers could pass a bus size or mask 
-value in struct dw_pcie_rp/dw_pcie, so the actual dma_set_mask() call 
-itself could be centralised? I guess there's also an argument that only 
-glue drivers which care about eDMA need to care about setting a mask at 
-all, so I don't have a string preference either way. If you'd rather 
-stick with that approach then it might be worth a brief comment at each 
-site to clarify why the other mask is being set from an entirely 
-different place, just in case anyone comes along and tries to "fix" it.
+Good catch. It turned out that this was a KMSAN problem (i.e. a false positive report).
 
-Cheers,
-Robin.
+On x86_64, scr_memsetw() is implemented as
+
+        static inline void scr_memsetw(u16 *s, u16 c, unsigned int count)
+        {
+                memset16(s, c, count / 2);
+        }
+
+and memset16() is implemented as
+
+        static inline void *memset16(uint16_t *s, uint16_t v, size_t n)
+        {
+        	long d0, d1;
+        	asm volatile("rep\n\t"
+        		     "stosw"
+        		     : "=&c" (d0), "=&D" (d1)
+        		     : "a" (v), "1" (s), "0" (n)
+        		     : "memory");
+        	return s;
+        }
+
+. Plain memset() in arch/x86/include/asm/string_64.h is redirected to __msan_memset()
+but memsetXX() are not redirected to __msan_memsetXX(). That is, memory initialization
+via memsetXX() results in KMSAN's shadow memory being not updated.
+
+KMSAN folks, how should we fix this problem?
+Redirect assembly-implemented memset16(size) to memset(size*2) if KMSAN is enabled?
+
