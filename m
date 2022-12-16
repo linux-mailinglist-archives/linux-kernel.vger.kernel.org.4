@@ -2,92 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8147964EC97
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6FE64EC9A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiLPOFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:05:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
+        id S230471AbiLPOGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:06:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiLPOFw (ORCPT
+        with ESMTP id S230466AbiLPOGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:05:52 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282A128E10;
-        Fri, 16 Dec 2022 06:05:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1GFjpQ7kUqBpcsYqnNwkgNJfjVlRXjx2+yVp8vKZtKI=; b=Fe0FYw4U4c3kW0Zci6+CADjzz3
-        va1rfx7hiXgVMTUEtidbcRCuQSyUruUQVyVtkHIEH8bDzJESRCK0UPHkUPNgxy0+z1mhn8W5U8Ua6
-        lmDrTc8YhGj48EBs1vRjKAUtNiB5IBVD6ABEcsCf0hnXzEdEjfCNfz/U8LPiQ/5nBr+NEutz1R0v+
-        z3hqXnUrerECq5lzL1PSa/fPophynKrG9korPQJOswrmkr85RiYtcK3yr6nL/Bia3Ay2tRnMdLoqd
-        Hikm52CTDsfHnKqckNN5wzhvb+6SvvNcZUkeKHsZOwzZRvmmpdk4dzc8CeIhbGsfQlMAFusJRrAy2
-        6y9VGGwQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p6BL3-00FWKQ-ID; Fri, 16 Dec 2022 14:05:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EE0033001E7;
-        Fri, 16 Dec 2022 15:05:13 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 88051201D8171; Fri, 16 Dec 2022 15:05:13 +0100 (CET)
-Date:   Fri, 16 Dec 2022 15:05:13 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jann Horn <jannh@google.com>,
-        Seth Jenkins <sethjenkins@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Huang Ying <ying.huang@intel.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] exit: Allow oops_limit to be disabled
-Message-ID: <Y5x7GXeluFmZ8E0E@hirez.programming.kicks-ass.net>
-References: <20221202210617.never.105-kees@kernel.org>
+        Fri, 16 Dec 2022 09:06:05 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432D256D62
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:06:02 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id 1so3622798lfz.4
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:06:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gtA0ZnaQhbMLk3LEMHJjdC9Cb2rxaaaRDqfkUATltms=;
+        b=bTZU/vwvJCwBk4fsZcI21p3jJiSyNGS1XC3uUNc/1fed0UfOy7CHVry5XtZWKcQCAF
+         G8A7TgrydnFwYCIiqZBGFV9782syeaCaLeehYPmTMCnxXKa/rE4UrHvnZ75bXoeHEFhQ
+         XLl87yV135SZGFyG9aGGTUin/KLYgNA2Iw/GYVJpMaO/gf5HtG4UO6D//xCO5Ujb/0o3
+         7i8AfIO/clDfT10xYqxJHdCd9WeiD2GqffCQujyRSXWkzUou14uwT+VAPrkZmH9DlH98
+         v/UxPn2t+6CY4kc1NNIyrZSMiFFdvOGCYpQRY9JWJZBLLZ1eHm+Et5x3dXl80jEcGetm
+         7Mdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gtA0ZnaQhbMLk3LEMHJjdC9Cb2rxaaaRDqfkUATltms=;
+        b=DIvnVrJi5/m+jCroOvpvkIbAQIX5cVyrXTHBaoNoG3JpD4u4pCqzufCxeXQ6YIp4Eb
+         wxNT955Q/7lZt46fsLyKFpxXcH8jEbjncD19SidsHCMyHa5jFa8eFtXLo6N20c9GQlgG
+         cFaqUoTlVdKYLpnwbFguUSX4Kzbdka+nhHIz4zvdGbma1bY1LJgL85yOqw+aXcVpoCkL
+         C4dXdPVSm4iCv+6bui8+r/Ajoq1mlUHGw1gEAguWYnMRCiPyUYM1jd0qylanWmXDTuiH
+         SapGfnsjnLnU06z/nforc06o/DgIuG3FTSktp8bRDOQ94oa0v5e14TX6dmsTGXmWzRYB
+         2FaA==
+X-Gm-Message-State: ANoB5pnieMlUQQ5Z/i9wKSe0JKQb7d7vvp8vMv6gjoRi7L4HPwl34aUj
+        ZWqvs/19i126nWHoTu0YkLE58g==
+X-Google-Smtp-Source: AA0mqf4rbB8R8MVzYSQXNJsJHXzC5O6kwcoW/TDFbuL80e27flg1hDbgAL/xzaUiq75HvYIvYpmBZg==
+X-Received: by 2002:ac2:539b:0:b0:4b5:5efb:7d26 with SMTP id g27-20020ac2539b000000b004b55efb7d26mr8138734lfh.37.1671199561242;
+        Fri, 16 Dec 2022 06:06:01 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id p2-20020ac24ec2000000b004b0b131453csm227585lfr.49.2022.12.16.06.05.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 06:06:00 -0800 (PST)
+Message-ID: <525fd984-0b67-8e11-d13c-7c4ee1853c4e@linaro.org>
+Date:   Fri, 16 Dec 2022 15:05:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221202210617.never.105-kees@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v16 2/3] dt-bindings: edac: nuvoton: Add document for NPCM
+ memory controller
+Content-Language: en-US
+To:     Marvin Lin <milkfafa@gmail.com>, linux-edac@vger.kernel.org,
+        rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
+        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     openbmc@lists.ozlabs.org, benjaminfair@google.com,
+        yuenn@google.com, venture@google.com, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, avifishman70@gmail.com, tmaimon77@gmail.com,
+        tali.perry1@gmail.com, ctcchien@nuvoton.com, kflin@nuvoton.com,
+        Rob Herring <robh@kernel.org>
+References: <20221216073141.3289309-1-milkfafa@gmail.com>
+ <20221216073141.3289309-3-milkfafa@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221216073141.3289309-3-milkfafa@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 01:06:21PM -0800, Kees Cook wrote:
+On 16/12/2022 08:31, Marvin Lin wrote:
+> Add dt-bindings document for Nuvoton NPCM memory controller.
+> 
+> Signed-off-by: Marvin Lin <milkfafa@gmail.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-> --- a/kernel/exit.c
-> +++ b/kernel/exit.c
-> @@ -954,7 +954,7 @@ void __noreturn make_task_dead(int signr)
->  	 * To make sure this can't happen, place an upper bound on how often the
->  	 * kernel may oops without panic().
->  	 */
-> -	if (atomic_inc_return(&oops_count) >= READ_ONCE(oops_limit))
-> +	if (atomic_inc_return(&oops_count) >= READ_ONCE(oops_limit) && oops_limit)
->  		panic("Oopsed too often (kernel.oops_limit is %d)", oops_limit);
->  
+So this is a 16th version but through this entire year you never Cced
+the maintainers... You did not send a single version to the memory
+controller maintainers.
 
-That's dodgy, please write as:
+I don't know why it is so big problem to use scripts/get_maintainers.pl.
 
-	limit = READ_ONCE(oops_limit);
-	if (atomic_inc_return(&oops_count) >= limit && limit)
+> ---
+>  .../memory-controllers/nuvoton,npcm-mc.yaml   | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/memory-controllers/nuvoton,npcm-mc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/nuvoton,npcm-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nuvoton,npcm-mc.yaml
+> new file mode 100644
+> index 000000000000..0e752a673453
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/memory-controllers/nuvoton,npcm-mc.yaml
 
-So we don't explicitly add a reload that negates the whole READ_ONCE().
+filename based on compatibles, so nuvoton,npcm-memory-controller.yaml
+
+> @@ -0,0 +1,54 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +
+
+No blank lines.
+
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/memory-controllers/nuvoton,npcm-mc.yaml#
+
+
+
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton NPCM Memory Controller
+> +
+> +maintainers:
+> +  - Marvin Lin <kflin@nuvoton.com>
+> +  - Stanley Chu <yschu@nuvoton.com>
+> +
+> +description: |
+> +  The Nuvoton BMC SoC supports DDR4 memory with and without ECC (error
+> +  correction check).
+> +
+> +  The memory controller supports single bit error correction, double bit
+> +  error detection (in-line ECC in which a section (1/8th) of the memory
+> +  device used to store data is used for ECC storage).
+> +
+> +  Note, the bootloader must configure ECC mode for the memory controller.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nuvoton,npcm750-memory-controller
+> +      - nuvoton,npcm845-memory-controller
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    ahb {
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+
+Why do you need this node in the example?
+
+> +        mc: memory-controller@f0824000 {
+> +            compatible = "nuvoton,npcm750-memory-controller";
+> +            reg = <0xf0824000 0x1000>;
+> +            interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+> +        };
+> +    };
+
+Best regards,
+Krzysztof
+
