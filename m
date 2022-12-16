@@ -2,106 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B54764E9B4
+	by mail.lfdr.de (Postfix) with ESMTP id C68E964E9B5
 	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbiLPKqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 05:46:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38198 "EHLO
+        id S230312AbiLPKqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 05:46:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbiLPKqe (ORCPT
+        with ESMTP id S230167AbiLPKqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 05:46:34 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EA0614E;
-        Fri, 16 Dec 2022 02:46:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1671187590; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=csXYHnw/KgLTki+mcBGYXSrGC78KzWSKoY0JKsxj6gc=;
-        b=KSdYCNv6j6I7YSsfN07giHrg/o64EqcwqsHYSX5BNtRbZfZLbtg5EY+ztrNOlGovwoyyuO
-        kVZ2amMCSBnE4/TRjIYQgsEgiSHmJBNqNIpQBKVU9fJvFgFvfBfnEOtdvE89hiPxSeR0Vj
-        jlRz4XfqGW+UNQCwRStXdzJ5zIpCKCk=
-Message-ID: <c78e92ae3cbea037abdd31ecd64e997c8dd1def2.camel@crapouillou.net>
-Subject: Re: [PATCH 01/10] dt-bindings: display: bridge: it66121: Add
- compatible string for IT6610
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     Phong LE <ple@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        list@opendingux.net, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 16 Dec 2022 11:46:28 +0100
-In-Reply-To: <CAG3jFytgK0noWteGvXTdSm9as9Q=qfhf_ep3Z8Wv2ofmLzGb=A@mail.gmail.com>
-References: <20221214125821.12489-1-paul@crapouillou.net>
-         <20221214125821.12489-2-paul@crapouillou.net>
-         <CAG3jFytgK0noWteGvXTdSm9as9Q=qfhf_ep3Z8Wv2ofmLzGb=A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 16 Dec 2022 05:46:35 -0500
+Received: from outbound-smtp19.blacknight.com (outbound-smtp19.blacknight.com [46.22.139.246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DC1D2CC
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:46:34 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
+        by outbound-smtp19.blacknight.com (Postfix) with ESMTPS id 317D31C3BB8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 10:46:33 +0000 (GMT)
+Received: (qmail 26693 invoked from network); 16 Dec 2022 10:46:33 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 16 Dec 2022 10:46:32 -0000
+Date:   Fri, 16 Dec 2022 10:46:28 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     tzm <tcm1030@163.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/mempolicy: failed to disable numa balancing
+Message-ID: <20221216104628.bbeoilx3r64k3tlv@techsingularity.net>
+References: <20221202141630.41220-1-tcm1030@163.com>
+ <20221202115954.a226f8ef3051266d04caff54@linux-foundation.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20221202115954.a226f8ef3051266d04caff54@linux-foundation.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeudi 15 d=C3=A9cembre 2022 =C3=A0 11:55 +0100, Robert Foss a =C3=A9crit=
-=C2=A0:
-> On Wed, 14 Dec 2022 at 13:58, Paul Cercueil <paul@crapouillou.net>
-> wrote:
-> >=20
-> > Add a new ite,it6610 compatible string to the IT66121 binding
-> > documentation, since the two chips are very similar.
-> >=20
-> > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > ---
-> > =C2=A0.../devicetree/bindings/display/bridge/ite,it66121.yaml=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 4
-> > +++-
-> > =C2=A01 file changed, 3 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/bridge/ite,it66121.yaml
-> > b/Documentation/devicetree/bindings/display/bridge/ite,it66121.yaml
-> > index 1b2185be92cd..72957be0ba3c 100644
-> > ---
-> > a/Documentation/devicetree/bindings/display/bridge/ite,it66121.yaml
-> > +++
-> > b/Documentation/devicetree/bindings/display/bridge/ite,it66121.yaml
-> > @@ -17,7 +17,9 @@ description: |
-> >=20
-> > =C2=A0properties:
-> > =C2=A0=C2=A0 compatible:
-> > -=C2=A0=C2=A0=C2=A0 const: ite,it66121
-> > +=C2=A0=C2=A0=C2=A0 enum:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - ite,it66121
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - ite,it6610
-> >=20
-> > =C2=A0=C2=A0 reg:
-> > =C2=A0=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > --
-> > 2.35.1
-> >=20
->=20
-> Reviewed-by: Robert Foss <robert.foss@linaro.org>
+On Fri, Dec 02, 2022 at 11:59:54AM -0800, Andrew Morton wrote:
+> On Fri,  2 Dec 2022 22:16:30 +0800 tzm <tcm1030@163.com> wrote:
+> 
+> > It will be failed to  disable numa balancing policy permanently by passing
+> > <numa_balancing=disable> to boot cmdline parameters.
+> > The numabalancing_override variable is int and 1 for enable -1 for disable.
+> > So, !enumabalancing_override will always be true, which cause this bug.
+> 
+> That's really old code!
+> 
+> > --- a/mm/mempolicy.c
+> > +++ b/mm/mempolicy.c
+> > @@ -2865,7 +2865,7 @@ static void __init check_numabalancing_enable(void)
+> >  	if (numabalancing_override)
+> >  		set_numabalancing_state(numabalancing_override == 1);
+> >  
+> > -	if (num_online_nodes() > 1 && !numabalancing_override) {
+> > +	if (num_online_nodes() > 1 && (numabalancing_override == 1)) {
+> >  		pr_info("%s automatic NUMA balancing. Configure with numa_balancing= or the kernel.numa_balancing sysctl\n",
+> >  			numabalancing_default ? "Enabling" : "Disabling");
+> >  		set_numabalancing_state(numabalancing_default);
+> 
+> Looks right to me.  Mel?
+> 
+> After eight years, I wonder if we actually need this.
 
-Series applied to drm-misc-next.
+I don't think the patch is right aside from coding style issues such as
+real names used in signed-off-by's.
 
-Thanks for the reviews!
+The !numabalancing_override is checking "should the default be changed?",
+itt's not checking if it should be enabled specifically. A better potential
+fix would be something like this? (not actually tested)
 
-Cheers,
--Paul
+diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+index 61aa9aedb728..fc649f8509f7 100644
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -2862,10 +2862,12 @@ static void __init check_numabalancing_enable(void)
+ 		numabalancing_default = true;
+ 
+ 	/* Parsed by setup_numabalancing. override == 1 enables, -1 disables */
+-	if (numabalancing_override)
++	if (numabalancing_override) {
+ 		set_numabalancing_state(numabalancing_override == 1);
++		return;
++	}
+ 
+-	if (num_online_nodes() > 1 && !numabalancing_override) {
++	if (num_online_nodes() > 1) {
+ 		pr_info("%s automatic NUMA balancing. Configure with numa_balancing= or the kernel.numa_balancing sysctl\n",
+ 			numabalancing_default ? "Enabling" : "Disabling");
+ 		set_numabalancing_state(numabalancing_default);
