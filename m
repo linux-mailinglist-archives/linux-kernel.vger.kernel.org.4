@@ -2,121 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A60564F4F2
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 00:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB9564F4EA
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 00:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbiLPXWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 18:22:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
+        id S230203AbiLPXRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 18:17:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiLPXWT (ORCPT
+        with ESMTP id S230205AbiLPXQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 18:22:19 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE37213D71;
-        Fri, 16 Dec 2022 15:22:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1671232938; x=1702768938;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rHmzNvIp4i4ZnpwcZV6eJ+Rg9c4LEbjzoc5annv1Nek=;
-  b=umins327sk9Gd9K99FND3xmU4/sVAT8LNvqb/47PwQlPmai5yB80lWHV
-   KtSyU0VSM9OS+/t7jtzh7oisMNWJ3/Ga/oHAmik2/FDg/Vn86gstxOi3v
-   tUsCkJdDW7IHdOVSO6ZrmwOZ+Fu19EK7DbAEIFK7YX4GGnK+nKYUlSNnU
-   A=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 16 Dec 2022 15:22:18 -0800
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 15:22:18 -0800
-Received: from [10.110.77.243] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 16 Dec
- 2022 15:22:17 -0800
-Message-ID: <031d6121-c4b0-8db4-f816-fcff1e57f656@quicinc.com>
-Date:   Fri, 16 Dec 2022 15:22:17 -0800
+        Fri, 16 Dec 2022 18:16:47 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47C663D3B;
+        Fri, 16 Dec 2022 15:16:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671232576; x=1702768576;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4TwMHbHcz5c58OOhZoR8gaykEMG0kQlgrEFXlEMBq9o=;
+  b=E1Sz8i17m6dAu8GSgOCUtpO+5u961J6AI7yfYJiQW7dF9QfxKzLvQAIn
+   59EvmvbTnbqMgLPu3nuNGJFKzLvZAfmMM3RdTHvfipZfXUxcrMtEjgpCu
+   mOC5Nh5f/sBXZAoZu1ThwNYWcVGcPjejpGcC/twb+sQjddE8J/YAsgh/R
+   tihOTLAyy4EqKYaRMkfCAUwHlaP/3DiUM6/F3FqF7HFy1ecVXh7aCka2Y
+   WpNEXrw2gttQZy2gDVLlwM6BNmRehXWxTHtQoIKg4DsuiB6GjB3W62PyN
+   WuSaTAN0jfO4L4DR6IkPe9IpB9osw43X8gLrlyrMNjDGF1JRevxf8dSsa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="302497732"
+X-IronPort-AV: E=Sophos;i="5.96,251,1665471600"; 
+   d="scan'208";a="302497732"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 15:16:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="643419690"
+X-IronPort-AV: E=Sophos;i="5.96,251,1665471600"; 
+   d="scan'208";a="643419690"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga007.jf.intel.com with ESMTP; 16 Dec 2022 15:15:47 -0800
+Date:   Fri, 16 Dec 2022 15:24:06 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v2 09/22] sched/fair: Use IPC class score to select a
+ busiest runqueue
+Message-ID: <20221216232406.GA23530@ranerica-svr.sc.intel.com>
+References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
+ <20221128132100.30253-10-ricardo.neri-calderon@linux.intel.com>
+ <Y5Gld+cThNOPFvgX@arm.com>
+ <20221214003243.GC30234@ranerica-svr.sc.intel.com>
+ <Y5pZV0txyK2Fkkg6@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v5] dt-bindings: firmware: scm: Add QDU1000/QRU1000
- compatible
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Das Srinagesh <quic_gurus@quicinc.com>
-CC:     "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221216231312.22574-1-quic_molvera@quicinc.com>
-Content-Language: en-US
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <20221216231312.22574-1-quic_molvera@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5pZV0txyK2Fkkg6@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 14, 2022 at 11:16:39PM +0000, Ionela Voinescu wrote:
+> Hi Ricardo,
+> 
+> On Tuesday 13 Dec 2022 at 16:32:43 (-0800), Ricardo Neri wrote:
+> [..]
+> > > >  /**
+> > > > @@ -10419,8 +10442,8 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+> > > >  {
+> > > >  	struct rq *busiest = NULL, *rq;
+> > > >  	unsigned long busiest_util = 0, busiest_load = 0, busiest_capacity = 1;
+> > > > +	int i, busiest_ipcc_delta = INT_MIN;
+> > > >  	unsigned int busiest_nr = 0;
+> > > > -	int i;
+> > > >  
+> > > >  	for_each_cpu_and(i, sched_group_span(group), env->cpus) {
+> > > >  		unsigned long capacity, load, util;
+> > > > @@ -10526,8 +10549,37 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+> > > >  
+> > > >  		case migrate_task:
+> > > >  			if (busiest_nr < nr_running) {
+> > > > +				struct task_struct *curr;
+> > > > +
+> > > >  				busiest_nr = nr_running;
+> > > >  				busiest = rq;
+> > > > +
+> > > > +				/*
+> > > > +				 * Remember the IPC score delta of busiest::curr.
+> > > > +				 * We may need it to break a tie with other queues
+> > > > +				 * with equal nr_running.
+> > > > +				 */
+> > > > +				curr = rcu_dereference(busiest->curr);
+> > > > +				busiest_ipcc_delta = ipcc_score_delta(curr,
+> > > > +								      env->dst_cpu);
+> > > > +			/*
+> > > > +			 * If rq and busiest have the same number of running
+> > > > +			 * tasks, pick rq if doing so would give rq::curr a
+> > > > +			 * bigger IPC boost on dst_cpu.
+> > > > +			 */
+> > > > +			} else if (sched_ipcc_enabled() &&
+> > > > +				   busiest_nr == nr_running) {
+> > > > +				struct task_struct *curr;
+> > > > +				int delta;
+> > > > +
+> > > > +				curr = rcu_dereference(rq->curr);
+> > > > +				delta = ipcc_score_delta(curr, env->dst_cpu);
+> > > > +
+> > > > +				if (busiest_ipcc_delta < delta) {
+> > > > +					busiest_ipcc_delta = delta;
+> > > > +					busiest_nr = nr_running;
+> > > > +					busiest = rq;
+> > > > +				}
+> > > >  			}
+> > > >  			break;
+> > > >  
+> > > 
+> > > While in the commit message you describe this as breaking a tie for
+> > > asym_packing,
+> > 
+> > Are you referring to the overall series or this specific patch? I checked
+> > commit message and I do not see references to asym_packing.
+> 
+> Sorry, my bad, I was thinking about the cover letter, not the commit
+> message. It's under "+++ Balancing load using classes of tasks. Theory
+> of operation".
+> 
+> > 
+> > > the code here does not only affect asym_packing. If
+> > > another architecture would have sched_ipcc_enabled() it would use this
+> > > as generic policy, and that might not be desired.
+> > 
+> > Indeed, the patchset implements support to use IPCC classes for asym_packing,
+> > but it is not limited to it.
+> > 
+> 
+> So is your current intention to support IPC classes only for asym_packing
+> for now?
+
+My intention is to introduce IPC classes in general and make it available
+to other policies or architectures. I use asym_packing as use case.
 
 
-On 12/16/2022 3:13 PM, Melody Olvera wrote:
-> Add compatible for scm driver for QDU1000 and QRU1000 platforms. These
-> drivers only require the compatible field, so update the bindings
-> accordingly for these platforms.
->
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> ---
-> This patch is separated out from [1] and includes
-> changes addressing comments from that patch set.
->
-> Changes from v4:
-> * rebased on top of [2]
-> * removed redundant allOf
->
-> Changes from v3:
-> * removed unnecessary reset-cells
->
-> Changes from v2:
-> * Dropped qru compat strings
-> * Marked no clocks on qdu/qru scm device
-> * Revised rpmhpd constants
-> * Updated socinfo driver to new format
->
-> [1] https://lore.kernel.org/all/20221026190549.4005703-2-quic_molvera@quicinc.com/
+> What would be the impact on you if you were to limit the
+> functionality in this patch to asym_packing only?
 
-Apologies; meant to note that [2] is https://lore.kernel.org/lkml/20221122092345.44369-2-krzysztof.kozlowski@linaro.org/
+There would not be any adverse impact.
 
-> ---
->  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-> index 8e6e9ebb343d..9312a0953ea8 100644
-> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-> @@ -38,6 +38,7 @@ properties:
->            - qcom,scm-msm8994
->            - qcom,scm-msm8996
->            - qcom,scm-msm8998
-> +          - qcom,scm-qdu1000
->            - qcom,scm-sc7180
->            - qcom,scm-sc7280
->            - qcom,scm-sc8280xp
->
-> base-commit: ca39c4daa6f7f770b1329ffb46f1e4a6bcc3f291
-> prerequisite-patch-id: d5d17b3d720b358b8478cb1ad87e21a70992f228
-> prerequisite-patch-id: 6c92672973fdc1524516942fa21c340e68e7c4fb
+> 
+> > It is true that I don't check here for asym_packing, but it should not be a
+> > problem, IMO. I compare two runqueues with equal nr_running, either runqueue
+> > is a good choice. This tie breaker is an overall improvement, no?
+> > 
+> 
+> It could be, but equally there could be other better policies as well -
+> other ways to consider IPC class information to break the tie.
+> 
+> If other architectures start having sched_ipcc_enabled() they would
+> automatically use the policy you've decided on here. If other policies
+> are better for those architectures this generic policy would be difficult
+> to modify to ensure there are no regressions for all other architectures
+> that use it, or it would be difficult to work around it.
+> 
+> For this and for future support of IPC classes I am just wondering if we
+> can better design how we enable different architectures to have different
+> policies.
 
+I see your point. I agree that other architectures may want to implement
+policies differently. I'll add an extra check for env->sd & SD_ASYM_PACKING.
+
+Thanks and BR,
+Ricardo
