@@ -2,76 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A3B64EE0E
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:43:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6022D64EE12
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbiLPPne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 10:43:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S230410AbiLPPpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 10:45:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiLPPnb (ORCPT
+        with ESMTP id S229863AbiLPPpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 10:43:31 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C6819288
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:43:30 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id c7so2948776qtw.8
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:43:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hRzoHlaRtllxxhng1OirGqerB1yq/2zcTl9e6GKVxwc=;
-        b=HrpZgugAOFtKsf8qtT+VXBdNxUyebmbOvlKaLi1HMjNBPquPscP6ATHq9HVtqyopVW
-         YecNb/5sx/H94gJwfmGP4iT9iBR+jhdqng3IVAGqEjoI2KskRTncug7A3UERFoPEdnSP
-         eMmlUjifCCIxqHi05J2Q2SHmIvZPXBcaJKx9I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hRzoHlaRtllxxhng1OirGqerB1yq/2zcTl9e6GKVxwc=;
-        b=zZQlGjIwcPLfJ2lo6FUGSFweEdn3sZbza8jryYJ7H9Gzc6rA/cPNG7v5SdDjZIze1F
-         MK4NCcqKZW4ew7h5JOqdtQa7osP+K7xC2emARcX2Jzro6JEynef+VK4IbPAG4cwC81rQ
-         b0mIyPhtqAf7RrFAULDYuD+SQqz7LoQ4CAp026fxmo0bqDJx/nZ1kEFX6gv2cTetC5Ln
-         XzsTvXpwGDeSKBezS3USlnk2T7oN0Uwd2jTkhBOkmHVsJzKOrwHkcmX9jd7+i9mfHoJ+
-         mK8kkQ4Hl26SfHuRZJrmjKXgkKetb8xjZ9pztXE1PG5+AuQdLkRXdaR0XosBuwmO0KgN
-         6ckw==
-X-Gm-Message-State: ANoB5pmOAZWsIVhi3vKiylxFkbTyhVsj6Y96IxJZOkhBOqfC0e7A3fke
-        v/m0NIzFsHMdiz1xSuQFx6Hmoxu7/l0EvnHq
-X-Google-Smtp-Source: AA0mqf7HGYNniqmRC+0EMrd8vlLjNvPVJXwRBk17HJPoE4nFpO/SOW0b1kjLxccjdnGT+byfD6tymw==
-X-Received: by 2002:ac8:7650:0:b0:3a7:e043:2d1b with SMTP id i16-20020ac87650000000b003a7e0432d1bmr45815442qtr.14.1671205408954;
-        Fri, 16 Dec 2022 07:43:28 -0800 (PST)
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com. [209.85.160.177])
-        by smtp.gmail.com with ESMTPSA id q56-20020a05620a2a7800b006fafaac72a6sm1686129qkp.84.2022.12.16.07.43.27
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 07:43:28 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id s9so2956684qtx.6
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:43:27 -0800 (PST)
-X-Received: by 2002:ac8:4992:0:b0:3a7:648d:23d4 with SMTP id
- f18-20020ac84992000000b003a7648d23d4mr19721907qtq.180.1671205407691; Fri, 16
- Dec 2022 07:43:27 -0800 (PST)
+        Fri, 16 Dec 2022 10:45:21 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9BFCB50D6B
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:45:20 -0800 (PST)
+Received: (qmail 997666 invoked by uid 1000); 16 Dec 2022 10:45:19 -0500
+Date:   Fri, 16 Dec 2022 10:45:19 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Max Staudt <mstaudt@chromium.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Ming Lei <tom.leiming@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Yunke Cao <yunkec@chromium.org>,
+        Christoph Hellwig <hch@lst.de>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] media: uvcvideo: Code cleanup for dev->status
+Message-ID: <Y5ySj1+mGK/ioI/q@rowland.harvard.edu>
+References: <20221214-uvc-status-alloc-v3-0-9a67616cc549@chromium.org>
+ <Y5s+kuxCAtS8Eixj@rowland.harvard.edu>
+ <CANiDSCudMRATbHU4=hyjiVhwLr6zQubXPzzpYtXCxdMPsZFcuw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221213174234.688534-1-dave.hansen@linux.intel.com>
- <CAHk-=wi=TY3Kte5Z1_nvfcsEh+rcz86pYnzeASw=pbG9QtpJEQ@mail.gmail.com>
- <20221215123007.cagd7qiidehqd77k@box.shutemov.name> <CAHk-=whC_ixb3FDdMhW_wiKw7-bB700kvUyqN+_cPUNp=1hNsQ@mail.gmail.com>
- <20221216021645.jn576zrhadocpt66@box.shutemov.name> <20221216150532.ll4oyff2tlrisqsh@box.shutemov.name>
-In-Reply-To: <20221216150532.ll4oyff2tlrisqsh@box.shutemov.name>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 16 Dec 2022 09:43:11 -0600
-X-Gmail-Original-Message-ID: <CAHk-=whjCVDeVa8jxEjnimfhKNnXiku7ku4NirmY+poKsnM5HQ@mail.gmail.com>
-Message-ID: <CAHk-=whjCVDeVa8jxEjnimfhKNnXiku7ku4NirmY+poKsnM5HQ@mail.gmail.com>
-Subject: Re: [GIT PULL] x86/mm for 6.2
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     kirill.shutemov@linux.intel.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANiDSCudMRATbHU4=hyjiVhwLr6zQubXPzzpYtXCxdMPsZFcuw@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,22 +46,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 9:05 AM Kirill A. Shutemov <kirill@shutemov.name> wrote:
->
-> Below is preliminary fixup that suppose to address the issue. It does not
-> include change to untagged_addr() interface to avoid the clutter.
+On Fri, Dec 16, 2022 at 09:55:09AM +0100, Ricardo Ribalda wrote:
+> Hi Alan
+> 
+> On Thu, 15 Dec 2022 at 16:34, Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Thu, Dec 15, 2022 at 11:57:17AM +0100, Ricardo Ribalda wrote:
+> > > There is no need to make a kzalloc just for 16 bytes. Let's embed the data
+> > > into the main data structure.
+> > >
+> > > Now that we are at it, lets remove all the castings and open coding of
+> > > offsets for it.
+> > >
+> > > [Christoph, do you think dma wise we are violating any non written rules? :) thanks]
+> >
+> > There _is_ a rule, and it is not exactly unwritten.  The kerneldoc for
+> > the transfer_buffer member of struct urb says:
+> >
+> >         This buffer must be suitable for DMA; allocate it with
+> >         kmalloc() or equivalent.
+> >
+> > Which in general means that the buffer must not be part of a larger
+> > structure -- not unless the driver can guarantee that the structure will
+> > _never_ be accessed while a USB transfer to/from the buffer is taking
+> > place.
+> >
+> 
+> Thanks a lot for the clarification. I was mainly looking at the kerneldoc from:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/usb.h#n1687
+> 
+> and I could not see any reference to the DMA requirements.
+> 
+> Mind if I send a patch to add a reference there?
 
-Looks like the right direction.
+Not at all.  But if you change the documentation for usb_fill_int_urb() 
+then you should also change it for usb_fill_control_urb() and 
+usb_fill_bulk_urb().
 
-And once you change untagged_addr() to take 'tsk', you should then be
-able to cache all the information in the thread struct, and avoid the
-'tsk->mm' dereference entirely.
+Alan Stern
 
-> kthread_use_mm() should be safe as long as no arch actually implements
-> per-thread tagging enabling.
-
-I think in a perfect world the (few) users of kthread_use_mm() would
-also just make sure they did the locking of thing, so that they can't
-have that race with somebody that then would enable LAM later.
-
-             Linus
+> > There are examples all over the USB subsystem where buffers as small as
+> > one or two bytes get kmalloc'ed in order to obey this rule.  16 bytes is
+> > certainly big enough that you shouldn't worry about it being allocated
+> > separately.
+> >
+> Yep, we should keep it malloced. Thanks a lot for looking into this :)
+> 
+> 
+> > Alan Stern
+> 
+> 
+> 
+> -- 
+> Ricardo Ribalda
