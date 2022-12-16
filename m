@@ -2,97 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FFAE64F26A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 21:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4ED64F282
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 21:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbiLPUfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 15:35:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
+        id S231967AbiLPUlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 15:41:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiLPUfN (ORCPT
+        with ESMTP id S231859AbiLPUlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 15:35:13 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907563B9FC
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:35:12 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id 4so3448317plj.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:35:12 -0800 (PST)
+        Fri, 16 Dec 2022 15:41:05 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B7C64DD;
+        Fri, 16 Dec 2022 12:41:03 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id m18so8859022eji.5;
+        Fri, 16 Dec 2022 12:41:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r/hPsvfVFhvh9haGKLunftTxDivO3JDSv2xgcZcDsPA=;
-        b=HvYgLvzKyB+qontqJaRxw4JCx5keeHG+fJkK4euqza/veNJBrv8ioB2lE6IXO0VI3n
-         esNkVZN37PeYArveZqKULuIZn7F1HgLhZ7ZOg+3+Q1JX2YF8qc0w9Jp9AkLmPCAxaHXq
-         9NQKhQSoi5qpbGUeWi2a7tg62N+alAyY5VjrQ=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FGvyMITTi9oXyIUnasPEhVJqtyXv6Y6ZzePRftZhGnA=;
+        b=W0V7by09TM3s4cRnh35968yxctyIfGjE/cCRibvsu2bm/46MP7rin+KSTflQzQKadY
+         rEhxD62uDF4OtoSmtHWSXxjSW39LnBLIdPIfn0oNAaY4Xn6Z5mjtg+KLIUjlSjVLA1YN
+         WnFw7nqrHwYPDpSC6Zr5MtmonMEJTt2kRP5Mc2q2nzvdc1/B4irhSlQV8v9ZVF7z7aLR
+         8P7jkFJtcZXLGHDXOOaozD9KgNFS+VQhio/Iqpfvu8kcmN6VEPYkvk+JD5o2COope2MW
+         Ywur2jORt6myml1Zpqqg6i6Md2JSWB/OAD3gmXSvlW7XbMoQVSD1oRkJvCU5ZeUKKSTp
+         Ex8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r/hPsvfVFhvh9haGKLunftTxDivO3JDSv2xgcZcDsPA=;
-        b=cwmhJedbv/y15uNs72iNDLTPqg8ppERRVM6SDZr5wYDCBiEMEha+M1P4O7hKnLjVWJ
-         R5YY+C3rX7dkZd02XQT4X3AQ56U7ouWfDyfGhGudnRKlH7svKnk663qO8gtNLsi/Hd52
-         Q7/ZW2Gz0CTDYyWQqQUQIErOntFu/Bwjb5tcOdjCtXDrgMm5RkDca08+wNvkwrWB7bBq
-         Sw/rJOQvnEH3sGEgLv0OR01NHfub2ysDsjHcCm09p+v22jmJeD2TZopamG90Eu+SPy16
-         kgCcBXvspf01LC6n+bplei144L8vWQeUWOvfjQZmsIVSg5he2sWqNZR4NkjhV0Wz7D9x
-         bdvQ==
-X-Gm-Message-State: AFqh2kqbr2pFui7Hd/qe/hEZwlahuGJevtlK/WwKaZfatfybgDiPgg5p
-        cPKdFTF9f4XbbID5ICN58BQIaw==
-X-Google-Smtp-Source: AMrXdXt8w3fEbmDbvTVO1Z+Z3U9o6ttyQJonRnCieP1HRMjM8XxbOprdtKK2Ib64+zi1S8WdDE+mjA==
-X-Received: by 2002:a17:902:d4c6:b0:191:a19:e768 with SMTP id o6-20020a170902d4c600b001910a19e768mr1842628plg.48.1671222912139;
-        Fri, 16 Dec 2022 12:35:12 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i4-20020a17090332c400b0018913417ba2sm2039045plr.130.2022.12.16.12.35.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 12:35:11 -0800 (PST)
-Date:   Fri, 16 Dec 2022 12:35:10 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Jeff Xu <jeffxu@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>, jeffxu@chromium.org,
-        skhan@linuxfoundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, jannh@google.com,
-        linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v6 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
-Message-ID: <202212161233.85C9783FB@keescook>
-References: <20221207154939.2532830-1-jeffxu@google.com>
- <20221207154939.2532830-4-jeffxu@google.com>
- <202212080821.5AE7EE99@keescook>
- <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
- <Y5yS8wCnuYGLHMj4@x1n>
- <CALmYWFsDhX76zbcyhYAW-u0BBwD+m+TKpt4_pZTMt+22zHhrGQ@mail.gmail.com>
- <20221216094259.bec91e4abd6cf54a05ce2813@linux-foundation.org>
- <CALmYWFsNp87a5uVQUAb4PG0khFN8Xxd=ibh9Q7g-Y0XW1Mn-8Q@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FGvyMITTi9oXyIUnasPEhVJqtyXv6Y6ZzePRftZhGnA=;
+        b=iSYoEh0vu6KX//PAW9anyldixdQSurvJQeKyss29A+IXK9JjcDIwZ0KPVMvT9hOMMb
+         RMCjbDiGdNZhxHwBMWTsSNXXgKA6thT6zKqfEgB2CiYG2Ta4WGLKEh5dLAnPD4GyxpzN
+         YxNVKzCMpWc53V3qeOg2kxMXTQD3+ObTm/rY5x6zgDOPPJj2MnDs6AFpJe1M6nRa8sF7
+         rR4/jHUsPN95/h8M/iPAWi9EULNM1KCaWoPnp1NE/9M/5SU3S9FefWAsuQaGuZkYlUUi
+         FuKeDiFyqu6HkJ/JWcs5Wz92Ju4cUxW225VEYdhy0RC5XTSBj+XumYL3qvIT5f/HJe/X
+         aZMg==
+X-Gm-Message-State: ANoB5pko3ZUTCgDfCGZnA4ZioT64WWxjsX8/Ydex0WROWaf+EdwqGt73
+        5jVJwkM8VceGx2Myzw9JktE=
+X-Google-Smtp-Source: AA0mqf5+bwekE2Ck/RwL71cqJjClxSLICfq5IEg1sgbFYw1RK6V3aTOQKEC9pglUSfZAcAdPZeVJcg==
+X-Received: by 2002:a17:907:cbc8:b0:7c1:6e08:4c20 with SMTP id vk8-20020a170907cbc800b007c16e084c20mr23312414ejc.7.1671223261471;
+        Fri, 16 Dec 2022 12:41:01 -0800 (PST)
+Received: from [192.168.1.101] ([141.136.89.211])
+        by smtp.gmail.com with ESMTPSA id dm4-20020a05640222c400b004589da5e5cesm1258695edb.41.2022.12.16.12.40.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 12:41:01 -0800 (PST)
+Message-ID: <7d44c9ed-cf9d-64e1-df85-726a97859e06@gmail.com>
+Date:   Sat, 17 Dec 2022 00:40:56 +0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALmYWFsNp87a5uVQUAb4PG0khFN8Xxd=ibh9Q7g-Y0XW1Mn-8Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH net-next v1 01/13] net: wwan: tmi: Add PCIe core
+Content-Language: en-US
+To:     =?UTF-8?B?WWFuY2hhbyBZYW5nICjmnajlvabotoUp?= 
+        <Yanchao.Yang@mediatek.com>
+Cc:     =?UTF-8?B?Q2hyaXMgRmVuZyAo5Yav5L+d5p6XKQ==?= 
+        <Chris.Feng@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?TWluZ2xpYW5nIFh1ICjlvpDmmI7kuq4p?= 
+        <mingliang.xu@mediatek.com>,
+        =?UTF-8?B?TWluIERvbmcgKOiRo+aVjyk=?= <min.dong@mediatek.com>,
+        "m.chetan.kumar@intel.com" <m.chetan.kumar@intel.com>,
+        "linuxwwan@mediatek.com" <linuxwwan@mediatek.com>,
+        =?UTF-8?B?TGlhbmcgTHUgKOWQleS6rik=?= <liang.lu@mediatek.com>,
+        =?UTF-8?B?SGFpanVuIExpdSAo5YiY5rW35YabKQ==?= 
+        <haijun.liu@mediatek.com>,
+        =?UTF-8?B?SGFvemhlIENoYW5nICjluLjmtanlk7Ip?= 
+        <Haozhe.Chang@mediatek.com>,
+        =?UTF-8?B?SHVhIFlhbmcgKOadqOWNjik=?= <Hua.Yang@mediatek.com>,
+        "linuxwwan@intel.com" <linuxwwan@intel.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "loic.poulain@linaro.org" <loic.poulain@linaro.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        =?UTF-8?B?VGluZyBXYW5nICjnjovmjLop?= <ting.wang@mediatek.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        =?UTF-8?B?QWlkZW4gV2FuZyAo546L5ZKP6bqSKQ==?= 
+        <Aiden.Wang@mediatek.com>,
+        =?UTF-8?B?RmVsaXggQ2hlbiAo6ZmI6Z2eKQ==?= <Felix.Chen@mediatek.com>,
+        =?UTF-8?B?TGFtYmVydCBXYW5nICjnjovkvJ8p?= 
+        <Lambert.Wang@mediatek.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        =?UTF-8?B?TWluZ2NodWFuZyBRaWFvICjkuZTmmI7pl68p?= 
+        <Mingchuang.Qiao@mediatek.com>,
+        =?UTF-8?B?R3VvaGFvIFpoYW5nICjlvKDlm73osaop?= 
+        <Guohao.Zhang@mediatek.com>,
+        =?UTF-8?B?WGlheXUgWmhhbmcgKOW8oOWkj+Wuhyk=?= 
+        <Xiayu.Zhang@mediatek.com>
+References: <20221122111152.160377-1-yanchao.yang@mediatek.com>
+ <20221122111152.160377-2-yanchao.yang@mediatek.com>
+ <64aada78-8029-1b05-b802-a005549503c9@gmail.com>
+ <8878ed64fadfda9b3d3c8cd8b4564dd9019349b6.camel@mediatek.com>
+From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
+In-Reply-To: <8878ed64fadfda9b3d3c8cd8b4564dd9019349b6.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 10:11:44AM -0800, Jeff Xu wrote:
-> Once per boot seems too little, it would be nice if we can list all processes.
-> I agree ratelimited might be too much.
-> There is a feature gap here for logging.
-> 
-> Kees, what do you think ?
+Hello Yanchao,
 
-I agree once per boot is kind of frustrating "I fixed the one warning,
-oh, now it's coming from a different process". But ratelimit is, in
-retrospect, still too often.
+On 07.12.2022 06:33, Yanchao Yang (杨彦超) wrote:
+> On Sun, 2022-12-04 at 22:52 +0400, Sergey Ryazanov wrote:
+>> On 22.11.2022 15:11, Yanchao Yang wrote:
+>>> Registers the TMI device driver with the kernel. Set up all the
+>>> fundamental
+>>> configurations for the device: PCIe layer, Modem Host Cross Core
+>>> Interface
+>>> (MHCCIF), Reset Generation Unit (RGU), modem common control
+>>> operations and
+>>> build infrastructure.
+>>>
+>>> * PCIe layer code implements driver probe and removal, MSI-X
+>>> interrupt
+>>> initialization and de-initialization, and the way of resetting the
+>>> device.
+>>> * MHCCIF provides interrupt channels to communicate events such as
+>>> handshake,
+>>> PM and port enumeration.
+>>> * RGU provides interrupt channels to generate notifications from
+>>> the device
+>>> so that the TMI driver could get the device reset.
+>>> * Modem common control operations provide the basic read/write
+>>> functions of
+>>> the device's hardware registers, mask/unmask/get/clear functions of
+>>> the
+>>> device's interrupt registers and inquiry functions of the device's
+>>> status.
+>>>
+>>> Signed-off-by: Ting Wang <ting.wang@mediatek.com>
+>>> Signed-off-by: MediaTek Corporation <linuxwwan@mediatek.com>
+>>> ---
+>>>    drivers/net/wwan/Kconfig                 |   11 +
+>>>    drivers/net/wwan/Makefile                |    1 +
+>>>    drivers/net/wwan/mediatek/Makefile       |   12 +
+>>>    drivers/net/wwan/mediatek/mtk_common.h   |   30 +
+>>>    drivers/net/wwan/mediatek/mtk_dev.c      |   50 +
+>>>    drivers/net/wwan/mediatek/mtk_dev.h      |  503 ++++++++++
+>>>    drivers/net/wwan/mediatek/pcie/mtk_pci.c | 1164
+>>> ++++++++++++++++++++++
+>>>    drivers/net/wwan/mediatek/pcie/mtk_pci.h |  150 +++
+>>>    drivers/net/wwan/mediatek/pcie/mtk_reg.h |   69 ++
+>>>    9 files changed, 1990 insertions(+)
+>>>    create mode 100644 drivers/net/wwan/mediatek/Makefile
+>>>    create mode 100644 drivers/net/wwan/mediatek/mtk_common.h
+>>>    create mode 100644 drivers/net/wwan/mediatek/mtk_dev.c
+>>>    create mode 100644 drivers/net/wwan/mediatek/mtk_dev.h
+>>>    create mode 100644 drivers/net/wwan/mediatek/pcie/mtk_pci.c
+>>>    create mode 100644 drivers/net/wwan/mediatek/pcie/mtk_pci.h
+>>>    create mode 100644 drivers/net/wwan/mediatek/pcie/mtk_reg.h
+>>>
+>>> diff --git a/drivers/net/wwan/Kconfig b/drivers/net/wwan/Kconfig
+>>> index 3486ffe94ac4..a93a0c511d50 100644
+>>> --- a/drivers/net/wwan/Kconfig
+>>> +++ b/drivers/net/wwan/Kconfig
+>>> @@ -119,6 +119,17 @@ config MTK_T7XX
+>>>    
+>>>    	  If unsure, say N.
+>>>    
+>>> +config MTK_TMI
+>>> +	tristate "TMI Driver for Mediatek T-series Device"
+>>> +	depends on PCI
+>>> +	help
+>>> +	  This driver enables Mediatek T-series WWAN Device
+>>> communication.
+>>> +
+>>> +	  If you have one of those Mediatek T-series WWAN Modules and
+>>> wish to
+>>> +	  use it in Linux say Y/M here.
+>>
+>> From this and the series descriptions, it is unclear which modem
+>> chips this driver is intended for and how does it correlate with the
+>> T7xx driver? Is the TMI driver a drop-in replacement for the t7xx driver,
+>> or does the TMI driver support any T-series chips except t7xx?
+> > The driver is intended for t8xx or later T-series modem chips in the
+> future. Currently, t7xx is not support.
 
-Let's go with per boot -- this should be noisy "enough" to get the
-changes in API into the callers without being too much of a hassle.
+Can you add this information to the option description to make it easier 
+for users to choose?
 
--- 
-Kees Cook
+BTW, just curious, do you have any plans to add T7xx support to the TMI 
+driver, or maybe merge them or factor out the common code into a common 
+library? I am asking because I noticed some common code and modem 
+components, but that is not addressed in the cover letter. Or is this 
+feeling misleading and these two series are very different?
+
+>>> +
+>>> +	  If unsure, say N.
+>>> +
+>>>    endif # WWAN
+>>>    
+>>>    endmenu
+>>> diff --git a/drivers/net/wwan/Makefile b/drivers/net/wwan/Makefile
+>>> index 3960c0ae2445..198d8074851f 100644
+>>> --- a/drivers/net/wwan/Makefile
+>>> +++ b/drivers/net/wwan/Makefile
+>>> @@ -14,3 +14,4 @@ obj-$(CONFIG_QCOM_BAM_DMUX) += qcom_bam_dmux.o
+>>>    obj-$(CONFIG_RPMSG_WWAN_CTRL) += rpmsg_wwan_ctrl.o
+>>>    obj-$(CONFIG_IOSM) += iosm/
+>>>    obj-$(CONFIG_MTK_T7XX) += t7xx/
+>>> +obj-$(CONFIG_MTK_TMI) += mediatek/
+>>
+>> The driver is called mtk_tmi, but its code is placed to the
+>> directory
+>> with too generic name 'mediatek'. Do you plan too keep all possible
+>> future drivers in this directory? >
+> Yes, we plan to put all mediatek's wwan driver into the same directory.
+> Currently, there is only T-series modem driver. So we don't create
+> 'tmi' folder under 'mediatek' directory explicitly.
+
+Thank you for the clarification.
+
+--
+Sergey
