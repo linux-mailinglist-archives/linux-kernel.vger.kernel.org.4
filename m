@@ -2,383 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1A364EAAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FA464EAAE
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:33:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbiLPLca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:32:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
+        id S230200AbiLPLd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:33:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbiLPLcV (ORCPT
+        with ESMTP id S230467AbiLPLdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:32:21 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A144F5D
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:32:20 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id c1so3031624lfi.7
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:32:19 -0800 (PST)
+        Fri, 16 Dec 2022 06:33:19 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C695FD43
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:33:17 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id m18so5483024eji.5
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:33:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dAx/1r3Bgtwb5gejIiLMQD2z5RpFJAB22ApCDcu9cys=;
-        b=W1KEfyCP1EPfqe+EFNlDgY5uuLVCqJqF03dWExRdMCHQMkE620y1TrUDuyeEdg7zUn
-         he3UdSCXrYIQEAWmuOhh49saZvkmtFB1Xqt6PhZVezQ+vtdxBgWZ/kXCUeYULPklY0L7
-         DPOjHIrcWJMpNb3Hwv8Yh03PYGIV9yPmbf2dRUc+Wh75AFVgF4vURfQOl3XjGvArm9nJ
-         lXoTdoXgvIom2IPMjZ7f2lO8AtGsLPwvn1iAW/H0ExJSiEswKHUILoUFFKVfJNvEWDfH
-         uznUELjCuBDB4D4viwgTqsEc5yVKqyr2xk+hDkNHGAp7ZRHTMxpKjR+coH2yH/r2BD08
-         I7/A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wp7xY02XT6L1Are9ykoIexwrwRSPJlIWQ4EVjYN7QUQ=;
+        b=P7dewo/vW1+3kUsS1DF1U+BER8M/mycwRvSHH0ufamy/AoKmpVhSYp+qN/HguQ21ZM
+         5PR1koGQ631rT+BZ1Fpr7Es8/iUYdu4JP4TXbYeNsvFztweDuDsZnufv/JtyoXBguA6N
+         DjTqUBw/K9bcM4Ga1qzan46RAV9Rk1bKLHdls9dGzZtElagF/EtghJhjecxP01O/cQEd
+         WhWyhGDb5/3rBUaqMhncK2UGGjRYE5kgp5nytaNT8FzahEwydSF36DfrftDG9gf4bK6g
+         QhD42nZYDWUnm9aEw5tkv4YYDw4EhNtqjWjgGpXQZrmpIKuwPP43CCXZnJREfvxrltvw
+         mOPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dAx/1r3Bgtwb5gejIiLMQD2z5RpFJAB22ApCDcu9cys=;
-        b=Mj2rz7tpUAvxfeQ9OCLTrEBYzJxttEaOJXwVGR/SuvbSJAiOFZfbXU3t4pCVk7ZgQs
-         Hp/7CRaMrbTj3aSQgWt3x1mIImxqjLXUtYfrs+C/zVxezoLRsi4RSZ+sdu8/jtPzTiw3
-         +j+sOzvCnJanvIDTJPa4MGWM4s9l9xLvG3QiYR7US8zis/0Bh5YzSXB/qP4MV+nMeWX5
-         PnEGCKh9kUDV1H9E9y6aVewQJDQFu5yY44MqnIdPGcfdMzxF6Sziekm5UdS83vTgwj6R
-         YvSArrZm/5k0fDlmU9xGV32Z+MrpIwwO5QmCXgK9DAqbB85v+V0kc2UwkFDwYNOLoVCl
-         fcEg==
-X-Gm-Message-State: ANoB5pkcKBEwxNfIBuZ8c0HX0rBQNW29haB3F00YdZHVC71AQ04TDvX8
-        1aF+YhV65RuB+AQc42mrRPBnjQ==
-X-Google-Smtp-Source: AA0mqf4ZhjmOvV5922vukAGUOlFpL4ayukZvFPADDzt+0ywiaB2yUSwWv14YnGU6D0lvb15/zE87vg==
-X-Received: by 2002:ac2:4f8d:0:b0:4a4:68b9:19f1 with SMTP id z13-20020ac24f8d000000b004a468b919f1mr8730959lfs.25.1671190339565;
-        Fri, 16 Dec 2022 03:32:19 -0800 (PST)
-Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id w1-20020a05651234c100b004b5b4126237sm198535lfr.67.2022.12.16.03.32.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 03:32:19 -0800 (PST)
-Message-ID: <afcb9378-f331-df8c-ced5-1c10999f5fb8@linaro.org>
-Date:   Fri, 16 Dec 2022 12:32:17 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wp7xY02XT6L1Are9ykoIexwrwRSPJlIWQ4EVjYN7QUQ=;
+        b=4Tc+TV4+ip+ThqCRcl2PV32g+JwWbniwD5i20uOI5XIEYq5W9oXfLcWvyLU/h903Ac
+         IYrPI5qS14j+s+hhBIQPUBRwk9uKDWb9qsM2mHJD1Mbx47GjllE95g6odYmYAN3fs2+t
+         Rk6Jv6f1oFLO5i2eAKNr9TXeKaH3vK3hFAwDTApwA6veZTW/koCLfQgEv20fSVh3D3TB
+         8RSM75zqTT/Ptb2D99sQWjauR1IhtpmuDf73oDreDXmkBb9O9oAylo1ZufgBJ8iuY81O
+         jLQjsk0xr5fFnkXbeHhyFocV6bs0Hm17/UV9NLQY9HaoNatP2xMUDIv/aPafjsphIevh
+         OiSQ==
+X-Gm-Message-State: ANoB5pkHHeD2UBVl+VQgxsdy+BmKu/xzGp/HpEuyQ7NiayUGTLi8KAJe
+        c/9Ko3RQ7AZiQ7qL3jNQvzXNFbMx5qf+WY3GPEk=
+X-Google-Smtp-Source: AA0mqf6OZPkMlhYgAwWt2IXqGv0ChcU18EjMrOEG2UsLBCDXGjnVEG+1WcMrC5Tma3ZW6OtfIucg9nsUMeNdSwihdi4=
+X-Received: by 2002:a17:907:766a:b0:7c0:f212:d9a with SMTP id
+ kk10-20020a170907766a00b007c0f2120d9amr18292772ejc.423.1671190396154; Fri, 16
+ Dec 2022 03:33:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v4 4/4] arm64: dts: qcom: sm6125: Initial support for
- xiaomi-laurel-sprout
-Content-Language: en-US
-To:     Lux Aliaga <they@mint.lgbt>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+References: <CALHCpMgSZOZdOGpLwTYf0sFD5EMNL7CuqHuFJV_6w5VPSWZnUw@mail.gmail.com>
+ <CALHCpMgEZjnR39upkR6iozSk-b5A_GHRo9rcDSPXzzQi6x_qCw@mail.gmail.com>
+ <b1b7935d-0785-2e57-bad9-ab2476f0acf2@leemhuis.info> <CALHCpMhsM2j=bSXEDC9BWYpOAyvCccgJpJmqXfiRTHvp6=y3tA@mail.gmail.com>
+ <20221212101449.4e465181@xps-13> <CALHCpMimCqZB0bnHaOdCzucey+92NcRRZXCHXYYH5c9vj0nZaQ@mail.gmail.com>
+ <20221212173730.64224599@xps-13> <b75a8769-0cc8-beb3-931a-6755aede3af0@inbox.ru>
+ <20221213104643.052d4a06@xps-13> <CALHCpMhOku2b+1y5Z=N5RJ6SvCvNakD2rSyRAqp6Gz3JWVvXGg@mail.gmail.com>
+ <20221213175424.79895b63@xps-13> <CAGETcx8YvD5JABuJhah_6oOAUe=QgnOG5gWNL7Hcfxbvq0C2YQ@mail.gmail.com>
+ <20221216120456.52072f9f@xps-13>
+In-Reply-To: <20221216120456.52072f9f@xps-13>
+From:   Maxim Kiselev <bigunclemax@gmail.com>
+Date:   Fri, 16 Dec 2022 14:33:04 +0300
+Message-ID: <CALHCpMhEdq=Zxsj10cUNoi7Z56bqPORf1dztRKXgOL3O9C7bBQ@mail.gmail.com>
+Subject: Re: nvmem-cells regression after adding 'call of_platform_populate()
+ for MTD partitions'
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20221215190404.398788-1-they@mint.lgbt>
- <20221215190404.398788-4-they@mint.lgbt>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221215190404.398788-4-they@mint.lgbt>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> Maxim, any chance you give this a try?
+Ok, I'll try it as soon as possible.
 
-
-On 15.12.2022 20:04, Lux Aliaga wrote:
-> Adds support for the Xiaomi Mi A3 (xiaomi-laurel-sprout). Here's a
-> summary on what's working.
-> 
-> - dmesg output to bootloader preconfigured display
-> - USB
-> - UFS
-> - SMD RPM regulators
-> 
-> Signed-off-by: Lux Aliaga <they@mint.lgbt>
-> ---
->  arch/arm64/boot/dts/qcom/Makefile             |   1 +
->  .../dts/qcom/sm6125-xiaomi-laurel-sprout.dts  | 254 ++++++++++++++++++
->  2 files changed, 255 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel-sprout.dts
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 3e79496292e7..2b2a0170db14 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -157,6 +157,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-lenovo-yoga-c630.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-samsung-w737.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sm4250-oneplus-billie2.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-sony-xperia-seine-pdx201.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-xiaomi-laurel-sprout.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sm6350-sony-xperia-lena-pdx213.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sm6375-sony-xperia-murray-pdx225.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sm7225-fairphone-fp4.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel-sprout.dts b/arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel-sprout.dts
-> new file mode 100644
-> index 000000000000..86e1ec47bf5e
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel-sprout.dts
-> @@ -0,0 +1,254 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) 2022, Lux Aliaga <they@mint.lgbt>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/input/gpio-keys.h>
-> +#include "sm6125.dtsi"
-> +
-> +/ {
-> +	model = "Xiaomi Mi A3";
-> +	compatible = "xiaomi,laurel-sprout", "qcom,sm6125";
-> +	chassis-type = "handset";
-> +
-> +	/* required for bootloader to select correct board */
-> +	qcom,msm-id = <394 0>; /* sm6125 v0 */
-Unless you have a prototype device, this is not correct.
-
-Please run `cat /sys/bus/soc/devices/soc0/revision` and confirm
-which revision is used on your phone.
-> +	qcom,board-id = <11 0>;
-> +
-> +	chosen {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		framebuffer0: framebuffer@5c000000 {
-> +			compatible = "simple-framebuffer";
-> +			reg = <0 0x5c000000 0 (1560 * 720 * 4)>;
-> +			width = <720>;
-> +			height = <1560>;
-> +			stride = <(720 * 4)>;
-> +			format = "a8r8g8b8";
-> +		};
-> +	};
-> +
-> +	extcon_usb: usb-id {
-'r' < 'u', usb-id should go after reserved-memory.
-
-> +		compatible = "linux,extcon-usb-gpio";
-> +		id-gpio = <&tlmm 102 GPIO_ACTIVE_HIGH>;
-> +	};
-> +
-> +	reserved-memory {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +
-> +		debug_mem: memory@ffb00000 {
-Memory node names should be more specific, for example
-debug@ instead of memory@.
-
-Konrad
-> +			reg = <0x0 0xffb00000 0x0 0xc0000>;
-> +			no-map;
-> +		};
-> +
-> +		last_log_mem: memory@ffbc0000 {
-> +			reg = <0x0 0xffbc0000 0x0 0x80000>;
-> +			no-map;
-> +		};
-> +
-> +		pstore_mem: ramoops@ffc00000 {
-> +			compatible = "ramoops";
-> +			reg = <0x0 0xffc40000 0x0 0xc0000>;
-> +			record-size = <0x1000>;
-> +			console-size = <0x40000>;
-> +			msg-size = <0x20000 0x20000>;
-> +		};
-> +
-> +		cmdline_mem: memory@ffd00000 {
-> +			reg = <0x0 0xffd40000 0x0 0x1000>;
-> +			no-map;
-> +		};
-> +	};
-> +};
-> +
-> +
-> +&hsusb_phy1 {
-> +	status = "okay";
-> +};
-> +
-> +&rpm_requests {
-> +	regulators-0 {
-> +		compatible = "qcom,rpm-pm6125-regulators";
-> +
-> +		vreg_s6a: s6 {
-> +			regulator-min-microvolt = <936000>;
-> +			regulator-max-microvolt = <1422000>;
-> +		};
-> +
-> +		vreg_l1a: l1 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1256000>;
-> +		};
-> +
-> +		vreg_l2a: l2 {
-> +			regulator-min-microvolt = <1000000>;
-> +			regulator-max-microvolt = <1056000>;
-> +		};
-> +
-> +		vreg_l3a: l3 {
-> +			regulator-min-microvolt = <1000000>;
-> +			regulator-max-microvolt = <1064000>;
-> +		};
-> +
-> +		vreg_l4a: l4 {
-> +			regulator-min-microvolt = <872000>;
-> +			regulator-max-microvolt = <976000>;
-> +		};
-> +
-> +		vreg_l5a: l5 {
-> +			regulator-min-microvolt = <1648000>;
-> +			regulator-max-microvolt = <3104000>;
-> +		};
-> +
-> +		vreg_l6a: l6 {
-> +			regulator-min-microvolt = <576000>;
-> +			regulator-max-microvolt = <656000>;
-> +		};
-> +
-> +		vreg_l7a: l7 {
-> +			regulator-min-microvolt = <872000>;
-> +			regulator-max-microvolt = <976000>;
-> +		};
-> +
-> +		vreg_l8a: l8 {
-> +			regulator-min-microvolt = <400000>;
-> +			regulator-max-microvolt = <728000>;
-> +		};
-> +
-> +		vreg_l9a: l9 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1896000>;
-> +		};
-> +
-> +		vreg_l10a: l10 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1896000>;
-> +		};
-> +
-> +		vreg_l11a: l11 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1952000>;
-> +		};
-> +
-> +		vreg_l12a: l12 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1996000>;
-> +		};
-> +
-> +		vreg_l13a: l13 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1832000>;
-> +		};
-> +
-> +		vreg_l14a: l14 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1904000>;
-> +		};
-> +
-> +		vreg_l15a: l15 {
-> +			regulator-min-microvolt = <3104000>;
-> +			regulator-max-microvolt = <3232000>;
-> +		};
-> +
-> +		vreg_l16a: l16 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1904000>;
-> +		};
-> +
-> +		vreg_l17a: l17 {
-> +			regulator-min-microvolt = <1248000>;
-> +			regulator-max-microvolt = <1304000>;
-> +		};
-> +
-> +		vreg_l18a: l18 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1264000>;
-> +		};
-> +
-> +		vreg_l19a: l19 {
-> +			regulator-min-microvolt = <1648000>;
-> +			regulator-max-microvolt = <2952000>;
-> +		};
-> +
-> +		vreg_l20a: l20 {
-> +			regulator-min-microvolt = <1648000>;
-> +			regulator-max-microvolt = <2952000>;
-> +		};
-> +
-> +		vreg_l21a: l21 {
-> +			regulator-min-microvolt = <2600000>;
-> +			regulator-max-microvolt = <2856000>;
-> +		};
-> +
-> +		vreg_l22a: l22 {
-> +			regulator-min-microvolt = <2944000>;
-> +			regulator-max-microvolt = <3304000>;
-> +		};
-> +
-> +		vreg_l23a: l23 {
-> +			regulator-min-microvolt = <3000000>;
-> +			regulator-max-microvolt = <3400000>;
-> +		};
-> +
-> +		vreg_l24a: l24 {
-> +			regulator-min-microvolt = <2944000>;
-> +			regulator-max-microvolt = <3304000>;
-> +		};
-> +	};
-> +};
-> +
-> +&sdc2_off_state {
-> +	sd-cd-pins {
-> +		pins = "gpio98";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +	};
-> +};
-> +
-> +&sdc2_on_state {
-> +	sd-cd-pins {
-> +		pins = "gpio98";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-pull-up;
-> +	};
-> +};
-> +
-> +&tlmm {
-> +	gpio-reserved-ranges = <22 2>, <28 6>;
-> +};
-> +
-> +&ufs_mem_hc {
-> +	vcc-supply = <&vreg_l24a>;
-> +	vccq2-supply = <&vreg_l11a>;
-> +	vcc-max-microamp = <600000>;
-> +	vccq2-max-microamp = <600000>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&ufs_mem_phy {
-> +	vdda-phy-supply = <&vreg_l4a>;
-> +	vdda-pll-supply = <&vreg_l10a>;
-> +	vdda-phy-max-microamp = <51400>;
-> +	vdda-pll-max-microamp = <14200>;
-> +	vddp-ref-clk-supply = <&vreg_l18a>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&usb3 {
-> +	status = "okay";
-> +};
-> +
-> +&usb3_dwc3 {
-> +	extcon = <&extcon_usb>;
-> +};
+=D0=BF=D1=82, 16 =D0=B4=D0=B5=D0=BA. 2022 =D0=B3. =D0=B2 14:04, Miquel Rayn=
+al <miquel.raynal@bootlin.com>:
+>
+> Hi Saravana, Maxim, Maxim,
+>
+> saravanak@google.com wrote on Wed, 14 Dec 2022 13:53:54 -0800:
+>
+> > On Tue, Dec 13, 2022 at 8:54 AM Miquel Raynal <miquel.raynal@bootlin.co=
+m> wrote:
+> > >
+> > > Hi Maxim,
+> > >
+> > > bigunclemax@gmail.com wrote on Tue, 13 Dec 2022 14:02:34 +0300:
+> > >
+> > > > I looked closer at commit 658c4448bbbf and bcdf0315a61a, 5db1c2dbc0=
+4c16 commits.
+> > > > Looks like we have two different features binded to one property - =
+"compatible".
+> > > >
+> > > > From one side it is the ability to forward the subnode of the mtd
+> > > > partition to the nvmem subsystem (658c4448bbbf and ac42c46f983e).
+> > > > And from another side is the ability to use custom initialization o=
+f
+> > > > the mtd partition (bcdf0315a61a and 5db1c2dbc04c16).
+> > > >
+> > > > What I mean:
+> > > > According to ac42c46f983e I can create DT like this:
+> > > >  - |
+> > > >     partitions {
+> > > >         compatible =3D "fixed-partitions";
+> > > >         #address-cells =3D <1>;
+> > > >         #size-cells =3D <1>;
+> > > >
+> > > >         partition@0 {
+> > > >             compatible =3D "nvmem-cells";
+> > > >             reg =3D <0x40000 0x10000>;
+> > > >             #address-cells =3D <1>;
+> > > >             #size-cells =3D <1>;
+> > > >             macaddr_gmac1: macaddr_gmac1@0 {
+> > > >                 reg =3D <0x0 0x6>;
+> > > >             };
+> > > >         };
+> > > >     };
+> > > >
+> > > >
+> > > > And according to 5db1c2dbc04c16 I can create DT like this:
+> > > >  - |
+> > > >     partitions {
+> > > >         compatible =3D "fixed-partitions";
+> > > >         #address-cells =3D <1>;
+> > > >         #size-cells =3D <1>;
+> > > >
+> > > >         partition@0 {
+> > > >             compatible =3D "u-boot,env";
+> > > >             reg =3D <0x40000 0x10000>;
+> > > >         };
+> > > >     };
+> > > >
+> > > > But I can not use them both, because only one "compatible" property=
+ allowed.
+> > > > This will be incorrect:
+> > > >  - |
+> > > >     partitions {
+> > > >         compatible =3D "fixed-partitions";
+> > > >         #address-cells =3D <1>;
+> > > >         #size-cells =3D <1>;
+> > > >
+> > > >         partition@0 {
+> > > >             compatible =3D "u-boot,env";  # from ac42c46f983e
+> > > >             compatible =3D "nvmem-cells"; # from 5db1c2dbc04c
+> > >
+> > > What about:
+> > >
+> > >               compatible =3D "u-boot,env", "nvmem-cells";
+> > >
+> > > instead? that should actually work.
+> > >
+> > > >             reg =3D <0x40000 0x10000>;
+> > > >             #address-cells =3D <1>;
+> > > >             #size-cells =3D <1>;
+> > > >             macaddr_gmac1: macaddr_gmac1@0 {
+> > > >                 reg =3D <0x0 0x6>;
+> > > >             };
+> > > >         };
+> > > >     };
+> > > >
+> > > > > compatible: Duplicate property name
+> > > >
+> > > > =D0=B2=D1=82, 13 =D0=B4=D0=B5=D0=BA. 2022 =D0=B3. =D0=B2 12:46, Miq=
+uel Raynal <miquel.raynal@bootlin.com>:
+> > > > >
+> > > > > Hi Maxim,
+> > > > >
+> > > > > fido_max@inbox.ru wrote on Mon, 12 Dec 2022 20:57:49 +0300:
+> > > > >
+> > > > > > Hi, Miquel!
+> > > > > >
+> > > > > > On 12.12.2022 19:37, Miquel Raynal wrote:
+> > > > > >
+> > > > > > > Let me try to recap the situation for all the people I just i=
+nvolved:
+> > > > > > >
+> > > > > > > * An Ethernet driver gets its mac address from an nvmem cell.=
+ The
+> > > > > > >    Ethernet controller DT node then has an "nvmem-cells" prop=
+erty
+> > > > > > >    pointing towards an nvmem cell.
+> > > > > > > * The nvmem cell comes from an mtd partition.
+> > > > > > > * The mtd partition is flagged with a particular compatible
+> > > > > > >    (which is also named "nvmem-cells") to tell the kernel tha=
+t the node
+> > > > > > >    produces nvmem cells.
+> > > > > > > * The mtd partition itself has no driver, but is the child no=
+de of a
+> > > > > > >    "partitions" container which has one (in this case,
+> > > > > > >    "fixed-partitions", see the snippet below).
+> > > > > > >
+> > > > > > > Because the "nvmem-cells" property of the Ethernet node point=
+s at the
+> > > > > > > nvmem-cell node, the core create a device link between the Et=
+hernet
+> > > > > > > controller (consumer) and the mtd partition (producer).
+> > > > > > >
+> > > > > > > The device link in this case will never be satisfied because =
+no driver
+> > > > > > > matches the "nvmem-cells" compatible of the partition node.
+> > > > > > >
+> > > > > > > Reverting commit bcdf0315a61a ("mtd: call of_platform_populat=
+e() for MTD
+> > > > > > > partitions") would IMHO not make much sense, the problem come=
+s from the
+> > > > > > > device link side and even there, there is nothing really "wro=
+ng",
+> > > > > > > because I really expect the mtd device to be ready before the
+> > > > > > > Ethernet controller probe, the device link is legitimate.
+> > > > > > >
+> > > > > > > So I would like to explore other alternatives. Here are a bun=
+ch of
+> > > > > > > ideas, but I'm open:
+> > > > > >
+> > > > > > How about to create simple driver with compatible=3D"nvmem-cell=
+" and to move all the suff from main mtd driver which serves nvmem-cell to =
+the probe function?
+> > > > >
+> > > > > This is probably worth the try but I doubt you can make it work w=
+ithout
+> > > > > regressions because IIRC the nvmem registration happens no matter=
+ the
+> > > > > compatible (not mentioning the user-otp and factory-otp cases). Y=
+ou can
+> > > > > definitely try this out if you think you can come up with somethi=
+ng
+> > > > > though.
+> > > > >
+> > > > > But I would like to hear from the device-link gurus :) because ev=
+en if
+> > > > > we fix mtd with a "trick" like above, I guess we'll very likely f=
+ind
+> > > > > other corner cases like that and I am interested in understanding=
+ the
+> > > > > rationale of what could be a proper fix.
+> > > > >
+> >
+> > Responding to the whole thread.
+> >
+> > I'm going by Miquel's first email in which he cc'ed me and haven't
+> > actually looked at the mtd code. Couple of comments:
+> >
+> > Independent of mtd/nvmem-cell, I generally frown on having a
+> > compatible string for a child node that you don't treat as a device.
+> > Even more so if you actually create a struct device for it and then
+> > don't do anything else with it. That's just a waste of memory. So, in
+> > general try to avoid that in the future if you can.
+>
+> Agreed, it didn't triggered any warnings in my head in the first place,
+> sorry about that.
+>
+> > Also, there are flags the parent device's driver can set that'll tell
+> > fw_devlink not to treat a specific DT node as a real device. So, if we
+> > really need that I'll dig up and suggest a fix.
+>
+> Interesting, that would indeed very likely fix it.
+>
+> > Lastly and more importantly, I've a series[1] that stops depending on
+> > the compatible property for fw_devlink to work. So it should be
+> > smarter than it is today. But that series has known bugs for which I
+> > gave test fixes in that thread. I plan to make a v2 of that series
+> > with that fix and I'm expecting it'll fix a bunch of fw_devlink
+> > issues.
+> >
+> > Feel free to give v1 + squashing the fixes a shot if you are excited
+> > to try it. Otherwise, I'll try my best to get around to it this week
+> > (kinda swamped though + holidays coming up, so no promises).
+>
+> Can you please include us in your next submission?
+> * Maxim Kiselev <bigunclemax@gmail.com>
+> * Maxim Kochetkov <fido_max@inbox.ru>
+> * Miquel Raynal <miquel.raynal@bootlin.com>
+>
+> > [1] - https://lore.kernel.org/lkml/20220810060040.321697-1-saravanak@go=
+ogle.com/
+>
+> Maxim, any chance you give this a try?
+>
+> Thanks,
+> Miqu=C3=A8l
