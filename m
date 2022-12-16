@@ -2,179 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F0464F530
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 00:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3418964F533
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 00:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbiLPXfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 18:35:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
+        id S230176AbiLPXgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 18:36:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiLPXfK (ORCPT
+        with ESMTP id S230170AbiLPXgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 18:35:10 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D0B72611
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:35:04 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so2828036wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:35:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=X0VtzC74LzR2drrGRcJjmM7+tpdFp4NU23zKURKWjt4=;
-        b=gfzD/GKB7u5dlxmxEaH6dLYg6YiMvLoKLMxgIkMoYyeq8S3M3btEvu7gt8MXbWzZQa
-         G6GWiXE1LS463y8W7c+a+8TF5sjpiYS1ywoBTty38GltUXu05+DWuenht2Ws/g8TvmNe
-         iyqheFyZquS57ZRuN+238btFfCxOGFaP6xtKQvuIZQM7dyu262r+ICz2EdaTOkqOsUvd
-         mEBFXa8jyLZeeBRo8UenQzbQSrLrGhXEOu+pLOfwZQZIuxwUoLHeco8xLOg03ZSVQVgR
-         2B0MKR+nQJO/RifdfQ51o4Jz8gbV7gamHgytNu5OdbfBwQEGy62XkdaDwqRwDUB8XiCI
-         e+gw==
+        Fri, 16 Dec 2022 18:36:18 -0500
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DD9E5B;
+        Fri, 16 Dec 2022 15:35:47 -0800 (PST)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-14455716674so5127313fac.7;
+        Fri, 16 Dec 2022 15:35:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=X0VtzC74LzR2drrGRcJjmM7+tpdFp4NU23zKURKWjt4=;
-        b=mjwXhGu1spMl1kwnx203skX8mTE290FeVyNy2ufjs8La4ORoYdF2agrO2mjsuDMh3W
-         uD/d0ZvfZi6SudiDoULw/57jozPJFXTdK7zkDf2+eKU7qlLPNWrikpKXZdp33vwjzLId
-         RWRm3ag5pCxK+BA8aHcmUbghVt2LrSUjRFiI0RMN29p8/KUIqBLBl83FzXlpz6P9GbLr
-         b/PVjadH/PSBlk8lJso0WcNCmVFbfKpNqis9osQEwqxlEi7fDYdjkqvMfFTM1K8alzpu
-         ZqVENNIUjrF92+6RdwrWN6mZRCenzqtGUheaXf/xhjFlEo4hjzy0tZ1Rdv4RPvjrd5sw
-         QYcQ==
-X-Gm-Message-State: AFqh2krOFzHc22AZhm516CplFoEBG7Jfq1Z9S/xlQMwF+2zYDG+Izh6E
-        31lmxDIw7H0p+Ep6Nu6vamGTag==
-X-Google-Smtp-Source: AMrXdXvFvrAx2wjFerv1hrGW9YLwPEWJ+CnrtJ/yL2ZcStDyiRN/YTr3lukNz8P7mAoYsh/kYqITOw==
-X-Received: by 2002:a05:600c:601b:b0:3d3:4cbf:3a51 with SMTP id az27-20020a05600c601b00b003d34cbf3a51mr40341wmb.14.1671233703215;
-        Fri, 16 Dec 2022 15:35:03 -0800 (PST)
-Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id ay14-20020a05600c1e0e00b003cfd4a50d5asm11026391wmb.34.2022.12.16.15.35.02
+        bh=ezE52xFkQObjRjRtInBGhG6kB7cA4+yJlcUUUMROGec=;
+        b=g9jgKZoQqYZP7kuZqHZAHSD5zREYR4ZzLNmkJhwsMXnZk6/J6Knvla0xZABfdZLb2q
+         nnQwRhf4YB1Dd3lrJfoqRWme8o8dC8Yr+7FxZnldqzdtJhCSeoHih/IXsAN83bcO88vU
+         zX/5S75PucWFiQYpzZ0FPeqP+Hi3rbfzFUyqj2YRuBuVOm9y3WPqV0Poe2p6y4wJffmR
+         R8MhvovcSHXzXWZwXJTZD+JMIrVgb+d6denrV1UWSSgMKO5UFvobYUyRfUx5DDQKpjM7
+         MDDmzfrr6Dm2rB3m4c9vsKpU2WVAJkNcamyPgR47fX9ZNBsz2pu1AzoFf6JzDFGXL49w
+         f8Eg==
+X-Gm-Message-State: ANoB5pkWcy0VLtpmW7WwzNSu/SZbqwtrjjp8Nx2jKRj3nZN0MAhmvHG+
+        at1I2a421V4hQN+EokjrVg==
+X-Google-Smtp-Source: AA0mqf6/zADOku4n5eNjLLFwzErqoFNJU5+DKPJxKstPfso/j2iOPJmt2FByGD044KHW/wbA+ARWLg==
+X-Received: by 2002:a05:6870:6c15:b0:143:9d79:e911 with SMTP id na21-20020a0568706c1500b001439d79e911mr15314113oab.46.1671233746754;
+        Fri, 16 Dec 2022 15:35:46 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q12-20020a056870828c00b0012763819bcasm1540096oae.50.2022.12.16.15.35.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 15:35:02 -0800 (PST)
-Date:   Fri, 16 Dec 2022 23:35:01 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Juri Lelli <juri.lelli@redhat.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, rostedt@goodmis.org,
-        tj@kernel.org, linux-kernel@vger.kernel.org,
-        luca.abeni@santannapisa.it, claudio@evidence.eu.com,
-        tommaso.cucinotta@santannapisa.it, bristot@redhat.com,
-        mathieu.poirier@linaro.org, lizefan@huawei.com, longman@redhat.com,
-        dietmar.eggemann@arm.com, cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>
-Subject: Re: [PATCH v9 3/8] cpuset: Rebuild root domain deadline accounting
- information
-Message-ID: <20221216233501.gh6m75e7s66dmjgo@airbuntu>
-References: <20190719140000.31694-1-juri.lelli@redhat.com>
- <20190719140000.31694-4-juri.lelli@redhat.com>
+        Fri, 16 Dec 2022 15:35:46 -0800 (PST)
+Received: (nullmailer pid 79790 invoked by uid 1000);
+        Fri, 16 Dec 2022 23:35:45 -0000
+Date:   Fri, 16 Dec 2022 17:35:45 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Eugen Hristev <eugen.hristev@microchip.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        luis.oliveira@synopsys.com, Luis Oliveira <lolivei@synopsys.com>
+Subject: Re: [PATCH v5 1/4] dt-bindings: media: Document bindings for DW MIPI
+ CSI-2 Host
+Message-ID: <20221216233545.GA72415-robh@kernel.org>
+References: <20221216143717.1002015-1-eugen.hristev@microchip.com>
+ <20221216143717.1002015-2-eugen.hristev@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190719140000.31694-4-juri.lelli@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221216143717.1002015-2-eugen.hristev@microchip.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
-
-On 07/19/19 15:59, Juri Lelli wrote:
-> When the topology of root domains is modified by CPUset or CPUhotplug
-> operations information about the current deadline bandwidth held in the
-> root domain is lost.
+On Fri, Dec 16, 2022 at 04:37:14PM +0200, Eugen Hristev wrote:
+> Add bindings for Synopsys DesignWare MIPI CSI-2 host.
 > 
-> This patch addresses the issue by recalculating the lost deadline
-> bandwidth information by circling through the deadline tasks held in
-> CPUsets and adding their current load to the root domain they are
-> associated with.
-> 
-> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
+> Signed-off-by: Luis Oliveira <lolivei@synopsys.com>
+> [eugen.hristev@microchip.com: reworked binding, converted to yaml]
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 > ---
+>  .../bindings/media/snps,dw-csi.yaml           | 149 ++++++++++++++++++
+>  1 file changed, 149 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/snps,dw-csi.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/snps,dw-csi.yaml b/Documentation/devicetree/bindings/media/snps,dw-csi.yaml
+> new file mode 100644
+> index 000000000000..439eadc8e517
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/snps,dw-csi.yaml
+> @@ -0,0 +1,149 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/snps,dw-csi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Synopsys DesignWare CSI-2 Host controller (csi2host)
+> +
+> +maintainers:
+> +  - Eugen Hristev <eugen.hristev@microchip.com>
+> +
+> +description:
+> +  CSI2HOST is used to receive image coming from an MIPI CSI-2 compatible
+> +  camera. It will convert the incoming CSI-2 stream into a dedicated
+> +  interface called the Synopsys IDI (Image Data Interface).
+> +  This interface is a 32-bit SoC internal only, and can be assimilated
+> +  with a CSI-2 interface.
+> +
+> +properties:
+> +  compatible:
+> +    const: snps,dw-csi
 
-We see that rebuild_root_domain() can take 10+ ms (I get a max of 20ms quite
-consistently) on suspend/resume.
+This needs an SoC specific compatible.
 
-Do we actually need to rebuild_root_domain() if we're going through
-a suspend/resume cycle?
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    description:
+> +      CSI2HOST can have two clocks connected. One clock is the
+> +      peripheral clock for the inside functionality of the hardware block.
+> +      This is named 'perclk'. The second clock can be the phy clock,
+> +      which is used to clock the phy via an internal link.
+> +      This clock is named 'phyclk', phy clock.
 
-ie: would something like the below make sense? We'd skip this logic if
-cpuhp_tasks_frozen is set which indicates it's not a real hotplug operation but
-we're suspending/resuming.
+The schema says most of this, don't repeat it in freeform text. If you 
+want a description of each clock, that goes 'clocks' like this:
 
+items:
+  - description: ...
+  - description: ...
 
-Cheers
+> +    items:
+> +      - const: perclk
+> +      - const: phyclk
+> +
+> +  phys:
+> +    maxItems: 1
+> +    description: MIPI D-PHY
+> +
+> +  phy-names:
+> +    items:
+> +      - const: dphy
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description:
+> +          Input port node, single endpoint describing the input port.
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +            description: Endpoint connected to input device
 
---
-Qais Yousef
+Don't need generic descriptions. Only the port nodes need to define what 
+they are.
 
+> +
+> +            properties:
+> +              bus-type:
+> +                const: 4
+> +
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+> +                items:
+> +                  maximum: 4
+> +
+> +              clock-lanes:
+> +                maxItems: 1
+> +
+> +              remote-endpoint: true
 
---->8---
+Don't need to list this.
 
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description:
+> +          Output port node, single endpoint describing the output port.
+> +
+> +        properties:
+> +          endpoint:
+> +            unevaluatedProperties: false
+> +            $ref: video-interfaces.yaml#
+> +            description: Endpoint connected to output device
+> +
+> +            properties:
+> +              bus-type:
+> +                const: 4
+> +
+> +              remote-endpoint: true
 
-From 4cfd50960ad872c5eb810ad3038eaf840bab5182 Mon Sep 17 00:00:00 2001
-From: Qais Yousef <qyousef@layalina.io>
-Date: Tue, 29 Nov 2022 19:01:52 +0000
-Subject: [PATCH] sched: cpuset: Don't rebuild sched domains on suspend-resume
+Ditto.
 
-Commit f9a25f776d78 ("cpusets: Rebuild root domain deadline accounting information")
-enabled rebuilding sched domain on cpuset and hotplug operations to
-correct deadline accounting.
-
-Rebuilding sched domain is a slow operation and we see 10+ ms delays
-on suspend-resume because of that.
-
-Since nothing is expected to change on suspend-resume operation; skip
-rebuilding the sched domains to regain some of the time lost.
-
-Debugged-by: Rick Yiu <rickyiu@google.com>
-Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
----
- kernel/cgroup/cpuset.c  | 6 ++++++
- kernel/sched/deadline.c | 3 +++
- 2 files changed, 9 insertions(+)
-
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index b474289c15b8..2ff68d625b7b 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1067,6 +1067,9 @@ static void update_tasks_root_domain(struct cpuset *cs)
- 	struct css_task_iter it;
- 	struct task_struct *task;
- 
-+	if (cpuhp_tasks_frozen)
-+		return;
-+
- 	css_task_iter_start(&cs->css, 0, &it);
- 
- 	while ((task = css_task_iter_next(&it)))
-@@ -1084,6 +1087,9 @@ static void rebuild_root_domains(void)
- 	lockdep_assert_cpus_held();
- 	lockdep_assert_held(&sched_domains_mutex);
- 
-+	if (cpuhp_tasks_frozen)
-+		return;
-+
- 	rcu_read_lock();
- 
- 	/*
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 0d97d54276cc..42c1143a3956 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -2575,6 +2575,9 @@ void dl_clear_root_domain(struct root_domain *rd)
- {
- 	unsigned long flags;
- 
-+	if (cpuhp_tasks_frozen)
-+		return;
-+
- 	raw_spin_lock_irqsave(&rd->dl_bw.lock, flags);
- 	rd->dl_bw.total_bw = 0;
- 	raw_spin_unlock_irqrestore(&rd->dl_bw.lock, flags);
--- 
-2.25.1
-
+> +
+> +    required:
+> +      - port@0
+> +      - port@1
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - ports
+> +
+> +examples:
+> +  - |
+> +    csi2: csi2@3000 {
+> +        compatible = "snps,dw-csi";
+> +        reg = <0x03000 0x7FF>;
+> +        phys = <&mipi_dphy_rx>;
+> +        phy-names = "dphy";
+> +        resets = <&dw_rst 1>;
+> +        interrupts = <2>;
+> +
+> +        ports {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            port@0 {
+> +                reg = <0>;
+> +
+> +                csi_ep1: endpoint {
+> +                    bus-type = <4>; /* MIPI CSI2 D-PHY */
+> +                    remote-endpoint = <&camera_1>;
+> +                    data-lanes = <1 2>;
+> +                    clock-lanes = <0>;
+> +                };
+> +            };
+> +
+> +            port@1 {
+> +                reg = <1>;
+> +
+> +                csi_ep2: endpoint {
+> +                    remote-endpoint = <&idi_receiver>;
+> +                    bus-type = <4>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +...
+> -- 
+> 2.25.1
+> 
+> 
