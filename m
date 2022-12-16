@@ -2,73 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A41764E671
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 04:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B02CD64E677
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 04:48:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiLPDoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 22:44:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
+        id S229910AbiLPDs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 22:48:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiLPDoJ (ORCPT
+        with ESMTP id S229517AbiLPDsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 22:44:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36AB40463
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 19:43:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671162207;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zfz+hZsu0mSAfvWAnAaAGFxMGv6r+4O1MrzGOXMUmB0=;
-        b=OYOLlqLA3thT6abxI5LkqFhaqymNoT28YHyr8DeXX6VfcxQZEF0WD0chM/ZMkPo/nsObWn
-        xF1PkxYMnCNLLE1PIJGcHOv3ayTCRDeQj/eXYR9zswBqR62GZ4qu4z0NOCIsfypncCxWac
-        qyxzN7XvEhVo1NRPivthAiflwUGzcMI=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-190-x_F2VRueMwaogdSH6T6TRQ-1; Thu, 15 Dec 2022 22:43:25 -0500
-X-MC-Unique: x_F2VRueMwaogdSH6T6TRQ-1
-Received: by mail-oo1-f71.google.com with SMTP id a9-20020a4a9b09000000b004a0bc0614fdso649128ook.11
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 19:43:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zfz+hZsu0mSAfvWAnAaAGFxMGv6r+4O1MrzGOXMUmB0=;
-        b=SXnAMr+lTXsf/PTSbSqssMbLQJnY1jswgO+451aKz/hISGy+z2tl+jmb5xnA3U2dK5
-         Cl2eaqA0yu0H9Y859K+J8lU814VbxPkgWMGY/jarFe8DK5d19HWzFzMkpd0lprCvjh2Y
-         YsmlLmwZPC+5xpshv80c6wKrm6iukTsSJqFkjSwXZ2vp7YPmPzUp7P407nQbiUs1liTH
-         Cj7a/jmwixsSNX4c5Z+AlUoA4JrT/vkGdH9PeyL3ZkSuy0Uk0zemLNzpTVA8IMbLvh1n
-         Nrr58Eaq+nbBgoR2tb9Qptpo1LdvhbKbAGeUxRNMv2XQchSPqmQB23CWaqg9RMVa6ey2
-         /A+Q==
-X-Gm-Message-State: ANoB5pk13NLgJBbBbJPqVymszo2XQBNh7L0FrACZDyDOuTZyzF0/lKDa
-        A52PNHBMW1tUfC/b6jmaXy5PCuGELWHRZCgi2wAc6j4HCzwpA2dpfswykADV9v/oj+v0pXXcIxl
-        MHhQ07I13vfEM5Dcg0NvTnqPIrsMusJmLVDfRVL3G
-X-Received: by 2002:a05:6870:9e8f:b0:144:a97b:1ae2 with SMTP id pu15-20020a0568709e8f00b00144a97b1ae2mr319389oab.35.1671162204861;
-        Thu, 15 Dec 2022 19:43:24 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7OmOp/XpirrXRViBtMxKqtenidH9XAN95sX4U25/bIv5XYq0XBM55D6y7jxPwBaziM5LOxB28ONerqMfvW4eI=
-X-Received: by 2002:a05:6870:9e8f:b0:144:a97b:1ae2 with SMTP id
- pu15-20020a0568709e8f00b00144a97b1ae2mr319384oab.35.1671162204619; Thu, 15
- Dec 2022 19:43:24 -0800 (PST)
+        Thu, 15 Dec 2022 22:48:22 -0500
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2098.outbound.protection.outlook.com [40.107.117.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB48646664
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 19:48:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NqxateY0FzZrlg0nd6zO1+CfTw466JZVlslrUyWNqb7cR4j9Q5tTi6xtT4AbdoL1gCsFw03Pn/5WsXkZF6q/ea+0I+W2BA8ktbVDmzqvV7Gjg+B3p5XeHuPJqlPooIGGZ0MGI1QxwuLViSIsXIcMKm309nVew7FN/puvXcCuHBqUgnPOFuq4xIXxC/3J06JEFfS4OH+fE3A2f2znZxZt9oGZX0yjV2gz6q6fJSYi8S91YIvf4LAe72MOpoMfy+t25pXZmwR7re88LC2U8LhoIIXvfZjZeQt3rRMiibSKNAeMUYVvrtQiR7QD+gu2oljqUwqjtMXf6RhlYxO3MgLH4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=07xIwyomg0crIck0R0MlHXyNC6CsCyUV6ff9zKM24Wk=;
+ b=Co60kp9DDAq64nU6oIhi6YNoRPxg0YIUHW1GLG3UTXMVqkTrKuSKclszaJCwmsGmgNAow/Oj5fsTxE7GBO99QZel3evRYVhZy6d797/L0Zk1m/CFSoGGjnG+vIepcKyFptXu3IpMC4x0bHg5+aVw/fYfXMGAlzB9+rLgYPaRzKdr9kdYtNnHLA7FUqTeriaRwHdiBwT6euouPeaGBcj4LzaJSe/IT1wG7WiuLI4gy7SxNMBHu1vEk5Pn+Wm+9Z4Gqx72B5u3HjoVaJ/sXL+23uoTylE5huFacly+Uwg6nqH2NDCgJNcfZslX/8w4AeclHTOuLFIHJmW8GXn9bYgvfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=07xIwyomg0crIck0R0MlHXyNC6CsCyUV6ff9zKM24Wk=;
+ b=M4GASpWnyDXV1a4hb8oNq0P07zebVhobSdFcD3a9fm5GQKD2NPEY5bo0PyuL13nd0ma6c2w5FQJas4qQ1xg/t/TR4GnVygqlUGnW/W1Vg0ugKKlLWhaDMLmXpxgZm1qBUGJQlGCTzVLaAKGXIHZLGB7wZdEUAgsYDnI4JO9fStcZx8Tr7P6MrM2YbVsaR2tQp2qyHVwZAIgxlh4sNvYhGaclYx0W+DVTV0C+5xxaiQb7Jd7SImXFstIT1XBugW2qdkHkPHQzcVHYQidtEUUR/SF1LlIBBYMY+ztqpYSx0dV4B/TH7/ecxX+0K4jMA/lyAEh+iFFfkkMy5H+MRWHpFQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SI2PR06MB4283.apcprd06.prod.outlook.com (2603:1096:4:15b::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12; Fri, 16 Dec
+ 2022 03:48:18 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::ef03:cbfb:f8ef:d88b]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::ef03:cbfb:f8ef:d88b%9]) with mapi id 15.20.5924.011; Fri, 16 Dec 2022
+ 03:48:18 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] f2fs: merge f2fs_show_injection_info() into time_to_inject()
+Date:   Fri, 16 Dec 2022 11:48:11 +0800
+Message-Id: <20221216034811.4603-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <dedae282-2d13-cc12-95b8-98cfd377d98c@kernel.org>
+References: <dedae282-2d13-cc12-95b8-98cfd377d98c@kernel.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR06CA0006.apcprd06.prod.outlook.com
+ (2603:1096:4:186::19) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-References: <20221215032719.72294-1-jasowang@redhat.com> <20221215034740-mutt-send-email-mst@kernel.org>
- <CACGkMEsLeCRDqyuyGzWw+kjYrTVDjUjOw6+xHESPT2D1p03=sQ@mail.gmail.com> <20221215042918-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20221215042918-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 16 Dec 2022 11:43:13 +0800
-Message-ID: <CACGkMEsbvTQrEp5dmQRHp58Mu=E7f433Xrvsbs4nZMA5R3B6mQ@mail.gmail.com>
-Subject: Re: [PATCH net V2] virtio-net: correctly enable callback during start_xmit
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xuanzhuo@linux.alibaba.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB4283:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7f54ac54-3a56-4e1c-0524-08dadf185e6e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tFokE8k8kn05cuBOfyqCBWAFFcOc3aNCRNXYn1pIZQ97faC1HTFq2IozzyX/8SxjBu0EX0bx20BFxH3+u+0PRWdRcizdkmXW9NLmZ5yhMqfbPhI4OmCXJdDZuTJwhBv9io16GtBjniSajgVBtHjOUo9O5BsLZ1OB6Rrmtndqmz/ky7DCOEmdNjZyGHTv0TE6txYrQTv0GM0oJA9gmo1izy4FR3febPMvL0Lelvd3pPjuAOjjxlnzUPOhM8DAzWbNSSqJ72kwhacERPgoTEqMW+vdLv1TVc8AG7/FcaXGXVjJKM/dtxlKBIdHscf3l3bKYMgXqyNdDTiClo0XC7guSIFyeFSclV7OY5lv0vupKTOfDNh2wO/dw4cJbFfFlcASwzJZRzRoqr4OPUZlbOQ3QE4LjK1oPOEuCiI54PLFDXaXh8fQ/XMQtbzbko0/bUoG1TWdKEY7xrehHq8SCTJh7AcG351eOUkyGFL4c/oQruMX443WoxppUlJEeoibGJqJuY2DkLeHLo8IMudbYZYUUyKwVNnR25PYI1iRk6Aq1mts/cuWbDDBy2ImehXzzpiIHGkIS2biiSVis5zfyvGgX5WhL8/daxVcTV+HmHJH1AlEgzkO3tUTVK9V0iL5dLwy0mMS4+ByzI9r0FpR89agEKoiGenS6n7XVZLASJ+r+xDOj7nZrT5FmQCRF05GgWdtl5YE2QOCW3pqVBuxYFf1iA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(396003)(346002)(376002)(39860400002)(451199015)(6666004)(26005)(6486002)(478600001)(6506007)(52116002)(2906002)(186003)(6512007)(86362001)(83380400001)(38350700002)(38100700002)(316002)(66556008)(66476007)(1076003)(66946007)(2616005)(8676002)(4326008)(8936002)(36756003)(41300700001)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?b8SGHTKucZCFGyQptmhTQyt6TSS0E1X69dG6xLQ5mtcGIPxCm+o2l5TD/ZT7?=
+ =?us-ascii?Q?TRIPP6rhI0fy5aYEKRhNaxX0AzOzYBcwf3owDlZkXqyC2ZU9t+HpNAFW8MDS?=
+ =?us-ascii?Q?DuC6uQmbDjZ1gF51dpLUK8GWldFeuEconiWzel7qwCmGIxbzbYw92eMwu8Va?=
+ =?us-ascii?Q?RZFiovxMUhcPUyjvLa/yEmDmJsx1yquYhGN8gKrh5XYeRgjs34KaKJ8j+Zwb?=
+ =?us-ascii?Q?FBfO0B7UFHGntlqaePE9sAPh7qPqLGjhbVTk1cPR7/xe2OceoEDzYKCoivKs?=
+ =?us-ascii?Q?hWFXAHM7musldCFoaE0euHl97k/mI4LeUeaob77IfEwmDcTUA60QgOGpI5SO?=
+ =?us-ascii?Q?YL6lyJVYvp9thQGp37/XQ4G8ks2Xz0irTmtgr1Z4bqXCCE6opcXWuCZkTTt0?=
+ =?us-ascii?Q?dOZ5iw5qoeVttpEKHmVtfmOgJcK6zlnjHGB06o9axO9xPtykBymHuAmaNayJ?=
+ =?us-ascii?Q?K3kBsXGSWsJIXIZzOTwP93UCIEMIwA9AQv4lNiSwUatwe2Fv7F/atZh6yZIp?=
+ =?us-ascii?Q?vTOjeEiqiWq+MfZ/dQmLP1msq6HeRwqoNxEuEY9UtgxQ4yQXi+atVNaUgnT3?=
+ =?us-ascii?Q?NxqWKRr1B8GbhA7G4PhAqrT5NsjLbN63+Ln/MIX9wmDY2wZcsoWGc1n0kGcZ?=
+ =?us-ascii?Q?n8QXPG+Wu38b/Y2oqASr/h3/dlKAEId+TPvRFA9ULF6adLiMS1NhHHIELWBS?=
+ =?us-ascii?Q?m1Q/VWtPpNIuq0NIZUMkhT6lU4JAKzHpd8cJYP4IhO0yXHKF14mslnNnA0pN?=
+ =?us-ascii?Q?DriZsNsGCx75hTRmDFedzqtFqEJJZA5cNRHTVhR/vF/mx2JTXZM9efsuCXpF?=
+ =?us-ascii?Q?B2uOs7Sljb8MkCjOo4kEs9WrJd7KurLszUPX31TKbQFYWqemGLnIKoxLpA8S?=
+ =?us-ascii?Q?GuDIdlOJyrpxtOAsCs7jcxtmyqD5/JwDNbVNlOd4PiBypxPZ1u8ti/8XyZCe?=
+ =?us-ascii?Q?SHmNY/X+l81WNjaIaYRn5hRD9ASl99U7ESz9gT04Ax4YbeW0LHOqT9nWeYvB?=
+ =?us-ascii?Q?0kZ6C7fk7Lw3sENRrXScgpOAo7R8upNq30oLEVMDtUjr7cO9F8szIpGVCcSI?=
+ =?us-ascii?Q?tsbvWTH4uW73AlDPg59Ym1uQ4gBD3IZ7IJ6e0sMSfj/ru+bStfjMzvcwjWOE?=
+ =?us-ascii?Q?qo/GvqCybBvTB3UUDW42nin2rYyVORxFPewLmb+gcuR3v48JgRi1ScxqkqD1?=
+ =?us-ascii?Q?Sej3ftiRcxILZqIISXaOb+I7ZIaHzFdW3GC+SFo9WySJ+AP764TCLx7v2KfC?=
+ =?us-ascii?Q?NnLe+rhNpUu5p3laC4DRSaJ5rtgXzjzIW0skpcaYJSK8SrB3nTsjhT274G7m?=
+ =?us-ascii?Q?uIv64iOk5EGPw7Gafqqyh2xvgdHPlcqPbN6FEJm/wvAykcpQ/QPmBJ2pAGAv?=
+ =?us-ascii?Q?o6HGQQG3Dn5v97qKcG8z2MguKumcYWkkDrbShCCReJ2zAz2hx0/9mcQjbDmG?=
+ =?us-ascii?Q?kMa3kY6VEiWQqvnhv1c4FsAAl+3wrdpce7ZHgCf2rW3494gIz0k6udU6cpfN?=
+ =?us-ascii?Q?TN/DywTZ+aa/+yEtDeuPRag8B293syvJQUg31QpR0oCa0+VZrI53EbqR7aMN?=
+ =?us-ascii?Q?Bn9U2fIlBYeCieG5eNW24cdl0OF9v/QJ5/YJERD5?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f54ac54-3a56-4e1c-0524-08dadf185e6e
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2022 03:48:18.5011
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BI4rDmsq912CZZ7HjupRjbEMyELT8M91c5yRBVFtPFWZp9Dsg94ggiSxEACq99j8/vNKMRBALdveDLmxcv5ToQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4283
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,139 +113,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 5:35 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Thu, Dec 15, 2022 at 05:15:43PM +0800, Jason Wang wrote:
-> > On Thu, Dec 15, 2022 at 5:02 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > >
-> > > On Thu, Dec 15, 2022 at 11:27:19AM +0800, Jason Wang wrote:
-> > > > Commit a7766ef18b33("virtio_net: disable cb aggressively") enables
-> > > > virtqueue callback via the following statement:
-> > > >
-> > > >         do {
-> > > >            ......
-> > > >       } while (use_napi && kick &&
-> > > >                unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
-> > > >
-> > > > When NAPI is used and kick is false, the callback won't be enabled
-> > > > here. And when the virtqueue is about to be full, the tx will be
-> > > > disabled, but we still don't enable tx interrupt which will cause a TX
-> > > > hang. This could be observed when using pktgen with burst enabled.
-> > > >
-> > > > Fixing this by trying to enable tx interrupt after we disable TX when
-> > > > we're not using napi or kick is false.
-> > > >
-> > > > Fixes: a7766ef18b33 ("virtio_net: disable cb aggressively")
-> > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > ---
-> > > > The patch is needed for -stable.
-> > > > Changes since V1:
-> > > > - enable tx interrupt after we disable tx
-> > > > ---
-> > > >  drivers/net/virtio_net.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > index 86e52454b5b5..dcf3a536d78a 100644
-> > > > --- a/drivers/net/virtio_net.c
-> > > > +++ b/drivers/net/virtio_net.c
-> > > > @@ -1873,7 +1873,7 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
-> > > >        */
-> > > >       if (sq->vq->num_free < 2+MAX_SKB_FRAGS) {
-> > > >               netif_stop_subqueue(dev, qnum);
-> > > > -             if (!use_napi &&
-> > > > +             if ((!use_napi || !kick) &&
-> > > >                   unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
-> > > >                       /* More just got used, free them then recheck. */
-> > > >                       free_old_xmit_skbs(sq, false);
-> > >
-> > > This will work but the following lines are:
-> > >
-> > >                        if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
-> > >                                 netif_start_subqueue(dev, qnum);
-> > >                                 virtqueue_disable_cb(sq->vq);
-> > >                         }
-> > >
-> > >
-> > > and I thought we are supposed to keep callbacks enabled with napi?
-> >
-> > This seems to be the opposite logic of commit a7766ef18b33 that
-> > disables callbacks for NAPI.
-> >
-> > It said:
-> >
-> >     There are currently two cases where we poll TX vq not in response to a
-> >     callback: start xmit and rx napi.  We currently do this with callbacks
-> >     enabled which can cause extra interrupts from the card.  Used not to be
-> >     a big issue as we run with interrupts disabled but that is no longer the
-> >     case, and in some cases the rate of spurious interrupts is so high
-> >     linux detects this and actually kills the interrupt.
-> >
-> > My undersatnding is that it tries to disable callbacks on TX.
->
-> I think we want to disable callbacks while polling, yes. here we are not
-> polling, and I think we want a callback because otherwise nothing will
-> orphan skbs and a socket can be blocked, not transmitting anything - a
-> deadlock.
+> After moving f2fs_show_injection_info() core functionality into time_to_inject(),
+> __builtin_return_address(0) result changes from return address of caller of
+> f2fs_show_injection_info() to return address of time_to_inject().
 
-I'm not sure how I got here, did you mean a partial revert of
-a7766ef18b33 (the part that disables TX callbacks on start_xmit)?
+I tried the __builtin_return_address(1) parameter just now, and no error
+was reported when compiling, but a null pointer problem will be triggered
+when the kernel is running.
 
-Btw, I plan to remove non NAPI mode completely, since it was disabled
-by default for years and we don't see any complaint, then we may have
-modern features like BQL and better TCP performance. In that sense we
-may simply keep tx callback open as most of modern NIC did.
+I thought about it, and the print address didn't seem clear enough.
+Let's just print the line number of the caller?
 
->
-> > > One of the ideas of napi is to free on napi callback, not here
-> > > immediately.
-> > >
-> > > I think it is easier to just do a separate branch here. Along the
-> > > lines of:
-> > >
-> > >                 if (use_napi) {
-> > >                         if (unlikely(!virtqueue_enable_cb_delayed(sq->vq)))
-> > >                                 virtqueue_napi_schedule(napi, vq);
-> >
-> > This seems to be a new logic and it causes some delay in processing TX
-> > (unnecessary NAPI).
->
-> That's good, we overloaded the queue so we are already going
-> too fast, deferring tx so queue has chance to drain
-> will allow better batching in the qdisc.
+#define time_to_inject(sbi, type) __time_to_inject(sbi, type, __func__, __LINE__)
+static inline bool __time_to_inject(struct f2fs_sb_info *sbi, int type,
+                                    const char *func_name, unsigned int line)
+{
+    struct f2fs_fault_info *ffi = &F2FS_OPTION(sbi).fault_info;
 
-I meant, compare to
+    if (!ffi->inject_rate)
+        return false;
 
-1) schedule NAPI and poll TX
+    if (!IS_FAULT_SET(ffi, type))
+        return false;
 
-The current code did
+    atomic_inc(&ffi->inject_ops);
+    if (atomic_read(&ffi->inject_ops) >= ffi->inject_rate) {
+        atomic_set(&ffi->inject_ops, 0);
+        printk_ratelimited("%sF2FS-fs (%s) : inject %s in [%s] %d\n",
+            KERN_INFO, sbi->sb->s_id, f2fs_fault_name[type],
+            func_name, line);
+        return true;
+    }
+    return false;
+}
 
-2) poll TX immediately
-
-2) seems faster?
-
-Thanks
-
->
-> > >                 } else {
-> > >                         ... old code ...
-> > >                 }
-> > >
-> > > also reduces chances of regressions on !napi (which is not well tested)
-> > > and keeps callbacks off while we free skbs.
-> >
-> > I think my patch doesn't change the logic of !napi? (It checks !napi || kick).
-> >
-> > Thanks
->
-> I agree it doesn't seem to as written.
->
-> > >
-> > > No?
-> > >
-> > >
-> > > > --
-> > > > 2.25.1
-> > >
->
-
+Thx,
+Yangtao
