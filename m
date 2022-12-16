@@ -2,191 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD47D64F15B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 20:03:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF9C64F156
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 20:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbiLPTDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 14:03:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53030 "EHLO
+        id S231495AbiLPTDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 14:03:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbiLPTDt (ORCPT
+        with ESMTP id S229453AbiLPTDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 14:03:49 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED186A768
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 11:03:45 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id x66so2413836pfx.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 11:03:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t2+6atgOOmHW3Y6/BjOreIZzNs1w8s58OfIYvMq9s2c=;
-        b=KBlw0Zv85xGI/f7zBeWNnuUhEAWd6AP8p/mVZ2PvNRpLPQgPs5oHJLEvhdVVP+B/5Y
-         MayQdYEgqMBwio68fP0vm2Qz0up6cD/PL9x1VK/v9WDid5KE3veOXRX3FhrQZJaQFYE/
-         fE4afr/+6N/WiVRjMAWr0r4VZlmt4FdcqdaR10I58q0Shh7pPeCT/9Uxh6XucorzU28o
-         hgtM9QZnXfLyQLSmR+YN647tiOBOZPrsE+TDEAgCjBnA0WIx0yMkrBEQloA9pmRjdJSm
-         pb45b4OboWwjXatSLEsxZQpwjg1rmP0yzkDqI4FCrhCcbOF2gEik9DTz4x2LyRGdF1gq
-         3+tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t2+6atgOOmHW3Y6/BjOreIZzNs1w8s58OfIYvMq9s2c=;
-        b=e8mEq1Il+yjLrGTlBIMuReLO3qcXXoe8bFYfBjs1TjR5eq2sy6RM6bzbWAcdB9FHm3
-         izDhtTbca4GwJR+wIuw6WlgiknCLYozPcdXc+or0g+hy2aE+zSEizp5R447wCz3zYgMj
-         7enbYMfsSANoxOlF53qOvky3zGThpp1qVFdbufP40DTqOhcnb0DoozVPiLPGJ+yuXLqX
-         TTZmTpSR2hYDl96CQCKommT1C6xlsLNy4YuA5Qr851PNZv5euHVzMBcS+TeAoIFog0Br
-         8a3+aiyNDxOQ4Ala1kQM28a82wJaUVJe+A2s8gzt/HAYLfUdxVP8Z8cE6/4skLZ+pWiE
-         /eOg==
-X-Gm-Message-State: ANoB5pl0QZW18fouTAO3Ec+uBZwl+E5ma8F1lbuEx6sRQZ7Ynk1vF8Vi
-        QeQCsVtC9eLITmlhlDe6yAzrbL/ZmLQFjk5z57Tx3g==
-X-Google-Smtp-Source: AA0mqf4uSuXyJGdBNnh0dTcrZ0uIDUxHYk0iKl8jaNcFx16JMkfVp7+9/n6i4JcZxOXpKjDBUCLM51XCRF7NvsRCoh0=
-X-Received: by 2002:aa7:8487:0:b0:56c:3bb4:28a8 with SMTP id
- u7-20020aa78487000000b0056c3bb428a8mr80681452pfn.83.1671217424499; Fri, 16
- Dec 2022 11:03:44 -0800 (PST)
+        Fri, 16 Dec 2022 14:03:39 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B894F662;
+        Fri, 16 Dec 2022 11:03:38 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGGltkJ015933;
+        Fri, 16 Dec 2022 19:03:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=vW0vZJBTn0bsMVcvNWIMjMwOPKd4Tcr/VYfysdsd4kQ=;
+ b=VfkXBkd2mD+VVPNMZK3ePzjsVRYe9RWxrh4uUjawftJaVfM7tcBCDb4oGgO3mlmjTFBq
+ 8uMdFz1goBq1o8UJPNWkPI85YqU9qrDJ0xIgCKLZ1iwfe4hgMPDHWsNU/852nKEkIeXe
+ e0X5mZOYxQC/i92o9qyNBt4bMv3Vqs7vPs/+2IV7+hwBf8vHfdKZPWJZULVN6w9XZl4o
+ ayiU+50327Td5X9CsSORU1fg+jjJxNbLWCTdcRZ8Q0HSNetTiBlR4h4TMJrH9MVr9ru/
+ udwMlTc4Z3jo6ucEFF1z++i2mW7yqskesg43oDuxIF3DzjInDPLvOToEPlhA/g5j/FhK Pg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mg2vwd060-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Dec 2022 19:03:20 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BGJ3KFH013400
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Dec 2022 19:03:20 GMT
+Received: from [10.110.47.220] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 16 Dec
+ 2022 11:03:18 -0800
+Message-ID: <880fd46c-3578-a49d-6b1c-93e1b9128cf5@quicinc.com>
+Date:   Fri, 16 Dec 2022 11:03:10 -0800
 MIME-Version: 1.0
-References: <20221209160453.3246150-4-jeffxu@google.com> <20221216183949.169779-1-sj@kernel.org>
-In-Reply-To: <20221216183949.169779-1-sj@kernel.org>
-From:   Jeff Xu <jeffxu@google.com>
-Date:   Fri, 16 Dec 2022 11:03:06 -0800
-Message-ID: <CALmYWFtfdL=1Nrwyj7je+o8dciDL76CCoga5aE3hZPOh-SFUpA@mail.gmail.com>
-Subject: Re: [PATCH v7 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
-To:     SeongJae Park <sj@kernel.org>
-Cc:     skhan@linuxfoundation.org, keescook@chromium.org,
-        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, jannh@google.com,
-        linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v12 2/5] dt-bindings: msm/dp: add data-lanes and
+ link-frequencies property
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <agross@kernel.org>, <airlied@gmail.com>, <andersson@kernel.org>,
+        <daniel@ffwll.ch>, <devicetree@vger.kernel.org>,
+        <dianders@chromium.org>, <dri-devel@lists.freedesktop.org>,
+        <konrad.dybcio@somainline.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robdclark@gmail.com>,
+        <robh+dt@kernel.org>, <sean@poorly.run>, <vkoul@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1670967848-31475-1-git-send-email-quic_khsieh@quicinc.com>
+ <1670967848-31475-3-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n52eHYCqxUJqQXoaQ8vyqCk-QfouSun+zUp3yo5DufWbwg@mail.gmail.com>
+ <b38af164-08bc-07e7-dfaf-fb4d6d89d7db@quicinc.com>
+ <CAE-0n53Cb6TFGfM6AYup5aP4=24j0ujVPi463oVqmzfNV2B4RA@mail.gmail.com>
+ <011c1ce3-605a-1ad5-d7df-b91e8c6808bc@linaro.org>
+ <CAE-0n51fxiNX6N2WvXrXXjmGtiDk-SwnyikRnDEKaK-rug2-Ew@mail.gmail.com>
+Content-Language: en-US
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAE-0n51fxiNX6N2WvXrXXjmGtiDk-SwnyikRnDEKaK-rug2-Ew@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 2DRg-2XAdd3yUNbd9yzq25xpq6JZL-H9
+X-Proofpoint-ORIG-GUID: 2DRg-2XAdd3yUNbd9yzq25xpq6JZL-H9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-16_12,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ clxscore=1015 phishscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
+ bulkscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212160166
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 10:39 AM SeongJae Park <sj@kernel.org> wrote:
->
-> Hi Jeff,
->
-> > From: Jeff Xu <jeffxu@google.com>
-> >
-> > The new MFD_NOEXEC_SEAL and MFD_EXEC flags allows application to
-> > set executable bit at creation time (memfd_create).
-> >
-> > When MFD_NOEXEC_SEAL is set, memfd is created without executable bit
-> > (mode:0666), and sealed with F_SEAL_EXEC, so it can't be chmod to
-> > be executable (mode: 0777) after creation.
-> >
-> > when MFD_EXEC flag is set, memfd is created with executable bit
-> > (mode:0777), this is the same as the old behavior of memfd_create.
-> >
-> > The new pid namespaced sysctl vm.memfd_noexec has 3 values:
-> > 0: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
-> >         MFD_EXEC was set.
-> > 1: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
-> >         MFD_NOEXEC_SEAL was set.
-> > 2: memfd_create() without MFD_NOEXEC_SEAL will be rejected.
-> >
-> > The sysctl allows finer control of memfd_create for old-software
-> > that doesn't set the executable bit, for example, a container with
-> > vm.memfd_noexec=1 means the old-software will create non-executable
-> > memfd by default. Also, the value of memfd_noexec is passed to child
-> > namespace at creation time. For example, if the init namespace has
-> > vm.memfd_noexec=2, all its children namespaces will be created with 2.
-> >
-> > Signed-off-by: Jeff Xu <jeffxu@google.com>
-> > Co-developed-by: Daniel Verkamp <dverkamp@chromium.org>
-> > Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > ---
-> [...]
-> > diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
-> > index f4f8cb0435b4..8a98b1af9376 100644
-> > --- a/kernel/pid_namespace.c
-> > +++ b/kernel/pid_namespace.c
-> > @@ -23,6 +23,7 @@
-> >  #include <linux/sched/task.h>
-> >  #include <linux/sched/signal.h>
-> >  #include <linux/idr.h>
-> > +#include "pid_sysctl.h"
-> >
-> >  static DEFINE_MUTEX(pid_caches_mutex);
-> >  static struct kmem_cache *pid_ns_cachep;
-> > @@ -110,6 +111,8 @@ static struct pid_namespace *create_pid_namespace(struct user_namespace *user_ns
-> >       ns->ucounts = ucounts;
-> >       ns->pid_allocated = PIDNS_ADDING;
-> >
-> > +     initialize_memfd_noexec_scope(ns);
-> > +
-> >       return ns;
-> >
-> >  out_free_idr:
-> > @@ -455,6 +458,8 @@ static __init int pid_namespaces_init(void)
-> >  #ifdef CONFIG_CHECKPOINT_RESTORE
-> >       register_sysctl_paths(kern_path, pid_ns_ctl_table);
-> >  #endif
-> > +
-> > +     register_pid_ns_sysctl_table_vm();
-> >       return 0;
-> >  }
-> [...]
-> >
-> > diff --git a/kernel/pid_sysctl.h b/kernel/pid_sysctl.h
-> > new file mode 100644
-> > index 000000000000..90a93161a122
-> > --- /dev/null
-> > +++ b/kernel/pid_sysctl.h
-> > @@ -0,0 +1,59 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#ifndef LINUX_PID_SYSCTL_H
-> > +#define LINUX_PID_SYSCTL_H
-> > +
-> > +#include <linux/pid_namespace.h>
-> > +
-> > +#if defined(CONFIG_SYSCTL) && defined(CONFIG_MEMFD_CREATE)
-> > +static inline void initialize_memfd_noexec_scope(struct pid_namespace *ns)
-> [...]
-> > +static inline void register_pid_ns_sysctl_table_vm(void)
-> > +{
-> > +     register_sysctl_paths(vm_path, pid_ns_ctl_table_vm);
-> > +}
-> > +#else
-> > +static inline void set_memfd_noexec_scope(struct pid_namespace *ns) {}
-> > +static inline void register_pid_ns_ctl_table_vm(void) {}
-> > +#endif
-> [...]
->
-> I found this patch makes build fails whne CONFIG_SYSCTL or CONFIG_MEMFD_CREATE
-> are not defined, as initialize_memfd_noexec_scope() and
-> register_pid_ns_sysctl_table_vm() are used from pid_namespace.c without the
-> configs protection.
->
-> I just posted a patch for that:
-> https://lore.kernel.org/linux-mm/20221216183314.169707-1-sj@kernel.org/
->
-> Could you please check?
->
-Hi SeongJae,
-Thanks for the patch ! I responded to the other thread.
 
-Andrew,
-From a process point of view, should I update this patch to V9 to
-include the fix ?
-or add a patch directly on top in the mm-unstable branch.
-
-Thanks
-Jeff
-
+On 12/15/2022 6:16 PM, Stephen Boyd wrote:
+> Quoting Dmitry Baryshkov (2022-12-15 13:12:49)
+>> On 15/12/2022 02:38, Stephen Boyd wrote:
+>>> Quoting Kuogee Hsieh (2022-12-14 14:56:23)
+>>>> Once link training start, then there are no any interactions between
+>>>> controller and phy during link training session.
+>>> What do you mean? The DP controller calls phy_configure() and changes
+>>> the link rate. The return value from phy_configure() should be checked
+>>> and link training should skip link rates that aren't supported and/or
+>>> number of lanes that aren't supported.
+>> I'd toss another coin into the argument. We have previously discussed
+>> using the link-frequencies property in the context of limiting link
+>> speeds for the DSI. There we have both hardware (SoC) limitations and
+>> the board limitations as in some cases the DSI lanes can not sustain
+>> some high rate. I still hope for these patches to materialize at some point.
+>>
+>> For the DP this is more or less the same story. We have the hardware
+>> (SoC, PHY, etc) limitations, but also we have the board/device
+>> limitations. For example some of the board might not be able to support
+>> HBR3 e.g. because of the PCB design. And while it might be logical to
+>> also add the 'max bit rate' support to the eDP & combo PHYs, it
+>> definitely makes sense to be able to limit the rate on the DP <->
+>> `something' link.
+> Honestly I don't think the PHY even makes sense to put the link rate
+> property. In the case of Trogdor, the DP controller and DP PHY both
+> support all DP link frequencies. The limiting factor is the TCPC
+> redriver that is only rated to support HBR2. We don't describe the TCPC
+> in DT because the EC controls it. This means we have to put the limit
+> *somewhere*, and putting it in the DP output node is the only place we
+> have right now. I would really prefer we put it wherever the limit is,
+> in this case either in the EC node or on the type-c ports.
 >
-> Thanks,
-> SJ
+> Another nice to have feature would be to support different TCPCs connected
+> to the same DP port. We were considering doing this on Trogdor, where we
+> would have a TCPC rated for HBR2 and another TCPC rated for HBR3 and
+> then detect which TCPC was in use to adjust the supported link rates.
+> We didn't do this though, so the idea got back-burnered.
+>
+> When the SoC is directly wired to a DP connector, I'd expect the
+> connector to have the link rate property. That's because the connector
+> or the traces outside of the SoC will be the part that's limiting the
+> supported frequencies, not the SoC. The graph would need to be walked to
+> find the link rate of course. The PHY could do this just as much as the
+> DP controller could.
+>
+>> Now, for all the practical purposes this `something' for the DP is the
+>> DP connector, the eDP panel or the USB-C mux (with the possible
+>> redrivers in the middle).
+>>
+>> Thus I'd support Kuogee's proposal to have link-frequencies in the DP's
+>> outbound endpoint. This is the link which will be driven by the data
+>> stream from the Linux point of view. The PHY is linked through the
+>> 'phys' property, but it doesn't participate in the USB-C (or in the
+>> connector/panel) graph.
+> Why doesn't the PHY participate in the graph? The eDP panel could just
+> as easily be connected to the eDP PHY if the PHY participated in the
+> graph.
+>
+>> Now let's discuss the data lanes. Currently we have them in the DP
+>> property itself. Please correct me if I'm wrong, but I think that we can
+>> drop it for all the practical purposes.
+> I vaguely recall that the driver was checking data-lanes to figure out
+> how many lanes are usable. This is another shortcut taken on Trogdor to
+> work around a lack of complete DP bindings. We only support two lanes of
+> DP on Trogdor.
+>
+>> Judging by the DP compat string
+>> the driver can determine if it uses 2 lanes (eDP) or 4 lanes
+>> (full-featured DP). In case of USB-C when the altmode dictates whether
+>> to use 2 or 4 lanes, the TCPM (Type-C Port Manager) will negotiate the
+>> mode and pin configuration, then inform the DP controller about the
+>> selected amount of lanes. Then DP informs the PHY about the selection
+>> (note, PHY doesn't have control at all in this scenario).
+>>
+>> The only problematic case is the mixed mode ports, which if I understand
+>> correctly, can be configured either to eDP or DP modes. I'm not sure who
+>> specifies and limits the amount of lanes available to the DP controller.
+>>
+> This would depend on where we send the type-c message in the kernel. It
+> really gets to the heart of the question too. Should the PHY be "dumb"
+> and do whatever the controller tells it to do? Or should the PHY be
+> aware of what's going on and take action itself? Note that the
+> data-lanes property is also used to remap lanes. On sc7180 the lane
+> remapping happens in the DP PHY, and then the type-c PHY can flip that
+> too, so if we don't involve the PHY(s) in the graph we'll have to
+> express this information in the DP controller graph and then pass it to
+> the PHY from the controller. Similarly, when we have more dynamic
+> configuration of the type-c PHY, where USB may or may not be used
+> because the TCPM has decided to use 2 or 4 lanes of DP, the data-lanes
+> property will only indicate lane mappings and not the number of lanes
+> supported. We'll again have to express the number of lanes to the PHY by
+> parsing the type-c messages.
+>
+> It looks simpler to me if the PHY APIs push errors up to the caller for
+> unsupported configurations. This will hopefully make it easier for the
+> DP controller when the DP lanes are muxed onto a type-c port so that the
+> controller doesn't have to parse type-c messages. Instead, the PHY will
+> get the type-c message, stash away supported number of lanes and link
+> rates and then notify the DP controller to retrain the link with the
+> link training algorithm. A few steps of the link training may be
+> skipped, but the type-c message parsing won't need to be part of the DP
+> controller code. Said another way, the DP controller can stay focused on
+> DP instead of navigating type-c in addition to DP.
+>
+>  From a binding perspective, data-lanes/link-frequencies are part of the
+> graph binding. Having a graph port without a remote-endpoint doesn't
+> really make any sense. Therefore we should decide to either connect the
+> PHY into the graph and constrain it via graph properties like
+> data-lanes, or leave it disconnected and have the controller drive the
+> PHY (or PHYs when we have type-c). The type-c framework will want the
+> orientation control (the type-c PHY) to be part of the graph from the
+> usb-c-connector. That way we can properly map the PHY pins to the
+> flipped or not-flipped state of the cable. Maybe we don't need to
+> connect the PHY to the DP graph? Instead there can be a type-c graph for
+> the PHY, TCPM, etc. and a display graph for the display chain. It feels
+> like that must not work somehow.
+>
+> Either way, I don't see how or why these properties should be part of
+> the DP controller. The controller isn't the limiting part, it's the
+> redriver or the board/connector/panel that's the limiting factor. Walk
+> the graph to find the lowest common denominator of link-frequencies and
+> handle data-lanes either statically in the PHY or dynamically by parsing
+> type-c messages. How does the eDP panel indicate only two lanes are
+> supported when all four lanes are wired? I thought that link training
+> just fails but I don't know.
+
+According to  DP specification, link policy and stream policy is happen 
+at link layer which is dp controller in our case.
+
+Also DP CTS (compliance Test) is also happen at link layer.
+
+I think intelligence should be placed at link layer.
+
+I will submit v14 patch and we can discuss more.
+
+
