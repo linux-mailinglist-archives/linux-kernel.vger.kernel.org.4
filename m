@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6194F64EA29
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B484D64EA2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbiLPLUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56398 "EHLO
+        id S230525AbiLPLUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiLPLTy (ORCPT
+        with ESMTP id S230494AbiLPLT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:19:54 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EAE566E4
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:19:52 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id ay40so1637731wmb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:19:51 -0800 (PST)
+        Fri, 16 Dec 2022 06:19:58 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C5913CF9;
+        Fri, 16 Dec 2022 03:19:56 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id a17so995354wrt.11;
+        Fri, 16 Dec 2022 03:19:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yTqI/CbUV6jX5wui5JlBloMcUYv0mbcJiOcRypXtbrA=;
-        b=PCIQzT4VelcoRW6FLNL6ix0D1MEvir/ty9yEjUivHY/4Aq2UqohEsun4e4TVjc4aI+
-         HQ1JVqKmffKvBJE8+NpYDcJTKQbaZspIS7Kip5cBDTFcdnJnpi6q4UTaY9WW2dm9YLlU
-         N7NQ6qIHu0FoDmfQwAK2spJGEJyyw9HpWDgzdSxfaK7jiPGiJll+lovvCoBHgSgj/VLO
-         s2sGvdQyWLPUYzSeBYj45LBZ7jsLIvnQr2bGi8mNRadiIY0gW6OUAzfQMFcdaG62XKYh
-         a2Rky7gWgQQXSI664j75HPyc9qkIYPIHS8PovfyKile0OWlNfdqbuyUgxtXGeWOuMWz8
-         FrJg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=heyMuzHz04KriYj72sAHJedD18+iTfhlMb4XPvSBspg=;
+        b=PrqKoAa/RVDC8IMImj4wqKQxVWkq8wfzQa29ZFtEpLDU9FmIUYj3VwkcGJd4xAyt6L
+         p1OMPIMyFJ8IPhtzPx+gLKIIwH1tdfcGlc8uO/bu1XyWXQdaZ4XRa7k7UYkxb8mnMCbu
+         PpTXRVyi2xoTiUOPNsE5OAgI4gTozuMhfptawGg+a/6g3ojEmT2iQXrl2ELKje8Ea8PD
+         jPugDooGQdPs4w7mp9qKcSXwZnik241zUG9WUm3mo2rKmc/seZxQd6IzHCD1pHfIP1h+
+         ALgw5PldIQBOh4YFG3GRGC+WGqxbUrMe8rLDZL8tjgDUdxjYVM76w8OJDfR6ejpfyeOv
+         lyYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yTqI/CbUV6jX5wui5JlBloMcUYv0mbcJiOcRypXtbrA=;
-        b=2q6Rw+8W1OpuHYyRxk0s0WlqWG2TsZ8B7F406lrcSGIU7ZivsenlOep3HbkDoV/yGa
-         womjX377s4R0SeTjcGYHj+Z/1Ayd5czDXott06oPdjRm/Ejc2pw9Dh+qXv7ngGvzMsI4
-         jFpytMeOYNXsLH+0YcKopS0K4xJX0e0X/KUxPB0sA9aWtSic/YJ/2JNCAR5of49NbGls
-         RTdMTVfWQZH2psvBSjrKNdwiy4tPeJkW1U0kJnddxmJtdEwzi9J5fgqb+aBox9xYtJ3q
-         ze5vn90tKK9kWtKuE4CovCGOkZgDXr4QhGDScUngGjaX//L8e9Fr28lDXL7LZ8i/FJ47
-         DStQ==
-X-Gm-Message-State: ANoB5pk9YCAbPGovdiw33VMaQEzilPd7DPc4xYQTmXer4jXWSEtif8Lv
-        5ICE4AWao/Z12g7bI91ta9bPAA==
-X-Google-Smtp-Source: AA0mqf6Mf9CTSxZ3ImnQysNj0CvMXjr990uEVF3HpCsC9SxxmPGmrBCVq5wr7QtdHX28vgEdaWa5Kg==
-X-Received: by 2002:a1c:f315:0:b0:3cf:a5df:8bb0 with SMTP id q21-20020a1cf315000000b003cfa5df8bb0mr25853743wmq.37.1671189590508;
-        Fri, 16 Dec 2022 03:19:50 -0800 (PST)
-Received: from localhost ([86.61.181.4])
-        by smtp.gmail.com with ESMTPSA id y18-20020a5d4ad2000000b002365cd93d05sm2032160wrs.102.2022.12.16.03.19.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 03:19:49 -0800 (PST)
-Date:   Fri, 16 Dec 2022 12:19:48 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Petr Machata <petrm@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: Fix documentation for
- unregister_netdevice_notifier_net
-Message-ID: <Y5xUVF4tL5sM2iBx@nanopsycho>
-References: <20221216094838.683379-1-linmq006@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=heyMuzHz04KriYj72sAHJedD18+iTfhlMb4XPvSBspg=;
+        b=FuUZQurbTrgtxWYiJWZmiN4+pOjV9YFlQFyNxxpR2lVT9MXzL0pAc4D1g6qN9tz2v3
+         z/yuGQrVIYgnhdr5PE0aK6yZEB73Xw836LD6+4vbFWxxtXsTaNPTwerRbfp7i0MwkXhH
+         FUD7Yp/eQFICGpKmKms1uPbiZqEspG4oHecRBgpriTYV7PeoAGqPw3q/1pQvocxNRJSr
+         7+hkeAAiT6Ke1dX5xydMH3Q7spOd4Bz13Kv5b+16nv3p7McuPq7qrsppIlwgv/9b/j+1
+         QVWCL966B83+k6BffHFSlgcoa75lZIQ0uIZo8oFIhRHVs76CgAQWPVSiWmCvXQEPQRJO
+         ECAw==
+X-Gm-Message-State: ANoB5pnjMOFNhHVaglzIKHaBsynaaMTDSwO5jfoNpRFM14fAx8YFcqRD
+        hs0xDA+xaU2lxULkzLrDfVc=
+X-Google-Smtp-Source: AA0mqf6qzujekHT6IZcXXelCTj2i4HPROM7svglyHpI3TSb5uzFdzhe0cPZAq932XfbYKkwkU9S+ZQ==
+X-Received: by 2002:adf:ed05:0:b0:242:1ea7:2bba with SMTP id a5-20020adfed05000000b002421ea72bbamr20885675wro.49.1671189595136;
+        Fri, 16 Dec 2022 03:19:55 -0800 (PST)
+Received: from [192.168.1.132] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id i13-20020adfefcd000000b0024216d2e386sm2102009wrp.16.2022.12.16.03.19.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 03:19:54 -0800 (PST)
+Message-ID: <b0e5d510-9947-b54c-a8a9-c20555818bb1@gmail.com>
+Date:   Fri, 16 Dec 2022 12:19:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221216094838.683379-1-linmq006@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v5 3/7] dt-bindings: mfd: syscon: Add mt8365-syscfg
+Content-Language: en-US
+To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        angelogioacchino.delregno@collabora.com, khilman@baylibre.com
+References: <20221213234346.2868828-1-bero@baylibre.com>
+ <20221213234346.2868828-4-bero@baylibre.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221213234346.2868828-4-bero@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,15 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fri, Dec 16, 2022 at 10:48:35AM CET, linmq006@gmail.com wrote:
->unregister_netdevice_notifier_net() is used for unregister a notifier
->registered by register_netdevice_notifier_net(). Also s/into/from/.
->
->Fixes: a30c7b429f2d ("net: introduce per-netns netdevice notifiers")
 
-Hmm, I believe that comment fixes should not contain the fixes tag not
-to confuse anyone (bot) as this is not fixing a bug. This is net-next
-tree material, please mark it as such in the patch subject line:
-[PATCH net-next v2] ...
 
-Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+On 14/12/2022 00:43, Bernhard Rosenkränzer wrote:
+> Document Mediatek mt8365-syscfg
+> 
+> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
+> ---
+>   Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> index 1b01bd0104316..7beeb0abc4db0 100644
+> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> @@ -50,6 +50,7 @@ properties:
+>                 - marvell,armada-3700-usb2-host-misc
+>                 - mediatek,mt8135-pctl-a-syscfg
+>                 - mediatek,mt8135-pctl-b-syscfg
+> +              - mediatek,mt8365-syscfg
+>                 - microchip,lan966x-cpu-syscon
+>                 - microchip,sparx5-cpu-syscon
+>                 - mstar,msc313-pmsleep
