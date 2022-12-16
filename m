@@ -2,378 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E801C64E504
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 01:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DF964E50D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 01:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbiLPAJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 19:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        id S229979AbiLPAMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 19:12:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbiLPAJ1 (ORCPT
+        with ESMTP id S229952AbiLPAMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 19:09:27 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994385E0BD;
-        Thu, 15 Dec 2022 16:09:26 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFMkpQC026731;
-        Fri, 16 Dec 2022 00:09:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=xpwQYPvfF7M2ny2Mrmu4NKAivyR1gnmTU100F0C3cr0=;
- b=cBh9H4HCrOrTdCt/30a/Q4Cs7jteo6VumBmMHRxw/QYaUtZKnGENfcsAFvJRpeXOW1Ko
- 0dyxl323G/R8x6SHiAAsqZAoaMlzlt7iL7HuGtZFDPnVcGvBDN5Kl5cZiRHZqKAZIkhi
- O2gYr7trIIqdJ7kJ/025F28SsoEqyznQexBRYnRzsnJMIwsKZTMnmAoy3D5Jf5hKOhIl
- bZhnNnMcJqnz/sKXHUP0pljAahMkWJVochqVjgJ6bkeWiZeEbC56LOTOAZ+1vjGLJLFf
- +jLxAkDr+a7x6ZAb9krwd2OYVM0UaN3J57bgl1UEKm3ioYh4lbTqseg7xYmHaCoW1AiZ uA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mg3f8t4f7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 00:09:20 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BG09JJL024702
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 00:09:19 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 15 Dec 2022 16:09:19 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 2/2] drm/msm/dp: enhance dp controller isr
-Date:   Thu, 15 Dec 2022 16:09:03 -0800
-Message-ID: <1671149343-312-3-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1671149343-312-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1671149343-312-1-git-send-email-quic_khsieh@quicinc.com>
+        Thu, 15 Dec 2022 19:12:01 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CB85C767;
+        Thu, 15 Dec 2022 16:12:00 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id n3so691309pfq.10;
+        Thu, 15 Dec 2022 16:12:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CjRTZSnN7OehZ4B/b2PDZdHfkdX8t/7cJbh10Uq9wgM=;
+        b=G3ibw7uyJqSHBop+XRRHCmxh5nTgQl7RMsfQLqSnkXGPGve9ffo4JvGCTGIfBqMVvz
+         x8PC0wrvKHy63DO6RmJW1r07L5vkhpB11bSdA3wEoZMGQzChT2zFm7EIuipHkoPuyO35
+         3mjUvlo9j0NgaphkrplvCeGqhVwsT2clMyH4uc75fSxxjX7Cnr1upYL/8rxJYGitTdWF
+         7HP4/Hj91uMo8LCMwOwDLLBhxBZQv6ycOo0fPKCysBnVQz6MtFlkDuV2mLnV+4opLKfN
+         kmqQbwFQwzNsEW6qAkrfTaJj3rQqNXpkXL7IN/4dCXdtzP4nJ/4wGtmonS5lDhtu4Jh9
+         JEHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CjRTZSnN7OehZ4B/b2PDZdHfkdX8t/7cJbh10Uq9wgM=;
+        b=I6MGZ/b9QyGDjKYUu5qHag8OUakcwmWa/0TWTfU2iiYbLacQBAo3Yjtigpp+W2zMCP
+         euCoBGLaOny2CwYF2R4Plgw+Z3pGT6p3lSHCIkrgzzET5YY8TQhCgShDbVNdrDQWGEPa
+         iRLXzGpsgEwCXOLGaDP19FvU+TJ6f/ka7lhC6em8nGg9Z8PE/4pTSIxAd0m6GfsEw/Jm
+         EqzBM3oRewFlIKN9op5993Arvsh8UqiLUho4MVJxMncaiWzTOrnDeq2L3BcM9i3ItdsA
+         RdfdhXPJygbdyS2qjYUZ7mtxrYFtRHr6GcTo3emwvdkvcqPC5K9C/FSdCHPQpwgmwJ/J
+         epvw==
+X-Gm-Message-State: ANoB5pnXl0uHDs+RrR9xeKpGVXL4zpugkQvAHls0ExX0eDsmz9DeCqvp
+        GzJZncJJtjqOG2Fb41viaHs=
+X-Google-Smtp-Source: AA0mqf7dR646CBYvZwhssozkq0PE6GAdWdbsqBMGIDmLMOlplvU2goZCen+eJDtRAJY+tG5kXBMHgw==
+X-Received: by 2002:aa7:96ab:0:b0:576:b8d0:6034 with SMTP id g11-20020aa796ab000000b00576b8d06034mr31796221pfk.31.1671149519600;
+        Thu, 15 Dec 2022 16:11:59 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id d15-20020aa797af000000b00574345ee12csm188474pfq.23.2022.12.15.16.11.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 16:11:59 -0800 (PST)
+Date:   Thu, 15 Dec 2022 16:11:57 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "Christopherson,, Sean" <seanjc@google.com>
+Subject: Re: [PATCH v10 056/108] KVM: TDX: don't request
+ KVM_REQ_APIC_PAGE_RELOAD
+Message-ID: <20221216001157.GK3632095@ls.amr.corp.intel.com>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+ <f0f134dcf59f901e4b8960c7b3f242dcd42b1c40.1667110240.git.isaku.yamahata@intel.com>
+ <e813c4791d3b0a6d14f344dfd881d65a2060764a.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Z7vGQF9lVz1mnCfS-_Ub2v6MrH5-Spww
-X-Proofpoint-ORIG-GUID: Z7vGQF9lVz1mnCfS-_Ub2v6MrH5-Spww
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-15_12,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 impostorscore=0 mlxlogscore=999
- adultscore=0 phishscore=0 bulkscore=0 mlxscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212160000
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e813c4791d3b0a6d14f344dfd881d65a2060764a.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dp_display_irq_handler() is the main isr handler with the helps
-of two sub isr, dp_aux_isr and dp_ctrl_isr, to service all DP
-interrupts on every irq triggered. Current all three isr does
-not return IRQ_HANDLED if there are any interrupts it had
-serviced. This patch fix this ambiguity by having all isr
-return IRQ_HANDLED if there are interrupts had been serviced
-or IRQ_NONE otherwise.
+On Mon, Nov 21, 2022 at 11:55:58PM +0000,
+"Huang, Kai" <kai.huang@intel.com> wrote:
 
-Changes in v5:
--- move complete into dp_aux_native_handler()
--- move complete into dp_aux_i2c_handler()
--- restore null ctrl check at isr
--- return IRQ_NODE directly
+> On Sat, 2022-10-29 at 23:22 -0700, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > 
+> > TDX doesn't need APIC page depending on vapic and its callback is
+> > WARN_ON_ONCE(is_tdx).  To avoid unnecessary overhead and WARN_ON_ONCE(),
+> > skip requesting KVM_REQ_APIC_PAGE_RELOAD when TD.
+> > 
+> >   WARNING: arch/x86/kvm/vmx/main.c:696 vt_set_apic_access_page_addr+0x3c/0x50 [kvm_intel]
+> >   RIP: 0010:vt_set_apic_access_page_addr+0x3c/0x50 [kvm_intel]
+> >   Call Trace:
+> >    vcpu_enter_guest+0x145d/0x24d0 [kvm]
+> >    kvm_arch_vcpu_ioctl_run+0x25d/0xcc0 [kvm]
+> >    kvm_vcpu_ioctl+0x414/0xa30 [kvm]
+> >    __x64_sys_ioctl+0xc0/0x100
+> >    do_syscall_64+0x39/0xc0
+> >    entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > 
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> >  arch/x86/kvm/x86.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 3868605462ed..5dadd0f9a10e 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -10487,7 +10487,9 @@ void kvm_arch_mmu_notifier_invalidate_range(struct kvm *kvm,
+> >  	 * Update it when it becomes invalid.
+> >  	 */
+> >  	apic_address = gfn_to_hva(kvm, APIC_DEFAULT_PHYS_BASE >> PAGE_SHIFT);
+> > -	if (start <= apic_address && apic_address < end)
+> > +	/* TDX doesn't need APIC page. */
+> > +	if (kvm->arch.vm_type != KVM_X86_TDX_VM &&
+> > +	    start <= apic_address && apic_address < end)
+> >  		kvm_make_all_cpus_request(kvm, KVM_REQ_APIC_PAGE_RELOAD);
+> >  }
+> >  
+> 
+> In patch "[PATCH v10 105/108] KVM: TDX: Add methods to ignore accesses to CPU
+> state", you have:
+> 
+> +static void vt_set_apic_access_page_addr(struct kvm_vcpu *vcpu)
+> +{
+> +	if (WARN_ON_ONCE(is_td_vcpu(vcpu)))
+> +		return;
+> +
+> +	vmx_set_apic_access_page_addr(vcpu);
+> +}
+> 
+> If you drop the WARN_ON_ONCE() above, you can just drop this patch.
+> 
+> For this particular case, I don't find it is quite necessary to change the
+> common x86 code as done in this patch.  In fact, SVM doesn't have a
+> set_apic_access_page_addr() callback which is consistent with just return if VM
+> is TD in vt_set_apic_access_page_addr().
+> 
 
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Suggested-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/gpu/drm/msm/dp/dp_aux.c     | 95 ++++++++++++++++++++++++++-----------
- drivers/gpu/drm/msm/dp/dp_aux.h     |  2 +-
- drivers/gpu/drm/msm/dp/dp_ctrl.c    | 12 ++++-
- drivers/gpu/drm/msm/dp/dp_ctrl.h    |  2 +-
- drivers/gpu/drm/msm/dp/dp_display.c | 16 +++++--
- 5 files changed, 89 insertions(+), 38 deletions(-)
+Oh, yes. I will drop this patch with removing WARN_ON_ONCE().
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_aux.c b/drivers/gpu/drm/msm/dp/dp_aux.c
-index cc3efed..d01ff45 100644
---- a/drivers/gpu/drm/msm/dp/dp_aux.c
-+++ b/drivers/gpu/drm/msm/dp/dp_aux.c
-@@ -162,45 +162,84 @@ static ssize_t dp_aux_cmd_fifo_rx(struct dp_aux_private *aux,
- 	return i;
- }
- 
--static void dp_aux_native_handler(struct dp_aux_private *aux, u32 isr)
-+static irqreturn_t dp_aux_native_handler(struct dp_aux_private *aux, u32 isr)
- {
--	if (isr & DP_INTR_AUX_I2C_DONE)
-+	irqreturn_t ret = IRQ_NONE;
-+
-+	if (isr & DP_INTR_AUX_I2C_DONE) {
- 		aux->aux_error_num = DP_AUX_ERR_NONE;
--	else if (isr & DP_INTR_WRONG_ADDR)
-+		ret = IRQ_HANDLED;
-+	} else if (isr & DP_INTR_WRONG_ADDR) {
- 		aux->aux_error_num = DP_AUX_ERR_ADDR;
--	else if (isr & DP_INTR_TIMEOUT)
-+		ret = IRQ_HANDLED;
-+	} else if (isr & DP_INTR_TIMEOUT) {
- 		aux->aux_error_num = DP_AUX_ERR_TOUT;
--	if (isr & DP_INTR_NACK_DEFER)
-+		ret = IRQ_HANDLED;
-+	}
-+
-+	if (isr & DP_INTR_NACK_DEFER) {
- 		aux->aux_error_num = DP_AUX_ERR_NACK;
-+		ret = IRQ_HANDLED;
-+	}
-+
- 	if (isr & DP_INTR_AUX_ERROR) {
- 		aux->aux_error_num = DP_AUX_ERR_PHY;
- 		dp_catalog_aux_clear_hw_interrupts(aux->catalog);
-+		ret = IRQ_HANDLED;
- 	}
-+
-+	if (ret == IRQ_HANDLED)
-+		complete(&aux->comp);
-+
-+	return ret;
- }
- 
--static void dp_aux_i2c_handler(struct dp_aux_private *aux, u32 isr)
-+static irqreturn_t dp_aux_i2c_handler(struct dp_aux_private *aux, u32 isr)
- {
-+	irqreturn_t ret = IRQ_NONE;
-+
- 	if (isr & DP_INTR_AUX_I2C_DONE) {
- 		if (isr & (DP_INTR_I2C_NACK | DP_INTR_I2C_DEFER))
- 			aux->aux_error_num = DP_AUX_ERR_NACK;
- 		else
- 			aux->aux_error_num = DP_AUX_ERR_NONE;
--	} else {
--		if (isr & DP_INTR_WRONG_ADDR)
--			aux->aux_error_num = DP_AUX_ERR_ADDR;
--		else if (isr & DP_INTR_TIMEOUT)
--			aux->aux_error_num = DP_AUX_ERR_TOUT;
--		if (isr & DP_INTR_NACK_DEFER)
--			aux->aux_error_num = DP_AUX_ERR_NACK_DEFER;
--		if (isr & DP_INTR_I2C_NACK)
--			aux->aux_error_num = DP_AUX_ERR_NACK;
--		if (isr & DP_INTR_I2C_DEFER)
--			aux->aux_error_num = DP_AUX_ERR_DEFER;
--		if (isr & DP_INTR_AUX_ERROR) {
--			aux->aux_error_num = DP_AUX_ERR_PHY;
--			dp_catalog_aux_clear_hw_interrupts(aux->catalog);
--		}
-+
-+		return IRQ_HANDLED;
- 	}
-+
-+	if (isr & DP_INTR_WRONG_ADDR) {
-+		aux->aux_error_num = DP_AUX_ERR_ADDR;
-+		ret = IRQ_HANDLED;
-+	} else if (isr & DP_INTR_TIMEOUT) {
-+		aux->aux_error_num = DP_AUX_ERR_TOUT;
-+		ret = IRQ_HANDLED;
-+	}
-+
-+	if (isr & DP_INTR_NACK_DEFER) {
-+		aux->aux_error_num = DP_AUX_ERR_NACK_DEFER;
-+		ret = IRQ_HANDLED;
-+	}
-+
-+	if (isr & DP_INTR_I2C_NACK) {
-+		aux->aux_error_num = DP_AUX_ERR_NACK;
-+		ret = IRQ_HANDLED;
-+	}
-+
-+	if (isr & DP_INTR_I2C_DEFER) {
-+		aux->aux_error_num = DP_AUX_ERR_DEFER;
-+		ret = IRQ_HANDLED;
-+	}
-+
-+	if (isr & DP_INTR_AUX_ERROR) {
-+		aux->aux_error_num = DP_AUX_ERR_PHY;
-+		dp_catalog_aux_clear_hw_interrupts(aux->catalog);
-+		ret = IRQ_HANDLED;
-+	}
-+
-+	if (ret == IRQ_HANDLED)
-+		complete(&aux->comp);
-+
-+	return ret;
- }
- 
- static void dp_aux_update_offset_and_segment(struct dp_aux_private *aux,
-@@ -409,14 +448,14 @@ static ssize_t dp_aux_transfer(struct drm_dp_aux *dp_aux,
- 	return ret;
- }
- 
--void dp_aux_isr(struct drm_dp_aux *dp_aux)
-+irqreturn_t dp_aux_isr(struct drm_dp_aux *dp_aux)
- {
- 	u32 isr;
- 	struct dp_aux_private *aux;
- 
- 	if (!dp_aux) {
- 		DRM_ERROR("invalid input\n");
--		return;
-+		return IRQ_NONE;
- 	}
- 
- 	aux = container_of(dp_aux, struct dp_aux_private, dp_aux);
-@@ -425,17 +464,15 @@ void dp_aux_isr(struct drm_dp_aux *dp_aux)
- 
- 	/* no interrupts pending, return immediately */
- 	if (!isr)
--		return;
-+		return IRQ_NONE;
- 
- 	if (!aux->cmd_busy)
--		return;
-+		return IRQ_NONE;
- 
- 	if (aux->native)
--		dp_aux_native_handler(aux, isr);
-+		return dp_aux_native_handler(aux, isr);
- 	else
--		dp_aux_i2c_handler(aux, isr);
--
--	complete(&aux->comp);
-+		return dp_aux_i2c_handler(aux, isr);
- }
- 
- void dp_aux_reconfig(struct drm_dp_aux *dp_aux)
-diff --git a/drivers/gpu/drm/msm/dp/dp_aux.h b/drivers/gpu/drm/msm/dp/dp_aux.h
-index e930974..511305d 100644
---- a/drivers/gpu/drm/msm/dp/dp_aux.h
-+++ b/drivers/gpu/drm/msm/dp/dp_aux.h
-@@ -11,7 +11,7 @@
- 
- int dp_aux_register(struct drm_dp_aux *dp_aux);
- void dp_aux_unregister(struct drm_dp_aux *dp_aux);
--void dp_aux_isr(struct drm_dp_aux *dp_aux);
-+irqreturn_t dp_aux_isr(struct drm_dp_aux *dp_aux);
- void dp_aux_init(struct drm_dp_aux *dp_aux);
- void dp_aux_deinit(struct drm_dp_aux *dp_aux);
- void dp_aux_reconfig(struct drm_dp_aux *dp_aux);
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index 3854c9f..cb0acb1 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1982,27 +1982,35 @@ int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
- 	return ret;
- }
- 
--void dp_ctrl_isr(struct dp_ctrl *dp_ctrl)
-+irqreturn_t dp_ctrl_isr(struct dp_ctrl *dp_ctrl)
- {
- 	struct dp_ctrl_private *ctrl;
- 	u32 isr;
-+	irqreturn_t ret = IRQ_NONE;
- 
- 	if (!dp_ctrl)
--		return;
-+		return IRQ_NONE;
- 
- 	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
- 
- 	isr = dp_catalog_ctrl_get_interrupt(ctrl->catalog);
-+	/* no interrupts pending, return immediately */
-+	if (!isr)
-+		return IRQ_NONE;
- 
- 	if (isr & DP_CTRL_INTR_READY_FOR_VIDEO) {
- 		drm_dbg_dp(ctrl->drm_dev, "dp_video_ready\n");
- 		complete(&ctrl->video_comp);
-+		ret = IRQ_HANDLED;
- 	}
- 
- 	if (isr & DP_CTRL_INTR_IDLE_PATTERN_SENT) {
- 		drm_dbg_dp(ctrl->drm_dev, "idle_patterns_sent\n");
- 		complete(&ctrl->idle_comp);
-+		ret = IRQ_HANDLED;
- 	}
-+
-+	return ret;
- }
- 
- struct dp_ctrl *dp_ctrl_get(struct device *dev, struct dp_link *link,
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-index 9f29734..c3af06d 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-@@ -25,7 +25,7 @@ int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_off_link(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_off(struct dp_ctrl *dp_ctrl);
- void dp_ctrl_push_idle(struct dp_ctrl *dp_ctrl);
--void dp_ctrl_isr(struct dp_ctrl *dp_ctrl);
-+irqreturn_t dp_ctrl_isr(struct dp_ctrl *dp_ctrl);
- void dp_ctrl_handle_sink_request(struct dp_ctrl *dp_ctrl);
- struct dp_ctrl *dp_ctrl_get(struct device *dev, struct dp_link *link,
- 			struct dp_panel *panel,	struct drm_dp_aux *aux,
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index bfd0aef..d40bfbd 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -1192,7 +1192,7 @@ static int dp_hpd_event_thread_start(struct dp_display_private *dp_priv)
- static irqreturn_t dp_display_irq_handler(int irq, void *dev_id)
- {
- 	struct dp_display_private *dp = dev_id;
--	irqreturn_t ret = IRQ_HANDLED;
-+	irqreturn_t ret = IRQ_NONE;
- 	u32 hpd_isr_status;
- 
- 	if (!dp) {
-@@ -1206,27 +1206,33 @@ static irqreturn_t dp_display_irq_handler(int irq, void *dev_id)
- 		drm_dbg_dp(dp->drm_dev, "type=%d isr=0x%x\n",
- 			dp->dp_display.connector_type, hpd_isr_status);
- 		/* hpd related interrupts */
--		if (hpd_isr_status & DP_DP_HPD_PLUG_INT_MASK)
-+		if (hpd_isr_status & DP_DP_HPD_PLUG_INT_MASK) {
- 			dp_add_event(dp, EV_HPD_PLUG_INT, 0, 0);
-+			ret = IRQ_HANDLED;
-+		}
- 
- 		if (hpd_isr_status & DP_DP_IRQ_HPD_INT_MASK) {
- 			dp_add_event(dp, EV_IRQ_HPD_INT, 0, 0);
-+			ret = IRQ_HANDLED;
- 		}
- 
- 		if (hpd_isr_status & DP_DP_HPD_REPLUG_INT_MASK) {
- 			dp_add_event(dp, EV_HPD_UNPLUG_INT, 0, 0);
- 			dp_add_event(dp, EV_HPD_PLUG_INT, 0, 3);
-+			ret = IRQ_HANDLED;
- 		}
- 
--		if (hpd_isr_status & DP_DP_HPD_UNPLUG_INT_MASK)
-+		if (hpd_isr_status & DP_DP_HPD_UNPLUG_INT_MASK) {
- 			dp_add_event(dp, EV_HPD_UNPLUG_INT, 0, 0);
-+			ret = IRQ_HANDLED;
-+		}
- 	}
- 
- 	/* DP controller isr */
--	dp_ctrl_isr(dp->ctrl);
-+	ret |= dp_ctrl_isr(dp->ctrl);
- 
- 	/* DP aux isr */
--	dp_aux_isr(dp->aux);
-+	ret |= dp_aux_isr(dp->aux);
- 
- 	return ret;
- }
+
+> Also, I don't particularly like the idea of having a lot of "is_td(kvm)" in the
+> common x86 code as if similar technology happens in the future, you will need to
+> have another "is_td_similar_vm(kvm)" thing.
+
+Currently KVM_CAP_VM_TYPES has such check in x86 kvm common code.
+
+
+> If modifying common x86 code is necessary, then it would make more sense to
+> introduce some common flag, and make TD guest set that flag.
+> 
+> Btw, this patch just comes out of blue from the  middle of a bunch of MMU
+> patches.  Shouldn't it be moved to "patches which handles interrupt related
+> staff"?
+> 
+> Btw2, by saying above, does it make sense to split patch "[PATCH v10 105/108]
+> KVM: TDX: Add methods to ignore accesses to CPU state" based on category such as
+> MMU/interrupt, etc?  Particularly, in that patch, some callbacks have WARN() or
+> KVM_BUG_ON() against TD guest, but some don't.  The logic behind those decisions
+> highly depend on previous patches.  To me, it makes more sense to just move
+> logic related things together.
+
+Ok, I'll split it up to cpu states/KVM MMU/interrupt parts.
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Isaku Yamahata <isaku.yamahata@gmail.com>
