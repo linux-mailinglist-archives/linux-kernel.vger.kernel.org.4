@@ -2,144 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239BA64F165
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 20:07:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD47D64F15B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 20:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbiLPTH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 14:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
+        id S231527AbiLPTDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 14:03:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiLPTH1 (ORCPT
+        with ESMTP id S231572AbiLPTDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 14:07:27 -0500
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 16 Dec 2022 11:07:25 PST
-Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58A2F24086;
-        Fri, 16 Dec 2022 11:07:25 -0800 (PST)
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-        id BA47140A06; Fri, 16 Dec 2022 18:03:48 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org BA47140A06
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-        s=odk20180602; t=1671210228;
-        bh=9DqqlWWZc0U7BIINrR5vZz1Zxbg1KcdqedMklEahsfQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Ozjnln9RyGHia3c3O03KaR1ZGoMj+pht+T4+spmVU5AYdB2EoSdZVTZ8lsSjm6A+t
-         6anrlvT+iEdNp96ydTeu3AN9ou6oSiED0iJyNSoSD7ezqeWTaQbtJ7lWetKCfWGFIi
-         kpXCfJszaDb8rM0knW0YofYjtfmMfCUF8jaLNoQE=
-Date:   Fri, 16 Dec 2022 18:03:48 +0100
-From:   Wim Van Sebroeck <wim@linux-watchdog.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Eddie James <eajames@linux.ibm.com>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Runyang Chen <runyang.chen@mediatek.com>,
-        Thomas Kastner <thomas.kastner@advantech.com>
-Subject: [GIT PULL REQUEST] watchdog - v6.2 release cycle.
-Message-ID: <20221216170348.GA21326@www.linux-watchdog.org>
+        Fri, 16 Dec 2022 14:03:49 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED186A768
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 11:03:45 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id x66so2413836pfx.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 11:03:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=t2+6atgOOmHW3Y6/BjOreIZzNs1w8s58OfIYvMq9s2c=;
+        b=KBlw0Zv85xGI/f7zBeWNnuUhEAWd6AP8p/mVZ2PvNRpLPQgPs5oHJLEvhdVVP+B/5Y
+         MayQdYEgqMBwio68fP0vm2Qz0up6cD/PL9x1VK/v9WDid5KE3veOXRX3FhrQZJaQFYE/
+         fE4afr/+6N/WiVRjMAWr0r4VZlmt4FdcqdaR10I58q0Shh7pPeCT/9Uxh6XucorzU28o
+         hgtM9QZnXfLyQLSmR+YN647tiOBOZPrsE+TDEAgCjBnA0WIx0yMkrBEQloA9pmRjdJSm
+         pb45b4OboWwjXatSLEsxZQpwjg1rmP0yzkDqI4FCrhCcbOF2gEik9DTz4x2LyRGdF1gq
+         3+tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t2+6atgOOmHW3Y6/BjOreIZzNs1w8s58OfIYvMq9s2c=;
+        b=e8mEq1Il+yjLrGTlBIMuReLO3qcXXoe8bFYfBjs1TjR5eq2sy6RM6bzbWAcdB9FHm3
+         izDhtTbca4GwJR+wIuw6WlgiknCLYozPcdXc+or0g+hy2aE+zSEizp5R447wCz3zYgMj
+         7enbYMfsSANoxOlF53qOvky3zGThpp1qVFdbufP40DTqOhcnb0DoozVPiLPGJ+yuXLqX
+         TTZmTpSR2hYDl96CQCKommT1C6xlsLNy4YuA5Qr851PNZv5euHVzMBcS+TeAoIFog0Br
+         8a3+aiyNDxOQ4Ala1kQM28a82wJaUVJe+A2s8gzt/HAYLfUdxVP8Z8cE6/4skLZ+pWiE
+         /eOg==
+X-Gm-Message-State: ANoB5pl0QZW18fouTAO3Ec+uBZwl+E5ma8F1lbuEx6sRQZ7Ynk1vF8Vi
+        QeQCsVtC9eLITmlhlDe6yAzrbL/ZmLQFjk5z57Tx3g==
+X-Google-Smtp-Source: AA0mqf4uSuXyJGdBNnh0dTcrZ0uIDUxHYk0iKl8jaNcFx16JMkfVp7+9/n6i4JcZxOXpKjDBUCLM51XCRF7NvsRCoh0=
+X-Received: by 2002:aa7:8487:0:b0:56c:3bb4:28a8 with SMTP id
+ u7-20020aa78487000000b0056c3bb428a8mr80681452pfn.83.1671217424499; Fri, 16
+ Dec 2022 11:03:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.20 (2009-12-10)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221209160453.3246150-4-jeffxu@google.com> <20221216183949.169779-1-sj@kernel.org>
+In-Reply-To: <20221216183949.169779-1-sj@kernel.org>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Fri, 16 Dec 2022 11:03:06 -0800
+Message-ID: <CALmYWFtfdL=1Nrwyj7je+o8dciDL76CCoga5aE3hZPOh-SFUpA@mail.gmail.com>
+Subject: Re: [PATCH v7 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+To:     SeongJae Park <sj@kernel.org>
+Cc:     skhan@linuxfoundation.org, keescook@chromium.org,
+        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com,
+        linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Dec 16, 2022 at 10:39 AM SeongJae Park <sj@kernel.org> wrote:
+>
+> Hi Jeff,
+>
+> > From: Jeff Xu <jeffxu@google.com>
+> >
+> > The new MFD_NOEXEC_SEAL and MFD_EXEC flags allows application to
+> > set executable bit at creation time (memfd_create).
+> >
+> > When MFD_NOEXEC_SEAL is set, memfd is created without executable bit
+> > (mode:0666), and sealed with F_SEAL_EXEC, so it can't be chmod to
+> > be executable (mode: 0777) after creation.
+> >
+> > when MFD_EXEC flag is set, memfd is created with executable bit
+> > (mode:0777), this is the same as the old behavior of memfd_create.
+> >
+> > The new pid namespaced sysctl vm.memfd_noexec has 3 values:
+> > 0: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
+> >         MFD_EXEC was set.
+> > 1: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
+> >         MFD_NOEXEC_SEAL was set.
+> > 2: memfd_create() without MFD_NOEXEC_SEAL will be rejected.
+> >
+> > The sysctl allows finer control of memfd_create for old-software
+> > that doesn't set the executable bit, for example, a container with
+> > vm.memfd_noexec=1 means the old-software will create non-executable
+> > memfd by default. Also, the value of memfd_noexec is passed to child
+> > namespace at creation time. For example, if the init namespace has
+> > vm.memfd_noexec=2, all its children namespaces will be created with 2.
+> >
+> > Signed-off-by: Jeff Xu <jeffxu@google.com>
+> > Co-developed-by: Daniel Verkamp <dverkamp@chromium.org>
+> > Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > ---
+> [...]
+> > diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
+> > index f4f8cb0435b4..8a98b1af9376 100644
+> > --- a/kernel/pid_namespace.c
+> > +++ b/kernel/pid_namespace.c
+> > @@ -23,6 +23,7 @@
+> >  #include <linux/sched/task.h>
+> >  #include <linux/sched/signal.h>
+> >  #include <linux/idr.h>
+> > +#include "pid_sysctl.h"
+> >
+> >  static DEFINE_MUTEX(pid_caches_mutex);
+> >  static struct kmem_cache *pid_ns_cachep;
+> > @@ -110,6 +111,8 @@ static struct pid_namespace *create_pid_namespace(struct user_namespace *user_ns
+> >       ns->ucounts = ucounts;
+> >       ns->pid_allocated = PIDNS_ADDING;
+> >
+> > +     initialize_memfd_noexec_scope(ns);
+> > +
+> >       return ns;
+> >
+> >  out_free_idr:
+> > @@ -455,6 +458,8 @@ static __init int pid_namespaces_init(void)
+> >  #ifdef CONFIG_CHECKPOINT_RESTORE
+> >       register_sysctl_paths(kern_path, pid_ns_ctl_table);
+> >  #endif
+> > +
+> > +     register_pid_ns_sysctl_table_vm();
+> >       return 0;
+> >  }
+> [...]
+> >
+> > diff --git a/kernel/pid_sysctl.h b/kernel/pid_sysctl.h
+> > new file mode 100644
+> > index 000000000000..90a93161a122
+> > --- /dev/null
+> > +++ b/kernel/pid_sysctl.h
+> > @@ -0,0 +1,59 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef LINUX_PID_SYSCTL_H
+> > +#define LINUX_PID_SYSCTL_H
+> > +
+> > +#include <linux/pid_namespace.h>
+> > +
+> > +#if defined(CONFIG_SYSCTL) && defined(CONFIG_MEMFD_CREATE)
+> > +static inline void initialize_memfd_noexec_scope(struct pid_namespace *ns)
+> [...]
+> > +static inline void register_pid_ns_sysctl_table_vm(void)
+> > +{
+> > +     register_sysctl_paths(vm_path, pid_ns_ctl_table_vm);
+> > +}
+> > +#else
+> > +static inline void set_memfd_noexec_scope(struct pid_namespace *ns) {}
+> > +static inline void register_pid_ns_ctl_table_vm(void) {}
+> > +#endif
+> [...]
+>
+> I found this patch makes build fails whne CONFIG_SYSCTL or CONFIG_MEMFD_CREATE
+> are not defined, as initialize_memfd_noexec_scope() and
+> register_pid_ns_sysctl_table_vm() are used from pid_namespace.c without the
+> configs protection.
+>
+> I just posted a patch for that:
+> https://lore.kernel.org/linux-mm/20221216183314.169707-1-sj@kernel.org/
+>
+> Could you please check?
+>
+Hi SeongJae,
+Thanks for the patch ! I responded to the other thread.
 
-Please pull following watchdog changes for the v5.19 release cycle.
+Andrew,
+From a process point of view, should I update this patch to V9 to
+include the fix ?
+or add a patch directly on top in the mm-unstable branch.
 
-This series contains:
-* Add Advantech EC watchdog driver
-* Add support for MT6795 Helio X10 watchdog and toprgu
-* Add support for MT8188 watchdog device
-* Remove #ifdef guards for PM related functions
-* Other fixes and improvements
+Thanks
+Jeff
 
-The output from git request-pull:
-----------------------------------------------------------------
-The following changes since commit f0c4d9fc9cc9462659728d168387191387e903cc:
-
-  Linux 6.1-rc4 (2022-11-06 15:07:11 -0800)
-
-are available in the git repository at:
-
-  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.2-rc1
-
-for you to fetch changes up to 9ec0b7e06835b857f892feb2fe6121db1393425d:
-
-  watchdog: aspeed: Enable pre-timeout interrupt (2022-11-19 15:30:41 +0100)
-
-----------------------------------------------------------------
-linux-watchdog 6.2-rc1 tag
-
-----------------------------------------------------------------
-Allen-KH Cheng (1):
-      dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT8173
-
-AngeloGioacchino Del Regno (3):
-      watchdog: mtk_wdt: Add support for MT6795 Helio X10 watchdog and toprgu
-      dt-bindings: watchdog: mediatek: Convert mtk-wdt to json-schema
-      dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT6795
-
-Eddie James (1):
-      watchdog: aspeed: Enable pre-timeout interrupt
-
-Marcus Folkesson (1):
-      watchdog: rn5t618: add support for read out bootstatus
-
-Mika Westerberg (1):
-      watchdog: iTCO_wdt: Set NO_REBOOT if the watchdog is not already running
-
-Paul Cercueil (4):
-      watchdog: at91rm9200: Remove #ifdef guards for PM related functions
-      watchdog: twl4030: Remove #ifdef guards for PM related functions
-      watchdog: omap: Remove #ifdef guards for PM related functions
-      watchdog: kempld: Remove #ifdef guards for PM related functions
-
-Runyang Chen (3):
-      dt-bindings: watchdog: Add compatible for MediaTek MT8188
-      dt-bindings: reset: mt8188: add toprgu reset-controller header file
-      watchdog: mediatek: mt8188: add wdt support
-
-Thomas Kastner (1):
-      watchdog: Add Advantech EC watchdog driver
-
- .../bindings/watchdog/mediatek,mtk-wdt.yaml        |  80 ++++++++
- .../devicetree/bindings/watchdog/mtk-wdt.txt       |  42 -----
- drivers/watchdog/Kconfig                           |   7 +
- drivers/watchdog/Makefile                          |   1 +
- drivers/watchdog/advantech_ec_wdt.c                | 205 +++++++++++++++++++++
- drivers/watchdog/aspeed_wdt.c                      | 104 +++++++++--
- drivers/watchdog/at91rm9200_wdt.c                  |  11 +-
- drivers/watchdog/db8500_wdt.c                      |   9 +-
- drivers/watchdog/iTCO_wdt.c                        |  21 ++-
- drivers/watchdog/kempld_wdt.c                      |  11 +-
- drivers/watchdog/mtk_wdt.c                         |  12 ++
- drivers/watchdog/omap_wdt.c                        |  11 +-
- drivers/watchdog/rn5t618_wdt.c                     |  12 ++
- drivers/watchdog/twl4030_wdt.c                     |   9 +-
- include/dt-bindings/reset/mt8188-resets.h          |  36 ++++
- include/linux/mfd/rn5t618.h                        |   9 +
- 16 files changed, 474 insertions(+), 106 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
- create mode 100644 drivers/watchdog/advantech_ec_wdt.c
- create mode 100644 include/dt-bindings/reset/mt8188-resets.h
-----------------------------------------------------------------
-
-Kind regards,
-Wim.
-
+>
+> Thanks,
+> SJ
