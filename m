@@ -2,206 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E17564ECA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C1F64EC9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbiLPOKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
+        id S230376AbiLPOIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:08:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiLPOKG (ORCPT
+        with ESMTP id S230233AbiLPOIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:10:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCAE2B25A
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:09:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671199758;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RA/Yc5ZHRE6FrNcZRlkstCVubCNeOdRMPGJUgVDRano=;
-        b=CegE4+uA0rYgeBHDzWKZOk4cNy4LGZ8Oboc3pGQEm+BnfRZbqNAvbe2toKrkWMwrYeLoco
-        Ddj5L1E+Bu4iILNjV8ZqTAhu8GDlcvCw6dAUr8jio9v66BuUdDOAzBfCwv95+elkKsoOAg
-        OC9HbjcC9B/TjrU1NwctV4BkoQpUTa4=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-475-jwTnpwj3PuOAoqw3A4jdRA-1; Fri, 16 Dec 2022 09:09:17 -0500
-X-MC-Unique: jwTnpwj3PuOAoqw3A4jdRA-1
-Received: by mail-pl1-f198.google.com with SMTP id z10-20020a170902ccca00b001898329db72so1759054ple.21
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:09:17 -0800 (PST)
+        Fri, 16 Dec 2022 09:08:06 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED792B274
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:08:04 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id z26so3604164lfu.8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:08:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E7rnlHGI8UN0z1G/4uZqIH5FqitWJ4bCQ8PKnzhEumA=;
+        b=no9qkEjyPsSwHJ8KWezcBHzFRemjLu2fgQlmmct3Pj5Kw7Mp5cqsq49NkdHb61et4G
+         ItQk8HCzJfJCY8+nVduYvzMm3uZUxcAv9LH7LQGt1JYz6WPbBxhhHPOHBP2a6MKv/XzK
+         Yamy9iMPIrwf5PLaMLvHpP1JnJ8TYfEF2UZuhrCwHFs8QEVyZ2ES90VOHfK8oJoI5U0d
+         0e7cSaJsMs3O9Yk0Q8/eunFUHibgHeSl66FQbzwVMAQ2NUbT3k2CK9sU58DzfCH4HgDZ
+         I3S+Rw6LDMbVB2MSGGcthhOxKemJO6hBSmqCy4zt8pvz37roHiCZXKTo7SqoiBO0iW9n
+         tFSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RA/Yc5ZHRE6FrNcZRlkstCVubCNeOdRMPGJUgVDRano=;
-        b=2qRBINjt3WfWYnDQ90YRU/URzSuAdzCDCeABafHUKs5McdRZdN2RrTNylrCFtSDh5p
-         z0gPPxihdmXJpIt7FK+RcTUesdn9A68X13R7hBNn0eGmzPwM3R5O7R+Iq5/HkxNykFl+
-         2objXI9vFNDBHd/q3uH5Ok9o0Yd44Yj5YV6c4E02N82jtIYOucdcN4jT7PIAR15BLHjD
-         gk9EN9qxVcEhnlWKVJqXovgpar2GA9qIcQ/7U62YRNBq0fDkwYWSPSeg5Xqak7/nVr0y
-         Sts/gzJJHLQl2BA8NQ9pCpcBeOnSWQgdDBUnioDrJfrLHYHhAaONbFQdm986JmDBwg8/
-         olyg==
-X-Gm-Message-State: ANoB5pljVS4q2Ot4XI8NAU/HOvETTEbl8dhkwebtp9DOuuMgeI0wa4p3
-        Il1MEyLbtDyx79uXyjyXLXgEIADPeS9ZZBvx6Zi9XbbEytBZ7l4TxhdsN8RHyPbhvvJFyqwyF4E
-        8jHoLXAcq0QR+gvBmQ6/DjHa7
-X-Received: by 2002:a05:6a21:999d:b0:9d:efd3:66f2 with SMTP id ve29-20020a056a21999d00b0009defd366f2mr49385980pzb.57.1671199756399;
-        Fri, 16 Dec 2022 06:09:16 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4QvH51tl1mP7UPtNO+GFRJLHBLli6PFxppfCqFl8Wt05sNUw4tDC0RTAnYyFUqUPkWRn6nSA==
-X-Received: by 2002:a05:6a21:999d:b0:9d:efd3:66f2 with SMTP id ve29-20020a056a21999d00b0009defd366f2mr49385943pzb.57.1671199755949;
-        Fri, 16 Dec 2022 06:09:15 -0800 (PST)
-Received: from localhost ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id l10-20020a63f30a000000b00470275c8d6dsm1515027pgh.10.2022.12.16.06.09.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 06:09:15 -0800 (PST)
-Date:   Fri, 16 Dec 2022 22:06:48 +0800
-From:   Coiby Xu <coxu@redhat.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "pvorel@suse.cz" <pvorel@suse.cz>,
-        "noodles@fb.com" <noodles@fb.com>, "tiwai@suse.de" <tiwai@suse.de>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        Elaine Palmer <erpalmer@linux.vnet.ibm.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v3 00/10] Add CA enforcement keyring restrictions
-Message-ID: <20221216140648.h32gn5qf3igorpzi@Rk>
-References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
- <b8e54d077da633132eb6da03ea536face095a425.camel@linux.ibm.com>
- <4CE6F17D-9D87-4024-9E1A-FDFE7C29D5FC@oracle.com>
- <1c51910a35a1d113256494827fd66ccc7473632e.camel@linux.ibm.com>
- <17855993-519C-4DAC-B62F-9DB473CF249B@oracle.com>
- <7df94da37c100c160436892a6996ba30e3fd6dc8.camel@linux.ibm.com>
- <21E52C3E-0778-4908-AF44-F65D57BEC4E0@oracle.com>
+        bh=E7rnlHGI8UN0z1G/4uZqIH5FqitWJ4bCQ8PKnzhEumA=;
+        b=yYCQ9ZA3UkmkTD6Au1nu5BBkyzup6I795VH5qQYZa0Kts4q17Ho9bLNKf5TxmOPYfJ
+         zhs1z4ySwVKp/yy5UX4bdyFGfvq8omnGKpSBdJX/JCfvHbQg6e1cwx11V0BBz6aC37dq
+         TrGgYRY9x2Vn1WMI7o5nRmTZVF5keT4TMHTUZPFtJN5Nd/rbejt7EZKAGRU/6EOUOiMk
+         15VyzBwYUkUsD/cjcQNNpUn6ExXxUHXJ8lohrPRzPSdsnmysNhQD0r9/5W2LgIB7vSqd
+         0Esll+1tN3Oma3jRlzUlo7cLupeh7ldYnTO7DSftL8TXPaTBP+5ThaI6WdnFxvmyJGfm
+         qfCg==
+X-Gm-Message-State: ANoB5pkWBuSb+GQi4t+X2HK6opxG2sG6XWJFZoU3SuT1WZUjriwBcu6r
+        dGk1mRsch+e1yV/ZTHSGGKv7MA==
+X-Google-Smtp-Source: AA0mqf4V28jx/U9NcnEY+r7qKoPQzTh7qAeK4cMVSE/XoxtGZ3WdPx2eHidPvXyk3Pi92ZkuYMZBxw==
+X-Received: by 2002:a05:6512:3c82:b0:4b5:5bc1:16da with SMTP id h2-20020a0565123c8200b004b55bc116damr11657584lfv.39.1671199682494;
+        Fri, 16 Dec 2022 06:08:02 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id p10-20020a2eba0a000000b0026fc79fd67dsm163265lja.74.2022.12.16.06.08.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 06:08:02 -0800 (PST)
+Message-ID: <22a055a9-a14b-e8b7-84e2-b091a05a3ba4@linaro.org>
+Date:   Fri, 16 Dec 2022 15:08:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <21E52C3E-0778-4908-AF44-F65D57BEC4E0@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v16 2/3] dt-bindings: edac: nuvoton: Add document for NPCM
+ memory controller
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Marvin Lin <milkfafa@gmail.com>, linux-edac@vger.kernel.org,
+        rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
+        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     openbmc@lists.ozlabs.org, benjaminfair@google.com,
+        yuenn@google.com, venture@google.com, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, avifishman70@gmail.com, tmaimon77@gmail.com,
+        tali.perry1@gmail.com, ctcchien@nuvoton.com, kflin@nuvoton.com,
+        Rob Herring <robh@kernel.org>
+References: <20221216073141.3289309-1-milkfafa@gmail.com>
+ <20221216073141.3289309-3-milkfafa@gmail.com>
+ <525fd984-0b67-8e11-d13c-7c4ee1853c4e@linaro.org>
+In-Reply-To: <525fd984-0b67-8e11-d13c-7c4ee1853c4e@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric and Mimi,
-
-On Thu, Dec 15, 2022 at 09:45:37PM +0000, Eric Snowberg wrote:
->
->
->>>>>>> A CA cert shall be defined as any X509 certificate that contains the
->>>>>>> keyCertSign key usage and has the CA bit set to true.
->>>>>>
->>>>>> Hi Eric,
->>>>>>
->>>>>> Allowing CA certificates with the digitalSignature key usage flag
->>>>>> enabled defeats the purpose of the new Kconfig.  Please update the
->>>>>> above definition to exclude the digitalSignature key usage flag and
->>>>>> modify the code accordingly.
->>>>>
->>>>> Within v2, the request was made to allow Intermediate CA certificates to be
->>>>> loaded directly.  The Intermediate CA referenced was the one used by kernel.org.
->>>>> This Intermediate CA contains both digitalSignature and keyCertSign.  If the code
->>>>> is changed to exclude this certificate, now the root CA has to be loaded again.  Is that
->>>>> the intent?
->>>>
->>>> That definitely was not the intent.  Nor would it address the issue of
->>>> a particular intermediate CA certificate having both keyCertSign and
->>>> digitalSignature.
->>>
->>> Sorry, I’m not following.  Why is it an issue that an intermediate CA certificate contains
->>> both keyCertSign and digitalSignature? Why would we want to exclude an Intermediate
->>> CA cert like the one used on kernel.org?
+On 16/12/2022 15:05, Krzysztof Kozlowski wrote:
+> On 16/12/2022 08:31, Marvin Lin wrote:
+>> Add dt-bindings document for Nuvoton NPCM memory controller.
 >>
->> I must be missing something.  Isn't the purpose of "keyUsage" to
->> minimize how a certificate may be used?   Why would we want the same
->> certificate to be used for both certificate signing and code signing?
->
->Every 3rd party intermediate CA I have looked at so far contains both set. Most have CRLSign set.
->Typically the root CA contains keyCertSign and CRLSign, but some also have digitalSignature
->set.  Finding a 3rd party Intermediate CA without digitalSignature set is probably going to be
->challenging and will severely limit usage.
+>> Signed-off-by: Marvin Lin <milkfafa@gmail.com>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+> So this is a 16th version but through this entire year you never Cced
+> the maintainers... You did not send a single version to the memory
+> controller maintainers.
+> 
+> I don't know why it is so big problem to use scripts/get_maintainers.pl.
 
-How about allowing both keyCertSign and digitalSignature asserted but
-issuing a warning for this case?
+Although maybe the reason for this is that it was being put in edac
+directory... eh...
 
-Here's my rationale for this proposal.
-
-I assume we should conform to some X.509 specifications. So I checked
-"RFC 5280: Internet X.509 Public Key Infrastructure Certificate and
-Certificate Revocation List (CRL) Profile" [1] and ITU-T X.509 (2012-10)
-[2].
-
-[1] states in 4.2.1.3. Key Usage,
-    "If the keyUsage extension is present, then the subject public key
-    MUST NOT be used to verify signatures on certificates or CRLs unless
-    the corresponding keyCertSign or cRLSign bit is set.  If the subject
-    public key is only to be used for verifying signatures on
-    certificates and/or CRLs, then the digitalSignature and
-    nonRepudiation bits SHOULD NOT be set.  However, the digitalSignature
-    and/or nonRepudiation bits MAY be set in addition to the keyCertSign
-    and/or cRLSign bits if the subject public key is to be used to verify
-    signatures on certificates and/or CRLs as well as other objects."
-
-and [2] states in 8.2.2.3 Key usage extension that,
-   "More than one bit may be set in an instance of the keyUsage extension.
-   The setting of multiple bits shall not change the meaning of each
-   individual bit but shall indicate that the certificate may be used for
-   all of the purposes indicated by the set bits. There may be risks
-   incurred when setting multiple bits. A review of those risks is
-   documented in Annex I."
-
-I interpret the above texts as we should allow both keyCertSign and
-digitalSignature. However [2] warns about the risks of setting multiple
-bits. Quoting Annex I,
-
-   "Combining the contentCommitment bit in the keyUsage certificate
-   extension with other keyUsage bits may have security implications
-   depending on the security environment in which the certificate is to be
-   used. If the subject's environment can be fully controlled and trusted,
-   then there are no specific security implications. For example, in cases
-   where the subject is fully confident about exactly which data is signed
-   or cases where the subject is fully confident about the security
-   characteristics of the authentication protocol being used. If the
-   subject's environment is not fully controlled or not fully trusted, then
-   unintentional signing of commitments is possible. Examples include the
-   use of badly formed authentication exchanges and the use of a rogue
-   software component. If untrusted environments are used by a subject,
-   these security implications can be limited through use of the following
-   measures:   
-    – to not combine the contentCommitment key usage setting in
-      certificates with any other key usage setting and to use the
-      corresponding private key only with this certificate;   
-      
-    – to limit the use of private keys associated with certificates that
-      have the contentCommitment key usage bit set, to environments which
-      are considered adequately controlled and trustworthy"
-
-So maybe it's useful to add a warning if both keyCertSign and
-digitalSignature are asserted.
-
-
--- 
 Best regards,
-Coiby
+Krzysztof
 
