@@ -2,115 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E9764E87C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 10:09:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEBDD64E883
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 10:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiLPJJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 04:09:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
+        id S230110AbiLPJNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 04:13:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiLPJJ2 (ORCPT
+        with ESMTP id S229453AbiLPJNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 04:09:28 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1C413F69
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 01:09:27 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p66iL-0004Tg-9b; Fri, 16 Dec 2022 10:09:09 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p66iG-004ssC-47; Fri, 16 Dec 2022 10:09:04 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p66iG-005ULn-9b; Fri, 16 Dec 2022 10:09:04 +0100
-Date:   Fri, 16 Dec 2022 10:09:04 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH 001/606] tpm: st33zp24: Convert to Convert to i2c's
- .probe_new()
-Message-ID: <20221216090904.qlekgvtpriijmvay@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-2-uwe@kleine-koenig.org>
+        Fri, 16 Dec 2022 04:13:40 -0500
+Received: from forwardcorp1b.mail.yandex.net (forwardcorp1b.mail.yandex.net [178.154.239.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4422B3D3BE;
+        Fri, 16 Dec 2022 01:13:37 -0800 (PST)
+Received: from myt5-8800bd68420f.qloud-c.yandex.net (myt5-8800bd68420f.qloud-c.yandex.net [IPv6:2a02:6b8:c12:4615:0:640:8800:bd68])
+        by forwardcorp1b.mail.yandex.net (Yandex) with ESMTP id 18FE0601F0;
+        Fri, 16 Dec 2022 12:13:35 +0300 (MSK)
+Received: from d-tatianin-nix.yandex-team.ru (unknown [2a02:6b8:b081:20::1:18])
+        by myt5-8800bd68420f.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id RDdkrU0Q6Ko1-Iah20vAt;
+        Fri, 16 Dec 2022 12:13:34 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
+        t=1671182014; bh=DpGcPD4QYNFodyzBuUrzHjZYe9mlGwIx7WnbID1FEt0=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=MtdZfUs9f4EjEINccyLb/HKZmCrkn2/crpmmmC+V3erQTQDPl85m0hEs1kUQc1/Bj
+         hYgbEkGMSjp9ReoPK/+AGzqrS5Ghx6KEGd6OsQMC9ijew/Zt2qM/kquQ6uKXFVjehU
+         letaB9xrxR/Cny8RFPmkOOQPMZ+8/02EhZIcQO/I=
+Authentication-Results: myt5-8800bd68420f.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
+From:   Daniil Tatianin <d-tatianin@yandex-team.ru>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>
+Cc:     Daniil Tatianin <d-tatianin@yandex-team.ru>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Harshitha Ramamurthy <harshitha.ramamurthy@intel.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] iavfs/iavf_main: actually log ->src mask when talking about it
+Date:   Fri, 16 Dec 2022 12:13:26 +0300
+Message-Id: <20221216091326.1457454-1-d-tatianin@yandex-team.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xd4tmrhrs6drh2st"
-Content-Disposition: inline
-In-Reply-To: <20221118224540.619276-2-uwe@kleine-koenig.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This fixes a copy-paste issue where dev_err would log the dst mask even
+though it is clearly talking about src.
 
---xd4tmrhrs6drh2st
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Found by Linux Verification Center (linuxtesting.org) with the SVACE
+static analysis tool.
 
-Hello,
+Fixes: 0075fa0fadd0a ("i40evf: Add support to apply cloud filters")
+Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
+---
+ drivers/net/ethernet/intel/iavf/iavf_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-while rebasing my series onto today's next I noticed the Subject being
-broken:
+diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
+index c4e451ef7942..adc02adef83a 100644
+--- a/drivers/net/ethernet/intel/iavf/iavf_main.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
+@@ -3850,7 +3850,7 @@ static int iavf_parse_cls_flower(struct iavf_adapter *adapter,
+ 				field_flags |= IAVF_CLOUD_FIELD_IIP;
+ 			} else {
+ 				dev_err(&adapter->pdev->dev, "Bad ip src mask 0x%08x\n",
+-					be32_to_cpu(match.mask->dst));
++					be32_to_cpu(match.mask->src));
+ 				return -EINVAL;
+ 			}
+ 		}
+-- 
+2.25.1
 
-	$Subject ~=3D s/Convert to //
-
-Apart from that I wonder who feels responsible to apply this patch (and
-the other tpm patches in this series). They got an Ack by Jarkko, but
-didn't appear in next.
-
-The plan for this series is not to apply to a single tree, but let the
-subsystem maintainers take their patches. I'd be happy if you consider
-them for the next merge window.
-
-Should I resend the tpm patches (with the subject fixed) once v6.2-rc1
-is published?
-
-Note that 662233731d66 ("i2c: core: Introduce i2c_client_get_device_id
-helper function") is already in Linus' tree, so if your tree is new
-enough (say v6.2-rc1 then) you don't need to care for this dependency.
-
-Best regards and thanks
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---xd4tmrhrs6drh2st
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOcNa0ACgkQwfwUeK3K
-7Alw4Af/RK9/7IC05BwpBrpy0qDkpZHmoJJKG3Gb/FsaXieOZO7bPAMOJzsW8Hy2
-5B4efkwpE0raNTxC8HAz4NUJiZW0uMGu3VvhsKDtR2g29fZZoen7ip9oVD1hD5J0
-5e5ZNaqVpjLe+Dl38VwO67/Us7ml8bQsXN6ZxnyAcb8sHQOzQ6eJ6WdyELoGOSSB
-CwYhlAAJB/CKv2DNwsuWI0dfw08Qxn5IoU98W9TKnOeYcMuq2PdZwcOt6fzSVdAZ
-XNE7isARnTxdSWjlZRyumVVlgf3Islw3ER4KJzaCAi/qn1LR5CRi+ppnDaoulAwT
-iL/CrBRnGkwTVS6WGqyFVv8YzIoI4g==
-=2hOt
------END PGP SIGNATURE-----
-
---xd4tmrhrs6drh2st--
