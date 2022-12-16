@@ -2,121 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FFCB64E9AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 119FE64E9B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiLPKp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 05:45:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
+        id S229632AbiLPKqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 05:46:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiLPKpX (ORCPT
+        with ESMTP id S229561AbiLPKqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 05:45:23 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955601BEAB
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:45:22 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id a16so3033359edb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:45:22 -0800 (PST)
+        Fri, 16 Dec 2022 05:46:18 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7E01A7;
+        Fri, 16 Dec 2022 02:46:17 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id w15so2054001wrl.9;
+        Fri, 16 Dec 2022 02:46:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tfKEqRAnCk1XoFzkUavcpoDLtAY1Rz2nZE3D5K7l538=;
-        b=rCgB4A2V+Oz1UM8NAbAxIpEmw5z9zXoYymJhqazd5FeIwyU36CZj4hY1CMcodSVBWz
-         kBnsy10GF//kUYo3O1vuIXL7WIaT/XO+6IBBK5GDn9VR01NhtjzTSvYvYpft8vifewWD
-         m2rVC0Cgg+GwpUVPY8Dwot18pdqU+A+yNtt2dtPft0ZjTFUkBynLW+ZYKZhGihBEp+M+
-         y5bXy5D/qgYtRryZP7R6T05m8hTsqY8GVXpeaWdsy3EFlGX46/yrdjOj7LXJmVpKqRH0
-         ZnqGFfXPujTV/ehwfLory2lvYGbJSEysepZRi7LAiv3bKNm1JM+rJNWMC84+4v2Om04w
-         b0jQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sO4cl5xjhBVd3+iJHoMx+vhvACtxqzk7PC5Y+IYSlGo=;
+        b=U+wbUqs6y5Ha3t9PLfeWlC2Tn5Exdl4K5spuYibUc5x4Tako5sn+lV2bE7eNBDrXHY
+         TphwwB5MfnzepvG/hWZZBVC2+59pd3VSdorV4S1rQRJpujtVaPon1fkyvAv35JO63SpW
+         DMAvbbLO8MAPK05sKTQWD/lsr6eZ1zmwpB0dM0PlrTWBFwMoso37SLjeIlIGak0TFaMq
+         Idfn+zrcnNvR7XcyxkzF1B65JRBzk+MjX6RVkutgYUJ8l1mDq5K6ze7/FVgvuow77c0q
+         7NioshZexPrE9jJ/SWXfGZFbNm65oL75dnovVmi1hDXz/AMqAdPaF3HezRiydofhTUcx
+         nJCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tfKEqRAnCk1XoFzkUavcpoDLtAY1Rz2nZE3D5K7l538=;
-        b=wKbewI5ZsTVkyv7LvFZwJTLUmW2C+rnGSu7YmDB5msp0LW58w73/tUiqJfQbegIqge
-         P0h32e02dc9zEmDpD3RFI+6aXIeeqn1M+v8luz1wrYoVaHb9onwMitiKUNuRKJgKzSNG
-         82uvyz0IT+MEnkhjRY94qmzIu9v51Yc1WNrflb2UXt3FsUKeSqbaGTRNcp5F2bxXBxiT
-         yL1PE63spdtly2EftwXdbp/eZxAW94J13LKHFW5srBpYenYs6cNnhAPTKSgheYU6vUmG
-         VU1n0+17YLOAiTnoA87accqK48JbijEgpsQKpl7qtRqIu4b/ge4Y2GDuy8TlVXgDQWLm
-         aY3g==
-X-Gm-Message-State: ANoB5pkKl9l3Ejpu/irFeAVsN22ykp6qwmc/8KVuGxKhdMIe+2ZzcMWQ
-        j8OWMsvTbfp1EIifKVDltpCizUFjrlGcWEaqP3FpmJ3NvmOrQiPgIeY=
-X-Google-Smtp-Source: AA0mqf6/bON0/tO+hvyAlOPEUEFLU6+KpvH9QUl6JWX+jtbzuhCsUQa70EjpcuFkFtFkDnaocA++CTuIRq/0TXhgEqk=
-X-Received: by 2002:a05:6402:1c1d:b0:46d:66ea:a5c2 with SMTP id
- ck29-20020a0564021c1d00b0046d66eaa5c2mr7683071edb.284.1671187521142; Fri, 16
- Dec 2022 02:45:21 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sO4cl5xjhBVd3+iJHoMx+vhvACtxqzk7PC5Y+IYSlGo=;
+        b=43W0/Q68SrbIgUOKt9UmTPqmsa/bCgHgxRrSHgdWbot/Mt6OiPDV4YnEk4heLS8Jcv
+         1eaIS8LfzQkMOEsP3K0ECby1Nole1rxbHgRPLNjaw8yIJYhD8MD7CfXV6If7IB6hfBPf
+         nrLhuhQLWYTvrxFjz4H+7bbmmz2D2uqd3AGCyPRTXuvlh6x0lB6e239Mn/qIPzIFVG9o
+         FwPUHMZGLvKeQgdBWzPcaTFHVlwvopKSnQmq/dJ3tVkrR+ewzHSEvXnH6+8A1jJau22q
+         ewYs1cxEUjIxFccIHlLFIVFxbKmbmrHpOpAiffnj8HwXyk5U07fuNh5ZcGOJN8yIpwOF
+         GqQw==
+X-Gm-Message-State: ANoB5pkGMVK/QsEgdMUE7y9kYVfXtBdNELBSNfKyAyM0plq5fr2UUsMX
+        ZIjwL0QyjmE7/xiGrknrEVY=
+X-Google-Smtp-Source: AA0mqf4HOHiYTqq0kp7OdkUCzJ8BQs4DBeNan81nRQTiiI1Wk2/CM9cRgA6TnfWggcAf6dckKY2Xsg==
+X-Received: by 2002:adf:a44f:0:b0:242:63e5:2449 with SMTP id e15-20020adfa44f000000b0024263e52449mr22819655wra.69.1671187575593;
+        Fri, 16 Dec 2022 02:46:15 -0800 (PST)
+Received: from [192.168.1.132] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id r4-20020adfa144000000b002367ad808a9sm1974295wrr.30.2022.12.16.02.46.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 02:46:14 -0800 (PST)
+Message-ID: <ebc435fd-0acb-6588-8acd-c8d504ad4289@gmail.com>
+Date:   Fri, 16 Dec 2022 11:46:12 +0100
 MIME-Version: 1.0
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Fri, 16 Dec 2022 11:45:10 +0100
-Message-ID: <CADYN=9LfFwNjToc8nhrD1MMZnQptyMNjbEFaMjPXuzzxADMbsA@mail.gmail.com>
-Subject: BUG: sleeping function called from invalid context at kernel/kallsyms.c:305
-To:     thunder.leizhen@huawei.com, mcgrof@kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 01/10] arm64: dts: mt8183: Fix Mali GPU clock
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, wenst@chromium.org,
+        miles.chen@mediatek.com, rex-bc.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, jose.exposito89@gmail.com,
+        drinkcat@chromium.org, weiyi.lu@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        angelogioacchino.delregno@collabora.com
+References: <20220927101128.44758-1-angelogioacchino.delregno@collabora.com>
+ <20220927101128.44758-2-angelogioacchino.delregno@collabora.com>
+ <20221206183037.3jnssar4yxcx5hpb@notapiano>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221206183037.3jnssar4yxcx5hpb@notapiano>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-I'm building an arm64 allmodconfig kernel (see the .config [1]) on
-yesterdays next tag 20221215 with KALLSYMS_SELFTEST enabled and I saw
-the following bug when the selftest ran:
 
-[29725.015182][   T58] BUG: sleeping function called from invalid
-context at kernel/kallsyms.c:305
-[29725.022953][   T58] in_atomic(): 0, irqs_disabled(): 128,
-non_block: 0, pid: 58, name: kallsyms_test
-[29725.031272][   T58] preempt_count: 0, expected: 0
-[29725.035903][   T58] RCU nest depth: 0, expected: 0
-[29725.040574][   T58] no locks held by kallsyms_test/58.
-[29725.045494][   T58] irq event stamp: 18899904
-[29725.049809][ T58] hardirqs last enabled at (18899903):
-finish_task_switch.isra.0 (core.c:?)
-[29725.059608][ T58] hardirqs last disabled at (18899904):
-test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
-[29725.069936][ T58] softirqs last enabled at (18899886): __do_softirq (??:?)
-[29725.078670][ T58] softirqs last disabled at (18899879):
-____do_softirq (irq.c:?)
-[29725.087399][   T58] CPU: 0 PID: 58 Comm: kallsyms_test Tainted: G
-             T  6.1.0-next-20221215 #2
-0a142be8faea13ac333ed9a1cf4e71b6966ad16e
-[29725.099607][   T58] Hardware name: linux,dummy-virt (DT)
-[29725.104674][   T58] Call trace:
-[29725.107909][ T58] dump_backtrace (??:?)
-[29725.112706][ T58] show_stack (??:?)
-[29725.116883][ T58] dump_stack_lvl (??:?)
-[29725.121666][ T58] dump_stack (??:?)
-[29725.125852][ T58] __might_resched (??:?)
-[29725.130712][ T58] kallsyms_on_each_symbol (??:?)
-[29725.136018][ T58] test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
-[29725.142008][ T58] test_entry (kallsyms_selftest.c:?)
-[29725.146312][ T58] kthread (kthread.c:?)
-[29725.150567][ T58] ret_from_fork (??:?)
-[29734.975283][   T58] kallsyms_selftest: kallsyms_on_each_symbol()
-traverse all: 5744310840 ns
-[29734.992268][   T58] kallsyms_selftest:
-kallsyms_on_each_match_symbol() traverse all: 1164580 ns
-[29735.049679][   T58] kallsyms_selftest: finish
+On 06/12/2022 19:30, Nícolas F. R. A. Prado wrote:
+> On Tue, Sep 27, 2022 at 12:11:19PM +0200, AngeloGioacchino Del Regno wrote:
+>> From: Chen-Yu Tsai <wenst@chromium.org>
+>>
+>> The actual clock feeding into the Mali GPU on the MT8183 is from the
+>> clock gate in the MFGCFG block, not CLK_TOP_MFGPLL_CK from the TOPCKGEN
+>> block, which itself is simply a pass-through placeholder for the MFGPLL
+>> in the APMIXEDSYS block.
+>>
+>> Fix the hardware description with the correct clock reference.
+>>
+>> Fixes: a8168cebf1bc ("arm64: dts: mt8183: Add node for the Mali GPU")
+>> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> 
+> Hi,
+> 
+> it seems that while all other patches on this series were applied by Chen-Yu
+> through the clk tree, this commit never made it to the mediatek tree.
+> 
+> As a result, MT8183-based machines (or at least mt8183-kukui-jacuzzi, where I
+> tested on) currently hang during boot not only on next, but also on mainline,
+> v6.1-rc8. With this commit applied I've confirmed that the machine boots fine
+> again.
+> 
+> Matthias, could you please apply this commit and make sure it makes its way to
+> v6.1? Given the Fixes tag it should eventually make its way there anyway, but if
+> still possible would be good to have it fixed right from v6.1.
+> 
+> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-looks like the issue is that test_perf_kallsyms_on_each_symbol() does
-these function calls:
+Applied now.
 
-       local_irq_save(flags);
-       t0 = sched_clock();
-       kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
-       t1 = sched_clock();
-       local_irq_restore(flags);
+Sorry for the late reply.
+Matthias
 
-and inside kallsyms_on_each_match_symbol(), cond_resched() is called.
-
-Any ideas how to solve this?
-
-Cheers,
-Anders
-[1] https://people.linaro.org/~anders.roxell/next-20221215.config
+> 
+> Thanks,
+> Nícolas
+> 
+>> ---
+>>   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+>> index a70b669c49ba..402136bfd535 100644
+>> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+>> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+>> @@ -1678,7 +1678,7 @@ gpu: gpu@13040000 {
+>>   				<GIC_SPI 278 IRQ_TYPE_LEVEL_LOW>;
+>>   			interrupt-names = "job", "mmu", "gpu";
+>>   
+>> -			clocks = <&topckgen CLK_TOP_MFGPLL_CK>;
+>> +			clocks = <&mfgcfg CLK_MFG_BG3D>;
+>>   
+>>   			power-domains =
+>>   				<&spm MT8183_POWER_DOMAIN_MFG_CORE0>,
+>> -- 
+>> 2.37.2
+>>
+>>
+>>
