@@ -2,224 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523E564E963
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:23:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0576364E966
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbiLPKXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 05:23:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53268 "EHLO
+        id S230358AbiLPKXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 05:23:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiLPKWu (ORCPT
+        with ESMTP id S230343AbiLPKXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 05:22:50 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331CD3B9EE;
-        Fri, 16 Dec 2022 02:22:46 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGABCjh028619;
-        Fri, 16 Dec 2022 10:22:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=TcAeN3dRCl/KmAEsM0+kWQHc5anuPLudURTbdyFvw/E=;
- b=KqMjmHLTO0eptLM6cEPU1sqkxnoX4x76EGiYIO4fEfYtWrmS/PFvKCck+e7MG+qfufGG
- 4cKPxwhVKensG46RBtd0v+p7ZcJYw10+9/a16+580TxPn9+dCoKeJnPaXYc69oqVlVBy
- cq+839J8snI7P2ukOhvwQHbC4/3/Czq4hWrgc++W6cVUmIkbqc9OkvOIkGjZLPY43J1+
- r5mcHAOXTIwxhQu8+6Wo+w8lcnDnFtkRs6u1da9zQLczwU09R6OHtcP7Re0Pb4UraxKr
- Ah2mu7KhmJHbmZTOJcAYBrMxZuxnDia6sSGgxgJCUEd/+h5zLA+iDS25yyCJjgsocqfV aA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mg2893urx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 10:22:24 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BGAMNWs009223
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 10:22:23 GMT
-Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 16 Dec 2022 02:22:17 -0800
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-To:     freedreno <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Sean Paul <sean@poorly.run>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 5/5] drm/msm/a6xx: Use genpd notifier to ensure cx-gdsc collapse
-Date:   Fri, 16 Dec 2022 15:51:24 +0530
-Message-ID: <20221216155038.v2.5.I9e10545c6a448d5eb1b734839b871d1b3146dac3@changeid>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1671186084-11356-1-git-send-email-quic_akhilpo@quicinc.com>
-References: <1671186084-11356-1-git-send-email-quic_akhilpo@quicinc.com>
+        Fri, 16 Dec 2022 05:23:09 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6EB3D3AE
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:23:07 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-309-P4IjutzAPZ-CU4wgQYv4rA-1; Fri, 16 Dec 2022 10:23:05 +0000
+X-MC-Unique: P4IjutzAPZ-CU4wgQYv4rA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 16 Dec
+ 2022 10:23:03 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Fri, 16 Dec 2022 10:23:02 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Bernard Metzler' <BMT@zurich.ibm.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+CC:     Arnd Bergmann <arnd@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        "Leon Romanovsky" <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: Re: [PATCH] RDMA/siw: fix pointer cast warning
+Thread-Topic: Re: [PATCH] RDMA/siw: fix pointer cast warning
+Thread-Index: AQHZEKfEZmHYt+KmU0GxS8VCrAg8Pq5wTljw
+Date:   Fri, 16 Dec 2022 10:23:02 +0000
+Message-ID: <fa8b6397c285413c83194e471056feea@AcuMS.aculab.com>
+References: <20221215170347.2612403-1-arnd@kernel.org>
+ <1bba42a31e0a487bbbf67955b674583e@AcuMS.aculab.com>
+ <CACRpkdY_050MZ3Gun_bOZiTk=q+7xUkiP0CO7daLEiX2wRi_yg@mail.gmail.com>
+ <SA0PR15MB3919F3295251A173D0E14C3F99E69@SA0PR15MB3919.namprd15.prod.outlook.com>
+In-Reply-To: <SA0PR15MB3919F3295251A173D0E14C3F99E69@SA0PR15MB3919.namprd15.prod.outlook.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: VQiYhUYoyMVQSdRIbg5VisQuHR5Tepjc
-X-Proofpoint-ORIG-GUID: VQiYhUYoyMVQSdRIbg5VisQuHR5Tepjc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-16_06,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- lowpriorityscore=0 bulkscore=0 spamscore=0 priorityscore=1501 phishscore=0
- impostorscore=0 suspectscore=0 malwarescore=0 adultscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212160091
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As per the recommended recovery sequence of adreno gpu, cx gdsc should
-collapse at hardware before it is turned back ON. This helps to clear
-out the stale states in hardware before it is reinitialized. Use the
-genpd notifier along with the newly introduced
-dev_pm_genpd_synced_poweroff() api to ensure that cx gdsc has collapsed
-before we turn it back ON.
-
-Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
----
-
-Changes in v2:
-- Select PM_GENERIC_DOMAINS from Kconfig
-
- drivers/gpu/drm/msm/Kconfig           |  1 +
- drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 15 +++++++++++++++
- drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  6 ++++++
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 11 +++++++++++
- 4 files changed, 33 insertions(+)
-
-diff --git a/drivers/gpu/drm/msm/Kconfig b/drivers/gpu/drm/msm/Kconfig
-index 3c9dfdb0b328..74f5916f5ca5 100644
---- a/drivers/gpu/drm/msm/Kconfig
-+++ b/drivers/gpu/drm/msm/Kconfig
-@@ -28,6 +28,7 @@ config DRM_MSM
- 	select SYNC_FILE
- 	select PM_OPP
- 	select NVMEM
-+	select PM_GENERIC_DOMAINS
- 	help
- 	  DRM/KMS driver for MSM/snapdragon.
- 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-index 1580d0090f35..c03830957c26 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-@@ -1507,6 +1507,17 @@ void a6xx_gmu_remove(struct a6xx_gpu *a6xx_gpu)
- 	gmu->initialized = false;
- }
- 
-+static int cxpd_notifier_cb(struct notifier_block *nb,
-+			unsigned long action, void *data)
-+{
-+	struct a6xx_gmu *gmu = container_of(nb, struct a6xx_gmu, pd_nb);
-+
-+	if (action == GENPD_NOTIFY_OFF)
-+		complete_all(&gmu->pd_gate);
-+
-+	return 0;
-+}
-+
- int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
- {
- 	struct adreno_gpu *adreno_gpu = &a6xx_gpu->base;
-@@ -1640,6 +1651,10 @@ int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
- 		goto detach_cxpd;
- 	}
- 
-+	init_completion(&gmu->pd_gate);
-+	complete_all(&gmu->pd_gate);
-+	gmu->pd_nb.notifier_call = cxpd_notifier_cb;
-+
- 	/*
- 	 * Get a link to the GX power domain to reset the GPU in case of GMU
- 	 * crash
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
-index 5a42dd4dd31f..0bc3eb443fec 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
-@@ -4,8 +4,10 @@
- #ifndef _A6XX_GMU_H_
- #define _A6XX_GMU_H_
- 
-+#include <linux/completion.h>
- #include <linux/iopoll.h>
- #include <linux/interrupt.h>
-+#include <linux/notifier.h>
- #include "msm_drv.h"
- #include "a6xx_hfi.h"
- 
-@@ -90,6 +92,10 @@ struct a6xx_gmu {
- 	bool initialized;
- 	bool hung;
- 	bool legacy; /* a618 or a630 */
-+
-+	/* For power domain callback */
-+	struct notifier_block pd_nb;
-+	struct completion pd_gate;
- };
- 
- static inline u32 gmu_read(struct a6xx_gmu *gmu, u32 offset)
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index 4b16e75dfa50..dd618b099110 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -10,6 +10,7 @@
- 
- #include <linux/bitfield.h>
- #include <linux/devfreq.h>
-+#include <linux/pm_domain.h>
- #include <linux/soc/qcom/llcc-qcom.h>
- 
- #define GPU_PAS_ID 13
-@@ -1258,6 +1259,7 @@ static void a6xx_recover(struct msm_gpu *gpu)
- {
- 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
- 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
-+	struct a6xx_gmu *gmu = &a6xx_gpu->gmu;
- 	int i, active_submits;
- 
- 	adreno_dump_info(gpu);
-@@ -1290,6 +1292,10 @@ static void a6xx_recover(struct msm_gpu *gpu)
- 	 */
- 	gpu->active_submits = 0;
- 
-+	reinit_completion(&gmu->pd_gate);
-+	dev_pm_genpd_add_notifier(gmu->cxpd, &gmu->pd_nb);
-+	dev_pm_genpd_synced_poweroff(gmu->cxpd);
-+
- 	/* Drop the rpm refcount from active submits */
- 	if (active_submits)
- 		pm_runtime_put(&gpu->pdev->dev);
-@@ -1297,6 +1303,11 @@ static void a6xx_recover(struct msm_gpu *gpu)
- 	/* And the final one from recover worker */
- 	pm_runtime_put_sync(&gpu->pdev->dev);
- 
-+	if (!wait_for_completion_timeout(&gmu->pd_gate, msecs_to_jiffies(1000)))
-+		DRM_DEV_ERROR(&gpu->pdev->dev, "cx gdsc didn't collapse\n");
-+
-+	dev_pm_genpd_remove_notifier(gmu->cxpd);
-+
- 	pm_runtime_use_autosuspend(&gpu->pdev->dev);
- 
- 	if (active_submits)
--- 
-2.7.4
+RnJvbTogQmVybmFyZCBNZXR6bGVyDQo+IFNlbnQ6IDE2IERlY2VtYmVyIDIwMjIgMTA6MDENCj4g
+DQo+ID4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPiBGcm9tOiBMaW51cyBXYWxsZWlq
+IDxsaW51cy53YWxsZWlqQGxpbmFyby5vcmc+DQo+ID4gU2VudDogRnJpZGF5LCAxNiBEZWNlbWJl
+ciAyMDIyIDA4OjQ3DQo+ID4gVG86IERhdmlkIExhaWdodCA8RGF2aWQuTGFpZ2h0QGFjdWxhYi5j
+b20+DQo+ID4gQ2M6IEFybmQgQmVyZ21hbm4gPGFybmRAa2VybmVsLm9yZz47IEJlcm5hcmQgTWV0
+emxlciA8Qk1UQHp1cmljaC5pYm0uY29tPjsNCj4gPiBKYXNvbiBHdW50aG9ycGUgPGpnZ0B6aWVw
+ZS5jYT47IExlb24gUm9tYW5vdnNreSA8bGVvbkBrZXJuZWwub3JnPjsgQXJuZA0KPiA+IEJlcmdt
+YW5uIDxhcm5kQGFybmRiLmRlPjsgbGludXgtcmRtYUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0K
+PiA+IGtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gPiBTdWJqZWN0OiBbRVhURVJOQUxdIFJlOiBb
+UEFUQ0hdIFJETUEvc2l3OiBmaXggcG9pbnRlciBjYXN0IHdhcm5pbmcNCj4gPg0KPiA+IE9uIFRo
+dSwgRGVjIDE1LCAyMDIyIGF0IDExOjIwIFBNIERhdmlkIExhaWdodCA8RGF2aWQuTGFpZ2h0QGFj
+dWxhYi5jb20+DQo+ID4gd3JvdGU6DQo+ID4NCj4gPiA+IEZyb206IEFybmQgQmVyZ21hbm4NCj4g
+PiA+ID4gU2VudDogMTUgRGVjZW1iZXIgMjAyMiAxNzowNA0KPiA+ID4gPg0KPiA+ID4gPiBGcm9t
+OiBBcm5kIEJlcmdtYW5uIDxhcm5kQGFybmRiLmRlPg0KPiA+ID4gPg0KPiA+ID4gPiBUaGUgcHJl
+dmlvdXMgYnVpbGQgZml4IGxlZnQgYSByZW1haW5pbmcgaXNzdWUgaW4gY29uZmlndXJhdGlvbnMN
+Cj4gPiA+ID4gd2l0aCA2NC1iaXQgZG1hX2FkZHJfdCBvbiAzMi1iaXQgYXJjaGl0ZWN0dXJlczoN
+Cj4gPiA+ID4NCj4gPiA+ID4gZHJpdmVycy9pbmZpbmliYW5kL3N3L3Npdy9zaXdfcXBfdHguYzog
+SW4gZnVuY3Rpb24gJ3Npd19nZXRfcGJscGFnZSc6DQo+ID4gPiA+IGRyaXZlcnMvaW5maW5pYmFu
+ZC9zdy9zaXcvc2l3X3FwX3R4LmM6MzI6Mzc6IGVycm9yOiBjYXN0IHRvIHBvaW50ZXINCj4gPiBm
+cm9tIGludGVnZXIgb2YgZGlmZmVyZW50IHNpemUgWy0NCj4gPiA+ID4gV2Vycm9yPWludC10by1w
+b2ludGVyLWNhc3RdDQo+ID4gPiA+ICAgIDMyIHwgICAgICAgICAgICAgICAgIHJldHVybiB2aXJ0
+X3RvX3BhZ2UoKHZvaWQgKilwYWRkcik7DQo+ID4gPiA+ICAgICAgIHwgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgXg0KPiA+ID4gPg0KPiA+ID4gPiBVc2UgdGhlIHNhbWUgZG91
+YmxlIGNhc3QgaGVyZSB0aGF0IHRoZSBkcml2ZXIgdXNlcyBlbHNld2hlcmUNCj4gPiA+ID4gdG8g
+Y29udmVydCBiZXR3ZWVuIGRtYV9hZGRyX3QgYW5kIHZvaWQqLg0KPiA+ID4gPg0KPiA+ID4gPiBJ
+dCB0b29rIG1lIGEgd2hpbGUgdG8gZmlndXJlIG91dCB3aHkgdGhpcyBkcml2ZXIgZG9lcyBpdA0K
+PiA+ID4gPiBsaWtlIHRoaXMsIGFzIHRoZXJlIGlzIG5vIGhhcmR3YXJlIGFjY2VzcyBhbmQgaXQg
+anVzdCBzdG9yZXMNCj4gPiA+ID4ga2VybmVsIHBvaW50ZXJzIGluIHBsYWNlIG9mIGRldmljZSBh
+ZGRyZXNzZXMgd2hlbiBjb21tdW5pY2F0aW5nDQo+ID4gPiA+IHdpdGggdGhlIHJkbWEgY29yZSBh
+bmQgd2l0aCB1c2VyIHNwYWNlLg0KPiA+ID4NCj4gPiA+IEkgaG9wZSB0aGF0IGRvZXNuJ3QgbWVh
+biBpdCBpcyByZWx5aW5nIG9uIHVzZXIgc3BhY2Ugb25seQ0KPiA+ID4gZ2l2aW5nIGl0IGJhY2sg
+dmFsaWQgdmFsdWVzPw0KPiA+DQo+ID4gSXQgbG9va3MgdG8gbWUgbGlrZSB0aGlzIGRyaXZlciB0
+b3RhbGx5IHRydXN0cyB1c2Vyc3BhY2UuDQo+ID4NCj4gDQo+IFNoYW1lIG9uIG1lLiBZZXMsIHNv
+bWVob3csIGFuIGFjY2Vzc19vaygodm9pZCBfX3VzZXIgKilzdGFydCwgbGVuKQ0KPiBpcyBtaXNz
+aW5nISBMZXQgbWUgZml4IHRoYXQgd2hlbiBJIGFtIGJhY2sgYXQgbXkgZGVzay4gU2VlbXMgaXQg
+bmVlZHMNCj4gaW1tZWRpYXRlIGFjdGlvbi4NCg0KVGhhdCB3YXNuJ3QgdGhlIHNvcnQgb2YgaXNz
+dWUgSSB3YXMgdGhpbmtpbmcgYWJvdXQuDQpJIHdhcyB3b3JyaWVkIHRoYXQgaXQgd2FzIHB1dHRp
+bmcgdGhlIGFkZHJlc3NlcyBvZiBrZXJuZWwgbWVtb3J5DQppbnRvIGJ1ZmZlcnMgd3JpdHRlbiB0
+byB1c2Vyc3BhY2UgYW5kIHRoZW4gbGF0ZXIgcmVhZGluZyB0aGUNCmFkZHJlc3NlcyBiYWNrIGZy
+b20gdXNlcnNwYWNlIGFuZCBhY2Nlc3NpbmcgdGhlbS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVy
+ZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5
+bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
