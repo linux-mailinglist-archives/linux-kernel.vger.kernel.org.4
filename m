@@ -2,43 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6022D64EE12
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A874864EE1D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbiLPPpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 10:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54484 "EHLO
+        id S231431AbiLPPry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 10:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiLPPpV (ORCPT
+        with ESMTP id S231420AbiLPPrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 10:45:21 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9BFCB50D6B
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:45:20 -0800 (PST)
-Received: (qmail 997666 invoked by uid 1000); 16 Dec 2022 10:45:19 -0500
-Date:   Fri, 16 Dec 2022 10:45:19 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Max Staudt <mstaudt@chromium.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Ming Lei <tom.leiming@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Yunke Cao <yunkec@chromium.org>,
-        Christoph Hellwig <hch@lst.de>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] media: uvcvideo: Code cleanup for dev->status
-Message-ID: <Y5ySj1+mGK/ioI/q@rowland.harvard.edu>
-References: <20221214-uvc-status-alloc-v3-0-9a67616cc549@chromium.org>
- <Y5s+kuxCAtS8Eixj@rowland.harvard.edu>
- <CANiDSCudMRATbHU4=hyjiVhwLr6zQubXPzzpYtXCxdMPsZFcuw@mail.gmail.com>
+        Fri, 16 Dec 2022 10:47:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED71E31DF3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:47:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671205624;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LxMkecyGYG9dLIpgBNsZUPusnmfyW4vuV2TgoZY8b1I=;
+        b=A1fXn9zjQ901DtvygIiyjjRKQzc4DqxvufQO1InD+mby2JrcmFAsrEotH/wQk55KkGvQMn
+        CXwuC1DZ0jGVg2Q5Dbc19xL94w6zpHJmU5CMQ2JG2mpxWIC/WOaH1QwDVnRYqitkZQAYmy
+        eLrxmaQe15/kqGhAvJIz2gQAN5NMGzI=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-562-MNjvB7bkMyWV18lbKyIrjg-1; Fri, 16 Dec 2022 10:47:02 -0500
+X-MC-Unique: MNjvB7bkMyWV18lbKyIrjg-1
+Received: by mail-qv1-f70.google.com with SMTP id c10-20020a05621401ea00b004c72d0e92bcso1651491qvu.12
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:47:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LxMkecyGYG9dLIpgBNsZUPusnmfyW4vuV2TgoZY8b1I=;
+        b=CqbBivKo9kSPxXgV040dkFb+itgG6lHh4Ww7ubp72tXF7mkCPa82ygC1FRfk3sPmCT
+         /VItvtyD0fuquDJVmR0na6zTz4AdwFn9It5KKDNdqxbZ4/9g7Lgg/mw5DiHCOJUhBl4O
+         Rxvi5wAtKKcknJVvB1AbgGllC1mgQXz7MwdoealfOJmvP/Hbd4czskm8JN0zCaZlnwWs
+         C2TXsoBI99Fp3AqYJgNukj7n/UMQ/mhS1xLk+1YYiOpHvBC4knP+9APKj/Y7g/mGLTZX
+         0j1uC8F35gZwIpElUin3WoXVHxIHkju3Aq2G7IenLsFnGkIsJbpRK78c99Nu4lhXp/A1
+         xpWA==
+X-Gm-Message-State: ANoB5pkOUJGxxp2HnnDULn/BZcyyqASM2yf+IbSGg6YdagF9F+44Vr+3
+        xQGKqKHjv/eixAsT4iu6+kjvg5JTE2I/mOtiW3WzlmoCwvSa0XZa4p/JTKYDwhFSv36uu5/gzNh
+        I3vbKpbNAMQc8FNezs39840Ij
+X-Received: by 2002:a05:622a:40c5:b0:3a5:306f:b124 with SMTP id ch5-20020a05622a40c500b003a5306fb124mr45697434qtb.10.1671205622303;
+        Fri, 16 Dec 2022 07:47:02 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5eK8zxu4MtCAROwOHMPjA4TRfLrCS+AsiC6Si+i4v1cyQH5maRZ4RJ3yJvRLlW+Au04FcIJQ==
+X-Received: by 2002:a05:622a:40c5:b0:3a5:306f:b124 with SMTP id ch5-20020a05622a40c500b003a5306fb124mr45697411qtb.10.1671205622117;
+        Fri, 16 Dec 2022 07:47:02 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-45-70-31-26-132.dsl.bell.ca. [70.31.26.132])
+        by smtp.gmail.com with ESMTPSA id a5-20020ac844a5000000b003a68af60591sm1466597qto.70.2022.12.16.07.47.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 07:47:01 -0800 (PST)
+Date:   Fri, 16 Dec 2022 10:46:59 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Jeff Xu <jeffxu@google.com>
+Cc:     Kees Cook <keescook@chromium.org>, jeffxu@chromium.org,
+        skhan@linuxfoundation.org, akpm@linux-foundation.org,
+        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v6 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+Message-ID: <Y5yS8wCnuYGLHMj4@x1n>
+References: <20221207154939.2532830-1-jeffxu@google.com>
+ <20221207154939.2532830-4-jeffxu@google.com>
+ <202212080821.5AE7EE99@keescook>
+ <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CANiDSCudMRATbHU4=hyjiVhwLr6zQubXPzzpYtXCxdMPsZFcuw@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+In-Reply-To: <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,56 +85,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 09:55:09AM +0100, Ricardo Ribalda wrote:
-> Hi Alan
-> 
-> On Thu, 15 Dec 2022 at 16:34, Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Thu, Dec 15, 2022 at 11:57:17AM +0100, Ricardo Ribalda wrote:
-> > > There is no need to make a kzalloc just for 16 bytes. Let's embed the data
-> > > into the main data structure.
-> > >
-> > > Now that we are at it, lets remove all the castings and open coding of
-> > > offsets for it.
-> > >
-> > > [Christoph, do you think dma wise we are violating any non written rules? :) thanks]
-> >
-> > There _is_ a rule, and it is not exactly unwritten.  The kerneldoc for
-> > the transfer_buffer member of struct urb says:
-> >
-> >         This buffer must be suitable for DMA; allocate it with
-> >         kmalloc() or equivalent.
-> >
-> > Which in general means that the buffer must not be part of a larger
-> > structure -- not unless the driver can guarantee that the structure will
-> > _never_ be accessed while a USB transfer to/from the buffer is taking
-> > place.
-> >
-> 
-> Thanks a lot for the clarification. I was mainly looking at the kerneldoc from:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/usb.h#n1687
-> 
-> and I could not see any reference to the DMA requirements.
-> 
-> Mind if I send a patch to add a reference there?
+Hi, Jeff,
 
-Not at all.  But if you change the documentation for usb_fill_int_urb() 
-then you should also change it for usb_fill_control_urb() and 
-usb_fill_bulk_urb().
+On Thu, Dec 08, 2022 at 02:55:45PM -0800, Jeff Xu wrote:
+> > > +     if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
 
-Alan Stern
+[...]
 
-> > There are examples all over the USB subsystem where buffers as small as
-> > one or two bytes get kmalloc'ed in order to obey this rule.  16 bytes is
-> > certainly big enough that you shouldn't worry about it being allocated
-> > separately.
-> >
-> Yep, we should keep it malloced. Thanks a lot for looking into this :)
-> 
-> 
-> > Alan Stern
-> 
-> 
-> 
-> -- 
-> Ricardo Ribalda
+> > > +             pr_warn_ratelimited(
+> > > +                     "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=%d '%s'\n",
+> > > +                     task_pid_nr(current), get_task_comm(comm, current));
+
+This will be frequently dumped right now with mm-unstable.  Is that what it
+wanted to achieve?
+
+[   10.822575] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=491 'systemd'
+[   10.824743] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=495 '(sd-executor)'
+...
+
+If there's already a sane default value (and also knobs for the user to
+change the default) not sure whether it's saner to just keep it silent as
+before?
+
+-- 
+Peter Xu
+
