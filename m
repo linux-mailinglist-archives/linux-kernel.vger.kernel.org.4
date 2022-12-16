@@ -2,107 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C69AD64F074
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5D764F077
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbiLPRiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 12:38:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
+        id S231396AbiLPRij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 12:38:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiLPRiM (ORCPT
+        with ESMTP id S231844AbiLPRie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 12:38:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC544046A;
-        Fri, 16 Dec 2022 09:38:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 776B3621C0;
-        Fri, 16 Dec 2022 17:38:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD48FC433D2;
-        Fri, 16 Dec 2022 17:38:08 +0000 (UTC)
-Date:   Fri, 16 Dec 2022 12:38:04 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Andreas Schwab' <schwab@linux-m68k.org>,
-        "'Leizhen (ThunderTown)'" <thunder.leizhen@huawei.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        "Joe Lawrence" <joe.lawrence@redhat.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH v9] kallsyms: Add self-test facility
-Message-ID: <20221216123805.6eba002c@gandalf.local.home>
-In-Reply-To: <20221216121947.7d03b651@gandalf.local.home>
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
-        <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
-        <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
-        <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
-        <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
-        <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
-        <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
-        <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com>
-        <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
-        <592dce7a0de24c62bd31c29f86ce6c1b@AcuMS.aculab.com>
-        <87pmcjidfe.fsf@igel.home>
-        <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com>
-        <87len7ibtt.fsf@igel.home>
-        <c7cebe9da0474eb880ab14124ba290d0@AcuMS.aculab.com>
-        <87fsdfib07.fsf@igel.home>
-        <819801284eb745d9a4189759bad297f5@AcuMS.aculab.com>
-        <20221216115314.6120beb7@gandalf.local.home>
-        <ecf4939dbff84709a1782a8e8851b29f@AcuMS.aculab.com>
-        <20221216121947.7d03b651@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Dec 2022 12:38:34 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6774046A;
+        Fri, 16 Dec 2022 09:38:32 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGGl4HJ024811;
+        Fri, 16 Dec 2022 17:38:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=zvx71KrV2LmSl2ZPn2MfklBoJ/9bDIChVxCtNYbUrgI=;
+ b=KkpP0oekqWOEc+TBWGUO/5T4Ym4M0MwWdMEFaVLduCvatQkJwNumuKJvrlL5MCiQYI4i
+ UDnSroZ17iDLYzC6MkEZpVNXYUoPZ2gkFBWM1//yCg2wCqMCYj51tU17cdGYPzUxKw/4
+ utqa3pYWsdGifj+BLhEiyXOAp/r7tK/W1UqOKmAyRd7VZHmwXKYSgeMAUWQZMKqYgiOa
+ 8GiBHQP/przSfnRsZZfaPVFiGt7ASc3+y0SSoVt369F1Lz97QkLCAmFm30VOWkVaY1n7
+ 3KtEwP/glU0XukHFcFlmTtpKheW/Mq6l2FDvJ9HAK5c+Y3GfbqYCkF1sgKNbnthx1rOz 6w== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mgmv11hb6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Dec 2022 17:38:23 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2BGHcJb6016047;
+        Fri, 16 Dec 2022 17:38:19 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3mck6kxv5n-1;
+        Fri, 16 Dec 2022 17:38:19 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BGHcJGC016039;
+        Fri, 16 Dec 2022 17:38:19 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 2BGHcIcv016038;
+        Fri, 16 Dec 2022 17:38:19 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id 13E233D72; Fri, 16 Dec 2022 23:08:18 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, linux-arm-msm@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org, quic_vtanuku@quicinc.com,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: [V2] dmaengine: qcom: gpi: Set link_rx bit on GO TRE for rx operation
+Date:   Fri, 16 Dec 2022 23:08:13 +0530
+Message-Id: <1671212293-14767-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -LpND4nb_KBVeun0hVtawLFVdBSBJOK_
+X-Proofpoint-ORIG-GUID: -LpND4nb_KBVeun0hVtawLFVdBSBJOK_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-16_12,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ mlxlogscore=816 adultscore=0 phishscore=0 impostorscore=0 malwarescore=0
+ suspectscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212160152
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Dec 2022 12:19:47 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+Rx operation on SPI GSI DMA is currently not working.
+As per GSI spec, link_rx bit is to be set on GO TRE on tx
+channel whenever there is going to be a DMA TRE on rx
+channel. This is currently set for duplex operation only.
 
-> I assumed that "memory" was for memory unrelated to the input constraints.
+Set the bit for rx operation as well.
+This is part of changes required to bring up Rx.
 
-Well, it looks like you do need a "memory" barrier.
+Fixes: 94b8f0e58fa1 ("dmaengine: qcom: gpi: set chain and link flag for duplex")
+Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+---
+v1 -> v2:
+- updated change description
+---
+ drivers/dma/qcom/gpi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-  https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html
+diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
+index 061add8..59a36cb 100644
+--- a/drivers/dma/qcom/gpi.c
++++ b/drivers/dma/qcom/gpi.c
+@@ -1756,6 +1756,7 @@ static int gpi_create_spi_tre(struct gchan *chan, struct gpi_desc *desc,
+ 		tre->dword[3] = u32_encode_bits(TRE_TYPE_GO, TRE_FLAGS_TYPE);
+ 		if (spi->cmd == SPI_RX) {
+ 			tre->dword[3] |= u32_encode_bits(1, TRE_FLAGS_IEOB);
++			tre->dword[3] |= u32_encode_bits(1, TRE_FLAGS_LINK);
+ 		} else if (spi->cmd == SPI_TX) {
+ 			tre->dword[3] |= u32_encode_bits(1, TRE_FLAGS_CHAIN);
+ 		} else { /* SPI_DUPLEX */
+-- 
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
 
-"memory"
-
-      The "memory" clobber tells the compiler that the assembly code
-      performs memory reads or writes to items other than those listed in
-      the input and output operands (for example, accessing the memory
-      pointed to by one of the input parameters). To ensure memory contains
-      correct values, GCC may need to flush specific register values to
-      memory before executing the asm. Further, the compiler does not
-      assume that any values read from memory before an asm remain
-      unchanged after that asm; it reloads them as needed. Using the
-      "memory" clobber effectively forms a read/write memory barrier for
-      the compiler.
-
-As the "(for example, accessing the memory pointed to by one of the input
-parameters)" is exactly this case.
-
--- Steve
