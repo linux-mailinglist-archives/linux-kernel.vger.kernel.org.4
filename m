@@ -2,192 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB9564F4EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 00:17:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 010B664F508
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 00:29:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiLPXRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 18:17:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
+        id S229820AbiLPX3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 18:29:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiLPXQr (ORCPT
+        with ESMTP id S230151AbiLPX3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 18:16:47 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47C663D3B;
-        Fri, 16 Dec 2022 15:16:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671232576; x=1702768576;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4TwMHbHcz5c58OOhZoR8gaykEMG0kQlgrEFXlEMBq9o=;
-  b=E1Sz8i17m6dAu8GSgOCUtpO+5u961J6AI7yfYJiQW7dF9QfxKzLvQAIn
-   59EvmvbTnbqMgLPu3nuNGJFKzLvZAfmMM3RdTHvfipZfXUxcrMtEjgpCu
-   mOC5Nh5f/sBXZAoZu1ThwNYWcVGcPjejpGcC/twb+sQjddE8J/YAsgh/R
-   tihOTLAyy4EqKYaRMkfCAUwHlaP/3DiUM6/F3FqF7HFy1ecVXh7aCka2Y
-   WpNEXrw2gttQZy2gDVLlwM6BNmRehXWxTHtQoIKg4DsuiB6GjB3W62PyN
-   WuSaTAN0jfO4L4DR6IkPe9IpB9osw43X8gLrlyrMNjDGF1JRevxf8dSsa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="302497732"
-X-IronPort-AV: E=Sophos;i="5.96,251,1665471600"; 
-   d="scan'208";a="302497732"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 15:16:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="643419690"
-X-IronPort-AV: E=Sophos;i="5.96,251,1665471600"; 
-   d="scan'208";a="643419690"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga007.jf.intel.com with ESMTP; 16 Dec 2022 15:15:47 -0800
-Date:   Fri, 16 Dec 2022 15:24:06 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v2 09/22] sched/fair: Use IPC class score to select a
- busiest runqueue
-Message-ID: <20221216232406.GA23530@ranerica-svr.sc.intel.com>
-References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
- <20221128132100.30253-10-ricardo.neri-calderon@linux.intel.com>
- <Y5Gld+cThNOPFvgX@arm.com>
- <20221214003243.GC30234@ranerica-svr.sc.intel.com>
- <Y5pZV0txyK2Fkkg6@arm.com>
+        Fri, 16 Dec 2022 18:29:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E619826546
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:28:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671233313;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oOzuvF1JcJhHhAVx50brEATiwwsFfA/JQNQZSVDvP8U=;
+        b=XDkzUmQvxl5VQ2dHy/W4LMJAq7M3EY1PVNo6Jewf7vvl5JH6BtguSxVjKd3fTiUFna9Z8Q
+        md2JrHqb6ZCRu6xdVTXiPk2+WvmcHZEEdsHTAAP+aZARiVZq4mz15T8V4blp1jDo1qHWJh
+        HwU+sPDHOAKUUPyJfBgftIt4/oUrfFI=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-64-LMptevi0PkWDRAW0TxlkNg-1; Fri, 16 Dec 2022 18:28:32 -0500
+X-MC-Unique: LMptevi0PkWDRAW0TxlkNg-1
+Received: by mail-qk1-f197.google.com with SMTP id q20-20020a05620a0d9400b006fcaa1eac9bso2914749qkl.23
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:28:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oOzuvF1JcJhHhAVx50brEATiwwsFfA/JQNQZSVDvP8U=;
+        b=WawEwNmVxcyMHqECJow4L9Sa0cDZkeIsVncbfYXYb55jPTs8uvZTEpHHHnzLPQDww+
+         xPSqwgDbfMRAiiQ6QikvetZB0pFmifxPJo4+GI1GjNEr0Yi9l9s9S7ENYItbWZlGLiYd
+         1cDwPumXUJHh0lXMqZWI/sZRsQBA6l4PMa48gYgay0FrHpCefBJnYsLr4sQIlOUJ7o8e
+         FcuNQxjXAd6draVfwRI/EL7WMj7oJBjbF1KaI2O6f3ozlMWgV870gsDt1ZnyH+s04yl9
+         T32DIGD9z0CO0SQ9u7XyRkYVp85ZPOPCYthtWcna5+a28Ads0ax/qax4g7aH2AbqLKyQ
+         BQoA==
+X-Gm-Message-State: ANoB5pmoT+OSuJ1PXmBAfayc5skJxQ1QyP8r96cF/bf+Eq7pZbilalSV
+        5pO5B/FLMHHWwiqbbqR4zxNPw6Yi412OptVti4vtsnwZIS8YlLJ1mXHs1Z1pwHVQ1CIvBjUGOYp
+        flZaFVlHNPd5lINI+XbN3v9cp
+X-Received: by 2002:ac8:7547:0:b0:3a6:18ff:c6e2 with SMTP id b7-20020ac87547000000b003a618ffc6e2mr43270452qtr.28.1671233311113;
+        Fri, 16 Dec 2022 15:28:31 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf65ipvRxOI0wPxhp1/suNkdbXHX84i0WSZZczzJb/1BWyw3GOFbPSxcXH2idaxxlQ6iUsbnjw==
+X-Received: by 2002:ac8:7547:0:b0:3a6:18ff:c6e2 with SMTP id b7-20020ac87547000000b003a618ffc6e2mr43270434qtr.28.1671233310883;
+        Fri, 16 Dec 2022 15:28:30 -0800 (PST)
+Received: from localhost (pool-71-184-142-128.bstnma.fios.verizon.net. [71.184.142.128])
+        by smtp.gmail.com with ESMTPSA id a16-20020ac81090000000b003a82ca4e81csm2042872qtj.80.2022.12.16.15.28.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 15:28:30 -0800 (PST)
+From:   Eric Chanudet <echanude@redhat.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        Eric Chanudet <echanude@redhat.com>
+Subject: [PATCH v3 0/4] arm64: dts: qcom: enable sa8540p-ride rtc
+Date:   Fri, 16 Dec 2022 18:26:02 -0500
+Message-Id: <20221216232606.2123341-1-echanude@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5pZV0txyK2Fkkg6@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 11:16:39PM +0000, Ionela Voinescu wrote:
-> Hi Ricardo,
-> 
-> On Tuesday 13 Dec 2022 at 16:32:43 (-0800), Ricardo Neri wrote:
-> [..]
-> > > >  /**
-> > > > @@ -10419,8 +10442,8 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> > > >  {
-> > > >  	struct rq *busiest = NULL, *rq;
-> > > >  	unsigned long busiest_util = 0, busiest_load = 0, busiest_capacity = 1;
-> > > > +	int i, busiest_ipcc_delta = INT_MIN;
-> > > >  	unsigned int busiest_nr = 0;
-> > > > -	int i;
-> > > >  
-> > > >  	for_each_cpu_and(i, sched_group_span(group), env->cpus) {
-> > > >  		unsigned long capacity, load, util;
-> > > > @@ -10526,8 +10549,37 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> > > >  
-> > > >  		case migrate_task:
-> > > >  			if (busiest_nr < nr_running) {
-> > > > +				struct task_struct *curr;
-> > > > +
-> > > >  				busiest_nr = nr_running;
-> > > >  				busiest = rq;
-> > > > +
-> > > > +				/*
-> > > > +				 * Remember the IPC score delta of busiest::curr.
-> > > > +				 * We may need it to break a tie with other queues
-> > > > +				 * with equal nr_running.
-> > > > +				 */
-> > > > +				curr = rcu_dereference(busiest->curr);
-> > > > +				busiest_ipcc_delta = ipcc_score_delta(curr,
-> > > > +								      env->dst_cpu);
-> > > > +			/*
-> > > > +			 * If rq and busiest have the same number of running
-> > > > +			 * tasks, pick rq if doing so would give rq::curr a
-> > > > +			 * bigger IPC boost on dst_cpu.
-> > > > +			 */
-> > > > +			} else if (sched_ipcc_enabled() &&
-> > > > +				   busiest_nr == nr_running) {
-> > > > +				struct task_struct *curr;
-> > > > +				int delta;
-> > > > +
-> > > > +				curr = rcu_dereference(rq->curr);
-> > > > +				delta = ipcc_score_delta(curr, env->dst_cpu);
-> > > > +
-> > > > +				if (busiest_ipcc_delta < delta) {
-> > > > +					busiest_ipcc_delta = delta;
-> > > > +					busiest_nr = nr_running;
-> > > > +					busiest = rq;
-> > > > +				}
-> > > >  			}
-> > > >  			break;
-> > > >  
-> > > 
-> > > While in the commit message you describe this as breaking a tie for
-> > > asym_packing,
-> > 
-> > Are you referring to the overall series or this specific patch? I checked
-> > commit message and I do not see references to asym_packing.
-> 
-> Sorry, my bad, I was thinking about the cover letter, not the commit
-> message. It's under "+++ Balancing load using classes of tasks. Theory
-> of operation".
-> 
-> > 
-> > > the code here does not only affect asym_packing. If
-> > > another architecture would have sched_ipcc_enabled() it would use this
-> > > as generic policy, and that might not be desired.
-> > 
-> > Indeed, the patchset implements support to use IPCC classes for asym_packing,
-> > but it is not limited to it.
-> > 
-> 
-> So is your current intention to support IPC classes only for asym_packing
-> for now?
+Enable sa8540p-ride rtc on pmic@0.
 
-My intention is to introduce IPC classes in general and make it available
-to other policies or architectures. I use asym_packing as use case.
+sa8540p base boards share the same pmics description, currently in
+pm8450a.dtsi. Rename the file to make this explicit and use it in both
+sa8540p-ride.dts and sa8295p-adp.dts.
+Add the missing offset where appropriate for the alarm register bank in
+other qcom,pm8941-rtc description.
 
+Changes since v2:
+- rename pm8450a.dtsi to sa8540p-pmics.dtsi.
 
-> What would be the impact on you if you were to limit the
-> functionality in this patch to asym_packing only?
+Changes since v1:
+- Add "alarm" register bank offset at 0x6100 in qcom,pm8941-rtc
+  descriptions.
 
-There would not be any adverse impact.
+Eric Chanudet (4):
+  arm64: dts: qcom: rename pm8450a dtsi to sa8540p-pmics
+  arm64: dts: qcom: sa8450p-pmics: add rtc node
+  arm64: dts: qcom: sa8295p-adp: use sa8540p-pmics
+  arm64: dts: qcom: pm8941-rtc add alarm register
 
-> 
-> > It is true that I don't check here for asym_packing, but it should not be a
-> > problem, IMO. I compare two runqueues with equal nr_running, either runqueue
-> > is a good choice. This tie breaker is an overall improvement, no?
-> > 
-> 
-> It could be, but equally there could be other better policies as well -
-> other ways to consider IPC class information to break the tie.
-> 
-> If other architectures start having sched_ipcc_enabled() they would
-> automatically use the policy you've decided on here. If other policies
-> are better for those architectures this generic policy would be difficult
-> to modify to ensure there are no regressions for all other architectures
-> that use it, or it would be difficult to work around it.
-> 
-> For this and for future support of IPC classes I am just wondering if we
-> can better design how we enable different architectures to have different
-> policies.
+ arch/arm64/boot/dts/qcom/pm8150.dtsi          |  2 +-
+ arch/arm64/boot/dts/qcom/pm8916.dtsi          |  3 +-
+ arch/arm64/boot/dts/qcom/pm8950.dtsi          |  2 +-
+ arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi     |  2 +-
+ arch/arm64/boot/dts/qcom/pmp8074.dtsi         |  2 +-
+ arch/arm64/boot/dts/qcom/pms405.dtsi          |  2 +-
+ arch/arm64/boot/dts/qcom/sa8295p-adp.dts      | 79 +------------------
+ .../qcom/{pm8450a.dtsi => sa8540p-pmics.dtsi} |  8 ++
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts     |  2 +-
+ 9 files changed, 17 insertions(+), 85 deletions(-)
+ rename arch/arm64/boot/dts/qcom/{pm8450a.dtsi => sa8540p-pmics.dtsi} (90%)
 
-I see your point. I agree that other architectures may want to implement
-policies differently. I'll add an extra check for env->sd & SD_ASYM_PACKING.
+-- 
+2.38.1
 
-Thanks and BR,
-Ricardo
