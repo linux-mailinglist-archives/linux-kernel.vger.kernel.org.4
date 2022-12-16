@@ -2,163 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241B664F00B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:09:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DCC64F013
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:10:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbiLPRJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 12:09:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
+        id S231679AbiLPRKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 12:10:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231577AbiLPRJM (ORCPT
+        with ESMTP id S231409AbiLPRKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 12:09:12 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2053.outbound.protection.outlook.com [40.107.21.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824BBEBC;
-        Fri, 16 Dec 2022 09:09:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Su/tLwTwHlabFmapw2PIBqUfJAVP4ss2qieCOMyPEwieTBKlq3jSQcJo4OVMSOFRa0AIF9FiyGZ11Xc+HI0R+G2Do00efNqpg8kviBL8ocwB+eFYy+q07+3Z+VjcU02hBSlQFPaTppwfPO+m7+u7UNb4/h8bLbg8U9am1S0hXWPMpROUVInOUxmbnT+tCYrSSWJgzVv9tE9dpFi8CRHBF4SC7fsvN2/iWKCSk3I+HKAU+Fswd1i2uZT/aZZfQuSckeQy5Jge2YFn8r7XxyDwppmP/XUb+ewlvgKML+h1KZn1IHXyLPGCWWy1VBHCjalQN7PIYyJ1BSCh8K0ZvH+WoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p+4Tr51MfxPSwWc2teNk1r5oEANOv47DQ//9Fr5IypA=;
- b=ML8MRp0Y5tPr721ZAfWA6pV1gRiTIjRDldqbMR7SAfu/kF9G23rmD2UrJaYKbOXJMDbkkoGrPxWxl4Sbw3hqDSPnsZU0MGpoMwTyqTxRg+1Ya3/Qiyq3bkM4vNXDFqeIdFQnEtSo8JpugGmhoTuz8JQ+gYwUQtkQWRF1nG1smYczWVsa+HOe7Xd3apEJ4d27gxX18awIdN2Iy73e1gEXIEb/7JbrZILIDuK1NRZUt7t6tycIbXDjramBcZ5PssEZk+syZDFUee0cwd2NaAVu4CXMEEyi4t/xMsLBO29XJf+pw95Ney3dQyafBQ+QmMyagxoicEOc/vrChSABhFvHRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p+4Tr51MfxPSwWc2teNk1r5oEANOv47DQ//9Fr5IypA=;
- b=zwO1Pbhny2gUuD/7QEOUMtyBuhhv+ZwCxzazCCKtsdXWEjY3+ccfGWL6JMFlXZ+tO5ibqd0hCDDiVVUITRxJm98IbtQqElGUb7hyEr/OioKaXVg05zbCnke4Xn+zQDXS4g7AjIK9ixRmSH1jn0xSEoxs4iRX5shtWqEntLEoYWnV/3Ih+qY66DKepko2s/hUlHoM7jeTziW4yvC5H2qyFzbFhbUHyh/zopx+uUN3wrL+p5P0H6SzgR3fhF/4Eav7Uac0Z8YDHRaImomOHmf5PCCnZS0pC/p2tKtKz9TaZcDlY2/ml6VVhEnkWeXbNuLyvUWZK58D2Hh/fYkexvq8cQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
- by PA4PR03MB6910.eurprd03.prod.outlook.com (2603:10a6:102:e9::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12; Fri, 16 Dec
- 2022 17:09:09 +0000
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2b95:1fe4:5d8f:22fb]) by DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2b95:1fe4:5d8f:22fb%6]) with mapi id 15.20.5880.019; Fri, 16 Dec 2022
- 17:09:09 +0000
-Message-ID: <68562aca-5256-9e4b-bcd5-983e43408a7d@seco.com>
-Date:   Fri, 16 Dec 2022 12:08:51 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 0/2] drm: Add component_match_add_of and convert users of
- drm_of_component_match_add
-Content-Language: en-US
-To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Brian Starkey <brian.starkey@arm.com>,
-        Chen Feng <puck.chen@hisilicon.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        John Stultz <jstultz@google.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Mali DP Maintainers <malidp@foss.arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mihail Atanassov <mihail.atanassov@arm.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Samuel Holland <samuel@sholland.org>,
-        Sean Paul <sean@poorly.run>, Takashi Iwai <tiwai@suse.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        Yong Wu <yong.wu@mediatek.com>, alsa-devel@alsa-project.org,
-        etnaviv@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-sunxi@lists.linux.dev
-References: <20221103182222.2247724-1-sean.anderson@seco.com>
-From:   Sean Anderson <sean.anderson@seco.com>
-In-Reply-To: <20221103182222.2247724-1-sean.anderson@seco.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR05CA0085.namprd05.prod.outlook.com
- (2603:10b6:a03:e0::26) To DB9PR03MB8847.eurprd03.prod.outlook.com
- (2603:10a6:10:3dd::13)
+        Fri, 16 Dec 2022 12:10:00 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBBFEBC;
+        Fri, 16 Dec 2022 09:09:59 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so4588332wma.1;
+        Fri, 16 Dec 2022 09:09:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=OXy3ueBR6wVuG2/VKlVCadT8O9k0LlAEa6JC/bhnWWU=;
+        b=UPDazBaIu2fSoFAJTa3/jRCwU2RidcAsN2nptPwpQjmq1HgvuBR+9sAL67wxnBZF2Z
+         2VLSoZxJOU/XlBq/2NACYNyF4kelML7EjUv9Er7GCd6hpwEcoXp3yN02nNi4khP05aM8
+         47S8oyXBsbTGUJAzXFquufbya7hf5Z2S+8LH+j+H1CV4gMrYSwpI93OuqUWH0b+Ey16t
+         iS3yBgKgGlCQYK7c5pxqV18EfDaPolW/bG26z+cz1D2BtaAOsqtwaz/HHbNO7PkncUl1
+         OWKmk9++9V7JDWaru6WQZBnu0KB+pTtgCOaMPJt/sjtTLjQklpol+uQRNy8L2XKO06dD
+         WTfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OXy3ueBR6wVuG2/VKlVCadT8O9k0LlAEa6JC/bhnWWU=;
+        b=VhMzC15pDDU2ab5Mx+QIKGMCX5olJs5HFAb0268pSRqY4diUwtr+g6Kr6A3JmtzfWq
+         vvKwDOzzjtPLtxag00lrTFsK/q1GxmPtfrxswMlpGCboqXfYAHy6bxC4Kq+6c8MJaEe3
+         ezXw2Do+r/EHmG1Pi20ONtOaCbFgccU+oufMLvKj2uX99BSp1YDcZlK4Q0lterjLN3xX
+         0fBgRjfkl5xzBjF8IibQulGclwKTS+nlZTEUG7sMWe76UFnS3TocSxeoH9DA8NyYCAsg
+         F+jmqUPctMVZ1aUFTM+nijz/SD/pLlNprCd+uFojT/ERTLH+bl0RAlMH0ceCm/eNaBOW
+         ApOA==
+X-Gm-Message-State: ANoB5pn8XuosXMV2HuY0Wk652cKgwdXnq6CMrfndkmi4LewoaO/0IiOy
+        HdvUrEXpxbx98SaMJFoY6ZA=
+X-Google-Smtp-Source: AA0mqf7DL/q+ypNtUscw8zIxIxzhSoxHKhZA3dgZSCQ2F+VBE494romYvBslK3IuiLIjL7OBN2kcCA==
+X-Received: by 2002:a05:600c:4f05:b0:3cf:6f4d:c25d with SMTP id l5-20020a05600c4f0500b003cf6f4dc25dmr24674139wmq.21.1671210597519;
+        Fri, 16 Dec 2022 09:09:57 -0800 (PST)
+Received: from Ansuel-xps. (93-42-71-18.ip85.fastwebnet.it. [93.42.71.18])
+        by smtp.gmail.com with ESMTPSA id f24-20020a1c6a18000000b003b95ed78275sm3061225wmc.20.2022.12.16.09.09.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 09:09:57 -0800 (PST)
+Message-ID: <639ca665.1c0a0220.ae24f.9d06@mx.google.com>
+X-Google-Original-Message-ID: <Y5ymZnJWpRMdigsd@Ansuel-xps.>
+Date:   Fri, 16 Dec 2022 18:09:58 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Subject: Re: [PATCH v7 06/11] leds: trigger: netdev: add hardware control
+ support
+References: <20221214235438.30271-1-ansuelsmth@gmail.com>
+ <20221214235438.30271-7-ansuelsmth@gmail.com>
+ <Y5tUU5zA/lkYJza+@shell.armlinux.org.uk>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|PA4PR03MB6910:EE_
-X-MS-Office365-Filtering-Correlation-Id: af732301-cfc7-4bd6-4a64-08dadf883ed3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dXVxBvj4ZaJElwLzCN8kHn2ebxRzHh3Gf63CAtngtlPvjwfc2UwnxYIu8RSAA9UwqyGOFvXys/Kh1HL8kUFOW9007tLpJdMK0ZWlbFigIZxbI6noBiIixOIZX7bPif2JRXOw5s0jTYF5e/+Ig1diIpJmyzB1FyuGRcBzO1hoCd5N4O+tsvHvAMBQEJ08MMWkdMMwfu266sBpe746IU+or+qjQiSmKwk7VkA3e5JgIPr77OFyYVmZTQhcTc+KoLXdw2DnBtUPdYhW+1Zp/iVS5fRmf/+6PPx2+h3WNGxBzF6BWHX3SgkeAaqWdbIa/V6jSPLkdxWYkmtYCSJObifs1mWKfGhArWozUFYOpjDMx2jQGwzkGoeJJoD/qfAun5iqwtWHNwpKmkLbvhqbI64ndOpRIvh8KATYLCpqhjWXJUV0N/NbI2XUvazt1rrnCefbrf1qEqhv7kLBH/LdeG0D69Q32t8Ef4GGOwe28a+cxWRDRXos3azu1CfJiK5nby5ObG56zMTY3FZiXsGsDckB6DLPv1oiKjurlsMBEhIsrlMOYQignIiOd4PCiegLHybRhWnyHIp5XhRF5cGJvvrKlf/Ws2b6AZbqAy4qBPPdHtuABbP5jIPOLJ5wrR2WN8TfZjTlGgFoLoIkt3soqk/R5XBR3APL9r6axqft/Mk6sAEtZVOny5DCIXVu4QQ4Tcrk8Ig8DzsC273xTFekQKcoYT3cR6CQCEGESHU23rXAnHq0Xh3/BqAm1r55CGEWgoPAQ645qEhg5NA843/ES/icVw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39850400004)(346002)(376002)(366004)(136003)(396003)(451199015)(52116002)(6512007)(2616005)(38100700002)(53546011)(38350700002)(6506007)(36756003)(83380400001)(6666004)(6486002)(186003)(478600001)(8936002)(26005)(31686004)(41300700001)(316002)(54906003)(110136005)(2906002)(86362001)(66946007)(66556008)(8676002)(66476007)(4326008)(7366002)(7416002)(31696002)(7406005)(5660300002)(44832011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SEJNRitKck1jeWxnU2crVFIyTEozVExjZ1krVnhBSktuY1N4ZVJZWXg1V2Vs?=
- =?utf-8?B?WGlXc3FOOGUrNS9DY0ZJZW9rYmFhWlBPWjVOMm1DeVlhNkVDZEdsVzhTcFJU?=
- =?utf-8?B?K0lnZHg1d0dYMGdseDNiWFJpZHFJOVpVSE9mYWdRbis4cGpWdWNza3dhNXdQ?=
- =?utf-8?B?S3RsUkdhVnU3Q1N0c25pV3psSFp3YWM4NDJpd0NlSmxzVy9QU1J0U3RZK0hz?=
- =?utf-8?B?ckpTQXd6VmUrNGI2Rlo4WnlaNUFGNThpeUpUUHB6UUFvbDhVdG0rNVBDdG84?=
- =?utf-8?B?aklESEJZT2FlbXd0MmwwZlBzdW5GTTVNWVdIaHUweWdPa2Foa3ZHWUYxL0g4?=
- =?utf-8?B?RlNpMWdubmVlcG9yYmZtS3ZFZGpLTkNidVc5ejNBdnBLNzRJdlltQkVQWGZV?=
- =?utf-8?B?UitGRzRKUmdIMlZUZm9VZlIydFlDNkNoZ1MzbVI4MWNwRGlmQW9MbnR5enl2?=
- =?utf-8?B?V0tydnZKL0JmM25GaGh3WWgvdDRITGQ5RzU3NWU4dVZ2NFZaejM5clZmQ3JI?=
- =?utf-8?B?WXJTRkxXMk9VdUdCR2VwKy9qQzJNS1dOWldPK2FxOERlVC9HT3Ntd3FiTGZV?=
- =?utf-8?B?bWFtNzJ5Tk5pcDAzVWU1eElObHdmdlE2c2ZHNjRmak9BeEd6aFlpckgxa2VX?=
- =?utf-8?B?Tk9CelVlYWxKMFBZMjIyem9qN21XRUZQbzFsUXFwNFQvRXJjRllUSmI3UEhG?=
- =?utf-8?B?T21vYXNkSDA1ZldUQkZZdnZwSEtJODFyZUh4NzkzK2UvMm5SYThFcWhpTmNu?=
- =?utf-8?B?OUwzRlY1a3h4V1BZdkF5RnQ1YzgzS21qSnFkNmVRY1lsNU5NSi9Uc3NMTWZE?=
- =?utf-8?B?SW9abWlFbklSZkF2VjF2b0xrdno2MWRiUzJJVFdsa1VsVUJzUm1OT2FwVjhS?=
- =?utf-8?B?cC82cE1MbFR3UXZFL1RpSEZhRUNQTWhLa0ZQaG9CQU43SWw4VDRFZ1Rta2lk?=
- =?utf-8?B?TXovOGZITWE2VVhuOUFodFJBOWFMa2ttMERjTG91SDlsRk90aGNuc053QkFl?=
- =?utf-8?B?MlZ2ZHpIbzNBZ2ZJd0lid3d4N1pncjRHbDlpN3ZVbnJzc0tOVlZ0M1N1eWdq?=
- =?utf-8?B?WS9qQTlOMWpzcXJmZDMvamVqNkVpenpHS2x0NkRMeEdYNjh0Q0ZHdDFsRXdi?=
- =?utf-8?B?c3VSSEJUZERlT09BZitZbFI1eE4vcE1OcVh5U2poS2lhdHYwYzlBU1RwYVR3?=
- =?utf-8?B?TXFIc2dDUGN1U01hSkkxNkNHYWRKZ2VtdklaeEhUVk1LVVh6SnE2eHRiVVRL?=
- =?utf-8?B?Q1o0TENOWE9NK29RSFhwWVpDNnNPM1NicVRjZTR4Z01SR1RhTXN4TTJtZjBP?=
- =?utf-8?B?UE9TVEpOZnMwc1huME5TaUlIbVV5OXE0cUhMRDl3eVFyVFlVeDVoVzI5Unk5?=
- =?utf-8?B?QmJkS3JpZmhWcUhNSDFMOGo1Qk9tdy9lYXluMlZpaThKQkZDc25xMWtJNlZz?=
- =?utf-8?B?Qm9NaXJXL3c4WVNWOC9FK0NWZHpISi9LVWZkUjZnU0EzV0M1bGpiMTVCc0hB?=
- =?utf-8?B?cWFPNjVidGtzUFRQeEl5TkptRnhrNFdyRFgrTWpRWUVwRThtbElNMXJzY2xW?=
- =?utf-8?B?YlRNT0lEeU9veHNKOU5IM1RYTU9SajFhbEZwaEQvUkx5TUFDdDR5ZGtHbE1j?=
- =?utf-8?B?NzBJcTkrVEp5REZ4WUlKc1VSUitRZzZEL1JHUWgyendmaEN0NDRLWUY5aWNw?=
- =?utf-8?B?TzhkU2QyY3AxQjFaWGwrWTkycy9YV05xd1dDbng1Y3VMamFCYXJoM3hEQThq?=
- =?utf-8?B?SDBRdDltR2NhRC9haEpiZjZOMmhBRDNkbmkzMjRyT2d0aFI0ZHkyTUlsMFZu?=
- =?utf-8?B?d0h4TnlLWHZ0ZHVvcFBMdGpZOEsxdHNsK2lhTmFYditQZk5UUkNMWitvcGdZ?=
- =?utf-8?B?aVIwdnM4dHIxV3NxcThIc2N2U0puTi9sWjlla0FTaFl3UmcvcVcycS9XTjl3?=
- =?utf-8?B?S0ZzNlRTcTFEVXQxTnRxd0lMbmp5a3RQYUwzSG9Nd3Y4U1RYeGl2Y0RlMHpa?=
- =?utf-8?B?U1NkaFZDbjFQVTNyQ2xRSE5VeXFvL1dkNXJLRndVM0orUVlSNE9nMHFaSmhL?=
- =?utf-8?B?VUluSjY3ZURLaFhUM3hUYUdDd0ZUVHc0cnN6YXAvck41R0cxT0hteGQ4dm56?=
- =?utf-8?B?ckRJTzJPRHpJTWZ4ZXQ4VzdrbHk3RUNEcnRLRnV1ZExSMHloamZJYkpWckEr?=
- =?utf-8?B?bHc9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: af732301-cfc7-4bd6-4a64-08dadf883ed3
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR03MB8847.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2022 17:09:09.2363
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XyLPJ+VUHXumX7wRoSdZtsZYS2a5W53pTd0sK15a2TVN29ad0Wrny9rpJBVKwRUz1Bz7e+GRhc0SaihjuyVXKg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR03MB6910
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5tUU5zA/lkYJza+@shell.armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -166,45 +89,241 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/3/22 14:22, Sean Anderson wrote:
-> This series adds a new function component_match_add_of to simplify the
-> common case of calling component_match_add_release with
-> component_release_of and component_compare_of. There is already
-> drm_of_component_match_add, which allows for a custom compare function.
-> However, all existing users just use component_compare_of (or an
-> equivalent).
+On Thu, Dec 15, 2022 at 05:07:31PM +0000, Russell King (Oracle) wrote:
+> On Thu, Dec 15, 2022 at 12:54:33AM +0100, Christian Marangi wrote:
+> > Add hardware control support for the Netdev trigger.
+> > The trigger on config change will check if the requested trigger can set
+> > to blink mode using LED hardware mode and if every blink mode is supported,
+> > the trigger will enable hardware mode with the requested configuration.
+> > If there is at least one trigger that is not supported and can't run in
+> > hardware mode, then software mode will be used instead.
+> > A validation is done on every value change and on fail the old value is
+> > restored and -EINVAL is returned.
+> > 
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > ---
+> >  drivers/leds/trigger/ledtrig-netdev.c | 155 +++++++++++++++++++++++++-
+> >  1 file changed, 149 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/leds/trigger/ledtrig-netdev.c b/drivers/leds/trigger/ledtrig-netdev.c
+> > index dd63cadb896e..ed019cb5867c 100644
+> > --- a/drivers/leds/trigger/ledtrig-netdev.c
+> > +++ b/drivers/leds/trigger/ledtrig-netdev.c
+> > @@ -37,6 +37,7 @@
+> >   */
+> >  
+> >  struct led_netdev_data {
+> > +	enum led_blink_modes blink_mode;
+> >  	spinlock_t lock;
+> >  
+> >  	struct delayed_work work;
+> > @@ -53,11 +54,105 @@ struct led_netdev_data {
+> >  	bool carrier_link_up;
+> >  };
+> >  
+> > +struct netdev_led_attr_detail {
+> > +	char *name;
+> > +	bool hardware_only;
+> > +	enum led_trigger_netdev_modes bit;
+> > +};
+> > +
+> > +static struct netdev_led_attr_detail attr_details[] = {
+> > +	{ .name = "link", .bit = TRIGGER_NETDEV_LINK},
+> > +	{ .name = "tx", .bit = TRIGGER_NETDEV_TX},
+> > +	{ .name = "rx", .bit = TRIGGER_NETDEV_RX},
+> > +};
+> > +
+> > +static bool validate_baseline_state(struct led_netdev_data *trigger_data)
+> > +{
+> > +	struct led_classdev *led_cdev = trigger_data->led_cdev;
+> > +	struct netdev_led_attr_detail *detail;
+> > +	u32 hw_blink_mode_supported = 0;
+> > +	bool force_sw = false;
+> > +	int i;
+> > +
+> > +	for (i = 0; i < ARRAY_SIZE(attr_details); i++) {
+> > +		detail = &attr_details[i];
+> > +
+> > +		/* Mode not active, skip */
+> > +		if (!test_bit(detail->bit, &trigger_data->mode))
+> > +			continue;
+> > +
+> > +		/* Hardware only mode enabled on software controlled led */
+> > +		if (led_cdev->blink_mode == SOFTWARE_CONTROLLED &&
+> > +		    detail->hardware_only)
+> > +			return false;
+> > +
+> > +		/* Check if the mode supports hardware mode */
+> > +		if (led_cdev->blink_mode != SOFTWARE_CONTROLLED) {
+> > +			/* With a net dev set, force software mode.
+> > +			 * With modes are handled by hardware, led will blink
+> > +			 * based on his own events and will ignore any event
+> > +			 * from the provided dev.
+> > +			 */
+> > +			if (trigger_data->net_dev) {
+> > +				force_sw = true;
+> > +				continue;
+> > +			}
+> > +
+> > +			/* With empty dev, check if the mode is supported */
+> > +			if (led_trigger_blink_mode_is_supported(led_cdev, detail->bit))
+> > +				hw_blink_mode_supported |= BIT(detail->bit);
+> > +		}
+> > +	}
+> > +
+> > +	/* We can't run modes handled by both software and hardware.
+> > +	 * Check if we run hardware modes and check if all the modes
+> > +	 * can be handled by hardware.
+> > +	 */
+> > +	if (hw_blink_mode_supported && hw_blink_mode_supported != trigger_data->mode)
+> > +		return false;
+> > +
+> > +	/* Modes are valid. Decide now the running mode to later
+> > +	 * set the baseline.
+> > +	 * Software mode is enforced with net_dev set. With an empty
+> > +	 * one hardware mode is selected by default (if supported).
+> > +	 */
+> > +	if (force_sw || led_cdev->blink_mode == SOFTWARE_CONTROLLED)
+> > +		trigger_data->blink_mode = SOFTWARE_CONTROLLED;
+> > +	else
+> > +		trigger_data->blink_mode = HARDWARE_CONTROLLED;
+> > +
+> > +	return true;
+> > +}
+> > +
+> >  static void set_baseline_state(struct led_netdev_data *trigger_data)
+> >  {
+> > +	int i;
+> >  	int current_brightness;
+> > +	struct netdev_led_attr_detail *detail;
+> >  	struct led_classdev *led_cdev = trigger_data->led_cdev;
+> >  
+> > +	/* Modes already validated. Directly apply hw trigger modes */
+> > +	if (trigger_data->blink_mode == HARDWARE_CONTROLLED) {
+> > +		/* We are refreshing the blink modes. Reset them */
+> > +		led_cdev->hw_control_configure(led_cdev, BIT(TRIGGER_NETDEV_LINK),
+> > +					       BLINK_MODE_ZERO);
+> > +
+> > +		for (i = 0; i < ARRAY_SIZE(attr_details); i++) {
+> > +			detail = &attr_details[i];
+> > +
+> > +			if (!test_bit(detail->bit, &trigger_data->mode))
+> > +				continue;
+> > +
+> > +			led_cdev->hw_control_configure(led_cdev, BIT(detail->bit),
+> > +						       BLINK_MODE_ENABLE);
+> > +		}
+> > +
+> > +		led_cdev->hw_control_start(led_cdev);
+> > +
+> > +		return;
+> > +	}
+> > +
+> > +	/* Handle trigger modes by software */
+> >  	current_brightness = led_cdev->brightness;
+> >  	if (current_brightness)
+> >  		led_cdev->blink_brightness = current_brightness;
+> > @@ -100,10 +195,15 @@ static ssize_t device_name_store(struct device *dev,
+> >  				 size_t size)
+> >  {
+> >  	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
+> > +	struct net_device *old_net = trigger_data->net_dev;
+> > +	char old_device_name[IFNAMSIZ];
+> >  
+> >  	if (size >= IFNAMSIZ)
+> >  		return -EINVAL;
+> >  
+> > +	/* Backup old device name */
+> > +	memcpy(old_device_name, trigger_data->device_name, IFNAMSIZ);
+> > +
+> >  	cancel_delayed_work_sync(&trigger_data->work);
+> >  
+> >  	spin_lock_bh(&trigger_data->lock);
+> > @@ -122,6 +222,19 @@ static ssize_t device_name_store(struct device *dev,
+> >  		trigger_data->net_dev =
+> >  		    dev_get_by_name(&init_net, trigger_data->device_name);
+> >  
+> > +	if (!validate_baseline_state(trigger_data)) {
+> > +		/* Restore old net_dev and device_name */
+> > +		if (trigger_data->net_dev)
+> > +			dev_put(trigger_data->net_dev);
+> > +
+> > +		dev_hold(old_net);
+> > +		trigger_data->net_dev = old_net;
+> > +		memcpy(trigger_data->device_name, old_device_name, IFNAMSIZ);
+> > +
+> > +		spin_unlock_bh(&trigger_data->lock);
+> > +		return -EINVAL;
 > 
-> I can split the second commit up if that is easier to review.
+> I'm not sure this is the best way... putting the net_dev but holding a
+> reference, to leter regain the reference via dev_hold() just feels
+> wrong. Also, I wonder what happens if two threads try to change the
+> netdev together - will the read of the old device name be potentially
+> corrupted (since we're not holding the trigger's lock?)
 > 
+> Maybe instead:
 > 
-> Sean Anderson (2):
->   component: Add helper for device nodes
->   drm: Convert users of drm_of_component_match_add to
->     component_match_add_of
+> +	struct net_device *old_net;
+> ...
+> -	if (trigger_data->net_dev) {
+> -		dev_put(trigger_data->net_dev);
+> -		trigger_data->net_dev = NULL;
+> -	}
+> +	old_net = trigger_data->net_dev;
+> +	trigger_data->net_dev = NULL;
+> +	memcpy(old_device_name, trigger_data->device_name, IFNAMSIZ);
+> ...
+> 	... extract out the setup of trigger_data->device_name
+> ...
+> +	if (!validate_baseline_state(trigger_data)) {
+> +		if (trigger_data->net_dev)
+> +			dev_put(trigger_data->net_dev);
+> +
+> +		/* Restore device settings */
+> +		trigger_data->net_dev = old_dev;
+> +		memcpy(trigger_data->device_name, old_device_name, IFNAMSIZ);
+> +		spin_unlock_bh(&trigger_data->lock);
+> +		return -EINVAL;
+> +	} else {
+> +		dev_put(old_net);
+> +	}
 > 
->  .../gpu/drm/arm/display/komeda/komeda_drv.c   |  6 ++--
->  drivers/gpu/drm/arm/hdlcd_drv.c               |  9 +-----
->  drivers/gpu/drm/arm/malidp_drv.c              | 11 +------
->  drivers/gpu/drm/armada/armada_drv.c           | 10 ++++---
->  drivers/gpu/drm/drm_of.c                      | 29 +++----------------
->  drivers/gpu/drm/etnaviv/etnaviv_drv.c         |  4 +--
->  .../gpu/drm/hisilicon/kirin/kirin_drm_drv.c   |  3 +-
->  drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  3 +-
->  drivers/gpu/drm/mediatek/mtk_drm_drv.c        |  4 +--
->  drivers/gpu/drm/msm/msm_drv.c                 | 14 ++++-----
->  drivers/gpu/drm/sti/sti_drv.c                 |  3 +-
->  drivers/gpu/drm/sun4i/sun4i_drv.c             |  3 +-
->  drivers/gpu/drm/tilcdc/tilcdc_external.c      | 10 ++-----
->  drivers/iommu/mtk_iommu.c                     |  3 +-
->  drivers/iommu/mtk_iommu_v1.c                  |  3 +-
->  include/drm/drm_of.h                          | 12 --------
->  include/linux/component.h                     |  9 ++++++
->  sound/soc/codecs/wcd938x.c                    |  6 ++--
->  18 files changed, 46 insertions(+), 96 deletions(-)
-> 
+> would be safer all round?
 
-ping?
+Need to check but if I'm not wrong all this thing was to handle the very
+corner case where net can be removed while we are changing trigger and
+something goes wrong down the line... Holding that means it won't get
+actually removed till everything is ok.
 
-Should I send a v2 broken up like Mark suggested?
+> 
+> One thought on this approach though - if one has a PHY that supports
+> "activity" but not independent "rx" and "tx" activity indications
+> and it doesn't support software control, how would one enable activity
+> mode? There isn't a way to simultaneously enable both at the same
+> time... However, I need to check whether there are any PHYs that fall
+> into this category.
+>
 
---Sean
+Problem is that for such feature and to have at least something working
+we need to face compromise. We really can't support each switch feature
+and have a generic API for everything. My original idea was to have
+something VERY dynamic with a totally dedicated and dumb trigger... But
+that was NACK as netdev was the correct way to handle these stuff...
+
+But adapting everything to netdev trigger is hard since you have just
+another generic abstraction layer. My idea at times was that in such
+case the trigger rule will be rejected and only enabled if both tx and
+rx were enabled. An alternative is to add another flag for activity
+rule. (for switch supporting independent tx and rx with activity rule
+enable both tx and rx event are enabled. for switch not supporting
+independent tx and rx just fallback to sw and say that the mode is not
+suported.)
+
+I already had the idea of Documenting all this case but if we decide to
+follow this approach then creating a schema file is a must at this
+point. (but wanted to introduce that later if and ever this feature will
+be accepted to permit to set trigger rules directly in DT following
+something like linux,default-trigger.
+
+-- 
+	Ansuel
