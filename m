@@ -2,86 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC14464F039
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C15364F03B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbiLPRRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 12:17:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
+        id S231428AbiLPRSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 12:18:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbiLPRRS (ORCPT
+        with ESMTP id S230462AbiLPRSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 12:17:18 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42CF2A275;
-        Fri, 16 Dec 2022 09:17:15 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso2289305wmo.1;
-        Fri, 16 Dec 2022 09:17:15 -0800 (PST)
+        Fri, 16 Dec 2022 12:18:14 -0500
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E86389FB
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:18:13 -0800 (PST)
+Received: by mail-ej1-x64a.google.com with SMTP id xj11-20020a170906db0b00b0077b6ecb23fcso2252019ejb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:18:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Grq/lCv6X9zvhjrxtn3hukSNIqujUj2abduruIelS+M=;
-        b=csfswnzvXRES6JVhxCweprsXbmn7xjoYqs+ltKvQBCzBf43+AVWxASz8MZ0TMedSNy
-         cmfryseQBvFRK6oLPazykJ1COPo+z5MfAXRlIeTX899arFClrQg/GICGhiJWFH7lOM2N
-         NBBZZJjGEorNNGtQ/mA1CXjz2ny/A8+YRYHUN51/0CsEOJQEgoXW+lV3ux8uOVlStkfn
-         1tT8Jxu/7BIy22iFF4rgpl8EnGqfCrzS8KE1vmzc3btZDx2ESqzMmHToc1y0bngCI/pZ
-         dXDLBTLsvBb4cO+MXd792JoTr5Oul1f4tSqixNXsfCtuwLsUMwIDKaKB4jEUTzo95OxA
-         HvhA==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dzRLghZOASFCJWHj5gtENvJEmLxYgTqYLUuzMhO6yYg=;
+        b=NqEhCAuwbwnQE4D8DgjXx6N0iIQHvSsmrAyu1FePW+2jSLWjW6C3cICygy9eRm1uxb
+         /J022jNT29ZQebL8NiHod4MHcDBpQ9dcRSSzBrUQpd/J/RLGlXqR6sP/yIXuAV33dsG3
+         qnhjfX1Sw2IfW5hP1QMVlEhg7N/f1V+kDma2WTKPgEeTleHQ9dDw3rUYC6yx3XuE8qIs
+         dBFnvxAD9/Iu9ZA4ezWAtp7aMx6KrDgbvUC8fkJ0VjBmYqTXOZ9gIzLTEcm+uuj6AVcp
+         n0/uh9Kwh9nLHNhp5f/t6AxFzwdYD5PHZZS/fG4acSXFsNf+QbrGrKX1Oo1B3qhGK85I
+         igqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Grq/lCv6X9zvhjrxtn3hukSNIqujUj2abduruIelS+M=;
-        b=vHta+VEdefDtumz9rC6M8E5/2GfbmH9VTtY924hftWqr9vDLbKJLjGxT9zfgqb6jzc
-         JuHAWsHYpDLJkMHGC1AM6f7vuirwAlv/Ml3azKHWLCOupo/UH3J1WV39T6f9Rc5F47y6
-         9vzzhdtSYtUVdh/MVLx/FBKwND9a2/xWUBmMUAR2RB53HSI+gZjT97i9YYlFSjw5zWgj
-         IuK8aq5Q3NsPS+EGqCDA48sxIWMev1I0JQV5iKuqkLEzzHstLNbuVXxzh/pztEUtzVZk
-         nY8ylCuGqNlzEW+enWc6VJahvO4hoYcICwX3kaWHML1ux1gyH3TjETGTUzfBJH208qtM
-         LArg==
-X-Gm-Message-State: ANoB5plripN2b/REigdD4f2j6HVAZqBp7sVybhbrBlF8r3kHfOE2V87z
-        bO78HPMWSGT0EvL+3IwXdNA=
-X-Google-Smtp-Source: AA0mqf4bczFAXhp8frgYXfTWDcx+1h47VoETJuXmG2+FOJRxH34v0Qw+cRKpdK1xm80neDn3BvMY6Q==
-X-Received: by 2002:a05:600c:4fc8:b0:3cf:614e:b587 with SMTP id o8-20020a05600c4fc800b003cf614eb587mr26240906wmq.26.1671211034146;
-        Fri, 16 Dec 2022 09:17:14 -0800 (PST)
-Received: from Ansuel-xps. (93-42-71-18.ip85.fastwebnet.it. [93.42.71.18])
-        by smtp.gmail.com with ESMTPSA id q9-20020a7bce89000000b003d1e34bcbb2sm3083664wmj.13.2022.12.16.09.17.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 09:17:13 -0800 (PST)
-Message-ID: <639ca819.7b0a0220.6b61a.9f2e@mx.google.com>
-X-Google-Original-Message-ID: <Y5yoGnwCHRK5qtJY@Ansuel-xps.>
-Date:   Fri, 16 Dec 2022 18:17:14 +0100
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Subject: Re: [PATCH v7 09/11] leds: trigger: netdev: add additional hardware
- only triggers
-References: <20221214235438.30271-1-ansuelsmth@gmail.com>
- <20221214235438.30271-10-ansuelsmth@gmail.com>
- <Y5ta87eCAQ8XsY8L@shell.armlinux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5ta87eCAQ8XsY8L@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dzRLghZOASFCJWHj5gtENvJEmLxYgTqYLUuzMhO6yYg=;
+        b=hZf+H3H3GcQC42zK/EU1L122Gtg4zqKJLJ94hH3/U78bR7GwMzxapW+09TqQziduXo
+         95aio3OVVayzPuvVolEdKk6X2l8h3jXwhVExgfpCCU0bRS0/pvbta7XaEJ14eLqReCR0
+         OjEHi0rIZHV3lWJqo9gTf9lfVI8x1s6XXvVYzVM+z4WlWADXRbllPoIXOVtYGBICe2RU
+         HKIHpotKF0uY4nY4IPs7BMyIi0liZe6mzVOWh9caU9QnqLxjnqoCtvU9NRD/9yNnMrsH
+         NwrbYQ/9Zmue0i3KWKzf+zrsTQ7Ptu/0NZrpn2wCXKbgooQXlzQ+szEFiCy88qFGeSIp
+         e9Mg==
+X-Gm-Message-State: ANoB5pkGXq1CYUDedpVQHCGusaJoTvaAE60/KywkBk5Pef6OJdFOy4Tg
+        t9oLgl4OZUyRSzn0rATzEBQ7tauEkAhQ
+X-Google-Smtp-Source: AA0mqf4KsedZ4fYUi5csgDIepYf3cb9p2oVcrccKNsymSrj3FGpvxAULnrUnfAHBYeL5rbfwKUEtkMOU0WWI
+X-Received: from dvyukov-desk.muc.corp.google.com ([2a00:79e0:9c:201:aa0c:a811:b910:ca2d])
+ (user=dvyukov job=sendgmr) by 2002:a17:906:2988:b0:7c0:b56a:eadf with SMTP id
+ x8-20020a170906298800b007c0b56aeadfmr10003794eje.271.1671211091732; Fri, 16
+ Dec 2022 09:18:11 -0800 (PST)
+Date:   Fri, 16 Dec 2022 18:18:07 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20221216171807.760147-1-dvyukov@google.com>
+Subject: [RFC PATCH] posix-timers: Support delivery of signals to the current thread
+From:   Dmitry Vyukov <dvyukov@google.com>
+To:     tglx@linutronix.de
+Cc:     linux-kernel@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,62 +66,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 05:35:47PM +0000, Russell King (Oracle) wrote:
-> On Thu, Dec 15, 2022 at 12:54:36AM +0100, Christian Marangi wrote:
-> > Add additional hardware only triggers commonly supported by switch LEDs.
-> > 
-> > Additional modes:
-> > link_10: LED on with link up AND speed 10mbps
-> > link_100: LED on with link up AND speed 100mbps
-> > link_1000: LED on with link up AND speed 1000mbps
-> > half_duplex: LED on with link up AND half_duplex mode
-> > full_duplex: LED on with link up AND full duplex mode
-> 
-> Looking at Marvell 88e151x, I don't think this is usable there.
-> We have the option of supporting link_1000 on one of the LEDs,
-> link_100 on another, and link_10 on the other. It's rather rare
-> for all three leds to be wired though.
+Support CLOCK_PROCESS_CPUTIME_ID timers with SIGEV_SIGNAL | SIGEV_THREAD_ID
+and sigev_notify_thread_id == 0, which sends the signal to the current
+thread that fires the timer. This is useful for relatively uniform sampling
+of process execution across all threads with signals.
 
-On qca8k it's just anarchy. You can apply the same rule table to
-whatever led you want. They are all the same... OEM decide what to do
-(add white led, amber, green...)
+Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Marco Elver <elver@google.com>
 
-Most common configuration is 2 leds, one react with port 1000 and the
-other with port 100. But each led can be set to be powered on to any
-speed by enabling 10 100 and 1000 rule.
+---
 
-Rejecting a configuration falls in the driver returning error on
-configure.
+We are trying to implement sampling program analysis based on this.
+We don't need 100% uniform sampling as a CPU profiler would need,
+but we still need the signals to be reasonably distributed across
+the process threads.
 
-> 
-> This is also a PHY where "activity" mode is supported (illuminated
-> or blinking if any traffic is transmitted or received) but may not
-> support individual directional traffic in hardware. However, it
-> does support forcing the LED on or off, so software mode can handle
-> those until the user selects a combination of modes that are
-> supported in the hardware.
-> 
-> > Additional blink interval modes:
-> > blink_2hz: LED blink on any even at 2Hz (250ms)
-> > blink_4hz: LED blink on any even at 4Hz (125ms)
-> > blink_8hz: LED blink on any even at 8Hz (62ms)
-> 
-> This seems too restrictive. For example, Marvell 88e151x supports
-> none of these, but does support 42, 84, 170, 340, 670ms.
-> 
+Thomas, does the idea look sane to you overall?
+Are there any existing alternatives to this?
 
-Eh this is really bad, it was an idea to support blink internal for each
-event but I expected other switch had something different... But the
-generic function is still there...
+All alternatives we found are complex and/or have high overhead.
+E.g. we considered using CLOCK_PROCESS_CPUTIME_ID+SIGEV_SIGNAL timer
+plus inherited for all threads perf_event(PERF_COUNT_SW_TASK_CLOCK).
+When the timer fires we enable the perf event, and then use the signals
+from the perf event, and then disable the perf event.
+But this has considerable memory overhead (perf event per thread)
+and issues IPIs to all CPUs for perf event enable/disable.
 
-Wonder if we should consider adding generic naming like SLOW, NORMAL(?),
-FAST. And just assign them from the driver side?
+We also considered using CLOCK_PROCESS_CPUTIME_ID+SIGEV_SIGNAL timer
+and then manually scan /proc/self/task/ and select some task at random.
+But this is also complex and makes it hard to do reasonable sampling
+proportional to activity of threads.
 
-Permit to have some kind of configuration while also keeping it generic
-enough? 
+All alternatives are based on CLOCK_PROCESS_CPUTIME_ID in some way,
+and it seems that just a single CLOCK_PROCESS_CPUTIME_ID timer is enough
+if it could deliver signals to active threads (what this patch is doing).
+The analysis we are trying to do is intended for production systems
+so we are aiming at as low overhead as possible.
 
-Just as reference... The blink mode already had a compromise since qca8k
-can support a way to blink differently based on the link speed.
+If this idea looks sane to you in general, I will add tests and I am open
+to suggestions on the user API (should it be a new SIGEV_CURRENT_THREAD?)
+and on how to represent this in the struct k_itimer. E.g. we could keep
+it_pid=current but add a special flag that says to send the signal to
+the current task rather than it_pid. This has an advantage that we can
+add the following check to posix_timer_event()
+(which would be pretty bad to violate):
+WARN_ON(!same_thread_group(pid_task(timr->it_pid, PIDTYPE_PID), current));
+---
+ kernel/time/posix-timers.c | 23 ++++++++++++++++-------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
 
+diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
+index 5dead89308b74..411ba087e0699 100644
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -336,6 +336,7 @@ void posixtimer_rearm(struct kernel_siginfo *info)
+ int posix_timer_event(struct k_itimer *timr, int si_private)
+ {
+ 	enum pid_type type;
++	struct pid *pid;
+ 	int ret;
+ 	/*
+ 	 * FIXME: if ->sigq is queued we can race with
+@@ -350,8 +351,9 @@ int posix_timer_event(struct k_itimer *timr, int si_private)
+ 	 */
+ 	timr->sigq->info.si_sys_private = si_private;
+ 
++	pid = timr->it_pid ?: task_pid(current);
+ 	type = !(timr->it_sigev_notify & SIGEV_THREAD_ID) ? PIDTYPE_TGID : PIDTYPE_PID;
+-	ret = send_sigqueue(timr->sigq, timr->it_pid, type);
++	ret = send_sigqueue(timr->sigq, pid, type);
+ 	/* If we failed to send the signal the timer stops. */
+ 	return ret > 0;
+ }
+@@ -428,27 +430,31 @@ static enum hrtimer_restart posix_timer_fn(struct hrtimer *timer)
+ 	return ret;
+ }
+ 
+-static struct pid *good_sigevent(sigevent_t * event)
++static struct pid *good_sigevent(sigevent_t *event, clockid_t which_clock)
+ {
+ 	struct pid *pid = task_tgid(current);
+ 	struct task_struct *rtn;
+ 
+ 	switch (event->sigev_notify) {
+ 	case SIGEV_SIGNAL | SIGEV_THREAD_ID:
++		/* This will use the current task for signals. */
++		if (which_clock == CLOCK_PROCESS_CPUTIME_ID &&
++		    !event->sigev_notify_thread_id)
++			return NULL;
+ 		pid = find_vpid(event->sigev_notify_thread_id);
+ 		rtn = pid_task(pid, PIDTYPE_PID);
+ 		if (!rtn || !same_thread_group(rtn, current))
+-			return NULL;
++			return ERR_PTR(-ENOENT);
+ 		fallthrough;
+ 	case SIGEV_SIGNAL:
+ 	case SIGEV_THREAD:
+ 		if (event->sigev_signo <= 0 || event->sigev_signo > SIGRTMAX)
+-			return NULL;
++			return ERR_PTR(-EINVAL);
+ 		fallthrough;
+ 	case SIGEV_NONE:
+ 		return pid;
+ 	default:
+-		return NULL;
++		return ERR_PTR(-EINVAL);
+ 	}
+ }
+ 
+@@ -502,6 +508,7 @@ static int do_timer_create(clockid_t which_clock, struct sigevent *event,
+ 	struct k_itimer *new_timer;
+ 	int error, new_timer_id;
+ 	int it_id_set = IT_ID_NOT_SET;
++	struct pid *pid;
+ 
+ 	if (!kc)
+ 		return -EINVAL;
+@@ -527,9 +534,11 @@ static int do_timer_create(clockid_t which_clock, struct sigevent *event,
+ 
+ 	if (event) {
+ 		rcu_read_lock();
+-		new_timer->it_pid = get_pid(good_sigevent(event));
++		pid = good_sigevent(event, which_clock);
++		if (!IS_ERR(pid))
++			new_timer->it_pid = get_pid(pid);
+ 		rcu_read_unlock();
+-		if (!new_timer->it_pid) {
++		if (IS_ERR(pid)) {
+ 			error = -EINVAL;
+ 			goto out;
+ 		}
+
+base-commit: 041fae9c105ae342a4245cf1e0dc56a23fbb9d3c
 -- 
-	Ansuel
+2.39.0.314.g84b9a713c41-goog
+
