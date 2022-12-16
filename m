@@ -2,103 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD7A64F2A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 21:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0316064F2A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 21:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbiLPUvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 15:51:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S231678AbiLPUw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 15:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231984AbiLPUu5 (ORCPT
+        with ESMTP id S229627AbiLPUwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 15:50:57 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5ED2189D
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:50:53 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id e13so5289753edj.7
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:50:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ty4Q6pmKGBdcK+JvghcaxT3SktTZCwT4+BsAt6gEM58=;
-        b=K281Hjcnge0R86zglG2H9v4Gt/ejUenfiXW6UYj7GNr4X2YogLbL9zN80GvGkEXpLF
-         bAscjiNEWAXJvdbmAen53eXH+PgSzU4jrBtGIts4eu+BzaMaTF5Zcp+/cIJ6ooacQEeD
-         7p18N6vnCNtUjS6nqN27cydZ6JYP9JpNOQr6w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ty4Q6pmKGBdcK+JvghcaxT3SktTZCwT4+BsAt6gEM58=;
-        b=tkVd12/kn0ItZcf18XdC/9+hfhNhSawkYAhV4mM8UgHvzgyCsmHNmdecZrjo68cU2Z
-         eCQRnORSwT1NV6RcHpTfYdLTC417QpVxfywffzp4dnPfuGEkRWTgtnN5o4j/7CRANZpH
-         lstYHLYF0WebFlTE06UircdbY5MdIkeQT6frpZPJDyjtuCB39rxiwbp0N/2i6CJHO8xI
-         79cHyvyRc7qQPFQRFM0wvb0Mgj4aocfc+VHk03Bj/lMoK99ZZqCof4UZZ1hEmV3AQr4i
-         e8pzjTHszIH9AZ7BslJGfFIUEPsNOCY4D9tIzpJKOnMi9c/8+qfnHmA3X9URRn4ojysg
-         HKeA==
-X-Gm-Message-State: ANoB5pm0wetxmslOhBMIhu3zGGEMxU24ZTUSggPoGnwSek12TGk0xroc
-        GLQVCV3iZ+8p5gxZrQ7PC8KZZ64Xln6eFET78Ac=
-X-Google-Smtp-Source: AA0mqf4Lw520lM3qgaq7H1rSzlTYOhLDdcMaZVsvFk92xnVtm+dMO4gICMZigRpRuFyb0oxNddMHeA==
-X-Received: by 2002:aa7:c787:0:b0:46d:cead:4eab with SMTP id n7-20020aa7c787000000b0046dcead4eabmr27364398eds.6.1671223851805;
-        Fri, 16 Dec 2022 12:50:51 -0800 (PST)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id d30-20020a056402401e00b0046b25b93451sm1237896eda.85.2022.12.16.12.50.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 12:50:51 -0800 (PST)
-Received: by mail-wr1-f47.google.com with SMTP id h7so3659318wrs.6
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:50:50 -0800 (PST)
-X-Received: by 2002:a5d:4950:0:b0:242:1f80:6cd9 with SMTP id
- r16-20020a5d4950000000b002421f806cd9mr26993001wrs.405.1671223850700; Fri, 16
- Dec 2022 12:50:50 -0800 (PST)
+        Fri, 16 Dec 2022 15:52:22 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC5E167E6;
+        Fri, 16 Dec 2022 12:52:21 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGKoIlQ019840;
+        Fri, 16 Dec 2022 20:51:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=lwTgPVE7s93yWALKfWps/+fuj40rX6BhC0pqamOZAbU=;
+ b=L5EqbfALn8vWO8JCLVeKFgHs4JVtxqibBz+67m+SY9ewxL/L59CbssZVwtQFCAXVn3KV
+ 6hOXEck9vrNLcY5oWqIZHfye8gBGVuKmOrDL3hoWHJ6cCjr8+KtDXonpiynZoTXfNbPH
+ ginX9HqC60/VWb/CpiakXEtG12RaX8T6YxSZEXWM6lvDIaURtrZO9kCjFyCfTWBbyr5g
+ 1NXEAr5Crzbwp+l7mz8A2NaD5CB3g8YMebhr5u5B2pTcTdQS7zvpnn3E+BRXUoBiaLLX
+ kl31JeoR+z632uI/0FlqixyTasMV0d4vZEF3RD4I5+PJHXMQAoWmitxzhZi1neEFZU9d Zw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mgvecrna7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Dec 2022 20:51:56 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BGKptXo031823
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Dec 2022 20:51:55 GMT
+Received: from [10.110.127.101] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 16 Dec
+ 2022 12:51:53 -0800
+Message-ID: <1bb4e2c3-3f6f-c161-ba7b-8e96f100f926@quicinc.com>
+Date:   Fri, 16 Dec 2022 12:51:52 -0800
 MIME-Version: 1.0
-References: <1671212293-14767-1-git-send-email-quic_vnivarth@quicinc.com>
-In-Reply-To: <1671212293-14767-1-git-send-email-quic_vnivarth@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 16 Dec 2022 12:50:38 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=UH_K+oyKOxk88_3zcYTB8C8JHAJVqFwLdO4DE0_wtvBg@mail.gmail.com>
-Message-ID: <CAD=FV=UH_K+oyKOxk88_3zcYTB8C8JHAJVqFwLdO4DE0_wtvBg@mail.gmail.com>
-Subject: Re: [V2] dmaengine: qcom: gpi: Set link_rx bit on GO TRE for rx operation
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        vkoul@kernel.org, linux-arm-msm@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
-        quic_vtanuku@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [RFC PATCH 1/6] drm/msm/dpu1: Implement DSC binding to PP block
+ for CTL V1
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        <phone-devel@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+CC:     <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Stephen Boyd" <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Jessica Zhang" <quic_jesszhan@quicinc.com>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        "Jani Nikula" <jani.nikula@intel.com>,
+        sunliming <sunliming@kylinos.cn>,
+        "Sam Ravnborg" <sam@ravnborg.org>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        "Vinod Polimera" <quic_vpolimer@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20221213232207.113607-1-marijn.suijten@somainline.org>
+ <20221213232207.113607-2-marijn.suijten@somainline.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20221213232207.113607-2-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: D7Eu62rNXFe6hpvmgDi6ZlchPJQEZzqA
+X-Proofpoint-ORIG-GUID: D7Eu62rNXFe6hpvmgDi6ZlchPJQEZzqA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-16_14,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=999 priorityscore=1501
+ bulkscore=0 suspectscore=0 malwarescore=0 mlxscore=0 clxscore=1011
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212160185
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Fri, Dec 16, 2022 at 9:38 AM Vijaya Krishna Nivarthi
-<quic_vnivarth@quicinc.com> wrote:
->
-> Rx operation on SPI GSI DMA is currently not working.
-> As per GSI spec, link_rx bit is to be set on GO TRE on tx
-> channel whenever there is going to be a DMA TRE on rx
-> channel. This is currently set for duplex operation only.
->
-> Set the bit for rx operation as well.
-> This is part of changes required to bring up Rx.
->
-> Fixes: 94b8f0e58fa1 ("dmaengine: qcom: gpi: set chain and link flag for duplex")
-> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+
+On 12/13/2022 3:22 PM, Marijn Suijten wrote:
+> All V1 CTL blocks (active CTLs) explicitly bind the pixel output from a
+> DSC block to a PINGPONG block by setting the PINGPONG idx in a DSC
+> hardware register.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 > ---
-> v1 -> v2:
-> - updated change description
-> ---
->  drivers/dma/qcom/gpi.c | 1 +
->  1 file changed, 1 insertion(+)
-
-Without knowing anything about how the hardware actually works, I can
-say that the change looks OK to me.
-
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c   |  3 +++
+>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |  9 +++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c    | 27 +++++++++++++++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h    |  4 +++
+>   4 files changed, 43 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 9c6817b5a194..c17ac85eb447 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -1830,6 +1830,9 @@ static void dpu_encoder_dsc_pipe_cfg(struct dpu_hw_dsc *hw_dsc,
+>   	if (hw_pp->ops.setup_dsc)
+>   		hw_pp->ops.setup_dsc(hw_pp);
+>   
+> +	if (hw_dsc->ops.dsc_bind_pingpong_blk)
+> +		hw_dsc->ops.dsc_bind_pingpong_blk(hw_dsc, true, hw_pp->idx);
+> +
+>   	if (hw_pp->ops.enable_dsc)
+>   		hw_pp->ops.enable_dsc(hw_pp);
+>   }
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index c160dae95a69..96f849907aa2 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -268,6 +268,15 @@ enum {
+>   	DPU_VBIF_MAX
+>   };
+>   
+> +/**
+> + * DSC features
+> + * @DPU_DSC_OUTPUT_CTRL       Configure which PINGPONG block gets
+> + *                            the pixel output from this DSC.
+> + */
+> +enum {
+> +	DPU_DSC_OUTPUT_CTRL = 0x1,
+> +};
+> +
+>   /**
+>    * MACRO DPU_HW_BLK_INFO - information of HW blocks inside DPU
+>    * @name:              string name for debug purposes
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
+> index 3662df698dae..619926da1441 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
+> @@ -29,6 +29,8 @@
+>   #define DSC_RANGE_MAX_QP                0x0B0
+>   #define DSC_RANGE_BPG_OFFSET            0x0EC
+>   
+> +#define DSC_CTL(m) (0x1800 - 0x3FC * (m - DSC_0))
+> +
+>   static void dpu_hw_dsc_disable(struct dpu_hw_dsc *dsc)
+>   {
+>   	struct dpu_hw_blk_reg_map *c = &dsc->hw;
+> @@ -150,6 +152,29 @@ static void dpu_hw_dsc_config_thresh(struct dpu_hw_dsc *hw_dsc,
+>   	}
+>   }
+>   
+> +static void dpu_hw_dsc_bind_pingpong_blk(
+> +		struct dpu_hw_dsc *hw_dsc,
+> +		bool enable,
+> +		const enum dpu_pingpong pp)
+> +{
+> +	struct dpu_hw_blk_reg_map *c = &hw_dsc->hw;
+> +	int mux_cfg = 0xF;
+> +	u32 dsc_ctl_offset;
+> +
+> +	dsc_ctl_offset = DSC_CTL(hw_dsc->idx);
+> +
+> +	if (enable)
+> +		mux_cfg = (pp - PINGPONG_0) & 0x7;
+> +
+> +	DRM_DEBUG_KMS("%s dsc:%d %s pp:%d\n",
+> +			enable ? "Binding" : "Unbinding",
+> +			hw_dsc->idx - DSC_0,
+> +			enable ? "to" : "from",
+> +			pp - PINGPONG_0);
+> +
+> +	DPU_REG_WRITE(c, dsc_ctl_offset, mux_cfg);
+> +}
+> +
+>   static struct dpu_dsc_cfg *_dsc_offset(enum dpu_dsc dsc,
+>   				       const struct dpu_mdss_cfg *m,
+>   				       void __iomem *addr,
+> @@ -174,6 +199,8 @@ static void _setup_dsc_ops(struct dpu_hw_dsc_ops *ops,
+>   	ops->dsc_disable = dpu_hw_dsc_disable;
+>   	ops->dsc_config = dpu_hw_dsc_config;
+>   	ops->dsc_config_thresh = dpu_hw_dsc_config_thresh;
+> +	if (cap & BIT(DPU_DSC_OUTPUT_CTRL))
+> +		ops->dsc_bind_pingpong_blk = dpu_hw_dsc_bind_pingpong_blk;
+>   };
+>   
+>   struct dpu_hw_dsc *dpu_hw_dsc_init(enum dpu_dsc idx, void __iomem *addr,
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
+> index c0b77fe1a696..ae9b5db53d7f 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
+> @@ -42,6 +42,10 @@ struct dpu_hw_dsc_ops {
+>   	 */
+>   	void (*dsc_config_thresh)(struct dpu_hw_dsc *hw_dsc,
+>   				  struct drm_dsc_config *dsc);
+> +
+> +	void (*dsc_bind_pingpong_blk)(struct dpu_hw_dsc *hw_dsc,
+> +				  bool enable,
+> +				  enum dpu_pingpong pp);
+>   };
+>   
+>   struct dpu_hw_dsc {
