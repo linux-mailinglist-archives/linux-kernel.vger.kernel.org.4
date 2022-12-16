@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD5564F245
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 21:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CBDE64F248
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 21:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbiLPURd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 15:17:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
+        id S231981AbiLPURq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 15:17:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231963AbiLPURV (ORCPT
+        with ESMTP id S231965AbiLPURW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 15:17:21 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6C56A741
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:17:20 -0800 (PST)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGJx5ZI011799
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:17:20 -0800
+        Fri, 16 Dec 2022 15:17:22 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480196A762
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:17:21 -0800 (PST)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGJxe1t026562
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:17:21 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=TsEKLROJI6bk+d/af34BtH3nHi+XT+AwCEfmZNUH3/Y=;
- b=eg/nESr6F77JzUbkWU0e8iE2X8/jNwrl9zRoWRDdZr9uOfV0IDl/ujcTuVTc15OXPMls
- qU20SlqzotONNGPF/XwPTBIXdMUmsF5JBreS/shSEouA+j7ohJczc3i9drTwXVqyWhF7
- uzJGYjx4yBnaQLsTh/JEY3tCWGUdCWeiYeFclsfq/fjyvWuuXKDj+vPrgdxzm/RDEpzQ
- +DugdrXadzXsbN1rvNvYRc3gq07R5VlZ8ZMEfKFAi72eBjaPi13EDukrGm2vBM4HGWsT
- 0QBbcoQbnNkyhujIGVmQcO9VshkHIKrdtE0bV0512vMynv7F3sHtHUP0EpRQLVjo7UX3 LA== 
+ bh=P/KRpfmdlQUKxAAPrLlGtIIYCnA6qEIJS0aGmE3w/OM=;
+ b=MbCoiSgfMSiseLUY8bCAs3dbyFZQ3Rl0CLAubF9uzrqkfr/MvHkNbhvABzz3rPOT94Uw
+ sTTUx6fDbStVDEpl/yLxoFGe5kd913/iZPC8NzP4KNck043HmxwxPnhDpEln4pd8i9jN
+ 6Cw3Lal8BKx/kX+3JkIH1HhFzFzt7+aMQf/q36VH/uV+dYPUng6PyeXINbyO+CNAX5wU
+ 9z2qD1wgvH7IFT9nDRQIKIlr5VhzMpcPlVILYm71FLYPu22UN5iWFdsEGlZAz1Kdfl3g
+ vSiVkdpvfAUdtxLcTxFzUw2ZW8+WSkwiTrstgXw3VCJtgTgDtji/8m1fiSDv2xYl4U6n QQ== 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3mgm45uyg4-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3mgh7v57s3-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:17:19 -0800
-Received: from twshared24004.14.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:17:20 -0800
+Received: from twshared8047.05.ash9.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 16 Dec 2022 12:17:18 -0800
+ 15.1.2375.34; Fri, 16 Dec 2022 12:17:20 -0800
 Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
-        id 1A5B2D042AB7; Fri, 16 Dec 2022 12:17:10 -0800 (PST)
+        id 289EAD042AB9; Fri, 16 Dec 2022 12:17:10 -0800 (PST)
 From:   Keith Busch <kbusch@meta.com>
 To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         Matthew Wilcox <willy@infradead.org>
 CC:     Tony Battersby <tonyb@cybernetics.com>,
         Kernel Team <kernel-team@meta.com>,
         Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv2 04/11] dmapool: cleanup integer types
-Date:   Fri, 16 Dec 2022 12:16:18 -0800
-Message-ID: <20221216201625.2362737-5-kbusch@meta.com>
+Subject: [PATCHv2 05/11] dmapool: speedup DMAPOOL_DEBUG with init_on_alloc
+Date:   Fri, 16 Dec 2022 12:16:19 -0800
+Message-ID: <20221216201625.2362737-6-kbusch@meta.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221216201625.2362737-1-kbusch@meta.com>
 References: <20221216201625.2362737-1-kbusch@meta.com>
@@ -53,8 +53,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: vhSY8vOHsHmUmbV2-dPGRoPkjZHkTU1j
-X-Proofpoint-GUID: vhSY8vOHsHmUmbV2-dPGRoPkjZHkTU1j
+X-Proofpoint-GUID: ZQVgAyTWC7jHrUwurblEzB0HFo65Zofu
+X-Proofpoint-ORIG-GUID: ZQVgAyTWC7jHrUwurblEzB0HFo65Zofu
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-16_14,2022-12-15_02,2022-06-22_01
@@ -70,89 +70,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tony Battersby <tonyb@cybernetics.com>
 
-To represent the size of a single allocation, dmapool currently uses
-'unsigned int' in some places and 'size_t' in other places.  Standardize
-on 'unsigned int' to reduce overhead, but use 'size_t' when counting all
-the blocks in the entire pool.
+Avoid double-memset of the same allocated memory in dma_pool_alloc()
+when both DMAPOOL_DEBUG is enabled and init_on_alloc=3D1.
 
 Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
 Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
- mm/dmapool.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ mm/dmapool.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/mm/dmapool.c b/mm/dmapool.c
-index 20616b760bb9c..ee993bb59fc27 100644
+index ee993bb59fc27..eaed3ffb42aa8 100644
 --- a/mm/dmapool.c
 +++ b/mm/dmapool.c
-@@ -43,10 +43,10 @@
- struct dma_pool {		/* the pool */
- 	struct list_head page_list;
- 	spinlock_t lock;
--	size_t size;
- 	struct device *dev;
--	size_t allocation;
--	size_t boundary;
-+	unsigned int size;
-+	unsigned int allocation;
-+	unsigned int boundary;
- 	char name[32];
- 	struct list_head pools;
- };
-@@ -73,7 +73,7 @@ static ssize_t pools_show(struct device *dev, struct de=
-vice_attribute *attr, cha
- 	mutex_lock(&pools_lock);
- 	list_for_each_entry(pool, &dev->dma_pools, pools) {
- 		unsigned pages =3D 0;
--		unsigned blocks =3D 0;
-+		size_t blocks =3D 0;
-=20
- 		spin_lock_irq(&pool->lock);
- 		list_for_each_entry(page, &pool->page_list, page_list) {
-@@ -83,9 +83,10 @@ static ssize_t pools_show(struct device *dev, struct d=
-evice_attribute *attr, cha
- 		spin_unlock_irq(&pool->lock);
-=20
- 		/* per-pool info, no real statistics yet */
--		size +=3D sysfs_emit_at(buf, size, "%-16s %4u %4zu %4zu %2u\n",
-+		size +=3D sysfs_emit_at(buf, size, "%-16s %4zu %4zu %4u %2u\n",
- 				      pool->name, blocks,
--				      pages * (pool->allocation / pool->size),
-+				      (size_t) pages *
-+				      (pool->allocation / pool->size),
- 				      pool->size, pages);
- 	}
- 	mutex_unlock(&pools_lock);
-@@ -133,7 +134,7 @@ struct dma_pool *dma_pool_create(const char *name, st=
-ruct device *dev,
- 	else if (align & (align - 1))
- 		return NULL;
-=20
--	if (size =3D=3D 0)
-+	if (size =3D=3D 0 || size > INT_MAX)
- 		return NULL;
- 	else if (size < 4)
- 		size =3D 4;
-@@ -146,6 +147,8 @@ struct dma_pool *dma_pool_create(const char *name, st=
-ruct device *dev,
- 	else if ((boundary < size) || (boundary & (boundary - 1)))
- 		return NULL;
-=20
-+	boundary =3D min(boundary, allocation);
-+
- 	retval =3D kmalloc(sizeof(*retval), GFP_KERNEL);
- 	if (!retval)
- 		return retval;
-@@ -306,7 +309,7 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t mem=
+@@ -356,7 +356,7 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t mem=
 _flags,
- {
- 	unsigned long flags;
- 	struct dma_page *page;
--	size_t offset;
-+	unsigned int offset;
- 	void *retval;
-=20
- 	might_alloc(mem_flags);
+ 			break;
+ 		}
+ 	}
+-	if (!(mem_flags & __GFP_ZERO))
++	if (!want_init_on_alloc(mem_flags))
+ 		memset(retval, POOL_POISON_ALLOCATED, pool->size);
+ #endif
+ 	spin_unlock_irqrestore(&pool->lock, flags);
 --=20
 2.30.2
 
