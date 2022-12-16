@@ -2,209 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2557364F0BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 19:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C5164F0CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 19:16:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbiLPSJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 13:09:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
+        id S230479AbiLPSQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 13:16:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbiLPSJI (ORCPT
+        with ESMTP id S229453AbiLPSQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 13:09:08 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C3B3B9C5
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 10:09:07 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id j16-20020a056830271000b0067202045ee9so1826109otu.7
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 10:09:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oMhT+z9S4ajvxZOpLPtLzBkB1H+/PH1H0XtszQxrbJw=;
-        b=3VAfy5O+VCkVtOfxakZNYZE++GSccgfUZynRfiJZVTPmwzodC4nBISkvKJKCVVzsfC
-         bOrRm41GoJ4b9FJr93ZFQCakcWBYH8fM2DL5hUog5orU9DPbO2FSAIUBkJwczrO4oZku
-         duKKS2eLGkOFTbR8mx9HnMp+xhkv1yjMFjpRBd83NBxJ2euotrQkoRiDdRNw96HvQVrQ
-         T+WRwxhhEowAQdcNilPYv/pQUoQ1dQkGEU15amAK34TiJPg5W7wvzz1x3P4F7qZmiQae
-         D+OQyPl6e/imaEvApBo3SULLI+ZdNrYbFkaDKCznkaEOExr35qiluRQwUod6XbFcHkAu
-         JQog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oMhT+z9S4ajvxZOpLPtLzBkB1H+/PH1H0XtszQxrbJw=;
-        b=aT4stP2p81+vx89JlY32WSgUxCSwjVH3okByi5H0sMk+VqKX/0WQ/xfk3WTYrEuZRT
-         Bkanoi3us6NhIJ4MU8sdXq9Fm8EANrLEPTBN6veSo3JFrx57uTbgGT0NxaeR34F3cR+B
-         h1Ne+vaHvwqS9RI8SIkzoc3BNkbBOS78D75MmWr714btsAF1OjsJ2HDULHs2R7J5hFBR
-         7eq8XUYLkHT5j4beuxbdqHbO0uDCFDaSikO1gl6kU2yqEqv003I0mnFlJvoarp8mQApr
-         iV1MKVCmjH5BVWo12TBs4IGFnu5urMlIHPrmyUCDxN6zoynr/o/gX+xKM2VcfYjz16Iz
-         NbBQ==
-X-Gm-Message-State: ANoB5pne2XIUSGyllA2f9CwwW9kO0iAFY3oMEJ+eF7rJjrhmts/PwBl5
-        /QpHL28qkn6xXBtQ8Ign/VSnlw==
-X-Google-Smtp-Source: AA0mqf4s8QbHTaWAc78Qc0VKG9ixx0lYe4dR2HPiAeNsWHPMuXp46GHQm+sR36gi9GPrhCSGzz/Zqg==
-X-Received: by 2002:a9d:7345:0:b0:670:9f08:2c48 with SMTP id l5-20020a9d7345000000b006709f082c48mr9495152otk.9.1671214146523;
-        Fri, 16 Dec 2022 10:09:06 -0800 (PST)
-Received: from smtpclient.apple (172-125-78-211.lightspeed.sntcca.sbcglobal.net. [172.125.78.211])
-        by smtp.gmail.com with ESMTPSA id t26-20020a05683022fa00b00661ad8741b4sm1139620otc.24.2022.12.16.10.09.04
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 16 Dec 2022 10:09:05 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v2 2/2] hfsplus: fix uninit-value in hfsplus_delete_cat()
-From:   Viacheslav Dubeyko <slava@dubeyko.com>
-In-Reply-To: <946950be-482c-ef9f-404c-2ce758ba175d@huawei.com>
-Date:   Fri, 16 Dec 2022 10:09:00 -0800
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aditya Garg <gargaditya08@live.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Jeff Layton <jlayton@kernel.org>, hannes@cmpxchg.org,
-        "Theodore Y . Ts'o" <tytso@mit.edu>, muchun.song@linux.dev,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <6B5CECB6-C620-479A-A8EC-817CCCD9ECBB@dubeyko.com>
-References: <20221215081820.948990-1-chenxiaosong2@huawei.com>
- <20221215081820.948990-3-chenxiaosong2@huawei.com>
- <6258B9FC-0A00-46BC-9C6C-720963D58A06@dubeyko.com>
- <946950be-482c-ef9f-404c-2ce758ba175d@huawei.com>
-To:     ChenXiaoSong <chenxiaosong2@huawei.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 16 Dec 2022 13:16:09 -0500
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B90DE5D699
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 10:16:00 -0800 (PST)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 2BGIAnf3023871;
+        Fri, 16 Dec 2022 12:10:49 -0600
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 2BGIAmSn023870;
+        Fri, 16 Dec 2022 12:10:48 -0600
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Fri, 16 Dec 2022 12:10:48 -0600
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jan-Benedict Glaw <jbglaw@lug-owl.de>,
+        Joel Stanley <joel@jms.id.au>
+Subject: Re: [PATCH v2] powerpc: Pass correct CPU reference to assembler
+Message-ID: <20221216181048.GC25951@gate.crashing.org>
+References: <01fe73614988e2402a7526fb6b6e903bc3777bb5.1671179743.git.christophe.leroy@csgroup.eu> <20221216171821.GA25951@gate.crashing.org> <73fc1107-b540-bec3-7625-c6e6d0641bbb@csgroup.eu>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <73fc1107-b540-bec3-7625-c6e6d0641bbb@csgroup.eu>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 16, 2022 at 05:57:46PM +0000, Christophe Leroy wrote:
+> Le 16/12/2022 à 18:18, Segher Boessenkool a écrit :
+> > On Fri, Dec 16, 2022 at 09:35:50AM +0100, Christophe Leroy wrote:
+> >> Today we have CONFIG_TARGET_CPU which provides the identification of the
+> >> expected CPU, it is used for GCC. Use it as well for the assembler.
+> > 
+> > Why do you use -Wa, at all for this?  The compiler should already pass
+> > proper options always!
+> 
+> That's historical I guess. Comes from commit 14cf11af6cf6 ("powerpc: 
+> Merge enough to start building in arch/powerpc.")
+
+Ah.  The patch moves stuff around, I thought more of it is new than it
+really is.  Sorry.
+
+It would be good to get rid of all such things that do no good and can
+easily cause problems, of course, but that does not belong to this patch
+of course.
+
+> >> +cpu-as-$(CONFIG_PPC_BOOK3S_64)	+= $(call as-option,-Wa$(comma)-many)
+> > 
+> > What is this for?  Using -many is a huge step back, it hides many
+> > problems :-(
+> 
+> The only thing I did is removed the -Wa,-mpower4 from the line, leaving 
+> the remaining part. Initialy it was:
+> 
+> cpu-as-$(CONFIG_PPC_BOOK3S_64) += $(call as-option,-Wa$(comma)-mpower4) 
+> $(call as-option,-Wa$(comma)-many)
+> 
+> It was added in 2018 by commit 960e30029863 ("powerpc/Makefile: Fix 
+> PPC_BOOK3S_64 ASFLAGS"). There is a long explanation it the commit.
+> 
+> Should we remove it ?
+
+The commit says it is a workaround for clang problems, so it needs
+testing there.  It also needs testing everywhere else, because as I said
+it hides a lot of problems, so removing it will make a lot of sloppy
+code that has crept in since 2018 scream bloody murder :-(
 
 
-> On Dec 15, 2022, at 5:16 PM, ChenXiaoSong <chenxiaosong2@huawei.com> =
-wrote:
->=20
-> =E5=9C=A8 2022/12/16 3:03, Viacheslav Dubeyko =E5=86=99=E9=81=93:
->> Maybe, I am missing something. But where in the second version of the =
-patch
->> initialization of subfolders?
->=20
-> The first patch of the patchset factor out hfsplus_init_inode() from =
-hfsplus_new_inode():
->=20
-> void hfsplus_init_inode(struct hfsplus_inode_info *hip)
-> {
->        INIT_LIST_HEAD(&hip->open_dir_list);
->        spin_lock_init(&hip->open_dir_lock);
->        mutex_init(&hip->extents_lock);
->        atomic_set(&hip->opencnt, 0);
->        hip->extent_state =3D 0;
->        hip->flags =3D 0;
->        hip->userflags =3D 0;
->        hip->subfolders =3D 0; /* I am here */
->        memset(hip->first_extents, 0, sizeof(hfsplus_extent_rec));
->        memset(hip->cached_extents, 0, sizeof(hfsplus_extent_rec));
->        hip->alloc_blocks =3D 0;
->        hip->first_blocks =3D 0;
->        hip->cached_start =3D 0;
->        hip->cached_blocks =3D 0;
->        hip->phys_size =3D 0;
->        hip->fs_blocks =3D 0;
->        hip->rsrc_inode =3D NULL;
-> }
-
-As far as I can see, you sent 0/2, 1/2, 2/2 patches in second version. =
-And patch 1/2 contains
-only this:
-
-diff --git a/fs/hfsplus/hfsplus_fs.h b/fs/hfsplus/hfsplus_fs.h
-index 6aa919e59483..2aa719e00ae5 100644
---- a/fs/hfsplus/hfsplus_fs.h
-+++ b/fs/hfsplus/hfsplus_fs.h
-@@ -472,6 +472,7 @@ extern const struct dentry_operations =
-hfsplus_dentry_operations;
-
-int hfsplus_write_begin(struct file *file, struct address_space =
-*mapping,
-		loff_t pos, unsigned len, struct page **pagep, void =
-**fsdata);
-+void hfsplus_init_inode(struct hfsplus_inode_info *hip);
-struct inode *hfsplus_new_inode(struct super_block *sb, struct inode =
-*dir,
-				umode_t mode);
-void hfsplus_delete_inode(struct inode *inode);
-diff --git a/fs/hfsplus/inode.c b/fs/hfsplus/inode.c
-index 840577a0c1e7..d921b32d292e 100644
---- a/fs/hfsplus/inode.c
-+++ b/fs/hfsplus/inode.c
-@@ -379,22 +379,8 @@ static const struct file_operations =
-hfsplus_file_operations =3D {
-	.unlocked_ioctl =3D hfsplus_ioctl,
-};
-
--struct inode *hfsplus_new_inode(struct super_block *sb, struct inode =
-*dir,
--				umode_t mode)
-+void hfsplus_init_inode(struct hfsplus_inode_info *hip)
-{
--	struct hfsplus_sb_info *sbi =3D HFSPLUS_SB(sb);
--	struct inode *inode =3D new_inode(sb);
--	struct hfsplus_inode_info *hip;
--
--	if (!inode)
--		return NULL;
--
--	inode->i_ino =3D sbi->next_cnid++;
--	inode_init_owner(&init_user_ns, inode, dir, mode);
--	set_nlink(inode, 1);
--	inode->i_mtime =3D inode->i_atime =3D inode->i_ctime =3D =
-current_time(inode);
--
--	hip =3D HFSPLUS_I(inode);
-	INIT_LIST_HEAD(&hip->open_dir_list);
-	spin_lock_init(&hip->open_dir_lock);
-	mutex_init(&hip->extents_lock);
-@@ -412,6 +398,25 @@ struct inode *hfsplus_new_inode(struct super_block =
-*sb, struct inode *dir,
-	hip->phys_size =3D 0;
-	hip->fs_blocks =3D 0;
-	hip->rsrc_inode =3D NULL;
-+}
-+
-+struct inode *hfsplus_new_inode(struct super_block *sb, struct inode =
-*dir,
-+				umode_t mode)
-+{
-+	struct hfsplus_sb_info *sbi =3D HFSPLUS_SB(sb);
-+	struct inode *inode =3D new_inode(sb);
-+	struct hfsplus_inode_info *hip;
-+
-+	if (!inode)
-+		return NULL;
-+
-+	inode->i_ino =3D sbi->next_cnid++;
-+	inode_init_owner(&init_user_ns, inode, dir, mode);
-+	set_nlink(inode, 1);
-+	inode->i_mtime =3D inode->i_atime =3D inode->i_ctime =3D =
-current_time(inode);
-+
-+	hip =3D HFSPLUS_I(inode);
-+	hfsplus_init_inode(hip);
-	if (S_ISDIR(inode->i_mode)) {
-		inode->i_size =3D 2;
-		sbi->folder_count++;
---=20
-2.31.1
-
-So, where is here hip->subfolders =3D 0; /* I am here */? Sorry, maybe I =
-missed some email.
-
-Thanks,
-Slava.
-
-
+Segher
