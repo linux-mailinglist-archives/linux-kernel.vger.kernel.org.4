@@ -2,108 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 898B464EC44
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 14:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 022A764EC4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 14:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbiLPNrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 08:47:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
+        id S230030AbiLPNup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 08:50:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLPNrs (ORCPT
+        with ESMTP id S229469AbiLPNun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 08:47:48 -0500
-Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FF3233A3;
-        Fri, 16 Dec 2022 05:47:45 -0800 (PST)
-Received: from frontend03.mail.m-online.net (unknown [192.168.6.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4NYVly68x2z1r0mw;
-        Fri, 16 Dec 2022 14:47:42 +0100 (CET)
-Received: from localhost (dynscan3.mnet-online.de [192.168.6.84])
-        by mail.m-online.net (Postfix) with ESMTP id 4NYVly39mbz1qqlR;
-        Fri, 16 Dec 2022 14:47:42 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan3.mail.m-online.net [192.168.6.84]) (amavisd-new, port 10024)
-        with ESMTP id Cv_LbUTLSLYi; Fri, 16 Dec 2022 14:47:40 +0100 (CET)
-X-Auth-Info: d2c8vAf/7S096P2171wjDzOH88fu51ugK9KL8/ApnVI0cpNJoTT8f6EyRvs9DVIV
-Received: from igel.home (aftr-62-216-205-197.dynamic.mnet-online.de [62.216.205.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Fri, 16 Dec 2022 14:47:40 +0100 (CET)
-Received: by igel.home (Postfix, from userid 1000)
-        id B46522C31D9; Fri, 16 Dec 2022 14:47:40 +0100 (CET)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Laight <David.Laight@aculab.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH v9] kallsyms: Add self-test facility
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
-        <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
-        <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
-        <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
-        <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
-        <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
-        <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
-        <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
-        <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
-        <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
-        <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
-        <87h6xvk1dc.fsf@igel.home>
-        <1739960e-7f95-88ef-9b91-31c7504bb7fd@huawei.com>
-X-Yow:  ..  I think I'd better go back to my DESK and toy with
- a few common MISAPPREHENSIONS...
-Date:   Fri, 16 Dec 2022 14:47:40 +0100
-In-Reply-To: <1739960e-7f95-88ef-9b91-31c7504bb7fd@huawei.com> (Leizhen's
-        message of "Fri, 16 Dec 2022 21:31:04 +0800")
-Message-ID: <87359fjw8z.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Fri, 16 Dec 2022 08:50:43 -0500
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C0C1B1C9;
+        Fri, 16 Dec 2022 05:50:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1671198637; x=1702734637;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=5l/yabekGsdFuR25QSgr9DRZbCIH3PHeIXqw+gVuang=;
+  b=h7GXj5zLXQHTEzTqAHPPjb4Bv9EvawdyinYUNXB13VnbagIg04uRt4nA
+   ECjfZ2tZAG0kSPAyWacw885MbyBUuJDbtOPsXo0xcm0jRAS05nXSY+Pau
+   xszCX1GaUot+BUm+ciV9reZQ5AvE7VxTv2+OOqv9DK/MXeqHtT78EEdfP
+   w=;
+X-IronPort-AV: E=Sophos;i="5.96,249,1665446400"; 
+   d="scan'208";a="162190110"
+Subject: Re: [PATCH v2 1/1] i2c: designware: set pinctrl recovery information from
+ device pinctrl
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-b5bd57cf.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 13:50:33 +0000
+Received: from EX13MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-m6i4x-b5bd57cf.us-east-1.amazon.com (Postfix) with ESMTPS id 189E542B90;
+        Fri, 16 Dec 2022 13:50:30 +0000 (UTC)
+Received: from EX19D013UWB003.ant.amazon.com (10.13.138.111) by
+ EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Fri, 16 Dec 2022 13:50:26 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX19D013UWB003.ant.amazon.com (10.13.138.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.20;
+ Fri, 16 Dec 2022 13:50:26 +0000
+Received: from [10.94.130.120] (10.94.130.120) by mail-relay.amazon.com
+ (10.43.161.249) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
+ Transport; Fri, 16 Dec 2022 13:50:20 +0000
+Message-ID: <1408bbef-10e3-f76b-b66d-b95e84748e18@amazon.com>
+Date:   Fri, 16 Dec 2022 15:50:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+CC:     <jarkko.nikula@linux.intel.com>, <mika.westerberg@linux.intel.com>,
+        <jsd@semihalf.com>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dwmw@amazon.co.uk>,
+        <benh@amazon.com>, <ronenk@amazon.com>, <talel@amazon.com>,
+        <jonnyc@amazon.com>, <hanochu@amazon.com>, <farbere@amazon.com>,
+        <itamark@amazon.com>
+References: <20221214142725.23881-1-hhhawa@amazon.com>
+ <Y5n1U1lYbcbJ5U1k@smile.fi.intel.com>
+ <efa9171f-98ac-f518-e59e-f6c4d7d3d4e6@amazon.com>
+ <Y5r2pZhe17dVBMme@smile.fi.intel.com>
+From:   "Hawa, Hanna" <hhhawa@amazon.com>
+In-Reply-To: <Y5r2pZhe17dVBMme@smile.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Dez 16 2022, Leizhen (ThunderTown) wrote:
 
-> On 2022/12/16 19:57, Andreas Schwab wrote:
->> On Dez 16 2022, Leizhen (ThunderTown) wrote:
->> 
->>> It seems that the problem is still strcmp(). After I commented strcmp() in
->>> arch/m68k/include/asm/string.h, and force it to use the one in lib/string.c,
->>> it works well.
->> 
->> Does that help?
->
-> It still needs to add 'volatile' to prevent compiler optimizations.
 
-If that makes a difference, then something else is wrong.
+On 12/15/2022 12:27 PM, Andy Shevchenko wrote:
+> OK, but why that function doesn't use the dev->pins->p if it's defined?
+> (As a fallback when rinfo->pinctrl is NULL. >
 
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+The solution will look like the below diff (get_device_pinctrl() is new 
+function that i've added that return the dev->pins->p)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 7539b0740351..469344d4ee43 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -34,6 +34,7 @@
+  #include <linux/of.h>
+  #include <linux/of_irq.h>
+  #include <linux/pinctrl/consumer.h>
++#include <linux/pinctrl/devinfo.h>
+  #include <linux/pm_domain.h>
+  #include <linux/pm_runtime.h>
+  #include <linux/pm_wakeirq.h>
+@@ -282,7 +283,11 @@ static void i2c_gpio_init_pinctrl_recovery(struct 
+i2c_adapter *adap)
+  {
+         struct i2c_bus_recovery_info *bri = adap->bus_recovery_info;
+         struct device *dev = &adap->dev;
+-       struct pinctrl *p = bri->pinctrl;
++       struct pinctrl *p;
++
++       if (!bri->pinctrl)
++               bri->pinctrl = get_device_pinctrl(dev->parent);
++       p = bri->pinctrl;
+
+> Wolfram?
+> 
+> Hanna, it seems you missed I²C maintainer to Cc...
+
+I based my CC/TO on get_maintainer.pl script. Will make sure that 
+Wolfram on CC next time.
