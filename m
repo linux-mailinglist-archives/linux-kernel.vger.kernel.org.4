@@ -2,52 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7225E64EB64
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 13:25:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7387364EB67
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 13:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiLPMZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 07:25:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60378 "EHLO
+        id S230115AbiLPM1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 07:27:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiLPMZg (ORCPT
+        with ESMTP id S229620AbiLPM1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 07:25:36 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB2514D19;
-        Fri, 16 Dec 2022 04:25:35 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NYSsX4n5Fz6J6J6;
-        Fri, 16 Dec 2022 20:22:24 +0800 (CST)
-Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 16 Dec
- 2022 12:25:32 +0000
-Date:   Fri, 16 Dec 2022 12:25:31 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V4 0/9] CXL: Process event logs
-Message-ID: <20221216122531.00001bef@huawei.com>
-In-Reply-To: <20221212070627.1372402-1-ira.weiny@intel.com>
-References: <20221212070627.1372402-1-ira.weiny@intel.com>
-Organization: Huawei Technologies R&D (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
+        Fri, 16 Dec 2022 07:27:10 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DAC5B87A
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 04:27:07 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id ay40so1756731wmb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 04:27:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lZPaMP3NS+aG29yEIXQBJU1PSsBR12KX/WLHE5hgBhg=;
+        b=EwFoobbGkq3kdjSSddn4dP2DlSB7v/6ahM91tKSIieGgu+t2VBP+wiUReEbfdbUGJK
+         1nzxnBgzE9dJDL8sJpgAwbbITAg4hMet8YEVncMfCCQptz4Uba1E7CgXT/MtOeiecOn/
+         u6R0pgxgQUp9TMpJuPy/nWddVXSqx7ybynW5OIiUOnTON1l0hdR2W40LxB+pVZUB+8q3
+         cEffdmakFndWYmWpy4pm1rSjuGUUSKtEPI36OaBC4qhe+timSCbiqEcL0TZxSDaTlRXb
+         E7mH2irkhjMd+vhj/wQ/Wtw2r3a/OHgo6pbgYtAIfhaCO/J76X+xhbQKw2jwQstGC72o
+         4wkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lZPaMP3NS+aG29yEIXQBJU1PSsBR12KX/WLHE5hgBhg=;
+        b=8LAODWoLv44r3ZVbR0rhMmGHjMYRohSdeiPvi6ROVKuzYh96I2nVQKtzDfzv8CQtwp
+         8bU7ais800pPdYTrVxM1qO4aTrm4fgqsUz1gGKQx4yJt+YmhdLi5yhRzrJ4C3dYG79Er
+         tmK6VcjGoi98fEhhpmYqsPe2SVq9jRyQWCcygQoq8ircGcXN+NQl+XTklfGOOv2CumSJ
+         55g8gJzkWUU06gRiWwCAiaMegZSHfiDb/9GhTmmUabF8VVQJgoOQgAN4sq73XhD7378t
+         V76CWC2Z8q3tRiHLotm3xgvX+OCpRN5h+apRqFfWskRTpk0z9KfnS4mLLMjdmYJsJdz5
+         gdQQ==
+X-Gm-Message-State: ANoB5pn4MrFNooZ/G0s/NBMbZGxfMU3gxwMIinrPFUZXVZj49+LZ5EqN
+        PMPYXOGLEBRB6h8WnbuHWow=
+X-Google-Smtp-Source: AA0mqf7bKZceTCnbTeFmQTOex7vWRPHqCRpJCrTYtkC7Fo4tgMc3BDdfxaa/jW+75d5ACMzJnmPTDg==
+X-Received: by 2002:a05:600c:35cd:b0:3cf:973e:c874 with SMTP id r13-20020a05600c35cd00b003cf973ec874mr24892024wmq.14.1671193626213;
+        Fri, 16 Dec 2022 04:27:06 -0800 (PST)
+Received: from [192.168.1.132] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id i26-20020a1c541a000000b003c6c182bef9sm11464603wmb.36.2022.12.16.04.27.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 04:27:05 -0800 (PST)
+Message-ID: <23f30de6-8122-2ab1-e519-1ade6650d8c0@gmail.com>
+Date:   Fri, 16 Dec 2022 13:27:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 2/3] soc: mediatek: mutex: Drop empty platform remove
+ function
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+References: <20221212222549.3779846-1-u.kleine-koenig@pengutronix.de>
+ <20221212222549.3779846-3-u.kleine-koenig@pengutronix.de>
+ <0670a966-2449-977d-a791-4b1c4478524b@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <0670a966-2449-977d-a791-4b1c4478524b@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,72 +81,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 11 Dec 2022 23:06:18 -0800
-ira.weiny@intel.com wrote:
 
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> This code has been tested with a newer qemu which allows for more events to be
-> returned at a time as well an additional QMP event and interrupt injection.
-> Those patches will follow once they have been cleaned up.
-> 
-> The series is now in 3 parts:
-> 
-> 	1) Base functionality including interrupts
-> 	2) Tracing specific events (Dynamic Capacity Event Record is defered)
-> 	3) cxl-test infrastructure for basic tests
-> 
-> Changes from V3
-> 	Feedback from Dan
-> 	Spit out ACPI changes for Bjorn
-> 
-> - Link to v3: https://lore.kernel.org/all/20221208052115.800170-1-ira.weiny@intel.com/
 
-Because I'm in a grumpy mood (as my colleagues will attest!)...
-This is dependent on the patch that moves the trace definitions and
-that's not upstream yet except in cxl/preview which is optimistic
-place to use for a base commit.  The id isn't the one below either which
-isn't in either mailine or the current CXL trees.
-
-Not that I actually checked the cover letter until it failed to apply
-(and hence already knew what was missing) but still, please call out
-dependencies unless they are in the branches Dan has queued up to push.
-
-I just want to play with Dave's fix for the RAS errors so having to jump
-through these other sets.
-
-Thanks,
-
-Jonathan
-
+On 13/12/2022 10:50, AngeloGioacchino Del Regno wrote:
+> Il 12/12/22 23:25, Uwe Kleine-König ha scritto:
+>> A remove callback just returning 0 is equivalent to no remove callback
+>> at all. So drop the useless function.
+>>
+>> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > 
+> Totally agree.
 > 
-> Davidlohr Bueso (1):
->   cxl/mem: Wire up event interrupts
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > 
-> Ira Weiny (8):
->   PCI/CXL: Export native CXL error reporting control
->   cxl/mem: Read, trace, and clear events on driver load
->   cxl/mem: Trace General Media Event Record
->   cxl/mem: Trace DRAM Event Record
->   cxl/mem: Trace Memory Module Event Record
->   cxl/test: Add generic mock events
->   cxl/test: Add specific events
->   cxl/test: Simulate event log overflow
-> 
->  drivers/acpi/pci_root.c       |   3 +
->  drivers/cxl/core/mbox.c       | 186 +++++++++++++
->  drivers/cxl/core/trace.h      | 479 ++++++++++++++++++++++++++++++++++
->  drivers/cxl/cxl.h             |  16 ++
->  drivers/cxl/cxlmem.h          | 171 ++++++++++++
->  drivers/cxl/cxlpci.h          |   6 +
->  drivers/cxl/pci.c             | 236 +++++++++++++++++
->  drivers/pci/probe.c           |   1 +
->  include/linux/pci.h           |   1 +
->  tools/testing/cxl/test/Kbuild |   2 +-
->  tools/testing/cxl/test/mem.c  | 352 +++++++++++++++++++++++++
->  11 files changed, 1452 insertions(+), 1 deletion(-)
-> 
-> 
-> base-commit: acb704099642bc822ef2aed223a0b8db1f7ea76e
 
+Applied thanks
