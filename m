@@ -2,128 +2,475 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2184864EE2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:50:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15EFC64EE30
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbiLPPuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 10:50:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
+        id S231478AbiLPPwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 10:52:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbiLPPu0 (ORCPT
+        with ESMTP id S231535AbiLPPwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 10:50:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A880362E95
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:50:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65421B81DB4
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:50:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A00F8C433D2;
-        Fri, 16 Dec 2022 15:50:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671205811;
-        bh=xZloe09AW17HVtjG+PDx0+BDGoNg91KCvWJB7A5php0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WvmalPl1UE2rei7ENXwYAxg7Q6rJ4dC4d+Xj3y6Sc/j6a/8J5daQlQNSjd5X8pAaa
-         iKbj6oef4Knm+xJPDyWAvB8aGf0lD7LISQIKNxZCXcividtmVvzM4eoAF7VcWcqv9m
-         Vu/Evr0j7/3K36nbWRcwio0XL9NdCtDZFzYTqdKDjS4L9kj2QNyAjQVWVA/gIS1SAu
-         ho6/dKnm1XxiKsci2/K6xYnkqB5rUfrTbS3+7Aq3XpqLJRqfWKjPVSWwbQSVG5q7br
-         l0S8v84MlpLboLAxe0VfgJAdQAudojXmVJIdwoxx3wpKqAtX5MxPGSN8y1qVn6sbbu
-         e8pKMwfbfbFAA==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        syzbot+4793f6096d174c90b4f7@syzkaller.appspotmail.com
-Subject: [PATCH] f2fs: fix to avoid potential deadlock
-Date:   Fri, 16 Dec 2022 23:50:00 +0800
-Message-Id: <20221216155000.3204-1-chao@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Fri, 16 Dec 2022 10:52:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC952D1FB
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:51:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671205865;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VzeAWf7o9iYFnEWXMhVbsUDOgRQpI8RINhpDTp/USlc=;
+        b=LMBWlNDeFXtloROJbF+bcqF8jSzvE9stPgmHKmFb7nLGfSG1AhL4a6N2qIyXQ24wqATgmL
+        duZ/ane2K30NBpy1/3DAHaWViNZl8LqyXnRNAKv5Sd6z3CZQdmzXG/Y1JnvzVskNoODk8d
+        edeaZDZF5SPNQxM1mzqWXDNl3Hz0/Uo=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-232-zDpSpWixNua0JId6PZ3ttg-1; Fri, 16 Dec 2022 10:51:03 -0500
+X-MC-Unique: zDpSpWixNua0JId6PZ3ttg-1
+Received: by mail-qv1-f69.google.com with SMTP id y5-20020a0cec05000000b004f98514e3fcso1651794qvo.18
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:51:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VzeAWf7o9iYFnEWXMhVbsUDOgRQpI8RINhpDTp/USlc=;
+        b=8KlFsqQuSgEoRjcNP09oK4/2J8OIj2o7eOZ7wY0qfzIcYgayXcJtumkh5piGjZEBBK
+         3jKVCRpctNn3Dxt2Jqpi8xKYLUDJNJk5qW3NnTkKyz1LZK2GeNctfGwfHELHpY21tEAd
+         0O+LBo+A2Kix2vkqQrlwfQa5ucTu8fuBxgDeBlPcCu59Qrl9jLn6Lb/ZkBFqMEieZ6pT
+         nA+LUtv6pi130uOcPv+A3JOBrU9GZPXUhw5lAyL/JbMpErx8Ggupac7x7x6W9C+3D8a8
+         xCXOJYU0lWYgCOSYdTc1gMY5mg1e+Ozcc1s9cc8x+cRjQvrhrQnKYufXTlL9U+32I752
+         P7Pw==
+X-Gm-Message-State: ANoB5pmKBIe/ce/nKYiyK8DsUMBnFTVvjRQm/zolx+wjMu1nA+ydlUzz
+        XeIjzQIm82sv8mTGZnMgLg6/ncgoi0p1JU5qIDL1KFPiwOQgKS/3P2N5Gv5SYwsRwQdTI2rRDkc
+        3k4bRN7eC4AAQl3+IEsoH4HRUb+1U4jGadMHwZASedkYVn+8lVSGq2LK0vv/9yEmccwCuatY6/Q
+        ==
+X-Received: by 2002:a05:622a:5149:b0:3a5:5f3d:f866 with SMTP id ew9-20020a05622a514900b003a55f3df866mr46805944qtb.42.1671205863018;
+        Fri, 16 Dec 2022 07:51:03 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf61qV/tR+3N3ZRBpaJ4bXZrNp5eWzxYJWXipKkel4P7kbm21fpeWlOmG5e+kBbZqPv7CCnsUw==
+X-Received: by 2002:a05:622a:5149:b0:3a5:5f3d:f866 with SMTP id ew9-20020a05622a514900b003a55f3df866mr46805892qtb.42.1671205862512;
+        Fri, 16 Dec 2022 07:51:02 -0800 (PST)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-45-70-31-26-132.dsl.bell.ca. [70.31.26.132])
+        by smtp.gmail.com with ESMTPSA id s81-20020a37a954000000b006eeb3165554sm1682297qke.19.2022.12.16.07.51.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 07:51:01 -0800 (PST)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        James Houghton <jthoughton@google.com>, peterx@redhat.com,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        David Hildenbrand <david@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jann Horn <jannh@google.com>
+Subject: [PATCH v4 0/9] mm/hugetlb: Make huge_pte_offset() thread-safe for pmd unshare
+Date:   Fri, 16 Dec 2022 10:50:51 -0500
+Message-Id: <20221216155100.2043537-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.37.3
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a potential deadlock reported by syzbot as below:
+Based on latest mm-unstable (da4b5585bc49).
 
-F2FS-fs (loop2): invalid crc value
-F2FS-fs (loop2): Found nat_bits in checkpoint
-F2FS-fs (loop2): Mounted with checkpoint version = 48b305e4
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0 Not tainted
-------------------------------------------------------
-syz-executor.2/32123 is trying to acquire lock:
-ffff0000c0e1a608 (&mm->mmap_lock){++++}-{3:3}, at: __might_fault+0x54/0xb4 mm/memory.c:5644
+This can be seen as a follow-up series to Mike's recent hugetlb vma lock
+series for pmd unsharing, but majorly covering safe use of huge_pte_offset.
 
-but task is already holding lock:
-ffff0001317c6088 (&sbi->sb_lock){++++}-{3:3}, at: f2fs_down_write fs/f2fs/f2fs.h:2205 [inline]
-ffff0001317c6088 (&sbi->sb_lock){++++}-{3:3}, at: f2fs_ioc_get_encryption_pwsalt fs/f2fs/file.c:2334 [inline]
-ffff0001317c6088 (&sbi->sb_lock){++++}-{3:3}, at: __f2fs_ioctl+0x1370/0x3318 fs/f2fs/file.c:4151
+Changelog for v3->v4:
+- Added r-bs
+- Rebased to recent Mike's work to move vma lock out of huge pmd share blocks
 
-which lock already depends on the new lock.
+Old versions:
 
-Chain exists of:
-  &mm->mmap_lock --> &nm_i->nat_tree_lock --> &sbi->sb_lock
+rfcv1:  https://lore.kernel.org/r/20221030212929.335473-1-peterx@redhat.com
+rfcv2:  https://lore.kernel.org/r/20221118011025.2178986-1-peterx@redhat.com
+v1:     https://lore.kernel.org/r/20221129193526.3588187-1-peterx@redhat.com
+v2:     https://lore.kernel.org/r/20221207203034.650899-1-peterx@redhat.com
+v3:     https://lore.kernel.org/r/20221209170100.973970-1-peterx@redhat.com
 
- Possible unsafe locking scenario:
+Problem
+=======
 
-       CPU0                    CPU1
-       ----                    ----
-  lock(&sbi->sb_lock);
-                               lock(&nm_i->nat_tree_lock);
-                               lock(&sbi->sb_lock);
-  lock(&mm->mmap_lock);
+huge_pte_offset() is a major helper used by hugetlb code paths to walk a
+hugetlb pgtable.  It's used mostly everywhere since that's needed even
+before taking the pgtable lock.
 
-Let's try to avoid above deadlock condition by moving __might_fault()
-out of sbi->sb_lock coverage.
+huge_pte_offset() is always called with mmap lock held with either read or
+write.  It was assumed to be safe but it's actually not.  One race
+condition can easily trigger by: (1) firstly trigger pmd share on a memory
+range, (2) do huge_pte_offset() on the range, then at the meantime, (3)
+another thread unshare the pmd range, and the pgtable page is prone to lost
+if the other shared process wants to free it completely (by either munmap
+or exit mm).
 
-Fixes: 95fa90c9e5a7 ("f2fs: support recording errors into superblock")
-Link: https://lore.kernel.org/linux-f2fs-devel/000000000000cd5fe305ef617fe2@google.com/T/#u
-Reported-by: syzbot+4793f6096d174c90b4f7@syzkaller.appspotmail.com
-Signed-off-by: Chao Yu <chao@kernel.org>
----
- fs/f2fs/file.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+The recent work from Mike on vma lock can resolve most of this already.
+It's achieved by forbidden pmd unsharing during the lock being taken, so no
+further risk of the pgtable page being freed.  It means if we can take the
+vma lock around all huge_pte_offset() callers it'll be safe.
 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index cad4bdd6f097..4bc98dbe8292 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -2336,6 +2336,7 @@ static int f2fs_ioc_get_encryption_pwsalt(struct file *filp, unsigned long arg)
- {
- 	struct inode *inode = file_inode(filp);
- 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-+	u8 encrypt_pw_salt[16];
- 	int err;
- 
- 	if (!f2fs_sb_has_encrypt(sbi))
-@@ -2360,12 +2361,14 @@ static int f2fs_ioc_get_encryption_pwsalt(struct file *filp, unsigned long arg)
- 		goto out_err;
- 	}
- got_it:
--	if (copy_to_user((__u8 __user *)arg, sbi->raw_super->encrypt_pw_salt,
--									16))
--		err = -EFAULT;
-+	memcpy(encrypt_pw_salt, sbi->raw_super->encrypt_pw_salt, 16);
- out_err:
- 	f2fs_up_write(&sbi->sb_lock);
- 	mnt_drop_write_file(filp);
+There're already a bunch of them that we did as per the latest mm-unstable,
+but also quite a few others that we didn't for various reasons especially
+on huge_pte_offset() usage.
+
+One more thing to mention is that besides the vma lock, i_mmap_rwsem can
+also be used to protect the pgtable page (along with its pgtable lock) from
+being freed from under us.  IOW, huge_pte_offset() callers need to either
+hold the vma lock or i_mmap_rwsem to safely walk the pgtables.
+
+A reproducer of such problem, based on hugetlb GUP (NOTE: since the race is
+very hard to trigger, one needs to apply another kernel delay patch too,
+see below):
+
+======8<=======
+  #define _GNU_SOURCE
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <errno.h>
+  #include <unistd.h>
+  #include <sys/mman.h>
+  #include <fcntl.h>
+  #include <linux/memfd.h>
+  #include <assert.h>
+  #include <pthread.h>
+
+  #define  MSIZE  (1UL << 30)     /* 1GB */
+  #define  PSIZE  (2UL << 20)     /* 2MB */
+
+  #define  HOLD_SEC  (1)
+
+  int pipefd[2];
+  void *buf;
+
+  void *do_map(int fd)
+  {
+      unsigned char *tmpbuf, *p;
+      int ret;
+
+      ret = posix_memalign((void **)&tmpbuf, MSIZE, MSIZE);
+      if (ret) {
+          perror("posix_memalign() failed");
+          return NULL;
+      }
+
+      tmpbuf = mmap(tmpbuf, MSIZE, PROT_READ | PROT_WRITE,
+                    MAP_SHARED | MAP_FIXED, fd, 0);
+      if (tmpbuf == MAP_FAILED) {
+          perror("mmap() failed");
+          return NULL;
+      }
+      printf("mmap() -> %p\n", tmpbuf);
+
+      for (p = tmpbuf; p < tmpbuf + MSIZE; p += PSIZE) {
+          *p = 1;
+      }
+
+      return tmpbuf;
+  }
+
+  void do_unmap(void *buf)
+  {
+      munmap(buf, MSIZE);
+  }
+
+  void proc2(int fd)
+  {
+      unsigned char c;
+
+      buf = do_map(fd);
+      if (!buf)
+          return;
+
+      read(pipefd[0], &c, 1);
+      /*
+       * This frees the shared pgtable page, causing use-after-free in
+       * proc1_thread1 when soft walking hugetlb pgtable.
+       */
+      do_unmap(buf);
+
+      printf("Proc2 quitting\n");
+  }
+
+  void *proc1_thread1(void *data)
+  {
+      /*
+       * Trigger follow-page on 1st 2m page.  Kernel hack patch needed to
+       * withhold this procedure for easier reproduce.
+       */
+      madvise(buf, PSIZE, MADV_POPULATE_WRITE);
+      printf("Proc1-thread1 quitting\n");
+      return NULL;
+  }
+
+  void *proc1_thread2(void *data)
+  {
+      unsigned char c;
+
+      /* Wait a while until proc1_thread1() start to wait */
+      sleep(0.5);
+      /* Trigger pmd unshare */
+      madvise(buf, PSIZE, MADV_DONTNEED);
+      /* Kick off proc2 to release the pgtable */
+      write(pipefd[1], &c, 1);
+
+      printf("Proc1-thread2 quitting\n");
+      return NULL;
+  }
+
+  void proc1(int fd)
+  {
+      pthread_t tid1, tid2;
+      int ret;
+
+      buf = do_map(fd);
+      if (!buf)
+          return;
+
+      ret = pthread_create(&tid1, NULL, proc1_thread1, NULL);
+      assert(ret == 0);
+      ret = pthread_create(&tid2, NULL, proc1_thread2, NULL);
+      assert(ret == 0);
+
+      /* Kick the child to share the PUD entry */
+      pthread_join(tid1, NULL);
+      pthread_join(tid2, NULL);
+
+      do_unmap(buf);
+  }
+
+  int main(void)
+  {
+      int fd, ret;
+
+      fd = memfd_create("test-huge", MFD_HUGETLB | MFD_HUGE_2MB);
+      if (fd < 0) {
+          perror("open failed");
+          return -1;
+      }
+
+      ret = ftruncate(fd, MSIZE);
+      if (ret) {
+          perror("ftruncate() failed");
+          return -1;
+      }
+
+      ret = pipe(pipefd);
+      if (ret) {
+          perror("pipe() failed");
+          return -1;
+      }
+
+      if (fork()) {
+          proc1(fd);
+      } else {
+          proc2(fd);
+      }
+
+      close(pipefd[0]);
+      close(pipefd[1]);
+      close(fd);
+
+      return 0;
+  }
+======8<=======
+
+The kernel patch needed to present such a race so it'll trigger 100%:
+
+======8<=======
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 9d97c9a2a15d..f8d99dad5004 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -38,6 +38,7 @@
+ #include <asm/page.h>
+ #include <asm/pgalloc.h>
+ #include <asm/tlb.h>
++#include <asm/delay.h>
+
+ #include <linux/io.h>
+ #include <linux/hugetlb.h>
+@@ -6290,6 +6291,7 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+                bool unshare = false;
+                int absent;
+                struct page *page;
++               unsigned long c = 0;
+
+                /*
+                 * If we have a pending SIGKILL, don't keep faulting pages and
+@@ -6309,6 +6311,13 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+                 */
+                pte = huge_pte_offset(mm, vaddr & huge_page_mask(h),
+                                      huge_page_size(h));
 +
-+	if (!err && copy_to_user((__u8 __user *)arg, encrypt_pw_salt, 16))
-+		err = -EFAULT;
++               pr_info("%s: withhold 1 sec...\n", __func__);
++               for (c = 0; c < 100; c++) {
++                       udelay(10000);
++               }
++               pr_info("%s: withhold 1 sec...done\n", __func__);
 +
- 	return err;
- }
- 
+                if (pte)
+                        ptl = huge_pte_lock(h, mm, pte);
+                absent = !pte || huge_pte_none(huge_ptep_get(pte));
+======8<=======
+
+It'll trigger use-after-free of the pgtable spinlock:
+
+======8<=======
+[   16.959907] follow_hugetlb_page: withhold 1 sec...
+[   17.960315] follow_hugetlb_page: withhold 1 sec...done
+[   17.960550] ------------[ cut here ]------------
+[   17.960742] DEBUG_LOCKS_WARN_ON(1)
+[   17.960756] WARNING: CPU: 3 PID: 542 at kernel/locking/lockdep.c:231 __lock_acquire+0x955/0x1fa0
+[   17.961264] Modules linked in:
+[   17.961394] CPU: 3 PID: 542 Comm: hugetlb-pmd-sha Not tainted 6.1.0-rc4-peterx+ #46
+[   17.961704] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+[   17.962266] RIP: 0010:__lock_acquire+0x955/0x1fa0
+[   17.962516] Code: c0 0f 84 5f fe ff ff 44 8b 1d 0f 9a 29 02 45 85 db 0f 85 4f fe ff ff 48 c7 c6 75 50 83 82 48 c7 c7 1b 4b 7d 82 e8 d3 22 d8 00 <0f> 0b 31 c0 4c 8b 54 24 08 4c 8b 04 24 e9
+[   17.963494] RSP: 0018:ffffc90000e4fba8 EFLAGS: 00010096
+[   17.963704] RAX: 0000000000000016 RBX: fffffffffd3925a8 RCX: 0000000000000000
+[   17.963989] RDX: 0000000000000002 RSI: ffffffff82863ccf RDI: 00000000ffffffff
+[   17.964276] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffc90000e4fa58
+[   17.964557] R10: 0000000000000003 R11: ffffffff83162688 R12: 0000000000000000
+[   17.964839] R13: 0000000000000001 R14: ffff888105eac748 R15: 0000000000000001
+[   17.965123] FS:  00007f17c0a00640(0000) GS:ffff888277cc0000(0000) knlGS:0000000000000000
+[   17.965443] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   17.965672] CR2: 00007f17c09ffef8 CR3: 000000010c87a005 CR4: 0000000000770ee0
+[   17.965956] PKRU: 55555554
+[   17.966068] Call Trace:
+[   17.966172]  <TASK>
+[   17.966268]  ? tick_nohz_tick_stopped+0x12/0x30
+[   17.966455]  lock_acquire+0xbf/0x2b0
+[   17.966603]  ? follow_hugetlb_page.cold+0x75/0x5c4
+[   17.966799]  ? _printk+0x48/0x4e
+[   17.966934]  _raw_spin_lock+0x2f/0x40
+[   17.967087]  ? follow_hugetlb_page.cold+0x75/0x5c4
+[   17.967285]  follow_hugetlb_page.cold+0x75/0x5c4
+[   17.967473]  __get_user_pages+0xbb/0x620
+[   17.967635]  faultin_vma_page_range+0x9a/0x100
+[   17.967817]  madvise_vma_behavior+0x3c0/0xbd0
+[   17.967998]  ? mas_prev+0x11/0x290
+[   17.968141]  ? find_vma_prev+0x5e/0xa0
+[   17.968304]  ? madvise_vma_anon_name+0x70/0x70
+[   17.968486]  madvise_walk_vmas+0xa9/0x120
+[   17.968650]  do_madvise.part.0+0xfa/0x270
+[   17.968813]  __x64_sys_madvise+0x5a/0x70
+[   17.968974]  do_syscall_64+0x37/0x90
+[   17.969123]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   17.969329] RIP: 0033:0x7f1840f0efdb
+[   17.969477] Code: c3 66 0f 1f 44 00 00 48 8b 15 39 6e 0e 00 f7 d8 64 89 02 b8 ff ff ff ff eb bc 0f 1f 44 00 00 f3 0f 1e fa b8 1c 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 0d 68
+[   17.970205] RSP: 002b:00007f17c09ffe38 EFLAGS: 00000202 ORIG_RAX: 000000000000001c
+[   17.970504] RAX: ffffffffffffffda RBX: 00007f17c0a00640 RCX: 00007f1840f0efdb
+[   17.970786] RDX: 0000000000000017 RSI: 0000000000200000 RDI: 00007f1800000000
+[   17.971068] RBP: 00007f17c09ffe50 R08: 0000000000000000 R09: 00007ffd3954164f
+[   17.971353] R10: 00007f1840e10348 R11: 0000000000000202 R12: ffffffffffffff80
+[   17.971709] R13: 0000000000000000 R14: 00007ffd39541550 R15: 00007f17c0200000
+[   17.972083]  </TASK>
+[   17.972199] irq event stamp: 2353
+[   17.972372] hardirqs last  enabled at (2353): [<ffffffff8117fe4e>] __up_console_sem+0x5e/0x70
+[   17.972869] hardirqs last disabled at (2352): [<ffffffff8117fe33>] __up_console_sem+0x43/0x70
+[   17.973365] softirqs last  enabled at (2330): [<ffffffff810f763d>] __irq_exit_rcu+0xed/0x160
+[   17.973857] softirqs last disabled at (2323): [<ffffffff810f763d>] __irq_exit_rcu+0xed/0x160
+[   17.974341] ---[ end trace 0000000000000000 ]---
+[   17.974614] BUG: kernel NULL pointer dereference, address: 00000000000000b8
+[   17.975012] #PF: supervisor read access in kernel mode
+[   17.975314] #PF: error_code(0x0000) - not-present page
+[   17.975615] PGD 103f7b067 P4D 103f7b067 PUD 106cd7067 PMD 0
+[   17.975943] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[   17.976197] CPU: 3 PID: 542 Comm: hugetlb-pmd-sha Tainted: G        W          6.1.0-rc4-peterx+ #46
+[   17.976712] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+[   17.977370] RIP: 0010:__lock_acquire+0x190/0x1fa0
+[   17.977655] Code: 98 00 00 00 41 89 46 24 81 e2 ff 1f 00 00 48 0f a3 15 e4 ba dd 02 0f 83 ff 05 00 00 48 8d 04 52 48 c1 e0 06 48 05 c0 d2 f4 83 <44> 0f b6 a0 b8 00 00 00 41 0f b7 46 20 6f
+[   17.979170] RSP: 0018:ffffc90000e4fba8 EFLAGS: 00010046
+[   17.979787] RAX: 0000000000000000 RBX: fffffffffd3925a8 RCX: 0000000000000000
+[   17.980838] RDX: 0000000000000002 RSI: ffffffff82863ccf RDI: 00000000ffffffff
+[   17.982048] RBP: 0000000000000000 R08: ffff888105eac720 R09: ffffc90000e4fa58
+[   17.982892] R10: ffff888105eab900 R11: ffffffff83162688 R12: 0000000000000000
+[   17.983771] R13: 0000000000000001 R14: ffff888105eac748 R15: 0000000000000001
+[   17.984815] FS:  00007f17c0a00640(0000) GS:ffff888277cc0000(0000) knlGS:0000000000000000
+[   17.985924] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   17.986265] CR2: 00000000000000b8 CR3: 000000010c87a005 CR4: 0000000000770ee0
+[   17.986674] PKRU: 55555554
+[   17.986832] Call Trace:
+[   17.987012]  <TASK>
+[   17.987266]  ? tick_nohz_tick_stopped+0x12/0x30
+[   17.987770]  lock_acquire+0xbf/0x2b0
+[   17.988118]  ? follow_hugetlb_page.cold+0x75/0x5c4
+[   17.988575]  ? _printk+0x48/0x4e
+[   17.988889]  _raw_spin_lock+0x2f/0x40
+[   17.989243]  ? follow_hugetlb_page.cold+0x75/0x5c4
+[   17.989687]  follow_hugetlb_page.cold+0x75/0x5c4
+[   17.990119]  __get_user_pages+0xbb/0x620
+[   17.990500]  faultin_vma_page_range+0x9a/0x100
+[   17.990928]  madvise_vma_behavior+0x3c0/0xbd0
+[   17.991354]  ? mas_prev+0x11/0x290
+[   17.991678]  ? find_vma_prev+0x5e/0xa0
+[   17.992024]  ? madvise_vma_anon_name+0x70/0x70
+[   17.992421]  madvise_walk_vmas+0xa9/0x120
+[   17.992793]  do_madvise.part.0+0xfa/0x270
+[   17.993166]  __x64_sys_madvise+0x5a/0x70
+[   17.993539]  do_syscall_64+0x37/0x90
+[   17.993879]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+======8<=======
+
+Resolution
+==========
+
+This patchset protects all the huge_pte_offset() callers to also take the
+vma lock properly.
+
+Patch Layout
+============
+
+Patch 1-2:         cleanup, or dependency of the follow up patches
+Patch 3:           before fixing, document huge_pte_offset() on lock required
+Patch 4-8:         each patch resolves one possible race condition
+Patch 9:           introduce hugetlb_walk() to replace huge_pte_offset()
+
+Tests
+=====
+
+The series is verified with the above reproducer so the race cannot
+trigger anymore.  It also passes all hugetlb kselftests.
+
+Comments welcomed, thanks.
+
+Peter Xu (9):
+  mm/hugetlb: Let vma_offset_start() to return start
+  mm/hugetlb: Don't wait for migration entry during follow page
+  mm/hugetlb: Document huge_pte_offset usage
+  mm/hugetlb: Move swap entry handling into vma lock when faulted
+  mm/hugetlb: Make userfaultfd_huge_must_wait() safe to pmd unshare
+  mm/hugetlb: Make hugetlb_follow_page_mask() safe to pmd unshare
+  mm/hugetlb: Make follow_hugetlb_page() safe to pmd unshare
+  mm/hugetlb: Make walk_hugetlb_range() safe to pmd unshare
+  mm/hugetlb: Introduce hugetlb_walk()
+
+ fs/hugetlbfs/inode.c     | 28 ++++++-------
+ fs/userfaultfd.c         | 26 ++++++++----
+ include/linux/hugetlb.h  | 69 ++++++++++++++++++++++++++++++
+ include/linux/pagewalk.h | 11 ++++-
+ include/linux/swapops.h  |  6 ++-
+ mm/hmm.c                 | 15 ++++++-
+ mm/hugetlb.c             | 91 ++++++++++++++++++----------------------
+ mm/migrate.c             | 25 +++++++++--
+ mm/page_vma_mapped.c     |  9 ++--
+ mm/pagewalk.c            |  6 +--
+ 10 files changed, 198 insertions(+), 88 deletions(-)
+
 -- 
-2.36.1
+2.37.3
 
