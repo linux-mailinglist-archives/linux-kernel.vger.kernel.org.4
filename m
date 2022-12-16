@@ -2,103 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D26564F11D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 19:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D0164F124
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 19:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbiLPShm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 13:37:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
+        id S230518AbiLPSkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 13:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbiLPSha (ORCPT
+        with ESMTP id S231854AbiLPSjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 13:37:30 -0500
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310AE2B19B;
-        Fri, 16 Dec 2022 10:37:29 -0800 (PST)
-Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGI24hg005349;
-        Fri, 16 Dec 2022 18:37:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=pps0720;
- bh=Yn+EZ0eRx8hAEN6fe2DP4uMTvGLg+IpizCbA6rAV1rc=;
- b=K4z9i4QzRT+rVv7OTMtPyYFHzg/nYrOsgtlJ7D1flFaltUxZkePveBYNnhZ0qth1A98z
- wpe3pukCyDNVdf8j33KU3GXmslfSs3DaAyrsUbwTbXD4Ih7pZo/Wb9B0kfzt1J7ZhxIL
- VsvKgVDEM9I/jf1Z+sP3ewXw51pbzOjaS0Je3bd2FWsCKm6WCJTHt1UTL0nksz97dCgB
- HpfpfLVmO8C1Sc3uv/NN7jFn8IzDGtzRgJaGmYgueKrcxwD/8Wzim11g8GwaxaLCcs5V
- QB7PKfY5lVkxmAK+yokqkXbrMChnC96u/48pwW4CjSkOv+kXoIK3jZR/S9IXTke8urrS GQ== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3mgusus8d9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 18:37:09 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 0466680170B;
-        Fri, 16 Dec 2022 18:37:08 +0000 (UTC)
-Received: from hpe.com (unknown [16.231.227.36])
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 793EC80619A;
-        Fri, 16 Dec 2022 18:37:08 +0000 (UTC)
-From:   nick.hawkins@hpe.com
-To:     verdun@hpe.com, nick.hawkins@hpe.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        linux@armlinux.org.uk, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v1 6/6] MAINTAINERS: Add HPE GXP I2C Support
-Date:   Fri, 16 Dec 2022 12:35:32 -0600
-Message-Id: <20221216183532.78933-7-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221216183532.78933-1-nick.hawkins@hpe.com>
-References: <20221216183532.78933-1-nick.hawkins@hpe.com>
-X-Proofpoint-ORIG-GUID: XZMd4EUxk7MRyvR6I4HWqe69KoliQOp4
-X-Proofpoint-GUID: XZMd4EUxk7MRyvR6I4HWqe69KoliQOp4
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-16_12,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- malwarescore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=999
- impostorscore=0 bulkscore=0 adultscore=0 phishscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212160162
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Dec 2022 13:39:35 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452F82B243;
+        Fri, 16 Dec 2022 10:39:09 -0800 (PST)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NYd7n1LyCz6HJVH;
+        Sat, 17 Dec 2022 02:35:17 +0800 (CST)
+Received: from localhost (10.45.152.125) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 16 Dec
+ 2022 18:39:06 +0000
+Date:   Fri, 16 Dec 2022 18:39:02 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+CC:     <ira.weiny@intel.com>, Bjorn Helgaas <bhelgaas@google.com>,
+        "Alison Schofield" <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Dave Jiang" <dave.jiang@intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: Re: [PATCH V4 0/9] CXL: Process event logs
+Message-ID: <20221216183902.00002bc8@Huawei.com>
+In-Reply-To: <639ca459102ad_b41e3294c7@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20221212070627.1372402-1-ira.weiny@intel.com>
+        <20221216122531.00001bef@huawei.com>
+        <639ca459102ad_b41e3294c7@dwillia2-xfh.jf.intel.com.notmuch>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.45.152.125]
+X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
+On Fri, 16 Dec 2022 09:01:13 -0800
+Dan Williams <dan.j.williams@intel.com> wrote:
 
-Add the I2C controller source and bindings.
+> Jonathan Cameron wrote:
+> > On Sun, 11 Dec 2022 23:06:18 -0800
+> > ira.weiny@intel.com wrote:
+> >   
+> > > From: Ira Weiny <ira.weiny@intel.com>
+> > > 
+> > > This code has been tested with a newer qemu which allows for more events to be
+> > > returned at a time as well an additional QMP event and interrupt injection.
+> > > Those patches will follow once they have been cleaned up.
+> > > 
+> > > The series is now in 3 parts:
+> > > 
+> > > 	1) Base functionality including interrupts
+> > > 	2) Tracing specific events (Dynamic Capacity Event Record is defered)
+> > > 	3) cxl-test infrastructure for basic tests
+> > > 
+> > > Changes from V3
+> > > 	Feedback from Dan
+> > > 	Spit out ACPI changes for Bjorn
+> > > 
+> > > - Link to v3: https://lore.kernel.org/all/20221208052115.800170-1-ira.weiny@intel.com/  
+> > 
+> > Because I'm in a grumpy mood (as my colleagues will attest!)...
+> > This is dependent on the patch that moves the trace definitions and
+> > that's not upstream yet except in cxl/preview which is optimistic
+> > place to use for a base commit.  The id isn't the one below either which
+> > isn't in either mailine or the current CXL trees.  
+> 
+> I do not want to commit to a new baseline until after -rc1, so yes this
+> is in a messy period.
 
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+Fully understood. I only push trees out as 'testing' for 0-day to hit
+until I can rebase on rc1.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1daadaa4d48b..d671a8b6968e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2217,12 +2217,14 @@ M:	Jean-Marie Verdun <verdun@hpe.com>
- M:	Nick Hawkins <nick.hawkins@hpe.com>
- S:	Maintained
- F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
-+F:	Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
- F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
- F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
- F:	arch/arm/boot/dts/hpe-bmc*
- F:	arch/arm/boot/dts/hpe-gxp*
- F:	arch/arm/mach-hpe/
- F:	drivers/clocksource/timer-gxp.c
-+F:	drivers/i2c/busses/i2c-gxp.c
- F:	drivers/spi/spi-gxp.c
- F:	drivers/watchdog/gxp-wdt.c
- 
--- 
-2.17.1
+> 
+> > Not that I actually checked the cover letter until it failed to apply
+> > (and hence already knew what was missing) but still, please call out
+> > dependencies unless they are in the branches Dan has queued up to push.
+> > 
+> > I just want to play with Dave's fix for the RAS errors so having to jump
+> > through these other sets.  
+> 
+> Yes, that is annoying, apologies.
+Not really a problem I just felt like grumbling :)
+
+Have a good weekend.
+
+Jonathan
+
+> 
+> > 
+> > Thanks,
+> > 
+> > Jonathan
+> >   
+> > > 
+> > > 
+> > > Davidlohr Bueso (1):
+> > >   cxl/mem: Wire up event interrupts
+> > > 
+> > > Ira Weiny (8):
+> > >   PCI/CXL: Export native CXL error reporting control
+> > >   cxl/mem: Read, trace, and clear events on driver load
+> > >   cxl/mem: Trace General Media Event Record
+> > >   cxl/mem: Trace DRAM Event Record
+> > >   cxl/mem: Trace Memory Module Event Record
+> > >   cxl/test: Add generic mock events
+> > >   cxl/test: Add specific events
+> > >   cxl/test: Simulate event log overflow
+> > > 
+> > >  drivers/acpi/pci_root.c       |   3 +
+> > >  drivers/cxl/core/mbox.c       | 186 +++++++++++++
+> > >  drivers/cxl/core/trace.h      | 479 ++++++++++++++++++++++++++++++++++
+> > >  drivers/cxl/cxl.h             |  16 ++
+> > >  drivers/cxl/cxlmem.h          | 171 ++++++++++++
+> > >  drivers/cxl/cxlpci.h          |   6 +
+> > >  drivers/cxl/pci.c             | 236 +++++++++++++++++
+> > >  drivers/pci/probe.c           |   1 +
+> > >  include/linux/pci.h           |   1 +
+> > >  tools/testing/cxl/test/Kbuild |   2 +-
+> > >  tools/testing/cxl/test/mem.c  | 352 +++++++++++++++++++++++++
+> > >  11 files changed, 1452 insertions(+), 1 deletion(-)
+> > > 
+> > > 
+> > > base-commit: acb704099642bc822ef2aed223a0b8db1f7ea76e  
+> >   
+> 
+> I think going forward these base-commits need to be something that are
+> reachable on cxl.git. For now I have pushed out a baseline for both Dave
+> and Ira's patches to cxl/preview which will rebase after -rc1 comes out.
+> 
+> Just the small matter of needing some acks/reviews on those lead in
+> patches so I can move them to through cxl/pending to cxl/next:
+
+
+Don't move too fast with Ira's.  Some issues coming up in testing..
+(admittedly half of them were things where QEMU hadn't kept up with
+what the kernel code now uses).
+
+
+> 
+> http://lore.kernel.org/r/167051869176.436579.9728373544811641087.stgit@dwillia2-xfh.jf.intel.com
+> http://lore.kernel.org/r/20221212070627.1372402-2-ira.weiny@intel.com
 
