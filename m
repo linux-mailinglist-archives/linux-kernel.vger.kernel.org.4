@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F8E64EC25
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 14:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6E164EC2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 14:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiLPNdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 08:33:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
+        id S230167AbiLPNfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 08:35:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLPNdl (ORCPT
+        with ESMTP id S229469AbiLPNfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 08:33:41 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4064218373
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 05:33:37 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id o5so2532453wrm.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 05:33:37 -0800 (PST)
+        Fri, 16 Dec 2022 08:35:39 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFE527F
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 05:35:37 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id h8-20020a1c2108000000b003d1efd60b65so4179374wmh.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 05:35:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zoNlcl5EdrvBU+HSJMxnrCA5HD90xdYfTEFQLwtn1Z4=;
-        b=dYbJm2vLGzYTl1SR6lTyIyZDstx1WHy/Pa1BkvMtNfVWOJJWSBtNqOMr7KvD60tTH1
-         FUs79ciy/klSi6Ca989XP7UcPfqMDJNa7mMv+e7QspU4A+yXs9uWaK20MybNg5SNzUFv
-         YemAjT3GurkQ3xmcvrNMR86uWiCyrwE/bmuSF8Bt3XQum+X2RppVB5fl+bs1t/p+/w9x
-         PacwAi/dZhqMs4dImvBd9KpF3OseST3sSw3R2NIHu3GAnj+MdAbjja76JJJnnww6fNuA
-         1nve9xSjYmBo50fZEgbXo3owRD0Z0up36hjZJ4fvcyMMBxRwy84c3oOdJSrtvffgMrcr
-         9iuw==
+        bh=SQCf+qv5bd4ElCdzVZ3jNTOUbAb4CRaR/pYBuk0Bj3Q=;
+        b=WiX8W2ruP+9YIPUcE2mF7jpRd3+tQbG6B2pisNWD/F60SYsz/mLlJkPZKeDevbWyRR
+         K3KWOQt5JlSPIGHJ03kmpT/LleN/eJ4Ljj1BXCrk7hPDWmmg0xQdx6u03lmd4xjNjWfE
+         BjZ3Vw+3gB7y+hLUsh9GD67YNKZD9pa2fKi4RiI6m53Q9XH2XTujXEFIwY+qBIDmBvA+
+         koZnM84R/FLjnl3Y2ViXf/7Wv7J2Ku7Mz/t7vuYdkf7fc7ggibO4dwch/u8M0+uCQ4Pq
+         TlpTwQnR/j9wUl+DutoY9257humQH0Zg6MVNqP6ZvVVbxY6JFpKMSFlA3VzUINIkEKUj
+         O+8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zoNlcl5EdrvBU+HSJMxnrCA5HD90xdYfTEFQLwtn1Z4=;
-        b=zYdFqdTBIbp1orVXqCpTfLDNPasA6k3YqsudYVpQ9dAckFiSsitjYM5ZJf+ib3Tq6R
-         UFClt++C1JJU+EdF4IaR3az/HQtYmNrP3ierZn1oiJbrFgLP4+sR4n/axlsVwC7Kg9pB
-         unngW/BYpHOAKHg36z+vhCoXcZcq3nF12CvU/g8PjINQCKftreeI2LPyhGalxaoQbcDk
-         Ffi3hLoxX+WQn/QzUZ6QrQLh9rMkNiS+EiEppq7E6sjrYu80T6dW3BVafoD7mbVpfvBj
-         BC0Dcr0vqkqepwla9FQrpDwZVROjO1WQ+GxEZFc8DpKgDvmDrGik23U5lXHV+IRksdvl
-         VL/Q==
-X-Gm-Message-State: ANoB5pkjGaoo760Ne2cvS6+Jq43GhgEX3BNO8lLvRfJNAl0gMNF45JM5
-        Wc58ShTEUheLGShTLWEKBCo=
-X-Google-Smtp-Source: AA0mqf7GsK+9KF+6xYlMmd/WNxVKsNSXdi9DxwopLYeC+l+LHjQC8M38gOSFU/By16MxGtlZGjC2uA==
-X-Received: by 2002:a05:6000:156c:b0:241:fbef:29b5 with SMTP id 12-20020a056000156c00b00241fbef29b5mr43444027wrz.13.1671197615729;
-        Fri, 16 Dec 2022 05:33:35 -0800 (PST)
+        bh=SQCf+qv5bd4ElCdzVZ3jNTOUbAb4CRaR/pYBuk0Bj3Q=;
+        b=CBgj52E2U78qo+pNutzrFyHMbSZynQoFktRklGsg8BTcJKkA0W9UEuTMl9IuyQon0c
+         1F5m8Zkz6Sx7GZQwHAkMawyeykoYiVkJA12f6cs7AbeQqsWQFQ0p9EfK2ZgKVuZHTt7x
+         BxKEMisZlhMxkWPI2LAovQSEyqyeQ1TOh4hTZgldoLvR+CsRlDhkWEuFeayHiiTlHNEH
+         JUQH/N4jsTYRZBbJ/dSjBa+Gj2xuWRgc0GiLPjtbPHWnGfy2QyBu/VWYsldouRIZIzag
+         tP8JuW7zsu1Lv374PWL5Za3VAV+goRHt1aC2O84SuUjgiUoQJik6bas4vdB4HZYScrJW
+         olGg==
+X-Gm-Message-State: ANoB5pmlPjfo9jMN+EC1TgPk4r9LegcqzI6xqPgimZJ2fgt420R3pmrg
+        Jf9Vwyg19s6BZgxtX1zyRww=
+X-Google-Smtp-Source: AA0mqf5cIONd+2x+L2MXCRiqZq2/EcC0pk+sRNVlYXBgoIRtXYMkzbVBjpJ730j3x5UYsqwZQ1EoJg==
+X-Received: by 2002:a05:600c:3592:b0:3d1:bc32:2447 with SMTP id p18-20020a05600c359200b003d1bc322447mr25311006wmq.21.1671197736187;
+        Fri, 16 Dec 2022 05:35:36 -0800 (PST)
 Received: from [192.168.1.132] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id y6-20020adfe6c6000000b00241e8d00b79sm2624307wrm.54.2022.12.16.05.33.34
+        by smtp.gmail.com with ESMTPSA id o13-20020a05600c510d00b003c6f8d30e40sm11757007wms.31.2022.12.16.05.35.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 05:33:34 -0800 (PST)
-Message-ID: <dd474515-4a4f-3925-cc96-068f9818a2f4@gmail.com>
-Date:   Fri, 16 Dec 2022 14:33:33 +0100
+        Fri, 16 Dec 2022 05:35:35 -0800 (PST)
+Message-ID: <52a9924a-aaea-ed31-672f-fdf8e1ef2881@gmail.com>
+Date:   Fri, 16 Dec 2022 14:35:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
@@ -65,8 +65,9 @@ Cc:     nancy.lin@mediatek.com, linux-arm-kernel@lists.infradead.org,
 References: <20221111082912.14557-1-matthias.bgg@kernel.org>
  <46c17d4b-d130-86a7-b5f8-73c30d7fdfdd@collabora.com>
  <CAGXv+5FORS=iGe55StxR_1E3sdtk9cvitfvNa1SydqCjWGcubg@mail.gmail.com>
+ <CAGXv+5GfZYdhSCkhdGXRvbprwhceMJy9a9j+cNxsyUFYhMNZOw@mail.gmail.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <CAGXv+5FORS=iGe55StxR_1E3sdtk9cvitfvNa1SydqCjWGcubg@mail.gmail.com>
+In-Reply-To: <CAGXv+5GfZYdhSCkhdGXRvbprwhceMJy9a9j+cNxsyUFYhMNZOw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,37 +82,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 01/12/2022 12:20, Chen-Yu Tsai wrote:
-> On Mon, Nov 14, 2022 at 7:59 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
+On 01/12/2022 12:25, Chen-Yu Tsai wrote:
+> On Thu, Dec 1, 2022 at 7:20 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
 >>
->> Il 11/11/22 09:29, matthias.bgg@kernel.org ha scritto:
->>> From: Matthias Brugger <matthias.bgg@gmail.com>
+>> On Mon, Nov 14, 2022 at 7:59 PM AngeloGioacchino Del Regno
+>> <angelogioacchino.delregno@collabora.com> wrote:
 >>>
->>> For backward compatibility we add the deprecated compatible.
+>>> Il 11/11/22 09:29, matthias.bgg@kernel.org ha scritto:
+>>>> From: Matthias Brugger <matthias.bgg@gmail.com>
+>>>>
+>>>> For backward compatibility we add the deprecated compatible.
+>>>>
+>>>> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
 >>>
->>> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+>>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>
+>>> ...And tested on MT8195 Cherry Chromebook.
 >>
->> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> This now seems like a bad idea. In the dtsi we have two nodes (vdosys0 and
+>> vdosys1) that both currently use the -mmsys compatible, which in the driver
+>> maps to vdosys0. So not only do we have vdosys1 incorrectly probing as
+>> vdosys0, we also have duplicate clks being registered and duplicate DRM
+>> pipelines. On my device vdosys1 ends up winning the duplicate clock race.
 >>
->> ...And tested on MT8195 Cherry Chromebook.
+>> I suggest just reverting this. The display stuff won't be useful unless
+>> the drivers are able to distinguish themselves from one another.
 > 
-> This now seems like a bad idea. In the dtsi we have two nodes (vdosys0 and
-> vdosys1) that both currently use the -mmsys compatible, which in the driver
-> maps to vdosys0. So not only do we have vdosys1 incorrectly probing as
-> vdosys0, we also have duplicate clks being registered and duplicate DRM
-> pipelines. On my device vdosys1 ends up winning the duplicate clock race.
-> 
+> That and try to fix the vdosys0 node ASAP.
 
-That's true, we should fix the DTS deleting vdosys1 node as it's not 
-implemented. While at it we should also fix the compatible for vdosys0 as 
-"mediatek,mt8195-mmsys" is now deprecated.
-
-Would you mind to send a patch?
+I'm not sure what you mean? If there are any patches that are in my queue that 
+needs attention, please let me know.
 
 Regards,
 Matthias
-
-> I suggest just reverting this. The display stuff won't be useful unless
-> the drivers are able to distinguish themselves from one another.
-> 
