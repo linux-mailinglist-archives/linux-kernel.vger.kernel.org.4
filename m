@@ -2,105 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F3064E7D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0752164E7DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiLPHgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 02:36:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50756 "EHLO
+        id S229632AbiLPHkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 02:40:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiLPHgo (ORCPT
+        with ESMTP id S229475AbiLPHkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 02:36:44 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71885379FB
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:36:43 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id k7-20020a256f07000000b006cbcc030bc8so1704837ybc.18
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:36:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+oFqrjyPYfae2XSyQbiGUZG3rY81EUIaDL06EKkI6tM=;
-        b=KVsxLpQ7oQzcgeZDnvA+Fo+lfQxv0hNTvZ8Yw7NAvD1WFMsisuTPXWwmd1eamU883Z
-         EXk+Igz3X351JARfptB/reH3VB3wqKukNJceOoQuMcdMrPTZbgkp4GZGuBrwNe9Fk0j3
-         ni9/vAaLYQiMcmcyRkoP8nG1HUHLe8pUwcTGfwFLDAz6vUQ6IO2U4OBS4MDBYnuJL/Ba
-         JyqnIPBfOWaW9+jA65j1R+9Ax8h9ynndPQLrqYecL+ImCENBjsv3VKrHNo421cD6j+ii
-         VwWv034ojOniIA2EZDzkcR3Y2F81GKl/wh2dQ1OyPwRHytSGHDqj9zQmPc/qp3kNf2l/
-         XvmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+oFqrjyPYfae2XSyQbiGUZG3rY81EUIaDL06EKkI6tM=;
-        b=paCnw49O9K0LiZAGbtZyRyJpeYK+uTFBmptinZs1HKbH+C5CF/KruXQ67Y9v3vTVDu
-         tSVQfTPoUxTAbLuUY+/gsSgOV3rgdn9ozmisxaSU2uTHknTH4za27grNCJc/IKRuK5oE
-         gJRqoTB9XMyYcRx3gqNb+rcY3gsbS9uw3uAPlzAwv7stZtcBe3Ygna4hPA+z++afV7a5
-         a22UbvMwo2cy9kMySJ1NvFNzTb0Jm2YXZjF3mDu66WUEdy6zBkDTnpX4rdSCe1EVOClr
-         xNKcw5PmXqkJgTaO4zX24OUMXFEhfewreNq1Jnf5YGiS0pxK2TCuUrlo/RwR1QDDoiF9
-         FM/Q==
-X-Gm-Message-State: ANoB5pkpcz2tztIxTk9/wfLA7ngMxEPmIOEix5R8pZOIx2LeHbAM6VyP
-        USWVK0o1uLOrszsvHnjCEBZIHeNVfbdyTA==
-X-Google-Smtp-Source: AA0mqf75PhHtisJYH8ZIDDVjR2R5VreZaDl8LDNJe7RZ4xRtvO+Ql5tjsmC8Lt0Uf6CqQK9C5mvqb74RqklYuA==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
- (user=shakeelb job=sendgmr) by 2002:a25:fc5:0:b0:6fc:677a:d649 with SMTP id
- 188-20020a250fc5000000b006fc677ad649mr30852517ybp.65.1671176202726; Thu, 15
- Dec 2022 23:36:42 -0800 (PST)
-Date:   Fri, 16 Dec 2022 07:36:40 +0000
-In-Reply-To: <13c73151-4b28-4324-afd5-8b84b82bc25d@shopee.com>
-Mime-Version: 1.0
-References: <20221215091907.763801-1-haifeng.xu@shopee.com>
- <20221215181803.ome46pkh6g7qu3t4@google.com> <abec13da-c74a-0fd8-74e0-3cdc547e4e08@shopee.com>
- <20221216064210.krxtxebuwc7dijzu@google.com> <13c73151-4b28-4324-afd5-8b84b82bc25d@shopee.com>
-Message-ID: <20221216073640.xjtpsyigoej77v5h@google.com>
-Subject: Re: [PATCH] mm/memcontrol: Skip root memcg in memcg_memory_event_mm
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Haifeng Xu <haifeng.xu@shopee.com>
-Cc:     akpm@linux-foundation.org, roman.gushchin@linux.dev,
-        songmuchun@bytedance.com, hannes@cmpxchg.org, vbabka@suse.cz,
-        willy@infradead.org, vasily.averin@linux.dev,
+        Fri, 16 Dec 2022 02:40:11 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438413B9DF;
+        Thu, 15 Dec 2022 23:40:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8blW/F/+PwS1X5UjK3Cc7amh31WnyYbXAljrienDktY=; b=E5OMUfst49yaCfkqXi77SZaxJT
+        0H2MxSDDIR0HbIiad0RvN2WLGjqw/Rj7X4um9Swgb4Yp3aupHCobR28+O6bVV+bF+AV2dFzCKP+g9
+        d76Hvr7umyrkD2EbX1FjwwB60EiiYIwH6D96oIr2fuks0pBvn1yh1ZOmwgwpwKPixL5RwMQIUfmPV
+        po1+ZVueIWcbMfwp0zOkSHb8fPV2DSADfFkcP5UEf33/Mnz0juOefPyMz3sEoaDB4E7ax3+ixF00L
+        PTb7IBzIXnWLxNmCWvflpKt+2FMBnOkThFcHplIJQbmRFL002F8uLZ5x4Ek8lqGV4L2Q7qDaAOjhT
+        V+A9amNA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p65Jm-00DPrG-0W; Fri, 16 Dec 2022 07:39:42 +0000
+Date:   Thu, 15 Dec 2022 23:39:41 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v7 23/25] PCI: dwc: Restore DMA-mask after MSI-data
+ allocation
+Message-ID: <Y5wgvdnMWQDxkUd+@infradead.org>
+References: <20221214235305.31744-1-Sergey.Semin@baikalelectronics.ru>
+ <20221214235305.31744-24-Sergey.Semin@baikalelectronics.ru>
+ <Y5rJJfZeVqliA5Rg@infradead.org>
+ <20221215092721.tvz3hpaql3kotgnu@mobilestation>
+ <07ec7610-f1be-9b5c-416d-17781a22427d@arm.com>
+ <20221215235218.wsuwy5uckqfxjnb6@mobilestation>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221215235218.wsuwy5uckqfxjnb6@mobilestation>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 03:28:53PM +0800, Haifeng Xu wrote:
-> 
-> 
-> On 2022/12/16 14:42, Shakeel Butt wrote:
-> > On Fri, Dec 16, 2022 at 09:43:02AM +0800, Haifeng Xu wrote:
-> >>
-> >>
-> >> On 2022/12/16 02:18, Shakeel Butt wrote:
-> >>> On Thu, Dec 15, 2022 at 09:19:07AM +0000, Haifeng Xu wrote:
-> >>>> The memory events aren't supported on root cgroup, so there is no need
-> >>>> to account MEMCG_OOM_KILL on root memcg.
-> >>>>
-> >>>
-> >>> Can you explain the scenario where this is happening and causing issue
-> >>> for you?
-> >>>
-> >> If the victim selected by oom killer belongs to root memcg, memcg_memory_event_mm
-> >> still counts the MEMCG_OOM_KILL event. This behavior is meaningless because the
-> >> flag of events/events.local in memory_files is CFTYPE_NOT_ON_ROOT. The root memcg
-> >> does not count any memory event.
-> >>
-> > 
-> > What about v1's memory.oom_control?
-> >
->  
-> The memory.oom_control doesn't set the CFTYPE_NOT_ON_ROOT flag. But oom_kill_disable or
-> under_oom actually only support non-root memcg, so the memory_events should be consistent
-> with them.
+On Fri, Dec 16, 2022 at 02:52:18AM +0300, Serge Semin wrote:
+> Got it. Thanks for clarification. I'll resubmit the series with only
+> the streaming DMA mask restoration.
 
-Did you take a look at mem_cgroup_oom_control_read()? It is displaying
-MEMCG_OOM_KILL for root memcg. Irrespective it makes sense or not, you
-want to change behavior of user visible interface. If you really want to
-then propose for the deprecation of that interface.
+Note that even for that we need to make sure there are no outstanding
+mappings when you change the mask.
+
