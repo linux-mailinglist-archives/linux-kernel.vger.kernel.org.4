@@ -2,82 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA56F64E8FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA6764E904
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbiLPKCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 05:02:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
+        id S230288AbiLPKCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 05:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbiLPKCI (ORCPT
+        with ESMTP id S229798AbiLPKCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 05:02:08 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D054049B79
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:02:03 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id 2so1764163ybl.13
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:02:03 -0800 (PST)
+        Fri, 16 Dec 2022 05:02:49 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84ADD4A063
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:02:46 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id 17so1879783pll.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:02:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=eqGMnzJ4Et1n9dwKrUIft9bF2vnqMW/4pT/9VNxrM7k=;
-        b=Nst6sempuwKjNJHSb9Yob8jl1E3RGL0zElMBgh6Rz+LxNqvCtg8xxbG/4xf+sZMVpN
-         lp4eXnnJhmm1YXABSk5d3S3NiHcVM0pa6xS8Y811E70i0ZkY03uckdtful2O8+k0LzII
-         AI7kEiC1r/bV+8NgjNovzQAoQWf9Vb5c7QDXFhXxamaYY8SNNsTeEKi84e6rT2KwZ//R
-         aVnw+OWdQo3/50hI/sC//qDqOdmyVo55Ed+STlDVAULIvCpxbcfyXVp1sioGn/5ZKhqH
-         y5JWBzXurMXpb8xtHj4O7ZbqUHcBZOHFPaBiqTp0WAsByC8eqPy0MSy41v/eQTUt7MKq
-         /5mQ==
+        d=heitbaum.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FP9LJMDYntXNXXevgIOUHTB1ze5iCC1u3bRVMjKPtEQ=;
+        b=DPapAx5OjERByaIzFy2dxneEocIRIp22ontAn+A2LLl/l0fJXWsXoNKum6ClbjoKjE
+         +ymAIryOTyF3fA3opSBgYMDqCk8AiaLWz8W7uB+Z6xP6NtQIku9faYGyr7FHDzaLGSX6
+         eTF4XmsP76VM2imwrkcTp6LRBP57cclridIv8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eqGMnzJ4Et1n9dwKrUIft9bF2vnqMW/4pT/9VNxrM7k=;
-        b=LQ5W07mheAbWaKT6E07C/cJ16KzS1aKj7rABt5AD8kYsq8hKSVt5qjg62uKi4w7MeF
-         oZ/cwkbkRROv7zPy1zyzYzBDz5nAtyCsGzzO4PK0EDhMsQDxMZ3aU/y/aoX3YNtgaFQe
-         JFDElrDnEFQVcQ1rpfsO+q89G98/d2u48ZGbD2P43iiL6hjHTOBhf7/9skNhMKOHO9WL
-         gZmVKcbREfXqwUdNLXUV6EViCahaGTb9BR0GdWKImHprGmcDZuZuoCBDRCrBn3BRZw2a
-         6+RBHws2W9xcTmxuhmNbga38mZfcASg94/tiBpcqWN13F91KqZENXRZpoCKg76RGW1QR
-         GzFA==
-X-Gm-Message-State: AFqh2koem0Ik9KJtEHFgDIbq95Z+QqC6hF6XVjBJpNH1MNqZPoHmZiJy
-        djKtgV/CUP9IEj7G/VgKMzeVSSCm89yLHV21HTo=
-X-Google-Smtp-Source: AMrXdXvmpCF6FNq8Haq5XAYSHx6aaG+Z2mpZh85M6o2tekgHkNygJEFA3ssgQ49v8CgxUYk/+fXQ2dG/rVWh0/TWmxc=
-X-Received: by 2002:a25:be92:0:b0:738:7de4:1201 with SMTP id
- i18-20020a25be92000000b007387de41201mr369981ybk.608.1671184922946; Fri, 16
- Dec 2022 02:02:02 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FP9LJMDYntXNXXevgIOUHTB1ze5iCC1u3bRVMjKPtEQ=;
+        b=Js60aKYFI+Ud1IGSk1LJRFJqGrYuPWzkQGIIhe4Uh86SYdh55tfRmxh7nruP4AkUKf
+         aldoDfYywSUm1h4LPh8mwLIZCdL3rXraJhsh+tmNqNxlyo+Q9/z8Zt3uPrcbuU1dsfXR
+         4eJMNyQatwGvkZg/nSuGoyxrKRGB+NfSL5d31IxL1/j4fO5A/j82VAqXm2uOPwUIzDAr
+         EuZzZBP8wgebGto+4Mz0EgP8sk833dGJb5eMHXT99hNyc59R3Io/UJPjeeR1p4ExjnGA
+         qhZiSf9dh8uqd+U+/YZ5oixz4Y0CX07YtBaU3gkAWhbLdfU5Qu4z9siCsprDFxz3rfAV
+         dmlA==
+X-Gm-Message-State: ANoB5plzKuBgccHJHyuNPxDqfctQpUmDRDjP5V9La9Fuk7bXSgTt0TYk
+        FCwIZW9d4Fw7R95Be2ABDZ5ZmQ==
+X-Google-Smtp-Source: AA0mqf70/ynGFAS3PgdTEeblJ6xC8/DMQr+bqmM5hCQ42dFjxw2wMIT8EpmcBEwD6rUDrFevMp8rzg==
+X-Received: by 2002:a17:902:c141:b0:189:6e2b:b742 with SMTP id 1-20020a170902c14100b001896e2bb742mr32615957plj.43.1671184965790;
+        Fri, 16 Dec 2022 02:02:45 -0800 (PST)
+Received: from 5c08d17891b1 ([220.253.112.46])
+        by smtp.gmail.com with ESMTPSA id i12-20020a170902cf0c00b001895d87225csm1190232plg.182.2022.12.16.02.02.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 02:02:44 -0800 (PST)
+Date:   Fri, 16 Dec 2022 10:02:36 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 00/15] 5.10.160-rc1 review
+Message-ID: <20221216100236.GA971897@5c08d17891b1>
+References: <20221215172906.638553794@linuxfoundation.org>
 MIME-Version: 1.0
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Fri, 16 Dec 2022 11:01:52 +0100
-Message-ID: <CAKXUXMxpWOXCUY-dd02P4ckAhF211VJtPTFeTriCMozZon7A5w@mail.gmail.com>
-Subject: No matching files for file entry added in MAINTAINERS
-To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shawn Guo <shawnguo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221215172906.638553794@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Christoph,
+On Thu, Dec 15, 2022 at 07:10:27PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.160 release.
+> There are 15 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 17 Dec 2022 17:28:57 +0000.
+> Anything received after that time might be too late.
 
-with commit 894799e1f496 ("MAINTAINERS: Add DHCOR to the DH electronic
-i.MX6 board support"), originating from
-https://lore.kernel.org/lkml/20221117105131.7059-1-cniedermaier@dh-electronics.com/,
-you have added a file entry to DH ELECTRONICS IMX6 DHCOM/DHCOR BOARD
-SUPPORT, but there is no file matching this entry in the repository.
+Hi Greg,
 
-Are there still files to come or should this pattern actually match
-certain files in the repository, but they are named slightly
-different?
+5.10.160-rc1 tested.
 
+Run tested on:
+- Intel Skylake x86_64 (nuc6 i5-6260U)
 
-Best regards,
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- Allwinner H6
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
 
-Lukas
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi
