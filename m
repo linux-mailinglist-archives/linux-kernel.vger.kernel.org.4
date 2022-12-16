@@ -2,106 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59FB64EE3D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:53:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 150A664EE49
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbiLPPxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 10:53:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
+        id S231673AbiLPPyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 10:54:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbiLPPxX (ORCPT
+        with ESMTP id S231608AbiLPPyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 10:53:23 -0500
-Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BCD652713;
-        Fri, 16 Dec 2022 07:53:06 -0800 (PST)
-Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 85465E0EFC;
-        Fri, 16 Dec 2022 18:53:05 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        baikalelectronics.ru; h=cc:cc:content-type:content-type:date
-        :from:from:in-reply-to:message-id:mime-version:references
-        :reply-to:subject:subject:to:to; s=post; bh=BlqsW160MZlI49NjTuF7
-        XmYKlcUm5mfF+05TJoJvOtE=; b=Mf2TwvIAUTPwFXIqnarhHdLi83phpmii33vN
-        LdSKqw6W4fVa3yhCiy5d9Sw5KEHMi4O4zqfVXFSojn8Qj3LJWJQeu4LbpWK/nAmx
-        +THbHjjM8sb+b9VX7TElEiCRM8USXOyWlT1PpcGrtSwsriNoZ4MukLCyl/9hR/vi
-        Qhuj0bQ=
-Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 648FEE0ED4;
-        Fri, 16 Dec 2022 18:53:05 +0300 (MSK)
-Received: from mobilestation (10.8.30.14) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 16 Dec 2022 18:53:05 +0300
-Date:   Fri, 16 Dec 2022 18:53:04 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-CC:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-pci@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] PCI: dwc: adjust to recent removal of PCI_MSI_IRQ_DOMAIN
-Message-ID: <20221216155304.uckgqbcgotqj6bha@mobilestation>
-References: <20221215103452.23131-1-lukas.bulwahn@gmail.com>
+        Fri, 16 Dec 2022 10:54:12 -0500
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2912251C;
+        Fri, 16 Dec 2022 07:54:10 -0800 (PST)
+Received: from frontend03.mail.m-online.net (unknown [192.168.6.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4NYYYs2T0Bz1r15j;
+        Fri, 16 Dec 2022 16:54:09 +0100 (CET)
+Received: from localhost (dynscan3.mnet-online.de [192.168.6.84])
+        by mail.m-online.net (Postfix) with ESMTP id 4NYYYr6hBnz1qqlS;
+        Fri, 16 Dec 2022 16:54:08 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan3.mail.m-online.net [192.168.6.84]) (amavisd-new, port 10024)
+        with ESMTP id eeIhuVM2PYYq; Fri, 16 Dec 2022 16:54:07 +0100 (CET)
+X-Auth-Info: IokKxDyfsmKnj/UNbNpukrp2esch72dvMzNGZb0m0793aVz1AxsKNjBAocx5UOrY
+Received: from igel.home (aftr-62-216-205-197.dynamic.mnet-online.de [62.216.205.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Fri, 16 Dec 2022 16:54:07 +0100 (CET)
+Received: by igel.home (Postfix, from userid 1000)
+        id 049FA2C32FE; Fri, 16 Dec 2022 16:54:06 +0100 (CET)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     "'Leizhen (ThunderTown)'" <thunder.leizhen@huawei.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Jiri Olsa" <jolsa@kernel.org>, Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: Re: [PATCH v9] kallsyms: Add self-test facility
+References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
+        <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
+        <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
+        <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
+        <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
+        <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
+        <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
+        <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
+        <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
+        <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
+        <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
+        <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
+        <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com>
+        <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
+        <592dce7a0de24c62bd31c29f86ce6c1b@AcuMS.aculab.com>
+        <87pmcjidfe.fsf@igel.home>
+        <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com>
+X-Yow:  My nose feels like a bad Ronald Reagan movie...
+Date:   Fri, 16 Dec 2022 16:54:06 +0100
+In-Reply-To: <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com> (David
+        Laight's message of "Fri, 16 Dec 2022 15:25:42 +0000")
+Message-ID: <87len7ibtt.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221215103452.23131-1-lukas.bulwahn@gmail.com>
-X-Originating-IP: [10.8.30.14]
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 11:34:52AM +0100, Lukas Bulwahn wrote:
-> Commit a474d3fbe287 ("PCI/MSI: Get rid of PCI_MSI_IRQ_DOMAIN") removes the
-> config PCI_MSI_IRQ_DOMAIN and makes all previous references to that config
-> then refer to PCI_MSI instead.
-> 
-> Commit ba6ed462dcf4 ("PCI: dwc: Add Baikal-T1 PCIe controller support")
-> adds the config PCIE_BT1, which following the previous default pattern
-> depends on the config PCI_MSI_IRQ_DOMAIN.
-> 
-> As these two commits were submitted roughly at the same time, the
-> refactoring did not take of this occurrence and the addition did not yet
-> notice the refactoring.
-> 
-> Take care of the PCI_MSI config refactoring on this latest addition.
+On Dez 16 2022, David Laight wrote:
 
-Indeed. I just didn't know about the refactoring. Thanks for submitting
-a fixup patch.
+> Right, but the 'output' values aren't needed and get
 
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+Yes, they are, because the inline asm modifies them.
 
--Serge(y)
-
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  drivers/pci/controller/dwc/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
-> index a0d2713f0e88..99ec91e2a5cf 100644
-> --- a/drivers/pci/controller/dwc/Kconfig
-> +++ b/drivers/pci/controller/dwc/Kconfig
-> @@ -225,7 +225,7 @@ config PCIE_ARTPEC6_EP
->  config PCIE_BT1
->  	tristate "Baikal-T1 PCIe controller"
->  	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
-> -	depends on PCI_MSI_IRQ_DOMAIN
-> +	depends on PCI_MSI
->  	select PCIE_DW_HOST
->  	help
->  	  Enables support for the PCIe controller in the Baikal-T1 SoC to work
-> -- 
-> 2.17.1
-> 
-> 
-
+-- 
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."
