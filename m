@@ -2,76 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C07564EFCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E262564EFD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbiLPQx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 11:53:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
+        id S231488AbiLPQyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 11:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbiLPQxY (ORCPT
+        with ESMTP id S231310AbiLPQyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 11:53:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6987B22B;
-        Fri, 16 Dec 2022 08:53:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A394FB81D39;
-        Fri, 16 Dec 2022 16:53:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30686C433D2;
-        Fri, 16 Dec 2022 16:53:17 +0000 (UTC)
-Date:   Fri, 16 Dec 2022 11:53:14 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Andreas Schwab' <schwab@linux-m68k.org>,
-        "'Leizhen (ThunderTown)'" <thunder.leizhen@huawei.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH v9] kallsyms: Add self-test facility
-Message-ID: <20221216115314.6120beb7@gandalf.local.home>
-In-Reply-To: <819801284eb745d9a4189759bad297f5@AcuMS.aculab.com>
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
-        <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
-        <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
-        <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
-        <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
-        <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
-        <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
-        <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
-        <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
-        <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com>
-        <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
-        <592dce7a0de24c62bd31c29f86ce6c1b@AcuMS.aculab.com>
-        <87pmcjidfe.fsf@igel.home>
-        <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com>
-        <87len7ibtt.fsf@igel.home>
-        <c7cebe9da0474eb880ab14124ba290d0@AcuMS.aculab.com>
-        <87fsdfib07.fsf@igel.home>
-        <819801284eb745d9a4189759bad297f5@AcuMS.aculab.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 16 Dec 2022 11:54:22 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A032D2634;
+        Fri, 16 Dec 2022 08:54:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=0ykrJHbPVroq1EZ3qDmhugzC+Dqya9lG2NHOM0fSuHo=; b=Nzz4oLZvxjnZJ/8f/1N6BhL8ca
+        oatlFMYFm9EO7tvvsgF4t+Hu7LI9qAMNkukyxGE8x82AK4apeFpPHobtr6Ch9KSuc907mVa4mGVeU
+        JKL1ozX4sUcshfL6OODBLA/sLBNoh4FNzOZwXYcg8W32uXvRR7goqUhhRWLqbQ7AxXv6KQ8l8dfED
+        z3kOtY8IwcZxtksSb7FXSEZiCbGzilFT/mYRz7qE9UJOYCFSrMXtgu80V+CVPw+g9XowT4edei3S8
+        QST1vWz7F9yqH9bmlk7mHs6zsIaWq5xfsldUZLJKAzCNdvnVDlOT3SiWxJ7j46ZJPuZy7yHsvnjay
+        SbC2QElA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35746)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1p6DyU-00089h-5t; Fri, 16 Dec 2022 16:54:19 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1p6DyS-00012U-KR; Fri, 16 Dec 2022 16:54:16 +0000
+Date:   Fri, 16 Dec 2022 16:54:16 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH net-next v4 0/4] phy: aquantia: Determine rate adaptation
+ support from registers
+Message-ID: <Y5yiuJYfqQlS0DX8@shell.armlinux.org.uk>
+References: <20221216164851.2932043-1-sean.anderson@seco.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221216164851.2932043-1-sean.anderson@seco.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,22 +64,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Dec 2022 16:32:08 +0000
-David Laight <David.Laight@ACULAB.COM> wrote:
+Hi Sean,
 
-> From: Andreas Schwab
-> > Sent: 16 December 2022 16:12
-> > On Dez 16 2022, David Laight wrote:
-> >   
-> > > The other issue is a missing "memory" clobber.  
-> > 
-> > strcmp is a pure read-only operation.  
+Please note net-next is currently closed due to the merge window, so
+please don't send patches for it. However, feel free to send RFC
+patches for net-next so that reviews can still happen.
+
+Thanks!
+
+On Fri, Dec 16, 2022 at 11:48:47AM -0500, Sean Anderson wrote:
+> This attempts to address the problems first reported in [1]. Tim has an
+> Aquantia phy where the firmware is set up to use "5G XFI" (underclocked
+> 10GBASE-R) when rate adapting lower speeds. This results in us
+> advertising that we support lower speeds and then failing to bring the
+> link up. To avoid this, determine whether to enable rate adaptation
+> based on what's programmed by the firmware. This is "the worst choice"
+> [2], but we can't really do better until we have more insight into
+> what the firmware is doing. At the very least, we can prevent bad
+> firmware from causing us to advertise the wrong modes.
 > 
-> Still needs the memory clobber.
+> Past submissions may be found at [3, 4].
+> 
+> [1] https://lore.kernel.org/netdev/CAJ+vNU3zeNqiGhjTKE8jRjDYR0D7f=iqPLB8phNyA2CWixy7JA@mail.gmail.com/
+> [2] https://lore.kernel.org/netdev/20221118171643.vu6uxbnmog4sna65@skbuf/
+> [3] https://lore.kernel.org/netdev/20221114210740.3332937-1-sean.anderson@seco.com/
+> [4] https://lore.kernel.org/netdev/20221128195409.100873-1-sean.anderson@seco.com/
+> 
+> Changes in v4:
+> - Reorganize MDIO defines
+> - Fix kerneldoc using - instead of : for parameters
+> 
+> Changes in v3:
+> - Update speed register bits
+> - Fix incorrect bits for PMA/PMD speed
+> 
+> Changes in v2:
+> - Move/rename phylink_interface_max_speed
+> - Rework to just validate things instead of modifying registers
+> 
+> Sean Anderson (4):
+>   net: phy: Move/rename phylink_interface_max_speed
+>   phy: mdio: Reorganize defines
+>   net: mdio: Update speed register bits
+>   phy: aquantia: Determine rate adaptation support from registers
+> 
+>  drivers/net/phy/aquantia_main.c | 160 ++++++++++++++++++++++++++++++--
+>  drivers/net/phy/phy-core.c      |  70 ++++++++++++++
+>  drivers/net/phy/phylink.c       |  75 +--------------
+>  include/linux/phy.h             |   1 +
+>  include/uapi/linux/mdio.h       | 109 ++++++++++++++--------
+>  5 files changed, 299 insertions(+), 116 deletions(-)
+> 
+> -- 
+> 2.35.1.1320.gc452695387.dirty
+> 
+> 
 
-What memory is being modified?
-
-I don't know m68k assembly, but I'm guessing the (%O)+ and the (%1)+ only
-modifies the register being used, and no memory is being touched.
-
--- Steve
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
