@@ -2,101 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD6764EABF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC41D64EAC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbiLPLkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:40:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
+        id S230423AbiLPLlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:41:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiLPLkG (ORCPT
+        with ESMTP id S229780AbiLPLlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:40:06 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDAE324F02
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:40:04 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id q6so3038700lfm.10
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:40:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wgeKrmXSmoymqmhHI2YxMBA2Z5Er7kXuJpmNUKdUO0s=;
-        b=pH6psooufM1EOIZ1dTWqVkEr69xvgIPx4ZEimTv6mC4eINse5qEa4NrGDSOBBwj762
-         /bgd34koXFHQAyv2NArrX1sUBOYds7odGlIKUmbgzLfSbmCf7PFb/L0qsJuvwYm0bgtY
-         c+ezpSSgWG3DLKcPusnb/n8iC0TPfTCO6u51t93e8QEWDdggW/RdOqSRj5yqPYRUNR0d
-         ozeZIxkcHjYfS8INT1pQmdsT2Lw7Fdax5Fdmp0iBQs83RPjwS9sIg88sVySVVFzPq02n
-         0UgYJhV7vQdHp3pqY2VRYGeLM9OKplVLkJ68QRO4edAki3NdrPofkrmkzReyPK0ZDLFq
-         IB4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wgeKrmXSmoymqmhHI2YxMBA2Z5Er7kXuJpmNUKdUO0s=;
-        b=BrwMWRTmSqnmlECwR08WCpLs1a75jAsr1ZOXKrMrIX+827I8rrM019ZGMl/9JwdHiL
-         FlZPm2xD0pxnIR6IG/maScrjeRb7Ho3dtd2awgAGOPAsCmEk+0rwII99C8wBpvM2ru7a
-         kq2oZn1Y2MeQIW+2OzNFqxlm4jCQoHdC/29BPY7naCKpyEVri+IfuPbwBKkXBgw344BC
-         x+Spne1Bo0/fTXEwypYW+ebnPzEUt/cQCV28RfFJtCJ28gb4EoB2l/ZAYadCx7NTqwbj
-         Jy6H1NAx9tZszu2IH3tn8PAGEcJgUiSVCKNM59vDarEmmgik8/pxdsDM9DSvEDGuHqhR
-         hEiw==
-X-Gm-Message-State: AFqh2krZJ3yYoApLujEkZwMkMiIRIsm2vFxEb5z4JGxHqCUz2exx8cxt
-        Y9gCxsZlsYbj8pEeigVWMhIQzA==
-X-Google-Smtp-Source: AMrXdXuV817UvVBPH9lI2IUvXbV1k38ISLjRMejglKcsP6HyI0s7d/1c8hLJRQG8SH+qs+RHZf7btw==
-X-Received: by 2002:a05:6512:282a:b0:4b9:a91c:b0cb with SMTP id cf42-20020a056512282a00b004b9a91cb0cbmr3681915lfb.57.1671190803152;
-        Fri, 16 Dec 2022 03:40:03 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id m8-20020a056512358800b004b5284a92f9sm195222lfr.208.2022.12.16.03.40.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 03:40:02 -0800 (PST)
-Message-ID: <c9dd9e3f-67f5-d2b3-79f9-f18fa07e4e89@linaro.org>
-Date:   Fri, 16 Dec 2022 12:40:01 +0100
+        Fri, 16 Dec 2022 06:41:00 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951A41658C;
+        Fri, 16 Dec 2022 03:40:57 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NYRwT59tyzmWjQ;
+        Fri, 16 Dec 2022 19:39:53 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 16 Dec 2022 19:40:54 +0800
+Subject: Re: [PATCH v9] kallsyms: Add self-test facility
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Geert Uytterhoeven' <geert@linux-m68k.org>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
+ <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
+ <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
+ <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
+ <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
+ <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
+ <d2d6feddc28b4c12af06da84bd48d900@AcuMS.aculab.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <75b4f3be-1e79-5602-5774-aa1fab3f07ce@huawei.com>
+Date:   Fri, 16 Dec 2022 19:40:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 1/2] dt-bindings: iio: adc: ep93xx: Add cirrus,ep9301-adc
- description
+In-Reply-To: <d2d6feddc28b4c12af06da84bd48d900@AcuMS.aculab.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     linux-iio@vger.kernel.org,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221214222024.951984-1-alexander.sverdlin@gmail.com>
- <20221215161835.GA138650-robh@kernel.org>
- <a279467764c063fccf28c7d8fdfac2ab57570fee.camel@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a279467764c063fccf28c7d8fdfac2ab57570fee.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/12/2022 17:25, Alexander Sverdlin wrote:
->>> +
->>> +examples:
->>> +  - |
->>> +    #include <dt-bindings/clock/cirrus,ep93xx-clock.h>
+
+
+On 2022/12/16 18:40, David Laight wrote:
+> From: Geert Uytterhoeven 
+>> Sent: 15 December 2022 13:25
+> ...
+>> Looks like commit 3bc753c06dd02a35 ("kbuild: treat char as always
+>> unsigned") is to blame.
+>>
+>> Changing:
+>>
+>>     --- a/arch/m68k/include/asm/string.h
+>>     +++ b/arch/m68k/include/asm/string.h
+>>     @@ -42,7 +42,7 @@ static inline char *strncpy(char *dest, const
+>> char *src, size_t n)
+>>      #define __HAVE_ARCH_STRCMP
+>>      static inline int strcmp(const char *cs, const char *ct)
+>>      {
+>>     -       char res;
+>>     +       signed char res;
+>>
+>>             asm ("\n"
+>>                     "1:     move.b  (%0)+,%2\n"     /* get *cs */
+>>
+>> fixes strcmp, but the test still fails:
 > 
-> your robot was right, this dependency is missing, I thought I can prepare
-> the ADC driver in advance, but seems it has to go together with the whole
-> DT conversion of the EP93xx series.
+> Try 'int res;' and an explicit sign extend (I think):
+> 	"3: extb %2\n"
 
-You can hard-code a number in the binding example, to drop dependency on
-the header.
+Compilation failed. I tried "return (int)(signed char)res;", it's still failed.
 
-Best regards,
-Krzysztof
+> 
+> The strcmp() is still wrong if either input string
+> has characters with the top bit set.
+> The result needs to be based of the carry flag not
+> the sign of the byte subtract.
+> 
+> It is too long since I've written m68k asm.
+> I've checked, all byte operations leave the high 24bits
+> unchanged.
 
+Currently, only ASCCIs. So it won't be the reason.
+
+> So it is possible that gcc is making assumptions and
+> skipping the sign extend under some circumstances.
+
+Wow, because compare_symbol_name() works properly during the previous binary
+search, the compiler must have done something bad. So I add 'volatile' to prevent
+compiler optimizations, and it's OK now.
+
+diff --git a/arch/m68k/include/asm/string.h b/arch/m68k/include/asm/string.h
+index f759d944c449940..3db81e5a783c72a 100644
+--- a/arch/m68k/include/asm/string.h
++++ b/arch/m68k/include/asm/string.h
+@@ -42,9 +42,9 @@ static inline char *strncpy(char *dest, const char *src, size_t n)
+ #define __HAVE_ARCH_STRCMP
+ static inline int strcmp(const char *cs, const char *ct)
+ {
+-       char res;
++       signed char res;
+
+-       asm ("\n"
++       asm volatile ("\n"
+                "1:     move.b  (%0)+,%2\n"     /* get *cs */
+                "       cmp.b   (%1)+,%2\n"     /* compare a byte */
+                "       jne     2f\n"           /* not equal, break out */
+
+> 
+> 	David
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+> 
+
+-- 
+Regards,
+  Zhen Lei
