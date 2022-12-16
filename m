@@ -2,93 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10B764EA5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2B3064EA5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiLPL1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:27:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
+        id S229892AbiLPL12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:27:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbiLPL0y (ORCPT
+        with ESMTP id S229729AbiLPL1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:26:54 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CC755A8D
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:26:48 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id cf42so3057218lfb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:26:48 -0800 (PST)
+        Fri, 16 Dec 2022 06:27:24 -0500
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5F64D5DA
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:27:22 -0800 (PST)
+Received: by mail-vk1-xa2c.google.com with SMTP id l17so990763vkk.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:27:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ijWttUWVsbhHZn4LhbIQN7vTGHeglSXzhGTgjwKCHrs=;
-        b=BApY2HUYX5jfRg/ED+D6Dvt4oqpujq+73E9c54TdioVyZf26smlPHX3+8j1sKBCCik
-         uKJ0I6nXju93Wm1xT11UvJJqwwYYScq2MnWuypWb1ZOgDR9nEsogoJEyj7iMPIlWRF6P
-         K6P9mmsrFT4WoyDabgdMMGYiww3VxyO3d6dcjwAonV6r2/c7Ip4LgHGjipfaFu/sq2YD
-         2sYII1iFNmpISpIpwVA2JX/dsxv+4w6wKpTsJcIcvqr3MN11OCswvr2fik+UIBNHB33s
-         Wh37wO1lbPARQRSbJrYuk2ZfKTquKmSMhw4aCinCWwo0PA+LfOkDhyLumDrKbmFSmPih
-         1Psw==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZkdA11L6P1WPDBE1mrl4curSBheefLQYVgKHrgovhvw=;
+        b=epgTZV18v5BRFirasNVaS0xStlOh43QI6CHisgNYFFoP1YfmVsa7CogJmcQQTCR5Xe
+         fxCSn2VUSIylQgEByhYckyYrAbluS/bXcy05m2WSYKaBs10diDg6Ej7Xksk/n0jfk49F
+         mWCGlTApwKmadLsh9IB6OImDEEKQoLm1qw8Xe/YmfgXYFIi7Ld+rUkO4MfXW8wMnOxeR
+         P2xE7/Vi7KmZezSUvZysWDg8qwzXfY7QjOPupH8Bbi4YTdhUSTJRprkfRLDo4aqdbpaZ
+         QGS9Lha2g7uf4N0uFJHkacgiBCk+CxXaxAFv0F7xMo2wUm9DRhrD8l8LSze4mwemJrTL
+         9Qaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ijWttUWVsbhHZn4LhbIQN7vTGHeglSXzhGTgjwKCHrs=;
-        b=KSmvTQgJtD1tSBbD6SYvuzacwlhKuOOQnKVjgrz/P1eehCY6ORpnRXjYqHq9YG0c+A
-         F9Nca1gPG4odY8R5Yvr0fn9gVfrl3M2M5QZU4ZU0gRSUmwReweUSmYrwtBEVZipw2hUH
-         2C2FFaKpeXFiBd+9mx80/HqsjK80LRShhrmmu/V5W7CBqZn9Oi3gT5BPgEZ8xY2Ao0Wr
-         aR9E0TbZKEQSq8C6ejfEf+U6dghQm6dEKJXVHafnnYmq9GgVA9yXMlZEpMKrwtEiZvWF
-         d6hI3gKdVi5nr/T0OFjYu9HSyzSfmyytESFHLpHT7i6EzmNgDSONv6P8dZJWHkAzOViz
-         dzFg==
-X-Gm-Message-State: ANoB5pnI6JvM80L8WVRR4PQ7dLjWFfrOFwdOedUvp5zcIT61xo4eaU8p
-        FJcpTu0d42MwwKZnEpkR2oQagA==
-X-Google-Smtp-Source: AA0mqf7kDhXi1vitDJl/sEJHs5hMVXC2c0ZScWKbCnxyQnShcZR/Q29dejmivVTVisYrz2IjnIXvhg==
-X-Received: by 2002:a05:6512:1296:b0:4b4:8bc3:21f9 with SMTP id u22-20020a056512129600b004b48bc321f9mr13076525lfs.36.1671190006641;
-        Fri, 16 Dec 2022 03:26:46 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id e1-20020a05651236c100b004bd8534ebbcsm194810lfs.37.2022.12.16.03.26.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 03:26:46 -0800 (PST)
-Message-ID: <ea6acf8b-bf83-391f-d235-0aff111d4dfa@linaro.org>
-Date:   Fri, 16 Dec 2022 12:26:45 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZkdA11L6P1WPDBE1mrl4curSBheefLQYVgKHrgovhvw=;
+        b=l4UK47HznwaF8yAV+wo7WEBESXffmLmX9KMOBsiDZNVO4XDTt/wJBfI6wmBhesqiuO
+         i1Hrg4q4CbDIZ0k4/5uFmHmTOYHL2rRVRGyFwePEMSaozIpE9k+anP2GaHfNykBcwQQo
+         DHASmar5DRaMk+ROn/HxChCbkn6eNWD6aEUxOBfVU/whIaTignNdEK7sYFpHc7kBeyCx
+         acd/SwbYDfH5tvNwHONy2NJhxbzVEQzH3cqsJVNoXGNOxEcm7LA1pVaEmkriQO04mdxs
+         vaNpmwjdWMZ4wBRYxUPLyAW3ooAMfmxGB4AoXDis5ygyLWL7zP7pqnUSM+TZbrDB7iPj
+         3zOA==
+X-Gm-Message-State: ANoB5plALFDEJR/bkAYa3FU522I9qZlpL5A+qyrBbOVcIKSO15OSNQ8g
+        j0EV4Z61Ea1SygQ8Mhx/5lQ67o7pZMSOo+Ef6VUQBA==
+X-Google-Smtp-Source: AA0mqf7FamBckNuL80bbGypsOgPVSYrYJ9tNTUEuT4ATfS0wx7IGlkjf6W7wB3bmSeTusDBI0KllAUVN+e2BuNToBrk=
+X-Received: by 2002:a1f:3846:0:b0:3bc:c843:c7b5 with SMTP id
+ f67-20020a1f3846000000b003bcc843c7b5mr33399911vka.30.1671190041699; Fri, 16
+ Dec 2022 03:27:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v4 3/4] dt-bindings: arm: qcom: Document
- xiaomi,laurel-sprout board
-Content-Language: en-US
-To:     Lux Aliaga <they@mint.lgbt>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221215190404.398788-1-they@mint.lgbt>
- <20221215190404.398788-3-they@mint.lgbt>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221215190404.398788-3-they@mint.lgbt>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20221215172906.638553794@linuxfoundation.org>
+In-Reply-To: <20221215172906.638553794@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 16 Dec 2022 16:57:10 +0530
+Message-ID: <CA+G9fYt2O6OZAbZ4rfVDJfWMi27OkMCEhTLyRBRPZuXucaSZzw@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/15] 5.10.160-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/12/2022 20:04, Lux Aliaga wrote:
-> Document the Xiaomi Mi A3 (xiaomi-laurel-sprout) smartphone which is
-> based on the Snapdragon 665 SoC.
-> 
+On Thu, 15 Dec 2022 at 23:41, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.160 release.
+> There are 15 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 17 Dec 2022 17:28:57 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.160-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Best regards,
-Krzysztof
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 5.10.160-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: a66782e1af759c5fff50b1b382ff4e34fe8fe158
+* git describe: v5.10.159-16-ga66782e1af75
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.159-16-ga66782e1af75
+
+## Test Regressions (compared to v5.10.158-99-g2c8c8e98b2ec)
+
+## Metric Regressions (compared to v5.10.158-99-g2c8c8e98b2ec)
+
+## Test Fixes (compared to v5.10.158-99-g2c8c8e98b2ec)
+
+## Metric Fixes (compared to v5.10.158-99-g2c8c8e98b2ec)
+
+## Test result summary
+total: 141503, pass: 122877, fail: 2557, skip: 15573, xfail: 496
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 148 passed, 3 failed
+* arm64: 49 total, 46 passed, 3 failed
+* i386: 39 total, 37 passed, 2 failed
+* mips: 31 total, 29 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 32 total, 25 passed, 7 failed
+* riscv: 16 total, 14 passed, 2 failed
+* s390: 16 total, 16 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 40 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
