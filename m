@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2F064F029
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8482764F030
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiLPRPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 12:15:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
+        id S231718AbiLPRQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 12:16:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbiLPRPD (ORCPT
+        with ESMTP id S230449AbiLPRQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 12:15:03 -0500
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6C06F4B7
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:15:02 -0800 (PST)
-Received: by mail-vs1-xe29.google.com with SMTP id t5so2887112vsh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:15:02 -0800 (PST)
+        Fri, 16 Dec 2022 12:16:19 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2630101F5
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:16:18 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id 17so3005094pll.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:16:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZtMTy3xD/YIIJO7mogDtwIJ/KFVv5XuLkhBv3fM/Tn8=;
-        b=lyj42c62QPSypdqG7GLNN3i2/cQoZpa+utzANMIFx97g8gqQMRmMZHX790g36afuiu
-         Q4EPORPLYwnd56QHiMbRb4x7OWPQid0pP5vAwIEGxaXr53pcKN7ACTIbw/LAUKVprpYC
-         rRakx+eLmwTqpj3I6wRKVaxbe2wOy7CUmZMbcULvIF7U/7ogbcaW8iBau9XGyY8a3z0H
-         KZJbg6Vw32CoU+BJiAB89sFkRqbhFgqUPk5LDnsdGoyEmhc/D9MLTdRjQ1bbmEQtF131
-         UN83FonIYdEcW0BLkzQpR7GONe24epAHIchTdyBtICVOwSZG7BkqBEmMduvXBaiqaL9U
-         mwhg==
+        bh=1vFt+PxUURFiZfVHrvBsmq3MYjQQnliB4U9G0LtHwvo=;
+        b=NzIXW8IPm6aqdfZVn8wF9pvH9EX2CYlT+NecBtjOLfEuyXc+cx2NKGt5J+FnKO1bjJ
+         TrF0y0yo6mVxhuVq30y+t91fPsGX6xGd9sb28pCmi+59SPnJev9IpMY/dcGPJmgXxLzp
+         uYMcp6cAQtYqy4jgdLA97Jt9m1/T5UmPMFJisqTII7KPitmCMZEDdbkzlV2rVl6bYHA4
+         cHbNfGO25NidGQjLdH+U6LTY95WHrEs/cMS3wJB4NiEqJbZc8YCuwLiuoX1snZ9fquUB
+         6TFyUQQ35fJyhZeTgW8uzcMzgbwY2W4AZcTPgGrzdmrUN5UHDplf+8ch5izUjtf2VG6v
+         UsfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZtMTy3xD/YIIJO7mogDtwIJ/KFVv5XuLkhBv3fM/Tn8=;
-        b=Hcr8v5U++4Auo1QqmeG/8SET+GrMsrC9g67V27iLe+xBtZGUTT0pz/TMfF7NW8+QhS
-         dhCsf1+bCxCawpSkgfKcTWErcmidZ0x6vpX77RnOlf2Z0BHN+gPou0LIZufw5kdClp6R
-         yst8hHF/YAzZsqauyYKl1s2WsGLkvr3VJQg7djBhNxFzs4ny7hNiJCTGYEkyj6oDRERS
-         l13VwIjb9kdGxn2WxhfrOvV0MSC352DwhL/3VKHnjbF8q8bt8bF3vpe+D3v0m2U2XJic
-         fWIyzb8VmxH3UJhVsAwf/48FUVy/FSCaB3S+S4YKlHLLK7AVyhZ+mZfzx3a4PPdkxI7Z
-         XrGg==
-X-Gm-Message-State: ANoB5plcaHnyM43oUVgJPbC1X0/RGLMVvbErQsw6VB++VtYjrcBtG1oS
-        tSYtwWaA5z8d4LDlriG1MCy8B4jysufnSwKJOlSfHA==
-X-Google-Smtp-Source: AA0mqf6BLokz7R9cQcWdhXwpvwEVngT1W67P7kJHUedJP0xJL3QcWm9I1GLdaBqKhgaamYVtXl4pd8gAH5NDwF0srac=
-X-Received: by 2002:a67:eb8b:0:b0:3b5:23b1:e56 with SMTP id
- e11-20020a67eb8b000000b003b523b10e56mr1887743vso.51.1671210901695; Fri, 16
- Dec 2022 09:15:01 -0800 (PST)
+        bh=1vFt+PxUURFiZfVHrvBsmq3MYjQQnliB4U9G0LtHwvo=;
+        b=BtIx6jsERMol8Bnjf0iqJWZQ5SIl2vjnvpQI0TXFjjCEjwlX5GI9TUXdOc0eXtER7Q
+         DUluCgruBxEMhEdlM+TBJ5hOF+7kQQGK36M81KP5cqlPJXbNIHbWv0sc0k5muyuVtqet
+         hAnrUIUWREa5zGrID1Nm+UvhwkH01m9mJZspw5KGFiDYDV+GL8DhZJSEouFRgzAgoelc
+         laB4p2AzlLBz+UwOt73GjrgQR/x1p9i0SGKSfIzZZj/AaS/Kh5dPCv+0nioFHqgTcVus
+         wBMKn0UZI5X1TgPyqbevL8Of3jxIkSEA80EvkQAYI69PTlPCLIiywcs8q7F2xq20jNGC
+         QDBw==
+X-Gm-Message-State: AFqh2ko21p8eDQSwxdJjgJ4aaEujomiNgX/BF9VBVeH8OgOsUGAmagh4
+        P/V0FIBhDfx52DOSvxpb0C5C99Hb7LjXV14PrPvhmQ==
+X-Google-Smtp-Source: AMrXdXvvu/Vp44NQhthEXWvCfyRa+UVxHXgPTglhTuliY9e8JxjquA4ilh9D3roeSj0Fhi+0+KgwBHTBi2wbT081p2k=
+X-Received: by 2002:a17:90a:69c7:b0:21a:8dc:1b5e with SMTP id
+ s65-20020a17090a69c700b0021a08dc1b5emr653725pjj.26.1671210977931; Fri, 16 Dec
+ 2022 09:16:17 -0800 (PST)
 MIME-Version: 1.0
-References: <0000000000006c411605e2f127e5@google.com> <000000000000b60c1105efe06dea@google.com>
- <Y5vTyjRX6ZgIYxgj@mit.edu> <Y5xsIkpIznpObOJL@google.com> <CANp29Y6KHBE-fpfJCXeN5Ju_qSOfUYAp2n+cNrGj25QtU0X=sA@mail.gmail.com>
- <Y5ylNxoN2p7dmcRD@mit.edu>
-In-Reply-To: <Y5ylNxoN2p7dmcRD@mit.edu>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Fri, 16 Dec 2022 18:14:50 +0100
-Message-ID: <CANp29Y4QVp1G83pSqpxeETbw_+kQQ5CZUz+Vgi767WxE8AuhHQ@mail.gmail.com>
-Subject: Re: kernel BUG in ext4_free_blocks (2)
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     Lee Jones <lee@kernel.org>,
-        syzbot <syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, gregkh@linuxfoundation.org,
-        lczerner@redhat.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sashal@kernel.org,
-        stable@vger.kernel.org, syzkaller-android-bugs@googlegroups.com,
-        tadeusz.struk@linaro.org
+References: <20221207154939.2532830-1-jeffxu@google.com> <20221207154939.2532830-4-jeffxu@google.com>
+ <202212080821.5AE7EE99@keescook> <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
+ <Y5yS8wCnuYGLHMj4@x1n>
+In-Reply-To: <Y5yS8wCnuYGLHMj4@x1n>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Fri, 16 Dec 2022 09:15:40 -0800
+Message-ID: <CALmYWFsDhX76zbcyhYAW-u0BBwD+m+TKpt4_pZTMt+22zHhrGQ@mail.gmail.com>
+Subject: Re: [PATCH v6 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Kees Cook <keescook@chromium.org>, jeffxu@chromium.org,
+        skhan@linuxfoundation.org, akpm@linux-foundation.org,
+        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -75,63 +75,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 6:05 PM Theodore Ts'o <tytso@mit.edu> wrote:
+On Fri, Dec 16, 2022 at 7:47 AM Peter Xu <peterx@redhat.com> wrote:
 >
-> On Fri, Dec 16, 2022 at 03:09:04PM +0100, Aleksandr Nogikh wrote:
-> >
-> > Syzbot is actually reacting here to this bug from the Android namespace:
-> >
-> > https://syzkaller.appspot.com/bug?id=5266d464285a03cee9dbfda7d2452a72c3c2ae7c
+> Hi, Jeff,
 >
-> Thanks for the clarification; stupid question, though -- I see
-> "upstream" is listed on the dashboard link above.  Assuming that
-> "usptream" is "Linus's tree", why was it still saying, "I can't find
-> this patch in any of my trees"?  What about the upstream tree?
+> On Thu, Dec 08, 2022 at 02:55:45PM -0800, Jeff Xu wrote:
+> > > > +     if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
+>
+> [...]
+>
+> > > > +             pr_warn_ratelimited(
+> > > > +                     "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=%d '%s'\n",
+> > > > +                     task_pid_nr(current), get_task_comm(comm, current));
+>
+> This will be frequently dumped right now with mm-unstable.  Is that what it
+> wanted to achieve?
+>
+> [   10.822575] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=491 'systemd'
+> [   10.824743] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=495 '(sd-executor)'
+> ...
+>
+> If there's already a sane default value (and also knobs for the user to
+> change the default) not sure whether it's saner to just keep it silent as
+> before?
+>
+Thanks for your comments.
 
-Bugs from different namespaces are treated independently, so in this
-particular case syzbot was expecting the fixing commit to reach the
-Android trees that it fuzzes.
+The intention is it is a reminder to adjust API calls to explicitly
+setting this bit.
+The sysctl vm.memfd_noexec = 0 1 is for transaction to the final
+state, and 2 depends on API call setting this bit.
 
---
-Aleksandr
+The log is ratelimited, and there is a rate limit setting:
+/proc/sys/kernel/printk_ratelimit
+/proc/sys/kernel/printk_ratelimit_burst
 
+Best regards,
+Jeff
+
+> --
+> Peter Xu
 >
-> > > Although this does appear to be a Stable candidate, I do not see it
-> > > in any of the Stable branches yet.  So I suspect the answer here is to
-> > > wait for the fix to filter down.
->
-> The reason why it's not hit any of the long-term stable trees is
-> because the patch doesn't apply cleanly, because there are
-> pre-requisite commits that were required.  Here are the required
-> commits for 5.15:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git ext4_for_5.15.83
->
-> % git log --reverse --oneline  v5.15.83..
-> 96d070a12a7c ext4: refactor ext4_free_blocks() to pull out ext4_mb_clear_bb()
->     [ Upstream commit 8ac3939db99f99667b8eb670cf4baf292896e72d ]
-> 2fa7a1780ecd ext4: add ext4_sb_block_valid() refactored out of ext4_inode_block_valid()
->     [ Upstream commit 6bc6c2bdf1baca6522b8d9ba976257d722423085 ]
-> 8dc76aa246b1 ext4: add strict range checks while freeing blocks
->     [ Upstream commit a00b482b82fb098956a5bed22bd7873e56f152f1 ]
-> deb2e1554497 ext4: block range must be validated before use in ext4_mb_clear_bb()
->     [ Upstream commit 1e1c2b86ef86a8477fd9b9a4f48a6bfe235606f6 ]
->
-> Further backports to LTS kernels for 5.10, 5.4, etc., are left as an
-> exercise to the reader.  :-)
->
->                                              - Ted
->
-> P.S.  I have not tried to run gce-xfstests regressions yet. so the
-> only QA done on these backports is "it builds, ship it!"  (And it
-> fixes the syzbot reproducers.)  Then again, we're not running this
-> kind of regression tests on the LTS kernels.
->
-> P.P.S.  If anyone is willing to volunteer to be an ext4 backports
-> maintainer, please contact me.  The job description is (a) dealing
-> with the stable backport failures and addressing the patch conflicts,
-> potentially by dragging in patch prerequisites, and (b) running
-> "gce-xfstests ltm -c ext4/all -g auto" and making sure there are no
-> regressions.
->
->                                               - Ted
