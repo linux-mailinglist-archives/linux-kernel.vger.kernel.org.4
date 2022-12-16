@@ -2,105 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00F864F257
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 21:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B855764F25E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 21:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbiLPU0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 15:26:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        id S231940AbiLPU1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 15:27:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbiLPU0i (ORCPT
+        with ESMTP id S231741AbiLPU1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 15:26:38 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E441B3947E;
-        Fri, 16 Dec 2022 12:26:36 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id z12so3626436qtv.5;
-        Fri, 16 Dec 2022 12:26:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rcRx1iOzeEHZanYkE8bGhrElsG764GjfvNJrIdjSpSE=;
-        b=EH9sGORcrxPkpJIGgXTqF0bnLJRWC1tzRxwIw+Q8Whlrje0bhyAePt4u67Tg6vzTxK
-         satVJ9y6zXFvImMyMjYekSi2prcvcLgdEMYd4SKJGa1uD88pfJK/xXIU1Is1T+VXdg7C
-         GPJU+15+hJNMeAbbl80VSF+T6dsHUfYYhvc57ct5ZSjm93vUe0cEbekFdnx0CF736RaD
-         mw/v4XQY0T9EZvHT/SBc8Jl/GpF3En61LQMbIIo51RP1AHtXcV4kR+S3qP5Z1j11LDt+
-         4r9bKXof6XKdoh+qKRRrQVbuLuXV/XvTlAMWSlxwp1UVHFQkzNL8pmKeiltFwYOX5BxF
-         Optw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rcRx1iOzeEHZanYkE8bGhrElsG764GjfvNJrIdjSpSE=;
-        b=atlIgBUR0400y6b4wRsdXFUiw4pnEaUJiesoTFRUEq1hh7kzDoQGfHoenWOBe5o1zv
-         dc6vPxD/apvotWMbs1InwKE6KYjIE81EW79FKoBdvvLHZVm7yBvURbnUqueaY4X0xlFn
-         JTR6IOBNYXiu4lAsmsoglHc0zWdVX34IeUQ6TWfReyHm3Y2l+S5EcHi/UUsfUlVPXsd2
-         OXuTKuYzKQ5/TIssP5jJdmjiq55KWZA1GOnDmmEzAIzp6CHtH3cspTd8sPr3apFupWFq
-         Z10EkPm3J5SUAQ2SrKK2yxwYsYY71T2PHTuS6h2M3dK1Kx/8MQibmTnb+KkQln7ck4sg
-         ukhQ==
-X-Gm-Message-State: ANoB5plgOjraHkmr0JuLgL2WSyj08ZprwOEfXWCL6hKd9y8WeUYTbZA7
-        vJzbGsysGPUvOQsQU+y4B9g=
-X-Google-Smtp-Source: AA0mqf68KfR/QxmkWifs6d/s8rQecBbb0g1rZ1GJPSQzTpEY2hwym72KmjU2IHEfpwMYDOcwNUZTEA==
-X-Received: by 2002:ac8:4d01:0:b0:3a8:28d1:4541 with SMTP id w1-20020ac84d01000000b003a828d14541mr17595036qtv.66.1671222395956;
-        Fri, 16 Dec 2022 12:26:35 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id f1-20020a05620a280100b006ee949b8051sm2170694qkp.51.2022.12.16.12.26.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 12:26:35 -0800 (PST)
-Message-ID: <925e3609-7bba-2045-1184-a6b0bf8f2b45@gmail.com>
-Date:   Fri, 16 Dec 2022 12:26:30 -0800
+        Fri, 16 Dec 2022 15:27:42 -0500
+Received: from amity.mint.lgbt (vmi888983.contaboserver.net [149.102.157.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D893EAC6
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:27:39 -0800 (PST)
+Received: from amity.mint.lgbt (mx.mint.lgbt [127.0.0.1])
+        by amity.mint.lgbt (Postfix) with ESMTP id 4NYgdP2Fkwz1S5Cn
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:27:37 -0500 (EST)
+Authentication-Results: amity.mint.lgbt (amavisd-new);
+        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
+        header.d=mint.lgbt
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mint.lgbt; h=
+        content-transfer-encoding:content-type:in-reply-to:from
+        :content-language:references:to:subject:user-agent:mime-version
+        :date:message-id; s=dkim; t=1671222456; x=1672086457; bh=IpJmud+
+        XEx9PKkU79dSSMg1CiFu7r9OxFpEYtS1E59w=; b=Ss0S5+ylltwEkcNqxY2Cfqi
+        6J0812qCLEG90MJ/5Q3Bm5u/BFPyFSGWVVDR+92Mj9o0lf/Hkjpvp0vYp9uPIoWW
+        xwY4BKkjIHUM6Tc9bHL6RZ3IQRs5o1iwMG9gSxsFBPIysleYVbsS4ROnNLpxsexV
+        mEgD9p3RGAmgfjYM8qpVE4v251JdtxRGCAqSLUzhbDWTy/zYi7vb1/5alK8s7PM/
+        Eof75PcH+zaSKqra0RGo8E523fI6ThaaBqNA/4shHXJHnmMa8GvewaY+XP89a1ut
+        g5RctfmztiyBvw+n0GlqbGpUeI/R1Srs9u8LpkyeWXpWp4Z66UFLd+yJPeML5hQ=
+        =
+X-Virus-Scanned: amavisd-new at amity.mint.lgbt
+Received: from amity.mint.lgbt ([127.0.0.1])
+        by amity.mint.lgbt (amity.mint.lgbt [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id vP55OA_FqP1E for <linux-kernel@vger.kernel.org>;
+        Fri, 16 Dec 2022 15:27:36 -0500 (EST)
+Received: from [192.168.1.96] (unknown [186.105.44.155])
+        by amity.mint.lgbt (Postfix) with ESMTPSA id 4NYgd50Bw7z1S52q;
+        Fri, 16 Dec 2022 15:27:20 -0500 (EST)
+Message-ID: <d0157452-307b-37a5-890a-b479a880ab95@mint.lgbt>
+Date:   Fri, 16 Dec 2022 17:27:17 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.15 00/14] 5.15.84-rc1 review
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v4 4/4] arm64: dts: qcom: sm6125: Initial support for
+ xiaomi-laurel-sprout
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20221215190404.398788-1-they@mint.lgbt>
+ <20221215190404.398788-4-they@mint.lgbt>
+ <afcb9378-f331-df8c-ced5-1c10999f5fb8@linaro.org>
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221215172906.338769943@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221215172906.338769943@linuxfoundation.org>
+From:   Lux Aliaga <they@mint.lgbt>
+In-Reply-To: <afcb9378-f331-df8c-ced5-1c10999f5fb8@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/22 10:10, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.84 release.
-> There are 14 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 17 Dec 2022 17:28:57 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.84-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+On 16/12/2022 08:32, Konrad Dybcio wrote:
+>
+> On 15.12.2022 20:04, Lux Aliaga wrote:
+>> Adds support for the Xiaomi Mi A3 (xiaomi-laurel-sprout). Here's a
+>> summary on what's working.
+>>
+>> - dmesg output to bootloader preconfigured display
+>> - USB
+>> - UFS
+>> - SMD RPM regulators
+>>
+>> Signed-off-by: Lux Aliaga <they@mint.lgbt>
+>> ---
+>>   arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>>   .../dts/qcom/sm6125-xiaomi-laurel-sprout.dts  | 254 ++++++++++++++++++
+>>   2 files changed, 255 insertions(+)
+>>   create mode 100644 arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel-sprout.dts
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+>> index 3e79496292e7..2b2a0170db14 100644
+>> --- a/arch/arm64/boot/dts/qcom/Makefile
+>> +++ b/arch/arm64/boot/dts/qcom/Makefile
+>> @@ -157,6 +157,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-lenovo-yoga-c630.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-samsung-w737.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= sm4250-oneplus-billie2.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-sony-xperia-seine-pdx201.dtb
+>> +dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-xiaomi-laurel-sprout.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= sm6350-sony-xperia-lena-pdx213.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= sm6375-sony-xperia-murray-pdx225.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= sm7225-fairphone-fp4.dtb
+>> diff --git a/arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel-sprout.dts b/arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel-sprout.dts
+>> new file mode 100644
+>> index 000000000000..86e1ec47bf5e
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel-sprout.dts
+>> @@ -0,0 +1,254 @@
+>> +// SPDX-License-Identifier: BSD-3-Clause
+>> +/*
+>> + * Copyright (c) 2022, Lux Aliaga <they@mint.lgbt>
+>> + */
+>> +
+>> +/dts-v1/;
+>> +
+>> +#include <dt-bindings/gpio/gpio.h>
+>> +#include <dt-bindings/input/input.h>
+>> +#include <dt-bindings/input/gpio-keys.h>
+>> +#include "sm6125.dtsi"
+>> +
+>> +/ {
+>> +	model = "Xiaomi Mi A3";
+>> +	compatible = "xiaomi,laurel-sprout", "qcom,sm6125";
+>> +	chassis-type = "handset";
+>> +
+>> +	/* required for bootloader to select correct board */
+>> +	qcom,msm-id = <394 0>; /* sm6125 v0 */
+> Unless you have a prototype device, this is not correct.
+>
+> Please run `cat /sys/bus/soc/devices/soc0/revision` and confirm
+> which revision is used on your phone.
+This segment has already been cross-referenced from downstream, and the 
+device boots up successfully when using this ID, unless you're referring 
+to the comment next to it, in which case I can recheck later, since 
+currently I'm away from my device.
+
 -- 
-Florian
+Lux Aliaga
+https://nixgoat.me/
 
