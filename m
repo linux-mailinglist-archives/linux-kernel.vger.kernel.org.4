@@ -2,177 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2FB164EB5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 13:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 141C464EB5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 13:23:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiLPMXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 07:23:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
+        id S230213AbiLPMXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 07:23:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiLPMXB (ORCPT
+        with ESMTP id S229547AbiLPMXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 07:23:01 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC9AB7F;
-        Fri, 16 Dec 2022 04:22:59 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 925605CE05;
-        Fri, 16 Dec 2022 12:22:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1671193378; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=55VqnW9Ao+0rvOaOMf07LBD98sXobnFCsHQn11Sa8t4=;
-        b=qTjnrQi98XS8giC/67pmAob3YyoPo4ZM/zR1IGDfJwcrnEnkNJPPLopN/OTTMUMzIJ8c4Y
-        SV3VhlBCaTZjtUjYsP2UF4YSdQx9N6gOee+Ph1pbnXW7kDupixd8iKm+dyK4yHSLWQYJp9
-        bBqvbuzBcSUu3TZgVuDgzpvu0J1zrZw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7FCF1138FD;
-        Fri, 16 Dec 2022 12:22:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id iCJrHiJjnGN5KQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 16 Dec 2022 12:22:58 +0000
-Date:   Fri, 16 Dec 2022 13:22:58 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
-        fvdl@google.com, bagasdotme@gmail.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] Revert "mm: add nodes= arg to memory.reclaim"
-Message-ID: <Y5xjIrrf0yNTJb/T@dhcp22.suse.cz>
-References: <20221202223533.1785418-1-almasrymina@google.com>
- <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz>
- <Y5xASNe1x8cusiTx@dhcp22.suse.cz>
- <CAHS8izP9RAYuVFs+e7JSKJui4u=oA4smqaRDGG2jn_3ssKvi8A@mail.gmail.com>
+        Fri, 16 Dec 2022 07:23:36 -0500
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCABB7F;
+        Fri, 16 Dec 2022 04:23:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=wPpGANywqu4yGBZP8iPh0IdTWEqi4Mnug94k3CnRBGM=; b=LVHmSC6+03vIlIcALFWDDADMY9
+        e8k2EzhRPNXUpVOih3wftktj30ftstF4lBiNWKyMAV8BOMLe/JBNPjNEMGL2BqbvfR7VjC8stGOAQ
+        awdGrMlFZxSyVCW5miPhRfNg7eu8k17enGzfS7buVed81wWVOOdCwrpCIPb9zLNbBsqEWwGfuXicC
+        eJVNmHOrNF4A3wCnMukhOpgfkGj7ZRISH0rawfWAP0aKdQ1L7vxEGGuFnkZPngG4mREBoxzAaI6dz
+        Mxu/zpBtN6kws5VNGxgvuhoGgGUOb4rZFgqbqWHw9ZomZqHhNNdzrxTS7OE7F9Gx5tFBefvevGC9r
+        qXlNUKIg==;
+Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:33606 helo=[192.168.69.116])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <primoz.fiser@norik.com>)
+        id 1p69kM-005Zec-SS;
+        Fri, 16 Dec 2022 13:23:26 +0100
+Message-ID: <5c2e0531-e7c3-1b37-35ed-c8e9795a0d18@norik.com>
+Date:   Fri, 16 Dec 2022 13:23:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHS8izP9RAYuVFs+e7JSKJui4u=oA4smqaRDGG2jn_3ssKvi8A@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] i2c: imx: increase retries on arbitration loss
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        upstream@lists.phytec.de, Marco Felsch <m.felsch@pengutronix.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        francesco.dolcini@toradex.com
+References: <20221216084511.2576786-1-primoz.fiser@norik.com>
+ <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
+ <bb4882a9-8be6-5255-6256-aa1253362e59@norik.com>
+ <20221216110227.GA12327@pengutronix.de>
+ <20221216111308.wckibotr5d3q6ree@pengutronix.de>
+From:   Primoz Fiser <primoz.fiser@norik.com>
+In-Reply-To: <20221216111308.wckibotr5d3q6ree@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: primoz.fiser@norik.com
+X-Authenticated-Sender: cpanel.siel.si: primoz.fiser@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 16-12-22 04:02:12, Mina Almasry wrote:
-> On Fri, Dec 16, 2022 at 1:54 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > Andrew,
-> > I have noticed that the patch made it into Linus tree already. Can we
-> > please revert it because the semantic is not really clear and we should
-> > really not create yet another user API maintenance problem. I am
-> > proposing to revert the nodemask extension for now before we grow any
-> > upstream users. Deeper in the email thread are some proposals how to
-> > move forward with that.
-> 
-> There are proposals, many which have been rejected due to not
-> addressing the motivating use cases and others that have been rejected
-> by fellow maintainers, and some that are awaiting feedback. No, there
-> is no other clear-cut way forward for this use case right now. I have
-> found the merged approach by far the most agreeable so far.
+Hi all,
 
-There is a clear need for further discussion and until then we do not
-want to expose interface and create dependencies that will inevitably
-hard to change the semantic later.
+On 16. 12. 22 12:13, Uwe Kleine-König wrote:
+> On Fri, Dec 16, 2022 at 12:02:27PM +0100, Oleksij Rempel wrote:
+>> On Fri, Dec 16, 2022 at 11:41:08AM +0100, Primoz Fiser wrote:
+>>> Hi Marco,
+>>>
+>>> On 16. 12. 22 10:45, Marco Felsch wrote:
+>>>> Hi Primoz,
+>>>>
+>>>> On 22-12-16, Primoz Fiser wrote:
+>>>>> By default, retries value is set to 0 (no retries). Set retries to more
+>>>>> sensible value of 3 to allow i2c core to re-attempt transfer in case of
+>>>>> i2c arbitration loss (i2c-imx returns -EAGAIN errno is such case).
+>>>>
+>>>> apart the fact that the number of retries vary a lot and so the client
+>>>> driver behaviour can vary a lot which is not good IMHO, why do you think
+>>>> that 3 is a sufficient number?
+>>>
+>>> IMHO it is better than leaving it at 0 (no retries)?
+>>>
+>>> Setting it to sensible value like 3 will at least attempt to make transfer
+>>> in case arbitration-loss occurs.
+>>>
+>>>>
+>>>> If an arbitration loss happen, why do you think that retrying it 3 times
+>>>> changes that?
+>>>
+>>> I our case, setting retries to non-zero value solves issues with PMIC
+>>> shutdown on phyboard-mira which in some rare cases fails with "Failed to
+>>> shutdown (err =  -11)" (-EAGAIN).
+>>>
+>>> To me it makes common sense retries is set to non-zero value especially for
+>>> such rare conditions/situations.
+>>
+>> https://lore.kernel.org/all/Ys1bw9zuIwWS+bqw@shikoro/
 
-> > From 7c5285f1725d5abfcae5548ab0d73be9ceded2a1 Mon Sep 17 00:00:00 2001
-> > From: Michal Hocko <mhocko@suse.com>
-> > Date: Fri, 16 Dec 2022 10:46:33 +0100
-> > Subject: [PATCH] Revert "mm: add nodes= arg to memory.reclaim"
-> >
-> > This reverts commit 12a5d3955227b0d7e04fb793ccceeb2a1dd275c5.
-> >
-> > Although it is recognized that a finer grained pro-active reclaim is
-> > something we need and want the semantic of this implementation is really
-> > ambiguous.
-> >
-> > From a follow up discussion it became clear that there are two essential
-> > usecases here. One is to use memory.reclaim to pro-actively reclaim
-> > memory and expectation is that the requested and reported amount of memory is
-> > uncharged from the memcg. Another usecase focuses on pro-active demotion
-> > when the memory is merely shuffled around to demotion targets while the
-> > overall charged memory stays unchanged.
-> >
-> > The current implementation considers demoted pages as reclaimed and that
-> > break both usecases.
-> 
-> I think you're making it sound like this specific patch broke both use
-> cases, and IMO that is not accurate. commit 3f1509c57b1b ("Revert
-> "mm/vmscan: never demote for memcg reclaim"") has been in the tree for
-> around 7 months now and that is the commit that enabled demotion in
-> memcg reclaim, and implicitly counted demoted pages as reclaimed in
-> memcg reclaim, which is the source of the ambiguity. Not the patch
-> that you are reverting here.
-> 
-> The irony I find with this revert is that this patch actually removes
-> the ambiguity and does not exacerbate it. Currently using
-> memory.reclaim _without_ the nodes= arg is ambiguous because demoted
-> pages count as reclaimed. On the other hand using memory.reclaim
-> _with_ the nodes= arg is completely unambiguous: the kernel will
-> demote-only from top tier nodes and reclaim-only from bottom tier
-> nodes.
+Ohh I see.
 
-Yes, demoted patches are indeed counted as reclaimed but that is not a
-major issue because from the external point of view charges are getting
-reclaimed. It is nodes specification which makes the latent problem much
-more obvious.
+Reading through the thread I guess we aren't getting this mainlined at 
+all :)
+
+But let me switch side and ask why do you think leaving retries = 0 is a 
+good idea?
+
+The only solid point in the thread seems to be that in that case we are 
+not covering up the potential i2c hardware issues?
+
+Yeah fair point but on the other hand, goal of this patch would be to 
+improve robustness in case of otherwise good performing hardware. From 
+user perspective I just want it to work despite it retrying under the 
+hood from time to time. I think Francesco had the same idea.
 
 > 
-> > [1] has tried to address the reporting part but
-> > there are more issues with that summarized in [2] and follow up emails.
-> >
-> 
-> I am the one that put effort into resolving the ambiguity introduced
-> by commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
-> reclaim"") and proposed [1]. Reverting this patch does nothing to
-> resolve ambiguity that it did not introduce.
-> 
-> > Let's revert the nodemask based extension of the memcg pro-active
-> > reclaim for now until we settle with a more robust semantic.
-> >
-> 
-> I do not think we should revert this. It enables a couple of important
-> use cases for Google:
-> 
-> 1. Enables us to specifically trigger proactive reclaim in a memcg on
-> a memory tiered system by specifying only the lower tiered nodes using
-> the nodes= arg.
-> 2. Enabled us to specifically trigger proactive demotion in a memcg on
-> a memory tiered system by specifying only the top tier nodes using the
-> nodes= arg.
+> Also in the same thread there is the question about better setting it in
+> the i2c core if 3 instead of 0 is a good idea for the imx driver.
 
-That is clear and the aim of the revert is not to disallow those
-usecases. We just need a clear and futureproof interface for that.
-Changing the semantic after the fact is a nogo, hence the revert.
+Using I2C_RETRIES ioctl for this seems a bit of an overkill considering 
+other i2c bus drivers also set retries to non-zero value. But anyways, 
+thank you for the idea.
+
+
 > 
-> Both use cases are broken with this revert, and no progress to resolve
-> the ambiguity is made with this revert.
+> Best regards
+> Uwe
+> 
 
-There cannot be any regression with the revert now because the code
-hasn't been upstream.
-
-So let's remove the interface until we can agree on the exact semantic
-and build the interface from there.
--- 
-Michal Hocko
-SUSE Labs
+BR,
+Primoz
