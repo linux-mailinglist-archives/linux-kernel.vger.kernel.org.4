@@ -2,105 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C03064ECCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7668464ECD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbiLPOTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:19:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
+        id S230242AbiLPOYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:24:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbiLPOTI (ORCPT
+        with ESMTP id S229981AbiLPOYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:19:08 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA96155A87
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:19:06 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id g20so1300881iob.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:19:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wl0ZP4xK4Upd+cEBPXBThb9AV02PUTeFRKB2U0gXeKA=;
-        b=h7Hp8co82FOYwMgBFNyRwl5UEW0DjFrlU1OxyWcWEStRdx8/2uo50bPmCKju4kCHMs
-         ZLz0tmw4M2Yk8/4wuarPbGE4UJkQPxJI7BV6/EjCS819Ul440ukpe82XWfl1q1fjqlKL
-         h0gEHODrQTaOrjFSEptVqYyf4PxscG/XUjrdg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wl0ZP4xK4Upd+cEBPXBThb9AV02PUTeFRKB2U0gXeKA=;
-        b=iJ5X8bXvdQ9htbIqJCjCSmqInlYqOhrqKwY57K4fxMXO4OfwlGpzJUGUyHdRXLBQ7O
-         5i69RZgM/XEiANrPaLXcUu/AvcKSJ6d9c/diwGk3XyFxNXW4gX7Ewh9KG/2kBBermgHY
-         lZsd2Y6gM8Q96YHxTbYS8EMq65g1Hgpr36vewCNoJjTevtXsNedKoPisRQdizwabspkJ
-         nxzpQ07oImSTqFSoJEe3a/gheecNDkOL+iTWW/T9Od/cyNwbvtHEWqAt6Bh/oes4l+ig
-         iCnP5kG6NCyxl69oRca+2a0leUtV8Mh8aGcIGde6C0o1ec+Fwzur4s8nIxnUoX3B79hc
-         YnQQ==
-X-Gm-Message-State: AFqh2kqvDQVeogErWEAaEIWUwBIoEylfQw3F8WtAL9j6mEutA0gHHAcF
-        ofpF1n5ieBGnrnoi0U7HdrcbOQ==
-X-Google-Smtp-Source: AMrXdXtPUW6Tpkax3Pl3MBRzQgK86qKjK/c8IXSjLRucLdvYx7JCaPonWbRFdZsrbBWNFHggfAQ8SQ==
-X-Received: by 2002:a6b:c8d2:0:b0:6e5:d1b2:d921 with SMTP id y201-20020a6bc8d2000000b006e5d1b2d921mr1195863iof.18.1671200346177;
-        Fri, 16 Dec 2022 06:19:06 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id z8-20020a02cea8000000b0037477c3d04asm728517jaq.130.2022.12.16.06.19.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 06:19:05 -0800 (PST)
-Date:   Fri, 16 Dec 2022 14:19:04 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dianders@chromium.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: arm: qcom: Document the sc7280 CRD
- Pro boards
-Message-ID: <Y5x+WEwTtpoV0gaR@google.com>
-References: <20221216112918.1243-1-quic_rjendra@quicinc.com>
+        Fri, 16 Dec 2022 09:24:47 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0AC1402D;
+        Fri, 16 Dec 2022 06:24:45 -0800 (PST)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NYWVF5WzBz688G2;
+        Fri, 16 Dec 2022 22:20:53 +0800 (CST)
+Received: from localhost (10.45.152.125) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 16 Dec
+ 2022 14:24:42 +0000
+Date:   Fri, 16 Dec 2022 14:24:38 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: Re: [PATCH V4 3/9] cxl/mem: Wire up event interrupts
+Message-ID: <20221216142438.00006588@Huawei.com>
+In-Reply-To: <20221212070627.1372402-4-ira.weiny@intel.com>
+References: <20221212070627.1372402-1-ira.weiny@intel.com>
+        <20221212070627.1372402-4-ira.weiny@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221216112918.1243-1-quic_rjendra@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.45.152.125]
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 04:59:17PM +0530, Rajendra Nayak wrote:
-> Add compatibles for the Pro SKU of the sc7280 CRD boards
-> which come with a Pro variant of the qcard.
-> The Pro qcard variant has smps9 from pm8350c ganged up with
-> smps7 and smps8.
-> 
-> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
-> v4 changes:
-> Added the zoglin-sku1536 compatible along with hoglin-sku1536.
-> Zoglin is same as the Hoglin variant, with the SPI Flash reduced
-> from 64MB to 8MB
-> 
->  Documentation/devicetree/bindings/arm/qcom.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index 1b5ac6b02bc5..07771d4c91bd 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -558,6 +558,12 @@ properties:
->            - const: google,hoglin
->            - const: qcom,sc7280
->  
-> +      - description: Qualcomm Technologies, Inc. sc7280 CRD Pro platform (newest rev)
-> +        items:
-> +          - const: google,zoglin-sku1536
-> +          - const: google,hoglin-sku1536
+On Sun, 11 Dec 2022 23:06:21 -0800
+ira.weiny@intel.com wrote:
 
-Is there actually such a thing as a 'hoglin-sku1536', i.e. the Pro qcard
-with 64MB of SPI flash, or do they all have 8MB of flash?
+> From: Davidlohr Bueso <dave@stgolabs.net>
+> 
+> Currently the only CXL features targeted for irq support require their
+> message numbers to be within the first 16 entries.  The device may
+> however support less than 16 entries depending on the support it
+> provides.
+> 
+> Attempt to allocate these 16 irq vectors.  If the device supports less
+> then the PCI infrastructure will allocate that number.  Upon successful
+> allocation, users can plug in their respective isr at any point
+> thereafter.
+> 
+> CXL device events are signaled via interrupts.  Each event log may have
+> a different interrupt message number.  These message numbers are
+> reported in the Get Event Interrupt Policy mailbox command.
+> 
+> Add interrupt support for event logs.  Interrupts are allocated as
+> shared interrupts.  Therefore, all or some event logs can share the same
+> message number.
+> 
+> In addition all logs are queried on any interrupt in order of the most
+> to least severe based on the status register.
+> 
+> Cc: Bjorn Helgaas <helgaas@kernel.org>
+> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Co-developed-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
+> 
+
+> +/**
+> + * Event Interrupt Policy
+> + *
+> + * CXL rev 3.0 section 8.2.9.2.4; Table 8-52
+> + */
+> +enum cxl_event_int_mode {
+> +	CXL_INT_NONE		= 0x00,
+> +	CXL_INT_MSI_MSIX	= 0x01,
+> +	CXL_INT_FW		= 0x02
+> +};
+> +struct cxl_event_interrupt_policy {
+> +	u8 info_settings;
+> +	u8 warn_settings;
+> +	u8 failure_settings;
+> +	u8 fatal_settings;
+
+This is an issue for your QEMU code which has this set at 5 bytes.
+Guess our handling of record lengths needs updating now we have two different
+spec versions to support and hence these can have multiple lengths.
+
+Btw, do you have an updated version of the QEMU patches you can share?
+I was planning on just doing the AER type RAS stuff for the first pull this cycle
+but given this set means we never reach that code I probably need to do QEMU
+support for this and the stuff to support those all in one go - otherwise
+no one will be able to test it :)  We rather optimistically have the OSC set
+to say the OS can have control of these, but upstream code doesn't emulate
+anything yet. Oops. Should have pretended the hardware was handling them
+until we had this support in place in QEMU.
+
+Jonathan
+
+> +} __packed;
+> +
+>  /**
+>   * struct cxl_event_state - Event log driver state
+>   *
+> @@ -288,6 +305,8 @@ enum cxl_opcode {
+>  	CXL_MBOX_OP_RAW			= CXL_MBOX_OP_INVALID,
+>  	CXL_MBOX_OP_GET_EVENT_RECORD	= 0x0100,
+>  	CXL_MBOX_OP_CLEAR_EVENT_RECORD	= 0x0101,
+> +	CXL_MBOX_OP_GET_EVT_INT_POLICY	= 0x0102,
+> +	CXL_MBOX_OP_SET_EVT_INT_POLICY	= 0x0103,
+>  	CXL_MBOX_OP_GET_FW_INFO		= 0x0200,
+>  	CXL_MBOX_OP_ACTIVATE_FW		= 0x0202,
+>  	CXL_MBOX_OP_GET_SUPPORTED_LOGS	= 0x0400,
