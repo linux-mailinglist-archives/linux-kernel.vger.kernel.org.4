@@ -2,96 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E49364EE1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 836CE64EE23
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbiLPPsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 10:48:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
+        id S231446AbiLPPtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 10:49:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231420AbiLPPr4 (ORCPT
+        with ESMTP id S231454AbiLPPss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 10:47:56 -0500
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9944D57B63;
-        Fri, 16 Dec 2022 07:47:55 -0800 (PST)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-144b21f5e5fso3680141fac.12;
-        Fri, 16 Dec 2022 07:47:55 -0800 (PST)
+        Fri, 16 Dec 2022 10:48:48 -0500
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215265FB92
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:48:47 -0800 (PST)
+Received: by mail-ua1-x936.google.com with SMTP id v21so625140uam.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:48:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XFrl/LbK1G5WKs6kEQuHh9VpuSYwwFlxL9Fnt6Grafw=;
-        b=IjYbmH+WtmZpu0mAC2AOgDYhE9KYNYITx34f7c9qkZfCKd5IKKxyyOw0T7gFxRWTt4
-         nuvOnP8LvkxBi8a4Jp8cHMdFJGq1naeSbHaurtyCE5mQdxUe30kSB0l9Em1Jtkaf3spJ
-         plIQwjrjVRxdxQYP7/7wPSqMToWMpDDqGjy2G60Cn1aKiocyU41GHv++gXswxXcoBhHp
-         e7+aQQKLkOPhcAcH9LjLQS0HPOElAvHKIIRxw78qyQ5FK903tabfSqYGCVtRe6t83pDY
-         8SXYCxv//kWnohk7jx77IMsxN4VPpvOEZ4CmHBOVMIpQ7WOUXO/7SQQP+eoHE2DxiTGk
-         fZOw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sYyw641UQlhdY1HWQGXj9TtCUKC82UQ9QI48yzSo1is=;
+        b=rPYrTc6DvNr/X7Oi9wM8LYTYjVShddq9aQ+JRdNQYkWUujHxfHoC+0KZtpdCivvRj/
+         jDVkRekXW7rVRelvVCxP3Jwnfqf3HFn4xkNE/s/JGe2vkeXDmNH2kBX7aIdYoOViGeFM
+         gpGVlH8DAzI1beEs8QtvDg5VyaWf3fgO+InZ2d26nfkoOevGYsTK0CQDYpHFvt/yUHCo
+         XQ20h7TkP7tnyoALGGNCNIljth4pLdw2f+nLGjTRatdU/3dAq2006hgcltktomK3YYs8
+         IUt3WneZAz7gURpcdiVgTE18odWgAsis7p1WS5QhLf4YW6KsfRUgYZzb6CGEG5CF1pvs
+         Y5nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XFrl/LbK1G5WKs6kEQuHh9VpuSYwwFlxL9Fnt6Grafw=;
-        b=AfBXfq8qUE++0RVVQrrF9XPX9NbIIpa/7dZkC3K8cZklvz5h+ezDGiCujaQ+3FdDsk
-         xmfXAfbrxU7lrcr2khtoCz8V7Lfu5BKqpxGFxc+xrQQeMWl/qVxFw3AmZFWh9i3gAozf
-         qiAvVgT+pOIqZmc3ueS58eGhQ5OFPk2ouhnooxDSaHwQjleXrRmF0yCft9UTJb22rK8E
-         RIvHKtSaBnx38vAgDCIVCzHeifep+V8jNefsg1vrzjD9/uQub8hBBwKv/iv+JeRnrZmj
-         SqKSpq048G7poDht2z+r/4pw1yzlzseXbX/1TqJArxda0hl7BeRjmzt+nwOMfEVB5K3Z
-         kzYQ==
-X-Gm-Message-State: ANoB5pnBxurdw8wUoWezXiDZutZMGM+NxUTCoNKo7MM1BItto/G9B050
-        N2MEjUJY9eMVKGdqKbfs1yE=
-X-Google-Smtp-Source: AA0mqf6Upt8/sk/c3hgOcm5E/FCC1D2QVOK2cunJl7CUOtTHULu8lHk32HIvwzJLbqPEfuWU7qe2KQ==
-X-Received: by 2002:a05:6870:b398:b0:13c:21e9:fe90 with SMTP id w24-20020a056870b39800b0013c21e9fe90mr18048617oap.17.1671205674912;
-        Fri, 16 Dec 2022 07:47:54 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id kw8-20020a056870ac0800b001431bf4e5a0sm1044032oab.38.2022.12.16.07.47.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 07:47:54 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e8aacf9f-4146-70b8-02c3-bacc8c32ccc4@roeck-us.net>
-Date:   Fri, 16 Dec 2022 07:47:51 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sYyw641UQlhdY1HWQGXj9TtCUKC82UQ9QI48yzSo1is=;
+        b=wMRQ+QCvbDz53q7o6gYMHh36BzYc+yrU26yIcxY3WB3UvKcxlkj9hLK90PoaT9qMk7
+         4DNxFksy+POLtZphbtlpGC3VRy2+UGD0EmKiIOY6QGCyvGDrhtYdRdx2LDbhorlLc8na
+         tKgwdscDEnRSIPq43ihLMOvtznfBSgYO2P6dCkHyf6UpNF6sMff5PhDge7uDTjiuHCTs
+         kfrOaUvCeRCYS0AYVEmcrmV4pOBt2kyqGF2kocupFwguU0GhJ0yDRBn2XhaBBLSn1XfO
+         DJVyckrPlQhyjKzFQAiJtI2qrrN2MmOjS5UhsgcnoXkn1NI5ZUQZe/c5VObRjPjvokcK
+         NFKA==
+X-Gm-Message-State: ANoB5pmWRsPPKduiNchymCi8qxSmRp1ugswjcZQjUFbRPGx4CFCON08m
+        g0uAH169VJOb0OOMXcOB4Z3/yKYqCSTq42Q4pJyVN5tauZsB622U
+X-Google-Smtp-Source: AA0mqf4T5nbzgu+TCh9N6EOi6miuOG5tQBOYekxMbZim3irFSGgi+QEZadNXAL8LsMVD4hMNKHK4R//ELrG7VbFYIoQ=
+X-Received: by 2002:ab0:700c:0:b0:42f:70c2:593b with SMTP id
+ k12-20020ab0700c000000b0042f70c2593bmr1966770ual.50.1671205726107; Fri, 16
+ Dec 2022 07:48:46 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>,
-        Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>
-References: <20221124230505.073418677@linutronix.de>
- <20221124232325.798556374@linutronix.de>
- <20221213190425.GA3943240@roeck-us.net>
- <4e0a129855490febb1c57e7e979bcfb579d39054.camel@linux.ibm.com>
- <87fsdgzpqs.ffs@tglx> <e570e70d-19bc-101b-0481-ff9a3cab3504@linux.ibm.com>
- <86wn6rptdu.wl-maz@kernel.org>
- <0acb8c63-7f6c-6df6-cb40-66b265a6e6ce@linux.ibm.com>
- <86v8mbphzw.wl-maz@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [patch V3 09/33] genirq/msi: Add range checking to
- msi_insert_desc()
-In-Reply-To: <86v8mbphzw.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20221211002908.2210-1-hdanton@sina.com> <00000000000025ff8d05ef842be6@google.com>
+ <20221211075612.2486-1-hdanton@sina.com> <20221211102208.2600-1-hdanton@sina.com>
+ <20221212032911.2965-1-hdanton@sina.com> <Y5d565XVsinbNNL2@mit.edu>
+ <CANpmjNNCQEXpJt1PQptyr8mrBbhWpToCRfvUT+RXmw5EA5EwVw@mail.gmail.com> <Y5fY6BRTB9OfwFU0@ZenIV>
+In-Reply-To: <Y5fY6BRTB9OfwFU0@ZenIV>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Fri, 16 Dec 2022 16:48:34 +0100
+Message-ID: <CANp29Y4x8zoXW0z-HarX3xZ6o8OHzWnGyHw8+JGsbLJKDWUgGA@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in do_mkdirat
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Marco Elver <elver@google.com>, "Theodore Ts'o" <tytso@mit.edu>,
+        Hillf Danton <hdanton@sina.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        syzbot <syzbot+919c5a9be8433b8bf201@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,29 +75,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/16/22 05:58, Marc Zyngier wrote:
-[ ... ]
+On Tue, Dec 13, 2022 at 2:44 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Mon, Dec 12, 2022 at 08:29:10PM +0100, Marco Elver wrote:
+>
+> > > > Given the call trace above, how do you know the ntfs3 guys should be also
+> > > > Cced in addition to AV? What if it would take more than three months for
+> > > > syzbot to learn the skills in your mind?
+>
+> Depends.  If you really are talking about the *BOT* learning to do
+> that on its own, it certainly would take more than 3 months; strong AI
+> is hard.  If, OTOH, it is not an AI research project and intervention of
+> somebody capable of passing the Turing test does not violate the purity
+> of experiment...  Surely converting "if it mounts an image as filesystem
+> of type $T, grep the tree for "MODULE_ALIAS_FS($T)" and treat that
+> as if a function from the resulting file had been found in stack trace"
+> into something usable for the bot should not take more than 3 months,
+> should it?
+>
+> If expressing that rule really takes "more than three months", I would
+> suggest that something is very wrong with the bot architecture...
+>
+> > Teaching a bot the pattern matching skills of a human is non-trivial.
+> > The current design will likely do the simplest thing: regex match
+> > reproducers and map a match to some kernel source dir, for which the
+> > maintainers are Cc'd. If you have better suggestions on how to
+> > mechanize subsystem selection based on a reproducer, please shout.
+>
+> Er...  Yes?  Look, it's really that simple -
+> for i in `sed -ne 's/.*syz_mount_image$\([_[:alnum:]]*\).*/\1/p' <$REPRO`; do
+>         git grep -l "MODULE_ALIAS_FS(\"$i\")"
+> done | sort | uniq
+> gets you the list of files.  No, I'm not suggesting to go for that kind
+> of shell use, but it's clearly doable with regex and search over the source
+> for fixed strings.  Unless something's drastically wrong with the way the
+> bot is written, it should be capable of something as basic as that...
+>
+> If it can't do that kind of mapping, precalculating it for given tree is
+> also not hard:
+> git grep 'MODULE_ALIAS_FS("'|sed -ne 's/\(.*\):.*MODULE_ALIAS_FS("\([_[:alnum:]]*\)".*/syz_mount_image$\2:\1/p'
+> will yield lines like
+> syz_mount_image$ext2:fs/ext2/super.c
+> syz_mount_image$ext2:fs/ext4/super.c
+> syz_mount_image$ext3:fs/ext4/super.c
+> syz_mount_image$ext4:fs/ext4/super.c
+> etc.  Surely turning *that* into whatever form the bot wants can't
+> be terribly hard? [*]
+>
+> All of that assumes that pattern-matching in syzkaller reproducer is
+> expressible; if "we must do everything by call trace alone" is
+> a real limitation, we are SOL; stack trace simply doesn't have
+> that information.  Is there such an architectural limitation?
 
->>
->> With both these fixes applied, it actually then leads to the very
->> next WARN_ON failing in msi_ctrl_valid...  Because ctrl->last ==
->> hwsize.  I think Thomas' initial fix for msi_domain_get_hwsize has
->> an off-by-1 error, I think we should return MSI_XA_DOMAIN_SIZE for
->> msi_domain_get_hwsize instead.
-> 
-> Yes, that's a good point, and that's consistent with what
-> __msi_create_irq_domain() does already, assuming MSI_XA_DOMAIN_SIZE
-> when info->hwsize is 0. No reason to do something else here.
-> 
-> I'll update Thomas' patch. Once Guenter confirms that PPC is OK, I'll
-> send it out.
-> 
+Thanks for the feedback, and we regret the inconvenience this may have caused.
 
-It wasn't just ppc; that was just the easiest to report. I applied
-the two patches on top of the irq merge and will test the resulting
-branch (mainline is too broken right now). I hope that will give me
-useful results. It will take a while though since my testbed is
-still busy testing the most recent release candidates.
+We've deployed a simple short term solution to the immediate issue:
+syzbot will extract the involved filesystems from reproducers and use
+this information to construct the email subject line and Cc the
+related people/mailing lists. This should take effect starting next
+week.
 
-Guenter
+That being said, in response to the original feedback we have already
+been planning comprehensive improvements to the subsystem selection
+process that will support more than just filesystems. But
+unfortunately, this is going to take longer to become available.
 
+--
+Aleksandr
+
+>
+> [*] depending upon config, ext2 could be mounted by ext2.ko and ext4.ko;
+> both have the same maillist for bug reports, so this ambiguity doesn't
+> matter - either match would do.
