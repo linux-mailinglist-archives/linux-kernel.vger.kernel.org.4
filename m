@@ -2,178 +2,402 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7336064E587
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 02:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5F264E58A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 02:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiLPBGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 20:06:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34178 "EHLO
+        id S229754AbiLPBIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 20:08:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLPBGL (ORCPT
+        with ESMTP id S229704AbiLPBIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 20:06:11 -0500
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2059.outbound.protection.outlook.com [40.107.14.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9CB186C3;
-        Thu, 15 Dec 2022 17:06:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O9Gr0lpWj0cCnq0dRsVQ/hIaJ+1TLsKyBuEr3wnd0FB96+/RoxGsN+m46T9WRJDUx2dL5NpwEFTWpMHvJldzNhtCttGHQALIUZFbhqvemWFPQRk2p4eRJHqdTDP2WvmMotx2wF++6sFbEtALjMenH2xrnlt0vPo2cPQwuHZWof/OaS252UJ4v0nbBnbRjXr4ntpvHwQqDN1w1j0s6LfmEoE2CC4PvrR1An4qNLQSuE+Gdq5rMf77FnkgNmC8lvhx/uHp3RQXtRunDC63Q/HPcRWSAoAr/lY4Rxf8XCgsBkUGMyic5j8xwII64uyNkbB43woLZDLA/ho3idstCjYfyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pllJne90N3yVLT3xE0HNswXGmhrMynLRr2MZrBhVvlE=;
- b=UVoJYh4gpxdrP1VT6FohzR5dQOZCZIMVdoHi9IGhlDKvhXn9jL44u+62hDDBu7hWy+RpaPcra5ARSj0VoV5M/TO2cRUwRiNsomfekkhKNFce1npOSJccHFwR8VSTCbW9GyFIPKbIAZoLTQpHryUyMM+lYk/rJiLGcaAE5MFoReb7uoHpjlCRskIO/zWMndzIWyAJ80vz0w5ots2W6RBpvVXt0nKmVuk7fN/TVB0OTtRJlH8dQKHMy1pk9GBEDJhtHYJESU1YTFuZNGma6BT1yetn3nz2hUWh2oMC4LJPp+FSIwg+VcnyCLgBuiMMXmNs8tcknxmUreEY52b3+4ixYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pllJne90N3yVLT3xE0HNswXGmhrMynLRr2MZrBhVvlE=;
- b=XEm5edXE6tovI0ACHGZMuU0ROEW8gviphAPLSF4ZhizmkcobI5kYH4alC89JAsUlObwBBJWVkkxArTv3qshFEgJnRbuyLAqsJm8bDxI16veW6XUNzfeExBzkIIfsyDNEZrb/mfA1lm6M4onVT+wMw1PmzBlHlhL4aei9rdqY7ts=
-Received: from DB9PR04MB8106.eurprd04.prod.outlook.com (2603:10a6:10:24b::13)
- by PR3PR04MB7337.eurprd04.prod.outlook.com (2603:10a6:102:81::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12; Fri, 16 Dec
- 2022 01:06:06 +0000
-Received: from DB9PR04MB8106.eurprd04.prod.outlook.com
- ([fe80::e9c1:3e78:4fc8:9b24]) by DB9PR04MB8106.eurprd04.prod.outlook.com
- ([fe80::e9c1:3e78:4fc8:9b24%9]) with mapi id 15.20.5880.019; Fri, 16 Dec 2022
- 01:06:05 +0000
-From:   Wei Fang <wei.fang@nxp.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>, Frank Li <frank.li@nxp.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>
-CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH net] arm64: dts: imx8dxl: Disable hibernation mode of
- AR8031 for EQOS
-Thread-Topic: [PATCH net] arm64: dts: imx8dxl: Disable hibernation mode of
- AR8031 for EQOS
-Thread-Index: AQHZEGkq2uoO+npoSUymdx9u0FEQV65uutSAgADvKqA=
-Date:   Fri, 16 Dec 2022 01:06:05 +0000
-Message-ID: <DB9PR04MB81066E9892C2916BA6EF0F4288E69@DB9PR04MB8106.eurprd04.prod.outlook.com>
-References: <20221215093627.956417-1-wei.fang@nxp.com>
- <035e9326-d507-2930-d1ab-22b95af035f8@linaro.org>
-In-Reply-To: <035e9326-d507-2930-d1ab-22b95af035f8@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DB9PR04MB8106:EE_|PR3PR04MB7337:EE_
-x-ms-office365-filtering-correlation-id: f7419f40-9da1-4db4-c87a-08dadf01b574
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ZutWH5KWMksz2/7Mm9wDHJ1bvkTX8sD/rrMZW6jv93fhF5rzYXAFfDd9BAvAu0z50lxnICNGNZHmOGMPA/hSvUQdRgslwTXJUqOptBvny5gdHNlIZU6MUrTngOqzv+JdNAalYUe+aZIBat7nlfZboezz7nNZhSUR3O6H5paEj7HGNltNK7rIJREKOYABjJiW1lrpG/luToiEJFRgh5ai/kT8GmQYza/n086auQZ56ytyzWHUM2P/K6IxLgRj68q0rX4YgH2eJEBFRS48XCT50unvB/tfthRif0KBJ6MOtJXW/shRqvBjXc2KzGrcJAZIL5PPZe1A/YtAnhnf64Ld7twod9b4gpsD7vTiRoI0XDtgrOU6+pezg8ZkzNIxQziAZfhFwtLRtBNFawpajYUVafxVTxmS/1rAoIDt3fzFzVU4bfQSF3iZ2H22IMXWa/PWU0vbDXa/tnWOuG8w3NTVagbFC5D9Pyqm4J9UgefmKuGETrJlu5h61+vDzTjVCznIuBuLX0m9ce/kKs6hV7PI6v7r80adPkpBTjvh8jZydk+Wx5q2hPeS0Bp7iyvS9jq6+hEZHlaeFFmInQug+q/eKwiwfN9sLGfxiUMoGpZRfdyQqreVtK9tV46vQ5FMWKNR3VKJu7dGQVKiPu3yVTTrqigm9+MhnTAenPOMZsM/72iAvEVw3VoI2CKfc918GAhrFCW3aU2aJy19iuXdOzUaZHTYWNC8XT43W26ronk68PnytKeezYICuJE39iBnaan7mCovCQdllx64QeDhboJDFw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB8106.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(346002)(136003)(376002)(366004)(451199015)(33656002)(2906002)(38070700005)(921005)(52536014)(7416002)(8936002)(55016003)(41300700001)(5660300002)(83380400001)(38100700002)(122000001)(86362001)(478600001)(54906003)(966005)(45080400002)(110136005)(71200400001)(6636002)(44832011)(4326008)(6506007)(53546011)(76116006)(26005)(66446008)(66476007)(66946007)(64756008)(66556008)(7696005)(316002)(8676002)(186003)(9686003)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?NWZZMkhqcWY4VThidldWYjlQU0MybXM0UEdmWlJHemFDSGJzSkZacHRMQ2NP?=
- =?gb2312?B?RDg1RDlkbXRNVWttNEIzUWRGZ3RWZHJwRHIvYkM0dFJOMWs2WUJkdjdXTWFW?=
- =?gb2312?B?OFpYZTNMeGFvT1FKUWc0alJZRXBWQnVzc0dJcHlWdEVVV1NGbFd3dmRKeXU5?=
- =?gb2312?B?eitHMUliV2JqNnVSTlBIMGJPU0dnUERnU3dWcTRDbjY3MmNidnE5OE1haXJu?=
- =?gb2312?B?RExDcWx5aWxQaGZZZmcxR1Z1ZUw0MkhQMU5QRzJROGFuNHB5bCtIbDg1Ti8z?=
- =?gb2312?B?UXBQK3hmazBYWG9DYWhCZUtKTVhleFBia2ltWEY4QXN4QjJ1L0V5S0ErRUdk?=
- =?gb2312?B?YXFxYVZtVFZaMm1qY0c3b2ZieXJpMEs0Zy8wRFlraUlzeHBDTldXUHNOVSs1?=
- =?gb2312?B?b2Zma0lPcEdRMTJxZnJhc2toTXU3VXRCbUNwOEJMQiszdDZEUlZSYWplYm5T?=
- =?gb2312?B?U1h4RFdsREl1ZlhRd3RCeHBYdHJhelJMdk92b1c3YkJ4dzZqQ3pTa0pPeE9G?=
- =?gb2312?B?a25vSk1mYmhtOFpMZnE0blQ1N2FuUUlIWXNtRmtPTEtaNmtIMTdxRE80MGlH?=
- =?gb2312?B?dFRHK1hYK252WU9saitSVGFDTzBtdlF2bm9ERUZ4UjhJRTN6a3haNXlQYXRw?=
- =?gb2312?B?SHJDaDNjNFB6NXlXby9hU2J5WUhJTWdmeGhZd2F0OU1QSWhJc0NGRmlrWU5p?=
- =?gb2312?B?VlpHUkFRdG1oQXJWTUtqdkU3TnJPbmMwSjNHQy9SYUlSeC8wa2ZjSmZkakxZ?=
- =?gb2312?B?SDBleEcxR0E5VVFXRmVvdmdvWXlOaC9UaElSVURQL2JqT0ExakhEVWhXQjND?=
- =?gb2312?B?VnBoR2psaWJ6bDNpdnRlODZnVkEvYnZZZCtQTlJXakk0TEJ3bzYrdVFpZjZq?=
- =?gb2312?B?QWRDUzFhZ25xdG9STGtEdE5HalF0a2VMd0J5VWRSRWN1Y1l2WEQvMXhWUWYr?=
- =?gb2312?B?cFhVYlNiemR1OHVidjQzWTd3c3dkM1cvbkt3MHNmdFB5OEhKdUJrRTRTYURN?=
- =?gb2312?B?ZjdJRVZlaXVybkpKVEVsWWJHOGdBbVlrUEtzUFlJSzBvYUZJbVhPcnFxYk1E?=
- =?gb2312?B?MzBxQXE1YURCeHAvVm5HV2IwUWNucm1rdkVnQXZzTExMWTJCbm05VUFyN0RO?=
- =?gb2312?B?U2hkV2FTNGNlR2lORlI3VC9TcGJEK0s2aGZHYWR3ZkI2RkdGRVVuUXhNL1dM?=
- =?gb2312?B?aU5QTkNaa0IzbiswTkk3WnZzR3FRc29Pci9ncEpGbXJDN2NpVnBsTG12M3lH?=
- =?gb2312?B?RkhwandaNU1XTjdhei85TldQaisxa3poQXQrazFwN2kyMkRUZ3RkRVdkYmgv?=
- =?gb2312?B?cWcvR3c4dEZiYmpGa2FHYVY0U09TdnJSbWYwT20xZEd1ckdiMVpScWhWN2Zz?=
- =?gb2312?B?YytKTzZmTUtvdHZReSsrL1lJV3M4MExPYWpOZXZZMU4vd1QxUzBFUnhEY2Vj?=
- =?gb2312?B?SjNzNDZTOTY2ZnRLQ0thOTR0ZG1WaWJ2VktkNmxwRU5sajRkd0RYdTl2MlJj?=
- =?gb2312?B?UStGWkZnQWxUdjlQb2E4ckRmOFJTK0dIN2pFdGVKSll1aTJxWGJ5MEpMOGMy?=
- =?gb2312?B?ZzI1Zzg3Z3BVRERrZlN5UlVCYy82b1JPTzA5SElMdGc4UFhYaUE2WFAyNGg3?=
- =?gb2312?B?eklVTkhFTkdWT0l4dVZ2aCsyL0JBTURxc2k2ako0Nk9vU05lU3VnTHNVcnJx?=
- =?gb2312?B?YmNrL0hkblhEcXRVMDhVdVNWc3FYS096NkhqdGFJb1dSQThXcGcvUUZJZTlZ?=
- =?gb2312?B?ektKKzBwR3B0WjdVUjJZd0t5RjA4MDMzZVlNZW81dVZ4dkxkbGRpUnVpVkQ1?=
- =?gb2312?B?SW9abkJkK3NleWZVU0I5Q0czWHRwdjNCeEErS2h2TGZzREt0TUtOTi82K2Jy?=
- =?gb2312?B?ek13ck1aR0MrcHpHTGFEakV0anE3WndTZnVCK0huSkhkbSsvbEU5cFpUY24r?=
- =?gb2312?B?YXMxUTFOQmtqMEJCam5YUDRNUEpWNWVITzlDblhBRnBHWDZKZmc2UXc4OTVY?=
- =?gb2312?B?dnd0VkhWY2l2dEdEWDFUVjZCTlN0SjFwTzF4WGJYeDhCcjBRWEhqL0ZDVGg5?=
- =?gb2312?B?MThoUUZXc1lGbExhdWt0emtnT0tVUndVRlh5VytKSHJMcTNrdW9Jd1NQOHdJ?=
- =?gb2312?Q?8eSA=3D?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB8106.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f7419f40-9da1-4db4-c87a-08dadf01b574
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Dec 2022 01:06:05.8325
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZD0qzYv/x3wqeziwm7ssVEtnrU5Dh8mBaEdpEgRemApUo1QnOuGZBk11EzV+u7GIWuehdJciig3jEvH+mT8IjQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR04MB7337
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 15 Dec 2022 20:08:12 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B778B59162;
+        Thu, 15 Dec 2022 17:08:07 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id BE7163200926;
+        Thu, 15 Dec 2022 20:08:04 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 15 Dec 2022 20:08:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pjd.dev; h=cc:cc
+        :content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1671152884; x=
+        1671239284; bh=blN/pt1VHUAedbxU0+7qmPGtXmOp01WbD8zdhO1Q+vg=; b=X
+        BmJsQ3B4YJeZLvJsYTnYbbUolXtXKL837JUAnKSRqghmq6gAcI/KbAmXr2yA1YG9
+        qzrYDqTYAHhM9T6BumHNNIVzWssJsm5U5hCZL+2iwUaSYjjQjNqfoDicZb74bFBk
+        9sya4TZiQW0DqrI1u1Vx3bpYgHZMa6v0hkdzhx+k+1oouvK7rfjRO8mo5yB899fB
+        tKaVMIBhMBDGsvGys/3plBRROHCmCTvAbiloaThq/4h3mj8r9qSFYOnxP9bu9jXr
+        oEBGAmUcELN16VZOsUMLqb4Jb+AL/x4KrrQYZvkCWR2EfgwQGJvr64mclJog6WII
+        5JpHx4h4IAF06RVccvTHA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1671152884; x=
+        1671239284; bh=blN/pt1VHUAedbxU0+7qmPGtXmOp01WbD8zdhO1Q+vg=; b=U
+        IMOeI8t33HP/o1ziJ2fdHh+wSUPGjRV0OUQ0KCwm6yk9bdMxhelElGLoE5FYtLy8
+        z4fzdF+lVuwTED6mVE5HCwI8Ml/mk+ECmYVZFNhpTsmjR5TfV0g69x/sjVPKWDkY
+        vkQujQnUiNc93pj7UwBwQNw1Cot6d7Am2GHLKk5PODUrNxsXUI4NJkvbcJ68gjHV
+        SOzJRULuWZ0zab3EZoUxhRd/TLditJVesjZM57KBWyaVXqeIdIFSGgnr43OTtDze
+        VhVSiTtcFvpFwmcs6jl3rIOgiaxejTFzzKdLMcaFgPYLqX7oGS1rbtvnXABo0gLf
+        vQDAPHp+kEizasLQPWfYg==
+X-ME-Sender: <xms:9MSbY3lMt7IjuOkmGC25uSzlWpr6aVqRHDvLcWC8VEfJdMppNrze8w>
+    <xme:9MSbY61hQnzh8UoA7q4eGoYA1nFFndizrQuLGOOXIQmIE3wjG7B9PeObniLWk-EfJ
+    rI6bJsbHooKY8JA6T8>
+X-ME-Received: <xmr:9MSbY9pc4ZRkn5eF5gA3idpkUfwgfDjADa3oYQE1XQkzzqPvTFa5cB9unu7knqDWfNietbU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeigddvkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenog
+    fuuhhsphgvtghtffhomhgrihhnucdlgeelmdenucfjughrpegtggfuhfgjffevgffkfhfv
+    ofesthhqmhdthhdtjeenucfhrhhomheprfgvthgvrhcuffgvlhgvvhhorhihrghsuceoph
+    gvthgvrhesphhjugdruggvvheqnecuggftrfgrthhtvghrnhepgeeghfduheeiuddvjeel
+    udehhedttdetjeffhfdutddtueekhedtteefuefhgfejnecuffhomhgrihhnpehtihhnhi
+    hurhhlrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
+    rhhomhepphgvthgvrhesphhjugdruggvvh
+X-ME-Proxy: <xmx:9MSbY_nQO8f9FgrWH3HgeAy_0EkdNlCRBwBdnqlcjWoSrq1V3e5d8w>
+    <xmx:9MSbY110B2KwadXmETPrpCTTRaMxwR9b34x6HHjzhmJMionQZLvtVA>
+    <xmx:9MSbY-u1WtxPuctyiW6W02xpxASQ9kDmMYHAsM1PnC04s8NVZN9e-g>
+    <xmx:9MSbYymxaybiTkAJtjfog675eLwAIshlymc5qf5PxCOevpO1SABq9Q>
+Feedback-ID: i9e814621:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 15 Dec 2022 20:08:03 -0500 (EST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
+Subject: Re: [PATCH] net/ncsi: Always use unicast source MAC address
+From:   Peter Delevoryas <peter@pjd.dev>
+In-Reply-To: <ac48b381b11c875cf36a471002658edafe04d9b9.camel@gmail.com>
+Date:   Thu, 15 Dec 2022 17:07:51 -0800
+Cc:     Peter Delevoryas <peter@pjd.dev>, sam@mendozajonas.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <7A3DBE8E-C13D-430D-B851-207779148A77@pjd.dev>
+References: <20221213004754.2633429-1-peter@pjd.dev>
+ <ac48b381b11c875cf36a471002658edafe04d9b9.camel@gmail.com>
+To:     Alexander H Duyck <alexander.duyck@gmail.com>
+X-Mailer: Apple Mail (2.3731.200.110.1.12)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_PDS_SHORTFWD_URISHRT_QP autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBLcnp5c3p0b2YgS296bG93c2tp
-IDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+DQo+IFNlbnQ6IDIwMjLE6jEy1MIxNcjV
-IDE4OjEzDQo+IFRvOiBXZWkgRmFuZyA8d2VpLmZhbmdAbnhwLmNvbT47IHJvYmgrZHRAa2VybmVs
-Lm9yZzsNCj4ga3J6eXN6dG9mLmtvemxvd3NraStkdEBsaW5hcm8ub3JnOyBzaGF3bmd1b0BrZXJu
-ZWwub3JnOw0KPiBzLmhhdWVyQHBlbmd1dHJvbml4LmRlOyBrZXJuZWxAcGVuZ3V0cm9uaXguZGU7
-IGZlc3RldmFtQGdtYWlsLmNvbTsNCj4gZGwtbGludXgtaW14IDxsaW51eC1pbXhAbnhwLmNvbT47
-IEZyYW5rIExpIDxmcmFuay5saUBueHAuY29tPjsgU2hlbndlaQ0KPiBXYW5nIDxzaGVud2VpLndh
-bmdAbnhwLmNvbT47IENsYXJrIFdhbmcgPHhpYW9uaW5nLndhbmdAbnhwLmNvbT4NCj4gQ2M6IGRl
-dmljZXRyZWVAdmdlci5rZXJuZWwub3JnOyBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVh
-ZC5vcmc7DQo+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQ
-QVRDSCBuZXRdIGFybTY0OiBkdHM6IGlteDhkeGw6IERpc2FibGUgaGliZXJuYXRpb24gbW9kZSBv
-Zg0KPiBBUjgwMzEgZm9yIEVRT1MNCj4gDQo+IE9uIDE1LzEyLzIwMjIgMTA6MzYsIHdlaS5mYW5n
-QG54cC5jb20gd3JvdGU6DQo+ID4gRnJvbTogV2VpIEZhbmcgPHdlaS5mYW5nQG54cC5jb20+DQo+
-ID4NCj4gPiBUaGUgaGliZXJuYXRpb24gbW9kZSBvZiBBUjgwMzEgUEhZIGRlZmF1bHRzIHRvIGJl
-IGVuYWJsZWQgYWZ0ZXINCj4gPiBoYXJkd2FyZSByZXNldC4gV2hlbiB0aGUgY2FibGUgaXMgdW5w
-bHVnZ2VkLCB0aGUgUEhZIHdpbGwgZW50ZXINCj4gPiBoaWJlcm5hdGlvbiBtb2RlIGFmdGVyIGFi
-b3V0IDEwIHNlbmNvbmRzIGFuZCB0aGUgUEhZIGNsb2NrcyB3aWxsIGJlDQo+ID4gc3RvcHBlZCB0
-byBzYXZlIHBvd2VyLiBIb3dldmVyLCBkdWUgdG8gdGhlIGRlc2lnbiBvZiBFUU9TLCB0aGUgbWFj
-DQo+ID4gbmVlZHMgdGhlIFJYX0NMSyBvZiBQSFkgZm9yIHNvZnR3YXJlIHJlc2V0IHRvIGNvbXBs
-ZXRlLiBPdGhlcndpc2UgdGhlDQo+ID4gc29mdHdhcmUgcmVzZXQgb2YgRVFPUyB3aWxsIGJlIGZh
-aWxlZCBhbmQgZG8gbm90IHdvcmsgY29ycmVjdGx5LiBUaGUNCj4gPiBvbmx5IHdheSBpcyB0byBk
-aXNhYmxlIGhpYmVybmF0aW9uIG1vZGUgb2YgQVI4MDMxIFBIWSBmb3IgRVFPUywgdGhlDQo+ICJx
-Y2EsZGlzYWJsZS1oaWJlcm5hdGlvbi1tb2RlIg0KPiA+IHByb3BlcnR5IGlzIHVzZWQgZm9yIHRo
-aXMgcHVycG9zZSBhbmQgaGFzIGFscmVhZHkgYmVlbiBzdWJtaXR0ZWQgdG8NCj4gPiB0aGUgdXBz
-dHJlYW0sIGZvciBtb3JlIGRldGFpbHMgcGxlYXNlIHJlZmVyIHRvIHRoZSBiZWxvdyBsaW5rOg0K
-PiA+IGh0dHBzOi8vZXVyMDEuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5jb20vP3VybD1o
-dHRwcyUzQSUyRiUyRmxvcmUNCj4gPiAua2VybmVsLm9yZyUyRm5ldGRldiUyRjIwMjIwODE4MDMw
-MDU0LjEwMTA2NjAtMi13ZWkuZmFuZyU0MG54cC5jbw0KPiBtJTJGJg0KPiA+DQo+IGFtcDtkYXRh
-PTA1JTdDMDElN0N3ZWkuZmFuZyU0MG54cC5jb20lN0M0N2NhODQwOGIzMTI0Y2RjNmFiZjA4ZA0K
-PiBhZGU4NGY4DQo+ID4NCj4gMWIlN0M2ODZlYTFkM2JjMmI0YzZmYTkyY2Q5OWM1YzMwMTYzNSU3
-QzAlN0MwJTdDNjM4MDY2OTU5OTI5Mw0KPiAzNzA3NiU3Q1UNCj4gPg0KPiBua25vd24lN0NUV0Zw
-Ykdac2IzZDhleUpXSWpvaU1DNHdMakF3TURBaUxDSlFJam9pVjJsdU16SWlMQ0pCVGlJNg0KPiBJ
-azFoYQ0KPiA+DQo+IFd3aUxDSlhWQ0k2TW4wJTNEJTdDMzAwMCU3QyU3QyU3QyZhbXA7c2RhdGE9
-OTJNMHlaJTJGbWNxRnINCj4gVTlwR3JrYm44VGZvDQo+ID4gJTJCRzVNVmdqeWV4aU5SS0Qybmlj
-JTNEJmFtcDtyZXNlcnZlZD0wDQo+IA0KPiBUaGlzIGlzIG5vdCBhIHBhdGNoIGZvciBuZXQtbmV4
-dCBhcyB5b3UgaW5kaWNhdGUgaW4gdGhlIHN1YmplY3QuIERUUyBwYXRjaGVzIGdvDQo+IHZpYSBT
-b0MgcGxhdGZvcm0gbWFpbnRhaW5lcnMuDQo+IA0KDQpPa2F5LCBJJ2xsIHJlbW92ZSAibmV0IiBm
-cm9tIHRoZSBzdWJqZWN0Lg0KDQo=
+
+
+> On Dec 13, 2022, at 8:41 AM, Alexander H Duyck =
+<alexander.duyck@gmail.com> wrote:
+>=20
+> On Mon, 2022-12-12 at 16:47 -0800, Peter Delevoryas wrote:
+>> I use QEMU for development, and I noticed that NC-SI packets get =
+dropped by
+>> the Linux software bridge[1] because we use a broadcast source MAC =
+address
+>> for the first few NC-SI packets.
+>=20
+> Normally NC-SI packets should never be seen by a bridge.
+
+True, and it=E2=80=99s good to keep this in context. I=E2=80=99m trying =
+to make this change
+to support simulation environments, but any change in NC-SI could easily
+result in the out-of-band network connection to BMC=E2=80=99s in real =
+data centers
+failing to come up, which can be really bad and usually impossible to
+recover remotely.
+
+> Isn't NC-SI
+> really supposed to just be between the BMC and the NIC firmware?
+
+Yep
+
+> Depending on your setup it might make more sense to use something like
+> macvtap or a socket connection to just bypass the need for the bridge
+> entirely.
+
+For unicast, yes, but I want to test multiple NIC=E2=80=99s sharing an =
+RMII
+link and verifying the broadcast behavior, and the failover behavior
+when an RX or TX channel goes down.
+
+The multicast UDP socket backend _does_ work, but I was getting some
+recirculation problems or some kind of buffering thing. I managed
+to get tap0 + tap1 + br0 working faster.
+
+>=20
+>> The spec requires that the destination MAC address is =
+FF:FF:FF:FF:FF:FF,
+>> but it doesn't require anything about the source MAC address as far =
+as I
+>> know. =46rom testing on a few different NC-SI NIC's (Broadcom 57502, =
+Nvidia
+>> CX4, CX6) I don't think it matters to the network card. I mean, Meta =
+has
+>> been using this in mass production with millions of BMC's [2].
+>>=20
+>> In general, I think it's probably just a good idea to use a unicast =
+MAC.
+>=20
+> I'm not sure I agree there. What is the initial value of the address?
+
+Ok so, to be honest, I thought that the BMC=E2=80=99s FTGMAC100 =
+peripherals
+came with addresses provisioned from the factory, and that we were just
+discarding that value and using an address provisioned through the NIC,
+because I hadn=E2=80=99t really dug into the FTGMAC100 datasheet fully. =
+I see now
+that the MAC address register I thought was a read-only manufacturing
+value is actually 8 different MAC address r/w registers for filtering.
+*facepalm*
+
+It suddenly makes a lot more sense why all these OEM Get MAC Address
+commands exist: the BMC chip doesn=E2=80=99t come with any MAC addresses =
+from
+manufacturing. It=E2=80=99s a necessity, not some convenience =
+artifact/etc.
+
+So, tracing some example systems to see what shows up:
+
+One example:
+INIT: Entering runlevel: 5
+Configuring network interfaces... [   25.893118] 8021q: adding VLAN 0 to =
+HW filter on device eth0
+[   25.904809] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+[   25.917307] ftgmac100 1e660000.ethernet eth0: NCSI: Handler for =
+packet type 0x82 returned -19
+[   25.958096] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+[   25.978124] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+[   25.990559] ftgmac100 1e660000.ethernet eth0: NCSI: 'bad' packet =
+ignored for type 0xd0
+[   26.018180] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+[   26.030631] ftgmac100 1e660000.ethernet eth0: NCSI: 'bad' packet =
+ignored for type 0xd0
+[   26.046594] ftgmac100 1e660000.ethernet eth0: NCSI: transmit cmd 0x50 =
+ncsi_oem_sma_mlx success during probe
+[   26.168109] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+[   26.198101] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+[   26.238237] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+[   26.272011] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+[   26.308155] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+[   26.320504] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+done.
+[   26.408094] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+[   26.438100] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+[   26.450537] ftgmac100 1e660000.ethernet eth0: NCSI: bcm_gmac16 MAC =
+RE:DA:CT:ED:HE:HE
+Starting random number generator[   26.472388] NCSI: =
+source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+ daemon[   26.518241] NCSI: source=3Dff:ff:ff:ff:ff:ff =
+dest=3Dff:ff:ff:ff:ff:ff
+[   26.559504] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+.
+[   26.608229] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+Setup dhclient for IPv6... done.
+[   26.681879] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+[   26.730523] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+[   26.808191] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+[   26.855689] NCSI: source=3Dff:ff:ff:ff:ff:ff dest=3Dff:ff:ff:ff:ff:ff
+
+Oddly, due to that code you mentioned, all NC-SI packets are using
+a broadcast source MAC address, even after the Get MAC Address sequence
+gets the MAC provisioned for the BMC from the Broadcom NIC.
+
+root@bmc-oob:~# ifconfig
+eth0      Link encap:Ethernet  HWaddr RE:DA:CT:ED:HE:HE
+          inet addr:XXXXXXX  Bcast:XXXXXXXX  Mask:XXXXXXXX
+          inet6 addr: XXXXXXXX Scope:Global
+          inet6 addr: XXXXXXXX Scope:Link
+          inet6 addr: XXXXXXXX Scope:Global
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:2965 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:637 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:872759 (852.3 KiB)  TX bytes:59936 (58.5 KiB)
+          Interrupt:19
+
+But, that=E2=80=99s a system using the 5.0 kernel with lots of old hacks
+on top. A system using a 5.15 kernel with this change included:
+
+INIT: Entering runlevel: 5
+Configuring network interfaces... [    6.596537] 8021q: adding VLAN 0 to =
+HW filter on device eth0
+[    6.609264] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
+[    6.622913] ftgmac100 1e690000.ftgmac eth0: NCSI: Handler for packet =
+type 0x82 returned -19
+[    6.641447] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
+[    6.662543] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
+[    6.680454] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
+[    6.694114] ftgmac100 1e690000.ftgmac eth0: NCSI: transmit cmd 0x50 =
+ncsi_oem_sma_mlx success during probe
+[    6.715722] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
+done.
+[    6.741372] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
+[    6.741451] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
+[    6.768714] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
+Starting random [    6.782599] NCSI: source=3DRE:DA:CT:ED:AD:DR =
+dest=3Dff:ff:ff:ff:ff:ff
+number generator[    6.799321] NCSI: source=3DRE:DA:CT:ED:AD:DR =
+dest=3Dff:ff:ff:ff:ff:ff
+ daemon[    6.815680] NCSI: source=3DRE:DA:CT:ED:AD:DR =
+dest=3Dff:ff:ff:ff:ff:ff
+[    6.831388] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
+.
+[    6.846921] ftgmac100 1e690000.ftgmac eth0: NCSI: Network controller =
+supports NC-SI 1.1, querying MAC address through OEM(0x8119) command
+Setup dhclient for IPv6... done.
+[    6.908921] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
+reloading rsyslo[    6.933085] NCSI: source=3DRE:DA:CT:ED:AD:DR =
+dest=3Dff:ff:ff:ff:ff:ff
+
+So, this BMC already had the provisioned MAC address somehow,
+even before the Nvidia Get MAC Address command towards the bottom.
+
+Adding tracing to ftgmac100:
+
+[    2.018672] ftgmac100_initial_mac
+[    2.026090] Read MAC address from FTGMAC100 register: =
+RE:DA:CT:ED:AD:DR
+[    2.040771] ftgmac100 1e690000.ftgmac: Read MAC address =
+RE:DA:CT:ED:AD:DR from chip
+[    2.057774] ftgmac100 1e690000.ftgmac: Using NCSI interface
+[    2.070957] ftgmac100 1e690000.ftgmac eth0: irq 33, mapped at =
+(ptrval)
+
+Now, after rewriting the FTGMAC100 register to fa:ce:b0:0c:20:22 and =
+rebooting:
+
+root@dhcp6-2620-10d-c0b9-4b08-0-0-0-e4e:~# devmem 0x1e690008 32 =
+0x0000face
+root@dhcp6-2620-10d-c0b9-4b08-0-0-0-e4e:~# devmem 0x1e690008
+0x0000FACE
+root@dhcp6-2620-10d-c0b9-4b08-0-0-0-e4e:~# devmem 0x1e69000c 32 =
+0xb00c2022
+root@dhcp6-2620-10d-c0b9-4b08-0-0-0-e4e:~# devmem 0x1e69000c
+0xB00C2022
+
+[    2.001304] ftgmac100_initial_mac
+[    2.008727] Read MAC address from FTGMAC100 register: =
+fa:ce:b0:0c:20:22
+[    2.023373] ftgmac100 1e690000.ftgmac: Read MAC address =
+fa:ce:b0:0c:20:22 from chip
+[    2.040367] ftgmac100 1e690000.ftgmac: Using NCSI interface
+
+[    6.581239] ftgmac100_reset_mac
+[    6.589193] ftgmac100_reset_mac
+[    6.596727] 8021q: adding VLAN 0 to HW filter on device eth0
+[    6.609462] NCSI: source=3Dfa:ce:b0:0c:20:22 dest=3Dff:ff:ff:ff:ff:ff
+[    6.623117] ftgmac100 1e690000.ftgmac eth0: NCSI: Handler for packet =
+type 0x82 returned -19
+[    6.641647] NCSI: source=3Dfa:ce:b0:0c:20:22 dest=3Dff:ff:ff:ff:ff:ff
+[    6.662398] NCSI: source=3Dfa:ce:b0:0c:20:22 dest=3Dff:ff:ff:ff:ff:ff
+[    6.680380] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
+[    6.694000] ftgmac100 1e690000.ftgmac eth0: NCSI: transmit cmd 0x50 =
+ncsi_oem_sma_mlx success during probe
+[    6.715700] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
+[    6.729528] NCSI: source=3DRE:DA:CT:ED:AD:DR dest=3Dff:ff:ff:ff:ff:ff
+
+So, it looks like whatever is initialized in ftgmac100_initial_mac =
+becomes
+the address we use for the NCSI queries initially.
+
+The Aspeed datasheet says the FTGMAC100 MAC address registers are =
+initialized to zero,
+and in that case the ftgmac100 driver initializes it to something random
+with eth_hw_addr_random().
+
+So, I mean correct me if I=E2=80=99m wrong, but I think it all seems =
+fine?
+
+On a hard power cycle (instead of just resetting the ARM cores, which =
+doesn=E2=80=99t seem to
+have reset the peripherals), maybe it would actually be zero, and get =
+initialized
+to the random value. I=E2=80=99ll test that, need to do some more debug =
+image building to do it
+remotely.
+
+> If I am not mistaken the gma_flag is used to indicate that the MAC
+> address has been acquired isn't it?
+
+That=E2=80=99s correct.
+
+> If using the broadcast is an issue
+> the maybe an all 0's MAC address might be more appropriate.
+
+Possibly yeah, although that would also be dropped by the Linux bridge =
+lol,
+so it wouldn=E2=80=99t solve my simulation problem.
+
+> My main
+> concern would be that the dev_addr is not initialized for those first
+> few messages so you may be leaking information.
+>=20
+>> This might have the effect of causing the NIC to learn 2 MAC =
+addresses from
+>> an NC-SI link if the BMC uses OEM Get MAC Address commands to change =
+its
+>> initial MAC address, but it shouldn't really matter. Who knows if =
+NIC's
+>> even have MAC learning enabled from the out-of-band BMC link, lol.
+>>=20
+>> [1]: https://tinyurl.com/4933mhaj
+>> [2]: https://tinyurl.com/mr3tyadb
+>=20
+> The thing is the OpenBMC approach initializes the value themselves to
+> broadcast[3]. As a result the two code bases are essentially doing the
+> same thing since mac_addr is defaulted to the broadcast address when
+> the ncsi interface is registered.
+
+That=E2=80=99s a very good point, thanks for pointing that out, I =
+hadn=E2=80=99t
+even noticed that!
+
+Anyways, let me know what you think of the traces I added above.
+Sorry for the delay, I=E2=80=99ve just been busy with some other stuff,
+but I do really actually care about upstreaming this (and several
+other NC-SI changes I=E2=80=99ll submit after this one, which are =
+unrelated
+but more useful).
+
+Thanks,
+Peter
+
+>=20
+> [3]: tinyurl.com/mr3cxf3b
+>=20
+>>=20
+>> Signed-off-by: Peter Delevoryas <peter@pjd.dev>
+>> ---
+>> net/ncsi/ncsi-cmd.c | 10 +---------
+>> 1 file changed, 1 insertion(+), 9 deletions(-)
+>>=20
+>> diff --git a/net/ncsi/ncsi-cmd.c b/net/ncsi/ncsi-cmd.c
+>> index dda8b76b7798..fd090156cf0d 100644
+>> --- a/net/ncsi/ncsi-cmd.c
+>> +++ b/net/ncsi/ncsi-cmd.c
+>> @@ -377,15 +377,7 @@ int ncsi_xmit_cmd(struct ncsi_cmd_arg *nca)
+>> eh =3D skb_push(nr->cmd, sizeof(*eh));
+>> eh->h_proto =3D htons(ETH_P_NCSI);
+>> eth_broadcast_addr(eh->h_dest);
+>> -
+>> - /* If mac address received from device then use it for
+>> - * source address as unicast address else use broadcast
+>> - * address as source address
+>> - */
+>> - if (nca->ndp->gma_flag =3D=3D 1)
+>> - memcpy(eh->h_source, nca->ndp->ndev.dev->dev_addr, ETH_ALEN);
+>> - else
+>> - eth_broadcast_addr(eh->h_source);
+>> + memcpy(eh->h_source, nca->ndp->ndev.dev->dev_addr, ETH_ALEN);
+>>=20
+>> /* Start the timer for the request that might not have
+>> * corresponding response. Given NCSI is an internal
+>=20
+
