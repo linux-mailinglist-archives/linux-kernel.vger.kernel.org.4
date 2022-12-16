@@ -2,152 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C9564F3F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 23:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358F464F402
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 23:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiLPWRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 17:17:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
+        id S229658AbiLPWV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 17:21:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbiLPWRd (ORCPT
+        with ESMTP id S229873AbiLPWVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 17:17:33 -0500
-Received: from mail-ot1-x349.google.com (mail-ot1-x349.google.com [IPv6:2607:f8b0:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748B42A703
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 14:17:26 -0800 (PST)
-Received: by mail-ot1-x349.google.com with SMTP id bq2-20020a056830388200b00672e4a07168so2000988otb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 14:17:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iIc91OoDv/mBPCGHIucL2csPnIlsRLcBZ/NTNtcT38Q=;
-        b=hAoT5MIAnuQSmqmxxyxbUJFAq8kFycgaIH3Rd2PXnLLgq4zV8nNoyOLPpXnYFa90MJ
-         S/Y97RfYpDzWFWmFoI7ftgkP5qIXUmtQycstRGSutXYJQNRXpI+/tA5cXZ4MkpqC8m9h
-         cdSrO4eoWj8H2mN8FnnHxk2Rf2m10M6jdxzt54kh/QZlJFj+8othZIIk4iBw9mv518Wa
-         1nQCSs5NUtfc0KkQN4P1EoPdmiYOe5KUsMZcNEYfChG0LL7SEfTDyV6SdUUiun7x6Vqh
-         z6UcYgV6HizryvFbeMJ1FomnoFuWgB4DkUC10Huv6lBsxzb6LQvZYjqwm7y4dJedWs6M
-         eNug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iIc91OoDv/mBPCGHIucL2csPnIlsRLcBZ/NTNtcT38Q=;
-        b=UFywerS2bClcFx2k94TlqM5nbAIm4GgKrlQ3F3KmcEYrvtjJiHYUkpPPgurX9eP4xF
-         s6GkA9NxQrEOVTQRhVZmd9FcCEoEDulW1mll69QyMsfQla+TuCV1ZD5jWzvi+3OmFyM+
-         pKoDQAACv/l521NZpicUZNAiXNPNZe0CwFbz9Aadg/dAw7K1tB2A7bY17D8Rdu/TqL+b
-         YZ/lYLZq5PU2eLrDLjlnDjRsH+KBGzGLsEkcoGymQOdd1W0objT3qeGRu33m/JHJE95m
-         vK5C3+IdRw9dsvDpG34xlvUY5zveSXHg29Wl9sknTNPxDxpv/PkODbQlyhaY+ZDxVjd6
-         KtKA==
-X-Gm-Message-State: AFqh2ko0KOfRhezVrTv1ngqTHDBNfY44WLQY2K9wt3w1r4LkyoXbUtMP
-        L01TLtONLbHWLAV19SxyufeQ4u2prtJGaoc=
-X-Google-Smtp-Source: AA0mqf71zNbvpxkSmqWDhizcNttRiDlQ6M7Uz0HofAn4JFHR2CcqiiSdNsVRzV138EW1X7bnH1CHA4hsEUcea+s=
-X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
- (user=allenwebb job=sendgmr) by 2002:a05:6870:6b8d:b0:143:53aa:5813 with SMTP
- id ms13-20020a0568706b8d00b0014353aa5813mr717884oab.161.1671229045721; Fri,
- 16 Dec 2022 14:17:25 -0800 (PST)
-Date:   Fri, 16 Dec 2022 16:17:03 -0600
-In-Reply-To: <20221216221703.294683-1-allenwebb@google.com>
-Mime-Version: 1.0
-References: <Y5IA2NYE5IaAzNby@kroah.com> <20221216221703.294683-1-allenwebb@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221216221703.294683-6-allenwebb@google.com>
-Subject: [PATCH v7 5/5] build: Add modules.builtin.alias
-From:   Allen Webb <allenwebb@google.com>
-To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Allen Webb <allenwebb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 16 Dec 2022 17:21:32 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3702D1E4;
+        Fri, 16 Dec 2022 14:21:30 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGLBKfu007097;
+        Fri, 16 Dec 2022 22:21:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=mN/CGGq9StXrPQ0xsghpwXjueW4uWopbH2Ftcek2z8w=;
+ b=pqCJ1FgTaoG3V0igT4TNiD6Dr2SgRgJW6cKYbmqyyqsop6Q0z9wTZaFqc7uiyRb2uYE2
+ koWYK/vyNBA0oVHHOgEJw3NJpUN1JT2wHANs61AvA7Z7heVNg2tnIwJJ6+HjF5q5QszA
+ 1dgoQnIVZDKg/Z42tGRSbDdRcRSgYRh4OOAJGTgYBmpfuRTYJUQ5nvCmM13Re1Qqzt9P
+ ck65xawj+kfnI7i7NpygOQDFt3elbgpMIHyAvrMDPZC24nKPZ8k+JWBf9y+cvDRZu0Ca
+ nUnouDWB9suthNTNgepy8A4t1axRQJsqZb/TXS06MUafHyASQf2BKSUIUNrYF5ABYrZv 2w== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mgvecrvma-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Dec 2022 22:21:02 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BGMKsip027202
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Dec 2022 22:20:54 GMT
+Received: from [10.110.127.101] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 16 Dec
+ 2022 14:20:52 -0800
+Message-ID: <8f33c1d0-a2ca-dc49-1884-01541ad83d49@quicinc.com>
+Date:   Fri, 16 Dec 2022 14:20:52 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [RFC PATCH 3/6] drm/msm/dpu1: Wire up DSC mask for active CTL
+ configuration
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        <phone-devel@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Stephen Boyd" <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Jessica Zhang" <quic_jesszhan@quicinc.com>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        "Jani Nikula" <jani.nikula@intel.com>,
+        sunliming <sunliming@kylinos.cn>,
+        "Sam Ravnborg" <sam@ravnborg.org>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        "Vinod Polimera" <quic_vpolimer@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20221213232207.113607-1-marijn.suijten@somainline.org>
+ <20221213232207.113607-4-marijn.suijten@somainline.org>
+ <184d22f1-7ed1-4a67-1c25-9fafeb94db83@linaro.org>
+ <20221214193026.dv2fuubysctcvlkg@SoMainline.org>
+ <658da2cf-1e1a-af27-b085-edf0887b8dae@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <658da2cf-1e1a-af27-b085-edf0887b8dae@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: DLSY3xawfJ9w3pOWd6BhsQ2MqOK1jXCZ
+X-Proofpoint-ORIG-GUID: DLSY3xawfJ9w3pOWd6BhsQ2MqOK1jXCZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-16_14,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=999 priorityscore=1501
+ bulkscore=0 suspectscore=0 malwarescore=0 mlxscore=0 clxscore=1015
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212160199
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Generate modules.builtin.alias using modpost and install it with the
-modules.
 
-Signed-off-by: Allen Webb <allenwebb@google.com>
----
- .gitignore               |  1 +
- Makefile                 |  1 +
- scripts/Makefile.modpost | 17 ++++++++++++++++-
- 3 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/.gitignore b/.gitignore
-index 47229f98b327b..40a90bca89641 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -67,6 +67,7 @@ modules.order
- /System.map
- /Module.markers
- /modules.builtin
-+/modules.builtin.alias
- /modules.builtin.modinfo
- /modules.nsdeps
- 
-diff --git a/Makefile b/Makefile
-index 78525ebea8762..572f364f40538 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1558,6 +1558,7 @@ __modinst_pre:
- 	fi
- 	@sed 's:^:kernel/:' modules.order > $(MODLIB)/modules.order
- 	@cp -f modules.builtin $(MODLIB)/
-+	@cp -f modules.builtin.alias $(MODLIB)/
- 	@cp -f $(objtree)/modules.builtin.modinfo $(MODLIB)/
- 
- endif # CONFIG_MODULES
-diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-index e41dee64d429c..94c1d66c7769a 100644
---- a/scripts/Makefile.modpost
-+++ b/scripts/Makefile.modpost
-@@ -15,6 +15,7 @@
- # 2) modpost is then used to
- # 3)  create one <module>.mod.c file per module
- # 4)  create one Module.symvers file with CRC for all exported symbols
-+# 5)  create modules.builtin.alias the aliases for built-in modules
- 
- # Step 3 is used to place certain information in the module's ELF
- # section, including information such as:
-@@ -51,6 +52,21 @@ ifneq ($(findstring i,$(filter-out --%,$(MAKEFLAGS))),)
- modpost-args += -n
- endif
- 
-+vmlinux.o-if-present := $(wildcard vmlinux.o)
-+ifneq ($(vmlinux.o-if-present),)
-+output-builtin.alias := modules.builtin.alias
-+modpost-args += -b .modules.builtin.alias.in
-+.modules.builtin.alias.in: $(output-symdump)
-+	@# Building $(output-symdump) generates .modules.builtin.alias.in as a
-+	@# side effect.
-+	@[ -e $@ ] || $(MODPOST) -b .modules.builtin.alias.in $(vmlinux.o-if-present)
-+
-+$(output-builtin.alias): .modules.builtin.alias.in
-+	sort -o $@ $^
-+
-+__modpost: $(output-builtin.alias)
-+endif
-+
- ifeq ($(KBUILD_EXTMOD),)
- 
- # Generate the list of in-tree objects in vmlinux
-@@ -78,7 +94,6 @@ targets += .vmlinux.objs
- .vmlinux.objs: vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
- 	$(call if_changed,vmlinux_objs)
- 
--vmlinux.o-if-present := $(wildcard vmlinux.o)
- output-symdump := vmlinux.symvers
- 
- ifdef KBUILD_MODULES
--- 
-2.37.3
+On 12/14/2022 5:08 PM, Dmitry Baryshkov wrote:
+> On 14/12/2022 21:30, Marijn Suijten wrote:
+>> On 2022-12-14 20:43:29, Dmitry Baryshkov wrote:
+>>> On 14/12/2022 01:22, Marijn Suijten wrote:
+>>>> Active CTLs have to configure what DSC block(s) have to be enabled, and
+>>>> what DSC block(s) have to be flushed; this value was initialized to 
+>>>> zero
+>>>> resulting in the necessary register writes to never happen (or would
+>>>> write zero otherwise).  This seems to have gotten lost in the DSC 
+>>>> v4->v5
+>>>> series while refactoring how the combination with merge_3d was handled.
+>>>>
+>>>> Fixes: 58dca9810749 ("drm/msm/disp/dpu1: Add support for DSC in 
+>>>> encoder")
+>>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>>> ---
+>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c | 1 +
+>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c | 1 +
+>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c  | 2 ++
+>>>>    3 files changed, 4 insertions(+)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c 
+>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+>>>> index ae28b2b93e69..35791f93c33d 100644
+>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+>>>> @@ -61,6 +61,7 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
+>>>>        intf_cfg.intf_mode_sel = DPU_CTL_MODE_SEL_CMD;
+>>>>        intf_cfg.stream_sel = cmd_enc->stream_sel;
+>>>>        intf_cfg.mode_3d = 
+>>>> dpu_encoder_helper_get_3d_blend_mode(phys_enc);
+>>>> +    intf_cfg.dsc = dpu_encoder_helper_get_dsc(phys_enc);
+>>>>        ctl->ops.setup_intf_cfg(ctl, &intf_cfg);
+>>>>        /* setup which pp blk will connect to this intf */
+>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c 
+>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+>>>> index 0f71e8fe7be7..9ee3a7306a5f 100644
+>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+>>>> @@ -274,6 +274,7 @@ static void 
+>>>> dpu_encoder_phys_vid_setup_timing_engine(
+>>>>        intf_cfg.intf_mode_sel = DPU_CTL_MODE_SEL_VID;
+>>>>        intf_cfg.stream_sel = 0; /* Don't care value for video mode */
+>>>>        intf_cfg.mode_3d = 
+>>>> dpu_encoder_helper_get_3d_blend_mode(phys_enc);
+>>>> +    intf_cfg.dsc = dpu_encoder_helper_get_dsc(phys_enc);
+>>>>        if (phys_enc->hw_pp->merge_3d)
+>>>>            intf_cfg.merge_3d = phys_enc->hw_pp->merge_3d->idx;
+>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c 
+>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+>>>> index 7cbcef6efe17..92ddf9995b37 100644
+>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+>>>> @@ -209,6 +209,7 @@ static void dpu_encoder_phys_wb_setup_cdp(struct 
+>>>> dpu_encoder_phys *phys_enc)
+>>>>            intf_cfg.intf = DPU_NONE;
+>>>>            intf_cfg.wb = hw_wb->idx;
+>>>> +        intf_cfg.dsc = dpu_encoder_helper_get_dsc(phys_enc);
+>>>
+>>> We usually don't have DSC with the writeback, don't we?
+>>
+>> I am unsure so ended up adding them in writeback regardless.  Downstream
+>> uses a separate callback to process intf_cfg.dsc instead of going
+>> through setup_intf_cfg().
+>>
+>> To prevent these from being missed again (in the case of copy&paste),
+>> how about instead having some function that sets up intf_cfg with these
+>> default values from a phys_enc?  That way most of this remains oblivious
+>> to the caller.
+> 
+> I'm not sure this is possible. E.g. intf_cfg.dsc should not be set for 
+> the WB.
+> 
 
+Although this change is harmless because 
+dpu_encoder_helper_get_dsc(phys_enc) will not return a valid DSC mask 
+for the WB encoder, hence the setup_intf_cfg will just skip the DSC 
+programming, I also agree that we can skip setting the intf_cfg.dsc for 
+the writeback encoder in this patch.
+
+>>
+>> On the same note, that callback on non-DPU_CTL_ACTIVE_CFG hardware
+>> doesn't use the intf_cfg.dsc member anyway, but it was again added to
+>> keep the blocks somewhat consistent (in case it ever becomes used?).
+>>
+>>>>            if (mode_3d && hw_pp && hw_pp->merge_3d)
+>>>>                intf_cfg.merge_3d = hw_pp->merge_3d->idx;
+>>>> @@ -230,6 +231,7 @@ static void dpu_encoder_phys_wb_setup_cdp(struct 
+>>>> dpu_encoder_phys *phys_enc)
+>>>>            intf_cfg.wb = hw_wb->idx;
+>>>>            intf_cfg.mode_3d =
+>>>>                dpu_encoder_helper_get_3d_blend_mode(phys_enc);
+>>>> +        intf_cfg.dsc = dpu_encoder_helper_get_dsc(phys_enc);
+>>>>            phys_enc->hw_ctl->ops.setup_intf_cfg(phys_enc->hw_ctl, 
+>>>> &intf_cfg);
+>>>>        }
+>>>>    }
+>>
+>> - Marijn
+> 
