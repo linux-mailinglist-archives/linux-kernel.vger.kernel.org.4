@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7863264E7DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E9D64E7E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiLPHmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 02:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
+        id S229614AbiLPHnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 02:43:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiLPHmk (ORCPT
+        with ESMTP id S229783AbiLPHnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 02:42:40 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCD73E0B5
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:42:39 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso1606555pjh.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:42:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p11g1cwrNZTNPGZ9JOLQCCww3AgSudE2cVlNLnF16zc=;
-        b=ixvI7Ak3I75fySctV1/dd+sdZTABsHg8bu7hFpLuyN8BHKmGfN3z1Aj/0VKzeMjcv3
-         Yx2YarpUotQqLooLXd7KrsAYxed3b55Q1KiMlbqTzvob8qcVCsK4zQv+5Jyj4Zzc3r5R
-         SHdVgW2Siaz+bwQ8R8ziN5juuRyjNlYJzZHVeLs32oSEmmAh+UXapL/LWJIyI5s0S4fX
-         mj0d3kfvEgX5Ts3EP3qykq2Jed42QJgR8LHUdIpi1rK1iaXOOskmnLea0OKLq37aB//X
-         jd7hMaXbMb6TNspCjwIS3MoZWBqbBaiX9mtaUuYsEq3QpMKStj/9nSxpeMRa6cW/hSzo
-         Ndkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p11g1cwrNZTNPGZ9JOLQCCww3AgSudE2cVlNLnF16zc=;
-        b=F0BJE9kw9EqkmaXCDHk5cGA0z0ykuOk5ZFLZdN9qIIjHbGiKBTjETzCz834D18B/Bl
-         opKXkE+Tf2xYuE4VGekl47L+qzmGAFn3cdExCHO1Prjv+CbvPKM9zn07dh5WqHYcKSWs
-         894tHzAoEWHnEIH53RhLkqZtMBqcM/13SwbX22E6z8PpOoLyPjy9Ltnz5Jk+p9rGEH7u
-         TyWaxIyuOQmo08Bj0DjCJV5Xxiw2x6r93MK2/33EibT/uBDPqoeYTT0Km/M6j6OGun0K
-         M4/8fLWkZWL3aC2AG9ITZNQOOJJGvm7L0glCQCOPNcca8mj8pdmOErVzzjt/0gtY+dfW
-         T0MA==
-X-Gm-Message-State: ANoB5pkDM7pKAq6M6TyJ3mzjp30Mx0OP18UuQKPisyn5Y7ycI+pT99kC
-        09GKfsmwWb3E88Qvp72lDW0=
-X-Google-Smtp-Source: AA0mqf45G+6k9iUrkTKEigJA7PtUlWdNG+akMhT77GtTrdF0p5ErbSlUKD9wC544JLf8+PzblnM7nQ==
-X-Received: by 2002:a05:6a20:65a1:b0:aa:7eab:25a5 with SMTP id p33-20020a056a2065a100b000aa7eab25a5mr34541260pzh.34.1671176559146;
-        Thu, 15 Dec 2022 23:42:39 -0800 (PST)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id c9-20020a170903234900b001885041d7b8sm854453plh.293.2022.12.15.23.42.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 23:42:38 -0800 (PST)
-Date:   Fri, 16 Dec 2022 16:42:32 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Chen Jun <chenjun102@huawei.com>
-Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
-        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
-        roman.gushchin@linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, xuqiang36@huawei.com
-Subject: Re: [PATCH] mm, slub: fix uninitialized variable in __slab_free
-Message-ID: <Y5whaFO6Z1eaQzeu@hyeyoo>
-References: <20221216033119.14159-1-chenjun102@huawei.com>
+        Fri, 16 Dec 2022 02:43:00 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FE13E0B5;
+        Thu, 15 Dec 2022 23:42:58 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NYLds08N2zRq0P;
+        Fri, 16 Dec 2022 15:41:53 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 16 Dec 2022 15:42:55 +0800
+Subject: Re: [PATCH v9] kallsyms: Add self-test facility
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Laight <David.Laight@aculab.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
+ <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
+ <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
+ <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
+ <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
+ <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
+ <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
+ <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
+ <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
+Date:   Fri, 16 Dec 2022 15:42:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221216033119.14159-1-chenjun102@huawei.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,48 +74,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 03:31:19AM +0000, Chen Jun wrote:
-> new.frozen is not initialized before it is used.
+
+
+On 2022/12/15 22:51, Geert Uytterhoeven wrote:
+> Hi Zhen,
 > 
-> Fixes: 2cfb7455d223 ("slub: Rework allocator fastpaths")
-> Signed-off-by: Chen Jun <chenjun102@huawei.com>
-> ---
->  mm/slub.c | 1 +
->  1 file changed, 1 insertion(+)
+> On Thu, Dec 15, 2022 at 3:40 PM Leizhen (ThunderTown)
+> <thunder.leizhen@huawei.com> wrote:
+>> On 2022/12/15 21:58, Leizhen (ThunderTown) wrote:
+>>> On 2022/12/15 21:24, Geert Uytterhoeven wrote:
+>>>> On Thu, Dec 15, 2022 at 1:34 PM Leizhen (ThunderTown)
+>>>> <thunder.leizhen@huawei.com> wrote:
+>>>>> On 2022/12/15 17:39, Geert Uytterhoeven wrote:
+>>>>>> On Thu, Dec 15, 2022 at 10:16 AM Leizhen (ThunderTown)
+>>>>>> <thunder.leizhen@huawei.com> wrote:
+>>>>>>> On 2022/12/15 16:50, Geert Uytterhoeven wrote:
+>>>>>>>> On Tue, Nov 15, 2022 at 9:41 AM Zhen Lei <thunder.leizhen@huawei.com> wrote:
+>>>>>>>>> Added test cases for basic functions and performance of functions
+>>>>>>>>> kallsyms_lookup_name(), kallsyms_on_each_symbol() and
+>>>>>>>>> kallsyms_on_each_match_symbol(). It also calculates the compression rate
+>>>>>>>>> of the kallsyms compression algorithm for the current symbol set.
+>>>>>>>>>
+>>>>>>>>> The basic functions test begins by testing a set of symbols whose address
+>>>>>>>>> values are known. Then, traverse all symbol addresses and find the
+>>>>>>>>> corresponding symbol name based on the address. It's impossible to
+>>>>>>>>> determine whether these addresses are correct, but we can use the above
+>>>>>>>>> three functions along with the addresses to test each other. Due to the
+>>>>>>>>> traversal operation of kallsyms_on_each_symbol() is too slow, only 60
+>>>>>>>>> symbols can be tested in one second, so let it test on average once
+>>>>>>>>> every 128 symbols. The other two functions validate all symbols.
+>>>>>>>>>
+>>>>>>>>> If the basic functions test is passed, print only performance test
+>>>>>>>>> results. If the test fails, print error information, but do not perform
+>>>>>>>>> subsequent performance tests.
+>>>>>>>>>
+>>>>>>>>> Start self-test automatically after system startup if
+>>>>>>>>> CONFIG_KALLSYMS_SELFTEST=y.
+>>>>>>>>>
+>>>>>>>>> Example of output content: (prefix 'kallsyms_selftest:' is omitted
+>>>>>>>>>  start
+>>>>>>>>>   ---------------------------------------------------------
+>>>>>>>>>  | nr_symbols | compressed size | original size | ratio(%) |
+>>>>>>>>>  |---------------------------------------------------------|
+>>>>>>>>>  |     107543 |       1357912   |      2407433  |  56.40   |
+>>>>>>>>>   ---------------------------------------------------------
+>>>>>>>>>  kallsyms_lookup_name() looked up 107543 symbols
+>>>>>>>>>  The time spent on each symbol is (ns): min=630, max=35295, avg=7353
+>>>>>>>>>  kallsyms_on_each_symbol() traverse all: 11782628 ns
+>>>>>>>>>  kallsyms_on_each_match_symbol() traverse all: 9261 ns
+>>>>>>>>>  finish
+>>>>>>>>>
+>>>>>>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>>>>>>>
+>>>>>>>> Thanks for your patch, which is now commit 30f3bb09778de64e ("kallsyms:
+>>>>>>>> Add self-test facility") in linus/master.
+>>>>>>>>
+>>>>>>>> I gave this a try on m68k (atari_defconfig + CONFIG_KALLSYMS_SELFTEST=y),
+>>>>>>>> but it failed:
+>>>>>>>>
+>>>>>>>>     start
+>>>>>>>>     kallsyms_lookup_name() for kallsyms_test_func_static failed:
+>>>>>>>> addr=0, expect 60ab0
+>>>>>>>>     kallsyms_lookup_name() for kallsyms_test_func failed: addr=0, expect 60ac0
+>>>>>>>>     kallsyms_lookup_name() for kallsyms_test_func_weak failed: addr=0,
+>>>>>>>> expect 60ac2
+>>>>>>>>     kallsyms_lookup_name() for vmalloc failed: addr=0, expect c272a
+>>>>>>>>     kallsyms_lookup_name() for vfree failed: addr=0, expect c2142
+>>>>>>>>     kallsyms_on_each_match_symbol() for kallsyms_test_func_static
+>>>>>>>> failed: count=0, addr=0, expect 60ab0
+>>>>>>>>     kallsyms_on_each_match_symbol() for kallsyms_test_func failed:
+>>>>>>>> count=0, addr=0, expect 60ac0
+>>>>>>>>     kallsyms_on_each_match_symbol() for kallsyms_test_func_weak
+>>>>>>>> failed: count=0, addr=0, expect 60ac2
+>>>>>>>>     kallsyms_on_each_match_symbol() for vmalloc failed: count=0,
+>>>>>>>> addr=0, expect c272a
+>>>>>>>>     kallsyms_on_each_match_symbol() for vfree failed: count=0, addr=0,
+>>>>>>>> expect c2142
+>>>>>>>>     abort
+>>>>>>>>
+>>>>>>>> Given all addresses are zero, it looks like some required functionality
+>>>>>>>> or config option is missing.
+>>>>>>>>
+>>>>>>>> $ grep SYM .config
+>>>>>>>> CONFIG_KALLSYMS=y
+>>>>>>>> CONFIG_KALLSYMS_SELFTEST=y
+>>>>>>>> CONFIG_KALLSYMS_BASE_RELATIVE=y
+>>>>>>>> # CONFIG_ASYMMETRIC_KEY_TYPE is not set
+>>>>>>>> CONFIG_SYMBOLIC_ERRNAME=y
+>>>>>>>> # CONFIG_STRIP_ASM_SYMS is not set
+>>>>>>>> CONFIG_KALLSYMS_SELFTEST
+>>>>>>>>
+>>>>>>>> Do you have a clue?
+>>>>>>>
+>>>>>>> cat /proc/kallsyms | grep kallsyms_test_func
+>>>>>>> Let's see if the compiler-generated symbols have some special suffixes.
+>>>>>>
+>>>>>> Thanks, looks normal to me:
+>>>>>>
+>>>>>>     atari:~# cat /proc/kallsyms | grep kallsyms_test_func
+>>>>>>     00060ab0 t kallsyms_test_func_static
+>>>>>>     00060ac0 T kallsyms_test_func
+>>>>>>     00060ac2 W kallsyms_test_func_weak
+>>>>>>     atari:~#
+>>>>>
+>>>>> It's incredible. I don't have a m68k environment and I'm trying to build a qemu
+>>>>> environment. If you're in a hurry and willing, you can apply the debugging patch
+>>>>> in the attachment. I'd like to see what's wrong. Use "dmesg | grep tst" to collect
+>>>>> the output information.
+>>>>
+>>>> Still fails:
+>>>>
+>>>>     tst: found kallsyms_test_func at index=12845
+>>>>     tst: [12533] = kallsyms_test_func, seq=17370, offset=191223
+>>>>     tst: [18800] = kallsyms_test_func, seq=23193, offset=259263
+>>>>     tst: [21934] = kallsyms_test_func, seq=2527, offset=22331
+>>>>     tst: [23501] = kallsyms_test_func, seq=11792, offset=126366
+>>>>     tst: [24284] = kallsyms_test_func, seq=8427, offset=87395
+>>>>     tst: [24676] = kallsyms_test_func, seq=21896, offset=243536
+>>>>     tst: [24872] = kallsyms_test_func, seq=22571, offset=251856
+>>>>     tst: [24970] = kallsyms_test_func, seq=23264, offset=260074
+>>>>     tst: [25019] = kallsyms_test_func, seq=9003, offset=93752
+>>>>     tst: [25043] = kallsyms_test_func, seq=14324, offset=155117
+>>>>     tst: [25055] = kallsyms_test_func, seq=5942, offset=62266
+>>>>     tst: [25061] = kallsyms_test_func, seq=14347, offset=155467
+>>>>     tst: [25064] = kallsyms_test_func, seq=14350, offset=155512
+>>>>     tst: [25066] = kallsyms_test_func, seq=14346, offset=155457
+>>>>     tst: [25067] = kallsyms_test_func, seq=14354, offset=155565
+>>>
+>>> -               pr_warn("tst: [%d] = %s, seq=%d, offset=%d\n", mid, name, seq, off);
+>>> +               pr_warn("tst: [%d] = %s, seq=%d, offset=%d\n", mid, namebuf, seq, off);
+>>>
+>>> Sorry, a variable in the debugging code is incorrectly written. 'name' should
+>>> be replaced with 'namebuf', then we can see which function the comparison is wrong.
+>>
+>> I attached debug patch v2.
 > 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 13459c69095a..8628c88875b6 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -3593,6 +3593,7 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
->  		return;
->  	}
->  
-> +	new.frozen = 0;
->  	do {
->  		if (unlikely(n)) {
->  			spin_unlock_irqrestore(&n->list_lock, flags);
-> -- 
-> 2.17.1
+> On 30f3bb09778de64 with your debug patch v2:
 
-This is incorrect because new.frozen is initialized when new.counters is
-initialized.
+I've set up the qemu environment, and I'll try to solve it by tomorrow at the latest.
 
-See definition of struct slab in mm/slab.h:
-
-struct slab {
-
-	[...]
-	union {
-		unsigned long counters;
-		struct {
-			unsigned inuse:16;
-			unsigned objects:15;
-			unsigned frozen:1;
-		};
-	};
-}
+> 
+> kallsyms_selftest: start
+> tst: kallsyms_lookup_names() is OK, name=kallsyms_test_func, i=0
+> kallsyms_selftest: kallsyms_lookup_name() for
+> kallsyms_test_func_static failed: addr=8dbc, expect 60498
+> kallsyms_selftest: kallsyms_lookup_name() for kallsyms_test_func
+> failed: addr=8dbc, expect 604a8
+> kallsyms_selftest: kallsyms_lookup_name() for kallsyms_test_func_weak
+> failed: addr=8dbc, expect 604aa
+> kallsyms_selftest: kallsyms_lookup_name() for vmalloc failed:
+> addr=8dbc, expect bde18
+> kallsyms_selftest: kallsyms_lookup_name() for vfree failed: addr=8dbc,
+> expect bd86e
+> kallsyms_selftest: kallsyms_on_each_match_symbol() for
+> kallsyms_test_func_static failed: count=24891, addr=1eea00, expect
+> 60498
+> kallsyms_selftest: kallsyms_on_each_match_symbol() for
+> kallsyms_test_func failed: count=24891, addr=1eea00, expect 604a8
+> kallsyms_selftest: kallsyms_on_each_match_symbol() for
+> kallsyms_test_func_weak failed: count=24891, addr=1eea00, expect 604aa
+> kallsyms_selftest: kallsyms_on_each_match_symbol() for vmalloc failed:
+> count=24891, addr=1eea00, expect bde18
+> kallsyms_selftest: kallsyms_on_each_match_symbol() for vfree failed:
+> count=24891, addr=1eea00, expect bd86e
+> kallsyms_selftest: abort
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+> 
+> .
+> 
 
 -- 
-Thanks,
-Hyeonggon
+Regards,
+  Zhen Lei
