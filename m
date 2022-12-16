@@ -2,151 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6ACE64F071
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C69AD64F074
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:38:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231812AbiLPRhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 12:37:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
+        id S231235AbiLPRiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 12:38:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbiLPRhA (ORCPT
+        with ESMTP id S230237AbiLPRiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 12:37:00 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B192A164A9
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:36:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671212219; x=1702748219;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=yXW+wV+UgSM2VSneYgwaMavVBMwnnak5JNaby2zZkUY=;
-  b=CTit5uW6eaCNF3GDuV3ogc0CGpP47y7jEnc5IqivZxUflrtrn1AQRrbi
-   pNHMtWvdfU+apTma+/51JOtLB40j8ngwT44h+8XGki1p/Vl6uQppLJmbq
-   yNhGVqa2R34+uWWLUPTUIaZ2tOSoDACjxbJSntITKeO+Y5utstFJYFFc1
-   qFCNmSjuv1raEioETZqUYxESXvE5M9HVA24RZlYPYLVQn4/qaq40lQCP1
-   eAj7rJ2bFA+ixUQOlKi3nFzSaeF7LSugUi50dtOTgyFfKy/+ymOY1C6nr
-   0k4gh3DyDHb3Im7oU4UCtiAjfRrdd8vaw8Vrg15DAvqAPYGpx1oC0RaLQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="383352498"
-X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="383352498"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 09:36:59 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="651997543"
-X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="651997543"
-Received: from krojasle-mobl.amr.corp.intel.com (HELO [10.209.187.31]) ([10.209.187.31])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 09:36:57 -0800
-Message-ID: <9aa4bffd-bc7e-0e40-3063-5ce80b5fbe9a@linux.intel.com>
-Date:   Fri, 16 Dec 2022 11:36:56 -0600
+        Fri, 16 Dec 2022 12:38:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC544046A;
+        Fri, 16 Dec 2022 09:38:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 776B3621C0;
+        Fri, 16 Dec 2022 17:38:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD48FC433D2;
+        Fri, 16 Dec 2022 17:38:08 +0000 (UTC)
+Date:   Fri, 16 Dec 2022 12:38:04 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     'Andreas Schwab' <schwab@linux-m68k.org>,
+        "'Leizhen (ThunderTown)'" <thunder.leizhen@huawei.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        "Joe Lawrence" <joe.lawrence@redhat.com>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: Re: [PATCH v9] kallsyms: Add self-test facility
+Message-ID: <20221216123805.6eba002c@gandalf.local.home>
+In-Reply-To: <20221216121947.7d03b651@gandalf.local.home>
+References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
+        <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
+        <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
+        <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
+        <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
+        <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
+        <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
+        <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com>
+        <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
+        <592dce7a0de24c62bd31c29f86ce6c1b@AcuMS.aculab.com>
+        <87pmcjidfe.fsf@igel.home>
+        <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com>
+        <87len7ibtt.fsf@igel.home>
+        <c7cebe9da0474eb880ab14124ba290d0@AcuMS.aculab.com>
+        <87fsdfib07.fsf@igel.home>
+        <819801284eb745d9a4189759bad297f5@AcuMS.aculab.com>
+        <20221216115314.6120beb7@gandalf.local.home>
+        <ecf4939dbff84709a1782a8e8851b29f@AcuMS.aculab.com>
+        <20221216121947.7d03b651@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH v2] ASoC: Intel: sof_nau8825: add variant with nau8318
- amplifier.
-Content-Language: en-US
-To:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-Cc:     Libin Yang <libin.yang@intel.com>,
-        "balamurugan . c" <balamurugan.c@intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Muralidhar Reddy <muralidhar.reddy@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        David Lin <CTLIN0@nuvoton.com>, alsa-devel@alsa-project.org,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Brent Lu <brent.lu@intel.com>, Yong Zhi <yong.zhi@intel.com>
-References: <20221216154938.9426-1-ajye_huang@compal.corp-partner.google.com>
- <b0612bbd-2eba-36cf-9c29-7542cf32adfd@linux.intel.com>
- <CALprXBYy9_ax8-xfh0paB59Pn=TB7yVLwtY8vnT_-y5vWd867w@mail.gmail.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <CALprXBYy9_ax8-xfh0paB59Pn=TB7yVLwtY8vnT_-y5vWd867w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 16 Dec 2022 12:19:47 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
+> I assumed that "memory" was for memory unrelated to the input constraints.
 
-On 12/16/22 10:55, Ajye Huang wrote:
-> Hi Pierre
-> 
-> On Sat, Dec 17, 2022 at 12:03 AM Pierre-Louis Bossart
-> <pierre-louis.bossart@linux.intel.com> wrote:
-> 
->> On 12/16/22 09:49, Ajye Huang wrote:
->>> This patch adds the driver data for two nau8318 speaker amplifiers on
->>> SSP1 and nau8825 on SSP0 for ADL platform.
->>
->> So here you are making reference to two amplifiers...
->>
->>> +static struct snd_soc_dai_link_component nau8318_components[] = {
->>> +     {
->>> +             .name = "NVTN2012:00",
->>> +             .dai_name = "nau8315-hifi",
->>> +     }
->>> +};
->>
->> but here there's only one? I was expecting something like what we've
->> used for Maxim amplifiers with a codec configuration and dailink
->> components that list the two amplifiers.
->>
->> static struct snd_soc_codec_conf max_98373_codec_conf[] = {
->>         {
->>                 .dlc = COMP_CODEC_CONF(MAX_98373_DEV0_NAME),
->>                 .name_prefix = "Right",
->>         },
->>         {
->>                 .dlc = COMP_CODEC_CONF(MAX_98373_DEV1_NAME),
->>                 .name_prefix = "Left",
->>         },
->> };
->>
->> struct snd_soc_dai_link_component max_98373_components[] = {
->>         {  /* For Right */
->>                 .name = MAX_98373_DEV0_NAME,
->>                 .dai_name = MAX_98373_CODEC_DAI,
->>         },
->>         {  /* For Left */
->>                 .name = MAX_98373_DEV1_NAME,
->>                 .dai_name = MAX_98373_CODEC_DAI,
->>         },
->> };
->>
->> Or is this a commit message problem and there's really only one amplifier?
-> 
-> Really , it has two speakers.  The nau8318 is an auto mode Amplifier
-> chip, similar to the max98360a amp chip.
-> EX: Sof_maxim_common.c (sound\soc\intel\boards):
-> static struct snd_soc_dai_link_component max_98360a_components[] = {
->     {
->         .name = MAX_98360A_DEV0_NAME,
->         .dai_name = MAX_98357A_CODEC_DAI,
->     }
-> };
-> It is not an i2c interface,  from the nau8318 data sheet, there are
-> five pins used mainly. one for enable, others for I2S.
-> EN-- enable pin
-> FSR-- Frame Sync, Right
-> FSL--  Frame Sync, Left
-> BCLK--  bit clock
-> DACIN-- Input i2s data
-> 
-> The FSR and FSL pins are for Left and Right channels used.
-> thanks
+Well, it looks like you do need a "memory" barrier.
 
-Ok, thanks for the explanations.
+  https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html
 
-Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+"memory"
+
+      The "memory" clobber tells the compiler that the assembly code
+      performs memory reads or writes to items other than those listed in
+      the input and output operands (for example, accessing the memory
+      pointed to by one of the input parameters). To ensure memory contains
+      correct values, GCC may need to flush specific register values to
+      memory before executing the asm. Further, the compiler does not
+      assume that any values read from memory before an asm remain
+      unchanged after that asm; it reloads them as needed. Using the
+      "memory" clobber effectively forms a read/write memory barrier for
+      the compiler.
+
+As the "(for example, accessing the memory pointed to by one of the input
+parameters)" is exactly this case.
+
+-- Steve
