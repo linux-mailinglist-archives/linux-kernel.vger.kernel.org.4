@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CBDE64F248
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 21:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E4E64F249
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 21:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231981AbiLPURq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 15:17:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
+        id S231986AbiLPUR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 15:17:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231965AbiLPURW (ORCPT
+        with ESMTP id S230389AbiLPURY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 15:17:22 -0500
+        Fri, 16 Dec 2022 15:17:24 -0500
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480196A762
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:17:21 -0800 (PST)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGJxe1t026562
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:17:21 -0800
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679A672608
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:17:23 -0800 (PST)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGJxCtl024349
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:17:23 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=P/KRpfmdlQUKxAAPrLlGtIIYCnA6qEIJS0aGmE3w/OM=;
- b=MbCoiSgfMSiseLUY8bCAs3dbyFZQ3Rl0CLAubF9uzrqkfr/MvHkNbhvABzz3rPOT94Uw
- sTTUx6fDbStVDEpl/yLxoFGe5kd913/iZPC8NzP4KNck043HmxwxPnhDpEln4pd8i9jN
- 6Cw3Lal8BKx/kX+3JkIH1HhFzFzt7+aMQf/q36VH/uV+dYPUng6PyeXINbyO+CNAX5wU
- 9z2qD1wgvH7IFT9nDRQIKIlr5VhzMpcPlVILYm71FLYPu22UN5iWFdsEGlZAz1Kdfl3g
- vSiVkdpvfAUdtxLcTxFzUw2ZW8+WSkwiTrstgXw3VCJtgTgDtji/8m1fiSDv2xYl4U6n QQ== 
+ bh=TZNkpjr8/3ibxb7IcC5QH+0+yx1Gj6xL4H95QeGVkb8=;
+ b=Le2B0or9qIKN4/IDsOqRE2RNIBLBq5FZiadWiezcWuUvS9XFIoEKTu0GV7qP14BvcHD9
+ 175I2MF7yY3OCK45Ei8UbmafeAbdxmSKGkTuMYg3ZCcDNpjeXSCUdAwaLbjTLSLhBZQ8
+ eCNcPvP0zWoOsXdvvixgXSEANHPKPAmprt0cjvG4m0nUBFGf5VTmXsT9OUT5g+OAuktR
+ xVVhWVJ5UMh5q1td1i0SdeiS+c+hDUj0TUPkmScLzOAc7eDOWs72WgLcWIgL4WZMh0F2
+ bwVilxlvdyARmBjemREW31XWdNHSfUt279QMZ0rlaTSyF+Q5acEP7pzglKeVBsosc/sW JA== 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3mgh7v57s3-7
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3mgxjy8gcx-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:17:20 -0800
-Received: from twshared8047.05.ash9.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:17:23 -0800
+Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
+ snc-exhub103.TheFacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 16 Dec 2022 12:17:22 -0800
+Received: from twshared8047.05.ash9.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 16 Dec 2022 12:17:20 -0800
+ 15.1.2375.34; Fri, 16 Dec 2022 12:17:22 -0800
 Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
-        id 289EAD042AB9; Fri, 16 Dec 2022 12:17:10 -0800 (PST)
+        id 36E3ED042ABC; Fri, 16 Dec 2022 12:17:10 -0800 (PST)
 From:   Keith Busch <kbusch@meta.com>
 To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         Matthew Wilcox <willy@infradead.org>
 CC:     Tony Battersby <tonyb@cybernetics.com>,
         Kernel Team <kernel-team@meta.com>,
         Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv2 05/11] dmapool: speedup DMAPOOL_DEBUG with init_on_alloc
-Date:   Fri, 16 Dec 2022 12:16:19 -0800
-Message-ID: <20221216201625.2362737-6-kbusch@meta.com>
+Subject: [PATCHv2 06/11] dmapool: move debug code to own functions
+Date:   Fri, 16 Dec 2022 12:16:20 -0800
+Message-ID: <20221216201625.2362737-7-kbusch@meta.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221216201625.2362737-1-kbusch@meta.com>
 References: <20221216201625.2362737-1-kbusch@meta.com>
@@ -53,8 +57,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: ZQVgAyTWC7jHrUwurblEzB0HFo65Zofu
-X-Proofpoint-ORIG-GUID: ZQVgAyTWC7jHrUwurblEzB0HFo65Zofu
+X-Proofpoint-GUID: q6HuErhKedLs_TltBFut5biXvYNyFJwi
+X-Proofpoint-ORIG-GUID: q6HuErhKedLs_TltBFut5biXvYNyFJwi
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-16_14,2022-12-15_02,2022-06-22_01
@@ -68,31 +72,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Battersby <tonyb@cybernetics.com>
+From: Keith Busch <kbusch@kernel.org>
 
-Avoid double-memset of the same allocated memory in dma_pool_alloc()
-when both DMAPOOL_DEBUG is enabled and init_on_alloc=3D1.
+Clean up the normal path by moving the debug code outside it.
 
-Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
 Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
- mm/dmapool.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/dmapool.c | 96 +++++++++++++++++++++++++++++-----------------------
+ 1 file changed, 54 insertions(+), 42 deletions(-)
 
 diff --git a/mm/dmapool.c b/mm/dmapool.c
-index ee993bb59fc27..eaed3ffb42aa8 100644
+index eaed3ffb42aa8..8a7aa19e650a1 100644
 --- a/mm/dmapool.c
 +++ b/mm/dmapool.c
-@@ -356,7 +356,7 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t mem=
-_flags,
- 			break;
- 		}
- 	}
--	if (!(mem_flags & __GFP_ZERO))
+@@ -294,6 +294,32 @@ void dma_pool_destroy(struct dma_pool *pool)
+ }
+ EXPORT_SYMBOL(dma_pool_destroy);
+=20
++static inline void pool_check_block(struct dma_pool *pool, void *retval,
++				    unsigned int offset, gfp_t mem_flags)
++{
++#ifdef	DMAPOOL_DEBUG
++	int i;
++	u8 *data =3D retval;
++	/* page->offset is stored in first 4 bytes */
++	for (i =3D sizeof(offset); i < pool->size; i++) {
++		if (data[i] =3D=3D POOL_POISON_FREED)
++			continue;
++		dev_err(pool->dev, "%s %s, %p (corrupted)\n",
++			__func__, pool->name, retval);
++
++		/*
++		 * Dump the first 4 bytes even if they are not
++		 * POOL_POISON_FREED
++		 */
++		print_hex_dump(KERN_ERR, "", DUMP_PREFIX_OFFSET, 16, 1,
++				data, pool->size, 1);
++		break;
++	}
 +	if (!want_init_on_alloc(mem_flags))
- 		memset(retval, POOL_POISON_ALLOCATED, pool->size);
- #endif
++		memset(retval, POOL_POISON_ALLOCATED, pool->size);
++#endif
++}
++
+ /**
+  * dma_pool_alloc - get a block of consistent memory
+  * @pool: dma pool that will produce the block
+@@ -336,29 +362,7 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t me=
+m_flags,
+ 	page->offset =3D *(int *)(page->vaddr + offset);
+ 	retval =3D offset + page->vaddr;
+ 	*handle =3D offset + page->dma;
+-#ifdef	DMAPOOL_DEBUG
+-	{
+-		int i;
+-		u8 *data =3D retval;
+-		/* page->offset is stored in first 4 bytes */
+-		for (i =3D sizeof(page->offset); i < pool->size; i++) {
+-			if (data[i] =3D=3D POOL_POISON_FREED)
+-				continue;
+-			dev_err(pool->dev, "%s %s, %p (corrupted)\n",
+-				__func__, pool->name, retval);
+-
+-			/*
+-			 * Dump the first 4 bytes even if they are not
+-			 * POOL_POISON_FREED
+-			 */
+-			print_hex_dump(KERN_ERR, "", DUMP_PREFIX_OFFSET, 16, 1,
+-					data, pool->size, 1);
+-			break;
+-		}
+-	}
+-	if (!want_init_on_alloc(mem_flags))
+-		memset(retval, POOL_POISON_ALLOCATED, pool->size);
+-#endif
++	pool_check_block(pool, retval, offset, mem_flags);
  	spin_unlock_irqrestore(&pool->lock, flags);
+=20
+ 	if (want_init_on_alloc(mem_flags))
+@@ -381,6 +385,32 @@ static struct dma_page *pool_find_page(struct dma_po=
+ol *pool, dma_addr_t dma)
+ 	return NULL;
+ }
+=20
++static inline bool pool_page_err(struct dma_pool *pool, struct dma_page =
+*page,
++				 void *vaddr)
++{
++#ifdef DMAPOOL_DEBUG
++	unsigned int chain =3D page->offset;
++
++	if ((dma - page->dma) !=3D offset) {
++		dev_err(pool->dev, "%s %s, %p (bad vaddr)/%pad\n",
++			__func__, pool->name, vaddr, &dma);
++		return true;
++	}
++
++	while (chain < pool->allocation) {
++		if (chain !=3D offset) {
++			chain =3D *(int *)(page->vaddr + chain);
++			continue;
++		}
++		dev_err(pool->dev, "%s %s, dma %pad already free\n",
++			__func__, pool->name, &dma);
++		return true;
++	}
++	memset(vaddr, POOL_POISON_FREED, pool->size);
++#endif
++	return false;
++}
++
+ /**
+  * dma_pool_free - put block back into dma pool
+  * @pool: the dma pool holding the block
+@@ -408,28 +438,10 @@ void dma_pool_free(struct dma_pool *pool, void *vad=
+dr, dma_addr_t dma)
+ 	offset =3D vaddr - page->vaddr;
+ 	if (want_init_on_free())
+ 		memset(vaddr, 0, pool->size);
+-#ifdef	DMAPOOL_DEBUG
+-	if ((dma - page->dma) !=3D offset) {
++	if (pool_page_err(pool, page, vaddr)) {
+ 		spin_unlock_irqrestore(&pool->lock, flags);
+-		dev_err(pool->dev, "%s %s, %p (bad vaddr)/%pad\n",
+-			__func__, pool->name, vaddr, &dma);
+ 		return;
+ 	}
+-	{
+-		unsigned int chain =3D page->offset;
+-		while (chain < pool->allocation) {
+-			if (chain !=3D offset) {
+-				chain =3D *(int *)(page->vaddr + chain);
+-				continue;
+-			}
+-			spin_unlock_irqrestore(&pool->lock, flags);
+-			dev_err(pool->dev, "%s %s, dma %pad already free\n",
+-				__func__, pool->name, &dma);
+-			return;
+-		}
+-	}
+-	memset(vaddr, POOL_POISON_FREED, pool->size);
+-#endif
+=20
+ 	page->in_use--;
+ 	*(int *)vaddr =3D page->offset;
 --=20
 2.30.2
 
