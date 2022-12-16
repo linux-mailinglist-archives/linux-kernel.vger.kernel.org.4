@@ -2,118 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83F364E820
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 09:26:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9024B64E82C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 09:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiLPI0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 03:26:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
+        id S229453AbiLPIg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 03:36:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiLPI0S (ORCPT
+        with ESMTP id S229705AbiLPIgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 03:26:18 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768B6E0A9;
-        Fri, 16 Dec 2022 00:26:16 -0800 (PST)
+        Fri, 16 Dec 2022 03:36:22 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0CE36C67;
+        Fri, 16 Dec 2022 00:36:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671179177; x=1702715177;
+  t=1671179782; x=1702715782;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vM5A9CqvPeqje6H8CYXLm2+IRrn5FrUkt/f4Pyg/fvg=;
-  b=Fs/uvHeAuSSSrEg828Z0Qco5wVKPj3d1gK51biErHUjPkVRUNzYD+GMm
-   Qpi2zJG5gnsFJOF5KJfC7iNKs/tpLjX8UQ5Od+RTx702U9hFbD4AAJreU
-   748yRKxc73+bBKUzdXvv1t4b8xVxNCmW7pHJCK4C1I/QO58nI+v6vYXpA
-   CQAOxitHrmihVTfbt0QtCHwYKorBzK3SHmLjL7B5YboLhne+T19kgV4Oz
-   NINP7sEaGpBU3X8vKVGjGkvA2kAN+6bF0TL25140cV8D5QkZtHlPvw229
-   RoHKCogMLlhwge1yqHHOfn/dCh9CoENmXZvgZktXLDB/2zzTTG/smwdDs
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="317612042"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=x4KOJKV9zJa7Q5/qcA2VHSVtGXnaPAHP82to8WMzGIg=;
+  b=ktB9kE3c20QSmMrnWKaz4EwRDWcO2XJwSO0p8RSR2w3VefLAiY8IkcfQ
+   XGtF+AzoxiCjbeBTfWxdEBzJy7/37EfMB8keOtOpPFM6EQOFf6Vdg6/bG
+   EKXqQRMrXCT3eGCA/gKjh1OsiPCrYf4ENe5GyH7Hj6jn7P+BotB2h7Xg8
+   1V2ZRY6lUy7vw6D6OPx8mDtDLwv91JEQ53bLz0kxgYsGfG3Te0d+C8yqk
+   gsnPGgD0c/0d0Vkar8N5EU8Y4J5jMnHicenjdq/wqr2qHnKNxOLQzHoOL
+   X4kocFeMtWOb2HN1WJsrvuZsKHPuTicyaEoU8Bhq+bJ81dJboivGlCq/p
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="298588968"
 X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="317612042"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 00:26:15 -0800
+   d="scan'208";a="298588968"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 00:36:21 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="978538954"
+X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="738465028"
 X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="978538954"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Dec 2022 00:26:10 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p662h-00AkMH-2T;
-        Fri, 16 Dec 2022 10:26:07 +0200
-Date:   Fri, 16 Dec 2022 10:26:07 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tharunkumar.Pasumarthi@microchip.com
-Cc:     Kumaravel.Thiagarajan@microchip.com, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
-        macro@orcam.me.uk, cang1@live.co.uk, colin.i.king@gmail.com,
-        phil.edworthy@renesas.com, biju.das.jz@bp.renesas.com,
-        geert+renesas@glider.be, lukas@wunner.de,
-        u.kleine-koenig@pengutronix.de, wander@redhat.com,
-        etremblay@distech-controls.com, jk@ozlabs.org,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH v9 tty-next 2/4] serial: 8250_pci1xxxx: Add driver for
- quad-uart support
-Message-ID: <Y5wrnzLMv5SCWPkn@smile.fi.intel.com>
-References: <20221216052656.2098100-1-kumaravel.thiagarajan@microchip.com>
- <20221216052656.2098100-3-kumaravel.thiagarajan@microchip.com>
- <Y5tciHzsEGU67h1Z@smile.fi.intel.com>
- <PH7PR11MB5958DF2284FDC67FA7018E9B9BE69@PH7PR11MB5958.namprd11.prod.outlook.com>
+   d="scan'208";a="738465028"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Dec 2022 00:36:19 -0800
+Date:   Fri, 16 Dec 2022 16:26:25 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Russ Weight <russell.h.weight@intel.com>,
+        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Marco Pagani <marpagan@redhat.com>
+Subject: Re: [PATCH v2 1/1] fpga: m10bmc-sec: Fix probe rollback
+Message-ID: <Y5wrsftEecB+pOsY@yilunxu-OptiPlex-7050>
+References: <20221214144952.8392-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <PH7PR11MB5958DF2284FDC67FA7018E9B9BE69@PH7PR11MB5958.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221214144952.8392-1-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 05:40:31AM +0000, Tharunkumar.Pasumarthi@microchip.com wrote:
-> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Sent: Thursday, December 15, 2022 11:13 PM
-
-...
-
-> > > +     ret = serial8250_pci_setup_port(pdev, port, 0, port_idx * 256,
-> > > + 0);
-> > 
-> > Actually isn't 0x100 better (show that there is an offset rather than a value of
-> > an register)?
+On 2022-12-14 at 16:49:52 +0200, Ilpo Järvinen wrote:
+> Handle probe error rollbacks properly to avoid leaks.
 > 
-> Okay, I will so something like this,
-> #define PORT_OFFSET 0x100
-> ret = serial8250_pci_setup_port(pdev, port, 0, PORT_OFFSET * port_idx, 0);
+> Fixes: 5cd339b370e2 ("fpga: m10bmc-sec: add max10 secure update functions")
+> Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> Reviewed-by: Marco Pagani <marpagan@redhat.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+> I don't know if the previous one fell through cracks so resending this.
 
-Makes sense.
+I'll pick this when v6.2-rc1 comes.
 
-...
+Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-> > > +     num_vectors = pci_alloc_irq_vectors(pdev, 1, max_vec_reqd,
-> > PCI_IRQ_ALL_TYPES);
-> > > +     if (num_vectors < 0) {
-> > 
-> > > +             pci_iounmap(pdev, priv->membase);
-> > 
-> > Here is inconsistency on how you interpret pci_*() calls when
-> > pcim_enable_device() has been used. I.e. for IRQ you don't deallocate
-> > resources explicitly (yes, it's done automatically anyway), but you explicitly
-> > call pci_iounmap(). Choose a single approach for all of them.
 > 
-> AFAIK call to pci_iounmap cannot be avoided since pci_ioremap_bar is not 'managed' API.
-> You suggest calling pci_free_irq_vectors (even though it is not mandatory)?
-
-Why is it not mandatory?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> v2:
+> - Resending v1 with Marco's Rev-by
+> 
+>  drivers/fpga/intel-m10-bmc-sec-update.c | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
+> index 79d48852825e..03f1bd81c434 100644
+> --- a/drivers/fpga/intel-m10-bmc-sec-update.c
+> +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
+> @@ -574,20 +574,27 @@ static int m10bmc_sec_probe(struct platform_device *pdev)
+>  	len = scnprintf(buf, SEC_UPDATE_LEN_MAX, "secure-update%d",
+>  			sec->fw_name_id);
+>  	sec->fw_name = kmemdup_nul(buf, len, GFP_KERNEL);
+> -	if (!sec->fw_name)
+> -		return -ENOMEM;
+> +	if (!sec->fw_name) {
+> +		ret = -ENOMEM;
+> +		goto fw_name_fail;
+> +	}
+>  
+>  	fwl = firmware_upload_register(THIS_MODULE, sec->dev, sec->fw_name,
+>  				       &m10bmc_ops, sec);
+>  	if (IS_ERR(fwl)) {
+>  		dev_err(sec->dev, "Firmware Upload driver failed to start\n");
+> -		kfree(sec->fw_name);
+> -		xa_erase(&fw_upload_xa, sec->fw_name_id);
+> -		return PTR_ERR(fwl);
+> +		ret = PTR_ERR(fwl);
+> +		goto fw_uploader_fail;
+>  	}
+>  
+>  	sec->fwl = fwl;
+>  	return 0;
+> +
+> +fw_uploader_fail:
+> +	kfree(sec->fw_name);
+> +fw_name_fail:
+> +	xa_erase(&fw_upload_xa, sec->fw_name_id);
+> +	return ret;
+>  }
+>  
+>  static int m10bmc_sec_remove(struct platform_device *pdev)
+> -- 
+> 2.30.2
+> 
