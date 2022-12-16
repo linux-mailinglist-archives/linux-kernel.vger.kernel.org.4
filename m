@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2689C64ECF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B9C64ECFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbiLPOge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:36:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
+        id S231210AbiLPOgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiLPOg3 (ORCPT
+        with ESMTP id S230204AbiLPOg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 16 Dec 2022 09:36:29 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24DA554F7;
-        Fri, 16 Dec 2022 06:36:28 -0800 (PST)
-Received: from beast.luon.net (unknown [IPv6:2a10:3781:2531::8])
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221FF26571;
+        Fri, 16 Dec 2022 06:36:29 -0800 (PST)
+Received: from beast.luon.net (simons.connected.by.freedominter.net [45.83.240.172])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sjoerd)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5ED516602C94;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8B6896602C95;
         Fri, 16 Dec 2022 14:36:27 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1671201387;
-        bh=C+3fmRVNonjirJ0IPyk/rDeiIFZ7HbWPCZDE7f3wJTU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RHbR6Wqk1rP9DWsc3019FKPPQjFuhfRqbE/7A4jxaLEnbTYdZIEOWop4ae8j3VXZP
-         pTH2FEl4V8Qo2W0Pew+GpiBOtaEzyNmM8bPHd5OlMPXiW02YbZEzZncVKRFywnZIAY
-         JziLt7dZU1IsZYrAyDrF/CSfma2BW1o5i65e8Wb8Ws5UMSqu1WIZt+E3mSRAZWcnvy
-         wVcL2SyruW3x0Xv3GVhc4xGtPGqS9E8oCxc6k7SDojvqUVGA40DM5PTvByrXC9lYx5
-         snGeDy0Xqv+QTGdxZ5zuwZwvSW9pxA6i5PoS1qhEtJoAWL6a/+gc6fkW9CDsrwhv7Y
-         3XSErSYN7ROPg==
+        bh=r7ISVIMrUOeq1YUcc/heo4+dqRfH9+l09wOKOWMWi60=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Qx6UC8ITR8ptql3nhJFJP4FsXa3Mm/v0EmU6ZSvDAVHQ2YBhDu1fTuan1NCqZNA/f
+         SEMgQaX7+hh+EgTuUqtFPeKUz9+okmxYD0PooSjtc1QYwSWTdZv0GTzerqeCFWjytR
+         RgctgCpGbgiCNkm6GcaWg/OVOQBGJ1h+7jqJsBH1g0j2hu4MFgs1A7wRvhn8nUMQeT
+         UdhlOkc2PetG2tzgoGZOMFk01tt03oijDBHmjt9BZhGR9X3VOZrP9rt/AOUovS8qXK
+         l5xs0VJakyrJwp2MYN31ZYoBnfofsigl37db7WW4iKNJv8u3geVlr1gzSrz270tbI1
+         k7qyBYPGl1EYA==
 Received: by beast.luon.net (Postfix, from userid 1000)
-        id 7AEB35E33154; Fri, 16 Dec 2022 15:36:24 +0100 (CET)
+        id 3C3695E33156; Fri, 16 Dec 2022 15:36:25 +0100 (CET)
 From:   Sjoerd Simons <sjoerd@collabora.com>
 To:     Nishanth Menon <nm@ti.com>
 Cc:     martyn.welch@collabora.com, Nitin Yadav <n-yadav@ti.com>,
@@ -44,10 +44,12 @@ Cc:     martyn.welch@collabora.com, Nitin Yadav <n-yadav@ti.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] Improve K3-am625-sk support (USB, MMC)
-Date:   Fri, 16 Dec 2022 15:36:20 +0100
-Message-Id: <20221216143624.23708-1-sjoerd@collabora.com>
+Subject: [PATCH 1/3] arm64: dts: ti: k3-am62-main: Update OTAP and ITAP delay select
+Date:   Fri, 16 Dec 2022 15:36:21 +0100
+Message-Id: <20221216143624.23708-2-sjoerd@collabora.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20221216143624.23708-1-sjoerd@collabora.com>
+References: <20221216143624.23708-1-sjoerd@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -59,35 +61,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Nitin Yadav <n-yadav@ti.com>
 
-This series picks up a few patches from the TI BSP tree that
-unfortunately didn't make it upstream thusfar.
+UHS Class U1 sd-card are not getting detected due to incorrect
+OTAP/ITAP delay select values in linux. Update OTAP and ITAP
+delay select values for various speed modes. For sdhci0, update
+OTAP delay values for ddr52 & HS200 and add ITAP delay for legacy
+& mmc-hs. For sdhci1 & sdhci2, update OTAP & ITAP delay select
+recommended as in RIOT for various speed modes.
 
-The first patch improve SD card compatibility (allowing U1 class cards
-to be used), the remaining ones add USB support.
+Signed-off-by: Nitin Yadav <n-yadav@ti.com>
+[cherry-pick from vendor BSP]
+Signed-off-by: Sjoerd Simons <sjoerd@collabora.com>
+---
 
-The type-c connector isn't entirely modelled with these changes as
-it goes through a TPS6598 PD controller. Unfortunately the dtb bindings
-for that currently require an irq line, which is not connected on E1 and
-E2 version boards. The patchese to support this setup unfortunately didn't land
-yet[0].. As such the last patch ignored the PD controller and simply
-configures usb0 as periphal only rather then mode switch capable, which
-at least gives some basic usability of that USB port.
+ arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 46 ++++++++++++------------
+ 1 file changed, 24 insertions(+), 22 deletions(-)
 
-0: https://lore.kernel.org/lkml/f714ee55-ef47-317d-81b9-57020dda064b@ti.com/T/
-
-
-Aswath Govindraju (2):
-  arm64: dts: ti: k3-am62-main: Add support for USB
-  arm64: dts: ti: k3-am625-sk: Add support for USB
-
-Nitin Yadav (1):
-  arm64: dts: ti: k3-am62-main: Update OTAP and ITAP delay select
-
- arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 90 ++++++++++++++++++------
- arch/arm64/boot/dts/ti/k3-am625-sk.dts   | 22 ++++++
- 2 files changed, 90 insertions(+), 22 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+index 03660476364f..28c250a8d1ec 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+@@ -391,8 +391,10 @@ sdhci0: mmc@fa10000 {
+ 		ti,clkbuf-sel = <0x7>;
+ 		ti,otap-del-sel-legacy = <0x0>;
+ 		ti,otap-del-sel-mmc-hs = <0x0>;
+-		ti,otap-del-sel-ddr52 = <0x9>;
+-		ti,otap-del-sel-hs200 = <0x6>;
++		ti,otap-del-sel-ddr52 = <0x5>;
++		ti,otap-del-sel-hs200 = <0x5>;
++		ti,itap-del-sel-legacy = <0xa>;
++		ti,itap-del-sel-mmc-hs = <0x1>;
+ 	};
+ 
+ 	sdhci1: mmc@fa00000 {
+@@ -403,17 +405,17 @@ sdhci1: mmc@fa00000 {
+ 		clocks = <&k3_clks 58 5>, <&k3_clks 58 6>;
+ 		clock-names = "clk_ahb", "clk_xin";
+ 		ti,trm-icp = <0x2>;
+-		ti,otap-del-sel-legacy = <0x0>;
++		ti,otap-del-sel-legacy = <0x8>;
+ 		ti,otap-del-sel-sd-hs = <0x0>;
+-		ti,otap-del-sel-sdr12 = <0xf>;
+-		ti,otap-del-sel-sdr25 = <0xf>;
+-		ti,otap-del-sel-sdr50 = <0xc>;
+-		ti,otap-del-sel-sdr104 = <0x6>;
+-		ti,otap-del-sel-ddr50 = <0x9>;
+-		ti,itap-del-sel-legacy = <0x0>;
+-		ti,itap-del-sel-sd-hs = <0x0>;
+-		ti,itap-del-sel-sdr12 = <0x0>;
+-		ti,itap-del-sel-sdr25 = <0x0>;
++		ti,otap-del-sel-sdr12 = <0x0>;
++		ti,otap-del-sel-sdr25 = <0x0>;
++		ti,otap-del-sel-sdr50 = <0x8>;
++		ti,otap-del-sel-sdr104 = <0x7>;
++		ti,otap-del-sel-ddr50 = <0x4>;
++		ti,itap-del-sel-legacy = <0xa>;
++		ti,itap-del-sel-sd-hs = <0x1>;
++		ti,itap-del-sel-sdr12 = <0xa>;
++		ti,itap-del-sel-sdr25 = <0x1>;
+ 		ti,clkbuf-sel = <0x7>;
+ 		bus-width = <4>;
+ 	};
+@@ -426,17 +428,17 @@ sdhci2: mmc@fa20000 {
+ 		clocks = <&k3_clks 184 5>, <&k3_clks 184 6>;
+ 		clock-names = "clk_ahb", "clk_xin";
+ 		ti,trm-icp = <0x2>;
+-		ti,otap-del-sel-legacy = <0x0>;
++		ti,otap-del-sel-legacy = <0x8>;
+ 		ti,otap-del-sel-sd-hs = <0x0>;
+-		ti,otap-del-sel-sdr12 = <0xf>;
+-		ti,otap-del-sel-sdr25 = <0xf>;
+-		ti,otap-del-sel-sdr50 = <0xc>;
+-		ti,otap-del-sel-sdr104 = <0x6>;
+-		ti,otap-del-sel-ddr50 = <0x9>;
+-		ti,itap-del-sel-legacy = <0x0>;
+-		ti,itap-del-sel-sd-hs = <0x0>;
+-		ti,itap-del-sel-sdr12 = <0x0>;
+-		ti,itap-del-sel-sdr25 = <0x0>;
++		ti,otap-del-sel-sdr12 = <0x0>;
++		ti,otap-del-sel-sdr25 = <0x0>;
++		ti,otap-del-sel-sdr50 = <0x8>;
++		ti,otap-del-sel-sdr104 = <0x7>;
++		ti,otap-del-sel-ddr50 = <0x8>;
++		ti,itap-del-sel-legacy = <0xa>;
++		ti,itap-del-sel-sd-hs = <0xa>;
++		ti,itap-del-sel-sdr12 = <0xa>;
++		ti,itap-del-sel-sdr25 = <0x1>;
+ 		ti,clkbuf-sel = <0x7>;
+ 	};
+ 
 -- 
 2.39.0
 
