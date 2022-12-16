@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E969964ECFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:38:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0ACC64ED06
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbiLPOiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:38:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
+        id S231240AbiLPOib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:38:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbiLPOhz (ORCPT
+        with ESMTP id S231288AbiLPOh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:37:55 -0500
+        Fri, 16 Dec 2022 09:37:59 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6005B5E09B;
-        Fri, 16 Dec 2022 06:37:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDD35EDCA;
+        Fri, 16 Dec 2022 06:37:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1671201449; x=1702737449;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=wMHFw5uiriRq1CxOroTGwEkfbMo+ViwT/l1yTeHdqjE=;
-  b=P04BaM4a73XLi5Q7RqvGc1KleZJUmJU+w5RRynnF63nArZZCzF3BBhXe
-   B8LVLsr+rfBMnwtujHl8poGxidXZQeKl1OmptcoApwVwFz44DS0sPUi8K
-   27IHuxM6UsduG4dnRo/Em5IyzriV+bpXqL5/BhvH0NrZap8v3VU6MJxhO
-   C8+a7D9GxL8yubRHVxFG6+jFCA1A65fl8Pd4bWQcqN7sKr5UL95GYGav1
-   Yc4uOvf9cw24K4FOnCqiKTcRv8TCIA+qxcf3iiYkdsNwv/PUAvWD21AU1
-   Zqpov/3/kKjT1u+cexOjQpVwK16Ju2vbl2ahMAEcihorlwR/SuhfcWjDp
-   w==;
+  t=1671201451; x=1702737451;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=FZy1RXcVK/2x+hEiHp355FgRq9Aa9qrbXPuFKkwSAW0=;
+  b=aqjSIsO65c3c1PHdOhShzdyU3uV9ZaNVFyU6o5o17mrwRYLlFDhW7nUP
+   gk0lD9uFnt6LOqXYLc4W2FmDMcIoXXOqgHAZmCXqoeoRLSu7YCXyXNncE
+   NYIBICZQC3bI/qZZxX9ch5FaZn4m0p6V9g42fA7bA13drbqgVuuQbMFxS
+   KGTXuQS+B20QfkSUc5r20RCOF/INeaWupLY5KBPILOpBwhlxE42CFwV2p
+   b6M6GXC5XXCHaMpB5olzUI8yGflkqyzFljIg+dwQ/7xzim48obsmkUpBU
+   K76Wy7eOFM1ZbFkIwAA9Gqhu5Kd1wjLcTsI0IA7jwRLkKk56QKAHtcxE4
+   A==;
 X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="128506510"
+   d="scan'208";a="128506511"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Dec 2022 07:37:27 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 16 Dec 2022 07:37:24 -0700
+ 15.1.2507.16; Fri, 16 Dec 2022 07:37:26 -0700
 Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Fri, 16 Dec 2022 07:37:22 -0700
+ 15.1.2507.16 via Frontend Transport; Fri, 16 Dec 2022 07:37:24 -0700
 From:   Eugen Hristev <eugen.hristev@microchip.com>
 To:     <linux-media@vger.kernel.org>
 CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-phy@lists.infradead.org>, <luis.oliveira@synopsys.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH v5 0/4] media: dwc: add csi2host driver
-Date:   Fri, 16 Dec 2022 16:37:13 +0200
-Message-ID: <20221216143717.1002015-1-eugen.hristev@microchip.com>
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Luis Oliveira <lolivei@synopsys.com>
+Subject: [PATCH v5 1/4] dt-bindings: media: Document bindings for DW MIPI CSI-2 Host
+Date:   Fri, 16 Dec 2022 16:37:14 +0200
+Message-ID: <20221216143717.1002015-2-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221216143717.1002015-1-eugen.hristev@microchip.com>
+References: <20221216143717.1002015-1-eugen.hristev@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -61,83 +64,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Add bindings for Synopsys DesignWare MIPI CSI-2 host.
 
-This is a respin of this abandoned series of patches here:
-https://lore.kernel.org/lkml/1560280855-18085-1-git-send-email-luis.oliveira@synopsys.com/
-
-I have been using this driver for the past few years, and I have reworked
-much of it to cope with latest kernel changes.
-The series is surely not perfect, and there is still plenty of room for
-improvement.
-I did not implement all the required changes from v4.
-I fixed several bugs in the driver, and implemented few things that were
-needed to run in our system (required clocks, etc.)
-The CSI2HOST block is present in at91 product named sama7g5 , and we have been
-testing it with the sama7g5 Evaluation Kit board.
-
-I do not think I will have the time to implement further changes to this driver.
-I am sharing this with the community to try to help others, and maybe
-someone will pick up this work and continue the upstreaming process.
-
-One of the big reworks is the binding document which I converted to yaml
-and added the properties that were needed in our product.
-The PHY binding is still in txt format as originally sent by Luis.
-Since I reworked most of the binding, I added myself as author to it.
-The rest of the driver keeps Luis as author and I added myself as
-Co-developer on the driver which I mostly improved. The commit log
-will contain information about everything that I have added to it.
-
-P.S. I have not kept the history change log. Sorry
-
-Eugen
-
-
-Eugen Hristev (1):
-  dt-bindings: media: Document bindings for DW MIPI CSI-2 Host
-
-Luis Oliveira (3):
-  dt-bindings: phy: Document the Synopsys MIPI DPHY Rx bindings
-  media: platform: dwc: Add MIPI CSI-2 controller driver
-  media: platform: dwc: Add DW MIPI DPHY Rx driver
-
- .../bindings/media/snps,dw-csi.yaml           | 149 ++++
- .../bindings/phy/snps,dw-dphy-rx.txt          |  29 +
- MAINTAINERS                                   |  11 +
- drivers/media/platform/Kconfig                |   1 +
- drivers/media/platform/Makefile               |   1 +
- drivers/media/platform/dwc/Kconfig            |  41 ++
- drivers/media/platform/dwc/Makefile           |  15 +
- drivers/media/platform/dwc/dw-csi-plat.c      | 667 ++++++++++++++++++
- drivers/media/platform/dwc/dw-csi-plat.h      | 102 +++
- drivers/media/platform/dwc/dw-csi-sysfs.c     | 623 ++++++++++++++++
- drivers/media/platform/dwc/dw-dphy-plat.c     | 224 ++++++
- drivers/media/platform/dwc/dw-dphy-rx.c       | 625 ++++++++++++++++
- drivers/media/platform/dwc/dw-dphy-rx.h       | 212 ++++++
- drivers/media/platform/dwc/dw-dphy-sysfs.c    | 232 ++++++
- drivers/media/platform/dwc/dw-mipi-csi.c      | 570 +++++++++++++++
- drivers/media/platform/dwc/dw-mipi-csi.h      | 294 ++++++++
- include/media/dwc/dw-csi-data.h               |  26 +
- include/media/dwc/dw-dphy-data.h              |  32 +
- include/media/dwc/dw-mipi-csi-pltfrm.h        | 104 +++
- 19 files changed, 3958 insertions(+)
+Signed-off-by: Luis Oliveira <lolivei@synopsys.com>
+[eugen.hristev@microchip.com: reworked binding, converted to yaml]
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+---
+ .../bindings/media/snps,dw-csi.yaml           | 149 ++++++++++++++++++
+ 1 file changed, 149 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/media/snps,dw-csi.yaml
- create mode 100644 Documentation/devicetree/bindings/phy/snps,dw-dphy-rx.txt
- create mode 100644 drivers/media/platform/dwc/Kconfig
- create mode 100644 drivers/media/platform/dwc/Makefile
- create mode 100644 drivers/media/platform/dwc/dw-csi-plat.c
- create mode 100644 drivers/media/platform/dwc/dw-csi-plat.h
- create mode 100644 drivers/media/platform/dwc/dw-csi-sysfs.c
- create mode 100644 drivers/media/platform/dwc/dw-dphy-plat.c
- create mode 100644 drivers/media/platform/dwc/dw-dphy-rx.c
- create mode 100644 drivers/media/platform/dwc/dw-dphy-rx.h
- create mode 100644 drivers/media/platform/dwc/dw-dphy-sysfs.c
- create mode 100644 drivers/media/platform/dwc/dw-mipi-csi.c
- create mode 100644 drivers/media/platform/dwc/dw-mipi-csi.h
- create mode 100644 include/media/dwc/dw-csi-data.h
- create mode 100644 include/media/dwc/dw-dphy-data.h
- create mode 100644 include/media/dwc/dw-mipi-csi-pltfrm.h
 
+diff --git a/Documentation/devicetree/bindings/media/snps,dw-csi.yaml b/Documentation/devicetree/bindings/media/snps,dw-csi.yaml
+new file mode 100644
+index 000000000000..439eadc8e517
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/snps,dw-csi.yaml
+@@ -0,0 +1,149 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/snps,dw-csi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Synopsys DesignWare CSI-2 Host controller (csi2host)
++
++maintainers:
++  - Eugen Hristev <eugen.hristev@microchip.com>
++
++description:
++  CSI2HOST is used to receive image coming from an MIPI CSI-2 compatible
++  camera. It will convert the incoming CSI-2 stream into a dedicated
++  interface called the Synopsys IDI (Image Data Interface).
++  This interface is a 32-bit SoC internal only, and can be assimilated
++  with a CSI-2 interface.
++
++properties:
++  compatible:
++    const: snps,dw-csi
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 2
++
++  clock-names:
++    description:
++      CSI2HOST can have two clocks connected. One clock is the
++      peripheral clock for the inside functionality of the hardware block.
++      This is named 'perclk'. The second clock can be the phy clock,
++      which is used to clock the phy via an internal link.
++      This clock is named 'phyclk', phy clock.
++    items:
++      - const: perclk
++      - const: phyclk
++
++  phys:
++    maxItems: 1
++    description: MIPI D-PHY
++
++  phy-names:
++    items:
++      - const: dphy
++
++  resets:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description:
++          Input port node, single endpoint describing the input port.
++
++        properties:
++          endpoint:
++            $ref: video-interfaces.yaml#
++            unevaluatedProperties: false
++            description: Endpoint connected to input device
++
++            properties:
++              bus-type:
++                const: 4
++
++              data-lanes:
++                minItems: 1
++                maxItems: 4
++                items:
++                  maximum: 4
++
++              clock-lanes:
++                maxItems: 1
++
++              remote-endpoint: true
++
++      port@1:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description:
++          Output port node, single endpoint describing the output port.
++
++        properties:
++          endpoint:
++            unevaluatedProperties: false
++            $ref: video-interfaces.yaml#
++            description: Endpoint connected to output device
++
++            properties:
++              bus-type:
++                const: 4
++
++              remote-endpoint: true
++
++    required:
++      - port@0
++      - port@1
++
++additionalProperties: false
++
++required:
++  - compatible
++  - ports
++
++examples:
++  - |
++    csi2: csi2@3000 {
++        compatible = "snps,dw-csi";
++        reg = <0x03000 0x7FF>;
++        phys = <&mipi_dphy_rx>;
++        phy-names = "dphy";
++        resets = <&dw_rst 1>;
++        interrupts = <2>;
++
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            port@0 {
++                reg = <0>;
++
++                csi_ep1: endpoint {
++                    bus-type = <4>; /* MIPI CSI2 D-PHY */
++                    remote-endpoint = <&camera_1>;
++                    data-lanes = <1 2>;
++                    clock-lanes = <0>;
++                };
++            };
++
++            port@1 {
++                reg = <1>;
++
++                csi_ep2: endpoint {
++                    remote-endpoint = <&idi_receiver>;
++                    bus-type = <4>;
++                };
++            };
++        };
++    };
++
++...
 -- 
 2.25.1
 
