@@ -2,114 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285B164E931
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4059064E9A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiLPKKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 05:10:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
+        id S230137AbiLPKly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 05:41:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiLPKKr (ORCPT
+        with ESMTP id S230365AbiLPKlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 05:10:47 -0500
-Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9086B6175;
-        Fri, 16 Dec 2022 02:10:45 -0800 (PST)
-Date:   Fri, 16 Dec 2022 11:10:41 +0100
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Julian Anastasov <ja@ssi.bg>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Simon Horman <horms@verge.net.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jiri Wiesner <jwiesner@suse.de>, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ipvs: use div_s64 for signed division
-Message-ID: <Y5xEITNJkry8uy/h@salvia>
-References: <20221215170324.2579685-1-arnd@kernel.org>
- <e1fea67-7425-f13d-e5bd-3d80d9a8afb8@ssi.bg>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e1fea67-7425-f13d-e5bd-3d80d9a8afb8@ssi.bg>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Dec 2022 05:41:39 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13F145ECC;
+        Fri, 16 Dec 2022 02:41:34 -0800 (PST)
+Received: from compute6.internal (unknown [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 98F253202612;
+        Fri, 16 Dec 2022 05:18:46 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 16 Dec 2022 05:18:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1671185926; x=1671272326; bh=GtRlZqOItr
+        U1QlWIXO4vq2lcVVqz0Xra01x2nnM+5SQ=; b=G7igdATSsnZODT8XLz5ncALZqO
+        k10fQ237UsThCWdue+lltqUJGzUPDMF28fMx97M4AkorJqqSe9ZQxSYaQZx56AeC
+        EHEguJlyXunsocNiu/RjZLUUMkHEMqxDLoH4YXPyvHEDXXJux7NFSF9mn9Y8TgvW
+        6AxviGNh4UK1BY5vBQmQCWog9vI/qBw8ps8PeLoNTszeIwQSa+IQIH9YAYtD33Xn
+        7OGI7uTr2b787gd9qofN7L1CpDS7ZwJyfqWa502zzrXr6MiDxvN9x4nvH1yh5ti0
+        I978fG/62KBjzAh4YSzW3k9m2CoTL7IZZFdsJ7evDejrSy8eHPA0+BOvIFag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1671185926; x=1671272326; bh=GtRlZqOItrU1QlWIXO4vq2lcVVqz
+        0Xra01x2nnM+5SQ=; b=L1By0LA9/8qY7X6bsIAaH5MIjUmuI/9h6xWB+o5BkDS8
+        TXObzHFRQ20lKmpIXNUk6B0d2x4/49/QXq3+xLGmTXAY8SrNlH1T1uBSJ3fSDQAG
+        Vz19SLJqF1VYOWJPL1SiFAO67EtVDowfqSO56VNa/E8K9z8cKw8wlEv1nO6VGbHR
+        jyvL7gT3jn2i7htTK1wUiuLTi8NBTcQhlgUXhA+/jF7QNBrbX2pkjBgi3oXKkp96
+        Lq+HjXbhYN0rsqie9sgiDEp439pmJgUtfVu1UdfcoSQpsFZtVWHTHuTgkH6DlC0u
+        vBE0Poon/VxmL73MTWbfa/HburlDqsdPtHQGz88UBg==
+X-ME-Sender: <xms:BUacY_-PhfvlXsey-UuiVE0ZvvN90m5buhvbpbSbHyvDQ0r9lSZMmw>
+    <xme:BUacY7uFR0D8sxe4HOWpX4LUZSwaRGK6kZF2SWEbQqrT1guXZCDQ16cqMrAhVsm4F
+    e85JoNt1RY3bmtbAa4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejgdduvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
+    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:BUacY9BKXgoEbxLPkM6sCJcFgXIxtV69mZ60oiFXVUyrSmJ6ChZL8A>
+    <xmx:BUacY7cmAL6rDakAhEmVptzn7zkezpzOFEKlIb2kvJVKxGE8ylKSZQ>
+    <xmx:BUacY0Oq0KeJ_uUj7n15o18IznObE4MnGf4_-Q7PlywN4-2m6jYgcA>
+    <xmx:BkacY7f0WYx1-vltgzIe39PWgEdva10sh-1EeWjQieqCagtoh1OVUA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3F2F9B60086; Fri, 16 Dec 2022 05:18:45 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <67efe55d-e5cd-46c1-97e4-c9f3a5884a07@app.fastmail.com>
+In-Reply-To: <Y5tPyOqSNud7LumS@sirena.org.uk>
+References: <20221215164140.821796-1-arnd@kernel.org>
+ <Y5tPyOqSNud7LumS@sirena.org.uk>
+Date:   Fri, 16 Dec 2022 11:18:24 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Mark Brown" <broonie@kernel.org>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Tony Lindgren" <tony@atomide.com>,
+        "Liam Girdwood" <lgirdwood@gmail.com>,
+        "Jerome Neanne" <jneanne@baylibre.com>,
+        "Axel Lin" <axel.lin@ingics.com>,
+        "Yang Li" <yang.lee@linux.alibaba.com>,
+        "Yang Yingliang" <yangyingliang@huawei.com>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] regulator: tps65219: fix Wextra warning
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Julian,
+On Thu, Dec 15, 2022, at 17:48, Mark Brown wrote:
+> On Thu, Dec 15, 2022 at 05:41:28PM +0100, Arnd Bergmann wrote:
+>
+>> -		tps65219_get_rdev_by_name(irq_type->regulator_name, rdevtbl, rdev);
+>> -		if (rdev < 0) {
+>> +		error = tps65219_get_rdev_by_name(irq_type->regulator_name, rdevtbl, rdev);
+>> +		if (error) {
+>>  			dev_err(tps->dev, "Failed to get rdev for %s\n",
+>>  				irq_type->regulator_name);
+>> -			return -EINVAL;
+>> +			return error;
+>
+> This will shut up the warning but is leaving the use of the
+> uninitialised rdev (which I'm kind of disappointed the static checkers
+> didn't pick up on).  rdev needs to be passed by reference into the
+> function, or set from the return value.
 
-On Thu, Dec 15, 2022 at 09:01:59PM +0200, Julian Anastasov wrote:
-> 
-> 	Hello,
-> 
-> On Thu, 15 Dec 2022, Arnd Bergmann wrote:
-> 
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > do_div() is only well-behaved for positive numbers, and now warns
-> > when the first argument is a an s64:
-> > 
-> > net/netfilter/ipvs/ip_vs_est.c: In function 'ip_vs_est_calc_limits':
-> > include/asm-generic/div64.h:222:35: error: comparison of distinct pointer types lacks a cast [-Werror]
-> >   222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-> >       |                                   ^~
-> > net/netfilter/ipvs/ip_vs_est.c:694:17: note: in expansion of macro 'do_div'
-> >   694 |                 do_div(val, loops);
-> 
-> 	net-next already contains fix for this warning
-> and changes val to u64.
+Right, I didn't look far enough to see what the function is
+actually trying to do here, and that it completely fails to
+do that.
 
-Arnd's patch applies fine on top of net-next, maybe he is addressing
-something else?
+I see that the bug was introduced between the first [1] and
+second []2] version of the driver, but don't see why. I'll
+leave it up to Jerome to address the problem, he's still
+in the middle of posting the rest of the series that has
+not yet been merged, so it makes sense for him to test it
+all together.
 
-> > Convert to using the more appropriate div_s64(), which also
-> > simplifies the code a bit.
-> > 
-> > Fixes: 705dd3444081 ("ipvs: use kthreads for stats estimation")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  net/netfilter/ipvs/ip_vs_est.c | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/net/netfilter/ipvs/ip_vs_est.c b/net/netfilter/ipvs/ip_vs_est.c
-> > index ce2a1549b304..dbc32f8cf1f9 100644
-> > --- a/net/netfilter/ipvs/ip_vs_est.c
-> > +++ b/net/netfilter/ipvs/ip_vs_est.c
-> > @@ -691,15 +691,13 @@ static int ip_vs_est_calc_limits(struct netns_ipvs *ipvs, int *chain_max)
-> >  		}
-> >  		if (diff >= NSEC_PER_SEC)
-> >  			continue;
-> > -		val = diff;
-> > -		do_div(val, loops);
-> > +		val = div_s64(diff, loops);
-> 
-> 	On CONFIG_X86_32 both versions execute single divl
-> for our case but div_s64 is not inlined. I'm not expert in
-> this area but if you think div_u64 is more appropriate then
-> post another patch. Note that now val is u64 and
-> min_est is still s32 (can be u32).
-> 
-> >  		if (!min_est || val < min_est) {
-> >  			min_est = val;
-> >  			/* goal: 95usec per chain */
-> >  			val = 95 * NSEC_PER_USEC;
-> >  			if (val >= min_est) {
-> > -				do_div(val, min_est);
-> > -				max = (int)val;
-> > +				max = div_s64(val, min_est);
-> >  			} else {
-> >  				max = 1;
-> >  			}
-> > -- 
-> > 2.35.1
-> 
-> Regards
-> 
-> --
-> Julian Anastasov <ja@ssi.bg>
-> 
+    Arnd
+
+[1] https://lore.kernel.org/lkml/20220719091742.3221-9-jneanne@baylibre.com/
+[2] https://lore.kernel.org/lkml/20220726103355.17684-10-jneanne@baylibre.com/
