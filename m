@@ -2,127 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187A364EB05
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E722964EB06
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbiLPL5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:57:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
+        id S230509AbiLPL5u convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Dec 2022 06:57:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLPL5J (ORCPT
+        with ESMTP id S229469AbiLPL5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:57:09 -0500
-Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A3B264F;
-        Fri, 16 Dec 2022 03:57:08 -0800 (PST)
-Received: from frontend03.mail.m-online.net (unknown [192.168.6.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4NYSJK5z16z1r15N;
-        Fri, 16 Dec 2022 12:57:05 +0100 (CET)
-Received: from localhost (dynscan3.mnet-online.de [192.168.6.84])
-        by mail.m-online.net (Postfix) with ESMTP id 4NYSJK33KXz1qqlR;
-        Fri, 16 Dec 2022 12:57:05 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan3.mail.m-online.net [192.168.6.84]) (amavisd-new, port 10024)
-        with ESMTP id qdIf7S9_5Cgo; Fri, 16 Dec 2022 12:57:03 +0100 (CET)
-X-Auth-Info: I9LqOxI019SRTRCJIUeMssxvg6YNOJZppYTy2eQwvJzS6pIPt2lkGXfejHqM6Sjd
-Received: from igel.home (aftr-62-216-205-197.dynamic.mnet-online.de [62.216.205.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Fri, 16 Dec 2022 06:57:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B246043845
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:57:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Fri, 16 Dec 2022 12:57:03 +0100 (CET)
-Received: by igel.home (Postfix, from userid 1000)
-        id AA35E2C31C2; Fri, 16 Dec 2022 12:57:03 +0100 (CET)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17BD3620C2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 11:57:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B8E5C433EF;
+        Fri, 16 Dec 2022 11:57:42 +0000 (UTC)
+Date:   Fri, 16 Dec 2022 06:57:39 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Wenchao Hao <haowenchao@huawei.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Laight <David.Laight@aculab.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH v9] kallsyms: Add self-test facility
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
-        <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
-        <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
-        <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
-        <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
-        <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
-        <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
-        <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
-        <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
-        <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
-        <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
-X-Yow:  Is there something I should be DOING with a GLAZED DONUT??
-Date:   Fri, 16 Dec 2022 12:57:03 +0100
-In-Reply-To: <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com> (Leizhen's
-        message of "Fri, 16 Dec 2022 17:36:30 +0800")
-Message-ID: <87h6xvk1dc.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <liuzhiqiang26@huawei.com>, <linfeilong@huawei.com>
+Subject: Re: [PATCH] cma:tracing: Print alloc result in
+ trace_cma_alloc_finish
+Message-ID: <20221216065739.30511197@gandalf.local.home>
+In-Reply-To: <4e9f9b32-7835-e4c5-55cb-9db82c98f9c1@huawei.com>
+References: <20221208142130.1501195-1-haowenchao@huawei.com>
+        <4e9f9b32-7835-e4c5-55cb-9db82c98f9c1@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Dez 16 2022, Leizhen (ThunderTown) wrote:
+On Fri, 16 Dec 2022 19:47:59 +0800
+Wenchao Hao <haowenchao@huawei.com> wrote:
 
-> It seems that the problem is still strcmp(). After I commented strcmp() in
-> arch/m68k/include/asm/string.h, and force it to use the one in lib/string.c,
-> it works well.
+> On 2022/12/8 22:21, Wenchao Hao wrote:
+> > The result of allocation is not printed in trace_cma_alloc_finish
+> > now, while it's important to do it so we can set filters to catch
+> > specific error on allocation or trigger some operations on specific
+> > error.
+> > 
+> > Although we have printed the result in log, but the log is
+> > conditional and could not be filtered by tracing event.
+> > 
+> > What's more, it introduce little overhead to print this result.
+> > The result of allocation is named as errorno in trace.
+> > 
+> > Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
+> > ---
 
-Does that help?
+> 
+> pinging
 
-diff --git a/arch/m68k/include/asm/string.h b/arch/m68k/include/asm/string.h
-index f759d944c449..cdafd67774e0 100644
---- a/arch/m68k/include/asm/string.h
-+++ b/arch/m68k/include/asm/string.h
-@@ -42,18 +42,19 @@ static inline char *strncpy(char *dest, const char *src, size_t n)
- #define __HAVE_ARCH_STRCMP
- static inline int strcmp(const char *cs, const char *ct)
- {
--	char res;
-+	int res = 0, tmp = 0;
- 
- 	asm ("\n"
- 		"1:	move.b	(%0)+,%2\n"	/* get *cs */
--		"	cmp.b	(%1)+,%2\n"	/* compare a byte */
-+		"	move.b	(%1)+,%3\n"	/* get *ct */
-+		"	cmp.b	%3,%2\n"	/* compare a byte */
- 		"	jne	2f\n"		/* not equal, break out */
- 		"	tst.b	%2\n"		/* at end of cs? */
- 		"	jne	1b\n"		/* no, keep going */
- 		"	jra	3f\n"		/* strings are equal */
--		"2:	sub.b	-(%1),%2\n"	/* *cs - *ct */
-+		"2:	sub.l	%3,%2\n"	/* *cs - *ct */
- 		"3:"
--		: "+a" (cs), "+a" (ct), "=d" (res));
-+		: "+a" (cs), "+a" (ct), "+d" (res), "+d" (tmp));
- 	return res;
- }
- #endif /* CONFIG_COLDFIRE */
 
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+From a tracing point of view, I see nothing wrong with it.
+
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+But I believe Andrew needs to take it.
+
+-- Steve
