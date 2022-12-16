@@ -2,83 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B82964E9A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A5864E9A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbiLPKlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 05:41:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
+        id S230445AbiLPKmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 05:42:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbiLPKlj (ORCPT
+        with ESMTP id S229930AbiLPKln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 05:41:39 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12D0442C7
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:41:33 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id y25so2832931lfa.9
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:41:33 -0800 (PST)
+        Fri, 16 Dec 2022 05:41:43 -0500
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2958A201A3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:41:42 -0800 (PST)
+Received: by mail-ua1-x92b.google.com with SMTP id x24so430836uaf.4
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:41:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vKWFv4+1LvBdg0mr235r5AhUkZyQqNGBCErVEiGMmEg=;
-        b=R7vAAqzgGShnocas6YZpTgDxaoNtnMm4wXRoNvlsBNw/NdoisDd+xIdHMd354q2ynx
-         17qlRfXH1JuGiWpSphIrlIVRpL1pQPtrC8M4ViDxvnnktKflFfYENjNQafoYhz2gHb8Z
-         4r2hCJmto8v201veR7/DZW5xtjgviSJyTgX1Uhj7psKfTM2gWcsevue5ORk66mq8jDOc
-         bHUnR7vGJE07tQriPNU5+ty6xBMJB8AHNKuNJjprobIFOqvb9DG5Mv+1IudQ7V8kXE0P
-         CJDapD2XerUx326jheWOzBncXPkzC5kygn7U6hZyFiOVNOrIlBqbTzMuhqEMNKmOBqtb
-         ZmGg==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KF8HfG3RuIXGDfw/y3jed8l0oAyCq6+DPWnERHKuQ8g=;
+        b=SOqHQcvIfkgg27w1oUM9xr1hTOUXUIpNbFQUbmJJ9+6C5EcxCAPW4uUFd6kW+Eupup
+         ZtJlU0yqrxo/DXzFHZN3ZYgHiEJgZMsgqbzOvpIvC73ACwfTuZ2JG5xEFRLBtOlgNNFN
+         hgyanrQOePD9IaBgpyCFKSL7lqMeOiqzUOBGuanr++BMrhlmy9mLBbFV5SS2IKt4bzy6
+         30lSvsa7iAQREGjnbnZ4FX5EZY+Ld/tGYhK4cls7d5W16LvzbQ1U5y6Pw7pNWmcoXg2P
+         3lEYmY9E5aL8w/bGP+8MPdnBnPDvOMShfqDjmQ3p8Qmwum54M8aONqxxFh0SaiNR9OlT
+         k1Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vKWFv4+1LvBdg0mr235r5AhUkZyQqNGBCErVEiGMmEg=;
-        b=0E/DhZkH6BZlXaz/YlUqoIotsjsyOesSSvtDb8DMkYcZcIzDP3OmfhpQf4RGtBfOho
-         op69gpYaLhRaWr2sDTrIYWuFfPI6zdJ+fWbinDRFqvOm7E4hSLqJ0UNiGOP2Y4ioAKzW
-         W6Ql/yJ/FlNHa205Va1xzRdiH5VAYLghK8fve8BdXkV8+2fMnDpms1YnxoaRU6yaRiXw
-         guzPoSLY667q0D37m5lMZNKXJccc1pairUZRdYV08+wtlHCfi8p14Dwm3EKGDUf9o6Kj
-         tkP79VINv5MbCZDKXxdn/SNSN7aILmlB6PxdX1z36i2NEcxYzNxaER+810AMMwDCjPf1
-         hBBw==
-X-Gm-Message-State: ANoB5pll+IFV7DGFIXx+O0h266YMqnqoRxFslbYU68f1DMfMUpjB+OfG
-        YKFNVokFFbAwKiyOQU1kU9doqA==
-X-Google-Smtp-Source: AA0mqf5+6cqyJyuRix6TrVBYKCydgdKKG+rfrjT7ZB2TWH+1nm5rapmQtuPaFGLtr72Thnbg8KH7eQ==
-X-Received: by 2002:a05:6512:3691:b0:4b6:fddc:1fcd with SMTP id d17-20020a056512369100b004b6fddc1fcdmr3929040lfs.23.1671187292163;
-        Fri, 16 Dec 2022 02:41:32 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id q1-20020ac25281000000b0049478cc4eb9sm184253lfm.230.2022.12.16.02.41.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 02:41:31 -0800 (PST)
-Message-ID: <0f3e755f-954a-9722-6898-181170deb2c3@linaro.org>
-Date:   Fri, 16 Dec 2022 11:41:30 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KF8HfG3RuIXGDfw/y3jed8l0oAyCq6+DPWnERHKuQ8g=;
+        b=6M8HEL1gkW+xSiWfLJtGCIWOT3uJbayJlt0TlvZ/+4D6FuX5RbqK5tooJW+yHFa+C7
+         fv0J15TWI5fsfMcIha0JfF7qTsc/HWnJyEvT4wTCtwAjx7hV6xjWLJyCZM+2V0JdNbAW
+         wIWVvmtNjp/j41K1i2cOwFsV47kYgJ+Tc48UFW+QJ5vHwdKVwRR4UGFyzlQXFetcYAX7
+         p7BycjjRCvwIK1dmGc0a+/X10PTXzDRTfFnLxLA07CgBc1poXljvsHcO3Sveze62sHP2
+         31ZiE1Oo9lmy8d0WDdJIAC82TiY3pbQnY3TEhbXJPtAQQ/MsJNbCmidI/yef3biYP4kq
+         e0IQ==
+X-Gm-Message-State: ANoB5pmOhtOBQ2r7+vPl88EbVosAqAa6O1UOvN30237vrqjBMIZYLuFd
+        HCDM1k8e2k4q/w1hLHNBWFwZC2bTUF5UBS+1Z/cBjw==
+X-Google-Smtp-Source: AA0mqf53GSAihWfsP/lAXw/j5vdjf3+ljgaW8kpLeXgeu0d03iYtepWtPR96CJmRmqv9ALqUNM7DThL7+7Zi35+nmBA=
+X-Received: by 2002:ab0:77c1:0:b0:418:620e:6794 with SMTP id
+ y1-20020ab077c1000000b00418620e6794mr57006657uar.59.1671187300971; Fri, 16
+ Dec 2022 02:41:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: display: imx: Describe drm binding
- for fsl,imx-lcdc
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221214115921.1845994-1-u.kleine-koenig@pengutronix.de>
- <20221214115921.1845994-2-u.kleine-koenig@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221214115921.1845994-2-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20221215172906.338769943@linuxfoundation.org>
+In-Reply-To: <20221215172906.338769943@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 16 Dec 2022 16:11:30 +0530
+Message-ID: <CA+G9fYuqrx3_FHU52EfQbo8xZyXNRmTFcX7kYf9iPu+TVB_U6A@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/14] 5.15.84-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,105 +72,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2022 12:59, Uwe Kleine-König wrote:
-> Modify the existing (fb-like) binding to support the drm-like binding in
-> parallel.
+On Thu, 15 Dec 2022 at 23:42, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.84 release.
+> There are 14 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 17 Dec 2022 17:28:57 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.84-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Aren't you now adding two compatibles to the same hardware, just for two
-Linux drivers? One hardware should have one compatible, regardless of
-Linux display implementation.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  .../bindings/display/imx/fsl,imx-lcdc.yaml    | 45 ++++++++++++++++++-
->  1 file changed, 44 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/imx/fsl,imx-lcdc.yaml b/Documentation/devicetree/bindings/display/imx/fsl,imx-lcdc.yaml
-> index 35a8fff036ca..2a8225b10890 100644
-> --- a/Documentation/devicetree/bindings/display/imx/fsl,imx-lcdc.yaml
-> +++ b/Documentation/devicetree/bindings/display/imx/fsl,imx-lcdc.yaml
-> @@ -21,6 +21,9 @@ properties:
->                - fsl,imx25-fb
->                - fsl,imx27-fb
->            - const: fsl,imx21-fb
-> +      - items:
-> +          - const: fsl,imx25-lcdc
-> +          - const: fsl,imx21-lcdc
->  
->    clocks:
->      maxItems: 3
-> @@ -31,6 +34,9 @@ properties:
->        - const: ahb
->        - const: per
->  
-> +  port:
-> +    $ref: /schemas/graph.yaml#/properties/port
-> +
->    display:
->      $ref: /schemas/types.yaml#/definitions/phandle
->  
-> @@ -59,17 +65,54 @@ properties:
->      description:
->        LCDC Sharp Configuration Register value.
->  
-> +if:
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Put it under allOf. It grows pretty often so this would avoid future
-re-indents.
+## Build
+* kernel: 5.15.84-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 1d22ad610255f0c61903c1e4fefce61227ec73b6
+* git describe: v5.15.83-15-g1d22ad610255
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.83-15-g1d22ad610255
 
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        enum:
-> +          - fsl,imx1-lcdc
-> +          - fsl,imx21-lcdc
-> +then:
-> +  properties:
-> +    display: false
-> +    fsl,dmacr: false
-> +    fsl,lpccr: false
-> +    fsl,lscr1: false
-> +
-> +  required:
-> +    - port
-> +
-> +else:
-> +  properties:
-> +    port: false
-> +
-> +  required:
-> +    - display
-> +
->  required:
->    - compatible
->    - clocks
->    - clock-names
-> -  - display
->    - interrupts
->    - reg
->  
->  additionalProperties: false
->  
->  examples:
-> +  - |
-> +    lcdc@53fbc000 {
-> +        compatible = "fsl,imx25-lcdc", "fsl,imx21-lcdc";
-> +        reg = <0x53fbc000 0x4000>;
-> +        interrupts = <39>;
-> +        clocks = <&clks 103>, <&clks 66>, <&clks 49>;
-> +        clock-names = "ipg", "ahb", "per";
-> +
-> +        port {
-> +            parallel_out: endpoint {
-> +              remote-endpoint = <&panel_in>;
-> +            };
-> +        };
-> +    };
->    - |
->      imxfb: fb@10021000 {
->          compatible = "fsl,imx21-fb";
+## Test Regressions (compared to v5.15.82-124-gd731c63c25d1)
 
-Best regards,
-Krzysztof
+## Metric Regressions (compared to v5.15.82-124-gd731c63c25d1)
 
+## Test Fixes (compared to v5.15.82-124-gd731c63c25d1)
+
+## Metric Fixes (compared to v5.15.82-124-gd731c63c25d1)
+
+
+## Test result summary
+total: 144723, pass: 125385, fail: 3089, skip: 15690, xfail: 559
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 148 passed, 3 failed
+* arm64: 49 total, 47 passed, 2 failed
+* i386: 39 total, 35 passed, 4 failed
+* mips: 31 total, 29 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 34 total, 32 passed, 2 failed
+* riscv: 14 total, 14 passed, 0 failed
+* s390: 16 total, 14 passed, 2 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 40 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* lt[
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
