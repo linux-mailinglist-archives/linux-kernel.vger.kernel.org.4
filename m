@@ -2,109 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7186364E9BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 702FC64E9C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 11:49:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbiLPKr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 05:47:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38972 "EHLO
+        id S229898AbiLPKtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 05:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbiLPKrJ (ORCPT
+        with ESMTP id S229620AbiLPKtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 05:47:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3031A7
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 02:47:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D724CB81B2A
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 10:47:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 424CCC433D2;
-        Fri, 16 Dec 2022 10:47:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671187625;
-        bh=GW47qGrPqF8CWC+Youkq+IO1MFrfcW5vndIuiRUvzRM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=E3fPudGa6StFQxmn4+3QO7yhd+6HAUS3uW7xK3ebXggA7JKM0SYZyZ0tO/aub63mc
-         2MkG9axMPSSUq9kWW+wL/zF1W9H6SB4a5o8cd3F8BC3XKRBlae5cvSHLRZ8fFYUie3
-         XhP+JJprIXerazBZ5Mm1+5EYqyjP9Yf+7VaR+VQjRTr/GXnN4dOJ791FuELQk50JA9
-         H9FKpjKMGqgikranAQp/OOUktY/TY3dpyCRCDfKe1qM1s1VI0oJzlmGLZBOOy6dZNG
-         4vCkLebDCcPjcSZqFdXHu2mLWzh/AzedWgiHsKpgEtAsJyG5oVAVV9M3VNcol/21st
-         5i7+OFdoiEC7Q==
-Message-ID: <a2c286e1-470f-ff83-196a-f7ea490096ff@kernel.org>
-Date:   Fri, 16 Dec 2022 18:47:01 +0800
+        Fri, 16 Dec 2022 05:49:06 -0500
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579472621;
+        Fri, 16 Dec 2022 02:49:05 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id vv4so5264122ejc.2;
+        Fri, 16 Dec 2022 02:49:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qkya9wd5Yr+9rmD7rFH/gX7qdmvbGNpb9infzuUbUvk=;
+        b=XZdM43MyeOFjsuBdNXrdOVetiXG2MlWo1QL60de7Xj5zOEIeaB4QqKI67monDZnWZw
+         XWKB0SiptoLbeO30vg0xQiCRuMxbDMUxxIOjo4fOGU0HmyU105l3Ui9M0rS+Q8LwzC8e
+         CvmS0dxb/rwiuKiqVV1eqRvsd3RtM+U77Ad6Zi3OwP0XdyVu0z3BNdi0UBMvVSyVib/s
+         rxnDOqVgHCZWvKSApQhw57xuEUoYidRYxi7wL8WjIgZg7lhfgbYMhQPXKb4IJjTas5kG
+         xz83eDo7eF7/Sird6TQwQzO5IrY19sfqUFWtk0ioqY/jGQLXZIbjsjmodczQoEOBUPtX
+         g+bg==
+X-Gm-Message-State: ANoB5pndx45izBvqeCMFrxyl3/wZqlgafvEz/uPSf1uUJo5ifYHWKRuy
+        szqDL83T1YXwnyepobKpzYw=
+X-Google-Smtp-Source: AA0mqf7TB5Fp8bws+jch7V7DDsz4ZuDB96TdPE9JghokH5/XbzB402jA/Ecyj8wZJr6/MOyC13FAGQ==
+X-Received: by 2002:a17:906:2345:b0:7ad:9455:d57d with SMTP id m5-20020a170906234500b007ad9455d57dmr26648346eja.74.1671187743739;
+        Fri, 16 Dec 2022 02:49:03 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id d22-20020a056402401600b004585eba4baesm710522eda.80.2022.12.16.02.49.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 02:49:03 -0800 (PST)
+Message-ID: <6b971a4e-c7d8-411e-1f92-fda29b5b2fb9@kernel.org>
+Date:   Fri, 16 Dec 2022 11:49:01 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] f2fs: merge f2fs_show_injection_info() into
- time_to_inject()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PULL] Networking for next-6.1
 Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <dedae282-2d13-cc12-95b8-98cfd377d98c@kernel.org>
- <20221216034811.4603-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20221216034811.4603-1-frank.li@vivo.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com,
+        joannelkoong@gmail.com
+References: <20221004052000.2645894-1-kuba@kernel.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20221004052000.2645894-1-kuba@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/16 11:48, Yangtao Li wrote:
->> After moving f2fs_show_injection_info() core functionality into time_to_inject(),
->> __builtin_return_address(0) result changes from return address of caller of
->> f2fs_show_injection_info() to return address of time_to_inject().
-> 
-> I tried the __builtin_return_address(1) parameter just now, and no error
-> was reported when compiling, but a null pointer problem will be triggered
-> when the kernel is running.
-> 
-> I thought about it, and the print address didn't seem clear enough.
-> Let's just print the line number of the caller?
+Hi,
 
-That will cause a regression when searching last injection call paths after
-bug occurs, since there are many similar callers of time_to_inject, but the
-caller's call paths are different. So, IMO, it's useful to keep
-__builtin_return_address in the log to distinguish the real call path of
-fault injection.
+On 04. 10. 22, 7:20, Jakub Kicinski wrote:
+> Joanne Koong (7):
 
-> 
-> #define time_to_inject(sbi, type) __time_to_inject(sbi, type, __func__, __LINE__)
+>        net: Add a bhash2 table hashed by port and address
 
-Any way to pass __builtin_return_address(0) from parameter in __time_to_inject(...)?
+This makes regression tests of python-ephemeral-port-reserve to fail.
 
-Thanks,
+I'm not sure if the issue is in the commit or in the test.
 
-> static inline bool __time_to_inject(struct f2fs_sb_info *sbi, int type,
->                                      const char *func_name, unsigned int line)
-> {
->      struct f2fs_fault_info *ffi = &F2FS_OPTION(sbi).fault_info;
-> 
->      if (!ffi->inject_rate)
->          return false;
-> 
->      if (!IS_FAULT_SET(ffi, type))
->          return false;
-> 
->      atomic_inc(&ffi->inject_ops);
->      if (atomic_read(&ffi->inject_ops) >= ffi->inject_rate) {
->          atomic_set(&ffi->inject_ops, 0);
->          printk_ratelimited("%sF2FS-fs (%s) : inject %s in [%s] %d\n",
->              KERN_INFO, sbi->sb->s_id, f2fs_fault_name[type],
->              func_name, line);
->          return true;
->      }
->      return false;
-> }
-> 
-> Thx,
-> Yangtao
+This C reproducer used to fail with 6.0, now it succeeds:
+#include <err.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include <sys/socket.h>
+
+#include <arpa/inet.h>
+#include <netinet/ip.h>
+
+int main()
+{
+         int x;
+         int s1 = socket(AF_INET, SOCK_STREAM|SOCK_CLOEXEC, IPPROTO_IP);
+         if (s1 < 0)
+                 err(1, "sock1");
+         x = 1;
+         if (setsockopt(s1, SOL_SOCKET, SO_REUSEADDR, &x, sizeof(x)))
+                 err(1, "setsockopt1");
+
+         struct sockaddr_in in = {
+                 .sin_family = AF_INET,
+                 .sin_port = INADDR_ANY,
+                 .sin_addr = { htonl(INADDR_LOOPBACK) },
+         };
+         if (bind(s1, (const struct sockaddr *)&in, sizeof(in)) < 0)
+                 err(1, "bind1");
+
+         if (listen(s1, 1) < 0)
+                 err(1, "listen1");
+
+         socklen_t inl = sizeof(in);
+         if (getsockname(s1, (struct sockaddr *)&in, &inl) < 0)
+                 err(1, "getsockname1");
+
+         int s2 = socket(AF_INET, SOCK_STREAM|SOCK_CLOEXEC, IPPROTO_IP);
+         if (s1 < 0)
+                 err(1, "sock2");
+
+         if (connect(s2, (struct sockaddr *)&in, inl) < 0)
+                 err(1, "conn2");
+
+         struct sockaddr_in acc;
+         inl = sizeof(acc);
+         int fdX = accept(s1, (struct sockaddr *)&acc, &inl);
+         if (fdX < 0)
+                 err(1, "accept");
+
+         close(fdX);
+         close(s2);
+         close(s1);
+
+         int s3 = socket(AF_INET, SOCK_STREAM|SOCK_CLOEXEC, IPPROTO_IP);
+         if (s3 < 0)
+                 err(1, "sock3");
+
+         if (bind(s3, (struct sockaddr *)&in, sizeof(in)) < 0)
+                 err(1, "bind3");
+
+         close(s3);
+
+         return 0;
+}
+
+
+
+thanks,
+-- 
+js
+suse labs
+
