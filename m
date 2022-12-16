@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D6C64E687
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 04:59:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 134EA64E685
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 04:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiLPD7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 22:59:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34306 "EHLO
+        id S229548AbiLPD63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Dec 2022 22:58:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiLPD7R (ORCPT
+        with ESMTP id S229910AbiLPD6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 22:59:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C2157B68
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 19:58:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671163108;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZDZbw5KBbPfiS0aQTncakmGLck0pebaODb2v7fHtSkU=;
-        b=K5FGe97IkNjfXBTxF0LGNcaYuRAQXLRE2YGPtaytDeklxN0OjL/Eg97aGBLesHMsClLcYU
-        mEsqk0VIma13L3cMXeSmNeOecdg96LnFFbEckTrFK8R6tlkKFEiONYgMXuyxlmgfjlh58E
-        1ZMQ4dcRsWgsTS52NBX3ceQTQTxOy3s=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-364-gqvu7vqgOAaqwOVQr5SF0Q-1; Thu, 15 Dec 2022 22:58:26 -0500
-X-MC-Unique: gqvu7vqgOAaqwOVQr5SF0Q-1
-Received: by mail-oi1-f199.google.com with SMTP id bi37-20020a05680818a500b0035ea4ea8db5so369305oib.11
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 19:58:26 -0800 (PST)
+        Thu, 15 Dec 2022 22:58:25 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A594AF19;
+        Thu, 15 Dec 2022 19:58:25 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so1161664pjj.4;
+        Thu, 15 Dec 2022 19:58:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uaxgo5LlIOi0S9JhLYqDMZ4gD6Tc+L6skMURu3UvP5M=;
+        b=VhKJWMt/vBbVHTOsROGaTOiEgWFUEkhaYjOnufZYir75TQ1WusnkY8EayMfHzsOIHM
+         MI9f1yV5IvtPNbGxgpeL5G25+BhhGZcoSOQAw7tCQznHWT46Zbr6aa/fAgpnB6q6WVlH
+         tnKzteOV0o9ac11RfS0XPTIqRXrin9XIvWWYXDomMjAW4Yt7VwaXR7QR0udOPfD84rlY
+         b8ebobqKHhSF5c217HYTCAu5MxYLNT17uD7PPPUcBCLttBp5nYoxvcxtjlZyfL5edYNF
+         DTZVP8IfOyc8kjqWLYwipHwKAOFFk23xcVwcrX1/80ktMo8/n5/vfoD1hABfFATe3u+s
+         h1gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZDZbw5KBbPfiS0aQTncakmGLck0pebaODb2v7fHtSkU=;
-        b=rlW4IR6q4H/AJ9jRj8j6wX8cgiIz++qaSW6Sh/Cx6ndgFCkzAp8f7zOjtoDU2JULRj
-         HlZXEPfgIw8M2mQd+h8fpVjvETShlA8xmHdmpyW4dmPqUm3ZBjGclwtX/xGWOxpcIBxe
-         sHM6dePXk9usDdNva8ylH3VV3H9f9xfFObku9471+1hcWzj6bLp1EsPb2sJFCTskQnvY
-         Gbx4e15FM9oWalm09cgyXMyVlEQ2q7jrx0Mhrn1GcegFR425bpTIZxORfDuZbLtgGShj
-         aU/qeD8JWfmZwTL6+vJN8MTVmUr3pTQYdGKyrff31Z0Ts9/Nrt5qpzGug32VTcAEFBn2
-         6dhw==
-X-Gm-Message-State: ANoB5pmL3E4VuBwRTUkInNRcqCcmM1G4AkrFNbGrOJAenhUtU+rmtsTL
-        Ve9k1CRRzOK+70uMeRRbtWaq4FfHfGzqI0eQpXFW2W4j8Faw78/aw/bw4p/iHYATGS6tlKveEUs
-        YsfKcCX1z+4KcrmL71vVtUiJW3Xj8FNIzz3s0tHs4
-X-Received: by 2002:a05:6870:9e8f:b0:144:a97b:1ae2 with SMTP id pu15-20020a0568709e8f00b00144a97b1ae2mr321068oab.35.1671163106199;
-        Thu, 15 Dec 2022 19:58:26 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7cNko4F3UygPQf9wPv8PFtFKeyAZAHrVVoEXi20rnQdjjtfEEnI4fzMXo4e3lRKZM1aSUXRIBpmnGfmOssvfY=
-X-Received: by 2002:a05:6870:9e8f:b0:144:a97b:1ae2 with SMTP id
- pu15-20020a0568709e8f00b00144a97b1ae2mr321067oab.35.1671163106015; Thu, 15
- Dec 2022 19:58:26 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uaxgo5LlIOi0S9JhLYqDMZ4gD6Tc+L6skMURu3UvP5M=;
+        b=Aqm+f7BELEuCYcczv17DZs5Uze4/4mEZyWJq3kYNnUkTwS/MkjTmoijOik4y1/LqfD
+         zYyuCkkrJbA8pZt1Lx/uNrpoyk4a+nisEbVsUKv/AuxEXNHDH02KP9hQ1+x31vwh9sOc
+         /qeURm+ulJhk+i1u0+JieY0EVuQvYANzmfptrEsQINmKRXtIdf+UGgoLKZExdNtVT/Wh
+         Nlcu9v9+RLngw7YGRkD0HUhJrTELCiUCGuj0N1IPpM0fnP/JgUSY9mVkC0MxZ8AsTVQA
+         fULqFdijUFSwAf9oV+Ifyb6pc8F0tHsI9SaxIo3OU4U7U3lGRSIeuexfyv8SpPhVFfw7
+         81Dw==
+X-Gm-Message-State: ANoB5plhc+HKx+KUu5KQg9PU5jeNHRv33Tt2kbFczsZot6JtzoRmUcjg
+        yVM6LbComgKVYuz2FNeJXpVDZYRtkeA=
+X-Google-Smtp-Source: AA0mqf5T364XIYvr0zuGPJhY9BDJUvUGHREqsmLjaIaY2M9pI3/LXv6EP0TdJcMdcaeWGGea7BLTEg==
+X-Received: by 2002:a17:902:e811:b0:189:d8fb:152d with SMTP id u17-20020a170902e81100b00189d8fb152dmr44450718plg.25.1671163104670;
+        Thu, 15 Dec 2022 19:58:24 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id v17-20020a63d551000000b00477bdc1d5d5sm499680pgi.6.2022.12.15.19.58.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 19:58:24 -0800 (PST)
+Date:   Thu, 15 Dec 2022 19:58:23 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Binbin Wu <binbin.wu@linux.intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v10 106/108] Documentation/virt/kvm: Document on Trust
+ Domain Extensions(TDX)
+Message-ID: <20221216035823.GE527635@ls.amr.corp.intel.com>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+ <fcf376f0f7703d06b6e7466e95cea624b58f746a.1667110240.git.isaku.yamahata@intel.com>
+ <faf65da9-aeb4-d7b2-0e60-995848e47d14@linux.intel.com>
 MIME-Version: 1.0
-References: <20221205084127.535-1-xieyongji@bytedance.com> <20221205084127.535-4-xieyongji@bytedance.com>
-In-Reply-To: <20221205084127.535-4-xieyongji@bytedance.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 16 Dec 2022 11:58:15 +0800
-Message-ID: <CACGkMEvYpBz6wdOPFvRveT=0AO=g-nzaeJt3y99oqWDLHUs=qw@mail.gmail.com>
-Subject: Re: [PATCH v2 03/11] vdpa: Add set_irq_affinity callback in vdpa_config_ops
-To:     Xie Yongji <xieyongji@bytedance.com>
-Cc:     mst@redhat.com, tglx@linutronix.de, hch@lst.de,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <faf65da9-aeb4-d7b2-0e60-995848e47d14@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,74 +78,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 5, 2022 at 4:43 PM Xie Yongji <xieyongji@bytedance.com> wrote:
->
-> This introduces set_irq_affinity callback in
-> vdpa_config_ops so that vdpa device driver can
-> get the interrupt affinity hint from the virtio
-> device driver. The interrupt affinity hint would
-> be needed by the interrupt affinity spreading
-> mechanism.
->
-> Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-> ---
->  drivers/virtio/virtio_vdpa.c | 4 ++++
->  include/linux/vdpa.h         | 8 ++++++++
->  2 files changed, 12 insertions(+)
->
-> diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
-> index 08084b49e5a1..4731e4616ee0 100644
-> --- a/drivers/virtio/virtio_vdpa.c
-> +++ b/drivers/virtio/virtio_vdpa.c
-> @@ -275,9 +275,13 @@ static int virtio_vdpa_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
->         struct virtio_vdpa_device *vd_dev = to_virtio_vdpa_device(vdev);
->         struct vdpa_device *vdpa = vd_get_vdpa(vdev);
->         const struct vdpa_config_ops *ops = vdpa->config;
-> +       struct irq_affinity default_affd = { 0 };
->         struct vdpa_callback cb;
->         int i, err, queue_idx = 0;
->
-> +       if (ops->set_irq_affinity)
-> +               ops->set_irq_affinity(vdpa, desc ? desc : &default_affd);
+On Fri, Nov 25, 2022 at 11:49:08AM +0800,
+Binbin Wu <binbin.wu@linux.intel.com> wrote:
 
-I wonder if we need to do this in vhost-vDPA. Or it's better to have a
-default affinity by the vDPA parent itself.
+> > +New KVM API, ioctl (sub)command, to manage TD VMs
+> > +-------------------------------------------------
+> > +Additional KVM API
+> API -> APIs
+> >   are needed to control TD VMs. The operations on TD
+> > +VMs are specific to TDX.
+> > +
+> > +- Piggyback and repurpose KVM_MEMORY_ENCRYPT_OP
+> > +
+> > +  Although not all operation isn't memory encryption,
+> 
+> How to understand it?
+> 
+> 
+> > repupose to get
 
-(Looking at virtio-pci, it doesn't do something like this).
+How about the followings?
 
-Thanks
+New KVM API, ioctl (sub)command, to manage TD VMs
+-------------------------------------------------
+Additional KVM APIs are needed to control TD VMs. The operations on TD
+VMs are specific to TDX.
 
-> +
->         for (i = 0; i < nvqs; ++i) {
->                 if (!names[i]) {
->                         vqs[i] = NULL;
-> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
-> index 0ff6c9363356..482ff7d0206f 100644
-> --- a/include/linux/vdpa.h
-> +++ b/include/linux/vdpa.h
-> @@ -256,6 +256,12 @@ struct vdpa_map_file {
->   *                             @vdev: vdpa device
->   *                             @idx: virtqueue index
->   *                             Returns the irq affinity mask
-> + * @set_irq_affinity:          Pass the irq affinity hint from the virtio
-> + *                             device driver to vdpa driver (optional).
-> + *                             Needed by the interrupt affinity spreading
-> + *                             mechanism.
-> + *                             @vdev: vdpa device
-> + *                             @desc: irq affinity hint
->   * @set_group_asid:            Set address space identifier for a
->   *                             virtqueue group (optional)
->   *                             @vdev: vdpa device
-> @@ -344,6 +350,8 @@ struct vdpa_config_ops {
->                                const struct cpumask *cpu_mask);
->         const struct cpumask *(*get_vq_affinity)(struct vdpa_device *vdev,
->                                                  u16 idx);
-> +       void (*set_irq_affinity)(struct vdpa_device *vdev,
-> +                                struct irq_affinity *desc);
->
->         /* DMA ops */
->         int (*set_map)(struct vdpa_device *vdev, unsigned int asid,
-> --
-> 2.20.1
->
+- Piggyback and repurpose KVM_MEMORY_ENCRYPT_OP
 
+  Although operations for TD VMs aren't necessarily related to memory
+  encryption, define sub operations of KVM_MEMORY_ENCRYPT_OP for TDX specific
+  ioctls.
+
+  Pros:
+
+  - No major change in common x86 KVM code.
+  - Follows the SEV case.
+
+  Cons:
+
+  - The sub operations of KVM_MEMORY_ENCRYPT_OP aren't necessarily memory
+    encryption, but operations on TD VMs.
+
+
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
