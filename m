@@ -2,249 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D01164EA6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E36F364EAA8
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:32:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbiLPLaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
+        id S230406AbiLPLc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:32:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiLPL36 (ORCPT
+        with ESMTP id S231232AbiLPLbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:29:58 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F935B5B7
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:29:57 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id a66so1983809vsa.6
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:29:57 -0800 (PST)
+        Fri, 16 Dec 2022 06:31:49 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B67C1408E
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:31:48 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id b13so3061122lfo.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:31:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hshIBEO5BuJMMxhTO5nPRgbV6MtjaGSC1XWTlwofzlQ=;
-        b=hRCHQBzYfAPjof8qyZ7LpH+ZxcjuKew4xm3kTaLQkzA6nCGqcHlLehPlJMDSndoVFL
-         xuU6w05g9AnDpxzXNta/MeF8g/PPsxGIv1ASXyPhFJh29iqYtTvz4yw9lOrEyCC8/1FO
-         +rJudARnDTCeB935/0P54q8kjceKZ90INGVGZd++jDXY9h/iU+V2JJe/b+d3yOV3F8Uo
-         xwkPMx9MhWeLjhLxgYewUQIB0u0oYUPhcmh4Ul4eAAhN9nbnQIGwoVVWBUjN2bi7w4sm
-         sPZ9eUy/GD8/GgFHQEkvdey72s4Do11qv89DJKoXwvTo7iLNTuX4Z6PtIviNCcMbO6FO
-         o1Gw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OO6jJw/yAEdPz9o4xXjIQOgJbUx/2Cm9X3PBVoUd2KU=;
+        b=NfdqW5nlqV/FRVeYEh4ZsOJX3jRu3qAUwUun87NlEKYcTsUAp/YyxnYZnrVGfAtMJm
+         7Vyui7n2GZEsagZJaWz2B7S8tiOHNq+7wEJNpQ4Eff8ErZzIDGBSdgASrsOSChqXzroJ
+         CiO5VGgd/XErJ7AAKnsHzVxqMNUXTJS8wtdv6sdUA4DflULgbTRxI46WzjGsGoBknBRA
+         tOcHQLD+O4hNSOABPkuaNO07jMCcUG3UrpKoKQwk6MjcRp4b1ausheTxMi3VA5BfsMFq
+         8DnWTJxmDm0J6tjNSHT074j05a61iivLoC46q78/Hgm8PbSRU8OdNjxdJXsTOnX20h4W
+         RbCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hshIBEO5BuJMMxhTO5nPRgbV6MtjaGSC1XWTlwofzlQ=;
-        b=5JHm/RP2jPa+xU/gGaRFVOrqdIModX1/2usnwRoPkr+B3FWe6t7APZHbhyKmor/RE0
-         1CtyhOJ2evtpA/4vMfuKDI12TSAci4pFlSeLYqIDPTL4w+uE5TLy2DS3BEX3ezcNtoa+
-         LvqellQLRHIyQa0KCuZFV17QJJreUZqAH+BXi2hJzgEBWVX59+UobkN+n3MMYZP/XVhs
-         DVCEsuqyd080wfr5wMUY/MGEuS7HK5inpKkU+SaiPkMuof6pxu7NMmcpkmGbUf+kwdsr
-         IaNC8nLNPCzXPRzKxXS0TLhKFNc7lrbj17to94biQze7NSNTRqGbrm4uXfngAEYGAYBW
-         8/cw==
-X-Gm-Message-State: ANoB5pmIlBsbSrhLrDu/CHjfjvr8yCb9ZlfuBDzGxxQie8Q1hiN25fqx
-        9yWQFMAAoWYW/8X4+OEKnYOzJHCDMHDwx0wIh2B3iw==
-X-Google-Smtp-Source: AA0mqf5CblcmqOzxnaAelHLLb0E7zJ7XbpKeujmgCHGkstQ2halSCUqOY/KblEIwVEu5GOwEyVLHgw38hS0DTvc6Um4=
-X-Received: by 2002:a05:6102:3ca1:b0:3b5:d38:9d4 with SMTP id
- c33-20020a0561023ca100b003b50d3809d4mr2385835vsv.9.1671190196636; Fri, 16 Dec
- 2022 03:29:56 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OO6jJw/yAEdPz9o4xXjIQOgJbUx/2Cm9X3PBVoUd2KU=;
+        b=JDosmdwNsZ1FZ1QGL2HrOar6kEXrLAko4yWb3dMlAfxBYgtMle1s/r+n8XD5ID1qem
+         vjVsJrePwCsNlkwfYfBCORy92l2iAO0o2pQAD6q78OtY1+h6MqBLmdXuVp/vzMtRQ3V3
+         4yw7FRlfNA08Ek3vdBJODalLLkXeagYVWoiKJRVNAKQ6YG/aWUAI5zGJkELcYxQBPd3S
+         nb6kLsr1Zkrb4nbkAAjFhAB76Q48fe8V0NWsOno2MrA5/INm3PUlrRHvbidUkNHgN5YP
+         Vz0pvCFzh0p25JUfuLbD4DjW7Fn7Qmh0EdUQjO6oMPAfZTaktXtaHt1zjnOgwMiL8MAK
+         HHsw==
+X-Gm-Message-State: ANoB5plrpLHGas+5Hr+x2PMMu9mElsN27dagdejaIpfd1+PW1y/mxZnD
+        hkhxkbk0RLjlO2ZTpYCNs5lsCw==
+X-Google-Smtp-Source: AA0mqf40uAdhtuFR2m8/f8fRtCtSwAQ0zUp3UzgeJbOv96oZQhiT2UKUhS0LaFR7wc7GavDpoPAKsg==
+X-Received: by 2002:a05:6512:31d2:b0:4b6:e64c:aebf with SMTP id j18-20020a05651231d200b004b6e64caebfmr8236317lfe.51.1671190306451;
+        Fri, 16 Dec 2022 03:31:46 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id o22-20020ac24e96000000b004a25468d86asm196865lfr.68.2022.12.16.03.31.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 03:31:46 -0800 (PST)
+Message-ID: <752fd23f-e366-70d6-3ae5-28f49d56ef15@linaro.org>
+Date:   Fri, 16 Dec 2022 12:31:45 +0100
 MIME-Version: 1.0
-References: <20221215172905.468656378@linuxfoundation.org>
-In-Reply-To: <20221215172905.468656378@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 16 Dec 2022 16:59:45 +0530
-Message-ID: <CA+G9fYu=CvaCaVSnGjXO7TF-XcOYqzcetLARozCkHGsJveqCKA@mail.gmail.com>
-Subject: Re: [PATCH 5.4 0/9] 5.4.228-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 1/2] dt-bindings: arm: Add Beacon EmbeddedWorks i.MX8M
+ Plus kit
+Content-Language: en-US
+To:     Adam Ford <aford173@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     aford@beaconembedded.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221215233719.404581-1-aford173@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221215233719.404581-1-aford173@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 at 23:40, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.4.228 release.
-> There are 9 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 17 Dec 2022 17:28:57 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.228-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 16/12/2022 00:37, Adam Ford wrote:
+> Add DT compatible string for a Beacon EmbeddedWorks development
+> kit based on the i.MX8M Plus from NXP.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Subject: missing prefix "fsl:"
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 
-## Build
-* kernel: 5.4.228-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: e538d4b64ed30c6b7248a14b4e8641db4db16736
-* git describe: v5.4.227-10-ge538d4b64ed3
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
-27-10-ge538d4b64ed3
 
-## Test Regressions (compared to v5.4.226-68-g8c05f5e0777d)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-## Metric Regressions (compared to v5.4.226-68-g8c05f5e0777d)
+Best regards,
+Krzysztof
 
-## Test Fixes (compared to v5.4.226-68-g8c05f5e0777d)
-
-## Metric Fixes (compared to v5.4.226-68-g8c05f5e0777d)
-
-## Test result summary
-total: 114869, pass: 99876, fail: 1964, skip: 12795, xfail: 234
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 146 total, 145 passed, 1 failed
-* arm64: 44 total, 40 passed, 4 failed
-* i386: 26 total, 20 passed, 6 failed
-* mips: 27 total, 27 passed, 0 failed
-* parisc: 6 total, 6 passed, 0 failed
-* powerpc: 30 total, 30 passed, 0 failed
-* riscv: 12 total, 11 passed, 1 failed
-* s390: 6 total, 6 passed, 0 failed
-* sh: 12 total, 12 passed, 0 failed
-* sparc: 6 total, 6 passed, 0 failed
-* x86_64: 37 total, 35 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* ltp[
-* network-basic-tests
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
