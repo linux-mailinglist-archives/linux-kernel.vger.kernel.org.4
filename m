@@ -2,111 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A874864EE1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:47:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2D964EE21
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiLPPry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 10:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
+        id S231453AbiLPPsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 10:48:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231420AbiLPPrw (ORCPT
+        with ESMTP id S231440AbiLPPr7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 10:47:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED71E31DF3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:47:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671205624;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LxMkecyGYG9dLIpgBNsZUPusnmfyW4vuV2TgoZY8b1I=;
-        b=A1fXn9zjQ901DtvygIiyjjRKQzc4DqxvufQO1InD+mby2JrcmFAsrEotH/wQk55KkGvQMn
-        CXwuC1DZ0jGVg2Q5Dbc19xL94w6zpHJmU5CMQ2JG2mpxWIC/WOaH1QwDVnRYqitkZQAYmy
-        eLrxmaQe15/kqGhAvJIz2gQAN5NMGzI=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-562-MNjvB7bkMyWV18lbKyIrjg-1; Fri, 16 Dec 2022 10:47:02 -0500
-X-MC-Unique: MNjvB7bkMyWV18lbKyIrjg-1
-Received: by mail-qv1-f70.google.com with SMTP id c10-20020a05621401ea00b004c72d0e92bcso1651491qvu.12
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:47:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LxMkecyGYG9dLIpgBNsZUPusnmfyW4vuV2TgoZY8b1I=;
-        b=CqbBivKo9kSPxXgV040dkFb+itgG6lHh4Ww7ubp72tXF7mkCPa82ygC1FRfk3sPmCT
-         /VItvtyD0fuquDJVmR0na6zTz4AdwFn9It5KKDNdqxbZ4/9g7Lgg/mw5DiHCOJUhBl4O
-         Rxvi5wAtKKcknJVvB1AbgGllC1mgQXz7MwdoealfOJmvP/Hbd4czskm8JN0zCaZlnwWs
-         C2TXsoBI99Fp3AqYJgNukj7n/UMQ/mhS1xLk+1YYiOpHvBC4knP+9APKj/Y7g/mGLTZX
-         0j1uC8F35gZwIpElUin3WoXVHxIHkju3Aq2G7IenLsFnGkIsJbpRK78c99Nu4lhXp/A1
-         xpWA==
-X-Gm-Message-State: ANoB5pkOUJGxxp2HnnDULn/BZcyyqASM2yf+IbSGg6YdagF9F+44Vr+3
-        xQGKqKHjv/eixAsT4iu6+kjvg5JTE2I/mOtiW3WzlmoCwvSa0XZa4p/JTKYDwhFSv36uu5/gzNh
-        I3vbKpbNAMQc8FNezs39840Ij
-X-Received: by 2002:a05:622a:40c5:b0:3a5:306f:b124 with SMTP id ch5-20020a05622a40c500b003a5306fb124mr45697434qtb.10.1671205622303;
-        Fri, 16 Dec 2022 07:47:02 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5eK8zxu4MtCAROwOHMPjA4TRfLrCS+AsiC6Si+i4v1cyQH5maRZ4RJ3yJvRLlW+Au04FcIJQ==
-X-Received: by 2002:a05:622a:40c5:b0:3a5:306f:b124 with SMTP id ch5-20020a05622a40c500b003a5306fb124mr45697411qtb.10.1671205622117;
-        Fri, 16 Dec 2022 07:47:02 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-45-70-31-26-132.dsl.bell.ca. [70.31.26.132])
-        by smtp.gmail.com with ESMTPSA id a5-20020ac844a5000000b003a68af60591sm1466597qto.70.2022.12.16.07.47.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 07:47:01 -0800 (PST)
-Date:   Fri, 16 Dec 2022 10:46:59 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Jeff Xu <jeffxu@google.com>
-Cc:     Kees Cook <keescook@chromium.org>, jeffxu@chromium.org,
-        skhan@linuxfoundation.org, akpm@linux-foundation.org,
-        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, linux-hardening@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v6 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
-Message-ID: <Y5yS8wCnuYGLHMj4@x1n>
-References: <20221207154939.2532830-1-jeffxu@google.com>
- <20221207154939.2532830-4-jeffxu@google.com>
- <202212080821.5AE7EE99@keescook>
- <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
+        Fri, 16 Dec 2022 10:47:59 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EFE60377;
+        Fri, 16 Dec 2022 07:47:58 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E88A16602C94;
+        Fri, 16 Dec 2022 15:47:54 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671205676;
+        bh=OpeibgDASJdMkvfrIt2wc5RhxgM/1AD0m55P+Z6hsDI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=DheIvro7Qj7OkGFB8YtfY1/OyrDKi9FDrq8eceDFfmnR+6THk1cazJa01O0U4pRom
+         6SmN02ZLRF2HNWSD48DjRkH/gbn9DTPvQ2NpAUTXshn6lxYOvzHZ1aMxJJpsGF2t5g
+         eHEvq6KE2HF57mNz5I90o6cYramUWKjjFibKLrHx6rn6kqpCcM5ck8HZ79bsTMgmVg
+         Rp4l2JD8InGiCqjwOJ79V0JDda+a4u2C0pGpUCJONb3HwmIYmhLECwRMICTiax7quM
+         1yL8q6LL+7R9uciTVjAy8bNtwLrIUICr9rbZ5ageiF8+lSRs2FqnU4M7jhhWxUW1JV
+         Xq9vzEw61wtJg==
+Message-ID: <e3c73d1c20e12ab351a74ef1abc949810fc1ba77.camel@collabora.com>
+Subject: Re: [PATCHv7 7/7] arm64: dts: rockchip: Add rock-5b board
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, Jagan Teki <jagan@edgeble.ai>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christopher Obbard <chris.obbard@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Date:   Fri, 16 Dec 2022 10:47:44 -0500
+In-Reply-To: <20221215183002.211081-8-sebastian.reichel@collabora.com>
+References: <20221215183002.211081-1-sebastian.reichel@collabora.com>
+         <20221215183002.211081-8-sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jeff,
+Hi Sebastian and Christopher,
 
-On Thu, Dec 08, 2022 at 02:55:45PM -0800, Jeff Xu wrote:
-> > > +     if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
+Le jeudi 15 d=C3=A9cembre 2022 =C3=A0 19:30 +0100, Sebastian Reichel a =C3=
+=A9crit=C2=A0:
+> From: Christopher Obbard <chris.obbard@collabora.com>
+>=20
+> Add board file for the RK3588 Rock 5B board. This is a basic
+> implementation which just brings up the eMMC and UART which is
+> enough to successfully boot Linux.
+>=20
+> The ethernet controller is connected via PCIe so support will
+> come in a follow-up patch.
+>=20
+> Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
+> Reviewed-by: Michael Riesch <michael.riesch@wolfvision.net>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  arch/arm64/boot/dts/rockchip/Makefile         |  1 +
+>  .../boot/dts/rockchip/rk3588-rock-5b.dts      | 44 +++++++++++++++++++
+>  2 files changed, 45 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+>=20
+> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/=
+rockchip/Makefile
+> index 87a853435142..c5bdd0176ce0 100644
+> --- a/arch/arm64/boot/dts/rockchip/Makefile
+> +++ b/arch/arm64/boot/dts/rockchip/Makefile
+> @@ -83,4 +83,5 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-evb1-v10.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-odroid-m1.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-rock-3a.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3588-evb1-v10.dtb
+> +dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3588-rock-5b.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3588s-rock-5a.dtb
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64=
+/boot/dts/rockchip/rk3588-rock-5b.dts
+> new file mode 100644
+> index 000000000000..baf46bd30b38
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+> @@ -0,0 +1,44 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +
+> +/dts-v1/;
+> +
+> +#include "rk3588.dtsi"
+> +
+> +/ {
+> +	model =3D "Radxa Rock 5B Board";
+> +	compatible =3D "radxa,rock-5b", "rockchip,rk3588";
+> +
+> +	aliases {
+> +		mmc1 =3D &sdhci;
 
-[...]
+I have no useful knowledge, but it seems the mmc alias don't match the vend=
+or.
+When I run your branch on Rock5B, the EMMC endup on /dev/mmcblk1 (aka mmc1 =
+alias
+I think) while when I boot the vendor kernel, it is always mmcblk0 (aka mmc=
+0
+alias?). Perhaps the vendor didn't add aliases ?
 
-> > > +             pr_warn_ratelimited(
-> > > +                     "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=%d '%s'\n",
-> > > +                     task_pid_nr(current), get_task_comm(comm, current));
+There could also be mainline rules to number based on the boot order. In th=
+is
+case, the difference would be acceptable, since SPL boot order is (usb?) > =
+SD
+Card > EMMC > SPI NOR. Though, the SPL is picked from the opposite order (s=
+pi,
+emmc, sd card). Anyway, I'm just trying to express that I noticed a differe=
+nce,
+and its not guarantied to be a bug.
 
-This will be frequently dumped right now with mm-unstable.  Is that what it
-wanted to achieve?
-
-[   10.822575] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=491 'systemd'
-[   10.824743] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=495 '(sd-executor)'
-...
-
-If there's already a sane default value (and also knobs for the user to
-change the default) not sure whether it's saner to just keep it silent as
-before?
-
--- 
-Peter Xu
+> +		serial2 =3D &uart2;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path =3D "serial2:1500000n8";
+> +	};
+> +
+> +	vcc5v0_sys: vcc5v0-sys-regulator {
+> +		compatible =3D "regulator-fixed";
+> +		regulator-name =3D "vcc5v0_sys";
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +		regulator-min-microvolt =3D <5000000>;
+> +		regulator-max-microvolt =3D <5000000>;
+> +	};
+> +};
+> +
+> +&sdhci {
+> +	bus-width =3D <8>;
+> +	no-sdio;
+> +	no-sd;
+> +	non-removable;
+> +	max-frequency =3D <200000000>;
+> +	mmc-hs400-1_8v;
+> +	mmc-hs400-enhanced-strobe;
+> +	status =3D "okay";
+> +};
+> +
+> +&uart2 {
+> +	pinctrl-0 =3D <&uart2m0_xfer>;
+> +	status =3D "okay";
+> +};
+> --=20
+> 2.39.0
+>=20
+>=20
 
