@@ -2,101 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAEE64EA55
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF57E64EA58
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:26:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiLPLZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:25:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
+        id S230369AbiLPL0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:26:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiLPLZw (ORCPT
+        with ESMTP id S229475AbiLPL0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:25:52 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C2E167ED
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:25:50 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id bf43so3019914lfb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:25:50 -0800 (PST)
+        Fri, 16 Dec 2022 06:26:41 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEF3286DB
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:26:40 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id pp21so1448214qvb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:26:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jq34xZSUT8QsMyztxfKEALtkriwch3PoCGhlEfPa3GQ=;
-        b=LkAyUjpNX35mihFXiQlkEnMc5deO2cakn0tU3MPYR6UVfWffBFoOVMIS4jj337q+BJ
-         mL17jgD7gMi9Eyqy+aoyL85bb6V2Y2vUsgWl+LG6D9+k7s6VigssHH1J0kkKHu/yB+Or
-         uzuaKVAx5CrGLggEo7ndLKznDfyUA87rPaMTPaekDXnZj0szgrdMyFz9Q44Q9/CnfZZ9
-         J8SnrsSphkexeZxxUfkBfIpsEpXrwocaNLN/74+hzhti7GfV34By+v4SkxhGBwWVN9P3
-         nvbVNEbhdwgGt/KuzMFJy8XuYeY2ISZn4eR4SWTgHmGkP4Bq6yhyqjuB31tj1MwR6UbH
-         neew==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=a7C4DlTIJe/XAzDTApvBRiD8XTjnKR9AH5A3VoUGLOg=;
+        b=NwQY0lOyux8zQdS9zMAo0gTIVBQw4Tpq5Bt9XfwxOWeeZoExJwK4JnJSNs6XbHTM+i
+         Lv5bhR0Bu8KLvRSNai/hEYLSdT1W9Ro3qa4We7yN3/PP2J3AnHLZ4Lfu7LFF67Lx8MY2
+         w+h/UW7V9V8UrlOYYhT/brFKFpP4g/HD7/LKY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jq34xZSUT8QsMyztxfKEALtkriwch3PoCGhlEfPa3GQ=;
-        b=A8F3TOf+pRKruVPjekujP2A5Sf1fkydRPTe2JW7OP1/nbLVQ3yJ0gfb4nqkB+5XMXE
-         IfaTjYt8pdbbEADsLk14ewEU9e88ivuo0DIi1GqZRjMgMqRszyovo0crzTNGpbQXMTFq
-         eJ+Tav59nKdOz1zd6u1eXGBEv0y9U2ATIN9DwEEuDN6LXMhZBdTe8m7x+9Qy8Tcz0c/9
-         4v2nnTjHESh3z2ij+6wi99f9fjy4oa53tY3egEO0zniYRoEKHpfZLVc90fGLN7LXseDq
-         RVZt63R7sV48tlhF8n7oTbqMWVCxTBaKsUP127ri0Uw11+gw01p7/2VxkLgbnNIwNXll
-         L0YA==
-X-Gm-Message-State: ANoB5pnSZTI7l5d6o6As2/zb6pCJt8coLKxBUWivFh+nzrmPmMXklaP2
-        hUS7bLZfWB4qXdA100oBR3ooGw==
-X-Google-Smtp-Source: AA0mqf6vfu4R9gsLSvdGIsOl2P+MeUnboQi0ZGy6b1tPRuGfMFVAhR0T9oajRy8PIo8lDi00UT7rQg==
-X-Received: by 2002:a05:6512:114e:b0:4b5:a4ef:fca3 with SMTP id m14-20020a056512114e00b004b5a4effca3mr10534762lfg.38.1671189948800;
-        Fri, 16 Dec 2022 03:25:48 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id s10-20020a056512214a00b004b52f4ea0d3sm192459lfr.192.2022.12.16.03.25.47
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a7C4DlTIJe/XAzDTApvBRiD8XTjnKR9AH5A3VoUGLOg=;
+        b=wvM7hXYqFkchVizh9xqCwBAFkZ1uHjLUuSeUuZhYFiQbiccMxqa0DnCHtnaRO6xAey
+         aZPOCFBD6c7MLkJgqlqVg+7+hBbjQsnucedV619ZP/v8AZ3pKMlsNjX+Ri4o/vJY+kD+
+         HCNXohRomLtGkVzefu4EPhiLJ6M4BmgHHaLD0O4s4ANjFhd2wG4FItxjlMW94yU5Vy5U
+         9ZQFRX8i/+MBiSgsSo9ewlyF7e8Dog69bHW1U/zIB52JmiuYQAIw+87OHtDEpImTev1i
+         OIY097jW0GQ7tCG7E3YmjC3tWixOfeqURoO2O/N7rHRBphBfm965QsHPSm/C6h/MAaEJ
+         PzhQ==
+X-Gm-Message-State: ANoB5pl5bceg6+TWKOsCGHPzQM78SJWud9zaWd00PB9mxCQ4pXcOi0JH
+        HUDNFKtvMx6xSfTUY/F05W+sdvVE0kl1HeAE
+X-Google-Smtp-Source: AA0mqf65owwUkuz1/vqVc90ajEocOmIGj1jaGtur3eD9SvjsJmBH+eVj/G7HORlo/7WWEJfY/8iRXw==
+X-Received: by 2002:a0c:e785:0:b0:4c7:911:274f with SMTP id x5-20020a0ce785000000b004c70911274fmr46719312qvn.35.1671189998966;
+        Fri, 16 Dec 2022 03:26:38 -0800 (PST)
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com. [209.85.160.177])
+        by smtp.gmail.com with ESMTPSA id 195-20020a370ccc000000b006eee3a09ff3sm1263853qkm.69.2022.12.16.03.26.37
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 03:25:48 -0800 (PST)
-Message-ID: <2f31c3a0-572d-41c4-4724-85d64394aa66@linaro.org>
-Date:   Fri, 16 Dec 2022 12:25:47 +0100
+        Fri, 16 Dec 2022 03:26:37 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id ay32so2379697qtb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:26:37 -0800 (PST)
+X-Received: by 2002:ac8:4992:0:b0:3a7:648d:23d4 with SMTP id
+ f18-20020ac84992000000b003a7648d23d4mr19675311qtq.180.1671189997363; Fri, 16
+ Dec 2022 03:26:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v4 1/4] dt-bindings: ufs: qcom: Add SM6125 compatible
- string
-Content-Language: en-US
-To:     Lux Aliaga <they@mint.lgbt>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221215190404.398788-1-they@mint.lgbt>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221215190404.398788-1-they@mint.lgbt>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CAO4mrfcX8J73DWunmdYjf_SK5TyLfp9W9rmESTj57PCkG2qkBw@mail.gmail.com>
+ <5eff70b8-04fc-ee87-973a-2099a65f6e29@opensource.wdc.com> <Y5s7F/4WKe8BtftB@ZenIV>
+ <80dc24c5-2c4c-b8da-5017-31aae65a4dfa@opensource.wdc.com> <Y5vo00v2F4zVKeug@ZenIV>
+In-Reply-To: <Y5vo00v2F4zVKeug@ZenIV>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 16 Dec 2022 03:26:21 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgOFV=QmwWQW0QxDNkeDt4t5dOty7AvGyWRyj-O=8db9A@mail.gmail.com>
+Message-ID: <CAHk-=wgOFV=QmwWQW0QxDNkeDt4t5dOty7AvGyWRyj-O=8db9A@mail.gmail.com>
+Subject: Re: possible deadlock in __ata_sff_interrupt
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Wei Chen <harperchen1110@gmail.com>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        syzbot <syzkaller@googlegroups.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/12/2022 20:04, Lux Aliaga wrote:
-> Document the compatible for UFS found on the SM6125.
-> 
-> Signed-off-by: Lux Aliaga <they@mint.lgbt>
-> ---
+On Thu, Dec 15, 2022 at 7:41 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> CPU1: ptrace(2)
+>         ptrace_check_attach()
+>                 read_lock(&tasklist_lock);
+>
+> CPU2: setpgid(2)
+>         write_lock_irq(&tasklist_lock);
+>         spins
+>
+> CPU1: takes an interrupt that would call kill_fasync().  grep and the
+> first instance of kill_fasync() is in hpet_interrupt() - it's not
+> something exotic.  IRQs disabled on CPU2 won't stop it.
+>         kill_fasync(..., SIGIO, ...)
+>                 kill_fasync_rcu()
+>                         read_lock_irqsave(&fa->fa_lock, flags);
+>                         send_sigio()
+>                                 read_lock_irqsave(&fown->lock, flags);
+>                                 read_lock(&tasklist_lock);
+>
+> ... and CPU1 spins as well.
 
-Three versions the same day? It's too much.
+Nope. See kernel/locking/qrwlock.c:
 
-Where is the changelog? What happened here?
+        /*
+         * Readers come here when they cannot get the lock without waiting
+         */
+        if (unlikely(in_interrupt())) {
+                /*
+                 * Readers in interrupt context will get the lock immediately
+                 * if the writer is just waiting (not holding the lock yet),
+                 * so spin with ACQUIRE semantics until the lock is available
+                 * without waiting in the queue.
+                 */
+                atomic_cond_read_acquire(&lock->cnts, !(VAL & _QW_LOCKED));
+                return;
+        }
 
->  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+and that's the new "civilized" reader unfairness.
 
-Best regards,
-Krzysztof
+The traditional rwlock was unconditionally unfair to writers, to the
+point that there were starvation issues because new readers would
+always get the lock.
 
+         Linus
