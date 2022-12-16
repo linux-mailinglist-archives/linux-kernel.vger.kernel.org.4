@@ -2,140 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6408564EB6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 13:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B971B64EB72
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 13:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbiLPM2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 07:28:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        id S230127AbiLPMdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 07:33:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiLPM2c (ORCPT
+        with ESMTP id S229620AbiLPMdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 07:28:32 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E2AE012;
-        Fri, 16 Dec 2022 04:28:30 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so2207146pjo.3;
-        Fri, 16 Dec 2022 04:28:30 -0800 (PST)
+        Fri, 16 Dec 2022 07:33:33 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899AF4AF09;
+        Fri, 16 Dec 2022 04:33:31 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id h10so2358392wrx.3;
+        Fri, 16 Dec 2022 04:33:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XN2BUIyyxfcPTn0lH7csIpbvsG2W/DIuROkPMqaCcZA=;
-        b=gTmjQHIthgTaarmTiJIFcOmKO18lOJx70K41j/h8aKXjh6KsuWGEkZFj33q3evneNQ
-         Z2aOHDpL36LFgscqFBHNKzMVJ9mYIx0ZAod72hmvUaLZsAbM7hZrGu12f8gqDapCACMi
-         41FVVH0qwRa4z0G6jmKXty6+LfGNMpKKDSTCYx8cJ/m33BMfthqrsxXH+AzoxBx8M9Yn
-         C/3DIhGswmw+wRwrjR6uyzMYIeKhpQu3fKP+73cPXx9rO1TkIqOY+++ZfmE+EG9Mnlfb
-         Id6KF6Rn3DAwHZhYd2fmrXGE5W6ntZV+znP4hk8sgPNWBl6FZtqOqmGU/m0AG/lTtkaW
-         KYyA==
+        bh=7mY6hvYGx7u+jk29wg+M7U2/g98Fn1qPUIlj1RP+5vA=;
+        b=kJLYLpYrHfoGVjP1cZeR6X2VGPLRZwIe29aHbmv2eFnDizp2j5/Ny8/k3J/Bt2Pipu
+         wvPiFlmNVAGuoFb3yHGT2Wm08XDr/n3qVRUq55Ko5SJl3lOfkJC1ijoxJmqaHBHexjhX
+         CWnRwhwOaLecC5UmlcJxLonCS9S1AYEj1tuqfdGsc2fKZmdHQ3z+LcvIG3cSBtJXL22B
+         9cPrAXx66Dvq9KaOvHQcJFJICYONOAabiOIJzGoL2UrKhtFSe23oQGqaps/vWoyXWvWw
+         3kDMGxAtmn8O6YFNvAMds41TyMf69qg1/fkg3pH5yk4HzFjjZXrQFX5sxWdCmBqfDq7u
+         si5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XN2BUIyyxfcPTn0lH7csIpbvsG2W/DIuROkPMqaCcZA=;
-        b=DVtf9Z2cDJFg1MTn+t/jDHGflkgVNdxRLnYreDEx+a5EzvdBsZy9pm/BfC2J19YVdt
-         BCwWCDXGBOqSqVt4QYdS/apmd++L4fE9woFzKOx2dAv7f5pvYVUA2t/GE8qE+sC7t14l
-         y3m3IAUylbQgGJ0OGiVPv9Q6YbvsWp5usB0Uzt1Lm2qEWvBp78UZCCqoUSWUgq+XC+Km
-         dukP4kmAw3JIRp+cvaqpNcp2Zml6FOCgYVBk7bFmd8Yfc7Kq2euljIHn/AXuvAAbwp4s
-         rE4ndqDqx0ch/WYSpU83Rpagce38xpPY/kTAZlUUSREbeQCSrp8hM5mWwrwLMs6VTz0D
-         /54w==
-X-Gm-Message-State: ANoB5pkDJNcUfTFmG09irURIPsR0qD3xiwIJs9A2e4veytzXhETOmZU2
-        OWJrh1c/8GxOotyVF22GxOc=
-X-Google-Smtp-Source: AA0mqf6d7oqZU2G/xjT5P7wiQ6Ao9vsN4Z35ejH9yc72sa2sgRGO8RLbwwQKenbvXgNM8+nnx4ulRg==
-X-Received: by 2002:a17:902:e285:b0:189:fd83:eb80 with SMTP id o5-20020a170902e28500b00189fd83eb80mr30939639plc.62.1671193710453;
-        Fri, 16 Dec 2022 04:28:30 -0800 (PST)
-Received: from [192.168.43.80] (subs32-116-206-28-27.three.co.id. [116.206.28.27])
-        by smtp.gmail.com with ESMTPSA id i6-20020a170902c94600b00189847cd4acsm1474100pla.237.2022.12.16.04.28.25
+        bh=7mY6hvYGx7u+jk29wg+M7U2/g98Fn1qPUIlj1RP+5vA=;
+        b=T61XCZkCo6OOa44MXne8+M67bWTjlA2peeuMvzi+P5TOimEJop/mSWX2awubz6drvD
+         jLRwrkU/vqkLrGLEeDsf+HeiUTY4AA3dxvy+sjBbZoUwd3DUqCB/QiExAjI6ho0xZ7xN
+         Ndzl3aMS+cf9wwX+ihUbTMTufVIgx50gC2wzvLmj/CoLMpH8UT7F8bCgPkbdevckCoi1
+         d0cQoPsFhwrngCjuCFPvtKdEv/eMPn5AjnbbfR5W7aSLHVgNTBATig5iSR2CmZFk0rlh
+         bS3Gy1ZX5yclWp75rJYm/4nPgkhixsQ0OwrXdZFs0GH/YYqP6USRp5Zv85Xl/EuGBNdx
+         Rgtw==
+X-Gm-Message-State: ANoB5pnTC5KtU/boJmB+FFCAZO5wQ+yZs1OHbRwRWrO+CATzM0juP3Zg
+        mOSk08zLfZzbT8XwBganOZCHB5nJ9H8=
+X-Google-Smtp-Source: AA0mqf55vRtatDTlwaKTgKD5DnqowdBO7bXUP96iLxcg9l1yFDr/VSB+vMbcLVk2+WtfVL7Y+m90xA==
+X-Received: by 2002:adf:f645:0:b0:242:1e1f:2d89 with SMTP id x5-20020adff645000000b002421e1f2d89mr19712565wrp.60.1671194009946;
+        Fri, 16 Dec 2022 04:33:29 -0800 (PST)
+Received: from [192.168.1.132] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id ba12-20020a0560001c0c00b002549b649b62sm2213551wrb.50.2022.12.16.04.33.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 04:28:30 -0800 (PST)
-Message-ID: <85f627d5-7572-1fc7-db1f-bc1337767a68@gmail.com>
-Date:   Fri, 16 Dec 2022 19:28:13 +0700
+        Fri, 16 Dec 2022 04:33:28 -0800 (PST)
+Message-ID: <5692faa0-6d7e-774f-9d6a-a495b44bdb3e@gmail.com>
+Date:   Fri, 16 Dec 2022 13:33:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH] Revert "mm: add nodes= arg to memory.reclaim"
+Subject: Re: [PATCH v4 0/8] add support MDP3 on MT8195 platform
 Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
-        fvdl@google.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20221202223533.1785418-1-almasrymina@google.com>
- <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz> <Y5xASNe1x8cusiTx@dhcp22.suse.cz>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <Y5xASNe1x8cusiTx@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8
+To:     Moudy Ho <moudy.ho@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221207094921.15450-1-moudy.ho@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221207094921.15450-1-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/16/22 16:54, Michal Hocko wrote:
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index c8ae7c897f14..74cec76be9f2 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -1245,13 +1245,17 @@ PAGE_SIZE multiple when read back.
->  	This is a simple interface to trigger memory reclaim in the
->  	target cgroup.
->  
-> -	This file accepts a string which contains the number of bytes to
-> -	reclaim.
-> +	This file accepts a single key, the number of bytes to reclaim.
-> +	No nested keys are currently supported.
->  
->  	Example::
->  
->  	  echo "1G" > memory.reclaim
->  
-> +	The interface can be later extended with nested keys to
-> +	configure the reclaim behavior. For example, specify the
-> +	type of memory to reclaim from (anon, file, ..).
-> +
->  	Please note that the kernel can over or under reclaim from
->  	the target cgroup. If less bytes are reclaimed than the
->  	specified amount, -EAGAIN is returned.
-> @@ -1263,13 +1267,6 @@ PAGE_SIZE multiple when read back.
->  	This means that the networking layer will not adapt based on
->  	reclaim induced by memory.reclaim.
->  
-> -	This file also allows the user to specify the nodes to reclaim from,
-> -	via the 'nodes=' key, for example::
-> -
-> -	  echo "1G nodes=0,1" > memory.reclaim
-> -
-> -	The above instructs the kernel to reclaim memory from nodes 0,1.
-> -
->    memory.peak
->  	A read-only single value file which exists on non-root
->  	cgroups.
 
-Ah! I forgot to add my Reviewed-by: tag when the original patch was
-submitted. However, I was Cc'ed the revert presumably due to Cc: tag in the
-original.
+Whole series applied, thanks!
 
-In any case, for the documentation part:
-
-Acked-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
--- 
-An old man doll... just what I always wanted! - Clara
-
+On 07/12/2022 10:49, Moudy Ho wrote:
+> From: mtk18742 <moudy.ho@mediatek.com>
+> 
+> Changes since v3:
+> - Rebase on linux-next
+> 
+> Changes since v2:
+> - Depend on :
+>    [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=681097
+> - Split dts settings into two patches based on belonging to MMSYS or MUTEX.
+> 
+> Changes since v1:
+> - Depend on :
+>    [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=681097
+> - Add compatible names to VPPSYS0 and VPPSYS1 in MMSYS binding file.
+> - Fix VPPSYS's MMSYS and MUTEX dts to pass the dtsb_check.
+> - Rename mtk_mmsys_merge_config() and mtk_mmsys_rsz_dcm_config() to
+>    mtk_mmsys_vpp_rsz_merge_config() and mtk_mmsys_vpp_rsz_dcm_config().
+> - Clean up mtk_mmsys_vpp_rsz_dcm_config().
+> - Add a comment to mtk_mutex_write_mod() and clean it up for use in more
+>    than 32 mods.
+> 
+> Hi,
+> 
+> This series add support for MT8195's two VPPSYS(Video Processor Pipe Subsystem),
+> under which there will be corresponding MMSYS and MUTEX settings that
+> need to be configured.
+> 
+> Moudy Ho (2):
+>    dt-bindings: arm: mediatek: mmsys: Add support for MT8195 VPPSYS
+>    arm64: dts: mediatek: mt8195: add MUTEX configuration for VPPSYS
+> 
+> Roy-CW.Yeh (6):
+>    dt-bindings: soc: mediatek: Add support for MT8195 VPPSYS
+>    arm64: dts: mediatek: mt8195: add MMSYS configuration for VPPSYS
+>    soc: mediatek: mmsys: add support for MT8195 VPPSYS
+>    soc: mediatek: mmsys: add config api for RSZ switching and DCM
+>    soc: mediatek: mutex: Add mtk_mutex_set_mod support to set MOD1
+>    soc: mediatek: mutex: support MT8195 VPPSYS
+> 
+>   .../bindings/arm/mediatek/mediatek,mmsys.yaml |   5 +-
+>   .../bindings/soc/mediatek/mediatek,mutex.yaml |   1 +
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  28 +++-
+>   drivers/soc/mediatek/mt8195-mmsys.h           |  13 ++
+>   drivers/soc/mediatek/mtk-mmsys.c              |  64 +++++++++
+>   drivers/soc/mediatek/mtk-mmsys.h              |   1 +
+>   drivers/soc/mediatek/mtk-mutex.c              | 135 +++++++++++++++++-
+>   include/linux/soc/mediatek/mtk-mmsys.h        |   4 +
+>   include/linux/soc/mediatek/mtk-mutex.h        |  35 +++++
+>   9 files changed, 274 insertions(+), 12 deletions(-)
+> 
