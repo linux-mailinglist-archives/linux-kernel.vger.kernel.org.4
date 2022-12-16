@@ -2,129 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB6364E74B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 07:24:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B504B64E76D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 07:56:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiLPGYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 01:24:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
+        id S229737AbiLPGz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 01:55:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiLPGYk (ORCPT
+        with ESMTP id S229471AbiLPGzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 01:24:40 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0608E6BCA2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 22:24:38 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so1430206pjo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 22:24:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0JvWppdepGKuCmZdK+T4x0HrLho3kQxHEXyInOIABdw=;
-        b=ZLRQsDIaEc7I4ixWaVvP1F3HTLEthQeeNLtaMh7Ktn1wlWDLMyCqsbcbnCBaXmjW62
-         KsFFGwGUzPVpOUI8uJFu1YHQUogRl16vxmktW0lI+MyWw18yfVz9GVAH13MDatVGmCQm
-         btMgceRIrcHIdzEE1DdJmDxVH59tQqFSKPh1Exm7snRZtSB0Rzf+7noxtFVnduY3kMLg
-         JpJvZ5p++xvAjCnXqrf30gkis6G0/CwPr4meDvGfXTs4lWrpcAh6ZxnI1dvyxCyAM0/O
-         Kx8aOfHP6gHdl2lCtS4gC21O7GA2m7wnc/hjHLb461KwWPEscD8VX/uyPY9B8bAdnDOx
-         mL7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0JvWppdepGKuCmZdK+T4x0HrLho3kQxHEXyInOIABdw=;
-        b=M5BsupKS1nau7T4U1GP3Ev1dCD9+vt2+4Fr4iiwk3GFGP5orkKQxNRZCaywjQtbs/t
-         jskIbujt5qN0lXSAxdDLoZrCUi7FmOkZVlfg4f42CuxuJA3a58kR53d0TG6IvuG29+bZ
-         zXIFx5FdST1LPQyV8TX39I9TTIBV/FpiiInb8U36Fs44txNGh+h3T/u5Nhkc/IZKD6KP
-         FVhKS6Jt015hoHyXPm1Eef3kyqoahev1JaLrObuOg3iypp18GsezGMcxRXGFqjQW+le3
-         sXvHQ9qQJHHDoPxIXLln1xsOH9+cfaxHln4HaO+kUgeutaMpb8aLoIMRZciwcuSiMiC8
-         qLvA==
-X-Gm-Message-State: ANoB5pmreluGRyWLiicu3GCtfPR3gBvyY4HMv5r920/IJ9XgGIZAOpQR
-        M6pPTSx5DUzQeWv/dWOjXRXV5g==
-X-Google-Smtp-Source: AA0mqf6fsWOiyIh7ajhDx3xcGGZ2etvic2nJr13nHLjljWd9tw/qya3r5tdXYSsmUAr/gWgZ1iW77g==
-X-Received: by 2002:a05:6a21:394b:b0:ac:3f3f:9fbd with SMTP id ac11-20020a056a21394b00b000ac3f3f9fbdmr36790086pzc.48.1671171877541;
-        Thu, 15 Dec 2022 22:24:37 -0800 (PST)
-Received: from C02G87K0MD6R.bytedance.net ([139.177.225.228])
-        by smtp.gmail.com with ESMTPSA id s5-20020a656445000000b0046feca0883fsm681819pgv.64.2022.12.15.22.24.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 22:24:36 -0800 (PST)
-From:   Hao Jia <jiahao.os@bytedance.com>
-To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net
-Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
-Subject: [PATCH v3 2/2] sched/core: Adjusting the order of scanning CPU
-Date:   Fri, 16 Dec 2022 14:24:06 +0800
-Message-Id: <20221216062406.7812-3-jiahao.os@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
-In-Reply-To: <20221216062406.7812-1-jiahao.os@bytedance.com>
-References: <20221216062406.7812-1-jiahao.os@bytedance.com>
+        Fri, 16 Dec 2022 01:55:55 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87867FCC2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 22:55:50 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4NYKch17dKz9sqm;
+        Fri, 16 Dec 2022 07:55:48 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id SJRcgJhfooxD; Fri, 16 Dec 2022 07:55:48 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4NYKch0L96z9sY5;
+        Fri, 16 Dec 2022 07:55:48 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id F0B6C8B77C;
+        Fri, 16 Dec 2022 07:55:47 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id sl70OE1yLI3i; Fri, 16 Dec 2022 07:55:47 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.180])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id B5C048B764;
+        Fri, 16 Dec 2022 07:55:47 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2BG6QLiY1146537
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 16 Dec 2022 07:26:21 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2BG6QJRo1146535;
+        Fri, 16 Dec 2022 07:26:19 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Subject: [PATCH] powerpc: Pass correct CPU reference to assembler
+Date:   Fri, 16 Dec 2022 07:26:11 +0100
+Message-Id: <176b0f41a8b9e9f1191bf2b8857d121887c4fbe5.1671171965.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1671171970; l=4369; s=20211009; h=from:subject:message-id; bh=MsAxZIY2P8LB6twC4gR4YIS6KE8v8tD1GgT5YQokrCc=; b=1ZJ7BiphCjY6/t6vIiwEegHZQ7BAvmHgQ6ZtLjud2rvlDDvwQ5Q/6WqKMstxpbOXArUjy4SGxAU3 kwVP+0PeBlP4B1vQ2yk6cr4YQvNMuF/eVoCk857NVrQcEXSjWF7n
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When select_idle_capacity() starts scanning for an idle CPU, it starts
-with target CPU that has already been checked in select_idle_sibling().
-So we start checking from the next CPU and try the target CPU at the end.
-Similarly for task_numa_assign(), we have just checked numa_migrate_on
-of dst_cpu, so start from the next CPU. This also works for
-steal_cookie_task(), the first scan must fail and start directly
-from the next one.
+Jan-Benedict reported issue with building ppc64e_defconfig
+with mainline GCC work:
 
-Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+  powerpc64-linux-gcc -Wp,-MMD,arch/powerpc/kernel/vdso/.gettimeofday-64.o.d -nostdinc -I./arch/powerpc/include -I./arch/powerpc/include/generated  -I./include -I./arch/powerpc/include/uapi -I./arch/powerpc/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/compiler-version.h -include ./include/linux/kconfig.h -D__KERNEL__ -I ./arch/powerpc -DHAVE_AS_ATHIGH=1 -fmacro-prefix-map=./= -D__ASSEMBLY__ -fno-PIE -m64 -Wl,-a64 -mabi=elfv1 -Wa,-me500 -Wa,-me500mc -mabi=elfv1 -mbig-endian    -Wl,-soname=linux-vdso64.so.1 -D__VDSO64__ -s -c -o arch/powerpc/kernel/vdso/gettimeofday-64.o arch/powerpc/kernel/vdso/gettimeofday.S
+	arch/powerpc/kernel/vdso/gettimeofday.S: Assembler messages:
+	arch/powerpc/kernel/vdso/gettimeofday.S:72: Error: unrecognized opcode: `stdu'
+	arch/powerpc/kernel/vdso/gettimeofday.S:72: Error: unrecognized opcode: `stdu'
+	arch/powerpc/kernel/vdso/gettimeofday.S:72: Error: unrecognized opcode: `std'
+	arch/powerpc/kernel/vdso/gettimeofday.S:72: Error: unrecognized opcode: `std'
+	arch/powerpc/kernel/vdso/gettimeofday.S:72: Error: unrecognized opcode: `ld'
+	arch/powerpc/kernel/vdso/gettimeofday.S:72: Error: unrecognized opcode: `ld'
+	...
+	make[1]: *** [arch/powerpc/kernel/vdso/Makefile:76: arch/powerpc/kernel/vdso/gettimeofday-64.o] Error 1
+	make: *** [arch/powerpc/Makefile:387: vdso_prepare] Error 2
+
+This is due to assembler being called with -me500mc which is
+a 32 bits target.
+
+The problem comes from the fact that CONFIG_PPC_E500MC is selected for
+both the e500mc (32 bits) and the e5500 (64 bits), and therefore the
+following makefile rule is wrong:
+
+  cpu-as-$(CONFIG_PPC_E500MC)    += $(call as-option,-Wa$(comma)-me500mc)
+
+Today we have CONFIG_TARGET_CPU which provides the identification of the
+expected CPU, it is used for GCC. Use it as well for the assembler.
+
+With that change (And also commit 825eada7717c ("powerpc/64: Set
+default CPU in Kconfig")), it now is:
+
+  powerpc64-linux-gcc -Wp,-MMD,arch/powerpc/kernel/vdso/.gettimeofday-64.o.d -nostdinc -I./arch/powerpc/include -I./arch/powerpc/include/generated  -I./include -I./arch/powerpc/include/uapi -I./arch/powerpc/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/compiler-version.h -include ./include/linux/kconfig.h -D__KERNEL__ -I ./arch/powerpc -DHAVE_AS_ATHIGH=1 -fmacro-prefix-map=./= -D__ASSEMBLY__ -fno-PIE -m64 -Wl,-a64 -mabi=elfv1 -mcpu=e500mc64 -Wa,-me500mc64 -mabi=elfv1 -mbig-endian    -Wl,-soname=linux-vdso64.so.1 -D__VDSO64__ -s -c -o arch/powerpc/kernel/vdso/gettimeofday-64.o arch/powerpc/kernel/vdso/gettimeofday.S
+
+Reported-by: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- kernel/sched/core.c | 2 +-
- kernel/sched/fair.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Commit 825eada7717c is in powerpc/next-test branch. Make sure the SHA doesn't change when it goes into powerpc/next
+---
+ arch/powerpc/Makefile | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 25b582b6ee5f..40149ff68f14 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6206,7 +6206,7 @@ static bool steal_cookie_task(int cpu, struct sched_domain *sd)
- {
- 	int i;
+diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
+index bf5f0a998273..3245eec95627 100644
+--- a/arch/powerpc/Makefile
++++ b/arch/powerpc/Makefile
+@@ -201,18 +201,15 @@ KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
+ # often slow when they are implemented at all
+ KBUILD_CFLAGS		+= $(call cc-option,-mno-string)
  
--	for_each_cpu_wrap(i, sched_domain_span(sd), cpu) {
-+	for_each_cpu_wrap(i, sched_domain_span(sd), cpu + 1) {
- 		if (i == cpu)
- 			continue;
+-cpu-as-$(CONFIG_40x)		+= -Wa,-m405
+-cpu-as-$(CONFIG_44x)		+= -Wa,-m440
+ cpu-as-$(CONFIG_ALTIVEC)	+= $(call as-option,-Wa$(comma)-maltivec)
+-cpu-as-$(CONFIG_PPC_E500)		+= -Wa,-me500
++cpu-as-$(CONFIG_TARGET_CPU_BOOL)	+= -Wa,-m$(CONFIG_TARGET_CPU)
  
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 643cbcb61b49..e910df06b779 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -1836,7 +1836,7 @@ static void task_numa_assign(struct task_numa_env *env,
- 		int start = env->dst_cpu;
+ # When using '-many -mpower4' gas will first try and find a matching power4
+ # mnemonic and failing that it will allow any valid mnemonic that GAS knows
+ # about. GCC will pass -many to GAS when assembling, clang does not.
+ # LLVM IAS doesn't understand either flag: https://github.com/ClangBuiltLinux/linux/issues/675
+ # but LLVM IAS only supports ISA >= 2.06 for Book3S 64 anyway...
+-cpu-as-$(CONFIG_PPC_BOOK3S_64)	+= $(call as-option,-Wa$(comma)-mpower4) $(call as-option,-Wa$(comma)-many)
+-cpu-as-$(CONFIG_PPC_E500MC)	+= $(call as-option,-Wa$(comma)-me500mc)
++cpu-as-$(CONFIG_PPC_BOOK3S_64)	+= $(call as-option,-Wa$(comma)-many)
  
- 		/* Find alternative idle CPU. */
--		for_each_cpu_wrap(cpu, cpumask_of_node(env->dst_nid), start) {
-+		for_each_cpu_wrap(cpu, cpumask_of_node(env->dst_nid), start + 1) {
- 			if (cpu == env->best_cpu || !idle_cpu(cpu) ||
- 			    !cpumask_test_cpu(cpu, env->p->cpus_ptr)) {
- 				continue;
-@@ -6811,7 +6811,7 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
- 	util_min = uclamp_eff_value(p, UCLAMP_MIN);
- 	util_max = uclamp_eff_value(p, UCLAMP_MAX);
- 
--	for_each_cpu_wrap(cpu, cpus, target) {
-+	for_each_cpu_wrap(cpu, cpus, target + 1) {
- 		unsigned long cpu_cap = capacity_of(cpu);
- 
- 		if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
+ KBUILD_AFLAGS += $(cpu-as-y)
+ KBUILD_CFLAGS += $(cpu-as-y)
 -- 
-2.37.0
+2.38.1
 
