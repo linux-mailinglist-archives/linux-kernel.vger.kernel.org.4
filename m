@@ -2,135 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC1B64EE85
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E33264EE8E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:08:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231596AbiLPQHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 11:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
+        id S232601AbiLPQHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 11:07:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232658AbiLPQGT (ORCPT
+        with ESMTP id S231277AbiLPQHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 11:06:19 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFC3B11
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:03:24 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id d15so2746001pls.6
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:03:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O1qjP7+KqmrUFY+SnaTsk+GxzcwVKXxOCE9bngVZS8Y=;
-        b=gShdK6XXiivLeNg7J6NrWJKdwX8H3oI/vll5yGqyUsWhvthrYgVG5ynkc+WQzHH6l1
-         pjy9eObYteoQhqshKUAviHYpmueiXHDFQRhZV//Pe2VOORb/xOLa63xIAgjPKFh97gGi
-         peQ2otoqOZL2tAvtc3WutLb0CcYgEQddXA3RPMe1cj1aauHQAz4FJAoKfrvmvTpb5ZW8
-         PNrAgfXlbXmRsFQr71pATmhnYCzNmRbWDkvgb8CtNo6YuDcXLh5GDxV3+OffnwZLz19D
-         6SGGPfe9btPIz8tvTTNAMwamlx79cAk/km8jKXjPY6V3PfUmAy2TEhDnZumkDK+I3u/q
-         MKRg==
+        Fri, 16 Dec 2022 11:07:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4167B102F
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:04:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671206651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qQVNpA1uebmeJDop3AawgUtcYkrEx880mhk59ps+M7g=;
+        b=Q7Pa2dYmCQ4J6KzXbLRpRQBfgSqWxrTGP4r67SS4LpDemWyaI0D1u7+7c4ZUA2wTqZZOUj
+        rxO58f4/44OiiNdp+1VgE13dfHaJa3Ra2PeE0NOB4d5aDp5/iobgPcEvsBECG8j2isLh8o
+        6gAozYdqwNX1g+cdQS346MDx9X3VfMk=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-232-9i42XGBuPCO_v7JKZFyOfw-1; Fri, 16 Dec 2022 11:04:10 -0500
+X-MC-Unique: 9i42XGBuPCO_v7JKZFyOfw-1
+Received: by mail-wm1-f69.google.com with SMTP id r129-20020a1c4487000000b003d153a83d27so1401053wma.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:04:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O1qjP7+KqmrUFY+SnaTsk+GxzcwVKXxOCE9bngVZS8Y=;
-        b=iChgfjC741jqF8S/Jt9fBLx52oyQPoTkfckMDEjb5/X2/XoGkI4lHjhODzulMIa4o3
-         Hu48Irmd05LBbvXTkgptKZgtHetkETqy1oz+Rpqi8kulxfz0DxedOgadh/Ie/zM4lLgE
-         tzql7zwA2Y/Dy/DPSFmCOyLUL7Jja0fZGPp9d6FgzNxuRfF4lvieW1FYRTSEqltzarGG
-         yPZOc9lPrRlZzAK9GR3TquWBOKGAbQ3lVYEOslLYi4eWb7xCae3ZBBWBCjRW6ivBL3F4
-         Ud5hf7LbVZNJyECO1O0ff3zKLNtPB4jamgI1ks3d31LT9Vy9ryaSUgV0Qa/siHIwC0Au
-         FW6w==
-X-Gm-Message-State: ANoB5pnhz31iOZFxOI4rr0JrUjy7zUtIDklUNAARQ9zWVdxmAds51423
-        DbLgHCAp5iWArXOoDj3wp0ov3VN94PhjARrT
-X-Google-Smtp-Source: AA0mqf4xvYHTRvfh2jPOwezebiiwAjxNqPenhU44p+alqYmIjvGkgXX83vP3VXqyQbYisb1qj6hfIQ==
-X-Received: by 2002:a17:90b:2401:b0:219:89c2:b70b with SMTP id nr1-20020a17090b240100b0021989c2b70bmr41208487pjb.16.1671206603701;
-        Fri, 16 Dec 2022 08:03:23 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id e24-20020a17090ac21800b0020ae09e9724sm1525281pjt.53.2022.12.16.08.03.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 08:03:22 -0800 (PST)
-Date:   Fri, 16 Dec 2022 08:03:22 -0800 (PST)
-X-Google-Original-Date: Fri, 16 Dec 2022 07:34:37 PST (-0800)
-Subject:     Re: [PATCH] RDMA/rxe: Avoid unused variable warnings on 32-bit targets
-In-Reply-To: <bc1603aa-cdf5-e8d3-d8f4-9e9c4f4d5563@linux.dev>
-CC:     jgg@nvidia.com, zyjzyj2000@gmail.com, jgg@ziepe.ca,
-        leon@kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@rivosinc.com
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     yanjun.zhu@linux.dev
-Message-ID: <mhng-1ccd6ce2-3d2d-4fd7-89e6-04aead156903@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qQVNpA1uebmeJDop3AawgUtcYkrEx880mhk59ps+M7g=;
+        b=KxeVNxzH98R/8cZXIEEgxCegry9a5hPXdfU9f1uNSJuebdy7E5SmGxbIWohQpGEH3H
+         5O6zO6YPEt9tJsfgwYyGTJmwrJuRZygJCgCoJ4cfykRzDsHcpxHItZ2Yf6dYQmxBSAuW
+         uxYDPBYBV0C/qK1DO2gdIAozoXN8ctduyOgOAFpbSNB47Kcudhdkh95hhwkEL5ILPHtV
+         NDYMWd6XZN/G3buemVHfULsEP8IzFTXaJVtjlxH2Q4v5kD0JWhC36p7+Z2hYpcAlxGQO
+         vWZewhe01n4J8eYSs66jGGipqJtytO5JQm5AsmevYFTt9XTT5oTRPV1XStsUHNc2cFs/
+         T5HA==
+X-Gm-Message-State: ANoB5pnjPTm8BVWWNdXtXdDnMqUFE3R36gz43hrYa6PPrABzdqyMSJ6n
+        vd9Wm2jeJouBXJTpkBzBhSkemgrCdHAFGIzTjkIw9tgVY9FLWXjQxe0N52MTs+15p8+lFd1LkV9
+        kDA3rQZ8c7GXWw7SUhHpH1oJi
+X-Received: by 2002:a05:600c:1da9:b0:3c7:a5:610e with SMTP id p41-20020a05600c1da900b003c700a5610emr26397879wms.27.1671206648940;
+        Fri, 16 Dec 2022 08:04:08 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5FXoyyoojkPA8DSBV7JMHnDUCdo6rCxiGpo8VsADBIE2hqSMxjc7E22yI7uL5rmmTlLo5q6w==
+X-Received: by 2002:a05:600c:1da9:b0:3c7:a5:610e with SMTP id p41-20020a05600c1da900b003c700a5610emr26397851wms.27.1671206648647;
+        Fri, 16 Dec 2022 08:04:08 -0800 (PST)
+Received: from ?IPV6:2003:cb:c71c:3900:7211:d436:8d8b:531c? (p200300cbc71c39007211d4368d8b531c.dip0.t-ipconnect.de. [2003:cb:c71c:3900:7211:d436:8d8b:531c])
+        by smtp.gmail.com with ESMTPSA id u9-20020a05600c00c900b003cf37c5ddc0sm2914316wmm.22.2022.12.16.08.04.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 08:04:08 -0800 (PST)
+Message-ID: <2eb1cc61-01ec-10c2-e81f-f4325ca7b03f@redhat.com>
+Date:   Fri, 16 Dec 2022 17:04:06 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 2/2] mm: Fix a few rare cases of using swapin error pte
+ marker
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     Andrea Arcangeli <aarcange@redhat.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Huang Ying <ying.huang@intel.com>
+References: <20221214200453.1772655-1-peterx@redhat.com>
+ <20221214200453.1772655-3-peterx@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221214200453.1772655-3-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 19:11:39 PST (-0800), yanjun.zhu@linux.dev wrote:
-> 在 2022/12/16 7:28, Palmer Dabbelt 写道:
->> From: Palmer Dabbelt <palmer@rivosinc.com>
->>
->
-> In
-> https://patchwork.kernel.org/project/linux-rdma/patch/1669905568-62-2-git-send-email-yangx.jy@fujitsu.com/
->
-> In this link, it seems that a similar commit for this problem.
-> Please check it.
+On 14.12.22 21:04, Peter Xu wrote:
+> This patch should harden commit 15520a3f0469 ("mm: use pte markers for swap
+> errors") on using pte markers for swapin errors on a few corner cases.
+> 
+> 1. Propagate swapin errors across fork()s: if there're swapin errors in
+>     the parent mm, after fork()s the child should sigbus too when an error
+>     page is accessed.
+> 
+> 2. Fix a rare condition race in pte_marker_clear() where a uffd-wp pte
+>     marker can be quickly switched to a swapin error.
+> 
+> 3. Explicitly ignore swapin error pte markers in change_protection().
+> 
+> I mostly don't worry on (2) or (3) at all, but we should still have them.
+> Case (1) is special because it can potentially cause silent data corrupt on
+> child when parent has swapin error triggered with swapoff, but since swapin
+> error is rare itself already it's probably not easy to trigger either.
+> 
+> Currently there is a priority difference between the uffd-wp bit and the
+> swapin error entry, in which the swapin error always has higher
+> priority (e.g. we don't need to wr-protect a swapin error pte marker).
+> 
+> If there will be a 3rd bit introduced, we'll probably need to consider a
+> more involved approach so we may need to start operate on the bits.  Let's
+> leave that for later.
+> 
+> This patch is tested with case (1) explicitly where we'll get corrupted
+> data before in the child if there's existing swapin error pte markers, and
+> after patch applied the child can be rightfully killed.
+> 
+> We don't need to copy stable for this one since 15520a3f0469 just landed as
+> part of v6.2-rc1, only "Fixes" applied.
+> 
+> Fixes: 15520a3f0469 ("mm: use pte markers for swap errors")
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 
-That one also fixes the compile issues for me.
+Acked-by: David Hildenbrand <david@redhat.com>
 
->
-> Thanks
-> Zhu Yanjun
->
->> These variables are not used on 32-bit targets as there's a big ifdef
->> around their use.  This results on a handful of warnings for 32-bit
->> RISC-V allyesconfig:
->>
->>    CC      drivers/infiniband/sw/rxe/rxe_resp.o
->> linux/drivers/infiniband/sw/rxe/rxe_resp.c: In function 'atomic_write_reply':
->> linux/drivers/infiniband/sw/rxe/rxe_resp.c:794:13: error: unused variable 'payload' [-Werror=unused-variable]
->>    794 |         int payload = payload_size(pkt);
->>        |             ^~~~~~~
->> linux/drivers/infiniband/sw/rxe/rxe_resp.c:793:24: error: unused variable 'mr' [-Werror=unused-variable]
->>    793 |         struct rxe_mr *mr = qp->resp.mr;
->>        |                        ^~
->> linux/drivers/infiniband/sw/rxe/rxe_resp.c:791:19: error: unused variable 'dst' [-Werror=unused-variable]
->>    791 |         u64 src, *dst;
->>        |                   ^~~
->> linux/drivers/infiniband/sw/rxe/rxe_resp.c:791:13: error: unused variable 'src' [-Werror=unused-variable]
->>    791 |         u64 src, *dst;
->>        |             ^~~
->> cc1: all warnings being treated as errors
->>
->> Fixes: 034e285f8b99 ("RDMA/rxe: Make responder support atomic write on RC service")
->> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->> ---
->>   drivers/infiniband/sw/rxe/rxe_resp.c | 8 ++++----
->>   1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
->> index 7a60c7709da0..18977d5a3316 100644
->> --- a/drivers/infiniband/sw/rxe/rxe_resp.c
->> +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
->> @@ -788,10 +788,10 @@ static enum resp_states atomic_reply(struct rxe_qp *qp,
->>   static enum resp_states atomic_write_reply(struct rxe_qp *qp,
->>   						struct rxe_pkt_info *pkt)
->>   {
->> -	u64 src, *dst;
->> -	struct resp_res *res = qp->resp.res;
->> -	struct rxe_mr *mr = qp->resp.mr;
->> -	int payload = payload_size(pkt);
->> +	__maybe_unused u64 src, *dst;
->> +	__maybe_unused struct resp_res *res = qp->resp.res;
->> +	__maybe_unused struct rxe_mr *mr = qp->resp.mr;
->> +	__maybe_unused int payload = payload_size(pkt);
->>
->>   	if (!res) {
->>   		res = rxe_prepare_res(qp, pkt, RXE_ATOMIC_WRITE_MASK);
+-- 
+Thanks,
+
+David / dhildenb
+
