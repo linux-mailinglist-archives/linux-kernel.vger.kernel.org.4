@@ -2,127 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29ACA64ED1B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D88EC64ED1E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:46:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbiLPOpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:45:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58444 "EHLO
+        id S230527AbiLPOqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:46:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbiLPOpE (ORCPT
+        with ESMTP id S229632AbiLPOqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:45:04 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401FC5D6A2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:45:03 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-62-OHQrkBEPO8-3KvAViQxO2w-1; Fri, 16 Dec 2022 14:45:00 +0000
-X-MC-Unique: OHQrkBEPO8-3KvAViQxO2w-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 16 Dec
- 2022 14:44:58 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Fri, 16 Dec 2022 14:44:58 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "'Leizhen (ThunderTown)'" <thunder.leizhen@huawei.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: RE: [PATCH v9] kallsyms: Add self-test facility
-Thread-Topic: [PATCH v9] kallsyms: Add self-test facility
-Thread-Index: AQHZEUYmzV5WljPUpEGVjsixemOWL65wgKUggAAUk7A=
-Date:   Fri, 16 Dec 2022 14:44:58 +0000
-Message-ID: <592dce7a0de24c62bd31c29f86ce6c1b@AcuMS.aculab.com>
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
- <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
- <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
- <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
- <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
- <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
- <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
- <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
- <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
- <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
- <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
- <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
- <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com>
- <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
-In-Reply-To: <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 16 Dec 2022 09:46:48 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FBD5D6AB;
+        Fri, 16 Dec 2022 06:46:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671202008; x=1702738008;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=lLgU8iAuD97bVOvHLDwFY8Y2D9mQMfGe1vN1MfsUUjk=;
+  b=CCtex0BP3MTzXJl8XyMwsd62Ka1BVKwvEN1GHNC0yBCkL6Zgnckg9avi
+   UJgJPicFSaacVtl/273xSoJYwWPqVh5VC83Rn4obLXH1lsvXeS3TfqJuF
+   PUsqo/oWDdstyJvWuNNzQhpImRCe6Y4YR6Z9jIa7y/+B1BmFfrfG1YWc1
+   V7hO0hpxAQ6i/RhlWTwwYQk4yUxiyEE1ddx2CvhH1kStaN28NN/o31vYk
+   ju6qiJUtodqdIpyQWSAwXAi5/uqr5YmmRDHVFXUImv2UrpvJY5SAQ6iLr
+   RgrL22QLXn7cWdlrPRxfEk9h5bXCB1rSk0YWXfKwsQOeW8r38zYul8p5J
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="298649829"
+X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
+   d="scan'208";a="298649829"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 06:46:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="792096757"
+X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
+   d="scan'208";a="792096757"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 16 Dec 2022 06:46:43 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p6Bz0-00Atfy-0W;
+        Fri, 16 Dec 2022 16:46:42 +0200
+Date:   Fri, 16 Dec 2022 16:46:41 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Hawa, Hanna" <hhhawa@amazon.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        jsd@semihalf.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dwmw@amazon.co.uk, benh@amazon.com,
+        ronenk@amazon.com, talel@amazon.com, jonnyc@amazon.com,
+        hanochu@amazon.com, farbere@amazon.com, itamark@amazon.com
+Subject: Re: [PATCH v2 1/1] i2c: designware: set pinctrl recovery information
+ from device pinctrl
+Message-ID: <Y5yE0SsfGrwaB5zA@smile.fi.intel.com>
+References: <20221214142725.23881-1-hhhawa@amazon.com>
+ <Y5n1U1lYbcbJ5U1k@smile.fi.intel.com>
+ <efa9171f-98ac-f518-e59e-f6c4d7d3d4e6@amazon.com>
+ <Y5r2pZhe17dVBMme@smile.fi.intel.com>
+ <1408bbef-10e3-f76b-b66d-b95e84748e18@amazon.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1408bbef-10e3-f76b-b66d-b95e84748e18@amazon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogRGF2aWQgTGFpZ2h0DQo+IFNlbnQ6IDE2IERlY2VtYmVyIDIwMjIgMTM6MzANCj4gDQo+
-IEZyb206IExlaXpoZW4gKFRodW5kZXJUb3duKQ0KPiA+IFNlbnQ6IDE2IERlY2VtYmVyIDIwMjIg
-MTI6MDINCj4gPg0KPiAuLg0KPiA+ID4gTW92aW5nIHRoZSBtNjhrIHZlcnNpb24gaW5zaWRlIGxp
-Yi9zdHJpbmcuYyBtYWtlcyB0aGUgdGVzdCBwYXNzLCB0b28uDQo+ID4gPiBTbyBpdCBtdXN0IGJl
-IHJlbGF0ZWQgdG8gdGhlIGZ1bmN0aW9uIGJlaW5nIGlubGluZSwgYW5kIGdjYyBtYWtpbmcNCj4g
-PiA+IChpbmNvcnJlY3QpIGFzc3VtcHRpb25zLi4uDQo+ID4NCj4gPiBZZXMsIGl0J3MgdGhlIGNv
-bXBpbGVyJ3MgZmF1bHQuIEkganVzdCByZXBsaWVkIERhdmlkIExhaWdodDoNCj4gPg0KPiA+IEkg
-YWRkZWQgJ3ZvbGF0aWxlJyB0byBwcmV2ZW50IGNvbXBpbGVyIG9wdGltaXphdGlvbnMsIGFuZCBp
-dCdzIE9LIG5vdy4NCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9hcmNoL202OGsvaW5jbHVkZS9hc20v
-c3RyaW5nLmggYi9hcmNoL202OGsvaW5jbHVkZS9hc20vc3RyaW5nLmgNCj4gPiBpbmRleCBmNzU5
-ZDk0NGM0NDk5NDAuLjNkYjgxZTVhNzgzYzcyYSAxMDA2NDQNCj4gPiAtLS0gYS9hcmNoL202OGsv
-aW5jbHVkZS9hc20vc3RyaW5nLmgNCj4gPiArKysgYi9hcmNoL202OGsvaW5jbHVkZS9hc20vc3Ry
-aW5nLmgNCj4gPiBAQCAtNDIsOSArNDIsOSBAQCBzdGF0aWMgaW5saW5lIGNoYXIgKnN0cm5jcHko
-Y2hhciAqZGVzdCwgY29uc3QgY2hhciAqc3JjLCBzaXplX3QgbikNCj4gPiAgI2RlZmluZSBfX0hB
-VkVfQVJDSF9TVFJDTVANCj4gPiAgc3RhdGljIGlubGluZSBpbnQgc3RyY21wKGNvbnN0IGNoYXIg
-KmNzLCBjb25zdCBjaGFyICpjdCkNCj4gPiAgew0KPiA+IC0gICAgICAgY2hhciByZXM7DQo+ID4g
-KyAgICAgICBzaWduZWQgY2hhciByZXM7DQo+ID4NCj4gPiAtICAgICAgIGFzbSAoIlxuIg0KPiA+
-ICsgICAgICAgYXNtIHZvbGF0aWxlICgiXG4iDQo+ID4gICAgICAgICAgICAgICAgICIxOiAgICAg
-bW92ZS5iICAoJTApKywlMlxuIiAgICAgLyogZ2V0ICpjcyAqLw0KPiA+ICAgICAgICAgICAgICAg
-ICAiICAgICAgIGNtcC5iICAgKCUxKSssJTJcbiIgICAgIC8qIGNvbXBhcmUgYSBieXRlICovDQo+
-ID4gICAgICAgICAgICAgICAgICIgICAgICAgam5lICAgICAyZlxuIiAgICAgICAgICAgLyogbm90
-IGVxdWFsLCBicmVhayBvdXQgKi8NCj4gDQo+IEFkZGluZyAndm9sYXRpbGUnIHRoZXJlIHNob3Vs
-ZG4ndCBtYWtlIGFueSByZWFsIGRpZmZlcmVuY2UuDQo+IA0KPiBJJ2QgZG91YmxlLWNoZWNrIHRo
-ZSBhc20gY29uc3RyYWludHMgZm9yIHRoZSB0d28gcG9pbnRlcnMuDQo+IFRoZXkgYXJlIG1vZGlm
-aWVkIGJ5IHRoZSBhc20sIGJ1dCB0aGUgY2FsbGVyJ3MgdmFyaWFibGVzDQo+IG11c3Qgbm90IGJl
-IGNoYW5nZWQuDQo+IA0KPiBJIHRoaW5rIHRoYXQgbWVhbnMgdGhleSBuZWVkIHRvIGJlIG5vcm1h
-bCAnaW5wdXQnIHBhcmFtZXRlcnMNCj4gYW5kIHRoZSByZXN1bHQgbXVzdCBiZSBpbiBkaWZmZXJl
-bnQgcmVnaXN0ZXIgKGVhcmx5IGNsb2JiZXI/KS4NCj4gQ3VycmVudGx5IHRoZSBwb2ludGVycyBh
-cmUgIityIiAtIHdoaWNoIEkgdGhpbmsgbWVhbnMgdGhleQ0KPiBhcmUgaW5wdXQtb3V0cHV0IGFu
-ZCBhbnkgY2FsbGVyLXN1cHBsaWVkIHZhcmlhYmxlIGlzDQo+IGxpa2VseSB0byBnZXQgY2hhbmdl
-ZC4NCg0KRGVmaW5pdGVseSBiYWRseSBicm9rZW4uDQonY3MnIGFuZCAnY3QnIHNob3VsZCBiZSBp
-bnB1dCBwYXJhbWV0ZXJzLg0KJ3JlcycgbmVlZHMgdG8gYmUgYW4gZWFybHktY2xvYmJlciBvdXRw
-dXQgcGFyYW1ldGVyICI9JnIiLg0KDQpTaW5jZSBpdCBpcyBhY3R1YWxseSBhICdzdGF0aWMgaW5s
-aW5lJyAobm90IGp1c3QgYSAjZGVmaW5lKQ0KdGhlbiBsZXR0aW5nIGNzL2N0IGJlIGNoYW5nZWQg
-cHJvYmFibHkgZG9lc24ndCBtYXR0ZXIuDQoNCkJ1dCB0aGUgbGFjayBvZiAnZWFybHkgY2xvYmJl
-cicgd2lsbCBjYXVzZSBncmllZi4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBM
-YWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBU
-LCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On Fri, Dec 16, 2022 at 03:50:19PM +0200, Hawa, Hanna wrote:
+> On 12/15/2022 12:27 PM, Andy Shevchenko wrote:
+> > OK, but why that function doesn't use the dev->pins->p if it's defined?
+> > (As a fallback when rinfo->pinctrl is NULL. >
+> 
+> The solution will look like the below diff (get_device_pinctrl() is new
+> function that i've added that return the dev->pins->p)
+
+Naming is not aligned with a namespace.
+
+I would rather name it dev_pinctrl() and locate it in pinctrl/devinfo.h.
+
+...
+
+> -       struct pinctrl *p = bri->pinctrl;
+> +       struct pinctrl *p;
+> +
+> +       if (!bri->pinctrl)
+> +               bri->pinctrl = get_device_pinctrl(dev->parent);
+> +       p = bri->pinctrl;
+
+Can be simplified with help of Elvis:
+
+	p = bri->pinctrl ?: dev_pinctrl(dev->parent);
+
+> > Wolfram?
+> > 
+> > Hanna, it seems you missed I²C maintainer to Cc...
+> 
+> I based my CC/TO on get_maintainer.pl script. Will make sure that Wolfram on
+> CC next time.
+
+All the same about Linus W., who is pin control subsystem maintainer, and be
+sure the respective mailing lists are also included.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
