@@ -2,110 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 561A064EF2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 784A164EF2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:32:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231350AbiLPQca convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Dec 2022 11:32:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
+        id S231500AbiLPQcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 11:32:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbiLPQcO (ORCPT
+        with ESMTP id S231277AbiLPQcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 11:32:14 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65206E3B
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:32:13 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-279-BdW-Xxs0M0eWjbn_VRCDlA-1; Fri, 16 Dec 2022 16:32:10 +0000
-X-MC-Unique: BdW-Xxs0M0eWjbn_VRCDlA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 16 Dec
- 2022 16:32:08 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Fri, 16 Dec 2022 16:32:08 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andreas Schwab' <schwab@linux-m68k.org>
-CC:     "'Leizhen (ThunderTown)'" <thunder.leizhen@huawei.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: RE: [PATCH v9] kallsyms: Add self-test facility
-Thread-Topic: [PATCH v9] kallsyms: Add self-test facility
-Thread-Index: AQHZEWkbzV5WljPUpEGVjsixemOWL65wtOBg
-Date:   Fri, 16 Dec 2022 16:32:08 +0000
-Message-ID: <819801284eb745d9a4189759bad297f5@AcuMS.aculab.com>
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
-        <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
-        <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
-        <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
-        <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
-        <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
-        <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
-        <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
-        <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
-        <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
-        <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
-        <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
-        <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com>
-        <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
-        <592dce7a0de24c62bd31c29f86ce6c1b@AcuMS.aculab.com>
-        <87pmcjidfe.fsf@igel.home>
-        <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com>
-        <87len7ibtt.fsf@igel.home>
-        <c7cebe9da0474eb880ab14124ba290d0@AcuMS.aculab.com>
- <87fsdfib07.fsf@igel.home>
-In-Reply-To: <87fsdfib07.fsf@igel.home>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 16 Dec 2022 11:32:32 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33CDE2D;
+        Fri, 16 Dec 2022 08:32:30 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 86A1A3454D;
+        Fri, 16 Dec 2022 16:32:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1671208349; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ifpYR2PdESJAbvJefyXjW1EWj/1z2L0zImGtUVLVTog=;
+        b=G0OuXHi/vYNbH57ZVsfKkJHhPgNpbk73CrPzwAWNhyKC3Xh8oDQOLuRGpTKYCaTgy2aXzB
+        k0KaxX3xKjrzsD+IFm28RtsBbuoo+JfPz565cOawN8pNgSC13NF9g2u/aUaZ1t/RcOUdug
+        Qo9E/fq7nu67Auoe/CaI7a2LO2TRDg8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1671208349;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ifpYR2PdESJAbvJefyXjW1EWj/1z2L0zImGtUVLVTog=;
+        b=yah1WAubrE2ujAH04CMoJ6yYkHNQn4D1DQrpz87GR8v/vJCOlcD2/p8mCcKOkvRmP0v02E
+        soZWIZ2/b5FHFHAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 580D0138F0;
+        Fri, 16 Dec 2022 16:32:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /03PFJ2dnGOaKQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 16 Dec 2022 16:32:29 +0000
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?q?Jakub=20Mat=C4=9Bna?= <matenajakub@gmail.com>,
+        stable@vger.kernel.org,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@kernel.org>
+Subject: [PATCH for v6.1 regression] mm, mremap: fix mremap() expanding vma with addr inside vma
+Date:   Fri, 16 Dec 2022 17:32:27 +0100
+Message-Id: <20221216163227.24648-1-vbabka@suse.cz>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Schwab
-> Sent: 16 December 2022 16:12
-> On Dez 16 2022, David Laight wrote:
-> 
-> > The other issue is a missing "memory" clobber.
-> 
-> strcmp is a pure read-only operation.
+Since 6.1 we have noticed random rpm install failures that were tracked
+to mremap() returning -ENOMEM and to commit ca3d76b0aa80 ("mm: add
+merging after mremap resize").
 
-Still needs the memory clobber.
+The problem occurs when mremap() expands a VMA in place, but using an
+starting address that's not vma->vm_start, but somewhere in the middle.
+The extension_pgoff calculation introduced by the commit is wrong in
+that case, so vma_merge() fails due to pgoffs not being compatible.
+Fix the calculation.
 
-	David
+By the way it seems that the situations, where rpm now expands a vma
+from the middle, were made possible also due to that commit, thanks to
+the improved vma merging. Yet it should work just fine, except for the
+buggy calculation.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Reported-by: Jiri Slaby <jirislaby@kernel.org>
+Link: https://bugzilla.suse.com/show_bug.cgi?id=1206359
+Fixes: ca3d76b0aa80 ("mm: add merging after mremap resize")
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Cc: Jakub Matěna <matenajakub@gmail.com>
+Cc: <stable@vger.kernel.org>
+Cc: "Kirill A . Shutemov" <kirill@shutemov.name>
+Cc: Liam Howlett <liam.howlett@oracle.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Mel Gorman <mgorman@techsingularity.net>
+Cc: Michal Hocko <mhocko@kernel.org>
+---
+Hi, this fixes a regression in 6.1 so please process ASAP so that stable
+6.1.y can get the fix.
+
+ mm/mremap.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/mm/mremap.c b/mm/mremap.c
+index e465ffe279bb..fe587c5d6591 100644
+--- a/mm/mremap.c
++++ b/mm/mremap.c
+@@ -1016,7 +1016,8 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
+ 			long pages = (new_len - old_len) >> PAGE_SHIFT;
+ 			unsigned long extension_start = addr + old_len;
+ 			unsigned long extension_end = addr + new_len;
+-			pgoff_t extension_pgoff = vma->vm_pgoff + (old_len >> PAGE_SHIFT);
++			pgoff_t extension_pgoff = vma->vm_pgoff +
++				((extension_start - vma->vm_start) >> PAGE_SHIFT);
+ 
+ 			if (vma->vm_flags & VM_ACCOUNT) {
+ 				if (security_vm_enough_memory_mm(mm, pages)) {
+-- 
+2.38.1
 
