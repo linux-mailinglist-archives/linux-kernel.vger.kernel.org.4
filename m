@@ -2,90 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576C064E6BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 05:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E34B264E6C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 05:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiLPEk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Dec 2022 23:40:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
+        id S229868AbiLPElL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 15 Dec 2022 23:41:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiLPEkY (ORCPT
+        with ESMTP id S229793AbiLPElG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Dec 2022 23:40:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C81130F53;
-        Thu, 15 Dec 2022 20:40:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3930A61FE6;
-        Fri, 16 Dec 2022 04:40:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89072C433D2;
-        Fri, 16 Dec 2022 04:40:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671165622;
-        bh=+KkV+X3jVCfNaN9ygGX9jCP52xI05DFOAj7yDkZ5NUs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=cGzRTsVowhMWII2SCk5Lmy1pmGDt8lQsKq7vOl4ndolECdsNsascpATgcNlrTkZ21
-         KgUv5/0Q6ekRxdI7+PsyAXyuGsKJK1kVxmsYhfa4BvPaXQ1+CUPk4YEMVkFAmiyu0R
-         QrgI0UNWYlh/2wLJFe4Yli21BEcvtDu/O2DwQmiTnLnt9nxD0EjGZXim/n7bZ+J0W7
-         4/UhNwryhHlHQNlD6GCWnA6Cvb9RQ061vi+4e5ouAG69f1WE2cHzv5j8UeAY+gWIgL
-         5lsH7VIy7/lKZtNDCEtpqECYHeSWyxfYJRY/yDCQ7Pqn6XNZFBwYfXU2M98e88su/+
-         mY9r9Py/3I74w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 29C975C1C5B; Thu, 15 Dec 2022 20:40:22 -0800 (PST)
-Date:   Thu, 15 Dec 2022 20:40:22 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] tracing: Do not synchronize freeing of trigger filter on
- boot up
-Message-ID: <20221216044022.GA2467686@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221214084954.e759647a2f5f1a38bc78b371@kernel.org>
- <20221214200333.GA3208104@paulmck-ThinkPad-P17-Gen-1>
- <20221215100241.73a30da8@gandalf.local.home>
- <20221215170256.GG4001@paulmck-ThinkPad-P17-Gen-1>
- <20221215135102.556ee076@gandalf.local.home>
- <20221215190158.GK4001@paulmck-ThinkPad-P17-Gen-1>
- <20221215173913.5432bfbf@gandalf.local.home>
- <20221215231027.GS4001@paulmck-ThinkPad-P17-Gen-1>
- <20221215184202.7ebb3055@gandalf.local.home>
- <20221216010118.GU4001@paulmck-ThinkPad-P17-Gen-1>
+        Thu, 15 Dec 2022 23:41:06 -0500
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3BE6366;
+        Thu, 15 Dec 2022 20:41:01 -0800 (PST)
+Received: by mail-pl1-f179.google.com with SMTP id d3so1150529plr.10;
+        Thu, 15 Dec 2022 20:41:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=idu/8FxD+PQK9l8zHYNdC3ZtLj9zNJ2MUZIelYcW0aE=;
+        b=DZZliLVsGkGfZ3eCapgMsgoH0YIUDl7AWu2TL7FybLjVYzfrBhBR5mL2feKGwbejjl
+         SwGV6Zr5bMtb+gFHnw1YMshJClAe73t2d4nj6fLgoVrXzbm+1uGTg53Mo2YsCEB1h6gD
+         1mlnZ8b3GGZELr97PCp5v0Q2iCHDLNYx9+xv3ItefXlcTqKusjnUnGyBy/sj0XVTfoAV
+         Oz9fvOk/sAGx30+388ifbKnDORsE1OVlLDb0+9u4DL60dTTB0XjV/DBfoU5xqJ6Ja1X2
+         QguNOFJaWaXaEndiN2Hqj3z2lIAYYcfuv8oI8IzEXpop17/euLx75J6gw3QynIPos9Gw
+         p7pQ==
+X-Gm-Message-State: AFqh2krBFg83wv2Mfqn4voonQYdyYDZ3VXJFGLnjA1VsM6S90cHgc7xr
+        Abiw/aOqG6RvTLB1LpXY0GeQYeaVkE8J6JysUck=
+X-Google-Smtp-Source: AMrXdXskktqxQqziYQg+ykW6hbRxVC+hH0xzdGaj1NKDK4YmlrmRd2Pfy0qK1CIcDYtsvUgnPs/g0eOpfbbowOjNEA0=
+X-Received: by 2002:a17:90a:c7d3:b0:21c:bc8b:b080 with SMTP id
+ gf19-20020a17090ac7d300b0021cbc8bb080mr421817pjb.19.1671165661121; Thu, 15
+ Dec 2022 20:41:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221216010118.GU4001@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221116205308.2996556-1-msp@baylibre.com> <20221116205308.2996556-3-msp@baylibre.com>
+ <20221130172100.ef4xn6j6kzrymdyn@pengutronix.de> <20221214091406.g6vim5hvlkm34naf@blmsp>
+ <20221214091820.geugui5ws3f7a5ng@pengutronix.de> <20221214092201.xpb3rnwp5rtvrpkr@pengutronix.de>
+ <CAMZ6RqLAZNj9dm_frbKExHK8AYDj9D0rX_9=c8_wk9kFrO-srw@mail.gmail.com>
+ <20221214103542.c5g32qtbuvn5mv4u@blmsp> <20221215093140.fwpezasd6whhk7p7@blmsp>
+In-Reply-To: <20221215093140.fwpezasd6whhk7p7@blmsp>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Fri, 16 Dec 2022 13:40:50 +0900
+Message-ID: <CAMZ6RqLTbD1KHqtg5E8tTGy1BFjJYjzVcK3-1L_WXo+Vw8cO4g@mail.gmail.com>
+Subject: Re: [PATCH 02/15] can: m_can: Wakeup net queue once tx was issued
+To:     Markus Schneider-Pargmann <msp@baylibre.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 05:01:18PM -0800, Paul E. McKenney wrote:
-> On Thu, Dec 15, 2022 at 06:42:02PM -0500, Steven Rostedt wrote:
-> > On Thu, 15 Dec 2022 15:10:27 -0800
-> > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > 
-> > > The nice thing about the current placement of rcu_scheduler_starting()
-> > > is that there is not yet any other task to switch to.  ;-)
-> > 
-> > Fair enough. Anyway the last patch appears to do the job.
-> > 
-> > Reported-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > Tested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> 
-> Applied, thank you!
+On Thu. 15 Dec. 2022 at 18:44, Markus Schneider-Pargmann
+<msp@baylibre.com> wrote:
+> Hi,
+>
+> On Wed, Dec 14, 2022 at 11:35:43AM +0100, Markus Schneider-Pargmann wrote:
+> > Hi Vincent,
+> >
+> > On Wed, Dec 14, 2022 at 07:15:25PM +0900, Vincent MAILHOL wrote:
+> > > On Wed. 14 Dec. 2022 at 18:28, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> > > > On 14.12.2022 10:18:20, Marc Kleine-Budde wrote:
+> > > > > On 14.12.2022 10:14:06, Markus Schneider-Pargmann wrote:
+> > > > > > Hi Marc,
+> > > > > >
+> > > > > > On Wed, Nov 30, 2022 at 06:21:00PM +0100, Marc Kleine-Budde wrote:
+> > > > > > > On 16.11.2022 21:52:55, Markus Schneider-Pargmann wrote:
+> > > > > > > > Currently the driver waits to wakeup the queue until the interrupt for
+> > > > > > > > the transmit event is received and acknowledged. If we want to use the
+> > > > > > > > hardware FIFO, this is too late.
+> > > > > > > >
+> > > > > > > > Instead release the queue as soon as the transmit was transferred into
+> > > > > > > > the hardware FIFO. We are then ready for the next transmit to be
+> > > > > > > > transferred.
+> > > > > > >
+> > > > > > > If you want to really speed up the TX path, remove the worker and use
+> > > > > > > the spi_async() API from the xmit callback, see mcp251xfd_start_xmit().
+> > > > > > >
+> > > > > > > Extra bonus if you implement xmit_more() and transfer more than 1 skb
+> > > > > > > per SPI transfer.
+> > > > > >
+> > > > > > Just a quick question here, I mplemented a xmit_more() call and I am
+> > > > > > testing it right now, but it always returns false even under high
+> > > > > > pressure. The device has a txqueuelen set to 1000. Do I need to turn
+> > > > > > some other knob for this to work?
+> > >
+> > > I was the first to use BQL in a CAN driver. It also took me time to
+> > > first figure out the existence of xmit_more() and even more to
+> > > understand how to make it so that it would return true.
+> > >
+> > > > > AFAIK you need BQL support: see 0084e298acfe ("can: mcp251xfd: add BQL support").
+> > > > >
+> > > > > The etas_es58x driver implements xmit_more(), I added the Author Vincent
+> > > > > on Cc.
+> > > >
+> > > > Have a look at netdev_queue_set_dql_min_limit() in the etas driver.
+> > >
+> > > The functions you need are the netdev_send_queue() and the
+> > > netdev_complete_queue():
+> > >
+> > >   https://elixir.bootlin.com/linux/latest/source/include/linux/netdevice.h#L3424
+> > >
+> > > For CAN, you probably want to have a look to can_skb_get_frame_len().
+> > >
+> > >   https://elixir.bootlin.com/linux/latest/source/include/linux/can/length.h#L166
+> > >
+> > > The netdev_queue_set_dql_min_limit() gives hints by setting a minimum
+> > > value for BQL. It is optional (and as of today I am the only user of
+> > > it).
+> >
+> > Thank you for this summary, great that you already invested the time to
+> > make it work with a CAN driver. I will give it a try in the m_can
+> > driver.
+>
+> Thanks again, it looks like it is working after adding netdev_sent_queue
+> and netdev_complete_queue.
 
-And I should have checked up on urgency.  Normal process would hold this
-one until the v6.3 merge window, but please let me know if you would
-like it in v6.2.  It is after all a bug fix.
+Happy to hear that :)
 
-							Thanx, Paul
+A quick advice just in case: make sure to test the different error
+branches (failed TX, can_restart() after bus off…).
+
+
+Yours sincerely,
+Vincent Mailhol
