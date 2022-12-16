@@ -2,147 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EBF64F12F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 19:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0CD264F131
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 19:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbiLPSmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 13:42:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45428 "EHLO
+        id S231747AbiLPSoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 13:44:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbiLPSmV (ORCPT
+        with ESMTP id S230389AbiLPSoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 13:42:21 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA61DB6;
-        Fri, 16 Dec 2022 10:42:19 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NYdCR4sVLz6HJW1;
-        Sat, 17 Dec 2022 02:38:27 +0800 (CST)
-Received: from localhost (10.45.152.125) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 16 Dec
- 2022 18:42:16 +0000
-Date:   Fri, 16 Dec 2022 18:42:15 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V4 3/9] cxl/mem: Wire up event interrupts
-Message-ID: <20221216184215.000015dd@Huawei.com>
-In-Reply-To: <20221216142438.00006588@Huawei.com>
-References: <20221212070627.1372402-1-ira.weiny@intel.com>
-        <20221212070627.1372402-4-ira.weiny@intel.com>
-        <20221216142438.00006588@Huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Fri, 16 Dec 2022 13:44:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAA1289;
+        Fri, 16 Dec 2022 10:44:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 383B6621D1;
+        Fri, 16 Dec 2022 18:44:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A426C433D2;
+        Fri, 16 Dec 2022 18:44:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671216242;
+        bh=vXaRsUEz+ZU8atzp08Gu7TMGOkHET3ojPGwll8eK0S0=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=tGo8OHTV3CB03XAOEEgy1LKM4ohkr0fVmRfCega/FzvnUSuCVoJ+CDhUpjIBdre9c
+         bf2gOLmN6g3k085im1FXmhLt7h5Hug/Y5A1mKl3g5SKLWP3tqIP0zBTx1FF6Xmbh0S
+         fo5p20JfswWi214OwwDiwMBNRghWmB8gfqQR6u2ryZ5jQbtdjhNULoip0TfaxkoSIG
+         66WtsvwamBuCGdO+2WRko2xfwOhUEvL9F0r6QyipLdIgoDYmFXXFsNrnuN03sShRaE
+         +np/w+rgP9EpZkwSe0PC7KqaZfK52ywIsiV0Se+dyMYH53jO1xe5YEZ42lULFcelxi
+         xnSbomOAZruxg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.45.152.125]
-X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20221211204324.169991-2-tmaimon77@gmail.com>
+References: <20221211204324.169991-1-tmaimon77@gmail.com> <20221211204324.169991-2-tmaimon77@gmail.com>
+Subject: Re: [PATCH v14 1/1] clk: npcm8xx: add clock controller
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     openbmc@lists.ozlabs.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tomer Maimon <tmaimon77@gmail.com>
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        benjaminfair@google.com, joel@jms.id.au, mturquette@baylibre.com,
+        tali.perry1@gmail.com, venture@google.com, yuenn@google.com
+Date:   Fri, 16 Dec 2022 10:44:00 -0800
+User-Agent: alot/0.10
+Message-Id: <20221216184402.8A426C433D2@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Dec 2022 14:24:38 +0000
-Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+Quoting Tomer Maimon (2022-12-11 12:43:24)
+> diff --git a/drivers/clk/clk-npcm8xx.c b/drivers/clk/clk-npcm8xx.c
+> new file mode 100644
+> index 000000000000..08ee7bea6f3a
+> --- /dev/null
+> +++ b/drivers/clk/clk-npcm8xx.c
+> @@ -0,0 +1,650 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+[...]
+> +#define NPCM8XX_CLK_S_RCP        "rcp"
+> +
+> +static const u32 pll_mux_table[] =3D { 0, 1, 2, 3 };
+> +static const struct clk_parent_data pll_mux_parents[] =3D {
+> +       { .fw_name =3D NPCM8XX_CLK_S_PLL0, .name =3D NPCM8XX_CLK_S_PLL0 },
 
-> On Sun, 11 Dec 2022 23:06:21 -0800
-> ira.weiny@intel.com wrote:
-> 
-> > From: Davidlohr Bueso <dave@stgolabs.net>
-> > 
-> > Currently the only CXL features targeted for irq support require their
-> > message numbers to be within the first 16 entries.  The device may
-> > however support less than 16 entries depending on the support it
-> > provides.
-> > 
-> > Attempt to allocate these 16 irq vectors.  If the device supports less
-> > then the PCI infrastructure will allocate that number.  Upon successful
-> > allocation, users can plug in their respective isr at any point
-> > thereafter.
-> > 
-> > CXL device events are signaled via interrupts.  Each event log may have
-> > a different interrupt message number.  These message numbers are
-> > reported in the Get Event Interrupt Policy mailbox command.
-> > 
-> > Add interrupt support for event logs.  Interrupts are allocated as
-> > shared interrupts.  Therefore, all or some event logs can share the same
-> > message number.
-> > 
-> > In addition all logs are queried on any interrupt in order of the most
-> > to least severe based on the status register.
-> > 
-> > Cc: Bjorn Helgaas <helgaas@kernel.org>
-> > Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Co-developed-by: Ira Weiny <ira.weiny@intel.com>
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
-> >   
-> 
-> > +/**
-> > + * Event Interrupt Policy
-> > + *
-> > + * CXL rev 3.0 section 8.2.9.2.4; Table 8-52
-> > + */
-> > +enum cxl_event_int_mode {
-> > +	CXL_INT_NONE		= 0x00,
-> > +	CXL_INT_MSI_MSIX	= 0x01,
-> > +	CXL_INT_FW		= 0x02
-> > +};
-> > +struct cxl_event_interrupt_policy {
-> > +	u8 info_settings;
-> > +	u8 warn_settings;
-> > +	u8 failure_settings;
-> > +	u8 fatal_settings;  
-> 
-> This is an issue for your QEMU code which has this set at 5 bytes.
-> Guess our handling of record lengths needs updating now we have two different
-> spec versions to support and hence these can have multiple lengths.
-> 
-> Btw, do you have an updated version of the QEMU patches you can share?
+As this is a new driver either you should only have .fw_name here. The
+.name field is a backup to migrate code over to a new binding. When
+.fw_name is used there should be an associated DT binding update. I
+doubt the usage of .fw_name is correct though, because aren't these clks
+internal to the controller? The .fw_name field is about describing
+parents that are an input to the clk controller node in DT (because the
+controller is a consumer of these clks that are external to the device).
 
-Note that I'm happy to take your QEMU series forwards, just don't want to duplicate
-stuff you have already done!
+So can you use the .hw field for these internal clks? Check out
+CLK_HW_INIT_HWS() macro and friends for a possible way to initialize
+this.
 
-Jonathan
+> +       { .fw_name =3D NPCM8XX_CLK_S_PLL1, .name =3D NPCM8XX_CLK_S_PLL1 },
+> +       { .fw_name =3D NPCM8XX_CLK_S_REFCLK, .name =3D NPCM8XX_CLK_S_REFC=
+LK },
 
-> I was planning on just doing the AER type RAS stuff for the first pull this cycle
-> but given this set means we never reach that code I probably need to do QEMU
-> support for this and the stuff to support those all in one go - otherwise
-> no one will be able to test it :)  We rather optimistically have the OSC set
-> to say the OS can have control of these, but upstream code doesn't emulate
-> anything yet. Oops. Should have pretended the hardware was handling them
-> until we had this support in place in QEMU.
-> 
-> Jonathan
-> 
-> > +} __packed;
-> > +
-> >  /**
-> >   * struct cxl_event_state - Event log driver state
-> >   *
-> > @@ -288,6 +305,8 @@ enum cxl_opcode {
-> >  	CXL_MBOX_OP_RAW			= CXL_MBOX_OP_INVALID,
-> >  	CXL_MBOX_OP_GET_EVENT_RECORD	= 0x0100,
-> >  	CXL_MBOX_OP_CLEAR_EVENT_RECORD	= 0x0101,
-> > +	CXL_MBOX_OP_GET_EVT_INT_POLICY	= 0x0102,
-> > +	CXL_MBOX_OP_SET_EVT_INT_POLICY	= 0x0103,
-> >  	CXL_MBOX_OP_GET_FW_INFO		= 0x0200,
-> >  	CXL_MBOX_OP_ACTIVATE_FW		= 0x0202,
-> >  	CXL_MBOX_OP_GET_SUPPORTED_LOGS	= 0x0400,  
-
+Maybe this is external? If so, it would be great to have this in the
+binding as a `clocks` property.
