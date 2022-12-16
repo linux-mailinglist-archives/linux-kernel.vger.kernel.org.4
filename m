@@ -2,201 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE47D64EF91
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5744464EFA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbiLPQlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 11:41:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40194 "EHLO
+        id S231351AbiLPQpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 11:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbiLPQkt (ORCPT
+        with ESMTP id S231718AbiLPQoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 11:40:49 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5013832B83
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:39:33 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id g7so3120983qts.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:39:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UUp91WprqaNHUITYm3j69t3IfOszFHi9suFKD1u0+mI=;
-        b=T8GPa8X/D2OsDZKZfADKGQ/74WXN/z4fbgtDQ3sU4/GoiaD0edPd53afSLhDGqKo3X
-         XewU82VH4Hdtv+V3LpO2Q3sRLpGItGQzU4/uoiihj/Onb9f9YzZnWdHzc7uD0K+8HKFN
-         dPtzvFyHodNIbjMjuvQpn4a/5fpQWW5DV24vs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UUp91WprqaNHUITYm3j69t3IfOszFHi9suFKD1u0+mI=;
-        b=CGBL+JbfhS2OyoAx3DDejkDVtGyvBbGkaVG/erF8jadBjfp2/lnZ04XrSlPuesWfAl
-         rYdYTfLTCZjekHSJHaXDRczILb0yqcT0T5vIaa3PThU1NFhyBFV4ikuZsWmu1c/6AhtO
-         bn/0A89xluLXzbLLRjhcZdHNH9Nvh71EXZBi5ESoSJWctfrvOg4Ra96EnEiDkhLiDZpa
-         l8ILjil4mobEtbeaEJEN5lm/UDNGhlTEVekcbbq6s/htz378gs8Uji/QR5iF3KITIWqK
-         n3Z3dZs/xoa2LZ0AlDtwoS7nCiYTfBE2MlzAxf6t933hCam2KgZyhvaAk1WH4hoFSuSI
-         sYLA==
-X-Gm-Message-State: ANoB5pnm5ohi/ZUH9m8JtnkRH3sL8BgCHCHLOXmG9rpj1NUZisQcVjkO
-        vAq+FLReJYL1ptXfN1Qrf+fxng==
-X-Google-Smtp-Source: AA0mqf62zlQCnbD3tXThc/MoCtlSiqHErYqPO3xyrTaRvhDl+tokw48r6iJtzKCmQLoe+hwMWiGReg==
-X-Received: by 2002:ac8:7419:0:b0:3a7:e805:a010 with SMTP id p25-20020ac87419000000b003a7e805a010mr46935325qtq.21.1671208772426;
-        Fri, 16 Dec 2022 08:39:32 -0800 (PST)
-Received: from localhost (48.230.85.34.bc.googleusercontent.com. [34.85.230.48])
-        by smtp.gmail.com with ESMTPSA id ca18-20020a05622a1f1200b003a7ee9613a6sm1578878qtb.25.2022.12.16.08.39.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 08:39:31 -0800 (PST)
-Date:   Fri, 16 Dec 2022 16:39:31 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>, boqun.feng@gmail.com,
-        neeraj.iitr10@gmail.com, urezki@gmail.com, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] srcu: Yet more detail for
- srcu_readers_active_idx_check() comments
-Message-ID: <Y5yfQwUpCU5cEQpE@google.com>
-References: <20221215201356.GM4001@paulmck-ThinkPad-P17-Gen-1>
- <EE4EC3CC-395E-475D-BEBE-545955AB97C8@joelfernandes.org>
- <20221216010914.GX4001@paulmck-ThinkPad-P17-Gen-1>
- <Y5ydp2YPRqGHq+eM@google.com>
+        Fri, 16 Dec 2022 11:44:12 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD112E687;
+        Fri, 16 Dec 2022 08:43:46 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B54D234588;
+        Fri, 16 Dec 2022 16:43:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1671209024; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=odwET7RAJt4TyX2c0eIiYppqthEh1UCsaW9+/jL2kns=;
+        b=xWkCYvJJcIhuomKFa0qbKF1b6jKhBc1nCaqwf4rU8Qfy/aQkvwRuxlvgINu/W5XshFcpqs
+        aVsg5AJWBVVLpyUdkZldHi2HJmGc03v4KoK/MT1VgPs12LKde+BPU3kcVpkybg+K7ZnbwP
+        7aF9Z/wTytEZoYCIkEQHur57R16mLz4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1671209024;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=odwET7RAJt4TyX2c0eIiYppqthEh1UCsaW9+/jL2kns=;
+        b=mhw6SA5W7W6VoFVGnzby+z7jJ3LSIG35U7TS/KxzU4sQbpJQocr/N2KgUgniszDZLULex2
+        lzOiaOVGNrGgjPDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8C3AD138FD;
+        Fri, 16 Dec 2022 16:43:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mr41IkCgnGOILgAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 16 Dec 2022 16:43:44 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 894A4A0762; Fri, 16 Dec 2022 17:43:42 +0100 (CET)
+Date:   Fri, 16 Dec 2022 17:43:42 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v5 2/3] fanotify: define struct members to hold response
+ decision context
+Message-ID: <20221216164342.ojcbdifdmafq5njw@quack3>
+References: <cover.1670606054.git.rgb@redhat.com>
+ <45da8423b9b1e8fc7abd68cd2269acff8cf9022a.1670606054.git.rgb@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5ydp2YPRqGHq+eM@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <45da8423b9b1e8fc7abd68cd2269acff8cf9022a.1670606054.git.rgb@redhat.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 04:32:39PM +0000, Joel Fernandes wrote:
-> On Thu, Dec 15, 2022 at 05:09:14PM -0800, Paul E. McKenney wrote:
-> [...]
-> > > >> 2. unlock()'s smp_mb() happened before Flip+smp_mb() , now the reader
-> > > >> has no new smp_mb() that happens AFTER the flip happened. So it can
-> > > >> totally sample the old idx again -- that particular reader will
-> > > >> increment twice, but the next time, it will see the flipped one.
-> > > > 
-> > > > I will let you transliterate both.  ;-)
-> > > 
-> > > I think I see what you mean now :)
-> > > 
-> > > I believe the access I am referring to is the read of idx on one side and
-> > > the write to idx on the other. However that is incomplete and I need to
-> > > pair that with some of other access on both sides.
-> > > 
-> > > So perhaps this:
-> > > 
-> > > Writer does flip + smp_mb + read unlock counts [1]
-> > > 
-> > > Reader does:
-> > >  read idx + smp_mb() + increment lock counts [2]
-> > > 
-> > > And subsequently reader does
-> > > Smp_mb() + increment unlock count. [3]
-> > > 
-> > > So [1] races with either [2] or [2]+[3].
-> > > 
-> > > Is that fair?
-> > 
-> > That does look much better, thank you!
+On Mon 12-12-22 09:06:10, Richard Guy Briggs wrote:
+> This patch adds a flag, FAN_INFO and an extensible buffer to provide
+> additional information about response decisions.  The buffer contains
+> one or more headers defining the information type and the length of the
+> following information.  The patch defines one additional information
+> type, FAN_RESPONSE_INFO_AUDIT_RULE, to audit a rule number.  This will
+> allow for the creation of other information types in the future if other
+> users of the API identify different needs.
 > 
-> Perhaps a comment with an ASCII diagram will help?
-> 
-> Case 2:
+> Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> Link: https://lore.kernel.org/r/2745105.e9J7NaK4W3@x2
+> Suggested-by: Jan Kara <jack@suse.cz>
+> Link: https://lore.kernel.org/r/20201001101219.GE17860@quack2.suse.cz
+> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
 
-And sorry I did not mention that Case 1 for me is the more trivial one where
-the reader is preempted after sampling idx, and then all of them do
-lock+unlock in quick succession to induce the counter-delta wrap around.
+Thanks for the patches. They look very good to me. Just two nits below. I
+can do the small updates on commit if there would be no other changes. But
+I'd like to get some review from audit guys for patch 3/3 before I commit
+this.
 
-thanks,
+> diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
+> index caa1211bac8c..cf3584351e00 100644
+> --- a/fs/notify/fanotify/fanotify_user.c
+> +++ b/fs/notify/fanotify/fanotify_user.c
+> @@ -283,19 +283,44 @@ static int create_fd(struct fsnotify_group *group, const struct path *path,
+>  	return client_fd;
+>  }
+>  
+> +static int process_access_response_info(int fd, const char __user *info, size_t info_len,
+> +					struct fanotify_response_info_audit_rule *friar)
 
- - Joel
+I prefer to keep lines within 80 columns, unless there is really good
+reason (like with strings) to have them longer.
 
+BTW, why do you call the info structure 'friar'? I feel some language twist
+escapes me ;)
 
-> Both the reader and the updater see each other's writes too late, but because
-> of memory barriers on both sides, they will eventually see each other's write
-> with respect to their own. This is similar to the store-buffer problem. This
-> let's a single reader contribute a maximum (unlock minus lock) imbalance of 2.
-> 
-> The following diagram shows the subtle worst case followed by a simplified
-> store-buffer explanation.
-> 
-> READER                  UPDATER
-> -------------           ----------
->                            // idx is initially 0.
-> read_lock() {
->   READ(idx) = 0;
->   lock[0]++; --------------------------------------------,
->                            flip() {                      |               
->                               smp_mb();                  |
->   smp_mb();                                              |
-> }                                                        |
->                                                          |
-> // RSCS                                                  |
->                                                          |
-> read_unlock() {                                          |
->   smp_mb();                                              |
->                               idx++;  // P               |
->                               smp_mb();                  |
->                            }                             |
->                                                          |
->                            scan_readers_idx(0) {         |
->                                count all unlock[0];      |
->                                    |                     |
->                                    |                     |
->   unlock[0]++; //X <--not-counted--`-----,               |
->                                          |               |
-> }                                        V               `------,
->                                // Will make sure next scan      |
->                                // will not miss this unlock (X) |
->                                // if other side saw flip (P) ,--`
->                                // Call this MB [1]           |
->                                // Order write(idx) with      |
->                                // next scan's unlock.        |
->                                smp_mb();                 ,---`
-> read_lock() {                                            |
->   READ(idx)=0;                                           |
->   lock[0]++; ----------------> count all lock[0];        |
->   smp_mb();         |     }                              |
-> }     |             |                                    V
->       |             `---> // Incorrect contribution to lock counting
->       |                   // upto a maximum of 2 times.
->       |
->        `---> // Pairs with MB [1]. Makes sure that
->              // the next read_lock()'s' idx read (Y) is ordered
->              // with above write to unlock[0] (X).
->                             |
-> rcu_read_unlock() {         |
->   smp_mb(); <---------------`
->   unlock[0]++; 
-> }
-> 
-> read_lock() {
->   READ(idx) = 1; //Y
->   lock[1]++;
->   ...
-> }
->                            scan_readers_idx(0) {
->                                count all unlock[0]; //Q
->                                ...
->                           }
-> 
-> This makes it similar to the store buffer pattern. Using X, Y, P and Q
-> annotated above, we get:
-> 
-> READER                    UPDATER
-> X (write)                 P (write)
-> 
-> smp_mb();                 smp_mb();
-> 
-> Y (read)                  Q (read)
-> 
-> 
-> thanks,
-> 
->  - Joel
-> 
+> +{
+> +	if (fd == FAN_NOFD)
+> +		return -ENOENT;
+
+I would not test 'fd' in this function at all. After all it is not part of
+the response info structure and you do check it in
+process_access_response() anyway.
+
+> +
+> +	if (info_len != sizeof(*friar))
+> +		return -EINVAL;
+> +
+> +	if (copy_from_user(friar, info, sizeof(*friar)))
+> +		return -EFAULT;
+> +
+> +	if (friar->hdr.type != FAN_RESPONSE_INFO_AUDIT_RULE)
+> +		return -EINVAL;
+> +	if (friar->hdr.pad != 0)
+> +		return -EINVAL;
+> +	if (friar->hdr.len != sizeof(*friar))
+> +		return -EINVAL;
+> +
+> +	return info_len;
+> +}
+> +
+
+...
+
+> @@ -327,10 +359,18 @@ static int process_access_response(struct fsnotify_group *group,
+>  		return -EINVAL;
+>  	}
+>  
+> -	if (fd < 0)
+> +	if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(group, FAN_ENABLE_AUDIT))
+>  		return -EINVAL;
+>  
+> -	if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(group, FAN_ENABLE_AUDIT))
+> +	if (response & FAN_INFO) {
+> +		ret = process_access_response_info(fd, info, info_len, &friar);
+> +		if (ret < 0)
+> +			return ret;
+> +	} else {
+> +		ret = 0;
+> +	}
+> +
+> +	if (fd < 0)
+>  		return -EINVAL;
+
+And here I'd do:
+
+	if (fd == FAN_NOFD)
+		return 0;
+	if (fd < 0)
+		return -EINVAL;
+
+As we talked in previous revisions we'd specialcase FAN_NOFD to just verify
+extra info is understood by the kernel so that application writing fanotify
+responses has a way to check which information it can provide to the
+kernel.
+
+								Honza
+
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
