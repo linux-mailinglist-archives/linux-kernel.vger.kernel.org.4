@@ -2,78 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E722964EB06
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B925264EB0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbiLPL5u convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Dec 2022 06:57:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
+        id S231186AbiLPL6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:58:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLPL5p (ORCPT
+        with ESMTP id S230030AbiLPL6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:57:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B246043845
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:57:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17BD3620C2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 11:57:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B8E5C433EF;
-        Fri, 16 Dec 2022 11:57:42 +0000 (UTC)
-Date:   Fri, 16 Dec 2022 06:57:39 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Wenchao Hao <haowenchao@huawei.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Fri, 16 Dec 2022 06:58:08 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E887F389FF;
+        Fri, 16 Dec 2022 03:58:06 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NYSDS52rdzqTDf;
+        Fri, 16 Dec 2022 19:53:44 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 16 Dec 2022 19:58:03 +0800
+Subject: Re: [PATCH v9] kallsyms: Add self-test facility
+To:     Andreas Schwab <schwab@linux-m68k.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <liuzhiqiang26@huawei.com>, <linfeilong@huawei.com>
-Subject: Re: [PATCH] cma:tracing: Print alloc result in
- trace_cma_alloc_finish
-Message-ID: <20221216065739.30511197@gandalf.local.home>
-In-Reply-To: <4e9f9b32-7835-e4c5-55cb-9db82c98f9c1@huawei.com>
-References: <20221208142130.1501195-1-haowenchao@huawei.com>
-        <4e9f9b32-7835-e4c5-55cb-9db82c98f9c1@huawei.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Laight <David.Laight@aculab.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
+ <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
+ <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
+ <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
+ <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
+ <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
+ <87len7k1yn.fsf@igel.home>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <9f2d4035-c647-4bd9-ffff-b970a88bcc88@huawei.com>
+Date:   Fri, 16 Dec 2022 19:57:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87len7k1yn.fsf@igel.home>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Dec 2022 19:47:59 +0800
-Wenchao Hao <haowenchao@huawei.com> wrote:
 
-> On 2022/12/8 22:21, Wenchao Hao wrote:
-> > The result of allocation is not printed in trace_cma_alloc_finish
-> > now, while it's important to do it so we can set filters to catch
-> > specific error on allocation or trigger some operations on specific
-> > error.
-> > 
-> > Although we have printed the result in log, but the log is
-> > conditional and could not be filtered by tracing event.
-> > 
-> > What's more, it introduce little overhead to print this result.
-> > The result of allocation is named as errorno in trace.
-> > 
-> > Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
-> > ---
+
+On 2022/12/16 19:44, Andreas Schwab wrote:
+> On Dez 15 2022, Geert Uytterhoeven wrote:
+> 
+>> Changing:
+>>
+>>     --- a/arch/m68k/include/asm/string.h
+>>     +++ b/arch/m68k/include/asm/string.h
+>>     @@ -42,7 +42,7 @@ static inline char *strncpy(char *dest, const
+>> char *src, size_t n)
+>>      #define __HAVE_ARCH_STRCMP
+>>      static inline int strcmp(const char *cs, const char *ct)
+>>      {
+>>     -       char res;
+>>     +       signed char res;
+>>
+>>             asm ("\n"
+>>                     "1:     move.b  (%0)+,%2\n"     /* get *cs */
+> 
+> Note that strcmp needs to compute the return value from the difference
+> of the _unsigned_ characters.  That does not explain the error, though,
+> since symbol names don't have characters with the high bit set.
+
+Why consider the high bit? It is not memcmp(). If the high bit is set,
+it is the user's fault.
+
 
 > 
-> pinging
 
-
-From a tracing point of view, I see nothing wrong with it.
-
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-But I believe Andrew needs to take it.
-
--- Steve
+-- 
+Regards,
+  Zhen Lei
