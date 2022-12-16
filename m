@@ -2,95 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9E464E850
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 09:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 959E664E857
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 09:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiLPIu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 03:50:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47480 "EHLO
+        id S229965AbiLPIz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 03:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiLPIuw (ORCPT
+        with ESMTP id S229955AbiLPIz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 03:50:52 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF696541
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 00:50:49 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NYN9L4tYkz8R039;
-        Fri, 16 Dec 2022 16:50:46 +0800 (CST)
-Received: from xaxapp03.zte.com.cn ([10.88.40.52])
-        by mse-fl1.zte.com.cn with SMTP id 2BG8obeY048049;
-        Fri, 16 Dec 2022 16:50:38 +0800 (+08)
-        (envelope-from guo.ziliang@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid32;
-        Fri, 16 Dec 2022 16:50:40 +0800 (CST)
-Date:   Fri, 16 Dec 2022 16:50:40 +0800 (CST)
-X-Zmail-TransId: 2afa639c3160ffffffffb8630f8e
-X-Mailer: Zmail v1.0
-Message-ID: <202212161650404440816@zte.com.cn>
-Mime-Version: 1.0
-From:   <guo.ziliang@zte.com.cn>
-To:     <catalin.marinas@arm.com>
-Cc:     <will@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <huang.junhua@zte.com.cn>,
-        <guo.ziliang@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIXSBhcm02NC91cHJvYmVzOiBjaGFuZ2UgdGhlIHVwcm9iZV9vcGNvZGVfdCB0eXBlZGVmIHRvIGZpeCB0aGUgc3BhcnNlIHdhcm5pbmc=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2BG8obeY048049
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 639C3166.001 by FangMail milter!
-X-FangMail-Envelope: 1671180646/4NYN9L4tYkz8R039/639C3166.001/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<guo.ziliang@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 639C3166.001/4NYN9L4tYkz8R039
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 16 Dec 2022 03:55:26 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AEEF37205
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 00:55:25 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id x2so1630680plb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 00:55:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KIfEz81U3HVJ4JhGoBJFjs00sIawE7R6JvvebcBdLcA=;
+        b=b3xVmZlRg/35qPV3zrDnmMxZkqYqnSqQ92eIj7WqDRIoee+cdDAs4Ul/3HBALrIqqK
+         ubUyl/4ZMRICi20VLa/qyvnIhVeNsUPHmnSesSDprBIlo+BBr5vWDWITYMiGY9Au1vCQ
+         HSSzbuGh0EU0goHPY7eXRo96OHIB0DXuXTeNE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KIfEz81U3HVJ4JhGoBJFjs00sIawE7R6JvvebcBdLcA=;
+        b=eHdYqeG4r5jEg5Vt7GMTbD/+tG03noZsKY9YmRXsT36dG3qqZ4iMKYq13tcEz4vQCc
+         hw3ESJJtMIDXfoPF3I0h3Y7QyHyVj/CqhK8AnNbzu/LNIGOkNGq2jSqn3WHHtfGKLkF+
+         JHOr7UEBKqA0Amf6v9QT++r5N9a6FNODyuhoexZ51CryrAHCxQr3kcy4hHmhVn0qlw1T
+         DS1B1ZCmeR9ffeKEulaBgVO259kr58ARrrVJZstRqglZbzmziBGSw+GgSmrisPBpCns0
+         F/cqH0EDrcDhrN7yyMAsNAMtpbVXtziz02jUiiW7BTMFFjNCUBOZ9YHGC1hLIRqO4P2L
+         GNXg==
+X-Gm-Message-State: ANoB5plW4ZI/xBoJwFoqB0BaeCEzS0F/HuHy6zRcp0uafpC9N7gBpAy9
+        wibYRd3dSjAodbPDGy7Gd+Lum+o6yBm2k2XbcIA=
+X-Google-Smtp-Source: AA0mqf7/5ZeAX0vNPXky6p/TZmbjWh03UKpnFRimSWBXeRanZYWF+SHYMCkZiDBN5itq/CHw+sedMA==
+X-Received: by 2002:a17:903:2481:b0:189:b0ff:e316 with SMTP id p1-20020a170903248100b00189b0ffe316mr29049793plw.38.1671180924773;
+        Fri, 16 Dec 2022 00:55:24 -0800 (PST)
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com. [209.85.214.169])
+        by smtp.gmail.com with ESMTPSA id cp12-20020a170902e78c00b00189502c8c8bsm1050871plb.87.2022.12.16.00.55.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 00:55:22 -0800 (PST)
+Received: by mail-pl1-f169.google.com with SMTP id w23so1635163ply.12
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 00:55:21 -0800 (PST)
+X-Received: by 2002:a17:90b:1489:b0:219:8132:70db with SMTP id
+ js9-20020a17090b148900b00219813270dbmr697624pjb.183.1671180920433; Fri, 16
+ Dec 2022 00:55:20 -0800 (PST)
+MIME-Version: 1.0
+References: <20221214-uvc-status-alloc-v3-0-9a67616cc549@chromium.org> <Y5s+kuxCAtS8Eixj@rowland.harvard.edu>
+In-Reply-To: <Y5s+kuxCAtS8Eixj@rowland.harvard.edu>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Fri, 16 Dec 2022 09:55:09 +0100
+X-Gmail-Original-Message-ID: <CANiDSCudMRATbHU4=hyjiVhwLr6zQubXPzzpYtXCxdMPsZFcuw@mail.gmail.com>
+Message-ID: <CANiDSCudMRATbHU4=hyjiVhwLr6zQubXPzzpYtXCxdMPsZFcuw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] media: uvcvideo: Code cleanup for dev->status
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Max Staudt <mstaudt@chromium.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Ming Lei <tom.leiming@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Yunke Cao <yunkec@chromium.org>,
+        Christoph Hellwig <hch@lst.de>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: junhua huang <huang.junhua@zte.com.cn>
-After we fixed the uprobe inst endian in aarch_be, the sparse check report
-the following warning info:
+Hi Alan
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/events/uprobes.c:223:25: sparse: sparse: restricted __le32 degrades to integer
->> kernel/events/uprobes.c:574:56: sparse: sparse: incorrect type in argument 4 (different base types)
-@@     expected unsigned int [addressable] [usertype] opcode @@     got restricted __le32 [usertype] @@
-   kernel/events/uprobes.c:574:56: sparse:     expected unsigned int [addressable] [usertype] opcode
-   kernel/events/uprobes.c:574:56: sparse:     got restricted __le32 [usertype]
->> kernel/events/uprobes.c:1483:32: sparse: sparse: incorrect type in initializer (different base types)
-@@     expected unsigned int [usertype] insn @@     got restricted __le32 [usertype] @@
-   kernel/events/uprobes.c:1483:32: sparse:     expected unsigned int [usertype] insn
-   kernel/events/uprobes.c:1483:32: sparse:     got restricted __le32 [usertype]
+On Thu, 15 Dec 2022 at 16:34, Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Thu, Dec 15, 2022 at 11:57:17AM +0100, Ricardo Ribalda wrote:
+> > There is no need to make a kzalloc just for 16 bytes. Let's embed the data
+> > into the main data structure.
+> >
+> > Now that we are at it, lets remove all the castings and open coding of
+> > offsets for it.
+> >
+> > [Christoph, do you think dma wise we are violating any non written rules? :) thanks]
+>
+> There _is_ a rule, and it is not exactly unwritten.  The kerneldoc for
+> the transfer_buffer member of struct urb says:
+>
+>         This buffer must be suitable for DMA; allocate it with
+>         kmalloc() or equivalent.
+>
+> Which in general means that the buffer must not be part of a larger
+> structure -- not unless the driver can guarantee that the structure will
+> _never_ be accessed while a USB transfer to/from the buffer is taking
+> place.
+>
 
-use the __le32 to u32 for uprobe_opcode_t, to keep the same.
+Thanks a lot for the clarification. I was mainly looking at the kerneldoc from:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/usb.h#n1687
 
-Fixes: 60f07e22a73d ("arm64:uprobe fix the uprobe SWBP_INSN in big-endian")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: junhua huang <huang.junhua@zte.com.cn>
----
- arch/arm64/include/asm/uprobes.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+and I could not see any reference to the DMA requirements.
 
-diff --git a/arch/arm64/include/asm/uprobes.h b/arch/arm64/include/asm/uprobes.h
-index ba4bff5ca674..2b09495499c6 100644
---- a/arch/arm64/include/asm/uprobes.h
-+++ b/arch/arm64/include/asm/uprobes.h
-@@ -16,7 +16,7 @@
- #define UPROBE_SWBP_INSN_SIZE	AARCH64_INSN_SIZE
- #define UPROBE_XOL_SLOT_BYTES	MAX_UINSN_BYTES
+Mind if I send a patch to add a reference there?
 
--typedef u32 uprobe_opcode_t;
-+typedef __le32 uprobe_opcode_t;
 
- struct arch_uprobe_task {
- };
+> There are examples all over the USB subsystem where buffers as small as
+> one or two bytes get kmalloc'ed in order to obey this rule.  16 bytes is
+> certainly big enough that you shouldn't worry about it being allocated
+> separately.
+>
+Yep, we should keep it malloced. Thanks a lot for looking into this :)
+
+
+> Alan Stern
+
+
+
 -- 
-2.15.2
+Ricardo Ribalda
