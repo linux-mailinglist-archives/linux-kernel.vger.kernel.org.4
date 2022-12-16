@@ -2,144 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B26C64E721
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 06:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E6B64E723
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 06:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiLPFx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 00:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
+        id S229774AbiLPFyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 00:54:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiLPFxZ (ORCPT
+        with ESMTP id S229480AbiLPFyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 00:53:25 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1501554458
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 21:53:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671170003; x=1702706003;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=WLWHglAhkqCifPwvRuVp0vusT4+KWLSJIOmFdoJ/uyE=;
-  b=l12hjpCezzpEaYT+g02VwbjsVDC7/PkbIxW/dIm3cNNIlugs5jf3KmDE
-   lvApqt8Fzq5tmDADRceql0PJrboiaANXS355WdKs6KXeFeaf6h8Ac8xLo
-   5fe8Zlq9ab0JdK0Y5fJuJvvrONB+NvVra5nM4ZP2Ixy+rWMenK9J7dp4v
-   47JoB45ksrA2Zas9EBnyWDYgZa0Xr8VtPo/Kivc9GFhV4wWFC+tDmRjsL
-   Kw5CPXy/FK0AjEKXFPn3IkucNoE5BUTTVHVFlSnF7w+YOLsMpqaqfJbJ4
-   wzwjdFmeDCPR4RfaZAAYLorOURBgSFrFv0/K2HokDpa5vKHyiYNKIVdg6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="405152267"
-X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="405152267"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 21:53:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="649692615"
-X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="649692615"
-Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 15 Dec 2022 21:53:21 -0800
-Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1p63eq-0006xS-1X;
-        Fri, 16 Dec 2022 05:53:20 +0000
-Date:   Fri, 16 Dec 2022 13:52:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rostedt.2022.12.15a] BUILD SUCCESS
- 4624173b63aaaf7230b66fe6d080f7cbcff51597
-Message-ID: <639c07af.Q654WTjf944b/8R5%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 16 Dec 2022 00:54:45 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DBE36D64;
+        Thu, 15 Dec 2022 21:54:43 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id s196so1105497pgs.3;
+        Thu, 15 Dec 2022 21:54:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9nHmBQYF3nBNqyNj2PFzrUNwBMnuzgTKWyjZljTDo88=;
+        b=QzFwd1MmmPpBd2ezWngjf7PUFaMaB52m8IiN67Yqc8i91g+Tdth/SezAJD12ThbR/2
+         9Ub0A414NsZr4WUwBcNy9zE/3cxR2w3aGJgdpIpW5WbBa/qLCV8JUsrEVzqQ0Uw0GVrx
+         JKBmdQGNgn1SZhPLZt3chZrVrc0VQAJCwHpP9zoIYeJ8evCSbQEE80OMuAz0WUYALvJL
+         yao3BPSdY77o4M6fbi34ZJsJTb2MaBAVi/O8xIj+79XOZ3dpNIG6S8xR4p3uH2b/qU5K
+         VbbYUtBI/A1Ofpa586Yi57dNxnPtuc/vnAnlC5eFRwc+X3eng66MA+z5zgxVCezaQPPG
+         qTig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9nHmBQYF3nBNqyNj2PFzrUNwBMnuzgTKWyjZljTDo88=;
+        b=gfaGuEh9n04XpvV6THBxVGxave1GiHl7D8NJaeikBx+14XJaI2d/bKdIJ8IxdDZtb3
+         poEs3Y9k8qqmbwKS1Z325wCs1PfWn8XHxdJIpuUVPRCawuP15CcCrhmw8dgrWCdYDdUt
+         v5buzuZ9HhVmzLgSAUJrRX2q6998WqofRSIpy6mQAQLljnSnkx5uUzpmLlSctOwTDqb0
+         fooaK3ouHq7gL/7uA04ebDGPlNIKmR1QD6oXzOJ61GVr21uEsmuB19hZR34vqw6yUXbY
+         BqiXwj9/4qOaXMo21DEnm82CCFheid0S983/kbaahMyTNhVjBjQgls21OJ8pAK+8bdxA
+         GW9g==
+X-Gm-Message-State: ANoB5pmulxP6WTlk7eyoOXqMNjM6HODjJkbttMLcKgN6IT9SILMudbR2
+        br7ChmTBga18A+XDGgfq3FcQ26CmhA==
+X-Google-Smtp-Source: AA0mqf4PSVQIxjakaMhGlrWMkqj/LWjNW94XGL+5lPErpFVoJ77ZONGaLRQYV88tY0n0LWCsJ6F0JQ==
+X-Received: by 2002:a62:870d:0:b0:576:f02e:d0ef with SMTP id i13-20020a62870d000000b00576f02ed0efmr31320268pfe.4.1671170082306;
+        Thu, 15 Dec 2022 21:54:42 -0800 (PST)
+Received: from localhost.localdomain ([144.214.0.6])
+        by smtp.gmail.com with ESMTPSA id g15-20020aa79f0f000000b0056b2e70c2f5sm593246pfr.25.2022.12.15.21.54.39
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 15 Dec 2022 21:54:41 -0800 (PST)
+From:   Hao Sun <sunhao.th@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>
+Subject: [PATCH bpf-next] bpf: dup xlated insns with kvmalloc+memcpy
+Date:   Fri, 16 Dec 2022 13:54:35 +0800
+Message-Id: <20221216055436.4698-1-sunhao.th@gmail.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rostedt.2022.12.15a
-branch HEAD: 4624173b63aaaf7230b66fe6d080f7cbcff51597  rcu: Dump rcu_init_invoked() in favor of rcu_scheduler_active
+Currently, kmemdup() is used for allocating and copying xlated insns
+in bpf_insn_prepare_dump(). The following warning can be triggered
+when dup large amount of insns (roughly BPF_COMPLEXITY_LIMIT_INSNS/2)
+because kmemdup() uses kmalloc() which would fail when allocing size
+is too big, leading to failure in dump xlated insns:
 
-elapsed time: 733m
+WARNING: CPU: 2 PID: 7060 at mm/page_alloc.c:5534
+Call Trace:
+ <TASK>
+ __alloc_pages_node include/linux/gfp.h:237 [inline]
+ alloc_pages_node include/linux/gfp.h:260 [inline]
+ __kmalloc_large_node+0x81/0x160 mm/slab_common.c:1096
+ __do_kmalloc_node mm/slab_common.c:943 [inline]
+ __kmalloc_node_track_caller.cold+0x5/0x5d mm/slab_common.c:975
+ kmemdup+0x29/0x60 mm/util.c:129
+ kmemdup include/linux/fortify-string.h:585 [inline]
+ bpf_insn_prepare_dump kernel/bpf/syscall.c:3820 [inline]
+ bpf_prog_get_info_by_fd+0x9a3/0x2cb0 kernel/bpf/syscall.c:3975
+ bpf_obj_get_info_by_fd kernel/bpf/syscall.c:4297 [inline]
+ __sys_bpf+0x3928/0x56f0 kernel/bpf/syscall.c:5004
+ __do_sys_bpf kernel/bpf/syscall.c:5069 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5067 [inline]
+ ...
 
-configs tested: 62
-configs skipped: 2
+So use kvmalloc()+memcpy() to fix this, for small size of insns,
+this is same as kmemdup(), but this also support dup large amount
+of xlated insns.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Signed-off-by: Hao Sun <sunhao.th@gmail.com>
+---
+ kernel/bpf/syscall.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-gcc tested configs:
-arc                                 defconfig
-alpha                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-powerpc                           allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-ia64                             allmodconfig
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-s390                             allyesconfig
-m68k                             allmodconfig
-x86_64                        randconfig-a004
-arc                              allyesconfig
-x86_64                        randconfig-a002
-alpha                            allyesconfig
-arc                  randconfig-r043-20221215
-arm                  randconfig-r046-20221215
-i386                          randconfig-a001
-x86_64                        randconfig-a006
-m68k                             allyesconfig
-i386                          randconfig-a014
-arm                                 defconfig
-i386                          randconfig-a003
-i386                          randconfig-a012
-i386                          randconfig-a005
-i386                          randconfig-a016
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-arm64                            allyesconfig
-arm                              allyesconfig
-x86_64                            allnoconfig
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-bpf
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-i386                                defconfig
-x86_64                              defconfig
-i386                             allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                           allyesconfig
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 35972afb6850..06229fddac0d 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3831,10 +3831,10 @@ static struct bpf_insn *bpf_insn_prepare_dump(const struct bpf_prog *prog,
+ 	u8 code;
+ 	int i;
+ 
+-	insns = kmemdup(prog->insnsi, bpf_prog_insn_size(prog),
+-			GFP_USER);
+-	if (!insns)
++	insns = kvmalloc(bpf_prog_insn_size(prog), GFP_USER | __GFP_NOWARN);
++	if (unlikely(!insns))
+ 		return insns;
++	memcpy(insns, prog->insnsi, bpf_prog_insn_size(prog));
+ 
+ 	for (i = 0; i < prog->len; i++) {
+ 		code = insns[i].code;
+@@ -3992,7 +3992,7 @@ static int bpf_prog_get_info_by_fd(struct file *file,
+ 		uinsns = u64_to_user_ptr(info.xlated_prog_insns);
+ 		ulen = min_t(u32, info.xlated_prog_len, ulen);
+ 		fault = copy_to_user(uinsns, insns_sanitized, ulen);
+-		kfree(insns_sanitized);
++		kvfree(insns_sanitized);
+ 		if (fault)
+ 			return -EFAULT;
+ 	}
 
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a013
-hexagon              randconfig-r041-20221215
-i386                          randconfig-a011
-hexagon              randconfig-r045-20221215
-riscv                randconfig-r042-20221215
-i386                          randconfig-a002
-s390                 randconfig-r044-20221215
-i386                          randconfig-a004
-i386                          randconfig-a015
-x86_64                        randconfig-a014
-i386                          randconfig-a006
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                          rhel-8.3-rust
-
+base-commit: 0e43662e61f2569500ab83b8188c065603530785
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.39.0
+
