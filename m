@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF2E64EC02
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 14:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4081F64EC05
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 14:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbiLPNTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 08:19:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
+        id S230312AbiLPNUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 08:20:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiLPNTd (ORCPT
+        with ESMTP id S229613AbiLPNUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 08:19:33 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEFB2637;
-        Fri, 16 Dec 2022 05:19:32 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id bx10so2529440wrb.0;
-        Fri, 16 Dec 2022 05:19:32 -0800 (PST)
+        Fri, 16 Dec 2022 08:20:14 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8A7DEA;
+        Fri, 16 Dec 2022 05:20:13 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id o15so1840716wmr.4;
+        Fri, 16 Dec 2022 05:20:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=od90tXEQYsjLrQqPYAWlVmlPm4cbiuRT6WyvN1iDenk=;
-        b=AmhgfXlT7Zr6IxKscdrarNyqKPDbNmj2k9dpNeesPsji5wD+Db0h3vPAztXh9wFVer
-         Tod6TKuBut7PCtzq1GKMYRFU+aHKZoNxEgsg621Ad2qwPF20sn3kVCtvM+rgt0E+DsdW
-         mtuTx4/b36nfmKXVMFPkkSVe25uoesKImVf6UKKhAAOMqteor1jZdYyQcUK3eHYjwq4j
-         sEvdrcjed3J4KtM+EUtiU++VdZgMngClY5kyW5w2aCVTeQMkiC2sPjjx5H9NaFgvXj3G
-         AF6FnxDZE5IrYMb0oVkpjOGuTc4/TnlglNgsmWFxsQlCb9amLtpkJ2kAkf+cTIyUFB/F
-         qOhA==
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VVkJauk19hoE6f3kxeOjvaH1U7eIS3w4LTh0tk+l6YI=;
+        b=PUNPY06DZ5RUnX+JRgGiNnOXOovHSAA+nil1/3hZlXM+yy273Bw3n0BC8Rh7HUpN8k
+         NFrC5v9eUwzsAnPW6lgbRV3BvsFRNLGC8lgPHxWS8yNeuGiIisfvvg7MBE9hmfWZHmDH
+         7zWNExs5ZuI7EtJORjxKVTHS7W6Kma7YryTqBN8VWmqXGUvYh/sqB5QPc+s8Xmjfpbsn
+         I/ICf9a8jt6DTin/MapZ15Pk3p0XuEEBgwDwk6zrF3078Q8uWVNH7f8qfCsh9Mw1+Dof
+         Bblb4x/J0pBpTj1pFwQOGxAIvqaorfzAnrpQRFqCkg+SNakUEgv70Kz4UQoi9PYW1NBw
+         wV8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=od90tXEQYsjLrQqPYAWlVmlPm4cbiuRT6WyvN1iDenk=;
-        b=m7RKE5iI9BnBGGlg0uA0V1MicC4b//2GtJdLmHqnGz2W8RtjohlA73SCD5+qy/sJX1
-         nJbEntoqkwA0mp4SoRXl6oR/W4mKHOgzwFFauxIP8YTq+3FRAUuymbyNyO3+innq4im0
-         Vn9egvm2T5anzQTHH41HZd7FvroB/N1WAF03QZYSlvnGtrLcV4+O/HlWMgGRFfzW9nH3
-         IofEgghZ/gZ9L0mq0NLxzHOnwZqZK4o2ZVRvQGPThVOL8eaB+/Y7UV6fxB0pkdRuouE2
-         bfvMiKgixvao+7fDEi6gml9svgCqGiETevKV+YB4x/9AMSoPxoxi99mo6d+vOgq1zYd2
-         VCvQ==
-X-Gm-Message-State: ANoB5pkGbmOuy3SNNSxMbhH5CL4/7N+8kot6hI+1sAMIII/zNL2j1SOT
-        imhF/t2HBZNn+Hjqu9krjRY7uFtfDuQ86g==
-X-Google-Smtp-Source: AA0mqf4ydAM5HaZnbwmxIzH1A8yNfHgcWat0P0NjHYg57pGecMzD5e4Ju3k/zehUXw+pUJCL5UM2Xw==
-X-Received: by 2002:adf:e44a:0:b0:242:763:34a5 with SMTP id t10-20020adfe44a000000b00242076334a5mr20371199wrm.2.1671196771125;
-        Fri, 16 Dec 2022 05:19:31 -0800 (PST)
-Received: from [192.168.1.132] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id x18-20020adfec12000000b00236488f62d6sm2250832wrn.79.2022.12.16.05.19.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 05:19:30 -0800 (PST)
-Message-ID: <f1e85a62-0f48-c4d8-f674-9a51b348e615@gmail.com>
-Date:   Fri, 16 Dec 2022 14:19:29 +0100
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VVkJauk19hoE6f3kxeOjvaH1U7eIS3w4LTh0tk+l6YI=;
+        b=ny8qx0T1KAXk49QOTuWamxw265myPwOCLbV3npYRm9WjsEwUEj4+Iix+XjgWwkxN6w
+         GnPICyF1jAgujw4AZhTEqg+FPdWl88l4n3eX94EBwiTO2+JxMlyDhzlPTDhOm4+UNq4v
+         YsuiJWh3TcyKGG8ll3c2ue8SqRiL0KxFspzqRiTGNoE18EyVFVtivrIqvi98llnoAFQY
+         j4GEF4yko+uUTky6F9h4m/buJxhHuL6z4rlcxVacDuXW41g43sylYAH+2J6yxGpEoncw
+         q/sLTOgIlbK9Az8Mi6822CoVz72mR6e/25HEzQGBBkEX9SPqMvllA/ICkJEWg/jnEUeN
+         tD9A==
+X-Gm-Message-State: ANoB5pkZFP6MfZ63bdt20hvc7qvWnKc+cq1xZq/VzAXDaD7z1eAD2aH5
+        nA6r0b+/svNlH7B4pek9ZxyRpL8jT3A=
+X-Google-Smtp-Source: AA0mqf4nEP4C4o6ZpBz5fXqKFX2qlIszB/th0rN27adgcD60jatZtWbG/cg5bFKqEdq7plzEAMLcfg==
+X-Received: by 2002:a05:600c:1d27:b0:3d2:27ba:dde0 with SMTP id l39-20020a05600c1d2700b003d227badde0mr15404710wms.33.1671196811680;
+        Fri, 16 Dec 2022 05:20:11 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id p2-20020a05600c358200b003d1f2c3e571sm10756854wmq.33.2022.12.16.05.20.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 05:20:11 -0800 (PST)
+Date:   Fri, 16 Dec 2022 14:20:09 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
+        Sumit Gupta <sumitg@nvidia.com>,
+        Petlozu Pravareshwar <petlozup@nvidia.com>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] soc: tegra: fix CPU_BIG_ENDIAN dependencies
+Message-ID: <Y5xwiV/OiAKmnsVt@orome>
+References: <20221215165336.1781080-1-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] arm64: dts: mediatek: align LED node names with dtschema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221125144138.477198-1-krzysztof.kozlowski@linaro.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221125144138.477198-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="W9s2yv2C2NngHnLL"
+Content-Disposition: inline
+In-Reply-To: <20221215165336.1781080-1-arnd@kernel.org>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,30 +78,56 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--W9s2yv2C2NngHnLL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 25/11/2022 15:41, Krzysztof Kozlowski wrote:
-> The node names should be generic and DT schema expects certain pattern:
-> 
->    mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dtb: pwmleds: 'keyboard-backlight' does not match any of the regexes: '^led(-[0-9a-f]+)?$', 'pinctrl-[0-9]+'
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Applied, thanks!
-
+On Thu, Dec 15, 2022 at 05:53:21PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> My previous patch to prevent BPMP from being enabled on big
+> endian kernels caused a build regression:
+>=20
+> WARNING: unmet direct dependencies detected for TEGRA_BPMP
+>   Depends on [n]: ARCH_TEGRA [=3Dy] && TEGRA_HSP_MBOX [=3Dy] && TEGRA_IVC=
+ [=3Dy] && !CPU_BIG_ENDIAN [=3Dy]
+>   Selected by [y]:
+>   - ARCH_TEGRA_186_SOC [=3Dy] && ARCH_TEGRA [=3Dy] && ARM64 [=3Dy]
+>   - ARCH_TEGRA_194_SOC [=3Dy] && ARCH_TEGRA [=3Dy] && ARM64 [=3Dy]
+>   - ARCH_TEGRA_234_SOC [=3Dy] && ARCH_TEGRA [=3Dy] && ARM64 [=3Dy]
+>=20
+> Add even more such dependencies for the SoC types that use
+> the BPMP driver.
+>=20
+> Fixes: 4ddb1bf1a837 ("tegra: mark BPMP driver as little-endian only")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->   .../boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dts      | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dts
-> index dec11a4eb59e..77b96ddf648e 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dts
-> @@ -13,7 +13,7 @@ / {
->   
->   	pwmleds {
->   		compatible = "pwm-leds";
-> -		keyboard_backlight: keyboard-backlight {
-> +		keyboard_backlight: led-0 {
->   			label = "cros_ec::kbd_backlight";
->   			pwms = <&cros_ec_pwm 0>;
->   			max-brightness = <1023>;
+>  drivers/soc/tegra/Kconfig | 3 +++
+>  1 file changed, 3 insertions(+)
+
+Do you want to pick this up into ARM SoC directly? If so:
+
+Acked-by: Thierry Reding <treding@nvidia.com>
+
+--W9s2yv2C2NngHnLL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmOccIkACgkQ3SOs138+
+s6GNmBAAnncANtXp6N1jNx8+Ps/0lg/2MM5Lp/GFca9eT9f6011lLAN5Qu2eiInv
+Be5dzOyAgjCcriwLtQjS/wJzScflRvS+pgJe7CvED8lyI85Ys7pyt1Pl1T6XJAkT
+mZLDbtBtlyE655D8dLvYhMqOk7qZglk3gIKakXulNESv46biLYk09AO5ewrYDQCw
+FNOsWpeKLq+05KJZKOlWyAJk3aajntCKayhNqnp8agO5VHhjpsdxP1oBAw0tnfl+
+V5wxaV9cGERAcJ2Gd4NG7GkYutWpaLK9+aMySjW9fgNRbvpzZJWXH0iGoAsGgO8l
+1JVe8gV6Y9ASOmFrdM6bY0zs9YZHp3waeRvr/cVs0r5rl3yaN751u8bYqEEVTjkQ
+lwgZXGOINhhYxpOmPLG7u6SD5lqvykrkFJQAPn4Z+g6LfadWzrGcfIja+DByk2vb
+nWXWi/7aF0tL0EQWi4soEFQQVjZfL2yN0AGcuSrPM+lFBbgxqcR6fBvtFR95J5M1
+kctUBWzjJp4fvTzUO+tyIbiK+SkqYkKNzQbZKe44CCPh2KptXfeYrOnc0qoFo/Xh
++DSmG/HQ4eg0GAjXm4wD8Ek9p6Bn8fQ2KmRcEnSrDXxvAuyXhYXXxmNxEBdDQfN4
+RSjNRZs1Klfx3a3oUCLabck4tSJHWb1DLeqPNSqK7RiGHLxeZwU=
+=oTaX
+-----END PGP SIGNATURE-----
+
+--W9s2yv2C2NngHnLL--
