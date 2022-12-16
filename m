@@ -2,70 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B60B264E871
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 10:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5DD64E873
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 10:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbiLPJDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 04:03:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
+        id S229695AbiLPJFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 04:05:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiLPJDY (ORCPT
+        with ESMTP id S230036AbiLPJFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 04:03:24 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114651EC5C;
-        Fri, 16 Dec 2022 01:03:22 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 6065B1382;
-        Fri, 16 Dec 2022 10:03:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1671181399;
+        Fri, 16 Dec 2022 04:05:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEE42E9EE
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 01:04:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671181471;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7vJFigaF3hOVrlkh94Vhue4PWpwlwOfUG4VGh2Ry3so=;
-        b=UxjrW7XS5s/5LVlnO1RX6ypK4y7kRWP+my750kFEmq9nfyoQMTUE9EPTNgIxHayJT/h6EJ
-        B51y9RwgGn0wC2zyXY7NIz5rwMRWutVZWr4C4T/Twq7EkP+cmFCsJGPKYM0fr1/hwZlNny
-        mk+8WAVUP2MBwxBtVPErTW6PoxSyxubKZmVPkKfjkGzQjhvigkkCXXD622q2bAQB4xfgpI
-        iTNZ6yV60ezv4TEVNUvTpOoNaE9Bg5+dj1R1ud3eztXNIF0XrloFSpZRRiEay+7VcgZwY6
-        ss+8jlNARSccp9hqkstryrnnI09UXNY41OPTrQJdyip2YI/POnDJ+mmZ6Y3s0Q==
+        bh=LJMVmx5617wnYVO/Ti21QHTcgxd/PcheSNh2Us8/9os=;
+        b=aozE8vGo+gT+EvRZ0u9JZaPAUTu72QqzSOO5gkndp7sHZLKKpKpWn2sVaKP+GbXfdR81zB
+        zydYcUitc0gjQVtlc0vKd13R4PZAfZ8bGVyxfqSEUxu5sA1rpvqIAZBA8JKfrx2q6ZC9OH
+        FnFaK6lNS8atNHvVoPRzgkAgvw7qwBs=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-36-GDodXZT1O7C0YBWLAH1yUg-1; Fri, 16 Dec 2022 04:04:30 -0500
+X-MC-Unique: GDodXZT1O7C0YBWLAH1yUg-1
+Received: by mail-wm1-f69.google.com with SMTP id p14-20020a05600c204e00b003cf4cce4da5so442309wmg.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 01:04:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LJMVmx5617wnYVO/Ti21QHTcgxd/PcheSNh2Us8/9os=;
+        b=ZqaoWJAC5ccAb9cAu3k0mcEjx/JQBKuyjCHoT1WRz4PhDv4yCdQZTkyY2V9xyhUurs
+         32XyfXMGXGRvDjf9i4s1DCHNRJddABgwBko63GltWbPL+oJOmgADd1t7XRn5Smk5GXSQ
+         pn0ARruJSmyNMc/AXmHb01B5r8Vv5EfAitLqKDu6eg/k3Ii1KTZnoczhQHrYEigmzNL9
+         09k76+YjNescEi8cq2UceOlMkjkaw4tlNv9peRkbKzplmjNqe4nGjEzLb5vAoumRUU6E
+         MJxTmZw9r5zF56bWNjzAfbFs3LMdBmp3iIs//5/Rg+UVzc7yqZ5JKRr2yq2K6tUOBRpp
+         iRFg==
+X-Gm-Message-State: ANoB5plpPQ5igTxEeKaDi8tJbIQRqdiNnSwrLWkf7cYN4u2bbtF++cl/
+        qQiL0yC5v4lsd5ksU3BsH5OB6+c/MEgLcucGEeHj1YEryDyf6b768QAoy+ZIAAfxADVux9aG3oc
+        N7ekDdnVuUXg9Nqs00i5azFal
+X-Received: by 2002:a05:600c:5570:b0:3d1:ee6c:f897 with SMTP id ja16-20020a05600c557000b003d1ee6cf897mr24618889wmb.3.1671181469142;
+        Fri, 16 Dec 2022 01:04:29 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf44EaOB06LEJ5Xrw6HHHrPTv1tXz6Tk6ti4LOhrQzaZKR+fbWWGTZDSKlTS7qMorzGnBsu8Nw==
+X-Received: by 2002:a05:600c:5570:b0:3d1:ee6c:f897 with SMTP id ja16-20020a05600c557000b003d1ee6cf897mr24618865wmb.3.1671181468820;
+        Fri, 16 Dec 2022 01:04:28 -0800 (PST)
+Received: from ?IPV6:2003:cb:c71c:3900:7211:d436:8d8b:531c? (p200300cbc71c39007211d4368d8b531c.dip0.t-ipconnect.de. [2003:cb:c71c:3900:7211:d436:8d8b:531c])
+        by smtp.gmail.com with ESMTPSA id k5-20020a05600c1c8500b003d237d60318sm2096196wms.2.2022.12.16.01.04.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 01:04:28 -0800 (PST)
+Message-ID: <618b69be-0e99-e35f-04b3-9c63d78ece50@redhat.com>
+Date:   Fri, 16 Dec 2022 10:04:27 +0100
 MIME-Version: 1.0
-Date:   Fri, 16 Dec 2022 10:03:19 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>, Xu Liang <lxu@maxlinear.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH net-next v1 3/4] dt-bindings: net: phy: add MaxLinear
- GPY2xx bindings
-In-Reply-To: <6c82b403962aaf1450eb5014c9908328@walle.cc>
-References: <20221202151204.3318592-1-michael@walle.cc>
- <20221202151204.3318592-4-michael@walle.cc>
- <20221205212924.GA2638223-robh@kernel.org>
- <99d4f476d4e0ce5945fa7e1823d9824a@walle.cc>
- <9c0506a6f654f72ea62fed864c1b2a26@walle.cc>
- <2597b9e5-7c61-e91c-741c-3fe18247e27c@linaro.org>
- <6c82b403962aaf1450eb5014c9908328@walle.cc>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <796a528b23aded95c1a647317c277b1f@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     Andrea Arcangeli <aarcange@redhat.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Huang Ying <ying.huang@intel.com>, stable@vger.kernel.org
+References: <20221214200453.1772655-1-peterx@redhat.com>
+ <20221214200453.1772655-2-peterx@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 1/2] mm/uffd: Fix pte marker when fork() without fork
+ event
+In-Reply-To: <20221214200453.1772655-2-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,111 +90,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-12-06 10:44, schrieb Michael Walle:
-> Am 2022-12-06 09:38, schrieb Krzysztof Kozlowski:
+On 14.12.22 21:04, Peter Xu wrote:
+> When fork(), dst_vma is not guaranteed to have VM_UFFD_WP even if src may
+> have it and has pte marker installed.  The warning is improper along with
+> the comment.  The right thing is to inherit the pte marker when needed, or
+> keep the dst pte empty.
 > 
->>>>> Just omit the interrupt property if you don't want interrupts and
->>>>> add it if you do.
->>>> 
->>>> How does that work together with "the device tree describes
->>>> the hardware and not the configuration". The interrupt line
->>>> is there, its just broken sometimes and thus it's disabled
->>>> by default for these PHY revisions/firmwares. With this
->>>> flag the user can say, "hey on this hardware it is not
->>>> relevant because we don't have shared interrupts or because
->>>> I know what I'm doing".
->> 
->> Yeah, that's a good question. In your case broken interrupts could be
->> understood the same as "not connected", so property not present. When
->> things are broken, you do not describe them fully in DTS for the
->> completeness of hardware description, right?
+> A vague guess is this happened by an accident when there's the prior patch
+> to introduce src/dst vma into this helper during the uffd-wp feature got
+> developed and I probably messed up in the rebase, since if we replace
+> dst_vma with src_vma the warning & comment it all makes sense too.
 > 
-> I'd agree here, but in this case it's different. First, it isn't
-> obvious in the first place that things are broken and boards in
-> the field wouldn't/couldn't get that update. I'd really expect
-> an erratum from MaxLinear here. And secondly, (which I
-> just noticed right now, sorry), is that the interrupt line
-> is also used for wake-on-lan, which can also be used even for
-> the "broken" PHYs.
+> Hugetlb did exactly the right here (copy_hugetlb_page_range()).  Fix the
+> general path.
 > 
-> To work around this, the basic idea was to just disable the
-> normal interrupts and fall back to polling mode, as the PHY
-> driver just use it for link detection and don't offer any
-> advanced features like PTP (for now). But still get the system
-> integrator a knob to opt-in to the old behavior on new device
-> trees.
+> Reproducer:
 > 
->>> Specifically you can't do the following: Have the same device
->>> tree and still being able to use it with a future PHY firmware
->>> update/revision. Because according to your suggestion, this
->>> won't have the interrupt property set. With this flag you can
->>> have the following cases:
->>>   (1) the interrupt information is there and can be used in the
->>>       future by non-broken PHY revisions,
->>>   (2) broken PHYs will ignore the interrupt line
->>>   (3) except the system designer opts-in with this flag (because
->>>       maybe this is the only PHY on the interrupt line etc).
->> 
->> I am not sure if I understand the case. You want to have a DTS with
->> interrupts and "maxlinear,use-broken-interrupts", where the latter 
->> will
->> be ignored by some future firmware?
+> https://github.com/xupengfe/syzkaller_logs/blob/main/221208_115556_copy_page_range/repro.c
 > 
-> Yes, that's correct.
+> Cc: <stable@vger.kernel.org> # 5.19+
+> Fixes: c56d1b62cce8 ("mm/shmem: handle uffd-wp during fork()")
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216808
+> Reported-by: Pengfei Xu <pengfei.xu@intel.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>   mm/memory.c | 8 ++------
+>   1 file changed, 2 insertions(+), 6 deletions(-)
 > 
->> Isn't then the property not really correct? Broken for one firmware
->> on the same device, working for other firmware on the same device?
-> 
-> Arguable, but you can interpret "use broken-interrupts" as no-op
-> if there are no broken interrupts.
-> 
->> I would assume that in such cases you (or bootloader or overlay)
->> should patch the DTS...
-> 
-> I think this would turn the opt-in into an opt-out and we'd rely
-> on the bootloader to workaround the erratum. Which isn't what we
-> want here.
+> diff --git a/mm/memory.c b/mm/memory.c
+> index aad226daf41b..032ef700c3e8 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -828,12 +828,8 @@ copy_nonpresent_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+>   			return -EBUSY;
+>   		return -ENOENT;
+>   	} else if (is_pte_marker_entry(entry)) {
+> -		/*
+> -		 * We're copying the pgtable should only because dst_vma has
+> -		 * uffd-wp enabled, do sanity check.
+> -		 */
+> -		WARN_ON_ONCE(!userfaultfd_wp(dst_vma));
+> -		set_pte_at(dst_mm, addr, dst_pte, pte);
+> +		if (userfaultfd_wp(dst_vma))
+> +			set_pte_at(dst_mm, addr, dst_pte, pte);
+>   		return 0;
+>   	}
+>   	if (!userfaultfd_wp(dst_vma))
 
-Just a recap what happened on IRC:
-  (1) Krzysztof signalled that such a property might be ok but the
-      commit message should be explain it better. For reference
-      here is what I explained there:
+Staring at the code first made me go "what about other PTE markers". I 
+then looked into the discussion in patch #2. The fix as is is 
+suboptimal, because it
 
-       maybe that property has a wrong name, but ultimately, it's just
-       a hint that the systems designer wants to use the interrupts
-       even if they don't work as expected, because they work on that
-       particular hardware.
-       the interrupt line is there but it's broken, there are device
-       trees out there with that property, so all we can do is to not
-       use the interrupts for that PHY. but as a systems designer who
-       is aware of the consequences and knowing that they don't apply
-       to my board, how could i then tell the driver to use it anyway.
+1) Removes the warning which is good, but
+2) Silently drops swapin errors now
 
-  (2) Krzysztof pointed out that there is still the issue raised by
-      Rob, that the schemas haven't any compatible and cannot be
-      validated. I think that applies to all the network PHY bindings
-      in the tree right now. I don't know how to fix them.
+So it silently breaks something else temporarily ...
 
-  (3) The main problem with the broken interrupt handling of the PHY
-      is that it will disturb other devices on that interrupt line.
-      IOW if the interrupt line is shared the PHY should fall back
-      to polling mode. I haven't found anything in the interrupt
-      subsys to query if a line is shared and I guess it's also
-      conceptually impossible to do such a thing, because there
-      might be any driver probed at a later time which also uses
-      that line.
-      Rob had the idea to walk the device tree and determine if
-      a particular interrupt is used by other devices, too. If
-      feasable, this sounds like a good enough heuristic for our
-      problem. Although there might be some edge cases, like
-      DT overlays loaded at linux runtime (?!).
 
-So this is what I'd do now: I'd skip a new device tree property
-for now and determine if the interrupt line is shared (by solely
-looking at the DT) and then disable the interrupt in the PHY
-driver. This begs the question what we do if there is no DT,
-interrupts disabled or enabled?
+I remember, that theoretically we could have multiple markers stored in 
+a single PTE marker.
 
-Andrew, what do you think?
+Wouldn't it be cleaner to be able to "clean" specific markers from a PTE 
+marker without having to special case on each and everyone? I mean, only 
+uffd-wp is really special such that it might disappear for the target.
 
--michael
+Something like (pseudocode):
+
+if (!userfaultfd_wp(dst_vma))
+	pte_marker_clear_uff_wp(entry);
+if (!pte_marker_empty(entry)) {
+	pte = make_pte_marker(pte_marker_get(entry));
+	set_pte_at(dst_mm, addr, dst_pte, pte);
+}
+
+Then this fix would be correct and backport-able even without #2. And it
+would work for new types of markers :)
+
+
+I'd prefer a fix that doesn't break something else temporarily, even if 
+the stable backport might require 5 additional minutes to do. So 
+squashing #2 into #1 would also work.
+
+-- 
+Thanks,
+
+David / dhildenb
+
