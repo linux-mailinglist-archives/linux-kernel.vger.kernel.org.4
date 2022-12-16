@@ -2,110 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2837864EA34
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1C964EA3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbiLPLWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:22:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S230520AbiLPLX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:23:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbiLPLV4 (ORCPT
+        with ESMTP id S231131AbiLPLXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:21:56 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2715C5E08E;
-        Fri, 16 Dec 2022 03:21:38 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id ay2-20020a05600c1e0200b003d22e3e796dso1546341wmb.0;
-        Fri, 16 Dec 2022 03:21:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DVBkOpfAYZxWE0+rYS13/gFKIJDXEDdtWxxYd6rvanE=;
-        b=Iot8Bh9+xa3SjKPmbkeHmZKvmaOocwiF58oJi+ZrCINaerAm+qXAfowhA+gQfZAcLE
-         EJUdTXEXViVikJzCrBCq4i98uocGEgBbfmrb9q9nBh5Nmblecou6t9oOpW6uRWLK1GBz
-         MEetQ2jCbq3XoLDmWIbbd35EDhsQvOmEY/h9HW4YmzUL3F3PFahNQNc5KS4xn0UUux1Q
-         5SzTp/lPaTaBRVUpxZNEqAYIuQc9CGKIpdGMwoRcr4tRRifWMNk19vKOKzzLHx5k75Vg
-         ymhJgLrxT6Ei1LDPjXDrQNXKzQ2yPhxUrK/B02IWvXoqvYxyoiIOyLiozp/THiJ5nlXf
-         3C5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DVBkOpfAYZxWE0+rYS13/gFKIJDXEDdtWxxYd6rvanE=;
-        b=G7u0evbKd1kfnB9KvpJUUOWiwhIokBXzuQpeqJGwzCb1SQYQqucN/MytiUdINBNQRz
-         rgLin2JywP2ugWQ2US85M5VO/iR9KCG8yM9uHrSVy1HdJ7UuwMkL7bIQ/WuVYZm/uvOY
-         NNQnx6PnD1NvaMQNEUBzQpThj7aXvTyiW147nKngeGq01g9Yo9KWEgvYwwG/uMAE0sYZ
-         xSKOs3kRhmajHVb1S+1onZ9IHLPS+Yknv4cQmcGvqNVy+4BZR7wvUrAD/NrfpW9mNUSh
-         29lv2DnpSwJiv3Gii0kgqBRr/grU0k+pztZjMq428W0FNS2cuoalzvonM/qFQXTFMaP7
-         xJTw==
-X-Gm-Message-State: ANoB5plnRJJVKqf2ttLEd4KcBpvRj3W387EQdwMVXvHO46GvRBduV9GU
-        uS8TxW6htqgYIYao60L6w6M=
-X-Google-Smtp-Source: AA0mqf7GB4tSWpDtLhelhZuynKxnu977KSCTCyRT5cUWJqYeo9WRE8n6Wpjo2J18u5oWUE7FtBHcKQ==
-X-Received: by 2002:a05:600c:4fd0:b0:3d1:c0a1:4804 with SMTP id o16-20020a05600c4fd000b003d1c0a14804mr25269065wmq.17.1671189696664;
-        Fri, 16 Dec 2022 03:21:36 -0800 (PST)
-Received: from [192.168.1.132] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id n7-20020a05600c3b8700b003b492753826sm2442120wms.43.2022.12.16.03.21.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 03:21:35 -0800 (PST)
-Message-ID: <ee793350-f5da-7a63-fe2f-d4d081428021@gmail.com>
-Date:   Fri, 16 Dec 2022 12:21:34 +0100
+        Fri, 16 Dec 2022 06:23:20 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243F525F6;
+        Fri, 16 Dec 2022 03:23:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7uUzUe05b7rr2RFoVxzKl8oM+JPXRAqmcWlIXshXf6k=; b=aga5oUqtu32MOEtQdA/9l8SgYw
+        eqK6h6wN132DVT+oU0J1vAaAqnDD9XVidOHg/mfgKt/l/NNxUEKYmN87y75crq7LwwGSN5uc4Tc28
+        LYhn+wq2JNxB9tcorqMrSKjTFx4mLCntL1j2kK16eSjrmZhZ6D/GzC3RXxMXJ3Lwf6Xxtcxrtwzan
+        uk7dbMJsjiNaaBQxysHX/awOSdIIxqAIkqaOjc5sgYID/MPPhRVZp+ZjTQ6+wnitR7qIQ0MjkY0eK
+        voyqKYu+AJCZBYN91XImzkkURLZtTL+QidKTG6/Ds3aRvOlUVBrICeXyXjIa718NB8LZwntbhghTt
+        2g8BSGDw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p68o3-00B973-GA; Fri, 16 Dec 2022 11:23:11 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0A374300652;
+        Fri, 16 Dec 2022 12:23:10 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E5E6F209E6740; Fri, 16 Dec 2022 12:23:09 +0100 (CET)
+Date:   Fri, 16 Dec 2022 12:23:09 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: camss: csiphy-3ph: avoid undefined behavior
+Message-ID: <Y5xVHU5FBr5qzAOs@hirez.programming.kicks-ass.net>
+References: <20221215162905.3960806-1-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v5 6/7] dt-bindings: usb: mediatek,mtk-xhci: add MT8365
- SoC bindings
-Content-Language: en-US
-To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        angelogioacchino.delregno@collabora.com, khilman@baylibre.com
-References: <20221213234346.2868828-1-bero@baylibre.com>
- <20221213234346.2868828-7-bero@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221213234346.2868828-7-bero@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221215162905.3960806-1-arnd@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 14/12/2022 00:43, Bernhard Rosenkränzer wrote:
-> From: Fabien Parent <fparent@baylibre.com>
+On Thu, Dec 15, 2022 at 05:28:46PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Add binding documentation for the MT8365 SoC.
+> Marking a case of the switch statement as unreachable means the
+> compiler treats it as undefined behavior, which is then caught by
+> an objtool warning:
 > 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
-
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
+> drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.o: warning: objtool: csiphy_lanes_enable() falls through to next function csiphy_lanes_disable()
+> 
+> Instead of simply continuing execution at a random place of the
+> driver, print a warning and return from to the caller, which
+> makes it possible to understand what happens and avoids the
+> warning.
+> 
+> Fixes: 53655d2a0ff2 ("media: camss: csiphy-3ph: add support for SM8250 CSI DPHY")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->   Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml | 1 +
->   1 file changed, 1 insertion(+)
+>  drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-> index a3c37944c6305..c119caa9ad168 100644
-> --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-> @@ -35,6 +35,7 @@ properties:
->             - mediatek,mt8188-xhci
->             - mediatek,mt8192-xhci
->             - mediatek,mt8195-xhci
-> +          - mediatek,mt8365-xhci
->         - const: mediatek,mtk-xhci
->   
->     reg:
+> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+> index 451a4c9b3d30..04baa80494c6 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+> +++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+> @@ -429,7 +429,8 @@ static void csiphy_gen2_config_lanes(struct csiphy_device *csiphy,
+>  		array_size = ARRAY_SIZE(lane_regs_sm8250[0]);
+>  		break;
+>  	default:
+> -		unreachable();
+> +		WARN(1, "unknown cspi version\n");
+> +		return;
+>  	}
+
+So no real objection here; but unreachable() does have an objtool
+annotation inside, so clearly the compiler managed to defeat that --
+perhaps we should look at that too.
