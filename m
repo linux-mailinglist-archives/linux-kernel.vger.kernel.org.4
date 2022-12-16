@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB3C64EE44
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:54:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 202A164EE42
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbiLPPyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 10:54:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
+        id S231563AbiLPPyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 10:54:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231524AbiLPPxi (ORCPT
+        with ESMTP id S231492AbiLPPxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 10:53:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC936A742
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:52:33 -0800 (PST)
+        Fri, 16 Dec 2022 10:53:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BFF6F0DB
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:52:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671205952;
+        s=mimecast20190719; t=1671205956;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SUHaufgIZGXg7uWbITubevKDDOKyb4JchyF1bpwW4KQ=;
-        b=F6ZrN9Ea59ydeOaDqamuI0mZto7frQNq7V3oMvINPhSNOcn4THcOzjpuQpCXtl8o1uUXvt
-        fhLbDinsBToFxyQo6exq1pA81e2nZwS6bR5FPHmEhknHzvYR+Ab2B0CyHxgV4VNfc84V+d
-        XMQEue8xmU23pPQdUTQRmgBtzA6Qj9w=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=75WLafdrG2VCO1SJG5HZ0fON/RGaffQASLSh3g0vcGk=;
+        b=LjM1O358OXmS2cPFxhybSvIwbd+v8Y9LbHlv7Ig5L6mQp+HITSzCjjCsnGjsDHyQeZjsgt
+        yumqXH68rOlx/dNF4mXV/j1Jb9MVgXaUCxtzUayTvfiuGB9yCk0dY4L7wCIduL2nXwUP5M
+        VdNh8DKMJqfKwrZYbSsXvLg8D2mNzLM=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-29-bAInidp2OnWKmmLUcle8DA-1; Fri, 16 Dec 2022 10:52:31 -0500
-X-MC-Unique: bAInidp2OnWKmmLUcle8DA-1
-Received: by mail-qv1-f71.google.com with SMTP id c10-20020a05621401ea00b004c72d0e92bcso1661841qvu.12
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:52:31 -0800 (PST)
+ us-mta-614-ha_DKkYnNfm_9vjFUe_QIQ-1; Fri, 16 Dec 2022 10:52:35 -0500
+X-MC-Unique: ha_DKkYnNfm_9vjFUe_QIQ-1
+Received: by mail-qt1-f200.google.com with SMTP id p20-20020ac84614000000b003a977d7a2ecso654633qtn.23
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:52:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SUHaufgIZGXg7uWbITubevKDDOKyb4JchyF1bpwW4KQ=;
-        b=VJ+1b90fqMNFI7JZpMIAfKaAix/mMNw+ScYuk6vtFMVdmrVE9mVujmpoOTSn9wXcPZ
-         DFZ6Swgan/ubN5sdzad3+K4IC0oHJLb+3j8TZhNylRNrDs+UsvDTUcQCAlDuFj+rDQdO
-         bC4PzHpT7i4BWpwazSI+pRgDp8dqrPZDzRRlRfjrPyioenOIR/iJM7MO80S7zpGnJe9m
-         /4s6zCTleQbBzfRz7/rcwRhSkj0/nOMcWwBkSyAXmyR93uJRhm7Nim+7Ho/jap1DuhFO
-         PLRlxf5dJg8gsG4P+GTgKr4EDRiAPv8+3bks81FSGav3LeflmsM6FSpdILR3uMd7xxYe
-         /+1A==
-X-Gm-Message-State: ANoB5pm4BcLohGW8IVNuT+UeTImFAvIvcMXQPTPDtEoFWv5haYiXcJPt
-        3vJkAONnVqJ1PmjIoQqJIVYpMcniYk6E6PQw6auUpgya8s1vQB6S5/j9GF18l9KCiOzTwKV3YC7
-        /l0O3SJ89+yfUnzWkmFKTM4ksdUQgzCs/kKX1PrjxzYxPIpgveg5b9J+SJga6EoD6E93gaGFOHA
+        bh=75WLafdrG2VCO1SJG5HZ0fON/RGaffQASLSh3g0vcGk=;
+        b=O2jn/cmwgtK0PqvmsNcfgaJLsCRNFP1wRrHvxmQc0Ows/TngVcPcM01mLT2mV2hm7E
+         JcmyaBloG32tkefTxNl0wIz2vT1VtI/EXxG584mV9Y+lzIr/9TyryxCnoBzRP4itL7y2
+         hfop6Vj8HN9kLJsMiB4cQ9HceKYmJcnEav+MZ6Nnid8/+ZiIHZ8LwAp50NU6/ytXhZi7
+         ImifSUPh0E4B8Bmfm7D4zZ8eXuZOFL4GMWNY/2dmWDCkmRjHRzoWnQvp25zfq3sZzI15
+         bAm5XPgQqrvzQ4ThPEqveDGHjvzcLt/t+eAOTiqtzDocsDoRPpf1hMK0jmF5FLnQ8qWl
+         PmZg==
+X-Gm-Message-State: AFqh2kp6fNxfCt5nwC9/7IVIbj9U7WDjKWxpGDQcRbqC9uVJNuoXc45Q
+        ChI1rHtQF8XqXA3kqds6nGGS4R6mxmmOLaA7EgBQqNEH8hqePLxCqn9+AC4rmoLdnVmYl63fCbX
+        n3Q0/YuRdeloZWbSM4SLXc/GrCWvZxvTAaRybr+rC7+FMtPNQgon5yCTGZkXhP2fJEUQmAGw38Q
         ==
-X-Received: by 2002:a05:622a:1652:b0:3a8:1600:e60f with SMTP id y18-20020a05622a165200b003a81600e60fmr42089086qtj.14.1671205949581;
-        Fri, 16 Dec 2022 07:52:29 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6EvF97ux4AdUPswvdTGfH5GWS4ADEWRFVyxzLx9ScIIRjScwUEcGsBcdGYmcjjmGBVg0epbg==
-X-Received: by 2002:a05:622a:1652:b0:3a8:1600:e60f with SMTP id y18-20020a05622a165200b003a81600e60fmr42089044qtj.14.1671205949310;
-        Fri, 16 Dec 2022 07:52:29 -0800 (PST)
+X-Received: by 2002:ac8:545a:0:b0:3a9:763b:4a6d with SMTP id d26-20020ac8545a000000b003a9763b4a6dmr2397210qtq.10.1671205953138;
+        Fri, 16 Dec 2022 07:52:33 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuv8NHiTHmsEqW/Az++9jPo/C9YVLUnT2LppWFbkrYlLQllWbZoKp1kPpJu4n0rC4ntRJAVZA==
+X-Received: by 2002:ac8:545a:0:b0:3a9:763b:4a6d with SMTP id d26-20020ac8545a000000b003a9763b4a6dmr2397157qtq.10.1671205952717;
+        Fri, 16 Dec 2022 07:52:32 -0800 (PST)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-45-70-31-26-132.dsl.bell.ca. [70.31.26.132])
-        by smtp.gmail.com with ESMTPSA id h9-20020ac81389000000b003a530a32f67sm1472717qtj.65.2022.12.16.07.52.27
+        by smtp.gmail.com with ESMTPSA id s21-20020a05620a0bd500b006fa4ac86bfbsm202359qki.55.2022.12.16.07.52.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 07:52:28 -0800 (PST)
+        Fri, 16 Dec 2022 07:52:32 -0800 (PST)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     David Hildenbrand <david@redhat.com>,
@@ -70,9 +70,9 @@ Cc:     David Hildenbrand <david@redhat.com>,
         Jann Horn <jannh@google.com>,
         James Houghton <jthoughton@google.com>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v4 8/9] mm/hugetlb: Make walk_hugetlb_range() safe to pmd unshare
-Date:   Fri, 16 Dec 2022 10:52:26 -0500
-Message-Id: <20221216155226.2043738-1-peterx@redhat.com>
+Subject: [PATCH v4 9/9] mm/hugetlb: Introduce hugetlb_walk()
+Date:   Fri, 16 Dec 2022 10:52:29 -0500
+Message-Id: <20221216155229.2043750-1-peterx@redhat.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221216155100.2043537-1-peterx@redhat.com>
 References: <20221216155100.2043537-1-peterx@redhat.com>
@@ -88,87 +88,294 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since walk_hugetlb_range() walks the pgtable, it needs the vma lock
-to make sure the pgtable page will not be freed concurrently.
+huge_pte_offset() is the main walker function for hugetlb pgtables.  The
+name is not really representing what it does, though.
+
+Instead of renaming it, introduce a wrapper function called hugetlb_walk()
+which will use huge_pte_offset() inside.  Assert on the locks when walking
+the pgtable.
+
+Note, the vma lock assertion will be a no-op for private mappings.
+
+Document the last special case in the page_vma_mapped_walk() path where we
+don't need any more lock to call hugetlb_walk().
+
+Taking vma lock there is not needed because either: (1) potential callers
+of hugetlb pvmw holds i_mmap_rwsem already (from one rmap_walk()), or (2)
+the caller will not walk a hugetlb vma at all so the hugetlb code path not
+reachable (e.g. in ksm or uprobe paths).
+
+It's slightly implicit for future page_vma_mapped_walk() callers on that
+lock requirement.  But anyway, when one day this rule breaks, one will get
+a straightforward warning in hugetlb_walk() with lockdep, then there'll be
+a way out.
 
 Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 Reviewed-by: John Hubbard <jhubbard@nvidia.com>
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- include/linux/pagewalk.h | 11 ++++++++++-
- mm/hmm.c                 | 15 ++++++++++++++-
- mm/pagewalk.c            |  2 ++
- 3 files changed, 26 insertions(+), 2 deletions(-)
+ fs/hugetlbfs/inode.c    |  4 +---
+ fs/userfaultfd.c        |  6 ++----
+ include/linux/hugetlb.h | 37 +++++++++++++++++++++++++++++++++++++
+ mm/hugetlb.c            | 31 +++++++++++++------------------
+ mm/page_vma_mapped.c    |  9 ++++++---
+ mm/pagewalk.c           |  4 +---
+ 6 files changed, 60 insertions(+), 31 deletions(-)
 
-diff --git a/include/linux/pagewalk.h b/include/linux/pagewalk.h
-index 959f52e5867d..27a6df448ee5 100644
---- a/include/linux/pagewalk.h
-+++ b/include/linux/pagewalk.h
-@@ -21,7 +21,16 @@ struct mm_walk;
-  *			depth is -1 if not known, 0:PGD, 1:P4D, 2:PUD, 3:PMD.
-  *			Any folded depths (where PTRS_PER_P?D is equal to 1)
-  *			are skipped.
-- * @hugetlb_entry:	if set, called for each hugetlb entry
-+ * @hugetlb_entry:	if set, called for each hugetlb entry. This hook
-+ *			function is called with the vma lock held, in order to
-+ *			protect against a concurrent freeing of the pte_t* or
-+ *			the ptl. In some cases, the hook function needs to drop
-+ *			and retake the vma lock in order to avoid deadlocks
-+ *			while calling other functions. In such cases the hook
-+ *			function must either refrain from accessing the pte or
-+ *			ptl after dropping the vma lock, or else revalidate
-+ *			those items after re-acquiring the vma lock and before
-+ *			accessing them.
-  * @test_walk:		caller specific callback function to determine whether
-  *			we walk over the current vma or not. Returning 0 means
-  *			"do page table walk over the current vma", returning
-diff --git a/mm/hmm.c b/mm/hmm.c
-index 3850fb625dda..796de6866089 100644
---- a/mm/hmm.c
-+++ b/mm/hmm.c
-@@ -493,8 +493,21 @@ static int hmm_vma_walk_hugetlb_entry(pte_t *pte, unsigned long hmask,
- 	required_fault =
- 		hmm_pte_need_fault(hmm_vma_walk, pfn_req_flags, cpu_flags);
- 	if (required_fault) {
-+		int ret;
-+
- 		spin_unlock(ptl);
--		return hmm_vma_fault(addr, end, required_fault, walk);
-+		hugetlb_vma_unlock_read(vma);
-+		/*
-+		 * Avoid deadlock: drop the vma lock before calling
-+		 * hmm_vma_fault(), which will itself potentially take and
-+		 * drop the vma lock. This is also correct from a
-+		 * protection point of view, because there is no further
-+		 * use here of either pte or ptl after dropping the vma
-+		 * lock.
-+		 */
-+		ret = hmm_vma_fault(addr, end, required_fault, walk);
-+		hugetlb_vma_lock_read(vma);
-+		return ret;
- 	}
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index fdb16246f46e..48f1a8ad2243 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -388,9 +388,7 @@ static bool hugetlb_vma_maps_page(struct vm_area_struct *vma,
+ {
+ 	pte_t *ptep, pte;
  
- 	pfn = pte_pfn(entry) + ((start & ~hmask) >> PAGE_SHIFT);
+-	ptep = huge_pte_offset(vma->vm_mm, addr,
+-			huge_page_size(hstate_vma(vma)));
+-
++	ptep = hugetlb_walk(vma, addr, huge_page_size(hstate_vma(vma)));
+ 	if (!ptep)
+ 		return false;
+ 
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index 887e20472051..4e27ff526873 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -237,14 +237,12 @@ static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
+ 					 unsigned long flags,
+ 					 unsigned long reason)
+ {
+-	struct mm_struct *mm = ctx->mm;
+ 	pte_t *ptep, pte;
+ 	bool ret = true;
+ 
+-	mmap_assert_locked(mm);
+-
+-	ptep = huge_pte_offset(mm, address, vma_mmu_pagesize(vma));
++	mmap_assert_locked(ctx->mm);
+ 
++	ptep = hugetlb_walk(vma, address, vma_mmu_pagesize(vma));
+ 	if (!ptep)
+ 		goto out;
+ 
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index d755e2a7c0db..b6b10101bea7 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -2,6 +2,7 @@
+ #ifndef _LINUX_HUGETLB_H
+ #define _LINUX_HUGETLB_H
+ 
++#include <linux/mm.h>
+ #include <linux/mm_types.h>
+ #include <linux/mmdebug.h>
+ #include <linux/fs.h>
+@@ -196,6 +197,11 @@ pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
+  * huge_pte_offset(): Walk the hugetlb pgtable until the last level PTE.
+  * Returns the pte_t* if found, or NULL if the address is not mapped.
+  *
++ * IMPORTANT: we should normally not directly call this function, instead
++ * this is only a common interface to implement arch-specific
++ * walker. Please use hugetlb_walk() instead, because that will attempt to
++ * verify the locking for you.
++ *
+  * Since this function will walk all the pgtable pages (including not only
+  * high-level pgtable page, but also PUD entry that can be unshared
+  * concurrently for VM_SHARED), the caller of this function should be
+@@ -1229,4 +1235,35 @@ bool want_pmd_share(struct vm_area_struct *vma, unsigned long addr);
+ #define flush_hugetlb_tlb_range(vma, addr, end)	flush_tlb_range(vma, addr, end)
+ #endif
+ 
++static inline bool __vma_shareable_lock(struct vm_area_struct *vma)
++{
++	return (vma->vm_flags & VM_MAYSHARE) && vma->vm_private_data;
++}
++
++/*
++ * Safe version of huge_pte_offset() to check the locks.  See comments
++ * above huge_pte_offset().
++ */
++static inline pte_t *
++hugetlb_walk(struct vm_area_struct *vma, unsigned long addr, unsigned long sz)
++{
++#if defined(CONFIG_HUGETLB_PAGE) && \
++	defined(CONFIG_ARCH_WANT_HUGE_PMD_SHARE) && defined(CONFIG_LOCKDEP)
++	struct hugetlb_vma_lock *vma_lock = vma->vm_private_data;
++
++	/*
++	 * If pmd sharing possible, locking needed to safely walk the
++	 * hugetlb pgtables.  More information can be found at the comment
++	 * above huge_pte_offset() in the same file.
++	 *
++	 * NOTE: lockdep_is_held() is only defined with CONFIG_LOCKDEP.
++	 */
++	if (__vma_shareable_lock(vma))
++		WARN_ON_ONCE(!lockdep_is_held(&vma_lock->rw_sema) &&
++			     !lockdep_is_held(
++				 &vma->vm_file->f_mapping->i_mmap_rwsem));
++#endif
++	return huge_pte_offset(vma->vm_mm, addr, sz);
++}
++
+ #endif /* _LINUX_HUGETLB_H */
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 33fe73e1e589..21dc37ff0896 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -258,11 +258,6 @@ static inline struct hugepage_subpool *subpool_vma(struct vm_area_struct *vma)
+ /*
+  * hugetlb vma_lock helper routines
+  */
+-static bool __vma_shareable_lock(struct vm_area_struct *vma)
+-{
+-	return vma->vm_flags & VM_MAYSHARE && vma->vm_private_data;
+-}
+-
+ void hugetlb_vma_lock_read(struct vm_area_struct *vma)
+ {
+ 	if (__vma_shareable_lock(vma)) {
+@@ -4959,7 +4954,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 	} else {
+ 		/*
+ 		 * For shared mappings the vma lock must be held before
+-		 * calling huge_pte_offset in the src vma. Otherwise, the
++		 * calling hugetlb_walk() in the src vma. Otherwise, the
+ 		 * returned ptep could go away if part of a shared pmd and
+ 		 * another thread calls huge_pmd_unshare.
+ 		 */
+@@ -4969,7 +4964,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 	last_addr_mask = hugetlb_mask_last_page(h);
+ 	for (addr = src_vma->vm_start; addr < src_vma->vm_end; addr += sz) {
+ 		spinlock_t *src_ptl, *dst_ptl;
+-		src_pte = huge_pte_offset(src, addr, sz);
++		src_pte = hugetlb_walk(src_vma, addr, sz);
+ 		if (!src_pte) {
+ 			addr |= last_addr_mask;
+ 			continue;
+@@ -5176,7 +5171,7 @@ int move_hugetlb_page_tables(struct vm_area_struct *vma,
+ 	hugetlb_vma_lock_write(vma);
+ 	i_mmap_lock_write(mapping);
+ 	for (; old_addr < old_end; old_addr += sz, new_addr += sz) {
+-		src_pte = huge_pte_offset(mm, old_addr, sz);
++		src_pte = hugetlb_walk(vma, old_addr, sz);
+ 		if (!src_pte) {
+ 			old_addr |= last_addr_mask;
+ 			new_addr |= last_addr_mask;
+@@ -5239,7 +5234,7 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
+ 	last_addr_mask = hugetlb_mask_last_page(h);
+ 	address = start;
+ 	for (; address < end; address += sz) {
+-		ptep = huge_pte_offset(mm, address, sz);
++		ptep = hugetlb_walk(vma, address, sz);
+ 		if (!ptep) {
+ 			address |= last_addr_mask;
+ 			continue;
+@@ -5552,7 +5547,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+ 			mutex_lock(&hugetlb_fault_mutex_table[hash]);
+ 			hugetlb_vma_lock_read(vma);
+ 			spin_lock(ptl);
+-			ptep = huge_pte_offset(mm, haddr, huge_page_size(h));
++			ptep = hugetlb_walk(vma, haddr, huge_page_size(h));
+ 			if (likely(ptep &&
+ 				   pte_same(huge_ptep_get(ptep), pte)))
+ 				goto retry_avoidcopy;
+@@ -5590,7 +5585,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+ 	 * before the page tables are altered
+ 	 */
+ 	spin_lock(ptl);
+-	ptep = huge_pte_offset(mm, haddr, huge_page_size(h));
++	ptep = hugetlb_walk(vma, haddr, huge_page_size(h));
+ 	if (likely(ptep && pte_same(huge_ptep_get(ptep), pte))) {
+ 		/* Break COW or unshare */
+ 		huge_ptep_clear_flush(vma, haddr, ptep);
+@@ -6376,7 +6371,7 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+ 		return NULL;
+ 
+ 	hugetlb_vma_lock_read(vma);
+-	pte = huge_pte_offset(mm, haddr, huge_page_size(h));
++	pte = hugetlb_walk(vma, haddr, huge_page_size(h));
+ 	if (!pte)
+ 		goto out_unlock;
+ 
+@@ -6441,8 +6436,8 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+ 		 *
+ 		 * Note that page table lock is not held when pte is null.
+ 		 */
+-		pte = huge_pte_offset(mm, vaddr & huge_page_mask(h),
+-				      huge_page_size(h));
++		pte = hugetlb_walk(vma, vaddr & huge_page_mask(h),
++				   huge_page_size(h));
+ 		if (pte)
+ 			ptl = huge_pte_lock(h, mm, pte);
+ 		absent = !pte || huge_pte_none(huge_ptep_get(pte));
+@@ -6633,7 +6628,7 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
+ 	last_addr_mask = hugetlb_mask_last_page(h);
+ 	for (; address < end; address += psize) {
+ 		spinlock_t *ptl;
+-		ptep = huge_pte_offset(mm, address, psize);
++		ptep = hugetlb_walk(vma, address, psize);
+ 		if (!ptep) {
+ 			address |= last_addr_mask;
+ 			continue;
+@@ -7040,8 +7035,8 @@ pte_t *huge_pmd_share(struct mm_struct *mm, struct vm_area_struct *vma,
+ 
+ 		saddr = page_table_shareable(svma, vma, addr, idx);
+ 		if (saddr) {
+-			spte = huge_pte_offset(svma->vm_mm, saddr,
+-					       vma_mmu_pagesize(svma));
++			spte = hugetlb_walk(svma, saddr,
++					    vma_mmu_pagesize(svma));
+ 			if (spte) {
+ 				get_page(virt_to_page(spte));
+ 				break;
+@@ -7358,7 +7353,7 @@ void hugetlb_unshare_all_pmds(struct vm_area_struct *vma)
+ 	hugetlb_vma_lock_write(vma);
+ 	i_mmap_lock_write(vma->vm_file->f_mapping);
+ 	for (address = start; address < end; address += PUD_SIZE) {
+-		ptep = huge_pte_offset(mm, address, sz);
++		ptep = hugetlb_walk(vma, address, sz);
+ 		if (!ptep)
+ 			continue;
+ 		ptl = huge_pte_lock(h, mm, ptep);
+diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
+index 93e13fc17d3c..f3729b23dd0e 100644
+--- a/mm/page_vma_mapped.c
++++ b/mm/page_vma_mapped.c
+@@ -168,9 +168,12 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
+ 		/* The only possible mapping was handled on last iteration */
+ 		if (pvmw->pte)
+ 			return not_found(pvmw);
+-
+-		/* when pud is not present, pte will be NULL */
+-		pvmw->pte = huge_pte_offset(mm, pvmw->address, size);
++		/*
++                 * All callers that get here will already hold the
++                 * i_mmap_rwsem.  Therefore, no additional locks need to be
++                 * taken before calling hugetlb_walk().
++		 */
++		pvmw->pte = hugetlb_walk(vma, pvmw->address, size);
+ 		if (!pvmw->pte)
+ 			return false;
+ 
 diff --git a/mm/pagewalk.c b/mm/pagewalk.c
-index 7f1c9b274906..d98564a7be57 100644
+index d98564a7be57..cb23f8a15c13 100644
 --- a/mm/pagewalk.c
 +++ b/mm/pagewalk.c
-@@ -302,6 +302,7 @@ static int walk_hugetlb_range(unsigned long addr, unsigned long end,
- 	const struct mm_walk_ops *ops = walk->ops;
- 	int err = 0;
- 
-+	hugetlb_vma_lock_read(vma);
+@@ -305,13 +305,11 @@ static int walk_hugetlb_range(unsigned long addr, unsigned long end,
+ 	hugetlb_vma_lock_read(vma);
  	do {
  		next = hugetlb_entry_end(h, addr, end);
- 		pte = huge_pte_offset(walk->mm, addr & hmask, sz);
-@@ -314,6 +315,7 @@ static int walk_hugetlb_range(unsigned long addr, unsigned long end,
+-		pte = huge_pte_offset(walk->mm, addr & hmask, sz);
+-
++		pte = hugetlb_walk(vma, addr & hmask, sz);
+ 		if (pte)
+ 			err = ops->hugetlb_entry(pte, hmask, addr, next, walk);
+ 		else if (ops->pte_hole)
+ 			err = ops->pte_hole(addr, next, -1, walk);
+-
  		if (err)
  			break;
  	} while (addr = next, addr != end);
-+	hugetlb_vma_unlock_read(vma);
- 
- 	return err;
- }
 -- 
 2.37.3
 
