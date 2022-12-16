@@ -2,116 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB8C64ECB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4D864ECBA
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbiLPONG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
+        id S230515AbiLPOOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:14:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbiLPOM5 (ORCPT
+        with ESMTP id S230476AbiLPOOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:12:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BAA11441;
-        Fri, 16 Dec 2022 06:12:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FB5E6212A;
-        Fri, 16 Dec 2022 14:12:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D55F3C433EF;
-        Fri, 16 Dec 2022 14:12:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671199975;
-        bh=26Mosu5Cz2UgSpReY99um0xG14PZU5nCcjyyW+3e/+Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pBeXgzD69ynXqAnQcwRVH03m6ilshVHImvxwy1hVGGmGVcmm5HFxswB2u+OcQkebe
-         4mtDusbv5FElPGUJN9VEdqhGdXqqwchF1NO6rPe3dARiRlKielSmB3oFkJAu9rfBhs
-         tY5oB87UzO1gm8IpbokJXghg1Om1NaWAV9bKmRy59+wXfxpPKto2wkMJc6UUndQ9Uy
-         NgoU8/OMEL6krpUoIKnZ2c3t5tFz03UDSJnfOxSVSl0lrhqSoMghiSe22zt3+fO6vg
-         nrmQgfxRFoLcAmT5XgjS8WDkwZga+LMXEfbmmnXtVUPQY5RFkhuBuGRAiK2QDvATJk
-         GU8qlzzt0PdjQ==
-Date:   Fri, 16 Dec 2022 14:12:49 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        syzbot <syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, gregkh@linuxfoundation.org,
-        lczerner@redhat.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sashal@kernel.org,
-        stable@vger.kernel.org, syzkaller-android-bugs@googlegroups.com,
-        tadeusz.struk@linaro.org
-Subject: Re: kernel BUG in ext4_free_blocks (2)
-Message-ID: <Y5x84fb+YegSendN@google.com>
-References: <0000000000006c411605e2f127e5@google.com>
- <000000000000b60c1105efe06dea@google.com>
- <Y5vTyjRX6ZgIYxgj@mit.edu>
- <Y5xsIkpIznpObOJL@google.com>
- <CANp29Y6KHBE-fpfJCXeN5Ju_qSOfUYAp2n+cNrGj25QtU0X=sA@mail.gmail.com>
+        Fri, 16 Dec 2022 09:14:21 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579162BB09
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:14:20 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id e13so3793713edj.7
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:14:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ddKdS4x8c4ZSI9PbKdla4xMHlbecpUYnHnf7KqPY/v4=;
+        b=R6Y9wbzKg0NbmB4AjAEL6H14ZChrWFx0hlN2XxHvBc27zrSdd/na0DCerF8SUKFHUc
+         MTu3O1RYtnY0WigZq8nNGAHSJHQKiwPTVZ6HF8spZcs7hKDI+VmizIV8iNUjzEmW4rob
+         UaHrQPy38gbeExCbEJ2bQUvHVRrWQdXuLA1GJFM3VSWf99D8DL5jJTCPjwtRoznmOuRr
+         fIpgkx6JGE9swQh1RofT2ugTXSj6dIUPEayzon6SrrcK+Lprt2a1fF9jF7ldW389gLCx
+         nqV/UbQxG/3UguVjjC5i1sjMypSwhtBzPdoN9sGgtD8I5YA/kYRAsc42cQ5OITXoy9Ob
+         2nDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ddKdS4x8c4ZSI9PbKdla4xMHlbecpUYnHnf7KqPY/v4=;
+        b=nu8rysnGGo7DxCYP7ZclKMNA9wAdmwX2UFszqB3QYkLrhZaBt9BVKos8TUOTvEDqwa
+         9Udhmc83BLaG5uZIs0P5LzsTUD0ZNoJzrfNk785Klu3RCw9d7bDI9/uyLhD3n61n0iI9
+         NDPQYvLp9k2D447XElzyxDL/NSBxxbndRGVaY15/GLNRuybTGvhzDwkF5I7K5yT9/f8j
+         kp2qXyaO5wYbuLv62h0wBMtylYI+/ZjSlRCVSshhDYwBXBMRjYdmK2N5zufjVIZpdRz9
+         kNyxQvKT9mdD711YxBMPh9aNN896CG4lNpKAblFXxWb4Fow9xiALJlQBdEdKVFDjIBi0
+         kiEg==
+X-Gm-Message-State: ANoB5pna6JuzEsu8Qar1B4+tAKD2JihBwbtNvxK2ddqXlm9N+GH91r9u
+        ILTRVQ4RMwfRXmMXl98tPYZ49Xa9Rhiq9pMvwvs=
+X-Google-Smtp-Source: AA0mqf6BSmGiKn9RwrZRjQ9xphWaxFRMLQtfrCkN0mNXTtvXh436rRG0C/W1XK/70b/joTiwwaz5IdmEm1aGS6uCx9Y=
+X-Received: by 2002:a05:6402:230f:b0:46c:dc40:4635 with SMTP id
+ l15-20020a056402230f00b0046cdc404635mr16626435eda.358.1671200058847; Fri, 16
+ Dec 2022 06:14:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANp29Y6KHBE-fpfJCXeN5Ju_qSOfUYAp2n+cNrGj25QtU0X=sA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a17:906:3fd1:b0:7c0:b6b2:c759 with HTTP; Fri, 16 Dec 2022
+ 06:14:18 -0800 (PST)
+Reply-To: subik7633@gmail.com
+From:   Susan Bikram <timh79161@gmail.com>
+Date:   Fri, 16 Dec 2022 06:14:18 -0800
+Message-ID: <CAAfykGWx3g453Z-2xhG3w3njoXY=kEjEjeuXyKWegpPmjDz0dA@mail.gmail.com>
+Subject: Please can i have your attention
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Dec 2022, Aleksandr Nogikh wrote:
+Dear ,
 
-> On Fri, Dec 16, 2022 at 2:01 PM Lee Jones <lee@kernel.org> wrote:
-> >
-> > On Thu, 15 Dec 2022, Theodore Ts'o wrote:
-> >
-> > > On Thu, Dec 15, 2022 at 08:34:35AM -0800, syzbot wrote:
-> > > > This bug is marked as fixed by commit:
-> > > > ext4: block range must be validated before use in ext4_mb_clear_bb()
-> > > > But I can't find it in any tested tree for more than 90 days.
-> > > > Is it a correct commit? Please update it by replying:
-> > > > #syz fix: exact-commit-title
-> > > > Until then the bug is still considered open and
-> > > > new crashes with the same signature are ignored.
-> > >
-> > > I don't know what is going on with syzkaller's commit detection, but
-> > > commit 1e1c2b86ef86 ("ext4: block range must be validated before use
-> > > in ext4_mb_clear_bb()") is an exact match for the commit title, and
-> > > it's been in the upstream kernel since v6.0.
-> > >
-> > > How do we make syzkaller accept this?  I'll try this again, but I
-> > > don't hold out much hope.
-> >
-> > I don't see the original bug report (was it posted to a lore
-> > associated list?), so there is no way to tell what branch syzbot was
-> > fuzzing at the time.  My assumption is that it was !Mainline.
-> 
-> Syzbot is actually reacting here to this bug from the Android namespace:
-> 
-> https://syzkaller.appspot.com/bug?id=5266d464285a03cee9dbfda7d2452a72c3c2ae7c
-> 
-> > Although this does appear to be a Stable candidate, I do not see it
-> > in any of the Stable branches yet.  So I suspect the answer here is to
-> > wait for the fix to filter down.
-> >
-> > In the mean time, I guess we should discuss whether syzbot should
-> > really be posting scans of downstream trees to upstream lists.
-> 
-> In this particular case, syzbot has captured all the recipients from
-> the patch email [1], because that email Cc'd
-> syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com. To syzbot, all
-> these people were involved in the original bug discussion, and so it
-> notified them about the problem.
-> 
-> FWIW I've sent a PR[2] to make the "I can't find it in any tested
-> tree" message include the link to the syzkaller dashboard. Hopefully
-> it will help resolve such confusions faster.
+Please can I have your attention and possibly help me for humanity's
+sake please. I am writing this message with a heavy heart filled with
+sorrows and sadness.
+Please if you can respond, i have an issue that i will be most
+grateful if you could help me deal with it please.
 
-That's helpful, thank you.
-
--- 
-Lee Jones [李琼斯]
+Susan
