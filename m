@@ -2,209 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C6564ED29
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A636D64ED34
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 15:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiLPOzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 09:55:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60528 "EHLO
+        id S231149AbiLPO6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 09:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbiLPOzX (ORCPT
+        with ESMTP id S229680AbiLPO6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:55:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DDE4A58A
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:54:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671202474;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eyyx/aF2V9lTUZ0rSVhQrdjXcZ3OfNikbAhK+3xqsq4=;
-        b=S6d4ADa7zXY8lzIQ+gqwqob4fDyFBPBrWQZsrdiZAniv4zBDwdwAPvtxrbyqKlDJmH035o
-        UN0RRGzsMZ1bBnP3+7Pg8ojYPMbA7z/VF22a4FzN4ToF8HW+GrYqrZLyR7UB87FL6nVJ9s
-        hjEwU3CksANj26aPX0Wtl0rT1ghmAEg=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-641--qGQlVN_Oeu-ngFojy_KyA-1; Fri, 16 Dec 2022 09:54:33 -0500
-X-MC-Unique: -qGQlVN_Oeu-ngFojy_KyA-1
-Received: by mail-qk1-f199.google.com with SMTP id az39-20020a05620a172700b006ff85c3b19eso1942749qkb.18
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:54:33 -0800 (PST)
+        Fri, 16 Dec 2022 09:58:10 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48A05D6BB
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:58:09 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id m29so3602936lfo.11
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 06:58:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qnQ8WVqn39lloqLDzY0u45TgwEZ131RficcHAU+KQ+E=;
+        b=oeFrpbC9q5PPAqJO+kaJZzPL/fa2Oy9hVNpADsk/a8586GWPaS1aCP5E7xjAKGysDA
+         u9aJDkLjv5XtEcv+PyCVB2tKVfbcCaWGGl90UHXLsBUV9JbaMOhDCJK5nVL28Ogh9FT6
+         8EH3i8jPcclhrjL/7QtkKfZ9Z1lQpEq1oEgF7dsL7ljqit9fRlajx09JAriSqqj2kQ50
+         lgCAuRBHTUlI+u1m752A7ICLwBXy8xPK1HTkVqNbxWCQ+X08LjDEVoTuJHJgdgIZr8Zr
+         0hqHwcbROUkSAzBNkVy7AJwHjxdM8sJAWwlFV1wOr52xphNz8+l4UcUGYMfb66MR1rc9
+         x2/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eyyx/aF2V9lTUZ0rSVhQrdjXcZ3OfNikbAhK+3xqsq4=;
-        b=ddB6VaExSaT39BHIuFjKkc9Pye/TZPm4uNoKZrJ2aYkcRD+6Q8GfILcEMOdih+mr1O
-         IAAB3kwoKXYok5Bsy2etKblSdywaWOVI3o1ZKuxI4ceeejJl6lYRSpkSdfo1hkjs05Fn
-         PMc2p15WWknQnCF+Icr74jbwuAJDFjEpn3xnzOB6sCYG9iccgH3ijfcI9vdcM8FjIlHX
-         oPUQOspLsF89ESgAZ7jk9m3feRXrvDEXUaAuL+ljzWXoGh1vTm8oG8hu6dkxzlHAsKcJ
-         0hfvyi+hLA4v62ylFGbqvxATvEHH3h2Xve+11Dzb/pzsy8DBO5SvOsmhdhS8XG/UWrsY
-         Jmyw==
-X-Gm-Message-State: ANoB5plgBXcxupD6BrXGiaJJWS2E+hQngldyXnuOLmg1R4xVd+dmur6J
-        M18KN3wgDAQ41lT917jBH0GdQlnbDiqbkfBSGke3fVWbgnv/6znzOsb9XuPzkP2L7Vpjjl8rN6P
-        eBuu/kEAgm5mK00DgMNtNbsVT
-X-Received: by 2002:ad4:43e9:0:b0:4bb:6eb9:a220 with SMTP id f9-20020ad443e9000000b004bb6eb9a220mr38021838qvu.8.1671202473243;
-        Fri, 16 Dec 2022 06:54:33 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5AHUM11A/bB73hu6cvluJb5tmi8bh492KBCIr5bVruuG1aH/QXeVJO6LChik/tvjIwG/6Bjw==
-X-Received: by 2002:ad4:43e9:0:b0:4bb:6eb9:a220 with SMTP id f9-20020ad443e9000000b004bb6eb9a220mr38021814qvu.8.1671202472943;
-        Fri, 16 Dec 2022 06:54:32 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-45-70-31-26-132.dsl.bell.ca. [70.31.26.132])
-        by smtp.gmail.com with ESMTPSA id u7-20020a05620a430700b006fa31bf2f3dsm1620323qko.47.2022.12.16.06.54.31
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qnQ8WVqn39lloqLDzY0u45TgwEZ131RficcHAU+KQ+E=;
+        b=BX5BJ5tZatnJrPVQmjGX539kjGIPVBCWCzlOC6DQBmnsQNi5tfwaXMorSsX6X9tukT
+         xwmYbdz5q5bgU4ig86XnQV9IBa/xfLAnIGD8S8NBkRPxszAd0pdDv8Vq+WmeAJrLrFqB
+         jyamoGZNntFmBBAe+xjYPlpef6ejYGJtY3FZkjTIfv6aREmAeq03CsGGhMqdna7ZddSC
+         NWrvC0tAua5Hz9f3qLzxO8L3Ng0IW0a4SOUdyelIWNPI51leugMWvpjAueVhWxdqgExo
+         Z47ncd77vEa0jxAAhx5xV35+fATolDxHLduBaylE67HTR+9yUe/a7HhrRbIJdej9CC9X
+         SfvQ==
+X-Gm-Message-State: ANoB5pm3SaYKhVB6KLwCG4mXxMoNOAuUrv8WvFWZWJ7VO+A5TjMNthCd
+        8jdaaJKTVA0ghHzyRzHwt03/Cg==
+X-Google-Smtp-Source: AA0mqf5zVAxsQWpDKAT+cihDzTutK+yPkquZd6gx5FEZQi1/4SqpZkDMvO905N9BPjowSzn5q4YqQw==
+X-Received: by 2002:a05:6512:2102:b0:4b5:6c36:79a4 with SMTP id q2-20020a056512210200b004b56c3679a4mr8644808lfr.65.1671202688023;
+        Fri, 16 Dec 2022 06:58:08 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c18-20020ac25f72000000b004b59b43ec61sm238491lfc.179.2022.12.16.06.58.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 06:54:32 -0800 (PST)
-Date:   Fri, 16 Dec 2022 09:54:31 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Huang Ying <ying.huang@intel.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm/uffd: Fix pte marker when fork() without fork
- event
-Message-ID: <Y5yGp6ToQD+eYrv/@x1n>
-References: <20221214200453.1772655-1-peterx@redhat.com>
- <20221214200453.1772655-2-peterx@redhat.com>
- <618b69be-0e99-e35f-04b3-9c63d78ece50@redhat.com>
+        Fri, 16 Dec 2022 06:58:07 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>
+Subject: [PATCH RFC 1/2] PM: domains: Add GENPD_FLAG_RT_SAFE for PREEMPT_RT
+Date:   Fri, 16 Dec 2022 15:58:01 +0100
+Message-Id: <20221216145802.102374-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <618b69be-0e99-e35f-04b3-9c63d78ece50@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 10:04:27AM +0100, David Hildenbrand wrote:
-> On 14.12.22 21:04, Peter Xu wrote:
-> > When fork(), dst_vma is not guaranteed to have VM_UFFD_WP even if src may
-> > have it and has pte marker installed.  The warning is improper along with
-> > the comment.  The right thing is to inherit the pte marker when needed, or
-> > keep the dst pte empty.
-> > 
-> > A vague guess is this happened by an accident when there's the prior patch
-> > to introduce src/dst vma into this helper during the uffd-wp feature got
-> > developed and I probably messed up in the rebase, since if we replace
-> > dst_vma with src_vma the warning & comment it all makes sense too.
-> > 
-> > Hugetlb did exactly the right here (copy_hugetlb_page_range()).  Fix the
-> > general path.
-> > 
-> > Reproducer:
-> > 
-> > https://github.com/xupengfe/syzkaller_logs/blob/main/221208_115556_copy_page_range/repro.c
-> > 
-> > Cc: <stable@vger.kernel.org> # 5.19+
-> > Fixes: c56d1b62cce8 ("mm/shmem: handle uffd-wp during fork()")
-> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216808
-> > Reported-by: Pengfei Xu <pengfei.xu@intel.com>
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >   mm/memory.c | 8 ++------
-> >   1 file changed, 2 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/mm/memory.c b/mm/memory.c
-> > index aad226daf41b..032ef700c3e8 100644
-> > --- a/mm/memory.c
-> > +++ b/mm/memory.c
-> > @@ -828,12 +828,8 @@ copy_nonpresent_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
-> >   			return -EBUSY;
-> >   		return -ENOENT;
-> >   	} else if (is_pte_marker_entry(entry)) {
-> > -		/*
-> > -		 * We're copying the pgtable should only because dst_vma has
-> > -		 * uffd-wp enabled, do sanity check.
-> > -		 */
-> > -		WARN_ON_ONCE(!userfaultfd_wp(dst_vma));
-> > -		set_pte_at(dst_mm, addr, dst_pte, pte);
-> > +		if (userfaultfd_wp(dst_vma))
-> > +			set_pte_at(dst_mm, addr, dst_pte, pte);
-> >   		return 0;
-> >   	}
-> >   	if (!userfaultfd_wp(dst_vma))
-> 
-> Staring at the code first made me go "what about other PTE markers". I then
-> looked into the discussion in patch #2. The fix as is is suboptimal, because
-> it
-> 
-> 1) Removes the warning which is good, but
-> 2) Silently drops swapin errors now
-> 
-> So it silently breaks something else temporarily ...
-> 
-> 
-> I remember, that theoretically we could have multiple markers stored in a
-> single PTE marker.
-> 
-> Wouldn't it be cleaner to be able to "clean" specific markers from a PTE
-> marker without having to special case on each and everyone? I mean, only
-> uffd-wp is really special such that it might disappear for the target.
+Realtime kernels with PREEMPT_RT must use raw_spinlock_t, so add a flag
+allowing a power domain provider to indicate it is RT safe.  The flag is
+supposed to be used with existing GENPD_FLAG_IRQ_SAFE.
 
-Quotting the commit message in patch 2:
+Cc: Adrien Thierry <athierry@redhat.com>
+Cc: Brian Masney <bmasney@redhat.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-  Currently there is a priority difference between the uffd-wp bit and the
-  swapin error entry, in which the swapin error always has higher priority
-  (e.g. we don't need to wr-protect a swapin error pte marker).
+---
 
-  If there will be a 3rd bit introduced, we'll probably need to consider a
-  more involved approach so we may need to start operate on the bits.
-  Let's leave that for later.
+Independently from Adrien, I encountered the same problem around genpd
+when using PREEMPT_RT kernel.
 
-I actually started the fix with something like that, but I noticed it's not
-needed to add more code if there's no 3rd bit introduced so I dropped that.
-I decided to go the simpler change approach and leave that for later.
+Previous patch by Adrien:
+https://lore.kernel.org/all/20220615203605.1068453-1-athierry@redhat.com/
+---
+ drivers/base/power/domain.c | 51 +++++++++++++++++++++++++++++++++++--
+ include/linux/pm_domain.h   | 13 ++++++++++
+ 2 files changed, 62 insertions(+), 2 deletions(-)
 
-> 
-> Something like (pseudocode):
-> 
-> if (!userfaultfd_wp(dst_vma))
-> 	pte_marker_clear_uff_wp(entry);
-> if (!pte_marker_empty(entry)) {
-> 	pte = make_pte_marker(pte_marker_get(entry));
-> 	set_pte_at(dst_mm, addr, dst_pte, pte);
-> }
-> 
-> Then this fix would be correct and backport-able even without #2. And it
-> would work for new types of markers :)
-
-When that comes, we may need one set_pte_marker_at() taking care of empty
-pte markers, otherwise there can be a lot of such check.
-
-> 
-> 
-> I'd prefer a fix that doesn't break something else temporarily, even if the
-> stable backport might require 5 additional minutes to do. So squashing #2
-> into #1 would also work.
-
-The thing is whether do we care about someone: (1) explicitly checkout at
-the commit of patch 1, then (2) runs the kernel, hit a swapnin error, (3)
-fork(), and (4) access the swapin error page in the child.
-
-To me I don't care even starting from (1).. because it really shouldn't
-happen at all in any serious environment.
-
-The other reason is these are indeed two issues to solve.  Even if by
-accident we kept the swapin error in old code we'll probably dump an
-warning which is not wanted either.  It's not something someone will really
-get benefit from..
-
-So like many other places, I don't have a strong opinion, but personally I
-prefer the current approach.
-
-Andrew, let me know if you want me to repost with a squashed version.
-
-Thanks,
-
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index a539d6bc6fe0..478862ae478a 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -119,6 +119,48 @@ static const struct genpd_lock_ops genpd_spin_ops = {
+ 	.unlock = genpd_unlock_spin,
+ };
+ 
++static void genpd_lock_rawspin(struct generic_pm_domain *genpd)
++	__acquires(&genpd->rslock)
++{
++	unsigned long flags;
++
++	raw_spin_lock_irqsave(&genpd->rslock, flags);
++	genpd->rlock_flags = flags;
++}
++
++static void genpd_lock_nested_rawspin(struct generic_pm_domain *genpd,
++					int depth)
++	__acquires(&genpd->rslock)
++{
++	unsigned long flags;
++
++	raw_spin_lock_irqsave_nested(&genpd->rslock, flags, depth);
++	genpd->rlock_flags = flags;
++}
++
++static int genpd_lock_interruptible_rawspin(struct generic_pm_domain *genpd)
++	__acquires(&genpd->rslock)
++{
++	unsigned long flags;
++
++	raw_spin_lock_irqsave(&genpd->rslock, flags);
++	genpd->rlock_flags = flags;
++	return 0;
++}
++
++static void genpd_unlock_rawspin(struct generic_pm_domain *genpd)
++	__releases(&genpd->rslock)
++{
++	raw_spin_unlock_irqrestore(&genpd->rslock, genpd->rlock_flags);
++}
++
++static const struct genpd_lock_ops genpd_rawspin_ops = {
++	.lock = genpd_lock_rawspin,
++	.lock_nested = genpd_lock_nested_rawspin,
++	.lock_interruptible = genpd_lock_interruptible_rawspin,
++	.unlock = genpd_unlock_rawspin,
++};
++
+ #define genpd_lock(p)			p->lock_ops->lock(p)
+ #define genpd_lock_nested(p, d)		p->lock_ops->lock_nested(p, d)
+ #define genpd_lock_interruptible(p)	p->lock_ops->lock_interruptible(p)
+@@ -2048,8 +2090,13 @@ static void genpd_free_data(struct generic_pm_domain *genpd)
+ static void genpd_lock_init(struct generic_pm_domain *genpd)
+ {
+ 	if (genpd->flags & GENPD_FLAG_IRQ_SAFE) {
+-		spin_lock_init(&genpd->slock);
+-		genpd->lock_ops = &genpd_spin_ops;
++		if (genpd->flags & GENPD_FLAG_RT_SAFE) {
++			raw_spin_lock_init(&genpd->rslock);
++			genpd->lock_ops = &genpd_rawspin_ops;
++		} else {
++			spin_lock_init(&genpd->slock);
++			genpd->lock_ops = &genpd_spin_ops;
++		}
+ 	} else {
+ 		mutex_init(&genpd->mlock);
+ 		genpd->lock_ops = &genpd_mtx_ops;
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index c6cda024ff99..6b0f9de2be1c 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -61,6 +61,14 @@
+  * GENPD_FLAG_MIN_RESIDENCY:	Enable the genpd governor to consider its
+  *				components' next wakeup when determining the
+  *				optimal idle state.
++ *
++ * GENPD_FLAG_RT_SAFE:		When used with GENPD_FLAG_IRQ_SAFE, this informs
++ *				genpd that its backend callbacks, ->power_on|off(),
++ *				do not use other spinlocks. They might use
++ *				raw_spinlocks or other pre-emption-disable
++ *				methods, all of which are PREEMPT_RT safe. Note
++ *				that, a genpd having this flag set, requires its
++ *				masterdomains to also have it set.
+  */
+ #define GENPD_FLAG_PM_CLK	 (1U << 0)
+ #define GENPD_FLAG_IRQ_SAFE	 (1U << 1)
+@@ -69,6 +77,7 @@
+ #define GENPD_FLAG_CPU_DOMAIN	 (1U << 4)
+ #define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
+ #define GENPD_FLAG_MIN_RESIDENCY (1U << 6)
++#define GENPD_FLAG_RT_SAFE	 (1U << 7)
+ 
+ enum gpd_status {
+ 	GENPD_STATE_ON = 0,	/* PM domain is on */
+@@ -164,6 +173,10 @@ struct generic_pm_domain {
+ 			spinlock_t slock;
+ 			unsigned long lock_flags;
+ 		};
++		struct {
++			raw_spinlock_t rslock;
++			unsigned long rlock_flags;
++		};
+ 	};
+ 
+ };
 -- 
-Peter Xu
+2.34.1
 
