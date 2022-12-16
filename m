@@ -2,180 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5744464EFA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F01064EF9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:45:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbiLPQpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 11:45:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
+        id S229892AbiLPQpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 11:45:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231718AbiLPQoM (ORCPT
+        with ESMTP id S231372AbiLPQow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 11:44:12 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD112E687;
-        Fri, 16 Dec 2022 08:43:46 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B54D234588;
-        Fri, 16 Dec 2022 16:43:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1671209024; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=odwET7RAJt4TyX2c0eIiYppqthEh1UCsaW9+/jL2kns=;
-        b=xWkCYvJJcIhuomKFa0qbKF1b6jKhBc1nCaqwf4rU8Qfy/aQkvwRuxlvgINu/W5XshFcpqs
-        aVsg5AJWBVVLpyUdkZldHi2HJmGc03v4KoK/MT1VgPs12LKde+BPU3kcVpkybg+K7ZnbwP
-        7aF9Z/wTytEZoYCIkEQHur57R16mLz4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1671209024;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=odwET7RAJt4TyX2c0eIiYppqthEh1UCsaW9+/jL2kns=;
-        b=mhw6SA5W7W6VoFVGnzby+z7jJ3LSIG35U7TS/KxzU4sQbpJQocr/N2KgUgniszDZLULex2
-        lzOiaOVGNrGgjPDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8C3AD138FD;
-        Fri, 16 Dec 2022 16:43:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id mr41IkCgnGOILgAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 16 Dec 2022 16:43:44 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 894A4A0762; Fri, 16 Dec 2022 17:43:42 +0100 (CET)
-Date:   Fri, 16 Dec 2022 17:43:42 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v5 2/3] fanotify: define struct members to hold response
- decision context
-Message-ID: <20221216164342.ojcbdifdmafq5njw@quack3>
-References: <cover.1670606054.git.rgb@redhat.com>
- <45da8423b9b1e8fc7abd68cd2269acff8cf9022a.1670606054.git.rgb@redhat.com>
+        Fri, 16 Dec 2022 11:44:52 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B944FA
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:44:50 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 374341042;
+        Fri, 16 Dec 2022 08:45:31 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.27.147])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F8F83F5A1;
+        Fri, 16 Dec 2022 08:44:49 -0800 (PST)
+Date:   Fri, 16 Dec 2022 16:44:43 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     will@kernel.org, catalin.marinas@arm.com,
+        daniel.thompson@linaro.org, dianders@chromium.org,
+        liwei391@huawei.com, mhiramat@kernel.org, maz@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] arm64: entry: Skip single stepping into interrupt
+ handlers
+Message-ID: <Y5yge52LQGp0uhIF@FVFF77S0Q05N.cambridge.arm.com>
+References: <20221215142903.2624142-1-sumit.garg@linaro.org>
+ <20221215142903.2624142-2-sumit.garg@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <45da8423b9b1e8fc7abd68cd2269acff8cf9022a.1670606054.git.rgb@redhat.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221215142903.2624142-2-sumit.garg@linaro.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 12-12-22 09:06:10, Richard Guy Briggs wrote:
-> This patch adds a flag, FAN_INFO and an extensible buffer to provide
-> additional information about response decisions.  The buffer contains
-> one or more headers defining the information type and the length of the
-> following information.  The patch defines one additional information
-> type, FAN_RESPONSE_INFO_AUDIT_RULE, to audit a rule number.  This will
-> allow for the creation of other information types in the future if other
-> users of the API identify different needs.
+On Thu, Dec 15, 2022 at 07:59:02PM +0530, Sumit Garg wrote:
+> Currently on systems where the timer interrupt (or any other
+> fast-at-human-scale periodic interrupt) is active then it is impossible
+> to step any code with interrupts unlocked because we will always end up
+> stepping into the timer interrupt instead of stepping the user code.
 > 
-> Suggested-by: Steve Grubb <sgrubb@redhat.com>
-> Link: https://lore.kernel.org/r/2745105.e9J7NaK4W3@x2
-> Suggested-by: Jan Kara <jack@suse.cz>
-> Link: https://lore.kernel.org/r/20201001101219.GE17860@quack2.suse.cz
-> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> The common user's goal while single stepping is that when they step then
+> the system will stop at PC+4 or PC+I for a branch that gets taken
+> relative to the instruction they are stepping. So, fix broken single step
+> implementation via skipping single stepping into interrupt handlers.
+> 
+> The methodology is when we receive an interrupt from EL1, check if we
+> are single stepping (pstate.SS). If yes then we save MDSCR_EL1.SS and
+> clear the register bit if it was set. Then unmask only D and leave I set.
+> On return from the interrupt, set D and restore MDSCR_EL1.SS. Along with
+> this skip reschedule if we were stepping.
+> 
+> Suggested-by: Will Deacon <will@kernel.org>
+> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> Tested-by: Douglas Anderson <dianders@chromium.org>
 
-Thanks for the patches. They look very good to me. Just two nits below. I
-can do the small updates on commit if there would be no other changes. But
-I'd like to get some review from audit guys for patch 3/3 before I commit
-this.
+FWIW, this looks reasonable to me; I have a couple of minor style/structure
+comments below.
 
-> diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
-> index caa1211bac8c..cf3584351e00 100644
-> --- a/fs/notify/fanotify/fanotify_user.c
-> +++ b/fs/notify/fanotify/fanotify_user.c
-> @@ -283,19 +283,44 @@ static int create_fd(struct fsnotify_group *group, const struct path *path,
->  	return client_fd;
+> ---
+>  arch/arm64/kernel/entry-common.c | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
+> index cce1167199e3..53bcb1902f2f 100644
+> --- a/arch/arm64/kernel/entry-common.c
+> +++ b/arch/arm64/kernel/entry-common.c
+> @@ -471,19 +471,35 @@ static __always_inline void __el1_irq(struct pt_regs *regs,
+>  	do_interrupt_handler(regs, handler);
+>  	irq_exit_rcu();
+>  
+> -	arm64_preempt_schedule_irq();
+> +	/* Don't reschedule in case we are single stepping */
+> +	if (!(regs->pstate & DBG_SPSR_SS))
+> +		arm64_preempt_schedule_irq();
+
+Please change arm64_preempt_schedule_irq() to take the regs as an argument, and
+put this test inside arm64_preempt_schedule_irq(). That way all the
+decision-making about whether to preempt is in one place.
+
+That can go immediately after the need_irq_preemption() test.
+
+>  
+>  	exit_to_kernel_mode(regs);
 >  }
->  
-> +static int process_access_response_info(int fd, const char __user *info, size_t info_len,
-> +					struct fanotify_response_info_audit_rule *friar)
+> +
+>  static void noinstr el1_interrupt(struct pt_regs *regs,
+>  				  void (*handler)(struct pt_regs *))
+>  {
+> +	unsigned long reg;
 
-I prefer to keep lines within 80 columns, unless there is really good
-reason (like with strings) to have them longer.
+Please s/reg/mdscr/. That way it's harder to confuse with 'regs', it's clearer
+that it's the MDSCR_ELx value, and if we have to save/restore any other
+registers in future it'll be obvious how to name things.
 
-BTW, why do you call the info structure 'friar'? I feel some language twist
-escapes me ;)
-
-> +{
-> +	if (fd == FAN_NOFD)
-> +		return -ENOENT;
-
-I would not test 'fd' in this function at all. After all it is not part of
-the response info structure and you do check it in
-process_access_response() anyway.
+Thanks,
+Mark.
 
 > +
-> +	if (info_len != sizeof(*friar))
-> +		return -EINVAL;
-> +
-> +	if (copy_from_user(friar, info, sizeof(*friar)))
-> +		return -EFAULT;
-> +
-> +	if (friar->hdr.type != FAN_RESPONSE_INFO_AUDIT_RULE)
-> +		return -EINVAL;
-> +	if (friar->hdr.pad != 0)
-> +		return -EINVAL;
-> +	if (friar->hdr.len != sizeof(*friar))
-> +		return -EINVAL;
-> +
-> +	return info_len;
-> +}
-> +
-
-...
-
-> @@ -327,10 +359,18 @@ static int process_access_response(struct fsnotify_group *group,
->  		return -EINVAL;
->  	}
->  
-> -	if (fd < 0)
-> +	if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(group, FAN_ENABLE_AUDIT))
->  		return -EINVAL;
->  
-> -	if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(group, FAN_ENABLE_AUDIT))
-> +	if (response & FAN_INFO) {
-> +		ret = process_access_response_info(fd, info, info_len, &friar);
-> +		if (ret < 0)
-> +			return ret;
-> +	} else {
-> +		ret = 0;
+> +	/* Disable single stepping within interrupt handler */
+> +	if (regs->pstate & DBG_SPSR_SS) {
+> +		reg = read_sysreg(mdscr_el1);
+> +		write_sysreg(reg & ~DBG_MDSCR_SS, mdscr_el1);
 > +	}
 > +
-> +	if (fd < 0)
->  		return -EINVAL;
-
-And here I'd do:
-
-	if (fd == FAN_NOFD)
-		return 0;
-	if (fd < 0)
-		return -EINVAL;
-
-As we talked in previous revisions we'd specialcase FAN_NOFD to just verify
-extra info is understood by the kernel so that application writing fanotify
-responses has a way to check which information it can provide to the
-kernel.
-
-								Honza
-
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+>  	write_sysreg(DAIF_PROCCTX_NOIRQ, daif);
+>  
+>  	if (IS_ENABLED(CONFIG_ARM64_PSEUDO_NMI) && !interrupts_enabled(regs))
+>  		__el1_pnmi(regs, handler);
+>  	else
+>  		__el1_irq(regs, handler);
+> +
+> +	if (regs->pstate & DBG_SPSR_SS) {
+> +		write_sysreg(DAIF_PROCCTX_NOIRQ | PSR_D_BIT, daif);
+> +		write_sysreg(reg, mdscr_el1);
+> +	}
+>  }
+>  
+>  asmlinkage void noinstr el1h_64_irq_handler(struct pt_regs *regs)
+> -- 
+> 2.34.1
+> 
