@@ -2,294 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1206864E7B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2039664E7B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiLPH1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 02:27:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
+        id S229783AbiLPH2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 02:28:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiLPH1k (ORCPT
+        with ESMTP id S229718AbiLPH2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 02:27:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3932F642
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:27:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671175619;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IPEjkfolOv6ztAu6aD/WZn2rd8mZZh/tttToGoLTS6A=;
-        b=cqC65dQF9KHXbRczjZ23j+lqjwD9pBnHDXXf3+V8WheTp86uLv/YsnKDTUlSzjsPkQC1eF
-        X3SsXpM9eV8uS/SHKdMev9JckGF5FC3lQkssuG+pI9IUSHMWGHaVE279MjXBr9bNFJDkox
-        HnX0L2A5h7pO2dB5tqUlz0YCoWqUQiU=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-399-7gFo_5q7PS-qckDwsNVySQ-1; Fri, 16 Dec 2022 02:26:58 -0500
-X-MC-Unique: 7gFo_5q7PS-qckDwsNVySQ-1
-Received: by mail-oi1-f198.google.com with SMTP id s8-20020a056808008800b00360b62b697bso470715oic.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:26:58 -0800 (PST)
+        Fri, 16 Dec 2022 02:28:32 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AC22F66A
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:28:30 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id h7so1613586wrs.6
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Dec 2022 23:28:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5mW7QVt5GH3e598iWydxa74nESqdi2JjbfGI/OH0/N4=;
+        b=HzPqlS3pSJKX/mWg1aDPh3gvD5j5vVwFrI1oPVhVq0OU90pjIL4AHCWuTX6FwdrH29
+         UC1oZF5oNlBEnUfHZOh3y5JsKjFOXQQ8xuYJ0gcP2UzgC/d08zbXfLvS2z0ofXLelTxq
+         gn7z21Gmim6PrUf1gMW5fgojW1UV/HRNWvLz3ZGQY4RPufEy75lvMvJRWo/I2Gj1rNI5
+         V5h1Oqb8Mi2jOhHPWUCmhg458gzCQP3M4znlhdWMsOB6Y3r8i9v6AcxqURgtPHlSeCGw
+         3Gm8d46jhoI98aGwJibETXxGvINhzNvnNhJ/2HoDgZrmnnf+rFtro8E8tKq5QiFs6cOW
+         2DTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IPEjkfolOv6ztAu6aD/WZn2rd8mZZh/tttToGoLTS6A=;
-        b=63+1KLY2lQT+CLJZIQP8QwAZZZxfo5Pvl6fc3CAVp9zHOKcJbSF9meX9vJRKQ4GGhS
-         VinWFja1PAs1IX5mE3D7EE1tnExBkERB0l3pqMxJmXTgDqoMeA7AYCY5mnAHrpXpSeGo
-         wJ4/fP378XUBMTCOnA3HPhT6Y/ATityYyN1jmwkmwZKKsBawMUibY6JolFafZbs6nKBJ
-         dfb+4c5mRcO2I8c8S6ESliHQsec6+K7zf35tMX4CFi09j+yYoS8d1xDWsg9BTT9Ha+A8
-         bayTSpFunRPpy8q/ogwezE8Ff2dATA1JDKg/Zeh5ink3pJIWUN7VS8Am+mMij0pOLVs4
-         xB0w==
-X-Gm-Message-State: ANoB5pmg6W6tCLG2Klmx/Nn29YqaSWbTaP8t5VY6SzCJ17bdAh1VJsTO
-        tnjo+aq+RUnhUTErjZHYZknsCTj8RxRlQPzff5m7R/RKG8wblXxvz6+oOB142Ma8stOS2uUgJ5C
-        J68vXqzH/GS/HVNKpND0iSMbJY9FDlTXp5K8zCfD8
-X-Received: by 2002:a05:6870:9e8f:b0:144:a97b:1ae2 with SMTP id pu15-20020a0568709e8f00b00144a97b1ae2mr348121oab.35.1671175617223;
-        Thu, 15 Dec 2022 23:26:57 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5OvsijG2TXiwv/QU3ULVD3ZpToieGkZY45BBePbQ7uOx0BJBOsOE53HatkWZtZEPx8gGf6bZNyBEXoLgyKqg8=
-X-Received: by 2002:a05:6870:9e8f:b0:144:a97b:1ae2 with SMTP id
- pu15-20020a0568709e8f00b00144a97b1ae2mr348115oab.35.1671175616981; Thu, 15
- Dec 2022 23:26:56 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5mW7QVt5GH3e598iWydxa74nESqdi2JjbfGI/OH0/N4=;
+        b=U7LwQ5y9XjAMON6KO44j31qnllAxtp5KroAknNx+5w8Z6GvyHcw1YdC2e1VB/YXTdx
+         ZZQ1NObieVj9JvQkn9pBz3vB1fMj1KlaYJcTeqeqsJZ42BRVJbRcVjCkgWOPAYsf+t7I
+         sj8wC8JNbEKxSST5X2QSfcfPEqO1HuhHk5hx7+lTgjJNWCihiUUIR+H/YoIubs1Am0kv
+         BXd6GIV9otCiqvxrcHuYiACz6o7Z4jDf+QLvV7cWHploZXl+imjLhQXHvbO70dArq0sp
+         uA3VA3dsnrxwMeL2MtUz1Jc3H3rN3jcwdUemKqDYhpTWWub7snP22JZ38r0VPkJpomad
+         O3Ow==
+X-Gm-Message-State: ANoB5pmcKoLwXvkSh1eLgfYGU8CsV2UpPESzP8VllGL2Dk5pfc76cIc8
+        LJXzogzkIR6hoMqGxEXvgvtMpw==
+X-Google-Smtp-Source: AA0mqf4v6cBApCiabUT5dWKT5Iaw++KpSoED6jqDXvZelej5Hfe95uM7HEGCGLzAfd0oCYIw/fYf1w==
+X-Received: by 2002:a5d:6a0c:0:b0:242:4bbe:2d20 with SMTP id m12-20020a5d6a0c000000b002424bbe2d20mr18379863wru.42.1671175708861;
+        Thu, 15 Dec 2022 23:28:28 -0800 (PST)
+Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
+        by smtp.gmail.com with ESMTPSA id c10-20020a5d4cca000000b0024278304ef6sm1498230wrt.13.2022.12.15.23.28.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 23:28:28 -0800 (PST)
+Message-ID: <c2014039-f1e8-6976-33d6-52e2dd4e7b66@baylibre.com>
+Date:   Fri, 16 Dec 2022 08:28:26 +0100
 MIME-Version: 1.0
-References: <20221214163025.103075-1-sgarzare@redhat.com> <20221214163025.103075-7-sgarzare@redhat.com>
-In-Reply-To: <20221214163025.103075-7-sgarzare@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 16 Dec 2022 15:26:46 +0800
-Message-ID: <CACGkMEuk0xNwthy4NgR1xPfEVt-EgtmZmfiacJprGgyvi3hVAA@mail.gmail.com>
-Subject: Re: [RFC PATCH 6/6] vdpa_sim: add support for user VA
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>, eperezma@redhat.com,
-        stefanha@redhat.com, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 1/6] DONOTMERGE: arm64: dts: ti: Add TI TPS65219 PMIC
+ support for AM642 SK board.
+Content-Language: en-US
+To:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Wadim Egorov <W.Egorov@phytec.de>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "kristo@kernel.org" <kristo@kernel.org>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "tony@atomide.com" <tony@atomide.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        "marcel.ziswiler@toradex.com" <marcel.ziswiler@toradex.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "biju.das.jz@bp.renesas.com" <biju.das.jz@bp.renesas.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "jeff@labundy.com" <jeff@labundy.com>, "afd@ti.com" <afd@ti.com>,
+        "khilman@baylibre.com" <khilman@baylibre.com>,
+        "narmstrong@baylibre.com" <narmstrong@baylibre.com>,
+        "msp@baylibre.com" <msp@baylibre.com>,
+        "j-keerthy@ti.com" <j-keerthy@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>
+References: <20221104152311.1098603-1-jneanne@baylibre.com>
+ <20221104152311.1098603-2-jneanne@baylibre.com>
+ <d0d7e315-ce86-0420-8ef5-fe2e4aefd5b4@phytec.de>
+ <e2bc53fe-3a0c-cf24-8b29-ca377aba3721@baylibre.com>
+ <Y5tGzjgcAWPqdFNE@sirena.org.uk> <20221215175411.znxy3d6ussq2iq5h@grieving>
+ <Y5tl3+2pJispcXy6@sirena.org.uk> <20221215214149.whcjdphxxvvedrih@affront>
+ <b6ea8cb7-38c4-13cf-a08a-ece973859342@ti.com>
+From:   jerome Neanne <jneanne@baylibre.com>
+In-Reply-To: <b6ea8cb7-38c4-13cf-a08a-ece973859342@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 12:31 AM Stefano Garzarella <sgarzare@redhat.com> wrote:
->
-> The new "use_va" module parameter (default: false) is used in
-> vdpa_alloc_device() to inform the vDPA framework that the device
-> supports VA.
->
-> vringh is initialized to use VA only when "use_va" is true and the
-> user's mm has been bound. So, only when the bus supports user VA
-> (e.g. vhost-vdpa).
->
-> vdpasim_mm_work_fn work is used to attach the kthread to the user
-> address space when the .bind_mm callback is invoked, and to detach
-> it when the device is reset.
-
-One thing in my mind is that the current datapath is running under
-spinlock which prevents us from using iov_iter (which may have page
-faults).
-
-We need to get rid of the spinlock first.
-
->
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> ---
->  drivers/vdpa/vdpa_sim/vdpa_sim.h |   1 +
->  drivers/vdpa/vdpa_sim/vdpa_sim.c | 104 ++++++++++++++++++++++++++++++-
->  2 files changed, 103 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-> index 07ef53ea375e..1b010e5c0445 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-> @@ -55,6 +55,7 @@ struct vdpasim {
->         struct vdpasim_virtqueue *vqs;
->         struct kthread_worker *worker;
->         struct kthread_work work;
-> +       struct mm_struct *mm_bound;
->         struct vdpasim_dev_attr dev_attr;
->         /* spinlock to synchronize virtqueue state */
->         spinlock_t lock;
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> index 36a1d2e0a6ba..6e07cedef30c 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> @@ -36,10 +36,90 @@ module_param(max_iotlb_entries, int, 0444);
->  MODULE_PARM_DESC(max_iotlb_entries,
->                  "Maximum number of iotlb entries for each address space. 0 means unlimited. (default: 2048)");
->
-> +static bool use_va;
-> +module_param(use_va, bool, 0444);
-> +MODULE_PARM_DESC(use_va, "Enable the device's ability to use VA");
-> +
->  #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
->  #define VDPASIM_QUEUE_MAX 256
->  #define VDPASIM_VENDOR_ID 0
->
-> +struct vdpasim_mm_work {
-> +       struct kthread_work work;
-> +       struct task_struct *owner;
-> +       struct mm_struct *mm;
-> +       bool bind;
-> +       int ret;
-> +};
-> +
-> +static void vdpasim_mm_work_fn(struct kthread_work *work)
-> +{
-> +       struct vdpasim_mm_work *mm_work =
-> +               container_of(work, struct vdpasim_mm_work, work);
-> +
-> +       mm_work->ret = 0;
-> +
-> +       if (mm_work->bind) {
-> +               kthread_use_mm(mm_work->mm);
-> +#if 0
-> +               if (mm_work->owner)
-> +                       mm_work->ret = cgroup_attach_task_all(mm_work->owner,
-> +                                                             current);
-> +#endif
-> +       } else {
-> +#if 0
-> +               //TODO: check it
-> +               cgroup_release(current);
-> +#endif
-> +               kthread_unuse_mm(mm_work->mm);
-> +       }
-> +}
-> +
-> +static void vdpasim_worker_queue_mm(struct vdpasim *vdpasim,
-> +                                   struct vdpasim_mm_work *mm_work)
-> +{
-> +       struct kthread_work *work = &mm_work->work;
-> +
-> +       kthread_init_work(work, vdpasim_mm_work_fn);
-> +       kthread_queue_work(vdpasim->worker, work);
-> +
-> +       spin_unlock(&vdpasim->lock);
-> +       kthread_flush_work(work);
-> +       spin_lock(&vdpasim->lock);
-> +}
-> +
-> +static int vdpasim_worker_bind_mm(struct vdpasim *vdpasim,
-> +                                 struct mm_struct *new_mm,
-> +                                 struct task_struct *owner)
-> +{
-> +       struct vdpasim_mm_work mm_work;
-> +
-> +       mm_work.owner = owner;
-> +       mm_work.mm = new_mm;
-> +       mm_work.bind = true;
-> +
-> +       vdpasim_worker_queue_mm(vdpasim, &mm_work);
-> +
-
-Should we wait for the work to be finished?
-
-> +       if (!mm_work.ret)
-> +               vdpasim->mm_bound = new_mm;
-> +
-> +       return mm_work.ret;
-> +}
-> +
-> +static void vdpasim_worker_unbind_mm(struct vdpasim *vdpasim)
-> +{
-> +       struct vdpasim_mm_work mm_work;
-> +
-> +       if (!vdpasim->mm_bound)
-> +               return;
-> +
-> +       mm_work.mm = vdpasim->mm_bound;
-> +       mm_work.bind = false;
-> +
-> +       vdpasim_worker_queue_mm(vdpasim, &mm_work);
-> +
-> +       vdpasim->mm_bound = NULL;
-> +}
->  static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
->  {
->         return container_of(vdpa, struct vdpasim, vdpa);
-> @@ -66,8 +146,10 @@ static void vdpasim_vq_notify(struct vringh *vring)
->  static void vdpasim_queue_ready(struct vdpasim *vdpasim, unsigned int idx)
->  {
->         struct vdpasim_virtqueue *vq = &vdpasim->vqs[idx];
-> +       bool va_enabled = use_va && vdpasim->mm_bound;
->
-> -       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, false, false,
-> +       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, false,
-> +                         va_enabled,
->                           (struct vring_desc *)(uintptr_t)vq->desc_addr,
->                           (struct vring_avail *)
->                           (uintptr_t)vq->driver_addr,
-> @@ -96,6 +178,9 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
->  {
->         int i;
->
-> +       //TODO: should we cancel the works?
-> +       vdpasim_worker_unbind_mm(vdpasim);
-
-We probably don't need this since it's the virtio level reset so we
-need to keep the mm bound in this case. Otherwise we may break the
-guest. It should be the responsibility of the driver to call
-config_ops->unbind if it needs to do that.
-
-Thanks
 
 
-> +
->         spin_lock(&vdpasim->iommu_lock);
->
->         for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
-> @@ -275,7 +360,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
->
->         vdpasim = vdpa_alloc_device(struct vdpasim, vdpa, NULL, ops,
->                                     dev_attr->ngroups, dev_attr->nas,
-> -                                   dev_attr->name, false);
-> +                                   dev_attr->name, use_va);
->         if (IS_ERR(vdpasim)) {
->                 ret = PTR_ERR(vdpasim);
->                 goto err_alloc;
-> @@ -657,6 +742,19 @@ static int vdpasim_set_map(struct vdpa_device *vdpa, unsigned int asid,
->         return ret;
->  }
->
-> +static int vdpasim_bind_mm(struct vdpa_device *vdpa, struct mm_struct *mm,
-> +                          struct task_struct *owner)
-> +{
-> +       struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-> +       int ret;
-> +
-> +       spin_lock(&vdpasim->lock);
-> +       ret = vdpasim_worker_bind_mm(vdpasim, mm, owner);
-> +       spin_unlock(&vdpasim->lock);
-> +
-> +       return ret;
-> +}
-> +
->  static int vdpasim_dma_map(struct vdpa_device *vdpa, unsigned int asid,
->                            u64 iova, u64 size,
->                            u64 pa, u32 perm, void *opaque)
-> @@ -744,6 +842,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
->         .set_group_asid         = vdpasim_set_group_asid,
->         .dma_map                = vdpasim_dma_map,
->         .dma_unmap              = vdpasim_dma_unmap,
-> +       .bind_mm                = vdpasim_bind_mm,
->         .free                   = vdpasim_free,
->  };
->
-> @@ -776,6 +875,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
->         .get_iova_range         = vdpasim_get_iova_range,
->         .set_group_asid         = vdpasim_set_group_asid,
->         .set_map                = vdpasim_set_map,
-> +       .bind_mm                = vdpasim_bind_mm,
->         .free                   = vdpasim_free,
->  };
->
-> --
-> 2.38.1
->
+On 16/12/2022 07:21, Vignesh Raghavendra wrote:
+> 
+> 
+> On 16/12/22 03:11, Nishanth Menon wrote:
+>> On 18:22-20221215, Mark Brown wrote:
+>>> On Thu, Dec 15, 2022 at 11:54:11AM -0600, Nishanth Menon wrote:
+>>>> On 16:09-20221215, Mark Brown wrote:
+>>>
+>>>>> That proposal looks really non-idiomatic and quite unusual, if there's a
+>>>>> fixed voltage supply to the LDO I'd expect to see it modeled as a fixed
+>>>>> voltage regulator.  I'm not sure what the use of bypass here is trying
+>>>>> to accomplish TBH.
+>>>
+>>>> The problem is this - the default NVM in the PMIC is setup such that
+>>>> VSET value =3.3v and bypass bit set (makes sense since the vin=3.3v).
+>>>
+>>> This implies no voltage drop over the LDO?  Sounds a bit suspect.
+>>
+>> Not the choice I'd probably have made ;)
+>>
+>>>
+>>>> Now the constraint is bypass bit cannot be changed without the LDO
+>>>> being switched off.
+>>>
+> 
+> Per https://www.ti.com/lit/ds/symlink/tps65219.pdf (7.3.6 Linear
+> Regulators).
+> 
+> LDOs have two modes:
+> 
+> 1. Load switch mode: in this case, output voltages of 1.5V up to 5.5V
+> are supported.
+> 
+> 2 Linear regulator LDO mode where output voltage is programmable in the
+> range of 0.6V to 3.4V in 50mV-steps with possibility of bypass.
+> 
+> (CAUTION on page 25):
+> A mode change between LDO(/bypass) and LSW-mode must only be performed,
+> when this regulator is disabled!
+> A change between LDO and bypass-mode (supported by LDO1 and LDO2 only)
+> is supported during operation.
+> 
+> So, seems like bypass can be toggled even with LDO on?
+>I possibly miss-interpreted this caution statement which leads to that 
+situation.
 
+Your understanding sounds correct. My mistake... Sorry for that
+
+
+Regards,
+Jerome.
