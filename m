@@ -2,101 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720D864E9E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A158064E9ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiLPLCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:02:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
+        id S230221AbiLPLDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:03:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiLPLCp (ORCPT
+        with ESMTP id S230282AbiLPLDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:02:45 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9522BD2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:02:44 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1p68U0-0001Mb-Uw; Fri, 16 Dec 2022 12:02:28 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1p68Tz-0003Yt-O1; Fri, 16 Dec 2022 12:02:27 +0100
-Date:   Fri, 16 Dec 2022 12:02:27 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Primoz Fiser <primoz.fiser@norik.com>
-Cc:     Marco Felsch <m.felsch@pengutronix.de>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, upstream@lists.phytec.de
-Subject: Re: [PATCH] i2c: imx: increase retries on arbitration loss
-Message-ID: <20221216110227.GA12327@pengutronix.de>
-References: <20221216084511.2576786-1-primoz.fiser@norik.com>
- <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
- <bb4882a9-8be6-5255-6256-aa1253362e59@norik.com>
+        Fri, 16 Dec 2022 06:03:04 -0500
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70612A25A
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 03:03:03 -0800 (PST)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 7A88220094;
+        Fri, 16 Dec 2022 12:03:01 +0100 (CET)
+Date:   Fri, 16 Dec 2022 12:03:00 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] arm64: dts: qcom: Use labels with generic node names
+ for ADC channels
+Message-ID: <20221216110300.rnlblgfjuojhlxny@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Jonathan Cameron <jic23@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221209215308.1781047-1-marijn.suijten@somainline.org>
+ <3d5b29f3-8d8d-93a7-a485-5261e2d8891d@linaro.org>
+ <20221210165434.3hhen5mgtvflghks@SoMainline.org>
+ <0bc1eba8-bc26-0bdb-16bf-78160c27c57b@linaro.org>
+ <20221214205556.jdbcv3e4fkvm7f3y@SoMainline.org>
+ <49be7501-916a-8d84-9757-fd31fab991dd@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bb4882a9-8be6-5255-6256-aa1253362e59@norik.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <49be7501-916a-8d84-9757-fd31fab991dd@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 11:41:08AM +0100, Primoz Fiser wrote:
-> Hi Marco,
+On 2022-12-16 11:49:09, Krzysztof Kozlowski wrote:
+> [..]
+> > My commit message explains why the ADC5/VADC driver should really
+> > receive a label property instead of using the node name.
 > 
-> On 16. 12. 22 10:45, Marco Felsch wrote:
-> > Hi Primoz,
-> > 
-> > On 22-12-16, Primoz Fiser wrote:
-> > > By default, retries value is set to 0 (no retries). Set retries to more
-> > > sensible value of 3 to allow i2c core to re-attempt transfer in case of
-> > > i2c arbitration loss (i2c-imx returns -EAGAIN errno is such case).
-> > 
-> > apart the fact that the number of retries vary a lot and so the client
-> > driver behaviour can vary a lot which is not good IMHO, why do you think
-> > that 3 is a sufficient number?
-> 
-> IMHO it is better than leaving it at 0 (no retries)?
-> 
-> Setting it to sensible value like 3 will at least attempt to make transfer
-> in case arbitration-loss occurs.
-> 
-> > 
-> > If an arbitration loss happen, why do you think that retrying it 3 times
-> > changes that?
-> 
-> I our case, setting retries to non-zero value solves issues with PMIC
-> shutdown on phyboard-mira which in some rare cases fails with "Failed to
-> shutdown (err =  -11)" (-EAGAIN).
-> 
-> To me it makes common sense retries is set to non-zero value especially for
-> such rare conditions/situations.
+> The reason "unpleasant file-browsing experience" is usually OS specific,
+> so it does not justify requiring a label property. Label is just a
+> helper for the users.
 
-https://lore.kernel.org/all/Ys1bw9zuIwWS+bqw@shikoro/
+Ack.  Then it's up to the driver to figure out what's best here.  My
+suggestion on top of the proposed handling by Jonathan:
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+a) Use label if present.
+b) Use node name if it's not adc-chan but strip the @xxx off it.
+c) Use (currently unused) hardcoded name in the driver.
+
+Unfortunately we have two drivers (VADC and ADC5) to deal with, where the
+VADC driver is not affected by any of these filename problems, nor won't
+be.  It doesn't have a label in Linux at all yet so there's no userspace
+ABI to (un)break, only DT ABI.
+
+- Marijn
