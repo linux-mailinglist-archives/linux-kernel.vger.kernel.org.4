@@ -2,108 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15B364EE9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C14A564EEA1
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 17:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbiLPQJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 11:09:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
+        id S231925AbiLPQJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 11:09:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbiLPQJB (ORCPT
+        with ESMTP id S231871AbiLPQJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 11:09:01 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD8547330
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:08:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1671206874; bh=pbGpvULOholZvb5olInn+Fl6NBfMf3MM3SbvamW2d28=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=XnU/moSq/6f6jqdAYoQ9DRaqqQH5af54Tv3y/qlQdHoPi6U1UYeZghrG8suLor2r/
-         kM6KA4s30gVkYVklrcIQidIbtgMPYiGXBubJEv9i2Cvk8cHqkJB3sryrxHnq2zA9Mo
-         UH5BollB15U0L3WPyrYTezQnpeKueuegGMMOlNNw=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Fri, 16 Dec 2022 17:07:54 +0100 (CET)
-X-EA-Auth: r6MeKYUR9fyZA/V6ZIIId1y+j07mHDm4LIWLgWKlymZezNqlTBjuWAOPObWQ9e34wUQtjuxU6yiuhxCu1INPd50jxqFtKREG
-Date:   Fri, 16 Dec 2022 21:37:47 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>, drv@mailo.com
-Subject: [PATCH] drm/i915/gvt: Replace DEFINE_SIMPLE_ATTRIBUTE by
- DEFINE_DEBUGFS_ATTRIBUTE
-Message-ID: <Y5yX01RC4B22j5w8@qemulion>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Dec 2022 11:09:16 -0500
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A5D3890
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:08:48 -0800 (PST)
+Received: by mail-wr1-x44a.google.com with SMTP id c13-20020adfa70d000000b0024853fb8766so599256wrd.11
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 08:08:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IGoF+2jeK3IkIsvFOiLtqC8rk3aTOnFvuluK6bOOS/s=;
+        b=V4uY+vWc/RMYG7pA2bA3dSUek6jo2HTpzw5kpwwq+9/ZdVNEH0gQvYNW5Or+TWCRky
+         f7Y6/9Khiv+DoWa+oGa9504FjuzAI92zMsjPS/QFrXPTYs0St3aidPUdVqKijA3MwxGm
+         smBZ3ZsJThu78ZkErPyhH5oUXvp8EvszZj2Czz6sYjakiEk8hBNLXgxpaypl9nppX52i
+         qeKqRqG00MJ0oEX97SxQPzmlSeG+JJPzr3w32COM053OLO9ECwgeYq1V6zmkOIJ2MSCp
+         bYyfMtxQdxIdSzuzl+oltMftHHci/r5R9LFEYrmoTyyDTPsgdhb6Sw8QIQAiTv43zm+P
+         qrkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IGoF+2jeK3IkIsvFOiLtqC8rk3aTOnFvuluK6bOOS/s=;
+        b=3AyRNNHHc+BdufjO/cZkinLz70higGl9z64qFefTL84EIfix4qzgUmluJAXB3F08E+
+         2XGSwfbeSgjyrj3YHDeBLnOw5Cf/9Ml7wl12l3otvDKnWVSpXODFEVhxd56dArsR2e0V
+         To3NtzwhePP3i+GGZB/2/npDv3DnaE8eYu6ZCRMZVybPHfwoFGlORCx2wfH6DrSr2ZIR
+         ahuTp5SMESwhPiA5WQJcko8SB5OI5m5zDIOJDHUppTufXMbEPMRAUwjoUuMcCjITu3Hn
+         eZb8uHKvTFAZiPJcrf5uF49MXJp52vGAKVZ2SQpxItzd64OE0D+RS6P2GN6KZ5Xviof0
+         1qrw==
+X-Gm-Message-State: ANoB5pmkoVsbDnTscIJPfZ2zmboeM1Jr2kfmzj2nyNzxQsr71bVNsf5X
+        bG47sgxz4BcylNohhzMj/hE9hOkZFf0=
+X-Google-Smtp-Source: AA0mqf4hi3NoV2PPOPWSopZoCqtyNF/jAEb1brUqVVbG1TOeXQ0CqV0qCkQD1Dw23x5Qwh/tX8kvMwTXbDs=
+X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:ad2c:4edf:bcb3:f7ae])
+ (user=glider job=sendgmr) by 2002:a05:6000:146:b0:242:9e3:87ba with SMTP id
+ r6-20020a056000014600b0024209e387bamr33632358wrx.580.1671206926247; Fri, 16
+ Dec 2022 08:08:46 -0800 (PST)
+Date:   Fri, 16 Dec 2022 17:08:41 +0100
+In-Reply-To: <20221215162956.4037570-1-arnd@kernel.org>
+Mime-Version: 1.0
+References: <20221215162956.4037570-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20221216160841.2061759-1-glider@google.com>
+Subject: Re: [PATCH] crypto: wp512: disable kmsan checks in wp512_process_buffer()
+From:   Alexander Potapenko <glider@google.com>
+To:     arnd@kernel.org
+Cc:     arnd@arndb.de, davem@davemloft.net, herbert@gondor.apana.org.au,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DEFINE_DEBUGFS_ATTRIBUTE macro has implementation for protecting the
-read/write file operations from removal race conditions. This further
-enables using debugfs_create_file_unsafe() function since there is no need
-for a proxy file operations struct for protection. Hence replace the
-DEFINE_SIMPLE_ATTRIBUTE macro by DEFINE_DEBUGFS_ATTRIBUTE and the
-debugfs_create_file() by the lightweight debugfs_create_file_unsafe()
-versions.
+> The memory sanitizer causes excessive register spills in this function:
 
-This issue was identified using the coccinelle debugfs_simple_attr.cocci
-semantic patch.
+> crypto/wp512.c:782:13: error: stack frame size (2104) exceeds limit (2048) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
-Please note: The changes are compile tested only.
+> Assume that this one is safe, and mark it as needing no checks to
+> get the stack usage back down to the normal level.
 
- drivers/gpu/drm/i915/gvt/debugfs.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/i915/gvt/debugfs.c b/drivers/gpu/drm/i915/gvt/debugfs.c
-index 9f1c209d9251..a45a43c35a6b 100644
---- a/drivers/gpu/drm/i915/gvt/debugfs.c
-+++ b/drivers/gpu/drm/i915/gvt/debugfs.c
-@@ -147,9 +147,9 @@ vgpu_scan_nonprivbb_set(void *data, u64 val)
- 	return 0;
- }
-
--DEFINE_SIMPLE_ATTRIBUTE(vgpu_scan_nonprivbb_fops,
--			vgpu_scan_nonprivbb_get, vgpu_scan_nonprivbb_set,
--			"0x%llx\n");
-+DEFINE_DEBUGFS_ATTRIBUTE(vgpu_scan_nonprivbb_fops,
-+			 vgpu_scan_nonprivbb_get, vgpu_scan_nonprivbb_set,
-+			 "0x%llx\n");
-
- /**
-  * intel_gvt_debugfs_add_vgpu - register debugfs entries for a vGPU
-@@ -165,8 +165,8 @@ void intel_gvt_debugfs_add_vgpu(struct intel_vgpu *vgpu)
- 	debugfs_create_bool("active", 0444, vgpu->debugfs, &vgpu->active);
- 	debugfs_create_file("mmio_diff", 0444, vgpu->debugfs, vgpu,
- 			    &vgpu_mmio_diff_fops);
--	debugfs_create_file("scan_nonprivbb", 0644, vgpu->debugfs, vgpu,
--			    &vgpu_scan_nonprivbb_fops);
-+	debugfs_create_file_unsafe("scan_nonprivbb", 0644, vgpu->debugfs, vgpu,
-+				   &vgpu_scan_nonprivbb_fops);
- }
-
- /**
---
-2.34.1
-
-
-
+KMSAN indeed bloats the stack frames heavily.
+Wouldn't it be more preferable to further increase KMSAN's -Wframe-larger-than limit instead?
+It is not intended for production anyway, and detecting a runtime stack overflow in the debug mode should not be a problem.
