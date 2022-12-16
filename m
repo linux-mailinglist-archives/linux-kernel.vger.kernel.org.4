@@ -2,84 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBDD64E883
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 10:13:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1293164E889
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 10:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiLPJNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 04:13:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
+        id S230118AbiLPJQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 04:16:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiLPJNk (ORCPT
+        with ESMTP id S229453AbiLPJQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 04:13:40 -0500
-Received: from forwardcorp1b.mail.yandex.net (forwardcorp1b.mail.yandex.net [178.154.239.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4422B3D3BE;
-        Fri, 16 Dec 2022 01:13:37 -0800 (PST)
-Received: from myt5-8800bd68420f.qloud-c.yandex.net (myt5-8800bd68420f.qloud-c.yandex.net [IPv6:2a02:6b8:c12:4615:0:640:8800:bd68])
-        by forwardcorp1b.mail.yandex.net (Yandex) with ESMTP id 18FE0601F0;
-        Fri, 16 Dec 2022 12:13:35 +0300 (MSK)
-Received: from d-tatianin-nix.yandex-team.ru (unknown [2a02:6b8:b081:20::1:18])
-        by myt5-8800bd68420f.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id RDdkrU0Q6Ko1-Iah20vAt;
-        Fri, 16 Dec 2022 12:13:34 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1671182014; bh=DpGcPD4QYNFodyzBuUrzHjZYe9mlGwIx7WnbID1FEt0=;
-        h=Message-Id:Date:Cc:Subject:To:From;
-        b=MtdZfUs9f4EjEINccyLb/HKZmCrkn2/crpmmmC+V3erQTQDPl85m0hEs1kUQc1/Bj
-         hYgbEkGMSjp9ReoPK/+AGzqrS5Ghx6KEGd6OsQMC9ijew/Zt2qM/kquQ6uKXFVjehU
-         letaB9xrxR/Cny8RFPmkOOQPMZ+8/02EhZIcQO/I=
-Authentication-Results: myt5-8800bd68420f.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-From:   Daniil Tatianin <d-tatianin@yandex-team.ru>
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>
-Cc:     Daniil Tatianin <d-tatianin@yandex-team.ru>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Harshitha Ramamurthy <harshitha.ramamurthy@intel.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] iavfs/iavf_main: actually log ->src mask when talking about it
-Date:   Fri, 16 Dec 2022 12:13:26 +0300
-Message-Id: <20221216091326.1457454-1-d-tatianin@yandex-team.ru>
-X-Mailer: git-send-email 2.25.1
+        Fri, 16 Dec 2022 04:16:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC6829CA5;
+        Fri, 16 Dec 2022 01:16:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54B3761F58;
+        Fri, 16 Dec 2022 09:16:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE0FAC433EF;
+        Fri, 16 Dec 2022 09:16:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671182176;
+        bh=LQ6WvU/8VYqSkymhRGk1M2D2cUZNcEEJNASg72U+chI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NluIm6tjLFbZNvYdy96AFVqdQT5NtNGdq5Mjn0NZ+eBB6pkCdPBtei86AVcdpIhMK
+         fTtzB6lZTDNJtYPtFOH0zT7Ci5CcHk1Kf49fX06LRh/PKaQx+yfkOY1vhy96ciR9wi
+         P7mN94QuOX2BowB5KiqrtXf6NTG+Rv0G8Ea/VtIjvVv253t2HPbd7CI2fCHsBtwvdG
+         VOs8+M0Fhxuh380DuclnDF0TNMiPuf2a8JyZ37tlbBI5c1wY40REqf+rLCXAqZRmeh
+         HwVpxo983Ap2Z2CbwaEejGHudCmXwoHykMVIr5fLPx5cTV9wDqDYT+RtEHJPVHopb7
+         FIWicAS0T5wag==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1p66pl-0001ei-IZ; Fri, 16 Dec 2022 10:16:50 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Subject: [PATCH] efi: random: fix NULL-deref when refreshing seed
+Date:   Fri, 16 Dec 2022 10:15:14 +0100
+Message-Id: <20221216091514.6298-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes a copy-paste issue where dev_err would log the dst mask even
-though it is clearly talking about src.
+Do not try to refresh the RNG seed in case the firmware does not support
+setting variables.
 
-Found by Linux Verification Center (linuxtesting.org) with the SVACE
-static analysis tool.
+This is specifically needed to prevent a NULL-pointer dereference on the
+Lenovo X13s with some firmware revisions.
 
-Fixes: 0075fa0fadd0a ("i40evf: Add support to apply cloud filters")
-Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
+Fixes: e7b813b32a42 ("efi: random: refresh non-volatile random seed when RNG is initialized")
+Reported-by: Steev Klimaszewski <steev@kali.org>
+Reported-by: Bjorn Andersson <andersson@kernel.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/firmware/efi/efi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index c4e451ef7942..adc02adef83a 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -3850,7 +3850,7 @@ static int iavf_parse_cls_flower(struct iavf_adapter *adapter,
- 				field_flags |= IAVF_CLOUD_FIELD_IIP;
- 			} else {
- 				dev_err(&adapter->pdev->dev, "Bad ip src mask 0x%08x\n",
--					be32_to_cpu(match.mask->dst));
-+					be32_to_cpu(match.mask->src));
- 				return -EINVAL;
- 			}
- 		}
+diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+index 2e168e5b97de..1a9e2f70c550 100644
+--- a/drivers/firmware/efi/efi.c
++++ b/drivers/firmware/efi/efi.c
+@@ -432,7 +432,9 @@ static int __init efisubsys_init(void)
+ 		platform_device_register_simple("efi_secret", 0, NULL, 0);
+ #endif
+ 
+-	execute_with_initialized_rng(&refresh_nv_rng_seed_nb);
++	if (efi_rt_services_supported(EFI_RT_SUPPORTED_SET_VARIABLE))
++		execute_with_initialized_rng(&refresh_nv_rng_seed_nb);
++
+ 	return 0;
+ 
+ err_remove_group:
 -- 
-2.25.1
+2.37.4
 
