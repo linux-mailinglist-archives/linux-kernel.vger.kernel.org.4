@@ -2,117 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635FA64E796
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7C164E7A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 08:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbiLPHGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 02:06:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35512 "EHLO
+        id S229918AbiLPHNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 02:13:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiLPHFs (ORCPT
+        with ESMTP id S230042AbiLPHNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 02:05:48 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D4ACED;
-        Thu, 15 Dec 2022 23:05:47 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 3687D24E275;
-        Fri, 16 Dec 2022 15:05:46 +0800 (CST)
-Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 16 Dec
- 2022 15:05:46 +0800
-Received: from wyh-VirtualBox.starfivetech.com (171.223.208.138) by
- EXMBX173.cuchost.com (172.16.6.93) with Microsoft SMTP Server (TLS) id
- 15.0.1497.42; Fri, 16 Dec 2022 15:05:44 +0800
-From:   Yanhong Wang <yanhong.wang@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-Subject: [PATCH v2 9/9] riscv: dts: starfive: visionfive-v2: Add phy clock delay train configuration
-Date:   Fri, 16 Dec 2022 15:06:32 +0800
-Message-ID: <20221216070632.11444-10-yanhong.wang@starfivetech.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221216070632.11444-1-yanhong.wang@starfivetech.com>
-References: <20221216070632.11444-1-yanhong.wang@starfivetech.com>
+        Fri, 16 Dec 2022 02:13:14 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375C72E68C;
+        Thu, 15 Dec 2022 23:11:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rbdP76tLSLd0zXbJ7Ayy7yAOCBynRgWdD+HyAwvTvH4=; b=m0+OLoWtPz8unWkSr4hKaAJVp7
+        FCyWa6+VyYFNVyBxJLY/OYIvymTzNjmoPqxgATo04jrLoz55cV6sENFU0SpPjK3SEtABL/MBJ+Cg1
+        /jd9QApAUcLaqH7FJt5TLDU2Uh9MP5A6bQjweSuCrenwOMOpCIQ3IhppLY31fLPLIMCyFEHgBJPn+
+        8e59gq9nDL2lQNjwRul99jyClPji6Lu6z3MH4b+SaqtXxGHzDliH2ZDI9bj0drxvpqxzfjIEqkCGH
+        I6UcdeKfCzvV3S2NXQz2PQU804l4yQa1hzThOOu28DGd6MaNMk4iy3zlT5HJgaNlf/fdrjjqy/vhl
+        cDSZ8IRQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p64sD-00DKqT-10; Fri, 16 Dec 2022 07:11:13 +0000
+Date:   Thu, 15 Dec 2022 23:11:13 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Ulrich Windl <Ulrich.Windl@rz.uni-regensburg.de>
+Cc:     haowenchao@huawei.com, open-iscsi <open-iscsi@googlegroups.com>,
+        linfeilong@huawei.com, liuzhiqiang26@huawei.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        michael.christie@oracle.com, Chris Leech <cleech@redhat.com>,
+        Lee Duncan <lduncan@suse.com>, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: Antw: [EXT] Re: [PATCH 0/2] scsi:donot skip lun if inquiry
+ returns PQ=1 for all hosts
+Message-ID: <Y5waEc0iqfGkkN7f@infradead.org>
+References: <20221214070846.1808300-1-haowenchao@huawei.com>
+ <Y5rHX95Vvl1aLhbp@infradead.org>
+ <639AD5C0020000A100050749@gwsmtp.uni-regensburg.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX173.cuchost.com
- (172.16.6.93)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <639AD5C0020000A100050749@gwsmtp.uni-regensburg.de>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In view of the particularity of StarFive JH7110 SoC, the PHY clock delay
-train configuration parameters must be adjusted for StarFive VisionFive
-v2 board.
+On Thu, Dec 15, 2022 at 09:07:28AM +0100, Ulrich Windl wrote:
+> Actusally I have no idea, but as a user of FC SAN systems I can remember a case when a storage system had to present a dummy LUN0 to enable hosts to find other LUNs (while LUN0 was never actually used). Maybe the client code was imperfect, I don't know.
 
-Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
----
- .../jh7110-starfive-visionfive-v2.dts         | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
-
-diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-index c8946cf3a268..81329d67ef0f 100644
---- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-+++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-@@ -15,6 +15,8 @@
- 
- 	aliases {
- 		serial0 = &uart0;
-+		ethernet0 = &gmac0;
-+		ethernet1 = &gmac1;
- 	};
- 
- 	chosen {
-@@ -114,3 +116,29 @@
- 	pinctrl-0 = <&uart0_pins>;
- 	status = "okay";
- };
-+
-+&gmac0 {
-+	status = "okay";
-+};
-+
-+&phy0 {
-+	rxc_dly_en = <1>;
-+	tx_delay_sel_fe = <5>;
-+	tx_delay_sel = <0xa>;
-+	tx_inverted_10 = <0x1>;
-+	tx_inverted_100 = <0x1>;
-+	tx_inverted_1000 = <0x1>;
-+};
-+
-+&gmac1 {
-+	status = "okay";
-+};
-+
-+&phy1 {
-+	rxc_dly_en = <0>;
-+	tx_delay_sel_fe = <5>;
-+	tx_delay_sel = <0>;
-+	tx_inverted_10 = <0x1>;
-+	tx_inverted_100 = <0x1>;
-+	tx_inverted_1000 = <0x0>;
-+};
--- 
-2.17.1
-
+Ignoring some of the well known LU bits that never really became
+practically relevant, lun0 is needed to use the REPORT_LUNS command
+to scane for the other logical units.  But unless the PQ says it
+actually is a valid logic unit, we never add a sdev for it.
