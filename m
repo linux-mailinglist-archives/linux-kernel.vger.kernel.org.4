@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C2C964ED63
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:05:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 526EC64ED64
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbiLPPFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 10:05:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        id S231285AbiLPPFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 10:05:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbiLPPFB (ORCPT
+        with ESMTP id S231279AbiLPPFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 10:05:01 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BCD5EDE2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:05:00 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id t17so6855895eju.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:05:00 -0800 (PST)
+        Fri, 16 Dec 2022 10:05:11 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129D35FBA5
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:05:04 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id tz12so6764341ejc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:05:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mx9LDDMonJXCHAOEK4zNyt/uyyr/R3Q1LY7CsDVkBng=;
-        b=tGpMdq7Kwibgu2mRvf++7d/oi2e8xt7todBd0XWZDZjND7UkqeF4plqbdLW14bnGMS
-         x3Z21HGKHuddpZBPnFiVJOHAugVjRXomYmsaBlSQcezJ2MAz4EVAW2vRQbHtgiV73gN7
-         ZY+nEIr+xC1c7t4ehh96pKzqTi19hoVT51JUnXMtrCZiYUxMsHNucgNhNMIBdhuA72qL
-         /SpWDOO02mf0su2sFRXiboics0+KzQx8mC4r/udaDvYD7lMhdx91QaZLyXLaDJOJ07tB
-         0+uCK8lLM++SQcWEt/JAWbBQlQZ5N+Yfyoungfj6kAk93FObRSpb7I6Wvl1kIUEtvm/I
-         5SaQ==
+        bh=vyUCUG6V1YXnG4+Utm9POFDhIKIlQ77/PNhTST9BZEY=;
+        b=7kUXBWg5N/sWO56ZCcrYsszd5Iur1Mz6vii+jvlPc6DvzZ8Poe6eARlfMHbWDY+eVl
+         AFcIv5rPzjU0zPEWiyIO19JoilMxW9xtO3sRJQiDFPGseF1uZdlWnkF7qpJp3ieSWmJn
+         BhFn/RdMTnk2w5UIaESFeVRJwcoxGuycae212iheU3BxSDKc4q72ob3UWFpxhcEQrgr8
+         pKcHCr62XVkOBXayvbh4Qa0UZ6AhDVgIoqe/dGUcE0PIms9aPwlGUIlEDhz+d28YhN0+
+         salfD5RlIj6odir80AI/AxmFZBLrbkrQJ4o5AdB5ONa6b2uB43WzBoNm9SrxFNEbPtvj
+         nFww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mx9LDDMonJXCHAOEK4zNyt/uyyr/R3Q1LY7CsDVkBng=;
-        b=wcohAWoimDNi1l+TE15D2Fna4lD2fL02bmz6xcX5pf2MXeiGsBJ93fcVm/GTwNfXRn
-         fxN/WvyNH4YI0o2cuUMbavRzXknjhW47RKjQ4CNqR/FSqSdMXldLaOpsVrUn28AbjhDl
-         f/wiOXia7EM09g4+3yOAm3hR7jgBxkmcdQFlANEN70AZOsJWbgibYf+3GvBsPeuD/BgO
-         DESoAbskvviycXs8I4YDMRh6HtwyvYJO/qK95m5oajrYaQ5WqFo3Aks+IwmfvJbhKZOQ
-         zJs8IWQur4Xsix98b6C6DFFqv5UmXXPvlC+6X0sweaEpZCGNYFhV/4jb0RGm8plhgLDb
-         nP7g==
-X-Gm-Message-State: ANoB5pmGCasiooG8N2lcL6LSvEALVJnWOYGD8XSa54M8+8n7NYZMAn2s
-        D2F0GesOd5kRBUettn6C2SF/tPYB8JfSZib2
-X-Google-Smtp-Source: AA0mqf4Nat12N8CuCRsRWRZrI2y5m3Rg/KQk+CKY4AANOZr7qN/BcqXELlOe705pZquKZI3L4idO0g==
-X-Received: by 2002:a17:906:a08c:b0:7ad:fe21:7a15 with SMTP id q12-20020a170906a08c00b007adfe217a15mr24302330ejy.22.1671203098391;
-        Fri, 16 Dec 2022 07:04:58 -0800 (PST)
+        bh=vyUCUG6V1YXnG4+Utm9POFDhIKIlQ77/PNhTST9BZEY=;
+        b=hcPSap9gYA3RourMEdv8D/iP6MGbk065GlAgtw3ZhnvbpAed0v//avFl65WKjBSsKy
+         +eRvjGqoKRzmIEQ22MmquKDtjK7WVTyT5UuiVcZ6s779lD932bbmA7/qTcWXh/TUVcnS
+         Hie337Jf7jn7p29J1FXR3n21Iq/Fo2rlmoy1WMn8PM7I5Mixdhm/aR3jr0lZy+WgM0ow
+         T8oDSROmO5GLbbREh5a9cRE1JGML1J/TxehwsTKt0O7uJt/n4gkynpcDcwro+/kAZY+T
+         oHjG7wiP4bOUN2fpp9GP3RighkcA/3Gptqk4H+gNVgHzoi4AM0eFFRSQ5ik0fqNJG8fk
+         WfwQ==
+X-Gm-Message-State: ANoB5plwhbwiWC76x2Zzlbca3oWR/6xp6IvG3S+tv4+sRq+XCDyLjdxo
+        9VDbKNFY0KjLZXZ7rLsjZxcQOkfdq73oJX4K
+X-Google-Smtp-Source: AA0mqf5wkAi2B3QvEFN6D+Uvc3NyBIGzQBTH4pObg0j/UYQAPt1rQ+zpeB0Kf/J1ouB1uFudu9JHig==
+X-Received: by 2002:a17:907:c78f:b0:7c1:4e8f:df2f with SMTP id tz15-20020a170907c78f00b007c14e8fdf2fmr40633162ejc.17.1671203102404;
+        Fri, 16 Dec 2022 07:05:02 -0800 (PST)
 Received: from localhost.localdomain (p200300d9973eac0005dbc67c2510e9a9.dip0.t-ipconnect.de. [2003:d9:973e:ac00:5db:c67c:2510:e9a9])
-        by smtp.googlemail.com with ESMTPSA id z1-20020a1709063a0100b00780982d77d1sm929456eje.154.2022.12.16.07.04.57
+        by smtp.googlemail.com with ESMTPSA id z1-20020a1709063a0100b00780982d77d1sm929456eje.154.2022.12.16.07.05.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 07:04:58 -0800 (PST)
+        Fri, 16 Dec 2022 07:05:02 -0800 (PST)
 From:   Manfred Spraul <manfred@colorfullife.com>
 To:     LKML <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
 Cc:     1vier1@web.de, Manfred Spraul <manfred@colorfullife.com>,
-        "Sun, Jiebin" <jiebin.sun@intel.com>
-Subject: [PATCH 2/3] include/linux/percpu_counter.h: Race in uniprocessor percpu_counter_add()
-Date:   Fri, 16 Dec 2022 16:04:40 +0100
-Message-Id: <20221216150441.200533-2-manfred@colorfullife.com>
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>
+Subject: [PATCH 3/3] kernel/irq/manage.c: disable_irq() might sleep.
+Date:   Fri, 16 Dec 2022 16:04:41 +0100
+Message-Id: <20221216150441.200533-3-manfred@colorfullife.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221216150441.200533-1-manfred@colorfullife.com>
 References: <20221216150155.200389-1-manfred@colorfullife.com>
@@ -73,40 +74,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The percpu interface is supposed to be preempt and irq safe.
+With the introduction of threaded interrupt handlers, it is virtually
+never safe to call disable_irq() from non-premptible context.
 
-But:
-The uniprocessor implementation of percpu_counter_add() is not irq safe:
-if an interrupt happens during the +=, then the result is undefined.
+Thus: Update the documentation, add a might_sleep() to catch any
+offenders.
 
-Therefore: switch from preempt_disable() to local_irq_save().
-This prevents interrupts from interrupting the +=, and as a side effect
-prevents preemption.
+Fixes: 3aa551c9b4c4 ("genirq: add threaded interrupt handler support")
 
 Signed-off-by: Manfred Spraul <manfred@colorfullife.com>
-Cc: "Sun, Jiebin" <jiebin.sun@intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>
 ---
- include/linux/percpu_counter.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ kernel/irq/manage.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/percpu_counter.h b/include/linux/percpu_counter.h
-index a3aae8d57a42..521a733e21a9 100644
---- a/include/linux/percpu_counter.h
-+++ b/include/linux/percpu_counter.h
-@@ -152,9 +152,11 @@ __percpu_counter_compare(struct percpu_counter *fbc, s64 rhs, s32 batch)
- static inline void
- percpu_counter_add(struct percpu_counter *fbc, s64 amount)
+diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+index 5b7cf28df290..8ce75495e04f 100644
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -723,10 +723,13 @@ EXPORT_SYMBOL(disable_irq_nosync);
+  *	to complete before returning. If you use this function while
+  *	holding a resource the IRQ handler may need you will deadlock.
+  *
+- *	This function may be called - with care - from IRQ context.
++ *	Can only be called from preemptible code as it might sleep when
++ *	an interrupt thread is associated to @irq.
++ *
+  */
+ void disable_irq(unsigned int irq)
  {
--	preempt_disable();
-+	unsigned long flags;
-+
-+	local_irq_save(flags);
- 	fbc->count += amount;
--	preempt_enable();
-+	local_irq_restore(flags);
++	might_sleep();
+ 	if (!__disable_irq_nosync(irq))
+ 		synchronize_irq(irq);
  }
- 
- /* non-SMP percpu_counter_add_local is the same with percpu_counter_add */
 -- 
 2.38.1
 
