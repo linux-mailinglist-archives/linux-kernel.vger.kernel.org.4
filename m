@@ -2,158 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A85A664F05B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35CF764F05E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 18:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231795AbiLPRYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 12:24:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
+        id S231774AbiLPR0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 12:26:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiLPRYs (ORCPT
+        with ESMTP id S230157AbiLPR0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 12:24:48 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DF446678;
-        Fri, 16 Dec 2022 09:24:47 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id h33so2206190pgm.9;
-        Fri, 16 Dec 2022 09:24:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dIv2+6FrFvBFHioHuEmEwHJpKVRq8KjJBhuXE7RUxYg=;
-        b=d23NYspAyVCmJO/zLT5jUZkbABjOrhjDGEzpNwHN1Y2X2M09aMzthCbgw60KJU8JYr
-         mDeOETQwEcv8QNPHZ3DNdBTzIR2uU5LS8H2SxytYrOPyNDTYFdOOnrIpNVzZrlFFfsfj
-         OaTKbOYW6n+g9wdS+++mbG42F9yXnVmrmq5Ku1B8WFLJ0iLUW8I5nS27k+WDeHaMLdZN
-         a9SkLT4irKpsOD7zwS/co/tM2fN3erGuRPalXhhs2mtLuaXjp45gkpcvVHYXpF7BuSGm
-         BYwBNltViQ6EwYgq2eyB+De3v6eDqLBqvJLU+sBbxHiL+vVVC5W4M1Ud08KMiLkhWxP3
-         5ALA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dIv2+6FrFvBFHioHuEmEwHJpKVRq8KjJBhuXE7RUxYg=;
-        b=H11ZNUJb8f8tJmaMMAAgjv/KVxaMPJ4FGGceETWN4uh/RLsTLy77ANfb8ltcffk0Qi
-         9NzHnwa06mCPNrc+sa9OnIf1vJqlZ1O2ILfMqbv8kw8lkQCvRBxGToGbaQOA7hse8KOY
-         fUYfhRAElI1HwRF8b4JXwP9RqNvlZvkdb3zqyRp/Y2JjSCrkoWVPcIEAeijf5XKa5rac
-         oA05Fb14a+ECDSYdFW4Q6ag136wuMvDlRcTDOT//46VXFWIdCuEK5ebGLoySMdU04GNV
-         th13BKjd3nEc2ZtoepPuQs63svKsqu/h8YKtFAPgzI8EmOQ0jq72hiAGmOd4HDJyjHNP
-         UDGw==
-X-Gm-Message-State: ANoB5pkXcuRC2BoJXBjm6HLu99bRcwkBhhEtXjFq7tpqNV/I4p6CwSL6
-        eWW/YcYxfFiYZl9gzd+V+LLBpyw0Qp/14pDGnCg=
-X-Google-Smtp-Source: AA0mqf5zNz6hV345CKNDdoPTSuEkHoCJNoHnCBMh3KCI82g843EREfkdqfeolue/dViCeefQLDeIVCNCf/G7gNTZHqo=
-X-Received: by 2002:a63:f241:0:b0:46f:da0:f093 with SMTP id
- d1-20020a63f241000000b0046f0da0f093mr70601384pgk.441.1671211486851; Fri, 16
- Dec 2022 09:24:46 -0800 (PST)
+        Fri, 16 Dec 2022 12:26:39 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494A910FD2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 09:26:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671211598; x=1702747598;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KpGYV+m7MyfuJOI4O3vKLHjkWPzImLJ0igcC0Y+vu5c=;
+  b=LTbLFc/AcqxeiTejwwi/+0p7Da+0TsmcraFX4+Vqp5B0V+XUElaeVfXG
+   Ic3bK4wlJJn+AANGydNJbcWQubBjZU3AcizzR0ZC4NfW1a2CNls7MszmS
+   3a9jRRrGnSY5O6NXr3/u/ojnt29Wd9/rNpsWW+8eO9/qn5cA90JiABJHa
+   yEqPgaWEr3waifadPbpzSkRdl77K3n8EOslCyr6ipG6Yzjq0D2HaPIL0V
+   uaPTvC+6UIif4ZhWFfMtahSxGXZCF5CIjU76rh6bZb+2oNZXya0CPBQoy
+   92TzLTLW2+TjygHbDc4G/52KvU83X6VOSty1iIeydAlxdNR6bhTPVaUv9
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="320188207"
+X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
+   d="scan'208";a="320188207"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 09:26:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="718435005"
+X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
+   d="scan'208";a="718435005"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Dec 2022 09:26:36 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p6ETj-0007JS-1r;
+        Fri, 16 Dec 2022 17:26:35 +0000
+Date:   Sat, 17 Dec 2022 01:26:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2022.12.12a] BUILD SUCCESS
+ 33bb97ec03485acc4463ccfc78f834e04e688b85
+Message-ID: <639caa3f.bR199CRiXMG/SBG+%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20221215144536.3810578-1-lukma@denx.de> <4d16ffd327d193f8c1f7c40f968fda90a267348e.camel@gmail.com>
- <20221216140526.799bd82f@wsk>
-In-Reply-To: <20221216140526.799bd82f@wsk>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Fri, 16 Dec 2022 09:24:35 -0800
-Message-ID: <CAKgT0Udm6s8Wib1dFp6f4yVhdMm62-4kjetYSucLr-Ruyg7-yg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dsa: marvell: Provide per device information about
- max frame size
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 5:05 AM Lukasz Majewski <lukma@denx.de> wrote:
->
-> Hi Alexander,
->
-> > On Thu, 2022-12-15 at 15:45 +0100, Lukasz Majewski wrote:
-> > > Different Marvell DSA switches support different size of max frame
-> > > bytes to be sent.
-> > >
-> > > For example mv88e6185 supports max 1632 bytes, which is now
-> > > in-driver standard value. On the other hand - mv88e6250 supports
-> > > 2048 bytes.
-> > >
-> > > As this value is internal and may be different for each switch IC,
-> > > new entry in struct mv88e6xxx_info has been added to store it.
-> > >
-> > > Signed-off-by: Lukasz Majewski <lukma@denx.de>
-> > > ---
-> > > Changes for v2:
-> > > - Define max_frame_size with default value of 1632 bytes,
-> > > - Set proper value for the mv88e6250 switch SoC (linkstreet) family
-> > > ---
-> > >  drivers/net/dsa/mv88e6xxx/chip.c | 13 ++++++++++++-
-> > >  drivers/net/dsa/mv88e6xxx/chip.h |  1 +
-> > >  2 files changed, 13 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/net/dsa/mv88e6xxx/chip.c
-> > > b/drivers/net/dsa/mv88e6xxx/chip.c index 2ca3cbba5764..7ae4c389ce50
-> > > 100644 --- a/drivers/net/dsa/mv88e6xxx/chip.c
-> > > +++ b/drivers/net/dsa/mv88e6xxx/chip.c
-> > > @@ -3093,7 +3093,9 @@ static int mv88e6xxx_get_max_mtu(struct
-> > > dsa_switch *ds, int port) if (chip->info->ops->port_set_jumbo_size)
-> > >             return 10240 - VLAN_ETH_HLEN - EDSA_HLEN -
-> > > ETH_FCS_LEN; else if (chip->info->ops->set_max_frame_size)
-> > > -           return 1632 - VLAN_ETH_HLEN - EDSA_HLEN -
-> > > ETH_FCS_LEN;
-> > > +           return (chip->info->max_frame_size  - VLAN_ETH_HLEN
-> > > +                   - EDSA_HLEN - ETH_FCS_LEN);
-> > > +
-> > >     return 1522 - VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN;
-> > >  }
-> > >
-> > >
-> >
-> > Is there any specific reason for triggering this based on the
-> > existance of the function call?
->
-> This was the original code in this driver.
->
-> This value (1632 or 2048 bytes) is SoC (family) specific.
->
-> By checking which device defines set_max_frame_size callback, I could
-> fill the chip->info->max_frame_size with 1632 value.
->
-> > Why not just replace:
-> >       else if (chip->info->ops->set_max_frame_size)
-> > with:
-> >       else if (chip->info->max_frame_size)
-> >
->
-> I think that the callback check is a bit "defensive" approach -> 1522B
-> is the default value and 1632 (or 10240 - jumbo) can be set only when
-> proper callback is defined.
->
-> > Otherwise my concern is one gets defined without the other leading to
-> > a future issue as 0 - extra headers will likely wrap and while the
-> > return value may be a signed int, it is usually stored in an unsigned
-> > int so it would effectively uncap the MTU.
->
-> Please correct me if I misunderstood something:
->
-> The problem is with new mv88eXXXX devices, which will not provide
-> max_frame_size information to their chip->info struct?
->
-> Or is there any other issue?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.12.12a
+branch HEAD: 33bb97ec03485acc4463ccfc78f834e04e688b85  rcu/kvfree: Split ready for reclaim objects from a batch
 
-That was mostly my concern. I was adding a bit of my own defensive
-programming in the event that somebody forgot to fill out the
-chip->info. If nothing else it might make sense to add a check to
-verify that the max_frame_size is populated before blindly using it.
-So perhaps you could do something similar to the max_t approach I had
-called out earlier but instead of applying it on the last case you
-could apply it for the "set_max_frame_size" case with 1632 being the
-minimum and being overwritten by 2048 if it is set in max_frame_size.
+elapsed time: 1176m
+
+configs tested: 61
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arc                                 defconfig
+alpha                               defconfig
+s390                             allmodconfig
+s390                                defconfig
+s390                             allyesconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+powerpc                           allnoconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+arc                  randconfig-r043-20221215
+arm                  randconfig-r046-20221215
+sh                               allmodconfig
+ia64                             allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a002
+x86_64                        randconfig-a015
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+arm                                 defconfig
+x86_64                              defconfig
+arm64                            allyesconfig
+i386                                defconfig
+x86_64                               rhel-8.3
+arm                              allyesconfig
+x86_64                           allyesconfig
+i386                             allyesconfig
+x86_64                            allnoconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+
+clang tested configs:
+hexagon              randconfig-r041-20221215
+hexagon              randconfig-r045-20221215
+riscv                randconfig-r042-20221215
+s390                 randconfig-r044-20221215
+x86_64                        randconfig-a014
+x86_64                        randconfig-a012
+x86_64                        randconfig-a001
+x86_64                        randconfig-a016
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a006
+i386                          randconfig-a015
+x86_64                          rhel-8.3-rust
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
