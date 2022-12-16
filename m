@@ -2,172 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2D964EE21
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E49364EE1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbiLPPsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 10:48:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
+        id S231423AbiLPPsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 10:48:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231440AbiLPPr7 (ORCPT
+        with ESMTP id S231420AbiLPPr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 10:47:59 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EFE60377;
-        Fri, 16 Dec 2022 07:47:58 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E88A16602C94;
-        Fri, 16 Dec 2022 15:47:54 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671205676;
-        bh=OpeibgDASJdMkvfrIt2wc5RhxgM/1AD0m55P+Z6hsDI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=DheIvro7Qj7OkGFB8YtfY1/OyrDKi9FDrq8eceDFfmnR+6THk1cazJa01O0U4pRom
-         6SmN02ZLRF2HNWSD48DjRkH/gbn9DTPvQ2NpAUTXshn6lxYOvzHZ1aMxJJpsGF2t5g
-         eHEvq6KE2HF57mNz5I90o6cYramUWKjjFibKLrHx6rn6kqpCcM5ck8HZ79bsTMgmVg
-         Rp4l2JD8InGiCqjwOJ79V0JDda+a4u2C0pGpUCJONb3HwmIYmhLECwRMICTiax7quM
-         1yL8q6LL+7R9uciTVjAy8bNtwLrIUICr9rbZ5ageiF8+lSRs2FqnU4M7jhhWxUW1JV
-         Xq9vzEw61wtJg==
-Message-ID: <e3c73d1c20e12ab351a74ef1abc949810fc1ba77.camel@collabora.com>
-Subject: Re: [PATCHv7 7/7] arm64: dts: rockchip: Add rock-5b board
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, Jagan Teki <jagan@edgeble.ai>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Michael Riesch <michael.riesch@wolfvision.net>
-Date:   Fri, 16 Dec 2022 10:47:44 -0500
-In-Reply-To: <20221215183002.211081-8-sebastian.reichel@collabora.com>
-References: <20221215183002.211081-1-sebastian.reichel@collabora.com>
-         <20221215183002.211081-8-sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Fri, 16 Dec 2022 10:47:56 -0500
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9944D57B63;
+        Fri, 16 Dec 2022 07:47:55 -0800 (PST)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-144b21f5e5fso3680141fac.12;
+        Fri, 16 Dec 2022 07:47:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XFrl/LbK1G5WKs6kEQuHh9VpuSYwwFlxL9Fnt6Grafw=;
+        b=IjYbmH+WtmZpu0mAC2AOgDYhE9KYNYITx34f7c9qkZfCKd5IKKxyyOw0T7gFxRWTt4
+         nuvOnP8LvkxBi8a4Jp8cHMdFJGq1naeSbHaurtyCE5mQdxUe30kSB0l9Em1Jtkaf3spJ
+         plIQwjrjVRxdxQYP7/7wPSqMToWMpDDqGjy2G60Cn1aKiocyU41GHv++gXswxXcoBhHp
+         e7+aQQKLkOPhcAcH9LjLQS0HPOElAvHKIIRxw78qyQ5FK903tabfSqYGCVtRe6t83pDY
+         8SXYCxv//kWnohk7jx77IMsxN4VPpvOEZ4CmHBOVMIpQ7WOUXO/7SQQP+eoHE2DxiTGk
+         fZOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XFrl/LbK1G5WKs6kEQuHh9VpuSYwwFlxL9Fnt6Grafw=;
+        b=AfBXfq8qUE++0RVVQrrF9XPX9NbIIpa/7dZkC3K8cZklvz5h+ezDGiCujaQ+3FdDsk
+         xmfXAfbrxU7lrcr2khtoCz8V7Lfu5BKqpxGFxc+xrQQeMWl/qVxFw3AmZFWh9i3gAozf
+         qiAvVgT+pOIqZmc3ueS58eGhQ5OFPk2ouhnooxDSaHwQjleXrRmF0yCft9UTJb22rK8E
+         RIvHKtSaBnx38vAgDCIVCzHeifep+V8jNefsg1vrzjD9/uQub8hBBwKv/iv+JeRnrZmj
+         SqKSpq048G7poDht2z+r/4pw1yzlzseXbX/1TqJArxda0hl7BeRjmzt+nwOMfEVB5K3Z
+         kzYQ==
+X-Gm-Message-State: ANoB5pnBxurdw8wUoWezXiDZutZMGM+NxUTCoNKo7MM1BItto/G9B050
+        N2MEjUJY9eMVKGdqKbfs1yE=
+X-Google-Smtp-Source: AA0mqf6Upt8/sk/c3hgOcm5E/FCC1D2QVOK2cunJl7CUOtTHULu8lHk32HIvwzJLbqPEfuWU7qe2KQ==
+X-Received: by 2002:a05:6870:b398:b0:13c:21e9:fe90 with SMTP id w24-20020a056870b39800b0013c21e9fe90mr18048617oap.17.1671205674912;
+        Fri, 16 Dec 2022 07:47:54 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id kw8-20020a056870ac0800b001431bf4e5a0sm1044032oab.38.2022.12.16.07.47.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 07:47:54 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e8aacf9f-4146-70b8-02c3-bacc8c32ccc4@roeck-us.net>
+Date:   Fri, 16 Dec 2022 07:47:51 -0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>,
+        Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>
+References: <20221124230505.073418677@linutronix.de>
+ <20221124232325.798556374@linutronix.de>
+ <20221213190425.GA3943240@roeck-us.net>
+ <4e0a129855490febb1c57e7e979bcfb579d39054.camel@linux.ibm.com>
+ <87fsdgzpqs.ffs@tglx> <e570e70d-19bc-101b-0481-ff9a3cab3504@linux.ibm.com>
+ <86wn6rptdu.wl-maz@kernel.org>
+ <0acb8c63-7f6c-6df6-cb40-66b265a6e6ce@linux.ibm.com>
+ <86v8mbphzw.wl-maz@kernel.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [patch V3 09/33] genirq/msi: Add range checking to
+ msi_insert_desc()
+In-Reply-To: <86v8mbphzw.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian and Christopher,
+On 12/16/22 05:58, Marc Zyngier wrote:
+[ ... ]
 
-Le jeudi 15 d=C3=A9cembre 2022 =C3=A0 19:30 +0100, Sebastian Reichel a =C3=
-=A9crit=C2=A0:
-> From: Christopher Obbard <chris.obbard@collabora.com>
->=20
-> Add board file for the RK3588 Rock 5B board. This is a basic
-> implementation which just brings up the eMMC and UART which is
-> enough to successfully boot Linux.
->=20
-> The ethernet controller is connected via PCIe so support will
-> come in a follow-up patch.
->=20
-> Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
-> Reviewed-by: Michael Riesch <michael.riesch@wolfvision.net>
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  arch/arm64/boot/dts/rockchip/Makefile         |  1 +
->  .../boot/dts/rockchip/rk3588-rock-5b.dts      | 44 +++++++++++++++++++
->  2 files changed, 45 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
->=20
-> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/=
-rockchip/Makefile
-> index 87a853435142..c5bdd0176ce0 100644
-> --- a/arch/arm64/boot/dts/rockchip/Makefile
-> +++ b/arch/arm64/boot/dts/rockchip/Makefile
-> @@ -83,4 +83,5 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-evb1-v10.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-odroid-m1.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-rock-3a.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3588-evb1-v10.dtb
-> +dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3588-rock-5b.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3588s-rock-5a.dtb
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64=
-/boot/dts/rockchip/rk3588-rock-5b.dts
-> new file mode 100644
-> index 000000000000..baf46bd30b38
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-> @@ -0,0 +1,44 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +
-> +/dts-v1/;
-> +
-> +#include "rk3588.dtsi"
-> +
-> +/ {
-> +	model =3D "Radxa Rock 5B Board";
-> +	compatible =3D "radxa,rock-5b", "rockchip,rk3588";
-> +
-> +	aliases {
-> +		mmc1 =3D &sdhci;
+>>
+>> With both these fixes applied, it actually then leads to the very
+>> next WARN_ON failing in msi_ctrl_valid...  Because ctrl->last ==
+>> hwsize.  I think Thomas' initial fix for msi_domain_get_hwsize has
+>> an off-by-1 error, I think we should return MSI_XA_DOMAIN_SIZE for
+>> msi_domain_get_hwsize instead.
+> 
+> Yes, that's a good point, and that's consistent with what
+> __msi_create_irq_domain() does already, assuming MSI_XA_DOMAIN_SIZE
+> when info->hwsize is 0. No reason to do something else here.
+> 
+> I'll update Thomas' patch. Once Guenter confirms that PPC is OK, I'll
+> send it out.
+> 
 
-I have no useful knowledge, but it seems the mmc alias don't match the vend=
-or.
-When I run your branch on Rock5B, the EMMC endup on /dev/mmcblk1 (aka mmc1 =
-alias
-I think) while when I boot the vendor kernel, it is always mmcblk0 (aka mmc=
-0
-alias?). Perhaps the vendor didn't add aliases ?
+It wasn't just ppc; that was just the easiest to report. I applied
+the two patches on top of the irq merge and will test the resulting
+branch (mainline is too broken right now). I hope that will give me
+useful results. It will take a while though since my testbed is
+still busy testing the most recent release candidates.
 
-There could also be mainline rules to number based on the boot order. In th=
-is
-case, the difference would be acceptable, since SPL boot order is (usb?) > =
-SD
-Card > EMMC > SPI NOR. Though, the SPL is picked from the opposite order (s=
-pi,
-emmc, sd card). Anyway, I'm just trying to express that I noticed a differe=
-nce,
-and its not guarantied to be a bug.
-
-> +		serial2 =3D &uart2;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path =3D "serial2:1500000n8";
-> +	};
-> +
-> +	vcc5v0_sys: vcc5v0-sys-regulator {
-> +		compatible =3D "regulator-fixed";
-> +		regulator-name =3D "vcc5v0_sys";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt =3D <5000000>;
-> +		regulator-max-microvolt =3D <5000000>;
-> +	};
-> +};
-> +
-> +&sdhci {
-> +	bus-width =3D <8>;
-> +	no-sdio;
-> +	no-sd;
-> +	non-removable;
-> +	max-frequency =3D <200000000>;
-> +	mmc-hs400-1_8v;
-> +	mmc-hs400-enhanced-strobe;
-> +	status =3D "okay";
-> +};
-> +
-> +&uart2 {
-> +	pinctrl-0 =3D <&uart2m0_xfer>;
-> +	status =3D "okay";
-> +};
-> --=20
-> 2.39.0
->=20
->=20
+Guenter
 
