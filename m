@@ -2,540 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE2E64F24B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 21:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D82664F250
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 21:18:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbiLPUSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 15:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
+        id S232111AbiLPUSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 15:18:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232016AbiLPURr (ORCPT
+        with ESMTP id S231958AbiLPUR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 15:17:47 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D6872628
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:17:32 -0800 (PST)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGJxPe9015102
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:17:32 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=qfJz/DDH55XtUOlIDeacYqymxZSjqIq0VpHDCFV+y+Y=;
- b=fsDFFrmJ5GWo97CAumjaL4HFFX7L0ymtC5kLDdM+OZo/nXZeO36EX6kGCRIAKrsBRzAy
- FKvEW/4AIGNjsw8DneZl9cH2P/zDevWdXhh5Rq0pjpoLEjhZnI1It8J6KxJRs231JNIP
- OaXpUrXsOrQ8WfBZqmbDkBZu/oH1wr5v7tq3qBkXN89HpkfMnoQYhKDVD0yHrSqTJfP7
- BsHBLciV/dnQo0NH5AtF/DPXlrgpO+3P6phBFI7TRTaWn+5cmr+rEBPfPHjE4tVY3TKm
- zqzbgN9QRJfzqgqn6fD8PqQc8f5ct0DbkjYA3Ixd2AXlvIXlcVvnXefJ9ZGIy4LNuP8W 1g== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3mg3hj2dga-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 12:17:32 -0800
-Received: from twshared7043.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 16 Dec 2022 12:17:31 -0800
-Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
-        id 79FDAD042AD9; Fri, 16 Dec 2022 12:17:10 -0800 (PST)
-From:   Keith Busch <kbusch@meta.com>
-To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-CC:     Tony Battersby <tonyb@cybernetics.com>,
-        Kernel Team <kernel-team@meta.com>,
-        Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv2 11/11] dmapool: link blocks across pages
-Date:   Fri, 16 Dec 2022 12:16:25 -0800
-Message-ID: <20221216201625.2362737-12-kbusch@meta.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221216201625.2362737-1-kbusch@meta.com>
-References: <20221216201625.2362737-1-kbusch@meta.com>
+        Fri, 16 Dec 2022 15:17:59 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AE372608;
+        Fri, 16 Dec 2022 12:17:37 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id c66so5203148edf.5;
+        Fri, 16 Dec 2022 12:17:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BGjv+/8zXr7odTppy9wSy02S+MVGH5glcnXAYdtKnUc=;
+        b=TV8HbEnKDq2YkTWyFgt4+EyfU3FKhaukBCAlB0FyymvKxMNDX6WeHg+RrH5t+u+HNU
+         L3081LjK7hrro0SmZuUw8hNedvKHeTZy9CFO9ppQxNdBT8UmvS07/mdNG3Scn/T4OQxH
+         tD61mf4lF2aj9R/5ve6y22MM/JcWpnFbz5reRI7c5f3aOW3faJKpkUZUUYhuyLXuQ1zb
+         M0AifqQmijt8NQG5+hSuNtZmqtfxN8ueFKVL2CH8fflaRPRYjCe0kzmcQlfdNnXKq3lg
+         vRU+68yM8cwuJib9Nd0BVdEDVfb4wXiUL8ewMNf/gsqmenfWZFhDJ+/PP0eVwPaXZ4q4
+         iSfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BGjv+/8zXr7odTppy9wSy02S+MVGH5glcnXAYdtKnUc=;
+        b=tDX6Hp3kAAo564AIDZlbsa8q0AmUSYAxds+7J0WH8DuteimR+QVngqe4Esl9DKdsgB
+         cYZtJCeEQGJ8SVetdSWrF0uIQwDvG/J0Yj5asdLXNgWWkwW+gfal0hCUWVDkAZJxDSjq
+         ruXVU3TDigsxpMp7jta5X2cYwWzBoB5maIH8P8iHOx1FFvCcvl9d23ShsGuu7Xqbxia2
+         1grA7qaIjAzSHOK5iYxjXNuv6vwkxW7nDQ3VcTo9vG1+lYIdZBQ6FlAmJ4eBrw+y1DQn
+         0uRIQZg3MkqCw22gxJSSNtI0CWyQysrIPh52zZDlXrdiolzjZtMSsmxDfBmzQXVcfdp+
+         D1PA==
+X-Gm-Message-State: ANoB5pnrI0csG4+BqpOB7cgUNzXNehVk5sNX7QblJFp1IDxu3ueZcRrh
+        qqRg3V8ou6B5LMSV5GZSTI8=
+X-Google-Smtp-Source: AA0mqf6d8xSqVNDYrjAMV+P3X5ndNEIKHb5m7mAEQC87Kre5WPjHKKPVfkDGDmsP7VMUuy5T/PjdeQ==
+X-Received: by 2002:a05:6402:378c:b0:45c:835b:ac66 with SMTP id et12-20020a056402378c00b0045c835bac66mr27764643edb.33.1671221855988;
+        Fri, 16 Dec 2022 12:17:35 -0800 (PST)
+Received: from [192.168.1.101] ([141.136.89.211])
+        by smtp.gmail.com with ESMTPSA id z7-20020aa7d407000000b0046b531fcf9fsm1231417edq.59.2022.12.16.12.17.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 12:17:35 -0800 (PST)
+Message-ID: <f6b1a1d6-699b-5740-6aa1-6285d673286a@gmail.com>
+Date:   Sat, 17 Dec 2022 00:17:30 +0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: FB9HGyNsTxDLMbWAOhQW-7MSco66prtg
-X-Proofpoint-ORIG-GUID: FB9HGyNsTxDLMbWAOhQW-7MSco66prtg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-16_14,2022-12-15_02,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH net-next v1 02/13] net: wwan: tmi: Add buffer management
+Content-Language: en-US
+To:     =?UTF-8?B?WWFuY2hhbyBZYW5nICjmnajlvabotoUp?= 
+        <Yanchao.Yang@mediatek.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "loic.poulain@linaro.org" <loic.poulain@linaro.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        =?UTF-8?B?Q2hyaXMgRmVuZyAo5Yav5L+d5p6XKQ==?= 
+        <Chris.Feng@mediatek.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?TWluZ2xpYW5nIFh1ICjlvpDmmI7kuq4p?= 
+        <mingliang.xu@mediatek.com>,
+        "linuxwwan@mediatek.com" <linuxwwan@mediatek.com>,
+        =?UTF-8?B?TWluIERvbmcgKOiRo+aVjyk=?= <min.dong@mediatek.com>,
+        "m.chetan.kumar@intel.com" <m.chetan.kumar@intel.com>,
+        "linuxwwan@intel.com" <linuxwwan@intel.com>,
+        =?UTF-8?B?TGlhbmcgTHUgKOWQleS6rik=?= <liang.lu@mediatek.com>,
+        =?UTF-8?B?SGFpanVuIExpdSAo5YiY5rW35YabKQ==?= 
+        <haijun.liu@mediatek.com>,
+        =?UTF-8?B?SGFvemhlIENoYW5nICjluLjmtanlk7Ip?= 
+        <Haozhe.Chang@mediatek.com>,
+        =?UTF-8?B?SHVhIFlhbmcgKOadqOWNjik=?= <Hua.Yang@mediatek.com>,
+        =?UTF-8?B?WGlheXUgWmhhbmcgKOW8oOWkj+Wuhyk=?= 
+        <Xiayu.Zhang@mediatek.com>,
+        =?UTF-8?B?QWlkZW4gV2FuZyAo546L5ZKP6bqSKQ==?= 
+        <Aiden.Wang@mediatek.com>,
+        =?UTF-8?B?RmVsaXggQ2hlbiAo6ZmI6Z2eKQ==?= <Felix.Chen@mediatek.com>,
+        =?UTF-8?B?VGluZyBXYW5nICjnjovmjLop?= <ting.wang@mediatek.com>,
+        =?UTF-8?B?R3VvaGFvIFpoYW5nICjlvKDlm73osaop?= 
+        <Guohao.Zhang@mediatek.com>,
+        =?UTF-8?B?TWluZ2NodWFuZyBRaWFvICjkuZTmmI7pl68p?= 
+        <Mingchuang.Qiao@mediatek.com>,
+        =?UTF-8?B?TGFtYmVydCBXYW5nICjnjovkvJ8p?= 
+        <Lambert.Wang@mediatek.com>
+References: <20221122111152.160377-1-yanchao.yang@mediatek.com>
+ <20221122111152.160377-3-yanchao.yang@mediatek.com>
+ <14db8809-6144-1d10-59e7-298079b2e6e2@gmail.com>
+ <a9d4eebb99d53224366c387ae314173b870d134c.camel@mediatek.com>
+From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
+In-Reply-To: <a9d4eebb99d53224366c387ae314173b870d134c.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Keith Busch <kbusch@kernel.org>
+Hello Yanchao,
 
-The allocated dmapool pages are never freed for the lifetime of the
-pool. There is no need for the two level list+stack lookup for finding a
-free block since nothing is ever removed from the list. Just use a
-simple stack, reducing time complexity to constant.
+sorry for late response, please find some thoughts below.
 
-The implementation inserts the stack linking elements and the dma handle
-of the block within itself when freed. This means the smallest possible
-dmapool block is increased to at most 16 bytes to accomodate these
-fields, but there are no exisiting users requesting a dma pool smaller
-than that anyway.
+On 09.12.2022 14:26, Yanchao Yang (杨彦超) wrote:
+> On Sun, 2022-12-04 at 22:58 +0400, Sergey Ryazanov wrote:
+>> On 22.11.2022 15:11, Yanchao Yang wrote:
+>>> From: MediaTek Corporation <linuxwwan@mediatek.com>
+>>>
+>>> To malloc I/O memory as soon as possible, buffer management comes
+>>> into being.
+>>> It creates buffer pools that reserve some buffers through deferred
+>>> works when
+>>> the driver isn't busy.
+>>>
+>>> The buffer management provides unified memory allocation/de-
+>>> allocation
+>>> interfaces for other modules. It supports two buffer types of SKB
+>>> and page.
+>>> Two reload work queues with different priority values are provided
+>>> to meet
+>>> various requirements of the control plane and the data plane.
+>>>
+>>> When the reserved buffer count of the pool is less than a threshold
+>>> (default
+>>> is 2/3 of the pool size), the reload work will restart to allocate
+>>> buffers
+>>> from the OS until the buffer pool becomes full. When the buffer
+>>> pool fills,
+>>> the OS will recycle the buffer freed by the user.
+>>>
+>>> Signed-off-by: Mingliang Xu <mingliang.xu@mediatek.com>
+>>> Signed-off-by: MediaTek Corporation <linuxwwan@mediatek.com>
+>>> ---
+>>>    drivers/net/wwan/mediatek/Makefile  |   3 +-
+>>>    drivers/net/wwan/mediatek/mtk_bm.c  | 369
+>>> ++++++++++++++++++++++++++++
+>>>    drivers/net/wwan/mediatek/mtk_bm.h  |  79 ++++++
+>>>    drivers/net/wwan/mediatek/mtk_dev.c |  11 +-
+>>>    drivers/net/wwan/mediatek/mtk_dev.h |   1 +
+>>>    5 files changed, 461 insertions(+), 2 deletions(-)
+>>>    create mode 100644 drivers/net/wwan/mediatek/mtk_bm.c
+>>>    create mode 100644 drivers/net/wwan/mediatek/mtk_bm.h
+>>
+>> Yanchao, can you share some numbers, how this custom pool is
+>> outperform
+>> the regular kernel allocator?
+> Prepare 2 drivers *.ko for comparison.
+> Driver A (following named A):  enable pre-allocate buffer pool.
+> Driver B (following named A):  disenable pre-allocate buffer pool. It
+> uses kernel API directly (__dev_alloc_skb and netdev_alloc_frag)
+> 
+> Test Instrument: Keysight UXM TA
+> Iperf command:
+> Server Command: iperf3 -s -p 5002 -i 1
+> Client Command: iperf3 -c 192.168.2.1 -p 5002 -i 1 -w 8M -t 30 -R -P 5
+> 
+> Test result: Fig 1. A’s TCP DL throughput Fig 2. B’s TCP DL throughput
+> (Ref attachment)
+> 
+>  From the results, it represents that the A’s IP packets throughput
+> reaches 7Gbits/sec, while B’s throughput is 4.7Gbits/sec. A’s
+> throughput is up about 50% compared with B.
+> 
+> In addition, from ftrace, it represents following results.
+> A: it takes 14.241828s for allocating 33211099 buffers. The average
+> time is about 0.4us.
+> B: it takes 7.677069s for allocating 10890789 buffers. The average time
+> is about 0.7us.
 
-Removing the list has a significant change in performance. Using the
-kernel's micro-benchmarking self test:
+Thank you for this impressive comparison test. There is something to 
+think about here.
 
-Before:
+In a common case, the kernel memory API is fast enough to guarantee 
+multi-gigabit throughput. So if some custom code outperforms it, then 
+either (a) you have found some corner case where the kernel memory API 
+is deadly slow and should be improved, or (b) there is something wrong 
+with a driver code. My point is that a driver should not implement 
+custom memory management since that leads to a driver complexity without 
+any real performance improvement.
 
-  # modprobe dmapool_test
-  dmapool test: size:16   blocks:8192   time:57282
-  dmapool test: size:64   blocks:8192   time:172562
-  dmapool test: size:256  blocks:8192   time:789247
-  dmapool test: size:1024 blocks:2048   time:371823
-  dmapool test: size:4096 blocks:1024   time:362237
+The test shows the really significant difference between the custom 
+memory pool and the direct kernel API calling. So let's try to figure 
+out what is going on.
 
-After:
+I assume that the control path (CLDMA) could not cause that much 
+performance degradation due to the low control messages traffic. So most 
+probably the root cause is somewhere in the data path (DPMAIF). Correct 
+me if my assumption is wrong.
 
-  # modprobe dmapool_test
-  dmapool test: size:16   blocks:8192   time:24997
-  dmapool test: size:64   blocks:8192   time:26584
-  dmapool test: size:256  blocks:8192   time:33542
-  dmapool test: size:1024 blocks:2048   time:9022
-  dmapool test: size:4096 blocks:1024   time:6045
+Digging deeper into the driver code, I noticed that there actually two 
+types of pools (buffers). One pool type contains ready-made skbs, and 
+the other contains just page fragments. And both types of pools are 
+utilized in the data Rx path. Have you tried measuring which type of 
+pool improves performance more significantly?
 
-The module test allocates quite a few blocks that may not accurately
-represent how these pools are used in real life. For a more marco level
-benchmark, running fio high-depth + high-batched on nvme, this patch
-shows submission and completion latency reduced by ~100usec each, 1%
-IOPs improvement, and perf record's time spent in dma_pool_alloc/free
-were reduced by half.
+I also noticed that neither allocated skb nor allocated page fragments 
+are freed in the DPMAIF code. So the improvement is not connected to 
+optimal caching (i.e. memory reuse). Thus memory allocation improvement 
+is most likely caused by avoiding of some contention.
 
-Signed-off-by: Keith Busch <kbusch@kernel.org>
----
-v1->v2:
+The pool reload is performed in the context of work. And if I am not 
+mistaken, then skbs and fragments are also taken from preallocated pools 
+in the context of work to reinitialize the BAT (Rx) ring buffer. There 
+is no difference in the matter of priority. Both the pool reload and the 
+Rx ring buffer reload functions are called with the same priority on an 
+arbitrary CPU in the absence of other high priority tasks (e.g. 
+tasklets, irq). The only obvious difference is the invocation rate. The 
+pool reload operation is triggered as soon as the pool level falls below 
+the predefined threshold (currently 67%). While the Rx ring reload 
+operation is called on each NAPI poll. Have you considered introducing a 
+threshold similar to the pool reload threshold and calling the rx ring 
+reload less frequently?
 
-  Applied feedback comments from Tony:
-   Updated data structure description comment
-   Used consistent size_t for accounting variables
-   Fixed block initialization for odd alignments
-
- mm/dmapool.c | 215 ++++++++++++++++++++++++++-------------------------
- 1 file changed, 109 insertions(+), 106 deletions(-)
-
-diff --git a/mm/dmapool.c b/mm/dmapool.c
-index f5b79c3268856..d26a0751dee63 100644
---- a/mm/dmapool.c
-+++ b/mm/dmapool.c
-@@ -15,7 +15,7 @@
-  * represented by the 'struct dma_pool' which keeps a doubly-linked list=
- of
-  * allocated pages.  Each page in the page_list is split into blocks of =
-at
-  * least 'size' bytes.  Free blocks are tracked in an unsorted singly-li=
-nked
-- * list of free blocks within the page.  Used blocks aren't tracked, but=
- we
-+ * list of free blocks across all pages.  Used blocks aren't tracked, bu=
-t we
-  * keep a count of how many are currently allocated from each page.
-  */
-=20
-@@ -40,13 +40,22 @@
- #define DMAPOOL_DEBUG 1
- #endif
-=20
-+struct dma_block {
-+	struct dma_block *next_block;
-+	dma_addr_t dma;
-+};
-+
- struct dma_pool {		/* the pool */
- 	struct list_head page_list;
- 	spinlock_t lock;
- 	struct device *dev;
-+	struct dma_block *next_block;
- 	unsigned int size;
- 	unsigned int allocation;
- 	unsigned int boundary;
-+	size_t nr_blocks;
-+	size_t nr_active;
-+	size_t nr_pages;
- 	char name[32];
- 	struct list_head pools;
- };
-@@ -55,8 +64,6 @@ struct dma_page {		/* cacheable header for 'allocation'=
- bytes */
- 	struct list_head page_list;
- 	void *vaddr;
- 	dma_addr_t dma;
--	unsigned int in_use;
--	unsigned int offset;
- };
-=20
- static DEFINE_MUTEX(pools_lock);
-@@ -64,30 +71,18 @@ static DEFINE_MUTEX(pools_reg_lock);
-=20
- static ssize_t pools_show(struct device *dev, struct device_attribute *a=
-ttr, char *buf)
- {
--	int size;
--	struct dma_page *page;
- 	struct dma_pool *pool;
-+	unsigned size;
-=20
- 	size =3D sysfs_emit(buf, "poolinfo - 0.1\n");
-=20
- 	mutex_lock(&pools_lock);
- 	list_for_each_entry(pool, &dev->dma_pools, pools) {
--		unsigned pages =3D 0;
--		size_t blocks =3D 0;
--
--		spin_lock_irq(&pool->lock);
--		list_for_each_entry(page, &pool->page_list, page_list) {
--			pages++;
--			blocks +=3D page->in_use;
--		}
--		spin_unlock_irq(&pool->lock);
--
- 		/* per-pool info, no real statistics yet */
--		size +=3D sysfs_emit_at(buf, size, "%-16s %4zu %4zu %4u %2u\n",
--				      pool->name, blocks,
--				      (size_t) pages *
--				      (pool->allocation / pool->size),
--				      pool->size, pages);
-+		size +=3D sysfs_emit_at(buf, size, "%-16s %4ld %4ld %4u %2ld\n",
-+				      pool->name, pool->nr_active,
-+				      pool->nr_blocks, pool->size,
-+				      pool->nr_pages);
- 	}
- 	mutex_unlock(&pools_lock);
-=20
-@@ -96,6 +91,25 @@ static ssize_t pools_show(struct device *dev, struct d=
-evice_attribute *attr, cha
-=20
- static DEVICE_ATTR_RO(pools);
-=20
-+static inline struct dma_block *pool_block_pop(struct dma_pool *pool)
-+{
-+	struct dma_block *block =3D pool->next_block;
-+
-+	if (block) {
-+		pool->next_block =3D block->next_block;
-+		pool->nr_active++;
-+	}
-+	return block;
-+}
-+
-+static inline void pool_block_push(struct dma_pool *pool, struct dma_blo=
-ck *block,
-+				 dma_addr_t dma)
-+{
-+	block->dma =3D dma;
-+	block->next_block =3D pool->next_block;
-+	pool->next_block =3D block;
-+}
-+
- /**
-  * dma_pool_create - Creates a pool of consistent memory blocks, for dma=
-.
-  * @name: name of pool, for diagnostics
-@@ -136,8 +150,8 @@ struct dma_pool *dma_pool_create(const char *name, st=
-ruct device *dev,
-=20
- 	if (size =3D=3D 0 || size > INT_MAX)
- 		return NULL;
--	else if (size < 4)
--		size =3D 4;
-+	if (size < sizeof(struct dma_block))
-+		size =3D sizeof(struct dma_block);
-=20
- 	size =3D ALIGN(size, align);
- 	allocation =3D max_t(size_t, size, PAGE_SIZE);
-@@ -162,6 +176,10 @@ struct dma_pool *dma_pool_create(const char *name, s=
-truct device *dev,
- 	retval->size =3D size;
- 	retval->boundary =3D boundary;
- 	retval->allocation =3D allocation;
-+	retval->nr_blocks =3D 0;
-+	retval->nr_active =3D 0;
-+	retval->nr_pages =3D 0;
-+	retval->next_block =3D NULL;
-=20
- 	INIT_LIST_HEAD(&retval->pools);
-=20
-@@ -199,22 +217,24 @@ EXPORT_SYMBOL(dma_pool_create);
-=20
- static void pool_initialise_page(struct dma_pool *pool, struct dma_page =
-*page)
- {
--	unsigned int offset =3D 0;
--	unsigned int next_boundary =3D pool->boundary;
--
--	page->in_use =3D 0;
--	page->offset =3D 0;
--	do {
--		unsigned int next =3D offset + pool->size;
--		if (unlikely((next + pool->size) >=3D next_boundary)) {
--			next =3D next_boundary;
-+	unsigned int next_boundary =3D pool->boundary, offset =3D 0;
-+	struct dma_block *block;
-+
-+	while (offset + pool->size <=3D pool->allocation) {
-+		if (offset + pool->size > next_boundary) {
-+			offset =3D next_boundary;
- 			next_boundary +=3D pool->boundary;
-+			continue;
- 		}
--		*(int *)(page->vaddr + offset) =3D next;
--		offset =3D next;
--	} while (offset < pool->allocation);
-+
-+		block =3D page->vaddr + offset;
-+		pool_block_push(pool, block, page->dma + offset);
-+		offset +=3D pool->size;
-+		pool->nr_blocks++;
-+	}
-=20
- 	list_add(&page->page_list, &pool->page_list);
-+	pool->nr_pages++;
- }
-=20
- static struct dma_page *pool_alloc_page(struct dma_pool *pool, gfp_t mem=
-_flags)
-@@ -236,11 +256,6 @@ static struct dma_page *pool_alloc_page(struct dma_p=
-ool *pool, gfp_t mem_flags)
- 	return page;
- }
-=20
--static inline bool is_page_busy(struct dma_page *page)
--{
--	return page->in_use !=3D 0;
--}
--
- /**
-  * dma_pool_destroy - destroys a pool of dma memory blocks.
-  * @pool: dma pool that will be destroyed
-@@ -252,7 +267,7 @@ static inline bool is_page_busy(struct dma_page *page=
-)
- void dma_pool_destroy(struct dma_pool *pool)
- {
- 	struct dma_page *page, *tmp;
--	bool empty =3D false;
-+	bool empty =3D false, busy =3D false;
-=20
- 	if (unlikely(!pool))
- 		return;
-@@ -267,13 +282,15 @@ void dma_pool_destroy(struct dma_pool *pool)
- 		device_remove_file(pool->dev, &dev_attr_pools);
- 	mutex_unlock(&pools_reg_lock);
-=20
-+	if (pool->nr_active) {
-+		dev_err(pool->dev, "%s %s busy\n", __func__, pool->name);
-+		busy =3D true;
-+	}
-+
- 	list_for_each_entry_safe(page, tmp, &pool->page_list, page_list) {
--		if (!is_page_busy(page))
-+		if (!busy)
- 			dma_free_coherent(pool->dev, pool->allocation,
- 					  page->vaddr, page->dma);
--		else
--			dev_err(pool->dev, "%s %s, %p busy\n", __func__,
--				pool->name, page->vaddr);
- 		list_del(&page->page_list);
- 		kfree(page);
- 	}
-@@ -282,18 +299,18 @@ void dma_pool_destroy(struct dma_pool *pool)
- }
- EXPORT_SYMBOL(dma_pool_destroy);
-=20
--static inline void pool_check_block(struct dma_pool *pool, void *retval,
--				    unsigned int offset, gfp_t mem_flags)
-+static inline void pool_check_block(struct dma_pool *pool, struct dma_bl=
-ock *block,
-+				    gfp_t mem_flags)
- {
--#ifdef	DMAPOOL_DEBUG
-+#ifdef DMAPOOL_DEBUG
-+	u8 *data =3D (void *)block;
- 	int i;
--	u8 *data =3D retval;
--	/* page->offset is stored in first 4 bytes */
--	for (i =3D sizeof(offset); i < pool->size; i++) {
-+
-+	for (i =3D sizeof(struct dma_block); i < pool->size; i++) {
- 		if (data[i] =3D=3D POOL_POISON_FREED)
- 			continue;
--		dev_err(pool->dev, "%s %s, %p (corrupted)\n",
--			__func__, pool->name, retval);
-+		dev_err(pool->dev, "%s %s, %p (corrupted)\n", __func__,
-+			pool->name, block);
-=20
- 		/*
- 		 * Dump the first 4 bytes even if they are not
-@@ -303,8 +320,9 @@ static inline void pool_check_block(struct dma_pool *=
-pool, void *retval,
- 				data, pool->size, 1);
- 		break;
- 	}
-+
- 	if (!want_init_on_alloc(mem_flags))
--		memset(retval, POOL_POISON_ALLOCATED, pool->size);
-+		memset(block, POOL_POISON_ALLOCATED, pool->size);
- #endif
- }
-=20
-@@ -321,44 +339,41 @@ static inline void pool_check_block(struct dma_pool=
- *pool, void *retval,
- void *dma_pool_alloc(struct dma_pool *pool, gfp_t mem_flags,
- 		     dma_addr_t *handle)
- {
--	unsigned long flags;
-+	struct dma_block *block;
- 	struct dma_page *page;
--	unsigned int offset;
--	void *retval;
-+	unsigned long flags;
-=20
- 	might_alloc(mem_flags);
-=20
- 	spin_lock_irqsave(&pool->lock, flags);
--	list_for_each_entry(page, &pool->page_list, page_list) {
--		if (page->offset < pool->allocation)
--			goto ready;
--	}
--
--	/* pool_alloc_page() might sleep, so temporarily drop &pool->lock */
--	spin_unlock_irqrestore(&pool->lock, flags);
-+	block =3D pool_block_pop(pool);
-+	if (!block) {
-+		/*
-+		 * pool_alloc_page() might sleep, so temporarily drop
-+		 * &pool->lock
-+		 */
-+		spin_unlock_irqrestore(&pool->lock, flags);
-=20
--	page =3D pool_alloc_page(pool, mem_flags & (~__GFP_ZERO));
--	if (!page)
--		return NULL;
-+		page =3D pool_alloc_page(pool, mem_flags & (~__GFP_ZERO));
-+		if (!page)
-+			return NULL;
-=20
--	spin_lock_irqsave(&pool->lock, flags);
--	pool_initialise_page(pool, page);
-- ready:
--	page->in_use++;
--	offset =3D page->offset;
--	page->offset =3D *(int *)(page->vaddr + offset);
--	retval =3D offset + page->vaddr;
--	*handle =3D offset + page->dma;
--	pool_check_block(pool, retval, offset, mem_flags);
-+		spin_lock_irqsave(&pool->lock, flags);
-+		pool_initialise_page(pool, page);
-+		block =3D pool_block_pop(pool);
-+	}
- 	spin_unlock_irqrestore(&pool->lock, flags);
-=20
-+	*handle =3D block->dma;
-+	pool_check_block(pool, block, mem_flags);
- 	if (want_init_on_alloc(mem_flags))
--		memset(retval, 0, pool->size);
-+		memset(block, 0, pool->size);
-=20
--	return retval;
-+	return block;
- }
- EXPORT_SYMBOL(dma_pool_alloc);
-=20
-+#ifdef DMAPOOL_DEBUG
- static struct dma_page *pool_find_page(struct dma_pool *pool, dma_addr_t=
- dma)
- {
- 	struct dma_page *page;
-@@ -372,33 +387,35 @@ static struct dma_page *pool_find_page(struct dma_p=
-ool *pool, dma_addr_t dma)
- 	return NULL;
- }
-=20
--#ifdef DMAPOOL_DEBUG
--static inline bool pool_page_err(struct dma_pool *pool, struct dma_page =
-*page,
--				 void *vaddr)
-+static inline bool pool_block_err(struct dma_pool *pool, void *vaddr,
-+				  dma_addr_t dma)
- {
--	unsigned int chain =3D page->offset;
-+	struct dma_block *block =3D pool->next_block;
-+	struct dma_page *page;
-=20
--	if ((dma - page->dma) !=3D offset) {
--		dev_err(pool->dev, "%s %s, %p (bad vaddr)/%pad\n",
-+	page =3D pool_find_page(pool, dma);
-+	if (!page) {
-+		dev_err(pool->dev, "%s %s, %p/%pad (bad dma)\n",
- 			__func__, pool->name, vaddr, &dma);
- 		return true;
- 	}
-=20
--	while (chain < pool->allocation) {
--		if (chain !=3D offset) {
--			chain =3D *(int *)(page->vaddr + chain);
-+	while (block) {
-+		if (block !=3D vaddr) {
-+			block =3D block->next_block;
- 			continue;
- 		}
- 		dev_err(pool->dev, "%s %s, dma %pad already free\n",
- 			__func__, pool->name, &dma);
- 		return true;
- 	}
-+
- 	memset(vaddr, POOL_POISON_FREED, pool->size);
- 	return false;
- }
- #else
--static inline bool pool_page_err(struct dma_pool *pool, struct dma_page =
-*page,
--				 void *vaddr)
-+static inline bool pool_block_err(struct dma_pool *pool, void *vaddr,
-+				  dma_addr_t dma)
- {
- 	if (want_init_on_free())
- 		memset(vaddr, 0, pool->size);
-@@ -417,28 +434,14 @@ static inline bool pool_page_err(struct dma_pool *p=
-ool, struct dma_page *page,
-  */
- void dma_pool_free(struct dma_pool *pool, void *vaddr, dma_addr_t dma)
- {
--	struct dma_page *page;
-+	struct dma_block *block =3D vaddr;
- 	unsigned long flags;
--	unsigned int offset;
-=20
- 	spin_lock_irqsave(&pool->lock, flags);
--	page =3D pool_find_page(pool, dma);
--	if (!page) {
--		spin_unlock_irqrestore(&pool->lock, flags);
--		dev_err(pool->dev, "%s %s, %p/%pad (bad dma)\n",
--			__func__, pool->name, vaddr, &dma);
--		return;
-+	if (!pool_block_err(pool, vaddr, dma)) {
-+		pool_block_push(pool, block, dma);
-+		pool->nr_active--;
- 	}
--
--	offset =3D vaddr - page->vaddr;
--	if (pool_page_err(pool, page, vaddr)) {
--		spin_unlock_irqrestore(&pool->lock, flags);
--		return;
--	}
--
--	page->in_use--;
--	*(int *)vaddr =3D page->offset;
--	page->offset =3D offset;
- 	spin_unlock_irqrestore(&pool->lock, flags);
- }
- EXPORT_SYMBOL(dma_pool_free);
---=20
-2.30.2
-
+--
+Sergey
