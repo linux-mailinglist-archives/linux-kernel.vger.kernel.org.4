@@ -2,109 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205E564EAF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 839F464EAFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbiLPLx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 06:53:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
+        id S230256AbiLPL4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:56:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbiLPLxS (ORCPT
+        with ESMTP id S229469AbiLPL4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:53:18 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4228C3054C;
-        Fri, 16 Dec 2022 03:53:17 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id m5-20020a7bca45000000b003d2fbab35c6so1555915wml.4;
-        Fri, 16 Dec 2022 03:53:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=13Vm0Lo332lPPEsaCgPFzelDF94GXJZ/U5/noq/R55w=;
-        b=m+6cs8UgDkgrBh11MngOAu6i4Zg6gyR10RxWXvHqf9GwlYCVctTfJHXDFmc2AKCLNX
-         wWoU6Xixz7e/eZTf5rKFD8YlcDnjwg9BPwUPfV5g57+6MGXL+91OhowWpKSYMXHetrTy
-         AVu6hA0h4jIwWetkwP1bCGUup6ZIwBeq93USUDy9jz2S/yM+lrAcEpEOmHMCBCuCfxFi
-         npWQbhxSvU/MVCPYbpuUoFAeMLeYjIr7y7nIl7T/hfZTGTPNguok1+BX2EWlexJoXhnh
-         154FLq2azM0avyQ5HBQ+Qylkx1yybgYNgjMsf0KTCt+oJR0WQtSg+bj9pr4u7/UyLVKB
-         jjfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=13Vm0Lo332lPPEsaCgPFzelDF94GXJZ/U5/noq/R55w=;
-        b=Cl8gTjOz84foRecWZDE7T4/0Qm4GSxUoKAOwJqbfxzLjiS+tGOqh3YWDwVmrEA2yM9
-         2KM3NDuPOxmmpClNwZp9TnQOgOym1m9GsvJaWHBTEfuSVDQDfm0Ps9ua2fWQWbsEuW/S
-         kHmNxGjd7ANqIF0o0KOadOk+pci9pjWDYF5aWPiRrlOoPEdAXHa/lFrOqW1hIbiwF2Ci
-         A0q509NK1b8esqCIuYXFN43m5fevBfWyy3GMPdKy3dvddhcU374rbFrYQUU82d1s2a4j
-         o6SoCz48SLmRAo/ReFAqqXmpC7KBWLuRkZiFoho3H93H08I+s8uhZ7Tf8cm+51DZOd9x
-         Sw9A==
-X-Gm-Message-State: ANoB5pkLoKbYEp5VVLUHVoFhecvgLSAqcrmmPWo6cOcjrmQ9VT4YDHUh
-        klL1OHJk9qvgOWlRgN0AwCA=
-X-Google-Smtp-Source: AA0mqf5bZXdv96QOcJhiW7IsKGleAkHdIQijkx4qy+QU0fcKKDKeNqxRLGjMQy21S+2Q0rZzIzjBfw==
-X-Received: by 2002:a05:600c:3d8f:b0:3cf:d70d:d5a8 with SMTP id bi15-20020a05600c3d8f00b003cfd70dd5a8mr24051092wmb.6.1671191595799;
-        Fri, 16 Dec 2022 03:53:15 -0800 (PST)
-Received: from [192.168.1.132] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id ay9-20020a5d6f09000000b002425504ae7dsm2071582wrb.80.2022.12.16.03.53.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 03:53:14 -0800 (PST)
-Message-ID: <06e969b5-3be2-4b23-de5a-93aa9ae6d95c@gmail.com>
-Date:   Fri, 16 Dec 2022 12:53:13 +0100
+        Fri, 16 Dec 2022 06:56:22 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31C433F;
+        Fri, 16 Dec 2022 03:56:21 -0800 (PST)
+Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: lukma@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 1ADD684CBD;
+        Fri, 16 Dec 2022 12:56:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1671191780;
+        bh=W2uwhnM1KnHLWHQOAr+kuaasVA13yupWdZfCcozE3jg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=P6Al+RuGcliK0ANlkmWfTIP7XF9QSHrti6BUfQknagNdCVrdkf63JJGRWBD9YjdFU
+         roP5qqh1zX61St7RVBWXo/XW1KzlZRUe53w3zJQ6hxcQU0uu0kOK4MZcmqUR9SyLGa
+         VMhFzmf1XSIsGx+vatpkkX23GPtRXtX+OFIqX+8Q1Hn7idf8kX7T+v7WwvXOIKE//0
+         8vPB0GK6+AJRqj2OydXqGjx64y6Efk6qaoXKpr2djx5roBiFbQwdWN0BtBjmWPefLZ
+         Gv2mOgj0ttuJc8Xx0804JyuYV64jqg1OHAksaTNwASo3XuDmDZaf7xR9LTiJfFHb97
+         Sg+TnGwSpHzlQ==
+Date:   Fri, 16 Dec 2022 12:56:12 +0100
+From:   Lukasz Majewski <lukma@denx.de>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dsa: marvell: Provide per device information
+ about max frame size
+Message-ID: <20221216125612.3183fe07@wsk>
+In-Reply-To: <20221215202017.4432ef25@kernel.org>
+References: <20221215144536.3810578-1-lukma@denx.de>
+        <20221215202017.4432ef25@kernel.org>
+Organization: denx.de
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 0/5] Add CPU caches information for some MediaTek SoCs
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        nfraprado@collabora.com, kernel@collabora.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221206112330.78431-1-angelogioacchino.delregno@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221206112330.78431-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/c3k.U7=FBMLow==QLU7n83=";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/c3k.U7=FBMLow==QLU7n83=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Jakub,
+
+> On Thu, 15 Dec 2022 15:45:34 +0100 Lukasz Majewski wrote:
+> > Different Marvell DSA switches support different size of max frame
+> > bytes to be sent.
+> >=20
+> > For example mv88e6185 supports max 1632 bytes, which is now
+> > in-driver standard value. On the other hand - mv88e6250 supports
+> > 2048 bytes.
+> >=20
+> > As this value is internal and may be different for each switch IC,
+> > new entry in struct mv88e6xxx_info has been added to store it. =20
+>=20
+> # Form letter - net-next is closed
+>=20
+
+I see....
+
+> We have already submitted the networking pull request to Linus
+> for v6.2 and therefore net-next is closed for new drivers, features,
+> code refactoring and optimizations. We are currently accepting
+> bug fixes only.
+
+Ok.
+
+>=20
+> Please repost when net-next reopens after Jan 2nd.
+>=20
+> RFC patches sent for review only are obviously welcome at any time.
+
+I hope that the discussion regarding those patches will be done by this
+time.
 
 
-On 06/12/2022 12:23, AngeloGioacchino Del Regno wrote:
-> In devicetrees for MediaTek SoCs the CPU caches information, if
-> present, is incomplete as it misses cache size, cache line size
-> and number of cache sets which, in turn, will also prevent any
-> cache associativity calculation.
-> 
-> For all of the SoCs that I know and/or I have information for,
-> I've added the right information for I/D, L2 and L3 where present.
-> This will also make the cacheinfo driver to correctly export the
-> CPU cache information to sysfs.
-> 
+Best regards,
 
-Whole series applied, thanks!
+Lukasz Majewski
 
-> AngeloGioacchino Del Regno (5):
->    arm64: dts: mt8195: Add complete CPU caches information
->    arm64: dts: mt8192: Add complete CPU caches information
->    arm64: dts: mt8186: Add complete CPU caches information
->    arm64: dts: mt8183: Add complete CPU caches information
->    arm64: dts: mt6795: Add complete CPU caches information
-> 
->   arch/arm64/boot/dts/mediatek/mt6795.dtsi | 50 ++++++++++++++++
->   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 74 ++++++++++++++++++++++++
->   arch/arm64/boot/dts/mediatek/mt8186.dtsi | 58 +++++++++++++++++++
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 58 +++++++++++++++++++
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 58 +++++++++++++++++++
->   5 files changed, 298 insertions(+)
-> 
+--
+
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
+
+--Sig_/c3k.U7=FBMLow==QLU7n83=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmOcXNwACgkQAR8vZIA0
+zr0n1Af+MK+dO8fYjl5t/EZTNMXBCaqMjorxgNDdU61LEUhVXhSzyrizCIOIR7RB
+zTAAMtJNvQBiN9xmCulYVwN9iBowwpEaVVUQrzgTJSBYxuLdc5RKa6cNpaWS2vgx
+H8ciOO7KYJOeYtVw9FYRXQsvQLo4nE06rvQiyKXcW3p8oq1wiqB6kZ2OZ+EbiMPT
+7mpIXZ0O4q50wYqv5i0m96xUyRpWtPncs6f/YeviMfkjkOssI3pTWXxobz2itbxK
+OB5Gauf/MnHB5zRKOH7wMjeW7y8LCkageAEcPIRF40/CKvevVRd35G5vqOnXWaHp
+2TXQmT4Skl9BagTMc4C7Y2CD3lViHA==
+=+0+v
+-----END PGP SIGNATURE-----
+
+--Sig_/c3k.U7=FBMLow==QLU7n83=--
