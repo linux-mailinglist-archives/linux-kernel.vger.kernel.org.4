@@ -2,113 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF08064EDD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 972BF64EDD7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 16:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbiLPPZy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Dec 2022 10:25:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
+        id S231389AbiLPP0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 10:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiLPPZu (ORCPT
+        with ESMTP id S231309AbiLPP0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 10:25:50 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DAB21255
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:25:48 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-80-_OXu78BEO5abMLAtHBU1jQ-1; Fri, 16 Dec 2022 15:25:46 +0000
-X-MC-Unique: _OXu78BEO5abMLAtHBU1jQ-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 16 Dec
- 2022 15:25:42 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Fri, 16 Dec 2022 15:25:42 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andreas Schwab' <schwab@linux-m68k.org>
-CC:     "'Leizhen (ThunderTown)'" <thunder.leizhen@huawei.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Jiri Olsa" <jolsa@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: RE: [PATCH v9] kallsyms: Add self-test facility
-Thread-Topic: [PATCH v9] kallsyms: Add self-test facility
-Thread-Index: AQHZEWHMzV5WljPUpEGVjsixemOWL65wodIQ
-Date:   Fri, 16 Dec 2022 15:25:42 +0000
-Message-ID: <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com>
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
-        <CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com>
-        <ad09966d-9357-1c32-e491-a402af8dac6e@huawei.com>
-        <CAMuHMdW=KXfYc3Rqz6LizJcDxRX3BzUFTPpdTpDB68sw+QPJ=A@mail.gmail.com>
-        <b00bcc04-0633-bac9-76ab-572f9470901c@huawei.com>
-        <CAMuHMdWPSeieR-sGuozd3kWGjVw85EV40irqM9aErXufifzFNA@mail.gmail.com>
-        <49070ac3-02bb-a3b3-b929-ede07e3b2c95@huawei.com>
-        <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
-        <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
-        <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
-        <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
-        <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
-        <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com>
-        <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
-        <592dce7a0de24c62bd31c29f86ce6c1b@AcuMS.aculab.com>
- <87pmcjidfe.fsf@igel.home>
-In-Reply-To: <87pmcjidfe.fsf@igel.home>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 16 Dec 2022 10:26:12 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B00154358
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:26:09 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id i15so4122741edf.2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:26:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tKpnCX1We6Wd+jFghY+6E3YYWeYuw8xu63PLFG+p7NQ=;
+        b=mUCc71x2gfj8zWHkucpemaG9ceX9LG3EweMQXIAWBlZTy3Y9h+Ho2Ln0ho92leTzUC
+         z6jTiXF32YnMtX/Fq2VsEVuabr3WksUq745MBuT00/4zwoe5k0rP9XXrRzeTufO4yNe1
+         pJgodK/x+6zCI3Wvpzl7KjyHuka22cQpmupeU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tKpnCX1We6Wd+jFghY+6E3YYWeYuw8xu63PLFG+p7NQ=;
+        b=Y1/yThZlsxn3vzxxCCBiKkYKFoeRvD4c68fLSJVJLk9SvYiuchs4X0W3zEp791Mj1i
+         JU25cborawvSHh9uNMrG+/bTqEh3BWGfwllkQJNEijGpXOLqqBAI+Hx7pzX19BsimSfD
+         YgD7Ts9zsm+XL2/UsKh/LEGT7hKmc41HIs/BSFXK2XsiQX/O7MKd1BbzHTSeU/IATMOt
+         eJd7m1275p3Qi/6Uzs7JjRc030G0rlyZCCL1PkfDooXtDVF/TF/Ta5fFpV0pWbtIXqq/
+         I7mLnkuGswMT/Gmg8C1nYC82wvtu0pCB0o65RLNZW+mJ/yNeIoS8yJZ9ZbkIx13F0vpv
+         nqZQ==
+X-Gm-Message-State: AFqh2krQC6joPy8j+ZbtV/s+/jXgAfA7A0gqHEpmBoGBbmdgFSDQT8sn
+        jOJMu2Jop+Gs7kjimAIiCLB42ZBji+IDAf2WPYY=
+X-Google-Smtp-Source: AMrXdXuNoRw+E5kBVZl5OwhRiO1t3gEaKq3cshg5Tsc1OaWqYsGU1yvN07p6eFz2gByJ6lwHgWS9HQ==
+X-Received: by 2002:a50:fc05:0:b0:46f:9a53:fdcc with SMTP id i5-20020a50fc05000000b0046f9a53fdccmr12389777edr.12.1671204367548;
+        Fri, 16 Dec 2022 07:26:07 -0800 (PST)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id u10-20020a056402110a00b0046aa78ecd8asm978935edv.3.2022.12.16.07.26.05
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 07:26:05 -0800 (PST)
+Received: by mail-wr1-f45.google.com with SMTP id w15so2826772wrl.9
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 07:26:05 -0800 (PST)
+X-Received: by 2002:adf:fd89:0:b0:242:1f81:7034 with SMTP id
+ d9-20020adffd89000000b002421f817034mr27601714wrr.617.1671204364781; Fri, 16
+ Dec 2022 07:26:04 -0800 (PST)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <1669810824-32094-1-git-send-email-quic_vnivarth@quicinc.com> <82ec225f-64e2-40a1-aa3e-58480f293d17@quicinc.com>
+In-Reply-To: <82ec225f-64e2-40a1-aa3e-58480f293d17@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 16 Dec 2022 07:25:53 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=V+XG9ZBFZOjnVVXfCQnPSCjdAwB095tiomhE9DNbW1Ag@mail.gmail.com>
+Message-ID: <CAD=FV=V+XG9ZBFZOjnVVXfCQnPSCjdAwB095tiomhE9DNbW1Ag@mail.gmail.com>
+Subject: Re: [PATCH] dmaengine: qcom: gpi: Set link_rx bit on GO TRE for rx operation
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, linux-arm-msm@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
+        quic_vtanuku@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Schwab <schwab@linux-m68k.org>
-> Sent: 16 December 2022 15:20
-> 
-> On Dez 16 2022, David Laight wrote:
-> 
-> > 'cs' and 'ct' should be input parameters.
-> 
-> They are (and output as well).
+Hi,
 
-Right, but the 'output' values aren't needed and get
-discarded because the asm block in inside a static inline.
+On Fri, Dec 16, 2022 at 4:15 AM Vijaya Krishna Nivarthi
+<quic_vnivarth@quicinc.com> wrote:
+>
+> Gentle reminder to review/approve please.
+>
+> Thank you...
 
-It could be a recipe just waiting to go wrong.
+I was expecting you to send a v2 where you beefed up the patch
+description to add the "why". Maybe others are as well? I suppose with
+that I could add a weak Reviewed-by to the patch.
 
-But I bet the actual problem is the output register
-aliasing one of the inputs and then reading from very
-low user addresses - I bet they don't fault on m68k.
+This is also a bad time for patches to be applied--it's right in the
+middle of the merge window. Usually the best time to send reminders is
+between -rc1 and -rc5. Officially "Fixes" could be applied at any time
+(even during the merge window), but unless it's urgent that usually
+doesn't happen.
 
-	David
+Speaking of which, given your updated description, I'd say that this
+_is_ a fix. Perhaps you should add a "Fixes" tag? That might actually
+help it get applied sooner. ;-)
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+-Doug
