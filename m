@@ -2,131 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C676964F543
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 00:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFBA264F546
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 00:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbiLPXkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 18:40:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
+        id S230173AbiLPXmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 18:42:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbiLPXkm (ORCPT
+        with ESMTP id S229926AbiLPXmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 18:40:42 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B54662E9
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:40:39 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id gt4so3939886pjb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:40:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qP9LUFiQr+YzMaH2ADs5X+hQzeakrlDwPsVjntwjyKc=;
-        b=QHKlHgQ1SzOIzUJocmAx5UWtJH/8UTsiopsrrQZvH1zE7NKYBI7QA1k69C3WspE3EB
-         cAqpZjDgJFTiNFWtE6zxGdaN+tOzQzzwkdgWMVbn1bEL9HKTH/s4j497z/nwE/CcRcLB
-         +Q2wumAjgS0yMxfGDA2LGAm12Y1hqhdwlnmZEC+VanIJeCME5xkm6+FK7stiHSX/9FnK
-         AL9shkX2H3c0Kt1HCPn3P32sufLL8+IsdFCeHNp3aqlRk+FsDlnTD9CnVcqy5StZXAO4
-         O+scEOSYPiSRG7sxcIfrwfwBKnz7YVYfAEzeB06iw9tNKiFkNqraNV3hUkX0Ed9kiNgr
-         fRzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qP9LUFiQr+YzMaH2ADs5X+hQzeakrlDwPsVjntwjyKc=;
-        b=n2MC5cGbyJ69izwTVFRhdW64knWQmSAVIdl16O4Z0PTykaGC5Nmaluhtz108YdtWCC
-         PlWfwkFxWX5TXrRuFCki1/64tB7UJMBFjL8/OkhZCqSChmtPcDjcrgEoRTGWupIq7+t7
-         herA2ycLV7/X9z2Y2gT1k86DYg9+VT/IAo5kr50Tr3aPBtGKKkex39mpRMpxA42PeQ8e
-         ewkNZUsCDslIcSRH2+ojPA6dsjx0HpJtdmXIynhGJdzTm33Af+lsAdVR/RhuaL4G98GD
-         m8B26Mgs70jZ3lCiZy20pq+ZScC8N/k3q1yJsGYToVEDTUcKK2vvzj5SIuWqIziEugEX
-         i+Yw==
-X-Gm-Message-State: AFqh2kqgnitJgfhx5VARMxks9vzpPinF3Cx06l4eu8QWOC0E5wxUAXjq
-        l53q5EsSLLU/51sa/eE7RNGAN8vdgwhym9gNh+TTog==
-X-Google-Smtp-Source: AMrXdXtnXsl2q7hOtIge/2/gsR8kvTNLB45QiArxl/ifC+j9uYnyXPKDu+v21IXOSAosloDINV72J/F8O6tmKW34wwM=
-X-Received: by 2002:a17:90a:4612:b0:219:a43b:1006 with SMTP id
- w18-20020a17090a461200b00219a43b1006mr1290642pjg.195.1671234038717; Fri, 16
- Dec 2022 15:40:38 -0800 (PST)
+        Fri, 16 Dec 2022 18:42:16 -0500
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7860E4D5DB
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 15:42:15 -0800 (PST)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 5AB513F360;
+        Sat, 17 Dec 2022 00:42:13 +0100 (CET)
+Date:   Sat, 17 Dec 2022 00:42:12 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Robert Marko <robimarko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thermal: qcom-spmi-adc5: Suppress probe-deferral error
+ message
+Message-ID: <20221216234212.5rm3uwzci2zjq67d@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Robert Marko <robimarko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221216190945.902754-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
-References: <20221207154939.2532830-1-jeffxu@google.com> <20221207154939.2532830-4-jeffxu@google.com>
- <202212080821.5AE7EE99@keescook> <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
- <Y5yS8wCnuYGLHMj4@x1n> <CALmYWFsDhX76zbcyhYAW-u0BBwD+m+TKpt4_pZTMt+22zHhrGQ@mail.gmail.com>
- <20221216094259.bec91e4abd6cf54a05ce2813@linux-foundation.org>
- <CALmYWFsNp87a5uVQUAb4PG0khFN8Xxd=ibh9Q7g-Y0XW1Mn-8Q@mail.gmail.com>
- <202212161233.85C9783FB@keescook> <CALmYWFuENPRvCAOF6of=Ufct5jjAbJ=iDyH7eODhdbm24uAK3Q@mail.gmail.com>
- <20221216140641.bf6e47b7c4f5a53f34c8cf9a@linux-foundation.org>
-In-Reply-To: <20221216140641.bf6e47b7c4f5a53f34c8cf9a@linux-foundation.org>
-From:   Jeff Xu <jeffxu@google.com>
-Date:   Fri, 16 Dec 2022 15:40:00 -0800
-Message-ID: <CALmYWFuqAruM=Brh_54hWL+HiKD+RABK4y+hzd4phOzOZ_0=CA@mail.gmail.com>
-Subject: Re: [PATCH v6 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, Peter Xu <peterx@redhat.com>,
-        jeffxu@chromium.org, skhan@linuxfoundation.org,
-        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, linux-hardening@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221216190945.902754-1-marijn.suijten@somainline.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 2:06 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Fri, 16 Dec 2022 13:46:58 -0800 Jeff Xu <jeffxu@google.com> wrote:
->
-> > On Fri, Dec 16, 2022 at 12:35 PM Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > On Fri, Dec 16, 2022 at 10:11:44AM -0800, Jeff Xu wrote:
-> > > > Once per boot seems too little, it would be nice if we can list all processes.
-> > > > I agree ratelimited might be too much.
-> > > > There is a feature gap here for logging.
-> > > >
-> > > > Kees, what do you think ?
-> > >
-> > > I agree once per boot is kind of frustrating "I fixed the one warning,
-> > > oh, now it's coming from a different process". But ratelimit is, in
-> > > retrospect, still too often.
-> > >
-> > > Let's go with per boot -- this should be noisy "enough" to get the
-> > > changes in API into the callers without being too much of a hassle.
-> > >
-> > Agreed.  Let's go with per boot.
-> >
-> > Hi Andrew, what is your preference ? I can send a patch  or you
-> > directly fix it in mm-unstable ?
->
-> Like this?
->
-Yes. Thanks!
+Whoops, that tile must of course have started with:
 
-> --- a/mm/memfd.c~mm-memfd-add-mfd_noexec_seal-and-mfd_exec-fix-3
-> +++ a/mm/memfd.c
-> @@ -308,7 +308,7 @@ SYSCALL_DEFINE2(memfd_create,
->                         flags |= MFD_NOEXEC_SEAL;
->                         break;
->                 default:
-> -                       pr_warn_ratelimited(
-> +                       pr_warn_once(
->                                 "memfd_create(): MFD_NOEXEC_SEAL is enforced, pid=%d '%s'\n",
->                                 task_pid_nr(current), get_task_comm(comm, current));
->                         return -EINVAL;
-> @@ -316,7 +316,7 @@ SYSCALL_DEFINE2(memfd_create,
->  #else
->                 flags |= MFD_EXEC;
->  #endif
-> -               pr_warn_ratelimited(
-> +               pr_warn_once(
->                         "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=%d '%s'\n",
->                         task_pid_nr(current), get_task_comm(comm, current));
->         }
-> _
->
+    iio: adc: qcom-spmi-adc5:
+
+instead of blindly copying the suffix from the thermal monitor patch
+(this driver is not a thermal monitor...).  I'll send a v2 if there are
+no other objections, unless this can be fixed up when the patch is
+applied.
+
+On 2022-12-16 20:09:45, Marijn Suijten wrote:
+> Much like 807efb7102e8 ("thermal: qcom-spmi-adc-tm5: suppress
+> probe-deferral error message") the ADC5 driver also spams a similar
+> probe-deferral error on startup when a channel is not yet available:
+> 
+>     [    0.343136] qcom-spmi-adc-tm5 1c40000.spmi:pmic@0:adc-tm@3500: get dt data failed: -517
+> 
+> Suppress it by using dev_err_probe instead, which also takes care of
+> storing the message as reason for deferring.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>  drivers/iio/adc/qcom-spmi-adc5.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/qcom-spmi-adc5.c b/drivers/iio/adc/qcom-spmi-adc5.c
+> index 821fee60a765..69cc36004b5a 100644
+> --- a/drivers/iio/adc/qcom-spmi-adc5.c
+> +++ b/drivers/iio/adc/qcom-spmi-adc5.c
+> @@ -894,10 +894,8 @@ static int adc5_probe(struct platform_device *pdev)
+>  	mutex_init(&adc->lock);
+>  
+>  	ret = adc5_get_fw_data(adc);
+> -	if (ret) {
+> -		dev_err(dev, "adc get dt data failed\n");
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "adc get dt data failed\n");
+>  
+>  	irq_eoc = platform_get_irq(pdev, 0);
+>  	if (irq_eoc < 0) {
+> -- 
+> 2.39.0
+> 
+
+Apologies for the clumsiness.
+
+- Marijn
