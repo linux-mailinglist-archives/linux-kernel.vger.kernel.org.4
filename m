@@ -2,246 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C9464EAE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 205E564EAF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Dec 2022 12:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbiLPLwZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Dec 2022 06:52:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
+        id S230509AbiLPLx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 06:53:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiLPLwW (ORCPT
+        with ESMTP id S230287AbiLPLxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 06:52:22 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C1D22B604;
-        Fri, 16 Dec 2022 03:52:21 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 786E01042;
-        Fri, 16 Dec 2022 03:53:01 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 741E13F73B;
-        Fri, 16 Dec 2022 03:52:18 -0800 (PST)
-Date:   Fri, 16 Dec 2022 11:52:14 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Martin Botka <martin.botka@somainline.org>
-Cc:     martin.botka1@gmail.com,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Jan Trmal <jtrmal@gmail.com>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
-        Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>,
-        linux-sunxi <linux-sunxi@lists.linux.dev>
-Subject: Re: [PATCH v5 3/3] regulator: axp20x: Add support for AXP1530
- variant
-Message-ID: <20221216115214.1be53742@donnerap.cambridge.arm.com>
-In-Reply-To: <F47BD077-BB4B-4866-B5E7-445D6CCE4FCE@somainline.org>
-References: <20221214190305.3354669-1-martin.botka@somainline.org>
-        <20221214190305.3354669-4-martin.botka@somainline.org>
-        <20221215231615.6a4fa710@slackpad.lan>
-        <F47BD077-BB4B-4866-B5E7-445D6CCE4FCE@somainline.org>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        Fri, 16 Dec 2022 06:53:18 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4228C3054C;
+        Fri, 16 Dec 2022 03:53:17 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id m5-20020a7bca45000000b003d2fbab35c6so1555915wml.4;
+        Fri, 16 Dec 2022 03:53:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=13Vm0Lo332lPPEsaCgPFzelDF94GXJZ/U5/noq/R55w=;
+        b=m+6cs8UgDkgrBh11MngOAu6i4Zg6gyR10RxWXvHqf9GwlYCVctTfJHXDFmc2AKCLNX
+         wWoU6Xixz7e/eZTf5rKFD8YlcDnjwg9BPwUPfV5g57+6MGXL+91OhowWpKSYMXHetrTy
+         AVu6hA0h4jIwWetkwP1bCGUup6ZIwBeq93USUDy9jz2S/yM+lrAcEpEOmHMCBCuCfxFi
+         npWQbhxSvU/MVCPYbpuUoFAeMLeYjIr7y7nIl7T/hfZTGTPNguok1+BX2EWlexJoXhnh
+         154FLq2azM0avyQ5HBQ+Qylkx1yybgYNgjMsf0KTCt+oJR0WQtSg+bj9pr4u7/UyLVKB
+         jjfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=13Vm0Lo332lPPEsaCgPFzelDF94GXJZ/U5/noq/R55w=;
+        b=Cl8gTjOz84foRecWZDE7T4/0Qm4GSxUoKAOwJqbfxzLjiS+tGOqh3YWDwVmrEA2yM9
+         2KM3NDuPOxmmpClNwZp9TnQOgOym1m9GsvJaWHBTEfuSVDQDfm0Ps9ua2fWQWbsEuW/S
+         kHmNxGjd7ANqIF0o0KOadOk+pci9pjWDYF5aWPiRrlOoPEdAXHa/lFrOqW1hIbiwF2Ci
+         A0q509NK1b8esqCIuYXFN43m5fevBfWyy3GMPdKy3dvddhcU374rbFrYQUU82d1s2a4j
+         o6SoCz48SLmRAo/ReFAqqXmpC7KBWLuRkZiFoho3H93H08I+s8uhZ7Tf8cm+51DZOd9x
+         Sw9A==
+X-Gm-Message-State: ANoB5pkLoKbYEp5VVLUHVoFhecvgLSAqcrmmPWo6cOcjrmQ9VT4YDHUh
+        klL1OHJk9qvgOWlRgN0AwCA=
+X-Google-Smtp-Source: AA0mqf5bZXdv96QOcJhiW7IsKGleAkHdIQijkx4qy+QU0fcKKDKeNqxRLGjMQy21S+2Q0rZzIzjBfw==
+X-Received: by 2002:a05:600c:3d8f:b0:3cf:d70d:d5a8 with SMTP id bi15-20020a05600c3d8f00b003cfd70dd5a8mr24051092wmb.6.1671191595799;
+        Fri, 16 Dec 2022 03:53:15 -0800 (PST)
+Received: from [192.168.1.132] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id ay9-20020a5d6f09000000b002425504ae7dsm2071582wrb.80.2022.12.16.03.53.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 03:53:14 -0800 (PST)
+Message-ID: <06e969b5-3be2-4b23-de5a-93aa9ae6d95c@gmail.com>
+Date:   Fri, 16 Dec 2022 12:53:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 0/5] Add CPU caches information for some MediaTek SoCs
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        nfraprado@collabora.com, kernel@collabora.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221206112330.78431-1-angelogioacchino.delregno@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221206112330.78431-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Dec 2022 06:26:38 +0100
-Martin Botka <martin.botka@somainline.org> wrote:
 
-Hi Martin,
 
-> On December 16, 2022 12:16:15 AM GMT+01:00, Andre Przywara <andre.przywara@arm.com> wrote:
-> >On Wed, 14 Dec 2022 20:03:05 +0100
-> >Martin Botka <martin.botka@somainline.org> wrote:
-> >
-> >Hi Martin,
-> >  
-> >> AXP1530 has a few regulators that are controlled via I2C Bus.
-> >> 
-> >> Add support for them.  
-> >
-> >thanks for putting this together!
-> >After coming up with a very similar patch based on the AXP313A313
-> >datasheet, I realised that those two must indeed be *somewhat*
-> >compatible, so I am going to compare my patch with yours ;-)
-> >  
-> Hello Andre,
-> Thanks so much for looking at this.
-> >> 
-> >> Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> >> ---
-> >>  drivers/regulator/axp20x-regulator.c | 44 ++++++++++++++++++++++++++++
-> >>  1 file changed, 44 insertions(+)
-> >> 
-> >> diff --git a/drivers/regulator/axp20x-regulator.c b/drivers/regulator/axp20x-regulator.c
-> >> index d260c442b788..9420839ff4f9 100644
-> >> --- a/drivers/regulator/axp20x-regulator.c
-> >> +++ b/drivers/regulator/axp20x-regulator.c
-> >> @@ -1001,6 +1001,40 @@ static const struct regulator_desc axp813_regulators[] = {
-> >>  		    AXP22X_PWR_OUT_CTRL2, AXP22X_PWR_OUT_DC1SW_MASK),
-> >>  };
-> >>  
-> >> +static const struct linear_range axp1530_dcdc1_ranges[] = {
-> >> +	REGULATOR_LINEAR_RANGE(500000, 0x0, 0x46, 10000),  
-> >
-> >The AXP313A manual mentions "steps", in decimal
-> >(0.5~1.2V，10mV/step，71steps), so I wonder if we should follow suit
-> >here and describe the min_sel and max_sel members in decimal?
-> >  
-> Ack. We definitely can :)
-> >> +	REGULATOR_LINEAR_RANGE(1220000, 0x47, 0x57, 20000),
-> >> +	REGULATOR_LINEAR_RANGE(1600000, 0x58, 0x6A, 100000),
-> >> +};
-> >> +
-> >> +static const struct linear_range axp1530_dcdc2_ranges[] = {
-> >> +	REGULATOR_LINEAR_RANGE(500000, 0x0, 0x46, 10000),
-> >> +	REGULATOR_LINEAR_RANGE(1220000, 0x47, 0x57, 20000),
-> >> +};  
-> >
-> >The values up till here match exactly what I extracted from the AXP313A
-> >manual.
-> >  
-> >> +
-> >> +static const struct linear_range axp1530_dcdc3_ranges[] = {
-> >> +	REGULATOR_LINEAR_RANGE(500000, 0x0, 0x46, 10000),
-> >> +	REGULATOR_LINEAR_RANGE(1220000, 0x47, 0x66, 20000),
-> >> +};  
-> >
-> >Can you double check that those are the values for DCDC3?
-> >The AXP313A manual uses different ranges, essentially:
-> >    REGULATOR_LINEAR_RANGE(800000, 0, 32, 10000),
-> >    REGULATOR_LINEAR_RANGE(1140000, 33, 68, 20000),
-> >So starting from 800mV, and using a slightly different split point.
-> >
-> >I would just hope that's this doesn't turn out to be an incompatible register.
-> >  
-> Interesting. The unfortunate thing with 1530 is that i could not find any datasheet referencing it. The actual PMIC that is on the device i have here is 313A. Do i think it would be best if i rename this driver to 313A and follow the 313A datasheet which is public.
+On 06/12/2022 12:23, AngeloGioacchino Del Regno wrote:
+> In devicetrees for MediaTek SoCs the CPU caches information, if
+> present, is incomplete as it misses cache size, cache line size
+> and number of cache sets which, in turn, will also prevent any
+> cache associativity calculation.
+> 
+> For all of the SoCs that I know and/or I have information for,
+> I've added the right information for I/D, L2 and L3 where present.
+> This will also make the cacheinfo driver to correctly export the
+> CPU cache information to sysfs.
+> 
 
-So where does the 1530 name and the other bits come from? Was there some
-statement somewhere that AXP1530 is the canonical chip, and the 313A is
-just a variant? Or are there devices using this chip, and you just happen
-to not have them, but a "compatible enough" 313A instead?
+Whole series applied, thanks!
 
-> This was already proposed in one of my device tree series.
-> What do you think of this idea Andre ?
-
-In general, I think it's too dangerous to develop against something you
-cannot test against. So I would always call this driver after the chip I
-have access to, especially if there is also a datasheet for it.
-If someone later finds the AXP1530 to be compatible, they can always use:
-	compatible = "x-powers,axp1530", "x-powers,axp313a";
-Or later on add explicit support for that chip if it turns out to be not
-fully compatible.
-
-The only reason to not do it this way around would be if one was a strict
-subset of the other. So if the 313A is the 1530 plus RTCLDO, for instance,
-it would make sense to reflect that in the compatible strings (by swapping
-them in the above example).
-But then again there is really no legacy here, so we could just upstream
-support for both variants in one go, using separate compatible strings,
-and let them just share some data structures internally. That is probably
-cleaner, and if both are going it at the same time, there is no downside,
-really.
-
-> >> +static const struct regulator_desc axp1530_regulators[] = {
-> >> +	AXP_DESC_RANGES(AXP1530, DCDC1, "dcdc1", "vin1", axp1530_dcdc1_ranges,
-> >> +					0x6B, AXP1530_DCDC1_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,  
-> >
-> >Again I would code the steps in decimal. The other regulators use a
-> >preprocessor constant, which helps the reader to get its meaning.
-> >And please use at least GENMASK(6, 0) instead of 0x7f, or #define this
-> >(can be shared for all DCDCs and the LDOs).
-> >  
-> Ack. Will use GENMASK.
-> >> +					BIT(0)),
-> >> +	AXP_DESC_RANGES(AXP1530, DCDC2, "dcdc2", "vin2", axp1530_dcdc2_ranges,
-> >> +					0x58, AXP1530_DCDC2_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
-> >> +					BIT(1)),
-> >> +	AXP_DESC_RANGES(AXP1530, DCDC3, "dcdc3", "vin3", axp1530_dcdc3_ranges,
-> >> +					0x58, AXP1530_DCDC3_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
-> >> +					BIT(2)),
-> >> +	AXP_DESC(AXP1530, LDO1, "ldo1", "ldo1in", 500, 3500, 100,
-> >> +					AXP1530_ALDO1_CONRTOL, 0x1f, AXP1530_OUTPUT_CONTROL,
-> >> +					BIT(3)),
-> >> +	AXP_DESC(AXP1530, LDO2, "ldo2", "ldo2in", 500, 3500, 100,
-> >> +					AXP1530_DLDO1_CONRTOL, 0x1f, AXP1530_OUTPUT_CONTROL,
-> >> +					BIT(4)),  
-> >
-> >Does this miss the fixed RTC-LDO? Or does the AXP1530 not have that?
-> >        AXP_DESC_FIXED(AXP313, RTC_LDO, "rtc-ldo", "ips", 1800),
-> >The AXP313A manual mentions that the voltage is customisable, either
-> >1.8V or 3.3V. I don't know how to model that, exactly. Should this be a
-> >DT property, then? Or do we fix it to one voltage, covering the value
-> >that's used out there?
-> >  
-> This is what always struck me as weird. This driver is based upon downstream version it indeed does miss the rtc-ldo.
-
-Well, in my experience downstream (BSP) drivers cannot be really trusted
-in this regard.
-So they could just papered over it by modelling this as a separate
-"regulator-fixed"? Or maybe this was their solution for the "customise"
-problem? So instead of having this as part of the AXP, they just put a
-per-board fixed regulator in and set the voltage there?
-
-Cheers,
-Andre
-
-> Afaik this may be the only difference between 1530 and 313 (other then what you pointed out the dcdc3 registers)
-> >> +};
-> >> +
-> >>  static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
-> >>  {
-> >>  	struct axp20x_dev *axp20x = dev_get_drvdata(pdev->dev.parent);
-> >> @@ -1040,6 +1074,12 @@ static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
-> >>  		def = 3000;
-> >>  		step = 150;
-> >>  		break;
-> >> +	case AXP1530_ID:
-> >> +		/*
-> >> +		 * Do not set the DCDC frequency on AXP1530  
-> >
-> >This should say that the frequency is fixed and cannot be programmed.
-> >I also added a warning if the frequency is not 3 MHz.
-> >Either this, or we make the "x-powers,dcdc-freq" DT property optional.
-> >  
-> Ack. Will reword and add warning.
-> >Cheers,
-> >Andre
-> >  
-> Cheers,
-> Martin
-> >> +		 */
-> >> +		return 0;
-> >> +		break;
-> >>  	default:
-> >>  		dev_err(&pdev->dev,
-> >>  			"Setting DCDC frequency for unsupported AXP variant\n");
-> >> @@ -1220,6 +1260,10 @@ static int axp20x_regulator_probe(struct platform_device *pdev)
-> >>  	bool drivevbus = false;
-> >>  
-> >>  	switch (axp20x->variant) {
-> >> +	case AXP1530_ID:
-> >> +		regulators = axp1530_regulators;
-> >> +		nregulators = AXP1530_REG_ID_MAX;
-> >> +		break;
-> >>  	case AXP202_ID:
-> >>  	case AXP209_ID:
-> >>  		regulators = axp20x_regulators;  
-> >  
-
+> AngeloGioacchino Del Regno (5):
+>    arm64: dts: mt8195: Add complete CPU caches information
+>    arm64: dts: mt8192: Add complete CPU caches information
+>    arm64: dts: mt8186: Add complete CPU caches information
+>    arm64: dts: mt8183: Add complete CPU caches information
+>    arm64: dts: mt6795: Add complete CPU caches information
+> 
+>   arch/arm64/boot/dts/mediatek/mt6795.dtsi | 50 ++++++++++++++++
+>   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 74 ++++++++++++++++++++++++
+>   arch/arm64/boot/dts/mediatek/mt8186.dtsi | 58 +++++++++++++++++++
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 58 +++++++++++++++++++
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 58 +++++++++++++++++++
+>   5 files changed, 298 insertions(+)
+> 
