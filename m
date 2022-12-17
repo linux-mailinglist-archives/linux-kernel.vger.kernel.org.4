@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3F164FBD0
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 19:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F057164FBDE
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 19:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbiLQS4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 13:56:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S230297AbiLQS4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 13:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiLQSzg (ORCPT
+        with ESMTP id S230024AbiLQSzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 13:55:36 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7C910B7B;
-        Sat, 17 Dec 2022 10:55:35 -0800 (PST)
-Date:   Sat, 17 Dec 2022 18:55:30 -0000
+        Sat, 17 Dec 2022 13:55:38 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9AB10B74;
+        Sat, 17 Dec 2022 10:55:36 -0800 (PST)
+Date:   Sat, 17 Dec 2022 18:55:31 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1671303331;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=nt5Z13x7cPRUra6u/EdfRu87/NpycaDyh7wrSUQR9ck=;
-        b=G1G58/Gb5ndyH6ooxLbFLJ29hJyHGVkqlNF5UoKuCGT5brcQZi+ZV1m4jlDHfk8u4KQ5Mi
-        jYVnmlTH5U5VcZnPu7JbSUnmeGHMmOA43sPoGpMwzWdrVgkK8fhVbfCl+O29jqBXd1KtnX
-        sNDaDTg5V7bSB/aafQydz804ftw0v75hkZUSA/uL9nP8jJTkXOSvMOOnEt9X4L7ZJiw+ys
-        LhRkR4KHoCgmRSga9NEpxEYhv5lbpcjVYg/DQfm/Zuxs6i6aGQEzlxf5UMQVxISlXHoLRK
-        GMpURkDBBC+QQ77h8/jNJWcll9PwO7xGAjR6vQ1EDBFizDHbeC1WjqQpbJ103w==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xHpGwxUQkPt+O/DJTHMvCsB7Jq4sjGs1fkAvGvyj3es=;
+        b=j7VlJPif5oSl6HC/K0RLIn3d9bLD27jp3m3Q2t5r0fXZQbyDzBDNtxhCj7FQA1qfgCVnQe
+        NLLTEI7W3kKSxUT0Z8H54v6YdDTtSsbG60KVG+1W0oj01N2e314aWj9tgF/UXvVcFA61Of
+        WyOELtiUB0f2hiGT7WD4pintwC1ksElm0UvUNbeWIL0Usfdl79FNd/xqiOEV/yIkAoDsrX
+        VoLr4Xi4Kw+jyv/qVDvShfIU4//gPnUAdLBjR1QADZEqLp9EzLSTDPPHhJ8qCfq6h36rPn
+        dLP8F0y4mSyFP1P/fmZXQihBFUPKfQxpzqNvO7g4YrcwbQHRr7IGe/IVRLNFhQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1671303331;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=nt5Z13x7cPRUra6u/EdfRu87/NpycaDyh7wrSUQR9ck=;
-        b=cRUVvfO1HZ2uAoa2pDPSwPdMWrt4SEMgBjfs4F6hFNTu1OSrf8LGf+bw9h9NiX5W8IsN9I
-        yARtmsIK93SidfAA==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xHpGwxUQkPt+O/DJTHMvCsB7Jq4sjGs1fkAvGvyj3es=;
+        b=++oauI/vjD5HhCcozQswQY3375xy28qbOzvBC2ihkXjCG06gV4p1vvrKEzm6OlEsu4qlL7
+        bx+Ja/E5I+TgzwDQ==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm: Inhibit _PAGE_NX changes from cpa_process_alias()
-Cc:     kernel test robot <oliver.sang@intel.com>,
+Subject: [tip: x86/mm] mm: Convert __HAVE_ARCH_P..P_GET to the new style
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
+In-Reply-To: <Y2EUEBlQXNgaJgoI@hirez.programming.kicks-ass.net>
+References: <Y2EUEBlQXNgaJgoI@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Message-ID: <167130333070.4906.17678564285729472836.tip-bot2@tip-bot2>
+Message-ID: <167130333160.4906.12264497164941506856.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,100 +66,57 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     d597416683d587e940faa35945fba162329b5a71
-Gitweb:        https://git.kernel.org/tip/d597416683d587e940faa35945fba162329b5a71
+Commit-ID:     2dff2c359e829245bc3d80e42e296876d1f0cf8e
+Gitweb:        https://git.kernel.org/tip/2dff2c359e829245bc3d80e42e296876d1f0cf8e
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 10 Nov 2022 13:33:57 +01:00
+AuthorDate:    Tue, 01 Nov 2022 12:53:18 +01:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Thu, 15 Dec 2022 10:37:28 -08:00
+CommitterDate: Thu, 15 Dec 2022 10:37:27 -08:00
 
-x86/mm: Inhibit _PAGE_NX changes from cpa_process_alias()
+mm: Convert __HAVE_ARCH_P..P_GET to the new style
 
-There is a cludge in change_page_attr_set_clr() that inhibits
-propagating NX changes to the aliases (directmap and highmap) -- this
-is a cludge twofold:
+Since __HAVE_ARCH_* style guards have been depricated in favour of
+defining the function name onto itself, convert pxxp_get().
 
- - it also inhibits the primary checks in __change_page_attr();
- - it hard depends on single bit changes.
-
-The introduction of set_memory_rox() triggered this last issue for
-clearing both _PAGE_RW and _PAGE_NX.
-
-Explicitly ignore _PAGE_NX in cpa_process_alias() instead.
-
-Fixes: b38994948567 ("x86/mm: Implement native set_memory_rox()")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Debugged-by: Dave Hansen <dave.hansen@intel.com>
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20221110125544.594991716%40infradead.org
+Link: https://lkml.kernel.org/r/Y2EUEBlQXNgaJgoI@hirez.programming.kicks-ass.net
 ---
- arch/x86/mm/pat/set_memory.c | 28 +++++++++++++++++++++++-----
- 1 file changed, 23 insertions(+), 5 deletions(-)
+ arch/powerpc/include/asm/nohash/32/pgtable.h | 2 +-
+ include/linux/pgtable.h                      | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 4943f6c..beef774 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -1669,6 +1669,12 @@ static int cpa_process_alias(struct cpa_data *cpa)
- 		alias_cpa.flags &= ~(CPA_PAGES_ARRAY | CPA_ARRAY);
- 		alias_cpa.curpage = 0;
+diff --git a/arch/powerpc/include/asm/nohash/32/pgtable.h b/arch/powerpc/include/asm/nohash/32/pgtable.h
+index 0d40b33..cb1ac02 100644
+--- a/arch/powerpc/include/asm/nohash/32/pgtable.h
++++ b/arch/powerpc/include/asm/nohash/32/pgtable.h
+@@ -263,7 +263,7 @@ static inline pte_basic_t pte_update(struct mm_struct *mm, unsigned long addr, p
+ }
  
-+		/* Directmap always has NX set, do not modify. */
-+		if (__supported_pte_mask & _PAGE_NX) {
-+			alias_cpa.mask_clr.pgprot &= ~_PAGE_NX;
-+			alias_cpa.mask_set.pgprot &= ~_PAGE_NX;
-+		}
-+
- 		cpa->force_flush_all = 1;
- 
- 		ret = __change_page_attr_set_clr(&alias_cpa, 0);
-@@ -1691,6 +1697,15 @@ static int cpa_process_alias(struct cpa_data *cpa)
- 		alias_cpa.flags &= ~(CPA_PAGES_ARRAY | CPA_ARRAY);
- 		alias_cpa.curpage = 0;
- 
-+		/*
-+		 * [_text, _brk_end) also covers data, do not modify NX except
-+		 * in cases where the highmap is the primary target.
-+		 */
-+		if (__supported_pte_mask & _PAGE_NX) {
-+			alias_cpa.mask_clr.pgprot &= ~_PAGE_NX;
-+			alias_cpa.mask_set.pgprot &= ~_PAGE_NX;
-+		}
-+
- 		cpa->force_flush_all = 1;
- 		/*
- 		 * The high mapping range is imprecise, so ignore the
-@@ -1709,6 +1724,12 @@ static int __change_page_attr_set_clr(struct cpa_data *cpa, int checkalias)
- 	unsigned long rempages = numpages;
- 	int ret = 0;
- 
-+	/*
-+	 * No changes, easy!
-+	 */
-+	if (!(pgprot_val(cpa->mask_set) | pgprot_val(cpa->mask_clr)))
-+		return ret;
-+
- 	while (rempages) {
- 		/*
- 		 * Store the remaining nr of pages for the large page
-@@ -1755,7 +1776,7 @@ static int change_page_attr_set_clr(unsigned long *addr, int numpages,
- 				    struct page **pages)
+ #ifdef CONFIG_PPC_16K_PAGES
+-#define __HAVE_ARCH_PTEP_GET
++#define ptep_get ptep_get
+ static inline pte_t ptep_get(pte_t *ptep)
  {
- 	struct cpa_data cpa;
--	int ret, cache, checkalias;
-+	int ret, cache;
+ 	pte_basic_t val = READ_ONCE(ptep->pte);
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index 2334852..70e2a7e 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -291,14 +291,14 @@ static inline void ptep_clear(struct mm_struct *mm, unsigned long addr,
+ 	ptep_get_and_clear(mm, addr, ptep);
+ }
  
- 	memset(&cpa, 0, sizeof(cpa));
+-#ifndef __HAVE_ARCH_PTEP_GET
++#ifndef ptep_get
+ static inline pte_t ptep_get(pte_t *ptep)
+ {
+ 	return READ_ONCE(*ptep);
+ }
+ #endif
  
-@@ -1805,10 +1826,7 @@ static int change_page_attr_set_clr(unsigned long *addr, int numpages,
- 	cpa.curpage = 0;
- 	cpa.force_split = force_split;
- 
--	/* No alias checking for _NX bit modifications */
--	checkalias = (pgprot_val(mask_set) | pgprot_val(mask_clr)) != _PAGE_NX;
--
--	ret = __change_page_attr_set_clr(&cpa, checkalias);
-+	ret = __change_page_attr_set_clr(&cpa, 1);
- 
- 	/*
- 	 * Check whether we really changed something:
+-#ifndef __HAVE_ARCH_PMDP_GET
++#ifndef pmdp_get
+ static inline pmd_t pmdp_get(pmd_t *pmdp)
+ {
+ 	return READ_ONCE(*pmdp);
