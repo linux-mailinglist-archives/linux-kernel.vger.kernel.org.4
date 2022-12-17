@@ -2,256 +2,431 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9D364FB69
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 18:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9E964FB72
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 18:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbiLQRuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 12:50:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
+        id S229547AbiLQR4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 12:56:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiLQRuq (ORCPT
+        with ESMTP id S229504AbiLQR4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 12:50:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A512DCE;
-        Sat, 17 Dec 2022 09:50:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74F1AB803F3;
-        Sat, 17 Dec 2022 17:50:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83D07C433EF;
-        Sat, 17 Dec 2022 17:50:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671299442;
-        bh=V5/tPOA23XGLvHxP7Wp2/GHmPh9tPgDd/LiGvXHHJOk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QMp+CVa1qh3/ltOTFGssk2SFTaBO5+XqoeJfLnltEJzc4Y3lnuxIuzDfMjBbO0WPo
-         nNncCVEE+vll5OUAADrhUOYf78L+/jE800U5ipsMjRjh5X+kUeuaBHeYBDxLacdPIH
-         5K1fv8vLFGiSJXgBv6unixc4SZJGGfDUCVP6+s71nN+r9AXRVACgfY196ogbbjCEtX
-         mMERdU62sp/TT88tuG51AyJKpOdm62+ht2Gr4csd6Uiar7ZF9ZBBbFGS8EPljZuDey
-         C75mRvuZm2uY0kUmjW9GpxObYmqwCA++4kIXCylts+M/Csq9I03An6M5gh5s1ttWbO
-         lecWk1rHgrIgg==
-Date:   Sat, 17 Dec 2022 17:50:38 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Sat, 17 Dec 2022 12:56:42 -0500
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA05A12A98;
+        Sat, 17 Dec 2022 09:56:40 -0800 (PST)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4NZDDl6jLQzDqgj;
+        Sat, 17 Dec 2022 17:56:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1671299800; bh=rgVvW+QSVBgX3nDCbaWA1aBTc5DpyYA+GfFdLOSQ09g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Mpzm1QBZs+HUu9ApIbPJ/eyypTLRs2EsSt2rCwIkW5xpMlg3xtEQ/EajewdI6J15C
+         5fa+OMMcqSiFAzPEKLA725D75dP1LakbXrEc99ysupOxPXUg+AiwOpgfesnOddvhNX
+         TxBi/Xb0mfes+JGkq7+HdNjSgyfL7yw79F+H0dws=
+X-Riseup-User-ID: 31A5AF4E0E9AD3A9049DA48DA65AF0F5EEE9BABFC61F39D0B165D21C3D4BBF8D
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4NZDDh6KZhz5vbr;
+        Sat, 17 Dec 2022 17:56:36 +0000 (UTC)
+From:   Dang Huynh <danct12@riseup.net>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Iskren Chernev <me@iskren.info>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: gpio-fan: convert to YAML
-Message-ID: <Y54BbjoRm5z2Tlp8@spud>
-References: <20220126200350.3633576-1-clabbe@baylibre.com>
+Subject: Re: [PATCH 5/5] arm64: dts: qcom: Add Lenovo Tab P11 (J606F/XiaoXin Pad) dts
+Date:   Sun, 18 Dec 2022 00:56:25 +0700
+Message-ID: <6898596.lOV4Wx5bFT@melttower>
+In-Reply-To: <20221208201401.530555-5-konrad.dybcio@linaro.org>
+References: <20221208201401.530555-1-konrad.dybcio@linaro.org>
+ <20221208201401.530555-5-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="J9cZgbLLDluj0yxy"
-Content-Disposition: inline
-In-Reply-To: <20220126200350.3633576-1-clabbe@baylibre.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---J9cZgbLLDluj0yxy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jan 26, 2022 at 08:03:50PM +0000, Corentin Labbe wrote:
-> Converts hwmon/gpio-fan.txt to YAML
->=20
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> Add an initial device tree for the Lenovo Tab P11. Currently it
+> enables:
+> 
+> - simplefb
+> - SD Card slot via SDHCI2
+> - gpio-keys & PON keys
+> - UFS
+> - RPM regulators
+> - USB2
+> 
+> This has been validated with a rev (62) device. You can check yours
+> next to the serial no. on the sticker in the lower portion of the
+> back side of your tablet.
+> 
+> To get a successful boot run:
+> 
+> cat arch/arm64/boot/Image.gz arch/arm64/boot/dts/qcom/\
+> sm6115p-lenovo-j606f.dtb > .Image.gz-dtb
+> 
+> ~/mkbootimg/mkbootimg.py \
+> --kernel .Image.gz-dtb \
+> --ramdisk some/initrd.img \
+> --pagesize 4096 \
+> --base 0x0 \
+> --kernel_offset 0x8000 \
+> --ramdisk_offset 0x1000000 \
+> --tags_offset 0x100 \
+> --cmdline 'SOME_CMDLINE' \
+> --dtb_offset 0x1f00000 \
+> --header_version 1 \
+> --os_version 11 \
+> --os_patch_level 2022-11 \
+> -o j606f.img
+> 
+> fastboot flash boot j606f.img
+> fastboot flash dtbo empty.img
+> fastboot flash recovery empty.img
+> fastboot reboot
+> 
+> Where empty.img is 2 zero-bytes.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->=20
-> I didnt found any clear maintainer and since DT yaml mandates a
-> maintainer section, I set devicetree@vger.kernel.org.
-
-Hey Corentin,
-Looks like there were only some minor comments from Rob on this patch,
-but I do not see a v2 on lore. Just never get around to sending a v2, or
-did it fall through the cracks?
-Thanks,
-Conor.
-
->=20
->  .../devicetree/bindings/hwmon/gpio-fan.txt    | 41 --------
->  .../devicetree/bindings/hwmon/gpio-fan.yaml   | 96 +++++++++++++++++++
->  2 files changed, 96 insertions(+), 41 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.txt
->  create mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt b/Docum=
-entation/devicetree/bindings/hwmon/gpio-fan.txt
-> deleted file mode 100644
-> index f4cfa350f6a1..000000000000
-> --- a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
-> +++ /dev/null
-> @@ -1,41 +0,0 @@
-> -Bindings for fan connected to GPIO lines
-> -
-> -Required properties:
-> -- compatible : "gpio-fan"
-> -
-> -Optional properties:
-> -- gpios: Specifies the pins that map to bits in the control value,
-> -  ordered MSB-->LSB.
-> -- gpio-fan,speed-map: A mapping of possible fan RPM speeds and the
-> -  control value that should be set to achieve them. This array
-> -  must have the RPM values in ascending order.
-> -- alarm-gpios: This pin going active indicates something is wrong with
-> -  the fan, and a udev event will be fired.
-> -- #cooling-cells: If used as a cooling device, must be <2>
-> -  Also see:
-> -  Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
-> -  min and max states are derived from the speed-map of the fan.
-> -
-> -Note: At least one the "gpios" or "alarm-gpios" properties must be set.
-> -
-> -Examples:
-> -
-> -	gpio_fan {
-> -		compatible =3D "gpio-fan";
-> -		gpios =3D <&gpio1 14 1
-> -			 &gpio1 13 1>;
-> -		gpio-fan,speed-map =3D <0    0
-> -				      3000 1
-> -				      6000 2>;
-> -		alarm-gpios =3D <&gpio1 15 1>;
-> -	};
-> -	gpio_fan_cool: gpio_fan {
-> -		compatible =3D "gpio-fan";
-> -		gpios =3D <&gpio2 14 1
-> -			 &gpio2 13 1>;
-> -		gpio-fan,speed-map =3D	<0    0>,
-> -					<3000 1>,
-> -					<6000 2>;
-> -		alarm-gpios =3D <&gpio2 15 1>;
-> -		#cooling-cells =3D <2>; /* min followed by max */
-> -	};
-> diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml b/Docu=
-mentation/devicetree/bindings/hwmon/gpio-fan.yaml
-> new file mode 100644
-> index 000000000000..15bb5efd3cb4
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  .../boot/dts/qcom/sm6115p-lenovo-j606f.dts    | 290 ++++++++++++++++++
+>  2 files changed, 291 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile
+> b/arch/arm64/boot/dts/qcom/Makefile index 3e79496292e7..5d281436172d 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -156,6 +156,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-shift-axolotl.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-lenovo-yoga-c630.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-samsung-w737.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sm4250-oneplus-billie2.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= sm6115p-lenovo-j606f.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-sony-xperia-seine-pdx201.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sm6350-sony-xperia-lena-pdx213.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sm6375-sony-xperia-murray-pdx225.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
+> b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts new file mode 100644
+> index 000000000000..102730dd49a7
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
-> @@ -0,0 +1,96 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/gpio-fan.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +++ b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
+> @@ -0,0 +1,290 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+> +/*
+> + * Copyright (c) 2022 Linaro Limited
+> + */
 > +
-> +title: Bindings for fan connected to GPIO lines
+> +/dts-v1/;
 > +
-> +maintainers:
-> +  - OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS <devicetree@vger.ke=
-rnel.org>
+> +#include "sm6115.dtsi"
+> +#include "pm6125.dtsi"
 > +
-> +properties:
-> +  compatible:
-> +    const: gpio-fan
+> +/ {
+> +	model = "Lenovo Tab P11";
+> +	compatible = "lenovo,j606f", "qcom,sm6115p", "qcom,sm6115";
+> +	chassis-type = "tablet";
 > +
-> +  gpios:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: Specifies the pins that map to bits in the control valu=
-e,
-> +      ordered MSB-->LSB.
+> +	/* required for bootloader to select correct board */
+> +	qcom,msm-id = <445 0x10000>, <420 0x10000>;
+> +	qcom,board-id = <34 3>;
 > +
-> +  gpio-fan,speed-map:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> +    description: A mapping of possible fan RPM speeds and the
-> +      control value that should be set to achieve them. This array
-> +      must have the RPM values in ascending order.
+> +	aliases {
+> +		mmc0 = &sdhc_2;
+> +	};
 > +
-> +  alarm-gpios:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: This pin going active indicates something is wrong with
-> +      the fan, and a udev event will be fired.
+> +	chosen {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
 > +
-> +  "#cooling-cells":
-> +    const: 2
-> +    description: If used as a cooling device, must be <2>
-> +      Also see Documentation/devicetree/bindings/thermal/thermal-cooling=
--devices.yaml
-> +      min and max states are derived from the speed-map of the fan.
+> +		framebuffer0: framebuffer@5c000000 {
+> +			compatible = "simple-framebuffer";
+> +			reg = <0 0x5c000000 0 (2000 * 1200 * 4)>;
+> +			width = <1200>;
+> +			height = <2000>;
+> +			stride = <(1200 * 4)>;
+> +			format = "a8r8g8b8";
+> +			clocks = <&gcc GCC_DISP_HF_AXI_CLK>;
+> +		};
+> +	};
 > +
-> +anyOf:
-> +  - required:
-> +      - gpios
-> +  - required:
-> +      - alarm-gpios
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +		label = "gpio-keys";
+Why is this needed? I had to make a patch to remove this label from many 
+device trees a few months ago and I haven't had any issue with it.
 > +
-> +additionalProperties: False
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&vol_up_n>;
 > +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/cortina,gemini-clock.h>
-> +    #include <dt-bindings/reset/cortina,gemini-reset.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    gpio1: gpio@4d000000 {
-> +      compatible =3D "cortina,gemini-gpio", "faraday,ftgpio010";
-> +      reg =3D <0x4d000000 0x100>;
-> +      interrupts =3D <22 IRQ_TYPE_LEVEL_HIGH>;
-> +      resets =3D <&syscon GEMINI_RESET_GPIO0>;
-> +      clocks =3D <&syscon GEMINI_CLK_APB>;
-> +      gpio-controller;
-> +      #gpio-cells =3D <2>;
-> +      interrupt-controller;
-> +      #interrupt-cells =3D <2>;
-> +    };
-> +    gpio_fan {
-> +      compatible =3D "gpio-fan";
-> +        gpios =3D <&gpio1 8 GPIO_ACTIVE_HIGH>;
-> +        gpio-fan,speed-map =3D <0    0>,
-> +                             <3000 1>,
-> +                             <6000 2>;
-> +        alarm-gpios =3D <&gpio1 15 GPIO_ACTIVE_HIGH>;
-> +    };
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/cortina,gemini-clock.h>
-> +    #include <dt-bindings/reset/cortina,gemini-reset.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    gpio2: gpio@4d000000 {
-> +      compatible =3D "cortina,gemini-gpio", "faraday,ftgpio010";
-> +      reg =3D <0x4d000000 0x100>;
-> +      interrupts =3D <22 IRQ_TYPE_LEVEL_HIGH>;
-> +      resets =3D <&syscon GEMINI_RESET_GPIO0>;
-> +      clocks =3D <&syscon GEMINI_CLK_APB>;
-> +      gpio-controller;
-> +      #gpio-cells =3D <2>;
-> +      interrupt-controller;
-> +      #interrupt-cells =3D <2>;
-> +    };
-> +    gpio_fan_cool: gpio_fan {
-> +      compatible =3D "gpio-fan";
-> +      gpios =3D <&gpio2 8 GPIO_ACTIVE_HIGH
-> +               &gpio2 1 GPIO_ACTIVE_HIGH>;
-> +      gpio-fan,speed-map =3D <0    0
-> +                           3000 1
-> +                           6000 2>;
-> +      alarm-gpios =3D <&gpio2 15 GPIO_ACTIVE_HIGH>;
-> +      #cooling-cells =3D <2>; /* min followed by max */
-> +    };
-> --=20
-> 2.34.1
->=20
->=20
+> +		key-volume-up {
+> +			label = "Volume Up";
+> +			linux,code = <KEY_VOLUMEUP>;
+> +			gpios = <&pm6125_gpio 5 GPIO_ACTIVE_LOW>;
+> +			debounce-interval = <15>;
+> +			linux,can-disable;
+> +			gpio-key,wakeup;
+> +		};
+> +	};
+> +};
+> +
+> +&dispcc {
+> +	/* HACK: disable until a panel driver is ready to retain simplefb 
+*/
+> +	status = "disabled";
+> +};
+> +
+> +&pm6125_gpio {
+> +	vol_up_n: vol-up-n-state {
+> +		pins = "gpio5";
+> +		function = "normal";
+> +		power-source = <0>;
+> +		bias-pull-up;
+> +		input-enable;
+> +	};
+> +};
+> +
+> +&pon_pwrkey {
+> +	status = "okay";
+> +};
+> +
+> +&pon_resin {
+> +	linux,code = <KEY_VOLUMEDOWN>;
+> +	status = "okay";
+> +};
+> +
+> +&rpm_requests {
+> +	regulators-0 {
+> +		compatible = "qcom,rpm-pm6125-regulators";
+> +
+> +		pm6125_s6: s6 {
+> +			regulator-min-microvolt = <304000>;
+> +			regulator-max-microvolt = <1456000>;
+> +		};
+> +
+> +		pm6125_s7: s7 {
+> +			regulator-min-microvolt = <1280000>;
+> +			regulator-max-microvolt = <2080000>;
+> +		};
+> +
+> +		pm6125_s8: s8 {
+> +			regulator-min-microvolt = <1064000>;
+> +			regulator-max-microvolt = <1304000>;
+> +		};
+> +
+> +		pm6125_l1: l1 {
+> +			regulator-min-microvolt = <952000>;
+> +			regulator-max-microvolt = <1152000>;
+> +		};
+> +
+> +		pm6125_l4: l4 {
+> +			regulator-min-microvolt = <488000>;
+> +			regulator-max-microvolt = <1000000>;
+> +		};
+> +
+> +		pm6125_l5: l5 {
+> +			regulator-min-microvolt = <1648000>;
+> +			/* 3.056V capped to 2.96V for SDHCI */
+> +			regulator-max-microvolt = <2960000>;
+> +			regulator-allow-set-load;
+> +			/* Broken hw, this one can't be turned off or 
+SDHCI will break! */
+> +			regulator-always-on;
+> +		};
+> +
+> +		pm6125_l6: l6 {
+> +			regulator-min-microvolt = <576000>;
+> +			regulator-max-microvolt = <656000>;
+> +		};
+> +
+> +		pm6125_l7: l7 {
+> +			/* 1.2V-1.304V fixed at 1.256V for SDHCI bias 
+*/
+> +			regulator-min-microvolt = <1256000>;
+> +			regulator-max-microvolt = <1256000>;
+> +			/*
+> +			 * TODO: SDHCI seems to also work with this 
+one turned off, however
+> +			 * there exists a possibility that it may 
+not work with some very
+> +			 * specific SDCard types, perhaps validating 
+this against a wide
+> +			 * range of models could rule that out, 
+saving some power would
+> +			 * certainly be nice..
+> +			 */
+> +			regulator-always-on;
+> +		};
+> +
+> +		pm6125_l8: l8 {
+> +			regulator-min-microvolt = <400000>;
+> +			regulator-max-microvolt = <728000>;
+> +		};
+> +
+> +		pm6125_l9: l9 {
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <2000000>;
+> +		};
+> +
+> +		pm6125_l10: l10 {
+> +			regulator-min-microvolt = <1704000>;
+> +			regulator-max-microvolt = <1904000>;
+> +		};
+> +
+> +		pm6125_l11: l11 {
+> +			regulator-min-microvolt = <1704000>;
+> +			regulator-max-microvolt = <1952000>;
+> +		};
+> +
+> +		pm6125_l12: l12 {
+> +			regulator-min-microvolt = <1624000>;
+> +			regulator-max-microvolt = <1984000>;
+> +		};
+> +
+> +		pm6125_l13: l13 {
+> +			regulator-min-microvolt = <1504000>;
+> +			regulator-max-microvolt = <1952000>;
+> +		};
+> +
+> +		pm6125_l14: l14 {
+> +			regulator-min-microvolt = <1704000>;
+> +			regulator-max-microvolt = <1904000>;
+> +		};
+> +
+> +		pm6125_l15: l15 {
+> +			regulator-min-microvolt = <2920000>;
+> +			regulator-max-microvolt = <3232000>;
+> +		};
+> +
+> +		pm6125_l16: l16 {
+> +			regulator-min-microvolt = <1704000>;
+> +			regulator-max-microvolt = <1904000>;
+> +		};
+> +
+> +		pm6125_l17: l17 {
+> +			regulator-min-microvolt = <1152000>;
+> +			regulator-max-microvolt = <1384000>;
+> +		};
+> +
+> +		pm6125_l18: l18 {
+> +			regulator-min-microvolt = <1104000>;
+> +			regulator-max-microvolt = <1312000>;
+> +		};
+> +
+> +		pm6125_l19: l19 {
+> +			regulator-min-microvolt = <1624000>;
+> +			regulator-max-microvolt = <3304000>;
+> +		};
+> +
+> +		pm6125_l20: l20 {
+> +			regulator-min-microvolt = <1624000>;
+> +			regulator-max-microvolt = <3304000>;
+> +		};
+> +
+> +		pm6125_l21: l21 {
+> +			regulator-min-microvolt = <2400000>;
+> +			regulator-max-microvolt = <3600000>;
+> +		};
+> +
+> +		pm6125_l22: l22 {
+> +			regulator-min-microvolt = <2952000>;
+> +			/* 3.304V capped to 2.96V for SDHCI */
+> +			regulator-max-microvolt = <2960000>;
+> +			regulator-allow-set-load;
+> +			/* Broken hw, this one can't be turned off or 
+SDHCI will break! */
+> +			regulator-always-on;
+> +		};
+> +
+> +		pm6125_l23: l23 {
+> +			regulator-min-microvolt = <3200000>;
+> +			regulator-max-microvolt = <3400000>;
+> +		};
+> +
+> +		pm6125_l24: l24 {
+> +			regulator-min-microvolt = <2704000>;
+> +			regulator-max-microvolt = <3600000>;
+> +		};
+> +	};
+> +};
+> +
+> +&sdhc_2 {
+> +	cd-gpios = <&tlmm 88 GPIO_ACTIVE_HIGH>;
+> +	pinctrl-names = "default", "sleep";
+> +	pinctrl-0 = <&sdc2_state_on &sdc2_gate_pin>;
+> +	pinctrl-1 = <&sdc2_state_off>;
+> +	vmmc-supply = <&pm6125_l22>;
+> +	vqmmc-supply = <&pm6125_l5>;
+> +	no-sdio;
+> +	no-mmc;
+> +	status = "okay";
+> +};
+> +
+> +&sleep_clk {
+> +	clock-frequency = <32764>;
+> +};
+> +
+> +&tlmm {
+> +	gpio-reserved-ranges = <14 4>;
+> +
+> +	/*
+> +	 * This is a wholly undocumented pin (other than a single vague
+> "pwr-gpios" reference) +	 * that needs to be toggled for the SD Card slot
+> to work properly.. +	 */
+> +	sdc2_gate_pin: sdc2-gate-state {
+> +		pins = "gpio45";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-up;
+> +		output-high;
+> +	};
+> +};
+> +
+> +&ufs_mem_hc {
+> +	vcc-supply = <&pm6125_l24>;
+> +	vcc-max-microamp = <600000>;
+> +	vccq2-supply = <&pm6125_l11>;
+> +	vccq2-max-microamp = <600000>;
+> +	status = "okay";
+> +};
+> +
+> +&ufs_mem_phy {
+> +	vdda-phy-supply = <&pm6125_l4>;
+> +	vdda-pll-supply = <&pm6125_l12>;
+> +	vddp-ref-clk-supply = <&pm6125_l18>;
+> +	status = "okay";
+> +};
+> +
+> +&usb_1 {
+> +	status = "okay";
+> +};
+> +
+> +&usb_1_hsphy {
+> +	vdd-supply = <&pm6125_l4>;
+> +	vdda-pll-supply = <&pm6125_l12>;
+> +	vdda-phy-dpdm-supply = <&pm6125_l15>;
+> +	status = "okay";
+> +};
+> +
+> +&xo_board {
+> +	clock-frequency = <19200000>;
+> +};
 
---J9cZgbLLDluj0yxy
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY54BbQAKCRB4tDGHoIJi
-0o9tAP4uLHXmJOt9syq4cRw8WtmC3czmyza6bquTAwVjIyXCnwEApwfTn9+n6yzG
-ZvvNOC+6QJbNKiyMjcs3kV9Q++41gwk=
-=eGzC
------END PGP SIGNATURE-----
 
---J9cZgbLLDluj0yxy--
