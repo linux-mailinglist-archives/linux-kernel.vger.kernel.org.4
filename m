@@ -2,282 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E166364F919
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 14:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 848F864F91D
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 14:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbiLQN2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 08:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
+        id S230343AbiLQNgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 08:36:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiLQN2g (ORCPT
+        with ESMTP id S229841AbiLQNgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 08:28:36 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75B4CE27;
-        Sat, 17 Dec 2022 05:28:33 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 90CCC447AA;
-        Sat, 17 Dec 2022 13:28:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1671283710; bh=94DNmBx41m1GaLqUJXLbTvW5t7x+aJ0RDNQpAYt2Eu8=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=Exz4I590rlMyW/ZbYpqEEp3DBBItYymx8UlN2cSejx+OcA4qN2AmdGWtrorymYwRb
-         SsyKUyD2zHV0QTomri2xdy/zoPHSJVgS4w1atc8o8IvItBdtlxrPqmANQR3qIVk9lJ
-         lmgAmLEJDQMaCmZA2tw2zXpEVYc1EvZaH9ZcikM3nbbczqTDESzTAC57BKtGOS/Xh1
-         4oeU9IyFPVzUf6Oy68lK/PVaIz+P23r9THgWC/kbdCuVZHamqkZ36lgILg1qG6c/tb
-         tjtyO8EmFQl4Z5nzTup4n/+6+8CJOpMP++0Lm3Qib5J9HVYuOgnczKQy9q5qkhWsms
-         aXG0Ys2f8VqDQ==
-Message-ID: <10a724cf-fa2b-a0fb-6737-b456238d0385@marcan.st>
-Date:   Sat, 17 Dec 2022 22:28:25 +0900
+        Sat, 17 Dec 2022 08:36:49 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6007DFB0;
+        Sat, 17 Dec 2022 05:36:48 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1441d7d40c6so6512976fac.8;
+        Sat, 17 Dec 2022 05:36:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=RpJvH6AiAJeYi8qsi/DnAQCpW34c5rPL8YXBbeT9+FQ=;
+        b=AZKLZSm0jeclDdd9ROYkW7P25x+5yNrOmJ9sHxua/Xrsj/fUcqyW7N+fozM8FtBytb
+         LLVdWqt3xd4Q/OOHsk8XWOqgPlkG4sZtXFja7CBk0890DC7YZ90jQtih4v2kDilu2gdf
+         8nVZCas3ktrQRju//DLbShoOp9p2quBadeQRuauoDboCpruhSHD0nltyNIsuzXEwgTq1
+         Pea6kZ+3SqNY9cslG01cBvEbQ8EqukP+p6i8iQVfY+yIcRaFDR0sFe49PnQD9nej/il0
+         IKxrViMSVNZrwWwIWbuHB+ddBc3Xa9jiRmI0U8VkRpCUrNFPlH7mIvjoqZ2VwT88bPuS
+         T/cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RpJvH6AiAJeYi8qsi/DnAQCpW34c5rPL8YXBbeT9+FQ=;
+        b=o0nMGK6yhT1gVNn6eij3VNv4AjyIWfh8/nkX7Vcabec81QC1M+IwGt2W1gxFs6UOQl
+         1xeLriy4augHsSVktvBLVMxnaaenSK2xG5uGmhD3gBBw2WdA794ztXyuW0+jgbgzDxsE
+         SvL0eJMxMZIemviF9R9oourib3RFbRl/47eqUYjGw9gfRoLFLTUiM+y6HSFgLh9bmhO6
+         F2lQVG8O3+njViBLaH9szUpHL1XZusZ7E4W0cak6q8DzpFUYCWS5cdTmSdBiZo17RoUJ
+         VWEM6EKqT2YhUcnv55WQD58+lw45dj9B2RqXraqj3Y1XkFYxKJfq1vYd7UFg2wMbJ/6u
+         b/aw==
+X-Gm-Message-State: ANoB5pl7t4k2oqDfJWJfu2fJdZTmu2QKD5jmBJs4DiYcA/lP1FnFYWIa
+        xwLG/NkMmxNNVy0HkTf8YbU=
+X-Google-Smtp-Source: AA0mqf6tGD0GzQZU6o204kR99SH2Pp9iJD5ytrtNPp+CA19K59+HPfTXmfLcLUWyep9jzJHzJouSqw==
+X-Received: by 2002:a05:6870:a18a:b0:141:fbdd:53b3 with SMTP id a10-20020a056870a18a00b00141fbdd53b3mr19488907oaf.41.1671284208152;
+        Sat, 17 Dec 2022 05:36:48 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9-20020a056870d28900b00143d4709a38sm2215370oae.55.2022.12.17.05.36.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Dec 2022 05:36:47 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <50bd7cc7-74bb-b1af-f817-54aa877dd10c@roeck-us.net>
+Date:   Sat, 17 Dec 2022 05:36:44 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [patch V3 09/33] genirq/msi: Add range checking to
+ msi_insert_desc()
 Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Alex Henrie <alexh@vpitech.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        David Oberhollenzer <david.oberhollenzer@sigma-star.at>,
-        Ettore Chimenti <ek5.chimenti@gmail.com>
-References: <20210626054113.246309-1-marcan@marcan.st>
- <20221215152641.39164ca3@endymion.delvare>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v3] i2c: i801: Safely share SMBus with BIOS/ACPI
-In-Reply-To: <20221215152641.39164ca3@endymion.delvare>
-Content-Type: text/plain; charset=UTF-8
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+References: <20221124230505.073418677@linutronix.de>
+ <20221124232325.798556374@linutronix.de>
+ <20221213190425.GA3943240@roeck-us.net>
+ <4e0a129855490febb1c57e7e979bcfb579d39054.camel@linux.ibm.com>
+ <87fsdgzpqs.ffs@tglx> <e570e70d-19bc-101b-0481-ff9a3cab3504@linux.ibm.com>
+ <86wn6rptdu.wl-maz@kernel.org>
+ <0acb8c63-7f6c-6df6-cb40-66b265a6e6ce@linux.ibm.com>
+ <86v8mbphzw.wl-maz@kernel.org>
+ <70dab88e-6119-0c12-7c6a-61bcbe239f66@roeck-us.net>
+ <86sfhepat1.wl-maz@kernel.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <86sfhepat1.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-I'm going to be honest - it's been so long I completely lost all mental
-state of this patch, so at this point I'm mostly at the same place you
-are here.
-
-On 15/12/2022 23.26, Jean Delvare wrote:
-
-> I object to this patch going to stable, as the original regression has
-> already been addressed by an earlier patch. The "Fixes" tag doesn't
-> seem appropriate, for the same reason.
+On 12/17/22 02:46, Marc Zyngier wrote:
+> On Sat, 17 Dec 2022 00:45:50 +0000,
+> Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On 12/16/22 05:58, Marc Zyngier wrote:
+>> [ ... ]
+>>
+>>>> With both these fixes applied, it actually then leads to the very
+>>>> next WARN_ON failing in msi_ctrl_valid...  Because ctrl->last ==
+>>>> hwsize.  I think Thomas' initial fix for msi_domain_get_hwsize has
+>>>> an off-by-1 error, I think we should return MSI_XA_DOMAIN_SIZE for
+>>>> msi_domain_get_hwsize instead.
+>>>
+>>> Yes, that's a good point, and that's consistent with what
+>>> __msi_create_irq_domain() does already, assuming MSI_XA_DOMAIN_SIZE
+>>> when info->hwsize is 0. No reason to do something else here.
+>>>
+>>> I'll update Thomas' patch. Once Guenter confirms that PPC is OK, I'll
+>>> send it out.
+>>>
+>> With
+>>
+>> 7a27b6136dcb (local/testing, testing-msi) genirq/msi: Return MSI_XA_DOMAIN_SIZE as the maximum MSI index when no domain is present
+>> c581d525bb1d genirq/msi: Check for the presence of an irq domain when validating msi_ctrl
+>> 9d33edb20f7e Merge tag 'irq-core-2022-12-10' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+>>
+>> I still get the following runtime warning.
+>>
+>> ------------[ cut here ]------------
+>> WARNING: CPU: 0 PID: 8 at kernel/irq/msi.c:196 .msi_domain_free_descs+0x144/0x170
+>> Modules linked in:
+>> CPU: 0 PID: 8 Comm: kworker/u2:0 Tainted: G                 N 6.1.0-01957-g7a27b6136dcb #1
+>> Hardware name: QEMU ppce500 e5500 0x80240020 QEMU e500
+>> Workqueue: nvme-reset-wq .nvme_reset_work
+>> NIP:  c000000000107d54 LR: c000000000107d44 CTR: 0000000000000000
+>> REGS: c0000000041e74d0 TRAP: 0700   Tainted: G                 N  (6.1.0-01957-g7a27b6136dcb)
+>> MSR:  0000000080029002 <CE,EE,ME>  CR: 44002282  XER: 20000000
+>> IRQMASK: 0
+>> GPR00: c000000000107d44 c0000000041e7770 c000000001629c00 c000000004e748a0
+>> GPR04: 000000005358db0a c000000001ce7a00 c00000000423b5d0 000000004735aaa2
+>> GPR08: 0000000000000002 0000000000000013 c00000000423acc0 c00000000214a998
+>> GPR12: 0000000024002282 c000000002579000 c00000000008e190 c000000004173540
+>> GPR16: 0000000000000000 c0000000043810b8 0000000000000000 0000000000000001
+>> GPR20: c0000000060b22d8 c0000000060a70f0 0000000000000000 c000000001996800
+>> GPR24: c0000000017df6c0 c0000000043810b8 c0000000060b2388 c0000000060b2000
+>> GPR28: ffffffffffffffff c0000000041e7888 c000000006025ac8 c000000004e748a0
+>> NIP [c000000000107d54] .msi_domain_free_descs+0x144/0x170
+>> LR [c000000000107d44] .msi_domain_free_descs+0x134/0x170
+>> Call Trace:
+>> [c0000000041e7770] [c000000000107d44] .msi_domain_free_descs+0x134/0x170 (unreliable)
+>> [c0000000041e7810] [c0000000001085d8] .msi_domain_free_msi_descs_range+0x38/0x70
+>> [c0000000041e78a0] [c0000000008d000c] .pci_msi_teardown_msi_irqs+0x4c/0xa0
+>> [c0000000041e7920] [c0000000008cf9e8] .pci_free_msi_irqs+0x18/0x50
+>> [c0000000041e79a0] [c0000000008cd8d0] .pci_free_irq_vectors+0x80/0xb0
+>> [c0000000041e7a20] [c000000000a6d2a0] .nvme_reset_work+0x870/0x1780
+>> [c0000000041e7bb0] [c000000000080e68] .process_one_work+0x2d8/0x7b0
+>> [c0000000041e7c90] [c0000000000813d8] .worker_thread+0x98/0x4f0
+>> [c0000000041e7d70] [c00000000008e2cc] .kthread+0x13c/0x150
+>> [c0000000041e7e10] [c0000000000005d8] .ret_from_kernel_thread+0x58/0x60
+>> Instruction dump:
+>> 7fc3f378 48ff1ca9 60000000 7c7f1b79 41c2002c e8810070 7fc3f378 48ff3491
+>> 60000000 813f0000 2c090000 41e2ffb0 <0fe00000> 60000000 60000000 ebc10090
+>> irq event stamp: 98168
+>> hardirqs last  enabled at (98167): [<c00000000110a274>] ._raw_spin_unlock_irqrestore+0x84/0xd0
+>> hardirqs last disabled at (98168): [<c000000000010b58>] .program_check_exception+0x38/0x120
+>> softirqs last  enabled at (97760): [<c00000000110b4dc>] .__do_softirq+0x60c/0x678
+>> softirqs last disabled at (97749): [<c000000000004d20>] .do_softirq_own_stack+0x30/0x50
+>> ---[ end trace 0000000000000000 ]---
+>> nvme nvme0: 1/0/0 default/read/poll queues
+>> nvme nvme0: Ignoring bogus Namespace Identifiers
+>> ...
+>>
+>> The system boots fine, though. This is seen when booting the ppce500
+>> machine with e5500 CPU and corenet64_smp_defconfig from nvme.
 > 
-> This patch is way too intrusive and risky to be considered for stable
-> kernels, it clearly fails to meet the first two acceptance criteria. It
-> should live for some time upstream before distributions may consider
-> backporting it.
-
-That's fair. The original intent was to fix the regression and implement
-it properly in one go.
-
->> +	/*
->> +	 * The controller provides a bit that implements a mutex mechanism
->> +	 * between users of the bus. First, try to lock the hardware mutex.
->> +	 * If this doesn't work, we give up trying to do this, but then
->> +	 * bail if ACPI uses SMBus at all.
->> +	 */
->> +	if (!priv->inuse_stuck) {
->> +		while (inb_p(SMBHSTSTS(priv)) & SMBHSTSTS_INUSE_STS) {
+> +PPC folks.
 > 
-> Do I understand correctly that there are 3 cases where we would be
-> looping here:
+> Thanks for the report.
 > 
-> 1* The SMBus was used by the BIOS at boot time and they forgot to clear
->    SMBHSTSTS_INUSE_STS. The expected outcome is a timeout.
+> I managed to reproduce this, although in a limited way (a SMP qemu
+> instance wouldn't boot at all). The problem is that the core MSI code
+> now assumes that if the arch code is in charge of breaking the
+> association of a MSI with a device, it is also in charge of clearing
+> the irq in the MSI descriptor.
 > 
-> 2* ACPI is using the SMBus, and the implementation is a good citizen
->    (acquires the hardware lock before starting a transfer, releases it
->    when done), and we are in the middle of an ACPI-side SMBus transfer.
->    The expectation is that the ACPI-side transfer will complete and the
->    hardware lock be released before we reach the timeout.
+> This matches the s390 behaviour, but not powerpc's, hence the splat
+> and the leaked MSI descriptors. The minimal fix should be as follow,
+> which I'll add to the pile of patches.
 > 
-> 3* ACPI is using the SMBus, the implementation is a bad citizen and did
->    not release the hardware lock after a transfer. The expected outcome
->    is a timeout.
+
+Confirmed, the patch below fixes the ppc problem.
+
+Thanks,
+Guenter
+
+> Thanks,
 > 
-> Case 1 wouldn't be a problem, but we can't differentiate it from case
-> 3, which is a problem, therefore we always consider a timeout to be the
-> problematic case 3 and inhibit driver access when that happens. Right?
-
-Not quite. inuse_stuck does not inhibit driver access by itself until we
-see *some* access from ACPI (acpi_usage).
-
-It is impossible for BIOS to forget to clear SMBHSTSTS_INUSE_STS *and*
-for ACPI to be a good citizen with the bus, because that would
-immediately deadlock on the ACPI access regardless of what the OS does
-(unless there is some weird logic/workaround to clear the lock on first
-access in the ACPI AML, but let's hope nobody does that). So the
-expected cases are:
-
-1. SMBus was left locked by the BIOS but is *not* used by ACPI
-(inuse_stuck == true, acpi_usage == false). In this case we expect a
-timeout once, then we give up on checking the hardware lock altogether
-in the future.
-
-2. SMBus is/was busy on a well-behaved ACPI transfer (inuse_stuck ==
-false, acpi_usage == true). In this case we make note of the ACPI usage
-but nothing bad happens (no timeout).
-
-3. ACPI is/has used SMBus and left it locked (inuse_stuck == true,
-acpi_usage == true). In this case we give up on future driver accesses
-entirely.
-
-Only case 3 leads to the driver bailing out on further accesses.
-
-> Note: I had to change this to use time_is_before_jiffies(), as
-> MAX_RETRIES has been removed from the i2c-i801 driver by commit
-> 44c54c4ec391 ("i2c: i801: Improve status polling") meanwhile.
-
-Ack.
-
-> Technically, this is "Non-SMBus access". It could still be an access to
-> other functions of the i82801 chipset, but we don't care about these.
-
-Right, makese sense.
-
+> 	M.
 > 
->>  	 */
->> -	mutex_lock(&priv->acpi_lock);
->> +	if (!i801_acpi_is_smbus_ioport(priv, address))
->> +		return i801_acpi_do_access(function, address, bits, value);
->>  
->> -	if (!priv->acpi_reserved && i801_acpi_is_smbus_ioport(priv, address)) {
->> -		priv->acpi_reserved = true;
->> +	if (!mutex_trylock(&priv->acpi_lock)) {
->> +		mutex_lock(&priv->acpi_lock);
+> diff --git a/arch/powerpc/platforms/4xx/hsta_msi.c b/arch/powerpc/platforms/4xx/hsta_msi.c
+> index d4f7fff1fc87..e11b57a62b05 100644
+> --- a/arch/powerpc/platforms/4xx/hsta_msi.c
+> +++ b/arch/powerpc/platforms/4xx/hsta_msi.c
+> @@ -115,6 +115,7 @@ static void hsta_teardown_msi_irqs(struct pci_dev *dev)
+>   		msi_bitmap_free_hwirqs(&ppc4xx_hsta_msi.bmp, irq, 1);
+>   		pr_debug("%s: Teardown IRQ %u (index %u)\n", __func__,
+>   			 entry->irq, irq);
+> +		entry->irq = 0;
+>   	}
+>   }
+>   
+> diff --git a/arch/powerpc/platforms/cell/axon_msi.c b/arch/powerpc/platforms/cell/axon_msi.c
+> index 5b012abca773..0c11aad896c7 100644
+> --- a/arch/powerpc/platforms/cell/axon_msi.c
+> +++ b/arch/powerpc/platforms/cell/axon_msi.c
+> @@ -289,6 +289,7 @@ static void axon_msi_teardown_msi_irqs(struct pci_dev *dev)
+>   	msi_for_each_desc(entry, &dev->dev, MSI_DESC_ASSOCIATED) {
+>   		irq_set_msi_desc(entry->irq, NULL);
+>   		irq_dispose_mapping(entry->irq);
+> +		entry->irq = 0;
+>   	}
+>   }
+>   
+> diff --git a/arch/powerpc/platforms/pasemi/msi.c b/arch/powerpc/platforms/pasemi/msi.c
+> index dc1846660005..166c97fff16d 100644
+> --- a/arch/powerpc/platforms/pasemi/msi.c
+> +++ b/arch/powerpc/platforms/pasemi/msi.c
+> @@ -66,6 +66,7 @@ static void pasemi_msi_teardown_msi_irqs(struct pci_dev *pdev)
+>   		hwirq = virq_to_hw(entry->irq);
+>   		irq_set_msi_desc(entry->irq, NULL);
+>   		irq_dispose_mapping(entry->irq);
+> +		entry->irq = 0;
+>   		msi_bitmap_free_hwirqs(&msi_mpic->msi_bitmap, hwirq, ALLOC_CHUNK);
+>   	}
+>   }
+> diff --git a/arch/powerpc/sysdev/fsl_msi.c b/arch/powerpc/sysdev/fsl_msi.c
+> index 73c2d70706c0..57978a44d55b 100644
+> --- a/arch/powerpc/sysdev/fsl_msi.c
+> +++ b/arch/powerpc/sysdev/fsl_msi.c
+> @@ -132,6 +132,7 @@ static void fsl_teardown_msi_irqs(struct pci_dev *pdev)
+>   		msi_data = irq_get_chip_data(entry->irq);
+>   		irq_set_msi_desc(entry->irq, NULL);
+>   		irq_dispose_mapping(entry->irq);
+> +		entry->irq = 0;
+>   		msi_bitmap_free_hwirqs(&msi_data->bitmap, hwirq, 1);
+>   	}
+>   }
+> diff --git a/arch/powerpc/sysdev/mpic_u3msi.c b/arch/powerpc/sysdev/mpic_u3msi.c
+> index 1d8cfdfdf115..492cb03c0b62 100644
+> --- a/arch/powerpc/sysdev/mpic_u3msi.c
+> +++ b/arch/powerpc/sysdev/mpic_u3msi.c
+> @@ -108,6 +108,7 @@ static void u3msi_teardown_msi_irqs(struct pci_dev *pdev)
+>   		hwirq = virq_to_hw(entry->irq);
+>   		irq_set_msi_desc(entry->irq, NULL);
+>   		irq_dispose_mapping(entry->irq);
+> +		entry->irq = 0;
+>   		msi_bitmap_free_hwirqs(&msi_mpic->msi_bitmap, hwirq, 1);
+>   	}
+>   }
 > 
-> I was pretty confused by this construct at first, I think it deserves a
-> comment. My understanding of it is:
-> 
-> 1* We first try to acquire the software lock without waiting. If it
->    works, it means that no transfer is in progress on the Linux side,
->    and we can proceed with the ACPI I/O request, as we hold the lock.
-> 
-> 2* If immediate acquisition of the software lock failed, we wait for
->    the lock to be released by i801_access(). Once we have the lock,
->    there are two options. Either the first thing done by the ACPI side
->    is reading SMBHSTSTS_INUSE_STS, it is a good citizen and we can
->    continue (we hold both the software lock and the hardware lock). Or
->    the ACPI side accesses another register directly, which means it
->    does not check SMBHSTSTS_INUSE_STS, it is a bad citizen and there is
->    no safe way to access the SMBus on the Linux side. We prevent
->    further access from the Linux side, as we did before this patch.
-> 
-> Please correct me if I'm wrong.
 
-Yes, I believe that was the intent.
-
-> 
-> I see a problem with this implementation. It is possible that
-> i801_access() gets called in the middle of an ACPI-side SMBus transfer,
-> because the software lock is not held for the whole duration of an
-> ACPI-side transfer (contrary to Linux-side transfers). Before this
-> patch, the first step of the ACPI-side transfer would have blocked any
-> future access from the Linux side, so we were safe. After this patch,
-> acpi_usage has been set to true at this point, but that alone won't
-> prevent access from the Linux side. Access will only be prevented if
-> SMBHSTSTS_INUSE_STS is considered stuck. If the ACPI implementation is
-> a bad citizen, I'm afraid there is no guarantee of that happening.
-> SMBHSTSTS will eventually be read during the ACPI-side transfer, and
-> that will acquire the hardware lock as a side effect, but not as the
-> first step.
-> 
-> Specifically, the scenario that would cause problem is:
-> 
-> ACPI side				| Linux side
-> ---------------------------------------+----------------------------------
-> [first step of a transfer]             |
-> mutex_trylock(&priv->acpi_lock)        |
-> priv->acpi_usage = true                |
-> i801_acpi_do_access(random register)   |
-> mutex_unlock(&priv->acpi_lock)         |
->                                        | take hardware lock
->                                        | mutex_lock(&priv->acpi_lock)
->                                        | priv->acpi_unsafe is false -> OK
->                                        | perform transfer
->                                        | release hardware lock
->                                        | mutex_unlock(&priv->acpi_lock)
-> [second step of a transfer]            |
-> mutex_trylock(&priv->acpi_lock)        |
-> i801_acpi_do_access(random register)   |
-> mutex_unlock(&priv->acpi_lock)         |
-> (...)                                  |
-> 
-> Obviously the ACPI-side transfer will be screwed, as whatever register
-> value was set during the first step will inevitably have been
-> overwritten by the Linux-side transfer.
-> 
-> I admit that the probability of this scenario happening is extremely
-> low, because it will take only one completed ACPI-side transfer (bad
-> citizen case) to take the hardware lock and not release it, which in
-> turn will prevent any further access from the Linux side. The above
-> scenario can therefore only happen if the very first SMBus transfer
-> from the bad citizen ACPI side happens at exactly the same time as a
-> transfer from the Linux side.
-
-Agreed, this is a problem.
-
-> Question: why do you check that the first action of ACPI AML is to
-> acquire the hardware lock *only* if that action was attempted while the
-> Linux side was performing a transfer? That event is quite unlikely to
-> happen. Can't we perform that test unconditionally the very first time
-> i801_acpi_io_handler() is called? Unless the i2c-i801 driver gets> initialized in the middle of an ACPI-side SMBus transfer [...]
-
-I wonder if there's some way to close this race? This doesn't sound all
-that unlikely (consider: ACPI backlight is also a module, device init
-happens in parallel, so we could well end up probing i2c-i801 in the
-middle of an ACPI SMBus transfer more often than you'd expect at boot time).
-
-How about this: instead of checking for the lock access on the *first*
-call to i801_acpi_io_handler, we add an acpi_must_lock flag. This is
-initially false, but it is set on completion of every Linux-side i2c
-transfer, and cleared once we see ACPI take the lock properly. The ACPI
-handler then checks it and expects a lock access if it is true.
-
-So as soon as Linux does an i2c transfer, we expect ACPI to be taking
-the lock next time it touches the hardware, and we know to bail on the
-Linux side in the future if it does not.
-
-* If the i2c driver probes in the middle of a well-behaved ACPI SMBus
-transfer, nothing bad happens, since if we try to do a Linux-side
-transfer it will block on the lock until ACPI is done. Further ACPI
-SMBus transfers after a Linux transfer will pass the locking check.
-* If the driver probes in the middle of a misbehaved ACPI transfer but
-is otherwise idle, nothing happens until the first Linux transfer, then
-the next ACPI access after that will have us bail and disable driver access.
-* If we probe *and* try to make a transfer all in the middle of a
-misbehaved ACPI transfer, then we are going to step on its toes and
-break it, but at least we will notice as soon as the Linux side is done
-(or possibly failed due to the collision) and ACPI tries to touch the
-controller again, so we will get out of its way in the future and
-there's at least a chance it will recover for future accesses.
-
-Further closing that last edge case to avoid ever conflicting with
-broken ACPI implementations would require some sort of mechanism to know
-whether ACPI AML started running an i2c transfer method before the
-i2c-i801 driver loaded, which might be too intrusive a change to be wrth
-it for such a corner case. Though maybe there's an easy way? If there's
-something like a global AML lock we could just have the probe sequence be:
-
-1. Register the ACPI IO handler
-2. Take the AML lock
-3. Set acpi_must_lock = true
-4. Release the AML lock
-5. Finally register the i2c controller
-
-That makes sure we serialize on any ongoing ACPI shenanigans at probe
-time and allows us to truly check that the first access from ACPI after
-that is a lock, before Linux has a chance to do anything itself. But I
-don't know off the top of my head whether there is such a lock.
-
-- Hector
