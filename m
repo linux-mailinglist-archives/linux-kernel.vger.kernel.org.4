@@ -2,160 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 968CC64F879
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 10:33:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D5464F87D
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 10:36:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbiLQJdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 04:33:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
+        id S230245AbiLQJgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 04:36:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiLQJdB (ORCPT
+        with ESMTP id S229469AbiLQJgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 04:33:01 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3775B2935F;
-        Sat, 17 Dec 2022 01:33:00 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id c7so3241982pfc.12;
-        Sat, 17 Dec 2022 01:33:00 -0800 (PST)
+        Sat, 17 Dec 2022 04:36:02 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E807E6547
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 01:36:00 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id i9so6725966edj.4
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 01:36:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=36Nz4DJ+RB5NaUU/Zyw08W8HOPfFS0NX9MwWlHipeNk=;
-        b=qA+Gfdg4FMuUl+yzoNxP7NW+nR2qrAE0dHiDv85L85UpUo/O24FasYg0q6Pd4kkSq+
-         dpMCQL54amyKpYpUFe/lzTeCALoGqTxc3sqFygMrGGHo9IS6BuO4S43HdUeR+yVo7ynY
-         31kptZ45ZNJhtqCF3iaw6IPgoZ7e2NjmIXdb7LzgUw3pjJXQD60WvF5dKhoJw6oh/jQs
-         +6DtElvZjYLwV75qrzVQMKYgi5fdjZbzbNwNmzM6Os+/KAn5EwYbSBixFspGQvur/ELJ
-         6QQufx7AH/AXpaxL59kxYYiB912dVe7ZKjVj638Z8ujghbXKKA93dU+ceZ9ou7PkvgXF
-         uYHA==
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OEPCT4FJ6pAWdhKShStAS/tGijfNEuYVpX12bBpatgQ=;
+        b=pY/RV03V0hPP5Pc6uzfBFPHJF5Opsaj8c5CI349870eDQrgeO9up1Y4vajrbVtvPzw
+         y+Cj5ndo5h9DR3sMmSjqSwEkUITb5GwKWlzFJzbpm00t4jjF7MKh9Y3kjMS5Rz4Sq4Da
+         ybl5pK5wOV1ORIJN7V+AbLcaF4ND8hcgrfRCbEQmwMOeBiFJv4wjd0kA331fnLoea8kr
+         kLCKehlWbb37BVAAiF0VgfsnVvrmTffXqsQkRsISv5+hGOMBdS5ZaKaZ+zo8F+oznDbd
+         3CE85DH1WoRAnmP1NCDVVWbMVtxXxah710WXf3f5D1XMSuMdlzqPyKDHOgWFvuZ3refi
+         XcoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=36Nz4DJ+RB5NaUU/Zyw08W8HOPfFS0NX9MwWlHipeNk=;
-        b=sEtzO7EhIx1tEnz1Gn6jOBKNSPplHErRvuEnF+Q4NATJq8UOOcBBGUCRDp/LLqEfqL
-         /lREEAF2DOLyev8AYyaRxq+Mmzt8jXc+N697C2FXyJBDNTrLmjXBC6WTz52xIwGgythr
-         E/Il/0uxT4x22soQdn5RS0a1YPD3dBqc5zypZJqvWLwlyIj8N8RMhj8JDoZ5swuLRNYU
-         PGagNWP6LcWzpG2R/5zORdHJpSWzmGBe7bh5+5/Mxe/wKiS1rsUh7ceWXxxgaKngSr0D
-         8C71uzS2u4fdxoNENUDpwO/cY+a4UG00YrlwM+aKQn3CZL0FWVqY0rdn6yp7JSftq+0K
-         ZbBA==
-X-Gm-Message-State: ANoB5pmi7sNNeFis1Q4othK2gYXr9NMvOy+xmUWLm7oZkZKm3POK9StT
-        bVffkJcYNS1TgwwL1MxivLU=
-X-Google-Smtp-Source: AA0mqf7ZXczKLE/hOP7YBZuLgP36h8VNtTI9Wcw2gFVvS0Xx5lrLmv0rk86AD+mzxcHXvGnBSxJNkA==
-X-Received: by 2002:aa7:93da:0:b0:576:de1:cd32 with SMTP id y26-20020aa793da000000b005760de1cd32mr37301869pff.0.1671269579563;
-        Sat, 17 Dec 2022 01:32:59 -0800 (PST)
-Received: from mail.google.com ([103.135.102.144])
-        by smtp.gmail.com with ESMTPSA id l187-20020a6225c4000000b0057621a437d7sm2777156pfl.116.2022.12.17.01.32.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Dec 2022 01:32:58 -0800 (PST)
-Date:   Sat, 17 Dec 2022 17:32:49 +0800
-From:   Changbin Du <changbin.du@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Changbin Du <changbin.du@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] bpf: makefiles: do not generate empty vmlinux.h
-Message-ID: <20221217093249.54nmxw4stzyymbis@mail.google.com>
-References: <20221129134217.52767-1-changbin.du@gmail.com>
- <20221129134217.52767-3-changbin.du@gmail.com>
- <CAEf4BzZPZeeGJTZC3NSm+Km4RZirGrwr8d8dXepLmBLTiUn8Hg@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OEPCT4FJ6pAWdhKShStAS/tGijfNEuYVpX12bBpatgQ=;
+        b=PJY6c8ieVdgF4AYW7qgVyOdzaSeRW1vatbOo7kczFvgSZQ0eeeD74KV0VY5CkgnIxl
+         EixGCUfGPWtLHArGJG9RKiUASEi48vPgrp7D82uKETHIsgQHJLVrOCTjmdiyMtARJe0m
+         /VPi/Y/T093guiBjkOxleTjNQfKunth9hWVhygJMJf/Q5MfRKryTl5cawsq5olAS2Coq
+         60FQ2n2GgqLkyOKCgEMEYOsi0OOcQgQbUOtM6tv4a0ErLzyEKH2H5JVbrgojPQ5Yt5Cr
+         wPrqdVS9hvWfVtMYJYfcQ8vl0odznSAN8k8ca6rC3rEcM3xCdfb2CgO6jsJwWEEKPI8q
+         XpEw==
+X-Gm-Message-State: ANoB5pn/Ieka2SzMJEgL1xmm2YVwrJeXzSjmGrovpVTCApTBLGax0W93
+        Cz0Y/tMx/0ghIGNZsC6KY3Q=
+X-Google-Smtp-Source: AA0mqf5qnLChFrLKh4m4JvtCg1Pr2jVj/JbQ0OvS72KJ/OCiaYIaCeVXhBCa1ueeDQqbX2KC+J3KOg==
+X-Received: by 2002:aa7:cdd6:0:b0:46d:6f14:aed with SMTP id h22-20020aa7cdd6000000b0046d6f140aedmr7559693edw.0.1671269759412;
+        Sat, 17 Dec 2022 01:35:59 -0800 (PST)
+Received: from [192.168.1.102] (p54a07888.dip0.t-ipconnect.de. [84.160.120.136])
+        by smtp.gmail.com with ESMTPSA id d30-20020a056402401e00b0046b25b93451sm1759478eda.85.2022.12.17.01.35.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Dec 2022 01:35:58 -0800 (PST)
+Message-ID: <81feafc6-d070-e551-6f85-73073238b511@gmail.com>
+Date:   Sat, 17 Dec 2022 10:35:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZPZeeGJTZC3NSm+Km4RZirGrwr8d8dXepLmBLTiUn8Hg@mail.gmail.com>
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] staging: r8188eu: Prefer kcalloc over kzalloc
+To:     Kang Minchul <tegongkang@gmail.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>
+Cc:     Pavel Skripkin <paskripkin@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221216223942.334221-1-tegongkang@gmail.com>
+Content-Language: en-US
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20221216223942.334221-1-tegongkang@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 04:52:11PM -0800, Andrii Nakryiko wrote:
-> On Tue, Nov 29, 2022 at 5:42 AM Changbin Du <changbin.du@gmail.com> wrote:
-> >
-> > Remove the empty vmlinux.h if bpftool failed to dump btf info.
-> > The emptry vmlinux.h can hide real error when reading output
+On 12/16/22 23:39, Kang Minchul wrote:
+> Fixed following checkpatch.pl warning:
+>   * WARNING: Prefer kcalloc over kzalloc with multiply
 > 
-> typo: empty
->
-Will be fixed, thanks.
-
-> > of make.
-> >
-> > This is done by adding .DELETE_ON_ERROR special target in related
-> > makefiles.
-> >
-> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> > ---
-> >  tools/bpf/bpftool/Makefile           | 3 +++
-> >  tools/perf/Makefile.perf             | 2 ++
-> >  tools/testing/selftests/bpf/Makefile | 3 +++
-> >  3 files changed, 8 insertions(+)
-> >
-> > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> > index 4a95c017ad4c..f6b1e65085db 100644
-> > --- a/tools/bpf/bpftool/Makefile
-> > +++ b/tools/bpf/bpftool/Makefile
-> > @@ -265,3 +265,6 @@ FORCE:
-> >  .PHONY: all FORCE bootstrap clean install-bin install uninstall
-> >  .PHONY: doc doc-clean doc-install doc-uninstall
-> >  .DEFAULT_GOAL := all
-> > +
-> > +# Delete partially updated (corrupted) files on error
-> > +.DELETE_ON_ERROR:
-> > diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> > index a432e59afc42..265254fc641a 100644
-> > --- a/tools/perf/Makefile.perf
-> > +++ b/tools/perf/Makefile.perf
-> > @@ -1149,3 +1149,5 @@ FORCE:
-> >  .PHONY: libtraceevent_plugins archheaders
-> >
-> >  endif # force_fixdep
-> > +
-> > +.DELETE_ON_ERROR:
+> Instead of specifying (number of bytes) * (size) as arugment
+> in kzalloc, prefer kcalloc.
 > 
-> please split out perf changes, they should go through perf tree
+> Signed-off-by: Kang Minchul <tegongkang@gmail.com>
+> ---
+>   drivers/staging/r8188eu/core/rtw_xmit.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-sure, I'll send a standalone patch to perf tree.
+> diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+> index 34494f08c0cd..36ce1e3f9c81 100644
+> --- a/drivers/staging/r8188eu/core/rtw_xmit.c
+> +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+> @@ -1564,7 +1564,7 @@ int rtw_alloc_hwxmits(struct adapter *padapter)
+>   
+>   	pxmitpriv->hwxmit_entry = HWXMIT_ENTRY;
+>   
+> -	pxmitpriv->hwxmits = kzalloc(sizeof(struct hw_xmit) * pxmitpriv->hwxmit_entry, GFP_KERNEL);
+> +	pxmitpriv->hwxmits = kcalloc(pxmitpriv->hwxmit_entry, sizeof(struct hw_xmit), GFP_KERNEL);
+>   	if (!pxmitpriv->hwxmits)
+>   		return -ENOMEM;
+>   
 
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> > index e6cf21fad69f..f41c4b011221 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -617,3 +617,6 @@ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)      \
-> >                                liburandom_read.so)
-> >
-> >  .PHONY: docs docs-clean
-> > +
-> > +# Delete partially updated (corrupted) files on error
-> > +.DELETE_ON_ERROR:
-> > --
-> > 2.37.2
-> >
-
--- 
-Cheers,
-Changbin Du
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
