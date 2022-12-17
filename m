@@ -2,58 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7602964FBBA
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 19:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3F164FBD0
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 19:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiLQSzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 13:55:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
+        id S229951AbiLQS4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 13:56:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiLQSze (ORCPT
+        with ESMTP id S229996AbiLQSzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 13:55:34 -0500
+        Sat, 17 Dec 2022 13:55:36 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993D810B74;
-        Sat, 17 Dec 2022 10:55:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7C910B7B;
+        Sat, 17 Dec 2022 10:55:35 -0800 (PST)
 Date:   Sat, 17 Dec 2022 18:55:30 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1671303330;
+        s=2020; t=1671303331;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ws8Tq+FoK4iImQayXxstvVvfm0RsfCLLhQdCNKNu8Rc=;
-        b=vOjoM2DdHMFhfCN/qjQVDiChpMNQ+nLKAyPmeAXP1yWmnyAk55++b/oKCv5ZFS/TLVltc2
-        /XJLvqDrX4IhCT9vzW8a2W/Fyx9quu0t/TrM/9sWn3uAkbUOzrZQBWHCKqoIlbccjKJw5u
-        8I6G77gq/knM+/ueLlx+z08pEfWlOcosXvKx9AiCwZGkHXHpY5CrHJpMvMFaruDJmxBJRg
-        fJHTkxS2znClHmLE9OHjJFF5ap1YwZfOMRa+Jil01XI2E/BAT9LIqbe/IasECXdDC9+Ber
-        tDgJ0Bhrm+8sVKzFoeck7AQ5+hOiuXYEJEDC074umJhs8yEW85iKs1Nji86aEw==
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=nt5Z13x7cPRUra6u/EdfRu87/NpycaDyh7wrSUQR9ck=;
+        b=G1G58/Gb5ndyH6ooxLbFLJ29hJyHGVkqlNF5UoKuCGT5brcQZi+ZV1m4jlDHfk8u4KQ5Mi
+        jYVnmlTH5U5VcZnPu7JbSUnmeGHMmOA43sPoGpMwzWdrVgkK8fhVbfCl+O29jqBXd1KtnX
+        sNDaDTg5V7bSB/aafQydz804ftw0v75hkZUSA/uL9nP8jJTkXOSvMOOnEt9X4L7ZJiw+ys
+        LhRkR4KHoCgmRSga9NEpxEYhv5lbpcjVYg/DQfm/Zuxs6i6aGQEzlxf5UMQVxISlXHoLRK
+        GMpURkDBBC+QQ77h8/jNJWcll9PwO7xGAjR6vQ1EDBFizDHbeC1WjqQpbJ103w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1671303330;
+        s=2020e; t=1671303331;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ws8Tq+FoK4iImQayXxstvVvfm0RsfCLLhQdCNKNu8Rc=;
-        b=11sCUB68Oj8lGbU5uVhFiz5CJY+Y6sLlZQn3Re6xxLecHGDQr2JLkvG1cIZ0PpDC3T1GpF
-        kMwHzqr2oHRgo9Bg==
-From:   "tip-bot2 for Sean Christopherson" <tip-bot2@linutronix.de>
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=nt5Z13x7cPRUra6u/EdfRu87/NpycaDyh7wrSUQR9ck=;
+        b=cRUVvfO1HZ2uAoa2pDPSwPdMWrt4SEMgBjfs4F6hFNTu1OSrf8LGf+bw9h9NiX5W8IsN9I
+        yARtmsIK93SidfAA==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm: Populate KASAN shadow for entire per-CPU range
- of CPU entry area
-Cc:     syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
+Subject: [tip: x86/mm] x86/mm: Inhibit _PAGE_NX changes from cpa_process_alias()
+Cc:     kernel test robot <oliver.sang@intel.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221110203504.1985010-3-seanjc@google.com>
-References: <20221110203504.1985010-3-seanjc@google.com>
 MIME-Version: 1.0
-Message-ID: <167130333016.4906.13770847952420004697.tip-bot2@tip-bot2>
+Message-ID: <167130333070.4906.17678564285729472836.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,109 +60,100 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     97650148a15e0b30099d6175ffe278b9f55ec66a
-Gitweb:        https://git.kernel.org/tip/97650148a15e0b30099d6175ffe278b9f55ec66a
-Author:        Sean Christopherson <seanjc@google.com>
-AuthorDate:    Thu, 10 Nov 2022 20:35:01 
+Commit-ID:     d597416683d587e940faa35945fba162329b5a71
+Gitweb:        https://git.kernel.org/tip/d597416683d587e940faa35945fba162329b5a71
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Thu, 10 Nov 2022 13:33:57 +01:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
 CommitterDate: Thu, 15 Dec 2022 10:37:28 -08:00
 
-x86/mm: Populate KASAN shadow for entire per-CPU range of CPU entry area
+x86/mm: Inhibit _PAGE_NX changes from cpa_process_alias()
 
-Populate a KASAN shadow for the entire possible per-CPU range of the CPU
-entry area instead of requiring that each individual chunk map a shadow.
-Mapping shadows individually is error prone, e.g. the per-CPU GDT mapping
-was left behind, which can lead to not-present page faults during KASAN
-validation if the kernel performs a software lookup into the GDT.  The DS
-buffer is also likely affected.
+There is a cludge in change_page_attr_set_clr() that inhibits
+propagating NX changes to the aliases (directmap and highmap) -- this
+is a cludge twofold:
 
-The motivation for mapping the per-CPU areas on-demand was to avoid
-mapping the entire 512GiB range that's reserved for the CPU entry area,
-shaving a few bytes by not creating shadows for potentially unused memory
-was not a goal.
+ - it also inhibits the primary checks in __change_page_attr();
+ - it hard depends on single bit changes.
 
-The bug is most easily reproduced by doing a sigreturn with a garbage
-CS in the sigcontext, e.g.
+The introduction of set_memory_rox() triggered this last issue for
+clearing both _PAGE_RW and _PAGE_NX.
 
-  int main(void)
-  {
-    struct sigcontext regs;
+Explicitly ignore _PAGE_NX in cpa_process_alias() instead.
 
-    syscall(__NR_mmap, 0x1ffff000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
-    syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 7ul, 0x32ul, -1, 0ul);
-    syscall(__NR_mmap, 0x21000000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
-
-    memset(&regs, 0, sizeof(regs));
-    regs.cs = 0x1d0;
-    syscall(__NR_rt_sigreturn);
-    return 0;
-  }
-
-to coerce the kernel into doing a GDT lookup to compute CS.base when
-reading the instruction bytes on the subsequent #GP to determine whether
-or not the #GP is something the kernel should handle, e.g. to fixup UMIP
-violations or to emulate CLI/STI for IOPL=3 applications.
-
-  BUG: unable to handle page fault for address: fffffbc8379ace00
-  #PF: supervisor read access in kernel mode
-  #PF: error_code(0x0000) - not-present page
-  PGD 16c03a067 P4D 16c03a067 PUD 15b990067 PMD 15b98f067 PTE 0
-  Oops: 0000 [#1] PREEMPT SMP KASAN
-  CPU: 3 PID: 851 Comm: r2 Not tainted 6.1.0-rc3-next-20221103+ #432
-  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
-  RIP: 0010:kasan_check_range+0xdf/0x190
-  Call Trace:
-   <TASK>
-   get_desc+0xb0/0x1d0
-   insn_get_seg_base+0x104/0x270
-   insn_fetch_from_user+0x66/0x80
-   fixup_umip_exception+0xb1/0x530
-   exc_general_protection+0x181/0x210
-   asm_exc_general_protection+0x22/0x30
-  RIP: 0003:0x0
-  Code: Unable to access opcode bytes at 0xffffffffffffffd6.
-  RSP: 0003:0000000000000000 EFLAGS: 00000202
-  RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00000000000001d0
-  RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-  RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-  R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-  R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-   </TASK>
-
-Fixes: 9fd429c28073 ("x86/kasan: Map shadow for percpu pages on demand")
-Reported-by: syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com
-Suggested-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Fixes: b38994948567 ("x86/mm: Implement native set_memory_rox()")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Debugged-by: Dave Hansen <dave.hansen@intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Link: https://lkml.kernel.org/r/20221110203504.1985010-3-seanjc@google.com
+Link: https://lkml.kernel.org/r/20221110125544.594991716%40infradead.org
 ---
- arch/x86/mm/cpu_entry_area.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ arch/x86/mm/pat/set_memory.c | 28 +++++++++++++++++++++++-----
+ 1 file changed, 23 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/mm/cpu_entry_area.c b/arch/x86/mm/cpu_entry_area.c
-index d831aae..7c855df 100644
---- a/arch/x86/mm/cpu_entry_area.c
-+++ b/arch/x86/mm/cpu_entry_area.c
-@@ -91,11 +91,6 @@ void cea_set_pte(void *cea_vaddr, phys_addr_t pa, pgprot_t flags)
- static void __init
- cea_map_percpu_pages(void *cea_vaddr, void *ptr, int pages, pgprot_t prot)
- {
--	phys_addr_t pa = per_cpu_ptr_to_phys(ptr);
--
--	kasan_populate_shadow_for_vaddr(cea_vaddr, pages * PAGE_SIZE,
--					early_pfn_to_nid(PFN_DOWN(pa)));
--
- 	for ( ; pages; pages--, cea_vaddr+= PAGE_SIZE, ptr += PAGE_SIZE)
- 		cea_set_pte(cea_vaddr, per_cpu_ptr_to_phys(ptr), prot);
- }
-@@ -195,6 +190,9 @@ static void __init setup_cpu_entry_area(unsigned int cpu)
- 	pgprot_t tss_prot = PAGE_KERNEL;
- #endif
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index 4943f6c..beef774 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -1669,6 +1669,12 @@ static int cpa_process_alias(struct cpa_data *cpa)
+ 		alias_cpa.flags &= ~(CPA_PAGES_ARRAY | CPA_ARRAY);
+ 		alias_cpa.curpage = 0;
  
-+	kasan_populate_shadow_for_vaddr(cea, CPU_ENTRY_AREA_SIZE,
-+					early_cpu_to_node(cpu));
++		/* Directmap always has NX set, do not modify. */
++		if (__supported_pte_mask & _PAGE_NX) {
++			alias_cpa.mask_clr.pgprot &= ~_PAGE_NX;
++			alias_cpa.mask_set.pgprot &= ~_PAGE_NX;
++		}
 +
- 	cea_set_pte(&cea->gdt, get_cpu_gdt_paddr(cpu), gdt_prot);
+ 		cpa->force_flush_all = 1;
  
- 	cea_map_percpu_pages(&cea->entry_stack_page,
+ 		ret = __change_page_attr_set_clr(&alias_cpa, 0);
+@@ -1691,6 +1697,15 @@ static int cpa_process_alias(struct cpa_data *cpa)
+ 		alias_cpa.flags &= ~(CPA_PAGES_ARRAY | CPA_ARRAY);
+ 		alias_cpa.curpage = 0;
+ 
++		/*
++		 * [_text, _brk_end) also covers data, do not modify NX except
++		 * in cases where the highmap is the primary target.
++		 */
++		if (__supported_pte_mask & _PAGE_NX) {
++			alias_cpa.mask_clr.pgprot &= ~_PAGE_NX;
++			alias_cpa.mask_set.pgprot &= ~_PAGE_NX;
++		}
++
+ 		cpa->force_flush_all = 1;
+ 		/*
+ 		 * The high mapping range is imprecise, so ignore the
+@@ -1709,6 +1724,12 @@ static int __change_page_attr_set_clr(struct cpa_data *cpa, int checkalias)
+ 	unsigned long rempages = numpages;
+ 	int ret = 0;
+ 
++	/*
++	 * No changes, easy!
++	 */
++	if (!(pgprot_val(cpa->mask_set) | pgprot_val(cpa->mask_clr)))
++		return ret;
++
+ 	while (rempages) {
+ 		/*
+ 		 * Store the remaining nr of pages for the large page
+@@ -1755,7 +1776,7 @@ static int change_page_attr_set_clr(unsigned long *addr, int numpages,
+ 				    struct page **pages)
+ {
+ 	struct cpa_data cpa;
+-	int ret, cache, checkalias;
++	int ret, cache;
+ 
+ 	memset(&cpa, 0, sizeof(cpa));
+ 
+@@ -1805,10 +1826,7 @@ static int change_page_attr_set_clr(unsigned long *addr, int numpages,
+ 	cpa.curpage = 0;
+ 	cpa.force_split = force_split;
+ 
+-	/* No alias checking for _NX bit modifications */
+-	checkalias = (pgprot_val(mask_set) | pgprot_val(mask_clr)) != _PAGE_NX;
+-
+-	ret = __change_page_attr_set_clr(&cpa, checkalias);
++	ret = __change_page_attr_set_clr(&cpa, 1);
+ 
+ 	/*
+ 	 * Check whether we really changed something:
