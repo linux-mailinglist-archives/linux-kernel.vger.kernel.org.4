@@ -2,300 +2,474 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575DC64F6CB
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 02:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA5664F6CD
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 02:48:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbiLQBqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 20:46:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
+        id S229562AbiLQBrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 20:47:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiLQBqA (ORCPT
+        with ESMTP id S230010AbiLQBrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 20:46:00 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38111A445
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 17:45:58 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so4032707pjj.4
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 17:45:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1SPbBEgrOaHNV8xOhHSUjf1emrGY+ICMgqRk2n8nWrI=;
-        b=kB1udAvZT6xXPrHig116jEAzPsUx7zkg9OrgLbxxwwUvTSW0mU9HOfNtzC1qYSIudI
-         J+Ctp9oMo0iNzzrzhLpESvR8V336gTlu+FW4FSMJrVj/PCMN+Oh73+Y+s9YSwZzZyxhC
-         Ve05HraaxAXhI7iqk0nuts+VzGGGCKxzMtSg9Cd0VTiNAhRg+RiqlfdPIfYtqiTpxjKa
-         I4A2iBnz7KmI9hjlvmDAAINi6EqGhgPpdm0KAdOo287a3mdoPhEz3d5camsxpFDTZYRB
-         pcPYkTfJUzPLV4unMqIrxmrQFZB1K6bqRuovkWHaQCTSN7wXHYCYEx1KVDIwEXI8ECFO
-         O6ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1SPbBEgrOaHNV8xOhHSUjf1emrGY+ICMgqRk2n8nWrI=;
-        b=BpP9X29fcdDAjhcDlHMWLC1+Akx+/oDrta7Tv4BeihUAZjWVLEo+rpGYXMmLHau0HZ
-         U/ENKHdY4HN4I1iuRm7GVa7wX8P3hXYl0oTQZB5kEWCOpNwEz8qeaI3OekYILmIBzbQM
-         3bDfHjJMYNio7Eeo6OWvdVnt/t+etW61eeQgS8HANqJA4MH56DOvBmUPiEyhxtSDuVp/
-         uZP18SRVpx+gJ3jNh8GW7Iy217ghfLppfJIlpYpJJ9QlHrjdUx5YvE6g/68hD5RoG/pK
-         3UVDMkCSoH/amhPpJScOY6xlcHmWGk8zAVfOq+Cfdq/GaJD/qupQQUJyArLuoqGBrJKy
-         9Afw==
-X-Gm-Message-State: AFqh2kr5y8jfxGapd/UbTwb9gbCTby0SQpF9cxjJlwZv2CG9foUhJi4L
-        i5zY0cHtZNADAZUWJcU8RY438MJ5iD1B0NZ8qG5a5w==
-X-Google-Smtp-Source: AMrXdXuD0JNDkYJxldHADHFUTjZ45s8XXqk6J1PG4bpmd3+lReDrwwy/2Hn+lscVVYWRbqQdHt11YDt61guDvu1LQKY=
-X-Received: by 2002:a17:90a:3e4f:b0:219:aa90:3198 with SMTP id
- t15-20020a17090a3e4f00b00219aa903198mr1464527pjm.112.1671241557408; Fri, 16
- Dec 2022 17:45:57 -0800 (PST)
+        Fri, 16 Dec 2022 20:47:53 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D29A8D6F
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 17:47:49 -0800 (PST)
+Received: from loongson.cn (unknown [111.9.175.10])
+        by gateway (Coremail) with SMTP id _____8DxOenEH51joUgGAA--.11077S3;
+        Sat, 17 Dec 2022 09:47:48 +0800 (CST)
+Received: from [10.136.12.26] (unknown [111.9.175.10])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxHuTBH51jHxECAA--.6930S3;
+        Sat, 17 Dec 2022 09:47:47 +0800 (CST)
+Subject: Re: [PATCH 4/6] LoongArch: Strip guess_unwinder out from
+ prologue_unwinder
+To:     Qing Zhang <zhangqing@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+References: <20221215040141.18610-1-hejinyang@loongson.cn>
+ <20221215040141.18610-5-hejinyang@loongson.cn>
+ <36c3560a-0a2d-4c3f-ecb6-0e7e71746917@loongson.cn>
+ <be643b7c-611e-c87b-c030-5fa51220d78c@loongson.cn>
+ <6fdb3dc9-2b34-ce53-1ff8-6b23c1eaaa82@loongson.cn>
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <b1d090e3-1d68-3508-9108-5d697fa84ddd@loongson.cn>
+Date:   Sat, 17 Dec 2022 09:47:45 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <CALHCpMgSZOZdOGpLwTYf0sFD5EMNL7CuqHuFJV_6w5VPSWZnUw@mail.gmail.com>
- <CALHCpMgEZjnR39upkR6iozSk-b5A_GHRo9rcDSPXzzQi6x_qCw@mail.gmail.com>
- <b1b7935d-0785-2e57-bad9-ab2476f0acf2@leemhuis.info> <CALHCpMhsM2j=bSXEDC9BWYpOAyvCccgJpJmqXfiRTHvp6=y3tA@mail.gmail.com>
- <20221212101449.4e465181@xps-13> <CALHCpMimCqZB0bnHaOdCzucey+92NcRRZXCHXYYH5c9vj0nZaQ@mail.gmail.com>
- <20221212173730.64224599@xps-13> <b75a8769-0cc8-beb3-931a-6755aede3af0@inbox.ru>
- <20221213104643.052d4a06@xps-13> <CALHCpMhOku2b+1y5Z=N5RJ6SvCvNakD2rSyRAqp6Gz3JWVvXGg@mail.gmail.com>
- <20221213175424.79895b63@xps-13> <CAGETcx8YvD5JABuJhah_6oOAUe=QgnOG5gWNL7Hcfxbvq0C2YQ@mail.gmail.com>
- <20221216120456.52072f9f@xps-13>
-In-Reply-To: <20221216120456.52072f9f@xps-13>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 16 Dec 2022 17:45:20 -0800
-Message-ID: <CAGETcx_=K42PE4cvX7+h2gbNHORUfPmoVAbamn5MRK2VHtk-Dg@mail.gmail.com>
-Subject: Re: nvmem-cells regression after adding 'call of_platform_populate()
- for MTD partitions'
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6fdb3dc9-2b34-ce53-1ff8-6b23c1eaaa82@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8AxHuTBH51jHxECAA--.6930S3
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvAXoW3ZF13Kr18Wr4Dtr1DGFy3Arb_yoW8WFWxto
+        W7KF13Wr4rXrWUK3yUA34UJFy5tw4UJwnrArW5tr13Gr4Iya43Z3yUJa45tayxKr1rKr4U
+        Gryjqr1FvFWxXr1fn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
+        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
+        UUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
+        0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l84
+        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
+        M2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
+        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2
+        z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2
+        IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4U
+        YxBIdaVFxhVjvjDU0xZFpf9x07jepB-UUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 3:05 AM Miquel Raynal <miquel.raynal@bootlin.com> w=
-rote:
->
-> Hi Saravana, Maxim, Maxim,
->
-> saravanak@google.com wrote on Wed, 14 Dec 2022 13:53:54 -0800:
->
-> > On Tue, Dec 13, 2022 at 8:54 AM Miquel Raynal <miquel.raynal@bootlin.co=
-m> wrote:
-> > >
-> > > Hi Maxim,
-> > >
-> > > bigunclemax@gmail.com wrote on Tue, 13 Dec 2022 14:02:34 +0300:
-> > >
-> > > > I looked closer at commit 658c4448bbbf and bcdf0315a61a, 5db1c2dbc0=
-4c16 commits.
-> > > > Looks like we have two different features binded to one property - =
-"compatible".
-> > > >
-> > > > From one side it is the ability to forward the subnode of the mtd
-> > > > partition to the nvmem subsystem (658c4448bbbf and ac42c46f983e).
-> > > > And from another side is the ability to use custom initialization o=
-f
-> > > > the mtd partition (bcdf0315a61a and 5db1c2dbc04c16).
-> > > >
-> > > > What I mean:
-> > > > According to ac42c46f983e I can create DT like this:
-> > > >  - |
-> > > >     partitions {
-> > > >         compatible =3D "fixed-partitions";
-> > > >         #address-cells =3D <1>;
-> > > >         #size-cells =3D <1>;
-> > > >
-> > > >         partition@0 {
-> > > >             compatible =3D "nvmem-cells";
-> > > >             reg =3D <0x40000 0x10000>;
-> > > >             #address-cells =3D <1>;
-> > > >             #size-cells =3D <1>;
-> > > >             macaddr_gmac1: macaddr_gmac1@0 {
-> > > >                 reg =3D <0x0 0x6>;
-> > > >             };
-> > > >         };
-> > > >     };
-> > > >
-> > > >
-> > > > And according to 5db1c2dbc04c16 I can create DT like this:
-> > > >  - |
-> > > >     partitions {
-> > > >         compatible =3D "fixed-partitions";
-> > > >         #address-cells =3D <1>;
-> > > >         #size-cells =3D <1>;
-> > > >
-> > > >         partition@0 {
-> > > >             compatible =3D "u-boot,env";
-> > > >             reg =3D <0x40000 0x10000>;
-> > > >         };
-> > > >     };
-> > > >
-> > > > But I can not use them both, because only one "compatible" property=
- allowed.
-> > > > This will be incorrect:
-> > > >  - |
-> > > >     partitions {
-> > > >         compatible =3D "fixed-partitions";
-> > > >         #address-cells =3D <1>;
-> > > >         #size-cells =3D <1>;
-> > > >
-> > > >         partition@0 {
-> > > >             compatible =3D "u-boot,env";  # from ac42c46f983e
-> > > >             compatible =3D "nvmem-cells"; # from 5db1c2dbc04c
-> > >
-> > > What about:
-> > >
-> > >               compatible =3D "u-boot,env", "nvmem-cells";
-> > >
-> > > instead? that should actually work.
-> > >
-> > > >             reg =3D <0x40000 0x10000>;
-> > > >             #address-cells =3D <1>;
-> > > >             #size-cells =3D <1>;
-> > > >             macaddr_gmac1: macaddr_gmac1@0 {
-> > > >                 reg =3D <0x0 0x6>;
-> > > >             };
-> > > >         };
-> > > >     };
-> > > >
-> > > > > compatible: Duplicate property name
-> > > >
-> > > > =D0=B2=D1=82, 13 =D0=B4=D0=B5=D0=BA. 2022 =D0=B3. =D0=B2 12:46, Miq=
-uel Raynal <miquel.raynal@bootlin.com>:
-> > > > >
-> > > > > Hi Maxim,
-> > > > >
-> > > > > fido_max@inbox.ru wrote on Mon, 12 Dec 2022 20:57:49 +0300:
-> > > > >
-> > > > > > Hi, Miquel!
-> > > > > >
-> > > > > > On 12.12.2022 19:37, Miquel Raynal wrote:
-> > > > > >
-> > > > > > > Let me try to recap the situation for all the people I just i=
-nvolved:
-> > > > > > >
-> > > > > > > * An Ethernet driver gets its mac address from an nvmem cell.=
- The
-> > > > > > >    Ethernet controller DT node then has an "nvmem-cells" prop=
-erty
-> > > > > > >    pointing towards an nvmem cell.
-> > > > > > > * The nvmem cell comes from an mtd partition.
-> > > > > > > * The mtd partition is flagged with a particular compatible
-> > > > > > >    (which is also named "nvmem-cells") to tell the kernel tha=
-t the node
-> > > > > > >    produces nvmem cells.
-> > > > > > > * The mtd partition itself has no driver, but is the child no=
-de of a
-> > > > > > >    "partitions" container which has one (in this case,
-> > > > > > >    "fixed-partitions", see the snippet below).
-> > > > > > >
-> > > > > > > Because the "nvmem-cells" property of the Ethernet node point=
-s at the
-> > > > > > > nvmem-cell node, the core create a device link between the Et=
-hernet
-> > > > > > > controller (consumer) and the mtd partition (producer).
-> > > > > > >
-> > > > > > > The device link in this case will never be satisfied because =
-no driver
-> > > > > > > matches the "nvmem-cells" compatible of the partition node.
-> > > > > > >
-> > > > > > > Reverting commit bcdf0315a61a ("mtd: call of_platform_populat=
-e() for MTD
-> > > > > > > partitions") would IMHO not make much sense, the problem come=
-s from the
-> > > > > > > device link side and even there, there is nothing really "wro=
-ng",
-> > > > > > > because I really expect the mtd device to be ready before the
-> > > > > > > Ethernet controller probe, the device link is legitimate.
-> > > > > > >
-> > > > > > > So I would like to explore other alternatives. Here are a bun=
-ch of
-> > > > > > > ideas, but I'm open:
-> > > > > >
-> > > > > > How about to create simple driver with compatible=3D"nvmem-cell=
-" and to move all the suff from main mtd driver which serves nvmem-cell to =
-the probe function?
-> > > > >
-> > > > > This is probably worth the try but I doubt you can make it work w=
-ithout
-> > > > > regressions because IIRC the nvmem registration happens no matter=
- the
-> > > > > compatible (not mentioning the user-otp and factory-otp cases). Y=
-ou can
-> > > > > definitely try this out if you think you can come up with somethi=
-ng
-> > > > > though.
-> > > > >
-> > > > > But I would like to hear from the device-link gurus :) because ev=
-en if
-> > > > > we fix mtd with a "trick" like above, I guess we'll very likely f=
-ind
-> > > > > other corner cases like that and I am interested in understanding=
- the
-> > > > > rationale of what could be a proper fix.
-> > > > >
-> >
-> > Responding to the whole thread.
-> >
-> > I'm going by Miquel's first email in which he cc'ed me and haven't
-> > actually looked at the mtd code. Couple of comments:
-> >
-> > Independent of mtd/nvmem-cell, I generally frown on having a
-> > compatible string for a child node that you don't treat as a device.
-> > Even more so if you actually create a struct device for it and then
-> > don't do anything else with it. That's just a waste of memory. So, in
-> > general try to avoid that in the future if you can.
->
-> Agreed, it didn't triggered any warnings in my head in the first place,
-> sorry about that.
->
-> > Also, there are flags the parent device's driver can set that'll tell
-> > fw_devlink not to treat a specific DT node as a real device. So, if we
-> > really need that I'll dig up and suggest a fix.
->
-> Interesting, that would indeed very likely fix it.
->
-> > Lastly and more importantly, I've a series[1] that stops depending on
-> > the compatible property for fw_devlink to work. So it should be
-> > smarter than it is today. But that series has known bugs for which I
-> > gave test fixes in that thread. I plan to make a v2 of that series
-> > with that fix and I'm expecting it'll fix a bunch of fw_devlink
-> > issues.
-> >
-> > Feel free to give v1 + squashing the fixes a shot if you are excited
-> > to try it. Otherwise, I'll try my best to get around to it this week
-> > (kinda swamped though + holidays coming up, so no promises).
->
-> Can you please include us in your next submission?
-> * Maxim Kiselev <bigunclemax@gmail.com>
-> * Maxim Kochetkov <fido_max@inbox.ru>
-> * Miquel Raynal <miquel.raynal@bootlin.com>
+On 2022-12-16 10:14, Qing Zhang wrote:
 
-Will do.
+> Hi, Jinyang
+>
+> On 2022/12/16 上午9:40, Jinyang He wrote:
+>> On 2022-12-15 17:15, Qing Zhang wrote:
+>>
+>>> Hi, Jinyang
+>>>
+>>> On 2022/12/15 下午12:01, Jinyang He wrote:
+>>>> The prolugue unwinder rely on symbol info. When PC is not in kernel
+>>>> text address, it cannot find relative symbol info and it will be 
+>>>> broken.
+>>>> The guess unwinder will be used in this case. And the guess unwinder
+>>>> codes in prolugue unwinder is redundant. Strip it out and set the
+>>>> unwinder info in unwind_state.
+>>>>
+>>>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+>>>> ---
+>>>>   arch/loongarch/include/asm/unwind.h     |  22 ++++
+>>>>   arch/loongarch/kernel/Makefile          |   3 +-
+>>>>   arch/loongarch/kernel/unwind.c          |  52 +++++++++
+>>>>   arch/loongarch/kernel/unwind_guess.c    |  41 ++-----
+>>>>   arch/loongarch/kernel/unwind_prologue.c | 135 
+>>>> +++++++++---------------
+>>>>   5 files changed, 135 insertions(+), 118 deletions(-)
+>>>>   create mode 100644 arch/loongarch/kernel/unwind.c
+>>>>
+>>>> diff --git a/arch/loongarch/include/asm/unwind.h 
+>>>> b/arch/loongarch/include/asm/unwind.h
+>>>> index 6ece48f0ff77..a16aff1d086a 100644
+>>>> --- a/arch/loongarch/include/asm/unwind.h
+>>>> +++ b/arch/loongarch/include/asm/unwind.h
+>>>> @@ -18,6 +18,8 @@ enum unwinder_type {
+>>>>       UNWINDER_PROLOGUE,
+>>>>   };
+>>>>   +struct unwinder_ops;
+>>>> +
+>>>>   struct unwind_state {
+>>>>       char type; /* UNWINDER_XXX */
+>>>>       struct stack_info stack_info;
+>>>> @@ -25,8 +27,22 @@ struct unwind_state {
+>>>>       bool first, error, is_ftrace;
+>>>>       int graph_idx;
+>>>>       unsigned long sp, pc, ra;
+>>>> +    const struct unwinder_ops *ops;
+>>>> +};
+>>>> +
+>>>> +struct unwinder_ops {
+>>>> +    void (*unwind_start)(struct unwind_state *state,
+>>>> +                 struct task_struct *task, struct pt_regs *regs);
+>>>> +    bool (*unwind_next_frame)(struct unwind_state *state);
+>>>> +    unsigned long (*unwind_get_return_address)(struct unwind_state 
+>>>> *state);
+>>>>   };
+>>>>   +extern const struct unwinder_ops *default_unwinder;
+>>>> +extern const struct unwinder_ops unwinder_guess;
+>>>> +#ifdef CONFIG_UNWINDER_PROLOGUE
+>>>> +extern const struct unwinder_ops unwinder_prologue;
+>>>> +#endif
+>>>> +
+>>>>   void unwind_start(struct unwind_state *state,
+>>>>             struct task_struct *task, struct pt_regs *regs);
+>>>>   bool unwind_next_frame(struct unwind_state *state);
+>>>> @@ -49,4 +65,10 @@ static inline unsigned long 
+>>>> unwind_graph_addr(struct unwind_state *state,
+>>>>       return ftrace_graph_ret_addr(state->task, &state->graph_idx,
+>>>>                        pc, (unsigned long *)(cfa - 
+>>>> GRAPH_FAKE_OFFSET));
+>>>>   }
+>>>> +
+>>>> +static inline void unwind_register_unwinder(struct unwind_state 
+>>>> *state,
+>>>> +                      const struct unwinder_ops *unwinder)
+>>>> +{
+>>>> +    state->ops = unwinder;
+>>>> +}
+>>>>   #endif /* _ASM_UNWIND_H */
+>>>> diff --git a/arch/loongarch/kernel/Makefile 
+>>>> b/arch/loongarch/kernel/Makefile
+>>>> index 7ca65195f7f8..cb6029ea3ea9 100644
+>>>> --- a/arch/loongarch/kernel/Makefile
+>>>> +++ b/arch/loongarch/kernel/Makefile
+>>>> @@ -8,7 +8,7 @@ extra-y        := vmlinux.lds
+>>>>   obj-y        += head.o cpu-probe.o cacheinfo.o env.o setup.o 
+>>>> entry.o genex.o \
+>>>>              traps.o irq.o idle.o process.o dma.o mem.o io.o 
+>>>> reset.o switch.o \
+>>>>              elf.o syscall.o signal.o time.o topology.o inst.o 
+>>>> ptrace.o vdso.o \
+>>>> -           alternative.o unaligned.o
+>>>> +           alternative.o unaligned.o unwind.o unwind_guess.o
+>>>>     obj-$(CONFIG_ACPI)        += acpi.o
+>>>>   obj-$(CONFIG_EFI)         += efi.o
+>>>> @@ -42,7 +42,6 @@ obj-$(CONFIG_MAGIC_SYSRQ)    += sysrq.o
+>>>>   obj-$(CONFIG_KEXEC)        += machine_kexec.o relocate_kernel.o
+>>>>   obj-$(CONFIG_CRASH_DUMP)    += crash_dump.o
+>>>>   -obj-$(CONFIG_UNWINDER_GUESS)    += unwind_guess.o
+>>>>   obj-$(CONFIG_UNWINDER_PROLOGUE) += unwind_prologue.o
+>>>>     obj-$(CONFIG_PERF_EVENTS)    += perf_event.o perf_regs.o
+>>>> diff --git a/arch/loongarch/kernel/unwind.c 
+>>>> b/arch/loongarch/kernel/unwind.c
+>>>> new file mode 100644
+>>>> index 000000000000..568c6fe707d1
+>>>> --- /dev/null
+>>>> +++ b/arch/loongarch/kernel/unwind.c
+>>>> @@ -0,0 +1,52 @@
+>>>> +// SPDX-License-Identifier: GPL-2.0
+>>>> +/*
+>>>> + * Copyright (C) 2022 Loongson Technology Corporation Limited
+>>>> + */
+>>>> +#include <asm/unwind.h>
+>>>> +
+>>>> +#if defined(CONFIG_UNWINDER_GUESS)
+>>>> +const struct unwinder_ops *default_unwinder = &unwinder_guess;
+>>>> +#elif defined(CONFIG_UNWINDER_PROLOGUE)
+>>>> +const struct unwinder_ops *default_unwinder = &unwinder_prologue;
+>>>> +#endif
+>>>> +
+>>>> +unsigned long unwind_get_return_address(struct unwind_state *state)
+>>>> +{
+>>>> +    if (!state->ops || unwind_done(state))
+>>>> +        return 0;
+>>>> +    return state->ops->unwind_get_return_address(state);
+>>>> +}
+>>>> +EXPORT_SYMBOL_GPL(unwind_get_return_address);
+>>>> +
+>>>> +void unwind_start(struct unwind_state *state, struct task_struct 
+>>>> *task,
+>>>> +            struct pt_regs *regs)
+>>>> +{
+>>>> +    memset(state, 0, sizeof(*state));
+>>>> +    unwind_register_unwinder(state, default_unwinder);
+>>>> +    if (regs) {
+>>>> +        state->sp = regs->regs[3];
+>>>> +        state->pc = regs->csr_era;
+>>>> +        state->ra = regs->regs[1];
+>>>> +    } else if (task == current) {
+>>>> +        state->sp = (unsigned long)__builtin_frame_address(0);
+>>>> +        state->pc = (unsigned long)__builtin_return_address(0);
+>>>> +        state->ra = 0;
+>>>> +    } else {
+>>>> +        state->sp = thread_saved_fp(task);
+>>>> +        state->pc = thread_saved_ra(task);
+>>>> +        state->ra = 0;
+>>>> +    }
+>>>> +    state->task = task;
+>>>> +    get_stack_info(state->sp, state->task, &state->stack_info);
+>>>> +    state->pc = unwind_graph_addr(state, state->pc, state->sp);
+>
+>  here. :)
 
--Saravana
+The PC from branch 'task == current' is the RA of current frame. And the 
+PC from branch 'regs' is regs->csr_era, which may be RA of frame where 
+to get the regs->csr_era. They all may traced by function_graph. 
+Ftrace_graph_ret_addr() returns orignal addr and not destroys result, if 
+the addr was not traced, so calling it for deal with above cases.
+
+Thanks,
+
+Jinyang
 
 >
-> > [1] - https://lore.kernel.org/lkml/20220810060040.321697-1-saravanak@go=
-ogle.com/
->
-> Maxim, any chance you give this a try?
->
-> Thanks,
-> Miqu=C3=A8l
+>>>> + state->ops->unwind_start(state, task, regs);
+>>>> +}
+>>>> +EXPORT_SYMBOL_GPL(unwind_start);
+>>>> +
+>>>> +bool unwind_next_frame(struct unwind_state *state)
+>>>> +{
+>>>> +    if (!state->ops || unwind_done(state))
+>>>> +        return false;
+>>>> +    return state->ops->unwind_next_frame(state);
+>>>> +}
+>>>> +EXPORT_SYMBOL_GPL(unwind_next_frame);
+>>>> diff --git a/arch/loongarch/kernel/unwind_guess.c 
+>>>> b/arch/loongarch/kernel/unwind_guess.c
+>>>> index 8ce32c37c587..b7ca2b88ac63 100644
+>>>> --- a/arch/loongarch/kernel/unwind_guess.c
+>>>> +++ b/arch/loongarch/kernel/unwind_guess.c
+>>>> @@ -7,51 +7,23 @@
+>>>>     #include <asm/unwind.h>
+>>>>   -unsigned long unwind_get_return_address(struct unwind_state *state)
+>>>> +static unsigned long get_return_address(struct unwind_state *state)
+>>>>   {
+>>>> -    if (unwind_done(state))
+>>>> -        return 0;
+>>>>       return state->pc;
+>>>>   }
+>>>> -EXPORT_SYMBOL_GPL(unwind_get_return_address);
+>>>>   -void unwind_start(struct unwind_state *state, struct task_struct 
+>>>> *task,
+>>>> +static void start(struct unwind_state *state, struct task_struct 
+>>>> *task,
+>>>>               struct pt_regs *regs)
+>>>>   {
+>>>> -    memset(state, 0, sizeof(*state));
+>>>> -
+>>>> -    if (regs) {
+>>>> -        state->sp = regs->regs[3];
+>>>> -        state->pc = regs->csr_era;
+>>>> -    } else if (task == current) {
+>>>> -        state->sp = (unsigned long)__builtin_frame_address(0);
+>>>> -        state->pc = (unsigned long)__builtin_return_address(0);
+>>>> -    } else {
+>>>> -        state->sp = thread_saved_fp(task);
+>>>> -        state->pc = thread_saved_ra(task);
+>>>> -    }
+>>>> -
+>>>> -    state->task = task;
+>>>> -    state->first = true;
+>>>> -    state->pc = unwind_graph_add(state, state->pc, state->sp);
+>>>
+>>> Do we need to unwind_graph_add again here? unwinder_guess and 
+>>> unwind_prologue have already been done.
+>>
+>> Hi, Qing
+>>
+>>
+>> Sorry I don't what meanning here, as here is a delete line.
+>>
+> Sorry, It's the unwind_start up here.
+>>
+>>>
+>>>> -    get_stack_info(state->sp, state->task, &state->stack_info);
+>>>> -
+>>>>       if (!unwind_done(state) && !__kernel_text_address(state->pc))
+>>>>           unwind_next_frame(state);
+>>>>   }
+>>>> -EXPORT_SYMBOL_GPL(unwind_start);
+>>>>   -bool unwind_next_frame(struct unwind_state *state)
+>>>> +static bool next_frame(struct unwind_state *state)
+>>>>   {
+>>>>       struct stack_info *info = &state->stack_info;
+>>>>       unsigned long addr;
+>>>>   -    if (unwind_done(state))
+>>>> -        return false;
+>>>> -
+>>>> -    if (state->first)
+>>>> -        state->first = false;
+>>>> -
+>>>>       do {
+>>>>           for (state->sp += sizeof(unsigned long);
+>>>>                state->sp < info->end;
+>>>> @@ -68,4 +40,9 @@ bool unwind_next_frame(struct unwind_state *state)
+>>>>         return false;
+>>>>   }
+>>>> -EXPORT_SYMBOL_GPL(unwind_next_frame);
+>>>> +
+>>>> +const struct unwinder_ops unwinder_guess = {
+>>>> +    .unwind_start = start,
+>>>> +    .unwind_next_frame = next_frame,
+>>>> +    .unwind_get_return_address = get_return_address,
+>>>> +};
+>>>> diff --git a/arch/loongarch/kernel/unwind_prologue.c 
+>>>> b/arch/loongarch/kernel/unwind_prologue.c
+>>>> index d464c533c64f..9677e13c4b4c 100644
+>>>> --- a/arch/loongarch/kernel/unwind_prologue.c
+>>>> +++ b/arch/loongarch/kernel/unwind_prologue.c
+>>>> @@ -9,6 +9,8 @@
+>>>>   #include <asm/ptrace.h>
+>>>>   #include <asm/unwind.h>
+>>>>   +static const struct unwinder_ops *guard_unwinder = &unwinder_guess;
+>>>> +
+>>>>   static inline void unwind_state_fixup(struct unwind_state *state)
+>>>>   {
+>>>>   #ifdef CONFIG_DYNAMIC_FTRACE
+>>>> @@ -19,31 +21,19 @@ static inline void unwind_state_fixup(struct 
+>>>> unwind_state *state)
+>>>>   #endif
+>>>>   }
+>>>>   -unsigned long unwind_get_return_address(struct unwind_state *state)
+>>>> +static unsigned long get_return_address(struct unwind_state *state)
+>>>>   {
+>>>> -    if (unwind_done(state))
+>>>> -        return 0;
+>>>>       return state->pc;
+>>>>   }
+>>>> -EXPORT_SYMBOL_GPL(unwind_get_return_address);
+>>>> -
+>>>> -static bool unwind_by_guess(struct unwind_state *state)
+>>>> -{
+>>>> -    struct stack_info *info = &state->stack_info;
+>>>> -    unsigned long addr;
+>>>> -
+>>>> -    for (state->sp += sizeof(unsigned long);
+>>>> -         state->sp < info->end;
+>>>> -         state->sp += sizeof(unsigned long)) {
+>>>> -        addr = *(unsigned long *)(state->sp);
+>>>> -        state->pc = unwind_graph_addr(state, addr, state->sp + 8);
+>>>> -        if (__kernel_text_address(state->pc))
+>>>> -            return true;
+>>>> -    }
+>>>> -
+>>>> -    return false;
+>>>> -}
+>>>>   +/*
+>>>> + * LoongArch function prologue like follows,
+>>>> + *     [others instructions not use stack var]
+>>>> + *     addi.d sp, sp, -imm
+>>>> + *     st.d   xx, sp, offset <- save callee saved regs and
+>>>> + *     st.d   yy, sp, offset    save ra if function is nest.
+>>>> + *     [others instructions]
+>>>> + */
+>>>>   static bool unwind_by_prologue(struct unwind_state *state)
+>>>>   {
+>>>>       long frame_ra = -1;
+>>>> @@ -89,6 +79,10 @@ static bool unwind_by_prologue(struct 
+>>>> unwind_state *state)
+>>>>           ip++;
+>>>>       }
+>>>>   +    /*
+>>>> +     * Not find stack alloc action, PC may be in a leaf function. 
+>>>> Only the
+>>>> +     * first being true is reasonable, otherwise indicate analysis 
+>>>> is broken.
+>>>> +     */
+>>>>       if (!frame_size) {
+>>>>           if (state->first)
+>>>>               goto first;
+>>>> @@ -106,6 +100,7 @@ static bool unwind_by_prologue(struct 
+>>>> unwind_state *state)
+>>>>           ip++;
+>>>>       }
+>>>>   +    /* Not find save $ra action, PC may be in a leaf function, 
+>>>> too. */
+>>>>       if (frame_ra < 0) {
+>>>>           if (state->first) {
+>>>>               state->sp = state->sp + frame_size;
+>>>> @@ -114,96 +109,63 @@ static bool unwind_by_prologue(struct 
+>>>> unwind_state *state)
+>>>>           return false;
+>>>>       }
+>>>>   -    if (state->first)
+>>>> -        state->first = false;
+>>>> -
+>>>>       state->pc = *(unsigned long *)(state->sp + frame_ra);
+>>>>       state->sp = state->sp + frame_size;
+>>>>       goto out;
+>>>>     first:
+>>>> -    state->first = false;
+>>>> -    if (state->pc == state->ra)
+>>>> -        return false;
+>>>> -
+>>>>       state->pc = state->ra;
+>>>>     out:
+>>>> +    state->first = false;
+>>>>       unwind_state_fixup(state);
+>>>>       return !!__kernel_text_address(state->pc);
+>>>>   }
+>>>>   -void unwind_start(struct unwind_state *state, struct task_struct 
+>>>> *task,
+>>>> +static void start(struct unwind_state *state, struct task_struct 
+>>>> *task,
+>>>>               struct pt_regs *regs)
+>>>>   {
+>>>> -    memset(state, 0, sizeof(*state));
+>>>> -    state->type = UNWINDER_PROLOGUE;
+>>>> -
+>>>> -    if (regs) {
+>>>> -        state->sp = regs->regs[3];
+>>>> -        state->pc = regs->csr_era;
+>>>> -        state->ra = regs->regs[1];
+>>>> -        if (!__kernel_text_address(state->pc))
+>>>> -            state->type = UNWINDER_GUESS;
+>>>> -    } else if (task == current) {
+>>>> -        state->sp = (unsigned long)__builtin_frame_address(0);
+>>>> -        state->pc = (unsigned long)__builtin_return_address(0);
+>>>> -        state->ra = 0;
+>>>> -    } else {
+>>>> -        state->sp = thread_saved_fp(task);
+>>>> -        state->pc = thread_saved_ra(task);
+>>>> -        state->ra = 0;
+>>>> -    }
+>>>> -
+>>>> -    state->task = task;
+>>>>       state->first = true;
+>>>> -    state->pc = unwind_graph_addr(state, state->pc, state->sp);
+>>>> -    get_stack_info(state->sp, state->task, &state->stack_info);
+>>>>   -    if (!unwind_done(state) && !__kernel_text_address(state->pc))
+>>>> -        unwind_next_frame(state);
+>>>> +    /*
+>>>> +     * The current PC is not kernel text address, we cannot find its
+>>>> +     * relative symbol. Thus, prologue analysis will be broken. 
+>>>> Luckly,
+>>>> +     * we can use the guard unwinder.
+>>>> +     */
+>>>> +    if (!__kernel_text_address(state->pc)) {
+>>>> +        unwind_register_unwinder(state, guard_unwinder);
+>>>
+>>> Just add a comment here. Instead of using guard_unwinder, can we still
+>>> use guess_unwinder?
+>>
+>> Yes, and I'll use '&guess_unwinder' in next version. And I'll
+>> drop unwind type in next version, too.
+>>
+>>
+>> Thanks,
+>>
+>> Jinyang
+>>
+
