@@ -2,153 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9AC64F727
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 03:45:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9439064F735
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 03:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiLQCpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 21:45:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
+        id S230299AbiLQCtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 21:49:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbiLQCow (ORCPT
+        with ESMTP id S230209AbiLQCsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 21:44:52 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24467020E;
-        Fri, 16 Dec 2022 18:44:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671245091; x=1702781091;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=pn9KRdM41gHq5Yx1tyI8RAyUBn2yaSilzmFv6TXzjWc=;
-  b=DhqQMYMm7Ny315PDD+oCxykHvd6Vsi/WRmtHg7che6436JLO0hCgNedj
-   TEQ3bdRv2UjudOohoq6rmv+EN4DKTR+jQpOHLtvWq6U2EmQgrlh95MdJe
-   vHLxir00T998SIVKAeVriYjfu7t8x4c6SFoF1HhCa3Z66di8lCV/R6/WD
-   BHO5NIiaYHGleH0OVdJeyW0181X1N/C0TBOy9GsMH90/cZc0ITwTBEpV9
-   mE13kQJxAs9CeIDS2/eWnpPEoTsggQKHFDiSupkXGBgu28gCVQD5iRB0R
-   EQ03PzcCuy8f1BfYncLdeLzSe0unk8I0yfCTK3M2cU+Kp8A+TgriOoGPF
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="320272646"
-X-IronPort-AV: E=Sophos;i="5.96,251,1665471600"; 
-   d="scan'208";a="320272646"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 18:44:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="652133956"
-X-IronPort-AV: E=Sophos;i="5.96,251,1665471600"; 
-   d="scan'208";a="652133956"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga007.fm.intel.com with ESMTP; 16 Dec 2022 18:44:50 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 16 Dec 2022 18:44:50 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 16 Dec 2022 18:44:50 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.172)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Fri, 16 Dec 2022 18:44:49 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EzwkW33pleE3AS7HxGeru0rP49uHt/BrKhRSDV5WztKknXFwSVPb3pt8WbEFaZ6Nf5ZET4m2b46Mu+06S+9L/jgANCfCs2x/tYcfH/B2R6dOY6650iXFP6vR2Z9cvtY697Vqlp1AKAW6+lr9nrW0wavo4jlGfLLoNz5a/tKszq6zc9zrvOyCe2B5sVWFZJE42+0tLDBqAMTF7YA9ZnGog6s5rdZDz+kgznXfp/ajeG8fA2X+wvwF0ggCChVvQFdILCavLhir6kqx0E4xla0afo7TyoGvh8vU8Jj2zcoUW4afnizem+ovqr+LVvU/gGvawYNYwxKLaqerZ2uY3lrUDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rGntxEzIvt1n5W0MStyri4Iv+z7H3+GTfQhbCEnIG8o=;
- b=TpetGV1MroBOSYnifThZwlxGx2nSb2mP50yhAcP9MNDJ8e7ysN8nTmGlCKCItoyOmay4d9H2AlF7c3AIaoHiOScP1xgpinsIdOqwi/pLUYWa9wbiY0oJ5vX8WDnFyR8SqJRRMM9rTPR16hvvMqwfAcfSSeXbarFon8vKyylCVYj+DlWF5C9yLinLiw0mWQ+/rRkobw32OHgd6+ETbwXDrpIru2VcCQ5hyj7/gmDfYpAf4CQZ/jmKKi307wnpiYWkoMKYoXrajFG6ZIFgdE9K3x5CQBhjaebeG4p2vys6m2o1tBh5U2nPizov+Z4oueUi3PbanBuGYCEsoQRX+kBxDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14)
- by SA1PR11MB6712.namprd11.prod.outlook.com (2603:10b6:806:25c::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Sat, 17 Dec
- 2022 02:44:47 +0000
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::114c:5805:e63f:6018]) by PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::114c:5805:e63f:6018%4]) with mapi id 15.20.5924.011; Sat, 17 Dec 2022
- 02:44:47 +0000
-From:   "Zhang, Qiang1" <qiang1.zhang@intel.com>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>
-CC:     "frederic@kernel.org" <frederic@kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] rcu: Fix opposite might_sleep() check in
- rcu_blocking_is_gp()
-Thread-Topic: [PATCH] rcu: Fix opposite might_sleep() check in
- rcu_blocking_is_gp()
-Thread-Index: AQHZEDjb4JuHblX+NUKrHh1V8qzf2q5xRmGAgAAGjvCAABO7YA==
-Date:   Sat, 17 Dec 2022 02:44:47 +0000
-Message-ID: <PH0PR11MB588000890D537044BBAA209EDAE79@PH0PR11MB5880.namprd11.prod.outlook.com>
-References: <20221215035755.2820163-1-qiang1.zhang@intel.com>
- <20221217010345.GF4001@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB5880526CB255AFF91F0D76A2DAE79@PH0PR11MB5880.namprd11.prod.outlook.com>
-In-Reply-To: <PH0PR11MB5880526CB255AFF91F0D76A2DAE79@PH0PR11MB5880.namprd11.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR11MB5880:EE_|SA1PR11MB6712:EE_
-x-ms-office365-filtering-correlation-id: 29d752ab-142f-4832-c0a3-08dadfd8a965
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yBfZ+h5oYo8O6/QoI1nvvg5FNBbHc4Kl35F+Bwp3PqilSLmdBwVj6jb3qCH2NsWyAiUEFC5lJDMP/KZhGvda8jljpkJvb6gWjHAqbssbmQ7jX2dhf+9Lg2elic8i9NjsZHD92+Md0Y8m6kdzCm7o3SaA+0BnbuS2aPdk3gb0U0O5Bko9r2/ZhnToZRV9PhSiTlHnV/NWQjVR67xR01AroxgrJmmNSvx2DNOT+hLUDmyJsgNLWpUtweDBZLMdE4Hj4jrWqGA9++fn9i79aSjhjzqktbQwnxBGdjTpyZuuQK5AuJEGjgatkPlgoQAvSgVYj7dCFllraOSbXWs5PN0VKUG43sVK4DvVB/kTuhz4Yl/1Rn3S1rXNz/TP+qUguVHJYTb3WnGkDMZ4mOwGWJTA8KKhLJeqtP9IAG6A9nvY19s+/xXH67efKVGPv7tWsahw3cJhE6DA/I0jo0UOifFYjPYgFZkYy79/YtMiFdQa5DNnFR4AMwM19BKgulAszmEofoEZ/L+mveaUzohSovRCxHxuYyNqOC7CQabxNEKOG0W9v8QAfthmaoJ+kENPSEKd6PIXLDY5LCPByrpn2jhxzMfKoM9OOz2SmbcPxJZU9O8OcVHsJy5rOk5B4ocuhum04rOJtUMEP2qsvaRCgktD82d6a1G/pHB6nSwcj2Ki4TyaKnL+vsOc9KQdiMdYn7auEVSa9aYVKax5Ld3SRUcPvA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5880.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(366004)(376002)(346002)(136003)(451199015)(8936002)(54906003)(316002)(38100700002)(71200400001)(33656002)(122000001)(478600001)(82960400001)(38070700005)(110136005)(186003)(9686003)(2940100002)(26005)(7696005)(66476007)(55016003)(6506007)(66946007)(86362001)(66446008)(64756008)(5660300002)(76116006)(52536014)(2906002)(83380400001)(4326008)(8676002)(66556008)(41300700001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?NU7GLO6/vV17CXey5EulFDfJi3bOGR3avmtUMbp+hbp5UzSrY249A92CgIr/?=
- =?us-ascii?Q?8HJbz2Wn+dhnP5zanwO1+C/IOP/G5HlK6vzFWRZZ0qiY8rqxNlXHMJmOVA48?=
- =?us-ascii?Q?DahbQrt2QkyVOlrC/rfVhn1LFPmAyULzwF0BNA0g+dn6i/alEbec8Y6W1/lW?=
- =?us-ascii?Q?c4gCjkcLJYzhaPFHtXFiqen4l/KOinHrNIBjJwDyn8vWjDtkHDm4Qdbnb6Un?=
- =?us-ascii?Q?TaDleNd8nUqjerFnXB8swTKqpswLjWd69SUck/XZ78H/jwqqTOupuCXUodQD?=
- =?us-ascii?Q?ZoCVnMQ/gOHn9Ht2CLcVwx7F22sRJL72VRIY4Fs4BvHYlomrnnbmpdAEePzL?=
- =?us-ascii?Q?+hqaQCGn3a0hAdLypzRI39rOmJ0P6YC8Eadn7dR7zbN28wcvenNzyX6XITLI?=
- =?us-ascii?Q?nV6ZmdvnyZ/t13ALxdvRWrRlO5Qcswv9twa5MAMEY6AFa4ySY1fuCGmf9CAR?=
- =?us-ascii?Q?C78AFuvLs/TvDJsQpis9ki2NPSKSsD9GQkGsGJCEvjn4qKqAhKwOcXapfFjK?=
- =?us-ascii?Q?WltVHBiU+IxrUZJbgBPGpOtSN98xLZ5Oeqv5kcDmxZ33rKj+c8zqmYCtxA2G?=
- =?us-ascii?Q?SUlg27q6p5V9fG0I9S2WXUIG2rL5kodnBdx/3xi6HWNfLa42poAe4Rsi0yAk?=
- =?us-ascii?Q?92ovylYdyBZP3wWtH+weEBUoEzlLurAd34XuAeRMdJ5Jras6c3G9ewlvuMuX?=
- =?us-ascii?Q?GMWd3mkSoRtCiqZktUHjamLAg3q05kPOtobvUi0Mhv9UtDuqok1PDb6xY6ad?=
- =?us-ascii?Q?iegq7zP5yvBj3IJMDCUHaEqnB3tXt9722+qojuTuVME+ELBiQigWuzfPjxrH?=
- =?us-ascii?Q?1yW8KI4XHNvfshFG9c9Vegc5BpPsizS57xtF67miNC941MYakJifK7l4gaKS?=
- =?us-ascii?Q?IJijYMPO1fes2ugbEc4vORElGH0AaUcVi6i8c0DcuIimF4pf/kxG9MOo6g5U?=
- =?us-ascii?Q?xNac/opxohc3Frqp4tdS7S/xYYnvVLf6Xy5bXDF7+6VRY4rrxPL/IuT6aw0V?=
- =?us-ascii?Q?NKtVCJ1rglGD8PpAjQFVJnIXmjL3noUufh3bwA0orbPQaYAkYvuvAazik3PG?=
- =?us-ascii?Q?vXG0eOpCBLWCoqH0gDdamvnvcjyF0lb2HiGNCl9fImMmG9NsT6dBBXUu/4oE?=
- =?us-ascii?Q?URY5XZaxOjpKyfhVAvLaRR5QKWphVEewAEw+WdK8B4kBNRTme+p+gIO5bmCN?=
- =?us-ascii?Q?U2txg2ImqrLkA3bzO0KmQNbz4N4CJKJED3rO+iERTxPJmOOYcpEOXKxSIIqW?=
- =?us-ascii?Q?E3tiWTti49PWtc2p1+tezdB3ZkjYgJrpShZeCde9WfKKF5IZndoAZxx4aRRF?=
- =?us-ascii?Q?dm2qe2U2g3RoZskVIFdpAP9NwC2tNQNGRpyqLlhq/S+0Kh4fDU/5D3IUIfX1?=
- =?us-ascii?Q?DCW3RPS6QsuDYCLkVOw74LpQkNgGo/JVfZURTO7fxNFsistEfEW0hySVwb9T?=
- =?us-ascii?Q?bhmcV6D+eaqLJ1dYvqVqi4gDjwZW8bSIMnDX7hlIPkeDMlsABzrrw9mKIlfI?=
- =?us-ascii?Q?LfzaJeyoSy6o1Qp+/3uQpwE4Gx5wS5wz/RuKNXckcEjqL37Pq8SekxLshQHY?=
- =?us-ascii?Q?9phwfw4KUwrL8Tq8i8muKZnfj78vyJm3Se8WA5H8?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 16 Dec 2022 21:48:33 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D432BAE75
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 18:48:30 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8BxVPD9LZ1jaUsGAA--.14451S3;
+        Sat, 17 Dec 2022 10:48:29 +0800 (CST)
+Received: from [10.130.0.63] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxIL_7LZ1jRRoCAA--.7268S3;
+        Sat, 17 Dec 2022 10:48:28 +0800 (CST)
+Subject: Re: [PATCH 4/6] LoongArch: Strip guess_unwinder out from
+ prologue_unwinder
+To:     Jinyang He <hejinyang@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+References: <20221215040141.18610-1-hejinyang@loongson.cn>
+ <20221215040141.18610-5-hejinyang@loongson.cn>
+ <36c3560a-0a2d-4c3f-ecb6-0e7e71746917@loongson.cn>
+ <be643b7c-611e-c87b-c030-5fa51220d78c@loongson.cn>
+ <6fdb3dc9-2b34-ce53-1ff8-6b23c1eaaa82@loongson.cn>
+ <b1d090e3-1d68-3508-9108-5d697fa84ddd@loongson.cn>
+From:   Qing Zhang <zhangqing@loongson.cn>
+Message-ID: <5f46b787-1218-1c5d-3a48-7414fb7914c0@loongson.cn>
+Date:   Sat, 17 Dec 2022 10:48:27 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5880.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 29d752ab-142f-4832-c0a3-08dadfd8a965
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2022 02:44:47.3981
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cCU2h44+KZsDD/+Isu/maDcfQLebL7mqVi8VGSXpDhBTL7Pm/BcATWVxRkvZgQLvguGP1DjxCiIDK6V9Irmutg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6712
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b1d090e3-1d68-3508-9108-5d697fa84ddd@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxIL_7LZ1jRRoCAA--.7268S3
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvAXoWfJw1xWF43tFW7GFWkuw13XFb_yoW8ArW8Jo
+        W7Kr13Xr4rXryUK34UA34UJFy5tw4UJwnrArW5tr13Gr4Iy3W7Z3yUJa45tayxKr1rGr4U
+        Gryjqr1FvFWxXr1fn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
+        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
+        UUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
+        0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l84
+        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
+        M2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
+        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2
+        z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2
+        IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4U
+        YxBIdaVFxhVjvjDU0xZFpf9x07jepB-UUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -156,69 +74,412 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, Dec 15, 2022 at 11:57:55AM +0800, Zqiang wrote:
-> Currently, if the system is in the RCU_SCHEDULER_INACTIVE state, invoke
-> synchronize_rcu_*() will implies a grace period and return directly,
-> so there is no sleep action due to waiting for a grace period to end,
-> but this might_sleep() check is the opposite. therefore, this commit
-> puts might_sleep() check in the correct palce.
->=20
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
->
->Queued for testing and review, thank you!
->
->I was under the impression that might_sleep() did some lockdep-based
->checking, but I am unable to find it.  If there really is such checking,
->that would be a potential argument for leaving this code as it is.
->
->
->__might_sleep
->   __might_resched(file, line, 0)
->      rcu_sleep_check()
->
->Does it refer to this rcu_sleep_check() ?
->
->If so, when in the RCU_SCHEDULER_INACTIVE state,  the debug_lockdep_rcu_en=
-abled() is always
->return false, so the RCU_LOCKDEP_WARN() also does not produce an actual wa=
-rning.
->
 
-and when the system_state =3D=3D SYSTEM_BOOTING, we just did  rcu_sleep_che=
-ck()  and then  return.
+On 2022/12/17 上午9:47, Jinyang He wrote:
+> On 2022-12-16 10:14, Qing Zhang wrote:
+> 
+>> Hi, Jinyang
+>>
+>> On 2022/12/16 上午9:40, Jinyang He wrote:
+>>> On 2022-12-15 17:15, Qing Zhang wrote:
+>>>
+>>>> Hi, Jinyang
+>>>>
+>>>> On 2022/12/15 下午12:01, Jinyang He wrote:
+>>>>> The prolugue unwinder rely on symbol info. When PC is not in kernel
+>>>>> text address, it cannot find relative symbol info and it will be 
+>>>>> broken.
+>>>>> The guess unwinder will be used in this case. And the guess unwinder
+>>>>> codes in prolugue unwinder is redundant. Strip it out and set the
+>>>>> unwinder info in unwind_state.
+>>>>>
+>>>>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+>>>>> ---
+>>>>>   arch/loongarch/include/asm/unwind.h     |  22 ++++
+>>>>>   arch/loongarch/kernel/Makefile          |   3 +-
+>>>>>   arch/loongarch/kernel/unwind.c          |  52 +++++++++
+>>>>>   arch/loongarch/kernel/unwind_guess.c    |  41 ++-----
+>>>>>   arch/loongarch/kernel/unwind_prologue.c | 135 
+>>>>> +++++++++---------------
+>>>>>   5 files changed, 135 insertions(+), 118 deletions(-)
+>>>>>   create mode 100644 arch/loongarch/kernel/unwind.c
+>>>>>
+>>>>> diff --git a/arch/loongarch/include/asm/unwind.h 
+>>>>> b/arch/loongarch/include/asm/unwind.h
+>>>>> index 6ece48f0ff77..a16aff1d086a 100644
+>>>>> --- a/arch/loongarch/include/asm/unwind.h
+>>>>> +++ b/arch/loongarch/include/asm/unwind.h
+>>>>> @@ -18,6 +18,8 @@ enum unwinder_type {
+>>>>>       UNWINDER_PROLOGUE,
+>>>>>   };
+>>>>>   +struct unwinder_ops;
+>>>>> +
+>>>>>   struct unwind_state {
+>>>>>       char type; /* UNWINDER_XXX */
+>>>>>       struct stack_info stack_info;
+>>>>> @@ -25,8 +27,22 @@ struct unwind_state {
+>>>>>       bool first, error, is_ftrace;
+>>>>>       int graph_idx;
+>>>>>       unsigned long sp, pc, ra;
+>>>>> +    const struct unwinder_ops *ops;
+>>>>> +};
+>>>>> +
+>>>>> +struct unwinder_ops {
+>>>>> +    void (*unwind_start)(struct unwind_state *state,
+>>>>> +                 struct task_struct *task, struct pt_regs *regs);
+>>>>> +    bool (*unwind_next_frame)(struct unwind_state *state);
+>>>>> +    unsigned long (*unwind_get_return_address)(struct unwind_state 
+>>>>> *state);
+>>>>>   };
+>>>>>   +extern const struct unwinder_ops *default_unwinder;
+>>>>> +extern const struct unwinder_ops unwinder_guess;
+>>>>> +#ifdef CONFIG_UNWINDER_PROLOGUE
+>>>>> +extern const struct unwinder_ops unwinder_prologue;
+>>>>> +#endif
+>>>>> +
+>>>>>   void unwind_start(struct unwind_state *state,
+>>>>>             struct task_struct *task, struct pt_regs *regs);
+>>>>>   bool unwind_next_frame(struct unwind_state *state);
+>>>>> @@ -49,4 +65,10 @@ static inline unsigned long 
+>>>>> unwind_graph_addr(struct unwind_state *state,
+>>>>>       return ftrace_graph_ret_addr(state->task, &state->graph_idx,
+>>>>>                        pc, (unsigned long *)(cfa - 
+>>>>> GRAPH_FAKE_OFFSET));
+>>>>>   }
+>>>>> +
+>>>>> +static inline void unwind_register_unwinder(struct unwind_state 
+>>>>> *state,
+>>>>> +                      const struct unwinder_ops *unwinder)
+>>>>> +{
+>>>>> +    state->ops = unwinder;
+>>>>> +}
+>>>>>   #endif /* _ASM_UNWIND_H */
+>>>>> diff --git a/arch/loongarch/kernel/Makefile 
+>>>>> b/arch/loongarch/kernel/Makefile
+>>>>> index 7ca65195f7f8..cb6029ea3ea9 100644
+>>>>> --- a/arch/loongarch/kernel/Makefile
+>>>>> +++ b/arch/loongarch/kernel/Makefile
+>>>>> @@ -8,7 +8,7 @@ extra-y        := vmlinux.lds
+>>>>>   obj-y        += head.o cpu-probe.o cacheinfo.o env.o setup.o 
+>>>>> entry.o genex.o \
+>>>>>              traps.o irq.o idle.o process.o dma.o mem.o io.o 
+>>>>> reset.o switch.o \
+>>>>>              elf.o syscall.o signal.o time.o topology.o inst.o 
+>>>>> ptrace.o vdso.o \
+>>>>> -           alternative.o unaligned.o
+>>>>> +           alternative.o unaligned.o unwind.o unwind_guess.o
+>>>>>     obj-$(CONFIG_ACPI)        += acpi.o
+>>>>>   obj-$(CONFIG_EFI)         += efi.o
+>>>>> @@ -42,7 +42,6 @@ obj-$(CONFIG_MAGIC_SYSRQ)    += sysrq.o
+>>>>>   obj-$(CONFIG_KEXEC)        += machine_kexec.o relocate_kernel.o
+>>>>>   obj-$(CONFIG_CRASH_DUMP)    += crash_dump.o
+>>>>>   -obj-$(CONFIG_UNWINDER_GUESS)    += unwind_guess.o
+>>>>>   obj-$(CONFIG_UNWINDER_PROLOGUE) += unwind_prologue.o
+>>>>>     obj-$(CONFIG_PERF_EVENTS)    += perf_event.o perf_regs.o
+>>>>> diff --git a/arch/loongarch/kernel/unwind.c 
+>>>>> b/arch/loongarch/kernel/unwind.c
+>>>>> new file mode 100644
+>>>>> index 000000000000..568c6fe707d1
+>>>>> --- /dev/null
+>>>>> +++ b/arch/loongarch/kernel/unwind.c
+>>>>> @@ -0,0 +1,52 @@
+>>>>> +// SPDX-License-Identifier: GPL-2.0
+>>>>> +/*
+>>>>> + * Copyright (C) 2022 Loongson Technology Corporation Limited
+>>>>> + */
+>>>>> +#include <asm/unwind.h>
+>>>>> +
+>>>>> +#if defined(CONFIG_UNWINDER_GUESS)
+>>>>> +const struct unwinder_ops *default_unwinder = &unwinder_guess;
+>>>>> +#elif defined(CONFIG_UNWINDER_PROLOGUE)
+>>>>> +const struct unwinder_ops *default_unwinder = &unwinder_prologue;
+>>>>> +#endif
+>>>>> +
+>>>>> +unsigned long unwind_get_return_address(struct unwind_state *state)
+>>>>> +{
+>>>>> +    if (!state->ops || unwind_done(state))
+>>>>> +        return 0;
+>>>>> +    return state->ops->unwind_get_return_address(state);
+>>>>> +}
+>>>>> +EXPORT_SYMBOL_GPL(unwind_get_return_address);
+>>>>> +
+>>>>> +void unwind_start(struct unwind_state *state, struct task_struct 
+>>>>> *task,
+>>>>> +            struct pt_regs *regs)
+>>>>> +{
+>>>>> +    memset(state, 0, sizeof(*state));
+>>>>> +    unwind_register_unwinder(state, default_unwinder);
+>>>>> +    if (regs) {
+>>>>> +        state->sp = regs->regs[3];
+>>>>> +        state->pc = regs->csr_era;
+>>>>> +        state->ra = regs->regs[1];
+>>>>> +    } else if (task == current) {
+>>>>> +        state->sp = (unsigned long)__builtin_frame_address(0);
+>>>>> +        state->pc = (unsigned long)__builtin_return_address(0);
+>>>>> +        state->ra = 0;
+>>>>> +    } else {
+>>>>> +        state->sp = thread_saved_fp(task);
+>>>>> +        state->pc = thread_saved_ra(task);
+>>>>> +        state->ra = 0;
+>>>>> +    }
+>>>>> +    state->task = task;
+>>>>> +    get_stack_info(state->sp, state->task, &state->stack_info);
+>>>>> +    state->pc = unwind_graph_addr(state, state->pc, state->sp);
+>>
+>>  here. :)
+> 
+> The PC from branch 'task == current' is the RA of current frame. And the 
+> PC from branch 'regs' is regs->csr_era, which may be RA of frame where 
+> to get the regs->csr_era. They all may traced by function_graph. 
+> Ftrace_graph_ret_addr() returns orignal addr and not destroys result, if 
+> the addr was not traced, so calling it for deal with above cases.
+> 
+ok, you are right. The first state>pc obtained by cat/proc/self/stack 
+after the function graph is a "return to handler".
 
-Thanks
-Zqiang
+Thank,
+-Qing
+> Thanks,
+> 
+> Jinyang
+> 
+>>
+>>>>> + state->ops->unwind_start(state, task, regs);
+>>>>> +}
+>>>>> +EXPORT_SYMBOL_GPL(unwind_start);
+>>>>> +
+>>>>> +bool unwind_next_frame(struct unwind_state *state)
+>>>>> +{
+>>>>> +    if (!state->ops || unwind_done(state))
+>>>>> +        return false;
+>>>>> +    return state->ops->unwind_next_frame(state);
+>>>>> +}
+>>>>> +EXPORT_SYMBOL_GPL(unwind_next_frame);
+>>>>> diff --git a/arch/loongarch/kernel/unwind_guess.c 
+>>>>> b/arch/loongarch/kernel/unwind_guess.c
+>>>>> index 8ce32c37c587..b7ca2b88ac63 100644
+>>>>> --- a/arch/loongarch/kernel/unwind_guess.c
+>>>>> +++ b/arch/loongarch/kernel/unwind_guess.c
+>>>>> @@ -7,51 +7,23 @@
+>>>>>     #include <asm/unwind.h>
+>>>>>   -unsigned long unwind_get_return_address(struct unwind_state *state)
+>>>>> +static unsigned long get_return_address(struct unwind_state *state)
+>>>>>   {
+>>>>> -    if (unwind_done(state))
+>>>>> -        return 0;
+>>>>>       return state->pc;
+>>>>>   }
+>>>>> -EXPORT_SYMBOL_GPL(unwind_get_return_address);
+>>>>>   -void unwind_start(struct unwind_state *state, struct task_struct 
+>>>>> *task,
+>>>>> +static void start(struct unwind_state *state, struct task_struct 
+>>>>> *task,
+>>>>>               struct pt_regs *regs)
+>>>>>   {
+>>>>> -    memset(state, 0, sizeof(*state));
+>>>>> -
+>>>>> -    if (regs) {
+>>>>> -        state->sp = regs->regs[3];
+>>>>> -        state->pc = regs->csr_era;
+>>>>> -    } else if (task == current) {
+>>>>> -        state->sp = (unsigned long)__builtin_frame_address(0);
+>>>>> -        state->pc = (unsigned long)__builtin_return_address(0);
+>>>>> -    } else {
+>>>>> -        state->sp = thread_saved_fp(task);
+>>>>> -        state->pc = thread_saved_ra(task);
+>>>>> -    }
+>>>>> -
+>>>>> -    state->task = task;
+>>>>> -    state->first = true;
+>>>>> -    state->pc = unwind_graph_add(state, state->pc, state->sp);
+>>>>
+>>>> Do we need to unwind_graph_add again here? unwinder_guess and 
+>>>> unwind_prologue have already been done.
+>>>
+>>> Hi, Qing
+>>>
+>>>
+>>> Sorry I don't what meanning here, as here is a delete line.
+>>>
+>> Sorry, It's the unwind_start up here.
+>>>
+>>>>
+>>>>> -    get_stack_info(state->sp, state->task, &state->stack_info);
+>>>>> -
+>>>>>       if (!unwind_done(state) && !__kernel_text_address(state->pc))
+>>>>>           unwind_next_frame(state);
+>>>>>   }
+>>>>> -EXPORT_SYMBOL_GPL(unwind_start);
+>>>>>   -bool unwind_next_frame(struct unwind_state *state)
+>>>>> +static bool next_frame(struct unwind_state *state)
+>>>>>   {
+>>>>>       struct stack_info *info = &state->stack_info;
+>>>>>       unsigned long addr;
+>>>>>   -    if (unwind_done(state))
+>>>>> -        return false;
+>>>>> -
+>>>>> -    if (state->first)
+>>>>> -        state->first = false;
+>>>>> -
+>>>>>       do {
+>>>>>           for (state->sp += sizeof(unsigned long);
+>>>>>                state->sp < info->end;
+>>>>> @@ -68,4 +40,9 @@ bool unwind_next_frame(struct unwind_state *state)
+>>>>>         return false;
+>>>>>   }
+>>>>> -EXPORT_SYMBOL_GPL(unwind_next_frame);
+>>>>> +
+>>>>> +const struct unwinder_ops unwinder_guess = {
+>>>>> +    .unwind_start = start,
+>>>>> +    .unwind_next_frame = next_frame,
+>>>>> +    .unwind_get_return_address = get_return_address,
+>>>>> +};
+>>>>> diff --git a/arch/loongarch/kernel/unwind_prologue.c 
+>>>>> b/arch/loongarch/kernel/unwind_prologue.c
+>>>>> index d464c533c64f..9677e13c4b4c 100644
+>>>>> --- a/arch/loongarch/kernel/unwind_prologue.c
+>>>>> +++ b/arch/loongarch/kernel/unwind_prologue.c
+>>>>> @@ -9,6 +9,8 @@
+>>>>>   #include <asm/ptrace.h>
+>>>>>   #include <asm/unwind.h>
+>>>>>   +static const struct unwinder_ops *guard_unwinder = &unwinder_guess;
+>>>>> +
+>>>>>   static inline void unwind_state_fixup(struct unwind_state *state)
+>>>>>   {
+>>>>>   #ifdef CONFIG_DYNAMIC_FTRACE
+>>>>> @@ -19,31 +21,19 @@ static inline void unwind_state_fixup(struct 
+>>>>> unwind_state *state)
+>>>>>   #endif
+>>>>>   }
+>>>>>   -unsigned long unwind_get_return_address(struct unwind_state *state)
+>>>>> +static unsigned long get_return_address(struct unwind_state *state)
+>>>>>   {
+>>>>> -    if (unwind_done(state))
+>>>>> -        return 0;
+>>>>>       return state->pc;
+>>>>>   }
+>>>>> -EXPORT_SYMBOL_GPL(unwind_get_return_address);
+>>>>> -
+>>>>> -static bool unwind_by_guess(struct unwind_state *state)
+>>>>> -{
+>>>>> -    struct stack_info *info = &state->stack_info;
+>>>>> -    unsigned long addr;
+>>>>> -
+>>>>> -    for (state->sp += sizeof(unsigned long);
+>>>>> -         state->sp < info->end;
+>>>>> -         state->sp += sizeof(unsigned long)) {
+>>>>> -        addr = *(unsigned long *)(state->sp);
+>>>>> -        state->pc = unwind_graph_addr(state, addr, state->sp + 8);
+>>>>> -        if (__kernel_text_address(state->pc))
+>>>>> -            return true;
+>>>>> -    }
+>>>>> -
+>>>>> -    return false;
+>>>>> -}
+>>>>>   +/*
+>>>>> + * LoongArch function prologue like follows,
+>>>>> + *     [others instructions not use stack var]
+>>>>> + *     addi.d sp, sp, -imm
+>>>>> + *     st.d   xx, sp, offset <- save callee saved regs and
+>>>>> + *     st.d   yy, sp, offset    save ra if function is nest.
+>>>>> + *     [others instructions]
+>>>>> + */
+>>>>>   static bool unwind_by_prologue(struct unwind_state *state)
+>>>>>   {
+>>>>>       long frame_ra = -1;
+>>>>> @@ -89,6 +79,10 @@ static bool unwind_by_prologue(struct 
+>>>>> unwind_state *state)
+>>>>>           ip++;
+>>>>>       }
+>>>>>   +    /*
+>>>>> +     * Not find stack alloc action, PC may be in a leaf function. 
+>>>>> Only the
+>>>>> +     * first being true is reasonable, otherwise indicate analysis 
+>>>>> is broken.
+>>>>> +     */
+>>>>>       if (!frame_size) {
+>>>>>           if (state->first)
+>>>>>               goto first;
+>>>>> @@ -106,6 +100,7 @@ static bool unwind_by_prologue(struct 
+>>>>> unwind_state *state)
+>>>>>           ip++;
+>>>>>       }
+>>>>>   +    /* Not find save $ra action, PC may be in a leaf function, 
+>>>>> too. */
+>>>>>       if (frame_ra < 0) {
+>>>>>           if (state->first) {
+>>>>>               state->sp = state->sp + frame_size;
+>>>>> @@ -114,96 +109,63 @@ static bool unwind_by_prologue(struct 
+>>>>> unwind_state *state)
+>>>>>           return false;
+>>>>>       }
+>>>>>   -    if (state->first)
+>>>>> -        state->first = false;
+>>>>> -
+>>>>>       state->pc = *(unsigned long *)(state->sp + frame_ra);
+>>>>>       state->sp = state->sp + frame_size;
+>>>>>       goto out;
+>>>>>     first:
+>>>>> -    state->first = false;
+>>>>> -    if (state->pc == state->ra)
+>>>>> -        return false;
+>>>>> -
+>>>>>       state->pc = state->ra;
+>>>>>     out:
+>>>>> +    state->first = false;
+>>>>>       unwind_state_fixup(state);
+>>>>>       return !!__kernel_text_address(state->pc);
+>>>>>   }
+>>>>>   -void unwind_start(struct unwind_state *state, struct task_struct 
+>>>>> *task,
+>>>>> +static void start(struct unwind_state *state, struct task_struct 
+>>>>> *task,
+>>>>>               struct pt_regs *regs)
+>>>>>   {
+>>>>> -    memset(state, 0, sizeof(*state));
+>>>>> -    state->type = UNWINDER_PROLOGUE;
+>>>>> -
+>>>>> -    if (regs) {
+>>>>> -        state->sp = regs->regs[3];
+>>>>> -        state->pc = regs->csr_era;
+>>>>> -        state->ra = regs->regs[1];
+>>>>> -        if (!__kernel_text_address(state->pc))
+>>>>> -            state->type = UNWINDER_GUESS;
+>>>>> -    } else if (task == current) {
+>>>>> -        state->sp = (unsigned long)__builtin_frame_address(0);
+>>>>> -        state->pc = (unsigned long)__builtin_return_address(0);
+>>>>> -        state->ra = 0;
+>>>>> -    } else {
+>>>>> -        state->sp = thread_saved_fp(task);
+>>>>> -        state->pc = thread_saved_ra(task);
+>>>>> -        state->ra = 0;
+>>>>> -    }
+>>>>> -
+>>>>> -    state->task = task;
+>>>>>       state->first = true;
+>>>>> -    state->pc = unwind_graph_addr(state, state->pc, state->sp);
+>>>>> -    get_stack_info(state->sp, state->task, &state->stack_info);
+>>>>>   -    if (!unwind_done(state) && !__kernel_text_address(state->pc))
+>>>>> -        unwind_next_frame(state);
+>>>>> +    /*
+>>>>> +     * The current PC is not kernel text address, we cannot find its
+>>>>> +     * relative symbol. Thus, prologue analysis will be broken. 
+>>>>> Luckly,
+>>>>> +     * we can use the guard unwinder.
+>>>>> +     */
+>>>>> +    if (!__kernel_text_address(state->pc)) {
+>>>>> +        unwind_register_unwinder(state, guard_unwinder);
+>>>>
+>>>> Just add a comment here. Instead of using guard_unwinder, can we still
+>>>> use guess_unwinder?
+>>>
+>>> Yes, and I'll use '&guess_unwinder' in next version. And I'll
+>>> drop unwind type in next version, too.
+>>>
+>>>
+>>> Thanks,
+>>>
+>>> Jinyang
+>>>
+> 
 
->Thanks
->Zqiang
->
-
->But in the meantime, full speed ahead!  ;-)
->
->						Thanx, Paul
->
-> ---
->  kernel/rcu/tree.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->=20
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index ee8a6a711719..65f3dd2fd3ae 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -3379,9 +3379,10 @@ void __init kfree_rcu_scheduler_running(void)
->   */
->  static int rcu_blocking_is_gp(void)
->  {
-> -	if (rcu_scheduler_active !=3D RCU_SCHEDULER_INACTIVE)
-> +	if (rcu_scheduler_active !=3D RCU_SCHEDULER_INACTIVE) {
-> +		might_sleep();
->  		return false;
-> -	might_sleep();  /* Check for RCU read-side critical section. */
-> +	}
->  	return true;
->  }
-> =20
-> --=20
-> 2.25.1
->=20
