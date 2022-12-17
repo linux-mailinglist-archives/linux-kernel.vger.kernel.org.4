@@ -2,249 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530BB64FC50
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 21:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB70D64FC52
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 21:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiLQUwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 15:52:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
+        id S229978AbiLQU5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 15:57:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLQUwV (ORCPT
+        with ESMTP id S229469AbiLQU5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 15:52:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DE5BE39;
-        Sat, 17 Dec 2022 12:52:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A401760C49;
-        Sat, 17 Dec 2022 20:52:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 510E7C433EF;
-        Sat, 17 Dec 2022 20:52:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671310339;
-        bh=9VVTBzXnV6KBWlFAwdUE+9TcYF61FDpIXiV69L6AWhE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qJ6DFyt1J9sIoVrokFvRQ0j0HxF75kWqacdFE0Y7N4TLyk3tklsOk2NyKY+DZhvRj
-         +NjndODjOpYBTZKhkCDOwgHcrlTSmfV5Ojd/yev/9NXRCHMUqMMN8FKsGCawBboj+R
-         6D9ASfHdpz024mPaRZJvYV0ceGpcH7ssRfyws5JFSUfQwpNjAWnIv6OJMW984QHglz
-         v37GdIra5YgPuUEqhhVfCvXeHhYvg6xHYY35AHfem++xf6liTvdvkuDtlZ+zn+MVl6
-         w8KjY0hz9VJFp5ILS5SG5/fU2KqIeYJjvPDvM+J0S8obeGuArENTP3ZOTt7uVB+Qm+
-         1caRWivvAnFag==
-Date:   Sat, 17 Dec 2022 20:52:11 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Guo Ren <guoren@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v5 4/6] riscv: mm: dma-noncoherent: Pass direction and
- operation to ALT_CMO_OP()
-Message-ID: <Y54r+5lkSvgA9IxR@spud>
-References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221212115505.36770-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Sat, 17 Dec 2022 15:57:16 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E00F595;
+        Sat, 17 Dec 2022 12:57:14 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id s7so5534883plk.5;
+        Sat, 17 Dec 2022 12:57:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UsNOLxzzDUM86Dcn9dtIU2NoBPxLljweQcBTZ9NLmX0=;
+        b=NRoAcBbcipvkcWU+CrzfHGM0nUY5XYUY5Vu4Wc12W2t89xJ9XulTFG7jyWkGSa71Gt
+         mllSuPp5KWY/+A857nHJMdJeQXAW8AGki/Je3W3G4KkljZYN+9VE0KQX4Pl+uEdHUTv9
+         GjnGN1Rqrt9VYttVsNd3AXiETiNZeaWFg7HfMq6wzM0jqvZmnonziwYfqzqLvawSdKiT
+         xfXXgunFytHbHT/bg9p36z6NAu9qdIGSEr8eMQEE5VPKc90IcNb0Oupr6p8yQugw8HTD
+         z+bv/VLY6fbGVR2uFE6FBerxybA/rlEn/DqMnHu7exuToWrAs+zqMhKe7CXjimrJk2z8
+         iM1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UsNOLxzzDUM86Dcn9dtIU2NoBPxLljweQcBTZ9NLmX0=;
+        b=rX6pI0qsBoX1vUxScGJGzKWyvPNTVpRJWn1FqqKI+DdAdUNT44mBHOgIODVXTbh35x
+         KBcS5IKeYA+IZhksGxaNwG1tSTBUCMNhHhJ1GRG4BatEQ+paLjRUgVRbZGTTfI2lpshJ
+         /08WTGiR40GVXsOb/us2vu2+Ecdymhapee0m90DO0BLGHo6SBUqC3uuBYGOo9yxOlDOS
+         JMoMeYrdXpH7mrj02XR+c3LCW73pnwQQU8lWwXlMxFOtdJf4iBnF5nFO36QIxCF/44V+
+         1dYOpVW3YgElLmOynzlPZnMQQlPqcLsG2DNvKf2kCAGePRHyuBzaustAbhoIxcyG0D7s
+         YiPg==
+X-Gm-Message-State: ANoB5plMvoBu7NprAy4mGmUWKgTzaKSgVPypNY4L2IWo1xAQxaiL1yrZ
+        HTjKFGmtI+JscAer/xKqRQ5RF0UnpVV7qIKEXCs=
+X-Google-Smtp-Source: AA0mqf549V4Hy9hQmdroy9lbhZgtpKHGpFAj3mvSEPHGZPUx03/UlmcXbTq/idXKLOQxISPWDsgcM14OQmV3Tp4ENOg=
+X-Received: by 2002:a17:902:9a8b:b0:190:c917:ab61 with SMTP id
+ w11-20020a1709029a8b00b00190c917ab61mr1172194plp.93.1671310633744; Sat, 17
+ Dec 2022 12:57:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="xwBsLtrovXDxZRvK"
-Content-Disposition: inline
-In-Reply-To: <20221212115505.36770-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221213004754.2633429-1-peter@pjd.dev> <ac48b381b11c875cf36a471002658edafe04d9b9.camel@gmail.com>
+ <7A3DBE8E-C13D-430D-B851-207779148A77@pjd.dev> <CAKgT0Uf-9XwvJJTZOD0EHby6Lr0R-tMYGiR_2og3k=d_eTBPAw@mail.gmail.com>
+ <09CDE7FD-2C7D-4A0B-B085-E877472FA997@pjd.dev>
+In-Reply-To: <09CDE7FD-2C7D-4A0B-B085-E877472FA997@pjd.dev>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Sat, 17 Dec 2022 12:57:02 -0800
+Message-ID: <CAKgT0UfOnJGf+n_PTizCyq77H+ZvWMU4i=D=GW3o13RNqWf-Gg@mail.gmail.com>
+Subject: Re: [PATCH] net/ncsi: Always use unicast source MAC address
+To:     Peter Delevoryas <peter@pjd.dev>
+Cc:     sam@mendozajonas.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 16, 2022 at 8:20 PM Peter Delevoryas <peter@pjd.dev> wrote:
+>
+>
+>
+> > On Dec 16, 2022, at 10:29 AM, Alexander Duyck <alexander.duyck@gmail.co=
+m> wrote:
+> >
+> > On Thu, Dec 15, 2022 at 5:08 PM Peter Delevoryas <peter@pjd.dev> wrote:
+> >>
+> >>
+> >>
+> >>> On Dec 13, 2022, at 8:41 AM, Alexander H Duyck <alexander.duyck@gmail=
+.com> wrote:
+> >>>
+> >>> On Mon, 2022-12-12 at 16:47 -0800, Peter Delevoryas wrote:
 
---xwBsLtrovXDxZRvK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+<...>
 
-Hey Prabhakar,
+> >
+> >>> My main
+> >>> concern would be that the dev_addr is not initialized for those first
+> >>> few messages so you may be leaking information.
+> >>>
+> >>>> This might have the effect of causing the NIC to learn 2 MAC address=
+es from
+> >>>> an NC-SI link if the BMC uses OEM Get MAC Address commands to change=
+ its
+> >>>> initial MAC address, but it shouldn't really matter. Who knows if NI=
+C's
+> >>>> even have MAC learning enabled from the out-of-band BMC link, lol.
+> >>>>
+> >>>> [1]: https://tinyurl.com/4933mhaj
+> >>>> [2]: https://tinyurl.com/mr3tyadb
+> >>>
+> >>> The thing is the OpenBMC approach initializes the value themselves to
+> >>> broadcast[3]. As a result the two code bases are essentially doing th=
+e
+> >>> same thing since mac_addr is defaulted to the broadcast address when
+> >>> the ncsi interface is registered.
+> >>
+> >> That=E2=80=99s a very good point, thanks for pointing that out, I hadn=
+=E2=80=99t
+> >> even noticed that!
+> >>
+> >> Anyways, let me know what you think of the traces I added above.
+> >> Sorry for the delay, I=E2=80=99ve just been busy with some other stuff=
+,
+> >> but I do really actually care about upstreaming this (and several
+> >> other NC-SI changes I=E2=80=99ll submit after this one, which are unre=
+lated
+> >> but more useful).
+> >>
+> >> Thanks,
+> >> Peter
+> >
+> > So the NC-SI spec says any value can be used for the source MAC and
+> > that broadcast "may" be used. I would say there are some debugging
+> > advantages to using broadcast that will be obvious in a packet trace.
+>
+> Ehhhhh yeah I guess, but the ethertype is what I filter for. But sure,
+> a broadcast source MAC is pretty unique too.
+>
+> > I wonder if we couldn't look at doing something like requiring
+> > broadcast or LAA if the gma_flag isn't set.
+>
+> What is LAA? I=E2=80=99m out of the loop
 
-On Mon, Dec 12, 2022 at 11:55:03AM +0000, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->=20
-> Pass direction and operation to ALT_CMO_OP() macro.
->=20
-> Vendors might want to perform different operations based on the direction
-> and callbacks (arch_sync_dma_for_device/arch_sync_dma_for_cpu/
-> arch_dma_prep_coherent) so to handle such cases pass the direction and
-> operation to ALT_CMO_OP() macro. This is in preparation for adding errata
-> for the Andes CPU core.
+Locally administered MAC address[4]. Basically it is a MAC address
+that is generated locally such as your random MAC address. Assuming
+the other end of the NC-SI link is using a MAC address with a vendor
+OUI there should be no risk of collisions on a point-to-point link.
+Essentially if you wanted to you could probably just generate a random
+MAC address for the NCSI protocol and then use that in place of the
+broadcast address.
 
-This patch seems to break the build on top of the most recent
-linux-next:
-=2E....../stuff/linux/arch/riscv/mm/pmem.c:13:53: error: too few arguments =
-provided to function-like macro invocation
-        ALT_CMO_OP(clean, addr, size, riscv_cbom_block_size);
-                                                           ^
-/stuff/linux/arch/riscv/include/asm/errata_list.h:127:9: note: macro 'ALT_C=
-MO_OP' defined here
-#define ALT_CMO_OP(_op, _start, _size, _cachesize, _dir, _ops)          \
-        ^
-=2E.  CC      block/partitions/sgi.o
-=2E+...+/stuff/linux/arch/riscv/mm/pmem.c:13:2: error: use of undeclared id=
-entifier 'ALT_CMO_OP'
-        ALT_CMO_OP(clean, addr, size, riscv_cbom_block_size);
-        ^
-/stuff/linux/arch/riscv/mm/pmem.c:19:53: error: too few arguments provided =
-to function-like macro invocation
-        ALT_CMO_OP(inval, addr, size, riscv_cbom_block_size);
-                                                           ^
-/stuff/linux/arch/riscv/include/asm/errata_list.h:127:9: note: macro 'ALT_C=
-MO_OP' defined here
-#define ALT_CMO_OP(_op, _start, _size, _cachesize, _dir, _ops)          \
-        ^
-=2E..........  AR      lib/math/built-in.a
-=2E/stuff/linux/arch/riscv/mm/pmem.c:19:2: .error: use of undeclared identi=
-fier 'ALT_CMO_OP'
-        ALT_CMO_OP(inval, addr, size, riscv_cbom_block_size);
-        ^
-=2E.4 errors generated.
+> But also: aren=E2=80=99t we already using broadcast if the gma_flag isn=
+=E2=80=99t set?
+>
+> -       if (nca->ndp->gma_flag =3D=3D 1)
+> -               memcpy(eh->h_source, nca->ndp->ndev.dev->dev_addr, ETH_AL=
+EN);
+> -       else
+> -               eth_broadcast_addr(eh->h_source);
+> +       memcpy(eh->h_source, nca->ndp->ndev.dev->dev_addr, ETH_ALEN);
 
-The pmem stuff is new so that'd be why it has not come up before.
+That I am not sure about. You were using this kernel without your
+patch right? With your patch it would make sense to see that behavior,
+but without I am not sure why you would see that address for any NC-SI
+commands before the gma_flag is set.
 
-(FWIW, clang allmodconfig)
+>
+> > With that we could at
+> > least advertise that we don't expect this packet to be going out in a
+> > real network as we cannot guarantee the MAC is unique.
+>
+> Yeah, but it probably wouldn=E2=80=99t help my simulation scenario.
+>
+> I guess it sounds like this patch is not a good idea, which to be fair,
+> is totally reasonable.
+>
+> I can just add some iptables rules to tunnel these packets with a differe=
+nt
+> source MAC, or fix the multicast socket issue I was having. It=E2=80=99s =
+really
+> not a big deal, and like you=E2=80=99re saying, we probably don=E2=80=99t=
+ want to make
+> it harder to maintain _forever_.
 
->=20
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v4 -> v5
-> * Updated commit message.
->=20
-> RFC v3 -> v4
-> * New patch
-> ---
->  arch/riscv/include/asm/cacheflush.h  |  4 ++++
->  arch/riscv/include/asm/errata_list.h |  8 ++++++--
->  arch/riscv/mm/dma-noncoherent.c      | 15 ++++++++++-----
->  3 files changed, 20 insertions(+), 7 deletions(-)
->=20
-> diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm=
-/cacheflush.h
-> index 03e3b95ae6da..e22019668b9e 100644
-> --- a/arch/riscv/include/asm/cacheflush.h
-> +++ b/arch/riscv/include/asm/cacheflush.h
-> @@ -8,6 +8,10 @@
-> =20
->  #include <linux/mm.h>
-> =20
-> +#define NON_COHERENT_SYNC_DMA_FOR_DEVICE	0
-> +#define NON_COHERENT_SYNC_DMA_FOR_CPU		1
-> +#define NON_COHERENT_DMA_PREP			2
-> +
->  static inline void local_flush_icache_all(void)
->  {
->  	asm volatile ("fence.i" ::: "memory");
-> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/as=
-m/errata_list.h
-> index 2ba7e6e74540..48e899a8e7a9 100644
-> --- a/arch/riscv/include/asm/errata_list.h
-> +++ b/arch/riscv/include/asm/errata_list.h
-> @@ -124,7 +124,7 @@ asm volatile(ALTERNATIVE(						\
->  #define THEAD_flush_A0	".long 0x0275000b"
->  #define THEAD_SYNC_S	".long 0x0190000b"
-> =20
-> -#define ALT_CMO_OP(_op, _start, _size, _cachesize)			\
-> +#define ALT_CMO_OP(_op, _start, _size, _cachesize, _dir, _ops)		\
->  asm volatile(ALTERNATIVE_2(						\
->  	__nops(6),							\
->  	"mv a0, %1\n\t"							\
-> @@ -146,7 +146,11 @@ asm volatile(ALTERNATIVE_2(						\
->  			ERRATA_THEAD_CMO, CONFIG_ERRATA_THEAD_CMO)	\
->  	: : "r"(_cachesize),						\
->  	    "r"((unsigned long)(_start) & ~((_cachesize) - 1UL)),	\
-> -	    "r"((unsigned long)(_start) + (_size))			\
-> +	    "r"((unsigned long)(_start) + (_size)),			\
-> +	    "r"((unsigned long)(_start)),				\
-> +	    "r"((unsigned long)(_size)),				\
-> +	    "r"((unsigned long)(_dir)),					\
-> +	    "r"((unsigned long)(_ops))					\
->  	: "a0")
-> =20
->  #define THEAD_C9XX_RV_IRQ_PMU			17
-> diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoher=
-ent.c
-> index d919efab6eba..e2b82034f504 100644
-> --- a/arch/riscv/mm/dma-noncoherent.c
-> +++ b/arch/riscv/mm/dma-noncoherent.c
-> @@ -19,13 +19,16 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size=
-_t size,
-> =20
->  	switch (dir) {
->  	case DMA_TO_DEVICE:
-> -		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
-> +		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size,
-> +			   dir, NON_COHERENT_SYNC_DMA_FOR_DEVICE);
->  		break;
->  	case DMA_FROM_DEVICE:
-> -		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
-> +		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size,
-> +			   dir, NON_COHERENT_SYNC_DMA_FOR_DEVICE);
->  		break;
->  	case DMA_BIDIRECTIONAL:
-> -		ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-> +		ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size,
-> +			   dir, NON_COHERENT_SYNC_DMA_FOR_DEVICE);
->  		break;
->  	default:
->  		break;
-> @@ -42,7 +45,8 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t si=
-ze,
->  		break;
->  	case DMA_FROM_DEVICE:
->  	case DMA_BIDIRECTIONAL:
-> -		ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-> +		ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size,
-> +			   dir, NON_COHERENT_SYNC_DMA_FOR_CPU);
->  		break;
->  	default:
->  		break;
-> @@ -53,7 +57,8 @@ void arch_dma_prep_coherent(struct page *page, size_t s=
-ize)
->  {
->  	void *flush_addr =3D page_address(page);
-> =20
-> -	ALT_CMO_OP(flush, flush_addr, size, riscv_cbom_block_size);
-> +	ALT_CMO_OP(flush, flush_addr, size, riscv_cbom_block_size,
-> +		   0, NON_COHERENT_DMA_PREP);
->  }
-> =20
->  void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
-> --=20
-> 2.25.1
->=20
+Like I said before I would be good with either a Broadcast address OR
+a LAA address. The one thing we need to watch out for though is any
+sort of leak. One possible concern would be if for example you had 4
+ports using 4 different MAC addresses but one BMC. You don't want to
+accidently leak the MAC address from one port onto the other one. With
+a LAA address if it were to leak and screw up ARP tables somewhere it
+wouldn't be a big deal since it isn't expected to be switched in the
+first place.
 
---xwBsLtrovXDxZRvK
-Content-Type: application/pgp-signature; name="signature.asc"
+> I would just suggest praying for the next guy that tries to test NC-SI
+> stuff with QEMU and finds out NC-SI traffic gets dropped by bridges.
+> I had to resort to reading the source code and printing stuff with
+> BPF to identify this. Maybe it=E2=80=99s more obvious to other people thi=
+s wouldn=E2=80=99t
+> work though.
 
------BEGIN PGP SIGNATURE-----
+Well it seems like NC-SI isn't meant to be bridged based on the fact
+that it is using a broadcast MAC address as a source. If nothing else
+I suppose you could try to work with the standards committee on that
+to see what can be done to make the protocol more portable.. :-)
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY54r+wAKCRB4tDGHoIJi
-0h2gAP0erGWo9T3Karis7yeYncpvuKo03HROZmPadrJUGiSFWwD/YfCL5tWNgToO
-cSJbl11wYttzxvo472uETFhyjvdMSQo=
-=dpsF
------END PGP SIGNATURE-----
-
---xwBsLtrovXDxZRvK--
+[4]: https://macaddress.io/faq/what-are-a-universal-address-and-a-local-adm=
+inistered-address
