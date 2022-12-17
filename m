@@ -2,86 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9D464FC93
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 23:13:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A3764FC9A
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 23:36:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiLQWNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 17:13:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
+        id S229892AbiLQWgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 17:36:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiLQWNl (ORCPT
+        with ESMTP id S229469AbiLQWgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 17:13:41 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1707DF5BF;
-        Sat, 17 Dec 2022 14:13:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=VXdDjaKjNgqzgz5N9G89jtZt4Zpl7V9U1dIBQVr4Qfs=; b=Fz6ggJX6gJBiW/Dws/3FR1gu5N
-        Ne7LxDyxOEsqcniNGPvLW2TJHn9JiX821s6vX2vBr12EuMUBHJzm4SW93LvmWeFPm7KyHZgCOg4+b
-        yDbs0H2b/fEOarQkKWtJffpGhl3Z7SuN1Uu/SWtSp4f2oZlMxJaX5hT8gHEPJAo9nmAu1HIeieraK
-        wnF9pu/ss6koQxUnEEL7Izc468bP2N7z94A8ApcNa4zaJEw8cE6VToUjLeoc5GymO9BfJUuXF5SmC
-        VO9RUyoXjqVozyW6jMVXocysf0Cfg/1Yrzq8b9ZcLHY1ezqTN7RrMGA/mu8t7MPj1DlSdUFL2JJKZ
-        9O08/5GA==;
-Received: from p200300ccff28b2001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff28:b200:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1p6fQk-0001Pw-6c; Sat, 17 Dec 2022 23:13:18 +0100
-Received: from andi by aktux with local (Exim 4.94.2)
-        (envelope-from <andreas@kemnade.info>)
-        id 1p6fQj-002obI-Ec; Sat, 17 Dec 2022 23:13:17 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     jic23@kernel.org, lars@metafoo.de, andreas@kemnade.info,
-        paul@crapouillou.net, jiasheng@iscas.ac.cn,
-        oleksandr.kozaruk@ti.com, gg@slimlogic.co.uk, balajitk@ti.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        Julia Lawall <julia.lawall@lip6.fr>
-Subject: [PATCH] iio:adc:twl6030: Enable measurement of VAC
-Date:   Sat, 17 Dec 2022 23:13:05 +0100
-Message-Id: <20221217221305.671117-1-andreas@kemnade.info>
-X-Mailer: git-send-email 2.30.2
+        Sat, 17 Dec 2022 17:36:01 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083B3B482;
+        Sat, 17 Dec 2022 14:36:00 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so9508576pjs.4;
+        Sat, 17 Dec 2022 14:36:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mHEiXf8m3ynm1qnXenv73EgPAWU2TYeSlO0zoKS2tIw=;
+        b=MROxCfXkBZ8ljulhphkiBQ81hSbnwplA/vM3btKcOgC6Adt7Mrgr1TzUp8B2T6VFe8
+         9vzGtap4aHgvvtfwjDRS7t2Tkwly/E9Ij4iyY8XBvJogOFcZPXcONE8lFQNeFXOTWXAr
+         7D2x/1qStMKhv9etxAymtROiCFQy/lf2tLTz3Nazj4F4jHI/rJcyx/yRoz+P9naNwxIn
+         e3/zVO3ze5fOggN28JZwz8ASNd8t0ktkr9dRWfBU+3Nz29xvMt9Q4uA7ReJXw6a2whUA
+         H6iOQs58EBJhJLxxKZU9hAw63iqQ71nmzbf3TPHsbujt5+8GxwsyrwfeO+LNqFxhbSNm
+         cT0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mHEiXf8m3ynm1qnXenv73EgPAWU2TYeSlO0zoKS2tIw=;
+        b=Chv0F6BrOeXoToWg0HfiZNWhCLy8BGPAxkwp6l38IJDsh6bT312QC3dntOt20qavp9
+         woExEPcDmFebjyU09SbanPxQW+ff0XFVfBmp1PPRJNPqW2tlhvoDMcV2zoxvEtart+if
+         WpOKuEb51eD8EHey4Lb9MgTeXDS8Fv9LRbE3JR/egsP6lJQLmvmJGNNwmZjO/k68qqd4
+         9pmB2d1RoAO47NKju9WejrT+PrOMCwKAeu9orf4+FN+NVp9OBhKwUycTHLoEk+2ah3R9
+         IansumIAXJzSE7p58XgFM06V89CRpOdi6uEOUIZSNIOVmR/Hl/CnUwXY8b9o/ycStz3G
+         dACQ==
+X-Gm-Message-State: ANoB5plSQG8Uq8yBXL9Jkuu4ppxoJY9EfRbX7v4VvmiL+TUCBGshts4Y
+        KJoQh6ez/gWD68CDDCosX2g=
+X-Google-Smtp-Source: AA0mqf5I30Y42tIYNsbMPePLQ0diPQyPoR8HuUCfg2QwxTr3wrfF+9pkaVZRjpcK6nTEWy7VYdKexQ==
+X-Received: by 2002:a17:902:ccd0:b0:188:7da8:a970 with SMTP id z16-20020a170902ccd000b001887da8a970mr43575603ple.8.1671316559298;
+        Sat, 17 Dec 2022 14:35:59 -0800 (PST)
+Received: from WRT-WX9.. ([103.135.102.144])
+        by smtp.gmail.com with ESMTPSA id u9-20020a17090341c900b001801aec1f6bsm4031660ple.141.2022.12.17.14.35.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Dec 2022 14:35:58 -0800 (PST)
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Changbin Du <changbin.du@gmail.com>
+Subject: [PATCH v3 0/2] bpftool: improve error handing for missing .BTF section
+Date:   Sun, 18 Dec 2022 06:35:07 +0800
+Message-Id: <20221217223509.88254-1-changbin.du@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VAC needs to be wired up to produce proper measurements,
-without this change only near zero values are reported.
+Display error message for missing ".BTF" section and clean up empty
+vmlinux.h file.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Julia Lawall <julia.lawall@lip6.fr>
-Fixes: 1696f36482e7 ("iio: twl6030-gpadc: TWL6030, TWL6032 GPADC driver")
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- drivers/iio/adc/twl6030-gpadc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v3:
+ - fix typo and make error message consistent. (Andrii Nakryiko)
+ - split out perf change.
+v2:
+ - remove vmlinux specific error info.
+ - use builtin target .DELETE_ON_ERROR: to delete empty vmlinux.h
 
-diff --git a/drivers/iio/adc/twl6030-gpadc.c b/drivers/iio/adc/twl6030-gpadc.c
-index 40438e5b4970..32873fb5f367 100644
---- a/drivers/iio/adc/twl6030-gpadc.c
-+++ b/drivers/iio/adc/twl6030-gpadc.c
-@@ -952,7 +952,7 @@ static int twl6030_gpadc_probe(struct platform_device *pdev)
- 	}
- 
- 	ret = twl_i2c_write_u8(TWL6030_MODULE_ID0,
--				VBAT_MEAS | BB_MEAS | BB_MEAS,
-+				VBAT_MEAS | BB_MEAS | VAC_MEAS,
- 				TWL6030_MISC1);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to wire up inputs\n");
+
+Changbin Du (2):
+  libbpf: show error info about missing ".BTF" section
+  bpf: makefiles: do not generate empty vmlinux.h
+
+ tools/bpf/bpftool/Makefile           | 3 +++
+ tools/lib/bpf/btf.c                  | 1 +
+ tools/testing/selftests/bpf/Makefile | 3 +++
+ 3 files changed, 7 insertions(+)
+
 -- 
-2.30.2
+2.37.2
 
