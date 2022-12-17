@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E46864F7F3
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 07:40:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F16164F7F5
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 07:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbiLQGk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 01:40:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
+        id S230170AbiLQGki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 01:40:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbiLQGkV (ORCPT
+        with ESMTP id S230145AbiLQGk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 01:40:21 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A4967D90;
-        Fri, 16 Dec 2022 22:40:19 -0800 (PST)
+        Sat, 17 Dec 2022 01:40:29 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD0C67DA1;
+        Fri, 16 Dec 2022 22:40:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1671259220; x=1702795220;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5OIgX8jvqnen4oGjgd76wyRg0mzkmPs0CoXk7Hupyak=;
-  b=U08dUqzPge8ZmJFtAG86UTINDeewemEFt2Y2eqVKQVC6679y1hs2FCm8
-   v80iOriQVRavxIr1njVMarE1UyU8EjLAK2d2vHI/RR9anmeMpl1fuCaF/
-   LoT8I+jt5R69sCmuO+fckQpEVeLUTer0Tg7mNz0dhW/8wYTvsPGXrJ3QR
-   1yxXDrrkuD84JJ654neJ/flW1BTz7XkmtONdGA/L9zsNKtavuX7HIa2zk
-   PvXJn5nyJsLcM5H4KfURavZRbFjZgpf3jsmy26WxhP7ME3+Uf8NEJBt9W
-   CxryNVPXPbGyC2+cz5ruZRS/ra0HY+ZXTIQaQEdN5dyq6xpzGxn4CvI1k
-   w==;
+  t=1671259228; x=1702795228;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ZO1lkAXUoRuziw9YZwoPMSZJwRO3K1VPLK1qr7OIeyE=;
+  b=xWXnlcidpjeqKCgdGfNLUGQFRycck6iJPFT0UJy9XxyLioxduAGuUSr/
+   gGodcqaSq94oe9i06wV42rSo/xFMxfRknYWIDpP0IMrDKk3EXGkYLGEHT
+   1mCeK6Ie6Fjvibi0e/4dSHhwLi7/u1+8dXrFPM7OZauByOpgEwWyL2pOe
+   9OYlcTHrp/nxpQJlZNhdq/oPV7LGiJZ9nmcdPWOuznwP+vMd6mNJOTKpG
+   n+ITk87YakoxHJbUi+iTeY6m0O/DOLfVKlOso2SPTCT/dsw3rCKFFzSn9
+   XsIErZ6oEG08BkXpfUB7buqx2dnDu70Jh6mJfB8RANRw1eanj6pcJKXyu
+   A==;
 X-IronPort-AV: E=Sophos;i="5.96,252,1665471600"; 
-   d="scan'208";a="193460256"
+   d="scan'208";a="192133246"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Dec 2022 23:40:19 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Dec 2022 23:40:26 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 16 Dec 2022 23:40:18 -0700
+ 15.1.2507.16; Fri, 16 Dec 2022 23:40:26 -0700
 Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Fri, 16 Dec 2022 23:40:13 -0700
+ 15.1.2507.16 via Frontend Transport; Fri, 16 Dec 2022 23:40:20 -0700
 From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     <linux-serial@vger.kernel.org>, <gregkh@linuxfoundation.org>,
@@ -49,14 +49,17 @@ CC:     <linux-serial@vger.kernel.org>, <gregkh@linuxfoundation.org>,
         <geert+renesas@glider.be>, <lukas@wunner.de>,
         <u.kleine-koenig@pengutronix.de>, <wander@redhat.com>,
         <etremblay@distech-controls.com>, <jk@ozlabs.org>,
-        <UNGLinuxDriver@microchip.com>
-Subject: [PATCH v10 tty-next 0/4] serial: 8250_pci1xxxx: Add driver for the pci1xxxx's quad-uart function
-Date:   Sun, 18 Dec 2022 00:45:03 +0530
-Message-ID: <20221217191507.2359029-1-kumaravel.thiagarajan@microchip.com>
+        <UNGLinuxDriver@microchip.com>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Subject: [PATCH v10 tty-next 1/4] serial: 8250_pci: Add serial8250_pci_setup_port definition in 8250_pcilib.c
+Date:   Sun, 18 Dec 2022 00:45:04 +0530
+Message-ID: <20221217191507.2359029-2-kumaravel.thiagarajan@microchip.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221217191507.2359029-1-kumaravel.thiagarajan@microchip.com>
+References: <20221217191507.2359029-1-kumaravel.thiagarajan@microchip.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="y"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
         DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
@@ -67,40 +70,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pci1xxxx is a PCIe switch with a multi-function endpoint on one of its
-downstream ports. Quad-uart is one of the functions in the multi-function
-endpoint. This patch adds device driver for the quad-uart function and
-enumerates between 1 to 4 instances of uarts based on the PCIe subsystem
-device ID.
+Move implementation of setup_port func() to serial8250_pci_setup_port.
 
-The changes from v1->v2->v3->v4->v5->v6->v7->v8->v9->v10 are mentioned in
-each patch in the patchset.
+Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+Changes in v10:
+- No Change
 
-Thanks to Andy Shevchenko, Ilpo Jarvinen, Chritophe JAILLET, Geert
-Uytterhoeven, Greg KH, Jiri Slaby for their review comments.
+Changes in v9:
+- Added License in 8250_pcilib.c file
 
-Kumaravel Thiagarajan (4):
-  serial: 8250_pci: Add serial8250_pci_setup_port definition in
-    8250_pcilib.c
-  serial: 8250_pci1xxxx: Add driver for quad-uart support
-  serial: 8250_pci1xxxx: Add RS485 support to quad-uart driver
-  serial: 8250_pci1xxxx: Add power management functions to quad-uart
-    driver
+Changes in v8:
+- Moved SERIAL_8250_PCILIB above 8250_PCI
 
- MAINTAINERS                             |   7 +
- drivers/tty/serial/8250/8250_pci.c      |  25 +-
- drivers/tty/serial/8250/8250_pci1xxxx.c | 494 ++++++++++++++++++++++++
- drivers/tty/serial/8250/8250_pcilib.c   |  39 ++
- drivers/tty/serial/8250/8250_pcilib.h   |  15 +
- drivers/tty/serial/8250/8250_port.c     |   8 +
- drivers/tty/serial/8250/Kconfig         |  15 +
- drivers/tty/serial/8250/Makefile        |   2 +
- include/uapi/linux/serial_core.h        |   3 +
- 9 files changed, 586 insertions(+), 22 deletions(-)
- create mode 100644 drivers/tty/serial/8250/8250_pci1xxxx.c
+Changes in v7:
+- Used namespace 'SERIAL_8250_PCI' while exporting and importing symbols
+- Included structures used in function declaration in 8250_pcilib.h file
+
+Changes in v6:
+- Made this patch first patch of the patch series
+
+Changes in v5:
+- This is the new patch added in v5 version of this patchset
+- Moved implementation of setup_port from 8250_pci.c to 8250_pcilib.c
+---
+ drivers/tty/serial/8250/8250_pci.c    | 25 +++--------------
+ drivers/tty/serial/8250/8250_pcilib.c | 39 +++++++++++++++++++++++++++
+ drivers/tty/serial/8250/8250_pcilib.h | 15 +++++++++++
+ drivers/tty/serial/8250/Kconfig       |  4 +++
+ drivers/tty/serial/8250/Makefile      |  1 +
+ 5 files changed, 62 insertions(+), 22 deletions(-)
  create mode 100644 drivers/tty/serial/8250/8250_pcilib.c
  create mode 100644 drivers/tty/serial/8250/8250_pcilib.h
 
+diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
+index 6f66dc2ebacc..58cc9e19bd20 100644
+--- a/drivers/tty/serial/8250/8250_pci.c
++++ b/drivers/tty/serial/8250/8250_pci.c
+@@ -24,6 +24,7 @@
+ #include <asm/io.h>
+ 
+ #include "8250.h"
++#include "8250_pcilib.h"
+ 
+ /*
+  * init function returns:
+@@ -89,28 +90,7 @@ static int
+ setup_port(struct serial_private *priv, struct uart_8250_port *port,
+ 	   u8 bar, unsigned int offset, int regshift)
+ {
+-	struct pci_dev *dev = priv->dev;
+-
+-	if (bar >= PCI_STD_NUM_BARS)
+-		return -EINVAL;
+-
+-	if (pci_resource_flags(dev, bar) & IORESOURCE_MEM) {
+-		if (!pcim_iomap(dev, bar, 0) && !pcim_iomap_table(dev))
+-			return -ENOMEM;
+-
+-		port->port.iotype = UPIO_MEM;
+-		port->port.iobase = 0;
+-		port->port.mapbase = pci_resource_start(dev, bar) + offset;
+-		port->port.membase = pcim_iomap_table(dev)[bar] + offset;
+-		port->port.regshift = regshift;
+-	} else {
+-		port->port.iotype = UPIO_PORT;
+-		port->port.iobase = pci_resource_start(dev, bar) + offset;
+-		port->port.mapbase = 0;
+-		port->port.membase = NULL;
+-		port->port.regshift = 0;
+-	}
+-	return 0;
++	return serial8250_pci_setup_port(priv->dev, port, bar, offset, regshift);
+ }
+ 
+ /*
+@@ -5759,3 +5739,4 @@ module_pci_driver(serial_pci_driver);
+ MODULE_LICENSE("GPL");
+ MODULE_DESCRIPTION("Generic 8250/16x50 PCI serial probe module");
+ MODULE_DEVICE_TABLE(pci, serial_pci_tbl);
++MODULE_IMPORT_NS(SERIAL_8250_PCI);
+diff --git a/drivers/tty/serial/8250/8250_pcilib.c b/drivers/tty/serial/8250/8250_pcilib.c
+new file mode 100644
+index 000000000000..a7124cda1871
+--- /dev/null
++++ b/drivers/tty/serial/8250/8250_pcilib.c
+@@ -0,0 +1,39 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * 8250 PCI library.
++ *
++ * Copyright (C) 2001 Russell King, All Rights Reserved.
++ */
++#include <linux/errno.h>
++#include <linux/ioport.h>
++#include <linux/pci.h>
++#include <linux/types.h>
++
++#include "8250.h"
++
++int serial8250_pci_setup_port(struct pci_dev *dev, struct uart_8250_port *port,
++		   u8 bar, unsigned int offset, int regshift)
++{
++	if (bar >= PCI_STD_NUM_BARS)
++		return -EINVAL;
++
++	if (pci_resource_flags(dev, bar) & IORESOURCE_MEM) {
++		if (!pcim_iomap(dev, bar, 0) && !pcim_iomap_table(dev))
++			return -ENOMEM;
++
++		port->port.iotype = UPIO_MEM;
++		port->port.iobase = 0;
++		port->port.mapbase = pci_resource_start(dev, bar) + offset;
++		port->port.membase = pcim_iomap_table(dev)[bar] + offset;
++		port->port.regshift = regshift;
++	} else {
++		port->port.iotype = UPIO_PORT;
++		port->port.iobase = pci_resource_start(dev, bar) + offset;
++		port->port.mapbase = 0;
++		port->port.membase = NULL;
++		port->port.regshift = 0;
++	}
++	return 0;
++}
++EXPORT_SYMBOL_NS_GPL(serial8250_pci_setup_port, SERIAL_8250_PCI);
++MODULE_LICENSE("GPL");
+diff --git a/drivers/tty/serial/8250/8250_pcilib.h b/drivers/tty/serial/8250/8250_pcilib.h
+new file mode 100644
+index 000000000000..1aaf1b50ce9c
+--- /dev/null
++++ b/drivers/tty/serial/8250/8250_pcilib.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * 8250 PCI library header file.
++ *
++ * Copyright (C) 2001 Russell King, All Rights Reserved.
++ */
++
++#include <linux/types.h>
++
++struct pci_dev;
++
++struct uart_8250_port;
++
++int serial8250_pci_setup_port(struct pci_dev *dev, struct uart_8250_port *port, u8 bar,
++		   unsigned int offset, int regshift);
+diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
+index d0b49e15fbf5..768b73d5cb9a 100644
+--- a/drivers/tty/serial/8250/Kconfig
++++ b/drivers/tty/serial/8250/Kconfig
+@@ -129,9 +129,13 @@ config SERIAL_8250_DMA
+ 	  This builds DMA support that can be used with 8250/16650
+ 	  compatible UART controllers that support DMA signaling.
+ 
++config SERIAL_8250_PCILIB
++	bool
++
+ config SERIAL_8250_PCI
+ 	tristate "8250/16550 PCI device support"
+ 	depends on SERIAL_8250 && PCI
++	select SERIAL_8250_PCILIB
+ 	default SERIAL_8250
+ 	help
+ 	  This builds standard PCI serial support. You may be able to
+diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
+index bee908f99ea0..b9179d1f104b 100644
+--- a/drivers/tty/serial/8250/Makefile
++++ b/drivers/tty/serial/8250/Makefile
+@@ -12,6 +12,7 @@ obj-$(CONFIG_SERIAL_8250)		+= 8250.o 8250_base.o
+ 8250_base-$(CONFIG_SERIAL_8250_DMA)	+= 8250_dma.o
+ 8250_base-$(CONFIG_SERIAL_8250_DWLIB)	+= 8250_dwlib.o
+ 8250_base-$(CONFIG_SERIAL_8250_FINTEK)	+= 8250_fintek.o
++8250_base-$(CONFIG_SERIAL_8250_PCILIB)	+= 8250_pcilib.o
+ obj-$(CONFIG_SERIAL_8250_GSC)		+= 8250_gsc.o
+ obj-$(CONFIG_SERIAL_8250_PCI)		+= 8250_pci.o
+ obj-$(CONFIG_SERIAL_8250_EXAR)		+= 8250_exar.o
 -- 
 2.25.1
 
