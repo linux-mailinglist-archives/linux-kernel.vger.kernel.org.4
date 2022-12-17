@@ -2,124 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1261464F960
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 15:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0DB64F95F
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 15:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbiLQOaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 09:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
+        id S229874AbiLQOaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 09:30:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiLQO36 (ORCPT
+        with ESMTP id S229545AbiLQOaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 09:29:58 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E9F15A19
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 06:29:52 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id bf43so7643716lfb.6
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 06:29:52 -0800 (PST)
+        Sat, 17 Dec 2022 09:30:01 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4F4C56;
+        Sat, 17 Dec 2022 06:29:59 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id ud5so12358609ejc.4;
+        Sat, 17 Dec 2022 06:29:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yKzaM/h7vl6R759siCibHu6TxUrRFv6DmVbOkDTjDuw=;
-        b=YOPHMkPb/czTunzVGkCZOOu5lXuUDZNpdEpBOqW3bpkFbDPY4U3zCxIxnwHFZ6/8RQ
-         Iq4g8Qq8v8nkOUCZF+PaBw6KYVA/yX43eB4VoTz+pOADfRLEfh6e2S/vF0M9kTv4dqdX
-         q1vqd3E6vmasvjCE0RIJYwpOCPVdeSbakxvJLaAt0fThvMkWLl9u2gYAfXYHU/k1kxqF
-         iHXso5pcgd5e79OeGS5wxIDpWyxlTTaYHzqDsc23nXgAZmh//8NoBgWkDvaYo63GFdBo
-         1gR7SPnZ/9YlwBv7kVdLj1CC7Vu9xhCLMQ+HAf3fOzNw4FNx9Az/NgeFPqGi/DzAMiFG
-         6TAw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lQhV9ZLQ0rBir+Rwlz04DWdfpa5Y//vPvGj9FwWeR4Q=;
+        b=RDngtkpOhyHk/y1Hu6UNv5iw8G8/Jqyi3UgSqrTEr9haacPwug7dje55GhH8SxU5we
+         4gPsJ0jG82Ss8yJ9W9semLvAk7sZcLyphybc8l1XpyJK1mfRNAejQhJru+R2w5/2gSyE
+         ftVc35yOle+l6zUguGi6O98fb0xLulVW07iSvUZ9gMvAnDcsZMJANjEbidI40y/LzSho
+         VquW3aCMhqvS3Mm0/Ay0iJ6h/W2Y+RL7i7nIHJdpc4wPOFyMwZ1p1r/KZtpQZCWzNwDy
+         vgJI1t1nsnBb5hahhnqQl4ZXPUIU6x0sHQCPo8PZEnbQayjBRrXj/KlYtYKfqbvi1Kj5
+         VqUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yKzaM/h7vl6R759siCibHu6TxUrRFv6DmVbOkDTjDuw=;
-        b=4MCvtWcVFIYylk8R0YRZPkf58Acb46JNLgL2o/3Tn5vcezM/YFyfA7aKXcSCbufcXN
-         GmpN2mi2phmixHW+kkGnFS/VOfYN6Wbtez7/0PMl0h+Bq0kslTPXj9JDAn42aXAc8Hog
-         GhsCaysSg/VSSHc8ADNmqOZQADuOHUcFlJjy+9KfJU1T9xmzcJp5NyvbJdAwbQyaCZPN
-         dlzJC7Fyo7VMQSiFi5omLVclfeVW2yLjMsbAd0espqibiqz1yQM+W/HCJK+vqrua7twf
-         ibV2sfOcrLFUM3QX3Lr48/d6bPYYMzTOMHaKZWNyp5StltMTnsY8bKFfzrqLalsH0jtg
-         DYQA==
-X-Gm-Message-State: ANoB5pne/CIJrCeBLhSgv/ZDJKLQHYF2W20JOucb1vpq9QD5sQpKV+lj
-        5fSszShn8X6HypulnafvZ+PDUA==
-X-Google-Smtp-Source: AA0mqf4oYJgZJsBoQnoL6WGJjw+60x3a4oac4NeDaCysJL8NEIM5xeQcDJjBdDjoferec0D10QO1wQ==
-X-Received: by 2002:a19:ca58:0:b0:4b5:8579:545d with SMTP id h24-20020a19ca58000000b004b58579545dmr9465392lfj.5.1671287391293;
-        Sat, 17 Dec 2022 06:29:51 -0800 (PST)
-Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id c19-20020a056512325300b004b577877286sm527095lfr.50.2022.12.17.06.29.49
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lQhV9ZLQ0rBir+Rwlz04DWdfpa5Y//vPvGj9FwWeR4Q=;
+        b=whkEnT6/4Seq7V+2e5UxcG7D2ooJ5GeY5EaEbQyQjTPeia4mrz1kgCNg2yBc9FtlBJ
+         +M2s4bVrSiUuGPBwpC4RdUSXb1pLF71ZK+zvd70ngS08dCvRB0NjA6gyx7HKwLsjvKlk
+         z1UVhNhVhVtrSQlTRC3XhUuw5RXUwsn8ey/OCc+GddRaLS5X6Z4bVM5gGLNkw8TD3Q2Q
+         k0pAK6waOsC3AC2o68YCR1Ip3GuHMSgNuFh1mY0km8JTd2vGiqN7+KFRUPvDdIDWPbMy
+         nVwVwIuSVJ+L/Yz3EMMKRf3mJ+GB5dpVww4I9DuK2AwcOcBlxAlc8UYFfJkPDP3NDHn4
+         whWg==
+X-Gm-Message-State: ANoB5pnnHDV7dR4i+fJ9Z96sIFeMpv1eHOy8kadBAA18cftUKqxFcJXO
+        11krpufvytlDGkgmhD1esCM=
+X-Google-Smtp-Source: AA0mqf4Ew5SrfUly16kO8AwYm754mspeq8+vy5cdtvDEqqp7wWGzkpsHSApEJHYMoXIotEhLzf6dIQ==
+X-Received: by 2002:a17:906:34c5:b0:7ae:e886:8ccb with SMTP id h5-20020a17090634c500b007aee8868ccbmr44247934ejb.14.1671287397463;
+        Sat, 17 Dec 2022 06:29:57 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id ku17-20020a170907789100b008072c925e4csm410251ejc.21.2022.12.17.06.29.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Dec 2022 06:29:50 -0800 (PST)
-Message-ID: <3ca81685-fb8f-fa31-3ae8-ef72f3aca7f2@linaro.org>
-Date:   Sat, 17 Dec 2022 15:29:49 +0100
+        Sat, 17 Dec 2022 06:29:57 -0800 (PST)
+Message-ID: <a2d22ba1-d9a2-03ec-3c02-e5c8e885fac5@gmail.com>
+Date:   Sat, 17 Dec 2022 15:29:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5] dt-bindings: soc: qcom,rpmh-rsc: Update to allow for
- generic nodes
+ Thunderbird/102.3.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v1] dt-bindings: display: rockchip: convert rockchip-lvds.txt
+ to YAML
+To:     heiko@sntech.de
+Cc:     hjc@rock-chips.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, airlied@gmail.com,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Language: en-US
-To:     Melody Olvera <quic_molvera@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221216231349.22835-1-quic_molvera@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221216231349.22835-1-quic_molvera@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Convert rockchip-lvds.txt to YAML.
 
+Changed:
+  Add power-domains property.
+  Requirements between PX30 and RK3288
 
-On 17.12.2022 00:13, Melody Olvera wrote:
-> Update the bindings to allow for generic regulator nodes instead of
-> device-specific node names.
-> 
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> ---
-> 
-> Changes from v4:
-> * updated regulator pattern to accommodate more regulators
-> 
-> This patch comes from discussions on [1] and is separated out. It also
-> has updated pattern matching to match the comments left from [1].
-> 
-> [1] https://lore.kernel.org/all/20221026200429.162212-2-quic_molvera@quicinc.com/
-> 
-> ---
->  Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
-> index b246500d3d5d..5bb624f62edc 100644
-> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
-> @@ -112,8 +112,9 @@ properties:
->      $ref: /schemas/power/qcom,rpmpd.yaml#
->  
->  patternProperties:
-> -  '-regulators$':
-> +  '^regulators(-[09])?$':
-Wouldn't this only allow regulators-0 and regulators-9?
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
+ .../display/rockchip/rockchip-lvds.txt        |  92 ----------
+ .../display/rockchip/rockchip-lvds.yaml       | 159 ++++++++++++++++++
+ 2 files changed, 159 insertions(+), 92 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
+ create mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.yaml
 
-Konrad
->      $ref: /schemas/regulator/qcom,rpmh-regulator.yaml#
-> +    unevaluatedProperties: false
->  
->  required:
->    - compatible
-> 
-> base-commit: ca39c4daa6f7f770b1329ffb46f1e4a6bcc3f291
+diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt b/Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
+deleted file mode 100644
+index aaf8c44cf..000000000
+--- a/Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
++++ /dev/null
+@@ -1,92 +0,0 @@
+-Rockchip RK3288 LVDS interface
+-================================
+-
+-Required properties:
+-- compatible: matching the soc type, one of
+-	- "rockchip,rk3288-lvds";
+-	- "rockchip,px30-lvds";
+-
+-- reg: physical base address of the controller and length
+-	of memory mapped region.
+-- clocks: must include clock specifiers corresponding to entries in the
+-	clock-names property.
+-- clock-names: must contain "pclk_lvds"
+-
+-- avdd1v0-supply: regulator phandle for 1.0V analog power
+-- avdd1v8-supply: regulator phandle for 1.8V analog power
+-- avdd3v3-supply: regulator phandle for 3.3V analog power
+-
+-- rockchip,grf: phandle to the general register files syscon
+-- rockchip,output: "rgb", "lvds" or "duallvds", This describes the output interface
+-
+-- phys: LVDS/DSI DPHY (px30 only)
+-- phy-names: name of the PHY, must be "dphy" (px30 only)
+-
+-Optional properties:
+-- pinctrl-names: must contain a "lcdc" entry.
+-- pinctrl-0: pin control group to be used for this controller.
+-
+-Required nodes:
+-
+-The lvds has two video ports as described by
+-	Documentation/devicetree/bindings/media/video-interfaces.txt
+-Their connections are modeled using the OF graph bindings specified in
+-	Documentation/devicetree/bindings/graph.txt.
+-
+-- video port 0 for the VOP input, the remote endpoint maybe vopb or vopl
+-- video port 1 for either a panel or subsequent encoder
+-
+-Example:
+-
+-lvds_panel: lvds-panel {
+-	compatible = "auo,b101ean01";
+-	enable-gpios = <&gpio7 21 GPIO_ACTIVE_HIGH>;
+-	data-mapping = "jeida-24";
+-
+-	ports {
+-		panel_in_lvds: endpoint {
+-			remote-endpoint = <&lvds_out_panel>;
+-		};
+-	};
+-};
+-
+-For Rockchip RK3288:
+-
+-	lvds: lvds@ff96c000 {
+-		compatible = "rockchip,rk3288-lvds";
+-		rockchip,grf = <&grf>;
+-		reg = <0xff96c000 0x4000>;
+-		clocks = <&cru PCLK_LVDS_PHY>;
+-		clock-names = "pclk_lvds";
+-		pinctrl-names = "lcdc";
+-		pinctrl-0 = <&lcdc_ctl>;
+-		avdd1v0-supply = <&vdd10_lcd>;
+-		avdd1v8-supply = <&vcc18_lcd>;
+-		avdd3v3-supply = <&vcca_33>;
+-		rockchip,output = "rgb";
+-		ports {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			lvds_in: port@0 {
+-				reg = <0>;
+-
+-				lvds_in_vopb: endpoint@0 {
+-					reg = <0>;
+-					remote-endpoint = <&vopb_out_lvds>;
+-				};
+-				lvds_in_vopl: endpoint@1 {
+-					reg = <1>;
+-					remote-endpoint = <&vopl_out_lvds>;
+-				};
+-			};
+-
+-			lvds_out: port@1 {
+-				reg = <1>;
+-
+-				lvds_out_panel: endpoint {
+-					remote-endpoint = <&panel_in_lvds>;
+-				};
+-			};
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.yaml b/Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.yaml
+new file mode 100644
+index 000000000..13e12f4b5
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.yaml
+@@ -0,0 +1,159 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/rockchip/rockchip-lvds.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip SoC display controller (VOP)
++
++description: Rockchip low-voltage differential signal (LVDS) transmitter
++
++maintainers:
++  - Sandy Huang <hjc@rock-chips.com>
++  - Heiko Stuebner <heiko@sntech.de>
++
++properties:
++  compatible:
++    enum:
++      - rockchip,px30-lvds
++      - rockchip,rk3288-lvds
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    const: pclk_lvds
++
++  avdd1v0-supply:
++    description: Regulator phandle for 1.0V analog power.
++
++  avdd1v8-supply:
++    description: Regulator phandle for 1.8V analog power.
++
++  avdd3v3-supply:
++    description: Regulator phandle for 3.3V analog power.
++
++  rockchip,grf:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: Phandle to the general register files syscon.
++
++  rockchip,output:
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [rgb, lvds, duallvds]
++    description: This describes the output interface.
++
++  phys:
++    maxItems: 1
++
++  phy-names:
++    const: dphy
++
++  pinctrl-names:
++    const: lcdc
++
++  pinctrl-0: true
++
++  power-domains:
++    maxItems: 1
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/properties/port
++        description:
++          Video port 0 for the VOP input, the remote endpoint maybe vopb or vopl.
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description:
++          Video port 1 for either a panel or subsequent encoder.
++
++    required:
++      - port@0
++      - port@1
++
++additionalProperties: false
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: rockchip,px30-lvds
++
++    then:
++      required:
++        - phys
++        - phy-names
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: rockchip,rk3288-lvds
++
++    then:
++      required:
++        - reg
++        - clocks
++        - clock-names
++        - avdd1v0-supply
++        - avdd1v8-supply
++        - avdd3v3-supply
++
++required:
++  - compatible
++  - rockchip,grf
++  - rockchip,output
++  - ports
++
++examples:
++  - |
++    #include <dt-bindings/clock/rk3288-cru.h>
++
++    lvds: lvds@ff96c000 {
++      compatible = "rockchip,rk3288-lvds";
++      reg = <0xff96c000 0x4000>;
++      clocks = <&cru PCLK_LVDS_PHY>;
++      clock-names = "pclk_lvds";
++      avdd1v0-supply = <&vdd10_lcd>;
++      avdd1v8-supply = <&vcc18_lcd>;
++      avdd3v3-supply = <&vcca_33>;
++      pinctrl-names = "lcdc";
++      pinctrl-0 = <&lcdc_ctl>;
++      rockchip,grf = <&grf>;
++      rockchip,output = "rgb";
++
++      ports {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        lvds_in: port@0 {
++          reg = <0>;
++          #address-cells = <1>;
++          #size-cells = <0>;
++
++          lvds_in_vopb: endpoint@0 {
++            reg = <0>;
++            remote-endpoint = <&vopb_out_lvds>;
++          };
++          lvds_in_vopl: endpoint@1 {
++            reg = <1>;
++            remote-endpoint = <&vopl_out_lvds>;
++          };
++        };
++
++        lvds_out: port@1 {
++          reg = <1>;
++
++          lvds_out_panel: endpoint {
++            remote-endpoint = <&panel_in_lvds>;
++          };
++        };
++      };
++    };
+--
+2.20.1
+
