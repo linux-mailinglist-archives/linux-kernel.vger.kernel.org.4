@@ -2,108 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA0A864F701
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 03:24:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A45564F703
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 03:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiLQCYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 21:24:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
+        id S229984AbiLQC1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 21:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiLQCYm (ORCPT
+        with ESMTP id S229675AbiLQC1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 21:24:42 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BE611A0A
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 18:24:42 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NYqX74DBJzRq6D;
-        Sat, 17 Dec 2022 10:23:35 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sat, 17 Dec 2022 10:24:40 +0800
-Subject: Re: [PATCH -next resend v3] mm: hwposion: support recovery from
- ksm_might_need_to_copy()
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>, Kefeng Wang <wangkefeng.wang@huawei.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        David Hildenbrand <david@redhat.com>
-References: <20221213030557.143432-1-wangkefeng.wang@huawei.com>
- <20221213120523.141588-1-wangkefeng.wang@huawei.com>
- <20221216014729.GA2116060@hori.linux.bs1.fc.nec.co.jp>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <dbb212bb-fac9-cb38-a32e-b64755a67d29@huawei.com>
-Date:   Sat, 17 Dec 2022 10:24:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Fri, 16 Dec 2022 21:27:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45433D91C
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 18:26:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671243986;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ji+gytidbXOMWyPvLX4LLTm6QX/OlsVTfQzF/90xBXs=;
+        b=MQUzWNwqSDFdcvhuOhH5nc0Vx2yCN45Tyc2Z+oxaebNQ5ZwWjBseFA3QPMmm/BPeEcXz3m
+        iLaH+wE2RCPknkJBV0wtOCEf3hSCxIo0b9BX0c93cBidkTKNYaYbZxvACZbM+L/pAOvEH2
+        LSj2J43UyoNS5cY3HpzVG9LbvulP784=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-655-OfgwyDBZMqah10-vzCPlwA-1; Fri, 16 Dec 2022 21:26:23 -0500
+X-MC-Unique: OfgwyDBZMqah10-vzCPlwA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7F7D685C6E0;
+        Sat, 17 Dec 2022 02:26:22 +0000 (UTC)
+Received: from [10.22.8.73] (unknown [10.22.8.73])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5FB7A40C2064;
+        Sat, 17 Dec 2022 02:26:20 +0000 (UTC)
+Message-ID: <af29b121-b1da-64f3-a739-1b233fa04002@redhat.com>
+Date:   Fri, 16 Dec 2022 21:26:20 -0500
 MIME-Version: 1.0
-In-Reply-To: <20221216014729.GA2116060@hori.linux.bs1.fc.nec.co.jp>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v9 3/8] cpuset: Rebuild root domain deadline accounting
+ information
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Qais Yousef <qyousef@layalina.io>,
+        Juri Lelli <juri.lelli@redhat.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, rostedt@goodmis.org,
+        tj@kernel.org, linux-kernel@vger.kernel.org,
+        luca.abeni@santannapisa.it, claudio@evidence.eu.com,
+        tommaso.cucinotta@santannapisa.it, bristot@redhat.com,
+        mathieu.poirier@linaro.org, lizefan@huawei.com,
+        dietmar.eggemann@arm.com, cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>
+References: <20190719140000.31694-1-juri.lelli@redhat.com>
+ <20190719140000.31694-4-juri.lelli@redhat.com>
+ <20221216233501.gh6m75e7s66dmjgo@airbuntu>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20221216233501.gh6m75e7s66dmjgo@airbuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/16 9:47, HORIGUCHI NAOYA(堀口 直也) wrote:
-> On Tue, Dec 13, 2022 at 08:05:23PM +0800, Kefeng Wang wrote:
->> When the kernel copy a page from ksm_might_need_to_copy(), but runs
->> into an uncorrectable error, it will crash since poisoned page is
->> consumed by kernel, this is similar to Copy-on-write poison recovery,
-> 
-> Maybe you mean "this is similar to the issue recently fixed by
-> Copy-on-write poison recovery."?  And if this sentence ends here,
-> please put "." instead of ",".
-> 
->> When an error is detected during the page copy, return VM_FAULT_HWPOISON
->> in do_swap_page(), and install a hwpoison entry in unuse_pte() when
->> swapoff, which help us to avoid system crash.  Note, memory failure on
->> a KSM page will be skipped, but still call memory_failure_queue() to
->> be consistent with general memory failure process.
-> 
-> Thank you for the work.  I have a few comment below ...
+On 12/16/22 18:35, Qais Yousef wrote:
+> Hi
+>
+> On 07/19/19 15:59, Juri Lelli wrote:
+>> When the topology of root domains is modified by CPUset or CPUhotplug
+>> operations information about the current deadline bandwidth held in the
+>> root domain is lost.
+>>
+>> This patch addresses the issue by recalculating the lost deadline
+>> bandwidth information by circling through the deadline tasks held in
+>> CPUsets and adding their current load to the root domain they are
+>> associated with.
+>>
+>> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+>> Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
+>> ---
+> We see that rebuild_root_domain() can take 10+ ms (I get a max of 20ms quite
+> consistently) on suspend/resume.
+>
+> Do we actually need to rebuild_root_domain() if we're going through
+> a suspend/resume cycle?
+>
+> ie: would something like the below make sense? We'd skip this logic if
+> cpuhp_tasks_frozen is set which indicates it's not a real hotplug operation but
+> we're suspending/resuming.
+>
+>
+> Cheers
+>
+> --
+> Qais Yousef
+>
+>
+> --->8---
+>
+>
+>  From 4cfd50960ad872c5eb810ad3038eaf840bab5182 Mon Sep 17 00:00:00 2001
+> From: Qais Yousef <qyousef@layalina.io>
+> Date: Tue, 29 Nov 2022 19:01:52 +0000
+> Subject: [PATCH] sched: cpuset: Don't rebuild sched domains on suspend-resume
+>
+> Commit f9a25f776d78 ("cpusets: Rebuild root domain deadline accounting information")
+> enabled rebuilding sched domain on cpuset and hotplug operations to
+> correct deadline accounting.
+>
+> Rebuilding sched domain is a slow operation and we see 10+ ms delays
+> on suspend-resume because of that.
+>
+> Since nothing is expected to change on suspend-resume operation; skip
+> rebuilding the sched domains to regain some of the time lost.
+>
+> Debugged-by: Rick Yiu <rickyiu@google.com>
+> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+> ---
+>   kernel/cgroup/cpuset.c  | 6 ++++++
+>   kernel/sched/deadline.c | 3 +++
+>   2 files changed, 9 insertions(+)
+>
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index b474289c15b8..2ff68d625b7b 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1067,6 +1067,9 @@ static void update_tasks_root_domain(struct cpuset *cs)
+>   	struct css_task_iter it;
+>   	struct task_struct *task;
+>   
+> +	if (cpuhp_tasks_frozen)
+> +		return;
+> +
+>   	css_task_iter_start(&cs->css, 0, &it);
+>   
+>   	while ((task = css_task_iter_next(&it)))
+> @@ -1084,6 +1087,9 @@ static void rebuild_root_domains(void)
+>   	lockdep_assert_cpus_held();
+>   	lockdep_assert_held(&sched_domains_mutex);
+>   
+> +	if (cpuhp_tasks_frozen)
+> +		return;
+> +
+>   	rcu_read_lock();
+>   
+>   	/*
 
-Thanks both.
+rebuild_root_domains() is the only caller of update_tasks_root_domain(). 
+So the first hunk is redundant as update_tasks_root_domain() won't be 
+called when cpuhp_tasks_frozen is set.
 
->> -	if (unlikely(!PageUptodate(page))) {
->> -		pte_t pteval;
->> +	if (hwposioned || !PageUptodate(page)) {
->> +		swp_entry_t swp_entry;
->>  
->>  		dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
->> -		pteval = swp_entry_to_pte(make_swapin_error_entry());
->> -		set_pte_at(vma->vm_mm, addr, pte, pteval);
->> -		swap_free(entry);
->> +		if (hwposioned) {
->> +			swp_entry = make_hwpoison_entry(swapcache);
->> +			page = swapcache;
-> 
-> This might work for the process accessing to the broken page, but ksm
-> pages are likely to be shared by multiple processes, so it would be
-> much nicer if you can convert all mapping entries for the error ksm page
-> into hwpoisoned ones.  Maybe in this thorough approach,
-> hwpoison_user_mappings() is updated to call try_to_unmap() for ksm pages.
-> But it's not necessary to do this together with applying mcsafe-memcpy,
-> because recovery action and mcsafe-memcpy can be done independently.
-> 
+Cheers,
+Longman
 
-I'm afraid leaving the ksm page in the cache will repeatedly trigger uncorrectable error for the
-same page if ksm pages are shared by multiple processes. This might reach the hardware threshold
-and result in fatal uncorrectable error (thus casuing system to panic). So IMHO it might be better
-to check if page is hwpoisoned before calling ksm_might_need_to_copy() if above thorough approach
-is not implemented. But I can easily be wrong.
-
-Thanks,
-Miaohe Lin
