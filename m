@@ -2,484 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9439064F735
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 03:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2F164F739
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 03:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbiLQCtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 21:49:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
+        id S229841AbiLQC7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 21:59:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiLQCsd (ORCPT
+        with ESMTP id S229453AbiLQC7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 21:48:33 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D432BAE75
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 18:48:30 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8BxVPD9LZ1jaUsGAA--.14451S3;
-        Sat, 17 Dec 2022 10:48:29 +0800 (CST)
-Received: from [10.130.0.63] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxIL_7LZ1jRRoCAA--.7268S3;
-        Sat, 17 Dec 2022 10:48:28 +0800 (CST)
-Subject: Re: [PATCH 4/6] LoongArch: Strip guess_unwinder out from
- prologue_unwinder
-To:     Jinyang He <hejinyang@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-References: <20221215040141.18610-1-hejinyang@loongson.cn>
- <20221215040141.18610-5-hejinyang@loongson.cn>
- <36c3560a-0a2d-4c3f-ecb6-0e7e71746917@loongson.cn>
- <be643b7c-611e-c87b-c030-5fa51220d78c@loongson.cn>
- <6fdb3dc9-2b34-ce53-1ff8-6b23c1eaaa82@loongson.cn>
- <b1d090e3-1d68-3508-9108-5d697fa84ddd@loongson.cn>
-From:   Qing Zhang <zhangqing@loongson.cn>
-Message-ID: <5f46b787-1218-1c5d-3a48-7414fb7914c0@loongson.cn>
-Date:   Sat, 17 Dec 2022 10:48:27 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 16 Dec 2022 21:59:10 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8608EBF4F;
+        Fri, 16 Dec 2022 18:59:09 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NYrD73c80zqT0r;
+        Sat, 17 Dec 2022 10:54:47 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Sat, 17 Dec 2022 10:59:07 +0800
+Subject: Re: [PATCH 1/2] mm/uffd: Fix pte marker when fork() without fork
+ event
+To:     Peter Xu <peterx@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>
+CC:     Andrea Arcangeli <aarcange@redhat.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Huang Ying <ying.huang@intel.com>, <stable@vger.kernel.org>
+References: <20221214200453.1772655-1-peterx@redhat.com>
+ <20221214200453.1772655-2-peterx@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <eeedfdcb-2f9a-86fb-ab62-32cdfaf5d289@huawei.com>
+Date:   Sat, 17 Dec 2022 10:59:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <b1d090e3-1d68-3508-9108-5d697fa84ddd@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20221214200453.1772655-2-peterx@redhat.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxIL_7LZ1jRRoCAA--.7268S3
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvAXoWfJw1xWF43tFW7GFWkuw13XFb_yoW8ArW8Jo
-        W7Kr13Xr4rXryUK34UA34UJFy5tw4UJwnrArW5tr13Gr4Iy3W7Z3yUJa45tayxKr1rGr4U
-        Gryjqr1FvFWxXr1fn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
-        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
-        UUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
-        0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l84
-        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-        M2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
-        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2
-        z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2
-        IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
-        O2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
-        Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
-        WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4U
-        YxBIdaVFxhVjvjDU0xZFpf9x07jepB-UUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/12/15 4:04, Peter Xu wrote:
+> When fork(), dst_vma is not guaranteed to have VM_UFFD_WP even if src may
+> have it and has pte marker installed.  The warning is improper along with
+> the comment.  The right thing is to inherit the pte marker when needed, or
+> keep the dst pte empty.
+> 
+> A vague guess is this happened by an accident when there's the prior patch
+> to introduce src/dst vma into this helper during the uffd-wp feature got
+> developed and I probably messed up in the rebase, since if we replace
+> dst_vma with src_vma the warning & comment it all makes sense too.
+> 
+> Hugetlb did exactly the right here (copy_hugetlb_page_range()).  Fix the
+> general path.
+> 
+> Reproducer:
+> 
+> https://github.com/xupengfe/syzkaller_logs/blob/main/221208_115556_copy_page_range/repro.c
+> 
+> Cc: <stable@vger.kernel.org> # 5.19+
+> Fixes: c56d1b62cce8 ("mm/shmem: handle uffd-wp during fork()")
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216808
+> Reported-by: Pengfei Xu <pengfei.xu@intel.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 
+Looks good to me. Thanks.
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
 
-On 2022/12/17 上午9:47, Jinyang He wrote:
-> On 2022-12-16 10:14, Qing Zhang wrote:
-> 
->> Hi, Jinyang
->>
->> On 2022/12/16 上午9:40, Jinyang He wrote:
->>> On 2022-12-15 17:15, Qing Zhang wrote:
->>>
->>>> Hi, Jinyang
->>>>
->>>> On 2022/12/15 下午12:01, Jinyang He wrote:
->>>>> The prolugue unwinder rely on symbol info. When PC is not in kernel
->>>>> text address, it cannot find relative symbol info and it will be 
->>>>> broken.
->>>>> The guess unwinder will be used in this case. And the guess unwinder
->>>>> codes in prolugue unwinder is redundant. Strip it out and set the
->>>>> unwinder info in unwind_state.
->>>>>
->>>>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
->>>>> ---
->>>>>   arch/loongarch/include/asm/unwind.h     |  22 ++++
->>>>>   arch/loongarch/kernel/Makefile          |   3 +-
->>>>>   arch/loongarch/kernel/unwind.c          |  52 +++++++++
->>>>>   arch/loongarch/kernel/unwind_guess.c    |  41 ++-----
->>>>>   arch/loongarch/kernel/unwind_prologue.c | 135 
->>>>> +++++++++---------------
->>>>>   5 files changed, 135 insertions(+), 118 deletions(-)
->>>>>   create mode 100644 arch/loongarch/kernel/unwind.c
->>>>>
->>>>> diff --git a/arch/loongarch/include/asm/unwind.h 
->>>>> b/arch/loongarch/include/asm/unwind.h
->>>>> index 6ece48f0ff77..a16aff1d086a 100644
->>>>> --- a/arch/loongarch/include/asm/unwind.h
->>>>> +++ b/arch/loongarch/include/asm/unwind.h
->>>>> @@ -18,6 +18,8 @@ enum unwinder_type {
->>>>>       UNWINDER_PROLOGUE,
->>>>>   };
->>>>>   +struct unwinder_ops;
->>>>> +
->>>>>   struct unwind_state {
->>>>>       char type; /* UNWINDER_XXX */
->>>>>       struct stack_info stack_info;
->>>>> @@ -25,8 +27,22 @@ struct unwind_state {
->>>>>       bool first, error, is_ftrace;
->>>>>       int graph_idx;
->>>>>       unsigned long sp, pc, ra;
->>>>> +    const struct unwinder_ops *ops;
->>>>> +};
->>>>> +
->>>>> +struct unwinder_ops {
->>>>> +    void (*unwind_start)(struct unwind_state *state,
->>>>> +                 struct task_struct *task, struct pt_regs *regs);
->>>>> +    bool (*unwind_next_frame)(struct unwind_state *state);
->>>>> +    unsigned long (*unwind_get_return_address)(struct unwind_state 
->>>>> *state);
->>>>>   };
->>>>>   +extern const struct unwinder_ops *default_unwinder;
->>>>> +extern const struct unwinder_ops unwinder_guess;
->>>>> +#ifdef CONFIG_UNWINDER_PROLOGUE
->>>>> +extern const struct unwinder_ops unwinder_prologue;
->>>>> +#endif
->>>>> +
->>>>>   void unwind_start(struct unwind_state *state,
->>>>>             struct task_struct *task, struct pt_regs *regs);
->>>>>   bool unwind_next_frame(struct unwind_state *state);
->>>>> @@ -49,4 +65,10 @@ static inline unsigned long 
->>>>> unwind_graph_addr(struct unwind_state *state,
->>>>>       return ftrace_graph_ret_addr(state->task, &state->graph_idx,
->>>>>                        pc, (unsigned long *)(cfa - 
->>>>> GRAPH_FAKE_OFFSET));
->>>>>   }
->>>>> +
->>>>> +static inline void unwind_register_unwinder(struct unwind_state 
->>>>> *state,
->>>>> +                      const struct unwinder_ops *unwinder)
->>>>> +{
->>>>> +    state->ops = unwinder;
->>>>> +}
->>>>>   #endif /* _ASM_UNWIND_H */
->>>>> diff --git a/arch/loongarch/kernel/Makefile 
->>>>> b/arch/loongarch/kernel/Makefile
->>>>> index 7ca65195f7f8..cb6029ea3ea9 100644
->>>>> --- a/arch/loongarch/kernel/Makefile
->>>>> +++ b/arch/loongarch/kernel/Makefile
->>>>> @@ -8,7 +8,7 @@ extra-y        := vmlinux.lds
->>>>>   obj-y        += head.o cpu-probe.o cacheinfo.o env.o setup.o 
->>>>> entry.o genex.o \
->>>>>              traps.o irq.o idle.o process.o dma.o mem.o io.o 
->>>>> reset.o switch.o \
->>>>>              elf.o syscall.o signal.o time.o topology.o inst.o 
->>>>> ptrace.o vdso.o \
->>>>> -           alternative.o unaligned.o
->>>>> +           alternative.o unaligned.o unwind.o unwind_guess.o
->>>>>     obj-$(CONFIG_ACPI)        += acpi.o
->>>>>   obj-$(CONFIG_EFI)         += efi.o
->>>>> @@ -42,7 +42,6 @@ obj-$(CONFIG_MAGIC_SYSRQ)    += sysrq.o
->>>>>   obj-$(CONFIG_KEXEC)        += machine_kexec.o relocate_kernel.o
->>>>>   obj-$(CONFIG_CRASH_DUMP)    += crash_dump.o
->>>>>   -obj-$(CONFIG_UNWINDER_GUESS)    += unwind_guess.o
->>>>>   obj-$(CONFIG_UNWINDER_PROLOGUE) += unwind_prologue.o
->>>>>     obj-$(CONFIG_PERF_EVENTS)    += perf_event.o perf_regs.o
->>>>> diff --git a/arch/loongarch/kernel/unwind.c 
->>>>> b/arch/loongarch/kernel/unwind.c
->>>>> new file mode 100644
->>>>> index 000000000000..568c6fe707d1
->>>>> --- /dev/null
->>>>> +++ b/arch/loongarch/kernel/unwind.c
->>>>> @@ -0,0 +1,52 @@
->>>>> +// SPDX-License-Identifier: GPL-2.0
->>>>> +/*
->>>>> + * Copyright (C) 2022 Loongson Technology Corporation Limited
->>>>> + */
->>>>> +#include <asm/unwind.h>
->>>>> +
->>>>> +#if defined(CONFIG_UNWINDER_GUESS)
->>>>> +const struct unwinder_ops *default_unwinder = &unwinder_guess;
->>>>> +#elif defined(CONFIG_UNWINDER_PROLOGUE)
->>>>> +const struct unwinder_ops *default_unwinder = &unwinder_prologue;
->>>>> +#endif
->>>>> +
->>>>> +unsigned long unwind_get_return_address(struct unwind_state *state)
->>>>> +{
->>>>> +    if (!state->ops || unwind_done(state))
->>>>> +        return 0;
->>>>> +    return state->ops->unwind_get_return_address(state);
->>>>> +}
->>>>> +EXPORT_SYMBOL_GPL(unwind_get_return_address);
->>>>> +
->>>>> +void unwind_start(struct unwind_state *state, struct task_struct 
->>>>> *task,
->>>>> +            struct pt_regs *regs)
->>>>> +{
->>>>> +    memset(state, 0, sizeof(*state));
->>>>> +    unwind_register_unwinder(state, default_unwinder);
->>>>> +    if (regs) {
->>>>> +        state->sp = regs->regs[3];
->>>>> +        state->pc = regs->csr_era;
->>>>> +        state->ra = regs->regs[1];
->>>>> +    } else if (task == current) {
->>>>> +        state->sp = (unsigned long)__builtin_frame_address(0);
->>>>> +        state->pc = (unsigned long)__builtin_return_address(0);
->>>>> +        state->ra = 0;
->>>>> +    } else {
->>>>> +        state->sp = thread_saved_fp(task);
->>>>> +        state->pc = thread_saved_ra(task);
->>>>> +        state->ra = 0;
->>>>> +    }
->>>>> +    state->task = task;
->>>>> +    get_stack_info(state->sp, state->task, &state->stack_info);
->>>>> +    state->pc = unwind_graph_addr(state, state->pc, state->sp);
->>
->>  here. :)
-> 
-> The PC from branch 'task == current' is the RA of current frame. And the 
-> PC from branch 'regs' is regs->csr_era, which may be RA of frame where 
-> to get the regs->csr_era. They all may traced by function_graph. 
-> Ftrace_graph_ret_addr() returns orignal addr and not destroys result, if 
-> the addr was not traced, so calling it for deal with above cases.
-> 
-ok, you are right. The first state>pc obtained by cat/proc/self/stack 
-after the function graph is a "return to handler".
-
-Thank,
--Qing
-> Thanks,
-> 
-> Jinyang
-> 
->>
->>>>> + state->ops->unwind_start(state, task, regs);
->>>>> +}
->>>>> +EXPORT_SYMBOL_GPL(unwind_start);
->>>>> +
->>>>> +bool unwind_next_frame(struct unwind_state *state)
->>>>> +{
->>>>> +    if (!state->ops || unwind_done(state))
->>>>> +        return false;
->>>>> +    return state->ops->unwind_next_frame(state);
->>>>> +}
->>>>> +EXPORT_SYMBOL_GPL(unwind_next_frame);
->>>>> diff --git a/arch/loongarch/kernel/unwind_guess.c 
->>>>> b/arch/loongarch/kernel/unwind_guess.c
->>>>> index 8ce32c37c587..b7ca2b88ac63 100644
->>>>> --- a/arch/loongarch/kernel/unwind_guess.c
->>>>> +++ b/arch/loongarch/kernel/unwind_guess.c
->>>>> @@ -7,51 +7,23 @@
->>>>>     #include <asm/unwind.h>
->>>>>   -unsigned long unwind_get_return_address(struct unwind_state *state)
->>>>> +static unsigned long get_return_address(struct unwind_state *state)
->>>>>   {
->>>>> -    if (unwind_done(state))
->>>>> -        return 0;
->>>>>       return state->pc;
->>>>>   }
->>>>> -EXPORT_SYMBOL_GPL(unwind_get_return_address);
->>>>>   -void unwind_start(struct unwind_state *state, struct task_struct 
->>>>> *task,
->>>>> +static void start(struct unwind_state *state, struct task_struct 
->>>>> *task,
->>>>>               struct pt_regs *regs)
->>>>>   {
->>>>> -    memset(state, 0, sizeof(*state));
->>>>> -
->>>>> -    if (regs) {
->>>>> -        state->sp = regs->regs[3];
->>>>> -        state->pc = regs->csr_era;
->>>>> -    } else if (task == current) {
->>>>> -        state->sp = (unsigned long)__builtin_frame_address(0);
->>>>> -        state->pc = (unsigned long)__builtin_return_address(0);
->>>>> -    } else {
->>>>> -        state->sp = thread_saved_fp(task);
->>>>> -        state->pc = thread_saved_ra(task);
->>>>> -    }
->>>>> -
->>>>> -    state->task = task;
->>>>> -    state->first = true;
->>>>> -    state->pc = unwind_graph_add(state, state->pc, state->sp);
->>>>
->>>> Do we need to unwind_graph_add again here? unwinder_guess and 
->>>> unwind_prologue have already been done.
->>>
->>> Hi, Qing
->>>
->>>
->>> Sorry I don't what meanning here, as here is a delete line.
->>>
->> Sorry, It's the unwind_start up here.
->>>
->>>>
->>>>> -    get_stack_info(state->sp, state->task, &state->stack_info);
->>>>> -
->>>>>       if (!unwind_done(state) && !__kernel_text_address(state->pc))
->>>>>           unwind_next_frame(state);
->>>>>   }
->>>>> -EXPORT_SYMBOL_GPL(unwind_start);
->>>>>   -bool unwind_next_frame(struct unwind_state *state)
->>>>> +static bool next_frame(struct unwind_state *state)
->>>>>   {
->>>>>       struct stack_info *info = &state->stack_info;
->>>>>       unsigned long addr;
->>>>>   -    if (unwind_done(state))
->>>>> -        return false;
->>>>> -
->>>>> -    if (state->first)
->>>>> -        state->first = false;
->>>>> -
->>>>>       do {
->>>>>           for (state->sp += sizeof(unsigned long);
->>>>>                state->sp < info->end;
->>>>> @@ -68,4 +40,9 @@ bool unwind_next_frame(struct unwind_state *state)
->>>>>         return false;
->>>>>   }
->>>>> -EXPORT_SYMBOL_GPL(unwind_next_frame);
->>>>> +
->>>>> +const struct unwinder_ops unwinder_guess = {
->>>>> +    .unwind_start = start,
->>>>> +    .unwind_next_frame = next_frame,
->>>>> +    .unwind_get_return_address = get_return_address,
->>>>> +};
->>>>> diff --git a/arch/loongarch/kernel/unwind_prologue.c 
->>>>> b/arch/loongarch/kernel/unwind_prologue.c
->>>>> index d464c533c64f..9677e13c4b4c 100644
->>>>> --- a/arch/loongarch/kernel/unwind_prologue.c
->>>>> +++ b/arch/loongarch/kernel/unwind_prologue.c
->>>>> @@ -9,6 +9,8 @@
->>>>>   #include <asm/ptrace.h>
->>>>>   #include <asm/unwind.h>
->>>>>   +static const struct unwinder_ops *guard_unwinder = &unwinder_guess;
->>>>> +
->>>>>   static inline void unwind_state_fixup(struct unwind_state *state)
->>>>>   {
->>>>>   #ifdef CONFIG_DYNAMIC_FTRACE
->>>>> @@ -19,31 +21,19 @@ static inline void unwind_state_fixup(struct 
->>>>> unwind_state *state)
->>>>>   #endif
->>>>>   }
->>>>>   -unsigned long unwind_get_return_address(struct unwind_state *state)
->>>>> +static unsigned long get_return_address(struct unwind_state *state)
->>>>>   {
->>>>> -    if (unwind_done(state))
->>>>> -        return 0;
->>>>>       return state->pc;
->>>>>   }
->>>>> -EXPORT_SYMBOL_GPL(unwind_get_return_address);
->>>>> -
->>>>> -static bool unwind_by_guess(struct unwind_state *state)
->>>>> -{
->>>>> -    struct stack_info *info = &state->stack_info;
->>>>> -    unsigned long addr;
->>>>> -
->>>>> -    for (state->sp += sizeof(unsigned long);
->>>>> -         state->sp < info->end;
->>>>> -         state->sp += sizeof(unsigned long)) {
->>>>> -        addr = *(unsigned long *)(state->sp);
->>>>> -        state->pc = unwind_graph_addr(state, addr, state->sp + 8);
->>>>> -        if (__kernel_text_address(state->pc))
->>>>> -            return true;
->>>>> -    }
->>>>> -
->>>>> -    return false;
->>>>> -}
->>>>>   +/*
->>>>> + * LoongArch function prologue like follows,
->>>>> + *     [others instructions not use stack var]
->>>>> + *     addi.d sp, sp, -imm
->>>>> + *     st.d   xx, sp, offset <- save callee saved regs and
->>>>> + *     st.d   yy, sp, offset    save ra if function is nest.
->>>>> + *     [others instructions]
->>>>> + */
->>>>>   static bool unwind_by_prologue(struct unwind_state *state)
->>>>>   {
->>>>>       long frame_ra = -1;
->>>>> @@ -89,6 +79,10 @@ static bool unwind_by_prologue(struct 
->>>>> unwind_state *state)
->>>>>           ip++;
->>>>>       }
->>>>>   +    /*
->>>>> +     * Not find stack alloc action, PC may be in a leaf function. 
->>>>> Only the
->>>>> +     * first being true is reasonable, otherwise indicate analysis 
->>>>> is broken.
->>>>> +     */
->>>>>       if (!frame_size) {
->>>>>           if (state->first)
->>>>>               goto first;
->>>>> @@ -106,6 +100,7 @@ static bool unwind_by_prologue(struct 
->>>>> unwind_state *state)
->>>>>           ip++;
->>>>>       }
->>>>>   +    /* Not find save $ra action, PC may be in a leaf function, 
->>>>> too. */
->>>>>       if (frame_ra < 0) {
->>>>>           if (state->first) {
->>>>>               state->sp = state->sp + frame_size;
->>>>> @@ -114,96 +109,63 @@ static bool unwind_by_prologue(struct 
->>>>> unwind_state *state)
->>>>>           return false;
->>>>>       }
->>>>>   -    if (state->first)
->>>>> -        state->first = false;
->>>>> -
->>>>>       state->pc = *(unsigned long *)(state->sp + frame_ra);
->>>>>       state->sp = state->sp + frame_size;
->>>>>       goto out;
->>>>>     first:
->>>>> -    state->first = false;
->>>>> -    if (state->pc == state->ra)
->>>>> -        return false;
->>>>> -
->>>>>       state->pc = state->ra;
->>>>>     out:
->>>>> +    state->first = false;
->>>>>       unwind_state_fixup(state);
->>>>>       return !!__kernel_text_address(state->pc);
->>>>>   }
->>>>>   -void unwind_start(struct unwind_state *state, struct task_struct 
->>>>> *task,
->>>>> +static void start(struct unwind_state *state, struct task_struct 
->>>>> *task,
->>>>>               struct pt_regs *regs)
->>>>>   {
->>>>> -    memset(state, 0, sizeof(*state));
->>>>> -    state->type = UNWINDER_PROLOGUE;
->>>>> -
->>>>> -    if (regs) {
->>>>> -        state->sp = regs->regs[3];
->>>>> -        state->pc = regs->csr_era;
->>>>> -        state->ra = regs->regs[1];
->>>>> -        if (!__kernel_text_address(state->pc))
->>>>> -            state->type = UNWINDER_GUESS;
->>>>> -    } else if (task == current) {
->>>>> -        state->sp = (unsigned long)__builtin_frame_address(0);
->>>>> -        state->pc = (unsigned long)__builtin_return_address(0);
->>>>> -        state->ra = 0;
->>>>> -    } else {
->>>>> -        state->sp = thread_saved_fp(task);
->>>>> -        state->pc = thread_saved_ra(task);
->>>>> -        state->ra = 0;
->>>>> -    }
->>>>> -
->>>>> -    state->task = task;
->>>>>       state->first = true;
->>>>> -    state->pc = unwind_graph_addr(state, state->pc, state->sp);
->>>>> -    get_stack_info(state->sp, state->task, &state->stack_info);
->>>>>   -    if (!unwind_done(state) && !__kernel_text_address(state->pc))
->>>>> -        unwind_next_frame(state);
->>>>> +    /*
->>>>> +     * The current PC is not kernel text address, we cannot find its
->>>>> +     * relative symbol. Thus, prologue analysis will be broken. 
->>>>> Luckly,
->>>>> +     * we can use the guard unwinder.
->>>>> +     */
->>>>> +    if (!__kernel_text_address(state->pc)) {
->>>>> +        unwind_register_unwinder(state, guard_unwinder);
->>>>
->>>> Just add a comment here. Instead of using guard_unwinder, can we still
->>>> use guess_unwinder?
->>>
->>> Yes, and I'll use '&guess_unwinder' in next version. And I'll
->>> drop unwind type in next version, too.
->>>
->>>
->>> Thanks,
->>>
->>> Jinyang
->>>
-> 
+Thanks,
+Miaohe Lin
 
