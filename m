@@ -2,105 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BCF064F855
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 09:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED50F64F85E
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 10:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiLQIpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 03:45:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
+        id S230193AbiLQJBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 04:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLQIpG (ORCPT
+        with ESMTP id S230188AbiLQJBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 03:45:06 -0500
-X-Greylist: delayed 2673 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 17 Dec 2022 00:45:05 PST
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E5D17E1A;
-        Sat, 17 Dec 2022 00:45:05 -0800 (PST)
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 2BH8ijR4006775;
-        Sat, 17 Dec 2022 17:44:46 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2BH8ijR4006775
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1671266686;
-        bh=LHeucGCPwMdgCGBwHWBUilHEHkQaQRZPEHaHIlGQdN8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lE0+CsG52o3f20fEyTU9yUtd7iYk9Bn/HQQlB6B/Hh9CxI/PI0WoYU7oVKZgm+dUJ
-         SFFOrSdQIgkUaYCvK1VFXYqXvh7rXFdv2SmPWsHqPBsu/rmxDBu6eRCcg48phX8kwa
-         zMuq4Ghq2bpYWwQlmgvTzGTFnR2PHOOoWDcSNQlU3dt5K9AQdosviNl0PBEtJfcgbN
-         hnBUSR2wCnJKdyPd5DUDlo0USZSip/wIaU6/2tZ49tKlsmHm8wd6JiQfHM81Jm7EIY
-         TGI4uaqHPboOhd8l4Nw4VlT4zXC6gmUxY3cX6SSfBvczbD7YtmeLGoErB8hjLqySxP
-         a8ijgeQmRFXaw==
-X-Nifty-SrcIP: [209.85.160.54]
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-14449b7814bso6070130fac.3;
-        Sat, 17 Dec 2022 00:44:46 -0800 (PST)
-X-Gm-Message-State: AFqh2krVXPygpEy4gqObiMu7PKBGnK02/EsB73de9Q+YWpE4WPPOUmqU
-        hoYjmOp8p6rgmlPf6IANTGxFPuCvfy5TJ1GXCAU=
-X-Google-Smtp-Source: AMrXdXvP1ofd0t5v1b6rbg3fmaf6LHIaqutyPKXmOtf3qP7yg5FU0tS0EUKDRsQH2AqhAXcv3p2e8+d0UCGUMl6p5mE=
-X-Received: by 2002:a05:6871:450d:b0:144:a2de:1075 with SMTP id
- nj13-20020a056871450d00b00144a2de1075mr581546oab.194.1671266685319; Sat, 17
- Dec 2022 00:44:45 -0800 (PST)
+        Sat, 17 Dec 2022 04:01:39 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698541BEA2
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 01:01:37 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id qk9so11274692ejc.3
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 01:01:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vK0TZW6SYzMO8GJcX0vIR6Bw0LJNQhztjdVIUby5uwE=;
+        b=aRaARTQBZZZuk/VU/VusJZClWP8dWJEDi2BZR+u7kcvHQ2/ZMwU9eccWdiOuI/YuG+
+         HbNez89BIhShn6BnL2PELxiELE8GxiaadQNdweXW06UtO0T+EigIitWp+GDnWl4eG5lQ
+         H6ERgsa5vQcQ4DRgZTuW5VYr9lwRd4E6WnMxc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vK0TZW6SYzMO8GJcX0vIR6Bw0LJNQhztjdVIUby5uwE=;
+        b=xIWSMjvNr/OdWkVfi/h5GMDtWldctw5PvIpo1n+MNCbZlRmISv4Qwnp2+jqghnrBei
+         jBJr4S00GPgAppsfWLT38/430r1lfsENbJbzuODLGqNehW70wU+4ZzsEnSAHg48ZnbG+
+         7KrsCW96mazoTONWSBNMBJLMKhHNzvVYwt4m9vFagM+yJJVuzQH54zl40UgA7RwjHmS7
+         vhLe0iHnkwpEd5d8909cx+Q168kp+lrv0FnMQA6kOXAU/pTFUNQHJbYojwQq4ENxxQGG
+         nBMIwZ145xlH1JdWxNVdSP7O198N7+hTfTjwtXIZHTX/4S+8+2oQsv/SXE8SQWIC0scX
+         pXgA==
+X-Gm-Message-State: ANoB5pnTvRG08jItphqUNSzKq5r1Ona7xBhqxNvJ/zxsqZDsTg5c4EoG
+        qXt45PA4r8zoOzyGNEcmmxBCyj1dxJRkYYwvihOuyQ==
+X-Google-Smtp-Source: AA0mqf6cg0tsIZBexBusYHjO1PwoPuvESDbdCXGNxJo3TpNxUNUoxiYf5E/awJEDfFRWdgm4ftoUS2ZS9QGvRqlTqr8=
+X-Received: by 2002:a17:906:8383:b0:7c1:19ea:dda with SMTP id
+ p3-20020a170906838300b007c119ea0ddamr8603728ejx.31.1671267695782; Sat, 17 Dec
+ 2022 01:01:35 -0800 (PST)
 MIME-Version: 1.0
-References: <CAK7LNASM6KsrXHXLykaQ=rJ3YZ5OA+7im4=g=3Ob3EPt97n_HQ@mail.gmail.com>
- <tencent_6B46BD116F0C168438B3982F0F546C5F6709@qq.com>
-In-Reply-To: <tencent_6B46BD116F0C168438B3982F0F546C5F6709@qq.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 17 Dec 2022 17:44:09 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASu6i9V4b_u68azpM45zPM0udGW8kVWGd+UZzJtSq0+TA@mail.gmail.com>
-Message-ID: <CAK7LNASu6i9V4b_u68azpM45zPM0udGW8kVWGd+UZzJtSq0+TA@mail.gmail.com>
-Subject: Re: Re: [PATCH] kbuild: Fix compilation error
-To:     Rong Tao <rtoax@foxmail.com>
-Cc:     bpf@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, nicolas@fjasle.eu, rongtao@cestc.cn
+References: <20220414110838.883074566@linuxfoundation.org> <CA+G9fYvgzFW7sMZVdw5r970QNNg4OK8=pbQV0kDfbOX-rXu5Rw@mail.gmail.com>
+ <CA+G9fYscMP+DTzaQGw1p-KxyhPi0JB64ABDu_aNSU0r+_VgBHg@mail.gmail.com>
+ <165094019509.1648.12340115187043043420@noble.neil.brown.name>
+ <Y5y5n8JoGZNt1otY@panicking> <332A0C50-D53E-4C86-9795-6238C961C869@hammerspace.com>
+In-Reply-To: <332A0C50-D53E-4C86-9795-6238C961C869@hammerspace.com>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Sat, 17 Dec 2022 10:01:24 +0100
+Message-ID: <CAOf5uwmVrH6nwkp1fb+WAS0XR=hm4XoQfHZK=OyGLFajMHtnRw@mail.gmail.com>
+Subject: Re: [PATCH 4.19 000/338] 4.19.238-rc1 review
+To:     Trond Myklebust <trondmy@hammerspace.com>
+Cc:     Neil Brown <neilb@suse.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "patches@kernelci.org" <patches@kernelci.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        "pavel@denx.de" <pavel@denx.de>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
+        "slade@sladewatkins.com" <slade@sladewatkins.com>,
+        Netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        Anna Schumaker <anna.schumaker@netapp.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 17, 2022 at 5:11 PM Rong Tao <rtoax@foxmail.com> wrote:
+Hi
+
+On Fri, Dec 16, 2022 at 10:25 PM Trond Myklebust
+<trondmy@hammerspace.com> wrote:
 >
-> Yes, It's happen in the mainline kernel.
 >
-> I pulled the latest code and habitually compiled samples/bpf,
 >
-> $ git remote get-url origin
-> git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> $ make -C samples/bpf
+> > On Dec 16, 2022, at 13:31, Michael Trimarchi <michael@amarulasolutions.=
+com> wrote:
+> >
+> > [You don't often get email from michael@amarulasolutions.com. Learn why=
+ this is important at https://aka.ms/LearnAboutSenderIdentification ]
+> >
+> > Hi Neil
+> >
+> > On Tue, Apr 26, 2022 at 12:29:55PM +1000, NeilBrown wrote:
+> >> On Thu, 21 Apr 2022, Naresh Kamboju wrote:
+> >>> On Mon, 18 Apr 2022 at 14:09, Naresh Kamboju <naresh.kamboju@linaro.o=
+rg> wrote:
+> >>>>
+> >>>> On Thu, 14 Apr 2022 at 18:45, Greg Kroah-Hartman
+> >>>> <gregkh@linuxfoundation.org> wrote:
+> >>>>>
+> >>>>> This is the start of the stable review cycle for the 4.19.238 relea=
+se.
+> >>>>> There are 338 patches in this series, all will be posted as a respo=
+nse
+> >>>>> to this one.  If anyone has any issues with these being applied, pl=
+ease
+> >>>>> let me know.
+> >>>>>
+> >>>>> Responses should be made by Sat, 16 Apr 2022 11:07:54 +0000.
+> >>>>> Anything received after that time might be too late.
+> >>>>>
+> >>>>> The whole patch series can be found in one patch at:
+> >>>>>        https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/p=
+atch-4.19.238-rc1.gz
+> >>>>> or in the git tree and branch at:
+> >>>>>        git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-s=
+table-rc.git linux-4.19.y
+> >>>>> and the diffstat can be found below.
+> >>>>>
+> >>>>> thanks,
+> >>>>>
+> >>>>> greg k-h
+> >>>>
+> >>>>
+> >>>> Following kernel warning noticed on arm64 Juno-r2 while booting
+> >>>> stable-rc 4.19.238. Here is the full test log link [1].
+> >>>>
+> >>>> [    0.000000] Booting Linux on physical CPU 0x0000000100 [0x410fd03=
+3]
+> >>>> [    0.000000] Linux version 4.19.238 (tuxmake@tuxmake) (gcc version
+> >>>> 11.2.0 (Debian 11.2.0-18)) #1 SMP PREEMPT @1650206156
+> >>>> [    0.000000] Machine model: ARM Juno development board (r2)
+> >>>> <trim>
+> >>>> [   18.499895] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >>>> [   18.504172] WARNING: inconsistent lock state
+> >>>> [   18.508451] 4.19.238 #1 Not tainted
+> >>>> [   18.511944] --------------------------------
+> >>>> [   18.516222] inconsistent {IN-SOFTIRQ-W} -> {SOFTIRQ-ON-W} usage.
+> >>>> [   18.522242] kworker/u12:3/60 [HC0[0]:SC0[0]:HE1:SE1] takes:
+> >>>> [   18.527826] (____ptrval____)
+> >>>> (&(&xprt->transport_lock)->rlock){+.?.}, at: xprt_destroy+0x70/0xe0
+> >>>> [   18.536648] {IN-SOFTIRQ-W} state was registered at:
+> >>>> [   18.541543]   lock_acquire+0xc8/0x23c
+> >>
+> >> Prior to Linux 5.3, ->transport_lock needs spin_lock_bh() and
+> >> spin_unlock_bh().
+> >>
+> >
+> > We get the same deadlock or similar one and we think that
+> > can be connected to this thread on 4.19.243. For us is a bit
+> > difficult to hit but we are going to apply this change
+> >
+> > net: sunrpc: Fix deadlock in xprt_destroy
+> >
+> > Prior to Linux 5.3, ->transport_lock needs spin_lock_bh() and
+> > spin_unlock_bh().
+> >
+> > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> > ---
+> > net/sunrpc/xprt.c | 4 ++--
+> > 1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/net/sunrpc/xprt.c b/net/sunrpc/xprt.c
+> > index d05fa7c36d00..b1abf4848bbc 100644
+> > --- a/net/sunrpc/xprt.c
+> > +++ b/net/sunrpc/xprt.c
+> > @@ -1550,9 +1550,9 @@ static void xprt_destroy(struct rpc_xprt *xprt)
+> >         * is cleared.  We use ->transport_lock to ensure the mod_timer(=
+)
+> >         * can only run *before* del_time_sync(), never after.
+> >         */
+> > -       spin_lock(&xprt->transport_lock);
+> > +       spin_lock_bh(&xprt->transport_lock);
+> >        del_timer_sync(&xprt->timer);
+> > -       spin_unlock(&xprt->transport_lock);
+> > +       spin_unlock_bh(&xprt->transport_lock);
+> >
+> >        /*
+> >         * Destroy sockets etc from the system workqueue so they can
+> > =E2=80=94
 >
-> and the compilation error occurred. I applied this patch and can
-> fix this compilation error.
+> Agreed. When backporting to kernels that are older than 5.3.x, the transp=
+ort lock needs to be taken using the bh-safe spin lock variants.
+>
+> Reviewed-by: Trond Myklebust <trond.myklebust@hammerspace.com <mailto:tro=
+nd.myklebust@hammerspace.com>>
+>
+
+Seems already applied, but for some reason I miss it. I will re-align
+to stable again
+
+Michael
+
+> _________________________________
+> Trond Myklebust
+> Linux NFS client maintainer, Hammerspace
+> trond.myklebust@hammerspace.com
+>
 
 
+--=20
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
 
-
-I want you to describe the steps to reproduce the issue from the pristine
-source tree instead of printing the URL of your origin.
-
-
-
-I prepared a template for you.
-Please fill the following 3 square brackets.
-
-
-
-$ git log --oneline  -1
- [ Fill the commit hash you are working on ]
-$ git clean -dfx
-
- [ Fill steps between "git clean -dfx" and "make -C samples/bpf" ]
-
-$ make -C samples/bpf
- [ Fill the error message you get ]
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com
