@@ -2,99 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA2D64F887
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 10:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BF864F88A
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 10:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbiLQJtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 04:49:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
+        id S229526AbiLQJxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 04:53:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiLQJto (ORCPT
+        with ESMTP id S229508AbiLQJxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 04:49:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403D52E9D9
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 01:49:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671270539;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8+cb7SeX23uGI90U7WymgIHpdK7PIOEux9WNUqXxSTM=;
-        b=hCfYCubFb0NR4y9P2uYgIlGycjLtTDBy/HIpbMQ7lkd47y5XQ8MYtAurZjOIEJOeHSAr5d
-        L5VbRlq9jfI2h0MMPvazf9siCfvPMKv/TzmKBe9/mI+kXkGLvg6H3lmczEUlttMkZMPFnk
-        QAk59Ibx0vXKtNgyupQLCX2EqVE8ahc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-247-slC8Q35xPLK9tZqcDtKq2g-1; Sat, 17 Dec 2022 04:48:56 -0500
-X-MC-Unique: slC8Q35xPLK9tZqcDtKq2g-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D589F29AA383;
-        Sat, 17 Dec 2022 09:48:55 +0000 (UTC)
-Received: from localhost (ovpn-12-34.pek2.redhat.com [10.72.12.34])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9EB6C40ED76B;
-        Sat, 17 Dec 2022 09:48:54 +0000 (UTC)
-Date:   Sat, 17 Dec 2022 17:48:51 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH 0/2] kexec: Remove unnecessary arch hook
-Message-ID: <Y52Qg8OvU1UsGZGC@MiWiFi-R3L-srv>
-References: <20221215182339.129803-1-helgaas@kernel.org>
+        Sat, 17 Dec 2022 04:53:20 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1281402B;
+        Sat, 17 Dec 2022 01:53:20 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id gt4so4730745pjb.1;
+        Sat, 17 Dec 2022 01:53:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZO9al7YrSck89G9oQI8cP/XGUvm/YU35VYbyVunm5c4=;
+        b=Cd7UX6Z/M+SikLmiL7gQJHEJFfgXYJIPl5HY8eeTO00yFJSrLozFQPFBNTiVkcfBAX
+         PHiqGCUh6T1xWTZGZ2FiOak8jRk2NGqA0Ji2thJz+8uf2tIrxtIngWlT25mKseO+Xr/K
+         FErOm9OdrcoCUUnp/tKBhB8rc+KEbIO3CY2hMevUfKwsTkeV3ADz1bDXumAH3HZdcsCT
+         1sfVSkCW7Nfg4z9xDzop705rza+WHYyuZvHsloPhQTp+oJpSmBl+91YV2Tpeu4STnfKC
+         d9qCQg3qChK4EyVmqSs1GuVMIdZTxn4s5n8JJi4zp3jnH75Nd25Y1BPMu27coCa90vDs
+         q2nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZO9al7YrSck89G9oQI8cP/XGUvm/YU35VYbyVunm5c4=;
+        b=XWQl+nh4mX3PYceMTiIoXgEXQuEszIeuO/Dva5DMCr0zXrR4xExuV4SlFQDAX6uB0A
+         DbEEPVrXUUwDh5ACFVZYcDLvxumpU70rbeDQHO4Q758sVkTVMOlHCBGhQZWEGq3JxbbP
+         Dj8eyPHpx6dZPjCPS87nWcvOZGwaoHWdIDB2oX5CHuNGWyMNCpqDOG4PJvRP7Pk5tFj4
+         FL30ABWaEluvrMXLWWY1aSnaGSrndJ5fLDQty39l6mxJHn/nWvAXYmwNGapZLbykYAzQ
+         p1WUs/D7MtGGr+9+80Mgg7hwaBKx5QO9/gZVZOoQmiUJl0w6NUu19TpHaXctCalSgYm+
+         tm5g==
+X-Gm-Message-State: AFqh2kpdQxBc9vrCKjqfoCzpMyb/4tLWIpdmYtq/qO9SUSlrQmDLqNym
+        CPbRRIZI/gXY630Uks4Zm50=
+X-Google-Smtp-Source: AMrXdXv7wgU+sjohjYoEMqYiZO2kSArsMi2NJZs01NPzBy6lDcZzmTFQTIwbzvKAqHerIXXc+TGdUg==
+X-Received: by 2002:a17:902:8c90:b0:189:9fb2:255a with SMTP id t16-20020a1709028c9000b001899fb2255amr1568235plo.19.1671270799496;
+        Sat, 17 Dec 2022 01:53:19 -0800 (PST)
+Received: from debian.me (subs03-180-214-233-79.three.co.id. [180.214.233.79])
+        by smtp.gmail.com with ESMTPSA id v1-20020a1709029a0100b001897e2fd65dsm3119669plp.9.2022.12.17.01.53.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Dec 2022 01:53:18 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 53765100B3E; Sat, 17 Dec 2022 16:53:15 +0700 (WIB)
+Date:   Sat, 17 Dec 2022 16:53:15 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Qais Yousef <qyousef@layalina.io>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>, Wei Wang <wvw@google.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Hank <han.lin@mediatek.com>, Paul Bone <pbone@mozilla.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [PATCH v3] Documentation: sched: Document util clamp feature
+Message-ID: <Y52Ri28ThsM4iU8X@debian.me>
+References: <20221216235716.201923-1-qyousef@layalina.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="IAbXMJJDJGhLPlUP"
 Content-Disposition: inline
-In-Reply-To: <20221215182339.129803-1-helgaas@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221216235716.201923-1-qyousef@layalina.io>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/22 at 12:23pm, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> There are no arch-specific things in arch_kexec_kernel_image_load(), so
-> remove it and just use the generic version.
 
-I ever posted below patch to do the same thing, Andrew only picked the
-memory leak fixing patch.
+--IAbXMJJDJGhLPlUP
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[PATCH v2 2/2] kexec_file: clean up arch_kexec_kernel_image_load
-https://lore.kernel.org/all/20220223113225.63106-3-bhe@redhat.com/T/#u
+On Fri, Dec 16, 2022 at 11:57:16PM +0000, Qais Yousef wrote:
+> +Another example is in Android where tasks are classified as background,
+> +foreground, top-app, etc. Util clamp can be used to constrain how much
+> +resources background tasks are consuming by capping the performance poin=
+t they
+> +can run at. This constraint helps reserve resources for important tasks,=
+ like
+> +the ones belonging to the currently active app (top-app group). Beside t=
+his
+> +helps in limiting how much power they consume. This can be more obvious =
+in
+> +heterogeneous systems (e.g. Arm big.LITTLE); the constraint will help bi=
+as the
+> +background tasks to stay on the little cores which will ensure that:
+> +
+> +        1. The big cores are free to run top-app tasks immediately. top-=
+app
+> +           tasks are the tasks the user is currently interacting with, h=
+ence
+> +           the most important tasks in the system.
+> +        2. They don't run on a power hungry core and drain battery even =
+if they
+> +           are CPU intensive tasks.
+> +
+> +.. note::
+> +  **little cores**:
+> +    CPUs with capacity < 1024
+> +
+> +  **big cores**:
+> +    CPUs with capacity =3D 1024
 
-> 
-> Bjorn Helgaas (2):
->   x86/kexec: Remove unnecessary arch_kexec_kernel_image_load()
->   kexec: Remove unnecessary arch_kexec_kernel_image_load()
-> 
->  arch/x86/include/asm/kexec.h       |  3 ---
->  arch/x86/kernel/machine_kexec_64.c | 11 -----------
->  include/linux/kexec.h              |  8 --------
->  kernel/kexec_file.c                |  6 +++---
->  4 files changed, 3 insertions(+), 25 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
-> 
-> _______________________________________________
-> kexec mailing list
-> kexec@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kexec
-> 
+Processing capacity (CPU frequency) in MHz? This is the first time I
+hear Arm big.LITTLE architecture. CC'ing several Arm folks and
+linux-arm-kernel list for I'm unsure on this.
 
+> +
+> +By making these uclamp performance requests, or rather hints, user space=
+ can
+> +ensure system resources are used optimally to deliver the best possible =
+user
+> +experience.
+> +
+> +Another use case is to help with **overcoming the ramp up latency inheri=
+t in
+> +how scheduler utilization signal is calculated**.
+
+IMO the bold text isn't needed (why did you highlight the phrase above)?
+
+> +When task @p is running, **the scheduler should try its best to ensure it
+> +starts at 40% performance level**. If the task runs for a long enough ti=
+me so
+> +that its actual utilization goes above 80%, the utilization, or performa=
+nce
+> +level, will be capped.
+
+Same here.
+
+> +**Generally it is advised to perceive the input as performance level or =
+point
+> +which will imply both task placement and frequency selection**.
+
+Same here too.
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--IAbXMJJDJGhLPlUP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY52ReQAKCRD2uYlJVVFO
+o4HkAP4rc8AULhBHVO7Y9cRRRNKL0KVpwku8TWCuK0K3HNSBjgEAmNGvg6da34fs
+mfQfANrw8H/CE0iusS8NXjKKCrYFugk=
+=tqHd
+-----END PGP SIGNATURE-----
+
+--IAbXMJJDJGhLPlUP--
