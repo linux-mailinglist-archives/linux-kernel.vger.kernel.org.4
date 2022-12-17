@@ -2,160 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4069D64F737
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 03:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F308364F744
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 04:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiLQCs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 21:48:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
+        id S230122AbiLQDGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 22:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbiLQCsc (ORCPT
+        with ESMTP id S229562AbiLQDGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 21:48:32 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36E4A453;
-        Fri, 16 Dec 2022 18:48:30 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NYr4n1m64z4f3lXl;
-        Sat, 17 Dec 2022 10:48:25 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgB3m9j5LZ1jmxh7CQ--.11469S8;
-        Sat, 17 Dec 2022 10:48:28 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     tj@kernel.org, hch@infradead.org, josef@toxicpanda.com,
-        axboe@kernel.dk
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH -next 4/4] blk-cgroup: synchronize del_gendisk() with configuring cgroup policy
-Date:   Sat, 17 Dec 2022 11:09:08 +0800
-Message-Id: <20221217030908.1261787-5-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221217030908.1261787-1-yukuai1@huaweicloud.com>
-References: <20221217030908.1261787-1-yukuai1@huaweicloud.com>
+        Fri, 16 Dec 2022 22:06:08 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269E523BFA;
+        Fri, 16 Dec 2022 19:06:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jWtc9HV4mZkcQQqnBoDACVfU97buWMoTCyNNR31hoNA=; b=mGWFtYubZCf15iI7riYCznZTlg
+        DMzSV1J/8G/hqclJ5D3XF7KDHCzKaNAkKQJHucyZ0vskCaoeOO0E+T3joXHDJm+a40OGTEHVlhS//
+        ogTQCNrBtRRNednyZDK5P5X0Cd+h99iB2DnH6Cs6L2QxDpjX5GFZVwGvm1XGzi33SW/wg1zIBA7sl
+        d9lQd6LD6+X6W2Ra1ldh79ltdDV3Tw4s/iPZbS59WS5JvL05fIl3FFQHAgB+lQOSMI3/UxiejZSKB
+        AAmPViH17agF4OkT6MIkRWTz1RiZ0qenMh+GKBZNLK+xKmoPe2E+NpEswPzhLDXk/qzLt1HaH9Ri2
+        ZQAFtytQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1p6NWP-00CMqi-2K;
+        Sat, 17 Dec 2022 03:05:57 +0000
+Date:   Sat, 17 Dec 2022 03:05:57 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        Waiman Long <longman@redhat.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Wei Chen <harperchen1110@gmail.com>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        syzbot <syzkaller@googlegroups.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: possible deadlock in __ata_sff_interrupt
+Message-ID: <Y50yFYjysKQlLWtK@ZenIV>
+References: <CAO4mrfcX8J73DWunmdYjf_SK5TyLfp9W9rmESTj57PCkG2qkBw@mail.gmail.com>
+ <5eff70b8-04fc-ee87-973a-2099a65f6e29@opensource.wdc.com>
+ <Y5s7F/4WKe8BtftB@ZenIV>
+ <80dc24c5-2c4c-b8da-5017-31aae65a4dfa@opensource.wdc.com>
+ <Y5vo00v2F4zVKeug@ZenIV>
+ <CAHk-=wgOFV=QmwWQW0QxDNkeDt4t5dOty7AvGyWRyj-O=8db9A@mail.gmail.com>
+ <Y50BqT3nSF7+JEzt@ZenIV>
+ <Y50FIckzrV9sWlid@boqun-archlinux>
+ <CAHk-=wj7FpAXZ0hnPKh-5CG-ZW8BmOhd4tEW+J7ryW26fkcDNA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgB3m9j5LZ1jmxh7CQ--.11469S8
-X-Coremail-Antispam: 1UD129KBjvJXoWxur1DZrykJF4kCw4rXrW3Awb_yoW5Jw18pa
-        9IgF13CrWIgrsrZa1DGa1fZrsavw40gr1fA3yfA3yayrW7Kr1IvF1kAF9rZrWfZFsxJrsx
-        Xr4FgrZ0kr1UCw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPF14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-        z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-        4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
-        3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-        IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
-        kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-        14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIx
-        kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAF
-        wI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-        W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUF18B
-        UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wj7FpAXZ0hnPKh-5CG-ZW8BmOhd4tEW+J7ryW26fkcDNA@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+On Fri, Dec 16, 2022 at 08:31:54PM -0600, Linus Torvalds wrote:
+> Ok, let's bring in Waiman for the rwlock side.
+> 
+> On Fri, Dec 16, 2022 at 5:54 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+> >
+> > Right, for a reader not in_interrupt(), it may be blocked by a random
+> > waiting writer because of the fairness, even the lock is currently held
+> > by a reader:
+> >
+> >         CPU 1                   CPU 2           CPU 3
+> >         read_lock(&tasklist_lock); // get the lock
+> >
+> >                                                 write_lock_irq(&tasklist_lock); // wait for the lock
+> >
+> >                                 read_lock(&tasklist_lock); // cannot get the lock because of the fairness
+> 
+> But this should be ok - because CPU1 can make progress and eventually
+> release the lock.
+> 
+> So the tasklist_lock use is fine on its own - the reason interrupts
+> are special is because an interrupt on CPU 1 taking the lock for
+> reading would deadlock otherwise. As long as it happens on another
+> CPU, the original CPU should then be able to make progress.
+> 
+> But the problem here seems to be thst *another* lock is also involved
+> (in this case apparently "host->lock", and now if CPU1 and CPU2 get
+> these two locks in a different order, you can get an ABBA deadlock.
+> 
+> And apparently our lockdep machinery doesn't catch that issue, so it
+> doesn't get flagged.
 
-iocost is initialized when it's configured the first time, and iocost
-initializing can race with del_gendisk(), which will cause null pointer
-dereference:
+Lockdep has actually caught that; the locks involved are mention in the
+report (https://marc.info/?l=linux-ide&m=167094379710177&w=2).  The form
+of report might have been better, but if anything, it doesn't mention
+potential involvement of tasklist_lock writer, turning that into a deadlock.
 
-t1				t2
-ioc_qos_write
- blk_iocost_init
-  rq_qos_add
-  				del_gendisk
-  				 rq_qos_exit
-  				 //iocost is removed from q->roqs
-  blkcg_activate_policy
-   pd_init_fn
-    ioc_pd_init
-     ioc = q_to_ioc(blkg->q)
-     //can't find iocost and return null
+OTOH, that's more or less implicit for the entire class:
 
-Fix the problem by adding a new mutex in request_queue, and use it to
-synchronize rq_qos_exit() from del_gendisk() with configuring cgroup
-policy.
+read_lock(A)		[non-interrupt]
+			local_irq_disable()	local_irq_disable()
+			spin_lock(B)		write_lock(A)
+			read_lock(A)
+[in interrupt]
+spin_lock(B)
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/blk-cgroup.c     | 3 +++
- block/blk-rq-qos.c     | 8 ++++++++
- include/linux/blkdev.h | 1 +
- 3 files changed, 12 insertions(+)
+is what that sort of reports is about.  In this case A is tasklist_lock,
+B is host->lock.  Possible call chains for CPU1 and CPU2 are reported...
 
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index ad612148cf3b..8dcdaacb52a1 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -658,12 +658,14 @@ struct block_device *blkcg_conf_open_bdev(char **inputp)
- 		return ERR_PTR(-ENODEV);
- 	}
- 
-+	mutex_lock(&bdev->bd_queue->blkcg_pols_lock);
- 	*inputp = input;
- 	return bdev;
- }
- 
- void blkcg_conf_close_bdev(struct block_device *bdev)
- {
-+	mutex_unlock(&bdev->bd_queue->blkcg_pols_lock);
- 	blkdev_put_no_open(bdev);
- }
- 
-@@ -1277,6 +1279,7 @@ int blkcg_init_disk(struct gendisk *disk)
- 	int ret;
- 
- 	INIT_LIST_HEAD(&q->blkg_list);
-+	mutex_init(&q->blkcg_pols_lock);
- 
- 	new_blkg = blkg_alloc(&blkcg_root, disk, GFP_KERNEL);
- 	if (!new_blkg)
-diff --git a/block/blk-rq-qos.c b/block/blk-rq-qos.c
-index efffc6fa55db..86bccdfa1a43 100644
---- a/block/blk-rq-qos.c
-+++ b/block/blk-rq-qos.c
-@@ -290,6 +290,10 @@ void rq_qos_exit(struct request_queue *q)
- {
- 	struct rq_qos *rqos;
- 
-+#ifdef CONFIG_BLK_CGROUP
-+	mutex_lock(&q->blkcg_pols_lock);
-+#endif
-+
- 	spin_lock_irq(&q->queue_lock);
- 	rqos = q->rq_qos;
- 	q->rq_qos = NULL;
-@@ -300,4 +304,8 @@ void rq_qos_exit(struct request_queue *q)
- 			rqos->ops->exit(rqos);
- 		rqos = rqos->next;
- 	} while (rqos);
-+
-+#ifdef CONFIG_BLK_CGROUP
-+	mutex_unlock(&q->blkcg_pols_lock);
-+#endif
- }
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 301cf1cf4f2f..824d68a41a83 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -484,6 +484,7 @@ struct request_queue {
- 	DECLARE_BITMAP		(blkcg_pols, BLKCG_MAX_POLS);
- 	struct blkcg_gq		*root_blkg;
- 	struct list_head	blkg_list;
-+	struct mutex		blkcg_pols_lock;
- #endif
- 
- 	struct queue_limits	limits;
--- 
-2.31.1
+I wonder why analogues of that hadn't been reported for other SCSI hosts -
+it's a really common pattern there...
 
+> I'm not sure what the lockdep rules for rwlocks are, but maybe lockdep
+> treats rwlocks as being _always_ unfair, not knowing about that "it's
+> only unfair when it's in interrupt context".
+> 
+> Maybe we need to always make rwlock unfair? Possibly only for tasklist_lock?
+
+ISTR threads about the possibility of explicit read_lock_unfair()...
