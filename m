@@ -2,87 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE5764F969
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 15:35:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0E664F96D
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 15:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiLQOf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 09:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47140 "EHLO
+        id S229603AbiLQOhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 09:37:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiLQOfX (ORCPT
+        with ESMTP id S229864AbiLQOhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 09:35:23 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515E013D1B
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 06:35:22 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id g14so4930077ljh.10
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 06:35:22 -0800 (PST)
+        Sat, 17 Dec 2022 09:37:02 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A128FFAEF
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 06:37:01 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id o6so2779334lfi.5
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 06:37:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q2NbXIefrhDpmJKbJe0p5pGtCPv/H1p/XKFgPNAP5e8=;
-        b=DGT+hxjwqBvNruxpVyh3pSYJl+25hKQPJfVlKBxisxPwf8p0k/KF1E1kDDfPNsyA6S
-         iuF9+ByLJceYuDXMNMiwAmWurFEOOXpKc2XarKoN+hizrQgwvWspH5lmeGscPF0D5yb+
-         mxg4RT54rgmaHIGVUB8ivp5TzlDpiUdV+1+5CjZPgOYo17T+FfB0Dn9BHjrp+S4OLgo8
-         DzceOp8NpjRKCWgXv55S8k8qxkWKErYo6oronSe1iZya6I+Zd+dKda9lFakQliY9V0qh
-         nR8UyzrxYilspb6Nil6O5Ov49K7W1usNcPtHLRZRacn7kbN12woR3zOGUMfE6DkrWmmV
-         oTfQ==
+        bh=yhIs6fKfOUXpD44jRG6XVKMUeo1AQbRaXZh3dXmE8yg=;
+        b=lfg6T6tFtiAwoV/7hjiVnUpzD0U08hBpMrXzDfxyyX6O+JgJwNME6Tx/VMZvDsLRUK
+         dJJKvmfPwAiAQHIfnFfPsKivMkKJ/nB2sfZdssw6F9XoS8ECTG+GmetrDl6rfo6WoFDa
+         9jBSN2FtnCudfLcssTYe1qK6Yq60Qa9rfrI9+KCPG9/ows4q6C3ZbD3mXQg7JkJ++jO6
+         kwHbmGBkE1Cn4JDir+wHbQUSKiMpuOs+iLiUHI4+oFip5oMHylRIysZXtFjKxD5QkTzc
+         26kqtHr3GmpR/47abQeDxesy6Xp1aTLHC9erjMS9mFuMsP3pD3SaP1F+HO6qBankCXfS
+         uBxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q2NbXIefrhDpmJKbJe0p5pGtCPv/H1p/XKFgPNAP5e8=;
-        b=ZHp2i4fO4ItQmBQp5lQbILjwPdS7o9LAq5/oHwVx8CCZdW+DmlESBS7JAsV4INz1sK
-         ENZHNkpOtgRoRNxOGR6ZLdzxYNpaqWf/ZRA2MXcnRoFZwjqEVvNa9GJbXNp/Ec6XK/s5
-         SJZl0INyuP7CqTUiQO95hT0tXxX5VcAiltJJZy9gpVtsjUldu5SwUDXMjLeYVgKpsk7F
-         xIwkxg+Mg35+O1mIo+4Sp5tpE6q7WbyYWneGlETZjduouTNqWQ5UirG7qjbFYJ5BjZ8r
-         pbOWS4ji9k1G6WJS8aBdO2LMOwpC4pEdujZBzE6gk97dlrg/TmyP7z+lbD1xGmlQ0R+c
-         jiuw==
-X-Gm-Message-State: ANoB5pnPIHMbtq2rvhjwGpyScCUxOs321aOhA/eO/VAg1ck6iyhD4Fx2
-        VL64UAt0WZsC+oXBC3bWvwB1fA==
-X-Google-Smtp-Source: AA0mqf4sAUxGPRGY1t+nFac9lB8vlD4k06aGikbGf39u4uxX/tEv2+gvhycZZ7fuQsKobeUHW+EwYA==
-X-Received: by 2002:a2e:b947:0:b0:279:edec:808b with SMTP id 7-20020a2eb947000000b00279edec808bmr9484632ljs.9.1671287720565;
-        Sat, 17 Dec 2022 06:35:20 -0800 (PST)
+        bh=yhIs6fKfOUXpD44jRG6XVKMUeo1AQbRaXZh3dXmE8yg=;
+        b=4SOoCEZhBPiGWUMB8SoPceqseuImu3Fio+QpmLeJ0ZamPEgZ37d1YplidGIO/Cuh1f
+         242560N092lHaAG+xKUZ1aUpcci1d5qezhiKGTX3MQhdxc8xL7nE5y2BX7fNVkOgq0eG
+         /2PGc2L7wpTE0iN1EyTjhiAxt4kD8nFA5hOv+71bSNHEQHr9P18dzovuauJDFKY39nsr
+         iG0v01dxaudE0R0g9QbpWfhwjq/2QZd5HISrqtAItrED8nYeT67uiJzrGSiatTatZ78l
+         aUn3ddjetgJjNmomeYw4c6yGzYxkCbqakWLWGTgXv5eR+WMmNPez8FFat6N4Aiw33JL9
+         y9aQ==
+X-Gm-Message-State: ANoB5pmVVOOI+nROnLAsDpFwkFQ8cQIRbMHtd3TKu1Am3s1Tff9jinvG
+        IN/ETgjT7ocqAOhs1h8+PfpKwg==
+X-Google-Smtp-Source: AA0mqf6oGEg0XjMplLN1FeA974LONUwNKg1/PZjvwG7VNjiM+Ymn5G8rg5XoALL2ckkwj53VP5P5zg==
+X-Received: by 2002:a05:6512:1698:b0:4af:ac78:2602 with SMTP id bu24-20020a056512169800b004afac782602mr14565352lfb.29.1671287820054;
+        Sat, 17 Dec 2022 06:37:00 -0800 (PST)
 Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id bd8-20020a05651c168800b00279e0b8bae7sm347057ljb.65.2022.12.17.06.35.19
+        by smtp.gmail.com with ESMTPSA id p13-20020a056512328d00b00497a61453a9sm516617lfe.243.2022.12.17.06.36.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Dec 2022 06:35:20 -0800 (PST)
-Message-ID: <f5496b92-ac1f-5920-1b3f-2bf0e710623b@linaro.org>
-Date:   Sat, 17 Dec 2022 15:35:18 +0100
+        Sat, 17 Dec 2022 06:36:59 -0800 (PST)
+Message-ID: <7b6e1c29-4e33-b66c-00c8-836a62a0941d@linaro.org>
+Date:   Sat, 17 Dec 2022 15:36:58 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: sm6125: Add GPI DMA nodes
+Subject: Re: [PATCH v3 1/4] arm64: dts: qcom: rename pm8450a dtsi to
+ sa8540p-pmics
 Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+To:     Eric Chanudet <echanude@redhat.com>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Lux Aliaga <they@mint.lgbt>,
-        Richard Acayan <mailingradian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221216231528.1268447-1-marijn.suijten@somainline.org>
- <20221216231528.1268447-3-marijn.suijten@somainline.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
+        Brian Masney <bmasney@redhat.com>
+References: <20221216232606.2123341-1-echanude@redhat.com>
+ <20221216232606.2123341-2-echanude@redhat.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221216231528.1268447-3-marijn.suijten@somainline.org>
+In-Reply-To: <20221216232606.2123341-2-echanude@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,79 +83,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 17.12.2022 00:15, Marijn Suijten wrote:
-> From: Martin Botka <martin.botka@somainline.org>
+On 17.12.2022 00:26, Eric Chanudet wrote:
+> pm8450a.dtsi was introduced for the descriptions of sa8540p based boards.
+> Rename the dtsi to make this relationship explicit.
 > 
-> Add nodes for GPI DMA hosts on SM6125.
-> 
-> Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> [Marijn: reorder properties, use sdm845 fallback compatible, disable by
->  default, use 3 instead of 5 dma cells]
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+For the descriptions of PMICs used on SA8540p based boards, I suppose?
+> Signed-off-by: Eric Chanudet <echanude@redhat.com>
 > ---
->  arch/arm64/boot/dts/qcom/sm6125.dtsi | 37 ++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> index a205121ab4a7..abcd634c4f6d 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> @@ -5,6 +5,7 @@
->  
->  #include <dt-bindings/clock/qcom,gcc-sm6125.h>
->  #include <dt-bindings/clock/qcom,rpmcc.h>
-> +#include <dt-bindings/dma/qcom-gpi.h>
->  #include <dt-bindings/gpio/gpio.h>
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
->  #include <dt-bindings/power/qcom-rpmpd.h>
-> @@ -510,6 +511,42 @@ sdhc_2: mmc@4784000 {
->  			status = "disabled";
->  		};
->  
-> +		gpi_dma0: dma-controller@4a00000 {
-> +			compatible = "qcom,sm6125-gpi-dma", "qcom,sdm845-gpi-dma";
-> +			reg = <0x04a00000 0x60000>;
-> +			interrupts = <GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 336 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 337 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 338 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 339 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 340 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>;
-> +			dma-channels = <8>;
-> +			dma-channel-mask = <0x1f>;
-> +			iommus = <&apps_smmu 0x0136 0x0>;
-The stream id does not need the leading zero.
-You made the mask a decimal zero in the previous patchset, please
-decide on one convention. Masks are generally more useful as hex,
-but for zero values I suppose zero is less noise for the same thing..
+The change itself looks perfectly fine though!
 
-The DMA nodes however, look good otherwise.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
-> +			#dma-cells = <3>;
-> +			status = "disabled";
-> +		};
-> +
-> +		gpi_dma1: dma-controller@4c00000 {
-> +			compatible = "qcom,sm6125-gpi-dma", "qcom,sdm845-gpi-dma";
-> +			reg = <0x04c00000 0x60000>;
-> +			interrupts = <GIC_SPI 314 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 318 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 319 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 321 IRQ_TYPE_LEVEL_HIGH>;
-> +			dma-channels = <8>;
-> +			dma-channel-mask = <0x0f>;
-> +			iommus = <&apps_smmu 0x0156 0x0>;
-> +			#dma-cells = <3>;
-> +			status = "disabled";
-> +		};
-> +
->  		usb3: usb@4ef8800 {
->  			compatible = "qcom,sm6125-dwc3", "qcom,dwc3";
->  			reg = <0x04ef8800 0x400>;
+>  arch/arm64/boot/dts/qcom/{pm8450a.dtsi => sa8540p-pmics.dtsi} | 0
+>  arch/arm64/boot/dts/qcom/sa8540p-ride.dts                     | 2 +-
+>  2 files changed, 1 insertion(+), 1 deletion(-)
+>  rename arch/arm64/boot/dts/qcom/{pm8450a.dtsi => sa8540p-pmics.dtsi} (100%)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/pm8450a.dtsi b/arch/arm64/boot/dts/qcom/sa8540p-pmics.dtsi
+> similarity index 100%
+> rename from arch/arm64/boot/dts/qcom/pm8450a.dtsi
+> rename to arch/arm64/boot/dts/qcom/sa8540p-pmics.dtsi
+> diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+> index 6c547f1b13dc..77d499702ea8 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+> +++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+> @@ -10,7 +10,7 @@
+>  #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+>  
+>  #include "sa8540p.dtsi"
+> -#include "pm8450a.dtsi"
+> +#include "sa8540p-pmics.dtsi"
+>  
+>  / {
+>  	model = "Qualcomm SA8540P Ride";
