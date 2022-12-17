@@ -2,54 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C61764FB1C
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 17:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4170A64FB20
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 17:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiLQQxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 11:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
+        id S229912AbiLQQy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 11:54:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiLQQxe (ORCPT
+        with ESMTP id S229504AbiLQQyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 11:53:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6785D120A9
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 08:52:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671295963;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=VtiAFXUoxPGVWbrfrF2d0QiTT9pcM+3AnAGNlWeoaSw=;
-        b=PiVL90qE9mvYz4Q0R+srTADYUmDuhjJAvYBowdjOFpViEdRMsfTVrn09n4nP+rg2x5b9qf
-        M0R93EdtRSytN1oVjBbBXiIJMq6rliNqhg76CcVX89n7ay3SNhzoiaecThqFGMY13fkHCH
-        8s8xK11mUj7pSRBEHUeuhZ2N0i6Qho4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-630-L_OKN2wJMPycZbZxOl4drA-1; Sat, 17 Dec 2022 11:52:37 -0500
-X-MC-Unique: L_OKN2wJMPycZbZxOl4drA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5D7CB88F46A;
-        Sat, 17 Dec 2022 16:52:37 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.2.16.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9E62F14171C5;
-        Sat, 17 Dec 2022 16:52:36 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     linux-modules@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] kmod: configure.ac: In _Noreturn check, include <stdlib.h>
- for exit
-Date:   Sat, 17 Dec 2022 17:52:34 +0100
-Message-ID: <877cyq6kh9.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
+        Sat, 17 Dec 2022 11:54:55 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DEFA120A9;
+        Sat, 17 Dec 2022 08:54:54 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id v11so5152523ljk.12;
+        Sat, 17 Dec 2022 08:54:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wmEYNEeXTHN9jLFf1JOekZjqFW60u0oAeXrnu+MyxkM=;
+        b=oYmUzwA7jCS8pg/B15UxwynMnEEs9tp8cleAQSrMviky8HwmLw/0J3swevMT4ZsJGg
+         oN6WjOVXKdA6q2mAUqPP4oXxlvWA6ZjWioH4yNaGL6V+7FIoLkqGWP5JKBoEQFqePWO5
+         okzWqaRairbWd4OHquq63d9mRTZ2wW1XPmYmNi37D4D4C6EYh7ett8VHhxRU0kyf1hH4
+         Jn4+7AdJGhA9681mvx9cEZzq74ahhSZxqHXEiZFBPLmpMnx9jveQr2YNYrx7OJEp/atJ
+         qHXWB1AGaJ7oKSCGrnHBIO8H6BRF0V5cfEE7Ei4qSrmt+CaSukxndqBoHGJRZuV25djJ
+         tE1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wmEYNEeXTHN9jLFf1JOekZjqFW60u0oAeXrnu+MyxkM=;
+        b=YtLNxqp1hqbwzR8njJLKO0wOQ/DWDDtYJ5HLpWrjo1dfHPyEc/i0NuDjm8PPzP0q6c
+         xBSM7vMTPrwMYi9SCk+uMVOHdKs7nqXINwcCTe68h86S1wtbNHd4HdEo8ETEBPbBUNFv
+         I+3H+MSt7S6m0iSNdcnyIm4Aqi9cPGvLWvQHMR2JstWs5TOZ3Qf1hQ9zV5mL6X4BQQXI
+         HWp9hX4XC2ZB/zJ/31LErTJvCCPsB/29feKr8KplFyBNCrowsmtqbrecJqR9MsFAxX51
+         K7+JUFcXrHkGseNkbkKxHRGRwmkC0aWkHsPAeUvu7/4cVpnp8NIBTQhj7QBeHWck8Skw
+         9QaQ==
+X-Gm-Message-State: ANoB5pkyV8qRNrsImpE8LS4H0xFh2MGz02HJ8341OBJk5UnvizVdcR+I
+        SAtJ5o80P+Wcjzj1a1x/RVw=
+X-Google-Smtp-Source: AA0mqf7ZnOsDxJcqwctnB8cdwtxcRn/GD9vgbD5H9+Uhcx2pMNVWDcUIBwfrn+V/TpARePmcYVkJWA==
+X-Received: by 2002:a2e:bea7:0:b0:279:d51:db93 with SMTP id a39-20020a2ebea7000000b002790d51db93mr12677365ljr.11.1671296092244;
+        Sat, 17 Dec 2022 08:54:52 -0800 (PST)
+Received: from [10.0.0.100] (host-185-69-38-8.kaisa-laajakaista.fi. [185.69.38.8])
+        by smtp.gmail.com with ESMTPSA id r21-20020a2e8e35000000b0026e04cc88cfsm398636ljk.124.2022.12.17.08.54.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Dec 2022 08:54:51 -0800 (PST)
+Message-ID: <bfe79fe8-9f7c-6bec-7867-e75bac89438d@gmail.com>
+Date:   Sat, 17 Dec 2022 18:56:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 0/5] dmaengine: Add support for AM62A SoC DMAs
+To:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20221213164304.1126945-1-vigneshr@ti.com>
+Content-Language: en-US
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+In-Reply-To: <20221213164304.1126945-1-vigneshr@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,29 +78,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Otherwise, an implicit functiona declaration is used, causing
-a C99 compatibility issue.
+Hi Vignesh,
 
-Signed-off-by: Florian Weimer <fweimer@redhat.com>
+On 13/12/2022 18:42, Vignesh Raghavendra wrote:
+> This series introduces support for various DMAs on TI's AM62A SoC under
+> K3 family of devices.
+> 
+> Apart from usual BCDMA and PKTDMA thats present on K3 family, AM62A has
+> a dedicated BCDMA for camera (CSI) with only RX DMA Channels.
+> 
+> Patch 1 adds bindings for this new DMA instance
+> Patch 2 fixes a bug that gets exposed due to RX only DMA
+> Patch 3 and 4 add base support for AM62A DMA
+> Patch 5 does BCDMA CSI RX specific enhancements.
 
----
- configure.ac | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Looks good, thank you,
 
-diff --git a/configure.ac b/configure.ac
-index 6989e93..12e0518 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -68,7 +68,8 @@ AC_COMPILE_IFELSE(
- 
- AC_MSG_CHECKING([whether _Noreturn is supported])
- AC_COMPILE_IFELSE(
--	[AC_LANG_SOURCE([[_Noreturn int foo(void) { exit(0); }]])],
-+	[AC_LANG_SOURCE([[#include <stdlib.h>
-+	_Noreturn int foo(void) { exit(0); }]])],
-         [AC_DEFINE([HAVE_NORETURN], [1], [Define if _Noreturn is available])
- 	 AC_MSG_RESULT([yes])],
- 	[AC_MSG_RESULT([no])])
+Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
 
-base-commit: 6c5f2f13689e6a4668f87171752d7818bed4b602
+> 
+> v3:
+> Fix yaml bindings to constraint regs and reg-names per compatible
+> 
+> v2:
+> Fix k3-bcdma.yaml as per Krzysztof 's comments
+> Address's Peter's comment on 2/5
+> https://lore.kernel.org/r/20221212105416.3628442-1-vigneshr@ti.com
+> 
+> v1:
+> https://lore.kernel.org/dmaengine/20221206043554.1521522-1-vigneshr@ti.com/
+> 
+> Jai Luthra (1):
+>    dmaengine: ti: k3-psil-am62a: Add AM62Ax PSIL and PDMA data
+> 
+> Vignesh Raghavendra (4):
+>    dt-bindings: dma: ti: k3-bcdma: Add bindings for BCDMA CSI RX
+>    dmaengine: ti: k3-udma: Fix BCDMA for case w/o BCHAN
+>    dmaengine: ti: k3-udma: Add support for DMAs on AM62A SoC
+>    dmaengine: ti: k3-udma: Add support for BCDMA CSI RX
+> 
+>   .../devicetree/bindings/dma/ti/k3-bcdma.yaml  |  77 +++++--
+>   drivers/dma/ti/Makefile                       |   3 +-
+>   drivers/dma/ti/k3-psil-am62a.c                | 196 ++++++++++++++++++
+>   drivers/dma/ti/k3-psil-priv.h                 |   1 +
+>   drivers/dma/ti/k3-psil.c                      |   1 +
+>   drivers/dma/ti/k3-udma.c                      |  41 +++-
+>   6 files changed, 295 insertions(+), 24 deletions(-)
+>   create mode 100644 drivers/dma/ti/k3-psil-am62a.c
+> 
 
+-- 
+Péter
