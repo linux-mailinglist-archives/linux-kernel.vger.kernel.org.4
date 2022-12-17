@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF7B64FBE1
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 19:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC3B64FBE3
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 19:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbiLQS4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 13:56:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
+        id S230453AbiLQS5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 13:57:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbiLQSzi (ORCPT
+        with ESMTP id S230030AbiLQSzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 17 Dec 2022 13:55:38 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDAF257;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC7123A;
         Sat, 17 Dec 2022 10:55:37 -0800 (PST)
 Date:   Sat, 17 Dec 2022 18:55:32 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -21,29 +21,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=U2nuVVwlgknR7c20H19gyaTMlpo/vf3YwyYK63vf2Cs=;
-        b=szyZ8ibfqc//YUpVObIFf2MC76VCweYywUSi6bNfq60jZbIhXoZMCf33/B8xkmgQBdhsIf
-        kqU+VXUhaWMAkFGUi2IkTPJI7KrPJdMFV3n7W1bX+ugLpHnPaZF5xDn5yUWjqb5FdAH+RX
-        3aY3g3QOelmxGIfC2sMmRlhOeYDlTXJaB9I/XPUnGvqgB5rHa5OMRCw7WrI897Ld94cbhs
-        vd7LIbxkom3psOg90XTbxOfM8YXBtKP8W/W7ayWwS+xoPubBPaASUo1gbSRaPU6f/gX3gC
-        P7JPSvrDBu6SXIF6uG62dn/l+CjyKgHdFaVXW/qG6CCVQ4tZB3JID4EOmm6FZw==
+        bh=c5g6MSrqZsjP8rQ+Bx44M5yo8LZcSCCthyNX2GgIJYU=;
+        b=YIQSN19LWJmoUttmAjjI3Pb/eyiffL6VPEsBMCmPtWT+bBcC7OVrWmScUrH9N8L3n1al2V
+        9WO9PyAOtkX5+tq63dwh45YfCW40AUe5pkbMi4WEgul6Y7kUNn/XojnPX64iPWQrStX1uE
+        xVnZyFqqCbsvWUp+aWSqcYW1WWRHtiPb3D1IEkX/NIbmaswm6FXhFg4CeHAJFfG7B6K7aX
+        UpweqwHacnFSpi5ySY8hD00UMwalOOwfo5PvXgUCaeWgko5ABKKL/yCANSmELZEfjE9KPa
+        GpvI+6Ii6IkBEqPokCIqSrYpEpCH5OnYjqcJUKgh33I+/KSlUXc/6a1xaO5DAQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1671303332;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=U2nuVVwlgknR7c20H19gyaTMlpo/vf3YwyYK63vf2Cs=;
-        b=jyfK7Py3EThkvJXJ1bOIO6oRUOV5esNuioLSFUzNVHkLjgXxv/497cRdYW3FcuhpDHYdk6
-        8kAlwB+husO95tCw==
+        bh=c5g6MSrqZsjP8rQ+Bx44M5yo8LZcSCCthyNX2GgIJYU=;
+        b=LFhIRGS43jiyYOup8PegzRc+4pycbWG13QfFLUT2uBVNZEr1FhXfDHtKR9sPURnYevLMGY
+        dT1gikrMpdvUfHAw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86_64: Remove pointless set_64bit() usage
+Subject: [tip: x86/mm] x86/mm/pae: Use WRITE_ONCE()
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <167130333218.4906.13606513137061485071.tip-bot2@tip-bot2>
+Message-ID: <167130333255.4906.14861666890204509269.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,106 +59,57 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     9ee850acd25dc290d3cad2707e99380e372ad490
-Gitweb:        https://git.kernel.org/tip/9ee850acd25dc290d3cad2707e99380e372ad490
+Commit-ID:     f7bcd4617de67a4700a7bd7dc56808b57f1c8748
+Gitweb:        https://git.kernel.org/tip/f7bcd4617de67a4700a7bd7dc56808b57f1c8748
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Fri, 21 Oct 2022 14:11:38 +02:00
+AuthorDate:    Thu, 26 Nov 2020 17:40:12 +01:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
 CommitterDate: Thu, 15 Dec 2022 10:37:27 -08:00
 
-x86_64: Remove pointless set_64bit() usage
+x86/mm/pae: Use WRITE_ONCE()
 
-The use of set_64bit() in X86_64 only code is pretty pointless, seeing
-how it's a direct assignment. Remove all this nonsense.
+Disallow write-tearing, that would be really unfortunate.
 
-[nathanchance: unbreak irte]
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20221022114425.168036718%40infradead.org
+Link: https://lkml.kernel.org/r/20221022114425.038102604%40infradead.org
 ---
- arch/um/include/asm/pgtable-3level.h |  8 --------
- arch/x86/include/asm/cmpxchg_64.h    |  5 -----
- drivers/iommu/intel/irq_remapping.c  | 13 +++++--------
- 3 files changed, 5 insertions(+), 21 deletions(-)
+ arch/x86/include/asm/pgtable-3level.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/um/include/asm/pgtable-3level.h b/arch/um/include/asm/pgtable-3level.h
-index cb896e6..8a5032e 100644
---- a/arch/um/include/asm/pgtable-3level.h
-+++ b/arch/um/include/asm/pgtable-3level.h
-@@ -58,11 +58,7 @@
- #define pud_populate(mm, pud, pmd) \
- 	set_pud(pud, __pud(_PAGE_TABLE + __pa(pmd)))
- 
--#ifdef CONFIG_64BIT
--#define set_pud(pudptr, pudval) set_64bit((u64 *) (pudptr), pud_val(pudval))
--#else
- #define set_pud(pudptr, pudval) (*(pudptr) = (pudval))
--#endif
- 
- static inline int pgd_newpage(pgd_t pgd)
+diff --git a/arch/x86/include/asm/pgtable-3level.h b/arch/x86/include/asm/pgtable-3level.h
+index 0a1b81d..d3a2492 100644
+--- a/arch/x86/include/asm/pgtable-3level.h
++++ b/arch/x86/include/asm/pgtable-3level.h
+@@ -27,9 +27,9 @@
+  */
+ static inline void native_set_pte(pte_t *ptep, pte_t pte)
  {
-@@ -71,11 +67,7 @@ static inline int pgd_newpage(pgd_t pgd)
+-	ptep->pte_high = pte.pte_high;
++	WRITE_ONCE(ptep->pte_high, pte.pte_high);
+ 	smp_wmb();
+-	ptep->pte_low = pte.pte_low;
++	WRITE_ONCE(ptep->pte_low, pte.pte_low);
+ }
  
- static inline void pgd_mkuptodate(pgd_t pgd) { pgd_val(pgd) &= ~_PAGE_NEWPAGE; }
- 
--#ifdef CONFIG_64BIT
--#define set_pmd(pmdptr, pmdval) set_64bit((u64 *) (pmdptr), pmd_val(pmdval))
--#else
- #define set_pmd(pmdptr, pmdval) (*(pmdptr) = (pmdval))
--#endif
- 
- static inline void pud_clear (pud_t *pud)
+ static inline void native_set_pte_atomic(pte_t *ptep, pte_t pte)
+@@ -58,16 +58,16 @@ static inline void native_set_pud(pud_t *pudp, pud_t pud)
+ static inline void native_pte_clear(struct mm_struct *mm, unsigned long addr,
+ 				    pte_t *ptep)
  {
-diff --git a/arch/x86/include/asm/cmpxchg_64.h b/arch/x86/include/asm/cmpxchg_64.h
-index 250187a..0d3beb2 100644
---- a/arch/x86/include/asm/cmpxchg_64.h
-+++ b/arch/x86/include/asm/cmpxchg_64.h
-@@ -2,11 +2,6 @@
- #ifndef _ASM_X86_CMPXCHG_64_H
- #define _ASM_X86_CMPXCHG_64_H
+-	ptep->pte_low = 0;
++	WRITE_ONCE(ptep->pte_low, 0);
+ 	smp_wmb();
+-	ptep->pte_high = 0;
++	WRITE_ONCE(ptep->pte_high, 0);
+ }
  
--static inline void set_64bit(volatile u64 *ptr, u64 val)
--{
--	*ptr = val;
--}
--
- #define arch_cmpxchg64(ptr, o, n)					\
- ({									\
- 	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
-diff --git a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
-index 5962bb5..5d17616 100644
---- a/drivers/iommu/intel/irq_remapping.c
-+++ b/drivers/iommu/intel/irq_remapping.c
-@@ -173,7 +173,6 @@ static int modify_irte(struct irq_2_iommu *irq_iommu,
- 	index = irq_iommu->irte_index + irq_iommu->sub_handle;
- 	irte = &iommu->ir_table->base[index];
+ static inline void native_pmd_clear(pmd_t *pmdp)
+ {
+-	pmdp->pmd_low = 0;
++	WRITE_ONCE(pmdp->pmd_low, 0);
+ 	smp_wmb();
+-	pmdp->pmd_high = 0;
++	WRITE_ONCE(pmdp->pmd_high, 0);
+ }
  
--#if defined(CONFIG_HAVE_CMPXCHG_DOUBLE)
- 	if ((irte->pst == 1) || (irte_modified->pst == 1)) {
- 		bool ret;
- 
-@@ -187,11 +186,9 @@ static int modify_irte(struct irq_2_iommu *irq_iommu,
- 		 * same as the old value.
- 		 */
- 		WARN_ON(!ret);
--	} else
--#endif
--	{
--		set_64bit(&irte->low, irte_modified->low);
--		set_64bit(&irte->high, irte_modified->high);
-+	} else {
-+		WRITE_ONCE(irte->low, irte_modified->low);
-+		WRITE_ONCE(irte->high, irte_modified->high);
- 	}
- 	__iommu_flush_cache(iommu, irte, sizeof(*irte));
- 
-@@ -249,8 +246,8 @@ static int clear_entries(struct irq_2_iommu *irq_iommu)
- 	end = start + (1 << irq_iommu->irte_mask);
- 
- 	for (entry = start; entry < end; entry++) {
--		set_64bit(&entry->low, 0);
--		set_64bit(&entry->high, 0);
-+		WRITE_ONCE(entry->low, 0);
-+		WRITE_ONCE(entry->high, 0);
- 	}
- 	bitmap_release_region(iommu->ir_table->bitmap, index,
- 			      irq_iommu->irte_mask);
+ static inline void native_pud_clear(pud_t *pudp)
