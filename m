@@ -2,263 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E9364F803
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 07:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 347D564F807
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 07:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiLQGtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 01:49:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
+        id S230253AbiLQGyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 01:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLQGtt (ORCPT
+        with ESMTP id S229508AbiLQGyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 01:49:49 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1550CB1FE
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 22:49:48 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id n23-20020a056602341700b00689fc6dbfd6so2294922ioz.8
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 22:49:48 -0800 (PST)
+        Sat, 17 Dec 2022 01:54:21 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E69DEF5;
+        Fri, 16 Dec 2022 22:54:19 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so4437164pjm.2;
+        Fri, 16 Dec 2022 22:54:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zTRwQwjRjFumFyxEyxranWFY1512AG8fB4PKbLYm7/w=;
+        b=NWcm1JwY96dMWxjs5IWH5Gw+YJAk6kU61ZgOq74+2Ft0dSBmX66GOSJpbeB/RODtxY
+         ZJXYSP5mJJIdgf+fj1Veqe6leYoe8eZ1VqswKGcJj0GUvM6Dm9csGfDvxLH+tISW5kRO
+         t8A3dl7r5UnSfWAAZfUgVhRH5T7mIEtRhDbDAeEjm40gZsHHylCerQfx0S3EySfCBz67
+         mfYsE+zrAxOqdFl3lVolCeDal1E0Zwh9FSzXmeJVny35hKVX5cY66MXvF1WPUMcUnJtt
+         w7TJlc6lt1g8paZP95qsZmpRuRn6fk42hdURJ9GmdTqUlVcORU/njIXRZfRPmhlkghjs
+         Xw4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GyQq3J/CsQAhIaTo8vCcmGo+Pj4aGJUo66uY5Wlp/xU=;
-        b=eu7XfLvB8VqN82Eah/qzjyfPEOvhjBDe1YWtUk0mZA5LnAMgeaRebgkRnwZ33IvRoo
-         6Fs8MafWwYr0aXu0x/bih/zdgYTo5jGIQE05Veo65o117Yg633IobL5Ac9CfiC5EN4HG
-         EkVcjX92KHtjpM9poK3/AH2+bcGvbgzC8QYBszn3pocN6f6LsP2q/GVyIuHTG9O3zVA6
-         BahV+PYtcnudXPGiem9Dbmz6dtvbrOByLvRY4qp1vUSxG+qrSPAntAewMagNDoqjHM5K
-         Vvwz7a6R83zmsbbiW74w2LgoEWR5xTC2CeCq8h4wOqvPUNQ+B3TiwiIjZyv3vJdb81jZ
-         xhWQ==
-X-Gm-Message-State: ANoB5pluy35Lqx3cYBhzi23uH+ZdJysOVH6qGWwoiRv5XLBL7z/M6ITR
-        x5rqHaYcaogkPXieHmsmGK+2hWZ/V0kyBPpPstfp+NCxCLPa
-X-Google-Smtp-Source: AA0mqf7DRFT0Eh75MRLv+Lwe9y5M4ZmigwmS09P9gLiFONoTfLtVLXR6xdRGWQT46OTBwi9FBhMZZdN0hjedrYNc8NCkcWd/8w8T
-MIME-Version: 1.0
-X-Received: by 2002:a02:5447:0:b0:38a:66d5:f599 with SMTP id
- t68-20020a025447000000b0038a66d5f599mr7466588jaa.274.1671259787365; Fri, 16
- Dec 2022 22:49:47 -0800 (PST)
-Date:   Fri, 16 Dec 2022 22:49:47 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f413dc05f0007d10@google.com>
-Subject: [syzbot] [ntfs3?] INFO: task hung in attr_data_get_block
-From:   syzbot <syzbot+0ed04a03534f9788b484@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-kernel@vger.kernel.org, ntfs3@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zTRwQwjRjFumFyxEyxranWFY1512AG8fB4PKbLYm7/w=;
+        b=6JEc2cZnqXkYrRpDLMivk2vQoHvyssXytgEFndxzM+9CECY6GuJQKzISwCIDceO6BM
+         T4/Bx44kpbLJnUcMAZSCWHR5mOjgR35xTcJsdZ9aADnAI11koLTsEJFc7uMg7AV+5q31
+         d7+8CxFcaJOvW19+wQSEybvs8hN1z2SprWpk2dVJFtBgQWWQgIdgT2x1wJwFvAR8qVOC
+         rFRQjt0kUBL87lj/bJ7MEl44OLgbSesrS3STuEFxrpoingu+k5sXsv17brXdwtGrJ5jl
+         4Rr+J6sKZYOMOIAYpc5VRwMviI8kOpD8M0NbP6VKoGKobVDdJTKI4mXspd8B3oqpGSXf
+         FHbw==
+X-Gm-Message-State: ANoB5pnNZggcOYbP3Rr64pivsCOxQeAm89nDM0lOJq3H7QIxJg6SMEVz
+        r1dn+bdJmd6EfvYvIGlfvw==
+X-Google-Smtp-Source: AA0mqf5+xTjpLxbKqdJmoRoKKB4QwdG8ypMyKmwb9ME+gW0ZIs+RRUP4getudFGJyA2Ctyrjw3lhYA==
+X-Received: by 2002:a17:903:3252:b0:189:e924:e279 with SMTP id ji18-20020a170903325200b00189e924e279mr35377133plb.49.1671260058659;
+        Fri, 16 Dec 2022 22:54:18 -0800 (PST)
+Received: from smtpclient.apple (n119236129232.netvigator.com. [119.236.129.232])
+        by smtp.gmail.com with ESMTPSA id e13-20020a6558cd000000b004768ce9e4fasm2495183pgu.59.2022.12.16.22.54.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 16 Dec 2022 22:54:18 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: KASAN: use-after-free Read in ___bpf_prog_run
+From:   Hao Sun <sunhao.th@gmail.com>
+In-Reply-To: <52379286-960e-3fcd-84a2-3cab4d3b7c4e@meta.com>
+Date:   Sat, 17 Dec 2022 14:54:04 +0800
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <5B270DBF-E305-4C86-B246-F5C8A5D942CA@gmail.com>
+References: <CACkBjsbS0jeOUFzxWH-bBay9=cTQ_S2JbMnAa7V2sHpp_19PPw@mail.gmail.com>
+ <52379286-960e-3fcd-84a2-3cab4d3b7c4e@meta.com>
+To:     Yonghong Song <yhs@meta.com>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    830b3c68c1fb Linux 6.1
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1647ee1f880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5a194ed4fc682723
-dashboard link: https://syzkaller.appspot.com/bug?extid=0ed04a03534f9788b484
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12b69bc7880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ecbc3b880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/955d55d85d6c/disk-830b3c68.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7ef0e1f6a0c3/vmlinux-830b3c68.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/27601eb5ff0b/bzImage-830b3c68.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/bdcae8f0f777/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0ed04a03534f9788b484@syzkaller.appspotmail.com
-
-INFO: task syz-executor194:6265 blocked for more than 143 seconds.
-      Not tainted 6.1.0-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor194 state:D stack:21160 pid:6265  ppid:3719   flags:0x00004004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5209 [inline]
- __schedule+0x8c9/0xd70 kernel/sched/core.c:6521
- schedule+0xcb/0x190 kernel/sched/core.c:6597
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6656
- __mutex_lock_common+0xe4f/0x26e0 kernel/locking/mutex.c:679
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- ni_lock fs/ntfs3/ntfs_fs.h:1108 [inline]
- attr_data_get_block+0x301/0x2370 fs/ntfs3/attrib.c:917
- ntfs_get_block_vbo+0x310/0xe40 fs/ntfs3/inode.c:564
- do_mpage_readpage+0x970/0x1c50 fs/mpage.c:208
- mpage_readahead+0x210/0x380 fs/mpage.c:361
- read_pages+0x169/0x9c0 mm/readahead.c:161
- page_cache_ra_unbounded+0x703/0x820 mm/readahead.c:270
- filemap_readahead mm/filemap.c:2557 [inline]
- filemap_get_pages+0x72f/0x10d0 mm/filemap.c:2597
- filemap_read+0x3cf/0xea0 mm/filemap.c:2675
- call_read_iter include/linux/fs.h:2193 [inline]
- generic_file_splice_read+0x1ff/0x5d0 fs/splice.c:309
- do_splice_to fs/splice.c:793 [inline]
- splice_direct_to_actor+0x41b/0xc00 fs/splice.c:865
- do_splice_direct+0x279/0x3d0 fs/splice.c:974
- do_sendfile+0x5fb/0xf80 fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1323 [inline]
- __se_sys_sendfile64+0x14f/0x1b0 fs/read_write.c:1309
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f8784c2fe69
-RSP: 002b:00007f8784bda208 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007f8784cd37a8 RCX: 00007f8784c2fe69
-RDX: 0000000000000000 RSI: 0000000000000005 RDI: 0000000000000004
-RBP: 00007f8784cd37a0 R08: 0000000000000000 R09: 0000000000000000
-R10: 00000000010007c9 R11: 0000000000000246 R12: 00007f8784cd37ac
-R13: 00007ffda4d8823f R14: 00007f8784bda300 R15: 0000000000022000
- </TASK>
-INFO: task syz-executor194:6275 blocked for more than 144 seconds.
-      Not tainted 6.1.0-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor194 state:D stack:22856 pid:6275  ppid:3719   flags:0x00004004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5209 [inline]
- __schedule+0x8c9/0xd70 kernel/sched/core.c:6521
- schedule+0xcb/0x190 kernel/sched/core.c:6597
- io_schedule+0x83/0x100 kernel/sched/core.c:8741
- folio_wait_bit_common+0x83a/0x12a0 mm/filemap.c:1296
- folio_lock include/linux/pagemap.h:939 [inline]
- truncate_inode_pages_range+0xc9d/0x17f0 mm/truncate.c:423
- truncate_inode_pages mm/truncate.c:452 [inline]
- truncate_pagecache mm/truncate.c:753 [inline]
- truncate_setsize+0xcb/0xf0 mm/truncate.c:778
- ntfs_truncate fs/ntfs3/file.c:491 [inline]
- ntfs3_setattr+0x4f2/0xb00 fs/ntfs3/file.c:792
- notify_change+0xe38/0x10f0 fs/attr.c:420
- do_truncate+0x1fb/0x2e0 fs/open.c:65
- handle_truncate fs/namei.c:3216 [inline]
- do_open fs/namei.c:3561 [inline]
- path_openat+0x2770/0x2df0 fs/namei.c:3714
- do_filp_open+0x264/0x4f0 fs/namei.c:3741
- do_sys_openat2+0x124/0x4e0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_creat fs/open.c:1402 [inline]
- __se_sys_creat fs/open.c:1396 [inline]
- __x64_sys_creat+0x11f/0x160 fs/open.c:1396
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f8784c2fe69
-RSP: 002b:00007f877c9b9208 EFLAGS: 00000246 ORIG_RAX: 0000000000000055
-RAX: ffffffffffffffda RBX: 00007f8784cd37b8 RCX: 00007f8784c2fe69
-RDX: 00007f877c9b9700 RSI: 0000000000000000 RDI: 0000000020000180
-RBP: 00007f8784cd37b0 R08: 00007f877c9b9700 R09: 0000000000000000
-R10: 00007f877c9b9700 R11: 0000000000000246 R12: 00007f8784cd37bc
-R13: 00007ffda4d8823f R14: 00007f877c9b9300 R15: 0000000000022000
- </TASK>
-
-Showing all locks held in the system:
-1 lock held by rcu_tasks_kthre/12:
- #0: ffffffff8d127330 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
-1 lock held by rcu_tasks_trace/13:
- #0: ffffffff8d127b30 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
-1 lock held by khungtaskd/28:
- #0: 
-ffffffff8d127160 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
-2 locks held by getty/3312:
- #0: ffff888017ba7098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x21/0x70 drivers/tty/tty_ldisc.c:244
- #1: ffffc900031262f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x53b/0x1650 drivers/tty/n_tty.c:2177
-3 locks held by syz-executor194/6265:
- #0: ffff88807c0ce460 (sb_writers#10){.+.+}-{0:0}, at: do_sendfile+0x5d6/0xf80 fs/read_write.c:1254
- #1: ffff8880707022c0 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
- #1: ffff8880707022c0 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: page_cache_ra_unbounded+0xe9/0x820 mm/readahead.c:226
- #2: ffff888070701e80 (&ni->ni_lock/4){+.+.}-{3:3}, at: ni_lock fs/ntfs3/ntfs_fs.h:1108 [inline]
- #2: ffff888070701e80 (&ni->ni_lock/4){+.+.}-{3:3}, at: attr_data_get_block+0x301/0x2370 fs/ntfs3/attrib.c:917
-3 locks held by syz-executor194/6275:
- #0: ffff88807c0ce460 (sb_writers#10){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:393
- #1: ffff888070702120 (&sb->s_type->i_mutex_key#18){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
- #1: ffff888070702120 (&sb->s_type->i_mutex_key#18){+.+.}-{3:3}, at: do_truncate+0x1e7/0x2e0 fs/open.c:63
- #2: ffff888070701e80 (&ni->ni_lock/4){+.+.}-{3:3}, at: ni_lock fs/ntfs3/ntfs_fs.h:1108 [inline]
- #2: ffff888070701e80 (&ni->ni_lock/4){+.+.}-{3:3}, at: ntfs_truncate fs/ntfs3/file.c:489 [inline]
- #2: ffff888070701e80 (&ni->ni_lock/4){+.+.}-{3:3}, at: ntfs3_setattr+0x4e3/0xb00 fs/ntfs3/file.c:792
-2 locks held by syz-executor194/11945:
- #0: ffff8880b9839dd8 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x25/0x110 kernel/sched/core.c:537
- #1: ffff8880b9827788 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x611/0x9a0 kernel/sched/psi.c:909
-
-=============================================
-
-NMI backtrace for cpu 0
-CPU: 0 PID: 28 Comm: khungtaskd Not tainted 6.1.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- nmi_cpu_backtrace+0x46f/0x4f0 lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x1ba/0x420 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:220 [inline]
- watchdog+0xcf5/0xd40 kernel/hung_task.c:377
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 PID: 11955 Comm: syz-executor194 Not tainted 6.1.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:io_serial_out+0x79/0xb0 drivers/tty/serial/8250/8250_port.c:467
-Code: fc 89 e9 41 d3 e7 48 83 c3 40 48 89 d8 48 c1 e8 03 42 80 3c 20 00 74 08 48 89 df e8 81 16 2a fd 44 03 3b 44 89 f0 44 89 fa ee <5b> 41 5c 41 5e 41 5f 5d c3 89 e9 80 e1 07 38 c1 7c ab 48 89 ef e8
-RSP: 0018:ffffc9000b917350 EFLAGS: 00000002
-RAX: 0000000000000030 RBX: ffffffff92117ec0 RCX: 0000000000000000
-RDX: 00000000000003f8 RSI: 0000000000000000 RDI: 0000000000000020
-RBP: 0000000000000000 R08: ffffffff84b4ae06 R09: ffffed1003ca6047
-R10: ffffed1003ca6047 R11: 1ffff11003ca6046 R12: dffffc0000000000
-R13: ffffffff91dd1d0a R14: 0000000000000030 R15: 00000000000003f8
-FS:  00007f8784bda700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f8784bdb000 CR3: 000000002109b000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- serial8250_console_write+0x14c0/0x1ab0 drivers/tty/serial/8250/8250_port.c:3436
- call_console_driver kernel/printk/printk.c:1942 [inline]
- console_emit_next_record+0x778/0xa40 kernel/printk/printk.c:2731
- console_unlock+0x27c/0x6f0 kernel/printk/printk.c:2860
- vprintk_emit+0xd1/0x1e0 kernel/printk/printk.c:2268
- _printk+0xc0/0x100 kernel/printk/printk.c:2289
- ntfs_printk+0x2fa/0x340 fs/ntfs3/super.c:68
- ntfs_init_from_boot fs/ntfs3/super.c:758 [inline]
- ntfs_fill_super+0xe69/0x42a0 fs/ntfs3/super.c:935
- get_tree_bdev+0x400/0x620 fs/super.c:1324
- vfs_get_tree+0x88/0x270 fs/super.c:1531
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f8784c3132a
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 08 01 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f8784bda078 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f8784c3132a
-RDX: 000000002001f180 RSI: 000000002001f1c0 RDI: 00007f8784bda090
-RBP: 0000000000000004 R08: 00007f8784bda0d0 R09: 000000000001f16e
-R10: 000000000000000e R11: 0000000000000286 R12: 00007f8784bda6b8
-R13: 00007f8784bda090 R14: 00007f8784bda0d0 R15: 000000000000000e
- </TASK>
-INFO: NMI handler (nmi_cpu_backtrace_handler) took too long to run: 1.040 msecs
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> On 17 Dec 2022, at 1:07 PM, Yonghong Song <yhs@meta.com> wrote:
+>=20
+>=20
+>=20
+> On 12/14/22 11:49 PM, Hao Sun wrote:
+>> Hi,
+>> The following KASAN report can be triggered by loading and test
+>> running this simple BPF prog with a random data/ctx:
+>> 0: r0 =3D bpf_get_current_task_btf      ;
+>> R0_w=3Dtrusted_ptr_task_struct(off=3D0,imm=3D0)
+>> 1: r0 =3D *(u32 *)(r0 +8192)       ;
+>> R0_w=3Dscalar(umax=3D4294967295,var_off=3D(0x0; 0xffffffff))
+>> 2: exit
+>> I've simplified the C reproducer but didn't find the root cause.
+>> JIT was disabled, and the interpreter triggered UAF when executing
+>> the load insn. A slab-out-of-bound read can also be triggered:
+>> https://pastebin.com/raw/g9zXr8jU
+>> This can be reproduced on:
+>> HEAD commit: b148c8b9b926 selftests/bpf: Add few corner cases to test
+>> padding handling of btf_dump
+>> git tree: bpf-next
+>> console log: https://pastebin.com/raw/1EUi9tJe
+>> kernel config: https://pastebin.com/raw/rgY3AJDZ
+>> C reproducer: https://pastebin.com/raw/cfVGuCBm
+>=20
+> I I tried with your above kernel config and C reproducer and cannot =
+reproduce the kasan issue you reported.
+>=20
+> [root@arch-fb-vm1 bpf-next]# ./a.out
+> func#0 @0
+> 0: R1=3Dctx(off=3D0,imm=3D0) R10=3Dfp0
+> 0: (85) call bpf_get_current_task_btf#158     ; =
+R0_w=3Dtrusted_ptr_task_struct(off=3D0,imm=3D0)
+> 1: (61) r0 =3D *(u32 *)(r0 +8192)       ; =
+R0_w=3Dscalar(umax=3D4294967295,var_off=3D(0x0; 0xffffffff))
+> 2: (95) exit
+> processed 3 insns (limit 1000000) max_states_per_insn 0 total_states 0 =
+peak_states 0 mark_read 0
+>=20
+> prog fd: 3
+> [root@arch-fb-vm1 bpf-next]#
+>=20
+> Your config indeed has kasan on.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Hi,
+
+I can still reproduce this on a latest bpf-next build: 0e43662e61f25=20
+(=E2=80=9Ctools/resolve_btfids: Use pkg-config to locate libelf=E2=80=9D).=
+=20
+The simplified C reproducer sometime need to be run twice to trigger
+the UAF. Also note that interpreter is required. Here is the original
+C reproducer that loads and runs the BPF prog continuously for your
+convenience:
+https://pastebin.com/raw/WSJuNnVU
+
+>=20
+>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> BUG: KASAN: use-after-free in ___bpf_prog_run+0x7f35/0x8fd0
+>> kernel/bpf/core.c:1937
+>> Read of size 4 at addr ffff88801f1f2000 by task a.out/7137
+>> CPU: 3 PID: 7137 Comm: a.out Not tainted
+>> 6.1.0-rc8-02212-gef3911a3e4d6-dirty #137
+>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch =
+Linux
+>> 1.16.1-1-1 04/01/2014
+>> Call Trace:
+>> <TASK>
+>> __dump_stack lib/dump_stack.c:88 [inline]
+>> dump_stack_lvl+0x100/0x178 lib/dump_stack.c:106
+>> print_address_description mm/kasan/report.c:284 [inline]
+>> print_report+0x167/0x46c mm/kasan/report.c:395
+>> kasan_report+0xbf/0x1e0 mm/kasan/report.c:495
+>> ___bpf_prog_run+0x7f35/0x8fd0 kernel/bpf/core.c:1937
+>> __bpf_prog_run32+0x9d/0xe0 kernel/bpf/core.c:2045
+>> bpf_dispatcher_nop_func include/linux/bpf.h:1082 [inline]
+>> __bpf_prog_run include/linux/filter.h:600 [inline]
+>> bpf_prog_run include/linux/filter.h:607 [inline]
+>> bpf_test_run+0x38e/0x980 net/bpf/test_run.c:402
+>> bpf_prog_test_run_skb+0xb67/0x1dc0 net/bpf/test_run.c:1187
+>> bpf_prog_test_run kernel/bpf/syscall.c:3644 [inline]
+>> __sys_bpf+0x1293/0x5840 kernel/bpf/syscall.c:4997
+>> __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
+>> __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
+>> __x64_sys_bpf+0x78/0xc0 kernel/bpf/syscall.c:5081
+>> do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>> do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
+>> entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> RIP: 0033:0x7fb8adae4469
+>> Code: 00 f3 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48
+>> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> =
+3d
+>> 01 f0 ff ff 73 01 c3 48 8b 0d ff 49 2b 00 f7 d8 64 89 01 48
+>> RSP: 002b:00007fff514ad148 EFLAGS: 00000203 ORIG_RAX: =
+0000000000000141
+>> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb8adae4469
+>> RDX: 0000000000000025 RSI: 0000000020000200 RDI: 000000000000000a
+>> RBP: 00007fff514ae2f0 R08: 00007fb8adb2dd70 R09: 00000b4100000218
+>> R10: e67c061720b91d86 R11: 0000000000000203 R12: 000055ed87c00760
+>> R13: 00007fff514ae3d0 R14: 0000000000000000 R15: 0000000000000000
+>> </TASK>
+>> Allocated by task 7128:
+>> kasan_save_stack+0x20/0x40 mm/kasan/common.c:45
+>> kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+>> __kasan_slab_alloc+0x84/0x90 mm/kasan/common.c:325
+>> kasan_slab_alloc include/linux/kasan.h:201 [inline]
+>> slab_post_alloc_hook mm/slab.h:737 [inline]
+>> slab_alloc_node mm/slub.c:3398 [inline]
+>> kmem_cache_alloc_node+0x166/0x410 mm/slub.c:3443
+>> alloc_task_struct_node kernel/fork.c:171 [inline]
+>> dup_task_struct kernel/fork.c:966 [inline]
+>> copy_process+0x5db/0x6f40 kernel/fork.c:2084
+>> kernel_clone+0xe8/0x980 kernel/fork.c:2671
+>> __do_sys_clone+0xc0/0x100 kernel/fork.c:2812
+>> do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>> do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
+>> entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> Freed by task 0:
+>> kasan_save_stack+0x20/0x40 mm/kasan/common.c:45
+>> kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+>> kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:511
+>> ____kasan_slab_free mm/kasan/common.c:236 [inline]
+>> ____kasan_slab_free+0x15e/0x1b0 mm/kasan/common.c:200
+>> kasan_slab_free include/linux/kasan.h:177 [inline]
+>> slab_free_hook mm/slub.c:1724 [inline]
+>> slab_free_freelist_hook+0x10b/0x1e0 mm/slub.c:1750
+>> slab_free mm/slub.c:3661 [inline]
+>> kmem_cache_free+0xee/0x5b0 mm/slub.c:3683
+>> put_task_struct include/linux/sched/task.h:119 [inline]
+>> delayed_put_task_struct+0x274/0x3e0 kernel/exit.c:178
+>> rcu_do_batch kernel/rcu/tree.c:2250 [inline]
+>> rcu_core+0x835/0x1980 kernel/rcu/tree.c:2510
+>> __do_softirq+0x1f7/0xaf6 kernel/softirq.c:571
+>> Last potentially related work creation:
+>> kasan_save_stack+0x20/0x40 mm/kasan/common.c:45
+>> __kasan_record_aux_stack+0xbf/0xd0 mm/kasan/generic.c:481
+>> call_rcu+0x9e/0x790 kernel/rcu/tree.c:2798
+>> put_task_struct_rcu_user kernel/exit.c:184 [inline]
+>> put_task_struct_rcu_user+0x83/0xc0 kernel/exit.c:181
+>> release_task+0xe9e/0x1ae0 kernel/exit.c:234
+>> wait_task_zombie kernel/exit.c:1136 [inline]
+>> wait_consider_task+0x17d8/0x3e70 kernel/exit.c:1363
+>> do_wait_thread kernel/exit.c:1426 [inline]
+>> do_wait+0x75f/0xdc0 kernel/exit.c:1543
+>> kernel_wait4+0x153/0x260 kernel/exit.c:1706
+>> __do_sys_wait4+0x147/0x160 kernel/exit.c:1734
+>> do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>> do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
+>> entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> Second to last potentially related work creation:
+>> kasan_save_stack+0x20/0x40 mm/kasan/common.c:45
+>> __kasan_record_aux_stack+0xbf/0xd0 mm/kasan/generic.c:481
+>> call_rcu+0x9e/0x790 kernel/rcu/tree.c:2798
+>> put_task_struct_rcu_user kernel/exit.c:184 [inline]
+>> put_task_struct_rcu_user+0x83/0xc0 kernel/exit.c:181
+>> release_task+0xe9e/0x1ae0 kernel/exit.c:234
+>> wait_task_zombie kernel/exit.c:1136 [inline]
+>> wait_consider_task+0x17d8/0x3e70 kernel/exit.c:1363
+>> do_wait_thread kernel/exit.c:1426 [inline]
+>> do_wait+0x75f/0xdc0 kernel/exit.c:1543
+>> kernel_wait4+0x153/0x260 kernel/exit.c:1706
+>> __do_sys_wait4+0x147/0x160 kernel/exit.c:1734
+>> do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>> do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
+>> entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> The buggy address belongs to the object at ffff88801f1f1d80
+>> which belongs to the cache task_struct of size 7240
+>> The buggy address is located 640 bytes inside of
+>> 7240-byte region [ffff88801f1f1d80, ffff88801f1f39c8)
+>> The buggy address belongs to the physical page:
+>> page:ffffea00007c7c00 refcount:1 mapcount:0 mapping:0000000000000000
+>> index:0x0 pfn:0x1f1f0
+>> head:ffffea00007c7c00 order:3 compound_mapcount:0 compound_pincount:0
+>> memcg:ffff888013b2c081
+>> flags: 0xfff00000010200(slab|head|node=3D0|zone=3D1|lastcpupid=3D0x7ff)=
+
+>> raw: 00fff00000010200 ffffea00005e4200 dead000000000002 =
+ffff88801322a000
+>> raw: 0000000000000000 0000000080040004 00000001ffffffff =
+ffff888013b2c081
+>> page dumped because: kasan: bad access detected
+>> page_owner tracks the page as allocated
+>> page last allocated via order 3, migratetype Unmovable, gfp_mask
+>> =
+0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOME=
+MALLOC),
+>> pid 16, tgid 16 (kworker/u17:1), ts 3731671201, free_ts 0
+>> prep_new_page mm/page_alloc.c:2539 [inline]
+>> get_page_from_freelist+0x10ce/0x2db0 mm/page_alloc.c:4291
+>> __alloc_pages+0x1c8/0x5c0 mm/page_alloc.c:5558
+>> alloc_pages+0x1a9/0x270 mm/mempolicy.c:2285
+>> alloc_slab_page mm/slub.c:1794 [inline]
+>> allocate_slab+0x24e/0x340 mm/slub.c:1939
+>> new_slab mm/slub.c:1992 [inline]
+>> ___slab_alloc+0x89a/0x1400 mm/slub.c:3180
+>> __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3279
+>> slab_alloc_node mm/slub.c:3364 [inline]
+>> kmem_cache_alloc_node+0x12e/0x410 mm/slub.c:3443
+>> alloc_task_struct_node kernel/fork.c:171 [inline]
+>> dup_task_struct kernel/fork.c:966 [inline]
+>> copy_process+0x5db/0x6f40 kernel/fork.c:2084
+>> kernel_clone+0xe8/0x980 kernel/fork.c:2671
+>> user_mode_thread+0xb4/0xf0 kernel/fork.c:2747
+>> call_usermodehelper_exec_work kernel/umh.c:175 [inline]
+>> call_usermodehelper_exec_work+0xcb/0x170 kernel/umh.c:161
+>> process_one_work+0xa33/0x1720 kernel/workqueue.c:2289
+>> worker_thread+0x67d/0x10e0 kernel/workqueue.c:2436
+>> kthread+0x2e4/0x3a0 kernel/kthread.c:376
+>> ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+>> page_owner free stack trace missing
+>> Memory state around the buggy address:
+>> ffff88801f1f1f00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>> ffff88801f1f1f80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>>> ffff88801f1f2000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>> ^
+>> ffff88801f1f2080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>> ffff88801f1f2100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+
