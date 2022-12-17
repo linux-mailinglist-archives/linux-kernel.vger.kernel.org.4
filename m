@@ -2,49 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2422464F582
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 01:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCACB64F58A
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 01:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbiLQADe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 19:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42174 "EHLO
+        id S229506AbiLQAJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 19:09:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbiLQADR (ORCPT
+        with ESMTP id S229453AbiLQAJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 19:03:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F02750BC;
-        Fri, 16 Dec 2022 16:02:59 -0800 (PST)
+        Fri, 16 Dec 2022 19:09:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE676E9ED;
+        Fri, 16 Dec 2022 16:09:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC9C7B81E2C;
-        Sat, 17 Dec 2022 00:02:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6065C433EF;
-        Sat, 17 Dec 2022 00:02:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E06A5621A1;
+        Sat, 17 Dec 2022 00:09:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35004C433EF;
+        Sat, 17 Dec 2022 00:09:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671235376;
-        bh=5A1aij+Hegtx0u914TiIF50pW15xVFJBSfDFBSTowrQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oKS0sSfQh20gJwHqeDNttj9nsgLT4ClpeLJnQfPM65F0zBz7SrbJPUWoqLnPL1KLH
-         BpSb1GvhGZMmg9o1FOEr0ERNKa/D978rJHDBwwi45xlDzY/+0XZa4ALrhUJ2iz/fsj
-         eUL2rIvaEw7RXz7kVeqQ3F6/c+hWTq/219sZBF/n139agHMsLCCK022Qt1V//b2c36
-         UWo8YHkgd8+Cr8sOCtQfJs978hiEIR1Pgh0Syok9DBnjzvgZS+09f9ZdjHwXJiex61
-         wJaaxyYCOd7gyRMVwKUulYc70koddviL8ZHKHzVefySoW06LQv4KYIKrruiru5dwoi
-         s9BtTaYLQuZ/w==
-From:   SeongJae Park <sj@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     SeongJae Park <sj@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/11] implement DAMOS filtering for anon pages and
-Date:   Sat, 17 Dec 2022 00:02:54 +0000
-Message-Id: <20221217000254.59126-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221216155948.54023e407679736afcf00d9f@linux-foundation.org>
-References: 
+        s=k20201202; t=1671235781;
+        bh=FtAeghpOcG2WZJsrWRmoGbAgKj+g/KOYm0uLL2+J9z0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YAxQy6bjIYHUeso98wKjj2cJYiE2u9GGKELZXCseOoc89YinC3UQjXcgoaTq2tgwP
+         YWPI0YoiqwbXhCFi3VdGsfMIMrdGrJoFmCcUiH6aZhfErTqiufAukSKsw7fzZJxsir
+         r02BKMyUzvD9N5+DKqK/yUgZ5WKGr30whw0DnzlCF5RNRskOYXmy/4wI7IDxdrQz3X
+         8e6XiLKWA+t3zwpZmqGo4E6Cd7s0C7zOqX6I7fYqiIS/rtEyowSf9c062XQ3O6kR0z
+         ditkzAZ5G4DnYjpzfIU0hQv9cztvb1qlo1VL6JO4a3e6PXui1UPsL2s+5NLbQPxIYR
+         T8RAH4tc55UIg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Zqiang <qiang1.zhang@intel.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, frederic@kernel.org,
+        quic_neeraju@quicinc.com, josh@joshtriplett.org,
+        rcu@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 1/9] rcu: Fix __this_cpu_read() lockdep warning in rcu_force_quiescent_state()
+Date:   Fri, 16 Dec 2022 19:09:28 -0500
+Message-Id: <20221217000937.41115-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -55,18 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Dec 2022 15:59:48 -0800 Andrew Morton <akpm@linux-foundation.org> wrote:
+From: Zqiang <qiang1.zhang@intel.com>
 
-> On Mon,  5 Dec 2022 23:08:19 +0000 SeongJae Park <sj@kernel.org> wrote:
-> 
-> > Subject: [PATCH 00/11] implement DAMOS filtering for anon pages and
-> 
-> I rewrote this to
-> 
-> implement DAMOS filtering for anon pages and/or specific memory cgroups
+[ Upstream commit ceb1c8c9b8aa9199da46a0f29d2d5f08d9b44c15 ]
 
-Sounds much better, thank you Andrew!
+Running rcutorture with non-zero fqs_duration module parameter in a
+kernel built with CONFIG_PREEMPTION=y results in the following splat:
 
+BUG: using __this_cpu_read() in preemptible [00000000]
+code: rcu_torture_fqs/398
+caller is __this_cpu_preempt_check+0x13/0x20
+CPU: 3 PID: 398 Comm: rcu_torture_fqs Not tainted 6.0.0-rc1-yoctodev-standard+
+Call Trace:
+<TASK>
+dump_stack_lvl+0x5b/0x86
+dump_stack+0x10/0x16
+check_preemption_disabled+0xe5/0xf0
+__this_cpu_preempt_check+0x13/0x20
+rcu_force_quiescent_state.part.0+0x1c/0x170
+rcu_force_quiescent_state+0x1e/0x30
+rcu_torture_fqs+0xca/0x160
+? rcu_torture_boost+0x430/0x430
+kthread+0x192/0x1d0
+? kthread_complete_and_exit+0x30/0x30
+ret_from_fork+0x22/0x30
+</TASK>
 
-Thanks,
-SJ
+The problem is that rcu_force_quiescent_state() uses __this_cpu_read()
+in preemptible code instead of the proper raw_cpu_read().  This commit
+therefore changes __this_cpu_read() to raw_cpu_read().
+
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ kernel/rcu/tree.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 93416afebd59..14d9384fba05 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -2418,7 +2418,7 @@ void rcu_force_quiescent_state(void)
+ 	struct rcu_node *rnp_old = NULL;
+ 
+ 	/* Funnel through hierarchy to reduce memory contention. */
+-	rnp = __this_cpu_read(rcu_data.mynode);
++	rnp = raw_cpu_read(rcu_data.mynode);
+ 	for (; rnp != NULL; rnp = rnp->parent) {
+ 		ret = (READ_ONCE(rcu_state.gp_flags) & RCU_GP_FLAG_FQS) ||
+ 		       !raw_spin_trylock(&rnp->fqslock);
+-- 
+2.35.1
+
