@@ -2,138 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806FE64F860
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 10:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5367564F870
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 10:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbiLQJBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 04:01:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
+        id S230110AbiLQJZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 04:25:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiLQJBo (ORCPT
+        with ESMTP id S229655AbiLQJZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 04:01:44 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3DEE032
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 01:01:43 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id b24-20020a056602219800b006e2bf9902cbso2325716iob.4
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 01:01:43 -0800 (PST)
+        Sat, 17 Dec 2022 04:25:22 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B25BB1E9;
+        Sat, 17 Dec 2022 01:25:21 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id r26so6647964edc.10;
+        Sat, 17 Dec 2022 01:25:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9SEYu3CD2lscfQ36Ylbp9Rqo5knyPNps9HHg3nLsTAU=;
+        b=CZDcwRmSfxElaHhnrnXV1dK0HsrFk3xCvzEl6BkQxbzqw143BmQplGWtgEuPJHC8mg
+         2dljFg/+cH2ktnIjAuWwIF44uKYEMnvIvdpNJ4i1p2q1TrOq72jQsaizUs7XFPJHB4tJ
+         NinrO3Ws4lP5IRylp9LKeC4jQohtke27qBwQXcJ4EbRI8TNinh50rQpE/skQTg07pJN3
+         BJfr2DRt5gypWLSqh4YgOiggtTnORTV/6WLC8K0OB+IL8PeVQedoKeDockMu1uGmhyyu
+         4rHUIl6ICgBjPTytT6CFeBgBQXyVlYQyW0EJnOqi7DFKSsAq72aqJd1ByGZI/hKlAKYU
+         Ys2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AYvJo8yuqCoES5ZZikY7SREAaKv4YPjwh9IFzyN29mE=;
-        b=5RXVTdB8Pdgxhiuda0buxH8wJ5lCu5ZulYsCnaJdI4RxoFV4HX6pgduy7HGc+InRUl
-         rpyzzRUxaKHaLq8SY2ZN/zYc3fZ7gZsuqZN5pSPOXiTqF6R/wu0ESrIoW5NY5lViHSvx
-         04BkCAytiiLh2EGrKL/FPsC+seac7T7iQ6/JSYBY9ZLIUhEKysXV1+EIUFl07zzN5hxe
-         kKIYc44ZLEQLktS2jbsGBBV47hPvCZ4Xi3UNZZbjQ/3uNWbpNrFj65VDv0uagNXLYSeM
-         H1DQHfyE9RtqZrXymAlLu/9fe9fI2WVXAHvgSeQZTsY5g0BkeWw+HxRTr1LRIWIMevfs
-         4nUw==
-X-Gm-Message-State: ANoB5pnySj7g4tcxBg8+XaN//596nZNnOMgmLxrXDzkdmy12nsR65lj8
-        YUCiEQIsbqXBOurgXfliNzuiMVi4FtmUi/9IitsmuGF1me3c
-X-Google-Smtp-Source: AA0mqf6i/ECzHp8mYrFcEWNWBqOnwQvD+KbO/XLMiyNrAJIrn362K2jZ79eX1Hv4gR6onBAXHfnvwx6T9TPT1I5EZhTu8KV222Hs
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9SEYu3CD2lscfQ36Ylbp9Rqo5knyPNps9HHg3nLsTAU=;
+        b=fmwrRBP4AeDIXdeRgN1WJoG/qW8DX6qxKBTyZN6qp8YCgTUfB2mLjiorzwUYN/ZfQO
+         zQiOdYcVo+Js/1ypjqJ3mLVpPyvPXLJ9a/ajSzObo/ZrSZQxGW+V4wogFIZdNOO5+/7R
+         zlqSH7mi0NZbS0UhvaYCJN93veHPLEClhwaLYlzB4CkL1/Wc6RQ8ovXVg3oCBErItvS4
+         HdKCw/je1jxLVSldZJUD9or3KRTtzS4vdcPXF10J3zm3TxjBBV9PEgxYHpxw/ZfqS7Uw
+         3c3aXEDKeQ+Fk6XrJUUp+O/7cfOg/yC4TRbZysNDp97MkiwUI+q6TjufUy0DtKhhSA0f
+         HpdA==
+X-Gm-Message-State: ANoB5plX9jMr9bleYwm2R1BJ+l6efG7zQl/ouDAbsOOT4M68B/KKezYS
+        LyjQqhiVATkHcMq1jUfGhAqLMsWaUtd6UO8P0lojAQlRclI=
+X-Google-Smtp-Source: AA0mqf5NIw5Y+h7F6m+nXVsCJPl61RfC9zGdCMU+KR8GxKCkveAAUWN4fZbxs4vgB2vP0G7rIky8AJDAOCkMrwmH+/w=
+X-Received: by 2002:a05:6402:4023:b0:46c:f631:c0e6 with SMTP id
+ d35-20020a056402402300b0046cf631c0e6mr16410969eda.251.1671269119483; Sat, 17
+ Dec 2022 01:25:19 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a02:7403:0:b0:363:a229:57c3 with SMTP id
- o3-20020a027403000000b00363a22957c3mr1284306jac.231.1671267703001; Sat, 17
- Dec 2022 01:01:43 -0800 (PST)
-Date:   Sat, 17 Dec 2022 01:01:42 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c31da505f0025531@google.com>
-Subject: [syzbot] [udf?] WARNING in udf_setsize
-From:   syzbot <syzbot+0937935b993956ba28ab@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, jack@suse.com, jack@suse.cz,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <CAO4mrffa_3PhjfA9hxTq_U9GjC++0suGnme9oNcKE=Gn+g1iRg@mail.gmail.com>
+In-Reply-To: <CAO4mrffa_3PhjfA9hxTq_U9GjC++0suGnme9oNcKE=Gn+g1iRg@mail.gmail.com>
+From:   Wei Chen <harperchen1110@gmail.com>
+Date:   Sat, 17 Dec 2022 17:24:43 +0800
+Message-ID: <CAO4mrfdmjvRUNbDyP0R03_DrD_eFCLCguz6OxZ2TYRSv0K9gxA@mail.gmail.com>
+Subject: WARNING in nla_get_range_unsigned
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Dear Linux Developers,
 
-syzbot found the following issue on:
+Recently, when using our tool to fuzz kernel, the following crash was
+triggered. Although this crash has been reported by syzbot
+https://syzkaller.appspot.com/bug?id=32e20c07949c6d6006f26466022469e33ae69108
+and fixed in commit netlink: policy: correct validation type check
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c30a3c957c885e618ddffc065f888be4f8d5a9bd,
+it still happens in the latest kernel version.
 
-HEAD commit:    764822972d64 Merge tag 'nfsd-6.2' of git://git.kernel.org/..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=11536087880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8c59170b68d26a55
-dashboard link: https://syzkaller.appspot.com/bug?extid=0937935b993956ba28ab
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11c41f07880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=137b3913880000
+HEAD commit:  76dcd734eca
+git tree: linux-next
+compiler: clang 12.0.0
+console output:
+https://drive.google.com/file/d/1reeOfFkfJp4-GUz_uMTh-uWXPLBJDcA6/view?usp=share_link
+kernel config: https://drive.google.com/file/d/1jH4qV5XblPADvMDUlvS7DwtW0FroMoVB/view?usp=share_link
+syz repro: https://drive.google.com/file/d/1Ong8vQn675RFU7R1O5HfiwWxp4UhnaIF/view?usp=share_link
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0c840c19749d/disk-76482297.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/bdfd51618ae0/vmlinux-76482297.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/fef17b5d4d6d/bzImage-76482297.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/f0caf90549db/mount_0.gz
-
-The issue was bisected to:
-
-commit 16d0556568148bdcaa45d077cac9f8f7077cf70a
-Author: Jan Kara <jack@suse.cz>
-Date:   Wed Dec 7 17:17:34 2022 +0000
-
-    udf: Discard preallocation before extending file with a hole
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1790d4e7880000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1450d4e7880000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1050d4e7880000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0937935b993956ba28ab@syzkaller.appspotmail.com
-Fixes: 16d055656814 ("udf: Discard preallocation before extending file with a hole")
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: Wei Chen <harperchen1110@gmail.com>
 
 ------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3631 at fs/udf/inode.c:639 udf_setsize+0xf9e/0x1380 fs/udf/inode.c:1236
+WARNING: CPU: 0 PID: 17743 at lib/nlattr.c:118
+nla_get_range_unsigned+0x1d8/0x1e0 lib/nlattr.c:117
 Modules linked in:
-CPU: 1 PID: 3631 Comm: syz-executor194 Not tainted 6.1.0-syzkaller-03225-g764822972d64 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:udf_extend_file fs/udf/inode.c:638 [inline]
-RIP: 0010:udf_setsize+0xf9e/0x1380 fs/udf/inode.c:1236
-Code: 8e fe 45 85 f6 49 bf 00 00 00 00 00 fc ff df 74 0a e8 86 28 8e fe e9 34 ff ff ff e8 7c 28 8e fe e9 fa fd ff ff e8 72 28 8e fe <0f> 0b e9 61 f6 ff ff 89 d9 80 e1 07 38 c1 0f 8c 1a f1 ff ff 48 89
-RSP: 0018:ffffc90003cefb00 EFLAGS: 00010293
-RAX: ffffffff82fd3d5e RBX: 0000000000000800 RCX: ffff888022760000
-RDX: 0000000000000000 RSI: 0000000000001000 RDI: 0000000000000800
-RBP: ffffc90003cefcd8 R08: ffffffff82fd33b8 R09: ffffed100df29024
-R10: ffffed100df29024 R11: 1ffff1100df29023 R12: 1ffff9200079df70
-R13: ffffc90003cefc10 R14: 0000000000001000 R15: 0000000000000009
-FS:  00005555566c83c0(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CPU: 0 PID: 17743 Comm: syz-executor.0 Not tainted 6.1.0-rc8 #3
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+RIP: 0010:nla_get_range_unsigned+0x1d8/0x1e0 lib/nlattr.c:117
+Code: 8d ff 49 8b 75 08 ba 10 00 00 00 4c 89 f7 e8 0f d8 f8 02 5b 41
+5c 41 5d 41 5e 41 5f 5d c3 e8 0f 57 7a ff eb 05 e8 08 57 7a ff <0f> 0b
+e9 a9 fe ff ff 90 55 41 57 41 56 41 54 53 49 89 f6 49 89 fc
+RSP: 0018:ffffc90002df39b8 EFLAGS: 00010287
+RAX: ffffffff81ad2f51 RBX: ffffffff85364d28 RCX: 0000000000040000
+RDX: ffffc90000add000 RSI: 0000000000000268 RDI: 0000000000000269
+RBP: 000000000000f940 R08: ffffffff81ad2dd8 R09: 0000000000000000
+R10: 0001ffffffffffff R11: ffff888045136780 R12: ffff88803e174000
+R13: ffffffff85364d20 R14: ffffc90002df3a30 R15: ffffffff85364d21
+FS:  00007fab1e5c8700(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000560387521d28 CR3: 0000000073ea7000 CR4: 00000000003506f0
+CR2: 000000000073f8d0 CR3: 000000004a789000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
 Call Trace:
  <TASK>
- udf_setattr+0x362/0x530 fs/udf/file.c:281
- notify_change+0xe50/0x1100 fs/attr.c:482
- do_truncate+0x200/0x2f0 fs/open.c:65
- do_sys_ftruncate+0x2bc/0x360 fs/open.c:193
+ __netlink_policy_dump_write_attr+0x23d/0x990 net/netlink/policy.c:310
+ netlink_policy_dump_write_attr+0x22/0x30 net/netlink/policy.c:411
+ netlink_ack_tlv_fill net/netlink/af_netlink.c:2454 [inline]
+ netlink_ack+0x546/0x760 net/netlink/af_netlink.c:2506
+ netlink_rcv_skb+0x1b7/0x240 net/netlink/af_netlink.c:2546
+ rtnetlink_rcv+0x18/0x20 net/core/rtnetlink.c:6109
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x5e9/0x6b0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x739/0x860 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg net/socket.c:734 [inline]
+ ____sys_sendmsg+0x38f/0x500 net/socket.c:2482
+ ___sys_sendmsg net/socket.c:2536 [inline]
+ __sys_sendmsg+0x197/0x230 net/socket.c:2565
+ __do_sys_sendmsg net/socket.c:2574 [inline]
+ __se_sys_sendmsg net/socket.c:2572 [inline]
+ __x64_sys_sendmsg+0x42/0x50 net/socket.c:2572
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fd454550da9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffeb8edd258 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
-RAX: ffffffffffffffda RBX: 00007ffeb8edd268 RCX: 00007fd454550da9
-RDX: ffffffffffffffc0 RSI: 00000000000007fb RDI: 0000000000000004
-RBP: 00007ffeb8edd260 R08: 00007fd45450e360 R09: 00007fd45450e360
-R10: 00007ffeb8edd260 R11: 0000000000000246 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+RIP: 0033:0x4697f9
+Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fab1e5c7c48 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 000000000077bf80 RCX: 00000000004697f9
+RDX: 0000000000000000 RSI: 0000000020000000 RDI: 0000000000000003
+RBP: 00000000004d29e9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000077bf80
+R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd7c0e6920
  </TASK>
+---[ end trace 0000000000000000 ]---
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Best,
+Wei
