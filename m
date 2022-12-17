@@ -2,115 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC3664F814
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 08:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E21CB64F818
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 08:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbiLQH0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 02:26:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
+        id S230110AbiLQHcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 02:32:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiLQH0v (ORCPT
+        with ESMTP id S229962AbiLQHb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 02:26:51 -0500
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2086.outbound.protection.outlook.com [40.92.103.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B98E17;
-        Fri, 16 Dec 2022 23:26:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hfMSRWp23f3YmHYdekfMU21wW9WTXIkq7HLanWhj5o6ovgBJZEIzRrnXche44ZUYg4e3DK5oXr5MKOJn3hrdXXxzrvG82xqLrLZniDhKkKzB5mrV14hDgZGpT9FoOVFxs6meiduYi1TUZtZnNVrpw+KjkMSLmiU0/c80ankum7/kffXKnkU6pmDvx1dgwE+Ul1Y88vyW4OfWsJ12Md61tTZ5BUuG1AIvJtEcEYg3ZxwBB/Snr4ueIFMZlKEkGIOTlleKUt0iFpwOOkn6kqZcyyV4Fc31hXFJzYv4fiRq3RpVOeMsIc2Yo4aBsNXn9/PUlD4Z3Pg72biYyTAvAMfT7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bk3If8EM1PQyR4GLuYT5i2TprxcQAc76MEJqrGYRHl8=;
- b=LEl3y4tt2PGaGl9QFTAq67OuHaQ6DXtootYXgAhloEcPZ7JGp/Innn4Gxg7O7jRwqIqv7BadG+/ZNrXg9WdF8KkZP9DwcE3AQMXtq5CUD/CGgFQy4uSxwjNCfLE1/9wgs58Cj2DjmCkMjV0RXvNGvgboCuP3HnCtUrSi4wbpjYtILUHkxPHGRcRboIOffCyz9MKB6sReosegTn8au49ayw8ZM0XuGSDwpRyPyX8cI0fwloMaLjaE6YxE6nS2sJCXWuJ9YnJCQXkkjTdilYq0iGB0RfXtnkC73verWhPXhilRBnXD86ljjyVblHU88q4/0pWrOgOSfafIhocy8UQvTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bk3If8EM1PQyR4GLuYT5i2TprxcQAc76MEJqrGYRHl8=;
- b=fFAnIpR1ffgpMh56jfOkGpqxjuxd0N7Qx9L2gD4i66y+NG+T6Egnz61WTOHVFpMF65bwDHbCD5Op41XpLLYGkRRLymVA7mvKKmjWQc6MWtdD+HfisarJs+SsBaW0WYP4agegkjuu5IaJ/kkFYMsFltw6hL8BnXF5cfP+qQWT18QAzaUJJTAXENtAAqHgXb6NcJjWK/Z9gh8lhCryqR8mjXcJuBLYNR5OQLV+bYbTF6jyCY8o1cIPUukjLEAwTAMA2ZTdjLw/zpEAyApwmjrfZ1wFpVZ0bykQna+5P7s+S33TYpbQOEAWnDintAtTxjs0KvPhnFyya/YRq3UmWvXrOQ==
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
- PN0PR01MB5690.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:62::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5924.11; Sat, 17 Dec 2022 07:26:42 +0000
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::9758:2410:fd85:511a]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::9758:2410:fd85:511a%7]) with mapi id 15.20.5924.016; Sat, 17 Dec 2022
- 07:26:42 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        "jkosina@suse.cz" <jkosina@suse.cz>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        Sat, 17 Dec 2022 02:31:56 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828281DF35;
+        Fri, 16 Dec 2022 23:31:54 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NYyGr1YPYzqT6p;
+        Sat, 17 Dec 2022 15:27:32 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Sat, 17 Dec 2022 15:31:50 +0800
+Subject: Re: [PATCH v9] kallsyms: Add self-test facility
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Steven Rostedt' <rostedt@goodmis.org>
+CC:     'Andreas Schwab' <schwab@linux-m68k.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-CC:     Orlando Chamberlain <redecorating@protonmail.com>
-Subject: [PATCH] HID: Recognize sensors with application collections too.
-Thread-Topic: [PATCH] HID: Recognize sensors with application collections too.
-Thread-Index: AQHZEejpxeN0O9mCjEWaxsQGHt35aQ==
-Date:   Sat, 17 Dec 2022 07:26:42 +0000
-Message-ID: <8DA00FF4-DB08-4CEC-A5B4-47A71DC09C13@live.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [NbbNw7J8Oljuf0+P9kWkQurrURltQfrd]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|PN0PR01MB5690:EE_
-x-ms-office365-filtering-correlation-id: 234b38e8-b765-4a31-7354-08dae0000b92
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TMkiTrAxrWpI/5xyy8BIPDwGjorHtInvLDhFlnd+/aAdev0/PcAITFBsaRByYwSzzBLlscql3FfW+gbKzyDklCQYzoOuceAQpKGPyEWixQ5WsyEdP/FBNYDGsVg0GanbkiirpHZQ9VigZC9jTwa6TLOrCNEe0W/irj+EtLSbCCaGw0dWsW1CiPp45sXFEqZp+OxogC8K0ZK28z0j1jGiIUGWnwySlyct0IKindVFrPouHDnF5AAn0JjFYewLq7dnQRIx4gjKwKZqxyr9YD7QfKuYbM4RYRDVitfvsJk/eV4qyZXSC53NfLnUTyzAPL3sWIRR69JpSlzU7lfgVQrSjjj1iPV9hOjjHtGUk5BlEGExUAXSNiYJh65kGiu11eRp375vDKu22OnWgRlMmyi3WWtaktnxFO6/yNdfw3ZChHeUGq4juVTdI6vV270CrSqyS4EVfap/GEj9/hL8ZBJOq1ehawAALRPIcLsGpQPJioi5ZwKObRQ4HJyU+ZUgzX4ulsU8qgFNW/IlihDZW/O9x0rTHj7jLIjE6xJYs7I2b9WIorjdDWlRPbAAWpBonEGsU8YwnFrgLI61MfJ6lFtDcnK76RhTfEsAtxqbbZAxxd0=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b0tPRWRyWUJ4a2lqY3ZabTRoWVo2czZ6M1BsZjhGYU1McnRSSVRQVzBjQUNH?=
- =?utf-8?B?V2lvL3hwZEJSMzh1RU1Jd3FjdUFWRE5FV0tPQ0hyOHN2Qm9GeGNZc3RoTUVy?=
- =?utf-8?B?aTZWa1oyTjlGTlZOWGdMdmZ2Z08xYkVkOXg1d1FyTUhLTWNuVUhCNHpSU0JU?=
- =?utf-8?B?aDNPamNyZFJISEt1V0RXOWIrSW16dzhISzFjUVBJcTh3TThuSHA4N1lQWUhU?=
- =?utf-8?B?ZUpJNUV4SlZJa3dGNURtOGI1RERreE9DS1hXczRTeDFxVzlFQStIYjJHRWdN?=
- =?utf-8?B?Y3p1QnN5dTRHSmtjMzNxWnZoQURWbk9Ud3JqNS80ckNOU2FpVFBFQm5QcStE?=
- =?utf-8?B?ek0yT0hvM1c5WmxiUmNHbWRmRFlSZjNnNHE3d3FtL1NuUU0xckxYSG9SK1po?=
- =?utf-8?B?ZTFQcGNqaGFMSmVqK013Z3M4RDhwZ1Y2UHZhTXpQam5EZWUyN0pvLy9YaUh3?=
- =?utf-8?B?eTFYVDhYMVJuWWpmZ3M4Nkx6WDdSL3ZqQUd5OEluby9IdisxYlpVSlAzWGw4?=
- =?utf-8?B?T3hNSWJIQlRtV2lFSXFiMGwvRkFmc1hGdURIaUF0ZEVlTE5CZmtQaERzbzF3?=
- =?utf-8?B?Q1gweFRrREd6SGQ4dTMyMGFXRXNod2xnT2x0VUVnNmdTWGZoRWdKa3lwUFpr?=
- =?utf-8?B?Y081cno0SitZS2ZLVEdPSk1aaGJRUEE0TW5melJDZmtHZHhTbEx4KzdSckZl?=
- =?utf-8?B?bFp6L1lwN3oxSHVLeE1PTUdZL1d4UGN4KzlWaWthZklIYlhsVFJBQmdDeGQ4?=
- =?utf-8?B?SThRb0hyRDJMVTV2aEw5a0pUSVFFRVNaSWQwMEFnMkpKdURKbU1ZeFRKcDRy?=
- =?utf-8?B?SW9ObmRIcldaSmZBSlM5M3JpK1lxTjNDM2MzTmVCeERlNWZmUVVSazQ0bElj?=
- =?utf-8?B?a3k5VWVnZnVYTGVtbGd1bm51azM0L3NSVEF5aXlpMXkwUlVvWXRmVGtac0R3?=
- =?utf-8?B?S3hjY05kOW5aMjM4N0hEajBOOXp3Z3RQdWg2cCsrbHZuSkZPK2hSNTBKT3Fn?=
- =?utf-8?B?M1hBWjFqWDlaNHhNcUhaRGQ4cmtLZTk1N0tGVDhDNkQ2U20vNlpuZWd4bWNZ?=
- =?utf-8?B?NWFoRGNjeUpyVUFOb0JVTjd3NjMydjBUMGdLSXd6Q0JtN0xxMVp3MkNZb1JB?=
- =?utf-8?B?dEJxcDdsaWhGMXZIaXdkQ25Rdjc4UWo5N1FYNXluRnMxUEExRys0TXh0UnNH?=
- =?utf-8?B?bmZmZkdpeVR4MHVsRWZYNkpMbEs1L2I1TXh0SU93QWhWVmxOUVNWRzN0UWxu?=
- =?utf-8?B?c3lZeTQ0T0FNdUI3VUFxS1pXNDdrQWxlM3Zla3lFQmpIVkRRTFZaYStKemc0?=
- =?utf-8?B?d0Q4d0kzNzZEKzUvaUx2VWM5Ykd5QXA0Wlc0YU9qNHhKUTFEUUFyakdlY2lj?=
- =?utf-8?B?MHc0SVFMU2l0bmNBUkdFV29NdmxINVRMVjQ5WVlleE1HYVVpdXpydmNYYnRk?=
- =?utf-8?B?RW15MjFXdE80S001UWpreVBNRFVpdXhBVE1Na0gwTUFQSExadlJ4UlhPd21j?=
- =?utf-8?B?WXArQ0tkTGhTcUt0bHRJNW9COThPMHVOMW1TcnRUSFlDaEhFb2FrVUxKanBS?=
- =?utf-8?B?RnNnLzFmL0ZER0NNNUp2Sk5ub0tNK2tsT0c0T2Nnc0lxK2Q3NGxFd2V3N3Jx?=
- =?utf-8?B?amlEQ0dWV28rWm56N3JsdGo0U1hzb1NhUWRPT3BNQ25tSzdCSVBJRjV1TTZX?=
- =?utf-8?B?MTNYSzFvbWY5RHlVRy9QY1Y3UVF4RS9jSFRrTlV6dlRNbndnNnV6Z3hRPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <CFF2E37B147EC346BBBE17AEEDF6D8F8@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
+ <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
+ <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
+ <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
+ <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
+ <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
+ <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com>
+ <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
+ <592dce7a0de24c62bd31c29f86ce6c1b@AcuMS.aculab.com>
+ <87pmcjidfe.fsf@igel.home>
+ <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com>
+ <87len7ibtt.fsf@igel.home>
+ <c7cebe9da0474eb880ab14124ba290d0@AcuMS.aculab.com>
+ <87fsdfib07.fsf@igel.home>
+ <819801284eb745d9a4189759bad297f5@AcuMS.aculab.com>
+ <20221216115314.6120beb7@gandalf.local.home>
+ <ecf4939dbff84709a1782a8e8851b29f@AcuMS.aculab.com>
+ <20221216121947.7d03b651@gandalf.local.home>
+ <20221216123805.6eba002c@gandalf.local.home>
+ <83701d57c0064c709669c03cecc38356@AcuMS.aculab.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <066d4a61-3df9-b9c8-81a2-40dfcd3c73ef@huawei.com>
+Date:   Sat, 17 Dec 2022 15:31:39 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 234b38e8-b765-4a31-7354-08dae0000b92
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2022 07:26:42.4803
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0PR01MB5690
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+In-Reply-To: <83701d57c0064c709669c03cecc38356@AcuMS.aculab.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,42 +87,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogUm9uYWxkIFRzY2hhbMOkciA8cm9uYWxkQGlubm92YXRpb24uY2g+DQoNCkFjY29yZGlu
-ZyB0byBIVVRSUjM5IGxvZ2ljYWwgc2Vuc29yIGRldmljZXMgbWF5IGJlIG5lc3RlZCBpbnNpZGUN
-CnBoeXNpY2FsIGNvbGxlY3Rpb25zIG9yIG1heSBiZSBzcGVjaWZpZWQgaW4gbXVsdGlwbGUgdG9w
-LWxldmVsDQphcHBsaWNhdGlvbiBjb2xsZWN0aW9ucyAoc2VlIHBhZ2UgNTksIHN0cmF0ZWdpZXMg
-MSBhbmQgMikuIEhvd2V2ZXIsDQp0aGUgY3VycmVudCBjb2RlIHdhcyBvbmx5IHJlY29nbml6aW5n
-IHRob3NlIHdpdGggcGh5c2ljYWwgY29sbGVjdGlvbnMuDQoNClRoaXMgaXNzdWUgdHVybmVkIHVw
-IGluIHJlY2VudCBNYWNCb29rIFBybydzIHdoaWNoIGRlZmluZSB0aGUgQUxTIGluDQphIHRvcC1s
-ZXZlbCBhcHBsaWNhdGlvbiBjb2xsZWN0aW9uLg0KDQpTaWduZWQtb2ZmLWJ5OiBSb25hbGQgVHNj
-aGFsw6RyIDxyb25hbGRAaW5ub3ZhdGlvbi5jaD4NClNpZ25lZC1vZmYtYnk6IEFkaXR5YSBHYXJn
-IDxnYXJnYWRpdHlhMDhAbGl2ZS5jb20+DQotLS0NCiBkcml2ZXJzL2hpZC9oaWQtY29yZS5jICAg
-ICAgIHwgMyArKy0NCiBkcml2ZXJzL2hpZC9oaWQtc2Vuc29yLWh1Yi5jIHwgNiArKysrLS0NCiAy
-IGZpbGVzIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCg0KZGlmZiAt
-LWdpdCBhL2RyaXZlcnMvaGlkL2hpZC1jb3JlLmMgYi9kcml2ZXJzL2hpZC9oaWQtY29yZS5jDQpp
-bmRleCBiN2Y1NTY2ZTMzOGQuLjhmY2Q2NjNiMTBlMiAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvaGlk
-L2hpZC1jb3JlLmMNCisrKyBiL2RyaXZlcnMvaGlkL2hpZC1jb3JlLmMNCkBAIC04MDQsNyArODA0
-LDggQEAgc3RhdGljIHZvaWQgaGlkX3NjYW5fY29sbGVjdGlvbihzdHJ1Y3QgaGlkX3BhcnNlciAq
-cGFyc2VyLCB1bnNpZ25lZCB0eXBlKQ0KIAlpbnQgaTsNCiANCiAJaWYgKCgocGFyc2VyLT5nbG9i
-YWwudXNhZ2VfcGFnZSA8PCAxNikgPT0gSElEX1VQX1NFTlNPUikgJiYNCi0JICAgIHR5cGUgPT0g
-SElEX0NPTExFQ1RJT05fUEhZU0lDQUwpDQorCSAgICAodHlwZSA9PSBISURfQ09MTEVDVElPTl9Q
-SFlTSUNBTCB8fA0KKwkgICAgIHR5cGUgPT0gSElEX0NPTExFQ1RJT05fQVBQTElDQVRJT04pKQ0K
-IAkJaGlkLT5ncm91cCA9IEhJRF9HUk9VUF9TRU5TT1JfSFVCOw0KIA0KIAlpZiAoaGlkLT52ZW5k
-b3IgPT0gVVNCX1ZFTkRPUl9JRF9NSUNST1NPRlQgJiYNCmRpZmYgLS1naXQgYS9kcml2ZXJzL2hp
-ZC9oaWQtc2Vuc29yLWh1Yi5jIGIvZHJpdmVycy9oaWQvaGlkLXNlbnNvci1odWIuYw0KaW5kZXgg
-NmFiZDNlMmE5MDk0Li5kMDNkYzRjYTA5NWYgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL2hpZC9oaWQt
-c2Vuc29yLWh1Yi5jDQorKysgYi9kcml2ZXJzL2hpZC9oaWQtc2Vuc29yLWh1Yi5jDQpAQCAtMzk3
-LDcgKzM5Nyw4IEBAIGludCBzZW5zb3JfaHViX2lucHV0X2dldF9hdHRyaWJ1dGVfaW5mbyhzdHJ1
-Y3QgaGlkX3NlbnNvcl9odWJfZGV2aWNlICpoc2RldiwNCiAJCWZvciAoaSA9IDA7IGkgPCByZXBv
-cnQtPm1heGZpZWxkOyArK2kpIHsNCiAJCQlmaWVsZCA9IHJlcG9ydC0+ZmllbGRbaV07DQogCQkJ
-aWYgKGZpZWxkLT5tYXh1c2FnZSkgew0KLQkJCQlpZiAoZmllbGQtPnBoeXNpY2FsID09IHVzYWdl
-X2lkICYmDQorCQkJCWlmICgoZmllbGQtPnBoeXNpY2FsID09IHVzYWdlX2lkIHx8DQorCQkJCSAg
-ICAgZmllbGQtPmFwcGxpY2F0aW9uID09IHVzYWdlX2lkKSAmJg0KIAkJCQkJKGZpZWxkLT5sb2dp
-Y2FsID09IGF0dHJfdXNhZ2VfaWQgfHwNCiAJCQkJCWZpZWxkLT51c2FnZVswXS5oaWQgPT0NCiAJ
-CQkJCQkJYXR0cl91c2FnZV9pZCkgJiYNCkBAIC01MDYsNyArNTA3LDggQEAgc3RhdGljIGludCBz
-ZW5zb3JfaHViX3Jhd19ldmVudChzdHJ1Y3QgaGlkX2RldmljZSAqaGRldiwNCiAJCQkJCWNvbGxl
-Y3Rpb24tPnVzYWdlKTsNCiANCiAJCWNhbGxiYWNrID0gc2Vuc29yX2h1Yl9nZXRfY2FsbGJhY2so
-aGRldiwNCi0JCQkJcmVwb3J0LT5maWVsZFtpXS0+cGh5c2ljYWwsDQorCQkJCXJlcG9ydC0+Zmll
-bGRbaV0tPnBoeXNpY2FsID86DQorCQkJCQlyZXBvcnQtPmZpZWxkW2ldLT5hcHBsaWNhdGlvbiwN
-CiAJCQkJcmVwb3J0LT5maWVsZFtpXS0+dXNhZ2VbMF0uY29sbGVjdGlvbl9pbmRleCwNCiAJCQkJ
-JmhzZGV2LCAmcHJpdik7DQogCQlpZiAoIWNhbGxiYWNrKSB7DQotLSANCjIuMzguMQ0KDQo=
+
+
+On 2022/12/17 3:27, David Laight wrote:
+> From: Steven Rostedt
+>> Sent: 16 December 2022 17:38
+>>
+>> On Fri, 16 Dec 2022 12:19:47 -0500
+>> Steven Rostedt <rostedt@goodmis.org> wrote:
+>>
+>>> I assumed that "memory" was for memory unrelated to the input constraints.
+>>
+>> Well, it looks like you do need a "memory" barrier.
+>>
+>>   https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html
+>>
+>> "memory"
+>>
+>>       The "memory" clobber tells the compiler that the assembly code
+>>       performs memory reads or writes to items other than those listed in
+>>       the input and output operands (for example, accessing the memory
+>>       pointed to by one of the input parameters). To ensure memory contains
+>>       correct values, GCC may need to flush specific register values to
+>>       memory before executing the asm. Further, the compiler does not
+>>       assume that any values read from memory before an asm remain
+>>       unchanged after that asm; it reloads them as needed. Using the
+>>       "memory" clobber effectively forms a read/write memory barrier for
+>>       the compiler.
+>>
+>> As the "(for example, accessing the memory pointed to by one of the input
+>> parameters)" is exactly this case.
+> 
+> Without the memory clobber code like:
+> int f(const char *s)
+> {
+> 	char c[4] = "abc";
+> 	return strcmp(s, c);
+> }
+> is very like to get optimised so that c[] is never written.
+> 
+> However, in this case, the strings have all existed for ages.
+> So that won't be the problem.
+> 
+> It might be obvious what is wrong from the asm output.
+> Although the binary-chop lookup is suspect I'd also check
+> that the sorted index is plausible - just tracing the first
+> 20 entries might be enough.
+> No point peering at the search code if the setup is wrong.
+
+6.47.2.1 Volatile
+GCC’s optimizers sometimes discard asm statements if they determine there is no need for
+the output variables. Also, the optimizers may move code out of loops if they believe that
+the code will always return the same result (i.e. none of its input values change between
+calls). Using the volatile qualifier disables these optimizations.
+
+So it's quite possible (I didn't disassemble vmlinux, because I didn't learn m68k):
+
+//binary search
+while (low <= high) {
+    ...
+    ret = compare_symbol_name(name, namebuf);   ----> (1)
+    if (!ret)
+        break;
+}
+
+low = mid;
+while (low) {
+    ...
+    if (compare_symbol_name(name, namebuf))     ----> (2)
+        break;
+    low--;
+}
+
+The pointer 'name' and 'namebuf' of (1) and (2) are the same,
+so the 'if' statement of (2) maybe omitted by compiler.
+
+By the way, I tried no volatile but with
++               : : "memory");
+It also works well.
+
+> 
+> 	David
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+> 
+> 
+> .
+> 
+
+-- 
+Regards,
+  Zhen Lei
