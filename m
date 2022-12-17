@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F112264FC35
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 21:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 098DC64FC38
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 21:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiLQUXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 15:23:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37542 "EHLO
+        id S229966AbiLQUXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 15:23:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiLQUXj (ORCPT
+        with ESMTP id S229941AbiLQUXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 15:23:39 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E60E0DA
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 12:23:37 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id s4-20020a056e02216400b00304cd64ce20so3969027ilv.6
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 12:23:37 -0800 (PST)
+        Sat, 17 Dec 2022 15:23:42 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F028E0FF
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 12:23:38 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id j11-20020a056e02218b00b00304b148969dso4005881ila.13
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 12:23:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=eOpFqGpwkUsU/PaMKCKCrxmyrnrYaOTFPop5D3XZ8FU=;
-        b=DEsoo4afIZ2Yd4CBOIoyOmyHG6fswWVI/y7+/MCDxZlo3uF0ZB4nhMlR3yis2HJxJK
-         NqHTjzqFi2NXghPL9WpyukeVFohHoLu40EYdASAPO2aNuz1mukIrJTJsXeL/ylwc6P6V
-         pgpQ4mUhdvbBRoXq/2RcZfCjGtONCJ7gUUnkmGtAuEmtXHKprJ0vkxAebyxG5rYPfp5o
-         StqVArCJidze6UtDheDOVd8TA5Hz44vbqRRO5P0YQOW1Y4HiNjGzHDKL78glFc05/sCy
-         U0ZB4Nfbkv19YccvlIkkxGaIy6DWTfnb8Bag+YxlzATOpaGYuUieOywl+TcwlD7aN5mT
-         0vtQ==
-X-Gm-Message-State: ANoB5pmam3qYKptu6OazlCPWT/1ilU4SJU3F6AcGSAQ38wD48z2AU/iv
-        yJgkiZPqDLnS6h9ZQs0mWvMvy5emoH5tg8ujzp0fpnzHpAsU
-X-Google-Smtp-Source: AA0mqf5lRVMS4o6Oykhpeta6b+msjjuoSk+c5JJLtNE7AxzJTVhrLrJr428eZVE6vMIu3U+JfsDlRGjH++m4LNz0R5aCSZCnnPTM
+        bh=zhak8b5pECv3WdAuTBYFEI8u4BH4xzgqJb+pR1es1dw=;
+        b=5SGPzIApA7McMUbtapBDXllM7wcT3wEItjMMp3AYsWEIo9dxI19cMmtuVihq6pjT9q
+         9GUjIJCfBNlhoHxWWa3GvJVJAt2AetZrvOvq8eB8Tirxc6jqR0dqnwgR6+nRoW1Rvr9M
+         vfXHY4nossk0SOlUF9G5O3MOWYoJg7kp2aS24zQxmXojUMLPDTdCWThRoHTIVuZ+J+u/
+         tYjSK+W5s1Ay0HQyR+6reDcSBWbw23ZtUaGvo+S2BMMdSFildyGPwey3JuIZyUcbHGxW
+         OSr0a+KV1Hx2SEfXnNd0aVF/gwTJ86uEkWnjOAXe7UVntA9xJlWGOV2jner2R81W8+qo
+         fqGw==
+X-Gm-Message-State: ANoB5pnm+w8lSxwR/6lwCTF/6kQ4tjVYZ2iDV55cktzaCgPmLL821l3X
+        gXlhcwqvYJ4WqhJK+TWyrC1NuPMZr+yo9mALa7JBA0ZbaR1I
+X-Google-Smtp-Source: AA0mqf4SE3WhaLo0Wqu5rl3EqqzkTQBtaB/iRqHJV5j60PglmweOvVXaL+HWPFGUhuyO9VrWZ1Wx5GLdjlbY/HrWbkGBm2XCzhdO
 MIME-Version: 1.0
-X-Received: by 2002:a92:6f06:0:b0:300:d7db:639e with SMTP id
- k6-20020a926f06000000b00300d7db639emr44984840ilc.264.1671308617173; Sat, 17
+X-Received: by 2002:a92:bf08:0:b0:302:43b8:d42f with SMTP id
+ z8-20020a92bf08000000b0030243b8d42fmr39574908ilh.64.1671308617477; Sat, 17
  Dec 2022 12:23:37 -0800 (PST)
 Date:   Sat, 17 Dec 2022 12:23:37 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006fd14305f00bdc84@google.com>
-Subject: [syzbot] kernel BUG in ext4_do_writepages
-From:   syzbot <syzbot+d1da16f03614058fdc48@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
+Message-ID: <00000000000074764e05f00bdc01@google.com>
+Subject: [syzbot] WARNING in drv_link_info_changed
+From:   syzbot <syzbot+224ad65c927c83902f06@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com,
+        johannes@sipsolutions.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,74 +61,52 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    02bf43c7b7f7 Merge tag 'fs.xattr.simple.rework.rbtree.rwlo..
+HEAD commit:    e2ca6ba6ba01 Merge tag 'mm-stable-2022-12-13' of git://git..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16d48f33880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8c59170b68d26a55
-dashboard link: https://syzkaller.appspot.com/bug?extid=d1da16f03614058fdc48
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=166cffdf880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=172b1f2b880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16d4f027880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a6133b41a9a0f500
+dashboard link: https://syzkaller.appspot.com/bug?extid=224ad65c927c83902f06
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/45f211dceffb/disk-02bf43c7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fd0c63aa3713/vmlinux-02bf43c7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/734647e04fd0/bzImage-02bf43c7.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/192035fab0d1/mount_0.gz
+disk image: https://storage.googleapis.com/syzbot-assets/be256841c209/disk-e2ca6ba6.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/76c90a4cdade/vmlinux-e2ca6ba6.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a44766da5515/bzImage-e2ca6ba6.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d1da16f03614058fdc48@syzkaller.appspotmail.com
+Reported-by: syzbot+224ad65c927c83902f06@syzkaller.appspotmail.com
 
 ------------[ cut here ]------------
-kernel BUG at fs/ext4/inode.c:2782!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 1100 Comm: kworker/u4:5 Not tainted 6.1.0-syzkaller-03295-g02bf43c7b7f7 #0
+WARNING: CPU: 0 PID: 5553 at net/mac80211/driver-ops.c:416 drv_link_info_changed+0xd2/0x780 net/mac80211/driver-ops.c:416
+Modules linked in:
+CPU: 1 PID: 5553 Comm: kworker/u4:23 Not tainted 6.1.0-syzkaller-09941-ge2ca6ba6ba01 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: writeback wb_workfn (flush-7:1)
-RIP: 0010:ext4_do_writepages+0x3c27/0x3c30 fs/ext4/inode.c:2781
-Code: c7 50 d6 4b 8d 4c 89 fa e8 46 c9 33 02 e9 c0 fb ff ff e8 4c 7b 53 ff 0f 0b e8 45 7b 53 ff 0f 0b e8 fe 4d 5c 08 e8 39 7b 53 ff <0f> 0b 0f 1f 80 00 00 00 00 55 41 57 41 56 53 48 89 fb 49 bf 00 00
-RSP: 0018:ffffc90004ffede0 EFLAGS: 00010293
-RAX: ffffffff8237eaa7 RBX: 0000008000000000 RCX: ffff8880207dd7c0
-RDX: 0000000000000000 RSI: 0000008000000000 RDI: 0000000000000000
-RBP: ffffc90004fff150 R08: ffffffff8237b469 R09: ffffed100e7b8791
-R10: ffffed100e7b8791 R11: 1ffff1100e7b8790 R12: ffff888073dc3ee0
-R13: ffffc90004fff650 R14: 0000008410000000 R15: 0000000000000001
+Workqueue: phy12 ieee80211_roc_work
+RIP: 0010:drv_link_info_changed+0xd2/0x780 net/mac80211/driver-ops.c:416
+Code: 83 f8 01 0f 84 f6 00 00 00 e8 ea a6 4f f8 83 eb 07 31 ff 83 e3 fb 89 de e8 8b a3 4f f8 85 db 0f 84 da 00 00 00 e8 ce a6 4f f8 <0f> 0b e9 c5 02 00 00 e8 c2 a6 4f f8 4d 8d bc 24 50 1a 00 00 48 b8
+RSP: 0018:ffffc90004befb90 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 00000000fffffffb RCX: 0000000000000000
+RDX: ffff888027601d40 RSI: ffffffff893103a2 RDI: 0000000000000005
+RBP: ffff88807e7e8de0 R08: 0000000000000005 R09: 0000000000000000
+R10: 00000000fffffffb R11: 0000000000000000 R12: ffff88803f4c0c80
+R13: 0000000000000200 R14: 0000000000000000 R15: ffff88803f4c26d0
 FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f224f000000 CR3: 0000000019fee000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+CR2: 00007f696ff85058 CR3: 000000002991d000 CR4: 0000000000350ee0
 Call Trace:
  <TASK>
- ext4_writepages+0x1e0/0x290 fs/ext4/inode.c:2965
- do_writepages+0x3c3/0x680 mm/page-writeback.c:2469
- __writeback_single_inode+0xd1/0x670 fs/fs-writeback.c:1587
- writeback_sb_inodes+0xb3b/0x18f0 fs/fs-writeback.c:1878
- __writeback_inodes_wb+0x125/0x420 fs/fs-writeback.c:1949
- wb_writeback+0x440/0x7b0 fs/fs-writeback.c:2054
- wb_check_background_flush fs/fs-writeback.c:2120 [inline]
- wb_do_writeback fs/fs-writeback.c:2208 [inline]
- wb_workfn+0xb3f/0xef0 fs/fs-writeback.c:2235
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
+ ieee80211_link_info_change_notify+0x17a/0x270 net/mac80211/main.c:290
+ ieee80211_offchannel_stop_vifs+0x308/0x4e0 net/mac80211/offchannel.c:121
+ _ieee80211_start_next_roc+0x6f7/0x9a0 net/mac80211/offchannel.c:365
+ __ieee80211_roc_work+0x190/0x3d0 net/mac80211/offchannel.c:432
+ ieee80211_roc_work+0x2f/0x40 net/mac80211/offchannel.c:460
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2436
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
  </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:ext4_do_writepages+0x3c27/0x3c30 fs/ext4/inode.c:2781
-Code: c7 50 d6 4b 8d 4c 89 fa e8 46 c9 33 02 e9 c0 fb ff ff e8 4c 7b 53 ff 0f 0b e8 45 7b 53 ff 0f 0b e8 fe 4d 5c 08 e8 39 7b 53 ff <0f> 0b 0f 1f 80 00 00 00 00 55 41 57 41 56 53 48 89 fb 49 bf 00 00
-RSP: 0018:ffffc90004ffede0 EFLAGS: 00010293
-RAX: ffffffff8237eaa7 RBX: 0000008000000000 RCX: ffff8880207dd7c0
-RDX: 0000000000000000 RSI: 0000008000000000 RDI: 0000000000000000
-RBP: ffffc90004fff150 R08: ffffffff8237b469 R09: ffffed100e7b8791
-R10: ffffed100e7b8791 R11: 1ffff1100e7b8790 R12: ffff888073dc3ee0
-R13: ffffc90004fff650 R14: 0000008410000000 R15: 0000000000000001
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f224f0df000 CR3: 0000000021186000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
 ---
@@ -135,5 +116,3 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
