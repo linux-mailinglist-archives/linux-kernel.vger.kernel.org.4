@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D9D64FBE0
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 19:56:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A1864FBE2
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 19:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbiLQS4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 13:56:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
+        id S230405AbiLQS46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 13:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiLQSzi (ORCPT
+        with ESMTP id S229864AbiLQSzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 13:55:38 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388842D5;
+        Sat, 17 Dec 2022 13:55:39 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332A02D4;
         Sat, 17 Dec 2022 10:55:37 -0800 (PST)
 Date:   Sat, 17 Dec 2022 18:55:32 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1671303333;
+        s=2020; t=1671303332;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=nnhG1yoylZQ4yHA8V2Wi+1iakrx4cPgvIkGwcKrqkG8=;
-        b=zEOiwGcZsApXtm8iXT2w9pC6EGvpDuVv4j3vys2Wq5+yXOSlp0Mbz0IvJD2culVKDs45MW
-        V4IxDx9vuzjnibp0kjPFjkpiYpquFCZvLtlSq25K0Y1RTQLfCL8WNoL/4NEtKPy+0RPYTd
-        HrWgvni6i1osNxJlgI53S3CHa7iZ9rhExtOFavtSibNL2B32emwdWHpx9jXDJP6KB+7gq5
-        OFllO/rPcZkuE/srYJhgFtf/K13lU96eIUQ0dZ/UMa+xxXNViTMB7TQ6R7UqVyN1DMR9uS
-        hsx0OiRzfzhCrnL1bsE64wWfVIGE0SJN1fGOW7PGPAIQdjbE1h+bjOR29D/DsQ==
+        bh=7eNvTjTLqRAbPy5cQPJ6gsPDxp6OvPC1Mc2GQawkk1o=;
+        b=3EHZPT0WHwNNcF9vvs3sGTN/UYK3tye7pIYR1moiYp48e0wrzwecvqwLhHIV8wxO2/cX8t
+        m5Aq2Mf+54JczjJGLu9mqMKdM9r2xO0g4pPxI1PUa2+3XAI64/1DqHHggAbAypdmBAIN83
+        cKr4OhbeWI5Rp9wag2koziZ39hDnmSCi3OXjMGPslWXZh1MqjXaF/xgU5liADfQ5o4sUJw
+        ejh9X7kAVi4oAlS7FTeIZ3u+ABUPFT+rYQJqFSsaSIfaHn9qA3WrZL+x6BWIhYEGrJt4gr
+        iV2TBGzcs1zoVr3wgUqtXjnQQQOxRnuSpUEk7WX7a86diyLF+9NdV8xdpZR/tg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1671303333;
+        s=2020e; t=1671303332;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=nnhG1yoylZQ4yHA8V2Wi+1iakrx4cPgvIkGwcKrqkG8=;
-        b=AqDe/RXRtimJNan3OEXfrKfJ11GiHP3Ox0QoFcAccVSrAtLonPsi8/nGo/UvSNmSH0MNNP
-        AxPHXwAxelhUN0CQ==
+        bh=7eNvTjTLqRAbPy5cQPJ6gsPDxp6OvPC1Mc2GQawkk1o=;
+        b=k2TlqL5ztb7mCGbagKp0HRTUFJy+l3ImOe8pJCOLFXuJGKPIFy1lfeHcUdFu+Do5T/5Ay8
+        zGk0RWtUMmQ6SrCw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm/pae: Don't (ab)use atomic64
+Subject: [tip: x86/mm] x86/mm/pae: Be consistent with pXXp_get_and_clear()
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <167130333280.4906.12675723278515944040.tip-bot2@tip-bot2>
+Message-ID: <167130333238.4906.2107855285027662487.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,49 +59,123 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     7a9b8bdb6af3e19fb8e3dc7a3caf6a9ea1bed8cd
-Gitweb:        https://git.kernel.org/tip/7a9b8bdb6af3e19fb8e3dc7a3caf6a9ea1bed8cd
+Commit-ID:     b7301f20105a27112f7ca8040cfb0b0505a32fbd
+Gitweb:        https://git.kernel.org/tip/b7301f20105a27112f7ca8040cfb0b0505a32fbd
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 26 Nov 2020 17:38:42 +01:00
+AuthorDate:    Mon, 30 Nov 2020 12:21:25 +01:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
 CommitterDate: Thu, 15 Dec 2022 10:37:27 -08:00
 
-x86/mm/pae: Don't (ab)use atomic64
+x86/mm/pae: Be consistent with pXXp_get_and_clear()
 
-PAE implies CX8, write readable code.
+Given that ptep_get_and_clear() uses cmpxchg8b, and that should be by
+far the most common case, there's no point in having an optimized
+variant for pmd/pud.
+
+Introduce the pxx_xchg64() helper to implement the common logic once.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20221022114424.971450128%40infradead.org
+Link: https://lkml.kernel.org/r/20221022114425.103392961%40infradead.org
 ---
- arch/x86/include/asm/pgtable-3level.h |  9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ arch/x86/include/asm/pgtable-3level.h | 67 ++++++--------------------
+ 1 file changed, 17 insertions(+), 50 deletions(-)
 
 diff --git a/arch/x86/include/asm/pgtable-3level.h b/arch/x86/include/asm/pgtable-3level.h
-index 94f50b0..0a1b81d 100644
+index d3a2492..93c82c6 100644
 --- a/arch/x86/include/asm/pgtable-3level.h
 +++ b/arch/x86/include/asm/pgtable-3level.h
-@@ -2,8 +2,6 @@
- #ifndef _ASM_X86_PGTABLE_3LEVEL_H
- #define _ASM_X86_PGTABLE_3LEVEL_H
+@@ -90,34 +90,33 @@ static inline void pud_clear(pud_t *pudp)
+ 	 */
+ }
  
--#include <asm/atomic64_32.h>
--
- /*
-  * Intel Physical Address Extension (PAE) Mode - three-level page
-  * tables on PPro+ CPUs.
-@@ -95,11 +93,12 @@ static inline void pud_clear(pud_t *pudp)
++
++#define pxx_xchg64(_pxx, _ptr, _val) ({					\
++	_pxx##val_t *_p = (_pxx##val_t *)_ptr;				\
++	_pxx##val_t _o = *_p;						\
++	do { } while (!try_cmpxchg64(_p, &_o, (_val)));			\
++	native_make_##_pxx(_o);						\
++})
++
  #ifdef CONFIG_SMP
  static inline pte_t native_ptep_get_and_clear(pte_t *ptep)
  {
--	pte_t res;
-+	pte_t old = *ptep;
+-	pte_t old = *ptep;
+-
+-	do {
+-	} while (!try_cmpxchg64(&ptep->pte, &old.pte, 0ULL));
+-
+-	return old;
++	return pxx_xchg64(pte, ptep, 0ULL);
+ }
+-#else
+-#define native_ptep_get_and_clear(xp) native_local_ptep_get_and_clear(xp)
+-#endif
  
--	res.pte = (pteval_t)arch_atomic64_xchg((atomic64_t *)ptep, 0);
-+	do {
-+	} while (!try_cmpxchg64(&ptep->pte, &old.pte, 0ULL));
+-#ifdef CONFIG_SMP
+ static inline pmd_t native_pmdp_get_and_clear(pmd_t *pmdp)
+ {
+-	pmd_t res;
+-
+-	/* xchg acts as a barrier before setting of the high bits */
+-	res.pmd_low = xchg(&pmdp->pmd_low, 0);
+-	res.pmd_high = READ_ONCE(pmdp->pmd_high);
+-	WRITE_ONCE(pmdp->pmd_high, 0);
++	return pxx_xchg64(pmd, pmdp, 0ULL);
++}
  
 -	return res;
-+	return old;
++static inline pud_t native_pudp_get_and_clear(pud_t *pudp)
++{
++	return pxx_xchg64(pud, pudp, 0ULL);
  }
  #else
- #define native_ptep_get_and_clear(xp) native_local_ptep_get_and_clear(xp)
++#define native_ptep_get_and_clear(xp) native_local_ptep_get_and_clear(xp)
+ #define native_pmdp_get_and_clear(xp) native_local_pmdp_get_and_clear(xp)
++#define native_pudp_get_and_clear(xp) native_local_pudp_get_and_clear(xp)
+ #endif
+ 
+ #ifndef pmdp_establish
+@@ -141,42 +140,10 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+ 		return old;
+ 	}
+ 
+-	do {
+-		old = *pmdp;
+-	} while (cmpxchg64(&pmdp->pmd, old.pmd, pmd.pmd) != old.pmd);
+-
+-	return old;
++	return pxx_xchg64(pmd, pmdp, pmd.pmd);
+ }
+ #endif
+ 
+-#ifdef CONFIG_SMP
+-union split_pud {
+-	struct {
+-		u32 pud_low;
+-		u32 pud_high;
+-	};
+-	pud_t pud;
+-};
+-
+-static inline pud_t native_pudp_get_and_clear(pud_t *pudp)
+-{
+-	union split_pud res, *orig = (union split_pud *)pudp;
+-
+-#ifdef CONFIG_PAGE_TABLE_ISOLATION
+-	pti_set_user_pgtbl(&pudp->p4d.pgd, __pgd(0));
+-#endif
+-
+-	/* xchg acts as a barrier before setting of the high bits */
+-	res.pud_low = xchg(&orig->pud_low, 0);
+-	res.pud_high = orig->pud_high;
+-	orig->pud_high = 0;
+-
+-	return res.pud;
+-}
+-#else
+-#define native_pudp_get_and_clear(xp) native_local_pudp_get_and_clear(xp)
+-#endif
+-
+ /* Encode and de-code a swap entry */
+ #define SWP_TYPE_BITS		5
+ 
