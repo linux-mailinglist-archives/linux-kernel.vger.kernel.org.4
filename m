@@ -2,88 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E743864F84E
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 09:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BCF064F855
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 09:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiLQImO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 03:42:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43050 "EHLO
+        id S230145AbiLQIpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 03:45:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLQImM (ORCPT
+        with ESMTP id S229469AbiLQIpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 03:42:12 -0500
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC6F17434
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 00:42:10 -0800 (PST)
-From:   =?UTF-8?q?Micha=C5=82=20G=C3=B3rny?= <mgorny@gentoo.org>
-To:     Dmitry Goldin <dgoldin+lkml@protonmail.ch>
-Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Micha=C5=82=20G=C3=B3rny?= <mgorny@gentoo.org>,
-        Sam James <sam@gentoo.org>
-Subject: [PATCH] kheaders: prefer gtar over tar for better compatibility
-Date:   Sat, 17 Dec 2022 09:41:55 +0100
-Message-Id: <20221217084155.663235-1-mgorny@gentoo.org>
-X-Mailer: git-send-email 2.39.0
+        Sat, 17 Dec 2022 03:45:06 -0500
+X-Greylist: delayed 2673 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 17 Dec 2022 00:45:05 PST
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E5D17E1A;
+        Sat, 17 Dec 2022 00:45:05 -0800 (PST)
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 2BH8ijR4006775;
+        Sat, 17 Dec 2022 17:44:46 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2BH8ijR4006775
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1671266686;
+        bh=LHeucGCPwMdgCGBwHWBUilHEHkQaQRZPEHaHIlGQdN8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lE0+CsG52o3f20fEyTU9yUtd7iYk9Bn/HQQlB6B/Hh9CxI/PI0WoYU7oVKZgm+dUJ
+         SFFOrSdQIgkUaYCvK1VFXYqXvh7rXFdv2SmPWsHqPBsu/rmxDBu6eRCcg48phX8kwa
+         zMuq4Ghq2bpYWwQlmgvTzGTFnR2PHOOoWDcSNQlU3dt5K9AQdosviNl0PBEtJfcgbN
+         hnBUSR2wCnJKdyPd5DUDlo0USZSip/wIaU6/2tZ49tKlsmHm8wd6JiQfHM81Jm7EIY
+         TGI4uaqHPboOhd8l4Nw4VlT4zXC6gmUxY3cX6SSfBvczbD7YtmeLGoErB8hjLqySxP
+         a8ijgeQmRFXaw==
+X-Nifty-SrcIP: [209.85.160.54]
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-14449b7814bso6070130fac.3;
+        Sat, 17 Dec 2022 00:44:46 -0800 (PST)
+X-Gm-Message-State: AFqh2krVXPygpEy4gqObiMu7PKBGnK02/EsB73de9Q+YWpE4WPPOUmqU
+        hoYjmOp8p6rgmlPf6IANTGxFPuCvfy5TJ1GXCAU=
+X-Google-Smtp-Source: AMrXdXvP1ofd0t5v1b6rbg3fmaf6LHIaqutyPKXmOtf3qP7yg5FU0tS0EUKDRsQH2AqhAXcv3p2e8+d0UCGUMl6p5mE=
+X-Received: by 2002:a05:6871:450d:b0:144:a2de:1075 with SMTP id
+ nj13-20020a056871450d00b00144a2de1075mr581546oab.194.1671266685319; Sat, 17
+ Dec 2022 00:44:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAK7LNASM6KsrXHXLykaQ=rJ3YZ5OA+7im4=g=3Ob3EPt97n_HQ@mail.gmail.com>
+ <tencent_6B46BD116F0C168438B3982F0F546C5F6709@qq.com>
+In-Reply-To: <tencent_6B46BD116F0C168438B3982F0F546C5F6709@qq.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 17 Dec 2022 17:44:09 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASu6i9V4b_u68azpM45zPM0udGW8kVWGd+UZzJtSq0+TA@mail.gmail.com>
+Message-ID: <CAK7LNASu6i9V4b_u68azpM45zPM0udGW8kVWGd+UZzJtSq0+TA@mail.gmail.com>
+Subject: Re: Re: [PATCH] kbuild: Fix compilation error
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     bpf@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, nicolas@fjasle.eu, rongtao@cestc.cn
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 86cdd2fdc4e39c388d39c7ba2396d1a9dfd66226 ("kheaders: make headers
-archive reproducible") introduced a number of options specific to GNU
-tar to the `tar` invocation in `gen_kheaders.sh` script.  This causes
-the script to fail to work on systems where `tar` is not GNU tar.  This
-can occur e.g. on recent Gentoo Linux installations that support using
-bsdtar from libarchive instead.
+On Sat, Dec 17, 2022 at 5:11 PM Rong Tao <rtoax@foxmail.com> wrote:
+>
+> Yes, It's happen in the mainline kernel.
+>
+> I pulled the latest code and habitually compiled samples/bpf,
+>
+> $ git remote get-url origin
+> git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> $ make -C samples/bpf
+>
+> and the compilation error occurred. I applied this patch and can
+> fix this compilation error.
 
-To achieve better portability, try using `gtar` over `tar` if the former
-is available.  This is the name frequently used on systems featuring
-support for installing GNU tar alongside another tar implementation.
-If `gtar` is not present, `tar` is used for compatibility with regular
-systems.
 
-Link: https://bugs.gentoo.org/884061
-Reported-by: Sam James <sam@gentoo.org>
-Tested-by: Sam James <sam@gentoo.org>
-Signed-off-by: Michał Górny <mgorny@gentoo.org>
----
- kernel/gen_kheaders.sh | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/gen_kheaders.sh b/kernel/gen_kheaders.sh
-index 473036b43..d2445af7f 100755
---- a/kernel/gen_kheaders.sh
-+++ b/kernel/gen_kheaders.sh
-@@ -80,11 +80,20 @@ done | cpio --quiet -pdu $cpio_dir >/dev/null 2>&1
- find $cpio_dir -type f -print0 |
- 	xargs -0 -P8 -n1 perl -pi -e 'BEGIN {undef $/;}; s/\/\*((?!SPDX).)*?\*\///smg;'
- 
-+# The following tar invocations use options specific to GNU tar. On some
-+# systems (e.g. Gentoo), `tar` can be a different tool (e.g. bsdtar), and GNU
-+# tar can be found as `gtar`.
-+if [ -x "$(command -v gtar)" ]; then
-+	tar=gtar
-+else
-+	tar=tar
-+fi
-+
- # Create archive and try to normalize metadata for reproducibility.
- # For compatibility with older versions of tar, files are fed to tar
- # pre-sorted, as --sort=name might not be available.
- find $cpio_dir -printf "./%P\n" | LC_ALL=C sort | \
--    tar "${KBUILD_BUILD_TIMESTAMP:+--mtime=$KBUILD_BUILD_TIMESTAMP}" \
-+    $tar "${KBUILD_BUILD_TIMESTAMP:+--mtime=$KBUILD_BUILD_TIMESTAMP}" \
-     --owner=0 --group=0 --numeric-owner --no-recursion \
-     -I $XZ -cf $tarfile -C $cpio_dir/ -T - > /dev/null
- 
+
+I want you to describe the steps to reproduce the issue from the pristine
+source tree instead of printing the URL of your origin.
+
+
+
+I prepared a template for you.
+Please fill the following 3 square brackets.
+
+
+
+$ git log --oneline  -1
+ [ Fill the commit hash you are working on ]
+$ git clean -dfx
+
+ [ Fill steps between "git clean -dfx" and "make -C samples/bpf" ]
+
+$ make -C samples/bpf
+ [ Fill the error message you get ]
+
+
+
+
+
 -- 
-2.39.0
-
+Best Regards
+Masahiro Yamada
