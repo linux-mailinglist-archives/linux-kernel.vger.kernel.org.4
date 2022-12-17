@@ -2,144 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5367564F870
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 10:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 968CC64F879
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 10:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiLQJZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 04:25:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
+        id S229985AbiLQJdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 04:33:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiLQJZW (ORCPT
+        with ESMTP id S229548AbiLQJdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 04:25:22 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B25BB1E9;
-        Sat, 17 Dec 2022 01:25:21 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id r26so6647964edc.10;
-        Sat, 17 Dec 2022 01:25:21 -0800 (PST)
+        Sat, 17 Dec 2022 04:33:01 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3775B2935F;
+        Sat, 17 Dec 2022 01:33:00 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id c7so3241982pfc.12;
+        Sat, 17 Dec 2022 01:33:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9SEYu3CD2lscfQ36Ylbp9Rqo5knyPNps9HHg3nLsTAU=;
-        b=CZDcwRmSfxElaHhnrnXV1dK0HsrFk3xCvzEl6BkQxbzqw143BmQplGWtgEuPJHC8mg
-         2dljFg/+cH2ktnIjAuWwIF44uKYEMnvIvdpNJ4i1p2q1TrOq72jQsaizUs7XFPJHB4tJ
-         NinrO3Ws4lP5IRylp9LKeC4jQohtke27qBwQXcJ4EbRI8TNinh50rQpE/skQTg07pJN3
-         BJfr2DRt5gypWLSqh4YgOiggtTnORTV/6WLC8K0OB+IL8PeVQedoKeDockMu1uGmhyyu
-         4rHUIl6ICgBjPTytT6CFeBgBQXyVlYQyW0EJnOqi7DFKSsAq72aqJd1ByGZI/hKlAKYU
-         Ys2Q==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=36Nz4DJ+RB5NaUU/Zyw08W8HOPfFS0NX9MwWlHipeNk=;
+        b=qA+Gfdg4FMuUl+yzoNxP7NW+nR2qrAE0dHiDv85L85UpUo/O24FasYg0q6Pd4kkSq+
+         dpMCQL54amyKpYpUFe/lzTeCALoGqTxc3sqFygMrGGHo9IS6BuO4S43HdUeR+yVo7ynY
+         31kptZ45ZNJhtqCF3iaw6IPgoZ7e2NjmIXdb7LzgUw3pjJXQD60WvF5dKhoJw6oh/jQs
+         +6DtElvZjYLwV75qrzVQMKYgi5fdjZbzbNwNmzM6Os+/KAn5EwYbSBixFspGQvur/ELJ
+         6QQufx7AH/AXpaxL59kxYYiB912dVe7ZKjVj638Z8ujghbXKKA93dU+ceZ9ou7PkvgXF
+         uYHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9SEYu3CD2lscfQ36Ylbp9Rqo5knyPNps9HHg3nLsTAU=;
-        b=fmwrRBP4AeDIXdeRgN1WJoG/qW8DX6qxKBTyZN6qp8YCgTUfB2mLjiorzwUYN/ZfQO
-         zQiOdYcVo+Js/1ypjqJ3mLVpPyvPXLJ9a/ajSzObo/ZrSZQxGW+V4wogFIZdNOO5+/7R
-         zlqSH7mi0NZbS0UhvaYCJN93veHPLEClhwaLYlzB4CkL1/Wc6RQ8ovXVg3oCBErItvS4
-         HdKCw/je1jxLVSldZJUD9or3KRTtzS4vdcPXF10J3zm3TxjBBV9PEgxYHpxw/ZfqS7Uw
-         3c3aXEDKeQ+Fk6XrJUUp+O/7cfOg/yC4TRbZysNDp97MkiwUI+q6TjufUy0DtKhhSA0f
-         HpdA==
-X-Gm-Message-State: ANoB5plX9jMr9bleYwm2R1BJ+l6efG7zQl/ouDAbsOOT4M68B/KKezYS
-        LyjQqhiVATkHcMq1jUfGhAqLMsWaUtd6UO8P0lojAQlRclI=
-X-Google-Smtp-Source: AA0mqf5NIw5Y+h7F6m+nXVsCJPl61RfC9zGdCMU+KR8GxKCkveAAUWN4fZbxs4vgB2vP0G7rIky8AJDAOCkMrwmH+/w=
-X-Received: by 2002:a05:6402:4023:b0:46c:f631:c0e6 with SMTP id
- d35-20020a056402402300b0046cf631c0e6mr16410969eda.251.1671269119483; Sat, 17
- Dec 2022 01:25:19 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=36Nz4DJ+RB5NaUU/Zyw08W8HOPfFS0NX9MwWlHipeNk=;
+        b=sEtzO7EhIx1tEnz1Gn6jOBKNSPplHErRvuEnF+Q4NATJq8UOOcBBGUCRDp/LLqEfqL
+         /lREEAF2DOLyev8AYyaRxq+Mmzt8jXc+N697C2FXyJBDNTrLmjXBC6WTz52xIwGgythr
+         E/Il/0uxT4x22soQdn5RS0a1YPD3dBqc5zypZJqvWLwlyIj8N8RMhj8JDoZ5swuLRNYU
+         PGagNWP6LcWzpG2R/5zORdHJpSWzmGBe7bh5+5/Mxe/wKiS1rsUh7ceWXxxgaKngSr0D
+         8C71uzS2u4fdxoNENUDpwO/cY+a4UG00YrlwM+aKQn3CZL0FWVqY0rdn6yp7JSftq+0K
+         ZbBA==
+X-Gm-Message-State: ANoB5pmi7sNNeFis1Q4othK2gYXr9NMvOy+xmUWLm7oZkZKm3POK9StT
+        bVffkJcYNS1TgwwL1MxivLU=
+X-Google-Smtp-Source: AA0mqf7ZXczKLE/hOP7YBZuLgP36h8VNtTI9Wcw2gFVvS0Xx5lrLmv0rk86AD+mzxcHXvGnBSxJNkA==
+X-Received: by 2002:aa7:93da:0:b0:576:de1:cd32 with SMTP id y26-20020aa793da000000b005760de1cd32mr37301869pff.0.1671269579563;
+        Sat, 17 Dec 2022 01:32:59 -0800 (PST)
+Received: from mail.google.com ([103.135.102.144])
+        by smtp.gmail.com with ESMTPSA id l187-20020a6225c4000000b0057621a437d7sm2777156pfl.116.2022.12.17.01.32.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Dec 2022 01:32:58 -0800 (PST)
+Date:   Sat, 17 Dec 2022 17:32:49 +0800
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Changbin Du <changbin.du@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] bpf: makefiles: do not generate empty vmlinux.h
+Message-ID: <20221217093249.54nmxw4stzyymbis@mail.google.com>
+References: <20221129134217.52767-1-changbin.du@gmail.com>
+ <20221129134217.52767-3-changbin.du@gmail.com>
+ <CAEf4BzZPZeeGJTZC3NSm+Km4RZirGrwr8d8dXepLmBLTiUn8Hg@mail.gmail.com>
 MIME-Version: 1.0
-References: <CAO4mrffa_3PhjfA9hxTq_U9GjC++0suGnme9oNcKE=Gn+g1iRg@mail.gmail.com>
-In-Reply-To: <CAO4mrffa_3PhjfA9hxTq_U9GjC++0suGnme9oNcKE=Gn+g1iRg@mail.gmail.com>
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Sat, 17 Dec 2022 17:24:43 +0800
-Message-ID: <CAO4mrfdmjvRUNbDyP0R03_DrD_eFCLCguz6OxZ2TYRSv0K9gxA@mail.gmail.com>
-Subject: WARNING in nla_get_range_unsigned
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZPZeeGJTZC3NSm+Km4RZirGrwr8d8dXepLmBLTiUn8Hg@mail.gmail.com>
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux Developers,
+On Wed, Nov 30, 2022 at 04:52:11PM -0800, Andrii Nakryiko wrote:
+> On Tue, Nov 29, 2022 at 5:42 AM Changbin Du <changbin.du@gmail.com> wrote:
+> >
+> > Remove the empty vmlinux.h if bpftool failed to dump btf info.
+> > The emptry vmlinux.h can hide real error when reading output
+> 
+> typo: empty
+>
+Will be fixed, thanks.
 
-Recently, when using our tool to fuzz kernel, the following crash was
-triggered. Although this crash has been reported by syzbot
-https://syzkaller.appspot.com/bug?id=32e20c07949c6d6006f26466022469e33ae69108
-and fixed in commit netlink: policy: correct validation type check
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c30a3c957c885e618ddffc065f888be4f8d5a9bd,
-it still happens in the latest kernel version.
+> > of make.
+> >
+> > This is done by adding .DELETE_ON_ERROR special target in related
+> > makefiles.
+> >
+> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> > ---
+> >  tools/bpf/bpftool/Makefile           | 3 +++
+> >  tools/perf/Makefile.perf             | 2 ++
+> >  tools/testing/selftests/bpf/Makefile | 3 +++
+> >  3 files changed, 8 insertions(+)
+> >
+> > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> > index 4a95c017ad4c..f6b1e65085db 100644
+> > --- a/tools/bpf/bpftool/Makefile
+> > +++ b/tools/bpf/bpftool/Makefile
+> > @@ -265,3 +265,6 @@ FORCE:
+> >  .PHONY: all FORCE bootstrap clean install-bin install uninstall
+> >  .PHONY: doc doc-clean doc-install doc-uninstall
+> >  .DEFAULT_GOAL := all
+> > +
+> > +# Delete partially updated (corrupted) files on error
+> > +.DELETE_ON_ERROR:
+> > diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> > index a432e59afc42..265254fc641a 100644
+> > --- a/tools/perf/Makefile.perf
+> > +++ b/tools/perf/Makefile.perf
+> > @@ -1149,3 +1149,5 @@ FORCE:
+> >  .PHONY: libtraceevent_plugins archheaders
+> >
+> >  endif # force_fixdep
+> > +
+> > +.DELETE_ON_ERROR:
+> 
+> please split out perf changes, they should go through perf tree
+> 
+sure, I'll send a standalone patch to perf tree.
 
-HEAD commit:  76dcd734eca
-git tree: linux-next
-compiler: clang 12.0.0
-console output:
-https://drive.google.com/file/d/1reeOfFkfJp4-GUz_uMTh-uWXPLBJDcA6/view?usp=share_link
-kernel config: https://drive.google.com/file/d/1jH4qV5XblPADvMDUlvS7DwtW0FroMoVB/view?usp=share_link
-syz repro: https://drive.google.com/file/d/1Ong8vQn675RFU7R1O5HfiwWxp4UhnaIF/view?usp=share_link
+> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> > index e6cf21fad69f..f41c4b011221 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -617,3 +617,6 @@ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)      \
+> >                                liburandom_read.so)
+> >
+> >  .PHONY: docs docs-clean
+> > +
+> > +# Delete partially updated (corrupted) files on error
+> > +.DELETE_ON_ERROR:
+> > --
+> > 2.37.2
+> >
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: Wei Chen <harperchen1110@gmail.com>
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 17743 at lib/nlattr.c:118
-nla_get_range_unsigned+0x1d8/0x1e0 lib/nlattr.c:117
-Modules linked in:
-CPU: 0 PID: 17743 Comm: syz-executor.0 Not tainted 6.1.0-rc8 #3
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
-RIP: 0010:nla_get_range_unsigned+0x1d8/0x1e0 lib/nlattr.c:117
-Code: 8d ff 49 8b 75 08 ba 10 00 00 00 4c 89 f7 e8 0f d8 f8 02 5b 41
-5c 41 5d 41 5e 41 5f 5d c3 e8 0f 57 7a ff eb 05 e8 08 57 7a ff <0f> 0b
-e9 a9 fe ff ff 90 55 41 57 41 56 41 54 53 49 89 f6 49 89 fc
-RSP: 0018:ffffc90002df39b8 EFLAGS: 00010287
-RAX: ffffffff81ad2f51 RBX: ffffffff85364d28 RCX: 0000000000040000
-RDX: ffffc90000add000 RSI: 0000000000000268 RDI: 0000000000000269
-RBP: 000000000000f940 R08: ffffffff81ad2dd8 R09: 0000000000000000
-R10: 0001ffffffffffff R11: ffff888045136780 R12: ffff88803e174000
-R13: ffffffff85364d20 R14: ffffc90002df3a30 R15: ffffffff85364d21
-FS:  00007fab1e5c8700(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000073f8d0 CR3: 000000004a789000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
-Call Trace:
- <TASK>
- __netlink_policy_dump_write_attr+0x23d/0x990 net/netlink/policy.c:310
- netlink_policy_dump_write_attr+0x22/0x30 net/netlink/policy.c:411
- netlink_ack_tlv_fill net/netlink/af_netlink.c:2454 [inline]
- netlink_ack+0x546/0x760 net/netlink/af_netlink.c:2506
- netlink_rcv_skb+0x1b7/0x240 net/netlink/af_netlink.c:2546
- rtnetlink_rcv+0x18/0x20 net/core/rtnetlink.c:6109
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x5e9/0x6b0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x739/0x860 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg net/socket.c:734 [inline]
- ____sys_sendmsg+0x38f/0x500 net/socket.c:2482
- ___sys_sendmsg net/socket.c:2536 [inline]
- __sys_sendmsg+0x197/0x230 net/socket.c:2565
- __do_sys_sendmsg net/socket.c:2574 [inline]
- __se_sys_sendmsg net/socket.c:2572 [inline]
- __x64_sys_sendmsg+0x42/0x50 net/socket.c:2572
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x4697f9
-Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fab1e5c7c48 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 000000000077bf80 RCX: 00000000004697f9
-RDX: 0000000000000000 RSI: 0000000020000000 RDI: 0000000000000003
-RBP: 00000000004d29e9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000077bf80
-R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd7c0e6920
- </TASK>
----[ end trace 0000000000000000 ]---
-
-Best,
-Wei
+-- 
+Cheers,
+Changbin Du
