@@ -2,166 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A45564F703
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 03:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 873DC64F705
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 03:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbiLQC1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 21:27:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45562 "EHLO
+        id S230155AbiLQC26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 21:28:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiLQC1M (ORCPT
+        with ESMTP id S229658AbiLQC24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 21:27:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45433D91C
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 18:26:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671243986;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ji+gytidbXOMWyPvLX4LLTm6QX/OlsVTfQzF/90xBXs=;
-        b=MQUzWNwqSDFdcvhuOhH5nc0Vx2yCN45Tyc2Z+oxaebNQ5ZwWjBseFA3QPMmm/BPeEcXz3m
-        iLaH+wE2RCPknkJBV0wtOCEf3hSCxIo0b9BX0c93cBidkTKNYaYbZxvACZbM+L/pAOvEH2
-        LSj2J43UyoNS5cY3HpzVG9LbvulP784=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-655-OfgwyDBZMqah10-vzCPlwA-1; Fri, 16 Dec 2022 21:26:23 -0500
-X-MC-Unique: OfgwyDBZMqah10-vzCPlwA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 16 Dec 2022 21:28:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB78B4A2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 18:28:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7F7D685C6E0;
-        Sat, 17 Dec 2022 02:26:22 +0000 (UTC)
-Received: from [10.22.8.73] (unknown [10.22.8.73])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5FB7A40C2064;
-        Sat, 17 Dec 2022 02:26:20 +0000 (UTC)
-Message-ID: <af29b121-b1da-64f3-a739-1b233fa04002@redhat.com>
-Date:   Fri, 16 Dec 2022 21:26:20 -0500
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A7BF62303
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 02:28:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D51FC433D2
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 02:28:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671244134;
+        bh=VUCG53a4oSTambxnA8+oZoRvt/KCrHqzj/6JzMamBjE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VT+Chgfespi5HOXvy6itfep9bRe9jovMb097pqj5dBtqfrYHq9hblchwHSgukkKSi
+         NsOi0gS/u1uVY5yeGzGblJsywfmIMqIa4Vri5IHL35bjqQconKIRyBhAzAl0UmQtQ7
+         xFNyrUjaRKvA1W+orFsnhqjP1QxonlVWviO9oRRKwIWQ063cMJoh1Vvcx/AlrnNaJU
+         UdcALDyRyAA4aZ1Af0jClJd83JOVBvLzjybgXm4jXP+PIy6OvErm30G5iTG7tOY914
+         hPZ6rMfnYKlvacX/O31ItYhZJUnYnBCMxEnDZCAjs1Rx/B2wsjJ1lNtD/JiDxEigc4
+         PnJf1rcHYQIJg==
+Received: by mail-ej1-f49.google.com with SMTP id m18so10178947eji.5
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 18:28:54 -0800 (PST)
+X-Gm-Message-State: ANoB5pl7e1QmbiDYgFzL2aS04Ihl0F13zAC4vVVyB5KvvxTpwJIQySnL
+        oCjrhIheFmQ5r3nR5mf0jlLh74Q2I6tIrR3DDAc=
+X-Google-Smtp-Source: AA0mqf47+ply9VSRHBd31O/9oVUprEm9hsCBrufNSvw/MZ0x3HrBwvtNwRoQ04aUf+l6sk/cBdptSO1/Kq9+E8lsgGw=
+X-Received: by 2002:a17:906:f116:b0:7c1:764:5e08 with SMTP id
+ gv22-20020a170906f11600b007c107645e08mr12599889ejb.72.1671244132633; Fri, 16
+ Dec 2022 18:28:52 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v9 3/8] cpuset: Rebuild root domain deadline accounting
- information
-Content-Language: en-US
-To:     Qais Yousef <qyousef@layalina.io>,
-        Juri Lelli <juri.lelli@redhat.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, rostedt@goodmis.org,
-        tj@kernel.org, linux-kernel@vger.kernel.org,
-        luca.abeni@santannapisa.it, claudio@evidence.eu.com,
-        tommaso.cucinotta@santannapisa.it, bristot@redhat.com,
-        mathieu.poirier@linaro.org, lizefan@huawei.com,
-        dietmar.eggemann@arm.com, cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>
-References: <20190719140000.31694-1-juri.lelli@redhat.com>
- <20190719140000.31694-4-juri.lelli@redhat.com>
- <20221216233501.gh6m75e7s66dmjgo@airbuntu>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221216233501.gh6m75e7s66dmjgo@airbuntu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <1670575981-14389-1-git-send-email-yangtiezhu@loongson.cn>
+ <CAAhV-H6e2HzXs9PCcdnebPBvGZrx5vRXji1vGXfPwkEihBOiKA@mail.gmail.com> <20221213121013.b09182c5842171f3f25a2e59@kernel.org>
+In-Reply-To: <20221213121013.b09182c5842171f3f25a2e59@kernel.org>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sat, 17 Dec 2022 10:28:44 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H45RvQB=ntmw8muqpxUhpt=hR+gCDs0BGXnhJHSquRU3g@mail.gmail.com>
+Message-ID: <CAAhV-H45RvQB=ntmw8muqpxUhpt=hR+gCDs0BGXnhJHSquRU3g@mail.gmail.com>
+Subject: Re: [PATCH v10 0/4] Add kprobe and kretprobe support for LoongArch
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Jeff Xie <xiehuan09@gmail.com>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/16/22 18:35, Qais Yousef wrote:
-> Hi
+Hi, Masami,
+
+On Tue, Dec 13, 2022 at 11:10 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
 >
-> On 07/19/19 15:59, Juri Lelli wrote:
->> When the topology of root domains is modified by CPUset or CPUhotplug
->> operations information about the current deadline bandwidth held in the
->> root domain is lost.
->>
->> This patch addresses the issue by recalculating the lost deadline
->> bandwidth information by circling through the deadline tasks held in
->> CPUsets and adding their current load to the root domain they are
->> associated with.
->>
->> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
->> Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
->> ---
-> We see that rebuild_root_domain() can take 10+ ms (I get a max of 20ms quite
-> consistently) on suspend/resume.
+> On Fri, 9 Dec 2022 18:01:44 +0800
+> Huacai Chen <chenhuacai@kernel.org> wrote:
 >
-> Do we actually need to rebuild_root_domain() if we're going through
-> a suspend/resume cycle?
+> > Hi, Masami,
+> >
+> > This series looks good to me now, but I'm not familiar with kprobes.
+> > So, if you have any comments, please let me know.
 >
-> ie: would something like the below make sense? We'd skip this logic if
-> cpuhp_tasks_frozen is set which indicates it's not a real hotplug operation but
-> we're suspending/resuming.
+> Sorry I missed this series. Let me add some comments.
+> BTW, I don't have any board to run the loongarch, so I'll make
+> comments just about style issues.
+You needn't say sorry, and you can use qemu to run loongarch if needed.
+
+Huacai
 >
+> Thanks,
 >
-> Cheers
+> >
+> > And Jeff,
+> >
+> > As we all know, you are an expert in this domain, so could you please
+> > help me to test this series?
+> >
+> > If there are no objections, I plan to merge this series in a few days.
+> > But since the next merge window will be open soon, if there are any
+> > problems, I will revert the patches to wait for the next cycle.
+> >
+> > Thanks,
+> > Huacai
+> >
+> > On Fri, Dec 9, 2022 at 4:53 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+> > >
+> > > v10:
+> > >   -- Remove sign_extend() based on the latest code
+> > >   -- Rename insns_are_not_supported() to insns_not_supported()
+> > >   -- Rename insns_are_not_simulated() to insns_not_simulated()
+> > >   -- Set KPROBE_HIT_SSDONE if cur->post_handler is not NULL
+> > >   -- Enable preemption for KPROBE_REENTER in kprobe_fault_handler()
+> > >
+> > > v9:
+> > >   -- Rename sign_extended() to sign_extend()
+> > >   -- Modify kprobe_fault_handler() to handle all of kprobe_status
+> > >
+> > > v8:
+> > >   -- Put "regs->csr_prmd &= ~CSR_PRMD_PIE;" ahead to save one line
+> > >   -- Add code comment of preempt_disable()
+> > >   -- Put kprobe_page_fault() in __do_page_fault()
+> > >   -- Modify the check condition of break insn in kprobe_breakpoint_handler()
+> > >
+> > > v7:
+> > >   -- Remove stop_machine_cpuslocked() related code
+> > >
+> > > v6:
+> > >   -- Add a new patch to redefine larch_insn_patch_text() with
+> > >      stop_machine_cpuslocked()
+> > >   -- Modify kprobe_breakpoint_handler() to consider the original
+> > >      insn is break and return the correct value
+> > >   -- Modify do_bp() to refresh bcode when original insn is break
+> > >
+> > > v5:
+> > >   -- Rebase on the latest code
+> > >   -- Use stop_machine_cpuslocked() to modify insn to avoid CPU race
+> > >
+> > > v4:
+> > >   -- Remove kprobe_exceptions_notify() in kprobes.c
+> > >   -- Call kprobe_breakpoint_handler() and kprobe_singlestep_handler()
+> > >      in do_bp()
+> > >
+> > > v3:
+> > >   -- Rebase on the latest code
+> > >   -- Check the alignment of PC in simu_branch() and simu_pc()
+> > >   -- Add ibar in flush_insn_slot()
+> > >   -- Rename kprobe_{pre,post}_handler() to {post_}kprobe_handler
+> > >   -- Add preempt_disable() and preempt_enable_no_resched()
+> > >   -- Remove r0 save/restore and do some minor changes
+> > >      in kprobes_trampoline.S
+> > >   -- Do not enable CONFIG_KPROBES by default
+> > >
+> > > v2:
+> > >   -- Split simu_branch() and simu_pc() into a single patch
+> > >   -- Call kprobe_page_fault() in do_page_fault()
+> > >   -- Add kprobes_trampoline.S for kretprobe
+> > >
+> > > Tiezhu Yang (4):
+> > >   LoongArch: Simulate branch and PC instructions
+> > >   LoongArch: Add kprobe support
+> > >   LoongArch: Add kretprobe support
+> > >   samples/kprobes: Add LoongArch support
+> > >
+> > >  arch/loongarch/Kconfig                     |   2 +
+> > >  arch/loongarch/include/asm/inst.h          |  20 ++
+> > >  arch/loongarch/include/asm/kprobes.h       |  59 +++++
+> > >  arch/loongarch/include/asm/ptrace.h        |   1 +
+> > >  arch/loongarch/kernel/Makefile             |   2 +
+> > >  arch/loongarch/kernel/inst.c               | 123 ++++++++++
+> > >  arch/loongarch/kernel/kprobes.c            | 364 +++++++++++++++++++++++++++++
+> > >  arch/loongarch/kernel/kprobes_trampoline.S |  96 ++++++++
+> > >  arch/loongarch/kernel/traps.c              |  13 +-
+> > >  arch/loongarch/mm/fault.c                  |   3 +
+> > >  samples/kprobes/kprobe_example.c           |   8 +
+> > >  11 files changed, 687 insertions(+), 4 deletions(-)
+> > >  create mode 100644 arch/loongarch/include/asm/kprobes.h
+> > >  create mode 100644 arch/loongarch/kernel/kprobes.c
+> > >  create mode 100644 arch/loongarch/kernel/kprobes_trampoline.S
+> > >
+> > > --
+> > > 2.1.0
+> > >
+>
 >
 > --
-> Qais Yousef
->
->
-> --->8---
->
->
->  From 4cfd50960ad872c5eb810ad3038eaf840bab5182 Mon Sep 17 00:00:00 2001
-> From: Qais Yousef <qyousef@layalina.io>
-> Date: Tue, 29 Nov 2022 19:01:52 +0000
-> Subject: [PATCH] sched: cpuset: Don't rebuild sched domains on suspend-resume
->
-> Commit f9a25f776d78 ("cpusets: Rebuild root domain deadline accounting information")
-> enabled rebuilding sched domain on cpuset and hotplug operations to
-> correct deadline accounting.
->
-> Rebuilding sched domain is a slow operation and we see 10+ ms delays
-> on suspend-resume because of that.
->
-> Since nothing is expected to change on suspend-resume operation; skip
-> rebuilding the sched domains to regain some of the time lost.
->
-> Debugged-by: Rick Yiu <rickyiu@google.com>
-> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
-> ---
->   kernel/cgroup/cpuset.c  | 6 ++++++
->   kernel/sched/deadline.c | 3 +++
->   2 files changed, 9 insertions(+)
->
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index b474289c15b8..2ff68d625b7b 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1067,6 +1067,9 @@ static void update_tasks_root_domain(struct cpuset *cs)
->   	struct css_task_iter it;
->   	struct task_struct *task;
->   
-> +	if (cpuhp_tasks_frozen)
-> +		return;
-> +
->   	css_task_iter_start(&cs->css, 0, &it);
->   
->   	while ((task = css_task_iter_next(&it)))
-> @@ -1084,6 +1087,9 @@ static void rebuild_root_domains(void)
->   	lockdep_assert_cpus_held();
->   	lockdep_assert_held(&sched_domains_mutex);
->   
-> +	if (cpuhp_tasks_frozen)
-> +		return;
-> +
->   	rcu_read_lock();
->   
->   	/*
-
-rebuild_root_domains() is the only caller of update_tasks_root_domain(). 
-So the first hunk is redundant as update_tasks_root_domain() won't be 
-called when cpuhp_tasks_frozen is set.
-
-Cheers,
-Longman
-
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
