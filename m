@@ -2,173 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B798464F672
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 01:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0168064F673
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 01:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiLQAp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 19:45:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
+        id S229743AbiLQAqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 19:46:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiLQApz (ORCPT
+        with ESMTP id S229495AbiLQAqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 19:45:55 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68EA1CFFF;
-        Fri, 16 Dec 2022 16:45:54 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id r205so2480404oib.9;
-        Fri, 16 Dec 2022 16:45:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nWg9wkFT4ZXDaL5R+ZrQ8A3wXuZdrfbZGO5+ybNKwD8=;
-        b=IrMDX6HzbVbj0D3HmhfEn7ql6+u9Cz+HK+7ZZWCgyEe4G8AC38w/0A0g15kk3lhqKY
-         JUUVCtscTivfzzpwA7fGf5KWN7xwcUF0gEoz9h1xq0SjM/Nzr9PMQT+SJgTm8M0ABmBt
-         v3XXEfEW1Xun3DRRlYrIXqpb3xmZXfBHAxMNKrq34lwdBHotI9/C81rxhl0cOCrH9/wd
-         fTUUraQzF1SjRsSWutg+AWwiCDzzeTcz4CUh5kOEg4AQAYuewct7fXIuP6XZgdbJGv+L
-         FigwTiCGjaAICXdD5hl/fcqsft5pFyQLMLWYFpLDUpaB7oB7fjTBdklUVoyc/lqlO99L
-         wv8Q==
+        Fri, 16 Dec 2022 19:46:42 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94ED92656F
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 16:46:40 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id s4-20020a056e02216400b00304cd64ce20so2630913ilv.6
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 16:46:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nWg9wkFT4ZXDaL5R+ZrQ8A3wXuZdrfbZGO5+ybNKwD8=;
-        b=fa37kRvywhLgUa8/MarYKDCBhZq/QBioUxU79hrl34dhbJVrH7PHGx+AmNKiXc95yr
-         RSCehIkQiEafaJZQzbw8xOFi8tRS78l6vl0sOSej44jpzBvYzR2WKXwWv9mX0GjrC5Rs
-         d9Qk2FqdrKBwMTv6gKCRMKpTSKSsGl6bRzPbIymsECgWxVt0Rm3VdgXRbuHAPWAJGzKI
-         sUwDXfhb0SCFgJaWXIqJb7O3slvzorK54lKnd83/bAzfEwXr7xQ7ni9prLmF81ElzjlQ
-         fExBtQGEtRVGe/cUjS6hMxEgfpnczUVGwputFof3nzJM2U/sFPoWHtpj3G3+2LhvNc40
-         B9Mw==
-X-Gm-Message-State: ANoB5pk8rPiiSI3Lw7V3wdpMjugvejQavr+AcNvQIE/BTyPBCokf2a6h
-        LrZYO/eK3AvvTFF619sa6iXKqJR5SrQ=
-X-Google-Smtp-Source: AA0mqf4aFArzmI7oJ6MlqElzjiZLGBrY9qRcgyNH1dHH0RI6U0HJT5i8ik99aMOQrJduJlQEthYfLA==
-X-Received: by 2002:a05:6808:98e:b0:35e:5aac:716a with SMTP id a14-20020a056808098e00b0035e5aac716amr13462971oic.45.1671237953918;
-        Fri, 16 Dec 2022 16:45:53 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t26-20020a05683022fa00b00661ad8741b4sm1551565otc.24.2022.12.16.16.45.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 16:45:53 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <70dab88e-6119-0c12-7c6a-61bcbe239f66@roeck-us.net>
-Date:   Fri, 16 Dec 2022 16:45:50 -0800
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zbhz5hYdc5507PTzEvKg+x5ZfnFp0eVbrdWTDciABXU=;
+        b=s+lzZhkGNL1itoJanf2J3qOFV9G2E4VHw+HveeY1vuq3SPLpjfFTnGsp1EjXdJ/KbA
+         1WsvCPtWyqVtzTBvARKO9rtM0gR5Zj3LOFIbTj8UDuz1KoYx7k+Rxoe8GmMr+ipX4XIL
+         DUozvfIG8EVpbe8vBX6sPyvLTGl2yAy67/WG2bxArgqhwIJ0QbTsbTIWx88GRLyrFpMy
+         PTv0CaUMFRQRn9Ze9t7dNdVF6EyZ2Lh3BzdqtZ8+BKphX2im/C9Tjkw9fdFawYS0o1Vi
+         UP3HYXOUeFCwOHqhYD0Ttw1y2M3xcXFGWwJdVQMQ65ALE6JteZwNrSreuzDHYCWC7Q7U
+         rEag==
+X-Gm-Message-State: AFqh2ko3QF35F8SW92XUNVHwMVjNJ/Jkoz1u3y1geVVQjiirUF/0ZLn9
+        hKj8WMpio6EB9wgBtiDvcXiHncR7qdrMlDQgcweSbqdEZAUF
+X-Google-Smtp-Source: AMrXdXsJB8/byPFCMJ8QVcntvw73I2qlU21ExYOTd6lfA/p8HzHhQHq8TvWkqvJH9uXZMX24FLF0QgXDPID5ZXcw/REsri92Q6e1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>,
-        Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>
-References: <20221124230505.073418677@linutronix.de>
- <20221124232325.798556374@linutronix.de>
- <20221213190425.GA3943240@roeck-us.net>
- <4e0a129855490febb1c57e7e979bcfb579d39054.camel@linux.ibm.com>
- <87fsdgzpqs.ffs@tglx> <e570e70d-19bc-101b-0481-ff9a3cab3504@linux.ibm.com>
- <86wn6rptdu.wl-maz@kernel.org>
- <0acb8c63-7f6c-6df6-cb40-66b265a6e6ce@linux.ibm.com>
- <86v8mbphzw.wl-maz@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [patch V3 09/33] genirq/msi: Add range checking to
- msi_insert_desc()
-In-Reply-To: <86v8mbphzw.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:59b:b0:38c:8ef9:c68b with SMTP id
+ a27-20020a056638059b00b0038c8ef9c68bmr857481jar.298.1671237999980; Fri, 16
+ Dec 2022 16:46:39 -0800 (PST)
+Date:   Fri, 16 Dec 2022 16:46:39 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000052f6ae05effb6b1f@google.com>
+Subject: [syzbot] possible deadlock in f2fs_ioc_get_encryption_pwsalt
+From:   syzbot <syzbot+883ded0ab581cc190f58@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/16/22 05:58, Marc Zyngier wrote:
-[ ... ]
+Hello,
 
->> With both these fixes applied, it actually then leads to the very
->> next WARN_ON failing in msi_ctrl_valid...  Because ctrl->last ==
->> hwsize.  I think Thomas' initial fix for msi_domain_get_hwsize has
->> an off-by-1 error, I think we should return MSI_XA_DOMAIN_SIZE for
->> msi_domain_get_hwsize instead.
-> 
-> Yes, that's a good point, and that's consistent with what
-> __msi_create_irq_domain() does already, assuming MSI_XA_DOMAIN_SIZE
-> when info->hwsize is 0. No reason to do something else here.
-> 
-> I'll update Thomas' patch. Once Guenter confirms that PPC is OK, I'll
-> send it out.
-> 
-With
+syzbot found the following issue on:
 
-7a27b6136dcb (local/testing, testing-msi) genirq/msi: Return MSI_XA_DOMAIN_SIZE as the maximum MSI index when no domain is present
-c581d525bb1d genirq/msi: Check for the presence of an irq domain when validating msi_ctrl
-9d33edb20f7e Merge tag 'irq-core-2022-12-10' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+HEAD commit:    830b3c68c1fb Linux 6.1
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17951967880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=26d9ba6d9b746f4
+dashboard link: https://syzkaller.appspot.com/bug?extid=883ded0ab581cc190f58
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-I still get the following runtime warning.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 8 at kernel/irq/msi.c:196 .msi_domain_free_descs+0x144/0x170
-Modules linked in:
-CPU: 0 PID: 8 Comm: kworker/u2:0 Tainted: G                 N 6.1.0-01957-g7a27b6136dcb #1
-Hardware name: QEMU ppce500 e5500 0x80240020 QEMU e500
-Workqueue: nvme-reset-wq .nvme_reset_work
-NIP:  c000000000107d54 LR: c000000000107d44 CTR: 0000000000000000
-REGS: c0000000041e74d0 TRAP: 0700   Tainted: G                 N  (6.1.0-01957-g7a27b6136dcb)
-MSR:  0000000080029002 <CE,EE,ME>  CR: 44002282  XER: 20000000
-IRQMASK: 0
-GPR00: c000000000107d44 c0000000041e7770 c000000001629c00 c000000004e748a0
-GPR04: 000000005358db0a c000000001ce7a00 c00000000423b5d0 000000004735aaa2
-GPR08: 0000000000000002 0000000000000013 c00000000423acc0 c00000000214a998
-GPR12: 0000000024002282 c000000002579000 c00000000008e190 c000000004173540
-GPR16: 0000000000000000 c0000000043810b8 0000000000000000 0000000000000001
-GPR20: c0000000060b22d8 c0000000060a70f0 0000000000000000 c000000001996800
-GPR24: c0000000017df6c0 c0000000043810b8 c0000000060b2388 c0000000060b2000
-GPR28: ffffffffffffffff c0000000041e7888 c000000006025ac8 c000000004e748a0
-NIP [c000000000107d54] .msi_domain_free_descs+0x144/0x170
-LR [c000000000107d44] .msi_domain_free_descs+0x134/0x170
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2c32f77928d8/disk-830b3c68.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/02c35bb3112e/vmlinux-830b3c68.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/fe93aa8e0468/bzImage-830b3c68.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+883ded0ab581cc190f58@syzkaller.appspotmail.com
+
+F2FS-fs (loop4): Try to recover 2th superblock, ret: 0
+F2FS-fs (loop4): Mounted with checkpoint version = 753bd00b
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-syzkaller #0 Not tainted
+------------------------------------------------------
+syz-executor.4/21588 is trying to acquire lock:
+ffff88807d6cc9d8 (&mm->mmap_lock#2){++++}-{3:3}, at: __might_fault+0xa9/0x180 mm/memory.c:5644
+
+but task is already holding lock:
+ffff888021560088 (&sbi->sb_lock){++++}-{3:3}, at: f2fs_down_write fs/f2fs/f2fs.h:2205 [inline]
+ffff888021560088 (&sbi->sb_lock){++++}-{3:3}, at: f2fs_ioc_get_encryption_pwsalt+0x174/0x370 fs/f2fs/file.c:2334
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #4 (&sbi->sb_lock){++++}-{3:3}:
+       down_write+0x94/0x220 kernel/locking/rwsem.c:1562
+       f2fs_down_write fs/f2fs/f2fs.h:2205 [inline]
+       f2fs_handle_error+0x8e/0x200 fs/f2fs/super.c:3898
+       f2fs_check_nid_range.part.0+0x4d/0x60 fs/f2fs/node.c:39
+       f2fs_check_nid_range fs/f2fs/node.c:2275 [inline]
+       add_free_nid.isra.0+0x781/0x940 fs/f2fs/node.c:2282
+       scan_nat_page fs/f2fs/node.c:2384 [inline]
+       __f2fs_build_free_nids+0x5b5/0xe10 fs/f2fs/node.c:2490
+       f2fs_build_free_nids fs/f2fs/node.c:2528 [inline]
+       f2fs_build_node_manager+0x2007/0x2fb0 fs/f2fs/node.c:3313
+       f2fs_fill_super+0x3a95/0x77a0 fs/f2fs/super.c:4306
+       mount_bdev+0x351/0x410 fs/super.c:1401
+       legacy_get_tree+0x109/0x220 fs/fs_context.c:610
+       vfs_get_tree+0x8d/0x2f0 fs/super.c:1531
+       do_new_mount fs/namespace.c:3040 [inline]
+       path_mount+0x132a/0x1e20 fs/namespace.c:3370
+       do_mount fs/namespace.c:3383 [inline]
+       __do_sys_mount fs/namespace.c:3591 [inline]
+       __se_sys_mount fs/namespace.c:3568 [inline]
+       __x64_sys_mount+0x283/0x300 fs/namespace.c:3568
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #3 (&nm_i->nat_tree_lock){++++}-{3:3}:
+       down_read+0x9c/0x450 kernel/locking/rwsem.c:1509
+       f2fs_down_read fs/f2fs/f2fs.h:2180 [inline]
+       f2fs_get_node_info+0x1ac/0x1070 fs/f2fs/node.c:560
+       f2fs_new_node_page+0x249/0xac0 fs/f2fs/node.c:1291
+       f2fs_get_dnode_of_data+0x530/0x2480 fs/f2fs/node.c:806
+       f2fs_reserve_block+0x4d/0x430 fs/f2fs/data.c:1184
+       f2fs_get_block+0x131/0x150 fs/f2fs/data.c:1205
+       f2fs_vm_page_mkwrite+0x12b2/0x1c90 fs/f2fs/file.c:118
+       do_page_mkwrite+0x19b/0x680 mm/memory.c:2977
+       wp_page_shared mm/memory.c:3323 [inline]
+       do_wp_page+0xde5/0x1930 mm/memory.c:3473
+       handle_pte_fault mm/memory.c:4972 [inline]
+       __handle_mm_fault+0x181b/0x3a40 mm/memory.c:5096
+       handle_mm_fault+0x1cc/0x780 mm/memory.c:5217
+       faultin_page mm/gup.c:1009 [inline]
+       __get_user_pages+0x497/0xf10 mm/gup.c:1230
+       __get_user_pages_locked mm/gup.c:1434 [inline]
+       __get_user_pages_remote+0x18f/0x830 mm/gup.c:2187
+       pin_user_pages_remote+0x70/0xb0 mm/gup.c:3245
+       process_vm_rw_single_vec mm/process_vm_access.c:105 [inline]
+       process_vm_rw_core.constprop.0+0x43b/0x980 mm/process_vm_access.c:215
+       process_vm_rw+0x29c/0x300 mm/process_vm_access.c:283
+       __do_sys_process_vm_writev mm/process_vm_access.c:303 [inline]
+       __se_sys_process_vm_writev mm/process_vm_access.c:298 [inline]
+       __x64_sys_process_vm_writev+0xe3/0x1b0 mm/process_vm_access.c:298
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #2 (&sbi->node_change){++++}-{3:3}:
+       down_read+0x9c/0x450 kernel/locking/rwsem.c:1509
+       f2fs_down_read fs/f2fs/f2fs.h:2180 [inline]
+       f2fs_lock_op fs/f2fs/f2fs.h:2223 [inline]
+       f2fs_do_map_lock+0x4e/0x80 fs/f2fs/data.c:1442
+       f2fs_vm_page_mkwrite+0x1253/0x1c90 fs/f2fs/file.c:116
+       do_page_mkwrite+0x19b/0x680 mm/memory.c:2977
+       do_shared_fault mm/memory.c:4618 [inline]
+       do_fault mm/memory.c:4686 [inline]
+       handle_pte_fault mm/memory.c:4954 [inline]
+       __handle_mm_fault+0x2280/0x3a40 mm/memory.c:5096
+       handle_mm_fault+0x1cc/0x780 mm/memory.c:5217
+       faultin_page mm/gup.c:1009 [inline]
+       __get_user_pages+0x497/0xf10 mm/gup.c:1230
+       __get_user_pages_locked mm/gup.c:1494 [inline]
+       __get_user_pages_remote+0x326/0x830 mm/gup.c:2187
+       pin_user_pages_remote+0x70/0xb0 mm/gup.c:3245
+       process_vm_rw_single_vec mm/process_vm_access.c:105 [inline]
+       process_vm_rw_core.constprop.0+0x43b/0x980 mm/process_vm_access.c:215
+       process_vm_rw+0x29c/0x300 mm/process_vm_access.c:283
+       __do_sys_process_vm_writev mm/process_vm_access.c:303 [inline]
+       __se_sys_process_vm_writev mm/process_vm_access.c:298 [inline]
+       __x64_sys_process_vm_writev+0xe3/0x1b0 mm/process_vm_access.c:298
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #1 (mapping.invalidate_lock#3){++++}-{3:3}:
+       down_read+0x9c/0x450 kernel/locking/rwsem.c:1509
+       filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+       filemap_fault+0xba2/0x2400 mm/filemap.c:3127
+       f2fs_filemap_fault+0x82/0x3e0 fs/f2fs/file.c:44
+       __do_fault+0x107/0x600 mm/memory.c:4202
+       do_shared_fault mm/memory.c:4608 [inline]
+       do_fault mm/memory.c:4686 [inline]
+       handle_pte_fault mm/memory.c:4954 [inline]
+       __handle_mm_fault+0x2200/0x3a40 mm/memory.c:5096
+       handle_mm_fault+0x1cc/0x780 mm/memory.c:5217
+       faultin_page mm/gup.c:1009 [inline]
+       __get_user_pages+0x497/0xf10 mm/gup.c:1230
+       __get_user_pages_locked mm/gup.c:1434 [inline]
+       __get_user_pages_remote+0x18f/0x830 mm/gup.c:2187
+       pin_user_pages_remote+0x70/0xb0 mm/gup.c:3245
+       process_vm_rw_single_vec mm/process_vm_access.c:105 [inline]
+       process_vm_rw_core.constprop.0+0x43b/0x980 mm/process_vm_access.c:215
+       process_vm_rw+0x29c/0x300 mm/process_vm_access.c:283
+       __do_sys_process_vm_writev mm/process_vm_access.c:303 [inline]
+       __se_sys_process_vm_writev mm/process_vm_access.c:298 [inline]
+       __x64_sys_process_vm_writev+0xe3/0x1b0 mm/process_vm_access.c:298
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&mm->mmap_lock#2){++++}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain kernel/locking/lockdep.c:3831 [inline]
+       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
+       lock_acquire kernel/locking/lockdep.c:5668 [inline]
+       lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+       __might_fault mm/memory.c:5645 [inline]
+       __might_fault+0x10c/0x180 mm/memory.c:5638
+       _copy_to_user+0x29/0x150 lib/usercopy.c:29
+       copy_to_user include/linux/uaccess.h:169 [inline]
+       f2fs_ioc_get_encryption_pwsalt+0x2b2/0x370 fs/f2fs/file.c:2349
+       __f2fs_ioctl+0x1755/0xa800 fs/f2fs/file.c:4151
+       f2fs_ioctl+0x18e/0x220 fs/f2fs/file.c:4224
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  &mm->mmap_lock#2 --> &nm_i->nat_tree_lock --> &sbi->sb_lock
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&sbi->sb_lock);
+                               lock(&nm_i->nat_tree_lock);
+                               lock(&sbi->sb_lock);
+  lock(&mm->mmap_lock#2);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor.4/21588:
+ #0: ffff88801bc5e460 (sb_writers#21){.+.+}-{0:0}, at: f2fs_ioc_get_encryption_pwsalt+0x136/0x370 fs/f2fs/file.c:2330
+ #1: ffff888021560088 (&sbi->sb_lock){++++}-{3:3}, at: f2fs_down_write fs/f2fs/f2fs.h:2205 [inline]
+ #1: ffff888021560088 (&sbi->sb_lock){++++}-{3:3}, at: f2fs_ioc_get_encryption_pwsalt+0x174/0x370 fs/f2fs/file.c:2334
+
+stack backtrace:
+CPU: 1 PID: 21588 Comm: syz-executor.4 Not tainted 6.1.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
 Call Trace:
-[c0000000041e7770] [c000000000107d44] .msi_domain_free_descs+0x134/0x170 (unreliable)
-[c0000000041e7810] [c0000000001085d8] .msi_domain_free_msi_descs_range+0x38/0x70
-[c0000000041e78a0] [c0000000008d000c] .pci_msi_teardown_msi_irqs+0x4c/0xa0
-[c0000000041e7920] [c0000000008cf9e8] .pci_free_msi_irqs+0x18/0x50
-[c0000000041e79a0] [c0000000008cd8d0] .pci_free_irq_vectors+0x80/0xb0
-[c0000000041e7a20] [c000000000a6d2a0] .nvme_reset_work+0x870/0x1780
-[c0000000041e7bb0] [c000000000080e68] .process_one_work+0x2d8/0x7b0
-[c0000000041e7c90] [c0000000000813d8] .worker_thread+0x98/0x4f0
-[c0000000041e7d70] [c00000000008e2cc] .kthread+0x13c/0x150
-[c0000000041e7e10] [c0000000000005d8] .ret_from_kernel_thread+0x58/0x60
-Instruction dump:
-7fc3f378 48ff1ca9 60000000 7c7f1b79 41c2002c e8810070 7fc3f378 48ff3491
-60000000 813f0000 2c090000 41e2ffb0 <0fe00000> 60000000 60000000 ebc10090
-irq event stamp: 98168
-hardirqs last  enabled at (98167): [<c00000000110a274>] ._raw_spin_unlock_irqrestore+0x84/0xd0
-hardirqs last disabled at (98168): [<c000000000010b58>] .program_check_exception+0x38/0x120
-softirqs last  enabled at (97760): [<c00000000110b4dc>] .__do_softirq+0x60c/0x678
-softirqs last disabled at (97749): [<c000000000004d20>] .do_softirq_own_stack+0x30/0x50
----[ end trace 0000000000000000 ]---
-nvme nvme0: 1/0/0 default/read/poll queues
-nvme nvme0: Ignoring bogus Namespace Identifiers
-...
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain kernel/locking/lockdep.c:3831 [inline]
+ __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
+ lock_acquire kernel/locking/lockdep.c:5668 [inline]
+ lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+ __might_fault mm/memory.c:5645 [inline]
+ __might_fault+0x10c/0x180 mm/memory.c:5638
+ _copy_to_user+0x29/0x150 lib/usercopy.c:29
+ copy_to_user include/linux/uaccess.h:169 [inline]
+ f2fs_ioc_get_encryption_pwsalt+0x2b2/0x370 fs/f2fs/file.c:2349
+ __f2fs_ioctl+0x1755/0xa800 fs/f2fs/file.c:4151
+ f2fs_ioctl+0x18e/0x220 fs/f2fs/file.c:4224
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4c6808c0d9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f4c66bfe168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f4c681abf80 RCX: 00007f4c6808c0d9
+RDX: 0000000000000000 RSI: 0000000040106614 RDI: 0000000000000003
+RBP: 00007f4c680e7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff2fcbd3ff R14: 00007f4c66bfe300 R15: 0000000000022000
+ </TASK>
 
-The system boots fine, though. This is seen when booting the ppce500 machine with
-e5500 CPU and corenet64_smp_defconfig from nvme.
 
-Guenter
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
