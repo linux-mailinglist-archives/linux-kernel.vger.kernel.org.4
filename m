@@ -2,231 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB0664FC2F
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 21:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F112264FC35
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 21:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiLQUGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 15:06:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
+        id S229939AbiLQUXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 15:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiLQUGA (ORCPT
+        with ESMTP id S229613AbiLQUXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 15:06:00 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DB910547;
-        Sat, 17 Dec 2022 12:05:59 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id 130so3838900pfu.8;
-        Sat, 17 Dec 2022 12:05:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YJvFao2kum+z/fRIMmSQ6AmqGMnYsMDljV3fMQWk5zA=;
-        b=Rvb7IOdopngt0BcTjJcQQ2vCbW5QyTbvCXh/hf8jI5PfdObMLw25ghLyHgA2ML4sfa
-         vEjpo3w8rkbfl82dStG2UvDwZ6HUmXRAWE2TDwS0wDUT+qW++y3a07YOCdR23LgJ5wyQ
-         ZrFJMxWfG4up800F43BogCj7mqm8l8/Y4BX6VGDUXy9pnwkBvs4+eYAA2MdWzFC45dah
-         sm8VoWeZchvn6kEd6RZRnWTUaefZhymbK9fHkFyHXRj4rK3RHsm6006jL+UgbxutzZ3G
-         w1B5EXtblob9kKtt1OT/9MxY/hT1uXwc6Ll6H8U6On+S/FbiIpspy0sjJpv0SrZSbdwe
-         vnww==
+        Sat, 17 Dec 2022 15:23:39 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E60E0DA
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 12:23:37 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id s4-20020a056e02216400b00304cd64ce20so3969027ilv.6
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 12:23:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YJvFao2kum+z/fRIMmSQ6AmqGMnYsMDljV3fMQWk5zA=;
-        b=MgiAJAw0ei+eFDSER3ELlxBq6zYxXy9UbZfQ+wmUhecJ7AZUzdvCFdkjIbN9OGyysg
-         EECC2urnsB6YRsm7p0KJYHAzvlmY0o2IWQYIhC7WFuoOXFdoeAkRr+cEFgL/jui0ffJI
-         ZsVgvIdhlkvoWtJGOTv0Rmo8zgH+DozdcjJqcxTCEmXMWhX5kyPJHqsY2qph3RDceo4x
-         WEyakb64FrF2/jydbLwicTW6qBRd0nVpCalCV9LwLSXCch93YUdLbC/wyDXTKQ8URjD+
-         6B+snns+bESkaeKWp/pwmJlIdgoblrBAgfInC+T2l3xtTDGDKbA1IFlLLnXhPY7CeSqE
-         3Npg==
-X-Gm-Message-State: ANoB5pkSEQTf/4n5a6pYKBO2ZyiiLXW3XSgKO8ejDnFN7CEa+z72fG82
-        TchFMr1vBJa/XmEcl0suKM4=
-X-Google-Smtp-Source: AA0mqf5r7u9O0zYn2CAB3n7q1oStHj6rVMmZTNKuyyIFVVwd/AegbRRQDt9GBvMtGVPY4k+OAu1aqg==
-X-Received: by 2002:aa7:8b48:0:b0:56b:ae1d:a3c6 with SMTP id i8-20020aa78b48000000b0056bae1da3c6mr8845616pfd.1.1671307558741;
-        Sat, 17 Dec 2022 12:05:58 -0800 (PST)
-Received: from mail.google.com (125-237-37-88-fibre.sparkbb.co.nz. [125.237.37.88])
-        by smtp.gmail.com with ESMTPSA id k10-20020aa79d0a000000b00575da69a16asm3615691pfp.179.2022.12.17.12.05.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Dec 2022 12:05:58 -0800 (PST)
-Date:   Sun, 18 Dec 2022 09:05:51 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        paulo.miguel.almeida.rodenas@gmail.com
-Subject: Re: [PATCH v3] [next] pcmcia: synclink_cs: replace 1-element array
- with flex-array member
-Message-ID: <Y54hHyoUW/tGioLx@mail.google.com>
-References: <Y5uN9Rr3v1uWH765@mail.google.com>
- <Y5z4Og3XmCGQwTO9@mail.google.com>
- <CAHp75VeNcPjngJcF96Y9hV=Y+NeaGadSMGMvgCTD6kdBi=+9fg@mail.gmail.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eOpFqGpwkUsU/PaMKCKCrxmyrnrYaOTFPop5D3XZ8FU=;
+        b=DEsoo4afIZ2Yd4CBOIoyOmyHG6fswWVI/y7+/MCDxZlo3uF0ZB4nhMlR3yis2HJxJK
+         NqHTjzqFi2NXghPL9WpyukeVFohHoLu40EYdASAPO2aNuz1mukIrJTJsXeL/ylwc6P6V
+         pgpQ4mUhdvbBRoXq/2RcZfCjGtONCJ7gUUnkmGtAuEmtXHKprJ0vkxAebyxG5rYPfp5o
+         StqVArCJidze6UtDheDOVd8TA5Hz44vbqRRO5P0YQOW1Y4HiNjGzHDKL78glFc05/sCy
+         U0ZB4Nfbkv19YccvlIkkxGaIy6DWTfnb8Bag+YxlzATOpaGYuUieOywl+TcwlD7aN5mT
+         0vtQ==
+X-Gm-Message-State: ANoB5pmam3qYKptu6OazlCPWT/1ilU4SJU3F6AcGSAQ38wD48z2AU/iv
+        yJgkiZPqDLnS6h9ZQs0mWvMvy5emoH5tg8ujzp0fpnzHpAsU
+X-Google-Smtp-Source: AA0mqf5lRVMS4o6Oykhpeta6b+msjjuoSk+c5JJLtNE7AxzJTVhrLrJr428eZVE6vMIu3U+JfsDlRGjH++m4LNz0R5aCSZCnnPTM
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VeNcPjngJcF96Y9hV=Y+NeaGadSMGMvgCTD6kdBi=+9fg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:6f06:0:b0:300:d7db:639e with SMTP id
+ k6-20020a926f06000000b00300d7db639emr44984840ilc.264.1671308617173; Sat, 17
+ Dec 2022 12:23:37 -0800 (PST)
+Date:   Sat, 17 Dec 2022 12:23:37 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006fd14305f00bdc84@google.com>
+Subject: [syzbot] kernel BUG in ext4_do_writepages
+From:   syzbot <syzbot+d1da16f03614058fdc48@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 17, 2022 at 01:43:40PM +0200, Andy Shevchenko wrote:
-> On Sat, Dec 17, 2022 at 12:59 AM Paulo Miguel Almeida
-> <paulo.miguel.almeida.rodenas@gmail.com> wrote:
-> >
-> > One-element arrays are deprecated, and we are replacing them with
-> > flexible array members instead. So, replace one-element array with
-> > flexible-array member in struct RXBUF and refactor the rest of the code
-> > accordingly. While at it, fix an edge case which could cause
-> > rx_buf_count to be 0 when max_frame_size was set to the maximum
-> > allowed value (65535).
-> >
-> > It's worth mentioning that struct RXBUF was allocating 1 byte "too much"
-> > for what is required (ignoring bytes added by padding).
-> >
-> > This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> > routines on memcpy() and help us make progress towards globally
-> > enabling -fstrict-flex-arrays=3 [1].
-> 
-> ...
-> 
-> >  static int rx_alloc_buffers(MGSLPC_INFO *info)
-> >  {
-> >         /* each buffer has header and data */
-> > -       info->rx_buf_size = sizeof(RXBUF) + info->max_frame_size;
-> > +       if (check_add_overflow(sizeof(RXBUF), info->max_frame_size, &info->rx_buf_size))
-> > +               return -EINVAL;
-> >
-> > -       /* calculate total allocation size for 8 buffers */
-> > -       info->rx_buf_total_size = info->rx_buf_size * 8;
-> 
-> > +       /* try to alloc as many buffers that can fit within RXBUF_MAX_SIZE (up to 8) */
-> > +       if (check_mul_overflow(info->rx_buf_size, 8, &info->rx_buf_total_size))
-> > +               return -EINVAL;
-> 
-> This check is implied by kcalloc(). But to make it effective we
-> probably need to get a count first.
-> 
-> > -       /* limit total allocated memory */
-> > -       if (info->rx_buf_total_size > 0x10000)
-> > -               info->rx_buf_total_size = 0x10000;
-> > +       if (info->rx_buf_total_size > RXBUF_MAX_SIZE)
-> > +               info->rx_buf_total_size = RXBUF_MAX_SIZE;
-> 
-> If max_frame_size > 8192 - sizeof(RXBUF), we bump into this condition...
-> 
-> >         /* calculate number of buffers */
-> >         info->rx_buf_count = info->rx_buf_total_size / info->rx_buf_size;
-> 
-> ...which means that rx_buf_count < 8...
+Hello,
 
-that's correct. My reading of what the original author intended is the
-following:
+syzbot found the following issue on:
 
-- rx_buf_count can be < 8 if max_frame_size needs to be > 8192 so that
-  userspace tools don't need to collate the different packets together
-  then again, SyncLink_CS supports a variety of protocols.
+HEAD commit:    02bf43c7b7f7 Merge tag 'fs.xattr.simple.rework.rbtree.rwlo..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16d48f33880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8c59170b68d26a55
+dashboard link: https://syzkaller.appspot.com/bug?extid=d1da16f03614058fdc48
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=166cffdf880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=172b1f2b880000
 
-- the more circular buffers, the better, but it looks perfectly acceptable
-  to have 1 big rx_buf (max_frame_size possible) if the communication is
-  orchestrated nicely (which part sends what and when) especially for
-  RS-232-based communications.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/45f211dceffb/disk-02bf43c7.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fd0c63aa3713/vmlinux-02bf43c7.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/734647e04fd0/bzImage-02bf43c7.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/192035fab0d1/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d1da16f03614058fdc48@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+kernel BUG at fs/ext4/inode.c:2782!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 1100 Comm: kworker/u4:5 Not tainted 6.1.0-syzkaller-03295-g02bf43c7b7f7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: writeback wb_workfn (flush-7:1)
+RIP: 0010:ext4_do_writepages+0x3c27/0x3c30 fs/ext4/inode.c:2781
+Code: c7 50 d6 4b 8d 4c 89 fa e8 46 c9 33 02 e9 c0 fb ff ff e8 4c 7b 53 ff 0f 0b e8 45 7b 53 ff 0f 0b e8 fe 4d 5c 08 e8 39 7b 53 ff <0f> 0b 0f 1f 80 00 00 00 00 55 41 57 41 56 53 48 89 fb 49 bf 00 00
+RSP: 0018:ffffc90004ffede0 EFLAGS: 00010293
+RAX: ffffffff8237eaa7 RBX: 0000008000000000 RCX: ffff8880207dd7c0
+RDX: 0000000000000000 RSI: 0000008000000000 RDI: 0000000000000000
+RBP: ffffc90004fff150 R08: ffffffff8237b469 R09: ffffed100e7b8791
+R10: ffffed100e7b8791 R11: 1ffff1100e7b8790 R12: ffff888073dc3ee0
+R13: ffffc90004fff650 R14: 0000008410000000 R15: 0000000000000001
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f224f000000 CR3: 0000000019fee000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ ext4_writepages+0x1e0/0x290 fs/ext4/inode.c:2965
+ do_writepages+0x3c3/0x680 mm/page-writeback.c:2469
+ __writeback_single_inode+0xd1/0x670 fs/fs-writeback.c:1587
+ writeback_sb_inodes+0xb3b/0x18f0 fs/fs-writeback.c:1878
+ __writeback_inodes_wb+0x125/0x420 fs/fs-writeback.c:1949
+ wb_writeback+0x440/0x7b0 fs/fs-writeback.c:2054
+ wb_check_background_flush fs/fs-writeback.c:2120 [inline]
+ wb_do_writeback fs/fs-writeback.c:2208 [inline]
+ wb_workfn+0xb3f/0xef0 fs/fs-writeback.c:2235
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:ext4_do_writepages+0x3c27/0x3c30 fs/ext4/inode.c:2781
+Code: c7 50 d6 4b 8d 4c 89 fa e8 46 c9 33 02 e9 c0 fb ff ff e8 4c 7b 53 ff 0f 0b e8 45 7b 53 ff 0f 0b e8 fe 4d 5c 08 e8 39 7b 53 ff <0f> 0b 0f 1f 80 00 00 00 00 55 41 57 41 56 53 48 89 fb 49 bf 00 00
+RSP: 0018:ffffc90004ffede0 EFLAGS: 00010293
+RAX: ffffffff8237eaa7 RBX: 0000008000000000 RCX: ffff8880207dd7c0
+RDX: 0000000000000000 RSI: 0000008000000000 RDI: 0000000000000000
+RBP: ffffc90004fff150 R08: ffffffff8237b469 R09: ffffed100e7b8791
+R10: ffffed100e7b8791 R11: 1ffff1100e7b8790 R12: ffff888073dc3ee0
+R13: ffffc90004fff650 R14: 0000008410000000 R15: 0000000000000001
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f224f0df000 CR3: 0000000021186000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
-> (and if max_frame_size > RXBUF_MAX_SIZE - sizeof(RXBUF), count becomes
-> 0, I don't know if below clamp_val() is the only place to guarantee
-> that)
-> 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-I can confirm that the clamp_val() below is the only place that
-guarantees the max_frame_size isn't greater than RXBUF_MAX_SIZE. That
-happens at the device probing stage: 
-
-( mgslpc_probe > mgslpc_add_device > clamp_val-like routine )
-
-As max_frame_size can only be set as a module parameter and no other way
-is exposed to userspace to tweak that afterwards, my 2 cents is that 
-clamp_val() routine should be fine as rx_buf_count will always be > 0 
-after this fix.
-
-> > -       info->rx_buf = kmalloc(info->rx_buf_total_size, GFP_KERNEL);
-> > +       info->rx_buf = kcalloc(info->rx_buf_count, info->rx_buf_size, GFP_KERNEL);
-> 
-> ...hence rx_buf size will be less than rx_buf_total_size.
-> 
-> That is probably not an issue per se, but I'm wondering if the
-> (bigger) value of rx_buf_total_size is the problem further in the
-> code.
-> 
-
-rx_buf_total_size isn't used outside of this function so it
-could be a local variable IMO.. so I would say that this wouldn't be a
-problem.
-
-I had noticed that rx_buf_total_size could be moved into a local
-variable before but I thought that removing it from MGSLPC struct
-should be part of a separate patch instead.
-
-> >         if (info->rx_buf == NULL)
-> >                 return -ENOMEM;
-> 
-> Maybe something like
-> 
-> static int rx_alloc_buffers(MGSLPC_INFO *info)
-> {
->     /* Prevent count from being 0 */
->     if (->max_frame_size > MAX_FRAME_SIZE)
->         return -EINVAL;
-
-This boils down to whether having the clamp_val() on the probe method is
-sufficient in your point of view. You make the final call on this :-)
-
->     ...
->    count = ...;
->    ...
->    rx_total_size = ...
->    rx_buf = kcalloc(...);
-> 
-> Then you don't need to check overflow with check_add_overflow() and
-> check_mul_overflow() will be inside the kcalloc.
-> 
-
-check_mul_overflow point -> agreed.
-
-check_add_overflow -> similar suggestion as my previous point, if the
-clamp_val on probe is sufficient for you, I would say that we don't need
-it as of now too. But if you still think that we need it, I'm flexible
-with that too.
-
-> ...
-> 
-> > -       if (info->max_frame_size < 4096)
-> > -               info->max_frame_size = 4096;
-> > -       else if (info->max_frame_size > 65535)
-> > -               info->max_frame_size = 65535;
-> > +       if (info->max_frame_size < MGSLPC_MIN_FRAME_SIZE)
-> > +               info->max_frame_size = MGSLPC_MIN_FRAME_SIZE;
-> > +       else if (info->max_frame_size > MGSLPC_MAX_FRAME_SIZE)
-> > +               info->max_frame_size = MGSLPC_MAX_FRAME_SIZE;
-> 
-> You can use clamp_val() macro here.
-> 
-
-Nice, I didn't know about this macro. I will make that change for v4.
-
-All really nice points you've made Andy, I'm learning heaps of new
-things with this patch :-)
-
-thanks!
-
-- Paulo A.
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
