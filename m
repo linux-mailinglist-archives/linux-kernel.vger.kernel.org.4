@@ -2,151 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB3D64F994
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 16:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 587AB64F996
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 16:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiLQPEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 10:04:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55464 "EHLO
+        id S229866AbiLQPEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 10:04:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiLQPEW (ORCPT
+        with ESMTP id S229785AbiLQPEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 10:04:22 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB08E08F
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 07:04:20 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id b3so7753354lfv.2
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 07:04:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fyQwYotwFo1Kdd3TcYj4RcjJFej1hnlZ4LHTPyy+j+w=;
-        b=yKDOg0iOz8aWkF1+IMWego2W/bWGiArJesQTAtUgW65j8ZHfOu0qZ9jSJfsJAhECYT
-         W4rD6HxpFqRfakp8VTJnGhh6ftpSq8sbEvIMYD0Wz37KzCibJVWqb3ilcGCp1m8iPoLf
-         nWiduzZfM9s/gFzCvBPwnSdOw42O0vpleFBxMN/wamWSvEMBYdXRe2RO6XQrMWC84RvM
-         +mAu3N/NlsBrQaIIliSVFh/bktm38Pg8hp6ZCRGJ/m1sBh9iUhZq8senySYjRuPCyvGE
-         ttSPap5yuDDAE9iJuToTnwHN8UrOWjuu9EDiwf2pEcXAeuXOzZ8afSwvaqB9DxTBxOLv
-         F9ww==
+        Sat, 17 Dec 2022 10:04:48 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC1EE0F4
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 07:04:47 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id a11-20020a92c54b000000b003034a80704fso3683030ilj.1
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 07:04:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fyQwYotwFo1Kdd3TcYj4RcjJFej1hnlZ4LHTPyy+j+w=;
-        b=kYAqOrevur6p2bR2VKjALOP5U07oDZgRMjyePuZj3gWg9Qh3i/GLv6ic3E0xtfK+Me
-         2l58R36jmax9sz1Ig+I3XgSS0LwY93ydC1/0rv0U5mfAoGyandx9UnRI1Pu92HqTH5Fi
-         ePnnnlu1+i7zMnqiEipvnjscswOKKM0eYhzzQYtH9v4weC8ALdfZBgpPGGXTmch+XTis
-         +6SoqUzI8T3hjooQEWKjA3LQlaIadAIBAOIEJwMUFYSlvnimTuoFwq96Q7PzDXoG2Khr
-         9b5BGOgEEobkWWD6rjRow2wehEDPwWhDHBnv1X2wNiMV/TAsbC3efbeK7ApMSxzJSGrQ
-         EeuA==
-X-Gm-Message-State: ANoB5pnGhBa6XwQXnJyjdCZbyfgBAbvuoMyIyLRH3azSrDzoiR6nuLzF
-        JaOZsVCSBOHne5EZGHgO6ZqbSw==
-X-Google-Smtp-Source: AA0mqf5pCMMfp2ZmMFhqcQt8HIDrPtQG40+9L6xOvOth/N/wgUZdVsdomUJF2saefgPyykgUAes8bw==
-X-Received: by 2002:ac2:4283:0:b0:4a4:68b7:deb7 with SMTP id m3-20020ac24283000000b004a468b7deb7mr9908501lfh.19.1671289459199;
-        Sat, 17 Dec 2022 07:04:19 -0800 (PST)
-Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id n7-20020ac242c7000000b00499bf7605afsm530708lfl.143.2022.12.17.07.04.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Dec 2022 07:04:18 -0800 (PST)
-Message-ID: <11174eb6-0a9d-7df1-6f06-da4010f76453@linaro.org>
-Date:   Sat, 17 Dec 2022 16:04:17 +0100
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=omaK9fMsNTFLQFu8h+rdMbTpBSMkwRzhs2jI7TjkUT0=;
+        b=p0o3yahZy/bbbVStRyGPrxw2U0KZYeugqeDrkjKGNw7rjWTM6Y/aK/c0kKQspRh0xc
+         wXYKWLOlUqFcsGH0IEXszdILtUJDLIDOLKD/CBWtoxqgxEC9Om0UPQMxcYM89C3/+ulo
+         2caZqQ6bkhB4m6iZFl4X4CGY2A7yzninOJ3MBAwf05n6kFT9BZ+AutFEa8nlDqrZk3LX
+         35EHPJu3TPe8mqtjT9o1nQOvJ9mrsH/fbX34G2FTWR3801zXt00fEE0Gk1xA8iA5Oehs
+         FRrmTensF+gYI2Mq2H+d3+1avgVNImYe6UbahHS2MCTRz44qHIDC8q47wwoS73EGb/jV
+         EaTA==
+X-Gm-Message-State: ANoB5pnT5fBEK+J2OWJYlNWT9DIkR3dvh8WybiuPuz3IsZDyPjq6WNb3
+        tPkxNc2t8hvgkIql470kBH/S+yOjBkx5vU6FoUiOJuq5af2A
+X-Google-Smtp-Source: AA0mqf7t8lfDnKiC98KvoSy+fx+/HSUyNi90WFAyDJlm4d+ZKZZrP28jqBjM4GPPNlKj821+oyCqJz09Zyo9A8DPwKFpdQ5G0s4U
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] arm64: dts: qcom: sm6125-seine: Clean up gpio-keys
- (volume down)
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221217100455.52593-1-marijn.suijten@somainline.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221217100455.52593-1-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:4395:b0:38a:a802:cfe with SMTP id
+ bo21-20020a056638439500b0038aa8020cfemr2183751jab.45.1671289487069; Sat, 17
+ Dec 2022 07:04:47 -0800 (PST)
+Date:   Sat, 17 Dec 2022 07:04:47 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003198a505f0076823@google.com>
+Subject: [syzbot] [udf?] BUG: unable to handle kernel NULL pointer dereference
+ in __writepage
+From:   syzbot <syzbot+c27475eb921c46bbdc62@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, jack@suse.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    77856d911a8c Merge tag 'arm64-fixes' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=117055e7880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=55043d38f21f0e0f
+dashboard link: https://syzkaller.appspot.com/bug?extid=c27475eb921c46bbdc62
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=141da6e7880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17d81b8b880000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0b78ce281e8c/disk-77856d91.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8af6f6a5481b/vmlinux-77856d91.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8c902de7af92/bzImage-77856d91.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/280fb5acc0d8/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c27475eb921c46bbdc62@syzkaller.appspotmail.com
+
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+#PF: supervisor instruction fetch in kernel mode
+#PF: error_code(0x0010) - not-present page
+PGD 2bff1067 P4D 2bff1067 PUD 1f5dc067 PMD 0 
+Oops: 0010 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 9019 Comm: syz-executor202 Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+RSP: 0018:ffffc9000be3f6a8 EFLAGS: 00010246
+RAX: 1ffffffff1659874 RBX: ffffea0001bf0e00 RCX: ffff8880183c57c0
+RDX: 0000000000000000 RSI: ffffc9000be3fb00 RDI: ffffea0001bf0e00
+RBP: ffffffff8b2cc3a0 R08: ffffffff81bf03f6 R09: fffffbfff1d200ae
+R10: fffffbfff1d200ae R11: 1ffffffff1d200ad R12: dffffc0000000000
+R13: ffffea0001bf0e00 R14: ffff8880738dbd28 R15: ffffc9000be3fb00
+FS:  00007ff98e385700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 000000001ca8e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __writepage+0x60/0x120 mm/page-writeback.c:2537
+ write_cache_pages+0x7dd/0x1350 mm/page-writeback.c:2472
+ generic_writepages mm/page-writeback.c:2563 [inline]
+ do_writepages+0x438/0x690 mm/page-writeback.c:2583
+ filemap_fdatawrite_wbc+0x11e/0x170 mm/filemap.c:388
+ __filemap_fdatawrite_range mm/filemap.c:421 [inline]
+ file_write_and_wait_range+0x228/0x330 mm/filemap.c:777
+ __generic_file_fsync+0x6e/0x190 fs/libfs.c:1132
+ generic_file_fsync+0x6f/0xe0 fs/libfs.c:1173
+ generic_write_sync include/linux/fs.h:2882 [inline]
+ udf_file_write_iter+0x4d6/0x5f0 fs/udf/file.c:176
+ call_write_iter include/linux/fs.h:2186 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x7b5/0xbb0 fs/read_write.c:584
+ ksys_write+0x19b/0x2c0 fs/read_write.c:637
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7ff9967027f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 91 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ff98e3852f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007ff996780790 RCX: 00007ff9967027f9
+RDX: 0000000000000008 RSI: 0000000020000040 RDI: 0000000000000004
+RBP: 00007ff99678079c R08: 00007ff98e385700 R09: 0000000000000000
+R10: 00007ff98e385700 R11: 0000000000000246 R12: 00007ff99674cd70
+R13: 00007ff99674c180 R14: 0000000020000c80 R15: 00007ff996780798
+ </TASK>
+Modules linked in:
+CR2: 0000000000000000
+---[ end trace 0000000000000000 ]---
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+RSP: 0018:ffffc9000be3f6a8 EFLAGS: 00010246
+RAX: 1ffffffff1659874 RBX: ffffea0001bf0e00 RCX: ffff8880183c57c0
+RDX: 0000000000000000 RSI: ffffc9000be3fb00 RDI: ffffea0001bf0e00
+RBP: ffffffff8b2cc3a0 R08: ffffffff81bf03f6 R09: fffffbfff1d200ae
+R10: fffffbfff1d200ae R11: 1ffffffff1d200ad R12: dffffc0000000000
+R13: ffffea0001bf0e00 R14: ffff8880738dbd28 R15: ffffc9000be3fb00
+FS:  00007ff98e385700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 000000001ca8e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
-On 17.12.2022 11:04, Marijn Suijten wrote:
-> - Remove autorepeat (leave key repetition to userspace);
-> - Remove unneeded status = "okay" (this is the default);
-> - Allow the interrupt line for this button to be disabled;
-> - Use a full, descriptive node name;
-> - Set proper bias on the GPIO via pinctrl;
-> - Sort properties.
-> 
-> Fixes: 82e1783890b7 ("arm64: dts: qcom: sm6125: Add support for Sony Xperia 10II")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->  .../qcom/sm6125-sony-xperia-seine-pdx201.dts  | 20 ++++++++++++++-----
->  1 file changed, 15 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-> index 1b9e40d3d269..8c7c9331fd21 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-> @@ -41,17 +41,17 @@ extcon_usb: extcon-usb {
->  	};
->  
->  	gpio-keys {
-> -		status = "okay";
->  		compatible = "gpio-keys";
-> -		autorepeat;
-> +		pinctrl-0 = <&gpio_keys_state>;
-> +		pinctrl-names = "default";
->  
-> -		key-vol-dn {
-> +		key-volume-down {
->  			label = "Volume Down";
->  			gpios = <&tlmm 47 GPIO_ACTIVE_LOW>;
-> -			linux,input-type = <1>;
->  			linux,code = <KEY_VOLUMEDOWN>;
-> -			gpio-key,wakeup;
->  			debounce-interval = <15>;
-> +			linux,can-disable;
-> +			gpio-key,wakeup;
->  		};
->  	};
->  
-> @@ -270,6 +270,16 @@ &sdhc_1 {
->  
->  &tlmm {
->  	gpio-reserved-ranges = <22 2>, <28 6>;
-> +
-> +	gpio_keys_state: gpio-keys-state {
-> +		key-volume-down-pins {
-I see no need for defining a wrapper node.
-The other changes look good!
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Konrad
-> +			pins = "gpio47";
-> +			function = "gpio";
-> +			drive-strength = <2>;
-> +			bias-disable;
-> +			input-enable;
-> +		};
-> +	};
->  };
->  
->  &usb3 {
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
