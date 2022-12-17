@@ -2,48 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B99A64FBDC
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 19:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7602964FBBA
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 19:55:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbiLQS43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 13:56:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        id S230110AbiLQSzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 13:55:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiLQSzg (ORCPT
+        with ESMTP id S229710AbiLQSze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 13:55:36 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFCF10B6A;
-        Sat, 17 Dec 2022 10:55:35 -0800 (PST)
+        Sat, 17 Dec 2022 13:55:34 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993D810B74;
+        Sat, 17 Dec 2022 10:55:32 -0800 (PST)
 Date:   Sat, 17 Dec 2022 18:55:30 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1671303331;
+        s=2020; t=1671303330;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=wKtqd1EdbC51guVZ8hPdSDdIhuF7SYx99kyd5XYQNbg=;
-        b=MgvvSw6hZjUwPug+IGqCfCPE8wt0fDqsXOXeAwxgqltYmMYyWgO9pQs9njou4ORqSuPKJN
-        OesvSvjkwxn4DtjeNk6lgrL+pOZ/oYIsC/G5tlRmwQ28sjJ54RhYg+UobwectH5kxYpshS
-        coiR1ScFJqyyVnDhagK+q/AP8b7UgZavQjPghlMnA17vw2aeviMq1N7ea8+ns/A0Lt2/h1
-        ozY1x4GUKzqSrjG7N0eejW9j5Ktedht+VQtIxJgtmYhKChGtUvMZsySm4A6WXEHXziVuRU
-        rYSwUGioteUeHF9gdyHJCPJuqH4jrGbIR589sj1nPJnh5SgSroOrbLi+R1Qp3g==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ws8Tq+FoK4iImQayXxstvVvfm0RsfCLLhQdCNKNu8Rc=;
+        b=vOjoM2DdHMFhfCN/qjQVDiChpMNQ+nLKAyPmeAXP1yWmnyAk55++b/oKCv5ZFS/TLVltc2
+        /XJLvqDrX4IhCT9vzW8a2W/Fyx9quu0t/TrM/9sWn3uAkbUOzrZQBWHCKqoIlbccjKJw5u
+        8I6G77gq/knM+/ueLlx+z08pEfWlOcosXvKx9AiCwZGkHXHpY5CrHJpMvMFaruDJmxBJRg
+        fJHTkxS2znClHmLE9OHjJFF5ap1YwZfOMRa+Jil01XI2E/BAT9LIqbe/IasECXdDC9+Ber
+        tDgJ0Bhrm+8sVKzFoeck7AQ5+hOiuXYEJEDC074umJhs8yEW85iKs1Nji86aEw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1671303331;
+        s=2020e; t=1671303330;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=wKtqd1EdbC51guVZ8hPdSDdIhuF7SYx99kyd5XYQNbg=;
-        b=rVjgihaRHcvlERtpVsZC462XZF0MTw55CuR68kbXasI6PA3J3MyDWoH5oNnCN0y+PrtCCT
-        lFAkjjdwImA/2zCw==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ws8Tq+FoK4iImQayXxstvVvfm0RsfCLLhQdCNKNu8Rc=;
+        b=11sCUB68Oj8lGbU5uVhFiz5CJY+Y6sLlZQn3Re6xxLecHGDQr2JLkvG1cIZ0PpDC3T1GpF
+        kMwHzqr2oHRgo9Bg==
+From:   "tip-bot2 for Sean Christopherson" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm: Untangle __change_page_attr_set_clr(.checkalias)
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: x86/mm] x86/mm: Populate KASAN shadow for entire per-CPU range
+ of CPU entry area
+Cc:     syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
+In-Reply-To: <20221110203504.1985010-3-seanjc@google.com>
+References: <20221110203504.1985010-3-seanjc@google.com>
 MIME-Version: 1.0
-Message-ID: <167130333087.4906.17380343026267717502.tip-bot2@tip-bot2>
+Message-ID: <167130333016.4906.13770847952420004697.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,146 +69,109 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     ef9ab81af6e1f7b7ff589aa1504434aa5915c1df
-Gitweb:        https://git.kernel.org/tip/ef9ab81af6e1f7b7ff589aa1504434aa5915c1df
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 10 Nov 2022 13:33:54 +01:00
+Commit-ID:     97650148a15e0b30099d6175ffe278b9f55ec66a
+Gitweb:        https://git.kernel.org/tip/97650148a15e0b30099d6175ffe278b9f55ec66a
+Author:        Sean Christopherson <seanjc@google.com>
+AuthorDate:    Thu, 10 Nov 2022 20:35:01 
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
 CommitterDate: Thu, 15 Dec 2022 10:37:28 -08:00
 
-x86/mm: Untangle __change_page_attr_set_clr(.checkalias)
+x86/mm: Populate KASAN shadow for entire per-CPU range of CPU entry area
 
-The .checkalias argument to __change_page_attr_set_clr() is overloaded
-and serves two different purposes:
+Populate a KASAN shadow for the entire possible per-CPU range of the CPU
+entry area instead of requiring that each individual chunk map a shadow.
+Mapping shadows individually is error prone, e.g. the per-CPU GDT mapping
+was left behind, which can lead to not-present page faults during KASAN
+validation if the kernel performs a software lookup into the GDT.  The DS
+buffer is also likely affected.
 
- - it inhibits the call to cpa_process_alias() -- as suggested by the
-   name; however,
+The motivation for mapping the per-CPU areas on-demand was to avoid
+mapping the entire 512GiB range that's reserved for the CPU entry area,
+shaving a few bytes by not creating shadows for potentially unused memory
+was not a goal.
 
- - it also serves as 'primary' indicator for __change_page_attr()
-   ( which in turn also serves as a recursion terminator for
-     cpa_process_alias() ).
+The bug is most easily reproduced by doing a sigreturn with a garbage
+CS in the sigcontext, e.g.
 
-Untangle these by extending the use of CPA_NO_CHECK_ALIAS to all
-callsites that currently use .checkalias=0 for this purpose.
+  int main(void)
+  {
+    struct sigcontext regs;
 
+    syscall(__NR_mmap, 0x1ffff000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
+    syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 7ul, 0x32ul, -1, 0ul);
+    syscall(__NR_mmap, 0x21000000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
+
+    memset(&regs, 0, sizeof(regs));
+    regs.cs = 0x1d0;
+    syscall(__NR_rt_sigreturn);
+    return 0;
+  }
+
+to coerce the kernel into doing a GDT lookup to compute CS.base when
+reading the instruction bytes on the subsequent #GP to determine whether
+or not the #GP is something the kernel should handle, e.g. to fixup UMIP
+violations or to emulate CLI/STI for IOPL=3 applications.
+
+  BUG: unable to handle page fault for address: fffffbc8379ace00
+  #PF: supervisor read access in kernel mode
+  #PF: error_code(0x0000) - not-present page
+  PGD 16c03a067 P4D 16c03a067 PUD 15b990067 PMD 15b98f067 PTE 0
+  Oops: 0000 [#1] PREEMPT SMP KASAN
+  CPU: 3 PID: 851 Comm: r2 Not tainted 6.1.0-rc3-next-20221103+ #432
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+  RIP: 0010:kasan_check_range+0xdf/0x190
+  Call Trace:
+   <TASK>
+   get_desc+0xb0/0x1d0
+   insn_get_seg_base+0x104/0x270
+   insn_fetch_from_user+0x66/0x80
+   fixup_umip_exception+0xb1/0x530
+   exc_general_protection+0x181/0x210
+   asm_exc_general_protection+0x22/0x30
+  RIP: 0003:0x0
+  Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+  RSP: 0003:0000000000000000 EFLAGS: 00000202
+  RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00000000000001d0
+  RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+  RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+  R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+  R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+   </TASK>
+
+Fixes: 9fd429c28073 ("x86/kasan: Map shadow for percpu pages on demand")
+Reported-by: syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com
+Suggested-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20221110125544.527267183%40infradead.org
+Reviewed-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Link: https://lkml.kernel.org/r/20221110203504.1985010-3-seanjc@google.com
 ---
- arch/x86/mm/pat/set_memory.c | 30 +++++++++++-------------------
- 1 file changed, 11 insertions(+), 19 deletions(-)
+ arch/x86/mm/cpu_entry_area.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 50f81ea..4943f6c 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -1727,7 +1727,7 @@ static int __change_page_attr_set_clr(struct cpa_data *cpa, int checkalias)
- 		if (ret)
- 			goto out;
- 
--		if (checkalias) {
-+		if (checkalias && !(cpa->flags & CPA_NO_CHECK_ALIAS)) {
- 			ret = cpa_process_alias(cpa);
- 			if (ret)
- 				goto out;
-@@ -1801,18 +1801,12 @@ static int change_page_attr_set_clr(unsigned long *addr, int numpages,
- 	cpa.numpages = numpages;
- 	cpa.mask_set = mask_set;
- 	cpa.mask_clr = mask_clr;
--	cpa.flags = 0;
-+	cpa.flags = in_flag;
- 	cpa.curpage = 0;
- 	cpa.force_split = force_split;
- 
--	if (in_flag & (CPA_ARRAY | CPA_PAGES_ARRAY))
--		cpa.flags |= in_flag;
--
- 	/* No alias checking for _NX bit modifications */
- 	checkalias = (pgprot_val(mask_set) | pgprot_val(mask_clr)) != _PAGE_NX;
--	/* Has caller explicitly disabled alias checking? */
--	if (in_flag & CPA_NO_CHECK_ALIAS)
--		checkalias = 0;
- 
- 	ret = __change_page_attr_set_clr(&cpa, checkalias);
- 
-@@ -2067,11 +2061,9 @@ int set_memory_np(unsigned long addr, int numpages)
- 
- int set_memory_np_noalias(unsigned long addr, int numpages)
+diff --git a/arch/x86/mm/cpu_entry_area.c b/arch/x86/mm/cpu_entry_area.c
+index d831aae..7c855df 100644
+--- a/arch/x86/mm/cpu_entry_area.c
++++ b/arch/x86/mm/cpu_entry_area.c
+@@ -91,11 +91,6 @@ void cea_set_pte(void *cea_vaddr, phys_addr_t pa, pgprot_t flags)
+ static void __init
+ cea_map_percpu_pages(void *cea_vaddr, void *ptr, int pages, pgprot_t prot)
  {
--	int cpa_flags = CPA_NO_CHECK_ALIAS;
+-	phys_addr_t pa = per_cpu_ptr_to_phys(ptr);
 -
- 	return change_page_attr_set_clr(&addr, numpages, __pgprot(0),
- 					__pgprot(_PAGE_PRESENT), 0,
--					cpa_flags, NULL);
-+					CPA_NO_CHECK_ALIAS, NULL);
+-	kasan_populate_shadow_for_vaddr(cea_vaddr, pages * PAGE_SIZE,
+-					early_pfn_to_nid(PFN_DOWN(pa)));
+-
+ 	for ( ; pages; pages--, cea_vaddr+= PAGE_SIZE, ptr += PAGE_SIZE)
+ 		cea_set_pte(cea_vaddr, per_cpu_ptr_to_phys(ptr), prot);
  }
+@@ -195,6 +190,9 @@ static void __init setup_cpu_entry_area(unsigned int cpu)
+ 	pgprot_t tss_prot = PAGE_KERNEL;
+ #endif
  
- int set_memory_4k(unsigned long addr, int numpages)
-@@ -2288,7 +2280,7 @@ static int __set_pages_p(struct page *page, int numpages)
- 				.numpages = numpages,
- 				.mask_set = __pgprot(_PAGE_PRESENT | _PAGE_RW),
- 				.mask_clr = __pgprot(0),
--				.flags = 0};
-+				.flags = CPA_NO_CHECK_ALIAS };
++	kasan_populate_shadow_for_vaddr(cea, CPU_ENTRY_AREA_SIZE,
++					early_cpu_to_node(cpu));
++
+ 	cea_set_pte(&cea->gdt, get_cpu_gdt_paddr(cpu), gdt_prot);
  
- 	/*
- 	 * No alias checking needed for setting present flag. otherwise,
-@@ -2296,7 +2288,7 @@ static int __set_pages_p(struct page *page, int numpages)
- 	 * mappings (this adds to complexity if we want to do this from
- 	 * atomic context especially). Let's keep it simple!
- 	 */
--	return __change_page_attr_set_clr(&cpa, 0);
-+	return __change_page_attr_set_clr(&cpa, 1);
- }
- 
- static int __set_pages_np(struct page *page, int numpages)
-@@ -2307,7 +2299,7 @@ static int __set_pages_np(struct page *page, int numpages)
- 				.numpages = numpages,
- 				.mask_set = __pgprot(0),
- 				.mask_clr = __pgprot(_PAGE_PRESENT | _PAGE_RW),
--				.flags = 0};
-+				.flags = CPA_NO_CHECK_ALIAS };
- 
- 	/*
- 	 * No alias checking needed for setting not present flag. otherwise,
-@@ -2315,7 +2307,7 @@ static int __set_pages_np(struct page *page, int numpages)
- 	 * mappings (this adds to complexity if we want to do this from
- 	 * atomic context especially). Let's keep it simple!
- 	 */
--	return __change_page_attr_set_clr(&cpa, 0);
-+	return __change_page_attr_set_clr(&cpa, 1);
- }
- 
- int set_direct_map_invalid_noflush(struct page *page)
-@@ -2386,7 +2378,7 @@ int __init kernel_map_pages_in_pgd(pgd_t *pgd, u64 pfn, unsigned long address,
- 		.numpages = numpages,
- 		.mask_set = __pgprot(0),
- 		.mask_clr = __pgprot(~page_flags & (_PAGE_NX|_PAGE_RW)),
--		.flags = 0,
-+		.flags = CPA_NO_CHECK_ALIAS,
- 	};
- 
- 	WARN_ONCE(num_online_cpus() > 1, "Don't call after initializing SMP");
-@@ -2399,7 +2391,7 @@ int __init kernel_map_pages_in_pgd(pgd_t *pgd, u64 pfn, unsigned long address,
- 
- 	cpa.mask_set = __pgprot(_PAGE_PRESENT | page_flags);
- 
--	retval = __change_page_attr_set_clr(&cpa, 0);
-+	retval = __change_page_attr_set_clr(&cpa, 1);
- 	__flush_tlb_all();
- 
- out:
-@@ -2429,12 +2421,12 @@ int __init kernel_unmap_pages_in_pgd(pgd_t *pgd, unsigned long address,
- 		.numpages	= numpages,
- 		.mask_set	= __pgprot(0),
- 		.mask_clr	= __pgprot(_PAGE_PRESENT | _PAGE_RW),
--		.flags		= 0,
-+		.flags		= CPA_NO_CHECK_ALIAS,
- 	};
- 
- 	WARN_ONCE(num_online_cpus() > 1, "Don't call after initializing SMP");
- 
--	retval = __change_page_attr_set_clr(&cpa, 0);
-+	retval = __change_page_attr_set_clr(&cpa, 1);
- 	__flush_tlb_all();
- 
- 	return retval;
+ 	cea_map_percpu_pages(&cea->entry_stack_page,
