@@ -2,102 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2622064F7C7
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 06:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 300A364F7C8
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 06:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbiLQFPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 00:15:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
+        id S230028AbiLQFP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 00:15:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiLQFPP (ORCPT
+        with ESMTP id S229911AbiLQFPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 00:15:15 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732786E9DD
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 21:15:00 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id b24-20020a05600c4a9800b003d21efdd61dso3059809wmp.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 21:15:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LG/OBjlQoR5hXNhPlSspTsGRVUXAxaICxjQTgjnwTCE=;
-        b=ZOgSGSbnbCCmH+dhULrSoz6lDA5Nuf4ClRGWoR2ZhtZtnQreXd9UiP4HuBSHG2YExF
-         gfrQ8rYD2GIcdS2ikly5DJA05Ic10lgzOAWMwwDx5a4KICFTQ93BZEeizol0SCXPaTcv
-         yfo9ERgf/Nk+O2ytzHXbWMtcempjiUXNHeSwQ2PEhjN5nBuCnaPpciDQ/O4fSvkaXAEl
-         C5mzMcF1SQuN/ZeO3bSETxH9py5oaCjSPweGC7BKWMaGFW/nObkK4XX2XluNpOmr1J70
-         Bhc6YzE8zDv8Y6jT0CUUlnWidpK3Oi7aCuv+ixIbdvTtUh6qhqKpQ+xXKXV9QJs3YJmg
-         6mzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LG/OBjlQoR5hXNhPlSspTsGRVUXAxaICxjQTgjnwTCE=;
-        b=TbEe6bALkX+lpTW0lVar0qby1igou/YaZ6LQVGJbivptc3MSo4Ex6NkrOwTPNdYzbk
-         pK7WCcrlmW1kmtg6iCTCv+iNJnrbIDs24yVH7R+hwCuzmLdeI71e4ri81r4nTYhl+kKo
-         DrZXGMwjz5kMslr+fgkOSGuL8OgwgSUos+YLeiMIEW+H/fsYgbNbbKdXQ04Ucv43krM3
-         BM0wGYqV60o0Br7Fb/0s0Ex1S8H4Ky5VXPkGUgz9p6/8J1h9533WrQhTMvCAKcp2iA8E
-         awgGUT15HqXPiS9omHrmLlUACz7TmVEzBL+ZX5NHMz7CLqLqkppS/5mmxrS7fjmEil2i
-         0nMA==
-X-Gm-Message-State: AFqh2koH6geO1Jl/nVI+I+gxS0WDGZUkf5wo7vbqxOdk57LY5xHVu73/
-        zzoRtxxjPrLK5bzlix3YhzWrBH3xu6X1nFgNPSACnQ==
-X-Google-Smtp-Source: AMrXdXuERKqHdWiURqQGzD7/QlAGP7/gOUi+J/zxdBXaAinHz+JCo70giVGEQQ+CgLhETQ80zddp9F7swSbLmgOfzTg=
-X-Received: by 2002:a05:600c:1819:b0:3d3:4be7:fba4 with SMTP id
- n25-20020a05600c181900b003d34be7fba4mr35885wmp.58.1671254098992; Fri, 16 Dec
- 2022 21:14:58 -0800 (PST)
+        Sat, 17 Dec 2022 00:15:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CF06E9E6;
+        Fri, 16 Dec 2022 21:15:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0A1C60921;
+        Sat, 17 Dec 2022 05:15:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5474AC433EF;
+        Sat, 17 Dec 2022 05:15:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671254120;
+        bh=radMw15X9qeTFbbSlTf0SfWRvZQR4SUmgAmlVZ0Dkks=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=TJElZYcw3WiLt+sFW2jJLAOm3NFnqwNLphQxnt9FqgBzoWmsSztEcekEiRpJRxFsJ
+         p8jF5bKJUqioud7G4QhfgvmnnpIywDSRh5z1/76AEaiZ2tgeHVyr4ga6wMA/maMmHN
+         llRMDp2zjz1YWijfTk/vUVyOQcnhVJIA/m3MYD82dktDvCbrUWEig2oJdtxtqttRX3
+         GObFol9HdasJJcALoj5grsaPUnGrFnfrhzIoU/hfk/YcCNo7vOLkmksZSgjUp8ygef
+         D4i6RXQ9pnfw8H8AS6o7mu0e0yrDELGE8On7RKlI/FdtrwnS8ApyVXJBSgH5skWytg
+         zy2nvdJRU0+Cw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id EC0D55C0A2D; Fri, 16 Dec 2022 21:15:19 -0800 (PST)
+Date:   Fri, 16 Dec 2022 21:15:19 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>, boqun.feng@gmail.com,
+        neeraj.iitr10@gmail.com, urezki@gmail.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] srcu: Yet more detail for
+ srcu_readers_active_idx_check() comments
+Message-ID: <20221217051519.GI4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221216165144.GA4001@paulmck-ThinkPad-P17-Gen-1>
+ <54F1102C-2577-4238-83B3-D38BA7ED9087@joelfernandes.org>
+ <CAEXW_YTkeGVJZQCJ-_3ez_BpeMJ0TOYONCv_g76MDh5=M+9x_Q@mail.gmail.com>
+ <CAEXW_YSueD31wcNA_=YNiWJfZ80TBypYEXUAwg_XedzRvQ+5HA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221208061841.2186447-1-davidgow@google.com> <20221208061841.2186447-3-davidgow@google.com>
-In-Reply-To: <20221208061841.2186447-3-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Sat, 17 Dec 2022 00:14:47 -0500
-Message-ID: <CAFd5g47EMW0B6_0mjk_UVZ7oeMJes-c8aoQxpz0o4jO_WB+8Zw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] Documentation: Add Function Redirection API docs
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joe Fradley <joefradley@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEXW_YSueD31wcNA_=YNiWJfZ80TBypYEXUAwg_XedzRvQ+5HA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 1:18 AM 'David Gow' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> From: Sadiya Kazi <sadiyakazi@google.com>
->
-> Added a new page (functionredirection.rst) that describes the Function
-> Redirection (static stubbing) API. This page will be expanded if we add,
-> for example, ftrace-based stubbing.
->
-> In addition,
-> 1. Updated the api/index.rst page to create an entry for function
->    redirection api
-> 2. Updated the toctree to be hidden, reducing redundancy on the
->    generated page.
->
-> Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
-> Co-developed-by: David Gow <davidgow@google.com>
-> Signed-off-by: David Gow <davidgow@google.com>
+On Fri, Dec 16, 2022 at 10:21:25PM -0500, Joel Fernandes wrote:
+> On Fri, Dec 16, 2022 at 10:19 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> >
+> > Hi,
+> > On the related subject of this function, I drew a diagram for one of
+> > the reasons why per-CPU unlock counts have to be scanned first, for a
+> > particular index, before the per-CPU lock counts, and not the other
+> > way. Otherwise, a reader that got preempted after reading the index,
+> > can suddenly get scheduled during the inactive index's scan, and cause
+> > the total lock and unlock counts to falsely match:
+> > https://i.imgur.com/79fDWdQ.png
+> 
+> Better diagram: https://i.imgur.com/PXKJnmW.png
+> (Added the preemption reasoning for Reader 0).
 
-Aside from the comments that have already been made, everything looks
-good to me.
+Nice!!!
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+The other way to look at this is using a memory-ordering viewpoint.
+This is a member of the message-passing litmus-test family, and the reader
+must read the variables in the opposite order that the writer writes them.
+
+(See the infamous test6.pdf file, "MP" pattern.)
+
+							Thanx, Paul
+
+> thanks,
+> 
+>  - Joel
+> 
+> 
+> > Cheers,
+> >
+> >  - Joel
+> >
+> >
+> >
+> > On Fri, Dec 16, 2022 at 11:54 AM Joel Fernandes <joel@joelfernandes.org> wrote:
+> > >
+> > >
+> > >
+> > > > On Dec 16, 2022, at 11:51 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > >
+> > > > ﻿On Fri, Dec 16, 2022 at 04:32:39PM +0000, Joel Fernandes wrote:
+> > > >> On Thu, Dec 15, 2022 at 05:09:14PM -0800, Paul E. McKenney wrote:
+> > > >> [...]
+> > > >>>>>> 2. unlock()'s smp_mb() happened before Flip+smp_mb() , now the reader
+> > > >>>>>> has no new smp_mb() that happens AFTER the flip happened. So it can
+> > > >>>>>> totally sample the old idx again -- that particular reader will
+> > > >>>>>> increment twice, but the next time, it will see the flipped one.
+> > > >>>>>
+> > > >>>>> I will let you transliterate both.  ;-)
+> > > >>>>
+> > > >>>> I think I see what you mean now :)
+> > > >>>>
+> > > >>>> I believe the access I am referring to is the read of idx on one side and
+> > > >>>> the write to idx on the other. However that is incomplete and I need to
+> > > >>>> pair that with some of other access on both sides.
+> > > >>>>
+> > > >>>> So perhaps this:
+> > > >>>>
+> > > >>>> Writer does flip + smp_mb + read unlock counts [1]
+> > > >>>>
+> > > >>>> Reader does:
+> > > >>>> read idx + smp_mb() + increment lock counts [2]
+> > > >>>>
+> > > >>>> And subsequently reader does
+> > > >>>> Smp_mb() + increment unlock count. [3]
+> > > >>>>
+> > > >>>> So [1] races with either [2] or [2]+[3].
+> > > >>>>
+> > > >>>> Is that fair?
+> > > >>>
+> > > >>> That does look much better, thank you!
+> > > >>
+> > > >> Perhaps a comment with an ASCII diagram will help?
+> > > >>
+> > > >>
+> > > >> Case 2:
+> > > >> Both the reader and the updater see each other's writes too late, but because
+> > > >> of memory barriers on both sides, they will eventually see each other's write
+> > > >> with respect to their own. This is similar to the store-buffer problem. This
+> > > >> let's a single reader contribute a maximum (unlock minus lock) imbalance of 2.
+> > > >>
+> > > >> The following diagram shows the subtle worst case followed by a simplified
+> > > >> store-buffer explanation.
+> > > >>
+> > > >> READER                  UPDATER
+> > > >> -------------           ----------
+> > > >>                           // idx is initially 0.
+> > > >> read_lock() {
+> > > >>  READ(idx) = 0;
+> > > >>  lock[0]++; --------------------------------------------,
+> > > >>                           flip() {                      |
+> > > >>                              smp_mb();                  |
+> > > >>  smp_mb();                                              |
+> > > >> }                                                        |
+> > > >>                                                         |
+> > > >> // RSCS                                                  |
+> > > >>                                                         |
+> > > >> read_unlock() {                                          |
+> > > >>  smp_mb();                                              |
+> > > >>                              idx++;  // P               |
+> > > >>                              smp_mb();                  |
+> > > >>                           }                             |
+> > > >>                                                         |
+> > > >>                           scan_readers_idx(0) {         |
+> > > >>                               count all unlock[0];      |
+> > > >>                                   |                     |
+> > > >>                                   |                     |
+> > > >>  unlock[0]++; //X <--not-counted--`-----,               |
+> > > >>                                         |               |
+> > > >> }                                        V               `------,
+> > > >>                               // Will make sure next scan      |
+> > > >>                               // will not miss this unlock (X) |
+> > > >>                               // if other side saw flip (P) ,--`
+> > > >>                               // Call this MB [1]           |
+> > > >>                               // Order write(idx) with      |
+> > > >>                               // next scan's unlock.        |
+> > > >>                               smp_mb();                 ,---`
+> > > >> read_lock() {                                            |
+> > > >>  READ(idx)=0;                                           |
+> > > >>  lock[0]++; ----------------> count all lock[0];        |
+> > > >>  smp_mb();         |     }                              |
+> > > >> }     |             |                                    V
+> > > >>      |             `---> // Incorrect contribution to lock counting
+> > > >>      |                   // upto a maximum of 2 times.
+> > > >>      |
+> > > >>       `---> // Pairs with MB [1]. Makes sure that
+> > > >>             // the next read_lock()'s' idx read (Y) is ordered
+> > > >>             // with above write to unlock[0] (X).
+> > > >>                            |
+> > > >> rcu_read_unlock() {         |
+> > > >>  smp_mb(); <---------------`
+> > > >>  unlock[0]++;
+> > > >> }
+> > > >>
+> > > >> read_lock() {
+> > > >>  READ(idx) = 1; //Y
+> > > >>  lock[1]++;
+> > > >>  ...
+> > > >> }
+> > > >>                           scan_readers_idx(0) {
+> > > >>                               count all unlock[0]; //Q
+> > > >>                               ...
+> > > >>
+> > > >>
+> > > >> thanks,
+> > > >>
+> > > >> - Joel
+> > > >>
+> > > >>                          }
+> > > >>
+> > > >> This makes it similar to the store buffer pattern. Using X, Y, P and Q
+> > > >> annotated above, we get:
+> > > >>
+> > > >> READER                    UPDATER
+> > > >> X (write)                 P (write)
+> > > >>
+> > > >> smp_mb();                 smp_mb();
+> > > >>
+> > > >> Y (read)                  Q (read)
+> > > >
+> > > > Given that this diagram is more than 50 lines long, it might go better in
+> > > > a design document describing this part of RCU.  Perhaps less detail or
+> > > > segmented, but the same general idea as this guy:
+> > > >
+> > > > Documentation/RCU/Design/Memory-Ordering/Tree-RCU-Memory-Ordering.rst
+> > >
+> > > Yes, this sounds like a good place to add it and perhaps we refer to it from the C source file? I can take this up to do over the holidays, if you prefer.
+> > >
+> > > Thanks,
+> > >
+> > >   - Joel
+> > >
+> > >
+> > > >
+> > > > Thoughts?
+> > > >
+> > > >                        Thanx, Paul
