@@ -2,102 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87E064F8B3
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 11:35:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF1264F8C0
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 11:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbiLQKfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 05:35:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
+        id S230237AbiLQKrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 05:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiLQKft (ORCPT
+        with ESMTP id S230155AbiLQKrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 05:35:49 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AEACBF41
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 02:35:48 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id x11so4573015ljh.7
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 02:35:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t6cxt7pOx+yjxHzIOKE7PvpAXZf8eYOMSoAnUrzpOMQ=;
-        b=QVghawtwgSpMfGtDoJXbg4K54IkutqOBAireTIcsWaEndSA5KZfMYzE1EvFXTPaOVD
-         elsXbMkXzVUei2RGqNXJvYoU6OyIX/T1tw5qcc43dcsvm3qzxLYMxeCHGi4rAAVcWY+0
-         UZD/QIkBCraE8YuaNUN0Zrn5hOOndOR2sQCcjiGo2Pa5062IQQkiDpzcy4izeE/8ntH0
-         ZrdyqXxQoyVsaF2AFnEp6WnKkQmdP4Va/t0pEcboRLzEpCK1xjnXsp/i4eSn8MQrxyes
-         XdyqSKccLFSPVl3Ubw1N15lZ/DHTkqlmCCfvAVF8EB1/MTqBMB6jmhFppiz/46WShddI
-         V7AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t6cxt7pOx+yjxHzIOKE7PvpAXZf8eYOMSoAnUrzpOMQ=;
-        b=SmPqMPgujXd98KtAi2FFTYejEK1NMmYNN1Mmyi1lR9SoSCAsJ8LZlV95z6ZKITp5ON
-         f0tx4by9Ghm1LKFBsm0ZYtAXVPwiiVy9bufaIai+GAHQHCpBV3oBJsAjTRf8fnfglyKe
-         1/lIUNqaHZNE1Da+y6PvQXzJTGjeco6XI+XJGuSJnz4g3VtRp3yQ8/fS7uC+U3FI5A78
-         oEDjVg8PrdXDZLxkqS/X0khwJG2jDRXBe51oITHMmSFmNo0w5jYMYLtvzdvuGvIdGwBV
-         62yeBWDe+tKN31JcA4CqSClmSItDr9y6MFpeqO3kfbOMEA43C/vQZoa1GlzY5VWsnTvp
-         c7vw==
-X-Gm-Message-State: ANoB5pnalNc/4PtgfAmVi/Pc3++fRshAxkCdvu59ZaMStpnBBEDMCpPh
-        lEx1I8yhYP6Lk+pLfM5BYYEoBw==
-X-Google-Smtp-Source: AA0mqf6uxVSOy/0yIlItmN5uwMQTq8ElvVOsqcpLuKp1rU11/Oj6kweZpcWkl7PH49csb1C+Vn6FWQ==
-X-Received: by 2002:a05:651c:1592:b0:277:8a76:90a4 with SMTP id h18-20020a05651c159200b002778a7690a4mr10873604ljq.0.1671273346754;
-        Sat, 17 Dec 2022 02:35:46 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05651c118c00b00279e41de7e6sm302760ljo.3.2022.12.17.02.35.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Dec 2022 02:35:46 -0800 (PST)
-Message-ID: <9c56b7b0-b22b-b90c-a67a-5fa23825b166@linaro.org>
-Date:   Sat, 17 Dec 2022 11:35:44 +0100
+        Sat, 17 Dec 2022 05:47:42 -0500
+X-Greylist: delayed 302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 17 Dec 2022 02:47:40 PST
+Received: from mail-108-mta118.mxroute.com (mail-108-mta118.mxroute.com [136.175.108.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFE510B54
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 02:47:39 -0800 (PST)
+Received: from mail-111-mta2.mxroute.com ([136.175.111.2] filter006.mxroute.com)
+ (Authenticated sender: mN4UYu2MZsgR)
+ by mail-108-mta118.mxroute.com (ZoneMTA) with ESMTPSA id 1851fadb42f0001d7e.006
+ for <linux-kernel@vger.kernel.org>
+ (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256);
+ Sat, 17 Dec 2022 10:42:35 +0000
+X-Zone-Loop: 43f778ed12e330a3bce11918edca10e1b8e69358928e
+X-Originating-IP: [136.175.111.2]
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=c8h4.io;
+        s=x; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:
+        From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=PvmwkN+BYUCQUQdJYFAdNwIAg6Wx6lg7uwVGd3w86p8=; b=c
+        e2KTpl4ljuZzZwscxfRQsObKC9ppNfMaMr/Swx1cFAdzgIp8NBX4x61gBTdDXJvUGb42PeiMlKYmg
+        eTFajhQD2A4HQNKEP/IevCe3iimpPtgebn7XhUfFiG3Vr3DqQyAliDuIqhIxhrlKUyGyPJdDdXvjX
+        hWNOdXv7wQUg6LXNpB9bhIhw1s2cOkSr+bKD7YHG1Ljrd3G+jq5ftMq7QiEI2fGPHXm+8A6Ljx0k5
+        QDB6VYtK99IMVnQJ8CC2KApfajYdTY2kdTCVNIogPkbMtoVi7DSASwLuv+wNwu8L4bq4yWoNYh60q
+        p7epfEz3rk3lkcZnsH5J+GVsg6vrKtQqQ==;
+From:   Christoph Heiss <christoph@c8h4.io>
+To:     Chris Snook <chris.snook@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: alx: Switch to DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()
+Date:   Sat, 17 Dec 2022 11:40:24 +0100
+Message-Id: <20221217104024.1954875-1-christoph@c8h4.io>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5] dt-bindings: firmware: scm: Add QDU1000/QRU1000
- compatible
-Content-Language: en-US
-To:     Melody Olvera <quic_molvera@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Das Srinagesh <quic_gurus@quicinc.com>
-Cc:     "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221216231312.22574-1-quic_molvera@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221216231312.22574-1-quic_molvera@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Id: christoph@c8h4.io
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/12/2022 00:13, Melody Olvera wrote:
-> Add compatible for scm driver for QDU1000 and QRU1000 platforms. These
-> drivers only require the compatible field, so update the bindings
-> accordingly for these platforms.
-> 
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> ---
-> This patch is separated out from [1] and includes
-> changes addressing comments from that patch set.
-> 
+Using these macros allows to remove an #ifdef-guard on CONFIG_PM_SLEEP.
+No functional changes.
 
+Signed-off-by: Christoph Heiss <christoph@c8h4.io>
+---
+ drivers/net/ethernet/atheros/alx/main.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/drivers/net/ethernet/atheros/alx/main.c b/drivers/net/ethernet/atheros/alx/main.c
+index d30d11872719..306393f8eeca 100644
+--- a/drivers/net/ethernet/atheros/alx/main.c
++++ b/drivers/net/ethernet/atheros/alx/main.c
+@@ -1905,7 +1905,6 @@ static void alx_remove(struct pci_dev *pdev)
+ 	free_netdev(alx->dev);
+ }
 
-Best regards,
-Krzysztof
+-#ifdef CONFIG_PM_SLEEP
+ static int alx_suspend(struct device *dev)
+ {
+ 	struct alx_priv *alx = dev_get_drvdata(dev);
+@@ -1951,12 +1950,7 @@ static int alx_resume(struct device *dev)
+ 	return err;
+ }
+
+-static SIMPLE_DEV_PM_OPS(alx_pm_ops, alx_suspend, alx_resume);
+-#define ALX_PM_OPS      (&alx_pm_ops)
+-#else
+-#define ALX_PM_OPS      NULL
+-#endif
+-
++static DEFINE_SIMPLE_DEV_PM_OPS(alx_pm_ops, alx_suspend, alx_resume);
+
+ static pci_ers_result_t alx_pci_error_detected(struct pci_dev *pdev,
+ 					       pci_channel_state_t state)
+@@ -2055,7 +2049,7 @@ static struct pci_driver alx_driver = {
+ 	.probe       = alx_probe,
+ 	.remove      = alx_remove,
+ 	.err_handler = &alx_err_handlers,
+-	.driver.pm   = ALX_PM_OPS,
++	.driver.pm   = pm_sleep_ptr(&alx_pm_ops),
+ };
+
+ module_pci_driver(alx_driver);
+--
+2.39.0
 
