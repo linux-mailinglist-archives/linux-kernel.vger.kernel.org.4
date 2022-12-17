@@ -2,108 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA8664FC77
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 22:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC2E64FC7B
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 22:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiLQVhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 16:37:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
+        id S230109AbiLQVls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 16:41:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiLQVhU (ORCPT
+        with ESMTP id S229475AbiLQVlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 16:37:20 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EBC0AE5C;
-        Sat, 17 Dec 2022 13:37:19 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id c7so5509254qtw.8;
-        Sat, 17 Dec 2022 13:37:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=HtFHmDiZdhCBd3AYorc5R49zCwK13HQcbUolbEz3R6U=;
-        b=VErxAKwASmsxRND0FtHwJBvLHoqVGMxEX0602KEiOqqNSgMj1JhwpaZ0tMitBdfBhI
-         ArThuzu9pnP85KphHcjpghaJV/pF3Zk80AJ/s+sulAFmIDKHuFoToZ1PdY4W9KgxFY6K
-         Pghyol2GXMRyB88BBWQrKn9JdZtGu/ZLMuKouOd+ex2zqWkXJmJiqRdn1rZfYYCqocBS
-         yKZd2aQM2DanaHrpKs+WgTkGBy5aHXYPYYE+leWITF6AZa7ah83r6AP8znNHHsKC5e7g
-         olPGD+/NTOn8RGS20X0HI5ah5UFVj8mdg4DZLxsthAuPHXwpPnAoVX/05/Gv1walKIe7
-         P1zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HtFHmDiZdhCBd3AYorc5R49zCwK13HQcbUolbEz3R6U=;
-        b=o/S8IEZc1+RMtVeBAZvyW6eJWrMshl4cPYBMw1rzndFpyBCUh5W8nGzo9/NMPpwIv6
-         Eh6CLblgQDK4iTKOoZRzQRTPZJ1m5TEckiT6/RbgYTtPI6i83T8hom9o3uXah0d5YtPD
-         qSYkapxMiroeNRssnf9uFIbmq3mrfLoYZIxqgUyMH33XPFQ6Zr1AbTRHzCu7+OSD1d5i
-         954Nb9aoBL/yEPzRqjfmjBpxaNnORM7dpZECbtjSYYumjBr3x4H5p9Ryl85rySbWWi6R
-         rrbvOCckpy1Cp+KCjxHU+MFTrt0lYbFEsN4NtYzHagyr8e1YdkJMFFAlLYsmOINR2UBP
-         Rs8g==
-X-Gm-Message-State: ANoB5pl3/ZGgQIAz5f2UVR/N5TBgP4qvV4zmEPeYbw5vVyexrWFGXWkf
-        822Bv8D02Kg4kkGmEvqX/l4=
-X-Google-Smtp-Source: AA0mqf70mi1N6Mmb+f+DwUawtikOqYGZ0oLF9h2eOT6o/H1kgb8D3Nqs6Ts4PLeX0Lm9E8QZWaO57g==
-X-Received: by 2002:ac8:51d0:0:b0:3a7:e271:fc05 with SMTP id d16-20020ac851d0000000b003a7e271fc05mr47664883qtn.3.1671313038289;
-        Sat, 17 Dec 2022 13:37:18 -0800 (PST)
-Received: from localhost ([2600:1700:65a0:ab60:5eb1:3c61:24e:7911])
-        by smtp.gmail.com with ESMTPSA id s5-20020a05620a254500b006f9f714cb6asm4155158qko.50.2022.12.17.13.37.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Dec 2022 13:37:16 -0800 (PST)
-Date:   Sat, 17 Dec 2022 13:37:15 -0800
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Jun Nie <jun.nie@linaro.org>, jhs@mojatatu.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2] net: sched: ematch: reject invalid data
-Message-ID: <Y542i4NHrt7RIA+C@pop-os.localdomain>
-References: <20221214022058.3625300-1-jun.nie@linaro.org>
- <f8af2b70e3c2074de04b2117100b2cdc5ec4ec6d.camel@redhat.com>
+        Sat, 17 Dec 2022 16:41:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3AE10B7D;
+        Sat, 17 Dec 2022 13:41:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD48160C50;
+        Sat, 17 Dec 2022 21:41:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBC83C433EF;
+        Sat, 17 Dec 2022 21:41:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671313303;
+        bh=FQfM15omrjyZA4dNcbB7Ai/GYY6dSKSm7z3ucZy747g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Kf2nbSVkMJm05leBFU5yBUdyBRglF/S1CO0UNZeQQ5OZ8uxxAKbHUyMZNEsMSRUxJ
+         lThDE0WdEw8XKX8p3NXUthYKnpa8Z4q5IO7eELKeCLyDxv+YCC1C1D2Sd0oavTdMCd
+         H/AJYgPN7Bu4zIIfyZ34z9L78vwJxpOFsapcwc3YUzjEFYmVObYkervQlUuIywM6AT
+         cghmlLqaKABIm7F1hcYWTj4OP+A3oKBrVmEz79dZ0jyq62QaS46AEUSzSz/QVr8x75
+         4QW/7HpoHG4KXNcw0oL8mSxqWn6cGudP63b24O+wxH96G6XK+bvbbr1i55MmkHaxuL
+         lKdXtw1mS2T2w==
+Date:   Sat, 17 Dec 2022 21:41:36 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Guo Ren <guoren@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v5 1/6] riscv: asm: alternative-macros: Introduce
+ ALTERNATIVE_3() macro
+Message-ID: <Y543kM4070CSDtZi@spud>
+References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221212115505.36770-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="9X66vO0ItE/RH9dw"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f8af2b70e3c2074de04b2117100b2cdc5ec4ec6d.camel@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221212115505.36770-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 01:50:43PM +0100, Paolo Abeni wrote:
-> On Wed, 2022-12-14 at 10:20 +0800, Jun Nie wrote:
-> > ---
-> >  net/sched/em_cmp.c | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/net/sched/em_cmp.c b/net/sched/em_cmp.c
-> > index f17b049ea530..0284394be53f 100644
-> > --- a/net/sched/em_cmp.c
-> > +++ b/net/sched/em_cmp.c
-> > @@ -22,9 +22,14 @@ static int em_cmp_match(struct sk_buff *skb, struct tcf_ematch *em,
-> >  			struct tcf_pkt_info *info)
-> >  {
-> >  	struct tcf_em_cmp *cmp = (struct tcf_em_cmp *) em->data;
-> > -	unsigned char *ptr = tcf_get_base_ptr(skb, cmp->layer) + cmp->off;
-> > +	unsigned char *ptr;
-> >  	u32 val = 0;
-> >  
-> > +	if (!cmp)
-> > +		return 0;
-> 
-> It feels like this is papering over the real issue. Why em->data is
-> NULL here? why other ematches are not afflicted by this issue? 
-> 
-> is em->data really NULL or some small value instead? KASAN seams to
-> tell it's a small value, not 0, so this patch should not avoid the
-> oops. Have you tested it vs the reproducer?
 
-Right. I think I have found the root cause, let me test my patch to see
-if it makes syzbot happy.
+--9X66vO0ItE/RH9dw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks.
+On Mon, Dec 12, 2022 at 11:55:00AM +0000, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>=20
+> Introduce ALTERNATIVE_3() macro.
+>=20
+> A vendor wants to replace an old_content, but another vendor has used
+> ALTERNATIVE_2() to patch its customized content at the same location.
+> In this case, this vendor can use macro ALTERNATIVE_3() and then replace
+> ALTERNATIVE_2() with ALTERNATIVE_3() to append its customized content.
+>=20
+> While at it update comment above ALTERNATIVE_2() macro and make it generic
+> so that the comment holds good for any new addition of ALTERNATIVE_X()
+> macros.
+>=20
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v4->v5
+> * Rebased the patch on top of Andrew's series (now in Palmers for next-br=
+anch)
+> * Updated comment for ALTERNATIVE_x() as suggested by Heiko
+>=20
+> RFC v3 -> v4
+> * New patch
+> ---
+>  arch/riscv/include/asm/alternative-macros.h | 46 ++++++++++++++++++---
+>  1 file changed, 41 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/inc=
+lude/asm/alternative-macros.h
+> index 7226e2462584..a5b4691520da 100644
+> --- a/arch/riscv/include/asm/alternative-macros.h
+> +++ b/arch/riscv/include/asm/alternative-macros.h
+> @@ -50,8 +50,17 @@
+>  	ALT_NEW_CONTENT \vendor_id_2, \errata_id_2, \enable_2, \new_c_2
+>  .endm
+> =20
+> +.macro ALTERNATIVE_CFG_3 old_c, new_c_1, vendor_id_1, errata_id_1, enabl=
+e_1,	\
+> +				new_c_2, vendor_id_2, errata_id_2, enable_2,	\
+> +				new_c_3, vendor_id_3, errata_id_3, enable_3
+> +       ALTERNATIVE_CFG_2 \old_c, \new_c_1, \vendor_id_1, \errata_id_1, \=
+enable_1,	\
+> +                                 \new_c_2, \vendor_id_2, \errata_id_2, \=
+enable_2
+> +       ALT_NEW_CONTENT \vendor_id_3, \errata_id_3, \enable_3, \new_c_3
+> +.endm
+> +
+>  #define __ALTERNATIVE_CFG(...)		ALTERNATIVE_CFG __VA_ARGS__
+>  #define __ALTERNATIVE_CFG_2(...)	ALTERNATIVE_CFG_2 __VA_ARGS__
+> +#define __ALTERNATIVE_CFG_3(...)	ALTERNATIVE_CFG_3 __VA_ARGS__
+> =20
+>  #else /* !__ASSEMBLY__ */
+> =20
+> @@ -98,6 +107,13 @@
+>  	__ALTERNATIVE_CFG(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1)	\
+>  	ALT_NEW_CONTENT(vendor_id_2, errata_id_2, enable_2, new_c_2)
+> =20
+> +#define __ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, en=
+able_1,	\
+> +				   new_c_2, vendor_id_2, errata_id_2, enable_2,	\
+> +				   new_c_3, vendor_id_3, errata_id_3, enable_3)	\
+> +	__ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,=
+	\
+> +                                   new_c_2, vendor_id_2, errata_id_2, en=
+able_2)	\
+> +	ALT_NEW_CONTENT(vendor_id_3, errata_id_3, enable_3, new_c_3)
+> +
+>  #endif /* __ASSEMBLY__ */
+> =20
+>  #define _ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, CONFIG_k)	\
+> @@ -108,6 +124,13 @@
+>  	__ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLE=
+D(CONFIG_k_1),	\
+>  				   new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2))
+> =20
+> +#define _ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, CON=
+FIG_k_1,		\
+> +				  new_c_2, vendor_id_2, errata_id_2, CONFIG_k_2,		\
+> +				  new_c_3, vendor_id_3, errata_id_3, CONFIG_k_3)		\
+> +	__ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLE=
+D(CONFIG_k_1),	\
+> +				   new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2),	\
+> +				   new_c_3, vendor_id_3, errata_id_3, IS_ENABLED(CONFIG_k_3))
+> +
+>  #else /* CONFIG_RISCV_ALTERNATIVE */
+>  #ifdef __ASSEMBLY__
+> =20
+> @@ -152,15 +175,28 @@
+>  	_ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG=
+_k)
+> =20
+>  /*
+> - * A vendor wants to replace an old_content, but another vendor has used
+> - * ALTERNATIVE() to patch its customized content at the same location. In
+> - * this case, this vendor can create a new macro ALTERNATIVE_2() based
+> - * on the following sample code and then replace ALTERNATIVE() with
+> - * ALTERNATIVE_2() to append its customized content.
+> + * ALTERNATIVE_x macros allow providing multiple replacement options
+> + * for an ALTERNATIVE code section. This is helpful if multiple
+> + * implementation variants for the same functionality exist for
+> + * different cpu cores.
+
+I think this last sentence should be:
+"This is helpful if multiple implementation variants exist for the same
+functionality."
+I don't think CPU cores is the right level of "granularity".
+
+> + *
+> + * Usage:
+> + *   ALTERNATIVE_x(old_content,
+> + *      new_content1, vendor_id1, errata_id1, CONFIG_k1,
+> + *      new_content2, vendor_id2, errata_id2, CONFIG_k2,
+> + *      ...
+> + *      new_contentx, vendor_idx, errata_idx, CONFIG_kx)
+>   */
+>  #define ALTERNATIVE_2(old_content, new_content_1, vendor_id_1, errata_id=
+_1, CONFIG_k_1,		\
+>  				   new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2)		\
+>  	_ALTERNATIVE_CFG_2(old_content, new_content_1, vendor_id_1, errata_id_1=
+, CONFIG_k_1,	\
+>  					new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2)
+> =20
+> +#define ALTERNATIVE_3(old_content, new_content_1, vendor_id_1, errata_id=
+_1, CONFIG_k_1,		\
+> +				   new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2,		\
+> +				   new_content_3, vendor_id_3, errata_id_3, CONFIG_k_3)		\
+> +       _ALTERNATIVE_CFG_3(old_content, new_content_1, vendor_id_1, errat=
+a_id_1, CONFIG_k_1,	\
+> +                                       new_content_2, vendor_id_2, errat=
+a_id_2, CONFIG_k_2,	\
+> +                                       new_content_3, vendor_id_3, errat=
+a_id_3, CONFIG_k_3)
+
+btw, why is this indented with spaces when the line above it is indented
+with tabs? (At least, that is how it appears in mutt).
+
+With those minor bits & the suggested fixes from Drew/Geert:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+> +
+>  #endif
+> --=20
+> 2.25.1
+>=20
+
+--9X66vO0ItE/RH9dw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY543kAAKCRB4tDGHoIJi
+0h+1AQCWYOSiTUMmLEQOWyuSsja8cTBe0s7E75THHhx5ytR1+wD8DH3FlM6csl5t
+HilI1PkreKSHH2mpX6BVpeofVNt0FAQ=
+=VgBI
+-----END PGP SIGNATURE-----
+
+--9X66vO0ItE/RH9dw--
