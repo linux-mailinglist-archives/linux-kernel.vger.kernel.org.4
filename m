@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D2564F8CD
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 11:58:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F287A64F8D0
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 11:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiLQK6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 05:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
+        id S230308AbiLQK7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 05:59:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230274AbiLQK6r (ORCPT
+        with ESMTP id S230299AbiLQK7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 05:58:47 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7138647E
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 02:58:45 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id bp15so7134706lfb.13
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 02:58:45 -0800 (PST)
+        Sat, 17 Dec 2022 05:59:13 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51A6636A
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 02:59:12 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id s10so4636417ljg.1
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 02:59:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vH+Qf1qNqoa6LSK/oJrnU6JcVq/+Xdmk69TeAJOsb8o=;
-        b=ZL43STlBtL4OnrYlLeBaoXrhcJMiyesIgktxakTbHyqVQD1xLW25KgMfHRRry3Zs/d
-         s8lIoWv79qZnZpGyJynxcVzPsrP+DwfhRdn6Ets+oVM+NjhrSAcWu+Qbg7a3S/I3S77U
-         Brv4b7Z5WxfvKGTob7f6fZlG2/MnO1ekvouX6O0oV/W4VtX44c/BaoV83f97BcJcCjMA
-         UL4sN52FwccT10wWLn7gi+AnFnhAsJshtxXO/wbsBjUhkZEt7jpsOio1Xj6sSoL4klSk
-         6BA68G4XrNN9gX6jUuHSFSglzuyZ13uQIXR3zK+73HnPxqenB9vQkz5OoyzaUebVwuo3
-         OUQg==
+        bh=bWBK8NjdOSu2oHxSgXnlLAV0JJ7om2AhC9msq+gIQIM=;
+        b=Dlhh+IGTjTctruJwrIaH6drA+PFg6ZZJ92h9c61MVbbPSXUenClCC+DRso8ySoGoQC
+         t+b+YXGI2GdDC6+JOPNlFH+BW1RaIHoCsofdfmwKUP4cnbm491J+8FBCl0+1eYQWcMRB
+         SybJThQORk17Dey8dWxK577KDG/qgxIGd6uYidPmv+5mPe0wGPlsZcXX7TdKQBgHatFd
+         E85WHFb5Tdvf2UrDHlaV3moTNZ6ahNNSUgFLTYlfKEAFNlFYao/oFKBoUqn3KlTdyLsL
+         172qDrWM1GMPhHJUgcMxWw/RM4yoIXgSK0N6Kc0vaCRQxXJ8FZ8ZafNTtLm+JiqRj0Ga
+         5E2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vH+Qf1qNqoa6LSK/oJrnU6JcVq/+Xdmk69TeAJOsb8o=;
-        b=EtPKeD/wN+rXSVF8bBGS+Atz8esRA77qxQOd20ti5yUrAQA6Sn7WVG3zC3kDdv2MJr
-         9uGd6zC47n4VhTps92S9guaW6Ok7GxwXaMiaJZ5gbLp7PiFcI1A+6rKON9oGOu8BZxSs
-         +tUF0a2sjJF1TwS74JYDN0nvzere+GkbCJQZI6HZ0TJzb/Cogt2cXhZ08XsMfDQrlWyG
-         hdjGsXQr6F0NpiQs57+6/G4DKRiuzPGEGAMagHmC/gFXP1R+uNqmuGjX7JdwxD6dBlPK
-         qjCqpJKnWORrkWGW4YsawlTf5SttbY1at2eOC0BZY8Ie2GN11lryymi0AABBF2wHAwyU
-         FZyQ==
-X-Gm-Message-State: ANoB5pmFaWK70RlD2Bmi3YgTt0O3nccpJnM8iqKTKvHNiwH99oppiA2e
-        Cypg7NsMkpwBy8+CoFI/EzRocA==
-X-Google-Smtp-Source: AA0mqf5wT3ntTMt+i8dtAJ3QoNcyWZIS38qjTI7TINNrwlleIXai4do90gsEtW/4Rzzd6MSGiqsSWg==
-X-Received: by 2002:a05:6512:3d2:b0:4b3:9fdc:1697 with SMTP id w18-20020a05651203d200b004b39fdc1697mr9243579lfp.47.1671274724079;
-        Sat, 17 Dec 2022 02:58:44 -0800 (PST)
+        bh=bWBK8NjdOSu2oHxSgXnlLAV0JJ7om2AhC9msq+gIQIM=;
+        b=ydaVNWMmzX/PHe9IqfO1AIqyJDnBTnMO0C7NxkzWiIu+BiYLrySJNZ5tJZZv3glSWN
+         gg9ZJ9yci9xjDItRLNifIz8iC962vynRj1UcZeiiYGaiERWqYkPVpjVc/vJSnnFDTFSJ
+         BGQxbgHy3+nxrerA4n3ADThBEDGZjNHHXjk0b1kKJ9PXVWNLmLIyxe08fKQ2ZOHXOYQK
+         zTyXSWBHyX0ZqcQSMEyK2DLvrvQpmGMQLb2wy4euiMWiQr/iui29GdaE1nKyHzgVXCCd
+         lWTyDlXd1AIrz8f1QgjCoFckRpJV1TA+5WCSLd8Rpqx6ZHUZxw6y68tv724sAVwhaid4
+         Pv0w==
+X-Gm-Message-State: ANoB5pmWuma50tyjbi+DxDMTxjm0O/zrLuqQkE5N8sHD690zIdvLQxZB
+        bTjSxodI+DvQ2rGdQUH/Ya64ML8/BiktBpQ7
+X-Google-Smtp-Source: AA0mqf7Y4mEt/k9+m5ipOow6pNb/D27j4c2KqpRcfhLmsqUub5zJB/St9dC7Jsmzft03u3M2Kyvr+Q==
+X-Received: by 2002:a05:651c:b0a:b0:26f:db35:6059 with SMTP id b10-20020a05651c0b0a00b0026fdb356059mr11629668ljr.36.1671274751143;
+        Sat, 17 Dec 2022 02:59:11 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bd8-20020a05651c168800b00279e0b8bae7sm295980ljb.65.2022.12.17.02.58.42
+        by smtp.gmail.com with ESMTPSA id i25-20020a2ea379000000b0026e0434eb1esm302535ljn.67.2022.12.17.02.59.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Dec 2022 02:58:43 -0800 (PST)
-Message-ID: <0a537c59-acd7-3f7f-8618-cc0e91a6a58a@linaro.org>
-Date:   Sat, 17 Dec 2022 11:58:42 +0100
+        Sat, 17 Dec 2022 02:59:10 -0800 (PST)
+Message-ID: <ff8cd48a-c353-3663-4370-f86637e092b2@linaro.org>
+Date:   Sat, 17 Dec 2022 11:59:09 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH v1 4/6] ARM: dts: hpe: Add I2C Topology
+Subject: Re: [PATCH v1 3/6] dt-bindings: mfd: syscon: Document GXP register
+ compatible
 Content-Language: en-US
 To:     nick.hawkins@hpe.com, verdun@hpe.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
@@ -63,15 +64,14 @@ To:     nick.hawkins@hpe.com, verdun@hpe.com, robh+dt@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 References: <20221216183532.78933-1-nick.hawkins@hpe.com>
- <20221216183532.78933-5-nick.hawkins@hpe.com>
+ <20221216183532.78933-4-nick.hawkins@hpe.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221216183532.78933-5-nick.hawkins@hpe.com>
+In-Reply-To: <20221216183532.78933-4-nick.hawkins@hpe.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,158 +81,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 16/12/2022 19:35, nick.hawkins@hpe.com wrote:
 > From: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> Add 9 I2C Engines, 2 MUXs, and a EEPROM to the device tree.
+> Document hpe,gxp-sysreg compatible for GXP registers.
 > 
 > Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 > ---
->  arch/arm/boot/dts/hpe-bmc-dl360gen10.dts |  72 ++++++++++++++
->  arch/arm/boot/dts/hpe-gxp.dtsi           | 115 +++++++++++++++++++++++
->  2 files changed, 187 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
-> index 3a7382ce40ef..d9008e2cfed3 100644
-> --- a/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
-> +++ b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
-> @@ -23,4 +23,76 @@
->  		device_type = "memory";
->  		reg = <0x40000000 0x20000000>;
->  	};
-> +
-> +	i2cmux@4 {
-> +		compatible = "i2c-mux-reg";
-> +		i2c-parent = <&i2c4>;
-> +		reg = <0xd1000074 1>;
 
-Did you check this? `dtbs_check` and `dtbs W=1`? Reg looks different
-than unit.
 
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		i2c4@1 {
 
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-i2c@
-
-> +			reg = <1>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +> +		i2c4@3 {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-> +			reg = <3>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +
-> +		i2c4@4 {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-> +			reg = <4>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +	};
-> +
-> +	i2cmux@6 {
-> +		compatible = "i2c-mux-reg";
-> +		i2c-parent = <&i2c6>;
-> +		reg = <0xd1000076 1>;
-
-Same question.
-
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		i2c6@1 {
-
-and so on...
-
-> +			reg = <1>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +
-> +		i2c6@2 {
-> +			reg = <2>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +
-> +		i2c6@3 {
-> +			reg = <3>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +
-> +		i2c6@4 {
-> +			reg = <4>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +
-> +		i2c6@5 {
-> +			reg = <5>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +	};
-> +};
-> +
-> +&i2c2 {
-> +	eeprom@50 {
-> +		compatible = "atmel,24c02";
-> +		pagesize = <8>;
-> +		reg = <0x50>;
-> +	};
->  };
-> diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi b/arch/arm/boot/dts/hpe-gxp.dtsi
-> index cf735b3c4f35..27e68932021c 100644
-> --- a/arch/arm/boot/dts/hpe-gxp.dtsi
-> +++ b/arch/arm/boot/dts/hpe-gxp.dtsi
-> @@ -122,6 +122,121 @@
->  				interrupts = <6>;
->  				interrupt-parent = <&vic0>;
->  			};
-> +
-> +			sysreg_system_controller: syscon@f8 {
-> +				compatible = "hpe,gxp-sysreg", "syscon";
-> +				reg = <0xf8 0x8>;
-> +			};
-> +
-> +			i2c0: i2c@2000 {
-> +				compatible = "hpe,gxp-i2c";
-> +				reg = <0x2000 0x70>;
-> +				interrupts = <9>;
-> +				interrupt-parent = <&vic0>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				hpe,sysreg-phandle = <&sysreg_system_controller>;
-> +				hpe,i2c-max-bus-freq = <100000>;
-
-Busses should stay disabled in DTSI and only enabled by specific board,
-when needed.
-
-> +			};
-> +
-> +			i2c1: i2c@2100 {
-> +				compatible = "hpe,gxp-i2c";
-> +				reg = <0x2100 0x70>;
-> +				interrupts = <9>;
-> +				interrupt-parent = <&vic0>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				hpe,sysreg-phandle = <&sysreg_system_controller>;
-> +				hpe,i2c-max-bus-freq = <100000>;
-> +			};
-> +
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
