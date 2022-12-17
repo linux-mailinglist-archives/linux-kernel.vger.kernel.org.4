@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521C764F694
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 01:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3535F64F698
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 01:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbiLQAwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 19:52:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
+        id S229895AbiLQAyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 19:54:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiLQAve (ORCPT
+        with ESMTP id S230106AbiLQAxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 19:51:34 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20102DDB;
-        Fri, 16 Dec 2022 16:50:42 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id a16so5837958edb.9;
-        Fri, 16 Dec 2022 16:50:42 -0800 (PST)
+        Fri, 16 Dec 2022 19:53:49 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE0EDDB
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 16:53:21 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id i9so5882724edj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 16:53:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=S0skL65OaO9gjbkjvlPH5KjvN9AR9I2NEJv0ewBhF0s=;
-        b=HACALePnQgwM9kIMhvd61ExKv806V+P6dqzb5XF9iqoh05XKL0pTQ99ayThM3VKY6F
-         KKHuY+Z1ie4Rri/8NFmIcM9mclmqJ3qLwjhNm+/Mn3w5sxq+lpdYwL1HTR1VRMXihZgl
-         Ov56YJESouLvDdHMu29BkWj+diKliJXEXwJ3z8wp+Ovtr4pELHMdyWruFk8mSwPZQGsS
-         bK6/sj49bKavvvkvv9d7UkJLcX5M1XcyMPN2x0uc/v46kGxvjpKsjyTG6ccxTlA7humx
-         HVFv3td4oY3ZRqe6wE/g6K7+2dWi/CuPpfujS2+9gno1Own/j3vhOikkyLTeaxdl9N3G
-         jsig==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=N2BdpDmynsGLfYwZJze3eSzx6Qv1LTya1e+z5hUsqmE=;
+        b=gBW5AQYO4rFsTaG3SVrW2wngY+SAI9LKsn1P5sKw/E6teVWPSifYOZZkoY7I3NSLZf
+         kXM6oZVgsQ0VThAxEqHVMFLImdTnoYonfOUQHdEVMJwJgnxn01GyBz8kUbpoarUaKfwW
+         IIdKP6j1tSanrdDC8Pssb68OC5XWnMjzbCaKeoxOj4Nk/zpSibzkgqCxPjleTJMbhXWV
+         bZ2C+u/DNeDvM/AzCbGpIkTQaJMS4QVSQJl4/49CQ342Pi6OOvaxDzlB+IrfEkKnwM9t
+         pbBlfe3HZubnBORrEv9bWjSypXYkRezxYm19E2zhN9FxMAbGM5bwh1kMc9ut1hghlxPv
+         ExPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S0skL65OaO9gjbkjvlPH5KjvN9AR9I2NEJv0ewBhF0s=;
-        b=4uDhqAI+D664Cqnf9QOmCKfxhi2MuwMgfGafuNmRqqEp64M2FmEBPi1+O2noYjQq7y
-         uCBzESn7e5ossGe3zaCa46RSh0dDR/4iFCUFD5HMz1h6CIQneJHmSeWIAuuPJLiwDPIR
-         F04tyRtv6rVItWS3BnO7Nv8DnUb6mOp1Ojs426Qa3LqL016H9EGmXw/liUAIrIWakETN
-         GNX2lQj2l2p0ntVr8bwE9tWRr/Owj+45Pay9V5c0/QKDo6qOvAr9GdGpBt+BxMJKfZ2b
-         8u8Fm1OOS4B1lOjdgkFoHfXpdN405xCvBjSQqgPrb/OOeHBvbnMzjmAQiPIW+mDZB5Rx
-         m1+w==
-X-Gm-Message-State: ANoB5pleFKEf7JD5Ewvuay/VptUMzUDGEq98QIqGjssiLU4a6ubwZSOH
-        t3zJ0Sqh1dS9FekTLPjUXUg=
-X-Google-Smtp-Source: AA0mqf5cplFdyLfoxVBrt9WBfwmU3SGbWmbo41fqCEcgMMaaIYDa8xsYo5Omuthkl3mF8N2zeuKBvg==
-X-Received: by 2002:aa7:cf0c:0:b0:470:410a:8ea7 with SMTP id a12-20020aa7cf0c000000b00470410a8ea7mr27866246edy.18.1671238241105;
-        Fri, 16 Dec 2022 16:50:41 -0800 (PST)
-Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
-        by smtp.gmail.com with ESMTPSA id b4-20020aa7d484000000b0046267f8150csm1419543edr.19.2022.12.16.16.50.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 16:50:40 -0800 (PST)
-Date:   Sat, 17 Dec 2022 01:50:39 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michal Kubecek <mkubecek@suse.cz>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [PATCH v4 ethtool-next 2/2] add support for IEEE 802.3cg-2019 Clause
- 148 - PLCA RS
-Message-ID: <1ddabd3850c3f3aea4b2ce840a053f0e917803ba.1671236216.git.piergiorgio.beruto@gmail.com>
-References: <cover.1671236215.git.piergiorgio.beruto@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N2BdpDmynsGLfYwZJze3eSzx6Qv1LTya1e+z5hUsqmE=;
+        b=4Xd+DrEP5G/F/DwDER4JE0jSFBdEl7yBnw7d3zEfSTMnbnlrG2AM7S1srPocDV/cKh
+         7xtPS/tP87KCjROwOxodZKHQj5dEu06QrFl0BDguI/EPrWvmyYUb8ALSVzZ4Ws8PBDdO
+         MA1ZX/fEtn/YZ9lw2g2hZ6WkY7P5OP8TIFZswEMaycc69ne5ZG01y7MZJQxRqwY1hD0S
+         +nlRlR7XR6p8OTeqdNgCnjY6Jk2nO1umwBxRrjJYOpTkjY4kKeQRMw7rLSaRWVsqhwMn
+         lO4/EppDo663tco4h5Dfnf6OmRfMY8QfivXHJ6kZYM/eT0G2NBmhl38HgPxg2RFBPIBB
+         Z2oA==
+X-Gm-Message-State: ANoB5pmi6p2gmYXMi5m4Mk0PXj6IeLFYvEhULcTuQ+PiRzpeJAE4AiWd
+        gS+inXXt3RrzxTNoHHg7etulCiiWCWpaDFhYKC0=
+X-Google-Smtp-Source: AA0mqf6/LjB4O+EBhjbmWRKNkOG7rHY1f+Jadwiawdch/R0N6qxSY5O07jNJs01UiDhqUvS76Y3nY7cEbDqZaefSE7U=
+X-Received: by 2002:a50:fc91:0:b0:46c:673b:93ac with SMTP id
+ f17-20020a50fc91000000b0046c673b93acmr21013301edq.317.1671238399989; Fri, 16
+ Dec 2022 16:53:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1671236215.git.piergiorgio.beruto@gmail.com>
+References: <20221216233355.542197-1-robdclark@gmail.com> <CAPaKu7RP281inKJKNWWTnETCU+giwU2YajzwH6AUVeTDXQoWWg@mail.gmail.com>
+ <CAF6AEGv0w=iPW-25BEjmEoQyODyQU23sK_j2eNGV2jOQO+byCg@mail.gmail.com>
+In-Reply-To: <CAF6AEGv0w=iPW-25BEjmEoQyODyQU23sK_j2eNGV2jOQO+byCg@mail.gmail.com>
+From:   Chia-I Wu <olvaffe@gmail.com>
+Date:   Fri, 16 Dec 2022 16:53:08 -0800
+Message-ID: <CAPaKu7QyJ0iYEyHt8VWk4ESL4EzzeT8xj0CcNuvg5mUWeBzpwg@mail.gmail.com>
+Subject: Re: [PATCH] drm/panfrost: Fix GEM handle creation UAF
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -79,527 +72,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for the Physical Layer Collision Avoidance
-Reconciliation Sublayer which was introduced in the IEEE 802.3
-standard by the 802.3cg working group in 2019.
+On Fri, Dec 16, 2022 at 4:20 PM Rob Clark <robdclark@gmail.com> wrote:
+>
+> On Fri, Dec 16, 2022 at 3:59 PM Chia-I Wu <olvaffe@gmail.com> wrote:
+> >
+> > On Fri, Dec 16, 2022 at 3:34 PM Rob Clark <robdclark@gmail.com> wrote:
+> > >
+> > > From: Rob Clark <robdclark@chromium.org>
+> > >
+> > > Relying on an unreturned handle to hold a reference to an object we
+> > > dereference is not safe.  Userspace can guess the handle and race us
+> > > by closing the handle from another thread.  The _create_with_handle()
+> > > that returns an object ptr is pretty much a pattern to avoid.  And
+> > > ideally creating the handle would be done after any needed dererencing.
+> > > But in this case creation of the mapping is tied to the handle creation.
+> > > Fortunately the mapping is refcnt'd and holds a reference to the object,
+> > > so we can drop the handle's reference once we hold a mapping reference.
+> > >
+> > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > ---
+> > >  drivers/gpu/drm/panfrost/panfrost_drv.c |  7 +++++++
+> > >  drivers/gpu/drm/panfrost/panfrost_gem.c | 10 +++++++---
+> > >  2 files changed, 14 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> > > index 2fa5afe21288..aa5848de647c 100644
+> > > --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
+> > > +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> > > @@ -98,6 +98,13 @@ static int panfrost_ioctl_create_bo(struct drm_device *dev, void *data,
+> > >                 return PTR_ERR(bo);
+> > >
+> > >         mapping = panfrost_gem_mapping_get(bo, priv);
+> > > +
+> > > +       /*
+> > > +        * Now that the mapping holds a reference to the bo until we no longer
+> > > +        * need it, we can safely drop the handle's reference.
+> > > +        */
+> > Not too familiar with panfrost, but I don't see
+> > panfrost_gem_mapping_get hold a reference to the bo?
+>
+> It doesn't directly, but the mapping already holds a reference, taken
+> before the handle reference is dropped
+>
+> It is all a bit too subtle for my taste.
+Ack.
+> > > +       drm_gem_object_put(&bo->base.base);
+> > > +
+> > >         if (!mapping) {
+> > >                 drm_gem_object_put(&bo->base.base);
+> > >                 return -EINVAL;
+> > > diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.c b/drivers/gpu/drm/panfrost/panfrost_gem.c
+> > > index 293e799e2fe8..e3e21c500d24 100644
+> > > --- a/drivers/gpu/drm/panfrost/panfrost_gem.c
+> > > +++ b/drivers/gpu/drm/panfrost/panfrost_gem.c
+> > > @@ -234,6 +234,10 @@ struct drm_gem_object *panfrost_gem_create_object(struct drm_device *dev, size_t
+> > >         return &obj->base.base;
+> > >  }
+> > >
+> > > +/*
+> > > + * NOTE: if this succeeds, both the handle and the returned object have
+> > > + * an outstanding reference.
+> > > + */
+> > I might suggest dropping the "_with_handle" suffix.
+>
+> Maybe _and_handle would be a better name (for this and other cases
+> that return both a handle and obj)?
+Sounds good.  We will want that for panfrost, qxl, and vmwgfx.
 
-The ethtool interface has been extended as follows:
-- show if the device supports PLCA when ethtool is invoked without FLAGS
-   - additionally show what PLCA version is supported
-   - show the current PLCA status
-- add FLAGS for getting and setting the PLCA configuration
+The other drivers and helpers only need the handle.  Their
+_with_handle should be fixed to not return the pointer.
 
-Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
----
- Makefile.am        |   1 +
- ethtool.c          |  21 ++++
- netlink/extapi.h   |   6 +
- netlink/plca.c     | 295 +++++++++++++++++++++++++++++++++++++++++++++
- netlink/settings.c |  86 ++++++++++++-
- 5 files changed, 407 insertions(+), 2 deletions(-)
- create mode 100644 netlink/plca.c
-
-diff --git a/Makefile.am b/Makefile.am
-index fcc912edd7e4..b184b8ceb28a 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -41,6 +41,7 @@ ethtool_SOURCES += \
- 		  netlink/desc-ethtool.c netlink/desc-genlctrl.c \
- 		  netlink/module-eeprom.c netlink/module.c \
- 		  netlink/desc-rtnl.c netlink/cable_test.c netlink/tunnels.c \
-+		  netlink/plca.c \
- 		  uapi/linux/ethtool_netlink.h \
- 		  uapi/linux/netlink.h uapi/linux/genetlink.h \
- 		  uapi/linux/rtnetlink.h uapi/linux/if_link.h
-diff --git a/ethtool.c b/ethtool.c
-index 3207e49137c4..d23406f54a37 100644
---- a/ethtool.c
-+++ b/ethtool.c
-@@ -6075,6 +6075,27 @@ static const struct option args[] = {
- 		.help	= "Set transceiver module settings",
- 		.xhelp	= "		[ power-mode-policy high|auto ]\n"
- 	},
-+	{
-+		.opts	= "--get-plca-cfg",
-+		.nlfunc	= nl_plca_get_cfg,
-+		.help	= "Get PLCA configuration",
-+	},
-+	{
-+		.opts	= "--set-plca-cfg",
-+		.nlfunc	= nl_plca_set_cfg,
-+		.help	= "Set PLCA configuration",
-+		.xhelp  = "             [ enable on|off ]\n"
-+			  "             [ node-id N ]\n"
-+			  "             [ node-cnt N ]\n"
-+			  "             [ to-tmr N ]\n"
-+			  "             [ burst-cnt N ]\n"
-+			  "             [ burst-tmr N ]\n"
-+	},
-+	{
-+		.opts	= "--get-plca-status",
-+		.nlfunc	= nl_plca_get_status,
-+		.help	= "Get PLCA status information",
-+	},
- 	{
- 		.opts	= "-h|--help",
- 		.no_dev	= true,
-diff --git a/netlink/extapi.h b/netlink/extapi.h
-index 1bb580a889a8..0add156e644a 100644
---- a/netlink/extapi.h
-+++ b/netlink/extapi.h
-@@ -47,6 +47,9 @@ int nl_gmodule(struct cmd_context *ctx);
- int nl_smodule(struct cmd_context *ctx);
- int nl_monitor(struct cmd_context *ctx);
- int nl_getmodule(struct cmd_context *ctx);
-+int nl_plca_get_cfg(struct cmd_context *ctx);
-+int nl_plca_set_cfg(struct cmd_context *ctx);
-+int nl_plca_get_status(struct cmd_context *ctx);
- 
- void nl_monitor_usage(void);
- 
-@@ -114,6 +117,9 @@ nl_get_eeprom_page(struct cmd_context *ctx __maybe_unused,
- #define nl_getmodule		NULL
- #define nl_gmodule		NULL
- #define nl_smodule		NULL
-+#define nl_get_plca_cfg		NULL
-+#define nl_set_plca_cfg		NULL
-+#define nl_get_plca_status	NULL
- 
- #endif /* ETHTOOL_ENABLE_NETLINK */
- 
-diff --git a/netlink/plca.c b/netlink/plca.c
-new file mode 100644
-index 000000000000..f7d7bdbc5c84
---- /dev/null
-+++ b/netlink/plca.c
-@@ -0,0 +1,295 @@
-+/*
-+ * plca.c - netlink implementation of plca command
-+ *
-+ * Implementation of "ethtool --show-plca <dev>" and
-+ * "ethtool --set-plca <dev> ..."
-+ */
-+
-+#include <errno.h>
-+#include <string.h>
-+#include <stdio.h>
-+
-+#include "../internal.h"
-+#include "../common.h"
-+#include "netlink.h"
-+#include "bitset.h"
-+#include "parser.h"
-+
-+/* PLCA_GET_CFG */
-+
-+int plca_get_cfg_reply_cb(const struct nlmsghdr *nlhdr, void *data)
-+{
-+	const struct nlattr *tb[ETHTOOL_A_PLCA_MAX + 1] = {};
-+	DECLARE_ATTR_TB_INFO(tb);
-+	struct nl_context *nlctx = data;
-+	bool silent;
-+	int idv, val;
-+	int err_ret;
-+	int ret;
-+
-+	silent = nlctx->is_dump || nlctx->is_monitor;
-+	err_ret = silent ? MNL_CB_OK : MNL_CB_ERROR;
-+	ret = mnl_attr_parse(nlhdr, GENL_HDRLEN, attr_cb, &tb_info);
-+	if (ret < 0)
-+		return err_ret;
-+
-+	nlctx->devname = get_dev_name(tb[ETHTOOL_A_PLCA_HEADER]);
-+	if (!dev_ok(nlctx))
-+		return err_ret;
-+
-+	if (silent)
-+		putchar('\n');
-+
-+	printf("PLCA settings for %s:\n", nlctx->devname);
-+
-+	// check if PLCA is enabled
-+	printf("\tEnabled: ");
-+
-+	if (!tb[ETHTOOL_A_PLCA_ENABLED]) {
-+		printf("not supported");
-+	} else {
-+		val = mnl_attr_get_u8(tb[ETHTOOL_A_PLCA_ENABLED]);
-+		printf(val ? "Yes" : "No");
-+	}
-+	putchar('\n');
-+
-+	// get node ID
-+	printf("\tlocal node ID: ");
-+
-+	if (!tb[ETHTOOL_A_PLCA_NODE_ID]) {
-+		printf("not supported");
-+	} else {
-+		idv = mnl_attr_get_u32(tb[ETHTOOL_A_PLCA_NODE_ID]);
-+		printf("%u (%s)", idv,
-+		       idv == 0 ? "coordinator" :
-+		       idv == 255 ? "unconfigured" : "follower");
-+	}
-+	putchar('\n');
-+
-+	// get node count
-+	printf("\tNode count: ");
-+	if (!tb[ETHTOOL_A_PLCA_NODE_CNT]) {
-+		printf("not supported");
-+	} else {
-+		val = mnl_attr_get_u32(tb[ETHTOOL_A_PLCA_NODE_CNT]);
-+		printf("%u", val);
-+
-+		// The node count is ignored by follower nodes. However, it can
-+		// be pre-set to enable fast coordinator role switchover.
-+		// Therefore, on a follower node we still wanto to show it,
-+		// indicating it is not currently used.
-+		if (tb[ETHTOOL_A_PLCA_NODE_ID] && idv != 0)
-+			printf(" (ignored)");
-+	}
-+	putchar('\n');
-+
-+	// get TO timer (transmit opportunity timer)
-+	printf("\tTO timer: ");
-+	if (!tb[ETHTOOL_A_PLCA_TO_TMR]) {
-+		printf("not supported");
-+	} else {
-+		val = mnl_attr_get_u32(tb[ETHTOOL_A_PLCA_TO_TMR]);
-+		printf("%u BT", val);
-+	}
-+	putchar('\n');
-+
-+	// get burst count
-+	printf("\tBurst count: ");
-+	if (!tb[ETHTOOL_A_PLCA_BURST_CNT]) {
-+		printf("not supported");
-+	} else {
-+		val = mnl_attr_get_u32(tb[ETHTOOL_A_PLCA_BURST_CNT]);
-+		printf("%u (%s)", val,
-+		       val > 0 ? "enabled" : "disabled");
-+	}
-+	putchar('\n');
-+
-+	// get burst timer
-+	printf("\tBurst timer: ");
-+	if (!tb[ETHTOOL_A_PLCA_BURST_TMR]) {
-+		printf("not supported");
-+	} else {
-+		val = mnl_attr_get_u32(tb[ETHTOOL_A_PLCA_BURST_TMR]);
-+		printf("%u BT", val);
-+	}
-+	putchar('\n');
-+
-+	return MNL_CB_OK;
-+}
-+
-+
-+int nl_plca_get_cfg(struct cmd_context *ctx)
-+{
-+	struct nl_context *nlctx = ctx->nlctx;
-+	struct nl_socket *nlsk = nlctx->ethnl_socket;
-+	int ret;
-+
-+	if (netlink_cmd_check(ctx, ETHTOOL_MSG_PLCA_GET_CFG, true))
-+		return -EOPNOTSUPP;
-+
-+	if (ctx->argc > 0) {
-+		fprintf(stderr, "ethtool: unexpected parameter '%s'\n",
-+			*ctx->argp);
-+		return 1;
-+	}
-+
-+	ret = nlsock_prep_get_request(nlsk, ETHTOOL_MSG_PLCA_GET_CFG,
-+				      ETHTOOL_A_PLCA_HEADER, 0);
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	return nlsock_send_get_request(nlsk, plca_get_cfg_reply_cb);
-+}
-+
-+/* PLCA_SET_CFG */
-+
-+static const struct param_parser set_plca_params[] = {
-+	{
-+		.arg		= "enable",
-+		.type		= ETHTOOL_A_PLCA_ENABLED,
-+		.handler	= nl_parse_u8bool,
-+		.min_argc	= 1,
-+	},
-+	{
-+		.arg		= "node-id",
-+		.type		= ETHTOOL_A_PLCA_NODE_ID,
-+		.handler	= nl_parse_direct_u32,
-+		.min_argc	= 1,
-+	},
-+	{
-+		.arg		= "node-cnt",
-+		.type		= ETHTOOL_A_PLCA_NODE_CNT,
-+		.handler	= nl_parse_direct_u32,
-+		.min_argc	= 1,
-+	},
-+	{
-+		.arg		= "to-tmr",
-+		.type		= ETHTOOL_A_PLCA_TO_TMR,
-+		.handler	= nl_parse_direct_u32,
-+		.min_argc	= 1,
-+	},
-+	{
-+		.arg		= "burst-cnt",
-+		.type		= ETHTOOL_A_PLCA_BURST_CNT,
-+		.handler	= nl_parse_direct_u32,
-+		.min_argc	= 1,
-+	},
-+	{
-+		.arg		= "burst-tmr",
-+		.type		= ETHTOOL_A_PLCA_BURST_TMR,
-+		.handler	= nl_parse_direct_u32,
-+		.min_argc	= 1,
-+	},
-+	{}
-+};
-+
-+int nl_plca_set_cfg(struct cmd_context *ctx)
-+{
-+	struct nl_context *nlctx = ctx->nlctx;
-+	struct nl_msg_buff *msgbuff;
-+	struct nl_socket *nlsk;
-+	int ret;
-+
-+	if (netlink_cmd_check(ctx, ETHTOOL_MSG_PLCA_SET_CFG, false))
-+		return -EOPNOTSUPP;
-+	if (!ctx->argc) {
-+		fprintf(stderr,
-+			"ethtool (--set-plca-cfg): parameters missing\n");
-+		return 1;
-+	}
-+
-+	nlctx->cmd = "--set-plca-cfg";
-+	nlctx->argp = ctx->argp;
-+	nlctx->argc = ctx->argc;
-+	nlctx->devname = ctx->devname;
-+	nlsk = nlctx->ethnl_socket;
-+	msgbuff = &nlsk->msgbuff;
-+
-+	ret = msg_init(nlctx, msgbuff, ETHTOOL_MSG_PLCA_SET_CFG,
-+		       NLM_F_REQUEST | NLM_F_ACK);
-+	if (ret < 0)
-+		return 2;
-+	if (ethnla_fill_header(msgbuff, ETHTOOL_A_PLCA_HEADER,
-+			       ctx->devname, 0))
-+		return -EMSGSIZE;
-+
-+	ret = nl_parser(nlctx, set_plca_params, NULL, PARSER_GROUP_NONE, NULL);
-+	if (ret < 0)
-+		return 1;
-+
-+	ret = nlsock_sendmsg(nlsk, NULL);
-+	if (ret < 0)
-+		return 76;
-+	ret = nlsock_process_reply(nlsk, nomsg_reply_cb, nlctx);
-+	if (ret == 0)
-+		return 0;
-+	else
-+		return nlctx->exit_code ?: 76;
-+}
-+
-+/* PLCA_GET_STATUS */
-+
-+int plca_get_status_reply_cb(const struct nlmsghdr *nlhdr, void *data)
-+{
-+	const struct nlattr *tb[ETHTOOL_A_PLCA_MAX + 1] = {};
-+	DECLARE_ATTR_TB_INFO(tb);
-+	struct nl_context *nlctx = data;
-+	bool silent;
-+	int err_ret;
-+	int ret;
-+	u8 val;
-+
-+	silent = nlctx->is_dump || nlctx->is_monitor;
-+	err_ret = silent ? MNL_CB_OK : MNL_CB_ERROR;
-+	ret = mnl_attr_parse(nlhdr, GENL_HDRLEN, attr_cb, &tb_info);
-+	if (ret < 0)
-+		return err_ret;
-+
-+	nlctx->devname = get_dev_name(tb[ETHTOOL_A_PLCA_HEADER]);
-+	if (!dev_ok(nlctx))
-+		return err_ret;
-+
-+	if (silent)
-+		putchar('\n');
-+
-+	printf("PLCA status of %s:\n", nlctx->devname);
-+
-+	// check whether the Open Alliance TC14 standard memory map is supported
-+	printf("\tStatus: ");
-+
-+	if (!tb[ETHTOOL_A_PLCA_STATUS]) {
-+		printf("not supported");
-+	} else {
-+		val = mnl_attr_get_u8(tb[ETHTOOL_A_PLCA_STATUS]);
-+		printf(val ? "on" : "off");
-+	}
-+	putchar('\n');
-+
-+	return MNL_CB_OK;
-+}
-+
-+
-+int nl_plca_get_status(struct cmd_context *ctx)
-+{
-+	struct nl_context *nlctx = ctx->nlctx;
-+	struct nl_socket *nlsk = nlctx->ethnl_socket;
-+	int ret;
-+
-+	if (netlink_cmd_check(ctx, ETHTOOL_MSG_PLCA_GET_STATUS, true))
-+		return -EOPNOTSUPP;
-+
-+	if (ctx->argc > 0) {
-+		fprintf(stderr, "ethtool: unexpected parameter '%s'\n",
-+			*ctx->argp);
-+		return 1;
-+	}
-+
-+	ret = nlsock_prep_get_request(nlsk, ETHTOOL_MSG_PLCA_GET_STATUS,
-+				      ETHTOOL_A_PLCA_HEADER, 0);
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	return nlsock_send_get_request(nlsk, plca_get_status_reply_cb);
-+}
-diff --git a/netlink/settings.c b/netlink/settings.c
-index 14ad0b46e102..2f4081b89713 100644
---- a/netlink/settings.c
-+++ b/netlink/settings.c
-@@ -166,6 +166,9 @@ static const struct link_mode_info link_modes[] = {
- 	[ETHTOOL_LINK_MODE_100baseFX_Half_BIT]		= __HALF_DUPLEX(100),
- 	[ETHTOOL_LINK_MODE_100baseFX_Full_BIT]		= __REAL(100),
- 	[ETHTOOL_LINK_MODE_10baseT1L_Full_BIT]		= __REAL(10),
-+	[ETHTOOL_LINK_MODE_10baseT1S_Full_BIT]		= __REAL(10),
-+	[ETHTOOL_LINK_MODE_10baseT1S_Half_BIT]		= __REAL(10),
-+	[ETHTOOL_LINK_MODE_10baseT1S_P2MP_Half_BIT]	= __REAL(10),
- };
- const unsigned int link_modes_count = ARRAY_SIZE(link_modes);
- 
-@@ -890,6 +893,70 @@ int debug_reply_cb(const struct nlmsghdr *nlhdr, void *data)
- 	return MNL_CB_OK;
- }
- 
-+int plca_cfg_reply_cb(const struct nlmsghdr *nlhdr, void *data)
-+{
-+	const struct nlattr *tb[ETHTOOL_A_PLCA_MAX + 1] = {};
-+	DECLARE_ATTR_TB_INFO(tb);
-+	struct nl_context *nlctx = data;
-+	int ret;
-+
-+	if (nlctx->is_dump || nlctx->is_monitor)
-+		nlctx->no_banner = false;
-+	ret = mnl_attr_parse(nlhdr, GENL_HDRLEN, attr_cb, &tb_info);
-+	if (ret < 0)
-+		return ret;
-+	nlctx->devname = get_dev_name(tb[ETHTOOL_A_PLCA_HEADER]);
-+	if (!dev_ok(nlctx))
-+		return MNL_CB_OK;
-+
-+	print_banner(nlctx);
-+	printf("\tPLCA support: ");
-+
-+	if (tb[ETHTOOL_A_PLCA_VERSION]) {
-+		uint16_t val = mnl_attr_get_u16(tb[ETHTOOL_A_PLCA_VERSION]);
-+
-+		printf("OPEN Alliance v%u.%u",
-+		       (unsigned int)((val >> 4) & 0xF),
-+		       (unsigned int)(val & 0xF));
-+	} else
-+		printf("non-standard");
-+
-+	printf("\n");
-+
-+	return MNL_CB_OK;
-+}
-+
-+int plca_status_reply_cb(const struct nlmsghdr *nlhdr, void *data)
-+{
-+	const struct nlattr *tb[ETHTOOL_A_PLCA_MAX + 1] = {};
-+	DECLARE_ATTR_TB_INFO(tb);
-+	struct nl_context *nlctx = data;
-+	int ret;
-+
-+	if (nlctx->is_dump || nlctx->is_monitor)
-+		nlctx->no_banner = false;
-+	ret = mnl_attr_parse(nlhdr, GENL_HDRLEN, attr_cb, &tb_info);
-+	if (ret < 0)
-+		return ret;
-+	nlctx->devname = get_dev_name(tb[ETHTOOL_A_PLCA_HEADER]);
-+	if (!dev_ok(nlctx))
-+		return MNL_CB_OK;
-+
-+	print_banner(nlctx);
-+	printf("\tPLCA status: ");
-+
-+	if (tb[ETHTOOL_A_PLCA_STATUS]) {
-+		uint8_t val = mnl_attr_get_u8(tb[ETHTOOL_A_PLCA_STATUS]);
-+
-+		printf(val ? "up" : "down");
-+	} else
-+		printf("unknown");
-+
-+	printf("\n");
-+
-+	return MNL_CB_OK;
-+}
-+
- static int gset_request(struct nl_context *nlctx, uint8_t msg_type,
- 			uint16_t hdr_attr, mnl_cb_t cb)
- {
-@@ -914,7 +981,10 @@ int nl_gset(struct cmd_context *ctx)
- 	    netlink_cmd_check(ctx, ETHTOOL_MSG_LINKINFO_GET, true) ||
- 	    netlink_cmd_check(ctx, ETHTOOL_MSG_WOL_GET, true) ||
- 	    netlink_cmd_check(ctx, ETHTOOL_MSG_DEBUG_GET, true) ||
--	    netlink_cmd_check(ctx, ETHTOOL_MSG_LINKSTATE_GET, true))
-+	    netlink_cmd_check(ctx, ETHTOOL_MSG_LINKSTATE_GET, true) ||
-+	    netlink_cmd_check(ctx, ETHTOOL_MSG_LINKSTATE_GET, true) ||
-+	    netlink_cmd_check(ctx, ETHTOOL_MSG_PLCA_GET_CFG, true) ||
-+	    netlink_cmd_check(ctx, ETHTOOL_MSG_PLCA_GET_STATUS, true))
- 		return -EOPNOTSUPP;
- 
- 	nlctx->suppress_nlerr = 1;
-@@ -934,6 +1004,12 @@ int nl_gset(struct cmd_context *ctx)
- 	if (ret == -ENODEV)
- 		return ret;
- 
-+	ret = gset_request(nlctx, ETHTOOL_MSG_PLCA_GET_CFG,
-+			   ETHTOOL_A_PLCA_HEADER, plca_cfg_reply_cb);
-+
-+	if (ret == -ENODEV)
-+		return ret;
-+
- 	ret = gset_request(nlctx, ETHTOOL_MSG_DEBUG_GET, ETHTOOL_A_DEBUG_HEADER,
- 			   debug_reply_cb);
- 	if (ret == -ENODEV)
-@@ -941,6 +1017,13 @@ int nl_gset(struct cmd_context *ctx)
- 
- 	ret = gset_request(nlctx, ETHTOOL_MSG_LINKSTATE_GET,
- 			   ETHTOOL_A_LINKSTATE_HEADER, linkstate_reply_cb);
-+
-+	if (ret == -ENODEV)
-+		return ret;
-+
-+
-+	ret = gset_request(nlctx, ETHTOOL_MSG_PLCA_GET_STATUS,
-+			   ETHTOOL_A_PLCA_HEADER, plca_status_reply_cb);
- 	if (ret == -ENODEV)
- 		return ret;
- 
-@@ -949,7 +1032,6 @@ int nl_gset(struct cmd_context *ctx)
- 		return 75;
- 	}
- 
--
- 	return 0;
- }
- 
--- 
-2.37.4
-
+>
+> > The naming convention is used in several drivers.  I think we should
+> > make it the case that the _with_handle variants always return the
+> > handle without the pointer.  (And with the change, it immediately
+> > becomes clear that qxl and vmwgfx also have similar issues).
+>
+> ugg, yeah, qxl does have the issue in the qxl_mode_dumb_create path.
+> I overlooked that it returns an obj pointer by reference.
+>
+> on the surface vmwgfx looked ok, but I could have overlooked something.
+>
+> BR,
+> -R
+>
+> > >  struct panfrost_gem_object *
+> > >  panfrost_gem_create_with_handle(struct drm_file *file_priv,
+> > >                                 struct drm_device *dev, size_t size,
+> > > @@ -261,10 +265,10 @@ panfrost_gem_create_with_handle(struct drm_file *file_priv,
+> > >          * and handle has the id what user can see.
+> > >          */
+> > >         ret = drm_gem_handle_create(file_priv, &shmem->base, handle);
+> > > -       /* drop reference from allocate - handle holds it now. */
+> > > -       drm_gem_object_put(&shmem->base);
+> > > -       if (ret)
+> > > +       if (ret) {
+> > > +               drm_gem_object_put(&shmem->base);
+> > >                 return ERR_PTR(ret);
+> > > +       }
+> > >
+> > >         return bo;
+> > >  }
+> > > --
+> > > 2.38.1
+> > >
