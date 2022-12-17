@@ -2,79 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7777864F88D
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 10:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BBB64F890
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 10:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiLQJxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 04:53:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
+        id S230215AbiLQJ5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 04:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbiLQJxo (ORCPT
+        with ESMTP id S229496AbiLQJ5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 04:53:44 -0500
-Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEFA1742E;
-        Sat, 17 Dec 2022 01:53:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1671270818;
-        bh=JouZ6st3CYo4QzJIiGOY2B/ojRdjjgnSW9GrcLgVarA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=hJ4Dazaa2S+EdiilUN8C5RPXkrGHH+SBV48iHSsmSMMU4ufhooL9bI3+4ipYw+V5T
-         iKPSLuzjrTp9swBnGMWYr0ltDDJrTNpPjbasy3p+03K4WOr61XlyG1nz6XYZ6SU3l/
-         XSbxxlUDhpdRUPxS55YvP4soMbrKBoVekpJJkMbo=
-Received: from rtoax.. ([111.199.188.149])
-        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
-        id D633F853; Sat, 17 Dec 2022 17:53:35 +0800
-X-QQ-mid: xmsmtpt1671270815t3h8oup6i
-Message-ID: <tencent_84C64B10159B57C45158C406032921B22C07@qq.com>
-X-QQ-XMAILINFO: OZiGlmjmGvyhT9Tovp0kXcvTdhA0VADCjQw9uDxDVu/Svl6L2ELDPjLN8GZ+sh
-         CImNOjsryElJgsCu8ETr3cUWVHe7s6g1CYLBza5cdIWSs34+PgIfEY/rCBR8OmDtj1MBJYq1Owh8
-         7OyazBzwo2fg2EvXeYWdK82qfiyja0PRcIvUJetCpbAy5d1tCsdsaTEhjQj4IPEeZYFXhj1qGeEa
-         0B5dF04dJG/FQOg8SnfAplt8IlnTddP0Fu6x4SrPfSDBn7VVTJFLRMNdyHjeHB/xD5f0SUTYQIzO
-         mXvB7LqdWZK62gfUbnYtL+u41TM5Qr1CoO3lHkP2PuBmBRPElPlfZg3gGAUuuts0nqCz7HAaYydd
-         NpFNQaQTK1EKx0isSTqDN01wpxtswC1vlmwVrAFnm+wZtTpJhhXmRZnt+3h3S1gGvbqKtZzi9Sd+
-         yqf+rdir2hDyrMLvfJS8JR7k/UZCoKmVvpSd/c6AaDmhcNph4T2fxZ0De7RC3cPtbPaGU7Vfkkr8
-         c1fKWwfZFvcPdkVjvLm63rt3hBEbocmgU3dNPUjEpBwp8rn5PGA6ChOMjbdJl/JOZcAaaU5FJhiE
-         G0yrHN6UE2HxoIMaRHv7SAnGd6botEDk284hub3mg4oXWn9o6d9UouJHii8ytRc/aX+bVfaO5zWo
-         HRLUYrjbq59ry3+gVFo5aIlnRMK+3U80K96PcOSp0rhtXEz9nbM4KIk1wH/jZ0xrPPDIJhV1NFXq
-         Kj3ay76f6vdLHa6iVQZnO51Cnz5bPK56mRBbPw9hQEtmW6ebcL9WPeG1ZkCz3UdxqZafpEju2/Lm
-         +WNX8LWM1qi/TQTUUi0f297YC/n0cmHPqUybIGtCbf6EbiUrMOR+PZb6B8ndFzgtP1txFmq0Zxfc
-         sxMiGu96a9JvNckSWtiA8E6nAnURhLCU6/Fvhqv36vI/HE1GdbuKYhVKMWoW43xVheNm4Tgq0B1f
-         /7sjb3Wld2qdiHCdkalMOmnNTbmeumWfggncyD13MziNyr3Yd/dhquRURYHeaDgZczVIMaZTs=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     masahiroy@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, nicolas@fjasle.eu, rongtao@cestc.cn,
-        rtoax@foxmail.com
-Subject: Re: Re: [PATCH] kbuild: Fix compilation error
-Date:   Sat, 17 Dec 2022 17:53:34 +0800
-X-OQ-MSGID: <20221217095334.538189-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <CAK7LNASu6i9V4b_u68azpM45zPM0udGW8kVWGd+UZzJtSq0+TA@mail.gmail.com>
-References: <CAK7LNASu6i9V4b_u68azpM45zPM0udGW8kVWGd+UZzJtSq0+TA@mail.gmail.com>
+        Sat, 17 Dec 2022 04:57:10 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBB21D6;
+        Sat, 17 Dec 2022 01:57:09 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CEDBC608B2;
+        Sat, 17 Dec 2022 09:57:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1671271027; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SoLRNQRrRqUNC0cGrLyDcGJ7nXiwl9BQ5rqnla0AEQg=;
+        b=LzEcwgGhGGz8nj03JB5W4TiSbEKztKdG7hrQa5MIO0bwc5t2NC30MAA0U3vd2UhSj4T2Pz
+        Tx7x3OMd+ZGReDRDIwwbXqxis7W8upuGmgfxuw87vV+OuG3oq1SRHDCSet4bS0DJKP0ag6
+        XpG0vDOWegM0J6b+oztGV495X5UdU2I=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A96941326D;
+        Sat, 17 Dec 2022 09:57:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id St90JnOSnWOFNQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Sat, 17 Dec 2022 09:57:07 +0000
+Date:   Sat, 17 Dec 2022 10:57:06 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mina Almasry <almasrymina@google.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
+        fvdl@google.com, bagasdotme@gmail.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] Revert "mm: add nodes= arg to memory.reclaim"
+Message-ID: <Y52Scge3ynvn/mB4@dhcp22.suse.cz>
+References: <20221202223533.1785418-1-almasrymina@google.com>
+ <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz>
+ <Y5xASNe1x8cusiTx@dhcp22.suse.cz>
+ <20221216101820.3f4a370af2c93d3c2e78ed8a@linux-foundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221216101820.3f4a370af2c93d3c2e78ed8a@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks, Masahiro Yamada, I compile again from scrach. the compilation
-error not happen anymore. I think i miss 'make menuconfig' before.
+On Fri 16-12-22 10:18:20, Andrew Morton wrote:
+> On Fri, 16 Dec 2022 10:54:16 +0100 Michal Hocko <mhocko@suse.com> wrote:
+> 
+> > I have noticed that the patch made it into Linus tree already. Can we
+> > please revert it because the semantic is not really clear and we should
+> > really not create yet another user API maintenance problem.
+> 
+> Well dang.  I was waiting for the discussion to converge, blissfully
+> unaware that the thing was sitting in mm-stable :(  I guess the
+> 
+> 	Acked-by: Michal Hocko <mhocko@suse.com>
+> 	Acked-by: Shakeel Butt <shakeelb@google.com>
+> 	Acked-by: Muchun Song <songmuchun@bytedance.com>
+> 
+> fooled me.
 
-Thanks again!
+Hmm, as pointed out in http://lkml.kernel.org/r/Y5bsmpCyeryu3Zz1@dhcp22.suse.cz
+I've failed to see through all the consequences of the implementation.
+SO my bad here to add my ack before fully understanding all the
+implications.
 
-$ git log --oneline  -1
-77856d911a8c
-$ git clean -dfx
-$ make menuconfig <<== Which i miss
-$ make -j8
-$ make -C samples/bpf
+> I think it's a bit premature to revert at this stage.  Possibly we can
+> get to the desired end state by modifying the existing code.  Possibly
+> we can get to the desired end state by reverting this and by adding
+> something new.
 
+Sure if we can converge to a proper implementation during the rc phase
+then it would be ok. I cannot speak for others but at least for me
+upcoming 2 weeks would be mostly offline so I cannot really contribute
+much. A revert would be much more easier from the coordination POV IMHO.
 
+Also I do not think there is any strong reason to rush this in. I do not
+really see any major problems to have this extension in 6.2
+
+-- 
+Michal Hocko
+SUSE Labs
