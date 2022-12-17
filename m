@@ -2,96 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A143D64F964
+	by mail.lfdr.de (Postfix) with ESMTP id EB6FC64F965
 	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 15:31:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiLQOb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 09:31:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46036 "EHLO
+        id S229495AbiLQOba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 09:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiLQObX (ORCPT
+        with ESMTP id S229675AbiLQObW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 09:31:23 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A819210F3;
-        Sat, 17 Dec 2022 06:31:22 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id s7so4998581plk.5;
-        Sat, 17 Dec 2022 06:31:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=q+7z7G254vlB30dxaX0Fo49gLNLsS7YJkR6iYNb6Fv0=;
-        b=jvKehRiQgyKNh+iZ6HY/I2oEgNq6qt40AhQ2jM/Y+rqzjAHIOXlTqvFfVR6mMnSKBe
-         g+3jV0bE1trLAS5HzhOIn3fss/Gaq/oe8RqAx2gFE9Opvj3mueiQUpkXEZAajeDViw8g
-         uJbOdK7pSMRmSM7O8VwSpdCfu3NiOcZSfhTEP2Lwt8GTGkixZcx+N0Jg8W8j6SLz82w3
-         5+9RtPUTBfxRVfpzyN5GGh65zVcKYc436J9IQsYbcaRN2hfq4IvH+bfK/jI27jtegKpG
-         XoqKkQ/NNZaiUdKLxybsDD/KSBIESlxpoErfdLKF9JDp7z7jV/usnSm21v/QNv8Q3APy
-         35Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q+7z7G254vlB30dxaX0Fo49gLNLsS7YJkR6iYNb6Fv0=;
-        b=q0pSD/VwlY3U09gM+3UDZuM0k7T8KAy0iE4gP3TPEW1mcWVc8V4mt3dHLrt9k4770b
-         0K3PzZDORCTXy+dUbV1DWsmjGeTnGj2Gvy8rBG/QPClNKPTkN+uRAEoOsRIkXYsoe5Pv
-         2yAVySqzu8WlvbPPMICZH3v2s/xeq8HqH0Y3VoUNRcysgtLu3CPp+R6DFPIrW/YzQqyy
-         eE4HKZO3Q3EEV79eBYsLpeX0GILE8CIsAmjE4eifgOI32aKCLFrsTDUgDA0/dJD3HhQ+
-         sFVzvKdsg8l3RIB9bUBhYUuTEP85hHh13HKy8IlPhbZ/8iff6goBP8B24VY3I99m7/lS
-         JWhg==
-X-Gm-Message-State: ANoB5pktOou/Ft4Rl5Y2Jm9UhSv7u7s0MZPOVvsbatwVq2b9Tf7HNub2
-        pk9t8Ype7WW9ci8XAEq4rJ9jkrKe95PhzQqB
-X-Google-Smtp-Source: AA0mqf7WuudQT1xddyeqQk434g8azUldw7NaCX+6Q4guEXQQLo3/7D/ckgw31nmL76Sgsl3BamUJKg==
-X-Received: by 2002:a17:90b:198e:b0:219:cb6d:7b0b with SMTP id mv14-20020a17090b198e00b00219cb6d7b0bmr36174776pjb.44.1671287482118;
-        Sat, 17 Dec 2022 06:31:22 -0800 (PST)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id fy16-20020a17090b021000b00218b47be793sm2999708pjb.3.2022.12.17.06.31.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Dec 2022 09:31:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99294CD6;
         Sat, 17 Dec 2022 06:31:21 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] media: mc: entity: Fix doc for media_graph_walk_init
-Date:   Sat, 17 Dec 2022 18:31:13 +0400
-Message-Id: <20221217143113.3219104-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D392B80E3B;
+        Sat, 17 Dec 2022 14:31:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DBE0CC433D2;
+        Sat, 17 Dec 2022 14:31:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671287478;
+        bh=zuY4Z3A09N7iywF7L5TqR3KcfB/GD4XTce6j8hhBTzk=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ML7v2JX98m6GGM/prArhzhQ8ykWebOecyS2d+KiK04GINphDMqasu5aDu5cRSmmuR
+         DBoG1UANu2UrkZfxNcLlM56pY27i6vS301E4q2i8nTngTJ7x32D+98Sii18spUVZwe
+         PP1b3T5UZNB/HRsjDpC4cLm7SiQI+0VzN5wRNE/runfep2moeoImbtQkzeoay7h5Wf
+         66wTYELL7fe0EftCIYn4qM9sZ4WMvJjOVfKHWiLzlimBO1NcEPvLuzSSMQMrARAlSj
+         dEUiXN5faRiY/83adYys6574lrbP8HSe5LSfv7JVD6z4WeT2NZMbV2w27duwTBOs2l
+         wCSxGB2CvoClw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C925CE21EFC;
+        Sat, 17 Dec 2022 14:31:18 +0000 (UTC)
+Subject: Re: [GIT PULL] LEDs changes for 6.2-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y5xIuL2XfobFm9U1@duo.ucw.cz>
+References: <Y5xIuL2XfobFm9U1@duo.ucw.cz>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y5xIuL2XfobFm9U1@duo.ucw.cz>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/ tags/leds-6.2-rc1
+X-PR-Tracked-Commit-Id: 7cb092a0336c5770656c6742e7a7ce3042c8c44e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 75caf5940899a33165fb3d521492f3cd6b20c9a7
+Message-Id: <167128747881.22169.5100672320704103141.pr-tracker-bot@kernel.org>
+Date:   Sat, 17 Dec 2022 14:31:18 +0000
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        jacek.anaszewski@gmail.com, linux-leds@vger.kernel.org,
+        lee@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no media_graph_walk_free(). media_graph_walk_cleanup() is used
-to release the resources.
+The pull request you sent on Fri, 16 Dec 2022 11:30:16 +0100:
 
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/media/mc/mc-entity.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/ tags/leds-6.2-rc1
 
-diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index b8bcbc734eaf..de25de328fbe 100644
---- a/drivers/media/mc/mc-entity.c
-+++ b/drivers/media/mc/mc-entity.c
-@@ -295,7 +295,7 @@ static struct media_entity *stack_pop(struct media_graph *graph)
-  *
-  * Reserve resources for graph walk in media device's current
-  * state. The memory must be released using
-- * media_graph_walk_free().
-+ * media_graph_walk_cleanup().
-  *
-  * Returns error on failure, zero on success.
-  */
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/75caf5940899a33165fb3d521492f3cd6b20c9a7
+
+Thank you!
+
 -- 
-2.25.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
