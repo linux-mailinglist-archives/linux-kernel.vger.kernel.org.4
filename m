@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10B264FB82
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 19:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D094964FB83
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 19:09:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiLQSJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 13:09:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
+        id S229947AbiLQSJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 13:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiLQSJC (ORCPT
+        with ESMTP id S229874AbiLQSJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 13:09:02 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8792213F18;
-        Sat, 17 Dec 2022 10:09:01 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id y3so2890450ilq.0;
-        Sat, 17 Dec 2022 10:09:01 -0800 (PST)
+        Sat, 17 Dec 2022 13:09:03 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49AE13F1B;
+        Sat, 17 Dec 2022 10:09:02 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id i25so2857921ila.8;
+        Sat, 17 Dec 2022 10:09:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9q7xBuulUAodqsj8h08m05s1Xluf/iGOp96RSZvjmgg=;
-        b=GHnA01fmJDz+eulYNEoyIiywnjg8tPPn858ys+0Z3x/IjKkyyCuxLwn3ht0Bmk3I4R
-         8jpgDWFxlF+LMfqtmFp1YR45qXwYBCwotASGqvAp3u7OP1BAWLwPDNiNHZ99KRrqiO9s
-         YHxYDv0DELIjvPts2B+Fu53FS6Eev8WnnGaE5mFtm/IX/v0ZxkRmuIZredq/kL/srUjb
-         sXreqaD0VsFNTCnRi0lCzAs48l9nKqbZeqGnwNdJZPtTOuyPFx5dNidy1fj7DyvEOMRM
-         JqYq6pWf800nyvTHEcUwxc6EzhnPPEsr4wX3hPwZzm7jheFfRYCmG74AKOvTSsu7yvka
-         ssYw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TaOXfyrRK1GvvMxSl/L9IDQJHqE1dyqe1DAr6Oxagug=;
+        b=hEajjzC1KfeCTFM9jwZ/wkxgEEsTo56Cmb0HjJq2tAbyL4UrwaaI8OXYEzAmFSXM/m
+         Eu00Vyn4U5KHPjF8zfwE4wz+XSFaEl5te2WtTkRxSbtkGeJ8L9ITtGcZdbth0r8fA95X
+         BjBnR36kedNXXW1suwWOClMosFLtRpRj0Tvv6OsglfN1zDiiPiAoPMWZNxQVzxzPMIe6
+         7zs3frnuUOoEP0Pef3ejhzFOvR0onWVQIk+2cSDWqNYLC4IEDcPHSKAF4hZfNK1DMQKi
+         RmeFkysP1ZpSuObN6xy5AITif8bN6f7ppZMC1tnKhapqf2tJBPyJa0XFxcYuG1Xnm37P
+         HjNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9q7xBuulUAodqsj8h08m05s1Xluf/iGOp96RSZvjmgg=;
-        b=neOCfUUuQ9QP2EHt9ryUQ0R9W6nxjjgLoNbAUgB7npm/FY1mpE7DInf/8yIDid66KN
-         Xa1mPbRlmg/6UHohd+dhKV34LlkueLr6+8fqyAMu9OHBavz37HfHrQNNFglPYem4tyVm
-         gWx6e7Wum/39i9+BI3l3pKn1Npa6LjZj6mALO5ZIiN84DL/TVeterKLKEdmNraIoBY1g
-         yghrWU3X8ORqxOewXokDmgXoBDGFyovFwHBg3n3jV2hKcgwP9Wz0eMaNSU8gj/GFF8y/
-         mnUsUn7SRarMlEHs0FLGpJuKSEG6W1CYvo15IJqdcor0wsfrRk4Yz4q/FKV7yX6/S0z9
-         PydA==
-X-Gm-Message-State: AFqh2kqEpHbYHZN79RNoyLm9I8QBj7fv/j3Q0cQ3IT6ALiYCfGPGWUbN
-        Qd5deKeCVyEO/nkUIJbrCp0=
-X-Google-Smtp-Source: AMrXdXu/+Eu5hatE6KWhNHLfVgPNAwHeGYvS1e/ejgwCinbG5MuAEY8r8GwNHLMOYyqCT223v/UHpQ==
-X-Received: by 2002:a05:6e02:20cb:b0:308:f4c6:2576 with SMTP id 11-20020a056e0220cb00b00308f4c62576mr3611602ilq.22.1671300540703;
-        Sat, 17 Dec 2022 10:09:00 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TaOXfyrRK1GvvMxSl/L9IDQJHqE1dyqe1DAr6Oxagug=;
+        b=c8v8a3WpYp79aG6AoiPO+L6tx1kCuK9bdMMLkfutO+stMSr2pFP9du4wP3vRhI+ViO
+         MuOBr0K9HH/WZmnpjiojGXOA0LKGSEXHiJs+JcRgvLQe4fAgRCcYAdoL5gl+vA2pjYKC
+         6BUe0pM0BSF0BNAQkSQssQZsmZJbpHPFfv5Ywyfv0L51p4JnrkxbNuZM0JuKYnTXQ403
+         /BAB/Iv+obmdce4ArLhLXPxJ9h/czyqRlHRXkpttiTOaDBecOxmC/7e0SC9PROllCtHo
+         GCCaqmd47duLL10Je/1kUnUVxI/lpL2xYAhcVL34Yl6RVuCXR8Xys64Qc0Kca0Hpd5x3
+         z4Dg==
+X-Gm-Message-State: ANoB5pk9T6ggpgjCrdu7JY/5RzCJeE5LyR0Tgahr4Ps+4CZSQip29I2C
+        drEIPMPJ/MclfBK22r2tbLw=
+X-Google-Smtp-Source: AA0mqf41cNtnsG1L5o0PIOt8qpeGcJNybnnp1MbzQn/F3WKP5fT85C+inXMg1ySV2wTgYSSUxmu+Zw==
+X-Received: by 2002:a92:cc4f:0:b0:304:c91b:4a5d with SMTP id t15-20020a92cc4f000000b00304c91b4a5dmr11949100ilq.9.1671300541957;
+        Sat, 17 Dec 2022 10:09:01 -0800 (PST)
 Received: from aford-IdeaCentre-A730.lan ([2601:447:d001:9aea:d320:bc96:560d:6b27])
-        by smtp.gmail.com with ESMTPSA id u26-20020a02cbda000000b003728cd8bc7csm1763398jaq.38.2022.12.17.10.08.59
+        by smtp.gmail.com with ESMTPSA id u26-20020a02cbda000000b003728cd8bc7csm1763398jaq.38.2022.12.17.10.09.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Dec 2022 10:09:00 -0800 (PST)
+        Sat, 17 Dec 2022 10:09:01 -0800 (PST)
 From:   Adam Ford <aford173@gmail.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
@@ -62,10 +63,12 @@ Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Lucas Stach <l.stach@pengutronix.de>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] arm64: dts: imx8mp: Fix missing GPC Interrupt
-Date:   Sat, 17 Dec 2022 12:08:48 -0600
-Message-Id: <20221217180849.775718-1-aford173@gmail.com>
+Subject: [PATCH 2/2] arm64: dts: imx8mp: Fix power-domain typo
+Date:   Sat, 17 Dec 2022 12:08:49 -0600
+Message-Id: <20221217180849.775718-2-aford173@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221217180849.775718-1-aford173@gmail.com>
+References: <20221217180849.775718-1-aford173@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,25 +81,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GPC node references an interrupt parent, but it doesn't
-state the interrupt itself.  According to the TRM, this IRQ
-is 87. This also eliminate an error detected from dt_binding_check
+dt_binding_check detects an issue with the pgc_hsiomix power
+domain:
+  pgc: 'power-domains@17' does not match any of the regexes
 
-Fixes: fc0f05124621 ("arm64: dts: imx8mp: add GPC node with GPU power domains")
+This is because 'power-domains' should be 'power-domain'
+
+Fixes: 2ae42e0c0b67 ("arm64: dts: imx8mp: add HSIO power-domains")
 Signed-off-by: Adam Ford <aford173@gmail.com>
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-index 7a6e6221f421..7a8ca56e48b6 100644
+index 7a8ca56e48b6..19609ef0560a 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -524,6 +524,7 @@ gpc: gpc@303a0000 {
- 				compatible = "fsl,imx8mp-gpc";
- 				reg = <0x303a0000 0x1000>;
- 				interrupt-parent = <&gic>;
-+				interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>;
- 				interrupt-controller;
- 				#interrupt-cells = <3>;
+@@ -591,7 +591,7 @@ pgc_mipi_phy2: power-domain@16 {
+ 						reg = <IMX8MP_POWER_DOMAIN_MIPI_PHY2>;
+ 					};
  
+-					pgc_hsiomix: power-domains@17 {
++					pgc_hsiomix: power-domain@17 {
+ 						#power-domain-cells = <0>;
+ 						reg = <IMX8MP_POWER_DOMAIN_HSIOMIX>;
+ 						clocks = <&clk IMX8MP_CLK_HSIO_AXI>,
 -- 
 2.34.1
 
