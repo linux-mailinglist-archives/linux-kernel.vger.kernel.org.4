@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E80A064F6D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 02:56:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C4D64F6D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 02:56:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbiLQB44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 20:56:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
+        id S230086AbiLQB4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 20:56:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiLQB4Y (ORCPT
+        with ESMTP id S230076AbiLQB4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 20:56:24 -0500
+        Fri, 16 Dec 2022 20:56:23 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9294AF14
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 17:55:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C79C5C0F1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 17:55:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671242117;
+        s=mimecast20190719; t=1671242123;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=04/RfLLW+utGDl2gGNjOPJkeYdkxOAnoWfhoc+UAnVc=;
-        b=Av+JIrn0XfrOzOa+eplw6v+yefPTTenTCDN9u1pKvdqYzfA7Zos3xwuQP14DgKddYaDR0I
-        Ru6pTDbjeuyzEvoeYkbxodty4lsnHBuMpXbpfIYXYDF1D/tMpJ13isz5T6yYdKdatkVH8g
-        g9eQjJOnZmN7qik51XDO80F6Fosr5Uo=
+        bh=Xv8gbdl7CL7K4MDV2oGJuvA/KR+O1Rw3H7q7uOHvZNc=;
+        b=UM8tINCvM9Fq5yXXuJjueUxDimQIovKvax802X4WX0dAv8agEHkrdzE3KSfpw6wNbvTd8y
+        Uvk4nvByAOFE3vX2RwQEicb90PInciKv5Ya6W6DJfCuZ8q6rZ/OTHADn0fUBEGA59BM58i
+        SGs8Htl3XqhjU1NvboZAYcf6nz3mh2k=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-646-p7aGxOkiMEGk7SjP7CbKLQ-1; Fri, 16 Dec 2022 20:55:12 -0500
-X-MC-Unique: p7aGxOkiMEGk7SjP7CbKLQ-1
+ us-mta-674-kiSlyi0fPZqcsD2lk1KCCA-1; Fri, 16 Dec 2022 20:55:19 -0500
+X-MC-Unique: kiSlyi0fPZqcsD2lk1KCCA-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 78BBA811E6E;
-        Sat, 17 Dec 2022 01:55:11 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8CB3518A63EC;
+        Sat, 17 Dec 2022 01:55:18 +0000 (UTC)
 Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-34.pek2.redhat.com [10.72.12.34])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 752AF49BB6A;
-        Sat, 17 Dec 2022 01:55:06 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4EE9C49BB6A;
+        Sat, 17 Dec 2022 01:55:11 +0000 (UTC)
 From:   Baoquan He <bhe@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, urezki@gmail.com, stephen.s.brennan@oracle.com,
         willy@infradead.org, akpm@linux-foundation.org, hch@infradead.org,
-        Baoquan He <bhe@redhat.com>
-Subject: [PATCH v2 5/7] mm/vmalloc: skip the uninitilized vmalloc areas
-Date:   Sat, 17 Dec 2022 09:54:33 +0800
-Message-Id: <20221217015435.73889-6-bhe@redhat.com>
+        Baoquan He <bhe@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Pali Roh??r" <pali@kernel.org>, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v2 6/7] powerpc: mm: add VM_IOREMAP flag to the vmalloc area
+Date:   Sat, 17 Dec 2022 09:54:34 +0800
+Message-Id: <20221217015435.73889-7-bhe@redhat.com>
 In-Reply-To: <20221217015435.73889-1-bhe@redhat.com>
 References: <20221217015435.73889-1-bhe@redhat.com>
 MIME-Version: 1.0
@@ -62,38 +66,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For areas allocated via vmalloc_xxx() APIs, it searches for unmapped area
-to reserve and allocates new pages to map into, please see function
-__vmalloc_node_range(). During the process, flag VM_UNINITIALIZED is set
-in vm->flags to indicate that the pages allocation and mapping haven't
-been done, until clear_vm_uninitialized_flag() is called to clear it.
+Currently, for vmalloc areas with flag VM_IOREMAP set, except of the
+specific alignment clamping in __get_vm_area_node(), they will be
+ 1) Shown as ioremap in /proc/vmallocinfo;
+ 2) Ignored by /proc/kcore reading via vread()
 
-For this kind of area, if VM_UNINITIALIZED is still set, let's ignore
-it in vread() because pages newly allocated and being mapped in that
-area only contains zero data. reading them out by aligned_vread() is
-wasting time.
+So for the io mapping in ioremap_phb() of ppc, we should set VM_IOREMAP
+in flag to make it handled correctly as above.
 
 Signed-off-by: Baoquan He <bhe@redhat.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: "Pali Roh??r" <pali@kernel.org>
+Cc: linuxppc-dev@lists.ozlabs.org
 ---
- mm/vmalloc.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/powerpc/kernel/pci_64.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 3bfa872a4513..bdaceda1b878 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -3617,6 +3617,11 @@ long vread(char *buf, char *addr, unsigned long count)
- 		if (!vm && !flags)
- 			continue;
- 
-+		if (vm->flags & VM_UNINITIALIZED)
-+			continue;
-+		/* Pair with smp_wmb() in clear_vm_uninitialized_flag() */
-+		smp_rmb();
-+
- 		vaddr = (char *) va->va_start;
- 		size = flags ? va_size(va) : get_vm_area_size(vm);
- 
+diff --git a/arch/powerpc/kernel/pci_64.c b/arch/powerpc/kernel/pci_64.c
+index 0c7cfb9fab04..fd42059ae2a5 100644
+--- a/arch/powerpc/kernel/pci_64.c
++++ b/arch/powerpc/kernel/pci_64.c
+@@ -132,7 +132,7 @@ void __iomem *ioremap_phb(phys_addr_t paddr, unsigned long size)
+ 	 * address decoding but I'd rather not deal with those outside of the
+ 	 * reserved 64K legacy region.
+ 	 */
+-	area = __get_vm_area_caller(size, 0, PHB_IO_BASE, PHB_IO_END,
++	area = __get_vm_area_caller(size, VM_IOREMAP, PHB_IO_BASE, PHB_IO_END,
+ 				    __builtin_return_address(0));
+ 	if (!area)
+ 		return NULL;
 -- 
 2.34.1
 
