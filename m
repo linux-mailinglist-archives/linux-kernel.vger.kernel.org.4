@@ -2,225 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED50F64F85E
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 10:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 806FE64F860
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 10:01:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiLQJBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 04:01:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45548 "EHLO
+        id S230253AbiLQJBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 04:01:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbiLQJBj (ORCPT
+        with ESMTP id S230216AbiLQJBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 04:01:39 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698541BEA2
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 01:01:37 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id qk9so11274692ejc.3
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 01:01:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vK0TZW6SYzMO8GJcX0vIR6Bw0LJNQhztjdVIUby5uwE=;
-        b=aRaARTQBZZZuk/VU/VusJZClWP8dWJEDi2BZR+u7kcvHQ2/ZMwU9eccWdiOuI/YuG+
-         HbNez89BIhShn6BnL2PELxiELE8GxiaadQNdweXW06UtO0T+EigIitWp+GDnWl4eG5lQ
-         H6ERgsa5vQcQ4DRgZTuW5VYr9lwRd4E6WnMxc=
+        Sat, 17 Dec 2022 04:01:44 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3DEE032
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 01:01:43 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id b24-20020a056602219800b006e2bf9902cbso2325716iob.4
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 01:01:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vK0TZW6SYzMO8GJcX0vIR6Bw0LJNQhztjdVIUby5uwE=;
-        b=xIWSMjvNr/OdWkVfi/h5GMDtWldctw5PvIpo1n+MNCbZlRmISv4Qwnp2+jqghnrBei
-         jBJr4S00GPgAppsfWLT38/430r1lfsENbJbzuODLGqNehW70wU+4ZzsEnSAHg48ZnbG+
-         7KrsCW96mazoTONWSBNMBJLMKhHNzvVYwt4m9vFagM+yJJVuzQH54zl40UgA7RwjHmS7
-         vhLe0iHnkwpEd5d8909cx+Q168kp+lrv0FnMQA6kOXAU/pTFUNQHJbYojwQq4ENxxQGG
-         nBMIwZ145xlH1JdWxNVdSP7O198N7+hTfTjwtXIZHTX/4S+8+2oQsv/SXE8SQWIC0scX
-         pXgA==
-X-Gm-Message-State: ANoB5pnTvRG08jItphqUNSzKq5r1Ona7xBhqxNvJ/zxsqZDsTg5c4EoG
-        qXt45PA4r8zoOzyGNEcmmxBCyj1dxJRkYYwvihOuyQ==
-X-Google-Smtp-Source: AA0mqf6cg0tsIZBexBusYHjO1PwoPuvESDbdCXGNxJo3TpNxUNUoxiYf5E/awJEDfFRWdgm4ftoUS2ZS9QGvRqlTqr8=
-X-Received: by 2002:a17:906:8383:b0:7c1:19ea:dda with SMTP id
- p3-20020a170906838300b007c119ea0ddamr8603728ejx.31.1671267695782; Sat, 17 Dec
- 2022 01:01:35 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AYvJo8yuqCoES5ZZikY7SREAaKv4YPjwh9IFzyN29mE=;
+        b=5RXVTdB8Pdgxhiuda0buxH8wJ5lCu5ZulYsCnaJdI4RxoFV4HX6pgduy7HGc+InRUl
+         rpyzzRUxaKHaLq8SY2ZN/zYc3fZ7gZsuqZN5pSPOXiTqF6R/wu0ESrIoW5NY5lViHSvx
+         04BkCAytiiLh2EGrKL/FPsC+seac7T7iQ6/JSYBY9ZLIUhEKysXV1+EIUFl07zzN5hxe
+         kKIYc44ZLEQLktS2jbsGBBV47hPvCZ4Xi3UNZZbjQ/3uNWbpNrFj65VDv0uagNXLYSeM
+         H1DQHfyE9RtqZrXymAlLu/9fe9fI2WVXAHvgSeQZTsY5g0BkeWw+HxRTr1LRIWIMevfs
+         4nUw==
+X-Gm-Message-State: ANoB5pnySj7g4tcxBg8+XaN//596nZNnOMgmLxrXDzkdmy12nsR65lj8
+        YUCiEQIsbqXBOurgXfliNzuiMVi4FtmUi/9IitsmuGF1me3c
+X-Google-Smtp-Source: AA0mqf6i/ECzHp8mYrFcEWNWBqOnwQvD+KbO/XLMiyNrAJIrn362K2jZ79eX1Hv4gR6onBAXHfnvwx6T9TPT1I5EZhTu8KV222Hs
 MIME-Version: 1.0
-References: <20220414110838.883074566@linuxfoundation.org> <CA+G9fYvgzFW7sMZVdw5r970QNNg4OK8=pbQV0kDfbOX-rXu5Rw@mail.gmail.com>
- <CA+G9fYscMP+DTzaQGw1p-KxyhPi0JB64ABDu_aNSU0r+_VgBHg@mail.gmail.com>
- <165094019509.1648.12340115187043043420@noble.neil.brown.name>
- <Y5y5n8JoGZNt1otY@panicking> <332A0C50-D53E-4C86-9795-6238C961C869@hammerspace.com>
-In-Reply-To: <332A0C50-D53E-4C86-9795-6238C961C869@hammerspace.com>
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Sat, 17 Dec 2022 10:01:24 +0100
-Message-ID: <CAOf5uwmVrH6nwkp1fb+WAS0XR=hm4XoQfHZK=OyGLFajMHtnRw@mail.gmail.com>
-Subject: Re: [PATCH 4.19 000/338] 4.19.238-rc1 review
-To:     Trond Myklebust <trondmy@hammerspace.com>
-Cc:     Neil Brown <neilb@suse.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "patches@kernelci.org" <patches@kernelci.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        "pavel@denx.de" <pavel@denx.de>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
-        "slade@sladewatkins.com" <slade@sladewatkins.com>,
-        Netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        Anna Schumaker <anna.schumaker@netapp.com>
+X-Received: by 2002:a02:7403:0:b0:363:a229:57c3 with SMTP id
+ o3-20020a027403000000b00363a22957c3mr1284306jac.231.1671267703001; Sat, 17
+ Dec 2022 01:01:43 -0800 (PST)
+Date:   Sat, 17 Dec 2022 01:01:42 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c31da505f0025531@google.com>
+Subject: [syzbot] [udf?] WARNING in udf_setsize
+From:   syzbot <syzbot+0937935b993956ba28ab@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, jack@suse.com, jack@suse.cz,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Hello,
 
-On Fri, Dec 16, 2022 at 10:25 PM Trond Myklebust
-<trondmy@hammerspace.com> wrote:
->
->
->
-> > On Dec 16, 2022, at 13:31, Michael Trimarchi <michael@amarulasolutions.=
-com> wrote:
-> >
-> > [You don't often get email from michael@amarulasolutions.com. Learn why=
- this is important at https://aka.ms/LearnAboutSenderIdentification ]
-> >
-> > Hi Neil
-> >
-> > On Tue, Apr 26, 2022 at 12:29:55PM +1000, NeilBrown wrote:
-> >> On Thu, 21 Apr 2022, Naresh Kamboju wrote:
-> >>> On Mon, 18 Apr 2022 at 14:09, Naresh Kamboju <naresh.kamboju@linaro.o=
-rg> wrote:
-> >>>>
-> >>>> On Thu, 14 Apr 2022 at 18:45, Greg Kroah-Hartman
-> >>>> <gregkh@linuxfoundation.org> wrote:
-> >>>>>
-> >>>>> This is the start of the stable review cycle for the 4.19.238 relea=
-se.
-> >>>>> There are 338 patches in this series, all will be posted as a respo=
-nse
-> >>>>> to this one.  If anyone has any issues with these being applied, pl=
-ease
-> >>>>> let me know.
-> >>>>>
-> >>>>> Responses should be made by Sat, 16 Apr 2022 11:07:54 +0000.
-> >>>>> Anything received after that time might be too late.
-> >>>>>
-> >>>>> The whole patch series can be found in one patch at:
-> >>>>>        https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/p=
-atch-4.19.238-rc1.gz
-> >>>>> or in the git tree and branch at:
-> >>>>>        git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-s=
-table-rc.git linux-4.19.y
-> >>>>> and the diffstat can be found below.
-> >>>>>
-> >>>>> thanks,
-> >>>>>
-> >>>>> greg k-h
-> >>>>
-> >>>>
-> >>>> Following kernel warning noticed on arm64 Juno-r2 while booting
-> >>>> stable-rc 4.19.238. Here is the full test log link [1].
-> >>>>
-> >>>> [    0.000000] Booting Linux on physical CPU 0x0000000100 [0x410fd03=
-3]
-> >>>> [    0.000000] Linux version 4.19.238 (tuxmake@tuxmake) (gcc version
-> >>>> 11.2.0 (Debian 11.2.0-18)) #1 SMP PREEMPT @1650206156
-> >>>> [    0.000000] Machine model: ARM Juno development board (r2)
-> >>>> <trim>
-> >>>> [   18.499895] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>> [   18.504172] WARNING: inconsistent lock state
-> >>>> [   18.508451] 4.19.238 #1 Not tainted
-> >>>> [   18.511944] --------------------------------
-> >>>> [   18.516222] inconsistent {IN-SOFTIRQ-W} -> {SOFTIRQ-ON-W} usage.
-> >>>> [   18.522242] kworker/u12:3/60 [HC0[0]:SC0[0]:HE1:SE1] takes:
-> >>>> [   18.527826] (____ptrval____)
-> >>>> (&(&xprt->transport_lock)->rlock){+.?.}, at: xprt_destroy+0x70/0xe0
-> >>>> [   18.536648] {IN-SOFTIRQ-W} state was registered at:
-> >>>> [   18.541543]   lock_acquire+0xc8/0x23c
-> >>
-> >> Prior to Linux 5.3, ->transport_lock needs spin_lock_bh() and
-> >> spin_unlock_bh().
-> >>
-> >
-> > We get the same deadlock or similar one and we think that
-> > can be connected to this thread on 4.19.243. For us is a bit
-> > difficult to hit but we are going to apply this change
-> >
-> > net: sunrpc: Fix deadlock in xprt_destroy
-> >
-> > Prior to Linux 5.3, ->transport_lock needs spin_lock_bh() and
-> > spin_unlock_bh().
-> >
-> > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> > ---
-> > net/sunrpc/xprt.c | 4 ++--
-> > 1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/net/sunrpc/xprt.c b/net/sunrpc/xprt.c
-> > index d05fa7c36d00..b1abf4848bbc 100644
-> > --- a/net/sunrpc/xprt.c
-> > +++ b/net/sunrpc/xprt.c
-> > @@ -1550,9 +1550,9 @@ static void xprt_destroy(struct rpc_xprt *xprt)
-> >         * is cleared.  We use ->transport_lock to ensure the mod_timer(=
-)
-> >         * can only run *before* del_time_sync(), never after.
-> >         */
-> > -       spin_lock(&xprt->transport_lock);
-> > +       spin_lock_bh(&xprt->transport_lock);
-> >        del_timer_sync(&xprt->timer);
-> > -       spin_unlock(&xprt->transport_lock);
-> > +       spin_unlock_bh(&xprt->transport_lock);
-> >
-> >        /*
-> >         * Destroy sockets etc from the system workqueue so they can
-> > =E2=80=94
->
-> Agreed. When backporting to kernels that are older than 5.3.x, the transp=
-ort lock needs to be taken using the bh-safe spin lock variants.
->
-> Reviewed-by: Trond Myklebust <trond.myklebust@hammerspace.com <mailto:tro=
-nd.myklebust@hammerspace.com>>
->
+syzbot found the following issue on:
 
-Seems already applied, but for some reason I miss it. I will re-align
-to stable again
+HEAD commit:    764822972d64 Merge tag 'nfsd-6.2' of git://git.kernel.org/..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=11536087880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8c59170b68d26a55
+dashboard link: https://syzkaller.appspot.com/bug?extid=0937935b993956ba28ab
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11c41f07880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=137b3913880000
 
-Michael
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0c840c19749d/disk-76482297.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/bdfd51618ae0/vmlinux-76482297.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/fef17b5d4d6d/bzImage-76482297.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/f0caf90549db/mount_0.gz
 
-> _________________________________
-> Trond Myklebust
-> Linux NFS client maintainer, Hammerspace
-> trond.myklebust@hammerspace.com
->
+The issue was bisected to:
+
+commit 16d0556568148bdcaa45d077cac9f8f7077cf70a
+Author: Jan Kara <jack@suse.cz>
+Date:   Wed Dec 7 17:17:34 2022 +0000
+
+    udf: Discard preallocation before extending file with a hole
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1790d4e7880000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1450d4e7880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1050d4e7880000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0937935b993956ba28ab@syzkaller.appspotmail.com
+Fixes: 16d055656814 ("udf: Discard preallocation before extending file with a hole")
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3631 at fs/udf/inode.c:639 udf_setsize+0xf9e/0x1380 fs/udf/inode.c:1236
+Modules linked in:
+CPU: 1 PID: 3631 Comm: syz-executor194 Not tainted 6.1.0-syzkaller-03225-g764822972d64 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:udf_extend_file fs/udf/inode.c:638 [inline]
+RIP: 0010:udf_setsize+0xf9e/0x1380 fs/udf/inode.c:1236
+Code: 8e fe 45 85 f6 49 bf 00 00 00 00 00 fc ff df 74 0a e8 86 28 8e fe e9 34 ff ff ff e8 7c 28 8e fe e9 fa fd ff ff e8 72 28 8e fe <0f> 0b e9 61 f6 ff ff 89 d9 80 e1 07 38 c1 0f 8c 1a f1 ff ff 48 89
+RSP: 0018:ffffc90003cefb00 EFLAGS: 00010293
+RAX: ffffffff82fd3d5e RBX: 0000000000000800 RCX: ffff888022760000
+RDX: 0000000000000000 RSI: 0000000000001000 RDI: 0000000000000800
+RBP: ffffc90003cefcd8 R08: ffffffff82fd33b8 R09: ffffed100df29024
+R10: ffffed100df29024 R11: 1ffff1100df29023 R12: 1ffff9200079df70
+R13: ffffc90003cefc10 R14: 0000000000001000 R15: 0000000000000009
+FS:  00005555566c83c0(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000560387521d28 CR3: 0000000073ea7000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ udf_setattr+0x362/0x530 fs/udf/file.c:281
+ notify_change+0xe50/0x1100 fs/attr.c:482
+ do_truncate+0x200/0x2f0 fs/open.c:65
+ do_sys_ftruncate+0x2bc/0x360 fs/open.c:193
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fd454550da9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffeb8edd258 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
+RAX: ffffffffffffffda RBX: 00007ffeb8edd268 RCX: 00007fd454550da9
+RDX: ffffffffffffffc0 RSI: 00000000000007fb RDI: 0000000000000004
+RBP: 00007ffeb8edd260 R08: 00007fd45450e360 R09: 00007fd45450e360
+R10: 00007ffeb8edd260 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
 
---=20
-Michael Nazzareno Trimarchi
-Co-Founder & Chief Executive Officer
-M. +39 347 913 2170
-michael@amarulasolutions.com
-__________________________________
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Amarula Solutions BV
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-T. +31 (0)85 111 9172
-info@amarulasolutions.com
-www.amarulasolutions.com
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
