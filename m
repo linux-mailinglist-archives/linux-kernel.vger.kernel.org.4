@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A476A64F7F0
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 07:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7E864F7F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 07:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiLQGgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 01:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
+        id S230076AbiLQGgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 01:36:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiLQGgJ (ORCPT
+        with ESMTP id S230040AbiLQGgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 01:36:09 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1127215F33
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 22:36:09 -0800 (PST)
-Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NYx3G2QqYzJpNl;
-        Sat, 17 Dec 2022 14:32:26 +0800 (CST)
+        Sat, 17 Dec 2022 01:36:41 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE2413CDA
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 22:36:40 -0800 (PST)
+Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NYx714MFPzJqTd;
+        Sat, 17 Dec 2022 14:35:41 +0800 (CST)
 Received: from huawei.com (10.67.164.66) by kwepemm600005.china.huawei.com
  (7.193.23.191) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Sat, 17 Dec
- 2022 14:36:07 +0800
+ 2022 14:36:38 +0800
 From:   Longfang Liu <liulongfang@huawei.com>
 To:     <alex.williamson@redhat.com>, <jgg@nvidia.com>,
         <shameerali.kolothum.thodi@huawei.com>,
         <jonathan.cameron@huawei.com>
 CC:     <cohuck@redhat.com>, <linux-kernel@vger.kernel.org>,
         <linuxarm@openeuler.org>, <liulongfang@huawei.com>
-Subject: [PATCH v5 4/5] Documentation: add debugfs description for hisi_acc_vfio_pci
-Date:   Sat, 17 Dec 2022 14:32:47 +0800
-Message-ID: <20221217063248.6735-5-liulongfang@huawei.com>
+Subject: [PATCH v5 5/5] vfio: update live migration device status
+Date:   Sat, 17 Dec 2022 14:32:48 +0800
+Message-ID: <20221217063248.6735-6-liulongfang@huawei.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20221217063248.6735-1-liulongfang@huawei.com>
 References: <20221217063248.6735-1-liulongfang@huawei.com>
@@ -38,7 +38,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.67.164.66]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
  kwepemm600005.china.huawei.com (7.193.23.191)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -49,53 +49,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a debugfs document description file to help users understand
-how to use the accelerator live migration driver's debugfs.
+migration debugfs needs to perform debug operations based on the
+status of the current device. If the device is not loaded or has
+stopped, debugfs does not allow operations.
+
+so, after the live migration function is executed and the device is
+turned off, the device no longer needs to be accessed. At this time,
+the status of the device needs to be set to stop.
 
 Signed-off-by: Longfang Liu <liulongfang@huawei.com>
 ---
- .../ABI/testing/debugfs-hisi-migration        | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 Documentation/ABI/testing/debugfs-hisi-migration
+ drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c | 3 +++
+ drivers/vfio/pci/mlx5/main.c                   | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/Documentation/ABI/testing/debugfs-hisi-migration b/Documentation/ABI/testing/debugfs-hisi-migration
-new file mode 100644
-index 000000000000..a8cfc7688b88
---- /dev/null
-+++ b/Documentation/ABI/testing/debugfs-hisi-migration
-@@ -0,0 +1,32 @@
-+What:		/sys/kernel/debug/vfio_mig/<bdf>/state
-+Date:		Nov 2022
-+Contact:	linux-kernel@vger.kernel.org
-+Description:	Read the live migration status of the VF device.
-+		The status of these live migrations includes:
-+		ERROR, RUNNING, STOP, STOP_COPY, RESUMING.
+diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+index 186a44091b59..3e58d635afb6 100644
+--- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
++++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+@@ -1601,6 +1601,9 @@ static void hisi_acc_vfio_pci_close_device(struct vfio_device *core_vdev)
+ 	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(core_vdev);
+ 	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
+ 
++	if (core_vdev->mig_ops)
++		hisi_acc_vdev->mig_state = VFIO_DEVICE_STATE_STOP;
 +
-+What:		/sys/kernel/debug/vfio_mig/<bdf>/mig_data
-+Date:		Nov 2022
-+Contact:	linux-kernel@vger.kernel.org
-+Description:	Read the live migration data of the VF device.
-+		The output format of the data is defined by the live
-+		migration driver.
+ 	iounmap(vf_qm->io_base);
+ 	vfio_pci_core_close_device(core_vdev);
+ }
+diff --git a/drivers/vfio/pci/mlx5/main.c b/drivers/vfio/pci/mlx5/main.c
+index 031ac8cc215d..64b2fe58355a 100644
+--- a/drivers/vfio/pci/mlx5/main.c
++++ b/drivers/vfio/pci/mlx5/main.c
+@@ -1092,6 +1092,9 @@ static void mlx5vf_pci_close_device(struct vfio_device *core_vdev)
+ 	struct mlx5vf_pci_core_device *mvdev = container_of(
+ 		core_vdev, struct mlx5vf_pci_core_device, core_device.vdev);
+ 
++	if (mvdev->migrate_cap)
++		mvdev->mig_state = VFIO_DEVICE_STATE_STOP;
 +
-+What:		/sys/kernel/debug/vfio_mig/<bdf>/mig_attr
-+Date:		Nov 2022
-+Contact:	linux-kernel@vger.kernel.org
-+Description:	Read the live migration attributes of the VF device.
-+		The output format of the attributes is defined by the live
-+		migration driver.
-+
-+What:		/sys/kernel/debug/vfio_mig/<bdf>/debug
-+Date:		Nov 2022
-+Contact:	linux-kernel@vger.kernel.org
-+Description:	This debug file supports "echo" command	write operations.
-+		The command is actually represented by an integer number, and the
-+		specific meaning is defined by the corresponding device driver.
-+		For example, three commands are defined in the HiSilicon accelerator
-+		live migration driver:
-+		0: State save
-+		1: State resume
-+		2: IO test
+ 	mlx5vf_cmd_close_migratable(mvdev);
+ 	vfio_pci_core_close_device(core_vdev);
+ }
 -- 
 2.24.0
 
