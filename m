@@ -2,154 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9139D64F75A
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 04:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1077764F75E
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 04:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiLQD3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 22:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35956 "EHLO
+        id S230038AbiLQDaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 22:30:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiLQD3f (ORCPT
+        with ESMTP id S229545AbiLQDaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 22:29:35 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD1B13D26
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 19:29:33 -0800 (PST)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NYrz06g8JzmWfv;
-        Sat, 17 Dec 2022 11:28:28 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sat, 17 Dec 2022 11:29:31 +0800
-Subject: Re: BUG: sleeping function called from invalid context at
- kernel/kallsyms.c:305
-To:     Anders Roxell <anders.roxell@linaro.org>, <mcgrof@kernel.org>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CADYN=9LfFwNjToc8nhrD1MMZnQptyMNjbEFaMjPXuzzxADMbsA@mail.gmail.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <c68c4226-6a5b-b3f6-3102-d7c34b576f9d@huawei.com>
-Date:   Sat, 17 Dec 2022 11:29:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Fri, 16 Dec 2022 22:30:35 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB3224080
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 19:30:35 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id cf42so6348576lfb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 19:30:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wfHIfp2PgzsPQXGTrZ1bDouqyU93n0zRql8slxBHk7o=;
+        b=HRyi+WrAMBTb/wQaQGDQCXU8bfZEnhT5TFkJDWnE8WiWIdpI6TnIoU+VoZ6///rOWn
+         VBdElP7jI06sCHXpJ/2UGxYTWAdmQbRKK0zCNVeh9PxJGdGxrxjl3tzla6sqWTiVjGt3
+         vnVTYpfIaFTWlaEVLbXllugiXTBQnyk78ijc290dBsIaWnq5G0beeUWVjeER4yvZ4XLe
+         vvCRG9WRv/QxaL/4YYhsDr90TRyMiJIIl/LAlLx+i9v4pRrtXdJs75cAR0mEKcJZo/xD
+         B9r1ZGAxFLSk4Mtt3RQodmX0VQrn/CNvVp5LbDNlTLS8Pj46n1QDjKyhae6BE4XwwLVz
+         suiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wfHIfp2PgzsPQXGTrZ1bDouqyU93n0zRql8slxBHk7o=;
+        b=KBNstllggmdayrxeAmqexxvVJQ3wxkJ4/ksNuo9ypswgFwjAoTS48CXM2VqTMLKOTI
+         g5+2m4JTEbijWV+bUX0oEVOa8nznV1cXE1Z6IbnTaYLzpe2mG4iBMCswVIrHsER8PbAy
+         aibSdZLAaapNdHpbdhU0TJi0A/vEnnhfHm0QboQROLMoYjWZNblihgQBX4Qi5ICamODf
+         g15iqadDbwZdDUoiwISTjg/pF24lJxb4zDbDF41Ko5vutzXiUvpd1ygUQ5gP1XDNYswd
+         DemE2ULACDx9ws7ir/MxZ+kilcaXn0+rKB3IW2/magk95ckkmIxhLPlQlCG4vbjr9W6S
+         meTw==
+X-Gm-Message-State: ANoB5plYTdJqPiX0RXOiKfnVqnkvYYz2PGQ3WoUaoTEZG85X0R/Ccmk7
+        op0Qm7+yhC8N9YwPAbESmAWWIQU1D4of89Tj9nU=
+X-Google-Smtp-Source: AA0mqf5dbmzGjOMCdKmW8WQ3WKjjJJ0V17EL+WG5rzswhocJ8fWYbxgCj6cNQMpbFhu2jgfIBqhpOXfapoESpiKvmpk=
+X-Received: by 2002:a05:6512:3907:b0:4aa:cd5c:4c52 with SMTP id
+ a7-20020a056512390700b004aacd5c4c52mr26851626lfu.374.1671247833285; Fri, 16
+ Dec 2022 19:30:33 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CADYN=9LfFwNjToc8nhrD1MMZnQptyMNjbEFaMjPXuzzxADMbsA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:651c:b27:0:0:0:0 with HTTP; Fri, 16 Dec 2022 19:30:32
+ -0800 (PST)
+Reply-To: mrstheresaheidi8@gmail.com
+From:   "Ms. Theresa Heidi" <ogunbayobabatunde2020@gmail.com>
+Date:   Fri, 16 Dec 2022 19:30:32 -0800
+Message-ID: <CACe_CMuqJph6xLLQnHdY+GROairfZTsLpsKEEq2reXVW4w2NCg@mail.gmail.com>
+Subject: =?UTF-8?B?5oCl5LqL5rGC5Yqp?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_99,BAYES_999,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:12b listed in]
+        [list.dnswl.org]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ogunbayobabatunde2020[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ogunbayobabatunde2020[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrstheresaheidi8[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/12/16 18:45, Anders Roxell wrote:
-> Hi,
-> 
-> I'm building an arm64 allmodconfig kernel (see the .config [1]) on
-> yesterdays next tag 20221215 with KALLSYMS_SELFTEST enabled and I saw
-> the following bug when the selftest ran:
-> 
-> [29725.015182][   T58] BUG: sleeping function called from invalid
-> context at kernel/kallsyms.c:305
-> [29725.022953][   T58] in_atomic(): 0, irqs_disabled(): 128,
-> non_block: 0, pid: 58, name: kallsyms_test
-> [29725.031272][   T58] preempt_count: 0, expected: 0
-> [29725.035903][   T58] RCU nest depth: 0, expected: 0
-> [29725.040574][   T58] no locks held by kallsyms_test/58.
-> [29725.045494][   T58] irq event stamp: 18899904
-> [29725.049809][ T58] hardirqs last enabled at (18899903):
-> finish_task_switch.isra.0 (core.c:?)
-> [29725.059608][ T58] hardirqs last disabled at (18899904):
-> test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
-> [29725.069936][ T58] softirqs last enabled at (18899886): __do_softirq (??:?)
-> [29725.078670][ T58] softirqs last disabled at (18899879):
-> ____do_softirq (irq.c:?)
-> [29725.087399][   T58] CPU: 0 PID: 58 Comm: kallsyms_test Tainted: G
->              T  6.1.0-next-20221215 #2
-> 0a142be8faea13ac333ed9a1cf4e71b6966ad16e
-> [29725.099607][   T58] Hardware name: linux,dummy-virt (DT)
-> [29725.104674][   T58] Call trace:
-> [29725.107909][ T58] dump_backtrace (??:?)
-> [29725.112706][ T58] show_stack (??:?)
-> [29725.116883][ T58] dump_stack_lvl (??:?)
-> [29725.121666][ T58] dump_stack (??:?)
-> [29725.125852][ T58] __might_resched (??:?)
-> [29725.130712][ T58] kallsyms_on_each_symbol (??:?)
-> [29725.136018][ T58] test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
-> [29725.142008][ T58] test_entry (kallsyms_selftest.c:?)
-> [29725.146312][ T58] kthread (kthread.c:?)
-> [29725.150567][ T58] ret_from_fork (??:?)
-> [29734.975283][   T58] kallsyms_selftest: kallsyms_on_each_symbol()
-> traverse all: 5744310840 ns
-> [29734.992268][   T58] kallsyms_selftest:
-> kallsyms_on_each_match_symbol() traverse all: 1164580 ns
-> [29735.049679][   T58] kallsyms_selftest: finish
-> 
-> looks like the issue is that test_perf_kallsyms_on_each_symbol() does
-> these function calls:
-> 
->        local_irq_save(flags);
->        t0 = sched_clock();
->        kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
->        t1 = sched_clock();
->        local_irq_restore(flags);
-> 
-> and inside kallsyms_on_each_match_symbol(), cond_resched() is called.
-> 
-> Any ideas how to solve this?
-
-I was initially hoping that the test process would not be interrupted.
-It is not a big problem to remove local_irq_save(). From a probabilistic
-statistical point of view: it does not affect the horizontal comparison
-between kallsyms_on_each_symbol() and kallsyms_on_each_match_symbol(),
-and the vertical comparison before and after optimization is also not
-affected.
-
-Or do not call cond_resched() during the test. This method seems to be
-a little better.
-
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index e31b4d87a4e1b71..9e07fabaf08e647 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -358,7 +358,8 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
-                ret = fn(data, namebuf, NULL, kallsyms_sym_address(i));
-                if (ret != 0)
-                        return ret;
--               cond_resched();
-+               if (!IS_ENABLED(CONFIG_KALLSYMS_SELFTEST))
-+                       cond_resched();
-        }
-        return 0;
- }
-@@ -375,7 +376,8 @@ int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
-
-        for (i = start; !ret && i <= end; i++) {
-                ret = fn(data, kallsyms_sym_address(get_symbol_seq(i)));
--               cond_resched();
-+               if (!IS_ENABLED(CONFIG_KALLSYMS_SELFTEST))
-+                       cond_resched();
-        }
-
-        return ret;
-
-> 
-> Cheers,
-> Anders
-> [1] https://people.linaro.org/~anders.roxell/next-20221215.config
-> .
-> 
-
--- 
-Regards,
-  Zhen Lei
+5oWI5ZaE5o2Q5qy+77yBDQoNCuivt+S7lOe7humYheivu++8jOaIkeefpemBk+i/meWwgeS/oeeh
+ruWunuWPr+iDveS8mue7meS9oOS4gOS4quaDiuWWnOOAgiDmiJHlnKjpnIDopoHkvaDluK7liqnn
+moTml7blgJnpgJrov4fnp4HkurrmkJzntKLpgYfliLDkuobkvaDnmoTnlLXlrZDpgq7ku7bogZTn
+s7vjgIINCuaIkeaAgOedgOayiemHjeeahOaCsuS8pOWGmei/meWwgemCruS7tue7meS9oO+8jOaI
+kemAieaLqemAmui/h+S6kuiBlOe9keS4juS9oOiBlOezu++8jOWboOS4uuWug+S7jeeEtuaYr+ac
+gOW/q+eahOayn+mAmuWqkuS7i+OAgg0KDQrmiJHmmK82MuWygeeahOeJueiVvuiOjirmtbfokoLl
+pKvkurrvvIznm67liY3lm6DogrrnmYzlnKjku6XoibLliJfnmoTkuIDlrrbnp4Hnq4vljLvpmaLk
+vY/pmaLmsrvnlpfjgIINCjTlubTliY3vvIzmiJHnmoTkuIjlpKvljrvkuJblkI7vvIzmiJHnq4vl
+jbPooqvor4rmlq3lh7rmgqPmnInogrrnmYzvvIzku5bmiorku5bmiYDmnInnmoTkuIDliIfpg73n
+lZnnu5nkuobmiJHjgIIg5oiR5bim552A5oiR55qE56yU6K6w5pys55S16ISR5Zyo5LiA5a625Yy7
+6Zmi6YeM77yM5oiR5LiA55u05Zyo5o6l5Y+X6IK66YOo55mM55eH55qE5rK755aX44CCDQoNCuaI
+keS7juaIkeW3suaVheeahOS4iOWkq+mCo+mHjOe7p+aJv+S6huS4gOeslOi1hOmHke+8jOWPquac
+ieS4gOeZvuS4h+S6jOWNgeS4h+e+juWFg++8iDEsMjAwLDAwMCwwMOe+juWFg++8ieOAgueOsOWc
+qOW+iOaYjuaYvu+8jOaIkeato+WcqOaOpei/keeUn+WRveeahOacgOWQjuWHoOWkqe+8jOaIkeiu
+pOS4uuaIkeS4jeWGjemcgOimgei/meeslOmSseS6huOAgg0K5oiR55qE5Yy755Sf6K6p5oiR5piO
+55m977yM55Sx5LqO6IK655mM55qE6Zeu6aKY77yM5oiR5LiN5Lya5oyB57ut5LiA5bm044CCDQoN
+Cui/meeslOmSsei/mOWcqOWbveWklumTtuihjO+8jOeuoeeQhuWxguS7peecn+ato+eahOS4u+S6
+uueahOi6q+S7veWGmeS/oee7meaIke+8jOimgeaxguaIkeWHuumdouaUtumSse+8jOaIluiAheet
+vuWPkeS4gOWwgeaOiOadg+S5pu+8jOiuqeWIq+S6uuS7o+aIkeaUtumSse+8jOWboOS4uuaIkeeU
+n+eXheS4jeiDvei/h+adpeOAgg0K5aaC5p6c5LiN6YeH5Y+W6KGM5Yqo77yM6ZO26KGM5Y+v6IO9
+5Lya5Zug5Li65L+d5oyB6L+Z5LmI6ZW/5pe26Ze06ICM6KKr5rKh5pS26LWE6YeR44CCDQoNCuaI
+keWGs+WumuS4juaCqOiBlOezu++8jOWmguaenOaCqOaEv+aEj+W5tuacieWFtOi2o+W4ruWKqeaI
+keS7juWkluWbvemTtuihjOaPkOWPlui/meeslOmSse+8jOeEtuWQjuWwhui1hOmHkeeUqOS6juaF
+iOWWhOS6i+S4mu+8jOW4ruWKqeW8seWKv+e+pOS9k+OAgg0K5oiR6KaB5L2g5Zyo5oiR5Ye65LqL
+5LmL5YmN55yf6K+a5Zyw5aSE55CG6L+Z5Lqb5L+h5omY5Z+66YeR44CCIOi/meS4jeaYr+S4gOes
+lOiiq+ebl+eahOmSse+8jOS5n+ayoeaciea2ieWPiueahOWNsemZqeaYrzEwMCXnmoTpo47pmanl
+hY3otLnkuI7lhYXliIbnmoTms5Xlvovor4HmmI7jgIINCg0K5oiR6KaB5L2g5ou/NDUl55qE6ZKx
+57uZ5L2g5Liq5Lq65L2/55So77yM6ICMNTUl55qE6ZKx5bCG55So5LqO5oWI5ZaE5bel5L2c44CC
+DQrmiJHlsIbmhJ/osKLkvaDlnKjov5nku7bkuovkuIrmnIDlpKfnmoTkv6Hku7vlkozkv53lr4bv
+vIzku6Xlrp7njrDmiJHlhoXlv4PnmoTmhL/mnJvvvIzlm6DkuLrmiJHkuI3mg7PopoHku7vkvZXk
+vJrljbHlj4rmiJHmnIDlkI7nmoTmhL/mnJvnmoTkuJzopb/jgIINCuaIkeW+iOaKseatie+8jOWm
+guaenOaCqOaUtuWIsOi/meWwgeS/oeWcqOaCqOeahOWeg+WcvumCruS7tu+8jOaYr+eUseS6juac
+gOi/keeahOi/nuaOpemUmeivr+WcqOi/memHjOeahOWbveWutuOAgg0KDQrkvaDkurLniLHnmoTl
+prnlprnjgIINCueJueiVvuiOjirmtbfokoLlpKvkuroNCg==
