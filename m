@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A9064F603
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 01:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE87264F621
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 01:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbiLQAXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Dec 2022 19:23:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
+        id S230265AbiLQAYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Dec 2022 19:24:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiLQAW1 (ORCPT
+        with ESMTP id S230510AbiLQAXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Dec 2022 19:22:27 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E847CFFC
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 16:16:21 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso2870400wmo.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 16:16:21 -0800 (PST)
+        Fri, 16 Dec 2022 19:23:35 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A03482DC9
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 16:18:31 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id 1so5901647lfz.4
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 16:18:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5hOSZ9XvCZ0lVh7H3bPZKfFn1zZw42pxRgq17+nafB0=;
-        b=Wd10C8F53VhKbkG4Y7lnFbK5RrR4ZEDvp1wRJElm/qesZY565MvnlIQ/egFl21fmCo
-         K2yy/r6aSfJy4AXMIy6MTE93LoxqGYLOKcKoPvyxtBzJMLFfxpaZc2drzNAA7IRYOmRn
-         HvPnSy7KLIzzqi4kKTnkKZONJyV0OWJx39ulMmacF/UP2rwnRXeAiaEqookxIS0iaPdr
-         qNN3g6aYuk2yU2M0zOPc9GL5fEO7hg3nuw7O3nJuIz7Igxug5U6x2USBogjW52Qu+09y
-         HNPC/ZQCQ25vG1CCr5BeQ5eTwzd8ICslP/bHCIWxMejH77/wZ/EULa5MRrL84t1FumVf
-         LEHg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+WGXs0Da5xeMKOv53CBT3wPoiNkhzYtfmvcyhjfkGc4=;
+        b=ZGcE9nGrqhguAbP9ZgQjtsV+NzS0BvGV7bPnxNiFd1T0kTHGUl8R+CxGT0/PwAmMWD
+         dgqMz6dZQPF930ADNTZC8iEiPdSgqnPiVwuICNj7bPD/UfB64nTjZjgau/G1f0Yz44hM
+         cyyvjuv+rd8qh0t2pAkwKtZn8cdhiIviJKCCV8/dNApRm7ElwcCU+sy8WmVI9XF/m343
+         mi8kbWQ0V8KbVRIfTQp/eLHUt/QAhweXPuJZjF9/cg7u2Qdoci1TM9SD9w7+Bt977K6d
+         3owduyFzU1ALkWg0Yo2CTv842Av5hXzOhLru504oT2g7USvijOhQeQMGYRj65e/MjkD4
+         nlFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5hOSZ9XvCZ0lVh7H3bPZKfFn1zZw42pxRgq17+nafB0=;
-        b=gCDSKPNogSo5E0w5oqrSCtl3vlWiEWnkddoW92Jihc0/0uv+MNu71HEFuDI3doR+5j
-         qPF0TjcRqc3fYlUPn7CQ417MVpZ/o1oFv7SyHQCUdlX+jQvHl9ty10YD0DGcsNn23n7Z
-         HMrn/WWNdwFF6lFGQrAnhp8tJ7JpthI0srBOb64uPGc8AGhvbY61jVCBhcugMhB6Y5Qi
-         tOZGCv48vxZVx8i3a1d5ad58WzEuc9mfVqZOAcAf/GfxKu/qxWHwC4RYrVT9YBxXZH5Y
-         hfBG06pafA//+6L3z8LpTlF3aVGu8OEZ9dzigsMKk8D4tUaz+yT7Gl0qevfAkOtfu0lG
-         +ECw==
-X-Gm-Message-State: ANoB5plzOhahBqHZIzGERC0XodDMQUTxVCNogj+KOZq/f43eg8sgyStZ
-        ZWfaT+LmX/r+x8dDKCFHhMs=
-X-Google-Smtp-Source: AA0mqf4kILSJrFTdGHsPiCzjToEYxg/rLjBvuo4fPqokYKY9NrLy0YSCAxLGRc6cZkLuKtpU8pgD4w==
-X-Received: by 2002:a05:600c:a11:b0:3d2:2a74:3a90 with SMTP id z17-20020a05600c0a1100b003d22a743a90mr16109466wmp.22.1671236179867;
-        Fri, 16 Dec 2022 16:16:19 -0800 (PST)
-Received: from lucifer.home ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.googlemail.com with ESMTPSA id o3-20020a05600c510300b003cfa3a12660sm20866497wms.1.2022.12.16.16.16.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 16:16:19 -0800 (PST)
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>, Marco Elver <elver@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH] mm: remove unused alloc_pages_bulk_list()
-Date:   Sat, 17 Dec 2022 00:15:54 +0000
-Message-Id: <20221217001554.554913-1-lstoakes@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+WGXs0Da5xeMKOv53CBT3wPoiNkhzYtfmvcyhjfkGc4=;
+        b=D60NO3O9qePSzSSsr7Y8l+osl0znalihIBtZaRxTm79FFIqlXo0CLpDPkGJYblZTYF
+         gtWrbp0H6wKQJt1ynU1MaRGOyUmG2EgSC09nX+R8T0ULHcE7BN5LquZLgmnj+jZ8KaVm
+         zK/GB+PWE7PPiTUK3PTQGTdyY1tm5aZxk/XUJIowfHKpU+G65ktFRAj8eDU+FZPguc7U
+         7HaxTKRFNHsY0mWh06U3Ato6KEgVmUeZaCuIvWF8E4vuHYWQ/ds8cvFjCQh4uDea8F8N
+         X52ZVdpV1gmbVZhFn487ZXIODmnY8b6Zb7oxGwjze7Mz0A49ymhV9SueH+XZa+i3q0oa
+         7iuw==
+X-Gm-Message-State: ANoB5pkoctQzjrLnGc03tYUOZXsFXye6jChp8v7hqzMz6K0+DZF+XZdM
+        rpdvA4RRruEukhtCK03roBczbwcBdK0HNDsA0jg=
+X-Google-Smtp-Source: AA0mqf7MHydzXOY/VaQ5lDdSAMyCitjKWYjlgMFw6WL8fMnLgyqqPOOakZk/Gy2ay0rOj2w/DaMHQg==
+X-Received: by 2002:a05:6512:2110:b0:4b5:649a:9105 with SMTP id q16-20020a056512211000b004b5649a9105mr8871720lfr.65.1671236309990;
+        Fri, 16 Dec 2022 16:18:29 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id t28-20020a19dc1c000000b004b5821219fbsm350218lfg.60.2022.12.16.16.18.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 16:18:29 -0800 (PST)
+Message-ID: <f01f19c1-720e-a1dc-4cd1-2682b1202ffa@linaro.org>
+Date:   Sat, 17 Dec 2022 02:18:28 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] thermal: qcom-spmi-adc5: Suppress probe-deferral error
+ message
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Robert Marko <robimarko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221216190945.902754-1-marijn.suijten@somainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221216190945.902754-1-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This function is not referenced anywhere else in the kernel, remove it.
+On 16/12/2022 21:09, Marijn Suijten wrote:
+> Much like 807efb7102e8 ("thermal: qcom-spmi-adc-tm5: suppress
+> probe-deferral error message") the ADC5 driver also spams a similar
+> probe-deferral error on startup when a channel is not yet available:
+> 
+>      [    0.343136] qcom-spmi-adc-tm5 1c40000.spmi:pmic@0:adc-tm@3500: get dt data failed: -517
+> 
+> Suppress it by using dev_err_probe instead, which also takes care of
+> storing the message as reason for deferring.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>   drivers/iio/adc/qcom-spmi-adc5.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
 
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
----
- include/linux/gfp.h | 7 -------
- 1 file changed, 7 deletions(-)
+With the prefix fixed:
 
-diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-index 65a78773dcca..67c5164f4758 100644
---- a/include/linux/gfp.h
-+++ b/include/linux/gfp.h
-@@ -188,13 +188,6 @@ unsigned long alloc_pages_bulk_array_mempolicy(gfp_t gfp,
- 				unsigned long nr_pages,
- 				struct page **page_array);
- 
--/* Bulk allocate order-0 pages */
--static inline unsigned long
--alloc_pages_bulk_list(gfp_t gfp, unsigned long nr_pages, struct list_head *list)
--{
--	return __alloc_pages_bulk(gfp, numa_mem_id(), NULL, nr_pages, list, NULL);
--}
--
- static inline unsigned long
- alloc_pages_bulk_array(gfp_t gfp, unsigned long nr_pages, struct page **page_array)
- {
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
 -- 
-2.38.1
+With best wishes
+Dmitry
 
