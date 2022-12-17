@@ -2,59 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4EB64FA9A
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 16:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C1664FAED
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 17:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbiLQPnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 10:43:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56442 "EHLO
+        id S230224AbiLQQES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 11:04:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbiLQPl7 (ORCPT
+        with ESMTP id S230385AbiLQQD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 10:41:59 -0500
+        Sat, 17 Dec 2022 11:03:56 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0102B60D;
-        Sat, 17 Dec 2022 07:31:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BDCF3B9
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 07:58:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F20CB80684;
-        Sat, 17 Dec 2022 15:31:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEB10C433F1;
-        Sat, 17 Dec 2022 15:31:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4ADC7B802C5
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 15:58:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A67C433D2;
+        Sat, 17 Dec 2022 15:58:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671291072;
-        bh=VKwZ2zF2aVV2tEPQziZrVGlKv+NmWygqWOW8DfVQGBI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WzmbYFeEvWFDg664H2wAmFW6O0lUTRa5Y/0q5c9yBg/GIlZw515CZsCZ/DwYOqRal
-         jeIfPc1KoRhGAZ7niRyvB50Y2O5IiR+Nwlb+xfWkJiqp9oN7KLV2Mr7UTx0PDT4A5K
-         iorB1/FRF3u1igGSycPoXrcVq6la72MYZHwVVbWxrt8O6KNZJS3CWJndlYaHAcSlO3
-         LpxRDgfIatMiYoBwXzLOFILEJsfUTwd728XnUWFTPYt1DorJhZITUYQg6uqk/PMPS8
-         y7vpmNkKo6xIAgICV3BYcrkTufgaI8NkhpGaSyxQdaOg1mXO3uGsw1mukip9SAyqQI
-         E9+eOwfiLwS8g==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     ZhangPeng <zhangpeng362@huawei.com>,
-        syzbot+e836ff7133ac02be825f@syzkaller.appspotmail.com,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nanyong Sun <sunnanyong@huawei.com>,
-        Viacheslav Dubeyko <slava@dubeyko.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-fsdevel@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 8/8] hfs: fix OOB Read in __hfs_brec_find
-Date:   Sat, 17 Dec 2022 10:30:52 -0500
-Message-Id: <20221217153053.99513-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221217153053.99513-1-sashal@kernel.org>
-References: <20221217153053.99513-1-sashal@kernel.org>
+        s=k20201202; t=1671292723;
+        bh=0SWU9xGA4GT0P8n+P8Hu88az0XrllApnKjpIJZPfI6w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=XnN2aKjICo0GvkdUazSQ2jmJaoJ2C1FSTVpRoP4SN0crKqSmV0v4ZlGh5x2jXYra7
+         /t2Qks3AmvR+uri2OMeXWCeiCiQNQWjZCrmb/fuSim9MmgUXt8JgmDgQ0uQYRRSs/T
+         aVBOVdzT8Dh411yZ7fKdJxFux0Yo09QLu/rX4dBT4Ur9swiVSYwKY05XfTYhnkKoq5
+         E6+MCKwJSb4JNYV/+uxOvQI8oA5Y7IsuoI1AO1UVltLQKNctFGNc97FPDwqUicC37m
+         g/XQjEKmj7R/sI79ineVDreqH8+KqgFfTvsgGQDaUqy5OrjzZLlqwaP+FiR89fshjq
+         UE1CVe1VNmdag==
+Date:   Sat, 17 Dec 2022 09:58:42 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH 0/2] kexec: Remove unnecessary arch hook
+Message-ID: <20221217155842.GA389338@bhelgaas>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y52Qg8OvU1UsGZGC@MiWiFi-R3L-srv>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,79 +57,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ZhangPeng <zhangpeng362@huawei.com>
+On Sat, Dec 17, 2022 at 05:48:51PM +0800, Baoquan He wrote:
+> On 12/15/22 at 12:23pm, Bjorn Helgaas wrote:
+> > From: Bjorn Helgaas <bhelgaas@google.com>
+> > 
+> > There are no arch-specific things in arch_kexec_kernel_image_load(), so
+> > remove it and just use the generic version.
+> 
+> I ever posted below patch to do the same thing, Andrew only picked the
+> memory leak fixing patch.
+> 
+> [PATCH v2 2/2] kexec_file: clean up arch_kexec_kernel_image_load
+> https://lore.kernel.org/all/20220223113225.63106-3-bhe@redhat.com/T/#u
 
-[ Upstream commit 8d824e69d9f3fa3121b2dda25053bae71e2460d2 ]
+Indeed!  Sorry, I wasn't aware of your previous work.  If you repost
+it, cc me and I'll be glad to help review it.
 
-Syzbot reported a OOB read bug:
-
-==================================================================
-BUG: KASAN: slab-out-of-bounds in hfs_strcmp+0x117/0x190
-fs/hfs/string.c:84
-Read of size 1 at addr ffff88807eb62c4e by task kworker/u4:1/11
-CPU: 1 PID: 11 Comm: kworker/u4:1 Not tainted
-6.1.0-rc6-syzkaller-00308-g644e9524388a #0
-Workqueue: writeback wb_workfn (flush-7:0)
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- print_address_description+0x74/0x340 mm/kasan/report.c:284
- print_report+0x107/0x1f0 mm/kasan/report.c:395
- kasan_report+0xcd/0x100 mm/kasan/report.c:495
- hfs_strcmp+0x117/0x190 fs/hfs/string.c:84
- __hfs_brec_find+0x213/0x5c0 fs/hfs/bfind.c:75
- hfs_brec_find+0x276/0x520 fs/hfs/bfind.c:138
- hfs_write_inode+0x34c/0xb40 fs/hfs/inode.c:462
- write_inode fs/fs-writeback.c:1440 [inline]
-
-If the input inode of hfs_write_inode() is incorrect:
-struct inode
-  struct hfs_inode_info
-    struct hfs_cat_key
-      struct hfs_name
-        u8 len # len is greater than HFS_NAMELEN(31) which is the
-maximum length of an HFS filename
-
-OOB read occurred:
-hfs_write_inode()
-  hfs_brec_find()
-    __hfs_brec_find()
-      hfs_cat_keycmp()
-        hfs_strcmp() # OOB read occurred due to len is too large
-
-Fix this by adding a Check on len in hfs_write_inode() before calling
-hfs_brec_find().
-
-Link: https://lkml.kernel.org/r/20221130065959.2168236-1-zhangpeng362@huawei.com
-Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
-Reported-by: <syzbot+e836ff7133ac02be825f@syzkaller.appspotmail.com>
-Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc: Ira Weiny <ira.weiny@intel.com>
-Cc: Jeff Layton <jlayton@kernel.org>
-Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Nanyong Sun <sunnanyong@huawei.com>
-Cc: Viacheslav Dubeyko <slava@dubeyko.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/hfs/inode.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/fs/hfs/inode.c b/fs/hfs/inode.c
-index de0d6d4c46b6..cd4eee5b8358 100644
---- a/fs/hfs/inode.c
-+++ b/fs/hfs/inode.c
-@@ -452,6 +452,8 @@ int hfs_write_inode(struct inode *inode, struct writeback_control *wbc)
- 		/* panic? */
- 		return -EIO;
- 
-+	if (HFS_I(main_inode)->cat_key.CName.len > HFS_NAMELEN)
-+		return -EIO;
- 	fd.search_key->cat = HFS_I(main_inode)->cat_key;
- 	if (hfs_brec_find(&fd))
- 		/* panic? */
--- 
-2.35.1
-
+> > Bjorn Helgaas (2):
+> >   x86/kexec: Remove unnecessary arch_kexec_kernel_image_load()
+> >   kexec: Remove unnecessary arch_kexec_kernel_image_load()
+> > 
+> >  arch/x86/include/asm/kexec.h       |  3 ---
+> >  arch/x86/kernel/machine_kexec_64.c | 11 -----------
+> >  include/linux/kexec.h              |  8 --------
+> >  kernel/kexec_file.c                |  6 +++---
+> >  4 files changed, 3 insertions(+), 25 deletions(-)
