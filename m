@@ -2,254 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0822E64F7FB
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 07:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5707964F80C
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 08:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbiLQGlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 01:41:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
+        id S230280AbiLQHHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 02:07:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbiLQGk5 (ORCPT
+        with ESMTP id S229508AbiLQHG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 01:40:57 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7CEE00D;
-        Fri, 16 Dec 2022 22:40:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1671259253; x=1702795253;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YRxt5rhMNAk4hlkUwlWb5QlYXnZcpcrAzF1lQQTR4ps=;
-  b=vIarzuK+lloqrnRJUF6ZLUs8uk+BuTjr9dNoJqvM7Uz8di5gQTPt4joM
-   Q/hKwgcClI2EDQqD7IExStBcx+3Dlp1JgXuazKayNfTgCILCwMEeaiOAJ
-   MscX3hlAgRUUn/lB4DY4T9DSvqQmNNw9yvUpfDPA1qBvCGejYknij0AGW
-   ys4ikxo5GGhUnb/+n7vtXhJ5YqAwdiWcG/JlkOJdExgfUMMKITr85/J5T
-   3dmQnG3x7xP0Liw6UAR763DWi/jxZIxWA+NZBlLP3CSyeEnpq0YsGTYYv
-   R6szav3ebQUXnBdNbmkRb7xAuh/iPbUymwDY/IIpgqEj2a5NEmIc6xDjU
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,252,1665471600"; 
-   d="scan'208";a="188610399"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Dec 2022 23:40:49 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 16 Dec 2022 23:40:48 -0700
-Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Fri, 16 Dec 2022 23:40:42 -0700
-From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <linux-serial@vger.kernel.org>, <gregkh@linuxfoundation.org>,
-        <jirislaby@kernel.org>, <ilpo.jarvinen@linux.intel.com>,
-        <macro@orcam.me.uk>, <andriy.shevchenko@linux.intel.com>,
-        <cang1@live.co.uk>, <colin.i.king@gmail.com>,
-        <phil.edworthy@renesas.com>, <biju.das.jz@bp.renesas.com>,
-        <geert+renesas@glider.be>, <lukas@wunner.de>,
-        <u.kleine-koenig@pengutronix.de>, <wander@redhat.com>,
-        <etremblay@distech-controls.com>, <jk@ozlabs.org>,
-        <UNGLinuxDriver@microchip.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Subject: [PATCH v10 tty-next 4/4] serial: 8250_pci1xxxx: Add power management functions to quad-uart driver
-Date:   Sun, 18 Dec 2022 00:45:07 +0530
-Message-ID: <20221217191507.2359029-5-kumaravel.thiagarajan@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221217191507.2359029-1-kumaravel.thiagarajan@microchip.com>
-References: <20221217191507.2359029-1-kumaravel.thiagarajan@microchip.com>
+        Sat, 17 Dec 2022 02:06:59 -0500
+Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40EC3B9FC
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Dec 2022 23:06:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1671260811;
+        bh=qNPme23sRfuoZh5wT71WmCg74RkrBQR8L1HFucUJqQg=;
+        h=From:To:Cc:Subject:Date;
+        b=KxSV7RouGnBGIBn030RaXFw/DrdQ8xtwR4NbKP+Z2ItkaYrNCajP/uO4YpJEVI+mn
+         H+ZFeXxLH1ghAfx62qQ69tMWlEalDS9Grez6QMT7iNm0zrqdfoXYhalQXyuJS+V4z6
+         agRm/mtPFkWW2vSd+4Zu6SjtvvnmcAbYMjml8Iqo=
+Received: from rtoax.. ([111.199.188.149])
+        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
+        id DCB7CC9; Sat, 17 Dec 2022 15:03:28 +0800
+X-QQ-mid: xmsmtpt1671260608t8uzpjr6z
+Message-ID: <tencent_3D7B0D368482B2602EC7559A5E1546171009@qq.com>
+X-QQ-XMAILINFO: Mm/8i8/T4yne7jDl1XJl/TzZjZik7sj8e1EHqrLVkaLp4DVV33nWJ6iwpCMpUh
+         azceIv7JFW8GnKjG3GeU/09D0/P47r43xawCn9CVCqwOy3SaZ4LJtZCFTyyHPI/LijsQikeOHwWs
+         AYnMLcNl+UkrzaaDThXSh3bxQVXbwnlNrSfQsGLfKIIl4nKjI/J2Ja12/RIqn10jnjpjOpPmTiMP
+         WG/wLgLxB3el4y87Rx0yPRImgDYm3hIJuoj9UpD5ZIyh8896T1Go479yovAElJsKDE4reGigHQSV
+         M+VhAorZoYuh3am1j+wVHYLkLnmAKAo8y5kl0MgQRz26lr7eZfQ1RuiVK+Gr4Qt8/qpe6FCIdyaU
+         K7S/SRSesAEvCk9lCu7gFSBJpkjgiQSS43trnyEHDh6aK7tpHF4MtMOep+jHwXati8mlspBbl9rw
+         UQLBePJvflbZ7Wi/hafU+4gFD9fh1u2WetzoQBdXiGSVgKBharQy4OEXkDtnQHzS+AU4H6AFfb9A
+         GnBkCt6XCT0i61pdjXAyQrqu0pEOHPDw5wblLHRZ5NhmyjN3F9id8FznvVdG2/Kbr0NmbkuBQvLL
+         EgLlci8v3ONPa7Fvx/PdPAKg4cz6/EZd8T0dPFfZZTkjCy7QQCHGPi78VOo2yg4Py7qLMNuebRZ/
+         10r55qnz+SA8dAtno09cK4meNvy3sSfzSm5G0as+XtZRTR4Ybv0hVigOO7KvfB0fRRZaYBUdHv+S
+         vZzn29h8LNp/JgnXIu6JHR9yWcTQe7znhxVnnI2q3SVo5+bCofKbvYh6Or6eT3s7qqftbwbVb27i
+         hyR1QpNW9EJUZEvoI+cWeGlGtSoz+/x4FjNqnzj0chR3rY7JoV7Q7d13q/08Bpkn0E0XgmB38Xdu
+         sBVpyLBAagW/rQ3vd9Pmj/UfwkPj7x0whVdhuQstzx3bDoxbtEd2mGEfC0tfBFEVnnzeifKsSEvQ
+         Cdq0QHk1bU5kToBdBcakwEJhPEhQXNGTKUIUA+nStgCA8kPtJ00w==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     masahiroy@kernel.org
+Cc:     linux-kbuild@vger.kernel.org, Rong Tao <rongtao@cestc.cn>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org (open list),
+        bpf@vger.kernel.org (open list:BPF [MISC])
+Subject: [PATCH] kbuild: Fix compilation error
+Date:   Sat, 17 Dec 2022 15:03:18 +0800
+X-OQ-MSGID: <20221217070319.18331-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pci1xxxx's quad-uart function has the capability to wake up UART
-from suspend state. Enable wakeup before entering into suspend and
-disable wakeup on resume.
+From: Rong Tao <rongtao@cestc.cn>
 
-Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+In the absence of a CONFIG_FUNCTION_ALIGNMENT defined, -falign-functions=
+will be given a null value, which results in a compilation error, as
+follows:
+
+    $ make -C samples/bpf/
+    ...
+    CC      /home/sdb/Git/linux/samples/bpf/syscall_nrs.s
+    gcc: error: missing argument to ‘-falign-functions=’
+    make[2]: *** [scripts/Makefile.build:118: /home/sdb/Git/linux/samples
+        /bpf/syscall_nrs.s] Error 1
+    make[1]: *** [Makefile:1996: /home/sdb/Git/linux/samples/bpf] Error 2
+    make[1]: Leaving directory '/home/sdb/Git/linux'
+    make: *** [Makefile:269: all] Error 2
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
-Changes in v10:
-- No Change
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Changes in v9:
-- No Change
-
-Changes in v8:
-- No Change
-
-Changes in v7:
-- No Change
-
-Changes in v6:
-- No Change
-
-Changes in v5:
-- Corrected commit message
-
-Changes in v4:
-- No Change
-
-Changes in v3:
-- Handled race condition in suspend and resume callbacks
-
-Changes in v2:
-- Use DEFINE_SIMPLE_DEV_PM_OPS instead of SIMPLE_DEV_PM_OPS.
-- Use pm_sleep_ptr instead of CONFIG_PM_SLEEP.
-- Change the return data type of pci1xxxx_port_suspend to bool from int.
----
- drivers/tty/serial/8250/8250_pci1xxxx.c | 115 ++++++++++++++++++++++++
- 1 file changed, 115 insertions(+)
-
-diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial/8250/8250_pci1xxxx.c
-index 58f47d18f7d8..a3b25779d921 100644
---- a/drivers/tty/serial/8250/8250_pci1xxxx.c
-+++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
-@@ -212,6 +212,116 @@ static const struct serial_rs485 pci1xxxx_rs485_supported = {
- 	/* Delay RTS before send is not supported */
- };
+diff --git a/Makefile b/Makefile
+index 6aa709df6bde..57cce4c8f8a2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1006,9 +1006,11 @@ KBUILD_CFLAGS	+= $(CC_FLAGS_CFI)
+ export CC_FLAGS_CFI
+ endif
  
-+static bool pci1xxxx_port_suspend(int line)
-+{
-+	struct uart_8250_port *up = serial8250_get_port(line);
-+	struct uart_port *port = &up->port;
-+	struct tty_port *tport = &port->state->port;
-+	unsigned long flags;
-+	bool ret = false;
-+	u8 wakeup_mask;
-+
-+	mutex_lock(&tport->mutex);
-+	if (port->suspended == 0 && port->dev) {
-+		wakeup_mask = readb(up->port.membase + UART_WAKE_MASK_REG);
-+
-+		spin_lock_irqsave(&port->lock, flags);
-+		port->mctrl &= ~TIOCM_OUT2;
-+		port->ops->set_mctrl(port, port->mctrl);
-+		spin_unlock_irqrestore(&port->lock, flags);
-+
-+		ret = (wakeup_mask & UART_WAKE_SRCS) != UART_WAKE_SRCS;
-+	}
-+
-+	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
-+	mutex_unlock(&tport->mutex);
-+
-+	return ret;
-+}
-+
-+static void pci1xxxx_port_resume(int line)
-+{
-+	struct uart_8250_port *up = serial8250_get_port(line);
-+	struct uart_port *port = &up->port;
-+	struct tty_port *tport = &port->state->port;
-+	unsigned long flags;
-+
-+	mutex_lock(&tport->mutex);
-+	writeb(UART_BLOCK_SET_ACTIVE, port->membase + UART_ACTV_REG);
-+	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
-+
-+	if (port->suspended == 0) {
-+		spin_lock_irqsave(&port->lock, flags);
-+		port->mctrl |= TIOCM_OUT2;
-+		port->ops->set_mctrl(port, port->mctrl);
-+		spin_unlock_irqrestore(&port->lock, flags);
-+	}
-+	mutex_unlock(&tport->mutex);
-+}
-+
-+static int pci1xxxx_suspend(struct device *dev)
-+{
-+	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
-+	struct pci_dev *pcidev = to_pci_dev(dev);
-+	bool wakeup = false;
-+	unsigned int data;
-+	void __iomem *p;
-+	int i;
-+
-+	for (i = 0; i < priv->nr; i++) {
-+		if (priv->line[i] >= 0) {
-+			serial8250_suspend_port(priv->line[i]);
-+			wakeup |= pci1xxxx_port_suspend(priv->line[i]);
-+		}
-+	}
-+
-+	p = pci_ioremap_bar(pcidev, 0);
-+	if (!p) {
-+		dev_err(dev, "remapping of bar 0 memory failed");
-+		return -ENOMEM;
-+	}
-+
-+	data = readl(p + UART_RESET_REG);
-+	writel(data | UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
-+
-+	if (wakeup)
-+		writeb(UART_PCI_CTRL_D3_CLK_ENABLE, p + UART_PCI_CTRL_REG);
-+
-+	iounmap(p);
-+	device_set_wakeup_enable(dev, true);
-+	pci_wake_from_d3(pcidev, true);
-+
-+	return 0;
-+}
-+
-+static int pci1xxxx_resume(struct device *dev)
-+{
-+	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
-+	struct pci_dev *pcidev = to_pci_dev(dev);
-+	unsigned int data;
-+	void __iomem *p;
-+	int i;
-+
-+	p = pci_ioremap_bar(pcidev, 0);
-+	if (!p) {
-+		dev_err(dev, "remapping of bar 0 memory failed");
-+		return -ENOMEM;
-+	}
-+
-+	data = readl(p + UART_RESET_REG);
-+	writel(data & ~UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
-+	iounmap(p);
-+
-+	for (i = 0; i < priv->nr; i++) {
-+		if (priv->line[i] >= 0) {
-+			pci1xxxx_port_resume(priv->line[i]);
-+			serial8250_resume_port(priv->line[i]);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int pci1xxxx_setup(struct pci_dev *pdev,
- 			  struct uart_8250_port *port, int port_idx)
- {
-@@ -352,6 +462,8 @@ static void pci1xxxx_serial_remove(struct pci_dev *dev)
- 	pci_iounmap(dev, priv->membase);
- }
++ifdef CONFIG_FUNCTION_ALIGNMENT
+ ifneq ($(CONFIG_FUNCTION_ALIGNMENT),0)
+ KBUILD_CFLAGS += -falign-functions=$(CONFIG_FUNCTION_ALIGNMENT)
+ endif
++endif
  
-+static DEFINE_SIMPLE_DEV_PM_OPS(pci1xxxx_pm_ops, pci1xxxx_suspend, pci1xxxx_resume);
-+
- static const struct pci_device_id pci1xxxx_pci_tbl[] = {
- 	{ PCI_VDEVICE(EFAR, PCI_DEVICE_ID_EFAR_PCI11010) },
- 	{ PCI_VDEVICE(EFAR, PCI_DEVICE_ID_EFAR_PCI11101) },
-@@ -366,6 +478,9 @@ static struct pci_driver pci1xxxx_pci_driver = {
- 	.name = "pci1xxxx serial",
- 	.probe = pci1xxxx_serial_probe,
- 	.remove = pci1xxxx_serial_remove,
-+	.driver = {
-+		.pm     = pm_sleep_ptr(&pci1xxxx_pm_ops),
-+	},
- 	.id_table = pci1xxxx_pci_tbl,
- };
- module_pci_driver(pci1xxxx_pci_driver);
+ # arch Makefile may override CC so keep this after arch Makefile is included
+ NOSTDINC_FLAGS += -nostdinc
 -- 
-2.25.1
+2.38.1
 
