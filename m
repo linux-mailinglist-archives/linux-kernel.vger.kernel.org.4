@@ -2,267 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848F864F91D
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 14:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4FE64F920
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 14:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbiLQNgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 08:36:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
+        id S230252AbiLQNhd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 17 Dec 2022 08:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiLQNgt (ORCPT
+        with ESMTP id S230110AbiLQNh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 08:36:49 -0500
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6007DFB0;
-        Sat, 17 Dec 2022 05:36:48 -0800 (PST)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1441d7d40c6so6512976fac.8;
-        Sat, 17 Dec 2022 05:36:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RpJvH6AiAJeYi8qsi/DnAQCpW34c5rPL8YXBbeT9+FQ=;
-        b=AZKLZSm0jeclDdd9ROYkW7P25x+5yNrOmJ9sHxua/Xrsj/fUcqyW7N+fozM8FtBytb
-         LLVdWqt3xd4Q/OOHsk8XWOqgPlkG4sZtXFja7CBk0890DC7YZ90jQtih4v2kDilu2gdf
-         8nVZCas3ktrQRju//DLbShoOp9p2quBadeQRuauoDboCpruhSHD0nltyNIsuzXEwgTq1
-         Pea6kZ+3SqNY9cslG01cBvEbQ8EqukP+p6i8iQVfY+yIcRaFDR0sFe49PnQD9nej/il0
-         IKxrViMSVNZrwWwIWbuHB+ddBc3Xa9jiRmI0U8VkRpCUrNFPlH7mIvjoqZ2VwT88bPuS
-         T/cg==
+        Sat, 17 Dec 2022 08:37:27 -0500
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C40120BE;
+        Sat, 17 Dec 2022 05:37:24 -0800 (PST)
+Received: by mail-qt1-f170.google.com with SMTP id ay32so4822595qtb.11;
+        Sat, 17 Dec 2022 05:37:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RpJvH6AiAJeYi8qsi/DnAQCpW34c5rPL8YXBbeT9+FQ=;
-        b=o0nMGK6yhT1gVNn6eij3VNv4AjyIWfh8/nkX7Vcabec81QC1M+IwGt2W1gxFs6UOQl
-         1xeLriy4augHsSVktvBLVMxnaaenSK2xG5uGmhD3gBBw2WdA794ztXyuW0+jgbgzDxsE
-         SvL0eJMxMZIemviF9R9oourib3RFbRl/47eqUYjGw9gfRoLFLTUiM+y6HSFgLh9bmhO6
-         F2lQVG8O3+njViBLaH9szUpHL1XZusZ7E4W0cak6q8DzpFUYCWS5cdTmSdBiZo17RoUJ
-         VWEM6EKqT2YhUcnv55WQD58+lw45dj9B2RqXraqj3Y1XkFYxKJfq1vYd7UFg2wMbJ/6u
-         b/aw==
-X-Gm-Message-State: ANoB5pl7t4k2oqDfJWJfu2fJdZTmu2QKD5jmBJs4DiYcA/lP1FnFYWIa
-        xwLG/NkMmxNNVy0HkTf8YbU=
-X-Google-Smtp-Source: AA0mqf6tGD0GzQZU6o204kR99SH2Pp9iJD5ytrtNPp+CA19K59+HPfTXmfLcLUWyep9jzJHzJouSqw==
-X-Received: by 2002:a05:6870:a18a:b0:141:fbdd:53b3 with SMTP id a10-20020a056870a18a00b00141fbdd53b3mr19488907oaf.41.1671284208152;
-        Sat, 17 Dec 2022 05:36:48 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9-20020a056870d28900b00143d4709a38sm2215370oae.55.2022.12.17.05.36.45
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GEQhxkMBO6XWJFe+D6nzXPLObph3tXaHaWCQZey9h9Y=;
+        b=KF8wQm5mje6ABdqvpnOQe0OyWYnoaDIXhpc2Zqd2a6JCIAlNHuO9Tc/utnMD6QYqFO
+         52InTIIBieZtbCWDoCxpzMvGGtLwA2ujetcPuNcxWoaBjIh4joJZkemiAy0OKUBDaWsX
+         jFWxvAPAjoWguGy1HPFmgJlrBDkYnVkMFdLRLZAmYoNVmBh4pjtkBaAA9IkFNMezXdxV
+         FT0GHwiyFva2DTTJjUsvuj1uyGlhSftKXBOAvBvbulTGIEIf5koK6GRmkHcX5UBr9kpG
+         DvLu6zZCSn8vZWBYHO6UsOeIbGCxJB+Mmp8uLK+U4ajldIsONr/rf8M2eiJWT0NJ38LU
+         dwdw==
+X-Gm-Message-State: AFqh2krulqa+dJygYldrNBFM1QPvFOjtNtXMlGqZRrN2Q9NQ++EdZb1a
+        3APfQvQcvB6Jxi7sQMYxgyZ6eVmJdJPw+w==
+X-Google-Smtp-Source: AMrXdXstLjUzBJhqz6Yf8n5agF/AOCmGAO90eDMzCNhL5PRRAiH+qCnF16IeEDacZSPnR4VTXJWRVw==
+X-Received: by 2002:a05:622a:a05:b0:3a7:e8ab:2ae3 with SMTP id bv5-20020a05622a0a0500b003a7e8ab2ae3mr4857608qtb.25.1671284243072;
+        Sat, 17 Dec 2022 05:37:23 -0800 (PST)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id v18-20020a05620a441200b006fed2788751sm3592727qkp.76.2022.12.17.05.37.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Dec 2022 05:36:47 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <50bd7cc7-74bb-b1af-f817-54aa877dd10c@roeck-us.net>
-Date:   Sat, 17 Dec 2022 05:36:44 -0800
+        Sat, 17 Dec 2022 05:37:22 -0800 (PST)
+Received: by mail-yb1-f170.google.com with SMTP id 203so617399yby.10;
+        Sat, 17 Dec 2022 05:37:22 -0800 (PST)
+X-Received: by 2002:a25:7104:0:b0:702:90b4:2e24 with SMTP id
+ m4-20020a257104000000b0070290b42e24mr14490470ybc.365.1671284241922; Sat, 17
+ Dec 2022 05:37:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [patch V3 09/33] genirq/msi: Add range checking to
- msi_insert_desc()
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-References: <20221124230505.073418677@linutronix.de>
- <20221124232325.798556374@linutronix.de>
- <20221213190425.GA3943240@roeck-us.net>
- <4e0a129855490febb1c57e7e979bcfb579d39054.camel@linux.ibm.com>
- <87fsdgzpqs.ffs@tglx> <e570e70d-19bc-101b-0481-ff9a3cab3504@linux.ibm.com>
- <86wn6rptdu.wl-maz@kernel.org>
- <0acb8c63-7f6c-6df6-cb40-66b265a6e6ce@linux.ibm.com>
- <86v8mbphzw.wl-maz@kernel.org>
- <70dab88e-6119-0c12-7c6a-61bcbe239f66@roeck-us.net>
- <86sfhepat1.wl-maz@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <86sfhepat1.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
+ <e81710a9-2c45-0724-ec5f-727977202858@huawei.com> <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
+ <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com> <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
+ <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
+ <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com> <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
+ <592dce7a0de24c62bd31c29f86ce6c1b@AcuMS.aculab.com> <87pmcjidfe.fsf@igel.home>
+ <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com> <87len7ibtt.fsf@igel.home>
+ <c7cebe9da0474eb880ab14124ba290d0@AcuMS.aculab.com> <87fsdfib07.fsf@igel.home>
+ <819801284eb745d9a4189759bad297f5@AcuMS.aculab.com> <20221216115314.6120beb7@gandalf.local.home>
+ <ecf4939dbff84709a1782a8e8851b29f@AcuMS.aculab.com> <20221216121947.7d03b651@gandalf.local.home>
+ <20221216123805.6eba002c@gandalf.local.home> <83701d57c0064c709669c03cecc38356@AcuMS.aculab.com>
+ <066d4a61-3df9-b9c8-81a2-40dfcd3c73ef@huawei.com>
+In-Reply-To: <066d4a61-3df9-b9c8-81a2-40dfcd3c73ef@huawei.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sat, 17 Dec 2022 14:37:09 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXeusQbcfymQpKD4EWjBgKF4Wr8o2LyJhyaj3tS2MKTiQ@mail.gmail.com>
+Message-ID: <CAMuHMdXeusQbcfymQpKD4EWjBgKF4Wr8o2LyJhyaj3tS2MKTiQ@mail.gmail.com>
+Subject: Re: [PATCH v9] kallsyms: Add self-test facility
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andreas Schwab <schwab@linux-m68k.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/17/22 02:46, Marc Zyngier wrote:
-> On Sat, 17 Dec 2022 00:45:50 +0000,
-> Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On 12/16/22 05:58, Marc Zyngier wrote:
->> [ ... ]
->>
->>>> With both these fixes applied, it actually then leads to the very
->>>> next WARN_ON failing in msi_ctrl_valid...  Because ctrl->last ==
->>>> hwsize.  I think Thomas' initial fix for msi_domain_get_hwsize has
->>>> an off-by-1 error, I think we should return MSI_XA_DOMAIN_SIZE for
->>>> msi_domain_get_hwsize instead.
->>>
->>> Yes, that's a good point, and that's consistent with what
->>> __msi_create_irq_domain() does already, assuming MSI_XA_DOMAIN_SIZE
->>> when info->hwsize is 0. No reason to do something else here.
->>>
->>> I'll update Thomas' patch. Once Guenter confirms that PPC is OK, I'll
->>> send it out.
->>>
->> With
->>
->> 7a27b6136dcb (local/testing, testing-msi) genirq/msi: Return MSI_XA_DOMAIN_SIZE as the maximum MSI index when no domain is present
->> c581d525bb1d genirq/msi: Check for the presence of an irq domain when validating msi_ctrl
->> 9d33edb20f7e Merge tag 'irq-core-2022-12-10' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
->>
->> I still get the following runtime warning.
->>
->> ------------[ cut here ]------------
->> WARNING: CPU: 0 PID: 8 at kernel/irq/msi.c:196 .msi_domain_free_descs+0x144/0x170
->> Modules linked in:
->> CPU: 0 PID: 8 Comm: kworker/u2:0 Tainted: G                 N 6.1.0-01957-g7a27b6136dcb #1
->> Hardware name: QEMU ppce500 e5500 0x80240020 QEMU e500
->> Workqueue: nvme-reset-wq .nvme_reset_work
->> NIP:  c000000000107d54 LR: c000000000107d44 CTR: 0000000000000000
->> REGS: c0000000041e74d0 TRAP: 0700   Tainted: G                 N  (6.1.0-01957-g7a27b6136dcb)
->> MSR:  0000000080029002 <CE,EE,ME>  CR: 44002282  XER: 20000000
->> IRQMASK: 0
->> GPR00: c000000000107d44 c0000000041e7770 c000000001629c00 c000000004e748a0
->> GPR04: 000000005358db0a c000000001ce7a00 c00000000423b5d0 000000004735aaa2
->> GPR08: 0000000000000002 0000000000000013 c00000000423acc0 c00000000214a998
->> GPR12: 0000000024002282 c000000002579000 c00000000008e190 c000000004173540
->> GPR16: 0000000000000000 c0000000043810b8 0000000000000000 0000000000000001
->> GPR20: c0000000060b22d8 c0000000060a70f0 0000000000000000 c000000001996800
->> GPR24: c0000000017df6c0 c0000000043810b8 c0000000060b2388 c0000000060b2000
->> GPR28: ffffffffffffffff c0000000041e7888 c000000006025ac8 c000000004e748a0
->> NIP [c000000000107d54] .msi_domain_free_descs+0x144/0x170
->> LR [c000000000107d44] .msi_domain_free_descs+0x134/0x170
->> Call Trace:
->> [c0000000041e7770] [c000000000107d44] .msi_domain_free_descs+0x134/0x170 (unreliable)
->> [c0000000041e7810] [c0000000001085d8] .msi_domain_free_msi_descs_range+0x38/0x70
->> [c0000000041e78a0] [c0000000008d000c] .pci_msi_teardown_msi_irqs+0x4c/0xa0
->> [c0000000041e7920] [c0000000008cf9e8] .pci_free_msi_irqs+0x18/0x50
->> [c0000000041e79a0] [c0000000008cd8d0] .pci_free_irq_vectors+0x80/0xb0
->> [c0000000041e7a20] [c000000000a6d2a0] .nvme_reset_work+0x870/0x1780
->> [c0000000041e7bb0] [c000000000080e68] .process_one_work+0x2d8/0x7b0
->> [c0000000041e7c90] [c0000000000813d8] .worker_thread+0x98/0x4f0
->> [c0000000041e7d70] [c00000000008e2cc] .kthread+0x13c/0x150
->> [c0000000041e7e10] [c0000000000005d8] .ret_from_kernel_thread+0x58/0x60
->> Instruction dump:
->> 7fc3f378 48ff1ca9 60000000 7c7f1b79 41c2002c e8810070 7fc3f378 48ff3491
->> 60000000 813f0000 2c090000 41e2ffb0 <0fe00000> 60000000 60000000 ebc10090
->> irq event stamp: 98168
->> hardirqs last  enabled at (98167): [<c00000000110a274>] ._raw_spin_unlock_irqrestore+0x84/0xd0
->> hardirqs last disabled at (98168): [<c000000000010b58>] .program_check_exception+0x38/0x120
->> softirqs last  enabled at (97760): [<c00000000110b4dc>] .__do_softirq+0x60c/0x678
->> softirqs last disabled at (97749): [<c000000000004d20>] .do_softirq_own_stack+0x30/0x50
->> ---[ end trace 0000000000000000 ]---
->> nvme nvme0: 1/0/0 default/read/poll queues
->> nvme nvme0: Ignoring bogus Namespace Identifiers
->> ...
->>
->> The system boots fine, though. This is seen when booting the ppce500
->> machine with e5500 CPU and corenet64_smp_defconfig from nvme.
-> 
-> +PPC folks.
-> 
-> Thanks for the report.
-> 
-> I managed to reproduce this, although in a limited way (a SMP qemu
-> instance wouldn't boot at all). The problem is that the core MSI code
-> now assumes that if the arch code is in charge of breaking the
-> association of a MSI with a device, it is also in charge of clearing
-> the irq in the MSI descriptor.
-> 
-> This matches the s390 behaviour, but not powerpc's, hence the splat
-> and the leaked MSI descriptors. The minimal fix should be as follow,
-> which I'll add to the pile of patches.
-> 
+Hi Zhen,
 
-Confirmed, the patch below fixes the ppc problem.
+On Sat, Dec 17, 2022 at 8:32 AM Leizhen (ThunderTown)
+<thunder.leizhen@huawei.com> wrote:
+> On 2022/12/17 3:27, David Laight wrote:
+> > From: Steven Rostedt
+> >> Sent: 16 December 2022 17:38
+> >>
+> >> On Fri, 16 Dec 2022 12:19:47 -0500
+> >> Steven Rostedt <rostedt@goodmis.org> wrote:
+> >>
+> >>> I assumed that "memory" was for memory unrelated to the input constraints.
+> >>
+> >> Well, it looks like you do need a "memory" barrier.
+> >>
+> >>   https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html
+> >>
+> >> "memory"
+> >>
+> >>       The "memory" clobber tells the compiler that the assembly code
+> >>       performs memory reads or writes to items other than those listed in
+> >>       the input and output operands (for example, accessing the memory
+> >>       pointed to by one of the input parameters). To ensure memory contains
+> >>       correct values, GCC may need to flush specific register values to
+> >>       memory before executing the asm. Further, the compiler does not
+> >>       assume that any values read from memory before an asm remain
+> >>       unchanged after that asm; it reloads them as needed. Using the
+> >>       "memory" clobber effectively forms a read/write memory barrier for
+> >>       the compiler.
+> >>
+> >> As the "(for example, accessing the memory pointed to by one of the input
+> >> parameters)" is exactly this case.
+> >
+> > Without the memory clobber code like:
+> > int f(const char *s)
+> > {
+> >       char c[4] = "abc";
+> >       return strcmp(s, c);
+> > }
+> > is very like to get optimised so that c[] is never written.
+> >
+> > However, in this case, the strings have all existed for ages.
+> > So that won't be the problem.
+> >
+> > It might be obvious what is wrong from the asm output.
+> > Although the binary-chop lookup is suspect I'd also check
+> > that the sorted index is plausible - just tracing the first
+> > 20 entries might be enough.
+> > No point peering at the search code if the setup is wrong.
+>
+> 6.47.2.1 Volatile
+> GCC’s optimizers sometimes discard asm statements if they determine there is no need for
+> the output variables. Also, the optimizers may move code out of loops if they believe that
+> the code will always return the same result (i.e. none of its input values change between
+> calls). Using the volatile qualifier disables these optimizations.
+>
+> So it's quite possible (I didn't disassemble vmlinux, because I didn't learn m68k):
 
-Thanks,
-Guenter
+You don't have to disassemble, "make kernel/kallsyms.s" creates
+annotated assembler.
 
-> Thanks,
-> 
-> 	M.
-> 
-> diff --git a/arch/powerpc/platforms/4xx/hsta_msi.c b/arch/powerpc/platforms/4xx/hsta_msi.c
-> index d4f7fff1fc87..e11b57a62b05 100644
-> --- a/arch/powerpc/platforms/4xx/hsta_msi.c
-> +++ b/arch/powerpc/platforms/4xx/hsta_msi.c
-> @@ -115,6 +115,7 @@ static void hsta_teardown_msi_irqs(struct pci_dev *dev)
->   		msi_bitmap_free_hwirqs(&ppc4xx_hsta_msi.bmp, irq, 1);
->   		pr_debug("%s: Teardown IRQ %u (index %u)\n", __func__,
->   			 entry->irq, irq);
-> +		entry->irq = 0;
->   	}
->   }
->   
-> diff --git a/arch/powerpc/platforms/cell/axon_msi.c b/arch/powerpc/platforms/cell/axon_msi.c
-> index 5b012abca773..0c11aad896c7 100644
-> --- a/arch/powerpc/platforms/cell/axon_msi.c
-> +++ b/arch/powerpc/platforms/cell/axon_msi.c
-> @@ -289,6 +289,7 @@ static void axon_msi_teardown_msi_irqs(struct pci_dev *dev)
->   	msi_for_each_desc(entry, &dev->dev, MSI_DESC_ASSOCIATED) {
->   		irq_set_msi_desc(entry->irq, NULL);
->   		irq_dispose_mapping(entry->irq);
-> +		entry->irq = 0;
->   	}
->   }
->   
-> diff --git a/arch/powerpc/platforms/pasemi/msi.c b/arch/powerpc/platforms/pasemi/msi.c
-> index dc1846660005..166c97fff16d 100644
-> --- a/arch/powerpc/platforms/pasemi/msi.c
-> +++ b/arch/powerpc/platforms/pasemi/msi.c
-> @@ -66,6 +66,7 @@ static void pasemi_msi_teardown_msi_irqs(struct pci_dev *pdev)
->   		hwirq = virq_to_hw(entry->irq);
->   		irq_set_msi_desc(entry->irq, NULL);
->   		irq_dispose_mapping(entry->irq);
-> +		entry->irq = 0;
->   		msi_bitmap_free_hwirqs(&msi_mpic->msi_bitmap, hwirq, ALLOC_CHUNK);
->   	}
->   }
-> diff --git a/arch/powerpc/sysdev/fsl_msi.c b/arch/powerpc/sysdev/fsl_msi.c
-> index 73c2d70706c0..57978a44d55b 100644
-> --- a/arch/powerpc/sysdev/fsl_msi.c
-> +++ b/arch/powerpc/sysdev/fsl_msi.c
-> @@ -132,6 +132,7 @@ static void fsl_teardown_msi_irqs(struct pci_dev *pdev)
->   		msi_data = irq_get_chip_data(entry->irq);
->   		irq_set_msi_desc(entry->irq, NULL);
->   		irq_dispose_mapping(entry->irq);
-> +		entry->irq = 0;
->   		msi_bitmap_free_hwirqs(&msi_data->bitmap, hwirq, 1);
->   	}
->   }
-> diff --git a/arch/powerpc/sysdev/mpic_u3msi.c b/arch/powerpc/sysdev/mpic_u3msi.c
-> index 1d8cfdfdf115..492cb03c0b62 100644
-> --- a/arch/powerpc/sysdev/mpic_u3msi.c
-> +++ b/arch/powerpc/sysdev/mpic_u3msi.c
-> @@ -108,6 +108,7 @@ static void u3msi_teardown_msi_irqs(struct pci_dev *pdev)
->   		hwirq = virq_to_hw(entry->irq);
->   		irq_set_msi_desc(entry->irq, NULL);
->   		irq_dispose_mapping(entry->irq);
-> +		entry->irq = 0;
->   		msi_bitmap_free_hwirqs(&msi_mpic->msi_bitmap, hwirq, 1);
->   	}
->   }
-> 
+> //binary search
+> while (low <= high) {
+>     ...
+>     ret = compare_symbol_name(name, namebuf);   ----> (1)
+>     if (!ret)
+>         break;
+> }
+>
+> low = mid;
+> while (low) {
+>     ...
+>     if (compare_symbol_name(name, namebuf))     ----> (2)
+>         break;
+>     low--;
+> }
+>
+> The pointer 'name' and 'namebuf' of (1) and (2) are the same,
+> so the 'if' statement of (2) maybe omitted by compiler.
 
+And that is exactly what is happening: there are 3 calls to strcmp()
+with the exact same parameters, and gcc omits two of them, because it
+assumes it can predict the outcome, as the parameters haven't changed.
+
+Now, why have we never noticed this before? I guess because it is very
+uncommon for a function calling strcmp() multiple times with the exact
+same pointer parameters.  Common users change the pointers before
+every call, instead of keeping the pointer, but changing the buffers'
+contents the pointers point to.
+
+> By the way, I tried no volatile but with
+> +               : : "memory");
+> It also works well.
+
+Indeed, gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04) generates the
+same code for either adding the volatile or the memory clobber.
+
+Note that strcmp() is the only function in arch/m68k/include/asm/string.h
+using inline asm without the volatile keyword.  I guess we would
+see similar issues with strnlen() (which also doesn't modify memory)
+when dropping the volatile.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
