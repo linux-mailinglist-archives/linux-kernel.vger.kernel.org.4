@@ -2,55 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110AD64FC3A
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 21:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7675264FC3D
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 21:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiLQUY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 15:24:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
+        id S229976AbiLQUhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 15:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiLQUY4 (ORCPT
+        with ESMTP id S229469AbiLQUhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 15:24:56 -0500
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257CF11A3B;
-        Sat, 17 Dec 2022 12:24:55 -0800 (PST)
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 2BHKOaQd021483;
-        Sun, 18 Dec 2022 05:24:37 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2BHKOaQd021483
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1671308677;
-        bh=12Z45VhByhhHvXxa3z2C0y4e5fHfFmaFNtxkKKhzxMw=;
-        h=From:Date:Subject:To:Cc:From;
-        b=VLavnf2F4FZIZ0FfnDbeFKeIn0o2K/Nfw6n/GuUaB13o7VeEeEtYxVykkzBkdzqjz
-         kX/5wBmF6jbG3cgdNds59Jyf8BLnPLQYDBWcPmomdFD5ESFNqZQgr12mSl7IAW3q+p
-         3LlvTOF1+Sog5ofJvUNNQo7oH8qVUNuDKIwK0P9PL5CwYAK2eQi5t670mIQTiiBnTq
-         AtbSMzycN5F06x9bHV1I9adujvabv96l5+c2zQEUOBn2ZeM2csKlWoNL76CcBlUQhj
-         L2iJTFxTcnLwHPouJ+DXb2Ptto4qoerr69rn+KSrumlkCpvSf4gqaTX7NG90Bv2LuS
-         ztKreKyG2heqg==
-X-Nifty-SrcIP: [209.85.210.53]
-Received: by mail-ot1-f53.google.com with SMTP id m6-20020a9d7e86000000b0066ec505ae93so3333107otp.9;
-        Sat, 17 Dec 2022 12:24:36 -0800 (PST)
-X-Gm-Message-State: ANoB5pkT1kXihWiETh9n5xuikEesWN+NuvWpXN1QryxZmpM7XVKUwxXf
-        BZP+v6MYFjgudOQoQ+UcfOLrlWhpBG9JYWjxTfU=
-X-Google-Smtp-Source: AA0mqf5HlAF82+p3X/JOEHhuKbDPs057KoLCu3aB0jlbDPD+7gWrbjwmLiiwBIh5cMuy5bjYg6/Cctk2Z5h2QCpM20s=
-X-Received: by 2002:a9d:282:0:b0:66c:794e:f8c6 with SMTP id
- 2-20020a9d0282000000b0066c794ef8c6mr50268414otl.343.1671308675774; Sat, 17
- Dec 2022 12:24:35 -0800 (PST)
+        Sat, 17 Dec 2022 15:37:36 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1694A10FC5;
+        Sat, 17 Dec 2022 12:37:35 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-143ffc8c2b2so7304084fac.2;
+        Sat, 17 Dec 2022 12:37:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GV309XhbxYSSeC2+ZqrvzrEW3HmvEW82ggRkd0o8EA4=;
+        b=Q/3uiWxOsAbl/aTUptwN1WZuHTmIEqU9gfwAZFUDkmDsqIkfDkKGR7AIumTMGnVT1i
+         /TPLUihUmqsSEdhHnkh7thr8XYa820zrJXNx4CIJuiPbVvHE65BjRVVHVrpyA99lVwpa
+         JvLiJQslzNdFhFxDIkZR4sJIOo2X05t+FMsJkcdLVYQ6bVuDbjS9QeRykwrIhcTDhtoR
+         7bUh/kGWy90H4yNfr8+Y7NElrulGXbsAMPIRVVQjPnIpUzzDNoDCn0O7h39Mtmfl7Hb3
+         gegClJtXL1zN2KwZz7aOa9X8ss26pYmd8Zieg0nYxtniFLQ+MbfErqB7RgM3yg6m6U8M
+         DTHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GV309XhbxYSSeC2+ZqrvzrEW3HmvEW82ggRkd0o8EA4=;
+        b=E2y7F7ba2G3tJrtx1AzGCx3x042ReDsUOZUhVDiBxdp8LSv7BG35yKBAa1NSA93nHR
+         CoKIzK846j+F7ME3QpinORLX33l5upMXVfNS+2Z55GAoMhq49rFMWgXWrQR+I5UwDOXX
+         fwfTFUE51V6nGi+naAPhQLdmqiWjQ19ldQR+b/E3Ua+6vuqr01bsw1enmEv/7acHORhZ
+         BwJK1242I22kmFwd1X9zne4FS8XaeYLqd0Fr8z8bRz1aeG1IYdPmuuIp0QeS+2PyENFu
+         vHyP3GsEf9/dCebg+6gnqMZUDJLmeE3Vd9y6uX3UZeX506njb4Afo/HuOdUAFqL+0rm9
+         PieA==
+X-Gm-Message-State: AFqh2kpI9Upf+hBEVUQVg4P4BUCZaJXQwHox2qA8IR5/mk53jpBwaRkU
+        5S+HA+uZoMBw/6LSgsPtXAM=
+X-Google-Smtp-Source: AMrXdXsNTTrT6TNzi4vJWDcbqEpMwQ2wGeFK2Ddn2yzVQcLIRTgM9q/ayZSFZp4KN0/qb8+0vI9IvQ==
+X-Received: by 2002:a05:6870:1ec5:b0:144:830f:9dac with SMTP id pc5-20020a0568701ec500b00144830f9dacmr1527900oab.31.1671309454165;
+        Sat, 17 Dec 2022 12:37:34 -0800 (PST)
+Received: from [127.0.0.1] (187-24-192-125.3g.claro.net.br. [187.24.192.125])
+        by smtp.gmail.com with ESMTPSA id t23-20020a0568080b3700b00359ba124b07sm2400158oij.36.2022.12.17.12.37.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Dec 2022 12:37:33 -0800 (PST)
+Date:   Sat, 17 Dec 2022 17:37:28 -0300
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Ian Rogers <irogers@google.com>,
+        James Clark <james.clark@arm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kautuk Consul <kconsul@ventanamicro.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Nikita Shubin <n.shubin@yadro.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: Re: [GIT PULL] perf tools changes for v6.2: 1st batch
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAHk-=wjpO5LBx-mVD8+GBj3u7iNJHXn5y4OreKxsoRGi+4vMCQ@mail.gmail.com>
+References: <20221216143609.186415-1-acme@kernel.org> <CAHk-=wj+FNSnspKwVWAatD+DHz3Uy4eHxQryrfoZz6=4D=1X1w@mail.gmail.com> <Y53XHw3rlsaaUgOs@kernel.org> <CAHk-=wjpO5LBx-mVD8+GBj3u7iNJHXn5y4OreKxsoRGi+4vMCQ@mail.gmail.com>
+Message-ID: <67193F2E-ED6B-4EE3-A69E-A09DBC73AF69@gmail.com>
 MIME-Version: 1.0
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 18 Dec 2022 05:23:59 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR5JSqfOZ1WCHHPtjAQTOGiwpPEqshCheXrj7WSW1fMxg@mail.gmail.com>
-Message-ID: <CAK7LNAR5JSqfOZ1WCHHPtjAQTOGiwpPEqshCheXrj7WSW1fMxg@mail.gmail.com>
-Subject: [GIT PULL] Kbuild updates for v6.2-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,159 +94,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
 
 
-Please pull Kbuild updates for v6.2-rc1.
-Thank you.
+On December 17, 2022 4:55:25 PM GMT-03:00, Linus Torvalds <torvalds@linux-=
+foundation=2Eorg> wrote:
+>On Sat, Dec 17, 2022 at 8:50 AM Arnaldo Carvalho de Melo
+><acme@kernel=2Eorg> wrote:
+>>
+>> The python3-setuptools package is needed to build the python binding, s=
+o
+>> that one can use things like:
+>
+>So this fixes the error, but there's some other reason for it=2E
+>
+>I have
+>
+>  Package python3-setuptools-59=2E6=2E0-3=2Efc36=2Enoarch is already inst=
+alled=2E
+>
+>and with that patch the 'perf' build now works for me, but it says:
+>
+>    Makefile=2Econfig:898: Missing python setuptools, the python binding
+>won't be built, please install python3-setuptools or equivalent
+>
+>and then (pre-existing)
+>
+>    Makefile=2Econfig:921: Python interpreter too old (older than 3=2E6)
+>disabling jevent generation
+>
+>but I have
+>
+>    python3-3=2E10=2E8-3=2Efc36=2Ex86_64
+>
+>Now, for some reason I *also* have python2 installed, but that one is
+>called "python2"=2E
+>
+>[ Me trying to figure things out ]
+>
+>Ok, so if I uninstall my old python2 install, I now get
+>
+>  Makefile=2Econfig:880: No python interpreter was found: disables
+>Python support - please install python-devel/python-dev
+>  Makefile=2Econfig:915: No python interpreter disabling jevent generatio=
+n
+>
+>ok, so I didn't have 'python3-devel' installed=2E Installing that fixes
+>some things, but then I get
+>
+>  Makefile=2Econfig:889: No 'Python=2Eh' (for Python 2=2Ex support) was
+>found: disables Python support - please install
+>python-devel/python-dev
+>
+>so apparently perf really wants *both* python2 and python3 installed=2E
+>Isn't that a bit excessive?
 
+Well, perf used python2, then python3 became and option, had to be explici=
+tly selected, then the default moved to python3=2E
 
+Now probably the sensible thing is to get rid of all things related to pyt=
+hon2, I'll spend some time on this=2E=2E=2E
 
+>Anyway, it's clearly something about the install on this laptop, but
+>the error messages and the "this package is missing" things are
+>clearly not entirely right=2E
+>
+>Whatever=2E It does build cleanly now for me, and I'll ignore that "No
+>'Python=2Eh' (for Python 2=2Ex support)" thing=2E
 
+Ok, thanks for testing it=2E
 
-
-
-The following changes since commit eb7081409f94a9a8608593d0fb63a1aa3d6f95d8=
-:
-
-  Linux 6.1-rc6 (2022-11-20 16:02:16 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-tags/kbuild-v6.2
-
-for you to fetch changes up to 731c4eac848ff9dd42776da8ed3407b257e3abf0:
-
-  buildtar: fix tarballs with EFI_ZBOOT enabled (2022-12-17 21:55:04 +0900)
-
-----------------------------------------------------------------
-Kbuild updates for v6.2
-
- - Support zstd-compressed debug info
-
- - Allow W=3D1 builds to detect objects shared among multiple modules
-
- - Add srcrpm-pkg target to generate a source RPM package
-
- - Make the -s option detection work for future GNU Make versions
-
- - Add -Werror to KBUILD_CPPFLAGS when CONFIG_WERROR=3Dy
-
- - Allow W=3D1 builds to detect -Wundef warnings in any preprocessed files
-
- - Raise the minimum supported version of binutils to 2.25
-
- - Use $(intcmp ...) to compare integers if GNU Make >=3D 4.4 is used
-
- - Use $(file ...) to read a file if GNU Make >=3D 4.2 is used
-
- - Print error if GNU Make older than 3.82 is used
-
- - Allow modpost to detect section mismatches with Clang LTO
-
- - Include vmlinuz.efi into kernel tarballs for arm64 CONFIG_EFI_ZBOOT=3Dy
-
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      modpost: Mark uuid_le type to be suitable only for MEI
-
-Dmitry Goncharov (1):
-      kbuild: Port silent mode detection to future gnu make.
-
-Geert Uytterhoeven (1):
-      modpost: Join broken long printed messages
-
-Ivan Vecera (1):
-      kbuild: add ability to make source rpm buildable using koji
-
-KaiLong Wang (1):
-      modpost: fix array_size.cocci warning
-
-Masahiro Yamada (18):
-      kconfig: remove unneeded variable in get_prompt_str()
-      kconfig: remove const qualifier from str_get()
-      kconfig: remove redundant (void *) cast in search_conf()
-      scripts/jobserver-exec: parse the last --jobserver-auth=3D option
-      kbuild: deb-pkg: get rid of |flex:native workaround from Build-Depend=
-s
-      kbuild: add kbuild-file macro
-      kbuild: warn objects shared among multiple modules
-      kbuild: move -Werror from KBUILD_CFLAGS to KBUILD_CPPFLAGS
-      kbuild: add -Wundef to KBUILD_CPPFLAGS for W=3D1 builds
-      Documentation: raise minimum supported version of binutils to 2.25
-      kbuild: add test-{ge,gt,le,lt} macros
-      kbuild: do not sort after reading modules.order
-      kbuild: add read-file macro
-      kconfig: refactor Makefile to reduce process forks
-      kbuild: use .NOTINTERMEDIATE for future GNU Make versions
-      kbuild: change module.order to list *.o instead of *.ko
-      kbuild: refactor the prerequisites of the modpost rule
-      kbuild: ensure Make >=3D 3.82 is used
-
-Nathan Chancellor (2):
-      padata: Mark padata_work_init() as __ref
-      modpost: Include '.text.*' in TEXT_SECTIONS
-
-Nick Desaulniers (1):
-      Makefile.debug: support for -gz=3Dzstd
-
-Thomas Wei=C3=9Fschuh (2):
-      firmware_loader: remove #include <generated/utsrelease.h>
-      init/version.c: remove #include <generated/utsrelease.h>
-
-Veronika Kabatova (1):
-      buildtar: fix tarballs with EFI_ZBOOT enabled
-
- Documentation/process/changes.rst           |  4 ++--
- Makefile                                    | 26 +++++++++++++++++------
- arch/riscv/Makefile                         |  2 +-
- arch/x86/Makefile                           |  2 +-
- drivers/base/firmware_loader/firmware.h     |  2 --
- init/version.c                              |  1 -
- kernel/padata.c                             | 12 +++++++++--
- lib/Kconfig.debug                           | 29 +++++++++++++++++++++++--
- scripts/Kbuild.include                      | 48
-+++++++++++++++++++++++++++++++++++++++---
- scripts/Makefile.asm-generic                |  6 +++---
- scripts/Makefile.build                      | 14 ++++++------
- scripts/Makefile.clean                      |  5 +----
- scripts/Makefile.compiler                   |  4 ++--
- scripts/Makefile.debug                      |  6 +++++-
- scripts/Makefile.dtbinst                    |  2 +-
- scripts/Makefile.extrawarn                  |  1 +
- scripts/Makefile.modfinal                   |  8 +++----
- scripts/Makefile.modinst                    |  4 ++--
- scripts/Makefile.modpost                    | 41
-+++++++++++++++++++++++-------------
- scripts/Makefile.package                    | 10 +++++++++
- scripts/clang-tools/gen_compile_commands.py |  8 +++----
- scripts/gen_autoksyms.sh                    |  2 +-
- scripts/jobserver-exec                      |  4 +++-
- scripts/kconfig/.gitignore                  |  4 +++-
- scripts/kconfig/Makefile                    | 45
-+++++++++++++++++++++------------------
- scripts/kconfig/gconf-cfg.sh                |  7 ++++--
- scripts/kconfig/lkc.h                       |  2 +-
- scripts/kconfig/mconf-cfg.sh                | 25 ++++++++++++----------
- scripts/kconfig/mconf.c                     |  5 ++---
- scripts/kconfig/menu.c                      |  4 +---
- scripts/kconfig/nconf-cfg.sh                | 23 +++++++++++---------
- scripts/kconfig/qconf-cfg.sh                | 10 ++++++---
- scripts/kconfig/util.c                      |  2 +-
- scripts/min-tool-version.sh                 |  2 +-
- scripts/mod/file2alias.c                    | 30 +++++++++++++------------=
--
- scripts/mod/modpost.c                       | 23 ++++++++------------
- scripts/mod/sumversion.c                    |  4 ++--
- scripts/modules-check.sh                    |  2 +-
- scripts/package/buildtar                    |  2 +-
- scripts/package/mkdebian                    |  2 +-
- scripts/package/mkspec                      |  7 ++++++
- scripts/remove-stale-files                  |  2 ++
- 42 files changed, 286 insertions(+), 156 deletions(-)
-
-
---=20
-Best Regards
-Masahiro Yamada
+- Arnaldo=20
