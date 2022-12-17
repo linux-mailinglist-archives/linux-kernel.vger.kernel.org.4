@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC3B64FBE3
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 19:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D9D64FBE0
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 19:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbiLQS5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 13:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        id S229937AbiLQS4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 13:56:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiLQSzi (ORCPT
+        with ESMTP id S230039AbiLQSzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 17 Dec 2022 13:55:38 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC7123A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388842D5;
         Sat, 17 Dec 2022 10:55:37 -0800 (PST)
 Date:   Sat, 17 Dec 2022 18:55:32 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1671303332;
+        s=2020; t=1671303333;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=c5g6MSrqZsjP8rQ+Bx44M5yo8LZcSCCthyNX2GgIJYU=;
-        b=YIQSN19LWJmoUttmAjjI3Pb/eyiffL6VPEsBMCmPtWT+bBcC7OVrWmScUrH9N8L3n1al2V
-        9WO9PyAOtkX5+tq63dwh45YfCW40AUe5pkbMi4WEgul6Y7kUNn/XojnPX64iPWQrStX1uE
-        xVnZyFqqCbsvWUp+aWSqcYW1WWRHtiPb3D1IEkX/NIbmaswm6FXhFg4CeHAJFfG7B6K7aX
-        UpweqwHacnFSpi5ySY8hD00UMwalOOwfo5PvXgUCaeWgko5ABKKL/yCANSmELZEfjE9KPa
-        GpvI+6Ii6IkBEqPokCIqSrYpEpCH5OnYjqcJUKgh33I+/KSlUXc/6a1xaO5DAQ==
+        bh=nnhG1yoylZQ4yHA8V2Wi+1iakrx4cPgvIkGwcKrqkG8=;
+        b=zEOiwGcZsApXtm8iXT2w9pC6EGvpDuVv4j3vys2Wq5+yXOSlp0Mbz0IvJD2culVKDs45MW
+        V4IxDx9vuzjnibp0kjPFjkpiYpquFCZvLtlSq25K0Y1RTQLfCL8WNoL/4NEtKPy+0RPYTd
+        HrWgvni6i1osNxJlgI53S3CHa7iZ9rhExtOFavtSibNL2B32emwdWHpx9jXDJP6KB+7gq5
+        OFllO/rPcZkuE/srYJhgFtf/K13lU96eIUQ0dZ/UMa+xxXNViTMB7TQ6R7UqVyN1DMR9uS
+        hsx0OiRzfzhCrnL1bsE64wWfVIGE0SJN1fGOW7PGPAIQdjbE1h+bjOR29D/DsQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1671303332;
+        s=2020e; t=1671303333;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=c5g6MSrqZsjP8rQ+Bx44M5yo8LZcSCCthyNX2GgIJYU=;
-        b=LFhIRGS43jiyYOup8PegzRc+4pycbWG13QfFLUT2uBVNZEr1FhXfDHtKR9sPURnYevLMGY
-        dT1gikrMpdvUfHAw==
+        bh=nnhG1yoylZQ4yHA8V2Wi+1iakrx4cPgvIkGwcKrqkG8=;
+        b=AqDe/RXRtimJNan3OEXfrKfJ11GiHP3Ox0QoFcAccVSrAtLonPsi8/nGo/UvSNmSH0MNNP
+        AxPHXwAxelhUN0CQ==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm/pae: Use WRITE_ONCE()
+Subject: [tip: x86/mm] x86/mm/pae: Don't (ab)use atomic64
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <167130333255.4906.14861666890204509269.tip-bot2@tip-bot2>
+Message-ID: <167130333280.4906.12675723278515944040.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,57 +59,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     f7bcd4617de67a4700a7bd7dc56808b57f1c8748
-Gitweb:        https://git.kernel.org/tip/f7bcd4617de67a4700a7bd7dc56808b57f1c8748
+Commit-ID:     7a9b8bdb6af3e19fb8e3dc7a3caf6a9ea1bed8cd
+Gitweb:        https://git.kernel.org/tip/7a9b8bdb6af3e19fb8e3dc7a3caf6a9ea1bed8cd
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 26 Nov 2020 17:40:12 +01:00
+AuthorDate:    Thu, 26 Nov 2020 17:38:42 +01:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
 CommitterDate: Thu, 15 Dec 2022 10:37:27 -08:00
 
-x86/mm/pae: Use WRITE_ONCE()
+x86/mm/pae: Don't (ab)use atomic64
 
-Disallow write-tearing, that would be really unfortunate.
+PAE implies CX8, write readable code.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20221022114425.038102604%40infradead.org
+Link: https://lkml.kernel.org/r/20221022114424.971450128%40infradead.org
 ---
- arch/x86/include/asm/pgtable-3level.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/x86/include/asm/pgtable-3level.h |  9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/arch/x86/include/asm/pgtable-3level.h b/arch/x86/include/asm/pgtable-3level.h
-index 0a1b81d..d3a2492 100644
+index 94f50b0..0a1b81d 100644
 --- a/arch/x86/include/asm/pgtable-3level.h
 +++ b/arch/x86/include/asm/pgtable-3level.h
-@@ -27,9 +27,9 @@
-  */
- static inline void native_set_pte(pte_t *ptep, pte_t pte)
- {
--	ptep->pte_high = pte.pte_high;
-+	WRITE_ONCE(ptep->pte_high, pte.pte_high);
- 	smp_wmb();
--	ptep->pte_low = pte.pte_low;
-+	WRITE_ONCE(ptep->pte_low, pte.pte_low);
- }
+@@ -2,8 +2,6 @@
+ #ifndef _ASM_X86_PGTABLE_3LEVEL_H
+ #define _ASM_X86_PGTABLE_3LEVEL_H
  
- static inline void native_set_pte_atomic(pte_t *ptep, pte_t pte)
-@@ -58,16 +58,16 @@ static inline void native_set_pud(pud_t *pudp, pud_t pud)
- static inline void native_pte_clear(struct mm_struct *mm, unsigned long addr,
- 				    pte_t *ptep)
+-#include <asm/atomic64_32.h>
+-
+ /*
+  * Intel Physical Address Extension (PAE) Mode - three-level page
+  * tables on PPro+ CPUs.
+@@ -95,11 +93,12 @@ static inline void pud_clear(pud_t *pudp)
+ #ifdef CONFIG_SMP
+ static inline pte_t native_ptep_get_and_clear(pte_t *ptep)
  {
--	ptep->pte_low = 0;
-+	WRITE_ONCE(ptep->pte_low, 0);
- 	smp_wmb();
--	ptep->pte_high = 0;
-+	WRITE_ONCE(ptep->pte_high, 0);
- }
+-	pte_t res;
++	pte_t old = *ptep;
  
- static inline void native_pmd_clear(pmd_t *pmdp)
- {
--	pmdp->pmd_low = 0;
-+	WRITE_ONCE(pmdp->pmd_low, 0);
- 	smp_wmb();
--	pmdp->pmd_high = 0;
-+	WRITE_ONCE(pmdp->pmd_high, 0);
- }
+-	res.pte = (pteval_t)arch_atomic64_xchg((atomic64_t *)ptep, 0);
++	do {
++	} while (!try_cmpxchg64(&ptep->pte, &old.pte, 0ULL));
  
- static inline void native_pud_clear(pud_t *pudp)
+-	return res;
++	return old;
+ }
+ #else
+ #define native_ptep_get_and_clear(xp) native_local_ptep_get_and_clear(xp)
