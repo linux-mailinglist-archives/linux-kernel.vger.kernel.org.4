@@ -2,115 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE88D64FC24
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 20:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E60D964FC27
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 20:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiLQTqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 14:46:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
+        id S229743AbiLQTq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 14:46:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLQTp7 (ORCPT
+        with ESMTP id S229926AbiLQTqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 14:45:59 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE916478;
-        Sat, 17 Dec 2022 11:45:57 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 0A95B5FD03;
-        Sat, 17 Dec 2022 22:45:56 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1671306356;
-        bh=fRQaScZUwNSlmdqZ+Io2YTz+G50P34agK3PANG8xcpg=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=SYrU7wwJjd48bsmEyayCo3z+n3YukZqN12mu5SGqHo5v6byneL+q+3U7GIzPE7BMP
-         hmLUetTPQpw+Xq4pT08RTy7t/sxOwMLs4tCjrK1TSwypxP6GoRAqcxmR6LglHr+wD7
-         CMpEOtvMSWP4l2zk7yrry12hitXe50XR/Uwwk7a+r/IhTV/qCpMQ3c4gnKKP+txJfh
-         MyAx8n9c8v4GaquwxhFAqnxjuYDiePj0cSKs54jCxtM5uBo8p6MrT8g/0KbsUCkv9v
-         qJnONB7m5fISmnFOsCWgv8/itgjGEX9GLyFY/IGrGmp3yMeEMY4wgcreYpN8cSd6t/
-         a91p7St8NxhrA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Sat, 17 Dec 2022 22:45:55 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Subject: [RFC PATCH v1 1/2] virtio/vsock: send credit update depending on
- SO_RCVLOWAT
-Thread-Topic: [RFC PATCH v1 1/2] virtio/vsock: send credit update depending on
- SO_RCVLOWAT
-Thread-Index: AQHZElAtpIjfFhXnAkiL/v8iyYioYA==
-Date:   Sat, 17 Dec 2022 19:45:55 +0000
-Message-ID: <f304eabe-d2ef-11b1-f115-6967632f0339@sberdevices.ru>
-In-Reply-To: <39b2e9fd-601b-189d-39a9-914e5574524c@sberdevices.ru>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <34A3F028C08A3C47A856A1176E2EEEFC@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Sat, 17 Dec 2022 14:46:39 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B23B7EC;
+        Sat, 17 Dec 2022 11:46:35 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 5E7AD85237;
+        Sat, 17 Dec 2022 20:46:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1671306393;
+        bh=mx0kQyWotAfcs5S7Beuc2iw0C+M4q+8c4LB5R6a+j0s=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hYQN5auMc3/MoiYggnmoLVJNSVlZIsxDVSJutAxh1v0NMEGqG7/NlYrA6T5P2pp2l
+         q0VX0hQvXSdJsOiR0DayhpIQhMxZtGou9hI2kuPFmZ/qf9pk9xiKSDAaDM8n7jqO95
+         mKHSyBTTu/3N9v6Vm51iW0KyN1s6NTBlQjr665fkstxVWwgElv/9Y5b8/Lv8ewbbIN
+         zwLy/H287WStOWEbxQ9pzBuyRnso4xhoPhTkHM0qPN10wiw330Ft2PQAU/FgvvDhUH
+         nX7aWkPvlNzVI5/eC1XXVivmqkQNhmGD8vsUipW3Za8frOHLjSo3gU8I+Nk1LpM+O2
+         V52PBqad9viGg==
+Message-ID: <c21996f3-0f1d-8b77-95fb-ab98f3a28913@denx.de>
+Date:   Sat, 17 Dec 2022 20:46:31 +0100
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/12/17 15:49:00 #20678428
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [RESEND v12 4/4] phy: freescale: imx8m-pcie: Add i.MX8MP PCIe PHY
+ support
+To:     Richard Zhu <hongxing.zhu@nxp.com>, vkoul@kernel.org,
+        a.fatoum@pengutronix.de, p.zabel@pengutronix.de,
+        l.stach@pengutronix.de, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, shawnguo@kernel.org,
+        alexander.stein@ew.tq-group.com, richard.leitner@linux.dev
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+References: <1665625622-20551-1-git-send-email-hongxing.zhu@nxp.com>
+ <1665625622-20551-5-git-send-email-hongxing.zhu@nxp.com>
+Content-Language: en-US
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <1665625622-20551-5-git-send-email-hongxing.zhu@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhpcyBhZGRzIGV4dHJhIGNvbmRpdGlvbiB0byBzZW5kIGNyZWRpdCB1cGRhdGUgbWVzc2FnZSBk
-dXJpbmcgZGF0YQ0KcmVhZCB0byB1c2Vyc3BhY2UuIFByb2JsZW0gYXJpc2VzLCB3aGVuIHNlbmRl
-ciB3YWl0cyBmb3IgdGhlIGZyZWUgc3BhY2UNCm9uIHRoZSByZWNlaXZlciB3aGlsZSByZWNlaXZl
-ciB3YWl0cyBpbiAncG9sbCgpJyB1bnRpbCAncnhfYnl0ZXMnIHJlYWNoZXMNClNPX1JDVkxPV0FU
-IHZhbHVlIG9mIHRoZSBzb2NrZXQuIFdpdGggdGhpcyBwYXRjaCwgcmVjZWl2ZXIgc2VuZHMgY3Jl
-ZGl0DQp1cGRhdGUgbWVzc2FnZSB3aGVuIG51bWJlciBvZiBieXRlcyBpbiBpdCdzIHJ4IHF1ZXVl
-IGlzIHRvbyBzbWFsbCB0bw0KYXZvaWQgc2xlZXBpbmcgaW4gJ3BvbGwoKScuDQoNClNpZ25lZC1v
-ZmYtYnk6IEFyc2VuaXkgS3Jhc25vdiA8QVZLcmFzbm92QHNiZXJkZXZpY2VzLnJ1Pg0KLS0tDQog
-bmV0L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jIHwgOSArKysrKysrLS0NCiAx
-IGZpbGUgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0t
-Z2l0IGEvbmV0L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jIGIvbmV0L3Ztd192
-c29jay92aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jDQppbmRleCBhMTU4MWM3N2NmODQuLjRjZjI2
-Y2Y4YTc1NCAxMDA2NDQNCi0tLSBhL25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydF9jb21t
-b24uYw0KKysrIGIvbmV0L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jDQpAQCAt
-MzYyLDYgKzM2Miw3IEBAIHZpcnRpb190cmFuc3BvcnRfc3RyZWFtX2RvX2RlcXVldWUoc3RydWN0
-IHZzb2NrX3NvY2sgKnZzaywNCiAJc3RydWN0IHZpcnRpb192c29ja19zb2NrICp2dnMgPSB2c2st
-PnRyYW5zOw0KIAlzaXplX3QgYnl0ZXMsIHRvdGFsID0gMDsNCiAJc3RydWN0IHNrX2J1ZmYgKnNr
-YjsNCisJYm9vbCBsb3dfcnhfYnl0ZXM7DQogCWludCBlcnIgPSAtRUZBVUxUOw0KIAl1MzIgZnJl
-ZV9zcGFjZTsNCiANCkBAIC0zOTYsNiArMzk3LDggQEAgdmlydGlvX3RyYW5zcG9ydF9zdHJlYW1f
-ZG9fZGVxdWV1ZShzdHJ1Y3QgdnNvY2tfc29jayAqdnNrLA0KIAl9DQogDQogCWZyZWVfc3BhY2Ug
-PSB2dnMtPmJ1Zl9hbGxvYyAtICh2dnMtPmZ3ZF9jbnQgLSB2dnMtPmxhc3RfZndkX2NudCk7DQor
-CWxvd19yeF9ieXRlcyA9ICh2dnMtPnJ4X2J5dGVzIDwNCisJCQlzb2NrX3Jjdmxvd2F0KHNrX3Zz
-b2NrKHZzayksIDAsIElOVF9NQVgpKTsNCiANCiAJc3Bpbl91bmxvY2tfYmgoJnZ2cy0+cnhfbG9j
-ayk7DQogDQpAQCAtNDA1LDkgKzQwOCwxMSBAQCB2aXJ0aW9fdHJhbnNwb3J0X3N0cmVhbV9kb19k
-ZXF1ZXVlKHN0cnVjdCB2c29ja19zb2NrICp2c2ssDQogCSAqIHRvbyBoaWdoIGNhdXNlcyBleHRy
-YSBtZXNzYWdlcy4gVG9vIGxvdyBjYXVzZXMgdHJhbnNtaXR0ZXINCiAJICogc3RhbGxzLiBBcyBz
-dGFsbHMgYXJlIGluIHRoZW9yeSBtb3JlIGV4cGVuc2l2ZSB0aGFuIGV4dHJhDQogCSAqIG1lc3Nh
-Z2VzLCB3ZSBzZXQgdGhlIGxpbWl0IHRvIGEgaGlnaCB2YWx1ZS4gVE9ETzogZXhwZXJpbWVudA0K
-LQkgKiB3aXRoIGRpZmZlcmVudCB2YWx1ZXMuDQorCSAqIHdpdGggZGlmZmVyZW50IHZhbHVlcy4g
-QWxzbyBzZW5kIGNyZWRpdCB1cGRhdGUgbWVzc2FnZSB3aGVuDQorCSAqIG51bWJlciBvZiBieXRl
-cyBpbiByeCBxdWV1ZSBpcyBub3QgZW5vdWdoIHRvIHdha2UgdXAgcmVhZGVyLg0KIAkgKi8NCi0J
-aWYgKGZyZWVfc3BhY2UgPCBWSVJUSU9fVlNPQ0tfTUFYX1BLVF9CVUZfU0laRSkNCisJaWYgKGZy
-ZWVfc3BhY2UgPCBWSVJUSU9fVlNPQ0tfTUFYX1BLVF9CVUZfU0laRSB8fA0KKwkgICAgbG93X3J4
-X2J5dGVzKQ0KIAkJdmlydGlvX3RyYW5zcG9ydF9zZW5kX2NyZWRpdF91cGRhdGUodnNrKTsNCiAN
-CiAJcmV0dXJuIHRvdGFsOw0KLS0gDQoyLjI1LjENCg==
+On 10/13/22 03:47, Richard Zhu wrote:
+
+Hi,
+
+[...]
+
+> @@ -238,6 +251,14 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+>   		return PTR_ERR(imx8_phy->reset);
+>   	}
+>   
+> +	if (imx8_phy->drvdata->variant == IMX8MP) {
+> +		imx8_phy->perst =
+> +			devm_reset_control_get_exclusive(dev, "perst");
+> +		if (IS_ERR(imx8_phy->perst))
+> +			dev_err_probe(dev, PTR_ERR(imx8_phy->perst),
+
+I just notice this , are we missing return here ?
+
+That is ... return dev_err_probe(...) ?
+
+> +				      "Failed to get PCIE PHY PERST control\n");
+> +	}
+
+[...]
