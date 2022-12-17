@@ -2,172 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BF864F88A
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 10:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7777864F88D
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Dec 2022 10:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiLQJxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 04:53:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
+        id S229911AbiLQJxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 04:53:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiLQJxU (ORCPT
+        with ESMTP id S230317AbiLQJxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 04:53:20 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1281402B;
-        Sat, 17 Dec 2022 01:53:20 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id gt4so4730745pjb.1;
-        Sat, 17 Dec 2022 01:53:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZO9al7YrSck89G9oQI8cP/XGUvm/YU35VYbyVunm5c4=;
-        b=Cd7UX6Z/M+SikLmiL7gQJHEJFfgXYJIPl5HY8eeTO00yFJSrLozFQPFBNTiVkcfBAX
-         PHiqGCUh6T1xWTZGZ2FiOak8jRk2NGqA0Ji2thJz+8uf2tIrxtIngWlT25mKseO+Xr/K
-         FErOm9OdrcoCUUnp/tKBhB8rc+KEbIO3CY2hMevUfKwsTkeV3ADz1bDXumAH3HZdcsCT
-         1sfVSkCW7Nfg4z9xDzop705rza+WHYyuZvHsloPhQTp+oJpSmBl+91YV2Tpeu4STnfKC
-         d9qCQg3qChK4EyVmqSs1GuVMIdZTxn4s5n8JJi4zp3jnH75Nd25Y1BPMu27coCa90vDs
-         q2nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZO9al7YrSck89G9oQI8cP/XGUvm/YU35VYbyVunm5c4=;
-        b=XWQl+nh4mX3PYceMTiIoXgEXQuEszIeuO/Dva5DMCr0zXrR4xExuV4SlFQDAX6uB0A
-         DbEEPVrXUUwDh5ACFVZYcDLvxumpU70rbeDQHO4Q758sVkTVMOlHCBGhQZWEGq3JxbbP
-         Dj8eyPHpx6dZPjCPS87nWcvOZGwaoHWdIDB2oX5CHuNGWyMNCpqDOG4PJvRP7Pk5tFj4
-         FL30ABWaEluvrMXLWWY1aSnaGSrndJ5fLDQty39l6mxJHn/nWvAXYmwNGapZLbykYAzQ
-         p1WUs/D7MtGGr+9+80Mgg7hwaBKx5QO9/gZVZOoQmiUJl0w6NUu19TpHaXctCalSgYm+
-         tm5g==
-X-Gm-Message-State: AFqh2kpdQxBc9vrCKjqfoCzpMyb/4tLWIpdmYtq/qO9SUSlrQmDLqNym
-        CPbRRIZI/gXY630Uks4Zm50=
-X-Google-Smtp-Source: AMrXdXv7wgU+sjohjYoEMqYiZO2kSArsMi2NJZs01NPzBy6lDcZzmTFQTIwbzvKAqHerIXXc+TGdUg==
-X-Received: by 2002:a17:902:8c90:b0:189:9fb2:255a with SMTP id t16-20020a1709028c9000b001899fb2255amr1568235plo.19.1671270799496;
-        Sat, 17 Dec 2022 01:53:19 -0800 (PST)
-Received: from debian.me (subs03-180-214-233-79.three.co.id. [180.214.233.79])
-        by smtp.gmail.com with ESMTPSA id v1-20020a1709029a0100b001897e2fd65dsm3119669plp.9.2022.12.17.01.53.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Dec 2022 01:53:18 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 53765100B3E; Sat, 17 Dec 2022 16:53:15 +0700 (WIB)
-Date:   Sat, 17 Dec 2022 16:53:15 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Qais Yousef <qyousef@layalina.io>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>, Wei Wang <wvw@google.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Hank <han.lin@mediatek.com>, Paul Bone <pbone@mozilla.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: Re: [PATCH v3] Documentation: sched: Document util clamp feature
-Message-ID: <Y52Ri28ThsM4iU8X@debian.me>
-References: <20221216235716.201923-1-qyousef@layalina.io>
+        Sat, 17 Dec 2022 04:53:44 -0500
+Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEFA1742E;
+        Sat, 17 Dec 2022 01:53:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1671270818;
+        bh=JouZ6st3CYo4QzJIiGOY2B/ojRdjjgnSW9GrcLgVarA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=hJ4Dazaa2S+EdiilUN8C5RPXkrGHH+SBV48iHSsmSMMU4ufhooL9bI3+4ipYw+V5T
+         iKPSLuzjrTp9swBnGMWYr0ltDDJrTNpPjbasy3p+03K4WOr61XlyG1nz6XYZ6SU3l/
+         XSbxxlUDhpdRUPxS55YvP4soMbrKBoVekpJJkMbo=
+Received: from rtoax.. ([111.199.188.149])
+        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
+        id D633F853; Sat, 17 Dec 2022 17:53:35 +0800
+X-QQ-mid: xmsmtpt1671270815t3h8oup6i
+Message-ID: <tencent_84C64B10159B57C45158C406032921B22C07@qq.com>
+X-QQ-XMAILINFO: OZiGlmjmGvyhT9Tovp0kXcvTdhA0VADCjQw9uDxDVu/Svl6L2ELDPjLN8GZ+sh
+         CImNOjsryElJgsCu8ETr3cUWVHe7s6g1CYLBza5cdIWSs34+PgIfEY/rCBR8OmDtj1MBJYq1Owh8
+         7OyazBzwo2fg2EvXeYWdK82qfiyja0PRcIvUJetCpbAy5d1tCsdsaTEhjQj4IPEeZYFXhj1qGeEa
+         0B5dF04dJG/FQOg8SnfAplt8IlnTddP0Fu6x4SrPfSDBn7VVTJFLRMNdyHjeHB/xD5f0SUTYQIzO
+         mXvB7LqdWZK62gfUbnYtL+u41TM5Qr1CoO3lHkP2PuBmBRPElPlfZg3gGAUuuts0nqCz7HAaYydd
+         NpFNQaQTK1EKx0isSTqDN01wpxtswC1vlmwVrAFnm+wZtTpJhhXmRZnt+3h3S1gGvbqKtZzi9Sd+
+         yqf+rdir2hDyrMLvfJS8JR7k/UZCoKmVvpSd/c6AaDmhcNph4T2fxZ0De7RC3cPtbPaGU7Vfkkr8
+         c1fKWwfZFvcPdkVjvLm63rt3hBEbocmgU3dNPUjEpBwp8rn5PGA6ChOMjbdJl/JOZcAaaU5FJhiE
+         G0yrHN6UE2HxoIMaRHv7SAnGd6botEDk284hub3mg4oXWn9o6d9UouJHii8ytRc/aX+bVfaO5zWo
+         HRLUYrjbq59ry3+gVFo5aIlnRMK+3U80K96PcOSp0rhtXEz9nbM4KIk1wH/jZ0xrPPDIJhV1NFXq
+         Kj3ay76f6vdLHa6iVQZnO51Cnz5bPK56mRBbPw9hQEtmW6ebcL9WPeG1ZkCz3UdxqZafpEju2/Lm
+         +WNX8LWM1qi/TQTUUi0f297YC/n0cmHPqUybIGtCbf6EbiUrMOR+PZb6B8ndFzgtP1txFmq0Zxfc
+         sxMiGu96a9JvNckSWtiA8E6nAnURhLCU6/Fvhqv36vI/HE1GdbuKYhVKMWoW43xVheNm4Tgq0B1f
+         /7sjb3Wld2qdiHCdkalMOmnNTbmeumWfggncyD13MziNyr3Yd/dhquRURYHeaDgZczVIMaZTs=
+From:   Rong Tao <rtoax@foxmail.com>
+To:     masahiroy@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, nicolas@fjasle.eu, rongtao@cestc.cn,
+        rtoax@foxmail.com
+Subject: Re: Re: [PATCH] kbuild: Fix compilation error
+Date:   Sat, 17 Dec 2022 17:53:34 +0800
+X-OQ-MSGID: <20221217095334.538189-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <CAK7LNASu6i9V4b_u68azpM45zPM0udGW8kVWGd+UZzJtSq0+TA@mail.gmail.com>
+References: <CAK7LNASu6i9V4b_u68azpM45zPM0udGW8kVWGd+UZzJtSq0+TA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="IAbXMJJDJGhLPlUP"
-Content-Disposition: inline
-In-Reply-To: <20221216235716.201923-1-qyousef@layalina.io>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks, Masahiro Yamada, I compile again from scrach. the compilation
+error not happen anymore. I think i miss 'make menuconfig' before.
 
---IAbXMJJDJGhLPlUP
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks again!
 
-On Fri, Dec 16, 2022 at 11:57:16PM +0000, Qais Yousef wrote:
-> +Another example is in Android where tasks are classified as background,
-> +foreground, top-app, etc. Util clamp can be used to constrain how much
-> +resources background tasks are consuming by capping the performance poin=
-t they
-> +can run at. This constraint helps reserve resources for important tasks,=
- like
-> +the ones belonging to the currently active app (top-app group). Beside t=
-his
-> +helps in limiting how much power they consume. This can be more obvious =
-in
-> +heterogeneous systems (e.g. Arm big.LITTLE); the constraint will help bi=
-as the
-> +background tasks to stay on the little cores which will ensure that:
-> +
-> +        1. The big cores are free to run top-app tasks immediately. top-=
-app
-> +           tasks are the tasks the user is currently interacting with, h=
-ence
-> +           the most important tasks in the system.
-> +        2. They don't run on a power hungry core and drain battery even =
-if they
-> +           are CPU intensive tasks.
-> +
-> +.. note::
-> +  **little cores**:
-> +    CPUs with capacity < 1024
-> +
-> +  **big cores**:
-> +    CPUs with capacity =3D 1024
+$ git log --oneline  -1
+77856d911a8c
+$ git clean -dfx
+$ make menuconfig <<== Which i miss
+$ make -j8
+$ make -C samples/bpf
 
-Processing capacity (CPU frequency) in MHz? This is the first time I
-hear Arm big.LITTLE architecture. CC'ing several Arm folks and
-linux-arm-kernel list for I'm unsure on this.
 
-> +
-> +By making these uclamp performance requests, or rather hints, user space=
- can
-> +ensure system resources are used optimally to deliver the best possible =
-user
-> +experience.
-> +
-> +Another use case is to help with **overcoming the ramp up latency inheri=
-t in
-> +how scheduler utilization signal is calculated**.
-
-IMO the bold text isn't needed (why did you highlight the phrase above)?
-
-> +When task @p is running, **the scheduler should try its best to ensure it
-> +starts at 40% performance level**. If the task runs for a long enough ti=
-me so
-> +that its actual utilization goes above 80%, the utilization, or performa=
-nce
-> +level, will be capped.
-
-Same here.
-
-> +**Generally it is advised to perceive the input as performance level or =
-point
-> +which will imply both task placement and frequency selection**.
-
-Same here too.
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---IAbXMJJDJGhLPlUP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY52ReQAKCRD2uYlJVVFO
-o4HkAP4rc8AULhBHVO7Y9cRRRNKL0KVpwku8TWCuK0K3HNSBjgEAmNGvg6da34fs
-mfQfANrw8H/CE0iusS8NXjKKCrYFugk=
-=tqHd
------END PGP SIGNATURE-----
-
---IAbXMJJDJGhLPlUP--
