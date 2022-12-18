@@ -2,86 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A2364FED0
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 13:04:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC3C64FED5
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 13:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiLRMEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 07:04:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
+        id S230483AbiLRMMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 07:12:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiLRMER (ORCPT
+        with ESMTP id S229537AbiLRMMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 07:04:17 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8CC121;
-        Sun, 18 Dec 2022 04:04:15 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 900461EC04C1;
-        Sun, 18 Dec 2022 13:04:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1671365052;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=qZ7D+nJuEw06972G95/KVZOO2WSZfZWhv++0SW+ZtQo=;
-        b=U3fwypfodtyAL0P58CBYz6SK6jS4gJTvWm8Tpp6gqcaZRMIN+AJbY2M8NhU8SpyIYuufk9
-        rQGrjLFAPhRxrQqF70nVZZjU3BpfMKLuYfynJDnhD7NjlLOxd8ygzZLlsoITOuZUgLW256
-        MME6mx8Mzcu1c1Twf2+HCRrxH+raQYo=
-From:   Borislav Petkov <bp@alien8.de>
-To:     Thomas Sailer <t.sailer@alumni.ethz.ch>
-Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] hamradio: baycom_epp: Do not use x86-specific rdtsc()
-Date:   Sun, 18 Dec 2022 13:04:05 +0100
-Message-Id: <20221218120405.2431-1-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
+        Sun, 18 Dec 2022 07:12:46 -0500
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D350A6174;
+        Sun, 18 Dec 2022 04:12:41 -0800 (PST)
+X-QQ-mid: bizesmtp70t1671365528ty2do9ap
+Received: from localhost.localdomain ( [113.200.76.118])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 18 Dec 2022 20:12:06 +0800 (CST)
+X-QQ-SSF: 01400000002000B0D000B00A0000000
+X-QQ-FEAT: ILHsT53NKPgCay+doqSjgGYDcvmOKqmjpjYEJiGb0MHrDMNATU/mizb2BeNtV
+        dz35PUxh6RnVFkkJo6gWp4xYAhpMUnD9QgHopfv/dlK2NcNrjik/IiCYllIhhySxxCnkefn
+        ZvAFVawg0VXM7YdDfEvENB7B10dYgTc+luTaUULnKc0/QV7h6+CiVxWv1D+TYV8hBCdmYA+
+        CfUu+gy66DEsNQ0aNWqgGcOx79b72l1q4fYlOBCj8iB+PSMJ8+62Y36/vfk/o5qaCtpA4op
+        Yf2e+zaDDMd3iYuTot3fNUlMKMwdP7doGKWaY5QrighKW45Nyc+HVKfv8T6uQzVB/+xqhUD
+        krbdCoLz6otPeeh+ggcSwlHSONbDd/uzgt/OSQcS4XvLBYbT3oCVa/je4nJzg==
+X-QQ-GoodBg: 2
+From:   gouhao@uniontech.com
+To:     42.hyeyoo@gmail.com
+Cc:     akpm@linux-foundation.org, cl@linux.com, gouhao@uniontech.com,
+        gouhaojake@163.com, iamjoonsoo.kim@lge.com, keescook@chromium.org,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, mingo@elte.hu, penberg@kernel.org,
+        rientjes@google.com, roman.gushchin@linux.dev, vbabka@suse.cz
+Subject: Re: [PATCH] mm/slab: remove unused slab_early_init
+Date:   Sun, 18 Dec 2022 20:12:04 +0800
+Message-Id: <20221218121204.27720-1-gouhao@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <Y551tFBVcYxPlFlH@hyeyoo>
+References: <Y551tFBVcYxPlFlH@hyeyoo>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Borislav Petkov (AMD)" <bp@alien8.de>
+Thanks for your review, i will fix it in next version patch. :)
 
-Use get_cycles() which is provided by pretty much every arch.
 
-The UML build works too because get_cycles() is a simple "return 0;"
-because the rdtsc() is optimized away there.
-
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
----
- drivers/net/hamradio/baycom_epp.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
-
-diff --git a/drivers/net/hamradio/baycom_epp.c b/drivers/net/hamradio/baycom_epp.c
-index bd3b0c2655a2..83ff882f5d97 100644
---- a/drivers/net/hamradio/baycom_epp.c
-+++ b/drivers/net/hamradio/baycom_epp.c
-@@ -623,16 +623,10 @@ static int receive(struct net_device *dev, int cnt)
- 
- /* --------------------------------------------------------------------- */
- 
--#if defined(__i386__) && !defined(CONFIG_UML)
--#include <asm/msr.h>
- #define GETTICK(x)						\
- ({								\
--	if (boot_cpu_has(X86_FEATURE_TSC))			\
--		x = (unsigned int)rdtsc();			\
-+	x = (unsigned int)get_cycles();				\
- })
--#else /* __i386__  && !CONFIG_UML */
--#define GETTICK(x)
--#endif /* __i386__  && !CONFIG_UML */
- 
- static void epp_bh(struct work_struct *work)
- {
--- 
-2.35.1
-
+Thanks,
+Gou Hao
+> 
+> > so early during bootup.
+> > 
+> > The only user of 'slab_early_init' was removed in commit
+> > '3217fd9bdf00 ("mm/slab: make criteria for off slab
+> > determination robust and simple")'.
+> > 
+> > Signed-off-by: Gou Hao <gouhao@uniontech.com>
+> > ---
+> >  mm/slab.c | 3 ---
+> >  1 file changed, 3 deletions(-)
+> > 
+> > diff --git a/mm/slab.c b/mm/slab.c
+> > index 7a269db050ee..ede1f29fd81c 100644
+> > --- a/mm/slab.c
+> > +++ b/mm/slab.c
+> > @@ -220,7 +220,6 @@ static inline void fixup_objfreelist_debug(struct kmem_cache *cachep,
+> >  static inline void fixup_slab_list(struct kmem_cache *cachep,
+> >  				struct kmem_cache_node *n, struct slab *slab,
+> >  				void **list);
+> > -static int slab_early_init = 1;
+> >  
+> >  #define INDEX_NODE kmalloc_index(sizeof(struct kmem_cache_node))
+> >  
+> > @@ -1249,8 +1248,6 @@ void __init kmem_cache_init(void)
+> >  	slab_state = PARTIAL_NODE;
+> >  	setup_kmalloc_cache_index_table();
+> >  
+> > -	slab_early_init = 0;
+> > -
+> >  	/* 5) Replace the bootstrap kmem_cache_node */
+> >  	{
+> >  		int nid;
+> > -- 
+> > 2.20.1
+> 
+> Nice cleanup, thanks!
+> 
+> Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
