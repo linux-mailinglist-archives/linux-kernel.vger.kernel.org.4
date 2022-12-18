@@ -2,197 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC2A6505B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 00:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B13876505BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 00:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbiLRXil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 18:38:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
+        id S230393AbiLRXon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 18:44:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiLRXij (ORCPT
+        with ESMTP id S229730AbiLRXoh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 18:38:39 -0500
-X-Greylist: delayed 9054 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 18 Dec 2022 15:38:34 PST
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C466354;
-        Sun, 18 Dec 2022 15:38:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1671406713;
-        bh=3FDS/6KoYp5E84TDvpPY+jtYpp7eQlSuIRrF8vQtNUY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fLgsL7+Ja4lCR455/KR60nLBhLrFGk3ZLotcNZWDYECRFpqQ+wMa31dWlbDKqKLm0
-         W3UaB348v2jR7+ghGslj99nTxbmHWqNCYogVAlN0sTgsq209P7ZeyzmNxFvo9kA8cE
-         dPxqfKxx0h48yyvjkxX3O+r2wWV6YbmwrDDZZMsq7ZcF0YDNX8tqB/xyQYMJPQ26YY
-         D5fStfbxpBqbTXMgE8KuCAPMjLB5znHPn3NkcLc5oJTtU9BejQJNUmASuMuIOMZ5Mt
-         JOodIz4dwJlEq4nPSBmVeePyGK7oO6k0pFIm7l+nvX+DiqmMZHUB59r909DOmEMXDq
-         Xn6sSkm3FuJxA==
-Received: from [10.1.0.203] (192-222-188-69.qc.cable.ebox.net [192.222.188.69])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NZzmn3LZxzbT0;
-        Sun, 18 Dec 2022 18:38:33 -0500 (EST)
-Message-ID: <2da94283-4fce-9aff-ac5d-ba181fa0f008@efficios.com>
-Date:   Sun, 18 Dec 2022 18:38:56 -0500
+        Sun, 18 Dec 2022 18:44:37 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5AD63DD;
+        Sun, 18 Dec 2022 15:44:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-Id:
+        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=pM745wdQur5+R/jYHQA2I3LWyyZHcYT8xDsenki1WaM=; b=JctGwSaT6jMGcCxUXqh7rIwI2w
+        izGTgfStRrSQAXNli8SvNdz3l7NL8kdl0uVDDlgDHwwJRaDj+VeJyYA6AJy7ueDb5lMqIzspvU/WE
+        VX4dAFGBWseYkGJx1lr7rXHSu7yQL22EnjOSQCMnyCiX7hIWswFqPl2Jack3a3LWb0sFCdMeu3qhw
+        ygIaWDEBSw04G3Sx1rfrf3omrg7AahQstZkMZ2VJxPvHvGqdYaJyy8eB6xgr1gsYI26KUJ+nJXClA
+        LpJSUYkmCagfJIE9ZODmypRn7J/eNoVB1LLXsrLzJIGxQh7WghoikkwNWDWs67apotXFSVLk5lnEX
+        PEd4pq+Q==;
+Received: from 200-158-226-94.dsl.telesp.net.br ([200.158.226.94] helo=localhost)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1p73KU-005szJ-4o; Mon, 19 Dec 2022 00:44:26 +0100
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+To:     stable@vger.kernel.org
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, corbet@lwn.net,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, fenghua.yu@intel.com,
+        joshua@froggi.es, pgofman@codeweavers.com, pavel@denx.de,
+        pgriffais@valvesoftware.com, zfigura@codeweavers.com,
+        cristian.ciocaltea@collabora.com,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andre Almeida <andrealmeid@igalia.com>
+Subject: [PATCH 6.0.y / 6.1.y] x86/split_lock: Add sysctl to control the misery mode
+Date:   Sun, 18 Dec 2022 20:44:00 -0300
+Message-Id: <20221218234400.795055-1-gpiccoli@igalia.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
-Content-Language: en-US
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-References: <20221218191310.130904-1-joel@joelfernandes.org>
- <589da7c9-5fb7-5f6f-db88-ca464987997e@efficios.com>
- <CAEXW_YQHpz3dNqW1ocqjr-e9qn09Rkg4kQ19byZORGbO18Xckg@mail.gmail.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <CAEXW_YQHpz3dNqW1ocqjr-e9qn09Rkg4kQ19byZORGbO18Xckg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-18 16:30, Joel Fernandes wrote:
-> Hi Mathieu,
-> 
-> On Sun, Dec 18, 2022 at 3:56 PM Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
->>
->> On 2022-12-18 14:13, Joel Fernandes (Google) wrote:
->>> Hello, I believe the pre-flip memory barrier is not required. The only reason I
->>> can say to remove it, other than the possibility that it is unnecessary, is to
->>> not have extra code that does not help. However, since we are issuing a fully
->>> memory-barrier after the flip, I cannot say that it hurts to do it anyway.
->>>
->>> For this reason, please consider these patches as "informational", than a
->>> "please merge". :-) Though, feel free to consider merging if you agree!
->>>
->>> All SRCU scenarios pass with these, with 6 hours of testing.
->>
->> Hi Joel,
->>
->> Please have a look at the comments in my side-rcu implementation [1, 2].
->> It is similar to what SRCU does (per-cpu counter based grace period
->> tracking), but implemented for userspace. The comments explain why this
->> works without the memory barrier you identify as useless in SRCU.
->>
->> Following my implementation of side-rcu, I reviewed the SRCU comments
->> and identified that the barrier "/* E */" appears to be useless. I even
->> discussed this privately with Paul E. McKenney.
->>
->> My implementation and comments go further though, and skip the period
->> "flip" entirely if the first pass observes that all readers (in both
->> periods) are quiescent.
-> 
-> Actually in SRCU, the first pass scans only 1 index, then does the
-> flip, and the second pass scans the second index. Without doing a
-> flip, an index cannot be scanned for forward progress reasons because
-> it is still "active". So I am curious how you can skip flip and still
-> scan both indexes? I will dig more into your implementation to learn more.
+commit 727209376f4998bc84db1d5d8af15afea846a92b upstream.
 
-If we look at SRCU read-side:
+Commit b041b525dab9 ("x86/split_lock: Make life miserable for split lockers")
+changed the way the split lock detector works when in "warn" mode;
+basically, it not only shows the warn message, but also intentionally
+introduces a slowdown through sleeping plus serialization mechanism
+on such task. Based on discussions in [0], seems the warning alone
+wasn't enough motivation for userspace developers to fix their
+applications.
 
-int __srcu_read_lock(struct srcu_struct *ssp)
-{
-         int idx;
+This slowdown is enough to totally break some proprietary (aka.
+unfixable) userspace[1].
 
-         idx = READ_ONCE(ssp->srcu_idx) & 0x1;
-         this_cpu_inc(ssp->sda->srcu_lock_count[idx]);
-         smp_mb(); /* B */  /* Avoid leaking the critical section. */
-         return idx;
-}
+Happens that originally the proposal in [0] was to add a new mode
+which would warns + slowdown the "split locking" task, keeping the
+old warn mode untouched. In the end, that idea was discarded and
+the regular/default "warn" mode now slows down the applications. This
+is quite aggressive with regards proprietary/legacy programs that
+basically are unable to properly run in kernel with this change.
+While it is understandable that a malicious application could DoS
+by split locking, it seems unacceptable to regress old/proprietary
+userspace programs through a default configuration that previously
+worked. An example of such breakage was reported in [1].
 
-If the thread is preempted for a long period of time between load of 
-ssp->srcu_idx and increment of srcu_lock_count[idx], this means this
-thread can appear as a "new reader" for the idx period at any arbitrary 
-time in the future, independently of which period is the current one 
-within a future grace period.
+Add a sysctl to allow controlling the "misery mode" behavior, as per
+Thomas suggestion on [2]. This way, users running legacy and/or
+proprietary software are allowed to still execute them with a decent
+performance while still observing the warning messages on kernel log.
 
-As a result, the grace period algorithm needs to inherently support the 
-fact that a "new reader" can appear in any of the two periods, 
-independently of the current period state.
+[0] https://lore.kernel.org/lkml/20220217012721.9694-1-tony.luck@intel.com/
+[1] https://github.com/doitsujin/dxvk/issues/2938
+[2] https://lore.kernel.org/lkml/87pmf4bter.ffs@tglx/
 
-As a result, this means that while within period "0", we _need_ to allow 
-newly coming readers to appear as we scan period "0".
+[ dhansen: minor changelog tweaks, including clarifying the actual
+  	   problem ]
 
-As a result, we can simply scan both periods 0/1 for reader quiescence, 
-even while new readers appear within those periods.
-
-As a result, flipping between periods 0/1 is just relevant for forward 
-progress, not for correctness.
-
-As a result, we can remove barrier /* E */.
-
-Thoughts ?
-
-Thanks,
-
-Mathieu
+Fixes: b041b525dab9 ("x86/split_lock: Make life miserable for split lockers")
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Tested-by: Andre Almeida <andrealmeid@igalia.com>
+Link: https://lore.kernel.org/all/20221024200254.635256-1-gpiccoli%40igalia.com
+---
 
 
-> 
->> The most relevant comment in side-rcu is:
->>
->>    * The grace period completes when it observes that there are no active
->>    * readers within each of the periods.
->>    *
->>    * The active_readers state is initially true for each period, until the
->>    * grace period observes that no readers are present for each given
->>    * period, at which point the active_readers state becomes false.
->>
->> So I agree with the clarifications you propose here, but I think we can
->> improve the grace period implementation further by clarifying the SRCU
->> grace period model.
-> 
-> Thanks a lot, I am curious how you do the "detection of no new
-> readers" part without globally doing some kind of synchronization. I
-> will dig more into your implementation to learn more.
-> 
-> Thanks,
-> 
->   - Joel
-> 
-> 
-> 
->>
->> Thanks,
->>
->> Mathieu
->>
->>
->> [1] https://github.com/efficios/libside/blob/master/src/rcu.h
->> [2] https://github.com/efficios/libside/blob/master/src/rcu.c
->>
->>>
->>> thanks,
->>>
->>>    - Joel
->>>
->>> Joel Fernandes (Google) (2):
->>> srcu: Remove comment about prior read lock counts
->>> srcu: Remove memory barrier "E" as it is not required
->>>
->>> kernel/rcu/srcutree.c | 10 ----------
->>> 1 file changed, 10 deletions(-)
->>>
->>> --
->>> 2.39.0.314.g84b9a713c41-goog
->>>
->>
->> --
->> Mathieu Desnoyers
->> EfficiOS Inc.
->> https://www.efficios.com
->>
+Hi folks, I've build tested this on both 6.0.13 and 6.1, worked fine. The
+split lock detector code changed almost nothing since 6.0, so that makes
+sense...
 
+I think this is important to have in stable, some gaming community members
+seems excited with that, it'll help with general proprietary software
+(that is basically unfixable), making them run smoothly on 6.0.y and 6.1.y.
+
+I've CCed some folks more than just the stable list, to gather more
+opinions on that, so apologies if you received this email but think
+that you shouldn't have.
+
+Thanks in advance,
+
+Guilherme
+
+
+ Documentation/admin-guide/sysctl/kernel.rst | 23 ++++++++
+ arch/x86/kernel/cpu/intel.c                 | 63 +++++++++++++++++----
+ 2 files changed, 76 insertions(+), 10 deletions(-)
+
+diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+index 98d1b198b2b4..c2c64c1b706f 100644
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -1314,6 +1314,29 @@ watchdog work to be queued by the watchdog timer function, otherwise the NMI
+ watchdog — if enabled — can detect a hard lockup condition.
+ 
+ 
++split_lock_mitigate (x86 only)
++==============================
++
++On x86, each "split lock" imposes a system-wide performance penalty. On larger
++systems, large numbers of split locks from unprivileged users can result in
++denials of service to well-behaved and potentially more important users.
++
++The kernel mitigates these bad users by detecting split locks and imposing
++penalties: forcing them to wait and only allowing one core to execute split
++locks at a time.
++
++These mitigations can make those bad applications unbearably slow. Setting
++split_lock_mitigate=0 may restore some application performance, but will also
++increase system exposure to denial of service attacks from split lock users.
++
++= ===================================================================
++0 Disable the mitigation mode - just warns the split lock on kernel log
++  and exposes the system to denials of service from the split lockers.
++1 Enable the mitigation mode (this is the default) - penalizes the split
++  lockers with intentional performance degradation.
++= ===================================================================
++
++
+ stack_erasing
+ =============
+ 
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index 2d7ea5480ec3..427899650483 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -1034,8 +1034,32 @@ static const struct {
+ 
+ static struct ratelimit_state bld_ratelimit;
+ 
++static unsigned int sysctl_sld_mitigate = 1;
+ static DEFINE_SEMAPHORE(buslock_sem);
+ 
++#ifdef CONFIG_PROC_SYSCTL
++static struct ctl_table sld_sysctls[] = {
++	{
++		.procname       = "split_lock_mitigate",
++		.data           = &sysctl_sld_mitigate,
++		.maxlen         = sizeof(unsigned int),
++		.mode           = 0644,
++		.proc_handler	= proc_douintvec_minmax,
++		.extra1         = SYSCTL_ZERO,
++		.extra2         = SYSCTL_ONE,
++	},
++	{}
++};
++
++static int __init sld_mitigate_sysctl_init(void)
++{
++	register_sysctl_init("kernel", sld_sysctls);
++	return 0;
++}
++
++late_initcall(sld_mitigate_sysctl_init);
++#endif
++
+ static inline bool match_option(const char *arg, int arglen, const char *opt)
+ {
+ 	int len = strlen(opt), ratelimit;
+@@ -1146,12 +1170,20 @@ static void split_lock_init(void)
+ 		split_lock_verify_msr(sld_state != sld_off);
+ }
+ 
+-static void __split_lock_reenable(struct work_struct *work)
++static void __split_lock_reenable_unlock(struct work_struct *work)
+ {
+ 	sld_update_msr(true);
+ 	up(&buslock_sem);
+ }
+ 
++static DECLARE_DELAYED_WORK(sl_reenable_unlock, __split_lock_reenable_unlock);
++
++static void __split_lock_reenable(struct work_struct *work)
++{
++	sld_update_msr(true);
++}
++static DECLARE_DELAYED_WORK(sl_reenable, __split_lock_reenable);
++
+ /*
+  * If a CPU goes offline with pending delayed work to re-enable split lock
+  * detection then the delayed work will be executed on some other CPU. That
+@@ -1169,10 +1201,9 @@ static int splitlock_cpu_offline(unsigned int cpu)
+ 	return 0;
+ }
+ 
+-static DECLARE_DELAYED_WORK(split_lock_reenable, __split_lock_reenable);
+-
+ static void split_lock_warn(unsigned long ip)
+ {
++	struct delayed_work *work;
+ 	int cpu;
+ 
+ 	if (!current->reported_split_lock)
+@@ -1180,14 +1211,26 @@ static void split_lock_warn(unsigned long ip)
+ 				    current->comm, current->pid, ip);
+ 	current->reported_split_lock = 1;
+ 
+-	/* misery factor #1, sleep 10ms before trying to execute split lock */
+-	if (msleep_interruptible(10) > 0)
+-		return;
+-	/* Misery factor #2, only allow one buslocked disabled core at a time */
+-	if (down_interruptible(&buslock_sem) == -EINTR)
+-		return;
++	if (sysctl_sld_mitigate) {
++		/*
++		 * misery factor #1:
++		 * sleep 10ms before trying to execute split lock.
++		 */
++		if (msleep_interruptible(10) > 0)
++			return;
++		/*
++		 * Misery factor #2:
++		 * only allow one buslocked disabled core at a time.
++		 */
++		if (down_interruptible(&buslock_sem) == -EINTR)
++			return;
++		work = &sl_reenable_unlock;
++	} else {
++		work = &sl_reenable;
++	}
++
+ 	cpu = get_cpu();
+-	schedule_delayed_work_on(cpu, &split_lock_reenable, 2);
++	schedule_delayed_work_on(cpu, work, 2);
+ 
+ 	/* Disable split lock detection on this CPU to make progress */
+ 	sld_update_msr(false);
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+2.38.1
 
