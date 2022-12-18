@@ -2,56 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDF464FE12
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 09:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EFA64FE16
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 09:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbiLRIln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 03:41:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
+        id S230152AbiLRIma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 03:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiLRIll (ORCPT
+        with ESMTP id S229455AbiLRIm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 03:41:41 -0500
+        Sun, 18 Dec 2022 03:42:29 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321505F4C;
-        Sun, 18 Dec 2022 00:41:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C99AAE4B
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 00:42:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A03F560C40;
-        Sun, 18 Dec 2022 08:41:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C0BBC433EF;
-        Sun, 18 Dec 2022 08:41:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671352897;
-        bh=bTTHW54ywvYaPl0xp7dDxXJxXxuIkgm4KU9HqKO/f6k=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EBD6D60C55
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 08:42:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0725CC433D2;
+        Sun, 18 Dec 2022 08:42:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671352947;
+        bh=RJRMwGNC2KkNxDOd92oyiIHJr6kFRzCBX0VaGVpYj+o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sFyZe5Z+xuPBxmDdc1BY9PDe12EdH7hq2wEzbJdvbf7mZXYtdapzdc2TB5THbjgUD
-         8Ui6iyY/8cO+t2ZXXpFt6joQERaiPSuXlqODSG7iGKrcXTfhBrHsUtyiyWwSxQpno7
-         Lk8CiczP6Gw+cTvCxmJPvp6/R5XGDciFYlU4myMK3TLufTI0Pir9AYcY1RblwXitIL
-         k2aE2aIch4fqR8oarlAPK5oPMyiUq7VouvKAOwcXMBQKJsslCe4bNSclNfg0AgMgbv
-         Cqokj9ZJb1Q2JhnU5lKKpo05qDARkipL1a9fBwFa0iMSTTONWhA7MvQUCVpKSHEbh8
-         oG/UbjdLd0wZQ==
-Date:   Sun, 18 Dec 2022 10:41:32 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Lixue Liang <lianglixuehao@126.com>, anthony.l.nguyen@intel.com,
-        linux-kernel@vger.kernel.org, jesse.brandeburg@intel.com,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, lianglixue@greatwall.com.cn,
-        Alexander H Duyck <alexander.duyck@gmail.com>
-Subject: Re: [PATCH v7] igb: Assign random MAC address instead of fail in
- case of invalid one
-Message-ID: <Y57SPPmui6cwD5Ma@unreal>
-References: <20221213074726.51756-1-lianglixuehao@126.com>
- <Y5l5pUKBW9DvHJAW@unreal>
- <20221214085106.42a88df1@kernel.org>
- <Y5obql8TVeYEsRw8@unreal>
- <20221214125016.5a23c32a@kernel.org>
+        b=Tgtvvzfx0Jv3GuAy+iQyuLZB/WRdy9xi3JdZ5qjbyKpXjujlA0aaNA5G/1Gle3Gdz
+         3FbtE0qYWnGHojk/Llm60NrG7yEd2fqnknRG2zUdLq/oD4q4h2fAwGtWGocE2QHd6q
+         agsXpJ3Uf5YeJLizLJ/CASF3KfvC9aDp35Xj/afQ=
+Date:   Sun, 18 Dec 2022 09:42:24 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Reg the next LTS kernel (6.1?)
+Message-ID: <Y57ScAuGZ3PYnO7n@kroah.com>
+References: <CAPDLWs-Z8pYkwQ13dEgHXqSCjiq4xVnjuAXTy26H3=8NZCpV_g@mail.gmail.com>
+ <Yz/ZWBeNZvKenEVM@kroah.com>
+ <CAPDLWs9KWKs_-fpAp2=97uBARYqrHSYTPEU6RbqtWjAD8NpqgQ@mail.gmail.com>
+ <CAPDLWs9CoWw7NLfrtCfMsRAdCSfBgomVELRhM70QWVca99z65A@mail.gmail.com>
+ <Y53BputYK+3djDME@kroah.com>
+ <CAPDLWs_GZaL7m2YqyfRgJE_s8RaQ4fyWbJKF8iDWzWJs84SJiQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221214125016.5a23c32a@kernel.org>
+In-Reply-To: <CAPDLWs_GZaL7m2YqyfRgJE_s8RaQ4fyWbJKF8iDWzWJs84SJiQ@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,31 +54,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 12:50:16PM -0800, Jakub Kicinski wrote:
-> On Wed, 14 Dec 2022 20:53:30 +0200 Leon Romanovsky wrote:
-> > On Wed, Dec 14, 2022 at 08:51:06AM -0800, Jakub Kicinski wrote:
-> > > On Wed, 14 Dec 2022 09:22:13 +0200 Leon Romanovsky wrote:  
-> > > > NAK to any module driver parameter. If it is applicable to all drivers,
-> > > > please find a way to configure it to more user-friendly. If it is not,
-> > > > try to do the same as other drivers do.  
-> > > 
-> > > I think this one may be fine. Configuration which has to be set before
-> > > device probing can't really be per-device.  
-> > 
-> > This configuration can be different between multiple devices
-> > which use same igb module. Module parameters doesn't allow such
-> > separation.
-> 
-> Configuration of the device, sure, but this module param is more of 
-> a system policy. 
+On Sat, Dec 17, 2022 at 07:14:14PM +0530, Kaiwan N Billimoria wrote:
+> :-) Got it.
 
-And system policy should be controlled by userspace and applicable to as
-much as possible NICs, without custom module parameters.
+Sorry, but you didn't answer any of my questions, which makes it
+impossible for me to answer yours as my answer depends on your answer.
 
-I would imagine global (at the beginning, till someone comes forward and
-requests this parameter be per-device) to whole stack parameter with policies:
- * Be strict - fail if mac is not valid
- * Fallback to random
- * Random only ???
+Also, top-posting is bad, as you know, you just lost all the context
+here :(
 
-Thanks
+thanks,
+
+greg k-h
