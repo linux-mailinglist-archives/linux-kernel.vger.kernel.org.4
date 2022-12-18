@@ -2,381 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C43964FD45
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 01:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A8764FD57
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 02:06:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbiLRAf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 19:35:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44810 "EHLO
+        id S229937AbiLRBF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 20:05:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiLRAfK (ORCPT
+        with ESMTP id S229650AbiLRBFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 19:35:10 -0500
-Received: from sonata.ens-lyon.org (domu-toccata.ens-lyon.fr [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8DDFD0F
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 16:35:08 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id 6887D2016C;
-        Sun, 18 Dec 2022 01:35:07 +0100 (CET)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id maJQk0ZqxlWh; Sun, 18 Dec 2022 01:35:07 +0100 (CET)
-Received: from begin (lfbn-bor-1-376-208.w109-215.abo.wanadoo.fr [109.215.91.208])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 3439920170;
-        Sun, 18 Dec 2022 01:35:05 +0100 (CET)
-Received: from samy by begin with local (Exim 4.96)
-        (envelope-from <samuel.thibault@aquilenet.fr>)
-        id 1p6hdx-007m1e-19;
-        Sun, 18 Dec 2022 01:35:05 +0100
-Message-ID: <20221218003339.263695493@ens-lyon.org>
-User-Agent: quilt/0.66
-Date:   Sun, 18 Dec 2022 01:33:25 +0100
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, kbd@lists.altlinux.org
-Cc:     linux-kernel@vger.kernel.org,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>
-Subject: [patch] font: Leverage KD_FONT_OP_GET/SET_TALL font operations
-References: <20221218003209.503539532@ens-lyon.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 17 Dec 2022 20:05:53 -0500
+Received: from ms11p00im-qufo17291401.me.com (ms11p00im-qufo17291401.me.com [17.58.38.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4582647
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 17:05:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+        s=1a1hai; t=1671325551;
+        bh=CU/eyyyK8TwQFiwwwOIA2tQ1Rpw9x9qntSrQp9qm0zw=;
+        h=Content-Type:Mime-Version:Subject:From:Date:Message-Id:To;
+        b=vyW+mMByV2K4utfBidJJ/C1eVF7GzBMiDuRsZlGolhKrlKloqwKaECoHwLZp9IwG7
+         hXHJdbgWDh6An2PRbYYiuBkjxgVn0XEx7qy6dgIq8ylT6ChJSviYgqsZUS/u0l/0hE
+         iOuBh4B0nnVIndP5gNeSey5ATRMFtWsAZH/fNKOJQv0ZKNCS8kvyTVYFh/QjmmAa9h
+         lOK/Q3m0sYsNzYd3c1rOh0HQkUAsKLOT5fZBDR2NKLlfR61Ikj+PY5MtVx2E3mlTxr
+         3LYQ5eFYCpcjo5LV+81LPXwN5lAIjOCJIGOKSn+P4YC0O9vU9zxs3LbJIgAMVOaTjT
+         ddu3Vs/guNyjQ==
+Received: from smtpclient.apple (ms11p00im-dlb-asmtpmailmevip.me.com [17.57.154.19])
+        by ms11p00im-qufo17291401.me.com (Postfix) with ESMTPSA id 2E9498E053F;
+        Sun, 18 Dec 2022 01:05:50 +0000 (UTC)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
+Subject: Re: [PATCH 2/6] Don't assume UID 0 attach
+From:   evanhensbergen@icloud.com
+In-Reply-To: <Y55Z2DwZgRG+9zW3@codewreck.org>
+Date:   Sat, 17 Dec 2022 19:05:38 -0600
+Cc:     v9fs-developer@lists.sourceforge.net,
+        Ron Minnich <rminnich@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux_oss@crudebyte.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <3343B7A9-2D1D-4A41-859E-B04AF90152FA@icloud.com>
+References: <20221217185210.1431478-1-evanhensbergen@icloud.com>
+ <20221217185210.1431478-3-evanhensbergen@icloud.com>
+ <Y55Z2DwZgRG+9zW3@codewreck.org>
+To:     asmadeus@codewreck.org
+X-Mailer: Apple Mail (2.3731.200.110.1.12)
+X-Proofpoint-GUID: OA9RlOlds9TOEa1ab8ML_c9csJM0hqAT
+X-Proofpoint-ORIG-GUID: OA9RlOlds9TOEa1ab8ML_c9csJM0hqAT
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.816,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-01-18=5F01:2022-01-14=5F01,2022-01-18=5F01,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 phishscore=0
+ adultscore=0 bulkscore=0 malwarescore=0 clxscore=1015 suspectscore=0
+ mlxlogscore=615 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2212180009
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The new KD_FONT_OP_GET/SET_TALL font operations allow to load fonts taller
-than 32 pixels by dropping the VGA-specific vertical pitch limitation.
 
-The new maximum font size has thus been raised to 64x128.
 
-We however continue using the older font operations for smaller fonts, to
-continue supporting older kernels.
+> On Dec 17, 2022, at 6:07 PM, asmadeus@codewreck.org wrote:
+>=20
+> Eric Van Hensbergen wrote on Sat, Dec 17, 2022 at 06:52:06PM +0000:
+>> The writeback_fid fallback code assumes a root uid fallback which
+>> breaks many server configurations (which don't run as root).  This
+>> patch switches to generic lookup which will follow argument
+>> guidence on access modes and default ids to use on failure.
+>=20
+> Unfortunately this one will break writes to a file created as 400 I
+> think
+> That's the main reason we have this writeback fid afaik -- there are
+> cases where the user should be able to write to the file, but a plain
+> open/write won't work... I can't think of anything else than open 400
+> right now though
+>=20
 
-Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+I=E2=80=99ll try and craft a test case for this, but I think it works?
+That being said, I haven=E2=80=99t been trying the xfstests, just fsx =
+and bench.
 
-Index: kbd-2.5.1/src/compat/linux-kd.h
-===================================================================
---- kbd-2.5.1.orig/src/compat/linux-kd.h
-+++ kbd-2.5.1/src/compat/linux-kd.h
-@@ -90,7 +90,8 @@ struct console_font_op {
- 	unsigned int flags; /* KD_FONT_FLAG_* */
- 	unsigned int width, height;
- 	unsigned int charcount;
--	unsigned char *data; /* font data with height fixed to 32 */
-+	unsigned char *data; /* font data with vpitch fixed to 32 for
-+                              * KD_FONT_OP_SET/GET */
- };
- 
- #define KD_FONT_OP_SET 0         /* Set font */
-@@ -98,6 +99,8 @@ struct console_font_op {
- #define KD_FONT_OP_SET_DEFAULT 2 /* Set font to default, \
-                                     data points to name / NULL */
- #define KD_FONT_OP_COPY 3        /* Copy from another console */
-+#define KD_FONT_OP_SET_TALL 4    /* Set font with arbitrary vpitch */
-+#define KD_FONT_OP_GET_TALL 5    /* Get font with arbitrary vpitch */
- 
- #define KD_FONT_FLAG_OLD 0x80000000 /* Invoked via old interface */
- #define KD_FONT_FLAG_DONT_RECALC 1  /* Don't call adjust_height() */
-Index: kbd-2.5.1/src/libkfont/kdfontop.c
-===================================================================
---- kbd-2.5.1.orig/src/libkfont/kdfontop.c
-+++ kbd-2.5.1/src/libkfont/kdfontop.c
-@@ -51,19 +51,33 @@ get_font_kdfontop(struct kfont_context *
- 		unsigned char *buf,
- 		unsigned int *count,
- 		unsigned int *width,
--		unsigned int *height)
-+		unsigned int *height,
-+		unsigned int *vpitch)
- {
- 	struct console_font_op cfo;
- 
-+#ifdef KD_FONT_OP_GET_TALL
-+	cfo.op = KD_FONT_OP_GET_TALL;
-+#else
- 	cfo.op = KD_FONT_OP_GET;
-+#endif
- 	cfo.flags = 0;
--	cfo.width = cfo.height = 32;
-+	cfo.width = 64;
-+	cfo.height = 128;
- 	cfo.charcount = *count;
- 	cfo.data = buf;
- 
-+retry:
- 	errno = 0;
- 
- 	if (ioctl(consolefd, KDFONTOP, &cfo)) {
-+#ifdef KD_FONT_OP_GET_TALL
-+		if (errno == ENOSYS && cfo.op == KD_FONT_OP_GET_TALL) {
-+			/* Kernel before 6.2.  */
-+			cfo.op = KD_FONT_OP_GET;
-+			goto retry;
-+		}
-+#endif
- 		if (errno != ENOSYS && errno != EINVAL) {
- 			KFONT_ERR(ctx, "ioctl(KDFONTOP): %m");
- 			return -1;
-@@ -76,6 +90,14 @@ get_font_kdfontop(struct kfont_context *
- 		*height = cfo.height;
- 	if (width)
- 		*width = cfo.width;
-+	if (vpitch) {
-+#ifdef KD_FONT_OP_GET_TALL
-+		if (cfo.op == KD_FONT_OP_GET_TALL)
-+			*vpitch = cfo.height;
-+		else
-+#endif
-+			*vpitch = 32;
-+	}
- 	return 0;
- }
- 
-@@ -88,16 +110,17 @@ int
- kfont_get_font(struct kfont_context *ctx, int fd, unsigned char *buf,
- 		unsigned int *count,
- 		unsigned int *width,
--		unsigned int *height)
-+		unsigned int *height,
-+		unsigned int *vpitch)
- {
--	return get_font_kdfontop(ctx, fd, buf, count, width, height);
-+	return get_font_kdfontop(ctx, fd, buf, count, width, height, vpitch);
- }
- 
- int unsigned
- kfont_get_fontsize(struct kfont_context *ctx, int fd)
- {
- 	unsigned int count = 0;
--	if (!kfont_get_font(ctx, fd, NULL, &count, NULL, NULL))
-+	if (!kfont_get_font(ctx, fd, NULL, &count, NULL, NULL, NULL))
- 		return count;
- 	return 256;
- }
-@@ -106,11 +129,20 @@ static int
- put_font_kdfontop(struct kfont_context *ctx, int consolefd, unsigned char *buf,
- 		unsigned int count,
- 		unsigned int width,
--		unsigned int height)
-+		unsigned int height,
-+		unsigned int vpitch)
- {
- 	struct console_font_op cfo;
- 
--	cfo.op        = KD_FONT_OP_SET;
-+	if (vpitch == 32 && width <= 32)
-+		cfo.op        = KD_FONT_OP_SET;
-+	else {
-+#ifdef KD_FONT_OP_SET_TALL
-+		cfo.op        = KD_FONT_OP_SET_TALL;
-+#else
-+		return 1;
-+#endif
-+	}
- 	cfo.flags     = 0;
- 	cfo.width     = width;
- 	cfo.height    = height;
-@@ -154,7 +186,7 @@ put_font_kdfontop(struct kfont_context *
- 
- int
- kfont_put_font(struct kfont_context *ctx, int fd, unsigned char *buf, unsigned int count,
--        unsigned int width, unsigned int height)
-+        unsigned int width, unsigned int height, unsigned int vpitch)
- {
- 	if (!width)
- 		width = 8;
-@@ -162,5 +194,5 @@ kfont_put_font(struct kfont_context *ctx
- 	if (!height)
- 		height = font_charheight(buf, count, width);
- 
--	return put_font_kdfontop(ctx, fd, buf, count, width, height);
-+	return put_font_kdfontop(ctx, fd, buf, count, width, height, vpitch);
- }
-Index: kbd-2.5.1/src/libkfont/kfont.h
-===================================================================
---- kbd-2.5.1.orig/src/libkfont/kfont.h
-+++ kbd-2.5.1/src/libkfont/kfont.h
-@@ -171,7 +171,8 @@ int kfont_load_unicodemap(struct kfont_c
-  * Sets number of glyphs in COUNT, glyph size in WIDTH and HEIGHT.
-  */
- int kfont_get_font(struct kfont_context *ctx, int consolefd, unsigned char *buf,
--		unsigned int *count, unsigned int *width, unsigned int *height)
-+		unsigned int *count, unsigned int *width, unsigned int *height,
-+		unsigned int *vpitch)
- 	__attribute__((nonnull(1)));
- 
- /*
-@@ -180,7 +181,8 @@ int kfont_get_font(struct kfont_context
-  * Return 0 on success, -1 on failure.
-  */
- int kfont_put_font(struct kfont_context *ctx, int consolefd, unsigned char *buf,
--		unsigned int count, unsigned int width, unsigned int height)
-+		unsigned int count, unsigned int width, unsigned int height,
-+		unsigned int vpitch)
- 	__attribute__((nonnull(1)));
- 
- /*
-@@ -239,7 +241,7 @@ void kfont_disactivatemap(int fd);
- #include <stdio.h>
- 
- /* Maximum font size that we try to handle */
--#define MAXFONTSIZE 65536
-+#define MAXFONTSIZE (512*64*128)
- 
- /**
-  * readpsffont reads a PSF font.
-Index: kbd-2.5.1/src/libkfont/setfont.c
-===================================================================
---- kbd-2.5.1.orig/src/libkfont/setfont.c
-+++ kbd-2.5.1/src/libkfont/setfont.c
-@@ -45,8 +45,9 @@ findpartialfont(struct kfont_context *ct
- static int erase_mode = 1;
- 
- static int
--do_loadfont(struct kfont_context *ctx, int fd, const unsigned char *inbuf,
--		unsigned int width, unsigned int height, unsigned int hwunit,
-+try_loadfont(struct kfont_context *ctx, int fd, const unsigned char *inbuf,
-+		unsigned int width, unsigned int height, unsigned int vpitch,
-+		unsigned int hwunit,
- 		unsigned int fontsize, const char *filename)
- {
- 	unsigned char *buf = NULL;
-@@ -54,13 +55,13 @@ do_loadfont(struct kfont_context *ctx, i
- 	int bad_video_erase_char = 0;
- 	int ret;
- 
--	if (height < 1 || height > 32) {
--		KFONT_ERR(ctx, _("Bad character height %d"), height);
-+	if (height < 1 || height > 64) {
-+		KFONT_ERR(ctx, _("Bad character height %d (limit is 64)"), height);
- 		return -EX_DATAERR;
- 	}
- 
--	if (width < 1 || width > 32) {
--		KFONT_ERR(ctx, _("Bad character width %d"), width);
-+	if (width < 1 || width > 128) {
-+		KFONT_ERR(ctx, _("Bad character width %d (limit is 128)"), width);
- 		return -EX_DATAERR;
- 	}
- 
-@@ -68,8 +69,8 @@ do_loadfont(struct kfont_context *ctx, i
- 		hwunit = height;
- 
- 	if ((ctx->options & (1 << kfont_double_size)) &&
--	    (height > 16 || width > 16)) {
--		KFONT_ERR(ctx, _("Cannot double %dx%d font (limit is 16x16)"), width, height);
-+	    (height > 32 || width > 64)) {
-+		KFONT_ERR(ctx, _("Cannot double %dx%d font (limit is 32x64)"), width, height);
- 		kfont_unset_option(ctx, kfont_double_size);
- 	}
- 
-@@ -78,7 +79,7 @@ do_loadfont(struct kfont_context *ctx, i
- 		unsigned int kbytewidth = (2 * width + 7) / 8;
- 		unsigned int charsize   = height * bytewidth;
- 
--		kcharsize = 32 * kbytewidth;
-+		kcharsize = vpitch * kbytewidth;
- 		buflen    = kcharsize * ((fontsize < 128) ? 128 : fontsize);
- 
- 		buf = calloc(1, buflen);
-@@ -112,7 +113,7 @@ do_loadfont(struct kfont_context *ctx, i
- 		unsigned int bytewidth = (width + 7) / 8;
- 		unsigned int charsize  = height * bytewidth;
- 
--		kcharsize = 32 * bytewidth;
-+		kcharsize = vpitch * bytewidth;
- 		buflen    = kcharsize * ((fontsize < 128) ? 128 : fontsize);
- 
- 		buf = calloc(1, buflen);
-@@ -169,7 +170,7 @@ do_loadfont(struct kfont_context *ctx, i
- 		KFONT_INFO(ctx, _("Loading %d-char %dx%d (%d) font"),
- 		       fontsize, width, height, hwunit);
- 
--	if (kfont_put_font(ctx, fd, buf, fontsize, width, hwunit) < 0) {
-+	if (kfont_put_font(ctx, fd, buf, fontsize, width, hwunit, vpitch) < 1) {
- 		ret = -EX_OSERR;
- 		goto err;
- 	}
-@@ -181,6 +182,20 @@ err:
- }
- 
- static int
-+do_loadfont(struct kfont_context *ctx, int fd, const unsigned char *inbuf,
-+		unsigned int width, unsigned int height, unsigned int hwunit,
-+		unsigned int fontsize, const char *filename)
-+{
-+	int ret;
-+
-+	if (height <= 32 && width <= 32)
-+		/* This can work with pre-6.2 kernels and its size and vpitch limitations */
-+		return try_loadfont(ctx, fd, inbuf, width, height, 32, hwunit, fontsize, filename);
-+	else
-+		return try_loadfont(ctx, fd, inbuf, width, height, height, hwunit, fontsize, filename);
-+}
-+
-+static int
- do_loadtable(struct kfont_context *ctx, int fd, struct unicode_list *uclistheads,
- 		unsigned int fontsize)
- {
-@@ -585,19 +600,19 @@ save_font(struct kfont_context *ctx, int
- /* this is the max font size the kernel is willing to handle */
- 	unsigned char buf[MAXFONTSIZE];
- 
--	unsigned int i, ct, width, height, bytewidth, charsize, kcharsize;
-+	unsigned int i, ct, width, height, bytewidth, charsize, kcharsize, vpitch;
- 	int ret;
- 
--	ct = sizeof(buf) / (32 * 32 / 8); /* max size 32x32, 8 bits/byte */
-+	ct = sizeof(buf) / (64 * 128 / 8); /* max size 64x128, 8 bits/byte */
- 
--	if (kfont_get_font(ctx, consolefd, buf, &ct, &width, &height) < 0)
-+	if (kfont_get_font(ctx, consolefd, buf, &ct, &width, &height, &vpitch) < 0)
- 		return -EX_OSERR;
- 
- 	/* save as efficiently as possible */
- 	bytewidth = (width + 7) / 8;
- 	height    = font_charheight(buf, ct, width);
- 	charsize  = height * bytewidth;
--	kcharsize = 32 * bytewidth;
-+	kcharsize = vpitch * bytewidth;
- 
- /* Do we need a psf header? */
- /* Yes if ct==512 - otherwise we cannot distinguish
-Index: kbd-2.5.1/src/showconsolefont.c
-===================================================================
---- kbd-2.5.1.orig/src/showconsolefont.c
-+++ kbd-2.5.1/src/showconsolefont.c
-@@ -205,7 +205,7 @@ int main(int argc, char **argv)
- 	if (info) {
- 		nr = rows = cols = 0;
- 
--		ret = kfont_get_font(kfont, fd, NULL, &nr, &rows, &cols);
-+		ret = kfont_get_font(kfont, fd, NULL, &nr, &rows, &cols, NULL);
- 		if (ret != 0)
- 			leave(kfont, EXIT_FAILURE);
- 
-Index: kbd-2.5.1/tests/libtswrap/ioctl.c
-===================================================================
---- kbd-2.5.1.orig/tests/libtswrap/ioctl.c
-+++ kbd-2.5.1/tests/libtswrap/ioctl.c
-@@ -93,6 +93,12 @@ static struct translate_names kd_font_op
- 	{ KD_FONT_OP_GET, "KD_FONT_OP_GET" },
- 	{ KD_FONT_OP_SET_DEFAULT, "KD_FONT_OP_SET_DEFAULT" },
- 	{ KD_FONT_OP_COPY, "KD_FONT_OP_COPY" },
-+#ifdef KD_FONT_OP_SET_TALL
-+	{ KD_FONT_OP_SET_TALL, "KD_FONT_OP_SET_TALL" },
-+#endif
-+#ifdef KD_FONT_OP_GET_TALL
-+	{ KD_FONT_OP_GET_TALL, "KD_FONT_OP_GET_TALL" },
-+#endif
- 	{ 0, NULL }
- };
- 
+> I'm sure there's an xfs_io command and xfstest for that, but for now:
+> python3 -c 'import os; f =3D os.open("testfile", os.O_CREAT + =
+os.O_RDWR, 0o400); os.write(f, b"ok\n")'
+>=20
+> iirc ganesha running as non-root just ignores root requests and opens =
+as
+> current user-- this won't work for this particular case, but might be
+> good enough for you... With that said:
+
+Yeah, the real problem I ran into this was if the server is running as =
+non-root this causes issues and I was testing against cpu (which =
+doesn=E2=80=99t run as root).  I need to go back and check, but if you =
+are running as root and dftuid=3D0 then the behavior should be the same =
+as before?
+In any case, I=E2=80=99ll try to go back and make this work =E2=80=94 my =
+big issue was always using uid 0 regardless of what mount options said =
+is Wong.
+
+>=20
+>> There is a deeper underlying problem with writeback_fids in that
+>> this fallback is too standard and not an exception due to the way
+>> writeback mode works in the current implementation.  Subsequent
+>> patches will try to associate writeback fids from the original user
+>> either by flushing on close or by holding onto fid until writeback
+>> completes.
+>=20
+> If we can address this problem though I agree we should stop using
+> wrieback fids as much as we do.
+> Now fids are refcounted, I think we could just use the normal fid as
+> writeback fid (getting a ref), and the regular close will not clunk it
+> so delayed IOs will pass.
+>=20
+> Worth a try?
+
+Yeah, that (using regular fids) is exactly what I am doing in my write =
+back-fix patch which isn=E2=80=99t part of this series.  I was still =
+hunting a few bugs, but I think I nailed them today.  I have to do a =
+more extensive test sweep of the different configs, but unit tests seem =
+good to go now so if I end up reworking the patch set to address your =
+comment above, I may just go ahead and add it to the resubmit set.  =
+However, I also go ahead and flush on close/clunk =E2=80=94 and that =
+gets rid of the delayed write back which I think is actually preferable =
+anyways.  I may re-introduce it with temporal caching, but its just so =
+problematic=E2=80=A6..
+
+         -Eric
+
 
