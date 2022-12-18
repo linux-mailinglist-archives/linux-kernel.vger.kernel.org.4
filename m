@@ -2,98 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE16D64FF54
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 16:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC0064FF55
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 16:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbiLRPio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 10:38:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
+        id S230400AbiLRPug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 10:50:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiLRPil (ORCPT
+        with ESMTP id S229537AbiLRPuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 10:38:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D046564E5
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 07:38:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B41A60D2D
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 15:38:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CC2AC433EF;
-        Sun, 18 Dec 2022 15:38:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671377918;
-        bh=/45chhHZN7LvW7tG0SV0uxRS7NQX9LMWO7egMZomOmU=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=aqxMCpAiKkDTglWgrKmthVHVpTHzR5pQwpkLuLkFzlM7UXXmrGEi6FMqzBOpTEGqp
-         vwG44azOjE3y+XYDA2IhWxUI1+j1s7G0e8Kuh2j9uwb/bP3l/Loo9pHAwf2g2L5lVk
-         QSCkN342h8pV+5MXWqXWYDhJAH4iCqd9L6FTFuDhtkDIPy/bTpXIT57/QGdBjKqjOB
-         jJ6flShfP6QVQMIrGAKUDjhpSgenHM7TDaSZI1QzE1geb3HPYCrUw4LuYU84Qf9Oyu
-         FCjBtQbbs8qd0elbR0u9djoH5iRPPxDV7uZp/XPXQI1bqWeYjGycPrjFAUcE8eCH5A
-         YfMsMQHaO0hsw==
-Date:   Sun, 18 Dec 2022 16:38:33 +0100
-From:   Alexey Gladkov <legion@kernel.org>
-To:     Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Sun, 18 Dec 2022 10:50:32 -0500
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853ECA185
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 07:50:30 -0800 (PST)
+Received: from martin by viti.kaiser.cx with local (Exim 4.89)
+        (envelope-from <martin@viti.kaiser.cx>)
+        id 1p6vvj-0007vO-HB; Sun, 18 Dec 2022 16:50:23 +0100
+Date:   Sun, 18 Dec 2022 16:50:23 +0100
+From:   Martin Kaiser <lists@kaiser.cx>
+To:     Kang Minchul <tegongkang@gmail.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Pavel Skripkin <paskripkin@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, kbd@lists.altlinux.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [kbd] [patchv2 3/3] VT: Bump font size limitation to 64x128
- pixels
-Message-ID: <Y58z+e7DF+YpJYbR@example.org>
-References: <20221218003209.503539532@ens-lyon.org>
- <20221218003237.503424466@ens-lyon.org>
- <Y58mKmE9Km+NujDa@example.org>
- <20221218145532.syqzu76q23rz4tx6@begin>
- <Y58wzU081UB1IsxB@example.org>
- <20221218152857.qle75c6lhexkdoym@begin>
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: r8188eu: Prefer kcalloc over kzalloc
+Message-ID: <20221218155023.tn6244fhbtwgkl7o@viti.kaiser.cx>
+References: <20221216223942.334221-1-tegongkang@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221218152857.qle75c6lhexkdoym@begin>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221216223942.334221-1-tegongkang@gmail.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+Sender: Martin Kaiser <martin@viti.kaiser.cx>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 18, 2022 at 04:28:57PM +0100, Samuel Thibault wrote:
-> Alexey Gladkov, le dim. 18 déc. 2022 16:25:01 +0100, a ecrit:
-> > On Sun, Dec 18, 2022 at 03:55:32PM +0100, Samuel Thibault wrote:
-> > > Alexey Gladkov, le dim. 18 déc. 2022 15:39:38 +0100, a ecrit:
-> > > > On Sun, Dec 18, 2022 at 01:32:12AM +0100, Samuel Thibault wrote:
-> > > > > -#define max_font_size 65536
-> > > > > +#define max_font_width	64
-> > > > > +#define max_font_height	128
-> > > > > +#define max_font_glyphs	512
-> > > > > +#define max_font_size	(max_font_glyphs*max_font_width*max_font_height)
-> > > > 
-> > > > As a suggestion that you can safely ignore. Maybe make max_font_glyphs a
-> > > > sysctl parameter to be able to use larger fonts ?
-> > > > 
-> > > > I get requests from time to time in kbd that it is not possible to load a
-> > > > larger font.
-> > > 
-> > > 64KiB was really low, while the theoretically possible max was
-> > > 32*32*512 = 512KB, so I understand there used to be such requests :)
-> > > 
-> > > Here, by setting the max to 64x128*512, I don't think we'll need more.
-> > 
-> > I was not talking about the size of one glyph, but about the number of
-> > glyphs in the font. Right now the font cannot have more than 512 glyphs.
-> 
-> That one is unfortunately *very* hardcoded in the VT code, since it's
-> the very representation of the console text in vc_screenbuf which is set
-> to the VGA-based 16bits per glyph, with a 8+8 or 9+7 separation between
-> glyph number and color number. Lifting that would be way more involved.
+Thus wrote Kang Minchul (tegongkang@gmail.com):
 
-Yeah, but I thought that since someone decided to touch this old code,
-then this someone will improve this old limit :)
+> Fixed following checkpatch.pl warning:
+>  * WARNING: Prefer kcalloc over kzalloc with multiply
 
--- 
-Rgrds, legion
+> Instead of specifying (number of bytes) * (size) as arugment
+> in kzalloc, prefer kcalloc.
 
+> Signed-off-by: Kang Minchul <tegongkang@gmail.com>
+> ---
+>  drivers/staging/r8188eu/core/rtw_xmit.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+> diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+> index 34494f08c0cd..36ce1e3f9c81 100644
+> --- a/drivers/staging/r8188eu/core/rtw_xmit.c
+> +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+> @@ -1564,7 +1564,7 @@ int rtw_alloc_hwxmits(struct adapter *padapter)
+
+>  	pxmitpriv->hwxmit_entry = HWXMIT_ENTRY;
+
+> -	pxmitpriv->hwxmits = kzalloc(sizeof(struct hw_xmit) * pxmitpriv->hwxmit_entry, GFP_KERNEL);
+> +	pxmitpriv->hwxmits = kcalloc(pxmitpriv->hwxmit_entry, sizeof(struct hw_xmit), GFP_KERNEL);
+>  	if (!pxmitpriv->hwxmits)
+>  		return -ENOMEM;
+
+> -- 
+> 2.34.1
+
+Reviewed-by: Martin Kaiser <martin@kaiser.cx>
