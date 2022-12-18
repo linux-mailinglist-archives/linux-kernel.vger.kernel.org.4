@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD97B650478
+	by mail.lfdr.de (Postfix) with ESMTP id 9150D650477
 	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 20:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230441AbiLRTNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 14:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S230470AbiLRTN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 14:13:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiLRTNS (ORCPT
+        with ESMTP id S230419AbiLRTNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 14:13:18 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28BC1B866
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 11:13:18 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id c7so6780110qtw.8
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 11:13:18 -0800 (PST)
+        Sun, 18 Dec 2022 14:13:21 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3585BB866
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 11:13:19 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id fu10so6852148qtb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 11:13:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6wBQIku0dQkyfB58N1D5s2KPLrixlbfwvdwL9dUxK98=;
-        b=lroTRSYT+lpaoGdLTvSe0vNJT4ct3IB3eeOKCL3YQRvVP5j2VrdsOPUcLi8fN4+xcQ
-         tqx9I1ei9F8C2t0E6UYlk4BJAjVqoiJuWOBCAE31g+550nlQkhBhVROKlRx+VoNaGB/1
-         bWNL2XgieQGjgcDJbwvxzTqS2q3XrhB/3WDXQ=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aMETP/jVGqYAt1Am1sKohN2GIK72fbH2eJG8GB8IcRM=;
+        b=YLzX79p8Zz+klCpFEHuJD+fh6t+1Tol2NaoKjWGxZ7Yq3F9NHrlMXh/zlTV14xaoRj
+         y+Pc6HvAoZFfaHJtzIpbZAh561Uvj5MeZ2pZu6tBtBbOP7MEbwrkqKhQJDK/FrCrWWZG
+         ZUAxaLoo8oBMzcxsJ1E0iUOuhScEbJwSSMsec=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6wBQIku0dQkyfB58N1D5s2KPLrixlbfwvdwL9dUxK98=;
-        b=Lt2xvKripCmEaLdiVK03FmFO1/D5LYLeiNibTlzLjUyTtYU+tWX3T/uCIX7MpsPr23
-         Xg3IqZ2CljPjhTep89zLizpVuplKsfhMgyNKRirUl8xob1Yo8NIXm8C7NwDb38ez87uv
-         pGWhX0//KE4Va/yu7ETS1+bt6rzAX9eqXSO49anBb0TE7t9tc8rd0UoYrmNRBybzjD+t
-         /f98hmJqgQBs6lUGbnajid112lea8RBg3O2YI7xP1idAjv3FtgnnC6fOJj9zD+9FJc3D
-         ZbY5VVPQgimmnc6sRVfRpV2B3qalN5GT5BNilVWPmxmSH35A6GlIPxEp89AFtP0hEcQ6
-         VklA==
-X-Gm-Message-State: ANoB5pkjuHVTtbuw258Mv2DFoP274sg9szlbOCr/Nn0wOWXmSoih/zZI
-        fi51NuBLs+b1mAwswJaQBuc3HcsgIc/DuzCtBrY=
-X-Google-Smtp-Source: AA0mqf7J6UsYdtU3I+7qCCh94ebdBJCmtFyROhsopD/KPQRuOlbhn8h1ckK0lufGxdBXEQVLb6pAww==
-X-Received: by 2002:ac8:1019:0:b0:39c:da20:683 with SMTP id z25-20020ac81019000000b0039cda200683mr46753016qti.38.1671390796655;
-        Sun, 18 Dec 2022 11:13:16 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aMETP/jVGqYAt1Am1sKohN2GIK72fbH2eJG8GB8IcRM=;
+        b=rZLeaO2DCCZy2EyXEO3IFrrC1GrUQTCbGx5YL7d/JvHVzoZ8EG0HDaR7n1MFl6bEGn
+         fW4B5cgIXEBahaGFbQYQKKpo86I77X6U8N82/UKZ7eNoR9DRSXB1rif9BWPBYsCMwSqe
+         9TEE0IDE2PbevCulfOPnEDAz5L6flFaJl/cw/oRXOCrno3l2up2j59cd8zfCZFzZYTls
+         qZv8ESExc87Rdrzrvwbmxya/2d4kmD6vhDFFSfQtodryd3BYWswsID2qPCT2Zbfzidgx
+         m8QdntGql8E4Be7WznA/q69mh/OtuDBosKFb7iRNharpcRJftbNG17sQzY8HGrqF4+a7
+         aQMw==
+X-Gm-Message-State: ANoB5plbK04UMRoeG5Vv4KunRA1eOpctzktvb6IeMdrMpZgF/jj6dUzE
+        JsPMwizNB4R49P1SqzSiDapUN2FhcvloTs/T9oM=
+X-Google-Smtp-Source: AA0mqf5vbZr+d96WNNC0ud+2q6Ds+10bWi55Eh0WTvC+9QSlCfnuSJrllRhoGw8lTWnveVLPRptsFA==
+X-Received: by 2002:ac8:481a:0:b0:3a8:2ca5:8f9b with SMTP id g26-20020ac8481a000000b003a82ca58f9bmr25529899qtq.16.1671390798263;
+        Sun, 18 Dec 2022 11:13:18 -0800 (PST)
 Received: from joelboxx.c.googlers.com.com (48.230.85.34.bc.googleusercontent.com. [34.85.230.48])
-        by smtp.gmail.com with ESMTPSA id cq8-20020a05622a424800b003a591194221sm4952864qtb.7.2022.12.18.11.13.15
+        by smtp.gmail.com with ESMTPSA id cq8-20020a05622a424800b003a591194221sm4952864qtb.7.2022.12.18.11.13.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Dec 2022 11:13:15 -0800 (PST)
+        Sun, 18 Dec 2022 11:13:17 -0800 (PST)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
@@ -54,10 +55,12 @@ Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
         Steven Rostedt <rostedt@goodmis.org>
-Subject: [RFC 0/2] srcu: Remove pre-flip memory barrier
-Date:   Sun, 18 Dec 2022 19:13:07 +0000
-Message-Id: <20221218191310.130904-1-joel@joelfernandes.org>
+Subject: [RFC 1/2] srcu: Remove comment about prior read lock counts
+Date:   Sun, 18 Dec 2022 19:13:08 +0000
+Message-Id: <20221218191310.130904-2-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+In-Reply-To: <20221218191310.130904-1-joel@joelfernandes.org>
+References: <20221218191310.130904-1-joel@joelfernandes.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,27 +73,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, I believe the pre-flip memory barrier is not required. The only reason I
-can say to remove it, other than the possibility that it is unnecessary, is to
-not have extra code that does not help. However, since we are issuing a fully
-memory-barrier after the flip, I cannot say that it hurts to do it anyway.
+The comment says that if an updater saw lock count updates, then
+ensure the reader does not see the new srcu_idx.
 
-For this reason, please consider these patches as "informational", than a
-"please merge". :-) Though, feel free to consider merging if you agree!
+However, there is no memory barrier between a READER reading srcu_idx
+with respect to incrementing the lock count for that srcu_idx.
 
-All SRCU scenarios pass with these, with 6 hours of testing.
+So what is really happening is, both "B" and "C" will order the current
+reader's unlock count update, and the _next_ readers lock count update, with
+respect to the write to the currently active index.
 
-thanks,
+Consider first the case of the unlock count update being seen by the UPDATER:
 
- - Joel
+(for brevity, the pseudocode shortens "srcu_idx" to "idx")
 
-Joel Fernandes (Google) (2):
-srcu: Remove comment about prior read lock counts
-srcu: Remove memory barrier "E" as it is not required
+READER                            UPDATER
 
-kernel/rcu/srcutree.c | 10 ----------
-1 file changed, 10 deletions(-)
+rcu_read_lock() {
+    idx = READ(idx);
+    lock_count[idx]++;
 
---
+    smp_mb();    // B
+}
+                                srcu_flip() {
+                                    smp_mb(); //E
+                                    idx++;
+                                    smp_mb();
+                                }
+rcu_read_unlock() {
+    smp_mb();    // C
+    unlock_count[idx]++;
+}
+
+Consider that the updater saw the unlock count update, and due to this, we
+expect "E" to make sure that the reader only used the old srcu_idx.
+
+However, say the reader used the new srcu_idx because we dropped "E".  That is
+totally OK because both unlock and lock counts of this reader will negate each
+other during the next scan of the srcu_idx. So we don't have to guarantee at
+all that the reader used the old srcu_idx, that does not buy us anything
+because if it used the new one, we would just ignore it during the next scan
+anyway (the reader is "done").
+
+Now lets look at the following case:
+
+READER                            UPDATER
+
+rcu_read_lock() {
+    idx = READ(idx);
+    lock_count[idx]++;
+
+    smp_mb();    // B
+}
+
+rcu_read_unlock() {
+    smp_mb();    // C
+    unlock_count[idx]++;
+}
+                                srcu_flip() {
+                                    smp_mb(); //E
+                                    idx++;
+rcu_read_lock() {
+    idx = READ(idx);
+    lock_count[idx]++;
+
+    smp_mb();    // B
+                                    smp_mb();
+                                }
+}
+
+Consider that the updater saw the lock count update of the second
+rcu_read_lock(). It does not matter that we guarantee that the reader sees only
+the old srcu_idx. This is because, a reader could totally just sample
+srcu_idx, and stay preempted for long periods of time. So, during any scan, we
+already have the issue of a preempted-reader randomly springing up with a copy
+of the index which we consider the "new index". So guaranteeing that the reader
+saw the old srcu_idx instead of the new one if we saw its lock count updates,
+also does not buy us anything.
+
+Due to these reasons, drop the argument that the reader has to see a certain
+srcu_idx since we have no control over that anyway, and guaranteeing that does not
+buy us anything.
+
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+ kernel/rcu/srcutree.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index 1c304fec89c0..d6a4c2439ca6 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -983,12 +983,10 @@ static bool try_check_zero(struct srcu_struct *ssp, int idx, int trycount)
+ static void srcu_flip(struct srcu_struct *ssp)
+ {
+ 	/*
+-	 * Ensure that if this updater saw a given reader's increment
+-	 * from __srcu_read_lock(), that reader was using an old value
+-	 * of ->srcu_idx.  Also ensure that if a given reader sees the
+-	 * new value of ->srcu_idx, this updater's earlier scans cannot
+-	 * have seen that reader's increments (which is OK, because this
+-	 * grace period need not wait on that reader).
++	 * Ensure that if a given reader sees the new value of ->srcu_idx, this
++	 * updater's earlier scans cannot have seen that reader's increments
++	 * (which is OK, because this grace period need not wait on that
++	 * reader).
+ 	 */
+ 	smp_mb(); /* E */  /* Pairs with B and C. */
+ 
+-- 
 2.39.0.314.g84b9a713c41-goog
 
