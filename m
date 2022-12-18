@@ -2,235 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E01064FEE4
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 13:44:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D99264FEE9
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 14:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbiLRMo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 07:44:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
+        id S230201AbiLRNBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 08:01:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiLRMoZ (ORCPT
+        with ESMTP id S229730AbiLRNA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 07:44:25 -0500
-Received: from out-111.mta0.migadu.com (out-111.mta0.migadu.com [91.218.175.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E7AC0F
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 04:44:23 -0800 (PST)
-Message-ID: <83c2ef58243f12f5e3fa36fb7a4e2d74faf28990.camel@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1671367461;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vw9cJnccZBgvAQIi+XuStsPuQH4rQLQ9Ak8DoTFHcDw=;
-        b=EKU08Hezk6JNk37SUP/8qJRdEzVPoqCuEL6dwfr/pXFFX50+ZfFhWMCjtcrRYCPzwGljiB
-        x5zopbwaxlTcrO9CJcTqVqyQcSyTN6a5ykl+LM6Wnhm4bME2zlJPsYHAlLpJV/Z+plhOlz
-        H2fmumHS0/BmI1Pyr5dLlviBbgDUPwY=
-Subject: Re: [PATCH] gpio: sprd: Make irq_chip immutable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Cixi Geng <cixi.geng@linux.dev>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        linus.walleij@linaro.org, brgl@bgdev.pl, orsonzhai@gmail.com,
-        zhang.lyra@gmail.com, gengcixi@gmail.com
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sun, 18 Dec 2022 20:44:11 +0800
-In-Reply-To: <97e244d4-6b5c-31c9-7329-b8deef615645@linux.alibaba.com>
-References: <20221216041708.32768-1-cixi.geng@linux.dev>
-         <97e244d4-6b5c-31c9-7329-b8deef615645@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 18 Dec 2022 08:00:57 -0500
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65D010F6
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 05:00:55 -0800 (PST)
+Received: from dslb-178-004-201-210.178.004.pools.vodafone-ip.de ([178.4.201.210] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1p6tHV-0006ch-5i; Sun, 18 Dec 2022 14:00:41 +0100
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Martin Kaiser <martin@kaiser.cx>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: actions: add missing of_node_put calls
+Date:   Sun, 18 Dec 2022 14:00:21 +0100
+Message-Id: <20221218130022.393749-1-martin@kaiser.cx>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-12-16 at 14:50 +0800, Baolin Wang wrote:
-> >=20
-> >=20
-> > On 12/16/2022 12:17 PM, Cixi Geng wrote:
-> > > > From: Cixi Geng <cixi.geng1@unisoc.com>
-> > > >=20
-> > > > Kernel warns about mutable irq_chips:
-> > > >=20
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0 "not an immutable chip, please consider fi=
-xing!"
-> > > >=20
-> > > > Make the struct irq_chip const, flag it as IRQCHIP_IMMUTABLE,
-> > > > add > > the
-> > > > new helper functions, and call the appropriate gpiolib
-> > > > functions.
-> >=20
-> > Please split them into 3 patches and each patch converts one
-> > driver,=20
-> > which is easy to review.
-Thanks for reviewing, I will modify the comments in the next version
-> >=20
-> > > >=20
-> > > > Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-> > > > ---
-> > > > =C2=A0 drivers/gpio/gpio-eic-sprd.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
-=C2=A0 4 ++--
-> > > > =C2=A0 drivers/gpio/gpio-pmic-eic-sprd.c |=C2=A0 4 ++--
-> > > > =C2=A0 drivers/gpio/gpio-sprd.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 | 11 +++++++++--
-> > > > =C2=A0 3 files changed, 13 insertions(+), 6 deletions(-)
-> > > >=20
-> > > > diff --git a/drivers/gpio/gpio-eic-sprd.c > >
-> > > > b/drivers/gpio/gpio-eic-sprd.c
-> > > > index 8d722e026e9c..07b9099f2a6d 100644
-> > > > --- a/drivers/gpio/gpio-eic-sprd.c
-> > > > +++ b/drivers/gpio/gpio-eic-sprd.c
-> > > > @@ -631,10 +631,10 @@ static int sprd_eic_probe(struct > >
-> > > > platform_device *pdev)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sprd_eic->intc.irq_=
-mask =3D sprd_eic_irq_mask;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sprd_eic->intc.irq_=
-unmask =3D sprd_eic_irq_unmask;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sprd_eic->intc.irq_=
-set_type =3D sprd_eic_irq_set_type;
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sprd_eic->intc.flags =3D=
- IRQCHIP_SKIP_SET_WAKE;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sprd_eic->intc.flags =3D=
- IRQCHIP_SKIP_SET_WAKE | > >
-> > > > IRQCHIP_IMMUTABLE;
-> > > > =C2=A0=20
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq =3D &sprd_eic->=
-chip.irq;
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq->chip =3D &sprd_eic-=
->intc;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0gpio_irq_chip_set_chip(i=
-rq, &sprd_eic->intc);
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq->handler =3D ha=
-ndle_bad_irq;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq->default_type =
-=3D IRQ_TYPE_NONE;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq->parent_handler=
- =3D sprd_eic_irq_handler;
-> > > > diff --git a/drivers/gpio/gpio-pmic-eic-sprd.c > >
-> > > > b/drivers/gpio/gpio-pmic-eic-sprd.c
-> > > > index e518490c4b68..d96604ea10e7 100644
-> > > > --- a/drivers/gpio/gpio-pmic-eic-sprd.c
-> > > > +++ b/drivers/gpio/gpio-pmic-eic-sprd.c
-> > > > @@ -344,10 +344,10 @@ static int sprd_pmic_eic_probe(struct > >
-> > > > platform_device *pdev)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmic_eic->intc.irq_=
-set_type =3D
-> > > > sprd_pmic_eic_irq_set_type;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmic_eic->intc.irq_=
-bus_lock =3D sprd_pmic_eic_bus_lock;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmic_eic->intc.irq_=
-bus_sync_unlock =3D > >
-> > > > sprd_pmic_eic_bus_sync_unlock;
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmic_eic->intc.flags =3D=
- IRQCHIP_SKIP_SET_WAKE;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmic_eic->intc.flags =3D=
- IRQCHIP_SKIP_SET_WAKE | > >
-> > > > IRQCHIP_IMMUTABLE;
-> >=20
-> > Why not add GPIOCHIP_IRQ_RESOURCE_HELPERS for above 2 drivers?
-> > Seems > we=20
-> > can remove the irq_chip from pmic_eic structure, instead we can >
-> > define=20
-> > it statically with adding GPIOCHIP_IRQ_RESOURCE_HELPERS like other
-> > > patch=20
-> > [1] did?
-> >=20
-> > [1] >
-> > https://lore.kernel.org/all/20220419141846.598305-6-maz@kernel.org/
-> >=20
-> > > > =C2=A0=20
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq =3D &pmic_eic->=
-chip.irq;
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq->chip =3D &pmic_eic-=
->intc;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0gpio_irq_chip_set_chip(i=
-rq, &pmic_eic->intc);
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq->threaded =3D t=
-rue;
-> > > > =C2=A0=20
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D devm_gpioch=
-ip_add_data(&pdev->dev, &pmic_eic-
-> > > > >chip, > > pmic_eic);
-> > > > diff --git a/drivers/gpio/gpio-sprd.c b/drivers/gpio/gpio-
-> > > > sprd.c
-> > > > index 9bff63990eee..8398f9707ec0 100644
-> > > > --- a/drivers/gpio/gpio-sprd.c
-> > > > +++ b/drivers/gpio/gpio-sprd.c
-> > > > @@ -64,6 +64,11 @@ static void sprd_gpio_update(struct
-> > > > gpio_chip > > *chip, unsigned int offset,
-> > > > =C2=A0=20
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0writel_relaxed(tmp,=
- base + reg);
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0spin_unlock_irqrest=
-ore(&sprd_gpio->lock, flags);
-> > > > +
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (reg =3D=3D SPRD_GPIO=
-_IE && val =3D=3D 1)
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0gpiochip_enable_irq(chip, offset);
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0else if (reg =3D=3D SPRD=
-_GPIO_IE && val =3D=3D 0)
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0gpiochip_disable_irq(chip, offset);
-> >=20
-> > Looks incorrect to me, IIUC you should move=20
-> > gpiochip_enable_irq/gpiochip_disable_irq() into
-> > sprd_gpio_irq_mask() > and=20
-> > sprd_gpio_irq_unmask().
-> >=20
-> > > > =C2=A0 }
-> > > > =C2=A0=20
-> > > > =C2=A0 static int sprd_gpio_read(struct gpio_chip *chip, unsigned
-> > > > int > > offset, u16 reg)
-> > > > @@ -205,13 +210,15 @@ static void sprd_gpio_irq_handler(struct
-> > > > > > irq_desc *desc)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0chained_irq_exit(ic=
-, desc);
-> > > > =C2=A0 }
-> > > > =C2=A0=20
-> > > > -static struct irq_chip sprd_gpio_irqchip =3D {
-> > > > +static const struct irq_chip sprd_gpio_irqchip =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.name =3D "sprd-gpi=
-o",
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.irq_ack =3D sprd_g=
-pio_irq_ack,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.irq_mask =3D sprd_=
-gpio_irq_mask,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.irq_unmask =3D spr=
-d_gpio_irq_unmask,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.irq_set_type =3D s=
-prd_gpio_irq_set_type,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.flags =3D IRQCHIP_=
-SKIP_SET_WAKE,
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.flags =3D IRQCHIP_SKIP_=
-SET_WAKE | IRQCHIP_IMMUTABLE,
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0GPIOCHIP_IRQ_RESOURCE_HE=
-LPERS,
-> > > > =C2=A0 };
-> > > > =C2=A0=20
-> > > > =C2=A0 static int sprd_gpio_probe(struct platform_device *pdev)
-> > > > @@ -245,7 +252,7 @@ static int sprd_gpio_probe(struct > >
-> > > > platform_device *pdev)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sprd_gpio->chip.dir=
-ection_output =3D > >
-> > > > sprd_gpio_direction_output;
-> > > > =C2=A0=20
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq =3D &sprd_gpio-=
->chip.irq;
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq->chip =3D &sprd_gpio=
-_irqchip;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0gpio_irq_chip_set_chip(i=
-rq, &sprd_gpio_irqchip);
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq->handler =3D ha=
-ndle_bad_irq;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq->default_type =
-=3D IRQ_TYPE_NONE;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq->parent_handler=
- =3D sprd_gpio_irq_handler;
+A node that is returned by of_find_compatible_node has its refcount
+incremented. We have to call of_node_put when the node is no longer
+needed.
+
+Add the missing of_node_put calls in function s500_smp_prepare_cpus.
+
+Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+---
+compile-tested only, I don't have this hardware
+
+ arch/arm/mach-actions/platsmp.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm/mach-actions/platsmp.c b/arch/arm/mach-actions/platsmp.c
+index f26618b43514..9fe9a0bd0fd0 100644
+--- a/arch/arm/mach-actions/platsmp.c
++++ b/arch/arm/mach-actions/platsmp.c
+@@ -103,6 +103,7 @@ static void __init s500_smp_prepare_cpus(unsigned int max_cpus)
+ 	}
+ 
+ 	timer_base_addr = of_iomap(node, 0);
++	of_node_put(node);
+ 	if (!timer_base_addr) {
+ 		pr_err("%s: could not map timer registers\n", __func__);
+ 		return;
+@@ -115,6 +116,7 @@ static void __init s500_smp_prepare_cpus(unsigned int max_cpus)
+ 	}
+ 
+ 	sps_base_addr = of_iomap(node, 0);
++	of_node_put(node);
+ 	if (!sps_base_addr) {
+ 		pr_err("%s: could not map sps registers\n", __func__);
+ 		return;
+@@ -128,6 +130,7 @@ static void __init s500_smp_prepare_cpus(unsigned int max_cpus)
+ 		}
+ 
+ 		scu_base_addr = of_iomap(node, 0);
++		of_node_put(node);
+ 		if (!scu_base_addr) {
+ 			pr_err("%s: could not map scu registers\n", __func__);
+ 			return;
+-- 
+2.30.2
 
