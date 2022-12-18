@@ -2,101 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1378364FECA
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 12:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A2364FED0
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 13:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbiLRLnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 06:43:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54408 "EHLO
+        id S230460AbiLRMEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 07:04:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiLRLnc (ORCPT
+        with ESMTP id S229537AbiLRMER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 06:43:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDBCBE26
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 03:43:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Sun, 18 Dec 2022 07:04:17 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8CC121;
+        Sun, 18 Dec 2022 04:04:15 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C79560D2C
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 11:43:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 994CAC433EF;
-        Sun, 18 Dec 2022 11:43:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1671363811;
-        bh=G4lxT8N0O3pm0OMYLg7tXb0zKAcmSwn3RAxSly4BLRU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S+6Ygp7xe0MxYQIyINyKhEiQSb6b4S6P9rDILgVwh806UPWn+XUzPBDeoYuVH0NSo
-         C+rVAy89xQQM/6EzPNjuQV6iu4EPOVH65+NupwpuOxipF86NlmSOmNCgSCXtmtRPOd
-         r1BMseMpssYxPqdfjfGoM6lNWR1wRuKQr97PpR7w=
-Date:   Sun, 18 Dec 2022 12:43:27 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     linux-kernel@vger.kernel.org, laforge@gnumonks.org, arnd@arndb.de,
-        linux@dominikbrodowski.net, baijiaju1990@gmail.com
-Subject: Re: [PATCH] Revert "char: pcmcia: cm4000_cs: Replace mdelay with
- usleep_range in set_protocol"
-Message-ID: <Y5783zWoitPPyoOG@kroah.com>
-References: <20221128053915.90474-1-duoming@zju.edu.cn>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 900461EC04C1;
+        Sun, 18 Dec 2022 13:04:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1671365052;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=qZ7D+nJuEw06972G95/KVZOO2WSZfZWhv++0SW+ZtQo=;
+        b=U3fwypfodtyAL0P58CBYz6SK6jS4gJTvWm8Tpp6gqcaZRMIN+AJbY2M8NhU8SpyIYuufk9
+        rQGrjLFAPhRxrQqF70nVZZjU3BpfMKLuYfynJDnhD7NjlLOxd8ygzZLlsoITOuZUgLW256
+        MME6mx8Mzcu1c1Twf2+HCRrxH+raQYo=
+From:   Borislav Petkov <bp@alien8.de>
+To:     Thomas Sailer <t.sailer@alumni.ethz.ch>
+Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] hamradio: baycom_epp: Do not use x86-specific rdtsc()
+Date:   Sun, 18 Dec 2022 13:04:05 +0100
+Message-Id: <20221218120405.2431-1-bp@alien8.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221128053915.90474-1-duoming@zju.edu.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 01:39:15PM +0800, Duoming Zhou wrote:
-> This reverts commit be826ada52f1fcabed5b5217c94609ebf5967211.
-> 
-> The function monitor_card() is a timer handler that runs in an
-> atomic context, but it calls usleep_range() that can sleep.
-> As a result, the sleep-in-atomic-context bugs will happen.
-> The process is shown below:
-> 
->     (atomic context)
-> monitor_card()
->   set_protocol()
->     usleep_range() //sleep
-> 
-> The origin commit c1986ee9bea3 ("[PATCH] New Omnikey Cardman
-> 4000 driver") works fine.
-> 
-> Fixes: be826ada52f1 ("char: pcmcia: cm4000_cs: Replace mdelay with usleep_range in set_protocol")
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> ---
->  drivers/char/pcmcia/cm4000_cs.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/char/pcmcia/cm4000_cs.c b/drivers/char/pcmcia/cm4000_cs.c
-> index adaec8fd4b1..7125f89531f 100644
-> --- a/drivers/char/pcmcia/cm4000_cs.c
-> +++ b/drivers/char/pcmcia/cm4000_cs.c
-> @@ -529,7 +529,7 @@ static int set_protocol(struct cm4000_dev *dev, struct ptsreq *ptsreq)
->  			DEBUGP(5, dev, "NumRecBytes is valid\n");
->  			break;
->  		}
-> -		usleep_range(10000, 11000);
-> +		mdelay(10);
->  	}
->  	if (i == 100) {
->  		DEBUGP(5, dev, "Timeout waiting for NumRecBytes getting "
-> @@ -549,7 +549,7 @@ static int set_protocol(struct cm4000_dev *dev, struct ptsreq *ptsreq)
->  			}
->  			break;
->  		}
-> -		usleep_range(10000, 11000);
-> +		mdelay(10);
+From: "Borislav Petkov (AMD)" <bp@alien8.de>
 
-Can you add a comment that says "can not sleep as this is atomic
-context" for these calls so that this doesn't get changed again in the
-future?
+Use get_cycles() which is provided by pretty much every arch.
 
-thanks,
+The UML build works too because get_cycles() is a simple "return 0;"
+because the rdtsc() is optimized away there.
 
-greg k-h
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+---
+ drivers/net/hamradio/baycom_epp.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/drivers/net/hamradio/baycom_epp.c b/drivers/net/hamradio/baycom_epp.c
+index bd3b0c2655a2..83ff882f5d97 100644
+--- a/drivers/net/hamradio/baycom_epp.c
++++ b/drivers/net/hamradio/baycom_epp.c
+@@ -623,16 +623,10 @@ static int receive(struct net_device *dev, int cnt)
+ 
+ /* --------------------------------------------------------------------- */
+ 
+-#if defined(__i386__) && !defined(CONFIG_UML)
+-#include <asm/msr.h>
+ #define GETTICK(x)						\
+ ({								\
+-	if (boot_cpu_has(X86_FEATURE_TSC))			\
+-		x = (unsigned int)rdtsc();			\
++	x = (unsigned int)get_cycles();				\
+ })
+-#else /* __i386__  && !CONFIG_UML */
+-#define GETTICK(x)
+-#endif /* __i386__  && !CONFIG_UML */
+ 
+ static void epp_bh(struct work_struct *work)
+ {
+-- 
+2.35.1
+
