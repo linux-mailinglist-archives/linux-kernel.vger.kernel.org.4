@@ -2,163 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D13C650464
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 19:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C993650466
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 19:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiLRSeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 13:34:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
+        id S229865AbiLRSma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 13:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiLRSdr (ORCPT
+        with ESMTP id S229537AbiLRSm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 13:33:47 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CBEE7F
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 10:31:51 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id s9so6742467qtx.6
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 10:31:51 -0800 (PST)
+        Sun, 18 Dec 2022 13:42:27 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B613E389D
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 10:42:25 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id y25so10760123lfa.9
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 10:42:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G6KoHvcGTx1RcWeXNiJbyqXJGMqsYoj3r/slahxN0do=;
-        b=AXETmQ2+NJJH9dhNzAPwQ0s/HvEQF7jcqqUCJVlG45c91ucHbLsnCqKo61bi/1AxsV
-         WbR8WRagXpTp0rVjwLIGQM30a1S47wrJW+Z1j9N+MPtFq9WWws7hma6/BRHw66QW8T4q
-         G67j+3VBYBNneXjsrJNhe2zVwMTBr7TMKLIr0VHkXMfEE3awqCSAUF2M6Sc52bhm+mFh
-         YKlC38KVcYTaDIXKmZQdv5bEnmiiBi+jROD5I/dc3yzAGrlFvxG4ikTdVFfY177W3DhC
-         xki87bEvgwQydNUbKwT9qKQ+0846myxixMIMjFqKO6k3hZUiG0ixF+V8OxXRwD2vw8pf
-         FXXw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+agFvIpw1AyPz/b80qh9FbY1bWBFnqitRzpSRPrRS24=;
+        b=iRFeWKuHAGZDLQBj8wKPvyqm8Dre9gOMZz4k0TAbinao5JxUTeM50QHYUnQFuSFBpf
+         MYO1//5f0XMzrlm9YuqubulNC3qtumiW0FABIO3mAmWmXoQyGnaGqkaXfxe2dU+1dn/Q
+         Kswl5mnMtizPuf/WJWuJJFNECh7PFW3lNzxbQIdwfaqziaUcRgMpfy62igtTYMo2iMo5
+         YKMUn8by4X8xuIMASlElXiaGt+peL8W0EFdWbmZZ9Y/iKgsOfKzOkNqMzuUf1ouU9v4n
+         rw289Vh1OBbCQPlhoIrEfWslDcouKhiY791sVJJTKxtBoEScnZLbVNn4ON9pnAebS7nO
+         FB3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G6KoHvcGTx1RcWeXNiJbyqXJGMqsYoj3r/slahxN0do=;
-        b=4eMn+I1Wazs+VWGwk0r1tnfbzzrAG4i7+X5RMSfJ8MmPgzmyZuWXjds5XTpbP4n5Aw
-         5JLZB3KOqAjp/Qj5TXSYtWehB4FGI8c2ANvfoXu6hMsGhbHZQ0Bpnc2FGdYtdS6ZP3/3
-         K1wlL6z9b1I+mypFfXLHzKb6fymJcV8shSLeEWNPBPrNDhpR3r55NMf1hsQg48bWJg7K
-         t3p9Akpzh5CCK5LyWE4g3xDdRigFy0xJ2CazIZnsZp0P4NrMqpzHvH40XtzGEtMtfST1
-         j/XogutzwZ6rMDxrgMFBDhkXLd8IDVtwNUiqz+cGWIu6X/bL/04g6B5KfxFnuOOvpnT0
-         gtNQ==
-X-Gm-Message-State: ANoB5pmQ7zSLEbkgZU0kkxyUdrPcds+xM2E79iezf9nMqgSNd9JaqBfn
-        ipyFj4dWuhslYQJ57PKhHK95bca1SX9wekYVhNFDrg==
-X-Google-Smtp-Source: AA0mqf5ABkKhlDT/MO5rrqjzXb8ZbVq5G52EEI25mfQE+l9Q5TztddrpvmEjk73i7QcTQ8HFrykkl5VMG32NOyDWolA=
-X-Received: by 2002:ac8:754e:0:b0:3a7:e16a:6a7 with SMTP id
- b14-20020ac8754e000000b003a7e16a06a7mr17572456qtr.288.1671388310693; Sun, 18
- Dec 2022 10:31:50 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+agFvIpw1AyPz/b80qh9FbY1bWBFnqitRzpSRPrRS24=;
+        b=pjulc/mumIoubgqz6vKe24Cb8MEdvoQjJ7dZphz5ofg7tW/vXy5c9qgCuup13JT3Oc
+         9xuNuWXBK1x5YXcbEnwmKBEQHZsPY7/p1gh29ENbeKh+EmL3HjMZF6OzPIAGLDB7bC+f
+         swywHOu8iqH/4VhhLiVCET51FnF77+HDThTz2gp/dXsXH4xzLkrNruDUhivYCclOdfl9
+         F6wID/cS+H8XF1J0RlJO6O55Edz8mntWLflUcg+C3mbeLd/eiZqSxJvlmA3Ni/zhM0A4
+         4VjE5P6oss+fUhrDMkmYXF/XMyWyE3AyeaoM/1VxqUFmmD2tFgphRxGuEb1IFU6Wkplt
+         yMGA==
+X-Gm-Message-State: ANoB5pn+nE5/5pds/N3qrKvkkoUr2XbFW4HWlcWUkFqLrnB0CcvWl0WI
+        2Ymp6sPV7/fP+yLLrMLfqEX2Zw==
+X-Google-Smtp-Source: AA0mqf4tvcyd9aNP0DzCQOpMufm4ZQAVo9HezsyQK48pwUjnipumIOekUNNyRFQ7Ds1K9FtYSqACRQ==
+X-Received: by 2002:a19:5e5e:0:b0:4b5:6042:d136 with SMTP id z30-20020a195e5e000000b004b56042d136mr9104520lfi.22.1671388944002;
+        Sun, 18 Dec 2022 10:42:24 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id r16-20020ac24d10000000b004b4e4671212sm872696lfi.232.2022.12.18.10.42.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Dec 2022 10:42:23 -0800 (PST)
+Message-ID: <c5b8c9d1-6391-fb76-c380-6f0fdb3cc878@linaro.org>
+Date:   Sun, 18 Dec 2022 19:42:22 +0100
 MIME-Version: 1.0
-References: <20220830193701.1702962-1-maskray@google.com> <20220910075316.no72fdyqjvunomwm@google.com>
- <CAFP8O3+OwanSJdzd5V3oGJ_MOJOSVdbn+4iBJJKm2LCR8mCA0Q@mail.gmail.com>
- <9ce45cd2-dcd8-11f8-e496-7efe3649e241@csgroup.eu> <20221115004625.x4wl6zbg4iiuxl5t@google.com>
- <CAFP8O3LdSJCChGEwT57e=iZopceYkBFuW9XD=yhO1ZszVZGm4g@mail.gmail.com> <3ec9737e-3d1a-c014-b91a-0e2d406a3b3d@csgroup.eu>
-In-Reply-To: <3ec9737e-3d1a-c014-b91a-0e2d406a3b3d@csgroup.eu>
-From:   Fangrui Song <maskray@google.com>
-Date:   Sun, 18 Dec 2022 10:31:39 -0800
-Message-ID: <CAFP8O3KZTkSbxXJ2yWt4w-F3xWHY_owCs03wN3Bhss57O-E_JQ@mail.gmail.com>
-Subject: Re: [PATCH] vdso: Improve cmd_vdso_check to check all dynamic relocations
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH V2 2/2] arm64: dts: imx: Introduce imx8mp-beacon-kit
+To:     Adam Ford <aford173@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     aford@beaconembedded.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221217234340.819752-1-aford173@gmail.com>
+ <20221217234340.819752-2-aford173@gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221217234340.819752-2-aford173@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 4, 2022 at 8:58 AM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
->
->
-> Le 04/12/2022 =C3=A0 05:50, Fangrui Song a =C3=A9crit :
-> > On Mon, Nov 14, 2022 at 4:46 PM Fangrui Song <maskray@google.com> wrote=
-:
-> >>
-> >> On 2022-11-14, Christophe Leroy wrote:
-> >>>
-> >>>
-> >>> Le 28/09/2022 =C3=A0 07:25, Fangrui Song a =C3=A9crit :
-> >>>> On Sat, Sep 10, 2022 at 12:53 AM Fangrui Song <maskray@google.com> w=
-rote:
-> >>>>>
-> >>>>> On 2022-08-30, Fangrui Song wrote:
-> >>>>>> The actual intention is that no dynamic relocation exists. However=
-, some
-> >>>>>> GNU ld ports produce unneeded R_*_NONE. (If a port is not care eno=
-ugh to
-> >>>>>> determine the exact .rel[a].dyn size, the trailing zeros become R_=
-*_NONE
-> >>>>>> relocations. E.g. powerpc64le ld as of 2.38 has the issue with
-> >>>>>> defconfig.) R_*_NONE are generally no-op in the dynamic loaders. S=
-o just
-> >>>>>> ignore them.
-> >>>>>>
-> >>>>>> With the change, we can remove ARCH_REL_TYPE_ABS. ARCH_REL_TYPE_AB=
-S is a
-> >>>>>> bit misnomer as ports may check RELAVETIVE/GLOB_DAT/JUMP_SLOT whic=
-h are
-> >>>>>> not called "absolute relocations". (The patch is motivated by the =
-arm64
-> >>>>>> port missing R_AARCH64_RELATIVE.)
-> >>>>>>
-> >>>>>> While here, replace "egrep" with "grep" as "egrep" is deprecated i=
-n GNU
-> >>>>>> grep 3.7.
-> >>>>>>
-> >>>>>> Signed-off-by: Fangrui Song <maskray@google.com>
-> >>>>>> ---
-> >>>>>> [...]
-> >>>>>>
-> >>>>>
-> >>>>> Ping.
-> >>>>
-> >>>> Ping^2 :)
-> >>>
-> >>> Can you explain which ARCH_REL_TYPE_ABS can be removed with this chan=
-ge ?
-> >>> How is the verification done if ARCH_REL_TYPE_ABS is removed ?
-> >>
-> >> All ARCH_REL_TYPE_ABS relocation types can be removed. As explained, t=
-he
-> >> real intention is to check no dynamic relocation, and this is done by
-> >> the new
->
-> Well, there was a typo in my question, I wanted to ask 'why', not 'which'=
-.
->
-> >>
-> >>     cmd_vdso_check =3D if $(READELF) -rW $@ | grep -v _NONE | grep -q =
-"R_\w*_"; \
-> >>
-> >> in this patch.
-> >>
-> >> grep -v _NONE is to work around some GNU ld ports (and likely older re=
-leases
-> >> of some ports even if their latest versions are fixed) which produce
-> >> unneeded R_*_NONE dynamic relocations.
-> >
-> > Ping :)
->
-> Ok, that seems to work on powerpc.
->
-> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+On 18/12/2022 00:43, Adam Ford wrote:
+> Beacon Embedded has an i.MX8M Plus development kit which consists
+> of a SOM + baseboard.  The SOM includes Bluetooth, WiFi, QSPI, eMMC,
+> and one Ethernet PHY. The baseboard includes audio, HDMI, USB-C Dual
+> Role port, USB Hub with five ports, a PCIe slot, and a second Ethernet
+> PHY.
+> 
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> ---
+> V2:  Fix whitespace, remove dead nodes, and fix some node and
+> parameter names to address errors in 'make dt_binding_check'
 
-Thanks. Can a maintainer pick up this commit?
+You still cannot check/test/build this DTS without Makefile.
+
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-beacon-kit.dts b/arch/arm64/boot/dts/freescale/imx8mp-beacon-kit.dts
+> new file mode 100644
+> index 000000000000..70399f2419cf
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp-beacon-kit.dts
+> @@ -0,0 +1,549 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright 2022 Logic PD, Inc dba Beacon EmbeddedWorks
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/usb/pd.h>
+> +#include <dt-bindings/phy/phy-imx8-pcie.h>
+> +#include "imx8mp.dtsi"
+> +#include "imx8mp-beacon-som.dtsi"
+> +
+> +/ {
+> +	model = "Beacon EmbeddedWorks i.MX8MPlus Development kit";
+> +	compatible = "beacon,imx8mp-beacon-kit", "fsl,imx8mp";
+> +
+> +	aliases {
+> +		ethernet0 = &eqos;
+> +		ethernet1 = &fec;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = &uart2;
+> +	};
+> +
+> +	connector-1 {
+> +		compatible = "usb-c-connector";
+> +		label = "USB-C";
+> +		data-role = "dual";
+> +
+> +		ports {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			port@0 {
+> +				reg = <0>;
+> +				hs_ep: endpoint {
+> +					remote-endpoint = <&usb3_hs_ep>;
+> +				};
+> +			};
+> +			port@1 {
+> +				reg = <1>;
+> +				ss_ep: endpoint {
+> +					remote-endpoint = <&hd3ss3220_in_ep>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +		autorepeat;
+> +
+> +		button-0 {
+> +			label = "btn0";
+> +			linux,code = <BTN_0>;
+> +			gpios = <&pca6416_1 12 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+> +			wakeup-source;
+> +		};
+> +
+> +		button-1 {
+> +			label = "btn1";
+> +			linux,code = <BTN_1>;
+> +			gpios = <&pca6416_1 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+> +			wakeup-source;
+> +		};
+> +
+> +		button-2 {
+> +			label = "btn2";
+> +			linux,code = <BTN_2>;
+> +			gpios = <&pca6416_1 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+> +			wakeup-source;
+> +		};
+> +
+> +		button-3 {
+> +			label = "btn3";
+> +			linux,code = <BTN_3>;
+> +			gpios = <&pca6416_1 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+> +			wakeup-source;
+> +		};
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +
+> +		led0 {
+
+No improvements here.
+
+> +			label = "gen_led0";
+> +			gpios = <&pca6416_1 4 GPIO_ACTIVE_HIGH>;
+> +			default-state = "off";
+> +		};
+> +
+> +		led1 {
+> +			label = "gen_led1";
+> +			gpios = <&pca6416_1 5 GPIO_ACTIVE_HIGH>;
+> +			default-state = "off";
+> +		};
+> +
+> +		led2 {
+> +			label = "gen_led2";
+> +			gpios = <&pca6416_1 6 GPIO_ACTIVE_HIGH>;
+> +			default-state = "off";
+> +		};
+> +
+> +		led3 {
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&pinctrl_led3>;
+> +			label = "heartbeat";
+> +			gpios = <&gpio4 28 GPIO_ACTIVE_HIGH>;
+> +			linux,default-trigger = "heartbeat";
+> +		};
+> +	};
+> +
+> +	pcie0_refclk: pcie0-refclk {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <100000000>;
+> +	};
+> +
+> +	reg_usdhc2_vmmc: regulator-usdhc2 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "VSD_3V3";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +		startup-delay-us = <100>;
+> +		off-on-delay-us = <20000>;
+> +	};
+> +
+> +	reg_usb1_host_vbus: regulator-usb1-vbus {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "usb1_host_vbus";
+> +		regulator-max-microvolt = <5000000>;
+> +		regulator-min-microvolt = <5000000>;
+> +		gpio = <&pca6416_1 0 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +	};
+> +};
+> +
+> +&ecspi2 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_ecspi2>;
+> +	cs-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
+> +	status = "okay";
+> +
+> +	tpm: tpm@0 {
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_tpm>;
+> +		compatible = "infineon,slb9670";
+> +		reg = <0>;
+> +		reset-gpios = <&gpio4 0 GPIO_ACTIVE_LOW>;
+> +		spi-max-frequency = <18500000>;
+> +	};
+> +};
+> +
+> +&fec {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_fec>;
+> +	phy-mode = "rgmii-id";
+> +	phy-handle = <&ethphy1>;
+> +	phy-reset-gpios = <&gpio4 18 GPIO_ACTIVE_LOW>;
+> +	phy-reset-post-delay = <150>;
+> +	phy-reset-duration = <10>;
+> +	fsl,magic-packet;
+> +	status = "okay";
+> +
+> +	mdio {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		ethphy1: ethernet1-phy@3 {
+> +			compatible = "ethernet-phy-ieee802.3-c22";
+> +			reg = <3>;
+> +		};
+> +	};
+> +};
+> +
+> +&flexcan1 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_flexcan1>;
+> +	status = "okay";
+> +};
+> +
+> +
+> +&i2c2 {
+> +	clock-frequency = <384000>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_i2c2>;
+> +	status = "okay";
+> +
+> +	pca6416_3: gpio-i2c2@20 {
+
+No improvements.
+
+> +		compatible = "nxp,pcal6416";
+> +		reg = <0x20>;
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +		interrupt-parent = <&gpio4>;
+> +		interrupts = <27 IRQ_TYPE_EDGE_FALLING>;
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +};
+> +
+> +&i2c3 {
+> +	/* Connected to USB Hub */
+> +	ptn5110: ptn5110@52 {
+
+No improvements ... I'll stop reviewing. No point if you do not intend
+to apply the comments.
+
+
+Best regards,
+Krzysztof
+
