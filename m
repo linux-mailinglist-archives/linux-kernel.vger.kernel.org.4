@@ -2,92 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D314A64FED9
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 13:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3DA64FEDE
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 13:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiLRMRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 07:17:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S230505AbiLRMXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 07:23:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiLRMRb (ORCPT
+        with ESMTP id S230367AbiLRMX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 07:17:31 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807BF9FFC;
-        Sun, 18 Dec 2022 04:17:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1671365842; bh=XSJZQSBOsi4d0bAoKp7CaBEEiAwUVRWvKYztM60uOnI=;
-        h=X-UI-Sender-Class:Date:To:Cc:References:Subject:From:In-Reply-To;
-        b=ODKyMJFUsch+gTUWSJEombrOfdlTrAg3jA+WsOVeRjl+yB0XvHfwSgxaqunpwh292
-         V8dv6Lv98BDkK0HLp/qDGJakBqU7Z3ymt9YumhU+w8eMf7SSutklriQWf17MMEoM03
-         VhtEhyA+bcCRBcciZIdVL5vwb3+FovloEHLekWJECqvr3R+j92xM75pnT+DzGFVgci
-         mak4SnxOu8cbsFxOmPW7b1I67aDm2+k8TppOlQD0O/B6mqY37/d1hG/qukUf04Ff4Z
-         WIMNhJ9sA1yi/kJA9x676WPrOOIHO006hXjKI9zi7VOiKBuVHu5BU/xZaxyz6/uvXS
-         75Znr1for0nNg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [10.135.7.124] ([89.245.113.112]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MJE2D-1pLXB30LOd-00Kcnd; Sun, 18
- Dec 2022 13:17:22 +0100
-Message-ID: <dad11455-94e1-4b8c-d382-7100f08cd896@gmx.net>
-Date:   Sun, 18 Dec 2022 13:17:20 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-To:     perry.yuan@amd.com
-Cc:     Alexander.Deucher@amd.com, Deepak.Sharma@amd.com, Li.Meng@amd.com,
-        Mario.Limonciello@amd.com, Nathan.Fontenot@amd.com,
-        Shimmer.Huang@amd.com, Xiaojian.Du@amd.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael.j.wysocki@intel.com, ray.huang@amd.com,
-        viresh.kumar@linaro.org, wyes.karny@amd.com
-References: <20221208111852.386731-9-perry.yuan@amd.com>
-Subject: Re: [PATCH v7 08/13] cpufreq: amd-pstate: add frequency dynamic boost
- sysfs control
-Content-Language: de-DE
-From:   Thomas Koch <linrunner@gmx.net>
-In-Reply-To: <20221208111852.386731-9-perry.yuan@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:HHp7xb9naCA/Og7wFQa8uywCwZ/e5qFDv7qgmjsDWSfQvmuUXND
- je4hJP3Edz2Ru/nALLMowbfCDo45zrttm5r8AyRheUNP81TnE3Yz0osKZUWRBxRc+pwaIvD
- AjFPXL2EJs/OmUW3QCkiyFXb3PtvGBrsdpqANd+cwwaxtTxl6KlXKK1zJQL+l63ixD/sXWP
- 4LtvZxlx1w5yWD/GmEr2w==
-UI-OutboundReport: notjunk:1;M01:P0:NBbGoEkYW/o=;A2hfG0T/RjElhLwOxwGsLnxYEX3
- i0WITTC7MOjyDWk6E6AgL4PMjcfGMCsZLa5T80m9U8exjuMCRZbeAeHCvYFzKwAVbN01B84jV
- SC6AKH4JfD3xUfEcS9m0lnthv+C0bNAVp3d6DmK4wdkWJECBBMPiDb01a2eoGIOA6cdKMyz9E
- zek6/Lx+y63+Uv1PA8p+iN0AVGOPbd9e/6/soi4w+w1MG91JyNI8h9DSsKxymHBWhXI1NQ23/
- riJXAj2I7Ttq+trVRHJ5bxy6osr2/2g+6ZQ9EFzAXtdXF9Cl52KF+6jY7P2w6oLM3xpk7dmtZ
- smnGvVxXvkrUXPCYdHTZTGChuOzojzto6SHsg7cfoPSElm/RNRa66rvq6i3PvIhgkYuDfBWP0
- ISx2VZrSab4jqeNIx+mD5EfEDJhqrcfzWjMi9Wr9ZAwckpRPeRToKpcI3NvDODiiYXt12t68v
- ARPh8BziYbTBTPRPXLeC7lpnsAPpIuxjsxCuiBwstkp4VdtVM1fANBUhEsaAqmCwu4TLEab7Q
- kxAV8aWfOFVG10NDHk+wQhwXwRjgvZpKGXLj9w1pp+I+fOQDkGIaTs+T2EUGxIFxJYzCRhVpb
- 0/aQ1tEfkA3y/At+jiiYXPX3Pi/07rP+zkQ0UBnbREm/yTKPet/JQy0J7zoJpnBVaxF5TkHty
- ME6eKH29AA2VgfBT+yfN8am7VaKgKUtfts2IG1ITpmo2s6PXxCQ5C9ABs2eQDijbWcN5InSsg
- 2F2z/BAhsakU30C2YcREBCaratd9iTJvDundidD+NZvfMxVTWyGWlyzg+s/+7mLgFuidOOV5S
- /O2hporky5QdarAYJbYQKcgs8Wm7fJYC8ZXjRIOMk1nmDq0ywFU8/wOsJ13Uy0gy7lRhC2y95
- D8nOLA21ipi7RtRA+0HVWUnsD66sqZMEEr28rMutZVxtqABNLzJ+OVIz1ALZkgPCqtj2cblg1
- imBY8g==
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 18 Dec 2022 07:23:29 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4571EB1EF;
+        Sun, 18 Dec 2022 04:23:27 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BIBjpUR031124;
+        Sun, 18 Dec 2022 12:22:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : in-reply-to : references : content-type : mime-version :
+ date : content-transfer-encoding; s=pp1;
+ bh=WxTmQAcu65HvZSfDdjLU4w7Z21Y7RIeLQOxcGzy0fO8=;
+ b=U2YJgyi8Zgjm6PDc2OBJaqpEUQhrsEZFBKckO9IOiJ62R3g1BBsKoCKifhikZIezJlbK
+ Bk6W4qHcauHgkKkGZk6rlRttCryDvUoVoin+7FsleXj8zF+cXqfoI8YIuJ06W2CtdfjZ
+ 6VJE/kKeRl881RCunRcqZ59IfdQYhNPT9Iy4WPf2BXbEUow06kI6rqVBgf6ZI8AwAoZk
+ EIZ3vfnwSnnfBaqD6g0cGT5d7Goi1Fp1zbbaphJH8e1oqCTvhSoN+OuKDh6KDh/5/2v4
+ mSFFTzT7ihAad8zz0/n8NQ6b5sgi0lnuS1l9GBV1WpvJrTIaDX5ZsN6LxTbRGVtELp7p rw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mj29a8exp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 18 Dec 2022 12:22:49 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BICMmmY009188;
+        Sun, 18 Dec 2022 12:22:48 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mj29a8exd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 18 Dec 2022 12:22:48 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BIB2SXA032709;
+        Sun, 18 Dec 2022 12:22:47 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3mh6yy946f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 18 Dec 2022 12:22:47 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BICMkbU48628026
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 18 Dec 2022 12:22:46 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ECC355805E;
+        Sun, 18 Dec 2022 12:22:45 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6E4CC58052;
+        Sun, 18 Dec 2022 12:22:44 +0000 (GMT)
+Received: from sig-9-65-200-126.ibm.com (unknown [9.65.200.126])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Sun, 18 Dec 2022 12:22:44 +0000 (GMT)
+Message-ID: <2d75dfd105f8558ecd1074d64e4252ddd63b698b.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 00/10] Add CA enforcement keyring restrictions
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Coiby Xu <coxu@redhat.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "pvorel@suse.cz" <pvorel@suse.cz>,
+        "noodles@fb.com" <noodles@fb.com>, "tiwai@suse.de" <tiwai@suse.de>,
+        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
+        Konrad Wilk <konrad.wilk@oracle.com>,
+        Elaine Palmer <erpalmer@linux.vnet.ibm.com>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+In-Reply-To: <20221216140648.h32gn5qf3igorpzi@Rk>
+References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
+         <b8e54d077da633132eb6da03ea536face095a425.camel@linux.ibm.com>
+         <4CE6F17D-9D87-4024-9E1A-FDFE7C29D5FC@oracle.com>
+         <1c51910a35a1d113256494827fd66ccc7473632e.camel@linux.ibm.com>
+         <17855993-519C-4DAC-B62F-9DB473CF249B@oracle.com>
+         <7df94da37c100c160436892a6996ba30e3fd6dc8.camel@linux.ibm.com>
+         <21E52C3E-0778-4908-AF44-F65D57BEC4E0@oracle.com>
+         <20221216140648.h32gn5qf3igorpzi@Rk>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Date:   Sun, 18 Dec 2022 07:21:33 -0500
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: CgykJuAjHJKV3cQtZgITuWlpnXVrL2vc
+X-Proofpoint-GUID: Zmjte6GnxXnxz1MaK9VlLUvWvnrfsDGP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-18_02,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ impostorscore=0 suspectscore=0 phishscore=0 spamscore=0 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 malwarescore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212180114
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Perry,
+On Fri, 2022-12-16 at 22:06 +0800, Coiby Xu wrote:
+> Hi Eric and Mimi,
+> 
+> On Thu, Dec 15, 2022 at 09:45:37PM +0000, Eric Snowberg wrote:
+> >
+> >
+> >>>>>>> A CA cert shall be defined as any X509 certificate that contains the
+> >>>>>>> keyCertSign key usage and has the CA bit set to true.
+> >>>>>>
+> >>>>>> Hi Eric,
+> >>>>>>
+> >>>>>> Allowing CA certificates with the digitalSignature key usage flag
+> >>>>>> enabled defeats the purpose of the new Kconfig.  Please update the
+> >>>>>> above definition to exclude the digitalSignature key usage flag and
+> >>>>>> modify the code accordingly.
+> >>>>>
+> >>>>> Within v2, the request was made to allow Intermediate CA certificates to be
+> >>>>> loaded directly.  The Intermediate CA referenced was the one used by kernel.org.
+> >>>>> This Intermediate CA contains both digitalSignature and keyCertSign.  If the code
+> >>>>> is changed to exclude this certificate, now the root CA has to be loaded again.  Is that
+> >>>>> the intent?
+> >>>>
+> >>>> That definitely was not the intent.  Nor would it address the issue of
+> >>>> a particular intermediate CA certificate having both keyCertSign and
+> >>>> digitalSignature.
+> >>>
+> >>> Sorry, I’m not following.  Why is it an issue that an intermediate CA certificate contains
+> >>> both keyCertSign and digitalSignature? Why would we want to exclude an Intermediate
+> >>> CA cert like the one used on kernel.org?
+> >>
+> >> I must be missing something.  Isn't the purpose of "keyUsage" to
+> >> minimize how a certificate may be used?   Why would we want the same
+> >> certificate to be used for both certificate signing and code signing?
+> >
+> >Every 3rd party intermediate CA I have looked at so far contains both set. Most have CRLSign set.
+> >Typically the root CA contains keyCertSign and CRLSign, but some also have digitalSignature
+> >set.  Finding a 3rd party Intermediate CA without digitalSignature set is probably going to be
+> >challenging and will severely limit usage.
+> 
+> How about allowing both keyCertSign and digitalSignature asserted but
+> issuing a warning for this case?
+> 
+> Here's my rationale for this proposal.
+> 
+> I assume we should conform to some X.509 specifications. So I checked
+> "RFC 5280: Internet X.509 Public Key Infrastructure Certificate and
+> Certificate Revocation List (CRL) Profile" [1] and ITU-T X.509 (2012-10)
+> [2].
+> 
+> [1] states in 4.2.1.3. Key Usage,
+>     "If the keyUsage extension is present, then the subject public key
+>     MUST NOT be used to verify signatures on certificates or CRLs unless
+>     the corresponding keyCertSign or cRLSign bit is set.  If the subject
+>     public key is only to be used for verifying signatures on
+>     certificates and/or CRLs, then the digitalSignature and
+>     nonRepudiation bits SHOULD NOT be set.  However, the digitalSignature
+>     and/or nonRepudiation bits MAY be set in addition to the keyCertSign
+>     and/or cRLSign bits if the subject public key is to be used to verify
+>     signatures on certificates and/or CRLs as well as other objects."
+> 
+> and [2] states in 8.2.2.3 Key usage extension that,
+>    "More than one bit may be set in an instance of the keyUsage extension.
+>    The setting of multiple bits shall not change the meaning of each
+>    individual bit but shall indicate that the certificate may be used for
+>    all of the purposes indicated by the set bits. There may be risks
+>    incurred when setting multiple bits. A review of those risks is
+>    documented in Annex I."
+> 
+> I interpret the above texts as we should allow both keyCertSign and
+> digitalSignature. However [2] warns about the risks of setting multiple
+> bits. Quoting Annex I,
+> 
+>    "Combining the contentCommitment bit in the keyUsage certificate
+>    extension with other keyUsage bits may have security implications
+>    depending on the security environment in which the certificate is to be
+>    used. If the subject's environment can be fully controlled and trusted,
+>    then there are no specific security implications. For example, in cases
+>    where the subject is fully confident about exactly which data is signed
+>    or cases where the subject is fully confident about the security
+>    characteristics of the authentication protocol being used. If the
+>    subject's environment is not fully controlled or not fully trusted, then
+>    unintentional signing of commitments is possible. Examples include the
+>    use of badly formed authentication exchanges and the use of a rogue
+>    software component. If untrusted environments are used by a subject,
+>    these security implications can be limited through use of the following
+>    measures:   
+>     – to not combine the contentCommitment key usage setting in
+>       certificates with any other key usage setting and to use the
+>       corresponding private key only with this certificate;   
+>       
+>     – to limit the use of private keys associated with certificates that
+>       have the contentCommitment key usage bit set, to environments which
+>       are considered adequately controlled and trustworthy"
+> 
+> So maybe it's useful to add a warning if both keyCertSign and
+> digitalSignature are asserted.
 
-in amd_pstate active mode, where is the equivalent to
-/sys/devices/system/cpu/cpufreq/boost?
+Coiby, thank you for adding these details.  I was hoping others would
+chime in as well.  I agree at minimum there should be a warning.
 
-Is it /sys/devices/system/cpu/amd-pstate/cppc_dynamic_boost or something
-else?
+Perhaps instead of making INTEGRITY_CA_MACHINE_KEYRING dependent on
+INTEGRITY_MACHINE_KEYRING, make them a Kconfig "choice" to support the
+more restrictive certificate use case requirements:  all certificates,
+CA certificate signing and digital signature, only CA certificate
+signing.
 
-=2D-
-Freundliche Gr=C3=BC=C3=9Fe / Kind regards,
-Thomas Koch
+-- 
+thanks,
 
-Mail : linrunner@gmx.net
-Web  : https://linrunner.de/tlp
+Mimi
+
