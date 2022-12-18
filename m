@@ -2,106 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A5764FDA9
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 06:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC91A64FDB2
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 06:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbiLRFEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 00:04:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
+        id S230052AbiLRFP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 00:15:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiLRFEP (ORCPT
+        with ESMTP id S229641AbiLRFPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 00:04:15 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670BDDF54
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 21:04:14 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id m4so6083044pls.4
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 21:04:14 -0800 (PST)
+        Sun, 18 Dec 2022 00:15:25 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047BDD112
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 21:15:25 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id d7so6067149pll.9
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 21:15:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f+8uGGe5vOHJy+eJbczvZUafBVT7vGqMpKgjkjdLPuI=;
-        b=AUG89S3jopByrFoGln5MN2jF636XiStemIMcMCSuWk6oMNg9iO5UueelIFV1njqVHI
-         8xNZEK61XzIFE2aWXLg7XVYQC1MaKdi04PvGO8eEWf5i0agL+phx0a/uzwxqJ2TJTgwH
-         AycuZtmDn3/WjVykXDC1dg5Mberq7kxe2g/BlX3iT/qih/EOb9StiFbVsITj++WLdqKi
-         HJ/OQx8/vocQ0oOZqlOUc+f52B4lnLYMNRCSivjeLzqjt81UXIlt1PyO/OvGS6g157/0
-         toRr2GFIHeXC5KeT/KPDcr04xRb8r9YktQ5di2tIWEFfiODOoieEoMEsf6vTWIepEr8P
-         /N9Q==
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a01G1GBaf3qfiSutprsFR/TlqOiwESaNiFiCPW34lhQ=;
+        b=oB2m/VIEAkS9xOaITyE3rjE56r6CApd8uv6/I9Uhzf8pGv9vmJR578c5JqGMjoKvPv
+         kRaPQEyoEv/UxuTchSJGFAhseLU8GEBHWCYoQenv0Ni/ERulgVgmbY3R/CwgWJw/TvAs
+         3IeonmoVwK5kmEVznc8OofYBZSw1es2YvP7mL6RU21/0ABA/Kh6iBYlEl6MlbLsjVe4X
+         ALHKRtXC/iDcupj1w/c56rFgGtEO3dQpCE4BWpSytHZIad5dgzuxbns1fNb3nFkpVaw0
+         ts9lgWdtWxzOk2YhyxanXAGFYk4O0Rk9MCFkzxjA6qSrJb/6shjAA5V82VzCfyKPQ4Og
+         HTbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f+8uGGe5vOHJy+eJbczvZUafBVT7vGqMpKgjkjdLPuI=;
-        b=Gi7w3zHrf80xQk1bdTuMZ7anxOZ+QWBgT7cTj6HJh1VQYgPoIMoRw78VwmKLVXaUEN
-         xtUu2tPEIRCBaKwc2m+DyU7WrlmyO1rDBGzkmXK/VxB/FoDC04hfkiyguKTLug0GRAla
-         Py6oe+GgMnTdPELrNl2Yt+jbKbnBahbCKgHH/8hS1Qwt5Z4+BJBJy4T315pLH89lOxu1
-         NiODpZ2woXCW0khLuuCSPQrt+Su9qWuQeO8FDvDgVxXViqwU48AmqzLCSskN2/855N/Z
-         BPWgu02h3wm4FCOcUjLri3BnkLN0Lbgz94nUioUhLHW4677/CNESdUMMnAjRSdxOuFkW
-         hSYw==
-X-Gm-Message-State: ANoB5pmZFA9v4LD5PQM4YWuBK9sazh0AG0PPY1SzL6wI5oAohNNvUSjG
-        zCVx2eXasyQQNBAhzbz3mwLekyzsueczuNbt
-X-Google-Smtp-Source: AA0mqf4fYXX0D8kW4sXkaUW54DlF0CmQmMpx1VD8zG+Ot+MLlJkclZfPF/nBOvlrmMAFTwpnCLaHkg==
-X-Received: by 2002:a05:6a21:9212:b0:9f:2dd1:c2bc with SMTP id tl18-20020a056a21921200b0009f2dd1c2bcmr47116953pzb.49.1671339853827;
-        Sat, 17 Dec 2022 21:04:13 -0800 (PST)
-Received: from devtp.bytedance.net ([139.177.225.227])
-        by smtp.gmail.com with ESMTPSA id v20-20020a170902ca9400b001708c4ebbaesm4339348pld.309.2022.12.17.21.04.07
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a01G1GBaf3qfiSutprsFR/TlqOiwESaNiFiCPW34lhQ=;
+        b=6z6TzMUJidI0Kjp7sAkBPhx9s17D66Wzc5JrNvrjK2eVWxtIGCqoI4Sgdc8g7wiQHO
+         SKLWQIUc05BMQOf3s79ng2Qga37qD7ZmPa+tE76yM0hUmfZZFnLfLo1irnEFZMECK2ZB
+         +mKqJa3vfApGUOFkn/pw1ax5lYY6CpVBx3qK0J9U6lqpDmaJwzAt6Ayu/rXWlm4AFVDy
+         Tu6FPO6tRYlQ0sK0ImbAtSUNSGh/RfeMaBHcT1OVVb0xiLl7nL9MVVyl51qH9XQw5b5O
+         VwXIRtm8qf7k0O0CjTq/RpjUnmPzqTINcC83jgAYxmydYBgTHiFSUG9DamYhSND4E1el
+         uA+A==
+X-Gm-Message-State: ANoB5pk+x/VV5AY7wCOvoAg2jRjUs7PRGk1gmlxI6aQlYDllWt88AIhW
+        /cj0y12y7xV95/BTkblWyQkG1HyLxQx9l+7wicg=
+X-Google-Smtp-Source: AA0mqf72YV5edT4kAgOZXEWT3kE8W12UBWocuqS2BFj9Nm3zqofKc8b75dDfMhucuQYOpxQGxpjPjQ==
+X-Received: by 2002:a17:90b:4a8c:b0:219:e763:1d21 with SMTP id lp12-20020a17090b4a8c00b00219e7631d21mr39250867pjb.5.1671340524491;
+        Sat, 17 Dec 2022 21:15:24 -0800 (PST)
+Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id b1-20020a17090a6ac100b002139459e121sm7002417pjm.27.2022.12.17.21.15.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Dec 2022 21:04:13 -0800 (PST)
-From:   wuqiang <wuqiang.matt@bytedance.com>
-To:     mhiramat@kernel.org, davem@davemloft.net,
-        anil.s.keshavamurthy@intel.com, naveen.n.rao@linux.ibm.com,
-        rostedt@goodmis.org, peterz@infradead.org,
-        akpm@linux-foundation.org, sander@svanheule.net,
-        ebiggers@google.com, dan.j.williams@intel.com, jpoimboe@kernel.org
-Cc:     linux-kernel@vger.kernel.org, lkp@intel.com, mattwu@163.com,
-        wuqiang <wuqiang.matt@bytedance.com>
-Subject: [PATCH v8 5/5] MAINTAINERS: objpool added
-Date:   Sun, 18 Dec 2022 13:03:10 +0800
-Message-Id: <20221218050310.1338630-6-wuqiang.matt@bytedance.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221218050310.1338630-1-wuqiang.matt@bytedance.com>
-References: <20221218050310.1338630-1-wuqiang.matt@bytedance.com>
+        Sat, 17 Dec 2022 21:15:23 -0800 (PST)
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>,
+        Akihiko Odaki <akihiko.odaki@daynix.com>
+Subject: [PATCH v3 0/7] KVM: arm64: Normalize cache configuration
+Date:   Sun, 18 Dec 2022 14:14:05 +0900
+Message-Id: <20221218051412.384657-1-akihiko.odaki@daynix.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ojbpool, a scalable and lockless ring-array based object pool, was
-introduced to replace the original freelist (a LIFO queue based on
-singly linked list) to improve kretprobe scalability.
+Before this change, the cache configuration of the physical CPU was
+exposed to vcpus. This is problematic because the cache configuration a
+vcpu sees varies when it migrates between vcpus with different cache
+configurations.
 
-Signed-off-by: wuqiang <wuqiang.matt@bytedance.com>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+Fabricate cache configuration from the sanitized value, which holds the
+CTR_EL0 value the userspace sees regardless of which physical CPU it
+resides on.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 886d3f69ee64..9584aa440eb9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14914,6 +14914,13 @@ F:	include/linux/objagg.h
- F:	lib/objagg.c
- F:	lib/test_objagg.c
- 
-+OBJPOOL
-+M:	Matt Wu <wuqiang.matt@bytedance.com>
-+S:	Supported
-+F:	include/linux/objpool.h
-+F:	lib/objpool.c
-+F:	lib/test_objpool.c
-+
- OBJTOOL
- M:	Josh Poimboeuf <jpoimboe@kernel.org>
- M:	Peter Zijlstra <peterz@infradead.org>
+V2 -> V3:
+- Corrected message for patch "Normalize cache configuration"
+- Split patch "Normalize cache configuration"
+- Added handling for CSSELR_EL1.TnD
+- Added code to ignore RES0 in CSSELR_EL1
+- Replaced arm64_ftr_reg_ctrel0.sys_val with
+  read_sanitised_ftr_reg(SYS_CTR_EL0)
+- Fixed vcpu->arch.ccsidr initialziation
+- Added CCSIDR_EL1 sanitization
+- Added FWB check
+- Added a comment for CACHE_TYPE_SEPARATE
+- Added MTE tag cache creation code for CLIDR_EL1 fabrication
+- Removed CLIDR_EL1 reset code for reset caused by guest
+- Added a comment for CCSIDR2
+
+V2: https://lore.kernel.org/lkml/20221211051700.275761-2-akihiko.odaki@daynix.com/
+V1: https://lore.kernel.org/lkml/525ff263-90b3-5b12-da31-171b09f9ad1b@daynix.com/
+
+Akihiko Odaki (7):
+  arm64/sysreg: Convert CCSIDR_EL1 to automatic generation
+  arm64/sysreg: Add CCSIDR2_EL1
+  arm64/cache: Move CLIDR macro definitions
+  KVM: arm64: Always set HCR_TID2
+  KVM: arm64: Allow user to set CCSIDR_EL1
+  KVM: arm64: Mask FEAT_CCIDX
+  KVM: arm64: Normalize cache configuration
+
+ arch/arm64/include/asm/cache.h             |   9 +
+ arch/arm64/include/asm/kvm_arm.h           |   3 +-
+ arch/arm64/include/asm/kvm_emulate.h       |   4 -
+ arch/arm64/include/asm/kvm_host.h          |   6 +-
+ arch/arm64/include/asm/sysreg.h            |   1 -
+ arch/arm64/kernel/cacheinfo.c              |   5 -
+ arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h |   2 -
+ arch/arm64/kvm/reset.c                     |   1 +
+ arch/arm64/kvm/sys_regs.c                  | 246 +++++++++++++--------
+ arch/arm64/tools/sysreg                    |  16 ++
+ 10 files changed, 182 insertions(+), 111 deletions(-)
+
 -- 
-2.34.1
+2.38.1
 
