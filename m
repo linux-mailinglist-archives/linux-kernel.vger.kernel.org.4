@@ -2,132 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4EDC64FE75
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 11:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D9164FE7E
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 11:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbiLRK0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 05:26:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38276 "EHLO
+        id S230388AbiLRKla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 05:41:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiLRK0N (ORCPT
+        with ESMTP id S230314AbiLRKl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 05:26:13 -0500
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DC65F98
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 02:26:12 -0800 (PST)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 2620A1F82A;
-        Sun, 18 Dec 2022 11:26:10 +0100 (CET)
-Date:   Sun, 18 Dec 2022 11:26:08 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Lux Aliaga <they@mint.lgbt>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] arm64: dts: qcom: sm6125: Add apps_smmu with
- streamID to SDHCI 1/2 nodes
-Message-ID: <20221218102608.bzfyjnz64hcm4fj5@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Lux Aliaga <they@mint.lgbt>, Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20221216215819.1164973-1-marijn.suijten@somainline.org>
- <20221216215819.1164973-4-marijn.suijten@somainline.org>
+        Sun, 18 Dec 2022 05:41:26 -0500
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD404CFC;
+        Sun, 18 Dec 2022 02:41:25 -0800 (PST)
+Received: by mail-pj1-f51.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso6414041pjh.1;
+        Sun, 18 Dec 2022 02:41:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hWhSManBI4je4nMxJMM4ZaSPOEOq6LDDo1RylzkNEqQ=;
+        b=7Cwbeq11ZQeA9qovUP2Xg+slFu+jtJmNCl6nIIo/58yvtjGhjmp3qx19HrX+Ibz369
+         sd4u+m8vJtEHyWKlf5RnEmGVFZKH91Rbh+8x2Y5V6r4Lj/Do2GExOtFuRjN2a8k729x9
+         c5fnJbnEb3THWDDgtO7sFyk31qxHcGsanI/cyfncZhMW5jcnNMHTl6clseVd9wH6Et3a
+         F6IMNHvL+/k4dMhfIUtgVulpR/6RHB0D6mu8sagyHMbAN0xRkzk3mWxNGKez0gWH3IFk
+         h2onlIcRjn1A37aYrFx+9cjMWGiAoZd2gZ3JuZjFmhcVaP+B48gNLIKhtbtHteGu2f+p
+         ngEQ==
+X-Gm-Message-State: ANoB5pmCYb6f2uymyEGI7i+cfr5r/xcckZfD19zEE9KxmQ14Z3DiISdn
+        nUqRySl9pL7AM4M6v8uubvs=
+X-Google-Smtp-Source: AA0mqf5WO/7Cijtn5yQNAZZB8BrGz8AsTdLX2xUNi50p8THnp+UgPHQu+gm30xlzQSkYGxl6fclYfw==
+X-Received: by 2002:a17:902:a588:b0:185:441e:90b5 with SMTP id az8-20020a170902a58800b00185441e90b5mr38289081plb.27.1671360085146;
+        Sun, 18 Dec 2022 02:41:25 -0800 (PST)
+Received: from rocinante (fpd11144dd.ap.nuro.jp. [209.17.68.221])
+        by smtp.gmail.com with ESMTPSA id h20-20020a170902f7d400b00189548573a2sm4815698plw.161.2022.12.18.02.41.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Dec 2022 02:41:24 -0800 (PST)
+Date:   Sun, 18 Dec 2022 19:41:21 +0900
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Eli Cohen <elic@nvidia.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+Subject: Re: dynamic MSIX submission plans
+Message-ID: <Y57uUaSWXkSxZzHy@rocinante>
+References: <DM8PR12MB5400783BA8E864AC3DA47BD0ABE49@DM8PR12MB5400.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221216215819.1164973-4-marijn.suijten@somainline.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <DM8PR12MB5400783BA8E864AC3DA47BD0ABE49@DM8PR12MB5400.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-16 22:58:18, Marijn Suijten wrote:
-> When enabling the APPS SMMU the mainline driver reconfigures the SMMU
-> from its bootloader configuration, loosing the stream mapping for (among
-> which) the SDHCI hardware and breaking its ADMA feature.  This feature
-> can be disabled with:
-> 
->     sdhci.debug_quirks=0x40
-> 
-> But it is of course desired to have this feature enabled and working
-> through the SMMU.
-> 
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm6125.dtsi | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> index 347665c2067c..f560499cc0ca 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> @@ -468,6 +468,7 @@ sdhc_1: mmc@4744000 {
->  				 <&gcc GCC_SDCC1_APPS_CLK>,
->  				 <&xo_board>;
->  			clock-names = "iface", "core", "xo";
-> +			iommus = <&apps_smmu 0x160 0>;
+Hi Eli,
 
-I'll make the mask 0x0 (same below) in the next revision, please do not
-apply this patch.
-
-- Marijn
-
->  			power-domains = <&rpmpd SM6125_VDDCX>;
->  
-> @@ -494,6 +495,7 @@ sdhc_2: mmc@4784000 {
->  				 <&gcc GCC_SDCC2_APPS_CLK>,
->  				 <&xo_board>;
->  			clock-names = "iface", "core", "xo";
-> +			iommus = <&apps_smmu 0x180 0>;
->  
->  			pinctrl-0 = <&sdc2_on_state>;
->  			pinctrl-1 = <&sdc2_off_state>;
-> -- 
-> 2.39.0
+> With reference to this work
+> https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git
 > 
+> Can you share your plans with respect to submission?
+> 
+> Are you going to send them for the next kernel?
+
+I assume this was intended to be a private conversation?
+
+	Krzysztof
