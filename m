@@ -2,298 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8CA64FE9E
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 12:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3699864FEA3
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 12:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbiLRLNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 06:13:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46234 "EHLO
+        id S230370AbiLRLZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 06:25:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiLRLNb (ORCPT
+        with ESMTP id S230008AbiLRLZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 06:13:31 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418232DD3
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 03:13:29 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id u5so6494715pjy.5
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 03:13:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bj58fIt+qJydCfyNzVeCHORGcPLQ9XK7V8aCuX3pXug=;
-        b=5a1eXguRdAGVjYb/NPWQ9Ytpxe5kmDCVYyojCgvvb83+9XeovdU6lB6nvW8a+0tMAd
-         NcUL9eaH5VQERezbLbZW4zBj70WRQSWu9d56z4MsVXEIlhGL2nrIEUK3LeiGrWuo+DpK
-         tpQ2QZ2H8OXv+i4kPX7oJ5Gc+LAkJuUY9w4nOyMZa2NlO5KuHoBVFz2mVRutkjiT+JMQ
-         DDkayo4nsPlJErSwX+YNpfao+UqQyyA24b9o1ed2dIiBmFIoyz6Kb1nIghxfc92RZj4j
-         L6kIHMxbDTPV4vY3YUCtN+pRi0g4wYToUpUQ0c47WJAiKNcyQNdnkXoCo7/yFP76DIdk
-         COcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bj58fIt+qJydCfyNzVeCHORGcPLQ9XK7V8aCuX3pXug=;
-        b=UZdGf4vZGL/9ORyjdzWDISQxeGVTyHTLlhPoca+CzQtjpu3nLuCeV0GTerjOJR9BI4
-         Ysqu5Pi6nTIKRN53BnnZIQESKq1pu8/J4AxapqqgfDUwFTvte/9Pb+tKPij8f49atR6I
-         lNRZEC2qQLNd6ztP+9JSF194q/MoXDvhJE8y+J4MpUajWUOsrAFQAXQiCOnTMqua0N2C
-         tvXouXW7GJWShRifwr06trB+VMMXjM24Mo0MK2g9PwzuwrWjwm1VRbHFxE7SGC3aA4zS
-         wQXJeXMMBfHfn1lNacyRWX644FJF2S6+rGvAlCA8wR4xKaNnlZYOmiwP76ZDkIzJYcOc
-         vgJw==
-X-Gm-Message-State: AFqh2kqwsLGDwmQsYDOODwiKNUvJwWMfTsxrGF5WmaFj20NiLvlFfNOk
-        /qvYTlfacUvvovt8w23qfI7u9w==
-X-Google-Smtp-Source: AMrXdXtBJ3f5/hcS5KH8J4TUZSeF7LgpX1tc9Z/zVcLXR1oDs/v2wQ1IrHxLolGz5FsJOAfNFTEb5A==
-X-Received: by 2002:a05:6a20:2d8f:b0:b0:2070:2ef5 with SMTP id bf15-20020a056a202d8f00b000b020702ef5mr2606422pzb.22.1671362008699;
-        Sun, 18 Dec 2022 03:13:28 -0800 (PST)
-Received: from localhost.localdomain ([139.177.225.231])
-        by smtp.gmail.com with ESMTPSA id x21-20020a63fe55000000b0043c22e926f8sm4227235pgj.84.2022.12.18.03.13.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Dec 2022 03:13:28 -0800 (PST)
-From:   Jinke Han <hanjinke.666@bytedance.com>
-X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
-To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yinxin.x@bytedance.com,
-        Jinke Han <hanjinke.666@bytedance.com>
-Subject: [PATCH] blk-throtl: Introduce sync and async queues for blk-throtl
-Date:   Sun, 18 Dec 2022 19:13:14 +0800
-Message-Id: <20221218111314.55525-1-hanjinke.666@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 18 Dec 2022 06:25:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7938395B9
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 03:25:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1A1B60D2B
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 11:25:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35A4AC433D2;
+        Sun, 18 Dec 2022 11:25:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671362713;
+        bh=wwgGeYny5f5AHk6ZOFRk76mpsA6gB8yKbtwbzFis2D4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lS2C7AoRG3nj2J4y1kkvbi+n/qBlaxvkTKu8j4LjDwru3o9jVHtYmgCOlQUHNuC/X
+         d8GI+zFjL4Lg1qBdZC2QHMnpNvFEoW0aB4AAog+UYfc8jbilz4AO89pwsqvlJrDkhc
+         A2+FHKtUt2c7eozkbepsxsQv1kgETRmesY0rqGEWJhe5JW0kz5izGqFThoUGjYq1o4
+         QYDdBYanIT1ksd48vPU76CU/bAkdm7+MAY1B0GpfoBo4RA6F5wyMZaskMddwlztLlh
+         ycV9NQowizGvCpZp5PXqgDgwTIDjH3M00/oeybpmo7JDZwiRW/r9IDH6yC9+J7p0wu
+         UW7mcJe84CG0w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p6rn4-00DQUS-Nx;
+        Sun, 18 Dec 2022 11:25:10 +0000
+Date:   Sun, 18 Dec 2022 11:23:41 +0000
+Message-ID: <87cz8hez0i.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v3 1/7] arm64/sysreg: Convert CCSIDR_EL1 to automatic generation
+In-Reply-To: <20221218051412.384657-2-akihiko.odaki@daynix.com>
+References: <20221218051412.384657-1-akihiko.odaki@daynix.com>
+        <20221218051412.384657-2-akihiko.odaki@daynix.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: akihiko.odaki@daynix.com, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, mathieu.poirier@linaro.org, oliver.upton@linux.dev, suzuki.poulose@arm.com, alexandru.elisei@arm.com, james.morse@arm.com, will@kernel.org, catalin.marinas@arm.com, asahi@lists.linux.dev, alyssa@rosenzweig.io, sven@svenpeter.dev, marcan@marcan.st
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinke Han <hanjinke.666@bytedance.com>
+On Sun, 18 Dec 2022 05:14:06 +0000,
+Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+> 
+> Convert CCSIDR_EL1 to automatic generation as per DDI0487I.a. The field
+> definition is for case when FEAT_CCIDX is not implemented. Fields WT,
+> WB, RA and WA are defined as per A.j since they are now reserved and
+> may have UNKNOWN values in I.a, which the file format cannot represent.
+>
+> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> ---
+>  arch/arm64/include/asm/sysreg.h |  1 -
+>  arch/arm64/tools/sysreg         | 11 +++++++++++
+>  2 files changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+> index 7d301700d1a9..910e960661d3 100644
+> --- a/arch/arm64/include/asm/sysreg.h
+> +++ b/arch/arm64/include/asm/sysreg.h
+> @@ -425,7 +425,6 @@
+>  
+>  #define SYS_CNTKCTL_EL1			sys_reg(3, 0, 14, 1, 0)
+>  
+> -#define SYS_CCSIDR_EL1			sys_reg(3, 1, 0, 0, 0)
+>  #define SYS_AIDR_EL1			sys_reg(3, 1, 0, 0, 7)
+>  
+>  #define SYS_RNDR_EL0			sys_reg(3, 3, 2, 4, 0)
+> diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+> index 384757a7eda9..acc79b5ccf92 100644
+> --- a/arch/arm64/tools/sysreg
+> +++ b/arch/arm64/tools/sysreg
+> @@ -871,6 +871,17 @@ Sysreg	SCXTNUM_EL1	3	0	13	0	7
+>  Field	63:0	SoftwareContextNumber
+>  EndSysreg
+>  
+> +Sysreg	CCSIDR_EL1	3	1	0	0	0
+> +Res0	63:32
+> +Field	31:31	WT
+> +Field	30:30	WB
+> +Field	29:29	RA
+> +Field	28:28	WA
 
-Now we don't distinguish sync write ios from normal buffer write ios
-in blk-throtl. A bio with REQ_SYNC tagged always mean it will be wait
-until write completion soon after it submit. So it's reasonable for sync
-io to complete as soon as possible.
+For fields described as a single bit, the tool supports simply
+indicating the bit number (28 rather than 28:28).
 
-In our test, fio writes a 100g file in sequential 4k blocksize in
-a container with low bps limit configured (wbps=10M). More than 1200
-ios were throttled in blk-throtl queue and the avarage throtle time
-of each io is 140s. At the same time, the operation of saving a small
-file by vim will be blocked amolst 140s. As a fsync will be send by vim,
-the sync ios of fsync will be blocked by a huge amount of buffer write
-ios ahead. This is also a priority inversion problem within one cgroup.
-In the database scene, things got really bad with blk-throtle enabled
-as fsync is called very often.
+However, I strongly recommend against describing fields that have been
+dropped from the architecture.  This only happens when these fields
+are never used by any implementation, so describing them is at best
+useless.
 
-This patch splits bio queue into sync and async queues for blk-throtl
-and gives a huge priority to sync write ios. Sync queue only make sense
-for write ios as we treat all read io as sync io. I think it's a nice
-respond to the semantics of REQ_SYNC. Bios with REQ_META and REQ_PRIO
-gains the same priority as they are important to fs. This may avoid
-some potential priority inversion problems.
+> +Field	27:13	NumSets
+> +Field	12:3	Associavity
+> +Field	2:0	LineSize
+> +EndSysreg
+> +
 
-Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
-Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
----
- block/blk-throttle.c | 108 +++++++++++++++++++++++++++++++++++++++----
- block/blk-throttle.h |  12 ++++-
- 2 files changed, 111 insertions(+), 9 deletions(-)
+I don't think we have a good solution for overlapping fields that
+depend on other factors, either contextual (such as a mode that
+changes the layout of a sysreg), or architecture warts such as
+FEAT_CCIDX (which changes the layout of a well-known sysreg).
 
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 847721dc2b2b..57acfae9f820 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -21,6 +21,13 @@
- /* Total max dispatch from all groups in one round */
- #define THROTL_QUANTUM 32
- 
-+/* For write ios, dispatch 4 sync ios and 1 normal io in one loop */
-+#define THROTL_SYNC_FACTOR 4
-+
-+/* Only make sense for write ios, all read ios are treated as SYNC */
-+#define SYNC	0
-+#define ASYNC	1
-+
- /* Throttling is performed over a slice and after that slice is renewed */
- #define DFL_THROTL_SLICE_HD (HZ / 10)
- #define DFL_THROTL_SLICE_SSD (HZ / 50)
-@@ -241,11 +248,27 @@ static inline unsigned int throtl_bio_data_size(struct bio *bio)
- 	return bio->bi_iter.bi_size;
- }
- 
--static void throtl_qnode_init(struct throtl_qnode *qn, struct throtl_grp *tg)
-+static void throtl_qnode_init(struct throtl_qnode *qn, struct throtl_grp *tg,
-+			      bool rw)
- {
- 	INIT_LIST_HEAD(&qn->node);
--	bio_list_init(&qn->bios);
-+	bio_list_init(&qn->bios[SYNC]);
-+	bio_list_init(&qn->bios[ASYNC]);
- 	qn->tg = tg;
-+	qn->dispatch_sync_cnt = (rw == READ) ? UINT_MAX : 0;
-+}
-+
-+#define BLK_THROTL_SYNC(bio) (bio->bi_opf & (REQ_SYNC | REQ_META | REQ_PRIO))
-+
-+static inline void throtl_qnode_add_bio_list(struct throtl_qnode *qn,
-+					     struct bio *bio)
-+{
-+	bool rw = bio_data_dir(bio);
-+
-+	if ((rw == READ) || BLK_THROTL_SYNC(bio))
-+		bio_list_add(&qn->bios[SYNC], bio);
-+	else
-+		bio_list_add(&qn->bios[ASYNC], bio);
- }
- 
- /**
-@@ -261,13 +284,34 @@ static void throtl_qnode_init(struct throtl_qnode *qn, struct throtl_grp *tg)
- static void throtl_qnode_add_bio(struct bio *bio, struct throtl_qnode *qn,
- 				 struct list_head *queued)
- {
--	bio_list_add(&qn->bios, bio);
-+	throtl_qnode_add_bio_list(qn, bio);
- 	if (list_empty(&qn->node)) {
- 		list_add_tail(&qn->node, queued);
- 		blkg_get(tg_to_blkg(qn->tg));
- 	}
- }
- 
-+static inline struct bio *throtl_qnode_bio_peek(struct throtl_qnode *qn)
-+{
-+	struct bio *bio1, *bio2;
-+
-+	/* qn for read ios */
-+	if (qn->dispatch_sync_cnt == UINT_MAX)
-+		return bio_list_peek(&qn->bios[SYNC]);
-+
-+	/* qn for write ios */
-+	bio1 = bio_list_peek(&qn->bios[SYNC]);
-+	bio2 = bio_list_peek(&qn->bios[ASYNC]);
-+
-+	if (bio1 && bio2) {
-+		if (qn->dispatch_sync_cnt == THROTL_SYNC_FACTOR)
-+			return bio2;
-+		return bio1;
-+	}
-+
-+	return bio1 ?: bio2;
-+}
-+
- /**
-  * throtl_peek_queued - peek the first bio on a qnode list
-  * @queued: the qnode list to peek
-@@ -281,11 +325,59 @@ static struct bio *throtl_peek_queued(struct list_head *queued)
- 		return NULL;
- 
- 	qn = list_first_entry(queued, struct throtl_qnode, node);
--	bio = bio_list_peek(&qn->bios);
-+	bio = throtl_qnode_bio_peek(qn);
- 	WARN_ON_ONCE(!bio);
- 	return bio;
- }
- 
-+/**
-+ * throtl_qnode_bio_pop: pop a bio from a qnode
-+ * @qn: the qnode to pop a bio from
-+ *
-+ * For read io qn, just pop bio from sync queu and return.
-+ * For write io qn, the target queue to pop was determined by the dispatch_sync_cnt.
-+ * Try to pop bio from target queue, fetch the bio and return when it is not empty.
-+ * If the target queue empty, pop bio from other queue instead.
-+ */
-+static inline struct bio *throtl_qnode_bio_pop(struct throtl_qnode *qn)
-+{
-+	struct bio *bio;
-+
-+	/* qn for read ios */
-+	if (qn->dispatch_sync_cnt == UINT_MAX)
-+		return bio_list_pop(&qn->bios[SYNC]);
-+
-+	/* try to dispatch sync io */
-+	if (qn->dispatch_sync_cnt < THROTL_SYNC_FACTOR) {
-+		bio = bio_list_pop(&qn->bios[SYNC]);
-+		if (bio) {
-+			qn->dispatch_sync_cnt++;
-+			return bio;
-+		}
-+		bio = bio_list_pop(&qn->bios[ASYNC]);
-+		qn->dispatch_sync_cnt = 0;
-+		return bio;
-+	}
-+
-+	/* try to dispatch async io */
-+	bio = bio_list_pop(&qn->bios[ASYNC]);
-+	if (bio) {
-+		qn->dispatch_sync_cnt = 0;
-+		return bio;
-+	}
-+	bio = bio_list_pop(&qn->bios[SYNC]);
-+
-+	return bio;
-+}
-+
-+static inline bool throtl_qnode_empty(struct throtl_qnode *qn)
-+{
-+	if (bio_list_empty(&qn->bios[SYNC]) &&
-+		bio_list_empty(&qn->bios[ASYNC]))
-+		return true;
-+	return false;
-+}
-+
- /**
-  * throtl_pop_queued - pop the first bio form a qnode list
-  * @queued: the qnode list to pop a bio from
-@@ -310,10 +402,10 @@ static struct bio *throtl_pop_queued(struct list_head *queued,
- 		return NULL;
- 
- 	qn = list_first_entry(queued, struct throtl_qnode, node);
--	bio = bio_list_pop(&qn->bios);
-+	bio = throtl_qnode_bio_pop(qn);
- 	WARN_ON_ONCE(!bio);
- 
--	if (bio_list_empty(&qn->bios)) {
-+	if (throtl_qnode_empty(qn)) {
- 		list_del_init(&qn->node);
- 		if (tg_to_put)
- 			*tg_to_put = qn->tg;
-@@ -355,8 +447,8 @@ static struct blkg_policy_data *throtl_pd_alloc(gfp_t gfp,
- 	throtl_service_queue_init(&tg->service_queue);
- 
- 	for (rw = READ; rw <= WRITE; rw++) {
--		throtl_qnode_init(&tg->qnode_on_self[rw], tg);
--		throtl_qnode_init(&tg->qnode_on_parent[rw], tg);
-+		throtl_qnode_init(&tg->qnode_on_self[rw], tg, rw);
-+		throtl_qnode_init(&tg->qnode_on_parent[rw], tg, rw);
- 	}
- 
- 	RB_CLEAR_NODE(&tg->rb_node);
-diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-index ef4b7a4de987..55f3a9594e0d 100644
---- a/block/blk-throttle.h
-+++ b/block/blk-throttle.h
-@@ -28,8 +28,18 @@
-  */
- struct throtl_qnode {
- 	struct list_head	node;		/* service_queue->queued[] */
--	struct bio_list		bios;		/* queued bios */
-+	struct bio_list		bios[2];	/* queued bios */
- 	struct throtl_grp	*tg;		/* tg this qnode belongs to */
-+
-+	/*
-+	 * 1) for write throtl_qnode:
-+	 * [0, THROTL_SYNC_FACTOR-1]: dispatch sync io
-+	 * [THROTL_SYNC_FACTOR]: dispatch async io
-+	 *
-+	 * 2) for read throtl_qnode:
-+	 * UINT_MAX
-+	 */
-+	unsigned int dispatch_sync_cnt;         /* sync io dispatch counter */
- };
- 
- struct throtl_service_queue {
+At least, put a comment here that indicates the context of the
+description.
+
+Thanks,
+
+	M.
+
 -- 
-2.20.1
-
+Without deviation from the norm, progress is not possible.
