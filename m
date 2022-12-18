@@ -2,269 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B13876505BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 00:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 218556505C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 00:52:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbiLRXon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 18:44:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S231202AbiLRXwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 18:52:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiLRXoh (ORCPT
+        with ESMTP id S230231AbiLRXwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 18:44:37 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5AD63DD;
-        Sun, 18 Dec 2022 15:44:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-Id:
-        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=pM745wdQur5+R/jYHQA2I3LWyyZHcYT8xDsenki1WaM=; b=JctGwSaT6jMGcCxUXqh7rIwI2w
-        izGTgfStRrSQAXNli8SvNdz3l7NL8kdl0uVDDlgDHwwJRaDj+VeJyYA6AJy7ueDb5lMqIzspvU/WE
-        VX4dAFGBWseYkGJx1lr7rXHSu7yQL22EnjOSQCMnyCiX7hIWswFqPl2Jack3a3LWb0sFCdMeu3qhw
-        ygIaWDEBSw04G3Sx1rfrf3omrg7AahQstZkMZ2VJxPvHvGqdYaJyy8eB6xgr1gsYI26KUJ+nJXClA
-        LpJSUYkmCagfJIE9ZODmypRn7J/eNoVB1LLXsrLzJIGxQh7WghoikkwNWDWs67apotXFSVLk5lnEX
-        PEd4pq+Q==;
-Received: from 200-158-226-94.dsl.telesp.net.br ([200.158.226.94] helo=localhost)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1p73KU-005szJ-4o; Mon, 19 Dec 2022 00:44:26 +0100
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To:     stable@vger.kernel.org
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, corbet@lwn.net,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, fenghua.yu@intel.com,
-        joshua@froggi.es, pgofman@codeweavers.com, pavel@denx.de,
-        pgriffais@valvesoftware.com, zfigura@codeweavers.com,
-        cristian.ciocaltea@collabora.com,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andre Almeida <andrealmeid@igalia.com>
-Subject: [PATCH 6.0.y / 6.1.y] x86/split_lock: Add sysctl to control the misery mode
-Date:   Sun, 18 Dec 2022 20:44:00 -0300
-Message-Id: <20221218234400.795055-1-gpiccoli@igalia.com>
-X-Mailer: git-send-email 2.38.1
+        Sun, 18 Dec 2022 18:52:31 -0500
+X-Greylist: delayed 123 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 18 Dec 2022 15:52:30 PST
+Received: from rpt-cro-asav1.external.tpg.com.au (rpt-cro-asav1.external.tpg.com.au [60.241.0.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D2706573
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 15:52:30 -0800 (PST)
+X-Ironport-Abuse: host=202-168-35-241.tpgi.com.au, ip=202.168.35.241, date=12/19/22 10:49:21
+X-SMTP-MATCH: 0
+X-IPAS-Result: =?us-ascii?q?A2EaCgA9pp9j//EjqMpaHgEBCxIMSYZSlW6DFogNMAKTZ?=
+ =?us-ascii?q?A8BAwEBAQEBTQQBAT4BhEaFESY4EwEBAQQBAQEBAQIFAQEBAQEBAwEBAQUBA?=
+ =?us-ascii?q?gEBAQQFAQEBAoEZhS9GgjgihAkrCwEpHSZcAk2CfoJuAQMxuUoWBQIWgQGeF?=
+ =?us-ascii?q?woZKA1oA4FkgUCEVVCCE4QoiBOEfYIggWuBBoVxBIEJlnABAQMCAgMCAgMGB?=
+ =?us-ascii?q?AICAgUDAwIBAwQCCwUEDgMBAQICAQECBAgCAgMDAgIIDxUDBwIBBgUBAwECB?=
+ =?us-ascii?q?gQCBAELAgIFAgEKAQIEAQICAgEFCQECAwEDAQwCAgYCAgMFBgQCBgQGAgIFA?=
+ =?us-ascii?q?gEBAwICAg0DAgMCBAEFBQEBAhACBgQJAQYECwIFAQQEAQIFBwEDCQMCAgICC?=
+ =?us-ascii?q?AQHBAUKGQMDAiADCQMHBUkCCQMjDwMLCQgHDAEWKAYDAQoHDCgEBAwoAQoNC?=
+ =?us-ascii?q?AUBAgIBBwMDBQUCBw8DBAIBAwMCBQ8DAQYFAQIBAgICBAIIAgQFAgUDAgQCA?=
+ =?us-ascii?q?wICCAMCAwECAQcEAwQBBAIEAw0EAwQCAwICBQICAgICBQICAwECAgICAgIFA?=
+ =?us-ascii?q?gMCAQUBAgIBAgICBAECAgcEAgMBAwQOBAMCAgcBAgIBBgIHAwECAQQDAQEEA?=
+ =?us-ascii?q?gQBAgUCBAEDBgIDAQMKAgMCAQECAwMFAwICCAgCAwUCBAEBAgQDBAICCwEGA?=
+ =?us-ascii?q?gcCAgMCAgQEBAEBAgEEBQIDAQIDAwkCAgMCBAICCgEBAQECAQcCBAcGAgUCA?=
+ =?us-ascii?q?gIDAQICAQMCAQICChEBAQIDAwMEBgUDAwMCARUFAgEBAgIDAwIGAgECCAIEA?=
+ =?us-ascii?q?QQFAgECAQECAgQBCAICAQEBAgECAgMDAgECAgIEAwMBAgECAgMCAgIDAgIBD?=
+ =?us-ascii?q?QIGBgECAgICAgICAgIGAQIBAgMBAgcCBAMCAQICBQICAgMBAQYCBAsBAwICA?=
+ =?us-ascii?q?gIBCAEBAgUBAgICAwEBAwMEAwMFBgMCDAgBBQEDAR8DAgIIAgcCAQYDAgEPA?=
+ =?us-ascii?q?wICAwICAQQKAgMFAgQCAQQIBwIEAQIJAwIGAgYFGAECAgcEDAoBAgIFBgQBA?=
+ =?us-ascii?q?QIDAQIBAQIDAwIDAgQFAQUCAQIEAgICAQECBQ0BAQMEAgQCBwICAgMBBAIBA?=
+ =?us-ascii?q?gEDAwIDAQEBAwYGAgQEAgMDBgICAgMCAQICAwQNAQUCAgYDBAENBQYFBAMCC?=
+ =?us-ascii?q?AECAQEHAgQCBwkOAgECBAEFAgIDAgIBAwICAQIEAwECAgICBQcFAwQBBAMKC?=
+ =?us-ascii?q?wMBAQQDAgECAQIDAgMHAwIEAgMBAgMEBgYBCQQGBAENAwQCAgECAQEDBAQEA?=
+ =?us-ascii?q?gIBAgIDAQQCAgEBAwMDAgICAwQCAwMLBAoHAwMCAQULAgICAwIBAQMHBAUEA?=
+ =?us-ascii?q?gIGAQIEAgICAgICAgMBAQMKBAIBAwICBgMGAgECAQkFAgEJAwECAQMEAQMJA?=
+ =?us-ascii?q?QICBAkCAwcFCgICAgIIAgIOAwMCAQEEAgIEAwIJAQIHAgUBAQMFBwICAQICA?=
+ =?us-ascii?q?QQDAQkEAQIDAgEBAxIDAwEEAgIFAwMNCQYCAgEDAgENAwECAQIDAQUFFwMIB?=
+ =?us-ascii?q?xQDBQICBAQBCAICAwMDAgECCQYBAwEFAg4DAgIDAwYBAgEBAgMQAgMBAQEBF?=
+ =?us-ascii?q?wEDBAIDAQQDAQECAQIDAg4EAQQFDAMBAhEMAgQBBgIIAgICAgMBAwMFAQIDB?=
+ =?us-ascii?q?AIBCAYEAgICAgoCCgMCAwEDBQEDAgkDAQUBAgcCBgEBAQICCAIIAgMLAQMCA?=
+ =?us-ascii?q?wYCAQICAQUCAQICBQMFAgICAgQNAgUCAgIGAQIHBAICAgQBAgIGAgUBAgcHA?=
+ =?us-ascii?q?gUCAgIDAwoEBAIKBAEDAQEFAQIBAwQBAgQBAgECBQMGAgICAgECAgECAQEIA?=
+ =?us-ascii?q?gICAgICAgMEAgUDnBMHexRLgSNwgRoBAZFWgxqqXIFFRCEJAQYCW4FWfBopm?=
+ =?us-ascii?q?lmFbRoyqSSXQpEvkX2FBoFEgX9NI4EBbYFJUhkPnQRhOwIHCwEBAwmJSoJZA?=
+ =?us-ascii?q?QE?=
+IronPort-PHdr: A9a23:MxaPLBHELoWxWUr71Y2mOJ1Gf0RKhN3EVzX9CrIZgr5DOp6u447ld
+ BSGo6k30RmVB86CsbptsKn/jePJYSQ4+5GPsXQPItRndiQuroEopTEmG9OPEkbhLfTnPGQQF
+ cVGU0J5rTngaRAGUMnxaEfPrXKs8DUcBgvwNRZvJuTyB4Xek9m72/q99pHNYwhEnjWwba19I
+ Bmrswnaq9Ubj5ZlJqstxRTFpWdFdf5Lzm1yP1KTmBj85sa0/JF99ilbpuws+c1dX6jkZqo0V
+ bNXAigoPGAz/83rqALMTRCT6XsGU2UZiQRHDg7Y5xznRJjxsy/6tu1g2CmGOMD9UL45VSi+4
+ 6ptVRTljjoMOTwk/2HNksF+jLxVrQy8qRJxwIDaZ46aOvVlc6/Bft4XX3ZNU9xNWyBdBI63c
+ osBD/AGPeZdt4Tzo1wOrR2jDgerHuzuxTFJiWHy3a0+zu8sFgPG3Ak6ENMBvnXbstH1NKMcX
+ O2316TIwjDDYOlX2Tf58oTHbhchofSVUL92bMHexlUhGRnfgVWMtYzqISmV1uIVvmWb7+RtW
+ /+ihm0ppQ9xrTWixNkgh4bUi44L1F3J8SV0zZgpKNC4R0N1bsOoHpRRui2GKod7TMwsTW5pt
+ Sg1ybALv4OwcisSyJk/2RLTd+KLf5KV7h/iV+udOzl1iXJ/dL6hiBu+7E6twfDmWMauylZFt
+ C9Fn8HJtnAKyhPc9NCKSuB4/ke9wTaP0B3T6v1cLUA0i6XbL5khz6YylpoWq0vCESH3l1vyj
+ K+SbEkr5u+o6+H/brXnoJ+TKZN0hxngPqgyhMCzG/k0PwkNUmSB9+mx1Kfv8VP2TblXlvE2l
+ 7PWsJHeJcQVvK65BApV354h6xa6FTin39oZkmcDLFJBdh+KjZPkO17LIP/iDPe/h06gnytsx
+ /DDJrHhBI7CIWDZkLj9ZbZ991JcyA0rwN1b/55UEK0OIOrvWk/ts9zVFgI2PBaqw+n5DdVwz
+ Z4RVniRAqCHNaPStViI5uwzI+WWYo8apir9J+A/5/HylX85hUMdfa6x0JQJdX+4A/FmLF+YY
+ HXyntcMCmgKvg05TOzljF2NTyRfaGq1X6I5/j07Ep6pDZ/fRoCxh7yMxCS7HoBNaW9cEV2ME
+ mnnd5+CW/gSbCKeOMhhkiYLVbS5UY8uyQmutBPmy7pgNufU4jcXuon929hz5u3ejgsy+iJpA
+ MSdyW6NU3t4kX8PRz8zxKx/u1Byyk+f0ahkhPxVDdxS5/RSUgc6O57c0u56C9HpVwLFf9eJT
+ kumQ9q/DTEwVtIx3d4Db1x6G9W4gRDPxzCqDKMNl7yXGJw09brR0GXqJ8lny3bJyrMhj189T
+ 8tMK2KmnKh/+BbXB4LTlEWZjamqebwG3CHR7GeD0XaOvEZAXQ52T6rFQW0QaVXIrdni+EPCQ
+ KGhCa49PgtC18GCMK1KZcPtjVlcQ/fjItveb3qrm2isHRaI2q+MbI3ydmUZ3SXdDlUEkg8K8
+ XaFKwc+HCGhrHzaDDF1C1LvbF3j8fNkpHO4UEA01QeKYFNl17av/R4Vn/OcR+sJ3r0YoCcht
+ yl0HFGl0tLUDtqPvQVgfatCbtM55FdK22DUuhdyPpylNa9ih1oefx5rsEPp0hUkQrlHxMQjs
+ n4v5AZ7N6+d1FRPa3We0IyjFKfQLzzQ+xbnTqfGxVza1J7C+KIG+Os1r1G44ymmE0Mj9zNs1
+ NwDgCjU3YnDEAdHCcG5aU0w7RUv/9nn
+IronPort-Data: A9a23:N27Pqq6Cc9TkRZ5fs5nKfAxRtMvGchMFZxGqfqrLsTDasY5as4F+v
+ jcbCz3QOffbN2ShfN10b4u190MB6JLRydMwHQc4qCphEysa+MHILOrCIxarNUt+DCFioGGLT
+ Sk6QoOdRCzhZiaE/n9BCpC48T8mk/jgqoPUUIbsIjp2SRJvVBAvgBdin/9RqoNziLBVOSvU0
+ T/Ji5CZaQHNNwJcaDpOsfvZ8UM35pwehRtB1rAATaAT1LPhvyRNZH4vDfnZB2f1RIBSAtm7S
+ 47rpF1u1jqEl/uFIorNfofTKiXmcJaLVeS9oiM+t5yZv/R3jndaPpDXlhYrQRw/Zz2hx7idw
+ f0R7sboEV9B0qfkwIzxWDEAe81y0DEvFBYq7hFTvOTKp3AqfUcAzN1uDmwLGJM5yNpXKnNs9
+ sY0bzQWbBmM0rfeLLKTEoGAh+whKcD7I44bvjdryjSx4fQOG8iZBfyUtZkDgXFq2pkm8fX2P
+ qL1bRJtaR3QfBBLPgxIIJ07leaswHL4dlW0rXrP+PpqvzKKnVMZPL7FEPveVM6IS/hssk+cp
+ SGbx339OB5KO4nKodaC2jf27gPVpgv3UZwfEZW0/+BnhVmUyHBVDhAKPXO2reS8g1yzR/pQL
+ Esb/idopq83nGSoU9P0dx61uniJulgbQdU4O/Uz4gyLy4LO7gqZD3RCRTlEAPQ3s9Q2SyEo1
+ 3eNntX0FXluqKPLD3WH+d+8oSi7OSUPK0cBaDUCQA9D5MPsyKk1gw7DQ8hLDqG4lJv2FCv2z
+ jTMqzIx750XjMgWx+C48ErBjjaEuJfEVEg26x/RU2bj6Rl2DKanYoW49lXf6a0fBImcR1iF+
+ nMDnqCjAPsmV8nX0XXTEKBWQfTzu6/DLCXTgBhkGJxn/inFF2OfQL28KQpWfC9BWvvosxe3P
+ Sc/ZSs5CFRv0LdGoEO5j09dyyjn8EQ4KenYaw==
+IronPort-HdrOrdr: A9a23:7aP4/an013jIMiWkJJdxObPrImTpDfI13DAbv31ZSRFFG/FwWf
+ rCoB19726WtN9/Yh4dcLy7U5VoIkm9yXcK2+cs1N6ZNWHbUQCTQL2Kg7GJ/9SZIUzDytI=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="5.96,254,1665406800"; 
+   d="scan'208";a="258542197"
+Received: from 202-168-35-241.tpgi.com.au (HELO jmaxwell.com) ([202.168.35.241])
+  by rpt-cro-asav1.external.tpg.com.au with ESMTP; 19 Dec 2022 10:49:03 +1100
+From:   Jon Maxwell <jmaxwell37@gmail.com>
+To:     davem@davemloft.net
+Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jon Maxwell <jmaxwell37@gmail.com>
+Subject: [net-next] ipv6: fix routing cache overflow for raw sockets
+Date:   Mon, 19 Dec 2022 10:48:01 +1100
+Message-Id: <20221218234801.579114-1-jmaxwell37@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL,
+        SPOOF_GMAIL_MID autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 727209376f4998bc84db1d5d8af15afea846a92b upstream.
+Sending Ipv6 packets in a loop via a raw socket triggers an issue where a 
+route is cloned by ip6_rt_cache_alloc() for each packet sent. This quickly 
+consumes the Ipv6 max_size threshold which defaults to 4096 resulting in 
+these warnings:
 
-Commit b041b525dab9 ("x86/split_lock: Make life miserable for split lockers")
-changed the way the split lock detector works when in "warn" mode;
-basically, it not only shows the warn message, but also intentionally
-introduces a slowdown through sleeping plus serialization mechanism
-on such task. Based on discussions in [0], seems the warning alone
-wasn't enough motivation for userspace developers to fix their
-applications.
+[1]   99.187805] dst_alloc: 7728 callbacks suppressed
+[2] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
+.
+.
+[300] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
 
-This slowdown is enough to totally break some proprietary (aka.
-unfixable) userspace[1].
+When this happens the packet is dropped and sendto() gets a network is 
+unreachable error:
 
-Happens that originally the proposal in [0] was to add a new mode
-which would warns + slowdown the "split locking" task, keeping the
-old warn mode untouched. In the end, that idea was discarded and
-the regular/default "warn" mode now slows down the applications. This
-is quite aggressive with regards proprietary/legacy programs that
-basically are unable to properly run in kernel with this change.
-While it is understandable that a malicious application could DoS
-by split locking, it seems unacceptable to regress old/proprietary
-userspace programs through a default configuration that previously
-worked. An example of such breakage was reported in [1].
+# ./a.out -s 
 
-Add a sysctl to allow controlling the "misery mode" behavior, as per
-Thomas suggestion on [2]. This way, users running legacy and/or
-proprietary software are allowed to still execute them with a decent
-performance while still observing the warning messages on kernel log.
+remaining pkt 200557 errno 101
+remaining pkt 196462 errno 101
+.
+.
+remaining pkt 126821 errno 101
 
-[0] https://lore.kernel.org/lkml/20220217012721.9694-1-tony.luck@intel.com/
-[1] https://github.com/doitsujin/dxvk/issues/2938
-[2] https://lore.kernel.org/lkml/87pmf4bter.ffs@tglx/
+Fix this by adding a flag to prevent the cloning of routes for raw sockets. 
+Which makes the Ipv6 routing code use per-cpu routes instead which prevents 
+packet drop due to max_size overflow. 
 
-[ dhansen: minor changelog tweaks, including clarifying the actual
-  	   problem ]
+Ipv4 is not affected because it has a very large default max_size.
 
-Fixes: b041b525dab9 ("x86/split_lock: Make life miserable for split lockers")
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Tested-by: Andre Almeida <andrealmeid@igalia.com>
-Link: https://lore.kernel.org/all/20221024200254.635256-1-gpiccoli%40igalia.com
+Signed-off-by: Jon Maxwell <jmaxwell37@gmail.com>
 ---
+ include/net/flow.h | 1 +
+ net/ipv6/raw.c     | 2 +-
+ net/ipv6/route.c   | 1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
 
-
-Hi folks, I've build tested this on both 6.0.13 and 6.1, worked fine. The
-split lock detector code changed almost nothing since 6.0, so that makes
-sense...
-
-I think this is important to have in stable, some gaming community members
-seems excited with that, it'll help with general proprietary software
-(that is basically unfixable), making them run smoothly on 6.0.y and 6.1.y.
-
-I've CCed some folks more than just the stable list, to gather more
-opinions on that, so apologies if you received this email but think
-that you shouldn't have.
-
-Thanks in advance,
-
-Guilherme
-
-
- Documentation/admin-guide/sysctl/kernel.rst | 23 ++++++++
- arch/x86/kernel/cpu/intel.c                 | 63 +++++++++++++++++----
- 2 files changed, 76 insertions(+), 10 deletions(-)
-
-diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-index 98d1b198b2b4..c2c64c1b706f 100644
---- a/Documentation/admin-guide/sysctl/kernel.rst
-+++ b/Documentation/admin-guide/sysctl/kernel.rst
-@@ -1314,6 +1314,29 @@ watchdog work to be queued by the watchdog timer function, otherwise the NMI
- watchdog — if enabled — can detect a hard lockup condition.
+diff --git a/include/net/flow.h b/include/net/flow.h
+index 2f0da4f0318b..30b8973ffb4b 100644
+--- a/include/net/flow.h
++++ b/include/net/flow.h
+@@ -37,6 +37,7 @@ struct flowi_common {
+ 	__u8	flowic_flags;
+ #define FLOWI_FLAG_ANYSRC		0x01
+ #define FLOWI_FLAG_KNOWN_NH		0x02
++#define FLOWI_FLAG_SKIP_RAW		0x04
+ 	__u32	flowic_secid;
+ 	kuid_t  flowic_uid;
+ 	struct flowi_tunnel flowic_tun_key;
+diff --git a/net/ipv6/raw.c b/net/ipv6/raw.c
+index a06a9f847db5..0b89a7e66d09 100644
+--- a/net/ipv6/raw.c
++++ b/net/ipv6/raw.c
+@@ -884,7 +884,7 @@ static int rawv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+ 	security_sk_classify_flow(sk, flowi6_to_flowi_common(&fl6));
  
+ 	if (hdrincl)
+-		fl6.flowi6_flags |= FLOWI_FLAG_KNOWN_NH;
++		fl6.flowi6_flags |= FLOWI_FLAG_KNOWN_NH | FLOWI_FLAG_SKIP_RAW;
  
-+split_lock_mitigate (x86 only)
-+==============================
-+
-+On x86, each "split lock" imposes a system-wide performance penalty. On larger
-+systems, large numbers of split locks from unprivileged users can result in
-+denials of service to well-behaved and potentially more important users.
-+
-+The kernel mitigates these bad users by detecting split locks and imposing
-+penalties: forcing them to wait and only allowing one core to execute split
-+locks at a time.
-+
-+These mitigations can make those bad applications unbearably slow. Setting
-+split_lock_mitigate=0 may restore some application performance, but will also
-+increase system exposure to denial of service attacks from split lock users.
-+
-+= ===================================================================
-+0 Disable the mitigation mode - just warns the split lock on kernel log
-+  and exposes the system to denials of service from the split lockers.
-+1 Enable the mitigation mode (this is the default) - penalizes the split
-+  lockers with intentional performance degradation.
-+= ===================================================================
-+
-+
- stack_erasing
- =============
- 
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index 2d7ea5480ec3..427899650483 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -1034,8 +1034,32 @@ static const struct {
- 
- static struct ratelimit_state bld_ratelimit;
- 
-+static unsigned int sysctl_sld_mitigate = 1;
- static DEFINE_SEMAPHORE(buslock_sem);
- 
-+#ifdef CONFIG_PROC_SYSCTL
-+static struct ctl_table sld_sysctls[] = {
-+	{
-+		.procname       = "split_lock_mitigate",
-+		.data           = &sysctl_sld_mitigate,
-+		.maxlen         = sizeof(unsigned int),
-+		.mode           = 0644,
-+		.proc_handler	= proc_douintvec_minmax,
-+		.extra1         = SYSCTL_ZERO,
-+		.extra2         = SYSCTL_ONE,
-+	},
-+	{}
-+};
-+
-+static int __init sld_mitigate_sysctl_init(void)
-+{
-+	register_sysctl_init("kernel", sld_sysctls);
-+	return 0;
-+}
-+
-+late_initcall(sld_mitigate_sysctl_init);
-+#endif
-+
- static inline bool match_option(const char *arg, int arglen, const char *opt)
- {
- 	int len = strlen(opt), ratelimit;
-@@ -1146,12 +1170,20 @@ static void split_lock_init(void)
- 		split_lock_verify_msr(sld_state != sld_off);
- }
- 
--static void __split_lock_reenable(struct work_struct *work)
-+static void __split_lock_reenable_unlock(struct work_struct *work)
- {
- 	sld_update_msr(true);
- 	up(&buslock_sem);
- }
- 
-+static DECLARE_DELAYED_WORK(sl_reenable_unlock, __split_lock_reenable_unlock);
-+
-+static void __split_lock_reenable(struct work_struct *work)
-+{
-+	sld_update_msr(true);
-+}
-+static DECLARE_DELAYED_WORK(sl_reenable, __split_lock_reenable);
-+
- /*
-  * If a CPU goes offline with pending delayed work to re-enable split lock
-  * detection then the delayed work will be executed on some other CPU. That
-@@ -1169,10 +1201,9 @@ static int splitlock_cpu_offline(unsigned int cpu)
- 	return 0;
- }
- 
--static DECLARE_DELAYED_WORK(split_lock_reenable, __split_lock_reenable);
--
- static void split_lock_warn(unsigned long ip)
- {
-+	struct delayed_work *work;
- 	int cpu;
- 
- 	if (!current->reported_split_lock)
-@@ -1180,14 +1211,26 @@ static void split_lock_warn(unsigned long ip)
- 				    current->comm, current->pid, ip);
- 	current->reported_split_lock = 1;
- 
--	/* misery factor #1, sleep 10ms before trying to execute split lock */
--	if (msleep_interruptible(10) > 0)
--		return;
--	/* Misery factor #2, only allow one buslocked disabled core at a time */
--	if (down_interruptible(&buslock_sem) == -EINTR)
--		return;
-+	if (sysctl_sld_mitigate) {
-+		/*
-+		 * misery factor #1:
-+		 * sleep 10ms before trying to execute split lock.
-+		 */
-+		if (msleep_interruptible(10) > 0)
-+			return;
-+		/*
-+		 * Misery factor #2:
-+		 * only allow one buslocked disabled core at a time.
-+		 */
-+		if (down_interruptible(&buslock_sem) == -EINTR)
-+			return;
-+		work = &sl_reenable_unlock;
-+	} else {
-+		work = &sl_reenable;
-+	}
-+
- 	cpu = get_cpu();
--	schedule_delayed_work_on(cpu, &split_lock_reenable, 2);
-+	schedule_delayed_work_on(cpu, work, 2);
- 
- 	/* Disable split lock detection on this CPU to make progress */
- 	sld_update_msr(false);
+ 	if (ipc6.tclass < 0)
+ 		ipc6.tclass = np->tclass;
+diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+index e74e0361fd92..beae0bd61738 100644
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -2226,6 +2226,7 @@ struct rt6_info *ip6_pol_route(struct net *net, struct fib6_table *table,
+ 	if (rt) {
+ 		goto out;
+ 	} else if (unlikely((fl6->flowi6_flags & FLOWI_FLAG_KNOWN_NH) &&
++			    !(fl6->flowi6_flags & FLOWI_FLAG_SKIP_RAW) &&
+ 			    !res.nh->fib_nh_gw_family)) {
+ 		/* Create a RTF_CACHE clone which will not be
+ 		 * owned by the fib6 tree.  It is for the special case where
 -- 
-2.38.1
+2.31.1
 
