@@ -2,53 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E566504B1
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 22:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2446504B7
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 22:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbiLRVHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 16:07:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
+        id S230327AbiLRVSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 16:18:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiLRVHl (ORCPT
+        with ESMTP id S229507AbiLRVS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 16:07:41 -0500
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2330760E1
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 13:07:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1671397659;
-        bh=bzzA9VFUm6NqJzBX2Bls/aaFsWETWnz+FBiGd0+U0XU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BHXMdpImVf4HLS+Ql8/RN8Lluozm+JA+JFkfgRHd0SqPzaqpgJEAf2mceIkAJPMcV
-         yerbMgxa8D66izgvwomHPAi6HzS6ajQKfdp4dbjzfkotdf7ehyCdvopNUdq5T2ufXm
-         dtDkVtcGTaRCrgE3I55VDDCf/oNo/KdZaetAZyPObjuC1RAxV6BQIOXbYzBdc5bE6p
-         JwlU4c7/pUVTegZge2SUoD+xVWzsUIPiTKgL+cX8CTGpv7nA4fTy/2ZiaWBeYbKd6U
-         0Tx/BbwbqZGzQ2EGozbCSPYOacUcCu4wJ/pPA4jH34RHONjarsijz5WP6q4Q+8Bc++
-         LUNEVTx3Mv3Bg==
-Received: from [10.1.0.203] (192-222-188-69.qc.cable.ebox.net [192.222.188.69])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NZwQf6jcCzbfL;
-        Sun, 18 Dec 2022 16:07:38 -0500 (EST)
-Message-ID: <db4cccb8-e7fd-3d54-c5c8-3df90c5ddc49@efficios.com>
-Date:   Sun, 18 Dec 2022 16:08:02 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [RFC 1/2] srcu: Remove comment about prior read lock counts
-Content-Language: en-US
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-References: <20221218191310.130904-1-joel@joelfernandes.org>
- <20221218191310.130904-2-joel@joelfernandes.org>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20221218191310.130904-2-joel@joelfernandes.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
+        Sun, 18 Dec 2022 16:18:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6D76584
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 13:18:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B8B7B802C6
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 21:18:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0039DC433D2;
+        Sun, 18 Dec 2022 21:18:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671398305;
+        bh=qLS0rSzcRsrXELdh8lmseiGlAPNnrqeSC/zlmeZ4MmI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UFtwRkNV+FvyAvbN5wkROFPPPf5ex2bKaFI+B3griikv6/g21UROYm+iu5mZWhGmp
+         VVjCkbnxLGzKH3vKPXB4xWrp1LhNV6yup97xMu3t8xm/N1eS8oIasjHAWe4qxKKwpD
+         x8cHv4sIZ7oGIhQoRFsz9fv8fcHtQg4f+l7HmcdIyUuoQueBVxPI8wHJtQYm0xlhuF
+         2PsIEuo1FHMi1a3UqCPA6vOsks8E1Nbk+fopjQ315nAMIoRSLLrckn4dvcJ7yNGi9r
+         TfbNKZvfIzQkQdJRfwyFcb4MkBe3bmtt8JredyOeoxc11BExg1B/6Vduquj9HSJINv
+         yYmPoZ5mKOPNg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p7138-00DWZl-JL;
+        Sun, 18 Dec 2022 21:18:22 +0000
+Date:   Sun, 18 Dec 2022 21:16:53 +0000
+Message-ID: <87a63kfm4a.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v3 5/7] KVM: arm64: Allow user to set CCSIDR_EL1
+In-Reply-To: <20221218051412.384657-6-akihiko.odaki@daynix.com>
+References: <20221218051412.384657-1-akihiko.odaki@daynix.com>
+        <20221218051412.384657-6-akihiko.odaki@daynix.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: akihiko.odaki@daynix.com, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, mathieu.poirier@linaro.org, oliver.upton@linux.dev, suzuki.poulose@arm.com, alexandru.elisei@arm.com, james.morse@arm.com, will@kernel.org, catalin.marinas@arm.com, asahi@lists.linux.dev, alyssa@rosenzweig.io, sven@svenpeter.dev, marcan@marcan.st
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,149 +76,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-18 14:13, Joel Fernandes (Google) wrote:
-> The comment says that if an updater saw lock count updates, then
-> ensure the reader does not see the new srcu_idx.
+On Sun, 18 Dec 2022 05:14:10 +0000,
+Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
 > 
-> However, there is no memory barrier between a READER reading srcu_idx
-> with respect to incrementing the lock count for that srcu_idx.
+> Allow the userspace to set CCSIDR_EL1 so that if the kernel changes the
+> default values of CCSIDR_EL1, the userspace can restore the old values
+> from an old saved VM context.
 > 
-> So what is really happening is, both "B" and "C" will order the current
-> reader's unlock count update, and the _next_ readers lock count update, with
-> respect to the write to the currently active index.
+> Suggested-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> ---
+>  arch/arm64/include/asm/kvm_host.h |   3 +
+>  arch/arm64/kvm/reset.c            |   1 +
+>  arch/arm64/kvm/sys_regs.c         | 116 ++++++++++++++++++++----------
+>  3 files changed, 83 insertions(+), 37 deletions(-)
 > 
-> Consider first the case of the unlock count update being seen by the UPDATER:
-> 
-> (for brevity, the pseudocode shortens "srcu_idx" to "idx")
-> 
-> READER                            UPDATER
-> 
-> rcu_read_lock() {
->      idx = READ(idx);
->      lock_count[idx]++;
-> 
->      smp_mb();    // B
-> }
->                                  srcu_flip() {
->                                      smp_mb(); //E
->                                      idx++;
->                                      smp_mb();
->                                  }
-> rcu_read_unlock() {
->      smp_mb();    // C
->      unlock_count[idx]++;
-> }
-> 
-> Consider that the updater saw the unlock count update, and due to this, we
-> expect "E" to make sure that the reader only used the old srcu_idx.
-> 
-> However, say the reader used the new srcu_idx because we dropped "E".  That is
-> totally OK because both unlock and lock counts of this reader will negate each
-> other during the next scan of the srcu_idx. So we don't have to guarantee at
-> all that the reader used the old srcu_idx, that does not buy us anything
-> because if it used the new one, we would just ignore it during the next scan
-> anyway (the reader is "done").
-> 
-> Now lets look at the following case:
-> 
-> READER                            UPDATER
-> 
-> rcu_read_lock() {
->      idx = READ(idx);
->      lock_count[idx]++;
-> 
->      smp_mb();    // B
-> }
-> 
-> rcu_read_unlock() {
->      smp_mb();    // C
->      unlock_count[idx]++;
-> }
->                                  srcu_flip() {
->                                      smp_mb(); //E
->                                      idx++;
-> rcu_read_lock() {
->      idx = READ(idx);
->      lock_count[idx]++;
-> 
->      smp_mb();    // B
->                                      smp_mb();
->                                  }
-> }
-> 
-> Consider that the updater saw the lock count update of the second
-> rcu_read_lock(). It does not matter that we guarantee that the reader sees only
-> the old srcu_idx. This is because, a reader could totally just sample
-> srcu_idx, and stay preempted for long periods of time. So, during any scan, we
-> already have the issue of a preempted-reader randomly springing up with a copy
-> of the index which we consider the "new index". So guaranteeing that the reader
-> saw the old srcu_idx instead of the new one if we saw its lock count updates,
-> also does not buy us anything.
-> 
-> Due to these reasons, drop the argument that the reader has to see a certain
-> srcu_idx since we have no control over that anyway, and guaranteeing that does not
-> buy us anything.
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index cc2ede0eaed4..cfc6930efe1b 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -417,6 +417,9 @@ struct kvm_vcpu_arch {
+>  		u64 last_steal;
+>  		gpa_t base;
+>  	} steal;
+> +
+> +	/* Per-vcpu CCSIDR override or NULL */
+> +	u32 *ccsidr;
+>  };
+>  
+>  /*
+> diff --git a/arch/arm64/kvm/reset.c b/arch/arm64/kvm/reset.c
+> index 5ae18472205a..7980983dbad7 100644
+> --- a/arch/arm64/kvm/reset.c
+> +++ b/arch/arm64/kvm/reset.c
+> @@ -157,6 +157,7 @@ void kvm_arm_vcpu_destroy(struct kvm_vcpu *vcpu)
+>  	if (sve_state)
+>  		kvm_unshare_hyp(sve_state, sve_state + vcpu_sve_state_size(vcpu));
+>  	kfree(sve_state);
+> +	kfree(vcpu->arch.ccsidr);
+>  }
+>  
+>  static void kvm_vcpu_reset_sve(struct kvm_vcpu *vcpu)
+> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+> index f4a7c5abcbca..f48a3cc38d24 100644
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@ -87,11 +87,27 @@ static u32 cache_levels;
+>  /* CSSELR values; used to index KVM_REG_ARM_DEMUX_ID_CCSIDR */
+>  #define CSSELR_MAX 14
+>  
+> +static u8 get_min_cache_line_size(u32 csselr)
+> +{
+> +	u64 ctr_el0;
+> +	int field;
+> +
+> +	ctr_el0 = read_sanitised_ftr_reg(SYS_CTR_EL0);
+> +	field = csselr & CSSELR_EL1_InD ? CTR_EL0_IminLine_SHIFT : CTR_EL0_DminLine_SHIFT;
+> +
+> +	return cpuid_feature_extract_unsigned_field(ctr_el0, field) - 2;
+> +}
+> +
+>  /* Which cache CCSIDR represents depends on CSSELR value. */
+> -static u32 get_ccsidr(u32 csselr)
+> +static u32 get_ccsidr(struct kvm_vcpu *vcpu, u32 csselr)
+>  {
+> +	u32 ccsidr_index = csselr & (CSSELR_EL1_Level | CSSELR_EL1_InD);
+>  	u32 ccsidr;
+>  
+> +	if (vcpu->arch.ccsidr && is_valid_cache(ccsidr_index) &&
+> +	    !(kvm_has_mte(vcpu->kvm) && (csselr & CSSELR_EL1_TnD)))
+> +		return vcpu->arch.ccsidr[ccsidr_index];
+> +
 
-I don't understand why this first patch only removes a comment about the 
-need to order things, when in fact it's the entire memory barrier /* E 
-*/ that is useless.
+I really don't understand this logic. If the requested cache level is
+invalid, or the MTE setup doesn't match, you return something that is
+the part of the HW hierarchy, despite having a userspace-provided
+hierarchy.
 
-I suspect we should just remove the comment along with the barrier 
-without this added step.
+The other problem I can see here is that you're still relying on the
+host CLIDR_EL1 (aka cache_levels), while restoring a guest cache
+hierarchy must include a CLIDR_EL1. Otherwise, you cannot really
+evaluate the validity of that hierarchy, nor return consistent
+results.
 
-What SRCU fundamentally does is detect quiescence of all SRCU readers 
-between the beginning of the grace period and its completion. In order 
-to ensure forward progress, it does so in a two-phase algorithm. What 
-the grace period does to detect quiescence is to observe that each of 
-the periods (0/1) have no active reader at a given point in the grace 
-period. Then the fact that the period is flipped to send new-coming 
-readers into a different period is just to ensure forward progress, and 
-is basically irrelevant (order-wise) with the fact that the grace period 
-scans both periods and validates that both periods are observed to have 
-no active readers.
+I was expecting something like (totally untested, but you'll get what
+I mean):
 
-I'd favor just clarifying the SRCU model in this way, and then remove 
-the useless barrier, and also implement improvements to the SRCU 
-algorithm and skip the "flip" entirely when we notice (early) that no 
-active readers are present in both periods. This is actually similar to 
-what I implemented in side-rcu.
+	if (vcpu->arch.cssidr) {
+		if (!is_valid_cache(vcpu, csselr))
+			return 0; // UNKNOWN value
 
-Thoughts ?
+		return vcpu->arch.ccsidr[ccsidr_index];
+	}
+
+and with is_valid_cache() written as:
+
+bool is_valid_cache(struct kvm_vcpu *vcpu, u64 csselr)
+{
+	u64 clidr = __vcpu_sys_reg(vcpu, CLIDR_EL1);
+	u64 idx = FIELD_GET(CSSELR_EL1_Level, csselr);
+	u64 ttype = FIELD_GET(GENMASK(CLIDR_EL1_Ttypen_SHIFT + idx * 2 + 1,
+				      CLIDR_EL1_Ttypen_SHIFT + idx * 2),
+			      clidr);
+	u64 ctype = FIELD_GET(CLIDR_EL1_Ctype1 << (idx * 3), clidr);
+
+	// !MTE or InD make TnD RES0
+	if (!kvm_has_mte(vcpu->kvm) || (csselr & CSSELR_EL1_InD))
+		csselr &= ~CSSELR_EL1_TnD;
+
+	// If TnD is set, the cache level must be purely for tags
+	if (csselr & CSSELR_EL1_TnD)
+		return (ttype == 0b01);
+
+	// Otherwise, check for a match against the InD value
+	switch (ctype) {
+	case 0: /* No cache */
+		return false;
+	case 1: /* Instruction cache only */
+		return (csselr & CSSELR_EL1_InD);
+	case 2: /* Data cache only */
+	case 4: /* Unified cache */
+		return !(csselr & CSSELR_EL1_InD);
+	case 3: /* Separate instruction and data caches */
+		return true;
+	default: /* Reserved: we can't know instruction or data. */
+		return false;
+	}
+}
+
+which implies that CLIDR_EL1 isn't an invariant anymore. You have that
+in your last patch, but this needs to be brought in this one.
+
+It should be validated on userspace write, making sure that
+LoU/LoUIS/LoC are compatible with the state of CTR+FWB+CLIDR on the
+host.
+
+And then cache_levels disappears totally here.
+
+[...]
+
+> +static int set_ccsidr(struct kvm_vcpu *vcpu, u32 csselr, u32 val)
+> +{
+> +	u8 line_size = (val & CCSIDR_EL1_LineSize) >> CCSIDR_EL1_LineSize_SHIFT;
+
+Better written as
+
+	u8 line_size = FIELD_GET(CCSIDR_EL1_LineSize, val);
+
+> +	u32 *ccsidr = vcpu->arch.ccsidr;
+> +	u32 i;
+> +
+> +	if ((val & CCSIDR_EL1_RES0) || line_size < get_min_cache_line_size(csselr))
+> +		return -EINVAL;
+> +
+> +	if (!ccsidr) {
+> +		if (val == get_ccsidr(vcpu, csselr))
+> +			return 0;
+> +
+> +		ccsidr = kmalloc_array(CSSELR_MAX, sizeof(u32), GFP_KERNEL);
+> +		if (!ccsidr)
+> +			return -ENOMEM;
+> +
+> +		for (i = 0; i < CSSELR_MAX; i++)
+> +			if (is_valid_cache(i))
+> +				ccsidr[i] = get_ccsidr(vcpu, i);
+> +
+> +		vcpu->arch.ccsidr = ccsidr;
+> +	}
+> +
+> +	ccsidr[csselr] = val;
+> +
+> +	return 0;
+> +}
 
 Thanks,
 
-Mathieu
-
-> 
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->   kernel/rcu/srcutree.c | 10 ++++------
->   1 file changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-> index 1c304fec89c0..d6a4c2439ca6 100644
-> --- a/kernel/rcu/srcutree.c
-> +++ b/kernel/rcu/srcutree.c
-> @@ -983,12 +983,10 @@ static bool try_check_zero(struct srcu_struct *ssp, int idx, int trycount)
->   static void srcu_flip(struct srcu_struct *ssp)
->   {
->   	/*
-> -	 * Ensure that if this updater saw a given reader's increment
-> -	 * from __srcu_read_lock(), that reader was using an old value
-> -	 * of ->srcu_idx.  Also ensure that if a given reader sees the
-> -	 * new value of ->srcu_idx, this updater's earlier scans cannot
-> -	 * have seen that reader's increments (which is OK, because this
-> -	 * grace period need not wait on that reader).
-> +	 * Ensure that if a given reader sees the new value of ->srcu_idx, this
-> +	 * updater's earlier scans cannot have seen that reader's increments
-> +	 * (which is OK, because this grace period need not wait on that
-> +	 * reader).
->   	 */
->   	smp_mb(); /* E */  /* Pairs with B and C. */
->   
+	M.
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Without deviation from the norm, progress is not possible.
