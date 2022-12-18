@@ -2,222 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD5064FDC6
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 06:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E437A64FDDB
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 07:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiLRFSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 00:18:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
+        id S230216AbiLRGBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 01:01:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbiLRFSO (ORCPT
+        with ESMTP id S229716AbiLRGBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 00:18:14 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE229F31
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 21:18:12 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id bi26-20020a05600c3d9a00b003d3404a89faso3144475wmb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 21:18:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VZjrql4GzJFHQJkJaKmcf2NkEXsxLrfG96nTce813zM=;
-        b=q9j+E6sC/Mv5x8/TehXbtRXdQiQqqENXX7LLpqFkYiBa55+8Ym66+zW4pq4VTXeHWl
-         XZr7HRd5XthTvqPx42b23iS0OD7LaAtKz2N0BA+hLNO8iCmYfCxo2bGU3/dePc/hYCAo
-         zv5jSj5r3eaI8nCWSLh179yoY1FpO9pdnwRNU=
+        Sun, 18 Dec 2022 01:01:36 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA2C8FFE
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 22:01:35 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id s1-20020a056e021a0100b003026adad6a9so4677752ild.18
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 22:01:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VZjrql4GzJFHQJkJaKmcf2NkEXsxLrfG96nTce813zM=;
-        b=cVgbTCQfNZEYfbDLAX9JM8iYmykzd23r3ZtGr91X/CkXeQT2rDky6ALinSReVShvWX
-         cIHbJjffOVuzesj1OUGWmM5GarWUu7fwsI+LE+oncMrKExWjHc/F71la2twmCQBjbGyL
-         QLePnOWBHTxdkjUP50WLNXgqYz5n0X6oY7DXV6pkEVDwfwe4F+1HJUKb4gOXf+8352AR
-         Cyx0X18eDOL+v/B/GXTFCVmVuTdMWF/5qTUMWKZTrU6IJ3VMPj9Xz8R/XtUyABvfmO/9
-         oftt4Ba20gAvZwCdGduX4HPNSs/hxpYxrTlbglQFEr3g8KOoHtAy4zaFjWLb6l/J6yOK
-         0HuA==
-X-Gm-Message-State: ANoB5plbJLtHZVYu/krIrCrI44WtTLsaQeMllcbbJ0ezpNBy31O2xm4G
-        wQpw5nu3x5P5WaOFHIhK6qlYAQ==
-X-Google-Smtp-Source: AA0mqf6f3ef5BuwOP85Gx7YZu5EIiEpnxNCOl1r7V0jE6yQouke8p5FYLVXungY9c4+QkgtMwi2lfg==
-X-Received: by 2002:a7b:cbd1:0:b0:3d1:ed41:57c0 with SMTP id n17-20020a7bcbd1000000b003d1ed4157c0mr28766562wmi.30.1671340691305;
-        Sat, 17 Dec 2022 21:18:11 -0800 (PST)
-Received: from workstation.ehrig.io (tmo-122-74.customers.d1-online.com. [80.187.122.74])
-        by smtp.gmail.com with ESMTPSA id k62-20020a1ca141000000b003cf894dbc4fsm7805231wme.25.2022.12.17.21.18.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Dec 2022 21:18:10 -0800 (PST)
-From:   Christian Ehrig <cehrig@cloudflare.com>
-To:     bpf@vger.kernel.org
-Cc:     cehrig@cloudflare.com, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Kui-Feng Lee <kuifeng@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Kaixi Fan <fankaixi.li@bytedance.com>,
-        Paul Chaignon <paul@isovalent.com>,
-        Shmulik Ladkani <shmulik@metanetworks.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add BPF_F_NO_TUNNEL_KEY test
-Date:   Sun, 18 Dec 2022 06:17:32 +0100
-Message-Id: <20221218051734.31411-2-cehrig@cloudflare.com>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221218051734.31411-1-cehrig@cloudflare.com>
-References: <20221218051734.31411-1-cehrig@cloudflare.com>
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xbcYa5eQg7Z8jNSA/cnWkeX8JLb+cVTBidKMi6pk1gg=;
+        b=eyoUqTamVZgKAGKYv46Id0MmcCEC/6Y4Mlp5m23uJs8mgs6ZnXuA3mcz8GkVmKKY5/
+         SUPre2yNPQWRJnQquC99nD++vJH4oo+tD63tRAvQdYapRx/u+OhUFq1XwQxsS8lqo2Kp
+         d5mNAXO2f2fSB9T688mQu2/jmHT1aS56Rxqkdo/8iWPxTFvuNPnB/So3obcDJO5+sq22
+         BZU9O2TP5FfBbetRutRlzS5QIKnb/MnKKxkehbMerYBjWZaUm5jWLAFfhaykC8VD9f2I
+         AzP6+xRfEtCtnRnIj3Tajf/qIjH3YEpb9nZx9+JmuY1+y9nNA2TZnt4a7niyDzF2CI4g
+         fckg==
+X-Gm-Message-State: ANoB5pnFyYwHdUpWmviLXvJdqQtTzH+m1LGynsrpJSQV9xWltxipvBO/
+        PoBEa1ZogcpiEUzkgTNeyd7Sl2OMwlVl2I14VUhwe+vQ4TsG
+X-Google-Smtp-Source: AA0mqf5oSs80u9WQ2kCvE5YeFKbRq/AR38ghYqE+5FqSCqx+wmXjOMWe1dHy+1FftsAFEHtlxdJztKNPGJ0wFCTEOA4f4olKWFPy
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:95ca:0:b0:363:ab01:e25f with SMTP id
+ b68-20020a0295ca000000b00363ab01e25fmr46256323jai.167.1671343294459; Sat, 17
+ Dec 2022 22:01:34 -0800 (PST)
+Date:   Sat, 17 Dec 2022 22:01:34 -0800
+In-Reply-To: <000000000000ab092305e268a016@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005d3b2c05f013ef1d@google.com>
+Subject: Re: [syzbot] [gfs2?] general protection fault in gfs2_evict_inode (2)
+From:   syzbot <syzbot+8a5fc6416c175cecea34@syzkaller.appspotmail.com>
+To:     agruenba@redhat.com, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org, rpeterso@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds a selftest simulating a GRE sender and receiver using
-tunnel headers without tunnel keys. It validates if packets encapsulated
-using BPF_F_NO_TUNNEL_KEY are decapsulated by a GRE receiver not
-configured with tunnel keys.
+syzbot has found a reproducer for the following issue on:
 
-Signed-off-by: Christian Ehrig <cehrig@cloudflare.com>
----
- .../selftests/bpf/progs/test_tunnel_kern.c    | 21 ++++++++++
- tools/testing/selftests/bpf/test_tunnel.sh    | 40 +++++++++++++++++--
- 2 files changed, 58 insertions(+), 3 deletions(-)
+HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=15551327880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
+dashboard link: https://syzkaller.appspot.com/bug?extid=8a5fc6416c175cecea34
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1718796f880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1735df8f880000
 
-diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-index 98af55f0bcd3..508da4a23c4f 100644
---- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-@@ -81,6 +81,27 @@ int gre_set_tunnel(struct __sk_buff *skb)
- 	return TC_ACT_OK;
- }
- 
-+SEC("tc")
-+int gre_set_tunnel_no_key(struct __sk_buff *skb)
-+{
-+	int ret;
-+	struct bpf_tunnel_key key;
-+
-+	__builtin_memset(&key, 0x0, sizeof(key));
-+	key.remote_ipv4 = 0xac100164; /* 172.16.1.100 */
-+	key.tunnel_ttl = 64;
-+
-+	ret = bpf_skb_set_tunnel_key(skb, &key, sizeof(key),
-+				     BPF_F_ZERO_CSUM_TX | BPF_F_SEQ_NUMBER |
-+				     BPF_F_NO_TUNNEL_KEY);
-+	if (ret < 0) {
-+		log_err(ret);
-+		return TC_ACT_SHOT;
-+	}
-+
-+	return TC_ACT_OK;
-+}
-+
- SEC("tc")
- int gre_get_tunnel(struct __sk_buff *skb)
- {
-diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
-index 2eaedc1d9ed3..06857b689c11 100755
---- a/tools/testing/selftests/bpf/test_tunnel.sh
-+++ b/tools/testing/selftests/bpf/test_tunnel.sh
-@@ -66,15 +66,20 @@ config_device()
- 
- add_gre_tunnel()
- {
-+	tun_key=
-+	if [ -n "$1" ]; then
-+		tun_key="key $1"
-+	fi
-+
- 	# at_ns0 namespace
- 	ip netns exec at_ns0 \
--        ip link add dev $DEV_NS type $TYPE seq key 2 \
-+        ip link add dev $DEV_NS type $TYPE seq $tun_key \
- 		local 172.16.1.100 remote 172.16.1.200
- 	ip netns exec at_ns0 ip link set dev $DEV_NS up
- 	ip netns exec at_ns0 ip addr add dev $DEV_NS 10.1.1.100/24
- 
- 	# root namespace
--	ip link add dev $DEV type $TYPE key 2 external
-+	ip link add dev $DEV type $TYPE $tun_key external
- 	ip link set dev $DEV up
- 	ip addr add dev $DEV 10.1.1.200/24
- }
-@@ -238,7 +243,7 @@ test_gre()
- 
- 	check $TYPE
- 	config_device
--	add_gre_tunnel
-+	add_gre_tunnel 2
- 	attach_bpf $DEV gre_set_tunnel gre_get_tunnel
- 	ping $PING_ARG 10.1.1.100
- 	check_err $?
-@@ -253,6 +258,30 @@ test_gre()
-         echo -e ${GREEN}"PASS: $TYPE"${NC}
- }
- 
-+test_gre_no_tunnel_key()
-+{
-+	TYPE=gre
-+	DEV_NS=gre00
-+	DEV=gre11
-+	ret=0
-+
-+	check $TYPE
-+	config_device
-+	add_gre_tunnel
-+	attach_bpf $DEV gre_set_tunnel_no_key gre_get_tunnel
-+	ping $PING_ARG 10.1.1.100
-+	check_err $?
-+	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
-+	check_err $?
-+	cleanup
-+
-+        if [ $ret -ne 0 ]; then
-+                echo -e ${RED}"FAIL: $TYPE"${NC}
-+                return 1
-+        fi
-+        echo -e ${GREEN}"PASS: $TYPE"${NC}
-+}
-+
- test_ip6gre()
- {
- 	TYPE=ip6gre
-@@ -589,6 +618,7 @@ cleanup()
- 	ip link del ipip6tnl11 2> /dev/null
- 	ip link del ip6ip6tnl11 2> /dev/null
- 	ip link del gretap11 2> /dev/null
-+	ip link del gre11 2> /dev/null
- 	ip link del ip6gre11 2> /dev/null
- 	ip link del ip6gretap11 2> /dev/null
- 	ip link del geneve11 2> /dev/null
-@@ -641,6 +671,10 @@ bpf_tunnel_test()
- 	test_gre
- 	errors=$(( $errors + $? ))
- 
-+	echo "Testing GRE tunnel (without tunnel keys)..."
-+	test_gre_no_tunnel_key
-+	errors=$(( $errors + $? ))
-+
- 	echo "Testing IP6GRE tunnel..."
- 	test_ip6gre
- 	errors=$(( $errors + $? ))
--- 
-2.37.4
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/b4c763067524/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8a5fc6416c175cecea34@syzkaller.appspotmail.com
+
+gfs2: fsid=syz:syz.0: error recovering journal 0: -5
+Unable to handle kernel NULL pointer dereference at virtual address 000000000000008c
+Mem abort info:
+  ESR = 0x0000000096000006
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000006
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=000000010dd7c000
+[000000000000008c] pgd=080000010bf77003, p4d=080000010bf77003, pud=080000010a9f1003, pmd=0000000000000000
+Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 3071 Comm: syz-executor179 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : evict_linked_inode fs/gfs2/super.c:1330 [inline]
+pc : gfs2_evict_inode+0x6f8/0x918 fs/gfs2/super.c:1385
+lr : evict_linked_inode fs/gfs2/super.c:1328 [inline]
+lr : gfs2_evict_inode+0x6ec/0x918 fs/gfs2/super.c:1385
+sp : ffff80000ff73830
+x29: ffff80000ff738a0 x28: 0000000000000000 x27: 0000000000000000
+x26: ffff0000cb74c728 x25: 0000000000008004 x24: ffff0000c9b25110
+x23: ffff0000cb74c000 x22: ffff0000c9b24e70 x21: ffff0000cb74c000
+x20: ffff0000ca579770 x19: ffff0000ca5792c0 x18: 00000000000000c0
+x17: ffff80000dda8198 x16: ffff80000dbe6158 x15: ffff0000c407cec0
+x14: 00000000000000b8 x13: 00000000ffffffff x12: ffff0000c407cec0
+x11: ff80800009278314 x10: 0000000000000000 x9 : ffff800009278314
+x8 : 0000000000000000 x7 : ffff80000862aa80 x6 : 0000000000000000
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000001 x1 : 0000000000000000 x0 : ffff0000cb74c000
+Call trace:
+ evict_linked_inode fs/gfs2/super.c:1330 [inline]
+ gfs2_evict_inode+0x6f8/0x918 fs/gfs2/super.c:1385
+ evict+0xec/0x334 fs/inode.c:664
+ iput_final fs/inode.c:1747 [inline]
+ iput+0x2c4/0x324 fs/inode.c:1773
+ gfs2_jindex_free+0x10c/0x16c fs/gfs2/super.c:75
+ init_journal+0x518/0xcbc fs/gfs2/ops_fstype.c:871
+ init_inodes+0x74/0x184 fs/gfs2/ops_fstype.c:889
+ gfs2_fill_super+0x630/0x874 fs/gfs2/ops_fstype.c:1247
+ get_tree_bdev+0x1e8/0x2a0 fs/super.c:1324
+ gfs2_get_tree+0x30/0xc0 fs/gfs2/ops_fstype.c:1330
+ vfs_get_tree+0x40/0x140 fs/super.c:1531
+ do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+ path_mount+0x358/0x890 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+Code: 97ff3736 f94482e8 aa1703e0 2a1f03e1 (b9408d02) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	97ff3736 	bl	0xfffffffffffcdcd8
+   4:	f94482e8 	ldr	x8, [x23, #2304]
+   8:	aa1703e0 	mov	x0, x23
+   c:	2a1f03e1 	mov	w1, wzr
+* 10:	b9408d02 	ldr	w2, [x8, #140] <-- trapping instruction
 
