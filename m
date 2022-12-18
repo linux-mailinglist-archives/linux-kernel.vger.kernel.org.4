@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBE964FE67
+	by mail.lfdr.de (Postfix) with ESMTP id 3C64864FE65
 	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 11:19:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbiLRKT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 05:19:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
+        id S230319AbiLRKTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 05:19:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbiLRKT0 (ORCPT
+        with ESMTP id S230272AbiLRKTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 05:19:26 -0500
+        Sun, 18 Dec 2022 05:19:31 -0500
 Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6D5DEE6
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 02:19:25 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id a9so6393741pld.7
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 02:19:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763EEDEE3
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 02:19:30 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id a9so6393815pld.7
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 02:19:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ERe/r2sSrZoK/GY0S6LEuDdiHuaRQ2o4UfuW7lVdOJA=;
-        b=NzidgMsUv/PXs06KQ1wiEISb3hVNDjxnjvZ03vdtNPZ+wQrwGZ+beCSj1jS5UCnrOm
-         EcwJOQxR5C24LhdzxFXchQ3CjlIgeflvZ9Ffd5od6T7TJMiVhGo3QhVoLKYNIUcqKFrc
-         SB9H7hMqHpwSqMCjPqlardUQjGuslebXpsCBHDuUQ0VFGHomt8PW1+87G9HhJVZBBRvI
-         NJl9sZk1LqboH0x+TGGRD/fl6yVEbou1laIZ8ytEtOJKUVYtqtm2ntB5Ju2PMrpvPtCF
-         w5O0ZWeTaady6ZWy4F7dZIS9qzLSAGmfkTDp4WQWVo9CsE0pOsYLcS3PtTly57hWQwcq
-         zDhw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uvPBeK/uQOTkS5bCd9KHq/uJNQrs6bRmNyv7cBW90YM=;
+        b=cRiTctr0c+Y3PZWbi7kGhJ+34MYU3MF+KKnkl+m0yvYmeh883ce+JGBji2dZkDL2Wo
+         hjL9TAemPLQTDRquzBzZeh7gEX9K3HNYkHV9ZLZRDL/TKyUe+k5cg4kICjxEiUuvvHzT
+         /vjo03Bq5Fa77BDp79CFdE+HJdkWVffsveAnjyPESBtjDEWf9g6LV007LJr9icmfaraT
+         gHoQiwsNbbjf8JegEPhFcZi7XGz0hJeLpj0Vp09qF6fDBlDkBxajEVETAzGafjUiRTKy
+         mugTC9WZqfGT42wqXkQrr+4GNPLFab7/vpOtwly1RRFOOudqMFYz5g8lbt3jqqjaOK5W
+         tGpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ERe/r2sSrZoK/GY0S6LEuDdiHuaRQ2o4UfuW7lVdOJA=;
-        b=o0OzLldEYxpXWj1haUy9xXw8AxDZVv2TIJzOGbmVvm2RoPo199qgQtcTc9Yc9MG13I
-         eBfqfBqnjT5UPu1YE0CgtC4/F9reglFRxY2kpJrmfXdzpsLyK1DJ6VRxVx5m1et3le60
-         EWsj+0UscljhxgMgluDxBX84xpFxs/Xnix12ZqBkaIDjYe5mFoP65+3WdjgpObL5Z/Hm
-         e5wWBKAryx5jfqh011+lc1+blrinP6jlF1RBwE3XAKGUUZvUvknAyx15WdpyYZRnIiYV
-         peAFvxNCXCJQuKl6zcfyvFl0zg/U6azaeAUpkdvqrQpZgKH72cJZUgM7x80bCBjYbtzO
-         /8nQ==
-X-Gm-Message-State: AFqh2kpmIUnDAIajBuCD5O3or7de4PhQ3y+iXnKciRRRw0zh46iGwpfg
-        WFNABNh1HGC1ntXaOoye0h8=
-X-Google-Smtp-Source: AMrXdXt3Qc6Z+OskCRLL2iIYYRcpfIiOSjKvwM/qlDjcbNGQ72fpb+5p9Oct7I9A1nW4i/QOOzW8xg==
-X-Received: by 2002:a17:902:e80c:b0:189:985c:849d with SMTP id u12-20020a170902e80c00b00189985c849dmr7076606plg.1.1671358765219;
-        Sun, 18 Dec 2022 02:19:25 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uvPBeK/uQOTkS5bCd9KHq/uJNQrs6bRmNyv7cBW90YM=;
+        b=pafbpO8AJf9TK1B87KpiGAhXLxsnLM+9RmdUP718yjlcG0V/XDDyoylBlczNVT3dtV
+         HVMMxqkaW39WCP5qdWJ7dSmfAWHEnSDjudAc2JThQgtyttpW6kXFIOeLYdZ9AQdE3hfL
+         KAIvSEHWpp8CaF/kG4T3wOQQiLV6znmE/sbSWtgZfd8DL17CvpKtoLOPtrJ8y9khtdKB
+         yBhL9eJLhe5c1y1A1lQKVtvqvN5G6vXA94N28WXu3b0W2nfM51Dm4BU87WCVJ7AWE7Pf
+         y0Wa4PdM2xE2PuIALX8LTmv9jQPkBSVSm/aQAT5ijxaCzSitMuo/8ogUwD7berSugvTD
+         VZCA==
+X-Gm-Message-State: ANoB5pklci6xQQuLQGaqOSAlPZvdx6GIh5GX6QMPo7eKNqk0BG6tdbnZ
+        eDht9CFjUV1Ij8psDfDaFo0=
+X-Google-Smtp-Source: AA0mqf6JsU6eO2pxoS+w8HrBGNWmgAWd/51Yb3PiWN6hBjoaQOTnmocm7rbasPDj7XkU/fiBlRC6nw==
+X-Received: by 2002:a17:902:b618:b0:189:af28:fd8d with SMTP id b24-20020a170902b61800b00189af28fd8dmr37386097pls.1.1671358770040;
+        Sun, 18 Dec 2022 02:19:30 -0800 (PST)
 Received: from hyeyoo.. ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id ik11-20020a170902ab0b00b001897bfc9800sm4789791plb.53.2022.12.18.02.19.20
+        by smtp.gmail.com with ESMTPSA id ik11-20020a170902ab0b00b001897bfc9800sm4789791plb.53.2022.12.18.02.19.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Dec 2022 02:19:24 -0800 (PST)
+        Sun, 18 Dec 2022 02:19:29 -0800 (PST)
 From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
 To:     Christoph Lameter <cl@linux.com>,
         Pekka Enberg <penberg@kernel.org>,
@@ -65,10 +66,12 @@ Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
         Matthew WilCox <willy@infradead.org>,
         David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [RFC v3 0/4] move PG_slab flag to page_type
-Date:   Sun, 18 Dec 2022 19:18:57 +0900
-Message-Id: <20221218101901.373450-1-42.hyeyoo@gmail.com>
+Subject: [RFC v3 1/4] mm/hwpoison: remove MF_MSG_SLAB from action_page_types
+Date:   Sun, 18 Dec 2022 19:18:58 +0900
+Message-Id: <20221218101901.373450-2-42.hyeyoo@gmail.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20221218101901.373450-1-42.hyeyoo@gmail.com>
+References: <20221218101901.373450-1-42.hyeyoo@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,46 +84,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RFC v2:
-https://lore.kernel.org/linux-mm/20221106140355.294845-1-42.hyeyoo@gmail.com/
+As suggested by Naoya [1], identify_page_state() is never
+called when handling memory error on a slab page.
 
-This patch series moves PG_slab page flag to page_type,
-freeing one bit in page->flags and introduces %pGt format
-that prints human-readable page_type like %pGp for printing page flags.
+Clean this up before moving PG_slab flag to page_type in later patch.
 
-See changelog of patch 2 for more implementation details.
+[1] https://lore.kernel.org/linux-mm/Y2s+dnBsHAJu19ob@hyeyoo/#r
 
-Thanks everyone that gave valuable comments.
+Suggested-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+---
+ mm/memory-failure.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-v2 -> v3:
-- dropped show_page_types() in a thought that it is not interesting
-  to track refcount of non-usermapped pages.
-- added patch 1 that cleans up MF_MSG_SLAB in hwpoison
-- split implementation and application of %pGt to separate patches.
-- instead of printing "no page_type for ..." in %pGt, just print 
-  '0x<value>()' for a page that does not use page_type field.
-
-Hyeonggon Yoo (4):
-  mm/hwpoison: remove MF_MSG_SLAB from action_page_types
-  mm: move PG_slab flag to page_type
-  mm, printk: introduce new format %pGt for page_type
-  mm/debug: use %pGt to print page_type in dump_page()
-
- Documentation/core-api/printk-formats.rst |  3 +-
- fs/proc/page.c                            | 13 ++--
- include/linux/mm_types.h                  | 11 ++--
- include/linux/page-flags.h                | 77 ++++++++++++++++-------
- include/trace/events/mmflags.h            |  8 ++-
- kernel/crash_core.c                       |  3 +-
- lib/test_printf.c                         | 26 ++++++++
- lib/vsprintf.c                            | 21 +++++++
- mm/debug.c                                |  7 +++
- mm/internal.h                             |  1 +
- mm/memory-failure.c                       | 10 ---
- mm/slab.c                                 | 44 ++++++++-----
- mm/slab.h                                 |  3 +-
- 13 files changed, 162 insertions(+), 65 deletions(-)
-
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index c77a9e37e27e..74ad1db989e3 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -783,7 +783,6 @@ static const char *action_name[] = {
+ static const char * const action_page_types[] = {
+ 	[MF_MSG_KERNEL]			= "reserved kernel page",
+ 	[MF_MSG_KERNEL_HIGH_ORDER]	= "high-order kernel page",
+-	[MF_MSG_SLAB]			= "kernel slab page",
+ 	[MF_MSG_DIFFERENT_COMPOUND]	= "different compound page after locking",
+ 	[MF_MSG_HUGE]			= "huge page",
+ 	[MF_MSG_FREE_HUGE]		= "free huge page",
+@@ -1146,7 +1145,6 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+ #define mlock		(1UL << PG_mlocked)
+ #define lru		(1UL << PG_lru)
+ #define head		(1UL << PG_head)
+-#define slab		(1UL << PG_slab)
+ #define reserved	(1UL << PG_reserved)
+ 
+ static struct page_state error_states[] = {
+@@ -1156,13 +1154,6 @@ static struct page_state error_states[] = {
+ 	 * PG_buddy pages only make a small fraction of all free pages.
+ 	 */
+ 
+-	/*
+-	 * Could in theory check if slab page is free or if we can drop
+-	 * currently unused objects without touching them. But just
+-	 * treat it as standard kernel for now.
+-	 */
+-	{ slab,		slab,		MF_MSG_SLAB,	me_kernel },
+-
+ 	{ head,		head,		MF_MSG_HUGE,		me_huge_page },
+ 
+ 	{ sc|dirty,	sc|dirty,	MF_MSG_DIRTY_SWAPCACHE,	me_swapcache_dirty },
+@@ -1189,7 +1180,6 @@ static struct page_state error_states[] = {
+ #undef mlock
+ #undef lru
+ #undef head
+-#undef slab
+ #undef reserved
+ 
+ /*
 -- 
 2.32.0
 
