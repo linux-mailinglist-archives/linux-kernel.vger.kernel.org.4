@@ -2,245 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1655B65043C
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 18:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3859E65034F
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 18:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231402AbiLRRow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 12:44:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
+        id S233044AbiLRRBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 12:01:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbiLRRo2 (ORCPT
+        with ESMTP id S232310AbiLRRBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 12:44:28 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43CBD6CA3;
-        Sun, 18 Dec 2022 08:46:25 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NZnlw0Q8Bz67Q1W;
-        Mon, 19 Dec 2022 00:07:08 +0800 (CST)
-Received: from localhost (10.81.208.178) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Sun, 18 Dec
- 2022 16:08:28 +0000
-Date:   Sun, 18 Dec 2022 16:08:24 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-CC:     Luis Chamberlain <mcgrof@kernel.org>, <alison.schofield@intel.com>,
-        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
-        <bwidawsk@kernel.org>, <dave@stgolabs.net>,
-        <a.manzanares@samsung.com>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC] cxl_test: upgrade as a first class citizen selftests
- capable driver
-Message-ID: <20221218160824.0000583d@Huawei.com>
-In-Reply-To: <639d4bb71bada_b41e329452@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20221217034947.1174795-1-mcgrof@kernel.org>
-        <639d4bb71bada_b41e329452@dwillia2-xfh.jf.intel.com.notmuch>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Sun, 18 Dec 2022 12:01:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A121D6;
+        Sun, 18 Dec 2022 08:20:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D5F360D39;
+        Sun, 18 Dec 2022 16:20:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 646FFC433EF;
+        Sun, 18 Dec 2022 16:20:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671380443;
+        bh=FFT92f9FLlnPqJ4WXdrhhKnQ36lyXMAjIaaOy4oNPRQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=V2LXYDgvmrfMJiGl0WAwOuceMRIg5H8t7NQsOBlCBWXYe/T9ZAOgHmbvkjtNMClQN
+         UqqjcTdn/zmRO2AMlPH8uNfsTuvvRAtVYCsSYkBm3PWPNcREAktFPXQ/tmtadhEY+0
+         2S6esQHgvuqqNYGB8QtSf7jvhTlyIH/m/JrBkF/Bzauc045Q2OOSk/KfKOuKhBZiZ2
+         NddGyFT4FS1XqZ4e0owEUiNqS2LrVlAQnH3hoKqql40OQC0mZY+dHS47a2TClPuZII
+         A7dRTv356sRlF/uMpyibMfglZ6tuo2X+90iGRpd6d5XWfsIUcxpBcLuyx30hbJtX+I
+         WAR7xHGxJUVxg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Minsuk Kang <linuxlovemin@yonsei.ac.kr>,
+        Dokyung Song <dokyungs@yonsei.ac.kr>,
+        Jisoo Jang <jisoo.jang@yonsei.ac.kr>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        aspriel@gmail.com, franky.lin@broadcom.com,
+        hante.meuleman@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        marcan@marcan.st, alsi@bang-olufsen.dk, rmk+kernel@armlinux.org.uk,
+        phil@raspberrypi.com, ardb@kernel.org,
+        wsa+renesas@sang-engineering.com, linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 08/26] wifi: brcmfmac: Fix potential shift-out-of-bounds in brcmf_fw_alloc_request()
+Date:   Sun, 18 Dec 2022 11:19:58 -0500
+Message-Id: <20221218162016.934280-8-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221218162016.934280-1-sashal@kernel.org>
+References: <20221218162016.934280-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.208.178]
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Dec 2022 20:55:19 -0800
-Dan Williams <dan.j.williams@intel.com> wrote:
+From: Minsuk Kang <linuxlovemin@yonsei.ac.kr>
 
-> Luis Chamberlain wrote:
-> > To unit test CXL today we make use of the ndctl meson test suite but
-> > this requires the cxl_test driver. There is however is no kconfig option
-> > for this driver as its required to be built as an external driver. To
-> > debug CXL with this framework is not inuitive as it departs itself from
-> > typical Linux kernel development debugging processes, requiring an
-> > external module build which also happens to *rebuild* all CXL related
-> > production drivers with some new magic incantations, and replacing
-> > your production CXL modules with the new ones.
-> > 
-> > This is quite complex, departs ourselves from the typical build/boot
-> > debugging process most folks are used to, and requires a manual error-prone
-> > process which in some kernels / configurations can leads up to a kernel
-> > crash [0].
-> > 
-> > We can replace this by having the requirements be defined through proper
-> > kconfig symbols and having the cxl_test driver and requirements also become
-> > part of the standard Linux kernel build process. This matches most other
-> > kernel kernel debugging frameworks for subsystems, which don't require any
-> > external modules.
-> > 
-> > Let's review the current strategy today, first, so nothing is lost:
-> > 
-> >   * one must manually *build*, and then as a second step install
-> >     the cxl_test driver as an external modules:
-> > 
-> >     make M=tools/testing/cxl/
-> >     sudo M=tools/testing/cxl/ modules_install
-> > 
-> >     Provided your depmod.d was configured correctly on your Linux
-> >     distribution you will end up with a complete set of CXL production
-> >     modules and cxl_test mock drivers to let you now use the ndctl
-> >     test suite. To be clear, you will not only end up with cxl_test
-> >     but also with a complete set of module replacements for your CXL
-> >     environment.
-> > 
-> >     This works by:
-> > 
-> >     a) allowing the external module to re-define the __mock macro
-> >        to __weak, used on to_cxl_host_bridge() and allows the mock driver
-> >        to provide a replacement for that single call.
-> > 
-> >     b) the external module build process *rebuilds* all production
-> >        modules *again* but uses the the binutils --wrap=symbol
-> >        feature [0] [1] to let the production CXL code use the mocked up
-> >        CXL features.
-> > 
-> > We can simplify all this considerably and do away with the external
-> > modules requirements. The __mock stuff is raplaced by addressing the
-> > to_cxl_host_bridge() mapping using a define based on your kernel
-> > configuration. If using the production code you use the produciton
-> > __to_cxl_host_bridge(), otherwise mock_to_cxl_host_bridge() will be
-> > used. This is the *only* eyesore in the CXL code to enable use of the
-> > mock driver.
-> > 
-> > The magic --wrap=symbol incantations are also just tucked in a new
-> > production drivers/cxl/Makefile.mock which is only read when the kernel
-> > has been configured for debugging using the CXl mock framework.
-> > 
-> > The last bit of work left is to move as built-in code shared code
-> > between a production environment (non-debugging) and between what is
-> > needed for the same code to run when doing mock debugging. Today the
-> > requirements are small:
-> > 
-> >   * The code to implement to_cxl_host_bridge()
-> >   * When mock debugging is enabled, just the code we need to
-> >     support mock_to_cxl_host_bridge()
-> > 
-> > For both cases this is needed you have CXL_ACPI enabled.
-> > 
-> > In the future if we wanted to then now use the kernel selftests,
-> > for example a tools/testing/sefltests/cxl/ directory, we can easily
-> > do so. This also enables us to separate out unit tests out from the
-> > ndctl tree and allow unit tests to also be developed and written
-> > upstream on the kernel.
-> > 
-> > Another benefit of this approach is that there is no bit rot,
-> > in the sense that now bots can go willy nilly test building this
-> > code, whereas before only those who knew the proper incantations
-> > actually were building this code and loading it properly.
-> > 
-> > [0] https://lkml.kernel.org/r/20221209062919.1096779-1-mcgrof@kernel.org
-> > [1] https://sourceware.org/binutils/docs-2.23.1/ld/Options.html#index-g_t_002d_002dwrap_003d_0040var_007bsymbol_007d-263
-> > [2] https://lwn.net/Articles/558106/
-> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> > ---
-> > 
-> > What do folks think?
-> > 
-> > The test results:
-> > 
-> > https://gist.github.com/mcgrof/2ab7f1601141faa5ac7b16240b4ea652
-> > 
-> > The summary of test results:
-> > 
-> > Summary of Failures:
-> > 
-> > 1/5 ndctl:cxl / cxl-topology.sh      FAIL             0.50s   exit status 1
-> > 2/5 ndctl:cxl / cxl-region-sysfs.sh  FAIL             0.44s   exit status 1
-> > 5/5 ndctl:cxl / cxl-xor-region.sh    FAIL             0.45s   exit status 1  
-> 
-> At least for me the presented rationale and these results leaves me
-> cold. Yes, there are sharp edges but 0day groks this scheme when it runs
-> tools/testing/nvdimm/ (nfit_test) tests. The run_qemu script automates
-> cxl_test and nfit_test this as well. So the complexity has not proven
-> prohibitive. In the case of tools/testing/nvdimm/ it has not proven
-> prohibitive for years. In other words the suggestion that the current
-> organization ultimately leads to bit rot has not been substantiated in
-> practice.
-> 
-> The proposed direction to move tests out of the ndctl.git repo into the
-> kernel solves the wrong problem. It overlooks the fact that the tests
-> are more tightly coupled to libcxl changes than kernel changes. So in
-> terms of benefits of code being colocated, tests + libcxl + tools in the
-> same repo is more impactful than tests + kernel in the same repo.
-> 
-> I know Jonathan has some latent ideas about building up a CXL regression
-> suite on top of QEMU, but even there it's not clear that would benefit
-> from being developed in linux.git given the tight coupling to QEMU.git.
+[ Upstream commit 81d17f6f3331f03c8eafdacea68ab773426c1e3c ]
 
-QEMU based CI should go two ways:
-1) QEMU CI would typically pin particular kernel version and verify that
-   QEMU changed don't break that. If we need new features for a new test,
-   we move that kernel version used.  Existing tests should never break
-   against a fixed kernel version as that's a regression in QEMU (or
-   maybe a bug elsewhere) Ultimately we should have this running in the
-   normal QEMU gitlab CI.
-2) Kernel CI against QEMU would typically pin particular QEMU version
-   and check that kernel changes don't break.  This will have rough edges
-   for a while yet as we are still adding mandatory features to the QEMU
-   emulation (e.g. events support).  Again, as we add new features / tests
-   may need to move the QEMU version forwards to support them.
+This patch fixes a shift-out-of-bounds in brcmfmac that occurs in
+BIT(chiprev) when a 'chiprev' provided by the device is too large.
+It should also not be equal to or greater than BITS_PER_TYPE(u32)
+as we do bitwise AND with a u32 variable and BIT(chiprev). The patch
+adds a check that makes the function return NULL if that is the case.
+Note that the NULL case is later handled by the bus-specific caller,
+brcmf_usb_probe_cb() or brcmf_usb_reset_resume(), for example.
 
-I don't think we much care about backwards compatibility so once we've
-moved the pinned element forwards in the above, we won't care about the
-old version.  The aim here isn't really to ensure no regressions when
-running on QEMU (though that CI is nice to have), but more that we have
-no problems in kernel side of things.
+Found by a modified version of syzkaller.
 
-This is a way off yet.  Not seeing this as being part of linux.git.
-The QEMU CI stuff will be in the qemu.git and Kernel CI stuff probably
-sit out of tree - there shouldn't be a tight coupling beyond new tests
-wanting to check available features etc. I might ask a friendly
-CI project to add this to their normal runs.
+UBSAN: shift-out-of-bounds in drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
+shift exponent 151055786 is too large for 64-bit type 'long unsigned int'
+CPU: 0 PID: 1885 Comm: kworker/0:2 Tainted: G           O      5.14.0+ #132
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org 04/01/2014
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ dump_stack_lvl+0x57/0x7d
+ ubsan_epilogue+0x5/0x40
+ __ubsan_handle_shift_out_of_bounds.cold+0x53/0xdb
+ ? lock_chain_count+0x20/0x20
+ brcmf_fw_alloc_request.cold+0x19/0x3ea
+ ? brcmf_fw_get_firmwares+0x250/0x250
+ ? brcmf_usb_ioctl_resp_wait+0x1a7/0x1f0
+ brcmf_usb_get_fwname+0x114/0x1a0
+ ? brcmf_usb_reset_resume+0x120/0x120
+ ? number+0x6c4/0x9a0
+ brcmf_c_process_clm_blob+0x168/0x590
+ ? put_dec+0x90/0x90
+ ? enable_ptr_key_workfn+0x20/0x20
+ ? brcmf_common_pd_remove+0x50/0x50
+ ? rcu_read_lock_sched_held+0xa1/0xd0
+ brcmf_c_preinit_dcmds+0x673/0xc40
+ ? brcmf_c_set_joinpref_default+0x100/0x100
+ ? rcu_read_lock_sched_held+0xa1/0xd0
+ ? rcu_read_lock_bh_held+0xb0/0xb0
+ ? lock_acquire+0x19d/0x4e0
+ ? find_held_lock+0x2d/0x110
+ ? brcmf_usb_deq+0x1cc/0x260
+ ? mark_held_locks+0x9f/0xe0
+ ? lockdep_hardirqs_on_prepare+0x273/0x3e0
+ ? _raw_spin_unlock_irqrestore+0x47/0x50
+ ? trace_hardirqs_on+0x1c/0x120
+ ? brcmf_usb_deq+0x1a7/0x260
+ ? brcmf_usb_rx_fill_all+0x5a/0xf0
+ brcmf_attach+0x246/0xd40
+ ? wiphy_new_nm+0x1476/0x1d50
+ ? kmemdup+0x30/0x40
+ brcmf_usb_probe+0x12de/0x1690
+ ? brcmf_usbdev_qinit.constprop.0+0x470/0x470
+ usb_probe_interface+0x25f/0x710
+ really_probe+0x1be/0xa90
+ __driver_probe_device+0x2ab/0x460
+ ? usb_match_id.part.0+0x88/0xc0
+ driver_probe_device+0x49/0x120
+ __device_attach_driver+0x18a/0x250
+ ? driver_allows_async_probing+0x120/0x120
+ bus_for_each_drv+0x123/0x1a0
+ ? bus_rescan_devices+0x20/0x20
+ ? lockdep_hardirqs_on_prepare+0x273/0x3e0
+ ? trace_hardirqs_on+0x1c/0x120
+ __device_attach+0x207/0x330
+ ? device_bind_driver+0xb0/0xb0
+ ? kobject_uevent_env+0x230/0x12c0
+ bus_probe_device+0x1a2/0x260
+ device_add+0xa61/0x1ce0
+ ? __mutex_unlock_slowpath+0xe7/0x660
+ ? __fw_devlink_link_to_suppliers+0x550/0x550
+ usb_set_configuration+0x984/0x1770
+ ? kernfs_create_link+0x175/0x230
+ usb_generic_driver_probe+0x69/0x90
+ usb_probe_device+0x9c/0x220
+ really_probe+0x1be/0xa90
+ __driver_probe_device+0x2ab/0x460
+ driver_probe_device+0x49/0x120
+ __device_attach_driver+0x18a/0x250
+ ? driver_allows_async_probing+0x120/0x120
+ bus_for_each_drv+0x123/0x1a0
+ ? bus_rescan_devices+0x20/0x20
+ ? lockdep_hardirqs_on_prepare+0x273/0x3e0
+ ? trace_hardirqs_on+0x1c/0x120
+ __device_attach+0x207/0x330
+ ? device_bind_driver+0xb0/0xb0
+ ? kobject_uevent_env+0x230/0x12c0
+ bus_probe_device+0x1a2/0x260
+ device_add+0xa61/0x1ce0
+ ? __fw_devlink_link_to_suppliers+0x550/0x550
+ usb_new_device.cold+0x463/0xf66
+ ? hub_disconnect+0x400/0x400
+ ? _raw_spin_unlock_irq+0x24/0x30
+ hub_event+0x10d5/0x3330
+ ? hub_port_debounce+0x280/0x280
+ ? __lock_acquire+0x1671/0x5790
+ ? wq_calc_node_cpumask+0x170/0x2a0
+ ? lock_release+0x640/0x640
+ ? rcu_read_lock_sched_held+0xa1/0xd0
+ ? rcu_read_lock_bh_held+0xb0/0xb0
+ ? lockdep_hardirqs_on_prepare+0x273/0x3e0
+ process_one_work+0x873/0x13e0
+ ? lock_release+0x640/0x640
+ ? pwq_dec_nr_in_flight+0x320/0x320
+ ? rwlock_bug.part.0+0x90/0x90
+ worker_thread+0x8b/0xd10
+ ? __kthread_parkme+0xd9/0x1d0
+ ? process_one_work+0x13e0/0x13e0
+ kthread+0x379/0x450
+ ? _raw_spin_unlock_irq+0x24/0x30
+ ? set_kthread_struct+0x100/0x100
+ ret_from_fork+0x1f/0x30
 
-I don't have strong feelings on cxl_test. Tend not to use it myself
-and haven't yet contributed to it.
+Reported-by: Dokyung Song <dokyungs@yonsei.ac.kr>
+Reported-by: Jisoo Jang <jisoo.jang@yonsei.ac.kr>
+Reported-by: Minsuk Kang <linuxlovemin@yonsei.ac.kr>
+Signed-off-by: Minsuk Kang <linuxlovemin@yonsei.ac.kr>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20221024071329.504277-1-linuxlovemin@yonsei.ac.kr
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Jonathan
-
-> 
-> > 
-> > Ok:                 2   
-> > Expected Fail:      0   
-> > Fail:               3   
-> > Unexpected Pass:    0   
-> > Skipped:            0   
-> > Timeout:            0  
-> > 
-> > I don't quite get the failures yet, but hey it's a start.
-> > This commit depends on Dan's patch:
-> > 
-> > https://lkmll.kernel.org/r/6393a3a9d2882_579c1294b3@dwillia2-xfh.jf.intel.com.notmuch
-> > 
-> > But I can build another RFC if folks want without it.
-> > 
-> >  drivers/cxl/Kconfig                           | 23 +++++++
-> >  drivers/cxl/Makefile                          |  2 +
-> >  drivers/cxl/Makefile.mock                     | 15 +++++
-> >  drivers/cxl/acpi.c                            | 13 ----
-> >  drivers/cxl/core/Makefile                     |  4 ++
-> >  drivers/cxl/core/acpi.c                       | 30 +++++++++
-> >  drivers/cxl/cxl.h                             | 19 +++---
-> >  lib/Kconfig.debug                             |  8 +++
-> >  lib/Makefile                                  |  1 +
-> >  lib/test_cxl/Makefile                         | 13 ++++
-> >  lib/test_cxl/acpi.c                           | 28 +++++++++
-> >  lib/test_cxl/core.c                           | 37 +++++++++++
-> >  .../testing/cxl/test => lib/test_cxl}/cxl.c   |  7 ---
-> >  .../testing/cxl/test => lib/test_cxl}/mem.c   |  0
-> >  .../testing/cxl/test => lib/test_cxl}/mock.c  | 30 ---------
-> >  .../testing/cxl/test => lib/test_cxl}/mock.h  |  0  
->  
-> I do not think cxl_test is suitable to ship as an in-tree capability, it
-> is intentionally second class to keep test logic distinct from
-> production code.
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
+index 4e5a6c311d1a..d8460835ff00 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
+@@ -648,6 +648,11 @@ brcmf_fw_alloc_request(u32 chip, u32 chiprev,
+ 	char end = '\0';
+ 	size_t reqsz;
+ 
++	if (chiprev >= BITS_PER_TYPE(u32)) {
++		brcmf_err("Invalid chip revision %u\n", chiprev);
++		return NULL;
++	}
++
+ 	for (i = 0; i < table_size; i++) {
+ 		if (mapping_table[i].chipid == chip &&
+ 		    mapping_table[i].revmask & BIT(chiprev))
+-- 
+2.35.1
 
