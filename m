@@ -2,86 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D99264FEE9
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 14:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 102DD64FEEB
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 14:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiLRNBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 08:01:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
+        id S230212AbiLRNEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 08:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiLRNA5 (ORCPT
+        with ESMTP id S229730AbiLRNEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 08:00:57 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65D010F6
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 05:00:55 -0800 (PST)
-Received: from dslb-178-004-201-210.178.004.pools.vodafone-ip.de ([178.4.201.210] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1p6tHV-0006ch-5i; Sun, 18 Dec 2022 14:00:41 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Martin Kaiser <martin@kaiser.cx>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: actions: add missing of_node_put calls
-Date:   Sun, 18 Dec 2022 14:00:21 +0100
-Message-Id: <20221218130022.393749-1-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
+        Sun, 18 Dec 2022 08:04:22 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2B3B1D9
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 05:04:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671368661; x=1702904661;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=I24sFTyp/UKXONvaAGMG4cg5BaMMBdT07RdIRFqVtP0=;
+  b=A9N7booBjMWB2AlIqD8vAeidsUcuyIISbn7yBvWgQ2fOjIHfCzpVo8Ct
+   eM1gmU8hfyignyjlrCBPGnlQweCqWLzlHW8pydpPkm4nOcMZRCsDog0ah
+   FVBJSLVzctnGepZpqAYvhFl+SJu3K5O9f/tg6VfTMQ0PDu1ZbIdhkUQcM
+   Esqr1QbogKCtLJTsKNS2B9NSq90Jeg6s8tglUBuNQRl0mwdtP6bZUu4eP
+   ++jxv8sfF2HDKKxkkTC8x3rOIBYRYzyC0L3kxMY2RbdNQZ5sr6SgDyq89
+   jCdFqOkDWURej/dmdwWHlerHMoRi4SnXPDrv71Fva9hPJ7FbjsXlooDeM
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10564"; a="317893755"
+X-IronPort-AV: E=Sophos;i="5.96,254,1665471600"; 
+   d="scan'208";a="317893755"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2022 05:04:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10564"; a="682753443"
+X-IronPort-AV: E=Sophos;i="5.96,254,1665471600"; 
+   d="scan'208";a="682753443"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 18 Dec 2022 05:04:19 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p6tL0-0008Ic-0j;
+        Sun, 18 Dec 2022 13:04:18 +0000
+Date:   Sun, 18 Dec 2022 21:03:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2022.12.15a] BUILD SUCCESS
+ b99e4fd99dcc3da86988dcc930a2670387677788
+Message-ID: <639f0fac.7KA/pBRgVwRYQsSD%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A node that is returned by of_find_compatible_node has its refcount
-incremented. We have to call of_node_put when the node is no longer
-needed.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.12.15a
+branch HEAD: b99e4fd99dcc3da86988dcc930a2670387677788  rcu: Make rcu_blocking_is_gp() stop early-boot might_sleep()
 
-Add the missing of_node_put calls in function s500_smp_prepare_cpus.
+elapsed time: 2072m
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
-compile-tested only, I don't have this hardware
+configs tested: 68
+configs skipped: 2
 
- arch/arm/mach-actions/platsmp.c | 3 +++
- 1 file changed, 3 insertions(+)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/arch/arm/mach-actions/platsmp.c b/arch/arm/mach-actions/platsmp.c
-index f26618b43514..9fe9a0bd0fd0 100644
---- a/arch/arm/mach-actions/platsmp.c
-+++ b/arch/arm/mach-actions/platsmp.c
-@@ -103,6 +103,7 @@ static void __init s500_smp_prepare_cpus(unsigned int max_cpus)
- 	}
- 
- 	timer_base_addr = of_iomap(node, 0);
-+	of_node_put(node);
- 	if (!timer_base_addr) {
- 		pr_err("%s: could not map timer registers\n", __func__);
- 		return;
-@@ -115,6 +116,7 @@ static void __init s500_smp_prepare_cpus(unsigned int max_cpus)
- 	}
- 
- 	sps_base_addr = of_iomap(node, 0);
-+	of_node_put(node);
- 	if (!sps_base_addr) {
- 		pr_err("%s: could not map sps registers\n", __func__);
- 		return;
-@@ -128,6 +130,7 @@ static void __init s500_smp_prepare_cpus(unsigned int max_cpus)
- 		}
- 
- 		scu_base_addr = of_iomap(node, 0);
-+		of_node_put(node);
- 		if (!scu_base_addr) {
- 			pr_err("%s: could not map scu registers\n", __func__);
- 			return;
+gcc tested configs:
+powerpc                           allnoconfig
+sh                               allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+arc                                 defconfig
+m68k                             allyesconfig
+um                             i386_defconfig
+alpha                               defconfig
+m68k                             allmodconfig
+um                           x86_64_defconfig
+x86_64                               rhel-8.3
+arc                              allyesconfig
+alpha                            allyesconfig
+x86_64                              defconfig
+s390                             allmodconfig
+x86_64                        randconfig-a002
+x86_64                           allyesconfig
+s390                                defconfig
+x86_64                        randconfig-a006
+i386                          randconfig-a014
+x86_64                        randconfig-a004
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                           rhel-8.3-syz
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+x86_64                         rhel-8.3-kunit
+s390                             allyesconfig
+ia64                             allmodconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+i386                          randconfig-a001
+i386                          randconfig-a003
+arc                  randconfig-r043-20221216
+s390                 randconfig-r044-20221216
+riscv                randconfig-r042-20221216
+i386                          randconfig-a005
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+i386                                defconfig
+i386                             allyesconfig
+arc                  randconfig-r043-20221218
+s390                 randconfig-r044-20221218
+riscv                randconfig-r042-20221218
+x86_64                            allnoconfig
+
+clang tested configs:
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+i386                          randconfig-a013
+x86_64                        randconfig-a003
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+arm                  randconfig-r046-20221216
+hexagon              randconfig-r041-20221216
+hexagon              randconfig-r045-20221216
+i386                          randconfig-a002
+i386                          randconfig-a004
+x86_64                          rhel-8.3-rust
+i386                          randconfig-a006
+arm                  randconfig-r046-20221218
+hexagon              randconfig-r041-20221218
+hexagon              randconfig-r045-20221218
+
 -- 
-2.30.2
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
