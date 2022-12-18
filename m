@@ -2,116 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5FD65044D
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 19:29:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 796DF65044F
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 19:30:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbiLRS3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 13:29:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
+        id S230512AbiLRSaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 13:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiLRS3I (ORCPT
+        with ESMTP id S230480AbiLRS33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 13:29:08 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9052ADB;
-        Sun, 18 Dec 2022 09:56:45 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 7D0563200805;
-        Sun, 18 Dec 2022 12:56:44 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sun, 18 Dec 2022 12:56:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1671386204; x=1671472604; bh=Lr3MWV45UB
-        kC+Upx5XL3PAvGROvHCsXEucBbusCtnP0=; b=eJl4LtUIB9x18YUGZrQ4GBqrKA
-        9CzU5TZPAy7j+3eWm/GVppdUM4HAOIBMnvYbv16dUTug5nUsFzrmkJNWEzVCzr/A
-        Tm4d6Tjh8hktklG13uv+veEEUySiw9F9kNPveUJqrEGUKi3yjlasAckU3kAzYvsb
-        EXf6RevLcQrqBLLCa2orfRqOc43rl3rv5FXcXvadRwD1Kc5x0z7KOgy4nczXPd3j
-        Lz9PB4YBV17Np68rBvOqZPZXrOJW50mKQ4qtQ2ejmrUy0osUvaIQU5G30Opr/qEF
-        FO6wP5rql3XyGtY/dLHH6N+cHgVS0b8pMjvAS2KI1/ZBh/rlgj13uf1vkPlA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1671386204; x=1671472604; bh=Lr3MWV45UBkC+Upx5XL3PAvGROvH
-        CsXEucBbusCtnP0=; b=Qh8aFDtTYLdyWF+Gnt6+zQ9YyI69LxH6w+GokqsfG5xk
-        kqTwB18D3XM5n26ONAAZePkNCdV+h4CBD8YoyvtGejqg2hS0kZMUEWiwrjIOblA5
-        4TEzvj8ijL6PEUBEsNZw0q5tBuWR9H7jcu7Yk1IUVTrY6hjk5gC4a51M13V/74mj
-        3CBZ1J6XFMRuRbswn1SI2Hhd9lW+JDP5R9oGYPLIOtN6oAVymtouaFjl0La1jrnG
-        I7hA6FO3VGylZO9pMVwyN6NIztJ28D4ydEo4+r5nxGWoYYSDaRwAHf0alW7bLHUl
-        94NGshuQ1eeZgG0w8Mx3prCKkXTHXhiPxquf4pVdGw==
-X-ME-Sender: <xms:W1SfY4HGzwaAt1BhHXRtxmNfF3gN7Re9swmAXDgoiLxk8fQNxiuMeQ>
-    <xme:W1SfYxWHsbdMKeNCG3w9-rNK-QsUcJJDDbppLbHP90itV3GvheRUP_8eMCbb1ysIJ
-    w7FyVVOII0FP7dFtPA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedugddutdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:W1SfYyK6r2qRATtz3_C6teA_ecEcwT5f43rbeyu1H5POtxWrdgtjqQ>
-    <xmx:W1SfY6E4SKYQC71iFY-VBj7M5zXU8zk5I6KIoEnIrVK9QcfEIYrvVg>
-    <xmx:W1SfY-WGUL6qNHWaZJ6fwsH8d84JHppZ6NQuDsO8X-vKIS6BQC1lMg>
-    <xmx:XFSfY8yvUDK1j3raqSreXKgcF8JCCKu0DArRevWbugTXRfS6UjxnTw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A00EDB60086; Sun, 18 Dec 2022 12:56:43 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <60290159-8d63-4358-9ff1-a65cc335e0c6@app.fastmail.com>
-In-Reply-To: <20221218142231.qhczawk2zhpgh6dl@mobilestation>
-References: <20221215165247.1723462-1-arnd@kernel.org>
- <20221218142231.qhczawk2zhpgh6dl@mobilestation>
-Date:   Sun, 18 Dec 2022 18:56:24 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Serge Semin" <fancer.lancer@gmail.com>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Mark Brown" <broonie@kernel.org>,
-        "Serge Semin" <Sergey.Semin@baikalelectronics.ru>,
-        "Ramil Zaripov" <Ramil.Zaripov@baikalelectronics.ru>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: dw_bt1: fix MUX_MMIO dependencies
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 18 Dec 2022 13:29:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A668110F2;
+        Sun, 18 Dec 2022 10:06:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65E74B80ACD;
+        Sun, 18 Dec 2022 18:06:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1847FC433EF;
+        Sun, 18 Dec 2022 18:06:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671386799;
+        bh=+4b8SHIncr61S7nWnckzDHjes+eO28WU/zoZBZUfYIc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=X1pzg+BWsZgY6ueR9PUtwbTVDU5BouRHuV7TP2e4StpCRs1EmPGAaiLbZOiZQl8gf
+         oEXvk4oqhy/NzRVsuDySFEo8pJcSgkfhJyiGrCGSHHMPF+g21ggm+sX4tUHo2k6JGY
+         8ULptkkc5GxqsBh4NtIGXGEiNfcpe/7n1a8yMpYzjkXbDDvxzxFxdunFmriGB6l/G7
+         yu67/Yu8dwBKocEIcgr1cGJ2M2BWQ6nnPLsjivQCP0XvQhboGZu3kP/g3SWbPhm6IK
+         sq96U4ZbW4jHni6JMozP+DairwijYeWW9Ykz22yLgtC0mmoWucg4xbVFUR1lmeYpBf
+         NrxQ8yVBhBYww==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A8CFC5C0A43; Sun, 18 Dec 2022 10:06:38 -0800 (PST)
+Date:   Sun, 18 Dec 2022 10:06:38 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] rcu: Fix opposite might_sleep() check in
+ rcu_blocking_is_gp()
+Message-ID: <20221218180638.GR4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221215035755.2820163-1-qiang1.zhang@intel.com>
+ <20221217010345.GF4001@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB5880526CB255AFF91F0D76A2DAE79@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <PH0PR11MB588000890D537044BBAA209EDAE79@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <20221217051759.GK4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y550Z+MOq1IX3Wb4@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y550Z+MOq1IX3Wb4@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 18, 2022, at 15:22, Serge Semin wrote:
-> Hi Arnd
->
-> On Thu, Dec 15, 2022 at 05:52:34PM +0100, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> Selecting a symbol with additional dependencies requires
->> adding the same dependency here:
->> 
->> WARNING: unmet direct dependencies detected for MUX_MMIO
->>   Depends on [n]: MULTIPLEXER [=y] && OF [=n]
->>   Selected by [y]:
->>   - SPI_DW_BT1 [=y] && SPI [=y] && SPI_MASTER [=y] && SPI_DESIGNWARE [=y] && (MIPS_BAIKAL_T1 || COMPILE_TEST [=y])
->> 
->> Alternatively, we could drop this 'select' and require users to manually
->> put it into their .config as we do for other drivers.
->
-> Thanks for the patch. Seeing the driver is only implicitly dependent
-> from the mux-mmio driver (via the device described in the device tree
-> blob) I'd suggest to either drop the MUX_MMIO config reverse
-> dependency or convert it to the weak one - 'imply' (if it will solve
-> the problem).
+On Sun, Dec 18, 2022 at 02:01:11AM +0000, Joel Fernandes wrote:
+> On Fri, Dec 16, 2022 at 09:17:59PM -0800, Paul E. McKenney wrote:
+> > On Sat, Dec 17, 2022 at 02:44:47AM +0000, Zhang, Qiang1 wrote:
+> > > 
+> > > On Thu, Dec 15, 2022 at 11:57:55AM +0800, Zqiang wrote:
+> > > > Currently, if the system is in the RCU_SCHEDULER_INACTIVE state, invoke
+> > > > synchronize_rcu_*() will implies a grace period and return directly,
+> > > > so there is no sleep action due to waiting for a grace period to end,
+> > > > but this might_sleep() check is the opposite. therefore, this commit
+> > > > puts might_sleep() check in the correct palce.
+> > > > 
+> > > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > > >
+> > > >Queued for testing and review, thank you!
+> > > >
+> > > >I was under the impression that might_sleep() did some lockdep-based
+> > > >checking, but I am unable to find it.  If there really is such checking,
+> > > >that would be a potential argument for leaving this code as it is.
+> > > >
+> > > >
+> > > >__might_sleep
+> > > >   __might_resched(file, line, 0)
+> > > >      rcu_sleep_check()
+> > > >
+> > > >Does it refer to this rcu_sleep_check() ?
+> > > >
+> > > >If so, when in the RCU_SCHEDULER_INACTIVE state,  the debug_lockdep_rcu_enabled() is always
+> > > >return false, so the RCU_LOCKDEP_WARN() also does not produce an actual warning.
+> > > 
+> > > and when the system_state == SYSTEM_BOOTING, we just did  rcu_sleep_check()  and then  return.
+> > 
+> > Very good, thank you!
+> > 
+> > Thoughts from others?
+> 
+> Please consider this as a best-effort comment that might be missing details:
+> 
+> The might_sleep() was added in 18fec7d8758d ("rcu: Improve synchronize_rcu()
+> diagnostics")
+> 
+> Since it is illegal to call a blocking API like synchronize_rcu() in a
+> non-preemptible section, is there any harm in just calling might_sleep()
+> uncomditionally in rcu_block_is_gp() ? I think it is a bit irrelevant if
+> synchronize_rcu() is called from a call path, before scheduler is
+> initialized, or after. The fact that it was even called from a
+> non-preemptible section is a red-flag, considering if such non-preemptible
+> section may call synchronize_rcu() API in the future, after full boot up,
+> even if rarely.
+> 
+> For this reason, IMHO there is still value in doing the might_sleep() check
+> unconditionally. Say if a common code path is invoked both before
+> RCU_SCHEDULER_INIT and *very rarely* after RCU_SCHEDULER_INIT.
+> 
+> Or is there more of a point in doing this check if scheduler is initialized
+> from RCU perspective ?
 
-Ok, I'll send a new patch. I don't want to use 'imply' though, that
-tends to cause other problems because almost nobody understands what
-it actually does.
+One advantage of its current placement would be if might_sleep() ever
+unconditionally checks for interrupts being disabled.
 
-      Arnd
+I don't believe that might_sleep() will do that any time soon given the
+likely fallout from code invoked at early boot as well as from runtime,
+but why be in the way of that additional diagnostic check?
+
+							Thanx, Paul
+
+> If not, I would do something like this:
+> 
+> ---8<-----------------------
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 79aea7df4345..23c2303de9f4 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -3435,11 +3435,12 @@ static int rcu_blocking_is_gp(void)
+>  {
+>  	int ret;
+>  
+> +	might_sleep();  /* Check for RCU read-side critical section. */
+> +
+>  	// Invoking preempt_model_*() too early gets a splat.
+>  	if (rcu_scheduler_active == RCU_SCHEDULER_INACTIVE ||
+>  	    preempt_model_full() || preempt_model_rt())
+>  		return rcu_scheduler_active == RCU_SCHEDULER_INACTIVE;
+> -	might_sleep();  /* Check for RCU read-side critical section. */
+>  	preempt_disable();
+>  	/*
+>  	 * If the rcu_state.n_online_cpus counter is equal to one,
