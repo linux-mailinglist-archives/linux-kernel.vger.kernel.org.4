@@ -2,153 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4848264FD68
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 03:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1927864FD69
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 03:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiLRCBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 21:01:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
+        id S229864AbiLRCGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 21:06:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiLRCBO (ORCPT
+        with ESMTP id S229625AbiLRCGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 21:01:14 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D52F587
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 18:01:13 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id z12so5835875qtv.5
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 18:01:13 -0800 (PST)
+        Sat, 17 Dec 2022 21:06:52 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B3F101D0;
+        Sat, 17 Dec 2022 18:06:52 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so9742096pjs.4;
+        Sat, 17 Dec 2022 18:06:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9YL+FuLJ7qlz9APPs3z3TsrBC7PZN8ufUdCHbvSz3uA=;
-        b=QOCDkq5P5nAvWc91YSNw5WGopKLBbYCesUMTZ/UAQCW1JkMZlfjxNVaOTwDd7aiKVS
-         eCErS/jnF7akLL66EUKAiVSiVRCU6HdAgTGj00IQCQ6WTsY9Q3gUr6KM/C1wGbC+A5Jp
-         uspD4UXnggM0BWLUAxt7Vx9kMcxSCG4A8J4io=
+        bh=bQlL5ghD7N0N01DujD2JXmYgCfDGcy7QogVwZx4Fjmk=;
+        b=J1gBib2Q784kiXcU/vut8sUBNvdQgVqgCdUXusll8rXTeI5hQxVytK/hJ+aQpiYDHO
+         FE3bRIHokQ6x1YStbDNVSg+7w/rohIeQh6Ckjceu/LaK5nx1JztXpSSIOhFzBEZZZipG
+         xa6hyjye7AwuwphAdNvvH1fTt0oY3in6il9nVaLkFBnUebbbk7Sg5+HF8XAMwogFMkZg
+         +W1nhiVHBxzBstAn8R28tc1LPStKKumCNgnwKF+LmGrKpPTnhFB7SIhGIpI/sj50jK09
+         2/WSuQDUjGulUbRvKlf8t95BaZ3MVDF2fVZfMhUa/QVk2FiNRjlswKWiRf311v2hNqip
+         Nkkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9YL+FuLJ7qlz9APPs3z3TsrBC7PZN8ufUdCHbvSz3uA=;
-        b=NuYq2QI3IPvYjIQRhUimJ7n2ZWiv4L1p/PdWAdCRuWfRpD9waf5fLigm/zoqmuhqPP
-         SqgCTmbPxauLEv6CE6hqCBnDT7FneGKC5OFCLyXn76gnvnRTc/3gIWxcah2gDQLSadga
-         pDXmkHizz/6YvtvLpdiWWzt49QrbStULuLKTh6nmxi5PXU47XvLsRgwhev2Gafu3+Awo
-         xoNoqzsLGr5qWBAYTZbevBdSSBoDrlp52AvTshe72eEEnT/YVOzUYGEWCsB91Vrt/csh
-         F4DrwPkcJ22g5GJnlesvo2X6SUHRmWkED4tLNxyx2FQoNmTMIy9GEBciMsX53UK+fjNN
-         lj9w==
-X-Gm-Message-State: ANoB5pmiczIvf36HwAPoCAVcR7jvm6VmtRiWXsjZ0jTXoMn5zBZO/ECh
-        Q6QyJZdCNgapLTlGr1XrgyfASA==
-X-Google-Smtp-Source: AA0mqf6Uub/rQD9NpXq+yYYrHzYSh++cuSGYQ0k9M+NzTzMe5h6LjJ4MQ2sGRj3Ff04qVTJr641oJg==
-X-Received: by 2002:ac8:465a:0:b0:3a6:9f4e:22b5 with SMTP id f26-20020ac8465a000000b003a69f4e22b5mr52883265qto.20.1671328872527;
-        Sat, 17 Dec 2022 18:01:12 -0800 (PST)
-Received: from localhost (48.230.85.34.bc.googleusercontent.com. [34.85.230.48])
-        by smtp.gmail.com with ESMTPSA id g4-20020a05620a40c400b006fa16fe93bbsm4594096qko.15.2022.12.17.18.01.11
+        bh=bQlL5ghD7N0N01DujD2JXmYgCfDGcy7QogVwZx4Fjmk=;
+        b=eOTFkOiuCHuLT2yOhEHFxHaEpgey1za49cASlzEFrmQqkSnYfu/sm041XNMESBHd+5
+         kejXlXxYdQESWfawckUcDIsnQeIsl2GZNFDTkh31i95cnzTuzRJJX185EbM0ITTn2Gvz
+         ziEkpR5WviOMaqNwy9a+bNpO6u0VaoJecnPkshzzRt45QIvAPvYoaGuBHXub0YcLSdTE
+         XN/g59IOVWfD7m3ODEKbRmKqYtoNCtJgJcHdl51rUWpcqCoRnTErPOHzSqyuVdTcF3z9
+         y5Gpc7YgaE33wDqSduZZ+wGeOM/XyD2p+Fiw2fTMntMmK9Fz6Uiloe9waSwBqphaguVK
+         Wg1Q==
+X-Gm-Message-State: ANoB5pkQVsInuOksyCsPQ0WZdxP/ypLagqBLA6kR9+eN3AgEoiqxtGc3
+        JeJmbOSRTJ3h53AnXcb1K0U=
+X-Google-Smtp-Source: AA0mqf7Qiqj4Lf1RGe8dDZvnYHrIQLS5TCLeM0jd61cz/BJ5Z6igzixS54FlFJ4hkoVFNjhr/lH58w==
+X-Received: by 2002:a17:90a:dc14:b0:219:20b6:55e5 with SMTP id i20-20020a17090adc1400b0021920b655e5mr39424070pjv.5.1671329211448;
+        Sat, 17 Dec 2022 18:06:51 -0800 (PST)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id mi14-20020a17090b4b4e00b0020d67a726easm6895842pjb.10.2022.12.17.18.06.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Dec 2022 18:01:11 -0800 (PST)
-Date:   Sun, 18 Dec 2022 02:01:11 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rcu: Fix opposite might_sleep() check in
- rcu_blocking_is_gp()
-Message-ID: <Y550Z+MOq1IX3Wb4@google.com>
-References: <20221215035755.2820163-1-qiang1.zhang@intel.com>
- <20221217010345.GF4001@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB5880526CB255AFF91F0D76A2DAE79@PH0PR11MB5880.namprd11.prod.outlook.com>
- <PH0PR11MB588000890D537044BBAA209EDAE79@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20221217051759.GK4001@paulmck-ThinkPad-P17-Gen-1>
+        Sat, 17 Dec 2022 18:06:50 -0800 (PST)
+Date:   Sun, 18 Dec 2022 11:06:44 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     gouhao@uniontech.com
+Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
+        roman.gushchin@linux.dev, keescook@chromium.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org, mingo@elte.hu, gouhaojake@163.com
+Subject: Re: [PATCH] mm/slab: remove unused slab_early_init
+Message-ID: <Y551tFBVcYxPlFlH@hyeyoo>
+References: <20221217113045.15997-1-gouhao@uniontech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221217051759.GK4001@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221217113045.15997-1-gouhao@uniontech.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 09:17:59PM -0800, Paul E. McKenney wrote:
-> On Sat, Dec 17, 2022 at 02:44:47AM +0000, Zhang, Qiang1 wrote:
-> > 
-> > On Thu, Dec 15, 2022 at 11:57:55AM +0800, Zqiang wrote:
-> > > Currently, if the system is in the RCU_SCHEDULER_INACTIVE state, invoke
-> > > synchronize_rcu_*() will implies a grace period and return directly,
-> > > so there is no sleep action due to waiting for a grace period to end,
-> > > but this might_sleep() check is the opposite. therefore, this commit
-> > > puts might_sleep() check in the correct palce.
-> > > 
-> > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > >
-> > >Queued for testing and review, thank you!
-> > >
-> > >I was under the impression that might_sleep() did some lockdep-based
-> > >checking, but I am unable to find it.  If there really is such checking,
-> > >that would be a potential argument for leaving this code as it is.
-> > >
-> > >
-> > >__might_sleep
-> > >   __might_resched(file, line, 0)
-> > >      rcu_sleep_check()
-> > >
-> > >Does it refer to this rcu_sleep_check() ?
-> > >
-> > >If so, when in the RCU_SCHEDULER_INACTIVE state,  the debug_lockdep_rcu_enabled() is always
-> > >return false, so the RCU_LOCKDEP_WARN() also does not produce an actual warning.
-> > 
-> > and when the system_state == SYSTEM_BOOTING, we just did  rcu_sleep_check()  and then  return.
+On Sat, Dec 17, 2022 at 07:30:45PM +0800, gouhao@uniontech.com wrote:
+> From: Gou Hao <gouhao@uniontech.com>
 > 
-> Very good, thank you!
+> 'slab_early_init' was introduced by 'commit e0a42726794f
+> ("[PATCH] mm/slab.c: fix early init assumption")', this
+> flag was used to prevented off-slab caches being created
+
+s/prevented/prevent
+
+> so early during bootup.
 > 
-> Thoughts from others?
+> The only user of 'slab_early_init' was removed in commit
+> '3217fd9bdf00 ("mm/slab: make criteria for off slab
+> determination robust and simple")'.
+> 
+> Signed-off-by: Gou Hao <gouhao@uniontech.com>
+> ---
+>  mm/slab.c | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/mm/slab.c b/mm/slab.c
+> index 7a269db050ee..ede1f29fd81c 100644
+> --- a/mm/slab.c
+> +++ b/mm/slab.c
+> @@ -220,7 +220,6 @@ static inline void fixup_objfreelist_debug(struct kmem_cache *cachep,
+>  static inline void fixup_slab_list(struct kmem_cache *cachep,
+>  				struct kmem_cache_node *n, struct slab *slab,
+>  				void **list);
+> -static int slab_early_init = 1;
+>  
+>  #define INDEX_NODE kmalloc_index(sizeof(struct kmem_cache_node))
+>  
+> @@ -1249,8 +1248,6 @@ void __init kmem_cache_init(void)
+>  	slab_state = PARTIAL_NODE;
+>  	setup_kmalloc_cache_index_table();
+>  
+> -	slab_early_init = 0;
+> -
+>  	/* 5) Replace the bootstrap kmem_cache_node */
+>  	{
+>  		int nid;
+> -- 
+> 2.20.1
 
-Please consider this as a best-effort comment that might be missing details:
+Nice cleanup, thanks!
 
-The might_sleep() was added in 18fec7d8758d ("rcu: Improve synchronize_rcu()
-diagnostics")
+Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-Since it is illegal to call a blocking API like synchronize_rcu() in a
-non-preemptible section, is there any harm in just calling might_sleep()
-uncomditionally in rcu_block_is_gp() ? I think it is a bit irrelevant if
-synchronize_rcu() is called from a call path, before scheduler is
-initialized, or after. The fact that it was even called from a
-non-preemptible section is a red-flag, considering if such non-preemptible
-section may call synchronize_rcu() API in the future, after full boot up,
-even if rarely.
-
-For this reason, IMHO there is still value in doing the might_sleep() check
-unconditionally. Say if a common code path is invoked both before
-RCU_SCHEDULER_INIT and *very rarely* after RCU_SCHEDULER_INIT.
-
-Or is there more of a point in doing this check if scheduler is initialized
-from RCU perspective ?
-
-If not, I would do something like this:
-
----8<-----------------------
-
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 79aea7df4345..23c2303de9f4 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -3435,11 +3435,12 @@ static int rcu_blocking_is_gp(void)
- {
- 	int ret;
- 
-+	might_sleep();  /* Check for RCU read-side critical section. */
-+
- 	// Invoking preempt_model_*() too early gets a splat.
- 	if (rcu_scheduler_active == RCU_SCHEDULER_INACTIVE ||
- 	    preempt_model_full() || preempt_model_rt())
- 		return rcu_scheduler_active == RCU_SCHEDULER_INACTIVE;
--	might_sleep();  /* Check for RCU read-side critical section. */
- 	preempt_disable();
- 	/*
- 	 * If the rcu_state.n_online_cpus counter is equal to one,
+-- 
+Thanks,
+Hyeonggon
