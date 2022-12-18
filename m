@@ -2,97 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E19964FDF5
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 07:57:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F2564FE00
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 08:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiLRG5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 01:57:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
+        id S230119AbiLRHGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 02:06:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiLRG5k (ORCPT
+        with ESMTP id S229455AbiLRHGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 01:57:40 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1462C5F6E
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 22:57:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V8R3pyh61703lU5NROfcxG33NBEW3TIxYiocJNOOdi+DWBVSSSH+hn82iG125dttG16rMuWEfPjsf6vTpXs8qJgfu3WpKfb/DJtB5j7jemo+NOkGLnCTJO3AzhNOfNgOKe3cd6gvMgLiHwGsIQtWD+j2xHnZXarp77yyzLZ/sZcSj7hQ0p27UES6Q1MirSQeTh/Pmn6otI1sbAZYeSl7uichNLeLu3pdGgKfXQXRHxU9/MuUlM1zqC2V1G2T0WfpZTM1UjzqpuzShX5u7NGcEC8qA+QGIkVbLx3CRKWdWt7+jN9nENUDYU5hOspVwR9nMYoQYBrqAxiHrZSF98+5Qw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1F97svJn5QstKb6b4YUQYjqNSdCYS/XSCzT7/mpSBlU=;
- b=ChwvdSwtqjR/UUCUPYV+Ova5icpTLZ+YysaOHSdCL+rW7pg9N0z6ka8NvDCL26Ci9MsoK5XhiNQ+XBLosWhp5G0ForJU5QNNV7oipocO7VjRkqLEm0q4agXTr4qHQYvJ+Shp3EyV3g+fu+qbwjdCH+hzEunfPjjrX11xCGENx037XJ+3VGtEvJMRzg29N/dkE8jhAvGI3vIEXBBsuSJa1bUsHpDM8+/PN4cPStd0icazJosZFnulKAJy26K42MJbSe92OxycTSAUxcibkBSYcxdtp0eWYxERkgS96THNDjSLiYFSJ1M2nfvf94pPnfn4wUqqIIT8Z9UN2IckMDD+cA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1F97svJn5QstKb6b4YUQYjqNSdCYS/XSCzT7/mpSBlU=;
- b=zRfDNsfysLuNL74CoL/IZ7FbwYgqZjTznTMHkQ/IHmtY31yXi6CuCCdqMzCr32mcGitL+vgNVnysMerGgF9cjcSbws/MnDkydqG9WjmTCW/3onCsDbLPONhG2uRqodYkRJxENqu1AMUihgXmhFRwReiCAOoLmEm6jKFrPK5nXeo=
-Received: from BN0PR10CA0007.namprd10.prod.outlook.com (2603:10b6:408:143::25)
- by SN7PR12MB8170.namprd12.prod.outlook.com (2603:10b6:806:32c::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Sun, 18 Dec
- 2022 06:57:32 +0000
-Received: from BN8NAM11FT116.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:143:cafe::56) by BN0PR10CA0007.outlook.office365.com
- (2603:10b6:408:143::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.17 via Frontend
- Transport; Sun, 18 Dec 2022 06:57:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT116.mail.protection.outlook.com (10.13.176.67) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5924.16 via Frontend Transport; Sun, 18 Dec 2022 06:57:31 +0000
-Received: from pp-server-two.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Sun, 18 Dec
- 2022 00:57:28 -0600
-From:   xinhui pan <xinhui.pan@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     <daniel@ffwll.ch>, <matthew.auld@intel.com>,
-        <christian.koenig@amd.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <intel-gfx@lists.freedesktop.org>,
-        <arunpravin.paneerselvam@amd.com>,
-        "xinhui pan" <xinhui.pan@amd.com>
-Subject: [PATCH v6] drm: Optimise for continuous memory allocation
-Date:   Sun, 18 Dec 2022 14:57:08 +0800
-Message-ID: <20221218065708.93332-1-xinhui.pan@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 18 Dec 2022 02:06:15 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F735616E
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 23:06:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671347174; x=1702883174;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Mk4tXhVg7FhZzbLnDclHzkAdSvX9nFjEdgOykiCRWRE=;
+  b=ih3rNuphUWNufBTgdidnyEnshPLmlHsKxqFZ+s9B2L2/fBKhVAPrlVmK
+   ByK3ntoljx91scXBhEEDM9FT7o44bHYRDfAfjUGAzuv3/JFvOCrFFzkaW
+   FszTqOntvi97odF664zWfJY37EKTdSb8OgIlVTPVsfgMxDiIeC34xxtfB
+   dcfsfYsmu2IhBngflkgDFOj5ERV9PPUdNtNMnaBrrmBdHuDAujby5Siqh
+   qhdApcEPd76tZauwL0lB62yiYG0WI8ZIOMkg3c/kI4kjsidPpjboXqhpb
+   9oQ4LbNmVXN6Uv0cDZ3qJXF178E8Z4ioB51xTJYeW0w/PRCCdqtDM7/Wx
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10564"; a="383526501"
+X-IronPort-AV: E=Sophos;i="5.96,254,1665471600"; 
+   d="scan'208";a="383526501"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2022 23:06:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10564"; a="600351863"
+X-IronPort-AV: E=Sophos;i="5.96,254,1665471600"; 
+   d="scan'208";a="600351863"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 17 Dec 2022 23:06:12 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p6nkR-000882-2j;
+        Sun, 18 Dec 2022 07:06:11 +0000
+Date:   Sun, 18 Dec 2022 15:05:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/mm] BUILD SUCCESS
+ 3e844d842d49cdbe61a4b338bdd512654179488a
+Message-ID: <639ebbd6.OUlRrxaDCIyTVX1G%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT116:EE_|SN7PR12MB8170:EE_
-X-MS-Office365-Filtering-Correlation-Id: fdbb26fb-0852-4ed5-11d7-08dae0c5227d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bcSupmG/14fHwdYV7g5rV0txZHsZMyafyV7LRfcuqx8aZBcLiucUIzYivCPPB6cb5SMAsvrvx/MgVXs8S0+5zOWWN+UItW5Kck9lAsnvEqQ3TvjVbOI8LoPNK21VUD2X2nu7fBk9FGZlnZUkGVCtETzivT+tcnTEfGCWxseavcSb//sJ2DTJ8Gxj4EAlZWQkHCGVwr1ewAHHoRkU6DkRoSbxe6AaRQTqwyntbKYQLTiHda85My9zYyDoa0wObobCyr4Kb5sgWoJonRnLiPQUVZZh2YZFJU3zNnp/k9byKAZeR+bvgrCasQb+60yeNg7S504fILqi1HdZZbMlEEvsa/QWUz6iOKnhwi2WkUTNqfXBBDXwzhKgO9hWoSO/aemaKX90DBJV0dbpIhf8BqHqZMuMW0CahsFle0tNaxis/3BdkJjBEw0KGymEfRR1I87O2UVQ3lS6IvoqK+GeahZIFixqJ0kMo7buJMQN8cytruMTf6XVB3qw9UN5a/1a/PvAdqnu0fQ64UuDAleGBbLZOoIM4XapkmrbVXpMiSlbwJBKDCLQHLAGkrJy/xG+Om5dW+b3MpGYX9tC6XvGYCSDRzWAzSjf3qWxk2pVd0NsrAEQKIunF4bBshmFelUh7QaymOhVbXDTkc6hH1qgFMaX45WXrqjpZYrz/BfYTez0dEYCdq4pPiC9mOlb7LWcWOLCfWsoj04xQbSEsEbKfJU/d0XZ9W0d73I4OjeICg/q2tE=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(136003)(39860400002)(451199015)(40470700004)(46966006)(36840700001)(7696005)(82740400003)(316002)(478600001)(6916009)(54906003)(1076003)(4326008)(6666004)(8676002)(70206006)(70586007)(26005)(186003)(16526019)(2616005)(426003)(5660300002)(47076005)(8936002)(2906002)(83380400001)(41300700001)(336012)(36860700001)(81166007)(36756003)(356005)(40460700003)(82310400005)(86362001)(40480700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2022 06:57:31.7678
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fdbb26fb-0852-4ed5-11d7-08dae0c5227d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT116.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8170
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,213 +64,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Optimise a little when continuous memory request fails.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mm
+branch HEAD: 3e844d842d49cdbe61a4b338bdd512654179488a  x86/mm: Ensure forced page table splitting
 
-There are memory holes and continuous memory request usually fails when
-order is too big.
-Currently buddy only look for exactly order memory for such request.
-Now we can try again to look for several smaller continuous memory on
-failure.
+elapsed time: 3438m
 
-Signed-off-by: xinhui pan <xinhui.pan@amd.com>
----
-change from v5:
-reworked
----
- drivers/gpu/drm/drm_buddy.c | 161 ++++++++++++++++++++++++++++++++++--
- 1 file changed, 154 insertions(+), 7 deletions(-)
+configs tested: 177
+configs skipped: 23
 
-diff --git a/drivers/gpu/drm/drm_buddy.c b/drivers/gpu/drm/drm_buddy.c
-index 11bb59399471..6c795e1b3247 100644
---- a/drivers/gpu/drm/drm_buddy.c
-+++ b/drivers/gpu/drm/drm_buddy.c
-@@ -386,6 +386,140 @@ alloc_range_bias(struct drm_buddy *mm,
- 	return ERR_PTR(err);
- }
- 
-+static void __continuous_block_in_tree(struct drm_buddy_block *top_block,
-+				       struct list_head *fbl,
-+				       int left,
-+				       int min_order)
-+{
-+	/*
-+	 * Look for continuous memory of
-+	 * [top_block) when left is true or (top_block] when left is false.
-+	 * The list of fbl looks like (top_block1][free_block][...][top_blockX).
-+	 * Memory offset is in ascending order.
-+	 */
-+	while (top_block) {
-+		struct drm_buddy_block *block = top_block;
-+		int order;
-+
-+		while (drm_buddy_block_is_split(block))
-+			block = left ? block->left : block->right;
-+
-+		order = drm_buddy_block_order(block);
-+		if (order < min_order || !drm_buddy_block_is_free(block))
-+			return;
-+
-+		if (left)
-+			list_add_tail(&block->tmp_link, fbl);
-+		else
-+			list_add(&block->tmp_link, fbl);
-+
-+		if (order == min_order)
-+			return;
-+		top_block = __get_buddy(block);
-+	}
-+}
-+
-+static bool __free_block_in_order(struct list_head *fbl,
-+				  struct drm_buddy_block *cur,
-+				  int order,
-+				  struct drm_buddy_block **first,
-+				  struct drm_buddy_block **last)
-+{
-+	struct drm_buddy_block *fb = cur, *lb = list_next_entry(cur, tmp_link);
-+	u64 pages = BIT(order);
-+	u64 cur_pages = 0;
-+
-+	/*
-+	 * Look for continuous memory which satisfy requested order.
-+	 * Memory in list fbl are already in below order.
-+	 * 1) Memory offset are in ascending order.
-+	 * 2) Memory size are in ascending order from left to middle and
-+	 * descending order from middle to right.
-+	 * So walk through the list of fbl from middle to both sides to
-+	 * choose the bigger memory.
-+	 * This is because one memory with order X are composed with 2 of order X-1
-+	 * or 1 of order X-1 and 2 of order X-2, etc. Looks like below.
-+	 *      n
-+	 *    {∑(X - y)} + {2 * (X-n-1))}
-+	 *      1
-+	 * And the last 2 memory of order (X-n-1) are at the two sides of list.
-+	 */
-+	list_for_each_entry_from_reverse(fb, fbl, tmp_link) {
-+		int prev_order = drm_buddy_block_order(fb);
-+
-+		list_for_each_entry_from(lb, fbl, tmp_link) {
-+			int next_order = drm_buddy_block_order(lb);
-+
-+			if (prev_order <= next_order)
-+				cur_pages += BIT(next_order);
-+			else
-+				break;
-+		}
-+
-+		cur_pages += BIT(prev_order);
-+		if (pages == cur_pages) {
-+			*first = fb;
-+			*last = list_prev_entry(lb, tmp_link);
-+			return true;
-+		}
-+		BUG_ON(pages < cur_pages);
-+	}
-+
-+	*first = *last = NULL;
-+	return false;
-+}
-+
-+static struct drm_buddy_block *
-+find_continuous_blocks(struct drm_buddy *mm,
-+		       int order,
-+		       unsigned long flags,
-+		       struct drm_buddy_block **lb)
-+{
-+	struct list_head *head = &mm->free_list[order - 1];
-+	struct drm_buddy_block *free_block, *first = NULL, *last = NULL;
-+
-+	/*
-+	 * Look for continuous free memory in buddy and buddy-in-law.
-+	 * IOW, the most left blocks at right of free block and the most right
-+	 * blocks at left of free block.
-+	 */
-+
-+	list_for_each_entry(free_block, head, link) {
-+		struct drm_buddy_block *buddy, *parent, *block;
-+		int left, min_order = 0;
-+		LIST_HEAD(fbl);
-+
-+		parent = free_block->parent;
-+		if (!parent)
-+			continue;
-+
-+		left = parent->left == free_block;
-+		list_add(&free_block->tmp_link, &fbl);
-+		buddy = __get_buddy(free_block);
-+		__continuous_block_in_tree(buddy, &fbl, left, min_order);
-+
-+		while (parent && !((parent->left == block) ^ left)) {
-+			block = parent;
-+			parent = parent->parent;
-+		}
-+
-+		if (!parent)
-+			continue;
-+
-+		buddy = __get_buddy(block);
-+		__continuous_block_in_tree(buddy, &fbl, !left, min_order);
-+
-+		/* list head of fbl is invalid outside.
-+		 * Walk through list from first fo last only.
-+		 */
-+		if (__free_block_in_order(&fbl, free_block, order, &first, &last))
-+			break;
-+	}
-+
-+	*lb = last;
-+	return first;
-+}
-+
- static struct drm_buddy_block *
- get_maxblock(struct list_head *head)
- {
-@@ -637,7 +771,7 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
- 			   struct list_head *blocks,
- 			   unsigned long flags)
- {
--	struct drm_buddy_block *block = NULL;
-+	struct drm_buddy_block *block = NULL, *last_block = NULL;
- 	unsigned int min_order, order;
- 	unsigned long pages;
- 	LIST_HEAD(allocated);
-@@ -689,17 +823,30 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
- 				break;
- 
- 			if (order-- == min_order) {
-+				if (!(flags & DRM_BUDDY_RANGE_ALLOCATION) &&
-+				    min_order != 0 && pages == BIT(min_order)) {
-+					block = find_continuous_blocks(mm,
-+								       min_order,
-+								       flags,
-+								       &last_block);
-+					if (block)
-+						break;
-+				}
- 				err = -ENOSPC;
- 				goto err_free;
- 			}
- 		} while (1);
- 
--		mark_allocated(block);
--		mm->avail -= drm_buddy_block_size(mm, block);
--		kmemleak_update_trace(block);
--		list_add_tail(&block->link, &allocated);
--
--		pages -= BIT(order);
-+		do {
-+			mark_allocated(block);
-+			mm->avail -= drm_buddy_block_size(mm, block);
-+			kmemleak_update_trace(block);
-+			list_add_tail(&block->link, &allocated);
-+			pages -= BIT(drm_buddy_block_order(block));
-+			if (block == last_block || !last_block)
-+				break;
-+			block = list_next_entry(block, tmp_link);
-+		} while (block);
- 
- 		if (!pages)
- 			break;
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+arc                  randconfig-r043-20221215
+arm                  randconfig-r046-20221215
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+ia64                             allmodconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+m68k                             allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+i386                             allyesconfig
+i386                                defconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                            allnoconfig
+sh                           se7724_defconfig
+m68k                             alldefconfig
+powerpc                      chrp32_defconfig
+ia64                            zx1_defconfig
+powerpc                  storcenter_defconfig
+arm                          exynos_defconfig
+arc                            hsdk_defconfig
+sh                        sh7763rdp_defconfig
+powerpc                         wii_defconfig
+arm                            lart_defconfig
+m68k                       m5249evb_defconfig
+sh                            hp6xx_defconfig
+m68k                           virt_defconfig
+powerpc                     tqm8548_defconfig
+i386                          randconfig-c001
+loongarch                           defconfig
+loongarch                         allnoconfig
+loongarch                        allmodconfig
+nios2                            allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20221216
+powerpc                     taishan_defconfig
+powerpc                      mgcoge_defconfig
+powerpc                        cell_defconfig
+sh                           se7722_defconfig
+sh                          sdk7780_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+arm                           stm32_defconfig
+powerpc                     redwood_defconfig
+sh                         microdev_defconfig
+mips                          rb532_defconfig
+sh                   rts7751r2dplus_defconfig
+sh                          rsk7203_defconfig
+arm                           corgi_defconfig
+arm                           sama5_defconfig
+sh                          r7780mp_defconfig
+arm                            qcom_defconfig
+arm                           u8500_defconfig
+openrisc                            defconfig
+arm                          simpad_defconfig
+xtensa                  nommu_kc705_defconfig
+sh                      rts7751r2d1_defconfig
+arm                         s3c6400_defconfig
+powerpc                         ps3_defconfig
+m68k                          amiga_defconfig
+powerpc                        warp_defconfig
+xtensa                  cadence_csp_defconfig
+arc                    vdk_hs38_smp_defconfig
+sh                           se7705_defconfig
+powerpc                       maple_defconfig
+sparc                             allnoconfig
+mips                      loongson3_defconfig
+mips                       bmips_be_defconfig
+sparc                               defconfig
+xtensa                           allyesconfig
+csky                                defconfig
+sparc                            allyesconfig
+x86_64                                  kexec
+parisc                           allyesconfig
+powerpc                      bamboo_defconfig
+powerpc                     pq2fads_defconfig
+parisc64                         alldefconfig
+i386                          randconfig-a016
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a003
+arc                         haps_hs_defconfig
+arm                        clps711x_defconfig
+ia64                             alldefconfig
+i386                          randconfig-a005
+arc                  randconfig-r043-20221218
+i386                          randconfig-a001
+s390                 randconfig-r044-20221218
+arm                         assabet_defconfig
+arm                            xcep_defconfig
+riscv                randconfig-r042-20221218
+sh                   sh7724_generic_defconfig
+sh                        edosk7705_defconfig
+xtensa                           alldefconfig
+sh                          sdk7786_defconfig
+arm                            mps2_defconfig
+m68k                       m5208evb_defconfig
+arm                           imxrt_defconfig
+arm                      integrator_defconfig
+arm                  randconfig-c002-20221218
+riscv                               defconfig
+
+clang tested configs:
+hexagon              randconfig-r041-20221215
+hexagon              randconfig-r045-20221215
+riscv                randconfig-r042-20221215
+s390                 randconfig-r044-20221215
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a001
+x86_64                        randconfig-a016
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+x86_64                          rhel-8.3-rust
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+arm                          moxart_defconfig
+mips                        qi_lb60_defconfig
+arm                      tct_hammer_defconfig
+powerpc                 mpc8313_rdb_defconfig
+x86_64                        randconfig-k001
+powerpc                 mpc8560_ads_defconfig
+powerpc                     ppa8548_defconfig
+arm                         lpc32xx_defconfig
+mips                      pic32mzda_defconfig
+powerpc                 mpc836x_rdk_defconfig
+mips                          malta_defconfig
+powerpc                      katmai_defconfig
+hexagon              randconfig-r045-20221216
+arm                  randconfig-r046-20221216
+hexagon              randconfig-r041-20221216
+powerpc                     akebono_defconfig
+arm                  randconfig-r046-20221218
+hexagon              randconfig-r041-20221218
+hexagon              randconfig-r045-20221218
+mips                  cavium_octeon_defconfig
+powerpc                     pseries_defconfig
+riscv                    nommu_virt_defconfig
+powerpc                     mpc5200_defconfig
+mips                     cu1000-neo_defconfig
+mips                      malta_kvm_defconfig
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
