@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE6F64FEC0
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 12:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CDF64FEC1
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 12:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbiLRLcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 06:32:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
+        id S230484AbiLRLcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 06:32:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbiLRLcF (ORCPT
+        with ESMTP id S230458AbiLRLcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 06:32:05 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA64D6567;
-        Sun, 18 Dec 2022 03:32:04 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id ay40so4695332wmb.2;
-        Sun, 18 Dec 2022 03:32:04 -0800 (PST)
+        Sun, 18 Dec 2022 06:32:06 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968EC5FCD;
+        Sun, 18 Dec 2022 03:32:05 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso6979734wme.5;
+        Sun, 18 Dec 2022 03:32:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vSetaWLPY2RzczT8dviu9hjeHMLZpPIw6Q1N0t2ZCKw=;
-        b=Cyb93Jfpn/cMaA8CYCQBPt9rsFG9AEWjzj/F8ZsdNxUTs7KrhOq6x0u91KVY2DghTh
-         4nb8dBHbyIkyWRHchu7MOtIclaYwHtbZZvrNs7uj1aXCJeXwqNMluJ1di2iRiH7KrW7X
-         DrjJ23d4jmYJA6dKp+FTxoz7ayxr/KKdDHObJdYMf6Sh7/rh4v5En8OYS7+X1uEjehag
-         XWA5eAAyGlj09ZQl5RjWPrFhzD4MAtq4uG2EBMLg7Rbvi4COpaJuT2PotbCLxjgZsir9
-         7DqGLcYUFSGQ35G9YCNYCh5j+tll0XinvrAbklTVIT/59oOQ9XaPwe1TBY7eNcQlv4VY
-         fIlA==
+        bh=yLjJfom/Djky4gJzOObWXZRGBYjZpEjW1f7nmI91XpI=;
+        b=RYFhvq3UuA1RlSEtXy76MNft8qV3J3SYjxceU6+W/2yaQ5XjS35UK6Xx4nkY+6Q3nH
+         AVtfbyCcrFcUDa9qUdEKAN06yySkNyEoPefRksOH6iT+M178KlbjroWFWXlHToExXOL5
+         1RWB5hKHNVVVv4muz6KDbn423Lis+18ixeMkzZT2FdjXwPBF4877bdBZ1PViRsnVqucH
+         WSLZfx2smHC+rCVs4XGDZ+DwU5t4kg+Tnp5+RPnYFBBrPU0cb9Ib+42FsSyfoMLS687u
+         6NQPqAMNfKrQnj4xjfLLUY2MGaQyBTyw0hIDQd2Bm58fAo52E0ZX32kHmyA1pTz+F/CI
+         DIew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vSetaWLPY2RzczT8dviu9hjeHMLZpPIw6Q1N0t2ZCKw=;
-        b=QV4mbSoGWX3hPdZMNJYUCcboFJoBXaTF0ZSusC67/ElgDL/hiM7DEwi11rc7wF59Ze
-         GROP46ERtlqYtt9h7RYI4Fni5hFiPdUePT1tYTbX89CvSYEDU1y21jkRAsJTrpMJLEpE
-         y/xDMUArmaeWl+xv7rjFdQiwLOAkxeBuuOrH3DweLmCo3mqY/hRMqFA7BtCovud2091n
-         SFzJxbz7bxLvWTq7Bq21mk3AA5N69UGLWsvPhb8bPPOIW1oJN2SGdgwAxuinKyZkBvvX
-         onn5otnwmNOVAxntXMpM5nU3otBy0Dt/jAvdvo90zS/BsqeABmW12K0Ar3Ek0rDYyzDA
-         Ahxg==
-X-Gm-Message-State: ANoB5pmKrXZNpBzTWrE/0TmHDSGHVV/6uzGiuyw9O/F8Dupc/tsXol2U
-        HPLvM461cr3tvaTd+CcZXaPN/vGcYmXn8Vs+
-X-Google-Smtp-Source: AA0mqf6srxtsltfnM3JV+Jqhe1JY4SS4cC1aPGdFTwViDIzKBg4EMrI3ip8OhvTDz9tWaSXlX/Bnqw==
-X-Received: by 2002:a05:600c:3d06:b0:3c6:e60f:3f55 with SMTP id bh6-20020a05600c3d0600b003c6e60f3f55mr30077687wmb.12.1671363123289;
-        Sun, 18 Dec 2022 03:32:03 -0800 (PST)
+        bh=yLjJfom/Djky4gJzOObWXZRGBYjZpEjW1f7nmI91XpI=;
+        b=Z36attyEOynvCy6FCw1Lz27t9iNn46inblryVGZJq22ZUWmPttrweRh5cBHdvN9McM
+         X8b+v+ocYvJuvzKlk0IILLe4+y3hN3r6CvlPz1Djn5FAsXnrBxxHXcImY+GgblsCzKrW
+         1duQ7UNPP9TYMj8fzWLR3P2Nuov0szuiHIwVBh6NZ4Q/R6mWT0L6SEgh+QGWiw+KUkHn
+         wPrJGSGjraXQvsYLc2/OqiU5q860hhMs7xP+BTz9rEmYqp/d1qOZbbqqN67BcfG9OWZO
+         tZbhRofix1I/JD72YQCIyJ66H6EwEG99prKhiDbXRdJmDvv2DYlmp2p7DE6XLlc3mNyM
+         4hzQ==
+X-Gm-Message-State: ANoB5pm5jSv95UjRK8iMSK+V2TlxkgMJu8NqVYtkQ2ns86pVxZpcEuXZ
+        FwPIY+jO7TF9osaTzeRXrlFxFVTtFBME7EoB
+X-Google-Smtp-Source: AA0mqf5J2dKxLGdrSUWQsEJ4+4N8P2+k9DxXVA1Q0iGylxqEwxcHn0DgJtE4fznDovotRigng/hIFw==
+X-Received: by 2002:a05:600c:3511:b0:3cf:7b8b:6521 with SMTP id h17-20020a05600c351100b003cf7b8b6521mr30384391wmq.32.1671363124085;
+        Sun, 18 Dec 2022 03:32:04 -0800 (PST)
 Received: from localhost.localdomain ([2001:9e8:20fa:a700:21e9:9128:9ea2:3911])
-        by smtp.gmail.com with ESMTPSA id l41-20020a05600c1d2900b003d069fc7372sm9440751wms.1.2022.12.18.03.32.02
+        by smtp.gmail.com with ESMTPSA id l41-20020a05600c1d2900b003d069fc7372sm9440751wms.1.2022.12.18.03.32.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Dec 2022 03:32:02 -0800 (PST)
+        Sun, 18 Dec 2022 03:32:03 -0800 (PST)
 From:   Leonard Anderweit <leonard.anderweit@gmail.com>
 To:     linux-hwmon@vger.kernel.org
 Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
@@ -58,9 +58,9 @@ Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Leonard Anderweit <leonard.anderweit@gmail.com>
-Subject: [PATCH 3/6] hwmon: (aquacomputer_d5next) Add structure for fan layout
-Date:   Sun, 18 Dec 2022 12:31:28 +0100
-Message-Id: <20221218113131.3752-4-leonard.anderweit@gmail.com>
+Subject: [PATCH 4/6] hwmon: (aquacomputer_d5next) Device dependent serial number and firmware offsets
+Date:   Sun, 18 Dec 2022 12:31:29 +0100
+Message-Id: <20221218113131.3752-5-leonard.anderweit@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221218113131.3752-1-leonard.anderweit@gmail.com>
 References: <20221218113131.3752-1-leonard.anderweit@gmail.com>
@@ -76,81 +76,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce structure for per device fan sensor offsets. This allows
-reading fan sensors in aqc_raw_event() from devices which use a
-different sensor layout in their status HID report.  Currently only one
-version is implemented as all supported devices use the same structure.
+Add device dependent serial number and firmware offsets to support
+devices with different offsets. All currently supported devices share
+the same offsets. Implemented by Aleksa Savic [1].
 
+[1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/31/commits/14c3acf78b17397edb5dd356e6f5943a9996a1f9
+
+Originally-from: Aleksa Savic <savicaleksa83@gmail.com>
 Signed-off-by: Leonard Anderweit <leonard.anderweit@gmail.com>
 ---
- drivers/hwmon/aquacomputer_d5next.c | 28 ++++++++++++++++++++++++----
- 1 file changed, 24 insertions(+), 4 deletions(-)
+ drivers/hwmon/aquacomputer_d5next.c | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-index 388bf1e33e0d..1ea866fcd3ec 100644
+index 1ea866fcd3ec..cc53231067f4 100644
 --- a/drivers/hwmon/aquacomputer_d5next.c
 +++ b/drivers/hwmon/aquacomputer_d5next.c
-@@ -282,6 +282,21 @@ static const char *const label_highflownext_voltage[] = {
- 	"+5V USB voltage"
+@@ -43,9 +43,7 @@ static const char *const aqc_device_names[] = {
+ 
+ #define STATUS_REPORT_ID		0x01
+ #define STATUS_UPDATE_INTERVAL		(2 * HZ)	/* In seconds */
+-#define SERIAL_FIRST_PART		3
+-#define SERIAL_SECOND_PART		5
+-#define FIRMWARE_VERSION		13
++#define SERIAL_PART_OFFSET		2
+ 
+ #define CTRL_REPORT_ID			0x03
+ 
+@@ -59,7 +57,10 @@ static u8 secondary_ctrl_report[] = {
+ 	0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x34, 0xC6
  };
  
-+struct aqc_fan_structure_offsets {
-+	u8 voltage;
-+	u8 curr;
-+	u8 power;
-+	u8 speed;
-+};
+-/* Sensor sizes and offsets for all Aquacomputer devices */
++/* Info, sensor sizes and offsets for all Aquacomputer devices */
++#define AQC_SERIAL_START		0x3
++#define AQC_FIRMWARE_VERSION		0xD
 +
-+/* Fan structure offsets for all devices except Aquaero */
-+static struct aqc_fan_structure_offsets aqc_general_fan_structure = {
-+	.voltage = AQC_FAN_VOLTAGE_OFFSET,
-+	.curr = AQC_FAN_CURRENT_OFFSET,
-+	.power = AQC_FAN_POWER_OFFSET,
-+	.speed = AQC_FAN_SPEED_OFFSET
-+};
-+
- struct aqc_data {
- 	struct hid_device *hdev;
- 	struct device *hwmon_dev;
-@@ -308,6 +323,7 @@ struct aqc_data {
- 	int num_flow_sensors;
- 	u8 flow_sensors_start_offset;
- 	u8 flow_pulses_ctrl_offset;
-+	struct aqc_fan_structure_offsets *fan_structure;
+ #define AQC_SENSOR_SIZE			0x02
+ #define AQC_TEMP_SENSOR_DISCONNECTED	0x7FFF
+ #define AQC_FAN_PERCENT_OFFSET		0x00
+@@ -326,7 +327,9 @@ struct aqc_data {
+ 	struct aqc_fan_structure_offsets *fan_structure;
  
  	/* General info, same across all devices */
++	u8 serial_number_start_offset;
  	u32 serial_number[2];
-@@ -822,15 +838,17 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
- 	/* Fan speed and related readings */
- 	for (i = 0; i < priv->num_fans; i++) {
- 		priv->speed_input[i] =
--		    get_unaligned_be16(data + priv->fan_sensor_offsets[i] + AQC_FAN_SPEED_OFFSET);
-+		    get_unaligned_be16(data + priv->fan_sensor_offsets[i] +
-+				       priv->fan_structure->speed);
- 		priv->power_input[i] =
- 		    get_unaligned_be16(data + priv->fan_sensor_offsets[i] +
--				       AQC_FAN_POWER_OFFSET) * 10000;
-+				       priv->fan_structure->power) * 10000;
- 		priv->voltage_input[i] =
- 		    get_unaligned_be16(data + priv->fan_sensor_offsets[i] +
--				       AQC_FAN_VOLTAGE_OFFSET) * 10;
-+				       priv->fan_structure->voltage) * 10;
- 		priv->current_input[i] =
--		    get_unaligned_be16(data + priv->fan_sensor_offsets[i] + AQC_FAN_CURRENT_OFFSET);
-+		    get_unaligned_be16(data + priv->fan_sensor_offsets[i] +
-+				       priv->fan_structure->curr);
- 	}
++	u8 firmware_version_offset;
+ 	u16 firmware_version;
  
- 	/* Flow sensor readings */
-@@ -1078,6 +1096,8 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 	/* How many times the device was powered on, if available */
+@@ -808,9 +811,10 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
+ 	priv = hid_get_drvdata(hdev);
+ 
+ 	/* Info provided with every report */
+-	priv->serial_number[0] = get_unaligned_be16(data + SERIAL_FIRST_PART);
+-	priv->serial_number[1] = get_unaligned_be16(data + SERIAL_SECOND_PART);
+-	priv->firmware_version = get_unaligned_be16(data + FIRMWARE_VERSION);
++	priv->serial_number[0] = get_unaligned_be16(data + priv->serial_number_start_offset);
++	priv->serial_number[1] = get_unaligned_be16(data + priv->serial_number_start_offset +
++						    SERIAL_PART_OFFSET);
++	priv->firmware_version = get_unaligned_be16(data + priv->firmware_version_offset);
+ 
+ 	/* Physical temperature sensor readings */
+ 	for (i = 0; i < priv->num_temp_sensors; i++) {
+@@ -1096,6 +1100,9 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
  		break;
  	}
  
-+	priv->fan_structure = &aqc_general_fan_structure;
++	priv->serial_number_start_offset = AQC_SERIAL_START;
++	priv->firmware_version_offset = AQC_FIRMWARE_VERSION;
 +
+ 	priv->fan_structure = &aqc_general_fan_structure;
+ 
  	if (priv->buffer_size != 0) {
- 		priv->checksum_start = 0x01;
- 		priv->checksum_length = priv->buffer_size - 3;
 -- 
 2.38.1
 
