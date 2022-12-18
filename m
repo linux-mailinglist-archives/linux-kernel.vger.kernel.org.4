@@ -2,247 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 471696504DA
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 22:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A756504E0
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 22:57:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbiLRVr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 16:47:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
+        id S231197AbiLRV5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 16:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiLRVry (ORCPT
+        with ESMTP id S231167AbiLRV52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 16:47:54 -0500
-Received: from freundtech.com (freundtech.com [IPv6:2a01:4f8:c17:2d66::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18A5BC9A;
-        Sun, 18 Dec 2022 13:47:51 -0800 (PST)
-Received: from arch-desktop.fritz.box (unknown [IPv6:2a02:8071:2b80:7760:fecd:7e78:31fb:a087])
-        by freundtech.com (Postfix) with ESMTPSA id 4E3ED1E2F15;
-        Sun, 18 Dec 2022 22:47:49 +0100 (CET)
-From:   Adrian Freund <adrian@freund.io>
-To:     linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Basavaraj Natikar <basavaraj.natikar@amd.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "Luke D. Jones" <luke@ljones.dev>, Ivan Dovgal <iv.dovg@gmail.com>,
-        Adrian Freund <adrian@freund.io>
-Subject: [PATCH v2] HID: amd_sfh: Add support for tablet-mode-switch sensor
-Date:   Sun, 18 Dec 2022 22:47:23 +0100
-Message-Id: <20221218214723.14735-1-adrian@freund.io>
-X-Mailer: git-send-email 2.38.1
+        Sun, 18 Dec 2022 16:57:28 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21080C744
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 13:57:27 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id AD8782C0288;
+        Mon, 19 Dec 2022 10:57:23 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1671400643;
+        bh=wswQ/KMRzD2puKOHYOnzQLN1QFz3lsndlcSA4xBLrfM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=y/A64C0+Iq1Mz4IsvQ5ipgqfiL6/tb/klZ6Hdn+Jp9TVZ/PAf52b5jKnXt5bQGyJd
+         CuszkBTiBOK0ougQ8ujtt36KCWlpg6Qpee6gOAd2I9lHjQEaN0bI3Jb7Fc+QE/nBax
+         uQY6gNJzUwMX43nV0a2m5eAiZGWv0XG8X1AeEAd6XslLx7O7thUgvjb8vGyN31b/Bw
+         1Fb6weEsG3if3Eby4bQQ4EEDD+gQhRddNLGX/d0rrglfa9dUiNahNweDqYMkQ2rszQ
+         HbjBLqIafSP94WZ7HIASOxwoYnjMwQr4AvxG6XIxTARNVCb0bBHIBRLmcYj0bMDx6G
+         zyKNHcBFL6S9Q==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B639f8cc30000>; Mon, 19 Dec 2022 10:57:23 +1300
+Received: from thomaswi-dl.ws.atlnz.lc (thomaswi-dl.ws.atlnz.lc [10.33.25.46])
+        by pat.atlnz.lc (Postfix) with ESMTP id 77FBA13EE3F;
+        Mon, 19 Dec 2022 10:57:23 +1300 (NZDT)
+Received: by thomaswi-dl.ws.atlnz.lc (Postfix, from userid 1719)
+        id 731483E5131; Mon, 19 Dec 2022 10:57:23 +1300 (NZDT)
+From:   Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>
+To:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, a@unstable.cc, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>
+Subject: [PATCH 0/2] ip/ip6_gre: Fix GRE tunnels not generating IPv6 link local addresses
+Date:   Mon, 19 Dec 2022 10:57:16 +1300
+Message-Id: <20221218215718.1491444-1-Thomas.Winter@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=X/cs11be c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=sHyYjHe8cH0A:10 a=IpZYufPWUN2N8bb5Va0A:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for the tablet mode switch sensors on
-convertible devices where that sensor is managed by AMD SFH, like the
-Asus Flow X13 and the Lenovo ThinkPad L13 Yoga Gen2 (AMD).
+For our point-to-point GRE tunnels, they have IN6_ADDR_GEN_MODE_NONE
+when they are created then we set IN6_ADDR_GEN_MODE_EUI64 when they
+come up to generate the IPv6 link local address for the interface.
+Recently we found that they were no longer generating IPv6 addresses.
 
-Co-developed-by: Ivan Dovgal <iv.dovg@gmail.com>
-Signed-off-by: Ivan Dovgal <iv.dovg@gmail.com>
-Co-developed-by: Luke D. Jones <luke@ljones.dev>
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
-Signed-off-by: Adrian Freund <adrian@freund.io>
----
-v2:
-* Fixed build warning reported by kernel test robot <lkp@intel.com>
+Also, non-point-to-point tunnels were not generating any IPv6 link
+local address and instead generating an IPv6 compat address,
+breaking IPv6 communication on the tunnel.
 
- drivers/hid/amd-sfh-hid/amd_sfh_client.c      |  2 ++
- drivers/hid/amd-sfh-hid/amd_sfh_hid.h         |  2 +-
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.c        |  4 +++
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.h        |  1 +
- .../hid_descriptor/amd_sfh_hid_desc.c         | 27 +++++++++++++++++++
- .../hid_descriptor/amd_sfh_hid_desc.h         |  7 +++++
- .../hid_descriptor/amd_sfh_hid_report_desc.h  | 21 +++++++++++++++
- 7 files changed, 63 insertions(+), 1 deletion(-)
+These failures were caused by commit e5dd729460ca and this patch set
+aims to resolve these issues.
 
-diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_client.c b/drivers/hid/amd-sfh-hid/amd_sfh_client.c
-index 8275bba63611..83dd0402933c 100644
---- a/drivers/hid/amd-sfh-hid/amd_sfh_client.c
-+++ b/drivers/hid/amd-sfh-hid/amd_sfh_client.c
-@@ -146,6 +146,8 @@ static const char *get_sensor_name(int idx)
- 		return "gyroscope";
- 	case mag_idx:
- 		return "magnetometer";
-+	case tms_idx:
-+		return "tablet-mode-switch";
- 	case als_idx:
- 		return "ALS";
- 	case HPD_IDX:
-diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_hid.h b/drivers/hid/amd-sfh-hid/amd_sfh_hid.h
-index 3754fb423e3a..f10ec16bb8aa 100644
---- a/drivers/hid/amd-sfh-hid/amd_sfh_hid.h
-+++ b/drivers/hid/amd-sfh-hid/amd_sfh_hid.h
-@@ -11,7 +11,7 @@
- #ifndef AMDSFH_HID_H
- #define AMDSFH_HID_H
- 
--#define MAX_HID_DEVICES		5
-+#define MAX_HID_DEVICES		6
- #define AMD_SFH_HID_VENDOR	0x1022
- #define AMD_SFH_HID_PRODUCT	0x0001
- 
-diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
-index 47774b9ab3de..cfda797f0a62 100644
---- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
-+++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
-@@ -27,6 +27,7 @@
- #define ACEL_EN		BIT(0)
- #define GYRO_EN		BIT(1)
- #define MAGNO_EN	BIT(2)
-+#define TMS_EN		BIT(15)
- #define HPD_EN		BIT(16)
- #define ALS_EN		BIT(19)
- 
-@@ -227,6 +228,9 @@ int amd_mp2_get_sensor_num(struct amd_mp2_dev *privdata, u8 *sensor_id)
- 	if (MAGNO_EN & activestatus)
- 		sensor_id[num_of_sensors++] = mag_idx;
- 
-+	if (TMS_EN & activestatus)
-+		sensor_id[num_of_sensors++] = tms_idx;
-+
- 	if (ALS_EN & activestatus)
- 		sensor_id[num_of_sensors++] = als_idx;
- 
-diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.h b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.h
-index dfb7cabd82ef..e18ceee9e5db 100644
---- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.h
-+++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.h
-@@ -78,6 +78,7 @@ enum sensor_idx {
- 	accel_idx = 0,
- 	gyro_idx = 1,
- 	mag_idx = 2,
-+	tms_idx = 15,
- 	als_idx = 19
- };
- 
-diff --git a/drivers/hid/amd-sfh-hid/hid_descriptor/amd_sfh_hid_desc.c b/drivers/hid/amd-sfh-hid/hid_descriptor/amd_sfh_hid_desc.c
-index f9a8c02d5a7b..181973f35f05 100644
---- a/drivers/hid/amd-sfh-hid/hid_descriptor/amd_sfh_hid_desc.c
-+++ b/drivers/hid/amd-sfh-hid/hid_descriptor/amd_sfh_hid_desc.c
-@@ -47,6 +47,11 @@ static int get_report_descriptor(int sensor_idx, u8 *rep_desc)
- 		memcpy(rep_desc, comp3_report_descriptor,
- 		       sizeof(comp3_report_descriptor));
- 		break;
-+	case tms_idx: /* tablet mode switch */
-+		memset(rep_desc, 0, sizeof(tms_report_descriptor));
-+		memcpy(rep_desc, tms_report_descriptor,
-+		       sizeof(tms_report_descriptor));
-+		break;
- 	case als_idx: /* ambient light sensor */
- 		memset(rep_desc, 0, sizeof(als_report_descriptor));
- 		memcpy(rep_desc, als_report_descriptor,
-@@ -96,6 +101,16 @@ static u32 get_descr_sz(int sensor_idx, int descriptor_name)
- 			return sizeof(struct magno_feature_report);
- 		}
- 		break;
-+	case tms_idx:
-+		switch (descriptor_name) {
-+		case descr_size:
-+			return sizeof(tms_report_descriptor);
-+		case input_size:
-+			return sizeof(struct tms_input_report);
-+		case feature_size:
-+			return sizeof(struct tms_feature_report);
-+		}
-+		break;
- 	case als_idx:
- 		switch (descriptor_name) {
- 		case descr_size:
-@@ -138,6 +153,7 @@ static u8 get_feature_report(int sensor_idx, int report_id, u8 *feature_report)
- 	struct accel3_feature_report acc_feature;
- 	struct gyro_feature_report gyro_feature;
- 	struct magno_feature_report magno_feature;
-+	struct tms_feature_report tms_feature;
- 	struct hpd_feature_report hpd_feature;
- 	struct als_feature_report als_feature;
- 	u8 report_size = 0;
-@@ -173,6 +189,11 @@ static u8 get_feature_report(int sensor_idx, int report_id, u8 *feature_report)
- 		memcpy(feature_report, &magno_feature, sizeof(magno_feature));
- 		report_size = sizeof(magno_feature);
- 		break;
-+	case tms_idx:  /* tablet mode switch */
-+		get_common_features(&tms_feature.common_property, report_id);
-+		memcpy(feature_report, &tms_feature, sizeof(tms_feature));
-+		report_size = sizeof(tms_feature);
-+		break;
- 	case als_idx:  /* ambient light sensor */
- 		get_common_features(&als_feature.common_property, report_id);
- 		als_feature.als_change_sesnitivity = HID_DEFAULT_SENSITIVITY;
-@@ -211,6 +232,7 @@ static u8 get_input_report(u8 current_index, int sensor_idx, int report_id,
- 	struct accel3_input_report acc_input;
- 	struct gyro_input_report gyro_input;
- 	struct hpd_input_report hpd_input;
-+	struct tms_input_report tms_input;
- 	struct als_input_report als_input;
- 	struct hpd_status hpdstatus;
- 	u8 report_size = 0;
-@@ -244,6 +266,11 @@ static u8 get_input_report(u8 current_index, int sensor_idx, int report_id,
- 		memcpy(input_report, &magno_input, sizeof(magno_input));
- 		report_size = sizeof(magno_input);
- 		break;
-+	case tms_idx: /* tablet mode switch */
-+		get_common_inputs(&tms_input.common_property, report_id);
-+		report_size = sizeof(tms_input);
-+		memcpy(input_report, &tms_input, sizeof(tms_input));
-+		break;
- 	case als_idx: /* Als */
- 		get_common_inputs(&als_input.common_property, report_id);
- 		/* For ALS ,V2 Platforms uses C2P_MSG5 register instead of DRAM access method */
-diff --git a/drivers/hid/amd-sfh-hid/hid_descriptor/amd_sfh_hid_desc.h b/drivers/hid/amd-sfh-hid/hid_descriptor/amd_sfh_hid_desc.h
-index ebd55675eb62..b22068a47429 100644
---- a/drivers/hid/amd-sfh-hid/hid_descriptor/amd_sfh_hid_desc.h
-+++ b/drivers/hid/amd-sfh-hid/hid_descriptor/amd_sfh_hid_desc.h
-@@ -111,4 +111,11 @@ struct hpd_input_report {
- 	u8 human_presence;
- } __packed;
- 
-+struct tms_feature_report {
-+	struct common_feature_property common_property;
-+} __packed;
-+
-+struct tms_input_report {
-+	struct common_input_property common_property;
-+} __packed;
- #endif
-diff --git a/drivers/hid/amd-sfh-hid/hid_descriptor/amd_sfh_hid_report_desc.h b/drivers/hid/amd-sfh-hid/hid_descriptor/amd_sfh_hid_report_desc.h
-index 697f2791ea9c..96cbc1e5b9a7 100644
---- a/drivers/hid/amd-sfh-hid/hid_descriptor/amd_sfh_hid_report_desc.h
-+++ b/drivers/hid/amd-sfh-hid/hid_descriptor/amd_sfh_hid_report_desc.h
-@@ -644,6 +644,27 @@ static const u8 als_report_descriptor[] = {
- 0xC0			/* HID end collection */
- };
- 
-+
-+/* TABLET MODE SWITCH */
-+__maybe_unused // Used by sfh1.0, but not yet implemented in sfh1.1
-+static const u8 tms_report_descriptor[] = {
-+0x06, 0x43, 0xFF,  // Usage Page (Vendor Defined 0xFF43)
-+0x0A, 0x02, 0x02,  // Usage (0x0202)
-+0xA1, 0x01, // Collection (Application)
-+0x85, 0x11, //   Report ID (17)
-+0x15, 0x00, //   Logical Minimum (0)
-+0x25, 0x01, //   Logical Maximum (1)
-+0x35, 0x00, //   Physical Minimum (0)
-+0x45, 0x01, //   Physical Maximum (1)
-+0x65, 0x00, //   Unit (None)
-+0x55, 0x00, //   Unit Exponent (0)
-+0x75, 0x01, //   Report Size (1)
-+0x95, 0x98, //   Report Count (-104)
-+0x81, 0x03, //   Input (Const,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
-+0x91, 0x03, //   Output (Const,Var,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
-+0xC1, 0x00, // End Collection
-+};
-+
- /* BIOMETRIC PRESENCE*/
- static const u8 hpd_report_descriptor[] = {
- 0x05, 0x20,          /* Usage page */
--- 
-2.38.1
+Thomas Winter (2):
+  ip/ip6_gre: Fix changing addr gen mode not generating IPv6 link local
+    address
+  ip/ip6_gre: Fix non-point-to-point tunnel not generating IPv6 link
+    local address
+
+ net/ipv6/addrconf.c | 57 ++++++++++++++++++++++++---------------------
+ 1 file changed, 31 insertions(+), 26 deletions(-)
+
+--=20
+2.37.3
 
