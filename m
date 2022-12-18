@@ -2,58 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BE364FF5D
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 16:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A59164FF5F
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 16:58:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbiLRP4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 10:56:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
+        id S230341AbiLRP6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 10:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiLRPz7 (ORCPT
+        with ESMTP id S230078AbiLRP6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 10:55:59 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DF82F8;
-        Sun, 18 Dec 2022 07:55:57 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NZnQS6pQrz689PR;
-        Sun, 18 Dec 2022 23:52:00 +0800 (CST)
-Received: from localhost (10.81.208.178) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Sun, 18 Dec
- 2022 15:55:55 +0000
-Date:   Sun, 18 Dec 2022 15:55:53 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     johnny <johnny.li@montage-tech.com>
-CC:     "Ira Weiny (ira.weiny@intel.com)" <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Alison Schofield" <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V4 2/9] cxl/mem: Read, trace, and clear events on driver
- load
-Message-ID: <20221218155553.000043e5@Huawei.com>
-In-Reply-To: <Y55d/l1nTfpTX/1A@SR651>
-References: <20221212070627.1372402-1-ira.weiny@intel.com>
-        <20221212070627.1372402-3-ira.weiny@intel.com>
-        <20221216153939.00007c41@Huawei.com>
-        <Y5zo+UqOmGCE4ObC@iweiny-desk3>
-        <Y55d/l1nTfpTX/1A@SR651>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Sun, 18 Dec 2022 10:58:17 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA75B1E8;
+        Sun, 18 Dec 2022 07:58:16 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id h6so3585615iof.9;
+        Sun, 18 Dec 2022 07:58:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kuATr87CzTV1qlHuhve5U4eQzL5g/KrogSBqfE4e6bY=;
+        b=ZXThl7icRZA1j0FnxM1OKJa74blMj1G+6zvxBPyT3KDtsmaORX56LDU97fmJxRNL3/
+         w99GA+xiW+xwEHiQQ/H1d/Ss3hg+RASNxAQhmSCz76Xod+cwvFIEfbswuSJAsPOPYoX6
+         NkT6q0OEYlMqcowm53AE2AN5i8yarISkVgCG5/K5j5TO/kEWBMf6V+H60eyAO1wEW6PZ
+         CFRU1IwERb/zeEnjQbIUO9ZKj8Patjeo1YQ71Yxeb5LK49t9GpxJ7v8GeBHguPn5JsyM
+         WMPOvTX8b9Sxx0tDdvdqRgYrGxQZgFDKXovdzHuBddldTi7hciGK0RD2QDooYn1kuWne
+         kiGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kuATr87CzTV1qlHuhve5U4eQzL5g/KrogSBqfE4e6bY=;
+        b=vrhktCHP/LBWkQXZunMzRwhTYg1y9Pev/LsbrLMkLzKGluuNAx6n5SL4l6sXbfVqbT
+         MbGAxRztKHX2h4IBdVZs5LuzXS52uBYOHEZzs8Nnbnr+ofIcll4oLoAOkolLZJX0PIRt
+         gWhWx8e9K+aTIwEQYiuQdTOkK0t9e2CDMwhe3GaAB8XvYwr9vQQ7dmfJqOTgHVx95+u4
+         6Z8I3cYHsz5hGfs4esFxWkuA3Z/9uyvasBC18FvRodVhzE5RVSDxoprEEoaAYqj3hJ7g
+         eIQKb2XmcOIzR0TQk4rVAtFOwRX/T2skcP9ciEF+5+C6jb0sU+pfr1NcRszhSL2BaRx4
+         noSA==
+X-Gm-Message-State: ANoB5pk7SGNTZd18EyuHMe8Xo8gdkceNE5vtAas6WtXaMB4gUisx8u0E
+        +jedrtvTFjsVtw7g6XlDBD0iLXKvfxlitFLYuLw=
+X-Google-Smtp-Source: AA0mqf5+oecIz9tdAMmlHWeDLUh6Wy1MYszFbhbgmgfRcMCT4v6fGEjvqwbbzXSMBPvApo5rfnp5YnsxywtiiCSSGKs=
+X-Received: by 2002:a05:6602:2498:b0:6de:3990:de0e with SMTP id
+ g24-20020a056602249800b006de3990de0emr37096741ioe.203.1671379095856; Sun, 18
+ Dec 2022 07:58:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.208.178]
-X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221217180849.775718-1-aford173@gmail.com> <Y58rDppqQEI+vZ5U@pendragon.ideasonboard.com>
+In-Reply-To: <Y58rDppqQEI+vZ5U@pendragon.ideasonboard.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Sun, 18 Dec 2022 09:58:04 -0600
+Message-ID: <CAHCN7x+Zh28xwz6PDVAnepy4qE97TTCAwcTuUS+L3G7dkT7WRQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] arm64: dts: imx8mp: Fix missing GPC Interrupt
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-arm-kernel@lists.infradead.org, aford@beaconembedded.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,246 +75,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 18 Dec 2022 08:25:34 +0800
-johnny <johnny.li@montage-tech.com> wrote:
+On Sun, Dec 18, 2022 at 9:00 AM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Adam,
+>
+> Thank you for the patch.
+>
+> On Sat, Dec 17, 2022 at 12:08:48PM -0600, Adam Ford wrote:
+> > The GPC node references an interrupt parent, but it doesn't
+> > state the interrupt itself.  According to the TRM, this IRQ
+> > is 87. This also eliminate an error detected from dt_binding_check
+>
+> The interrupt isn't used by the driver as far as I can see, so I can't
+> test this, but the patch matches the reference manual, so
 
-> On Fri, Dec 16, 2022 at 01:54:01PM -0800, Ira Weiny (ira.weiny@intel.com) wrote:
-> > On Fri, Dec 16, 2022 at 03:39:39PM +0000, Jonathan Cameron wrote:  
-> > > On Sun, 11 Dec 2022 23:06:20 -0800
-> > > ira.weiny@intel.com wrote:
-> > >   
-> > > > From: Ira Weiny <ira.weiny@intel.com>
-> > > > 
-> > > > CXL devices have multiple event logs which can be queried for CXL event
-> > > > records.  Devices are required to support the storage of at least one
-> > > > event record in each event log type.
-> > > > 
-> > > > Devices track event log overflow by incrementing a counter and tracking
-> > > > the time of the first and last overflow event seen.
-> > > > 
-> > > > Software queries events via the Get Event Record mailbox command; CXL
-> > > > rev 3.0 section 8.2.9.2.2 and clears events via CXL rev 3.0 section
-> > > > 8.2.9.2.3 Clear Event Records mailbox command.
-> > > > 
-> > > > If the result of negotiating CXL Error Reporting Control is OS control,
-> > > > read and clear all event logs on driver load.
-> > > > 
-> > > > Ensure a clean slate of events by reading and clearing the events on
-> > > > driver load.
-> > > > 
-> > > > The status register is not used because a device may continue to trigger
-> > > > events and the only requirement is to empty the log at least once.  This
-> > > > allows for the required transition from empty to non-empty for interrupt
-> > > > generation.  Handling of interrupts is in a follow on patch.
-> > > > 
-> > > > The device can return up to 1MB worth of event records per query.
-> > > > Allocate a shared large buffer to handle the max number of records based
-> > > > on the mailbox payload size.
-> > > > 
-> > > > This patch traces a raw event record and leaves specific event record
-> > > > type tracing to subsequent patches.  Macros are created to aid in
-> > > > tracing the common CXL Event header fields.
-> > > > 
-> > > > Each record is cleared explicitly.  A clear all bit is specified but is
-> > > > only valid when the log overflows.
-> > > > 
-> > > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>  
-> > > 
-> > > A few things noticed inline.  I've tightened the QEMU code to reject the
-> > > case of the input payload claims to be bigger than the mailbox size
-> > > and hacked the size down to 256 bytes so it triggers the problem
-> > > highlighted below.  
-> > 
-> > I'm not sure what you did here.
-> >   
-> > >   
-> > > > 
-> > > > ---
-> > > > Changes from V3:
-> > > > 	Dan
-> > > > 		Split off _OSC pcie bits
-> > > > 			Use existing style for host bridge flag in that
-> > > > 			patch
-> > > > 		Clean up event processing loop
-> > > > 		Use dev_err_ratelimited()
-> > > > 		Clean up version change log
-> > > > 		Delete 'EVENT LOG OVERFLOW'
-> > > > 		Remove cxl_clear_event_logs()
-> > > > 		Add comment for native cxl control
-> > > > 		Fail driver load on event buf allocation failure
-> > > > 		Comment why events are not processed without _OSC flag
-> > > > ---
-> > > >  drivers/cxl/core/mbox.c  | 136 +++++++++++++++++++++++++++++++++++++++
-> > > >  drivers/cxl/core/trace.h | 120 ++++++++++++++++++++++++++++++++++
-> > > >  drivers/cxl/cxl.h        |  12 ++++
-> > > >  drivers/cxl/cxlmem.h     |  84 ++++++++++++++++++++++++
-> > > >  drivers/cxl/pci.c        |  40 ++++++++++++
-> > > >  5 files changed, 392 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> > > > index b03fba212799..9fb327370e08 100644
-> > > > --- a/drivers/cxl/core/mbox.c
-> > > > +++ b/drivers/cxl/core/mbox.c  
-> > >   
-> > > > +static int cxl_clear_event_record(struct cxl_dev_state *cxlds,
-> > > > +				  enum cxl_event_log_type log,
-> > > > +				  struct cxl_get_event_payload *get_pl)
-> > > > +{
-> > > > +	struct cxl_mbox_clear_event_payload payload = {
-> > > > +		.event_log = log,
-> > > > +	};
-> > > > +	u16 total = le16_to_cpu(get_pl->record_count);
-> > > > +	u8 max_handles = CXL_CLEAR_EVENT_MAX_HANDLES;
-> > > > +	size_t pl_size = sizeof(payload);
-> > > > +	struct cxl_mbox_cmd mbox_cmd;
-> > > > +	u16 cnt;
-> > > > +	int rc;
-> > > > +	int i;
-> > > > +
-> > > > +	/* Payload size may limit the max handles */
-> > > > +	if (pl_size > cxlds->payload_size) {
-> > > > +		max_handles = CXL_CLEAR_EVENT_LIMIT_HANDLES(cxlds->payload_size);
-> > > > +		pl_size = cxlds->payload_size;  
-> > 
-> > pl_size is only the max size possible if that size was smaller than the size of
-> > the record [sizeof(payload) above].
-> >   
-> > > > +	}
-> > > > +
-> > > > +	mbox_cmd = (struct cxl_mbox_cmd) {
-> > > > +		.opcode = CXL_MBOX_OP_CLEAR_EVENT_RECORD,
-> > > > +		.payload_in = &payload,
-> > > > +		.size_in = pl_size,  
-> > > 
-> > > This payload size should be whatever we need to store the records,
-> > > not the max size possible.  Particularly as that size is currently
-> > > bigger than the mailbox might be.  
-> > 
-> > But the above check and set ensures that does not happen.
-> >   
-> > > 
-> > > It shouldn't fail (I think) simply because a later version of the spec might
-> > > add more to this message and things should still work, but definitely not
-> > > good practice to tell the hardware this is much longer than it actually is.  
-> > 
-> > I don't follow.
-> > 
-> > The full payload is going to be sent even if we are just clearing 1 record
-> > which is inefficient but it should never overflow the hardware because it is
-> > limited by the check above.
-> > 
-> > So why would this be a problem?
-> >   
-> 
-> per spec3.0, Event Record Handles field is "A list of Event Record Handles the 
-> host has consumed and the device shall now remove from its internal Event Log 
-> store.". Extra unused handle list does not folow above description. And also 
-> spec mentions "All event record handles shall be nonzero value. A value of 0 
-> shall be treated by the device as an invalid handle.". So if there is value 0 
-> in extra unused handles, device shall return invalid handle error code
+I don't think it changes functionality, but the other imx8m boards
+have it, and 'make dtbs_check' showed it as missing.
+Thanks for the review.
 
-I don't think we call into that particular corner as the number of event
-record handles is set correctly.  Otherwise I agree this isn't following the
-spec - though I think key here is that it won't be broken against CXL 3.0 devices
-(with that rather roundabout argument that a CXL 3.0 devices should handle later
-spec messages as those should be backwards compatible) but it might be broken
-against CXL 3.0+ ones that interpret the 0s at the end as having meaning.
-
-Thanks,
-
-Jonathan
-
-> 
-> 
-> > > 
-> > >   
-> > > > +	};
-> > > > +
-> > > > +	/*
-> > > > +	 * Clear Event Records uses u8 for the handle cnt while Get Event
-> > > > +	 * Record can return up to 0xffff records.
-> > > > +	 */
-> > > > +	i = 0;
-> > > > +	for (cnt = 0; cnt < total; cnt++) {
-> > > > +		payload.handle[i++] = get_pl->records[cnt].hdr.handle;
-> > > > +		dev_dbg(cxlds->dev, "Event log '%d': Clearing %u\n",
-> > > > +			log, le16_to_cpu(payload.handle[i]));
-> > > > +
-> > > > +		if (i == max_handles) {
-> > > > +			payload.nr_recs = i;
-> > > > +			rc = cxl_internal_send_cmd(cxlds, &mbox_cmd);
-> > > > +			if (rc)
-> > > > +				return rc;
-> > > > +			i = 0;
-> > > > +		}
-> > > > +	}
-> > > > +
-> > > > +	/* Clear what is left if any */
-> > > > +	if (i) {
-> > > > +		payload.nr_recs = i;
-> > > > +		rc = cxl_internal_send_cmd(cxlds, &mbox_cmd);
-> > > > +		if (rc)
-> > > > +			return rc;
-> > > > +	}
-> > > > +
-> > > > +	return 0;
-> > > > +}  
-> > > 
-> > > 
-> > > ...
-> > >   
-> > > > diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> > > > index ab138004f644..dd9aa3dd738e 100644
-> > > > --- a/drivers/cxl/cxlmem.h
-> > > > +++ b/drivers/cxl/cxlmem.h  
-> > > 
-> > > ...
-> > >   
-> > > > +
-> > > > +/*
-> > > > + * Clear Event Records input payload
-> > > > + * CXL rev 3.0 section 8.2.9.2.3; Table 8-51
-> > > > + */
-> > > > +#define CXL_CLEAR_EVENT_MAX_HANDLES (0xff)
-> > > > +struct cxl_mbox_clear_event_payload {
-> > > > +	u8 event_log;		/* enum cxl_event_log_type */
-> > > > +	u8 clear_flags;
-> > > > +	u8 nr_recs;
-> > > > +	u8 reserved[3];
-> > > > +	__le16 handle[CXL_CLEAR_EVENT_MAX_HANDLES];  
-> > > 
-> > > Doesn't fit in the smallest possible payload buffer.
-> > > It's 526 bytes long.  Payload buffer might be 256 bytes in total.
-> > > (8.2.8.4.3 Mailbox capabilities)
-> > > 
-> > > Lazy approach, make this smaller and do more loops when clearing.
-> > > If we want to optimize this later can expand it to this size.  
-> > 
-> > I agree but the code already checks for and adjusts this on the fly based on
-> > cxlds->payload_size?
-> > 
-> >  +	/* Payload size may limit the max handles */
-> >  +	if (pl_size > cxlds->payload_size) {
-> >  +		max_handles = CXL_CLEAR_EVENT_LIMIT_HANDLES(cxlds->payload_size);
-> >  +		pl_size = cxlds->payload_size;
-> >  +	}
-> > 
-> > Why is this not ok?  [Other than being potentially inefficient.]
-> > 
-> > Do you have a patch to qemu which causes this?
-> > 
-> > Ira
-> >   
-> > > > +} __packed;
-> > > > +#define CXL_CLEAR_EVENT_LIMIT_HANDLES(payload_size)			\
-> > > > +	(((payload_size) -						\
-> > > > +		(sizeof(struct cxl_mbox_clear_event_payload) -		\
-> > > > +		 (sizeof(__le16) * CXL_CLEAR_EVENT_MAX_HANDLES))) /	\
-> > > > +		sizeof(__le16))
-> > > > +  
-> > > 
-> > > ...
-> > >   
-> >   
-> 
-
+>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>
+> > Fixes: fc0f05124621 ("arm64: dts: imx8mp: add GPC node with GPU power domains")
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> >
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > index 7a6e6221f421..7a8ca56e48b6 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > @@ -524,6 +524,7 @@ gpc: gpc@303a0000 {
+> >                               compatible = "fsl,imx8mp-gpc";
+> >                               reg = <0x303a0000 0x1000>;
+> >                               interrupt-parent = <&gic>;
+> > +                             interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>;
+> >                               interrupt-controller;
+> >                               #interrupt-cells = <3>;
+> >
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
