@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33AC6504A8
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 21:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AF96504A9
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 21:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiLRUvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 15:51:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56928 "EHLO
+        id S230488AbiLRUwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 15:52:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiLRUvw (ORCPT
+        with ESMTP id S229507AbiLRUwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 15:51:52 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FA4B1FE
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 12:51:50 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id h8so2973371qkk.8
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 12:51:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ausil.us; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=PK6Xhn1pRmUhw+cc6jr8M+nX0xE/ouv6dZZq3MtT0BY=;
-        b=FLdEIbHRmldWlRuXIFPmnjsvmxxYoIxVvFaOcVUuu9mg19Iswg3SShC4imPxLVoqbI
-         55v0UPj3apJs0MVcvSNBssdxIVVIElUn9ikuUIGGHSuFfUWjcPtP2TSjaDSu/gr1fM6M
-         Bput4lTgRe1XjL0NDjtG7/auo7W2hor/zDzlsCz7PgkgTNGQWlebsYYyvrjoa/PyyaSX
-         PmRngWKnjxkFuIoJTbv6DQm5Peo2kOSJPglC6hp4rERYcjDgtdZZT6dOWXzpdgeUnIlH
-         64OZck5PI82KlDkb2WSgc/4m1rQGvFZupjS1oUu2B8WMkk2W0Q5FxFedoCyb89C1DFdW
-         VTSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PK6Xhn1pRmUhw+cc6jr8M+nX0xE/ouv6dZZq3MtT0BY=;
-        b=GqZPyHzz4TmC3U6Cpkjate5kX5BsFIYKhy5CgKwqhIIJsi4eRTOptQ90dRyvcHTQM/
-         LFU6KqCJ59khXCbs5hO+Rs7OtZxI2DSA2KJN3tj3vfy9Cdx9bNL72lF36hOpMpFCCter
-         ePR78bC08eGwoiG4v2PHEd5KuJ8/7sk/VcluTp7OxywahbLvdbMzw6Js75mvMJ31Qc4R
-         5AabOsymMNw/jADDJZBUYq8Y1lRtUdVXC3ICIn7t3WbLeIN4gTjcTrQIp59nHC/io2Ij
-         NidV6JQKYexKKrtn2URBhkmQDeN7s/YTlwxue7qDsow656kIjHVcFaUhy87wZs0BBdrG
-         JsyQ==
-X-Gm-Message-State: ANoB5pmBOvIHgyIKgbxVD+sRaBWjFJuRTCcAgdppMST8ZDt6Py0/mRcE
-        uDcDWcMh6Q6ErXkbhq7UJHsKYq3OCtQbB7P2t/rRuw==
-X-Google-Smtp-Source: AA0mqf7dZc2pJGg90cDpqPPxKmiYOBVUEtgZ64CO7v9uXueTqVLXJJVmbs9KWVKT+S0E6s+j646J2kuNHTeP9HhAtks=
-X-Received: by 2002:a05:620a:b03:b0:6ff:8ac7:ad53 with SMTP id
- t3-20020a05620a0b0300b006ff8ac7ad53mr939105qkg.679.1671396708943; Sun, 18 Dec
- 2022 12:51:48 -0800 (PST)
+        Sun, 18 Dec 2022 15:52:49 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E5FB1FF
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 12:52:47 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 96CD61EC058A;
+        Sun, 18 Dec 2022 21:52:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1671396766;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=p8jNRft3cQpPAEOIVKTerwoAV7P5kvAYt4umdeGtjyA=;
+        b=qVLkaV+QcR1isr8kTXSLNpU8xza32yx4vMNw/Hwc1tQ4DO90DUyyVrfpxjSLu2/NoJpk9Y
+        YYmYCmHaWPOeVQ6fBIi2ux8KwniTpSpHvpM4QO9xZEKLeaFG+PCUmXqp07DTtyxby0npCM
+        GdRPQ55ONDI0neF9MlimTq5qMJ06r/A=
+Date:   Sun, 18 Dec 2022 21:52:42 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     X86 ML <x86@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH -v1.1 1/2] x86/tsc: Make recalibrate_cpu_khz() export GPL only
+Message-ID: <Y599miBzWRAuOwhg@zn.tnic>
+References: <20221217170511.21872-1-bp@alien8.de>
 MIME-Version: 1.0
-From:   Dennis Gilmore <dennis@ausil.us>
-Date:   Sun, 18 Dec 2022 14:51:38 -0600
-Message-ID: <CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-LCQc=74D=xE=rA@mail.gmail.com>
-Subject: BUG: arm64: missing build-id from vmlinux
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     linux-arch@vger.kernel.org, Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221217170511.21872-1-bp@alien8.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The changes in https://lore.kernel.org/linux-arm-kernel/166783716442.32724.935158280857906499.b4-ty@kernel.org/T/
-result in vmlinux no longer having a build-id. At the least, this
-causes rpm builds to fail. Reverting the patch does bring back a
-build-id, but there may be a different way to fix the regression
+v1.1 which removes a stray newline  too.
 
-Dennis
+---
+From: "Borislav Petkov (AMD)" <bp@alien8.de>
+
+A quick search doesn't reveal any use outside of the kernel - which
+would be questionable to begin with anyway - so make the export GPL
+only.
+
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+---
+ arch/x86/kernel/tsc.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index a78e73da4a74..eaeffef93a12 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -912,8 +912,7 @@ void recalibrate_cpu_khz(void)
+ 						    cpu_khz_old, cpu_khz);
+ #endif
+ }
+-
+-EXPORT_SYMBOL(recalibrate_cpu_khz);
++EXPORT_SYMBOL_GPL(recalibrate_cpu_khz);
+ 
+ 
+ static unsigned long long cyc2ns_suspend;
+-- 
+2.35.1
+
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
