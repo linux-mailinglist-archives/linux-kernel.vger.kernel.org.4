@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AAB64FE2B
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 10:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D38064FE32
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 10:53:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiLRJ36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 04:29:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
+        id S230212AbiLRJxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 04:53:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiLRJ3z (ORCPT
+        with ESMTP id S229455AbiLRJxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 04:29:55 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E35EDE87;
-        Sun, 18 Dec 2022 01:29:54 -0800 (PST)
-Received: from kwepemm600007.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NZcwJ43lXzmWMl;
-        Sun, 18 Dec 2022 17:28:48 +0800 (CST)
-Received: from DESKTOP-8RFUVS3.china.huawei.com (10.174.185.179) by
- kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sun, 18 Dec 2022 17:29:51 +0800
-From:   Zenghui Yu <yuzenghui@huawei.com>
-To:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <catalin.marinas@arm.com>, <will@kernel.org>, <shuah@kernel.org>,
-        <broonie@kernel.org>, <wanghaibin.wang@huawei.com>,
-        Zenghui Yu <yuzenghui@huawei.com>
-Subject: [PATCH 2/2] kselftest/arm64: Correct buffer size for SME ZA storage
-Date:   Sun, 18 Dec 2022 17:29:42 +0800
-Message-ID: <20221218092942.1940-2-yuzenghui@huawei.com>
-X-Mailer: git-send-email 2.23.0.windows.1
-In-Reply-To: <20221218092942.1940-1-yuzenghui@huawei.com>
-References: <20221218092942.1940-1-yuzenghui@huawei.com>
+        Sun, 18 Dec 2022 04:53:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793FABDF;
+        Sun, 18 Dec 2022 01:53:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24CB5B80A49;
+        Sun, 18 Dec 2022 09:53:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD4E6C433EF;
+        Sun, 18 Dec 2022 09:53:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671357208;
+        bh=RuYdwQB4ZI3x6re4FTlh0ngNIRbofnQu9Y6HdzOfg/g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XwlP15RdOfhkmn8EmvJKQVjdxzqrBoJ6mA6Po1gX72xDCmUc4VKQDnouTl48gQ5Ea
+         YITjhSRBTdv2ivDtkauv4APqm/lwDzb+UR1NTQfwIL0+OAt/mu2dvX4m+jHRbyIqzm
+         3NCHiqjatJNIPJN317/dsyU6wVQZQBfvpLsJii4+AAwkeYWP0RKsGSADz6h7m1r7pb
+         Oo9RLX6EacXjhSMzS/rmTfahIb2DsOnQPME9awLTGEtHI1SXN6+XfhNrGMiHUEPdRM
+         bzH8kr5s/6H5XLHyim6Ya5OefAWwBqgptNUA34/G/HJJ7xqdnzl9ul0t3NtwGTkJ0o
+         SK3/mkLZVoRlQ==
+Date:   Sun, 18 Dec 2022 11:53:23 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     tariqt@nvidia.com, yishaih@nvidia.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Part of devices not initialized with mlx4
+Message-ID: <Y57jE03Rmr7wphlj@unreal>
+References: <0a361ac2-c6bd-2b18-4841-b1b991f0635e@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.185.179]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600007.china.huawei.com (7.193.23.208)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0a361ac2-c6bd-2b18-4841-b1b991f0635e@suse.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,35 +53,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It looks like a copy-paste error to describe the ZA buffer size using (the
-number of P registers * the maximum size of a Z register). This doesn't
-have practical impact though as we're always allocating enough space even
-for the architectural maximum ZA storage, with SVL equals to 2048 bits.
+On Thu, Dec 15, 2022 at 10:51:15AM +0100, Petr Pavlu wrote:
+> Hello,
+> 
+> We have seen an issue when some of ConnectX-3 devices are not initialized
+> when mlx4 drivers are a part of initrd.
 
-Switch to use ZA_SIG_REGS_SIZE(SVE_VQ_MAX). setup_za() will need to
-initialize two 64MB arraies with this change and can be optimized later (if
-someone complain).
+<...>
 
-Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
----
- tools/testing/selftests/arm64/abi/syscall-abi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> * Systemd stops running services and then sends SIGTERM to "unmanaged" tasks
+>   on the system to terminate them too. This includes the modprobe task.
+> * Initialization of mlx4_en is interrupted in the middle of its init function.
 
-diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
-index 24a498029c78..4adeb21f500e 100644
---- a/tools/testing/selftests/arm64/abi/syscall-abi.c
-+++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
-@@ -282,8 +282,8 @@ static int check_svcr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
- 	return errors;
- }
- 
--uint8_t za_in[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
--uint8_t za_out[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
-+uint8_t za_in[ZA_SIG_REGS_SIZE(SVE_VQ_MAX)];
-+uint8_t za_out[ZA_SIG_REGS_SIZE(SVE_VQ_MAX)];
- 
- static void setup_za(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
- 		     uint64_t svcr)
--- 
-2.33.0
+And why do you think that this systemd behaviour is correct one?
 
+>   The module remains inserted but only some eth devices are initialized and
+>   operational.
+
+<...>
+
+> One idea how to address this issue is to model the mlx4 drivers using an
+> auxiliary bus, similar to how the same conversion was already done in mlx5.
+> This leaves all module loads to udevd which better integrates with the systemd
+> processing and a load of mlx4_en doesn't get interrupted.
+> 
+> My incomplete patches implementing this idea are available at:
+> https://github.com/petrpavlu/linux/commits/bsc1187236-wip-v1
+> 
+> The rework turned out to be not exactly straightforward and would need more
+> effort.
+
+Right, I didn't see any ROI of converting mlx4 to aux bus.
+
+> 
+> I realize mlx4 is only used for ConnectX-3 and older hardware. I wonder then
+> if this kind of rework would be suitable and something to proceed with, or if
+> some simpler idea how to address the described issue would be better and
+> preferread.
+
+Will it help if you move mlx4_en to rootfs?
+
+Thanks
+
+> 
+> Thank you,
+> Petr
+> 
