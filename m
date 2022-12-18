@@ -2,122 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D067F65048C
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 20:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B4B6650491
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 20:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbiLRTxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 14:53:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
+        id S230445AbiLRT62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 14:58:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiLRTxQ (ORCPT
+        with ESMTP id S229507AbiLRT6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 14:53:16 -0500
-Received: from ms11p00im-qufo17291401.me.com (ms11p00im-qufo17291401.me.com [17.58.38.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8972F388C
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 11:53:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-        s=1a1hai; t=1671393193;
-        bh=WBYzTifmHshHLbzV2OaE8+BkNgSKGYp9RT7BG1PKOmE=;
-        h=Content-Type:Mime-Version:Subject:From:Date:Message-Id:To;
-        b=wPyWipnumGLH0TdfZyv2p+GlV/DMHWIbnPcYEusmayf/RcwciuK1qjzO9NCTFMzIt
-         k5Hy/vDDOdNH0/P/ffYQ0M4l7M7SWcDt4Z50bjts4IlITijKmwePhkuhB/Un9DqNJi
-         6cbRGAT+9CiHwbjEkH+Fl0L1nVWXDpJsWRPPC8yAiiOhus558rL2HuW3+5b+gWurXO
-         gjQLd5boX+H4vgVesRve2CeF/F4a9Qv5LMLQfrP/uK2S0hWZdy14SlCyDlFwwF1n5X
-         NfGkHBFuwvXZ5EhuvUDPiaVL+IYnVq5iwWsXn29E7/aIeFh//eD7kGfNIONLPWOhLw
-         5QCBDWtk+TsTg==
-Received: from smtpclient.apple (ms11p00im-dlb-asmtpmailmevip.me.com [17.57.154.19])
-        by ms11p00im-qufo17291401.me.com (Postfix) with ESMTPSA id D5C998E041F;
-        Sun, 18 Dec 2022 19:53:12 +0000 (UTC)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
-Subject: Re: [PATCH 1/6] Adjust maximum MSIZE to account for p9 header
-From:   evanhensbergen@icloud.com
-In-Reply-To: <Y59uIwoECw0yHhf1@codewreck.org>
-Date:   Sun, 18 Dec 2022 13:52:55 -0600
-Cc:     Ron Minnich <rminnich@gmail.com>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        v9fs-developer@lists.sourceforge.net,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+        Sun, 18 Dec 2022 14:58:25 -0500
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66A36256;
+        Sun, 18 Dec 2022 11:58:20 -0800 (PST)
+Date:   Sun, 18 Dec 2022 19:58:08 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1671393496; x=1671652696;
+        bh=2oBFqBrjiA5PDPVogYmMd0bS4/q8x181uUhh5QhYmJU=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=l//ulm89UpfPlPFCR7HxFH2jRVD2BjN3CKyU1E3UaTUTwQA/YxmGrTuSZLVtqSWEP
+         Rd+a7SacWLbVEriIZOgWexOZW+LT14FfJZ6ZZnR0REGnnp8ryb0vHBYL9I93YoFplh
+         LJ1OQ2C7AhkHnQESwk/Dz3CPJjhU/WX5DLvPsGK0PphNpAh5IwUagQxy5tqeN/Fxgu
+         FzRNUpmw9KWWmzZcRwd6OqUtCZur/FzAU2Z4M5pRwUuieuDMbCn0Cdl1lawRS6ZUJz
+         dPVS2vO4xnUpQbVNQGCUBY8fVTlIcdL4DxY8Mq1Oaf9NKl6KVwUrmBkZP0MjrbJpDE
+         SarKQ5saIdupg==
+To:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
+From:   Jari Ruusu <jariruusu@protonmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Announce loop-AES-v3.7z file/swap crypto package
+Message-ID: <u520xqIq5scEZfm3VfvhECFSe_AaptFqf2SesPq2DtSPLsEXyAlhRrU563ISkexJb9VQcT8zi810kzAOo0hsornFu4_IdlUhFTMHf9q4-Oc=@protonmail.com>
+Feedback-ID: 22639318:user:proton
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <7D65A826-F163-4200-8997-5DE6E79223B5@icloud.com>
-References: <20221217185210.1431478-1-evanhensbergen@icloud.com>
- <20221217185210.1431478-2-evanhensbergen@icloud.com>
- <4530979.Ltmge6kleC@silver>
- <CAFkjPTmoQvzaSsSOAgM9_0+knudWsdi8=TnMOTXZj05hT6tneQ@mail.gmail.com>
- <51FD8D16-4070-4DCF-AEB5-11640A82762E@icloud.com>
- <CAP6exY+BF+1fjjUKX20vvbTZXiZ2gxUN3zc8+ZaHTY-aX6fRFQ@mail.gmail.com>
- <Y59uIwoECw0yHhf1@codewreck.org>
-To:     asmadeus@codewreck.org
-X-Mailer: Apple Mail (2.3731.200.110.1.12)
-X-Proofpoint-GUID: nZflBMZZIeodgn3tfr4Yyy-5igF09afa
-X-Proofpoint-ORIG-GUID: nZflBMZZIeodgn3tfr4Yyy-5igF09afa
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.816,17.0.605.474.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-18=5F01:2022-01-14=5F01,2022-01-18=5F01,2020-01-23?=
- =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0 bulkscore=0
- adultscore=0 mlxscore=0 mlxlogscore=999 clxscore=1015 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2212180189
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oh crap - I=E2=80=99m such an idiot - yeah IOHDRSZ was what I meant to =
-use in the first place.  Although I am left wondering why IOHDRSZ is 24 =
-- It does seem to be one extra byte, but I won=E2=80=99t begrudge lucho =
-for going for an even number.
+loop-AES changes since previous release:
+- Worked around non-exported blk_set_default_limits() on 6.0.11+ kernels.
 
-I=E2=80=99ll fix this up before re-releasing the patchset.  I=E2=80=99m =
-just finishing breaking up my write back fixes to make them a bit more =
-consumable as a patch.
+bzip2 compressed tarball is here:
 
-          -eric
+    https://loop-aes.sourceforge.net/loop-AES/loop-AES-v3.7z.tar.bz2
+    md5sum 6ddd7d22ae53d07fe4b2b5dfa403c44e
 
+    https://loop-aes.sourceforge.net/loop-AES/loop-AES-v3.7z.tar.bz2.sign
 
-
-> On Dec 18, 2022, at 1:46 PM, asmadeus@codewreck.org wrote:
->=20
-> ron minnich wrote on Sun, Dec 18, 2022 at 08:50:18AM -0800:
->> it's fine. tbh, I doubt the fact that you were fetching 31 vs 32 =
-pages
->> mattered as much as the fact that you weren't fetching *4k at a time* =
-:-)
->=20
-> Yes, I think we can just blanket this as +4k and it wouldn't change
-> much; I've been using 1MB+4k for rdma in previous tests...
->=20
-> We still aren't doing things 4k at a time with this though, I'd =
-suggest
-> rounding down the rsize > msize check in p9_client_read_once():
->=20
->        if (!rsize || rsize > clnt->msize - P9_IOHDRSZ)
->                rsize =3D clnt->msize - P9_IOHDRSZ;
->=20
-> to something that's better aligned; for some reason I thought we had
-> that already.  . . but thinking again the sizes are probably driven by
-> the cache and will be 4k multiples already?
->=20
->>> -#define DEFAULT_MSIZE (128 * 1024)
->>> +/* DEFAULT MSIZE =3D 32 pages worth of payload + P9_HDRSZ +
->>> + * room for write (16 extra) or read (11 extra) operands.
->>> + */
->>> +
->>> +#define DEFAULT_MSIZE ((128 * 1024) + P9_HDRSZ + 16)
->=20
-> There's P9_IOHDRSZ for that ;)
->=20
-> But I guess with the comment it doesn't matter much either way.
->=20
-> --=20
-> Dominique
+--
+Jari Ruusu=C2=A0 4096R/8132F189 12D6 4C3A DCDA 0AA4 27BD=C2=A0 ACDF F073 3C=
+80 8132 F189
 
