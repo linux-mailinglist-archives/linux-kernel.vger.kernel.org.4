@@ -2,100 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C906504AA
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 21:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 325956504AB
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 21:56:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbiLRUxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 15:53:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57480 "EHLO
+        id S230521AbiLRU4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 15:56:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiLRUxk (ORCPT
+        with ESMTP id S229507AbiLRU4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 15:53:40 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AF2B1FF
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 12:53:38 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1F6CE1EC058A;
-        Sun, 18 Dec 2022 21:53:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1671396817;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=EXFCNNlpJezbQHAX7KkO9d4XUv9kiX1NDPUmXFyc624=;
-        b=YKj90guWFdH35JwqgMtCkX0RWlEELOrlB9LHhN07RNwpwss9/sAtIPQ0l2TKL5goIaxu6O
-        xAPZmy1eF05XOZf7h0Hjdk9u25sS2vsWfRT6Go4h64mM00fDD0amoKh6TLFqv1caiK835a
-        wCS2mIEwKPV6Xg+bWVm2cKECKAe4YOY=
-Date:   Sun, 18 Dec 2022 21:53:36 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     X86 ML <x86@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] x86/tsc: Do feature check as the very first thing
-Message-ID: <Y5990CUCuWd5jfBH@zn.tnic>
-References: <20221217170511.21872-1-bp@alien8.de>
+        Sun, 18 Dec 2022 15:56:49 -0500
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B462D67;
+        Sun, 18 Dec 2022 12:56:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1671397005;
+        bh=oWdW2jkZe4raUuGf80B4/zbCbKlnHF22B6LFBy+dTJE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ITBYIiCleOPPN21wQgH96+iJOOcMZNLIVYI5GqaqDe6yGsmjayX0KmiDBhfh32LLs
+         MXOFE7GXWGLSrYCDIHYm6F3a07Mzoz/Q2tOSyu3ZUfzbOprYavX+GGJr6J9Ea89e/v
+         voE1vOtDaQy1exPeDAyWmkvuMb0t9JH4Jp05BJq7QRrZUZVXlVp18KuHm/tFdTo5Qb
+         35Q/B5tnD3pPsDdXKt6ZeVGkxYontSfSvV+JIHtcn50TgMqLqvKCVmmduVl3LaynJi
+         Yr3thFZH4jH4LfBQAXKDdeG0ON0/a5/BJHZzq13zBDoOFMY2xCWXMIeXMgSB1t5RG9
+         TJZGfcmckywBw==
+Received: from [10.1.0.203] (192-222-188-69.qc.cable.ebox.net [192.222.188.69])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NZwB46JQMzbnX;
+        Sun, 18 Dec 2022 15:56:44 -0500 (EST)
+Message-ID: <589da7c9-5fb7-5f6f-db88-ca464987997e@efficios.com>
+Date:   Sun, 18 Dec 2022 15:57:08 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221217170511.21872-1-bp@alien8.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
+Content-Language: en-US
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+References: <20221218191310.130904-1-joel@joelfernandes.org>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20221218191310.130904-1-joel@joelfernandes.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Borislav Petkov (AMD)" <bp@alien8.de>
+On 2022-12-18 14:13, Joel Fernandes (Google) wrote:
+> Hello, I believe the pre-flip memory barrier is not required. The only reason I
+> can say to remove it, other than the possibility that it is unnecessary, is to
+> not have extra code that does not help. However, since we are issuing a fully
+> memory-barrier after the flip, I cannot say that it hurts to do it anyway.
+> 
+> For this reason, please consider these patches as "informational", than a
+> "please merge". :-) Though, feel free to consider merging if you agree!
+> 
+> All SRCU scenarios pass with these, with 6 hours of testing.
 
-Do the feature check as the very first thing in the function. Everything
-else comes after that and is meaningless work if the TSC CPUID bit is
-not even set.
+Hi Joel,
 
-No functional changes.
+Please have a look at the comments in my side-rcu implementation [1, 2]. 
+It is similar to what SRCU does (per-cpu counter based grace period 
+tracking), but implemented for userspace. The comments explain why this 
+works without the memory barrier you identify as useless in SRCU.
 
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
----
- arch/x86/kernel/tsc.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Following my implementation of side-rcu, I reviewed the SRCU comments 
+and identified that the barrier "/* E */" appears to be useless. I even 
+discussed this privately with Paul E. McKenney.
 
-diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-index eaeffef93a12..1d509c8b3556 100644
---- a/arch/x86/kernel/tsc.c
-+++ b/arch/x86/kernel/tsc.c
-@@ -1509,6 +1509,11 @@ void __init tsc_early_init(void)
- 
- void __init tsc_init(void)
- {
-+	if (!boot_cpu_has(X86_FEATURE_TSC)) {
-+		setup_clear_cpu_cap(X86_FEATURE_TSC_DEADLINE_TIMER);
-+		return;
-+	}
-+
- 	/*
- 	 * native_calibrate_cpu_early can only calibrate using methods that are
- 	 * available early in boot.
-@@ -1516,11 +1521,6 @@ void __init tsc_init(void)
- 	if (x86_platform.calibrate_cpu == native_calibrate_cpu_early)
- 		x86_platform.calibrate_cpu = native_calibrate_cpu;
- 
--	if (!boot_cpu_has(X86_FEATURE_TSC)) {
--		setup_clear_cpu_cap(X86_FEATURE_TSC_DEADLINE_TIMER);
--		return;
--	}
--
- 	if (!tsc_khz) {
- 		/* We failed to determine frequencies earlier, try again */
- 		if (!determine_cpu_tsc_frequencies(false)) {
+My implementation and comments go further though, and skip the period 
+"flip" entirely if the first pass observes that all readers (in both 
+periods) are quiescent.
+
+The most relevant comment in side-rcu is:
+
+  * The grace period completes when it observes that there are no active
+  * readers within each of the periods.
+  *
+  * The active_readers state is initially true for each period, until the
+  * grace period observes that no readers are present for each given
+  * period, at which point the active_readers state becomes false.
+
+So I agree with the clarifications you propose here, but I think we can 
+improve the grace period implementation further by clarifying the SRCU 
+grace period model.
+
+Thanks,
+
+Mathieu
+
+
+[1] https://github.com/efficios/libside/blob/master/src/rcu.h
+[2] https://github.com/efficios/libside/blob/master/src/rcu.c
+
+> 
+> thanks,
+> 
+>   - Joel
+> 
+> Joel Fernandes (Google) (2):
+> srcu: Remove comment about prior read lock counts
+> srcu: Remove memory barrier "E" as it is not required
+> 
+> kernel/rcu/srcutree.c | 10 ----------
+> 1 file changed, 10 deletions(-)
+> 
+> --
+> 2.39.0.314.g84b9a713c41-goog
+> 
+
 -- 
-2.35.1
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
