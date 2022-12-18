@@ -2,118 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD7065047A
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 20:13:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DF565047F
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 20:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiLRTN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 14:13:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
+        id S230152AbiLRTZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 14:25:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbiLRTNW (ORCPT
+        with ESMTP id S229537AbiLRTZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 14:13:22 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38BFB870
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 11:13:20 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id cg5so6759351qtb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 11:13:20 -0800 (PST)
+        Sun, 18 Dec 2022 14:25:31 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987ECB870;
+        Sun, 18 Dec 2022 11:25:27 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id b3so10900457lfv.2;
+        Sun, 18 Dec 2022 11:25:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vj6H6w9xKIP6KzPO24qnEpNiKICnr312xMbSiquwZ1w=;
-        b=pt4vXBs6yibcCzpDPgkrFJCClB6mn1GvJAD4rIJtqm5ruo1W3/yInjv/vqqLoHGWV7
-         AF+fvogP7zG+31uqmGJp3tTlhfgpy9pDMUfo5H4aip1QWDMpt9fDgZNiuTaRExct1+WF
-         hxgnAhD75gKG4kh/Il0+8ELUmXdFXEhTwAHq0=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RZCLe2m2NSD05JaVIkjBaPWHL388f0XCT+zD7gnXxJg=;
+        b=G312hAt4HxrtBRbux5zdMisgUtEQYRrbQ35b0S9QLptUREc/qCFw4lNReSwD7fb84p
+         JCmsZeCW+BujvZVvkbN33v45J200CxzR2wMa912pDgTGQ6tL1LsCoyqye8An7p831laI
+         QdhvdDN2Xa8KLzcueDZtMT4FTdYogY0hMXZzmpc1JY2Zmdmj2XKopk1/FcgumSQH/MEZ
+         tipl30yhqmJqtfelm6GlvrANJfemuGNl5TBMbZPsL1Lz/AZTyJ5397gGpz251poCrrIU
+         W7HbsAadvuOyFrfP3ZE3Hmzaycc7QJW4Tx3+sppsr12L16WlJTjlYl+hvAhdyeR20P6s
+         FdXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vj6H6w9xKIP6KzPO24qnEpNiKICnr312xMbSiquwZ1w=;
-        b=RXeCgp4dtK6gl/Eboc+NgOgVAMHrQqTnKwMbPeCMYMNYLBO1EvBdGVmPyPHCoegpyJ
-         Gjh06HfqBPcMnTcvfbV5A9Qsyu5OsyNDuLt2LIk9qFt9AnhryHn0FOyAbKsY/HTPhTGl
-         11YR4DeUo5X2QOX2L0MLWCK9kfH2dGHNxIFaGme/2mLVHaD8V09FrzdSHJF2Hsf51xZ9
-         3HK16Zy+6qR/+/aZcRWJ56+zHs/Eab+Ow8dZE5HEgiVD4DGmGRl3+8SzaRDyuyLmdyse
-         YKmxPwpWQZqssWTtpOiboHd5CwrpquwL9ItX5JEb22+L//WGi5nJ+695oDQpMvv9PjRt
-         rflg==
-X-Gm-Message-State: ANoB5plcOCEKgczMOR5ij9/7LJ+hByWqHOgUlOLoRRC/smWl6VR1KIYl
-        mWHlMoxXjRO1tyTAAebRo+UWVvVQ6AXsYveKkfU=
-X-Google-Smtp-Source: AA0mqf42snSRGMzcQvB7R3GsQPL2CIth1zNWtzZ5ziKLDE9SS8vmD/GNAmyZghshkyxYgXjhroqn6w==
-X-Received: by 2002:ac8:5292:0:b0:3a7:f183:7f66 with SMTP id s18-20020ac85292000000b003a7f1837f66mr54074448qtn.22.1671390799594;
-        Sun, 18 Dec 2022 11:13:19 -0800 (PST)
-Received: from joelboxx.c.googlers.com.com (48.230.85.34.bc.googleusercontent.com. [34.85.230.48])
-        by smtp.gmail.com with ESMTPSA id cq8-20020a05622a424800b003a591194221sm4952864qtb.7.2022.12.18.11.13.18
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RZCLe2m2NSD05JaVIkjBaPWHL388f0XCT+zD7gnXxJg=;
+        b=6IHbCk0JzKj1o70g5SBH2Px3IVkj7Y0ohDjIEY1+Tqx9sXqQkwcU1d8z392RSYkI5D
+         6Kq/hlEJo8yu6nhYfz37HDMxqKEvJF6TISHeqbPqE8V4TFGz/Yr5AYamOM5Un9sg6Cac
+         n1S/KlLjwy7CImQCNGsyCmpGeGB3TbL9Kohupdjlg8nG2CRCik0ZIErlo++B9Er+1e4w
+         Hrl2nuzBwrDeusB3ZA9olOrwNdTqHqSPx/4Ub0h8WYe7kMmTGI2eoT98JIaP/bk0hnNQ
+         JVmzOQKMr7G7RwLuN9IobpUryx8rZvqeWiw/QzUzQQfQ/rQgEyI0d2dZ7els+f1NGFBw
+         lAZw==
+X-Gm-Message-State: ANoB5pmZ/ePuaaQbmGLbC05gBh0Qy/LlsD5QoxzWfEcp0+Tbydn3rop8
+        sYlG8Ts4U1FUV+JVQmJHPWJDLmoRnpg=
+X-Google-Smtp-Source: AA0mqf4+cOft/eyKec3yMJWbNGjr1IHI4qho/dSvocsBiGPavqTUZ3kgqwbT0GleCtc2zCAOv5y+lg==
+X-Received: by 2002:a05:6512:3d8f:b0:4b6:ee14:3e98 with SMTP id k15-20020a0565123d8f00b004b6ee143e98mr16918128lfv.23.1671391525808;
+        Sun, 18 Dec 2022 11:25:25 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id o19-20020a05651205d300b00498f77cfa63sm889219lfo.280.2022.12.18.11.25.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Dec 2022 11:13:18 -0800 (PST)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [RFC 2/2] srcu: Remove memory barrier "E" as it is not required
-Date:   Sun, 18 Dec 2022 19:13:09 +0000
-Message-Id: <20221218191310.130904-3-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20221218191310.130904-1-joel@joelfernandes.org>
-References: <20221218191310.130904-1-joel@joelfernandes.org>
+        Sun, 18 Dec 2022 11:25:25 -0800 (PST)
+Date:   Sun, 18 Dec 2022 22:25:23 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: dw_bt1: fix MUX_MMIO dependencies
+Message-ID: <20221218192523.c6vnfo26ua6xqf26@mobilestation>
+References: <20221215165247.1723462-1-arnd@kernel.org>
+ <20221218142231.qhczawk2zhpgh6dl@mobilestation>
+ <60290159-8d63-4358-9ff1-a65cc335e0c6@app.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <60290159-8d63-4358-9ff1-a65cc335e0c6@app.fastmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During a flip, we have a full memory barrier before idx is incremented.
+On Sun, Dec 18, 2022 at 06:56:24PM +0100, Arnd Bergmann wrote:
+> On Sun, Dec 18, 2022, at 15:22, Serge Semin wrote:
+> > Hi Arnd
+> >
+> > On Thu, Dec 15, 2022 at 05:52:34PM +0100, Arnd Bergmann wrote:
+> >> From: Arnd Bergmann <arnd@arndb.de>
+> >> 
+> >> Selecting a symbol with additional dependencies requires
+> >> adding the same dependency here:
+> >> 
+> >> WARNING: unmet direct dependencies detected for MUX_MMIO
+> >>   Depends on [n]: MULTIPLEXER [=y] && OF [=n]
+> >>   Selected by [y]:
+> >>   - SPI_DW_BT1 [=y] && SPI [=y] && SPI_MASTER [=y] && SPI_DESIGNWARE [=y] && (MIPS_BAIKAL_T1 || COMPILE_TEST [=y])
+> >> 
+> >> Alternatively, we could drop this 'select' and require users to manually
+> >> put it into their .config as we do for other drivers.
+> >
+> > Thanks for the patch. Seeing the driver is only implicitly dependent
+> > from the mux-mmio driver (via the device described in the device tree
+> > blob) I'd suggest to either drop the MUX_MMIO config reverse
+> > dependency or convert it to the weak one - 'imply' (if it will solve
+> > the problem).
+> 
 
-The effect of this seems to be to guarantee that, if a READER sees srcu_idx
-updates (srcu_flip), then prior scans would not see its updates to counters on
-that index.
+> Ok, I'll send a new patch. I don't want to use 'imply' though, that
+> tends to cause other problems because almost nobody understands what
+> it actually does.
 
-That does not matter because of the following reason: If a prior scan did see
-counter updates on the new index, that means the prior scan would would wait
-for the reader when it probably did not need to.
+Ok. Dropping it will be also suitable solution. I'll make sure our
+defconfigs will be updated afterwards.
 
-And if the prior scan did see both lock and unlock count updates on that index,
-that reader is essentially done, so it is OK to end the grace period.
+-Serge(y)
 
-For this reason, remove the full memory barrier before incrementing
-srcu_idx.
-
-6 hours of testing shows all SRCU-* scenarios pass with this.
-
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- kernel/rcu/srcutree.c | 8 --------
- 1 file changed, 8 deletions(-)
-
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index d6a4c2439ca6..2d2e6d304a43 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -982,14 +982,6 @@ static bool try_check_zero(struct srcu_struct *ssp, int idx, int trycount)
-  */
- static void srcu_flip(struct srcu_struct *ssp)
- {
--	/*
--	 * Ensure that if a given reader sees the new value of ->srcu_idx, this
--	 * updater's earlier scans cannot have seen that reader's increments
--	 * (which is OK, because this grace period need not wait on that
--	 * reader).
--	 */
--	smp_mb(); /* E */  /* Pairs with B and C. */
--
- 	WRITE_ONCE(ssp->srcu_idx, ssp->srcu_idx + 1);
- 
- 	/*
--- 
-2.39.0.314.g84b9a713c41-goog
-
+> 
+>       Arnd
