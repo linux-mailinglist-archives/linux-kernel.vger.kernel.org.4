@@ -2,69 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA6164FEF4
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 14:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA3964FEF8
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 14:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiLRNLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 08:11:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
+        id S230328AbiLRNNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 08:13:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiLRNLR (ORCPT
+        with ESMTP id S230195AbiLRNNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 08:11:17 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA98B21AF
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 05:11:15 -0800 (PST)
-Received: from dslb-178-004-201-210.178.004.pools.vodafone-ip.de ([178.4.201.210] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1p6tRa-0006i3-Gw; Sun, 18 Dec 2022 14:11:06 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Tsahee Zidenberg <tsahee@annapurnalabs.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Martin Kaiser <martin@kaiser.cx>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: Alpine: add missing of_node_put call
-Date:   Sun, 18 Dec 2022 14:10:26 +0100
-Message-Id: <20221218131025.394179-1-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 18 Dec 2022 08:13:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35A32ACA
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 05:13:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BBC26CE0B98
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 13:13:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D71DFC433EF;
+        Sun, 18 Dec 2022 13:13:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671369218;
+        bh=0hPFIoqG1pb5r61Kc7fAqelgV4PDptfCI2Zixp9Czww=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=O728Eyg27YQRWVtfaRew+4AvR3pwX0ixk0HZrFoBGhHOMVQeWYkF6NwcLBbuB48//
+         GUFIIaXp/ib7Gf3k03s+l10ggGZH6ZgF+DcKyLSz+zI8w/J/qCP6/jK2JG1NtXR0LO
+         UfZTcyt4XuJ6zhpar+la/pcUc9Apdl508e1Z72eBPZ/1tOcBpowyqRZS5U19nCUzNN
+         9i9U2afJjODUm2eT/pvXUezEt9Q8Layrv6WtZL5G3sf1jXAPGox7gSCL8lJgYScqfu
+         W22dYPT4gKbKKXC5oiqNsa9SRqZlEQsIQyI1ok5wiZXvVlftc/ZQ0FQb8uxr1Zfcms
+         XYn6PbADXMNKA==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p6tU0-00DR6V-83;
+        Sun, 18 Dec 2022 13:13:36 +0000
+Date:   Sun, 18 Dec 2022 13:11:01 +0000
+Message-ID: <87bko0g8m2.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v3 1/7] arm64/sysreg: Convert CCSIDR_EL1 to automatic generation
+In-Reply-To: <1ef32b0c-6cee-75f7-e1e0-ede1f5b9a016@daynix.com>
+References: <20221218051412.384657-1-akihiko.odaki@daynix.com>
+        <20221218051412.384657-2-akihiko.odaki@daynix.com>
+        <87cz8hez0i.wl-maz@kernel.org>
+        <1ef32b0c-6cee-75f7-e1e0-ede1f5b9a016@daynix.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: akihiko.odaki@daynix.com, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, mathieu.poirier@linaro.org, oliver.upton@linux.dev, suzuki.poulose@arm.com, alexandru.elisei@arm.com, james.morse@arm.com, will@kernel.org, catalin.marinas@arm.com, asahi@lists.linux.dev, alyssa@rosenzweig.io, sven@svenpeter.dev, marcan@marcan.st
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A node that is returned by of_find_compatible_node has its refcount
-incremented. We have to call of_node_put when the node is no longer
-needed.
+On Sun, 18 Dec 2022 11:35:12 +0000,
+Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>=20
+> On 2022/12/18 20:23, Marc Zyngier wrote:
+> > On Sun, 18 Dec 2022 05:14:06 +0000,
+> > Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+> >>=20
+> >> Convert CCSIDR_EL1 to automatic generation as per DDI0487I.a. The field
+> >> definition is for case when FEAT_CCIDX is not implemented. Fields WT,
+> >> WB, RA and WA are defined as per A.j since they are now reserved and
+> >> may have UNKNOWN values in I.a, which the file format cannot represent.
+> >>=20
+> >> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> >> ---
+> >>   arch/arm64/include/asm/sysreg.h |  1 -
+> >>   arch/arm64/tools/sysreg         | 11 +++++++++++
+> >>   2 files changed, 11 insertions(+), 1 deletion(-)
+> >>=20
+> >> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/=
+sysreg.h
+> >> index 7d301700d1a9..910e960661d3 100644
+> >> --- a/arch/arm64/include/asm/sysreg.h
+> >> +++ b/arch/arm64/include/asm/sysreg.h
+> >> @@ -425,7 +425,6 @@
+> >>     #define SYS_CNTKCTL_EL1			sys_reg(3, 0, 14, 1,
+> >> 0)
+> >>   -#define SYS_CCSIDR_EL1			sys_reg(3, 1, 0, 0, 0)
+> >>   #define SYS_AIDR_EL1			sys_reg(3, 1, 0, 0, 7)
+> >>     #define SYS_RNDR_EL0			sys_reg(3, 3, 2, 4, 0)
+> >> diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+> >> index 384757a7eda9..acc79b5ccf92 100644
+> >> --- a/arch/arm64/tools/sysreg
+> >> +++ b/arch/arm64/tools/sysreg
+> >> @@ -871,6 +871,17 @@ Sysreg	SCXTNUM_EL1	3	0	13	0	7
+> >>   Field	63:0	SoftwareContextNumber
+> >>   EndSysreg
+> >>   +Sysreg	CCSIDR_EL1	3	1	0	0	0
+> >> +Res0	63:32
+> >> +Field	31:31	WT
+> >> +Field	30:30	WB
+> >> +Field	29:29	RA
+> >> +Field	28:28	WA
+> >=20
+> > For fields described as a single bit, the tool supports simply
+> > indicating the bit number (28 rather than 28:28).
+> >=20
+> > However, I strongly recommend against describing fields that have been
+> > dropped from the architecture.  This only happens when these fields
+> > are never used by any implementation, so describing them is at best
+> > useless.
+>=20
+> arch/arm64/tools/gen-sysreg.awk does not allow a hole and requires all
+> bits are described hence these descriptions. If you have an
+> alternative idea I'd like to hear.
 
-Add a missing of_node_put call in function alpine_cpu_pm_init.
+I'd simply suggest creating an UNKNOWN field encompassing bits
+[21:28]. Alternatively, feel free to try the patch below, which allows
+you to describe these 4 bits as "Unkn	31:28", similar to Res0/Res1.
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+>
+> >=20
+> >> +Field	27:13	NumSets
+> >> +Field	12:3	Associavity
+
+Also, you may want to fix the typo here (Associativity).
+
+Thanks,
+
+	M.
+
+=46rom 3112be25ec785de4c92d11d5964d54f216a2289c Mon Sep 17 00:00:00 2001
+From: Marc Zyngier <maz@kernel.org>
+Date: Sun, 18 Dec 2022 12:55:23 +0000
+Subject: [PATCH] arm64: Allow the definition of UNKNOWN system register fie=
+lds
+
+The CCSIDR_EL1 register contains an UNKNOWN field (which replaces
+fields that were actually defined in previous revisions of the
+architecture).
+
+Define an 'Unkn' field type modeled after the Res0/Res1 types
+to allow such description. This allows the generation of
+
+  #define CCSIDR_EL1_UNKN     (UL(0) | GENMASK_ULL(31, 28))
+
+which may have its use one day. Hopefully the architecture doesn't
+add too many of those in the future.
+
+Signed-off-by: Marc Zyngier <maz@kernel.org>
 ---
-compile-tested only, I don't have this hardware
+ arch/arm64/tools/gen-sysreg.awk | 20 +++++++++++++++++++-
+ arch/arm64/tools/sysreg         |  2 ++
+ 2 files changed, 21 insertions(+), 1 deletion(-)
 
- arch/arm/mach-alpine/alpine_cpu_pm.c | 1 +
- 1 file changed, 1 insertion(+)
+diff --git a/arch/arm64/tools/gen-sysreg.awk b/arch/arm64/tools/gen-sysreg.=
+awk
+index c350164a3955..e1df4b956596 100755
+--- a/arch/arm64/tools/gen-sysreg.awk
++++ b/arch/arm64/tools/gen-sysreg.awk
+@@ -98,6 +98,7 @@ END {
+=20
+ 	res0 =3D "UL(0)"
+ 	res1 =3D "UL(0)"
++	unkn =3D "UL(0)"
+=20
+ 	next_bit =3D 63
+=20
+@@ -112,11 +113,13 @@ END {
+=20
+ 	define(reg "_RES0", "(" res0 ")")
+ 	define(reg "_RES1", "(" res1 ")")
++	define(reg "_UNKN", "(" unkn ")")
+ 	print ""
+=20
+ 	reg =3D null
+ 	res0 =3D null
+ 	res1 =3D null
++	unkn =3D null
+=20
+ 	next
+ }
+@@ -134,6 +137,7 @@ END {
+=20
+ 	res0 =3D "UL(0)"
+ 	res1 =3D "UL(0)"
++	unkn =3D "UL(0)"
+=20
+ 	define("REG_" reg, "S" op0 "_" op1 "_C" crn "_C" crm "_" op2)
+ 	define("SYS_" reg, "sys_reg(" op0 ", " op1 ", " crn ", " crm ", " op2 ")")
+@@ -161,7 +165,9 @@ END {
+ 		define(reg "_RES0", "(" res0 ")")
+ 	if (res1 !=3D null)
+ 		define(reg "_RES1", "(" res1 ")")
+-	if (res0 !=3D null || res1 !=3D null)
++	if (unkn !=3D null)
++		define(reg "_UNKN", "(" unkn ")")
++	if (res0 !=3D null || res1 !=3D null || unkn !=3D null)
+ 		print ""
+=20
+ 	reg =3D null
+@@ -172,6 +178,7 @@ END {
+ 	op2 =3D null
+ 	res0 =3D null
+ 	res1 =3D null
++	unkn =3D null
+=20
+ 	next
+ }
+@@ -190,6 +197,7 @@ END {
+         next_bit =3D 0
+ 	res0 =3D null
+ 	res1 =3D null
++	unkn =3D null
+=20
+ 	next
+ }
+@@ -215,6 +223,16 @@ END {
+ 	next
+ }
+=20
++/^Unkn/ && (block =3D=3D "Sysreg" || block =3D=3D "SysregFields") {
++	expect_fields(2)
++	parse_bitdef(reg, "UNKN", $2)
++	field =3D "UNKN_" msb "_" lsb
++
++	unkn =3D unkn " | GENMASK_ULL(" msb ", " lsb ")"
++
++	next
++}
++
+ /^Field/ && (block =3D=3D "Sysreg" || block =3D=3D "SysregFields") {
+ 	expect_fields(3)
+ 	field =3D $3
+diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+index bd5fceb26c54..472f68f020d9 100644
+--- a/arch/arm64/tools/sysreg
++++ b/arch/arm64/tools/sysreg
+@@ -15,6 +15,8 @@
+=20
+ # Res1	<msb>[:<lsb>]
+=20
++# Unkn	<msb>[:<lsb>]
++
+ # Field	<msb>[:<lsb>]	<name>
+=20
+ # Enum	<msb>[:<lsb>]	<name>
+--=20
+2.34.1
 
-diff --git a/arch/arm/mach-alpine/alpine_cpu_pm.c b/arch/arm/mach-alpine/alpine_cpu_pm.c
-index 13ae8412e9ce..fc5b9732ccb7 100644
---- a/arch/arm/mach-alpine/alpine_cpu_pm.c
-+++ b/arch/arm/mach-alpine/alpine_cpu_pm.c
-@@ -50,6 +50,7 @@ void __init alpine_cpu_pm_init(void)
- 
- 	np = of_find_compatible_node(NULL, NULL, "al,alpine-cpu-resume");
- 	al_cpu_resume_regs = of_iomap(np, 0);
-+	of_node_put(np);
- 
- 	wakeup_supported = !IS_ERR(al_sysfabric) && al_cpu_resume_regs;
- 
--- 
-2.30.2
 
+--=20
+Without deviation from the norm, progress is not possible.
