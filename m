@@ -2,170 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BF264FE1D
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 09:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D53F64FE27
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 10:29:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiLRIzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 03:55:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        id S230203AbiLRJ3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 04:29:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiLRIzu (ORCPT
+        with ESMTP id S229537AbiLRJ33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 03:55:50 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644115F9C;
-        Sun, 18 Dec 2022 00:55:49 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id DEB275C00E2;
-        Sun, 18 Dec 2022 03:55:46 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sun, 18 Dec 2022 03:55:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1671353746; x=
-        1671440146; bh=HuE2xNjaCsqZcCimOMMVJ+moDlJHyApAuDFUa5X1uOI=; b=s
-        KAtTR8dVPO6/9rTlLZrtLQMWIN+wRtzJ335GPnG10lT3d8W5wzzdhIVIAKQU4ddm
-        22J/EZr6AdsfQOhxBzOE6e87A4rkjJnrEJb1phODD/4XUTO67nJOppO/+h290FIL
-        MjmUleuYXMXRYsac+w83opNJPbYjlU8RT1vmFvgqGSt+a1O831bHcyysxIIm9gv4
-        CcTcN0MdgwAc80b8OJoaE2yjx+ZZhzGOhwN0+Guyn51IHo/ObI0PToRlkkFCiKXu
-        zFL3eIAfCIzoeH8qKfmjwQqnH7OMiwdUQiyG3Gm70tx6xy1dT3I9gBN6JSXMFPeb
-        gtMeMcGnp8xFc493zmvmg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1671353746; x=
-        1671440146; bh=HuE2xNjaCsqZcCimOMMVJ+moDlJHyApAuDFUa5X1uOI=; b=v
-        SB0nvwy9FHI37TGPI6fvkqhePxAsgli4lXWSLCsk1Fih76UchgJU/Vk0yqv5OcTH
-        kUbuZXrJwo3etdrXJJ3tG2YKzpHsLVNSCc/FGTg6iBPWwFWVBmTeH02WphSqb1CF
-        1wxnfTBrQtL0iZ98bkgaDdmiwvGQvPULiQ/5Q+yV4ONNmMBsq0JUUTRj2PX7r0ft
-        jZvy2k5MBEfzoI59zD2ptGFeimKf5FCBwtw+Nq1Oy/Uz1U9plGhqQD9iGjL5GfBI
-        X79PD3aECWAZL6WhlY1T/L6L9rDauqk2bzhGEsxOWjAPHKglXPrtv08N2jUBIj5e
-        33FdQLG0jcJ2G6Fs+uo/g==
-X-ME-Sender: <xms:ktWeY--j1vLLETFvw8SLrxlL3w7YI-QkASwWeBYqW-oa_5lqo8xPeA>
-    <xme:ktWeY-ui9ub_8AIOq2bE_tL-30tTDbMDm5kH94qUrjY7oc_P2Pkz7GMRBY-dOGYA9
-    8O0LRyJ5rAsUw>
-X-ME-Received: <xmr:ktWeY0DYZt-4dotV2VtDTqyUzo3b3TkjQoT5WboFLG0Jgv4SoIXTIMssqX4WXa0Lht5G71RmCy-SRYBJ9JCakWiyehaqiW8T>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtgdduvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpefgke
-    ffieefieevkeelteejvdetvddtledugfdvhfetjeejieduledtfefffedvieenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:ktWeY2f_9qR2A0ASZM6aflweJP3E1K6bOn8UQ7IM7axRYUSMrL765Q>
-    <xmx:ktWeYzMN2SeA1OSxgV-0QV3sP_DbI04F5d3fhS9OVOcWSj4ENVR2Fw>
-    <xmx:ktWeYwkNMd97IFl_CNj-gUnaNyUVkY3yavTqTGf-0F0ZHi3Ac0d_hQ>
-    <xmx:ktWeYwcMwafXcf25B8WTMkwOrm9aqo-52lXebmcd8v_BwUZtZOyAHw>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 18 Dec 2022 03:55:46 -0500 (EST)
-Date:   Sun, 18 Dec 2022 09:55:44 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Leesoo Ahn <lsahn@ooseel.net>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usbnet: jump to rx_cleanup case instead of calling
- skb_queue_tail
-Message-ID: <Y57VkLKetDsbUUjC@kroah.com>
-References: <20221217161851.829497-1-lsahn@ooseel.net>
+        Sun, 18 Dec 2022 04:29:29 -0500
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2081.outbound.protection.outlook.com [40.107.100.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B276CD2D8;
+        Sun, 18 Dec 2022 01:29:27 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IbuPYxGEKccrIa443ty1pS8slghcmh8OWEahS98L5p94v8hplbmk+2jpXDm2u5Tsqv7YBjvB3kYQlOy8c3041RkN9Iaqf06C91wfMXXniAOkhE9W+WjsPd5VZa3Bc4Oujqx0i2C2lcD94r3d/vtNMB6rNY+HeFU3ooDYy3PtDCD+ifcJllUJgrlRZpRcaIbYZJe9YKGJAL/hQXSRzLXZUHFts755G66qmX9tzQ+x9miJVKAprpK1rQzMwUIPx/EUx/u1xQEP7/R8vRiqVZXg3SCmzqCc5rYRYJbKHVwxavJBMSpDZEmjdFwRUeTs1clGcWcxrOed3zI/F8bj2OuzBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8ni/HcgUJj4jYluQH/iNqEn08LIAfMCD6DCOQpZE5A0=;
+ b=hmxvpDgtylz0C3Q2t9ljDeHVTD6czmnVr6uaeUD+euhoNB7hfIGNYQsgd7+Jg8glaTQyIfUOuG/M4Od1UYT7ZQURpd02H5/rgLyuU3NGMBeMxxgCbNhcYfWOuUN6Ij98PnNMRf6qyGW7sQE7ilV4VEJCi6J94qwsQkJcfO8g4lw1j22SlnIYPz7Cv/vfVNSh+aPNpeAXra1pCpAndioPlpb5yltkQykcaTd35wcZff61LjV+TXSrMiivAyq0qZ7i4qHe+ETLyc248rT24pSlHXE7Hg70RdyOgy49oHYlk27Z3qgN4E0CAsxOpc8gz9QAijY4YMFcDbnrfqGke0VUSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8ni/HcgUJj4jYluQH/iNqEn08LIAfMCD6DCOQpZE5A0=;
+ b=hgE0F1k3YC7g5DmKIQIKGix7jbYuKdpUajd1orALICBmzp+p8WtvhmJz6jXs18/6dBge/e4bGABg9XlNlKzfWrVJovfVtCS/eVYpaY5/gZHoYOsbprxf5wvI8hFLtI+kuAWXYyueVZTlNV9PoGUCxwNqziuG2iLz9CEHyONPIUumMebVgpJkX6T40xrobZGf5Mr6PXySUi8xnfOFr67/NeL5y3lPzwzlOQP92JhUN0DqzKCi2jLG7d7wqIYiGo0SKv8GjBwqFfOBgdpOYo9zeCHavjpxgnUUWbyrKkPSkzivNbKtomAuEk55k+AjGZSrWQgJnoqLkMfV1ZO9Ih6oLA==
+Received: from DM8PR12MB5400.namprd12.prod.outlook.com (2603:10b6:8:3b::12) by
+ IA1PR12MB8221.namprd12.prod.outlook.com (2603:10b6:208:3f0::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Sun, 18 Dec
+ 2022 09:29:25 +0000
+Received: from DM8PR12MB5400.namprd12.prod.outlook.com
+ ([fe80::70c6:a62a:4199:b8ed]) by DM8PR12MB5400.namprd12.prod.outlook.com
+ ([fe80::70c6:a62a:4199:b8ed%4]) with mapi id 15.20.5924.016; Sun, 18 Dec 2022
+ 09:29:25 +0000
+From:   Eli Cohen <elic@nvidia.com>
+To:     "tglx@linutronix.de" <tglx@linutronix.de>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+Subject: dynamic MSIX submission plans
+Thread-Topic: dynamic MSIX submission plans
+Thread-Index: AdkSwhlrQ+m8PjHmS1ipW7AraIwGZA==
+Date:   Sun, 18 Dec 2022 09:29:25 +0000
+Message-ID: <DM8PR12MB5400783BA8E864AC3DA47BD0ABE49@DM8PR12MB5400.namprd12.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM8PR12MB5400:EE_|IA1PR12MB8221:EE_
+x-ms-office365-filtering-correlation-id: 07918edd-7cb8-45cd-9b3a-08dae0da5acc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0f0B8Bc2KsT6ByELaNQENxR+/ogfSnbbLuxyTAK4jceQgvMdnjtOymq0UDYBhmIImqHsLFh2rNvlay5Cfiv8nJVsPv9CytScz/AkD9xdqObUkXWRidR+PO14chSTGAHtASNb2u3ORlCx+d/KqtwR/0aLeVwgplXyjiiIBMcKpvHN3f+DVCY/q0EXKd4ySy3gKQy6D6LmXa6bRWw14/OkqINVhKD2I2a39hwNBjqhZcgOKJNp10bk71luuTZTBY3uq+zyZ6me5lMm84VxC0N+L0rSSjm9WUdEYTHn/UIQhJiVTEUB+xXF/Wl05Zr8e4/VvRoNdx59hnKDyDtS43bs2t95fzUk7Y6iD7Xr7tbBgok0VYKxILI/p8FmbOVfSAj8wT9exMSreusCJFROPnSAkBqxsTYij0XJEaVIbsfR43MXwFHe+utFPYL9cJVNbyfuXalpmYJkOM7c31Z1+rnshcLZufBTbFaoLoHWgywhstMtOYsMUXGXYGm8z9AgPC/3RLLOFKUWpliPHS6QgromUEL4zSbza0gXdRuZvHKMjBjFse8YW1swhdCRM2ZREtu+H7d/1nSz2cuNc2Y8IRcH2c7ppynGZiMD+jfUzDFfZxX3ocJIGzsLtWIt9q4xl2WZ1Cs0SfdIwhJSnKJZOr4cmJs18sak0PzmWL021apoqMvezX7WY2leHzXbNBYhYvFr2Q4u6eS9SVE/5YL5SFMvUYxvNf9aA20fmRVmYHRvP4ekkkHUmKHPM/U6C/KBzlvUZGOIRoN9FhKBm7pwX+XYz1DyX22SiATfgxf/y2PMrXU=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5400.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(346002)(136003)(39860400002)(396003)(451199015)(66946007)(76116006)(66476007)(64756008)(66556008)(8676002)(9686003)(26005)(86362001)(4326008)(186003)(478600001)(71200400001)(52536014)(41300700001)(2906002)(55016003)(558084003)(33656002)(5660300002)(8936002)(3480700007)(66446008)(122000001)(316002)(966005)(6916009)(54906003)(6506007)(7696005)(38100700002)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YWdUN1ZkNXFFcWpOUFFTRVgwaXhsc3JXOERZbHZ2VFh1cXdiMUZCUklPU1BX?=
+ =?utf-8?B?aHJqaGoxb3JUMDJ0WkRXbUd1S2tyZ1UzQlByODl3ZkUrVkhTMEdZT3haNWN6?=
+ =?utf-8?B?Z1FsODZkR3V0Z1FSM1NucjBqRWU0WEZvTXFSTFVhWTZOazB1VmNxeXNnM0FR?=
+ =?utf-8?B?WDFwbzAwMDNvakM1TGk4bWxyOEZ3WlhpbjJFb29YNzJuRFpDVGNLZjl6Tkw0?=
+ =?utf-8?B?Ry9aK3JVVGFWeVMycWtHTHprSStXQ0xoY0RvZEFKb0VROFZjNzlmVEVDeTFL?=
+ =?utf-8?B?Tm5ycWJYSXhudnRSb0dySnEzc2NSWHJqRXNoY0UwLzlRdGZOdkwzNDh2VEVL?=
+ =?utf-8?B?SmY1M2pmeE5RSDBDcjlDaVlCUHFPemFLYWcvY2Y0VWl4TjMwZ2QxcWpib3dl?=
+ =?utf-8?B?aWRoTm1nU2lWYnloVjVDRWtLMHNBZk9hSkVtcFM0RjkxdUdBUWRYV3BETVFy?=
+ =?utf-8?B?aGpiLzlDSzRmbFVlTzN5WkFaY29XaVFEaHBLSSsvOXpGTmJpcHpDYkJBK0Y5?=
+ =?utf-8?B?ZzVFUTgxUVBXZytBWVhCS3VkL1ppK3h4L3dDOHdBQ3JTalFPNFp4am1WZGxH?=
+ =?utf-8?B?OGFkNnVpRDNSR2dvdllZWDJ6T2V6NEJvMzQ5a0Rkd20wdjVnWllRbDJMVWN5?=
+ =?utf-8?B?YW02QXRGd3JJeURLMFhjOHE1ZUJtZGJhTjE0anNRSUFGTFRuZHprTFRjU1lm?=
+ =?utf-8?B?MDJSUU9sRjB2bWNCRm9seStCZ2RKeG93bnhncU1JR3FMSkZneVRiUG11WDlT?=
+ =?utf-8?B?ejNDc2RFbVRjTG9GaEQ5d3BtYXVXQ1lnclZ0MFdwbVdNem83Q04yeTlZS2lD?=
+ =?utf-8?B?VmRsMStWNndMYjZBdVZ5TUZIdVRjSzREbzhhY3o0WUF2YmVCemVUeVkwUW9O?=
+ =?utf-8?B?NW5MQnlxM1NwSlNlYWMzQ1JvNzFVbnYrSG5iOUM4WHlaRXZVSncyZlRWdzRO?=
+ =?utf-8?B?NDh3NzExdXRSQklyVHRvMS9UTzU5bEo3NDBNdktiWjhBNVBrZSt1ZGdCdmg2?=
+ =?utf-8?B?eHZlUElFY1lzbSt0dWhqYW84Ny9aK29jZ3pXU1JYYzZ0cndqdUFmNGhPdSt0?=
+ =?utf-8?B?UTN3V2xoaDhoUDlnLzhaZ3ZBY21xRUJRU2hRMWRHVitWOXVjSHRjK1daYUd3?=
+ =?utf-8?B?em5Pam9JRDFMeExaSGhJcnM4cVBYSWlyR3JlU3pXUmJRUm9OTnBFTy9RVmdX?=
+ =?utf-8?B?YVlLTDV6TUU4THFOUFgvS0o2UzdBb3FjSWRpaFNneTVkSlZXd2l4Ni9jU3ZM?=
+ =?utf-8?B?ZkRUZHZBRDREcmhvaXp3UmFvZGFmUlBTUmNVVWhtbDU0YVRhZFp4dW8reHZu?=
+ =?utf-8?B?ZEI0bkVGUEhaQkxXd3NrZ2ViSFF4ZldHOGxFb0hVdG5tcTd3NUMzeFdLeEhS?=
+ =?utf-8?B?bEVrUHhrMkxZaE9jQ1pXYXdzdEpNTXprdU9SSGZDTVljL21IVzIrZmxRL0t1?=
+ =?utf-8?B?VHM0SDA5bUdlakxlNUx2NHk0cHNhMk8yVXoyOUx0V09MNkFwWWNZd2IrRlJW?=
+ =?utf-8?B?VWh2ZDBNOWpVTmdNcHF2eC96Zy9SN29teENWUHlnV0VhTnd5NzlIdlZHVUM0?=
+ =?utf-8?B?cFhCQVRuRE9NNmdpNFBxWDYzeWhGcngyN2pYeUN2Zjd6VlJiT1pJcjNReTcz?=
+ =?utf-8?B?cFVzRkxjUE1FUm9oWVNlZFEyakI3MmtvZEYyZWE3KzNELysxam1OR01SZGph?=
+ =?utf-8?B?V2tTTGloMnUwV21hSUFtWENPWG1uNnNNMDl0bDE3TFBwdDViV2NQS3dZQU8x?=
+ =?utf-8?B?NFdPVCt0RWd5NTVPREJaNjJMWENMSXovT1B4ZDVBN1ZjK05qc3ZVM0U2U2NR?=
+ =?utf-8?B?NVZONFh3a2hHd0FWN3ZFZ2VWRWZtTWdaQkM1ZktqdUdEb1RsOWMwQ3JJQlhW?=
+ =?utf-8?B?cVU4Q09GdXBOWUFWL3pSMERldVRKaU5YanFqUlRaN2phbmRIVi81TmlDYlFx?=
+ =?utf-8?B?RFJvSHVvbVhEdlVsdkVSMXB2OVFKdWFzVjkxaXBucmo3QWlNdGRGaE45Vm1N?=
+ =?utf-8?B?MjNza2szc0ZraHAwNUY1RnNPMHBqVE9sNjFpVXZOUE5RQWFGRlBQckNYY1lj?=
+ =?utf-8?B?clVUOUs2bUFMUzdQSjNudlU2cXlJSkN6c0JxVzNzcjZPOGthUFc1TnVCb2xF?=
+ =?utf-8?Q?t+aw=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221217161851.829497-1-lsahn@ooseel.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5400.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 07918edd-7cb8-45cd-9b3a-08dae0da5acc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Dec 2022 09:29:25.7041
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: H1hfSKWEKYnotAoto595S10J9BVSPjFUkI2df6CqFhWvqJMzbf86ICnqQmvNYGjE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8221
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 18, 2022 at 01:18:51AM +0900, Leesoo Ahn wrote:
-> The current source pushes skb into dev->done queue by calling
-> skb_queue_tail() and then, call skb_dequeue() to pop for rx_cleanup state
-> to free urb and skb next in usbnet_bh().
-> It wastes CPU resource with extra instructions. Instead, use return values
-> jumping to rx_cleanup case directly to free them. Therefore calling
-> skb_queue_tail() and skb_dequeue() is not necessary.
-> 
-> The follows are just showing difference between calling skb_queue_tail()
-> and using return values jumping to rx_cleanup state directly in usbnet_bh()
-> in Arm64 instructions with perf tool.
-> 
-> ----------- calling skb_queue_tail() -----------
->        │     if (!(dev->driver_info->flags & FLAG_RX_ASSEMBLE))
->   7.58 │248:   ldr     x0, [x20, #16]
->   2.46 │24c:   ldr     w0, [x0, #8]
->   1.64 │250: ↑ tbnz    w0, #14, 16c
->        │     dev->net->stats.rx_errors++;
->   0.57 │254:   ldr     x1, [x20, #184]
->   1.64 │258:   ldr     x0, [x1, #336]
->   2.65 │25c:   add     x0, x0, #0x1
->        │260:   str     x0, [x1, #336]
->        │     skb_queue_tail(&dev->done, skb);
->   0.38 │264:   mov     x1, x19
->        │268:   mov     x0, x21
->   2.27 │26c: → bl      skb_queue_tail
->   0.57 │270: ↑ b       44    // branch to call skb_dequeue()
-> 
-> ----------- jumping to rx_cleanup state -----------
->        │     if (!(dev->driver_info->flags & FLAG_RX_ASSEMBLE))
->   1.69 │25c:   ldr     x0, [x21, #16]
->   4.78 │260:   ldr     w0, [x0, #8]
->   3.28 │264: ↑ tbnz    w0, #14, e4    // jump to 'rx_cleanup' state
->        │     dev->net->stats.rx_errors++;
->   0.09 │268:   ldr     x1, [x21, #184]
->   2.72 │26c:   ldr     x0, [x1, #336]
->   3.37 │270:   add     x0, x0, #0x1
->   0.09 │274:   str     x0, [x1, #336]
->   0.66 │278: ↑ b       e4    // branch to 'rx_cleanup' state
-
-Interesting, but does this even really matter given the slow speed of
-the USB hardware?
-
-> Signed-off-by: Leesoo Ahn <lsahn@ooseel.net>
-> ---
->  drivers/net/usb/usbnet.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-> index 64a9a80b2309..924392a37297 100644
-> --- a/drivers/net/usb/usbnet.c
-> +++ b/drivers/net/usb/usbnet.c
-> @@ -555,7 +555,7 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
->  
->  /*-------------------------------------------------------------------------*/
->  
-> -static inline void rx_process (struct usbnet *dev, struct sk_buff *skb)
-> +static inline int rx_process(struct usbnet *dev, struct sk_buff *skb)
->  {
->  	if (dev->driver_info->rx_fixup &&
->  	    !dev->driver_info->rx_fixup (dev, skb)) {
-> @@ -576,11 +576,11 @@ static inline void rx_process (struct usbnet *dev, struct sk_buff *skb)
->  		netif_dbg(dev, rx_err, dev->net, "rx length %d\n", skb->len);
->  	} else {
->  		usbnet_skb_return(dev, skb);
-> -		return;
-> +		return 0;
->  	}
->  
->  done:
-> -	skb_queue_tail(&dev->done, skb);
-> +	return -1;
-
-Don't make up error numbers, this makes it look like this failed, not
-succeeded.  And if this failed, give it a real error value.
-
-thanks,
-
-greg k-h
+SGkgVGhvbWFzLA0KDQpXaXRoIHJlZmVyZW5jZSB0byB0aGlzIHdvcmsNCmh0dHBzOi8vZ2l0Lmtl
+cm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RnbHgvZGV2ZWwuZ2l0DQoNCkNhbiB5
+b3Ugc2hhcmUgeW91ciBwbGFucyB3aXRoIHJlc3BlY3QgdG8gc3VibWlzc2lvbj8NCg0KQXJlIHlv
+dSBnb2luZyB0byBzZW5kIHRoZW0gZm9yIHRoZSBuZXh0IGtlcm5lbD8NCg==
