@@ -2,138 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A8764FD57
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 02:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5969B64FD5A
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 02:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbiLRBF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 20:05:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
+        id S229971AbiLRBGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 20:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiLRBFx (ORCPT
+        with ESMTP id S229650AbiLRBGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 20:05:53 -0500
-Received: from ms11p00im-qufo17291401.me.com (ms11p00im-qufo17291401.me.com [17.58.38.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4582647
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Dec 2022 17:05:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-        s=1a1hai; t=1671325551;
-        bh=CU/eyyyK8TwQFiwwwOIA2tQ1Rpw9x9qntSrQp9qm0zw=;
-        h=Content-Type:Mime-Version:Subject:From:Date:Message-Id:To;
-        b=vyW+mMByV2K4utfBidJJ/C1eVF7GzBMiDuRsZlGolhKrlKloqwKaECoHwLZp9IwG7
-         hXHJdbgWDh6An2PRbYYiuBkjxgVn0XEx7qy6dgIq8ylT6ChJSviYgqsZUS/u0l/0hE
-         iOuBh4B0nnVIndP5gNeSey5ATRMFtWsAZH/fNKOJQv0ZKNCS8kvyTVYFh/QjmmAa9h
-         lOK/Q3m0sYsNzYd3c1rOh0HQkUAsKLOT5fZBDR2NKLlfR61Ikj+PY5MtVx2E3mlTxr
-         3LYQ5eFYCpcjo5LV+81LPXwN5lAIjOCJIGOKSn+P4YC0O9vU9zxs3LbJIgAMVOaTjT
-         ddu3Vs/guNyjQ==
-Received: from smtpclient.apple (ms11p00im-dlb-asmtpmailmevip.me.com [17.57.154.19])
-        by ms11p00im-qufo17291401.me.com (Postfix) with ESMTPSA id 2E9498E053F;
-        Sun, 18 Dec 2022 01:05:50 +0000 (UTC)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
-Subject: Re: [PATCH 2/6] Don't assume UID 0 attach
-From:   evanhensbergen@icloud.com
-In-Reply-To: <Y55Z2DwZgRG+9zW3@codewreck.org>
-Date:   Sat, 17 Dec 2022 19:05:38 -0600
-Cc:     v9fs-developer@lists.sourceforge.net,
-        Ron Minnich <rminnich@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux_oss@crudebyte.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3343B7A9-2D1D-4A41-859E-B04AF90152FA@icloud.com>
-References: <20221217185210.1431478-1-evanhensbergen@icloud.com>
- <20221217185210.1431478-3-evanhensbergen@icloud.com>
- <Y55Z2DwZgRG+9zW3@codewreck.org>
-To:     asmadeus@codewreck.org
-X-Mailer: Apple Mail (2.3731.200.110.1.12)
-X-Proofpoint-GUID: OA9RlOlds9TOEa1ab8ML_c9csJM0hqAT
-X-Proofpoint-ORIG-GUID: OA9RlOlds9TOEa1ab8ML_c9csJM0hqAT
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.816,17.0.605.474.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-18=5F01:2022-01-14=5F01,2022-01-18=5F01,2020-01-23?=
- =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 phishscore=0
- adultscore=0 bulkscore=0 malwarescore=0 clxscore=1015 suspectscore=0
- mlxlogscore=615 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2212180009
+        Sat, 17 Dec 2022 20:06:41 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729677674;
+        Sat, 17 Dec 2022 17:06:39 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C0F10240003;
+        Sun, 18 Dec 2022 01:06:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1671325598;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YStWod4/zbxwyTg2mUGlQ1V/5izn/bmZQdOBB5vAfdU=;
+        b=kaN17TMSBG/oXJrrW5Us1xcHg6ei8FmnWx4JxiYLUI3oBsrAk5WExLvNXkLpGe9lZqltl1
+        fluf+iPP8t2uG2kIX9wHsRBgOyRpklRIY4WqobTZOjPgc9GUds+yZg6YOuXvcFUXVmPfWT
+        qwN6Tb6TLacuag7xkbm5NtDafsNc1HqeeFD4f3jRdoB3rCSHfEk6/na3a6+RL5BaP+bX1s
+        2g/wMRyfCjul3bEm/PALVl58VwP7wwBCqf/m/U4IAQQNMHWJ7/MrSZzwJfmyUi3ZtkMtqW
+        BieXVop4OULSojnyBTHG3KBJjfC90RoGFHnK4kuoZg6NF9ZlZNPC0bhq4L60kQ==
+Date:   Sun, 18 Dec 2022 02:06:37 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RTC for 6.2
+Message-ID: <Y55nnQv5htuJnuw2@mail.local>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Linus,
 
+Here is the RTC subsystem pull request for 6.2. Most of the changes are
+a rework of the cmos driver by Rafael and fixes for issues found using
+static checkers. The removal of a driver leads to a reduction of the
+number of LOC of the subsystem.
 
-> On Dec 17, 2022, at 6:07 PM, asmadeus@codewreck.org wrote:
->=20
-> Eric Van Hensbergen wrote on Sat, Dec 17, 2022 at 06:52:06PM +0000:
->> The writeback_fid fallback code assumes a root uid fallback which
->> breaks many server configurations (which don't run as root).  This
->> patch switches to generic lookup which will follow argument
->> guidence on access modes and default ids to use on failure.
->=20
-> Unfortunately this one will break writes to a file created as 400 I
-> think
-> That's the main reason we have this writeback fid afaik -- there are
-> cases where the user should be able to write to the file, but a plain
-> open/write won't work... I can't think of anything else than open 400
-> right now though
->=20
+The following changes since commit db4e955ae333567dea02822624106c0b96a2f84f:
 
-I=E2=80=99ll try and craft a test case for this, but I think it works?
-That being said, I haven=E2=80=99t been trying the xfstests, just fsx =
-and bench.
+  rtc: cmos: fix build on non-ACPI platforms (2022-10-18 22:36:54 +0200)
 
-> I'm sure there's an xfs_io command and xfstest for that, but for now:
-> python3 -c 'import os; f =3D os.open("testfile", os.O_CREAT + =
-os.O_RDWR, 0o400); os.write(f, b"ok\n")'
->=20
-> iirc ganesha running as non-root just ignores root requests and opens =
-as
-> current user-- this won't work for this particular case, but might be
-> good enough for you... With that said:
+are available in the Git repository at:
 
-Yeah, the real problem I ran into this was if the server is running as =
-non-root this causes issues and I was testing against cpu (which =
-doesn=E2=80=99t run as root).  I need to go back and check, but if you =
-are running as root and dftuid=3D0 then the behavior should be the same =
-as before?
-In any case, I=E2=80=99ll try to go back and make this work =E2=80=94 my =
-big issue was always using uid 0 regardless of what mount options said =
-is Wong.
+  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.2
 
->=20
->> There is a deeper underlying problem with writeback_fids in that
->> this fallback is too standard and not an exception due to the way
->> writeback mode works in the current implementation.  Subsequent
->> patches will try to associate writeback fids from the original user
->> either by flushing on close or by holding onto fid until writeback
->> completes.
->=20
-> If we can address this problem though I agree we should stop using
-> wrieback fids as much as we do.
-> Now fids are refcounted, I think we could just use the normal fid as
-> writeback fid (getting a ref), and the regular close will not clunk it
-> so delayed IOs will pass.
->=20
-> Worth a try?
+for you to fetch changes up to e88f319a2546fd7772c726bf3a82a23b0859ddeb:
 
-Yeah, that (using regular fids) is exactly what I am doing in my write =
-back-fix patch which isn=E2=80=99t part of this series.  I was still =
-hunting a few bugs, but I think I nailed them today.  I have to do a =
-more extensive test sweep of the different configs, but unit tests seem =
-good to go now so if I end up reworking the patch set to address your =
-comment above, I may just go ahead and add it to the resubmit set.  =
-However, I also go ahead and flush on close/clunk =E2=80=94 and that =
-gets rid of the delayed write back which I think is actually preferable =
-anyways.  I may re-introduce it with temporal caching, but its just so =
-problematic=E2=80=A6..
+  rtc: ds1742: use devm_platform_get_and_ioremap_resource() (2022-12-15 23:34:31 +0100)
 
-         -Eric
+----------------------------------------------------------------
+RTC for 6.2
 
+Removed driver:
+ - davinci
 
+Drivers:
+ - convert i2c drivers to .probe_new
+ - fix spelling mistakes and duplicated words in comments
+ - cmos: rework wake setup and ACPI event handling
+ - cros-ec: Limit RTC alarm range to fix alarmtimer
+ - ds1347: fix century register handling
+ - efi: wakeup support
+ - isl12022: temperature sensor support
+ - pcf85063: fix read_alarm and clkout
+ - pcf8523: use stop bit to detect invalid time
+ - pcf8563: use RTC_FEATURE_ALARM
+ - snvs: be more flexible on LPSRT reads
+ - many static checker fixes
+
+----------------------------------------------------------------
+Alexander Stein (1):
+      rtc: pcf85063: Fix reading alarm
+
+Alexandre Belloni (2):
+      rtc: rx6110: fix warning with !OF
+      rtc: pcf85063: fix pcf85063_clkout_control
+
+Arnd Bergmann (1):
+      rtc: remove davinci rtc driver
+
+Christophe JAILLET (1):
+      rtc: Include <linux/kstrtox.h> when appropriate
+
+GUO Zihua (1):
+      rtc: mxc_v2: Add missing clk_disable_unprepare()
+
+Gaosheng Cui (2):
+      rtc: st-lpc: Add missing clk_disable_unprepare in st_rtc_probe()
+      rtc: pic32: Move devm_rtc_allocate_device earlier in pic32_rtc_probe()
+
+Guenter Roeck (1):
+      rtc: cros-ec: Limit RTC alarm range if needed
+
+Ian Abbott (1):
+      rtc: ds1347: fix value written to century register
+
+Jean Delvare (1):
+      rtc: isl12026: drop obsolete dependency on COMPILE_TEST
+
+Kees Cook (1):
+      rtc: msc313: Fix function prototype mismatch in msc313_rtc_probe()
+
+Marek Vasut (1):
+      dt-bindings: rtc: m41t80: Convert text schema to YAML one
+
+Minghao Chi (1):
+      rtc: ds1742: use devm_platform_get_and_ioremap_resource()
+
+Neil Armstrong (3):
+      dt-bindings: rtc: qcom-pm8xxx: document qcom,pm8921-rtc as fallback of qcom,pm8018-rtc
+      rtc: pm8xxx: drop unused pm8018 compatible
+      dt-bindings: rtc: convert rtc-meson.txt to dt-schema
+
+Rafael J. Wysocki (5):
+      rtc: cmos: Call cmos_wake_setup() from cmos_do_probe()
+      rtc: cmos: Call rtc_wake_setup() from cmos_do_probe()
+      rtc: cmos: Eliminate forward declarations of some functions
+      rtc: cmos: Rename ACPI-related functions
+      rtc: cmos: Disable ACPI RTC event on removal
+
+Rasmus Villemoes (1):
+      rtc: isl12022: add support for temperature sensor
+
+Riwen Lu (1):
+      rtc: efi: Add wakeup support
+
+Sebastian Reichel (2):
+      dt-bindings: rtc: convert hym8563 bindings to json-schema
+      rtc: rk808: reduce 'struct rk808' usage
+
+Shang XiaoJing (1):
+      rtc: class: Fix potential memleak in devm_rtc_allocate_device()
+
+Stefan Eichenberger (1):
+      rtc: snvs: Allow a time difference on clock register read
+
+Uwe Kleine-König (8):
+      rtc: abx80x: Convert to .probe_new()
+      rtc: isl1208: Convert to .probe_new()
+      rtc: m41t80: Convert to .probe_new()
+      rtc: nct3018y: Convert to .probe_new()
+      rtc: pcf2127: Convert to .probe_new()
+      rtc: rs5c372: Convert to .probe_new()
+      rtc: rv8803: Convert to .probe_new()
+      rtc: rx8025: Convert to .probe_new()
+
+Vincent Whitchurch (1):
+      rtc: pcf8563: clear RTC_FEATURE_ALARM if no irq
+
+Wadim Egorov (1):
+      rtc: rv3028: Use IRQ flags obtained from device tree if available
+
+Xiang wangx (1):
+      rtc: at91rm9200: Fix syntax errors in comments
+
+Yang Yingliang (2):
+      rtc: ds1302: remove unnecessary spi_set_drvdata()
+      rtc: s3c: Switch to use dev_err_probe() helper
+
+Yushan Zhou (1):
+      rtc: rzn1: Check return value in rzn1_rtc_probe
+
+Zhang Jiaming (1):
+      rtc: rs5c313: correct some spelling mistakes
+
+Zhang Jianhua (1):
+      rtc: fsl-ftm-alarm: Use module_platform_driver replace device_initcall
+
+paulmn (1):
+      rtc: pcf8523: fix for stop bit
+
+shaomin Deng (1):
+      rtc: remove duplicated words in comments
+
+ye xingchen (2):
+      rtc: s35390a: Remove the unneeded result variable
+      rtc: ds1307: use sysfs_emit() to instead of scnprintf()
+
+ .../bindings/rtc/amlogic,meson6-rtc.yaml           |  62 +++
+ .../devicetree/bindings/rtc/haoyu,hym8563.txt      |  30 --
+ .../devicetree/bindings/rtc/haoyu,hym8563.yaml     |  56 +++
+ .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml   |  16 +-
+ .../devicetree/bindings/rtc/rtc-m41t80.txt         |  39 --
+ .../devicetree/bindings/rtc/rtc-meson.txt          |  35 --
+ .../devicetree/bindings/rtc/st,m41t80.yaml         |  73 +++
+ drivers/rtc/Kconfig                                |  12 +-
+ drivers/rtc/Makefile                               |   1 -
+ drivers/rtc/class.c                                |   4 +-
+ drivers/rtc/interface.c                            |   2 +-
+ drivers/rtc/rtc-abx80x.c                           |  37 +-
+ drivers/rtc/rtc-at91rm9200.c                       |   2 +-
+ drivers/rtc/rtc-bq32k.c                            |   1 +
+ drivers/rtc/rtc-cmos.c                             | 378 +++++++--------
+ drivers/rtc/rtc-cros-ec.c                          |  35 +-
+ drivers/rtc/rtc-davinci.c                          | 512 ---------------------
+ drivers/rtc/rtc-ds1302.c                           |   6 -
+ drivers/rtc/rtc-ds1307.c                           |   4 +-
+ drivers/rtc/rtc-ds1347.c                           |   2 +-
+ drivers/rtc/rtc-ds1742.c                           |   3 +-
+ drivers/rtc/rtc-efi.c                              |   2 +
+ drivers/rtc/rtc-fsl-ftm-alarm.c                    |   7 +-
+ drivers/rtc/rtc-isl12022.c                         |  94 ++++
+ drivers/rtc/rtc-isl1208.c                          |   6 +-
+ drivers/rtc/rtc-m41t80.c                           |  13 +-
+ drivers/rtc/rtc-msc313.c                           |  12 +-
+ drivers/rtc/rtc-mxc_v2.c                           |   4 +-
+ drivers/rtc/rtc-nct3018y.c                         |   5 +-
+ drivers/rtc/rtc-pcf2127.c                          |  22 +-
+ drivers/rtc/rtc-pcf85063.c                         |  10 +-
+ drivers/rtc/rtc-pcf8523.c                          |  20 +-
+ drivers/rtc/rtc-pcf8563.c                          |   2 +
+ drivers/rtc/rtc-pic32.c                            |   8 +-
+ drivers/rtc/rtc-pm8xxx.c                           |   1 -
+ drivers/rtc/rtc-rk808.c                            |  47 +-
+ drivers/rtc/rtc-rs5c313.c                          |   6 +-
+ drivers/rtc/rtc-rs5c372.c                          |  13 +-
+ drivers/rtc/rtc-rv3028.c                           |  13 +-
+ drivers/rtc/rtc-rv3029c2.c                         |   1 +
+ drivers/rtc/rtc-rv8803.c                           |  30 +-
+ drivers/rtc/rtc-rx6110.c                           |   2 +-
+ drivers/rtc/rtc-rx8025.c                           |   7 +-
+ drivers/rtc/rtc-rzn1.c                             |   4 +-
+ drivers/rtc/rtc-s35390a.c                          |   6 +-
+ drivers/rtc/rtc-s3c.c                              |  11 +-
+ drivers/rtc/rtc-snvs.c                             |  16 +-
+ drivers/rtc/rtc-st-lpc.c                           |   1 +
+ drivers/rtc/sysfs.c                                |   1 +
+ 49 files changed, 674 insertions(+), 1000 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/rtc/amlogic,meson6-rtc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-m41t80.txt
+ delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-meson.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/st,m41t80.yaml
+ delete mode 100644 drivers/rtc/rtc-davinci.c
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
