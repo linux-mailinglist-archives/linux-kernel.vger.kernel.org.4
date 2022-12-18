@@ -2,95 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01D165041B
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 18:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16AF2650441
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 19:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbiLRRNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 12:13:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
+        id S230152AbiLRSK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 13:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233585AbiLRRLw (ORCPT
+        with ESMTP id S230499AbiLRSKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 12:11:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9BD1EC5D;
-        Sun, 18 Dec 2022 08:24:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3CA3B801C0;
-        Sun, 18 Dec 2022 16:24:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6818C433B3;
-        Sun, 18 Dec 2022 16:23:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671380640;
-        bh=3WqGSj+1m0F3VlMTs7183wM7F30z46aKwTvbELsoDwg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i+honjqbUF/YFJrmy+HwHD1PtdePvgNYf8sPWpStQtGGKWuV5pEhAdFIR8ko0Xtsn
-         BMX5YyvznVsXHLLHbOhqc/6gNa4tK+T6hUgS5k6rR9HeJby4q3ndSO+L3FZqlrKDFD
-         mKynUN5SBcAwsIFpDurExhqOa4cfc/ER/c3pE89xPwHAOCULtL+Ix/vkCgQfZGuQRF
-         S1W3G+gC4jAu0XeizLyJv23wPn8FD9juk6hWNi7PSi0eYBU3q9o1UIj2d2UGM7EviD
-         TnbPZIQCZu+2RysKcQKbIeElQrb9fGKfyTqMYNNA06zJV+NVtWI//A+QHEQpJVSB2x
-         HmeK8UaYsLZ8Q==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, mturquette@baylibre.com,
-        windhl@126.com, avolmat@me.com, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 20/20] clk: st: Fix memory leak in st_of_quadfs_setup()
-Date:   Sun, 18 Dec 2022 11:23:05 -0500
-Message-Id: <20221218162305.935724-20-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221218162305.935724-1-sashal@kernel.org>
-References: <20221218162305.935724-1-sashal@kernel.org>
+        Sun, 18 Dec 2022 13:10:02 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCB6D6526;
+        Sun, 18 Dec 2022 09:05:55 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id y2so3741429ily.5;
+        Sun, 18 Dec 2022 09:05:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OgOSUqKhKmN0gkj/ZYhYVdSQNMe/JfU2z8Ox21C/PKc=;
+        b=oSovyA7APlyKf7MOPiKXb/QkUKMc2CL02XPXvn1xFgfpOyBDfJu5uRGwxU68f2qKlh
+         kpSr+9aK2zk3LA+1Avy9stR80djC2M3MmhOCus4tvJPra20BKooLT3SBSiaQnAdDy6N+
+         XF8nhpWr3877mVxm2SGhZTlQkyGzyo8r3FddCvw4oyXLFQnoRCiEEggPuCId1g9TpJUa
+         /LlTFy9ZeZsEvuuNXP8aeDf+P1JnWopBbL8ColIi0F2bEpro62m6fjCMPeqE7HnsV4J2
+         mXAWSsSWqHnw2Z1kN0bO6ZPRHkDJ0kn8S3hGqJLNiBs3S6AnC9V3LaEcy+KrgWXODfKV
+         0nPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OgOSUqKhKmN0gkj/ZYhYVdSQNMe/JfU2z8Ox21C/PKc=;
+        b=5PQbrAdSoyJOcZJZ7ZLyRxAX3S0UpXV8XSQTZDl7vSzeqWg2HfiQ2eMJKY3FMssMzj
+         XYB3NKn//9jm2qIBB4Wwm/n+CIqRbFsCbAxNUE3X0PvMvO26luKgUIdbkGfiJ1+YwolU
+         I7tbiFB2h96ptHnU1bBQ4gQ2oIuKCN8iZlqNTerpTjhe/qHAxuamEIwd/h9R8p4znimH
+         EL02gGD79sCo6zpfRmaxr1CC3vJwxdOHYBI/hDbGg1aWT9je12jzUiAFuwhXpDv66VC7
+         JoguAD+Ca1DeZ5T0bAxsTGe6o9EIR169HcLsxwvCQW1zKc5AxydapAgzJL93vE6oiybr
+         1GHQ==
+X-Gm-Message-State: AFqh2kqzqARaIcFMAREQsCD810Kg/2XA1pj6Ph0tpqVS7D4EURSXV1kk
+        wUsoid3TdG+xRWO+xTzPCOI=
+X-Google-Smtp-Source: AMrXdXs6L4V8GTvalb5dTD0ZHa08kBUqeHPwuHOh2OVborwiR2Mlj8A7tn12vGnNWCdM/odmnpVjlg==
+X-Received: by 2002:a92:c805:0:b0:303:452b:27e1 with SMTP id v5-20020a92c805000000b00303452b27e1mr3749960iln.28.1671383154119;
+        Sun, 18 Dec 2022 09:05:54 -0800 (PST)
+Received: from aford-IdeaCentre-A730.lan ([2601:447:d001:9aea:c8ad:17b9:7862:6614])
+        by smtp.gmail.com with ESMTPSA id n15-20020a92dd0f000000b003032a97913asm2525296ilm.17.2022.12.18.09.05.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Dec 2022 09:05:53 -0800 (PST)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     aford@beaconembedded.com, marex@denx.de,
+        Adam Ford <aford173@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: imx8mp: Enable spba-bus on AIPS3
+Date:   Sun, 18 Dec 2022 11:05:44 -0600
+Message-Id: <20221218170545.1472746-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiu Jianfeng <xiujianfeng@huawei.com>
+There is an SPBA bus on AIPS3 which includes ecspi1-3,
+UART1-3, and Flexcan1-2 according to the TRM.
 
-[ Upstream commit cfd3ffb36f0d566846163118651d868e607300ba ]
+Signed-off-by: Adam Ford <aford173@gmail.com>
 
-If st_clk_register_quadfs_pll() fails, @lock should be freed before goto
-@err_exit, otherwise will cause meory leak issue, fix it.
-
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-Link: https://lore.kernel.org/r/20221122133614.184910-1-xiujianfeng@huawei.com
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/clk/st/clkgen-fsyn.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/clk/st/clkgen-fsyn.c b/drivers/clk/st/clkgen-fsyn.c
-index 14819d919df1..715c5d3a5cde 100644
---- a/drivers/clk/st/clkgen-fsyn.c
-+++ b/drivers/clk/st/clkgen-fsyn.c
-@@ -948,9 +948,10 @@ static void __init st_of_quadfs_setup(struct device_node *np,
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+index 2ce45e7cbbdf..9b0a47e7b8fd 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+@@ -719,121 +719,129 @@ aips3: bus@30800000 {
+ 			#size-cells = <1>;
+ 			ranges;
  
- 	clk = st_clk_register_quadfs_pll(pll_name, clk_parent_name, data,
- 			reg, lock);
--	if (IS_ERR(clk))
-+	if (IS_ERR(clk)) {
-+		kfree(lock);
- 		goto err_exit;
--	else
-+	} else
- 		pr_debug("%s: parent %s rate %u\n",
- 			__clk_get_name(clk),
- 			__clk_get_name(clk_get_parent(clk)),
+-			ecspi1: spi@30820000 {
++			spba-bus@30800000 {
++				compatible = "fsl,spba-bus", "simple-bus";
++				reg = <0x30800000 0x100000>;
+ 				#address-cells = <1>;
+-				#size-cells = <0>;
+-				compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
+-				reg = <0x30820000 0x10000>;
+-				interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clk IMX8MP_CLK_ECSPI1_ROOT>,
+-					 <&clk IMX8MP_CLK_ECSPI1_ROOT>;
+-				clock-names = "ipg", "per";
+-				assigned-clock-rates = <80000000>;
+-				assigned-clocks = <&clk IMX8MP_CLK_ECSPI1>;
+-				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
+-				dmas = <&sdma1 0 7 1>, <&sdma1 1 7 2>;
+-				dma-names = "rx", "tx";
+-				status = "disabled";
+-			};
++				#size-cells = <1>;
++				ranges;
+ 
+-			ecspi2: spi@30830000 {
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-				compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
+-				reg = <0x30830000 0x10000>;
+-				interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clk IMX8MP_CLK_ECSPI2_ROOT>,
+-					 <&clk IMX8MP_CLK_ECSPI2_ROOT>;
+-				clock-names = "ipg", "per";
+-				assigned-clock-rates = <80000000>;
+-				assigned-clocks = <&clk IMX8MP_CLK_ECSPI2>;
+-				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
+-				dmas = <&sdma1 2 7 1>, <&sdma1 3 7 2>;
+-				dma-names = "rx", "tx";
+-				status = "disabled";
+-			};
++				ecspi1: spi@30820000 {
++					#address-cells = <1>;
++					#size-cells = <0>;
++					compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
++					reg = <0x30820000 0x10000>;
++					interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
++					clocks = <&clk IMX8MP_CLK_ECSPI1_ROOT>,
++						 <&clk IMX8MP_CLK_ECSPI1_ROOT>;
++					clock-names = "ipg", "per";
++					assigned-clock-rates = <80000000>;
++					assigned-clocks = <&clk IMX8MP_CLK_ECSPI1>;
++					assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
++					dmas = <&sdma1 0 7 1>, <&sdma1 1 7 2>;
++					dma-names = "rx", "tx";
++					status = "disabled";
++				};
+ 
+-			ecspi3: spi@30840000 {
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-				compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
+-				reg = <0x30840000 0x10000>;
+-				interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clk IMX8MP_CLK_ECSPI3_ROOT>,
+-					 <&clk IMX8MP_CLK_ECSPI3_ROOT>;
+-				clock-names = "ipg", "per";
+-				assigned-clock-rates = <80000000>;
+-				assigned-clocks = <&clk IMX8MP_CLK_ECSPI3>;
+-				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
+-				dmas = <&sdma1 4 7 1>, <&sdma1 5 7 2>;
+-				dma-names = "rx", "tx";
+-				status = "disabled";
+-			};
++				ecspi2: spi@30830000 {
++					#address-cells = <1>;
++					#size-cells = <0>;
++					compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
++					reg = <0x30830000 0x10000>;
++					interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
++					clocks = <&clk IMX8MP_CLK_ECSPI2_ROOT>,
++						 <&clk IMX8MP_CLK_ECSPI2_ROOT>;
++					clock-names = "ipg", "per";
++					assigned-clock-rates = <80000000>;
++					assigned-clocks = <&clk IMX8MP_CLK_ECSPI2>;
++					assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
++					dmas = <&sdma1 2 7 1>, <&sdma1 3 7 2>;
++					dma-names = "rx", "tx";
++					status = "disabled";
++				};
+ 
+-			uart1: serial@30860000 {
+-				compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
+-				reg = <0x30860000 0x10000>;
+-				interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clk IMX8MP_CLK_UART1_ROOT>,
+-					 <&clk IMX8MP_CLK_UART1_ROOT>;
+-				clock-names = "ipg", "per";
+-				dmas = <&sdma1 22 4 0>, <&sdma1 23 4 0>;
+-				dma-names = "rx", "tx";
+-				status = "disabled";
+-			};
++				ecspi3: spi@30840000 {
++					#address-cells = <1>;
++					#size-cells = <0>;
++					compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
++					reg = <0x30840000 0x10000>;
++					interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
++					clocks = <&clk IMX8MP_CLK_ECSPI3_ROOT>,
++						 <&clk IMX8MP_CLK_ECSPI3_ROOT>;
++					clock-names = "ipg", "per";
++					assigned-clock-rates = <80000000>;
++					assigned-clocks = <&clk IMX8MP_CLK_ECSPI3>;
++					assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
++					dmas = <&sdma1 4 7 1>, <&sdma1 5 7 2>;
++					dma-names = "rx", "tx";
++					status = "disabled";
++				};
+ 
+-			uart3: serial@30880000 {
+-				compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
+-				reg = <0x30880000 0x10000>;
+-				interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clk IMX8MP_CLK_UART3_ROOT>,
+-					 <&clk IMX8MP_CLK_UART3_ROOT>;
+-				clock-names = "ipg", "per";
+-				dmas = <&sdma1 26 4 0>, <&sdma1 27 4 0>;
+-				dma-names = "rx", "tx";
+-				status = "disabled";
+-			};
++				uart1: serial@30860000 {
++					compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
++					reg = <0x30860000 0x10000>;
++					interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
++					clocks = <&clk IMX8MP_CLK_UART1_ROOT>,
++						 <&clk IMX8MP_CLK_UART1_ROOT>;
++					clock-names = "ipg", "per";
++					dmas = <&sdma1 22 4 0>, <&sdma1 23 4 0>;
++					dma-names = "rx", "tx";
++					status = "disabled";
++				};
+ 
+-			uart2: serial@30890000 {
+-				compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
+-				reg = <0x30890000 0x10000>;
+-				interrupts = <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clk IMX8MP_CLK_UART2_ROOT>,
+-					 <&clk IMX8MP_CLK_UART2_ROOT>;
+-				clock-names = "ipg", "per";
+-				dmas = <&sdma1 24 4 0>, <&sdma1 25 4 0>;
+-				dma-names = "rx", "tx";
+-				status = "disabled";
+-			};
++				uart3: serial@30880000 {
++					compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
++					reg = <0x30880000 0x10000>;
++					interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>;
++					clocks = <&clk IMX8MP_CLK_UART3_ROOT>,
++						 <&clk IMX8MP_CLK_UART3_ROOT>;
++					clock-names = "ipg", "per";
++					dmas = <&sdma1 26 4 0>, <&sdma1 27 4 0>;
++					dma-names = "rx", "tx";
++					status = "disabled";
++				};
+ 
+-			flexcan1: can@308c0000 {
+-				compatible = "fsl,imx8mp-flexcan";
+-				reg = <0x308c0000 0x10000>;
+-				interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clk IMX8MP_CLK_IPG_ROOT>,
+-					 <&clk IMX8MP_CLK_CAN1_ROOT>;
+-				clock-names = "ipg", "per";
+-				assigned-clocks = <&clk IMX8MP_CLK_CAN1>;
+-				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_40M>;
+-				assigned-clock-rates = <40000000>;
+-				fsl,clk-source = /bits/ 8 <0>;
+-				fsl,stop-mode = <&gpr 0x10 4>;
+-				status = "disabled";
+-			};
++				uart2: serial@30890000 {
++					compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
++					reg = <0x30890000 0x10000>;
++					interrupts = <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
++					clocks = <&clk IMX8MP_CLK_UART2_ROOT>,
++						 <&clk IMX8MP_CLK_UART2_ROOT>;
++					clock-names = "ipg", "per";
++					dmas = <&sdma1 24 4 0>, <&sdma1 25 4 0>;
++					dma-names = "rx", "tx";
++					status = "disabled";
++				};
+ 
+-			flexcan2: can@308d0000 {
+-				compatible = "fsl,imx8mp-flexcan";
+-				reg = <0x308d0000 0x10000>;
+-				interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clk IMX8MP_CLK_IPG_ROOT>,
+-					 <&clk IMX8MP_CLK_CAN2_ROOT>;
+-				clock-names = "ipg", "per";
+-				assigned-clocks = <&clk IMX8MP_CLK_CAN2>;
+-				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_40M>;
+-				assigned-clock-rates = <40000000>;
+-				fsl,clk-source = /bits/ 8 <0>;
+-				fsl,stop-mode = <&gpr 0x10 5>;
+-				status = "disabled";
++				flexcan1: can@308c0000 {
++					compatible = "fsl,imx8mp-flexcan";
++					reg = <0x308c0000 0x10000>;
++					interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
++					clocks = <&clk IMX8MP_CLK_IPG_ROOT>,
++						 <&clk IMX8MP_CLK_CAN1_ROOT>;
++					clock-names = "ipg", "per";
++					assigned-clocks = <&clk IMX8MP_CLK_CAN1>;
++					assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_40M>;
++					assigned-clock-rates = <40000000>;
++					fsl,clk-source = /bits/ 8 <0>;
++					fsl,stop-mode = <&gpr 0x10 4>;
++					status = "disabled";
++				};
++
++				flexcan2: can@308d0000 {
++					compatible = "fsl,imx8mp-flexcan";
++					reg = <0x308d0000 0x10000>;
++					interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>;
++					clocks = <&clk IMX8MP_CLK_IPG_ROOT>,
++						 <&clk IMX8MP_CLK_CAN2_ROOT>;
++					clock-names = "ipg", "per";
++					assigned-clocks = <&clk IMX8MP_CLK_CAN2>;
++					assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_40M>;
++					assigned-clock-rates = <40000000>;
++					fsl,clk-source = /bits/ 8 <0>;
++					fsl,stop-mode = <&gpr 0x10 5>;
++					status = "disabled";
++				};
+ 			};
+ 
+ 			crypto: crypto@30900000 {
 -- 
-2.35.1
+2.34.1
 
