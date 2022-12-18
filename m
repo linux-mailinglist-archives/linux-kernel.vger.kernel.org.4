@@ -2,210 +2,495 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5726064FD35
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 01:21:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B3F64FD38
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 01:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiLRAUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Dec 2022 19:20:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
+        id S229885AbiLRAVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Dec 2022 19:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiLRAUw (ORCPT
+        with ESMTP id S229611AbiLRAVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Dec 2022 19:20:52 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A72565BD;
-        Sat, 17 Dec 2022 16:20:50 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id v21so1346185uam.1;
-        Sat, 17 Dec 2022 16:20:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/t6IoJ3va+Stkf1oSUoL7zegWmdcaZ0I+iIO0OQeIN8=;
-        b=FRrkFgcYQdMPCxor46qGyW69SEr6L2mglGYfWsH8Fx2PH0Izdns78ZQXfzcWpxWbFC
-         bk+iD0CxZODdI4It1lcDdZ85NKOF0NU1helFJIpCSlYHZHpkAsvxWcbJ02vNq/yjwhcy
-         luFTBMI1KtTqDHVxph7pGP6qPkWeeiVjO6qSU/uMqixmQ+6QSbjbX5d5DM3PiX4SdRbS
-         fJeDOJLRx4GwOeq1XeyEq5mPCuE6TsvU9EnaKfAm5YeR2WLx1WaLrkAUQrXC+exuTcUX
-         uVt33GtQ+AwTi6SYxMq+OfFVEMJW8pRhsBfkcrU8eQNlt3cZhiuw4cdX8i07JRlDBmUj
-         +VFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/t6IoJ3va+Stkf1oSUoL7zegWmdcaZ0I+iIO0OQeIN8=;
-        b=Xj1AnpE9AwZU0w7iyveNfhMo4kEZ5ldLdgzR2+CsS0jL6DaXR1IHykfgmQ3FPZtYF6
-         ZHbL24Yw7U/Zw0D+jOueHYkjiYWT6sK9fMI5JFg3OEZApW8AhUYnfnl0AZrbqnmYKYd+
-         UBf2H4FIhC3y2yzmA7stLCDrpWfpTxOP70GfgHT9OGL/BVERe0eIm+Puyh4Yrv65LkkR
-         7cIInLGPj+kj/MGmYMCEwy6blKV0vJOwWEuZQ2B0FbSj3HVGd6Yb/bDHqDkiuvPZFtwx
-         tnjvjG6JHAPhLKtL1z7YLNqARJZ47mYJx6VqSXx/7asHDgz1zg8nHKyhgn5xYD58/z+C
-         Ti3Q==
-X-Gm-Message-State: ANoB5pnKdkVy4LWWDuc1M+8AJXh91aIeWaY6JcsAAhcKFkGqrQFTfKMM
-        dq3BHgQZN56tBJrmzIfQLIyKI7pIDAGcDZnnyeMG5yNBsxw=
-X-Google-Smtp-Source: AA0mqf7Rc5WCnP5xCpHajOYRt/VzkfNcl1MElpqBaTAQyK8S6TK+3U39K1mFNTessNEwxrD0qwPRm+bly7AxF6g4SzI=
-X-Received: by 2002:ab0:3848:0:b0:419:d3f0:d6a6 with SMTP id
- h8-20020ab03848000000b00419d3f0d6a6mr11768093uaw.111.1671322849016; Sat, 17
- Dec 2022 16:20:49 -0800 (PST)
+        Sat, 17 Dec 2022 19:21:19 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB55DEDB;
+        Sat, 17 Dec 2022 16:21:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671322878; x=1702858878;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=wM8slmAc7VmULF5axG01qAabBH4g78qGY5JglxE+qdg=;
+  b=PHdD643XvD7AD18JNxI5iEdezn3HbKeMWvhW8pNXZSIdZ6FwmijNiNvr
+   CwYNKteNR1kGMY9EcQA2ZFUfTjqo8qAAnZ9AmFbLDQD8c5utzYtl63rqm
+   P/CZDuV64VgvvMG6TkPIDbBoZR8YCwPg9BoGd0trEbpQIxA1TuCvIgig4
+   yScL2vJn8Cf6xw2TxuiTVllkRCzwCKZIXG+FKLj1vz1w1wyqxW6JUY85O
+   p1WK5hx3ydAE6VrqLaIeqFdfZ50nwOfyUSCBCPu1hmoHs2dFjv0zcJjwT
+   CJ7UzmoxPuFiHV6PA7nLixY4kiY56rHeIw9pzKqkCS6hRG26yXyeqwSli
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10564"; a="317853910"
+X-IronPort-AV: E=Sophos;i="5.96,253,1665471600"; 
+   d="scan'208";a="317853910"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2022 16:21:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10564"; a="652313274"
+X-IronPort-AV: E=Sophos;i="5.96,253,1665471600"; 
+   d="scan'208";a="652313274"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga007.fm.intel.com with ESMTP; 17 Dec 2022 16:21:17 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Sat, 17 Dec 2022 16:21:17 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Sat, 17 Dec 2022 16:21:17 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Sat, 17 Dec 2022 16:21:17 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.174)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Sat, 17 Dec 2022 16:21:16 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fe8xDMoKiM3utLavjH1hhyPPpQ9M5ObLNhvnfi6MZaKmPQ0rY3mbd02vB9naXjZoBVZyjVa8mqQCvLmOc8CD4aB7lxLblSFdLMw3j/uPg4BzDWfYOEamOTckKx12DOKpkyLKYHX9zX2W3ythgZf+d+l9am6KsErkj+4JNsifSzp95IZgx2W78Xlg6pxxsUb2QIz8n/eHQt2R+BGkF6dI3Fsyx+Q3qT4J8z5MjxE4yEwhLLA8bspfuhxrAAFoWtyGByBuE4b6uRyZZETf3IuCbFGlF9huehNSNza7WKTC4Mn5FYaFZ+kKG4N22/zu02k3O7sUUAyQDkdUdd7CNj7GBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q2FK8yEPlu+cyrpSdeMc26/IAG1Ixp2h9rYJbb0ual8=;
+ b=FfejTl/KrFoGJQMLrEUf9PAkM0k3weFYDN6rKVX5ACTxsMBBn/l5RZH2e65gkMocLRBHP986z5jAwkBSh1aylbF08PLMqXB3bWAJ+SwoTAWNb9i89gHOKB2bkzBLvdCiyJbwt/JYSAHah4VFVUVLfp1m2Kms1SJ3nxP3BSs/AeEpaPdglVj1l9bkJhBJdJ4g8tIaNWLL5zXvkCDdiDOv+FWdYtD572Mn+swQAUlwkBXXuhoqwCM6IeOZLVb2gjz2jVk6vE8K94hGUdEXV0XYjOnqWeUrFy/d16AYkFWxw+ZJjJUg+P7TZffSdHDczVHdM74OHyZKajCpiTROk/VCBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by SA1PR11MB7037.namprd11.prod.outlook.com (2603:10b6:806:2ba::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Sun, 18 Dec
+ 2022 00:21:10 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::288d:5cae:2f30:828b]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::288d:5cae:2f30:828b%6]) with mapi id 15.20.5924.011; Sun, 18 Dec 2022
+ 00:21:09 +0000
+Date:   Sat, 17 Dec 2022 16:21:05 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        "Vishal Verma" <vishal.l.verma@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Dave Jiang" <dave.jiang@intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: Re: [PATCH V4 2/9] cxl/mem: Read, trace, and clear events on driver
+ load
+Message-ID: <Y55c8TB75EUbhvqj@iweiny-mobl>
+References: <20221212070627.1372402-1-ira.weiny@intel.com>
+ <20221212070627.1372402-3-ira.weiny@intel.com>
+ <20221216153939.00007c41@Huawei.com>
+ <Y5zo+UqOmGCE4ObC@iweiny-desk3>
+ <20221217163850.00000bc4@Huawei.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221217163850.00000bc4@Huawei.com>
+X-ClientProxiedBy: MW4PR04CA0146.namprd04.prod.outlook.com
+ (2603:10b6:303:84::31) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
 MIME-Version: 1.0
-References: <CACsaVZL6ykbsVvEaV2Cv3r6m_jKt04MEUOw5=mSnR5AYTyE7qg@mail.gmail.com>
-In-Reply-To: <CACsaVZL6ykbsVvEaV2Cv3r6m_jKt04MEUOw5=mSnR5AYTyE7qg@mail.gmail.com>
-From:   Kyle Sanderson <kyle.leet@gmail.com>
-Date:   Sat, 17 Dec 2022 16:20:39 -0800
-Message-ID: <CACsaVZKGJ1uxC+-XV+tdy6nP01r7QjrzFH_iVGRw9acLRE-uvA@mail.gmail.com>
-Subject: Re: igc: 5.10.146 Kernel BUG at 0xffffffff813ce19f
-To:     Linux-Kernal <linux-kernel@vger.kernel.org>,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        openwrt-bugs@lists.openwrt.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|SA1PR11MB7037:EE_
+X-MS-Office365-Filtering-Correlation-Id: 889b8e67-4052-48d3-ff24-08dae08dc315
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: I40nLmiTbZrBAFw6GjieQ6/yo+4oWLkhF2zBSYzsZU6IjQOuTNm/Pf2DF+WbQ3GnpeK0p+Auc1Mt3+yFoucpj8mbzkowf8d0ysx5MJUyWJ+yr1v4SbZRl2WKpwsBgCopMa6w1DkLRdMWhjR5dzmBLjJhLnWBiHVeHFALZxTPnH7RS55iAkgxrGizti6PTf9+C0QeM09X+BK6sDp00NnLC1LnEI4bAvtyzlSpW0degKr7dUhYMgq/cwtkiw6pEN4CGVdi0pHYSKmFkwN1wasnGWh/udZHmL94wKM5qqzaMtB7G84Nnot1U5J3/ibBWR64VoGZcB+R/8D04/hNl/0r25o0P5JmeF49z54bciN6s1rL/qPT2tnOgJV1K980eQ42HFqP2MB8GQxs2KoPRzE3wMBriBgVZU4gq8BVbItzKb6rmQjj6W+xKVUE4FBNyaCeeLnn1hxBGAFGg0pXnUPBmbaruRaErmhpbYh5wCtl0S2lDmJ94LZFAtRZBOY2/mptKwAeCUGM65KepcuTvKmelsLpShC1DnMQnsz+U1IsNo260vkSDLyhXvLUsNsZcXq9qOIZHJkZx020q9LREIF9hhNNZv4gVbNzdQqsBBZd/6dLlACzLCr27Vq2kB4JpBXFVk8fN+YaaSoy896GFiAd1Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(39860400002)(396003)(136003)(366004)(376002)(451199015)(66946007)(86362001)(66476007)(8676002)(66556008)(4326008)(316002)(5660300002)(8936002)(41300700001)(33716001)(6666004)(6506007)(9686003)(6512007)(26005)(186003)(83380400001)(54906003)(6916009)(38100700002)(82960400001)(6486002)(478600001)(30864003)(44832011)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZRAoSyDadGjgZxwJiXEEw5GFrb4U/X5sa/Vs0MrRAOGom7ZPM1zVUTeXxI1M?=
+ =?us-ascii?Q?Ngoid6h/aZR+DsghE74ol2dIu7LsoY1y/OePk3EgcijjghMj/6DDM5aMyNN8?=
+ =?us-ascii?Q?zPIFYp7esZBwsooiGryZc6o4L9FRmwyed4r1eI59U5OySOaruOoA5hTG8dHJ?=
+ =?us-ascii?Q?1MarQlTooA4qyfbbToBCUEmv4RFnUAPSxaypqAaI7o6Dp5+iMVg8D5ybmS8d?=
+ =?us-ascii?Q?PGWDXyK5j9J6WMDaU32cvF+6LcXxwgyyf3W2ofON5qI8gknyKvX/2eBYCckE?=
+ =?us-ascii?Q?WoYHEqg59adGiNfwvBxWBtUmcxdeDM3Sd9+zcWzXIQZM1PZgQt5AIyWpDgN2?=
+ =?us-ascii?Q?xnYb4yGU17KfF2fZ9jSYf0iVLXfYeWSLdfdeU1YrRO7av5tS45ElqNM3ue5F?=
+ =?us-ascii?Q?U22isvgtsdTp1wqhIY26n9jpncOkUbZOLrb1x2bN3HH5y0OStJyF8KJy5wqd?=
+ =?us-ascii?Q?ynay4ieSBOkP060jl52kS8Gd6fxwFB9MbsMUmqaF39+sdQJuoqu+en8Z2OKO?=
+ =?us-ascii?Q?80WvyzkTCy+NwplgYN6HtKJXMmu83yMnDmtnrmI3sLgwEOe+KmYtvy+/5V+W?=
+ =?us-ascii?Q?ih9UGhHwyaWWxI9bpKuV+W79QtTEJQnmKZ8DyvxX7SY4FW6jiygOOJvQhHEj?=
+ =?us-ascii?Q?FF5F8rioodl3SFNffuowMg7wnkkn3A6t5hMhSV3HIQuKan86iS+byBRpA5FU?=
+ =?us-ascii?Q?a8Wo8aj95+wW3p2ZlLCw/rGb0ol95gpkbL+4k36+l67DZWw4mxP3a5i9RTPx?=
+ =?us-ascii?Q?nZRzz5vPGpmaDFUnOICWOFHTA3XMK8L7rVl1AMgeLeTd/jBsZdNWTibNcr69?=
+ =?us-ascii?Q?H/lF16MRP0L7fOI+qg/iAonU4f408B+FX9dpD/0LgZKHtOVG8Yzzv3UDvWN8?=
+ =?us-ascii?Q?yURMw4zBNC9GnngVJD9zvjbBK3i+x0jFkAleq7gIbsdkVGb1r3UPL/ap4V5z?=
+ =?us-ascii?Q?8K37GC9e8HeaHKCoq29q5NIE258FexdAornmNmDC3A7R2vgLkz86QVTm6zH2?=
+ =?us-ascii?Q?SsUNfy2z4Gbz0iT97LZjRZ03MluYr7OOqiLAwe99lJOcJ/aAFy8fMaQSDjMT?=
+ =?us-ascii?Q?6eB41RfUumSJAYPGN8D5EfQH17hCzSNLk0M8o5fvBLFlBMi6zimtG1kiKRtO?=
+ =?us-ascii?Q?GFyuY07+VHCy+9GnrrmB05kWGTFQJEEBaPU3FeciPFHPvympQKuQGwpmdnCj?=
+ =?us-ascii?Q?NVwYJT4TPziHswPQD06WjbTymNXsREKibCnlhJyD2tD2fyjECt6Awbw4Q6Iv?=
+ =?us-ascii?Q?gftYdce2Trg8k0pCP2HyQoKEX9wgFsscr1sqSm4KGZTKgYobICivvMEN9CRo?=
+ =?us-ascii?Q?VGdk0Ghh3e8ZJwQVB2Znz3lNZ6FMmT07AWH74lKs1EjmmHb0YIfmO7Ixbgor?=
+ =?us-ascii?Q?ACSAeDVr3wv4gyj3Q7PQU/0Ctl49TsT2ozWQFCP00th2kDIlW8GZ90LfJTiZ?=
+ =?us-ascii?Q?A4z1Gf2cPl0rDyBsHWiKao9Vb/QhKQU7A2jDdx6Y7bfrG9y5ySZqL1y6BnWW?=
+ =?us-ascii?Q?1qUlKtyroyflTsT0d0b4U1yuqtlMvCPOJLxzKP79UE4f5slIC2V/cX9JFjX4?=
+ =?us-ascii?Q?BSWO2zJhqLSDPZWlB8y2XxgpyuZqQKnF1eiJ4f83?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 889b8e67-4052-48d3-ff24-08dae08dc315
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2022 00:21:09.5761
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SKtmwkD+AgH3roLk2vnlwBDLW0PGt/Lsfw9N7yWNGmUHY0gAQkdOORrt17D/2mEzyjWXn5SnnkoFeC8cji0JAQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB7037
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Intel igc maintainers,
+On Sat, Dec 17, 2022 at 04:38:50PM +0000, Jonathan Cameron wrote:
+> On Fri, 16 Dec 2022 13:54:01 -0800
+> Ira Weiny <ira.weiny@intel.com> wrote:
+> 
+> > On Fri, Dec 16, 2022 at 03:39:39PM +0000, Jonathan Cameron wrote:
+> > > On Sun, 11 Dec 2022 23:06:20 -0800
+> > > ira.weiny@intel.com wrote:
+> > >   
+> > > > From: Ira Weiny <ira.weiny@intel.com>
+> > > > 
+> > > > CXL devices have multiple event logs which can be queried for CXL event
+> > > > records.  Devices are required to support the storage of at least one
+> > > > event record in each event log type.
+> > > > 
+> > > > Devices track event log overflow by incrementing a counter and tracking
+> > > > the time of the first and last overflow event seen.
+> > > > 
+> > > > Software queries events via the Get Event Record mailbox command; CXL
+> > > > rev 3.0 section 8.2.9.2.2 and clears events via CXL rev 3.0 section
+> > > > 8.2.9.2.3 Clear Event Records mailbox command.
+> > > > 
+> > > > If the result of negotiating CXL Error Reporting Control is OS control,
+> > > > read and clear all event logs on driver load.
+> > > > 
+> > > > Ensure a clean slate of events by reading and clearing the events on
+> > > > driver load.
+> > > > 
+> > > > The status register is not used because a device may continue to trigger
+> > > > events and the only requirement is to empty the log at least once.  This
+> > > > allows for the required transition from empty to non-empty for interrupt
+> > > > generation.  Handling of interrupts is in a follow on patch.
+> > > > 
+> > > > The device can return up to 1MB worth of event records per query.
+> > > > Allocate a shared large buffer to handle the max number of records based
+> > > > on the mailbox payload size.
+> > > > 
+> > > > This patch traces a raw event record and leaves specific event record
+> > > > type tracing to subsequent patches.  Macros are created to aid in
+> > > > tracing the common CXL Event header fields.
+> > > > 
+> > > > Each record is cleared explicitly.  A clear all bit is specified but is
+> > > > only valid when the log overflows.
+> > > > 
+> > > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>  
+> > > 
+> > > A few things noticed inline.  I've tightened the QEMU code to reject the
+> > > case of the input payload claims to be bigger than the mailbox size
+> > > and hacked the size down to 256 bytes so it triggers the problem
+> > > highlighted below.  
+> > 
+> > I'm not sure what you did here.
+> 
+> Nor am I. I think this might have been a case of chasing the undersized
+> length bug in QEMU because it was the CXL 3.0 issue and misunderstanding
+> one of the debug prints I got.
+> 
+> Friday silliness. Sorry about that!
 
-just confirmed on the same box that 13-CURRENT on FBSD does not result
-in a kernel panic when a single remote host loses power on the
-network. Please let me know if there's any additional information you
-need.
+NP but you did have me going.  I've vowed to actually understand the spec
+better going forward!  :-D
 
-Kyle.
+> 
+> However, the over sized payload communicated to the hardware is still
+> a potential problem. See below.
 
-On Thu, Dec 15, 2022 at 2:28 PM Kyle Sanderson <kyle.leet@gmail.com> wrote:
->
-> (Un)fortunately I can reproduce this bug by simply removing the
-> ethernet cable from the box while there is traffic flowing. kprint
-> below from a console line. Please CC / to me for any additional
-> information I can provide for this panic.
->
-> [  156.707054] igc 0000:01:00.0 eth0: NIC Link is Down
-> [  156.712981] br-lan: port 1(eth0) entered disabled state
-> [  156.719246] igc 0000:01:00.0 eth0: Register Dump
-> [  156.724784] igc 0000:01:00.0 eth0: Register Name   Value
-> [  156.731067] igc 0000:01:00.0 eth0: CTRL            181c0641
-> [  156.737607] igc 0000:01:00.0 eth0: STATUS          00380681
-> [  156.744133] igc 0000:01:00.0 eth0: CTRL_EXT        100000c0
-> [  156.750759] igc 0000:01:00.0 eth0: MDIC            18017949
-> [  156.757258] igc 0000:01:00.0 eth0: ICR             00000001
-> [  156.763785] igc 0000:01:00.0 eth0: RCTL            0440803a
-> [  156.770324] igc 0000:01:00.0 eth0: RDLEN[0-3]      00001000
-> 00001000 00001000 00001000
-> [  156.779457] igc 0000:01:00.0 eth0: RDH[0-3]        000000ef
-> 000000a1 00000092 000000ba
-> [  156.788500] igc 0000:01:00.0 eth0: RDT[0-3]        000000ee
-> 000000a0 00000091 000000b9
-> [  156.797650] igc 0000:01:00.0 eth0: RXDCTL[0-3]     02040808
-> 02040808 02040808 02040808
-> [  156.806688] igc 0000:01:00.0 eth0: RDBAL[0-3]      02f43000
-> 02180000 02e7f000 02278000
-> [  156.815781] igc 0000:01:00.0 eth0: RDBAH[0-3]      00000001
-> 00000001 00000001 00000001
-> [  156.824928] igc 0000:01:00.0 eth0: TCTL            a503f0fa
-> [  156.831587] igc 0000:01:00.0 eth0: TDBAL[0-3]      02f43000
-> 02180000 02e7f000 02278000
-> [  156.840637] igc 0000:01:00.0 eth0: TDBAH[0-3]      00000001
-> 00000001 00000001 00000001
-> [  156.849753] igc 0000:01:00.0 eth0: TDLEN[0-3]      00001000
-> 00001000 00001000 00001000
-> [  156.858760] igc 0000:01:00.0 eth0: TDH[0-3]        000000d4
-> 0000003d 000000af 0000002a
-> [  156.867771] igc 0000:01:00.0 eth0: TDT[0-3]        000000e4
-> 0000005a 000000c8 0000002a
-> [  156.876864] igc 0000:01:00.0 eth0: TXDCTL[0-3]     02100108
-> 02100108 02100108 02100108
-> [  156.885905] igc 0000:01:00.0 eth0: Reset adapter
-> [  160.307195] igc 0000:01:00.0 eth0: NIC Link is Up 1000 Mbps Full
-> Duplex, Flow Control: RX/TX
-> [  160.317974] br-lan: port 1(eth0) entered blocking state
-> [  160.324532] br-lan: port 1(eth0) entered forwarding state
-> [  161.197263] ------------[ cut here ]------------
-> [  161.202669] Kernel BUG at 0xffffffff813ce19f [verbose debug info unavailable]
-> [  161.210769] invalid opcode: 0000 [#1] SMP NOPTI
-> [  161.216022] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.10.146 #0
-> [  161.222980] Hardware name: Default string Default string/Default
-> string, BIOS 5.19 09/23/2022
-> [  161.232546] RIP: 0010:0xffffffff813ce19f
-> [  161.237167] Code: 03 01 4c 89 48 58 e9 2f ff ff ff 85 db 41 0f 95
-> c2 45 39 d9 41 0f 95 c1 45 84 ca 74 05 45 85 e4 78 0a 44 89 c2 e9 10
-> ff ff ff <0f> 0b 01 d2 45 89 c1 41 29 d1 ba 00 00 00 00 44 0f 48 ca eb
-> 80 cc
-> [  161.258651] RSP: 0018:ffffc90000118e88 EFLAGS: 00010283
-> [  161.264736] RAX: ffff888101f8f200 RBX: ffffc900006f9bd0 RCX: 000000000000050e
-> [  161.272837] RDX: ffff888101fec000 RSI: 0000000000000a1c RDI: 0000000000061a10
-> [  161.280942] RBP: ffffc90000118ef8 R08: 0000000000000000 R09: 0000000000061502
-> [  161.289089] R10: 0000000000000000 R11: 0000000000000000 R12: 00000000ffffff3f
-> [  161.297229] R13: ffff888101f8f140 R14: 0000000000000000 R15: ffff888100ad9b00
-> [  161.305345] FS:  0000000000000000(0000) GS:ffff88903fe80000(0000)
-> knlGS:00000 00000000000
-> [  161.314492] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  161.321139] CR2: 00007f941ad43a9b CR3: 000000000340a000 CR4: 0000000000350ee0
-> [  161.329284] Call Trace:
-> [  161.332373]  <IRQ>
-> [  161.334981]  ? 0xffffffffa0185f78 [igc@00000000f400031b+0x13000]
-> [  161.341949]  0xffffffff8185b047
-> [  161.345797]  0xffffffff8185b2ca
-> [  161.349637]  0xffffffff81e000bb
-> [  161.353465]  0xffffffff81c0109f
-> [  161.357304]  </IRQ>
-> [  161.359988]  0xffffffff8102cdac
-> [  161.363783]  0xffffffff810bfdaf
-> [  161.367584]  0xffffffff81a2e616
-> [  161.371374]  0xffffffff81c00c9e
-> [  161.375192] RIP: 0010:0xffffffff817e331b
-> [  161.379840] Code: 21 90 ff 65 8b 3d 45 23 83 7e e8 80 20 90 ff 31
-> ff 49 89 c6 e8 26 2d 90 ff 80 7d d7 00 0f 85 9e 01 00 00 fb 66 0f 1f
-> 44 00 00 <45> 85 ff 0f 88 cf 00 00 00 49 63 cf 48 8d 04 49 48 8d 14 81
-> 48 c1
-> [  161.401397] RSP: 0018:ffffc900000d3e80 EFLAGS: 00000246
-> [  161.407493] RAX: ffff88903fea5180 RBX: ffff88903feadf00 RCX: 000000000000001f
-> [  161.415648] RDX: 0000000000000000 RSI: 0000000046ec0743 RDI: 0000000000000000
-> [  161.423811] RBP: ffffc900000d3eb8 R08: 00000025881a3b81 R09: ffff888100317340
-> [  161.432003] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000003
-> [  161.440154] R13: ffffffff824c7bc0 R14: 00000025881a3b81 R15: 0000000000000003
-> [  161.448285]  0xffffffff817e357f
-> [  161.452123]  0xffffffff810e6258
-> [  161.455938]  0xffffffff810e63fb
-> [  161.459746]  0xffffffff8104bec0
-> [  161.463526]  0xffffffff810000f5
-> [  161.467290] Modules linked in: pppoe ppp_async nft_fib_inet
-> nf_flow_table_ipv 6 nf_flow_table_ipv4 nf_flow_table_inet wireguard
-> pppox ppp_generic nft_reject_i pv6 nft_reject_ipv4 nft_reject_inet
-> nft_reject nft_redir nft_quota nft_objref nf t_numgen nft_nat nft_masq
-> nft_log nft_limit nft_hash nft_flow_offload nft_fib_ip v6 nft_fib_ipv4
-> nft_fib nft_ct nft_counter nft_chain_nat nf_tables nf_nat nf_flo
-> w_table nf_conntrack libchacha20poly1305 curve25519_x86_64
-> chacha_x86_64 slhc r8 169 poly1305_x86_64 nfnetlink nf_reject_ipv6
-> nf_reject_ipv4 nf_log_ipv6 nf_log_i pv4 nf_log_common nf_defrag_ipv6
-> nf_defrag_ipv4 libcurve25519_generic libcrc32c libchacha igc forcedeth
-> e1000e crc_ccitt bnx2 i2c_dev ixgbe e1000 amd_xgbe ip6_u dp_tunnel
-> udp_tunnel mdio nls_utf8 ena kpp nls_iso8859_1 nls_cp437 vfat fat igb
-> button_hotplug tg3 ptp realtek pps_core mii
-> [  161.550507] ---[ end trace b1cb18ab2d1741bd ]---
-> [  161.555938] RIP: 0010:0xffffffff813ce19f
-> [  161.560634] Code: 03 01 4c 89 48 58 e9 2f ff ff ff 85 db 41 0f 95
-> c2 45 39 d9 41 0f 95 c1 45 84 ca 74 05 45 85 e4 78 0a 44 89 c2 e9 10
-> ff ff ff <0f> 0b 01 d2 45 89 c1 41 29 d1 ba 00 00 00 00 44 0f 48 ca eb
-> 80 cc
-> [  161.582281] RSP: 0018:ffffc90000118e88 EFLAGS: 00010283
-> [  161.588426] RAX: ffff888101f8f200 RBX: ffffc900006f9bd0 RCX: 000000000000050e
-> [  161.596668] RDX: ffff888101fec000 RSI: 0000000000000a1c RDI: 0000000000061a10
-> [  161.604860] RBP: ffffc90000118ef8 R08: 0000000000000000 R09: 0000000000061502
-> [  161.613052] R10: 0000000000000000 R11: 0000000000000000 R12: 00000000ffffff3f
-> [  161.621291] R13: ffff888101f8f140 R14: 0000000000000000 R15: ffff888100ad9b00
-> [  161.629505] FS:  0000000000000000(0000) GS:ffff88903fe80000(0000)
-> knlGS:00000 00000000000
-> [  161.638781] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  161.645549] CR2: 00007f941ad43a9b CR3: 000000000340a000 CR4: 0000000000350ee0
-> [  161.653841] Kernel panic - not syncing: Fatal exception in interrupt
-> [  161.661287] Kernel Offset: disabled
-> [  161.665644] Rebooting in 3 seconds..
-> [  164.670313] ACPI MEMORY or I/O RESET_REG.
->
-> Kyle.
+I don't see where there is an oversized payload used either...
+
+> 
+> > 
+> > >   
+> > > > 
+> > > > ---
+> > > > Changes from V3:
+> > > > 	Dan
+> > > > 		Split off _OSC pcie bits
+> > > > 			Use existing style for host bridge flag in that
+> > > > 			patch
+> > > > 		Clean up event processing loop
+> > > > 		Use dev_err_ratelimited()
+> > > > 		Clean up version change log
+> > > > 		Delete 'EVENT LOG OVERFLOW'
+> > > > 		Remove cxl_clear_event_logs()
+> > > > 		Add comment for native cxl control
+> > > > 		Fail driver load on event buf allocation failure
+> > > > 		Comment why events are not processed without _OSC flag
+> > > > ---
+> > > >  drivers/cxl/core/mbox.c  | 136 +++++++++++++++++++++++++++++++++++++++
+> > > >  drivers/cxl/core/trace.h | 120 ++++++++++++++++++++++++++++++++++
+> > > >  drivers/cxl/cxl.h        |  12 ++++
+> > > >  drivers/cxl/cxlmem.h     |  84 ++++++++++++++++++++++++
+> > > >  drivers/cxl/pci.c        |  40 ++++++++++++
+> > > >  5 files changed, 392 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> > > > index b03fba212799..9fb327370e08 100644
+> > > > --- a/drivers/cxl/core/mbox.c
+> > > > +++ b/drivers/cxl/core/mbox.c  
+> > >   
+> > > > +static int cxl_clear_event_record(struct cxl_dev_state *cxlds,
+> > > > +				  enum cxl_event_log_type log,
+> > > > +				  struct cxl_get_event_payload *get_pl)
+> > > > +{
+> > > > +	struct cxl_mbox_clear_event_payload payload = {
+> > > > +		.event_log = log,
+> > > > +	};
+> > > > +	u16 total = le16_to_cpu(get_pl->record_count);
+> > > > +	u8 max_handles = CXL_CLEAR_EVENT_MAX_HANDLES;
+> > > > +	size_t pl_size = sizeof(payload);
+
+This line ensures the payload is only ever the size of the definition per the
+3.0 spec.
+
+> > > > +	struct cxl_mbox_cmd mbox_cmd;
+> > > > +	u16 cnt;
+> > > > +	int rc;
+> > > > +	int i;
+> > > > +
+> > > > +	/* Payload size may limit the max handles */
+> > > > +	if (pl_size > cxlds->payload_size) {
+> > > > +		max_handles = CXL_CLEAR_EVENT_LIMIT_HANDLES(cxlds->payload_size);
+> 
+> Definition of that is more complex than it needs to be - see below.
+
+Then this ensures it is truncated if needed.
+
+> 
+> > > > +		pl_size = cxlds->payload_size;  
+> > 
+> > pl_size is only the max size possible if that size was smaller than the size of
+> > the record [sizeof(payload) above].
+> 
+> Sorry. For some reason my eyes skipped over this completely.
+> So we are fine for all my comments on overflowing.  On plus side
+> will now check if that happens in QEMU and return an error which we
+> weren't doing before.
+> 
+> > 
+> > > > +	}
+> > > > +
+> > > > +	mbox_cmd = (struct cxl_mbox_cmd) {
+> > > > +		.opcode = CXL_MBOX_OP_CLEAR_EVENT_RECORD,
+> > > > +		.payload_in = &payload,
+> > > > +		.size_in = pl_size,  
+> > > 
+> > > This payload size should be whatever we need to store the records,
+> > > not the max size possible.  Particularly as that size is currently
+> > > bigger than the mailbox might be.  
+> > 
+> > But the above check and set ensures that does not happen.
+> > 
+> > > 
+> > > It shouldn't fail (I think) simply because a later version of the spec might
+> > > add more to this message and things should still work, but definitely not
+> > > good practice to tell the hardware this is much longer than it actually is.  
+> > 
+> > I don't follow.
+> > 
+> > The full payload is going to be sent even if we are just clearing 1 record
+> > which is inefficient but it should never overflow the hardware because it is
+> > limited by the check above.
+> > 
+> > So why would this be a problem?
+> I'm struggling to find a clear spec statement on if this allowed, so the following
+> is a thought experiment. There is language in definition of the "invalid payload length"
+> error code "The input payload length is not valid for the specified command", but it
+> doesn't go into what counts as valid.
+
+I think the only thing which makes sense is if the payload length is smaller
+than:
+
+	Header + nr_recs * 2
+
+Anything up to
+
+	header + (0xff * 2) should be fine per the 3.0 spec.
+
+> 
+> What you have looks fine because a device can't fail on the basis it's told the
+> payload is longer than it expects, because you might be sending a CXL 4.0 spec
+> payload that is backwards compatible with CXL 3.0 - hence the fact the sizes
+> don't match up with that expected can't be considered an error.
+> So far so good... However, we may have a situation not dissimilar to the
+> change in record length for the set event interrupt policy payload between CXL 2.0
+> and CXL 3.0. The only way the endpoint knows what version of message it got is because the
+> record is 4 bytes or 5 bytes.  If we have extra stuff on the end of this record
+> in future the end point can assume that it is a new version of the spec and interpret
+> what is in that payload space.
+> 
+> Say the future structure looks like
+> 
+> struct cxl_mbox_clear_event_payload_future {
+> 	u8 event_log;		/* enum cxl_event_log_type */
+> 	u8 clear_flags;
+> 	u8 nr_recs;
+> 	u8 reserved[3];
+> 	__le16 handle[nr_recs]; 
+> 	__le16 otherdata[nr_recs];
+
+otherdata should be ignored by a 3.0 device.
+
+a theoretical 4.0 device should handle otherdata not being there per some flag
+in the flags field I would suppose...  That would have to be determined if this
+payload were extended.  Otherwise this software will fail no matter what.
+
+Other mailbox commands do not 0 out from the command size to 1M either.
+
+> }
+> 
+> Endpoint receiving your 'overly long payload' will assume all those otherdata fields
+> are 0, not necessarily the same as non present.
+
+But it is not 'overly long'.  It is only the length of the current spec.  See
+above.
+
+> For the set event interrupt policy, if we sent an overlong payload like you've done here
+> with assumption of the CXL 2.0 spec we would be turning off the DCD interrupt rather
+> that doing nothing (unlikely to be a problem in that particularly case as that one
+> doesn't have a FW Interrupt option - but that's more luck than design).
+> 
+> I'm not sure why we'd have extra stuff for this payload, but it 'might' happen'.
+
+I'll have to check but I don't think I set the payload long in that message.
+It too should be sizeof(<set event int policy>)
+
+> 
+> > > 
+> > 
+> > > 
+> > >   
+> > > > +	};
+> > > > +
+> > > > +	/*
+> > > > +	 * Clear Event Records uses u8 for the handle cnt while Get Event
+> > > > +	 * Record can return up to 0xffff records.
+> > > > +	 */
+> > > > +	i = 0;
+> > > > +	for (cnt = 0; cnt < total; cnt++) {
+> > > > +		payload.handle[i++] = get_pl->records[cnt].hdr.handle;
+> > > > +		dev_dbg(cxlds->dev, "Event log '%d': Clearing %u\n",
+> > > > +			log, le16_to_cpu(payload.handle[i]));
+> > > > +
+> > > > +		if (i == max_handles) {
+> > > > +			payload.nr_recs = i;
+> > > > +			rc = cxl_internal_send_cmd(cxlds, &mbox_cmd);
+> > > > +			if (rc)
+> > > > +				return rc;
+> > > > +			i = 0;
+> > > > +		}
+> > > > +	}
+> > > > +
+> > > > +	/* Clear what is left if any */
+> > > > +	if (i) {
+> > > > +		payload.nr_recs = i;
+> > > > +		rc = cxl_internal_send_cmd(cxlds, &mbox_cmd);
+> > > > +		if (rc)
+> > > > +			return rc;
+> > > > +	}
+> > > > +
+> > > > +	return 0;
+> > > > +}  
+> > > 
+> > > 
+> > > ...
+> > >   
+> > > > diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+> > > > index ab138004f644..dd9aa3dd738e 100644
+> > > > --- a/drivers/cxl/cxlmem.h
+> > > > +++ b/drivers/cxl/cxlmem.h  
+> > > 
+> > > ...
+> > >   
+> > > > +
+> > > > +/*
+> > > > + * Clear Event Records input payload
+> > > > + * CXL rev 3.0 section 8.2.9.2.3; Table 8-51
+> > > > + */
+> > > > +#define CXL_CLEAR_EVENT_MAX_HANDLES (0xff)
+> > > > +struct cxl_mbox_clear_event_payload {
+> > > > +	u8 event_log;		/* enum cxl_event_log_type */
+> > > > +	u8 clear_flags;
+> > > > +	u8 nr_recs;
+> > > > +	u8 reserved[3];
+> > > > +	__le16 handle[CXL_CLEAR_EVENT_MAX_HANDLES];  
+> > > 
+> > > Doesn't fit in the smallest possible payload buffer.
+> > > It's 526 bytes long.  Payload buffer might be 256 bytes in total.
+> > > (8.2.8.4.3 Mailbox capabilities)
+> > > 
+> > > Lazy approach, make this smaller and do more loops when clearing.
+> > > If we want to optimize this later can expand it to this size.  
+> > 
+> > I agree but the code already checks for and adjusts this on the fly based on
+> > cxlds->payload_size?
+> > 
+> >  +	/* Payload size may limit the max handles */
+> >  +	if (pl_size > cxlds->payload_size) {
+> >  +		max_handles = CXL_CLEAR_EVENT_LIMIT_HANDLES(cxlds->payload_size);
+> >  +		pl_size = cxlds->payload_size;
+> >  +	}
+> > 
+> > Why is this not ok?  [Other than being potentially inefficient.]
+> > 
+> > Do you have a patch to qemu which causes this?
+> 
+> Two issues crossing I think on my side and me thinking this one was obviously
+> the problem when it wasn't.
+
+My fault also for not at least throwing my Qemu test code out there.  I've been
+busy with some things today.  I'll try and get those changes cleaned up and at
+least another RFC set out ASAP.
+
+> 
+> > 
+> > Ira
+> > 
+> > > > +} __packed;
+> > > > +#define CXL_CLEAR_EVENT_LIMIT_HANDLES(payload_size)			\
+> > > > +	(((payload_size) -						\
+> > > > +		(sizeof(struct cxl_mbox_clear_event_payload) -		\
+> > > > +		 (sizeof(__le16) * CXL_CLEAR_EVENT_MAX_HANDLES))) /	\
+> 
+> Could use offsetof() to simplify this
+
+True.  How about I submit a clean up patch to follow?  I don't think this is
+broken.
+
+Ira
+
+> 
+> > > > +		sizeof(__le16))
+> > > > +  
+> > > 
+> > > ...
+> > >   
+> 
