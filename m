@@ -2,68 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3EB06504AF
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 22:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E566504B1
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Dec 2022 22:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbiLRVDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 16:03:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
+        id S230461AbiLRVHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 16:07:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiLRVCu (ORCPT
+        with ESMTP id S229507AbiLRVHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 16:02:50 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232C33882
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 13:02:49 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id y25so11039730lfa.9
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 13:02:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TpHLqKVH79TMfENsVoD6e8/Lr+5zSBRRAc4inRZzCrU=;
-        b=e1JcGvnD65bW967DfJog3AZxXpOmuu+jYa1ApT5630jyeoOCmlyWuEwO+ZgltGghnY
-         t4ur771veL8Pg17VQ1FaBy754bS3dZXsNhSAdrxTZg/Ji1yfZxA9drVx6NLPD4RMqUpj
-         YqZpWNB6an6jwEowgAnN60zvfNtIRDH+fPaOg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TpHLqKVH79TMfENsVoD6e8/Lr+5zSBRRAc4inRZzCrU=;
-        b=g7pGZV8v7fqzigRAEG2TSP8XJ9J5JbydKFLRa1A5V24HaFkDBcUrbeie0w35jkTEfy
-         FG55xNsMKZOsikNByfhpyZAmOpbdoCCziE7yGKjYa4WS44mn54e32/tb5AkWedbTP3Iw
-         pK50p/9cE9Y79judf4SbBsg+FHCh95V53ZsPZIrQbJvDv0ro64pl/1OofGFSpH3+7Pac
-         ooytKhgZD7ReseSZp7qzmcv2rdv6zMEHsG8oUyTc6ya+3XZsKyXU9fz/PpXNwf8jddvh
-         3NxbGVzKu6uKayG5TG2izoSkUMRkbZUjRH440cMWhnSkLq6a28I09KhZEgDChpRkMGbg
-         eecw==
-X-Gm-Message-State: ANoB5plwqU2Q1LGpMtHBw7Y8lqUHYoimL/iSnjOjFSiSGbNa8OjNII+T
-        Xkz9qQEEZXEHHwb5o1+owN/BUvDUoDaiGiq5YB0Q/g==
-X-Google-Smtp-Source: AA0mqf4v47MADKLEMMJUU0yBfI0kj3wTznUdtl6+qpPEE8Ag9BWJn8e4I9EJnZx3Ief+wX9YYfINOwqm2ubUzo0nKaA=
-X-Received: by 2002:a05:6512:224c:b0:4b5:ad89:8174 with SMTP id
- i12-20020a056512224c00b004b5ad898174mr3182761lfu.84.1671397367405; Sun, 18
- Dec 2022 13:02:47 -0800 (PST)
+        Sun, 18 Dec 2022 16:07:41 -0500
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2330760E1
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 13:07:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1671397659;
+        bh=bzzA9VFUm6NqJzBX2Bls/aaFsWETWnz+FBiGd0+U0XU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BHXMdpImVf4HLS+Ql8/RN8Lluozm+JA+JFkfgRHd0SqPzaqpgJEAf2mceIkAJPMcV
+         yerbMgxa8D66izgvwomHPAi6HzS6ajQKfdp4dbjzfkotdf7ehyCdvopNUdq5T2ufXm
+         dtDkVtcGTaRCrgE3I55VDDCf/oNo/KdZaetAZyPObjuC1RAxV6BQIOXbYzBdc5bE6p
+         JwlU4c7/pUVTegZge2SUoD+xVWzsUIPiTKgL+cX8CTGpv7nA4fTy/2ZiaWBeYbKd6U
+         0Tx/BbwbqZGzQ2EGozbCSPYOacUcCu4wJ/pPA4jH34RHONjarsijz5WP6q4Q+8Bc++
+         LUNEVTx3Mv3Bg==
+Received: from [10.1.0.203] (192-222-188-69.qc.cable.ebox.net [192.222.188.69])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NZwQf6jcCzbfL;
+        Sun, 18 Dec 2022 16:07:38 -0500 (EST)
+Message-ID: <db4cccb8-e7fd-3d54-c5c8-3df90c5ddc49@efficios.com>
+Date:   Sun, 18 Dec 2022 16:08:02 -0500
 MIME-Version: 1.0
-References: <20221215035755.2820163-1-qiang1.zhang@intel.com>
- <20221217010345.GF4001@paulmck-ThinkPad-P17-Gen-1> <PH0PR11MB5880526CB255AFF91F0D76A2DAE79@PH0PR11MB5880.namprd11.prod.outlook.com>
- <PH0PR11MB588000890D537044BBAA209EDAE79@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20221217051759.GK4001@paulmck-ThinkPad-P17-Gen-1> <Y550Z+MOq1IX3Wb4@google.com>
- <20221218180638.GR4001@paulmck-ThinkPad-P17-Gen-1> <CAEXW_YSy4MyUW55Umtt4LRfX_4Dhdv0h2O=n+Zbq2ijakwGnBw@mail.gmail.com>
- <20221218194434.GS4001@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20221218194434.GS4001@paulmck-ThinkPad-P17-Gen-1>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sun, 18 Dec 2022 16:02:35 -0500
-Message-ID: <CAEXW_YQvbcvxh7u7sU-VjdAYUWpxDzdH-68qk_AjY54hMjNYMg@mail.gmail.com>
-Subject: Re: [PATCH] rcu: Fix opposite might_sleep() check in rcu_blocking_is_gp()
-To:     paulmck@kernel.org
-Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [RFC 1/2] srcu: Remove comment about prior read lock counts
+Content-Language: en-US
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+References: <20221218191310.130904-1-joel@joelfernandes.org>
+ <20221218191310.130904-2-joel@joelfernandes.org>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20221218191310.130904-2-joel@joelfernandes.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,63 +56,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 18, 2022 at 2:44 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-[...]
-> > > > If not, I would do something like this:
-> > > >
-> > > > ---8<-----------------------
-> > > >
-> > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > > > index 79aea7df4345..23c2303de9f4 100644
-> > > > --- a/kernel/rcu/tree.c
-> > > > +++ b/kernel/rcu/tree.c
-> > > > @@ -3435,11 +3435,12 @@ static int rcu_blocking_is_gp(void)
-> > > >  {
-> > > >       int ret;
-> > > >
-> > > > +     might_sleep();  /* Check for RCU read-side critical section. */
-> > > > +
-> > > >       // Invoking preempt_model_*() too early gets a splat.
-> > > >       if (rcu_scheduler_active == RCU_SCHEDULER_INACTIVE ||
-> > > >           preempt_model_full() || preempt_model_rt())
-> > > >               return rcu_scheduler_active == RCU_SCHEDULER_INACTIVE;
->
-> If the scheduler is inactive (early boot with interrupts disabled),
-> we return here.
->
-> > > > -     might_sleep();  /* Check for RCU read-side critical section. */
->
-> We get here only if the scheduler has started, and even then only in
-> preemption-disabled kernels.
->
-> Or is you concern that the might_sleep() never gets invoked in kernels
-> with preemption enabled?  Fixing that would require a slightly different
-> patch, though.
->
-> Or should I have waited until tomorrow to respond to this email?  ;-)
+On 2022-12-18 14:13, Joel Fernandes (Google) wrote:
+> The comment says that if an updater saw lock count updates, then
+> ensure the reader does not see the new srcu_idx.
+> 
+> However, there is no memory barrier between a READER reading srcu_idx
+> with respect to incrementing the lock count for that srcu_idx.
+> 
+> So what is really happening is, both "B" and "C" will order the current
+> reader's unlock count update, and the _next_ readers lock count update, with
+> respect to the write to the currently active index.
+> 
+> Consider first the case of the unlock count update being seen by the UPDATER:
+> 
+> (for brevity, the pseudocode shortens "srcu_idx" to "idx")
+> 
+> READER                            UPDATER
+> 
+> rcu_read_lock() {
+>      idx = READ(idx);
+>      lock_count[idx]++;
+> 
+>      smp_mb();    // B
+> }
+>                                  srcu_flip() {
+>                                      smp_mb(); //E
+>                                      idx++;
+>                                      smp_mb();
+>                                  }
+> rcu_read_unlock() {
+>      smp_mb();    // C
+>      unlock_count[idx]++;
+> }
+> 
+> Consider that the updater saw the unlock count update, and due to this, we
+> expect "E" to make sure that the reader only used the old srcu_idx.
+> 
+> However, say the reader used the new srcu_idx because we dropped "E".  That is
+> totally OK because both unlock and lock counts of this reader will negate each
+> other during the next scan of the srcu_idx. So we don't have to guarantee at
+> all that the reader used the old srcu_idx, that does not buy us anything
+> because if it used the new one, we would just ignore it during the next scan
+> anyway (the reader is "done").
+> 
+> Now lets look at the following case:
+> 
+> READER                            UPDATER
+> 
+> rcu_read_lock() {
+>      idx = READ(idx);
+>      lock_count[idx]++;
+> 
+>      smp_mb();    // B
+> }
+> 
+> rcu_read_unlock() {
+>      smp_mb();    // C
+>      unlock_count[idx]++;
+> }
+>                                  srcu_flip() {
+>                                      smp_mb(); //E
+>                                      idx++;
+> rcu_read_lock() {
+>      idx = READ(idx);
+>      lock_count[idx]++;
+> 
+>      smp_mb();    // B
+>                                      smp_mb();
+>                                  }
+> }
+> 
+> Consider that the updater saw the lock count update of the second
+> rcu_read_lock(). It does not matter that we guarantee that the reader sees only
+> the old srcu_idx. This is because, a reader could totally just sample
+> srcu_idx, and stay preempted for long periods of time. So, during any scan, we
+> already have the issue of a preempted-reader randomly springing up with a copy
+> of the index which we consider the "new index". So guaranteeing that the reader
+> saw the old srcu_idx instead of the new one if we saw its lock count updates,
+> also does not buy us anything.
+> 
+> Due to these reasons, drop the argument that the reader has to see a certain
+> srcu_idx since we have no control over that anyway, and guaranteeing that does not
+> buy us anything.
 
-No, I think you are quite right. I was not referring to
-rcu_sleep_check(), but rather the following prints in might_sleep(). I
-see an unconditional call to might_sleep()  from kvfree_call_rcu() but
-not one from synchronize_rcu() which can also sleep.
+I don't understand why this first patch only removes a comment about the 
+need to order things, when in fact it's the entire memory barrier /* E 
+*/ that is useless.
 
-But I see your point, early boot code has interrupts disabled, but can
-still totally call synchronize_rcu() when the scheduler is INACTIVE.
-And might_sleep() might bitterly complain. Thanks for the
-clarification.
+I suspect we should just remove the comment along with the barrier 
+without this added step.
 
-pr_err("BUG: sleeping function called from invalid context at %s:%d\n",
-      file, line);
-pr_err("in_atomic(): %d, irqs_disabled(): %d, non_block: %d, pid: %d,
-name: %s\n",
-      in_atomic(), irqs_disabled(), current->non_block_count,
-      current->pid, current->comm);
-pr_err("preempt_count: %x, expected: %x\n", preempt_count(),
-      offsets & MIGHT_RESCHED_PREEMPT_MASK);
+What SRCU fundamentally does is detect quiescence of all SRCU readers 
+between the beginning of the grace period and its completion. In order 
+to ensure forward progress, it does so in a two-phase algorithm. What 
+the grace period does to detect quiescence is to observe that each of 
+the periods (0/1) have no active reader at a given point in the grace 
+period. Then the fact that the period is flipped to send new-coming 
+readers into a different period is just to ensure forward progress, and 
+is basically irrelevant (order-wise) with the fact that the grace period 
+scans both periods and validates that both periods are observed to have 
+no active readers.
+
+I'd favor just clarifying the SRCU model in this way, and then remove 
+the useless barrier, and also implement improvements to the SRCU 
+algorithm and skip the "flip" entirely when we notice (early) that no 
+active readers are present in both periods. This is actually similar to 
+what I implemented in side-rcu.
+
+Thoughts ?
 
 Thanks,
 
- - Joel
+Mathieu
 
-> > > >       /*
-> > > >        * If the rcu_state.n_online_cpus counter is equal to one,
+> 
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+>   kernel/rcu/srcutree.c | 10 ++++------
+>   1 file changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> index 1c304fec89c0..d6a4c2439ca6 100644
+> --- a/kernel/rcu/srcutree.c
+> +++ b/kernel/rcu/srcutree.c
+> @@ -983,12 +983,10 @@ static bool try_check_zero(struct srcu_struct *ssp, int idx, int trycount)
+>   static void srcu_flip(struct srcu_struct *ssp)
+>   {
+>   	/*
+> -	 * Ensure that if this updater saw a given reader's increment
+> -	 * from __srcu_read_lock(), that reader was using an old value
+> -	 * of ->srcu_idx.  Also ensure that if a given reader sees the
+> -	 * new value of ->srcu_idx, this updater's earlier scans cannot
+> -	 * have seen that reader's increments (which is OK, because this
+> -	 * grace period need not wait on that reader).
+> +	 * Ensure that if a given reader sees the new value of ->srcu_idx, this
+> +	 * updater's earlier scans cannot have seen that reader's increments
+> +	 * (which is OK, because this grace period need not wait on that
+> +	 * reader).
+>   	 */
+>   	smp_mb(); /* E */  /* Pairs with B and C. */
+>   
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
