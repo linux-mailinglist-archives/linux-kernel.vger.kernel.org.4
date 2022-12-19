@@ -2,120 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6943F6509E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 11:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8B66509F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 11:18:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbiLSKQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 05:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
+        id S231693AbiLSKRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 05:17:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231401AbiLSKQF (ORCPT
+        with ESMTP id S231545AbiLSKR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 05:16:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694B7A449
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 02:15:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671444920;
+        Mon, 19 Dec 2022 05:17:29 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FCF2DFD;
+        Mon, 19 Dec 2022 02:17:27 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 241F21EC0662;
+        Mon, 19 Dec 2022 11:17:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1671445046;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0F60KxR0W9IzjgTzMiPaONsb+3DC5K9NhR1i6GY+9bw=;
-        b=UCyJWuRWj0jWxC73KOYjHtojHh6nXW+7UV36fdidehnR2PGoybgiQHbLO7xspk1LJKiMYW
-        4DpH62xFMl/9r/uo51fhf0x6wXc8Std2dAmQdqDLS/XAb8AzTFa26g5vvNQz/u2HKH3+vS
-        IW8RfFFNLnp7n8LYPCrhO8/zSRGFJJs=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-333-rqm_50CWO9mJ1s3j1faepg-1; Mon, 19 Dec 2022 05:15:18 -0500
-X-MC-Unique: rqm_50CWO9mJ1s3j1faepg-1
-Received: by mail-qv1-f69.google.com with SMTP id w1-20020a056214012100b004c6ecf32001so5320567qvs.8
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 02:15:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0F60KxR0W9IzjgTzMiPaONsb+3DC5K9NhR1i6GY+9bw=;
-        b=vzouybI4jvJexq3eCvWfViB8NE7LefteO1pl0mzTi0UViMP/Uw7tsGdjZPYfyz6aau
-         ltWhb7lCJ6tC12coz4nobGawqxVL2HXQBsDvh+kzAacAX3XydLeLJ6L93qZxMuH389Fz
-         YF2VT2uFjn8WXCjkH0zZCRKuEuiYTxfxJ2PY0NtLsuwtMAlOzuOW4txJJNX1YPlzQnV+
-         XKWB2rFbLSPebmOB5wCelYlXC/HK9Tl+rYEndSFfOY9xlt22bQcRIiU0kzqR1ofrtGk1
-         rdqomYUEI5eaL0q/9mTPAeNYrPbapuvmsE9FSDDLw5igK7hnJif/ZU6r8qoxofRo2PQx
-         jwsQ==
-X-Gm-Message-State: ANoB5pkwCdJREsbvCIWOChmb4KtR1UaUa9KuzS8kHFhSG2zW66Ar73KD
-        Jdj7b122muE2ICFSkb1s2fNxu+BlX5E/ZFI8J/1csRBCpwpfZmA7gbA38iguelm/e3oyzqrlAnF
-        ROKdBaZ6Wt8Tn0qBt6G5WckCo
-X-Received: by 2002:ac8:4e51:0:b0:3a5:2704:d4bd with SMTP id e17-20020ac84e51000000b003a52704d4bdmr74303334qtw.16.1671444918000;
-        Mon, 19 Dec 2022 02:15:18 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5bm5Qnb85eW38Qmkj26T6UAoQXiAZKZbsD/6lF6kYKtBjYMui2UsCvc851kAw1QZmfTvQTLw==
-X-Received: by 2002:ac8:4e51:0:b0:3a5:2704:d4bd with SMTP id e17-20020ac84e51000000b003a52704d4bdmr74303318qtw.16.1671444917765;
-        Mon, 19 Dec 2022 02:15:17 -0800 (PST)
-Received: from redhat.com ([45.144.113.29])
-        by smtp.gmail.com with ESMTPSA id r17-20020a05620a299100b006fb8239db65sm6819951qkp.43.2022.12.19.02.15.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 02:15:17 -0800 (PST)
-Date:   Mon, 19 Dec 2022 05:15:09 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Li Zetao <lizetao1@huawei.com>, pbonzini@redhat.com,
-        stefanha@redhat.com, axboe@kernel.dk, kraxel@redhat.com,
-        david@redhat.com, ericvh@gmail.com, lucho@ionkov.net,
-        asmadeus@codewreck.org, linux_oss@crudebyte.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, rusty@rustcorp.com.au,
-        virtualization@lists.linux-foundation.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org
-Subject: Re: [PATCH 0/4] Fix probe failed when modprobe modules
-Message-ID: <20221219050716-mutt-send-email-mst@kernel.org>
-References: <20221128021005.232105-1-lizetao1@huawei.com>
- <20221128042945-mutt-send-email-mst@kernel.org>
- <CACGkMEtuOk+wyCsvY0uayGAvy926G381PC-csoXVAwCfiKCZQw@mail.gmail.com>
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Td6DN6d9KHuO8Ni0x4sFSPaN76BIetZ9amTLwGfBuQY=;
+        b=Gi31BrcudDAIpa+PJzR9Rm2IwbH2EvgIUujPE8wya8WJCeKy/2ekrtTK9r05L2S9b69Vty
+        nPxnhxFIIyGflDiLpYzFN3KhRz/d2AlJ8y/q4NmLiN36+iptFsaIT87iBVCGpQcQ6JiTDL
+        XdJKVV4+vR907NBBpfad61/X4A6kZl0=
+Date:   Mon, 19 Dec 2022 11:17:22 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
+Message-ID: <Y6A6MkFjckQ18fFH@zn.tnic>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
+ <Y5yKEpwCzZpNoBrp@zn.tnic>
+ <20221219081532.GD1691829@chaop.bj.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CACGkMEtuOk+wyCsvY0uayGAvy926G381PC-csoXVAwCfiKCZQw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221219081532.GD1691829@chaop.bj.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 11:37:09AM +0800, Jason Wang wrote:
-> >
-> >
-> > Quite a lot of core work here. Jason are you still looking into
-> > hardening?
+On Mon, Dec 19, 2022 at 04:15:32PM +0800, Chao Peng wrote:
+> Tamping down with error number a bit:
 > 
-> Yes, last time we've discussed a solution that depends on the first
-> kick to enable the interrupt handler. But after some thought, it seems
-> risky since there's no guarantee that the device work in this way.
-> 
-> One example is the current vhost_net, it doesn't wait for the kick to
-> process the rx packets. Any more thought on this?
-> 
-> Thanks
+>         if (attrs->flags)
+>                 return -ENXIO;
+>         if (attrs->attributes & ~supported_attrs)
+>                 return -EOPNOTSUPP;
+>         if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size) ||
+>             attrs->size == 0)
+>                 return -EINVAL;
+>         if (attrs->address + attrs->size < attrs->address)
+>                 return -E2BIG;
 
-Specifically virtio net is careful to call virtio_device_ready
-under rtnl lock so buffers are only added after DRIVER_OK.
+Yap, better.
 
-However we do not need to tie this to kick, this is what I wrote:
+I guess you should add those to the documentation of the ioctl too
+so that people can find out why it fails. Or, well, they can look
+at the code directly too but still... imagine some blurb about
+user-friendliness here...
 
-> BTW Jason, I had the idea to disable callbacks until driver uses the
-> virtio core for the first time (e.g. by calling virtqueue_add* family of
-> APIs). Less aggressive than your ideas but I feel it will add security
-> to the init path at least.
-
-So not necessarily kick, we can make adding buffers allow the
-interrupt.
-
-
+:-)
 
 -- 
-MST
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
