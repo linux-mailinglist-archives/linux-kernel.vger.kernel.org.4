@@ -2,141 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 412E7651472
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 21:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 035A2651474
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 21:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbiLSUwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 15:52:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
+        id S231931AbiLSUx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 15:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232755AbiLSUvs (ORCPT
+        with ESMTP id S232559AbiLSUxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 15:51:48 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C79012AB5
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 12:51:44 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id bp15so15493919lfb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 12:51:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Vz0gc2fIsvgndZrJ67LKywnyviecBh18rwcvp2t84Fw=;
-        b=nf6XxcHkdQC2FMDbYR9XAhPdkk2xaGquNl3GuERuC4t50ok1sYXsase9CbyZDkwnIl
-         uawAJR/j2g2EwktEiKGOs6yunQFYLYGjTivUZM7ymkb+9U/qryXGYIbnQS0UeygfXFcb
-         2j7sxTReJrJSrKQW8vXZyDEpqyIThKRL/cpK30PZVqphi2R5J8z4vl0tYYIL8+VVhBKH
-         wWj9Ed6rJo+W8/hvtt2AXOyZqKxMcjWwoxb93eAv5LdWFTl1cnRCcaPocduf/efJRtcF
-         SYMA1ZcUX4qV265HO38TjKDi7ZIhEp+5FSydlJoPcfM5qGC/kTSpibou+Q2lgZU0HWiZ
-         AAZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vz0gc2fIsvgndZrJ67LKywnyviecBh18rwcvp2t84Fw=;
-        b=N/uobPTHsAi5NwN8K3B2qfDa78aHPaT8MKRECl1Gc9zCobwFFgB4oeCENuqzT1iFhQ
-         COA/CBkjMDAFfTuZHh/kwJ2g2Hb8+nWWLCj+rtQMvQzk0Z/F23d5bFmNBiBphgvLES8F
-         5mRfe2UUBZPXQOPADoJ4rV67dMP/siWkA/8CnuoE7VvJ0+iTcKlqVe8DYZdhFCPuHOLj
-         0TbRSTa/Gr4pJH7/TzRjDxtNUhNEQ2CeExUXeO4bwkgJq8bU4LIzomL9ytmCRYjoW1DV
-         gr72HH/yYd2bC0q89zt/zqAwj3SPuCVIrcnYEwRLrQ88XDi7ISoipmfAyoMG/RfcxkvB
-         ZjzQ==
-X-Gm-Message-State: ANoB5pneMSnsPB0bkcyapIQL9N78NDggGojJ9dswpT6bt+rSmwv5kFfO
-        8zNDR3vn5urZXfDOwSu9bOfIbA==
-X-Google-Smtp-Source: AA0mqf6CB4pooKYg9NjiLjkT2SYb0YciwIVIJ0CFILLTIYRz/BmCumCuClKBt4taEUaN5PoMzv74wQ==
-X-Received: by 2002:ac2:5e29:0:b0:4b5:b10b:6824 with SMTP id o9-20020ac25e29000000b004b5b10b6824mr11054994lfg.55.1671483102454;
-        Mon, 19 Dec 2022 12:51:42 -0800 (PST)
-Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id z19-20020ac25df3000000b00498fbec3f8asm1192956lfq.129.2022.12.19.12.51.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 12:51:42 -0800 (PST)
-Message-ID: <741887b5-8f83-4db5-bb17-755afc18716d@linaro.org>
-Date:   Mon, 19 Dec 2022 21:51:40 +0100
+        Mon, 19 Dec 2022 15:53:22 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5AF95BB;
+        Mon, 19 Dec 2022 12:53:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1671483190; bh=p/gQJhr994QueR5DCQ02g1AeDDewrUyc8tKh6QiFUkY=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=HoSm133nBavBRfcicEpLqQ+jRK961tUApRYIQ8pDgIxxofMXWkygWczd/fJE6+/ic
+         Ddxwd4DaigF7a2OKLqu8uG3DH1G4Ie1WgT5+hTRRZLvzsvoSRcSmrP8ha5J5lGQ0Fz
+         Zro/l0IX/xXdS5Dw+4yxv7SB4K3Yr3LxK9N9dP/M=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Mon, 19 Dec 2022 21:53:10 +0100 (CET)
+X-EA-Auth: +h2tLTIwcg0ajAKuBXmzbKsnCnk2zDEhM6dJi882wT8DN3KzYR/3+5BACGCSRR5Q+YR5WyE8C8ku02eMcjcEXmrxEU07Owm8
+Date:   Tue, 20 Dec 2022 02:23:06 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Nilesh Javali <njavali@marvell.com>,
+        Manish Rangankar <mrangankar@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>, drv@mailo.com
+Subject: Re: [PATCH] scsi: qla4xxx: Use sysfs_emit in show function callsbacks
+Message-ID: <Y6DPMipC0V00uUu0@qemulion>
+References: <Y5RF+PGBuiXu7UrX@qemulion>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm8450: Use GIC-ITS for PCIe0 and
- PCIe1
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     bhelgaas@google.com, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221219191427.480085-1-manivannan.sadhasivam@linaro.org>
- <20221219191427.480085-4-manivannan.sadhasivam@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221219191427.480085-4-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5RF+PGBuiXu7UrX@qemulion>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Dec 10, 2022 at 02:10:24PM +0530, Deepak R Varma wrote:
+> According to Documentation/filesystems/sysfs.rst, the show() callback
+> function of kobject attributes should strictly use sysfs_emit instead
+> of sprintf family functions.
+> Issue identified using the coccinelle device_attr_show.cocci script.
+>
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
 
+Hello,
+May I please request a review and feedback on this patch?
 
-On 19.12.2022 20:14, Manivannan Sadhasivam wrote:
-> Both PCIe0 and PCIe1 controllers are capable of receiving MSIs from
-> endpoint devices using GIC-ITS MSI controller. Add support for it.
-> 
-> Currently, BDF (0:0.0) and BDF (1:0.0) are enabled and with the
-> msi-map-mask of 0xff00, all the 32 devices under these two busses can
-> share the same Device ID.
-> 
-> The GIC-ITS MSI implementation provides an advantage over internal MSI
-> implementation using Locality-specific Peripheral Interrupts (LPI) that
-> would allow MSIs to be targeted for each CPU core.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Thank you,
+./drv
+
 > ---
-This breaks PCIe Wi-Fi on Xperia 1 IV:
+>  drivers/scsi/qla4xxx/ql4_attr.c | 32 ++++++++++++++++----------------
+>  1 file changed, 16 insertions(+), 16 deletions(-)
+>
+> diff --git a/drivers/scsi/qla4xxx/ql4_attr.c b/drivers/scsi/qla4xxx/ql4_attr.c
+> index abfa6ef60480..773b8dbe1121 100644
+> --- a/drivers/scsi/qla4xxx/ql4_attr.c
+> +++ b/drivers/scsi/qla4xxx/ql4_attr.c
+> @@ -156,11 +156,11 @@ qla4xxx_fw_version_show(struct device *dev,
+>  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+>
+>  	if (is_qla80XX(ha))
+> -		return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d (%x)\n",
+> +		return sysfs_emit(buf, "%d.%02d.%02d (%x)\n",
+>  				ha->fw_info.fw_major, ha->fw_info.fw_minor,
+>  				ha->fw_info.fw_patch, ha->fw_info.fw_build);
+>  	else
+> -		return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d.%02d\n",
+> +		return sysfs_emit(buf, "%d.%02d.%02d.%02d\n",
+>  				ha->fw_info.fw_major, ha->fw_info.fw_minor,
+>  				ha->fw_info.fw_patch, ha->fw_info.fw_build);
+>  }
+> @@ -170,7 +170,7 @@ qla4xxx_serial_num_show(struct device *dev, struct device_attribute *attr,
+>  			char *buf)
+>  {
+>  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> -	return snprintf(buf, PAGE_SIZE, "%s\n", ha->serial_number);
+> +	return sysfs_emit(buf, "%s\n", ha->serial_number);
+>  }
+>
+>  static ssize_t
+> @@ -178,7 +178,7 @@ qla4xxx_iscsi_version_show(struct device *dev, struct device_attribute *attr,
+>  			   char *buf)
+>  {
+>  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> -	return snprintf(buf, PAGE_SIZE, "%d.%02d\n", ha->fw_info.iscsi_major,
+> +	return sysfs_emit(buf, "%d.%02d\n", ha->fw_info.iscsi_major,
+>  			ha->fw_info.iscsi_minor);
+>  }
+>
+> @@ -187,7 +187,7 @@ qla4xxx_optrom_version_show(struct device *dev, struct device_attribute *attr,
+>  			    char *buf)
+>  {
+>  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> -	return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d.%02d\n",
+> +	return sysfs_emit(buf, "%d.%02d.%02d.%02d\n",
+>  			ha->fw_info.bootload_major, ha->fw_info.bootload_minor,
+>  			ha->fw_info.bootload_patch, ha->fw_info.bootload_build);
+>  }
+> @@ -197,7 +197,7 @@ qla4xxx_board_id_show(struct device *dev, struct device_attribute *attr,
+>  		      char *buf)
+>  {
+>  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> -	return snprintf(buf, PAGE_SIZE, "0x%08X\n", ha->board_id);
+> +	return sysfs_emit(buf, "0x%08X\n", ha->board_id);
+>  }
+>
+>  static ssize_t
+> @@ -207,7 +207,7 @@ qla4xxx_fw_state_show(struct device *dev, struct device_attribute *attr,
+>  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+>
+>  	qla4xxx_get_firmware_state(ha);
+> -	return snprintf(buf, PAGE_SIZE, "0x%08X%8X\n", ha->firmware_state,
+> +	return sysfs_emit(buf, "0x%08X%8X\n", ha->firmware_state,
+>  			ha->addl_fw_state);
+>  }
+>
+> @@ -220,7 +220,7 @@ qla4xxx_phy_port_cnt_show(struct device *dev, struct device_attribute *attr,
+>  	if (is_qla40XX(ha))
+>  		return -ENOSYS;
+>
+> -	return snprintf(buf, PAGE_SIZE, "0x%04X\n", ha->phy_port_cnt);
+> +	return sysfs_emit(buf, "0x%04X\n", ha->phy_port_cnt);
+>  }
+>
+>  static ssize_t
+> @@ -232,7 +232,7 @@ qla4xxx_phy_port_num_show(struct device *dev, struct device_attribute *attr,
+>  	if (is_qla40XX(ha))
+>  		return -ENOSYS;
+>
+> -	return snprintf(buf, PAGE_SIZE, "0x%04X\n", ha->phy_port_num);
+> +	return sysfs_emit(buf, "0x%04X\n", ha->phy_port_num);
+>  }
+>
+>  static ssize_t
+> @@ -244,7 +244,7 @@ qla4xxx_iscsi_func_cnt_show(struct device *dev, struct device_attribute *attr,
+>  	if (is_qla40XX(ha))
+>  		return -ENOSYS;
+>
+> -	return snprintf(buf, PAGE_SIZE, "0x%04X\n", ha->iscsi_pci_func_cnt);
+> +	return sysfs_emit(buf, "0x%04X\n", ha->iscsi_pci_func_cnt);
+>  }
+>
+>  static ssize_t
+> @@ -253,7 +253,7 @@ qla4xxx_hba_model_show(struct device *dev, struct device_attribute *attr,
+>  {
+>  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+>
+> -	return snprintf(buf, PAGE_SIZE, "%s\n", ha->model_name);
+> +	return sysfs_emit(buf, "%s\n", ha->model_name);
+>  }
+>
+>  static ssize_t
+> @@ -261,7 +261,7 @@ qla4xxx_fw_timestamp_show(struct device *dev, struct device_attribute *attr,
+>  			  char *buf)
+>  {
+>  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> -	return snprintf(buf, PAGE_SIZE, "%s %s\n", ha->fw_info.fw_build_date,
+> +	return sysfs_emit(buf, "%s %s\n", ha->fw_info.fw_build_date,
+>  			ha->fw_info.fw_build_time);
+>  }
+>
+> @@ -270,7 +270,7 @@ qla4xxx_fw_build_user_show(struct device *dev, struct device_attribute *attr,
+>  			   char *buf)
+>  {
+>  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> -	return snprintf(buf, PAGE_SIZE, "%s\n", ha->fw_info.fw_build_user);
+> +	return sysfs_emit(buf, "%s\n", ha->fw_info.fw_build_user);
+>  }
+>
+>  static ssize_t
+> @@ -278,7 +278,7 @@ qla4xxx_fw_ext_timestamp_show(struct device *dev, struct device_attribute *attr,
+>  			      char *buf)
+>  {
+>  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> -	return snprintf(buf, PAGE_SIZE, "%s\n", ha->fw_info.extended_timestamp);
+> +	return sysfs_emit(buf, "%s\n", ha->fw_info.extended_timestamp);
+>  }
+>
+>  static ssize_t
+> @@ -300,7 +300,7 @@ qla4xxx_fw_load_src_show(struct device *dev, struct device_attribute *attr,
+>  		break;
+>  	}
+>
+> -	return snprintf(buf, PAGE_SIZE, "%s\n", load_src);
+> +	return sysfs_emit(buf, "%s\n", load_src);
+>  }
+>
+>  static ssize_t
+> @@ -309,7 +309,7 @@ qla4xxx_fw_uptime_show(struct device *dev, struct device_attribute *attr,
+>  {
+>  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+>  	qla4xxx_about_firmware(ha);
+> -	return snprintf(buf, PAGE_SIZE, "%u.%u secs\n", ha->fw_uptime_secs,
+> +	return sysfs_emit(buf, "%u.%u secs\n", ha->fw_uptime_secs,
+>  			ha->fw_uptime_msecs);
+>  }
+>
+> --
+> 2.34.1
+>
 
-[   32.711199] ath11k_pci 0000:01:00.0: Adding to iommu group 5
-[   32.713738] ath11k_pci 0000:01:00.0: BAR 0: assigned [mem 0x60400000-0x605fffff 64bit]
-[   32.715447] ath11k_pci 0000:01:00.0: MSI vectors: 32
-[   32.715485] ath11k_pci 0000:01:00.0: wcn6855 hw2.1
-[   32.873873] mhi mhi0: Requested to power ON
-[   32.873896] mhi mhi0: Power on setup success
-[   65.161798] arm-smmu 15000000.iommu: Unhandled context fault: fsr=0x402, iova=0x91517088, fsynr=0x640001, cbfrsynra=0x1c00, cb=5
 
-
-Konrad
->  arch/arm64/boot/dts/qcom/sm8450.dtsi | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 570475040d95..276ceba4c247 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -1733,9 +1733,9 @@ pcie0: pci@1c00000 {
->  			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
->  				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
->  
-> -			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
-> -			interrupt-names = "msi";
-> -			#interrupt-cells = <1>;
-> +			msi-map = <0x0 &gic_its 0x5980 0x1>,
-> +				  <0x100 &gic_its 0x5981 0x1>;
-> +			msi-map-mask = <0xff00>;
->  			interrupt-map-mask = <0 0 0 0x7>;
->  			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
->  					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
-> @@ -1842,9 +1842,9 @@ pcie1: pci@1c08000 {
->  			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
->  				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
->  
-> -			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
-> -			interrupt-names = "msi";
-> -			#interrupt-cells = <1>;
-> +			msi-map = <0x0 &gic_its 0x5a01 0x1>,
-> +				  <0x100 &gic_its 0x5a00 0x1>;
-> +			msi-map-mask = <0xff00>;
->  			interrupt-map-mask = <0 0 0 0x7>;
->  			interrupt-map = <0 0 0 1 &intc 0 0 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
->  					<0 0 0 2 &intc 0 0 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
