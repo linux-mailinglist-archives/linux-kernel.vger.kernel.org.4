@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CA36510C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 17:56:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 443DA6510C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 17:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbiLSQ4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 11:56:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39274 "EHLO
+        id S232274AbiLSQ5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 11:57:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbiLSQ4j (ORCPT
+        with ESMTP id S232363AbiLSQ47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 11:56:39 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63425FD7;
-        Mon, 19 Dec 2022 08:56:38 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id tz12so22986492ejc.9;
-        Mon, 19 Dec 2022 08:56:38 -0800 (PST)
+        Mon, 19 Dec 2022 11:56:59 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C11A12D18;
+        Mon, 19 Dec 2022 08:56:58 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id gh17so23044100ejb.6;
+        Mon, 19 Dec 2022 08:56:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=MW9IUi38LGJbWOititTnXuZuxcZ+qs+mMT17ZPnQkKo=;
-        b=OeS+09a5otGiv+Kpp8lLf+vmlBCzLGRQR7qaXnlrCYGE2jyYt7zZ96biw1Dqc+/HT0
-         A/HvI2rQK1PhpdXfAu8BkfTe8SpXixvvkcogsKLFjRipBr3Z/72DkU+uGlsb2940rucX
-         sJo4GcqGJ8KVxFlsN4DisdJDmDEFTWGBogewBBWvwny/hCGMSXzuO1jLOAFn7f81cByM
-         2Akq7VTkHMbjuCNNk7/JNHnR0SHjuLGoWFp+5JjOmjPV9MED3JTPNEVgrfs/UmaxukWZ
-         NqtQXG8SUkdFIAnSufSaC16d3VGbJLX5xiQTfvDLeJ0Pre0Zko9oKo/6wUsaRHJ52u5f
-         n6wQ==
+        bh=Gb1Ci/peDFXem9KQH4YU7Ajcj0W54+LbHk+JTs6pzhc=;
+        b=UmDPOgnX9rup6tCIGhloyjt6lRLcVZejtv4yKWpWgWwcK/Hfacc0swYAY457jUkhri
+         z5OzYxcIh/efEjrvv6MzGJIbeH6ygsTbO9N0FgEGjJHwnprbJvYQIpjfGO0bpwGPju8y
+         MHnKEqKBLVADfiBhuGYf7+R6UCKEmTgbgSaAm3FoxplZlfxonWhg9FgInq5DJtE6awFS
+         DIjXQZLg2sm8Tlchzw8JTDqWRQqk3PZ7P8TUoMYpxbHe/bV7M5vcvTYc8TB0E3zeclwp
+         41/8670nFhZvHxF94m47MJ8pzhP79gbv5DUfGRKCPs3s9/ltjvaUU89jBNQANKbv3CHF
+         eurA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MW9IUi38LGJbWOititTnXuZuxcZ+qs+mMT17ZPnQkKo=;
-        b=VvNYLSE6x30Wn40lWiODiMWcL2MzMoHSEQogFALeIEMlm+w1G0VnEqTUwQGyeZXOnb
-         mvB9MftS/H0JlwTmzoT2GSqfEa6xAYRi3OWfyngGzFtksYm+QS3Pm+ZWcqoIokpfV4xf
-         8XMNb7OOvT1AqbDqsg92amKVQgkOiuBO99Fs5T8JBEJ1Y4PVbPXQMMlsfyVOwfANM/s4
-         JV9E4smpLpDcahP6bLC+eojExqTe+JyBwlGosw8ejoA7GZOw7sMsg2KlxcxtvlVIhWao
-         nMKxeu1ZCBoaQFJwKb+KqIlDaQlCqQeAxsvAVArzAjr0ptEj2h72QePoJqyoKREyxJq4
-         susg==
-X-Gm-Message-State: ANoB5pn96+DQ05p58wm6mR1rw/XtLClZx/cEbC5xCLOgTsTCSqDQO79J
-        ke+5RfNBg49OKiZJFTiezLo=
-X-Google-Smtp-Source: AA0mqf41B2/H4EPNsKQaq9hNNH4wwwkWyo/RIZIY1kQU+RhK6rFFtS4wChCTmLuHjDyyznqvRl+W0Q==
-X-Received: by 2002:a17:907:11c8:b0:7c0:beee:2f06 with SMTP id va8-20020a17090711c800b007c0beee2f06mr34217874ejb.52.1671468997317;
-        Mon, 19 Dec 2022 08:56:37 -0800 (PST)
+        bh=Gb1Ci/peDFXem9KQH4YU7Ajcj0W54+LbHk+JTs6pzhc=;
+        b=WBfzj+feu5STcO8ZXz3C8LAVm1moxkM5UmtU8kVvTjBnRV/3dGMeMxcILtVyQxqxXx
+         QjLrydG7HWP3aXJWmP+XA/JGcOYcg7sn3hfU7ifkszhNA89jhtcxPfXE0FzFX2NJxeyy
+         i+lkUoxkJS5MMrM1luU6qe6NzdhPsWDjvOcsEucbso/r/eUE5S2yvo46kUn7xeN3MHs+
+         EGHnI0DBRUu0I+1ucex7VYsSAlK3IhIjbAB0EZ1zucitV2QrW3y791CK9TZ56vrcJmBu
+         FBv5SxMPqTHOA2uhYtFd+Tenu04udCFxNLsihXnETqV0eLLNIguq94PKEK6SR3wKrJi+
+         fTZw==
+X-Gm-Message-State: ANoB5pm8hPFpzs/GVUoY5OFKlE6lHiqMeqxZf0DWp3zqBz9Vl0R88aol
+        7b81mOoVnFRnNUhHPyT9g8o=
+X-Google-Smtp-Source: AA0mqf4bqKwTMm/poacEbbnbaz1b85s0kV6pg/w2GLVW64PdSvJIQpi543GO23QSmuWnnclDXJC8+w==
+X-Received: by 2002:a17:906:18e2:b0:78d:f455:c381 with SMTP id e2-20020a17090618e200b0078df455c381mr37139173ejf.39.1671469016673;
+        Mon, 19 Dec 2022 08:56:56 -0800 (PST)
 Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id rs13-20020a170907036d00b0077a1dd3e7b7sm4623533ejb.102.2022.12.19.08.56.36
+        by smtp.gmail.com with ESMTPSA id m18-20020a1709062ad200b0073dbaeb50f6sm4605585eje.169.2022.12.19.08.56.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 08:56:36 -0800 (PST)
-Message-ID: <0b9bb507-1819-4bfa-593f-8b7e92c2ce3d@gmail.com>
-Date:   Mon, 19 Dec 2022 17:56:35 +0100
+        Mon, 19 Dec 2022 08:56:56 -0800 (PST)
+Message-ID: <e54f7b52-3530-59c4-90c6-1fb5a17d6491@gmail.com>
+Date:   Mon, 19 Dec 2022 17:56:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
 From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v4 2/5] dt-bindings: soc: rockchip: grf: add
- rockchip,lvds.yaml
+Subject: [PATCH v4 3/5] dt-bindings: phy: add port node to
+ phy-rockchip-inno-usb2.yaml
 To:     heiko@sntech.de
 Cc:     hjc@rock-chips.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, airlied@gmail.com,
@@ -80,39 +80,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add new converted rockchip,lvds.yaml to grf.yaml file.
-Prepare for more SoCs with lvds output.
+On Rockchip rk3399 a port node with one endpoint can be connected
+to a USB Type-C connector node.
+Add a port node to the phy-rockchip-inno-usb2.yaml file.
 
 Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
- .../devicetree/bindings/soc/rockchip/grf.yaml          | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ .../devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml      | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-index 2ed8cca79..d74295e98 100644
---- a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-+++ b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-@@ -75,13 +75,17 @@ allOf:
-       properties:
-         compatible:
-           contains:
--            const: rockchip,px30-grf
-+            enum:
-+              - rockchip,px30-grf
+diff --git a/Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml b/Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml
+index f71920082..ffc7e7560 100644
+--- a/Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml
++++ b/Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml
+@@ -115,6 +115,11 @@ properties:
+     required:
+       - "#phy-cells"
 
-     then:
-       properties:
-         lvds:
--          description:
--            Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
-+          type: object
++  port:
++    $ref: /schemas/graph.yaml#/properties/port
++    description:
++      Port node with one endpoint connected to a USB Type-C connector node.
 +
-+          $ref: "/schemas/display/rockchip/rockchip,lvds.yaml#"
-+
-+          unevaluatedProperties: false
-
-   - if:
-       properties:
+ required:
+   - compatible
+   - reg
 --
 2.20.1
 
