@@ -2,323 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BFEA650E79
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 850B7650E7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbiLSPQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 10:16:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
+        id S232252AbiLSPSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 10:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232849AbiLSPQQ (ORCPT
+        with ESMTP id S232482AbiLSPRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 10:16:16 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBBB38C;
-        Mon, 19 Dec 2022 07:15:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=w4sSFhh83uAji8+0eAowtyfKSzm6lsgYgeM/KPj3SJw=; b=SQh7IKfej+/jWDV02bPW0rvUTL
-        +/T5pdlopHUCfUuGQMtAWwyYVIrwVk3abapQ+Nd2DmCUaf8MeKFSa7vikK01xS+0wIl+3zTzW/P3g
-        fwEvcz+u1+avs9g5H9A37wuSZiM8BeRgcXmYcotSxGzT1bc5b0SscN7l0evXhV/GKdOk=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:48604 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1p7HrT-0000v1-07; Mon, 19 Dec 2022 10:15:29 -0500
-Date:   Mon, 19 Dec 2022 10:15:26 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>, hugo@hugovil.com
-Message-Id: <20221219101526.ab27daa0971e827128d51a15@hugovil.com>
-In-Reply-To: <CAH+2xPDW04NKD34RjcLO=HP1_KDxe9dvbLC9B4Rv+i3O8S58qQ@mail.gmail.com>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
-        <20221215150214.1109074-2-hugo@hugovil.com>
-        <CAH+2xPDW04NKD34RjcLO=HP1_KDxe9dvbLC9B4Rv+i3O8S58qQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Mon, 19 Dec 2022 10:17:37 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2644463E6;
+        Mon, 19 Dec 2022 07:17:13 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id ay2-20020a05600c1e0200b003d22e3e796dso6709540wmb.0;
+        Mon, 19 Dec 2022 07:17:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SE2wnLe1zQwpUgdkaV82HIeqF7pshRKC4WnQ2bpJY/k=;
+        b=CF+6cPb7SiTANsjqBYJPCXXmWE/kQImVInxzbTAqvBeyI6Xg3uMHdrbFE38oCVdRyu
+         2ZTEDDFuoh8KU67Z7wodP+Z7Yub7qASqMFpnwNsLjkKvm4ROBO3TAw1mtFXT/Grp1VKQ
+         WfBJva0ShpnhqTG/NAgDdiPGBy54qt5RQDrqnVuTMR6FMP/TzTPjLdOvomyy3gJaDf8T
+         pj96Sgz33JCX1R9Kd/XzGyZPimUsIBMF6UpIgeSiat0N9/ZpF8fGhnjXVdDRUh1EFU7p
+         LhyL4welxMQW4AGgJa2XxU/ZRZ7A4T+w6aDearyl8CUYyMokqw5S55U3ZK2KAf/Kw2uS
+         80Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SE2wnLe1zQwpUgdkaV82HIeqF7pshRKC4WnQ2bpJY/k=;
+        b=RVAyV4Fle86FUIRD0VpjTkG5Ld76bXxG9D/pw+T65t0lEwyjbYmmzMexfTYxZ6eYR4
+         C13ec2nfSaEXTD3owQDgghO2pIj+Du4rEtek3sPxZX0yqH/joj7wVDNLZPUm3TwudBpt
+         QLOe7cboswrQo1aQcHWY0cNqSNq4GsbAaO92wBAHDwZHniWUtDSZG4R0FVTmM8Dpf3FS
+         7E7l3i9RIFcE9NKc9n5u7XUAhpfaFQJIo4n0qnYvbs3ru+g7WAWaifa2lL2ScyrKWgPA
+         h2TmvALNdxSJZC0eTp6rjs6Ys2QgmXkzIhLZ6mMH3odT9NJSFxQFEDVgQGmj8sabWEs7
+         bw/w==
+X-Gm-Message-State: AFqh2kpsw+ku7Bdsgc6M8AVgbabYrNI7hFjFeki2DcQ+48cX9dpvjhQp
+        7JX7eXZSM8KKL1PSIudhGJe5y/DfVjA=
+X-Google-Smtp-Source: AMrXdXuH6Zq5ZzI7Dwg/UowK+RUEcQgPwybSI7MWtJprY0o3lhEbsd07Wa6X+KcEVK3Iic5PLouPyg==
+X-Received: by 2002:a7b:c856:0:b0:3d3:4406:8a2e with SMTP id c22-20020a7bc856000000b003d344068a2emr8931252wml.15.1671463031555;
+        Mon, 19 Dec 2022 07:17:11 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id bg2-20020a05600c3c8200b003b47e75b401sm23545595wmb.37.2022.12.19.07.17.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Dec 2022 07:17:11 -0800 (PST)
+Message-ID: <ba8ce731-2d9c-901f-e208-deafe589b723@gmail.com>
+Date:   Mon, 19 Dec 2022 16:17:09 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+To:     Rob Herring <robh+dt@kernel.org>, Moudy Ho <moudy.ho@mediatek.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221207094921.15450-1-moudy.ho@mediatek.com>
+ <20221207094921.15450-2-moudy.ho@mediatek.com>
+ <CAL_JsqKdaVmGKSwR0yiYGKc6Kp6jki632GA6CBOOjGzUmvSRWA@mail.gmail.com>
+Content-Language: en-US
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH v4 1/8] dt-bindings: arm: mediatek: mmsys: Add support for
+ MT8195 VPPSYS
+In-Reply-To: <CAL_JsqKdaVmGKSwR0yiYGKc6Kp6jki632GA6CBOOjGzUmvSRWA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 01/14] rtc: pcf2127: add variant-specific
- configuration structure
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Dec 2022 10:05:53 +0100
-Bruno Thomsen <bruno.thomsen@gmail.com> wrote:
-
-> Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
-> >
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >
-> > Create variant-specific configuration structures to simplify the
-> > implementation of new variants into this driver. It will also avoid
-> > to have too many tests for a specific variant, or a list of variants
-> > for new devices, inside the code itself.
-> >
-> > Add configuration options for the support of the NVMEM, bit CD0 in
-> > register WD_CTL as well as the maximum number of registers for each
-> > variant, instead of hardcoding the variant (PCF2127) inside the
-> > i2c_device_id and spi_device_id structures.
-> >
-> > Also specify a different maximum number of registers (max_register)
-> > for the PCF2129.
-> >
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  drivers/rtc/rtc-pcf2127.c | 95 +++++++++++++++++++++++++++++++--------
-> >  1 file changed, 76 insertions(+), 19 deletions(-)
-> >
-> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > index 87f4fc9df68b..b9a5d47a439f 100644
-> > --- a/drivers/rtc/rtc-pcf2127.c
-> > +++ b/drivers/rtc/rtc-pcf2127.c
-> > @@ -21,6 +21,7 @@
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> >  #include <linux/of_irq.h>
-> > +#include <linux/of_device.h>
-> >  #include <linux/regmap.h>
-> >  #include <linux/watchdog.h>
-> >
-> > @@ -101,10 +102,17 @@
-> >                 PCF2127_BIT_CTRL2_WDTF | \
-> >                 PCF2127_BIT_CTRL2_TSF2)
-> >
-> > +struct pcf21xx_config {
-> > +       int max_register;
-> > +       unsigned int has_nvmem:1;
-> > +       unsigned int has_bit_wd_ctl_cd0:1;
-> > +};
-> > +
-> >  struct pcf2127 {
-> >         struct rtc_device *rtc;
-> >         struct watchdog_device wdd;
-> >         struct regmap *regmap;
-> > +       const struct pcf21xx_config *cfg;
-> >         time64_t ts;
-> >         bool ts_valid;
-> >         bool irq_enabled;
-> > @@ -631,8 +639,27 @@ static const struct attribute_group pcf2127_attr_group = {
-> >         .attrs  = pcf2127_attrs,
-> >  };
-> >
-> > +enum pcf21xx_type {
-> > +       PCF2127,
-> > +       PCF2129,
-> > +       PCF21XX_LAST_ID
-> > +};
-> > +
-> > +static struct pcf21xx_config pcf21xx_cfg[] = {
-> > +       [PCF2127] = {
-> > +               .max_register = 0x1d,
-> > +               .has_nvmem = 1,
-> > +               .has_bit_wd_ctl_cd0 = 1,
-> > +       },
-> > +       [PCF2129] = {
-> > +               .max_register = 0x19,
-> > +               .has_nvmem = 0,
-> > +               .has_bit_wd_ctl_cd0 = 0,
-> > +       },
-> > +};
-> > +
-> >  static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> > -                        int alarm_irq, const char *name, bool is_pcf2127)
-> > +                        int alarm_irq, const char *name, const struct pcf21xx_config *config)
-> >  {
-> >         struct pcf2127 *pcf2127;
-> >         int ret = 0;
-> > @@ -645,6 +672,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> >                 return -ENOMEM;
-> >
-> >         pcf2127->regmap = regmap;
-> > +       pcf2127->cfg = config;
-> >
-> >         dev_set_drvdata(dev, pcf2127);
-> >
-> > @@ -688,7 +716,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> >                 set_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
-> >         }
-> >
-> > -       if (is_pcf2127) {
-> > +       if (pcf2127->cfg->has_nvmem) {
-> >                 struct nvmem_config nvmem_cfg = {
-> >                         .priv = pcf2127,
-> >                         .reg_read = pcf2127_nvmem_read,
-> > @@ -734,7 +762,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> >                                  PCF2127_BIT_WD_CTL_TF1 |
-> >                                  PCF2127_BIT_WD_CTL_TF0,
-> >                                  PCF2127_BIT_WD_CTL_CD1 |
-> > -                                (is_pcf2127 ? PCF2127_BIT_WD_CTL_CD0 : 0) |
-> > +                                (pcf2127->cfg->has_bit_wd_ctl_cd0 ? PCF2127_BIT_WD_CTL_CD0 : 0) |
-> >                                  PCF2127_BIT_WD_CTL_TF1);
-> >         if (ret) {
-> >                 dev_err(dev, "%s: watchdog config (wd_ctl) failed\n", __func__);
-> > @@ -799,9 +827,9 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> >
-> >  #ifdef CONFIG_OF
-> >  static const struct of_device_id pcf2127_of_match[] = {
-> > -       { .compatible = "nxp,pcf2127" },
-> > -       { .compatible = "nxp,pcf2129" },
-> > -       { .compatible = "nxp,pca2129" },
-> > +       { .compatible = "nxp,pcf2127", .data = &pcf21xx_cfg[PCF2127] },
-> > +       { .compatible = "nxp,pcf2129", .data = &pcf21xx_cfg[PCF2129] },
-> > +       { .compatible = "nxp,pca2129", .data = &pcf21xx_cfg[PCF2129] },
-> >         {}
-> >  };
-> >  MODULE_DEVICE_TABLE(of, pcf2127_of_match);
-> > @@ -886,26 +914,40 @@ static const struct regmap_bus pcf2127_i2c_regmap = {
-> >  static struct i2c_driver pcf2127_i2c_driver;
-> >
-> >  static const struct i2c_device_id pcf2127_i2c_id[] = {
-> > -       { "pcf2127", 1 },
-> > -       { "pcf2129", 0 },
-> > -       { "pca2129", 0 },
-> > +       { "pcf2127", PCF2127 },
-> > +       { "pcf2129", PCF2129 },
-> > +       { "pca2129", PCF2129 },
-> >         { }
-> >  };
-> >  MODULE_DEVICE_TABLE(i2c, pcf2127_i2c_id);
-> >
-> >  static int pcf2127_i2c_probe(struct i2c_client *client)
-> >  {
-> > -       const struct i2c_device_id *id = i2c_match_id(pcf2127_i2c_id, client);
-> >         struct regmap *regmap;
-> > -       static const struct regmap_config config = {
-> > +       static struct regmap_config config = {
-> >                 .reg_bits = 8,
-> >                 .val_bits = 8,
-> > -               .max_register = 0x1d,
-> >         };
-> > +       const struct pcf21xx_config *variant;
-> 
-> Hi Hugo,
-> 
-> Patch series does not apply on 6.1 tree as pcf2127_i2c_probe() call
-> signature does not match[1].
-> 
-> static int pcf2127_i2c_probe(struct i2c_client *client,
->       const struct i2c_device_id *id)
-> 
-> 
-> [1] https://elixir.bootlin.com/linux/v6.1/source/drivers/rtc/rtc-pcf2127.c#L888
-> 
-> /Bruno
-
-Hi Bruno,
-I based my driver on the git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git repo, as indicated in the MAINTAINERS file for the RTC subsystem (T: entry). I used the rtc-next branch on this repo.
-
-Can you tell me exactly which repo and branch I need to use to resubmit the driver?
-
-Thank you, Hugo.
 
 
-> >         if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-> >                 return -ENODEV;
-> >
-> > +       if (client->dev.of_node) {
-> > +               variant = of_device_get_match_data(&client->dev);
-> > +               if (!variant)
-> > +                       return -ENODEV;
-> > +       } else {
-> > +               enum pcf21xx_type type =
-> > +                       i2c_match_id(pcf2127_i2c_id, client)->driver_data;
-> > +
-> > +               if (type >= PCF21XX_LAST_ID)
-> > +                       return -ENODEV;
-> > +               variant = &pcf21xx_cfg[type];
-> > +       }
-> > +
-> > +       config.max_register = variant->max_register,
-> > +
-> >         regmap = devm_regmap_init(&client->dev, &pcf2127_i2c_regmap,
-> >                                         &client->dev, &config);
-> >         if (IS_ERR(regmap)) {
-> > @@ -915,7 +957,7 @@ static int pcf2127_i2c_probe(struct i2c_client *client)
-> >         }
-> >
-> >         return pcf2127_probe(&client->dev, regmap, client->irq,
-> > -                            pcf2127_i2c_driver.driver.name, id->driver_data);
-> > +                            pcf2127_i2c_driver.driver.name, variant);
-> >  }
-> >
-> >  static struct i2c_driver pcf2127_i2c_driver = {
-> > @@ -953,17 +995,32 @@ static void pcf2127_i2c_unregister_driver(void)
-> >  #if IS_ENABLED(CONFIG_SPI_MASTER)
-> >
-> >  static struct spi_driver pcf2127_spi_driver;
-> > +static const struct spi_device_id pcf2127_spi_id[];
-> >
-> >  static int pcf2127_spi_probe(struct spi_device *spi)
-> >  {
-> > -       static const struct regmap_config config = {
-> > +       static struct regmap_config config = {
-> >                 .reg_bits = 8,
-> >                 .val_bits = 8,
-> >                 .read_flag_mask = 0xa0,
-> >                 .write_flag_mask = 0x20,
-> > -               .max_register = 0x1d,
-> >         };
-> >         struct regmap *regmap;
-> > +       const struct pcf21xx_config *variant;
-> > +
-> > +       if (spi->dev.of_node) {
-> > +               variant = of_device_get_match_data(&spi->dev);
-> > +               if (!variant)
-> > +                       return -ENODEV;
-> > +       } else {
-> > +               enum pcf21xx_type type = spi_get_device_id(spi)->driver_data;
-> > +
-> > +               if (type >= PCF21XX_LAST_ID)
-> > +                       return -ENODEV;
-> > +               variant = &pcf21xx_cfg[type];
-> > +       }
-> > +
-> > +       config.max_register = variant->max_register,
-> >
-> >         regmap = devm_regmap_init_spi(spi, &config);
-> >         if (IS_ERR(regmap)) {
-> > @@ -974,13 +1031,13 @@ static int pcf2127_spi_probe(struct spi_device *spi)
-> >
-> >         return pcf2127_probe(&spi->dev, regmap, spi->irq,
-> >                              pcf2127_spi_driver.driver.name,
-> > -                            spi_get_device_id(spi)->driver_data);
-> > +                            variant);
-> >  }
-> >
-> >  static const struct spi_device_id pcf2127_spi_id[] = {
-> > -       { "pcf2127", 1 },
-> > -       { "pcf2129", 0 },
-> > -       { "pca2129", 0 },
-> > +       { "pcf2127", PCF2127 },
-> > +       { "pcf2129", PCF2129 },
-> > +       { "pca2129", PCF2129 },
-> >         { }
-> >  };
-> >  MODULE_DEVICE_TABLE(spi, pcf2127_spi_id);
-> > --
-> > 2.30.2
-> >
+On 19/12/2022 14:44, Rob Herring wrote:
+> On Wed, Dec 7, 2022 at 3:49 AM Moudy Ho <moudy.ho@mediatek.com> wrote:
+>>
+>> For MT8195, VPPSYS0 and VPPSYS1 are 2 display pipes with
+>> hardware differences in power domains, clocks and subsystem counts,
+>> which should be determined by compatible names.
+>>
+>> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>   .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml     | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> This landed in today's linux-next causing the following binding
+> warnings. Is this a fix? Only fixes for 6.2 should be added during the
+> merge window.
 > 
 
+No it's not a fix, it's queued for the next -rc phase. I didn't know of the 
+limitation of linux-next only allowing fixes in the merge window.
 
--- 
-Hugo Villeneuve <hugo@hugovil.com>
+Actually the patch is wrong. It shouldn't include "mediatek,mt8195-mmsys" as 
+fallback for mediatek,mt8195-vppsys[0,1].
+
+I'll revert the whole series from v6.2-tmp/dts64 and v6.2-tmp/soc
+
+Regards,
+Matthias
+
+> /builds/robherring/linux-dt/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8195-clock.example.dtb:
+> clock-controller@14000000: $nodename:0: 'clock-controller@14000000'
+> does not match '^syscon@[0-9a-f]+$'
+>          From schema:
+> /builds/robherring/linux-dt/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> /builds/robherring/linux-dt/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8195-clock.example.dtb:
+> clock-controller@14000000: compatible: 'oneOf' conditional failed, one
+> must be fixed:
+>          ['mediatek,mt8195-vppsys0'] is too short
+>          'mediatek,mt8195-vppsys0' is not one of
+> ['mediatek,mt2701-mmsys', 'mediatek,mt2712-mmsys',
+> 'mediatek,mt6765-mmsys', 'mediatek,mt6779-mmsys',
+> 'mediatek,mt6795-mmsys', 'mediatek,mt6797-mmsys',
+> 'mediatek,mt8167-mmsys', 'mediatek,mt8173-mmsys',
+> 'mediatek,mt8183-mmsys', 'mediatek,mt8186-mmsys',
+> 'mediatek,mt8188-vdosys0', 'mediatek,mt8192-mmsys',
+> 'mediatek,mt8365-mmsys']
+>          'mediatek,mt8195-mmsys' was expected
+>          'mediatek,mt7623-mmsys' was expected
+>          From schema:
+> /builds/robherring/linux-dt/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
