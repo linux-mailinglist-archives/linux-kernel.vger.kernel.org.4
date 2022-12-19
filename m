@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5640B651298
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02FFA65129A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbiLSTQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 14:16:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
+        id S232455AbiLSTQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 14:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232410AbiLSTPD (ORCPT
+        with ESMTP id S232499AbiLSTPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 14:15:03 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2153E1183A
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 11:14:46 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id s7so9982261plk.5
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 11:14:46 -0800 (PST)
+        Mon, 19 Dec 2022 14:15:16 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E41513CFB
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 11:14:50 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id b13-20020a17090a5a0d00b0021906102d05so9788463pjd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 11:14:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9agN2hOf+CL4HJ9ZbGXzkjZqDPOgTWQAwGYfyipiHIQ=;
-        b=btxnOBxzbKshtiQvz6qlHOmD0ilj28u9K1pdvGzXZo6Y+y5YVboduUvCynfNY55U8e
-         aNaW42k2fyavRmJ0XxsPWkoHNJ8mUQi6AcvMnccBiakR3XkZOoS9DofZDWEJYqSVnC60
-         OF29eYMnKHv8WCuCbUVwP7IyxidHWEnRpnx9MCmwRyXA4S7ZhGccP9sSFMQyydt4XotT
-         GAN19uexcDovmj6S3jsVUtn65vk0LOy2cWlnLb82KA7kb8nawvOPvaTRAbN8W6huwVDC
-         yFOGtD3YdmWrQqQi+fxscnp0vpKzF4OPvZSbzCz4uevgpgNXWi2buICfjgGYsdgNANsn
-         633w==
+        bh=sAubOkJvINNojNKQySo7fdvunMLKmBVll3HExCwexwo=;
+        b=JuHzAjEtS3z3AoG0EOBAtJfVoGmuEoBwfuq6bv4gk+GZhn3641lIsz8c8HCAhPdSg9
+         FvbtOTJr/o5hDTHq05f6k7k1tYRrGOiH5LqagM9BEjUxIMLsIPqrGaudPeXxVSNvU/US
+         o0Lu7Cw8x8A95clipBqMSjq+zul51e/SovIxqFgsXYlkyVzvwZOK+RLDFRZ+y5ZHlPOj
+         FRmE5NGFNCoXlpeud0gPtFrAk2HU2zXev5LEZ7bSjZB54Gp5/V0qEy7q79flhleD7jc+
+         MyIJTSrLO7wvOSMuxeqkJZFutH3kX+th0e8ZtgxdV1K8+Jk45wGeM400D+1zesaoZXiN
+         tCYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9agN2hOf+CL4HJ9ZbGXzkjZqDPOgTWQAwGYfyipiHIQ=;
-        b=Yn/1BBs+SZa2XWcu17E9FtzJUjpapn3pjm7cu//9bRZaJZEAgjrtFkCFt6U81oMg7a
-         1muslaHHrwabuXmMf2nyHqWHILI2HndkH4QpDsmM2X8mDPSojeTUmEWFjpwDhM/oZ3sG
-         x7FlVUegW0/uD2cgohesO72/0bqyTEHIfcB4PdY98Knrp+I3opzLClmSLADKrX+OcCoA
-         IrIq9OPpQfjdzPuQTFJcv0zbre8xuHa55kez1kwXsV2O8xnCCovjTcCz/kJJorMeKtxD
-         xuymyJoddqO0Z54KVqoiN/cFn5xWniE9UzgDmUypQoPTLQwxSdcBguBK+KQamAFbMamW
-         mVWQ==
-X-Gm-Message-State: ANoB5pkcBj1z+vBfSyU8vWyqFlZ5dH4wyLsdXQUb63qgq4nP7k+Lfwa5
-        ocvT2dzWqIcUoJUhsv82HhYa
-X-Google-Smtp-Source: AA0mqf7+ed63KjB6ZCD3S3TNvfHlUCFvDU+43EXQVENXe0Iof9ZpFio8+fK5fukXHGANR/xjxogyJw==
-X-Received: by 2002:a17:90a:fe0a:b0:219:8cba:cbbd with SMTP id ck10-20020a17090afe0a00b002198cbacbbdmr45654393pjb.32.1671477285810;
-        Mon, 19 Dec 2022 11:14:45 -0800 (PST)
+        bh=sAubOkJvINNojNKQySo7fdvunMLKmBVll3HExCwexwo=;
+        b=n7TLAol4q3848jeiBGG995GfaajGU7W6uUYTyYuKntfCz2UAsfhKSfjvPGkuun9q1d
+         Yw+Ng7x1JPrxHpfoKl446ZiRYvLzF3nYzWbbAKSW4YnvYNrXdaq4Tpv5Ns6wH+tK+91L
+         aM+mg0PHPUTJYaBsGWrDJydFSHDlzWb8fTmbuIZBWaAvUjbn5yNd/kiamVM4xglEomva
+         SJYLveJLdJ3tLKq1PhHl2nwsnsFXLYvkLe9J6LmiN6yK3PvOWoV2sxuvWldHuyTiqn4C
+         A1WCfwUs1FBY09WHUeOkubTSx8UtgeQHpIANnj2MlqGap3w/osoTOMK8W8Sho0Ysf8cG
+         rbQg==
+X-Gm-Message-State: ANoB5pktULqs1NrMzv3YP7tIABmqbYQWLQBI1JCnwBs7HinNL6aX45Kx
+        af0hzKbdvALwpopvP1qlOHl5
+X-Google-Smtp-Source: AA0mqf7bcFYuSkhSlx4GdCaQjF/wzvulHntCyBcCywh+NNbwUHeolME6QXhdkW/x1vnDIOoLUlThdQ==
+X-Received: by 2002:a17:90b:378c:b0:21e:1282:af42 with SMTP id mz12-20020a17090b378c00b0021e1282af42mr41810543pjb.40.1671477289675;
+        Mon, 19 Dec 2022 11:14:49 -0800 (PST)
 Received: from localhost.localdomain ([220.158.159.17])
-        by smtp.gmail.com with ESMTPSA id z4-20020a17090a66c400b001f94d25bfabsm9485803pjl.28.2022.12.19.11.14.40
+        by smtp.gmail.com with ESMTPSA id z4-20020a17090a66c400b001f94d25bfabsm9485803pjl.28.2022.12.19.11.14.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 11:14:44 -0800 (PST)
+        Mon, 19 Dec 2022 11:14:48 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     andersson@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org
@@ -57,9 +57,9 @@ Cc:     bhelgaas@google.com, konrad.dybcio@linaro.org,
         linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 2/3] dt-bindings: PCI: qcom: Document msi-map and msi-map-mask properties
-Date:   Tue, 20 Dec 2022 00:44:26 +0530
-Message-Id: <20221219191427.480085-3-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 3/3] arm64: dts: qcom: sm8450: Use GIC-ITS for PCIe0 and PCIe1
+Date:   Tue, 20 Dec 2022 00:44:27 +0530
+Message-Id: <20221219191427.480085-4-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221219191427.480085-1-manivannan.sadhasivam@linaro.org>
 References: <20221219191427.480085-1-manivannan.sadhasivam@linaro.org>
@@ -67,61 +67,60 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Qcom PCIe controller is capable of using either internal MSI controller
-or the external GIC-ITS for receiving the MSIs from endpoint devices.
-Currently, the binding only documents the internal MSI implementation.
+Both PCIe0 and PCIe1 controllers are capable of receiving MSIs from
+endpoint devices using GIC-ITS MSI controller. Add support for it.
 
-Let's document the GIC-ITS imeplementation by making use of msi-map and
-msi-map-mask properties.
+Currently, BDF (0:0.0) and BDF (1:0.0) are enabled and with the
+msi-map-mask of 0xff00, all the 32 devices under these two busses can
+share the same Device ID.
+
+The GIC-ITS MSI implementation provides an advantage over internal MSI
+implementation using Locality-specific Peripheral Interrupts (LPI) that
+would allow MSIs to be targeted for each CPU core.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- .../devicetree/bindings/pci/qcom,pcie.yaml       | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8450.dtsi | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-index 02450fb26bb9..24c3e7ef14eb 100644
---- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-+++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-@@ -100,18 +100,28 @@ properties:
-     description: GPIO controlled connection to WAKE# signal
-     maxItems: 1
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index 570475040d95..276ceba4c247 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -1733,9 +1733,9 @@ pcie0: pci@1c00000 {
+ 			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
+ 				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
  
-+  msi-map: true
-+
-+  msi-map-mask: true
-+
- required:
-   - compatible
-   - reg
-   - reg-names
--  - interrupts
--  - interrupt-names
--  - "#interrupt-cells"
-   - interrupt-map-mask
-   - interrupt-map
-   - clocks
-   - clock-names
+-			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
+-			interrupt-names = "msi";
+-			#interrupt-cells = <1>;
++			msi-map = <0x0 &gic_its 0x5980 0x1>,
++				  <0x100 &gic_its 0x5981 0x1>;
++			msi-map-mask = <0xff00>;
+ 			interrupt-map-mask = <0 0 0 0x7>;
+ 			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+ 					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+@@ -1842,9 +1842,9 @@ pcie1: pci@1c08000 {
+ 			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
+ 				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
  
-+oneOf:
-+  - required:
-+      - interrupts
-+      - interrupt-names
-+      - "#interrupt-cells"
-+  - required:
-+      - msi-map
-+      - msi-map-mask
-+
- allOf:
-   - $ref: /schemas/pci/pci-bus.yaml#
-   - if:
+-			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
+-			interrupt-names = "msi";
+-			#interrupt-cells = <1>;
++			msi-map = <0x0 &gic_its 0x5a01 0x1>,
++				  <0x100 &gic_its 0x5a00 0x1>;
++			msi-map-mask = <0xff00>;
+ 			interrupt-map-mask = <0 0 0 0x7>;
+ 			interrupt-map = <0 0 0 1 &intc 0 0 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+ 					<0 0 0 2 &intc 0 0 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
 -- 
 2.25.1
 
