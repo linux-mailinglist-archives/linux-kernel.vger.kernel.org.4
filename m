@@ -2,110 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D652650B4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81650650B50
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:19:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbiLSMSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 07:18:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S231648AbiLSMTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 07:19:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231631AbiLSMSi (ORCPT
+        with ESMTP id S231993AbiLSMTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 07:18:38 -0500
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEA0E4A;
-        Mon, 19 Dec 2022 04:18:37 -0800 (PST)
-Received: by mail-ua1-x929.google.com with SMTP id e24so2021962uam.10;
-        Mon, 19 Dec 2022 04:18:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YvLnmu4Wq8jjqUUGJ/Mh5PFJXWDf0nAdtM6JdYMI7IU=;
-        b=UkeSJy17prYpZznPUkfkZ6vitltPqv/vkSPQAc8jUKhELnuYIlrCWeNqjwfscstCMM
-         Xpwd0/+MFN16pkQ623U24NKZdrv+/iBaKhhG103g2iUbI7v8Mgsgs0tOBZ3k2qfR59DQ
-         woEWK/LkIftDiLxjR7vIEJRjiQtsrROPuVaGdWXDPdcb7xRFvctRVWq67/cYwzRICso4
-         QkrSCctqIn5k0LGtb7c53c9dvFgbmVAqvosfcu7J0Lx1TGSjzowx3aNdWRZZWONhm9Bs
-         QdVDsgP7Ntkw1mdJbDc5KER0cBo+ShJk5oqtpdqDIlTVJKxGIb75V6pf1N1yNIMJyLM+
-         iuAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YvLnmu4Wq8jjqUUGJ/Mh5PFJXWDf0nAdtM6JdYMI7IU=;
-        b=A5ybd95tjO81AUiLbxNtSRNdpTFzOeyTNOwrejC8fUb9pLZJwMRyPoEoykCwIW4z6K
-         dYfT3DobMv1Jmhk9ibCxDLxFcFl+rwZmsKlII0EP+qMgSeTYh7ycqvT7wr7Tfrqz+TWG
-         lWqGu23ydi3J1E5s/eRovRhRUjJ9qJuax3Eq+8cIzP+fq+9FvHpqMNUCA3bMe1WJcoZG
-         aAz4HRMS1n86gIePaLObORqFRd4SUruT+UbxtMkd4JIeKbPbV2Bc8zgeyE6hBbZkYtFs
-         NCmjlW8R8zbUwZ3gCUjiqngslBHCIZIJJYkiAdZUF4hX6yBXxUresmeGDFGQhk3UTDBd
-         qAmA==
-X-Gm-Message-State: ANoB5pmJQJrm0ROJVMOXbRMVFh5zwCn+rR5selzqm+FF7FGQbtRppJpp
-        rgy3zEYCQXYdNDmg2GtKnpSc9Hd0dYluZvYs53i+/j78i02r/3Q409I=
-X-Google-Smtp-Source: AA0mqf6nPovE1C1F5nKtDRiSxN9ZxHW96bV9sRtMh92ObF0Wj6j/kYZTZ8GwxdeFNjnyhJRKl4rgO3vbKrWzAbdtNQg=
-X-Received: by 2002:a9f:23ca:0:b0:3d7:3610:45fc with SMTP id
- 68-20020a9f23ca000000b003d7361045fcmr52992500uao.120.1671452316259; Mon, 19
- Dec 2022 04:18:36 -0800 (PST)
+        Mon, 19 Dec 2022 07:19:23 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E472CF00A
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 04:19:20 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.25.143])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8B7BB66003EF;
+        Mon, 19 Dec 2022 12:19:16 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671452359;
+        bh=Fkz+8txKDcicaeIC9mB036Q3Ziqc1S7XLdS0osTQ2/4=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=OOaYhixDWGFqE3vejEvHLy8xD9kzMYpd5fRD3bGI3J8jbdi1qpnCnz6+Tc+ZGNJK1
+         WNYGFzQTGqSkDHonTfE0c+f/1QzMyNQ00BjL4SwUzGdhKSmcxeB8JfWMNdXVnYDhrp
+         0UfPHT1zITbBIr0W6RNQWOb1UVJt1kv0rD57sKzJgDK/02dSLv4K8AnIaP9TJFF0dk
+         mfVKyVsanQRAoEvaRpzfbvK//ADI46Sj6gsGEcM5+eLGsmClFKUDvppjqT3yAKxoQq
+         R1Yj4ekutk9AJ1P21cZEb9xNacwynqZmJ4UGbEJsWcLQP/S3rcmxIJRMnoWqJD4+/G
+         e5/86rq5GoojA==
+Message-ID: <e3c26b56-5458-eb25-c753-fc4c058ba1b1@collabora.com>
+Date:   Mon, 19 Dec 2022 17:19:12 +0500
 MIME-Version: 1.0
-References: <20221216073141.3289309-1-milkfafa@gmail.com> <20221216073141.3289309-3-milkfafa@gmail.com>
- <525fd984-0b67-8e11-d13c-7c4ee1853c4e@linaro.org> <22a055a9-a14b-e8b7-84e2-b091a05a3ba4@linaro.org>
-In-Reply-To: <22a055a9-a14b-e8b7-84e2-b091a05a3ba4@linaro.org>
-From:   Kun-Fa Lin <milkfafa@gmail.com>
-Date:   Mon, 19 Dec 2022 20:18:25 +0800
-Message-ID: <CADnNmFrvDWg6kK==Yje_RrOO=V-DBJiBhtOF84yC-aKvwBQrQA@mail.gmail.com>
-Subject: Re: [PATCH v16 2/3] dt-bindings: edac: nuvoton: Add document for NPCM
- memory controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-edac@vger.kernel.org, rric@kernel.org, james.morse@arm.com,
-        tony.luck@intel.com, mchehab@kernel.org, bp@alien8.de,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        benjaminfair@google.com, yuenn@google.com, venture@google.com,
-        KWLIU@nuvoton.com, YSCHU@nuvoton.com, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, ctcchien@nuvoton.com,
-        kflin@nuvoton.com, Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        kernel@collabora.com
+Subject: Re: [PATCH v4 1/3] mm/mprotect: Fix soft-dirty check in
+ can_change_pte_writable()
+To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Gofman <pgofman@codeweavers.com>
+References: <20220725142048.30450-1-peterx@redhat.com>
+ <20220725142048.30450-2-peterx@redhat.com>
+ <b75653b8-5264-ca03-bf5c-671e07e7fdd8@collabora.com> <Y3gRy8pUiYWFGqcI@x1n>
+ <a9984aa6-41bc-17c3-b564-87b997c0f2d0@collabora.com> <Y3vq18eTOE0e7I1+@x1n>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y3vq18eTOE0e7I1+@x1n>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On 11/22/22 2:17 AM, Peter Xu wrote:
+> On Mon, Nov 21, 2022 at 07:57:05PM +0500, Muhammad Usama Anjum wrote:
+>> Hi Peter,
+>>
+>> Thank you so much for replying.
+>>
+>> On 11/19/22 4:14 AM, Peter Xu wrote:
+>>> On Sat, Nov 19, 2022 at 01:16:26AM +0500, Muhammad Usama Anjum wrote:
+>>>> Hi Peter and David,
+>>>
+>>> Hi, Muhammad,
+>>>
+>>>>
+>>>> On 7/25/22 7:20 PM, Peter Xu wrote:
+>>>>> The check wanted to make sure when soft-dirty tracking is enabled we won't
+>>>>> grant write bit by accident, as a page fault is needed for dirty tracking.
+>>>>> The intention is correct but we didn't check it right because VM_SOFTDIRTY
+>>>>> set actually means soft-dirty tracking disabled.  Fix it.
+>>>> [...]
+>>>>> +static inline bool vma_soft_dirty_enabled(struct vm_area_struct *vma)
+>>>>> +{
+>>>>> +	/*
+>>>>> +	 * NOTE: we must check this before VM_SOFTDIRTY on soft-dirty
+>>>>> +	 * enablements, because when without soft-dirty being compiled in,
+>>>>> +	 * VM_SOFTDIRTY is defined as 0x0, then !(vm_flags & VM_SOFTDIRTY)
+>>>>> +	 * will be constantly true.
+>>>>> +	 */
+>>>>> +	if (!IS_ENABLED(CONFIG_MEM_SOFT_DIRTY))
+>>>>> +		return false;
+>>>>> +
+>>>>> +	/*
+>>>>> +	 * Soft-dirty is kind of special: its tracking is enabled when the
+>>>>> +	 * vma flags not set.
+>>>>> +	 */
+>>>>> +	return !(vma->vm_flags & VM_SOFTDIRTY);
+>>>>> +}
+>>>> I'm sorry. I'm unable to understand the inversion here.
+>>>>> its tracking is enabled when the vma flags not set.
+>>>> VM_SOFTDIRTY is set on the VMA when new VMA is allocated to mark is
+>>>> soft-dirty. When we write to clear_refs to clear soft-dirty bit,
+>>>> VM_SOFTDIRTY is cleared from the VMA as well. Then why do you say tracking
+>>>> is enabled when the vma flags not set?
+>>>
+>>> Because only when 4>clear_refs happens would VM_SOFTDIRTY be cleared, and
+>>> only until then the real tracking starts (by removing write bits on ptes).
+>> But even if the VM_SOFTDIRTY is set on the VMA, the individual pages are
+>> still marked soft-dirty. Both are independent.
+>>
+>> It means tracking is enabled all the time in individual pages.
+Addition of vma_soft_dirty_enabled() has tinkered with the soft-dirty PTE
+bit status setting. The internal behavior has changed. The test case was
+shared by David
+(https://lore.kernel.org/all/bfcae708-db21-04b4-0bbe-712badd03071@redhat.com/).
+The explanation is as following:
 
-Thanks for the review.
+_Before_ addition of this patch(76aefad628aae),
+m = mmap(2 pages)
+clear_softdirty()
+mremap(m + pag_size)
+mprotect(READ)
+mprotect(READ | WRITE);
+memset(m)
+After memset(),
+			PAGE-1		PAGE-2
+VM_SOFTDIRTY		set		set
+PTE softdirty flag	set		set
+/proc//pagemap view	set		set
 
-> > So this is a 16th version but through this entire year you never Cced
-> > the maintainers... You did not send a single version to the memory
-> > controller maintainers.
-> >
-> > I don't know why it is so big problem to use scripts/get_maintainers.pl.
->
-> Although maybe the reason for this is that it was being put in edac
-> directory... eh...
 
-I should check the CC list for each version anyway. I'm sorry about that.
+_After_ addition of this patch(76aefad628aae)
+m = mmap(2 pages)
+clear_softdirty()
+mremap(m + page_size)
+mprotect(READ)
+mprotect(READ | WRITE);
+memset(m)
+After memset(),
+			PAGE-1		PAGE-2
+VM_SOFTDIRTY		set		set
+PTE softdirty flag	*not set*	set
+/proc//pagemap view	set		set
 
-> > +++ b/Documentation/devicetree/bindings/memory-controllers/nuvoton,npcm-mc.yaml
->
-> filename based on compatibles, so nuvoton,npcm-memory-controller.yaml
+The user's point of view hasn't changed. But internally after this patch,
+the soft-dirty tracking in PTEs gets turn off if VM_SOFTDIRTY is set. The
+soft-dirty tracking in the PTEs shouldn't be just turned off when mprotect
+is used. Why? Because soft-dirty tracking in the PTEs is always enabled
+regardless of VM_SOFTDIRTY is set or not. Example:
 
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +
->
-> No blank lines.
+m = mem(2 pages)
+At this point:
+			PAGE-1		PAGE-2
+VM_SOFTDIRTY		set		set
+PTE softdirty flag	not set		not set
+/proc//pagemap view	set		set
+memset(m)
+At this point:
+			PAGE-1		PAGE-2
+VM_SOFTDIRTY		set		set
+PTE softdirty flag	set		set
+/proc//pagemap view	set		set
 
-> > +    ahb {
-> > +        #address-cells = <1>;
-> > +        #size-cells = <1>;
->
-> Why do you need this node in the example?
+This example proves that soft-dirty flag on the PTE is set regardless of
+the VM_SOFTDIRTY.
 
-These problems will be addressed in next patch. Thank you.
+The simplest hack to get rid this changed behavior and revert to the
+previous behaviour is as following:
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -860,6 +860,8 @@ static inline bool vma_soft_dirty_enabled(struct
+vm_area_struct *vma)
+        if (!IS_ENABLED(CONFIG_MEM_SOFT_DIRTY))
+                return false;
 
-Regards,
-Marvin
++       return true;
++
+        /*
+         * Soft-dirty is kind of special: its tracking is enabled when the
+         * vma flags not set.
+I was trying to verify this hack. But I couldn't previously until @Paul has
+mentioned this again. I've verified with limited tests that this hack
+in-deed works. We are unaware that does this hack create problems in other
+areas or not. We can think of better way to solve this. Once we get the
+comments from the community.
+
+This internal behavior change is affecting the new feature addition to the
+soft-dirty flag which is already delicate and has issues.
+(https://lore.kernel.org/all/20221109102303.851281-1-usama.anjum@collabora.com/)
+
+> 
+> IMHO it depends on how we define "tracking enabled" - before clear_refs
+> even if no pages written they'll also be reported as dirty, then the
+> information is useless.
+> 
+>> Only the soft-dirty bit status in individual page isn't significant if
+>> VM_SOFTDIRTY already is set. Right?
+> 
+> Yes.  But I'd say it makes more sense to say "tracking enabled" if we
+> really started tracking (by removing the write bits in ptes, otherwise we
+> did nothing).  When vma created we didn't track anything.
+> 
+> I don't know the rational of why soft-dirty was defined like that.  I think
+> it's somehow related to the fact that we allow false positive dirty pages
+> not false negative.  IOW, it's a bug to leak a page being dirtied, but not
+> vice versa if we report clean page dirty.
+> 
+
+-- 
+BR,
+Muhammad Usama Anjum
