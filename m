@@ -2,71 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987D0650E90
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52AF4650E93
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbiLSPXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 10:23:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
+        id S232054AbiLSPZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 10:25:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiLSPXf (ORCPT
+        with ESMTP id S231631AbiLSPZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 10:23:35 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F09640D;
-        Mon, 19 Dec 2022 07:23:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=buA/ZEow5OjkGUtOsIBYGacja4Fo6Mielfu3hKR75DQ=; b=rSDogOt/lnBUdJPhFbObGx09xp
-        7+7Lm9V4wk39bJ33dkaYKYPcjA/jGvBtO81NJyi45vPdIP8EIp36MRebWL+fX4l9MACM5oyOSBu1L
-        jEE4s9Crb6UWcLQ4Le5715Un6OSyT6k2qlt1I4tyIg2P7enmiODLda2ROQ0qY3OxMqSPf04J+m6lm
-        0vzGuKDqdfA3DKxWlNAR/BkZ29HNxKuW+aI+rUziQ9pbQJLD4N89a3R/aNuHrtHgjgQacB+yAZany
-        q0E4JEUhpfLFgyy/7syixwTzSApzhhnF8TtotbVqWkqym25vDx14u6RPdsTZ8qswdpOezuXDnd1uq
-        YafjDnOA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p7HzM-000pwx-0T; Mon, 19 Dec 2022 15:23:36 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 93BB630029B;
-        Mon, 19 Dec 2022 16:23:24 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E957120A1AB9C; Mon, 19 Dec 2022 16:23:23 +0100 (CET)
-Date:   Mon, 19 Dec 2022 16:23:23 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     x86@kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Nadav Amit <namit@vmware.com>
-Subject: Re: [PATCH -tip v4 0/2] x86/kprobes: Fix to check not-kprobe's int3
- correctly
-Message-ID: <Y6CB698Owg87wIbs@hirez.programming.kicks-ass.net>
-References: <167146050052.1374301.10407562178447545337.stgit@devnote3>
+        Mon, 19 Dec 2022 10:25:52 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B6826D4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:25:51 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id tz12so22296208ejc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:25:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aj0IM0CjoexC2i+yXzlejMAdGHqKdzeRDWPxbdEC52Y=;
+        b=C27vv2XZEEG7o+ka9HbL1o5t/B7aIJ4pAiWnEmugk/R1THnHYJhrpcvb3g+33/nV3m
+         FUS4GDIoBadaCouoSTNr3Hni6vlup0jMFlP1BF7zUVsymILYTZS51SdGqdVKmbe7F5gT
+         W7H2pkRhunEQFxeFlzT3xhHEuTALwlc5r/S7HFR94VpbgneKm4zMVB0vd1aDVFKvhmAO
+         4zZmNa+pabm0UqudM7n1qGo5k96yNSRBzFcLzeHmFUCQev0j5qSTIHkwWNQVJdJdRfin
+         DEgPICs36diGa1KlQqxM1wE1Ku7EMgoFDdUzfxbFpnY4FanfMQ4KUPWYAXCWR/mZ2jdD
+         JaJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aj0IM0CjoexC2i+yXzlejMAdGHqKdzeRDWPxbdEC52Y=;
+        b=yHcVnRCymg1STnG7MuH4NBadYFbni0dt9iAqFH3/y5GJq4dCzZRJAVU/9ycMQL3p4v
+         qhb03pDDQELzH5PPpfgrxifcV+9E7VbEn2fQpHY2rJFbAvGijAjZICOHgbqS08YMBjaC
+         UZS9YRhrGgyLc+EdAYz9S/KMoxiZMODOa9kGJze8ao50g7GhqU3wlsDUkyNBFDKKVotW
+         PnBCvKo+FeR0Tyu/NC1egBy9xpCxUZX786frJxrmARjlIzXEZOqfx/Tf7BbWK8R4cehL
+         WX+xKDTWVFgP7zwcyhlOt6lXTKzughPnjcyrup6izVe0m+clFA68POxt9w+aBSvo/H/V
+         uY4A==
+X-Gm-Message-State: ANoB5pm2m/tO6heYbDFFwJ9eF/nlFCjQr48/ui6+RhPkrsccDhEov/FO
+        qrFISZZIeGW7CPRzpZiCYkuz3g7JOGcHM60q61A=
+X-Google-Smtp-Source: AA0mqf6RNAS3BLxNGbG+6VbszxBZsCh5Lwxp+Nx0tJByBwVj3fDL4RyN+tNMFS7BsJ2gpqcowZENPTnJfzVaCuZEevs=
+X-Received: by 2002:a17:907:9d04:b0:7c1:1342:61b7 with SMTP id
+ kt4-20020a1709079d0400b007c1134261b7mr11287051ejc.524.1671463549653; Mon, 19
+ Dec 2022 07:25:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <167146050052.1374301.10407562178447545337.stgit@devnote3>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:640c:1d45:b0:183:d190:e1fd with HTTP; Mon, 19 Dec 2022
+ 07:25:49 -0800 (PST)
+Reply-To: sra.xinmeishen@yahoo.com
+From:   Xinmei Shen <consultecanadalome@gmail.com>
+Date:   Mon, 19 Dec 2022 07:25:49 -0800
+Message-ID: <CADOWGUF7q6cuW3oFj0URQVRpuGhbiOWDoNWRYxiddajnSW72BQ@mail.gmail.com>
+Subject: Re: Respuesta
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 11:35:00PM +0900, Masami Hiramatsu (Google) wrote:
-> Masami Hiramatsu (Google) (2):
->       x86/kprobes: Fix kprobes instruction boudary check with CONFIG_RETHUNK
->       x86/kprobes: Fix optprobe optimization check with CONFIG_RETHUNK
-> 
+Beneficiario,
 
-Thanks, I'll go queue these in x86/urgent after -rc1 happens.
+Sali=C3=B3 con un premio de las Naciones Unidas afiliado al fondos
+monetario internacional en el que se nos entreg=C3=B3 su direcci=C3=B3n de
+correo electr=C3=B3nico y el fondos para su transferencia, as=C3=AD que env=
+=C3=ADe
+sus datos para su transferencia.
+
+Se nos indic=C3=B3 que transfiri=C3=A9ramos todas las transacciones pendien=
+tes
+dentro de las pr=C3=B3ximas 48 horas o si ya recibi=C3=B3 su fondo, si no l=
+o
+cumple de inmediato. Nota: Necesitamos su respuesta urgente, este no es
+uno de esos estafadores de Internet, es el alivio de COVID-19
+
+Sra. Xinmei Shen
