@@ -2,122 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6880A650E27
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:59:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAAB650E28
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232254AbiLSO7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 09:59:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
+        id S232482AbiLSO7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 09:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232221AbiLSO6c (ORCPT
+        with ESMTP id S232233AbiLSO6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 09:58:32 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0987C384;
-        Mon, 19 Dec 2022 06:57:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IxbTudA4feCy7V4StycL6z3Gw08KgIGquvj8lJQM3zk=; b=MjHPsuR/gNwPkXqJiBXeujMeaF
-        MbcU+ntQeEnKkeD8AIYI5Om7Zla+mCZpC1yZu2/IqzTf47X8cKwI+esGRtLusDM4jWw67zF+0ZBek
-        5QZcF4CcHPoUgkKj55+Aj9daMz0U1XNluJouvy/rOoXUEGmV9U+bAkMSGA8zww1aJpKr2AZkpGsIV
-        PcsJRKSZl/bLvAdWKdD8t3JVWV2HHGdJLFKWHd8fkVjy3p2OTtqj+xfqoCdi70KUcNZ/1YI6WN5RB
-        Q+Hkj1sX772uV3M9jjvlw5re2MPAO7GjmZLOeLTmCdQmKZU8Q1h+wnvVDe05b8p1J/q3t3VSYGOwn
-        gfNMjmVg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1p7HZZ-00CdMu-17;
-        Mon, 19 Dec 2022 14:56:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Mon, 19 Dec 2022 09:58:33 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A63D6C
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 06:57:47 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B53E8300348;
-        Mon, 19 Dec 2022 15:56:56 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 92EC620A1489F; Mon, 19 Dec 2022 15:56:56 +0100 (CET)
-Date:   Mon, 19 Dec 2022 15:56:56 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rafael@kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        len.brown@intel.com, Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [RFC/RFT PATCH 1/2] sched/core: Check and schedule ksoftirq
-Message-ID: <Y6B7uOBjzYrLhmOu@hirez.programming.kicks-ass.net>
-References: <20221215184300.1592872-1-srinivas.pandruvada@linux.intel.com>
- <20221215184300.1592872-2-srinivas.pandruvada@linux.intel.com>
- <Y5xURk3CkzhIjmmq@hirez.programming.kicks-ass.net>
- <20221216220748.GA1967978@lothringen>
- <Y6BMAp6A731F8ZL4@hirez.programming.kicks-ass.net>
- <Y6BPLoHJNWjjMUv8@linutronix.de>
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D79BB60E28;
+        Mon, 19 Dec 2022 14:57:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1671461865; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D/sJHRe1x61d+bdcjyXrRDFyLAb4JzMt7z9Tz9dQe3Y=;
+        b=bbfl9TLEtf3MfG8fLhS7RT4/l+ZSwDlujYhz+f2nEGuw5NC8S5yjVy7dX58bYFeyngn3Fi
+        obcKYJLIh7p58PjYOCPz1WIMDVA/GN1P5pWBKRULLlwgj0IfiQTjGQdHivfvz0InGTiUfN
+        DOAzSbskUN38YKAJ2WrrOQ78pQtvITQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1671461865;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D/sJHRe1x61d+bdcjyXrRDFyLAb4JzMt7z9Tz9dQe3Y=;
+        b=DBkMLuapRX252h48tigOMlhNmXZjuSvjEOEBzBW4EkzV5NSyVPU1h5w4FlK/Flia6WrmfN
+        f4CfhhE1eCk43qCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ABDB513498;
+        Mon, 19 Dec 2022 14:57:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id I23jKOl7oGPaSgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 19 Dec 2022 14:57:45 +0000
+Message-ID: <0693327a-4951-6864-12c6-88cfe81abd12@suse.de>
+Date:   Mon, 19 Dec 2022 15:57:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6BPLoHJNWjjMUv8@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] drm: Replace DRM_INFO() with pr_info()
+Content-Language: en-US
+To:     Siddh Raman Pant <code@siddh.me>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20221219142319.79827-1-code@siddh.me>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221219142319.79827-1-code@siddh.me>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------jRAn52zmCrZax5bIrKY4wpAQ"
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 12:46:54PM +0100, Sebastian Andrzej Siewior wrote:
-> On 2022-12-19 12:33:22 [+0100], Peter Zijlstra wrote:
-> > ksoftirq is typically a CFS task while idle injection is required to be
-> > a FIFO (typically FIFO-1) task -- so that would require lifting
-> > ksoftirqd to FIFO and that has other problems.
-> > 
-> > I'm guessing the problem case is where idle injection comes in while
-> > ksoftirq is running (and preempted), because in that case you cannot run
-> > the softirq stuff in-place.
-> > 
-> > The 'right' thing to do would be to PI boost ksoftirqd in that case I
-> > suppose. Perhaps something like so, it would boost ksoftirq when it's
-> > running, and otherwise runs the ksoftirqd thing in-situ.
-> > 
-> > I've not really throught hard about this though, so perhaps I completely
-> > wrecked things.
-> 
-> I don't know why you intend to run ksoftirqd but in general it breaks RT
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------jRAn52zmCrZax5bIrKY4wpAQ
+Content-Type: multipart/mixed; boundary="------------m4Z8Z0lSKTODIrTprfAvX6xL";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Siddh Raman Pant <code@siddh.me>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>
+Cc: dri-devel <dri-devel@lists.freedesktop.org>,
+ linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <0693327a-4951-6864-12c6-88cfe81abd12@suse.de>
+Subject: Re: [PATCH] drm: Replace DRM_INFO() with pr_info()
+References: <20221219142319.79827-1-code@siddh.me>
+In-Reply-To: <20221219142319.79827-1-code@siddh.me>
 
-So the upstream problem is where softirq is punted to ksoftirq (obvious
-from hardirq tail) and idle-injection comes in and either:
+--------------m4Z8Z0lSKTODIrTprfAvX6xL
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
- - runs before ksoftirq had a chance to run, or
- - preempts ksoftirqd.
+SGkNCg0KQW0gMTkuMTIuMjIgdW0gMTU6MjMgc2NocmllYiBTaWRkaCBSYW1hbiBQYW50Og0K
+PiBMaW5lIDUzNiBvZiBkcm1fcHJpbnQuaCBzYXlzIERSTV9JTkZPKCkgaXMgZGVwcmVjYXRl
+ZA0KPiBpbiBmYXZvciBvZiBwcl9pbmZvKCkuDQoNClRoYXQncyBhIG1pc2xlYWRpbmcgY29t
+bWVudC4gRFJNX0lORk8oKSBpcyBkZXByZWNhdGVkIGZvciBkcm1faW5mbygpLiANCnByX2lu
+Zm8oKSBldCBhbCBpcyBvbmx5IHRvIGJlIHVzZWQgb2YgeW91IGRvbid0IGhhdmUgYSBkZXYg
+cG9pbnRlci4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gU2lnbmVkLW9mZi1i
+eTogU2lkZGggUmFtYW4gUGFudCA8Y29kZUBzaWRkaC5tZT4NCj4gLS0tDQo+ICAgZHJpdmVy
+cy9ncHUvZHJtL2RybV9jbGllbnRfbW9kZXNldC5jIHwgIDIgKy0NCj4gICBkcml2ZXJzL2dw
+dS9kcm0vZHJtX2Nvbm5lY3Rvci5jICAgICAgfCAgOCArKysrLS0tLQ0KPiAgIGRyaXZlcnMv
+Z3B1L2RybS9kcm1fZHJ2LmMgICAgICAgICAgICB8IDEwICsrKysrLS0tLS0NCj4gICBkcml2
+ZXJzL2dwdS9kcm0vZHJtX2VkaWRfbG9hZC5jICAgICAgfCAxNCArKysrKysrLS0tLS0tLQ0K
+PiAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fcGNpLmMgICAgICAgICAgICB8ICAyICstDQo+ICAg
+NSBmaWxlcyBjaGFuZ2VkLCAxOCBpbnNlcnRpb25zKCspLCAxOCBkZWxldGlvbnMoLSkNCj4g
+DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2NsaWVudF9tb2Rlc2V0LmMg
+Yi9kcml2ZXJzL2dwdS9kcm0vZHJtX2NsaWVudF9tb2Rlc2V0LmMNCj4gaW5kZXggYmJjNTM1
+Y2M1MGRkLi4yZTI4OTE2MTRjNTggMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9k
+cm1fY2xpZW50X21vZGVzZXQuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2NsaWVu
+dF9tb2Rlc2V0LmMNCj4gQEAgLTMzNSw3ICszMzUsNyBAQCBzdGF0aWMgYm9vbCBkcm1fY2xp
+ZW50X3RhcmdldF9jbG9uZWQoc3RydWN0IGRybV9kZXZpY2UgKmRldiwNCj4gICAJCURSTV9E
+RUJVR19LTVMoImNhbiBjbG9uZSB1c2luZyAxMDI0eDc2OFxuIik7DQo+ICAgCQlyZXR1cm4g
+dHJ1ZTsNCj4gICAJfQ0KPiAtCURSTV9JTkZPKCJrbXM6IGNhbid0IGVuYWJsZSBjbG9uaW5n
+IHdoZW4gd2UgcHJvYmFibHkgd2FudGVkIHRvLlxuIik7DQo+ICsJcHJfaW5mbygiW2RybV0g
+a21zOiBjYW4ndCBlbmFibGUgY2xvbmluZyB3aGVuIHdlIHByb2JhYmx5IHdhbnRlZCB0by5c
+biIpOw0KPiAgIAlyZXR1cm4gZmFsc2U7DQo+ICAgfQ0KPiAgIA0KPiBkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy9ncHUvZHJtL2RybV9jb25uZWN0b3IuYyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1f
+Y29ubmVjdG9yLmMNCj4gaW5kZXggNjFjMjljZTc0YjAzLi4yNmEwM2I3MGUyYzYgMTAwNjQ0
+DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fY29ubmVjdG9yLmMNCj4gKysrIGIvZHJp
+dmVycy9ncHUvZHJtL2RybV9jb25uZWN0b3IuYw0KPiBAQCAtMTY1LDE0ICsxNjUsMTQgQEAg
+c3RhdGljIHZvaWQgZHJtX2Nvbm5lY3Rvcl9nZXRfY21kbGluZV9tb2RlKHN0cnVjdCBkcm1f
+Y29ubmVjdG9yICpjb25uZWN0b3IpDQo+ICAgCQlyZXR1cm47DQo+ICAgDQo+ICAgCWlmICht
+b2RlLT5mb3JjZSkgew0KPiAtCQlEUk1fSU5GTygiZm9yY2luZyAlcyBjb25uZWN0b3IgJXNc
+biIsIGNvbm5lY3Rvci0+bmFtZSwNCj4gLQkJCSBkcm1fZ2V0X2Nvbm5lY3Rvcl9mb3JjZV9u
+YW1lKG1vZGUtPmZvcmNlKSk7DQo+ICsJCXByX2luZm8oIltkcm1dIGZvcmNpbmcgJXMgY29u
+bmVjdG9yICVzXG4iLCBjb25uZWN0b3ItPm5hbWUsDQo+ICsJCQlkcm1fZ2V0X2Nvbm5lY3Rv
+cl9mb3JjZV9uYW1lKG1vZGUtPmZvcmNlKSk7DQo+ICAgCQljb25uZWN0b3ItPmZvcmNlID0g
+bW9kZS0+Zm9yY2U7DQo+ICAgCX0NCj4gICANCj4gICAJaWYgKG1vZGUtPnBhbmVsX29yaWVu
+dGF0aW9uICE9IERSTV9NT0RFX1BBTkVMX09SSUVOVEFUSU9OX1VOS05PV04pIHsNCj4gLQkJ
+RFJNX0lORk8oImNtZGxpbmUgZm9yY2VzIGNvbm5lY3RvciAlcyBwYW5lbF9vcmllbnRhdGlv
+biB0byAlZFxuIiwNCj4gLQkJCSBjb25uZWN0b3ItPm5hbWUsIG1vZGUtPnBhbmVsX29yaWVu
+dGF0aW9uKTsNCj4gKwkJcHJfaW5mbygiW2RybV0gY21kbGluZSBmb3JjZXMgY29ubmVjdG9y
+ICVzIHBhbmVsX29yaWVudGF0aW9uIHRvICVkXG4iLA0KPiArCQkJY29ubmVjdG9yLT5uYW1l
+LCBtb2RlLT5wYW5lbF9vcmllbnRhdGlvbik7DQo+ICAgCQlkcm1fY29ubmVjdG9yX3NldF9w
+YW5lbF9vcmllbnRhdGlvbihjb25uZWN0b3IsDQo+ICAgCQkJCQkJICAgIG1vZGUtPnBhbmVs
+X29yaWVudGF0aW9uKTsNCj4gICAJfQ0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJt
+L2RybV9kcnYuYyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZHJ2LmMNCj4gaW5kZXggMjAzYmY4
+ZDZjMzRjLi4xNDg2ZGYwOTc5MDggMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9k
+cm1fZHJ2LmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2RybV9kcnYuYw0KPiBAQCAtODk4
+LDExICs4OTgsMTEgQEAgaW50IGRybV9kZXZfcmVnaXN0ZXIoc3RydWN0IGRybV9kZXZpY2Ug
+KmRldiwgdW5zaWduZWQgbG9uZyBmbGFncykNCj4gICAJaWYgKGRybV9jb3JlX2NoZWNrX2Zl
+YXR1cmUoZGV2LCBEUklWRVJfTU9ERVNFVCkpDQo+ICAgCQlkcm1fbW9kZXNldF9yZWdpc3Rl
+cl9hbGwoZGV2KTsNCj4gICANCj4gLQlEUk1fSU5GTygiSW5pdGlhbGl6ZWQgJXMgJWQuJWQu
+JWQgJXMgZm9yICVzIG9uIG1pbm9yICVkXG4iLA0KPiAtCQkgZHJpdmVyLT5uYW1lLCBkcml2
+ZXItPm1ham9yLCBkcml2ZXItPm1pbm9yLA0KPiAtCQkgZHJpdmVyLT5wYXRjaGxldmVsLCBk
+cml2ZXItPmRhdGUsDQo+IC0JCSBkZXYtPmRldiA/IGRldl9uYW1lKGRldi0+ZGV2KSA6ICJ2
+aXJ0dWFsIGRldmljZSIsDQo+IC0JCSBkZXYtPnByaW1hcnktPmluZGV4KTsNCj4gKwlwcl9p
+bmZvKCJbZHJtXSBJbml0aWFsaXplZCAlcyAlZC4lZC4lZCAlcyBmb3IgJXMgb24gbWlub3Ig
+JWRcbiIsDQo+ICsJCWRyaXZlci0+bmFtZSwgZHJpdmVyLT5tYWpvciwgZHJpdmVyLT5taW5v
+ciwNCj4gKwkJZHJpdmVyLT5wYXRjaGxldmVsLCBkcml2ZXItPmRhdGUsDQo+ICsJCWRldi0+
+ZGV2ID8gZGV2X25hbWUoZGV2LT5kZXYpIDogInZpcnR1YWwgZGV2aWNlIiwNCj4gKwkJZGV2
+LT5wcmltYXJ5LT5pbmRleCk7DQo+ICAgDQo+ICAgCWdvdG8gb3V0X3VubG9jazsNCj4gICAN
+Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fZWRpZF9sb2FkLmMgYi9kcml2
+ZXJzL2dwdS9kcm0vZHJtX2VkaWRfbG9hZC5jDQo+IGluZGV4IDM3ZDhiYTNkZGI0Ni4uZDNj
+YjE5ODM4MGM1IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2VkaWRfbG9h
+ZC5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZWRpZF9sb2FkLmMNCj4gQEAgLTI0
+Miw5ICsyNDIsOSBAQCBzdGF0aWMgdm9pZCAqZWRpZF9sb2FkKHN0cnVjdCBkcm1fY29ubmVj
+dG9yICpjb25uZWN0b3IsIGNvbnN0IGNoYXIgKm5hbWUsDQo+ICAgCQl1OCAqbmV3X2VkaWQ7
+DQo+ICAgDQo+ICAgCQllZGlkW0VESURfTEVOR1RILTFdICs9IGVkaWRbMHg3ZV0gLSB2YWxp
+ZF9leHRlbnNpb25zOw0KPiAtCQlEUk1fSU5GTygiRm91bmQgJWQgdmFsaWQgZXh0ZW5zaW9u
+cyBpbnN0ZWFkIG9mICVkIGluIEVESUQgZGF0YSAiDQo+IC0JCSAgICAiXCIlc1wiIGZvciBj
+b25uZWN0b3IgXCIlc1wiXG4iLCB2YWxpZF9leHRlbnNpb25zLA0KPiAtCQkgICAgZWRpZFsw
+eDdlXSwgbmFtZSwgY29ubmVjdG9yX25hbWUpOw0KPiArCQlwcl9pbmZvKCJbZHJtXSBGb3Vu
+ZCAlZCB2YWxpZCBleHRlbnNpb25zIGluc3RlYWQgb2YgJWQgaW4gRURJRCBkYXRhICINCj4g
+KwkJCSJcIiVzXCIgZm9yIGNvbm5lY3RvciBcIiVzXCJcbiIsIHZhbGlkX2V4dGVuc2lvbnMs
+DQo+ICsJCQllZGlkWzB4N2VdLCBuYW1lLCBjb25uZWN0b3JfbmFtZSk7DQo+ICAgCQllZGlk
+WzB4N2VdID0gdmFsaWRfZXh0ZW5zaW9uczsNCj4gICANCj4gICAJCW5ld19lZGlkID0ga3Jl
+YWxsb2MoZWRpZCwgKHZhbGlkX2V4dGVuc2lvbnMgKyAxKSAqIEVESURfTEVOR1RILA0KPiBA
+QCAtMjUzLDEwICsyNTMsMTAgQEAgc3RhdGljIHZvaWQgKmVkaWRfbG9hZChzdHJ1Y3QgZHJt
+X2Nvbm5lY3RvciAqY29ubmVjdG9yLCBjb25zdCBjaGFyICpuYW1lLA0KPiAgIAkJCWVkaWQg
+PSBuZXdfZWRpZDsNCj4gICAJfQ0KPiAgIA0KPiAtCURSTV9JTkZPKCJHb3QgJXMgRURJRCBi
+YXNlIGJsb2NrIGFuZCAlZCBleHRlbnNpb24lcyBmcm9tICINCj4gLQkgICAgIlwiJXNcIiBm
+b3IgY29ubmVjdG9yIFwiJXNcIlxuIiwgKGJ1aWx0aW4gPj0gMCkgPyAiYnVpbHQtaW4iIDoN
+Cj4gLQkgICAgImV4dGVybmFsIiwgdmFsaWRfZXh0ZW5zaW9ucywgdmFsaWRfZXh0ZW5zaW9u
+cyA9PSAxID8gIiIgOiAicyIsDQo+IC0JICAgIG5hbWUsIGNvbm5lY3Rvcl9uYW1lKTsNCj4g
+Kwlwcl9pbmZvKCJbZHJtXSBHb3QgJXMgRURJRCBiYXNlIGJsb2NrIGFuZCAlZCBleHRlbnNp
+b24lcyBmcm9tICINCj4gKwkJIlwiJXNcIiBmb3IgY29ubmVjdG9yIFwiJXNcIlxuIiwgKGJ1
+aWx0aW4gPj0gMCkgPyAiYnVpbHQtaW4iIDoNCj4gKwkJImV4dGVybmFsIiwgdmFsaWRfZXh0
+ZW5zaW9ucywgdmFsaWRfZXh0ZW5zaW9ucyA9PSAxID8gIiIgOiAicyIsDQo+ICsJCW5hbWUs
+IGNvbm5lY3Rvcl9uYW1lKTsNCj4gICANCj4gICBvdXQ6DQo+ICAgCXJlbGVhc2VfZmlybXdh
+cmUoZncpOw0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2RybV9wY2kuYyBiL2Ry
+aXZlcnMvZ3B1L2RybS9kcm1fcGNpLmMNCj4gaW5kZXggMzlkMzVmYzNhNDNiLi45NGVlMTk0
+Y2U5MjcgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fcGNpLmMNCj4gKysr
+IGIvZHJpdmVycy9ncHUvZHJtL2RybV9wY2kuYw0KPiBAQCAtMjYyLDcgKzI2Miw3IEBAIHZv
+aWQgZHJtX2xlZ2FjeV9wY2lfZXhpdChjb25zdCBzdHJ1Y3QgZHJtX2RyaXZlciAqZHJpdmVy
+LA0KPiAgIAkJfQ0KPiAgIAkJbXV0ZXhfdW5sb2NrKCZsZWdhY3lfZGV2X2xpc3RfbG9jayk7
+DQo+ICAgCX0NCj4gLQlEUk1fSU5GTygiTW9kdWxlIHVubG9hZGVkXG4iKTsNCj4gKwlwcl9p
+bmZvKCJbZHJtXSBNb2R1bGUgdW5sb2FkZWRcbiIpOw0KPiAgIH0NCj4gICBFWFBPUlRfU1lN
+Qk9MKGRybV9sZWdhY3lfcGNpX2V4aXQpOw0KPiAgIA0KDQotLSANClRob21hcyBaaW1tZXJt
+YW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9u
+cyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFu
+eQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBU
+b3Rldg0K
 
-In both cases we'll appear to go idle with softirqs pending -- which
-triggers a pesky warning, because obviously undesirable.
+--------------m4Z8Z0lSKTODIrTprfAvX6xL--
 
-In the first case we can run 'ksoftirqd' in-context, but then need to
-serialize against the actual ksoftirqd. In the second case we need to
-serialize against ksoftirqd and ensure it is complete before proceeding
-with going 'idle'.
+--------------jRAn52zmCrZax5bIrKY4wpAQ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Since idle-injection runs FIFO and ksoftirqd typically does not, some
-form of PI is required.
+-----BEGIN PGP SIGNATURE-----
 
-> left and right and we attempt to avoid running ksoftirqd as much as
-> possible. If it runs and you go and boost it then it probably gets even
-> worse from RT point of view.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmOge+kFAwAAAAAACgkQlh/E3EQov+Cb
+0w//acRXHc6A2bDYUPKJ44QHJ38ulmit4wFJHNNQ0fvvWVcypfNTL5DA/G+TJwkNtZJqHWOK8Vnq
+yv4d9rN/worjVZ04CSZN92KFv51WSp1/Clz40FaoEtghS3dijzeVtbjDZ3j7P6xuBGjVcc/CYpcp
+vHKuLpyG20HU7nzlBJptioY/bAlzTLHzfDXNe3cWvrCw+3T25V7Bp8LGtB6l0mWTPc/x+YCZ3SRc
+wRKnUHiS/PQiE16GRABM3emfWCUvX+2tNBmzsuDxRvZlWFle07n3vXBMrMGcgd6Vgd38kMSYeRkk
+fJAEaDVJAiIqikx9VeGeDaPbuZBgS3S7GCjDaOH3vi+EIz9skwM6y36HtX9LUNRX+ZhB1FFOQt8f
+kAhYjK5JLh9up6oloUbddrp/0Z3M2oKb4HrqgcQdS5GBEfLaNR2Sp9CzRdF8u2HkbfNNB5BrSeMY
+65HqhZgboEWh5L3JrxoplKbJ2+6F8bnYBLCnBVUGkYFj1ZA/Msk4bv8sMDI5e6d3u/aYi4lpcIpf
+2EmT6LJkUBgf4ySlEyfdGToKqYkOGUap91I6aTJH4/Nt274J9pJHM7io/Mc0tWHkT5DxwP8kdZrN
+RnSQCC/Cw058E5XXlp7KVWB3ms7Y6xZXiQigoToGknSyrVTIdDMcdfmYOJrfIPh+97BeGhpvHP2M
+1Oo=
+=yvX9
+-----END PGP SIGNATURE-----
 
-So if you never run ksoftirqd, the above problem doesn't happen. If
-ksoftirqd *can* run, you still need to deal with it somehow. Boosting
-ksoftirqd to whatever priority the idle-injection thread has should not
-be worse than anything the idle-injection already does, no?
-
-Specifically, without idle-injection involved the patch as proposed (+-
-fixes required to make it compile and work) should be a no-op.
-
-> ksoftirqd runs softirqs from hardirq context. Everything else is handled
-> in is handled within local-bh-disable+enable loop. We already have have
-> the boost-ksoftird hammer which is the per-CPU BLK called
-> local_bh_disable(). In general everything should be moved out of it.
-> For timers we have the ktimerd thread which needs clean up. 
-
-
+--------------jRAn52zmCrZax5bIrKY4wpAQ--
