@@ -2,187 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A75C6513B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 21:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF8A6513C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 21:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232119AbiLSUSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 15:18:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43788 "EHLO
+        id S231944AbiLSUUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 15:20:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232502AbiLSURr (ORCPT
+        with ESMTP id S232283AbiLSUUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 15:17:47 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F0D64ED;
-        Mon, 19 Dec 2022 12:17:45 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id v23so5007547pju.3;
-        Mon, 19 Dec 2022 12:17:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E/YKT1JJIPuRoA7Hx7R8arjPSGFufHSp1KclETKmED4=;
-        b=HVbC+Iu6DOauKYKAjXJ43ZOUiX8W5s0QydrESBi85TvL2VmyDCJR/2ymPdVYq/iDf/
-         IO6JdGU4dwlAukwN6rby4URhzT7owcP4jlDE7KILweEbgmvaWh+tGJlJzYD1tXTVYGSc
-         LWNHMvXZrUg5P/xm50ZkS7+tQkGNaKPvYW9Zn2vDbBdFSpLQ4WgcFx3BMgkEqaEOeGis
-         jWD0VFpNiPZQg5fT8EfCEAdwmkBJFsP4/GCJSNA9Dq1G7InW2qzihT9tyIqEZHighyhM
-         DI/RyyArd/3wL6L81SseIQT4GhJscNZJGGQ+Ozj6E5HBWubdlQs2B2YNCaYU0m9UzYI/
-         /Epg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=E/YKT1JJIPuRoA7Hx7R8arjPSGFufHSp1KclETKmED4=;
-        b=X7XX/EOCfQbmZeg0Dnr/Oq/qtZc2UMRxaFSQwqe3QkjSewv4gcNcx9/zhtqf4O6NCC
-         5TXdof5GJh+qAMzcnXAdXnbdMCXFzI63M86OmbMKiaOU5LzGmckqPWsj3/1E2wfoGTZ6
-         0EUWuA/YoVD4q5pEXVLsCSdpCzRCWb9i98jVpg4J/+0RSElAyc8A3C0RofvfH0+nh1Wr
-         1qymH484eP7hEVVs7qXQqCoJR2G/aWrC5F7VHQKE/Z2i0ULKMDgtsQh5EhNpmkLh12cW
-         ABBCp6/CB9TQp85x5Wxxpqma6Ssp7XXc/x8lBJ9yO1/UY5D2+f53ETjF8IBXgvtz+8PC
-         t+4Q==
-X-Gm-Message-State: ANoB5pmZd8DZ19gwS+zUqY1UYv8o9XrY/sIfcBefOtYazmpidil+Rptn
-        Ma29RzfaflyQQaGyNm7EAZs=
-X-Google-Smtp-Source: AA0mqf61SP7/nZq9TfSNMMcb4bbYVKQVTkKEFue+8KZXn3Lu9cPuwaVOSuM5ZwGEwLEZzSwFMg1C/A==
-X-Received: by 2002:a17:90b:2d83:b0:219:e002:1ba3 with SMTP id sj3-20020a17090b2d8300b00219e0021ba3mr46689926pjb.9.1671481065326;
-        Mon, 19 Dec 2022 12:17:45 -0800 (PST)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:ff0:735a:2805:e706:5164])
-        by smtp.gmail.com with ESMTPSA id f10-20020a17090ace0a00b00219220edf0dsm6324260pju.48.2022.12.19.12.17.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 12:17:44 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
-        Blake Jones <blakejones@google.com>, bpf@vger.kernel.org
-Subject: [PATCH 6/6] perf test: Update perf lock contention test
-Date:   Mon, 19 Dec 2022 12:17:32 -0800
-Message-Id: <20221219201732.460111-7-namhyung@kernel.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20221219201732.460111-1-namhyung@kernel.org>
-References: <20221219201732.460111-1-namhyung@kernel.org>
+        Mon, 19 Dec 2022 15:20:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB002140FE;
+        Mon, 19 Dec 2022 12:19:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E20AB80EF7;
+        Mon, 19 Dec 2022 20:19:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 668BDC433EF;
+        Mon, 19 Dec 2022 20:19:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671481192;
+        bh=tTePxdA+CAo0HaKkeJhMsyhOGYdEA4fxoVpt8swbBoc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sV6eZbQ7OQO4BbD66TmrU+8AHX03VTOHKMRBS/nFZ0CG64//0g4lajH+VAVk8F47K
+         LMRUuiRoZCIkjRREHqI6tDcm3gAjAKjax4c9NJYJKLeUgUc32NWwEH7k1aFvk4MRRP
+         C+y9PQQlAFhrvxmMOfb2wIaKTi9BTC36xN2MxYh7TGAFUumqT00dG7jR2E5HYGHFsR
+         f1e6I/wzYK09eYBdA2jKY+BsGLCOBSjRhWx7m9Ot5Owo5bA/6K+A/a8qSd0JHudAFu
+         08G3x0/vu9x4WEGUTkb83JWRQNWn3N6St5j5606e6hNKwOltW66A3QMrDbmP55n6tl
+         3AMJJ+6ISEXAw==
+Message-ID: <da0a1ee5-0f95-f10f-9d87-afd298df2e40@kernel.org>
+Date:   Mon, 19 Dec 2022 22:19:46 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v12 3/6] remoteproc: pru: Add APIs to get and put the PRU
+ cores
+To:     MD Danish Anwar <danishanwar@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Suman Anna <s-anna@ti.com>, "Andrew F . Davis" <afd@ti.com>,
+        nm@ti.com, vigneshr@ti.com, srk@ti.com,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20221216053313.2974826-1-danishanwar@ti.com>
+ <20221216053313.2974826-4-danishanwar@ti.com>
+Content-Language: en-US
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20221216053313.2974826-4-danishanwar@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add more tests for the new filters.
 
-  $ sudo perf test contention -v
-   87: kernel lock contention analysis test                            :
-  --- start ---
-  test child forked, pid 412379
-  Testing perf lock record and perf lock contention
-  Testing perf lock contention --use-bpf
-  Testing perf lock record and perf lock contention at the same time
-  Testing perf lock contention --threads
-  Testing perf lock contention --lock-addr
-  Testing perf lock contention --type-filter
-  Testing perf lock contention --lock-filter
-  test child finished with 0
-  ---- end ----
-  kernel lock contention analysis test: Ok
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/tests/shell/lock_contention.sh | 58 ++++++++++++++++++++++-
- 1 file changed, 57 insertions(+), 1 deletion(-)
+On 16/12/2022 07:33, MD Danish Anwar wrote:
+> Add two new APIs, pru_rproc_get() and pru_rproc_put(), to the PRU
+> driver to allow client drivers to acquire and release the remoteproc
+> device associated with a PRU core. The PRU cores are treated as
+> resources with only one client owning it at a time.
+> 
+> The pru_rproc_get() function returns the rproc handle corresponding
+> to a PRU core identified by the device tree "ti,prus" property under
+> the client node. The pru_rproc_put() is the complementary function
+> to pru_rproc_get().
+> 
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
 
-diff --git a/tools/perf/tests/shell/lock_contention.sh b/tools/perf/tests/shell/lock_contention.sh
-index cc9ceb9e19ca..b05f1b1ca6c8 100755
---- a/tools/perf/tests/shell/lock_contention.sh
-+++ b/tools/perf/tests/shell/lock_contention.sh
-@@ -115,7 +115,7 @@ test_aggr_addr()
- 	fi
- 
- 	# the perf lock contention output goes to the stderr
--	perf lock con -a -b -t -E 1 -q -- perf bench sched messaging > /dev/null 2> ${result}
-+	perf lock con -a -b -l -E 1 -q -- perf bench sched messaging > /dev/null 2> ${result}
- 	if [ $(cat "${result}" | wc -l) != "1" ]; then
- 		echo "[Fail] BPF result count is not 1:" $(cat "${result}" | wc -l)
- 		err=1
-@@ -123,6 +123,60 @@ test_aggr_addr()
- 	fi
- }
- 
-+test_type_filter()
-+{
-+	echo "Testing perf lock contention --type-filter (w/ spinlock)"
-+	perf lock contention -i ${perfdata} -Y spinlock -q 2> ${result}
-+	if [ $(grep -c -v spinlock "${result}") != "0" ]; then
-+		echo "[Fail] Recorded should not have non-spinlocks:" $(cat "${result}")
-+		err=1
-+		exit
-+	fi
-+
-+	if ! perf lock con -b true > /dev/null 2>&1 ; then
-+		return
-+	fi
-+
-+	perf lock con -a -b -Y spinlock -q -- perf bench sched messaging > /dev/null 2> ${result}
-+	if [ $(grep -c -v spinlock "${result}") != "0" ]; then
-+		echo "[Fail] Recorded should not have non-spinlocks:" $(cat "${result}")
-+		err=1
-+		exit
-+	fi
-+}
-+
-+test_lock_filter()
-+{
-+	echo "Testing perf lock contention --lock-filter (w/ tasklist_lock)"
-+	perf lock contention -i ${perfdata} -l -q 2> ${result}
-+	if [ $(grep -c tasklist_lock "${result}") != "1" ]; then
-+		echo "[Skip] Could not find 'tasklist_lock'"
-+		return
-+	fi
-+
-+	perf lock contention -i ${perfdata} -L tasklist_lock -q 2> ${result}
-+
-+	# find out the type of tasklist_lock
-+	local type=$(head -1 "${result}" | awk '{ print $8 }' | sed -e 's/:.*//')
-+
-+	if [ $(grep -c -v "${type}" "${result}") != "0" ]; then
-+		echo "[Fail] Recorded should not have non-${type} locks:" $(cat "${result}")
-+		err=1
-+		exit
-+	fi
-+
-+	if ! perf lock con -b true > /dev/null 2>&1 ; then
-+		return
-+	fi
-+
-+	perf lock con -a -b -L tasklist_lock -q -- perf bench sched messaging > /dev/null 2> ${result}
-+	if [ $(grep -c -v "${type}" "${result}") != "0" ]; then
-+		echo "[Fail] Recorded should not have non-${type} locks:" $(cat "${result}")
-+		err=1
-+		exit
-+	fi
-+}
-+
- check
- 
- test_record
-@@ -130,5 +184,7 @@ test_bpf
- test_record_concurrent
- test_aggr_task
- test_aggr_addr
-+test_type_filter
-+test_lock_filter
- 
- exit ${err}
--- 
-2.39.0.314.g84b9a713c41-goog
-
+Reviewed-by: Roger Quadros <rogerq@kernel.org>
