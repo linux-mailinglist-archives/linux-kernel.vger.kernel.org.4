@@ -2,100 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7B96509D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 11:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6943F6509E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 11:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbiLSKNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 05:13:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
+        id S231582AbiLSKQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 05:16:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbiLSKNK (ORCPT
+        with ESMTP id S231401AbiLSKQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 05:13:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2578A444;
-        Mon, 19 Dec 2022 02:13:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6410AB80D2E;
-        Mon, 19 Dec 2022 10:13:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB7B1C433D2;
-        Mon, 19 Dec 2022 10:13:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671444786;
-        bh=so62ehXrt0ugpolpXDq/vhciOHZFZ9Z/0bVRkGbhDyE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VuAtJpn1m+nCSNRBmNIusc0AHAFMcriDsUG6yWQXEc7DQZWU2o/8BMmhJAs9VECrE
-         zzcKFvzMVyJBGdkCKhFMjMtjbcN5cqkg0619MSWfC1xRqKz4xvemVueJoSOQeqNfSp
-         7R/aJh3adC/Lk5FuZJp0qZnC4DQNUME5pKDycN9/yc1gYP3f3RM5gdQHX4xv1PrwDe
-         hg1S+IuR72E9/NjBmk23EB1l3xFZrgeg9xbGBcAjhDoVLAdlcTnTzk9zPsjJHz+hy8
-         aOXmJxsVX44WGsQb/i3YoYr3c2NQJsgqgpgqUVosSUicbWGP+PuN3WHYplMUaRNEqn
-         TIGN8RJR4R9rw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1p7D9Y-0002ab-5M; Mon, 19 Dec 2022 11:13:48 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH v2] efi: random: fix NULL-deref when refreshing seed
-Date:   Mon, 19 Dec 2022 11:12:37 +0100
-Message-Id: <20221219101237.9872-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.37.4
+        Mon, 19 Dec 2022 05:16:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694B7A449
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 02:15:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671444920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0F60KxR0W9IzjgTzMiPaONsb+3DC5K9NhR1i6GY+9bw=;
+        b=UCyJWuRWj0jWxC73KOYjHtojHh6nXW+7UV36fdidehnR2PGoybgiQHbLO7xspk1LJKiMYW
+        4DpH62xFMl/9r/uo51fhf0x6wXc8Std2dAmQdqDLS/XAb8AzTFa26g5vvNQz/u2HKH3+vS
+        IW8RfFFNLnp7n8LYPCrhO8/zSRGFJJs=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-333-rqm_50CWO9mJ1s3j1faepg-1; Mon, 19 Dec 2022 05:15:18 -0500
+X-MC-Unique: rqm_50CWO9mJ1s3j1faepg-1
+Received: by mail-qv1-f69.google.com with SMTP id w1-20020a056214012100b004c6ecf32001so5320567qvs.8
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 02:15:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0F60KxR0W9IzjgTzMiPaONsb+3DC5K9NhR1i6GY+9bw=;
+        b=vzouybI4jvJexq3eCvWfViB8NE7LefteO1pl0mzTi0UViMP/Uw7tsGdjZPYfyz6aau
+         ltWhb7lCJ6tC12coz4nobGawqxVL2HXQBsDvh+kzAacAX3XydLeLJ6L93qZxMuH389Fz
+         YF2VT2uFjn8WXCjkH0zZCRKuEuiYTxfxJ2PY0NtLsuwtMAlOzuOW4txJJNX1YPlzQnV+
+         XKWB2rFbLSPebmOB5wCelYlXC/HK9Tl+rYEndSFfOY9xlt22bQcRIiU0kzqR1ofrtGk1
+         rdqomYUEI5eaL0q/9mTPAeNYrPbapuvmsE9FSDDLw5igK7hnJif/ZU6r8qoxofRo2PQx
+         jwsQ==
+X-Gm-Message-State: ANoB5pkwCdJREsbvCIWOChmb4KtR1UaUa9KuzS8kHFhSG2zW66Ar73KD
+        Jdj7b122muE2ICFSkb1s2fNxu+BlX5E/ZFI8J/1csRBCpwpfZmA7gbA38iguelm/e3oyzqrlAnF
+        ROKdBaZ6Wt8Tn0qBt6G5WckCo
+X-Received: by 2002:ac8:4e51:0:b0:3a5:2704:d4bd with SMTP id e17-20020ac84e51000000b003a52704d4bdmr74303334qtw.16.1671444918000;
+        Mon, 19 Dec 2022 02:15:18 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5bm5Qnb85eW38Qmkj26T6UAoQXiAZKZbsD/6lF6kYKtBjYMui2UsCvc851kAw1QZmfTvQTLw==
+X-Received: by 2002:ac8:4e51:0:b0:3a5:2704:d4bd with SMTP id e17-20020ac84e51000000b003a52704d4bdmr74303318qtw.16.1671444917765;
+        Mon, 19 Dec 2022 02:15:17 -0800 (PST)
+Received: from redhat.com ([45.144.113.29])
+        by smtp.gmail.com with ESMTPSA id r17-20020a05620a299100b006fb8239db65sm6819951qkp.43.2022.12.19.02.15.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 02:15:17 -0800 (PST)
+Date:   Mon, 19 Dec 2022 05:15:09 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Li Zetao <lizetao1@huawei.com>, pbonzini@redhat.com,
+        stefanha@redhat.com, axboe@kernel.dk, kraxel@redhat.com,
+        david@redhat.com, ericvh@gmail.com, lucho@ionkov.net,
+        asmadeus@codewreck.org, linux_oss@crudebyte.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, rusty@rustcorp.com.au,
+        virtualization@lists.linux-foundation.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org
+Subject: Re: [PATCH 0/4] Fix probe failed when modprobe modules
+Message-ID: <20221219050716-mutt-send-email-mst@kernel.org>
+References: <20221128021005.232105-1-lizetao1@huawei.com>
+ <20221128042945-mutt-send-email-mst@kernel.org>
+ <CACGkMEtuOk+wyCsvY0uayGAvy926G381PC-csoXVAwCfiKCZQw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEtuOk+wyCsvY0uayGAvy926G381PC-csoXVAwCfiKCZQw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do not try to refresh the RNG seed in case the firmware does not support
-setting variables.
+On Tue, Nov 29, 2022 at 11:37:09AM +0800, Jason Wang wrote:
+> >
+> >
+> > Quite a lot of core work here. Jason are you still looking into
+> > hardening?
+> 
+> Yes, last time we've discussed a solution that depends on the first
+> kick to enable the interrupt handler. But after some thought, it seems
+> risky since there's no guarantee that the device work in this way.
+> 
+> One example is the current vhost_net, it doesn't wait for the kick to
+> process the rx packets. Any more thought on this?
+> 
+> Thanks
 
-This is specifically needed to prevent a NULL-pointer dereference on the
-Lenovo X13s with some firmware revisions, or more generally, whenever
-the runtime services have been disabled (e.g. efi=noruntime or with
-PREEMPT_RT).
+Specifically virtio net is careful to call virtio_device_ready
+under rtnl lock so buffers are only added after DRIVER_OK.
 
-Fixes: e7b813b32a42 ("efi: random: refresh non-volatile random seed when RNG is initialized")
-Reported-by: Steev Klimaszewski <steev@kali.org>
-Reported-by: Bjorn Andersson <andersson@kernel.org>
-Tested-by: Andrew Halaney <ahalaney@redhat.com> # sc8280xp-lenovo-thinkpad-x13s
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
+However we do not need to tie this to kick, this is what I wrote:
 
-Changes in v2
- - amend commit message with a comment on this being needed whenever the
-   runtime services have been disabled
+> BTW Jason, I had the idea to disable callbacks until driver uses the
+> virtio core for the first time (e.g. by calling virtqueue_add* family of
+> APIs). Less aggressive than your ideas but I feel it will add security
+> to the init path at least.
+
+So not necessarily kick, we can make adding buffers allow the
+interrupt.
 
 
- drivers/firmware/efi/efi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-index 31a4090c66b3..09716eebe8ac 100644
---- a/drivers/firmware/efi/efi.c
-+++ b/drivers/firmware/efi/efi.c
-@@ -429,7 +429,9 @@ static int __init efisubsys_init(void)
- 		platform_device_register_simple("efi_secret", 0, NULL, 0);
- #endif
- 
--	execute_with_initialized_rng(&refresh_nv_rng_seed_nb);
-+	if (efi_rt_services_supported(EFI_RT_SUPPORTED_SET_VARIABLE))
-+		execute_with_initialized_rng(&refresh_nv_rng_seed_nb);
-+
- 	return 0;
- 
- err_remove_group:
 -- 
-2.37.4
+MST
 
