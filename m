@@ -2,46 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D37F651388
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5FAB65138B
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:58:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbiLST4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 14:56:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
+        id S232455AbiLST6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 14:58:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbiLST4a (ORCPT
+        with ESMTP id S231305AbiLST63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 14:56:30 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21062DEE7;
-        Mon, 19 Dec 2022 11:56:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=klZAlP1kOUp7wpdZeL5YEyJd1NOcY1vneGW37Msxzjw=; b=zEEU2qspZ4u/6ELaYbnpp78VmU
-        GLEoJRvumw95axpcRtNDMP/P+JPKcvMQZ1gycML+Hjhd+SH5I7pv1c/brFef8Ava5AUAq2d4j9Vic
-        G+f+Kthek418tixMVMw67hbN0yLX1+m7RFNzuOZBTDOq/uf6/y78uQ4T+pNlm8TH1HQv6L+94Mh72
-        iC2J0WvTJqmpiSv9GM3oHlLl/IC92+ZPj5rR/ATydJ/yOq3aM0nFYuYUxC2caNQ+n1aQGagHK84G8
-        kO0PWwOApi0omv+yHFytr2/yAMeEK7o2T4PAl++2WkBEJ/Mn5CkG/Je1NZ9ix7twkuPCZzh4F745E
-        6CRIjONg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p7MFJ-001TSF-BY; Mon, 19 Dec 2022 19:56:25 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     alison.schofield@intel.com, vishal.l.verma@intel.com,
-        ira.weiny@intel.com, bwidawsk@kernel.org, dan.j.williams@intel.com
-Cc:     dave@stgolabs.net, a.manzanares@samsung.com, mcgrof@kernel.org,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cxl_test: remove nvdimm requirement
-Date:   Mon, 19 Dec 2022 11:56:20 -0800
-Message-Id: <20221219195620.351544-1-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.37.1
+        Mon, 19 Dec 2022 14:58:29 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C32510FEA;
+        Mon, 19 Dec 2022 11:58:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1671479906; bh=i+f4d/Si53rzglv7PMIEM+OxgEO+cRX80m33pXb3pNE=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=t5BnMz9oqKIXOVixMSgK4ca5LKCstRcsxV881tqn3MnDik0kGsQz7inTnd+A6fsDD
+         MVHh3B/FjGCB204gBC72c36HVyV6/CmRkbkR2o+xBviUYCgwv2+07bUP0wJ70sOrgx
+         bS/HsAm70YtFMVEaO2F9ohHcbJatg2eRHYrtK9x3lmRylrTrYO0JDjHLn2OmI6WWM5
+         xhfcBxz5446v8/61LgKXQP+Yp+06/lxoCcYkCV/pjWVY1i36pnBJPUePAUE0qV0lIQ
+         6VVz/UIsDGwllWbT9gw+1NC23PK6TBo38QT9gv0BzXXaFG1zjsAEcNv0w55y8cahId
+         4Z2PYXCCCsqfQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.100.20] ([46.142.34.134]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N79uI-1ooWB41vwK-017TV3; Mon, 19
+ Dec 2022 20:58:26 +0100
+Message-ID: <ce3f3e97-fd58-da96-9e2e-735d20abad69@gmx.de>
+Date:   Mon, 19 Dec 2022 20:58:26 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Subject: Re: [PATCH 6.1 00/25] 6.1.1-rc1 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:R2/yFToRqHv7kiV79nWVCJUfyIRW0xeGkqADhCguTWxsOT74Ap+
+ j2YVpfSSV0ppPQ1OUCaecC6ElvyWNy3k19S+vdHCMkUzbTDETIoxNOFL5yA4HvQ9D+KEfcA
+ I59XelTTtqVt0BPYiRKi47JLBWQXNA6jqBtD4KD9SHoQxduQkiUV+Zla1RI1beI/z1kyUWx
+ EunsaJ5kz0IXanzrJujOA==
+UI-OutboundReport: notjunk:1;M01:P0:dxpzJ/pqmh8=;p8cUn8ush4hw8tcrtmF+B1hUwgi
+ PxL2lBwtVaXMV/gly4srxbC9U4UXLtzwpvrE+bD5E4lYJEcnKe+BvBp3/CfrYT2HZBWmgI+8P
+ PrVZ88u0xcxX8fKsKHvPCDToaWmV9B+r2mv8yrg2ilG2evV2C73KEBpRc337XiXHgKY+I8YP/
+ AOsTjksqRxOq9wh8pVOrx6EExXrlNkTJJKlr80XCV6ML91wwxx/p3SWmMzERQYGS4mpn+bs/B
+ oaRjJkZyuv9MFRYVFtkU7wKdOfGOSkEDTjqbU3QSWp/3CgWA/+IoMroRlE+d2Fp+6+FYvLwQz
+ 7XGxcse9GKnwanrUbbZ2hf2YShatpMEFTYvGOukjo6WhSYJcjs2DGpywdBt15ZZ5IfdwlpZrd
+ aBGYT+6K3FVYcWqdIFhWWQ25/z/y71wqbqE9dYwF4Q+gDbXFGpqezWkRiX99dJAfHhbk8mYpZ
+ qCVdynt6UUmQLhB7wEt7TAb2R6Q9uGLBK4CVx/S5TLY2htWrKLh1xizijWRHrGt6YFzIxoLl0
+ r/WsP2WhDGk0AtT85zYqF3B8wKCjcgUbSFW4vmdH2pTriFuvT6I0MI1RYLJzMNdYqFlSCHEGj
+ OEL5Wl2tge29Xr8A+vO6vGSzWjHXloYxMyLZxi8PZfrPfkj8EU78961UiBmdXnvTbSYzKbwig
+ krpN5iHglr5WxBdtTFPJ5m4rU/S7Qg+kUfHgymRWtuqXbIVmzhbWbfEoj8FQDpeUfpx0t5EYM
+ 7IXOhzFV3EfDsO7dT7Mj9DiRyyWMiRixumR2rZYhnouqWm+1fEOT12TS3Fz8biFxd8YPk2Yxz
+ 73flJmfjOgyaGPjbcI3FEI3eVNI7lv21W0CN6dehUUJFauXK3MnbLHmLJPCUtKUVm5qoNbmLC
+ V/cscHoOZpsPwsFK9cKHH8jRzZKjYg5iEJa2+OUlkj6qGHNzvuRIiP41ZR9zCC+tcmv3mVwQ5
+ J9/3r7C1p+snqAYk/RULJ+mAJLU=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,47 +69,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need for NVDIMM to test CXL, so remove this
-requirement.
+Hi Greg
 
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- tools/testing/cxl/config_check.c | 2 --
- tools/testing/cxl/test/mock.c    | 2 ++
- 2 files changed, 2 insertions(+), 2 deletions(-)
+6.1.1-rc1
 
-diff --git a/tools/testing/cxl/config_check.c b/tools/testing/cxl/config_check.c
-index 99b56b5f6edf..cef5f1159ba7 100644
---- a/tools/testing/cxl/config_check.c
-+++ b/tools/testing/cxl/config_check.c
-@@ -10,7 +10,5 @@ void check(void)
- 	BUILD_BUG_ON(!IS_ENABLED(CONFIG_64BIT));
- 	BUILD_BUG_ON(!IS_MODULE(CONFIG_CXL_BUS));
- 	BUILD_BUG_ON(!IS_MODULE(CONFIG_CXL_ACPI));
--	BUILD_BUG_ON(!IS_MODULE(CONFIG_CXL_PMEM));
- 	BUILD_BUG_ON(!IS_ENABLED(CONFIG_CXL_REGION_INVALIDATION_TEST));
--	BUILD_BUG_ON(!IS_ENABLED(CONFIG_NVDIMM_SECURITY_TEST));
- }
-diff --git a/tools/testing/cxl/test/mock.c b/tools/testing/cxl/test/mock.c
-index 5dface08e0de..7c71826f1aac 100644
---- a/tools/testing/cxl/test/mock.c
-+++ b/tools/testing/cxl/test/mock.c
-@@ -116,6 +116,7 @@ struct acpi_pci_root *__wrap_acpi_pci_find_root(acpi_handle handle)
- }
- EXPORT_SYMBOL_GPL(__wrap_acpi_pci_find_root);
- 
-+#ifdef CONFIG_CXL_PMEM
- struct nvdimm_bus *
- __wrap_nvdimm_bus_register(struct device *dev,
- 			   struct nvdimm_bus_descriptor *nd_desc)
-@@ -130,6 +131,7 @@ __wrap_nvdimm_bus_register(struct device *dev,
- 	return nvdimm_bus_register(dev, nd_desc);
- }
- EXPORT_SYMBOL_GPL(__wrap_nvdimm_bus_register);
-+#endif
- 
- struct cxl_hdm *__wrap_devm_cxl_setup_hdm(struct cxl_port *port)
- {
--- 
-2.35.1
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 37)
+
+Thanks
+
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 
