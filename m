@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4705E651645
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 00:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0A76516A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 00:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232786AbiLSXDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 18:03:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55336 "EHLO
+        id S232855AbiLSXHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 18:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232889AbiLSXBu (ORCPT
+        with ESMTP id S232959AbiLSXDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 18:01:50 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72E01178;
-        Mon, 19 Dec 2022 15:00:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1671490844; x=1703026844;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8UhbIO+bjFBQdkCiu8pP4FCYrwf/TNyQmQumJGPtH4E=;
-  b=mqL+MaM0oAt3wNjvSQZPsr6lUcAJ7uwgwCDKimAPcvtu5OgzAZQ5jwl/
-   o+Qa91l9e1BnAH3t6V7gzcQ6yA+4xB7pdMZw3HEN5by5w7IGPS6vH3NDX
-   NsBqsRVOg87nxXD3NRkPL9Tiv1fBP4kjzKqwn0yVYULq+IE08CZnn44MH
-   c=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 19 Dec 2022 15:00:43 -0800
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 15:00:43 -0800
+        Mon, 19 Dec 2022 18:03:05 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227CB1580F;
+        Mon, 19 Dec 2022 15:01:07 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJMlBrb021788;
+        Mon, 19 Dec 2022 23:00:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=qcppdkim1;
+ bh=xxb40SBhINMA+hmRpsx/CP63bdIdqGIdwKa3KzTzd2Q=;
+ b=MFjJBomY/JgQu46hgZ7FcZntWCGdVry1ZFDVMNDxKD3nBjdZKd8TAWrjfU6fHIsBR88h
+ 7fSY/vnQIClBN7dONfPQuE+r5wh/u9Eimd+kC/bB9UvoBn5pj69rqDyHegN+Q3PQQmGK
+ 7WogD5HY3ykcRJuvjnjzOBYs4N+Eyx4XIDwkCr9d5jzinr6T0KnlS49gmPuZgaZkiwrM
+ BLNmR8UhsYZzIjAaapGbJOo4c3YrNlWF/3NTngDtfwEGHRX0l6slZBmG0k5mbyhAO1zO
+ X+gPIJD4sIpqgQIMQIiM0TetBiUPJf/HYq7CwHP6y/0Hlf89aYTaPbqqlLOPdqwSXWgh hA== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mh72gd4dm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Dec 2022 23:00:45 +0000
+Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BJN0jr1007358
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Dec 2022 23:00:45 GMT
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 19 Dec 2022 15:00:42 -0800
+ 15.2.986.36; Mon, 19 Dec 2022 15:00:44 -0800
 From:   Elliot Berman <quic_eberman@quicinc.com>
 To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-CC:     Elliot Berman <quic_eberman@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        "Srivatsa Vaddagiri" <quic_svaddagi@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>
+CC:     Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
         Carl van Schaik <quic_cvanscha@quicinc.com>,
         Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Jassi Brar <jassisinghbrar@gmail.com>,
@@ -62,9 +64,9 @@ CC:     Elliot Berman <quic_eberman@quicinc.com>,
         <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-acpi@vger.kernel.org>
-Subject: [PATCH v8 19/28] firmware: qcom_scm: Register Gunyah platform ops
-Date:   Mon, 19 Dec 2022 14:58:40 -0800
-Message-ID: <20221219225850.2397345-20-quic_eberman@quicinc.com>
+Subject: [PATCH v8 20/28] docs: gunyah: Document Gunyah VM Manager
+Date:   Mon, 19 Dec 2022 14:58:41 -0800
+Message-ID: <20221219225850.2397345-21-quic_eberman@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221219225850.2397345-1-quic_eberman@quicinc.com>
 References: <20221219225850.2397345-1-quic_eberman@quicinc.com>
@@ -74,8 +76,20 @@ Content-Type: text/plain
 X-Originating-IP: [10.49.16.6]
 X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: EZZ-VF57SvRhg0-nYdnWAYMpgUnGlh52
+X-Proofpoint-ORIG-GUID: EZZ-VF57SvRhg0-nYdnWAYMpgUnGlh52
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-19_01,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ suspectscore=0 impostorscore=0 bulkscore=0 mlxlogscore=999 adultscore=0
+ spamscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212190202
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,162 +97,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qualcomm platforms have a firmware entity which performs access control
-to physical pages. Dynamically started Gunyah virtual machines use the
-QCOM_SCM_RM_MANAGED_VMID for access. Linux thus needs to assign access
-to the memory used by guest VMs. Gunyah doesn't do this operation for us
-since it is the current VM (typically VMID_HLOS) delegating the access
-and not Gunyah itself. Use the Gunyah platform ops to achieve this so
-that only Qualcomm platforms attempt to make the needed SCM calls.
+Document the ioctls and usage of Gunyah VM Manager driver.
 
-Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- drivers/firmware/Kconfig    |  2 +
- drivers/firmware/qcom_scm.c | 95 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 97 insertions(+)
+ Documentation/virt/gunyah/index.rst      |   1 +
+ Documentation/virt/gunyah/vm-manager.rst | 100 +++++++++++++++++++++++
+ 2 files changed, 101 insertions(+)
+ create mode 100644 Documentation/virt/gunyah/vm-manager.rst
 
-diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-index b59e3041fd62..b888068ff6f2 100644
---- a/drivers/firmware/Kconfig
-+++ b/drivers/firmware/Kconfig
-@@ -214,6 +214,8 @@ config MTK_ADSP_IPC
+diff --git a/Documentation/virt/gunyah/index.rst b/Documentation/virt/gunyah/index.rst
+index fbadbdd24da7..9019a03b6f3e 100644
+--- a/Documentation/virt/gunyah/index.rst
++++ b/Documentation/virt/gunyah/index.rst
+@@ -7,6 +7,7 @@ Gunyah Hypervisor
+ .. toctree::
+    :maxdepth: 1
  
- config QCOM_SCM
- 	tristate
-+	select VIRT_DRIVERS
-+	select GUNYAH_PLATFORM_HOOKS
++   vm-manager
+    message-queue
  
- config QCOM_SCM_DOWNLOAD_MODE_DEFAULT
- 	bool "Qualcomm download mode enabled by default"
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index 92763dce6477..bebc848cd3c5 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -17,6 +17,7 @@
- #include <linux/clk.h>
- #include <linux/reset-controller.h>
- #include <linux/arm-smccc.h>
-+#include <linux/gunyah_rsc_mgr.h>
- 
- #include "qcom_scm.h"
- 
-@@ -27,6 +28,9 @@ module_param(download_mode, bool, 0);
- #define SCM_HAS_IFACE_CLK	BIT(1)
- #define SCM_HAS_BUS_CLK		BIT(2)
- 
-+#define QCOM_SCM_RM_MANAGED_VMID	0x3A
-+#define QCOM_SCM_MAX_MANAGED_VMID	0x3F
+ Gunyah is a Type-1 hypervisor which is independent of any OS kernel, and runs in
+diff --git a/Documentation/virt/gunyah/vm-manager.rst b/Documentation/virt/gunyah/vm-manager.rst
+new file mode 100644
+index 000000000000..62513af09cbf
+--- /dev/null
++++ b/Documentation/virt/gunyah/vm-manager.rst
+@@ -0,0 +1,100 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
- struct qcom_scm {
- 	struct device *dev;
- 	struct clk *core_clk;
-@@ -1292,6 +1296,94 @@ int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
- }
- EXPORT_SYMBOL(qcom_scm_lmh_dcvsh);
- 
-+static int qcom_scm_gh_rm_pre_mem_share(struct gh_rm_rpc *rm, struct gh_rm_mem_parcel *mem_parcel)
-+{
-+	struct qcom_scm_vmperm *new_perms;
-+	u64 src, src_cpy;
-+	int ret = 0, i, n;
++=======================
++Virtual Machine Manager
++=======================
 +
-+	new_perms = kcalloc(mem_parcel->n_acl_entries, sizeof(*new_perms), GFP_KERNEL);
-+	if (!new_perms)
-+		return -ENOMEM;
++The Gunyah Virtual Machine Manager is a Linux driver to support launching
++virtual machines using Gunyah. It presently supports launching non-proxy
++scheduled Linux-like virtual machines.
 +
-+	for (n = 0; n < mem_parcel->n_acl_entries; n++) {
-+		if (mem_parcel->acl_entries[n].vmid <= QCOM_SCM_MAX_MANAGED_VMID)
-+			new_perms[n].vmid = mem_parcel->acl_entries[n].vmid;
-+		else
-+			new_perms[n].vmid = QCOM_SCM_RM_MANAGED_VMID;
-+		if (mem_parcel->acl_entries[n].perms & GH_RM_ACL_X)
-+			new_perms[n].perm |= QCOM_SCM_PERM_EXEC;
-+		if (mem_parcel->acl_entries[n].perms & GH_RM_ACL_W)
-+			new_perms[n].perm |= QCOM_SCM_PERM_WRITE;
-+		if (mem_parcel->acl_entries[n].perms & GH_RM_ACL_R)
-+			new_perms[n].perm |= QCOM_SCM_PERM_READ;
-+	}
++Except for some basic information about the location of initial binaries,
++most of the configuration about a Gunyah virtual machine is described in the
++VM's devicetree. The devicetree is generated by userspace. Interacting with the
++virtual machine is still done via the kernel and VM configuration requires some
++of the corresponding functionality to be set up in the kernel. For instance,
++sharing userspace memory with a VM is done via the GH_VM_SET_USER_MEM_REGION
++ioctl. The VM itself is configured to use the memory region via the
++devicetree.
 +
-+	src = (1ull << QCOM_SCM_VMID_HLOS);
++Sample Userspace VMM
++====================
 +
-+	for (i = 0; i < mem_parcel->n_mem_entries; i++) {
-+		src_cpy = src;
-+		ret = qcom_scm_assign_mem(mem_parcel->mem_entries[i].ipa_base,
-+						mem_parcel->mem_entries[i].size,
-+						&src_cpy, new_perms, mem_parcel->n_acl_entries);
-+		if (ret) {
-+			src = 0;
-+			for (n = 0; n < mem_parcel->n_acl_entries; n++) {
-+				if (mem_parcel->acl_entries[n].vmid <= QCOM_SCM_MAX_MANAGED_VMID)
-+					src |= (1ull << mem_parcel->acl_entries[n].vmid);
-+				else
-+					src |= (1ull << QCOM_SCM_RM_MANAGED_VMID);
-+			}
++A sample userspace VMM is included in samples/gunyah/ along with a minimal
++devicetree that can be used to launch a VM. To build this sample, enable
++CONFIG_SAMPLE_GUNYAH.
 +
-+			new_perms[0].vmid = QCOM_SCM_VMID_HLOS;
++IOCTLs and userspace VMM flows
++==============================
 +
-+			for (i--; i >= 0; i--) {
-+				src_cpy = src;
-+				ret = qcom_scm_assign_mem(mem_parcel->mem_entries[i].ipa_base,
-+								mem_parcel->mem_entries[i].size,
-+								&src_cpy, new_perms, 1);
-+				WARN_ON_ONCE(ret);
-+			}
-+			break;
-+		}
-+	}
++The kernel exposes a char device interface at /dev/gunyah.
 +
-+	kfree(new_perms);
-+	return ret;
-+}
++To create a VM, use the GH_CREATE_VM ioctl. A successful call will return a
++"Gunyah VM" file descriptor.
 +
-+static int qcom_scm_gh_rm_post_mem_reclaim(struct gh_rm_rpc *rm,
-+						struct gh_rm_mem_parcel *mem_parcel)
-+{
-+	struct qcom_scm_vmperm new_perms;
-+	u64 src = 0;
-+	int ret = 0, i, n;
++/dev/gunyah API Descriptions
++----------------------------
 +
-+	new_perms.vmid = QCOM_SCM_VMID_HLOS;
-+	new_perms.perm = QCOM_SCM_PERM_EXEC | QCOM_SCM_PERM_WRITE | QCOM_SCM_PERM_READ;
++GH_CREATE_VM
++~~~~~~~~~~~~
 +
-+	for (n = 0; n < mem_parcel->n_acl_entries; n++) {
-+		if (mem_parcel->acl_entries[n].vmid <= QCOM_SCM_MAX_MANAGED_VMID)
-+			src |= (1ull << mem_parcel->acl_entries[n].vmid);
-+		else
-+			src |= (1ull << QCOM_SCM_RM_MANAGED_VMID);
-+	}
++Creates a Gunyah VM. The argument is reserved for future use and must be 0.
 +
-+	for (i = 0; i < mem_parcel->n_mem_entries; i++) {
-+		ret = qcom_scm_assign_mem(mem_parcel->mem_entries[i].ipa_base,
-+						mem_parcel->mem_entries[i].size,
-+						&src, &new_perms, 1);
-+		WARN_ON_ONCE(ret);
-+	}
++Gunyah VM API Descriptions
++--------------------------
 +
-+	return ret;
-+}
++GH_VM_SET_USER_MEM_REGION
++~~~~~~~~~~~~~~~~~~~~~~~~~
 +
-+static struct gunyah_rm_platform_ops qcom_scm_gh_rm_platform_ops = {
-+	.pre_mem_share = qcom_scm_gh_rm_pre_mem_share,
-+	.post_mem_reclaim = qcom_scm_gh_rm_post_mem_reclaim,
-+};
++::
 +
- static int qcom_scm_find_dload_address(struct device *dev, u64 *addr)
- {
- 	struct device_node *tcsr;
-@@ -1414,6 +1506,9 @@ static int qcom_scm_probe(struct platform_device *pdev)
- 	if (download_mode)
- 		qcom_scm_set_download_mode(true);
- 
-+	if (gh_rm_register_platform_ops(&qcom_scm_gh_rm_platform_ops))
-+		dev_warn(__scm->dev, "Gunyah RM platform ops were already registered\n");
++  struct gh_userspace_memory_region {
++	__u32 label;
++	__u32 flags;
++	__u64 guest_phys_addr;
++	__u64 memory_size;
++	__u64 userspace_addr;
++  };
 +
- 	return 0;
- }
- 
++This ioctl allows the user to create or delete a memory parcel for a guest
++virtual machine. Each memory region is uniquely identified by a label;
++attempting to create two regions with the same label is not allowed.
++
++While VMM is guest-agnostic and allows runtime addition of memory regions,
++Linux guest virtual machines do not support accepting memory regions at runtime.
++Thus, memory regions should be provided before starting the VM and the VM must
++be configured to accept these at boot-up.
++
++The guest physical address is used by Linux kernel to check that the requested
++user regions do not overlap and to help find the corresponding memory region
++for calls like GH_VM_SET_DTB_CONFIG.
++
++To delete a memory region, call GH_VM_SET_USER_MEM_REGION with label set to the
++desired region and memory_size set to 0.
++
++The flags field of gh_userspace_memory_region accepts the following bits. All
++other bits must be 0 and are reserved for future use. The ioctl will return
++-EINVAL if an unsupported bit is detected.
++
++  - GH_MEM_ALLOW_READ/GH_MEM_ALLOW_WRITE/GH_MEM_ALLOW_EXEC sets read/write/exec
++    permissions for the guest, respectively.
++  - GH_MEM_LENT means that the memory will be unmapped from the host and be
++    unaccessible by the host while the guest has the region.
++
++GH_VM_SET_DTB_CONFIG
++~~~~~~~~~~~~~~~~~~~~
++
++::
++
++  struct gh_vm_dtb_config {
++	__u64 gpa;
++	__u64 size;
++  };
++
++This ioctl sets the location of the VM's devicetree blob and is used by Gunyah
++Resource Manager to allocate resources.
++
++GH_VM_START
++~~~~~~~~~~~
++
++This ioctl starts the VM.
 -- 
 2.25.1
 
