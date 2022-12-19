@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D32F36512C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1586512D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:22:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232456AbiLSTT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 14:19:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
+        id S232690AbiLSTWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 14:22:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232564AbiLSTTJ (ORCPT
+        with ESMTP id S232458AbiLSTVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 14:19:09 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FD913CC2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 11:19:09 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id y133-20020a25328b000000b006f997751950so11675460yby.7
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 11:19:09 -0800 (PST)
+        Mon, 19 Dec 2022 14:21:47 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16331704B;
+        Mon, 19 Dec 2022 11:20:23 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id 4so10007176plj.3;
+        Mon, 19 Dec 2022 11:20:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iIc91OoDv/mBPCGHIucL2csPnIlsRLcBZ/NTNtcT38Q=;
-        b=r8vPBYkfeyPzl0oDj/LTaQo+BZJ7LAkSF5428uTADVbbx4PH0krjcafDDu6HZWVLF/
-         6PK65zYCRLx/WopxRxp3Uxjzj32xc++LBtmmCjcK2Lyfa7QDmG2wr1AIhBOfBpd0y3F7
-         rF2zLFeT9NcKM2MJOlwDxsbVXrKJh0y5EPJTqXSFHIG6d7wT5rmbIPq0ZDA/lSNQWRc5
-         KvvsyX7kLtAAyaI7OeQ02ycGiFds8HatG+Vilc1GVYOq7oIhPCaeyM5NLsyGFMozcp/1
-         bonJrRbgxss5V5/ewRa+AQlechuVqx9l2/cIaFE8w2rGn+vMfAefFzxcNb/DmiWg4tVI
-         5RLw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VR46xdGbsg8mOM7/UFZLhsN0WuKq4eAgjSK/29pLVdw=;
+        b=aTfRBT+OcrFsAJU2Tq4Bcah4rMnw9eeLl7CBo9nh7WLnaxsF67mHOprqd2fATuQudf
+         mLY2RoXIDjaAT1Hcb8oDn4xSuO/w8d6trTe+82kbnJuTtrF9a3yal4ZpHiIN/vzcTmjz
+         ENzw6qeq9SDxRssTuytMOnAHbulRhF3C24FYzO/YNXhCyRCNDEJk38FNQJeu4rR+ND+x
+         Z4nNDriroEI1nbsFJ146UYHUU/5XgjZOYlPpFxLRDUdAguuEzy4mV5uH/af1XcGfVv2H
+         oYgyi8sMm1bkl+8fOrjMlVljLMxZ2BmTXTZni/NwbfISXhgmtZBW3dYT6XjitND9LOGJ
+         sxww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iIc91OoDv/mBPCGHIucL2csPnIlsRLcBZ/NTNtcT38Q=;
-        b=5i9RDjy3yFeh4gJTpjen4weBQeq73VRfgZe2EQ6VY/ZiuaKiJM5ZhV03Q2S134mjGN
-         qz5CR/CIBc5lapYO1yl+4pdedhlOow0hvrHZVrRNVqrQLBbMxWmKXlAePGumwM3SFewB
-         zEpURuHkAfFMJx9AvvZh4or7G8EVw2u2Vcz+kLE63tCiDagsK+EzhrB3rffQt5fqZRGo
-         uGaCjS7J5L6zdemqo0ODJyYryZLNnIM+JARPoUiilGATORPp7uR4CtZTiiyK2xcrMXno
-         UwtRnaA4c4bWY4tpzRWevcq8kOFpWwfVlqqbHsM85Wk1TIFa8HiUPNiOJHaKsE16PnNE
-         Ycew==
-X-Gm-Message-State: AFqh2kqmav9Zd7F3/WZwYVA6FEp7otmU096QcT+Q5/ivpGB5toZidlRl
-        TbLaEV88BW9I43rdkqbCGXBwmpoi1hiBP9Q=
-X-Google-Smtp-Source: AMrXdXu1UOgFHyAN6NsQ+1XaAW4P5yWDQtrcqIFXvJe7O6WezqPpzlP5r7QSr5cq4wj/GeiMHPgpVcqbt1X8myM=
-X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
- (user=allenwebb job=sendgmr) by 2002:a0d:c901:0:b0:349:a017:8dcc with SMTP id
- l1-20020a0dc901000000b00349a0178dccmr858068ywd.258.1671477548552; Mon, 19 Dec
- 2022 11:19:08 -0800 (PST)
-Date:   Mon, 19 Dec 2022 13:18:55 -0600
-In-Reply-To: <20221219191855.2010466-1-allenwebb@google.com>
-Mime-Version: 1.0
-References: <20221216221703.294683-1-allenwebb@google.com> <20221219191855.2010466-1-allenwebb@google.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VR46xdGbsg8mOM7/UFZLhsN0WuKq4eAgjSK/29pLVdw=;
+        b=OJNl8ZPcpirIVbjx9KhovCSGcu9NWaP3jTGdbPDKpmeqBUwQspgAnGiwHHclTBX7uS
+         tgL66zyPTiwiO0ZLUDX28NIQEVLhqk/oFCnUs+hw6lQXVN3iitdXiK7a7u67yUZ9i1Ex
+         ePzOQV8t3MgvgPZuN5YRTA7vKGQ3b54zWz4W//YV9+kYEoFqpPpgCCB3TynUIj2JMD1I
+         lLRK+xxu0yghwQJlw+5SWdSo+7l8/fkg4/IblSB7P67Qdb4jpsFGJ5GGnYiRunWaD5zb
+         0o49cm0sau6xie/ZFZdK3dGD9W1M2CZUpZgsHtVm4o7OQ7wVTnBqBaZA6SNJkP8ySoBw
+         QwXA==
+X-Gm-Message-State: AFqh2kp2AWYAe7tAJW02VnhqRDOt9+W5xxVBq3KRP/iijrkw6GiqBknx
+        JsBpcXGjbgmtXhysY5KGmLhEPpmOdUU=
+X-Google-Smtp-Source: AMrXdXt9lF1+KsoIgLbpyfUFVSrwW0MHO+N6HPx2iUWtmmib3ZexnjW06+ojln4Y94KOklO1VRO3sw==
+X-Received: by 2002:a05:6a21:6d93:b0:9d:efbe:2052 with SMTP id wl19-20020a056a216d9300b0009defbe2052mr16503711pzb.8.1671477620884;
+        Mon, 19 Dec 2022 11:20:20 -0800 (PST)
+Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:4c62:79e:b4cd:2cbb])
+        by smtp.gmail.com with ESMTPSA id b6-20020a1709027e0600b001869f2120absm7488342plm.294.2022.12.19.11.20.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 11:20:20 -0800 (PST)
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH 1/5] gpiolib: of: remove of_gpio_count()
+Date:   Mon, 19 Dec 2022 11:20:12 -0800
+Message-Id: <20221219192016.1396950-1-dmitry.torokhov@gmail.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221219191855.2010466-10-allenwebb@google.com>
-Subject: [PATCH v8 9/9] build: Add modules.builtin.alias
-From:   Allen Webb <allenwebb@google.com>
-To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Allen Webb <allenwebb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,82 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Generate modules.builtin.alias using modpost and install it with the
-modules.
+There are no more users of of_gpio_count() in the mainline kernel,
+remove it.
 
-Signed-off-by: Allen Webb <allenwebb@google.com>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- .gitignore               |  1 +
- Makefile                 |  1 +
- scripts/Makefile.modpost | 17 ++++++++++++++++-
- 3 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/.gitignore b/.gitignore
-index 47229f98b327b..40a90bca89641 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -67,6 +67,7 @@ modules.order
- /System.map
- /Module.markers
- /modules.builtin
-+/modules.builtin.alias
- /modules.builtin.modinfo
- /modules.nsdeps
+After 6.2-rc1 there should be no more users of the APIs mentioned in
+this series.
+
+ include/linux/of_gpio.h | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+diff --git a/include/linux/of_gpio.h b/include/linux/of_gpio.h
+index 6db627257a7b..39f16a960565 100644
+--- a/include/linux/of_gpio.h
++++ b/include/linux/of_gpio.h
+@@ -105,17 +105,6 @@ static inline int of_gpio_named_count(const struct device_node *np,
+ 	return of_count_phandle_with_args(np, propname, "#gpio-cells");
+ }
  
-diff --git a/Makefile b/Makefile
-index 78525ebea8762..572f364f40538 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1558,6 +1558,7 @@ __modinst_pre:
- 	fi
- 	@sed 's:^:kernel/:' modules.order > $(MODLIB)/modules.order
- 	@cp -f modules.builtin $(MODLIB)/
-+	@cp -f modules.builtin.alias $(MODLIB)/
- 	@cp -f $(objtree)/modules.builtin.modinfo $(MODLIB)/
- 
- endif # CONFIG_MODULES
-diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-index e41dee64d429c..94c1d66c7769a 100644
---- a/scripts/Makefile.modpost
-+++ b/scripts/Makefile.modpost
-@@ -15,6 +15,7 @@
- # 2) modpost is then used to
- # 3)  create one <module>.mod.c file per module
- # 4)  create one Module.symvers file with CRC for all exported symbols
-+# 5)  create modules.builtin.alias the aliases for built-in modules
- 
- # Step 3 is used to place certain information in the module's ELF
- # section, including information such as:
-@@ -51,6 +52,21 @@ ifneq ($(findstring i,$(filter-out --%,$(MAKEFLAGS))),)
- modpost-args += -n
- endif
- 
-+vmlinux.o-if-present := $(wildcard vmlinux.o)
-+ifneq ($(vmlinux.o-if-present),)
-+output-builtin.alias := modules.builtin.alias
-+modpost-args += -b .modules.builtin.alias.in
-+.modules.builtin.alias.in: $(output-symdump)
-+	@# Building $(output-symdump) generates .modules.builtin.alias.in as a
-+	@# side effect.
-+	@[ -e $@ ] || $(MODPOST) -b .modules.builtin.alias.in $(vmlinux.o-if-present)
-+
-+$(output-builtin.alias): .modules.builtin.alias.in
-+	sort -o $@ $^
-+
-+__modpost: $(output-builtin.alias)
-+endif
-+
- ifeq ($(KBUILD_EXTMOD),)
- 
- # Generate the list of in-tree objects in vmlinux
-@@ -78,7 +94,6 @@ targets += .vmlinux.objs
- .vmlinux.objs: vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
- 	$(call if_changed,vmlinux_objs)
- 
--vmlinux.o-if-present := $(wildcard vmlinux.o)
- output-symdump := vmlinux.symvers
- 
- ifdef KBUILD_MODULES
+-/**
+- * of_gpio_count() - Count GPIOs for a device
+- * @np:		device node to count GPIOs for
+- *
+- * Same as of_gpio_named_count, but hard coded to use the 'gpios' property
+- */
+-static inline int of_gpio_count(const struct device_node *np)
+-{
+-	return of_gpio_named_count(np, "gpios");
+-}
+-
+ static inline int of_get_gpio_flags(const struct device_node *np, int index,
+ 		      enum of_gpio_flags *flags)
+ {
 -- 
-2.37.3
+2.39.0.314.g84b9a713c41-goog
 
