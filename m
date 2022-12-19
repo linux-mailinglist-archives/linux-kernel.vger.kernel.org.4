@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14A0651458
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 21:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6890A65144A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 21:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232757AbiLSUrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 15:47:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
+        id S232853AbiLSUrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 15:47:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbiLSUqk (ORCPT
+        with ESMTP id S232381AbiLSUqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 19 Dec 2022 15:46:40 -0500
-Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2C21276F
+Received: from mail-io1-xd49.google.com (mail-io1-xd49.google.com [IPv6:2607:f8b0:4864:20::d49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF4612D1C
         for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 12:46:30 -0800 (PST)
-Received: by mail-il1-x14a.google.com with SMTP id j3-20020a056e02154300b00304bc968ef1so7171962ilu.4
+Received: by mail-io1-xd49.google.com with SMTP id e15-20020a056602158f00b006e01d8fa493so4614388iow.3
         for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 12:46:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RHzej/1PRqREjwzL8yy+/gC2rwJnW9I5Nh9PS4uQu5Q=;
-        b=qF7j3UMvzJCUsQLLBjLgzSlmOXfqeEaNvw3PLXzeRWDcyY3bD8OOA38EQdGqqCZrSa
-         iZncq8o51eeujFRZtBj6GVXss1cKEXggq6R/z5mdQ5oGh7e4OTlkwSEut6Vgt5ailuuP
-         Ed8N28NG0EMmlAF45ESity6Pkkw741SVRjm2mDeGj1255GePszv1dQ+FkisGc7bA9Zi+
-         PxalhtbeDVQuKtLNXx40YFKl4kZTz7hZ9GB7/D2GRe8u5St+PZ3YIZZ29RK+RgepiQRB
-         Zd9kHw0ZtKBVgwDl7AT/HspdSRo1e7RQggsVmuqHRJipm5Guv5SA6HoxE4OVIO2cVfY1
-         Ztbg==
+        bh=Ict2nAybZst9hd7blb/mqnDuFXGRQOU9mJnqBemEDUs=;
+        b=s2ZrfNQOjBrSWOSByiZCQfYB433BmyIy/j3ly5GPI7q7DQSKjQaGWpR8OpY5yqR4up
+         s/oCDPMg27vjwGrwVakCjp4cMNI3bT10VqVyYGG/KXoVAvy3X5gux1hPs+vi4/BDBB3M
+         KwDWb6Jhedtm3NReW57ZGysB4WVkkexx2NoF17pNoEVKe1gWeqybIlgRLnARmU/966fe
+         bfborkGMEPeQtjsE7fqcXAEvOEBGXFtMu9wq8FhFmfhYwwf529//Ho3A8hM019D3duWx
+         jJCLpW3SvyBXZJdHFHUrepQKdzkQiRs1ZiPGq9+tWAKvGfkZODfY5IapcpB2YfBsy2iC
+         GbYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RHzej/1PRqREjwzL8yy+/gC2rwJnW9I5Nh9PS4uQu5Q=;
-        b=yZEXx5zI4tw+CwOWp2hwvZGdXjdlLSPwwj89Jk3D6TwsHcKQGGqKwDKHGsaWPJLXo7
-         cW9WVrT0sj14BpaOPqPcb1uezKdpeaeuA2BWrFzHLar2pE4tm6IOCEOWAueQ02b84Oxh
-         mihp/AWNfSQm8IH2hEu3YQ2BSSk+U+UrVV0RCbjXy7Kd+t9TTdGbOtzigITw/7izVpry
-         CBiB6Yi0lQ3f5HrWFRGG7kSxyh9ZgDYoMbvSu34QW1xhO5V+PYe/91xNyUVVZ33jj99G
-         4SBA0CAWS+P0y7HXoLm9e/ZGzyUe0/CjVEp2IAvh13/QtA3MVYtdvdoqh1ezUURjbEVH
-         YXoA==
-X-Gm-Message-State: ANoB5pnWNml4qZywNi49JXiW7gELyfK6G3ZXxGpOwQkkUqieJSOro+CV
-        adN0lQJQ2Vb8dY18kTNLfDPBRht2pSVqkv4=
-X-Google-Smtp-Source: AA0mqf6P0aFwhaiO/Hq5T9Jzwbu4P/V1ES2mCZhd8CSbA9Dg3bOw2kpuFSOzPqyC1YM4SB2aGePgn2HQQq3dYk8=
+        bh=Ict2nAybZst9hd7blb/mqnDuFXGRQOU9mJnqBemEDUs=;
+        b=maIH3A+7P16Q1aAC/LQhNS7tJWwmwlAjh64M+AJPGK/OaPNzTi+mCaMpwr8eAksB0U
+         N4v5CVm9PJ+hB6DduRrR6ptY7/MflqCwZ+HZTgZmtfRB0d31byI2o0WXZgLGSKuTAFNJ
+         nZsdNCfN66jb4IghzbU+fKb6QlucUVbFhGb7Mau4lsN6jsYnKIKsyfXKF1Ex8MaK483H
+         r6YZ6QgJVl1rM/baZHecA/8a2F5TRxSxnn+EKhlamRVhvpqtWMDgRd671tly0+ktDtlk
+         kQ0j3eAhZY6iCUBViG6XpRJJAcgp4LhIcuxOIpIUNCw630HIxkmhaR9wTheMOm0l1MMk
+         OwVw==
+X-Gm-Message-State: ANoB5pkIhbWyr00yPXoll1zJwADwuFXFtyvVHjgBxpsEVGO7MAoC+T0c
+        KfxCZgBKjVpOSUnlKOMXkc4sS0yc4S/g3DM=
+X-Google-Smtp-Source: AA0mqf4Vg7sPZKoxjDlHwlE7TekSeJ2HLUzyD0Y5TnfKfKOKbyyhiPH5BhZs8OQobjXMnrVrn44Buga/nbkrqDk=
 X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
- (user=allenwebb job=sendgmr) by 2002:a92:cd83:0:b0:300:56a5:ae19 with SMTP id
- r3-20020a92cd83000000b0030056a5ae19mr43568707ilb.72.1671482789512; Mon, 19
- Dec 2022 12:46:29 -0800 (PST)
-Date:   Mon, 19 Dec 2022 14:46:15 -0600
+ (user=allenwebb job=sendgmr) by 2002:a05:6e02:c08:b0:303:4e51:e5b2 with SMTP
+ id d8-20020a056e020c0800b003034e51e5b2mr11864457ile.285.1671482790594; Mon,
+ 19 Dec 2022 12:46:30 -0800 (PST)
+Date:   Mon, 19 Dec 2022 14:46:16 -0600
 In-Reply-To: <20221219204619.2205248-1-allenwebb@google.com>
 Mime-Version: 1.0
 References: <20221219191855.2010466-1-allenwebb@google.com> <20221219204619.2205248-1-allenwebb@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221219204619.2205248-8-allenwebb@google.com>
-Subject: [PATCH v9 07/10] modpost: Add -b option for emitting built-in aliases
+Message-ID: <20221219204619.2205248-9-allenwebb@google.com>
+Subject: [PATCH v9 08/10] file2alias.c: Implement builtin.alias generation
 From:   Allen Webb <allenwebb@google.com>
 To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
@@ -72,80 +72,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds an unimplemented command line flag for writing the built-in
-aliases to a file.
+This populates the mod->modalias_buf with aliases for built-in modules
+when modpost is run against vmlinuz.o.
 
 Signed-off-by: Allen Webb <allenwebb@google.com>
 ---
- scripts/mod/modpost.c | 23 +++++++++++++++++++++--
- scripts/mod/modpost.h |  1 +
- 2 files changed, 22 insertions(+), 2 deletions(-)
+ scripts/mod/file2alias.c | 55 +++++++++++++++++++++++++++-------------
+ 1 file changed, 38 insertions(+), 17 deletions(-)
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 2c80da0220c3..e38d6b2ceea4 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -2165,6 +2165,19 @@ static void write_if_changed(struct buffer *b, const char *fname)
- 	write_buf(b, fname);
+diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+index e41ff8de7a87..e840cb51281a 100644
+--- a/scripts/mod/file2alias.c
++++ b/scripts/mod/file2alias.c
+@@ -232,6 +232,8 @@ static void do_usb_entry(void *symval,
+ 	add_wildcard(alias);
+ 	buf_printf(&mod->dev_table_buf,
+ 		   "MODULE_ALIAS(\"%s\");\n", alias);
++	if (mod->builtin_name)
++		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias, mod->builtin_name);
  }
  
-+/* Write the builtin aliases to the specified file. */
-+static void write_builtin(const char *fname)
-+{
-+	struct buffer buf = { };
-+	struct module *mod;
-+
-+	list_for_each_entry(mod, &modules, list)
-+		buf_write(&buf, mod->modalias_buf.p, mod->modalias_buf.pos);
-+
-+	write_if_changed(&buf, fname);
-+	free(buf.p);
-+}
-+
- static void write_vmlinux_export_c_file(struct module *mod)
- {
- 	struct buffer buf = { };
-@@ -2321,13 +2334,16 @@ int main(int argc, char **argv)
- {
- 	struct module *mod;
- 	char *missing_namespace_deps = NULL;
--	char *dump_write = NULL, *files_source = NULL;
-+	char *builtin_write = NULL, *dump_write = NULL, *files_source = NULL;
- 	int opt;
- 	LIST_HEAD(dump_lists);
- 	struct dump_list *dl, *dl2;
+ /* Handles increment/decrement of BCD formatted integers */
+@@ -376,9 +378,13 @@ static void do_of_entry_multi(void *symval, struct module *mod)
+ 			*tmp = '_';
  
--	while ((opt = getopt(argc, argv, "ei:mnT:o:awENd:")) != -1) {
-+	while ((opt = getopt(argc, argv, "b:ei:mnT:o:awENd:")) != -1) {
- 		switch (opt) {
-+		case 'b':
-+			builtin_write = optarg;
-+			break;
- 		case 'e':
- 			external_module = true;
- 			break;
-@@ -2390,6 +2406,9 @@ int main(int argc, char **argv)
- 			write_mod_c_file(mod);
+ 	buf_printf(&mod->dev_table_buf, "MODULE_ALIAS(\"%s\");\n", alias);
++	if (mod->builtin_name)
++		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias, mod->builtin_name);
+ 	strcat(alias, "C");
+ 	add_wildcard(alias);
+ 	buf_printf(&mod->dev_table_buf, "MODULE_ALIAS(\"%s\");\n", alias);
++	if (mod->builtin_name)
++		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias, mod->builtin_name);
+ }
+ 
+ static void do_of_table(void *symval, unsigned long size,
+@@ -610,12 +616,18 @@ static void do_pnp_device_entry(void *symval, unsigned long size,
+ 
+ 		buf_printf(&mod->dev_table_buf,
+ 			   "MODULE_ALIAS(\"pnp:d%s*\");\n", *id);
++		if (mod->builtin_name)
++			buf_printf(&mod->modalias_buf, "alias pnp:d%s* %s\n",
++				   *id, mod->builtin_name);
+ 
+ 		/* fix broken pnp bus lowercasing */
+ 		for (j = 0; j < sizeof(acpi_id); j++)
+ 			acpi_id[j] = toupper((*id)[j]);
+ 		buf_printf(&mod->dev_table_buf,
+ 			   "MODULE_ALIAS(\"acpi*:%s:*\");\n", acpi_id);
++		if (mod->builtin_name)
++			buf_printf(&mod->modalias_buf, "alias acpi*:%s:* %s\n",
++				   acpi_id, mod->builtin_name);
  	}
+ }
  
-+	if (builtin_write)
-+		write_builtin(builtin_write);
+@@ -637,6 +649,8 @@ static void do_pnp_card_entries(void *symval, unsigned long size,
+ 			const char *id = (char *)(*devs)[j].id;
+ 			int i2, j2;
+ 			int dup = 0;
++			char acpi_id[PNP_ID_LEN];
++			int k;
+ 
+ 			if (!id[0])
+ 				break;
+@@ -662,19 +676,23 @@ static void do_pnp_card_entries(void *symval, unsigned long size,
+ 			}
+ 
+ 			/* add an individual alias for every device entry */
+-			if (!dup) {
+-				char acpi_id[PNP_ID_LEN];
+-				int k;
+-
+-				buf_printf(&mod->dev_table_buf,
+-					   "MODULE_ALIAS(\"pnp:d%s*\");\n", id);
+-
+-				/* fix broken pnp bus lowercasing */
+-				for (k = 0; k < sizeof(acpi_id); k++)
+-					acpi_id[k] = toupper(id[k]);
+-				buf_printf(&mod->dev_table_buf,
+-					   "MODULE_ALIAS(\"acpi*:%s:*\");\n", acpi_id);
+-			}
++			if (dup)
++				continue;
 +
- 	if (missing_namespace_deps)
- 		write_namespace_deps_files(missing_namespace_deps);
++			buf_printf(&mod->dev_table_buf,
++				   "MODULE_ALIAS(\"pnp:d%s*\");\n", id);
++			if (mod->builtin_name)
++				buf_printf(&mod->modalias_buf, "alias pnp:d%s* %s\n",
++					   id, mod->builtin_name);
++
++			/* fix broken pnp bus lowercasing */
++			for (k = 0; k < sizeof(acpi_id); k++)
++				acpi_id[k] = toupper(id[k]);
++			buf_printf(&mod->dev_table_buf,
++				   "MODULE_ALIAS(\"acpi*:%s:*\");\n", acpi_id);
++			if (mod->builtin_name)
++				buf_printf(&mod->modalias_buf, "alias acpi*:%s:* %s\n",
++					   acpi_id, mod->builtin_name);
+ 		}
+ 	}
+ }
+@@ -1476,10 +1494,13 @@ static void do_table(void *symval, unsigned long size,
+ 	size -= id_size;
  
-diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-index 34fe5fc0b02c..c55a6aeb46bf 100644
---- a/scripts/mod/modpost.h
-+++ b/scripts/mod/modpost.h
-@@ -123,6 +123,7 @@ struct module {
- 	bool has_init;
- 	bool has_cleanup;
- 	struct buffer dev_table_buf;
-+	struct buffer modalias_buf;
- 	char	     srcversion[25];
- 	// Missing namespace dependencies
- 	struct list_head missing_namespaces;
+ 	for (i = 0; i < size; i += id_size) {
+-		if (do_entry(mod->name, symval+i, alias)) {
+-			buf_printf(&mod->dev_table_buf,
+-				   "MODULE_ALIAS(\"%s\");\n", alias);
+-		}
++		if (!do_entry(mod->name, symval + i, alias))
++			continue;
++		buf_printf(&mod->dev_table_buf, "MODULE_ALIAS(\"%s\");\n", alias);
++		if (!mod->builtin_name)
++			continue;
++		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias,
++			   mod->builtin_name);
+ 	}
+ }
+ 
 -- 
 2.37.3
 
