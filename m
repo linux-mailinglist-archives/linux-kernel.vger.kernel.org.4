@@ -2,170 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82757650E73
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BFEA650E79
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232941AbiLSPPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 10:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
+        id S233029AbiLSPQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 10:16:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232876AbiLSPPT (ORCPT
+        with ESMTP id S232849AbiLSPQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 10:15:19 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CE7B7DB
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:15:18 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id b3so14153283lfv.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:15:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m8Uj/f0x4H68pfp6EBuS49q8mUm/dd1ntZTx2c5gQRw=;
-        b=joGdkJgxChVHrhqXxh4D8sJDaKpzxBgUcFgLtPczIcYGrPWnS0gYSfGGb/xwur1BZA
-         HXUG1BhIHBctF7bFBpebP9+UCrd1/wX6sQ06q9+cIYwobrrc2Zzo3WsBKRD3558LWzFQ
-         /N47j8fJwjN1I4eRjd0Qr07xS6EOzoIv8QhoPs4d+muMgyaWlNH3o7v1b1Xr6gxm8Bsn
-         zsRaxMej9uybQ/82hjh0l+j0+akCnf8EYggcdPI5wQ4zTU9cGGyx+pH3DhxSdkmYX4n/
-         boQmP89KDmwLe8i18IoxJ121DOicW9mnYp04EIuXSuoqBPamMqwF9q353kDRDAlSKDOO
-         ifvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m8Uj/f0x4H68pfp6EBuS49q8mUm/dd1ntZTx2c5gQRw=;
-        b=7x2rGYUa0cwuIR2NYaIF+nO0g3O9dwGM9vvON6YRkwljNesnlM3zKyYhibnBTVOr02
-         zrkyxSvNX0JHSzBuNGXaTn9bNLQIJdpQbI5CCx1TDHG57Ki2GZ314EH3qBXUbpH+jmu1
-         VPgGiAfuHtpPUTDFZggnetT0o93Rd7ideBlrEXVuRrNsni+x6tb3XLRGtw+vDDjIgBuD
-         ljyKmR/G1yOAcS9FqRNmbwh8g3JATui4tYiHnCHOtH7WQNblFabfkAxA0iLY6wUmzDPa
-         uhonWqleCL8Oy+kwQGGT7up2ShuXwuBQnjAXR4Rcf1n7d8wWmnAKTuxIrHaTNtvBdWFA
-         rScA==
-X-Gm-Message-State: ANoB5plJzZfE/a20hAA0KJAEV60/z3Zua1hsogdavzO5PS/58OhDVkHM
-        P7oS6gJKQHpYUgxGlkS7G3Lx0w==
-X-Google-Smtp-Source: AA0mqf6TIA7wSK78A1e7LxWcZY/ah0RMdr0IMbRzO6DwrSrVhPg3kDS+rfPE3kSDU9y+6k9YFRKeKw==
-X-Received: by 2002:a05:6512:2c85:b0:4a4:68b9:607f with SMTP id dw5-20020a0565122c8500b004a468b9607fmr11616697lfb.10.1671462916643;
-        Mon, 19 Dec 2022 07:15:16 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id e1-20020a05651236c100b004bd8534ebbcsm1109894lfs.37.2022.12.19.07.15.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 07:15:16 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-Subject: [PATCH v2 5/5] PM: domains: Do not call device_pm_check_callbacks() when holding genpd_lock()
-Date:   Mon, 19 Dec 2022 16:15:03 +0100
-Message-Id: <20221219151503.385816-6-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org>
-References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 19 Dec 2022 10:16:16 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBBB38C;
+        Mon, 19 Dec 2022 07:15:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=w4sSFhh83uAji8+0eAowtyfKSzm6lsgYgeM/KPj3SJw=; b=SQh7IKfej+/jWDV02bPW0rvUTL
+        +/T5pdlopHUCfUuGQMtAWwyYVIrwVk3abapQ+Nd2DmCUaf8MeKFSa7vikK01xS+0wIl+3zTzW/P3g
+        fwEvcz+u1+avs9g5H9A37wuSZiM8BeRgcXmYcotSxGzT1bc5b0SscN7l0evXhV/GKdOk=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:48604 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1p7HrT-0000v1-07; Mon, 19 Dec 2022 10:15:29 -0500
+Date:   Mon, 19 Dec 2022 10:15:26 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Bruno Thomsen <bruno.thomsen@gmail.com>
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>, hugo@hugovil.com
+Message-Id: <20221219101526.ab27daa0971e827128d51a15@hugovil.com>
+In-Reply-To: <CAH+2xPDW04NKD34RjcLO=HP1_KDxe9dvbLC9B4Rv+i3O8S58qQ@mail.gmail.com>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+        <20221215150214.1109074-2-hugo@hugovil.com>
+        <CAH+2xPDW04NKD34RjcLO=HP1_KDxe9dvbLC9B4Rv+i3O8S58qQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 01/14] rtc: pcf2127: add variant-specific
+ configuration structure
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If PM domain on PREEMPT_RT is marked as GENPD_FLAG_RT_SAFE(), the
-genpd_lock() will be a raw spin lock, thus device_pm_check_callbacks()
-must be called outside of the domain lock.
+On Mon, 19 Dec 2022 10:05:53 +0100
+Bruno Thomsen <bruno.thomsen@gmail.com> wrote:
 
-This solves on PREEMPT_RT:
+> Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
+> >
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> >
+> > Create variant-specific configuration structures to simplify the
+> > implementation of new variants into this driver. It will also avoid
+> > to have too many tests for a specific variant, or a list of variants
+> > for new devices, inside the code itself.
+> >
+> > Add configuration options for the support of the NVMEM, bit CD0 in
+> > register WD_CTL as well as the maximum number of registers for each
+> > variant, instead of hardcoding the variant (PCF2127) inside the
+> > i2c_device_id and spi_device_id structures.
+> >
+> > Also specify a different maximum number of registers (max_register)
+> > for the PCF2129.
+> >
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> >  drivers/rtc/rtc-pcf2127.c | 95 +++++++++++++++++++++++++++++++--------
+> >  1 file changed, 76 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > index 87f4fc9df68b..b9a5d47a439f 100644
+> > --- a/drivers/rtc/rtc-pcf2127.c
+> > +++ b/drivers/rtc/rtc-pcf2127.c
+> > @@ -21,6 +21,7 @@
+> >  #include <linux/module.h>
+> >  #include <linux/of.h>
+> >  #include <linux/of_irq.h>
+> > +#include <linux/of_device.h>
+> >  #include <linux/regmap.h>
+> >  #include <linux/watchdog.h>
+> >
+> > @@ -101,10 +102,17 @@
+> >                 PCF2127_BIT_CTRL2_WDTF | \
+> >                 PCF2127_BIT_CTRL2_TSF2)
+> >
+> > +struct pcf21xx_config {
+> > +       int max_register;
+> > +       unsigned int has_nvmem:1;
+> > +       unsigned int has_bit_wd_ctl_cd0:1;
+> > +};
+> > +
+> >  struct pcf2127 {
+> >         struct rtc_device *rtc;
+> >         struct watchdog_device wdd;
+> >         struct regmap *regmap;
+> > +       const struct pcf21xx_config *cfg;
+> >         time64_t ts;
+> >         bool ts_valid;
+> >         bool irq_enabled;
+> > @@ -631,8 +639,27 @@ static const struct attribute_group pcf2127_attr_group = {
+> >         .attrs  = pcf2127_attrs,
+> >  };
+> >
+> > +enum pcf21xx_type {
+> > +       PCF2127,
+> > +       PCF2129,
+> > +       PCF21XX_LAST_ID
+> > +};
+> > +
+> > +static struct pcf21xx_config pcf21xx_cfg[] = {
+> > +       [PCF2127] = {
+> > +               .max_register = 0x1d,
+> > +               .has_nvmem = 1,
+> > +               .has_bit_wd_ctl_cd0 = 1,
+> > +       },
+> > +       [PCF2129] = {
+> > +               .max_register = 0x19,
+> > +               .has_nvmem = 0,
+> > +               .has_bit_wd_ctl_cd0 = 0,
+> > +       },
+> > +};
+> > +
+> >  static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> > -                        int alarm_irq, const char *name, bool is_pcf2127)
+> > +                        int alarm_irq, const char *name, const struct pcf21xx_config *config)
+> >  {
+> >         struct pcf2127 *pcf2127;
+> >         int ret = 0;
+> > @@ -645,6 +672,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> >                 return -ENOMEM;
+> >
+> >         pcf2127->regmap = regmap;
+> > +       pcf2127->cfg = config;
+> >
+> >         dev_set_drvdata(dev, pcf2127);
+> >
+> > @@ -688,7 +716,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> >                 set_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
+> >         }
+> >
+> > -       if (is_pcf2127) {
+> > +       if (pcf2127->cfg->has_nvmem) {
+> >                 struct nvmem_config nvmem_cfg = {
+> >                         .priv = pcf2127,
+> >                         .reg_read = pcf2127_nvmem_read,
+> > @@ -734,7 +762,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> >                                  PCF2127_BIT_WD_CTL_TF1 |
+> >                                  PCF2127_BIT_WD_CTL_TF0,
+> >                                  PCF2127_BIT_WD_CTL_CD1 |
+> > -                                (is_pcf2127 ? PCF2127_BIT_WD_CTL_CD0 : 0) |
+> > +                                (pcf2127->cfg->has_bit_wd_ctl_cd0 ? PCF2127_BIT_WD_CTL_CD0 : 0) |
+> >                                  PCF2127_BIT_WD_CTL_TF1);
+> >         if (ret) {
+> >                 dev_err(dev, "%s: watchdog config (wd_ctl) failed\n", __func__);
+> > @@ -799,9 +827,9 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> >
+> >  #ifdef CONFIG_OF
+> >  static const struct of_device_id pcf2127_of_match[] = {
+> > -       { .compatible = "nxp,pcf2127" },
+> > -       { .compatible = "nxp,pcf2129" },
+> > -       { .compatible = "nxp,pca2129" },
+> > +       { .compatible = "nxp,pcf2127", .data = &pcf21xx_cfg[PCF2127] },
+> > +       { .compatible = "nxp,pcf2129", .data = &pcf21xx_cfg[PCF2129] },
+> > +       { .compatible = "nxp,pca2129", .data = &pcf21xx_cfg[PCF2129] },
+> >         {}
+> >  };
+> >  MODULE_DEVICE_TABLE(of, pcf2127_of_match);
+> > @@ -886,26 +914,40 @@ static const struct regmap_bus pcf2127_i2c_regmap = {
+> >  static struct i2c_driver pcf2127_i2c_driver;
+> >
+> >  static const struct i2c_device_id pcf2127_i2c_id[] = {
+> > -       { "pcf2127", 1 },
+> > -       { "pcf2129", 0 },
+> > -       { "pca2129", 0 },
+> > +       { "pcf2127", PCF2127 },
+> > +       { "pcf2129", PCF2129 },
+> > +       { "pca2129", PCF2129 },
+> >         { }
+> >  };
+> >  MODULE_DEVICE_TABLE(i2c, pcf2127_i2c_id);
+> >
+> >  static int pcf2127_i2c_probe(struct i2c_client *client)
+> >  {
+> > -       const struct i2c_device_id *id = i2c_match_id(pcf2127_i2c_id, client);
+> >         struct regmap *regmap;
+> > -       static const struct regmap_config config = {
+> > +       static struct regmap_config config = {
+> >                 .reg_bits = 8,
+> >                 .val_bits = 8,
+> > -               .max_register = 0x1d,
+> >         };
+> > +       const struct pcf21xx_config *variant;
+> 
+> Hi Hugo,
+> 
+> Patch series does not apply on 6.1 tree as pcf2127_i2c_probe() call
+> signature does not match[1].
+> 
+> static int pcf2127_i2c_probe(struct i2c_client *client,
+>       const struct i2c_device_id *id)
+> 
+> 
+> [1] https://elixir.bootlin.com/linux/v6.1/source/drivers/rtc/rtc-pcf2127.c#L888
+> 
+> /Bruno
 
-  [ BUG: Invalid wait context ]
-  6.1.0-rt5-00325-g8a5f56bcfcca #8 Tainted: G        W
-  -----------------------------
-  swapper/0/1 is trying to lock:
-  ffff76e045dec9a0 (&dev->power.lock){+.+.}-{3:3}, at: device_pm_check_callbacks+0x20/0xf0
-  other info that might help us debug this:
-  context-{5:5}
-  3 locks held by swapper/0/1:
-   #0: ffff76e045deb8e8 (&dev->mutex){....}-{4:4}, at: __device_attach+0x38/0x1c0
-   #1: ffffa92b81f825e0 (gpd_list_lock){+.+.}-{4:4}, at: __genpd_dev_pm_attach+0x7c/0x250
-   #2: ffff76e04105c7a0 (&genpd->rslock){....}-{2:2}, at: genpd_lock_rawspin+0x1c/0x30
-  stack backtrace:
-  CPU: 5 PID: 1 Comm: swapper/0 Tainted: G        W          6.1.0-rt5-00325-g8a5f56bcfcca #8
-  Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
-  Call trace:
-   dump_backtrace.part.0+0xe0/0xf0
-   show_stack+0x18/0x40
-   dump_stack_lvl+0x8c/0xb8
-   dump_stack+0x18/0x34
-   __lock_acquire+0x938/0x2100
-   lock_acquire.part.0+0x104/0x28c
-   lock_acquire+0x68/0x84
-   rt_spin_lock+0x40/0x100
-   device_pm_check_callbacks+0x20/0xf0
-   dev_pm_domain_set+0x54/0x64
-   genpd_add_device+0x258/0x340
-   __genpd_dev_pm_attach+0xa8/0x250
-   genpd_dev_pm_attach_by_id+0xc4/0x190
-   genpd_dev_pm_attach_by_name+0x3c/0x60
-   dev_pm_domain_attach_by_name+0x20/0x30
-   dt_idle_attach_cpu+0x24/0x90
-   psci_cpuidle_probe+0x300/0x4b0
-   platform_probe+0x68/0xe0
-   really_probe+0xbc/0x2dc
-   __driver_probe_device+0x78/0xe0
-   driver_probe_device+0x3c/0x160
-   __device_attach_driver+0xb8/0x140
-   bus_for_each_drv+0x78/0xd0
-   __device_attach+0xa8/0x1c0
-   device_initial_probe+0x14/0x20
-   bus_probe_device+0x9c/0xa4
-   device_add+0x3b4/0x8dc
-   platform_device_add+0x114/0x234
-   platform_device_register_full+0x108/0x1a4
-   psci_idle_init+0x6c/0xb0
-   do_one_initcall+0x74/0x450
-   kernel_init_freeable+0x2e0/0x350
-   kernel_init+0x24/0x130
-   ret_from_fork+0x10/0x20
+Hi Bruno,
+I based my driver on the git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git repo, as indicated in the MAINTAINERS file for the RTC subsystem (T: entry). I used the rtc-next branch on this repo.
 
-Cc: Adrien Thierry <athierry@redhat.com>
-Cc: Brian Masney <bmasney@redhat.com>
-Cc: linux-rt-users@vger.kernel.org
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/base/power/domain.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Can you tell me exactly which repo and branch I need to use to resubmit the driver?
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 4dfce1d476f4..db499ba40497 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -1666,10 +1666,14 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
- 	if (ret)
- 		goto out;
- 
-+
-+	/* PREEMPT_RT: Must be outside of genpd_lock */
-+	device_pm_check_callbacks(dev);
-+
- 	genpd_lock(genpd);
- 
- 	genpd_set_cpumask(genpd, gpd_data->cpu);
--	dev_pm_domain_set(dev, &genpd->domain);
-+	dev_pm_domain_set_no_cb(dev, &genpd->domain);
- 
- 	genpd->device_count++;
- 	if (gd)
+Thank you, Hugo.
+
+
+> >         if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+> >                 return -ENODEV;
+> >
+> > +       if (client->dev.of_node) {
+> > +               variant = of_device_get_match_data(&client->dev);
+> > +               if (!variant)
+> > +                       return -ENODEV;
+> > +       } else {
+> > +               enum pcf21xx_type type =
+> > +                       i2c_match_id(pcf2127_i2c_id, client)->driver_data;
+> > +
+> > +               if (type >= PCF21XX_LAST_ID)
+> > +                       return -ENODEV;
+> > +               variant = &pcf21xx_cfg[type];
+> > +       }
+> > +
+> > +       config.max_register = variant->max_register,
+> > +
+> >         regmap = devm_regmap_init(&client->dev, &pcf2127_i2c_regmap,
+> >                                         &client->dev, &config);
+> >         if (IS_ERR(regmap)) {
+> > @@ -915,7 +957,7 @@ static int pcf2127_i2c_probe(struct i2c_client *client)
+> >         }
+> >
+> >         return pcf2127_probe(&client->dev, regmap, client->irq,
+> > -                            pcf2127_i2c_driver.driver.name, id->driver_data);
+> > +                            pcf2127_i2c_driver.driver.name, variant);
+> >  }
+> >
+> >  static struct i2c_driver pcf2127_i2c_driver = {
+> > @@ -953,17 +995,32 @@ static void pcf2127_i2c_unregister_driver(void)
+> >  #if IS_ENABLED(CONFIG_SPI_MASTER)
+> >
+> >  static struct spi_driver pcf2127_spi_driver;
+> > +static const struct spi_device_id pcf2127_spi_id[];
+> >
+> >  static int pcf2127_spi_probe(struct spi_device *spi)
+> >  {
+> > -       static const struct regmap_config config = {
+> > +       static struct regmap_config config = {
+> >                 .reg_bits = 8,
+> >                 .val_bits = 8,
+> >                 .read_flag_mask = 0xa0,
+> >                 .write_flag_mask = 0x20,
+> > -               .max_register = 0x1d,
+> >         };
+> >         struct regmap *regmap;
+> > +       const struct pcf21xx_config *variant;
+> > +
+> > +       if (spi->dev.of_node) {
+> > +               variant = of_device_get_match_data(&spi->dev);
+> > +               if (!variant)
+> > +                       return -ENODEV;
+> > +       } else {
+> > +               enum pcf21xx_type type = spi_get_device_id(spi)->driver_data;
+> > +
+> > +               if (type >= PCF21XX_LAST_ID)
+> > +                       return -ENODEV;
+> > +               variant = &pcf21xx_cfg[type];
+> > +       }
+> > +
+> > +       config.max_register = variant->max_register,
+> >
+> >         regmap = devm_regmap_init_spi(spi, &config);
+> >         if (IS_ERR(regmap)) {
+> > @@ -974,13 +1031,13 @@ static int pcf2127_spi_probe(struct spi_device *spi)
+> >
+> >         return pcf2127_probe(&spi->dev, regmap, spi->irq,
+> >                              pcf2127_spi_driver.driver.name,
+> > -                            spi_get_device_id(spi)->driver_data);
+> > +                            variant);
+> >  }
+> >
+> >  static const struct spi_device_id pcf2127_spi_id[] = {
+> > -       { "pcf2127", 1 },
+> > -       { "pcf2129", 0 },
+> > -       { "pca2129", 0 },
+> > +       { "pcf2127", PCF2127 },
+> > +       { "pcf2129", PCF2129 },
+> > +       { "pca2129", PCF2129 },
+> >         { }
+> >  };
+> >  MODULE_DEVICE_TABLE(spi, pcf2127_spi_id);
+> > --
+> > 2.30.2
+> >
+> 
+
+
 -- 
-2.34.1
-
+Hugo Villeneuve <hugo@hugovil.com>
