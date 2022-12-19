@@ -2,110 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7EA651056
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 17:26:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D0F65105D
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 17:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbiLSQZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 11:25:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
+        id S232215AbiLSQ0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 11:26:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232164AbiLSQZu (ORCPT
+        with ESMTP id S232193AbiLSQ0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 11:25:50 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFA1DC5;
-        Mon, 19 Dec 2022 08:25:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=DMgnjXuEz37SAQZwzhYvECTxcksb+stH/eD5YxCDg08=; b=jwExuptXdOIFXQ6Fl3g+htcwTO
-        sFpyrI0Jah5mQt4ROJ+Ls2kdKqnNRDKvWO0BMv0xjQJjZBdUaTYzbZLc6T03J0Ll8c7cDW5oE7beV
-        a1Fppy4cmneYSrlPKyWMqffOpTR5et+bCzs78Ko4hMlj7aFBTtarUnNsmsBkvniE6WkA=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:48606 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1p7IxS-0001V0-Ic; Mon, 19 Dec 2022 11:25:42 -0500
-Date:   Mon, 19 Dec 2022 11:25:42 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20221219112542.fb30929b8b91255dcba5a289@hugovil.com>
-In-Reply-To: <CAH+2xPAWo=nycQMLrjye8i3a3textJdyYJcWRG3Jq-tbN0a9RA@mail.gmail.com>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
-        <20221215150214.1109074-15-hugo@hugovil.com>
-        <CAH+2xPAWo=nycQMLrjye8i3a3textJdyYJcWRG3Jq-tbN0a9RA@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Mon, 19 Dec 2022 11:26:31 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA1810050
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 08:26:29 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b3so14480211lfv.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 08:26:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VVcuzSa6ITgbiUXQ3/VszXDRCE6tsh7BmKWstibWurk=;
+        b=DYsU6Lnc6nmHgXbqdcXxuc97r9RnkxPdHkR8XCseBv39UrwTvs6sQ8/iewYJZQjV7P
+         ABsXSGAhEjZHL+WZcSlrR2MKzblzjjTaNG54K3dUyj2qdzs9Je9qK0sJMGnK8qStTXct
+         V5e6R+UYO9xS0ELz3cb5OUn2PvSMtDX9elF/IJ8vOhZ72B0EXm4XcSIpYsNh9EiS/zFZ
+         /WT5N5LONztJu1fHZzPWrXmcZHeCAYuoXWj5IdVZMesgUgBA2XqDGIpXFB4hjB2JIbd6
+         6rMaTfAaYmY+w/r2ygbt6pniTo6hjdQN0r4dVuW11LGhxXMBfw4Ywfdelrw4FabaIDbJ
+         Qp4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VVcuzSa6ITgbiUXQ3/VszXDRCE6tsh7BmKWstibWurk=;
+        b=X+y/4EbqJ0gcS8BG/EtNWKBNmrwcpO/QNt+T/49tGj4nQtq19FRjounq50VPgW8T52
+         1Jkt43NsbGpzDNujasYz88XIgrD/huuzLBjVNuzW5qkXLBQJCc0EUBeNktZWu7zVghPk
+         FMgkUfxn0YCcHV3Slg0APiN4Hg9wSde5JWnS7gl6KE/HmyLV1hXjVwBYbezGyx4cSwt2
+         bzui5hqLzapUSSgM7R/ym7igX9Ggt/ZfXpeDbCVXK1W1CI5USi7hW2okh1qxU+tX7jep
+         fsEhr25Y6KNA4f7zXUgj4SSUeCpx7YHYUYuNbMmCbEcMQ2RnoGZTV/CdA9ZHh1Iikdm6
+         j1fA==
+X-Gm-Message-State: ANoB5plwOTtyhLNweHu4UhI5/e3irglRXablA5L763vvvxIBBwYZqT0g
+        Gf0o3JgY+QWIwkrT1YWiuudgaQ==
+X-Google-Smtp-Source: AA0mqf7zS/oZ/AeLWrqigs8m70l+8YN+UnPxfXQ5V9qKKgPnb1jrN9n239LevfnQnsIU9Ab3VIIJmQ==
+X-Received: by 2002:a05:6512:1501:b0:4b5:90be:33c8 with SMTP id bq1-20020a056512150100b004b590be33c8mr16294678lfb.48.1671467188289;
+        Mon, 19 Dec 2022 08:26:28 -0800 (PST)
+Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id v6-20020a2ea606000000b002775d0ae776sm799631ljp.14.2022.12.19.08.26.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 08:26:27 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: sm8350: Drop standalone smem node
+Date:   Mon, 19 Dec 2022 17:26:18 +0100
+Message-Id: <20221219162618.873117-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 14/14] dt-bindings: rtc: pcf2127: add PCF2131
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Dec 2022 10:14:10 +0100
-Bruno Thomsen <bruno.thomsen@gmail.com> wrote:
+SM8350 is one of the last SoCs whose DTSI escaped the smem node
+conversion. Use the newer memory-node binding instead of a memory *and*
+smem node.
 
-> Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
-> >
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >
-> > Add support for new NXP RTC PCF2131.
-> >
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > index cde7b1675ead..a8f8c23da4d8 100644
-> > --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > @@ -14,7 +14,9 @@ maintainers:
-> >
-> >  properties:
-> >    compatible:
-> > -    const: nxp,pcf2127
-> > +    enum:
-> > +      - nxp,pcf2127
-> > +      - nxp,pcf2131
-> 
-> The enum is incomplete as pcf2127_of_match struct also contains:
-> nxp,pcf2129
-> ncp,pca2129
-> 
-> /Bruno
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-Hi,
-if I understand correctly, this means that the pca2129 and pcf2129 entries are already missing and should be added in a fix or a patch outside the scope of my new driver...
-
-Hugo.
-
-
-> >    reg:
-> >      maxItems: 1
-> > --
-> > 2.30.2
-> >
-> 
-
-
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index 245dce24ec59..16b07d209e66 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -406,8 +406,10 @@ reserved_xbl_uefi_log: memory@80880000 {
+ 			no-map;
+ 		};
+ 
+-		smem_mem: memory@80900000 {
++		smem@80900000 {
++			compatible = "qcom,smem";
+ 			reg = <0x0 0x80900000 0x0 0x200000>;
++			hwlocks = <&tcsr_mutex 3>;
+ 			no-map;
+ 		};
+ 
+@@ -516,12 +518,6 @@ removed_mem: memory@d8800000 {
+ 		};
+ 	};
+ 
+-	smem: qcom,smem {
+-		compatible = "qcom,smem";
+-		memory-region = <&smem_mem>;
+-		hwlocks = <&tcsr_mutex 3>;
+-	};
+-
+ 	smp2p-adsp {
+ 		compatible = "qcom,smp2p";
+ 		qcom,smem = <443>, <429>;
 -- 
-Hugo Villeneuve <hugo@hugovil.com>
+2.39.0
+
