@@ -2,126 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053F165149E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 22:07:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5CBE6514A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 22:08:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbiLSVHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 16:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
+        id S232469AbiLSVH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 16:07:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbiLSVHG (ORCPT
+        with ESMTP id S232574AbiLSVHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 16:07:06 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C079FDD
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 13:07:05 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 857C31EC06C0;
-        Mon, 19 Dec 2022 22:07:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1671484024;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WWS8nVwHrnKk4rH61ugvHQLrpBwE7+W6H6dxrqdsAWY=;
-        b=UrXJ2WkQ46Y6tqCiuC2RagX1T8hbsDwOvf3lZodEivJ4pPknHhehIPDiPXAVHo4Te+A8Ps
-        6LPZxsJj+tB+IDrgnNXM9Q5N4Syve98fZwX3ifItpHCQlaPVSZ6OmsPodEnU3GW1o33kfX
-        Q+KfPD9T5mhnwFAeHCCNV0mHxpR3iVY=
-From:   Borislav Petkov <bp@alien8.de>
-To:     X86 ML <x86@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] x86/microcode/AMD: Handle multiple glued containers properly
-Date:   Mon, 19 Dec 2022 22:06:56 +0100
-Message-Id: <20221219210656.5140-2-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221219210656.5140-1-bp@alien8.de>
-References: <20221219210656.5140-1-bp@alien8.de>
+        Mon, 19 Dec 2022 16:07:54 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48593658E
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 13:07:51 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id x11so10469875ljh.7
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 13:07:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DvDFRM+cIsRIk+HqgujcIiOfyICxAxZ5sfBT0wH/F0w=;
+        b=hpybuwdtfx5Ig/p4JwDOF5ggHdKpWlXU5aP/RV04mEmmy3DqzGUiI3+9gHNzeTDm9L
+         GqypwiESMeD44/3G78iWvyJQPpDlCg08IMLmFAMyPuLs6FgDoDilntwlc4AEeI37Cszm
+         bYKmGKEKFLlLBR7FTCbCI4Wch61JbEbrGgmXyGbK9MGObrhJLy6PR1kfHe2CrP5A6g1Q
+         Rf1uCtE4q7Mfzwjnn2kqE6H2ny2GFTWenxke03HJ6pdHaCYEMRM5BI4l0m/b8hJ4rgup
+         54awbrrDz8GYEYZoEH+ZX905D5jHFWzE6Nq3uz3zWINYUZYf5ZhoeNL81OO2mpav/37L
+         83Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DvDFRM+cIsRIk+HqgujcIiOfyICxAxZ5sfBT0wH/F0w=;
+        b=yYk/sz1DCivdgjMZQMe4/q3uBlBzxLC/l2f3cfUipMzZtzx30sKbf7b7zgf9PmGqgu
+         E4gDqK1TT8yk5qY5ur4gWbAEEbZ/A8m16YZa72VfHJwMVRNfoYzlqTU9e8ezJNcEuD5S
+         /GXqTJRoLpFhQf1WKOw9O+x5N0JlMBNQ7w+iB4xM7svvXGjFOfyAcTNamZiXOWuVwNri
+         /fn58uk6fnKfmU43f68OTVrB/OLUAadlbhOYz1VRHxEId5Rtgka1u9k/DbT2vUbfLgr8
+         FRoQES6/r7k9tkxSGxj6rXC/5GXF/4CjhcBMviPp0Lsdbl18pg7K5d4x0CZCF+wJHGz1
+         ueSg==
+X-Gm-Message-State: ANoB5pnO/AS2BbF25JhGTkYXlId2RBDPt0ctfafcMHh3kfH0X4b6D/km
+        PXpA9b22BxRBfrdQgSL3k7AjlMb0gfR9FVflyWvFiA==
+X-Google-Smtp-Source: AA0mqf7yh+36itgm76QOQNXUPNSIh1XAiQ1h3fas3L7sHK0kevEvJn+HhC5t4DANokXbaBLR76Kk/IEFhKA2q7XG/jE=
+X-Received: by 2002:a05:651c:c87:b0:27b:afc1:da9 with SMTP id
+ bz7-20020a05651c0c8700b0027bafc10da9mr1862896ljb.218.1671484069613; Mon, 19
+ Dec 2022 13:07:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
+In-Reply-To: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Mon, 19 Dec 2022 18:07:38 -0300
+Message-ID: <CAAEAJfBP_D65kjHbwYP+LWfWKfzFtHtWo+3bDcbdO8tPtBurUA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/9] AV1 stateless decoder for RK3588
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     p.zabel@pengutronix.de, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+Hi Benjamin,
 
-It can happen that - especially during testing - the microcode
-blobs of all families are all glued together in the initrd. The
-current code doesn't check whether the current container matched
-a microcode patch and continues to the next one, which leads to
-save_microcode_in_initrd_amd() to look at the next and thus wrong one:
+On Mon, Dec 19, 2022 at 12:56 PM Benjamin Gaignard
+<benjamin.gaignard@collabora.com> wrote:
+>
+> This series implement AV1 stateless decoder for RK3588 SoC.
+> The harware support 8 and 10 bits bitstreams up to 7680x4320.
+> AV1 feature like film grain or scaling are done by the postprocessor.
+> The driver can produce NV12_4L4 and NV12 pixel formats.
+> A native 10bits NV12_4L4 format is possible but need more investigation
+> to be completly documented and enabled.
+>
+> It is based on Daniel's "[RFC,v3] media: Add AV1 uAPI" [1] patches and
+> Sebastian's device-tree patches for RK3588.
+>
 
-  microcode: parse_container: ucode: 0xffff88807e9d9082
-  microcode: verify_patch: buf: 0xffff88807e9d90ce, buf_size: 26428
-  microcode: verify_patch: proc_id: 0x8082, patch_fam: 0x17, this family: 0x17
-  microcode: verify_patch: buf: 0xffff88807e9d9d56, buf_size: 23220
-  microcode: verify_patch: proc_id: 0x8012, patch_fam: 0x17, this family: 0x17
-  microcode: parse_container: MATCH: eq_id: 0x8012, patch proc_rev_id: 0x8012
+I thought the AV1 decoder in RK3588 was really a separate hardware
+from the Hantro G1/G2.
 
-<-- matching patch found
+Shouldn't this need a new driver for this new hardware?
 
-  microcode: verify_patch: buf: 0xffff88807e9da9de, buf_size: 20012
-  microcode: verify_patch: proc_id: 0x8310, patch_fam: 0x17, this family: 0x17
-  microcode: verify_patch: buf: 0xffff88807e9db666, buf_size: 16804
-  microcode: Invalid type field (0x414d44) in container file section header.
-  microcode: Patch section fail
+Thanks!
+Ezequiel
 
-<-- checking chokes on the microcode magic value of the next container.
-
-  microcode: parse_container: saving container 0xffff88807e9d9082
-  microcode: save_microcode_in_initrd_amd: scanned containers, data: 0xffff88807e9d9082, size: 9700a
-
-and now if there's a next (and last container) it'll use that in
-save_microcode_in_initrd_amd() and not find a proper patch, ofc.
-
-Fix that by moving the out: label up, before the desc->mc check which
-jots down the pointer of the matching patch and is used to signal to the
-caller that it has found a matching patch in the current container.
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- arch/x86/kernel/cpu/microcode/amd.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
-index 339c9666c8bc..d144f918a896 100644
---- a/arch/x86/kernel/cpu/microcode/amd.c
-+++ b/arch/x86/kernel/cpu/microcode/amd.c
-@@ -330,8 +330,9 @@ static size_t parse_container(u8 *ucode, size_t size, struct cont_desc *desc)
- 		ret = verify_patch(x86_family(desc->cpuid_1_eax), buf, size, &patch_size, true);
- 		if (ret < 0) {
- 			/*
--			 * Patch verification failed, skip to the next
--			 * container, if there's one:
-+			 * Patch verification failed, skip to the next container, if
-+			 * there is one. Before exit, check whether that container has
-+			 * found a patch already. If so, use it.
- 			 */
- 			goto out;
- 		} else if (ret > 0) {
-@@ -350,6 +351,7 @@ static size_t parse_container(u8 *ucode, size_t size, struct cont_desc *desc)
- 		size -= patch_size + SECTION_HDR_SIZE;
- 	}
- 
-+out:
- 	/*
- 	 * If we have found a patch (desc->mc), it means we're looking at the
- 	 * container which has a patch for this CPU so return 0 to mean, @ucode
-@@ -364,7 +366,6 @@ static size_t parse_container(u8 *ucode, size_t size, struct cont_desc *desc)
- 		return 0;
- 	}
- 
--out:
- 	return orig_size - size;
- }
- 
--- 
-2.35.1
-
+> The full branch can be found here:
+> https://gitlab.collabora.com/linux/for-upstream/-/commits/rk3588_av1_decoder_v1
+>
+> Fluster score is: 151/239 while testing AV1-TEST-VECTORS with GStreamer-AV1-V4L2SL-Gst1.0.
+> The failing tests are:
+> - 10bits bitstream because 10bits output formats aren't yet implemented.
+> - the 2 tests with 2 spatial layers: few errors in luma/chroma values
+> - tests with resolution < hardware limit (64x64)
+>
+> Benjamin
+>
+> Benjamin Gaignard (9):
+>   dt-bindings: media: rockchip-vpu: Add rk3588 vpu compatible
+>   media: verisilicon: Add AV1 decoder mode and controls
+>   media: verisilicon: Save bit depth for AV1 decoder
+>   media: verisilicon: Check AV1 bitstreams bit depth
+>   media: verisilicon: Compute motion vectors size for AV1 frames
+>   media: verisilicon: Add AV1 entropy helpers
+>   media: verisilicon: Add Rockchip AV1 decoder
+>   media: verisilicon: Add film grain feature to AV1 driver
+>   media: verisilicon: Enable AV1 decoder on rk3588
+>
+>  .../bindings/media/rockchip-vpu.yaml          |    1 +
+>  drivers/media/platform/verisilicon/Makefile   |    3 +
+>  drivers/media/platform/verisilicon/hantro.h   |    5 +
+>  .../media/platform/verisilicon/hantro_drv.c   |   54 +
+>  .../media/platform/verisilicon/hantro_hw.h    |  102 +
+>  .../platform/verisilicon/hantro_postproc.c    |    3 +
+>  .../media/platform/verisilicon/hantro_v4l2.c  |    5 +
+>  .../verisilicon/rockchip_av1_entropymode.c    | 4536 +++++++++++++++++
+>  .../verisilicon/rockchip_av1_entropymode.h    |  272 +
+>  .../verisilicon/rockchip_av1_filmgrain.c      |  401 ++
+>  .../verisilicon/rockchip_av1_filmgrain.h      |   36 +
+>  .../verisilicon/rockchip_vpu981_hw_av1_dec.c  | 2280 +++++++++
+>  .../verisilicon/rockchip_vpu981_regs.h        |  477 ++
+>  .../platform/verisilicon/rockchip_vpu_hw.c    |  116 +
+>  14 files changed, 8291 insertions(+)
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_entropymode.c
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_entropymode.h
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_filmgrain.c
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_filmgrain.h
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_regs.h
+>
+> --
+> 2.34.1
+>
