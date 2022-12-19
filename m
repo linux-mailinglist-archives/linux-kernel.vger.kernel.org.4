@@ -2,97 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF81650EF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79776650F37
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbiLSPof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 10:44:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
+        id S232801AbiLSPq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 10:46:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232548AbiLSPoE (ORCPT
+        with ESMTP id S232631AbiLSPpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 10:44:04 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB41813D05;
-        Mon, 19 Dec 2022 07:43:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671464591; x=1703000591;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=jY3jHYLAYkAS0aE4T0DejdVw3nwg6vnENj2h5kDjznY=;
-  b=bxrpn8SkNLS3nnu63lkVuiW+tHm6ZgdU5Il4ozdL9LROjYRzFE1xDcnB
-   4TKf8QHLRAbh9lVbGY5zIOFj4kc0ow+eE3UTrR/6fstHGLr6ueqZpTdh0
-   Ud4JcWLJMwfJLubIIT3m9qC2BZPZYzgeaJi/GW2gTDp5Pq0SnV8/IhPJE
-   2tFXfeI/LvHY2oywiCe8T60kAjk9pG6DRPQk1UHFSojWgCjmZY/Cee7j9
-   PmdYZGaqhSfjMXTQMh/cRLFTZ56gzGmDKLqLve7z51Ms0e+PtMjhR8G0u
-   1uzwMqLyuNaFR9DWXujO1G9r238AONjQ8fMtyVppiQ3PYA2oFkbIrkTpC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="317014312"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="317014312"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 07:43:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="600708356"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="600708356"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga003.jf.intel.com with ESMTP; 19 Dec 2022 07:43:08 -0800
-Message-ID: <90f6c531-1fed-2d0a-c6a9-46685517f02b@linux.intel.com>
-Date:   Mon, 19 Dec 2022 17:44:29 +0200
+        Mon, 19 Dec 2022 10:45:54 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F42512625
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:44:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kI4Lo2eTc7TViP7CmNTlVP4L2d4aRAIDxWiWnUYFIrU=; b=TG+tRuZcAz321fdSqW97adMUwL
+        HIY5nwQZlLSyPYxBtLON/dOfKneHU1UU/qafcRRw+ZTy8prlDqBqUmiRfgx6AY2FB/tnAcXgvRwZB
+        yHgk8bbwb5M48UBYbfjELFnhqWC4ZzOS7xcUXm0fKg5WCvr4HsUdp1xoz4AJWAPQHlH2u6dffpnia
+        6zb+XnRuQds3i/kR3xpQYuFb3UXMB4hqcCDo4XufEikWVD+UmcNozhGCQKGXp33kdtLW9eApWCqxU
+        w1kn2UylJJioSvJavNfPUrpC3hxkYuPII/RnGF8UdlfNxe0EHv+EkXggNHc1SjakcNi9w+7cns9h8
+        OTVQ9iFg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p7IJo-000r9D-BN; Mon, 19 Dec 2022 15:44:44 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D8385300193;
+        Mon, 19 Dec 2022 16:44:33 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C82F7201A8ADD; Mon, 19 Dec 2022 16:44:33 +0100 (CET)
+Date:   Mon, 19 Dec 2022 16:44:33 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Uros Bizjak <ubizjak@gmail.com>, x86@kernel.org,
+        willy@infradead.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        aarcange@redhat.com, kirill.shutemov@linux.intel.com,
+        jroedel@suse.de
+Subject: Re: [PATCH 11/13] x86_64: Remove pointless set_64bit() usage
+Message-ID: <Y6CG4e6JteXc8ih5@hirez.programming.kicks-ass.net>
+References: <20221022111403.531902164@infradead.org>
+ <20221022114425.168036718@infradead.org>
+ <Y2QR/BRHjjYUNszh@dev-arch.thelio-3990X>
+ <CAFULd4bkn3i0ds1ywhxAZBQH+1O-zbPWscUqjoEcv4xvnxOnSw@mail.gmail.com>
+ <Y2QYHZsZNs33NXZB@dev-arch.thelio-3990X>
+ <CAHk-=wjCBOwSWec+=h08q3Gbr4UjSfX46GrQjzHZLFokziS7nA@mail.gmail.com>
+ <Y2U3WdU61FvYlpUh@hirez.programming.kicks-ass.net>
+ <CAHk-=wggJFQJmWtvsFVt69hzRXW3zD5+9q-1Laz=NoZQ8Fy9Ag@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Content-Language: en-US
-To:     Gongwei Li <lifangpi@hotmail.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ligongwei@kylinos.cn
-References: <SI2PR02MB4603295B418781879CE88751DDE59@SI2PR02MB4603.apcprd02.prod.outlook.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH V1] usb: Fix typo in comment
-In-Reply-To: <SI2PR02MB4603295B418781879CE88751DDE59@SI2PR02MB4603.apcprd02.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wggJFQJmWtvsFVt69hzRXW3zD5+9q-1Laz=NoZQ8Fy9Ag@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.12.2022 3.38, Gongwei Li wrote:
-> From: Gongwei Li <ligongwei@kylinos.cn>
+On Fri, Nov 04, 2022 at 10:15:08AM -0700, Linus Torvalds wrote:
+> On Fri, Nov 4, 2022 at 9:01 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > So cmpxchg_double() does a cmpxchg on a double long value and is
+> > currently supported by: i386, x86_64, arm64 and s390.
+> >
+> > On all those, except i386, two longs are u128.
+> >
+> > So how about we introduce u128 and cmpxchg128 -- then it directly
+> > mirrors the u64 and cmpxchg64 usage we already have. It then also
+> > naturally imposses the alignment thing.
 > 
-> Spelling mistake in comment.
-> 
-> Signed-off-by: Gongwei Li <ligongwei@kylinos.cn>
-> ---
->   drivers/usb/host/pci-quirks.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
-> index ef08d68b9714..9710425e69aa 100644
-> --- a/drivers/usb/host/pci-quirks.c
-> +++ b/drivers/usb/host/pci-quirks.c
-> @@ -1103,10 +1103,10 @@ void usb_enable_intel_xhci_ports(struct pci_dev *xhci_pdev)
->   	pci_read_config_dword(xhci_pdev, USB_INTEL_USB2PRM,
->   			&ports_available);
->   
-> -	dev_dbg(&xhci_pdev->dev, "Configurable USB 2.0 ports to hand over to xCHI: 0x%x\n",
-> +	dev_dbg(&xhci_pdev->dev, "Configurable USB 2.0 ports to hand over to xHCI: 0x%x\n",
->   			ports_available);
->   
-> -	/* Write XUSB2PR, the xHC USB 2.0 Port Routing Register, to
-> +	/* Write XUSB2PR, the xHCI USB 2.0 Port Routing Register, to
+> Ack
 
-xHC isn't a typo in this case, just refers to the actual xHC Extensible Host Controller itself.
-The port routing register isn't part of the  xHCI specification.
-
-Thanks
--Mathias
-
-
+Out now: https://lkml.kernel.org/r/20221219153525.632521981@infradead.org
