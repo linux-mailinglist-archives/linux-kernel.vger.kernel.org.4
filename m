@@ -2,171 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3EA650CEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCA9650D03
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231974AbiLSOBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 09:01:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
+        id S231197AbiLSOHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 09:07:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbiLSOBl (ORCPT
+        with ESMTP id S229499AbiLSOHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 09:01:41 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77CDBDEFB
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 06:01:40 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2A14AFEC;
-        Mon, 19 Dec 2022 06:02:21 -0800 (PST)
-Received: from e112269-lin.cambridge.arm.com (unknown [10.1.194.34])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 10BA93F71A;
-        Mon, 19 Dec 2022 06:01:38 -0800 (PST)
-From:   Steven Price <steven.price@arm.com>
-To:     Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
-Cc:     Steven Price <steven.price@arm.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/panfrost: Fix GEM handle creation ref-counting
-Date:   Mon, 19 Dec 2022 14:01:30 +0000
-Message-Id: <20221219140130.410578-1-steven.price@arm.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 19 Dec 2022 09:07:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED271E0A2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 06:06:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671458779;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nuVjVLBj8E1x4HBavhbBfOmlBo2lVvbRsYo3c8J2IAY=;
+        b=WPlslR2sfJyybnqaST83DyUehC+1G7Rb/WKISwLvR4FjYN7EtReBoPVUNoNwTyesBOoYGn
+        /uovASfJFScM8VxrXyvBBhOHYUYCg6O2xyOPaGiYgfaz56A9PlRpaKr6rWt9hmTrRe2pOu
+        CPusgIXWwXA/7xIHliVBKZ9NQrU2SVM=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-157-ydHQ1dAcM6iGUO3C1MkA3g-1; Mon, 19 Dec 2022 09:06:17 -0500
+X-MC-Unique: ydHQ1dAcM6iGUO3C1MkA3g-1
+Received: by mail-il1-f198.google.com with SMTP id l13-20020a056e0212ed00b00304c6338d79so6639635iln.21
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 06:06:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nuVjVLBj8E1x4HBavhbBfOmlBo2lVvbRsYo3c8J2IAY=;
+        b=AUi10nwI+nSsQit5lPFW6Yvi/7wAiqo3IJ9FiAeK+5aZmDkKPBD2YBZ+foR+GIxcYu
+         dDac0NT7iwX07+bOXZQpqh52ud1T50O5lcdYYmPGDwgaa0uGv+jukpYdSJEVr/Fdkpwl
+         UCHDtKrh70CnRchvyeMTUaWMnLLN9xqUbJHE37T3oS5NCIyM3e89oAp6fwavE5EQRQ2P
+         iUNFzcoV8K1WQyls8+RxOvCfvOvVuziz7ibCCefD553pmyKeb8aL95VSlaT85Sz8pd21
+         FaUTHZg++XQ8g3OIdyy7v8EjFL1dYeaknG1MHVnhNjavNwGsSp/IcxuF82+SCTrCkdNT
+         lVlg==
+X-Gm-Message-State: ANoB5pnbUOkKKi95fDLQyeaoGmLERQs9S0A0PHt7iUcoSKGkorF04Tgy
+        YCK0XK6xbS2rPuR4upAJIdYxLTagzQLJZSz/C2M5KlFa1y1L4E6xIBefRYbXIr/MixuUEBwenQF
+        mOSgSLcLAwInpp60mncr4oX3UDqm0iSPdtt+5XNkq
+X-Received: by 2002:a92:ca8d:0:b0:302:de10:7ae1 with SMTP id t13-20020a92ca8d000000b00302de107ae1mr37983330ilo.15.1671458776999;
+        Mon, 19 Dec 2022 06:06:16 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5HsqW3uYLj3Z+BSfkHisqf8EAo68havrtSEvHFzsSQz53HGMcIdhS8KxdYoPUtoUD8VI3yzwO/jE3fe1h0XZs=
+X-Received: by 2002:a92:ca8d:0:b0:302:de10:7ae1 with SMTP id
+ t13-20020a92ca8d000000b00302de107ae1mr37983326ilo.15.1671458776758; Mon, 19
+ Dec 2022 06:06:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221215154416.111704-1-hadess@hadess.net>
+In-Reply-To: <20221215154416.111704-1-hadess@hadess.net>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 19 Dec 2022 15:06:05 +0100
+Message-ID: <CAO-hwJJefrHHkffo2o1bq1iJCQJe2-Oq3PZ0to07RS0U-xA5Sg@mail.gmail.com>
+Subject: Re: [PATCH] HID: logitech-hidpp: Guard FF init code against non-USB devices
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Kosina <jikos@kernel.org>,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-panfrost_gem_create_with_handle() previously returned a BO but with the
-only reference being from the handle, which user space could in theory
-guess and release, causing a use-after-free. Additionally if the call to
-panfrost_gem_mapping_get() in panfrost_ioctl_create_bo() failed then
-a(nother) reference on the BO was dropped.
+On Thu, Dec 15, 2022 at 4:44 PM Bastien Nocera <hadess@hadess.net> wrote:
+>
+> The Force Feedback code assumes that all the devices passed to it will
+> be USB devices, but that might not be the case for emulated devices.
+> Guard against a crash by checking the device type before poking at USB
+> properties.
+>
+> Reported-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> ---
 
-The _create_with_handle() is a problematic pattern, so ditch it and
-instead create the handle in panfrost_ioctl_create_bo(). If the call to
-panfrost_gem_mapping_get() fails then this means that user space has
-indeed gone behind our back and freed the handle. In which case just
-return an error code.
+I have added cc: stable, and applied to for-6.2/upstream-fixes
 
-Reported-by: Rob Clark <robdclark@chromium.org>
-Fixes: f3ba91228e8e ("drm/panfrost: Add initial panfrost driver")
-Signed-off-by: Steven Price <steven.price@arm.com>
----
- drivers/gpu/drm/panfrost/panfrost_drv.c | 27 ++++++++++++++++---------
- drivers/gpu/drm/panfrost/panfrost_gem.c | 16 +--------------
- drivers/gpu/drm/panfrost/panfrost_gem.h |  5 +----
- 3 files changed, 20 insertions(+), 28 deletions(-)
-
-diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
-index fa619fe72086..abb0dadd8f63 100644
---- a/drivers/gpu/drm/panfrost/panfrost_drv.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
-@@ -82,6 +82,7 @@ static int panfrost_ioctl_create_bo(struct drm_device *dev, void *data,
- 	struct panfrost_gem_object *bo;
- 	struct drm_panfrost_create_bo *args = data;
- 	struct panfrost_gem_mapping *mapping;
-+	int ret;
- 
- 	if (!args->size || args->pad ||
- 	    (args->flags & ~(PANFROST_BO_NOEXEC | PANFROST_BO_HEAP)))
-@@ -92,21 +93,29 @@ static int panfrost_ioctl_create_bo(struct drm_device *dev, void *data,
- 	    !(args->flags & PANFROST_BO_NOEXEC))
- 		return -EINVAL;
- 
--	bo = panfrost_gem_create_with_handle(file, dev, args->size, args->flags,
--					     &args->handle);
-+	bo = panfrost_gem_create(dev, args->size, args->flags);
- 	if (IS_ERR(bo))
- 		return PTR_ERR(bo);
- 
-+	ret = drm_gem_handle_create(file, &bo->base.base, &args->handle);
-+	if (ret)
-+		goto out;
-+
- 	mapping = panfrost_gem_mapping_get(bo, priv);
--	if (!mapping) {
--		drm_gem_object_put(&bo->base.base);
--		return -EINVAL;
-+	if (mapping) {
-+		args->offset = mapping->mmnode.start << PAGE_SHIFT;
-+		panfrost_gem_mapping_put(mapping);
-+	} else {
-+		/* This can only happen if the handle from
-+		 * drm_gem_handle_create() has already been guessed and freed
-+		 * by user space
-+		 */
-+		ret = -EINVAL;
- 	}
- 
--	args->offset = mapping->mmnode.start << PAGE_SHIFT;
--	panfrost_gem_mapping_put(mapping);
--
--	return 0;
-+out:
-+	drm_gem_object_put(&bo->base.base);
-+	return ret;
- }
- 
- /**
-diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.c b/drivers/gpu/drm/panfrost/panfrost_gem.c
-index 293e799e2fe8..3c812fbd126f 100644
---- a/drivers/gpu/drm/panfrost/panfrost_gem.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_gem.c
-@@ -235,12 +235,8 @@ struct drm_gem_object *panfrost_gem_create_object(struct drm_device *dev, size_t
- }
- 
- struct panfrost_gem_object *
--panfrost_gem_create_with_handle(struct drm_file *file_priv,
--				struct drm_device *dev, size_t size,
--				u32 flags,
--				uint32_t *handle)
-+panfrost_gem_create(struct drm_device *dev, size_t size, u32 flags)
- {
--	int ret;
- 	struct drm_gem_shmem_object *shmem;
- 	struct panfrost_gem_object *bo;
- 
-@@ -256,16 +252,6 @@ panfrost_gem_create_with_handle(struct drm_file *file_priv,
- 	bo->noexec = !!(flags & PANFROST_BO_NOEXEC);
- 	bo->is_heap = !!(flags & PANFROST_BO_HEAP);
- 
--	/*
--	 * Allocate an id of idr table where the obj is registered
--	 * and handle has the id what user can see.
--	 */
--	ret = drm_gem_handle_create(file_priv, &shmem->base, handle);
--	/* drop reference from allocate - handle holds it now. */
--	drm_gem_object_put(&shmem->base);
--	if (ret)
--		return ERR_PTR(ret);
--
- 	return bo;
- }
- 
-diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.h b/drivers/gpu/drm/panfrost/panfrost_gem.h
-index 8088d5fd8480..ad2877eeeccd 100644
---- a/drivers/gpu/drm/panfrost/panfrost_gem.h
-+++ b/drivers/gpu/drm/panfrost/panfrost_gem.h
-@@ -69,10 +69,7 @@ panfrost_gem_prime_import_sg_table(struct drm_device *dev,
- 				   struct sg_table *sgt);
- 
- struct panfrost_gem_object *
--panfrost_gem_create_with_handle(struct drm_file *file_priv,
--				struct drm_device *dev, size_t size,
--				u32 flags,
--				uint32_t *handle);
-+panfrost_gem_create(struct drm_device *dev, size_t size, u32 flags);
- 
- int panfrost_gem_open(struct drm_gem_object *obj, struct drm_file *file_priv);
- void panfrost_gem_close(struct drm_gem_object *obj,
--- 
-2.34.1
+Thanks,
+Benjamin
 
