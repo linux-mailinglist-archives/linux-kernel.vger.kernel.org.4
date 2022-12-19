@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D72665165D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 00:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2AF65169C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 00:06:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233130AbiLSXEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 18:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
+        id S233240AbiLSXGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 18:06:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232971AbiLSXCK (ORCPT
+        with ESMTP id S233009AbiLSXDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 18:02:10 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF3812ACE;
-        Mon, 19 Dec 2022 15:00:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1671490858; x=1703026858;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=iYweQv3PzZF7Arr6/aTL5AojEd8q8UfNKCO0tinlKwU=;
-  b=cLfMLaGPiVLRASxlmDtaNkILDRz9fMsBa+ne0Db2n1O2jBjrvF6JURaR
-   uCMODnPlD6QvQaVBrwvkIuL5/5qyPMC7Yjb6hA/Vc3gvc6BBxaY6cX8UV
-   7n7U6c5H+9l6vJeTaZ7VwjFCovxqsfpbJHhDCXG22Owv7/XloM4EejD0k
-   I=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 19 Dec 2022 15:00:54 -0800
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 15:00:54 -0800
+        Mon, 19 Dec 2022 18:03:44 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F98167FE;
+        Mon, 19 Dec 2022 15:01:12 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJIKvmY015286;
+        Mon, 19 Dec 2022 23:00:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=qcppdkim1;
+ bh=D3j+GJokMFdBeRJ2Xes3rbW9E8kTJM1GvmXc4zDqJAc=;
+ b=HBu83y0/uAMJArdMUGnpvY1AKDw7TcrYAYpgEkGdprxeopmwSue7o6EatGo1A9yWk4TF
+ p9s5LTyHKEGx6Jie0XwEdXQph1Tw6xe4hJ8xwQ2XVHXQyZjuzWLiX0fZCdrv1UrCem5c
+ WiKFO4nL2v3UIxgmx0H2Wm1P8kXz0Ni83Hz2rP6i4jqseYy+eODM1gAzMtlfxVC0hu+0
+ 6+u+Ozkjp/F/82sJEnxn5+aUjE9yMUa7vFZplLKsPob9xCWH/UNmOjAdVFpDbivtIL9j
+ GKc/SHWiO9QKxn+X8xQhkWypLMkt4frBbIiUzomwDhlw+1QIXWpdXTsebF9N5/BOGmqI mw== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mh72gd4e1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Dec 2022 23:00:56 +0000
+Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BJN0ucQ006910
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Dec 2022 23:00:56 GMT
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 19 Dec 2022 15:00:53 -0800
+ 15.2.986.36; Mon, 19 Dec 2022 15:00:55 -0800
 From:   Elliot Berman <quic_eberman@quicinc.com>
 To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
         Elliot Berman <quic_eberman@quicinc.com>,
         Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
+        Jonathan Corbet <corbet@lwn.net>
 CC:     Trilok Soni <quic_tsoni@quicinc.com>,
         Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
         Carl van Schaik <quic_cvanscha@quicinc.com>,
@@ -48,20 +52,21 @@ CC:     Trilok Soni <quic_tsoni@quicinc.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Bagas Sanjaya" <bagasdotme@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Jassi Brar <jassisinghbrar@gmail.com>,
-        "Sudeep Holla" <sudeep.holla@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-acpi@vger.kernel.org>
-Subject: [PATCH v8 26/28] virt: gunyah: Add hypercalls for sending doorbell
-Date:   Mon, 19 Dec 2022 14:58:47 -0800
-Message-ID: <20221219225850.2397345-27-quic_eberman@quicinc.com>
+Subject: [PATCH v8 27/28] virt: gunyah: Add irqfd interface
+Date:   Mon, 19 Dec 2022 14:58:48 -0800
+Message-ID: <20221219225850.2397345-28-quic_eberman@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221219225850.2397345-1-quic_eberman@quicinc.com>
 References: <20221219225850.2397345-1-quic_eberman@quicinc.com>
@@ -71,8 +76,20 @@ Content-Type: text/plain
 X-Originating-IP: [10.49.16.6]
 X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 5or1HWkH4LQxbY2CovGsT7oOrv1RQ2EZ
+X-Proofpoint-ORIG-GUID: 5or1HWkH4LQxbY2CovGsT7oOrv1RQ2EZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-19_01,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ suspectscore=0 impostorscore=0 bulkscore=0 mlxlogscore=999 adultscore=0
+ spamscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212190202
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,74 +97,312 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gunyah doorbells allow two virtual machines to signal each other using
-interrupts. Add the hypercalls needed to assert the interrupt.
+Enable support for creating irqfds which can raise an interrupt on a
+Gunyah virtual machine. irqfds are exposed to userspace as a Gunyah VM
+function with the name "irqfd". If the VM devicetree is not configured
+to create a doorbell with the corresponding label, userspace will still
+be able to assert the eventfd but no interrupt will be raised on the
+guest.
 
+Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- arch/arm64/gunyah/gunyah_hypercall.c | 27 +++++++++++++++++++++++++++
- include/linux/gunyah.h               |  3 +++
- 2 files changed, 30 insertions(+)
+ Documentation/virt/gunyah/vm-manager.rst |  22 +++
+ drivers/virt/gunyah/Kconfig              |  10 ++
+ drivers/virt/gunyah/Makefile             |   1 +
+ drivers/virt/gunyah/gunyah_irqfd.c       | 180 +++++++++++++++++++++++
+ include/linux/gunyah.h                   |   5 +
+ include/uapi/linux/gunyah.h              |  11 +-
+ 6 files changed, 228 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/virt/gunyah/gunyah_irqfd.c
 
-diff --git a/arch/arm64/gunyah/gunyah_hypercall.c b/arch/arm64/gunyah/gunyah_hypercall.c
-index dc42a4e6bd7c..00c5f91b96fd 100644
---- a/arch/arm64/gunyah/gunyah_hypercall.c
-+++ b/arch/arm64/gunyah/gunyah_hypercall.c
-@@ -26,6 +26,8 @@
- 						   GH_FN_ID(GH_CALL_TYPE_HYPERCALL, fn))
+diff --git a/Documentation/virt/gunyah/vm-manager.rst b/Documentation/virt/gunyah/vm-manager.rst
+index d11267d59802..b6cf8db826b8 100644
+--- a/Documentation/virt/gunyah/vm-manager.rst
++++ b/Documentation/virt/gunyah/vm-manager.rst
+@@ -142,3 +142,25 @@ The vcpu type will register with the VM Manager to expect to control
+ vCPU number `vcpu_id`. It returns a file descriptor allowing interaction with
+ the vCPU. See the Gunyah vCPU API description sections for interacting with
+ the Gunyah vCPU file descriptors.
++
++Type: "irqfd"
++^^^^^^^^^^^^^
++
++::
++
++  struct gh_fn_irqfd_arg {
++	__u32 fd;
++	__u32 label;
++  #define GH_IRQFD_LEVEL			(1UL << 0)
++  #define GH_IRQFD_DEASSIGN		(1UL << 1)
++	__u32 flags;
++  };
++
++Allows setting an eventfd to directly trigger a guest interrupt.
++irqfd.fd specifies the file descriptor to use as the eventfd.
++irqfd.label corresponds to the doorbell label used in the guest VM's devicetree.
++The irqfd is removed using the GH_IRQFD_DEASSIGN flag and specifying at least
++the irqfd.label.
++
++GH_IRQFD_LEVEL configures the corresponding doorbell to behave like a level
++triggered interrupt.
+diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
+index f9551cd5dfe4..42842e755a04 100644
+--- a/drivers/virt/gunyah/Kconfig
++++ b/drivers/virt/gunyah/Kconfig
+@@ -49,5 +49,15 @@ config GUNYAH_VCPU
+ 	  can schedule the guest VM's vCPUs instead of using Gunyah's scheduler.
+ 	  VMMs can also handle stage 2 faults of the vCPUs.
  
- #define GH_HYPERCALL_HYP_IDENTIFY		GH_HYPERCALL(0x0000)
-+#define GH_HYPERCALL_DBL_SEND			GH_HYPERCALL(0x0012)
-+#define GH_HYPERCALL_DBL_SET_MASK		GH_HYPERCALL(0x0015)
- #define GH_HYPERCALL_MSGQ_SEND			GH_HYPERCALL(0x001B)
- #define GH_HYPERCALL_MSGQ_RECV			GH_HYPERCALL(0x001C)
- #define GH_HYPERCALL_VCPU_RUN			GH_HYPERCALL(0x0065)
-@@ -68,6 +70,31 @@ void gh_hypercall_hyp_identify(struct gh_hypercall_hyp_identify_resp *hyp_identi
- }
- EXPORT_SYMBOL_GPL(gh_hypercall_hyp_identify);
++	  Say Y/M here if unsure and you want to support Gunyah VMMs.
++
++config GUNYAH_IRQFD
++	tristate "Gunyah irqfd interface"
++	depends on GUNYAH_RESOURCE_MANAGER
++	depends on GUNYAH_VM_MANAGER
++	help
++	  Enable kernel support for creating irqfds which can raise an interrupt
++	  on Gunyah virtual machine.
++
+ 	  Say Y/M here if unsure and you want to support Gunyah VMMs.
+ endif
+diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
+index debdd7e4d9a1..065eeb060597 100644
+--- a/drivers/virt/gunyah/Makefile
++++ b/drivers/virt/gunyah/Makefile
+@@ -6,3 +6,4 @@ gunyah_rsc_mgr-$(CONFIG_GUNYAH_VM_MANAGER) += vm_mgr.o vm_mgr_mm.o
+ obj-$(CONFIG_GUNYAH_RESOURCE_MANAGER) += gunyah_rsc_mgr.o
  
-+int gh_hypercall_dbl_send(u64 capid, u64 new_flags, u64 *old_flags)
+ obj-$(CONFIG_GUNYAH_VCPU) += gunyah_vcpu.o
++obj-$(CONFIG_GUNYAH_IRQFD) += gunyah_irqfd.o
+diff --git a/drivers/virt/gunyah/gunyah_irqfd.c b/drivers/virt/gunyah/gunyah_irqfd.c
+new file mode 100644
+index 000000000000..34ec389323e2
+--- /dev/null
++++ b/drivers/virt/gunyah/gunyah_irqfd.c
+@@ -0,0 +1,180 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#include <linux/eventfd.h>
++#include <linux/file.h>
++#include <linux/fs.h>
++#include <linux/gunyah.h>
++#include <linux/gunyah_vm_mgr.h>
++#include <linux/kref.h>
++#include <linux/module.h>
++#include <linux/poll.h>
++#include <linux/printk.h>
++
++#include <uapi/linux/gunyah.h>
++
++struct gunyah_irqfd {
++	struct gunyah_resource *ghrsc;
++	struct gunyah_vm_resource_ticket ticket;
++	struct gunyah_vm_function *f;
++
++	struct kref kref;
++	bool level;
++
++	struct eventfd_ctx *ctx;
++	wait_queue_entry_t wait;
++	poll_table pt;
++	struct fd fd;
++	struct work_struct shutdown_work;
++};
++
++static void gh_irqfd_cleanup(struct kref *kref)
 +{
-+	struct arm_smccc_res res;
++	struct gunyah_irqfd *irqfd = container_of(kref, struct gunyah_irqfd, kref);
 +
-+	arm_smccc_1_1_hvc(GH_HYPERCALL_DBL_SEND, capid, new_flags, 0, &res);
-+
-+	if (res.a0)
-+		return res.a0;
-+
-+	*old_flags = res.a1;
-+
-+	return res.a0;
++	kfree(irqfd);
 +}
-+EXPORT_SYMBOL_GPL(gh_hypercall_dbl_send);
 +
-+int gh_hypercall_dbl_set_mask(u64 capid, u64 enable_mask, u64 ack_mask)
++
++static void irqfd_shutdown(struct work_struct *work)
 +{
-+	struct arm_smccc_res res;
++	struct gunyah_irqfd *irqfd = container_of(work, struct gunyah_irqfd, shutdown_work);
++	u64 isr;
 +
-+	arm_smccc_1_1_hvc(GH_HYPERCALL_DBL_SET_MASK, capid, enable_mask, ack_mask, 0, &res);
++	if (irqfd->ctx) {
++		eventfd_ctx_remove_wait_queue(irqfd->ctx, &irqfd->wait, &isr);
++		eventfd_ctx_put(irqfd->ctx);
++		fdput(irqfd->fd);
++		irqfd->ctx = NULL;
++		irqfd->fd.file = NULL;
++	}
 +
-+	return res.a0;
++	kref_put(&irqfd->kref, gh_irqfd_cleanup);
 +}
-+EXPORT_SYMBOL_GPL(gh_hypercall_dbl_set_mask);
 +
- int gh_hypercall_msgq_send(u64 capid, size_t size, uintptr_t buff, int tx_flags, bool *ready)
- {
- 	struct arm_smccc_res res;
++static int irqfd_wakeup(wait_queue_entry_t *wait, unsigned int mode, int sync, void *key)
++{
++	struct gunyah_irqfd *irqfd = container_of(wait, struct gunyah_irqfd, wait);
++	__poll_t flags = key_to_poll(key);
++	u64 enable_mask = GH_DBL_NONBLOCK;
++	u64 old_flags;
++	int ret = 0;
++
++	if (flags & EPOLLIN) {
++		if (irqfd->ghrsc) {
++			ret = gh_hypercall_dbl_send(irqfd->ghrsc->capid, enable_mask, &old_flags);
++			if (ret)
++				pr_err("Failed to assert irq %d\n", irqfd->f->fn.irqfd.label);
++		}
++	}
++
++	return 0;
++}
++
++static void irqfd_ptable_queue_proc(struct file *file, wait_queue_head_t *wqh, poll_table *pt)
++{
++	struct gunyah_irqfd *irq_ctx = container_of(pt, struct gunyah_irqfd, pt);
++
++	add_wait_queue(wqh, &irq_ctx->wait);
++}
++
++static int gunyah_irqfd_populate(struct gunyah_vm_resource_ticket *ticket,
++				struct gunyah_resource *ghrsc)
++{
++	struct gunyah_irqfd *irqfd = container_of(ticket, struct gunyah_irqfd, ticket);
++	u64 enable_mask = GH_DBL_NONBLOCK;
++	u64 ack_mask = ~0;
++	int ret = 0;
++
++	irqfd->ghrsc = ghrsc;
++	if (irqfd->level) {
++		ret = gh_hypercall_dbl_set_mask(irqfd->ghrsc->capid, enable_mask, ack_mask);
++		if (ret)
++			pr_warn("irq %d couldn't be set as level triggered. Might cause IRQ storm if asserted\n",
++				irqfd->f->fn.irqfd.label);
++	}
++	kref_get(&irqfd->kref);
++
++	return 0;
++}
++
++static void gunyah_irqfd_unpopulate(struct gunyah_vm_resource_ticket *ticket,
++					struct gunyah_resource *ghrsc)
++{
++	struct gunyah_irqfd *irqfd = container_of(ticket, struct gunyah_irqfd, ticket);
++
++	queue_work(system_wq, &irqfd->shutdown_work);
++	irqfd->ghrsc = NULL;
++	kref_put(&irqfd->kref, gh_irqfd_cleanup);
++}
++
++static long gunyah_irqfd_bind(struct gunyah_vm_function *f)
++{
++	__poll_t events;
++	struct gunyah_irqfd *irqfd;
++	long r;
++
++	irqfd = kzalloc(sizeof(*irqfd), GFP_KERNEL);
++	if (!irqfd)
++		return -ENOMEM;
++
++	irqfd->f = f;
++	f->data = irqfd;
++
++	irqfd->fd = fdget(f->fn.irqfd.fd);
++	if (!irqfd->fd.file) {
++		r = -EBADF;
++		goto err_free;
++	}
++
++	irqfd->ctx = eventfd_ctx_fileget(irqfd->fd.file);
++	if (IS_ERR(irqfd->ctx)) {
++		r = PTR_ERR(irqfd->ctx);
++		goto err_fdput;
++	}
++
++	if (f->fn.irqfd.flags & GH_IRQFD_LEVEL)
++		irqfd->level = true;
++
++	irqfd->ticket.resource_type = GUNYAH_RESOURCE_TYPE_BELL_TX;
++	irqfd->ticket.label = f->fn.irqfd.label;
++	irqfd->ticket.owner = THIS_MODULE;
++	irqfd->ticket.populate = gunyah_irqfd_populate;
++	irqfd->ticket.unpopulate = gunyah_irqfd_unpopulate;
++
++	r = ghvm_add_resource_ticket(f->ghvm, &irqfd->ticket);
++	if (r)
++		goto err_ctx;
++
++	init_waitqueue_func_entry(&irqfd->wait, irqfd_wakeup);
++	INIT_WORK(&irqfd->shutdown_work, irqfd_shutdown);
++	init_poll_funcptr(&irqfd->pt, irqfd_ptable_queue_proc);
++	kref_init(&irqfd->kref);
++
++	events = vfs_poll(irqfd->fd.file, &irqfd->pt);
++	if (events & EPOLLIN)
++		pr_warn("Premature injection of interrupt\n");
++
++	return 0;
++err_ctx:
++	eventfd_ctx_put(irqfd->ctx);
++err_fdput:
++	fdput(irqfd->fd);
++err_free:
++	kfree(irqfd);
++	return r;
++}
++
++static void gunyah_irqfd_release(struct gunyah_vm_function *f)
++{
++	struct gunyah_irqfd *irqfd = f->data;
++
++	/* unpopulate will trigger clean up of the eventfd */
++	ghvm_remove_resource_ticket(irqfd->f->ghvm, &irqfd->ticket);
++}
++
++DECLARE_GUNYAH_VM_FUNCTION_INIT(irqfd, gunyah_irqfd_bind, gunyah_irqfd_release);
++MODULE_DESCRIPTION("Gunyah irqfds");
++MODULE_LICENSE("GPL");
 diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
-index 42160b4de834..2c2b498a792d 100644
+index 2c2b498a792d..db5910adc658 100644
 --- a/include/linux/gunyah.h
 +++ b/include/linux/gunyah.h
-@@ -163,6 +163,9 @@ static inline u16 gh_api_version(void)
- void gh_hypercall_get_uid(u32 uid[4]);
- void gh_hypercall_hyp_identify(struct gh_hypercall_hyp_identify_resp *hyp_identity);
+@@ -32,6 +32,11 @@ struct gunyah_resource {
+ 	u32 rm_label;
+ };
  
-+int gh_hypercall_dbl_send(u64 capid, u64 new_flags, u64 *old_flags);
-+int gh_hypercall_dbl_set_mask(u64 capid, u64 enable_mask, u64 ack_mask);
++/**
++ * Gunyah Doorbells
++ */
++#define GH_DBL_NONBLOCK		BIT(32)
 +
- #define GH_HYPERCALL_MSGQ_TX_FLAGS_PUSH		BIT(0)
+ /**
+  * Gunyah Message Queues
+  */
+diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
+index ccc0e6d0f985..5eab212c7bf5 100644
+--- a/include/uapi/linux/gunyah.h
++++ b/include/uapi/linux/gunyah.h
+@@ -57,10 +57,19 @@ struct gh_fn_vcpu_arg {
+ 	__u32 vcpu_id;
+ };
  
- int gh_hypercall_msgq_send(u64 capid, size_t size, uintptr_t buff, int tx_flags, bool *ready);
++struct gh_fn_irqfd_arg {
++	__u32 fd;
++	__u32 label;
++#define GH_IRQFD_LEVEL			(1UL << 0)
++#define GH_IRQFD_DEASSIGN		(1UL << 1)
++	__u32 flags;
++};
++
+ struct gh_vm_function {
+ 	char name[GUNYAH_FUNCTION_NAME_SIZE];
+ 	union {
+-		struct gh_device_vcpu_arg vcpu;
++		struct gh_fn_vcpu_arg vcpu;
++		struct gh_fn_irqfd_arg irqfd;
+ 		char data[GUNYAH_FUNCTION_MAX_ARG_SIZE];
+ 	};
+ };
 -- 
 2.25.1
 
