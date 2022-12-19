@@ -2,126 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3155651125
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CB2651129
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:20:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbiLSRTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 12:19:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S231310AbiLSRTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 12:19:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232296AbiLSRTS (ORCPT
+        with ESMTP id S231959AbiLSRTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 12:19:18 -0500
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC79013EB6;
-        Mon, 19 Dec 2022 09:19:14 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id 6so4605760vkz.0;
-        Mon, 19 Dec 2022 09:19:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aZRGUJIQAa5KK6Y33xr4h/ZDNiIwMoPJ3eE77a0n7hg=;
-        b=auj81D1GJXAgJiqie/fXN9atmWN/0DCcWtL6GTUXu2nR7Nbelgq4p2I3MJFiETa8WQ
-         2+pbBS3lri7AHoZLt+aqvo3LSRB9ZEZ4nikQPnfFr9yh75THj/A9bZsUXDkgTx3PMgAx
-         jZDGTdXV7RpjU98zLx1QKUi9pgLy0IAHRGFLISuKoHM+23T8Dfslcl6CPap5/J85GjxT
-         MhC7KljFly2JdMLEGbXEeaLnfeOzHRcWMa3fl5TrMaLuqyjlqEv+gN3PyiSLsVbbqb3W
-         7ByQKOMg0pSXAaWfIkD5U07eDro2jYJnuGBPYVaq1aEOj5QZKk91f9sgh/g4mcR9kNrS
-         NXYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aZRGUJIQAa5KK6Y33xr4h/ZDNiIwMoPJ3eE77a0n7hg=;
-        b=aek7wmSS3KOAHfClzkMvP6YsduIVapPGucwRduBfzP9Pw0v25Y2vb1Wr8R+8XUu0bo
-         2XJLTI/+C84ldmgPOtlbciXySMEoFczzOjsAU4on8m+3sYZI28N+yE/O4eGDj7+CuS3y
-         P21KYTEo748+xvv+tgnr0bgh24AEIBAxFuYn1oZrN8BiQouPQ/A/OLnMx5wT+ffLOEFH
-         Jh+8QXmWDRfqpYvviMB9GEtgHrfQqfzKpSlSyuQnZQtemsyU3EotT/sPIkWnUIYE8Bk/
-         FTphmWD+Lghbq8gX694VKsfzL603+pQqBLxZEyEGEkBRsOHgDUnh0buvv8GE53kQBeOf
-         WUwA==
-X-Gm-Message-State: ANoB5pnFsyrP0JM/Czzeb7/lBB/9zgktU6lQxkeG7BErqjl6IolJ+RdS
-        R/7r6nQMAzLGKKrZ8cd5p3MLy9bJ07FfGyAIQ9r873tmogE=
-X-Google-Smtp-Source: AA0mqf6axTdy5vFx6gaiz7Pe6RB12fD2A5bZU42tZeMrqi50Qtg3hg3u8VI1oUtUABh5JcVdVjD4VDyDPMLuHTE/Pgo=
-X-Received: by 2002:a1f:58c1:0:b0:3b7:bd26:9251 with SMTP id
- m184-20020a1f58c1000000b003b7bd269251mr48290118vkb.25.1671470354004; Mon, 19
- Dec 2022 09:19:14 -0800 (PST)
+        Mon, 19 Dec 2022 12:19:33 -0500
+Received: from box.opentheblackbox.net (box.opentheblackbox.net [IPv6:2600:3c02::f03c:92ff:fee2:82bc])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165212FB;
+        Mon, 19 Dec 2022 09:19:33 -0800 (PST)
+Received: from authenticated-user (box.opentheblackbox.net [172.105.151.37])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.opentheblackbox.net (Postfix) with ESMTPSA id EB7B83EA50;
+        Mon, 19 Dec 2022 12:19:31 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pgazz.com; s=mail;
+        t=1671470372; bh=9bYAYnsF3sM0kY4DcqJgvSrfn3Yhvu5t4LsWQCVQ22c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GJQcaj2xzpKLi5sHc3YQsD6NWInQKxVlMsfPXGSd/qlRDRg1emOaEYSLxr5ZmnJuu
+         XQ4rx/Vz1CIH56ag6NqmeL8WRtR3Bk2fyjPJ4egMEOwFnnBpVWrQt8Ww9mjkh7+JRX
+         J7CckD7a3o3jwPpXwkeuQPKdKpAjYO3LYOrfUurdlNnSDmlqLLm1tXSJH7HBdNrR3r
+         S+PRCP024baGQTjsdTe/BpCgi7ZSr9wY3G/By6PGl+RX9kLxWYEi+Mmni1pgYJBl4c
+         wt2NNus2JCUUYtmiVxY+3LqFwectQVi1eghXHD6S8FTKeIhmDUjufdcXkpJGra7ejn
+         t8DPptsHTOv0w==
+From:   Paul Gazzillo <paul@pgazz.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Zheng Bin <zhengbin13@huawei.com>,
+        Suman Ghosh <sumang@marvell.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Paul Gazzillo <paul@pgazz.com>
+Subject: [PATCH v2] octeontx2_pf: Select NET_DEVLINK when enabling OCTEONTX2_PF
+Date:   Mon, 19 Dec 2022 12:19:11 -0500
+Message-Id: <20221219171918.834772-1-paul@pgazz.com>
 MIME-Version: 1.0
-References: <20221215150214.1109074-1-hugo@hugovil.com> <20221215150214.1109074-15-hugo@hugovil.com>
- <CAH+2xPAWo=nycQMLrjye8i3a3textJdyYJcWRG3Jq-tbN0a9RA@mail.gmail.com> <20221219112542.fb30929b8b91255dcba5a289@hugovil.com>
-In-Reply-To: <20221219112542.fb30929b8b91255dcba5a289@hugovil.com>
-From:   Bruno Thomsen <bruno.thomsen@gmail.com>
-Date:   Mon, 19 Dec 2022 18:18:58 +0100
-Message-ID: <CAH+2xPA0uc8wCtaR7Z48G9SkHWQG=Gb9XtxBCPKUgKfq5EDVQA@mail.gmail.com>
-Subject: Re: [PATCH v3 14/14] dt-bindings: rtc: pcf2127: add PCF2131
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,RCVD_IN_XBL,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Den man. 19. dec. 2022 kl. 17.25 skrev Hugo Villeneuve <hugo@hugovil.com>:
->
-> On Mon, 19 Dec 2022 10:14:10 +0100
-> Bruno Thomsen <bruno.thomsen@gmail.com> wrote:
->
-> > Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
-> > >
-> > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > >
-> > > Add support for new NXP RTC PCF2131.
-> > >
-> > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 4 +++-
-> > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > index cde7b1675ead..a8f8c23da4d8 100644
-> > > --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > @@ -14,7 +14,9 @@ maintainers:
-> > >
-> > >  properties:
-> > >    compatible:
-> > > -    const: nxp,pcf2127
-> > > +    enum:
-> > > +      - nxp,pcf2127
-> > > +      - nxp,pcf2131
-> >
-> > The enum is incomplete as pcf2127_of_match struct also contains:
-> > nxp,pcf2129
-> > ncp,pca2129
-> >
-> > /Bruno
->
-> Hi,
-> if I understand correctly, this means that the pca2129 and pcf2129 entries are already missing and should be added in a fix or a patch outside the scope of my new driver...
->
+When using COMPILE_TEST, the driver controlled by OCTEONTX2_PF does
+not select NET_DEVLINK while the related OCTEONTX2_AF driver does.
+This means that when OCTEONTX2_PF is enabled from a default
+configuration, linker errors will occur due to undefined references to
+code controlled by NET_DEVLINK.
 
-Correct, I just noticed while doing review.
+1. make.cross ARCH=x86_64 defconfig
+2. make.cross ARCH=x86_64 menuconfig
+3. Enable COMPILE_TEST
+   General setup  --->
+     Compile also drivers which will not load
+4. Enable OCTEONTX2_PF
+   Device Drivers  --->
+     Network device support  --->
+       Ethernet driver support  --->
+         Marvell OcteonTX2 NIC Physical Function driver
+5. Exit and save configuration.  NET_DEVLINK will still be disabled.
+6. make.cross ARCH=x86_64 several linker errors, for example,
+   ld: drivers/net/ethernet/marvell/octeontx2/nic/otx2_devlink.o:
+     in function `otx2_register_dl':
+   otx2_devlink.c:(.text+0x142): undefined reference to `devlink_alloc_ns'
 
-> Hugo.
->
->
-> > >    reg:
-> > >      maxItems: 1
-> > > --
-> > > 2.30.2
-> > >
-> >
->
->
-> --
-> Hugo Villeneuve <hugo@hugovil.com>
+This fix adds "select NET_DEVLINK" link to OCTEONTX2_PF's Kconfig
+specification to match OCTEONTX2_AF.
+
+Fixes: 2da489432747 ("octeontx2-pf: devlink params support to set mcam entry count")
+Signed-off-by: Paul Gazzillo <paul@pgazz.com>
+---
+v1 -> v2: Added the fixes tag
+
+ drivers/net/ethernet/marvell/octeontx2/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/ethernet/marvell/octeontx2/Kconfig b/drivers/net/ethernet/marvell/octeontx2/Kconfig
+index 3f982ccf2c85..639893d87055 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/Kconfig
++++ b/drivers/net/ethernet/marvell/octeontx2/Kconfig
+@@ -31,6 +31,7 @@ config NDC_DIS_DYNAMIC_CACHING
+ config OCTEONTX2_PF
+ 	tristate "Marvell OcteonTX2 NIC Physical Function driver"
+ 	select OCTEONTX2_MBOX
++	select NET_DEVLINK
+ 	depends on (64BIT && COMPILE_TEST) || ARM64
+ 	depends on PCI
+ 	depends on PTP_1588_CLOCK_OPTIONAL
+-- 
+2.25.1
+
