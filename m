@@ -2,122 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1271865147E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 21:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6009651482
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 21:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232386AbiLSU4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 15:56:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
+        id S232484AbiLSU5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 15:57:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbiLSU4B (ORCPT
+        with ESMTP id S232473AbiLSU4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 15:56:01 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C286561;
-        Mon, 19 Dec 2022 12:56:01 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id 82so7054084pgc.0;
-        Mon, 19 Dec 2022 12:56:01 -0800 (PST)
+        Mon, 19 Dec 2022 15:56:53 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ADFA1A6
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 12:56:53 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id l10so10221576plb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 12:56:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NakfROSMki8cV2nnpMoQ1MJIRum6ZgALihcXreebAZQ=;
-        b=P9vTDBW4Z9V3T+vz64KijYP0mRwH/VSJa3JCdcPiIQ8AckWvIFsGQVP9FZKvi0ENkr
-         1iFYZCLDOJljki+cWdV2+/aQdMYLTHmsVq0uLQ8/VGQcQORfO1eTRB4xyZi/viWROc1H
-         Zpm2AvuHS8iRTJngk6WIbwIDOjlMe7N9wHr2/MPlcTPD8bUALFqvER4S0Cq4/zhB5RNG
-         2nRPGHMhjgP99prOQ3hUchptv3SsOS/A+CYtVYvc5w55arPw+hxIrkBXcdSVD5wwonlD
-         8LkK2tpGZVXLH58UsGQ1HdFqMn1ZcCj7+IJPojJSk3Qr5+CxgUnLSfzAUwBMBQwnPE8e
-         IFaQ==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AP0DPgy6juzYjbnmoSK4DSIse02YvBVHuic1zb1crI0=;
+        b=n2Cb9GinsIjyEaT+YGxcLDI2zefP9STnyh6mk+easKE+YmRAE9neZPO5KKQ0un7hzA
+         1WfQoF2Qy0Oo6ffwsDhxOVc59fCZU/OEXw2pDj+gQV0719Bol/qBcaBjr/N/1fCixHbV
+         ii3Mixw1qykkBdRq56vPuUoU5eSuiWj0Y/li7hPZ1nkZn0PUrxr1Ssco3G6XWTYk0jUX
+         q4f7k/NwuXW5lT7SorZpgTcJN3pVISAhO39PNgwLfXd7DlNY8/GHIY8XYdFgsXUjmFu0
+         W9mV9ZnGjHaq6eAnzo7i3kzYthj9wRa40zLu/snuft72nTrG+Y3Azx55N1JgbakviMQY
+         s+6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NakfROSMki8cV2nnpMoQ1MJIRum6ZgALihcXreebAZQ=;
-        b=L1OOTNg3zItYfP9o0jlVZw8sPoLq4J6w7K0ehDc3/enMyGgxvafBHYdwntqILF2vOC
-         0kyOGfPU4DmQcBO+3yFFLvIZErrxShnVtCXn6cOU/vTQdx9NZnP2g9Wx2oKdqC7bFOBi
-         Emx/DQh2RHtb1mJ/Q2VuB34DQNlUjMle/VNSNfhj6VegDR/uMeszLW1z1paEDvuP9OTA
-         DmMVZMW0KKpgzGNOr/+7UIKtZfAwPsZw1BcA31+jzAYQPMPXU44M5da34twmXaTp+9Bn
-         p/wmS+QcFLG9z37pfzRhbt9WZ2JVbD0V3CIw/s2lAUdDGn774UrtOB0EL2GEA5tE188t
-         2vpA==
-X-Gm-Message-State: ANoB5pn55Z3ZL7CpYSruOmEcMCauwGPmi8DKop/hpVRr5j19emU46iNL
-        ganhtikSijtmD5JWyJfyRTs=
-X-Google-Smtp-Source: AA0mqf6x/yM7OIbELNQSHNQnxTbVe+Z7POs+RPh7fYMKmdoryFQiV4RgP8MP0Dewq1H0xH/Wqnjvlw==
-X-Received: by 2002:aa7:8e4c:0:b0:56b:7b9f:5cb6 with SMTP id d12-20020aa78e4c000000b0056b7b9f5cb6mr45396562pfr.19.1671483360467;
-        Mon, 19 Dec 2022 12:56:00 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id 127-20020a621785000000b0056da073b2b7sm7047390pfx.210.2022.12.19.12.55.59
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AP0DPgy6juzYjbnmoSK4DSIse02YvBVHuic1zb1crI0=;
+        b=Vbgv8s2rzvbK+ZcMmytE4oKknC585Vj4NmyOVNN/satdsYbCvxt4VjVZy5DoOPZvj1
+         Zkyba78EhqdmK60cTMAKaVrTf4taHsOHkwE9ZZodHG2I/TJD1WdDk8RxEeNj5TWAQi7E
+         nXkEfruLTMYshPQt0653BJ6CCuI7BrF3020aSqNaO7PrEjz+BlndRdkYwZhiF8Aih+Ws
+         d6RHBCYYEDx9PTpB7yh6SD8KXQzr/FEDsvU8NA349VPb6ICCg6S5aZvoVJQTWqA6OMMZ
+         AAPTjxFhHNh6chFYBQTohDGG2CPgGOaYIrl8L69iHUms5ZWov9E2YFzCUpdtA6A6utcn
+         PTQQ==
+X-Gm-Message-State: AFqh2kpKQ374rss5x1KZgIGpQGMBz5Uti7ZI4FQVayPMjnG7+g3gjXip
+        mJT0m34aTbIKpKwM2HPdwSQ4yQ==
+X-Google-Smtp-Source: AMrXdXuYwK2oZVtQXVR6Uo4lZSOvVHJU5q2NtoAiJA4PqmRch5RIgzCrcaxiZPZosP5g1PcjUUJE1g==
+X-Received: by 2002:a17:902:e5cd:b0:189:b910:c6d2 with SMTP id u13-20020a170902e5cd00b00189b910c6d2mr1353085plf.1.1671483412369;
+        Mon, 19 Dec 2022 12:56:52 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id q18-20020a17090311d200b00188f07c9eedsm7601657plh.176.2022.12.19.12.56.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 12:56:00 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 19 Dec 2022 10:55:57 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH -next 0/4] blk-cgroup: synchronize del_gendisk() with
- configuring cgroup policy
-Message-ID: <Y6DP3aOSad8+D1yY@slm.duckdns.org>
-References: <20221217030908.1261787-1-yukuai1@huaweicloud.com>
+        Mon, 19 Dec 2022 12:56:51 -0800 (PST)
+Date:   Mon, 19 Dec 2022 20:56:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     coverity-bot <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        kvm@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: Coverity: handle_vmclear(): Error handling issues
+Message-ID: <Y6DQEFYmjLTXvw/g@google.com>
+References: <202212010825.C23022D@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221217030908.1261787-1-yukuai1@huaweicloud.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <202212010825.C23022D@keescook>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Sat, Dec 17, 2022 at 11:09:04AM +0800, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
+On Thu, Dec 01, 2022, coverity-bot wrote:
+> Hello!
 > 
-> iocost is initialized when it's configured the first time, and iocost
-> initializing can race with del_gendisk(), which will cause null pointer
-> dereference:
+> This is an experimental semi-automated report about issues detected by
+> Coverity from a scan of next-20221201 as part of the linux-next scan project:
+> https://scan.coverity.com/projects/linux-next-weekly-scan
 > 
-> t1				t2
-> ioc_qos_write
->  blk_iocost_init
->   rq_qos_add
->   				del_gendisk
->   				 rq_qos_exit
->   				 //iocost is removed from q->roqs
->   blkcg_activate_policy
->    pd_init_fn
->     ioc_pd_init
->      ioc = q_to_ioc(blkg->q)
->      //can't find iocost and return null
+> You're getting this email because you were associated with the identified
+> lines of code (noted below) that were touched by commits:
 > 
-> And iolatency is about to switch to the same lazy initialization.
+>   Fri Dec 14 17:59:46 2018 +0100
+>     55d2375e58a6 ("KVM: nVMX: Move nested code to dedicated files")
 > 
-> This patchset fix this problem by synchronize rq_qos_add() and
-> blkcg_activate_policy() with rq_qos_exit().
+> Coverity reported the following:
+> 
+> *** CID 1527765:  Error handling issues  (CHECKED_RETURN)
+> arch/x86/kvm/vmx/nested.c:5269 in handle_vmclear()
+> 5263     	 */
+> 5264     	if (likely(!guest_cpuid_has_evmcs(vcpu) ||
+> 5265     		   !evmptr_is_valid(nested_get_evmptr(vcpu)))) {
+> 5266     		if (vmptr == vmx->nested.current_vmptr)
+> 5267     			nested_release_vmcs12(vcpu);
+> 5268
+> vvv     CID 1527765:  Error handling issues  (CHECKED_RETURN)
+> vvv     Calling "kvm_vcpu_write_guest" without checking return value (as is done elsewhere 7 out of 8 times).
+> 5269     		kvm_vcpu_write_guest(vcpu,
+> 5270     				     vmptr + offsetof(struct vmcs12,
+> 5271     						      launch_state),
+> 5272     				     &zero, sizeof(zero));
+> 5273     	} else if (vmx->nested.hv_evmcs && vmptr == vmx->nested.hv_evmcs_vmptr) {
+> 5274     		nested_release_evmcs(vcpu);
+> 
+> If this is a false positive, please let us know so we can mark it as
+> such, or teach the Coverity rules to be smarter. If not, please make
+> sure fixes get into linux-next. :) For patches fixing this, please
+> include these lines (but double-check the "Fixes" first):
+> 
+> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> Addresses-Coverity-ID: 1527765 ("Error handling issues")
+> Fixes: 55d2375e58a6 ("KVM: nVMX: Move nested code to dedicated files")
 
-So, the patchset seems a bit overly complicated to me. What do you think
-about the following?
+Nit on the bot, if it's going to provide a Fixes without human verification, then
+it should probably try to bisect (which I realize could get quite nasty).  Both
+this VMCLEAR issue and the SMM issue report bogus Fixes due to code movement.  If
+the blamed commit on this won't hadn't been so obviously wrong I likely would have
+copy+pasted without ever verifying.
 
-* These init/exit paths are super cold path, just protecting them with a
-  global mutex is probably enough. If we encounter a scalability problem,
-  it's easy to fix down the line.
-
-* If we're synchronizing this with a mutex anyway, no need to grab the
-  queue_lock, right? rq_qos_add/del/exit() can all just hold the mutex.
-
-* And we can keep the state tracking within rq_qos. When rq_qos_exit() is
-  called, mark it so that future adds will fail - be that a special ->next
-  value a queue flag or whatever.
-
-Thanks.
-
--- 
-tejun
+Maybe just omit the Fixes entirely and rely on the above "touched by commits" to
+provide the developer with the hint?
