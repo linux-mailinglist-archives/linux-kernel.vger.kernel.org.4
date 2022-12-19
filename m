@@ -2,239 +2,395 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C43906508CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 09:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A02376508D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 09:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbiLSItO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 03:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
+        id S230355AbiLSIuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 03:50:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231654AbiLSIs0 (ORCPT
+        with ESMTP id S231430AbiLSItg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 03:48:26 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098F2C753;
-        Mon, 19 Dec 2022 00:48:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671439703; x=1702975703;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=KIpCFhQ0U/3ODsKmybGnumRtoiorSkib4N9ykDJCKXY=;
-  b=ZUd/NjQDnjhq7Vo5qM87H3OARXfiSt0ohzL+GEXFfhQcHMGpFc2d49h3
-   RQfX13V9M8e2ida6SG+Q5a/QUmcv167kmWJeNloIRIt+hmW8zGAyakpBk
-   aoEi6x4x7yvfmISHoB+178jy4nGeeHkYgFCM3uic1ILm48218H6pKUC0I
-   y+OJvrYXaChYvKh65vC5QLpOoj7xtc34IwYJLnrKNO7XwOeVHfSChStwp
-   34hE0vZX6sCbu0/gaQay78OqAvWuSf4TZ6m5siLskf/t4paa9lhtx//TY
-   tFjW58aNZSSu6L0898l6YcRMCJkXHjXlY8jHq02IH2Fa0pI+ExEzFA3NX
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="299633408"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="299633408"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 00:48:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="979310872"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="979310872"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Dec 2022 00:48:21 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 19 Dec 2022 00:48:21 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 19 Dec 2022 00:48:21 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.103)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 19 Dec 2022 00:48:21 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mJZb/uYCC/xzRs/KsL2k9BToKwZDo8dEKoim2Le9SFI2pFrEJFR16gun/7VTVRfolHi6H0GC96S/SK9Nq1G1IrtOnEd2VfKIU+FRY0VJgGhOc8+xzJWAmSn7aPfljL7QKC4o9zk588dgS8jaD6eNvw9eCoXzTIsKtNSTBI2F4aB7lkzVE/iEYmD1p6W7/gRAXEfNVlYO2hpeA6OMp/H4YTCuziBqEFc3iroFMVgniKvW2+5eC6OMM3ra0qT0bI2Vu23bTbEYuzOonBcbrc6IZm9kD5teNDAULDjq6o0iOJ74h/wgnVKicHNFAHtosZax4/xAGt41DYFxif25I/MQ8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KIpCFhQ0U/3ODsKmybGnumRtoiorSkib4N9ykDJCKXY=;
- b=a2uT3DwAcEPV6zGnHeFo2sLFyWb/MRBh0U/jaFW9auXc+lX0i1lewMgs6dSgeTvyeamxjYmJ1K99cgjDoT4ebmFHgsZgbiIKHEEbBGTANGbUlM1gVnkOLv1AKqxnd7nI5aW60LVifWj0yr2HkkZSuaPSfW14pb0SxRuaE/POV4h8xFj7C/FSWHEECJhAT2IZRm0FFET0WrgWhH++kS4RvB4/jl4nRgvebniJgjoAWD+Zk0yqA/ni6pa/R+ndd8ynMz8sC5bATjjGSzjx4s8fQupYKU4u9tOu12vmXSJuqb3mGNTGYM4xztOibcU6dpEIVddQoidPGVM9qrM5189ggw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by DM8PR11MB5590.namprd11.prod.outlook.com (2603:10b6:8:32::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5924.16; Mon, 19 Dec 2022 08:48:10 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::2fb7:be18:a20d:9b6e]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::2fb7:be18:a20d:9b6e%8]) with mapi id 15.20.5924.016; Mon, 19 Dec 2022
- 08:48:10 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
-        "tabba@google.com" <tabba@google.com>,
-        "Hocko, Michal" <mhocko@suse.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "dhildenb@redhat.com" <dhildenb@redhat.com>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-        "vannapurve@google.com" <vannapurve@google.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "mail@maciej.szmigiero.name" <mail@maciej.szmigiero.name>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "qperret@google.com" <qperret@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "ddutile@redhat.com" <ddutile@redhat.com>,
-        "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "wanpengli@tencent.com" <wanpengli@tencent.com>,
-        "yu.c.zhang@linux.intel.com" <yu.c.zhang@linux.intel.com>,
-        "hughd@google.com" <hughd@google.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "jlayton@kernel.org" <jlayton@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "steven.price@arm.com" <steven.price@arm.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linmiaohe@huawei.com" <linmiaohe@huawei.com>
-Subject: Re: [PATCH v10 1/9] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Thread-Topic: [PATCH v10 1/9] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Thread-Index: AQHZBhXuq53UEB1w4kqtU0OzCkPOIq5sjtQAgAhi5ICAAA9XAA==
-Date:   Mon, 19 Dec 2022 08:48:10 +0000
-Message-ID: <deba096c85e41c3a15d122f2159986a74b16770f.camel@intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
-         <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
-         <5c6e2e516f19b0a030eae9bf073d555c57ca1f21.camel@intel.com>
-         <20221219075313.GB1691829@chaop.bj.intel.com>
-In-Reply-To: <20221219075313.GB1691829@chaop.bj.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|DM8PR11MB5590:EE_
-x-ms-office365-filtering-correlation-id: b88aee26-950f-4ac1-8c1a-08dae19dc1cb
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: KRNansXIR21dnZ2lK91763rjv27mUNOucl5axHk4NwEEDt7ZmpCJ+E0eA/fSqolIadNaGkvXU5BL1jgLNmEb7n/VYveCHe+1oX5zAv1pqQtLHnDL5yVV93LVnn2Ij1NtZWLYBYv1PukqlLmmxw7APOMJyLzSBbnS0tDCtPxF34a44rJS6sypWRG+QWPkotRWEQORW2neiNsu5OI3QMa51TkjXyA2Du1AKQZftyAiKOczveGwhyYDB4wA6BlqD2yVPQWJR+T7196dzs0TfVpUrf6nQhUjf+08JUWrqyRtm8QccTy4pWrEExtrbgQV8NhsKPpLHQEHP1Yl5ORQL3v+qil0ROlTHAHIdcznAiMsRdEehNOYHudytniKIYDItuWRS4mYcVS4v1liyVjGIS+TyCAmA+JF2ON8eWVmG390eSyaKo61/LUQHqteLqTMbwtxSFZSIN8xBhPnxCNgqbZPaCTbi305b76Q/PmGWMYc/V5bD/U4r2Sy/+tqdUJtLRu2VW+WY1WpkkpuMjZwD5ZD+nhHiAFO0TAA1iEERZqgrWtLSJxV1FSDknXtW+s49tw5+e1OjdSynloh3OZ28xikokOHJ9A9Q9DCD67imrrirnMRxiF7FwPs7ZB7VUZT+0s08Hf0pv5S0l9ELTI3VUW8fHTgPmTupU//wsyl9TtzeWXVQzHfKITVZHKVY/SJ6066xZx6gj3IvfepQQTKjhvU3r2w7+iJ5BIp00oniazMwx4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(366004)(136003)(376002)(39860400002)(396003)(451199015)(8676002)(5660300002)(6916009)(7406005)(7416002)(4326008)(91956017)(4001150100001)(54906003)(76116006)(66946007)(66556008)(66476007)(2906002)(64756008)(66446008)(6506007)(6486002)(71200400001)(966005)(478600001)(6512007)(26005)(186003)(41300700001)(86362001)(83380400001)(2616005)(38100700002)(82960400001)(36756003)(38070700005)(8936002)(316002)(122000001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Ui9RWDhOVXpPT2JVQ3QzWkkwU3A2Sk1KQWhGTlhRMFh2dTVUNnpHZlcxdDYv?=
- =?utf-8?B?QkpKd2tBbVN1UkdmQ0xJajJyL05tWE51bTF4ZStmc21oODVmRFRHSDgvMmI5?=
- =?utf-8?B?R04rTWFwTFNFNlZYRlJKVFpodjE4YUFiaWxiZHlSeE9RZkNJZUxYQVZsWGVY?=
- =?utf-8?B?SUtZVFdUbUszZHlXL29xSU4xN1hNZXoxdGtMeUNpc2xhWnVQNjl3enNtbEpH?=
- =?utf-8?B?SHQ3NWl0clBzSUo5cG94VzJCL3FzdTRpR1JOYmw1TkhOWnJGS3NLN1czNW84?=
- =?utf-8?B?NFBIMHk4QXRhZGJwNVVmTit5MzZTbU9KT01vb2kwdStJcTV2cmJRUVpmd2ll?=
- =?utf-8?B?dVJtMGZ5Nk9SZ3R2Z1dSdm9rd3ZhUUpobTBQY0pqS0s5UlVDY0orY0k2NE1K?=
- =?utf-8?B?OE0wTm5UUThBZFFTTVMzRXRJakoxelVtZTg2U0hOeXVMajFZM3JxZThzc3lK?=
- =?utf-8?B?ZE1NVDV1Sy9VT1JBTlhpdnV4c1BPV3JxYkFuSjdiZUlpdUpKOFZJaTgybXZN?=
- =?utf-8?B?UkhWUGFNR3ZrQ0JkSm5jc3hEd2I4YkhWUTFrelRGR1FGSG41TzVUMmRld2V3?=
- =?utf-8?B?OVlMZlRKZFBua09qMHpmR0FQWERvNWoyTktBb0tVK2xlVHl5U2VrekptWENm?=
- =?utf-8?B?ZWpkTnlQOVJTZ2dQY09PTzRhSjdmQVB2TmplbmEyWGFqZFVVanExM0Zzd09G?=
- =?utf-8?B?cTFTVFdYMHZjN0ZQcDl1OFRxOEJqS3VFUjJybUtTNTRRdmR0VDNWQVM5T1VC?=
- =?utf-8?B?QU9oQlJIZXA5MGd4SnNBRXZZMW5LbGdVL2ozMGJZbDRnV3VXVnlzTUhHUU5P?=
- =?utf-8?B?czkzVGlFVXBMK3FjNC92WU1sakxUeEwxUVorcW1uTnJoRERYWnlGaldvU21W?=
- =?utf-8?B?MUJ4TFB0a3E5OVVKN2RnWVY1QkZXeDFWYWN4Um44QXhQbzBQeUFDYktOdUdK?=
- =?utf-8?B?UG1YTFZoQ01SS2RKWDNmZVRpQ29kckovaWdSa1NNVE5CeENRNFdRZ0c3UHAy?=
- =?utf-8?B?V0l3NUFKd0ZNSDc2dFlpaDFheDZrS3lYc0JlQjA2T1FETVlsODJoUHpKT01n?=
- =?utf-8?B?R21SYzYvd0t0MkdoQTB1UnpEQ2pkN2VUVHZrZmJKRlJ5ZDczcFZTdUtkeDBH?=
- =?utf-8?B?Wm9NWGFkNVM2cjExWDVaVU1XdlF4Wmg5TzlNMjN3bHdCdThqUWMxaGtqZEVR?=
- =?utf-8?B?RkpZeFRFdStsVndLREFGaUNkSU5JWlJPTW1XMitqY3FIWXdJbjdUSjl1Q3Fq?=
- =?utf-8?B?N1hKWlZWYkxUMHVIZlNzdStQVnFNK1NMNVd6NnkxZk5nSXBOY1pJTGhjdzBF?=
- =?utf-8?B?cXdMbjFWNVFSaFZienorU0doSzdIUHB6MEhWRlRIT0pQaFh6L2Q4UVZmekVk?=
- =?utf-8?B?czNKUnd4Y0hXcTMxRHcyVlB0ZUhjREszR21SaFdLSTNROXdScFRsVHV6NmZ4?=
- =?utf-8?B?S1pXVWJ2U1BvVWphbWU1c2l2SmQ5NDZrUXVIU1hFRjhxS2dLUEYwaUlscHQ4?=
- =?utf-8?B?VHJOazJ0NkwxMkZuK2ViUHVVVDk1VHBqeHRjbmdrSVNTYndrVG9BMGhTak55?=
- =?utf-8?B?LzdXaHBOWmk2TG1DYnJjc2kwbmxSMDRxeUM2WHNuVEkweWt5MkVIOUp6bmpX?=
- =?utf-8?B?MjN3RHcxVGZEYVdMTlBhVWUyRHhQTkxyOXBQNk50anpaNG1BcmxPSXZ6M3BK?=
- =?utf-8?B?WEtQeEMvM2R2ci9nbGdIdXg1QzZCS0NwN05IZXdvMWt1MFpQRU05L0VnU1Qr?=
- =?utf-8?B?UVJWbzAyL2twVlRoT3NhRVQxUUJTeDZCY2JQeTBPWXQxL3BWV3ZGaW9Fd2hK?=
- =?utf-8?B?VE9TUDJsTXNGQy91UCtXUDJpMDVZK2YyRkdGdnprWWM2S1dia1pWZzJodEFi?=
- =?utf-8?B?VUc4d3VDOE5DdVVzN0tKMjR6U0haTTFHc0F5MGhPTFR3L0IrNTNGU0JoRDA2?=
- =?utf-8?B?RDdmSXFPN2w3Q1p0YlQrMHR5THkwSXNCZWYzR0w1dzh3b2hnTGZ0ZXFxUnJh?=
- =?utf-8?B?N0lhR1dLdHlqd0JBejVFbmtIM0RtOXRIQWRSdnRhK1Z0b1hyNTlRNHhudU1a?=
- =?utf-8?B?R015TDVmdXlvcW1qRTgzZzJiaDlSbGVZRFY2R2lxWnFDRHY2ai9lYVFGSFZ5?=
- =?utf-8?B?UHc4TEFsQ1BMVWNlM1JVRVZ5TTV4SGR0QjU0WFlsbWFJM20zc29iZzRDMmxX?=
- =?utf-8?B?UUE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C7CB7BB1761BDA44B44EA3585A10144C@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 19 Dec 2022 03:49:36 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FC6D2EA
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 00:49:06 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2502E6601615;
+        Mon, 19 Dec 2022 08:49:04 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671439744;
+        bh=fHKd6BRq6uZcW6ywAPxNchjREe1bE9kQxwS8OOY5srY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QRNjaW33It3+GiXXqG0hTTcsLCCNLewpJwxPyxsh2qm19voa8A69EXcIhl6bLqSSq
+         kJVyeL6KVN7sghfpKuEWKWqUkSsAEOcIcnWypQEyjE4gKTd1YWSi7t8cXBgscv8aSj
+         WYnQgE5OcNKowNzAsuYl9tCDyPQYpwcRZrxTAkvDiE3TiwiRabjeQLinNkQp0EBSO4
+         7fjS31ffJp1FAfrGtzMnn/Fdty62LfOErsZ9rGbzk8T8zOdVnwWiNHsdthCROXbWbj
+         ykxu+HPGiV7wGUMtBt3Y3g1YuWubLmzTeesg7H66pQFCf5HzaKn6cNcpF9vtyT+lIV
+         ZmALD2wmY+CTw==
+Message-ID: <0d155803-0861-ee56-fea1-abcfa77acd0a@collabora.com>
+Date:   Mon, 19 Dec 2022 09:49:01 +0100
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b88aee26-950f-4ac1-8c1a-08dae19dc1cb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Dec 2022 08:48:10.3335
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rPDg1RwbaOSFnsHyby6CeQ2xLRkK/Ao2NUPXJQRQ9b8pZQz5I+abLSkv77az+kc9gDkIg+iTS6zBxtAwPV+TEA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5590
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RESEND PATCH v3] soc: mediatek: Introduce
+ mediatek-regulator-coupler driver
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, wenst@chromium.org,
+        alyssa.rosenzweig@collabora.com, nfraprado@collabora.com,
+        dmitry.osipenko@collabora.com
+References: <20221006115816.66853-1-angelogioacchino.delregno@collabora.com>
+ <e04d15ee-9570-c919-5218-91109a88c0cb@gmail.com>
+ <fe236ad5-c4e0-1649-6521-ab7c14a1ff15@collabora.com>
+ <732e4a1d-8008-072d-cedb-c6859cbfdf98@collabora.com>
+ <19d04ffd-a79d-06f6-cb0e-fe56bc18615f@gmail.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <19d04ffd-a79d-06f6-cb0e-fe56bc18615f@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIyLTEyLTE5IGF0IDE1OjUzICswODAwLCBDaGFvIFBlbmcgd3JvdGU6DQo+ID4g
-DQo+ID4gWy4uLl0NCj4gPiANCj4gPiA+ICsNCj4gPiA+ICsJLyoNCj4gPiA+ICsJICogVGhlc2Ug
-cGFnZXMgYXJlIGN1cnJlbnRseSB1bm1vdmFibGUgc28gZG9uJ3QgcGxhY2UgdGhlbSBpbnRvDQo+
-ID4gPiBtb3ZhYmxlDQo+ID4gPiArCSAqIHBhZ2VibG9ja3MgKGUuZy4gQ01BIGFuZCBaT05FX01P
-VkFCTEUpLg0KPiA+ID4gKwkgKi8NCj4gPiA+ICsJbWFwcGluZyA9IG1lbWZkLT5mX21hcHBpbmc7
-DQo+ID4gPiArCW1hcHBpbmdfc2V0X3VuZXZpY3RhYmxlKG1hcHBpbmcpOw0KPiA+ID4gKwltYXBw
-aW5nX3NldF9nZnBfbWFzayhtYXBwaW5nLA0KPiA+ID4gKwkJCcKgwqDCoMKgIG1hcHBpbmdfZ2Zw
-X21hc2sobWFwcGluZykgJiB+X19HRlBfTU9WQUJMRSk7DQo+ID4gDQo+ID4gQnV0LCBJSVVDIHJl
-bW92aW5nIF9fR0ZQX01PVkFCTEUgZmxhZyBoZXJlIG9ubHkgbWFrZXMgcGFnZSBhbGxvY2F0aW9u
-IGZyb20NCj4gPiBub24tDQo+ID4gbW92YWJsZSB6b25lcywgYnV0IGRvZXNuJ3QgbmVjZXNzYXJp
-bHkgcHJldmVudCBwYWdlIGZyb20gYmVpbmcgbWlncmF0ZWQuwqAgTXkNCj4gPiBmaXJzdCBnbGFu
-Y2UgaXMgeW91IG5lZWQgdG8gaW1wbGVtZW50IGVpdGhlciBhX29wcy0+bWlncmF0ZV9mb2xpbygp
-IG9yIGp1c3QNCj4gPiBnZXRfcGFnZSgpIGFmdGVyIGZhdWx0aW5nIGluIHRoZSBwYWdlIHRvIHBy
-ZXZlbnQuDQo+IA0KPiBUaGUgY3VycmVudCBhcGkgcmVzdHJpY3RlZG1lbV9nZXRfcGFnZSgpIGFs
-cmVhZHkgZG9lcyB0aGlzLCBhZnRlciB0aGUNCj4gY2FsbGVyIGNhbGxpbmcgaXQsIGl0IGhvbGRz
-IGEgcmVmZXJlbmNlIHRvIHRoZSBwYWdlLiBUaGUgY2FsbGVyIHRoZW4NCj4gZGVjaWRlcyB3aGVu
-IHRvIGNhbGwgcHV0X3BhZ2UoKSBhcHByb3ByaWF0ZWx5Lg0KDQpJIHRyaWVkIHRvIGRpZyBzb21l
-IGhpc3RvcnkuIFBlcmhhcHMgSSBhbSBtaXNzaW5nIHNvbWV0aGluZywgYnV0IGl0IHNlZW1zIEtp
-cmlsbA0Kc2FpZCBpbiB2OSB0aGF0IHRoaXMgY29kZSBkb2Vzbid0IHByZXZlbnQgcGFnZSBtaWdy
-YXRpb24sIGFuZCB3ZSBuZWVkIHRvDQppbmNyZWFzZSBwYWdlIHJlZmNvdW50IGluIHJlc3RyaWN0
-ZWRtZW1fZ2V0X3BhZ2UoKToNCg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtbW0vMjAy
-MjExMjkxMTIxMzkudXNwNmRxaGJpaDQ3cXBqbEBib3guc2h1dGVtb3YubmFtZS8NCg0KQnV0IGxv
-b2tpbmcgYXQgdGhpcyBzZXJpZXMgaXQgc2VlbXMgcmVzdHJpY3RlZG1lbV9nZXRfcGFnZSgpIGlu
-IHRoaXMgdjEwIGlzDQppZGVudGljYWwgdG8gdGhlIG9uZSBpbiB2OSAoZXhjZXB0IHYxMCB1c2Vz
-ICdmb2xpbycgaW5zdGVhZCBvZiAncGFnZScpPw0KDQpBbnl3YXkgaWYgdGhpcyBpcyBub3QgZml4
-ZWQsIHRoZW4gaXQgc2hvdWxkIGJlIGZpeGVkLiAgT3RoZXJ3aXNlLCBhIGNvbW1lbnQgYXQNCnRo
-ZSBwbGFjZSB3aGVyZSBwYWdlIHJlZmNvdW50IGlzIGluY3JlYXNlZCB3aWxsIGJlIGhlbHBmdWwg
-dG8gaGVscCBwZW9wbGUNCnVuZGVyc3RhbmQgcGFnZSBtaWdyYXRpb24gaXMgYWN0dWFsbHkgcHJl
-dmVudGVkLg0KDQo=
+Il 16/12/22 16:26, Matthias Brugger ha scritto:
+> Hi Angelo,
+> 
+> On 16/12/2022 14:15, AngeloGioacchino Del Regno wrote:
+>> Il 21/11/22 13:01, AngeloGioacchino Del Regno ha scritto:
+>>> Il 21/11/22 12:44, Matthias Brugger ha scritto:
+>>>>
+>>>>
+>>>> On 06/10/2022 13:58, AngeloGioacchino Del Regno wrote:
+>>>>> This driver currently deals with GPU-SRAM regulator coupling, ensuring
+>>>>> that the SRAM voltage is always between a specific range of distance to
+>>>>> the GPU voltage, depending on the SoC, necessary in order to achieve
+>>>>> system stability across the full range of supported GPU frequencies.
+>>>>>
+>>>>> Signed-off-by: AngeloGioacchino Del Regno 
+>>>>> <angelogioacchino.delregno@collabora.com>
+>>>>> Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>>>> ---
+>>>>>
+>>>>> This driver was successfully tested for more than 3 months.
+>>>>> GPU DVFS works correctly with no stability issues.
+>>>>>
+>>>>> Changes in RESEND,v3:
+>>>>>   Rebased over next-20221005
+>>>>>
+>>>>> Changes in v3:
+>>>>>   - Added braces to else-if branch
+>>>>>
+>>>>> Changes in v2:
+>>>>>   - Added check for n_coupled
+>>>>>   - Added check for vgpu to enforce attaching to vgpu<->sram coupling only
+>>>>>
+>>>>> Context:
+>>>>> This driver is the last of the pieces of a bigger puzzle, aiming to finally
+>>>>> enable Dynamic Voltage/Frequency Scaling for Mali GPUs found on MediaTek
+>>>>> SoCs on the fully open source graphics stack (Panfrost driver).
+>>>>>
+>>>>> No devicetree bindings are provided because this does not require any
+>>>>> driver-specific binding at all.
+>>>>>
+>>>>> Last but not least: it was chosen to have this driver enabled for
+>>>>> ( ARCH_MEDIATEK && REGULATOR ) without really giving a free configuration
+>>>>> choice because, once the DVFS mechanism will be fully working, using one
+>>>>> of the listed MediaTek SoCs *without* this coupling mechanism *will* lead
+>>>>> to unstabilities and system crashes.
+>>>>> For COMPILE_TEST, choice is given for obvious reasons.
+>>>>>
+>>>>>   drivers/soc/mediatek/Kconfig                 |   5 +
+>>>>>   drivers/soc/mediatek/Makefile                |   1 +
+>>>>>   drivers/soc/mediatek/mtk-regulator-coupler.c | 159 +++++++++++++++++++
+>>>>>   3 files changed, 165 insertions(+)
+>>>>>   create mode 100644 drivers/soc/mediatek/mtk-regulator-coupler.c
+>>>>>
+>>>>> diff --git a/drivers/soc/mediatek/Kconfig b/drivers/soc/mediatek/Kconfig
+>>>>> index 40d0cc600cae..30b5afc0e51d 100644
+>>>>> --- a/drivers/soc/mediatek/Kconfig
+>>>>> +++ b/drivers/soc/mediatek/Kconfig
+>>>>> @@ -44,6 +44,11 @@ config MTK_PMIC_WRAP
+>>>>>         on different MediaTek SoCs. The PMIC wrapper is a proprietary
+>>>>>         hardware to connect the PMIC.
+>>>>> +config MTK_REGULATOR_COUPLER
+>>>>> +    bool "MediaTek SoC Regulator Coupler" if COMPILE_TEST
+>>>>> +    default ARCH_MEDIATEK
+>>>>> +    depends on REGULATOR
+>>>>> +
+>>>>>   config MTK_SCPSYS
+>>>>>       bool "MediaTek SCPSYS Support"
+>>>>>       default ARCH_MEDIATEK
+>>>>> diff --git a/drivers/soc/mediatek/Makefile b/drivers/soc/mediatek/Makefile
+>>>>> index 0e9e703c931a..8c0ddacbcde8 100644
+>>>>> --- a/drivers/soc/mediatek/Makefile
+>>>>> +++ b/drivers/soc/mediatek/Makefile
+>>>>> @@ -3,6 +3,7 @@ obj-$(CONFIG_MTK_CMDQ) += mtk-cmdq-helper.o
+>>>>>   obj-$(CONFIG_MTK_DEVAPC) += mtk-devapc.o
+>>>>>   obj-$(CONFIG_MTK_INFRACFG) += mtk-infracfg.o
+>>>>>   obj-$(CONFIG_MTK_PMIC_WRAP) += mtk-pmic-wrap.o
+>>>>> +obj-$(CONFIG_MTK_REGULATOR_COUPLER) += mtk-regulator-coupler.o
+>>>>>   obj-$(CONFIG_MTK_SCPSYS) += mtk-scpsys.o
+>>>>>   obj-$(CONFIG_MTK_SCPSYS_PM_DOMAINS) += mtk-pm-domains.o
+>>>>>   obj-$(CONFIG_MTK_MMSYS) += mtk-mmsys.o
+>>>>> diff --git a/drivers/soc/mediatek/mtk-regulator-coupler.c 
+>>>>> b/drivers/soc/mediatek/mtk-regulator-coupler.c
+>>>>> new file mode 100644
+>>>>> index 000000000000..ad2ed42aa697
+>>>>> --- /dev/null
+>>>>> +++ b/drivers/soc/mediatek/mtk-regulator-coupler.c
+>>>>> @@ -0,0 +1,159 @@
+>>>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>>>> +/*
+>>>>> + * Voltage regulators coupler for MediaTek SoCs
+>>>>> + *
+>>>>> + * Copyright (C) 2022 Collabora, Ltd.
+>>>>> + * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>>> + */
+>>>>> +
+>>>>> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>>>>> +
+>>>>> +#include <linux/init.h>
+>>>>> +#include <linux/kernel.h>
+>>>>> +#include <linux/of.h>
+>>>>> +#include <linux/regulator/coupler.h>
+>>>>> +#include <linux/regulator/driver.h>
+>>>>> +#include <linux/regulator/machine.h>
+>>>>> +#include <linux/suspend.h>
+>>>>> +
+>>>>> +#define to_mediatek_coupler(x)    container_of(x, struct 
+>>>>> mediatek_regulator_coupler, coupler)
+>>>>> +
+>>>>> +struct mediatek_regulator_coupler {
+>>>>> +    struct regulator_coupler coupler;
+>>>>> +    struct regulator_dev *vsram_rdev;
+>>>>> +};
+>>>>> +
+>>>>> +/*
+>>>>> + * We currently support only couples of not more than two vregs and
+>>>>> + * modify the vsram voltage only when changing voltage of vgpu.
+>>>>> + *
+>>>>> + * This function is limited to the GPU<->SRAM voltages relationships.
+>>>>> + */
+>>>>> +static int mediatek_regulator_balance_voltage(struct regulator_coupler *coupler,
+>>>>> +                          struct regulator_dev *rdev,
+>>>>> +                          suspend_state_t state)
+>>>>> +{
+>>>>> +    struct mediatek_regulator_coupler *mrc = to_mediatek_coupler(coupler);
+>>>>> +    int max_spread = rdev->constraints->max_spread[0];
+>>>>> +    int vsram_min_uV = mrc->vsram_rdev->constraints->min_uV;
+>>>>> +    int vsram_max_uV = mrc->vsram_rdev->constraints->max_uV;
+>>>>> +    int vsram_target_min_uV, vsram_target_max_uV;
+>>>>> +    int min_uV = 0;
+>>>>> +    int max_uV = INT_MAX;
+>>>>> +    int ret;
+>>>>> +
+>>>>> +    /*
+>>>>> +     * If the target device is on, setting the SRAM voltage directly
+>>>>> +     * is not supported as it scales through its coupled supply voltage.
+>>>>> +     *
+>>>>> +     * An exception is made in case the use_count is zero: this means
+>>>>> +     * that this is the first time we power up the SRAM regulator, which
+>>>>> +     * implies that the target device has yet to perform initialization
+>>>>> +     * and setting a voltage at that time is harmless.
+>>>>> +     */
+>>>>> +    if (rdev == mrc->vsram_rdev) {
+>>>>> +        if (rdev->use_count == 0)
+>>>>> +            return regulator_do_balance_voltage(rdev, state, true);
+>>>>> +
+>>>>> +        return -EPERM;
+>>>>> +    }
+>>>>> +
+>>>>> +    ret = regulator_check_consumers(rdev, &min_uV, &max_uV, state);
+>>>>> +    if (ret < 0)
+>>>>> +        return ret;
+>>>>> +
+>>>>> +    if (min_uV == 0) {
+>>>>> +        ret = regulator_get_voltage_rdev(rdev);
+>>>>> +        if (ret < 0)
+>>>>> +            return ret;
+>>>>> +        min_uV = ret;
+>>>>> +    }
+>>>>> +
+>>>>> +    ret = regulator_check_voltage(rdev, &min_uV, &max_uV);
+>>>>> +    if (ret < 0)
+>>>>> +        return ret;
+>>>>> +
+>>>>> +    /*
+>>>>> +     * If we're asked to set a voltage less than VSRAM min_uV, set
+>>>>> +     * the minimum allowed voltage on VSRAM, as in this case it is
+>>>>> +     * safe to ignore the max_spread parameter.
+>>>>> +     */
+>>>>> +    vsram_target_min_uV = max(vsram_min_uV, min_uV + max_spread);
+>>>>> +    vsram_target_max_uV = min(vsram_max_uV, vsram_target_min_uV + max_spread);
+>>>>> +
+>>>>> +    /* Make sure we're not out of range */
+>>>>> +    vsram_target_min_uV = min(vsram_target_min_uV, vsram_max_uV);
+>>>>> +
+>>>>> +    pr_debug("Setting voltage %d-%duV on %s (minuV %d)\n",
+>>>>> +         vsram_target_min_uV, vsram_target_max_uV,
+>>>>> +         rdev_get_name(mrc->vsram_rdev), min_uV);
+>>>>> +
+>>>>> +    ret = regulator_set_voltage_rdev(mrc->vsram_rdev, vsram_target_min_uV,
+>>>>> +                     vsram_target_max_uV, state);
+>>>>> +    if (ret)
+>>>>> +        return ret;
+>>>>> +
+>>>>> +    /* The sram voltage is now balanced: update the target vreg voltage */
+>>>>> +    return regulator_do_balance_voltage(rdev, state, true);
+>>>>> +}
+>>>>> +
+>>>>> +static int mediatek_regulator_attach(struct regulator_coupler *coupler,
+>>>>> +                     struct regulator_dev *rdev)
+>>>>> +{
+>>>>> +    struct mediatek_regulator_coupler *mrc = to_mediatek_coupler(coupler);
+>>>>> +    const char *rdev_name = rdev_get_name(rdev);
+>>>>> +
+>>>>> +    /*
+>>>>> +     * If we're getting a coupling of more than two regulators here and
+>>>>> +     * this means that this is surely not a GPU<->SRAM couple: in that
+>>>>> +     * case, we may want to use another coupler implementation, if any,
+>>>>> +     * or the generic one: the regulator core will keep walking through
+>>>>> +     * the list of couplers when any .attach_regulator() cb returns 1.
+>>>>> +     */
+>>>>> +    if (rdev->coupling_desc.n_coupled > 2)
+>>>>> +        return 1;
+>>>>> +
+>>>>> +    if (strstr(rdev_name, "sram")) {
+>>>>
+>>>> My understanding is, that we have to have either a DT node with regulator-name 
+>>>> = "sram" property to pollute rdev->constraints->name or some 
+>>>> regulator_desc->name populated in the drivers/regulator/mt*.c
+>>>>
+>>>
+>>> No, it's not trying to find a regulator named "sram", but any regulator that
+>>> *contains* the "sram" string in its name, but checks only regulators that are
+>>> coupled to others. This is the same for the "Vgpu" / "vgpu".
+>>>
+>>> Example:
+>>>
+>>> Regulator A, coupled to Regulator B.
+>>>
+>>> Regulator A name = "Vgpu" or "vgpu", or *vgpu*, or *Vgpu*
+>>>                     (name must contain either Vgpu or vgpu)
+>>>
+>>> Regulator B name = "vsram" or "sram_gpu" or *sram*
+>>>                     (name must contain "sram").
+>>>
+>>> mrc->vsram_rdev = rdev
+>>>
+>>> rdev == our Regulator B.
+>>>
+>>> We hence return 0 to the coupling API: this will produce the effect of making
+>>> it use this driver's .balance_voltage() callback instead of the generic one
+>>> on vgpu<->vsram.
+>>>
+>>>
+>>>> I wasn't able to find either of this, so I wonder how this is supposed to work. 
+>>>> Please provide pointers to a working and complete implementation of this, so 
+>>>> that I'm able to judge what is going on and if the approach is the correct one.
+>>>>
+>>>> I tried to figure out using mt8195-tracking-master-rolling
+>>>
+>>> That's the right branch.
+>>>
+>>> Let's take MT8192 Asurada as an example of how this works....
+>>>
+>>> `mt6359_vsram_others_ldo_reg´ is the SRAM regulator for the GPU:
+>>> https://gitlab.collabora.com/google/chromeos-kernel/-/blob/mt8195-tracking-master-rolling/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi#L551
+>>>
+>>> `mt6359_vsram_others_ldo_reg` regulator-name = "vsram_others";
+>>>                                                   ^^^^
+>>> Contains "sram", and this regulator is also
+>>>
+>>>      regulator-coupled-with = <&mt6315_7_vbuck1>;
+>>>
+>>> `mt6315_7_vbuck1` regulator-name = "Vgpu";
+>>>                                      ^^^^
+>>> Contains "Vgpu", and this regulator is also
+>>>
+>>>      regulator-coupled-with = <&mt6359_vsram_others_ldo_reg>;
+>>>
+>>> That's how the coupling works in this case.
+>>>
+>>>
+>>> Now, looking at case exclusions:
+>>> In MT8192 Asurada (or, actually, mt6359.dtsi) we have other regulators that do
+>>> actually contain "sram" in their name, like "vsram_proc1" and "vsram_others_sshub".
+>>>
+>>> These regulators will be ignored, as they are *not* coupled with Vgpu.
+>>>
+>>>
+>>> What this driver currently does in this regard is:
+>>> 1. Regulator attach is called only on *coupled* regulators, not on the others
+>>> 2. If the regulator contains name "vgpu" or "Vgpu" or "sram" we're good,
+>>>     otherwise we don't attach the balance_voltage logic of this driver to
+>>>     the unmatched regulators.
+>>>
+>>>
+>>> Does this explanation clarify your doubts?
+>>>
+>>> Regards,
+>>> Angelo
+>>>
+>>
+>> Matthias, please don't forget about this one :-)
+>>
+> 
+> Unfortunately I have to leave now and didn't had time to look more into it. So I'll 
+> write just my suspicion. So please feel free to correct me if I'm totally wrong (I 
+> know you will do anyway ;)
+> 
+> 1) When the regulator-coupler driver was introduced the driver was bound by a 
+> compatible, but we use arch_initcall(...) for it.
+> 2) I really don't like the hardcoded search for a the regulator name in the 
+> mediatek_regulator_attach function. I haven't seen that in the Nvidia driver, also 
+> I had no time to understand how they decide which regulators need to be coupled. My 
+> instinct would tell me that this should be described in device-tree.
+> 
+
+I didn't want to use custom devicetree properties to couple our regulators...
+
+Tegra wants to couple three regulators: CORE, RTC and CPU and they're getting that
+with three custom properties:
+* nvidia,tegra-core-regulator
+* nvidia,tegra-rtc-regulator
+* nvidia,tegra-gpu-regulator
+
+Hardcoding the regulator name *sub*string in the mediatek-regulator-coupler allows
+us to use *only* generic devicetree properties instead of inventing our own: after
+all, even in the case in which a board uses a regulator that doesn't have the VGPU
+and/or VSRAM_GPU "kind of name" in it, it's still possible to change the name via
+devicetree (which would be correct, because the regulator is used for that, and
+would be the right name).
+
+As of now, there's no board using a regulator that has a not matching name, and
+this is because MediaTek SoCs are always using a MediaTek PMIC in combination,
+which always specifies this kind of name.
+
+I remind you that this driver does *nothing* unless coupling is activated through
+devicetree propert*ies*, as this driver has to be seen as a hook to the regulator
+coupling API, and not standalone code - hence, in my opinion, the cleanest
+implementation of that is to use only properties provided by the regulator coupling
+API, without any assistance from custom properties, unless *really* needed.
+
+Summarizing:
+* Deciding which regulators need to be coupled *already needs to* be described
+   in devicetree, otherwise this driver will do nothing;
+* The hardcoded strings are there only to restrict this driver to GPU related
+   regulators (vgpu as gpu core supply - vsram-gpu as gpu sram supply)
+
+Cheers!
+Angelo
+
