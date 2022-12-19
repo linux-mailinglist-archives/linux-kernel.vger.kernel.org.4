@@ -2,293 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87F4650979
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 10:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 070C965097A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 10:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbiLSJoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 04:44:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
+        id S231540AbiLSJo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 04:44:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiLSJoB (ORCPT
+        with ESMTP id S230346AbiLSJoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 04:44:01 -0500
-Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB87D2E8;
-        Mon, 19 Dec 2022 01:43:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1671443006; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=LOCrxKOXLVaY82NfhflD3Vz6Bx9kbBbItxvm4Swsr2NOLq+0X/J7UVpUBeT3FaEHur5WLhLK+k40djFLsQw6HNXcnVTv1eb3nznf9s2MmYIO2D/X26ZSv9wL3cVO56KhRTVmGTP3fixzJy6slIGzr9OmwDgXmx8wKSCQPu/oxkc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1671443006; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=FZkrG/PJzkAi8Kwx1oMn1iqTbZ/7Tzjos6YQM1WqJFY=; 
-        b=XUwegxb8R2YJVYR4e8+ARCHktnvMNiLAigUm0dvPZoQFNlzRHXCen8Z/IqtSm1cN0tT+HE2OC5D5d/2nncmOeHlJwkvenPNNzPMWi2rQviLmrvzV/wbMHTib4RqRyhBXdMyGcV5RGIWJixzauwGWVIN4bylKJ6CJncpRNTsKE1k=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1671443006;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-        bh=FZkrG/PJzkAi8Kwx1oMn1iqTbZ/7Tzjos6YQM1WqJFY=;
-        b=Axk3H0JdXqb85gV9+L+mdWtRvkRwZjJcpkjQvmgFJ6TbOLIb03Jf4yDjY21HdRPj
-        b+OP0792RQ8fVFlp559Fua+JJuB4d+6EulQPlS23n518y7w7mrhWnlw7nfNPMQAtiuS
-        /6b23pXET43pyipobTxpKtFle3ux0Ezj/bf8+pV4=
-Received: from edelgard.fodlan.icenowy.me (120.85.99.51 [120.85.99.51]) by mx.zohomail.com
-        with SMTPS id 1671443003083956.9203910325415; Mon, 19 Dec 2022 01:43:23 -0800 (PST)
-Message-ID: <e9428f30cf0c6a239af01c0c2db9c511f3561a8c.camel@icenowy.me>
-Subject: Re: [PATCH v3 00/12] riscv: Allwinner D1/D1s platform support
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Conor Dooley <conor@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Jisheng Zhang <jszhang@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Andre Przywara <andre.przywara@arm.com>
-Date:   Mon, 19 Dec 2022 17:43:17 +0800
-In-Reply-To: <Y53/ruLoggBDXozF@spud>
-References: <20221208090237.20572-1-samuel@sholland.org>
-         <Y53/ruLoggBDXozF@spud>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
+        Mon, 19 Dec 2022 04:44:25 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2154995A5
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 01:44:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671443064; x=1702979064;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZPIbaI8Fo25hM21zchenFK+gSCjoAt+0YV2aFj835DI=;
+  b=kwcqvRUa9hCxl+MgD2TbxR5vsz7twjvQugElCS4QqpFb1cxYvPn9MZMt
+   kGkQ0054qXUHb1HCwzanHl8lxED7dP/lI5s6MPBxa7HTZEY5BZAEoBuj+
+   KMtvXSmnCYHtFF2iN7LQs7BoSERVXcekf0ZX5bCTH3YgJrdVlUA4G4ojL
+   MAAYT/wUZ37BW1K48P6+VH8g+ZQxWRnA5gVJYGshCFZc/UGLupygqPPqB
+   d/oUxZvAM5Bsvf1s8LTM6X12NclC/eMw5kgYKG6T35m0YagQjrROHOVtF
+   zM14v5lY7DA7JTtoMeGELcpDBBJ3wrYitNsY2c8Rp8CID1fLvh3OFZtMd
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="302735799"
+X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
+   d="scan'208";a="302735799"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 01:44:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="643937254"
+X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
+   d="scan'208";a="643937254"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 19 Dec 2022 01:44:19 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p7Cgy-00CDxm-0q;
+        Mon, 19 Dec 2022 11:44:16 +0200
+Date:   Mon, 19 Dec 2022 11:44:16 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        HORIGUCHI =?utf-8?B?TkFPWUEo5aCA5Y+j44CA55u05LmfKQ==?= 
+        <naoya.horiguchi@nec.com>, Joe Perches <joe@perches.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Matthew WilCox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC v3 3/4] mm, printk: introduce new format %pGt for page_type
+Message-ID: <Y6AycLbpjVzXM5I9@smile.fi.intel.com>
+References: <20221218101901.373450-1-42.hyeyoo@gmail.com>
+ <20221218101901.373450-4-42.hyeyoo@gmail.com>
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221218101901.373450-4-42.hyeyoo@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=E5=9C=A8 2022-12-17=E6=98=9F=E6=9C=9F=E5=85=AD=E7=9A=84 17:43 +0000=EF=BC=
-=8CConor Dooley=E5=86=99=E9=81=93=EF=BC=9A
-> On Thu, Dec 08, 2022 at 03:02:25AM -0600, Samuel Holland wrote:
-> > This series adds the Kconfig/defconfig plumbing and devicetrees for
-> > a
-> > range of Allwinner D1 and D1s-based boards. Many features are
-> > already
-> > enabled, including USB, Ethernet, and WiFi.
-> >=20
-> > The devicetrees use bindings from the following series which have
-> > not
-> > yet been merged to linux-next:
-> > =C2=A0- In-package LDO regulators:
-> > =C2=A0=C2=A0
-> > https://lore.kernel.org/lkml/20221208084127.17443-1-samuel@sholland.org=
-/
-> > =C2=A0- Ethernet MAC binding fix (not a new issue with D1):
-> > =C2=A0=C2=A0
-> > https://lore.kernel.org/lkml/20221208061616.7806-1-samuel@sholland.org/
-> > =C2=A0- TI ADC101C ADC (accepted, not yet in linux-next):
-> > =C2=A0=C2=A0
-> > https://lore.kernel.org/lkml/20221125220903.8632-1-samuel@sholland.org/
-> >=20
-> > The only remaining DT validation issue is that gpio-fan is missing
-> > a
-> > YAML conversion, although one is on the list here:
-> > https://lore.kernel.org/lkml/20220126200350.3633576-1-clabbe@baylibre.c=
-om/
->=20
-> With the above 4 in next:
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
->=20
-> Corentin's patch looked like it needed only minor changes. I shall go
-> ping it :)
+On Sun, Dec 18, 2022 at 07:19:00PM +0900, Hyeonggon Yoo wrote:
+> %pGp format is used to print 'flags' field of struct page.
+> As some page flags (e.g. PG_buddy, see page-flags.h for more details)
+> are set in page_type field, introduce %pGt format which provides
+> human readable output of page_type.
+> 
+> Note that the sense of bits are different in page_type. if page_type is
+> 0xffffffff, no flags are set. if PG_slab (0x00100000) flag is set,
+> page_type is 0xffefffff. Clearing a bit means we set the bit.
+> 
+> Bits in page_type are inverted when printing page type names.
 
-In addition I think Corentin's patch shouldn't be a blocking issue.
-This patchset does not depend on DT binding being converted to YAML,
-TXT binding is enough as dependency.
+...
 
->=20
-> >=20
-> > $ make ARCH=3Driscv CROSS_COMPILE=3Driscv64-linux-musl- dtbs_check
-> > =C2=A0 SYNC=C2=A0=C2=A0=C2=A0 include/config/auto.conf.cmd
-> > =C2=A0 LINT=C2=A0=C2=A0=C2=A0 Documentation/devicetree/bindings
-> > =C2=A0 CHKDT=C2=A0=C2=A0 Documentation/devicetree/bindings/processed-sc=
-hema.json
-> > =C2=A0 SCHEMA=C2=A0 Documentation/devicetree/bindings/processed-schema.=
-json
-> > =C2=A0 DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-clockworkpi-
-> > v3.14.dtb
-> > =C2=A0 DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-devterm-v3.14.dt=
-b
-> > =C2=A0 DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-dongshan-nezha-
-> > stu.dtb
-> > =C2=A0 DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-
-> > panel-480p.dtb
-> > =C2=A0 DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-
-> > panel-720p.dtb
-> > =C2=A0 DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-
-> > dock.dtb
-> > =C2=A0 DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv.dtb
-> > =C2=A0 DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-mangopi-mq-
-> > pro.dtb
-> > =C2=A0 DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dtb
-> > =C2=A0 DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1s-mangopi-mq.dtb
-> > arch/riscv/boot/dts/allwinner/sun20i-d1-devterm-v3.14.dtb:0:0:
-> > /fan: failed to match any schema with compatible: ['gpio-fan']
-> >=20
-> > Note that validation requires dt-schema v2022.12 or newer.
-> >=20
-> > I tested this series (DMIC, Ethernet, LEDs, MMC, PMIC, touch, and
-> > USB,
-> > all where available) on the following boards:
-> > =C2=A0- sun20i-d1-devterm-v3.14
-> > =C2=A0- sun20i-d1-dongshan-nezha-stu
-> > =C2=A0- sun20i-d1-lichee-rv-86-panel-480p
-> > =C2=A0- sun20i-d1-mangopi-mq-pro
-> > =C2=A0- sun20i-d1-nezha
-> > =C2=A0- sun20i-d1s-mangopi-mq
-> >=20
-> > Changes in v3:
-> > =C2=A0- Drop dummy DCXO clock-frequency property
-> > =C2=A0- Decrease the PLIC's riscv,ndev property to 175
-> > =C2=A0- Fix `make W=3D1 dtbs` warnings (unnecessary #address/#size-cell=
-s)
-> > =C2=A0- Drop mmc aliases
-> > =C2=A0- Change LED_FUNCTION_BACKLIGHT to LED_FUNCTION_STATUS (the
-> > backlight
-> > =C2=A0=C2=A0 regulator is disconnected by default, so this is a standal=
-one
-> > LED)
-> > =C2=A0- Fix `make W=3D1 dtbs` warnings (missing reg properties)
-> > =C2=A0- ARCH_SUNXI depends on MMU && !XIP_KERNEL
-> >=20
-> > Changes in v2:
-> > =C2=A0- Add MangoPi MQ (non-Pro) board
-> > =C2=A0- Split into separate files for sharing with D1s/R528/T113
-> > =C2=A0- Use SOC_PERIPHERAL_IRQ macro for interrupts
-> > =C2=A0- Rename osc24M to dcxo and move the frequency to the board DTs
-> > =C2=A0- Drop analog LDOs due to the missing binding
-> > =C2=A0- Correct tcon_top DSI clock reference
-> > =C2=A0- Add DMIC, DSI controller, and DPHY (bindings are in linux-next)
-> > =C2=A0- Add CPU OPP table
-> > =C2=A0- Common regulators moved to MangoPi MQ patch, removed analog LDO=
-s
-> > =C2=A0- Removed LRADC (depends on analog LDOs)
-> > =C2=A0- Added XR829 host-wake interrupt
-> > =C2=A0- Added DMIC sound card to Lichee RV dock and Lichee RV 86 Panel
-> > =C2=A0- Removed LRADC (depends on analog LDOs)
-> > =C2=A0- Added LED (GPIO shared between onboard LED and backlight
-> > regulator)
-> > =C2=A0- Added PMIC GPIO controller node (binding merged for 6.2)
-> > =C2=A0- Sort Kconfig as if we had done s/SOC_/ARCH_/ for future-proofin=
-g
-> >=20
-> > Samuel Holland (12):
-> > =C2=A0 MAINTAINERS: Match the sun20i family of Allwinner SoCs
-> > =C2=A0 dt-bindings: vendor-prefixes: Add Allwinner D1/D1s board vendors
-> > =C2=A0 dt-bindings: riscv: Add Allwinner D1/D1s board compatibles
-> > =C2=A0 riscv: dts: allwinner: Add the D1/D1s SoC devicetree
-> > =C2=A0 riscv: dts: allwinner: Add MangoPi MQ devicetree
-> > =C2=A0 riscv: dts: allwinner: Add Allwinner D1 Nezha devicetree
-> > =C2=A0 riscv: dts: allwinner: Add Sipeed Lichee RV devicetrees
-> > =C2=A0 riscv: dts: allwinner: Add MangoPi MQ Pro devicetree
-> > =C2=A0 riscv: dts: allwinner: Add Dongshan Nezha STU devicetree
-> > =C2=A0 riscv: dts: allwinner: Add ClockworkPi and DevTerm devicetrees
-> > =C2=A0 riscv: Add the Allwinner SoC family Kconfig option
-> > =C2=A0 riscv: defconfig: Enable the Allwinner D1 platform and drivers
-> >=20
-> > =C2=A0.../devicetree/bindings/riscv/sunxi.yaml=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 |=C2=A0 69 ++
-> > =C2=A0.../devicetree/bindings/vendor-prefixes.yaml=C2=A0 |=C2=A0=C2=A0 =
-4 +
-> > =C2=A0MAINTAINERS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- |=C2=A0=C2=A0 2 +-
-> > =C2=A0arch/riscv/Kconfig.socs=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 |=C2=A0 10 +
-> > =C2=A0arch/riscv/boot/dts/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=
-=C2=A0 1 +
-> > =C2=A0arch/riscv/boot/dts/allwinner/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 |=C2=A0 11 +
-> > =C2=A0.../allwinner/sun20i-common-regulators.dtsi=C2=A0=C2=A0 |=C2=A0 3=
-5 +
-> > =C2=A0.../allwinner/sun20i-d1-clockworkpi-v3.14.dts | 252 ++++++
-> > =C2=A0.../dts/allwinner/sun20i-d1-devterm-v3.14.dts |=C2=A0 36 +
-> > =C2=A0.../sun20i-d1-dongshan-nezha-stu.dts=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 117 +++
-> > =C2=A0.../sun20i-d1-lichee-rv-86-panel-480p.dts=C2=A0=C2=A0=C2=A0=C2=A0=
- |=C2=A0 29 +
-> > =C2=A0.../sun20i-d1-lichee-rv-86-panel-720p.dts=C2=A0=C2=A0=C2=A0=C2=A0=
- |=C2=A0 10 +
-> > =C2=A0.../sun20i-d1-lichee-rv-86-panel.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 | 119 +++
-> > =C2=A0.../allwinner/sun20i-d1-lichee-rv-dock.dts=C2=A0=C2=A0=C2=A0 |=C2=
-=A0 97 ++
-> > =C2=A0.../dts/allwinner/sun20i-d1-lichee-rv.dts=C2=A0=C2=A0=C2=A0=C2=A0=
- |=C2=A0 87 ++
-> > =C2=A0.../allwinner/sun20i-d1-mangopi-mq-pro.dts=C2=A0=C2=A0=C2=A0 | 14=
-2 +++
-> > =C2=A0.../boot/dts/allwinner/sun20i-d1-nezha.dts=C2=A0=C2=A0=C2=A0 | 16=
-6 ++++
-> > =C2=A0arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi=C2=A0 |=C2=A0 66 ++
-> > =C2=A0.../dts/allwinner/sun20i-d1s-mangopi-mq.dts=C2=A0=C2=A0 | 134 +++
-> > =C2=A0arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi |=C2=A0 76 ++
-> > =C2=A0.../boot/dts/allwinner/sunxi-d1-t113.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=
- |=C2=A0 15 +
-> > =C2=A0.../boot/dts/allwinner/sunxi-d1s-t113.dtsi=C2=A0=C2=A0=C2=A0 | 83=
-7
-> > ++++++++++++++++++
-> > =C2=A0arch/riscv/configs/defconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 =
-22 +-
-> > =C2=A023 files changed, 2335 insertions(+), 2 deletions(-)
-> > =C2=A0create mode 100644
-> > Documentation/devicetree/bindings/riscv/sunxi.yaml
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/Makefile
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-common-
-> > regulators.dtsi
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-
-> > clockworkpi-v3.14.dts
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-
-> > devterm-v3.14.dts
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-
-> > dongshan-nezha-stu.dts
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee=
--
-> > rv-86-panel-480p.dts
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee=
--
-> > rv-86-panel-720p.dts
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee=
--
-> > rv-86-panel.dtsi
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee=
--
-> > rv-dock.dts
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee=
--
-> > rv.dts
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-
-> > mangopi-mq-pro.dts
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-
-> > nezha.dts
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1s-
-> > mangopi-mq.dts
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sunxi-d1-
-> > t113.dtsi
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sunxi-d1s-
-> > t113.dtsi
-> >=20
-> > --=20
-> > 2.37.4
-> >=20
-> >=20
+> +#define __def_pagetype_names						\
+> +	{PG_slab,			"slab"		},		\
+> +	{PG_offline,			"offline"	},		\
+> +	{PG_guard,			"guard"		},		\
+> +	{PG_table,			"table"		},		\
+> +	{PG_buddy,			"buddy"		}
+
+Wondering if it will be more robust to define a helper macro
+
+#define DEF_PAGETYPE_NAME(_name)	{ PG_##_name, __stringify(_name) }
+...
+#undef DEF_PAGETYPE_MASK
+
+In this case it decreases the chances of typo in the strings and flags.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
