@@ -2,102 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED01E650A98
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 12:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45067650A9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 12:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbiLSLKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 06:10:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
+        id S231904AbiLSLLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 06:11:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiLSLKG (ORCPT
+        with ESMTP id S229957AbiLSLLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 06:10:06 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4121510DA;
-        Mon, 19 Dec 2022 03:10:05 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p7E1z-0004IE-OX; Mon, 19 Dec 2022 12:10:03 +0100
-Message-ID: <12c40aac-8f3b-fea2-17bb-d6a954d26597@leemhuis.info>
-Date:   Mon, 19 Dec 2022 12:10:03 +0100
+        Mon, 19 Dec 2022 06:11:00 -0500
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7DB7A5F73;
+        Mon, 19 Dec 2022 03:10:52 -0800 (PST)
+Received: from [192.168.4.25] (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id 65E0B2EE4C;
+        Mon, 19 Dec 2022 12:10:50 +0100 (CET)
+Message-ID: <a858367d-5953-1fba-0cb6-20ea917194e0@gpxsee.org>
+Date:   Mon, 19 Dec 2022 12:10:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Andrew M <quantumphazor@gmail.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>
-Subject: =?UTF-8?Q?=5bregression=5d_Bug=c2=a0216817_-_btusb_device_with_ID_0?=
- =?UTF-8?Q?489=3ae0d0_no_longer_working_after_v6=2e0?=
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1671448205;e76b99f4;
-X-HE-SMSGID: 1p7E1z-0004IE-OX
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 0/1] Digiteq Automotive MGB4 driver
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lizhi Hou <lizhi.hou@amd.com>,
+        =?UTF-8?Q?Martin_T=c5=afma?= <martin.tuma@digiteqautomotive.com>
+References: <20221123140431.4730-1-tumic@gpxsee.org>
+ <Y59iurFF9CM21p7o@duo.ucw.cz>
+Content-Language: en-US
+From:   =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>
+In-Reply-To: <Y59iurFF9CM21p7o@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker speaking.
-
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developer don't keep an eye on it, I decided to forward it by
-mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216817 :
-
->  Andrew M 2022-12-18 04:28:43 UTC
+On 18. 12. 22 19:58, Pavel Machek wrote:
+> Hi!
 > 
-> The internal USB Bluetooth device in my laptop no longer works since v6.0
+>> From: Martin Tůma <martin.tuma@digiteqautomotive.com>
+>>
+>> Hi,
+>> This patch adds a driver for the Digiteq Automotive MGB4 grabber card.
+>> MGB4 is a modular frame grabber PCIe card for automotive video interfaces
+>> (FPD-Link and GMSL for now). It is based on a Xilinx FPGA and uses their
+>> XDMA IP core for DMA transfers. Additionally, Xilinx I2C and SPI IP cores
+>> which already have drivers in linux are used in the design.
+>>
+>> The driver is a quite standard v4l2 driver, with one exception - there are
+>> a lot of sysfs options that may/must be set before opening the v4l2 device
+>> to adapt the card on a specific signal (see mgb4.rst for details)
+>> as the card must be able to work with various signal sources (or displays)
+>> that can not be auto-detected.
 > 
-> Device in question:
-> ID 0489:e0d0 Foxconn / Hon Hai
+> Uff, that's "interesting". What kind of platform does this run on? You
+> should be getting non-probeable parameters from deice tree (or APCI).
 > 
-> Works fine in 5.19.x and fails after 6.0
-> I ran a bisect that resulted in it breaking after this commit:
-> 26afbd826ee326e63a334c37fd45e82e50a615ec Bluetooth: Add initial implementation of CIS connections
-> 
-> System: Lenovo ThinkPad T14 (AMD) Gen 2
-> 
-> dmesg output:
-> 
-> [    0.978396] usb 5-4: new full-speed USB device number 2 using xhci_hcd
-> [    1.142461] usb 5-4: New USB device found, idVendor=0489, idProduct=e0d0, bcdDevice= 0.01
-> [    1.142467] usb 5-4: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> [    4.591285] Bluetooth: Core ver 2.22
-> [    4.591304] Bluetooth: HCI device and connection manager initialized
-> [    4.591308] Bluetooth: HCI socket layer initialized
-> [    4.591309] Bluetooth: L2CAP socket layer initialized
-> [    4.591315] Bluetooth: SCO socket layer initialized
-> [    4.871972] usbcore: registered new interface driver btusb
-> [    4.883484] Bluetooth: hci0: HCI Enhanced Setup Synchronous Connection command is advertised, but not supported.
-> [    4.973465] Bluetooth: BNEP (Ethernet Emulation) ver 1.3
-> [    4.973468] Bluetooth: BNEP filters: protocol multicast
-> [    4.973472] Bluetooth: BNEP socket layer initialized
-> [    4.975525] Bluetooth: hci0: unexpected cc 0x2060 length: 1 < 7
-> [    4.975537] Bluetooth: hci0: Opcode 0x2060 failed: -38
-> [    6.985714] Bluetooth: hci0: command tx timeout
-> 
-> Attached is output of lsusb -v -d 0489:e0d0
+> Best regards,
+> 								Pavel
+> 								
 
-See the ticket for more details.
+Hi,
+It is a PCIe card, so it runs on any platform that supports PCIe cards. 
+We do use the HW on x86_64 and arm platforms.
 
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
+The parameters are in no way connected to the platform where the card is 
+used, they are properties of the video signal that can change arbitrary 
+as you can connect different car infotainments (the signal source) to 
+the card (the same applies to the outputs - the car displays). Usually, 
+there is no auto-configuration on the signal level, that's why you have 
+to provide the various properties externally according to the 
+infotainment that you have at the moment connected to the card.
 
-#regzbot introduced: 26afbd826ee3
-https://bugzilla.kernel.org/show_bug.cgi?id=216817
-#regzbot ignore-activity
+Any kind of device tree or ACPI parameters make no sense for the HW/the 
+intended usage.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+M.
