@@ -2,123 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A35865084A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 08:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C2B65086E
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 09:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbiLSH7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 02:59:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
+        id S231448AbiLSIOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 03:14:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiLSH7B (ORCPT
+        with ESMTP id S229499AbiLSION (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 02:59:01 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AF6BC2E;
-        Sun, 18 Dec 2022 23:59:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671436740; x=1702972740;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=LTCN5nc9sJT3ve1jNEbkwKdzxPjXUiJ2eqZmznP7zEs=;
-  b=apUAziLsi1avXc90CdVu3Tk+ZAKwrXTAVhoVT0ukEOkXjTdgjaXvpsvi
-   osNLiMEc0XIJif58bf6GTq2L9ayChJY4uf32rVYak1dX6eHTcDZJdKNN6
-   XcGu3RjsWwmOyIwNkpkJpiMQ9I6D9DAk/dUo/ygVUkns9LYNxizqNRKPo
-   bi+yFSclXObovu0qvSPAsePk9d70I6UwIlmbIr6I8hsTbtImyz2mGRVFj
-   8mq0KpHdKs7xWCiunRLH+kYg4yN2AC0qNHcK0ZtW8SJBAFqyQbrLi1X/2
-   yWrNLtXvUJCTzmKygHTIxQwkVS9YKxLuMi4Ts072Y2MpOwAx4TbI4Qr2V
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="383638121"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="383638121"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2022 23:58:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="895959169"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="895959169"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by fmsmga006.fm.intel.com with ESMTP; 18 Dec 2022 23:58:49 -0800
-Date:   Mon, 19 Dec 2022 15:54:32 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "tabba@google.com" <tabba@google.com>,
-        "Hocko, Michal" <mhocko@suse.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "dhildenb@redhat.com" <dhildenb@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-        "vannapurve@google.com" <vannapurve@google.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "mail@maciej.szmigiero.name" <mail@maciej.szmigiero.name>,
-        "qperret@google.com" <qperret@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "ddutile@redhat.com" <ddutile@redhat.com>,
-        "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        "wanpengli@tencent.com" <wanpengli@tencent.com>,
-        "yu.c.zhang@linux.intel.com" <yu.c.zhang@linux.intel.com>,
-        "hughd@google.com" <hughd@google.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "jlayton@kernel.org" <jlayton@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "steven.price@arm.com" <steven.price@arm.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>
-Subject: Re: [PATCH v10 6/9] KVM: Unmap existing mappings when change the
- memory attributes
-Message-ID: <20221219075432.GC1691829@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-7-chao.p.peng@linux.intel.com>
- <0889bab999cbb464e63490bdb5b3c68c07791979.camel@intel.com>
+        Mon, 19 Dec 2022 03:14:13 -0500
+X-Greylist: delayed 945 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 19 Dec 2022 00:14:11 PST
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FC2D5FFD
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 00:14:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Hzd8l
+        f6HY4y2Yw9uc+TdTUhpidkvFZA9uoCnx/ZjXJY=; b=UykVbeZaZcR2s+sQubBlD
+        Gsa9w0ba/ivcEYX4AGmLCBHWkNum3qHH7OBFjoLsIYujCvedluxNUWSVNHUlaroz
+        Q0iyNvwrBN79oTsgcnXNWLLTwnqEmcU2h01h768tl/HLe+vuhCvPofLHwxEz6D/T
+        47DERHVVrrH/n4IXvrHRHA=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g0-2 (Coremail) with SMTP id _____wCXjF1NGaBjOMpSAA--.24784S2;
+        Mon, 19 Dec 2022 15:57:02 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     zhi.a.wang@intel.com
+Cc:     1002992920@qq.com, airlied@gmail.com, airlied@linux.ie,
+        alex000young@gmail.com, dri-devel@lists.freedesktop.org,
+        gregkh@linuxfoundation.org, hackerzheng666@gmail.com,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        joonas.lahtinen@linux.intel.com, linux-kernel@vger.kernel.org,
+        security@kernel.org, tvrtko.ursulin@linux.intel.com,
+        zhenyuw@linux.intel.com, zyytlz.wz@163.com
+Subject: Re: [Intel-gfx] [PATCH v3] drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
+Date:   Mon, 19 Dec 2022 15:57:00 +0800
+Message-Id: <20221219075700.220058-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <da557524-02ff-2ac7-7960-6f710c2d41d6@intel.com>
+References: <da557524-02ff-2ac7-7960-6f710c2d41d6@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0889bab999cbb464e63490bdb5b3c68c07791979.camel@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wCXjF1NGaBjOMpSAA--.24784S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GF48GF45Kr43KF4UtFWDurg_yoWfZFc_uF
+        yxCwn7Cw1DJFsxWw43tFnxXr409rn5XrZ2g3yFvrW7GasrZFnrWas3J3sIgrs7t393KrW5
+        Kr4DXrWjvryj9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRtMKCJUUUUU==
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiQhHcU1aED4R+7wAAsU
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 11:51:25PM +0000, Huang, Kai wrote:
-> On Fri, 2022-12-02 at 14:13 +0800, Chao Peng wrote:
-> >  
-> > -	/* flags is currently not used. */
-> > +	/* 'flags' is currently not used. */
-> >  	if (attrs->flags)
-> >  		return -EINVAL;
-> 
-> Unintended code change.
+Hi Zhi,
 
-Yeah!
+Thanks again for your reply and clear explaination about the function.
+I still have some doubt about the fix. Here is a invoke chain :
+ppgtt_populate_spt
+  ->ppgtt_populate_shadow_entry
+    ->split_2MB_gtt_entry
+As far as I'm concerned, when something error happens in DMA mapping,
+which will make intel_gvt_dma_map_guest_page return none-zero code,
+It will invoke ppgtt_invalidate_spt and call ppgtt_free_spt,which will
+finally free spt by kfree. But the caller doesn't notice that and frees
+spt by calling ppgtt_free_spt again. This is a typical UAF/Double Free
+vulnerability. So I think the key point is about how to handle spt properly.
+The handle newly allocated spt (aka sub_spt) is not the root cause of this
+issue. Could you please give me more advice about how to fix this security
+bug? Besides, I'm not sure if there are more similar problems in othe location.
 
-Chao
+Best regards,
+Zheng Wang
+
+-- 
+2.25.1
+
