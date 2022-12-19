@@ -2,107 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAD5650BF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 428F7650C0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbiLSMms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 07:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51002 "EHLO
+        id S231515AbiLSMon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 07:44:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbiLSMmb (ORCPT
+        with ESMTP id S231516AbiLSMoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 07:42:31 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF352E02C;
-        Mon, 19 Dec 2022 04:42:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671453750; x=1702989750;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rFXRuNuxKSqw6oDareMv/+ap40tT1Fx8IbD+8iaDdIA=;
-  b=IZXetE5XNAHD7uM/btlUAH6uU8hmpShZrZjomkb+CyNzsWvuFKxGg1aQ
-   ArPLVfcN4PsEtShgjLLne7amUxMlGKxKmUmU90FadwGVxNLuXNcjLlf+1
-   JUjCcYl8sRVd2khi7gEnbkVykPv7Zjnj+GFpf6g24fJtkxz9yMOZ8gybC
-   GuqcZTMk1G36aYdwIjWudIkedB/0h4DjrXFar8xqBuNEIQ1rWZw3+1LK/
-   KVppPNoENae3fpjluJCk0OW6Yu02dC7Z05UjgN+4uLvdK1EGjl73vIIG2
-   bszhZ3ulISZwweOtgUA06YvSK3LqCoLcMtmgXWIg4a6YSpi86DYMGYZaH
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="381564791"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="381564791"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 04:42:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="979361387"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="979361387"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Dec 2022 04:42:29 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 6A45343A; Mon, 19 Dec 2022 14:42:57 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v1 8/8] pinctrl: intel: Get rid of unused members in struct intel_function
-Date:   Mon, 19 Dec 2022 14:42:40 +0200
-Message-Id: <20221219124240.62781-8-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221219124240.62781-1-andriy.shevchenko@linux.intel.com>
-References: <20221219124240.62781-1-andriy.shevchenko@linux.intel.com>
+        Mon, 19 Dec 2022 07:44:14 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F60E032;
+        Mon, 19 Dec 2022 04:44:12 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id n20so21273461ejh.0;
+        Mon, 19 Dec 2022 04:44:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kxV7u7RRZGTufLc/md9pxkp/T9u0Ezh5oQMEVPe6YoE=;
+        b=NXZBQcYCFN6W7FZJnt2A0RGQ67TR1ahrG9Il9h7nLhG41ek3IlOG5ncHGcpvDsgYYi
+         wGPBvRPnhbbsdeGYPZSE6kp8mwDpreWGjVAv2C/2OwGnYkkVJKGOdp8SZb+vbL/qtyFU
+         Nt6SF2tW0efcm36MpHVmZWcsI6rrkzPPtLEUsdQnn4+6IcLMWnEWtmt1mT8MTjRAPsYZ
+         v3TFOMh8gs/NcWWIZxoHgSKd/vhauHrCBqIG4kzFA2hwG2H0oE29kqpilZR2Pf9qdP9R
+         TXho41ZtENKaJhpNTjGnSoqu2cb70bvgvUqcgB6DEn09XGgHSd0ekPM/TMeT2hJZ5YXe
+         SqiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kxV7u7RRZGTufLc/md9pxkp/T9u0Ezh5oQMEVPe6YoE=;
+        b=RzOmVQr2ZBXCxL7g8t+OQXHf7456/j5MY2XAkh5A864kxjukItANP60XQKKbqULHUR
+         zQQOk7cKeRCvNi+0kn0myy9a+xFIlD+N3TRT3k3RTPDNTkmIVnAmIAfBLNtG4LUfQ137
+         bsqhlgcvB0UH4smEcvx/5SJjoK9e0t50We7z1xrLeqmlKFb8ZrJmx5nBlH1SEvqEjyhT
+         GBsiHC527pmh/xgI87qaGbNviMrw05zeDPrF+EKq/Eu3lOJwFASV1gf3P6OsvnCVxVEQ
+         1pSZd/bT9lOimFBSiqa5LM9C8w2rCZnWnwiby8fxYQBiwDDC6VjNRU5L/mlxk77X9Hj5
+         Qwtw==
+X-Gm-Message-State: ANoB5plkOCycajBhjcev+UXp5sK6hg4HSOo8Ny4feNW3qoNe0vH3SBJS
+        0WeEx3xEJH/8Qr7HcsRh2CtLt3/JoXkACaWMX7Y=
+X-Google-Smtp-Source: AA0mqf5uBgvc3EA96bzK5dHrHzFiUTyMSkm7/ctkGB9XyGfleg5xEJDmeYdEobBRDxbJ6jWt4l6SYB5GKW3s9lK5HRk=
+X-Received: by 2002:a17:906:3e41:b0:78d:bc9f:33da with SMTP id
+ t1-20020a1709063e4100b0078dbc9f33damr80689032eji.80.1671453850556; Mon, 19
+ Dec 2022 04:44:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <mhng-8b05b6cd-d8a1-4302-af24-2f64a4bf7c32@palmer-ri-x1c9a>
+ <32cf0901-a4a0-48a7-bf42-f2cdb34d1ee7@app.fastmail.com> <Y55IQIxXw/twcxFx@spud>
+In-Reply-To: <Y55IQIxXw/twcxFx@spud>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 19 Dec 2022 12:43:44 +0000
+Message-ID: <CA+V-a8utcKKp81UTxQSvD6WsHgjO_7gSz33eedaE0+VxrR3f4w@mail.gmail.com>
+Subject: Re: [PATCH v5 6/6] soc: renesas: Add L2 cache management for RZ/Five SoC
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-riscv@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>, soc@kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        guoren <guoren@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Christoph Hellwig <hch@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver has been converted to a generic data type and macro for
-the pin function definition, hence get rid of not used members in
-the struct intel_function.
+Hi Conor,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/pinctrl/intel/pinctrl-intel.h | 9 ---------
- 1 file changed, 9 deletions(-)
+On Sat, Dec 17, 2022 at 10:52 PM Conor Dooley <conor@kernel.org> wrote:
+>
+> On Fri, Dec 16, 2022 at 09:04:20PM +0100, Arnd Bergmann wrote:
+> > On Fri, Dec 16, 2022, at 17:32, Palmer Dabbelt wrote:
+> > > On Thu, 15 Dec 2022 23:02:58 PST (-0800), Christoph Hellwig wrote:
+> > >> On Thu, Dec 15, 2022 at 01:40:30PM -0800, Palmer Dabbelt wrote:
+> > >>> Given that we already moved the SiFive one out it seems sane to just start
+> > >>> with the rest in drivers/soc/$VENDOR.  Looks like it was Christoph's idea to
+> > >>> do the move, so I'm adding him in case he's got an opinion (and also the SOC
+> > >>> alias, as that seems generally relevant).
+> > >>
+> > >> Well, it isn't an integral architecture feature, so it doesn't really
+> > >> beloing into arch.  Even the irqchip and timer drivers that are more
+> > >> less architectural are in drivers/ as they aren't really core
+> > >> architecture code.
+> > >
+> > > That makes sense to me, it just looks like the SiFive ccache is the only
+> > > one that's in drivers/soc/$VENDOR, the rest are in arch.  It looks like
+> > > mostly older ports that have vendor-specific cache files in arch (ie,
+> > > arm has it but arm64 doesn't).  Maybe that's just because the newer
+> > > architectures sorted out standard ISA interfaces for these and thus
+> > > don't need the vendor-specific bits?  I think we're likely to end up
+> > > with quite a few of these vendor-specific cache management schemes on
+> > > RISC-V.
+> > >
+> > > I'm always happy to keep stuff out of arch/riscv, though.  So maybe we
+> > > just buck the trend here and stick to drivers/soc/$VENDOR like we did
+> > > for the first one?
+> >
+> > I don't particularly like drivers/soc/ to become more of a dumping
+> > ground for random drivers. If there are several SoCs that have the
+> > same requirement to do a particular thing, the logical step would
+> > be to put them into a proper subsystem, with a well-defined interface
+> > to dma-mapping and virtualization frameworks.
+> >
+> > The other things we have in drivers/soc/ are usually either
+> > soc_device drivers for identifying the system, or they export
+> > interfaces used by soc specific drivers.
+>
+> Sounds like that's two "not in my back yard" votes from the maintainers
+> in question..
+> Doing drivers/cache would allow us to co-locate the RISC-V cache
+> management bits since it is not just going to be the ax45mp l2 driver
+> that will need to have them.
+>
+> Would it be okay to put this driver in soc/andestech for now & then move
+> it, and the SiFive one, once we've got patches posted for cache
+> management with that?
+>
+I think to start with it would be better if we place the Andes cache
+driver in the proposed "drivers/cache" folder. We would avoid
+unnecessary movement of code?
 
-diff --git a/drivers/pinctrl/intel/pinctrl-intel.h b/drivers/pinctrl/intel/pinctrl-intel.h
-index 91e5bedba00b..1faf2ada480a 100644
---- a/drivers/pinctrl/intel/pinctrl-intel.h
-+++ b/drivers/pinctrl/intel/pinctrl-intel.h
-@@ -37,15 +37,9 @@ struct intel_pingroup {
- /**
-  * struct intel_function - Description about a function
-  * @func: Generic data of the pin function (name and groups of pins)
-- * @name: Name of the function
-- * @groups: An array of groups for this function
-- * @ngroups: Number of groups in @groups
-  */
- struct intel_function {
- 	struct pinfunction func;
--	const char *name;
--	const char * const *groups;
--	size_t ngroups;
- };
- 
- #define INTEL_PINCTRL_MAX_GPP_SIZE	32
-@@ -188,9 +182,6 @@ struct intel_community {
- #define FUNCTION(n, g)							\
- 	{								\
- 		.func = PINCTRL_PINFUNCTION((n), (g), ARRAY_SIZE(g)),	\
--		.name = (n),						\
--		.groups = (g),						\
--		.ngroups = ARRAY_SIZE((g)),				\
- 	}
- 
- /**
--- 
-2.35.1
-
+Cheers,
+Prabhakar
