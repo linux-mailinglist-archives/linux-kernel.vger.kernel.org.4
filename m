@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAAB650E28
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BA1650E2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:01:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbiLSO7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 09:59:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60616 "EHLO
+        id S231856AbiLSPA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 10:00:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232233AbiLSO6d (ORCPT
+        with ESMTP id S232095AbiLSPA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 09:58:33 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A63D6C
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 06:57:47 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 19 Dec 2022 10:00:29 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1CE2AC2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:00:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D79BB60E28;
-        Mon, 19 Dec 2022 14:57:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1671461865; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=D/sJHRe1x61d+bdcjyXrRDFyLAb4JzMt7z9Tz9dQe3Y=;
-        b=bbfl9TLEtf3MfG8fLhS7RT4/l+ZSwDlujYhz+f2nEGuw5NC8S5yjVy7dX58bYFeyngn3Fi
-        obcKYJLIh7p58PjYOCPz1WIMDVA/GN1P5pWBKRULLlwgj0IfiQTjGQdHivfvz0InGTiUfN
-        DOAzSbskUN38YKAJ2WrrOQ78pQtvITQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1671461865;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=D/sJHRe1x61d+bdcjyXrRDFyLAb4JzMt7z9Tz9dQe3Y=;
-        b=DBkMLuapRX252h48tigOMlhNmXZjuSvjEOEBzBW4EkzV5NSyVPU1h5w4FlK/Flia6WrmfN
-        f4CfhhE1eCk43qCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ABDB513498;
-        Mon, 19 Dec 2022 14:57:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id I23jKOl7oGPaSgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 19 Dec 2022 14:57:45 +0000
-Message-ID: <0693327a-4951-6864-12c6-88cfe81abd12@suse.de>
-Date:   Mon, 19 Dec 2022 15:57:45 +0100
+        by sin.source.kernel.org (Postfix) with ESMTPS id 39D1BCE0F98
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 15:00:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDE70C433D2;
+        Mon, 19 Dec 2022 15:00:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671462024;
+        bh=JbD1CERCvAqPiTchVboz7aWPTf4CqkVZl5hSSLWV8+Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TWOHbnn13mEX9dougL+e1l5NCO4uC1JocxLiRTSuLMFPPooSOsduPqT9WpQeOtG6O
+         w2zJBKPFa+CLq98BUmfOJTMjK7bvGLBCpvveQ1ekQ8bR2LmWkgnufJ4Obi/Awvwz3M
+         n7qP1lNleQHNul8coOBFRf32nkDXxU7wxe4tfgcU8ogUOrPfC1Itbs9hxlkmwndsXj
+         2rBH/FnRTPol7uGGixifpUdUvmPnbyxy+o72SDzNKVoOPR7m7cPSHLft1yAfwpc1h5
+         lGiwqAGg8ay3BTPXtyoQlRsnMWvSY6wtMMPNexp2/Kzyu25GTC7kKoU8xhzOMlmWgc
+         3GMADB2IG5MTQ==
+Date:   Mon, 19 Dec 2022 15:00:15 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Akihiko Odaki <akihiko.odaki@daynix.com>,
+        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v3 1/7] arm64/sysreg: Convert CCSIDR_EL1 to automatic
+ generation
+Message-ID: <Y6B8fzaFSwmJ5VC1@sirena.org.uk>
+References: <20221218051412.384657-1-akihiko.odaki@daynix.com>
+ <20221218051412.384657-2-akihiko.odaki@daynix.com>
+ <87cz8hez0i.wl-maz@kernel.org>
+ <1ef32b0c-6cee-75f7-e1e0-ede1f5b9a016@daynix.com>
+ <87bko0g8m2.wl-maz@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] drm: Replace DRM_INFO() with pr_info()
-Content-Language: en-US
-To:     Siddh Raman Pant <code@siddh.me>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20221219142319.79827-1-code@siddh.me>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20221219142319.79827-1-code@siddh.me>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------jRAn52zmCrZax5bIrKY4wpAQ"
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="u5kU4UMJcC0W4wyS"
+Content-Disposition: inline
+In-Reply-To: <87bko0g8m2.wl-maz@kernel.org>
+X-Cookie: I brake for chezlogs!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,149 +71,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------jRAn52zmCrZax5bIrKY4wpAQ
-Content-Type: multipart/mixed; boundary="------------m4Z8Z0lSKTODIrTprfAvX6xL";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Siddh Raman Pant <code@siddh.me>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>
-Cc: dri-devel <dri-devel@lists.freedesktop.org>,
- linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <0693327a-4951-6864-12c6-88cfe81abd12@suse.de>
-Subject: Re: [PATCH] drm: Replace DRM_INFO() with pr_info()
-References: <20221219142319.79827-1-code@siddh.me>
-In-Reply-To: <20221219142319.79827-1-code@siddh.me>
 
---------------m4Z8Z0lSKTODIrTprfAvX6xL
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+--u5kU4UMJcC0W4wyS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-SGkNCg0KQW0gMTkuMTIuMjIgdW0gMTU6MjMgc2NocmllYiBTaWRkaCBSYW1hbiBQYW50Og0K
-PiBMaW5lIDUzNiBvZiBkcm1fcHJpbnQuaCBzYXlzIERSTV9JTkZPKCkgaXMgZGVwcmVjYXRl
-ZA0KPiBpbiBmYXZvciBvZiBwcl9pbmZvKCkuDQoNClRoYXQncyBhIG1pc2xlYWRpbmcgY29t
-bWVudC4gRFJNX0lORk8oKSBpcyBkZXByZWNhdGVkIGZvciBkcm1faW5mbygpLiANCnByX2lu
-Zm8oKSBldCBhbCBpcyBvbmx5IHRvIGJlIHVzZWQgb2YgeW91IGRvbid0IGhhdmUgYSBkZXYg
-cG9pbnRlci4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gU2lnbmVkLW9mZi1i
-eTogU2lkZGggUmFtYW4gUGFudCA8Y29kZUBzaWRkaC5tZT4NCj4gLS0tDQo+ICAgZHJpdmVy
-cy9ncHUvZHJtL2RybV9jbGllbnRfbW9kZXNldC5jIHwgIDIgKy0NCj4gICBkcml2ZXJzL2dw
-dS9kcm0vZHJtX2Nvbm5lY3Rvci5jICAgICAgfCAgOCArKysrLS0tLQ0KPiAgIGRyaXZlcnMv
-Z3B1L2RybS9kcm1fZHJ2LmMgICAgICAgICAgICB8IDEwICsrKysrLS0tLS0NCj4gICBkcml2
-ZXJzL2dwdS9kcm0vZHJtX2VkaWRfbG9hZC5jICAgICAgfCAxNCArKysrKysrLS0tLS0tLQ0K
-PiAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fcGNpLmMgICAgICAgICAgICB8ICAyICstDQo+ICAg
-NSBmaWxlcyBjaGFuZ2VkLCAxOCBpbnNlcnRpb25zKCspLCAxOCBkZWxldGlvbnMoLSkNCj4g
-DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2NsaWVudF9tb2Rlc2V0LmMg
-Yi9kcml2ZXJzL2dwdS9kcm0vZHJtX2NsaWVudF9tb2Rlc2V0LmMNCj4gaW5kZXggYmJjNTM1
-Y2M1MGRkLi4yZTI4OTE2MTRjNTggMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9k
-cm1fY2xpZW50X21vZGVzZXQuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2NsaWVu
-dF9tb2Rlc2V0LmMNCj4gQEAgLTMzNSw3ICszMzUsNyBAQCBzdGF0aWMgYm9vbCBkcm1fY2xp
-ZW50X3RhcmdldF9jbG9uZWQoc3RydWN0IGRybV9kZXZpY2UgKmRldiwNCj4gICAJCURSTV9E
-RUJVR19LTVMoImNhbiBjbG9uZSB1c2luZyAxMDI0eDc2OFxuIik7DQo+ICAgCQlyZXR1cm4g
-dHJ1ZTsNCj4gICAJfQ0KPiAtCURSTV9JTkZPKCJrbXM6IGNhbid0IGVuYWJsZSBjbG9uaW5n
-IHdoZW4gd2UgcHJvYmFibHkgd2FudGVkIHRvLlxuIik7DQo+ICsJcHJfaW5mbygiW2RybV0g
-a21zOiBjYW4ndCBlbmFibGUgY2xvbmluZyB3aGVuIHdlIHByb2JhYmx5IHdhbnRlZCB0by5c
-biIpOw0KPiAgIAlyZXR1cm4gZmFsc2U7DQo+ICAgfQ0KPiAgIA0KPiBkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy9ncHUvZHJtL2RybV9jb25uZWN0b3IuYyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1f
-Y29ubmVjdG9yLmMNCj4gaW5kZXggNjFjMjljZTc0YjAzLi4yNmEwM2I3MGUyYzYgMTAwNjQ0
-DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fY29ubmVjdG9yLmMNCj4gKysrIGIvZHJp
-dmVycy9ncHUvZHJtL2RybV9jb25uZWN0b3IuYw0KPiBAQCAtMTY1LDE0ICsxNjUsMTQgQEAg
-c3RhdGljIHZvaWQgZHJtX2Nvbm5lY3Rvcl9nZXRfY21kbGluZV9tb2RlKHN0cnVjdCBkcm1f
-Y29ubmVjdG9yICpjb25uZWN0b3IpDQo+ICAgCQlyZXR1cm47DQo+ICAgDQo+ICAgCWlmICht
-b2RlLT5mb3JjZSkgew0KPiAtCQlEUk1fSU5GTygiZm9yY2luZyAlcyBjb25uZWN0b3IgJXNc
-biIsIGNvbm5lY3Rvci0+bmFtZSwNCj4gLQkJCSBkcm1fZ2V0X2Nvbm5lY3Rvcl9mb3JjZV9u
-YW1lKG1vZGUtPmZvcmNlKSk7DQo+ICsJCXByX2luZm8oIltkcm1dIGZvcmNpbmcgJXMgY29u
-bmVjdG9yICVzXG4iLCBjb25uZWN0b3ItPm5hbWUsDQo+ICsJCQlkcm1fZ2V0X2Nvbm5lY3Rv
-cl9mb3JjZV9uYW1lKG1vZGUtPmZvcmNlKSk7DQo+ICAgCQljb25uZWN0b3ItPmZvcmNlID0g
-bW9kZS0+Zm9yY2U7DQo+ICAgCX0NCj4gICANCj4gICAJaWYgKG1vZGUtPnBhbmVsX29yaWVu
-dGF0aW9uICE9IERSTV9NT0RFX1BBTkVMX09SSUVOVEFUSU9OX1VOS05PV04pIHsNCj4gLQkJ
-RFJNX0lORk8oImNtZGxpbmUgZm9yY2VzIGNvbm5lY3RvciAlcyBwYW5lbF9vcmllbnRhdGlv
-biB0byAlZFxuIiwNCj4gLQkJCSBjb25uZWN0b3ItPm5hbWUsIG1vZGUtPnBhbmVsX29yaWVu
-dGF0aW9uKTsNCj4gKwkJcHJfaW5mbygiW2RybV0gY21kbGluZSBmb3JjZXMgY29ubmVjdG9y
-ICVzIHBhbmVsX29yaWVudGF0aW9uIHRvICVkXG4iLA0KPiArCQkJY29ubmVjdG9yLT5uYW1l
-LCBtb2RlLT5wYW5lbF9vcmllbnRhdGlvbik7DQo+ICAgCQlkcm1fY29ubmVjdG9yX3NldF9w
-YW5lbF9vcmllbnRhdGlvbihjb25uZWN0b3IsDQo+ICAgCQkJCQkJICAgIG1vZGUtPnBhbmVs
-X29yaWVudGF0aW9uKTsNCj4gICAJfQ0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJt
-L2RybV9kcnYuYyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZHJ2LmMNCj4gaW5kZXggMjAzYmY4
-ZDZjMzRjLi4xNDg2ZGYwOTc5MDggMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9k
-cm1fZHJ2LmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2RybV9kcnYuYw0KPiBAQCAtODk4
-LDExICs4OTgsMTEgQEAgaW50IGRybV9kZXZfcmVnaXN0ZXIoc3RydWN0IGRybV9kZXZpY2Ug
-KmRldiwgdW5zaWduZWQgbG9uZyBmbGFncykNCj4gICAJaWYgKGRybV9jb3JlX2NoZWNrX2Zl
-YXR1cmUoZGV2LCBEUklWRVJfTU9ERVNFVCkpDQo+ICAgCQlkcm1fbW9kZXNldF9yZWdpc3Rl
-cl9hbGwoZGV2KTsNCj4gICANCj4gLQlEUk1fSU5GTygiSW5pdGlhbGl6ZWQgJXMgJWQuJWQu
-JWQgJXMgZm9yICVzIG9uIG1pbm9yICVkXG4iLA0KPiAtCQkgZHJpdmVyLT5uYW1lLCBkcml2
-ZXItPm1ham9yLCBkcml2ZXItPm1pbm9yLA0KPiAtCQkgZHJpdmVyLT5wYXRjaGxldmVsLCBk
-cml2ZXItPmRhdGUsDQo+IC0JCSBkZXYtPmRldiA/IGRldl9uYW1lKGRldi0+ZGV2KSA6ICJ2
-aXJ0dWFsIGRldmljZSIsDQo+IC0JCSBkZXYtPnByaW1hcnktPmluZGV4KTsNCj4gKwlwcl9p
-bmZvKCJbZHJtXSBJbml0aWFsaXplZCAlcyAlZC4lZC4lZCAlcyBmb3IgJXMgb24gbWlub3Ig
-JWRcbiIsDQo+ICsJCWRyaXZlci0+bmFtZSwgZHJpdmVyLT5tYWpvciwgZHJpdmVyLT5taW5v
-ciwNCj4gKwkJZHJpdmVyLT5wYXRjaGxldmVsLCBkcml2ZXItPmRhdGUsDQo+ICsJCWRldi0+
-ZGV2ID8gZGV2X25hbWUoZGV2LT5kZXYpIDogInZpcnR1YWwgZGV2aWNlIiwNCj4gKwkJZGV2
-LT5wcmltYXJ5LT5pbmRleCk7DQo+ICAgDQo+ICAgCWdvdG8gb3V0X3VubG9jazsNCj4gICAN
-Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fZWRpZF9sb2FkLmMgYi9kcml2
-ZXJzL2dwdS9kcm0vZHJtX2VkaWRfbG9hZC5jDQo+IGluZGV4IDM3ZDhiYTNkZGI0Ni4uZDNj
-YjE5ODM4MGM1IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2VkaWRfbG9h
-ZC5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZWRpZF9sb2FkLmMNCj4gQEAgLTI0
-Miw5ICsyNDIsOSBAQCBzdGF0aWMgdm9pZCAqZWRpZF9sb2FkKHN0cnVjdCBkcm1fY29ubmVj
-dG9yICpjb25uZWN0b3IsIGNvbnN0IGNoYXIgKm5hbWUsDQo+ICAgCQl1OCAqbmV3X2VkaWQ7
-DQo+ICAgDQo+ICAgCQllZGlkW0VESURfTEVOR1RILTFdICs9IGVkaWRbMHg3ZV0gLSB2YWxp
-ZF9leHRlbnNpb25zOw0KPiAtCQlEUk1fSU5GTygiRm91bmQgJWQgdmFsaWQgZXh0ZW5zaW9u
-cyBpbnN0ZWFkIG9mICVkIGluIEVESUQgZGF0YSAiDQo+IC0JCSAgICAiXCIlc1wiIGZvciBj
-b25uZWN0b3IgXCIlc1wiXG4iLCB2YWxpZF9leHRlbnNpb25zLA0KPiAtCQkgICAgZWRpZFsw
-eDdlXSwgbmFtZSwgY29ubmVjdG9yX25hbWUpOw0KPiArCQlwcl9pbmZvKCJbZHJtXSBGb3Vu
-ZCAlZCB2YWxpZCBleHRlbnNpb25zIGluc3RlYWQgb2YgJWQgaW4gRURJRCBkYXRhICINCj4g
-KwkJCSJcIiVzXCIgZm9yIGNvbm5lY3RvciBcIiVzXCJcbiIsIHZhbGlkX2V4dGVuc2lvbnMs
-DQo+ICsJCQllZGlkWzB4N2VdLCBuYW1lLCBjb25uZWN0b3JfbmFtZSk7DQo+ICAgCQllZGlk
-WzB4N2VdID0gdmFsaWRfZXh0ZW5zaW9uczsNCj4gICANCj4gICAJCW5ld19lZGlkID0ga3Jl
-YWxsb2MoZWRpZCwgKHZhbGlkX2V4dGVuc2lvbnMgKyAxKSAqIEVESURfTEVOR1RILA0KPiBA
-QCAtMjUzLDEwICsyNTMsMTAgQEAgc3RhdGljIHZvaWQgKmVkaWRfbG9hZChzdHJ1Y3QgZHJt
-X2Nvbm5lY3RvciAqY29ubmVjdG9yLCBjb25zdCBjaGFyICpuYW1lLA0KPiAgIAkJCWVkaWQg
-PSBuZXdfZWRpZDsNCj4gICAJfQ0KPiAgIA0KPiAtCURSTV9JTkZPKCJHb3QgJXMgRURJRCBi
-YXNlIGJsb2NrIGFuZCAlZCBleHRlbnNpb24lcyBmcm9tICINCj4gLQkgICAgIlwiJXNcIiBm
-b3IgY29ubmVjdG9yIFwiJXNcIlxuIiwgKGJ1aWx0aW4gPj0gMCkgPyAiYnVpbHQtaW4iIDoN
-Cj4gLQkgICAgImV4dGVybmFsIiwgdmFsaWRfZXh0ZW5zaW9ucywgdmFsaWRfZXh0ZW5zaW9u
-cyA9PSAxID8gIiIgOiAicyIsDQo+IC0JICAgIG5hbWUsIGNvbm5lY3Rvcl9uYW1lKTsNCj4g
-Kwlwcl9pbmZvKCJbZHJtXSBHb3QgJXMgRURJRCBiYXNlIGJsb2NrIGFuZCAlZCBleHRlbnNp
-b24lcyBmcm9tICINCj4gKwkJIlwiJXNcIiBmb3IgY29ubmVjdG9yIFwiJXNcIlxuIiwgKGJ1
-aWx0aW4gPj0gMCkgPyAiYnVpbHQtaW4iIDoNCj4gKwkJImV4dGVybmFsIiwgdmFsaWRfZXh0
-ZW5zaW9ucywgdmFsaWRfZXh0ZW5zaW9ucyA9PSAxID8gIiIgOiAicyIsDQo+ICsJCW5hbWUs
-IGNvbm5lY3Rvcl9uYW1lKTsNCj4gICANCj4gICBvdXQ6DQo+ICAgCXJlbGVhc2VfZmlybXdh
-cmUoZncpOw0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2RybV9wY2kuYyBiL2Ry
-aXZlcnMvZ3B1L2RybS9kcm1fcGNpLmMNCj4gaW5kZXggMzlkMzVmYzNhNDNiLi45NGVlMTk0
-Y2U5MjcgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fcGNpLmMNCj4gKysr
-IGIvZHJpdmVycy9ncHUvZHJtL2RybV9wY2kuYw0KPiBAQCAtMjYyLDcgKzI2Miw3IEBAIHZv
-aWQgZHJtX2xlZ2FjeV9wY2lfZXhpdChjb25zdCBzdHJ1Y3QgZHJtX2RyaXZlciAqZHJpdmVy
-LA0KPiAgIAkJfQ0KPiAgIAkJbXV0ZXhfdW5sb2NrKCZsZWdhY3lfZGV2X2xpc3RfbG9jayk7
-DQo+ICAgCX0NCj4gLQlEUk1fSU5GTygiTW9kdWxlIHVubG9hZGVkXG4iKTsNCj4gKwlwcl9p
-bmZvKCJbZHJtXSBNb2R1bGUgdW5sb2FkZWRcbiIpOw0KPiAgIH0NCj4gICBFWFBPUlRfU1lN
-Qk9MKGRybV9sZWdhY3lfcGNpX2V4aXQpOw0KPiAgIA0KDQotLSANClRob21hcyBaaW1tZXJt
-YW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9u
-cyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFu
-eQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBU
-b3Rldg0K
+On Sun, Dec 18, 2022 at 01:11:01PM +0000, Marc Zyngier wrote:
+> Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
 
---------------m4Z8Z0lSKTODIrTprfAvX6xL--
+> > arch/arm64/tools/gen-sysreg.awk does not allow a hole and requires all
+> > bits are described hence these descriptions. If you have an
+> > alternative idea I'd like to hear.
 
---------------jRAn52zmCrZax5bIrKY4wpAQ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+> I'd simply suggest creating an UNKNOWN field encompassing bits
+> [21:28]. Alternatively, feel free to try the patch below, which allows
+> you to describe these 4 bits as "Unkn	31:28", similar to Res0/Res1.
+
+I agree, where practical we should add new field types and other
+features as needed rather than trying to shoehorn things into what the
+tool currently supports.  It is very much a work in progress which can't
+fully represent everything in the spec yet.  For things like the
+registers with multiple possible views it's much more effort which
+shouldn't get in the way of progress on features but with something like
+this just updating the tool so we can match the architecture spec is the
+right thing.
+
+> Define an 'Unkn' field type modeled after the Res0/Res1 types
+> to allow such description. This allows the generation of
+
+I'd be tempted to spell out Unknown fully since Unkn is not such a
+common abbreviation but I can see the desire to keep the name shorter
+and it doesn't really matter so either way:
+
+Reviewed-by: Mark Brown <broonie@kernel.org>
+
+--u5kU4UMJcC0W4wyS
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmOge+kFAwAAAAAACgkQlh/E3EQov+Cb
-0w//acRXHc6A2bDYUPKJ44QHJ38ulmit4wFJHNNQ0fvvWVcypfNTL5DA/G+TJwkNtZJqHWOK8Vnq
-yv4d9rN/worjVZ04CSZN92KFv51WSp1/Clz40FaoEtghS3dijzeVtbjDZ3j7P6xuBGjVcc/CYpcp
-vHKuLpyG20HU7nzlBJptioY/bAlzTLHzfDXNe3cWvrCw+3T25V7Bp8LGtB6l0mWTPc/x+YCZ3SRc
-wRKnUHiS/PQiE16GRABM3emfWCUvX+2tNBmzsuDxRvZlWFle07n3vXBMrMGcgd6Vgd38kMSYeRkk
-fJAEaDVJAiIqikx9VeGeDaPbuZBgS3S7GCjDaOH3vi+EIz9skwM6y36HtX9LUNRX+ZhB1FFOQt8f
-kAhYjK5JLh9up6oloUbddrp/0Z3M2oKb4HrqgcQdS5GBEfLaNR2Sp9CzRdF8u2HkbfNNB5BrSeMY
-65HqhZgboEWh5L3JrxoplKbJ2+6F8bnYBLCnBVUGkYFj1ZA/Msk4bv8sMDI5e6d3u/aYi4lpcIpf
-2EmT6LJkUBgf4ySlEyfdGToKqYkOGUap91I6aTJH4/Nt274J9pJHM7io/Mc0tWHkT5DxwP8kdZrN
-RnSQCC/Cw058E5XXlp7KVWB3ms7Y6xZXiQigoToGknSyrVTIdDMcdfmYOJrfIPh+97BeGhpvHP2M
-1Oo=
-=yvX9
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOgfH4ACgkQJNaLcl1U
+h9BsAgf/SbrRls2l2YJ4ke3IATlZrBSMsZVI98FuGsLwHeKknHxUHGkJKrMfdbk4
+diEmW0Bk69Cn4VAzsMwg7l0x8JMGJwE94sMyUwX0DOC0r1xI/KrAxhS/PetsIlVv
+tJQPP9FYO33oJmjDsAqCwaO90Qkdk4I7QrDos/eO+yucA6tISgrM95FSufMwTZqX
+9pu8j5CizDnf77pZIXVUjhDMVzdqJsiGg3YTuHZpDXdfXq/COW4ECCMKB25GmCSh
+/pB2NEvWJoX6ZiDoyi7XxokmMv8nOPnMYyahTM1jO2N5tEcav9E4t9levchdQ5n0
+PTo3pY7o2LisFYorkFn5o4eys9hYRw==
+=BwsC
 -----END PGP SIGNATURE-----
 
---------------jRAn52zmCrZax5bIrKY4wpAQ--
+--u5kU4UMJcC0W4wyS--
