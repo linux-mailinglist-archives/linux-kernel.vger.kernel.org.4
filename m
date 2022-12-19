@@ -2,134 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C3A6514B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 22:21:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CFE6514BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 22:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232438AbiLSVVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 16:21:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
+        id S232704AbiLSVWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 16:22:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232552AbiLSVUz (ORCPT
+        with ESMTP id S229895AbiLSVWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 16:20:55 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2118.outbound.protection.outlook.com [40.107.22.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20D764D1;
-        Mon, 19 Dec 2022 13:20:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Lnas/Ei5LpXYNSAGuaR60BOH0sdBPciffqdJcSi1REfxWVp7eRhSqhbBSKsBxPYkIMWAxszZJ4lCC+fvUR05HxqCnEiHwrAhiXrJujKvqINhmITCMxwPisHkIi6GORMEQKt4GsQ3z5eFMDJa8/EW2G+rwjfaXS72cAgM/Iq06LejoWm4ACBNV72dK4RnsrfpnzbldnLsQnqPuHLdlk0h1BnIX7E/Wi0FDjLiT4vezAOAuAmYmcgVQljCriij80PxwS7DuiQDpXMIO20SGzovURZARXGIreQNlD4YDCm1VtDgTkY/RTI4guXhuOfpfxIMnCs0I3i1OY3IisZnftMtZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ySpz1nlgcq/mVnqqCPG7zzsJF94xzgLeBnibFVWUUbs=;
- b=X9W5k/52LPPUx48eAnTXCbjnXBTHUQGvHNmGSyIGyYlE9aZG1tPr8iryMv3FLRYg//1CrKlZLeALo02QBVG801xaOoLlTNnW+xLViKj2nndL3RYAUQcRX2AtaQNZqPRtvD7bTP3r6P7uWS6PMA201uTf2pe6Lkf2UhHJUgnoOyyE+bgUxLg4738ltdW0rgnJ3UiAz8pcuvpH/3hCtxC7VzFohFr84aL6ciz6DRkkHztWxbzRO0I12aP2buXAUj1IcugAfQpAxmge1FYc9y2OCo1AKHWVsDILDacEKnz65I5jj7FMO9iVxKPGuiv70tikURoh1daGmA4ep33xSEqpSQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 80.151.164.27) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu; dmarc=none
- action=none header.from=esd.eu; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ySpz1nlgcq/mVnqqCPG7zzsJF94xzgLeBnibFVWUUbs=;
- b=ferSbRDnt7pMME2ZMLo995J3V3C+cuFqXe2mhv+A3kPBzV3bTOzEUiJYOeaWPrQT3w6dD2oBNzy50FVLcjEFn6VkyYQbtmAIJEp3xVZqe6EyHI3DBjsZuMnBUfoIOJuu8swj3ccqfKpX0YnE6ZVekMIdd7+uqo7if3qn/bXudsE=
-Received: from ZR0P278CA0053.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:1d::22)
- by AM7PR03MB6232.eurprd03.prod.outlook.com (2603:10a6:20b:13b::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Mon, 19 Dec
- 2022 21:20:50 +0000
-Received: from VI1EUR06FT067.eop-eur06.prod.protection.outlook.com
- (2603:10a6:910:1d:cafe::99) by ZR0P278CA0053.outlook.office365.com
- (2603:10a6:910:1d::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.20 via Frontend
- Transport; Mon, 19 Dec 2022 21:20:50 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=esd.eu;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
- discourages use of 80.151.164.27 as permitted sender)
-Received: from esd-s7.esd (80.151.164.27) by
- VI1EUR06FT067.mail.protection.outlook.com (10.13.6.78) with Microsoft SMTP
- Server id 15.20.5924.16 via Frontend Transport; Mon, 19 Dec 2022 21:20:49
- +0000
-Received: from esd-s20.esd.local (debby [10.0.0.190])
-        by esd-s7.esd (Postfix) with ESMTPS id 4AD3C7C16C8;
-        Mon, 19 Dec 2022 22:20:49 +0100 (CET)
-Received: by esd-s20.esd.local (Postfix, from userid 2046)
-        id 3F9E72E1DC1; Mon, 19 Dec 2022 22:20:49 +0100 (CET)
-From:   Frank Jungclaus <frank.jungclaus@esd.eu>
-To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Frank Jungclaus <frank.jungclaus@esd.eu>
-Subject: [PATCH 1/3] can: esd_usb: Improved behavior on esd CAN_ERROR_EXT event (1)
-Date:   Mon, 19 Dec 2022 22:20:12 +0100
-Message-Id: <20221219212013.1294820-2-frank.jungclaus@esd.eu>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221219212013.1294820-1-frank.jungclaus@esd.eu>
-References: <20221219212013.1294820-1-frank.jungclaus@esd.eu>
-MIME-Version: 1.0
+        Mon, 19 Dec 2022 16:22:11 -0500
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD6A64D1;
+        Mon, 19 Dec 2022 13:22:10 -0800 (PST)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-143ffc8c2b2so13202545fac.2;
+        Mon, 19 Dec 2022 13:22:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=f/Rdvbu+qSgHoC8VgQQG2atswz7W9zrDtpuYONrJn/Q=;
+        b=yJWD2nBRnVDgdbsQpV1zFrkqgSb4wzf/qkiswwrWgYlb64841ikksj6b/pz2BdG0RD
+         HemSt6CjNTOTfLDgwSfPv4M0AAuBoXEfLm1zHMF3DnocrDcy33OJ5raBubQBbs2T0/ap
+         4l9rMs+BqykMIRMYPPCyeKkE+v8lDbLkrIOE6p4Pjg9CqAsymX7Q757NlKSrfGVLDmxp
+         aVMMyq+EQntbMgg/m9WvH9aDTlrINMCVX/LQtV6QWL+w0B3Mn+t9CPsvoRqp9H1J0QyM
+         Oo4+bKp9ZITKBu7yE6JbAZqcclDuqoNQ0kiHtzemadPAj9USU5EH5QS9UYim5iy67BKr
+         ByEg==
+X-Gm-Message-State: ANoB5pm0rq+DWHB4dbrie/vkc1/mqUMD9Y33WV+AvzdqvDih5kjYLFUw
+        59l9i9NpVeq1TgvvQnjsxA==
+X-Google-Smtp-Source: AA0mqf7Swu8ufPQphtB2Ovx5HkJFBwFP2DUcnrN3rLC0xKRvsEiI5m29SLKPHE/BL0mwmq/kG0H5pw==
+X-Received: by 2002:a05:6870:7d02:b0:144:b4d6:4e02 with SMTP id os2-20020a0568707d0200b00144b4d64e02mr20991772oab.40.1671484929997;
+        Mon, 19 Dec 2022 13:22:09 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h18-20020a4ad012000000b004908a9542f8sm4345687oor.31.2022.12.19.13.22.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 13:22:09 -0800 (PST)
+Received: (nullmailer pid 2350832 invoked by uid 1000);
+        Mon, 19 Dec 2022 21:22:08 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1EUR06FT067:EE_|AM7PR03MB6232:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: cd797964-2040-4923-17d0-08dae206e6f4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /x5HfrvrFergW/ATbm2GhQfYnetiOiJTOpURBDZQBh9Jml4ApOLUy2Jw7KW1tOIfO9RHuRdSE3h0oit+bRZ159PXmaXTYxL35aASUDwaCh87ravkDsT7Jmn3oBO0FC1INT+KWeNy+2UvTD3NQGqv5FMpZLv8mqtyEcG7q3EcX23lXbYWS1hV41wTfmnCLDvYHjKXizThFQfojPhFuSMnmclKMsFFU2nft+N5APXVQ4E3xK1kx6s5FRpvzMl/mDE3d+WhxwsUrtZ94UQlIcZ/TYdi5O5hN0UyjkINr54pDJHL9z722ket2+CtXmmA0GUTkjy9rW7dnviGj8SM0hqLwj7rO4MPuvNep4LqXV9gCuhzSKaOBY1hziPYA294Nxda0cTYaXTthfISNswNi3wqhtVR88/ZUGB/rL8kED1QdikCQesMAy3et2i4ZEFaSKFypF2ps76T6WjIRiGvE6CqeW7wD7uB5LoUQxzw/eYyHZuirQ1hscMUXJkFqpiE8+B0tYIwqJBzFCidoGlp7hR72ZF5DvesDohgkwoaYx+Yzxmr02BGTSU4LKYskOWjDVo0gMtw++RYAPy2Z2AxCDng3IiKdJ9YyA6wgYQsIpH0GdTxLaoSz6Uyux3DwOGoMwQwW5/MQORFsKLcZJgewbNuM8Sy6xgWnaSYIgr8UiM8TP0=
-X-Forefront-Antispam-Report: CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(39830400003)(376002)(451199015)(36840700001)(46966006)(8936002)(8676002)(70586007)(70206006)(5660300002)(4326008)(44832011)(36860700001)(41300700001)(42186006)(316002)(40480700001)(2906002)(54906003)(110136005)(86362001)(2616005)(1076003)(356005)(83380400001)(26005)(186003)(6266002)(82310400005)(336012)(47076005)(81166007)(478600001)(36756003)(6666004);DIR:OUT;SFP:1102;
-X-OriginatorOrg: esd.eu
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2022 21:20:49.7846
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd797964-2040-4923-17d0-08dae206e6f4
-X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
-X-MS-Exchange-CrossTenant-AuthSource: VI1EUR06FT067.eop-eur06.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR03MB6232
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Witold Sadowski <wsadowski@marvell.com>
+Cc:     wbartczak@marvell.com, jpawar@cadence.com,
+        linux-spi@vger.kernel.org, pthombar@cadence.com,
+        devicetree@vger.kernel.org, konrad@cadence.com,
+        linux-kernel@vger.kernel.org, wzmuda@marvell.com,
+        broonie@kernel.org
+In-Reply-To: <20221219144254.20883-5-wsadowski@marvell.com>
+References: <20221219144254.20883-1-wsadowski@marvell.com>
+ <20221219144254.20883-5-wsadowski@marvell.com>
+Message-Id: <167148425112.2334433.10418308951514723890.robh@kernel.org>
+Subject: Re: [PATCH 4/7] spi: cadence: Change dt-bindings documentation for
+ Cadence XSPI controller
+Date:   Mon, 19 Dec 2022 15:22:08 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Moved the supply for cf->data[3] (bit stream position of CAN error)
-outside of the "switch (ecc & SJA1000_ECC_MASK){}"-statement, because
-this position is independent of the error type.
 
-Fixes: 96d8e90382dc ("can: Add driver for esd CAN-USB/2 device")
-Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
----
- drivers/net/can/usb/esd_usb.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On Mon, 19 Dec 2022 06:42:51 -0800, Witold Sadowski wrote:
+> Add parameter cdns,read-size.
+> Parameter is controlling SDMA read size length.
+> 
+> Signed-off-by: Witold Sadowski <wsadowski@marvell.com>
+> ---
+>  Documentation/devicetree/bindings/spi/cdns,xspi.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
 
-diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-index 42323f5e6f3a..5e182fadd875 100644
---- a/drivers/net/can/usb/esd_usb.c
-+++ b/drivers/net/can/usb/esd_usb.c
-@@ -286,7 +286,6 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
- 				cf->data[2] |= CAN_ERR_PROT_STUFF;
- 				break;
- 			default:
--				cf->data[3] = ecc & SJA1000_ECC_SEG;
- 				break;
- 			}
- 
-@@ -294,6 +293,9 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
- 			if (!(ecc & SJA1000_ECC_DIR))
- 				cf->data[2] |= CAN_ERR_PROT_TX;
- 
-+			/* Bit stream position in CAN frame as the error was detected */
-+			cf->data[3] = ecc & SJA1000_ECC_SEG;
-+
- 			if (priv->can.state == CAN_STATE_ERROR_WARNING ||
- 			    priv->can.state == CAN_STATE_ERROR_PASSIVE) {
- 				cf->data[1] = (txerr > rxerr) ?
--- 
-2.25.1
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/cdns,xspi.yaml: properties:cdns,read-size: 'oneOf' conditional failed, one must be fixed:
+	'type' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	'description' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	Additional properties are not allowed ('items' was unexpected)
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/cdns,xspi.yaml: properties:cdns,read-size: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/cdns,xspi.yaml: properties:cdns,read-size: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221219144254.20883-5-wsadowski@marvell.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
