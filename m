@@ -2,487 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5EC650E0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4750650DC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbiLSOtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 09:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
+        id S231679AbiLSOrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 09:47:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231941AbiLSOrY (ORCPT
+        with ESMTP id S231739AbiLSOrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 09:47:24 -0500
-Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03FBC2E0;
-        Mon, 19 Dec 2022 06:47:13 -0800 (PST)
-Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 9AFF3E0EC0;
-        Mon, 19 Dec 2022 17:47:12 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        baikalelectronics.ru; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:from:from:in-reply-to:message-id
-        :mime-version:references:reply-to:subject:subject:to:to; s=post;
-         bh=atpPh75QDBIeBqtjFhiWN9h7moAqhnd1/tjx3F+rkSE=; b=ISJjjWaylb/j
-        7JpBElitrnelhws1vKbFOF+40BhpVKmg9CKC25SZeZwy7bFPlxbMKW5X2qr7DktP
-        S56IvyaDC688sgC0y4XW6TlOu6OwlnQG0F0w2hy8C7Svi5TKYVd51el39+FWu3oQ
-        VQZY7NkzJzGlU115NigUMLjpfjxvuNw=
-Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 8FB54E0E70;
-        Mon, 19 Dec 2022 17:47:12 +0300 (MSK)
-Received: from localhost (10.8.30.14) by mail (192.168.51.25) with Microsoft
- SMTP Server (TLS) id 15.0.1395.4; Mon, 19 Dec 2022 17:47:12 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        caihuoqing <caihuoqing@baidu.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        <linux-pci@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v8 16/26] dmaengine: dw-edma: Move eDMA data pointer to DebugFS node descriptor
-Date:   Mon, 19 Dec 2022 17:46:47 +0300
-Message-ID: <20221219144658.26620-17-Sergey.Semin@baikalelectronics.ru>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221219144658.26620-1-Sergey.Semin@baikalelectronics.ru>
-References: <20221219144658.26620-1-Sergey.Semin@baikalelectronics.ru>
+        Mon, 19 Dec 2022 09:47:14 -0500
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC2A6316;
+        Mon, 19 Dec 2022 06:47:02 -0800 (PST)
+Received: by mail-qt1-f171.google.com with SMTP id x11so8308127qtv.13;
+        Mon, 19 Dec 2022 06:47:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PKHY9P32m8mgAHA8zC+eLfMybd3edFH7KlvoI0D1D6w=;
+        b=yjqbcP0kb1U9Q52/fNXaP/l2a1evSM6vwOXVFHMc2OxQ9Ldtdemnn3k4d/lz/v4hz8
+         zQ84fL2uq50VkDWzbe77PfUimkat8ayAeLOw/PQ7IJt7O/+96BuXetuyjobGfRsAsiMP
+         4Z/wG9nv7vX5HZv0CSATPvCL4CNXT4wIarRClxarTZHQ3O+4832tKMOsn9hUbyDXNThe
+         LbQRlvty1GfMvTXsYV77j2Q/mFFNZkMnoZAWOhxkrVC1U4+EEsHN/aj7fCHSt/M85xKY
+         jgY2r5VXr/ZB4xNWHntqzNVNS4ry/vOki83djczxd0plHuNoaFVKGx1x6sZc2XDNvy4X
+         RC5g==
+X-Gm-Message-State: ANoB5pnu297nz9o75/XHEnLZxSzQ7FpBrHUXIHn8g4hkO643++tHzzBk
+        MRSYNbaOJ1Rt82IpP+jTk2+IH6mRYl3sVA==
+X-Google-Smtp-Source: AA0mqf7nSFaluLYdxRTxxYekVmSkLmL5ndtc8GSVDm46qOuXfLRV7bsezW8v6KMpv03l6sE8YdpP0Q==
+X-Received: by 2002:ac8:7949:0:b0:3a8:991:bfa5 with SMTP id r9-20020ac87949000000b003a80991bfa5mr49813575qtt.44.1671461221336;
+        Mon, 19 Dec 2022 06:47:01 -0800 (PST)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id g22-20020a05620a40d600b006fa7b5ea2d1sm7185375qko.125.2022.12.19.06.47.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Dec 2022 06:47:00 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id 186so9668798ybe.8;
+        Mon, 19 Dec 2022 06:47:00 -0800 (PST)
+X-Received: by 2002:a25:7204:0:b0:6f0:9ff5:1151 with SMTP id
+ n4-20020a257204000000b006f09ff51151mr67152949ybc.543.1671461220397; Mon, 19
+ Dec 2022 06:47:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.8.30.14]
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221107175305.63975-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221107175305.63975-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdV46aMfqu+kMW9E-RURugK-giOx0k-NPe5XX4nxKZJzkg@mail.gmail.com>
+ <CA+V-a8uqQ2fK1UjRT864jyHdt6Z47V=iARSJC6B2M6Gikms=Eg@mail.gmail.com>
+ <CA+V-a8sGLrsRWFi3-hNmB=Uj-aCQLD5VQesmUFb8N1NAqhyLuQ@mail.gmail.com>
+ <CAMuHMdW_QuBUUypyrAbLqWPdZ81bWeYDyPbBf=2KmDht1X44bA@mail.gmail.com> <CA+V-a8uQFiU2KRcsoC5--tjfuWRj3VRJAUaZtv0+U0DziZQOwg@mail.gmail.com>
+In-Reply-To: <CA+V-a8uQFiU2KRcsoC5--tjfuWRj3VRJAUaZtv0+U0DziZQOwg@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 19 Dec 2022 15:46:48 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWROUWd0eQXrjx2pUVs2AtvRvu7spbpGWf5EDumemetcw@mail.gmail.com>
+Message-ID: <CAMuHMdWROUWd0eQXrjx2pUVs2AtvRvu7spbpGWf5EDumemetcw@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/5] dt-bindings: interrupt-controller:
+ renesas,rzg2l-irqc: Document RZ/G2UL SoC
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The last thing that really stops the DebugFS part of the eDMA driver from
-supporting the multi-eDMA platform in is keeping the eDMA private data
-pointer in the static area of the DebugFS module. Since the DebugFS node
-descriptors are now kz-allocated we can freely move that pointer to being
-preserved in the descriptors. After the DebugFS initialization procedure
-that pointer will be used in the DebugFS files getter to access the common
-CSRs space and the context CSRs spin-lock. So the main part of this change
-is connected with the DebugFS nodes descriptors initialization macros,
-which aside with already defined prototypes now require to have the DW
-eDMA private data pointer passed.
+Hi Prabhakar,
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Acked-by: Vinod Koul <vkoul@kernel.org>
----
- drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 242 +++++++++++------------
- 1 file changed, 117 insertions(+), 125 deletions(-)
+On Mon, Dec 19, 2022 at 3:26 PM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+> On Mon, Dec 19, 2022 at 1:50 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Mon, Dec 19, 2022 at 1:57 PM Lad, Prabhakar
+> > <prabhakar.csengg@gmail.com> wrote:
+> > > On Fri, Nov 18, 2022 at 12:29 PM Lad, Prabhakar
+> > > <prabhakar.csengg@gmail.com> wrote:
+> > > > On Thu, Nov 17, 2022 at 10:54 AM Geert Uytterhoeven
+> > > > <geert@linux-m68k.org> wrote:
+> > > > > On Mon, Nov 7, 2022 at 6:53 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > > > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > > >
+> > > > > > Document RZ/G2UL (R9A07G043) IRQC bindings. The RZ/G2UL IRQC block is
+> > > > > > identical to one found on the RZ/G2L SoC. No driver changes are
+> > > > > > required as generic compatible string "renesas,rzg2l-irqc" will be
+> > > > > > used as a fallback.
+> > > > > >
+> > > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > > > > > Note, renesas,r9a07g043u-irqc is added we have slight difference's compared to RZ/Five
+> > > > > > - G2UL IRQCHIP (hierarchical IRQ domain) -> GIC where as on RZ/Five we have PLIC (chained interrupt
+> > > > > > domain) -> RISCV INTC
+> > > > >
+> > > > > I think this difference is purely a software difference, and abstracted
+> > > > > in DTS through the interrupt hierarchy.
+> > > > > Does it have any impact on the bindings?
+> > > > >
+> > > > > > - On the RZ/Five we have additional registers for IRQC block
+> > > > >
+> > > > > Indeed, the NMI/IRQ/TINT "Interruput" Mask Control Registers, thus
+> > > > > warranting separate compatible values.
+> > > > >
+> > > > > > - On the RZ/Five we have BUS_ERR_INT which needs to be handled by IRQC
+> > > > >
+> > > > > Can you please elaborate? I may have missed something, but to me it
+> > > > > looks like that is exactly the same on RZ/G2UL and on RZ/Five.
+> > > > >
+> > > > Now that we have to update the binding doc with the BUS_ERR_INT too,
+> > > > do you think it would make sense to add interrupt-names too?
+> >
+> > > Gentle ping.
+> >
+> > Thanks for the ping, I had missed you were waiting on input from me.
+> > Sorry for that...
+> >
+> No worries.
+>
+> > As there are three different groups of parent interrupts, adding
+> > interrupt-names makes sense.
+> Ok.
+>
+> > However, as this binding is already in active use since v6.1, you
+> > probably need to keep on supporting the
+> > ack of interrupt-names.  Or do you think there are no real users yet,
+> > and we can drop support for that?
+> >
+> Sorry can you please elaborate on "ack of interrupt-names".
 
-diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
-index 1596eedf35c5..e6cf608d121b 100644
---- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
-+++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
-@@ -13,53 +13,55 @@
- #include "dw-edma-v0-regs.h"
- #include "dw-edma-core.h"
- 
--#define REGS_ADDR(name) \
--	((void __iomem *)&regs->name)
-+#define REGS_ADDR(dw, name)							\
-+	({									\
-+		struct dw_edma_v0_regs __iomem *__regs = (dw)->chip->reg_base;	\
-+										\
-+		(void __iomem *)&__regs->name;					\
-+	})
- 
--#define REGS_CH_ADDR(name, _dir, _ch)						\
-+#define REGS_CH_ADDR(dw, name, _dir, _ch)					\
- 	({									\
- 		struct dw_edma_v0_ch_regs __iomem *__ch_regs;			\
- 										\
- 		if ((dw)->chip->mf == EDMA_MF_EDMA_LEGACY)			\
--			__ch_regs = &regs->type.legacy.ch;			\
-+			__ch_regs = REGS_ADDR(dw, type.legacy.ch);		\
- 		else if (_dir == EDMA_DIR_READ)					\
--			__ch_regs = &regs->type.unroll.ch[_ch].rd;		\
-+			__ch_regs = REGS_ADDR(dw, type.unroll.ch[_ch].rd);	\
- 		else								\
--			__ch_regs = &regs->type.unroll.ch[_ch].wr;		\
-+			__ch_regs = REGS_ADDR(dw, type.unroll.ch[_ch].wr);	\
- 										\
- 		(void __iomem *)&__ch_regs->name;				\
- 	})
- 
--#define REGISTER(name) \
--	{ #name, REGS_ADDR(name) }
-+#define REGISTER(dw, name) \
-+	{ dw, #name, REGS_ADDR(dw, name) }
- 
--#define CTX_REGISTER(name, dir, ch) \
--	{ #name, REGS_CH_ADDR(name, dir, ch), dir, ch }
-+#define CTX_REGISTER(dw, name, dir, ch) \
-+	{ dw, #name, REGS_CH_ADDR(dw, name, dir, ch), dir, ch }
- 
--#define WR_REGISTER(name) \
--	{ #name, REGS_ADDR(wr_##name) }
--#define RD_REGISTER(name) \
--	{ #name, REGS_ADDR(rd_##name) }
-+#define WR_REGISTER(dw, name) \
-+	{ dw, #name, REGS_ADDR(dw, wr_##name) }
-+#define RD_REGISTER(dw, name) \
-+	{ dw, #name, REGS_ADDR(dw, rd_##name) }
- 
--#define WR_REGISTER_LEGACY(name) \
--	{ #name, REGS_ADDR(type.legacy.wr_##name) }
-+#define WR_REGISTER_LEGACY(dw, name) \
-+	{ dw, #name, REGS_ADDR(dw, type.legacy.wr_##name) }
- #define RD_REGISTER_LEGACY(name) \
--	{ #name, REGS_ADDR(type.legacy.rd_##name) }
-+	{ dw, #name, REGS_ADDR(dw, type.legacy.rd_##name) }
- 
--#define WR_REGISTER_UNROLL(name) \
--	{ #name, REGS_ADDR(type.unroll.wr_##name) }
--#define RD_REGISTER_UNROLL(name) \
--	{ #name, REGS_ADDR(type.unroll.rd_##name) }
-+#define WR_REGISTER_UNROLL(dw, name) \
-+	{ dw, #name, REGS_ADDR(dw, type.unroll.wr_##name) }
-+#define RD_REGISTER_UNROLL(dw, name) \
-+	{ dw, #name, REGS_ADDR(dw, type.unroll.rd_##name) }
- 
- #define WRITE_STR				"write"
- #define READ_STR				"read"
- #define CHANNEL_STR				"channel"
- #define REGISTERS_STR				"registers"
- 
--static struct dw_edma				*dw;
--static struct dw_edma_v0_regs			__iomem *regs;
--
- struct dw_edma_debugfs_entry {
-+	struct dw_edma				*dw;
- 	const char				*name;
- 	void __iomem				*reg;
- 	enum dw_edma_dir			dir;
-@@ -69,10 +71,11 @@ struct dw_edma_debugfs_entry {
- static int dw_edma_debugfs_u32_get(void *data, u64 *val)
- {
- 	struct dw_edma_debugfs_entry *entry = data;
-+	struct dw_edma *dw = entry->dw;
- 	void __iomem *reg = entry->reg;
- 
- 	if (dw->chip->mf == EDMA_MF_EDMA_LEGACY &&
--	    reg >= (void __iomem *)&regs->type.legacy.ch) {
-+	    reg >= REGS_ADDR(dw, type.legacy.ch)) {
- 		unsigned long flags;
- 		u32 viewport_sel;
- 
-@@ -81,7 +84,7 @@ static int dw_edma_debugfs_u32_get(void *data, u64 *val)
- 
- 		raw_spin_lock_irqsave(&dw->lock, flags);
- 
--		writel(viewport_sel, &regs->type.legacy.viewport_sel);
-+		writel(viewport_sel, REGS_ADDR(dw, type.legacy.viewport_sel));
- 		*val = readl(reg);
- 
- 		raw_spin_unlock_irqrestore(&dw->lock, flags);
-@@ -93,7 +96,8 @@ static int dw_edma_debugfs_u32_get(void *data, u64 *val)
- }
- DEFINE_DEBUGFS_ATTRIBUTE(fops_x32, dw_edma_debugfs_u32_get, NULL, "0x%08llx\n");
- 
--static void dw_edma_debugfs_create_x32(const struct dw_edma_debugfs_entry ini[],
-+static void dw_edma_debugfs_create_x32(struct dw_edma *dw,
-+				       const struct dw_edma_debugfs_entry ini[],
- 				       int nr_entries, struct dentry *dent)
- {
- 	struct dw_edma_debugfs_entry *entries;
-@@ -112,62 +116,62 @@ static void dw_edma_debugfs_create_x32(const struct dw_edma_debugfs_entry ini[],
- 	}
- }
- 
--static void dw_edma_debugfs_regs_ch(enum dw_edma_dir dir, u16 ch,
--				    struct dentry *dent)
-+static void dw_edma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
-+				    u16 ch, struct dentry *dent)
- {
- 	struct dw_edma_debugfs_entry debugfs_regs[] = {
--		CTX_REGISTER(ch_control1, dir, ch),
--		CTX_REGISTER(ch_control2, dir, ch),
--		CTX_REGISTER(transfer_size, dir, ch),
--		CTX_REGISTER(sar.lsb, dir, ch),
--		CTX_REGISTER(sar.msb, dir, ch),
--		CTX_REGISTER(dar.lsb, dir, ch),
--		CTX_REGISTER(dar.msb, dir, ch),
--		CTX_REGISTER(llp.lsb, dir, ch),
--		CTX_REGISTER(llp.msb, dir, ch),
-+		CTX_REGISTER(dw, ch_control1, dir, ch),
-+		CTX_REGISTER(dw, ch_control2, dir, ch),
-+		CTX_REGISTER(dw, transfer_size, dir, ch),
-+		CTX_REGISTER(dw, sar.lsb, dir, ch),
-+		CTX_REGISTER(dw, sar.msb, dir, ch),
-+		CTX_REGISTER(dw, dar.lsb, dir, ch),
-+		CTX_REGISTER(dw, dar.msb, dir, ch),
-+		CTX_REGISTER(dw, llp.lsb, dir, ch),
-+		CTX_REGISTER(dw, llp.msb, dir, ch),
- 	};
- 	int nr_entries;
- 
- 	nr_entries = ARRAY_SIZE(debugfs_regs);
--	dw_edma_debugfs_create_x32(debugfs_regs, nr_entries, dent);
-+	dw_edma_debugfs_create_x32(dw, debugfs_regs, nr_entries, dent);
- }
- 
--static void dw_edma_debugfs_regs_wr(struct dentry *dent)
-+static void dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
- {
- 	const struct dw_edma_debugfs_entry debugfs_regs[] = {
- 		/* eDMA global registers */
--		WR_REGISTER(engine_en),
--		WR_REGISTER(doorbell),
--		WR_REGISTER(ch_arb_weight.lsb),
--		WR_REGISTER(ch_arb_weight.msb),
-+		WR_REGISTER(dw, engine_en),
-+		WR_REGISTER(dw, doorbell),
-+		WR_REGISTER(dw, ch_arb_weight.lsb),
-+		WR_REGISTER(dw, ch_arb_weight.msb),
- 		/* eDMA interrupts registers */
--		WR_REGISTER(int_status),
--		WR_REGISTER(int_mask),
--		WR_REGISTER(int_clear),
--		WR_REGISTER(err_status),
--		WR_REGISTER(done_imwr.lsb),
--		WR_REGISTER(done_imwr.msb),
--		WR_REGISTER(abort_imwr.lsb),
--		WR_REGISTER(abort_imwr.msb),
--		WR_REGISTER(ch01_imwr_data),
--		WR_REGISTER(ch23_imwr_data),
--		WR_REGISTER(ch45_imwr_data),
--		WR_REGISTER(ch67_imwr_data),
--		WR_REGISTER(linked_list_err_en),
-+		WR_REGISTER(dw, int_status),
-+		WR_REGISTER(dw, int_mask),
-+		WR_REGISTER(dw, int_clear),
-+		WR_REGISTER(dw, err_status),
-+		WR_REGISTER(dw, done_imwr.lsb),
-+		WR_REGISTER(dw, done_imwr.msb),
-+		WR_REGISTER(dw, abort_imwr.lsb),
-+		WR_REGISTER(dw, abort_imwr.msb),
-+		WR_REGISTER(dw, ch01_imwr_data),
-+		WR_REGISTER(dw, ch23_imwr_data),
-+		WR_REGISTER(dw, ch45_imwr_data),
-+		WR_REGISTER(dw, ch67_imwr_data),
-+		WR_REGISTER(dw, linked_list_err_en),
- 	};
- 	const struct dw_edma_debugfs_entry debugfs_unroll_regs[] = {
- 		/* eDMA channel context grouping */
--		WR_REGISTER_UNROLL(engine_chgroup),
--		WR_REGISTER_UNROLL(engine_hshake_cnt.lsb),
--		WR_REGISTER_UNROLL(engine_hshake_cnt.msb),
--		WR_REGISTER_UNROLL(ch0_pwr_en),
--		WR_REGISTER_UNROLL(ch1_pwr_en),
--		WR_REGISTER_UNROLL(ch2_pwr_en),
--		WR_REGISTER_UNROLL(ch3_pwr_en),
--		WR_REGISTER_UNROLL(ch4_pwr_en),
--		WR_REGISTER_UNROLL(ch5_pwr_en),
--		WR_REGISTER_UNROLL(ch6_pwr_en),
--		WR_REGISTER_UNROLL(ch7_pwr_en),
-+		WR_REGISTER_UNROLL(dw, engine_chgroup),
-+		WR_REGISTER_UNROLL(dw, engine_hshake_cnt.lsb),
-+		WR_REGISTER_UNROLL(dw, engine_hshake_cnt.msb),
-+		WR_REGISTER_UNROLL(dw, ch0_pwr_en),
-+		WR_REGISTER_UNROLL(dw, ch1_pwr_en),
-+		WR_REGISTER_UNROLL(dw, ch2_pwr_en),
-+		WR_REGISTER_UNROLL(dw, ch3_pwr_en),
-+		WR_REGISTER_UNROLL(dw, ch4_pwr_en),
-+		WR_REGISTER_UNROLL(dw, ch5_pwr_en),
-+		WR_REGISTER_UNROLL(dw, ch6_pwr_en),
-+		WR_REGISTER_UNROLL(dw, ch7_pwr_en),
- 	};
- 	struct dentry *regs_dent, *ch_dent;
- 	int nr_entries, i;
-@@ -176,11 +180,11 @@ static void dw_edma_debugfs_regs_wr(struct dentry *dent)
- 	regs_dent = debugfs_create_dir(WRITE_STR, dent);
- 
- 	nr_entries = ARRAY_SIZE(debugfs_regs);
--	dw_edma_debugfs_create_x32(debugfs_regs, nr_entries, regs_dent);
-+	dw_edma_debugfs_create_x32(dw, debugfs_regs, nr_entries, regs_dent);
- 
- 	if (dw->chip->mf == EDMA_MF_HDMA_COMPAT) {
- 		nr_entries = ARRAY_SIZE(debugfs_unroll_regs);
--		dw_edma_debugfs_create_x32(debugfs_unroll_regs, nr_entries,
-+		dw_edma_debugfs_create_x32(dw, debugfs_unroll_regs, nr_entries,
- 					   regs_dent);
- 	}
- 
-@@ -189,47 +193,47 @@ static void dw_edma_debugfs_regs_wr(struct dentry *dent)
- 
- 		ch_dent = debugfs_create_dir(name, regs_dent);
- 
--		dw_edma_debugfs_regs_ch(EDMA_DIR_WRITE, i, ch_dent);
-+		dw_edma_debugfs_regs_ch(dw, EDMA_DIR_WRITE, i, ch_dent);
- 	}
- }
- 
--static void dw_edma_debugfs_regs_rd(struct dentry *dent)
-+static void dw_edma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
- {
- 	const struct dw_edma_debugfs_entry debugfs_regs[] = {
- 		/* eDMA global registers */
--		RD_REGISTER(engine_en),
--		RD_REGISTER(doorbell),
--		RD_REGISTER(ch_arb_weight.lsb),
--		RD_REGISTER(ch_arb_weight.msb),
-+		RD_REGISTER(dw, engine_en),
-+		RD_REGISTER(dw, doorbell),
-+		RD_REGISTER(dw, ch_arb_weight.lsb),
-+		RD_REGISTER(dw, ch_arb_weight.msb),
- 		/* eDMA interrupts registers */
--		RD_REGISTER(int_status),
--		RD_REGISTER(int_mask),
--		RD_REGISTER(int_clear),
--		RD_REGISTER(err_status.lsb),
--		RD_REGISTER(err_status.msb),
--		RD_REGISTER(linked_list_err_en),
--		RD_REGISTER(done_imwr.lsb),
--		RD_REGISTER(done_imwr.msb),
--		RD_REGISTER(abort_imwr.lsb),
--		RD_REGISTER(abort_imwr.msb),
--		RD_REGISTER(ch01_imwr_data),
--		RD_REGISTER(ch23_imwr_data),
--		RD_REGISTER(ch45_imwr_data),
--		RD_REGISTER(ch67_imwr_data),
-+		RD_REGISTER(dw, int_status),
-+		RD_REGISTER(dw, int_mask),
-+		RD_REGISTER(dw, int_clear),
-+		RD_REGISTER(dw, err_status.lsb),
-+		RD_REGISTER(dw, err_status.msb),
-+		RD_REGISTER(dw, linked_list_err_en),
-+		RD_REGISTER(dw, done_imwr.lsb),
-+		RD_REGISTER(dw, done_imwr.msb),
-+		RD_REGISTER(dw, abort_imwr.lsb),
-+		RD_REGISTER(dw, abort_imwr.msb),
-+		RD_REGISTER(dw, ch01_imwr_data),
-+		RD_REGISTER(dw, ch23_imwr_data),
-+		RD_REGISTER(dw, ch45_imwr_data),
-+		RD_REGISTER(dw, ch67_imwr_data),
- 	};
- 	const struct dw_edma_debugfs_entry debugfs_unroll_regs[] = {
- 		/* eDMA channel context grouping */
--		RD_REGISTER_UNROLL(engine_chgroup),
--		RD_REGISTER_UNROLL(engine_hshake_cnt.lsb),
--		RD_REGISTER_UNROLL(engine_hshake_cnt.msb),
--		RD_REGISTER_UNROLL(ch0_pwr_en),
--		RD_REGISTER_UNROLL(ch1_pwr_en),
--		RD_REGISTER_UNROLL(ch2_pwr_en),
--		RD_REGISTER_UNROLL(ch3_pwr_en),
--		RD_REGISTER_UNROLL(ch4_pwr_en),
--		RD_REGISTER_UNROLL(ch5_pwr_en),
--		RD_REGISTER_UNROLL(ch6_pwr_en),
--		RD_REGISTER_UNROLL(ch7_pwr_en),
-+		RD_REGISTER_UNROLL(dw, engine_chgroup),
-+		RD_REGISTER_UNROLL(dw, engine_hshake_cnt.lsb),
-+		RD_REGISTER_UNROLL(dw, engine_hshake_cnt.msb),
-+		RD_REGISTER_UNROLL(dw, ch0_pwr_en),
-+		RD_REGISTER_UNROLL(dw, ch1_pwr_en),
-+		RD_REGISTER_UNROLL(dw, ch2_pwr_en),
-+		RD_REGISTER_UNROLL(dw, ch3_pwr_en),
-+		RD_REGISTER_UNROLL(dw, ch4_pwr_en),
-+		RD_REGISTER_UNROLL(dw, ch5_pwr_en),
-+		RD_REGISTER_UNROLL(dw, ch6_pwr_en),
-+		RD_REGISTER_UNROLL(dw, ch7_pwr_en),
- 	};
- 	struct dentry *regs_dent, *ch_dent;
- 	int nr_entries, i;
-@@ -238,11 +242,11 @@ static void dw_edma_debugfs_regs_rd(struct dentry *dent)
- 	regs_dent = debugfs_create_dir(READ_STR, dent);
- 
- 	nr_entries = ARRAY_SIZE(debugfs_regs);
--	dw_edma_debugfs_create_x32(debugfs_regs, nr_entries, regs_dent);
-+	dw_edma_debugfs_create_x32(dw, debugfs_regs, nr_entries, regs_dent);
- 
- 	if (dw->chip->mf == EDMA_MF_HDMA_COMPAT) {
- 		nr_entries = ARRAY_SIZE(debugfs_unroll_regs);
--		dw_edma_debugfs_create_x32(debugfs_unroll_regs, nr_entries,
-+		dw_edma_debugfs_create_x32(dw, debugfs_unroll_regs, nr_entries,
- 					   regs_dent);
- 	}
- 
-@@ -251,15 +255,15 @@ static void dw_edma_debugfs_regs_rd(struct dentry *dent)
- 
- 		ch_dent = debugfs_create_dir(name, regs_dent);
- 
--		dw_edma_debugfs_regs_ch(EDMA_DIR_READ, i, ch_dent);
-+		dw_edma_debugfs_regs_ch(dw, EDMA_DIR_READ, i, ch_dent);
- 	}
- }
- 
--static void dw_edma_debugfs_regs(void)
-+static void dw_edma_debugfs_regs(struct dw_edma *dw)
- {
- 	const struct dw_edma_debugfs_entry debugfs_regs[] = {
--		REGISTER(ctrl_data_arb_prior),
--		REGISTER(ctrl),
-+		REGISTER(dw, ctrl_data_arb_prior),
-+		REGISTER(dw, ctrl),
- 	};
- 	struct dentry *regs_dent;
- 	int nr_entries;
-@@ -267,40 +271,28 @@ static void dw_edma_debugfs_regs(void)
- 	regs_dent = debugfs_create_dir(REGISTERS_STR, dw->debugfs);
- 
- 	nr_entries = ARRAY_SIZE(debugfs_regs);
--	dw_edma_debugfs_create_x32(debugfs_regs, nr_entries, regs_dent);
-+	dw_edma_debugfs_create_x32(dw, debugfs_regs, nr_entries, regs_dent);
- 
--	dw_edma_debugfs_regs_wr(regs_dent);
--	dw_edma_debugfs_regs_rd(regs_dent);
-+	dw_edma_debugfs_regs_wr(dw, regs_dent);
-+	dw_edma_debugfs_regs_rd(dw, regs_dent);
- }
- 
--void dw_edma_v0_debugfs_on(struct dw_edma *_dw)
-+void dw_edma_v0_debugfs_on(struct dw_edma *dw)
- {
- 	if (!debugfs_initialized())
- 		return;
- 
--	dw = _dw;
--	if (!dw)
--		return;
--
--	regs = dw->chip->reg_base;
--	if (!regs)
--		return;
--
- 	dw->debugfs = debugfs_create_dir(dw->name, NULL);
- 
- 	debugfs_create_u32("mf", 0444, dw->debugfs, &dw->chip->mf);
- 	debugfs_create_u16("wr_ch_cnt", 0444, dw->debugfs, &dw->wr_ch_cnt);
- 	debugfs_create_u16("rd_ch_cnt", 0444, dw->debugfs, &dw->rd_ch_cnt);
- 
--	dw_edma_debugfs_regs();
-+	dw_edma_debugfs_regs(dw);
- }
- 
--void dw_edma_v0_debugfs_off(struct dw_edma *_dw)
-+void dw_edma_v0_debugfs_off(struct dw_edma *dw)
- {
--	dw = _dw;
--	if (!dw)
--		return;
--
- 	debugfs_remove_recursive(dw->debugfs);
- 	dw->debugfs = NULL;
- }
--- 
-2.38.1
+Oops, s/ack/lack/. I.e. what you described below.
 
+> So moving forward the driver will first check for interrupt-names
+> property and if that exists it will map the IRQ0-7 and GPIO-TINIT
+> interrupts (based on the names it will create a hierarchy domain) and
+> for the NMI and BUS_ERR_INT we request the IRQ numbers and register
+> the IRQ handler in IRQC driver itself.
+>
+> And for backward compatibility we parse the IRQ numbers based on
+> indexes i.e. 0 = NMI, 1-8  = IRQ 0-7  and 9-41 GPIO TINT interrupts.
 
+Exactly.
+
+> > > > BUS_ERR_INT will have to be handled IRQC itself (i.e. IRQC will
+> > > > register a handler for it).
+> >
+> > Do you mean you will need a fourth parent type for that?
+> >
+> No something like what we have for NMI we can add something similar
+> below for bus error interrupts:
+> interrupts = ....
+>               <GIC_SPI 57 IRQ_TYPE_EDGE_RISING>;
+> interrupt-names = ....,
+>              "bus-error-int";
+
+Hence a fourth name?
+
+1. legacy index  0 -> "nmi"
+2. legacy indices 1-8 -> "irq%u" (0-7)
+3. legacy indices 9-41 -> "tint%u" (0-31)
+4. (not supported) -> "bus-error-int" (or "bus-err"?)
+
+> As the registers to handle the NMI and BUS_ERR_INT are present on the
+> IRQC block, the interrupt handler will have to be registered by the
+> IRQC block itself by requesting the IRQ. So we will have to skip
+> mapping of BUS_ERR_INT as we do for the NMI case. Does that make
+> sense?
+
+OK.
+
+BTW, that means RZG2L_NMI from <dt-bindings/interrupt-controller/irqc-rzg2l.h>
+will never be used?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
