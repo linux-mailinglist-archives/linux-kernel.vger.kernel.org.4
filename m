@@ -2,129 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D636511FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 19:32:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BCB9651206
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 19:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232521AbiLSSc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 13:32:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
+        id S232541AbiLSSdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 13:33:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232512AbiLSSbp (ORCPT
+        with ESMTP id S232415AbiLSScS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 13:31:45 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCE11401A;
-        Mon, 19 Dec 2022 10:31:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=v4wAWSgxyhaRB7Y8Dgp+aaoh5EMx3BiZ3LpgdRNFuKM=; b=vQcFZ1klU2teUayG3dFn8DvFCV
-        7hk2s9B4vxD/y0qaf5KvKBx82x2sT8SXy6OCIDPziELVb97LUETR2LOh0Ps+XdM28vPF9fkEyk56v
-        Q/DxyhiTI/LvOGkiNXV6ZxOoclIvotqbcjZcQcuu4w4KDb03ruDGzXsGGf3WGPvd8+4s=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:48612 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1p7Kut-0003U7-JK; Mon, 19 Dec 2022 13:31:12 -0500
-Date:   Mon, 19 Dec 2022 13:31:11 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20221219133111.6d6af8e601ca019f26fcb382@hugovil.com>
-In-Reply-To: <CAH+2xPA0uc8wCtaR7Z48G9SkHWQG=Gb9XtxBCPKUgKfq5EDVQA@mail.gmail.com>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
-        <20221215150214.1109074-15-hugo@hugovil.com>
-        <CAH+2xPAWo=nycQMLrjye8i3a3textJdyYJcWRG3Jq-tbN0a9RA@mail.gmail.com>
-        <20221219112542.fb30929b8b91255dcba5a289@hugovil.com>
-        <CAH+2xPA0uc8wCtaR7Z48G9SkHWQG=Gb9XtxBCPKUgKfq5EDVQA@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Mon, 19 Dec 2022 13:32:18 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9132114091
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 10:31:30 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso1192023pjp.4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 10:31:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PVnQKP7oNdrUNmwohJQk3GAbsbyZ21YPYiaFQu000f4=;
+        b=G/+XUPGwLp4EY9GJTIJ8CZfZqL3jcqF3dfYYNADdbI/Z/D5n1AbUVw9Nz7xyfEbmsA
+         IqOJ+bb/z2uKeJ16gUU3414VtvaJO3ZPASd98YyaLF9eIj/6XibZ4B1BQ3qizle5qesU
+         HTCo7ZNPlcf0JhJlKxKiNJlEBixO+iICov0iPIwrjihQ+DLCr0mQUAiN8boV0Man8VCy
+         DoQek06wu84yf1HO/KyUNIJg0dVWVz/i9Mw+tCuB8utNIZ8FSmgZWEGIE/S2vnQT3LrS
+         7d+GWoLtvDz+zNOc83SauTASVmI7ZMILygCQMSwsQKyKq9UXD8sqKQ2Gv3Q5vx5xpEih
+         PoXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PVnQKP7oNdrUNmwohJQk3GAbsbyZ21YPYiaFQu000f4=;
+        b=tiq/2H8TVWjTnfQxUsdy+UXSSyxoy9yCCGc+lTStAjJW+FTesABRG85zEBCnbT6ZW7
+         zmDKJz3zOH+S65yiYNVl2uJug+Rl7GUmcFU3hRTHIslotYQC0cGp8TsQzCorJ/pI9rnS
+         QhTYDr2cu+sdKHgU/CPN3r2N2Bkn+xkgOOEwySnmKuAZ5SU7aaJ7cwyUegA1DfXWp9cq
+         84lj0pA9tzg0m9zsykPV0UIp2SUgsPmeimx0sEgqtYXtUjtXRhGsrNXyIT2v8FFJhuX5
+         8+ByKXX3UGt92Wd3d+76b3ibjgi1azQ3dFstCSRPMt/ZjBiJZScUBCZg/5Wq4bzOfOuA
+         uj1A==
+X-Gm-Message-State: ANoB5pmYWc31VXbXBU8d2p8zj/meFcXpcV6ZAneX2V+mPu9P9zg7UvI9
+        rw/2JtkJnyLq8XxP0ag8muR0
+X-Google-Smtp-Source: AA0mqf7D0YYD7XtD4fAx0uFKGN9VoO5NrYy0CawXxr9ighchqco9whyjw2bwcxPCuhbiOVr5XK0fUQ==
+X-Received: by 2002:a17:90a:ea09:b0:219:8d8a:a608 with SMTP id w9-20020a17090aea0900b002198d8aa608mr45517417pjy.43.1671474690043;
+        Mon, 19 Dec 2022 10:31:30 -0800 (PST)
+Received: from thinkpad ([220.158.159.17])
+        by smtp.gmail.com with ESMTPSA id ds6-20020a17090b08c600b00218f9bd50c7sm6223719pjb.50.2022.12.19.10.31.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 10:31:29 -0800 (PST)
+Date:   Tue, 20 Dec 2022 00:01:22 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Andrew Halaney <ahalaney@redhat.com>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
+        tony.luck@intel.com, quic_saipraka@quicinc.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        quic_ppareek@quicinc.com, luca.weiss@fairphone.com
+Subject: Re: [PATCH v2 00/13] Qcom: LLCC/EDAC: Fix base address used for LLCC
+ banks
+Message-ID: <20221219183122.GD126558@thinkpad>
+References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
+ <20221212192340.evgtbpzmw7hcdolb@halaney-x13s>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221212192340.evgtbpzmw7hcdolb@halaney-x13s>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 14/14] dt-bindings: rtc: pcf2127: add PCF2131
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Dec 2022 18:18:58 +0100
-Bruno Thomsen <bruno.thomsen@gmail.com> wrote:
+Hi Andrew,
 
-> Den man. 19. dec. 2022 kl. 17.25 skrev Hugo Villeneuve <hugo@hugovil.com>:
+On Mon, Dec 12, 2022 at 01:23:40PM -0600, Andrew Halaney wrote:
+> On Mon, Dec 12, 2022 at 06:02:58PM +0530, Manivannan Sadhasivam wrote:
+> > The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
+> > accessing the (Control and Status Regsiters) CSRs of each LLCC bank.
+> > This offset only works for some SoCs like SDM845 for which driver support
+> > was initially added.
 > >
-> > On Mon, 19 Dec 2022 10:14:10 +0100
-> > Bruno Thomsen <bruno.thomsen@gmail.com> wrote:
+> > But the later SoCs use different register stride that vary between the
+> > banks with holes in-between. So it is not possible to use a single register
+> > stride for accessing the CSRs of each bank. By doing so could result in a
+> > crash with the current drivers. So far this crash is not reported since
+> > EDAC_QCOM driver is not enabled in ARM64 defconfig and no one tested the
+> > driver extensively by triggering the EDAC IRQ (that's where each bank
+> > CSRs are accessed).
 > >
-> > > Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
-> > > >
-> > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > >
-> > > > Add support for new NXP RTC PCF2131.
-> > > >
-> > > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 4 +++-
-> > > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > > index cde7b1675ead..a8f8c23da4d8 100644
-> > > > --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > > +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > > @@ -14,7 +14,9 @@ maintainers:
-> > > >
-> > > >  properties:
-> > > >    compatible:
-> > > > -    const: nxp,pcf2127
-> > > > +    enum:
-> > > > +      - nxp,pcf2127
-> > > > +      - nxp,pcf2131
-> > >
-> > > The enum is incomplete as pcf2127_of_match struct also contains:
-> > > nxp,pcf2129
-> > > ncp,pca2129
-> > >
-> > > /Bruno
+> > For fixing this issue, let's obtain the base address of each LLCC bank from
+> > devicetree and get rid of the fixed stride.
 > >
-> > Hi,
-> > if I understand correctly, this means that the pca2129 and pcf2129 entries are already missing and should be added in a fix or a patch outside the scope of my new driver...
+> > This series affects multiple platforms but I have only tested this on
+> > SM8250 and SM8450. Testing on other platforms is welcomed.
 > >
 > 
-> Correct, I just noticed while doing review.
-
-Hi,
-I will send a separate patch very soon.
-
-Thank you,
-Hugo. V.
-
-
-> > > >    reg:
-> > > >      maxItems: 1
-> > > > --
-> > > > 2.30.2
-> > > >
-> > >
-> >
-> >
-> > --
-> > Hugo Villeneuve <hugo@hugovil.com>
+> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
 > 
 
+I dropped your tested-by tag in v3 as some of the patch content have been
+changed. Please test v3 and share your feedback.
+
+Thanks,
+Mani
+
+> I took this for a quick spin on the qdrive3 I've got access to without
+> any issue:
+> 
+>     [root@localhost ~]# modprobe qcom_edac
+>     [root@localhost ~]# dmesg | grep -i edac
+>     [    0.620723] EDAC MC: Ver: 3.0.0
+>     [    1.165417] ghes_edac: GHES probing device list is empty
+>     [  594.688103] EDAC DEVICE0: Giving out device to module qcom_llcc_edac controller llcc: DEV qcom_llcc_edac (INTERRUPT)
+>     [root@localhost ~]# cat /proc/interrupts | grep ecc
+>     174:          0          0          0          0          0          0          0          0     GICv3 614 Level     llcc_ecc
+>     [root@localhost ~]#
+> 
+> Potentially stupid question, but are users expected to manually load the
+> driver as I did? I don't see how it would be loaded automatically in the
+> current state, but thought it was funny that I needed to modprobe
+> myself.
+> 
+> Please let me know if you want me to do any more further testing!
+> 
+> Thanks,
+> Andrew
+> 
 
 -- 
-Hugo Villeneuve <hugo@hugovil.com>
+மணிவண்ணன் சதாசிவம்
