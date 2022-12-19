@@ -2,125 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4CB65150D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 22:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B98651514
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 22:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232470AbiLSVlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 16:41:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
+        id S232810AbiLSVqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 16:46:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbiLSVk4 (ORCPT
+        with ESMTP id S232559AbiLSVqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 16:40:56 -0500
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56FDAE68
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 13:40:54 -0800 (PST)
-Received: by mail-vs1-xe2e.google.com with SMTP id 3so10074209vsq.7
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 13:40:54 -0800 (PST)
+        Mon, 19 Dec 2022 16:46:11 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00F06572
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 13:46:06 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id f34so532765lfv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 13:46:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=b0lZ9H61ffuyWT5v/mD9MPUBMs9gBi6BOfPbdE5H3Cc=;
-        b=RGKpKnvwsu92s39ZICRbT6oNnETwNW3atD20amN/lcRp18RYNoO4wGtDFQDU+oeevE
-         tR3zVtefmWET6AXP6ucq5gASmcH62ZLkSqzv7cKmx1QG8AyEMguXdgTMN944C/zo8yGv
-         AxYgVRe8iccPJFPo92zKrPHz2gRwnRMawy755OsP0aH7BPO4wCUDpAki9F9pmDwmIg9t
-         feWk3S0+wTgieqkXVLcJobshpCKOYWR6T+eRgminpytOAEO87HqC5HrPTLd7nrBIt0Ie
-         pBd2+qmxKwiQuW7F/igh9192OvD+IvOy1Cw5NvW1hrO3cxd1Sp99CbOzONgjkBJ31zO0
-         TRrw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XB6cREulQAxqSm/nFa6k4wjD6bFB02amrV76mX+yCIs=;
+        b=XxoN9bRVvG18VXJeePFuxyk1L13yeJxtTlVRlH+RXOWKsZxCpJ2AAHvgl8VQ+UnsoC
+         1qhE0iFe0yCXrI++jKmPTPNLuJ+tjfnW0iIi4+rjTMjgEOEtm4IXF4zB7wSoFxAQd4Wc
+         Hp/IlT0TrSVrfecF4KnZZrzzQYI37AUQf9wQbS2Tr6CeIM9XxXt1agMGXbnY0i7YpK9T
+         grYk0E+YNwT9L043+5ME2Oo8Q6rJWz4tpFZ8I6cRp4PF0dX8alA5WqX/0fqqw8RqcuVP
+         uR0eDUunFyal/u53Y2zju3Swu2EDFsi69XnH/zhUK5zqZk9TvRgVWpZK1cRcu/onlyNN
+         GlOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b0lZ9H61ffuyWT5v/mD9MPUBMs9gBi6BOfPbdE5H3Cc=;
-        b=KZ9zSPPHju3aeDAS5MNgtNX2fR0fk6iM482ZqTC3tISA1pcrNdgSeTs9gAs6F1AB59
-         xQk/STd6ogiDPCqFuxcgSewLJ0M1J7DbUIiZcceB02Oyt+XYbnFsgdVFBdoffaKwkzJ7
-         FRcD0Hn+Fv4SGfkoRPD+YeNbxBgpAPfpsGt9tgh1/6ATsz1u8XSYWpo/afvwmuSAbQZT
-         W6SK/dbQv4sqBGqpGA+/D7c+5+c0hjNUvOio5jTKZQ/0dDwBtgRn+vM29zaMZgr5dx+P
-         TzndxqDWnvRxkUkPKz6aHwnxVOz31809rEtnM/XOfnx0rSthQYI6t0JnOSDrThwuu6kY
-         qJmg==
-X-Gm-Message-State: AFqh2kreyWBR4XP5thMX6E9jFk0gkjoQYRae+vRYkvXRaHzZcT9tmVkS
-        TKtUGg876SK6zkQhvnzsspgbG5CNEdkJgtbCHie6dg==
-X-Google-Smtp-Source: AMrXdXunXpVUQSC1E212BDorayyxTvtJQdCJ3MFfjCdbPC4ogzCh2qmoge/BZ4NqmL2AsBHr95/mAWiLa0TfgJV+fkI=
-X-Received: by 2002:a67:ffd5:0:b0:3bc:441f:a808 with SMTP id
- w21-20020a67ffd5000000b003bc441fa808mr984012vsq.36.1671486053254; Mon, 19 Dec
- 2022 13:40:53 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XB6cREulQAxqSm/nFa6k4wjD6bFB02amrV76mX+yCIs=;
+        b=TfLXJdgCHrdj7llbPd5dZ5m4ombShq/KqQvRAwLAsvSPS1w4j4PIaLYNEHgb8rIGQD
+         W7lNlN042pSQ3MISjUr1cswpsTn5w0/Qqo1u7x1eukskLx+VcnqTJA6Opndmx9YMH93g
+         p1HUoC7zmMFrbW75h8lieeMZB/vzIzA8u+FCY1H1h7i13MGaDBqOGSqvN1Kbd3LWa1Fa
+         js1NsKzMrvHcCVIbaQoGiARLUxZ+E1YXBaBzHovnaVoV4avN2NHdVOWk1Veth/vN6ht6
+         UYXQ1IsvMJHc3Xz01k1PKOeTPadUMkWve36KnABQ/jgbs8KyZJlyqJmzecxXVTqQZ4He
+         ut+w==
+X-Gm-Message-State: ANoB5pl7rptptpiGBbvWwy/Qo3eQZ0PyeZWs0ODMrgo4/w7OW2QEyFAw
+        kfhsc6Qvy3wWQsJZHhT0yg9KfQ==
+X-Google-Smtp-Source: AA0mqf598/MCF/JjEFs4sytej/bZyytsruYpkdumZTQtJfjYvaqHK4GOJ3jxcNm12jWpnEvG729kiQ==
+X-Received: by 2002:a05:6512:304b:b0:4b5:892:3987 with SMTP id b11-20020a056512304b00b004b508923987mr24595255lfb.9.1671486365267;
+        Mon, 19 Dec 2022 13:46:05 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id a12-20020a056512200c00b004b700ba3cf3sm1205396lfb.203.2022.12.19.13.46.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Dec 2022 13:46:04 -0800 (PST)
+Message-ID: <6a59addb-b1a0-8536-c909-25c4c4447e09@linaro.org>
+Date:   Mon, 19 Dec 2022 23:46:03 +0200
 MIME-Version: 1.0
-References: <20221219191855.2010466-1-allenwebb@google.com>
- <20221219204619.2205248-1-allenwebb@google.com> <20221219204619.2205248-11-allenwebb@google.com>
- <Y6DWaODE5F9x+Qq1@bombadil.infradead.org>
-In-Reply-To: <Y6DWaODE5F9x+Qq1@bombadil.infradead.org>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Mon, 19 Dec 2022 15:40:42 -0600
-Message-ID: <CAJzde07K0siUs-eKfXxVp7R47hF8TdADGeTEvFtwxHVg9NV7FA@mail.gmail.com>
-Subject: Re: [PATCH v9 10/10] docs: Include modules.builtin.alias
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm8450: Use GIC-ITS for PCIe0 and
+ PCIe1
+Content-Language: en-GB
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     bhelgaas@google.com, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221219191427.480085-1-manivannan.sadhasivam@linaro.org>
+ <20221219191427.480085-4-manivannan.sadhasivam@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221219191427.480085-4-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 3:23 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Mon, Dec 19, 2022 at 02:46:18PM -0600, Allen Webb wrote:
-> > Update the documentation to include the presense and use case of
-> > modules.builtin.alias.
-> >
-> > Signed-off-by: Allen Webb <allenwebb@google.com>
-> > ---
-> >  Documentation/kbuild/kbuild.rst | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
-> > index 08f575e6236c..1c7c02040a54 100644
-> > --- a/Documentation/kbuild/kbuild.rst
-> > +++ b/Documentation/kbuild/kbuild.rst
-> > @@ -17,6 +17,12 @@ modules.builtin
-> >  This file lists all modules that are built into the kernel. This is used
-> >  by modprobe to not fail when trying to load something builtin.
-> >
-> > +modules.builtin.alias
-> > +---------------------
-> > +This file lists all match-id based aliases for modules built into the kernel.
-> > +These are intended to enable userspace to make authorization decisions based
-> > +on which modules are likely to be bound to a device after it is authorized.
->
-> What is an example? This sounds obscure.
+On 19/12/2022 21:14, Manivannan Sadhasivam wrote:
+> Both PCIe0 and PCIe1 controllers are capable of receiving MSIs from
+> endpoint devices using GIC-ITS MSI controller. Add support for it.
+> 
+> Currently, BDF (0:0.0) and BDF (1:0.0) are enabled and with the
+> msi-map-mask of 0xff00, all the 32 devices under these two busses can
+> share the same Device ID.
+> 
+> The GIC-ITS MSI implementation provides an advantage over internal MSI
+> implementation using Locality-specific Peripheral Interrupts (LPI) that
+> would allow MSIs to be targeted for each CPU core.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 12 ++++++------
+>   1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> index 570475040d95..276ceba4c247 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> @@ -1733,9 +1733,9 @@ pcie0: pci@1c00000 {
+>   			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
+>   				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
+>   
+> -			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
+> -			interrupt-names = "msi";
+> -			#interrupt-cells = <1>;
+> +			msi-map = <0x0 &gic_its 0x5980 0x1>,
+> +				  <0x100 &gic_its 0x5981 0x1>;
 
-Many of the devices that match the usb_storage driver only specify the
-vendor id, product id, and device id (VID:PID:D) and do not match
-against device class, interface class, etc. Here are some examples
-from modules.alias: A grep for wildcards in these fields yields 6136
-matches:
-grep 'dc\*dsc\*dp\*ic\*isc\*ip\*in\*'
-/lib/modules/5.19.11-1rodete1-amd64/modules.alias | wc -l
-6136
+Does ITS support handling more than one MSI interrupt per device? 
+Otherwise it might be better to switch to multi-MSI scheme using SPI 
+interrupts.
 
-To write USBGuard policy that only authorizes devices that bind to a
-particular module the policy needs to be aware of all these VID:PID:D
-which can change between kernel versions.
+> +			msi-map-mask = <0xff00>;
+>   			interrupt-map-mask = <0 0 0 0x7>;
+>   			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+>   					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> @@ -1842,9 +1842,9 @@ pcie1: pci@1c08000 {
+>   			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
+>   				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
+>   
+> -			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
+> -			interrupt-names = "msi";
+> -			#interrupt-cells = <1>;
+> +			msi-map = <0x0 &gic_its 0x5a01 0x1>,
+> +				  <0x100 &gic_its 0x5a00 0x1>;
 
-This is done at runtime rather than excluding modules from the build
-because some devices are not needed at or before login or when a
-device is locked. By not authorizing new devices that would bind to a
-set of modules, these modules become unreachable to an attacker who
-seeks to exploit kernel bugs in those modules.
+Are you sure that the order is correct here?
 
-I could add this detail to the documentation file, but I was trying to
-keep the description to about the same length as the others around it.
+> +			msi-map-mask = <0xff00>;
+>   			interrupt-map-mask = <0 0 0 0x7>;
+>   			interrupt-map = <0 0 0 1 &intc 0 0 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+>   					<0 0 0 2 &intc 0 0 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
 
->
->   Luis
+-- 
+With best wishes
+Dmitry
+
