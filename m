@@ -2,141 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5381B65119D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 19:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4541E6511A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 19:16:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232176AbiLSSPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 13:15:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
+        id S232037AbiLSSQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 13:16:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232183AbiLSSPX (ORCPT
+        with ESMTP id S230226AbiLSSQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 13:15:23 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F26E13D73
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 10:15:22 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2BJIF4Ce015721
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 13:15:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1671473706; bh=RPZcPeqiNQ/txvHn7bKkT7EcINFhNS0Qm6B4IweGX98=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=NMYC7AA6LuGf8a6NW6qf8Pm3KhIx10BCL60vB2yDFeUEviJNykiDfB5bpRHnk17Qs
-         5aZtm/ugMun8c4i1gr7EuLSC0fX9FQ7/7sstYQHVBEAxLqdMW6XZSR7e6zOJ+yNxg9
-         0UnAzDQO94KhF1rp843GP1XkdmSu5+AvP8lb+38SOfEbMiN8oSW3abLuV6e5TGe8Jg
-         M0T7KzUWXn8+Jf3kCvVryfP75Eo853NMheoooFmDMRlD+buKsgnP2Q25G9DTr5++ym
-         BautrZUXd6IDlRak9kDYfCu5uo8cp3xO92SPN0iPsegzK0nvdnrAj2w8DfQ1iOdjH0
-         4cM4iOpnO4yVA==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id EA15E15C3511; Mon, 19 Dec 2022 13:15:03 -0500 (EST)
-Date:   Mon, 19 Dec 2022 13:15:03 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     Lee Jones <lee@kernel.org>,
-        syzbot <syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, gregkh@linuxfoundation.org,
-        lczerner@redhat.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sashal@kernel.org,
-        stable@vger.kernel.org, syzkaller-android-bugs@googlegroups.com,
-        tadeusz.struk@linaro.org
-Subject: Re: kernel BUG in ext4_free_blocks (2)
-Message-ID: <Y6CqJ8fgQQW8AhT6@mit.edu>
-References: <0000000000006c411605e2f127e5@google.com>
- <000000000000b60c1105efe06dea@google.com>
- <Y5vTyjRX6ZgIYxgj@mit.edu>
- <Y5xsIkpIznpObOJL@google.com>
- <CANp29Y6KHBE-fpfJCXeN5Ju_qSOfUYAp2n+cNrGj25QtU0X=sA@mail.gmail.com>
- <Y5ylNxoN2p7dmcRD@mit.edu>
- <CANp29Y4QVp1G83pSqpxeETbw_+kQQ5CZUz+Vgi767WxE8AuhHQ@mail.gmail.com>
- <Y5y824gPqZo+vcxb@mit.edu>
- <CANp29Y4S0TTVjonA9ADpBKviNHR+n3nYi2hy2hcee-4ArD5t4Q@mail.gmail.com>
+        Mon, 19 Dec 2022 13:16:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561EC2605;
+        Mon, 19 Dec 2022 10:16:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E86DB6108D;
+        Mon, 19 Dec 2022 18:16:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66441C433D2;
+        Mon, 19 Dec 2022 18:16:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671473776;
+        bh=xf8iFCzl9zuXuIZoZeKbqKyIeX7Ltc9DNWcGsUf9asw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G0xO+GTMM6RneQprCz7daszheO8/h/FCWFvLmanljzzDwzmHLyArI8bqC8kK21RSX
+         W0iHknaZ1nn2s5z9j7r7942rbYfSViWb5HeZcSVr70lnGpL9qQg/uHX2gcqXT3HBGd
+         uypxF8yMN2KyH+ra4LwyIBkEoTQBWuKyYj1nwA9YucsaXqeI+wciVhAf6BvX7OfFIZ
+         FgjS1yw6hxLqxWicC3zaGQYORtEs53LlRZe7KYJ4jMFuGVqyRJ6jHwteZR7HOKrjXh
+         qwbRV2XwihEpuqPRSmO1KYW6dsYXsx+EIdj6YB/Oilk1oLyvl3Sjj1Hhfz2bbMQcIT
+         1wOqe3l8OQBvA==
+Date:   Mon, 19 Dec 2022 18:16:10 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Witold Sadowski <wsadowski@marvell.com>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jpawar@cadence.com,
+        pthombar@cadence.com, konrad@cadence.com, wbartczak@marvell.com,
+        wzmuda@marvell.com
+Subject: Re: [PATCH 5/7] spi: cadence: Add read access size switch
+Message-ID: <Y6Cqavt/wT2sQfRU@sirena.org.uk>
+References: <20221219144254.20883-1-wsadowski@marvell.com>
+ <20221219144254.20883-6-wsadowski@marvell.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fUY/ItggUwzxJAnk"
 Content-Disposition: inline
-In-Reply-To: <CANp29Y4S0TTVjonA9ADpBKviNHR+n3nYi2hy2hcee-4ArD5t4Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20221219144254.20883-6-wsadowski@marvell.com>
+X-Cookie: Pay toll ahead.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 05:12:47PM +0100, Aleksandr Nogikh wrote:
-> (a) Once you have opened the bug report page, you can find the
-> namespace at the top of the page.
-> (b) One can at least see the list of the tested trees on the main page
-> of the namespace -- we do share the latest commits for each manager
-> instance. Also see the comment below.
 
-It's not obvious what you mean by the "main page" of the namespace.
-I'm guessing, but from the bug report page, there is a horizontal set
-of icons, "Open", "Fixed", "Invalid" .... (which all have the same
-icons), that the "Open" icon is the one that gets to the main page?
+--fUY/ItggUwzxJAnk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Assuming that this[1] is what was meant by "main page" (which is also
-implied by the URL, but it's otherwise **really** not obvious), where
-is the list of tested trees?
+On Mon, Dec 19, 2022 at 06:42:52AM -0800, Witold Sadowski wrote:
+> Allow to use different SDMA read size.
+> In Marvell implementation of that IP each SDMA
+> access will read 8 bytes at once, and is not
+> configurable.
 
-[1] https://syzkaller.appspot.com/android-5-10
+If this isn't configurable then shouldn't we just key off the compatible
+rather than having a separate property?
 
-I see the table "Instances", but it looks like the only two instances,
-ci2-android-5-10 and ci2-android-5-10-perf, are both apparently
-looking at the same commit --- but there's nothing that tells you what
-kernel tree those commits are from.  I can't see **anything* that
-looks like an explicit git repo URL plus branch name.  Is it perhaps
-one of these?
+--fUY/ItggUwzxJAnk
+Content-Type: application/pgp-signature; name="signature.asc"
 
-https://android.googlesource.com/kernel/common/+/refs/heads/android12-5.10
-https://android.googlesource.com/kernel/common/+/refs/heads/android13-5.10
+-----BEGIN PGP SIGNATURE-----
 
-It also appears that the android-5-10 "namespace" doesn't track any
-other trees other than the Android 5.10 tree.  Which means the e-mail
-message, "I can't find the commit on any tested tree" is ***super***
-misleading.  At least for the android-5-10 namespace, why not just
-say, "I don't see that commit on the git branch <explicit git repo and
-branch name>"?
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOgqmoACgkQJNaLcl1U
+h9DQwwgAgdo84Nf5Ics4LK4oxae6TizIsBnruqnm3WPEvcjnNlSWq1bejox99uH5
+3hPpyBH8pxhAJIwkUHukxVTsZmjdd7x7ZeNUWqi0nV+EFbEWZkpPsR2wb4vEuZY0
+KtB9mufJFdBmPmseqLGuSObzLtJoh9ERjrY/GtQil77IO5Zd/8NsFFId4PibehAQ
+2oK0xezwLv7N9Jd82b/Ai6RmE35sg50Rf0UlP7v7NnNTnbOyvpyTkD7SYzEFeWQu
+jO2B3dorzTljzIkAmnvuq5yMkPVBeO85mK60+gNaJvAg4WeuC4R5IgrwqJGLxSmJ
+Bwx1geciQym3FAbIb7kJjLQIRKv9nw==
+=Sai/
+-----END PGP SIGNATURE-----
 
-I did finally find the missing information, but it required a lot of
-clicking and searching.  From the bug page [2], the status line is:
-
-    Status: upstream: reported C repro on 2022/11/27 00:51
-
-Has a link to the e-mail sent to the upstream developers[3].  And in
-*that* e-mail, we can find the git tree involved: 
-
-   git tree: android12-5.10-lts
-
-[3] https://groups.google.com/g/syzkaller-android-bugs/c/LmaUwJpTXkA/m/HjsARFKWCQAJ
-
-
-Going back to your pull request[4] to add a link to the dashboard in
-the e-mail, how about also adding to the e-mail an indication about
-the Syzkaller namespace.  That way, the upstream developer can quickly
-determine that the namespace is "Android-X.Y" and simply hit the 'd'
-key as not really relevant to the upstream developer.
-
-[4] https://github.com/google/syzkaller/pull/3591
-
-I assume that there's someone in the Android kernel ecosystem that is
-responsible for figuring out how to make sure commits are backported
-from upstream into the LTS kernels, and the LTS kernels to the
-relevant Android branch.
-
-I do know one thing for certain --- I don't scale to the point where
-this can made my problem.  So I want to be able to more quickly triage
-e-mails that are Not My Problem.
-
-More generally, I think we need some kind of MAINTAINERS-like file
-which explicitly lists who does have that responsibility, and which
-can be used by Syzkaller so we aren't just blindly spamming all of the
-upstream developers in the hopes that one of them will do somebody
-else's job just to shut up the nag mail.  Otherwise, the natural
-reaction will be to resort to a mail filter to /dev/null the nag mail.
-:-/
-
-					- Ted
+--fUY/ItggUwzxJAnk--
