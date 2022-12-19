@@ -2,164 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ADD9650C2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:52:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C11D8650C3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbiLSMwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 07:52:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
+        id S231702AbiLSM55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 07:57:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbiLSMwu (ORCPT
+        with ESMTP id S231292AbiLSM5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 07:52:50 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9529B46
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 04:52:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=uxYH6
-        rrU5fdjTZNUSkyInFLMBcyBhkRRS55I787F7LE=; b=c3MxkReacFwFpO3rkb5eb
-        2mvuGDoCXHLe55cZoIIPb8L90Gsq+IurHKy5SncT4Sjzlua9NpaN7cP34Q7rxQAp
-        eWFbvqJQgZZHxNf0NsF4GYG9JwFPaK/9KRtdG5JUVEvbdhZ7aBD2iRAYhVGzmY47
-        MYAJCI2jbepyCVq69pkrN8=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g0-4 (Coremail) with SMTP id _____wA3hXZ1XqBjHoJ2AA--.37727S2;
-        Mon, 19 Dec 2022 20:52:05 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     zhi.a.wang@intel.com
-Cc:     1002992920@qq.com, airlied@gmail.com, airlied@linux.ie,
-        alex000young@gmail.com, dri-devel@lists.freedesktop.org,
-        gregkh@linuxfoundation.org, hackerzheng666@gmail.com,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        joonas.lahtinen@linux.intel.com, linux-kernel@vger.kernel.org,
-        security@kernel.org, tvrtko.ursulin@linux.intel.com,
-        zhenyuw@linux.intel.com, zyytlz.wz@163.com
-Subject: [RESEND PATCH v4] drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
-Date:   Mon, 19 Dec 2022 20:52:04 +0800
-Message-Id: <20221219125204.1001149-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <11728bc1-7b59-1623-b517-d1a0d57eb275@intel.com>
-References: <11728bc1-7b59-1623-b517-d1a0d57eb275@intel.com>
+        Mon, 19 Dec 2022 07:57:53 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AECAF59C;
+        Mon, 19 Dec 2022 04:57:52 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id kw15so21181278ejc.10;
+        Mon, 19 Dec 2022 04:57:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4LQE62+2wuigm3XEvUptVNxTDjUyXyDiBAp0xKdO5OI=;
+        b=avXCIb03aNF+/2KOLLu/1s2Q8CZXuni1vKuNEJpnt7VtrfmbOhDmbl0vMtN+C+YHjr
+         4dWIH1fOJEtgcUmuzMbis1uKmtya1+9bhRMNgkAtFvwiC53K/787JLPqh5Rf1wE4I3iJ
+         9NxduGDW8iJz9kUD3YidXhuVs/PCGE260dRl58DkgTRNDatt2EXvPgtOSBaRWE9kq8hs
+         F4ow8PV8ZYzIdaX04IWD/oKip4e0ZtPFL46uib+twstsTdMuKAblcFCT252wd+iOlC9t
+         eiGqikfD2lNDXthOFgQJfZ8BX+vlv91WAjebj4+znAIUrX9kja7+TfzdclkiT0sdWyr0
+         HBcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4LQE62+2wuigm3XEvUptVNxTDjUyXyDiBAp0xKdO5OI=;
+        b=4fu9SqdF4rcWLgEocX5vkwLdQHYYLUF+ELDKAG7eNZaVhjQll0oqRYpBxWCafSCIim
+         dJA93twdCOKTSiFqu1YYK1k/1UuPfkcQnJwNSLiaSY2mQBjDLrM1fyRmZ/F1a/4RXFN5
+         osGAp+GPooAJKDXbDYGYFFLeHKy43v08izuiuls6E0aqqB9HjSrozLwECJ6Grg7oeIwq
+         vkLVBPJSaGEXyryc03SWPsTpeiqIp5Q+ZJm27RnV5LqkIZcHoHAxcC3ofgmDzKLsQIu5
+         REQtl3PMQDkE5AvBfI2BPs+J53b0N0sWpAsxKm8wakmJ+y2rfu7HmG0qbfvW/oFg3I5s
+         NXrw==
+X-Gm-Message-State: ANoB5pmGgsCyhlz/Qa220U7TEdymROr3IAqdhB+7fJjq/KZoJG31xH7u
+        iZt7/TKuCmVoKuemZm2YiErjK51ggDKP0bHvAKc=
+X-Google-Smtp-Source: AA0mqf5xgU7O52hFIF6NaDL0v2bRjjn0g9Ry8We7IY1pr/I/+8hC77HKha6QNBV1ZJVq2Im1KSZXfdhQASsR1y4jrUE=
+X-Received: by 2002:a17:906:79c4:b0:778:e3e2:8311 with SMTP id
+ m4-20020a17090679c400b00778e3e28311mr72270959ejo.342.1671454670943; Mon, 19
+ Dec 2022 04:57:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wA3hXZ1XqBjHoJ2AA--.37727S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXry3Ar17WF1UKryrJr1UWrg_yoW5trWkpF
-        WUWF45AF4xAF1IvryfWF18AFy3Z3W3Xa4xWrZ7K3WYkFsrtF1qyrWayFy3Jr9I9rZrWw4f
-        CF4UJFZrC34jqa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRYhFsUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXB3cU1Xl5JmTlQAAsF
+References: <20221107175305.63975-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221107175305.63975-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdV46aMfqu+kMW9E-RURugK-giOx0k-NPe5XX4nxKZJzkg@mail.gmail.com> <CA+V-a8uqQ2fK1UjRT864jyHdt6Z47V=iARSJC6B2M6Gikms=Eg@mail.gmail.com>
+In-Reply-To: <CA+V-a8uqQ2fK1UjRT864jyHdt6Z47V=iARSJC6B2M6Gikms=Eg@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 19 Dec 2022 12:57:24 +0000
+Message-ID: <CA+V-a8sGLrsRWFi3-hNmB=Uj-aCQLD5VQesmUFb8N1NAqhyLuQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/5] dt-bindings: interrupt-controller:
+ renesas,rzg2l-irqc: Document RZ/G2UL SoC
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If intel_gvt_dma_map_guest_page failed, it will call
- ppgtt_invalidate_spt, which will finally free the spt. But the caller does
- not notice that, it will free spt again in error path.
+Hi Geert,
 
-Fix this by undoing the mapping of DMA address and freeing sub_spt.
+On Fri, Nov 18, 2022 at 12:29 PM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+>
+> Hi Geert,
+>
+> On Thu, Nov 17, 2022 at 10:54 AM Geert Uytterhoeven
+> <geert@linux-m68k.org> wrote:
+> >
+> > Hi Prabhakar,
+> >
+> > On Mon, Nov 7, 2022 at 6:53 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > Document RZ/G2UL (R9A07G043) IRQC bindings. The RZ/G2UL IRQC block is
+> > > identical to one found on the RZ/G2L SoC. No driver changes are
+> > > required as generic compatible string "renesas,rzg2l-irqc" will be
+> > > used as a fallback.
+> > >
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Thanks for your patch!
+> >
+> > > ---
+> > > Note, renesas,r9a07g043u-irqc is added we have slight difference's compared to RZ/Five
+> > > - G2UL IRQCHIP (hierarchical IRQ domain) -> GIC where as on RZ/Five we have PLIC (chained interrupt
+> > > domain) -> RISCV INTC
+> >
+> > I think this difference is purely a software difference, and abstracted
+> > in DTS through the interrupt hierarchy.
+> > Does it have any impact on the bindings?
+> >
+> > > - On the RZ/Five we have additional registers for IRQC block
+> >
+> > Indeed, the NMI/IRQ/TINT "Interruput" Mask Control Registers, thus
+> > warranting separate compatible values.
+> >
+> > > - On the RZ/Five we have BUS_ERR_INT which needs to be handled by IRQC
+> >
+> > Can you please elaborate? I may have missed something, but to me it
+> > looks like that is exactly the same on RZ/G2UL and on RZ/Five.
+> >
+> Now that we have to update the binding doc with the BUS_ERR_INT too,
+> do you think it would make sense to add interrupt-names too?
+>
+> BUS_ERR_INT will have to be handled IRQC itself (i.e. IRQC will
+> register a handler for it).
+>
+Gentle ping.
 
-Fixes: b901b252b6cf ("drm/i915/gvt: Add 2M huge gtt support")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
-v4:
-- fix by undo the mapping of DMA address and free sub_spt suggested by Zhi
-
-v3:
-- correct spelling mistake and remove unused variable suggested by Greg
-
-v2: https://lore.kernel.org/all/20221006165845.1735393-1-zyytlz.wz@163.com/
-
-v1: https://lore.kernel.org/all/20220928033340.1063949-1-zyytlz.wz@163.com/
----
- drivers/gpu/drm/i915/gvt/gtt.c | 53 +++++++++++++++++++++++++++++-----
- 1 file changed, 46 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
-index 51e5e8fb505b..b472e021e5a4 100644
---- a/drivers/gpu/drm/i915/gvt/gtt.c
-+++ b/drivers/gpu/drm/i915/gvt/gtt.c
-@@ -1192,11 +1192,11 @@ static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
- {
- 	const struct intel_gvt_gtt_pte_ops *ops = vgpu->gvt->gtt.pte_ops;
- 	struct intel_vgpu_ppgtt_spt *sub_spt;
--	struct intel_gvt_gtt_entry sub_se;
-+	struct intel_gvt_gtt_entry sub_se, e;
- 	unsigned long start_gfn;
- 	dma_addr_t dma_addr;
--	unsigned long sub_index;
--	int ret;
-+	unsigned long sub_index, parent_index;
-+	int ret, ret1;
- 
- 	gvt_dbg_mm("Split 2M gtt entry, index %lu\n", index);
- 
-@@ -1209,10 +1209,8 @@ static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
- 	for_each_shadow_entry(sub_spt, &sub_se, sub_index) {
- 		ret = intel_gvt_dma_map_guest_page(vgpu, start_gfn + sub_index,
- 						   PAGE_SIZE, &dma_addr);
--		if (ret) {
--			ppgtt_invalidate_spt(spt);
--			return ret;
--		}
-+		if (ret)
-+			goto err;
- 		sub_se.val64 = se->val64;
- 
- 		/* Copy the PAT field from PDE. */
-@@ -1231,6 +1229,47 @@ static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
- 	ops->set_pfn(se, sub_spt->shadow_page.mfn);
- 	ppgtt_set_shadow_entry(spt, se, index);
- 	return 0;
-+err:
-+	/* Undone the existing mappings of DMA addr. */
-+	for_each_present_shadow_entry(spt, &e, parent_index) {
-+		switch (e.type) {
-+		case GTT_TYPE_PPGTT_PTE_4K_ENTRY:
-+			gvt_vdbg_mm("invalidate 4K entry\n");
-+			ppgtt_invalidate_pte(spt, &e);
-+			break;
-+		case GTT_TYPE_PPGTT_PTE_64K_ENTRY:
-+			/* We don't setup 64K shadow entry so far. */
-+			WARN(1, "suspicious 64K gtt entry\n");
-+			continue;
-+		case GTT_TYPE_PPGTT_PTE_2M_ENTRY:
-+			gvt_vdbg_mm("invalidate 2M entry\n");
-+			continue;
-+		case GTT_TYPE_PPGTT_PTE_1G_ENTRY:
-+			WARN(1, "GVT doesn't support 1GB page\n");
-+			continue;
-+		case GTT_TYPE_PPGTT_PML4_ENTRY:
-+		case GTT_TYPE_PPGTT_PDP_ENTRY:
-+		case GTT_TYPE_PPGTT_PDE_ENTRY:
-+			gvt_vdbg_mm("invalidate PMUL4/PDP/PDE entry\n");
-+			ret1 = ppgtt_invalidate_spt_by_shadow_entry(
-+					spt->vgpu, &e);
-+			if (ret1) {
-+				gvt_vgpu_err("fail: shadow page %p shadow entry 0x%llx type %d\n",
-+				spt, e.val64, e.type);
-+				goto free_spt;
-+			}
-+			break;
-+		default:
-+			GEM_BUG_ON(1);
-+		}
-+	}
-+	/* Release the new alloced apt. */
-+free_spt:
-+	trace_spt_change(sub_spt->vgpu->id, "release", sub_spt,
-+		sub_spt->guest_page.gfn, sub_spt->shadow_page.type);
-+	ppgtt_free_spt(sub_spt);
-+	sub_spt = NULL;
-+	return ret;
- }
- 
- static int split_64KB_gtt_entry(struct intel_vgpu *vgpu,
--- 
-2.25.1
-
+Cheers,
+Prabhakar
