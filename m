@@ -2,134 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E230D651112
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B3965111C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232226AbiLSRQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 12:16:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
+        id S231401AbiLSRRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 12:17:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbiLSRPx (ORCPT
+        with ESMTP id S232215AbiLSRRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 12:15:53 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF8138BD
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 09:15:51 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id j11-20020a056e02218b00b00304b148969dso6941432ila.13
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 09:15:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EnRDZ1K+D0vLPUMDxkm5NljbpI20iR4Z282yrTptjjI=;
-        b=5Z7CzWPdHEOG/YTbbMTVfB3GgXhorBYk5cNrxd99ThnSmAB6Dk3RG+ZAf4e6Qj/32Q
-         AD/iUg5wXbyVl/Cod2MDm2wXZ8tMmj0F2ieuteD9iZJKBARwI5wYOjVTXi/Ioc9Di+Az
-         n+XrSXPgFEY/uUmV2HCA3kBbCV6S9p1X8sBRGFP0gCNfIZOrJU8V4aowaCnLSEbhUvtr
-         dDgxvYoCRXDF16wN4u5UgdSrLnBf1C72jGZQ27h4E5PJ+1mEEFr3A8jA3Lr/cPwB28tk
-         7y8ltYzEAUzyw2OotsUYgExaLzc8vW0uJezG77PEe8PvA+ZisiZUkFIJNKRUKzFK10+2
-         sozw==
-X-Gm-Message-State: ANoB5pmQSz60XEsdbppMp19Is20haoshVJL/wk1fldbgaA8AbPa4jCvL
-        LsAAN0uzJi54E/MNt7H+GyjxlQUjz1RYtw0Xdc6XiH9gK6hN
-X-Google-Smtp-Source: AA0mqf447X5AHSCQt+3I1CIK3kwJxub5jCXsC0Oj4OzG4atqe+4fwrO3PNvReXHX7ApvbFYDCPIApNZt2KcCKLFlEzRnMf0EJORl
+        Mon, 19 Dec 2022 12:17:38 -0500
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C5365C0;
+        Mon, 19 Dec 2022 09:17:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1671470258; x=1703006258;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pgUvBnVCbGJYeuahVflnK3XdhoiYPjLg+A5dzxEHAs4=;
+  b=aRSkQ4S+HFg0jBUYwVIa7SjU3gaQ70eGHh0jj0L357rO9v+T4xlEMEp8
+   zGR/DDIqfpIiHauRxvp6rXgsX1wB6hj6k3TLJuAQOH5agPy9ZANE1mTYR
+   WfkDo9J7LaevU+7dKrdYJBnhGmwDZy9OWxIyP76apNluqfXAAy4RW4u8N
+   Q=;
+X-IronPort-AV: E=Sophos;i="5.96,257,1665446400"; 
+   d="scan'208";a="278734712"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-f7c754c9.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 17:17:37 +0000
+Received: from EX13D42EUA004.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-m6i4x-f7c754c9.us-west-2.amazon.com (Postfix) with ESMTPS id 1CD7341648;
+        Mon, 19 Dec 2022 17:17:35 +0000 (UTC)
+Received: from EX19D019EUA002.ant.amazon.com (10.252.50.84) by
+ EX13D42EUA004.ant.amazon.com (10.43.165.34) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Mon, 19 Dec 2022 17:17:33 +0000
+Received: from dev-dsk-hhhawa-1b-84e0d7ff.eu-west-1.amazon.com (10.43.161.114)
+ by EX19D019EUA002.ant.amazon.com (10.252.50.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.20; Mon, 19 Dec 2022 17:17:28 +0000
+From:   Hanna Hawa <hhhawa@amazon.com>
+To:     <wsa@kernel.org>, <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
+        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <farbere@amazon.com>, <itamark@amazon.com>, <lareine@amazon.com>,
+        <hhhawa@amazon.com>
+Subject: [PATCH v3 1/1] i2c: designware: use casting of u64 in clock multiplication to avoid overflow
+Date:   Mon, 19 Dec 2022 17:17:13 +0000
+Message-ID: <20221219171713.10108-1-hhhawa@amazon.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:d38e:0:b0:303:41c2:c798 with SMTP id
- o14-20020a92d38e000000b0030341c2c798mr15687356ilo.248.1671470151159; Mon, 19
- Dec 2022 09:15:51 -0800 (PST)
-Date:   Mon, 19 Dec 2022 09:15:51 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009cd81e05f0317886@google.com>
-Subject: [syzbot] WARNING in put_pmu_ctx
-From:   syzbot <syzbot+697196bc0265049822bd@syzkaller.appspotmail.com>
-To:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        bpf@vger.kernel.org, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org,
-        netdev@vger.kernel.org, peterz@infradead.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.161.114]
+X-ClientProxiedBy: EX13D19UWA003.ant.amazon.com (10.43.160.170) To
+ EX19D019EUA002.ant.amazon.com (10.252.50.84)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Lareine Khawaly <lareine@amazon.com>
 
-syzbot found the following issue on:
+In functions i2c_dw_scl_lcnt() and i2c_dw_scl_hcnt() may have overflow
+by depending on the values of the given parameters including the ic_clk.
+For example in our use case where ic_clk is larger than one million,
+multiplication of ic_clk * 4700 will result in 32 bit overflow.
 
-HEAD commit:    13e3c7793e2f Merge tag 'for-netdev' of https://git.kernel...
-git tree:       bpf
-console output: https://syzkaller.appspot.com/x/log.txt?x=12eda6e7880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b0e91ad4b5f69c47
-dashboard link: https://syzkaller.appspot.com/bug?extid=697196bc0265049822bd
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114a2127880000
+Add cast of u64 to the calculation to avoid multiplication overflow, and
+use the corresponding define for divide.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/373a99daa295/disk-13e3c779.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7fa71ed0fe17/vmlinux-13e3c779.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/2842ad5c698b/bzImage-13e3c779.xz
+Fixes: 2373f6b9744d ("i2c-designware: split of i2c-designware.c into core and bus specific parts")
+Signed-off-by: Lareine Khawaly <lareine@amazon.com>
+Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+697196bc0265049822bd@syzkaller.appspotmail.com
+Change Log v2->v3:
+- Avoid changing the ic_clk parameter to u64, and do casting in the
+  calculation itself instead.
+- use DIV_ROUND_CLOSEST_ULL instead of DIV_ROUND_CLOSEST
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 22650 at kernel/events/core.c:4920 put_pmu_ctx kernel/events/core.c:4920 [inline]
-WARNING: CPU: 1 PID: 22650 at kernel/events/core.c:4920 put_pmu_ctx+0x2a5/0x390 kernel/events/core.c:4893
-Modules linked in:
-CPU: 1 PID: 22650 Comm: syz-executor.4 Not tainted 6.1.0-syzkaller-09661-g13e3c7793e2f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:put_pmu_ctx kernel/events/core.c:4920 [inline]
-RIP: 0010:put_pmu_ctx+0x2a5/0x390 kernel/events/core.c:4893
-Code: dd ff e8 2e 0f dd ff 48 8d 7b 50 48 c7 c6 a0 f8 a2 81 e8 3e c8 c7 ff eb d6 e8 17 0f dd ff 0f 0b e9 64 ff ff ff e8 0b 0f dd ff <0f> 0b eb 88 e8 c2 bc 2a 00 eb a5 e8 fb 0e dd ff 0f 0b e9 e4 fd ff
-RSP: 0018:ffffc90003f47c68 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff8880b9841978 RCX: 0000000000000000
-RDX: ffff88801fc6ba80 RSI: ffffffff81a3a405 RDI: 0000000000000001
-RBP: ffff8880b98419a8 R08: 0000000000000001 R09: 0000000000000001
-R10: ffffed1017306b78 R11: 0000000000000000 R12: ffff8880b9835c90
-R13: ffff8880b9835bc0 R14: 0000000000000293 R15: ffff8880b9841980
-FS:  00007f1cdf1fe700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f78cc3157e2 CR3: 000000001ccc0000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- _free_event+0x3c5/0x13d0 kernel/events/core.c:5196
- put_event kernel/events/core.c:5283 [inline]
- perf_event_release_kernel+0x6ad/0x8f0 kernel/events/core.c:5395
- perf_release+0x37/0x50 kernel/events/core.c:5405
- __fput+0x27c/0xa90 fs/file_table.c:320
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1cdfe8c0d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f1cdf1fe168 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 00007f1cdffabf80 RCX: 00007f1cdfe8c0d9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
-RBP: 00007f1cdfee7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd2718bc2f R14: 00007f1cdf1fe300 R15: 0000000000022000
- </TASK>
-
-
+Change Log v1->v2:
+- Update commit message and add fix tag.
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/i2c/busses/i2c-designware-common.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+index e0a46dfd1c15..9cc02d0142df 100644
+--- a/drivers/i2c/busses/i2c-designware-common.c
++++ b/drivers/i2c/busses/i2c-designware-common.c
+@@ -351,7 +351,8 @@ u32 i2c_dw_scl_hcnt(u32 ic_clk, u32 tSYMBOL, u32 tf, int cond, int offset)
+ 		 *
+ 		 * If your hardware is free from tHD;STA issue, try this one.
+ 		 */
+-		return DIV_ROUND_CLOSEST(ic_clk * tSYMBOL, MICRO) - 8 + offset;
++		return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * tSYMBOL,
++					     MICRO) - 8 + offset;
+ 	else
+ 		/*
+ 		 * Conditional expression:
+@@ -367,7 +368,8 @@ u32 i2c_dw_scl_hcnt(u32 ic_clk, u32 tSYMBOL, u32 tf, int cond, int offset)
+ 		 * The reason why we need to take into account "tf" here,
+ 		 * is the same as described in i2c_dw_scl_lcnt().
+ 		 */
+-		return DIV_ROUND_CLOSEST(ic_clk * (tSYMBOL + tf), MICRO) - 3 + offset;
++		return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tSYMBOL + tf),
++					     MICRO) - 3 + offset;
+ }
+ 
+ u32 i2c_dw_scl_lcnt(u32 ic_clk, u32 tLOW, u32 tf, int offset)
+@@ -383,7 +385,8 @@ u32 i2c_dw_scl_lcnt(u32 ic_clk, u32 tLOW, u32 tf, int offset)
+ 	 * account the fall time of SCL signal (tf).  Default tf value
+ 	 * should be 0.3 us, for safety.
+ 	 */
+-	return DIV_ROUND_CLOSEST(ic_clk * (tLOW + tf), MICRO) - 1 + offset;
++	return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tLOW + tf),
++				     MICRO) - 1 + offset;
+ }
+ 
+ int i2c_dw_set_sda_hold(struct dw_i2c_dev *dev)
+-- 
+2.38.1
+
