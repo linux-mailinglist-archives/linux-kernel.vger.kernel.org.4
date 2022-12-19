@@ -2,163 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806AD650C52
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 14:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0147E650C64
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 14:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbiLSNC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 08:02:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
+        id S232018AbiLSNFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 08:05:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbiLSNCW (ORCPT
+        with ESMTP id S231875AbiLSNFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 08:02:22 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A03FD0C;
-        Mon, 19 Dec 2022 05:02:21 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJ7sR6q005806;
-        Mon, 19 Dec 2022 07:01:47 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=RsDUjqcyl0e7SVM4Mcf1dx9SVITxVBoD1dr7weRpKvI=;
- b=Tn0r2dQn4j8TZLPXBwTBAflOGg9uMmA+h8yJJqm5DVH7WP2tIeiqIQZTSIc5pogcslVG
- e061GhsjqC3SfSG86mswvV2i4+guVu9KAKsldToWxUt8vYGkGj/Hlm/h6t9Enlivt+KK
- wvIQBAVgIbWKSiHg/qTisxWyDcDC+crwJNUzNKTfsLo50oM7844zdpkfRm3yvgYy3v1D
- /g+Xa3monHSbnDaY3ihktPplvtqD3WnVEpgo4QV+Qy8WyUa0t1dn7rmigU/oQbOkGea5
- dp0ZXmQey2QmCvg4HjU3dWRDgDwtCmYw2L2IKIqIXy6U6aN0jd7/GPUZrk4UcYwPH8jm 2Q== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3mhb2ttbjq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 07:01:47 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Mon, 19 Dec
- 2022 07:01:45 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.20 via Frontend Transport; Mon, 19 Dec 2022 07:01:45 -0600
-Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.111])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8048011CC;
-        Mon, 19 Dec 2022 13:01:45 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
-        <wsa@kernel.org>
-CC:     <hdegoede@redhat.com>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH v4] i2c: designware: Fix unbalanced suspended flag
-Date:   Mon, 19 Dec 2022 13:01:45 +0000
-Message-ID: <20221219130145.883309-1-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 19 Dec 2022 08:05:08 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B2EFAD8
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 05:05:03 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id c1so13527257lfi.7
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 05:05:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uEl6FOWuKZ6UAvDbu88RJHguk6sS9ZMQHT6dYgluwo8=;
+        b=R/5PgBXYN7w1BEUCUag9ctmn2yHfIYDc+7U39SyBATEkLrp1YnFu2oN66OukgektU/
+         mbno7A9xcaWtKv9gWhNdsBdyYtoapM6RAYvSUtNC8ptvyQC7HngaSIT5/bUD8TFhnsva
+         SpPT27ILprpmZUHuijYB1j5Lng7rDSDxlR/VIm3s7yNcMIR2OpzEDgdlVPd9Hg/tC84Z
+         bipcn9Cr4tA+hZsFOoaIFW6PCI1VMpaGbJvj/GDEG522BbqhyTecbt9rDohQgQuldaCg
+         AibJcJlF23LXi5pvb/QVwNQjhK6avWxKxXUVw46FIbFZ1ApZ+DgW6y6RE7Kq04zs2Gcf
+         QPaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uEl6FOWuKZ6UAvDbu88RJHguk6sS9ZMQHT6dYgluwo8=;
+        b=1wnprs1WWoTUU5ThSslVIm/TVNMh2QvI6H1pyO4PpwT9CzP4fmfGxAVsYxOPhAKY5M
+         3KT8duaFRZfm/oGBpmoaUxjF82OospKNV/z18bWwxOAeqlWZ9uESFlf8ChNeu8prxIwP
+         Y3uuxxmnR/4aSBPriC8B7prh0v4zTo7glqQDBwbZtMqZTQf9/zDKDgEVy9TS2DENhPCW
+         rJIAikoGsk7gfRt4/9MgaV32OlQ4U1vCx+gC9FOtjB+0MJUBTm18w6Cw9rWSAwUhoZgp
+         I+66H/VHP2HygyiPTPINgRIi1yxeCPIXhnvHoMbEi+h7AMX03HEnfQJY20sQzWOw9c0x
+         wYkg==
+X-Gm-Message-State: ANoB5plEAWsnrHY4js+ySQo4LAP2oWfX5hb6iI64gRjrnqpDEpSilp4v
+        Bq+JTlxFOBTQzIYXtYeUxB/OLg==
+X-Google-Smtp-Source: AA0mqf4f6yLjzCLg63fIkw03LtleqxYyfk7pE3QJAm9UmsEgN4eh100In7UsKiQD/PwDJArNOWxX6g==
+X-Received: by 2002:a19:e051:0:b0:4b5:b7be:136b with SMTP id g17-20020a19e051000000b004b5b7be136bmr10806206lfj.69.1671455101743;
+        Mon, 19 Dec 2022 05:05:01 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id z11-20020a056512370b00b004b4f1ea713csm1097577lfr.73.2022.12.19.05.04.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Dec 2022 05:05:00 -0800 (PST)
+Message-ID: <8db62d1a-365c-d41d-90aa-4c78c5d5e9ce@linaro.org>
+Date:   Mon, 19 Dec 2022 14:04:59 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: cnwms7r3xqZceF0Duc1Y5-hBkhh2oDS5
-X-Proofpoint-GUID: cnwms7r3xqZceF0Duc1Y5-hBkhh2oDS5
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3] dt-bindings: display: rockchip: convert
+ rockchip-lvds.txt to YAML
+To:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de
+Cc:     hjc@rock-chips.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, airlied@gmail.com,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <fd51df66-147d-d40f-913e-385625a71984@gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <fd51df66-147d-d40f-913e-385625a71984@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
-i2c_mark_adapter_resumed().
+On 19/12/2022 13:32, Johan Jonker wrote:
+> Convert rockchip-lvds.txt to YAML.
+> 
+> Changed:
+>   Add power-domains property.
+>   Requirements between PX30 and RK3288
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+> 
+> Changed V3:
+>   Filename matching compatible style
+>   Drop "Regulator phandle for "
+>   Specify properties and requirements per SoC
+>   Sort order and restyle
+> 
+> Changed V2:
+>   Fix title
+> ---
+>  .../display/rockchip/rockchip,lvds.yaml       | 170 ++++++++++++++++++
+>  .../display/rockchip/rockchip-lvds.txt        |  92 ----------
+>  2 files changed, 170 insertions(+), 92 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml b/Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+> new file mode 100644
+> index 000000000..03b002a05
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+> @@ -0,0 +1,170 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/rockchip/rockchip,lvds.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Rockchip low-voltage differential signal (LVDS) transmitter
+> +
+> +maintainers:
+> +  - Sandy Huang <hjc@rock-chips.com>
+> +  - Heiko Stuebner <heiko@sntech.de>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - rockchip,px30-lvds
+> +      - rockchip,rk3288-lvds
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: pclk_lvds
+> +
+> +  avdd1v0-supply:
+> +    description: 1.0V analog power.
+> +
+> +  avdd1v8-supply:
+> +    description: 1.8V analog power.
+> +
+> +  avdd3v3-supply:
+> +    description: 3.3V analog power.
+> +
+> +  rockchip,grf:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: Phandle to the general register files syscon.
+> +
+> +  rockchip,output:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    enum: [rgb, lvds, duallvds]
+> +    description: This describes the output interface.
+> +
+> +  phys:
+> +    maxItems: 1
+> +
+> +  phy-names:
+> +    const: dphy
+> +
+> +  pinctrl-names:
+> +    const: lcdc
+> +
+> +  pinctrl-0: true
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description:
+> +          Video port 0 for the VOP input.
+> +          The remote endpoint maybe vopb or vopl.
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description:
+> +          Video port 1 for either a panel or subsequent encoder.
+> +
+> +    required:
+> +      - port@0
+> +      - port@1
+> +
+> +required:
+> +  - compatible
+> +  - rockchip,grf
+> +  - rockchip,output
+> +  - ports
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: rockchip,px30-lvds
+> +
+> +    then:
+> +      properties:
+> +        reg: false
+> +        clocks: false
+> +        clock-names: false
+> +        avdd1v0-supply: false
+> +        avdd1v8-supply: false
+> +        avdd3v3-supply: false
+> +
 
-dw_i2c_plat_resume() must always be called, so that
-i2c_mark_adapter_resumed() is called. This is not compatible with
-DPM_FLAG_MAY_SKIP_RESUME, so remove the flag.
+I see one compatible expects regmap from parent (grf is the parent here)
+and other is directly on MMIO bus. Not the best combination... Maybe
+this  should be just split to two separate bindings? Looking at driver,
+their code is also very different between these two variants.
 
-Since the controller is always resumed on system resume the
-dw_i2c_plat_complete() callback is redundant and has been removed.
-
-The unbalanced suspended flag was introduced by commit c57813b8b288
-("i2c: designware: Lock the adapter while setting the suspended flag")
-
-Before that commit, the system and runtime PM used the same functions. The
-DPM_FLAG_MAY_SKIP_RESUME was used to skip the system resume if the driver
-had been in runtime-suspend. If system resume was skipped, the suspended
-flag would be cleared by the next runtime resume. The check of the
-suspended flag was _after_ the call to pm_runtime_get_sync() in
-i2c_dw_xfer(). So either a system resume or a runtime resume would clear
-the flag before it was checked.
-
-Having introduced the unbalanced suspended flag with that commit, a further
-commit 80704a84a9f8
-("i2c: designware: Use the i2c_mark_adapter_suspended/resumed() helpers")
-
-changed from using a local suspended flag to using the
-i2c_mark_adapter_suspended/resumed() functions. These use a flag that is
-checked by I2C core code before issuing the transfer to the bus driver, so
-there was no opportunity for the bus driver to runtime resume itself before
-the flag check.
-
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-Fixes: c57813b8b288 ("i2c: designware: Lock the adapter while setting the suspended flag")
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
----
-Changes from v3:
-- Fixed wrapping in commit description. No code changes
----
- drivers/i2c/busses/i2c-designware-platdrv.c | 20 ++------------------
- 1 file changed, 2 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index ba043b547393..74182db03a88 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -351,13 +351,11 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
- 
- 	if (dev->flags & ACCESS_NO_IRQ_SUSPEND) {
- 		dev_pm_set_driver_flags(&pdev->dev,
--					DPM_FLAG_SMART_PREPARE |
--					DPM_FLAG_MAY_SKIP_RESUME);
-+					DPM_FLAG_SMART_PREPARE);
- 	} else {
- 		dev_pm_set_driver_flags(&pdev->dev,
- 					DPM_FLAG_SMART_PREPARE |
--					DPM_FLAG_SMART_SUSPEND |
--					DPM_FLAG_MAY_SKIP_RESUME);
-+					DPM_FLAG_SMART_SUSPEND);
- 	}
- 
- 	device_enable_async_suspend(&pdev->dev);
-@@ -419,21 +417,8 @@ static int dw_i2c_plat_prepare(struct device *dev)
- 	 */
- 	return !has_acpi_companion(dev);
- }
--
--static void dw_i2c_plat_complete(struct device *dev)
--{
--	/*
--	 * The device can only be in runtime suspend at this point if it has not
--	 * been resumed throughout the ending system suspend/resume cycle, so if
--	 * the platform firmware might mess up with it, request the runtime PM
--	 * framework to resume it.
--	 */
--	if (pm_runtime_suspended(dev) && pm_resume_via_firmware())
--		pm_request_resume(dev);
--}
- #else
- #define dw_i2c_plat_prepare	NULL
--#define dw_i2c_plat_complete	NULL
- #endif
- 
- #ifdef CONFIG_PM
-@@ -483,7 +468,6 @@ static int __maybe_unused dw_i2c_plat_resume(struct device *dev)
- 
- static const struct dev_pm_ops dw_i2c_dev_pm_ops = {
- 	.prepare = dw_i2c_plat_prepare,
--	.complete = dw_i2c_plat_complete,
- 	SET_LATE_SYSTEM_SLEEP_PM_OPS(dw_i2c_plat_suspend, dw_i2c_plat_resume)
- 	SET_RUNTIME_PM_OPS(dw_i2c_plat_runtime_suspend, dw_i2c_plat_runtime_resume, NULL)
- };
--- 
-2.30.2
+Best regards,
+Krzysztof
 
