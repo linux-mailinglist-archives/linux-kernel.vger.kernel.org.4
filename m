@@ -2,113 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55C46650B3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBF0650B2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:08:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbiLSMJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 07:09:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
+        id S231702AbiLSMH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 07:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbiLSMIi (ORCPT
+        with ESMTP id S231516AbiLSMG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 07:08:38 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5F1A184
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 04:07:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=YOKduRxqOQ+ggRn/s0wpQfzORzZWr0CzU1FGkX5EVD0=; b=K1wDeBQUGjOAaSvqjsK/WFqC8q
-        Twg+pOjENQOwi1xB9DZdCquC5QkrUXyE/Ng3qRaDhGDtDt5R31KI2NAEUjebif0hS+kvFPw/C9uIk
-        Pi7+t5lQSu7V6Esd9L1G9Hvgu2PQ0UUmnyTU93VMt6zGjDYuPQFA2C4Pvniftt3Zb3BYxsScBOIcE
-        OV0/dTWw7owOfiosd+VPR8/1reAR3MUYsrQEVYLTOp6SvQNh4Ea9cQfgOc8+C5uR+woR6fbRH9CET
-        +1S/xA6U2bLThvEIwVTby2L7gIn6CGudbupY1eLlfQbJlhvNaRW/t4s/eGctHfz4bgb4FmTptmwPf
-        nH8evx4w==;
-Received: from [177.34.169.227] (helo=bowie..)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1p7EvU-006HsS-4m; Mon, 19 Dec 2022 13:07:24 +0100
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Melissa Wen <mwen@igalia.com>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-        Emma Anholt <emma@anholt.net>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        Wambui Karuga <wambui@karuga.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
-Subject: [PATCH v4 7/7] drm/todo: update the debugfs clean up task
-Date:   Mon, 19 Dec 2022 09:06:21 -0300
-Message-Id: <20221219120621.15086-8-mcanal@igalia.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221219120621.15086-1-mcanal@igalia.com>
-References: <20221219120621.15086-1-mcanal@igalia.com>
+        Mon, 19 Dec 2022 07:06:56 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E14D1106;
+        Mon, 19 Dec 2022 04:06:53 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 753FD607DC;
+        Mon, 19 Dec 2022 12:06:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1671451611; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vcYyeovvyeIUt7S0vbCFAC7dHaOjTv+mzzbe5d276WA=;
+        b=cKH6lPcm6qTERFkgfs95izoDW3LTVijdvzrmfJn690l+1owObw0m+Kz7Y06qsjOaD6EqbN
+        1nQu1wgzRFe45utSi3lZdgUiSHYfJhsXYSCl4AiM7stbZoFRgU5YJjZf7vof2Pl0jVnVap
+        3Cb7KuvdLUWZo1lmVQy5c4TDx9dQfMk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6005B13910;
+        Mon, 19 Dec 2022 12:06:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ScRpF9tToGMUbwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 19 Dec 2022 12:06:51 +0000
+Date:   Mon, 19 Dec 2022 13:06:51 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     =?utf-8?B?56iL5Z6y5rab?= Chengkaitao Cheng 
+        <chengkaitao@didiglobal.com>
+Cc:     chengkaitao <pilgrimtao@gmail.com>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
+        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
+        "yuzhao@google.com" <yuzhao@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "surenb@google.com" <surenb@google.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH v2] mm: memcontrol: protect the memory in cgroup from
+ being oom killed
+Message-ID: <Y6Atfc8ijws/A/f5@dhcp22.suse.cz>
+References: <395B1998-38A9-4A68-96F8-6EDF44686231@didiglobal.com>
+ <BE56B09A-7C70-4152-B4D4-B8433A37465D@didiglobal.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <BE56B09A-7C70-4152-B4D4-B8433A37465D@didiglobal.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The structs drm_debugfs_info and drm_debugfs_entry introduced a new
-debugfs structure to DRM, centered on drm_device instead of drm_minor.
-Therefore, remove the tasks related to create a new device-centered
-debugfs structure and add a new task to replace the use of
-drm_debugfs_create_files() for the use of drm_debugfs_add_file() and
-drm_debugfs_add_files().
+On Mon 19-12-22 03:16:33, 程垲涛 Chengkaitao Cheng wrote:
+> Hi Michal Hocko,
+> Looking forward to your reply.
 
-Signed-off-by: Maíra Canal <mcanal@igalia.com>
----
- Documentation/gpu/todo.rst | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+I am sorry, I do not have anything to add to my previous concerns. But
+let me summarize. I think your way of mixing per memcg protection with
+the per-process oom_score is very dubious. This is not an unfixable
+problem. All you need to do is the discount all processes in the same
+memcg equally. A bigger problem is, though, that I am not convinced the
+memory protection based interface is really viable. Based on experiences
+with the existing reclaim protection interface this is not really
+trivial interface to use. You either have to have a good overview of the
+working set size or you have to auto-tune it based on a feedback
+mechanism (e.g. PSI). Auto-tuning based on oom which should be a
+rare event is rather problematic I would say.
 
-diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-index b2c6aaf1edf2..f64abf69f341 100644
---- a/Documentation/gpu/todo.rst
-+++ b/Documentation/gpu/todo.rst
-@@ -508,17 +508,14 @@ Clean up the debugfs support
- 
- There's a bunch of issues with it:
- 
--- The drm_info_list ->show() function doesn't even bother to cast to the drm
--  structure for you. This is lazy.
-+- Convert drivers to support the drm_debugfs_add_files() function instead of
-+  the drm_debugfs_create_files() function.
- 
- - We probably want to have some support for debugfs files on crtc/connectors and
-   maybe other kms objects directly in core. There's even drm_print support in
-   the funcs for these objects to dump kms state, so it's all there. And then the
-   ->show() functions should obviously give you a pointer to the right object.
- 
--- The drm_info_list stuff is centered on drm_minor instead of drm_device. For
--  anything we want to print drm_device (or maybe drm_file) is the right thing.
--
- - The drm_driver->debugfs_init hooks we have is just an artifact of the old
-   midlayered load sequence. DRM debugfs should work more like sysfs, where you
-   can create properties/files for an object anytime you want, and the core
-@@ -527,8 +524,6 @@ There's a bunch of issues with it:
-   this (together with the drm_minor->drm_device move) would allow us to remove
-   debugfs_init.
- 
--Previous RFC that hasn't landed yet: https://lore.kernel.org/dri-devel/20200513114130.28641-2-wambui.karugax@gmail.com/
--
- Contact: Daniel Vetter
- 
- Level: Intermediate
+All that being said I am not convinced that the interface is practically
+usable and you haven't really provided good examples to prove me wrong.
 -- 
-2.38.1
-
+Michal Hocko
+SUSE Labs
