@@ -2,104 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 795C7650C4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 14:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4CA650C50
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 14:01:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231860AbiLSNAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 08:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
+        id S232007AbiLSNBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 08:01:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiLSNAn (ORCPT
+        with ESMTP id S231292AbiLSNBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 08:00:43 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E494612B;
-        Mon, 19 Dec 2022 05:00:40 -0800 (PST)
-From:   Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1671454839;
-        bh=LXP8YNxMczzf+pLAFEBraHS71TcH5D0s/f2HVc8xxo4=;
-        h=From:Date:Subject:To:Cc:From;
-        b=Rwnr78Y9jfXzdcmkxygZwu95fm9+vfXTRkow+2qgz3mbjfKlU0XXr05lUjAj4NdCG
-         L1ykEBJDjcDajDxRwD7rnMIjud/KujFSohf+xLxxVepyCh2T9yJQ1HxMGG/Fi9tVTR
-         Dr+Ow3J0tTlKs3rzJK7BqxUhcL9SF4Qp0j7pDM00=
-Date:   Mon, 19 Dec 2022 13:00:34 +0000
-Subject: [PATCH v3] nsfs: add compat ioctl handler
+        Mon, 19 Dec 2022 08:01:47 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA4E1151
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 05:01:46 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id f18so8548071wrj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 05:01:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nF7ws8r0mp70NFZAKD6xZ2YaUyIewxpp+mfAcRmI/lE=;
+        b=g1HxN9AozAKS9+jMF74tB5TvmlEFBJjcfudBC89GlKCAfEzYdjhDlTOMLw1v4GC9M2
+         GjP8gr8OOZ4Q/ezCBFDN7bJEDpnktEOT9WwtJVkTjC4TBI/ufyWIk+sfNm9SsrWbqbtY
+         MgL7ZYMN8yOR9jgz7hp0Ob/3r4KEG27krKhra7ZeWBTjlsDg/ZVtT+jnYcZtPiPrs+yW
+         deq9GwpLyALBVNLtShuymUfT3H5fhTGpSra60MRx5O7eFmJWFKgX7QTwG988WOtA8sS5
+         fGXNWssXt10JVr1UEZaaEeqqhlXoRrIycDX0nQIqWH0I68kEUhNRfw40y4IW3qSbkSvo
+         yfUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nF7ws8r0mp70NFZAKD6xZ2YaUyIewxpp+mfAcRmI/lE=;
+        b=UqNtAuJ2HlTUCszsOMKLEPzcROOVAZEutmSolJzSu5IuldZ5sz42z0JJCnMlc50N2J
+         bAp4JzzK0cj6RPCL+L5kUOSMB5pAfgsjanHrxRiawkM3G0X3e1BZVqTvu/uuKfKDp/tv
+         OS7diIaTVIzjrIZKismsVZ4UBcMMb2HGH31zzW82/fFwb2qb1IP62FOKksG4D+XPB53Z
+         btlTrgn/YQ9eH6soAQ1YUhLo2ZZ0ai7ES84so1rk9LFZ8irR4gVor9LDSnxzNMqGBYbG
+         KXpSD3birpeMtKhWz2GB/OuhatKkoZy7I5Hu8487B4/On44LNjC0zkH1UT1b1KVrSL7q
+         U1lg==
+X-Gm-Message-State: ANoB5pksC0Rxsr3TmG1//+vSD5PEPvrHYCUJ3t0IL4nS6S2wRWf3yD7m
+        DPVCvyaJ1Jtwf8E7Id9Wrco=
+X-Google-Smtp-Source: AA0mqf7AexisWJ3Gi42FxINMFRJi1wDoQBdNXzQN8Hdn8h1x+nqYewSPMtIeamoAZEDuZCy2D5Xmfg==
+X-Received: by 2002:a05:6000:170b:b0:242:806c:8612 with SMTP id n11-20020a056000170b00b00242806c8612mr31079743wrc.7.1671454904778;
+        Mon, 19 Dec 2022 05:01:44 -0800 (PST)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id u1-20020a5d6ac1000000b00241cfe6e286sm9921878wrw.98.2022.12.19.05.01.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 05:01:44 -0800 (PST)
+Date:   Mon, 19 Dec 2022 13:01:43 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, urezki@gmail.com,
+        stephen.s.brennan@oracle.com, willy@infradead.org,
+        akpm@linux-foundation.org, hch@infradead.org
+Subject: Re: [PATCH v2 2/7] mm/vmalloc.c: add flags to mark vm_map_ram area
+Message-ID: <Y6Bgt7k1H7Ez4EEb@lucifer>
+References: <20221217015435.73889-1-bhe@redhat.com>
+ <20221217015435.73889-3-bhe@redhat.com>
+ <Y52rllbXHMwbpJ8K@lucifer>
+ <Y6AaPKT7mdVxdHRl@MiWiFi-R3L-srv>
+ <Y6AqRauq6wEYK0n5@lucifer>
+ <Y6BYD24wzAogqRyT@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221214-nsfs-ioctl-compat-v3-1-b7f0eb7ccdd0@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAHJgoGMC/4WOQQ6CMBBFr0K6tqbTQguuvIdx0ZZim2BrGMAYw
- t0tLjWR1eT/5L0/C0E3BIfkVCxkcHPAkGIO4lAQ63W8ORranAlnnAOHkkbskIZkx57adH/okUJV
- 1qaTVQ1akcwZjY6aQUfrMxmnvs+lDzim4fXZmSGfyz/lDJTRWqiuBaeUaevz0wVEtH7yx+jGbWY
- PNyAb1UjGmOHf+DXzM9/9gm8a3lTGiAZEJ38067q+ASgwZ45CAQAA
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrey Vagin <avagin@openvz.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Serge Hallyn <serge@hallyn.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Karel Zak <kzak@redhat.com>,
-        Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.11.0-dev-e429b
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1671454836; l=1768;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=LXP8YNxMczzf+pLAFEBraHS71TcH5D0s/f2HVc8xxo4=;
- b=2gw9Voe7WdS31apTPWwDknLxyefznbIjUh+p5EDw3UsHntsLl2MoJyz8yQNxCJd8WpeYr6tPuoa/
- JXy7VWNLCOnCmbpuJnqf1Hy9TMT05hjvRfgGbxwRR6TUGXJUNKZ3
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6BYD24wzAogqRyT@MiWiFi-R3L-srv>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As all parameters and return values of the ioctls have the same
-representation on both 32bit and 64bit we can reuse the normal ioctl
-handler for the compat handler via compat_ptr_ioctl().
+On Mon, Dec 19, 2022 at 08:24:47PM +0800, Baoquan He wrote:
+> In fact, I should not do the checking, but do the clearing anyway. If I
+> change it as below, does it look better to you?
+>
+>
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 5e578563784a..369b848d097a 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -2253,8 +2253,7 @@ void vm_unmap_ram(const void *mem, unsigned int count)
+>  	spin_lock(&vmap_area_lock);
+>  	va = __find_vmap_area((unsigned long)addr, &vmap_area_root);
+>  	BUG_ON(!va);
+> -	if (va)
+> -		va->flags &= ~VMAP_RAM;
+> +	va->flags &= ~VMAP_RAM;
+>  	spin_unlock(&vmap_area_lock);
+>  	debug_check_no_locks_freed((void *)va->va_start,
+>  				    (va->va_end - va->va_start));
 
-All nsfs ioctls return a plain "int" filedescriptor which is a signed
-4-byte integer type on both 32bit and 64bit.
-The only parameter taken is by NS_GET_OWNER_UID and is a pointer to a
-"uid_t" which is a 4-byte unsigned integer type on both 32bit and 64bit.
+This is better as it avoids the slightly contradictory situation of checking for
+a condition we've asserted is not the case, but I would still far prefer keeping
+this as-is and placing the unlock before the BUG_ON().
 
-Fixes: 6786741dbf99 ("nsfs: add ioctl to get an owning user namespace for ns file descriptor")
-Reported-by: Karel Zak <kzak@redhat.com>
-Link: https://github.com/util-linux/util-linux/pull/1924#issuecomment-1344133656
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
-Changes in v3:
-- Resend without changes
-  v1 and v2 did not reach the mailing lists due to an issue in my mail setup
-- Link to v2: https://lore.kernel.org/r/20221214-nsfs-ioctl-compat-v2-0-b295bb3913f6@weissschuh.net
+This avoids explicitly and knowingly holding a lock over a BUG_ON() and is
+simple to implement, e.g.:-
 
-Changes in v2:
-- Use compat_ptr_ioctl()
-- Link to v1: https://lore.kernel.org/r/20221214-nsfs-ioctl-compat-v1-0-b169796000b2@weissschuh.net
----
- fs/nsfs.c | 1 +
- 1 file changed, 1 insertion(+)
+  	spin_lock(&vmap_area_lock);
+  	va = __find_vmap_area((unsigned long)addr, &vmap_area_root);
+ 	if (va)
+ 		va->flags &= ~VMAP_RAM;
+  	spin_unlock(&vmap_area_lock);
+  	BUG_ON(!va);
 
-diff --git a/fs/nsfs.c b/fs/nsfs.c
-index 3506f6074288..c28f69edef97 100644
---- a/fs/nsfs.c
-+++ b/fs/nsfs.c
-@@ -21,6 +21,7 @@ static long ns_ioctl(struct file *filp, unsigned int ioctl,
- static const struct file_operations ns_file_operations = {
- 	.llseek		= no_llseek,
- 	.unlocked_ioctl = ns_ioctl,
-+	.compat_ioctl   = compat_ptr_ioctl,
- };
- 
- static char *ns_dname(struct dentry *dentry, char *buffer, int buflen)
+> > You are at this point clearing the VMAP_RAM flag though, so if it is unimportant
+> > what the flags are after this call, why are you clearing this one?
+>
+> With my understanding, We had better do the clearing. Currently, from
+> the code, not doing the clearing won't cause issue. If possible, I would
+> like to clear it as below draft code.
+>
 
----
-base-commit: f9ff5644bcc04221bae56f922122f2b7f5d24d62
-change-id: 20221214-nsfs-ioctl-compat-1548bf6581a7
+Sure, it seems appropriate to clear it, I'm just unsure as to why you aren't
+just clearing both flags? Perhaps just set va->flags = 0?
 
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
+> >
+> > It is just a little confusing, I wonder whether the VMAP_BLOCK flag is necessary
+> > at all, is it possible to just treat a non-VMAP_BLOCK VMAP_RAM area as if it
+> > were simply a fully occupied block? Do we gain much by the distinction?
+>
+> Yeah, VMAP_BLOCK flag is necessary. vmap_block contains used region,
+> or dirty/free regions. While the non-vmap_blcok vm_map_ram area is
+> similar with the non vm_map_ram area. When reading out vm_map_ram
+> regions, vmap_block regions need be treated differently.
+
+OK looking through again closely I see you're absolutely right, I wondered
+whether you could somehow make a non-VMAP_BLOCK vread() operation be equivalent
+to a block one (only across the whole mapping), but I don't think you can.
