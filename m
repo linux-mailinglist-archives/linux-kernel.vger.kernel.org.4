@@ -2,108 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC247650CC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 14:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06107650CCC
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 14:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbiLSNpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 08:45:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
+        id S231881AbiLSNqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 08:46:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiLSNpT (ORCPT
+        with ESMTP id S229499AbiLSNqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 08:45:19 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AB310074
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 05:45:18 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id g14so9101305ljh.10
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 05:45:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jWwojFcgvooRzwcY3kRRXotYy0Om3fIUII0d+MNiGwk=;
-        b=DCX4oClnCIgAyv3gYJysFwGq+V35MxGf31bS2oPI+Qlj6V+ShxpjLS+fsVZGUJRIGB
-         ePr5ErZB25VyS5xSovUXRmeinqXroS7xO0RPkn8q/4LjXjN2HMBNSZ+Tv/xI+t4wYe7F
-         4ezcRe4auKulMdTwyLkDTG9i7X9UCqf0JJQqv9R2pgbzy1IRhaBSFnTkrXK7zGJ+RGUZ
-         /RNfIaSJq65/UmxNw5IDqYswDIsPII8u5v8P1u7CKWN7PYjiyr5912bvTdMX2+9remoP
-         0ZYn8CweqvMn8nep95lYI7tsfBxe9WpvYJIrKdGMfoS2E2tiiy/Ibcv7wdLeBOcCDZg/
-         XViQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jWwojFcgvooRzwcY3kRRXotYy0Om3fIUII0d+MNiGwk=;
-        b=daM1xuKOSVzcNmD9tNOvJfqfCvaU7JZZCuhUeJmINOItnwNEpQ/TTuvLCVkJojIAWP
-         hZOdM1AmgVGFOCJzDiBgdWly1NQp2AVXCfd9gQAb2LMWlkM/5+6/PZw4bvcqgzUwB815
-         UEYDSeitxuhFlnlhwajmZN9UNQ4Hje8pxRyo3+K/3np3gv6VjDej5nHGgTVhbSYJvxcZ
-         F/3WGoWJl4zF2erI02SI3+MsdPIadsd5/Kk4tkqozwyezX076EmmmrNUerN3KMPRzqI7
-         vkVEH+CnjUl8YUhfcCz2IEkL8+whXX5+hS5eON+3KjCmujnIS6p/V9Iot5V0UMtcJDdE
-         yQcA==
-X-Gm-Message-State: ANoB5pm51SAyu4UcXfZopTaGgPZ6637mlhYcOHV4DkPVDpMBDR2DUK5V
-        1yxFNEsRTRjzUZTC5QOT2SQ=
-X-Google-Smtp-Source: AA0mqf7+uq1OpLbr8wQHGFpw85OrlLg27KxT7NatFAHD95oOGfxFSNWgBz05V71hYkPc54ZhaW6EwA==
-X-Received: by 2002:a05:651c:98e:b0:277:351f:8cf5 with SMTP id b14-20020a05651c098e00b00277351f8cf5mr10873377ljq.3.1671457516389;
-        Mon, 19 Dec 2022 05:45:16 -0800 (PST)
-Received: from pc636 (host-90-233-218-120.mobileonline.telia.com. [90.233.218.120])
-        by smtp.gmail.com with ESMTPSA id g24-20020a2eb5d8000000b0027776efa48csm760923ljn.91.2022.12.19.05.45.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 05:45:16 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Mon, 19 Dec 2022 14:45:13 +0100
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Baoquan He <bhe@redhat.com>
-Subject: Re: [PATCH v2] mm: vmalloc: correct use of __GFP_NOWARN mask in
- __vmalloc_area_node()
-Message-ID: <Y6Bq6e7nEZYiOiQ7@pc636>
-References: <20221219123659.90614-1-lstoakes@gmail.com>
+        Mon, 19 Dec 2022 08:46:04 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416A8641F;
+        Mon, 19 Dec 2022 05:46:04 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJBEEPv022254;
+        Mon, 19 Dec 2022 13:45:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=lQyNqYU9KnNtnUHjNhcP6N/pp/vK2lVT3JKv/+bbuvs=;
+ b=oF5RELd7d87pMU/8XXwuZ9ZgVpxXL5vxG562UxRm0xZEExcrllIfUEnwbuFOwZkrogl2
+ aNx1rmAPX0yXVY93zurbNSeGt0hf3cwcBfaOuKf5qhAihvAVsCpYyldYEJwZ3BSdXR9M
+ BO84nRSiQY39y65CZr9bWTTucFbmysK67VUcY90hXF4kPs0bdY/zC7o7042OJQLV/+tO
+ mfTEruGViW92qZTrXZA70TxJj6JvIS3M2JDaGrZTSeBJIPjWpBh6+mEO3PFOaOrIH1LV
+ kn1JU/KHTPt4qiFtlXK+V4+Y8fULbysh46cJ8xAZpI9XbtdORM8LAfs7uDhY4gAA9jYu nA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mh4secgbv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Dec 2022 13:45:53 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BJDjq7P017587
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Dec 2022 13:45:52 GMT
+Received: from [10.216.40.161] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 19 Dec
+ 2022 05:45:47 -0800
+Message-ID: <773848af-c11e-2a9f-00b8-085d98147de3@quicinc.com>
+Date:   Mon, 19 Dec 2022 19:15:39 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219123659.90614-1-lstoakes@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 1/2] dt: bindings: add dt entry for XO calibration support
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        <ath11k@lists.infradead.org>,
+        "kvalo@kernel.org >> Kalle Valo" <kvalo@kernel.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <robh+dt@kernel.org>
+CC:     <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20221214121818.12928-1-quic_youghand@quicinc.com>
+ <20221214121818.12928-2-quic_youghand@quicinc.com>
+ <f39cd52f-94d4-fe3b-a5be-8b27017028ed@kernel.org>
+From:   "Youghandhar Chintala (Temp)" <quic_youghand@quicinc.com>
+In-Reply-To: <f39cd52f-94d4-fe3b-a5be-8b27017028ed@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: D3a8YjalaZ3M25Wo2h0jwwG54-uzrKe1
+X-Proofpoint-ORIG-GUID: D3a8YjalaZ3M25Wo2h0jwwG54-uzrKe1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-19_01,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=833
+ mlxscore=0 suspectscore=0 bulkscore=0 spamscore=0 phishscore=0
+ impostorscore=0 priorityscore=1501 adultscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212190122
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 12:36:59PM +0000, Lorenzo Stoakes wrote:
-> This function sets __GFP_NOWARN in the gfp_mask rendering the warn_alloc()
-> invocations no-ops. Remove this and instead rely on this flag being set
-> only for the vm_area_alloc_pages() function, ensuring it is cleared for
-> each of the warn_alloc() calls.
-> 
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> ---
->  mm/vmalloc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index ca71de7c9d77..10fe83c24436 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -3031,7 +3031,7 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
->  	int ret;
-> 
->  	array_size = (unsigned long)nr_small_pages * sizeof(struct page *);
-> -	gfp_mask |= __GFP_NOWARN;
-> +
->  	if (!(gfp_mask & (GFP_DMA | GFP_DMA32)))
->  		gfp_mask |= __GFP_HIGHMEM;
-> 
-> --
-> 2.39.0
-Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 
---
-Uladzislau Rezki
+On 12/19/2022 4:19 PM, Krzysztof Kozlowski wrote:
+> On 14/12/2022 13:18, Youghandhar Chintala wrote:
+>> Add dt binding to get XO calibration data support for Wi-Fi RF clock. 	 	
+>>
+>> Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
+> Please use scripts/get_maintainers.pl to get a list of necessary people
+> and lists to CC.  It might happen, that command when run on an older
+> kernel, gives you outdated entries.  Therefore please be sure you base
+> your patches on recent Linux kernel.
+>
+> You skipped all of them, so this has to be fixed.
+>
+> Best regards,
+> Krzysztof
+Thank you Krzysztof.
