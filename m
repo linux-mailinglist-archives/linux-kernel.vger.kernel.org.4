@@ -2,277 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE3965067B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 03:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F2C650685
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 03:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbiLSCjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 21:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
+        id S230061AbiLSClA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 21:41:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiLSCix (ORCPT
+        with ESMTP id S231130AbiLSCkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 21:38:53 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E183B1F6;
-        Sun, 18 Dec 2022 18:38:52 -0800 (PST)
-Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Nb3lY3Q9CzmWdh;
-        Mon, 19 Dec 2022 10:37:45 +0800 (CST)
-Received: from [10.67.110.218] (10.67.110.218) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 19 Dec 2022 10:38:50 +0800
-Message-ID: <68fa6a9d-7a7f-00ba-e5a2-9b64f0aa7db3@huawei.com>
-Date:   Mon, 19 Dec 2022 10:38:50 +0800
+        Sun, 18 Dec 2022 21:40:51 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA378DC6;
+        Sun, 18 Dec 2022 18:40:43 -0800 (PST)
+X-UUID: c6f786417c15441cb43942ff5b0806df-20221219
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=ICHy0x9L7FZYxDWuW2YY3FBCoGcD6xZ1gGBQdZu8k3s=;
+        b=sIK/qWGQ1KoHQxT0TCESP4Lx7J26TvmKMmWq5L7Z1IeFO/KI8vNVepvmspEokBWLTZyrv+r25Xx6IsFwOA3r6V/YmGTPi4/vdShtaQM5mOntlGILOCAJXYigsFvWKgF1a+JZD8px260vIhEhV6eNLWNV9kcLCBnyORl2gdy5CE0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:5d3e0bad-c7c1-4149-baf2-dbcee3a0c3d3,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.14,REQID:5d3e0bad-c7c1-4149-baf2-dbcee3a0c3d3,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:dcaaed0,CLOUDID:91e5b489-8530-4eff-9f77-222cf6e2895b,B
+        ulkID:221219104035OWZHG0ZG,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: c6f786417c15441cb43942ff5b0806df-20221219
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <xiangsheng.hou@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 730639053; Mon, 19 Dec 2022 10:40:33 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 19 Dec 2022 10:40:31 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Mon, 19 Dec 2022 10:40:30 +0800
+From:   Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>
+CC:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
+        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <benliang.zhao@mediatek.com>, <bin.zhang@mediatek.com>
+Subject: [PATCH v5 00/10] Add MediaTek MT7986 SPI NAND and ECC support
+Date:   Mon, 19 Dec 2022 10:40:09 +0800
+Message-ID: <20221219024019.31974-1-xiangsheng.hou@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] tracing: Add a way to filter function addresses to
- function names
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-CC:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ross Zwisler <zwisler@google.com>,
-        Tom Zanussi <zanussi@kernel.org>
-References: <20221214125209.09d736dd@gandalf.local.home>
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-In-Reply-To: <20221214125209.09d736dd@gandalf.local.home>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.218]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series add MediaTek MT7986 SPI NAND and ECC controller
+support, split ECC engine with rawnand controller in bindings and
+change to YAML schema.
 
+Changes since V4:
+ - Split arm and arm64 dts patch for fix existing NAND controller node name.
 
-在 2022/12/15 01:52, Steven Rostedt 写道:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> There's been several times where an event records a function address in
-> its field and I needed to filter on that address for a specific function
-> name. It required looking up the function in kallsyms, finding its size,
-> and doing a compare of "field >= function_start && field < function_end".
-> 
-> But this would change from boot to boot and is unreliable in scripts.
-> Also, it is useful to have this at boot up, where the addresses will not
-> be known. For example, on the boot command line:
-> 
->    trace_trigger="initcall_finish.traceoff if initcall_finish.function == acpi_init"
-> 
-> To implement this, add a ".function" prefix, that will check that the
-> field is of size long, and the only operations allowed (so far) are "=="
-> and "!=".
-> 
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
-> [ Resending due to claws-mail messing up the format of the
->    original patch ]
-> 
->   Documentation/trace/events.rst     | 12 +++++
->   kernel/trace/trace_events.c        |  2 +-
->   kernel/trace/trace_events_filter.c | 79 +++++++++++++++++++++++++++++-
->   3 files changed, 91 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
-> index c47f381d0c00..d0fd5c7220b7 100644
-> --- a/Documentation/trace/events.rst
-> +++ b/Documentation/trace/events.rst
-> @@ -207,6 +207,18 @@ field name::
->   As the kernel will have to know how to retrieve the memory that the pointer
->   is at from user space.
->   
-> +You can convert any long type to a function address and search by function name::
-> +
-> +  call_site.function == security_prepare_creds
-> +
-> +The above will filter when the field "call_site" falls on the address within
-> +"security_prepare_creds". That is, it will compare the value of "call_site" and
-> +the filter will return true if it is greater than or equal to the start of
-> +the function "security_prepare_creds" and less than the end of that function.
-> +
-> +The ".function" postfix can only be attached to values of size long, and can only
-> +be compared with "==" or "!=".
-> +
->   5.2 Setting filters
->   -------------------
->   
-> diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-> index 33e0b4f8ebe6..db6e2f399440 100644
-> --- a/kernel/trace/trace_events.c
-> +++ b/kernel/trace/trace_events.c
-> @@ -2822,7 +2822,7 @@ static __init int setup_trace_triggers(char *str)
->   		if (!trigger)
->   			break;
->   		bootup_triggers[i].event = strsep(&trigger, ".");
-> -		bootup_triggers[i].trigger = strsep(&trigger, ".");
-> +		bootup_triggers[i].trigger = strsep(&trigger, "");
+Changes since V3:
+ - Correct mediatek,mtk-nfc.yaml dt-bindings.
 
-Would it be better to change to:
+Changes since V2:
+ - Change ECC err_mask value with GENMASK macro.
+ - Change snfi mediatek,rx-latch-latency to mediatek,rx-latch-latency-ns.
+ - Add a separate patch for DTS change.
+ - Move common description to top-level pattern properties.
+ - Drop redundant parts in dt-bindings.
 
-      bootup_triggers[i].trigger = trigger;
+Changes since V1:
+ - Use existing sample delay property.
+ - Add restricting for optional nfi_hclk.
+ - Improve and perfect dt-bindings documentation.
+ - Change existing node name to match NAND controller DT bingings.
+ - Fix issues reported by dt_binding_check.
+ - Fix issues reported by dtbs_check.
 
-Because there is unnecessary loop if call strsep(s, "") :-)
-   strsep(s, ct) {
-     strpbrk(cs, ct) {
-       // when 'ct' is empty string, here will always return NULL
-       // after traversing string 'cs'
+Xiangsheng Hou (10):
+  spi: mtk-snfi: Change default page format to setup default setting
+  spi: mtk-snfi: Add optional nfi_hclk which is needed for MT7986
+  mtd: nand: ecc-mtk: Add ECC support fot MT7986 IC
+  dt-bindings: spi: mtk-snfi: Add compatible for MT7986
+  spi: mtk-snfi: Add snfi sample delay and read latency adjustment
+  dt-bindings: spi: mtk-snfi: Add read latch latency property
+  dt-bindings: mtd: Split ECC engine with rawnand controller
+  arm64: dts: mediatek: Fix existing NAND controller node name
+  arm: dts: mediatek: Fix existing NAND controller node name
+  dt-bindings: mtd: mediatek,nand-ecc-engine: Add compatible for MT7986
 
---
-Best regards,
-Zheng Yejian
+ .../bindings/mtd/mediatek,mtk-nfc.yaml        | 155 +++++++++++++++
+ .../mtd/mediatek,nand-ecc-engine.yaml         |  63 +++++++
+ .../devicetree/bindings/mtd/mtk-nand.txt      | 176 ------------------
+ .../bindings/spi/mediatek,spi-mtk-snfi.yaml   |  54 +++++-
+ arch/arm/boot/dts/mt2701.dtsi                 |   2 +-
+ arch/arm64/boot/dts/mediatek/mt2712e.dtsi     |   2 +-
+ arch/arm64/boot/dts/mediatek/mt7622.dtsi      |   2 +-
+ drivers/mtd/nand/ecc-mtk.c                    |  28 ++-
+ drivers/spi/spi-mtk-snfi.c                    |  41 +++-
+ 9 files changed, 330 insertions(+), 193 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+ create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,nand-ecc-engine.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mtd/mtk-nand.txt
 
->   		if (!bootup_triggers[i].trigger)
->   			break;
->   	}
-> diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-> index 96acc2b71ac7..eef6426051bb 100644
-> --- a/kernel/trace/trace_events_filter.c
-> +++ b/kernel/trace/trace_events_filter.c
-> @@ -64,6 +64,7 @@ enum filter_pred_fn {
->   	FILTER_PRED_FN_PCHAR_USER,
->   	FILTER_PRED_FN_PCHAR,
->   	FILTER_PRED_FN_CPU,
-> +	FILTER_PRED_FN_FUNCTION,
->   	FILTER_PRED_FN_,
->   	FILTER_PRED_TEST_VISITED,
->   };
-> @@ -71,6 +72,7 @@ enum filter_pred_fn {
->   struct filter_pred {
->   	enum filter_pred_fn 	fn_num;
->   	u64 			val;
-> +	u64 			val2;
->   	struct regex		regex;
->   	unsigned short		*ops;
->   	struct ftrace_event_field *field;
-> @@ -103,6 +105,7 @@ struct filter_pred {
->   	C(INVALID_FILTER,	"Meaningless filter expression"),	\
->   	C(IP_FIELD_ONLY,	"Only 'ip' field is supported for function trace"), \
->   	C(INVALID_VALUE,	"Invalid value (did you forget quotes)?"), \
-> +	C(NO_FUNCTION,		"Function not found"),			\
->   	C(ERRNO,		"Error"),				\
->   	C(NO_FILTER,		"No filter found")
->   
-> @@ -876,6 +879,17 @@ static int filter_pred_comm(struct filter_pred *pred, void *event)
->   	return cmp ^ pred->not;
->   }
->   
-> +/* Filter predicate for functions. */
-> +static int filter_pred_function(struct filter_pred *pred, void *event)
-> +{
-> +	unsigned long *addr = (unsigned long *)(event + pred->offset);
-> +	unsigned long start = (unsigned long)pred->val;
-> +	unsigned long end = (unsigned long)pred->val2;
-> +	int ret = *addr >= start && *addr < end;
-> +
-> +	return pred->op == OP_EQ ? ret : !ret;
-> +}
-> +
->   /*
->    * regex_match_foo - Basic regex callbacks
->    *
-> @@ -1335,6 +1349,8 @@ static int filter_pred_fn_call(struct filter_pred *pred, void *event)
->   		return filter_pred_pchar(pred, event);
->   	case FILTER_PRED_FN_CPU:
->   		return filter_pred_cpu(pred, event);
-> +	case FILTER_PRED_FN_FUNCTION:
-> +		return filter_pred_function(pred, event);
->   	case FILTER_PRED_TEST_VISITED:
->   		return test_pred_visited_fn(pred, event);
->   	default:
-> @@ -1350,8 +1366,13 @@ static int parse_pred(const char *str, void *data,
->   	struct trace_event_call *call = data;
->   	struct ftrace_event_field *field;
->   	struct filter_pred *pred = NULL;
-> +	unsigned long offset;
-> +	unsigned long size;
-> +	unsigned long ip;
->   	char num_buf[24];	/* Big enough to hold an address */
->   	char *field_name;
-> +	char *name;
-> +	bool function = false;
->   	bool ustring = false;
->   	char q;
->   	u64 val;
-> @@ -1393,6 +1414,12 @@ static int parse_pred(const char *str, void *data,
->   		i += len;
->   	}
->   
-> +	/* See if the field is a user space string */
-> +	if ((len = str_has_prefix(str + i, ".function"))) {
-> +		function = true;
-> +		i += len;
-> +	}
-> +
->   	while (isspace(str[i]))
->   		i++;
->   
-> @@ -1423,7 +1450,57 @@ static int parse_pred(const char *str, void *data,
->   	pred->offset = field->offset;
->   	pred->op = op;
->   
-> -	if (ftrace_event_is_function(call)) {
-> +	if (function) {
-> +		/* The field must be the same size as long */
-> +		if (field->size != sizeof(long)) {
-> +			parse_error(pe, FILT_ERR_ILLEGAL_FIELD_OP, pos + i);
-> +			goto err_free;
-> +		}
-> +
-> +		/* Function only works with '==' or '!=' and an unquoted string */
-> +		switch (op) {
-> +		case OP_NE:
-> +		case OP_EQ:
-> +			break;
-> +		default:
-> +			parse_error(pe, FILT_ERR_INVALID_OP, pos + i);
-> +			goto err_free;
-> +		}
-> +
-> +		if (isdigit(str[i])) {
-> +			ret = kstrtol(num_buf, 0, &ip);
-> +			if (ret) {
-> +				parse_error(pe, FILT_ERR_INVALID_VALUE, pos + i);
-> +				goto err_free;
-> +			}
-> +		} else {
-> +			s = i;
-> +			for (; str[i] && !isspace(str[i]); i++)
-> +				;
-> +
-> +			len = i - s;
-> +			name = kmemdup_nul(str + s, len, GFP_KERNEL);
-> +			if (!name)
-> +				goto err_mem;
-> +			ip = kallsyms_lookup_name(name);
-> +			kfree(name);
-> +			if (!ip) {
-> +				parse_error(pe, FILT_ERR_NO_FUNCTION, pos + i);
-> +				goto err_free;
-> +			}
-> +		}
-> +
-> +		/* Now find the function start and end address */
-> +		if (!kallsyms_lookup_size_offset(ip, &size, &offset)) {
-> +			parse_error(pe, FILT_ERR_NO_FUNCTION, pos + i);
-> +			goto err_free;
-> +		}
-> +
-> +		pred->fn_num = FILTER_PRED_FN_FUNCTION;
-> +		pred->val = ip - offset;
-> +		pred->val2 = pred->val + size;
-> +
-> +	} else if (ftrace_event_is_function(call)) {
->   		/*
->   		 * Perf does things different with function events.
->   		 * It only allows an "ip" field, and expects a string.
+-- 
+2.25.1
+
