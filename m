@@ -2,143 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56EFD6507ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 08:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B066507F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 08:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiLSHAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 02:00:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
+        id S231394AbiLSHA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 02:00:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231374AbiLSG76 (ORCPT
+        with ESMTP id S231307AbiLSHAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 01:59:58 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A2162CA;
-        Sun, 18 Dec 2022 22:59:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671433194; x=1702969194;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=Nxsaw3RCZ61ommUNocIgB+tNXnRqKXLXJfUHk01BRaQ=;
-  b=IyaQg8iDhS03OFOacY87s3YebFN1WW2hdibsxqHaRL9xw2x9DGtbUV4s
-   QlaS26b7CWUlEK9eVQ8yjiBTmvYEuuDMayzUoCPfzvikLl/6HoYAaNXrs
-   velV1ddX9FhmORHU4KiKM71f26KRmYl1owzHzFaJycciXvJRP9b/LyJO1
-   2BJdTtwwrT/X5zAL0LS1P7umup6o0TW1dphtCsLl9WGh+V4L2qcnVlT+Z
-   XekGZAQ/tcSHzFSBUwkb/ENg/gRL5auzEyEGEMYRz9ZF/X3MPCR+qA0AH
-   SDbU4UtfMEhwPdv+1+Ci20gkeMfYDviLe1ChL1tRc9tEheFfnBoGQnJDl
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="306960682"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="306960682"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2022 22:59:53 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="652594336"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="652594336"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.60.197])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2022 22:59:49 -0800
-Message-ID: <194c676b-3a73-7f34-1f29-a157b5e4731f@intel.com>
-Date:   Mon, 19 Dec 2022 08:59:48 +0200
+        Mon, 19 Dec 2022 02:00:53 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACE1C6E;
+        Sun, 18 Dec 2022 23:00:50 -0800 (PST)
+X-UUID: c5f9fcf1178c4b258e2e7ef65893e511-20221219
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=BROO9oR3Wy6uXyXdf6VAMOjT4WTHQrLO8YJEyXD5pf0=;
+        b=s8omwKzTGbwrTQIrRO8nvuguexXc2HqgFnpsHWE438TXr0fmU1QFjLcixggC3zWlLQqAgUawG+UwruAmRWj499j64gpDrRkgTZmwsgNMgzpbzaG/t904LoHG7Pamp103Tu4ADYC3T9XWj6VYP8OzuFJmTw49UgnzTVSriij59Bg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:7eef0291-34b7-477d-8601-0d00fe1fd3b4,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:dcaaed0,CLOUDID:f27a2252-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: c5f9fcf1178c4b258e2e7ef65893e511-20221219
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1754787933; Mon, 19 Dec 2022 15:00:44 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 19 Dec 2022 15:00:42 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Mon, 19 Dec 2022 15:00:41 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH] media: mediatek: vcodec: Using pm_runtime_put instead of pm_runtime_put_sync
+Date:   Mon, 19 Dec 2022 15:00:40 +0800
+Message-ID: <20221219070040.2434-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [PATCH] perf tool: Fix output unexpected messages in quiet mode
-Content-Language: en-US
-To:     Yang Jihong <yangjihong1@huawei.com>, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, kan.liang@linux.intel.com,
-        kim.phillips@amd.com, german.gomez@arm.com, ravi.bangoria@amd.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221219024911.62741-1-yangjihong1@huawei.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20221219024911.62741-1-yangjihong1@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/12/22 04:49, Yang Jihong wrote:
-> When perf uses quiet mode, perf_quiet_option sets debug_peo_args to -1,
+pm_runtime_put will set RPM_ASYNC flag then queue an idle-notification
+request again, won't return error immediately until current request is
+scheduled. But pm_runtime_put_sync run the ->runtime_idle() callback
+directly, will return error immediately.
 
-Seems like redirect_to_stderr has similar issue?
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+---
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> and display_attr incorrectly determines the value of debug_peo_args.
-> As a result, unexpected information is displayed.
-> 
-> Before:
->   # perf record --quiet -- ls > /dev/null
->   ------------------------------------------------------------
->   perf_event_attr:
->     size                             128
->     { sample_period, sample_freq }   4000
->     sample_type                      IP|TID|TIME|PERIOD
->     read_format                      ID|LOST
->     disabled                         1
->     inherit                          1
->     mmap                             1
->     comm                             1
->     freq                             1
->     enable_on_exec                   1
->     task                             1
->     precise_ip                       3
->     sample_id_all                    1
->     exclude_guest                    1
->     mmap2                            1
->     comm_exec                        1
->     ksymbol                          1
->     bpf_event                        1
->   ------------------------------------------------------------
->   ...
-> 
-> After:
->   # perf record --quiet -- ls > /dev/null
->   #
-> 
-> Fixes: ccd26741f5e6 ("perf tool: Provide an option to print perf_event_open args and return value")
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-
-Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
-
-> ---
->  tools/perf/util/debug.h | 2 +-
->  tools/perf/util/evsel.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/perf/util/debug.h b/tools/perf/util/debug.h
-> index f99468a7f681..f6ab84c93ec0 100644
-> --- a/tools/perf/util/debug.h
-> +++ b/tools/perf/util/debug.h
-> @@ -41,7 +41,7 @@ extern int debug_data_convert;
->  
->  /* Special macro to print perf_event_open arguments/return value. */
->  #define pr_debug2_peo(fmt, ...) {				\
-> -	if (debug_peo_args)						\
-> +	if (debug_peo_args > 0)						\
->  		pr_debugN(0, pr_fmt(fmt), ##__VA_ARGS__);	\
->  	else							\
->  		pr_debugN(2, pr_fmt(fmt), ##__VA_ARGS__);	\
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index 999dd1700502..45cf144c5d5d 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -1775,7 +1775,7 @@ static int __open_attr__fprintf(FILE *fp, const char *name, const char *val,
->  
->  static void display_attr(struct perf_event_attr *attr)
->  {
-> -	if (verbose >= 2 || debug_peo_args) {
-> +	if (verbose >= 2 || debug_peo_args > 0) {
->  		fprintf(stderr, "%.60s\n", graph_dotted_line);
->  		fprintf(stderr, "perf_event_attr:\n");
->  		perf_event_attr__fprintf(stderr, attr, __open_attr__fprintf, NULL);
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
+index 4305e4eb9900..341b406f5272 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
+@@ -72,9 +72,9 @@ static void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
+ {
+ 	int ret;
+ 
+-	ret = pm_runtime_put_sync(pm->dev);
++	ret = pm_runtime_put(pm->dev);
+ 	if (ret)
+-		mtk_v4l2_err("pm_runtime_put_sync fail %d", ret);
++		mtk_v4l2_err("pm_runtime_put fail %d", ret);
+ }
+ 
+ static void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm)
+-- 
+2.25.1
 
