@@ -2,125 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6BE650A46
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 11:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D87650A4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 11:44:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbiLSKlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 05:41:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
+        id S231824AbiLSKou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 05:44:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbiLSKlH (ORCPT
+        with ESMTP id S229598AbiLSKor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 05:41:07 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB98C6;
-        Mon, 19 Dec 2022 02:41:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IFPbzfUdrDLPsI6Yh+be7PnQrtmthWZZnt5l8XeTNK8=; b=WksacInf7Ol45SQs7nMlR4j8Yy
-        ePN7+1E4lzz+ySEpmFHlDJU3/HzJQtQVqhDOSs//Ud4ViZ8UTtOv8kw24I2DTRJ/mnuBjH7bPsfl/
-        hESqLCr18tpGKf4F4Ovg5vxJRUktTGNqlxRfIz/yvzw+ZV1dRqnRw9MbVuFlj1/2ToT5WA/OCPv4O
-        ltyOn8cuvIwHfbspMuS9dUDCRZjL2aXuhxQq9maiz9yyJYgLxyyccA10rlRCfhczSxcBr0uZiAmB2
-        Le8I0NMnMRliDR7/Mg8xG1fRT7hHpcy8xCkNCVrv0Cd6zEf5ufuT7KrRoy/LRYYmj1vU027Vm/wux
-        H75Z0zHQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p7DZQ-000cjH-9m; Mon, 19 Dec 2022 10:40:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A36223001D6;
-        Mon, 19 Dec 2022 11:40:19 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 81968202FE504; Mon, 19 Dec 2022 11:40:19 +0100 (CET)
-Date:   Mon, 19 Dec 2022 11:40:19 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dan Li <ashimida.1990@gmail.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Marco Elver <elver@google.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Song Liu <song@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Yuntao Wang <ytcoode@gmail.com>,
-        Changbin Du <changbin.du@intel.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC/RFT] CFI: Add support for gcc CFI in aarch64
-Message-ID: <Y6A/k7/KrCCDuux6@hirez.programming.kicks-ass.net>
-References: <20221219061758.23321-1-ashimida.1990@gmail.com>
+        Mon, 19 Dec 2022 05:44:47 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6EC5F8B
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 02:44:45 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id n1so8652220ljg.3
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 02:44:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DmjevszxUCHQTpFoG42/dWmGvxvU2NY1rLLfgP/zAYQ=;
+        b=xk6bLMxZNZBEzQrCU6p5cVw1ASvxpJqWRDfaGf+X56qYU19GLYXZBYPM0lH4Yxf8JL
+         WdKiOqSDQVbRhc7Va39RDQC21wP+cBx2VqOQOWswUn3jMpH6qFZuBnYUjXn38HKk8Mfo
+         z+eTjr0UhVr28cJsXjBrQ62bysYvDCjyLqa0RrvJJN/zJkODjvVD0xm1g3dfibJAYGKq
+         dGBCrqZ4mKEfCZh9riBPZ2kg4JIFMnR6NbyB/A6FMessjnuiwmFM8wYC6ISbiJZIBH6D
+         98OYIoIHmcVxTkC4W6BjbTjrZUzt3X8yQwHimgmy0O0wzYXSBEZXGttM03jGeMJ1TOTG
+         ww0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DmjevszxUCHQTpFoG42/dWmGvxvU2NY1rLLfgP/zAYQ=;
+        b=ZMSwQQ69Ufw1iVi2oyyjtV8v7ip3ezYzr+bN46oqS3wR17bsuHMbLfWUZCdMnY3TpJ
+         5IIiWpzcD3st3zEl52AE2HZGwjyAwqVRpYBN+WTqJE+ujsHpX27SGZLu715eB8N0tQw0
+         IvFXZoC0rmnGe9jrXpQqkfBC/LWzszLGNlUuikmbtx9aFZGqVqTdSv8izzLIsQv12q4u
+         0Q4OSpcjeDTdwHcUR7Cx5rHFWSaE9IdxKGVSHnxtpDngpM1OuFJEgzafUdAeq+Am4qsp
+         R6GCgYi+LWCCbGHxOIZrGJFbC54rXhedAvW3HBNZjJJn5u9I7X48HRZ4xNpAkTUbiamj
+         NpEw==
+X-Gm-Message-State: AFqh2kon/QBZZ6aARP6DYmNickDv3Ito8134FHJBKOFbeIemz/6XaoA+
+        Debqpe69+DCnONgzQUEhkT1urA==
+X-Google-Smtp-Source: AMrXdXs2ly9js0eSHV7X+rrGPhAfnPRWaalB/tSrvhSQbapLry3medMrQ2c5Xs+1XwcJCBV8NNeaIg==
+X-Received: by 2002:a05:651c:54f:b0:27f:66ec:b5d with SMTP id q15-20020a05651c054f00b0027f66ec0b5dmr3509135ljp.33.1671446683970;
+        Mon, 19 Dec 2022 02:44:43 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id f2-20020a2e3802000000b0027a099ad7efsm714252lja.35.2022.12.19.02.44.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Dec 2022 02:44:43 -0800 (PST)
+Message-ID: <c906603f-bf84-06d4-3e9c-bd4ab748591d@linaro.org>
+Date:   Mon, 19 Dec 2022 11:44:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219061758.23321-1-ashimida.1990@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: watchdog: Add watchdog for StarFive
+ JH7110
+Content-Language: en-US
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        linux-kernel@vger.kernel.org
+References: <20221219094233.179153-1-xingyu.wu@starfivetech.com>
+ <20221219094233.179153-2-xingyu.wu@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221219094233.179153-2-xingyu.wu@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 18, 2022 at 10:17:58PM -0800, Dan Li wrote:
-
-> In the compiler part[4], there are some differences from Sami's
-> implementation[3], mainly including:
+On 19/12/2022 10:42, Xingyu Wu wrote:
+> Add bindings to describe the watchdog for the StarFive JH7110 SoC.
 > 
-> 1. When a typeid mismatch is detected, the cfi_check_failed function
->    will be called instead of the brk instruction. This function needs
->    to be implemented by the compiler user.
->    If there are user mode programs or other systems that want to use
->    this feature, it may be more convenient to use a callback (so this
->    compilation option is set to -fsanitize=cfi instead of kcfi).
-
-This is not going to be acceptible for x86_64.
-
-> 2. A reserved typeid (such as 0x0U on the aarch64 platform) is always
->    inserted in front of functions that should not be called indirectly.
->    Functions that can be called indirectly will not use this hash value,
->    which prevents instructions/data before the function from being used
->    as a typeid by an attacker.
+> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> ---
+>  .../watchdog/starfive,jh7110-wdt.yaml         | 64 +++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/starfive,jh7110-wdt.yaml
 > 
-> 3. Some bits are ignored in the typeid to avoid conflicts between the
->    typeid and the instruction set of a specific platform, thereby
->    preventing an attacker from bypassing the CFI check by using the
->    instruction as a typeid, such as on the aarch64 platform:
->    * If the following instruction sequence exists:
-> 	  400620:       a9be7bfd        stp     x29, x30, [sp, #-32]!
-> 	  400624:       910003fd        mov     x29, sp
-> 	  400628:       f9000bf3        str     x19, [sp, #16]
->    * If the expected typeid of the indirect call is exactly 0x910003fd,
->      the attacker can jump to the next instruction position of any
->      "mov x29,sp" instruction (such as 0x400628 here).
-> 
-> 4. Insert a symbol __cfi_<function> before each function's typeid,
->    which may be helpful for fine-grained KASLR implementations (or not?).
-> 
-> 5. The current implementation of gcc only supports the aarch64 platform.
+> diff --git a/Documentation/devicetree/bindings/watchdog/starfive,jh7110-wdt.yaml b/Documentation/devicetree/bindings/watchdog/starfive,jh7110-wdt.yaml
+> new file mode 100644
+> index 000000000000..a7bfe0751928
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/starfive,jh7110-wdt.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/starfive,jh7110-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: StarFive Watchdog
+> +
+> +maintainers:
+> +  - Samin Guo <samin.guo@starfivetech.com>
+> +  - Xingyu Wu <xingyu.wu@starfivetech.com>
+> +
 
-What, if any, are the plans for x86_64 support?
+You miss watchdog.yaml. I asked to drop the quotes (so the " character),
+not the $ref. Please keep the $ref: watchdog.yaml and use
+unevaluatedProperties at the end (instead of additionalProperties).
+
+
+Best regards,
+Krzysztof
+
