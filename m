@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60CFE6514BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 22:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A6C6514BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 22:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232704AbiLSVWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 16:22:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45164 "EHLO
+        id S229895AbiLSVWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 16:22:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiLSVWL (ORCPT
+        with ESMTP id S232372AbiLSVWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 16:22:11 -0500
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD6A64D1;
-        Mon, 19 Dec 2022 13:22:10 -0800 (PST)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-143ffc8c2b2so13202545fac.2;
-        Mon, 19 Dec 2022 13:22:10 -0800 (PST)
+        Mon, 19 Dec 2022 16:22:12 -0500
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D1613E22;
+        Mon, 19 Dec 2022 13:22:11 -0800 (PST)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1447c7aa004so13150685fac.11;
+        Mon, 19 Dec 2022 13:22:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=f/Rdvbu+qSgHoC8VgQQG2atswz7W9zrDtpuYONrJn/Q=;
-        b=yJWD2nBRnVDgdbsQpV1zFrkqgSb4wzf/qkiswwrWgYlb64841ikksj6b/pz2BdG0RD
-         HemSt6CjNTOTfLDgwSfPv4M0AAuBoXEfLm1zHMF3DnocrDcy33OJ5raBubQBbs2T0/ap
-         4l9rMs+BqykMIRMYPPCyeKkE+v8lDbLkrIOE6p4Pjg9CqAsymX7Q757NlKSrfGVLDmxp
-         aVMMyq+EQntbMgg/m9WvH9aDTlrINMCVX/LQtV6QWL+w0B3Mn+t9CPsvoRqp9H1J0QyM
-         Oo4+bKp9ZITKBu7yE6JbAZqcclDuqoNQ0kiHtzemadPAj9USU5EH5QS9UYim5iy67BKr
-         ByEg==
-X-Gm-Message-State: ANoB5pm0rq+DWHB4dbrie/vkc1/mqUMD9Y33WV+AvzdqvDih5kjYLFUw
-        59l9i9NpVeq1TgvvQnjsxA==
-X-Google-Smtp-Source: AA0mqf7Swu8ufPQphtB2Ovx5HkJFBwFP2DUcnrN3rLC0xKRvsEiI5m29SLKPHE/BL0mwmq/kG0H5pw==
-X-Received: by 2002:a05:6870:7d02:b0:144:b4d6:4e02 with SMTP id os2-20020a0568707d0200b00144b4d64e02mr20991772oab.40.1671484929997;
-        Mon, 19 Dec 2022 13:22:09 -0800 (PST)
+        bh=mWZmLhv4tQqRJ/5IIdUzdyuJRsJ9N97/ffK3QG3ROhE=;
+        b=YkUYfcSMKPhdAb1I45Mg9DCAF5jJvER5IyRt9rcpN2P0js3lv9WyLSoShxngHLtJ6S
+         07Tx3pc3tdynvW2NSLRBLYfQAxp3g7PvEc1EyWKij+ykQuL5RXM+IsHkcESZMcn42dFe
+         iKJGcrjv7PCbmvzNuucsmh4KAdYTtIh61PnJzTcisR/CFm8vPb7FajwiPM0mDyu8dKoh
+         EpIn+So5+a5fTy+kC3gxwjsWhwL9YusiiN1butWzuor5pO0nKUK4h3D3wvJ7XY1XcOUI
+         17GAP6t+JTMYoGP16XjD233WkXhPwQR7ycRfzLt78SV4uSgdKW17kTDjckj4FjPPFnBG
+         4RvA==
+X-Gm-Message-State: AFqh2kqxg5GW6R56g8Ka6ZFag7hqb9/ftNffqKBw8LN+YzqxT2cJ9UoI
+        k2B3Es2QsY3xJ9N2Z5gULg==
+X-Google-Smtp-Source: AMrXdXvblcyvfksVkdMDmGQbTDb0F0OxjJ0/LA2SmlJcfOIDgs8zGzq2O65SptMl7iqmYzbMH6kgLQ==
+X-Received: by 2002:a05:6870:da09:b0:14b:f696:3ee9 with SMTP id go9-20020a056870da0900b0014bf6963ee9mr4554263oab.13.1671484931150;
+        Mon, 19 Dec 2022 13:22:11 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h18-20020a4ad012000000b004908a9542f8sm4345687oor.31.2022.12.19.13.22.09
+        by smtp.gmail.com with ESMTPSA id k48-20020a4a94b3000000b004a0918698f9sm4364886ooi.17.2022.12.19.13.22.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 13:22:09 -0800 (PST)
-Received: (nullmailer pid 2350832 invoked by uid 1000);
+        Mon, 19 Dec 2022 13:22:10 -0800 (PST)
+Received: (nullmailer pid 2350835 invoked by uid 1000);
         Mon, 19 Dec 2022 21:22:08 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Witold Sadowski <wsadowski@marvell.com>
-Cc:     wbartczak@marvell.com, jpawar@cadence.com,
-        linux-spi@vger.kernel.org, pthombar@cadence.com,
-        devicetree@vger.kernel.org, konrad@cadence.com,
-        linux-kernel@vger.kernel.org, wzmuda@marvell.com,
-        broonie@kernel.org
-In-Reply-To: <20221219144254.20883-5-wsadowski@marvell.com>
-References: <20221219144254.20883-1-wsadowski@marvell.com>
- <20221219144254.20883-5-wsadowski@marvell.com>
-Message-Id: <167148425112.2334433.10418308951514723890.robh@kernel.org>
-Subject: Re: [PATCH 4/7] spi: cadence: Change dt-bindings documentation for
- Cadence XSPI controller
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20221219191125.1974879-1-robh@kernel.org>
+References: <20221219191125.1974879-1-robh@kernel.org>
+Message-Id: <167148427205.2336021.7936012930229650977.robh@kernel.org>
+Subject: Re: [PATCH] regulator: dt-bindings: Convert Fairchild FAN53555 to DT schema
 Date:   Mon, 19 Dec 2022 15:22:08 -0600
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,56 +65,49 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Mon, 19 Dec 2022 06:42:51 -0800, Witold Sadowski wrote:
-> Add parameter cdns,read-size.
-> Parameter is controlling SDMA read size length.
+On Mon, 19 Dec 2022 13:11:25 -0600, Rob Herring wrote:
+> Convert the Fairchild FAN53555 and compatible variants binding to DT
+> schema format.
 > 
-> Signed-off-by: Witold Sadowski <wsadowski@marvell.com>
+> The example was missing 'reg', so add it.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  Documentation/devicetree/bindings/spi/cdns,xspi.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
+>  .../bindings/regulator/fan53555.txt           | 24 --------
+>  .../bindings/regulator/fcs,fan53555.yaml      | 59 +++++++++++++++++++
+>  2 files changed, 59 insertions(+), 24 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/regulator/fan53555.txt
+>  create mode 100644 Documentation/devicetree/bindings/regulator/fcs,fan53555.yaml
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-yamllint warnings/errors:
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/cdns,xspi.yaml: properties:cdns,read-size: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	'description' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('items' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/cdns,xspi.yaml: properties:cdns,read-size: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/cdns,xspi.yaml: properties:cdns,read-size: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221219191125.1974879-1-robh@kernel.org
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221219144254.20883-5-wsadowski@marvell.com
+regulator@40: Unevaluated properties are not allowed ('regulator-compatible', 'vsel-gpios' were unexpected)
+	arch/arm64/boot/dts/rockchip/rk3399-rock-4c-plus.dtb
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+regulator@40: Unevaluated properties are not allowed ('regulator-init-microvolt' was unexpected)
+	arch/arm64/boot/dts/rockchip/rk3566-anbernic-rg353p.dtb
+	arch/arm64/boot/dts/rockchip/rk3566-anbernic-rg503.dtb
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+regulator@41: Unevaluated properties are not allowed ('regulator-compatible', 'vsel-gpios' were unexpected)
+	arch/arm64/boot/dts/rockchip/rk3399-rock-4c-plus.dtb
 
-pip3 install dtschema --upgrade
+regulator@60: Unevaluated properties are not allowed ('vsel-gpios' was unexpected)
+	arch/arm64/boot/dts/freescale/imx8mq-nitrogen.dtb
+	arch/arm64/boot/dts/freescale/imx8mq-nitrogen.dtb
+	arch/arm64/boot/dts/freescale/imx8mq-nitrogen.dtb
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+syr827@40: Unevaluated properties are not allowed ('regulator-compatible' was unexpected)
+	arch/arm64/boot/dts/rockchip/rk3399-hugsun-x99.dtb
+
+syr828@41: Unevaluated properties are not allowed ('regulator-compatible' was unexpected)
+	arch/arm64/boot/dts/rockchip/rk3399-hugsun-x99.dtb
 
