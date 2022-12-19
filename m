@@ -2,108 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC455650875
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 09:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D568D650888
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 09:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbiLSIRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 03:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50870 "EHLO
+        id S231499AbiLSIWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 03:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiLSIRO (ORCPT
+        with ESMTP id S229499AbiLSIWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 03:17:14 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FE4BE23;
-        Mon, 19 Dec 2022 00:17:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1671437831; x=1702973831;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=y+btHyYZt6deb9ZTjxKgTd1t5WxObKlAJo5VmP00Z6U=;
-  b=xwaqUpwRop2MKwm/HalQ5KuYXbglFLih8Mo+YovkOxv0u59D0B2UBDFc
-   2WbRhudB7liA9ad20X5+6EoFQQd/F5JIDje3AsqbAs0ah6XQen57PEuJT
-   EqN59nUUYq2ljf7LJlrIF1eYcgtF24lM8CEa6Xr0YZBPeq+RUQFxV8y+3
-   YGyVWNIWnup3ECCviitRm2QQMD0PBtRY1v6QuAyaRQDQFd7O95xi1Np18
-   hwCV6ZnWCLVoNoKPINHBpZn9gGIb6VH/gAKu3raespz3sE+BwHhBBZUIm
-   sfXqjTL1q0PEwOvsBay/kWp6YxM8zIgfB+ffHaflVnzKsPJwYfUTfUDaj
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="128773399"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Dec 2022 01:17:09 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 19 Dec 2022 01:17:08 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Mon, 19 Dec 2022 01:17:06 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <lars.povlsen@microchip.com>,
-        <Steen.Hegelund@microchip.com>, <daniel.machon@microchip.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        kernel test robot <lkp@intel.com>,
-        "Dan Carpenter" <error27@gmail.com>,
-        Saeed Mahameed <saeed@kernel.org>
-Subject: [PATCH net v2] net: microchip: vcap: Fix initialization of value and mask
-Date:   Mon, 19 Dec 2022 09:22:15 +0100
-Message-ID: <20221219082215.76652-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
+        Mon, 19 Dec 2022 03:22:47 -0500
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3C57649;
+        Mon, 19 Dec 2022 00:22:44 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id AA62430000CE2;
+        Mon, 19 Dec 2022 09:22:40 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 9D60210D88; Mon, 19 Dec 2022 09:22:40 +0100 (CET)
+Date:   Mon, 19 Dec 2022 09:22:40 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Parav Pandit <parav@nvidia.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Wei Gong <gongwei833x@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v2] pci: fix device presence detection for VFs
+Message-ID: <20221219082240.GA5176@wunner.de>
+References: <20221110144700-mutt-send-email-mst@kernel.org>
+ <20221111234219.GA763705@bhelgaas>
+ <20221113034519-mutt-send-email-mst@kernel.org>
+ <20221116111619.GA5804@wunner.de>
+ <PH0PR12MB54811F4658F068C46E071E81DC069@PH0PR12MB5481.namprd12.prod.outlook.com>
+ <20221219005553-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219005553-mutt-send-email-mst@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following smatch warning:
+On Mon, Dec 19, 2022 at 12:56:15AM -0500, Michael S. Tsirkin wrote:
+> On Thu, Nov 17, 2022 at 05:36:48AM +0000, Parav Pandit wrote:
+> > > From: Lukas Wunner <lukas@wunner.de>
+> > > Sent: Wednesday, November 16, 2022 6:16 AM
+> > > 
+> > > [cc += Parav Pandit, author of 43bb40c5b926]
+> > > 
+> > > On Sun, Nov 13, 2022 at 03:46:06AM -0500, Michael S. Tsirkin wrote:
+> > > > On Fri, Nov 11, 2022 at 05:42:19PM -0600, Bjorn Helgaas wrote:
+> > > > > On Thu, Nov 10, 2022 at 03:15:55PM -0500, Michael S. Tsirkin wrote:
+> > > > > > On Thu, Nov 10, 2022 at 01:35:47PM -0600, Bjorn Helgaas wrote:
+> > > > > > > Prior to this change pci_device_is_present(VF) returned "false"
+> > > > > > > (because the VF Vendor ID is 0xffff); after the change it will
+> > > > > > > return "true" (because it will look at the PF Vendor ID instead).
+> > > > > > >
+> > > > > > > Previously virtio_pci_remove() called virtio_break_device().  I
+> > > > > > > guess that meant the virtio I/O operation will never be completed?
+> > > > > > >
+> > > > > > > But if we don't call virtio_break_device(), the virtio I/O
+> > > > > > > operation
+> > > > > > > *will* be completed?
+> > > >
+> > > > Just making sure - pci_device_is_present *is* the suggested way to
+> > > > distinguish between graceful and surprise removal, isn't it?
+> > > 
+> > > No, it's not.  Instead of !pci_device_is_present() you really want to call
+> > > pci_dev_is_disconnected() instead.
+> > > 
+> > > While the fix Bjorn applied for v6.2 may solve the issue and may make sense
+> > > on it's own, it's not the solution you're looking for.  You want to swap the
+> > > call to !pci_device_is_present() with pci_dev_is_disconnected(), move
+> > > pci_dev_is_disconnected() from drivers/pci/pci.h to include/linux/pci.h and
+> > > add a Fixes tag referencing 43bb40c5b926.
+> > > 
+> > > If you don't want to move pci_dev_is_disconnected(), you can alternatively
+> > > check for "pdev->error_state == pci_channel_io_perm_failure" or call
+> > > pci_channel_offline().  The latter will also return true though on transient
+> > > inaccessibility of the device (e.g. if it's being reset).
+> > > 
+> > pci_device_is_present() is calling pci_dev_is_disconnected().
+> > pci_dev_is_disconnected() avoids reading the vendor id.
+> > So pci_dev_is_disconnected() looks less strong check.
+> > I see that it can return a valid value on recoverable error case.
+> > 
+> > In that case, is pci_channel_offline() a more precise way to check that covers transient and permanent error?
+> > 
+> > And if that is the right check, we need to fix all the callers, mainly widely used nvme driver [1].
+> > 
+> > [1] https://elixir.bootlin.com/linux/v6.1-rc5/source/drivers/nvme/host/pci.c#L3228
+> > 
+> > Also, we need to add API documentation on when to use this API in context of hotplug, so that all related drivers can consistently use single API.
+> 
+> Bjorn, Lukas, what's your take on this idea?
 
-smatch warnings:
-drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c:103 vcap_debugfs_show_rule_keyfield() error: uninitialized symbol 'value'.
-drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c:106 vcap_debugfs_show_rule_keyfield() error: uninitialized symbol 'mask'.
+I don't really know what to add to my e-mail of Nov 16
+(quoted here in full).
 
-In case the vcap field was VCAP_FIELD_U128 and the key was different
-than IP6_S/DIP then the value and mask were not initialized, therefore
-initialize them.
+Yes, pci_channel_offline() returns true on transient and permanent
+failure.  Whether that's what you want, depends on your use case.
+If you want to check for a surprise-removed device, then you only
+want to check for permanent failure, so pci_channel_offline() is
+not correct and you should rather check for
+"pdev->error_state == pci_channel_io_perm_failure" or move
+pci_dev_is_disconnected() to include/linux/pci.h.  But again,
+I've already explained this in my e-mail ov Nov 16, so I don't
+know what's unclear.
 
-Fixes: 610c32b2ce66 ("net: microchip: vcap: Add vcap_get_rule")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <error27@gmail.com>
-Reviewed-by: Saeed Mahameed <saeed@kernel.org>
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
-v1->v2:
-- rebase on net
-- both the mask and value were assigned to data->u128.value, which is
-  wrong, fix this.
----
- drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c | 2 ++
- 1 file changed, 2 insertions(+)
+Thanks,
 
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c b/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c
-index 895bfff550d23..e0b206247f2eb 100644
---- a/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c
-@@ -83,6 +83,8 @@ static void vcap_debugfs_show_rule_keyfield(struct vcap_control *vctrl,
- 		hex = true;
- 		break;
- 	case VCAP_FIELD_U128:
-+		value = data->u128.value;
-+		mask = data->u128.mask;
- 		if (key == VCAP_KF_L3_IP6_SIP || key == VCAP_KF_L3_IP6_DIP) {
- 			u8 nvalue[16], nmask[16];
- 
--- 
-2.38.0
+Lukas
 
+> > > The theory of operation is as follows:  The PCI layer does indeed know
+> > > whether the device was surprise removed or gracefully removed and that
+> > > information is passed in the "presence" flag to pciehp_unconfigure_device()
+> > > (in drivers/pci/hotplug/pciehp_pci.c).  That function does the following:
+> > > 
+> > > 	if (!presence)
+> > > 		pci_walk_bus(parent, pci_dev_set_disconnected, NULL);
+> > > 
+> > > In other words, pdev->error_state is set to pci_channel_io_perm_failure on
+> > > the entire hierarchy below the hotplug port.  And pci_dev_is_disconnected()
+> > > simply checks whether that's the device's error_state.
+> > > 
+> > > pci_dev_is_disconnected() makes sense if you definitely know the device is
+> > > gone and want to skip certain steps or delays on device teardown.
+> > > However be aware that the device may be hot-removed after graceful
+> > > removal was initiated.  In such a situation, pci_dev_is_disconnected() may
+> > > return false and you'll try to access the device as normal, even though it was
+> > > yanked from the slot after the pci_dev_is_disconnected() call was
+> > > performed.  Ideally you should be able to cope with such scenarios as well.
+> > > 
+> > > For some more background info, refer to this LWN article (scroll down to the
+> > > "Surprise removal" section):
+> > > https://lwn.net/Articles/767885/
+> > > 
+> > > Thanks,
+> > > 
+> > > Lukas
