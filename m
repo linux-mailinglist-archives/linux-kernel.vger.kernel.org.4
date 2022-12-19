@@ -2,171 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD90650721
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 05:23:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C02365072E
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 05:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbiLSEXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 23:23:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
+        id S231270AbiLSE3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 23:29:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbiLSEWY (ORCPT
+        with ESMTP id S231557AbiLSE27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 23:22:24 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89ECF65AD;
-        Sun, 18 Dec 2022 20:22:23 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id d7so7839247pll.9;
-        Sun, 18 Dec 2022 20:22:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2eJ0PgV9osw1yzCFjYcppkmXI1mNsCk3sVd7FF32JKk=;
-        b=DWj2vrOsmcNcemOcEX+STJ0rY9zglo4HAd+kl6qkuHXYj1Wn+icY7bqhzZvQZPEXZq
-         q2GE6FnBygHaxi5XvVdiki3g+eQJkl7gjZr1Q4aOMaIIXj2g3RiKjVlAvHdORhkzVuS4
-         LKCmZkz7m3E1QfHnWerxeT51zEUy73Fa3T0MnAL2nY3N6bvLyTDW6zbbK3pew4Out7Z8
-         jjk1A2g/g70jdwVtmUF1V58q7Edd24yVBJgNwr+kfc2MrzW3xE/q5mUuXT3zwr81YB8D
-         3Nk2RzYCxxS+IpdEdLaruJm43t6qLYaz2ZiHbbSop+4Xt9I921ssalMCYn48uELg73fN
-         NQpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2eJ0PgV9osw1yzCFjYcppkmXI1mNsCk3sVd7FF32JKk=;
-        b=H8fJJDwoFf8MoP4bs39YEVUJmh+q6PsUEzZJuhWhF3kr9ppk3ixxU4fj5Dz37ea3Sw
-         QC6ENsX9XqFbyzHER/SwXBQi9hf53OyTbHmQsfBs/hyfC3rf+mK4A2rR2XmwEmJwr2Mh
-         o3lk8D48sOKoTxpIwZFd3wddD65g+fqi/uTjozYZcKfUxiOjfRFnvaeW5CfVQC3XOTi2
-         1r3W+x8OUS/DQR164YTMKu5I+EOYAruT9zIjesUNUn5VdnhfY4Umv9BqmokK90hKogYu
-         9T1fIi48tqcPWW4wNb4XAqUaf1qzCUL9qbfGuMnSLZNfeREwGb9LOMtfy3H1bmCCxXJU
-         f0Rg==
-X-Gm-Message-State: ANoB5pk0MadVFRLY2HLROns3yUDRnFBDdiCaUtZvB2yGauLv0ceKnJFd
-        Fvk44EjibODXbR3bMdmvvpc=
-X-Google-Smtp-Source: AA0mqf5MV88rivDFHbXAo0wF1vc9fTd9ZJ8yZVxW/J5PoxzMPwtuA4ml+Kh2ZZH4Hkxwpc1lxQbtzg==
-X-Received: by 2002:a17:90a:d24f:b0:219:251f:d92d with SMTP id o15-20020a17090ad24f00b00219251fd92dmr42619785pjw.9.1671423743042;
-        Sun, 18 Dec 2022 20:22:23 -0800 (PST)
-Received: from debian.me (subs32-116-206-28-20.three.co.id. [116.206.28.20])
-        by smtp.gmail.com with ESMTPSA id h22-20020a17090a055600b0021e1c8ef788sm6768182pjf.51.2022.12.18.20.22.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Dec 2022 20:22:22 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 50B64103F77; Mon, 19 Dec 2022 11:22:14 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH 10/10] docs: cgroup-v1: use numbered lists for user interface setup
-Date:   Mon, 19 Dec 2022 11:22:09 +0700
-Message-Id: <20221219042209.22898-11-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221219042209.22898-1-bagasdotme@gmail.com>
-References: <20221219042209.22898-1-bagasdotme@gmail.com>
+        Sun, 18 Dec 2022 23:28:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A32BF68;
+        Sun, 18 Dec 2022 20:26:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6B4AB80D27;
+        Mon, 19 Dec 2022 04:26:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7358DC433EF;
+        Mon, 19 Dec 2022 04:26:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671423986;
+        bh=hRycLOTdsoI0Dl/XQOcXlNVZnTaSLloe3NHNpvNTRgo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Oft5A7jUfir39CQjGSuN6VD5SuM0J18M9RnuI35aL7lqt6mu9cKKSo+qdouJVLx2X
+         aVm8L1oBf2XiMQi/KKIoUj9rgkQlvBO1lJCcLM/9XohaheYVSog2/pIuFyayYg1aAg
+         to1yZFvmH0H8BQs009eu13ks3MM/gT2sb2Oeq7Ohe+8mUrUV2IlqsBR2xCnfU/H4Vm
+         9Z3CTbhxmhFQWqDl6yopLSRqhBhm7L2NzQTvNYQQm6qenBxVfvQ2Kr3UqcFBdiP44M
+         ngPNDzY1Nut8gWnSKSsHbJt/A6yF9IqUPtvq2CS+V5a0LUPQkubKCmm4DlFsAXNBQV
+         MNl/bjZThHLTA==
+From:   guoren@kernel.org
+To:     torvalds@linux-foundation.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
+Subject: [GIT PULL] csky changes for v6.2-rc1
+Date:   Sun, 18 Dec 2022 23:26:22 -0500
+Message-Id: <20221219042622.2621881-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3017; i=bagasdotme@gmail.com; h=from:subject; bh=haqtoEyuEFE5UnwPbflPC/PeHSHq/t5MqztTHGRMvxU=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMnzn31Yu6nM4+SR7DS266m3vv0SYTkjskqKnT1/2vb+2c+E 01fc6ihlYRDjYpAVU2SZlMjXdHqXkciF9rWOMHNYmUCGMHBxCsBEtCIYGSby1km+5D6Wv99W4+3DqV 9jop/ITFCZJ+BRZbfuSIH2LT6Gf7q/dRxd+6+pLdU36Xr6wNKyY9lSKyVHrU1bSjdLNW26yQIA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Setup instructions for memory resource controller UI uses a mix of
-section headings and normal paragraphs, whereas numbered lists are
-better fit for this purpose.
+Hi Linus,
 
-While at it, also slightly reword the instructions and add reference to
-"Why are cgroups needed?" in the main cgroups documentation.
+Please pull the latest csky changes from:
 
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- .../admin-guide/cgroup-v1/cgroups.rst         |  2 ++
- .../admin-guide/cgroup-v1/memory.rst          | 26 ++++++++-----------
- 2 files changed, 13 insertions(+), 15 deletions(-)
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-diff --git a/Documentation/admin-guide/cgroup-v1/cgroups.rst b/Documentation/admin-guide/cgroup-v1/cgroups.rst
-index b0688011ed06de..9343148ee99366 100644
---- a/Documentation/admin-guide/cgroup-v1/cgroups.rst
-+++ b/Documentation/admin-guide/cgroup-v1/cgroups.rst
-@@ -80,6 +80,8 @@ access. For example, cpusets (see Documentation/admin-guide/cgroup-v1/cpusets.rs
- you to associate a set of CPUs and a set of memory nodes with the
- tasks in each cgroup.
- 
-+.. _cgroups-why-needed:
-+
- 1.2 Why are cgroups needed ?
- ----------------------------
- 
-diff --git a/Documentation/admin-guide/cgroup-v1/memory.rst b/Documentation/admin-guide/cgroup-v1/memory.rst
-index ae3a1d3873d73b..8cd46525b19c2e 100644
---- a/Documentation/admin-guide/cgroup-v1/memory.rst
-+++ b/Documentation/admin-guide/cgroup-v1/memory.rst
-@@ -389,30 +389,30 @@ U != 0, K >= U:
- 3. User Interface
- =================
- 
--3.0. Configuration
--------------------
-+To use the user interface:
- 
--a. Enable CONFIG_CGROUPS
--b. Enable CONFIG_MEMCG
--
--3.1. Prepare the cgroups (see cgroups.txt, Why are cgroups needed?)
---------------------------------------------------------------------
--
--::
-+1. Enable CONFIG_CGROUPS and CONFIG_MEMCG options
-+2. Prepare the cgroups (see :ref:`Why are cgroups needed?
-+   <cgroups-why-needed>` for the background information)::
- 
- 	# mount -t tmpfs none /sys/fs/cgroup
- 	# mkdir /sys/fs/cgroup/memory
- 	# mount -t cgroup none /sys/fs/cgroup/memory -o memory
- 
--3.2. Make the new group and move bash into it::
-+3. Make the new group and move bash into it::
- 
- 	# mkdir /sys/fs/cgroup/memory/0
- 	# echo $$ > /sys/fs/cgroup/memory/0/tasks
- 
--Since now we're in the 0 cgroup, we can alter the memory limit::
-+4. Since now we're in the 0 cgroup, we can alter the memory limit::
- 
- 	# echo 4M > /sys/fs/cgroup/memory/0/memory.limit_in_bytes
- 
-+   The limit can now be queried::
-+
-+	# cat /sys/fs/cgroup/memory/0/memory.limit_in_bytes
-+	4194304
-+
- .. note::
-    We can use a suffix (k, K, m, M, g or G) to indicate values in kilo,
-    mega or gigabytes. (Here, Kilo, Mega, Giga are Kibibytes, Mebibytes,
-@@ -424,10 +424,6 @@ Since now we're in the 0 cgroup, we can alter the memory limit::
- .. note::
-    We cannot set limits on the root cgroup any more.
- 
--::
--
--  # cat /sys/fs/cgroup/memory/0/memory.limit_in_bytes
--  4194304
- 
- We can check the usage::
- 
--- 
-An old man doll... just what I always wanted! - Clara
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
+are available in the Git repository at:
+
+  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-6.2-rc1
+
+for you to fetch changes up to 7e2004906fb52257772be0ef262fba2d5eb1653b:
+
+  Revert "csky: Add support for restartable sequence" (2022-11-11 04:59:28 -0500)
+
+----------------------------------------------------------------
+arch/csky patches for 6.2-rc1
+
+The pull request we've done:
+ - Revert rseq
+ - Add current_stack_pointer support
+ - Typo fixup
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      csky: Kconfig: Fix spelling mistake "Meory" -> "Memory"
+
+Mathieu Desnoyers (2):
+      Revert "csky: Fixup CONFIG_DEBUG_RSEQ"
+      Revert "csky: Add support for restartable sequence"
+
+Tong Tiangen (1):
+      csky: add arch support current_stack_pointer
+
+ arch/csky/Kconfig                 |  4 ++--
+ arch/csky/include/asm/processor.h |  2 ++
+ arch/csky/kernel/entry.S          | 11 +----------
+ arch/csky/kernel/signal.c         |  2 --
+ arch/csky/kernel/stacktrace.c     |  6 ++----
+ 5 files changed, 7 insertions(+), 18 deletions(-)
