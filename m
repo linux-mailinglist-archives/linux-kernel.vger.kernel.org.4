@@ -2,165 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C69316515BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 23:55:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 342BC6515C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 23:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232679AbiLSWzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 17:55:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S232717AbiLSW7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 17:59:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232617AbiLSWzZ (ORCPT
+        with ESMTP id S232716AbiLSW7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 17:55:25 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2056.outbound.protection.outlook.com [40.107.100.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D7C12D3D;
-        Mon, 19 Dec 2022 14:55:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dmEMxJdbofgVzaZBHdq1itE0Ynncf67mO1auhxkesAtaspzfE8YjehSxGyRhYP/dP6r/56V8ESey7UdwPn1bP5KtLcYw0qM/RjbIX6VDN/9jz+aL379IW7mBnorEC+vA5zGaqwY3IWQ5USnPuPkvZCc+ZRKIcbZ01S5H6JtkVq4nryLJv93bKcm4y3OQlP7jillDuYd6Q8xalVA4AjQB/qPLaT8MdXwBVrpA6SMqwXNE8PQ5v2HwYNyIJYaq7qgm7eTbrNzS3JTHujBJbstkIPPA7yfNyO/hwQqJVSrUhlIbZEQ6HZyE801KQV2/M9NImkmgCulPZIfB3EksQI/Utw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cNDoFPmVeb7tmsycbodwA6+cJ2kLW8Mh5F+zOTQ2ybE=;
- b=ho9O/NjMbJN0Jfyd408rlKtdGOJ/hKBLqErZlZ5s16ITRrCrmTI8F5CboD4cy1wZwk74X8j5m3cSu/FSVDu3UBU2DUnlFfJ21K//RFfYhJPHD5GpzU8mXhC8796DF6qUoYm5JkNJIdz8iogctE7SkkOT8TucdHkI6KPyIw2yqeO3/YeY9OUSal++XBWXtXPr3fRq5CvNdaTCntnsLEbzH/Ljbj+cg+cuJJ3V8ncyKoB4LFO29tE4mqdiprvDbo8sERNbfX5oPclnF0T7XhbL9sCMIvc42uAIHKiLAO/GzKR5JouPNEGn97CP+n0o4VECdXkn4ny3peqLLgDShTdgug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cNDoFPmVeb7tmsycbodwA6+cJ2kLW8Mh5F+zOTQ2ybE=;
- b=uvgtgAcqKYB9XuIpa9TpApFcohld/UCS3Hofgo0XL6Q0H+OxZQ2jGXEVpCvwHDnNrL9FB8OFn3UvywrSwsjIo7d0zJG34p2adPLzZ1QrUTF13oTskzZ25qDHdNoVipstvgZs1xhMyyfWQ1nR+2EdrVKXYkJcQLeUvZUka4fz9yg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by CY5PR12MB6647.namprd12.prod.outlook.com (2603:10b6:930:40::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Mon, 19 Dec
- 2022 22:55:22 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::ff3c:2d37:75f3:442a]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::ff3c:2d37:75f3:442a%4]) with mapi id 15.20.5924.016; Mon, 19 Dec 2022
- 22:55:22 +0000
-Message-ID: <910badde-2014-0acc-64c0-5d5cf07716fe@amd.com>
-Date:   Mon, 19 Dec 2022 16:55:19 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v8 04/13] cpufreq: amd-pstate: fix kernel hang issue while
- amd-pstate unregistering
-Content-Language: en-US
-To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
-        ray.huang@amd.com, viresh.kumar@linaro.org
-Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
-        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
-        Xiaojian.Du@amd.com, Li.Meng@amd.com, wyes.karny@amd.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221219064042.661122-1-perry.yuan@amd.com>
- <20221219064042.661122-5-perry.yuan@amd.com>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <20221219064042.661122-5-perry.yuan@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0412.namprd13.prod.outlook.com
- (2603:10b6:208:2c2::27) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Mon, 19 Dec 2022 17:59:39 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334BD13CD3;
+        Mon, 19 Dec 2022 14:59:38 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJLZO43017813;
+        Mon, 19 Dec 2022 22:59:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=AhED40djqVFMvVEfys5HxwJPt3BvUKftjBxacBou9RU=;
+ b=o0K4O73UitpOOl3y9Tf7GDVD4PPV4QVgX4/nqTMi6vgRWdFxN44OK8fuB+lrjUN9xHRE
+ TtXOqElg9lVRPoX3s0IhuMDTnR+OPPnmUOaPGmrlUTosESBHcpnajwpAn2qrWk/b2uGk
+ 7sxf9Sxm53D/4Vrxiig6bnGldM8VqLRXwJgqESZE9DXFZum1TPZz3AMJDSEcsXiu44sr
+ EG9WG5Mos/muv/kdrAFqa48o1Q0W+Evw1jgkV5uEdx+QnHrvM5JKZe27SwbiiwJpR2rn
+ gDWsKNgq+xcBSllje3QISf+/QkkD7sEFmEOfdotWf6X6RKBB2Lr0GeC457cZUWVB+14h wQ== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mh5v25gxe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Dec 2022 22:59:20 +0000
+Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BJMxJqN005214
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Dec 2022 22:59:19 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 19 Dec 2022 14:59:18 -0800
+From:   Elliot Berman <quic_eberman@quicinc.com>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+CC:     Elliot Berman <quic_eberman@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Srivatsa Vaddagiri" <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-acpi@vger.kernel.org>
+Subject: [PATCH v8 00/28] Drivers for gunyah hypervisor
+Date:   Mon, 19 Dec 2022 14:58:21 -0800
+Message-ID: <20221219225850.2397345-1-quic_eberman@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CY5PR12MB6647:EE_
-X-MS-Office365-Filtering-Correlation-Id: d6499a7b-b6f3-41a9-0b89-08dae2141bda
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4Jq8PaF1JB3BTMxtAuiERxzQQwDzpH+c4Ed75LqquIfSi30HJzD4imoCXFlX73B1Alh5x5GR+zm8lQSF+gBbiAhnouv6hzNpS/OAzZr6sJQWdBsrXkXqAaXsrMJ8ukcvSkgqLw+FpXPg4aOIwKr3ubOYwBPno2uQLk/AykBLHnyxQVaVp+Vd5Wm956dThYMaevy2Mt4zBrYRzsBdwBPXP1RgVHyHUi+O8VTkLalx2o3vDuq9a6Kx5EsGJkxYee6hOCAtWbluSLk8MtMQbPBIL0nIarlS42xnO8zKjUJHQllCMmfWyplJ3+3xK9JPW9ugG8PvzvxfLDuU0Sfur5aAeuhkBxL5qO6HSYGjEUXX2Qf+kNUSoBYX4tL6x0CyOkZEYrN+XEK7ZD6TI1sJBSh0g5hEf8LZVRNFvG7T+i5XZQCWVXPlWwkL2jVARTH2Ib486XfvduJtZdThBe2AIvKfwLCoZZZPXFxsl/843PxUhwP7tghtN4VlvhLhajdkVsm5xTBNK81Ni7UEAGs3PnWD4cFg4gTpAN+RrLGCtkhd8wqge9/AaeV7tHVSybTTmrHAzHhcnXldxwRqWwidsaoqFVhOqwBntKujsXoqW1HkHgTNuWTaG3X64pIGrcB+XpYQt/PN078WtY9dsdc2ewQuWPBKrfXLRfoXJKUvA1MLeQzi8u8UIA1A71HavwU5a6eOeD/Xqin10aKBdGZKel2NlIlpCnGv/GE77UJn6S6er8g=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(366004)(396003)(39860400002)(451199015)(6666004)(316002)(31686004)(2906002)(38100700002)(6512007)(66946007)(478600001)(31696002)(66476007)(66556008)(86362001)(26005)(4326008)(186003)(8676002)(36756003)(2616005)(8936002)(6486002)(6506007)(41300700001)(53546011)(5660300002)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ak9Rd2l0dmIxTnlqYU5tNDBGMDNERkhEeldmMHFBajBrdklTWHRSQmF2Vjlu?=
- =?utf-8?B?d0ZxL2VVMy9uZElvYlVWbGYzQXF1c2lqMEFCcG9GMElBdGsxNFpCZmJyZ01E?=
- =?utf-8?B?dnZqSXNTTTlaelY3Qm90TUtVTi9WV01NVnBGYmdmTXBsQmtJWEtBRnNJYjQ5?=
- =?utf-8?B?bFQxVm9XQmVXamxtTXBPSlBIcGx2b0hUQ25HQWJKTDVDaW1sMWRlengra3Ez?=
- =?utf-8?B?bm9rNk9wNWRHVVErL0tRWFFnU0tzUm1teGVONnNBRDJrajltWjBUSFpSSEl4?=
- =?utf-8?B?YUcvSkx1ZHZNKzNaTVZ4eXNGOHZTTFhpTnV3UkNDSHp3aXJHMFhrVSthTzRZ?=
- =?utf-8?B?VEhFUjhvM2hBaHJBekhWL2plajgyRHYrQ0lHYmVjT1E5QlRpYnlrcWNHelhr?=
- =?utf-8?B?bGR4bElRK0dHeU5BeWpST3J3cmx1WHVqTTMyZHpiUXFvWXBpKzVjR2VrSDNB?=
- =?utf-8?B?N2d5MkNnMHVzZC9CTWJCSlNid2hoZUhmL2pBZGJBUWsxYTZGUlRNc0JWeU8y?=
- =?utf-8?B?WEZXYnlFdmd2MEZLZzFuNHUzaVVkM2ZVVS9pcEpLOTcvcFBMNWorNE02SGdF?=
- =?utf-8?B?UUVRbmtuQ1pOa0haZlp3anJxVjduMHNyeWlHS0JFeUR3UFpiMW5ldGlYb1VQ?=
- =?utf-8?B?UkQ1OGptb2N0RUVDZ283MFEwYmZmRGNPRkxxdEhSUDgrUnVPOVpJOEVwb0x5?=
- =?utf-8?B?cDl0dHNrTmt2aTdrQVBEVmpZaHpRWEp5RTkraU9uSmtUNDdESXhXWlFTNkwx?=
- =?utf-8?B?L21sMnRaOTNHdFBQeFc4aFdiTWR0UWNCclRoOHFhRmw5MXh0bXdvSmhhOUhv?=
- =?utf-8?B?bUowdWNCZDdjUWR6cW9EYUNFdXIvTFR0cEdsRzZFdVJyQ2xqcjA1WFFYV2VH?=
- =?utf-8?B?aHNJOVFScmtocDY2R3U0b0tGOGg2Nm5jRWRwQ09SZDQycEQyTEx3emVaU2R1?=
- =?utf-8?B?N01KalRFbDlhQnJYcVFCaHFQbjllTHdwNVVvem5xcHNBVEpVNXdFT0NTeVJC?=
- =?utf-8?B?VXQyR2EyL3NpUXhuQUFwMjNnclpoOHkzK3M2QkhpdUFOMXkxVmdGcDRWZUFa?=
- =?utf-8?B?T1gxUXY0UmR0Q2N0ZHVueXgvMUVkVEhJa3dsVmRUQU9CUEZiOXZ3MGwzWWlq?=
- =?utf-8?B?dUJmYVBFNWdGMUdUcmpYNVQ3UWlyN3ZNNmhHeWt0cXZ4Q2R4SVg1Wi9Rbncy?=
- =?utf-8?B?L1lYWEJEUWxKYno3YVJ5U1AvVUFzV0NtOVRKNlpjNkNpaXRvQUMrM0pCenhE?=
- =?utf-8?B?cGFtNWZlWGZ5WE9YSnpYUmNrdW01UzA2bkNab0QwVzYrTlNObWk4eStxS1lR?=
- =?utf-8?B?WU0yYW9WMVBIRmRQRGE1dlpCNEJiWkhEbWRyVHV0K2dXRXRPb2dNak9vUDM4?=
- =?utf-8?B?VFRMcjdwT2ptenRpL0tZTSs5OTZEYURSOUliZGRJWVdxWE43SlhzamMzZFJD?=
- =?utf-8?B?WDUwdG9kaTJ2Q1ZZdXNadThkYkxxK21ja1E2T1A5OTNEQitHRUNYMitvQWkx?=
- =?utf-8?B?UDB4d1g0V1ZrckN1eExxV3pReFFnOFQyZEx6bTVURnlzM2xKVnBGZnNMNTMw?=
- =?utf-8?B?MytmRjJmV2xheVdSM1lkcVYzL092SHlBTUVzQkxBa1pvQmxxRFJUM0xuVGRE?=
- =?utf-8?B?V2E4ck10ODlkdmZYcHVRRmhIeVBSYmNwYUNOc3BTVEVieVBET2ZwWWhKT2dX?=
- =?utf-8?B?dzNjZzdXQ2M2ZnNaQ2I1YVpyeU1CVzRRM2k2NHFyTHZDSzI3ZWJkakVMRnpU?=
- =?utf-8?B?NEJyOWpCbXdoeDk2WGpiRThyeHI5ZEN4bW90QzZKU3lpS0JIUEsyeXF5ajFU?=
- =?utf-8?B?LzM3bjRObGd1ZlhOa1VkNW1vcUdYbXdnd0pxQWdEQlVCVFQzS3gvUU5BU2xZ?=
- =?utf-8?B?a3ZBRFF5bEJqbU9RNjRFZ1F6TUhITFY2VnpDSkJBbUlDODArbFRzaGFGbTM4?=
- =?utf-8?B?U0Mrbm41SjJRclBRdDZDMmdpZTFScGt5ZVBiR0c3bkpnUkhsSDRRV0tnNFlp?=
- =?utf-8?B?dm9uM1BMNWlBcGRJL05tUzdaL05RMzZER2VWZExGQ1c1K1JHclhjODluQUtt?=
- =?utf-8?B?bWRJdThFVWYydFlPcG10clVNenBUcTF5Sm9nOXJZZDlseW5rMGhCcGxZc2JV?=
- =?utf-8?Q?m4Yyk/FWJomNuWRrnCl7It3VI?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d6499a7b-b6f3-41a9-0b89-08dae2141bda
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2022 22:55:22.1781
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GbWf02nHPNsmFQrTf0wV9G+aC4JNCVGzVAExLbYgSfQDmrKXpUpncwc80z+ZSgHOybnRqy4EqH09E/rWpOxHGg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6647
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: WvwhfeK-kqNRtexhV9_eZ7zUAa7Tsg0t
+X-Proofpoint-GUID: WvwhfeK-kqNRtexhV9_eZ7zUAa7Tsg0t
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-19_01,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 suspectscore=0 clxscore=1011 adultscore=0 malwarescore=0
+ bulkscore=0 mlxlogscore=999 mlxscore=0 spamscore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212190201
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/19/2022 00:40, Perry Yuan wrote:
-> In the amd_pstate_adjust_perf(), there is one cpufreq_cpu_get() call to
-> increase increments the kobject reference count of policy and make it as
-> busy. Therefore, a corresponding call to cpufreq_cpu_put() is needed to
-> decrement the kobject reference count back, it will resolve the kernel
-> hang issue when unregistering the amd-pstate driver and register the
-> `amd_pstate_epp` driver instance.
-> 
-> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
-> Acked-by: Huang Rui <ray.huang@amd.com>
+Gunyah is a Type-1 hypervisor independent of any
+high-level OS kernel, and runs in a higher CPU privilege level. It does
+not depend on any lower-privileged OS kernel/code for its core
+functionality. This increases its security and can support a much smaller
+trusted computing base than a Type-2 hypervisor.
 
-Even if this patch comes into mainline through the series, this 
-particular patch should go to stable too to fix users unloading 
-amd-pstate with the existing passive mode.
+Gunyah is an open source hypervisor. The source repo is available at
+https://github.com/quic/gunyah-hypervisor.
 
-Cc: stable@vger.kernel.org
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+The diagram below shows the architecture.
 
-> ---
->   drivers/cpufreq/amd-pstate.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 204e39006dda..c17bd845f5fc 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -307,6 +307,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
->   		max_perf = min_perf;
->   
->   	amd_pstate_update(cpudata, min_perf, des_perf, max_perf, true);
-> +	cpufreq_cpu_put(policy);
->   }
->   
->   static int amd_get_min_freq(struct amd_cpudata *cpudata)
+::
+
+         VM A                    VM B
+     +-----+ +-----+  | +-----+ +-----+ +-----+
+     |     | |     |  | |     | |     | |     |
+ EL0 | APP | | APP |  | | APP | | APP | | APP |
+     |     | |     |  | |     | |     | |     |
+     +-----+ +-----+  | +-----+ +-----+ +-----+
+ ---------------------|-------------------------
+     +--------------+ | +----------------------+
+     |              | | |                      |
+ EL1 | Linux Kernel | | |Linux kernel/Other OS |   ...
+     |              | | |                      |
+     +--------------+ | +----------------------+
+ --------hvc/smc------|------hvc/smc------------
+     +----------------------------------------+
+     |                                        |
+ EL2 |            Gunyah Hypervisor           |
+     |                                        |
+     +----------------------------------------+
+
+Gunyah provides these following features.
+
+- Threads and Scheduling: The scheduler schedules virtual CPUs (VCPUs) on
+physical CPUs and enables time-sharing of the CPUs.
+- Memory Management: Gunyah tracks memory ownership and use of all memory
+under its control. Memory partitioning between VMs is a fundamental
+security feature.
+- Interrupt Virtualization: All interrupts are handled in the hypervisor
+and routed to the assigned VM.
+- Inter-VM Communication: There are several different mechanisms provided
+for communicating between VMs.
+- Device Virtualization: Para-virtualization of devices is supported using
+inter-VM communication. Low level system features and devices such as
+interrupt controllers are supported with emulation where required.
+
+This series adds the basic framework for detecting that Linux is running
+under Gunyah as a virtual machine, communication with the Gunyah Resource
+Manager, and a virtual machine manager capable of launching virtual machines.
+
+Patches 21-28 are presently intended to be submitted separately and are included
+for initial RFC. These patches introudce "VM function" framework to expose further
+interfaces to interact with Gunyah Virtual Machines. With all 28 patches, it is
+possible to create a Gunyah VM supporting virtio.
+
+Changes in v8:
+ - Treat VM manager as a library of RM
+ - Add patches 21-28 as RFC to support proxy-scheduled vCPUs and necessary bits to support virtio
+   from Gunyah userspace
+
+Changes in v7: https://lore.kernel.org/all/20221121140009.2353512-1-quic_eberman@quicinc.com/
+ - Refactor to remove gunyah RM bus
+ - Refactor allow multiple RM device instances
+ - Bump UAPI to start at 0x0
+ - Refactor QCOM SCM's platform hooks to allow CONFIG_QCOM_SCM=Y/CONFIG_GUNYAH=M combinations
+
+Changes in v6: https://lore.kernel.org/all/20221026185846.3983888-1-quic_eberman@quicinc.com/
+ - *Replace gunyah-console with gunyah VM Manager*
+ - Move include/asm-generic/gunyah.h into include/linux/gunyah.h
+ - s/gunyah_msgq/gh_msgq/
+ - Minor tweaks and documentation tidying based on comments from Jiri, Greg, Arnd, Dmitry, and Bagas.
+
+Changes in v5: https://lore.kernel.org/all/20221011000840.289033-1-quic_eberman@quicinc.com/
+ - Dropped sysfs nodes
+ - Switch from aux bus to Gunyah RM bus for the subdevices
+ - Cleaning up RM console
+
+Changes in v4: https://lore.kernel.org/all/20220928195633.2348848-1-quic_eberman@quicinc.com/
+ - Tidied up documentation throughout based on questions/feedback received
+ - Switched message queue implementation to use mailboxes
+ - Renamed "gunyah_device" as "gunyah_resource"
+
+Changes in v3: https://lore.kernel.org/all/20220811214107.1074343-1-quic_eberman@quicinc.com/
+ - /Maintained/Supported/ in MAINTAINERS
+ - Tidied up documentation throughout based on questions/feedback received
+ - Moved hypercalls into arch/arm64/gunyah/; following hyper-v's implementation
+ - Drop opaque typedefs
+ - Move sysfs nodes under /sys/hypervisor/gunyah/
+ - Moved Gunyah console driver to drivers/tty/
+ - Reworked gunyah_device design to drop the Gunyah bus.
+
+Changes in v2: https://lore.kernel.org/all/20220801211240.597859-1-quic_eberman@quicinc.com/
+ - DT bindings clean up
+ - Switch hypercalls to follow SMCCC 
+
+v1: https://lore.kernel.org/all/20220223233729.1571114-1-quic_eberman@quicinc.com/
+
+Elliot Berman (28):
+  docs: gunyah: Introduce Gunyah Hypervisor
+  dt-bindings: Add binding for gunyah hypervisor
+  gunyah: Common types and error codes for Gunyah hypercalls
+  arm64: smccc: Include alternative-macros.h
+  virt: gunyah: Add hypercalls to identify Gunyah
+  virt: gunyah: Identify hypervisor version
+  mailbox: Allow direct registration to a channel
+  virt: gunyah: msgq: Add hypercalls to send and receive messages
+  mailbox: Add Gunyah message queue mailbox
+  gunyah: rsc_mgr: Add resource manager RPC core
+  gunyah: rsc_mgr: Add VM lifecycle RPC
+  gunyah: vm_mgr: Introduce basic VM Manager
+  gunyah: rsc_mgr: Add RPC for sharing memory
+  gunyah: vm_mgr: Add/remove user memory regions
+  gunyah: vm_mgr: Add ioctls to support basic non-proxy VM boot
+  samples: Add sample userspace Gunyah VM Manager
+  gunyah: rsc_mgr: Add platform ops on mem_lend/mem_reclaim
+  firmware: qcom_scm: Use fixed width src vm bitmap
+  firmware: qcom_scm: Register Gunyah platform ops
+  docs: gunyah: Document Gunyah VM Manager
+  virt: gunyah: Translate gh_rm_hyp_resource into gunyah_resource
+  gunyah: vm_mgr: Add framework to add VM Functions
+  virt: gunyah: Add resource tickets
+  virt: gunyah: Add IO handlers
+  virt: gunyah: Add proxy-scheduled vCPUs
+  virt: gunyah: Add hypercalls for sending doorbell
+  virt: gunyah: Add irqfd interface
+  virt: gunyah: Add ioeventfd
+
+ .../bindings/firmware/gunyah-hypervisor.yaml  |  82 ++
+ .../userspace-api/ioctl/ioctl-number.rst      |   1 +
+ Documentation/virt/gunyah/index.rst           | 115 +++
+ Documentation/virt/gunyah/message-queue.rst   |  64 ++
+ Documentation/virt/gunyah/vm-manager.rst      | 187 ++++
+ Documentation/virt/index.rst                  |   1 +
+ MAINTAINERS                                   |  13 +
+ arch/arm64/Kbuild                             |   1 +
+ arch/arm64/gunyah/Makefile                    |   1 +
+ arch/arm64/gunyah/gunyah_hypercall.c          | 157 ++++
+ arch/arm64/include/asm/gunyah.h               |  23 +
+ drivers/firmware/Kconfig                      |   2 +
+ drivers/firmware/qcom_scm.c                   | 107 ++-
+ drivers/mailbox/Kconfig                       |  10 +
+ drivers/mailbox/Makefile                      |   2 +
+ drivers/mailbox/gunyah-msgq.c                 | 229 +++++
+ drivers/mailbox/mailbox.c                     |  96 ++-
+ drivers/mailbox/omap-mailbox.c                |  18 +-
+ drivers/mailbox/pcc.c                         |  18 +-
+ drivers/misc/fastrpc.c                        |   6 +-
+ drivers/net/wireless/ath/ath10k/qmi.c         |   4 +-
+ drivers/remoteproc/qcom_q6v5_mss.c            |   8 +-
+ drivers/soc/qcom/rmtfs_mem.c                  |   2 +-
+ drivers/virt/Kconfig                          |   1 +
+ drivers/virt/Makefile                         |   1 +
+ drivers/virt/gunyah/Kconfig                   |  73 ++
+ drivers/virt/gunyah/Makefile                  |  10 +
+ drivers/virt/gunyah/gunyah.c                  |  46 +
+ drivers/virt/gunyah/gunyah_ioeventfd.c        | 109 +++
+ drivers/virt/gunyah/gunyah_irqfd.c            | 180 ++++
+ drivers/virt/gunyah/gunyah_platform_hooks.c   |  63 ++
+ drivers/virt/gunyah/gunyah_vcpu.c             | 350 ++++++++
+ drivers/virt/gunyah/rsc_mgr.c                 | 795 ++++++++++++++++++
+ drivers/virt/gunyah/rsc_mgr.h                 | 124 +++
+ drivers/virt/gunyah/rsc_mgr_rpc.c             | 428 ++++++++++
+ drivers/virt/gunyah/vm_mgr.c                  | 594 +++++++++++++
+ drivers/virt/gunyah/vm_mgr.h                  |  76 ++
+ drivers/virt/gunyah/vm_mgr_mm.c               | 245 ++++++
+ include/linux/arm-smccc.h                     |   1 +
+ include/linux/gunyah.h                        | 186 ++++
+ include/linux/gunyah_rsc_mgr.h                | 136 +++
+ include/linux/gunyah_vm_mgr.h                 | 107 +++
+ include/linux/mailbox_client.h                |   1 +
+ include/linux/qcom_scm.h                      |   2 +-
+ include/uapi/linux/gunyah.h                   | 114 +++
+ samples/Kconfig                               |  10 +
+ samples/Makefile                              |   1 +
+ samples/gunyah/.gitignore                     |   2 +
+ samples/gunyah/Makefile                       |   6 +
+ samples/gunyah/gunyah_vmm.c                   | 270 ++++++
+ samples/gunyah/sample_vm.dts                  |  69 ++
+ 51 files changed, 5075 insertions(+), 72 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
+ create mode 100644 Documentation/virt/gunyah/index.rst
+ create mode 100644 Documentation/virt/gunyah/message-queue.rst
+ create mode 100644 Documentation/virt/gunyah/vm-manager.rst
+ create mode 100644 arch/arm64/gunyah/Makefile
+ create mode 100644 arch/arm64/gunyah/gunyah_hypercall.c
+ create mode 100644 arch/arm64/include/asm/gunyah.h
+ create mode 100644 drivers/mailbox/gunyah-msgq.c
+ create mode 100644 drivers/virt/gunyah/Kconfig
+ create mode 100644 drivers/virt/gunyah/Makefile
+ create mode 100644 drivers/virt/gunyah/gunyah.c
+ create mode 100644 drivers/virt/gunyah/gunyah_ioeventfd.c
+ create mode 100644 drivers/virt/gunyah/gunyah_irqfd.c
+ create mode 100644 drivers/virt/gunyah/gunyah_platform_hooks.c
+ create mode 100644 drivers/virt/gunyah/gunyah_vcpu.c
+ create mode 100644 drivers/virt/gunyah/rsc_mgr.c
+ create mode 100644 drivers/virt/gunyah/rsc_mgr.h
+ create mode 100644 drivers/virt/gunyah/rsc_mgr_rpc.c
+ create mode 100644 drivers/virt/gunyah/vm_mgr.c
+ create mode 100644 drivers/virt/gunyah/vm_mgr.h
+ create mode 100644 drivers/virt/gunyah/vm_mgr_mm.c
+ create mode 100644 include/linux/gunyah.h
+ create mode 100644 include/linux/gunyah_rsc_mgr.h
+ create mode 100644 include/linux/gunyah_vm_mgr.h
+ create mode 100644 include/uapi/linux/gunyah.h
+ create mode 100644 samples/gunyah/.gitignore
+ create mode 100644 samples/gunyah/Makefile
+ create mode 100644 samples/gunyah/gunyah_vmm.c
+ create mode 100644 samples/gunyah/sample_vm.dts
+
+
+base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
+-- 
+2.25.1
 
