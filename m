@@ -2,214 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE0C650C25
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:50:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADD9650C2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231775AbiLSMuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 07:50:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56098 "EHLO
+        id S231958AbiLSMwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 07:52:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbiLSMuL (ORCPT
+        with ESMTP id S231511AbiLSMwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 07:50:11 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D03E092
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 04:50:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=TcMj++DKHDSnsJKiF0RSWDsYZGHGKELK4tpk0ddOw10=; b=IzWW/+eF8On48ZVOSFqbkAuVxU
-        0k9+br5SyUceFfM5cw5mTlBu2tcxoUKNgLUSHOdvVnnSdFp3vbRr+nmgnG37oeQ6EYSdj0zEwcuXa
-        QzxDBEiq/xIZPrPDV50izFsScGe2D6mvqlAQCuh5sz6DoRAKSkMBRmf6qLEggrjzKAshs6JJrCLso
-        PZyGDH56U8YM8SQuCV7pm5nEnYisuyUswSACw8UojApgNpRnWfFfMDk/CTJYUWT3eIWjvbi86CyLN
-        THkSU7S7yzQYRuFvIhCKtKviGij0RPO1rfK7x0YImxtL0XEf8IYtqGDnEQNBH1v60CO/MhDJJYDv2
-        TmbP68nw==;
-Received: from [41.74.137.107] (helo=mail.igalia.com)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1p7Fag-006Ime-KV; Mon, 19 Dec 2022 13:49:58 +0100
-Date:   Mon, 19 Dec 2022 11:49:47 -0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     =?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        =?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>,
-        Emma Anholt <emma@anholt.net>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        Wambui Karuga <wambui@karuga.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/7] Introduce debugfs device-centered functions
-Message-ID: <20221219124947.vk5y3o2tdxhqu7s5@mail.igalia.com>
-References: <20221219120621.15086-1-mcanal@igalia.com>
+        Mon, 19 Dec 2022 07:52:50 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9529B46
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 04:52:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=uxYH6
+        rrU5fdjTZNUSkyInFLMBcyBhkRRS55I787F7LE=; b=c3MxkReacFwFpO3rkb5eb
+        2mvuGDoCXHLe55cZoIIPb8L90Gsq+IurHKy5SncT4Sjzlua9NpaN7cP34Q7rxQAp
+        eWFbvqJQgZZHxNf0NsF4GYG9JwFPaK/9KRtdG5JUVEvbdhZ7aBD2iRAYhVGzmY47
+        MYAJCI2jbepyCVq69pkrN8=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g0-4 (Coremail) with SMTP id _____wA3hXZ1XqBjHoJ2AA--.37727S2;
+        Mon, 19 Dec 2022 20:52:05 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     zhi.a.wang@intel.com
+Cc:     1002992920@qq.com, airlied@gmail.com, airlied@linux.ie,
+        alex000young@gmail.com, dri-devel@lists.freedesktop.org,
+        gregkh@linuxfoundation.org, hackerzheng666@gmail.com,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        joonas.lahtinen@linux.intel.com, linux-kernel@vger.kernel.org,
+        security@kernel.org, tvrtko.ursulin@linux.intel.com,
+        zhenyuw@linux.intel.com, zyytlz.wz@163.com
+Subject: [RESEND PATCH v4] drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
+Date:   Mon, 19 Dec 2022 20:52:04 +0800
+Message-Id: <20221219125204.1001149-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <11728bc1-7b59-1623-b517-d1a0d57eb275@intel.com>
+References: <11728bc1-7b59-1623-b517-d1a0d57eb275@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="e6l5q2x5nl7lwfcm"
-Content-Disposition: inline
-In-Reply-To: <20221219120621.15086-1-mcanal@igalia.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wA3hXZ1XqBjHoJ2AA--.37727S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXry3Ar17WF1UKryrJr1UWrg_yoW5trWkpF
+        WUWF45AF4xAF1IvryfWF18AFy3Z3W3Xa4xWrZ7K3WYkFsrtF1qyrWayFy3Jr9I9rZrWw4f
+        CF4UJFZrC34jqa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRYhFsUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXB3cU1Xl5JmTlQAAsF
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If intel_gvt_dma_map_guest_page failed, it will call
+ ppgtt_invalidate_spt, which will finally free the spt. But the caller does
+ not notice that, it will free spt again in error path.
 
---e6l5q2x5nl7lwfcm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fix this by undoing the mapping of DMA address and freeing sub_spt.
 
-On 12/19, Ma=EDra Canal wrote:
-> This series introduces the initial structure to make DRM debugfs more
-> device-centered and it is the first step to drop the
-> drm_driver->debugfs_init hooks in the future [1].
->=20
-> Currently, DRM debugfs files are created using drm_debugfs_create_files()
-> on request. The first patch of this series makes it possible for DRM devi=
-ces
-> for creating debugfs files during drm_dev_register(). For it, it introduc=
-es
-> two new functions that can be used by the drivers: drm_debugfs_add_files()
-> and drm_debugfs_add_file(). The requests are added to a list and are crea=
-ted
-> all at once during drm_dev_register(). Moreover, the first patch was base=
-d on
-> this RFC series [2].
->=20
-> The main difference between the RFC series and the current series is the
-> creation of a new fops structure to accommodate the new structs and, also,
-> the creation of a new drm_debugfs_open. Moreover, the new series uses
-> device-managed allocation, returns memory allocation errors, and converts
-> more drivers to the new structure.
->=20
-> Moreover, since v3, the ability to create debugfs files at late_register =
-hooks was
-> added. In previous versions, modeset components weren't able to create de=
-bugfs
-> files at late_register hooks as the registration of drm_minor happens bef=
-ore the
-> registration of the modeset abstractions. So, the third patch fixes this =
-problem
-> by adding a drm_debugfs_late_register() function. Thanks to Melissa Wen f=
-or
-> catching this problem!
->=20
-> Apart from the third patch, the series looks similiar from its last versi=
-on.
->=20
-> [1] https://cgit.freedesktop.org/drm/drm/tree/Documentation/gpu/todo.rst#=
-n506
-> [2] https://lore.kernel.org/dri-devel/20200513114130.28641-2-wambui.karug=
-ax@gmail.com/
->=20
-> Best Regards,
-> - Ma=EDra Canal
->=20
-> ---
->=20
-> v1 -> v2: https://lore.kernel.org/dri-devel/20221122190314.185015-1-mcana=
-l@igalia.com/T/#t
->=20
-> - Fix compilation errors in the second patch (kernel test robot).
-> - Drop debugfs_init hook from vkms (Ma=EDra Canal).
-> - Remove return values and error handling to debugfs related
-> functions (Jani Nikula).
-> - Remove entry from list after the file is created, so that drm_debugfs_i=
-nit
-> can be called more than once (Ma=EDra Canal).
->=20
-> v2 -> v3: https://lore.kernel.org/dri-devel/20221123220725.1272155-1-mcan=
-al@igalia.com/
->=20
-> - Rebase on top of drm-misc-next
->=20
-> v3 -> v4: https://lore.kernel.org/dri-devel/20221207132325.140393-1-mcana=
-l@igalia.com/
->=20
-> - Add Maxime's Reviewed-by tags
-> - Add the ability to create debugfs files at late_register hooks (Melissa=
- Wen).
+Fixes: b901b252b6cf ("drm/i915/gvt: Add 2M huge gtt support")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+v4:
+- fix by undo the mapping of DMA address and free sub_spt suggested by Zhi
 
-Hi Ma=EDra,
+v3:
+- correct spelling mistake and remove unused variable suggested by Greg
 
-Thanks for addressing all comments.
+v2: https://lore.kernel.org/all/20221006165845.1735393-1-zyytlz.wz@163.com/
 
-Maybe Danvet has some inputs for the late_register approach.
+v1: https://lore.kernel.org/all/20220928033340.1063949-1-zyytlz.wz@163.com/
+---
+ drivers/gpu/drm/i915/gvt/gtt.c | 53 +++++++++++++++++++++++++++++-----
+ 1 file changed, 46 insertions(+), 7 deletions(-)
 
-Anyway, LGTM and the entire series is:
+diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
+index 51e5e8fb505b..b472e021e5a4 100644
+--- a/drivers/gpu/drm/i915/gvt/gtt.c
++++ b/drivers/gpu/drm/i915/gvt/gtt.c
+@@ -1192,11 +1192,11 @@ static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
+ {
+ 	const struct intel_gvt_gtt_pte_ops *ops = vgpu->gvt->gtt.pte_ops;
+ 	struct intel_vgpu_ppgtt_spt *sub_spt;
+-	struct intel_gvt_gtt_entry sub_se;
++	struct intel_gvt_gtt_entry sub_se, e;
+ 	unsigned long start_gfn;
+ 	dma_addr_t dma_addr;
+-	unsigned long sub_index;
+-	int ret;
++	unsigned long sub_index, parent_index;
++	int ret, ret1;
+ 
+ 	gvt_dbg_mm("Split 2M gtt entry, index %lu\n", index);
+ 
+@@ -1209,10 +1209,8 @@ static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
+ 	for_each_shadow_entry(sub_spt, &sub_se, sub_index) {
+ 		ret = intel_gvt_dma_map_guest_page(vgpu, start_gfn + sub_index,
+ 						   PAGE_SIZE, &dma_addr);
+-		if (ret) {
+-			ppgtt_invalidate_spt(spt);
+-			return ret;
+-		}
++		if (ret)
++			goto err;
+ 		sub_se.val64 = se->val64;
+ 
+ 		/* Copy the PAT field from PDE. */
+@@ -1231,6 +1229,47 @@ static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
+ 	ops->set_pfn(se, sub_spt->shadow_page.mfn);
+ 	ppgtt_set_shadow_entry(spt, se, index);
+ 	return 0;
++err:
++	/* Undone the existing mappings of DMA addr. */
++	for_each_present_shadow_entry(spt, &e, parent_index) {
++		switch (e.type) {
++		case GTT_TYPE_PPGTT_PTE_4K_ENTRY:
++			gvt_vdbg_mm("invalidate 4K entry\n");
++			ppgtt_invalidate_pte(spt, &e);
++			break;
++		case GTT_TYPE_PPGTT_PTE_64K_ENTRY:
++			/* We don't setup 64K shadow entry so far. */
++			WARN(1, "suspicious 64K gtt entry\n");
++			continue;
++		case GTT_TYPE_PPGTT_PTE_2M_ENTRY:
++			gvt_vdbg_mm("invalidate 2M entry\n");
++			continue;
++		case GTT_TYPE_PPGTT_PTE_1G_ENTRY:
++			WARN(1, "GVT doesn't support 1GB page\n");
++			continue;
++		case GTT_TYPE_PPGTT_PML4_ENTRY:
++		case GTT_TYPE_PPGTT_PDP_ENTRY:
++		case GTT_TYPE_PPGTT_PDE_ENTRY:
++			gvt_vdbg_mm("invalidate PMUL4/PDP/PDE entry\n");
++			ret1 = ppgtt_invalidate_spt_by_shadow_entry(
++					spt->vgpu, &e);
++			if (ret1) {
++				gvt_vgpu_err("fail: shadow page %p shadow entry 0x%llx type %d\n",
++				spt, e.val64, e.type);
++				goto free_spt;
++			}
++			break;
++		default:
++			GEM_BUG_ON(1);
++		}
++	}
++	/* Release the new alloced apt. */
++free_spt:
++	trace_spt_change(sub_spt->vgpu->id, "release", sub_spt,
++		sub_spt->guest_page.gfn, sub_spt->shadow_page.type);
++	ppgtt_free_spt(sub_spt);
++	sub_spt = NULL;
++	return ret;
+ }
+ 
+ static int split_64KB_gtt_entry(struct intel_vgpu *vgpu,
+-- 
+2.25.1
 
-Reviewed-by: Melissa Wen <mwen@igalia.com>
-
->=20
-> ---
->=20
-> Ma=EDra Canal (7):
->   drm/debugfs: create device-centered debugfs functions
->   drm: use new debugfs device-centered functions on DRM core files
->   drm/debugfs: create debugfs late register functions
->   drm/vc4: use new debugfs device-centered functions
->   drm/v3d: use new debugfs device-centered functions
->   drm/vkms: use new debugfs device-centered functions
->   drm/todo: update the debugfs clean up task
->=20
->  Documentation/gpu/todo.rst            |   9 +--
->  drivers/gpu/drm/drm_atomic.c          |  11 ++-
->  drivers/gpu/drm/drm_client.c          |  11 ++-
->  drivers/gpu/drm/drm_debugfs.c         | 102 +++++++++++++++++++++++---
->  drivers/gpu/drm/drm_drv.c             |   3 +
->  drivers/gpu/drm/drm_framebuffer.c     |  11 ++-
->  drivers/gpu/drm/drm_gem_vram_helper.c |  11 ++-
->  drivers/gpu/drm/drm_internal.h        |   5 ++
->  drivers/gpu/drm/drm_mode_config.c     |   2 +
->  drivers/gpu/drm/v3d/v3d_debugfs.c     |  22 +++---
->  drivers/gpu/drm/vc4/vc4_bo.c          |  10 +--
->  drivers/gpu/drm/vc4/vc4_crtc.c        |   7 +-
->  drivers/gpu/drm/vc4/vc4_debugfs.c     |  36 ++-------
->  drivers/gpu/drm/vc4/vc4_dpi.c         |   5 +-
->  drivers/gpu/drm/vc4/vc4_drv.c         |   1 -
->  drivers/gpu/drm/vc4/vc4_drv.h         |  32 ++------
->  drivers/gpu/drm/vc4/vc4_dsi.c         |   6 +-
->  drivers/gpu/drm/vc4/vc4_hdmi.c        |  12 +--
->  drivers/gpu/drm/vc4/vc4_hvs.c         |  24 ++----
->  drivers/gpu/drm/vc4/vc4_v3d.c         |  14 +---
->  drivers/gpu/drm/vc4/vc4_vec.c         |   6 +-
->  drivers/gpu/drm/vkms/vkms_drv.c       |  17 ++---
->  include/drm/drm_debugfs.h             |  41 +++++++++++
->  include/drm/drm_device.h              |  15 ++++
->  24 files changed, 233 insertions(+), 180 deletions(-)
->=20
-> --=20
-> 2.38.1
->=20
-
---e6l5q2x5nl7lwfcm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmOgXeIACgkQwqF3j0dL
-ehynoBAAjIuD/UehebQL5BIwqEUr4hvf6XCbieGUxUyhKpf73O6hRWslSQ1ArAEG
-ZC6l9soqmjLY6HqN8yBL7J7NCsu+ee8BhtF+8TDxO4OrhDGuubeBTRQdDI/y5I7y
-0+lmq4dOtVtimKpt+Q2W4bZ7t+PY8QHFFBnQ1dHH4f1+eMIW8Rg9iq/b5BmdLgrq
-gccL/G73jJ+ds0Qq4kukz0PiDiLpMdNRXV4FUi9pAt26cOKd7TzRpFyMCygvKTxD
-byTZGUfmt+fpQwnKuN3ExAif9hw2g+GR23D+GnxtICYuEMVrRnbMYa4DdX5EwvUW
-BiKrC4kOICxNAjq9EjiLShbq/AnkukCN/P28Vf3YgsM72J7ZhyfV4SxfN5S96WG2
-EFR4UoBETZhNsffWs9cAMgQbD/UsnwXDxjimahFONXfcw0gUkQ98OeZzJJsE9QwO
-kudAmkpLGe+vi0Q2EZu0ADnNRZK8JPwm2FtbXPBa9kKZVnvF1bqrFCh8jMfdz6W6
-jsR7jDea15RRsInpTIl3/ILwagPEe+Xln9oqtKue44srK5g6ep/EocaZ8b89sJ6H
-fWAyYb5BsNHIxQjjWQweK5ga79wGTssfnX2or7IfCAlzfCuseYZ/fZ2YtpZR5UFE
-tkgz4wC69BvH7z2wA6fc33Wk4227cJifxOvYJbaHsj+GCxAuEhM=
-=lzAJ
------END PGP SIGNATURE-----
-
---e6l5q2x5nl7lwfcm--
