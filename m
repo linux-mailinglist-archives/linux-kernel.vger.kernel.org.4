@@ -2,402 +2,743 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9453F650B28
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BD2650B2D
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbiLSMHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 07:07:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53666 "EHLO
+        id S231821AbiLSMIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 07:08:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbiLSMGo (ORCPT
+        with ESMTP id S231840AbiLSMGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 07:06:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC32A187;
-        Mon, 19 Dec 2022 04:06:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6912560F38;
-        Mon, 19 Dec 2022 12:06:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EA71C433D2;
-        Mon, 19 Dec 2022 12:06:38 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [GIT PULL] LoongArch changes for v6.2
-Date:   Mon, 19 Dec 2022 20:06:12 +0800
-Message-Id: <20221219120612.1637267-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
+        Mon, 19 Dec 2022 07:06:25 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE769FC9;
+        Mon, 19 Dec 2022 04:06:19 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id t18so6035702pfq.13;
+        Mon, 19 Dec 2022 04:06:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OCWgPRlFVucyzhpVtQzo2QpU4CA3O/XPeQ4v/NeiuuY=;
+        b=IBUdoHdO3/MlimJtc2Do/Vt630jMD9EPIvWinQ9zKCcFO7CQHdR8tDEs42ow4nwqKM
+         byBUTRLQ80aC1D+bugDpKColOkQ3B1+041fnSC+ivk7mczFUTJvT+qRmMMgs0x09KIJ5
+         bMPLLf+zWZ1VYOBKJr0wSFo/XrDZ0DtQC8GQMSvC9uRH2NByXSfENWuRJGNU3Pdw22Zu
+         dzZE1L7CuKZ+qEVHz/PKmrvJ5PRjU3FLqQYgjQpnpKhxcvDwc19xA5XCEifb8C9poW0A
+         olPc1vfRdGu/Ec16uOHhIa3DeGLlR1HUDkWbwWnYMAH/tV58GPl2MFDmu6qGvxapUh4Y
+         +wNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OCWgPRlFVucyzhpVtQzo2QpU4CA3O/XPeQ4v/NeiuuY=;
+        b=K02Z3tBVuw1woI3g/lgts2YpbIE9WP6RpHfn994AlX1viDiUaWn3inFM+FxmETymjm
+         hhwV0wlX9ZpA2C5DMTXx+W1CcEMK0qJ9rrm1mpFd9Hf8qV5CnSGLdFKGFsr/UNYF5KYX
+         U2mh3+GfOrD3MfgL7SchD8TxanDB3NskqAY8AEvViVCYc/jGlEFtBSSynel1Al6cx2vp
+         Alh+eFemzuBJ/G5+RUlAGkNBYqV/5BPvOMPMOHpRvl/udoEo5eJi5PJkgQfNOiOqV4tZ
+         3sQL9Z8wJGWa+g/CNuSGSIavUD7WpRQmXmY+TwU423XU+kr1fmRpbEk2xD3FaHt0hVV0
+         FqZQ==
+X-Gm-Message-State: ANoB5pk1diWOlv39VpAAPEGj4G4x0KpIuzXIAj9lqx8dEVyyekOGHXf6
+        Jp68cDGsG+f+ke0Xpng5FLg=
+X-Google-Smtp-Source: AA0mqf6CwM66dvs5ulebjnS1zyPLxU3BpNT1AHpEp8aPn5z+/gmpJS+Cze01MgWbvY7WALr439SJaQ==
+X-Received: by 2002:a05:6a00:35c4:b0:578:ac9f:79a9 with SMTP id dc4-20020a056a0035c400b00578ac9f79a9mr28423878pfb.15.1671451578990;
+        Mon, 19 Dec 2022 04:06:18 -0800 (PST)
+Received: from VM-66-53-centos ([43.132.141.8])
+        by smtp.gmail.com with ESMTPSA id v18-20020a62a512000000b0057622e8e82csm6407778pfm.191.2022.12.19.04.06.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 04:06:17 -0800 (PST)
+Date:   Mon, 19 Dec 2022 20:06:13 +0800
+From:   Yuteng Zhong <zonyitoo@gmail.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>, Peter Geis <pgwipeout@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        Yuteng Zhong <zonyitoo@gmail.com>,
+        DHDAXCW <lasstp5011@gmail.com>
+Subject: [PATCH] arm64: dts: rockchip: Add RK3566 LubanCat 1
+Message-ID: <Y6BTtdsRi5PsY7uF@VM-66-53-centos>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 830b3c68c1fb1e9176028d02ef86f3cf76aa2476:
+LubanCat 1 is a Rockchip RK3566 SBC based
+is developed by EmbedFire Electronics Co., Ltd.
+Mini Linux Card Type Cheap Computer Development Board
+It has the following characteristics:
+- MicroSD card slot, onboard eMMC flash memory
+- 1GbE Realtek RTL8211F Ethernet Transceiver
+- 1 USB Type-C port (power and USB2.0 OTG)
+- 1 USB 3.0 Host port
+- 3 USB 2.0 Host ports
+- 1 HDMI
+- 1 infrared receiver
+- 1 MIPI DSI
+- 1 MIPI CSI
+- 1 x 4-section headphone jack
+- Mini PCIe socket (USB or PCIe)
+- 1 SIM Card slot
+- 1 SYS LED and 1 PWR LED
+- 40-pin GPIO expansion header
 
-  Linux 6.1 (2022-12-11 14:15:18 -0800)
+Signed-off-by: Yuteng Zhong <zonyitoo@gmail.com>
+Signed-off-by: DHDAXCW <lasstp5011@gmail.com>
+---
+ .../devicetree/bindings/arm/rockchip.yaml     |   5 +
+ arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+ .../boot/dts/rockchip/rk3566-lubancat-1.dts   | 604 ++++++++++++++++++
+ 3 files changed, 610 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts
 
-are available in the Git repository at:
+diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
+index 88ff4422a8c1..84d39a3a8843 100644
+--- a/Documentation/devicetree/bindings/arm/rockchip.yaml
++++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+@@ -781,6 +781,11 @@ properties:
+           - const: rockchip,rk3568-bpi-r2pro
+           - const: rockchip,rk3568
+ 
++      - description: EmbedFire LubanCat 1
++        items:
++          - const: embedfire,lubancat-1
++          - const: rockchip,rk3566
++
+ additionalProperties: true
+ 
+ ...
+diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+index 0a76a2ebb5f6..e52bda04d45a 100644
+--- a/arch/arm64/boot/dts/rockchip/Makefile
++++ b/arch/arm64/boot/dts/rockchip/Makefile
+@@ -78,6 +78,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-blade.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-cm4.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-model-a.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-box-demo.dtb
++dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-lubancat-1.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-odroid-m1.dtb
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts b/arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts
+new file mode 100644
+index 000000000000..50fbff349246
+--- /dev/null
++++ b/arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts
+@@ -0,0 +1,604 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++* Copyright (c) 2021 Rockchip Electronics Co., Ltd.
++*/
++
++/dts-v1/;
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/leds/common.h>
++#include <dt-bindings/pinctrl/rockchip.h>
++#include <dt-bindings/soc/rockchip,vop2.h>
++#include "rk3566.dtsi"
++
++/ {
++	model = "EmbedFire LubanCat 1";
++	compatible = "embedfire,lubancat-1", "rockchip,rk3566";
++
++	aliases {
++		ethernet0 = &gmac1;
++		mmc0 = &sdmmc0;
++		mmc1 = &sdhci;
++	};
++
++	chosen: chosen {
++		stdout-path = "serial2:1500000n8";
++	};
++
++	gmac1_clkin: external-gmac1-clock {
++		compatible = "fixed-clock";
++		clock-frequency = <125000000>;
++		clock-output-names = "gmac1_clkin";
++		#clock-cells = <0>;
++	};
++	
++	hdmi-con {
++		compatible = "hdmi-connector";
++		type = "a";
++
++		port {
++			hdmi_con_in: endpoint {
++				remote-endpoint = <&hdmi_out_con>;
++			};
++		};
++	};
++
++	gpio-leds {
++		compatible = "gpio-leds";
++
++		sys_led: sys-led {
++			label = "sys_led";
++			linux,default-trigger = "heartbeat";
++			default-state = "on";
++			gpios = <&gpio0 RK_PC5 GPIO_ACTIVE_LOW>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&sys_led_pin>;
++		};
++	};
++
++	dc_5v: dc-5v {
++		compatible = "regulator-fixed";
++		regulator-name = "dc_5v";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++	};
++
++	vcc3v3_sys: vcc3v3-sys {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc3v3_sys";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		vin-supply = <&vcc5v0_sys>;
++	};
++
++	vcc5v0_sys: vcc5v0-sys {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc5v0_sys";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&dc_5v>;
++	};
++
++	pcie_3v3: pcie2-3v3-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "pcie_3v3";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		enable-active-high;
++		gpio = <&gpio0 RK_PD3 GPIO_ACTIVE_HIGH>;
++		startup-delay-us = <5000>;
++		vin-supply = <&vcc5v0_sys>;
++	};
++
++	vcc5v0_usb20_host: vcc5v0-usb20-host-regulator {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio2 RK_PB6 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&vcc5v0_usb20_host_en>;
++		regulator-name = "vcc5v0_usb20_host";
++		regulator-always-on;
++	};
++
++	vcc5v0_usb30_host: vcc5v0-usb30-host-regulator {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio2 RK_PB5 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&vcc5v0_usb30_host_en>;
++		regulator-name = "vcc5v0_usb30_host";
++		regulator-always-on;
++	};
++};
++
++&uart2 {
++	status = "okay";
++};
++
++&combphy1 {
++	status = "okay";
++};
++
++&combphy2 {
++	status = "okay";
++};
++
++&cpu0 {
++	cpu-supply = <&vdd_cpu>;
++};
++
++&cpu1 {
++	cpu-supply = <&vdd_cpu>;
++};
++
++&cpu2 {
++	cpu-supply = <&vdd_cpu>;
++};
++
++&cpu3 {
++	cpu-supply = <&vdd_cpu>;
++};
++
++&gpu {
++	mali-supply = <&vdd_gpu>;
++	status = "okay";
++};
++
++&hdmi {
++	avdd-0v9-supply = <&vdda0v9_image>;
++	avdd-1v8-supply = <&vcca1v8_image>;
++	status = "okay";
++};
++
++&hdmi_in {
++	hdmi_in_vp0: endpoint {
++		remote-endpoint = <&vp0_out_hdmi>;
++	};
++};
++
++&hdmi_out {
++	hdmi_out_con: endpoint {
++		remote-endpoint = <&hdmi_con_in>;
++	};
++};
++
++&hdmi_sound {
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++
++	vdd_cpu: regulator@1c {
++		compatible = "tcs,tcs4525";
++		reg = <0x1c>;
++		fcs,suspend-voltage-selector = <1>;
++		regulator-name = "vdd_cpu";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <800000>;
++		regulator-max-microvolt = <1150000>;
++		regulator-ramp-delay = <2300>;
++		vin-supply = <&vcc5v0_sys>;
++
++		regulator-state-mem {
++			regulator-off-in-suspend;
++		};
++	};
++
++	rk809: pmic@20 {
++		compatible = "rockchip,rk809";
++		reg = <0x20>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <RK_PA3 IRQ_TYPE_LEVEL_LOW>;
++		assigned-clocks = <&cru I2S1_MCLKOUT_TX>;
++		assigned-clock-parents = <&cru CLK_I2S1_8CH_TX>;
++		#clock-cells = <1>;
++		clock-names = "mclk";
++		clocks = <&cru I2S1_MCLKOUT_TX>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pmic_int>;
++		rockchip,system-power-controller;
++		#sound-dai-cells = <0>;
++		vcc1-supply = <&vcc3v3_sys>;
++		vcc2-supply = <&vcc3v3_sys>;
++		vcc3-supply = <&vcc3v3_sys>;
++		vcc4-supply = <&vcc3v3_sys>;
++		vcc5-supply = <&vcc3v3_sys>;
++		vcc6-supply = <&vcc3v3_sys>;
++		vcc7-supply = <&vcc3v3_sys>;
++		vcc8-supply = <&vcc3v3_sys>;
++		vcc9-supply = <&vcc3v3_sys>;
++		wakeup-source;
++
++		regulators {
++			vdd_logic: DCDC_REG1 {
++				regulator-name = "vdd_logic";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <500000>;
++				regulator-max-microvolt = <1350000>;
++				regulator-init-microvolt = <900000>;
++				regulator-ramp-delay = <6001>;
++				regulator-initial-mode = <0x2>;
++
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vdd_gpu: DCDC_REG2 {
++				regulator-name = "vdd_gpu";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <500000>;
++				regulator-max-microvolt = <1350000>;
++				regulator-init-microvolt = <900000>;
++				regulator-ramp-delay = <6001>;
++				regulator-initial-mode = <0x2>;
++
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vcc_ddr: DCDC_REG3 {
++				regulator-name = "vcc_ddr";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-initial-mode = <0x2>;
++
++				regulator-state-mem {
++					regulator-on-in-suspend;
++				};
++			};
++
++			vdd_npu: DCDC_REG4 {
++				regulator-name = "vdd_npu";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <500000>;
++				regulator-max-microvolt = <1350000>;
++				regulator-init-microvolt = <900000>;
++				regulator-ramp-delay = <6001>;
++				regulator-initial-mode = <0x2>;
++
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vcc_1v8: DCDC_REG5 {
++				regulator-name = "vcc_1v8";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vdda0v9_image: LDO_REG1 {
++				regulator-name = "vdda0v9_image";
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-min-microvolt = <900000>;
++				regulator-max-microvolt = <900000>;
++
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vdda_0v9: LDO_REG2 {
++				regulator-name = "vdda_0v9";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <900000>;
++				regulator-max-microvolt = <900000>;
++
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vdda0v9_pmu: LDO_REG3 {
++				regulator-name = "vdda0v9_pmu";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <900000>;
++				regulator-max-microvolt = <900000>;
++
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <900000>;
++				};
++			};
++
++			vccio_acodec: LDO_REG4 {
++				regulator-name = "vccio_acodec";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vccio_sd: LDO_REG5 {
++				regulator-name = "vccio_sd";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vcc3v3_pmu: LDO_REG6 {
++				regulator-name = "vcc3v3_pmu";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <3300000>;
++				};
++			};
++
++			vcca_1v8: LDO_REG7 {
++				regulator-name = "vcca_1v8";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vcca1v8_pmu: LDO_REG8 {
++				regulator-name = "vcca1v8_pmu";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <1800000>;
++				};
++			};
++
++			vcca1v8_image: LDO_REG9 {
++				regulator-name = "vcca1v8_image";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vcc_3v3: SWITCH_REG1 {
++				regulator-name = "vcc_3v3";
++				regulator-always-on;
++				regulator-boot-on;
++
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vcc3v3_sd: SWITCH_REG2 {
++				regulator-name = "vcc3v3_sd";
++				regulator-always-on;
++				regulator-boot-on;
++
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++		};
++	};
++};
++
++&i2s1_8ch {
++	rockchip,trcm-sync-tx-only;
++	status = "okay";
++};
++
++&gmac1 {
++    phy-mode = "rgmii";
++    clock_in_out = "output";
++    snps,reset-gpio = <&gpio2 RK_PB0 GPIO_ACTIVE_LOW>;
++    snps,reset-active-low;
++    /* Reset time is 100ms, 100ms */
++    snps,reset-delays-us = <0 75000 100000>;
++    assigned-clocks = <&cru SCLK_GMAC1_RX_TX>, <&cru SCLK_GMAC1>;
++    assigned-clock-parents = <&cru SCLK_GMAC1_RGMII_SPEED>, <&cru CLK_MAC1_2TOP>;
++    assigned-clock-rates = <0>, <125000000>;
++    pinctrl-names = "default";
++    pinctrl-0 = <&gmac1m1_miim
++             &gmac1m1_tx_bus2_level3
++             &gmac1m1_rx_bus2
++             &gmac1m1_rgmii_clk_level2
++             &gmac1m1_rgmii_bus_level3>;
++    tx_delay = <0x1a>;
++    rx_delay = <0x0c>; 
++    phy-handle = <&rgmii_phy1>;
++    status = "okay";
++};
++
++&mdio1 {
++    rgmii_phy1: phy@0 {
++        compatible = "ethernet-phy-ieee802.3-c22";
++        reg = <0x0>;
++    };
++};
++
++&pcie2x1 {
++    reset-gpios = <&gpio0 RK_PB6 GPIO_ACTIVE_HIGH>;
++    disable-gpios = <&gpio0 RK_PA6 GPIO_ACTIVE_HIGH>;
++    vpcie3v3-supply = <&pcie_3v3>;
++    status = "okay";
++};
++
++&pinctrl {
++	leds {
++		sys_led_pin: sys-status-led-pin {
++			rockchip,pins = <0 RK_PC7 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++    usb {
++        vcc5v0_usb20_host_en: vcc5v0-usb20-host-en {
++            rockchip,pins = <2 RK_PB6 RK_FUNC_GPIO &pcfg_pull_none>;
++        };
++
++        vcc5v0_usb30_host_en: vcc5v0-usb30-host-en {
++            rockchip,pins = <2 RK_PB5 RK_FUNC_GPIO &pcfg_pull_none>;
++        };
++    };
++
++	pmic {
++		pmic_int: pmic_int {
++			rockchip,pins =
++				<0 RK_PA3 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
++	};
++};
++
++&pmu_io_domains {
++	pmuio2-supply = <&vcc3v3_pmu>;
++	vccio1-supply = <&vccio_acodec>;
++	vccio3-supply = <&vccio_sd>;
++	vccio4-supply = <&vcc_3v3>;
++	vccio5-supply = <&vcc_3v3>;
++	vccio6-supply = <&vcc_1v8>;
++	vccio7-supply = <&vcc_3v3>;
++	status = "okay";
++};
++
++&rng {
++	status = "okay";
++};
++
++&saradc {
++	vref-supply = <&vcca_1v8>;
++	status = "okay";
++};
++
++&tsadc {
++	rockchip,hw-tshut-mode = <1>;
++	rockchip,hw-tshut-polarity = <0>;
++	status = "okay";
++};
++
++&sdhci {
++	assigned-clocks = <&cru BCLK_EMMC>, <&cru TCLK_EMMC>, <&cru CCLK_EMMC>;
++	assigned-clock-rates = <200000000>, <24000000>, <200000000>;
++	bus-width = <8>;
++	max-frequency = <200000000>;
++	mmc-hs200-1_8v;		
++	non-removable;	
++	pinctrl-names = "default";
++	pinctrl-0 = <&emmc_bus8 &emmc_clk &emmc_cmd>;	
++	supports-emmc;
++	status = "okay";
++};
++
++&sdmmc0 {
++    max-frequency = <150000000>;
++    supports-sd;
++    bus-width = <4>;
++    cap-mmc-highspeed;
++    cap-sd-highspeed;
++    disable-wp;
++    sd-uhs-sdr104;
++    vmmc-supply = <&vcc3v3_sd>;
++    vqmmc-supply = <&vccio_sd>;
++    pinctrl-names = "default";
++    pinctrl-0 = <&sdmmc0_bus4 &sdmmc0_clk &sdmmc0_cmd &sdmmc0_det>;
++    status = "okay";
++};
++
++/* USB OTG/USB Host_1 USB 2.0 Comb */
++&usb2phy0 {
++	status = "okay";
++};
++
++&usb2phy0_host {
++	status = "okay";
++};
++
++&usb2phy0_otg {
++	status = "okay";
++};
++
++&usb_host0_ehci {
++	status = "okay";
++};
++
++&usb_host0_ohci {
++	status = "okay";
++};
++
++/* USB Host_2/USB Host_3 USB 2.0 Comb */
++&usb2phy1 {
++	status = "okay";
++};
++
++&usb2phy1_host {
++	status = "okay";
++};
++
++&usb2phy1_otg {
++	status = "okay";
++};
++
++&usb_host1_ehci {
++	status = "okay";
++};
++
++&usb_host1_ohci {
++	status = "okay";
++};
++
++/* USB3.0 Host */
++&usb_host1_xhci {
++	status = "okay";
++};
++
++&vop {
++	assigned-clocks = <&cru DCLK_VOP0>, <&cru DCLK_VOP1>;
++	assigned-clock-parents = <&pmucru PLL_HPLL>, <&cru PLL_VPLL>;
++	status = "okay";
++};
++
++&vop_mmu {
++	status = "okay";
++};
++
++&vp0 {
++	vp0_out_hdmi: endpoint@ROCKCHIP_VOP2_EP_HDMI0 {
++		reg = <ROCKCHIP_VOP2_EP_HDMI0>;
++		remote-endpoint = <&hdmi_in_vp0>;
++	};
++};
+-- 
+2.27.0
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.2
-
-for you to fetch changes up to 5535f4f70cfc15ef55b6ea7c7e17337b17337cb6:
-
-  LoongArch: Update Loongson-3 default config file (2022-12-14 08:41:54 +0800)
-
-----------------------------------------------------------------
-LoongArch changes for v6.2
-
-1, Switch to relative exception tables;
-2, Add unaligned access support;
-3, Add alternative runtime patching mechanism;
-4, Add FDT booting support from efi system table;
-5, Add suspend/hibernation (ACPI S3/S4) support;
-6, Add basic STACKPROTECTOR support;
-7, Add ftrace (function tracer) support;
-8, Update the default config file.
-
-----------------------------------------------------------------
-Binbin Zhou (2):
-      LoongArch: Add FDT booting support from efi system table
-      LoongArch: Add processing ISA Node in DeviceTree
-
-Huacai Chen (9):
-      Merge tags 'acpi-6.2-rc1' and 'irq-core-2022-12-10' into loongarch-next
-      LoongArch: Add unaligned access support
-      LoongArch: Add alternative runtime patching mechanism
-      LoongArch: Use alternative to optimize libraries
-      LoongArch: Add suspend (ACPI S3) support
-      LoongArch: Add hibernation (ACPI S4) support
-      LoongArch: Add basic STACKPROTECTOR support
-      LoongArch: module: Use got/plt section indices for relocations
-      LoongArch: Update Loongson-3 default config file
-
-Qing Zhang (8):
-      LoongArch/ftrace: Add basic support
-      LoongArch/ftrace: Add recordmcount support
-      LoongArch/ftrace: Add dynamic function tracer support
-      LoongArch/ftrace: Add dynamic function graph tracer support
-      LoongArch/ftrace: Add HAVE_DYNAMIC_FTRACE_WITH_REGS support
-      LoongArch/ftrace: Add HAVE_DYNAMIC_FTRACE_WITH_ARGS support
-      LoongArch/ftrace: Add HAVE_FUNCTION_GRAPH_RET_ADDR_PTR support
-      LoongArch: modules/ftrace: Initialize PLT at load time
-
-Youling Tang (6):
-      LoongArch: Consolidate __ex_table construction
-      LoongArch: Switch to relative exception tables
-      LoongArch: extable: Add `type` and `data` fields
-      LoongArch: extable: Add a dedicated uaccess handler
-      LoongArch: Remove the .fixup section usage
-      LoongArch: BPF: Add BPF exception tables
-
- Documentation/PCI/msi-howto.rst                    |   10 +
- Documentation/admin-guide/sysctl/kernel.rst        |    8 +-
- .../loongarch,cpu-interrupt-controller.yaml        |   34 +
- .../interrupt-controller/mediatek,cirq.txt         |   33 -
- .../interrupt-controller/mediatek,mtk-cirq.yaml    |   68 ++
- arch/arm64/kernel/acpi.c                           |  106 ++
- arch/ia64/hp/common/aml_nfw.c                      |    4 +-
- arch/loongarch/Kconfig                             |   20 +
- arch/loongarch/Makefile                            |    8 +
- arch/loongarch/configs/loongson3_defconfig         |   56 +-
- arch/loongarch/include/asm/acpi.h                  |  152 +--
- arch/loongarch/include/asm/alternative-asm.h       |   82 ++
- arch/loongarch/include/asm/alternative.h           |  111 ++
- arch/loongarch/include/asm/asm-extable.h           |   65 ++
- arch/loongarch/include/asm/bootinfo.h              |    1 +
- arch/loongarch/include/asm/bugs.h                  |   15 +
- arch/loongarch/include/asm/efi.h                   |    1 +
- arch/loongarch/include/asm/extable.h               |   47 +
- arch/loongarch/include/asm/ftrace.h                |   68 ++
- arch/loongarch/include/asm/futex.h                 |   27 +-
- arch/loongarch/include/asm/gpr-num.h               |   22 +
- arch/loongarch/include/asm/inst.h                  |   46 +
- arch/loongarch/include/asm/irq.h                   |    2 +-
- arch/loongarch/include/asm/loongson.h              |    3 +
- arch/loongarch/include/asm/module.h                |   27 +-
- arch/loongarch/include/asm/module.lds.h            |    1 +
- arch/loongarch/include/asm/setup.h                 |    1 +
- arch/loongarch/include/asm/stackprotector.h        |   38 +
- arch/loongarch/include/asm/string.h                |    5 +
- arch/loongarch/include/asm/thread_info.h           |    2 +-
- arch/loongarch/include/asm/time.h                  |    1 +
- arch/loongarch/include/asm/uaccess.h               |   24 +-
- arch/loongarch/include/asm/unwind.h                |    3 +-
- arch/loongarch/kernel/Makefile                     |   16 +-
- arch/loongarch/kernel/acpi.c                       |   17 +-
- arch/loongarch/kernel/alternative.c                |  246 +++++
- arch/loongarch/kernel/asm-offsets.c                |   15 +
- arch/loongarch/kernel/efi.c                        |   15 +-
- arch/loongarch/kernel/env.c                        |    2 +
- arch/loongarch/kernel/fpu.S                        |    5 +-
- arch/loongarch/kernel/ftrace.c                     |   73 ++
- arch/loongarch/kernel/ftrace_dyn.c                 |  273 +++++
- arch/loongarch/kernel/inst.c                       |  127 +++
- arch/loongarch/kernel/mcount.S                     |   96 ++
- arch/loongarch/kernel/mcount_dyn.S                 |  149 +++
- arch/loongarch/kernel/module-sections.c            |   64 +-
- arch/loongarch/kernel/module.c                     |   75 +-
- arch/loongarch/kernel/numa.c                       |   17 +-
- arch/loongarch/kernel/process.c                    |    6 +
- arch/loongarch/kernel/reset.c                      |    5 +
- arch/loongarch/kernel/setup.c                      |  149 ++-
- arch/loongarch/kernel/smp.c                        |   35 +
- arch/loongarch/kernel/switch.S                     |    5 +
- arch/loongarch/kernel/time.c                       |   11 +-
- arch/loongarch/kernel/traps.c                      |   27 +
- arch/loongarch/kernel/unaligned.c                  |  499 +++++++++
- arch/loongarch/kernel/unwind_guess.c               |    4 +-
- arch/loongarch/kernel/unwind_prologue.c            |   50 +-
- arch/loongarch/kernel/vmlinux.lds.S                |   13 +-
- arch/loongarch/lib/Makefile                        |    3 +-
- arch/loongarch/lib/clear_user.S                    |   85 +-
- arch/loongarch/lib/copy_user.S                     |  108 +-
- arch/loongarch/lib/memcpy.S                        |   95 ++
- arch/loongarch/lib/memmove.S                       |  121 +++
- arch/loongarch/lib/memset.S                        |   91 ++
- arch/loongarch/lib/unaligned.S                     |   84 ++
- arch/loongarch/mm/extable.c                        |   59 +-
- arch/loongarch/net/bpf_jit.c                       |   86 +-
- arch/loongarch/net/bpf_jit.h                       |    2 +
- arch/loongarch/pci/acpi.c                          |    7 +-
- arch/loongarch/power/Makefile                      |    4 +
- arch/loongarch/power/hibernate.c                   |   62 ++
- arch/loongarch/power/hibernate_asm.S               |   66 ++
- arch/loongarch/power/platform.c                    |   57 +
- arch/loongarch/power/suspend.c                     |   73 ++
- arch/loongarch/power/suspend_asm.S                 |   89 ++
- arch/powerpc/platforms/pseries/msi.c               |    7 +-
- arch/um/drivers/Kconfig                            |    1 -
- arch/um/include/asm/pci.h                          |    2 +-
- arch/x86/Kconfig                                   |    1 -
- arch/x86/include/asm/hyperv_timer.h                |    9 +
- arch/x86/include/asm/irq_remapping.h               |    4 -
- arch/x86/include/asm/irqdomain.h                   |    4 +-
- arch/x86/include/asm/mshyperv.h                    |    2 -
- arch/x86/include/asm/msi.h                         |    6 +
- arch/x86/include/asm/pci.h                         |    5 +-
- arch/x86/kernel/apic/msi.c                         |  211 ++--
- arch/x86/kernel/apic/vector.c                      |    4 -
- arch/x86/platform/olpc/olpc-xo15-sci.c             |    3 +-
- drivers/acpi/Kconfig                               |   10 +
- drivers/acpi/Makefile                              |    1 +
- drivers/acpi/ac.c                                  |    8 +-
- drivers/acpi/acpi_ffh.c                            |   55 +
- drivers/acpi/acpi_pad.c                            |    7 +-
- drivers/acpi/acpi_pcc.c                            |   47 +-
- drivers/acpi/acpi_video.c                          |    8 +-
- drivers/acpi/acpica/Makefile                       |    1 +
- drivers/acpi/acpica/acglobal.h                     |    1 +
- drivers/acpi/acpica/actables.h                     |    5 -
- drivers/acpi/acpica/acutils.h                      |   13 +
- drivers/acpi/acpica/dsmethod.c                     |   10 +-
- drivers/acpi/acpica/evevent.c                      |   11 +
- drivers/acpi/acpica/evregion.c                     |    9 +
- drivers/acpi/acpica/exconfig.c                     |    4 +-
- drivers/acpi/acpica/exfield.c                      |    8 +-
- drivers/acpi/acpica/exserial.c                     |    6 +
- drivers/acpi/acpica/hwsleep.c                      |   14 +
- drivers/acpi/acpica/tbdata.c                       |    2 +-
- drivers/acpi/acpica/tbfadt.c                       |    2 +-
- drivers/acpi/acpica/tbprint.c                      |   77 +-
- drivers/acpi/acpica/tbutils.c                      |    2 +-
- drivers/acpi/acpica/tbxfroot.c                     |   32 +-
- drivers/acpi/acpica/utcksum.c                      |  170 +++
- drivers/acpi/acpica/utcopy.c                       |    7 -
- drivers/acpi/acpica/utglobal.c                     |    4 +
- drivers/acpi/acpica/utstring.c                     |   10 +-
- drivers/acpi/apei/apei-base.c                      |    2 +-
- drivers/acpi/apei/einj.c                           |   56 +-
- drivers/acpi/apei/ghes.c                           |   62 +-
- drivers/acpi/battery.c                             |   10 +-
- drivers/acpi/bus.c                                 |    3 +
- drivers/acpi/button.c                              |    5 +-
- drivers/acpi/cppc_acpi.c                           |    4 +-
- drivers/acpi/ec.c                                  |   15 +-
- drivers/acpi/fan_attr.c                            |   16 +-
- drivers/acpi/fan_core.c                            |    1 +
- drivers/acpi/hed.c                                 |    3 +-
- drivers/acpi/irq.c                                 |    5 +-
- drivers/acpi/nfit/core.c                           |    3 +-
- drivers/acpi/pci_irq.c                             |    6 +-
- drivers/acpi/pfr_telemetry.c                       |    6 +-
- drivers/acpi/pfr_update.c                          |    6 +-
- drivers/acpi/power.c                               |    2 +-
- drivers/acpi/processor_idle.c                      |    9 +-
- drivers/acpi/processor_perflib.c                   |  100 +-
- drivers/acpi/processor_throttling.c                |    4 +-
- drivers/acpi/sbs.c                                 |    9 +-
- drivers/acpi/sbshc.c                               |    7 +-
- drivers/acpi/scan.c                                |    2 +-
- drivers/acpi/sysfs.c                               |    5 +-
- drivers/acpi/tables.c                              |   17 +-
- drivers/acpi/thermal.c                             |    9 +-
- drivers/acpi/tiny-power-button.c                   |   10 +-
- drivers/acpi/video_detect.c                        |  110 +-
- drivers/acpi/x86/utils.c                           |   24 +-
- drivers/base/Makefile                              |    2 +-
- drivers/base/platform-msi.c                        |    6 +-
- drivers/bus/fsl-mc/Kconfig                         |    2 +-
- drivers/bus/fsl-mc/dprc-driver.c                   |    1 -
- drivers/bus/fsl-mc/fsl-mc-bus.c                    |    1 -
- drivers/bus/fsl-mc/fsl-mc-msi.c                    |   25 +-
- drivers/char/sonypi.c                              |    3 +-
- drivers/char/tpm/tpm_crb.c                         |    4 +-
- drivers/dma/Kconfig                                |    2 +-
- drivers/dma/qcom/hidma.c                           |    8 +-
- drivers/hv/vmbus_drv.c                             |    5 +-
- drivers/hwmon/acpi_power_meter.c                   |    5 +-
- drivers/hwmon/asus_atk0110.c                       |    6 +-
- drivers/input/misc/atlas_btns.c                    |    4 +-
- drivers/iommu/Kconfig                              |    2 +-
- drivers/iommu/amd/amd_iommu_types.h                |    1 -
- drivers/iommu/amd/iommu.c                          |   44 +-
- drivers/iommu/intel/iommu.h                        |    1 -
- drivers/iommu/intel/irq_remapping.c                |   52 +-
- drivers/iommu/of_iommu.c                           |    1 -
- drivers/irqchip/Kconfig                            |    9 +-
- drivers/irqchip/irq-apple-aic.c                    |    6 +-
- drivers/irqchip/irq-gic-pm.c                       |    2 +-
- drivers/irqchip/irq-gic-v2m.c                      |   11 +-
- drivers/irqchip/irq-gic-v3.c                       |    3 +-
- drivers/irqchip/irq-gic.c                          |    7 +-
- drivers/irqchip/irq-loongarch-cpu.c                |   48 +-
- drivers/irqchip/irq-loongson-eiointc.c             |   63 +-
- drivers/irqchip/irq-loongson-htvec.c               |  176 +++-
- drivers/irqchip/irq-loongson-liointc.c             |   37 +-
- drivers/irqchip/irq-loongson-pch-lpc.c             |   25 +
- drivers/irqchip/irq-loongson-pch-pic.c             |   76 +-
- drivers/irqchip/irq-ls-extirq.c                    |    2 +-
- drivers/irqchip/irq-mips-gic.c                     |    2 +-
- drivers/irqchip/irq-mtk-cirq.c                     |   95 +-
- drivers/irqchip/irq-mvebu-icu.c                    |    4 +-
- drivers/irqchip/irq-sifive-plic.c                  |    6 +-
- drivers/irqchip/irq-sl28cpld.c                     |    3 +-
- drivers/irqchip/irq-st.c                           |    7 +-
- drivers/irqchip/irq-ti-sci-inta.c                  |    2 +-
- drivers/irqchip/irq-wpcm450-aic.c                  |    1 +
- drivers/mailbox/Kconfig                            |    2 +-
- drivers/mailbox/pcc.c                              |    1 +
- drivers/net/fjes/fjes_main.c                       |    4 +-
- drivers/pci/Kconfig                                |    7 +-
- drivers/pci/controller/Kconfig                     |   30 +-
- drivers/pci/controller/dwc/Kconfig                 |   48 +-
- drivers/pci/controller/mobiveil/Kconfig            |    6 +-
- drivers/pci/controller/pci-hyperv.c                |   15 +-
- drivers/pci/msi/Makefile                           |    3 +-
- drivers/pci/msi/api.c                              |  458 ++++++++
- drivers/pci/msi/irqdomain.c                        |  369 +++++--
- drivers/pci/msi/msi.c                              | 1100 ++++++++------------
- drivers/pci/msi/msi.h                              |  114 +-
- drivers/pci/probe.c                                |    2 -
- drivers/perf/Kconfig                               |    2 +-
- drivers/platform/chrome/chromeos_privacy_screen.c  |    3 +-
- drivers/platform/chrome/wilco_ec/event.c           |    4 +-
- drivers/platform/surface/surfacepro3_button.c      |    3 +-
- drivers/platform/x86/asus-laptop.c                 |    3 +-
- drivers/platform/x86/asus-wireless.c               |    3 +-
- drivers/platform/x86/classmate-laptop.c            |   20 +-
- drivers/platform/x86/dell/dell-rbtn.c              |    6 +-
- drivers/platform/x86/eeepc-laptop.c                |    3 +-
- drivers/platform/x86/fujitsu-laptop.c              |    4 +-
- drivers/platform/x86/fujitsu-tablet.c              |    3 +-
- drivers/platform/x86/intel/rst.c                   |    4 +-
- drivers/platform/x86/lg-laptop.c                   |    4 +-
- drivers/platform/x86/panasonic-laptop.c            |    8 +-
- drivers/platform/x86/sony-laptop.c                 |    9 +-
- drivers/platform/x86/system76_acpi.c               |    4 +-
- drivers/platform/x86/topstar-laptop.c              |    3 +-
- drivers/platform/x86/toshiba_acpi.c                |    4 +-
- drivers/platform/x86/toshiba_bluetooth.c           |    6 +-
- drivers/platform/x86/toshiba_haps.c                |    4 +-
- drivers/platform/x86/wireless-hotkey.c             |    3 +-
- drivers/platform/x86/xo15-ebook.c                  |    3 +-
- drivers/pnp/core.c                                 |    4 +-
- drivers/pnp/driver.c                               |    3 +-
- drivers/ptp/ptp_vmw.c                              |    3 +-
- drivers/soc/fsl/dpio/dpio-driver.c                 |    1 -
- drivers/soc/ti/Kconfig                             |    2 +-
- drivers/soc/ti/ti_sci_inta_msi.c                   |   12 +-
- drivers/thermal/intel/intel_menlow.c               |    8 +-
- drivers/vfio/fsl-mc/vfio_fsl_mc_intr.c             |    1 -
- drivers/video/backlight/apple_bl.c                 |    3 +-
- drivers/watchdog/ni903x_wdt.c                      |    4 +-
- drivers/xen/xen-acpi-pad.c                         |    3 +-
- include/acpi/acconfig.h                            |    2 +
- include/acpi/acpi_bus.h                            |    2 +-
- include/acpi/acpixf.h                              |    2 +-
- include/acpi/actbl1.h                              |  151 ++-
- include/acpi/actbl2.h                              |  162 ++-
- include/acpi/actypes.h                             |   10 +-
- include/acpi/acuuid.h                              |    3 +-
- include/acpi/processor.h                           |   10 +
- include/asm-generic/msi.h                          |    4 +-
- include/clocksource/hyperv_timer.h                 |    4 +-
- include/linux/acpi.h                               |   13 +
- include/linux/device.h                             |    8 +-
- include/linux/gpio/driver.h                        |    2 +-
- include/linux/irqdomain.h                          |  143 +--
- include/linux/irqdomain_defs.h                     |   31 +
- include/linux/irqreturn.h                          |    8 +-
- include/linux/msi.h                                |  357 +++++--
- include/linux/msi_api.h                            |   73 ++
- include/linux/pci.h                                |   29 +-
- kernel/irq/Kconfig                                 |    7 +-
- kernel/irq/chip.c                                  |    8 +-
- kernel/irq/internals.h                             |    2 +
- kernel/irq/irqdesc.c                               |   15 +-
- kernel/irq/manage.c                                |    4 +-
- kernel/irq/msi.c                                   |  914 +++++++++++++---
- scripts/mod/modpost.c                              |   13 +
- scripts/recordmcount.c                             |   39 +
- scripts/sorttable.c                                |    2 +-
- tools/power/acpi/tools/acpidump/Makefile           |    1 +
- tools/power/acpi/tools/acpidump/apdump.c           |    4 +-
- 263 files changed, 8205 insertions(+), 2358 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
- delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/mediatek,cirq.txt
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/mediatek,mtk-cirq.yaml
- create mode 100644 arch/loongarch/include/asm/alternative-asm.h
- create mode 100644 arch/loongarch/include/asm/alternative.h
- create mode 100644 arch/loongarch/include/asm/asm-extable.h
- create mode 100644 arch/loongarch/include/asm/bugs.h
- create mode 100644 arch/loongarch/include/asm/extable.h
- create mode 100644 arch/loongarch/include/asm/ftrace.h
- create mode 100644 arch/loongarch/include/asm/gpr-num.h
- create mode 100644 arch/loongarch/include/asm/stackprotector.h
- create mode 100644 arch/loongarch/kernel/alternative.c
- create mode 100644 arch/loongarch/kernel/ftrace.c
- create mode 100644 arch/loongarch/kernel/ftrace_dyn.c
- create mode 100644 arch/loongarch/kernel/mcount.S
- create mode 100644 arch/loongarch/kernel/mcount_dyn.S
- create mode 100644 arch/loongarch/kernel/unaligned.c
- create mode 100644 arch/loongarch/lib/memcpy.S
- create mode 100644 arch/loongarch/lib/memmove.S
- create mode 100644 arch/loongarch/lib/memset.S
- create mode 100644 arch/loongarch/lib/unaligned.S
- create mode 100644 arch/loongarch/power/Makefile
- create mode 100644 arch/loongarch/power/hibernate.c
- create mode 100644 arch/loongarch/power/hibernate_asm.S
- create mode 100644 arch/loongarch/power/platform.c
- create mode 100644 arch/loongarch/power/suspend.c
- create mode 100644 arch/loongarch/power/suspend_asm.S
- create mode 100644 arch/x86/include/asm/hyperv_timer.h
- create mode 100644 drivers/acpi/acpi_ffh.c
- create mode 100644 drivers/acpi/acpica/utcksum.c
- create mode 100644 drivers/pci/msi/api.c
- create mode 100644 include/linux/irqdomain_defs.h
- create mode 100644 include/linux/msi_api.h
