@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9B36510B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 17:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE31B6510B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 17:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbiLSQtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 11:49:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S231843AbiLSQsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 11:48:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231941AbiLSQts (ORCPT
+        with ESMTP id S231401AbiLSQsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 11:49:48 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0E312AEF;
-        Mon, 19 Dec 2022 08:49:47 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJGgCkw012947;
-        Mon, 19 Dec 2022 16:47:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=X/TCy+np95A3btt+KYPVOzVuzd5nRH3EepKk5/dPBvM=;
- b=Js/kiTBvvm2xw1oUgfBeMmxw836mIfpYmLwOVfwK9/IhsQBOLcdR7/iW2C5PzFewk1Ou
- PEXfPORBVX+EXj+REDuUAt+HL7rcGQr7z6Axq3mw7U8Wh2/Bh2UcCgJYFgpp3z1dIRKw
- rhJTAkqn4SlC5knZh30sF33RBo5fQKW/IcjIVE13uSHE/kt2DZaLiiK8g9lv5VKheZMr
- Ut5riOVi7wFaify6AtSW6zE4QurCH7VAToHKyWjysHcjxnZerFWNyNUBhrdD1qPMSO+9
- xVd5iH3Plp0NfQh5WDd1UYpdb9PpLp/UxGLR7hn4wxafFtJeMwXb51gII/Ib8qanoCrP wA== 
+        Mon, 19 Dec 2022 11:48:41 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEC9A1BD
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 08:48:40 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJGi3c5024934;
+        Mon, 19 Dec 2022 16:48:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Avcqq16wcT/rgWLBTYvJjWGMCSJ5kcrYa+wkoaZ9R/0=;
+ b=g0+r7mrzf0szb/CHf0ih7yQoYaNV4ULwhnpYUbUtFR183F4T1gEdlIgsbIsnRhdSaVih
+ B3M+pCQmtrIyr0m6H53JPeDlHIDTO3fmeWKts4rOYuLQvu7OjGT1zco3T013O8wsgJPU
+ VBPhlKRRss+o7Nd9fMnRsaKiAcN5rTNIjFJX7LqRsDu+FMa7OQ2XrRbveiblKk4mXdf8
+ yVjqyon09Qc1oQSNZbCv+lT7cDvguqluvHyND1t71vdQUhizCKf5jRfUuc/sVBAZDtLI
+ 6wnqmIEiD6wLtm4GolAOlYgybbCr7gp+hYPkNHVTH+0a9KV3t6nI1BFwjK6aZYWD5m0V FQ== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mjuq108qk-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mjur3r4pa-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 16:47:57 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BJGigIl001168;
-        Mon, 19 Dec 2022 16:47:56 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mjuq108pj-1
+        Mon, 19 Dec 2022 16:48:35 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BJGi9io025553;
+        Mon, 19 Dec 2022 16:48:35 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mjur3r4nq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 16:47:55 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJE7cBC024486;
-        Mon, 19 Dec 2022 16:47:52 GMT
+        Mon, 19 Dec 2022 16:48:35 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJE1K14013948;
+        Mon, 19 Dec 2022 16:48:33 GMT
 Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3mh6ywjv2n-1
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3mh6yw2vd1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 16:47:52 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BJGlmPq23921026
+        Mon, 19 Dec 2022 16:48:33 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BJGmUYE16712142
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 19 Dec 2022 16:47:48 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C9C1420040;
-        Mon, 19 Dec 2022 16:47:48 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 15D0420043;
-        Mon, 19 Dec 2022 16:47:48 +0000 (GMT)
-Received: from [9.155.211.163] (unknown [9.155.211.163])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 19 Dec 2022 16:47:48 +0000 (GMT)
-Message-ID: <3088ea5ffdfd095ca67265ed711e8d2bc188b362.camel@linux.ibm.com>
-Subject: Re: [RFC][PATCH 09/12] x86,amd_iommu: Replace cmpxchg_double()
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        torvalds@linux-foundation.org
-Cc:     corbet@lwn.net, will@kernel.org, boqun.feng@gmail.com,
-        mark.rutland@arm.com, catalin.marinas@arm.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, Herbert Xu <herbert@gondor.apana.org.au>,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org
-Date:   Mon, 19 Dec 2022 17:47:47 +0100
-In-Reply-To: <20221219154119.419176389@infradead.org>
-References: <20221219153525.632521981@infradead.org>
-         <20221219154119.419176389@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Mon, 19 Dec 2022 16:48:30 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9D6C42005A;
+        Mon, 19 Dec 2022 16:48:30 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7ED8F2004F;
+        Mon, 19 Dec 2022 16:48:30 +0000 (GMT)
+Received: from [9.171.202.193] (unknown [9.171.202.193])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 19 Dec 2022 16:48:30 +0000 (GMT)
+Message-ID: <1da3f764-4445-2135-3292-2912c2e8e778@linux.ibm.com>
+Date:   Mon, 19 Dec 2022 17:48:14 +0100
 MIME-Version: 1.0
+Subject: Re: [PATCH] gcov: Add support for checksum field
+Content-Language: en-US
+To:     Rickard Andersson <rickaran@axis.com>, linux-kernel@vger.kernel.org
+Cc:     rickard314.andersson@gmail.com, mliska@suse.cz
+References: <20221219150621.3310033-1-rickaran@axis.com>
+From:   Peter Oberparleiter <oberpar@linux.ibm.com>
+In-Reply-To: <20221219150621.3310033-1-rickaran@axis.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: avK4AaeUvBdFbu_514SfMdG6OTeTMyeK
-X-Proofpoint-GUID: MKTubrQvIx2xVgk4vNHOE1U_o7athJpa
+X-Proofpoint-ORIG-GUID: Af2f7sjyRAR5ny7q2MU6zjnCSPy3Zq73
+X-Proofpoint-GUID: bww0ZYjgVw71OGYN4tYSdn-4uIqcsI8b
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-19_01,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 bulkscore=0 lowpriorityscore=0 suspectscore=0
- clxscore=1011 mlxlogscore=721 phishscore=0 mlxscore=0 adultscore=0
- spamscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2212190147
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 lowpriorityscore=0 impostorscore=0 malwarescore=0
+ mlxscore=0 adultscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0
+ spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212190147
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -108,69 +90,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-12-19 at 16:35 +0100, Peter Zijlstra wrote:
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On 19.12.2022 16:06, Rickard Andersson wrote:
+> From: Rickard x Andersson <rickaran@axis.com>
+> 
+> In GCC version 12.1 a checksum field was added.
+
+Thanks for the patch!
+
+In another e-mail you mentioned that this patch fixes a kernel crash
+during boot when using gcov-kernel with GCC 12. Please add this
+information to the commit message and if possible the platform on which
+this occurs.
+
+Also this patch fixes a missing piece from a previous patch, so please add:
+
+Fixes: 977ef30a7d88 ("gcov: support GCC 12.1 and newer compilers")
+Cc: <stable@vger.kernel.org>
+
+Finally I reviewed and tested the patch and it looks good to me, so
+please add:
+
+Reviewed-by: Peter Oberparleiter <oberpar@linux.ibm.com>
+Tested-by: Peter Oberparleiter <oberpar@linux.ibm.com>
+
+Please resend with these commit message changes. Thanks!
+
+For the record: I wondered why my testing of the previous patch with GCC
+12 didn't catch this. It turns out that this crash does not occur on
+architectures with 8-byte pointer alignment such as s390x where I
+performed my tests. Consider this pahole output on s390x without the patch:
+
+struct gcov_info {
+[...]
+        unsigned int       stamp;                /*    16     4 */
+        /* XXX 4 bytes hole, try to pack */
+        const char  *      filename;             /*    24     8 */
+[...]
+}
+
+And with the patch:
+
+struct gcov_info {
+[...]
+       unsigned int       stamp;                /*    16     4 */
+       unsigned int       checksum;             /*    20     4 */
+       const char  *      filename;             /*    24     8 */
+[...]
+}
+
+As can be seen, the offset of the filename and subsequent fields does
+not change because the new field fills an alignment hole. It would
+change (resulting in a crash during boot) if the alignment-requirement
+of the const char *filename field would be different.
+
+> 
+> Signed-off-by: Rickard x Andersson <rickaran@axis.com>
 > ---
->  drivers/iommu/amd/amd_iommu_types.h |    9 +++++++--
->  drivers/iommu/amd/iommu.c           |   10 ++++------
->  2 files changed, 11 insertions(+), 8 deletions(-)
->=20
-> --- a/drivers/iommu/amd/amd_iommu_types.h
-> +++ b/drivers/iommu/amd/amd_iommu_types.h
-> @@ -979,8 +979,13 @@ union irte_ga_hi {
->  };
-> =20
->  struct irte_ga {
-> -	union irte_ga_lo lo;
-> -	union irte_ga_hi hi;
-> +	union {
-> +		struct {
-> +			union irte_ga_lo lo;
-> +			union irte_ga_hi hi;
-> +		};
-> +		u128 irte;
-> +	};
->  };
-> =20
->  struct irq_2_irte {
-> --- a/drivers/iommu/amd/iommu.c
-> +++ b/drivers/iommu/amd/iommu.c
-> @@ -2992,10 +2992,10 @@ static int alloc_irq_index(struct amd_io
->  static int modify_irte_ga(struct amd_iommu *iommu, u16 devid, int index,
->  			  struct irte_ga *irte, struct amd_ir_data *data)
->  {
-> -	bool ret;
->  	struct irq_remap_table *table;
-> -	unsigned long flags;
->  	struct irte_ga *entry;
-> +	unsigned long flags;
-> +	u128 old;
-> =20
->  	table =3D get_irq_table(iommu, devid);
->  	if (!table)
-> @@ -3006,16 +3006,14 @@ static int modify_irte_ga(struct amd_iom
->  	entry =3D (struct irte_ga *)table->table;
->  	entry =3D &entry[index];
-> =20
-> -	ret =3D cmpxchg_double(&entry->lo.val, &entry->hi.val,
-> -			     entry->lo.val, entry->hi.val,
-> -			     irte->lo.val, irte->hi.val);
->  	/*
->  	 * We use cmpxchg16 to atomically update the 128-bit IRTE,
->  	 * and it cannot be updated by the hardware or other processors
->  	 * behind us, so the return value of cmpxchg16 should be the
->  	 * same as the old value.
+>  kernel/gcov/gcc_4_7.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/kernel/gcov/gcc_4_7.c b/kernel/gcov/gcc_4_7.c
+> index c699feda21ac..04880d8fba25 100644
+> --- a/kernel/gcov/gcc_4_7.c
+> +++ b/kernel/gcov/gcc_4_7.c
+> @@ -85,6 +85,7 @@ struct gcov_fn_info {
+>   * @version: gcov version magic indicating the gcc version used for compilation
+>   * @next: list head for a singly-linked list
+>   * @stamp: uniquifying time stamp
+> + * @checksum: unique object checksum
+>   * @filename: name of the associated gcov data file
+>   * @merge: merge functions (null for unused counter type)
+>   * @n_functions: number of instrumented functions
+> @@ -97,6 +98,10 @@ struct gcov_info {
+>  	unsigned int version;
+>  	struct gcov_info *next;
+>  	unsigned int stamp;
+> + /* Since GCC 12.1 a checksum field is added. */
+> +#if (__GNUC__ >= 12)
+> +	unsigned int checksum;
+> +#endif
+>  	const char *filename;
+>  	void (*merge[GCOV_COUNTERS])(gcov_type *, unsigned int);
+>  	unsigned int n_functions;
 
-The above comment seems to have already been out of date but could be
-updated to say cmpxchg128 instead of cmxchg16 anyway.
-
->  	 */
-> -	WARN_ON(!ret);
-> +	old =3D entry->irte;
-> +	WARN_ON(!try_cmpxchg128(&entry->irte, &old, irte->irte));
-> =20
->  	if (data)
->  		data->ref =3D entry;
->=20
->=20
+-- 
+Peter Oberparleiter
+Linux on IBM Z Development - IBM Germany R&D
 
