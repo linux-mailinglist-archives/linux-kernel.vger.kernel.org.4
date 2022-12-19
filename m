@@ -2,188 +2,402 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E95650B16
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9453F650B28
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232043AbiLSMC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 07:02:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49572 "EHLO
+        id S231511AbiLSMHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 07:07:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231917AbiLSMBb (ORCPT
+        with ESMTP id S231197AbiLSMGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 07:01:31 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B635FED
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 04:01:00 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id h10so8389481wrx.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 04:01:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=I844ma+uGMWgpYRGjy2JdDfnJUAFr0IuxbRGPpJtscA=;
-        b=SGsqNE5upYRKIUms6GN0AQEgOmY+qQr24vcFcsbydj9WXSKgocvki+I/iNMvBHl9Ij
-         sYy66tWXvAo113s59a/qZ2M/JN5ZRpDbOiaUskgDsfsh1iBNLTfSx8Jxb8O20530DJh9
-         MonxsraTzP+fgxLusakco5EVO9SmYp3Q27J/s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I844ma+uGMWgpYRGjy2JdDfnJUAFr0IuxbRGPpJtscA=;
-        b=imxEDpDE/n+NeLdQzSCqHoou8rQZlQi7c9oIZ6LkVED/x7ZBiOZu4dxweV4eXcNAYR
-         pvfDDnh6q69DinZLBIjI5hlK03BdlvoBA/2RNrDWSppKSPr0vGx5BXmH++idJ+0JuHja
-         G3khueodtkDjJvgI3X+uQIOoJ7o6fU0F3AkpdYnOOYhdPTu1MbF+jVMojZC++MFMa88N
-         KO84ZpIK0bL4e04r5FHW3EOWfEK8AokANQ0/bsFk7P8ryNQd6Byzt8Yheq4XpzQzXwOb
-         dUSgkaqwHIcu/+LOtReJyL8U87bFVrcVe4wF5npjGJJEvi2Uagab5ZxLEzBx+owoQtL7
-         lNng==
-X-Gm-Message-State: ANoB5pnmgKIFtx3Bbb/6vXsipjkaLROhbZ1B5Rsskl83kZSrVHWpmyDI
-        +D/p4IeSCJsi2XDLhBnNgsT3A5gqzVs8PUJDOvA=
-X-Google-Smtp-Source: AA0mqf7QRIS5U4CpgZCgErkLDmu8raOZAE/Mqn3DShgIzU8/o8nAtBZr//raOaa7p6R/TvTU90JUmA==
-X-Received: by 2002:a5d:4c82:0:b0:242:806d:b763 with SMTP id z2-20020a5d4c82000000b00242806db763mr26533804wrs.38.1671451259310;
-        Mon, 19 Dec 2022 04:00:59 -0800 (PST)
-Received: from [10.176.68.61] ([192.19.148.250])
-        by smtp.gmail.com with ESMTPSA id bq1-20020a5d5a01000000b00236545edc91sm9812524wrb.76.2022.12.19.04.00.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 04:00:58 -0800 (PST)
-Message-ID: <8485b70f-4120-192c-3f7e-6b4c8ac2ec33@broadcom.com>
-Date:   Mon, 19 Dec 2022 13:00:57 +0100
+        Mon, 19 Dec 2022 07:06:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC32A187;
+        Mon, 19 Dec 2022 04:06:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6912560F38;
+        Mon, 19 Dec 2022 12:06:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EA71C433D2;
+        Mon, 19 Dec 2022 12:06:38 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [GIT PULL] LoongArch changes for v6.2
+Date:   Mon, 19 Dec 2022 20:06:12 +0800
+Message-Id: <20221219120612.1637267-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] dt-bindings: bcm4329-fmac: Add ingenic,iw8103-fmac
- compatible string
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arend van Spriel <arend@broadcom.com>
-Cc:     list@opendingux.net, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221214155943.15418-1-paul@crapouillou.net>
- <036c3985-0dcc-c860-4db2-22f0dd4550dc@linaro.org>
-From:   Arend van Spriel <arend.vanspriel@broadcom.com>
-In-Reply-To: <036c3985-0dcc-c860-4db2-22f0dd4550dc@linaro.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000095fff305f02d122f"
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000095fff305f02d122f
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+The following changes since commit 830b3c68c1fb1e9176028d02ef86f3cf76aa2476:
 
-On 12/14/2022 5:53 PM, Krzysztof Kozlowski wrote:
-> On 14/12/2022 16:59, Paul Cercueil wrote:
->> The MIPS CI20 board has a Ingenic IW8103 chip, which is supposedly just
->> a rebranded Broadcom BCM4330.
->>
->> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> 
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Linux 6.1 (2022-12-11 14:15:18 -0800)
 
-My guess is that Ingenic is not really a chip manufacturer, but this is 
-actually a wifi module using BCM4330 as wifi chip. Personally, I would 
-not add a compatible string for that and the commit message does not 
-offer any arguments for having this.
+are available in the Git repository at:
 
-Regards,
-Arend
+  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.2
 
---00000000000095fff305f02d122f
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+for you to fetch changes up to 5535f4f70cfc15ef55b6ea7c7e17337b17337cb6:
 
-MIIQdwYJKoZIhvcNAQcCoIIQaDCCEGQCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg3OMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
-MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
-rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
-aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
-e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
-cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
-MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
-KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
-/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
-TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
-YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
-b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
-CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
-BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
-jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
-9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
-/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
-jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
-AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
-dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
-MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
-IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
-SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
-XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
-J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
-nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBVYwggQ+oAMCAQICDE79bW6SMzVJMuOi1zANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMTQzMjNaFw0yNTA5MTAxMTQzMjNaMIGV
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEFyZW5kIFZhbiBTcHJpZWwxKzApBgkqhkiG
-9w0BCQEWHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IB
-DwAwggEKAoIBAQDxOB8Yu89pZLsG9Ic8ZY3uGibuv+NRsij+E70OMJQIwugrByyNq5xgH0BI22vJ
-LT7VKCB6YJC88ewEFfYi3EKW/sn6RL16ImUM40beDmQ12WBquJRoxVNyoByNalmTOBNYR95ZQZJw
-1nrzaoJtK0XIsv0dNCUcLlAc+jHkngD+I0ptVuWoMO1BcJexqJf5iX2M1CdC8PXTh9g4FIQnG2mc
-2Gzj3QNJRLsZu1TLyOyBBIr/BE7UiY3RabgRzknBGAPmzhS+fmyM8OtM5BYBsFBrSUFtZZO2p/tf
-Nbc24J2zf2peoZ8MK+7WQqummYlOnz+FyDkA9EybeNMcS5C+xi/PAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFIikAXd8CEtv
-ZbDflDRnf3tuStPuMA0GCSqGSIb3DQEBCwUAA4IBAQCdS5XCYx6k2GGZui9DlFsFm75khkqAU7rT
-zBX04sJU1+B1wtgmWTVIzW7ugdtDZ4gzaV0S9xRhpDErjJaltxPbCylb1DEsLj+AIvBR34caW6ZG
-sQk444t0HPb29HnWYj+OllIGMbdJWr0/P95ZrKk2bP24ub3ZP/8SyzrohfIba9WZKMq6g2nTLZE3
-BtkeSGJx/8dy0h8YmRn+adOrxKXHxhSL8BNn8wsmIZyYWe6fRcBtO3Ks2DOLyHCdkoFlN8x9VUQF
-N2ulEgqCbRKkx+qNirW86eF138lr1gRxzclu/38ko//MmkAYR/+hP3WnBll7zbpIt0jc9wyFkSqH
-p8a1MYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMTv1t
-bpIzNUky46LXMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAOfUysUXcJfYRWqfCK
-eoDRkpHAqooyPjoDq4oxct+cmjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjEyMTkxMjAwNTlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAm7KNtjDm/VrppMMe+U7phWT/3Z3ValcwtkQt
-VJWt0veyWNYoqrI+gnzFXcNukEu0F3/eEScmzJIpTY2IwaCwEas1ElaBct2fLbcWwW7QTVTzfcZj
-db1K1vBmuxqtgerPH7N+AH7cEGupKb4XwZ+rwLxGURSB/5acKaSW0ku64/tZZ3/Y3lKwr7PM6m6+
-wRb5PoXWPgJeosyP4bNGWrhmiVeccucEaRP4K6YNzldMLVztoAO6OmhTawEP2nUTV6mjSm38PI4o
-YfwxDe6V2HJ00oyL5UC4AzTol8um0eEwbg7sfSG38NBi7le7ddjuiOIOLX0f+pAfVzyI41s9jN5Z
-tw==
---00000000000095fff305f02d122f--
+  LoongArch: Update Loongson-3 default config file (2022-12-14 08:41:54 +0800)
+
+----------------------------------------------------------------
+LoongArch changes for v6.2
+
+1, Switch to relative exception tables;
+2, Add unaligned access support;
+3, Add alternative runtime patching mechanism;
+4, Add FDT booting support from efi system table;
+5, Add suspend/hibernation (ACPI S3/S4) support;
+6, Add basic STACKPROTECTOR support;
+7, Add ftrace (function tracer) support;
+8, Update the default config file.
+
+----------------------------------------------------------------
+Binbin Zhou (2):
+      LoongArch: Add FDT booting support from efi system table
+      LoongArch: Add processing ISA Node in DeviceTree
+
+Huacai Chen (9):
+      Merge tags 'acpi-6.2-rc1' and 'irq-core-2022-12-10' into loongarch-next
+      LoongArch: Add unaligned access support
+      LoongArch: Add alternative runtime patching mechanism
+      LoongArch: Use alternative to optimize libraries
+      LoongArch: Add suspend (ACPI S3) support
+      LoongArch: Add hibernation (ACPI S4) support
+      LoongArch: Add basic STACKPROTECTOR support
+      LoongArch: module: Use got/plt section indices for relocations
+      LoongArch: Update Loongson-3 default config file
+
+Qing Zhang (8):
+      LoongArch/ftrace: Add basic support
+      LoongArch/ftrace: Add recordmcount support
+      LoongArch/ftrace: Add dynamic function tracer support
+      LoongArch/ftrace: Add dynamic function graph tracer support
+      LoongArch/ftrace: Add HAVE_DYNAMIC_FTRACE_WITH_REGS support
+      LoongArch/ftrace: Add HAVE_DYNAMIC_FTRACE_WITH_ARGS support
+      LoongArch/ftrace: Add HAVE_FUNCTION_GRAPH_RET_ADDR_PTR support
+      LoongArch: modules/ftrace: Initialize PLT at load time
+
+Youling Tang (6):
+      LoongArch: Consolidate __ex_table construction
+      LoongArch: Switch to relative exception tables
+      LoongArch: extable: Add `type` and `data` fields
+      LoongArch: extable: Add a dedicated uaccess handler
+      LoongArch: Remove the .fixup section usage
+      LoongArch: BPF: Add BPF exception tables
+
+ Documentation/PCI/msi-howto.rst                    |   10 +
+ Documentation/admin-guide/sysctl/kernel.rst        |    8 +-
+ .../loongarch,cpu-interrupt-controller.yaml        |   34 +
+ .../interrupt-controller/mediatek,cirq.txt         |   33 -
+ .../interrupt-controller/mediatek,mtk-cirq.yaml    |   68 ++
+ arch/arm64/kernel/acpi.c                           |  106 ++
+ arch/ia64/hp/common/aml_nfw.c                      |    4 +-
+ arch/loongarch/Kconfig                             |   20 +
+ arch/loongarch/Makefile                            |    8 +
+ arch/loongarch/configs/loongson3_defconfig         |   56 +-
+ arch/loongarch/include/asm/acpi.h                  |  152 +--
+ arch/loongarch/include/asm/alternative-asm.h       |   82 ++
+ arch/loongarch/include/asm/alternative.h           |  111 ++
+ arch/loongarch/include/asm/asm-extable.h           |   65 ++
+ arch/loongarch/include/asm/bootinfo.h              |    1 +
+ arch/loongarch/include/asm/bugs.h                  |   15 +
+ arch/loongarch/include/asm/efi.h                   |    1 +
+ arch/loongarch/include/asm/extable.h               |   47 +
+ arch/loongarch/include/asm/ftrace.h                |   68 ++
+ arch/loongarch/include/asm/futex.h                 |   27 +-
+ arch/loongarch/include/asm/gpr-num.h               |   22 +
+ arch/loongarch/include/asm/inst.h                  |   46 +
+ arch/loongarch/include/asm/irq.h                   |    2 +-
+ arch/loongarch/include/asm/loongson.h              |    3 +
+ arch/loongarch/include/asm/module.h                |   27 +-
+ arch/loongarch/include/asm/module.lds.h            |    1 +
+ arch/loongarch/include/asm/setup.h                 |    1 +
+ arch/loongarch/include/asm/stackprotector.h        |   38 +
+ arch/loongarch/include/asm/string.h                |    5 +
+ arch/loongarch/include/asm/thread_info.h           |    2 +-
+ arch/loongarch/include/asm/time.h                  |    1 +
+ arch/loongarch/include/asm/uaccess.h               |   24 +-
+ arch/loongarch/include/asm/unwind.h                |    3 +-
+ arch/loongarch/kernel/Makefile                     |   16 +-
+ arch/loongarch/kernel/acpi.c                       |   17 +-
+ arch/loongarch/kernel/alternative.c                |  246 +++++
+ arch/loongarch/kernel/asm-offsets.c                |   15 +
+ arch/loongarch/kernel/efi.c                        |   15 +-
+ arch/loongarch/kernel/env.c                        |    2 +
+ arch/loongarch/kernel/fpu.S                        |    5 +-
+ arch/loongarch/kernel/ftrace.c                     |   73 ++
+ arch/loongarch/kernel/ftrace_dyn.c                 |  273 +++++
+ arch/loongarch/kernel/inst.c                       |  127 +++
+ arch/loongarch/kernel/mcount.S                     |   96 ++
+ arch/loongarch/kernel/mcount_dyn.S                 |  149 +++
+ arch/loongarch/kernel/module-sections.c            |   64 +-
+ arch/loongarch/kernel/module.c                     |   75 +-
+ arch/loongarch/kernel/numa.c                       |   17 +-
+ arch/loongarch/kernel/process.c                    |    6 +
+ arch/loongarch/kernel/reset.c                      |    5 +
+ arch/loongarch/kernel/setup.c                      |  149 ++-
+ arch/loongarch/kernel/smp.c                        |   35 +
+ arch/loongarch/kernel/switch.S                     |    5 +
+ arch/loongarch/kernel/time.c                       |   11 +-
+ arch/loongarch/kernel/traps.c                      |   27 +
+ arch/loongarch/kernel/unaligned.c                  |  499 +++++++++
+ arch/loongarch/kernel/unwind_guess.c               |    4 +-
+ arch/loongarch/kernel/unwind_prologue.c            |   50 +-
+ arch/loongarch/kernel/vmlinux.lds.S                |   13 +-
+ arch/loongarch/lib/Makefile                        |    3 +-
+ arch/loongarch/lib/clear_user.S                    |   85 +-
+ arch/loongarch/lib/copy_user.S                     |  108 +-
+ arch/loongarch/lib/memcpy.S                        |   95 ++
+ arch/loongarch/lib/memmove.S                       |  121 +++
+ arch/loongarch/lib/memset.S                        |   91 ++
+ arch/loongarch/lib/unaligned.S                     |   84 ++
+ arch/loongarch/mm/extable.c                        |   59 +-
+ arch/loongarch/net/bpf_jit.c                       |   86 +-
+ arch/loongarch/net/bpf_jit.h                       |    2 +
+ arch/loongarch/pci/acpi.c                          |    7 +-
+ arch/loongarch/power/Makefile                      |    4 +
+ arch/loongarch/power/hibernate.c                   |   62 ++
+ arch/loongarch/power/hibernate_asm.S               |   66 ++
+ arch/loongarch/power/platform.c                    |   57 +
+ arch/loongarch/power/suspend.c                     |   73 ++
+ arch/loongarch/power/suspend_asm.S                 |   89 ++
+ arch/powerpc/platforms/pseries/msi.c               |    7 +-
+ arch/um/drivers/Kconfig                            |    1 -
+ arch/um/include/asm/pci.h                          |    2 +-
+ arch/x86/Kconfig                                   |    1 -
+ arch/x86/include/asm/hyperv_timer.h                |    9 +
+ arch/x86/include/asm/irq_remapping.h               |    4 -
+ arch/x86/include/asm/irqdomain.h                   |    4 +-
+ arch/x86/include/asm/mshyperv.h                    |    2 -
+ arch/x86/include/asm/msi.h                         |    6 +
+ arch/x86/include/asm/pci.h                         |    5 +-
+ arch/x86/kernel/apic/msi.c                         |  211 ++--
+ arch/x86/kernel/apic/vector.c                      |    4 -
+ arch/x86/platform/olpc/olpc-xo15-sci.c             |    3 +-
+ drivers/acpi/Kconfig                               |   10 +
+ drivers/acpi/Makefile                              |    1 +
+ drivers/acpi/ac.c                                  |    8 +-
+ drivers/acpi/acpi_ffh.c                            |   55 +
+ drivers/acpi/acpi_pad.c                            |    7 +-
+ drivers/acpi/acpi_pcc.c                            |   47 +-
+ drivers/acpi/acpi_video.c                          |    8 +-
+ drivers/acpi/acpica/Makefile                       |    1 +
+ drivers/acpi/acpica/acglobal.h                     |    1 +
+ drivers/acpi/acpica/actables.h                     |    5 -
+ drivers/acpi/acpica/acutils.h                      |   13 +
+ drivers/acpi/acpica/dsmethod.c                     |   10 +-
+ drivers/acpi/acpica/evevent.c                      |   11 +
+ drivers/acpi/acpica/evregion.c                     |    9 +
+ drivers/acpi/acpica/exconfig.c                     |    4 +-
+ drivers/acpi/acpica/exfield.c                      |    8 +-
+ drivers/acpi/acpica/exserial.c                     |    6 +
+ drivers/acpi/acpica/hwsleep.c                      |   14 +
+ drivers/acpi/acpica/tbdata.c                       |    2 +-
+ drivers/acpi/acpica/tbfadt.c                       |    2 +-
+ drivers/acpi/acpica/tbprint.c                      |   77 +-
+ drivers/acpi/acpica/tbutils.c                      |    2 +-
+ drivers/acpi/acpica/tbxfroot.c                     |   32 +-
+ drivers/acpi/acpica/utcksum.c                      |  170 +++
+ drivers/acpi/acpica/utcopy.c                       |    7 -
+ drivers/acpi/acpica/utglobal.c                     |    4 +
+ drivers/acpi/acpica/utstring.c                     |   10 +-
+ drivers/acpi/apei/apei-base.c                      |    2 +-
+ drivers/acpi/apei/einj.c                           |   56 +-
+ drivers/acpi/apei/ghes.c                           |   62 +-
+ drivers/acpi/battery.c                             |   10 +-
+ drivers/acpi/bus.c                                 |    3 +
+ drivers/acpi/button.c                              |    5 +-
+ drivers/acpi/cppc_acpi.c                           |    4 +-
+ drivers/acpi/ec.c                                  |   15 +-
+ drivers/acpi/fan_attr.c                            |   16 +-
+ drivers/acpi/fan_core.c                            |    1 +
+ drivers/acpi/hed.c                                 |    3 +-
+ drivers/acpi/irq.c                                 |    5 +-
+ drivers/acpi/nfit/core.c                           |    3 +-
+ drivers/acpi/pci_irq.c                             |    6 +-
+ drivers/acpi/pfr_telemetry.c                       |    6 +-
+ drivers/acpi/pfr_update.c                          |    6 +-
+ drivers/acpi/power.c                               |    2 +-
+ drivers/acpi/processor_idle.c                      |    9 +-
+ drivers/acpi/processor_perflib.c                   |  100 +-
+ drivers/acpi/processor_throttling.c                |    4 +-
+ drivers/acpi/sbs.c                                 |    9 +-
+ drivers/acpi/sbshc.c                               |    7 +-
+ drivers/acpi/scan.c                                |    2 +-
+ drivers/acpi/sysfs.c                               |    5 +-
+ drivers/acpi/tables.c                              |   17 +-
+ drivers/acpi/thermal.c                             |    9 +-
+ drivers/acpi/tiny-power-button.c                   |   10 +-
+ drivers/acpi/video_detect.c                        |  110 +-
+ drivers/acpi/x86/utils.c                           |   24 +-
+ drivers/base/Makefile                              |    2 +-
+ drivers/base/platform-msi.c                        |    6 +-
+ drivers/bus/fsl-mc/Kconfig                         |    2 +-
+ drivers/bus/fsl-mc/dprc-driver.c                   |    1 -
+ drivers/bus/fsl-mc/fsl-mc-bus.c                    |    1 -
+ drivers/bus/fsl-mc/fsl-mc-msi.c                    |   25 +-
+ drivers/char/sonypi.c                              |    3 +-
+ drivers/char/tpm/tpm_crb.c                         |    4 +-
+ drivers/dma/Kconfig                                |    2 +-
+ drivers/dma/qcom/hidma.c                           |    8 +-
+ drivers/hv/vmbus_drv.c                             |    5 +-
+ drivers/hwmon/acpi_power_meter.c                   |    5 +-
+ drivers/hwmon/asus_atk0110.c                       |    6 +-
+ drivers/input/misc/atlas_btns.c                    |    4 +-
+ drivers/iommu/Kconfig                              |    2 +-
+ drivers/iommu/amd/amd_iommu_types.h                |    1 -
+ drivers/iommu/amd/iommu.c                          |   44 +-
+ drivers/iommu/intel/iommu.h                        |    1 -
+ drivers/iommu/intel/irq_remapping.c                |   52 +-
+ drivers/iommu/of_iommu.c                           |    1 -
+ drivers/irqchip/Kconfig                            |    9 +-
+ drivers/irqchip/irq-apple-aic.c                    |    6 +-
+ drivers/irqchip/irq-gic-pm.c                       |    2 +-
+ drivers/irqchip/irq-gic-v2m.c                      |   11 +-
+ drivers/irqchip/irq-gic-v3.c                       |    3 +-
+ drivers/irqchip/irq-gic.c                          |    7 +-
+ drivers/irqchip/irq-loongarch-cpu.c                |   48 +-
+ drivers/irqchip/irq-loongson-eiointc.c             |   63 +-
+ drivers/irqchip/irq-loongson-htvec.c               |  176 +++-
+ drivers/irqchip/irq-loongson-liointc.c             |   37 +-
+ drivers/irqchip/irq-loongson-pch-lpc.c             |   25 +
+ drivers/irqchip/irq-loongson-pch-pic.c             |   76 +-
+ drivers/irqchip/irq-ls-extirq.c                    |    2 +-
+ drivers/irqchip/irq-mips-gic.c                     |    2 +-
+ drivers/irqchip/irq-mtk-cirq.c                     |   95 +-
+ drivers/irqchip/irq-mvebu-icu.c                    |    4 +-
+ drivers/irqchip/irq-sifive-plic.c                  |    6 +-
+ drivers/irqchip/irq-sl28cpld.c                     |    3 +-
+ drivers/irqchip/irq-st.c                           |    7 +-
+ drivers/irqchip/irq-ti-sci-inta.c                  |    2 +-
+ drivers/irqchip/irq-wpcm450-aic.c                  |    1 +
+ drivers/mailbox/Kconfig                            |    2 +-
+ drivers/mailbox/pcc.c                              |    1 +
+ drivers/net/fjes/fjes_main.c                       |    4 +-
+ drivers/pci/Kconfig                                |    7 +-
+ drivers/pci/controller/Kconfig                     |   30 +-
+ drivers/pci/controller/dwc/Kconfig                 |   48 +-
+ drivers/pci/controller/mobiveil/Kconfig            |    6 +-
+ drivers/pci/controller/pci-hyperv.c                |   15 +-
+ drivers/pci/msi/Makefile                           |    3 +-
+ drivers/pci/msi/api.c                              |  458 ++++++++
+ drivers/pci/msi/irqdomain.c                        |  369 +++++--
+ drivers/pci/msi/msi.c                              | 1100 ++++++++------------
+ drivers/pci/msi/msi.h                              |  114 +-
+ drivers/pci/probe.c                                |    2 -
+ drivers/perf/Kconfig                               |    2 +-
+ drivers/platform/chrome/chromeos_privacy_screen.c  |    3 +-
+ drivers/platform/chrome/wilco_ec/event.c           |    4 +-
+ drivers/platform/surface/surfacepro3_button.c      |    3 +-
+ drivers/platform/x86/asus-laptop.c                 |    3 +-
+ drivers/platform/x86/asus-wireless.c               |    3 +-
+ drivers/platform/x86/classmate-laptop.c            |   20 +-
+ drivers/platform/x86/dell/dell-rbtn.c              |    6 +-
+ drivers/platform/x86/eeepc-laptop.c                |    3 +-
+ drivers/platform/x86/fujitsu-laptop.c              |    4 +-
+ drivers/platform/x86/fujitsu-tablet.c              |    3 +-
+ drivers/platform/x86/intel/rst.c                   |    4 +-
+ drivers/platform/x86/lg-laptop.c                   |    4 +-
+ drivers/platform/x86/panasonic-laptop.c            |    8 +-
+ drivers/platform/x86/sony-laptop.c                 |    9 +-
+ drivers/platform/x86/system76_acpi.c               |    4 +-
+ drivers/platform/x86/topstar-laptop.c              |    3 +-
+ drivers/platform/x86/toshiba_acpi.c                |    4 +-
+ drivers/platform/x86/toshiba_bluetooth.c           |    6 +-
+ drivers/platform/x86/toshiba_haps.c                |    4 +-
+ drivers/platform/x86/wireless-hotkey.c             |    3 +-
+ drivers/platform/x86/xo15-ebook.c                  |    3 +-
+ drivers/pnp/core.c                                 |    4 +-
+ drivers/pnp/driver.c                               |    3 +-
+ drivers/ptp/ptp_vmw.c                              |    3 +-
+ drivers/soc/fsl/dpio/dpio-driver.c                 |    1 -
+ drivers/soc/ti/Kconfig                             |    2 +-
+ drivers/soc/ti/ti_sci_inta_msi.c                   |   12 +-
+ drivers/thermal/intel/intel_menlow.c               |    8 +-
+ drivers/vfio/fsl-mc/vfio_fsl_mc_intr.c             |    1 -
+ drivers/video/backlight/apple_bl.c                 |    3 +-
+ drivers/watchdog/ni903x_wdt.c                      |    4 +-
+ drivers/xen/xen-acpi-pad.c                         |    3 +-
+ include/acpi/acconfig.h                            |    2 +
+ include/acpi/acpi_bus.h                            |    2 +-
+ include/acpi/acpixf.h                              |    2 +-
+ include/acpi/actbl1.h                              |  151 ++-
+ include/acpi/actbl2.h                              |  162 ++-
+ include/acpi/actypes.h                             |   10 +-
+ include/acpi/acuuid.h                              |    3 +-
+ include/acpi/processor.h                           |   10 +
+ include/asm-generic/msi.h                          |    4 +-
+ include/clocksource/hyperv_timer.h                 |    4 +-
+ include/linux/acpi.h                               |   13 +
+ include/linux/device.h                             |    8 +-
+ include/linux/gpio/driver.h                        |    2 +-
+ include/linux/irqdomain.h                          |  143 +--
+ include/linux/irqdomain_defs.h                     |   31 +
+ include/linux/irqreturn.h                          |    8 +-
+ include/linux/msi.h                                |  357 +++++--
+ include/linux/msi_api.h                            |   73 ++
+ include/linux/pci.h                                |   29 +-
+ kernel/irq/Kconfig                                 |    7 +-
+ kernel/irq/chip.c                                  |    8 +-
+ kernel/irq/internals.h                             |    2 +
+ kernel/irq/irqdesc.c                               |   15 +-
+ kernel/irq/manage.c                                |    4 +-
+ kernel/irq/msi.c                                   |  914 +++++++++++++---
+ scripts/mod/modpost.c                              |   13 +
+ scripts/recordmcount.c                             |   39 +
+ scripts/sorttable.c                                |    2 +-
+ tools/power/acpi/tools/acpidump/Makefile           |    1 +
+ tools/power/acpi/tools/acpidump/apdump.c           |    4 +-
+ 263 files changed, 8205 insertions(+), 2358 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/mediatek,cirq.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/mediatek,mtk-cirq.yaml
+ create mode 100644 arch/loongarch/include/asm/alternative-asm.h
+ create mode 100644 arch/loongarch/include/asm/alternative.h
+ create mode 100644 arch/loongarch/include/asm/asm-extable.h
+ create mode 100644 arch/loongarch/include/asm/bugs.h
+ create mode 100644 arch/loongarch/include/asm/extable.h
+ create mode 100644 arch/loongarch/include/asm/ftrace.h
+ create mode 100644 arch/loongarch/include/asm/gpr-num.h
+ create mode 100644 arch/loongarch/include/asm/stackprotector.h
+ create mode 100644 arch/loongarch/kernel/alternative.c
+ create mode 100644 arch/loongarch/kernel/ftrace.c
+ create mode 100644 arch/loongarch/kernel/ftrace_dyn.c
+ create mode 100644 arch/loongarch/kernel/mcount.S
+ create mode 100644 arch/loongarch/kernel/mcount_dyn.S
+ create mode 100644 arch/loongarch/kernel/unaligned.c
+ create mode 100644 arch/loongarch/lib/memcpy.S
+ create mode 100644 arch/loongarch/lib/memmove.S
+ create mode 100644 arch/loongarch/lib/memset.S
+ create mode 100644 arch/loongarch/lib/unaligned.S
+ create mode 100644 arch/loongarch/power/Makefile
+ create mode 100644 arch/loongarch/power/hibernate.c
+ create mode 100644 arch/loongarch/power/hibernate_asm.S
+ create mode 100644 arch/loongarch/power/platform.c
+ create mode 100644 arch/loongarch/power/suspend.c
+ create mode 100644 arch/loongarch/power/suspend_asm.S
+ create mode 100644 arch/x86/include/asm/hyperv_timer.h
+ create mode 100644 drivers/acpi/acpi_ffh.c
+ create mode 100644 drivers/acpi/acpica/utcksum.c
+ create mode 100644 drivers/pci/msi/api.c
+ create mode 100644 include/linux/irqdomain_defs.h
+ create mode 100644 include/linux/msi_api.h
