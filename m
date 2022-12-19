@@ -2,98 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E4B6508DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 09:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE5A6508D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 09:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbiLSIvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 03:51:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
+        id S231751AbiLSIuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 03:50:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiLSIub (ORCPT
+        with ESMTP id S231684AbiLSIuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 03:50:31 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5ECCCE02;
-        Mon, 19 Dec 2022 00:50:11 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NbCs63L1Mz9ttD8;
-        Mon, 19 Dec 2022 16:43:06 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwBHywagJaBjl6AmAA--.3254S2;
-        Mon, 19 Dec 2022 09:49:46 +0100 (CET)
-Message-ID: <0f80852578436dbba7a0fce03d86c3fa2d38c571.camel@huaweicloud.com>
-Subject: Re: [PATCH v2] KEYS: asymmetric: Copy sig and digest in
- public_key_verify_signature()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Eric Biggers <ebiggers@kernel.org>, dhowells@redhat.com,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Date:   Mon, 19 Dec 2022 09:49:29 +0100
-In-Reply-To: <Y5bxJ5UZNPzxwtoy@gondor.apana.org.au>
-References: <20221209150633.1033556-1-roberto.sassu@huaweicloud.com>
-         <Y5OGr59A9wo86rYY@sol.localdomain>
-         <fa8a307541735ec9258353d8ccb75c20bb22aafe.camel@huaweicloud.com>
-         <Y5bxJ5UZNPzxwtoy@gondor.apana.org.au>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 19 Dec 2022 03:50:05 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84301D11B;
+        Mon, 19 Dec 2022 00:49:50 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJ8jlcu030446;
+        Mon, 19 Dec 2022 08:49:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=h7RK8T8taq4CuuKj6hSyg+dTmQ/jogpwEizyJ2NFvGI=;
+ b=iY8Fs+JdXK4LSIatKjpW6032lTb1BxOTwti/8/7X1IJ/6ByGSiLXn47ZLI77M2Dd5kFk
+ oMjRA6NhWggTss1y8uQmqZmJ2VDRYPxtKb0EcrWwjAfT7w4gSE1FMoL96lE3shJUzb1E
+ KMShl8uc7Iue/2ZrQYEuHF6cKXRP3hcCYM8Vikh7Uko6NYcgQIecgPAPxxusQYxXTdZV
+ i5LlLxPGyNtPzszrzfVTqN+RKejsuvvVF0luqon7hR6fPq2hIRocnyyZWpSK8PKFugQz
+ 64LQTk/Ys86OuiMWBCVB4ruXdcOqqYJuL5s+2UTHz+bT5/7dkl1ExOX3ciNea1qrepJ4 bQ== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mjmqjr29d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Dec 2022 08:49:45 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJ8XLd9031216;
+        Mon, 19 Dec 2022 08:49:44 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3mh6yy1jdh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Dec 2022 08:49:43 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BJ8netd21496118
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 19 Dec 2022 08:49:40 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6A0FE2004E;
+        Mon, 19 Dec 2022 08:49:40 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1BF7820043;
+        Mon, 19 Dec 2022 08:49:40 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 19 Dec 2022 08:49:40 +0000 (GMT)
+From:   Thomas Richter <tmricht@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, gor@linux.ibm.com, sandipan.das@amd.com,
+        sumanthk@linux.ibm.com
+Cc:     svens@linux.ibm.com, hca@linux.ibm.com,
+        Thomas Richter <tmricht@linux.ibm.com>
+Subject: [PATCH v3 1/2] perf/test: Fix perf test 84 on s390
+Date:   Mon, 19 Dec 2022 09:49:32 +0100
+Message-Id: <20221219084933.3560216-1-tmricht@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwBHywagJaBjl6AmAA--.3254S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7JF43Gr1UCw18Gr47ZFWUJwb_yoWfuwbEgF
-        y3CF4kX34Fvr17tF4rtr4qqrs3GrWkAry7Xr4Ig3sxJ3s5Jws7WrsYkrs3Wr1xXr4rJF9F
-        gryrZ347X3W29jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb78YFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQALBF1jj4bHxwAAs5
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1rejIOvPBdJtMr55h9drN0eq8rytuXSM
+X-Proofpoint-ORIG-GUID: 1rejIOvPBdJtMr55h9drN0eq8rytuXSM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-18_13,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
+ impostorscore=0 clxscore=1015 priorityscore=1501 adultscore=0
+ malwarescore=0 lowpriorityscore=0 mlxlogscore=999 phishscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212190074
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-12-12 at 17:15 +0800, Herbert Xu wrote:
-> On Mon, Dec 12, 2022 at 10:07:38AM +0100, Roberto Sassu wrote:
-> > The problem is a misalignment between req->src_len (set to sig->s_size
-> > by akcipher_request_set_crypt()) and the length of the scatterlist (if
-> > we set the latter to sig->s_size + sig->digest_size).
-> > 
-> > When rsa_enc() calls mpi_read_raw_from_sgl(), it passes req->src_len as
-> > argument, and the latter allocates the MPI according to that. However,
-> > it does parsing depending on the length of the scatterlist.
-> > 
-> > If there are two scatterlists, it is not a problem, there is no
-> > misalignment. mpi_read_raw_from_sgl() picks the first. If there is just
-> > one, mpi_read_raw_from_sgl() parses all data there.
-> 
-> Thanks for the explanation.  That's definitely a bug which should
-> be fixed either in the RSA code or in MPI.
-> 
-> I'll look into it.
+perf test '84: probe libc's inet_pton & backtrace it with ping'
+fails on s390. Debugging revealed a changed stack trace for the
+ping command using probes:
 
-Hi Herbert
+ping 35729 [002]  8006.365063: probe_libc:inet_pton: (3ff9603e7c0)
+                  13e7c0 __GI___inet_pton+0x0 (/usr/lib64/libc.so.6)
+          --->    104371 text_to_binary_address+0xef1 (inlined)
+                  104371 gaih_inet+0xef1 (inlined)
+                  104371 __GI_getaddrinfo+0xef1 (inlined)
+                    5d4b main+0x139b (/usr/bin/ping)
 
-do you have any news on this bug?
+The line ---> text_to_binary_address ...
+is new. It was introduced with glibc version 2.36.7.2 released
+with Fedora 37 for s390.
 
-Thanks
+Output before
+ # ./perf test 84
+ 84: probe libc's inet_pton & backtrace it with ping   : FAILED!
+ #
 
-Roberto
+Output after:
+ # ./perf test 84
+ 84: probe libc's inet_pton & backtrace it with ping   : Ok
+ #
+
+Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+---
+ tools/perf/tests/shell/record+probe_libc_inet_pton.sh | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/perf/tests/shell/record+probe_libc_inet_pton.sh b/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
+index f12a4e217968..0f01c62cbee9 100755
+--- a/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
++++ b/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
+@@ -37,6 +37,7 @@ trace_libc_inet_pton_backtrace() {
+ 	case "$(uname -m)" in
+ 	s390x)
+ 		eventattr='call-graph=dwarf,max-stack=4'
++		echo "text_to_binary_address.*\+0x[[:xdigit:]]+[[:space:]]\($libc|inlined\)$" >> $expected
+ 		echo "gaih_inet.*\+0x[[:xdigit:]]+[[:space:]]\($libc|inlined\)$" >> $expected
+ 		echo "(__GI_)?getaddrinfo\+0x[[:xdigit:]]+[[:space:]]\($libc|inlined\)$" >> $expected
+ 		echo "main\+0x[[:xdigit:]]+[[:space:]]\(.*/bin/ping.*\)$" >> $expected
+-- 
+2.38.1
 
