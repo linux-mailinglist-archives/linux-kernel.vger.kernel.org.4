@@ -2,185 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8FC0650D8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E35650D89
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232336AbiLSOl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 09:41:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        id S232167AbiLSOlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 09:41:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231811AbiLSOl4 (ORCPT
+        with ESMTP id S231545AbiLSOlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 09:41:56 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD48198
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 06:41:53 -0800 (PST)
-Received: from kwepemm600001.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NbMnl0g9GzRq56;
-        Mon, 19 Dec 2022 22:40:43 +0800 (CST)
-Received: from huawei.com (10.175.113.133) by kwepemm600001.china.huawei.com
- (7.193.23.3) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 19 Dec
- 2022 22:41:51 +0800
-From:   Wang Hai <wanghai38@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
-        <jesse.brandeburg@intel.com>, <anthony.l.nguyen@intel.com>
-CC:     <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] kobject: Fix slab-out-of-bounds in fill_kobj_path()
-Date:   Mon, 19 Dec 2022 22:41:03 +0800
-Message-ID: <20221219144103.34789-1-wanghai38@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 19 Dec 2022 09:41:40 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AED198;
+        Mon, 19 Dec 2022 06:41:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671460899; x=1702996899;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c/Fey/5u4JdaJ7bzLoCFW1aE1G+HV8ZJD7FJfRPS4A4=;
+  b=TABdhEL+iu41oFoHC9Wj4vueMsamxAI4QBGg2SrvKzRjDM54aTwhoq4B
+   0yZK06Rj33DEn9IRJtWRQT8p4FU4w2Bx7PRwSu9SZu3vyOkJDZ4NZ0rZt
+   4P+tO7YdYbj1vu0cqJq4IANm1xc9Alc7GFJg1b6nE6yaxUwex5cJQtLG/
+   G74dZBS6pyn7kNvB+Z/crqNYeJ5e/foBbZ2loeYb1lZ2Zgg+C3dU/gsHJ
+   g+FXj+mUwy60U6fb7GB5y9uL7JywrzgLC22IxrXdscEpFRHlYQGorfWdi
+   jO+aYx/DVdtY2gcz/4s3cedBWetDmT0kChiN4h1vNW5VD1YIyhjiKTzFl
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="299694658"
+X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
+   d="scan'208";a="299694658"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 06:41:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="644025449"
+X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
+   d="scan'208";a="644025449"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 19 Dec 2022 06:41:36 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p7HKh-00CKMx-0J;
+        Mon, 19 Dec 2022 16:41:35 +0200
+Date:   Mon, 19 Dec 2022 16:41:34 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v1 1/4] pinctrl: intel: Add default case to
+ intel_config_set_pull()
+Message-ID: <Y6B4HrOXNPXGBDWZ@smile.fi.intel.com>
+References: <20221219123208.5505-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.113.133]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600001.china.huawei.com (7.193.23.3)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219123208.5505-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In kobject_get_path(), if kobj->name is changed between calls
-get_kobj_path_length() and fill_kobj_path() and the length becomes
-longer, then fill_kobj_path() will have an out-of-bounds bug.
+On Mon, Dec 19, 2022 at 02:32:05PM +0200, Andy Shevchenko wrote:
+> For the sake of symmetry with intel_config_get_pull(), add
+> a default case to the outer switch.
 
-The actual current problem occurs when the ixgbe probe.
+The stats for the entire series:
 
-In ixgbe_mii_bus_init(), if the length of netdev->dev.kobj.name
-length becomes longer, out-of-bounds will occur.
+ drivers/pinctrl/intel/pinctrl-intel.c | 45 +++++++++++++++++++++++++++------------------
+  1 file changed, 27 insertions(+), 18 deletions(-)
 
-cpu0                                         cpu1
-ixgbe_probe
- register_netdev(netdev)
-  netdev_register_kobject
-   device_add
-    kobject_uevent // Sending ADD events
-                                             systemd-udevd // rename netdev
-                                              dev_change_name
-                                               device_rename
-                                                kobject_rename
-                                                |
- ixgbe_mii_bus_init                             |
-  mdiobus_register                              |
-   __mdiobus_register                           |
-    device_register                             |
-     device_add                                 |
-      kobject_uevent                            |
-       kobject_get_path                         |
-        len = get_kobj_path_length // old name  |
-        path = kzalloc(len, gfp_mask);          |
-                                                kobj->name = name;
-                                                /* name length becomes
-                                                 * longer
-                                                 */
-        fill_kobj_path /* kobj path length is
-                        * longer than path,
-                        * resulting in out of
-                        * bounds when filling path
-                        */
-
-This is the kasan report:
-
-==================================================================
-BUG: KASAN: slab-out-of-bounds in fill_kobj_path+0x50/0xc0
-Write of size 7 at addr ff1100090573d1fd by task kworker/28:1/673
-
- Workqueue: events work_for_cpu_fn
- Call Trace:
- <TASK>
- dump_stack_lvl+0x34/0x48
- print_address_description.constprop.0+0x86/0x1e7
- print_report+0x36/0x4f
- kasan_report+0xad/0x130
- kasan_check_range+0x35/0x1c0
- memcpy+0x39/0x60
- fill_kobj_path+0x50/0xc0
- kobject_get_path+0x5a/0xc0
- kobject_uevent_env+0x140/0x460
- device_add+0x5c7/0x910
- __mdiobus_register+0x14e/0x490
- ixgbe_probe.cold+0x441/0x574 [ixgbe]
- local_pci_probe+0x78/0xc0
- work_for_cpu_fn+0x26/0x40
- process_one_work+0x3b6/0x6a0
- worker_thread+0x368/0x520
- kthread+0x165/0x1a0
- ret_from_fork+0x1f/0x30
-
-This reproducer triggers that bug:
-
-while:
-do
-    rmmod ixgbe
-    sleep 0.5
-    modprobe ixgbe
-    sleep 0.5
-
-When calling fill_kobj_path() to fill path, if the name length of
-kobj becomes longer, return failure and retry.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Wang Hai <wanghai38@huawei.com>
----
- lib/kobject.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/lib/kobject.c b/lib/kobject.c
-index a0b2dbfcfa23..d129f437b200 100644
---- a/lib/kobject.c
-+++ b/lib/kobject.c
-@@ -112,7 +112,7 @@ static int get_kobj_path_length(struct kobject *kobj)
- 	return length;
- }
- 
--static void fill_kobj_path(struct kobject *kobj, char *path, int length)
-+static bool fill_kobj_path(struct kobject *kobj, char *path, int length)
- {
- 	struct kobject *parent;
- 
-@@ -121,12 +121,16 @@ static void fill_kobj_path(struct kobject *kobj, char *path, int length)
- 		int cur = strlen(kobject_name(parent));
- 		/* back up enough to print this name with '/' */
- 		length -= cur;
-+		if (length < 0)
-+			return false;
- 		memcpy(path + length, kobject_name(parent), cur);
- 		*(path + --length) = '/';
- 	}
- 
- 	pr_debug("kobject: '%s' (%p): %s: path = '%s'\n", kobject_name(kobj),
- 		 kobj, __func__, path);
-+
-+	return true;
- }
- 
- /**
-@@ -140,14 +144,20 @@ char *kobject_get_path(struct kobject *kobj, gfp_t gfp_mask)
- {
- 	char *path;
- 	int len;
-+	bool ret;
- 
-+retry:
- 	len = get_kobj_path_length(kobj);
- 	if (len == 0)
- 		return NULL;
- 	path = kzalloc(len, gfp_mask);
- 	if (!path)
- 		return NULL;
--	fill_kobj_path(kobj, path, len);
-+	ret = fill_kobj_path(kobj, path, len);
-+	if (!ret) {
-+		kfree(path);
-+		goto retry;
-+	}
- 
- 	return path;
- }
 -- 
-2.17.1
+With Best Regards,
+Andy Shevchenko
+
 
