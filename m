@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A9C650C81
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 14:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC13650C82
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 14:15:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbiLSNOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 08:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
+        id S231949AbiLSNP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 08:15:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiLSNOO (ORCPT
+        with ESMTP id S231292AbiLSNPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 08:14:14 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681A17670;
-        Mon, 19 Dec 2022 05:14:12 -0800 (PST)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NbKrc1gn0zmWjX;
-        Mon, 19 Dec 2022 21:13:04 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 19 Dec 2022 21:14:09 +0800
-Subject: Re: [PATCH] perf tool: Fix output unexpected messages in quiet mode
-To:     Adrian Hunter <adrian.hunter@intel.com>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-        <namhyung@kernel.org>, <irogers@google.com>,
-        <kan.liang@linux.intel.com>, <kim.phillips@amd.com>,
-        <german.gomez@arm.com>, <ravi.bangoria@amd.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221219024911.62741-1-yangjihong1@huawei.com>
- <194c676b-3a73-7f34-1f29-a157b5e4731f@intel.com>
- <7aecae79-5b6d-09ea-dfd5-4d4810875f3d@huawei.com>
- <d2189ccc-26aa-250a-ad43-59d53ef01d5e@intel.com>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <0e06416c-fac3-1149-2660-9a1981e3460d@huawei.com>
-Date:   Mon, 19 Dec 2022 21:14:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Mon, 19 Dec 2022 08:15:25 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4877EE0E
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 05:15:23 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id l13-20020a056e021c0d00b003034e24b866so6626933ilh.22
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 05:15:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i5pIBPsEmmbOZ3cWYLkpKPQNIVoJt0tl6jhanWf54i8=;
+        b=DFBm4F7UTbCbmfAy3h5Ta63YcZdGq2oBBIhbK+6zm3Mc+NDkmXlPQ2C4L+FKujPWzY
+         gUDn1jtTKoWv70gH01ItIiz09rN/CJzg6DgU3CB1goPDAPtc2OmXmJh4uuqUC9kEGNjI
+         /qWzalPHuWPCXjtlLeXvGk1L91xmvP5BtXwAcMkCEdU6uusfPWAOvsm8Bk+lie3f1Y35
+         lN1Z5oxzqJJ7jPwBrmjeKmzPfsYQfzwnItHM33kq+nG9BjDjfBF4QO+Ykwr0DmLljmwT
+         F8P+iMlOQg2O3Wi9fLTDeAfSRhUEuFAmgehAsdLp5kwoN1+VuLj/vmNPmy0ONjIG/tV4
+         rQzg==
+X-Gm-Message-State: ANoB5plgiBMaYanj1xXmAXH0MzHQeWp+xK4l2ysUXF8bVOVHEc2mLlvz
+        GHCA7A7D+Xo+xa6h5pmAc45jpYNXbZC+6gaxQz7cf71da78v
+X-Google-Smtp-Source: AA0mqf4/oq6yF17x9pdmJqrm/OifNE6JbU1V614xKFhuKiVdYrSZZKaCzzVqr107vezsOVOHzk0npyskEk3IZpKulbYvYBeZRbiH
 MIME-Version: 1.0
-In-Reply-To: <d2189ccc-26aa-250a-ad43-59d53ef01d5e@intel.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:db01:0:b0:302:a711:8127 with SMTP id
+ b1-20020a92db01000000b00302a7118127mr37398004iln.123.1671455723251; Mon, 19
+ Dec 2022 05:15:23 -0800 (PST)
+Date:   Mon, 19 Dec 2022 05:15:23 -0800
+In-Reply-To: <20221219124321.1504-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a473b905f02e1c4d@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in put_pmu_ctx
+From:   syzbot <syzbot+b8e8c01c8ade4fe6e48f@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,123 +56,20 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello,
 
-On 2022/12/19 18:28, Adrian Hunter wrote:
-> On 19/12/22 11:28, Yang Jihong wrote:
->> Hello,
->>
->> On 2022/12/19 14:59, Adrian Hunter wrote:
->>> On 19/12/22 04:49, Yang Jihong wrote:
->>>> When perf uses quiet mode, perf_quiet_option sets debug_peo_args to -1,
->>>
->>> Seems like redirect_to_stderr has similar issue?
->> The redirect_to_stderr is used only in the veprintf function:
->>
->>    int veprintf(int level, int var, const char *fmt, va_list args)
->>    {
->>            int ret = 0;
->>
->>            if (var >= level) {
->>                    if (use_browser >= 1 && redirect_to_stderr <= 0) {
->>                            ui_helpline__vshow(fmt, args);
->>                    } else {
->>                            ret = fprintf_time(debug_file);
->>                            ret += vfprintf(debug_file, fmt, args);
->>                    }
->>            }
->>
->>            return ret;
->>    }
->>
->> If use quiet mode, verbose sets to -1. (also assigned in the perf_quiet_option function)
->> Because "var >= level" is false, veprintf function returns directly, which avoids this problem.
->>
->> However, there are cases where:
->>    # perf --debug stderr=-1 report -vvv 2>/tmp/debug
->>
->> If stderr is -1, should we redirect pr_debug in this case?
-> 
-> tools/perf/Documentation/perf.txt says debug variables are in value
-> range (0, 10), so -1 is invalid anyway.
-> 
-Okay, I see.
->>
->> Because I'm not sure if this is a problem,
->> if redirect_to_stderr needs to be fixed as well,
->> let me know and I'll submit a patch to fix it.
-> 
-> perf_quiet_option() sets redirect_to_stderr = -1 with the intention
-> that it turns it off, but it doesn't, although it gets turned of by
-> verbose = -1. Perhaps set redirect_to_stderr = 0 in perf_quiet_option() ?
-> 
-I think it's better to fix redirect_to_stderr and debug_peo_args in the 
-same way (because they're similar):
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+INFO: rcu detected stall in corrupted
 
-Solution A:
-   diff --git a/tools/perf/util/debug.c b/tools/perf/util/debug.c
-   index 65e6c22f38e4..908b26e579e5 100644
-   --- a/tools/perf/util/debug.c
-   +++ b/tools/perf/util/debug.c
-   @@ -68,7 +68,7 @@ int veprintf(int level, int var, const char *fmt, 
-va_list args)
-           int ret = 0;
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P5552 } 2685 jiffies s: 2817 root: 0x0/T
+rcu: blocking rcu_node structures (internal RCU debug):
 
-           if (var >= level) {
-   -               if (use_browser >= 1 && !redirect_to_stderr) {
-   +               if (use_browser >= 1 && redirect_to_stderr <= 0) {
-                           ui_helpline__vshow(fmt, args);
-                   } else {
-                           ret = fprintf_time(debug_file);
-   diff --git a/tools/perf/util/debug.h b/tools/perf/util/debug.h
-   index f99468a7f681..f6ab84c93ec0 100644
-   --- a/tools/perf/util/debug.h
-   +++ b/tools/perf/util/debug.h
-   @@ -41,7 +41,7 @@ extern int debug_data_convert;
 
-    /* Special macro to print perf_event_open arguments/return value. */
-    #define pr_debug2_peo(fmt, ...) {                              \
-   -       if (debug_peo_args)                                             \
-   +       if (debug_peo_args > 0)                                         \
-                   pr_debugN(0, pr_fmt(fmt), ##__VA_ARGS__);       \
-           else                                                    \
-                   pr_debugN(2, pr_fmt(fmt), ##__VA_ARGS__);       \
-   diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-   index 999dd1700502..45cf144c5d5d 100644
-   --- a/tools/perf/util/evsel.c
-   +++ b/tools/perf/util/evsel.c
-   @@ -1775,7 +1775,7 @@ static int __open_attr__fprintf(FILE *fp, const 
-char *name, const char *val,
+Tested on:
 
-    static void display_attr(struct perf_event_attr *attr)
-    {
-   -       if (verbose >= 2 || debug_peo_args) {
-   +       if (verbose >= 2 || debug_peo_args > 0) {
-                   fprintf(stderr, "%.60s\n", graph_dotted_line);
-                   fprintf(stderr, "perf_event_attr:\n");
-                   perf_event_attr__fprintf(stderr, attr, 
-__open_attr__fprintf, NULL);
+commit:         f9ff5644 Merge tag 'hsi-for-6.2' of git://git.kernel.o..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=1337f01b880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3263313469e7ca77
+dashboard link: https://syzkaller.appspot.com/bug?extid=b8e8c01c8ade4fe6e48f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=10acb79d880000
 
-or
-Solution B:
-
-   diff --git a/tools/perf/util/debug.c b/tools/perf/util/debug.c
-   index 908b26e579e5..e3acc213edd1 100644
-   --- a/tools/perf/util/debug.c
-   +++ b/tools/perf/util/debug.c
-   @@ -241,6 +241,9 @@ int perf_quiet_option(void)
-                   opt++;
-           }
-
-   +       redirect_to_stderr = 0;
-   +       debug_peo_args = 0;
-   +
-
-> I see we have another problem as well: places that check "if (verbose)"
-> instead of "if (verbose > 0)"
-Yes,  places that "if (verbose)" also have problems, I'll submit a patch 
-to change them to "if (verbose > 0)"
-
-In addition, I found another problem, perf lock/stat/probe does not call 
-the perf_quiet_option function when quiet is true.
-
-Thanks,
-Yang
