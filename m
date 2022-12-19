@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1234D650B8B
+	by mail.lfdr.de (Postfix) with ESMTP id BD38E650B8C
 	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbiLSM1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 07:27:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
+        id S232145AbiLSM1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 07:27:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbiLSM0e (ORCPT
+        with ESMTP id S231877AbiLSM0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 19 Dec 2022 07:26:34 -0500
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E17DFA7;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCD2DF7C;
         Mon, 19 Dec 2022 04:26:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1671452793; x=1702988793;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=wriakv1+mcnXnd3wAKx3rFcCp8RBbBGEcLAFkWv/D0w=;
-  b=J65lwnoTYuRx8kfsNRea40X5NLlDi1sLVmarWg7X+/pD+2P0gxPOIupB
-   rwojg2uEN3RIdcAAT4qv011XdpKlvc166jhco2SnVRf4RiebuWAyRrI0M
-   g0NGbFfh+HwFFndI2vjh1r7pdoVmTQBp1BVMD/Mx7EYTGmmp91H6jE9y+
-   LOBsgy5bq2Vjb/P34Y1piyEPnWe/HCALIYeOQnUkMLdR83jUJwIi+1B90
-   fk4ZQZyzlpa6PWIgZAlivh9bpflYvqPtNNTh+qY2C5QHMMK6gY95HS6SN
-   Tgw8pYPj2GeI6+KUqLuVkYmh86hcGBpwR4hVx3Vr8GXKmkhi85owu+dX3
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="302762266"
+  bh=RakmmzlY6jMPeov+PSuZEvYARu9FFL2L6z23c01ftqU=;
+  b=ILwmC99Gm5jMvAzy8MEYKAJ0NCxScMyb74v4khkcNK/lMMDlrJbkGvtF
+   CKcH+rwv55fQL6AvKPSIph209KYVAr7kDiq0wOoVwvGp+0NXXh5OBV/nb
+   rSHwKlaFgwELtYb6rwHGVOaCoL7gx71vimkK2V0T4bn3YjnH7gMlEqnBx
+   FG00PGwakClXa4pgmIf2g0U57rK5Is42mauiq/MpMlx56gqC56jQwu2gc
+   aapxsN+HRBx6fWS7nN4uL/qsvIrBYy4Tq4SjODr/laBs/Z80KryZzxxXV
+   DOwZj2mM4VeHP11eLq7Yf4Bf/gR+09yD9Eebe2k+lKsaHCjsz3DLzDrqi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="302762263"
 X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="302762266"
+   d="scan'208";a="302762263"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 04:26:32 -0800
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 04:26:31 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="824831640"
+X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="824831639"
 X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="824831640"
+   d="scan'208";a="824831639"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orsmga005.jf.intel.com with ESMTP; 19 Dec 2022 04:26:30 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 38C42704; Mon, 19 Dec 2022 14:26:55 +0200 (EET)
+        id 440F0735; Mon, 19 Dec 2022 14:26:55 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
         Andy Shevchenko <andy@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v1 16/17] pinctrl: sunrisepoint: Replace SPT_COMMUNITY() by INTEL_COMMUNITY_*()
-Date:   Mon, 19 Dec 2022 14:26:42 +0200
-Message-Id: <20221219122643.3513-16-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 17/17] pinctrl: intel: Always use gpp_num_padown_regs in the main driver
+Date:   Mon, 19 Dec 2022 14:26:43 +0200
+Message-Id: <20221219122643.3513-17-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221219122643.3513-1-andriy.shevchenko@linux.intel.com>
 References: <20221219122643.3513-1-andriy.shevchenko@linux.intel.com>
@@ -64,70 +64,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use INTEL_COMMUNITY_*() common macro instead custom SPT_COMMUNITY().
+For the size-based communities, always use gpp_num_padown_regs,
+which is now provided explicitly via INTEL_COMMUNITY_SIZE() macro.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/intel/pinctrl-sunrisepoint.c | 37 +++++++-------------
- 1 file changed, 13 insertions(+), 24 deletions(-)
+ drivers/pinctrl/intel/pinctrl-intel.c |  9 +--------
+ drivers/pinctrl/intel/pinctrl-intel.h | 13 +++++++------
+ 2 files changed, 8 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/pinctrl/intel/pinctrl-sunrisepoint.c b/drivers/pinctrl/intel/pinctrl-sunrisepoint.c
-index 292b660067e9..f91e27feb7c3 100644
---- a/drivers/pinctrl/intel/pinctrl-sunrisepoint.c
-+++ b/drivers/pinctrl/intel/pinctrl-sunrisepoint.c
-@@ -15,31 +15,17 @@
+diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
+index cc3aaba24188..4029891ba628 100644
+--- a/drivers/pinctrl/intel/pinctrl-intel.c
++++ b/drivers/pinctrl/intel/pinctrl-intel.c
+@@ -1451,14 +1451,7 @@ static int intel_pinctrl_add_padgroups_by_size(struct intel_pinctrl *pctrl,
+ 		gpps[i].gpio_base = gpps[i].base;
+ 		gpps[i].padown_num = padown_num;
  
- #include "pinctrl-intel.h"
- 
--#define SPT_PAD_OWN		0x020
-+#define SPT_H_PAD_OWN		0x020
- #define SPT_H_PADCFGLOCK	0x090
--#define SPT_LP_PADCFGLOCK	0x0a0
--#define SPT_HOSTSW_OWN		0x0d0
--#define SPT_GPI_IS		0x100
--#define SPT_GPI_IE		0x120
--
--#define SPT_COMMUNITY(b, s, e, g, n, v, gs, gn)			\
--	{							\
--		.barno = (b),					\
--		.padown_offset = SPT_PAD_OWN,			\
--		.padcfglock_offset = SPT_##v##_PADCFGLOCK,	\
--		.hostown_offset = SPT_HOSTSW_OWN,		\
--		.is_offset = SPT_GPI_IS,			\
--		.ie_offset = SPT_GPI_IE,			\
--		.gpp_size = (gs),				\
--		.gpp_num_padown_regs = (gn),			\
--		.pin_base = (s),				\
--		.npins = ((e) - (s) + 1),			\
--		.gpps = (g),					\
--		.ngpps = (n),					\
--	}
-+#define SPT_H_HOSTSW_OWN	0x0d0
-+#define SPT_H_GPI_IS		0x100
-+#define SPT_H_GPI_IE		0x120
- 
--#define SPT_LP_COMMUNITY(b, s, e)			\
--	SPT_COMMUNITY(b, s, e, NULL, 0, LP, 24, 4)
-+#define SPT_LP_PAD_OWN		0x020
-+#define SPT_LP_PADCFGLOCK	0x0a0
-+#define SPT_LP_HOSTSW_OWN	0x0d0
-+#define SPT_LP_GPI_IS		0x100
-+#define SPT_LP_GPI_IE		0x120
- 
- #define SPT_H_GPP(r, s, e, g)				\
- 	{						\
-@@ -50,7 +36,10 @@
+-		/*
+-		 * In older hardware the number of padown registers per
+-		 * group is fixed regardless of the group size.
+-		 */
+-		if (community->gpp_num_padown_regs)
+-			padown_num += community->gpp_num_padown_regs;
+-		else
+-			padown_num += DIV_ROUND_UP(gpps[i].size * 4, 32);
++		padown_num += community->gpp_num_padown_regs;
  	}
  
- #define SPT_H_COMMUNITY(b, s, e, g)			\
--	SPT_COMMUNITY(b, s, e, g, ARRAY_SIZE(g), H, 0, 0)
-+	INTEL_COMMUNITY_GPPS(b, s, e, g, SPT_H)
-+
-+#define SPT_LP_COMMUNITY(b, s, e)			\
-+	INTEL_COMMUNITY_SIZE(b, s, e, 24, 4, SPT_LP)
- 
- /* Sunrisepoint-LP */
- static const struct pinctrl_pin_desc sptlp_pins[] = {
+ 	community->ngpps = ngpps;
+diff --git a/drivers/pinctrl/intel/pinctrl-intel.h b/drivers/pinctrl/intel/pinctrl-intel.h
+index b0f2be4c1fd1..981c1f520f13 100644
+--- a/drivers/pinctrl/intel/pinctrl-intel.h
++++ b/drivers/pinctrl/intel/pinctrl-intel.h
+@@ -96,8 +96,7 @@ enum {
+  * @gpp_size: Maximum number of pads in each group, such as PADCFGLOCK,
+  *            HOSTSW_OWN, GPI_IS, GPI_IE. Used when @gpps is %NULL.
+  * @gpp_num_padown_regs: Number of pad registers each pad group consumes at
+- *			 minimum. Use %0 if the number of registers can be
+- *			 determined by the size of the group.
++ *			 minimum. Used when @gpps is %NULL.
+  * @gpps: Pad groups if the controller has variable size pad groups
+  * @ngpps: Number of pad groups in this community
+  * @pad_map: Optional non-linear mapping of the pads
+@@ -106,11 +105,13 @@ enum {
+  * @regs: Community specific common registers (reserved for core driver)
+  * @pad_regs: Community specific pad registers (reserved for core driver)
+  *
+- * In some of Intel GPIO host controllers this driver supports each pad group
++ * In older Intel GPIO host controllers, this driver supports, each pad group
+  * is of equal size (except the last one). In that case the driver can just
+- * fill in @gpp_size field and let the core driver to handle the rest. If
+- * the controller has pad groups of variable size the client driver can
+- * pass custom @gpps and @ngpps instead.
++ * fill in @gpp_size and @gpp_num_padown_regs fields and let the core driver
++ * to handle the rest.
++ *
++ * In newer Intel GPIO host controllers each pad group is of variable size,
++ * so the client driver can pass custom @gpps and @ngpps instead.
+  */
+ struct intel_community {
+ 	unsigned int barno;
 -- 
 2.35.1
 
