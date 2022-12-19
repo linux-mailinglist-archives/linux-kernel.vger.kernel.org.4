@@ -2,73 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F96651100
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D962651102
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbiLSRKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 12:10:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
+        id S231344AbiLSRLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 12:11:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232492AbiLSRJW (ORCPT
+        with ESMTP id S232521AbiLSRKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 12:09:22 -0500
-Received: from box.opentheblackbox.net (box.opentheblackbox.net [IPv6:2600:3c02::f03c:92ff:fee2:82bc])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E2D13F01
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 09:08:52 -0800 (PST)
-Received: from authenticated-user (box.opentheblackbox.net [172.105.151.37])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.opentheblackbox.net (Postfix) with ESMTPSA id BBE813F589;
-        Mon, 19 Dec 2022 12:08:50 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pgazz.com; s=mail;
-        t=1671469731; bh=2z/RdLC67skNWPnka/S+ZiN5XyR2+M85/rUK4V27W9M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DURfx8p576SdWv8ZiqxsBqaDdkz5cHEwIvpskizKwKeVzql57/Ip2WZEuvmy8gkwV
-         3CwXBCsyqULzi0nDxttP5W+Cgc4jbdCzeYrUIXubK2v5/DT0HLLyvhLWowheHO60bV
-         YlhDFVKWtzPbVRikRU/QFfIDFbX1tgALHipQS5+g8Jk2JXuSyZTZob/axLWge96OTS
-         bl+DcKgG1B4ln86ljULvjCswIArYNgMkgXrA8zLRPrOZBGurV9tuRYWcuow6/BN4GL
-         sVtIixLPAAhnHmBuRc3FVqp6beofw47aBLpAc8H7Oyyz33uJxcb97btgCG3UpXj7A5
-         VLJsyB1Ije1vA==
-Date:   Mon, 19 Dec 2022 12:08:48 -0500
-From:   Paul Gazzillo <paul@pgazz.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Zheng Bin <zhengbin13@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Suman Ghosh <sumang@marvell.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] octeontx2_pf: Select NET_DEVLINK when enabling
- OCTEONTX2_PF
-Message-ID: <20221219170848.ia7houw2u4ajgxbn@device>
-References: <20221216215509.821591-1-paul@pgazz.com>
- <20221216212943.05813d44@kernel.org>
+        Mon, 19 Dec 2022 12:10:36 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69040E0D2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 09:10:35 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id r130so8395071oih.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 09:10:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=o415vNGiWZJMFGap7OmVii6SWD7+LBqh+wGTkPFhiOE=;
+        b=IWoAh3HdFUTEYgLFYMEAL6iHGBaUB2SXaZXaPzo4lG5lxYzeDBSfWVFbtF91KFRYCx
+         eW8DqhsxCe87HWzSHmv5xbFPQHa05job4UlVtldM+cPOkc5PIzZvFBa8JkDhjZtDzoSZ
+         oOI/IquvnWlv92yoTHpLN5Jq3x9ujzNwN2HIHkPh21lsXxwGUVUkvCmZtA9CDjX27yCJ
+         Zx8P9FeVEzD7OnZfMKe+ifkwPpQ9rOFyRBlN0gMml6FTmWiknaDOr6z+3W5kEYaZz7rg
+         MI9ucXegQOrVnX2IqcLR00Wt+Nyl14+fHmS3ez8+Sja83TFCMAX11tJ4JP/70DGNOgS2
+         yiyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o415vNGiWZJMFGap7OmVii6SWD7+LBqh+wGTkPFhiOE=;
+        b=ierLJzte094ksg+cqNEzw01yqxItBnrrB2ElpjJvSaTTfOJ1mRCd+cdaTm8GMWmR7s
+         hiidIzAdf+dba1aphq18ez8OVfNywS7/kM4uyF+or9JEZXw7YXmLOdoSlm2CKwn0zFQk
+         SX7OR6cgK9aejp6XknSixaiFc6Wb0CDDJAYwelsBllj774LFYdLcLIL2+yGW0qsn8gbf
+         6Q6fXda92OrGu1APPdRlg8MxsZo4qrKp6xydnc14O4Ww+cwDAbQ2ma5IVLRmKvMq8eDB
+         Z/l33Wbv/fa0uZbxqmXyOL05K4FQJZ4CfQCJJym4kPvdPnvynQJaSUUOnGNfnECw6slj
+         sjxg==
+X-Gm-Message-State: ANoB5pmzFKSzevvIm4D35C13qB5lU4Ijwcd+bUIiQLKvqy7RDVR44iJF
+        diYF6Ww4ovI4qgHXEh3X9h8nhpSd40hxdKSjyag=
+X-Google-Smtp-Source: AA0mqf4dXq6LEueYgWCPenepyFYAJvBJhWuXCZSaiNwDQGXZInwKN2ESNZrVlXut+TrHwJ/ytVdjkm0ZJigEepf2J7Y=
+X-Received: by 2002:a54:4409:0:b0:35c:28e4:f42d with SMTP id
+ k9-20020a544409000000b0035c28e4f42dmr784639oiw.38.1671469833250; Mon, 19 Dec
+ 2022 09:10:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221216212943.05813d44@kernel.org>
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,RCVD_IN_XBL,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20221219140130.410578-1-steven.price@arm.com>
+In-Reply-To: <20221219140130.410578-1-steven.price@arm.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Mon, 19 Dec 2022 09:10:33 -0800
+Message-ID: <CAF6AEGsZgjyv7r5_xWh1M9eR6+6A16bYZy9YLKAAf0Rm1iTnCQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/panfrost: Fix GEM handle creation ref-counting
+To:     Steven Price <steven.price@arm.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@chromium.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/16/2022, Jakub Kicinski wrote:
-> On Fri, 16 Dec 2022 16:54:48 -0500 Paul Gazzillo wrote:
-> > This fix adds "select NET_DEVLINK" link to OCTEONTX2_PF's Kconfig
-> > specification to match OCTEONTX2_AF.
-> 
-> Where was the use of devlink introduced in OCTEONTX2_PF?
-> Could you provide a Fixes tag?
+On Mon, Dec 19, 2022 at 6:02 AM Steven Price <steven.price@arm.com> wrote:
+>
+> panfrost_gem_create_with_handle() previously returned a BO but with the
+> only reference being from the handle, which user space could in theory
+> guess and release, causing a use-after-free. Additionally if the call to
+> panfrost_gem_mapping_get() in panfrost_ioctl_create_bo() failed then
+> a(nother) reference on the BO was dropped.
+>
+> The _create_with_handle() is a problematic pattern, so ditch it and
+> instead create the handle in panfrost_ioctl_create_bo(). If the call to
+> panfrost_gem_mapping_get() fails then this means that user space has
+> indeed gone behind our back and freed the handle. In which case just
+> return an error code.
+>
+> Reported-by: Rob Clark <robdclark@chromium.org>
 
-It looks like it was introduced in
+Yeah, I like getting rid of the _create_with_handle() pattern, the
+only place where that pattern works is if you immediately return the
+handle to userspace (and don't otherwise touch the obj)
 
-  2da489432747 ("octeontx2-pf: devlink params support to set mcam entry count")
+Reviewed-by: Rob Clark <robdclark@gmail.com>
 
-I will send a new version of the patch with a "Fixes:" tag now.
+> Fixes: f3ba91228e8e ("drm/panfrost: Add initial panfrost driver")
+> Signed-off-by: Steven Price <steven.price@arm.com>
+> ---
+>  drivers/gpu/drm/panfrost/panfrost_drv.c | 27 ++++++++++++++++---------
+>  drivers/gpu/drm/panfrost/panfrost_gem.c | 16 +--------------
+>  drivers/gpu/drm/panfrost/panfrost_gem.h |  5 +----
+>  3 files changed, 20 insertions(+), 28 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> index fa619fe72086..abb0dadd8f63 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> @@ -82,6 +82,7 @@ static int panfrost_ioctl_create_bo(struct drm_device *dev, void *data,
+>         struct panfrost_gem_object *bo;
+>         struct drm_panfrost_create_bo *args = data;
+>         struct panfrost_gem_mapping *mapping;
+> +       int ret;
+>
+>         if (!args->size || args->pad ||
+>             (args->flags & ~(PANFROST_BO_NOEXEC | PANFROST_BO_HEAP)))
+> @@ -92,21 +93,29 @@ static int panfrost_ioctl_create_bo(struct drm_device *dev, void *data,
+>             !(args->flags & PANFROST_BO_NOEXEC))
+>                 return -EINVAL;
+>
+> -       bo = panfrost_gem_create_with_handle(file, dev, args->size, args->flags,
+> -                                            &args->handle);
+> +       bo = panfrost_gem_create(dev, args->size, args->flags);
+>         if (IS_ERR(bo))
+>                 return PTR_ERR(bo);
+>
+> +       ret = drm_gem_handle_create(file, &bo->base.base, &args->handle);
+> +       if (ret)
+> +               goto out;
+> +
+>         mapping = panfrost_gem_mapping_get(bo, priv);
+> -       if (!mapping) {
+> -               drm_gem_object_put(&bo->base.base);
+> -               return -EINVAL;
+> +       if (mapping) {
+> +               args->offset = mapping->mmnode.start << PAGE_SHIFT;
+> +               panfrost_gem_mapping_put(mapping);
+> +       } else {
+> +               /* This can only happen if the handle from
+> +                * drm_gem_handle_create() has already been guessed and freed
+> +                * by user space
+> +                */
+> +               ret = -EINVAL;
+>         }
+>
+> -       args->offset = mapping->mmnode.start << PAGE_SHIFT;
+> -       panfrost_gem_mapping_put(mapping);
+> -
+> -       return 0;
+> +out:
+> +       drm_gem_object_put(&bo->base.base);
+> +       return ret;
+>  }
+>
+>  /**
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.c b/drivers/gpu/drm/panfrost/panfrost_gem.c
+> index 293e799e2fe8..3c812fbd126f 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_gem.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_gem.c
+> @@ -235,12 +235,8 @@ struct drm_gem_object *panfrost_gem_create_object(struct drm_device *dev, size_t
+>  }
+>
+>  struct panfrost_gem_object *
+> -panfrost_gem_create_with_handle(struct drm_file *file_priv,
+> -                               struct drm_device *dev, size_t size,
+> -                               u32 flags,
+> -                               uint32_t *handle)
+> +panfrost_gem_create(struct drm_device *dev, size_t size, u32 flags)
+>  {
+> -       int ret;
+>         struct drm_gem_shmem_object *shmem;
+>         struct panfrost_gem_object *bo;
+>
+> @@ -256,16 +252,6 @@ panfrost_gem_create_with_handle(struct drm_file *file_priv,
+>         bo->noexec = !!(flags & PANFROST_BO_NOEXEC);
+>         bo->is_heap = !!(flags & PANFROST_BO_HEAP);
+>
+> -       /*
+> -        * Allocate an id of idr table where the obj is registered
+> -        * and handle has the id what user can see.
+> -        */
+> -       ret = drm_gem_handle_create(file_priv, &shmem->base, handle);
+> -       /* drop reference from allocate - handle holds it now. */
+> -       drm_gem_object_put(&shmem->base);
+> -       if (ret)
+> -               return ERR_PTR(ret);
+> -
+>         return bo;
+>  }
+>
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.h b/drivers/gpu/drm/panfrost/panfrost_gem.h
+> index 8088d5fd8480..ad2877eeeccd 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_gem.h
+> +++ b/drivers/gpu/drm/panfrost/panfrost_gem.h
+> @@ -69,10 +69,7 @@ panfrost_gem_prime_import_sg_table(struct drm_device *dev,
+>                                    struct sg_table *sgt);
+>
+>  struct panfrost_gem_object *
+> -panfrost_gem_create_with_handle(struct drm_file *file_priv,
+> -                               struct drm_device *dev, size_t size,
+> -                               u32 flags,
+> -                               uint32_t *handle);
+> +panfrost_gem_create(struct drm_device *dev, size_t size, u32 flags);
+>
+>  int panfrost_gem_open(struct drm_gem_object *obj, struct drm_file *file_priv);
+>  void panfrost_gem_close(struct drm_gem_object *obj,
+> --
+> 2.34.1
+>
