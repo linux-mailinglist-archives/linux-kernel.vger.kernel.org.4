@@ -2,175 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE17650D6F
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD84650D77
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232501AbiLSOgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 09:36:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40588 "EHLO
+        id S232498AbiLSOhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 09:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232396AbiLSOgC (ORCPT
+        with ESMTP id S232548AbiLSOgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 09:36:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8A0E2D
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 06:35:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 19 Dec 2022 09:36:55 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB46712090;
+        Mon, 19 Dec 2022 06:36:34 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 062A5B80E4B
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 14:35:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75782C433D2;
-        Mon, 19 Dec 2022 14:35:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671460552;
-        bh=pfL+GsdcRpU52Alfp1NPpm/Vx5s2knEiBXoyTHXuwy4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QmGJzg1kboE70UMiR/yRBXkRvYCGtVoFFT5PYSNpBwpnMf1tx6GeVtxHQJVbQwyVl
-         9Kjpei9YWA0F4myXpwWpI6YeRQ49Dqt9Hhn9ooFyah4SpIA5HhvA9LJGMYYBstfZbX
-         3kPMJvCUL/1rsli4Uw0+Fx8Qzulegr/nbbZpKfbsee7llsdX7hBLoBYhJ6+df5jDXn
-         1WxuvN3mp3dylS9nT5n4VYUIGYyvg0PBfh90ioEa445JaDR7v9+P2tOzvy8BqchXbl
-         CvTcP8EuvSZqyAZn99Fl1z4ldUydcSkTGG5WW4BW3jlwkTsMSLmQr/3LwmWV7t5ah8
-         Kykgfmfh11dOQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 4ACDC40367; Mon, 19 Dec 2022 11:35:47 -0300 (-03)
-Date:   Mon, 19 Dec 2022 11:35:47 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Borislav Petkov <bp@suse.de>, Ian Rogers <irogers@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Juergen Gross <jgross@suse.com>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: [PATCH 1/1 fyi] tools headers cpufeatures: Sync with the kernel
- sources
-Message-ID: <Y6B2w3WqifB/V70T@kernel.org>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ECC051EC06BD;
+        Mon, 19 Dec 2022 15:36:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1671460593;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Nr0Z4OvkPMBKiUgwrvy1b0JeJ5CuH4u8cdycIbF3VTo=;
+        b=g4O8WnDjjWmrtbFmMTY4G0yltCqzIeXhWywY3xwLBgdFTN9TCYZMZhAq9By4cTHHjnVkHt
+        354idtEXaLQwUDtNstFC6rPiAS1iw8va+w5OrbtVNCuvMSntL0hbmQcddYbRIVl0pEcCkP
+        SG+jpLF4Ne/7gzC4KSRDGyQn3EtYD1Q=
+Date:   Mon, 19 Dec 2022 15:36:28 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <Y6B27MpZO8o1Asfe@zn.tnic>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+On Fri, Dec 02, 2022 at 02:13:41PM +0800, Chao Peng wrote:
+> In memory encryption usage, guest memory may be encrypted with special
+> key and can be accessed only by the guest itself. We call such memory
+> private memory. It's valueless and sometimes can cause problem to allow
 
-- Arnaldo
+valueless?
 
-Full explanation:
+I can't parse that.
 
-There used to be no copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
+> userspace to access guest private memory. This new KVM memslot extension
+> allows guest private memory being provided through a restrictedmem
+> backed file descriptor(fd) and userspace is restricted to access the
+> bookmarked memory in the fd.
 
-The way these headers are used in perf are not restricted to just
-including them to compile something.
+bookmarked?
 
-There are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
+> This new extension, indicated by the new flag KVM_MEM_PRIVATE, adds two
+> additional KVM memslot fields restricted_fd/restricted_offset to allow
+> userspace to instruct KVM to provide guest memory through restricted_fd.
+> 'guest_phys_addr' is mapped at the restricted_offset of restricted_fd
+> and the size is 'memory_size'.
+> 
+> The extended memslot can still have the userspace_addr(hva). When use, a
 
-E.g.:
+"When un use, ..."
 
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
+...
 
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
+> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+> index a8e379a3afee..690cb21010e7 100644
+> --- a/arch/x86/kvm/Kconfig
+> +++ b/arch/x86/kvm/Kconfig
+> @@ -50,6 +50,8 @@ config KVM
+>  	select INTERVAL_TREE
+>  	select HAVE_KVM_PM_NOTIFIER if PM
+>  	select HAVE_KVM_MEMORY_ATTRIBUTES
+> +	select HAVE_KVM_RESTRICTED_MEM if X86_64
+> +	select RESTRICTEDMEM if HAVE_KVM_RESTRICTED_MEM
 
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
+Those deps here look weird.
 
-To pick the changes from:
+RESTRICTEDMEM should be selected by TDX_GUEST as it can't live without
+it.
 
-  15e15d64bd8e12d8 ("x86/cpufeatures: Add X86_FEATURE_XENPV to disabled-features.h")
+Then you don't have to select HAVE_KVM_RESTRICTED_MEM simply because of
+X86_64 - you need that functionality when the respective guest support
+is enabled in KVM.
 
-This only causes these perf files to be rebuilt:
+Then, looking forward into your patchset, I'm not sure you even
+need HAVE_KVM_RESTRICTED_MEM - you could make it all depend on
+CONFIG_RESTRICTEDMEM. But that's KVM folks call - I'd always aim for
+less Kconfig items because we have waay too many.
 
-  CC       /tmp/build/perf/bench/mem-memcpy-x86-64-asm.o
-  CC       /tmp/build/perf/bench/mem-memset-x86-64-asm.o
+Thx.
 
-And addresses this perf build warning:
-
-  Warning: Kernel ABI header at 'tools/arch/x86/include/asm/disabled-features.h' differs from latest version at 'arch/x86/include/asm/disabled-features.h'
-  diff -u tools/arch/x86/include/asm/disabled-features.h arch/x86/include/asm/disabled-features.h
-
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Borislav Petkov <bp@suse.de>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Juergen Gross <jgross@suse.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Link: https://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/arch/x86/include/asm/disabled-features.h | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
-
-diff --git a/tools/arch/x86/include/asm/disabled-features.h b/tools/arch/x86/include/asm/disabled-features.h
-index 33d2cd04d2544791..c44b56f7ffba0d0e 100644
---- a/tools/arch/x86/include/asm/disabled-features.h
-+++ b/tools/arch/x86/include/asm/disabled-features.h
-@@ -69,6 +69,12 @@
- # define DISABLE_UNRET		(1 << (X86_FEATURE_UNRET & 31))
- #endif
- 
-+#ifdef CONFIG_CALL_DEPTH_TRACKING
-+# define DISABLE_CALL_DEPTH_TRACKING	0
-+#else
-+# define DISABLE_CALL_DEPTH_TRACKING	(1 << (X86_FEATURE_CALL_DEPTH & 31))
-+#endif
-+
- #ifdef CONFIG_INTEL_IOMMU_SVM
- # define DISABLE_ENQCMD		0
- #else
-@@ -81,6 +87,12 @@
- # define DISABLE_SGX	(1 << (X86_FEATURE_SGX & 31))
- #endif
- 
-+#ifdef CONFIG_XEN_PV
-+# define DISABLE_XENPV		0
-+#else
-+# define DISABLE_XENPV		(1 << (X86_FEATURE_XENPV & 31))
-+#endif
-+
- #ifdef CONFIG_INTEL_TDX_GUEST
- # define DISABLE_TDX_GUEST	0
- #else
-@@ -98,10 +110,11 @@
- #define DISABLED_MASK5	0
- #define DISABLED_MASK6	0
- #define DISABLED_MASK7	(DISABLE_PTI)
--#define DISABLED_MASK8	(DISABLE_TDX_GUEST)
-+#define DISABLED_MASK8	(DISABLE_XENPV|DISABLE_TDX_GUEST)
- #define DISABLED_MASK9	(DISABLE_SGX)
- #define DISABLED_MASK10	0
--#define DISABLED_MASK11	(DISABLE_RETPOLINE|DISABLE_RETHUNK|DISABLE_UNRET)
-+#define DISABLED_MASK11	(DISABLE_RETPOLINE|DISABLE_RETHUNK|DISABLE_UNRET| \
-+			 DISABLE_CALL_DEPTH_TRACKING)
- #define DISABLED_MASK12	0
- #define DISABLED_MASK13	0
- #define DISABLED_MASK14	0
 -- 
-2.38.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
