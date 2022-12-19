@@ -2,105 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BABCA65076A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 07:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C42C665076E
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 07:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiLSGEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 01:04:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36700 "EHLO
+        id S231158AbiLSGHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 01:07:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiLSGD5 (ORCPT
+        with ESMTP id S229485AbiLSGHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 01:03:57 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFB09599;
-        Sun, 18 Dec 2022 22:03:53 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id B3A6F84913;
-        Mon, 19 Dec 2022 07:03:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1671429830;
-        bh=MkvKsVKAty0HJJf2smTx3uSxYSAK5yNNC63zTBdQT1U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UeKVGrRpVuh9Bsjos7+aMvvA9TjjRs6jSWpD8YO/fuEZEb0J0dM7HrbnKZVulP9Ia
-         E6Kt4zHYTnUuSWsDPAa2SMT/cayugvpTATPGwSJ+AEwBbGuDkRMHPuvMBb4d88RxXU
-         SjOsPpMWGovmXdITpMTf1WwY6Y5Wf2LAlAsKLR0kOe6iE4p+jeh43UekIO+MNAsL6C
-         kDPfYdMmIj00NQbSStbGap5ZRJ32Yb264KDxLkoB8dqKVSlG3cs+HQigAWbJqjafjG
-         bbniULICx4ksX1AF6KHNdiiOkEXOvMAmFcBC3n1gOU1NsVVr0e/0J4H29VK0peI37y
-         pNOipD2Yb0KrA==
-Message-ID: <77487520-3812-0a9f-54e6-e9cb7feb6e51@denx.de>
-Date:   Mon, 19 Dec 2022 07:03:49 +0100
+        Mon, 19 Dec 2022 01:07:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B58138AC
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 22:06:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671429994;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XigryfQRFtsWdEbkv6Wm3U8owFw61u6BpVpPnZJFRMg=;
+        b=STicuWCAKSvKT7SQljLnXiSoa1CKP8N9din1CJNCwfKmWzNRqet6S1NnzUN6PQeZu/zVj2
+        HnNBVqzUT4z+Q3dViUAZRHEr5WvIB0U9n51Ya+9tOPLFsBwtsX/7z95nxvn+SASxyiH4L4
+        BrTua0h/jlNyJUJh6aWdpLIjy/+NPfw=
+Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
+ [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-84-2Kg8Yhp_PY-b6C39NGOFXQ-1; Mon, 19 Dec 2022 01:06:32 -0500
+X-MC-Unique: 2Kg8Yhp_PY-b6C39NGOFXQ-1
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-143d68edfa1so3756835fac.11
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 22:06:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XigryfQRFtsWdEbkv6Wm3U8owFw61u6BpVpPnZJFRMg=;
+        b=Fq/BybhFCoRCJJ6+aXIm1qdVo+kIP62Ks24NUXQoMt9fVbRv1UY8CgtZC5SmC/fEvp
+         vZUlnCnMnwpIOLTxjOxVPs5vp23OL8C7V1hndLLdq1fdgx9NaO7+3xQilhIz7XJWMTWI
+         S7iz4R/nvmBFrKrAEr8JmkZoyjzBdxsF6eunYLcZU5TR6Bu+coOKJEN2xVCdVsu0gV6t
+         8kW4p1sGd+IzSdvIs+xviycXxu+KXm3vG/yPkLkilTRZN5PXB2vmFVxZ4rhdB9UhKuzm
+         Y4Ws0JXXV1XjWxg8zprhHRHo6dGUry8lzq6wfURYuOh6tK5c1o9/WJYSlqep5fFbhLL2
+         tEPg==
+X-Gm-Message-State: AFqh2koKMK60B3rz/W066IIlO+7gxOkdSXm8shGQj3dLfeG5oOPiNDb0
+        Xv0k6/kYflXc0dOp2I8YJwoLqdUJifr/GrpirojTkFeqX3SdL4pY9IWpoa//OVQpaB/FVLAxd1C
+        JK5PXP3fx0gvbJduMtFBl4zWVCfGwkiQv7wT1B+4M
+X-Received: by 2002:a05:6870:bb1a:b0:144:b22a:38d3 with SMTP id nw26-20020a056870bb1a00b00144b22a38d3mr1559330oab.280.1671429991542;
+        Sun, 18 Dec 2022 22:06:31 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtEMJgS1ChBokfoPuf9NBXHkuhyfDrZNuIeENNBw3Xhfy0B/3jRCocYKgxZ7bMQ6hn9bzIu5zP6t5dKWvNJIIo=
+X-Received: by 2002:a05:6870:bb1a:b0:144:b22a:38d3 with SMTP id
+ nw26-20020a056870bb1a00b00144b22a38d3mr1559328oab.280.1671429991369; Sun, 18
+ Dec 2022 22:06:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RESEND v12 4/4] phy: freescale: imx8m-pcie: Add i.MX8MP PCIe PHY
- support
-To:     Hongxing Zhu <hongxing.zhu@nxp.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>,
-        "richard.leitner@linux.dev" <richard.leitner@linux.dev>
-Cc:     "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>
-References: <1665625622-20551-1-git-send-email-hongxing.zhu@nxp.com>
- <1665625622-20551-5-git-send-email-hongxing.zhu@nxp.com>
- <c21996f3-0f1d-8b77-95fb-ab98f3a28913@denx.de>
- <AS8PR04MB86767EFD1DE8CC1FBA574D708CE59@AS8PR04MB8676.eurprd04.prod.outlook.com>
-Content-Language: en-US
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <AS8PR04MB86767EFD1DE8CC1FBA574D708CE59@AS8PR04MB8676.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221205084127.535-1-xieyongji@bytedance.com> <20221205084127.535-4-xieyongji@bytedance.com>
+ <CACGkMEvYpBz6wdOPFvRveT=0AO=g-nzaeJt3y99oqWDLHUs=qw@mail.gmail.com> <CACycT3u237c2jHaYeoPQoXK1eb4FDOJJcc6_21N3m=aBHsDwFg@mail.gmail.com>
+In-Reply-To: <CACycT3u237c2jHaYeoPQoXK1eb4FDOJJcc6_21N3m=aBHsDwFg@mail.gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 19 Dec 2022 14:06:20 +0800
+Message-ID: <CACGkMEtoX_jPkJnCB6bx0qkB4pfOAPcSDAdwmd9pL4d8Z3cnEg@mail.gmail.com>
+Subject: Re: [PATCH v2 03/11] vdpa: Add set_irq_affinity callback in vdpa_config_ops
+To:     Yongji Xie <xieyongji@bytedance.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Christoph Hellwig <hch@lst.de>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/19/22 04:25, Hongxing Zhu wrote:
+On Mon, Dec 19, 2022 at 12:39 PM Yongji Xie <xieyongji@bytedance.com> wrote:
+>
+> On Fri, Dec 16, 2022 at 11:58 AM Jason Wang <jasowang@redhat.com> wrote:
+> >
+> > On Mon, Dec 5, 2022 at 4:43 PM Xie Yongji <xieyongji@bytedance.com> wrote:
+> > >
+> > > This introduces set_irq_affinity callback in
+> > > vdpa_config_ops so that vdpa device driver can
+> > > get the interrupt affinity hint from the virtio
+> > > device driver. The interrupt affinity hint would
+> > > be needed by the interrupt affinity spreading
+> > > mechanism.
+> > >
+> > > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+> > > ---
+> > >  drivers/virtio/virtio_vdpa.c | 4 ++++
+> > >  include/linux/vdpa.h         | 8 ++++++++
+> > >  2 files changed, 12 insertions(+)
+> > >
+> > > diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
+> > > index 08084b49e5a1..4731e4616ee0 100644
+> > > --- a/drivers/virtio/virtio_vdpa.c
+> > > +++ b/drivers/virtio/virtio_vdpa.c
+> > > @@ -275,9 +275,13 @@ static int virtio_vdpa_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
+> > >         struct virtio_vdpa_device *vd_dev = to_virtio_vdpa_device(vdev);
+> > >         struct vdpa_device *vdpa = vd_get_vdpa(vdev);
+> > >         const struct vdpa_config_ops *ops = vdpa->config;
+> > > +       struct irq_affinity default_affd = { 0 };
+> > >         struct vdpa_callback cb;
+> > >         int i, err, queue_idx = 0;
+> > >
+> > > +       if (ops->set_irq_affinity)
+> > > +               ops->set_irq_affinity(vdpa, desc ? desc : &default_affd);
+> >
+> > I wonder if we need to do this in vhost-vDPA.
+>
+> I don't get why we need to do this in vhost-vDPA? Should this be done in VM?
 
-Hi,
+If I was not wrong, this tries to set affinity on the host instead of
+the guest. More below.
 
->>> @@ -238,6 +251,14 @@ static int imx8_pcie_phy_probe(struct
->> platform_device *pdev)
->>>    		return PTR_ERR(imx8_phy->reset);
->>>    	}
->>>
->>> +	if (imx8_phy->drvdata->variant == IMX8MP) {
->>> +		imx8_phy->perst =
->>> +			devm_reset_control_get_exclusive(dev, "perst");
->>> +		if (IS_ERR(imx8_phy->perst))
->>> +			dev_err_probe(dev, PTR_ERR(imx8_phy->perst),
->>
->> I just notice this , are we missing return here ?
->>
->> That is ... return dev_err_probe(...) ?
-> 
-> Ooh, it's my fault. Thanks for your reminder.
-> One return should be here.
-> -                       dev_err_probe(dev, PTR_ERR(imx8_phy->perst),
-> +                       return dev_err_probe(dev, PTR_ERR(imx8_phy->perst),
-> Hi Vinod @vkoul@kernel.org:
-> Should I re-summit one fix patch?
+>
+> > Or it's better to have a
+> > default affinity by the vDPA parent
+> >
+>
+> I think both are OK. But the default value should always be zero, so I
+> put it in a common place.
 
-I think just send a follow up patch with Fixes: tag .
+I think we should either:
+
+1) document the zero default value in vdpa.c
+2) set the zero in both vhost-vdpa and virtio-vdpa, or in the vdpa core
+
+>
+> > (Looking at virtio-pci, it doesn't do something like this).
+> >
+>
+> Yes, but we did something like this in the pci layer:
+> pci_alloc_irq_vectors_affinity().
+
+Ok.
+
+Thanks
+
+>
+> Thanks,
+> Yongji
+>
+
