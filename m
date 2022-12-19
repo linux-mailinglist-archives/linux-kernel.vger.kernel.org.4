@@ -2,149 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E294B6514DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 22:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D916514E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 22:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232835AbiLSV1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 16:27:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
+        id S232604AbiLSV32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 16:29:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbiLSV1g (ORCPT
+        with ESMTP id S232777AbiLSV24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 16:27:36 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2098.outbound.protection.outlook.com [40.107.7.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BDF646A;
-        Mon, 19 Dec 2022 13:27:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dFAUZGYVG46C8RhHEWX0IeFCT5fZcfMwZZdVx8VgUKelBUv23NzwiKKtnrlbNRTXDjLG/SvECkIr1WkLw17JEyB2FMPhABc/alVtMuxXbH+1rFCd2tBYcjzCzRaEX/4s4az24NMG5xJilB/Y7WADB1Ruy0ct1T7Bh2oHLLmq65Lh3UINlYf3gfhysx43GIsdDJe7McnuzeCFXiEK1zpFHk/Zzfa/sCTStUh+aKl96vg532n/XuN+MvZWZ4af+FQ8BXsvXW9uRJUUM9OSun/ZPDOTQGLHF0W4hwEyCABjO8VtUhP+gc0tbnMHEwRRlbcx5pk+2O9eXL11IvEBC2i/ZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PH4Epp4GyGuEC6gorfLFdD6vqnNWemsv/uQaT6+AYik=;
- b=Oiq6VM3xcn+4BpYYbv6HQgOjFtKc5TknN02f4fB1Vij2JsD6hRvCGkYP3YjETVpXRLmI6LakGGA2z+ujBoC6Zb1KG3cZFuoDMc7TUbNo6FVAgfWCKIDfMC7FCjkhTeFpoZSc9e+4QGRmURrYIX4PyD/vqHrhMGtDQNRNJ8IhAX/hflVFivAMXCWmGeDJLnqrFI2xFI1PSS6h8OI5VFY544yCXv/c+Rhx7pZVwbjPXvdjN2Jgwi4Nb/00p0fAFrodD2i65e4TcAik5aG9t/4X2kU7PUnhduEdlS0jx98Y98KwbdzPGzzxxIj+Wyzggwm3RvU12ATKrlt5WlQs2KxYrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 80.151.164.27) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu; dmarc=none
- action=none header.from=esd.eu; dkim=none (message not signed); arc=none
+        Mon, 19 Dec 2022 16:28:56 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E6F13F4C;
+        Mon, 19 Dec 2022 13:28:51 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso14523724pjt.0;
+        Mon, 19 Dec 2022 13:28:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PH4Epp4GyGuEC6gorfLFdD6vqnNWemsv/uQaT6+AYik=;
- b=CA3IFhpBTrIr1v0GnQD9G1dr3PwWNYe29FbJn86cdctrwGbSMHM9WNudxpXT3rP7jQwrM/D7eWZweZo5edJNzdLmTkFdynu0tFz2tLOpeDZfhCzcHCXXn3yTiSWEciidtj77pymvKFIUckHOlK5wBlnuDHmJ69lxzlP5o6lJs1M=
-Received: from AM5PR0402CA0018.eurprd04.prod.outlook.com
- (2603:10a6:203:90::28) by PAWPR03MB10089.eurprd03.prod.outlook.com
- (2603:10a6:102:360::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Mon, 19 Dec
- 2022 21:27:30 +0000
-Received: from AM7EUR06FT021.eop-eur06.prod.protection.outlook.com
- (2603:10a6:203:90:cafe::28) by AM5PR0402CA0018.outlook.office365.com
- (2603:10a6:203:90::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.18 via Frontend
- Transport; Mon, 19 Dec 2022 21:27:30 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=esd.eu;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
- discourages use of 80.151.164.27 as permitted sender)
-Received: from esd-s7.esd (80.151.164.27) by
- AM7EUR06FT021.mail.protection.outlook.com (10.233.255.227) with Microsoft
- SMTP Server id 15.20.5924.16 via Frontend Transport; Mon, 19 Dec 2022
- 21:27:29 +0000
-Received: from esd-s20.esd.local (debby [10.0.0.190])
-        by esd-s7.esd (Postfix) with ESMTPS id 522427C16C9;
-        Mon, 19 Dec 2022 22:27:29 +0100 (CET)
-Received: by esd-s20.esd.local (Postfix, from userid 2046)
-        id 482F62E1DC1; Mon, 19 Dec 2022 22:27:29 +0100 (CET)
-From:   Frank Jungclaus <frank.jungclaus@esd.eu>
-To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Frank Jungclaus <frank.jungclaus@esd.eu>
-Subject: [PATCH 3/3] can: esd_usb: Improved decoding for ESD_EV_CAN_ERROR_EXT messages
-Date:   Mon, 19 Dec 2022 22:27:17 +0100
-Message-Id: <20221219212717.1298282-2-frank.jungclaus@esd.eu>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221219212717.1298282-1-frank.jungclaus@esd.eu>
-References: <20221219212717.1298282-1-frank.jungclaus@esd.eu>
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L+/Zc6HF+HMCFeX1vjX9OMe2YVRCyrJBTigomMNkApo=;
+        b=YTxP4cH27crU7cLDy6KXr1WIQp1FJaDX9Sc61wvNatsiejqKbzyE48BOtkzQoEJscq
+         Xq9vKKPkduSkCxvqnlSJ+xuUS2DG/FkZUqHmNjXz3ZlcQzGeXsru7Uj9z9tn9cNlKJtl
+         UUpC3fWTWzopHj4/75cKXOvthjER/sDCA+LF4YYRxrp8gfhIhktADeGATWDVFd25z9Y5
+         JYoI8ra68qoDQVE/4Cz0stB9x1/ZcyVfutfh5n2O/wU3DijgV25mNSCglMHsoJDRC8Fd
+         RhkwwWhNETISGbtH3iG3qYZwuVADiu/Un2Gv90U3+kE5KnTgdnaPZfqNW+tChGZ8PbWB
+         INsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=L+/Zc6HF+HMCFeX1vjX9OMe2YVRCyrJBTigomMNkApo=;
+        b=o+Pdcfl9EaycX6cD9NLPHzALv/Hsf2+FPfrQ464iEpQ7rmPuu2EgNJQS4e0Tj+CbdG
+         NcuGcF+fKr2wEKOX8Nae24zBrgdYv5luf8BkcjvUxGKbQYuWZrpn32KF7g/+ec7kT+53
+         inix3s2gkLwKqoO07OM4mL5SgvZ/RYrGzZoarMUgKob7UeIDOAhG/Mp8E31edLC+ufzl
+         8ufGm77o2f1SFXRiPyOFtMYOlHRRz7nvzjoKlDE3r/j3kYgd4oUcjcnWwyTSemBAIkha
+         oQUF9b06/IDfVmNcbBhtYyliyt4207GvgD/KNewa/WYITOxNDoVaMxYohJ+BNKLdnjn8
+         74Mg==
+X-Gm-Message-State: ANoB5pnbzTJYR1d3F4hgkUaU91tmtnXwOgTPJFg8w4+wyuyj3RlifDD3
+        neStOtZPjMFEL01W7g26/mhKH0dBDJbGDQ==
+X-Google-Smtp-Source: AA0mqf7Asi82O6N0gmU0UcNYN1+oJwVe+xXHHM6zh8uiTddI4N4blkHkkatEkZRResYbYiTHl3TgLg==
+X-Received: by 2002:a05:6a20:4387:b0:ac:f68:249a with SMTP id i7-20020a056a20438700b000ac0f68249amr54579248pzl.6.1671485330850;
+        Mon, 19 Dec 2022 13:28:50 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id u15-20020a65670f000000b00476d1385265sm6740700pgf.25.2022.12.19.13.28.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 13:28:50 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 19 Dec 2022 11:28:48 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next 2/4] blk-iocost: don't throttle bio if iocg is
+ offlined
+Message-ID: <Y6DXkLeOmu7VWovz@slm.duckdns.org>
+References: <20221217030527.1250083-1-yukuai1@huaweicloud.com>
+ <20221217030527.1250083-3-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7EUR06FT021:EE_|PAWPR03MB10089:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: adeb51a5-21de-4151-4296-08dae207d570
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xRlsG70RyeU1m0paW1nmLq597/n1aNfmNJAe0NrLOfXm8xaLaU8HEvb5FAMfiQY5f6854fSHDzp8IfMwF4FbUqMGY/LM5vXsZdacVlGjvL3v5xE6mt1oCSjqOhA2+YIxIM+Vf6mSRb7Z4OJh4MQYE+SRqc4TGh7r7/HrE7+dS1z0x7uXPy9YK/9mIHvRRyWXEC6WjGjhq7WOvyPnHlrkmZBTlkhDdyHbZ8kqUjGGt/01ygvOjgNd8XjSs7kfVWwQZueIwxx4d79UIn9yZStax9JZfaJBtfF8Gn3a6Lyi/PZE1jyLuLWwLJd10CGotpXmEg2kHT8KXR0H94wD3We7leyckvGdkGS8jC7KKljfcxdrRMGPn7Wifn+F2DUmoplsT7Wxq3GFJc3qlUnfBMGC5DeBnosiFwEh4L+KKm64snrzGBqAbZtQ3p1SGiSoNvOgeg4uxFp7bYkhjH0TjgI229d0wdRh56xvbhVW3cYmFO3Mmck9KQxTd8Cp/Jpu5VCyZCy6fk798E6E1UwQ9zzOHYf+U/JR3/ku/1eaLtKQkMcnoQIviboZ49i+RJWLZOdBvsmFgS1WwCUeWmVMa+/PXDal0tNx14w8Ighr6RlTNf3BLk6skvPJYBQBv/GlICRCLqjMM/gMaruMOq0Dw01h0QlAVIKTU5ZoAZRrZ0gIwUXDQgbcxS1gAZKc6j15Uu7gbOzcUvVYp6zwGGK2Ei2hFw==
-X-Forefront-Antispam-Report: CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230022)(4636009)(39840400004)(396003)(346002)(136003)(376002)(451199015)(46966006)(36840700001)(36860700001)(86362001)(6666004)(2616005)(26005)(6266002)(2906002)(336012)(81166007)(186003)(966005)(36756003)(478600001)(110136005)(316002)(8936002)(44832011)(15650500001)(356005)(54906003)(40480700001)(70206006)(8676002)(82310400005)(41300700001)(1076003)(42186006)(83380400001)(5660300002)(47076005)(4326008)(70586007);DIR:OUT;SFP:1102;
-X-OriginatorOrg: esd.eu
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2022 21:27:29.9117
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: adeb51a5-21de-4151-4296-08dae207d570
-X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
-X-MS-Exchange-CrossTenant-AuthSource: AM7EUR06FT021.eop-eur06.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR03MB10089
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221217030527.1250083-3-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As suggested by Marc there now is a union plus a struct ev_can_err_ext
-for easier decoding of an ESD_EV_CAN_ERROR_EXT event message (which
-simply is a rx_msg with some dedicated data).
+On Sat, Dec 17, 2022 at 11:05:25AM +0800, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> bio will grab blkg reference, however, blkcg->online_pin is not grabbed,
+> hence cgroup can be removed after thread exit while bio is still in
+> progress. Bypass io in this case since it doesn't make sense to
+> throttle bio while cgroup is removed.
 
-Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Link: https://lore.kernel.org/linux-can/20220621071152.ggyhrr5sbzvwpkpx@pengutronix.de/
-Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
----
- drivers/net/can/usb/esd_usb.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+I don't get it. Why wouldn't that make sense? ISTR some occasions where we
+clear the config to mitigate exits stalling for too long but in general a
+policy being active on a draining cgroup shouldn't be a problem.
 
-diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-index 09745751f168..f90bb2c0ba15 100644
---- a/drivers/net/can/usb/esd_usb.c
-+++ b/drivers/net/can/usb/esd_usb.c
-@@ -127,7 +127,15 @@ struct rx_msg {
- 	u8 dlc;
- 	__le32 ts;
- 	__le32 id; /* upper 3 bits contain flags */
--	u8 data[8];
-+	union {
-+		u8 data[8];
-+		struct {
-+			u8 status; /* CAN Controller Status */
-+			u8 ecc;    /* Error Capture Register */
-+			u8 rec;    /* RX Error Counter */
-+			u8 tec;    /* TX Error Counter */
-+		} ev_can_err_ext;  /* For ESD_EV_CAN_ERROR_EXT */
-+	};
- };
- 
- struct tx_msg {
-@@ -229,10 +237,10 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
- 	u32 id = le32_to_cpu(msg->msg.rx.id) & ESD_IDMASK;
- 
- 	if (id == ESD_EV_CAN_ERROR_EXT) {
--		u8 state = msg->msg.rx.data[0];
--		u8 ecc = msg->msg.rx.data[1];
--		u8 rxerr = msg->msg.rx.data[2];
--		u8 txerr = msg->msg.rx.data[3];
-+		u8 state = msg->msg.rx.ev_can_err_ext.status;
-+		u8 ecc = msg->msg.rx.ev_can_err_ext.ecc;
-+		u8 rxerr = msg->msg.rx.ev_can_err_ext.rec;
-+		u8 txerr = msg->msg.rx.ev_can_err_ext.tec;
- 
- 		netdev_dbg(priv->netdev,
- 			   "CAN_ERR_EV_EXT: dlc=%#02x state=%02x ecc=%02x rec=%02x tec=%02x\n",
+Thanks.
+
 -- 
-2.25.1
-
+tejun
