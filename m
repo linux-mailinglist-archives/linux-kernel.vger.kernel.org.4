@@ -2,76 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C11D8650C3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 664B0650C48
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:59:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbiLSM55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 07:57:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58244 "EHLO
+        id S231531AbiLSM7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 07:59:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiLSM5x (ORCPT
+        with ESMTP id S231292AbiLSM7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 07:57:53 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AECAF59C;
-        Mon, 19 Dec 2022 04:57:52 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id kw15so21181278ejc.10;
-        Mon, 19 Dec 2022 04:57:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4LQE62+2wuigm3XEvUptVNxTDjUyXyDiBAp0xKdO5OI=;
-        b=avXCIb03aNF+/2KOLLu/1s2Q8CZXuni1vKuNEJpnt7VtrfmbOhDmbl0vMtN+C+YHjr
-         4dWIH1fOJEtgcUmuzMbis1uKmtya1+9bhRMNgkAtFvwiC53K/787JLPqh5Rf1wE4I3iJ
-         9NxduGDW8iJz9kUD3YidXhuVs/PCGE260dRl58DkgTRNDatt2EXvPgtOSBaRWE9kq8hs
-         F4ow8PV8ZYzIdaX04IWD/oKip4e0ZtPFL46uib+twstsTdMuKAblcFCT252wd+iOlC9t
-         eiGqikfD2lNDXthOFgQJfZ8BX+vlv91WAjebj4+znAIUrX9kja7+TfzdclkiT0sdWyr0
-         HBcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4LQE62+2wuigm3XEvUptVNxTDjUyXyDiBAp0xKdO5OI=;
-        b=4fu9SqdF4rcWLgEocX5vkwLdQHYYLUF+ELDKAG7eNZaVhjQll0oqRYpBxWCafSCIim
-         dJA93twdCOKTSiFqu1YYK1k/1UuPfkcQnJwNSLiaSY2mQBjDLrM1fyRmZ/F1a/4RXFN5
-         osGAp+GPooAJKDXbDYGYFFLeHKy43v08izuiuls6E0aqqB9HjSrozLwECJ6Grg7oeIwq
-         vkLVBPJSaGEXyryc03SWPsTpeiqIp5Q+ZJm27RnV5LqkIZcHoHAxcC3ofgmDzKLsQIu5
-         REQtl3PMQDkE5AvBfI2BPs+J53b0N0sWpAsxKm8wakmJ+y2rfu7HmG0qbfvW/oFg3I5s
-         NXrw==
-X-Gm-Message-State: ANoB5pmGgsCyhlz/Qa220U7TEdymROr3IAqdhB+7fJjq/KZoJG31xH7u
-        iZt7/TKuCmVoKuemZm2YiErjK51ggDKP0bHvAKc=
-X-Google-Smtp-Source: AA0mqf5xgU7O52hFIF6NaDL0v2bRjjn0g9Ry8We7IY1pr/I/+8hC77HKha6QNBV1ZJVq2Im1KSZXfdhQASsR1y4jrUE=
-X-Received: by 2002:a17:906:79c4:b0:778:e3e2:8311 with SMTP id
- m4-20020a17090679c400b00778e3e28311mr72270959ejo.342.1671454670943; Mon, 19
- Dec 2022 04:57:50 -0800 (PST)
+        Mon, 19 Dec 2022 07:59:09 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C7FF59C;
+        Mon, 19 Dec 2022 04:59:08 -0800 (PST)
+Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NbKWD4YLvzmWZC;
+        Mon, 19 Dec 2022 20:58:00 +0800 (CST)
+Received: from [10.67.101.126] (10.67.101.126) by
+ dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Mon, 19 Dec 2022 20:59:06 +0800
+Message-ID: <f15c142c-669d-6bc7-f9b9-c05cc3df1542@huawei.com>
+Date:   Mon, 19 Dec 2022 20:59:05 +0800
 MIME-Version: 1.0
-References: <20221107175305.63975-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221107175305.63975-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdV46aMfqu+kMW9E-RURugK-giOx0k-NPe5XX4nxKZJzkg@mail.gmail.com> <CA+V-a8uqQ2fK1UjRT864jyHdt6Z47V=iARSJC6B2M6Gikms=Eg@mail.gmail.com>
-In-Reply-To: <CA+V-a8uqQ2fK1UjRT864jyHdt6Z47V=iARSJC6B2M6Gikms=Eg@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 19 Dec 2022 12:57:24 +0000
-Message-ID: <CA+V-a8sGLrsRWFi3-hNmB=Uj-aCQLD5VQesmUFb8N1NAqhyLuQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 1/5] dt-bindings: interrupt-controller:
- renesas,rzg2l-irqc: Document RZ/G2UL SoC
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH V2] scsi: libsas: Directly kick-off EH when ATA device
+ fell off
+Content-Language: en-CA
+To:     John Garry <john.g.garry@oracle.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <damien.lemoal@opensource.wdc.com>,
+        <linux-ide@vger.kernel.org>, <hare@suse.com>, <hch@lst.de>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
+        <kangfenglong@huawei.com>
+References: <20221216100327.7386-1-yangxingui@huawei.com>
+ <565fcf28-ec53-8d74-00a3-94be8e5b60e4@oracle.com>
+From:   yangxingui <yangxingui@huawei.com>
+In-Reply-To: <565fcf28-ec53-8d74-00a3-94be8e5b60e4@oracle.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.101.126]
+X-ClientProxiedBy: dggpemm500008.china.huawei.com (7.185.36.136) To
+ dggpemm500012.china.huawei.com (7.185.36.89)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,56 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
 
-On Fri, Nov 18, 2022 at 12:29 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
->
-> Hi Geert,
->
-> On Thu, Nov 17, 2022 at 10:54 AM Geert Uytterhoeven
-> <geert@linux-m68k.org> wrote:
-> >
-> > Hi Prabhakar,
-> >
-> > On Mon, Nov 7, 2022 at 6:53 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > >
-> > > Document RZ/G2UL (R9A07G043) IRQC bindings. The RZ/G2UL IRQC block is
-> > > identical to one found on the RZ/G2L SoC. No driver changes are
-> > > required as generic compatible string "renesas,rzg2l-irqc" will be
-> > > used as a fallback.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Thanks for your patch!
-> >
-> > > ---
-> > > Note, renesas,r9a07g043u-irqc is added we have slight difference's compared to RZ/Five
-> > > - G2UL IRQCHIP (hierarchical IRQ domain) -> GIC where as on RZ/Five we have PLIC (chained interrupt
-> > > domain) -> RISCV INTC
-> >
-> > I think this difference is purely a software difference, and abstracted
-> > in DTS through the interrupt hierarchy.
-> > Does it have any impact on the bindings?
-> >
-> > > - On the RZ/Five we have additional registers for IRQC block
-> >
-> > Indeed, the NMI/IRQ/TINT "Interruput" Mask Control Registers, thus
-> > warranting separate compatible values.
-> >
-> > > - On the RZ/Five we have BUS_ERR_INT which needs to be handled by IRQC
-> >
-> > Can you please elaborate? I may have missed something, but to me it
-> > looks like that is exactly the same on RZ/G2UL and on RZ/Five.
-> >
-> Now that we have to update the binding doc with the BUS_ERR_INT too,
-> do you think it would make sense to add interrupt-names too?
->
-> BUS_ERR_INT will have to be handled IRQC itself (i.e. IRQC will
-> register a handler for it).
->
-Gentle ping.
 
-Cheers,
-Prabhakar
+On 2022/12/19 17:23, John Garry wrote:
+> On 16/12/2022 10:03, Xingui Yang wrote:
+>> If the ATA device fell off, call sas_ata_device_link_abort() directly and
+>> mark all outstanding QCs as failed and kick-off EH Immediately. This 
+>> avoids
+>> having to wait for block layer timeouts.
+>>
+>> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+>> ---
+>> Changes to v1:
+>> - Use dev_is_sata() to check ATA device type
+>>   drivers/scsi/libsas/sas_discover.c | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/drivers/scsi/libsas/sas_discover.c 
+>> b/drivers/scsi/libsas/sas_discover.c
+>> index d5bc1314c341..a12b65eb4a2a 100644
+>> --- a/drivers/scsi/libsas/sas_discover.c
+>> +++ b/drivers/scsi/libsas/sas_discover.c
+>> @@ -362,6 +362,9 @@ static void sas_destruct_ports(struct asd_sas_port 
+>> *port)
+>>   void sas_unregister_dev(struct asd_sas_port *port, struct 
+>> domain_device *dev)
+>>   {
+>> +    if (test_bit(SAS_DEV_GONE, &dev->state) && dev_is_sata(dev))
+>> +        sas_ata_device_link_abort(dev, false);
+> 
+Hi, John
+> Firstly, I think that there is a bug in sas_ata_device_link_abort() -> 
+> ata_link_abort() code in that the host lock in not grabbed, as the 
+> comment in ata_port_abort() mentions. Having said that, libsas had 
+> already some dodgy host locking usage - specifically dropping the lock 
+> for the queuing path (that's something else to be fixed up ... I think 
+> that is due to queue command CB calling task_done() in some cases), but 
+> I still think that sas_ata_device_link_abort() should be fixed (to grab 
+> the host lock).
+ok, I agree with you very much for this, I had doubts about whether we 
+needed to grab lock before.
+> 
+> Secondly, this just seems like a half solution to the age-old problem - 
+> that is, EH eventually kicking in only after 30 seconds when a disk is 
+> removed with active IO. I say half solution as SAS disks still have this 
+> issue for libsas. Can we instead push to try to solve both of them now?
+
+Jason said you must have such an opinion "a half solution". As libsas 
+does not have any interface to mark all outstanding commands as failed 
+for SAS disk currently and SAS disk support I/O resumable transmission 
+after intermittent disconnections, so I want to optimize sata disk first.
+If we want to achieve a complete solution, perhaps we need to define 
+such an interface in libsas and implement it by lldd. My current idea is 
+to call sas_abort_task() for all outstanding commands in lldd. I wonder 
+if you approve of this?
+
+Thanks,
+Xingui
+> 
+> There was a broad previous discussion on this:
+> https://urldefense.com/v3/__https://lore.kernel.org/linux-scsi/Ykqg0kr0F*2Fyzk2XW@infradead.org/__;JQ!!ACWV5N9M2RV99hQ!MwAZFXXIwuP0lv-kuUIJ0ekUiGBWlTBhU3oQjyOf_yuP1rHDJb8UKMzJjndXNQ-W1PQGJXzgc0bQUsHh4NGh21EOc50$ 
+> 
+> 
+>  From that discussion, Hannes was doing some related prep work series, 
+> but I don't think it got completed.
+> 
+> Thanks,
+> John
+> 
+>> +
+>>       if (!test_bit(SAS_DEV_DESTROY, &dev->state) &&
+>>           !list_empty(&dev->disco_list_node)) {
+>>           /* this rphy never saw sas_rphy_add */
+> 
+> .
