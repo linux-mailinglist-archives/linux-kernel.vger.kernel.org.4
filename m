@@ -2,86 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26006512A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA186512AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbiLSTR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 14:17:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
+        id S232320AbiLSTSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 14:18:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232674AbiLSTRC (ORCPT
+        with ESMTP id S232561AbiLSTSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 14:17:02 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467CE12D2F
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 11:16:52 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id BEA8A320025E;
-        Mon, 19 Dec 2022 14:16:49 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 19 Dec 2022 14:16:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1671477409; x=1671563809; bh=rjUsL417U0
-        iV5j5xNXkCITEEN+5bMG2rGdx4wSKwQDE=; b=lJMbYQxjl7JexG9ECtnoyb3bDl
-        AwiXT/9IE1P/V0FHHRP8PVY2uAylvMYpZ39uB5WVO5R9x9nr6ojQzYQdar7k78L3
-        hFB1i6WS0+1FeABEHl3/ujbAXobKXGxpteobl/f830hQGZ3mzHOGrRb584b7ueeR
-        yd8igHbj6jbTPSqT7HufTi/IPA+Assp0Ny/Ij8c/zFiGbn7P/zXByWWPnlxKMjSK
-        N1Ye8g1MgI2+5kjoKTXUeSBNeWXtvrFxz7z5AUQoxaLxfS5KMbILLDYPekd9lerN
-        94RIyxrKxtUQS26pnrLT2L4+x+UINkpbIPAx9oo2rAC6S1j/hPdu5wy5zI7A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1671477409; x=1671563809; bh=rjUsL417U0iV5j5xNXkCITEEN+5b
-        MG2rGdx4wSKwQDE=; b=oulPqgvAkYRRLyvl0/1vjmmms3Y+ZwR7FMGT7b+TGI2E
-        5Mi4ou80pOEzT1LqqF9oswKfRxS7BZaLxRtFWq/FIGDk+OdzSeoK79bn4SWFcqS0
-        2ACpmTVpMtLKZ/u5veydv7X8282cJ0PWiPJyil5Pe97IA/epUUQSkTQtB7xp3yFM
-        9JvG2LVm+Jxsyd7Omc7KQoTi+2wDrwY8d8OSghH4/OvwASXOU3h03Y7D9rxqMTIo
-        XKmXaP5Z3Lu4dMe8dVxqhrWniw1UQNJfgtiDa1AnKszIbfeszACdSDoSCGgeOCvA
-        vmTRtWRjQpQ5Dm7DCSwBLlIRhPGeEwubOpdCGZAOsg==
-X-ME-Sender: <xms:oLigY0jVWcgdk-qLgA8KkgnHnQOj-A5QHfuq3OnJ59bmQAjbrO8BYg>
-    <xme:oLigY9CbNFrL5pUYeYfh-OBcgGT4mC5gLBEIh7XtFeprvAlF5gKA_qB-Nx4OLqeiN
-    wzstqSyGL-jIx8tYOs>
-X-ME-Received: <xmr:oLigY8GPg6euFbfLMRDtuwKW_3-l-Uvq_RDLOqJdg9UHMHk4c6Sf2XC_xNYpAA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefgdeliecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvhigthhho
-    ucetnhguvghrshgvnhcuoehthigthhhosehthigthhhordhpihiiiigrqeenucggtffrrg
-    htthgvrhhnpeeutedttefgjeefffehffffkeejueevieefudelgeejuddtfeffteeklefh
-    leelteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hthigthhhosehthigthhhordhpihiiiigr
-X-ME-Proxy: <xmx:oLigY1QH-64N4h2I2909TCfeh2dCRIeubqb84Ma-_nzoPIUkEHwwjw>
-    <xmx:oLigYxxbK9-uRz9rymjprQ6i9dLVWVrpPc5FcJcJ2XRApukE8jAaDw>
-    <xmx:oLigYz6PB8C_aG7qfEX4ztfX2gheSZnaGeZFgj2rWH2KjZGVZApUpg>
-    <xmx:obigY59ej475FRw4nUcmJo_VHrONRMUZeB9AH3FQrIWME7Hd_wRpYQ>
-Feedback-ID: i21f147d5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 19 Dec 2022 14:16:47 -0500 (EST)
-Date:   Mon, 19 Dec 2022 12:16:46 -0700
-From:   Tycho Andersen <tycho@tycho.pizza>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Subject: Re: [PATCH v3] fuse: In fuse_flush only wait if someone wants the
- return code
-Message-ID: <Y6C4ni3wpkaYxmLw@tycho.pizza>
-References: <CAJfpegvrd2nsydG26stcmeEkdO1JLyeu69KrZs4dvVxXtoz42Q@mail.gmail.com>
- <20221114160209.1229849-1-tycho@tycho.pizza>
- <Y4TNI8+QVHFuzeZC@tycho.pizza>
- <CAJfpegtckCReg7V6ET4a8EW_X-WfmANQdc4hP26bV9zoRrk7Wg@mail.gmail.com>
- <Y5IjpyLHIF8PgQ6l@tycho.pizza>
+        Mon, 19 Dec 2022 14:18:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FB812767
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 11:17:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671477442;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lw/Fj1Iw2Xi8gGiXlXcO2+qBIKUYLL1c1CqizXCd5bE=;
+        b=NwoecDWtM6YJyoBm8+fMH5gVBwg3M625GWg0C4HL7E92BGvJ2QFr9Z7BbyI9627Xwu/++Y
+        jHAXRVzRgKrkJSKOoIA2heKJKcTvqaDb32LHGx2fG/SVwbuKihJJueD+kCl+6XLvu+aYS0
+        bToAQIbrpEm3KC3Odv0pUOF8erKBaNY=
+Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com
+ [209.85.222.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-638-Py433fNVN2mM5RJnQ3MKFw-1; Mon, 19 Dec 2022 14:17:21 -0500
+X-MC-Unique: Py433fNVN2mM5RJnQ3MKFw-1
+Received: by mail-ua1-f69.google.com with SMTP id c1-20020a9f3d81000000b00418b667e367so4150297uai.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 11:17:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lw/Fj1Iw2Xi8gGiXlXcO2+qBIKUYLL1c1CqizXCd5bE=;
+        b=TzmLYcXSVI1Aft5mJI0HKV5ZAPxXXRuam3jTJfstj62jgQF6b+EO2ko1MIKKPbr54e
+         3U+GlW2ztiZztWdVAf8JOEOyiO5OMySEhcZsCTptZTg86da6Sbo1yHNv5JShL4xMP7WP
+         B74g9pBgeQ5DTehIu75PApkNGUZe+WLq3PA3dLB0UFo1WtwP9uGtgD5zwJds54wAaMTu
+         IKn5GWHABse7Vayb3XnZTWFpN7WLCqyySxtBTlUxgLt2oIRYX8IWyvsvk+PVyhQjEgyZ
+         hrwLM5dvTf7rmtS8TshwC5HhCiFBoGl+zVuI4QtGTrEb1XF1vVmvIczEo4Aj5fJCcSog
+         vm+g==
+X-Gm-Message-State: ANoB5pkrWyDlPuUU3oucPDi0fiQDMUDEG9VnRbNLo/oOly+y5QolYfvT
+        9YoJCW8tN940mMuWGIx3xnRPuTWBicr5cZQSDsJCtuget5JHx5XOE7nHpm2C1x0jB2/PK+lQvGD
+        sYI0iA1WlIfDXx5IT3Lk5cT5A
+X-Received: by 2002:a05:6102:3083:b0:3b1:4937:2877 with SMTP id l3-20020a056102308300b003b149372877mr23080827vsb.21.1671477436389;
+        Mon, 19 Dec 2022 11:17:16 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4iWPbVRwLj078zkvGVS/rMXaSWd3/HYmSgeJhJHRGIOBQ4Q1rAtNoBQr169ipCDx2TZD4nMw==
+X-Received: by 2002:a05:6102:3083:b0:3b1:4937:2877 with SMTP id l3-20020a056102308300b003b149372877mr23080807vsb.21.1671477436170;
+        Mon, 19 Dec 2022 11:17:16 -0800 (PST)
+Received: from localhost (pool-71-184-142-128.bstnma.fios.verizon.net. [71.184.142.128])
+        by smtp.gmail.com with ESMTPSA id bp43-20020a05620a45ab00b006fb7c42e73asm7668029qkb.21.2022.12.19.11.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 11:17:15 -0800 (PST)
+Date:   Mon, 19 Dec 2022 14:17:15 -0500
+From:   Eric Chanudet <echanude@redhat.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
+        Brian Masney <bmasney@redhat.com>
+Subject: Re: [PATCH v3 1/4] arm64: dts: qcom: rename pm8450a dtsi to
+ sa8540p-pmics
+Message-ID: <20221219191715.7vhu2wtrs45zvmh4@echanude>
+References: <20221216232606.2123341-1-echanude@redhat.com>
+ <20221216232606.2123341-2-echanude@redhat.com>
+ <7b6e1c29-4e33-b66c-00c8-836a62a0941d@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5IjpyLHIF8PgQ6l@tycho.pizza>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+In-Reply-To: <7b6e1c29-4e33-b66c-00c8-836a62a0941d@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,33 +85,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 10:49:30AM -0700, Tycho Andersen wrote:
-> On Thu, Dec 08, 2022 at 03:26:19PM +0100, Miklos Szeredi wrote:
-> > On Mon, 28 Nov 2022 at 16:01, Tycho Andersen <tycho@tycho.pizza> wrote:
-> > >
-> > > Hi Milkos,
-> > >
-> > > On Mon, Nov 14, 2022 at 09:02:09AM -0700, Tycho Andersen wrote:
-> > > > v3: use schedule_work() to avoid other sleeps in inode_write_now() and
-> > > >     fuse_sync_writes(). Fix a UAF of the stack-based inarg.
-> > >
-> > > Thoughts on this version?
+On Sat, Dec 17, 2022 at 03:36:58PM +0100, Konrad Dybcio wrote:
+> On 17.12.2022 00:26, Eric Chanudet wrote:
+> > pm8450a.dtsi was introduced for the descriptions of sa8540p based boards.
+> > Rename the dtsi to make this relationship explicit.
 > > 
-> > Skipping attr invalidation on success is wrong.
-> 
-> Agreed, that looks like my mistake.
-> 
-> > How about the attached (untested) patch?
-> 
-> It passes my reproducer with no warnings or anything. Feel free to
-> add:
-> 
-> Tested-by: Tycho Andersen <tycho@tycho.pizza>
-> 
-> if you want to commit it.
+> For the descriptions of PMICs used on SA8540p based boards, I suppose?
 
-Ping, thoughts on landing this?
+Absolutely, thanks! Amended in v4:
+https://lore.kernel.org/linux-arm-msm/20221219191000.2570545-1-echanude@redhat.com
 
-Thanks,
+-- 
+Eric Chanudet
 
-Tycho
