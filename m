@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBE4650824
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 08:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C28C650827
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 08:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbiLSHlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 02:41:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
+        id S231663AbiLSHl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 02:41:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbiLSHlQ (ORCPT
+        with ESMTP id S231589AbiLSHlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 02:41:16 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7E32AC1;
-        Sun, 18 Dec 2022 23:41:12 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so12112540pjr.3;
-        Sun, 18 Dec 2022 23:41:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZQXRyu6a6hdNWFaFM+lIaXBcIgFQDwtpyt8WeRchEz4=;
-        b=olsK2UwfYzqPUKl+35ZdgZ6KcfrBuV5sAMP3WI8UpF9uZK6k18enKS0+gIulldpCyZ
-         ipmjptU7vA/K4c5Zs/leYH0BgIwqvdtlVSds0md4cvbU9bfmUluSawoDJ2uByg8Hapdk
-         oY91fcTzc55YDFwKOMNXa69hvipHyBBI5tTzFBsvUr00tDcPYTii7fPvIBEwRFtZnyFC
-         UycYxdZDfztAsyRNTrlsNbcGHV80QYf3KUbfgkd8B83KNPxM0jGFS9Zilwk0H8NDCtu7
-         M+6hr69Qk8vrsfP7efc24PwO+G2ZDH20AgHeWcEonFljEkvDIh/M07EQlu8YvPKxvcS5
-         +nNQ==
+        Mon, 19 Dec 2022 02:41:22 -0500
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674312AC1;
+        Sun, 18 Dec 2022 23:41:21 -0800 (PST)
+Received: by mail-pf1-f180.google.com with SMTP id c7so5591674pfc.12;
+        Sun, 18 Dec 2022 23:41:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZQXRyu6a6hdNWFaFM+lIaXBcIgFQDwtpyt8WeRchEz4=;
-        b=aAFtX2QfOiQfTO1JKE02+1uxhxmddutU7Sm+DSyYNrlV4CZRvYCStMS1c9dxfGtuvX
-         LUdl3vWBUHWZyanHXKXELuZMwOR9VfMu3zRIRnPgQ2HEXfSlrOjGOTGHOInvI95NDIRY
-         0dAWP8OCHvRZYxVldOsfLCs+BjlFFIJ0ZXwrTsesBNvtcB4VwcY4pE1l215n1khAzsrM
-         NyO38c1q/IFlUduaeIBO7utuErvv9PKnJcmQqOutssI9aU9dS9fFcZUmBa5wsrUduGfP
-         lSVNVWEGMObH09QilyucAvvhU9597qjRzJIao506co6lRx+PZKVLv4rIJLtkf6UoAVLU
-         syIA==
-X-Gm-Message-State: AFqh2kpx7eZruOVsAf4yT8+jdxQvKrtd3f2XiDCIuW86ZYVSgYb9Jgih
-        lplVdgdwoX6hVQFfWGSOOoU=
-X-Google-Smtp-Source: AMrXdXsAppBd6D3nooYBF1q37PXxGHJtkZzfPuBA2JrINR+dGNUn3yybFLypkoghJJfnbkC8gzj4Kw==
-X-Received: by 2002:a17:90b:2747:b0:223:7513:adfd with SMTP id qi7-20020a17090b274700b002237513adfdmr15238189pjb.3.1671435671812;
-        Sun, 18 Dec 2022 23:41:11 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-26.three.co.id. [180.214.232.26])
-        by smtp.gmail.com with ESMTPSA id a23-20020a656417000000b0046ae5cfc3d5sm1376812pgv.61.2022.12.18.23.41.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Dec 2022 23:41:11 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id DC09A10016D; Mon, 19 Dec 2022 14:41:07 +0700 (WIB)
-Date:   Mon, 19 Dec 2022 14:41:07 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Li zeming <zeming@nfschina.com>, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] v4l2-core: v4l2-h264: check after increasing memory
- allocation
-Message-ID: <Y6AVkwh+V/PjzIfK@debian.me>
-References: <20221219033712.3270-1-zeming@nfschina.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WBGRE1+2gVpyciRz6kal4GRgitcm3glibRbLj9MWFrg=;
+        b=2v/kSswAM8b+2TpErxE8BSOZPAhqWI1Vuon6xmAYQlw2bBELAL4B0u0GdPir1Yx4FJ
+         RxNlDhlkr718NVqBdG9SvFm69hmbrmjc/shiAdZh2nNSJOAXZWKfU5HGD19K2CGGMgzT
+         D/TDQE5v0+PCUC8/P5Yu6y9x8Ag5GeE0TNU7l33dAbXnJ1FM0TodeIZg4t+uTBAyWQvO
+         ErbHyX3UEr7s4Vmx8aHvSkBqKXwavzzJJcN3qwKykuOkfkdiriXsei0vKarnRmy6h9fe
+         illwcFbw+Rp361O4t8HwvsBnam0/NWJ6Q5qiebNFuVxpCs9p5P1jKoh6DwNv5LG+ESmn
+         F8LQ==
+X-Gm-Message-State: ANoB5pl8iekoYEM7jJ8avVw/khoAIPKGb2fHayfZKVvc5DfSSOXGNMr/
+        LIwi5jlKazp186Pt8o6xOWM=
+X-Google-Smtp-Source: AA0mqf4p4ZNMgTYVqbLumGYc2FkVA3jzfFM5c5P5zjj0bpBPibwRAC6aDekK2LPz4tFQUdDkuLFiBw==
+X-Received: by 2002:a05:6a00:1c81:b0:577:8bae:29a7 with SMTP id y1-20020a056a001c8100b005778bae29a7mr40469582pfw.33.1671435680895;
+        Sun, 18 Dec 2022 23:41:20 -0800 (PST)
+Received: from [192.168.219.108] ([14.4.134.166])
+        by smtp.gmail.com with ESMTPSA id w185-20020a627bc2000000b00575d1ba0ecfsm5836772pfc.133.2022.12.18.23.41.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Dec 2022 23:41:20 -0800 (PST)
+Message-ID: <a2e0e98a-1044-908a-15bc-b165ff8b23ea@ooseel.net>
+Date:   Mon, 19 Dec 2022 16:41:16 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pKLsL9cNsnMmaJug"
-Content-Disposition: inline
-In-Reply-To: <20221219033712.3270-1-zeming@nfschina.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] usbnet: jump to rx_cleanup case instead of calling
+ skb_queue_tail
+Content-Language: en-US
+To:     Greg KH <greg@kroah.com>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221217161851.829497-1-lsahn@ooseel.net>
+ <Y57VkLKetDsbUUjC@kroah.com>
+From:   Leesoo Ahn <lsahn@ooseel.net>
+In-Reply-To: <Y57VkLKetDsbUUjC@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,47 +70,90 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---pKLsL9cNsnMmaJug
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 22. 12. 18. 17:55, Greg KH wrote:
+> On Sun, Dec 18, 2022 at 01:18:51AM +0900, Leesoo Ahn wrote:
+>> The current source pushes skb into dev->done queue by calling
+>> skb_queue_tail() and then, call skb_dequeue() to pop for rx_cleanup state
+>> to free urb and skb next in usbnet_bh().
+>> It wastes CPU resource with extra instructions. Instead, use return values
+>> jumping to rx_cleanup case directly to free them. Therefore calling
+>> skb_queue_tail() and skb_dequeue() is not necessary.
+>>
+>> The follows are just showing difference between calling skb_queue_tail()
+>> and using return values jumping to rx_cleanup state directly in usbnet_bh()
+>> in Arm64 instructions with perf tool.
+>>
+>> ----------- calling skb_queue_tail() -----------
+>>         │     if (!(dev->driver_info->flags & FLAG_RX_ASSEMBLE))
+>>    7.58 │248:   ldr     x0, [x20, #16]
+>>    2.46 │24c:   ldr     w0, [x0, #8]
+>>    1.64 │250: ↑ tbnz    w0, #14, 16c
+>>         │     dev->net->stats.rx_errors++;
+>>    0.57 │254:   ldr     x1, [x20, #184]
+>>    1.64 │258:   ldr     x0, [x1, #336]
+>>    2.65 │25c:   add     x0, x0, #0x1
+>>         │260:   str     x0, [x1, #336]
+>>         │     skb_queue_tail(&dev->done, skb);
+>>    0.38 │264:   mov     x1, x19
+>>         │268:   mov     x0, x21
+>>    2.27 │26c: → bl      skb_queue_tail
+>>    0.57 │270: ↑ b       44    // branch to call skb_dequeue()
+>>
+>> ----------- jumping to rx_cleanup state -----------
+>>         │     if (!(dev->driver_info->flags & FLAG_RX_ASSEMBLE))
+>>    1.69 │25c:   ldr     x0, [x21, #16]
+>>    4.78 │260:   ldr     w0, [x0, #8]
+>>    3.28 │264: ↑ tbnz    w0, #14, e4    // jump to 'rx_cleanup' state
+>>         │     dev->net->stats.rx_errors++;
+>>    0.09 │268:   ldr     x1, [x21, #184]
+>>    2.72 │26c:   ldr     x0, [x1, #336]
+>>    3.37 │270:   add     x0, x0, #0x1
+>>    0.09 │274:   str     x0, [x1, #336]
+>>    0.66 │278: ↑ b       e4    // branch to 'rx_cleanup' state
+> Interesting, but does this even really matter given the slow speed of
+> the USB hardware?
 
-On Mon, Dec 19, 2022 at 11:37:12AM +0800, Li zeming wrote:
-> The pointer *out_str adds judgment and should help with program robustnes=
-s.
->=20
+It doesn't if USB hardware has slow speed but in software view, it's 
+still worth avoiding calling skb_queue_tail() and skb_dequeue() which 
+work with spinlock, if possible.
 
-Terminology: if[-else] blocks are conditionals, not judgements.
 
-> diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-cor=
-e/v4l2-h264.c
-> index 72bd64f65198..934aba539332 100644
-> --- a/drivers/media/v4l2-core/v4l2-h264.c
-> +++ b/drivers/media/v4l2-core/v4l2-h264.c
-> @@ -305,6 +305,8 @@ static const char *format_ref_list_p(const struct v4l=
-2_h264_reflist_builder *bui
->  	int n =3D 0, i;
-> =20
->  	*out_str =3D kmalloc(tmp_str_size, GFP_KERNEL);
-> +	if (!*out_str)
-> +		return NULL;
+>> Signed-off-by: Leesoo Ahn <lsahn@ooseel.net>
+>> ---
+>>   drivers/net/usb/usbnet.c | 11 ++++++-----
+>>   1 file changed, 6 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+>> index 64a9a80b2309..924392a37297 100644
+>> --- a/drivers/net/usb/usbnet.c
+>> +++ b/drivers/net/usb/usbnet.c
+>> @@ -555,7 +555,7 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
+>>   
+>>   /*-------------------------------------------------------------------------*/
+>>   
+>> -static inline void rx_process (struct usbnet *dev, struct sk_buff *skb)
+>> +static inline int rx_process(struct usbnet *dev, struct sk_buff *skb)
+>>   {
+>>   	if (dev->driver_info->rx_fixup &&
+>>   	    !dev->driver_info->rx_fixup (dev, skb)) {
+>> @@ -576,11 +576,11 @@ static inline void rx_process (struct usbnet *dev, struct sk_buff *skb)
+>>   		netif_dbg(dev, rx_err, dev->net, "rx length %d\n", skb->len);
+>>   	} else {
+>>   		usbnet_skb_return(dev, skb);
+>> -		return;
+>> +		return 0;
+>>   	}
+>>   
+>>   done:
+>> -	skb_queue_tail(&dev->done, skb);
+>> +	return -1;
+> Don't make up error numbers, this makes it look like this failed, not
+> succeeded.  And if this failed, give it a real error value.
+>
+> thanks,
+>
+> greg k-h
 
-Why did you add the check beside robustness?
+Best regards,
+Leesoo
 
-Thanks.=20
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---pKLsL9cNsnMmaJug
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY6AViwAKCRD2uYlJVVFO
-o/t0AQCwcopw+TXZljE09jvLgDqqoeetJNthp3jE/EGMTsGsPgD/cBHqoyPpfbBn
-ULgc5x/oOTjP9V3QOu9umw36f75TIAM=
-=wTM6
------END PGP SIGNATURE-----
-
---pKLsL9cNsnMmaJug--
