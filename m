@@ -2,61 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF8A6513C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 21:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F79E6513CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 21:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbiLSUUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 15:20:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45332 "EHLO
+        id S232124AbiLSUXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 15:23:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232283AbiLSUUL (ORCPT
+        with ESMTP id S229977AbiLSUW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 15:20:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB002140FE;
-        Mon, 19 Dec 2022 12:19:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E20AB80EF7;
-        Mon, 19 Dec 2022 20:19:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 668BDC433EF;
-        Mon, 19 Dec 2022 20:19:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671481192;
-        bh=tTePxdA+CAo0HaKkeJhMsyhOGYdEA4fxoVpt8swbBoc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=sV6eZbQ7OQO4BbD66TmrU+8AHX03VTOHKMRBS/nFZ0CG64//0g4lajH+VAVk8F47K
-         LMRUuiRoZCIkjRREHqI6tDcm3gAjAKjax4c9NJYJKLeUgUc32NWwEH7k1aFvk4MRRP
-         C+y9PQQlAFhrvxmMOfb2wIaKTi9BTC36xN2MxYh7TGAFUumqT00dG7jR2E5HYGHFsR
-         f1e6I/wzYK09eYBdA2jKY+BsGLCOBSjRhWx7m9Ot5Owo5bA/6K+A/a8qSd0JHudAFu
-         08G3x0/vu9x4WEGUTkb83JWRQNWn3N6St5j5606e6hNKwOltW66A3QMrDbmP55n6tl
-         3AMJJ+6ISEXAw==
-Message-ID: <da0a1ee5-0f95-f10f-9d87-afd298df2e40@kernel.org>
-Date:   Mon, 19 Dec 2022 22:19:46 +0200
+        Mon, 19 Dec 2022 15:22:58 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B92E6
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 12:22:55 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id g7so9305795qts.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 12:22:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yPJmhSw0v+DBD18ezfqwoFIbrDfIDYOSBxHcqB6pM8c=;
+        b=ufVdqxl3U6xcJrbMBBFjMYH38pbQ8C6rVXD6M9PFyOz3uu0fDzG2Yu6KQZswL9JaGN
+         wG7DzfGPl/r6Svs/ipSN7jvEGwxUKQ+00RD6Y3NB9PLWam3zdT9A5/DFNXf+ZUSh6phG
+         R/KjqYya3cLAoNHMVJOgasgPmJJwwqPTAcKeg3ILK/9RwmHxbV+XPkvD2IeD2IAn1Qx8
+         50Ao/VfcuqqTb2wAk5zUI6HcAmZlPGLhzBR84BQTjH88KnxYvqdbURxEHjUcRLKzNO4J
+         QjqAAOSXmpNCyjuqRyc0gmfAZUrvUYejPgcXj5YfNYOm33BCed/ks902Ma8S+VLq2KuK
+         gwCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yPJmhSw0v+DBD18ezfqwoFIbrDfIDYOSBxHcqB6pM8c=;
+        b=eVTkxFtNiLVy+/AYBeyk4Bs2nqfUXxSaiz/57uEox+Bg9GHrnTRnQy8SMSWF2K01I9
+         nRD8zxsrCdGEt+ibVWrbgPTWdkycHBIq799fHuQ7PvXkd+x3FsxrQ8HB+yiGKTgtQCvX
+         SBa21LN7g9E4q3Qe1EYBDkPDrgliCDRsK7mX7jBSmebWCo3kLXs1JcLWeBrBa3nxgxQJ
+         8wrWBFGzAL+IfoVztVx6x1OWjCC0H9MvHZCJqlRLhiT1aE3vZt7CXulf6uWb7I3qzUJJ
+         CEWDi3ieN3r89n7nuzeBOd7QE0lNTA1QGlKstRPI2K8FSDYPMPIDbePlc0b/JvJsSzhl
+         gDgQ==
+X-Gm-Message-State: ANoB5pkc/oaNicZI/UOQ0RdsbstROdL3/XkH7kwiVKE8Qe+age5ehJD7
+        3OX/P7eQMQD/GWrAg+BZNZeBUw==
+X-Google-Smtp-Source: AA0mqf6bgQRtffH6JrJGneylIPV58q03NN7jZ14+JAv/Q5A3ejlRDvtnveprymGmtEXa1aT0ulFYrA==
+X-Received: by 2002:a05:622a:1cc5:b0:3a4:bc76:969c with SMTP id bc5-20020a05622a1cc500b003a4bc76969cmr54004924qtb.55.1671481374827;
+        Mon, 19 Dec 2022 12:22:54 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id w7-20020ac86b07000000b003a50d92f9b4sm6521847qts.1.2022.12.19.12.22.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 12:22:54 -0800 (PST)
+Message-ID: <e675cfd9f11f68f95ff7bdc17c64466ab92ddfe1.camel@ndufresne.ca>
+Subject: Re: [PATCH v1 0/9] AV1 stateless decoder for RK3588
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Date:   Mon, 19 Dec 2022 15:22:50 -0500
+In-Reply-To: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
+References: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v12 3/6] remoteproc: pru: Add APIs to get and put the PRU
- cores
-To:     MD Danish Anwar <danishanwar@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Suman Anna <s-anna@ti.com>, "Andrew F . Davis" <afd@ti.com>,
-        nm@ti.com, vigneshr@ti.com, srk@ti.com,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20221216053313.2974826-1-danishanwar@ti.com>
- <20221216053313.2974826-4-danishanwar@ti.com>
-Content-Language: en-US
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20221216053313.2974826-4-danishanwar@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,22 +77,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le lundi 19 d=C3=A9cembre 2022 =C3=A0 16:56 +0100, Benjamin Gaignard a =C3=
+=A9crit=C2=A0:
+> This series implement AV1 stateless decoder for RK3588 SoC.
+> The harware support 8 and 10 bits bitstreams up to 7680x4320.
+> AV1 feature like film grain or scaling are done by the postprocessor.
+> The driver can produce NV12_4L4 and NV12 pixel formats.
+> A native 10bits NV12_4L4 format is possible but need more investigation
+> to be completly documented and enabled.
+>=20
+> It is based on Daniel's "[RFC,v3] media: Add AV1 uAPI" [1] patches and
+> Sebastian's device-tree patches for RK3588.
+>=20
+> The full branch can be found here:
+> https://gitlab.collabora.com/linux/for-upstream/-/commits/rk3588_av1_deco=
+der_v1
+>=20
+> Fluster score is: 151/239 while testing AV1-TEST-VECTORS with GStreamer-A=
+V1-V4L2SL-Gst1.0.
+> The failing tests are:
+> - 10bits bitstream because 10bits output formats aren't yet implemented.
+> - the 2 tests with 2 spatial layers: few errors in luma/chroma values
+> - tests with resolution < hardware limit (64x64)
 
+Its nice to note that we tested 10bit support by forcing P010 output from t=
+he
+postprocessor, with all bitstream working except for filmgrain. Hopefully w=
+e'll
+get 10bit properly sorted out, but we don't think the uAPI have any issues
+specifically for 10bit (Mediatek driver does not support 10bit or filmgrain=
+).
 
-On 16/12/2022 07:33, MD Danish Anwar wrote:
-> Add two new APIs, pru_rproc_get() and pru_rproc_put(), to the PRU
-> driver to allow client drivers to acquire and release the remoteproc
-> device associated with a PRU core. The PRU cores are treated as
-> resources with only one client owning it at a time.
-> 
-> The pru_rproc_get() function returns the rproc handle corresponding
-> to a PRU core identified by the device tree "ti,prus" property under
-> the client node. The pru_rproc_put() is the complementary function
-> to pru_rproc_get().
-> 
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+>=20
+> Benjamin
+>=20
+> Benjamin Gaignard (9):
+>   dt-bindings: media: rockchip-vpu: Add rk3588 vpu compatible
+>   media: verisilicon: Add AV1 decoder mode and controls
+>   media: verisilicon: Save bit depth for AV1 decoder
+>   media: verisilicon: Check AV1 bitstreams bit depth
+>   media: verisilicon: Compute motion vectors size for AV1 frames
+>   media: verisilicon: Add AV1 entropy helpers
+>   media: verisilicon: Add Rockchip AV1 decoder
+>   media: verisilicon: Add film grain feature to AV1 driver
+>   media: verisilicon: Enable AV1 decoder on rk3588
+>=20
+>  .../bindings/media/rockchip-vpu.yaml          |    1 +
+>  drivers/media/platform/verisilicon/Makefile   |    3 +
+>  drivers/media/platform/verisilicon/hantro.h   |    5 +
+>  .../media/platform/verisilicon/hantro_drv.c   |   54 +
+>  .../media/platform/verisilicon/hantro_hw.h    |  102 +
+>  .../platform/verisilicon/hantro_postproc.c    |    3 +
+>  .../media/platform/verisilicon/hantro_v4l2.c  |    5 +
+>  .../verisilicon/rockchip_av1_entropymode.c    | 4536 +++++++++++++++++
+>  .../verisilicon/rockchip_av1_entropymode.h    |  272 +
+>  .../verisilicon/rockchip_av1_filmgrain.c      |  401 ++
+>  .../verisilicon/rockchip_av1_filmgrain.h      |   36 +
+>  .../verisilicon/rockchip_vpu981_hw_av1_dec.c  | 2280 +++++++++
+>  .../verisilicon/rockchip_vpu981_regs.h        |  477 ++
+>  .../platform/verisilicon/rockchip_vpu_hw.c    |  116 +
+>  14 files changed, 8291 insertions(+)
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_entro=
+pymode.c
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_entro=
+pymode.h
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_filmg=
+rain.c
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_filmg=
+rain.h
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_hw=
+_av1_dec.c
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_re=
+gs.h
+>=20
 
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
