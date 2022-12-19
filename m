@@ -2,152 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2B6650F3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4401650F4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232415AbiLSPuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 10:50:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
+        id S232625AbiLSPxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 10:53:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232457AbiLSPtd (ORCPT
+        with ESMTP id S232577AbiLSPwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 10:49:33 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0349D13D74
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:46:45 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id j4so14335907lfk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:46:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xFCpf3PbvIQQ1SNGLa/aq7+Wn4jdyYZuDDJi9LLB1B4=;
-        b=gKqbO1meKhIZD2D09ZCzm9ZeMDy0hOdvyqFlDWsgKXhxMOn3wYnBWjx6GBVU8A6nOq
-         558ZgA48b1G1NSDdF41U5Hqwe3MnKEkyJx+3a5wMI91G643gV7AdTZHF4+OVRjPzshll
-         vnnCbPOgUYy61iR7un4ZHS7Lk7yvhkMOdXWsMUvDa1SHvlXjZ9jBv44IbEuijC5r7DHE
-         Ye1VEimwxDffRyiMC5ESvQWe6En7sypHId4Q3QuhOZw1aki2iq8OJKilEgrylXMgt6ir
-         XiRDrJ+PSrWeVCB41wWTQsr+Ht/6rOJOdTrxKMrnfCRpMKZrVv9TNLwuwbyETBT3232F
-         w+HQ==
+        Mon, 19 Dec 2022 10:52:39 -0500
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43798E00A;
+        Mon, 19 Dec 2022 07:49:50 -0800 (PST)
+Received: by mail-oo1-f51.google.com with SMTP id e12-20020a4ab98c000000b004a081e811beso1464856oop.2;
+        Mon, 19 Dec 2022 07:49:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xFCpf3PbvIQQ1SNGLa/aq7+Wn4jdyYZuDDJi9LLB1B4=;
-        b=35+DzdM4z6PazhRp+QPW5tnFYAleqkBATj9BLszKgb645/p5y8IyEkud/u9DFwsydl
-         BISTcSrDZx5wfYI/TbXYE+ftdrPnUx0/Qvd2vsyTHoTGrFuEX4grI7K4TKjz3iC7kS3f
-         aNdoklXiW3r39xIu7JtztlHbwpAoZInVZ/kz6ZvTXS1GNuIxnzMiLB26JJNHbC77aC6F
-         jlfXa3Bgy7rBflnX+nYM98/VBzgtASowXE6MC3tqakmr9um2xfA+lfIFomukbv9xGpYd
-         2vqsFQJoSjtr8+IVksLoEe9lM7xQqyoQcr/IqB6DSh8h/w/7Db4gud+2jH0PUMgmpGKJ
-         4fqw==
-X-Gm-Message-State: ANoB5pnPjU/csdpK//4x+dwhffFuQ4OUl0CFsehxppBQgZCPbdaAxplR
-        muDR34CmvbZxliERPYTuupsr3+xiA8RHq741
-X-Google-Smtp-Source: AA0mqf6Wmq5YhXOuEkTp/H84nOahnrxrpmRb9ofAmBdzPy6LBU5agQfTH+mptXSQeW/d6pPgAATx0A==
-X-Received: by 2002:a05:6512:68a:b0:4b4:e2c9:9b25 with SMTP id t10-20020a056512068a00b004b4e2c99b25mr15398614lfe.44.1671464803399;
-        Mon, 19 Dec 2022 07:46:43 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c4-20020a056512074400b004b59871f457sm1121269lfs.247.2022.12.19.07.46.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 07:46:42 -0800 (PST)
-Message-ID: <ebc66796-ec22-7fe9-a93a-0c6b1dc56496@linaro.org>
-Date:   Mon, 19 Dec 2022 16:46:42 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GtpKKtIDT0wu0L0RuUxg/9TFW0XNw8+9Gg9cF/VjLLE=;
+        b=eioMztVVnXywNfq8RIm2K7wff6dbZRnSZhVCo9JgHjZVtoDjC0m2yJXz+kh7eMtss8
+         1UYEMVXX+60Sam/GUfj5YNV5mA1b/TqbCmt5380QYyi1N+yDzpsQVT0cRY7VjqpXnC1K
+         BXmFheTmEkgVAvSJ2CGfEwAo8JvoPZtbbXAUqTg0ZiRu+QkVvgqhLqNoHrzlkKd9QtbM
+         J27CYq7Ccx1V1j/1VJjODFDsWNiIA6nKzRJ3tEGOQkjjIba01Z6A8PDEU+o3H8xf5oJF
+         dxl+lJAVkgJitung2e5zhFOlgR+fIYQ7mX4cKdxDiO2Wcj+Ef8zugn1UeBTyUqH1YDA4
+         Zm6A==
+X-Gm-Message-State: ANoB5pme1mHf8AaZBaaZYzGdIo1VEK27cu53Wa0VEJXXrszY3j9a0jKs
+        Azm6rbDXrKyGAkcDWuEI23qC5siO0Q==
+X-Google-Smtp-Source: AA0mqf7IjPg4muxSCN2Qt3qxFnZ19qiEyp4eFf6ZehhyfdSNFY+GlSxtPeeW6TGXhuc3LQaSp077LQ==
+X-Received: by 2002:a4a:e205:0:b0:49f:b2be:1865 with SMTP id b5-20020a4ae205000000b0049fb2be1865mr18158083oot.7.1671464989515;
+        Mon, 19 Dec 2022 07:49:49 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k13-20020a056820016d00b00499527def25sm4034953ood.47.2022.12.19.07.49.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 07:49:49 -0800 (PST)
+Received: (nullmailer pid 1447283 invoked by uid 1000);
+        Mon, 19 Dec 2022 15:49:48 -0000
+Date:   Mon, 19 Dec 2022 09:49:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 00/17] dt-bindings: soc: Introduce UniPhier
+ miscellaneous register blocks and fix examples
+Message-ID: <20221219154948.GA1439405-robh@kernel.org>
+References: <20221213082449.2721-1-hayashi.kunihiko@socionext.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] nfc: st-nci: array index overflow in st_nci_se_get_bwi()
-Content-Language: en-US
-To:     Alexander Duyck <alexander.duyck@gmail.com>
-Cc:     Aleksandr Burakov <a.burakov@rosalinux.ru>,
-        Christophe Ricard <christophe.ricard@gmail.com>,
-        Samuel Ortiz <sameo@linux.intel.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-References: <20221213141228.101786-1-a.burakov@rosalinux.ru>
- <5841f9021baf856c26fb27ac1d75fc1e29d3e044.camel@gmail.com>
- <bd44539b-b3fb-f88d-86f2-fbc3fa83c783@linaro.org>
- <CAKgT0UemyUYpfchg7=ArO1NzkLofUgbSK8F71SRLHZDUxaDc-Q@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAKgT0UemyUYpfchg7=ArO1NzkLofUgbSK8F71SRLHZDUxaDc-Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221213082449.2721-1-hayashi.kunihiko@socionext.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/12/2022 16:41, Alexander Duyck wrote:
-> On Mon, Dec 19, 2022 at 1:06 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 14/12/2022 19:35, Alexander H Duyck wrote:
->>> On Tue, 2022-12-13 at 09:12 -0500, Aleksandr Burakov wrote:
->>>> Index of info->se_info.atr can be overflow due to unchecked increment
->>>> in the loop "for". The patch checks the value of current array index
->>>> and doesn't permit increment in case of the index is equal to
->>>> ST_NCI_ESE_MAX_LENGTH - 1.
->>>>
->>>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->>>>
->>>> Fixes: ed06aeefdac3 ("nfc: st-nci: Rename st21nfcb to st-nci")
->>>> Signed-off-by: Aleksandr Burakov <a.burakov@rosalinux.ru>
->>>> ---
->>>>  drivers/nfc/st-nci/se.c | 5 +++--
->>>>  1 file changed, 3 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/nfc/st-nci/se.c b/drivers/nfc/st-nci/se.c
->>>> index ec87dd21e054..ff8ac1784880 100644
->>>> --- a/drivers/nfc/st-nci/se.c
->>>> +++ b/drivers/nfc/st-nci/se.c
->>>> @@ -119,10 +119,11 @@ static u8 st_nci_se_get_bwi(struct nci_dev *ndev)
->>>>      /* Bits 8 to 5 of the first TB for T=1 encode BWI from zero to nine */
->>>>      for (i = 1; i < ST_NCI_ESE_MAX_LENGTH; i++) {
->>>>              td = ST_NCI_ATR_GET_Y_FROM_TD(info->se_info.atr[i]);
->>>> -            if (ST_NCI_ATR_TA_PRESENT(td))
->>>> +            if (ST_NCI_ATR_TA_PRESENT(td) && i < ST_NCI_ESE_MAX_LENGTH - 1)
->>>>                      i++;
->>>>              if (ST_NCI_ATR_TB_PRESENT(td)) {
->>>> -                    i++;
->>>> +                    if (i < ST_NCI_ESE_MAX_LENGTH - 1)
->>>> +                            i++;
->>>>                      return info->se_info.atr[i] >> 4;
->>>>              }
->>>>      }
->>>
->>> Rather than adding 2 checks you could do this all with one check.
->>> Basically you would just need to replace:
->>>   if (ST_NCI_ATR_TB_PRESENT(td)) {
->>>       i++;
->>>
->>> with:
->>>   if (ST_NCI_ATR_TB_PRESENT(td) && ++i < ST_NCI_ESE_MAX_LENGTH)
->>>
->>> Basically it is fine to increment "i" as long as it isn't being used as
->>> an index so just restricting the last access so that we don't
->>> dereference using it as an index should be enough.
->>
->> These are different checks - TA and TB. By skipping TA, your code is not
->> equivalent. Was it intended?
+On Tue, Dec 13, 2022 at 05:24:32PM +0900, Kunihiko Hayashi wrote:
+> This series introduces dt-bindings documents for miscellaneous register
+> blocks implemented in Socionext UniPhier SoCs.
 > 
-> Sorry, I wasn't talking about combining the TA and TB checks. I was
-> talking about combining the TB check and the bounds check so that you
-> didn't return and se_info_atr for a value that may not have actually
-> aligned due to the fact you had overflowed. Specifically, is skipping
-> the i++ the correct response to going out of bounds? I'm wondering if
-> you should be returning the default instead in the case of overflow?
+> These are previously defined in the devicetree and used in the examples
+> of subnodes' dt-bindings, however, not documented.
 > 
-> The TA check could be modified so that it checks for "++i =
-> ST_NCI_ESE_MAX_LENGTH" and if that is true break rather than continue
-> in the loop.
+> These include two types of the blocks
+> 
+> * independent block including miscellaneous registers and functions for
+>   the whole SoC (system controller and SoC-glue logic)
+> 
+> * sideband logic including control registers in the component (others)
+> 
+> And prior to adding these dt-bindings, fix examples in the existing
+> dt-bindings.
+> 
+> This series is part of the previous series shown below:
+> https://lore.kernel.org/linux-arm-kernel/20221107103410.3443-2-hayashi.kunihiko@socionext.com
+> 
+> Changes since v2:
+> - Drop redundant nodes in examples (clock, reset, soc-glue-debug)
+> - Drop parent node in examples
+> - Add more properties to examples for pinctrl
+> - Add a patch for regulator change
+> - Use consistent quotes
+> - Drop unit address patterns of patternProperties
+> - Mandatory unit address pattern for efuse (soc-glue-debug)
+> - Fix additionalProperties (ahci-glue)
+> 
+> Changes since v1:
+> - Fix examples in the existing dt-bindings (Add PATCH 1-7)
+> - Add dt-bindings for SoC-glue logic debug part (Add PATCH 10)
+> - Drop generic and ld6b compatible strings
+> - Change "usb-controller" node in soc-glue to "usb-hub"
+> - Change "usb-controller" node in USB glue layer example to "usb"
+> - Add negation of child properties by compatible string
+> 
+> Kunihiko Hayashi (17):
+>   dt-bindings: clock: Fix node descriptions in uniphier-clock example
+>   dt-bindings: reset: Fix node descriptions in uniphier-reset example
+>   dt-bindings: pinctrl: Fix node descriptions in uniphier-pinctrl
+>     example
+>   dt-bindings: regulator: Fix node descriptions in uniphier-regulator
+>     example
+>   dt-bindings: watchdog: Fix node descriptions in uniphier-wdt example
+>   dt-bindings: thermal: Fix node descriptions in uniphier-thermal
+>     example
+>   dt-bindings: phy: Fix node descriptions in uniphier-phy example
+>   dt-bindings: nvmem: Fix node descriptions in uniphier-efuse example
+>   dt-bindings: soc: socionext: Add UniPhier system controller
+>   dt-bindings: soc: socionext: Add UniPhier SoC-glue logic
+>   dt-bindings: soc: socionext: Add UniPhier SoC-glue logic debug part
+>   dt-bindings: soc: socionext: Add UniPhier peripheral block
+>   dt-bindings: soc: socionext: Add UniPhier media I/O block
+>   dt-bindings: soc: socionext: Add UniPhier SD interface block
+>   dt-bindings: soc: socionext: Add UniPhier ADAMV block
+>   dt-bindings: soc: socionext: Add UniPhier DWC3 USB glue layer
+>   dt-bindings: soc: socionext: Add UniPhier AHCI glue layer
 
-Ah, right. From that point of view, the first check (TA) also does not
-look correct or equivalent. If we reached end of
-ST_NCI_ESE_MAX_LENGTH(), we should not check TB on that entry. I would
-propose to end the loop at that stage.
+You sent this To me, so I'm assuming you want me to apply it?
+Otherwise, it can go via the Socionext tree. Let me know and I can fix 
+up Krzysztof's comments and apply the series.
 
-Best regards,
-Krzysztof
-
+Rob
