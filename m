@@ -2,151 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE409650909
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 10:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 921D665090C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 10:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbiLSJFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 04:05:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38366 "EHLO
+        id S231481AbiLSJGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 04:06:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiLSJFr (ORCPT
+        with ESMTP id S231381AbiLSJGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 04:05:47 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA2B100B
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 01:05:46 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id r25-20020a6bfc19000000b006e002cb217fso3770339ioh.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 01:05:46 -0800 (PST)
+        Mon, 19 Dec 2022 04:06:12 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3701B7CD;
+        Mon, 19 Dec 2022 01:06:10 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id f189so8021530vsc.11;
+        Mon, 19 Dec 2022 01:06:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=h/eKdzskSLkdb/WTlAr0Z8SBGaY7mnwABJ1S9BsYBDk=;
+        b=a4TGtSvLMzEkTjJ58sDcWPjbzQp0HbaCdEhA/fBGZwlk2XLWVzfBjQ/irAHozUqaSR
+         ZptyV2SF5lxs19MUsDq416y/FI8fN+4WpXyAJ2eGSekKBfQbD6qsD2GjfgGKTxMxw/bL
+         5E73ZMr7N+WAla/ELsh87UbufIpzgkbZ6Hn1BPASsoRGrmBw+0w2FRhUpRh0vRPoq3fS
+         6koSAfiRPPmmlYrWJkcDCjhrEa6NCqtQwyfzDXyXLO3vJbmx5mTDPDXEgzDpy2KVSr6w
+         jlUXRoICDOhOS6N8DMGSY2E90FssMOBBFxr35bMJci+lZEiJ/GE0CIYUb9cxhoUPvDCP
+         6++w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AWOajJEnSGvTS82I9sFGcxGqMpzhww1quh5l5HfVQMo=;
-        b=B6uJ9vhzSBJeKVCg0NMlb/ch+xKQTUoxCGDBS3MxkRFBWMBsvtQ33nrI1UwZhM/1Xb
-         UcYQumjuSGMoZQ9+OlGkFVUhBwt2HxX1RZ5Dnx9PutOgb2A2Rvc4Ei31usoQIMSe9iTE
-         FwN/GgvVsQMMRYZ42EESTuaX9pwaU/Ee+F9wPQMTuShsSzPXLK+odlohs1482D65WDpq
-         B8072KMb54eGHdAZMrfXAlSkJBNwL22pxoKX7bzt64T5BxKhvz3iPFQl9sE/j8YbZDYD
-         ool5Gz7cbPsQR7bM6kt9K98UTgMc6CFW6THqMqJYtTfLLIQMi1Z/uhlHIWXc36rIJwiY
-         9Kcg==
-X-Gm-Message-State: AFqh2krXPVT1UukuEYbYx9KJnXzfUBvpY2oIjK/PScpvtFtFtgEBBRen
-        pTneuTMsc15vQEY9HnhGh7QvvBHcA1J4blbVtF8U7urTiGlk
-X-Google-Smtp-Source: AMrXdXvMBZ6zcydBG77Del9/vlqq2KsNYogxJMaVE3ldzoO8dCp6RPqBBbfMO8Hb3rlDv2mHFAuCCjQP86FV3Xw2SYR+FzQB6G9P
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h/eKdzskSLkdb/WTlAr0Z8SBGaY7mnwABJ1S9BsYBDk=;
+        b=VM6x0qihyb+Syqj2yFihC3atfG4NXgR3ywOce5T8CMGwIJB/b0ohHxvbHw+tmjNLyp
+         HFYuiJ+ENofuGQizh9SguDhrE0Z66ZBDLbzeG/amtDreIG8dR9IKOtueQsKvFrJdYUXA
+         Aff7BMn3qOZi0dQ/2gUysIcGoZHjnjTFZSHZEDIb9vDGNV9IJI5KGk0H4ccKRk9zXqRb
+         JpmgSz/LF+WleWO9kUjgtpvS4nG6cSvQ4cQpMzSrVaPK1SMG4ruj30EEvmCddia5wLV1
+         fccrIFdoeBE9lhkeebJxtkB9fSf30DExHT99ON6wr0XRSyL0YBvXe8vfrMKxVTK8i8Bl
+         WmhQ==
+X-Gm-Message-State: ANoB5plnpmIkI9/CoO3u8duWOc3XrFCg7x9e4wSpt+FlGCXzC5zo7jCt
+        JWQKm/DgjhKe438FdOrmSNqx5+sAI28ZGJxw9ME=
+X-Google-Smtp-Source: AA0mqf4SRAwUuTX38+ttDJu/1wWAfpI2VN++vQcBAr3i9/Ir0PtfihMVLYDcXPELdJG9qD7yxeQwkwvwQk8Ggut0Ut0=
+X-Received: by 2002:a05:6102:232b:b0:3b2:fb62:6535 with SMTP id
+ b11-20020a056102232b00b003b2fb626535mr8904887vsa.63.1671440769980; Mon, 19
+ Dec 2022 01:06:09 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:f47:b0:308:86c1:9717 with SMTP id
- y7-20020a056e020f4700b0030886c19717mr860827ilj.8.1671440745677; Mon, 19 Dec
- 2022 01:05:45 -0800 (PST)
-Date:   Mon, 19 Dec 2022 01:05:45 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e8c98705f02a9f6d@google.com>
-Subject: [syzbot] general protection fault in detach_extent_buffer_page (3)
-From:   syzbot <syzbot+0c9e903ba426fae1f88d@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20221215150214.1109074-1-hugo@hugovil.com> <20221215150214.1109074-2-hugo@hugovil.com>
+In-Reply-To: <20221215150214.1109074-2-hugo@hugovil.com>
+From:   Bruno Thomsen <bruno.thomsen@gmail.com>
+Date:   Mon, 19 Dec 2022 10:05:53 +0100
+Message-ID: <CAH+2xPDW04NKD34RjcLO=HP1_KDxe9dvbLC9B4Rv+i3O8S58qQ@mail.gmail.com>
+Subject: Re: [PATCH v3 01/14] rtc: pcf2127: add variant-specific configuration structure
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
+>
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+>
+> Create variant-specific configuration structures to simplify the
+> implementation of new variants into this driver. It will also avoid
+> to have too many tests for a specific variant, or a list of variants
+> for new devices, inside the code itself.
+>
+> Add configuration options for the support of the NVMEM, bit CD0 in
+> register WD_CTL as well as the maximum number of registers for each
+> variant, instead of hardcoding the variant (PCF2127) inside the
+> i2c_device_id and spi_device_id structures.
+>
+> Also specify a different maximum number of registers (max_register)
+> for the PCF2129.
+>
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> ---
+>  drivers/rtc/rtc-pcf2127.c | 95 +++++++++++++++++++++++++++++++--------
+>  1 file changed, 76 insertions(+), 19 deletions(-)
+>
+> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> index 87f4fc9df68b..b9a5d47a439f 100644
+> --- a/drivers/rtc/rtc-pcf2127.c
+> +++ b/drivers/rtc/rtc-pcf2127.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_irq.h>
+> +#include <linux/of_device.h>
+>  #include <linux/regmap.h>
+>  #include <linux/watchdog.h>
+>
+> @@ -101,10 +102,17 @@
+>                 PCF2127_BIT_CTRL2_WDTF | \
+>                 PCF2127_BIT_CTRL2_TSF2)
+>
+> +struct pcf21xx_config {
+> +       int max_register;
+> +       unsigned int has_nvmem:1;
+> +       unsigned int has_bit_wd_ctl_cd0:1;
+> +};
+> +
+>  struct pcf2127 {
+>         struct rtc_device *rtc;
+>         struct watchdog_device wdd;
+>         struct regmap *regmap;
+> +       const struct pcf21xx_config *cfg;
+>         time64_t ts;
+>         bool ts_valid;
+>         bool irq_enabled;
+> @@ -631,8 +639,27 @@ static const struct attribute_group pcf2127_attr_group = {
+>         .attrs  = pcf2127_attrs,
+>  };
+>
+> +enum pcf21xx_type {
+> +       PCF2127,
+> +       PCF2129,
+> +       PCF21XX_LAST_ID
+> +};
+> +
+> +static struct pcf21xx_config pcf21xx_cfg[] = {
+> +       [PCF2127] = {
+> +               .max_register = 0x1d,
+> +               .has_nvmem = 1,
+> +               .has_bit_wd_ctl_cd0 = 1,
+> +       },
+> +       [PCF2129] = {
+> +               .max_register = 0x19,
+> +               .has_nvmem = 0,
+> +               .has_bit_wd_ctl_cd0 = 0,
+> +       },
+> +};
+> +
+>  static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> -                        int alarm_irq, const char *name, bool is_pcf2127)
+> +                        int alarm_irq, const char *name, const struct pcf21xx_config *config)
+>  {
+>         struct pcf2127 *pcf2127;
+>         int ret = 0;
+> @@ -645,6 +672,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>                 return -ENOMEM;
+>
+>         pcf2127->regmap = regmap;
+> +       pcf2127->cfg = config;
+>
+>         dev_set_drvdata(dev, pcf2127);
+>
+> @@ -688,7 +716,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>                 set_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
+>         }
+>
+> -       if (is_pcf2127) {
+> +       if (pcf2127->cfg->has_nvmem) {
+>                 struct nvmem_config nvmem_cfg = {
+>                         .priv = pcf2127,
+>                         .reg_read = pcf2127_nvmem_read,
+> @@ -734,7 +762,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>                                  PCF2127_BIT_WD_CTL_TF1 |
+>                                  PCF2127_BIT_WD_CTL_TF0,
+>                                  PCF2127_BIT_WD_CTL_CD1 |
+> -                                (is_pcf2127 ? PCF2127_BIT_WD_CTL_CD0 : 0) |
+> +                                (pcf2127->cfg->has_bit_wd_ctl_cd0 ? PCF2127_BIT_WD_CTL_CD0 : 0) |
+>                                  PCF2127_BIT_WD_CTL_TF1);
+>         if (ret) {
+>                 dev_err(dev, "%s: watchdog config (wd_ctl) failed\n", __func__);
+> @@ -799,9 +827,9 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>
+>  #ifdef CONFIG_OF
+>  static const struct of_device_id pcf2127_of_match[] = {
+> -       { .compatible = "nxp,pcf2127" },
+> -       { .compatible = "nxp,pcf2129" },
+> -       { .compatible = "nxp,pca2129" },
+> +       { .compatible = "nxp,pcf2127", .data = &pcf21xx_cfg[PCF2127] },
+> +       { .compatible = "nxp,pcf2129", .data = &pcf21xx_cfg[PCF2129] },
+> +       { .compatible = "nxp,pca2129", .data = &pcf21xx_cfg[PCF2129] },
+>         {}
+>  };
+>  MODULE_DEVICE_TABLE(of, pcf2127_of_match);
+> @@ -886,26 +914,40 @@ static const struct regmap_bus pcf2127_i2c_regmap = {
+>  static struct i2c_driver pcf2127_i2c_driver;
+>
+>  static const struct i2c_device_id pcf2127_i2c_id[] = {
+> -       { "pcf2127", 1 },
+> -       { "pcf2129", 0 },
+> -       { "pca2129", 0 },
+> +       { "pcf2127", PCF2127 },
+> +       { "pcf2129", PCF2129 },
+> +       { "pca2129", PCF2129 },
+>         { }
+>  };
+>  MODULE_DEVICE_TABLE(i2c, pcf2127_i2c_id);
+>
+>  static int pcf2127_i2c_probe(struct i2c_client *client)
+>  {
+> -       const struct i2c_device_id *id = i2c_match_id(pcf2127_i2c_id, client);
+>         struct regmap *regmap;
+> -       static const struct regmap_config config = {
+> +       static struct regmap_config config = {
+>                 .reg_bits = 8,
+>                 .val_bits = 8,
+> -               .max_register = 0x1d,
+>         };
+> +       const struct pcf21xx_config *variant;
 
-syzbot found the following issue on:
+Hi Hugo,
 
-HEAD commit:    e2ca6ba6ba01 Merge tag 'mm-stable-2022-12-13' of git://git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=141d9ad0480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ca14f57f6fb6faa7
-dashboard link: https://syzkaller.appspot.com/bug?extid=0c9e903ba426fae1f88d
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Patch series does not apply on 6.1 tree as pcf2127_i2c_probe() call
+signature does not match[1].
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0c9e903ba426fae1f88d@syzkaller.appspotmail.com
-
-general protection fault, probably for non-canonical address 0xdffffc000000003d: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x00000000000001e8-0x00000000000001ef]
-CPU: 1 PID: 45 Comm: kcompactd0 Not tainted 6.1.0-syzkaller-09941-ge2ca6ba6ba01 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:__lock_acquire+0xd83/0x56d0 kernel/locking/lockdep.c:4925
-Code: 3d 0f 41 bf 01 00 00 00 0f 86 c8 00 00 00 89 05 93 56 3d 0f e9 bd 00 00 00 48 b8 00 00 00 00 00 fc ff df 4c 89 f2 48 c1 ea 03 <80> 3c 02 00 0f 85 4e 31 00 00 49 81 3e 60 65 f6 8f 0f 84 4c f3 ff
-RSP: 0018:ffffc900008d74a8 EFLAGS: 00010002
-RAX: dffffc0000000000 RBX: 1ffff9200011aec5 RCX: 0000000000000000
-RDX: 000000000000003d RSI: 0000000000000000 RDI: 0000000000000001
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: fffffbfff1ce6862 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff88801562e100 R14: 00000000000001e8 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff88802c700000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fc081fa8000 CR3: 000000006a5b7000 CR4: 0000000000150ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- lock_acquire kernel/locking/lockdep.c:5668 [inline]
- lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:350 [inline]
- detach_extent_buffer_page+0x6c7/0xb40 fs/btrfs/extent_io.c:4051
- btrfs_release_extent_buffer_pages+0x12b/0x400 fs/btrfs/extent_io.c:4120
- release_extent_buffer+0x242/0x2b0 fs/btrfs/extent_io.c:4618
- try_release_extent_buffer+0x307/0x8d0 fs/btrfs/extent_io.c:5717
- btree_release_folio+0xc2/0x100 fs/btrfs/disk-io.c:909
- filemap_release_folio+0x13f/0x1b0 mm/filemap.c:3967
- btree_migrate_folio+0xa2/0x100 fs/btrfs/disk-io.c:874
- move_to_new_folio+0x17a/0x6e0 mm/migrate.c:958
- __unmap_and_move mm/migrate.c:1122 [inline]
- unmap_and_move mm/migrate.c:1194 [inline]
- migrate_pages+0x1de8/0x3e10 mm/migrate.c:1477
- compact_zone+0x1c74/0x39f0 mm/compaction.c:2413
- kcompactd_do_work+0x2f7/0x7c0 mm/compaction.c:2851
- kcompactd+0x8c3/0xdf0 mm/compaction.c:2953
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__lock_acquire+0xd83/0x56d0 kernel/locking/lockdep.c:4925
-Code: 3d 0f 41 bf 01 00 00 00 0f 86 c8 00 00 00 89 05 93 56 3d 0f e9 bd 00 00 00 48 b8 00 00 00 00 00 fc ff df 4c 89 f2 48 c1 ea 03 <80> 3c 02 00 0f 85 4e 31 00 00 49 81 3e 60 65 f6 8f 0f 84 4c f3 ff
-RSP: 0018:ffffc900008d74a8 EFLAGS: 00010002
-RAX: dffffc0000000000 RBX: 1ffff9200011aec5 RCX: 0000000000000000
-RDX: 000000000000003d RSI: 0000000000000000 RDI: 0000000000000001
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: fffffbfff1ce6862 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff88801562e100 R14: 00000000000001e8 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff88802c700000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fc081fa8000 CR3: 000000006a5b7000 CR4: 0000000000150ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	0f 41 bf 01 00 00 00 	cmovno 0x1(%rdi),%edi
-   7:	0f 86 c8 00 00 00    	jbe    0xd5
-   d:	89 05 93 56 3d 0f    	mov    %eax,0xf3d5693(%rip)        # 0xf3d56a6
-  13:	e9 bd 00 00 00       	jmpq   0xd5
-  18:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  1f:	fc ff df
-  22:	4c 89 f2             	mov    %r14,%rdx
-  25:	48 c1 ea 03          	shr    $0x3,%rdx
-* 29:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2d:	0f 85 4e 31 00 00    	jne    0x3181
-  33:	49 81 3e 60 65 f6 8f 	cmpq   $0xffffffff8ff66560,(%r14)
-  3a:	0f                   	.byte 0xf
-  3b:	84 4c f3 ff          	test   %cl,-0x1(%rbx,%rsi,8)
+static int pcf2127_i2c_probe(struct i2c_client *client,
+      const struct i2c_device_id *id)
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+[1] https://elixir.bootlin.com/linux/v6.1/source/drivers/rtc/rtc-pcf2127.c#L888
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+/Bruno
+
+>
+>         if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+>                 return -ENODEV;
+>
+> +       if (client->dev.of_node) {
+> +               variant = of_device_get_match_data(&client->dev);
+> +               if (!variant)
+> +                       return -ENODEV;
+> +       } else {
+> +               enum pcf21xx_type type =
+> +                       i2c_match_id(pcf2127_i2c_id, client)->driver_data;
+> +
+> +               if (type >= PCF21XX_LAST_ID)
+> +                       return -ENODEV;
+> +               variant = &pcf21xx_cfg[type];
+> +       }
+> +
+> +       config.max_register = variant->max_register,
+> +
+>         regmap = devm_regmap_init(&client->dev, &pcf2127_i2c_regmap,
+>                                         &client->dev, &config);
+>         if (IS_ERR(regmap)) {
+> @@ -915,7 +957,7 @@ static int pcf2127_i2c_probe(struct i2c_client *client)
+>         }
+>
+>         return pcf2127_probe(&client->dev, regmap, client->irq,
+> -                            pcf2127_i2c_driver.driver.name, id->driver_data);
+> +                            pcf2127_i2c_driver.driver.name, variant);
+>  }
+>
+>  static struct i2c_driver pcf2127_i2c_driver = {
+> @@ -953,17 +995,32 @@ static void pcf2127_i2c_unregister_driver(void)
+>  #if IS_ENABLED(CONFIG_SPI_MASTER)
+>
+>  static struct spi_driver pcf2127_spi_driver;
+> +static const struct spi_device_id pcf2127_spi_id[];
+>
+>  static int pcf2127_spi_probe(struct spi_device *spi)
+>  {
+> -       static const struct regmap_config config = {
+> +       static struct regmap_config config = {
+>                 .reg_bits = 8,
+>                 .val_bits = 8,
+>                 .read_flag_mask = 0xa0,
+>                 .write_flag_mask = 0x20,
+> -               .max_register = 0x1d,
+>         };
+>         struct regmap *regmap;
+> +       const struct pcf21xx_config *variant;
+> +
+> +       if (spi->dev.of_node) {
+> +               variant = of_device_get_match_data(&spi->dev);
+> +               if (!variant)
+> +                       return -ENODEV;
+> +       } else {
+> +               enum pcf21xx_type type = spi_get_device_id(spi)->driver_data;
+> +
+> +               if (type >= PCF21XX_LAST_ID)
+> +                       return -ENODEV;
+> +               variant = &pcf21xx_cfg[type];
+> +       }
+> +
+> +       config.max_register = variant->max_register,
+>
+>         regmap = devm_regmap_init_spi(spi, &config);
+>         if (IS_ERR(regmap)) {
+> @@ -974,13 +1031,13 @@ static int pcf2127_spi_probe(struct spi_device *spi)
+>
+>         return pcf2127_probe(&spi->dev, regmap, spi->irq,
+>                              pcf2127_spi_driver.driver.name,
+> -                            spi_get_device_id(spi)->driver_data);
+> +                            variant);
+>  }
+>
+>  static const struct spi_device_id pcf2127_spi_id[] = {
+> -       { "pcf2127", 1 },
+> -       { "pcf2129", 0 },
+> -       { "pca2129", 0 },
+> +       { "pcf2127", PCF2127 },
+> +       { "pcf2129", PCF2129 },
+> +       { "pca2129", PCF2129 },
+>         { }
+>  };
+>  MODULE_DEVICE_TABLE(spi, pcf2127_spi_id);
+> --
+> 2.30.2
+>
