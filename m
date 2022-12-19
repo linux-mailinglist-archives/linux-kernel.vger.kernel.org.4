@@ -2,182 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE416651075
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 17:31:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFE66510A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 17:45:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbiLSQbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 11:31:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59362 "EHLO
+        id S232183AbiLSQon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 11:44:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbiLSQbp (ORCPT
+        with ESMTP id S231480AbiLSQol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 11:31:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AEFC07
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 08:30:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671467437;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iqzZDJr3eUwayKjs/1xitM2q4nRywOPqCiXpKwUBAdY=;
-        b=RlkNdKoha1nZTvvyBCkbowbs5R+6rxzeCw8UK+cov6+RRoPulJKxm52iDGWVDiveuStfyo
-        c0X8WqnSjiTmCavMRO6zLudoCt1pB+UHs99eT3mbqT+XKb0civYMCAhBMkYNJ0j6+WechX
-        NeSOfulOupnwZwq26I0/XBBQ7GGN5wk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-332-UNsY6G-3NzygpiX6OJ2yDw-1; Mon, 19 Dec 2022 11:30:29 -0500
-X-MC-Unique: UNsY6G-3NzygpiX6OJ2yDw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 19 Dec 2022 11:44:41 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3677A25D2;
+        Mon, 19 Dec 2022 08:44:40 -0800 (PST)
+Received: from [IPV6:2a01:e0a:120:3210:f69c:5603:d4ce:7aa2] (unknown [IPv6:2a01:e0a:120:3210:f69c:5603:d4ce:7aa2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0F8D21991C41;
-        Mon, 19 Dec 2022 16:30:26 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.194.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 202D340C1073;
-        Mon, 19 Dec 2022 16:30:22 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        io-uring@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Pitre <nico@fluxnic.net>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH mm-stable RFC 2/2] mm/nommu: don't use VM_MAYSHARE for MAP_PRIVATE mappings
-Date:   Mon, 19 Dec 2022 17:30:13 +0100
-Message-Id: <20221219163013.259423-3-david@redhat.com>
-In-Reply-To: <20221219163013.259423-1-david@redhat.com>
-References: <20221219163013.259423-1-david@redhat.com>
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9A2EA660037C;
+        Mon, 19 Dec 2022 16:44:38 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671468279;
+        bh=E0r3d2ox1oE9eTKDNfe4pYrofvO/8Q+8UC+WxtJKOUE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DuGMS5QH7ZJSZPLa55sJEBRHIeiLRJgrJoH29Aij2zShuTiq5+P/mBsQnx/GroFKV
+         gLqu+BpsXOSxrA1cFhHdsoedC9oxlxFaK+mU4seAXg5R7KrOs6FRkVmt88/DNPdzST
+         u/nmCae7I3YT8cKE7S6s+hkubloGxnFlzviMHjYu5SUXvt9lRTUcLAXRRP9mvrH9a3
+         TglSlRJ8o5EsfZ1EKOBJJ3L+KV2+o/WJX0tloCDcdS0MPuQXmhEQ0kNfRb8/wd5/n1
+         c16c3FN/sBIG2rd3qXimaIyZJOvSNr0lWrwkJd9Jcu1TDsQDNBfsg2HA1ClCEZVwvt
+         zXSKiWS29wDEQ==
+Message-ID: <ec38d798-1b7b-2fc2-5be8-30ef28330760@collabora.com>
+Date:   Mon, 19 Dec 2022 17:44:36 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 1/9] dt-bindings: media: rockchip-vpu: Add rk3588 vpu
+ compatible
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+References: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
+ <20221219155616.848690-2-benjamin.gaignard@collabora.com>
+ <15146b26-438b-698a-9e17-cb4ef2318420@linaro.org>
+Content-Language: en-US
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <15146b26-438b-698a-9e17-cb4ef2318420@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's stop using VM_MAYSHARE for MAP_PRIVATE mappings and use VM_MAYOVERLAY
-instead. Rewrite determine_vm_flags() to make the whole logic easier to
-digest, and to cleanly separate MAP_PRIVATE vs. MAP_SHARED.
 
-No functional change intended.
+Le 19/12/2022 à 17:06, Krzysztof Kozlowski a écrit :
+> On 19/12/2022 16:56, Benjamin Gaignard wrote:
+>> Add compatible for rk3588 AV1 vpu decoder.
+>>
+>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>> ---
+>>   Documentation/devicetree/bindings/media/rockchip-vpu.yaml | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+>> index 6cc4d3e5a61d..8454df53f5cb 100644
+>> --- a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+>> +++ b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+>> @@ -24,6 +24,7 @@ properties:
+>>             - rockchip,rk3399-vpu
+>>             - rockchip,px30-vpu
+>>             - rockchip,rk3568-vpu
+>> +          - rockchip,rk3588-av1-vpu
+> Why "av1" suffix? Is there another type (different device, different
+> programming model) expected on rk3588?
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- include/linux/mm.h |  7 ++++++-
- mm/nommu.c         | 51 +++++++++++++++++++++++++++-------------------
- 2 files changed, 36 insertions(+), 22 deletions(-)
+Yes there is 4 different vpu on rk3588.
+This one only does av1.
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 734d0bc7c7c6..c229eee6211c 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -276,7 +276,12 @@ extern unsigned int kobjsize(const void *objp);
- #define VM_MAYSHARE	0x00000080
- 
- #define VM_GROWSDOWN	0x00000100	/* general info on the segment */
-+#ifdef CONFIG_MMU
- #define VM_UFFD_MISSING	0x00000200	/* missing pages tracking */
-+#else /* CONFIG_MMU */
-+#define VM_MAYOVERLAY	0x00000200	/* nommu: R/O MAP_PRIVATE mapping that might overlay a file mapping */
-+#define VM_UFFD_MISSING	0
-+#endif /* CONFIG_MMU */
- #define VM_PFNMAP	0x00000400	/* Page-ranges managed without "struct page", just pure PFN */
- #define VM_UFFD_WP	0x00001000	/* wrprotect pages tracking */
- 
-@@ -1374,7 +1379,7 @@ static inline bool is_nommu_shared_mapping(vm_flags_t flags)
- 	 * ptrace does not apply. Note that there is no mprotect() to upgrade
- 	 * write permissions later.
- 	 */
--	return flags & VM_MAYSHARE;
-+	return flags & (VM_MAYSHARE | VM_MAYOVERLAY);
- }
- #endif
- 
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 6c4bdc07a776..5c628c868648 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -892,29 +892,36 @@ static unsigned long determine_vm_flags(struct file *file,
- 	unsigned long vm_flags;
- 
- 	vm_flags = calc_vm_prot_bits(prot, 0) | calc_vm_flag_bits(flags);
--	/* vm_flags |= mm->def_flags; */
- 
--	if (!(capabilities & NOMMU_MAP_DIRECT)) {
--		/* attempt to share read-only copies of mapped file chunks */
-+	if (!file) {
-+		/*
-+		 * MAP_ANONYMOUS. MAP_SHARED is mapped to MAP_PRIVATE, because
-+		 * there is no fork().
-+		 */
- 		vm_flags |= VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC;
--		if (file && !(prot & PROT_WRITE))
--			vm_flags |= VM_MAYSHARE;
-+	} else if (flags & MAP_PRIVATE) {
-+		/* MAP_PRIVATE file mapping */
-+		if (capabilities & NOMMU_MAP_DIRECT)
-+			vm_flags |= (capabilities & NOMMU_VMFLAGS);
-+		else
-+			vm_flags |= VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC;
-+
-+		if (!(prot & PROT_WRITE) && !current->ptrace)
-+			/*
-+			 * R/O private file mapping which cannot be used to
-+			 * modify memory, especially also not via active ptrace
-+			 * (e.g., set breakpoints) or later by upgrading
-+			 * permissions (no mprotect()). We can try overlaying
-+			 * the file mapping, which will work e.g., on chardevs,
-+			 * ramfs/tmpfs/shmfs and romfs/cramf.
-+			 */
-+			vm_flags |= VM_MAYOVERLAY;
- 	} else {
--		/* overlay a shareable mapping on the backing device or inode
--		 * if possible - used for chardevs, ramfs/tmpfs/shmfs and
--		 * romfs/cramfs */
--		vm_flags |= VM_MAYSHARE | (capabilities & NOMMU_VMFLAGS);
--		if (flags & MAP_SHARED)
--			vm_flags |= VM_SHARED;
-+		/* MAP_SHARED file mapping: NOMMU_MAP_DIRECT is set. */
-+		vm_flags |= VM_SHARED | VM_MAYSHARE |
-+			    (capabilities & NOMMU_VMFLAGS);
- 	}
- 
--	/* refuse to let anyone share private mappings with this process if
--	 * it's being traced - otherwise breakpoints set in it may interfere
--	 * with another untraced process
--	 */
--	if ((flags & MAP_PRIVATE) && current->ptrace)
--		vm_flags &= ~VM_MAYSHARE;
--
- 	return vm_flags;
- }
- 
-@@ -952,9 +959,11 @@ static int do_mmap_private(struct vm_area_struct *vma,
- 	void *base;
- 	int ret, order;
- 
--	/* invoke the file's mapping function so that it can keep track of
--	 * shared mappings on devices or memory
--	 * - VM_MAYSHARE will be set if it may attempt to share
-+	/*
-+	 * Invoke the file's mapping function so that it can keep track of
-+	 * shared mappings on devices or memory. VM_MAYOVERLAY will be set if
-+	 * it may attempt to share, which will make is_nommu_shared_mapping()
-+	 * happy.
- 	 */
- 	if (capabilities & NOMMU_MAP_DIRECT) {
- 		ret = call_mmap(vma->vm_file, vma);
--- 
-2.38.1
-
+>
+> Best regards,
+> Krzysztof
+>
