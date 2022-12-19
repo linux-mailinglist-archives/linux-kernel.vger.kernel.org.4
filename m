@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E48650818
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 08:35:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89056650802
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 08:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbiLSHfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 02:35:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37628 "EHLO
+        id S231496AbiLSHRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 02:17:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbiLSHfb (ORCPT
+        with ESMTP id S231519AbiLSHRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 02:35:31 -0500
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EA926F2;
-        Sun, 18 Dec 2022 23:35:31 -0800 (PST)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A5B4C1A1612;
-        Mon, 19 Dec 2022 08:35:29 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 6A10C1A05C8;
-        Mon, 19 Dec 2022 08:35:29 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id D61911820F59;
-        Mon, 19 Dec 2022 15:35:27 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     vkoul@kernel.org, marex@denx.de, alexander.stein@ew.tq-group.com,
-        lorenzo.pieralisi@arm.com
-Cc:     linux-phy@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        Richard Zhu <hongxing.zhu@nxp.com>
-Subject: [PATCH] phy: freescale: imx8m-pcie: Add one missing error return
-Date:   Mon, 19 Dec 2022 15:12:21 +0800
-Message-Id: <1671433941-2037-1-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 19 Dec 2022 02:17:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7A395A9
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 23:16:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671434187;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BdWW4mbATFocYlfd/RqNiXq7z60CEKDBIQVxKlktu5Q=;
+        b=iVOS83LCEfVnXIMmcMJlJsE+543CDtN0a3MQDAbNpHtCGtsndwMkEhUSC/8n/3msM3MfQo
+        pO7RJZJzYYHFdVcGt0BXX/6tUMRMhqKmotvjMV1mW9cNFbMMC/v5+vD0k6Gdq72DnWpMxH
+        XLhrk17nsFGCm1Ug3DcNg9gT1NTH7wk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-141-FyoKMx-XPI-HEcyT7J2yAQ-1; Mon, 19 Dec 2022 02:16:22 -0500
+X-MC-Unique: FyoKMx-XPI-HEcyT7J2yAQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3B11A2A59557;
+        Mon, 19 Dec 2022 07:16:22 +0000 (UTC)
+Received: from localhost (ovpn-12-41.pek2.redhat.com [10.72.12.41])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 017562026D4B;
+        Mon, 19 Dec 2022 07:16:20 +0000 (UTC)
+Date:   Mon, 19 Dec 2022 15:16:17 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, urezki@gmail.com,
+        stephen.s.brennan@oracle.com, willy@infradead.org,
+        akpm@linux-foundation.org, hch@infradead.org
+Subject: Re: [PATCH v2 5/7] mm/vmalloc: skip the uninitilized vmalloc areas
+Message-ID: <Y6APwfb9v2t3xUhv@MiWiFi-R3L-srv>
+References: <20221217015435.73889-1-bhe@redhat.com>
+ <20221217015435.73889-6-bhe@redhat.com>
+ <Y52w/w3IqJ0SCI6I@lucifer>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y52w/w3IqJ0SCI6I@lucifer>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There should be one error return when fail to fetch the perst reset.
-Add the missing error return.
+On 12/17/22 at 12:07pm, Lorenzo Stoakes wrote:
+> On Sat, Dec 17, 2022 at 09:54:33AM +0800, Baoquan He wrote:
+> > @@ -3617,6 +3617,11 @@ long vread(char *buf, char *addr, unsigned long count)
+> >  		if (!vm && !flags)
+> >  			continue;
+> >
+> > +		if (vm->flags & VM_UNINITIALIZED)
+> > +			continue;
+> 
+> This comes immediately after asserting that vm _might be null_. This surely must become:-
+> 
+> if (vm && vm->flags & VM_UNINITIALIZED)
+>         continue;
 
-Fixes: dce9edff16ee ("phy: freescale: imx8m-pcie: Add i.MX8MP PCIe PHY support")
-
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
----
- drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-index 7585e8080b77..afc63552ecaf 100644
---- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-+++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-@@ -255,7 +255,7 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
- 		imx8_phy->perst =
- 			devm_reset_control_get_exclusive(dev, "perst");
- 		if (IS_ERR(imx8_phy->perst))
--			dev_err_probe(dev, PTR_ERR(imx8_phy->perst),
-+			return dev_err_probe(dev, PTR_ERR(imx8_phy->perst),
- 				      "Failed to get PCIE PHY PERST control\n");
- 	}
- 
--- 
-2.25.1
+You are right, will fix it in v3. Thanks for careful reivewing.
 
