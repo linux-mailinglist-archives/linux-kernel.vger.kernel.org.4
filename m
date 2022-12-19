@@ -2,182 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73604650866
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 09:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C156A65086B
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 09:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiLSIHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 03:07:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
+        id S231391AbiLSIJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 03:09:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiLSIHf (ORCPT
+        with ESMTP id S229615AbiLSIJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 03:07:35 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6235F62DB
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 00:07:34 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id a25so3377085qkl.12
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 00:07:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SEgPCMOuM3toHAMRnPEv0nKP/n56PHLERtNl5qSP27Y=;
-        b=GeCE1XpHOPsjmhot1alfGm10UwZR8WweYcK7Ys0ml6q0SKl29iSB4V/YGoLSd4bF1D
-         k/gNkETnjVkPJ3Mu1VpAF8eFG5GiSNeo69v3wu2KtdmT4uHcvtB1BF5MN9dPZFmdphob
-         1mLvk0O3KpQe0zjxF6uDeaTIgsHmR8OuHDTH08g4AUFwm1wAsHiRLxiWMjfR8b1Dt2bt
-         iyWWQAJD+eRSch1JqaY7QuT/BfK6poPY9PQY9D0PW4C07QFqWjcRmkGZNLBGT1Q6HBOs
-         oyx07AoRsJLtXSd2iqJrF0eHZPK97da/C0T3ywoEpIBiJqNzLY4mwLdMjx05xon0pZLw
-         nANw==
+        Mon, 19 Dec 2022 03:09:27 -0500
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1703362D2;
+        Mon, 19 Dec 2022 00:09:26 -0800 (PST)
+Received: by mail-pg1-f180.google.com with SMTP id w37so5650141pga.5;
+        Mon, 19 Dec 2022 00:09:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SEgPCMOuM3toHAMRnPEv0nKP/n56PHLERtNl5qSP27Y=;
-        b=rGG2XOw/hF34DN1Tn4fl9TORsee7zNTwJrUSocEPGhzZTV9Yb94w2/F9M7hB38OtqZ
-         nR8D8FVCoHQ9TpMBTSB88fo7ceAK9bvH487tm00FO6OM7mxNW6WQPnKifER4zprp62Ee
-         X6mSKySUIvn673iUOQfiVwZUar5V7Fw6GAsjk9noPQAd+eZS+JZmpAjp+U1fQWmX252n
-         QdkUJAZh1KBHucsvJ4zibri+kkYl6xIPPnnoa6MgNAoqAiQuIhGSzniD9bQyqgXx/yLG
-         glIm6Jn27whoilMIuSm+nHUjKwPScKAoj62KiaaXoP/H0iIwYzd+oQi6jX+YHFbToVJt
-         Czdg==
-X-Gm-Message-State: ANoB5pn0O/7g27km/F1SLg63a5lNEmVsNV6qFqC0mLiD602b6d2+zr3Z
-        Eg8Y5UhcaYjCn2yB/qiLOu1IoNzLhmP66xJre42cUA==
-X-Google-Smtp-Source: AA0mqf4hYcWqPwq7UNurh/zcWd4YRTG/jTjM6/0NYYnoB+BRyABPbRkLCDZqXLnbNzo8v38MVmQrUBGL+qURaCEBFHY=
-X-Received: by 2002:a05:620a:8109:b0:6ff:a7f1:ff4e with SMTP id
- os9-20020a05620a810900b006ffa7f1ff4emr752607qkn.292.1671437253480; Mon, 19
- Dec 2022 00:07:33 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A3yf0KS/FP0thjxq563bdYl/LLOFgjmgJm4mPBjDh+U=;
+        b=vB06uoUCjCNuSxlG8wnY9I+42x3b6yCrax3FE7yJ3iI9HUtTiEMeTmMiKwxS1UlefF
+         aL7MlKa3S3C+f02/x1TnK8FktGUHxfp3veHa4FiXsHCME7PmRzxdUPc+en9wBlhrOEU1
+         6gw3e3364OsAObAuyFzL+djOmmjel/Onn0sEHRBCEjMrvUL8rOWMQC36KIWinQkjnUn5
+         VlBYqbchGM1JRb+nkoDAphHwnC3htVp11+Fi27ASR0pdWloFcPbhx2MDyKbrPeYLyMo+
+         O9nsB2uy7y5lCcztanVCwN2LUhnUPi2/3l82KZbgQupcU/r8NphUAM6Sq8GhXD+f0Q8F
+         IGDw==
+X-Gm-Message-State: ANoB5pnb5Xywhemhpa2+OtqSOpEeux/ycx5Z58Lou9udur5PrBDp5zf/
+        2ZDEO7R1hSHLBTeAuVe4tXg=
+X-Google-Smtp-Source: AA0mqf4H0gtMj6oWuz+nKGu4Zj9+L0sGeSxNQIbpGC17bYZwlG9YG0ee5hNFJ6n0IXhIBLrnTmZGfw==
+X-Received: by 2002:a62:17d5:0:b0:577:2a9:ec82 with SMTP id 204-20020a6217d5000000b0057702a9ec82mr37369305pfx.5.1671437365558;
+        Mon, 19 Dec 2022 00:09:25 -0800 (PST)
+Received: from [192.168.219.108] ([14.4.134.166])
+        by smtp.gmail.com with ESMTPSA id 62-20020a621641000000b00574afdc0391sm6066785pfw.174.2022.12.19.00.09.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Dec 2022 00:09:24 -0800 (PST)
+Message-ID: <403f3ea8-eeec-2a78-640e-c11c3fe28f45@ooseel.net>
+Date:   Mon, 19 Dec 2022 17:09:21 +0900
 MIME-Version: 1.0
-References: <20190719140000.31694-1-juri.lelli@redhat.com> <20190719140000.31694-4-juri.lelli@redhat.com>
- <20221216233501.gh6m75e7s66dmjgo@airbuntu>
-In-Reply-To: <20221216233501.gh6m75e7s66dmjgo@airbuntu>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 19 Dec 2022 09:07:21 +0100
-Message-ID: <CAKfTPtA0M5XOP4UdkFeSNen98e842OfKTBDOt0r-y_TD4w54jw@mail.gmail.com>
-Subject: Re: [PATCH v9 3/8] cpuset: Rebuild root domain deadline accounting information
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Juri Lelli <juri.lelli@redhat.com>, peterz@infradead.org,
-        mingo@redhat.com, rostedt@goodmis.org, tj@kernel.org,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org, lizefan@huawei.com,
-        longman@redhat.com, dietmar.eggemann@arm.com,
-        cgroups@vger.kernel.org, Wei Wang <wvw@google.com>,
-        Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] usbnet: jump to rx_cleanup case instead of calling
+ skb_queue_tail
+To:     Greg KH <greg@kroah.com>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221217161851.829497-1-lsahn@ooseel.net>
+ <Y57VkLKetDsbUUjC@kroah.com>
+ <a2e0e98a-1044-908a-15bc-b165ff8b23ea@ooseel.net>
+ <Y6AXqOlCUy7mahgj@kroah.com>
+Content-Language: en-US
+From:   Leesoo Ahn <lsahn@ooseel.net>
+In-Reply-To: <Y6AXqOlCUy7mahgj@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 17 Dec 2022 at 00:35, Qais Yousef <qyousef@layalina.io> wrote:
->
-> Hi
->
-> On 07/19/19 15:59, Juri Lelli wrote:
-> > When the topology of root domains is modified by CPUset or CPUhotplug
-> > operations information about the current deadline bandwidth held in the
-> > root domain is lost.
-> >
-> > This patch addresses the issue by recalculating the lost deadline
-> > bandwidth information by circling through the deadline tasks held in
-> > CPUsets and adding their current load to the root domain they are
-> > associated with.
-> >
-> > Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-> > Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
-> > ---
->
-> We see that rebuild_root_domain() can take 10+ ms (I get a max of 20ms quite
-> consistently) on suspend/resume.
->
-> Do we actually need to rebuild_root_domain() if we're going through
-> a suspend/resume cycle?
 
-During suspend to ram, there are cpus hotplug operation but If you use
-suspend to idle, you will skip cpus hotplug operation and its
-associated rebuild.
+On 22. 12. 19. 16:50, Greg KH wrote:
+> On Mon, Dec 19, 2022 at 04:41:16PM +0900, Leesoo Ahn wrote:
+>> On 22. 12. 18. 17:55, Greg KH wrote:
+>>> On Sun, Dec 18, 2022 at 01:18:51AM +0900, Leesoo Ahn wrote:
+>>>> The current source pushes skb into dev->done queue by calling
+>>>> skb_queue_tail() and then, call skb_dequeue() to pop for rx_cleanup state
+>>>> to free urb and skb next in usbnet_bh().
+>>>> It wastes CPU resource with extra instructions. Instead, use return values
+>>>> jumping to rx_cleanup case directly to free them. Therefore calling
+>>>> skb_queue_tail() and skb_dequeue() is not necessary.
+>>>>
+>>>> The follows are just showing difference between calling skb_queue_tail()
+>>>> and using return values jumping to rx_cleanup state directly in usbnet_bh()
+>>>> in Arm64 instructions with perf tool.
+>>>>
+>>>> ----------- calling skb_queue_tail() -----------
+>>>>          │     if (!(dev->driver_info->flags & FLAG_RX_ASSEMBLE))
+>>>>     7.58 │248:   ldr     x0, [x20, #16]
+>>>>     2.46 │24c:   ldr     w0, [x0, #8]
+>>>>     1.64 │250: ↑ tbnz    w0, #14, 16c
+>>>>          │     dev->net->stats.rx_errors++;
+>>>>     0.57 │254:   ldr     x1, [x20, #184]
+>>>>     1.64 │258:   ldr     x0, [x1, #336]
+>>>>     2.65 │25c:   add     x0, x0, #0x1
+>>>>          │260:   str     x0, [x1, #336]
+>>>>          │     skb_queue_tail(&dev->done, skb);
+>>>>     0.38 │264:   mov     x1, x19
+>>>>          │268:   mov     x0, x21
+>>>>     2.27 │26c: → bl      skb_queue_tail
+>>>>     0.57 │270: ↑ b       44    // branch to call skb_dequeue()
+>>>>
+>>>> ----------- jumping to rx_cleanup state -----------
+>>>>          │     if (!(dev->driver_info->flags & FLAG_RX_ASSEMBLE))
+>>>>     1.69 │25c:   ldr     x0, [x21, #16]
+>>>>     4.78 │260:   ldr     w0, [x0, #8]
+>>>>     3.28 │264: ↑ tbnz    w0, #14, e4    // jump to 'rx_cleanup' state
+>>>>          │     dev->net->stats.rx_errors++;
+>>>>     0.09 │268:   ldr     x1, [x21, #184]
+>>>>     2.72 │26c:   ldr     x0, [x1, #336]
+>>>>     3.37 │270:   add     x0, x0, #0x1
+>>>>     0.09 │274:   str     x0, [x1, #336]
+>>>>     0.66 │278: ↑ b       e4    // branch to 'rx_cleanup' state
+>>> Interesting, but does this even really matter given the slow speed of
+>>> the USB hardware?
+>> It doesn't if USB hardware has slow speed but in software view, it's still
+>> worth avoiding calling skb_queue_tail() and skb_dequeue() which work with
+>> spinlock, if possible.
+> But can you actually measure that in either CPU load or in increased
+> transfer speeds?
+>
+> thanks,
+>
+> greg k-h
 
->
-> ie: would something like the below make sense? We'd skip this logic if
-> cpuhp_tasks_frozen is set which indicates it's not a real hotplug operation but
-> we're suspending/resuming.
->
->
-> Cheers
->
-> --
-> Qais Yousef
->
->
-> --->8---
->
->
-> From 4cfd50960ad872c5eb810ad3038eaf840bab5182 Mon Sep 17 00:00:00 2001
-> From: Qais Yousef <qyousef@layalina.io>
-> Date: Tue, 29 Nov 2022 19:01:52 +0000
-> Subject: [PATCH] sched: cpuset: Don't rebuild sched domains on suspend-resume
->
-> Commit f9a25f776d78 ("cpusets: Rebuild root domain deadline accounting information")
-> enabled rebuilding sched domain on cpuset and hotplug operations to
-> correct deadline accounting.
->
-> Rebuilding sched domain is a slow operation and we see 10+ ms delays
-> on suspend-resume because of that.
->
-> Since nothing is expected to change on suspend-resume operation; skip
-> rebuilding the sched domains to regain some of the time lost.
->
-> Debugged-by: Rick Yiu <rickyiu@google.com>
-> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
-> ---
->  kernel/cgroup/cpuset.c  | 6 ++++++
->  kernel/sched/deadline.c | 3 +++
->  2 files changed, 9 insertions(+)
->
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index b474289c15b8..2ff68d625b7b 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1067,6 +1067,9 @@ static void update_tasks_root_domain(struct cpuset *cs)
->         struct css_task_iter it;
->         struct task_struct *task;
->
-> +       if (cpuhp_tasks_frozen)
-> +               return;
-> +
->         css_task_iter_start(&cs->css, 0, &it);
->
->         while ((task = css_task_iter_next(&it)))
-> @@ -1084,6 +1087,9 @@ static void rebuild_root_domains(void)
->         lockdep_assert_cpus_held();
->         lockdep_assert_held(&sched_domains_mutex);
->
-> +       if (cpuhp_tasks_frozen)
-> +               return;
-> +
->         rcu_read_lock();
->
->         /*
-> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-> index 0d97d54276cc..42c1143a3956 100644
-> --- a/kernel/sched/deadline.c
-> +++ b/kernel/sched/deadline.c
-> @@ -2575,6 +2575,9 @@ void dl_clear_root_domain(struct root_domain *rd)
->  {
->         unsigned long flags;
->
-> +       if (cpuhp_tasks_frozen)
-> +               return;
-> +
->         raw_spin_lock_irqsave(&rd->dl_bw.lock, flags);
->         rd->dl_bw.total_bw = 0;
->         raw_spin_unlock_irqrestore(&rd->dl_bw.lock, flags);
-> --
-> 2.25.1
->
+I think the follows are maybe what you would be interested in. I have 
+tested both case with perf on the same machine and environments, also 
+modified driver code a bit to go to rx_cleanup case, not to net stack in 
+a specific packet.
+
+----- calling skb_queue_tail() -----
+-   11.58%     0.26%  swapper          [k] usbnet_bh
+    - 11.32% usbnet_bh
+       - 6.43% skb_dequeue
+            6.34% _raw_spin_unlock_irqrestore
+       - 2.21% skb_queue_tail
+            2.19% _raw_spin_unlock_irqrestore
+       - 1.68% consume_skb
+          - 0.97% kfree_skbmem
+               0.80% kmem_cache_free
+            0.53% skb_release_data
+
+----- jump to rx_cleanup directly -----
+-    7.62%     0.18%  swapper          [k] usbnet_bh
+    - 7.44% usbnet_bh
+       - 4.63% skb_dequeue
+            4.57% _raw_spin_unlock_irqrestore
+       - 1.76% consume_skb
+          - 1.03% kfree_skbmem
+               0.86% kmem_cache_free
+            0.56% skb_release_data
+         0.54% smsc95xx_rx_fixup
+
+The first case takes CPU resource a bit much by the result.
+
+Thank you for reviewing, by the way.
+
+Best regards,
+Leesoo
+
+
+
