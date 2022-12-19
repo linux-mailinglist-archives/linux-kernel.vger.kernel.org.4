@@ -2,49 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 768406516AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 00:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D336516B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 00:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbiLSXOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 18:14:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
+        id S229779AbiLSXWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 18:22:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232989AbiLSXNZ (ORCPT
+        with ESMTP id S229441AbiLSXWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 18:13:25 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEC81A384;
-        Mon, 19 Dec 2022 15:06:06 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Nbb0g517Qz4x1G;
-        Tue, 20 Dec 2022 10:05:55 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1671491156;
-        bh=m1FNy0ef8Z6Ok4WPRB4WI1oYFT0cUkkBILg1vbkFQVI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ujpeG2YHKZSUg2BJbnkrT65xtAJeFw7EZtr6KMggdmbQSwcOCnHM/0K8nHh6BuO7f
-         4xDG54toGM/eHVwRcUnppfJKoLj+eKU2S5DWSovG+QhQgoe+YPp0qUY6wjweB4BvcC
-         RCxwDiT/4rJ7PhX+4Fa3Lw/epOSGA7mzjgpxDEjTsoJHdAb9vE70c3yErGQki4S0YU
-         ihvkrgLxEz+QP939bgXlX9Fty0E0JlGNWCuVhHk2/6gC15n8gAdO+M2Vcz+KXfwLPC
-         Gau7AEw2zMGzj+cU+8PvWRAU0Z8dYASc9Co6WhkIxWwMJ1xwFjoYwcXB1N/YMxR329
-         MFt5ScxByQF4g==
-Date:   Tue, 20 Dec 2022 10:05:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vhost tree with Linus' tree
-Message-ID: <20221220100553.56279b42@canb.auug.org.au>
+        Mon, 19 Dec 2022 18:22:10 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3720E5FA0;
+        Mon, 19 Dec 2022 15:22:09 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id b13-20020a17090a5a0d00b0021906102d05so10367651pjd.5;
+        Mon, 19 Dec 2022 15:22:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=92qNU0Pb2An2LZWcMglNNqJebkSusC9umdTJ4WDVykw=;
+        b=pjzTUfJ46fLQi4dWC9vri+3Yn1OAC9s266Yv9Ns5Bxwtfw2TtPg6AABhb6JZcbvYam
+         18ZqgY9J+IxnxZMKpU/HJlUB80YQP5ewnR2boqsMCy5lfaaAXnwiPdapfoNRCLfcL1rv
+         zSsy8zNgp3094o3iwciKyFFe/mFKza5jdJE5v3lwn+9EZJN0FyUckgYevwlbc87wW2E0
+         x8Yi3zbOrvxUNe6KXt/9KsHMp2mN7sNM0AN7Kr0Wk7gIRo1PqEuNNnt+TsWY0V1eDZx+
+         8/jWt5ycHQ1TlhFuJ54l4BG2EB4jiPT5PCnriVT6CnGSSN0gmBeIu8xbFu4HXRrggXbu
+         9rSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=92qNU0Pb2An2LZWcMglNNqJebkSusC9umdTJ4WDVykw=;
+        b=NVCrGl/R+F/SriHgD1MsIqE7GEEoMaQahLV3Ct8IVasI7zd56ZPTayKHpJatW/Bq8D
+         1S+bJH325lKuKoz/iI4tlfjuQuzvifisc14YVsEFNgn4l0uOjjq3kgFlqstxeNHJlqmV
+         emiJUkNno1fRt2KhsqFxkcsZGBJ2KDda/uzZL1MbmBp5A2hJ8WA487VEJv61tNLpZdHb
+         2FNwsVbBwKQsanqVy+Cnlr0+DKEgBFqBTjbSagGcdu03lc5bajElVkqxOc7PLnO/yNQB
+         F2hH0pBwv+2neCHm+MrozjSd+GqkRQGWZnFnkFTbJ1XA3+1+5m7P/UKXY/XjRhwjcVMM
+         OdbA==
+X-Gm-Message-State: AFqh2kpo/8cNOpDgrPwwXJebrz46rHymTLmUF7EO9Ome5em6eFXm378v
+        8/WCQQHj1HD+rMn1Ocrhgtg=
+X-Google-Smtp-Source: AMrXdXsUNtrXcUDFBBp/ETSAt1qfFRJ2Ev7+yfubKUCERURB2rFZdvhPppebIcm2RnanK6C8hX+1yg==
+X-Received: by 2002:a17:902:f648:b0:191:327d:ddc0 with SMTP id m8-20020a170902f64800b00191327dddc0mr857547plg.21.1671492128605;
+        Mon, 19 Dec 2022 15:22:08 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id b12-20020a170903228c00b00177faf558b5sm7677791plh.250.2022.12.19.15.22.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Dec 2022 15:22:08 -0800 (PST)
+Message-ID: <af80e9fe-2929-d909-4c11-4fdcffd74780@gmail.com>
+Date:   Mon, 19 Dec 2022 15:21:55 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vNGSavCtqEiQo9JsuTjYFFf";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5.10 00/18] 5.10.161-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221219182940.701087296@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221219182940.701087296@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,99 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/vNGSavCtqEiQo9JsuTjYFFf
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 12/19/22 11:24, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.161 release.
+> There are 18 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.161-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Hi all,
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-Today's linux-next merge of the vhost tree got a conflict in:
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-  drivers/vhost/vsock.c
-
-between commit:
-
-  de4eda9de2d9 ("use less confusing names for iov_iter direction initialize=
-rs")
-
-from Linus' tree and commit:
-
-  101cf89e8d08 ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
-
-from the vhost tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/vhost/vsock.c
-index cd6f7776013a,830bc823addc..000000000000
---- a/drivers/vhost/vsock.c
-+++ b/drivers/vhost/vsock.c
-@@@ -165,8 -157,9 +157,9 @@@ vhost_transport_do_send_pkt(struct vhos
-  			break;
-  		}
- =20
- -		iov_iter_init(&iov_iter, READ, &vq->iov[out], in, iov_len);
- +		iov_iter_init(&iov_iter, ITER_DEST, &vq->iov[out], in, iov_len);
-- 		payload_len =3D pkt->len - pkt->off;
-+ 		payload_len =3D skb->len;
-+ 		hdr =3D virtio_vsock_hdr(skb);
- =20
-  		/* If the packet is greater than the space available in the
-  		 * buffer, we split it using multiple buffers.
-@@@ -366,18 -340,21 +340,22 @@@ vhost_vsock_alloc_skb(struct vhost_virt
-  		return NULL;
-  	}
- =20
-- 	pkt =3D kzalloc(sizeof(*pkt), GFP_KERNEL);
-- 	if (!pkt)
-+ 	len =3D iov_length(vq->iov, out);
-+=20
-+ 	/* len contains both payload and hdr */
-+ 	skb =3D virtio_vsock_alloc_skb(len, GFP_KERNEL);
-+ 	if (!skb)
-  		return NULL;
- =20
- -	iov_iter_init(&iov_iter, WRITE, vq->iov, out, len);
- +	len =3D iov_length(vq->iov, out);
- +	iov_iter_init(&iov_iter, ITER_SOURCE, vq->iov, out, len);
- =20
-- 	nbytes =3D copy_from_iter(&pkt->hdr, sizeof(pkt->hdr), &iov_iter);
-- 	if (nbytes !=3D sizeof(pkt->hdr)) {
-+ 	hdr =3D virtio_vsock_hdr(skb);
-+ 	nbytes =3D copy_from_iter(hdr, sizeof(*hdr), &iov_iter);
-+ 	if (nbytes !=3D sizeof(*hdr)) {
-  		vq_err(vq, "Expected %zu bytes for pkt->hdr, got %zu bytes\n",
-- 		       sizeof(pkt->hdr), nbytes);
-- 		kfree(pkt);
-+ 		       sizeof(*hdr), nbytes);
-+ 		kfree_skb(skb);
-  		return NULL;
-  	}
- =20
-
---Sig_/vNGSavCtqEiQo9JsuTjYFFf
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOg7lEACgkQAVBC80lX
-0GyLZgf+Pc9cXS0OA5KNne6FUmec+Ev6RsGmENoKwykf7ayCw0iesuBgm3J26yI9
-LtxrH+tSiFt/e0lspsUyE6Q3y9kFSXj/A0BmwNqH9YlzxOkEhgWgFeCYjfbAuAg9
-NZsRrStznM3YBwiPvn9zCxQfzrWl7ul1ymlnT1ohpvHLD0wDJHlmYZwi8u5lKOL9
-qlyoMBkjgz9VslSiIQHyeujV5djFgJlOQo1u83w8Pbo+/XswsNtJ6YnB/2kwym37
-EfcLNTfXG66l5jmyCS/VQbmXYZ7peL+/WZXJsTxf1+3KRpqs2OvXLniNEOCoImdv
-ngc6mt2M2KCAcA6OqBc795MVQNWlgg==
-=BPiX
------END PGP SIGNATURE-----
-
---Sig_/vNGSavCtqEiQo9JsuTjYFFf--
