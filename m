@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C02365072E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 05:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2D4650734
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 05:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbiLSE3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 23:29:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
+        id S230494AbiLSEjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 23:39:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbiLSE27 (ORCPT
+        with ESMTP id S229507AbiLSEjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 23:28:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A32BF68;
-        Sun, 18 Dec 2022 20:26:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6B4AB80D27;
-        Mon, 19 Dec 2022 04:26:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7358DC433EF;
-        Mon, 19 Dec 2022 04:26:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671423986;
-        bh=hRycLOTdsoI0Dl/XQOcXlNVZnTaSLloe3NHNpvNTRgo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Oft5A7jUfir39CQjGSuN6VD5SuM0J18M9RnuI35aL7lqt6mu9cKKSo+qdouJVLx2X
-         aVm8L1oBf2XiMQi/KKIoUj9rgkQlvBO1lJCcLM/9XohaheYVSog2/pIuFyayYg1aAg
-         to1yZFvmH0H8BQs009eu13ks3MM/gT2sb2Oeq7Ohe+8mUrUV2IlqsBR2xCnfU/H4Vm
-         9Z3CTbhxmhFQWqDl6yopLSRqhBhm7L2NzQTvNYQQm6qenBxVfvQ2Kr3UqcFBdiP44M
-         ngPNDzY1Nut8gWnSKSsHbJt/A6yF9IqUPtvq2CS+V5a0LUPQkubKCmm4DlFsAXNBQV
-         MNl/bjZThHLTA==
-From:   guoren@kernel.org
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
-Subject: [GIT PULL] csky changes for v6.2-rc1
-Date:   Sun, 18 Dec 2022 23:26:22 -0500
-Message-Id: <20221219042622.2621881-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Sun, 18 Dec 2022 23:39:12 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77B59592
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 20:39:10 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id d20so11337595edn.0
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 20:39:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yLUZjWcghSAP0Jcw1C/k6kbbyQzYb6OIC4BK30LiWEw=;
+        b=P/vBoKQf5XqdFa45bFbzUHUX5rhLqbIrGPk7w5fDus5Cfx8IHPM0XRwWdbbJEJytUR
+         SltFGVjrurR6o4shT433ybEXkqOjxM0aLEwzpSE8ZVbf5tSjeNo3ohzitwQtfXg5My2s
+         UQ1v9fHzjERiR0+UxUf+YJedIAOpXH/8v/q/WccqyVhFTvIlFPq6f5Y1VLEZKiA2adUJ
+         ZsfGABzZ7FFBMhCAgI4dBU0soLw2v4C79ERJU8+1C2RAkP6+KMpZOML26CBchJNk42T2
+         AeEOc27CcsI+Fhd31n1VBDw2JMrr0q9Ny+TXL1OsyLzhtgOsB6fwGdtLy61gC5Tx0+6K
+         jkag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yLUZjWcghSAP0Jcw1C/k6kbbyQzYb6OIC4BK30LiWEw=;
+        b=W96bpeJ9Mbb0cQb5zbH4+BC3Ux37PkQnw70VMW7DviIM3/JZ1Pf+d1fp1H8+ehNKW/
+         rPiuj2HMk5dsKmoLoiyfsvxq+N3BWgDfrsBKis2QOCcaN4O9OO5pVOjNUmGEvyfEHHla
+         ApZP4aunA+GuCQUrT/++PxGP2aQqJGxYJDbToaSB0lk7IxHGXfDyhnMzgX0v244Toz+g
+         Y4oS/H4e8U4x0xW/xYf4VItUljpRL3U7dEvzfhyGbTURLCihKuL8g4fGHNm33mJMDpCZ
+         RaBVCZ0bpAvbhrd+axJ/xNZ2CbJy36qLN4igbX7dG4eGSZCPh9kNk7+u+59CpqcBkOv1
+         sTLQ==
+X-Gm-Message-State: ANoB5pkC+K3qTGDsCI4yHv3TxxOvqqXL4Seuh1hYZUh4NbG3Jxz36J3F
+        QOD9dHcJhc/4uP4e+fihXH0Qft2ukhhMoQH8NvGu
+X-Google-Smtp-Source: AA0mqf72rvbmL6gSbaiRROP4StbRyZyY9f5+SBB9OoCNbU7Nf+5ZZ0e+fD3c6XUIYukTkA03I4yfYkiMdoAOUivzzs8=
+X-Received: by 2002:a05:6402:230f:b0:46c:dc40:4635 with SMTP id
+ l15-20020a056402230f00b0046cdc404635mr17616087eda.358.1671424749327; Sun, 18
+ Dec 2022 20:39:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221205084127.535-1-xieyongji@bytedance.com> <20221205084127.535-4-xieyongji@bytedance.com>
+ <CACGkMEvYpBz6wdOPFvRveT=0AO=g-nzaeJt3y99oqWDLHUs=qw@mail.gmail.com>
+In-Reply-To: <CACGkMEvYpBz6wdOPFvRveT=0AO=g-nzaeJt3y99oqWDLHUs=qw@mail.gmail.com>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Mon, 19 Dec 2022 12:38:58 +0800
+Message-ID: <CACycT3u237c2jHaYeoPQoXK1eb4FDOJJcc6_21N3m=aBHsDwFg@mail.gmail.com>
+Subject: Re: [PATCH v2 03/11] vdpa: Add set_irq_affinity callback in vdpa_config_ops
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Christoph Hellwig <hch@lst.de>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Dec 16, 2022 at 11:58 AM Jason Wang <jasowang@redhat.com> wrote:
+>
+> On Mon, Dec 5, 2022 at 4:43 PM Xie Yongji <xieyongji@bytedance.com> wrote:
+> >
+> > This introduces set_irq_affinity callback in
+> > vdpa_config_ops so that vdpa device driver can
+> > get the interrupt affinity hint from the virtio
+> > device driver. The interrupt affinity hint would
+> > be needed by the interrupt affinity spreading
+> > mechanism.
+> >
+> > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+> > ---
+> >  drivers/virtio/virtio_vdpa.c | 4 ++++
+> >  include/linux/vdpa.h         | 8 ++++++++
+> >  2 files changed, 12 insertions(+)
+> >
+> > diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
+> > index 08084b49e5a1..4731e4616ee0 100644
+> > --- a/drivers/virtio/virtio_vdpa.c
+> > +++ b/drivers/virtio/virtio_vdpa.c
+> > @@ -275,9 +275,13 @@ static int virtio_vdpa_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
+> >         struct virtio_vdpa_device *vd_dev = to_virtio_vdpa_device(vdev);
+> >         struct vdpa_device *vdpa = vd_get_vdpa(vdev);
+> >         const struct vdpa_config_ops *ops = vdpa->config;
+> > +       struct irq_affinity default_affd = { 0 };
+> >         struct vdpa_callback cb;
+> >         int i, err, queue_idx = 0;
+> >
+> > +       if (ops->set_irq_affinity)
+> > +               ops->set_irq_affinity(vdpa, desc ? desc : &default_affd);
+>
+> I wonder if we need to do this in vhost-vDPA.
 
-Please pull the latest csky changes from:
+I don't get why we need to do this in vhost-vDPA? Should this be done in VM?
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+> Or it's better to have a
+> default affinity by the vDPA parent
+>
 
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+I think both are OK. But the default value should always be zero, so I
+put it in a common place.
 
-are available in the Git repository at:
+> (Looking at virtio-pci, it doesn't do something like this).
+>
 
-  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-6.2-rc1
+Yes, but we did something like this in the pci layer:
+pci_alloc_irq_vectors_affinity().
 
-for you to fetch changes up to 7e2004906fb52257772be0ef262fba2d5eb1653b:
-
-  Revert "csky: Add support for restartable sequence" (2022-11-11 04:59:28 -0500)
-
-----------------------------------------------------------------
-arch/csky patches for 6.2-rc1
-
-The pull request we've done:
- - Revert rseq
- - Add current_stack_pointer support
- - Typo fixup
-
-----------------------------------------------------------------
-Colin Ian King (1):
-      csky: Kconfig: Fix spelling mistake "Meory" -> "Memory"
-
-Mathieu Desnoyers (2):
-      Revert "csky: Fixup CONFIG_DEBUG_RSEQ"
-      Revert "csky: Add support for restartable sequence"
-
-Tong Tiangen (1):
-      csky: add arch support current_stack_pointer
-
- arch/csky/Kconfig                 |  4 ++--
- arch/csky/include/asm/processor.h |  2 ++
- arch/csky/kernel/entry.S          | 11 +----------
- arch/csky/kernel/signal.c         |  2 --
- arch/csky/kernel/stacktrace.c     |  6 ++----
- 5 files changed, 7 insertions(+), 18 deletions(-)
+Thanks,
+Yongji
