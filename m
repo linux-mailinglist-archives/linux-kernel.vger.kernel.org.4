@@ -2,234 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9500E65100D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 17:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD3D65100A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 17:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbiLSQOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 11:14:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        id S231854AbiLSQOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 11:14:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231840AbiLSQOK (ORCPT
+        with ESMTP id S231812AbiLSQOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 11:14:10 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF6E4A440;
-        Mon, 19 Dec 2022 08:14:03 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85D70FEC;
-        Mon, 19 Dec 2022 08:14:44 -0800 (PST)
-Received: from e126815.warwick.arm.com (e126815.arm.com [10.32.32.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5C9433F703;
+        Mon, 19 Dec 2022 11:14:02 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EE2DF46;
         Mon, 19 Dec 2022 08:14:01 -0800 (PST)
-From:   James Clark <james.clark@arm.com>
-To:     linux-perf-users@vger.kernel.org
-Cc:     robh@kernel.org, German Gomez <german.gomez@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 4/4] perf report: Add 'simd' sort field
-Date:   Mon, 19 Dec 2022 16:12:58 +0000
-Message-Id: <20221219161259.3097213-5-james.clark@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221219161259.3097213-1-james.clark@arm.com>
-References: <20221219161259.3097213-1-james.clark@arm.com>
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJGD177026411;
+        Mon, 19 Dec 2022 16:13:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=ZsydaWwORy2lc4YtcUfyBIIbjUIfDmjxIjEgD4QMMpg=;
+ b=tZCi6XA9crFra2SZQSW+VcfqM0OcrCkWB6INgwJR3EUetKUUt/meawuj7CrJsz2uzmNE
+ tRYyXu269XALwp6F8eil82lFFGqkZt4zJdWlseSurxzuLZIlCV86/2x9MyshgU1LWprp
+ wI7RM42L4ZP5BEyq/wN5rttLFdRdnbvc4hL5tNsWaOStGRQdrVUUdVSsPmSM5Tj9/Hrr
+ 36wmTP7o2GDIiAM0yImHilpZClgnAGhkRZ1IZ7chXyFnzfvOoZvPRr4aClFrlgFQSU68
+ YVyLv3C9KSybNlKHNpJjhMq5dmzCtfJcGINV+tn6gdYqYmZjgrbp0IfH/knZs3VqNky6 /g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mju9eg3fu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Dec 2022 16:13:47 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BJGDBA9028467;
+        Mon, 19 Dec 2022 16:13:42 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mju9eg2u0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Dec 2022 16:13:42 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJE7c6s024486;
+        Mon, 19 Dec 2022 16:13:24 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3mh6ywjsym-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Dec 2022 16:13:24 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BJGDLrK25559646
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 19 Dec 2022 16:13:21 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 051062004E;
+        Mon, 19 Dec 2022 16:13:21 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9ACC620040;
+        Mon, 19 Dec 2022 16:13:20 +0000 (GMT)
+Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.170.124])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 19 Dec 2022 16:13:20 +0000 (GMT)
+Message-ID: <fbe79380237a2d6f4aca0c6b6909afd20b35a058.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 5/9] KVM: s390: selftest: memop: Move testlist into
+ main
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Huth <thuth@redhat.com>
+Date:   Mon, 19 Dec 2022 17:13:20 +0100
+In-Reply-To: <20221213165405.2953539-6-scgl@linux.ibm.com>
+References: <20221213165405.2953539-1-scgl@linux.ibm.com>
+         <20221213165405.2953539-6-scgl@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: NATjA8NPGe-CT4G3UaXDW_WsM-6vcUjA
+X-Proofpoint-GUID: LZKs_1CA8sNAPc1PXH-HZy3FrXVqtTCy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-19_01,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ bulkscore=0 clxscore=1015 suspectscore=0 priorityscore=1501 phishscore=0
+ spamscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212190142
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: German Gomez <german.gomez@arm.com>
+On Tue, 2022-12-13 at 17:54 +0100, Janis Schoetterl-Glausch wrote:
+> This allows checking if the necessary requirements for a test case are
+> met via an arbitrary expression. In particular, it is easy to check if
+> certain bits are set in the memop extension capability.
+>=20
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> Reviewed-by: Thomas Huth <thuth@redhat.com>
+> ---
+>  tools/testing/selftests/kvm/s390x/memop.c | 132 +++++++++++-----------
+>  1 file changed, 66 insertions(+), 66 deletions(-)
+>=20
+> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/se=
+lftests/kvm/s390x/memop.c
+> index 286185a59238..10f34c629cac 100644
+> --- a/tools/testing/selftests/kvm/s390x/memop.c
+> +++ b/tools/testing/selftests/kvm/s390x/memop.c
+> @@ -690,87 +690,87 @@ static void test_errors(void)
+>  	kvm_vm_free(t.kvm_vm);
+>  }
+> =20
+[...]
+> =20
+>  int main(int argc, char *argv[])
+>  {
+>  	int extension_cap, idx;
+> =20
+> +	setbuf(stdout, NULL);	/* Tell stdout not to buffer its content */
+>  	TEST_REQUIRE(kvm_has_cap(KVM_CAP_S390_MEM_OP));
+> +	extension_cap =3D kvm_check_cap(KVM_CAP_S390_MEM_OP_EXTENSION);
+> =20
+[...]
+> =20
+>  	ksft_print_header();
+> -
+>  	ksft_set_plan(ARRAY_SIZE(testlist));
+> =20
+> -	extension_cap =3D kvm_check_cap(KVM_CAP_S390_MEM_OP_EXTENSION);
+>  	for (idx =3D 0; idx < ARRAY_SIZE(testlist); idx++) {
+> -		if (extension_cap >=3D testlist[idx].extension) {
+> +		if (testlist[idx].requirements_met) {
+>  			testlist[idx].test();
+>  			ksft_test_result_pass("%s\n", testlist[idx].name);
+>  		} else {
+> -			ksft_test_result_skip("%s - extension level %d not supported\n",
+> -					      testlist[idx].name,
+> -					      testlist[idx].extension);
+> +			ksft_test_result_skip("%s - requirements not met (kernel has extensio=
+n cap %#x\n)",
 
-Add 'simd' sort field to visualize SIMD ops in perf-report.
+                                                                           =
+     oops, should be )\n ofc ^
 
-Rows are labeled with the SIMD isa, and the type of predicate (if any):
-
-  - [p] partial predicate
-  - [e] empty predicate (no elements in the vector being used)
-
-Example with Arm SPE and SVE (Scalable Vector Extension):
-
-  #include <arm_sve.h>
-
-  double src[1025], dst[1025];
-
-  int main(void) {
-    svfloat64_t vc = svdup_f64(1);
-    for(;;)
-      for(int i = 0; i < 1025; i += svcntd())
-      {
-        svbool_t pg = svwhilelt_b64(i, 1025);
-        svfloat64_t vsrc = svld1(pg, &src[i]);
-        svfloat64_t vdst = svadd_x(pg, vsrc, vc);
-        svst1(pg, &dst[i], vdst);
-      }
-    return 0;
-  }
-
-  ... compiled using "gcc-11 -march=armv8-a+sve -O3"
-
-Profiling on a platform that implements FEAT_SVE and FEAT_SPEv1p1:
-
-  $ perf record -e arm_spe_0// -- ./a.out
-  $ perf report --itrace=i1i -s overhead,pid,simd,sym
-
-  Overhead      Pid:Command   Simd     Symbol
-  ........  ................  .......  ......................
-
-    53.76%    10758:program            [.] main
-    46.14%    10758:program   [.] SVE  [.] main
-     0.09%    10758:program   [p] SVE  [.] main
-
-The report shows 0.09% of the sampled SVE operations use partial
-predicates due to src and dst arrays not being multiples of the vector
-register lengths.
-
-Signed-off-by: German Gomez <german.gomez@arm.com>
-Signed-off-by: James Clark <james.clark@arm.com>
----
- tools/perf/Documentation/perf-report.txt |  1 +
- tools/perf/util/hist.c                   |  1 +
- tools/perf/util/hist.h                   |  1 +
- tools/perf/util/sort.c                   | 47 ++++++++++++++++++++++++
- tools/perf/util/sort.h                   |  2 +
- 5 files changed, 52 insertions(+)
-
-diff --git a/tools/perf/Documentation/perf-report.txt b/tools/perf/Documentation/perf-report.txt
-index 4fa509b15948..ff524d83a4a7 100644
---- a/tools/perf/Documentation/perf-report.txt
-+++ b/tools/perf/Documentation/perf-report.txt
-@@ -115,6 +115,7 @@ OPTIONS
- 	- p_stage_cyc: On powerpc, this presents the number of cycles spent in a
- 	  pipeline stage. And currently supported only on powerpc.
- 	- addr: (Full) virtual address of the sampled instruction
-+	- simd: Flags describing a SIMD operation. "e" for empty Arm SVE predicate. "p" for partial Arm SVE predicate
- 
- 	By default, comm, dso and symbol keys are used.
- 	(i.e. --sort comm,dso,symbol)
-diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
-index 17a05e943b44..e2390114c495 100644
---- a/tools/perf/util/hist.c
-+++ b/tools/perf/util/hist.c
-@@ -742,6 +742,7 @@ __hists__add_entry(struct hists *hists,
- 		.weight = sample->weight,
- 		.ins_lat = sample->ins_lat,
- 		.p_stage_cyc = sample->p_stage_cyc,
-+		.simd_flags = sample->simd_flags,
- 	}, *he = hists__findnew_entry(hists, &entry, al, sample_self);
- 
- 	if (!hists->has_callchains && he && he->callchain_size != 0)
-diff --git a/tools/perf/util/hist.h b/tools/perf/util/hist.h
-index ebd8a8f783ee..e6ecb4453053 100644
---- a/tools/perf/util/hist.h
-+++ b/tools/perf/util/hist.h
-@@ -80,6 +80,7 @@ enum hist_column {
- 	HISTC_ADDR_FROM,
- 	HISTC_ADDR_TO,
- 	HISTC_ADDR,
-+	HISTC_SIMD,
- 	HISTC_NR_COLS, /* Last entry */
- };
- 
-diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
-index 0ecc2cb13792..5c8bfea2ce34 100644
---- a/tools/perf/util/sort.c
-+++ b/tools/perf/util/sort.c
-@@ -131,6 +131,52 @@ struct sort_entry sort_thread = {
- 	.se_width_idx	= HISTC_THREAD,
- };
- 
-+/* --sort simd */
-+
-+static int64_t
-+sort__simd_cmp(struct hist_entry *left, struct hist_entry *right)
-+{
-+	if (left->simd_flags.arch != right->simd_flags.arch)
-+		return (int64_t) left->simd_flags.arch - right->simd_flags.arch;
-+
-+	return (int64_t) left->simd_flags.pred - right->simd_flags.pred;
-+}
-+
-+static const char *hist_entry__get_simd_name(struct simd_flags *simd_flags)
-+{
-+	u64 arch = simd_flags->arch;
-+
-+	if (arch & SIMD_OP_FLAGS_ARCH_SVE)
-+		return "SVE";
-+	else
-+		return "n/a";
-+}
-+
-+static int hist_entry__simd_snprintf(struct hist_entry *he, char *bf,
-+				     size_t size, unsigned int width __maybe_unused)
-+{
-+	const char *name;
-+
-+	if (!he->simd_flags.arch)
-+		return repsep_snprintf(bf, size, "");
-+
-+	name = hist_entry__get_simd_name(&he->simd_flags);
-+
-+	if (he->simd_flags.pred & SIMD_OP_FLAGS_PRED_EMPTY)
-+		return repsep_snprintf(bf, size, "[e] %s", name);
-+	else if (he->simd_flags.pred & SIMD_OP_FLAGS_PRED_PARTIAL)
-+		return repsep_snprintf(bf, size, "[p] %s", name);
-+
-+	return repsep_snprintf(bf, size, "[.] %s", name);
-+}
-+
-+struct sort_entry sort_simd = {
-+	.se_header	= "Simd   ",
-+	.se_cmp		= sort__simd_cmp,
-+	.se_snprintf	= hist_entry__simd_snprintf,
-+	.se_width_idx	= HISTC_SIMD,
-+};
-+
- /* --sort comm */
- 
- /*
-@@ -2042,6 +2088,7 @@ static struct sort_dimension common_sort_dimensions[] = {
- 	DIM(SORT_LOCAL_PIPELINE_STAGE_CYC, "local_p_stage_cyc", sort_local_p_stage_cyc),
- 	DIM(SORT_GLOBAL_PIPELINE_STAGE_CYC, "p_stage_cyc", sort_global_p_stage_cyc),
- 	DIM(SORT_ADDR, "addr", sort_addr),
-+	DIM(SORT_SIMD, "simd", sort_simd)
- };
- 
- #undef DIM
-diff --git a/tools/perf/util/sort.h b/tools/perf/util/sort.h
-index 04ff8b61a2a7..8e69a2a53dc1 100644
---- a/tools/perf/util/sort.h
-+++ b/tools/perf/util/sort.h
-@@ -110,6 +110,7 @@ struct hist_entry {
- 	u64			p_stage_cyc;
- 	u8			cpumode;
- 	u8			depth;
-+	struct simd_flags	simd_flags;
- 
- 	/* We are added by hists__add_dummy_entry. */
- 	bool			dummy;
-@@ -237,6 +238,7 @@ enum sort_type {
- 	SORT_LOCAL_PIPELINE_STAGE_CYC,
- 	SORT_GLOBAL_PIPELINE_STAGE_CYC,
- 	SORT_ADDR,
-+	SORT_SIMD,
- 
- 	/* branch stack specific sort keys */
- 	__SORT_BRANCH_STACK,
--- 
-2.25.1
+> +					      testlist[idx].name, extension_cap);
+>  		}
+>  	}
+> =20
 
