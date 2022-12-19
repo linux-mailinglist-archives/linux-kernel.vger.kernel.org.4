@@ -2,75 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0147E650C64
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 14:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50397650C6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 14:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbiLSNFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 08:05:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
+        id S231917AbiLSNGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 08:06:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231875AbiLSNFI (ORCPT
+        with ESMTP id S229794AbiLSNGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 08:05:08 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B2EFAD8
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 05:05:03 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id c1so13527257lfi.7
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 05:05:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uEl6FOWuKZ6UAvDbu88RJHguk6sS9ZMQHT6dYgluwo8=;
-        b=R/5PgBXYN7w1BEUCUag9ctmn2yHfIYDc+7U39SyBATEkLrp1YnFu2oN66OukgektU/
-         mbno7A9xcaWtKv9gWhNdsBdyYtoapM6RAYvSUtNC8ptvyQC7HngaSIT5/bUD8TFhnsva
-         SpPT27ILprpmZUHuijYB1j5Lng7rDSDxlR/VIm3s7yNcMIR2OpzEDgdlVPd9Hg/tC84Z
-         bipcn9Cr4tA+hZsFOoaIFW6PCI1VMpaGbJvj/GDEG522BbqhyTecbt9rDohQgQuldaCg
-         AibJcJlF23LXi5pvb/QVwNQjhK6avWxKxXUVw46FIbFZ1ApZ+DgW6y6RE7Kq04zs2Gcf
-         QPaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uEl6FOWuKZ6UAvDbu88RJHguk6sS9ZMQHT6dYgluwo8=;
-        b=1wnprs1WWoTUU5ThSslVIm/TVNMh2QvI6H1pyO4PpwT9CzP4fmfGxAVsYxOPhAKY5M
-         3KT8duaFRZfm/oGBpmoaUxjF82OospKNV/z18bWwxOAeqlWZ9uESFlf8ChNeu8prxIwP
-         Y3uuxxmnR/4aSBPriC8B7prh0v4zTo7glqQDBwbZtMqZTQf9/zDKDgEVy9TS2DENhPCW
-         rJIAikoGsk7gfRt4/9MgaV32OlQ4U1vCx+gC9FOtjB+0MJUBTm18w6Cw9rWSAwUhoZgp
-         I+66H/VHP2HygyiPTPINgRIi1yxeCPIXhnvHoMbEi+h7AMX03HEnfQJY20sQzWOw9c0x
-         wYkg==
-X-Gm-Message-State: ANoB5plEAWsnrHY4js+ySQo4LAP2oWfX5hb6iI64gRjrnqpDEpSilp4v
-        Bq+JTlxFOBTQzIYXtYeUxB/OLg==
-X-Google-Smtp-Source: AA0mqf4f6yLjzCLg63fIkw03LtleqxYyfk7pE3QJAm9UmsEgN4eh100In7UsKiQD/PwDJArNOWxX6g==
-X-Received: by 2002:a19:e051:0:b0:4b5:b7be:136b with SMTP id g17-20020a19e051000000b004b5b7be136bmr10806206lfj.69.1671455101743;
-        Mon, 19 Dec 2022 05:05:01 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z11-20020a056512370b00b004b4f1ea713csm1097577lfr.73.2022.12.19.05.04.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 05:05:00 -0800 (PST)
-Message-ID: <8db62d1a-365c-d41d-90aa-4c78c5d5e9ce@linaro.org>
-Date:   Mon, 19 Dec 2022 14:04:59 +0100
+        Mon, 19 Dec 2022 08:06:44 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7ED565E6
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 05:06:40 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p7FqU-0006uP-H0; Mon, 19 Dec 2022 14:06:18 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p7FqR-000Kxh-SW; Mon, 19 Dec 2022 14:06:15 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p7FqQ-006JrB-MX; Mon, 19 Dec 2022 14:06:14 +0100
+Date:   Mon, 19 Dec 2022 14:06:10 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Sasha Finkelstein <fnkl.kernel@gmail.com>
+Cc:     thierry.reding@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, marcan@marcan.st,
+        sven@svenpeter.dev, alyssa@rosenzweig.io, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] pwm: Add Apple PWM controller
+Message-ID: <20221219130610.yxggztlqnssm4k7c@pengutronix.de>
+References: <20221209111313.2701-1-fnkl.kernel@gmail.com>
+ <20221209111313.2701-3-fnkl.kernel@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3] dt-bindings: display: rockchip: convert
- rockchip-lvds.txt to YAML
-To:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de
-Cc:     hjc@rock-chips.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, airlied@gmail.com,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <fd51df66-147d-d40f-913e-385625a71984@gmail.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <fd51df66-147d-d40f-913e-385625a71984@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cybldnmdxrk2dtsd"
+Content-Disposition: inline
+In-Reply-To: <20221209111313.2701-3-fnkl.kernel@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,143 +57,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/12/2022 13:32, Johan Jonker wrote:
-> Convert rockchip-lvds.txt to YAML.
-> 
-> Changed:
->   Add power-domains property.
->   Requirements between PX30 and RK3288
-> 
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
-> 
-> Changed V3:
->   Filename matching compatible style
->   Drop "Regulator phandle for "
->   Specify properties and requirements per SoC
->   Sort order and restyle
-> 
-> Changed V2:
->   Fix title
-> ---
->  .../display/rockchip/rockchip,lvds.yaml       | 170 ++++++++++++++++++
->  .../display/rockchip/rockchip-lvds.txt        |  92 ----------
->  2 files changed, 170 insertions(+), 92 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
->  delete mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml b/Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+
+--cybldnmdxrk2dtsd
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+over all the driver looks good. Just a few smaller issues below.
+
+I wonder if it's a good idea to call this driver "apple". SoC vendors
+seem to reinvent their peripherals (or buy them somewhere else) for
+their different generations of processors. Maybe call it "apple-s5l"
+already today and not only when the next generation SoC appears?
+(I don't feel strong here, if you want to delay that renaming until
+there is an incompatible SoC that's fine for me.)
+
+On Fri, Dec 09, 2022 at 02:13:11PM +0300, Sasha Finkelstein wrote:
+> diff --git a/drivers/pwm/pwm-apple.c b/drivers/pwm/pwm-apple.c
 > new file mode 100644
-> index 000000000..03b002a05
+> index 000000000000..a85fecb20105
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
-> @@ -0,0 +1,170 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/rockchip/rockchip,lvds.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +++ b/drivers/pwm/pwm-apple.c
+> @@ -0,0 +1,150 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR MIT
+> +/*
+> + * Driver for the Apple SoC PWM controller
+> + *
+> + * Copyright The Asahi Linux Contributors
+> + *
+> + * Limitations:
+> + * - The writes to cycle registers are shadowed until a write to
+> + *   the control register.
+> + */
 > +
-> +title: Rockchip low-voltage differential signal (LVDS) transmitter
-> +
-> +maintainers:
-> +  - Sandy Huang <hjc@rock-chips.com>
-> +  - Heiko Stuebner <heiko@sntech.de>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - rockchip,px30-lvds
-> +      - rockchip,rk3288-lvds
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: pclk_lvds
-> +
-> +  avdd1v0-supply:
-> +    description: 1.0V analog power.
-> +
-> +  avdd1v8-supply:
-> +    description: 1.8V analog power.
-> +
-> +  avdd3v3-supply:
-> +    description: 3.3V analog power.
-> +
-> +  rockchip,grf:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: Phandle to the general register files syscon.
-> +
-> +  rockchip,output:
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    enum: [rgb, lvds, duallvds]
-> +    description: This describes the output interface.
-> +
-> +  phys:
-> +    maxItems: 1
-> +
-> +  phy-names:
-> +    const: dphy
-> +
-> +  pinctrl-names:
-> +    const: lcdc
-> +
-> +  pinctrl-0: true
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description:
-> +          Video port 0 for the VOP input.
-> +          The remote endpoint maybe vopb or vopl.
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description:
-> +          Video port 1 for either a panel or subsequent encoder.
-> +
-> +    required:
-> +      - port@0
-> +      - port@1
-> +
-> +required:
-> +  - compatible
-> +  - rockchip,grf
-> +  - rockchip,output
-> +  - ports
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: rockchip,px30-lvds
-> +
-> +    then:
-> +      properties:
-> +        reg: false
-> +        clocks: false
-> +        clock-names: false
-> +        avdd1v0-supply: false
-> +        avdd1v8-supply: false
-> +        avdd3v3-supply: false
-> +
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pwm.h>
+> +#include <linux/io.h>
+> +#include <linux/clk.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/math64.h>
 
-I see one compatible expects regmap from parent (grf is the parent here)
-and other is directly on MMIO bus. Not the best combination... Maybe
-this  should be just split to two separate bindings? Looking at driver,
-their code is also very different between these two variants.
+I didn't test, but I think you don't need pm_runtime.h here. Also maybe
+the of headers are not needed?
 
-Best regards,
-Krzysztof
+> +#define APPLE_PWM_CONTROL     0x00
+> +#define APPLE_PWM_ON_CYCLES   0x1c
+> +#define APPLE_PWM_OFF_CYCLES  0x18
+> +
+> +#define APPLE_CTRL_ENABLE        BIT(0)
+> +#define APPLE_CTRL_MODE          BIT(2)
+> +#define APPLE_CTRL_UPDATE        BIT(5)
+> +#define APPLE_CTRL_TRIGGER       BIT(9)
+> +#define APPLE_CTRL_INVERT        BIT(10)
+> +#define APPLE_CTRL_OUTPUT_ENABLE BIT(14)
 
+Would be nice if the register prefix would match the register name. That
+is please either rename APPLE_PWM_CONTROL to APPLE_PWM_CTRL or use
+APPLE_PWM_CONTROL as prefix for the bit fields in that register.
+
+> +
+> +struct apple_pwm {
+> +	struct pwm_chip chip;
+> +	void __iomem *base;
+> +	u64 clkrate;
+> +};
+> +
+> +static inline struct apple_pwm *to_apple_pwm(struct pwm_chip *chip)
+> +{
+> +	return container_of(chip, struct apple_pwm, chip);
+> +}
+> +
+> +static int apple_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+> +			   const struct pwm_state *state)
+> +{
+> +	struct apple_pwm *fpwm;
+> +	u64 on_cycles, off_cycles;
+
+The declaration can move into the if block below.
+
+> +
+> +	fpwm =3D to_apple_pwm(chip);
+> +	if (state->enabled) {
+> +		on_cycles =3D mul_u64_u64_div_u64(fpwm->clkrate,
+> +						state->duty_cycle, NSEC_PER_SEC);
+> +		if (on_cycles > 0xFFFFFFFF)
+> +			return -ERANGE;
+> +
+> +		off_cycles =3D mul_u64_u64_div_u64(fpwm->clkrate,
+> +						 state->period, NSEC_PER_SEC) - on_cycles;
+> +		if (off_cycles > 0xFFFFFFFF)
+> +			return -ERANGE;
+> +
+> +		writel(on_cycles, fpwm->base + APPLE_PWM_ON_CYCLES);
+> +		writel(off_cycles, fpwm->base + APPLE_PWM_OFF_CYCLES);
+> +		writel(APPLE_CTRL_ENABLE | APPLE_CTRL_OUTPUT_ENABLE | APPLE_CTRL_UPDAT=
+E,
+> +		       fpwm->base + APPLE_PWM_CONTROL);
+> +	} else {
+> +		writel(0, fpwm->base + APPLE_PWM_CONTROL);
+> +	}
+> +	return 0;
+
+Assuming clkrate =3D 24000000, I wonder what happens if (duty_cycle and)
+period are so small that on_cycles and off_cycles are both zero. How
+does the hardware behave in this case?
+
+> +}
+> +
+> +static void apple_pwm_get_state(struct pwm_chip *chip, struct pwm_device=
+ *pwm,
+> +			   struct pwm_state *state)
+> +{
+> +	struct apple_pwm *fpwm;
+> +	u32 on_cycles, off_cycles, ctrl;
+> +
+> +	fpwm =3D to_apple_pwm(chip);
+> +
+> +	ctrl =3D readl(fpwm->base + APPLE_PWM_CONTROL);
+> +	on_cycles =3D readl(fpwm->base + APPLE_PWM_ON_CYCLES);
+> +	off_cycles =3D readl(fpwm->base + APPLE_PWM_OFF_CYCLES);
+> +
+> +	state->enabled =3D (ctrl & APPLE_CTRL_ENABLE) && (ctrl & APPLE_CTRL_OUT=
+PUT_ENABLE);
+> +	state->polarity =3D PWM_POLARITY_NORMAL;
+> +	state->duty_cycle =3D mul_u64_u64_div_u64(on_cycles, NSEC_PER_SEC, fpwm=
+->clkrate);
+> +	state->period =3D mul_u64_u64_div_u64(off_cycles + on_cycles,
+> +					    NSEC_PER_SEC, fpwm->clkrate);
+
+Wrong rounding direction, you need to round up. Did you test with
+PWM_DEBUG on? This should point out the more obvious cases. Assuming
+clkrate =3D 24000000 for example setting .duty_cycle =3D 3 should trigger a
+warning.
+
+Unfortunately there is no variant of mul_u64_u64_div_u64 that rounds up,
+maybe we need to introduce one.
+
+> +}
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--cybldnmdxrk2dtsd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOgYb8ACgkQwfwUeK3K
+7AmyGgf/ZLtQ8j885QI9iI+qjelPALAIjeT2vq38/e9XPENLAGqMsl2+Fi9hgqEC
+fVv6/DhQyKJpvtcjjZIAnr7yBNXFSSAOoCgcNQ5RekuJ4PLW0Bh3yvOA4rf34Ilv
+N/pH5R1CVD1+nRP9VnfctX8cSG1a/fNhuXiSz47Fr2vhvHUGj8x2eLpD+NYZQhzN
+Nn0IQK6T5TQ5m45269jzJgfnoNFDaNQsUkW9BkveIBiIfuwzccdyGu1W0U6dwX6e
+MWaVcHSOtOl55ijXCtDBg4H6AdYiAgAdD7vyYS4sOZsix+cKoAVvl5bAjhDhTmro
+guHL50ggTuXTF6uizUOVGEGUUB1/xw==
+=+xU3
+-----END PGP SIGNATURE-----
+
+--cybldnmdxrk2dtsd--
