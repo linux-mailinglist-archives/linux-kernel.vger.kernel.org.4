@@ -2,107 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C444565110B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 841BA65110D
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbiLSRMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 12:12:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
+        id S229794AbiLSROO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 12:14:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231991AbiLSRLy (ORCPT
+        with ESMTP id S231447AbiLSROL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 12:11:54 -0500
-X-Greylist: delayed 181 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 19 Dec 2022 09:11:53 PST
-Received: from box.opentheblackbox.net (box.opentheblackbox.net [IPv6:2600:3c02::f03c:92ff:fee2:82bc])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B6E1095;
-        Mon, 19 Dec 2022 09:11:53 -0800 (PST)
-Received: from authenticated-user (box.opentheblackbox.net [172.105.151.37])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.opentheblackbox.net (Postfix) with ESMTPSA id 2BB7A3EA50;
-        Mon, 19 Dec 2022 12:11:52 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pgazz.com; s=mail;
-        t=1671469912; bh=9bYAYnsF3sM0kY4DcqJgvSrfn3Yhvu5t4LsWQCVQ22c=;
-        h=From:To:Cc:Subject:Date:From;
-        b=QkzqOPRUuNa/qGz+0kKM5B8ydrXl9Ytr+JMz6Pmr9P7JxdXWyz4dhM2A5Z8ZqbhCa
-         KYDejVQfMZi9z57C561MkYLMyfB06tnpe+dd5ns5D3vkhZEtm0lngZHyJEeqgC9Ww4
-         LOmgxxjQEUZ9Kw5aOXcw5DO0FP8tgPuOEFb2jy3Y8g7hjMLql+wjURr9+22toh7WCd
-         bBTultH/RwGwlE3wPqFGKdgDNU/G5BC3J3Ra9bdp+6FuZX7cz+U0VJMXHtxKdxDK5z
-         WBCrkoZIygor8LuvRjNylL8Hcy56hxpBAeBTkSSekg3h8zg/rKfRpJFUcgUxu97kW9
-         boDnjoZZyTsGA==
-From:   Paul Gazzillo <paul@pgazz.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Zheng Bin <zhengbin13@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Suman Ghosh <sumang@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        Sunil Goutham <sgoutham@marvell.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Paul Gazzillo <paul@pgazz.com>
-Subject: [PATCH] octeontx2_pf: Select NET_DEVLINK when enabling OCTEONTX2_PF
-Date:   Mon, 19 Dec 2022 12:11:28 -0500
-Message-Id: <20221219171149.833822-1-paul@pgazz.com>
+        Mon, 19 Dec 2022 12:14:11 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D5C6471
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 09:14:10 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id n65-20020a17090a2cc700b0021bc5ef7a14so9537570pjd.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 09:14:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=o8HDc6dT9joGnG0gM3Tw5fM1Y1kizsgnHmZfvE7ewTk=;
+        b=YhR1xiT0G8FBVLG4nJ7wyz0mwaCakcQ8zSxJN8XRMcoomBHQBF2s4yfFSUkKVORwII
+         bxpniJ4SxJ36LlZU9hk367x2Z+5rIBF3V0A5DpiQ6xGZM0gzmVwwl1t5pLSGio/O7u/A
+         ngVFBIpD447Cz0UH2XAPfSeSw2XayP5fw5NTudPakDqqe3n1YQZBP3Qja9+F3l4sAi4c
+         Sn53AFhPs5jWQxHskDdW+U4ehLe9k3WzrXVJ1dPTR4/z80LJscC+5JToN19Wd1H2xDCk
+         sENCCk2RzauNypk5LI5YUbTo+pgQtS9xLlE38Xau0R2Du5uLrgAvCp+krPBd2Nsw6xKG
+         yx0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o8HDc6dT9joGnG0gM3Tw5fM1Y1kizsgnHmZfvE7ewTk=;
+        b=FArrDGEHj68A+mv7J2PLaUhR9Yl5erZcKHCJDKEA6X+dJJMUHYttbUKQA0kTS0pde/
+         QfJopnaeEOulIXl/Nr97w9iGaogU+e0P9m6qL481+iNdrrPXvGz36jK+59ZqTpCPn7ke
+         mb+Cp0zlYdaPogVyczivSRPvF3ARKUhMDi1xzlZv+KaCTdD7kP3KkUiPOUE2MMUYtnY5
+         TBKbwVrIf5yHqOsINl6A+J6oZaUPwggA9nC1MWDCc/a2WMXOQFgyC0sbXYOyKuwhU51O
+         XeMhydwWaFt3R92sim3GuHGUMmvXUZNEk5uwkvvSvM9Yo7ydVRWHrKIM0v5T40QPggE8
+         +pwA==
+X-Gm-Message-State: AFqh2krqe46SzdmdsOL9e7c17Icwlwq00R7oSzs+KW2HBS1Ui8cTCjnI
+        zSGV4vapUAbNfL5g/lt/kMDzug==
+X-Google-Smtp-Source: AMrXdXtA/r28YJXIRo6rvLUx9viMsWmFPGKLwT5h9L/Tk/gsWPHqogS0jjDxwTKHjwethgFz72RwtA==
+X-Received: by 2002:a05:6a20:c1a4:b0:a3:d7b0:aeef with SMTP id bg36-20020a056a20c1a400b000a3d7b0aeefmr1680834pzb.0.1671470049442;
+        Mon, 19 Dec 2022 09:14:09 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id i3-20020a631303000000b00478fbfd5276sm6532260pgl.15.2022.12.19.09.14.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 09:14:04 -0800 (PST)
+Date:   Mon, 19 Dec 2022 17:14:00 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     Zhang Chen <chen.zhang@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [RFC PATCH 5/9] x86/bugs: Use Virtual MSRs to request hardware
+ mitigations
+Message-ID: <Y6Cb2OrkQ8X3IvW5@google.com>
+References: <20221210160046.2608762-1-chen.zhang@intel.com>
+ <20221210160046.2608762-6-chen.zhang@intel.com>
+ <Y5oviY0471JytWPo@google.com>
+ <Y6BtcutjgcgE8dsv@gao-cwp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,RCVD_IN_XBL,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6BtcutjgcgE8dsv@gao-cwp>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using COMPILE_TEST, the driver controlled by OCTEONTX2_PF does
-not select NET_DEVLINK while the related OCTEONTX2_AF driver does.
-This means that when OCTEONTX2_PF is enabled from a default
-configuration, linker errors will occur due to undefined references to
-code controlled by NET_DEVLINK.
+On Mon, Dec 19, 2022, Chao Gao wrote:
+> On Wed, Dec 14, 2022 at 08:18:17PM +0000, Sean Christopherson wrote:
+> > To me, this looks like Intel is foisting a paravirt interface on KVM and other
+> > hypervisors without collaborating with said hypervisors' developers and maintainers.
+> >
+> >I get that some of the mitigations are vendor specific, but things like RETPOLINE
+> >aren't vendor specific.  I haven't followed all of the mitigation stuff very
+> >closely, but I wouldn't be surprised if there are mitigations now or in the future
+> >that are common across architectures, e.g. arm64 and x86-64.  Intel doing its own
+> >thing means AMD and arm64 will likely follow suit, and suddenly KVM is supporting
+> >multiple paravirt interfaces for very similar things, without having any control
+> >over the APIs.  That's all kinds of backwards.
+> 
+> But if the interface is defined by KVM rather than Intel, it will likely end up
+> with different interfaces for different VMMs, then Linux guest needs to support
+> all of them. And KVM needs to implement Hyper-V's and Xen's interface to support
+> Hyper-V enlightened and Xen enlightened guest. This is a _real_ problem and
+> complicates KVM/Linux in a similar way as multiple paravirt interfaces.
 
-1. make.cross ARCH=x86_64 defconfig
-2. make.cross ARCH=x86_64 menuconfig
-3. Enable COMPILE_TEST
-   General setup  --->
-     Compile also drivers which will not load
-4. Enable OCTEONTX2_PF
-   Device Drivers  --->
-     Network device support  --->
-       Ethernet driver support  --->
-         Marvell OcteonTX2 NIC Physical Function driver
-5. Exit and save configuration.  NET_DEVLINK will still be disabled.
-6. make.cross ARCH=x86_64 several linker errors, for example,
-   ld: drivers/net/ethernet/marvell/octeontx2/nic/otx2_devlink.o:
-     in function `otx2_register_dl':
-   otx2_devlink.c:(.text+0x142): undefined reference to `devlink_alloc_ns'
+I never said the PV interfaces should be defined by KVM.  I 100% agree that any
+one hypervisor defining its own interface will suffer the same problem.
 
-This fix adds "select NET_DEVLINK" link to OCTEONTX2_PF's Kconfig
-specification to match OCTEONTX2_AF.
+I think having a PV interface for coordinating mitigations between host and guest
+is a great idea.  What I don't like is tying the interface to "hardware" and defining
+the interface without even trying to collaborate with others.
 
-Fixes: 2da489432747 ("octeontx2-pf: devlink params support to set mcam entry count")
-Signed-off-by: Paul Gazzillo <paul@pgazz.com>
----
-v1 -> v2: Added the fixes tag
+> The use case of this paravirt interface is specific to Intel CPU microarchitecture.
 
- drivers/net/ethernet/marvell/octeontx2/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Well yeah, because the interface was designed only to work for Intel CPUs.
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/Kconfig b/drivers/net/ethernet/marvell/octeontx2/Kconfig
-index 3f982ccf2c85..639893d87055 100644
---- a/drivers/net/ethernet/marvell/octeontx2/Kconfig
-+++ b/drivers/net/ethernet/marvell/octeontx2/Kconfig
-@@ -31,6 +31,7 @@ config NDC_DIS_DYNAMIC_CACHING
- config OCTEONTX2_PF
- 	tristate "Marvell OcteonTX2 NIC Physical Function driver"
- 	select OCTEONTX2_MBOX
-+	select NET_DEVLINK
- 	depends on (64BIT && COMPILE_TEST) || ARM64
- 	depends on PCI
- 	depends on PTP_1588_CLOCK_OPTIONAL
--- 
-2.25.1
+> Supporting multiple paravirt interfaces may not happen in the near future if there
+> is no use case for AMD and arm64.
 
+I'll take that bet.  The vast majority of problems that are solved by PV interfaces
+are common to all architectures and vendors, e.g. steal time, PV spinlocks, async
+page faults, directed yield, confidential VMs (GHCB vs. GHCI), etc.  I highly doubt
+Intel is the only hardware vendor that will ever benefit from paravirtualizing
+mitigations.
