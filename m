@@ -2,189 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 059CC650EC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F15C650ED1
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbiLSPkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 10:40:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56998 "EHLO
+        id S231811AbiLSPmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 10:42:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbiLSPkk (ORCPT
+        with ESMTP id S231783AbiLSPmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 10:40:40 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD841144C
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:40:38 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id b13so14252168lfo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:40:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dr8GvJaUU0STZax+c0mj5MPZF8of0PjiTPxlj3vYQSU=;
-        b=yAISmKjU+Ld+moI+LTCelr86cpzWi6b5hOAlcNuilkw320KewZAL6lKvOC0cGRSTqf
-         ZisFJ7JkPT3RwpoasAvB870jeN9uL4j6UTZbEvL5dyisTzSlWZ/LOZDKjgQRjWEQG/nc
-         Mz30NVYZuRdn9dJctLj5P8UsHSdeCLlUiMfPei8UVBvjYOQUwDmsBCZy6yuU7S2SRf7N
-         bvpuxfFDlhn9qtPCU4RTszw/2GWSdAaW58EiotDIyfGqPeIABujmxPQpT1+Kfn+JnXhv
-         eOefo3tLU/i7BZqPL7KnLYxpdKRUqRVUx2m7moEKDr0661IgwOZO0zch8cyAFpuT80e4
-         HGmw==
+        Mon, 19 Dec 2022 10:42:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA7825FE
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:41:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671464493;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vlKnSWSIx1ojfKs5edw/VgZ4TRdc4IynKJCcaopveyo=;
+        b=GREtjv889MT64dKVhhsXjW5qgU5hMMHnL/bw+kd9aN7B/soNfMUNOsOukuFjhATVACCtT4
+        SCkqLCjr1IUeGzg+/HNhE/kzJFV2qqZ+WnWIkIMbg8pEGTKyCY3tClfL8NSl1pOvsViC1l
+        06IENGQfCZuQw+YWOaQqWU/jQONj9VY=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-636-PobU9o7iOOm7K5UIO4VjgQ-1; Mon, 19 Dec 2022 10:41:30 -0500
+X-MC-Unique: PobU9o7iOOm7K5UIO4VjgQ-1
+Received: by mail-wm1-f69.google.com with SMTP id h9-20020a1c2109000000b003cfd37aec58so5303046wmh.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:41:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dr8GvJaUU0STZax+c0mj5MPZF8of0PjiTPxlj3vYQSU=;
-        b=up4LXQSoLzXbCDw0WW5BSqSTYFRVVV3qxWrvyC9m5ecg75dYWXHFVFeaDq5jg1/jBV
-         hPsUqQlN9PHkSC7SJ++ZRaP2OnBaQYd363NKrElnLVYyAIoriXlntByoBtheRPuoy9JT
-         VjbH68CIXFQqUATjF6zZo9gJ9jXiAknxp3OZ6WbFhGVZF38i9FnNZI536tpzeIkm2TS+
-         lQFdNwVNkpmWY9onDUPe4H4CbB2McIYZ+SBqXp9V9ElxeWkFDxgf+991KMmWNzLZy0+c
-         Ryft18UyAuBVEy/cbqs/oezKTl5ePHmpKAalAmS7of0hSTv+Qd4g33qKYHLuerJ5nFMh
-         n7/A==
-X-Gm-Message-State: ANoB5pk1Fp9+P0+BOP8SI/wuGwXBh0rCtInTs5uZ95ra7M9vO5RiLMo3
-        0qdNvb5EeYZhOo/XdZTVuImg2w==
-X-Google-Smtp-Source: AA0mqf7j7A82NmhWgQhPoWndLVceW4a+6WTS99f8B2Pbp14hoUEvShZP6IARYSv+akQCeEH9QvKytA==
-X-Received: by 2002:a05:6512:4029:b0:4b5:5da1:44c1 with SMTP id br41-20020a056512402900b004b55da144c1mr13683726lfb.11.1671464436943;
-        Mon, 19 Dec 2022 07:40:36 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id q15-20020ac25a0f000000b004b53eb60e3dsm1126339lfn.109.2022.12.19.07.40.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 07:40:36 -0800 (PST)
-Message-ID: <5fc29d3c-e3da-3dc4-bce5-2158b81daa43@linaro.org>
-Date:   Mon, 19 Dec 2022 16:40:35 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vlKnSWSIx1ojfKs5edw/VgZ4TRdc4IynKJCcaopveyo=;
+        b=RQSjWaaBWNVRIFppXUH5EhwvmQHphQBUr34JaS75XuDLpi3H6Z21F9H2BfTgxhMKaD
+         ZT8HUykgeXyt8pxdXhh+nd1Ak9cc+UO2PqgflQdr61zBq2PsOgOExCMmof7Ve8Ef/NsX
+         LKcJ8CYjp3zihEb146YtFBgZ/I1PG3kaZlongJKLYcQFgQuy9FopZPfvcKBXksrK5Olx
+         TAoJ9N8mjE9SlPwiKfzWeyz9TDoodevUHlKpmr5f8RQ3Sx8LewvzPGiCE9V3n+yMRoDY
+         BtqMk8JmgW5K9F4ZS62xoTEg6nD26e/CXOwQO8MbIpt4J/BafS4mXE449BhACZgFCEN8
+         2vbQ==
+X-Gm-Message-State: ANoB5pkVAom3fZMM0ceVKq7vlRIJ1IJPi864PoMWZPRX9ub11aNFHPvV
+        en3Pj13Db+qnih/FAudzDjzuQ/v7f6/wdyhL/tR3F0A1cmsi4HE1pFD9kjtjtfY9L+V4lLVrr+v
+        gjG1jOqJP7toKjqK33jFFfRRq
+X-Received: by 2002:adf:f98c:0:b0:242:5582:f947 with SMTP id f12-20020adff98c000000b002425582f947mr27182921wrr.19.1671464488915;
+        Mon, 19 Dec 2022 07:41:28 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7c1CCW4GpXsPVVZneJb9YGEsZaku3fS+KXI667IWEo0kL8508tyP91BWhdT1KIQ5j10Q7ikw==
+X-Received: by 2002:adf:f98c:0:b0:242:5582:f947 with SMTP id f12-20020adff98c000000b002425582f947mr27182913wrr.19.1671464488677;
+        Mon, 19 Dec 2022 07:41:28 -0800 (PST)
+Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
+        by smtp.gmail.com with ESMTPSA id az17-20020adfe191000000b00241bd7a7165sm10281220wrb.82.2022.12.19.07.41.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 07:41:28 -0800 (PST)
+Date:   Mon, 19 Dec 2022 16:41:23 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Subject: Re: [RFC PATCH v1 0/2] virtio/vsock: fix mutual rx/tx hungup
+Message-ID: <CAGxU2F4ca5pxW3RX4wzsTx3KRBtxLK_rO9KxPgUtqcaSNsqXCA@mail.gmail.com>
+References: <39b2e9fd-601b-189d-39a9-914e5574524c@sberdevices.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 3/5] dt-bindings: mmc: sdhci-cadence: SD6 support
-Content-Language: en-US
-To:     Piyush Malgujar <pmalgujar@marvell.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, adrian.hunter@intel.com,
-        ulf.hansson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, yamada.masahiro@socionext.com,
-        devicetree@vger.kernel.org
-Cc:     jannadurai@marvell.com, cchavva@marvell.com
-References: <20221219142418.27949-1-pmalgujar@marvell.com>
- <20221219142418.27949-4-pmalgujar@marvell.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221219142418.27949-4-pmalgujar@marvell.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <39b2e9fd-601b-189d-39a9-914e5574524c@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/12/2022 15:24, Piyush Malgujar wrote:
-> From: Jayanthi Annadurai <jannadurai@marvell.com>
-> 
+Hi Arseniy,
 
-Subject: use final prefix matching the file, so "cdns,sdhci:"
+On Sat, Dec 17, 2022 at 8:42 PM Arseniy Krasnov <AVKrasnov@sberdevices.ru> wrote:
+>
+> Hello,
+>
+> seems I found strange thing(may be a bug) where sender('tx' later) and
+> receiver('rx' later) could stuck forever. Potential fix is in the first
+> patch, second patch contains reproducer, based on vsock test suite.
+> Reproducer is simple: tx just sends data to rx by 'write() syscall, rx
+> dequeues it using 'read()' syscall and uses 'poll()' for waiting. I run
+> server in host and client in guest.
+>
+> rx side params:
+> 1) SO_VM_SOCKETS_BUFFER_SIZE is 256Kb(e.g. default).
+> 2) SO_RCVLOWAT is 128Kb.
+>
+> What happens in the reproducer step by step:
+>
 
-> Add support for SD6 controller support
+I put the values of the variables involved to facilitate understanding:
 
-Full stop.
+RX: buf_alloc = 256 KB; fwd_cnt = 0; last_fwd_cnt = 0;
+    free_space = buf_alloc - (fwd_cnt - last_fwd_cnt) = 256 KB
 
-> 
-> Signed-off-by: Jayanthi Annadurai <jannadurai@marvell.com>
-> Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
-> ---
->  .../devicetree/bindings/mmc/cdns,sdhci.yaml   | 33 +++++++++++++++++--
->  1 file changed, 31 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> index 8b1a0fdcb5e3e2e8b87d8d7678e37f3dad447fc1..2043e78ccd5f708a01e87fd96ec410418fcd539f 100644
-> --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/mmc/cdns,sdhci.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Cadence SD/SDIO/eMMC Host Controller (SD4HC)
-> +title: Cadence SD/SDIO/eMMC Host Controller (SD4HC, SD6HC)
->  
->  maintainers:
->    - Masahiro Yamada <yamada.masahiro@socionext.com>
-> @@ -19,6 +19,7 @@ properties:
->            - microchip,mpfs-sd4hc
->            - socionext,uniphier-sd4hc
->        - const: cdns,sd4hc
-> +      - const: cdns,sd6hc
+The credit update is sent if
+free_space < VIRTIO_VSOCK_MAX_PKT_BUF_SIZE [64 KB]
 
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
+> 1) tx tries to send 256Kb + 1 byte (in a single 'write()')
+> 2) tx sends 256Kb, data reaches rx (rx_bytes == 256Kb)
+> 3) tx waits for space in 'write()' to send last 1 byte
+> 4) rx does poll(), (rx_bytes >= rcvlowat) 256Kb >= 128Kb, POLLIN is set
+> 5) rx reads 64Kb, credit update is not sent due to *
 
-... because it does not really make sense. Why do you require SD6HC as
-fallback? I think you meant enum.
+RX: buf_alloc = 256 KB; fwd_cnt = 64 KB; last_fwd_cnt = 0;
+    free_space = 192 KB
 
->  
->    reg:
->      maxItems: 1
-> @@ -111,6 +112,34 @@ properties:
->      minimum: 0
->      maximum: 0x7f
->  
-> +  cdns,iocell_input_delay:
+> 6) rx does poll(), (rx_bytes >= rcvlowat) 192Kb >= 128Kb, POLLIN is set
+> 7) rx reads 64Kb, credit update is not sent due to *
 
-No underscores. Use proper units in name suffix:
-https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
+RX: buf_alloc = 256 KB; fwd_cnt = 128 KB; last_fwd_cnt = 0;
+    free_space = 128 KB
 
+> 8) rx does poll(), (rx_bytes >= rcvlowat) 128Kb >= 128Kb, POLLIN is set
+> 9) rx reads 64Kb, credit update is not sent due to *
 
-> +    description: Delay in ps across the input IO cells
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+Right, (free_space < VIRTIO_VSOCK_MAX_PKT_BUF_SIZE) is still false.
 
-Ditto... and so on - all of the fields.
+RX: buf_alloc = 256 KB; fwd_cnt = 196 KB; last_fwd_cnt = 0;
+    free_space = 64 KB
 
-> +
-> +  cdns,iocell_output_delay:
-> +    description: Delay in ps across the output IO cells
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +
-> +  cdns,delay_element:
-> +    description: Delay element in ps used for calculating phy timings
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +
-> +  cdns,read_dqs_cmd_delay:
-> +    description: Command delay used in HS200 tuning
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +
-> +  cdns,tune_val_start:
-> +    description: Staring value of data delay used in HS200 tuning
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +
-> +  cdns,tune_val_step:
-> +    description: Incremental value of data delay used in HS200 tuning
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +
-> +  cdns,max_tune_iter:
-> +    description: Maximum number of iterations to complete the HS200 tuning process
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+> 10) rx does poll(), (rx_bytes < rcvlowat) 64Kb < 128Kb, rx waits in poll()
 
-Why these three are properties of DT?
+I agree that the TX is stuck because we are not sending the credit 
+update, but also if RX sends the credit update at step 9, RX won't be 
+woken up at step 10, right?
 
-> +
->  required:
->    - compatible
->    - reg
-> @@ -122,7 +151,7 @@ unevaluatedProperties: false
->  examples:
->    - |
->      emmc: mmc@5a000000 {
-> -        compatible = "socionext,uniphier-sd4hc", "cdns,sd4hc";
-> +        compatible = "socionext,uniphier-sd4hc", "cdns,sd4hc", "cdns,sd6hc";
+>
+> * is optimization in 'virtio_transport_stream_do_dequeue()' which
+>   sends OP_CREDIT_UPDATE only when we have not too much space -
+>   less than VIRTIO_VSOCK_MAX_PKT_BUF_SIZE.
+>
+> Now tx side waits for space inside write() and rx waits in poll() for
+> 'rx_bytes' to reach SO_RCVLOWAT value. Both sides will wait forever. I
+> think, possible fix is to send credit update not only when we have too
+> small space, but also when number of bytes in receive queue is smaller
+> than SO_RCVLOWAT thus not enough to wake up sleeping reader. I'm not
+> sure about correctness of this idea, but anyway - I think that problem
+> above exists. What do You think?
 
-This is confusing. I don't understand it. It requires much more
-explanation in your commit msg.
+I'm not sure, I have to think more about it, but if RX reads less than 
+SO_RCVLOWAT, I expect it's normal to get to a case of stuck.
 
->          reg = <0x5a000000 0x400>;
->          interrupts = <0 78 4>;
->          clocks = <&clk 4>;
+In this case we are only unstucking TX, but even if it sends that single 
+byte, RX is still stuck and not consuming it, so it was useless to wake 
+up TX if RX won't consume it anyway, right?
 
-Best regards,
-Krzysztof
+If RX woke up (e.g. SO_RCVLOWAT = 64KB) and read the remaining 64KB, 
+then it would still send the credit update even without this patch and 
+TX will send the 1 byte.
+
+Thanks,
+Stefano
 
