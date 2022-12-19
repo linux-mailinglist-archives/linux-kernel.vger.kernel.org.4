@@ -2,139 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BCB9651206
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 19:33:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB5265121F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 19:41:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232541AbiLSSdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 13:33:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S231693AbiLSSlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 13:41:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232415AbiLSScS (ORCPT
+        with ESMTP id S231344AbiLSSlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 13:32:18 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9132114091
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 10:31:30 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso1192023pjp.4
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 10:31:30 -0800 (PST)
+        Mon, 19 Dec 2022 13:41:39 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36CF65DA
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 10:41:38 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id i19-20020a63e913000000b004705d1506a6so5974015pgh.13
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 10:41:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PVnQKP7oNdrUNmwohJQk3GAbsbyZ21YPYiaFQu000f4=;
-        b=G/+XUPGwLp4EY9GJTIJ8CZfZqL3jcqF3dfYYNADdbI/Z/D5n1AbUVw9Nz7xyfEbmsA
-         IqOJ+bb/z2uKeJ16gUU3414VtvaJO3ZPASd98YyaLF9eIj/6XibZ4B1BQ3qizle5qesU
-         HTCo7ZNPlcf0JhJlKxKiNJlEBixO+iICov0iPIwrjihQ+DLCr0mQUAiN8boV0Man8VCy
-         DoQek06wu84yf1HO/KyUNIJg0dVWVz/i9Mw+tCuB8utNIZ8FSmgZWEGIE/S2vnQT3LrS
-         7d+GWoLtvDz+zNOc83SauTASVmI7ZMILygCQMSwsQKyKq9UXD8sqKQ2Gv3Q5vx5xpEih
-         PoXw==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SNYwUfFTuoAl5hIOKZfjRFYuwooe+ZnU5TXmMtVw1Vw=;
+        b=PCE1gF+1xjOltBu41UU9JPCPlViAY0cp05OJvxQyQmPrpc7dNlHqmkq7q85iScUgvx
+         59kbvpZ4IjfRtmma8ODffuMTsAdjF6mc9FKVnFuKmw3rIELY0aR224rULoZiXejfOyPf
+         FqKdlLrrnzQ6/TCerumh1X/uvJfXZqds67yZn+AFQJl4989wHnRjAT2AzwxFsBTJNKfx
+         cL6dAu+m1G6g1ck0y4oLro0/8KGrxIl8w+FuqOar5e0t0qvTFZly6zsHf3kBOU8TZs8R
+         LLRlKdcxr8DoXqpBUn8ZIP3Srjfi+Eo3QZ34EJGob+nKn5A2MI7/q1aI8OxYh9LPoYPL
+         oMfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PVnQKP7oNdrUNmwohJQk3GAbsbyZ21YPYiaFQu000f4=;
-        b=tiq/2H8TVWjTnfQxUsdy+UXSSyxoy9yCCGc+lTStAjJW+FTesABRG85zEBCnbT6ZW7
-         zmDKJz3zOH+S65yiYNVl2uJug+Rl7GUmcFU3hRTHIslotYQC0cGp8TsQzCorJ/pI9rnS
-         QhTYDr2cu+sdKHgU/CPN3r2N2Bkn+xkgOOEwySnmKuAZ5SU7aaJ7cwyUegA1DfXWp9cq
-         84lj0pA9tzg0m9zsykPV0UIp2SUgsPmeimx0sEgqtYXtUjtXRhGsrNXyIT2v8FFJhuX5
-         8+ByKXX3UGt92Wd3d+76b3ibjgi1azQ3dFstCSRPMt/ZjBiJZScUBCZg/5Wq4bzOfOuA
-         uj1A==
-X-Gm-Message-State: ANoB5pmYWc31VXbXBU8d2p8zj/meFcXpcV6ZAneX2V+mPu9P9zg7UvI9
-        rw/2JtkJnyLq8XxP0ag8muR0
-X-Google-Smtp-Source: AA0mqf7D0YYD7XtD4fAx0uFKGN9VoO5NrYy0CawXxr9ighchqco9whyjw2bwcxPCuhbiOVr5XK0fUQ==
-X-Received: by 2002:a17:90a:ea09:b0:219:8d8a:a608 with SMTP id w9-20020a17090aea0900b002198d8aa608mr45517417pjy.43.1671474690043;
-        Mon, 19 Dec 2022 10:31:30 -0800 (PST)
-Received: from thinkpad ([220.158.159.17])
-        by smtp.gmail.com with ESMTPSA id ds6-20020a17090b08c600b00218f9bd50c7sm6223719pjb.50.2022.12.19.10.31.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 10:31:29 -0800 (PST)
-Date:   Tue, 20 Dec 2022 00:01:22 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com, quic_saipraka@quicinc.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com
-Subject: Re: [PATCH v2 00/13] Qcom: LLCC/EDAC: Fix base address used for LLCC
- banks
-Message-ID: <20221219183122.GD126558@thinkpad>
-References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
- <20221212192340.evgtbpzmw7hcdolb@halaney-x13s>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221212192340.evgtbpzmw7hcdolb@halaney-x13s>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SNYwUfFTuoAl5hIOKZfjRFYuwooe+ZnU5TXmMtVw1Vw=;
+        b=M3ZAjRvvb9b0frF5vZ7k7m0eYnkrArfC6LHXP1ZRRYk3mtdgIE44gl8in8e/TBo/7N
+         u0sVpzVWgJ7sx5krYYws4GKCSXQNJcKJBjM3gpj6pd2tYyZk68zYkRZ4WBzJuXdZCPfE
+         bTvdtrBw9Xp7O9O7cYuHW6QjQAsPna9oQUJrk4merGkr0g3xLTBqeXegGiZRPxAITrfE
+         jCkvMPVBT3N5e0QqWMWMb/RcrqklIQ3TEW5jZ/7je7UQIe5bnZSRitylUHvqOdXP4Pqb
+         bxI4ZsW+PYd0nlKukPIRDBLsKaG5znmuv3xbiNzGjl5k0dMISTZvdsjyUrN4+A0ov54Z
+         yvxQ==
+X-Gm-Message-State: ANoB5pnh/bPPvnuwTlaM2oNw1f3g8sJRPiczqs/9OuLW+2YEyzYfqvlO
+        VMGiXKBYvoGKCKM4RG2Pc+eaPKg=
+X-Google-Smtp-Source: AA0mqf5TTar+nQv3C/Qqpl/Q/pwSxFitrhZd1MdtZyr+Jmy7ViVHZitW9mXzJszzBU8Xm9p1hKZoeEI=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a17:902:74c3:b0:189:71ff:cfb5 with SMTP id
+ f3-20020a17090274c300b0018971ffcfb5mr60929233plt.7.1671475298158; Mon, 19 Dec
+ 2022 10:41:38 -0800 (PST)
+Date:   Mon, 19 Dec 2022 10:41:36 -0800
+In-Reply-To: <20221218051734.31411-1-cehrig@cloudflare.com>
+Mime-Version: 1.0
+References: <20221218051734.31411-1-cehrig@cloudflare.com>
+Message-ID: <Y6CwYK4xMTJv/R7u@google.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Add flag BPF_F_NO_TUNNEL_KEY to bpf_skb_set_tunnel_key()
+From:   sdf@google.com
+To:     Christian Ehrig <cehrig@cloudflare.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Kui-Feng Lee <kuifeng@fb.com>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Kaixi Fan <fankaixi.li@bytedance.com>,
+        Shmulik Ladkani <shmulik@metanetworks.com>,
+        Paul Chaignon <paul@isovalent.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+On 12/18, Christian Ehrig wrote:
+> This patch allows to remove TUNNEL_KEY from the tunnel flags bitmap
+> when using bpf_skb_set_tunnel_key by providing a BPF_F_NO_TUNNEL_KEY
+> flag. On egress, the resulting tunnel header will not contain a tunnel
+> key if the protocol and implementation supports it.
 
-On Mon, Dec 12, 2022 at 01:23:40PM -0600, Andrew Halaney wrote:
-> On Mon, Dec 12, 2022 at 06:02:58PM +0530, Manivannan Sadhasivam wrote:
-> > The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
-> > accessing the (Control and Status Regsiters) CSRs of each LLCC bank.
-> > This offset only works for some SoCs like SDM845 for which driver support
-> > was initially added.
-> >
-> > But the later SoCs use different register stride that vary between the
-> > banks with holes in-between. So it is not possible to use a single register
-> > stride for accessing the CSRs of each bank. By doing so could result in a
-> > crash with the current drivers. So far this crash is not reported since
-> > EDAC_QCOM driver is not enabled in ARM64 defconfig and no one tested the
-> > driver extensively by triggering the EDAC IRQ (that's where each bank
-> > CSRs are accessed).
-> >
-> > For fixing this issue, let's obtain the base address of each LLCC bank from
-> > devicetree and get rid of the fixed stride.
-> >
-> > This series affects multiple platforms but I have only tested this on
-> > SM8250 and SM8450. Testing on other platforms is welcomed.
-> >
-> 
-> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
-> 
+> At the moment bpf_tunnel_key wants a user to specify a numeric tunnel
+> key. This will wrap the inner packet into a tunnel header with the key
+> bit and value set accordingly. This is problematic when using a tunnel
+> protocol that supports optional tunnel keys and a receiving tunnel
+> device that is not expecting packets with the key bit set. The receiver
+> won't decapsulate and drop the packet.
 
-I dropped your tested-by tag in v3 as some of the patch content have been
-changed. Please test v3 and share your feedback.
+> RFC 2890 and RFC 2784 GRE tunnels are examples where this flag is
+> useful. It allows for generating packets, that can be decapsulated by
+> a GRE tunnel device not operating in collect metadata mode or not
+> expecting the key bit set.
 
-Thanks,
-Mani
+> Signed-off-by: Christian Ehrig <cehrig@cloudflare.com>
 
-> I took this for a quick spin on the qdrive3 I've got access to without
-> any issue:
-> 
->     [root@localhost ~]# modprobe qcom_edac
->     [root@localhost ~]# dmesg | grep -i edac
->     [    0.620723] EDAC MC: Ver: 3.0.0
->     [    1.165417] ghes_edac: GHES probing device list is empty
->     [  594.688103] EDAC DEVICE0: Giving out device to module qcom_llcc_edac controller llcc: DEV qcom_llcc_edac (INTERRUPT)
->     [root@localhost ~]# cat /proc/interrupts | grep ecc
->     174:          0          0          0          0          0          0          0          0     GICv3 614 Level     llcc_ecc
->     [root@localhost ~]#
-> 
-> Potentially stupid question, but are users expected to manually load the
-> driver as I did? I don't see how it would be loaded automatically in the
-> current state, but thought it was funny that I needed to modprobe
-> myself.
-> 
-> Please let me know if you want me to do any more further testing!
-> 
-> Thanks,
-> Andrew
-> 
+Acked-by: Stanislav Fomichev <sdf@google.com>
 
--- 
-மணிவண்ணன் சதாசிவம்
+> ---
+>   include/uapi/linux/bpf.h       | 4 ++++
+>   net/core/filter.c              | 5 ++++-
+>   tools/include/uapi/linux/bpf.h | 4 ++++
+>   3 files changed, 12 insertions(+), 1 deletion(-)
+
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 464ca3f01fe7..bc1a3d232ae4 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -2001,6 +2001,9 @@ union bpf_attr {
+>    * 			sending the packet. This flag was added for GRE
+>    * 			encapsulation, but might be used with other protocols
+>    * 			as well in the future.
+> + * 		**BPF_F_NO_TUNNEL_KEY**
+> + * 			Add a flag to tunnel metadata indicating that no tunnel
+> + * 			key should be set in the resulting tunnel header.
+>    *
+>    * 		Here is a typical usage on the transmit path:
+>    *
+> @@ -5764,6 +5767,7 @@ enum {
+>   	BPF_F_ZERO_CSUM_TX		= (1ULL << 1),
+>   	BPF_F_DONT_FRAGMENT		= (1ULL << 2),
+>   	BPF_F_SEQ_NUMBER		= (1ULL << 3),
+> +	BPF_F_NO_TUNNEL_KEY		= (1ULL << 4),
+>   };
+
+>   /* BPF_FUNC_skb_get_tunnel_key flags. */
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 929358677183..c746e4d77214 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -4615,7 +4615,8 @@ BPF_CALL_4(bpf_skb_set_tunnel_key, struct sk_buff  
+> *, skb,
+>   	struct ip_tunnel_info *info;
+
+>   	if (unlikely(flags & ~(BPF_F_TUNINFO_IPV6 | BPF_F_ZERO_CSUM_TX |
+> -			       BPF_F_DONT_FRAGMENT | BPF_F_SEQ_NUMBER)))
+> +			       BPF_F_DONT_FRAGMENT | BPF_F_SEQ_NUMBER |
+> +			       BPF_F_NO_TUNNEL_KEY)))
+>   		return -EINVAL;
+>   	if (unlikely(size != sizeof(struct bpf_tunnel_key))) {
+>   		switch (size) {
+> @@ -4653,6 +4654,8 @@ BPF_CALL_4(bpf_skb_set_tunnel_key, struct sk_buff  
+> *, skb,
+>   		info->key.tun_flags &= ~TUNNEL_CSUM;
+>   	if (flags & BPF_F_SEQ_NUMBER)
+>   		info->key.tun_flags |= TUNNEL_SEQ;
+> +	if (flags & BPF_F_NO_TUNNEL_KEY)
+> +		info->key.tun_flags &= ~TUNNEL_KEY;
+
+>   	info->key.tun_id = cpu_to_be64(from->tunnel_id);
+>   	info->key.tos = from->tunnel_tos;
+> diff --git a/tools/include/uapi/linux/bpf.h  
+> b/tools/include/uapi/linux/bpf.h
+> index 464ca3f01fe7..bc1a3d232ae4 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -2001,6 +2001,9 @@ union bpf_attr {
+>    * 			sending the packet. This flag was added for GRE
+>    * 			encapsulation, but might be used with other protocols
+>    * 			as well in the future.
+> + * 		**BPF_F_NO_TUNNEL_KEY**
+> + * 			Add a flag to tunnel metadata indicating that no tunnel
+> + * 			key should be set in the resulting tunnel header.
+>    *
+>    * 		Here is a typical usage on the transmit path:
+>    *
+> @@ -5764,6 +5767,7 @@ enum {
+>   	BPF_F_ZERO_CSUM_TX		= (1ULL << 1),
+>   	BPF_F_DONT_FRAGMENT		= (1ULL << 2),
+>   	BPF_F_SEQ_NUMBER		= (1ULL << 3),
+> +	BPF_F_NO_TUNNEL_KEY		= (1ULL << 4),
+>   };
+
+>   /* BPF_FUNC_skb_get_tunnel_key flags. */
+> --
+> 2.37.4
+
