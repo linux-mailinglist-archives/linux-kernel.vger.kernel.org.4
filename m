@@ -2,79 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8D96511A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 19:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6350D6511B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 19:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232215AbiLSSRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 13:17:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
+        id S232266AbiLSSV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 13:21:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231944AbiLSSRD (ORCPT
+        with ESMTP id S232207AbiLSSVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 13:17:03 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD53E26DE;
-        Mon, 19 Dec 2022 10:17:02 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id ay40so7062072wmb.2;
-        Mon, 19 Dec 2022 10:17:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rhpuRs15Dkd7RSjm8roBGpRn5wYfY2Q6OrR3reT4HY4=;
-        b=Q1s5akx7wwCpP5YF8xryCFNBrkOCDE2qI/EAA+0JkX09BgsP/K4m1uoT1xiGq4HpBG
-         SGJrjdT7drzhdDLYX59ZYT8qdAdcoUf3M3xhmXq3rtAKExt6NGKq7E4WWTz5QdgxbIOI
-         rOlin1X6fQ9/e5J7XD2JARPzhT1hxnHfa04/1zHeULrZ3C10M8KHlJAUsxRWUSstkWKN
-         YljHIAdNa+xNLetOeuCq/z5pCcnEL4l5bC3WagQ2ZEwDySqrqMR0yv/EFyKdy7VKCQeU
-         dVbTa4plFSqKtfiMQslYxgshY/Z3fZyLHAGhZtXxeU5wDj5ApwdIEZ/j1+UXF5Vr91OW
-         V1fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rhpuRs15Dkd7RSjm8roBGpRn5wYfY2Q6OrR3reT4HY4=;
-        b=1EGHqkjPYZkAx9FxC4vEKjM9ZX/TheA12VOGSujsmMn0AEiem7BdbNITkdQJfGhbyX
-         8nBrtX/X8paYvPZLRsf2t9ls+BONHm9ZvMyufRNExLGOPEWSTLrbyxkTnXJ/ZXJUSlCL
-         +N+y31PrlfcTJPGSInIZRL9nGbTxy2G4sdPxuY8Y/x1zSii/STMq6waI6yxLcHfUFiLQ
-         /GQZE0ojEF3Sobi7lPgqWDDRGjoqRgYaDBM0IR2Yaj1mfyHnMK0tD9gsI3HNQoI/EezW
-         CXvOvMUNouEq6WASHmgiy+jjXiZdsRgxc29v++iuZsrgfQimpkI3ryxX93bBHRdfoJgE
-         871Q==
-X-Gm-Message-State: AFqh2koq2EcjB/6V5YcElTjiotAEbiHQ5pdmBOz0aGxb9CjldO6oFbsi
-        4333KaKkT5Cds8ijFB63Xuo=
-X-Google-Smtp-Source: AMrXdXuwfXPWamzj0OMhY3RED/t3K84KWkfMcm7/g7c6+1V2k4IGfSku0LqR16CC8TfahLl3ojnahw==
-X-Received: by 2002:a05:600c:35d3:b0:3d3:5ccc:4442 with SMTP id r19-20020a05600c35d300b003d35ccc4442mr1636409wmq.26.1671473821394;
-        Mon, 19 Dec 2022 10:17:01 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id y21-20020a1c4b15000000b003d1b4d957aasm13120406wma.36.2022.12.19.10.17.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 10:17:00 -0800 (PST)
-Message-ID: <f1c79a8b-837c-eff7-c5e6-2c3a9658ec3c@gmail.com>
-Date:   Mon, 19 Dec 2022 19:16:59 +0100
+        Mon, 19 Dec 2022 13:21:22 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D08614D;
+        Mon, 19 Dec 2022 10:21:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6grkKqNpHqDjE2CxjSJFUJOEcpN2/JFfLlyRMhX3IhM=; b=1MiHKDKZ8dHEcqlhotvk+nQL5F
+        87OakpCd5BXDbVlsTmf945Oaq7TCDfTmYqW0GbWpz9mfCrOpkII52rykQWP8QNfRfvsnNVSaznBB/
+        +KgoF8d199MbGOtt+Eu4qoWoy9bPt4ESdhcgKbw2Vl52c8wpVUeb2tlZ/S4rpHtUN3EOLnr/dhh/u
+        7tIIisJhOBPcoDBPTvlIJoWeRaJLiuvBSNnpb+N0Qo8NMkDyOi+LkloSIGtg2rX2BuRkJPjUAthFl
+        aSPCTPfT0iLE39K/4auxFrBdK+0JlngkeOiO04v/flUBnVbuDPuIZm6q0HmfFfZnvq5WFdw4HhLyi
+        KbJh6y/g==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p7Kkx-00HMLW-9b; Mon, 19 Dec 2022 18:20:55 +0000
+Date:   Mon, 19 Dec 2022 10:20:55 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        alison.schofield@intel.com, vishal.l.verma@intel.com,
+        ira.weiny@intel.com, bwidawsk@kernel.org, dave@stgolabs.net,
+        a.manzanares@samsung.com, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] cxl_test: upgrade as a first class citizen selftests
+ capable driver
+Message-ID: <Y6Crh5DiGPPzKoYp@bombadil.infradead.org>
+References: <20221217034947.1174795-1-mcgrof@kernel.org>
+ <639d4bb71bada_b41e329452@dwillia2-xfh.jf.intel.com.notmuch>
+ <20221218160824.0000583d@Huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] iommu/mediatek-v1: Fix an error handling path in
- mtk_iommu_v1_probe()
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Honghui Zhang <honghui.zhang@mediatek.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Joerg Roedel <jroedel@suse.de>, iommu@lists.linux.dev,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <593e7b7d97c6e064b29716b091a9d4fd122241fb.1671473163.git.christophe.jaillet@wanadoo.fr>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <593e7b7d97c6e064b29716b091a9d4fd122241fb.1671473163.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221218160824.0000583d@Huawei.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,48 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Dec 18, 2022 at 04:08:24PM +0000, Jonathan Cameron wrote:
+> QEMU based CI should go two ways:
+> 1) QEMU CI would typically pin particular kernel version and verify that
+>    QEMU changed don't break that. If we need new features for a new test,
+>    we move that kernel version used.  Existing tests should never break
+>    against a fixed kernel version as that's a regression in QEMU (or
+>    maybe a bug elsewhere) Ultimately we should have this running in the
+>    normal QEMU gitlab CI.
 
-On 19/12/2022 19:06, Christophe JAILLET wrote:
-> A clk, prepared and enabled in mtk_iommu_v1_hw_init(), is not released in
-> the error handling path of mtk_iommu_v1_probe().
-> 
-> Add the corresponding clk_disable_unprepare(), as already done in the
-> remove function.
-> 
-> Fixes: b17336c55d89 ("iommu/mediatek: add support for mtk iommu generation one HW")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Sounds sensible.
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> 2) Kernel CI against QEMU would typically pin particular QEMU version
+>    and check that kernel changes don't break.  This will have rough edges
+>    for a while yet as we are still adding mandatory features to the QEMU
+>    emulation (e.g. events support).  Again, as we add new features / tests
+>    may need to move the QEMU version forwards to support them.
 
-> ---
-> Another option would be to use devm_clk_get_enabled(). This would save a
-> few LoC in mtk_iommu_v1_hw_init() and in the remove function.
-> However, it would change the order of function calls in the remove function
-> so I leave it as-is.
-> Let me know if it is fine and if you prefer this alternative.
-> ---
->   drivers/iommu/mtk_iommu_v1.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
-> index 69682ee068d2..ca581ff1c769 100644
-> --- a/drivers/iommu/mtk_iommu_v1.c
-> +++ b/drivers/iommu/mtk_iommu_v1.c
-> @@ -683,7 +683,7 @@ static int mtk_iommu_v1_probe(struct platform_device *pdev)
->   	ret = iommu_device_sysfs_add(&data->iommu, &pdev->dev, NULL,
->   				     dev_name(&pdev->dev));
->   	if (ret)
-> -		return ret;
-> +		goto out_clk_unprepare;
->   
->   	ret = iommu_device_register(&data->iommu, &mtk_iommu_v1_ops, dev);
->   	if (ret)
-> @@ -698,6 +698,8 @@ static int mtk_iommu_v1_probe(struct platform_device *pdev)
->   	iommu_device_unregister(&data->iommu);
->   out_sysfs_remove:
->   	iommu_device_sysfs_remove(&data->iommu);
-> +out_clk_unprepare:
-> +	clk_disable_unprepare(data->bclk);
->   	return ret;
->   }
->   
+Sure - but for this today other than ensuring a kernel does not crash upon
+bootup we also have cxl_test, but not much else.
+
+We'll want to exand a set of target tests on CXL enabled nodes, without
+cxl_test. Other than verifying the topology matches, we'll want to start
+mimicking actual use cases / performance stuff.
+
+> I don't think we much care about backwards compatibility so once we've
+> moved the pinned element forwards in the above, we won't care about the
+> old version. 
+
+Making tests simply skip if the feature is not available doens't take
+much effort but forward thinking.
+
+> The aim here isn't really to ensure no regressions when
+> running on QEMU (though that CI is nice to have), but more that we have
+> no problems in kernel side of things.
+
+Sure.
+
+> This is a way off yet.  Not seeing this as being part of linux.git.
+> The QEMU CI stuff will be in the qemu.git and Kernel CI stuff probably
+> sit out of tree - there shouldn't be a tight coupling beyond new tests
+> wanting to check available features etc. I might ask a friendly
+> CI project to add this to their normal runs.
+
+OK in case it helps, cxl-enabled qemu building bringup / ndctl building
+and install is all now automated and integratead as part of kdevops so
+patches welcomed to expand that coverage.
+
+> I don't have strong feelings on cxl_test. Tend not to use it myself
+> and haven't yet contributed to it.
+
+Thanks, this is useful information.
+
+  Luis
