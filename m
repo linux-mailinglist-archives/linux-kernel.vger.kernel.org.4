@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBE1650AA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 12:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F97650AA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 12:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbiLSLPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 06:15:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
+        id S231928AbiLSLTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 06:19:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbiLSLPs (ORCPT
+        with ESMTP id S231301AbiLSLTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 06:15:48 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2524F1C;
-        Mon, 19 Dec 2022 03:15:45 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id u19so20609462ejm.8;
-        Mon, 19 Dec 2022 03:15:45 -0800 (PST)
+        Mon, 19 Dec 2022 06:19:42 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843D92672;
+        Mon, 19 Dec 2022 03:19:41 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id m18so20666013eji.5;
+        Mon, 19 Dec 2022 03:19:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sULm/S6ctvHgsxCE9dNljDGGzik1S/Aj6TzzkY/co2Q=;
-        b=Cg5hiCoT38OhoJ6Bne97SPV5T/4u55mVWC85pj/w41gRATbSBW+BUAKeaNWUWtNzCY
-         qnwhZAhlI/7cnvViPw/bfzsFbUvba1ok93/1qDUBoN8/NDl2eaMur26PD4munFHSY0Q7
-         ikAl4FerrTytdL0z81UCCwL/P0v3xPeXiYAW3KiQeXAkL69pxnlbRlSyx84sCAL4SrlF
-         Sqh16rHAVd9JZg4OBxGFfFldJALBHIvMY9cg5d536PmFhNrZRZn/XBUXnWOIE1CyD9UZ
-         CEZjBkJTXjP4DTSgN5//ygeM5NOlnOmZ10tUV+sThLbF4VYGkzTZZqEe/TTVSwsrKjTa
-         oeOg==
+        bh=zI2RTlOmL5oiwdZqJNw/D+P+a1vxFWJZ9IKVgLH4ir4=;
+        b=bST3w1n2l4lGbm29FxqMPyB7CEznBrQmws+cKHNPXfRBzJ+B5JlTr/56pIFpsc+yIA
+         zeNLk1+vrvu60Nhfp9Fy2Ml2kxQg2+iWzFRo+uX8PssZJHOiZdLvCAh615JUYhRB8Bxh
+         6eo3UDkzllFuwTe0G5oyISg+stHLjrMRDlop3bn1PQyKZS9+ctlNDK7JX874Q5IBUI/W
+         rzuOr8ZWXrXomg9s/yLd33dwiu7k2FSlsFEqNyOQE4RUZFjvcQaILIDbOejJS10SEGiT
+         3RO/FaO9t2nn+C6l7VGFHO5VtmAMkHZJMN5/tICm1rcsQLU6Bc8DoDkeuIvKgfKRpdiA
+         zX4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sULm/S6ctvHgsxCE9dNljDGGzik1S/Aj6TzzkY/co2Q=;
-        b=0g74H0qnuTP36rGki1IrnyLv4wV07EYV99HnqL7gx73dNG/IaIG002fBJNBsuI4N2M
-         9pVJULUJ7jpGjLEO3aOFa6cpQ2IUDkAgnFssRW7ufYalbQnq7ixP2gMgrEGWTiADJpWL
-         JNEK0g+WUDX1MgizguVNuCAwzgudDpdG+7j92eGikP/5/UHwZTCVG78UxZ+AhNzq5A9z
-         Iz5l3IbICh/+6hWs1Z5PFSE3i2z+F+YhEUtSnAx6h3Rg4Kk/9PX7ceO4tr2tWFx1mxgW
-         jWvYs2065k5AiHU6/XNYkg+PxIo+L+1tlGPBEnWLmT7Qb4dupLV2yyIfYCNii7LaE6L4
-         Ie5g==
-X-Gm-Message-State: ANoB5plF2gz/9Mef2l5tn6UTy7bNQNHL6SWsEK+hLg4+f4OWyqTpxHfy
-        BfwUE5b6YDphV+daDmWRKzVMpLzvXy7wcEv0y1Y=
-X-Google-Smtp-Source: AA0mqf6DSq68HqwwXjoJBjzLaxcy23gNleXYuq16vF5JPGyGgRZfsMM7aZQjJaDzh/QNNHekgnhbEGhA3xhTXdp3SqQ=
-X-Received: by 2002:a17:906:9615:b0:7c0:f459:a0e4 with SMTP id
- s21-20020a170906961500b007c0f459a0e4mr16004795ejx.155.1671448544424; Mon, 19
- Dec 2022 03:15:44 -0800 (PST)
+        bh=zI2RTlOmL5oiwdZqJNw/D+P+a1vxFWJZ9IKVgLH4ir4=;
+        b=AjP/y7nSby3cCs7nD3oJHiWYGyJfN4QzX4sSavGUm0vZYkFuiqmG7+v/j4w0djzdBv
+         VIqoTdxKguoa8YFTLxAq0iwNsmyKinE9HiFAbTICxqxH25905ER7NDhhaHtpv7fAN7h+
+         aXB/t5HEm9TZLyAzYbTEA85f3nUk6kt7g4Pe55mZ01EtZSGClFH+XguHKAgol+xWrkBG
+         gw1K9HOGdIp9R3GdHjzKiTvYs32XYqiv6J3xjDZpOM6gj+47JcUtI4J/SjTbRWzgng4T
+         5D0036+FFGAi2JIjn91BX9oGwKW7WyTV7KzWtS/6sqYhU61P6CW+pNiqB8eepCTzZNXt
+         p95w==
+X-Gm-Message-State: ANoB5pms4qlepdd/5ddgPinh2a4n2Xd5yQY/b5CEQbEUQNyJHbzS2nWH
+        p3++HyVYn8sB8O0aT2jigKRmsc6DE2FwyECrENw=
+X-Google-Smtp-Source: AA0mqf6SIamhLU7Cdvr18/aFPWgzWlZlnua/b6tCC3PtCfJ09nFC457/raz0+iG0t2BqLWy5GLe94zi6oDpXrLjIxHg=
+X-Received: by 2002:a17:906:79c4:b0:778:e3e2:8311 with SMTP id
+ m4-20020a17090679c400b00778e3e28311mr72229403ejo.342.1671448779945; Mon, 19
+ Dec 2022 03:19:39 -0800 (PST)
 MIME-Version: 1.0
 References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221212115505.36770-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <Y543kM4070CSDtZi@spud>
-In-Reply-To: <Y543kM4070CSDtZi@spud>
+ <20221212115505.36770-4-prabhakar.mahadev-lad.rj@bp.renesas.com> <Y54ycZdMLjU5QVn5@spud>
+In-Reply-To: <Y54ycZdMLjU5QVn5@spud>
 From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 19 Dec 2022 11:15:17 +0000
-Message-ID: <CA+V-a8ss0idLDoc+J8-Undqd+DUGrpeytenzSxV8xMs2N3dh1g@mail.gmail.com>
-Subject: Re: [PATCH v5 1/6] riscv: asm: alternative-macros: Introduce
- ALTERNATIVE_3() macro
+Date:   Mon, 19 Dec 2022 11:19:13 +0000
+Message-ID: <CA+V-a8sa1H=Hh2SzbKDWhiAO=C+Y2YN7sk9APBeqktBeHf49jA@mail.gmail.com>
+Subject: Re: [PATCH v5 3/6] riscv: errata: Add Andes alternative ports
 To:     Conor Dooley <conor@kernel.org>
 Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -91,132 +90,137 @@ Hi Conor,
 
 Thank you for the review.
 
-On Sat, Dec 17, 2022 at 9:41 PM Conor Dooley <conor@kernel.org> wrote:
+On Sat, Dec 17, 2022 at 9:19 PM Conor Dooley <conor@kernel.org> wrote:
 >
-> On Mon, Dec 12, 2022 at 11:55:00AM +0000, Prabhakar wrote:
+> On Mon, Dec 12, 2022 at 11:55:02AM +0000, Prabhakar wrote:
 > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > >
-> > Introduce ALTERNATIVE_3() macro.
+> > Add required ports of the Alternative scheme for Andes CPU cores.
 > >
-> > A vendor wants to replace an old_content, but another vendor has used
-> > ALTERNATIVE_2() to patch its customized content at the same location.
-> > In this case, this vendor can use macro ALTERNATIVE_3() and then replace
-> > ALTERNATIVE_2() with ALTERNATIVE_3() to append its customized content.
-> >
-> > While at it update comment above ALTERNATIVE_2() macro and make it generic
-> > so that the comment holds good for any new addition of ALTERNATIVE_X()
-> > macros.
+> > I/O Coherence Port (IOCP) provides an AXI interface for connecting external
+> > non-caching masters, such as DMA controllers. IOCP is a specification
+> > option and is disabled on the Renesas RZ/Five SoC due to this reason cache
+> > management needs a software workaround.
 > >
 > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > > ---
-> > v4->v5
-> > * Rebased the patch on top of Andrew's series (now in Palmers for next-branch)
-> > * Updated comment for ALTERNATIVE_x() as suggested by Heiko
+> > v4 -> v5
+> > * Sorted the Kconfig/Makefile/Switch based on Core name
+> > * Added a comments
+> > * Introduced RZFIVE_SBI_EXT_IOCP_SW_WORKAROUND SBI EXT ID to check if
+> >   CMO needs to be applied. Is there a way we can access the DTB while patching
+> >   as we can drop this SBI EXT ID and add a DT property instead for cmo?
 > >
 > > RFC v3 -> v4
 > > * New patch
 > > ---
-> >  arch/riscv/include/asm/alternative-macros.h | 46 ++++++++++++++++++---
-> >  1 file changed, 41 insertions(+), 5 deletions(-)
+> >  arch/riscv/Kconfig.erratas           | 22 +++++++
+> >  arch/riscv/errata/Makefile           |  1 +
+> >  arch/riscv/errata/andes/Makefile     |  1 +
+> >  arch/riscv/errata/andes/errata.c     | 93 ++++++++++++++++++++++++++++
+> >  arch/riscv/include/asm/alternative.h |  3 +
+> >  arch/riscv/include/asm/errata_list.h |  5 ++
+> >  arch/riscv/kernel/alternative.c      |  5 ++
+> >  7 files changed, 130 insertions(+)
+> >  create mode 100644 arch/riscv/errata/andes/Makefile
+> >  create mode 100644 arch/riscv/errata/andes/errata.c
 > >
-> > diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
-> > index 7226e2462584..a5b4691520da 100644
-> > --- a/arch/riscv/include/asm/alternative-macros.h
-> > +++ b/arch/riscv/include/asm/alternative-macros.h
-> > @@ -50,8 +50,17 @@
-> >       ALT_NEW_CONTENT \vendor_id_2, \errata_id_2, \enable_2, \new_c_2
-> >  .endm
+> > diff --git a/arch/riscv/Kconfig.erratas b/arch/riscv/Kconfig.erratas
+> > index 69621ae6d647..f0f0c1abd52b 100644
+> > --- a/arch/riscv/Kconfig.erratas
+> > +++ b/arch/riscv/Kconfig.erratas
+> > @@ -1,5 +1,27 @@
+> >  menu "CPU errata selection"
 > >
-> > +.macro ALTERNATIVE_CFG_3 old_c, new_c_1, vendor_id_1, errata_id_1, enable_1, \
-> > +                             new_c_2, vendor_id_2, errata_id_2, enable_2,    \
-> > +                             new_c_3, vendor_id_3, errata_id_3, enable_3
-> > +       ALTERNATIVE_CFG_2 \old_c, \new_c_1, \vendor_id_1, \errata_id_1, \enable_1,    \
-> > +                                 \new_c_2, \vendor_id_2, \errata_id_2, \enable_2
-> > +       ALT_NEW_CONTENT \vendor_id_3, \errata_id_3, \enable_3, \new_c_3
-> > +.endm
+> > +config ERRATA_ANDES
+> > +     bool "Andes AX45MP errata"
+> > +     depends on !XIP_KERNEL
+> > +     select RISCV_ALTERNATIVE
+> > +     help
+> > +       All Andes errata Kconfig depend on this Kconfig. Disabling
+> > +       this Kconfig will disable all Andes errata. Please say "Y"
+> > +       here if your platform uses Andes CPU cores.
 > > +
-> >  #define __ALTERNATIVE_CFG(...)               ALTERNATIVE_CFG __VA_ARGS__
-> >  #define __ALTERNATIVE_CFG_2(...)     ALTERNATIVE_CFG_2 __VA_ARGS__
-> > +#define __ALTERNATIVE_CFG_3(...)     ALTERNATIVE_CFG_3 __VA_ARGS__
-> >
-> >  #else /* !__ASSEMBLY__ */
-> >
-> > @@ -98,6 +107,13 @@
-> >       __ALTERNATIVE_CFG(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1)   \
-> >       ALT_NEW_CONTENT(vendor_id_2, errata_id_2, enable_2, new_c_2)
-> >
-> > +#define __ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,      \
-> > +                                new_c_2, vendor_id_2, errata_id_2, enable_2, \
-> > +                                new_c_3, vendor_id_3, errata_id_3, enable_3) \
-> > +     __ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1, \
-> > +                                   new_c_2, vendor_id_2, errata_id_2, enable_2)      \
-> > +     ALT_NEW_CONTENT(vendor_id_3, errata_id_3, enable_3, new_c_3)
+> > +       Otherwise, please say "N" here to avoid unnecessary overhead.
 > > +
-> >  #endif /* __ASSEMBLY__ */
-> >
-> >  #define _ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, CONFIG_k)       \
-> > @@ -108,6 +124,13 @@
-> >       __ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),   \
-> >                                  new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2))
-> >
-> > +#define _ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, CONFIG_k_1,             \
-> > +                               new_c_2, vendor_id_2, errata_id_2, CONFIG_k_2,                \
-> > +                               new_c_3, vendor_id_3, errata_id_3, CONFIG_k_3)                \
-> > +     __ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),   \
-> > +                                new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2),   \
-> > +                                new_c_3, vendor_id_3, errata_id_3, IS_ENABLED(CONFIG_k_3))
+> > +config ERRATA_ANDES_CMO
+> > +     bool "Apply Andes cache management errata"
+> > +     depends on ERRATA_ANDES && MMU && ARCH_R9A07G043
+> > +     select RISCV_DMA_NONCOHERENT
+> > +     default y
+> > +     help
+> > +       This will apply the cache management errata to handle the
+> > +       non-standard handling on non-coherent operations on Andes cores.
 > > +
-> >  #else /* CONFIG_RISCV_ALTERNATIVE */
-> >  #ifdef __ASSEMBLY__
-> >
-> > @@ -152,15 +175,28 @@
-> >       _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-> >
-> >  /*
-> > - * A vendor wants to replace an old_content, but another vendor has used
-> > - * ALTERNATIVE() to patch its customized content at the same location. In
-> > - * this case, this vendor can create a new macro ALTERNATIVE_2() based
-> > - * on the following sample code and then replace ALTERNATIVE() with
-> > - * ALTERNATIVE_2() to append its customized content.
-> > + * ALTERNATIVE_x macros allow providing multiple replacement options
-> > + * for an ALTERNATIVE code section. This is helpful if multiple
-> > + * implementation variants for the same functionality exist for
-> > + * different cpu cores.
->
-> I think this last sentence should be:
-> "This is helpful if multiple implementation variants exist for the same
-> functionality."
-> I don't think CPU cores is the right level of "granularity".
->
-Ok, I'll update it as above.
-
+> > +       If you don't know what to do here, say "Y".
+> > +
+> >  config ERRATA_SIFIVE
+> >       bool "SiFive errata"
+> >       depends on !XIP_KERNEL
+> > diff --git a/arch/riscv/errata/Makefile b/arch/riscv/errata/Makefile
+> > index a1055965fbee..6f1c693af92d 100644
+> > --- a/arch/riscv/errata/Makefile
+> > +++ b/arch/riscv/errata/Makefile
+> > @@ -1,2 +1,3 @@
+> > +obj-$(CONFIG_ERRATA_ANDES) += andes/
+> >  obj-$(CONFIG_ERRATA_SIFIVE) += sifive/
+> >  obj-$(CONFIG_ERRATA_THEAD) += thead/
+> > diff --git a/arch/riscv/errata/andes/Makefile b/arch/riscv/errata/andes/Makefile
+> > new file mode 100644
+> > index 000000000000..2d644e19caef
+> > --- /dev/null
+> > +++ b/arch/riscv/errata/andes/Makefile
+> > @@ -0,0 +1 @@
+> > +obj-y += errata.o
+> > diff --git a/arch/riscv/errata/andes/errata.c b/arch/riscv/errata/andes/errata.c
+> > new file mode 100644
+> > index 000000000000..3d04f15df8d5
+> > --- /dev/null
+> > +++ b/arch/riscv/errata/andes/errata.c
+> > @@ -0,0 +1,93 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Erratas to be applied for Andes CPU cores
 > > + *
-> > + * Usage:
-> > + *   ALTERNATIVE_x(old_content,
-> > + *      new_content1, vendor_id1, errata_id1, CONFIG_k1,
-> > + *      new_content2, vendor_id2, errata_id2, CONFIG_k2,
-> > + *      ...
-> > + *      new_contentx, vendor_idx, errata_idx, CONFIG_kx)
-> >   */
-> >  #define ALTERNATIVE_2(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,              \
-> >                                  new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2)         \
-> >       _ALTERNATIVE_CFG_2(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,    \
-> >                                       new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2)
-> >
-> > +#define ALTERNATIVE_3(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,              \
-> > +                                new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2,         \
-> > +                                new_content_3, vendor_id_3, errata_id_3, CONFIG_k_3)         \
-> > +       _ALTERNATIVE_CFG_3(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,  \
-> > +                                       new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2,  \
-> > +                                       new_content_3, vendor_id_3, errata_id_3, CONFIG_k_3)
+> > + *  Copyright (C) 2022 Renesas Electronics Corporation.
+> > + *
+> > + * Author: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > + */
+> > +
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +
+> > +#include <asm/alternative.h>
+> > +#include <asm/cacheflush.h>
+> > +#include <asm/errata_list.h>
+> > +#include <asm/patch.h>
+> > +#include <asm/sbi.h>
+> > +#include <asm/vendorid_list.h>
+> > +
+> > +#define ANDESTECH_AX45MP_MARCHID     0x8000000000008a45UL
+> > +#define ANDESTECH_AX45MP_MIMPID              0x500UL
+> > +#define ANDESTECH_SBI_EXT_ANDES              0x0900031E
+> > +
+> > +#define RZFIVE_SBI_EXT_IOCP_SW_WORKAROUND    0
+> > +
+> > +static long ax45mp_iocp_sw_workaround(void)
+> > +{
+> > +     struct sbiret ret;
+> > +
+> > +     ret = sbi_ecall(ANDESTECH_SBI_EXT_ANDES, RZFIVE_SBI_EXT_IOCP_SW_WORKAROUND,
+> > +                     0, 0, 0, 0, 0, 0);
 >
-> btw, why is this indented with spaces when the line above it is indented
-> with tabs? (At least, that is how it appears in mutt).
->
-I'll update it with spaces.
+> Seeing as you need a new version for some of the other bits, I think it
+> would be good to add a minor comment here somewhere (be it here or the
+> commit message) that links to the SBI specs for this.
+> I think this looks pretty good though.
+Sure I'll add a comment here.
 
-> With those minor bits & the suggested fixes from Drew/Geert:
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->
+I was wondering if we can get rid of this vendor specific extension
+here if we get access to the DT here (for example having a DT property
+which would indicate if IOCP CMO should be applied or not). Do you
+think that would be good approach?  ATM we dont have a pointer here
+for FDT whie early patching.
+
 Cheers,
 Prabhakar
