@@ -2,74 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5566A650A5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 11:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7578650A5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 11:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbiLSKuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 05:50:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
+        id S229618AbiLSKua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 05:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbiLSKuA (ORCPT
+        with ESMTP id S231466AbiLSKuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 05:50:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC15BC00;
-        Mon, 19 Dec 2022 02:49:59 -0800 (PST)
+        Mon, 19 Dec 2022 05:50:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78179592;
+        Mon, 19 Dec 2022 02:50:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DD2F60EB7;
-        Mon, 19 Dec 2022 10:49:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12548C433EF;
-        Mon, 19 Dec 2022 10:49:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7182FB80D6F;
+        Mon, 19 Dec 2022 10:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 119D4C433D2;
+        Mon, 19 Dec 2022 10:50:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671446998;
-        bh=A3VkKPICWqmqnDaWN0cKcYEdoV07F+Y6/PeP1lQP3B4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TEXyOCFTTwkxGfxtAbp/Mky8Ihs6chDpXarV+fDWm7JW56Oz2H5Be0do4XSZpYFCB
-         N4oyRGf+QnQTUXlhB1jgmSW+Ewodhxod/O/7lF4DHf/ux71cg5LdEWiIPV3bz2VaO0
-         6qbUAzHMsFfkATUo5ihy1XCnX+gBTKFRH3/Z/jQkZlCGxCRib7u1Hwmome5ep6CByo
-         KSI1ojmlld3LriUmjyZe0yfcszlHTdvEDfnJVgFK03ZEeEz5T2rmZxPZ9DvOX1XVN3
-         oqO9DxcHwh71ucs0pjMBcnl4zWYBrmRHjCfaPIriJ4Mi8bvtKxBOLqF05vIsnlLSum
-         K/3QDUPn2VDGQ==
-Message-ID: <f39cd52f-94d4-fe3b-a5be-8b27017028ed@kernel.org>
-Date:   Mon, 19 Dec 2022 11:49:53 +0100
+        s=k20201202; t=1671447016;
+        bh=/TM29bq8epKg+lGf9zZ1cjGedliSnCMo8M6GpK1ZhUY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ShIiiDXxcMVt4+h0XLONbWsFuP+vLyJ0yylmF6IdWdpnCcKCsdQjnqnysnw90/3eB
+         Ml4ctSvLTiAAlVSbqCTNXPVvcSQEzk1X1z7v5h5/kkIzq5HrbIBLHZqK0woFTjJ51U
+         86AKarYz1nQg2ToPJC/iD1EMK0VrgDyF0OZbxAdBYjEk3F7OyIJyRqJTpwjAUTfVzE
+         rCtznYrFz5zxB7nM6bq7nPOsAIky6bjq8Afv3LbQ/3qhfwHVXQ6cQeidNcv99j0AAi
+         pfd34AbdGh19VXHJFMDFWgsE/jomEhbZGcnFKS14B/ypL6AyiVDMD/+XAm7ZpZK67A
+         T8dZovvollaww==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E468FE21EEE;
+        Mon, 19 Dec 2022 10:50:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 1/2] dt: bindings: add dt entry for XO calibration support
-Content-Language: en-US
-To:     Youghandhar Chintala <quic_youghand@quicinc.com>,
-        ath11k@lists.infradead.org
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221214121818.12928-1-quic_youghand@quicinc.com>
- <20221214121818.12928-2-quic_youghand@quicinc.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20221214121818.12928-2-quic_youghand@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3] net: Fix documentation for
+ unregister_netdevice_notifier_net
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167144701593.11987.7838332375815964417.git-patchwork-notify@kernel.org>
+Date:   Mon, 19 Dec 2022 10:50:15 +0000
+References: <20221218130957.3584727-1-linmq006@gmail.com>
+In-Reply-To: <20221218130957.3584727-1-linmq006@gmail.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, bigeasy@linutronix.de, imagedong@tencent.com,
+        kuniyu@amazon.com, petrm@nvidia.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2022 13:18, Youghandhar Chintala wrote:
-> Add dt binding to get XO calibration data support for Wi-Fi RF clock.
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Sun, 18 Dec 2022 17:09:54 +0400 you wrote:
+> unregister_netdevice_notifier_net() is used for unregister a notifier
+> registered by register_netdevice_notifier_net(). Also s/into/from/.
 > 
-> Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+> changes in v2:
+> - s/into/from/ as pointed out by Petr Machata.
+> changes in v3:
+> - remove fixes tag as pointed out by Jiri Pirko.
+> 
+> [...]
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
+Here is the summary with links:
+  - [net-next,v3] net: Fix documentation for unregister_netdevice_notifier_net
+    https://git.kernel.org/netdev/net-next/c/9054b41c4e1b
 
-You skipped all of them, so this has to be fixed.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Best regards,
-Krzysztof
 
