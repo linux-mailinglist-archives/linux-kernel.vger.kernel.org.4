@@ -2,144 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82408650CD7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 14:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD91650CDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 14:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231980AbiLSNuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 08:50:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
+        id S231975AbiLSNvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 08:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbiLSNuw (ORCPT
+        with ESMTP id S231978AbiLSNuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 08:50:52 -0500
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F07BE25;
-        Mon, 19 Dec 2022 05:50:51 -0800 (PST)
-Received: by mail-qt1-f176.google.com with SMTP id h26so4359117qtu.2;
-        Mon, 19 Dec 2022 05:50:51 -0800 (PST)
+        Mon, 19 Dec 2022 08:50:55 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D48BE25
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 05:50:54 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id r18so6167378pgr.12
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 05:50:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4OfVkgFyuWv/O4DNg94sdS/FVSa58FzsgxawIIgMVAU=;
+        b=f3kZod/t7t8SqcZUISMQbdv1VhlpJa1QyhSoACz09KLwbNQAdocCQpOsIX2t+EweoE
+         Px7Z9oC1FOIqu0oo09e6CofisZFFyu/s4GZfBIPg6yGDfJQKzKmnAN8VABf3UNloFgGL
+         A+yagwpTYmaNcrjYh1kIfad/jgFdwo5L1F/Pr2+UNeCipax5rbosxgMANTFK4Y1Zt+DD
+         oXsp0nSf3ZPRRUIl9+J50cUpM467kgbXZFj6xtGhpnqlqbK4ZRj3QFmXuOhA2xw/RN9S
+         zGmPs59gCTdTsgloyUjlJy53Y7rhB+LZ2LiTGeCX7G92IORgmxP0xk25n9WqE6UyjLIY
+         t/aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TMpAZw6S6JvATf2B1ykxy7jXVkmfHoXtkV8PdpVE9/I=;
-        b=YcQmAiImD94tGo2tQE+svnYRZMdvoG/6WQ2Fjp6xTrF6G2nRvBg400ciDvuf/P79P0
-         rs6dDkboFCw7+eLd/f4RbiX5VPAihh77YByMqwDEW7/El34oterd6uegg3HCL24ACqct
-         A5AyW111gadcSmFLUejq1V/8B+lSipoLe98Bm/ZIWm8e3CnlCnE7ahcFOkDQ9Ojo+Q8C
-         yC41LmLFn4PRmdQUgI28sc0CRkX3YuoK5FMdoSu1akj/sdWtOUJ9ouM8dZ23U9jKvHw5
-         TFV4WCWUdxJDa8BA/SAyRhFvZORlECjJD3NyK+YEUvp0mcRMt6ZE0OTnRY21Er10BB1W
-         noMA==
-X-Gm-Message-State: ANoB5pntU5QuM95j99hxro7mo7OupxCmI0lsfMexRGKfHBLoja7z+UG8
-        RXgtpVXJS9/8nkeDxRxlPD3FRRioaTV6Wg==
-X-Google-Smtp-Source: AA0mqf6p4vwTP+3AkeYlGoBK1w16eYvuUY+YBns06d1D4IDpc3Fzrn1klY0kHzdlDc9s35kEQ+Hz5Q==
-X-Received: by 2002:ac8:1004:0:b0:39c:da20:d48d with SMTP id z4-20020ac81004000000b0039cda20d48dmr49738354qti.34.1671457849991;
-        Mon, 19 Dec 2022 05:50:49 -0800 (PST)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id y21-20020ac85255000000b00398313f286dsm6018434qtn.40.2022.12.19.05.50.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 05:50:49 -0800 (PST)
-Received: by mail-yb1-f172.google.com with SMTP id b16so9550924yba.0;
-        Mon, 19 Dec 2022 05:50:48 -0800 (PST)
-X-Received: by 2002:a25:9e84:0:b0:6de:6183:c5c3 with SMTP id
- p4-20020a259e84000000b006de6183c5c3mr79384857ybq.89.1671457848676; Mon, 19
- Dec 2022 05:50:48 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4OfVkgFyuWv/O4DNg94sdS/FVSa58FzsgxawIIgMVAU=;
+        b=HwlQpt3blZ3CKaNNZwixOKKFRS5JHTuzfSwqFZt5v/+brdO2zZHEH9CF0EWA5/oZeG
+         qzlUajkBbRQ0mXM06qmW8ecPFoOvss/pOPJYYiY21Wby6pJBVfdOOmVw4LDm/lOSdte4
+         YLn7s3K71M8OrQZvl3a6H3ya7EorQzTYGq8DoEjZ2N4x7RXSK6V7sBmF+IJvSvjOUJxo
+         KIqim8T8clC4UQndm9Rj1ZOzJJVJKUWTk5cHoCdQo/gnwFg+oJ9qKnl2JNBRQsdwkkpZ
+         GJjZPLO/ZYevPin3QYoX/99SuQKERdBrfkazXcoNV92kmYn2Br+Wnj+pOohSPIh/Xaoj
+         3rGg==
+X-Gm-Message-State: ANoB5pmxdyQ8dXBN+s/7aCwWzzmAI70gPNZVb8CtCRDeU6MhFcKUqWET
+        Hd35GbmQb499Wtk3OU1uBBwx
+X-Google-Smtp-Source: AA0mqf58zwHfVYBpkQxITdhQuWuLqWHMIDAGkGzKVhO9isGzw/+AhzSj+zJSau1B797hbuYXyPOtww==
+X-Received: by 2002:a62:3896:0:b0:576:1c37:5720 with SMTP id f144-20020a623896000000b005761c375720mr37603975pfa.4.1671457853797;
+        Mon, 19 Dec 2022 05:50:53 -0800 (PST)
+Received: from thinkpad ([220.158.159.17])
+        by smtp.gmail.com with ESMTPSA id 193-20020a6218ca000000b0056ba6952e40sm6619076pfy.181.2022.12.19.05.50.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 05:50:52 -0800 (PST)
+Date:   Mon, 19 Dec 2022 19:20:46 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andrew Halaney <ahalaney@redhat.com>, andersson@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        bp@alien8.de, tony.luck@intel.com, quic_saipraka@quicinc.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        quic_ppareek@quicinc.com, luca.weiss@fairphone.com
+Subject: Re: [PATCH v2 00/13] Qcom: LLCC/EDAC: Fix base address used for LLCC
+ banks
+Message-ID: <20221219135046.GA126558@thinkpad>
+References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
+ <20221212192340.evgtbpzmw7hcdolb@halaney-x13s>
+ <20221213052802.GB4862@thinkpad>
+ <ec64e3a0-085d-7830-fd4e-6969c1c9bbdf@linaro.org>
+ <20221213175738.GI4862@thinkpad>
+ <195a55f1-76e7-3f00-da1f-4ae84f7943c0@linaro.org>
 MIME-Version: 1.0
-References: <20221107175305.63975-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221107175305.63975-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdV46aMfqu+kMW9E-RURugK-giOx0k-NPe5XX4nxKZJzkg@mail.gmail.com>
- <CA+V-a8uqQ2fK1UjRT864jyHdt6Z47V=iARSJC6B2M6Gikms=Eg@mail.gmail.com> <CA+V-a8sGLrsRWFi3-hNmB=Uj-aCQLD5VQesmUFb8N1NAqhyLuQ@mail.gmail.com>
-In-Reply-To: <CA+V-a8sGLrsRWFi3-hNmB=Uj-aCQLD5VQesmUFb8N1NAqhyLuQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 19 Dec 2022 14:50:36 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW_QuBUUypyrAbLqWPdZ81bWeYDyPbBf=2KmDht1X44bA@mail.gmail.com>
-Message-ID: <CAMuHMdW_QuBUUypyrAbLqWPdZ81bWeYDyPbBf=2KmDht1X44bA@mail.gmail.com>
-Subject: Re: [PATCH RFC 1/5] dt-bindings: interrupt-controller:
- renesas,rzg2l-irqc: Document RZ/G2UL SoC
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <195a55f1-76e7-3f00-da1f-4ae84f7943c0@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+On Tue, Dec 13, 2022 at 07:47:17PM +0100, Krzysztof Kozlowski wrote:
+> On 13/12/2022 18:57, Manivannan Sadhasivam wrote:
+> > On Tue, Dec 13, 2022 at 05:54:56PM +0100, Krzysztof Kozlowski wrote:
+> >> On 13/12/2022 06:28, Manivannan Sadhasivam wrote:
+> >>> On Mon, Dec 12, 2022 at 01:23:40PM -0600, Andrew Halaney wrote:
+> >>>> On Mon, Dec 12, 2022 at 06:02:58PM +0530, Manivannan Sadhasivam wrote:
+> >>>>> The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
+> >>>>> accessing the (Control and Status Regsiters) CSRs of each LLCC bank.
+> >>>>> This offset only works for some SoCs like SDM845 for which driver support
+> >>>>> was initially added.
+> >>>>>
+> >>>>> But the later SoCs use different register stride that vary between the
+> >>>>> banks with holes in-between. So it is not possible to use a single register
+> >>>>> stride for accessing the CSRs of each bank. By doing so could result in a
+> >>>>> crash with the current drivers. So far this crash is not reported since
+> >>>>> EDAC_QCOM driver is not enabled in ARM64 defconfig and no one tested the
+> >>>>> driver extensively by triggering the EDAC IRQ (that's where each bank
+> >>>>> CSRs are accessed).
+> >>>>>
+> >>>>> For fixing this issue, let's obtain the base address of each LLCC bank from
+> >>>>> devicetree and get rid of the fixed stride.
+> >>>>>
+> >>>>> This series affects multiple platforms but I have only tested this on
+> >>>>> SM8250 and SM8450. Testing on other platforms is welcomed.
+> >>>>>
+> >>>>
+> >>>> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
+> >>>>
+> >>>
+> >>> Thanks!
+> >>>
+> >>>> I took this for a quick spin on the qdrive3 I've got access to without
+> >>>> any issue:
+> >>>>
+> >>>>     [root@localhost ~]# modprobe qcom_edac
+> >>>>     [root@localhost ~]# dmesg | grep -i edac
+> >>>>     [    0.620723] EDAC MC: Ver: 3.0.0
+> >>>>     [    1.165417] ghes_edac: GHES probing device list is empty
+> >>>>     [  594.688103] EDAC DEVICE0: Giving out device to module qcom_llcc_edac controller llcc: DEV qcom_llcc_edac (INTERRUPT)
+> >>>>     [root@localhost ~]# cat /proc/interrupts | grep ecc
+> >>>>     174:          0          0          0          0          0          0          0          0     GICv3 614 Level     llcc_ecc
+> >>>>     [root@localhost ~]#
+> >>>>
+> >>>> Potentially stupid question, but are users expected to manually load the
+> >>>> driver as I did? I don't see how it would be loaded automatically in the
+> >>>> current state, but thought it was funny that I needed to modprobe
+> >>>> myself.
+> >>>>
+> >>>> Please let me know if you want me to do any more further testing!
+> >>>>
+> >>>
+> >>> Well, I always ended up using the driver as a built-in. I do make it module for
+> >>> build test but never really used it as a module, so didn't catch this issue.
+> >>>
+> >>> This is due to the module alias not exported by the qcom_edac driver. Below
+> >>> diff allows kernel to autoload it:
+> >>>
+> >>> diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
+> >>> index f7afb5375293..13919d01c22d 100644
+> >>> --- a/drivers/edac/qcom_edac.c
+> >>> +++ b/drivers/edac/qcom_edac.c
+> >>> @@ -419,3 +419,4 @@ module_platform_driver(qcom_llcc_edac_driver);
+> >>>  
+> >>>  MODULE_DESCRIPTION("QCOM EDAC driver");
+> >>>  MODULE_LICENSE("GPL v2");
+> >>> +MODULE_ALIAS("platform:qcom_llcc_edac");
+> >>
+> >> While this is a way to fix it, but instead of creating aliases for wrong
+> >> names, either a correct name should be used or driver should receive ID
+> >> table.
+> >>
+> > 
+> > I'm not sure how you'd fix it with a _correct_ name here. 
+> 
+> Hm, I assumed that it would be enough if driver name would match device
+> name. Currently these two are not in sync. Maybe it's not enough when
+> built as module?
+> 
 
-On Mon, Dec 19, 2022 at 1:57 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Fri, Nov 18, 2022 at 12:29 PM Lad, Prabhakar
-> <prabhakar.csengg@gmail.com> wrote:
-> > On Thu, Nov 17, 2022 at 10:54 AM Geert Uytterhoeven
-> > <geert@linux-m68k.org> wrote:
-> > > On Mon, Nov 7, 2022 at 6:53 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > >
-> > > > Document RZ/G2UL (R9A07G043) IRQC bindings. The RZ/G2UL IRQC block is
-> > > > identical to one found on the RZ/G2L SoC. No driver changes are
-> > > > required as generic compatible string "renesas,rzg2l-irqc" will be
-> > > > used as a fallback.
-> > > >
-> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Right, for module it is not enough and that's why we need id_table/alias.
 
-> > > > Note, renesas,r9a07g043u-irqc is added we have slight difference's compared to RZ/Five
-> > > > - G2UL IRQCHIP (hierarchical IRQ domain) -> GIC where as on RZ/Five we have PLIC (chained interrupt
-> > > > domain) -> RISCV INTC
-> > >
-> > > I think this difference is purely a software difference, and abstracted
-> > > in DTS through the interrupt hierarchy.
-> > > Does it have any impact on the bindings?
-> > >
-> > > > - On the RZ/Five we have additional registers for IRQC block
-> > >
-> > > Indeed, the NMI/IRQ/TINT "Interruput" Mask Control Registers, thus
-> > > warranting separate compatible values.
-> > >
-> > > > - On the RZ/Five we have BUS_ERR_INT which needs to be handled by IRQC
-> > >
-> > > Can you please elaborate? I may have missed something, but to me it
-> > > looks like that is exactly the same on RZ/G2UL and on RZ/Five.
-> > >
-> > Now that we have to update the binding doc with the BUS_ERR_INT too,
-> > do you think it would make sense to add interrupt-names too?
+> > Also, the id table is
+> > an overkill since there is only one driver that is making use of it. And
+> > moreover, there is no definite ID to use.
+> 
+> Every driver with a single device support has usually ID table and it's
+> not a problem...
+> 
 
-> Gentle ping.
+Are you referring to OF/ACPI ID table? Or something else?
 
-Thanks for the ping, I had missed you were waiting on input from me.
-Sorry for that...
+Thanks,
+Mani
 
-As there are three different groups of parent interrupts, adding
-interrupt-names makes sense.  However, as this binding is already
-in active use since v6.1, you probably need to keep on supporting the
-ack of interrupt-names.  Or do you think there are no real users yet,
-and we can drop support for that?
+> Best regards,
+> Krzysztof
+> 
 
-> > BUS_ERR_INT will have to be handled IRQC itself (i.e. IRQC will
-> > register a handler for it).
-
-Do you mean you will need a fourth parent type for that?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+மணிவண்ணன் சதாசிவம்
