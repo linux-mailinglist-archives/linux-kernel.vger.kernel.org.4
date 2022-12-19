@@ -2,85 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52AF4650E93
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:25:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC07650E96
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbiLSPZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 10:25:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
+        id S232087AbiLSP10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 10:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231631AbiLSPZw (ORCPT
+        with ESMTP id S231783AbiLSP1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 10:25:52 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B6826D4
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:25:51 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id tz12so22296208ejc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:25:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aj0IM0CjoexC2i+yXzlejMAdGHqKdzeRDWPxbdEC52Y=;
-        b=C27vv2XZEEG7o+ka9HbL1o5t/B7aIJ4pAiWnEmugk/R1THnHYJhrpcvb3g+33/nV3m
-         FUS4GDIoBadaCouoSTNr3Hni6vlup0jMFlP1BF7zUVsymILYTZS51SdGqdVKmbe7F5gT
-         W7H2pkRhunEQFxeFlzT3xhHEuTALwlc5r/S7HFR94VpbgneKm4zMVB0vd1aDVFKvhmAO
-         4zZmNa+pabm0UqudM7n1qGo5k96yNSRBzFcLzeHmFUCQev0j5qSTIHkwWNQVJdJdRfin
-         DEgPICs36diGa1KlQqxM1wE1Ku7EMgoFDdUzfxbFpnY4FanfMQ4KUPWYAXCWR/mZ2jdD
-         JaJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aj0IM0CjoexC2i+yXzlejMAdGHqKdzeRDWPxbdEC52Y=;
-        b=yHcVnRCymg1STnG7MuH4NBadYFbni0dt9iAqFH3/y5GJq4dCzZRJAVU/9ycMQL3p4v
-         qhb03pDDQELzH5PPpfgrxifcV+9E7VbEn2fQpHY2rJFbAvGijAjZICOHgbqS08YMBjaC
-         UZS9YRhrGgyLc+EdAYz9S/KMoxiZMODOa9kGJze8ao50g7GhqU3wlsDUkyNBFDKKVotW
-         PnBCvKo+FeR0Tyu/NC1egBy9xpCxUZX786frJxrmARjlIzXEZOqfx/Tf7BbWK8R4cehL
-         WX+xKDTWVFgP7zwcyhlOt6lXTKzughPnjcyrup6izVe0m+clFA68POxt9w+aBSvo/H/V
-         uY4A==
-X-Gm-Message-State: ANoB5pm2m/tO6heYbDFFwJ9eF/nlFCjQr48/ui6+RhPkrsccDhEov/FO
-        qrFISZZIeGW7CPRzpZiCYkuz3g7JOGcHM60q61A=
-X-Google-Smtp-Source: AA0mqf6RNAS3BLxNGbG+6VbszxBZsCh5Lwxp+Nx0tJByBwVj3fDL4RyN+tNMFS7BsJ2gpqcowZENPTnJfzVaCuZEevs=
-X-Received: by 2002:a17:907:9d04:b0:7c1:1342:61b7 with SMTP id
- kt4-20020a1709079d0400b007c1134261b7mr11287051ejc.524.1671463549653; Mon, 19
- Dec 2022 07:25:49 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:640c:1d45:b0:183:d190:e1fd with HTTP; Mon, 19 Dec 2022
- 07:25:49 -0800 (PST)
-Reply-To: sra.xinmeishen@yahoo.com
-From:   Xinmei Shen <consultecanadalome@gmail.com>
-Date:   Mon, 19 Dec 2022 07:25:49 -0800
-Message-ID: <CADOWGUF7q6cuW3oFj0URQVRpuGhbiOWDoNWRYxiddajnSW72BQ@mail.gmail.com>
-Subject: Re: Respuesta
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+        Mon, 19 Dec 2022 10:27:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF2D6467
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:27:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F6DFB80E53
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 15:27:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D110BC433EF;
+        Mon, 19 Dec 2022 15:27:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671463640;
+        bh=JMW0b8vWlwPAZKdyQQxW3qognqY1rfXtk72EWUCOkXo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aPk4RHrGseOyH9skuJulVohV+CFyLrm+dOlxl0w8315MBSQSCHaW0XXH3pbwSIsA3
+         7xe8mcgfOWEO9fQGfYgZ+Eg4x+v2TPw8GxAsmri0r5ofYbEJV8hdmTfObcKUpGLnpy
+         LAfECG1u9g6UbaD7atsRqh/1KqNqxwHMmcqOaT0Q3sZDyWMqhuZ7I9S8azAtrx009t
+         YuxzvceHLMkWp0I+mCvPDeX4gEDsWSDB0e2jkvST63IpWfLauI35bYOJmBYHZagq2c
+         uAlfD2VE6H2r0v9kBEh05Na55SW9US+6EHavCLR9umx4B9xcGihvWR0QXBxg6nhoH4
+         JJIxCY0tDw3SA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p7I2v-00DglG-TZ;
+        Mon, 19 Dec 2022 15:27:18 +0000
+Date:   Mon, 19 Dec 2022 15:27:17 +0000
+Message-ID: <86o7rzpg6i.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Akihiko Odaki <akihiko.odaki@daynix.com>,
+        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v3 1/7] arm64/sysreg: Convert CCSIDR_EL1 to automatic generation
+In-Reply-To: <Y6B8fzaFSwmJ5VC1@sirena.org.uk>
+References: <20221218051412.384657-1-akihiko.odaki@daynix.com>
+        <20221218051412.384657-2-akihiko.odaki@daynix.com>
+        <87cz8hez0i.wl-maz@kernel.org>
+        <1ef32b0c-6cee-75f7-e1e0-ede1f5b9a016@daynix.com>
+        <87bko0g8m2.wl-maz@kernel.org>
+        <Y6B8fzaFSwmJ5VC1@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, akihiko.odaki@daynix.com, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, mathieu.poirier@linaro.org, oliver.upton@linux.dev, suzuki.poulose@arm.com, alexandru.elisei@arm.com, james.morse@arm.com, will@kernel.org, catalin.marinas@arm.com, asahi@lists.linux.dev, alyssa@rosenzweig.io, sven@svenpeter.dev, marcan@marcan.st
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Beneficiario,
+On Mon, 19 Dec 2022 15:00:15 +0000,
+Mark Brown <broonie@kernel.org> wrote:
+> 
+> [1  <text/plain; us-ascii (7bit)>]
+> On Sun, Dec 18, 2022 at 01:11:01PM +0000, Marc Zyngier wrote:
+> > Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+> 
+> > > arch/arm64/tools/gen-sysreg.awk does not allow a hole and requires all
+> > > bits are described hence these descriptions. If you have an
+> > > alternative idea I'd like to hear.
+> 
+> > I'd simply suggest creating an UNKNOWN field encompassing bits
+> > [21:28]. Alternatively, feel free to try the patch below, which allows
+> > you to describe these 4 bits as "Unkn	31:28", similar to Res0/Res1.
+> 
+> I agree, where practical we should add new field types and other
+> features as needed rather than trying to shoehorn things into what the
+> tool currently supports.  It is very much a work in progress which can't
+> fully represent everything in the spec yet.  For things like the
+> registers with multiple possible views it's much more effort which
+> shouldn't get in the way of progress on features but with something like
+> this just updating the tool so we can match the architecture spec is the
+> right thing.
 
-Sali=C3=B3 con un premio de las Naciones Unidas afiliado al fondos
-monetario internacional en el que se nos entreg=C3=B3 su direcci=C3=B3n de
-correo electr=C3=B3nico y el fondos para su transferencia, as=C3=AD que env=
-=C3=ADe
-sus datos para su transferencia.
+I was tempted to add a Namespace tag that wouldn't generate the sysreg
+#defines, but only generate the fields with a feature-specific
+namespace. For example:
 
-Se nos indic=C3=B3 que transfiri=C3=A9ramos todas las transacciones pendien=
-tes
-dentro de las pr=C3=B3ximas 48 horas o si ya recibi=C3=B3 su fondo, si no l=
-o
-cumple de inmediato. Nota: Necesitamos su respuesta urgente, este no es
-uno de esos estafadores de Internet, es el alivio de COVID-19
+Sysreg	CCSIDR_EL1	3	1	0	0	0
+Res0	63:32
+Unkn	31:28
+Field	27:13	NumSets
+Field	12:3	Associativity
+Field	2:0	LineSize
+EndSysreg
 
-Sra. Xinmei Shen
+Namespace CCIDX CCSIDR_EL1
+Res0	63:56
+Field	55:32	NumSets
+Res0	31:25
+Field	24:3	Associativity
+Field	2:0	LineSize
+EndSysreg
+
+the later generating:
+
+#define CCIDR_EL1_CCIDX_RES0		(GENMASK(63, 56) | GENMASK(31, 25))
+#define	CCIDR_EL1_CCIDX_NumSets		GENMASK(55, 32)
+#define	CCIDR_EL1_CCIDX_Associativity	GENMASK(24, 3)
+#define CCIDR_EL1_CCIDX_LineSize	GENMASK(2, 0)
+
+Thoughts?
+
+> 
+> > Define an 'Unkn' field type modeled after the Res0/Res1 types
+> > to allow such description. This allows the generation of
+> 
+> I'd be tempted to spell out Unknown fully since Unkn is not such a
+> common abbreviation but I can see the desire to keep the name shorter
+> and it doesn't really matter so either way:
+> 
+> Reviewed-by: Mark Brown <broonie@kernel.org>
+
+Yeah, this stuff is write-only most of the time, and I like my fields
+aligned if at all possible.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
