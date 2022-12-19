@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9AF651254
+	by mail.lfdr.de (Postfix) with ESMTP id F0F52651255
 	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbiLSTAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 14:00:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
+        id S232461AbiLSTAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 14:00:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232725AbiLSTAC (ORCPT
+        with ESMTP id S232641AbiLSTAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 19 Dec 2022 14:00:02 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466DB25FA
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 10:59:29 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id v23so4802423pju.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 10:59:29 -0800 (PST)
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746945F52
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 10:59:35 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id x2so9897867plb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 10:59:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:reply-to:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=e8B2I+4NRvgsSq6ExVIS5zUbrcMf1l4UJ5x1/qJc8cA=;
-        b=eDZyM7UOpN208tVAX+hBqxHyra/S+kQPzV2RhHjUpgkC9oo2h5Ktaz/fro6c2oe/PI
-         AiE0zgUos7a8I423N7mG0KgJrZbDbZjAuWEzhLGcsc4EetSbBy1aMp8FeQIqHi1Hqxqn
-         /mMWiYwsa4h1ySc2e1WYwy1U8XSH06HeDaI3chHznqgvFcCkUMVwJdUKuQPt2Pb1uiRc
-         ZcO5tNFbF1z+vFDCInDRnW/UpVs4kNmOWUagDrXtr1sYk7b4I6IGW+5X49eK1ICfP6Yc
-         2Nt0p3JG5RSnqmvBmQNcIgP82uZ3RVr5b1D+Vl9i1cIFY/GPycw8aNT5PXlUOLbbE1in
-         hFbQ==
+        bh=YXfRuD0XfIija2Fu4Zh5yh7fZwHxF8sos3x+jWEicXs=;
+        b=ODbh7AHIyVlbnpVquiBqy8uEqHmm0QDGOQpUJwJz/fbNOgW3c0R/3yhPHQnjBkR/8r
+         tnh0wWulPnf0Wj3awEx8ZPQPMrdKzjq7pV7sN2bCjtjdIQ/LcSbHqSmXvPDtBY+lnfir
+         7uJGSab0IG9Tx8xG9I7eas8PxE+cPMOmkqpBUFsyjEFMrvfNppiutfoNT7Z/HGBY3IkU
+         alKfJUqOrRLJNjr4lKh3oxDJmmEo59BuF8lOFQlnhMTfyVNZzqAoC3bNX4b+p/FrF92G
+         GWZVZNyfjzrwVX1w9NsKXgGt0W/3iz6L6SvXShaG9dlAeQjPraoMq6bGI2EO7PUtLLRc
+         4gDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:reply-to:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=e8B2I+4NRvgsSq6ExVIS5zUbrcMf1l4UJ5x1/qJc8cA=;
-        b=Wk9xIU57GBjKJySnb8BqoiWIVD9vksdYkSwP4E3Y55ErakUugSTo1BTARpXCD3WWRt
-         ZYLVwYnHIIEU9KxfUTEssKw79I0HVMsjaU82yoawPUaz5+En87oS0E6pL87aA0nDMW5Y
-         LvD1FgMQDbQ9Sd3rrU0+XFgHN/keAisJhlvOAjBQPkLLVuUpm7ojpkZ6FAx7aXgYVeMJ
-         fbBjb5y4Soi+P/sugrBNVvz/qO/4vnTAJGKf+G4z6TMUjdj9o8/vG7VXRugCQ4NfAwUz
-         umoZliCZdUVntL7S7qg1qee15vDsrMP0vx6rBSCQZkmGiWqrcRtQuH59oJwREfG1u7li
-         /ZQg==
-X-Gm-Message-State: ANoB5plG1PQdsWTgfoEhiNFy6D+8y7okP5jFBD19WsvEMc6roFNNxfQp
-        s+dS0IiIsAAvednt++pSu7E=
-X-Google-Smtp-Source: AA0mqf5haLYTtDDLTVNr5GE8KrQCnl2ZPXRQYj++5TqGjcUqyeaN1eo2aDvP3ExoJcIc66C/EvYGTg==
-X-Received: by 2002:a17:903:2448:b0:189:f277:3830 with SMTP id l8-20020a170903244800b00189f2773830mr65253828pls.68.1671476368808;
-        Mon, 19 Dec 2022 10:59:28 -0800 (PST)
+        bh=YXfRuD0XfIija2Fu4Zh5yh7fZwHxF8sos3x+jWEicXs=;
+        b=JfCe1NnS3nZWOk3LtUavjvpgQ4XJfosFIVAJjn0XMqC8pO3o+y3XlHjWLRPs4vjuun
+         kEMYoVJFSQlgrFlIdQjWxJZOF9u8EKNUXJEAaK7ZzKb6D6YvEic3JCaMevZjyF6w2UhX
+         XITgmcW2jbTl06aCxryjXlczu9Rd2NnVJeMho28nG5dHEOPmnVsHdpO0ScRz6kVFym+s
+         qb+qU15AZkSN75eMEuIkDwFNe8mRTdCrbUPE2+b0wYh/vuRx29sLK+5WLERnEMkgy38i
+         R2NvDKG9q+uTmmen9FsslgJwCVIyBlpV5lEn2FJ9fHOWSKszTb4bcnntqWhmRmDtbFHn
+         tZhg==
+X-Gm-Message-State: AFqh2kpozQ4soJ2EK5Xa/7pYDz80dgEldOmk35b2tPvZkMLXUxqUoBT1
+        kZxgdIQoTMuUBzeX9fADNwM=
+X-Google-Smtp-Source: AMrXdXulOr2VKgdwgb5ddyFY81acDgesX38ZIxXMTqNqQO11JCVLUIZ2yxFN1GN1A2WIBZRP+TzUWQ==
+X-Received: by 2002:a17:903:2154:b0:189:5a49:36c3 with SMTP id s20-20020a170903215400b001895a4936c3mr9539682ple.0.1671476374965;
+        Mon, 19 Dec 2022 10:59:34 -0800 (PST)
 Received: from localhost.localdomain ([198.13.51.166])
-        by smtp.gmail.com with ESMTPSA id i6-20020a170902c94600b00189847cd4acsm7480790pla.237.2022.12.19.10.59.23
+        by smtp.gmail.com with ESMTPSA id i6-20020a170902c94600b00189847cd4acsm7480790pla.237.2022.12.19.10.59.29
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 19 Dec 2022 10:59:28 -0800 (PST)
+        Mon, 19 Dec 2022 10:59:34 -0800 (PST)
 From:   Kairui Song <ryncsn@gmail.com>
 To:     linux-mm@kvack.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -60,9 +60,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Hugh Dickins <hughd@google.com>,
         Matthew Wilcox <willy@infradead.org>,
         Kairui Song <kasong@tencent.com>
-Subject: [PATCH v2 3/4] swap: fold swap_ra_clamp_pfn into swap_ra_info
-Date:   Tue, 20 Dec 2022 02:58:39 +0800
-Message-Id: <20221219185840.25441-4-ryncsn@gmail.com>
+Subject: [PATCH v2 4/4] swap: avoid holding swap reference in swap_cache_get_folio
+Date:   Tue, 20 Dec 2022 02:58:40 +0800
+Message-Id: <20221219185840.25441-5-ryncsn@gmail.com>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20221219185840.25441-1-ryncsn@gmail.com>
 References: <20221219185840.25441-1-ryncsn@gmail.com>
@@ -81,93 +81,91 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kairui Song <kasong@tencent.com>
 
-This make the code cleaner. This helper is made of only two line of
-self explanational code and not reused anywhere else.
+All its callers either already hold a reference to, or lock the
+swap device while calling this function. There is only one exception
+in shmem_swapin_folio, just make this caller also hold a reference
+of the swap device, so this helper can be simplified and saves
+a few cycles.
 
-And this actually make the compiled object smaller by a bit.
-
-bloat-o-meter results on x86_64 of mm/swap_state.o:
-
-add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-35 (-35)
-Function                                     old     new   delta
-swap_ra_info.constprop                       512     477     -35
-Total: Before=8388, After=8353, chg -0.42%
+This also provides finer control of error handling in shmem_swapin_folio,
+on race (with swap off), it can just try again. For invalid swap entry,
+it can fail with a proper error code.
 
 Signed-off-by: Kairui Song <kasong@tencent.com>
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
 ---
- mm/swap_state.c | 44 +++++++++++++++++++-------------------------
- 1 file changed, 19 insertions(+), 25 deletions(-)
+ mm/shmem.c      | 11 +++++++++++
+ mm/swap_state.c |  8 ++------
+ 2 files changed, 13 insertions(+), 6 deletions(-)
 
+diff --git a/mm/shmem.c b/mm/shmem.c
+index c301487be5fb..5bdf7298d494 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -1735,6 +1735,7 @@ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
+ 	struct address_space *mapping = inode->i_mapping;
+ 	struct shmem_inode_info *info = SHMEM_I(inode);
+ 	struct mm_struct *charge_mm = vma ? vma->vm_mm : NULL;
++	struct swap_info_struct *si;
+ 	struct folio *folio = NULL;
+ 	swp_entry_t swap;
+ 	int error;
+@@ -1746,6 +1747,14 @@ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
+ 	if (is_swapin_error_entry(swap))
+ 		return -EIO;
+ 
++	si = get_swap_device(swap);
++	if (!si) {
++		if (!shmem_confirm_swap(mapping, index, swap))
++			return -EEXIST;
++		else
++			return -EINVAL;
++	}
++
+ 	/* Look it up and read it in.. */
+ 	folio = swap_cache_get_folio(swap, NULL, 0);
+ 	if (!folio) {
+@@ -1806,6 +1815,7 @@ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
+ 	delete_from_swap_cache(folio);
+ 	folio_mark_dirty(folio);
+ 	swap_free(swap);
++	put_swap_device(si);
+ 
+ 	*foliop = folio;
+ 	return 0;
+@@ -1819,6 +1829,7 @@ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
+ 		folio_unlock(folio);
+ 		folio_put(folio);
+ 	}
++	put_swap_device(si);
+ 
+ 	return error;
+ }
 diff --git a/mm/swap_state.c b/mm/swap_state.c
-index af8bc123b7c4..d8d171195a3a 100644
+index d8d171195a3a..cb9aaa00951d 100644
 --- a/mm/swap_state.c
 +++ b/mm/swap_state.c
-@@ -693,28 +693,15 @@ void exit_swap_address_space(unsigned int type)
- 	swapper_spaces[type] = NULL;
- }
- 
--static inline void swap_ra_clamp_pfn(struct vm_area_struct *vma,
--				     unsigned long faddr,
--				     unsigned long lpfn,
--				     unsigned long rpfn,
--				     unsigned long *start,
--				     unsigned long *end)
--{
--	*start = max3(lpfn, PFN_DOWN(vma->vm_start),
--		      PFN_DOWN(faddr & PMD_MASK));
--	*end = min3(rpfn, PFN_DOWN(vma->vm_end),
--		    PFN_DOWN((faddr & PMD_MASK) + PMD_SIZE));
--}
--
- static void swap_ra_info(struct vm_fault *vmf,
--			struct vma_swap_readahead *ra_info)
-+			 struct vma_swap_readahead *ra_info)
+@@ -321,19 +321,15 @@ static inline bool swap_use_vma_readahead(void)
+  * unlocked and with its refcount incremented - we rely on the kernel
+  * lock getting page table operations atomic even if we drop the folio
+  * lock before returning.
++ *
++ * Caller must lock the swap device or hold a reference to keep it valid.
+  */
+ struct folio *swap_cache_get_folio(swp_entry_t entry,
+ 		struct vm_area_struct *vma, unsigned long addr)
  {
- 	struct vm_area_struct *vma = vmf->vma;
- 	unsigned long ra_val;
--	unsigned long faddr, pfn, fpfn;
-+	unsigned long faddr, pfn, fpfn, lpfn, rpfn;
- 	unsigned long start, end;
- 	pte_t *pte, *orig_pte;
--	unsigned int max_win, hits, prev_win, win, left;
-+	unsigned int max_win, hits, prev_win, win;
- #ifndef CONFIG_64BIT
- 	pte_t *tpte;
- #endif
-@@ -742,16 +729,23 @@ static void swap_ra_info(struct vm_fault *vmf,
+ 	struct folio *folio;
+-	struct swap_info_struct *si;
  
- 	/* Copy the PTEs because the page table may be unmapped */
- 	orig_pte = pte = pte_offset_map(vmf->pmd, faddr);
--	if (fpfn == pfn + 1)
--		swap_ra_clamp_pfn(vma, faddr, fpfn, fpfn + win, &start, &end);
--	else if (pfn == fpfn + 1)
--		swap_ra_clamp_pfn(vma, faddr, fpfn - win + 1, fpfn + 1,
--				  &start, &end);
--	else {
--		left = (win - 1) / 2;
--		swap_ra_clamp_pfn(vma, faddr, fpfn - left, fpfn + win - left,
--				  &start, &end);
-+	if (fpfn == pfn + 1) {
-+		lpfn = fpfn;
-+		rpfn = fpfn + win;
-+	} else if (pfn == fpfn + 1) {
-+		lpfn = fpfn - win + 1;
-+		rpfn = fpfn + 1;
-+	} else {
-+		unsigned int left = (win - 1) / 2;
-+
-+		lpfn = fpfn - left;
-+		rpfn = fpfn + win - left;
- 	}
-+	start = max3(lpfn, PFN_DOWN(vma->vm_start),
-+		     PFN_DOWN(faddr & PMD_MASK));
-+	end = min3(rpfn, PFN_DOWN(vma->vm_end),
-+		   PFN_DOWN((faddr & PMD_MASK) + PMD_SIZE));
-+
- 	ra_info->nr_pte = end - start;
- 	ra_info->offset = fpfn - start;
- 	pte -= ra_info->offset;
+-	si = get_swap_device(entry);
+-	if (!si)
+-		return NULL;
+ 	folio = filemap_get_folio(swap_address_space(entry), swp_offset(entry));
+-	put_swap_device(si);
+-
+ 	if (folio) {
+ 		bool vma_ra = swap_use_vma_readahead();
+ 		bool readahead;
 -- 
 2.35.2
 
