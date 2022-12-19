@@ -2,154 +2,450 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D568D650888
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 09:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F5165088B
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 09:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbiLSIWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 03:22:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        id S231540AbiLSIXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 03:23:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiLSIWr (ORCPT
+        with ESMTP id S229499AbiLSIXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 03:22:47 -0500
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3C57649;
-        Mon, 19 Dec 2022 00:22:44 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id AA62430000CE2;
-        Mon, 19 Dec 2022 09:22:40 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 9D60210D88; Mon, 19 Dec 2022 09:22:40 +0100 (CET)
-Date:   Mon, 19 Dec 2022 09:22:40 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Parav Pandit <parav@nvidia.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Wei Gong <gongwei833x@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v2] pci: fix device presence detection for VFs
-Message-ID: <20221219082240.GA5176@wunner.de>
-References: <20221110144700-mutt-send-email-mst@kernel.org>
- <20221111234219.GA763705@bhelgaas>
- <20221113034519-mutt-send-email-mst@kernel.org>
- <20221116111619.GA5804@wunner.de>
- <PH0PR12MB54811F4658F068C46E071E81DC069@PH0PR12MB5481.namprd12.prod.outlook.com>
- <20221219005553-mutt-send-email-mst@kernel.org>
+        Mon, 19 Dec 2022 03:23:12 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2083.outbound.protection.outlook.com [40.107.237.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71067649
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 00:23:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bK1ZRWZjnsFPrzcJ29eOU/glt9gZfHHhWj7Ni81OPwQ72be22rqdMoVf2iXbCNEpof+2l80ZJ7tnja3TSbAbrr+LJag5vLUx0zZCMfpNI79L+/aF7/7ps5dNk2Kfk7Qxw1UgFHlTTV2FCQ83bWL7wKiw9GC8dLHmfc/tWY4WJ1P1JtPJ1fA0/rt1Bf05586Q406xjj5dBvrkehHwD6bMV5tUcM6RtKCvCYvcXJIWh4mNkqQFHCjqujMTZGnkNzlCx+VQFVtKn6GOBC/x1Vh74qR1qDc1MMiT6qgYWi6xXMHTAO6IdNmERb0zr3iFMC2vT5C+uOnTKlH+zfyol+KHoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NItzDPaQl7FSC4P4rrs9A1PqHxTiOmZIdtbN8mTWZkU=;
+ b=ecvRGVt2+TC9X43aF0tqjusFun5ypvMjpmX+Ou3InSgxm/kqanL2rq4enYth+csl2eI5f6pDi7hbzN2xfX4VMgfsO47mpxwTyR7CLt37e7py2W0+Sp9j8qK9PER4Yktwm2a66vnl2940BxREFIultJydkrHyn0ZmVamU1PmA2MyTh+Q6t+MMS+WW3yNy3e/gh7/RL2KiKwaxR6aOm6xtaNvLhe6XF4EmwqDBReZi8nNriFCsiux+aeW++0PKSPvdw+VpzLC7mESB+ZYmJugknZUd5D7FnK2Cc2NglJIUERy+K/TyHZgn/cVo5fgKr2lfOY0vdgeabS5Z0/YqeUnF7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NItzDPaQl7FSC4P4rrs9A1PqHxTiOmZIdtbN8mTWZkU=;
+ b=L8j+vLkjickN6OfUhH7wztfXycCZ1nJm5S/NvHVT5KZjt5iWwMYsNVTUmUDed7enUJnu7PdgXplfoFasPbZHGzkPJYgaqlPHsw8CtdZTPe2/Rv4zRdvwvoMCW3SLt5UTmcjmNdkghOd/LxAPfau3gkZpTejtftuawGKGCu8NJnQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM4PR12MB5055.namprd12.prod.outlook.com (2603:10b6:5:39a::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12; Mon, 19 Dec
+ 2022 08:23:06 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::80d8:934f:caa7:67b0]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::80d8:934f:caa7:67b0%3]) with mapi id 15.20.5924.016; Mon, 19 Dec 2022
+ 08:23:06 +0000
+Message-ID: <0ac03934-27dc-e045-fece-5a4b4328de6c@amd.com>
+Date:   Mon, 19 Dec 2022 09:23:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: amdgpu refcount saturation
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>, amd-gfx@lists.freedesktop.org,
+        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        lkml <linux-kernel@vger.kernel.org>
+References: <Y52tzASAKNAJEER3@zn.tnic>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <Y52tzASAKNAJEER3@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0104.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a1::20) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219005553-mutt-send-email-mst@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DM4PR12MB5055:EE_
+X-MS-Office365-Filtering-Correlation-Id: 08a72fd4-5c09-44e2-22b8-08dae19a413d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UZqEs8FfRZC/LbTJf3aIkVaA3CfEWx7LzezyZC+nhyNAJDG804Ed5eKG/6TgF4mQHCxqkN2ik/nCn23tUV/VCWtKfb5UqXJEuH6cRQqgT0dLEndIv2WtuMSCEeaufYKLseH1OFyqGVQyBio3PCrOW6KNDRolgLZv/A8qQjFbVZGQV6rXDNN3ZwMAhbbikutve+8UjXAjBZyIMibvmBWWWCiKm+cKNyH1DluiyhBUXVh5Y9QlfeoU98BVdOuB+gYgtITbF6APyMj6PvsOGN9CUoWlgi8apJ+cYbKI04zVyn8JhP15Lx1ftRehaN2uR6C2xgvqZmxoAMD+Hi4tsHfj/qYzKPvwJJ2NoNnePN3Dsn2F9d1TyGZDSJoAB3xjIDN8i2wy7TWHZpOTQQSn5I0lQAm0fBbYA6d/afGLWKd8vRZt/vMXdaL0YiU4Qj0iG93efn05fynD4rFZmbGhnsTzI+1Clje1hfkMsC+6r54oWSiR/3nIreF2hfMzfErZJk5R+meXD5I1SGxI7nOsI407GTUok6joG3gGeS8aAkiRQjbQtsZVHBaMLlmxnGMPlK4ifZLMcHwbvn/R5Spwb2Vp5MN+HmIIJcGoOFZHouhGXQI9LsI/ynB6dRZfdVz5p5RNDAZpVJfkpkEu+pqnh045NDWGioCkGXCIyKnGr6ayS8K4vb+tXjAnP6D7ZeqskfX+Ux+f5VraTLERtlBJFtG3d8ii4iivHinm3IUIYVDac6g=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(136003)(376002)(39860400002)(396003)(451199015)(3480700007)(83380400001)(86362001)(31696002)(41300700001)(30864003)(5660300002)(8936002)(7116003)(6506007)(4326008)(186003)(8676002)(66476007)(2616005)(6512007)(66946007)(316002)(66556008)(110136005)(45080400002)(31686004)(6486002)(38100700002)(478600001)(54906003)(2906002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YllucGx0bjBKaG5CcURQVXp5NC9qMUpwSEtQR2t6cklpc2pNaTFjQnV4UVJk?=
+ =?utf-8?B?YkVMTExVS2lPM0RvWHQyMzRrTVY0bDhDYWRrRXRjWHhaVWZLQTFiVlAyeHRv?=
+ =?utf-8?B?VE9XU1lGaFNLeVh1TUltSlZtb3BDTURWRnlBMG1nVDIyQzEvM0lGRnNRdGli?=
+ =?utf-8?B?eU1BNDlzNVlFaVpvbDM3RFFlUk4zam4zVVVKNzF6OG4vL09qMkd5M250V1J0?=
+ =?utf-8?B?RlFEUnNFYlR1bDI5VmxUTWxBMEkyU2JQakRmeHU1aFVJS3lTV0VMUWxHb3Yr?=
+ =?utf-8?B?Vms4eGk0eTRIUllwOFd3MXdvL085MDB2MDR5cGk0R1BEVDBOSVFiM2w1dVlS?=
+ =?utf-8?B?MG1XZS8rM1RMQTdWQVk2Y2lCZkFVM05LbzNORGI5bXdCZjBGMXpEZEs2ZVdQ?=
+ =?utf-8?B?UTZqSkxwcWNpTWgyczRoVk9jM3RjU1lqK3JvS1crZUk2dmwxT2syUUFuQ2Iz?=
+ =?utf-8?B?TVZ6YUtBajZWTnQ0cDl0eDlBUWUzZWZDaWkzcnpkRm95VE5OaXFMeDlSYjg5?=
+ =?utf-8?B?eHMrTkdER0Zsa002WEYxMjVUYXJHRzdHb3Exd05RTURYa092NWNCVmlHOWU4?=
+ =?utf-8?B?NlByT2dXTWoxVytleGRQZm9HYWlkU0pQK3ZhQ1lPeThUei9wT0FoUHJJTzBE?=
+ =?utf-8?B?aUhWQmdVeS9xUmZ5RTFwcmFWTjI0c0ExUVFkT1hhbUF0QUpMUXBHNW01aEtP?=
+ =?utf-8?B?N1pZWStGVVBONTVwa1Y3MjRXMldSYVYvc3hnc3M2c3dERENYZ29SSXUwYnR3?=
+ =?utf-8?B?a1IvMThtV2k5ZTBmWWlNVCtncGdFOGpFbEphZEdYZkV5WC96QjdoOGNYYUht?=
+ =?utf-8?B?bUgxQjV0eEppdWR0U0VhL0wwcmRFdTY4blhnMllFMDN2WkRITXltazlKQ1l0?=
+ =?utf-8?B?ekdqckt1RFRBQTNpTnlualVjekVSanI4b1RHZFpYaTI0NVJwLzVRa21iS3Nu?=
+ =?utf-8?B?Tkt1VGlBUFRRYnhGZXlxTkJrVmJHaVdnRDF4RmZiTElMQjY1dzNmQnNjZThZ?=
+ =?utf-8?B?eVEzUFNzcUhWYlVjL1Mycy9OSitsOGZSMTluWU94dnRSK1UrSkxNQnpXVjJp?=
+ =?utf-8?B?aE53SmhrV25UTnJzVTVCbmFrcDBOZUIzeXpNNFlwbFlpTWtpdGxhV2VvSXgz?=
+ =?utf-8?B?NnBpL1F6TlAyUVZ6c3pMMElyeUVIK1FzL3JiUDBhaGl3dWI5aFBuVXpmMTZ6?=
+ =?utf-8?B?aUhTclVQdlhiWURDbHZRYlRhZUVNaHl3SWRkV1BuY1g2enJpckZSUWRLK2lF?=
+ =?utf-8?B?VVkrK3N1dE1td2MvUFQwa05nWGpPd005dTV4V1h3QkV6ZkpyTVl5Ni9pVnZI?=
+ =?utf-8?B?RXpIalpUWkhOSnQ3Tlc3aFBGSGlPOEROUUZ1VmRWbC9JOUh0Umo4c0VBL3Zr?=
+ =?utf-8?B?UlhyUG0yU3hQZHV1V3NFMVB6dUlYNTdMbVdMNlU3cVRNcWJDcDVRMmdwalRu?=
+ =?utf-8?B?SklZazQxekpVZUJVZmJaQnZ6d2xHZ0hMaWhwdnMxU1BBU1BVak9oWlgvY29V?=
+ =?utf-8?B?dXZnU3RVNFNSUERwTEozMU8zZFhtVndhMjNzLzhlWEM1bDlFTTJLeXFNWHl4?=
+ =?utf-8?B?SjFla0JRYno4dTJYdlFHazVlcWR5Y2d1WVFpYVFoZ2pXS2VsMTJ5OHdzdGpk?=
+ =?utf-8?B?Y1BpM3dLVnhrZmVGSU1yeUsyK0daVXIrczFDeUdlUzdmTmRiVjBQNUhBbS93?=
+ =?utf-8?B?SFl3cmpubjJ6NjBlVEhGWDRhRjN6ME9QNEU5cm0zNGxta05USWt4TWRvSEly?=
+ =?utf-8?B?QzFGTmlrTWdtL1VlOVVjVkVOZDRLSlNMTktXVlZSRjlJYmtNaDhBWVhydmEr?=
+ =?utf-8?B?SnNXaE1weHFST1VRMDNsYVk1ZXgvdVpFMkZpQ3ovUExYTkFXakFLNlo0UTI4?=
+ =?utf-8?B?SDN0QlV4YUk2aDhnbU1CRStrTzdVWGx0QjQrY0tzK01CaWtPNEM2ck9Dcksv?=
+ =?utf-8?B?WWc4OGVDeFhYazIwa2ZiRzVQa2dsZG55VjkvaTFkR0x0UXUwaGNML0ovVTUw?=
+ =?utf-8?B?eEF3d2lnS05PZmJEMitZdnpEdm12Z3JaYTY4NFhTRXlxVFA3KzI3K0tmU0Yy?=
+ =?utf-8?B?Qk1OMks0TE1Wd2hGRjIvUmhzUXhodHhjeExWMlZpdG1NNHMxSXlVNzQzcmJR?=
+ =?utf-8?B?NW04K044cUVMdjhOMDlrWFJrUVNueTJDWWZXRm9rQjZBbVRQWS9yT0NYYlpl?=
+ =?utf-8?Q?/QkXqPjHUXCNq8dbHLfjRclW3awfOx/Su1mlRKej1QbC?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 08a72fd4-5c09-44e2-22b8-08dae19a413d
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2022 08:23:06.6772
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WJ67w1ju/e0xHQ7/ZSUMYwKvfhXsT+ymIO/CSS8j9fzlYyui2/AuMvh1kHIqSHR1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5055
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 12:56:15AM -0500, Michael S. Tsirkin wrote:
-> On Thu, Nov 17, 2022 at 05:36:48AM +0000, Parav Pandit wrote:
-> > > From: Lukas Wunner <lukas@wunner.de>
-> > > Sent: Wednesday, November 16, 2022 6:16 AM
-> > > 
-> > > [cc += Parav Pandit, author of 43bb40c5b926]
-> > > 
-> > > On Sun, Nov 13, 2022 at 03:46:06AM -0500, Michael S. Tsirkin wrote:
-> > > > On Fri, Nov 11, 2022 at 05:42:19PM -0600, Bjorn Helgaas wrote:
-> > > > > On Thu, Nov 10, 2022 at 03:15:55PM -0500, Michael S. Tsirkin wrote:
-> > > > > > On Thu, Nov 10, 2022 at 01:35:47PM -0600, Bjorn Helgaas wrote:
-> > > > > > > Prior to this change pci_device_is_present(VF) returned "false"
-> > > > > > > (because the VF Vendor ID is 0xffff); after the change it will
-> > > > > > > return "true" (because it will look at the PF Vendor ID instead).
-> > > > > > >
-> > > > > > > Previously virtio_pci_remove() called virtio_break_device().  I
-> > > > > > > guess that meant the virtio I/O operation will never be completed?
-> > > > > > >
-> > > > > > > But if we don't call virtio_break_device(), the virtio I/O
-> > > > > > > operation
-> > > > > > > *will* be completed?
-> > > >
-> > > > Just making sure - pci_device_is_present *is* the suggested way to
-> > > > distinguish between graceful and surprise removal, isn't it?
-> > > 
-> > > No, it's not.  Instead of !pci_device_is_present() you really want to call
-> > > pci_dev_is_disconnected() instead.
-> > > 
-> > > While the fix Bjorn applied for v6.2 may solve the issue and may make sense
-> > > on it's own, it's not the solution you're looking for.  You want to swap the
-> > > call to !pci_device_is_present() with pci_dev_is_disconnected(), move
-> > > pci_dev_is_disconnected() from drivers/pci/pci.h to include/linux/pci.h and
-> > > add a Fixes tag referencing 43bb40c5b926.
-> > > 
-> > > If you don't want to move pci_dev_is_disconnected(), you can alternatively
-> > > check for "pdev->error_state == pci_channel_io_perm_failure" or call
-> > > pci_channel_offline().  The latter will also return true though on transient
-> > > inaccessibility of the device (e.g. if it's being reset).
-> > > 
-> > pci_device_is_present() is calling pci_dev_is_disconnected().
-> > pci_dev_is_disconnected() avoids reading the vendor id.
-> > So pci_dev_is_disconnected() looks less strong check.
-> > I see that it can return a valid value on recoverable error case.
-> > 
-> > In that case, is pci_channel_offline() a more precise way to check that covers transient and permanent error?
-> > 
-> > And if that is the right check, we need to fix all the callers, mainly widely used nvme driver [1].
-> > 
-> > [1] https://elixir.bootlin.com/linux/v6.1-rc5/source/drivers/nvme/host/pci.c#L3228
-> > 
-> > Also, we need to add API documentation on when to use this API in context of hotplug, so that all related drivers can consistently use single API.
-> 
-> Bjorn, Lukas, what's your take on this idea?
+Thanks for the notice, going to take a look today.
 
-I don't really know what to add to my e-mail of Nov 16
-(quoted here in full).
+Regards,
+Christian.
 
-Yes, pci_channel_offline() returns true on transient and permanent
-failure.  Whether that's what you want, depends on your use case.
-If you want to check for a surprise-removed device, then you only
-want to check for permanent failure, so pci_channel_offline() is
-not correct and you should rather check for
-"pdev->error_state == pci_channel_io_perm_failure" or move
-pci_dev_is_disconnected() to include/linux/pci.h.  But again,
-I've already explained this in my e-mail ov Nov 16, so I don't
-know what's unclear.
+Am 17.12.22 um 12:53 schrieb Borislav Petkov:
+> Hi folks,
+>
+> this is with Linus' tree from Wed:
+>
+> 041fae9c105a ("Merge tag 'f2fs-for-6.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs")
+>
+> on a CZ laptop:
+>
+> [    7.782901] [drm] initializing kernel modesetting (CARRIZO 0x1002:0x9874 0x103C:0x807E 0xC4)
+>
+> The splat is kinda messy:
+>
+> ---
+>
+> [    7.755306] [drm] amdgpu kernel modesetting enabled.
+> [    7.779110] amdgpu 0000:00:01.0: vgaarb: deactivate vga console
+> [    7.780417] Console: switching to colour dummy device 80x25
+> [    7.782901] [drm] initializing kernel modesetting (CARRIZO 0x1002:0x9874 0x103C:0x807E 0xC4).
+> [    7.783244] [drm] register mmio base: 0xD0C00000
+> [    7.783405] [drm] register mmio size: 262144
+> [    7.784182] [drm] add ip block number 0 <vi_common>
+> [    7.784375] [drm] add ip block number 1 <gmc_v8_0>
+> [    7.784555] [drm] add ip block number 2 <cz_ih>
+> [    7.784717] [drm] add ip block number 3 <gfx_v8_0>
+> [    7.784925] [drm] add ip block number 4 <sdma_v3_0>
+> [    7.785094] [drm] add ip block number 5 <powerplay>
+> [    7.785264] [drm] add ip block number 6 <dm>
+> [    7.785413] [drm] add ip block number 7 <uvd_v6_0>
+> [    7.785580] [drm] add ip block number 8 <vce_v3_0>
+> [    7.800919] [drm] BIOS signature incorrect 5b 7
+> [    7.801095] resource sanity check: requesting [mem 0x000c0000-0x000dffff], which spans more than PCI Bus 0000:00 [mem 0x000c0000-0x000cbfff window]
+> [    7.801544] caller pci_map_rom+0x68/0x1c0 mapping multiple BARs
+> [    7.801838] amdgpu 0000:00:01.0: amdgpu: Fetched VBIOS from ROM BAR
+> [    7.802067] amdgpu: ATOM BIOS: SWBRT27354.001
+> [    7.802272] [drm] UVD is enabled in physical mode
+> [    7.802438] [drm] VCE enabled in physical mode
+> [    7.802592] amdgpu 0000:00:01.0: amdgpu: Trusted Memory Zone (TMZ) feature not supported
+> [    7.803100] [drm] vm size is 64 GB, 2 levels, block size is 10-bit, fragment size is 9-bit
+> [    7.803387] amdgpu 0000:00:01.0: amdgpu: VRAM: 512M 0x000000F400000000 - 0x000000F41FFFFFFF (512M used)
+> [    7.803708] amdgpu 0000:00:01.0: amdgpu: GART: 1024M 0x000000FF00000000 - 0x000000FF3FFFFFFF
+> [    7.804007] [drm] Detected VRAM RAM=512M, BAR=512M
+> [    7.804174] [drm] RAM width 128bits UNKNOWN
+> [    7.804703] [drm] amdgpu: 512M of VRAM memory ready
+> [    7.804882] [drm] amdgpu: 7638M of GTT memory ready.
+> [    7.805164] [drm] GART: num cpu pages 262144, num gpu pages 262144
+> [    7.805484] [drm] PCIE GART of 1024M enabled (table at 0x000000F400A00000).
+> [    7.808418] amdgpu: hwmgr_sw_init smu backed is smu8_smu
+> [    7.809070] [drm] Found UVD firmware Version: 1.91 Family ID: 11
+> [    7.809413] [drm] UVD ENC is disabled
+> [    7.810321] [drm] Found VCE firmware Version: 52.4 Binary ID: 3
+> [    7.812036] amdgpu: smu version 18.62.00
+> [    7.818378] [drm] DM_PPLIB: values for Engine clock
+> [    7.818566] [drm] DM_PPLIB:	 300000
+> [    7.818689] [drm] DM_PPLIB:	 360000
+> [    7.818811] [drm] DM_PPLIB:	 423530
+> [    7.818934] [drm] DM_PPLIB:	 514290
+> [    7.819056] [drm] DM_PPLIB:	 626090
+> [    7.819179] [drm] DM_PPLIB:	 720000
+> [    7.819302] [drm] DM_PPLIB: Validation clocks:
+> [    7.819456] [drm] DM_PPLIB:    engine_max_clock: 72000
+> [    7.819633] [drm] DM_PPLIB:    memory_max_clock: 80000
+> [    7.819810] [drm] DM_PPLIB:    level           : 8
+> [    7.819977] [drm] DM_PPLIB: values for Display clock
+> [    7.820148] [drm] DM_PPLIB:	 300000
+> [    7.820271] [drm] DM_PPLIB:	 400000
+> [    7.820394] [drm] DM_PPLIB:	 496560
+> [    7.820563] [drm] DM_PPLIB:	 626090
+> [    7.820694] [drm] DM_PPLIB:	 685720
+> [    7.820857] [drm] DM_PPLIB:	 757900
+> [    7.820979] [drm] DM_PPLIB: Validation clocks:
+> [    7.821133] [drm] DM_PPLIB:    engine_max_clock: 72000
+> [    7.821310] [drm] DM_PPLIB:    memory_max_clock: 80000
+> [    7.821487] [drm] DM_PPLIB:    level           : 8
+> [    7.821653] [drm] DM_PPLIB: values for Memory clock
+> [    7.821821] [drm] DM_PPLIB:	 333000
+> [    7.821944] [drm] DM_PPLIB:	 800000
+> [    7.822066] [drm] DM_PPLIB: Validation clocks:
+> [    7.822220] [drm] DM_PPLIB:    engine_max_clock: 72000
+> [    7.822397] [drm] DM_PPLIB:    memory_max_clock: 80000
+> [    7.822574] [drm] DM_PPLIB:    level           : 8
+> [    7.823044] [drm] Display Core initialized with v3.2.215!
+> [    7.903994] [drm] UVD initialized successfully.
+> [    8.103416] [drm] VCE initialized successfully.
+> [    8.104616] amdgpu 0000:00:01.0: amdgpu: SE 1, SH per SE 1, CU per SH 8, active_cu_number 8
+> [    8.109430] [drm] Initialized amdgpu 3.49.0 20150101 for 0000:00:01.0 on minor 0
+> [    8.120099] fbcon: amdgpudrmfb (fb0) is primary device
+> [    8.886332] Console: switching to colour frame buffer device 320x90
+> [    8.902118] amdgpu 0000:00:01.0: [drm] fb0: amdgpudrmfb frame buffer device
+> [    8.967565] process '/usr/bin/fstype' started with executable stack
+> [    8.979419] PM: Image not found (code -22)
+> [    9.043724] EXT4-fs (sda2): mounted filesystem c34989f9-7c8f-49ae-8285-7896af84c685 with ordered data mode. Quota mode: disabled.
+> [    9.540346] systemd-udevd[1404]: /etc/udev/rules.d/storage_devices.rules:1 Invalid value for OPTIONS key, ignoring: 'all_partitions'
+> [    9.766687] input: Power Button as /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0C:00/input/input10
+> [    9.770181] ACPI: button: Power Button [PWRB]
+> [    9.782936] acpi_cpufreq: overriding BIOS provided _PSD data
+> [    9.784086] ACPI: AC: AC Adapter [AC] (off-line)
+> [    9.789339] input: Sleep Button as /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0E:00/input/input11
+> [    9.792905] ACPI: button: Sleep Button [SLPB]
+> [    9.815432] input: Lid Switch as /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0D:00/input/input12
+> [    9.840976] ACPI: button: Lid Switch [LID]
+> [    9.842731] ACPI: battery: Slot [BAT0] (battery present)
+> [    9.862066] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input13
+> [    9.884592] ACPI: button: Power Button [PWRF]
+> [    9.998674] cryptd: max_cpu_qlen set to 1000
+> [   10.011682] input: PC Speaker as /devices/platform/pcspkr/input/input14
+> [   10.019917] AVX2 version of gcm_enc/dec engaged.
+> [   10.020328] AES CTR mode by8 optimization enabled
+> [   10.024120] systemd-udevd[1427]: ethtool: autonegotiation is unset or enabled, the speed and duplex are not writable.
+> [   10.025845] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+> [   10.089758] cfg80211: Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+> [   10.092829] cfg80211: loaded regulatory.db is malformed or signature is missing/invalid
+> [   10.113060] snd_hda_intel 0000:00:01.1: Force to non-snoop mode
+> [   10.114044] tg3 0000:01:00.0 eth0: Tigon3 [partno(BCM95762) rev 5762100] (PCI Express) MAC address fc:3f:db:fc:10:9f
+> [   10.120860] tg3 0000:01:00.0 eth0: attached PHY is 5762C (10/100/1000Base-T Ethernet) (WireSpeed[1], EEE[1])
+> [   10.121311] tg3 0000:01:00.0 eth0: RXcsums[1] LinkChgREG[0] MIirq[0] ASF[0] TSOcap[1]
+> [   10.121588] tg3 0000:01:00.0 eth0: dma_rwctrl[00000001] dma_mask[64-bit]
+> [   10.141135] snd_hda_intel 0000:00:01.1: bound 0000:00:01.0 (ops amdgpu_dm_audio_component_bind_ops [amdgpu])
+> [   10.156355] Intel(R) Wireless WiFi driver for Linux
+> [   10.162066] input: HDA ATI HDMI HDMI/DP,pcm=3 as /devices/pci0000:00/0000:00:01.1/sound/card0/input15
+> [   10.163016] input: HDA ATI HDMI HDMI/DP,pcm=7 as /devices/pci0000:00/0000:00:01.1/sound/card0/input16
+> [   10.163881] input: HDA ATI HDMI HDMI/DP,pcm=8 as /devices/pci0000:00/0000:00:01.1/sound/card0/input17
+> [   10.165613] iwlwifi 0000:02:00.0: loaded firmware version 29.1044073957.0 7265D-29.ucode op_mode iwlmvm
+> [   10.170553] snd_hda_codec_generic hdaudioC1D0: autoconfig for Generic: line_outs=1 (0x17/0x0/0x0/0x0/0x0) type:speaker
+> [   10.171019] snd_hda_codec_generic hdaudioC1D0:    speaker_outs=0 (0x0/0x0/0x0/0x0/0x0)
+> [   10.171349] snd_hda_codec_generic hdaudioC1D0:    hp_outs=1 (0x1d/0x0/0x0/0x0/0x0)
+> [   10.171662] snd_hda_codec_generic hdaudioC1D0:    mono: mono_out=0x0
+> [   10.171901] snd_hda_codec_generic hdaudioC1D0:    inputs:
+> [   10.172111] snd_hda_codec_generic hdaudioC1D0:      Internal Mic=0x1a
+> [   10.172358] snd_hda_codec_generic hdaudioC1D0:      Mic=0x19
+> [   10.194871] input: HDA ATI HDMI HDMI/DP,pcm=9 as /devices/pci0000:00/0000:00:01.1/sound/card0/input18
+> [   10.196005] input: HD-Audio Generic Mic as /devices/pci0000:00/0000:00:09.2/sound/card1/input19
+> [   10.196800] input: HD-Audio Generic Headphone as /devices/pci0000:00/0000:00:09.2/sound/card1/input20
+> [   10.341545] iwlwifi 0000:02:00.0: Detected Intel(R) Dual Band Wireless AC 7265, REV=0x210
+> [   10.347851] thermal thermal_zone5: failed to read out thermal zone (-61)
+> [   10.370248] iwlwifi 0000:02:00.0: base HW address: 18:5e:0f:ef:3f:49, OTP minor version: 0x0
+> [   10.442314] systemd-udevd[1415]: Using default interface naming scheme 'v243'.
+> [   10.450847] ieee80211 phy0: Selected rate control algorithm 'iwl-mvm-rs'
+> [   10.460077] systemd-udevd[1415]: ethtool: autonegotiation is unset or enabled, the speed and duplex are not writable.
+> [   10.461982] systemd-udevd[1430]: Using default interface naming scheme 'v243'.
+> [   10.472784] systemd-udevd[1430]: ethtool: autonegotiation is unset or enabled, the speed and duplex are not writable.
+> [   10.990278] SVM: TSC scaling supported
+> [   10.992345] kvm: Nested Virtualization enabled
+> [   10.994632] SVM: kvm: Nested Paging enabled
+> [   10.997010] SVM: Virtual GIF supported
+> [   10.999325] SVM: LBR virtualization supported
+>
+> ...
+>
+> [   11.923155] Adding 15721468k swap on /dev/sda1.  Priority:-2 extents:1 across:15721468k SS
+> [   11.959678] EXT4-fs (sda2): re-mounted c34989f9-7c8f-49ae-8285-7896af84c685. Quota mode: disabled.
+> [   12.431892] device-mapper: ioctl: 4.47.0-ioctl (2022-07-28) initialised: dm-devel@redhat.com
+> [   12.457215] loop: module loaded
+> [   12.583033] EXT4-fs (sda5): mounted filesystem d78a2e53-75c6-4d4a-887c-f4a66a64ba8c with ordered data mode. Quota mode: disabled.
+> [   12.586978] tg3 0000:01:00.0 eth0: Link is up at 100 Mbps, full duplex
+> [   12.588511] tg3 0000:01:00.0 eth0: Flow control is on for TX and on for RX
+> [   12.589552] /dev/stick1: Can't open blockdev
+> [   12.589847] tg3 0000:01:00.0 eth0: EEE is disabled
+> [   12.593385] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+> [   15.638763] ------------[ cut here ]------------
+> [   15.638772] ------------[ cut here ]------------
+> [   15.638910] refcount_t: underflow; use-after-free.
+> [   15.638937] WARNING: CPU: 1 PID: 1214 at lib/refcount.c:28 refcount_warn_saturate+0xba/0x110
+> [   15.639052] refcount_t: saturated; leaking memory.
+> [   15.639078] WARNING: CPU: 3 PID: 2437 at lib/refcount.c:19 refcount_warn_saturate+0x74/0x110
+> [   15.639192] Modules linked in: loop
+> [   15.639433] Modules linked in: loop
+> [   15.639574]  dm_crypt dm_mod edac_mce_amd
+> [   15.639815]  dm_crypt dm_mod
+> [   15.639919]  kvm_amd ccp rng_core kvm irqbypass crct10dif_pclmul crc32_pclmul crc32c_intel ghash_clmulni_intel iwlmvm sha512_ssse3 sha512_generic mac80211 libarc4 snd_hda_codec_generic ledtrig_audio snd_hda_codec_hdmi iwlwifi snd_hda_intel snd_intel_dspcfg snd_hda_codec aesni_intel
+> [   15.639941]  edac_mce_amd kvm_amd
+> [   15.640045]  snd_hda_core
+> [   15.640047]  ccp
+> [   15.640049]  crypto_simd pcspkr
+> [   15.640167]  rng_core kvm irqbypass
+> [   15.640254]  cryptd snd_pcm
+> [   15.641109]  crct10dif_pclmul
+> [   15.641215]  fam15h_power cfg80211
+> [   15.641311]  crc32_pclmul crc32c_intel
+> [   15.641380]  snd_timer k10temp
+> [   15.641494]  ghash_clmulni_intel
+> [   15.641496]  snd
+> [   15.641499]  iwlmvm sha512_ssse3 sha512_generic
+> [   15.641623]  rfkill tg3 soundcore
+> [   15.641725]  mac80211
+> [   15.641727]  battery acpi_cpufreq ac
+> [   15.641834]  libarc4 snd_hda_codec_generic
+> [   15.641955]  button input_leds
+> [   15.642089]  ledtrig_audio snd_hda_codec_hdmi
+> [   15.642199]  led_class psmouse
+> [   15.642315]  iwlwifi snd_hda_intel
+> [   15.642385]  serio_raw amdgpu drm_buddy
+> [   15.642545]  snd_intel_dspcfg snd_hda_codec
+> [   15.642663]  gpu_sched
+> [   15.642665]  aesni_intel
+> [   15.642667]  drm_display_helper video wmi
+> [   15.642752]  snd_hda_core crypto_simd
+>
+> [   15.642881]  pcspkr cryptd
+> [   15.643026] CPU: 1 PID: 1214 Comm: sdma1 Not tainted 6.1.0+ #1
+> [   15.643135]  snd_pcm fam15h_power
+> [   15.643288] Hardware name: HP HP EliteBook 745 G3/807E, BIOS N73 Ver. 01.39 04/16/2019
+> [   15.643291] RIP: 0010:refcount_warn_saturate+0xba/0x110
+> [   15.643399]  cfg80211 snd_timer k10temp
+> [   15.643521] Code: 07 01 e8 3d 7b 52 00 0f 0b e9 92 ec 57 00 80 3d 0e 1e ee 07 00 75 85 48 c7 c7 78 20 fe 81 c6 05 fe 1d ee 07 01 e8 1a 7b 52 00 <0f> 0b e9 6f ec 57 00 80 3d e9 1d ee 07 00 0f 85 5e ff ff ff 48 c7
+> [   15.643657]  snd rfkill
+> [   15.643805] RSP: 0018:ffffc90000acbe60 EFLAGS: 00010286
+> [   15.643892]  tg3 soundcore battery
+>
+> [   15.643986] RAX: 0000000000000026 RBX: ffff888103624040 RCX: 0000000000000027
+> [   15.644127]  acpi_cpufreq ac button
+> [   15.644257] RDX: ffff88842f49f3c8 RSI: 0000000000000001 RDI: ffff88842f49f3c0
+> [   15.644260] RBP: ffff8881051531f0 R08: 80000000fff003ff R09: ffffc90000acbe00
+> [   15.644316]  input_leds led_class
+> [   15.644415] R10: 0000000000000001 R11: ffffffffffffffff R12: ffff88810e2bdc00
+> [   15.644417] R13: ffff88810e2bdc78 R14: ffff888103624000 R15: ffff8881051cd008
+> [   15.644622]  psmouse
+> [   15.644739] FS:  0000000000000000(0000) GS:ffff88842f480000(0000) knlGS:0000000000000000
+> [   15.645011]  serio_raw amdgpu drm_buddy
+> [   15.645193] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   15.645195] CR2: 00005563d7a6d000 CR3: 0000000103e9c000 CR4: 00000000001506e0
+> [   15.645329]  gpu_sched drm_display_helper video
+> [   15.645962] Call Trace:
+> [   15.645965]  <TASK>
+> [   15.646052]  wmi
+> [   15.646057] CPU: 3 PID: 2437 Comm: Xorg Not tainted 6.1.0+ #1
+> [   15.646235]  drm_sched_entity_pop_job+0xfb/0x430 [gpu_sched]
+> [   15.646357] Hardware name: HP HP EliteBook 745 G3/807E, BIOS N73 Ver. 01.39 04/16/2019
+> [   15.646360] RIP: 0010:refcount_warn_saturate+0x74/0x110
+> [   15.646416]  drm_sched_main+0x99/0x3f0 [gpu_sched]
+> [   15.646662] Code: 07 01 e8 83 7b 52 00 0f 0b e9 d8 ec 57 00 80 3d 57 1e ee 07 00 75 cb 48 c7 c7 20 20 fe 81 c6 05 47 1e ee 07 01 e8 60 7b 52 00 <0f> 0b e9 b5 ec 57 00 80 3d 32 1e ee 07 00 75 a8 48 c7 c7 48 20 fe
+> [   15.646785]  ? __pfx_autoremove_wake_function+0x10/0x10
+> [   15.647030] RSP: 0000:ffffc90001b33ca0 EFLAGS: 00010286
+> [   15.647276]  ? __pfx_drm_sched_main+0x10/0x10 [gpu_sched]
+> [   15.647394] RAX: 0000000000000026 RBX: ffffc90001b33ce0 RCX: 0000000000000027
+> [   15.647397] RDX: ffff88842f59f3c8 RSI: 0000000000000001 RDI: ffff88842f59f3c0
+> [   15.647640]  kthread+0xd4/0x100
+> [   15.647886] RBP: ffff888103624040 R08: 80000000fff00401 R09: ffffc90001b33c40
+> [   15.647888] R10: 0000000000000001 R11: ffffffffffffffff R12: 00000000ffffffff
+> [   15.647967]  ? __pfx_kthread+0x10/0x10
+> [   15.648244] R13: ffff888103624040 R14: ffff88810e968058 R15: ffff888000000000
+> [   15.648247]  ret_from_fork+0x2c/0x50
+> [   15.648383] FS:  00007f385db36a00(0000) GS:ffff88842f580000(0000) knlGS:0000000000000000
+> [   15.648586]  </TASK>
+> [   15.648588] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   15.648591] CR2: 00007f37d3016df0 CR3: 0000000103e9c000 CR4: 00000000001506e0
+> [   15.648833] ---[ end trace 0000000000000000 ]---
+> [   15.654004] Call Trace:
+> [   15.654006]  <TASK>
+> [   15.654007]  dma_resv_iter_walk_unlocked.part.0+0x147/0x180
+> [   15.654015]  dma_resv_iter_first_unlocked+0x25/0x70
+> [   15.654018]  dma_resv_test_signaled+0x22/0xb0
+> [   15.654021]  ttm_bo_vm_fault_reserved+0x43/0x350
+> [   15.654886]  amdgpu_gem_fault+0x7f/0xf0 [amdgpu]
+> [   15.655696]  __do_fault+0x41/0x240
+> [   15.655974]  __handle_mm_fault+0xcf4/0x1740
+> [   15.655978]  ? do_mmap+0x33d/0x4f0
+> [   15.655981]  handle_mm_fault+0xb5/0x180
+> [   15.655984]  do_user_addr_fault+0x19b/0x6b0
+> [   15.656574]  exc_page_fault+0x6d/0x140
+> [   15.656715]  asm_exc_page_fault+0x22/0x30
+> [   15.656723] RIP: 0033:0x7f385d17b1bb
+> [   15.657027] Code: 00 00 48 01 d6 48 01 d7 4c 8d 1d 00 0b 05 00 49 63 14 93 49 8d 14 13 ff e2 0f 0b 0f 1f 40 00 48 81 ea 80 00 00 00 0f 28 4e f0 <0f> 29 4f f0 0f 28 56 e0 0f 29 57 e0 0f 28 5e d0 0f 29 5f d0 0f 28
+> [   15.657030] RSP: 002b:00007ffdc75943a8 EFLAGS: 00010202
+> [   15.657032] RAX: 00007f37d3015000 RBX: 00007f37d3015000 RCX: 0000000000010000
+> [   15.657034] RDX: 0000000000001d80 RSI: 00007f37f000ae00 RDI: 00007f37d3016e00
+> [   15.658395] RBP: 0000000000000001 R08: 00007f37d3016df0 R09: 0000000000000000
+> [   15.658396] R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000080e1
+> [   15.658397] R13: 00005563d7c23e78 R14: 00007f37f0009000 R15: 0000000000001e00
+> [   15.658400]  </TASK>
+> [   15.659189] ---[ end trace 0000000000000000 ]---
+> [   15.668798] ------------[ cut here ]------------
+> [   15.669007] refcount_t: saturated; leaking memory.
+> [   15.669201] WARNING: CPU: 1 PID: 2479 at lib/refcount.c:22 refcount_warn_saturate+0x51/0x110
+> [   15.669492] Modules linked in: loop dm_crypt dm_mod edac_mce_amd kvm_amd ccp rng_core kvm irqbypass crct10dif_pclmul crc32_pclmul crc32c_intel ghash_clmulni_intel iwlmvm sha512_ssse3 sha512_generic mac80211 libarc4 snd_hda_codec_generic ledtrig_audio snd_hda_codec_hdmi iwlwifi snd_hda_intel snd_intel_dspcfg snd_hda_codec aesni_intel snd_hda_core crypto_simd pcspkr cryptd snd_pcm fam15h_power cfg80211 snd_timer k10temp snd rfkill tg3 soundcore battery acpi_cpufreq ac button input_leds led_class psmouse serio_raw amdgpu drm_buddy gpu_sched drm_display_helper video wmi
+> [   15.671256] CPU: 1 PID: 2479 Comm: Xorg:cs0 Tainted: G        W          6.1.0+ #1
+> [   15.671510] Hardware name: HP HP EliteBook 745 G3/807E, BIOS N73 Ver. 01.39 04/16/2019
+> [   15.671774] RIP: 0010:refcount_warn_saturate+0x51/0x110
+> [   15.671954] Code: 84 bc 00 00 00 e9 ff ec 57 00 85 f6 74 23 80 3d 79 1e ee 07 00 75 ee 48 c7 c7 20 20 fe 81 c6 05 69 1e ee 07 01 e8 83 7b 52 00 <0f> 0b e9 d8 ec 57 00 80 3d 57 1e ee 07 00 75 cb 48 c7 c7 20 20 fe
+> [   15.672626] RSP: 0018:ffffc90000beb820 EFLAGS: 00010282
+> [   15.672812] RAX: 0000000000000026 RBX: ffff888103624040 RCX: 0000000000000027
+> [   15.672815] RDX: ffff88842f49f3c8 RSI: 0000000000000001 RDI: ffff88842f49f3c0
+> [   15.672816] RBP: 0000000000000003 R08: 0000000000000058 R09: 00000000ffefffff
+> [   15.672818] R10: ffffffff8224a280 R11: 0000000000000003 R12: ffff888105153000
+> [   15.672820] R13: ffff8881051c0000 R14: ffff888105493f48 R15: ffff888105153000
+> [   15.672822] FS:  00007f38541ff640(0000) GS:ffff88842f480000(0000) knlGS:0000000000000000
+> [   15.672824] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   15.672826] CR2: 00005563d7a6d000 CR3: 0000000103e9c000 CR4: 00000000001506e0
+> [   15.672828] Call Trace:
+> [   15.674888]  <TASK>
+> [   15.674889]  amdgpu_sync_resv+0x191/0x1e0 [amdgpu]
+> [   15.675956]  amdgpu_vm_sdma_prepare.part.0+0x4b/0x90 [amdgpu]
+> [   15.677154]  amdgpu_vm_update_range+0x140/0x6e0 [amdgpu]
+> [   15.678185]  amdgpu_vm_bo_update+0x32e/0x570 [amdgpu]
+> [   15.679068]  amdgpu_vm_handle_moved+0x5e/0x120 [amdgpu]
+> [   15.679999]  amdgpu_cs_ioctl+0x1289/0x1e00 [amdgpu]
+> [   15.681234]  ? __pfx_amdgpu_cs_ioctl+0x10/0x10 [amdgpu]
+> [   15.682257]  drm_ioctl_kernel+0xbf/0x160
+> [   15.682398]  drm_ioctl+0x21c/0x500
+> [   15.682517]  ? __pfx_amdgpu_cs_ioctl+0x10/0x10 [amdgpu]
+> [   15.683403]  ? futex_wake+0x6d/0x160
+> [   15.683533]  amdgpu_drm_ioctl+0x5e/0xb0 [amdgpu]
+> [   15.684394]  __x64_sys_ioctl+0xb6/0xd0
+> [   15.684589]  ? exit_to_user_mode_prepare+0x97/0x140
+> [   15.684774]  do_syscall_64+0x3a/0x90
+> [   15.684784]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> [   15.685094] RIP: 0033:0x7f385d12d957
+> [   15.685229] Code: 3c 1c 48 f7 d8 4c 39 e0 77 b9 e8 24 ff ff ff 85 c0 78 be 4c 89 e0 5b 5d 41 5c c3 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d e1 94 0c 00 f7 d8 64 89 01 48
+> [   15.685232] RSP: 002b:00007f38541fe868 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> [   15.685236] RAX: ffffffffffffffda RBX: 00007f38541fe8d0 RCX: 00007f385d12d957
+> [   15.685238] RDX: 00007f38541fe8d0 RSI: 00000000c0186444 RDI: 000000000000000e
+> [   15.685239] RBP: 00000000c0186444 R08: 00007f38541fea00 R09: 0000000000000020
+> [   15.685241] R10: 00007f38541fea00 R11: 0000000000000246 R12: 00005563d7964490
+> [   15.685242] R13: 000000000000000e R14: 0000000000000000 R15: 00005563d7b4f6a0
+> [   15.685245]  </TASK>
+> [   15.685247] ---[ end trace 0000000000000000 ]---
+>
 
-Thanks,
-
-Lukas
-
-> > > The theory of operation is as follows:  The PCI layer does indeed know
-> > > whether the device was surprise removed or gracefully removed and that
-> > > information is passed in the "presence" flag to pciehp_unconfigure_device()
-> > > (in drivers/pci/hotplug/pciehp_pci.c).  That function does the following:
-> > > 
-> > > 	if (!presence)
-> > > 		pci_walk_bus(parent, pci_dev_set_disconnected, NULL);
-> > > 
-> > > In other words, pdev->error_state is set to pci_channel_io_perm_failure on
-> > > the entire hierarchy below the hotplug port.  And pci_dev_is_disconnected()
-> > > simply checks whether that's the device's error_state.
-> > > 
-> > > pci_dev_is_disconnected() makes sense if you definitely know the device is
-> > > gone and want to skip certain steps or delays on device teardown.
-> > > However be aware that the device may be hot-removed after graceful
-> > > removal was initiated.  In such a situation, pci_dev_is_disconnected() may
-> > > return false and you'll try to access the device as normal, even though it was
-> > > yanked from the slot after the pci_dev_is_disconnected() call was
-> > > performed.  Ideally you should be able to cope with such scenarios as well.
-> > > 
-> > > For some more background info, refer to this LWN article (scroll down to the
-> > > "Surprise removal" section):
-> > > https://lwn.net/Articles/767885/
-> > > 
-> > > Thanks,
-> > > 
-> > > Lukas
