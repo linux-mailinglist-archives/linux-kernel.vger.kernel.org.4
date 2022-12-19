@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF04D65089C
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 09:37:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 733F36508AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 09:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbiLSIhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 03:37:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
+        id S231579AbiLSInX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 03:43:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbiLSIhr (ORCPT
+        with ESMTP id S231352AbiLSInV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 03:37:47 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7EEA195
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 00:37:43 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id w15so7826785wrl.9
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 00:37:43 -0800 (PST)
+        Mon, 19 Dec 2022 03:43:21 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA96A19A
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 00:43:19 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id vv4so19794477ejc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 00:43:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=d4PUWpDCc5OCB6Ld0BBIMnycdruf1PmlxbuZjGzJaNI=;
-        b=jEjbWPy3wl7ITLr6+vKM2O1zBwRTG+Cfcc/X5DlmiSBitzlS/LzwgnImKPhv/5D6ED
-         BH/znKkATw3mwgY8kioKuh6GmSRHT0rXCP0dFs+Kg5rAPJT/rRpuB/TZk4rmltnpADqO
-         nitrydB3ZiDPtrY1g7PuvJG10i2LmF1ZeS+cek8jn32aayFBGJ0SIyeTmSWLMlx7kvOy
-         l+gL6LB3sqdo39ElbKft1MMy9yqN9wZLrgPeu2s5qsNemG+M+hA2A3Eb96jVfB4G8Vn3
-         pC1KfVRrp82KsdyUXz3L7Z8LrGyIbVtsjjDJoF3rL2hZfVNfDkbU7SwliRRAfPitUU7Q
-         R8VA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kYYaE3bwqOZpjy9bqglp5kw8THeTMFyYTG3Pe3WusMY=;
+        b=73G2LxFwIuXcJ8JfikxHBeTK8Ai8+099d7TsNEgBayS3aGnT3o3UhXd2w5UnDtt3Ia
+         0sIi4pHg+1OyBNaU//uOizs1AYrUWG3CyYuYFuOI1PE5M5UPmWEfmAZhzFVLQro/CjuR
+         nOevReLfQUP7X4vhPqEh1sfp38tL+m0m27GS4zbsfo5WkN1gzXKerBonhxbzgq4fiC+l
+         5XQY4rvgo80IFX4GjhiUWF8UjdWrPH9ncuS0egroDJR7bwpeaLjA3a3sZe7nxggczXLQ
+         dDh9f93/9dRvQWVcZAD7UwR/uJEhOqRZ0xeNv/HJN2ab/rZYMMolHOLoTxlxZqJKdebN
+         v7yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d4PUWpDCc5OCB6Ld0BBIMnycdruf1PmlxbuZjGzJaNI=;
-        b=UUo2SY/HFyouGhZw/6BQBJ9XQ5j0d41KqV9RJzxoHRPt/vMdNUQyNux99PfdqtKZQb
-         dXIqvdpmT1ggCAEqTIfGnemX0IJPlknXUfF4yNIZs4BDjCDWx+uUU8WMkg7CxoJkFvcQ
-         DG4USiClNHICGBj+HGbHMEF7SuqZCUlkbBot9mPCwloBQesSUW1yFYLEJH3DTbj/BLjI
-         Ne0HPS1gziZw2R+Wt43ll0M/ZNBiEATEmOUAt+GKegrOZ3IhXVVEuYKp1AzNXY8dGAV7
-         WbnpQbeo12sW/FYrI4HN7yQPq+ma+ASKrODCnD23BL7gmyKYGem/CSKcMo1y5UajsSC0
-         V7rw==
-X-Gm-Message-State: ANoB5plepUSgbltvcj1NJS/wc+uKFWiMpsaKhRvASfPbeNqWv9TcAqHo
-        L2AfnKQ6yJLPx8UieGDHWsA=
-X-Google-Smtp-Source: AA0mqf4wyPidEccC0M5VF4p936r5kX1uhUcQHMLls8ZiooP3dZ4udmDJHm0BIgHEVPnEnYWqyGCr9Q==
-X-Received: by 2002:a5d:6091:0:b0:242:2088:1546 with SMTP id w17-20020a5d6091000000b0024220881546mr32222857wrt.61.1671439062329;
-        Mon, 19 Dec 2022 00:37:42 -0800 (PST)
-Received: from ?IPV6:2a02:908:1256:79a0:83d7:3937:b31e:d44c? ([2a02:908:1256:79a0:83d7:3937:b31e:d44c])
-        by smtp.gmail.com with ESMTPSA id d7-20020a5d5387000000b00241e4bff85asm9285780wrv.100.2022.12.19.00.37.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 00:37:41 -0800 (PST)
-Message-ID: <9e886927-df5a-e264-8d8d-c83045bac732@gmail.com>
-Date:   Mon, 19 Dec 2022 09:37:44 +0100
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kYYaE3bwqOZpjy9bqglp5kw8THeTMFyYTG3Pe3WusMY=;
+        b=jmHz/FnnyIVv0IHSL3mFDzM1R7EvF9jZ450t0nOYblnXH2y+3r2l3kWv9zW+oFwPUk
+         x9KJZA453DJhCC8cjE/Dzj2auUwoABqvdy2EqUlaTHoXFShmK6ObGt1W/XobUiBNipEZ
+         BmKjAtWUHyICmTLZxHLOfG8W1LdqZr/bVyptrYuF/qmoOTmiTkmVANqp8q/gMZbaip9R
+         gWYsY3TNrHZqnJzmZ/A6tOPDrI2qpmYzFlCgYW8ttP4lis4vLEc5fL+4L0Ukedhxuf/u
+         Y5YHYzOC4ta4i+l2tc75EBauxi7EcEY392HYaW6eDA6tt9SBHG3htdTfiw2u6xNJbrVE
+         TTOg==
+X-Gm-Message-State: ANoB5pnIAdMHt7fIpfQsGyODnIrP2/HysujswGzd3CwZ6+sdIwqW1j03
+        tDYgX3eUcW8juzNEXNKlqvTdzQ==
+X-Google-Smtp-Source: AA0mqf7famYNciIPKzFQ0QR5iYvihCH5RaB2lTsclMVvpvXA8pM9J4X8rlevPiqjboKSR8SeNzSmuw==
+X-Received: by 2002:a17:906:8d08:b0:7c1:700:1e2d with SMTP id rv8-20020a1709068d0800b007c107001e2dmr55156347ejc.20.1671439397658;
+        Mon, 19 Dec 2022 00:43:17 -0800 (PST)
+Received: from [127.0.1.1] ([2001:b07:5d39:f336:a0ba:cfa5:2107:c2c4])
+        by smtp.gmail.com with ESMTPSA id w7-20020a170906b18700b007c0b28b85c5sm4083755ejy.138.2022.12.19.00.43.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 00:43:17 -0800 (PST)
+From:   Carlo Caione <ccaione@baylibre.com>
+Date:   Mon, 19 Dec 2022 09:43:05 +0100
+Subject: [PATCH] drm/meson: Reduce the FIFO lines held when AFBC is not used
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6] drm: Optimise for continuous memory allocation
-Content-Language: en-US
-To:     xinhui pan <xinhui.pan@amd.com>, amd-gfx@lists.freedesktop.org
-Cc:     arunpravin.paneerselvam@amd.com, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        matthew.auld@intel.com, daniel@ffwll.ch, christian.koenig@amd.com
-References: <20221218065708.93332-1-xinhui.pan@amd.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <20221218065708.93332-1-xinhui.pan@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Message-Id: <20221216-afbc_s905x-v1-0-033bebf780d9@baylibre.com>
+To:     David Airlie <airlied@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Carlo Caione <ccaione@baylibre.com>
+X-Mailer: b4 0.10.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,228 +75,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 18.12.22 um 07:57 schrieb xinhui pan:
-> Optimise a little when continuous memory request fails.
->
-> There are memory holes and continuous memory request usually fails when
-> order is too big.
-> Currently buddy only look for exactly order memory for such request.
-> Now we can try again to look for several smaller continuous memory on
-> failure.
+Having a bigger number of FIFO lines held after vsync is only useful to
+SoCs using AFBC to give time to the AFBC decoder to be reset, configured
+and enabled again.
 
-I'm still pretty sure that this is illegal.
+For SoCs not using AFBC this, on the contrary, is causing on some
+displays issues and a few pixels vertical offset in the displayed image.
 
-See the order is not only the minimum we need for linear allocation, but 
-also the minimum alignment we need.
+Conditionally increase the number of lines held after vsync only for
+SoCs using AFBC, leaving the default value for all the others.
 
-So if you look at some block combination like 010 when searching for an 
-order 2 allocation you satisfy the contiguous constrain, but not the 
-alignment constrain and that's illegal.
+Signed-off-by: Carlo Caione <ccaione@baylibre.com>
+---
+Fix display issues for amlogic SoCs not using AFBC
 
-Additional to that we have a huge additional CPU overhead for contiguous 
-allocations with that.
+In 24e0d4058eff the number of lines held after VSYNC was incremented to give
+time to the AFBC decoder to do its job. This is causing an issue (seen on
+S905x) where the image (on some panels) is dislayed with a vertical offset.
+With this patch we try to keep the fix only when AFBC is actually used
+filtering on the SoC type.
 
-Regards,
-Christian.
+To: Neil Armstrong <neil.armstrong@linaro.org>
+To: David Airlie <airlied@gmail.com>
+To: Daniel Vetter <daniel@ffwll.ch>
+To: Kevin Hilman <khilman@baylibre.com>
+To: Jerome Brunet <jbrunet@baylibre.com>
+To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-amlogic@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+---
+ drivers/gpu/drm/meson/meson_viu.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
->
-> Signed-off-by: xinhui pan <xinhui.pan@amd.com>
-> ---
-> change from v5:
-> reworked
-> ---
->   drivers/gpu/drm/drm_buddy.c | 161 ++++++++++++++++++++++++++++++++++--
->   1 file changed, 154 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/gpu/drm/drm_buddy.c b/drivers/gpu/drm/drm_buddy.c
-> index 11bb59399471..6c795e1b3247 100644
-> --- a/drivers/gpu/drm/drm_buddy.c
-> +++ b/drivers/gpu/drm/drm_buddy.c
-> @@ -386,6 +386,140 @@ alloc_range_bias(struct drm_buddy *mm,
->   	return ERR_PTR(err);
->   }
->   
-> +static void __continuous_block_in_tree(struct drm_buddy_block *top_block,
-> +				       struct list_head *fbl,
-> +				       int left,
-> +				       int min_order)
-> +{
-> +	/*
-> +	 * Look for continuous memory of
-> +	 * [top_block) when left is true or (top_block] when left is false.
-> +	 * The list of fbl looks like (top_block1][free_block][...][top_blockX).
-> +	 * Memory offset is in ascending order.
-> +	 */
-> +	while (top_block) {
-> +		struct drm_buddy_block *block = top_block;
-> +		int order;
-> +
-> +		while (drm_buddy_block_is_split(block))
-> +			block = left ? block->left : block->right;
-> +
-> +		order = drm_buddy_block_order(block);
-> +		if (order < min_order || !drm_buddy_block_is_free(block))
-> +			return;
-> +
-> +		if (left)
-> +			list_add_tail(&block->tmp_link, fbl);
-> +		else
-> +			list_add(&block->tmp_link, fbl);
-> +
-> +		if (order == min_order)
-> +			return;
-> +		top_block = __get_buddy(block);
-> +	}
-> +}
-> +
-> +static bool __free_block_in_order(struct list_head *fbl,
-> +				  struct drm_buddy_block *cur,
-> +				  int order,
-> +				  struct drm_buddy_block **first,
-> +				  struct drm_buddy_block **last)
-> +{
-> +	struct drm_buddy_block *fb = cur, *lb = list_next_entry(cur, tmp_link);
-> +	u64 pages = BIT(order);
-> +	u64 cur_pages = 0;
-> +
-> +	/*
-> +	 * Look for continuous memory which satisfy requested order.
-> +	 * Memory in list fbl are already in below order.
-> +	 * 1) Memory offset are in ascending order.
-> +	 * 2) Memory size are in ascending order from left to middle and
-> +	 * descending order from middle to right.
-> +	 * So walk through the list of fbl from middle to both sides to
-> +	 * choose the bigger memory.
-> +	 * This is because one memory with order X are composed with 2 of order X-1
-> +	 * or 1 of order X-1 and 2 of order X-2, etc. Looks like below.
-> +	 *      n
-> +	 *    {∑(X - y)} + {2 * (X-n-1))}
-> +	 *      1
-> +	 * And the last 2 memory of order (X-n-1) are at the two sides of list.
-> +	 */
-> +	list_for_each_entry_from_reverse(fb, fbl, tmp_link) {
-> +		int prev_order = drm_buddy_block_order(fb);
-> +
-> +		list_for_each_entry_from(lb, fbl, tmp_link) {
-> +			int next_order = drm_buddy_block_order(lb);
-> +
-> +			if (prev_order <= next_order)
-> +				cur_pages += BIT(next_order);
-> +			else
-> +				break;
-> +		}
-> +
-> +		cur_pages += BIT(prev_order);
-> +		if (pages == cur_pages) {
-> +			*first = fb;
-> +			*last = list_prev_entry(lb, tmp_link);
-> +			return true;
-> +		}
-> +		BUG_ON(pages < cur_pages);
-> +	}
-> +
-> +	*first = *last = NULL;
-> +	return false;
-> +}
-> +
-> +static struct drm_buddy_block *
-> +find_continuous_blocks(struct drm_buddy *mm,
-> +		       int order,
-> +		       unsigned long flags,
-> +		       struct drm_buddy_block **lb)
-> +{
-> +	struct list_head *head = &mm->free_list[order - 1];
-> +	struct drm_buddy_block *free_block, *first = NULL, *last = NULL;
-> +
-> +	/*
-> +	 * Look for continuous free memory in buddy and buddy-in-law.
-> +	 * IOW, the most left blocks at right of free block and the most right
-> +	 * blocks at left of free block.
-> +	 */
-> +
-> +	list_for_each_entry(free_block, head, link) {
-> +		struct drm_buddy_block *buddy, *parent, *block;
-> +		int left, min_order = 0;
-> +		LIST_HEAD(fbl);
-> +
-> +		parent = free_block->parent;
-> +		if (!parent)
-> +			continue;
-> +
-> +		left = parent->left == free_block;
-> +		list_add(&free_block->tmp_link, &fbl);
-> +		buddy = __get_buddy(free_block);
-> +		__continuous_block_in_tree(buddy, &fbl, left, min_order);
-> +
-> +		while (parent && !((parent->left == block) ^ left)) {
-> +			block = parent;
-> +			parent = parent->parent;
-> +		}
-> +
-> +		if (!parent)
-> +			continue;
-> +
-> +		buddy = __get_buddy(block);
-> +		__continuous_block_in_tree(buddy, &fbl, !left, min_order);
-> +
-> +		/* list head of fbl is invalid outside.
-> +		 * Walk through list from first fo last only.
-> +		 */
-> +		if (__free_block_in_order(&fbl, free_block, order, &first, &last))
-> +			break;
-> +	}
-> +
-> +	*lb = last;
-> +	return first;
-> +}
-> +
->   static struct drm_buddy_block *
->   get_maxblock(struct list_head *head)
->   {
-> @@ -637,7 +771,7 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
->   			   struct list_head *blocks,
->   			   unsigned long flags)
->   {
-> -	struct drm_buddy_block *block = NULL;
-> +	struct drm_buddy_block *block = NULL, *last_block = NULL;
->   	unsigned int min_order, order;
->   	unsigned long pages;
->   	LIST_HEAD(allocated);
-> @@ -689,17 +823,30 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
->   				break;
->   
->   			if (order-- == min_order) {
-> +				if (!(flags & DRM_BUDDY_RANGE_ALLOCATION) &&
-> +				    min_order != 0 && pages == BIT(min_order)) {
-> +					block = find_continuous_blocks(mm,
-> +								       min_order,
-> +								       flags,
-> +								       &last_block);
-> +					if (block)
-> +						break;
-> +				}
->   				err = -ENOSPC;
->   				goto err_free;
->   			}
->   		} while (1);
->   
-> -		mark_allocated(block);
-> -		mm->avail -= drm_buddy_block_size(mm, block);
-> -		kmemleak_update_trace(block);
-> -		list_add_tail(&block->link, &allocated);
-> -
-> -		pages -= BIT(order);
-> +		do {
-> +			mark_allocated(block);
-> +			mm->avail -= drm_buddy_block_size(mm, block);
-> +			kmemleak_update_trace(block);
-> +			list_add_tail(&block->link, &allocated);
-> +			pages -= BIT(drm_buddy_block_order(block));
-> +			if (block == last_block || !last_block)
-> +				break;
-> +			block = list_next_entry(block, tmp_link);
-> +		} while (block);
->   
->   		if (!pages)
->   			break;
+diff --git a/drivers/gpu/drm/meson/meson_viu.c b/drivers/gpu/drm/meson/meson_viu.c
+index d4b907889a21..cd399b0b7181 100644
+--- a/drivers/gpu/drm/meson/meson_viu.c
++++ b/drivers/gpu/drm/meson/meson_viu.c
+@@ -436,15 +436,14 @@ void meson_viu_init(struct meson_drm *priv)
+ 
+ 	/* Initialize OSD1 fifo control register */
+ 	reg = VIU_OSD_DDR_PRIORITY_URGENT |
+-		VIU_OSD_HOLD_FIFO_LINES(31) |
+ 		VIU_OSD_FIFO_DEPTH_VAL(32) | /* fifo_depth_val: 32*8=256 */
+ 		VIU_OSD_WORDS_PER_BURST(4) | /* 4 words in 1 burst */
+ 		VIU_OSD_FIFO_LIMITS(2);      /* fifo_lim: 2*16=32 */
+ 
+ 	if (meson_vpu_is_compatible(priv, VPU_COMPATIBLE_G12A))
+-		reg |= VIU_OSD_BURST_LENGTH_32;
++		reg |= (VIU_OSD_BURST_LENGTH_32 | VIU_OSD_HOLD_FIFO_LINES(31));
+ 	else
+-		reg |= VIU_OSD_BURST_LENGTH_64;
++		reg |= (VIU_OSD_BURST_LENGTH_64 | VIU_OSD_HOLD_FIFO_LINES(4));
+ 
+ 	writel_relaxed(reg, priv->io_base + _REG(VIU_OSD1_FIFO_CTRL_STAT));
+ 	writel_relaxed(reg, priv->io_base + _REG(VIU_OSD2_FIFO_CTRL_STAT));
 
+---
+base-commit: 84e57d292203a45c96dbcb2e6be9dd80961d981a
+change-id: 20221216-afbc_s905x-4baf5fdc9970
+
+Best regards,
+-- 
+Carlo Caione
