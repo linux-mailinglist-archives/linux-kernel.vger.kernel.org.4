@@ -2,157 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0912D6513EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 21:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D2E6513EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 21:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbiLSU3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 15:29:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
+        id S232502AbiLSU33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 15:29:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232328AbiLSU2w (ORCPT
+        with ESMTP id S232323AbiLSU3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 15:28:52 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E7F8FD3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 12:28:50 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id c7so9287483qtw.8
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 12:28:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=PECBBcrgpKAeHwq8TDeEP5JS5G3rnettIaoWdcM7j1Y=;
-        b=W1blpq5+a9QGCDuj+ebjQo6UJdZOn1UG0Be52m8UmMOlWV4eArUHbQrV4nAvUDk3uK
-         18Hd+tT1f90ljLLwwdiOXB/JrVt5gydloMRTRgFVzWBZYCrnIzZUQQME1rnbNYnmV3U+
-         wKEJPFpa8x7FhOjyGiPqa7l6pNJqQMNyIWU+4WF56yCJvAR86MYf/XlzeUKaAAZQJ4xG
-         lnjJJW/qdGxtKxk2QSd/tRh+foWvzkpNEC+XRtPkD4NrcjRVaq/apzufNhPgoREKu08a
-         D42j5OURe9wKigUsFZBsQhrbkB1DNeTkFbLWtjvHQT2jhHLvlAa7KfPCiNqN02EYqckP
-         tjiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PECBBcrgpKAeHwq8TDeEP5JS5G3rnettIaoWdcM7j1Y=;
-        b=y16TkLdywMJ3PW9zRzm+b5bFxApDKTjWKG1HpXzOBNo+oE0qkxSBJlU4U2HEUs4xai
-         i84zrqwXuP3gareuIJdHTVK4dfdi0zjE9XlH4HdBK1QxzA6vO5QO4CT8mpENwndcyCvA
-         p/Qyj1mcc/4wcYaBP7xj7BUYaruP76fToWjgbUnqz7r+ueZoA4tW0f66e+pLqg1SSQrw
-         H7hGL/MtzRyRtkfVEJHv1gBnyP64n4gXhIX6w8MpH+6zinsw9jI017KonRQcXu0tWMv0
-         vkShsy/HNt+2IZkrpY7rXn5/Ct+HpvXnfGgKlVcrYeTaDLf/fxQFehfsWa2rdKU+XmkC
-         81Fg==
-X-Gm-Message-State: ANoB5pmgYDXN35ReqsryuE09rFpYaZ+lRL1Mm8pWb1899vtQLHBhqa2h
-        MBsUsxYjzb2CIeOxOfisEe1bWA==
-X-Google-Smtp-Source: AA0mqf6aOuki7WAAYbi0dAxo2ur7bA3i9IwDBkMk78Jl1dEcj+6GgwyewWvr3HhJZnhoPSQ/KnGKMA==
-X-Received: by 2002:a05:622a:5085:b0:3a7:e110:81e5 with SMTP id fp5-20020a05622a508500b003a7e11081e5mr54094898qtb.53.1671481730077;
-        Mon, 19 Dec 2022 12:28:50 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id r3-20020ac85e83000000b0039953dcc480sm6478803qtx.88.2022.12.19.12.28.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 12:28:49 -0800 (PST)
-Message-ID: <ab54d584ce30b99ace048da9b9c9ee317df1a5c5.camel@ndufresne.ca>
-Subject: Re: [PATCH v1 2/9] media: verisilicon: Add AV1 decoder mode and
- controls
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Date:   Mon, 19 Dec 2022 15:28:48 -0500
-In-Reply-To: <20221219155616.848690-3-benjamin.gaignard@collabora.com>
-References: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
-         <20221219155616.848690-3-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 19 Dec 2022 15:29:17 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0CD6599;
+        Mon, 19 Dec 2022 12:29:16 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2BDCA5C0120;
+        Mon, 19 Dec 2022 15:29:16 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 19 Dec 2022 15:29:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1671481756; x=1671568156; bh=pfkagIuhE7CfwQL8bON3iNU6to3dC/ZAaMg
+        aVhzAzk8=; b=pqBRIDz82N44U8PO+/wzIHFE0rKim54Zsp+QZ6euvHd+WLNiP6y
+        8+V4Cy1k6t2qlyPG0xxtVsSUyu00lvGw7syrXZ7JDnIqk0kr7+0mIJUhPxFRecd1
+        EvNJcs+PEUOnUF+zdczaCKPVpzlLeov/lOZR/J9kdsspzDrGGSjng5n84V8v6hGn
+        kcGHVP01vcdNaJjgQMU55FDZOtT3UfJAGf59HJJG+GOGP/dySMQXwKgta6XGR8sj
+        S+lbYlySHn5eBUsok+t+BvcowMm+RSsd856amCXOBqDavjBtR62yLgSwvDpjr3wF
+        l0Pa/cCLtpas1uxeqGnxG1rK6XlqCjmVdxw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1671481756; x=
+        1671568156; bh=pfkagIuhE7CfwQL8bON3iNU6to3dC/ZAaMgaVhzAzk8=; b=q
+        mInxkw0FT7n564cu6pyhx6mR9AXpoaXMo6arUjoevn0z1hwvEvCGbErYljk5+x2c
+        WqYYNr0PL1+DH7Ck7aS/+xhdG0XLQLaM/8yWWsuOdxSOTeR1aixWUk6VgrciytCv
+        DZQyUUUcQrZjegENnXveBizRaWv5IAN4S4eVAqBfceQPtxUZGQ9//GnO+ejtRmWA
+        vH/0I1jzy4KTbemYid3IZp0bkTyUgqTCNGEj/tWperCrN3CBWf5EFt2Jt5Fb3Qbs
+        NwiIHrclZq1ZVFC0BbpIJbvvuGL9K7+EsuHJRGx5Paykvy1/QJSogO+bTxqTWnvF
+        9elrljqRQjqvz8vgwG5Nw==
+X-ME-Sender: <xms:nMmgY5Ca97AY8VILImRKzfjMVtjHN2X9FA7AagL9OLPfyGWRA2YHXw>
+    <xme:nMmgY3hLAHNKXWR5zi7bUJeKiH4qMgF_yKna4UrpzoxodiXiVkE5Uq-S0dMjZ4gzh
+    yJKYaO84PgrVSdSjtA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefgdduudduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfeefuefhkeejvedtvddtleeltddttdejgedvhfdtuddvhfeukeduiefhjeetgfei
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:nMmgY0lK7tR1ZqUQwaNh2wMQJk5uBUePihilqf4VyegKoU5EvxTq9A>
+    <xmx:nMmgYzyjYs4R7layYNS9nOFVn0ilvyg-kg_TB2bLt23z9mLgRij30w>
+    <xmx:nMmgY-QsOz6xw4asOr-81Af1UmthZjEggOBT6X-mtfsmmrElvqzORg>
+    <xmx:nMmgY34Hta4tlSBLgHsyodNrUOs-ELzLINqz8M6CTlMUBlq00b_Giw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 0B7D8B60086; Mon, 19 Dec 2022 15:29:16 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <0b37729c-535f-4864-aa2e-4f6088f8e63e@app.fastmail.com>
+Date:   Mon, 19 Dec 2022 21:28:54 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Subject: [GIT PULL] asm-generic bits for 6.2
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le lundi 19 d=C3=A9cembre 2022 =C3=A0 16:56 +0100, Benjamin Gaignard a =C3=
-=A9crit=C2=A0:
-> Add AV1 decoder as new decoder mode to Hantro driver.
-> Register needed AV1 controls for the decoder.
->=20
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763:
 
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
 
-> ---
->  drivers/media/platform/verisilicon/hantro.h   |  3 +++
->  .../media/platform/verisilicon/hantro_drv.c   | 21 +++++++++++++++++++
->  2 files changed, 24 insertions(+)
->=20
-> diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/=
-platform/verisilicon/hantro.h
-> index 2989ebc631cc..61480825b856 100644
-> --- a/drivers/media/platform/verisilicon/hantro.h
-> +++ b/drivers/media/platform/verisilicon/hantro.h
-> @@ -38,6 +38,7 @@ struct hantro_postproc_ops;
->  #define HANTRO_H264_DECODER	BIT(18)
->  #define HANTRO_HEVC_DECODER	BIT(19)
->  #define HANTRO_VP9_DECODER	BIT(20)
-> +#define HANTRO_AV1_DECODER	BIT(21)
->  #define HANTRO_DECODERS		0xffff0000
-> =20
->  /**
-> @@ -111,6 +112,7 @@ struct hantro_variant {
->   * @HANTRO_MODE_VP8_DEC: VP8 decoder.
->   * @HANTRO_MODE_HEVC_DEC: HEVC decoder.
->   * @HANTRO_MODE_VP9_DEC: VP9 decoder.
-> + * @HANTRO_MODE_AV1_DEC: AV1 decoder
->   */
->  enum hantro_codec_mode {
->  	HANTRO_MODE_NONE =3D -1,
-> @@ -120,6 +122,7 @@ enum hantro_codec_mode {
->  	HANTRO_MODE_VP8_DEC,
->  	HANTRO_MODE_HEVC_DEC,
->  	HANTRO_MODE_VP9_DEC,
-> +	HANTRO_MODE_AV1_DEC,
->  };
-> =20
->  /*
-> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/me=
-dia/platform/verisilicon/hantro_drv.c
-> index 8cb4a68c9119..4500e1fc0f2c 100644
-> --- a/drivers/media/platform/verisilicon/hantro_drv.c
-> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-> @@ -498,6 +498,27 @@ static const struct hantro_ctrl controls[] =3D {
->  		.cfg =3D {
->  			.id =3D V4L2_CID_STATELESS_VP9_COMPRESSED_HDR,
->  		},
-> +	}, {
-> +		.codec =3D HANTRO_AV1_DECODER,
-> +		.cfg =3D {
-> +			.id =3D V4L2_CID_STATELESS_AV1_FRAME,
-> +		},
-> +	}, {
-> +		.codec =3D HANTRO_AV1_DECODER,
-> +		.cfg =3D {
-> +			.id =3D V4L2_CID_STATELESS_AV1_TILE_GROUP_ENTRY,
-> +			.dims =3D { V4L2_AV1_MAX_TILE_COUNT },
-> +		},
-> +	}, {
-> +		.codec =3D HANTRO_AV1_DECODER,
-> +		.cfg =3D {
-> +			.id =3D V4L2_CID_STATELESS_AV1_SEQUENCE,
-> +		},
-> +	}, {
-> +		.codec =3D HANTRO_AV1_DECODER,
-> +		.cfg =3D {
-> +			.id =3D V4L2_CID_STATELESS_AV1_FILM_GRAIN,
-> +		},
->  	},
->  };
-> =20
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git asm-generic-6.2-1
+
+for you to fetch changes up to 32975c491ee410598b33201344c123fcc81a7c33:
+
+  uapi: Add missing _UAPI prefix to <asm-generic/types.h> include guard (2022-12-01 16:22:06 +0100)
+
+----------------------------------------------------------------
+asm-generic bits for 6.2
+
+There are only three fairly simple patches. The #include
+change to linux/swab.h addresses a userspace build issue,
+and the change to the mmio tracing logic helps provide
+more useful traces.
+
+----------------------------------------------------------------
+Geert Uytterhoeven (1):
+      uapi: Add missing _UAPI prefix to <asm-generic/types.h> include guard
+
+Matt Redfearn (1):
+      include/uapi/linux/swab: Fix potentially missing __always_inline
+
+Sai Prakash Ranjan (1):
+      asm-generic/io: Add _RET_IP_ to MMIO trace for more accurate debug info
+
+ include/asm-generic/io.h         | 80 ++++++++++++++++++++--------------------
+ include/trace/events/rwmmio.h    | 43 +++++++++++++--------
+ include/uapi/asm-generic/types.h |  6 +--
+ include/uapi/linux/swab.h        |  2 +-
+ lib/trace_readwrite.c            | 16 ++++----
+ 5 files changed, 79 insertions(+), 68 deletions(-)
