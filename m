@@ -2,217 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0242D650D42
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B93650D39
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbiLSO0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 09:26:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
+        id S231996AbiLSOZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 09:25:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232123AbiLSO0C (ORCPT
+        with ESMTP id S232009AbiLSOZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 09:26:02 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97041C3B;
-        Mon, 19 Dec 2022 06:25:44 -0800 (PST)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJAR3YQ006554;
-        Mon, 19 Dec 2022 06:25:40 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=KuP8NpPDBWhX77mKMbWAKTy7A4aer4UO3cZcZzz+FLU=;
- b=SN0lfiHEUZ1M7mOG7IDIY1lkZT1uGsi+3RoV8IarSeAh4exaWOTdq6LpnExjAx1s1zDz
- vqwXKSNjGcBmT6wpMM5b04kKAdH9ER+Y2AC3F+1evCqbmd5D0iY55HZxJYS96yDz2tpE
- DVLSfHqT4BO2XVw1b8ow7RTRYZpj7IjlJ/3h+eKPkBD8NK8nj3cRsnO0zwgxh7qehu9P
- 8r8W5n8lmYqXQ7w/1xZX3BFOu5jK1x1Ng6p/QicduqoJRiUMLioR9StQG3gv5TatbkVw
- WA031U6DfBrbRb+Rni0ipeh0DmPbWeC4Om31FJs9W64F/V6yrbwCQoh9ScsXYZ+OMbYL Fw== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3mjnans1vs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 06:25:40 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 19 Dec
- 2022 06:25:38 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Mon, 19 Dec 2022 06:25:38 -0800
-Received: from localhost.localdomain (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id 7EAAA3F7087;
-        Mon, 19 Dec 2022 06:25:38 -0800 (PST)
-From:   Piyush Malgujar <pmalgujar@marvell.com>
-To:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <adrian.hunter@intel.com>, <ulf.hansson@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <yamada.masahiro@socionext.com>, <devicetree@vger.kernel.org>
-CC:     <jannadurai@marvell.com>, <cchavva@marvell.com>,
-        Piyush Malgujar <pmalgujar@marvell.com>
-Subject: [PATCH 5/5] drivers: mmc: sdhci-cadence: Add debug option for sdhci-cadence driver.
-Date:   Mon, 19 Dec 2022 06:24:18 -0800
-Message-ID: <20221219142418.27949-6-pmalgujar@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221219142418.27949-1-pmalgujar@marvell.com>
-References: <20221219142418.27949-1-pmalgujar@marvell.com>
+        Mon, 19 Dec 2022 09:25:35 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE8D1115B;
+        Mon, 19 Dec 2022 06:25:29 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id bj12so21760102ejb.13;
+        Mon, 19 Dec 2022 06:25:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xYRfbzPEZUDqYHBHO2OONlQoVvt/nOvN/sUxnF9qyWo=;
+        b=e9zsbwpgQOJThMSZty56tbhvsX9S6xNi/odqIIFmFXTISKtp5Diio3LBrw28QKJrNt
+         xVGQ0jBrPNQFjLyJu109uRPbbo3bwr8SLyIpr7ScEAhKWT0rXqH0IsZ7MjRP8IqjmWsZ
+         YnG27KxDFme0jxss425KS02McA/bvwNRqwwl7cFVB/U5hUw3lbwba8MV4Lcz/FHr2DIv
+         Gco4gh1UsBUUT8Qq2Mk4HlQ6TopteGaVT0mKR+Q9AewEW7T2kk3s6ue2WqnP5lqLXkQc
+         zxFPinfQUtAQ8zaolbAw7sKprMDAr0K5fC9G1h807l19FNab1POxWJXGBwfk+5LDweQG
+         KnIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xYRfbzPEZUDqYHBHO2OONlQoVvt/nOvN/sUxnF9qyWo=;
+        b=jRcpeWvaVbJ9h+mF0SAmmK3zdDqbMckiWquRQ58QBUyw8b0Iat9FritBOIysdGr4b6
+         NxFf03TqYXmkNWMoXRw/lkt0mZXCBM5DIsbBMTRDmSH1ovWH9cj4ao1uCTHQ8u88p0ue
+         RNchMr+QWAle32Gmf/rPpLODpvB97ZTio2vtq2Uz6EhvWZXRG0c8yq7QK2lSQP/NFMKu
+         bjc8bTGPJHK/N06d94+f2s0zO8v2d5DCZHatGYVBk1hMFCys7J7oMhUeb8VlkuN5Inq5
+         XL7ON7qrhr7HYxTXvxi7e007/NVTD4esbtHKvtIUefEnZ9rGQOj3FZ9I+lAXn6Ykk9+w
+         P3jA==
+X-Gm-Message-State: ANoB5pmaKPGUW22hqnrY7Wp76VRXJ3o3SItA2SVxzxKSAN0OxV1ePBos
+        +H9F6eqEJONnsHX7LZv1ZLxO5qmEIBo2A/yMLbrETnyJOhNO+acA
+X-Google-Smtp-Source: AA0mqf4sYmFVPDPZVaDcYXIU6+c12nNnA9tI2uhf4e4+Q1z3PHZyLOqyAStEhWTGWMryL6CJJIVxbfCPwD9VsoOUbfI=
+X-Received: by 2002:a17:906:3e41:b0:78d:bc9f:33da with SMTP id
+ t1-20020a1709063e4100b0078dbc9f33damr80717346eji.80.1671459928389; Mon, 19
+ Dec 2022 06:25:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: Bv0OsHvksL4ZF-SD5XvkkIIi0a8xDo6j
-X-Proofpoint-ORIG-GUID: Bv0OsHvksL4ZF-SD5XvkkIIi0a8xDo6j
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-19_01,2022-12-15_02,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221107175305.63975-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221107175305.63975-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdV46aMfqu+kMW9E-RURugK-giOx0k-NPe5XX4nxKZJzkg@mail.gmail.com>
+ <CA+V-a8uqQ2fK1UjRT864jyHdt6Z47V=iARSJC6B2M6Gikms=Eg@mail.gmail.com>
+ <CA+V-a8sGLrsRWFi3-hNmB=Uj-aCQLD5VQesmUFb8N1NAqhyLuQ@mail.gmail.com> <CAMuHMdW_QuBUUypyrAbLqWPdZ81bWeYDyPbBf=2KmDht1X44bA@mail.gmail.com>
+In-Reply-To: <CAMuHMdW_QuBUUypyrAbLqWPdZ81bWeYDyPbBf=2KmDht1X44bA@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 19 Dec 2022 14:25:01 +0000
+Message-ID: <CA+V-a8uQFiU2KRcsoC5--tjfuWRj3VRJAUaZtv0+U0DziZQOwg@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/5] dt-bindings: interrupt-controller:
+ renesas,rzg2l-irqc: Document RZ/G2UL SoC
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jayanthi Annadurai <jannadurai@marvell.com>
+Hi Geert,
 
-Use Kernel config CONFIG_MMC_DEBUG to support dumping PHY and host
-controller register configuration for debug.
+On Mon, Dec 19, 2022 at 1:50 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Mon, Dec 19, 2022 at 1:57 PM Lad, Prabhakar
+> <prabhakar.csengg@gmail.com> wrote:
+> > On Fri, Nov 18, 2022 at 12:29 PM Lad, Prabhakar
+> > <prabhakar.csengg@gmail.com> wrote:
+> > > On Thu, Nov 17, 2022 at 10:54 AM Geert Uytterhoeven
+> > > <geert@linux-m68k.org> wrote:
+> > > > On Mon, Nov 7, 2022 at 6:53 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > >
+> > > > > Document RZ/G2UL (R9A07G043) IRQC bindings. The RZ/G2UL IRQC block is
+> > > > > identical to one found on the RZ/G2L SoC. No driver changes are
+> > > > > required as generic compatible string "renesas,rzg2l-irqc" will be
+> > > > > used as a fallback.
+> > > > >
+> > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> > > > > Note, renesas,r9a07g043u-irqc is added we have slight difference's compared to RZ/Five
+> > > > > - G2UL IRQCHIP (hierarchical IRQ domain) -> GIC where as on RZ/Five we have PLIC (chained interrupt
+> > > > > domain) -> RISCV INTC
+> > > >
+> > > > I think this difference is purely a software difference, and abstracted
+> > > > in DTS through the interrupt hierarchy.
+> > > > Does it have any impact on the bindings?
+> > > >
+> > > > > - On the RZ/Five we have additional registers for IRQC block
+> > > >
+> > > > Indeed, the NMI/IRQ/TINT "Interruput" Mask Control Registers, thus
+> > > > warranting separate compatible values.
+> > > >
+> > > > > - On the RZ/Five we have BUS_ERR_INT which needs to be handled by IRQC
+> > > >
+> > > > Can you please elaborate? I may have missed something, but to me it
+> > > > looks like that is exactly the same on RZ/G2UL and on RZ/Five.
+> > > >
+> > > Now that we have to update the binding doc with the BUS_ERR_INT too,
+> > > do you think it would make sense to add interrupt-names too?
+>
+> > Gentle ping.
+>
+> Thanks for the ping, I had missed you were waiting on input from me.
+> Sorry for that...
+>
+No worries.
 
-Signed-off-by: Jayanthi Annadurai <jannadurai@marvell.com>
-Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
----
- drivers/mmc/host/sdhci-cadence.c | 100 +++++++++++++++++++++++++++++++
- 1 file changed, 100 insertions(+)
+> As there are three different groups of parent interrupts, adding
+> interrupt-names makes sense.
+Ok.
 
-diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
-index 6bf703f15bc5be7e3be4cb1144b78ec3585ec540..75363aabce9228755c4abed08fe17e57d1a44b23 100644
---- a/drivers/mmc/host/sdhci-cadence.c
-+++ b/drivers/mmc/host/sdhci-cadence.c
-@@ -15,6 +15,10 @@
- 
- #include "sdhci-pltfm.h"
- 
-+#ifdef CONFIG_MMC_DEBUG
-+#define DEBUG_DRV	pr_info
-+#endif
-+
- #define SDMCLK_MAX_FREQ		200000000
- 
- #define DEFAULT_CMD_DELAY		16
-@@ -115,6 +119,10 @@
- #define	SDHCI_CDNS_SD6_PHY_DLL_SLAVE_CLK_WR_DELAY		GENMASK(15, 8)
- #define	SDHCI_CDNS_SD6_PHY_DLL_SLAVE_READ_DQS_DELAY		GENMASK(7, 0)
- 
-+#define SDHCI_CDNS_SD6_PHY_DLL_OBS_REG0				0x201C
-+#define SDHCI_CDNS_SD6_PHY_DLL_OBS_REG1				0x2020
-+#define SDHCI_CDNS_SD6_PHY_DLL_OBS_REG2				0x2024
-+
- #define SDHCI_CDNS_SD6_PHY_CTRL					0x2080
- #define	SDHCI_CDNS_SD6_PHY_CTRL_PHONY_DQS_TIMING		GENMASK(9, 4)
- 
-@@ -969,6 +977,94 @@ static void sdhci_cdns_sd6_calc_phy(struct sdhci_cdns_sd6_phy *phy)
- 	}
- }
- 
-+#ifdef CONFIG_MMC_DEBUG
-+static void sdhci_cdns_sd6_phy_dump(struct sdhci_cdns_sd6_phy *phy)
-+{
-+	DEBUG_DRV("PHY Timings\n");
-+	DEBUG_DRV("mode %d t_sdclk %d\n", phy->mode, phy->t_sdclk);
-+
-+	DEBUG_DRV("cp_clk_wr_delay %d\n", phy->settings.cp_clk_wr_delay);
-+	DEBUG_DRV("cp_clk_wrdqs_delay %d\n", phy->settings.cp_clk_wrdqs_delay);
-+	DEBUG_DRV("cp_data_select_oe_end %d\n", phy->settings.cp_data_select_oe_end);
-+	DEBUG_DRV("cp_dll_bypass_mode %d\n", phy->settings.cp_dll_bypass_mode);
-+	DEBUG_DRV("cp_dll_locked_mode %d\n", phy->settings.cp_dll_locked_mode);
-+	DEBUG_DRV("cp_dll_start_point %d\n", phy->settings.cp_dll_start_point);
-+	DEBUG_DRV("cp_io_mask_always_on %d\n", phy->settings.cp_io_mask_always_on);
-+	DEBUG_DRV("cp_io_mask_end %d\n", phy->settings.cp_io_mask_end);
-+	DEBUG_DRV("cp_io_mask_start %d\n", phy->settings.cp_io_mask_start);
-+	DEBUG_DRV("cp_rd_del_sel %d\n", phy->settings.cp_rd_del_sel);
-+	DEBUG_DRV("cp_read_dqs_cmd_delay %d\n", phy->settings.cp_read_dqs_cmd_delay);
-+	DEBUG_DRV("cp_read_dqs_delay %d\n", phy->settings.cp_read_dqs_delay);
-+	DEBUG_DRV("cp_sw_half_cycle_shift %d\n", phy->settings.cp_sw_half_cycle_shift);
-+	DEBUG_DRV("cp_sync_method %d\n", phy->settings.cp_sync_method);
-+	DEBUG_DRV("cp_use_ext_lpbk_dqs %d\n", phy->settings.cp_use_ext_lpbk_dqs);
-+	DEBUG_DRV("cp_use_lpbk_dqs %d\n", phy->settings.cp_use_lpbk_dqs);
-+	DEBUG_DRV("cp_use_phony_dqs %d\n", phy->settings.cp_use_phony_dqs);
-+	DEBUG_DRV("cp_use_phony_dqs_cmd %d\n", phy->settings.cp_use_phony_dqs_cmd);
-+	DEBUG_DRV("sdhc_extended_rd_mode %d\n", phy->settings.sdhc_extended_rd_mode);
-+	DEBUG_DRV("sdhc_extended_wr_mode %d\n", phy->settings.sdhc_extended_wr_mode);
-+
-+	DEBUG_DRV("sdhc_hcsdclkadj %d\n", phy->settings.sdhc_hcsdclkadj);
-+	DEBUG_DRV("sdhc_idelay_val %d\n", phy->settings.sdhc_idelay_val);
-+	DEBUG_DRV("sdhc_rdcmd_en %d\n", phy->settings.sdhc_rdcmd_en);
-+	DEBUG_DRV("sdhc_rddata_en %d\n", phy->settings.sdhc_rddata_en);
-+	DEBUG_DRV("sdhc_rw_compensate %d\n", phy->settings.sdhc_rw_compensate);
-+	DEBUG_DRV("sdhc_sdcfsh %d\n", phy->settings.sdhc_sdcfsh);
-+	DEBUG_DRV("sdhc_sdcfsl %d\n", phy->settings.sdhc_sdcfsl);
-+	DEBUG_DRV("sdhc_wrcmd0_dly %d %d\n",
-+		  phy->settings.sdhc_wrcmd0_dly, phy->settings.sdhc_wrcmd0_sdclk_dly);
-+	DEBUG_DRV("sdhc_wrcmd1_dly %d %d\n",
-+		  phy->settings.sdhc_wrcmd1_dly, phy->settings.sdhc_wrcmd1_sdclk_dly);
-+	DEBUG_DRV("sdhc_wrdata0_dly %d %d\n",
-+		  phy->settings.sdhc_wrdata0_dly, phy->settings.sdhc_wrdata0_sdclk_dly);
-+
-+	DEBUG_DRV("sdhc_wrdata1_dly %d %d\n",
-+		  phy->settings.sdhc_wrdata1_dly, phy->settings.sdhc_wrdata1_sdclk_dly);
-+	DEBUG_DRV("hs200_tune_val %d\n", phy->settings.hs200_tune_val);
-+}
-+
-+void sdhci_cdns_sd6_dump(struct sdhci_cdns_priv *priv)
-+{
-+	struct sdhci_cdns_sd6_phy *phy = priv->phy;
-+	int id;
-+
-+	sdhci_cdns_sd6_phy_dump(phy);
-+
-+	DEBUG_DRV("Host controller Register Dump\n");
-+	for (id = 0; id < 14; id++)
-+		DEBUG_DRV("HRS%d 0x%x\n", id, readl(priv->hrs_addr + (id * 4)));
-+
-+	id = 29;
-+	DEBUG_DRV("HRS%d 0x%x\n", id, readl(priv->hrs_addr + (id * 4)));
-+	id = 30;
-+	DEBUG_DRV("HRS%d 0x%x\n", id, readl(priv->hrs_addr + (id * 4)));
-+
-+	for (id = 0; id < 27; id++)
-+		DEBUG_DRV("SRS%d 0x%x\n", id, readl(priv->hrs_addr + 0x200 + (id * 4)));
-+
-+	DEBUG_DRV("SDHCI_CDNS_SD6_PHY_DQS_TIMING 0x%x\n",
-+		  sdhci_cdns_sd6_read_phy_reg(priv, SDHCI_CDNS_SD6_PHY_DQS_TIMING));
-+	DEBUG_DRV("SDHCI_CDNS_SD6_PHY_GATE_LPBK 0x%x\n",
-+		  sdhci_cdns_sd6_read_phy_reg(priv, SDHCI_CDNS_SD6_PHY_GATE_LPBK));
-+	DEBUG_DRV("SDHCI_CDNS_SD6_PHY_DLL_MASTER 0x%x\n",
-+		  sdhci_cdns_sd6_read_phy_reg(priv, SDHCI_CDNS_SD6_PHY_DLL_MASTER));
-+	DEBUG_DRV("SDHCI_CDNS_SD6_PHY_DLL_SLAVE 0x%x\n",
-+		  sdhci_cdns_sd6_read_phy_reg(priv, SDHCI_CDNS_SD6_PHY_DLL_SLAVE));
-+	DEBUG_DRV("SDHCI_CDNS_SD6_PHY_CTRL 0x%x\n",
-+		  sdhci_cdns_sd6_read_phy_reg(priv, SDHCI_CDNS_SD6_PHY_CTRL));
-+	DEBUG_DRV("SDHCI_CDNS_SD6_PHY_GPIO_CTRL0 0x%x\n",
-+		  sdhci_cdns_sd6_read_phy_reg(priv, SDHCI_CDNS_SD6_PHY_GPIO_CTRL0));
-+	DEBUG_DRV("SDHCI_CDNS_SD6_PHY_DQ_TIMING 0x%x\n",
-+		  sdhci_cdns_sd6_read_phy_reg(priv, SDHCI_CDNS_SD6_PHY_DQ_TIMING));
-+	DEBUG_DRV("SDHCI_CDNS_SD6_PHY_DLL_OBS_REG0 0x%x\n",
-+		  sdhci_cdns_sd6_read_phy_reg(priv, SDHCI_CDNS_SD6_PHY_DLL_OBS_REG0));
-+	DEBUG_DRV("SDHCI_CDNS_SD6_PHY_DLL_OBS_REG1 0x%x\n",
-+		  sdhci_cdns_sd6_read_phy_reg(priv, SDHCI_CDNS_SD6_PHY_DLL_OBS_REG1));
-+	DEBUG_DRV("SDHCI_CDNS_SD6_PHY_DLL_OBS_REG2 0x%x\n",
-+		  sdhci_cdns_sd6_read_phy_reg(priv, SDHCI_CDNS_SD6_PHY_DLL_OBS_REG2));
-+}
-+#endif
-+
- static int sdhci_cdns_sd6_get_delay_params(struct device *dev, struct sdhci_cdns_priv *priv)
- {
- 	struct sdhci_cdns_sd6_phy *phy = priv->phy;
-@@ -1373,6 +1469,10 @@ static void sdhci_cdns_sd6_set_clock(struct sdhci_host *host,
- 		pr_debug("%s: phy init failed\n", __func__);
- 
- 	sdhci_set_clock(host, clock);
-+
-+#ifdef CONFIG_MMC_DEBUG
-+	sdhci_cdns_sd6_dump(priv);
-+#endif
- }
- 
- static int sdhci_cdns_sd4_phy_probe(struct platform_device *pdev,
--- 
-2.17.1
+> However, as this binding is already in active use since v6.1, you
+> probably need to keep on supporting the
+> ack of interrupt-names.  Or do you think there are no real users yet,
+> and we can drop support for that?
+>
+Sorry can you please elaborate on "ack of interrupt-names".
 
+So moving forward the driver will first check for interrupt-names
+property and if that exists it will map the IRQ0-7 and GPIO-TINIT
+interrupts (based on the names it will create a hierarchy domain) and
+for the NMI and BUS_ERR_INT we request the IRQ numbers and register
+the IRQ handler in IRQC driver itself.
+
+And for backward compatibility we parse the IRQ numbers based on
+indexes i.e. 0 = NMI, 1-8  = IRQ 0-7  and 9-41 GPIO TINT interrupts.
+
+> > > BUS_ERR_INT will have to be handled IRQC itself (i.e. IRQC will
+> > > register a handler for it).
+>
+> Do you mean you will need a fourth parent type for that?
+>
+No something like what we have for NMI we can add something similar
+below for bus error interrupts:
+interrupts = ....
+              <GIC_SPI 57 IRQ_TYPE_EDGE_RISING>;
+interrupt-names = ....,
+             "bus-error-int";
+
+As the registers to handle the NMI and BUS_ERR_INT are present on the
+IRQC block, the interrupt handler will have to be registered by the
+IRQC block itself by requesting the IRQ. So we will have to skip
+mapping of BUS_ERR_INT as we do for the NMI case. Does that make
+sense?
+
+Cheers,
+Prabhakar
