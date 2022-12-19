@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4504650F7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:56:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A01650F87
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232505AbiLSP4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 10:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
+        id S229618AbiLSP4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 10:56:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbiLSP41 (ORCPT
+        with ESMTP id S232064AbiLSP42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 10:56:27 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7EA6343;
-        Mon, 19 Dec 2022 07:56:25 -0800 (PST)
+        Mon, 19 Dec 2022 10:56:28 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF5738D;
+        Mon, 19 Dec 2022 07:56:26 -0800 (PST)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:f69c:5603:d4ce:7aa2])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 16C416602C2C;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 993746602C38;
         Mon, 19 Dec 2022 15:56:24 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1671465384;
-        bh=0xvLSgnd51UVvYAm3gheA28esQ/NuH/ser9zs6gn/To=;
+        bh=dnBJgh8sSkt857ri8yCAHtqY7H+7m35HgIufTqw86+k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aMQCph4ji1fmcge88iutVVKOjX4jkQOaQi9ZFAj2jsNKwiZqEHDuKfI/LNdqFTRs+
-         AaN8xwR5SlMoX7wLrNKFKhJ4TPXSWitgkBz98+A7p5hmHG8lHVcGGPmFbrCQvtFlcI
-         EmBfjwSRzeUZBR+1zjUlDFlQcNLrPFbdcBE/yUALtP2MNaJieBKC94rKpMsAj0aYmA
-         KAAIC0oscoj575Ugso18t86qpHUqGVX73/DsgsExX326gZIJdH4qiXZ+qE54SJkK+e
-         9VmNVESDKWOp0MbAQtn9y5Q3+WyJCsDM6Ifab4KCfSpBwXTL3oG0cMRy3NTUpiHsG1
-         VRvGS/yN2lcSw==
+        b=dM+TQZYjcvfz+QOSRqrc5sqY1jLwFJ6RJWQ5j6je+x/qWmuOfQucYQtllbzklTEGF
+         8dSIdRN+2QdCn/3mf5cokKibr/8R5vmjXLQRnDTYV7c3JYLRtnvzpu8Yv2D1iLodeL
+         vz06sp1fnaJbAsLvf0czQwiewHEraHf23KALfj4U2yu5eM7fIJ/ZoB5VS0KobkPCj/
+         GvX2SfMaypzKv80MS6qtOCtF5x8P7ylGkzrHZoxmZCflcUo1mnYKQS0WomFauAFf3H
+         eiocvEdRWCz1pP6K21qZObA5/hXeWhGua+K9fAeavWeyktksj36DK5aZn6uWnxvUrQ
+         Kgy2sjHmNXsxw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
         mchehab@kernel.org, robh+dt@kernel.org,
@@ -41,9 +41,9 @@ Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v1 1/9] dt-bindings: media: rockchip-vpu: Add rk3588 vpu compatible
-Date:   Mon, 19 Dec 2022 16:56:08 +0100
-Message-Id: <20221219155616.848690-2-benjamin.gaignard@collabora.com>
+Subject: [PATCH v1 2/9] media: verisilicon: Add AV1 decoder mode and controls
+Date:   Mon, 19 Dec 2022 16:56:09 +0100
+Message-Id: <20221219155616.848690-3-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
 References: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
@@ -58,25 +58,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible for rk3588 AV1 vpu decoder.
+Add AV1 decoder as new decoder mode to Hantro driver.
+Register needed AV1 controls for the decoder.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- Documentation/devicetree/bindings/media/rockchip-vpu.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/verisilicon/hantro.h   |  3 +++
+ .../media/platform/verisilicon/hantro_drv.c   | 21 +++++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-index 6cc4d3e5a61d..8454df53f5cb 100644
---- a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-+++ b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-@@ -24,6 +24,7 @@ properties:
-           - rockchip,rk3399-vpu
-           - rockchip,px30-vpu
-           - rockchip,rk3568-vpu
-+          - rockchip,rk3588-av1-vpu
-       - items:
-           - const: rockchip,rk3188-vpu
-           - const: rockchip,rk3066-vpu
+diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
+index 2989ebc631cc..61480825b856 100644
+--- a/drivers/media/platform/verisilicon/hantro.h
++++ b/drivers/media/platform/verisilicon/hantro.h
+@@ -38,6 +38,7 @@ struct hantro_postproc_ops;
+ #define HANTRO_H264_DECODER	BIT(18)
+ #define HANTRO_HEVC_DECODER	BIT(19)
+ #define HANTRO_VP9_DECODER	BIT(20)
++#define HANTRO_AV1_DECODER	BIT(21)
+ #define HANTRO_DECODERS		0xffff0000
+ 
+ /**
+@@ -111,6 +112,7 @@ struct hantro_variant {
+  * @HANTRO_MODE_VP8_DEC: VP8 decoder.
+  * @HANTRO_MODE_HEVC_DEC: HEVC decoder.
+  * @HANTRO_MODE_VP9_DEC: VP9 decoder.
++ * @HANTRO_MODE_AV1_DEC: AV1 decoder
+  */
+ enum hantro_codec_mode {
+ 	HANTRO_MODE_NONE = -1,
+@@ -120,6 +122,7 @@ enum hantro_codec_mode {
+ 	HANTRO_MODE_VP8_DEC,
+ 	HANTRO_MODE_HEVC_DEC,
+ 	HANTRO_MODE_VP9_DEC,
++	HANTRO_MODE_AV1_DEC,
+ };
+ 
+ /*
+diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
+index 8cb4a68c9119..4500e1fc0f2c 100644
+--- a/drivers/media/platform/verisilicon/hantro_drv.c
++++ b/drivers/media/platform/verisilicon/hantro_drv.c
+@@ -498,6 +498,27 @@ static const struct hantro_ctrl controls[] = {
+ 		.cfg = {
+ 			.id = V4L2_CID_STATELESS_VP9_COMPRESSED_HDR,
+ 		},
++	}, {
++		.codec = HANTRO_AV1_DECODER,
++		.cfg = {
++			.id = V4L2_CID_STATELESS_AV1_FRAME,
++		},
++	}, {
++		.codec = HANTRO_AV1_DECODER,
++		.cfg = {
++			.id = V4L2_CID_STATELESS_AV1_TILE_GROUP_ENTRY,
++			.dims = { V4L2_AV1_MAX_TILE_COUNT },
++		},
++	}, {
++		.codec = HANTRO_AV1_DECODER,
++		.cfg = {
++			.id = V4L2_CID_STATELESS_AV1_SEQUENCE,
++		},
++	}, {
++		.codec = HANTRO_AV1_DECODER,
++		.cfg = {
++			.id = V4L2_CID_STATELESS_AV1_FILM_GRAIN,
++		},
+ 	},
+ };
+ 
 -- 
 2.34.1
 
