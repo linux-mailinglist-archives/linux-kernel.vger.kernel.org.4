@@ -2,140 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657296506F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 05:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 703E9650705
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 05:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbiLSD74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 22:59:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
+        id S231273AbiLSEWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 23:22:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiLSD7x (ORCPT
+        with ESMTP id S230061AbiLSEV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 22:59:53 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0009B867
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 19:59:52 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id c13so5359051pfp.5
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 19:59:52 -0800 (PST)
+        Sun, 18 Dec 2022 23:21:58 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1896355
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 20:21:57 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id g10so7825031plo.11
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 20:21:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7zjmmMgytExuZc86mJHKJqPbT4q6H6HnndQ6YFHbefE=;
-        b=u5u/i+5J3/oQvF8xoFgaMM9o1BRtRRCUXlDZu6Bsv5403ER8qQfHFd4Vt29XM8i2LT
-         IZws1z+kyBfPLp5vM2iRMdB4xatd5YiE7vJgvjJ83woJTYxjX/6swDGzBcqTpgqWggX8
-         lYn4IsNL9XEPAvXZ4qRc3xYrOQ7H7ujbvF/nFIrka3zifwWJpsZs69/5jY56E7lEzCnL
-         aQFdB5HUaBY3itXimwfyV+yPFhxzdkT8o4fQmsFBgnoTLSG5FyciGm+ONYEgR3A7vSUh
-         s9f+pgzYgE6My6lmMRM2EqLsKYwltSWfe0QdL8SMswiVRl6Jh1UywfXfUmMzPBdUokvO
-         4uIg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GYOZHntsfq9Oqu0AIUyQ2czFdBjuydE+iWot/+A9tks=;
+        b=fEja4+CjRKWn1HDf3oFuDpMNyY4ILeRfE6RyXf0N2LsVGmugFuW2LT6wBLvR6OZXw9
+         s7Ow9Tn4mA/gsew93EA7bvJIULnSNmtXKHha8fd4yKp0848Rnd2RaM+zozllRMJQGKiD
+         YzpUJErUX5fuOJ9C3DrXLrszMo6EGkBz7qB/UlNLp9AMG39/IhkTewQMLspDIb/7h5YR
+         Jh+wMWr03nP/1Ezja2nIjoDlOek8aBKBej7A59SoRbd8+UQhut9sop6owyMfWOr40tCg
+         +AnnrBajRSBuPP66YlCcU8f/TvAO45u1pOkTX9gcECAFBg6CJ6JqAONJQqspnXEmodWF
+         BHnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7zjmmMgytExuZc86mJHKJqPbT4q6H6HnndQ6YFHbefE=;
-        b=a04J7yZEC96tSGJJdHfi42e99YIqUJwAmFPXHM3IZHjvvuneIe6kBRz9SZB9xhKkII
-         DA5xBzvNNeqUOyoH3W4C6hbjC5Y0K2TuCGbVGgGV5CN5uUHjzvv2ETxn2pt4V+bUJ4aO
-         DrBruF1sqk5R0oKvbzVGzDbzTgDDjiUII1PbdKbFchhqhjgEjCsfA12xom78H+ZMNq60
-         BgphJYsD6ZDwE8db9T0qqgiRAj7EKqPTJ/BNSgiMCjZoFRyPPwdA/cQJGu1k+IcrGbXE
-         44fdK6cRdxGmxr2EQSJgSUWEwPjo7d69ZmBxErOMQfvsbBPVR4ASv7DT6xiXnKtKQ3XJ
-         JYpA==
-X-Gm-Message-State: ANoB5pndwVu8AriziLCOFuHKTrPsmO13bViJ3yguXyycJUW7rbVbLmMv
-        HFn4v7g7nRV2CXBccqgw5mF9uw==
-X-Google-Smtp-Source: AA0mqf7V+EPzmndWL3rAKC3iGF5YDG/97eYSnVVZjzV4A6w3mGpONWXQx+dFwKG7isOQGlTUFZhxdg==
-X-Received: by 2002:a05:6a00:a11:b0:578:866b:479a with SMTP id p17-20020a056a000a1100b00578866b479amr34638089pfh.1.1671422392382;
-        Sun, 18 Dec 2022 19:59:52 -0800 (PST)
-Received: from leoy-yangtze.lan ([152.70.116.104])
-        by smtp.gmail.com with ESMTPSA id 85-20020a621458000000b0056bbeaa82b9sm5366412pfu.113.2022.12.18.19.59.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Dec 2022 19:59:51 -0800 (PST)
-Date:   Mon, 19 Dec 2022 11:59:38 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Changbin Du <changbin.du@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] bpf: makefiles: do not generate empty vmlinux.h
-Message-ID: <Y5/hqqIwJIjdBSRh@leoy-yangtze.lan>
-References: <20221217223509.88254-1-changbin.du@gmail.com>
- <20221217223509.88254-3-changbin.du@gmail.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GYOZHntsfq9Oqu0AIUyQ2czFdBjuydE+iWot/+A9tks=;
+        b=pcjNS9e5KeB4JrI/3UXhAd4lkw9O0rnLcoFsdfBRxFVegPIfc8kUZOEGYlGBm6mEiZ
+         r4zYIrHklGd8jGaogPz7NPgDWddQQniFIlCMBlaf8eMkZocxW995aIjwHt1xKycOGF6n
+         U8cjZTgS5ACLUIi0kS7huXyxXHa1aJhuM4EghitQJPPvTrmd2fYvunr1NM/a4VenvPoX
+         37ELuMo9t7wfjieQ+r9WTl5iGytQRpjGr/8pk9UK+6VI7HQayQMXx9GBC4zmZWDwMXRt
+         ldf1uBmeByS0BtfvidPR6C380bDBWRB5xvVceJn8stOCK9wGzGdS0xcn43lpXn3oo6ew
+         0jow==
+X-Gm-Message-State: AFqh2krpeB5e68hwBHu1lMIJ30y+flRZ1AvElFdnFNuRAfWWASdoHfal
+        qwW/lP8EuAZ+7zFYRVda1Q==
+X-Google-Smtp-Source: AMrXdXsShbSg9tkRr9cAr4isOuGI/2MNiXO5pgVI8hqOMcUl02pgbWJV8ue4UcuPDHun13xdkKLxfA==
+X-Received: by 2002:a17:902:cf08:b0:191:282:5d6c with SMTP id i8-20020a170902cf0800b0019102825d6cmr14622492plg.61.1671423716287;
+        Sun, 18 Dec 2022 20:21:56 -0800 (PST)
+Received: from localhost.localdomain ([144.214.0.6])
+        by smtp.gmail.com with ESMTPSA id t9-20020a170902e84900b001888cadf8f6sm5896615plg.49.2022.12.18.20.21.54
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 18 Dec 2022 20:21:55 -0800 (PST)
+From:   Hao Sun <sunhao.th@gmail.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     daniel@iogearbox.net, Hao Sun <sunhao.th@gmail.com>
+Subject: [PATCH] mm: new primitive kvmemdup()
+Date:   Mon, 19 Dec 2022 12:21:26 +0800
+Message-Id: <20221219042126.3396-1-sunhao.th@gmail.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221217223509.88254-3-changbin.du@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 18, 2022 at 06:35:09AM +0800, Changbin Du wrote:
-> Remove the empty vmlinux.h if bpftool failed to dump btf info.
-> The empty vmlinux.h can hide real error when reading output
-> of make.
-> 
-> This is done by adding .DELETE_ON_ERROR special target in related
-> makefiles.
+Similar to kmemdup(), but support large amount of bytes with kvmalloc()
+and does *not* guarantee that the result will be physically contiguous.
+Use only in cases where kvmalloc() is needed and free it with kvfree().
 
-We need to handle the same case for perf building, its makefile
-linux/tools/perf/Makefile.perf also uses bpftool to generate
-vmlinux.h, see:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/perf/Makefile.perf#n1067
+Suggested-by: Daniel Borkmann <daniel@iogearbox.net> 
+Signed-off-by: Hao Sun <sunhao.th@gmail.com>
+---
+This pattern has been used in several places and we're also going to
+do this[1], seems reasonable to add this so that bpf and in future
+others could make use of it.
 
-Please consider to use a separate patch to add the same change in
-Makefile.perf?
+[1] https://lore.kernel.org/bpf/7d274284-0fcc-061c-582e-3dfb629c6a44@iogearbox.net/T/#t
+---
+ include/linux/string.h |  1 +
+ mm/util.c              | 24 +++++++++++++++++++++++-
+ 2 files changed, 24 insertions(+), 1 deletion(-)
 
-Thanks,
-Leo
+diff --git a/include/linux/string.h b/include/linux/string.h
+index db28802ab0a6..c062c581a98b 100644
+--- a/include/linux/string.h
++++ b/include/linux/string.h
+@@ -177,6 +177,7 @@ extern char *kstrdup(const char *s, gfp_t gfp) __malloc;
+ extern const char *kstrdup_const(const char *s, gfp_t gfp);
+ extern char *kstrndup(const char *s, size_t len, gfp_t gfp);
+ extern void *kmemdup(const void *src, size_t len, gfp_t gfp) __realloc_size(2);
++extern void *kvmemdup(const void *src, size_t len, gfp_t gfp) __realloc_size(2);
+ extern char *kmemdup_nul(const char *s, size_t len, gfp_t gfp);
+ 
+ extern char **argv_split(gfp_t gfp, const char *str, int *argcp);
+diff --git a/mm/util.c b/mm/util.c
+index b56c92fb910f..cec9327b27b4 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -120,7 +120,8 @@ EXPORT_SYMBOL(kstrndup);
+  * @len: memory region length
+  * @gfp: GFP mask to use
+  *
+- * Return: newly allocated copy of @src or %NULL in case of error
++ * Return: newly allocated copy of @src or %NULL in case of error,
++ * result is physically contiguous. Use kfree() to free.
+  */
+ void *kmemdup(const void *src, size_t len, gfp_t gfp)
+ {
+@@ -133,6 +134,27 @@ void *kmemdup(const void *src, size_t len, gfp_t gfp)
+ }
+ EXPORT_SYMBOL(kmemdup);
+ 
++/**
++ * kvmemdup - duplicate region of memory
++ *
++ * @src: memory region to duplicate
++ * @len: memory region length
++ * @gfp: GFP mask to use
++ *
++ * Return: newly allocated copy of @src or %NULL in case of error,
++ * result may be not physically contiguous. Use kvfree() to free.
++ */
++void *kvmemdup(const void *src, size_t len, gfp_t gfp)
++{
++	void *p;
++
++	p = kvmalloc(len, gfp);
++	if (p)
++		memcpy(p, src, len);
++	return p;
++}
++EXPORT_SYMBOL(kvmemdup);
++
+ /**
+  * kmemdup_nul - Create a NUL-terminated string from unterminated data
+  * @s: The data to stringify
 
-> Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> ---
->  tools/bpf/bpftool/Makefile           | 3 +++
->  tools/testing/selftests/bpf/Makefile | 3 +++
->  2 files changed, 6 insertions(+)
-> 
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index 787b857d3fb5..313fd1b09189 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-> @@ -289,3 +289,6 @@ FORCE:
->  .PHONY: all FORCE bootstrap clean install-bin install uninstall
->  .PHONY: doc doc-clean doc-install doc-uninstall
->  .DEFAULT_GOAL := all
-> +
-> +# Delete partially updated (corrupted) files on error
-> +.DELETE_ON_ERROR:
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index c22c43bbee19..205e8c3c346a 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -626,3 +626,6 @@ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)	\
->  			       liburandom_read.so)
->  
->  .PHONY: docs docs-clean
-> +
-> +# Delete partially updated (corrupted) files on error
-> +.DELETE_ON_ERROR:
-> -- 
-> 2.37.2
-> 
+base-commit: f9ff5644bcc04221bae56f922122f2b7f5d24d62
+-- 
+2.39.0
+
