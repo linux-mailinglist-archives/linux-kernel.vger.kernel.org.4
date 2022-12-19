@@ -2,120 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7145650D25
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A61650D2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:24:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiLSOWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 09:22:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
+        id S231641AbiLSOYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 09:24:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbiLSOWE (ORCPT
+        with ESMTP id S230373AbiLSOYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 09:22:04 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672E22BF6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 06:22:02 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id q6so13830860lfm.10
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 06:22:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UWrv8lBgcNHCLzm5GtvSjHAYiNFFdo3OiKB1hWU/9pE=;
-        b=AClt4/+6IM4CiIxkFfALoYpOwKNraprGKGusEjHm4WFM1kNpQp+x6T5dahtRa4kFQ+
-         6VqNG1c2aa640WdHNUYTonpDGYt62UWgqXZnbsXjo+BSaN4M0Uw4NCwXaQ0RuPiluNK5
-         cTOpShJCc8gVCV0dqs/xX+2JC6MBG4C//YpfZr/8LF2nDKC086MPSxmKbm5A6J7Ykfmh
-         YwRAodHKOKavJw99+cQxLiGF0jEeV2e5v98g3B/X4sQu88OE6PU3Tlw7llMiD3Ov1IgE
-         e7m1xQ54fQgPq7qLLYFu3TP/RGwqVbNfSCjQyPPmf3RI0EX3yDIiKaJy4wHEkC3YMFNE
-         x+Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UWrv8lBgcNHCLzm5GtvSjHAYiNFFdo3OiKB1hWU/9pE=;
-        b=zoK3pONUNjnVrr6iCvmEy2p4VE+zUKlhv5zYKNHyujyKA9cLoWHFsZPnq19FJqxxjE
-         qoBdllCzMTibjeWWHePxlW2o28HOsSHJ66M1aTDf8y8XYcBy3cJrPummLeDlk2y0mAIr
-         +MistXhbgBQn0sfyvjSx1/0pokffgelNrCW3rUDXOdkgrhcBE/r38dDReahsowAdBQwW
-         OomoNuBxYaaFeKjOEjGy13W+NOi1HpObTzDYrglIoxEQG3Vk005RT2mDYfyh8UajsDyK
-         Tuy6QLKtKGvcOe0SCHUCwEyigG1QVTiyBY16Ezgs/S6GHit9gCOl0CSaaYRkf2rpgYuy
-         F42w==
-X-Gm-Message-State: ANoB5pkS02feXRc/PJoe1f6QZ4FZ+b8j9a8oD6zWjiuxlMD/ObQnCd1F
-        ag/5HreDIDHYWzHOgCarZWWreg==
-X-Google-Smtp-Source: AA0mqf7DfqtKnlTO21BkZ/lJrUfLeWDWMGEUJgse8xppt0PUaUzMe2RXnCNpEe1xCdVOmu0TCDr+hg==
-X-Received: by 2002:ac2:4c51:0:b0:4a4:8a04:4b37 with SMTP id o17-20020ac24c51000000b004a48a044b37mr16183663lfk.32.1671459720807;
-        Mon, 19 Dec 2022 06:22:00 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id y7-20020ac24207000000b004b5831b69dcsm1117502lfh.140.2022.12.19.06.21.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 06:22:00 -0800 (PST)
-Message-ID: <9238a26e-7c4b-00ca-e097-5574ed75210d@linaro.org>
-Date:   Mon, 19 Dec 2022 15:21:58 +0100
+        Mon, 19 Dec 2022 09:24:16 -0500
+Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBA12BF6
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 06:24:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1671459814; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=acZ1fov4ki9u2AnkKuWBzsGnuiDOCWbHLX4PdhHmIH2kGT/Gr9pjQGOFU5UwWtQkKPFYm+Q49escKKx3H2yYY/S9Q1e/LBn5IdxDXPiyA4zLcTjFvl0BiQo20zvTlw5eRRr5w5Kn9I8SWWKK7jsLxe4A0Z5tnsTBIriZ3o35ueE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1671459814; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=/KkACYHujfaGKX6lGYzfdfF8MvLQer0ZrR0Xvcz+8Pg=; 
+        b=G1PZhlnGUFJQfIXR3sUFFDrxr31/MdjOB6zp4QzztXRMLAdSru3jLaSO+wG9eEovnFA0UBfCyRbwIXjI9rMyEHFU6Nn+Gvi8qjd9rJWyuWUd8sMZjXnQ/GsUMBwHdZIFbj1c760h6Y/bJ5YrE587F5hYhmiJFdPMrCcv+vgcjX8=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1671459814;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+        bh=/KkACYHujfaGKX6lGYzfdfF8MvLQer0ZrR0Xvcz+8Pg=;
+        b=qB4uFp3H3gNfY41OgmzaL/Y9TOCV0FdF20zOKObIIaWaEK3W9aYspuPROiXBdgIy
+        brEir+1l1y+CFJfptk5qaGTnWwQpbDNeD1xNtenE6SgimLLnsf8J+jh94gkp9Xl49kz
+        coV4kP9qKLKtpx18WSO88sYFuOKhQka/ea8chAgs=
+Received: from kampyooter.. (110.226.31.37 [110.226.31.37]) by mx.zoho.in
+        with SMTPS id 1671459813592928.3801402610421; Mon, 19 Dec 2022 19:53:33 +0530 (IST)
+From:   Siddh Raman Pant <code@siddh.me>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <20221219142319.79827-1-code@siddh.me>
+Subject: [PATCH] drm: Replace DRM_INFO() with pr_info()
+Date:   Mon, 19 Dec 2022 19:53:19 +0530
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 00/13] Qcom: LLCC/EDAC: Fix base address used for LLCC
- banks
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Andrew Halaney <ahalaney@redhat.com>, andersson@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        bp@alien8.de, tony.luck@intel.com, quic_saipraka@quicinc.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com
-References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
- <20221212192340.evgtbpzmw7hcdolb@halaney-x13s>
- <20221213052802.GB4862@thinkpad>
- <ec64e3a0-085d-7830-fd4e-6969c1c9bbdf@linaro.org>
- <20221213175738.GI4862@thinkpad>
- <195a55f1-76e7-3f00-da1f-4ae84f7943c0@linaro.org>
- <20221219135046.GA126558@thinkpad>
- <1df13a83-1926-05b5-f7c7-388ef431a2fa@linaro.org>
- <20221219141643.GB126558@thinkpad>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221219141643.GB126558@thinkpad>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/12/2022 15:16, Manivannan Sadhasivam wrote:
-> On Mon, Dec 19, 2022 at 03:11:36PM +0100, Krzysztof Kozlowski wrote:
->> On 19/12/2022 14:50, Manivannan Sadhasivam wrote:
->>>
->>>>> Also, the id table is
->>>>> an overkill since there is only one driver that is making use of it. And
->>>>> moreover, there is no definite ID to use.
->>>>
->>>> Every driver with a single device support has usually ID table and it's
->>>> not a problem...
->>>>
->>>
->>> Are you referring to OF/ACPI ID table? Or something else?
->>
->> No, I refer to the driver ID table (I2C, platform whatever the driver is).
->>
-> 
-> Yeah, that's what I wanted to avoid here. The ID table makes sense if you have
-> a bus like I2C or a separate subsystem but here LLCC is an individual driver.
-> So creating a separate ID table is an overkill IMO.
+Line 536 of drm_print.h says DRM_INFO() is deprecated
+in favor of pr_info().
 
-Why this is an overkill? Just few lines and many, many drivers have it.
-Even duplicated (for legacy reasons) with OF tables.
+Signed-off-by: Siddh Raman Pant <code@siddh.me>
+---
+ drivers/gpu/drm/drm_client_modeset.c |  2 +-
+ drivers/gpu/drm/drm_connector.c      |  8 ++++----
+ drivers/gpu/drm/drm_drv.c            | 10 +++++-----
+ drivers/gpu/drm/drm_edid_load.c      | 14 +++++++-------
+ drivers/gpu/drm/drm_pci.c            |  2 +-
+ 5 files changed, 18 insertions(+), 18 deletions(-)
 
-ALIAS is not the way to go around ID table because essentially you are
-re-implementing it.
+diff --git a/drivers/gpu/drm/drm_client_modeset.c b/drivers/gpu/drm/drm_cli=
+ent_modeset.c
+index bbc535cc50dd..2e2891614c58 100644
+--- a/drivers/gpu/drm/drm_client_modeset.c
++++ b/drivers/gpu/drm/drm_client_modeset.c
+@@ -335,7 +335,7 @@ static bool drm_client_target_cloned(struct drm_device =
+*dev,
+ =09=09DRM_DEBUG_KMS("can clone using 1024x768\n");
+ =09=09return true;
+ =09}
+-=09DRM_INFO("kms: can't enable cloning when we probably wanted to.\n");
++=09pr_info("[drm] kms: can't enable cloning when we probably wanted to.\n"=
+);
+ =09return false;
+ }
+=20
+diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connecto=
+r.c
+index 61c29ce74b03..26a03b70e2c6 100644
+--- a/drivers/gpu/drm/drm_connector.c
++++ b/drivers/gpu/drm/drm_connector.c
+@@ -165,14 +165,14 @@ static void drm_connector_get_cmdline_mode(struct drm=
+_connector *connector)
+ =09=09return;
+=20
+ =09if (mode->force) {
+-=09=09DRM_INFO("forcing %s connector %s\n", connector->name,
+-=09=09=09 drm_get_connector_force_name(mode->force));
++=09=09pr_info("[drm] forcing %s connector %s\n", connector->name,
++=09=09=09drm_get_connector_force_name(mode->force));
+ =09=09connector->force =3D mode->force;
+ =09}
+=20
+ =09if (mode->panel_orientation !=3D DRM_MODE_PANEL_ORIENTATION_UNKNOWN) {
+-=09=09DRM_INFO("cmdline forces connector %s panel_orientation to %d\n",
+-=09=09=09 connector->name, mode->panel_orientation);
++=09=09pr_info("[drm] cmdline forces connector %s panel_orientation to %d\n=
+",
++=09=09=09connector->name, mode->panel_orientation);
+ =09=09drm_connector_set_panel_orientation(connector,
+ =09=09=09=09=09=09    mode->panel_orientation);
+ =09}
+diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
+index 203bf8d6c34c..1486df097908 100644
+--- a/drivers/gpu/drm/drm_drv.c
++++ b/drivers/gpu/drm/drm_drv.c
+@@ -898,11 +898,11 @@ int drm_dev_register(struct drm_device *dev, unsigned=
+ long flags)
+ =09if (drm_core_check_feature(dev, DRIVER_MODESET))
+ =09=09drm_modeset_register_all(dev);
+=20
+-=09DRM_INFO("Initialized %s %d.%d.%d %s for %s on minor %d\n",
+-=09=09 driver->name, driver->major, driver->minor,
+-=09=09 driver->patchlevel, driver->date,
+-=09=09 dev->dev ? dev_name(dev->dev) : "virtual device",
+-=09=09 dev->primary->index);
++=09pr_info("[drm] Initialized %s %d.%d.%d %s for %s on minor %d\n",
++=09=09driver->name, driver->major, driver->minor,
++=09=09driver->patchlevel, driver->date,
++=09=09dev->dev ? dev_name(dev->dev) : "virtual device",
++=09=09dev->primary->index);
+=20
+ =09goto out_unlock;
+=20
+diff --git a/drivers/gpu/drm/drm_edid_load.c b/drivers/gpu/drm/drm_edid_loa=
+d.c
+index 37d8ba3ddb46..d3cb198380c5 100644
+--- a/drivers/gpu/drm/drm_edid_load.c
++++ b/drivers/gpu/drm/drm_edid_load.c
+@@ -242,9 +242,9 @@ static void *edid_load(struct drm_connector *connector,=
+ const char *name,
+ =09=09u8 *new_edid;
+=20
+ =09=09edid[EDID_LENGTH-1] +=3D edid[0x7e] - valid_extensions;
+-=09=09DRM_INFO("Found %d valid extensions instead of %d in EDID data "
+-=09=09    "\"%s\" for connector \"%s\"\n", valid_extensions,
+-=09=09    edid[0x7e], name, connector_name);
++=09=09pr_info("[drm] Found %d valid extensions instead of %d in EDID data =
+"
++=09=09=09"\"%s\" for connector \"%s\"\n", valid_extensions,
++=09=09=09edid[0x7e], name, connector_name);
+ =09=09edid[0x7e] =3D valid_extensions;
+=20
+ =09=09new_edid =3D krealloc(edid, (valid_extensions + 1) * EDID_LENGTH,
+@@ -253,10 +253,10 @@ static void *edid_load(struct drm_connector *connecto=
+r, const char *name,
+ =09=09=09edid =3D new_edid;
+ =09}
+=20
+-=09DRM_INFO("Got %s EDID base block and %d extension%s from "
+-=09    "\"%s\" for connector \"%s\"\n", (builtin >=3D 0) ? "built-in" :
+-=09    "external", valid_extensions, valid_extensions =3D=3D 1 ? "" : "s",
+-=09    name, connector_name);
++=09pr_info("[drm] Got %s EDID base block and %d extension%s from "
++=09=09"\"%s\" for connector \"%s\"\n", (builtin >=3D 0) ? "built-in" :
++=09=09"external", valid_extensions, valid_extensions =3D=3D 1 ? "" : "s",
++=09=09name, connector_name);
+=20
+ out:
+ =09release_firmware(fw);
+diff --git a/drivers/gpu/drm/drm_pci.c b/drivers/gpu/drm/drm_pci.c
+index 39d35fc3a43b..94ee194ce927 100644
+--- a/drivers/gpu/drm/drm_pci.c
++++ b/drivers/gpu/drm/drm_pci.c
+@@ -262,7 +262,7 @@ void drm_legacy_pci_exit(const struct drm_driver *drive=
+r,
+ =09=09}
+ =09=09mutex_unlock(&legacy_dev_list_lock);
+ =09}
+-=09DRM_INFO("Module unloaded\n");
++=09pr_info("[drm] Module unloaded\n");
+ }
+ EXPORT_SYMBOL(drm_legacy_pci_exit);
+=20
+--=20
+2.35.1
 
-Best regards,
-Krzysztof
 
