@@ -2,106 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CB2651129
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A47FE651127
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbiLSRTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 12:19:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
+        id S232370AbiLSRTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 12:19:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbiLSRTd (ORCPT
+        with ESMTP id S232190AbiLSRT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 12:19:33 -0500
-Received: from box.opentheblackbox.net (box.opentheblackbox.net [IPv6:2600:3c02::f03c:92ff:fee2:82bc])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165212FB;
-        Mon, 19 Dec 2022 09:19:33 -0800 (PST)
-Received: from authenticated-user (box.opentheblackbox.net [172.105.151.37])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.opentheblackbox.net (Postfix) with ESMTPSA id EB7B83EA50;
-        Mon, 19 Dec 2022 12:19:31 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pgazz.com; s=mail;
-        t=1671470372; bh=9bYAYnsF3sM0kY4DcqJgvSrfn3Yhvu5t4LsWQCVQ22c=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GJQcaj2xzpKLi5sHc3YQsD6NWInQKxVlMsfPXGSd/qlRDRg1emOaEYSLxr5ZmnJuu
-         XQ4rx/Vz1CIH56ag6NqmeL8WRtR3Bk2fyjPJ4egMEOwFnnBpVWrQt8Ww9mjkh7+JRX
-         J7CckD7a3o3jwPpXwkeuQPKdKpAjYO3LYOrfUurdlNnSDmlqLLm1tXSJH7HBdNrR3r
-         S+PRCP024baGQTjsdTe/BpCgi7ZSr9wY3G/By6PGl+RX9kLxWYEi+Mmni1pgYJBl4c
-         wt2NNus2JCUUYtmiVxY+3LqFwectQVi1eghXHD6S8FTKeIhmDUjufdcXkpJGra7ejn
-         t8DPptsHTOv0w==
-From:   Paul Gazzillo <paul@pgazz.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Zheng Bin <zhengbin13@huawei.com>,
-        Suman Ghosh <sumang@marvell.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Paul Gazzillo <paul@pgazz.com>
-Subject: [PATCH v2] octeontx2_pf: Select NET_DEVLINK when enabling OCTEONTX2_PF
-Date:   Mon, 19 Dec 2022 12:19:11 -0500
-Message-Id: <20221219171918.834772-1-paul@pgazz.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,RCVD_IN_XBL,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Mon, 19 Dec 2022 12:19:28 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4E195B1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 09:19:27 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id q93-20020a17090a1b6600b0021311ab9082so3769785pjq.7
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 09:19:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:reply-to:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u1OxrZzOIajVGZwkXAPogH/ue04ueQgByOpRB200gSU=;
+        b=RrzqGferbVNclkVYmMFvgCACtExupzd+zXKlb6mqsno4S/mJv3bQ7LCh29DMgCaVEu
+         2CVeVtbR98sVzCFZ2PrSeFfDjxBsanG7unC6LTZ7Pvf17Vx8sM/YNe1dVT1DS32UDOfh
+         hteFFn+helbDlE1Cubk5wDLAOGDZTao2EiDVP5kj+BdQOCHaKmFNXcNu8HKZCtnL9iyX
+         UvcOAjulhbrTLhfQXqDGVd6ILFbWZpvYCOcYGraPxPkQ5N8U1+IGg20DKKAkhwCg15pi
+         vN8zy17Y1pJ978V2ET2wigwRRg4poqTNOFZW76ogCRe/tD9RrpOZq/XyQhTz3HV37t5n
+         N0tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:reply-to:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=u1OxrZzOIajVGZwkXAPogH/ue04ueQgByOpRB200gSU=;
+        b=twtiR+Yp4Jg32U/R0trLGS2G773orZWM/PfYxE1rf9tndXnft26epMvPyW++GxbbBW
+         AcfQrIbcU7WkLsWJUywsufD9tO0v4yq27QR0AMiFw0vzDLYHwBtwyLaxbCb6/KRtvQrY
+         NK/bofdpRIOyGtlAb0dh/MKccn6HLgpqcOnLycJ62F9g6FXAH6V2jlF57lj6kIc4wAf/
+         AYu5+Xn4oHAFhg01EicjIJCkJAbzC+xClzfTBMQtUqoIpuTd7mCElhlweDYQpNsE4d6N
+         scg+DUqqk15+5fkcPk11ss7blx5C3wpYKDMGKvarrXgaP7XRY6SbAgaQfuaXhvmDOjD5
+         UrEw==
+X-Gm-Message-State: ANoB5plwCts5iKYOirJetIzI816R3vYjOvx2PxcpvKbgi9B+njdcqkS9
+        DFsyBYrrzd0h+kL0tAq3oznZ3kN5FUE=
+X-Google-Smtp-Source: AA0mqf47iFBIWrLHBVtRlKfWtlwfs4338UwzR9+snJh/ddN8hNpdi0zwWP4rl94BM9iTNW8RowDHx1ocEik=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:cf02:b0:189:d193:95e7 with SMTP id
+ i2-20020a170902cf0200b00189d19395e7mr21663279plg.1.1671470367133; Mon, 19 Dec
+ 2022 09:19:27 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Mon, 19 Dec 2022 17:19:24 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20221219171924.67989-1-seanjc@google.com>
+Subject: [PATCH] KVM: Destroy target device if coalesced MMIO unregistration fails
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "=?UTF-8?q?=E6=9F=B3=E8=8F=81=E5=B3=B0?=" <liujingfeng@qianxin.com>,
+        Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using COMPILE_TEST, the driver controlled by OCTEONTX2_PF does
-not select NET_DEVLINK while the related OCTEONTX2_AF driver does.
-This means that when OCTEONTX2_PF is enabled from a default
-configuration, linker errors will occur due to undefined references to
-code controlled by NET_DEVLINK.
+Destroy and free the target coalesced MMIO device if unregistering said
+device fails.  As clearly noted in the code, kvm_io_bus_unregister_dev()
+does not destroy the target device.
 
-1. make.cross ARCH=x86_64 defconfig
-2. make.cross ARCH=x86_64 menuconfig
-3. Enable COMPILE_TEST
-   General setup  --->
-     Compile also drivers which will not load
-4. Enable OCTEONTX2_PF
-   Device Drivers  --->
-     Network device support  --->
-       Ethernet driver support  --->
-         Marvell OcteonTX2 NIC Physical Function driver
-5. Exit and save configuration.  NET_DEVLINK will still be disabled.
-6. make.cross ARCH=x86_64 several linker errors, for example,
-   ld: drivers/net/ethernet/marvell/octeontx2/nic/otx2_devlink.o:
-     in function `otx2_register_dl':
-   otx2_devlink.c:(.text+0x142): undefined reference to `devlink_alloc_ns'
+  BUG: memory leak
+  unreferenced object 0xffff888112a54880 (size 64):
+    comm "syz-executor.2", pid 5258, jiffies 4297861402 (age 14.129s)
+    hex dump (first 32 bytes):
+      38 c7 67 15 00 c9 ff ff 38 c7 67 15 00 c9 ff ff  8.g.....8.g.....
+      e0 c7 e1 83 ff ff ff ff 00 30 67 15 00 c9 ff ff  .........0g.....
+    backtrace:
+      [<0000000006995a8a>] kmalloc include/linux/slab.h:556 [inline]
+      [<0000000006995a8a>] kzalloc include/linux/slab.h:690 [inline]
+      [<0000000006995a8a>] kvm_vm_ioctl_register_coalesced_mmio+0x8e/0x3d0 =
+arch/x86/kvm/../../../virt/kvm/coalesced_mmio.c:150
+      [<00000000022550c2>] kvm_vm_ioctl+0x47d/0x1600 arch/x86/kvm/../../../=
+virt/kvm/kvm_main.c:3323
+      [<000000008a75102f>] vfs_ioctl fs/ioctl.c:46 [inline]
+      [<000000008a75102f>] file_ioctl fs/ioctl.c:509 [inline]
+      [<000000008a75102f>] do_vfs_ioctl+0xbab/0x1160 fs/ioctl.c:696
+      [<0000000080e3f669>] ksys_ioctl+0x76/0xa0 fs/ioctl.c:713
+      [<0000000059ef4888>] __do_sys_ioctl fs/ioctl.c:720 [inline]
+      [<0000000059ef4888>] __se_sys_ioctl fs/ioctl.c:718 [inline]
+      [<0000000059ef4888>] __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
+      [<000000006444fa05>] do_syscall_64+0x9f/0x4e0 arch/x86/entry/common.c=
+:290
+      [<000000009a4ed50b>] entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
-This fix adds "select NET_DEVLINK" link to OCTEONTX2_PF's Kconfig
-specification to match OCTEONTX2_AF.
+  BUG: leak checking failed
 
-Fixes: 2da489432747 ("octeontx2-pf: devlink params support to set mcam entry count")
-Signed-off-by: Paul Gazzillo <paul@pgazz.com>
+Fixes: 5d3c4c79384a ("KVM: Stop looking for coalesced MMIO zones if the bus=
+ is destroyed")
+Cc: stable@vger.kernel.org
+Reported-by: =E6=9F=B3=E8=8F=81=E5=B3=B0 <liujingfeng@qianxin.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
-v1 -> v2: Added the fixes tag
+ virt/kvm/coalesced_mmio.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
- drivers/net/ethernet/marvell/octeontx2/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+diff --git a/virt/kvm/coalesced_mmio.c b/virt/kvm/coalesced_mmio.c
+index 0be80c213f7f..5ef88f5a0864 100644
+--- a/virt/kvm/coalesced_mmio.c
++++ b/virt/kvm/coalesced_mmio.c
+@@ -187,15 +187,17 @@ int kvm_vm_ioctl_unregister_coalesced_mmio(struct kvm=
+ *kvm,
+ 			r =3D kvm_io_bus_unregister_dev(kvm,
+ 				zone->pio ? KVM_PIO_BUS : KVM_MMIO_BUS, &dev->dev);
+=20
++			kvm_iodevice_destructor(&dev->dev);
++
+ 			/*
+ 			 * On failure, unregister destroys all devices on the
+ 			 * bus _except_ the target device, i.e. coalesced_zones
+-			 * has been modified.  No need to restart the walk as
+-			 * there aren't any zones left.
++			 * has been modified.  Bail after destroying the target
++			 * device, there's no need to restart the walk as there
++			 * aren't any zones left.
+ 			 */
+ 			if (r)
+ 				break;
+-			kvm_iodevice_destructor(&dev->dev);
+ 		}
+ 	}
+=20
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/Kconfig b/drivers/net/ethernet/marvell/octeontx2/Kconfig
-index 3f982ccf2c85..639893d87055 100644
---- a/drivers/net/ethernet/marvell/octeontx2/Kconfig
-+++ b/drivers/net/ethernet/marvell/octeontx2/Kconfig
-@@ -31,6 +31,7 @@ config NDC_DIS_DYNAMIC_CACHING
- config OCTEONTX2_PF
- 	tristate "Marvell OcteonTX2 NIC Physical Function driver"
- 	select OCTEONTX2_MBOX
-+	select NET_DEVLINK
- 	depends on (64BIT && COMPILE_TEST) || ARM64
- 	depends on PCI
- 	depends on PTP_1588_CLOCK_OPTIONAL
--- 
-2.25.1
+base-commit: 9d75a3251adfbcf444681474511b58042a364863
+--=20
+2.39.0.314.g84b9a713c41-goog
 
