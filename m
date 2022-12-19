@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382616509C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 11:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD326509C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 11:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbiLSKEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 05:04:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
+        id S231394AbiLSKHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 05:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiLSKEc (ORCPT
+        with ESMTP id S229499AbiLSKHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 05:04:32 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82682DE5
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 02:04:31 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id p3-20020a6bfa03000000b006df8582e11cso3881720ioh.22
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 02:04:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eyU2aTqJrEienAovyYz9d8BtwNn+WYphP8UJdFWjqvw=;
-        b=aNjXPgqIrQHAVT4v044QxSskbVeWQPYgDZ7tHtBV9AY+5kjTNnkuwAt6CfXXqsihF9
-         rAtvaqubX7FHA6jF+VOS9x1FN4IGexBQWaeXWQaOmKMoy0qKwWu6Hnn2R8YGepBHUaHS
-         omdKla+JY5YBv88bYYn6mHI1VVJPB0TxLUU1dAWov0yz2CyJhFs0owbcsNUIMTGO4eMK
-         hxyVERh04RsCYQ5V/x4347csizeIk4hoFS5wm8w4MDZGbMNl4U8/kkR3E7eKj57WoIiB
-         mUGlO8WrZ8+dYk6JpfkdpuKpBQ4ekzSpcHMDw92CSeTP+s41MVd7Za5ZgmWYpmN2w+4e
-         jdGg==
-X-Gm-Message-State: ANoB5pkzlM2EuWwn4Gh11R2aS3pza4upjcDCryD/nqJXeBoYi9vFC1J0
-        aVDEZQyPWjaG3/fZCCfvZDLIoHE8I3odbfkA4GbxJS8jOZ7L
-X-Google-Smtp-Source: AA0mqf59Vv/cxyI3zDwpIJ7v3WG0pccDSkld2sIjZgSJZzD2DTs3ssqktEYjfqDBM9eGMQ/fdZ///hGWO63SchopcMxN/THnH7fo
+        Mon, 19 Dec 2022 05:07:42 -0500
+Received: from outbound-smtp28.blacknight.com (outbound-smtp28.blacknight.com [81.17.249.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C8C26FC
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 02:07:41 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
+        by outbound-smtp28.blacknight.com (Postfix) with ESMTPS id 16A23CCD39
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 10:07:39 +0000 (GMT)
+Received: (qmail 2594 invoked from network); 19 Dec 2022 10:07:38 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 19 Dec 2022 10:07:38 -0000
+Date:   Mon, 19 Dec 2022 10:07:34 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>, Marco Elver <elver@google.com>,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH] mm: remove unused alloc_pages_bulk_list()
+Message-ID: <20221219100734.jag6zejp4tug77yq@techsingularity.net>
+References: <20221217001554.554913-1-lstoakes@gmail.com>
+ <Y51L496TjNuiSxsG@casper.infradead.org>
+ <Y51/Mt70d++6Zzzq@lucifer>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:14a:b0:303:f9f:74cb with SMTP id
- j10-20020a056e02014a00b003030f9f74cbmr25665155ilr.167.1671444271272; Mon, 19
- Dec 2022 02:04:31 -0800 (PST)
-Date:   Mon, 19 Dec 2022 02:04:31 -0800
-In-Reply-To: <000000000000b960c00594598949@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000d1f3105f02b729c@google.com>
-Subject: Re: KASAN: use-after-free Read in tc_chain_fill_node
-From:   syzbot <syzbot+5f229e48cccc804062c0@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, gregkh@linuxfoundation.org, jiri@mellanox.com,
-        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        stable-commits@vger.kernel.org, stable@vger.kernel.org,
-        syzkaller-lts-bugs@googlegroups.com, vladbu@mellanox.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <Y51/Mt70d++6Zzzq@lucifer>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-net: core: netlink: add helper refcount dec and lock function
-net: sched: add helper function to take reference to Qdisc
-net: sched: extend Qdisc with rcu
-net: sched: rename qdisc_destroy() to qdisc_put()
-net: sched: use Qdisc rcu API instead of relying on rtnl lock
-But I can't find it in any tested tree for more than 90 days.
-Is it a correct commit? Please update it by replying:
-#syz fix: exact-commit-title
+On Sat, Dec 17, 2022 at 08:34:58AM +0000, Lorenzo Stoakes wrote:
+> + Mel
+> 
+> On Sat, Dec 17, 2022 at 04:56:03AM +0000, Matthew Wilcox wrote:
+> > I think we're waiting to see if any users show up.  It's only been 18
+> > months or so, so perhaps wait a little longer?
+> 
+> Apologies, I should have researched the background of this further. I see it was
+> added speculatively in 0f87d9d30f.
+> 
+> > Also, if we do get rid of this, then __alloc_pages_bulk() can lose
+> > the "list" argument.
+> 
+> Ack. Will do a v2 if Mel feels it's appropriate to remove at this stage,
+> otherwise we can drop the idea and wait for users to emerge.
 
-Until then the bug is still considered open and new crashes with the same signature are ignored.
+I reckon we should give it another few months until May. There has been
+one user recently that tried to use list but it turned out arrays were
+more appropriate.
 
-Dashboard link: https://syzkaller.appspot.com/bug?extid=5f229e48cccc804062c0
+-- 
+Mel Gorman
+SUSE Labs
