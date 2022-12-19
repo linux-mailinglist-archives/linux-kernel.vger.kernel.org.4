@@ -2,88 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00A565081A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 08:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F5165081F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 08:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231563AbiLSHg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 02:36:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
+        id S229957AbiLSHkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 02:40:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbiLSHgZ (ORCPT
+        with ESMTP id S229615AbiLSHkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 02:36:25 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928CAA44B;
-        Sun, 18 Dec 2022 23:36:23 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 500E984D70;
-        Mon, 19 Dec 2022 08:36:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1671435381;
-        bh=Voeiz7V8OcQZJcxdSJRCFvpWv4YiQpVgYELZEftdCQ0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DHKKgkZPBX7pGz14kASI7flYNmgKOEQPiF2gBYirqQjSc1xUFQbrW6Sr5GzrT5lw4
-         fUuvphceSZl4H39r0tyY7x6Sbi4TXRtnZc0keD7PUyLWNsDnSsZLuLHrALXo+1wy2I
-         FQqCbATTkdS3lzLn8Q7RuN6/sGH8pNzCo2s4owIcH2DT+/45PDCRO7B2zJS3rWfVDb
-         n1OByfkskDQoMWBJxegeIk3300MCn1QaG1tE27EYylJ7zOM0gBxDO13fI48eTsd21W
-         cEZh7mjbP2cRJiSa1JuhXCoqbAAJekczXMcoCobpCUNU4FTrZL8SBYx0oPiQWai7ii
-         9+3Cgc25w/SuQ==
-Message-ID: <c677ece5-1f84-7f37-ea80-12f19fa6e222@denx.de>
-Date:   Mon, 19 Dec 2022 08:36:19 +0100
+        Mon, 19 Dec 2022 02:40:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1933C4F
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 23:39:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671435593;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w11vatQNVAnUlnMv1dmIAsVTD8BgrqYdlE5ppWAhfcU=;
+        b=QkH3RAeEHOefS3aX62LvTskihBDnOvtaFHGOzWxOQE+Hb7RhCWo8maUkSecVaL/9d8+ck3
+        zkSqbZjpwpmvQAVc9rMdcwg2K09EtgEewsa5ElR3VuDg0Wi+cLqHYWe32kF27w8LS8NOph
+        hlHbY3nCrElmQEJx750AiYIWKXMKUn0=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-70-Bc3ZZmJjPRG2gf62IXoDhQ-1; Mon, 19 Dec 2022 02:39:52 -0500
+X-MC-Unique: Bc3ZZmJjPRG2gf62IXoDhQ-1
+Received: by mail-qk1-f200.google.com with SMTP id az39-20020a05620a172700b006ff85c3b19eso6774201qkb.18
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 23:39:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w11vatQNVAnUlnMv1dmIAsVTD8BgrqYdlE5ppWAhfcU=;
+        b=Zf2Q9hVjEi0JXy8qa+TQEFVfrEXlpDqjc7iA5fgdtxw/WdZDA3aABK9u6MgCz58TzF
+         b1RW/WhVEEDjOk8FkGXumEnBmdmIbuEJZU/bAodGEVJjXYUE+f/iDQQfa233BbVSuLhb
+         ovpoAFs6P1YFQLEo2qakSk+WHzVh+C2FLaeN2qQjx3WqmaV+DJJmsI4iIW43u2LnEmKZ
+         vIypDhDTVLGo1VXrjGlXBjdWSJZEU9AOQoprXOMfFFbMaUg0f7I6PFnOcqVmMR8ogZ96
+         B9HTgjnUitkpyZrEVaH7HWRttH29uMGCGUVLv8q5PHyxD7nV1mDz1qPIY7miXM8Precy
+         SnsA==
+X-Gm-Message-State: ANoB5pnqaRHP53srTtnS2LzDn48CUuiTHVlkYKfjHVSON8pYBPnNEKWU
+        5lcSZYHCfieoxAOH5uJWGNXHzLtBniyYsryKZkUs/Q23aMgUzFetfRwNoRo62MqME94qhmQJnfv
+        TaozBFkGTqwwwCk4EZvQXyvI0
+X-Received: by 2002:ac8:5544:0:b0:3a8:b88:c1 with SMTP id o4-20020ac85544000000b003a80b8800c1mr51790080qtr.66.1671435591905;
+        Sun, 18 Dec 2022 23:39:51 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7+jlbEi9Hng1kQBhZFIW+Ck6EaPnOm37evbb26ZWZOc9ge1j5bCv1B5OdL+PMwpgyh21WQcw==
+X-Received: by 2002:ac8:5544:0:b0:3a8:b88:c1 with SMTP id o4-20020ac85544000000b003a80b8800c1mr51790067qtr.66.1671435591645;
+        Sun, 18 Dec 2022 23:39:51 -0800 (PST)
+Received: from redhat.com ([45.144.113.29])
+        by smtp.gmail.com with ESMTPSA id cj23-20020a05622a259700b003a7f597dc60sm5645751qtb.72.2022.12.18.23.39.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Dec 2022 23:39:51 -0800 (PST)
+Date:   Mon, 19 Dec 2022 02:39:46 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Andrey Smetanin <asmetanin@yandex-team.ru>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yc-core@yandex-team.ru
+Subject: Re: [PATCH] vhost_net: revert upend_idx only on retriable error
+Message-ID: <20221219023900-mutt-send-email-mst@kernel.org>
+References: <20221123102207.451527-1-asmetanin@yandex-team.ru>
+ <CACGkMEs3gdcQ5_PkYmz2eV-kFodZnnPPhvyRCyLXBYYdfHtNjw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] phy: freescale: imx8m-pcie: Add one missing error return
-Content-Language: en-US
-To:     Richard Zhu <hongxing.zhu@nxp.com>, vkoul@kernel.org,
-        alexander.stein@ew.tq-group.com, lorenzo.pieralisi@arm.com
-Cc:     linux-phy@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-References: <1671433941-2037-1-git-send-email-hongxing.zhu@nxp.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <1671433941-2037-1-git-send-email-hongxing.zhu@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEs3gdcQ5_PkYmz2eV-kFodZnnPPhvyRCyLXBYYdfHtNjw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/19/22 08:12, Richard Zhu wrote:
-> There should be one error return when fail to fetch the perst reset.
-> Add the missing error return.
+On Thu, Dec 01, 2022 at 05:01:58PM +0800, Jason Wang wrote:
+> On Wed, Nov 23, 2022 at 6:24 PM Andrey Smetanin
+> <asmetanin@yandex-team.ru> wrote:
+> >
+> > Fix possible virtqueue used buffers leak and corresponding stuck
+> > in case of temporary -EIO from sendmsg() which is produced by
+> > tun driver while backend device is not up.
+> >
+> > In case of no-retriable error and zcopy do not revert upend_idx
+> > to pass packet data (that is update used_idx in corresponding
+> > vhost_zerocopy_signal_used()) as if packet data has been
+> > transferred successfully.
 > 
-> Fixes: dce9edff16ee ("phy: freescale: imx8m-pcie: Add i.MX8MP PCIe PHY support")
+> Should we mark head.len as VHOST_DMA_DONE_LEN in this case?
 > 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> Thanks
 
-Reviewed-by: Marek Vasut <marex@denx.de>
+Any response here?
 
-> ---
->   drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> index 7585e8080b77..afc63552ecaf 100644
-> --- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> +++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> @@ -255,7 +255,7 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
->   		imx8_phy->perst =
->   			devm_reset_control_get_exclusive(dev, "perst");
->   		if (IS_ERR(imx8_phy->perst))
-> -			dev_err_probe(dev, PTR_ERR(imx8_phy->perst),
-> +			return dev_err_probe(dev, PTR_ERR(imx8_phy->perst),
->   				      "Failed to get PCIE PHY PERST control\n");
->   	}
 
-Thanks !
+> >
+> > Signed-off-by: Andrey Smetanin <asmetanin@yandex-team.ru>
+> > ---
+> >  drivers/vhost/net.c | 9 ++++++---
+> >  1 file changed, 6 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
+> > index 20265393aee7..93e9166039b9 100644
+> > --- a/drivers/vhost/net.c
+> > +++ b/drivers/vhost/net.c
+> > @@ -934,13 +934,16 @@ static void handle_tx_zerocopy(struct vhost_net *net, struct socket *sock)
+> >
+> >                 err = sock->ops->sendmsg(sock, &msg, len);
+> >                 if (unlikely(err < 0)) {
+> > +                       bool retry = err == -EAGAIN || err == -ENOMEM || err == -ENOBUFS;
+> > +
+> >                         if (zcopy_used) {
+> >                                 if (vq->heads[ubuf->desc].len == VHOST_DMA_IN_PROGRESS)
+> >                                         vhost_net_ubuf_put(ubufs);
+> > -                               nvq->upend_idx = ((unsigned)nvq->upend_idx - 1)
+> > -                                       % UIO_MAXIOV;
+> > +                               if (retry)
+> > +                                       nvq->upend_idx = ((unsigned)nvq->upend_idx - 1)
+> > +                                               % UIO_MAXIOV;
+> >                         }
+> > -                       if (err == -EAGAIN || err == -ENOMEM || err == -ENOBUFS) {
+> > +                       if (retry) {
+> >                                 vhost_discard_vq_desc(vq, 1);
+> >                                 vhost_net_enable_vq(net, vq);
+> >                                 break;
+> > --
+> > 2.25.1
+> >
+
