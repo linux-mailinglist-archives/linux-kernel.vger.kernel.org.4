@@ -2,196 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218556505C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 00:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CF96505D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 01:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbiLRXwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 18:52:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
+        id S231213AbiLSAE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 19:04:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbiLRXwb (ORCPT
+        with ESMTP id S229570AbiLSAE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 18:52:31 -0500
-X-Greylist: delayed 123 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 18 Dec 2022 15:52:30 PST
-Received: from rpt-cro-asav1.external.tpg.com.au (rpt-cro-asav1.external.tpg.com.au [60.241.0.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D2706573
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 15:52:30 -0800 (PST)
-X-Ironport-Abuse: host=202-168-35-241.tpgi.com.au, ip=202.168.35.241, date=12/19/22 10:49:21
-X-SMTP-MATCH: 0
-X-IPAS-Result: =?us-ascii?q?A2EaCgA9pp9j//EjqMpaHgEBCxIMSYZSlW6DFogNMAKTZ?=
- =?us-ascii?q?A8BAwEBAQEBTQQBAT4BhEaFESY4EwEBAQQBAQEBAQIFAQEBAQEBAwEBAQUBA?=
- =?us-ascii?q?gEBAQQFAQEBAoEZhS9GgjgihAkrCwEpHSZcAk2CfoJuAQMxuUoWBQIWgQGeF?=
- =?us-ascii?q?woZKA1oA4FkgUCEVVCCE4QoiBOEfYIggWuBBoVxBIEJlnABAQMCAgMCAgMGB?=
- =?us-ascii?q?AICAgUDAwIBAwQCCwUEDgMBAQICAQECBAgCAgMDAgIIDxUDBwIBBgUBAwECB?=
- =?us-ascii?q?gQCBAELAgIFAgEKAQIEAQICAgEFCQECAwEDAQwCAgYCAgMFBgQCBgQGAgIFA?=
- =?us-ascii?q?gEBAwICAg0DAgMCBAEFBQEBAhACBgQJAQYECwIFAQQEAQIFBwEDCQMCAgICC?=
- =?us-ascii?q?AQHBAUKGQMDAiADCQMHBUkCCQMjDwMLCQgHDAEWKAYDAQoHDCgEBAwoAQoNC?=
- =?us-ascii?q?AUBAgIBBwMDBQUCBw8DBAIBAwMCBQ8DAQYFAQIBAgICBAIIAgQFAgUDAgQCA?=
- =?us-ascii?q?wICCAMCAwECAQcEAwQBBAIEAw0EAwQCAwICBQICAgICBQICAwECAgICAgIFA?=
- =?us-ascii?q?gMCAQUBAgIBAgICBAECAgcEAgMBAwQOBAMCAgcBAgIBBgIHAwECAQQDAQEEA?=
- =?us-ascii?q?gQBAgUCBAEDBgIDAQMKAgMCAQECAwMFAwICCAgCAwUCBAEBAgQDBAICCwEGA?=
- =?us-ascii?q?gcCAgMCAgQEBAEBAgEEBQIDAQIDAwkCAgMCBAICCgEBAQECAQcCBAcGAgUCA?=
- =?us-ascii?q?gIDAQICAQMCAQICChEBAQIDAwMEBgUDAwMCARUFAgEBAgIDAwIGAgECCAIEA?=
- =?us-ascii?q?QQFAgECAQECAgQBCAICAQEBAgECAgMDAgECAgIEAwMBAgECAgMCAgIDAgIBD?=
- =?us-ascii?q?QIGBgECAgICAgICAgIGAQIBAgMBAgcCBAMCAQICBQICAgMBAQYCBAsBAwICA?=
- =?us-ascii?q?gIBCAEBAgUBAgICAwEBAwMEAwMFBgMCDAgBBQEDAR8DAgIIAgcCAQYDAgEPA?=
- =?us-ascii?q?wICAwICAQQKAgMFAgQCAQQIBwIEAQIJAwIGAgYFGAECAgcEDAoBAgIFBgQBA?=
- =?us-ascii?q?QIDAQIBAQIDAwIDAgQFAQUCAQIEAgICAQECBQ0BAQMEAgQCBwICAgMBBAIBA?=
- =?us-ascii?q?gEDAwIDAQEBAwYGAgQEAgMDBgICAgMCAQICAwQNAQUCAgYDBAENBQYFBAMCC?=
- =?us-ascii?q?AECAQEHAgQCBwkOAgECBAEFAgIDAgIBAwICAQIEAwECAgICBQcFAwQBBAMKC?=
- =?us-ascii?q?wMBAQQDAgECAQIDAgMHAwIEAgMBAgMEBgYBCQQGBAENAwQCAgECAQEDBAQEA?=
- =?us-ascii?q?gIBAgIDAQQCAgEBAwMDAgICAwQCAwMLBAoHAwMCAQULAgICAwIBAQMHBAUEA?=
- =?us-ascii?q?gIGAQIEAgICAgICAgMBAQMKBAIBAwICBgMGAgECAQkFAgEJAwECAQMEAQMJA?=
- =?us-ascii?q?QICBAkCAwcFCgICAgIIAgIOAwMCAQEEAgIEAwIJAQIHAgUBAQMFBwICAQICA?=
- =?us-ascii?q?QQDAQkEAQIDAgEBAxIDAwEEAgIFAwMNCQYCAgEDAgENAwECAQIDAQUFFwMIB?=
- =?us-ascii?q?xQDBQICBAQBCAICAwMDAgECCQYBAwEFAg4DAgIDAwYBAgEBAgMQAgMBAQEBF?=
- =?us-ascii?q?wEDBAIDAQQDAQECAQIDAg4EAQQFDAMBAhEMAgQBBgIIAgICAgMBAwMFAQIDB?=
- =?us-ascii?q?AIBCAYEAgICAgoCCgMCAwEDBQEDAgkDAQUBAgcCBgEBAQICCAIIAgMLAQMCA?=
- =?us-ascii?q?wYCAQICAQUCAQICBQMFAgICAgQNAgUCAgIGAQIHBAICAgQBAgIGAgUBAgcHA?=
- =?us-ascii?q?gUCAgIDAwoEBAIKBAEDAQEFAQIBAwQBAgQBAgECBQMGAgICAgECAgECAQEIA?=
- =?us-ascii?q?gICAgICAgMEAgUDnBMHexRLgSNwgRoBAZFWgxqqXIFFRCEJAQYCW4FWfBopm?=
- =?us-ascii?q?lmFbRoyqSSXQpEvkX2FBoFEgX9NI4EBbYFJUhkPnQRhOwIHCwEBAwmJSoJZA?=
- =?us-ascii?q?QE?=
-IronPort-PHdr: A9a23:MxaPLBHELoWxWUr71Y2mOJ1Gf0RKhN3EVzX9CrIZgr5DOp6u447ld
- BSGo6k30RmVB86CsbptsKn/jePJYSQ4+5GPsXQPItRndiQuroEopTEmG9OPEkbhLfTnPGQQF
- cVGU0J5rTngaRAGUMnxaEfPrXKs8DUcBgvwNRZvJuTyB4Xek9m72/q99pHNYwhEnjWwba19I
- Bmrswnaq9Ubj5ZlJqstxRTFpWdFdf5Lzm1yP1KTmBj85sa0/JF99ilbpuws+c1dX6jkZqo0V
- bNXAigoPGAz/83rqALMTRCT6XsGU2UZiQRHDg7Y5xznRJjxsy/6tu1g2CmGOMD9UL45VSi+4
- 6ptVRTljjoMOTwk/2HNksF+jLxVrQy8qRJxwIDaZ46aOvVlc6/Bft4XX3ZNU9xNWyBdBI63c
- osBD/AGPeZdt4Tzo1wOrR2jDgerHuzuxTFJiWHy3a0+zu8sFgPG3Ak6ENMBvnXbstH1NKMcX
- O2316TIwjDDYOlX2Tf58oTHbhchofSVUL92bMHexlUhGRnfgVWMtYzqISmV1uIVvmWb7+RtW
- /+ihm0ppQ9xrTWixNkgh4bUi44L1F3J8SV0zZgpKNC4R0N1bsOoHpRRui2GKod7TMwsTW5pt
- Sg1ybALv4OwcisSyJk/2RLTd+KLf5KV7h/iV+udOzl1iXJ/dL6hiBu+7E6twfDmWMauylZFt
- C9Fn8HJtnAKyhPc9NCKSuB4/ke9wTaP0B3T6v1cLUA0i6XbL5khz6YylpoWq0vCESH3l1vyj
- K+SbEkr5u+o6+H/brXnoJ+TKZN0hxngPqgyhMCzG/k0PwkNUmSB9+mx1Kfv8VP2TblXlvE2l
- 7PWsJHeJcQVvK65BApV354h6xa6FTin39oZkmcDLFJBdh+KjZPkO17LIP/iDPe/h06gnytsx
- /DDJrHhBI7CIWDZkLj9ZbZ991JcyA0rwN1b/55UEK0OIOrvWk/ts9zVFgI2PBaqw+n5DdVwz
- Z4RVniRAqCHNaPStViI5uwzI+WWYo8apir9J+A/5/HylX85hUMdfa6x0JQJdX+4A/FmLF+YY
- HXyntcMCmgKvg05TOzljF2NTyRfaGq1X6I5/j07Ep6pDZ/fRoCxh7yMxCS7HoBNaW9cEV2ME
- mnnd5+CW/gSbCKeOMhhkiYLVbS5UY8uyQmutBPmy7pgNufU4jcXuon929hz5u3ejgsy+iJpA
- MSdyW6NU3t4kX8PRz8zxKx/u1Byyk+f0ahkhPxVDdxS5/RSUgc6O57c0u56C9HpVwLFf9eJT
- kumQ9q/DTEwVtIx3d4Db1x6G9W4gRDPxzCqDKMNl7yXGJw09brR0GXqJ8lny3bJyrMhj189T
- 8tMK2KmnKh/+BbXB4LTlEWZjamqebwG3CHR7GeD0XaOvEZAXQ52T6rFQW0QaVXIrdni+EPCQ
- KGhCa49PgtC18GCMK1KZcPtjVlcQ/fjItveb3qrm2isHRaI2q+MbI3ydmUZ3SXdDlUEkg8K8
- XaFKwc+HCGhrHzaDDF1C1LvbF3j8fNkpHO4UEA01QeKYFNl17av/R4Vn/OcR+sJ3r0YoCcht
- yl0HFGl0tLUDtqPvQVgfatCbtM55FdK22DUuhdyPpylNa9ih1oefx5rsEPp0hUkQrlHxMQjs
- n4v5AZ7N6+d1FRPa3We0IyjFKfQLzzQ+xbnTqfGxVza1J7C+KIG+Os1r1G44ymmE0Mj9zNs1
- NwDgCjU3YnDEAdHCcG5aU0w7RUv/9nn
-IronPort-Data: A9a23:N27Pqq6Cc9TkRZ5fs5nKfAxRtMvGchMFZxGqfqrLsTDasY5as4F+v
- jcbCz3QOffbN2ShfN10b4u190MB6JLRydMwHQc4qCphEysa+MHILOrCIxarNUt+DCFioGGLT
- Sk6QoOdRCzhZiaE/n9BCpC48T8mk/jgqoPUUIbsIjp2SRJvVBAvgBdin/9RqoNziLBVOSvU0
- T/Ji5CZaQHNNwJcaDpOsfvZ8UM35pwehRtB1rAATaAT1LPhvyRNZH4vDfnZB2f1RIBSAtm7S
- 47rpF1u1jqEl/uFIorNfofTKiXmcJaLVeS9oiM+t5yZv/R3jndaPpDXlhYrQRw/Zz2hx7idw
- f0R7sboEV9B0qfkwIzxWDEAe81y0DEvFBYq7hFTvOTKp3AqfUcAzN1uDmwLGJM5yNpXKnNs9
- sY0bzQWbBmM0rfeLLKTEoGAh+whKcD7I44bvjdryjSx4fQOG8iZBfyUtZkDgXFq2pkm8fX2P
- qL1bRJtaR3QfBBLPgxIIJ07leaswHL4dlW0rXrP+PpqvzKKnVMZPL7FEPveVM6IS/hssk+cp
- SGbx339OB5KO4nKodaC2jf27gPVpgv3UZwfEZW0/+BnhVmUyHBVDhAKPXO2reS8g1yzR/pQL
- Esb/idopq83nGSoU9P0dx61uniJulgbQdU4O/Uz4gyLy4LO7gqZD3RCRTlEAPQ3s9Q2SyEo1
- 3eNntX0FXluqKPLD3WH+d+8oSi7OSUPK0cBaDUCQA9D5MPsyKk1gw7DQ8hLDqG4lJv2FCv2z
- jTMqzIx750XjMgWx+C48ErBjjaEuJfEVEg26x/RU2bj6Rl2DKanYoW49lXf6a0fBImcR1iF+
- nMDnqCjAPsmV8nX0XXTEKBWQfTzu6/DLCXTgBhkGJxn/inFF2OfQL28KQpWfC9BWvvosxe3P
- Sc/ZSs5CFRv0LdGoEO5j09dyyjn8EQ4KenYaw==
-IronPort-HdrOrdr: A9a23:7aP4/an013jIMiWkJJdxObPrImTpDfI13DAbv31ZSRFFG/FwWf
- rCoB19726WtN9/Yh4dcLy7U5VoIkm9yXcK2+cs1N6ZNWHbUQCTQL2Kg7GJ/9SZIUzDytI=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-AV: E=Sophos;i="5.96,254,1665406800"; 
-   d="scan'208";a="258542197"
-Received: from 202-168-35-241.tpgi.com.au (HELO jmaxwell.com) ([202.168.35.241])
-  by rpt-cro-asav1.external.tpg.com.au with ESMTP; 19 Dec 2022 10:49:03 +1100
-From:   Jon Maxwell <jmaxwell37@gmail.com>
-To:     davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jon Maxwell <jmaxwell37@gmail.com>
-Subject: [net-next] ipv6: fix routing cache overflow for raw sockets
-Date:   Mon, 19 Dec 2022 10:48:01 +1100
-Message-Id: <20221218234801.579114-1-jmaxwell37@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        Sun, 18 Dec 2022 19:04:26 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4846BA180
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 16:04:25 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id 1so11435577lfz.4
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 16:04:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tPvUHEz/lJ33Hi7CkPgpILSAI47KZFMUKJUPwIXUyf8=;
+        b=kkui8mzTOoVPKxSjezZdbbQ0s/rBXPZnafOSq6CGGtx/xieKNqrH5BUIJxwMQpreS/
+         1DnLsMpwxd3NdZuK4dE1swyF8/ZNXGcNPLHDqe5Xz1dqDNNQao9YNQhc+RsI7M9WXO63
+         LlCBKkLnlbUlrI6SAeS6djv041CERrijuigJc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tPvUHEz/lJ33Hi7CkPgpILSAI47KZFMUKJUPwIXUyf8=;
+        b=yzCV83YKeg/P+zysWcGPPxc0lXgCwYWhasayGAHdN1kVZPjvODDW3MYiFy7NktoL61
+         CqGsfqEyFipfGjAGmVR6rJ8xT/l5z988eMtI5jXk7rH2ezKi0kl9jw5xsfsYEl4PPfy9
+         WcK6LAbRXIvm6FWZqArzIAsNyHP3FX1FX9OCRd05oMal4R9Sr3b/jqemt1xulSTDNbiH
+         wL9ZQtAgtwnPPYLbDL4CVuXK2xWf5x0NJ1ukM2sG6XIUtvifQj/TM5JDhJgVpz8TH3rG
+         3y3AoGaJQHZof/3Z8oCa8vjl1TYDKUhxM2NF/x0ZR1SmvbtM7LgydZjrwPSlYsL1GNFC
+         i9+A==
+X-Gm-Message-State: AFqh2kol2g8wcaSxst7NUpEMtTJ7kDsm1RWIrd5BOSCAHbsW8UTsMjvN
+        OlwsWBNs2Egw1F9APuTTcO4Y9Ej2t/I3o1SpZ0pFRFjqeKhRGXmx
+X-Google-Smtp-Source: AMrXdXuYNL3oYDSB6XDvbVneusKWCYh4IuhsbZ0KYqyRO5jfc43I7H0aK3+HTUbfrz1cNNlrDyQKPRgXRJN0wQRB+lQ=
+X-Received: by 2002:a05:6512:228c:b0:4bc:bdf5:f163 with SMTP id
+ f12-20020a056512228c00b004bcbdf5f163mr755262lfu.583.1671408263534; Sun, 18
+ Dec 2022 16:04:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL,
-        SPOOF_GMAIL_MID autolearn=no autolearn_force=no version=3.4.6
+References: <20221218191310.130904-1-joel@joelfernandes.org>
+ <589da7c9-5fb7-5f6f-db88-ca464987997e@efficios.com> <CAEXW_YQHpz3dNqW1ocqjr-e9qn09Rkg4kQ19byZORGbO18Xckg@mail.gmail.com>
+ <2da94283-4fce-9aff-ac5d-ba181fa0f008@efficios.com>
+In-Reply-To: <2da94283-4fce-9aff-ac5d-ba181fa0f008@efficios.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Sun, 18 Dec 2022 19:04:12 -0500
+Message-ID: <CAEXW_YQBmwynuBOWbV6_L2itRr_i3BZUxQ91PDC2We2vXhpztQ@mail.gmail.com>
+Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sending Ipv6 packets in a loop via a raw socket triggers an issue where a 
-route is cloned by ip6_rt_cache_alloc() for each packet sent. This quickly 
-consumes the Ipv6 max_size threshold which defaults to 4096 resulting in 
-these warnings:
+Hi Mathieu,
 
-[1]   99.187805] dst_alloc: 7728 callbacks suppressed
-[2] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
-.
-.
-[300] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
+On Sun, Dec 18, 2022 at 6:38 PM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> On 2022-12-18 16:30, Joel Fernandes wrote:
+> > Hi Mathieu,
+> >
+> > On Sun, Dec 18, 2022 at 3:56 PM Mathieu Desnoyers
+> > <mathieu.desnoyers@efficios.com> wrote:
+> >>
+> >> On 2022-12-18 14:13, Joel Fernandes (Google) wrote:
+> >>> Hello, I believe the pre-flip memory barrier is not required. The only reason I
+> >>> can say to remove it, other than the possibility that it is unnecessary, is to
+> >>> not have extra code that does not help. However, since we are issuing a fully
+> >>> memory-barrier after the flip, I cannot say that it hurts to do it anyway.
+> >>>
+> >>> For this reason, please consider these patches as "informational", than a
+> >>> "please merge". :-) Though, feel free to consider merging if you agree!
+> >>>
+> >>> All SRCU scenarios pass with these, with 6 hours of testing.
+> >>
+> >> Hi Joel,
+> >>
+> >> Please have a look at the comments in my side-rcu implementation [1, 2].
+> >> It is similar to what SRCU does (per-cpu counter based grace period
+> >> tracking), but implemented for userspace. The comments explain why this
+> >> works without the memory barrier you identify as useless in SRCU.
+> >>
+> >> Following my implementation of side-rcu, I reviewed the SRCU comments
+> >> and identified that the barrier "/* E */" appears to be useless. I even
+> >> discussed this privately with Paul E. McKenney.
+> >>
+> >> My implementation and comments go further though, and skip the period
+> >> "flip" entirely if the first pass observes that all readers (in both
+> >> periods) are quiescent.
+> >
+> > Actually in SRCU, the first pass scans only 1 index, then does the
+> > flip, and the second pass scans the second index. Without doing a
+> > flip, an index cannot be scanned for forward progress reasons because
+> > it is still "active". So I am curious how you can skip flip and still
+> > scan both indexes? I will dig more into your implementation to learn more.
+>
+> If we look at SRCU read-side:
+>
+> int __srcu_read_lock(struct srcu_struct *ssp)
+> {
+>          int idx;
+>
+>          idx = READ_ONCE(ssp->srcu_idx) & 0x1;
+>          this_cpu_inc(ssp->sda->srcu_lock_count[idx]);
+>          smp_mb(); /* B */  /* Avoid leaking the critical section. */
+>          return idx;
+> }
+>
+> If the thread is preempted for a long period of time between load of
+> ssp->srcu_idx and increment of srcu_lock_count[idx], this means this
+> thread can appear as a "new reader" for the idx period at any arbitrary
+> time in the future, independently of which period is the current one
+> within a future grace period.
+>
+> As a result, the grace period algorithm needs to inherently support the
+> fact that a "new reader" can appear in any of the two periods,
+> independently of the current period state.
+>
+> As a result, this means that while within period "0", we _need_ to allow
+> newly coming readers to appear as we scan period "0".
 
-When this happens the packet is dropped and sendto() gets a network is 
-unreachable error:
+Sure, it already does handle it but that is I believe it is a corner
+case, not the norm.
 
-# ./a.out -s 
+> As a result, we can simply scan both periods 0/1 for reader quiescence,
+> even while new readers appear within those periods.
 
-remaining pkt 200557 errno 101
-remaining pkt 196462 errno 101
-.
-.
-remaining pkt 126821 errno 101
+I think this is a bit dangerous. Yes there is the preemption thing you
+mentioned above, but that is bounded since you can only have a fixed
+number of tasks that underwent that preemption, and it is quite rare
+in the sense, each reader should get preempted just after sampling idx
+but not incrementing lock count.
 
-Fix this by adding a flag to prevent the cloning of routes for raw sockets. 
-Which makes the Ipv6 routing code use per-cpu routes instead which prevents 
-packet drop due to max_size overflow. 
+However, if we scan while new readers appear (outside of the above
+preemption problem), we can have counter wrap causing a false match
+much quicker.
+The scan loop is:
+check_readers(idx) {
+   count_all_unlocks(idx);
+   smp_mb();
+   count_all_locks(idx);
+   bool done = (locks == unlocks)
+   if (done) {
+         // readers are done, end scan for this idx.
+   } else {
+         // try again later
+   }
+}
 
-Ipv4 is not affected because it has a very large default max_size.
+So if check_readers() got preempted just after the smp_mb(), then you
+can have lots of tasks enter and exit the read-side critical section
+and increment the locks count. Eventually locks == unlocks will
+happen, and it is screwed. Sure this is also theoretical, but yeah
+that issue can be made "worse" by scanning active readers
+deliberately, especially when such readers can also nest arbitrarily.
 
-Signed-off-by: Jon Maxwell <jmaxwell37@gmail.com>
----
- include/net/flow.h | 1 +
- net/ipv6/raw.c     | 2 +-
- net/ipv6/route.c   | 1 +
- 3 files changed, 3 insertions(+), 1 deletion(-)
+> As a result, flipping between periods 0/1 is just relevant for forward
+> progress, not for correctness.
 
-diff --git a/include/net/flow.h b/include/net/flow.h
-index 2f0da4f0318b..30b8973ffb4b 100644
---- a/include/net/flow.h
-+++ b/include/net/flow.h
-@@ -37,6 +37,7 @@ struct flowi_common {
- 	__u8	flowic_flags;
- #define FLOWI_FLAG_ANYSRC		0x01
- #define FLOWI_FLAG_KNOWN_NH		0x02
-+#define FLOWI_FLAG_SKIP_RAW		0x04
- 	__u32	flowic_secid;
- 	kuid_t  flowic_uid;
- 	struct flowi_tunnel flowic_tun_key;
-diff --git a/net/ipv6/raw.c b/net/ipv6/raw.c
-index a06a9f847db5..0b89a7e66d09 100644
---- a/net/ipv6/raw.c
-+++ b/net/ipv6/raw.c
-@@ -884,7 +884,7 @@ static int rawv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 	security_sk_classify_flow(sk, flowi6_to_flowi_common(&fl6));
- 
- 	if (hdrincl)
--		fl6.flowi6_flags |= FLOWI_FLAG_KNOWN_NH;
-+		fl6.flowi6_flags |= FLOWI_FLAG_KNOWN_NH | FLOWI_FLAG_SKIP_RAW;
- 
- 	if (ipc6.tclass < 0)
- 		ipc6.tclass = np->tclass;
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index e74e0361fd92..beae0bd61738 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -2226,6 +2226,7 @@ struct rt6_info *ip6_pol_route(struct net *net, struct fib6_table *table,
- 	if (rt) {
- 		goto out;
- 	} else if (unlikely((fl6->flowi6_flags & FLOWI_FLAG_KNOWN_NH) &&
-+			    !(fl6->flowi6_flags & FLOWI_FLAG_SKIP_RAW) &&
- 			    !res.nh->fib_nh_gw_family)) {
- 		/* Create a RTF_CACHE clone which will not be
- 		 * owned by the fib6 tree.  It is for the special case where
--- 
-2.31.1
+Sure, agreed, forward progress.
 
+>
+> As a result, we can remove barrier /* E */.
+>
+
+IMO, the "E" is not needed at all even if you do the flip because of
+the reasons in the patch series changelogs, so whether we do flip less
+frequently, we still don't need "E" IMHO.
+
+Thanks!
+
+ - Joel
+
+
+> Thoughts ?
+>
+> Thanks,
+>
+> Mathieu
+>
+>
+> >
+> >> The most relevant comment in side-rcu is:
+> >>
+> >>    * The grace period completes when it observes that there are no active
+> >>    * readers within each of the periods.
+> >>    *
+> >>    * The active_readers state is initially true for each period, until the
+> >>    * grace period observes that no readers are present for each given
+> >>    * period, at which point the active_readers state becomes false.
+> >>
+> >> So I agree with the clarifications you propose here, but I think we can
+> >> improve the grace period implementation further by clarifying the SRCU
+> >> grace period model.
+> >
+> > Thanks a lot, I am curious how you do the "detection of no new
+> > readers" part without globally doing some kind of synchronization. I
+> > will dig more into your implementation to learn more.
+> >
+> > Thanks,
+> >
+> >   - Joel
+> >
+> >
+> >
+> >>
+> >> Thanks,
+> >>
+> >> Mathieu
+> >>
+> >>
+> >> [1] https://github.com/efficios/libside/blob/master/src/rcu.h
+> >> [2] https://github.com/efficios/libside/blob/master/src/rcu.c
+> >>
+> >>>
+> >>> thanks,
+> >>>
+> >>>    - Joel
+> >>>
+> >>> Joel Fernandes (Google) (2):
+> >>> srcu: Remove comment about prior read lock counts
+> >>> srcu: Remove memory barrier "E" as it is not required
+> >>>
+> >>> kernel/rcu/srcutree.c | 10 ----------
+> >>> 1 file changed, 10 deletions(-)
+> >>>
+> >>> --
+> >>> 2.39.0.314.g84b9a713c41-goog
+> >>>
+> >>
+> >> --
+> >> Mathieu Desnoyers
+> >> EfficiOS Inc.
+> >> https://www.efficios.com
+> >>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> https://www.efficios.com
+>
