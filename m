@@ -2,90 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2161650D80
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E332650D83
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbiLSOj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 09:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
+        id S232197AbiLSOkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 09:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231764AbiLSOjW (ORCPT
+        with ESMTP id S231370AbiLSOkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 09:39:22 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8211F198;
-        Mon, 19 Dec 2022 06:39:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671460761; x=1702996761;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rCQHZpM+/1vfi9uBTeBhQeKwjkgu8kWOQVhgRmihmwI=;
-  b=K7iPVR/mEb8h6+Nx7884p6McjtbURt5YetbILTOOnMn9ha5Y+YeWV3GL
-   VlsQ1paY+ZqPxZIBCEXN7O9Y62Kpx3rH0N4pHRTz8IlTm8ohwG44Soh8v
-   w7P+Lmjc3sskXal3Jsc0yNXackc0SWkg1NX8zG0zX8/eSwJQzg+5em8pS
-   G8Vgus3yRNzfKDbp9C4eV4s0xCliANKs45F8K0PBz9xfrfJBAVmlL2I7K
-   ukyQUo1cBb0ksWGObblb1puOOz2V7MXFMjk1nPKLVIjYaGDV3lPyJ91fN
-   46mqvsK2r+eW9LZKux6/YQeOAVCTZSSuBcf71t/2gSctIKgSspmDQJw63
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="299038498"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="299038498"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 06:39:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="757642469"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="757642469"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 19 Dec 2022 06:39:14 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p7HIP-00CKKM-0r;
-        Mon, 19 Dec 2022 16:39:13 +0200
-Date:   Mon, 19 Dec 2022 16:39:13 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 1/1] pinctrl: intel: Use same order of bit fields for
- PADCFG2
-Message-ID: <Y6B3kaPG3G3s4BKX@smile.fi.intel.com>
-References: <20221219123229.5564-1-andriy.shevchenko@linux.intel.com>
- <Y6B2e17sDuUxUgpY@black.fi.intel.com>
+        Mon, 19 Dec 2022 09:40:17 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064728F
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 06:40:16 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id a16so13122788edb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 06:40:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kali.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ua8Y8Z4pBPkKAQrNbMtdprGt9Mnzjiq5jD7V9dAC+Y0=;
+        b=G3jXAcTBG6DW2mXzZQy+MnSYx8QarWdNCLBbbNBf4dhSNyVBq7+tEuaA8nyoaQzHSC
+         T2/AIr30A5/xKEqRRe96P6L1Kz8ZiWzCzLOw0JTafXjpX47GhUMZYFYBTmWyndCj6FYi
+         QcyLrVVakhlCJTGDmmXtF61fQr0qclIZ02oGkotXAUi4QmRdWjIjXzedXDc76uwZmtVv
+         5dobDMpTQsN/K4hVVIZO7KFQjnIqkV8OEpf85/eKN00wxZ4v7c+gRFwKuma8TlvrgAQn
+         xXQIkYf5FFIpu4sCY6SgYscXB2g1shNDKxSaI0FMWEEYAm5iphgy7A0g3hGJT//i2T1S
+         x2Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ua8Y8Z4pBPkKAQrNbMtdprGt9Mnzjiq5jD7V9dAC+Y0=;
+        b=4PXWkRmRK5BFGM3fOUteOG+xpObSstLr54Hmmus6DW/5ednPoY+C30lTVOvZy8JcfL
+         i3DvoWasVzXXEBTbW1wmrdXofvE4f1PF9UuMrHeZYD3M5yeDWB5vz+qTczMXvRWEZ4sq
+         26u1FsGAGDACygvRWxT19NOmSo3/Pwb6jtWuuAsOs8oEQ4TUhyRuvT/cGSh+0yPSh2u/
+         IO068/tSAsZs6oAwP406TGCyCPDJSA5cosvGqBCaZguJxKh/LOvojUsz7IkklLMc7GoD
+         KBOn2gh+6vopnaz/oC/jBsNYRydp9AAg6fAwMbOABpFqm0FUjIy9w13CneBuhThcV699
+         hbLQ==
+X-Gm-Message-State: ANoB5pnFjyHl+t8NWt90RO1IF2q4+OtQWtKQtM/p8qBFp4MV4+RfMw3E
+        RxcFGXShcHkHdT7qgOCZc6ZMEMhFaqgwTy4ggugssA==
+X-Google-Smtp-Source: AA0mqf7TLwr4RwvBIZNE9XLvZOJZLpbzN3o7oBcTc6f2+HcefZvPXkuFp5X4hDGTMYSF6KZgK/oIBfpMQTQclJUTTVA=
+X-Received: by 2002:aa7:cd04:0:b0:46b:34c:5574 with SMTP id
+ b4-20020aa7cd04000000b0046b034c5574mr52252953edw.175.1671460814633; Mon, 19
+ Dec 2022 06:40:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6B2e17sDuUxUgpY@black.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221219101237.9872-1-johan+linaro@kernel.org>
+In-Reply-To: <20221219101237.9872-1-johan+linaro@kernel.org>
+From:   Steev Klimaszewski <steev@kali.org>
+Date:   Mon, 19 Dec 2022 08:40:03 -0600
+Message-ID: <CAKXuJqjBUnW_6P8SQ2jePA9n3UddgPOpe3EwoC+k=_5KRno1wQ@mail.gmail.com>
+Subject: Re: [PATCH v2] efi: random: fix NULL-deref when refreshing seed
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andrew Halaney <ahalaney@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 04:34:35PM +0200, Mika Westerberg wrote:
-> On Mon, Dec 19, 2022 at 02:32:29PM +0200, Andy Shevchenko wrote:
-> > PADCFG0 and PADCFG1 are ordered from MSB to LSB, do the same
-> > for PADCFG2 bit fields.
-> 
-> Perhaps:
-> 
-> No functional changes.
-
-Sure.
-
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-
-Thank you!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+On Mon, Dec 19, 2022 at 4:13 AM Johan Hovold <johan+linaro@kernel.org> wrote:
+>
+> Do not try to refresh the RNG seed in case the firmware does not support
+> setting variables.
+>
+> This is specifically needed to prevent a NULL-pointer dereference on the
+> Lenovo X13s with some firmware revisions, or more generally, whenever
+> the runtime services have been disabled (e.g. efi=noruntime or with
+> PREEMPT_RT).
+>
+> Fixes: e7b813b32a42 ("efi: random: refresh non-volatile random seed when RNG is initialized")
+> Reported-by: Steev Klimaszewski <steev@kali.org>
+> Reported-by: Bjorn Andersson <andersson@kernel.org>
+> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sc8280xp-lenovo-thinkpad-x13s
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>
+> Changes in v2
+>  - amend commit message with a comment on this being needed whenever the
+>    runtime services have been disabled
+>
+>
+>  drivers/firmware/efi/efi.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+> index 31a4090c66b3..09716eebe8ac 100644
+> --- a/drivers/firmware/efi/efi.c
+> +++ b/drivers/firmware/efi/efi.c
+> @@ -429,7 +429,9 @@ static int __init efisubsys_init(void)
+>                 platform_device_register_simple("efi_secret", 0, NULL, 0);
+>  #endif
+>
+> -       execute_with_initialized_rng(&refresh_nv_rng_seed_nb);
+> +       if (efi_rt_services_supported(EFI_RT_SUPPORTED_SET_VARIABLE))
+> +               execute_with_initialized_rng(&refresh_nv_rng_seed_nb);
+> +
+>         return 0;
+>
+>  err_remove_group:
+> --
+> 2.37.4
+>
+Andrew already sent one, but also confirming since I reported it, this
+fixes the issue for me as well.
+Tested-by: Steev Klimaszewski <steev@kali.org>
