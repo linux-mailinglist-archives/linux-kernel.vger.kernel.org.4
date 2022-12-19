@@ -2,100 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5446507A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 07:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 005A46507A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 07:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbiLSGiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 01:38:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
+        id S230427AbiLSGjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 01:39:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiLSGiN (ORCPT
+        with ESMTP id S229473AbiLSGjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 01:38:13 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884446402;
-        Sun, 18 Dec 2022 22:38:12 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id w20so1495408ply.12;
-        Sun, 18 Dec 2022 22:38:12 -0800 (PST)
+        Mon, 19 Dec 2022 01:39:47 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DF56402
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 22:39:22 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id u19so19124060ejm.8
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 22:39:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x6wBmBynq3nQh89d9yjAKo+Zm4+3fSnMMUhm5AG3pJM=;
-        b=S+g8KqllwWEGtkNcOGEJzH+dxc16IDbnHaLIL8kA1qbNRTBzIEPovDirRmORPFY261
-         eAOgaIZWWRdqk1aV2+eaL2PijXAcAgqYhHeY5F2pOrETsfYdmTiwD2QUHYSn5dJBeEOW
-         u2LG4O8Lw2+FFfQJaXecxQR0SrcMrRNakG03ZZ4PXF+dmbLI9/UATauOzqKKaYOHGHcv
-         ODQbTFOSdr62rOsO1JGLLg7RkcCazHP8/1bue+WqY/9Zi0r3PAEKx1cbTDXAjAWihV3t
-         tW0YH/ZfeO58ePx0FACiVpJNY3ej6AKDhgt/kiOu+hTq4+LIE35r4Nc7dtpMPdbH/Pmb
-         rixA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zd1mHyRN65lmN5xV+vXr0Mw3jIgs5Oj3GSKs1eE1JMs=;
+        b=JUQuTlyHEzYg1D7o0VriaNmZ+dS6TmeOSZE5kxXst33424NsZNB4GoVs7OrA9wplEU
+         Drk3zFZllJsUFQGGO2/4SiFuCHeQYBa0jI2WJmTZFZLvuM13vCvOK6SWZSAZKnhxC7IC
+         UTduNeUgBWllqu+fJb1FfN/CHgcH02y6hxvnp/5kJ1mUOeX/OM/H/p52GBWAg4NJL4H7
+         aD+aLN37KitbevJHmaClz8wBAPIuXDg7pxpBNbjW6bNfPB3n9jUvEK03lj0K8HF3xPEY
+         qmttpoXCb4I91oyCoX2JxbAIz5bbQ6aCq/AXFx2MV6eME2hyR53YHe+5iSTnpg5TzTNy
+         EwjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x6wBmBynq3nQh89d9yjAKo+Zm4+3fSnMMUhm5AG3pJM=;
-        b=IbIbrTueEneqn/eOO21pKO6CAfRJIrKDdXs957JBbKLOmcd7IuNRzECOqzqC72honk
-         gcbzyZJ7CyPULOt1Vaqcx1cC1ZGTBzsEL0IUcozzCKjZWNIj4sKxsi5Q1YnbobVG506i
-         kLat6TwUR7TWKL2a9DM+TXJ/ZOj7dKFEUlnPmEgX4I/1ugltwPmZg0nyDpMwW/Y9M04Q
-         PHYhMCd51F4aietaT5O1Dpkq2q6nou/93vFk5ZU9V4hI9dkANW5d1fI0dwp4RYvYrxgf
-         WukOs2vUog24fIV9xUXrWicgpVHy3sQEefEvQ82CdaEM507Lre0QyAiU67gYzRfc2nIP
-         zidg==
-X-Gm-Message-State: ANoB5pliAPYzi3AQvrO/6aOXLnIEdEgfJYSXKDlLjc5dYL+K6D3lkjQd
-        fJxEQpH6+y3TqV0K8/abc5I=
-X-Google-Smtp-Source: AA0mqf6d27dF2FPb3UEwEblMV/YWAgfd/LMdLUPq7GmumP7yoieAsA+YVfvpB/Zr1edEyaAcu1kKcA==
-X-Received: by 2002:a17:902:ef47:b0:187:1b7a:6930 with SMTP id e7-20020a170902ef4700b001871b7a6930mr47705835plx.6.1671431891959;
-        Sun, 18 Dec 2022 22:38:11 -0800 (PST)
-Received: from localhost ([103.152.220.92])
-        by smtp.gmail.com with ESMTPSA id n10-20020a170902e54a00b0018b025d9a40sm6163746plf.256.2022.12.18.22.38.11
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 18 Dec 2022 22:38:11 -0800 (PST)
-Date:   Sun, 18 Dec 2022 22:38:09 -0800
-From:   Dan Li <ashimida.1990@gmail.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Marco Elver <elver@google.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Song Liu <song@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Yuntao Wang <ytcoode@gmail.com>,
-        Changbin Du <changbin.du@intel.com>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [RFC/RFT] CFI: Add support for gcc CFI in aarch64
-Message-ID: <20221219063809.xgd6jjio4f7j5ysw@ubuntu>
-References: <20221219061758.23321-1-ashimida.1990@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zd1mHyRN65lmN5xV+vXr0Mw3jIgs5Oj3GSKs1eE1JMs=;
+        b=LTMX7z+4BzCV2LRDXo24T4fRYbckhBcDjP7prXEv8NSPXyVY8u2qgyJJNcuJj75KvQ
+         pw6a9m6d/6lx5tC4Qj0Tjb5ysqx1Te8BgKoZEhpAbNtgEs/nDgeVuIawAORzzNOr8Kbb
+         QZWLDahr/uNEoY3s0Y4byerHQca02BgM0GmsNHvOS15wfB4ycGI+Lm98OAzdnxwktBf7
+         mtD89Q39vwGc9YaG/W5242HPdXg1NNcB7g412jKPKQ8HwXiXhnaijJrVPXxWrISJt5ZC
+         g+5L/gWjyHRPljqswrdqohA+eP26TatTXd0Vi82pxXQ/h9c7jFPRdAX79Kf8FAzqRUWn
+         nK6g==
+X-Gm-Message-State: ANoB5pn0nThE/0fYuJG6ZF5bjjjBsumrjTlrx5qwx0z/OQADWCDsWcZ9
+        6gQyTDHcKMPHXocyNAWgR1Vj8vft63h+H9y8vIU2
+X-Google-Smtp-Source: AA0mqf6IvVU57fVD9DTwYYQAkrFuiEH0B89oSrd3NQNspl2r5Izkdk8Fd+W5ZHpOqmv9Y13s/g+JNKRKR/ZDVFzMMtk=
+X-Received: by 2002:a17:906:4351:b0:78d:513d:f447 with SMTP id
+ z17-20020a170906435100b0078d513df447mr73969432ejm.708.1671431960711; Sun, 18
+ Dec 2022 22:39:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219061758.23321-1-ashimida.1990@gmail.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221205084127.535-1-xieyongji@bytedance.com> <20221205090243.791-1-xieyongji@bytedance.com>
+ <20221205090243.791-3-xieyongji@bytedance.com> <CACGkMEuAxEEvShwN8Q_k-FKZODesORn4zJG7UFHD-KS8sQXYjg@mail.gmail.com>
+In-Reply-To: <CACGkMEuAxEEvShwN8Q_k-FKZODesORn4zJG7UFHD-KS8sQXYjg@mail.gmail.com>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Mon, 19 Dec 2022 14:39:09 +0800
+Message-ID: <CACycT3u5x1wJi8Q1Pm88ckivEUHV11jrzrsaU7JRmVP73M9+DA@mail.gmail.com>
+Subject: Re: [PATCH v2 09/11] vduse: Add enable_irq_wq sysfs interface for virtqueues
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Christoph Hellwig <hch@lst.de>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,34 +70,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Cc: linux-hardening@vger.kernel.org
-On 12/18, Dan Li wrote:
-> Based on Sami's patch[1], this patch makes the corresponding kernel
-> configuration of CFI available when compiling the kernel with the gcc[2].
-> 
-> The code after enabling cfi is as follows:
-> 
-> int (*p)(void);
-> int func (int)
-> {
-> 	p();
-> }
-> 
-> __cfi_func:
->         .4byte 0x439d3502
-> func:
->         ......
->         adrp    x0, p
->         add     x0, x0, :lo12:p
->         mov     w1, 23592
->         movk    w1, 0x4601, lsl 16
->         cmp     w0, w1
->         beq     .L2
->         ......
->         bl      cfi_check_failed
-> .L2:
->         blr     x19
->         ret
-> 
-> In the compiler part[4], there are some differences from Sami's
-> implementation[3], mainly including:
+On Fri, Dec 16, 2022 at 1:43 PM Jason Wang <jasowang@redhat.com> wrote:
+>
+> On Mon, Dec 5, 2022 at 5:03 PM Xie Yongji <xieyongji@bytedance.com> wrote:
+> >
+> > Add enable_irq_wq sysfs interface to control whether
+> > use workqueue to inject irq or not. The vhost-vdpa case
+> > can benefit from it.
+>
+> Do we have a benchmark result for this?
+>
+
+It can reduce 2~3 us latency in our sync I/O test.
+
+> Or I wonder if we can extend set_vq_cb() by associating an eventfd
+> then VDUSE can signal that eventfd directly?
+>
+
+It looks good to me. I can try this way in v3.
+
+Thanks,
+Yongji
