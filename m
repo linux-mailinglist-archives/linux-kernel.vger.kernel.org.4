@@ -2,54 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D61A3650F3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2B6650F3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbiLSPte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 10:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37428 "EHLO
+        id S232415AbiLSPuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 10:50:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231952AbiLSPtK (ORCPT
+        with ESMTP id S232457AbiLSPtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 10:49:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0815013D1B
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:46:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 796F961032
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 15:46:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C3BC433EF;
-        Mon, 19 Dec 2022 15:46:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671464781;
-        bh=pWSfuZOhIjqdOCy61VXp5X8qHj+yFgIvKlxmkT/QoMg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cesYhb6e1Iy+HV45aoxQypb5ezCh5mt3n88eMXxGAQKRsza3+oMKa05ZoB4SfMYgZ
-         OmgbG2dobhuFv13QF4Kx7b098dIQUcHRLJr5sfXJdn8UYc2S4sByJV81uggpOUvu71
-         pse5Ory0GhfciWzECoMJrR7cxaxDR5Q+vPs5AzM5nyIlRCupvRNrrpfnSgdH2ee4qu
-         EGxpRgs8evaXvyHAom7VCkNpWGwfKMNiB4XjWzj6lCDm2UBNpJDgWUAR1t+95v4LTo
-         IJsiGvYiuBlMDOzojGowzJoIFMx0wxM207+C/fBjAosB+PrzZ49PjfpHbPtiuSPNOO
-         NT8YZ3c4LE13w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id ABDD240367; Mon, 19 Dec 2022 12:46:17 -0300 (-03)
-Date:   Mon, 19 Dec 2022 12:46:17 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH 1/1 fyi] tools headers UAPI: Sync linux/fscrypt.h with the
- kernel sources
-Message-ID: <Y6CHSS6Rn9YOqpAd@kernel.org>
+        Mon, 19 Dec 2022 10:49:33 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0349D13D74
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:46:45 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id j4so14335907lfk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:46:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xFCpf3PbvIQQ1SNGLa/aq7+Wn4jdyYZuDDJi9LLB1B4=;
+        b=gKqbO1meKhIZD2D09ZCzm9ZeMDy0hOdvyqFlDWsgKXhxMOn3wYnBWjx6GBVU8A6nOq
+         558ZgA48b1G1NSDdF41U5Hqwe3MnKEkyJx+3a5wMI91G643gV7AdTZHF4+OVRjPzshll
+         vnnCbPOgUYy61iR7un4ZHS7Lk7yvhkMOdXWsMUvDa1SHvlXjZ9jBv44IbEuijC5r7DHE
+         Ye1VEimwxDffRyiMC5ESvQWe6En7sypHId4Q3QuhOZw1aki2iq8OJKilEgrylXMgt6ir
+         XiRDrJ+PSrWeVCB41wWTQsr+Ht/6rOJOdTrxKMrnfCRpMKZrVv9TNLwuwbyETBT3232F
+         w+HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xFCpf3PbvIQQ1SNGLa/aq7+Wn4jdyYZuDDJi9LLB1B4=;
+        b=35+DzdM4z6PazhRp+QPW5tnFYAleqkBATj9BLszKgb645/p5y8IyEkud/u9DFwsydl
+         BISTcSrDZx5wfYI/TbXYE+ftdrPnUx0/Qvd2vsyTHoTGrFuEX4grI7K4TKjz3iC7kS3f
+         aNdoklXiW3r39xIu7JtztlHbwpAoZInVZ/kz6ZvTXS1GNuIxnzMiLB26JJNHbC77aC6F
+         jlfXa3Bgy7rBflnX+nYM98/VBzgtASowXE6MC3tqakmr9um2xfA+lfIFomukbv9xGpYd
+         2vqsFQJoSjtr8+IVksLoEe9lM7xQqyoQcr/IqB6DSh8h/w/7Db4gud+2jH0PUMgmpGKJ
+         4fqw==
+X-Gm-Message-State: ANoB5pnPjU/csdpK//4x+dwhffFuQ4OUl0CFsehxppBQgZCPbdaAxplR
+        muDR34CmvbZxliERPYTuupsr3+xiA8RHq741
+X-Google-Smtp-Source: AA0mqf6Wmq5YhXOuEkTp/H84nOahnrxrpmRb9ofAmBdzPy6LBU5agQfTH+mptXSQeW/d6pPgAATx0A==
+X-Received: by 2002:a05:6512:68a:b0:4b4:e2c9:9b25 with SMTP id t10-20020a056512068a00b004b4e2c99b25mr15398614lfe.44.1671464803399;
+        Mon, 19 Dec 2022 07:46:43 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c4-20020a056512074400b004b59871f457sm1121269lfs.247.2022.12.19.07.46.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Dec 2022 07:46:42 -0800 (PST)
+Message-ID: <ebc66796-ec22-7fe9-a93a-0c6b1dc56496@linaro.org>
+Date:   Mon, 19 Dec 2022 16:46:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] nfc: st-nci: array index overflow in st_nci_se_get_bwi()
+Content-Language: en-US
+To:     Alexander Duyck <alexander.duyck@gmail.com>
+Cc:     Aleksandr Burakov <a.burakov@rosalinux.ru>,
+        Christophe Ricard <christophe.ricard@gmail.com>,
+        Samuel Ortiz <sameo@linux.intel.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+References: <20221213141228.101786-1-a.burakov@rosalinux.ru>
+ <5841f9021baf856c26fb27ac1d75fc1e29d3e044.camel@gmail.com>
+ <bd44539b-b3fb-f88d-86f2-fbc3fa83c783@linaro.org>
+ <CAKgT0UemyUYpfchg7=ArO1NzkLofUgbSK8F71SRLHZDUxaDc-Q@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAKgT0UemyUYpfchg7=ArO1NzkLofUgbSK8F71SRLHZDUxaDc-Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,103 +79,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+On 19/12/2022 16:41, Alexander Duyck wrote:
+> On Mon, Dec 19, 2022 at 1:06 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 14/12/2022 19:35, Alexander H Duyck wrote:
+>>> On Tue, 2022-12-13 at 09:12 -0500, Aleksandr Burakov wrote:
+>>>> Index of info->se_info.atr can be overflow due to unchecked increment
+>>>> in the loop "for". The patch checks the value of current array index
+>>>> and doesn't permit increment in case of the index is equal to
+>>>> ST_NCI_ESE_MAX_LENGTH - 1.
+>>>>
+>>>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>>>>
+>>>> Fixes: ed06aeefdac3 ("nfc: st-nci: Rename st21nfcb to st-nci")
+>>>> Signed-off-by: Aleksandr Burakov <a.burakov@rosalinux.ru>
+>>>> ---
+>>>>  drivers/nfc/st-nci/se.c | 5 +++--
+>>>>  1 file changed, 3 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/nfc/st-nci/se.c b/drivers/nfc/st-nci/se.c
+>>>> index ec87dd21e054..ff8ac1784880 100644
+>>>> --- a/drivers/nfc/st-nci/se.c
+>>>> +++ b/drivers/nfc/st-nci/se.c
+>>>> @@ -119,10 +119,11 @@ static u8 st_nci_se_get_bwi(struct nci_dev *ndev)
+>>>>      /* Bits 8 to 5 of the first TB for T=1 encode BWI from zero to nine */
+>>>>      for (i = 1; i < ST_NCI_ESE_MAX_LENGTH; i++) {
+>>>>              td = ST_NCI_ATR_GET_Y_FROM_TD(info->se_info.atr[i]);
+>>>> -            if (ST_NCI_ATR_TA_PRESENT(td))
+>>>> +            if (ST_NCI_ATR_TA_PRESENT(td) && i < ST_NCI_ESE_MAX_LENGTH - 1)
+>>>>                      i++;
+>>>>              if (ST_NCI_ATR_TB_PRESENT(td)) {
+>>>> -                    i++;
+>>>> +                    if (i < ST_NCI_ESE_MAX_LENGTH - 1)
+>>>> +                            i++;
+>>>>                      return info->se_info.atr[i] >> 4;
+>>>>              }
+>>>>      }
+>>>
+>>> Rather than adding 2 checks you could do this all with one check.
+>>> Basically you would just need to replace:
+>>>   if (ST_NCI_ATR_TB_PRESENT(td)) {
+>>>       i++;
+>>>
+>>> with:
+>>>   if (ST_NCI_ATR_TB_PRESENT(td) && ++i < ST_NCI_ESE_MAX_LENGTH)
+>>>
+>>> Basically it is fine to increment "i" as long as it isn't being used as
+>>> an index so just restricting the last access so that we don't
+>>> dereference using it as an index should be enough.
+>>
+>> These are different checks - TA and TB. By skipping TA, your code is not
+>> equivalent. Was it intended?
+> 
+> Sorry, I wasn't talking about combining the TA and TB checks. I was
+> talking about combining the TB check and the bounds check so that you
+> didn't return and se_info_atr for a value that may not have actually
+> aligned due to the fact you had overflowed. Specifically, is skipping
+> the i++ the correct response to going out of bounds? I'm wondering if
+> you should be returning the default instead in the case of overflow?
+> 
+> The TA check could be modified so that it checks for "++i =
+> ST_NCI_ESE_MAX_LENGTH" and if that is true break rather than continue
+> in the loop.
 
-- Arnaldo
+Ah, right. From that point of view, the first check (TA) also does not
+look correct or equivalent. If we reached end of
+ST_NCI_ESE_MAX_LENGTH(), we should not check TB on that entry. I would
+propose to end the loop at that stage.
 
-Full explanation:
-
-There used to be no copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
-
-The way these headers are used in perf are not restricted to just
-including them to compile something.
-
-There are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
-
-E.g.:
-
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
-
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
-
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
-
----
-
-To pick the changes from:
-
-  f8b435f93b7630af ("fscrypt: remove unused Speck definitions")
-  e0cefada1383c5ce ("fscrypt: Add SM4 XTS/CTS symmetric algorithm support")
-
-That don't result in any changes in tooling, just causes this to be
-rebuilt:
-
-  CC      /tmp/build/perf-urgent/trace/beauty/sync_file_range.o
-  LD      /tmp/build/perf-urgent/trace/beauty/perf-in.o
-
-addressing this perf build warning:
-
-  Warning: Kernel ABI header at 'tools/include/uapi/linux/fscrypt.h' differs from latest version at 'include/uapi/linux/fscrypt.h'
-  diff -u tools/include/uapi/linux/fscrypt.h include/uapi/linux/fscrypt.h
-
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Eric Biggers <ebiggers@google.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Link: https://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/include/uapi/linux/fscrypt.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/include/uapi/linux/fscrypt.h b/tools/include/uapi/linux/fscrypt.h
-index a756b29afcc23749..fd1fb0d5389d3abd 100644
---- a/tools/include/uapi/linux/fscrypt.h
-+++ b/tools/include/uapi/linux/fscrypt.h
-@@ -26,6 +26,8 @@
- #define FSCRYPT_MODE_AES_256_CTS		4
- #define FSCRYPT_MODE_AES_128_CBC		5
- #define FSCRYPT_MODE_AES_128_CTS		6
-+#define FSCRYPT_MODE_SM4_XTS			7
-+#define FSCRYPT_MODE_SM4_CTS			8
- #define FSCRYPT_MODE_ADIANTUM			9
- #define FSCRYPT_MODE_AES_256_HCTR2		10
- /* If adding a mode number > 10, update FSCRYPT_MODE_MAX in fscrypt_private.h */
-@@ -185,8 +187,6 @@ struct fscrypt_get_key_status_arg {
- #define FS_ENCRYPTION_MODE_AES_256_CTS	FSCRYPT_MODE_AES_256_CTS
- #define FS_ENCRYPTION_MODE_AES_128_CBC	FSCRYPT_MODE_AES_128_CBC
- #define FS_ENCRYPTION_MODE_AES_128_CTS	FSCRYPT_MODE_AES_128_CTS
--#define FS_ENCRYPTION_MODE_SPECK128_256_XTS	7	/* removed */
--#define FS_ENCRYPTION_MODE_SPECK128_256_CTS	8	/* removed */
- #define FS_ENCRYPTION_MODE_ADIANTUM	FSCRYPT_MODE_ADIANTUM
- #define FS_KEY_DESC_PREFIX		FSCRYPT_KEY_DESC_PREFIX
- #define FS_KEY_DESC_PREFIX_SIZE		FSCRYPT_KEY_DESC_PREFIX_SIZE
--- 
-2.38.1
+Best regards,
+Krzysztof
 
