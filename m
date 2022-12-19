@@ -2,53 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E79A6506DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 04:40:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B459E6506E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 04:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbiLSDkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 22:40:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
+        id S231325AbiLSDp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 22:45:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiLSDkr (ORCPT
+        with ESMTP id S231315AbiLSDpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 22:40:47 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221416376
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 19:40:46 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id k6-20020a92c246000000b003035797fa8cso5884240ilo.8
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 19:40:46 -0800 (PST)
+        Sun, 18 Dec 2022 22:45:25 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FA7AE61
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 19:45:24 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id t2so7823035ply.2
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 19:45:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ufkpDtqwrwaASbEeUOXsA7V1EpiSQ5Rn4rC/a+dn8wY=;
+        b=kREEY0cPLyCDghlpTDJ8V2o21sNnI1qpq49TZewEDl/Dy9Ne8Ooj9q26jiMTKqFAIb
+         jBm2PZTjWpl34gp/877YXeDvIXjtCJWXKIaECssweFHZ5k1h5DDv9U5eGtl44jBz4hzu
+         7KXJLAe/wVbUrVRtPcZe9ZC0NbeMdZEI9d7zvYAUZvVTZrSb3NRCvih54mACbYLptfDn
+         74DCdpslCI0Cwo5zyeylqRxVGM87agTMsIotS/ZrP7kwNkSWGrXauryCBHRi+LstpufE
+         2J3jR7tMjbU114xqDI/y7p4jqBSd9YSHLVng8uf5gUhJFr28NryNS12H9ZXh3iKVfOB7
+         3MeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TkEZ8M+1HG3nvSZ+Xe6iYgKTar5Wi2cWB6DMhdk6aMU=;
-        b=y0adhAcnN2qRbBm7/a18kmNTRYFt/8zZLe61Bmp9tK2Fjeb77uIsxgrB70ReXJVd+A
-         hwma/+5kNwZP50Bq1LJxuTNmdJr8iUb8lSVY4hn0mUff0Iuo83PR2P8GSIa5PrW0SRVQ
-         85hw5OQUSUq9sRwGSZwsrrUBuDUDcLv0QQXHNgIlofgdizadugyM2hOLRMKhh1XRe4/U
-         4bEpitCjGSiuUa3KKQ7n6PHOFGY7Gcw5QKVbNqVhTbDEOOG2328MTcwMb8l4ZCV3x0PG
-         oB/nHeMAJbmwoAkg+z61PkLNLpyFaaddmmYgJ2InXJ1FRdWmBteIMvgC10JPJlK+cicX
-         oSLg==
-X-Gm-Message-State: ANoB5pnljqX9Cjkj3NCgyzXr6+ZLVcH3KcCyEZ/Fm1htaRN2F9kndS9h
-        +dTqM1oNmQbr5wXe0E9LLBsT0RjwVK9QgvbYEsaJDvXqSxdN
-X-Google-Smtp-Source: AA0mqf4Aa3Kw+wZKikbr83YdL7LJnPPJDgMoH3cjpM4sPJ0iZIkHjs9zKbORUXHaNOkFdGXiPdUEBsAKFWH72O4gdmVSX35qASHt
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ufkpDtqwrwaASbEeUOXsA7V1EpiSQ5Rn4rC/a+dn8wY=;
+        b=44gW26DwQd1zXPEbrixykYGG7wQk8hSjAOO4qZqvWOTygYT+8o5dkF5AdGJ+o2XhhU
+         i6d7kTZJw5YNLZWMsUCqvN8aE4fI9WCcoERGnQzh2JYe5dGPO23aVQD7hHVNSMOzApdn
+         WAjIqsH2MCx0ctqUN5hAeKqpUpc8Prp6T4i/ShKv8tWyUIVY5Ygm1g+gXgUA1KbcqB0Q
+         uqkPnxl7UPzsOalwVuSi4MTMu3qg8eEiTiZtZohTDmRpqlSDNQ9ovgm89aLzRWEQTmu+
+         NRPOPjblS9bXKjnz6KYpd8ARTqpvbIQo4xF4syIopvWndwCRJVK262hisvZzJmsVYLc4
+         umIg==
+X-Gm-Message-State: ANoB5pkFy5J/LUY0/pgJF8pscwto8M+tmDvAEwToht/W/2Uedaielcnd
+        W7viefvrW29dNESK5Nzk+jFTTw==
+X-Google-Smtp-Source: AA0mqf7PKPQzRVWRGzVuTYxLiD4/XBylyvC0Ia68WHidlagaoY58bNmKTs8hhuLKkg2UsWRYpxtzQw==
+X-Received: by 2002:a17:90a:4f49:b0:219:b04d:a1 with SMTP id w9-20020a17090a4f4900b00219b04d00a1mr41521474pjl.41.1671421523739;
+        Sun, 18 Dec 2022 19:45:23 -0800 (PST)
+Received: from leoy-yangtze.lan ([152.70.116.104])
+        by smtp.gmail.com with ESMTPSA id 21-20020a631955000000b004772abe41f6sm5194521pgz.83.2022.12.18.19.45.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Dec 2022 19:45:23 -0800 (PST)
+Date:   Mon, 19 Dec 2022 11:45:08 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] libbpf: show error info about missing ".BTF"
+ section
+Message-ID: <Y5/eE+ds+e+k3VJO@leoy-yangtze.lan>
+References: <20221217223509.88254-1-changbin.du@gmail.com>
+ <20221217223509.88254-2-changbin.du@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:6d1a:0:b0:387:eb89:9528 with SMTP id
- m26-20020a026d1a000000b00387eb899528mr36051793jac.26.1671421245501; Sun, 18
- Dec 2022 19:40:45 -0800 (PST)
-Date:   Sun, 18 Dec 2022 19:40:45 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009bb72705f0261578@google.com>
-Subject: [syzbot] memory leak in ath9k_hif_usb_rx_cb
-From:   syzbot <syzbot+e9632e3eb038d93d6bc6@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        kvalo@kernel.org, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com, toke@toke.dk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221217223509.88254-2-changbin.du@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,133 +91,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Changbin,
 
-syzbot found the following issue on:
+On Sun, Dec 18, 2022 at 06:35:08AM +0800, Changbin Du wrote:
+> Show the real problem instead of just saying "No such file or directory".
+> 
+> Now will print below info:
+> libbpf: failed to find '.BTF' ELF section in /home/changbin/work/linux/vmlinux
 
-HEAD commit:    6f1f5caed5bf Merge tag 'for-linus-6.2-ofs1' of git://git.k..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11a5aa57880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aa9d05fc5567240b
-dashboard link: https://syzkaller.appspot.com/bug?extid=e9632e3eb038d93d6bc6
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1138a5c0480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d07e77880000
+Recently I encountered the same issue, it could be caused by:
+either missing to install tool pahole or missing to enable kernel
+configuration CONFIG_DEBUG_INFO_BTF.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e0b09490fc5c/disk-6f1f5cae.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2f00e5ef8dce/vmlinux-6f1f5cae.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/78f4c439075f/bzImage-6f1f5cae.xz
+Could we give explict info for reasoning failure?  Like:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e9632e3eb038d93d6bc6@syzkaller.appspotmail.com
+"libbpf: failed to find '.BTF' ELF section in /home/changbin/work/linux/vmlinux,
+please install pahole and enable CONFIG_DEBUG_INFO_BTF=y for kernel building".
 
-BUG: memory leak
-unreferenced object 0xffff888101f97700 (size 240):
-  comm "softirq", pid 0, jiffies 4294945988 (age 15.200s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff83ac0212>] __alloc_skb+0x202/0x270 net/core/skbuff.c:552
-    [<ffffffff83ac396a>] __netdev_alloc_skb+0x6a/0x220 net/core/skbuff.c:630
-    [<ffffffff82df70d0>] __dev_alloc_skb include/linux/skbuff.h:3165 [inline]
-    [<ffffffff82df70d0>] ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:635 [inline]
-    [<ffffffff82df70d0>] ath9k_hif_usb_rx_cb+0x1d0/0x660 drivers/net/wireless/ath/ath9k/hif_usb.c:686
-    [<ffffffff82fd9d89>] __usb_hcd_giveback_urb+0xf9/0x230 drivers/usb/core/hcd.c:1671
-    [<ffffffff82fda06b>] usb_hcd_giveback_urb+0x1ab/0x1c0 drivers/usb/core/hcd.c:1754
-    [<ffffffff8318c0b4>] dummy_timer+0x8e4/0x14c0 drivers/usb/gadget/udc/dummy_hcd.c:1988
-    [<ffffffff81328243>] call_timer_fn+0x33/0x1f0 kernel/time/timer.c:1700
-    [<ffffffff813284ff>] expire_timers+0xff/0x1d0 kernel/time/timer.c:1751
-    [<ffffffff813286f9>] __run_timers kernel/time/timer.c:2022 [inline]
-    [<ffffffff813286f9>] __run_timers kernel/time/timer.c:1995 [inline]
-    [<ffffffff813286f9>] run_timer_softirq+0x129/0x2f0 kernel/time/timer.c:2035
-    [<ffffffff84c000eb>] __do_softirq+0xeb/0x2ef kernel/softirq.c:571
-    [<ffffffff8126a086>] invoke_softirq kernel/softirq.c:445 [inline]
-    [<ffffffff8126a086>] __irq_exit_rcu+0xc6/0x110 kernel/softirq.c:650
-    [<ffffffff848a7742>] sysvec_apic_timer_interrupt+0xa2/0xd0 arch/x86/kernel/apic/apic.c:1107
-    [<ffffffff84a00cc6>] asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
-    [<ffffffff848bd6e9>] native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
-    [<ffffffff848bd6e9>] arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
-    [<ffffffff848bd6e9>] acpi_safe_halt drivers/acpi/processor_idle.c:112 [inline]
-    [<ffffffff848bd6e9>] acpi_idle_do_entry+0xc9/0xe0 drivers/acpi/processor_idle.c:570
-    [<ffffffff848bdc00>] acpi_idle_enter+0x150/0x230 drivers/acpi/processor_idle.c:707
-    [<ffffffff83699eb4>] cpuidle_enter_state+0xc4/0x740 drivers/cpuidle/cpuidle.c:239
+> Error: failed to load BTF from /home/changbin/work/linux/vmlinux: No such file or directory
 
-BUG: memory leak
-unreferenced object 0xffff88810c312800 (size 1024):
-  comm "softirq", pid 0, jiffies 4294945988 (age 15.200s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff814f6467>] __do_kmalloc_node mm/slab_common.c:967 [inline]
-    [<ffffffff814f6467>] __kmalloc_node_track_caller+0x47/0x120 mm/slab_common.c:988
-    [<ffffffff83ac00f1>] kmalloc_reserve net/core/skbuff.c:492 [inline]
-    [<ffffffff83ac00f1>] __alloc_skb+0xe1/0x270 net/core/skbuff.c:565
-    [<ffffffff83ac396a>] __netdev_alloc_skb+0x6a/0x220 net/core/skbuff.c:630
-    [<ffffffff82df70d0>] __dev_alloc_skb include/linux/skbuff.h:3165 [inline]
-    [<ffffffff82df70d0>] ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:635 [inline]
-    [<ffffffff82df70d0>] ath9k_hif_usb_rx_cb+0x1d0/0x660 drivers/net/wireless/ath/ath9k/hif_usb.c:686
-    [<ffffffff82fd9d89>] __usb_hcd_giveback_urb+0xf9/0x230 drivers/usb/core/hcd.c:1671
-    [<ffffffff82fda06b>] usb_hcd_giveback_urb+0x1ab/0x1c0 drivers/usb/core/hcd.c:1754
-    [<ffffffff8318c0b4>] dummy_timer+0x8e4/0x14c0 drivers/usb/gadget/udc/dummy_hcd.c:1988
-    [<ffffffff81328243>] call_timer_fn+0x33/0x1f0 kernel/time/timer.c:1700
-    [<ffffffff813284ff>] expire_timers+0xff/0x1d0 kernel/time/timer.c:1751
-    [<ffffffff813286f9>] __run_timers kernel/time/timer.c:2022 [inline]
-    [<ffffffff813286f9>] __run_timers kernel/time/timer.c:1995 [inline]
-    [<ffffffff813286f9>] run_timer_softirq+0x129/0x2f0 kernel/time/timer.c:2035
-    [<ffffffff84c000eb>] __do_softirq+0xeb/0x2ef kernel/softirq.c:571
-    [<ffffffff8126a086>] invoke_softirq kernel/softirq.c:445 [inline]
-    [<ffffffff8126a086>] __irq_exit_rcu+0xc6/0x110 kernel/softirq.c:650
-    [<ffffffff848a7742>] sysvec_apic_timer_interrupt+0xa2/0xd0 arch/x86/kernel/apic/apic.c:1107
-    [<ffffffff84a00cc6>] asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
-    [<ffffffff848bd6e9>] native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
-    [<ffffffff848bd6e9>] arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
-    [<ffffffff848bd6e9>] acpi_safe_halt drivers/acpi/processor_idle.c:112 [inline]
-    [<ffffffff848bd6e9>] acpi_idle_do_entry+0xc9/0xe0 drivers/acpi/processor_idle.c:570
-    [<ffffffff848bdc00>] acpi_idle_enter+0x150/0x230 drivers/acpi/processor_idle.c:707
+This log is confusing when we can find vmlinux file but without BTF
+section.  Consider to use a separate patch to detect vmlinux not
+found case and print out "No such file or directory"?
 
-BUG: memory leak
-unreferenced object 0xffff888101f97500 (size 240):
-  comm "softirq", pid 0, jiffies 4294945988 (age 15.200s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff83ac0212>] __alloc_skb+0x202/0x270 net/core/skbuff.c:552
-    [<ffffffff83ac396a>] __netdev_alloc_skb+0x6a/0x220 net/core/skbuff.c:630
-    [<ffffffff82df70d0>] __dev_alloc_skb include/linux/skbuff.h:3165 [inline]
-    [<ffffffff82df70d0>] ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:635 [inline]
-    [<ffffffff82df70d0>] ath9k_hif_usb_rx_cb+0x1d0/0x660 drivers/net/wireless/ath/ath9k/hif_usb.c:686
-    [<ffffffff82fd9d89>] __usb_hcd_giveback_urb+0xf9/0x230 drivers/usb/core/hcd.c:1671
-    [<ffffffff82fda06b>] usb_hcd_giveback_urb+0x1ab/0x1c0 drivers/usb/core/hcd.c:1754
-    [<ffffffff8318c0b4>] dummy_timer+0x8e4/0x14c0 drivers/usb/gadget/udc/dummy_hcd.c:1988
-    [<ffffffff81328243>] call_timer_fn+0x33/0x1f0 kernel/time/timer.c:1700
-    [<ffffffff813284ff>] expire_timers+0xff/0x1d0 kernel/time/timer.c:1751
-    [<ffffffff813286f9>] __run_timers kernel/time/timer.c:2022 [inline]
-    [<ffffffff813286f9>] __run_timers kernel/time/timer.c:1995 [inline]
-    [<ffffffff813286f9>] run_timer_softirq+0x129/0x2f0 kernel/time/timer.c:2035
-    [<ffffffff84c000eb>] __do_softirq+0xeb/0x2ef kernel/softirq.c:571
-    [<ffffffff8126a086>] invoke_softirq kernel/softirq.c:445 [inline]
-    [<ffffffff8126a086>] __irq_exit_rcu+0xc6/0x110 kernel/softirq.c:650
-    [<ffffffff848a7742>] sysvec_apic_timer_interrupt+0xa2/0xd0 arch/x86/kernel/apic/apic.c:1107
-    [<ffffffff84a00cc6>] asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
-    [<ffffffff848bd6e9>] native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
-    [<ffffffff848bd6e9>] arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
-    [<ffffffff848bd6e9>] acpi_safe_halt drivers/acpi/processor_idle.c:112 [inline]
-    [<ffffffff848bd6e9>] acpi_idle_do_entry+0xc9/0xe0 drivers/acpi/processor_idle.c:570
-    [<ffffffff848bdc00>] acpi_idle_enter+0x150/0x230 drivers/acpi/processor_idle.c:707
-    [<ffffffff83699eb4>] cpuidle_enter_state+0xc4/0x740 drivers/cpuidle/cpuidle.c:239
+Thanks,
+Leo
 
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> ---
+>  tools/lib/bpf/btf.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index 71e165b09ed5..dd2badf1a54e 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -990,6 +990,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+>  	err = 0;
+>  
+>  	if (!btf_data) {
+> +		pr_warn("failed to find '%s' ELF section in %s\n", BTF_ELF_SEC, path);
+>  		err = -ENOENT;
+>  		goto done;
+>  	}
+> -- 
+> 2.37.2
+> 
