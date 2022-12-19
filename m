@@ -2,102 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF73650E89
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78556650E8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:22:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232254AbiLSPVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 10:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
+        id S232217AbiLSPWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 10:22:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbiLSPVr (ORCPT
+        with ESMTP id S231931AbiLSPWs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 10:21:47 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7E17F63F1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 07:21:45 -0800 (PST)
-Received: (qmail 26221 invoked by uid 1000); 19 Dec 2022 10:21:44 -0500
-Date:   Mon, 19 Dec 2022 10:21:44 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Flavio Suligoi <f.suligoi@asem.it>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Ray Chi <raychi@google.com>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: core: hub: disable autosuspend for TI TUSB8041
-Message-ID: <Y6CBiGHm7jishpYQ@rowland.harvard.edu>
-References: <20221219124759.3207032-1-f.suligoi@asem.it>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219124759.3207032-1-f.suligoi@asem.it>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 19 Dec 2022 10:22:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF67263EE;
+        Mon, 19 Dec 2022 07:22:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 825EDB80E7A;
+        Mon, 19 Dec 2022 15:22:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 308DDC433F0;
+        Mon, 19 Dec 2022 15:22:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671463365;
+        bh=jDxSJDMTWt13FePZzSNyAo9bsTVsnhQKvIKfDSGpKYA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=g7P55TVlxO9/vnI7D61UYWRppYjrE7rM1dfJE1nr4qTMj2b7mXOYDzgdheZ04njTE
+         WPHLFD/9nS8if06YqwnR/TwPHNsTYSEaTJXNW9e7uXBAZjkkFHvT+1atlTIdVnlvWC
+         01IW7GQY85X2QtMW1XD0ZbeTeUdgOQq8+rq1asWws8OnWGt+2pJfiT6AKEU+h1lQXe
+         aJTMN7/O8y1mgihJO0PgfHbX7cs68/T9TFTUwGJbNHvaGccZ6fbA120C+9OwcfinT0
+         weR8kwArFugXpY/00IxxT7pjiOU/zsr0SBaPlQZLNez19mvlPSyFEz349TzFlEjWKe
+         +Qo0RPf9ZLkjg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 157CAE21EEE;
+        Mon, 19 Dec 2022 15:22:45 +0000 (UTC)
+Subject: Re: [GIT PULL] 2nd v6.2 PR for nfsd
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <B9418BA0-EBAC-4CE4-AA12-206083581C42@oracle.com>
+References: <B9418BA0-EBAC-4CE4-AA12-206083581C42@oracle.com>
+X-PR-Tracked-List-Id: <linux-nfs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <B9418BA0-EBAC-4CE4-AA12-206083581C42@oracle.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-6.2-1
+X-PR-Tracked-Commit-Id: 75333d48f92256a0dec91dbf07835e804fc411c0
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: aeba12b26c79fc35e07e511f692a8907037d95da
+Message-Id: <167146336508.2518.10690228005733903437.pr-tracker-bot@kernel.org>
+Date:   Mon, 19 Dec 2022 15:22:45 +0000
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jeff Layton <jlayton@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 01:47:59PM +0100, Flavio Suligoi wrote:
-> The Texas Instruments TUSB8041 has an autosuspend problem at high
-> temperature.
-> 
-> If there is not USB traffic, after a couple of ms, the device enters in
-> autosuspend mode. In this condition the external clock stops working, to
-> save energy. When the USB activity turns on, ther hub exits the
-> autosuspend state, the clock starts running again and all works fine.
-> 
-> At ambient temperature all works correctly, but at high temperature,
-> when the USB activity turns on, the external clock doesn't restart and
-> the hub disappears from the USB bus.
-> 
-> Disabling the autosuspend mode for this hub solves the issue.
-> 
-> Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
-> ---
+The pull request you sent on Mon, 19 Dec 2022 14:19:51 +0000:
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-6.2-1
 
-> v2: set TUSB8041 vendor id directly as hexnumber, instead of a complex formula
-> 
->  drivers/usb/core/hub.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 77e73fc8d673..9eca403af2a8 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -44,6 +44,9 @@
->  #define USB_PRODUCT_USB5534B			0x5534
->  #define USB_VENDOR_CYPRESS			0x04b4
->  #define USB_PRODUCT_CY7C65632			0x6570
-> +#define USB_VENDOR_TEXAS_INSTRUMENTS		0x0451
-> +#define USB_PRODUCT_TUSB8041_USB3		0x8140
-> +#define USB_PRODUCT_TUSB8041_USB2		0x8142
->  #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
->  #define HUB_QUIRK_DISABLE_AUTOSUSPEND		0x02
->  
-> @@ -5854,6 +5857,16 @@ static const struct usb_device_id hub_id_table[] = {
->        .idVendor = USB_VENDOR_GENESYS_LOGIC,
->        .bInterfaceClass = USB_CLASS_HUB,
->        .driver_info = HUB_QUIRK_CHECK_PORT_AUTOSUSPEND},
-> +    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-> +			| USB_DEVICE_ID_MATCH_PRODUCT,
-> +      .idVendor = USB_VENDOR_TEXAS_INSTRUMENTS,
-> +      .idProduct = USB_PRODUCT_TUSB8041_USB2,
-> +      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
-> +    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-> +			| USB_DEVICE_ID_MATCH_PRODUCT,
-> +      .idVendor = USB_VENDOR_TEXAS_INSTRUMENTS,
-> +      .idProduct = USB_PRODUCT_TUSB8041_USB3,
-> +      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
->      { .match_flags = USB_DEVICE_ID_MATCH_DEV_CLASS,
->        .bDeviceClass = USB_CLASS_HUB},
->      { .match_flags = USB_DEVICE_ID_MATCH_INT_CLASS,
-> -- 
-> 2.25.1
-> 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/aeba12b26c79fc35e07e511f692a8907037d95da
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
