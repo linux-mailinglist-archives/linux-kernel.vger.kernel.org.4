@@ -2,131 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B3965111C
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:18:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A0C651119
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:17:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbiLSRRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 12:17:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S231631AbiLSRRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 12:17:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232215AbiLSRRi (ORCPT
+        with ESMTP id S232201AbiLSRRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 12:17:38 -0500
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C5365C0;
-        Mon, 19 Dec 2022 09:17:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1671470258; x=1703006258;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=pgUvBnVCbGJYeuahVflnK3XdhoiYPjLg+A5dzxEHAs4=;
-  b=aRSkQ4S+HFg0jBUYwVIa7SjU3gaQ70eGHh0jj0L357rO9v+T4xlEMEp8
-   zGR/DDIqfpIiHauRxvp6rXgsX1wB6hj6k3TLJuAQOH5agPy9ZANE1mTYR
-   WfkDo9J7LaevU+7dKrdYJBnhGmwDZy9OWxIyP76apNluqfXAAy4RW4u8N
-   Q=;
-X-IronPort-AV: E=Sophos;i="5.96,257,1665446400"; 
-   d="scan'208";a="278734712"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-f7c754c9.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 17:17:37 +0000
-Received: from EX13D42EUA004.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-m6i4x-f7c754c9.us-west-2.amazon.com (Postfix) with ESMTPS id 1CD7341648;
-        Mon, 19 Dec 2022 17:17:35 +0000 (UTC)
-Received: from EX19D019EUA002.ant.amazon.com (10.252.50.84) by
- EX13D42EUA004.ant.amazon.com (10.43.165.34) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Mon, 19 Dec 2022 17:17:33 +0000
-Received: from dev-dsk-hhhawa-1b-84e0d7ff.eu-west-1.amazon.com (10.43.161.114)
- by EX19D019EUA002.ant.amazon.com (10.252.50.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.20; Mon, 19 Dec 2022 17:17:28 +0000
-From:   Hanna Hawa <hhhawa@amazon.com>
-To:     <wsa@kernel.org>, <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
-        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <farbere@amazon.com>, <itamark@amazon.com>, <lareine@amazon.com>,
-        <hhhawa@amazon.com>
-Subject: [PATCH v3 1/1] i2c: designware: use casting of u64 in clock multiplication to avoid overflow
-Date:   Mon, 19 Dec 2022 17:17:13 +0000
-Message-ID: <20221219171713.10108-1-hhhawa@amazon.com>
-X-Mailer: git-send-email 2.38.1
+        Mon, 19 Dec 2022 12:17:18 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD962CC1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 09:17:17 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id j5-20020a5d9d05000000b006e2f0c28177so4303214ioj.17
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 09:17:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PYjS+ImIjrElaMqPFYQYWhlqH8+ajaaNfs4wjRxv44E=;
+        b=JYVSlBTjYqNXouii5Vg/aOQADbnEdsZPiXaUXwGiu0h5bIWbA8bYWxsD3EzA2dS8j2
+         IgrMA5JrDwhhvvVEZ3b2v26jsBZUmTiLKeRIivCM2sTI0Hay6HLbI+JLtMRl7hdW6O+O
+         uKVG4/+yQLyNF+RY5faW2iwEDz20h2jyQ8LTv9h8QAoaQfScnlldZOTQKBk1BtGkG3gV
+         SC9NGp+btMXg6PstHcIMW2lBceQqvbPio9sE6EBL0CI0/sg/jgTswKWb6BJn1zHRwUPw
+         WzkB5WXQ8HbrPYBWUG46yUUQmczbkrLLM0fI6vfIfGaxTAgJPmFwOeM9UljXStYFsK6J
+         iKoQ==
+X-Gm-Message-State: ANoB5pl6x2vfDdadsHhJD9F+C3NdDxukJVS0/1mVOdhWW5WPav00WDyq
+        VH12hsbzWWCLuQGT+snNx564sJ0rdw+WA4DhNYYg5vdz8An4
+X-Google-Smtp-Source: AA0mqf6mS7AY+xDbJTMOlE5wjvG4azZl8BE4+sZCPTnQM2/sNy65Okf7frmd5yiE7N74XUWj5uKHHblSC/tc/Lv4ktwvigNy0WiT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.114]
-X-ClientProxiedBy: EX13D19UWA003.ant.amazon.com (10.43.160.170) To
- EX19D019EUA002.ant.amazon.com (10.252.50.84)
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:3e1a:b0:38a:9017:1246 with SMTP id
+ co26-20020a0566383e1a00b0038a90171246mr3484306jab.119.1671470237050; Mon, 19
+ Dec 2022 09:17:17 -0800 (PST)
+Date:   Mon, 19 Dec 2022 09:17:17 -0800
+In-Reply-To: <1535853.1671468284@warthog.procyon.org.uk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bb6b2305f0317d76@google.com>
+Subject: Re: [syzbot] kernel BUG in rxrpc_put_peer
+From:   syzbot <syzbot+c22650d2844392afdcfd@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
+        kuba@kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lareine Khawaly <lareine@amazon.com>
+Hello,
 
-In functions i2c_dw_scl_lcnt() and i2c_dw_scl_hcnt() may have overflow
-by depending on the values of the given parameters including the ic_clk.
-For example in our use case where ic_clk is larger than one million,
-multiplication of ic_clk * 4700 will result in 32 bit overflow.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+INFO: rcu detected stall in corrupted
 
-Add cast of u64 to the calculation to avoid multiplication overflow, and
-use the corresponding define for divide.
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P5792 } 2657 jiffies s: 2825 root: 0x0/T
+rcu: blocking rcu_node structures (internal RCU debug):
 
-Fixes: 2373f6b9744d ("i2c-designware: split of i2c-designware.c into core and bus specific parts")
-Signed-off-by: Lareine Khawaly <lareine@amazon.com>
-Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
 
-Change Log v2->v3:
-- Avoid changing the ic_clk parameter to u64, and do casting in the
-  calculation itself instead.
-- use DIV_ROUND_CLOSEST_ULL instead of DIV_ROUND_CLOSEST
+Tested on:
 
-Change Log v1->v2:
-- Update commit message and add fix tag.
----
- drivers/i2c/busses/i2c-designware-common.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+commit:         6529d700 rxrpc: Move client call connection to the I/O..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/
+console output: https://syzkaller.appspot.com/x/log.txt?x=13f3b420480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b0e91ad4b5f69c47
+dashboard link: https://syzkaller.appspot.com/bug?extid=c22650d2844392afdcfd
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
-index e0a46dfd1c15..9cc02d0142df 100644
---- a/drivers/i2c/busses/i2c-designware-common.c
-+++ b/drivers/i2c/busses/i2c-designware-common.c
-@@ -351,7 +351,8 @@ u32 i2c_dw_scl_hcnt(u32 ic_clk, u32 tSYMBOL, u32 tf, int cond, int offset)
- 		 *
- 		 * If your hardware is free from tHD;STA issue, try this one.
- 		 */
--		return DIV_ROUND_CLOSEST(ic_clk * tSYMBOL, MICRO) - 8 + offset;
-+		return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * tSYMBOL,
-+					     MICRO) - 8 + offset;
- 	else
- 		/*
- 		 * Conditional expression:
-@@ -367,7 +368,8 @@ u32 i2c_dw_scl_hcnt(u32 ic_clk, u32 tSYMBOL, u32 tf, int cond, int offset)
- 		 * The reason why we need to take into account "tf" here,
- 		 * is the same as described in i2c_dw_scl_lcnt().
- 		 */
--		return DIV_ROUND_CLOSEST(ic_clk * (tSYMBOL + tf), MICRO) - 3 + offset;
-+		return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tSYMBOL + tf),
-+					     MICRO) - 3 + offset;
- }
- 
- u32 i2c_dw_scl_lcnt(u32 ic_clk, u32 tLOW, u32 tf, int offset)
-@@ -383,7 +385,8 @@ u32 i2c_dw_scl_lcnt(u32 ic_clk, u32 tLOW, u32 tf, int offset)
- 	 * account the fall time of SCL signal (tf).  Default tf value
- 	 * should be 0.3 us, for safety.
- 	 */
--	return DIV_ROUND_CLOSEST(ic_clk * (tLOW + tf), MICRO) - 1 + offset;
-+	return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tLOW + tf),
-+				     MICRO) - 1 + offset;
- }
- 
- int i2c_dw_set_sda_hold(struct dw_i2c_dev *dev)
--- 
-2.38.1
-
+Note: no patches were applied.
