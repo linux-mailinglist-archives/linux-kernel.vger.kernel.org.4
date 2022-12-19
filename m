@@ -2,180 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A13651006
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 17:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7434C651008
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 17:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbiLSQNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 11:13:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
+        id S231670AbiLSQN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 11:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiLSQNA (ORCPT
+        with ESMTP id S231470AbiLSQNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 11:13:00 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA28A195
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 08:12:59 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id b189so9135576vsc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 08:12:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NXAezGejVXbeBYBMQO1JPQhZlW10I7StHKj3XoiHdI4=;
-        b=SuPVqQRPPitUqfamp29KTGLVOOk59vMZz2BCaqhNg1FnesGQEkoUFwas7Yua/eiVus
-         +h66iu6YPQ9NWUhWMKTnDFHZ3RYaFB+P80Kl28MHXfWehW4i0MUE7H57i0eZ5iUZb5cR
-         KX7BvK6kUwFYtmlNMUJn8JkCR5ldhIBVZJQ+pceC4wSWgekR2UKldlLo5h4EpOPNSdZ3
-         snhb1+vjcD+ycdyD+3Y/2fl9YpVAcNlU4RN+gmhW0VaqPaUY7gnHHfju/sjGYJCi/LUD
-         CD43ak4PTDrT95k2rDtw1ZcH49AvEk86PuFy3BGAUveaCLkFK98YpmkPwBlfULSnttm8
-         5lIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NXAezGejVXbeBYBMQO1JPQhZlW10I7StHKj3XoiHdI4=;
-        b=bXY/3kZJR4d1z6ay1AkcBhRwbrtJWCvJVQQX/GzK5feoIlKPbAh0x29U9FYqKRpwVl
-         aaHnZXJlSvaXjWccf0fAuF8XIGabAvorer5Mj8qqH6oJw0DS4A2xNP02b9ih0sflwFkg
-         z3M2gUinUJQmUqmxZFbZlS1yV4aq+eYHE53iiEQL87TeWk1Bk4DJUZ5xLCHBxiFUvPwg
-         VljnO1FwO/1hcECgu3/zhLjtnBI+DjEeWUycsGECc0PRGaNd1YNJUrUrItsa/NFGxacH
-         MZWuVnA44NE7cnhuhnICCznUYklSEguW+0tu7URVMnkZ5XjQ4bPYkpEspaxprxur7nF9
-         Do3A==
-X-Gm-Message-State: ANoB5pmUCgSgWWfnBSU1dzixKmNu86wtpK0iIRSfEnIKJAsSwQUrgwQ6
-        IjqEcFV1kQEvdqUEZj6AZonU3E/zv9BEnY9tdBi60w==
-X-Google-Smtp-Source: AA0mqf514pBGNnaG/BN/e+1uhHfWKsrAbWKj1jIQMBBGK06O43m6F0yLA4yJf8gtzwCyJ56elG6reXjaAC6mO5ltxaE=
-X-Received: by 2002:a05:6102:3c7:b0:3b1:38c5:d283 with SMTP id
- n7-20020a05610203c700b003b138c5d283mr14012498vsq.53.1671466378227; Mon, 19
- Dec 2022 08:12:58 -0800 (PST)
+        Mon, 19 Dec 2022 11:13:53 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF986A440;
+        Mon, 19 Dec 2022 08:13:50 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7B601AD7;
+        Mon, 19 Dec 2022 08:14:31 -0800 (PST)
+Received: from e126815.warwick.arm.com (e126815.arm.com [10.32.32.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6B5683F703;
+        Mon, 19 Dec 2022 08:13:48 -0800 (PST)
+From:   James Clark <james.clark@arm.com>
+To:     linux-perf-users@vger.kernel.org
+Cc:     robh@kernel.org, James Clark <james.clark@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 0/4] Enable display of partial and empty SVE predicates from Arm SPE data
+Date:   Mon, 19 Dec 2022 16:12:54 +0000
+Message-Id: <20221219161259.3097213-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <0000000000006c411605e2f127e5@google.com> <000000000000b60c1105efe06dea@google.com>
- <Y5vTyjRX6ZgIYxgj@mit.edu> <Y5xsIkpIznpObOJL@google.com> <CANp29Y6KHBE-fpfJCXeN5Ju_qSOfUYAp2n+cNrGj25QtU0X=sA@mail.gmail.com>
- <Y5ylNxoN2p7dmcRD@mit.edu> <CANp29Y4QVp1G83pSqpxeETbw_+kQQ5CZUz+Vgi767WxE8AuhHQ@mail.gmail.com>
- <Y5y824gPqZo+vcxb@mit.edu>
-In-Reply-To: <Y5y824gPqZo+vcxb@mit.edu>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Mon, 19 Dec 2022 17:12:47 +0100
-Message-ID: <CANp29Y4S0TTVjonA9ADpBKviNHR+n3nYi2hy2hcee-4ArD5t4Q@mail.gmail.com>
-Subject: Re: kernel BUG in ext4_free_blocks (2)
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     Lee Jones <lee@kernel.org>,
-        syzbot <syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, gregkh@linuxfoundation.org,
-        lczerner@redhat.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sashal@kernel.org,
-        stable@vger.kernel.org, syzkaller-android-bugs@googlegroups.com,
-        tadeusz.struk@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ted,
+Hi,
 
-Thanks for the comments!
+I'm submitting this on behalf of German who moved on to work on other
+things in Arm before he could finish it off.
 
-On Fri, Dec 16, 2022 at 7:45 PM Theodore Ts'o <tytso@mit.edu> wrote:
->
-> On Fri, Dec 16, 2022 at 06:14:50PM +0100, Aleksandr Nogikh wrote:
-> > > Thanks for the clarification; stupid question, though -- I see
-> > > "upstream" is listed on the dashboard link above.  Assuming that
-> > > "usptream" is "Linus's tree", why was it still saying, "I can't find
-> > > this patch in any of my trees"?  What about the upstream tree?
-> >
-> > Bugs from different namespaces are treated independently, so in this
-> > particular case syzbot was expecting the fixing commit to reach the
-> > Android trees that it fuzzes.
->
-> Is there a way someone can look at the dashboard link to determine
-> which (a) what namespace a particular syzkaller report is in, and (b)
-> what trees are included in a particular namespace?
+The predicate information is available on SPE samples from 
+Armv8.3 (FEAT_SPEv1p1), this could be useful info for profiling SVE
+code as partial and empty predicates indicate that the full vector
+width isn't being used. There is a good example in the last commit
+message.
 
-(a) Once you have opened the bug report page, you can find the
-namespace at the top of the page.
-(b) One can at least see the list of the tested trees on the main page
-of the namespace -- we do share the latest commits for each manager
-instance. Also see the comment below.
+Though currently, there isn't a suitable field to store the info
+on Perf samples, so this change also adds a new SIMD field.
+This field could be used by other architectures, but currently there
+is only one bit reserved to identify SVE. It's only added to
+struct perf_sample on the userspace side, and isn't part of the kernel
+ABI, so it doesn't survive a perf inject. Although this is the
+same behavior for some other fields like branch flags, so I don't
+think it should be an issue to do something similar here. Perhaps in
+the future we could make sure everything that is synthesised from
+auxtrace data also makes it back into the new Perf inject file without
+being lost.
 
->
-> Adding a link to the e-mail to the dashboard page may not help if it's
-> not obvious why the dashboard mentions "upstream" and yet it's not in
-> "any of the trees".  Maybe the e-mail should explicitly list the trees
-> that syzkaller will be searching?
+German Gomez (4):
+  perf event: Add simd_flags field to perf_sample
+  perf arm-spe: Refactor arm-spe to support operation packet type
+  perf arm-spe: Add SVE flags to the SPE samples
+  perf report: Add 'simd' sort field
 
-I've sent a PR[1] that makes the bot send the list of the searched
-trees. For upstream, we search quite a lot of trees, so the bot will
-share some of them in the email and give a link to see the rest.
-Otherwise the contents would be totally unintelligible.
+ tools/perf/Documentation/perf-report.txt      |  1 +
+ .../util/arm-spe-decoder/arm-spe-decoder.c    | 30 ++++++++++--
+ .../util/arm-spe-decoder/arm-spe-decoder.h    | 47 +++++++++++++++----
+ tools/perf/util/arm-spe.c                     | 28 +++++++++--
+ tools/perf/util/hist.c                        |  1 +
+ tools/perf/util/hist.h                        |  1 +
+ tools/perf/util/sample.h                      | 13 +++++
+ tools/perf/util/sort.c                        | 47 +++++++++++++++++++
+ tools/perf/util/sort.h                        |  2 +
+ 9 files changed, 152 insertions(+), 18 deletions(-)
 
-[1] https://github.com/google/syzkaller/pull/3593
 
->
-> And it would seem that it would be a *feature* if looking at a syzbot
-> dashboard from Android namespace could expose the fact that particular
-> patch is in any of the LTS trees or Linus's upstream tree, no?
+base-commit: 573de010917836f198a4e579d40674991659668b
+-- 
+2.25.1
 
-Yes, that would be definitely nice.
-We do have the improvements to the missing commit detection on our
-TODO list, but I cannot say at the moment when exactly it will be
-done.
-
->
-> Also, what is the reason for Android for being in a separate
-> namespace?  Is it running on a separate syzbot VM?  I can understand
-> why from a feature perspective, that Fuschia and OpenBSD should be in
-> separate namespaces; but what are the reasons that there are separate
-> namespaces for Android versus the upstream kernel?  Especially since
-> the Android dashboard is apparently referencing the upstream kernel?
-> What's up with that?
-
-It's based on Linux, but it's not exactly Linux and can have its own bugs.
-
->
-> Put another way, while I think it's super useful to have a link to
-> Syzbot dashboard page, in the e-mail, I'm not sure it's going to be a
-> complete solution to the confusion that was inspired by this case.
->
-> That being said, in general I think a link to the Dashboard is useful;
-> in fact, it might be nice if we could encourage upstream developers
-> put in the commit trailer:
->
-> Link: https://syzkaller.appspot.com/bug?id=5266d464285a03cee9dbfda7d2452a72c3c2ae7c
->
-> in addition to, or better yet, instead of:
->
-> Reported-by: syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com
->
-> ... and have Syzbot be able to translate from the Link: tag as being
-> equivalent to the Reported-by: link.  That's becase the Link is going
-> to be much more useful to humans than the Reported-by --- we've had a
-> number of cases where as part of the patch review, we really wanted to
-> get back to the Dashboard page, and it's not easy to get to the
-> Dashboard from the Reported-by tag.
-
-FWIW it's quite easy to get the Dashboard link from the Reported-by
-tag (although I agree it's not the most intuitive thing imaginable) --
-one just needs to substitute the hash code after the + sign to
-https://syzkaller.appspot.com/bug?extid=%s
-
-Re. the Link tag.. it's interesting. It doesn't seem to be very
-reasonable to include both, as it would look somewhat excessive:
-
-Reported-by: syzbot+abcdef012345678@syzkaller.appspotmail.com
-Link: https://syzkaller.appspot.com/bug?extid=abcdef012345678
-
-I'll take a look into the pros and cons of using just the Link tag.
-
---
-Aleksandr
-
->
-> Thanks,
->
->                                                 - Ted
->
