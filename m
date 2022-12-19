@@ -2,178 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE31B6510B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 17:48:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA0E6510B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 17:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbiLSQsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 11:48:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
+        id S231931AbiLSQtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 11:49:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231401AbiLSQsl (ORCPT
+        with ESMTP id S231136AbiLSQtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 11:48:41 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEC9A1BD
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 08:48:40 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJGi3c5024934;
-        Mon, 19 Dec 2022 16:48:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Avcqq16wcT/rgWLBTYvJjWGMCSJ5kcrYa+wkoaZ9R/0=;
- b=g0+r7mrzf0szb/CHf0ih7yQoYaNV4ULwhnpYUbUtFR183F4T1gEdlIgsbIsnRhdSaVih
- B3M+pCQmtrIyr0m6H53JPeDlHIDTO3fmeWKts4rOYuLQvu7OjGT1zco3T013O8wsgJPU
- VBPhlKRRss+o7Nd9fMnRsaKiAcN5rTNIjFJX7LqRsDu+FMa7OQ2XrRbveiblKk4mXdf8
- yVjqyon09Qc1oQSNZbCv+lT7cDvguqluvHyND1t71vdQUhizCKf5jRfUuc/sVBAZDtLI
- 6wnqmIEiD6wLtm4GolAOlYgybbCr7gp+hYPkNHVTH+0a9KV3t6nI1BFwjK6aZYWD5m0V FQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mjur3r4pa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 16:48:35 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BJGi9io025553;
-        Mon, 19 Dec 2022 16:48:35 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mjur3r4nq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 16:48:35 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJE1K14013948;
-        Mon, 19 Dec 2022 16:48:33 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3mh6yw2vd1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 16:48:33 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BJGmUYE16712142
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 19 Dec 2022 16:48:30 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9D6C42005A;
-        Mon, 19 Dec 2022 16:48:30 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7ED8F2004F;
-        Mon, 19 Dec 2022 16:48:30 +0000 (GMT)
-Received: from [9.171.202.193] (unknown [9.171.202.193])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 19 Dec 2022 16:48:30 +0000 (GMT)
-Message-ID: <1da3f764-4445-2135-3292-2912c2e8e778@linux.ibm.com>
-Date:   Mon, 19 Dec 2022 17:48:14 +0100
+        Mon, 19 Dec 2022 11:49:39 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7947710540
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 08:49:38 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id d10so4992034ilc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 08:49:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=O53/BMj/UJQrRui9mxtxJP8eMQ6bqXClr1qQJJurLSM=;
+        b=Qe31U6yIonvkfkl/5QCFTfJ2g7i0mTSPpjR3/Ugw0vMPfMdpuEI61AUG9W8EODRwDV
+         cF9R41MZgNqaiPJocr5rdzc78Fksv9S/MOPWfztf3ty5S3G2OkQau/rh3ld7ACLWVOaG
+         ptwLYSmON5sAS/qRqEPXU919vEV/4jyq69MRzTZvwhd2ivmxfCJgb7dPET+GlXv+Pwbt
+         5x3HJuCVD6fGKDVtgnvv8mn0+QAH8DWto/tGdR5Wef0hWuYJMgRvvRJ9VYUNmcaE551w
+         RiAv2qglWtQ29j3Q4iNO9iJ5za8dIzoC+tPohr+QrQk5MemGb5KIvaaZe4mUbwij7Pf5
+         PTaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O53/BMj/UJQrRui9mxtxJP8eMQ6bqXClr1qQJJurLSM=;
+        b=SaSAfXZwXFE4JFQSTTmoPUIHTdC+CXfEgFQoyqJ24+xMltvzRFqWenwIm0ivTjCzKL
+         or8VeUWqNF9LTcj6vAw1IrLW8BPeBZ0T8qZyvCsAwQqpg92FM1a6uRcaeBexu+TXXQEc
+         K82fkpg5LztWxOylk8KVHI+fj+jpUl5Xjc1n6WOw99lrMd4JgQfHyS0mOjL0PV/9iOCa
+         dl/d5zVpFwTC3xqTGK+p0brY2JFcIYc0TIld+uLqu+JbmI66lANtxguD5YbQMaEzCwej
+         PpU0dbAHknoCMbpPSL0a4beYcC4LxhGPzVoGDZJk/TbN0HBuxZfGWZGI1D9baaNtmSme
+         Zq9Q==
+X-Gm-Message-State: AFqh2komfXq2gO+DiE++j5fYD1tGRKbZGIBFFyv17OJkamOtRnN4BhAf
+        rEBphkbVb4kPRGNviXs4BSu7JrYMID27FceNiek=
+X-Google-Smtp-Source: AMrXdXs7/nOwEBiskqNbc4mpuAb2eT65ywrTMDNqNwDJk16tTbcyAcBNEi8l/UOEBn1N4OaBDA01gw==
+X-Received: by 2002:a92:d746:0:b0:303:3163:cb0a with SMTP id e6-20020a92d746000000b003033163cb0amr5215141ilq.17.1671468577809;
+        Mon, 19 Dec 2022 08:49:37 -0800 (PST)
+Received: from ip-172-31-23-7.us-east-2.compute.internal (ec2-18-117-238-67.us-east-2.compute.amazonaws.com. [18.117.238.67])
+        by smtp.googlemail.com with ESMTPSA id q37-20020a056638346500b00383c144fbd7sm3515170jav.32.2022.12.19.08.49.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 08:49:37 -0800 (PST)
+From:   Jianlin Lv <iecedge@gmail.com>
+To:     akpm@linux-foundation.org, yejiajian2018@email.szu.edu.cn,
+        caoyixuan2019@email.szu.edu.cn, seanga2@gmail.com,
+        zhangyinan2019@email.szu.edu.cn, zhaochongxi2019@email.szu.edu.cn
+Cc:     iecedge@gmail.com, jianlv@ebay.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] tools/vm/page_owner_sort: free memory before exit
+Date:   Mon, 19 Dec 2022 16:49:17 +0000
+Message-Id: <20221219164917.14132-1-iecedge@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: Re: [PATCH] gcov: Add support for checksum field
-Content-Language: en-US
-To:     Rickard Andersson <rickaran@axis.com>, linux-kernel@vger.kernel.org
-Cc:     rickard314.andersson@gmail.com, mliska@suse.cz
-References: <20221219150621.3310033-1-rickaran@axis.com>
-From:   Peter Oberparleiter <oberpar@linux.ibm.com>
-In-Reply-To: <20221219150621.3310033-1-rickaran@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Af2f7sjyRAR5ny7q2MU6zjnCSPy3Zq73
-X-Proofpoint-GUID: bww0ZYjgVw71OGYN4tYSdn-4uIqcsI8b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-19_01,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- priorityscore=1501 lowpriorityscore=0 impostorscore=0 malwarescore=0
- mlxscore=0 adultscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0
- spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212190147
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.12.2022 16:06, Rickard Andersson wrote:
-> From: Rickard x Andersson <rickaran@axis.com>
-> 
-> In GCC version 12.1 a checksum field was added.
+Although when a process terminates, the kernel will removes memory
+associated with that process, It's neither good style nor proper design
+to leave it to kernel.
+This patch free allocated memory before process exit.
 
-Thanks for the patch!
+Signed-off-by: Jianlin Lv <iecedge@gmail.com>
+---
+ tools/vm/page_owner_sort.c | 65 ++++++++++++++++++++++++++------------
+ 1 file changed, 45 insertions(+), 20 deletions(-)
 
-In another e-mail you mentioned that this patch fixes a kernel crash
-during boot when using gcov-kernel with GCC 12. Please add this
-information to the commit message and if possible the platform on which
-this occurs.
-
-Also this patch fixes a missing piece from a previous patch, so please add:
-
-Fixes: 977ef30a7d88 ("gcov: support GCC 12.1 and newer compilers")
-Cc: <stable@vger.kernel.org>
-
-Finally I reviewed and tested the patch and it looks good to me, so
-please add:
-
-Reviewed-by: Peter Oberparleiter <oberpar@linux.ibm.com>
-Tested-by: Peter Oberparleiter <oberpar@linux.ibm.com>
-
-Please resend with these commit message changes. Thanks!
-
-For the record: I wondered why my testing of the previous patch with GCC
-12 didn't catch this. It turns out that this crash does not occur on
-architectures with 8-byte pointer alignment such as s390x where I
-performed my tests. Consider this pahole output on s390x without the patch:
-
-struct gcov_info {
-[...]
-        unsigned int       stamp;                /*    16     4 */
-        /* XXX 4 bytes hole, try to pack */
-        const char  *      filename;             /*    24     8 */
-[...]
-}
-
-And with the patch:
-
-struct gcov_info {
-[...]
-       unsigned int       stamp;                /*    16     4 */
-       unsigned int       checksum;             /*    20     4 */
-       const char  *      filename;             /*    24     8 */
-[...]
-}
-
-As can be seen, the offset of the filename and subsequent fields does
-not change because the new field fills an alignment hole. It would
-change (resulting in a crash during boot) if the alignment-requirement
-of the const char *filename field would be different.
-
-> 
-> Signed-off-by: Rickard x Andersson <rickaran@axis.com>
-> ---
->  kernel/gcov/gcc_4_7.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/kernel/gcov/gcc_4_7.c b/kernel/gcov/gcc_4_7.c
-> index c699feda21ac..04880d8fba25 100644
-> --- a/kernel/gcov/gcc_4_7.c
-> +++ b/kernel/gcov/gcc_4_7.c
-> @@ -85,6 +85,7 @@ struct gcov_fn_info {
->   * @version: gcov version magic indicating the gcc version used for compilation
->   * @next: list head for a singly-linked list
->   * @stamp: uniquifying time stamp
-> + * @checksum: unique object checksum
->   * @filename: name of the associated gcov data file
->   * @merge: merge functions (null for unused counter type)
->   * @n_functions: number of instrumented functions
-> @@ -97,6 +98,10 @@ struct gcov_info {
->  	unsigned int version;
->  	struct gcov_info *next;
->  	unsigned int stamp;
-> + /* Since GCC 12.1 a checksum field is added. */
-> +#if (__GNUC__ >= 12)
-> +	unsigned int checksum;
-> +#endif
->  	const char *filename;
->  	void (*merge[GCOV_COUNTERS])(gcov_type *, unsigned int);
->  	unsigned int n_functions;
-
+diff --git a/tools/vm/page_owner_sort.c b/tools/vm/page_owner_sort.c
+index ce860ab94162..7c2ac124cdc8 100644
+--- a/tools/vm/page_owner_sort.c
++++ b/tools/vm/page_owner_sort.c
+@@ -246,15 +246,16 @@ static int search_pattern(regex_t *pattern, char *pattern_str, char *buf)
+ 	return 0;
+ }
+ 
+-static void check_regcomp(regex_t *pattern, const char *regex)
++static bool check_regcomp(regex_t *pattern, const char *regex)
+ {
+ 	int err;
+ 
+ 	err = regcomp(pattern, regex, REG_EXTENDED | REG_NEWLINE);
+ 	if (err != 0 || pattern->re_nsub != 1) {
+ 		fprintf(stderr, "Invalid pattern %s code %d\n", regex, err);
+-		exit(1);
++		return false;
+ 	}
++	return true;
+ }
+ 
+ static char **explode(char sep, const char *str, int *size)
+@@ -494,28 +495,28 @@ static bool is_need(char *buf)
+ 	return true;
+ }
+ 
+-static void add_list(char *buf, int len, char *ext_buf)
++static bool add_list(char *buf, int len, char *ext_buf)
+ {
+ 	if (list_size != 0 &&
+ 		len == list[list_size-1].len &&
+ 		memcmp(buf, list[list_size-1].txt, len) == 0) {
+ 		list[list_size-1].num++;
+ 		list[list_size-1].page_num += get_page_num(buf);
+-		return;
++		return true;
+ 	}
+ 	if (list_size == max_size) {
+ 		fprintf(stderr, "max_size too small??\n");
+-		exit(1);
++		return false;
+ 	}
+ 	if (!is_need(buf))
+-		return;
++		return true;
+ 	list[list_size].pid = get_pid(buf);
+ 	list[list_size].tgid = get_tgid(buf);
+ 	list[list_size].comm = get_comm(buf);
+ 	list[list_size].txt = malloc(len+1);
+ 	if (!list[list_size].txt) {
+ 		fprintf(stderr, "Out of memory\n");
+-		exit(1);
++		return false;
+ 	}
+ 	memcpy(list[list_size].txt, buf, len);
+ 	list[list_size].txt[len] = 0;
+@@ -534,6 +535,7 @@ static void add_list(char *buf, int len, char *ext_buf)
+ 		printf("loaded %d\r", list_size);
+ 		fflush(stdout);
+ 	}
++	return true;
+ }
+ 
+ static bool parse_cull_args(const char *arg_str)
+@@ -790,12 +792,19 @@ int main(int argc, char **argv)
+ 		exit(1);
+ 	}
+ 
+-	check_regcomp(&order_pattern, "order\\s*([0-9]*),");
+-	check_regcomp(&pid_pattern, "pid\\s*([0-9]*),");
+-	check_regcomp(&tgid_pattern, "tgid\\s*([0-9]*) ");
+-	check_regcomp(&comm_pattern, "tgid\\s*[0-9]*\\s*\\((.*)\\),\\s*ts");
+-	check_regcomp(&ts_nsec_pattern, "ts\\s*([0-9]*)\\s*ns,");
+-	check_regcomp(&free_ts_nsec_pattern, "free_ts\\s*([0-9]*)\\s*ns");
++	if (!check_regcomp(&order_pattern, "order\\s*([0-9]*),"))
++		goto out_order;
++	if (!check_regcomp(&pid_pattern, "pid\\s*([0-9]*),"))
++		goto out_pid;
++	if (!check_regcomp(&tgid_pattern, "tgid\\s*([0-9]*) "))
++		goto out_tgid;
++	if (!check_regcomp(&comm_pattern, "tgid\\s*[0-9]*\\s*\\((.*)\\),\\s*ts"))
++		goto out_comm;
++	if (!check_regcomp(&ts_nsec_pattern, "ts\\s*([0-9]*)\\s*ns,"))
++		goto out_ts;
++	if (!check_regcomp(&free_ts_nsec_pattern, "free_ts\\s*([0-9]*)\\s*ns"))
++		goto out_free_ts;
++
+ 	fstat(fileno(fin), &st);
+ 	max_size = st.st_size / 100; /* hack ... */
+ 
+@@ -804,7 +813,7 @@ int main(int argc, char **argv)
+ 	ext_buf = malloc(BUF_SIZE);
+ 	if (!list || !buf || !ext_buf) {
+ 		fprintf(stderr, "Out of memory\n");
+-		exit(1);
++		goto out_free;
+ 	}
+ 
+ 	for ( ; ; ) {
+@@ -812,7 +821,8 @@ int main(int argc, char **argv)
+ 
+ 		if (buf_len < 0)
+ 			break;
+-		add_list(buf, buf_len, ext_buf);
++		if (!add_list(buf, buf_len, ext_buf))
++			goto out_free;
+ 	}
+ 
+ 	printf("loaded %d\n", list_size);
+@@ -862,11 +872,26 @@ int main(int argc, char **argv)
+ 			fprintf(fout, "\n");
+ 		}
+ 	}
+-	regfree(&order_pattern);
+-	regfree(&pid_pattern);
+-	regfree(&tgid_pattern);
+-	regfree(&comm_pattern);
+-	regfree(&ts_nsec_pattern);
++
++out_free:
++	if (ext_buf)
++		free(ext_buf);
++	if (buf)
++		free(buf);
++	if (list)
++		free(list);
++out_free_ts:
+ 	regfree(&free_ts_nsec_pattern);
++out_ts:
++	regfree(&ts_nsec_pattern);
++out_comm:
++	regfree(&comm_pattern);
++out_tgid:
++	regfree(&tgid_pattern);
++out_pid:
++	regfree(&pid_pattern);
++out_order:
++	regfree(&order_pattern);
++
+ 	return 0;
+ }
 -- 
-Peter Oberparleiter
-Linux on IBM Z Development - IBM Germany R&D
+2.25.1
 
