@@ -2,126 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A66AF650BCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF84650BD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbiLSMgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 07:36:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47580 "EHLO
+        id S231474AbiLSMiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 07:38:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbiLSMf4 (ORCPT
+        with ESMTP id S230226AbiLSMh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 07:35:56 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2D83A9
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 04:35:30 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id jo4so12182711ejb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 04:35:30 -0800 (PST)
+        Mon, 19 Dec 2022 07:37:57 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF6BB78
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 04:37:56 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id ay2-20020a05600c1e0200b003d22e3e796dso6323062wmb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 04:37:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rCYG7t1izN/gOyqR3UaPefTWs3YwGVtAE/HZuYn9Rfc=;
-        b=ZKtkG+FX5U20S1M6EMAO9s5DcYzxSPb3NQCBOLLNZKUq1ijR3Q2uoYri0UIzTgvgB0
-         BuFxphDmBbwcllU3Gq/LcNYSqtuoFmVbWfxHoWpZbb485QqVZreK8NBdka6pJ9kqxEfi
-         b6g2VtgxtP/YluAJZKnBbJAR0WCcpqKp7HjTA=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=g6Me+DBgXsfmWJ38qvhXvaW8D2IHQSt5hD0RyNkeY+E=;
+        b=NAh2XJlSv77ASCxFYGMJtxLIjwpUTn1YC0CArWVi7rFEVXnd6kNFdZy5ilWTWxa86i
+         WjkLVgey4kBBhYRhwJ7hq79WfifO+tTOWBCcjxZdMRLTzeu4gVpZQY3xFWTvZxPExcLy
+         Gg31Ec9XhEmunxVVD4sYo/nc4/aJFmn5cKc412djPFcnsHS5m2CYgZqGK9JsL7exqqUp
+         CylW3oiyTdlQYKAc1v79ZYICGsSo6Af5efCs8HcFETdvxB59WcLPxz1eKipHcRZXrJls
+         k+IRJFfe+JzBKCKyPToDq0PbNzlJBS/EzdEGgBq4+xvpxjOU7cjikl1EH5h/Ir597TJD
+         NBsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rCYG7t1izN/gOyqR3UaPefTWs3YwGVtAE/HZuYn9Rfc=;
-        b=6h341Xz0Omgjiwh3+S1A3yafWrPsp/QTjJnVJwqDQH1ZXFVWFjLZl82C92oDPUYYuE
-         K81MB6M7m2LHNKcfjn6y4Pqs+0i0xTQljM61Zjv6STj6amnfIreB7kQamCFdqjAGWq8s
-         41687W/BaDO9UUwEpkqk1z6WwGdX4UhqcrnLMQlr4l5XZOZ6X1pLRPubV9q8Vor1NwCL
-         bpXmE2l1qQgZEQZvx9wjsnb/801VX213NsmDkypRj+OjELOsbLiwRWYsjnghSRXwYKdF
-         NL5uf5v05cKFm0ciTtbKaAiuVaSSjVlED9lKV8QQm4p7QjM9Aon9+O1OZlnjCGsIb8ZW
-         G9rw==
-X-Gm-Message-State: ANoB5pnZLXeprthjPRZT3PYQbYM/xwuY5WgzDV/S7u357I2ke0qrCcmM
-        y2me5DtFkdYUQ5mB41X7LSL3BW0KhkmUKPleujBtXg==
-X-Google-Smtp-Source: AA0mqf7MRvG+Qj2JseT+Qj2IY04GU3ehuu2j+6yoRs/z0TWbsGNO6utzwcWxYija4unhyYJGQ57ZKqf8K83fjcrrTnQ=
-X-Received: by 2002:a17:906:8383:b0:7c1:19ea:dda with SMTP id
- p3-20020a170906838300b007c119ea0ddamr8979778ejx.31.1671453314287; Mon, 19 Dec
- 2022 04:35:14 -0800 (PST)
+        bh=g6Me+DBgXsfmWJ38qvhXvaW8D2IHQSt5hD0RyNkeY+E=;
+        b=hYzaVnmg6vOW12PyAcCJN1ECPIkgIZcPi2zPkofjfbcfPM/af+ChRP1IDSUey7npVV
+         V1a6ifI53WIkoCsDTiEb5ZG3Zab23Ks8rPlfzmBtlyRjv7yhHVU1zSb1mR1TA6kEUpcQ
+         z3kPOW1BSJ4FL9gSHn0dB0cfuOWc/WHR+hwK5ErctTagx4H755ix9BUpv8jQ/KAMSnpq
+         T0YgNbp7qAl8X/5qJdwT9BCMu1jEe+Ewc0GedvkUXjDoprFrMnOaC4WNAybnhEHuuBRs
+         htww0kW5QQNQlNCUfsInVST6aluFc7cK+eEDwcKE7t89rhO0gKKGH3IUAJIvEHqf4y4h
+         HYpg==
+X-Gm-Message-State: ANoB5pmYEDVTDXIjBeaFxuW6wnt/pd75oMtp2OMH5PoiXoECdShLO4tA
+        feiM8tWEIqV5zoGIemhpp8s=
+X-Google-Smtp-Source: AA0mqf6vMOah2sbZeg/1NiD8YhY9MhtmRUuiQH47Q6PH9S1K2RoxJihHwKH0XUJ+kL73L1RK3y+kJQ==
+X-Received: by 2002:a7b:c053:0:b0:3cf:7385:677f with SMTP id u19-20020a7bc053000000b003cf7385677fmr32578116wmc.35.1671453475410;
+        Mon, 19 Dec 2022 04:37:55 -0800 (PST)
+Received: from lucifer.home ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.googlemail.com with ESMTPSA id j41-20020a05600c1c2900b003b4ff30e566sm36554330wms.3.2022.12.19.04.37.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 04:37:54 -0800 (PST)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Baoquan He <bhe@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH v2] mm: vmalloc: correct use of __GFP_NOWARN mask in __vmalloc_area_node()
+Date:   Mon, 19 Dec 2022 12:36:59 +0000
+Message-Id: <20221219123659.90614-1-lstoakes@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20221002064540.2500257-1-michael@amarulasolutions.com>
-In-Reply-To: <20221002064540.2500257-1-michael@amarulasolutions.com>
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Mon, 19 Dec 2022 13:35:02 +0100
-Message-ID: <CAOf5uw=2zjki8DEkgvDTKrj6V=FS44Z1WN3AvFZvzuN-MU_y4Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/4] Add RGB ttl connection on rockchip phy
-To:     Sandy Huang <hjc@rock-chips.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-amarula@amarulasolutions.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all
+This function sets __GFP_NOWARN in the gfp_mask rendering the warn_alloc()
+invocations no-ops. Remove this and instead rely on this flag being set
+only for the vm_area_alloc_pages() function, ensuring it is cleared for
+each of the warn_alloc() calls.
 
-On Sun, Oct 2, 2022 at 8:45 AM Michael Trimarchi
-<michael@amarulasolutions.com> wrote:
->
-> The rockchip phy can be convigured in ttl mode. The phy is shared
-> between lvds, dsi, ttl. The configuration that now I'm able to support
-> has the display output on some set of pins on standard vop output
-> and a set of pins using the ttl phy. The solution is not clean as I
-> would like to have because some register that are used to enable
-> the TTL, are in the same register area of the dsi controller.
-> In order to test I must add the following
->
-> dsi_dphy: phy@ff2e0000 {
->
->         reg = <0x0 0xff2e0000 0x0 0x10000>,
->                 <0x0 0xff450000 0x0 0x10000>;
->         ...
-> }
->
-> The problem here is the second region I have added is the same of
-> dsi logic. Only one register is needed by the the phy driver
->
+Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+---
+ mm/vmalloc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Is there anyone who has time to review it?
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index ca71de7c9d77..10fe83c24436 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -3031,7 +3031,7 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
+ 	int ret;
 
-Michael
+ 	array_size = (unsigned long)nr_small_pages * sizeof(struct page *);
+-	gfp_mask |= __GFP_NOWARN;
++
+ 	if (!(gfp_mask & (GFP_DMA | GFP_DMA32)))
+ 		gfp_mask |= __GFP_HIGHMEM;
 
-> Michael Trimarchi (4):
->   phy: add PHY_MODE_TTL
->   phy: rockchip: Add inno_is_valid_phy_mode
->   phy: rockchip: Implement TTY phy mode
->   drm/rockchip: rgb: Add dphy connection to rgb output
->
->  drivers/gpu/drm/rockchip/rockchip_rgb.c       | 18 +++++
->  .../phy/rockchip/phy-rockchip-inno-dsidphy.c  | 72 +++++++++++++++++++
->  include/linux/phy/phy.h                       |  3 +-
->  3 files changed, 92 insertions(+), 1 deletion(-)
->
-> --
-> 2.34.1
->
-
-
--- 
-Michael Nazzareno Trimarchi
-Co-Founder & Chief Executive Officer
-M. +39 347 913 2170
-michael@amarulasolutions.com
-__________________________________
-
-Amarula Solutions BV
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-T. +31 (0)85 111 9172
-info@amarulasolutions.com
-www.amarulasolutions.com
+--
+2.39.0
