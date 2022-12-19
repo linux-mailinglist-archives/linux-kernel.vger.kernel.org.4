@@ -2,163 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58023650B12
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4728B650B11
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbiLSMCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 07:02:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
+        id S231136AbiLSMBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 07:01:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbiLSMBV (ORCPT
+        with ESMTP id S231686AbiLSMA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 07:01:21 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DDEFD2E
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 04:00:36 -0800 (PST)
-Received: from kwepemm600017.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NbJCh25zJzmWkD;
-        Mon, 19 Dec 2022 19:59:28 +0800 (CST)
-Received: from ubuntu.huawei.com (10.175.112.125) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 19 Dec 2022 20:00:32 +0800
-From:   Tong Tiangen <tongtiangen@huawei.com>
-To:     Mark Rutland <mark.rutland@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Tong Tiangen <tongtiangen@huawei.com>
-Subject: [PATCH -next v8 0/4]arm64: add machine check safe support
-Date:   Mon, 19 Dec 2022 12:00:04 +0000
-Message-ID: <20221219120008.3818828-1-tongtiangen@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 19 Dec 2022 07:00:59 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F924FCFE;
+        Mon, 19 Dec 2022 04:00:14 -0800 (PST)
+Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: lukma@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 13364839D5;
+        Mon, 19 Dec 2022 13:00:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1671451212;
+        bh=7Tc08O5/QSZU9JKvbwkVI7bh4NdF+iLSTXKKDKKb9+I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FIrpeZz0t4AmQgZz1wwK6gVNwP0i0bnsweCmFKA8xLVCdqRCkB4wNKYDigrokRJHv
+         eqL8iXcu7SRq1bJGFy1Gyfzj1+p1Lc6qwC+ImrMOOX6HNgiYX3BBVOKXR+btocEDtQ
+         +JgtvF/ioC01E+HujxsDwrHEYeCuAqu1oRIM4RdjRo/7lc4HNpaX1ZWJ5DZOaHnWOD
+         yQOVNi6BcP0r/TLVw7kRzQ4huAInstETGDTkP8P3iCz4WTdfSlr0yVHd9x1tAS5ix/
+         v8W5pgMhtPiXcOPUhFyqYA+NkexojHdLxzbXDYJm1IGPt6pOBgHjm/XmEaFF+7zXoC
+         2HgBnd/JKEfFw==
+Date:   Mon, 19 Dec 2022 13:00:05 +0100
+From:   Lukasz Majewski <lukma@denx.de>
+To:     Alexander Duyck <alexander.duyck@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dsa: marvell: Provide per device information
+ about max frame size
+Message-ID: <20221219130005.6e995cb0@wsk>
+In-Reply-To: <CAKgT0Udm6s8Wib1dFp6f4yVhdMm62-4kjetYSucLr-Ruyg7-yg@mail.gmail.com>
+References: <20221215144536.3810578-1-lukma@denx.de>
+        <4d16ffd327d193f8c1f7c40f968fda90a267348e.camel@gmail.com>
+        <20221216140526.799bd82f@wsk>
+        <CAKgT0Udm6s8Wib1dFp6f4yVhdMm62-4kjetYSucLr-Ruyg7-yg@mail.gmail.com>
+Organization: denx.de
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/7XCBTm3tbk2vu6GHzeVhVz3";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the increase of memory capacity and density, the probability of
-memory error increases. The increasing size and density of server RAM
-in the data center and cloud have shown increased uncorrectable memory
-errors.
+--Sig_/7XCBTm3tbk2vu6GHzeVhVz3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Currently, the kernel has a mechanism to recover from hardware memory
-errors. This patchset provides an new recovery mechanism.
+Hi Alexander,
 
-For arm64, the hardware memory error handling is do_sea() which divided
-into two cases:
- 1. The user state consumed the memory errors, the solution is kill the
-    user process and isolate the error page.
- 2. The kernel state consumed the memory errors, the solution is panic.
+> On Fri, Dec 16, 2022 at 5:05 AM Lukasz Majewski <lukma@denx.de> wrote:
+> >
+> > Hi Alexander,
+> > =20
+> > > On Thu, 2022-12-15 at 15:45 +0100, Lukasz Majewski wrote: =20
+> > > > Different Marvell DSA switches support different size of max
+> > > > frame bytes to be sent.
+> > > >
+> > > > For example mv88e6185 supports max 1632 bytes, which is now
+> > > > in-driver standard value. On the other hand - mv88e6250 supports
+> > > > 2048 bytes.
+> > > >
+> > > > As this value is internal and may be different for each switch
+> > > > IC, new entry in struct mv88e6xxx_info has been added to store
+> > > > it.
+> > > >
+> > > > Signed-off-by: Lukasz Majewski <lukma@denx.de>
+> > > > ---
+> > > > Changes for v2:
+> > > > - Define max_frame_size with default value of 1632 bytes,
+> > > > - Set proper value for the mv88e6250 switch SoC (linkstreet)
+> > > > family ---
+> > > >  drivers/net/dsa/mv88e6xxx/chip.c | 13 ++++++++++++-
+> > > >  drivers/net/dsa/mv88e6xxx/chip.h |  1 +
+> > > >  2 files changed, 13 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/net/dsa/mv88e6xxx/chip.c
+> > > > b/drivers/net/dsa/mv88e6xxx/chip.c index
+> > > > 2ca3cbba5764..7ae4c389ce50 100644 ---
+> > > > a/drivers/net/dsa/mv88e6xxx/chip.c +++
+> > > > b/drivers/net/dsa/mv88e6xxx/chip.c @@ -3093,7 +3093,9 @@ static
+> > > > int mv88e6xxx_get_max_mtu(struct dsa_switch *ds, int port) if
+> > > > (chip->info->ops->port_set_jumbo_size) return 10240 -
+> > > > VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN; else if
+> > > > (chip->info->ops->set_max_frame_size)
+> > > > -           return 1632 - VLAN_ETH_HLEN - EDSA_HLEN -
+> > > > ETH_FCS_LEN;
+> > > > +           return (chip->info->max_frame_size  - VLAN_ETH_HLEN
+> > > > +                   - EDSA_HLEN - ETH_FCS_LEN);
+> > > > +
+> > > >     return 1522 - VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN;
+> > > >  }
+> > > >
+> > > > =20
+> > >
+> > > Is there any specific reason for triggering this based on the
+> > > existance of the function call? =20
+> >
+> > This was the original code in this driver.
+> >
+> > This value (1632 or 2048 bytes) is SoC (family) specific.
+> >
+> > By checking which device defines set_max_frame_size callback, I
+> > could fill the chip->info->max_frame_size with 1632 value.
+> > =20
+> > > Why not just replace:
+> > >       else if (chip->info->ops->set_max_frame_size)
+> > > with:
+> > >       else if (chip->info->max_frame_size)
+> > > =20
+> >
+> > I think that the callback check is a bit "defensive" approach ->
+> > 1522B is the default value and 1632 (or 10240 - jumbo) can be set
+> > only when proper callback is defined.
+> > =20
+> > > Otherwise my concern is one gets defined without the other
+> > > leading to a future issue as 0 - extra headers will likely wrap
+> > > and while the return value may be a signed int, it is usually
+> > > stored in an unsigned int so it would effectively uncap the MTU. =20
+> >
+> > Please correct me if I misunderstood something:
+> >
+> > The problem is with new mv88eXXXX devices, which will not provide
+> > max_frame_size information to their chip->info struct?
+> >
+> > Or is there any other issue? =20
+>=20
+> That was mostly my concern. I was adding a bit of my own defensive
+> programming in the event that somebody forgot to fill out the
+> chip->info. If nothing else it might make sense to add a check to
+> verify that the max_frame_size is populated before blindly using it.
+> So perhaps you could do something similar to the max_t approach I had
+> called out earlier but instead of applying it on the last case you
+> could apply it for the "set_max_frame_size" case with 1632 being the
+> minimum and being overwritten by 2048 if it is set in max_frame_size.
 
-For case 2, Undifferentiated panic maybe not the optimal choice, it can
-be handled better, in some scenarios, we can avoid panic, such as
-uaccess, if the uaccess fails due to memory error, only the user
-process will be affected, kill the user process and isolate the user
-page with hardware memory errors is a better choice.
+I think that I shall add:
 
-Since V7:
- Currently, there are patches supporting recover from poison
- consumption for the cow scenario[1]. Therefore, Supporting cow
- scenario under the arm64 architecture only needs to modify the relevant
- code under the arch/.
- [1]https://lore.kernel.org/lkml/20221031201029.102123-1-tony.luck@intel.com/
+else if (chip->info->ops->set_max_frame_size)
+	return max_t(int, chip->info->max_frame_size, 1632) - (headers)
 
-Since V6:
- Resend patches that are not merged into the mainline in V6.
+So then the "default" value of 1632 will be overwritten by 2048 bytes.
 
-Since V5:
- 1. Add patch2/3 to add uaccess assembly helpers.
- 2. Optimize the implementation logic of arm64_do_kernel_sea() in patch8.
- 3. Remove kernel access fixup in patch9.
- All suggestion are from Mark. 
 
-Since V4:
- 1. According Michael's suggestion, add patch5.
- 2. According Mark's suggestiog, do some restructuring to arm64
- extable, then a new adaptation of machine check safe support is made based
- on this.
- 3. According Mark's suggestion, support machine check safe in do_mte() in
- cow scene.
- 4. In V4, two patches have been merged into -next, so V5 not send these
- two patches.
+Best regards,
 
-Since V3:
- 1. According to Robin's suggestion, direct modify user_ldst and
- user_ldp in asm-uaccess.h and modify mte.S.
- 2. Add new macro USER_MC in asm-uaccess.h, used in copy_from_user.S
- and copy_to_user.S.
- 3. According to Robin's suggestion, using micro in copy_page_mc.S to
- simplify code.
- 4. According to KeFeng's suggestion, modify powerpc code in patch1.
- 5. According to KeFeng's suggestion, modify mm/extable.c and some code
- optimization.
+Lukasz Majewski
 
-Since V2:
- 1. According to Mark's suggestion, all uaccess can be recovered due to
-    memory error.
- 2. Scenario pagecache reading is also supported as part of uaccess
-    (copy_to_user()) and duplication code problem is also solved. 
-    Thanks for Robin's suggestion.
- 3. According Mark's suggestion, update commit message of patch 2/5.
- 4. According Borisllav's suggestion, update commit message of patch 1/5.
+--
 
-Since V1:
- 1.Consistent with PPC/x86, Using CONFIG_ARCH_HAS_COPY_MC instead of
-   ARM64_UCE_KERNEL_RECOVERY.
- 2.Add two new scenes, cow and pagecache reading.
- 3.Fix two small bug(the first two patch).
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
 
-V1 in here:
-https://lore.kernel.org/lkml/20220323033705.3966643-1-tongtiangen@huawei.com/
+--Sig_/7XCBTm3tbk2vu6GHzeVhVz3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Tong Tiangen (4):
-  uaccess: add generic fallback version of copy_mc_to_user()
-  arm64: add support for machine check error safe
-  arm64: add uaccess to machine check safe
-  arm64: add cow to machine check safe
+-----BEGIN PGP SIGNATURE-----
 
- arch/arm64/Kconfig                   |  1 +
- arch/arm64/include/asm/asm-extable.h |  5 ++
- arch/arm64/include/asm/assembler.h   |  4 ++
- arch/arm64/include/asm/extable.h     |  1 +
- arch/arm64/include/asm/mte.h         |  4 ++
- arch/arm64/include/asm/page.h        | 10 ++++
- arch/arm64/lib/Makefile              |  2 +
- arch/arm64/lib/copy_mc_page.S        | 82 ++++++++++++++++++++++++++++
- arch/arm64/lib/mte.S                 | 19 +++++++
- arch/arm64/mm/copypage.c             | 42 ++++++++++++--
- arch/arm64/mm/extable.c              | 25 +++++++++
- arch/arm64/mm/fault.c                | 29 +++++++++-
- arch/powerpc/include/asm/uaccess.h   |  1 +
- arch/x86/include/asm/uaccess.h       |  1 +
- include/linux/highmem.h              |  2 +
- include/linux/uaccess.h              |  9 +++
- 16 files changed, 230 insertions(+), 7 deletions(-)
- create mode 100644 arch/arm64/lib/copy_mc_page.S
+iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmOgUkUACgkQAR8vZIA0
+zr0IIgf8DFwX5ALMURFb3pBxRfxtz7QWbOAhFlH5dZMui438mh4Yt8vRsW05YSm0
+JT82EGxvq+o9XaCZh+7zIRtXa/gRJwOBnIYZ3Ouz/JDVAkLPd/qEbeilIlNVw9YU
+apvXST3vFR8O6GxwoT7zZhT/rK6lVhIzhmpEZXzuIOXXPKW26aQL+llHeTAN1/ha
+rJ9MS0bPgScyUQzZb/SbqhgCrDPPk8GfO7bhOQl8/8wzRiwmEqeTZFH72bXbIh60
+mMFJFzXeigGRoAia3R/zioa4er7/6licKMhKiUyeOM4hMjxn5FKQteCnJVhsdCAZ
+yHcrIXTWMYjtg/WGeUYoWohcD9DliQ==
+=gxDE
+-----END PGP SIGNATURE-----
 
--- 
-2.25.1
-
+--Sig_/7XCBTm3tbk2vu6GHzeVhVz3--
