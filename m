@@ -2,156 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6659D651352
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F41651355
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232400AbiLSTdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 14:33:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
+        id S232598AbiLSTdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 14:33:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbiLSTc5 (ORCPT
+        with ESMTP id S230091AbiLSTdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 14:32:57 -0500
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F5312ABC;
-        Mon, 19 Dec 2022 11:32:56 -0800 (PST)
+        Mon, 19 Dec 2022 14:33:33 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3250F12ABE
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 11:33:32 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id a5-20020a25af05000000b006e450a5e507so11930239ybh.22
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 11:33:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1671478377; x=1703014377;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=XMs52eEwrpr6t8/OSw+Ha1zLO68AAU5IDolZMANPZLg=;
-  b=rlBmxt9ksRLT4sO5l1DifhKTLRf4y9JZEtnCcNxSPt1Gso6VPOw/7e9J
-   uV6MPmMTIjWflUq5ttOm4ExFc3fOHyvCvj5MSxfUqvu+qAMJ2iiqVDkDv
-   j6xahN3Ijr9t1IwbGtF73cSqAZOjOXlprv91hL8AMKQ4R4AvvqiM1rM6F
-   0=;
-X-IronPort-AV: E=Sophos;i="5.96,257,1665446400"; 
-   d="scan'208";a="275020458"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-3ef535ca.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 19:32:54 +0000
-Received: from EX13D21EUA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-m6i4x-3ef535ca.us-west-2.amazon.com (Postfix) with ESMTPS id 49DFB60A0E;
-        Mon, 19 Dec 2022 19:32:51 +0000 (UTC)
-Received: from EX19D019EUA002.ant.amazon.com (10.252.50.84) by
- EX13D21EUA001.ant.amazon.com (10.43.165.41) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Mon, 19 Dec 2022 19:32:50 +0000
-Received: from dev-dsk-hhhawa-1b-84e0d7ff.eu-west-1.amazon.com (10.43.160.83)
- by EX19D019EUA002.ant.amazon.com (10.252.50.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.20; Mon, 19 Dec 2022 19:32:45 +0000
-From:   Hanna Hawa <hhhawa@amazon.com>
-To:     <wsa@kernel.org>, <linus.walleij@linaro.org>,
-        <andriy.shevchenko@linux.intel.com>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
-CC:     <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
-        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <farbere@amazon.com>, <itamark@amazon.com>, <hhhawa@amazon.com>
-Subject: [PATCH v3 1/1] i2c: Set pinctrl recovery info to device pinctrl
-Date:   Mon, 19 Dec 2022 19:32:28 +0000
-Message-ID: <20221219193228.35078-1-hhhawa@amazon.com>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.160.83]
-X-ClientProxiedBy: EX13D28UWC003.ant.amazon.com (10.43.162.48) To
- EX19D019EUA002.ant.amazon.com (10.252.50.84)
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1BXl9vy0f2f/11VKxHLckXglqOMtK0anh34YjL4SpoA=;
+        b=gglIK/h4ez0+aqt1O+U+ScB+Bh/FoHfv+OJW2X6p/mpdxgf9sq0WpIXhUJ5u7bEa4H
+         10mjJki54ttBlnuEVGRrt4nfvk3DPFYhdmDXX9JB4EHkXVknVwm2r+YbixMYY8N6UZas
+         5vXteQ+W/jinCVg1i3jH3Sq6GdLGbtJiJEgL0VHwTnjBd1sEoZok1EKLr4pFYMROU+p0
+         YYRYQlwDq4TmyqJr6mbWUEz8O0t2eI0OU1/lIEPwriuBAiJG2+lZYudkRgiaKxtj40mh
+         nzufqCnqhxprw5h6I+7GHHOA9d0zJQesZdwXXEQXREzaIOdk4g+/4kVnus4E4cmOz0rr
+         e0cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1BXl9vy0f2f/11VKxHLckXglqOMtK0anh34YjL4SpoA=;
+        b=nykCQRm0Xa9MXBQI+/4DwfmrCbMl3cy3YMb61gbNWkdZR/XGzPvj6p3nwwRRCGYqGm
+         8wd08CchTtKB6bbxhF/vTi3Db7B8VaoGh5GhQBJ93ecNq52IdR58TvOQTDmg9Xqck70i
+         CKwpdvv5JTocRtj36YScTasJaluVZ7pCxMtQwesDxt6L0A+2WNm0jlILwPaCfsFi6HEw
+         8doVAqxwz+mUwbBevPrT9O+RgcYMgKRRY/T/Av4SLMvyQpJKNDim67OjhFTeFvJBnEIv
+         ++NtAzHCcPt7snB1MT+doma2xCnwvIgxsam9o6w+eM40/TuJkkZv/v5crGeomITj9kpS
+         4btg==
+X-Gm-Message-State: ANoB5pkbmIll0EzJ3cZ5KzYSXOCL1FFBE6jEraPpJku7PgX3pKU9nDSX
+        /P47HWmDM7LVWOKdes07rtvmt1E=
+X-Google-Smtp-Source: AA0mqf7Icw3UnigDaLBzU7ImBfrwnGJPUr76c1EwJr94knLZ93lfIm35xMaxZVPdh0LFftWlP4RFSck=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a25:b885:0:b0:701:49ca:8ae8 with SMTP id
+ w5-20020a25b885000000b0070149ca8ae8mr21490186ybj.553.1671478411506; Mon, 19
+ Dec 2022 11:33:31 -0800 (PST)
+Date:   Mon, 19 Dec 2022 11:33:29 -0800
+In-Reply-To: <Y6B3xEgkbmFUCeni@hirez.programming.kicks-ass.net>
+Mime-Version: 1.0
+References: <000000000000a20a2e05f029c577@google.com> <Y6B3xEgkbmFUCeni@hirez.programming.kicks-ass.net>
+Message-ID: <Y6C8iQGENUk/XY/A@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in put_pmu_ctx
+From:   sdf@google.com
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     syzbot <syzbot+b8e8c01c8ade4fe6e48f@syzkaller.appspotmail.com>,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        bpf@vger.kernel.org, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the i2c subsystem rely on the controller device tree to
-initialize the pinctrl recovery information, part of the drivers does
-not set this field (rinfo->pinctrl), for example i2c designware driver.
+On 12/19, Peter Zijlstra wrote:
+> On Mon, Dec 19, 2022 at 12:04:43AM -0800, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    13e3c7793e2f Merge tag 'for-netdev' of  
+> https://git.kernel...
+> > git tree:       bpf
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=177df7e0480000
+> > kernel config:   
+> https://syzkaller.appspot.com/x/.config?x=b0e91ad4b5f69c47
+> > dashboard link:  
+> https://syzkaller.appspot.com/bug?extid=b8e8c01c8ade4fe6e48f
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU  
+> Binutils for Debian) 2.35.2
+> > syz repro:       
+> https://syzkaller.appspot.com/x/repro.syz?x=15e87100480000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ceeb13880000
+> >
+> > Downloadable assets:
+> > disk image:  
+> https://storage.googleapis.com/syzbot-assets/373a99daa295/disk-13e3c779.raw.xz
+> > vmlinux:  
+> https://storage.googleapis.com/syzbot-assets/7fa71ed0fe17/vmlinux-13e3c779.xz
+> > kernel image:  
+> https://storage.googleapis.com/syzbot-assets/2842ad5c698b/bzImage-13e3c779.xz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the  
+> commit:
+> > Reported-by: syzbot+b8e8c01c8ade4fe6e48f@syzkaller.appspotmail.com
+> >
+> > ==================================================================
+> > BUG: KASAN: use-after-free in __lock_acquire+0x3ee7/0x56d0  
+> kernel/locking/lockdep.c:4925
+> > Read of size 8 at addr ffff8880237d6018 by task syz-executor287/8300
+> >
+> > CPU: 0 PID: 8300 Comm: syz-executor287 Not tainted  
+> 6.1.0-syzkaller-09661-g13e3c7793e2f #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+> Google 10/26/2022
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+> >  print_address_description mm/kasan/report.c:284 [inline]
+> >  print_report+0x15e/0x45d mm/kasan/report.c:395
+> >  kasan_report+0xbf/0x1f0 mm/kasan/report.c:495
+> >  __lock_acquire+0x3ee7/0x56d0 kernel/locking/lockdep.c:4925
+> >  lock_acquire kernel/locking/lockdep.c:5668 [inline]
+> >  lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+> >  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+> >  _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
+> >  put_pmu_ctx kernel/events/core.c:4913 [inline]
+> >  put_pmu_ctx+0xad/0x390 kernel/events/core.c:4893
+> >  _free_event+0x3c5/0x13d0 kernel/events/core.c:5196
+> >  free_event+0x58/0xc0 kernel/events/core.c:5224
+> >  __do_sys_perf_event_open+0x66d/0x2980 kernel/events/core.c:12701
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-The pins information is saved part of the device structure before probe
-and it's done on pinctrl_bind_pins().
+> Does this help?
 
-Make the i2c init recovery to get the device pins if it's not
-initialized by the driver from the device pins.
+Let's maybe try it this way:
 
-Added new API to get the device pinctrl.
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git  
+13e3c7793e2f
 
-Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index e47914ac8732..bbff551783e1 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -12689,7 +12689,8 @@ SYSCALL_DEFINE5(perf_event_open,
+  	return event_fd;
 
-Change Log v2->v3:
-- Add API to get the device pinctrl
-- Make the i2c init recovery to get the device pins
-
-Change Log v1->v2:
-- set the rinfo->pinctrl to dev->pins->p instead calling
-  devm_pinctrl_get()
----
- drivers/i2c/i2c-core-base.c     |  7 ++++++-
- include/linux/pinctrl/devinfo.h | 11 +++++++++++
- 2 files changed, 17 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 7539b0740351..17eecdcf1cb2 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -34,6 +34,7 @@
- #include <linux/of.h>
- #include <linux/of_irq.h>
- #include <linux/pinctrl/consumer.h>
-+#include <linux/pinctrl/devinfo.h>
- #include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
- #include <linux/pm_wakeirq.h>
-@@ -282,7 +283,11 @@ static void i2c_gpio_init_pinctrl_recovery(struct i2c_adapter *adap)
- {
- 	struct i2c_bus_recovery_info *bri = adap->bus_recovery_info;
- 	struct device *dev = &adap->dev;
--	struct pinctrl *p = bri->pinctrl;
-+	struct pinctrl *p;
-+
-+	if (!bri->pinctrl)
-+		bri->pinctrl = dev_pinctrl(dev->parent);
-+	p = bri->pinctrl;
- 
- 	/*
- 	 * we can't change states without pinctrl, so remove the states if
-diff --git a/include/linux/pinctrl/devinfo.h b/include/linux/pinctrl/devinfo.h
-index a48ff69acddd..5c00ee115528 100644
---- a/include/linux/pinctrl/devinfo.h
-+++ b/include/linux/pinctrl/devinfo.h
-@@ -17,6 +17,7 @@
- #ifdef CONFIG_PINCTRL
- 
- /* The device core acts as a consumer toward pinctrl */
-+#include <linux/device.h>
- #include <linux/pinctrl/consumer.h>
- 
- /**
-@@ -40,6 +41,11 @@ struct dev_pin_info {
- extern int pinctrl_bind_pins(struct device *dev);
- extern int pinctrl_init_done(struct device *dev);
- 
-+static inline struct pinctrl *dev_pinctrl(struct device *dev)
-+{
-+	return dev->pins && dev->pins->p ? dev->pins->p : NULL;
-+}
-+
- #else
- 
- struct device;
-@@ -56,5 +62,10 @@ static inline int pinctrl_init_done(struct device *dev)
- 	return 0;
- }
- 
-+static inline struct pinctrl *get_device_pinctrl(struct device *dev)
-+{
-+	return NULL;
-+}
-+
- #endif /* CONFIG_PINCTRL */
- #endif /* PINCTRL_DEVINFO_H */
--- 
-2.38.1
-
+  err_context:
+-	/* event->pmu_ctx freed by free_event() */
++	put_pmu_ctx(event->pmu_ctx);
++	event->pmu_ctx = NULL; /* _free_event() */
+  err_locked:
+  	mutex_unlock(&ctx->mutex);
+  	perf_unpin_context(ctx);
