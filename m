@@ -2,139 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3185C650EB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 495F5650EBC
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 16:38:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbiLSPhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 10:37:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
+        id S232249AbiLSPin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 10:38:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiLSPhX (ORCPT
+        with ESMTP id S229781AbiLSPik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 10:37:23 -0500
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA91FCE2;
-        Mon, 19 Dec 2022 07:37:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1671464241; x=1703000241;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9p+mxbd5kh6SOfLyESUFNEms88GQjCAKJPms8yWVsvk=;
-  b=oMQV3JCJM7WJ12K6f01S4tuvmp5Z6DYNPivvPll4s4vCaM542QfpRKuZ
-   PgdUWXgJDtHvU4dtjh8+E0mf6Se1u8fsKqJrTc10X50/a/3SNm0eTCBgE
-   8MUWnS/aikUQmlwM8+CocSLtQSg5cwvrsvCRwQkNlHR4tFUuZ3gnxxlaA
-   s=;
-X-IronPort-AV: E=Sophos;i="5.96,255,1665446400"; 
-   d="scan'208";a="280451857"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-0ec33b60.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 15:37:16 +0000
-Received: from EX13D31EUA004.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-0ec33b60.us-west-2.amazon.com (Postfix) with ESMTPS id 3DFD6A2BBC;
-        Mon, 19 Dec 2022 15:37:15 +0000 (UTC)
-Received: from EX19D008EUA004.ant.amazon.com (10.252.50.158) by
- EX13D31EUA004.ant.amazon.com (10.43.165.161) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Mon, 19 Dec 2022 15:37:14 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX19D008EUA004.ant.amazon.com (10.252.50.158) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.20;
- Mon, 19 Dec 2022 15:37:13 +0000
-Received: from dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (10.15.11.255)
- by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP Server id
- 15.0.1497.42 via Frontend Transport; Mon, 19 Dec 2022 15:37:12 +0000
-Received: by dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (Postfix, from userid 23027615)
-        id A716920D70; Mon, 19 Dec 2022 16:37:11 +0100 (CET)
-From:   Pratyush Yadav <ptyadav@amazon.de>
-To:     <stable@vger.kernel.org>
-CC:     Pratyush Yadav <ptyadav@amazon.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wei Liu <wei.liu@kernel.org>, Paul Durrant <paul@xen.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Sasha Levin" <sashal@kernel.org>, Puranjay Mohan <pjy@amazon.de>,
-        Maximilian Heyne <mheyne@amazon.de>,
-        Julien Grall <julien@xen.org>,
-        <xen-devel@lists.xenproject.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 5.4] xen-netback: move removal of "hotplug-status" to the right place
-Date:   Mon, 19 Dec 2022 16:37:10 +0100
-Message-ID: <20221219153710.23782-1-ptyadav@amazon.de>
-X-Mailer: git-send-email 2.38.1
+        Mon, 19 Dec 2022 10:38:40 -0500
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959268FD4;
+        Mon, 19 Dec 2022 07:38:39 -0800 (PST)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1322d768ba7so11952440fac.5;
+        Mon, 19 Dec 2022 07:38:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vOiCy0WjVxH8DVieLn08mRiczm9EV7y8BSE0KN+iAsY=;
+        b=DjxjbgqDIIrpkIVMc+4BESYvR89pi6HZNba9DDVg5hiBWLHxND+tlbjwJ+ogCLRtLO
+         duhMwYnWVfP/m2ChjmGM/6bPk62Y4Tp5Yi1mOwowE0dv9nSJapsJoLbAP/5tH4oq1Qhs
+         +jFzBA+UzprfVjp0W75l2MYm5GyndBeQebJOgcL9X97YYFJRxRsGteECRTtxHn1fe/DK
+         iUnxYsaEPBqfuakrnwJ07rnkwTSmEi7ssjSQW3Wq0f2FAOpyNwG1ayPHtGvM2EL1lJGb
+         MpDyS8F04WBmHqASNlWQatr7CCEbjbxj+bF1dELlz0+as+oaodnX7hxr7pbZiQS8HN4Z
+         p7PQ==
+X-Gm-Message-State: ANoB5pnpS6SrxBGWQNlGfmUeYLwNP1aL2gnW5EsBjWLPB3+kiNEIiOfB
+        MiUIdYx8i2YLyHPuFVJFsQ==
+X-Google-Smtp-Source: AA0mqf4x/VJvpocUXMYkW+FznjpJCn7AIX+ML2f8QWtAFUzzyWkj/yArsDdRcpF8jQ89ySsWI3scNA==
+X-Received: by 2002:a05:6871:784:b0:137:3adb:9149 with SMTP id o4-20020a056871078400b001373adb9149mr20697434oap.16.1671464318860;
+        Mon, 19 Dec 2022 07:38:38 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z21-20020a056870e31500b00148316f78fesm4870553oad.2.2022.12.19.07.38.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 07:38:38 -0800 (PST)
+Received: (nullmailer pid 1431223 invoked by uid 1000);
+        Mon, 19 Dec 2022 15:38:37 -0000
+Date:   Mon, 19 Dec 2022 09:38:37 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
+        bin.zhang@mediatek.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH v5 06/10] dt-bindings: spi: mtk-snfi: Add read latch
+ latency property
+Message-ID: <20221219153837.GA1426412-robh@kernel.org>
+References: <20221219024019.31974-1-xiangsheng.hou@mediatek.com>
+ <20221219024019.31974-7-xiangsheng.hou@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219024019.31974-7-xiangsheng.hou@mediatek.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The removal of "hotplug-status" has moved around a bit. First it was
-moved from netback_remove() to hotplug_status_changed() in upstream
-commit 1f2565780e9b ("xen-netback: remove 'hotplug-status' once it has
-served its purpose"). Then the change was reverted in upstream commit
-0f4558ae9187 ("Revert "xen-netback: remove 'hotplug-status' once it has
-served its purpose""), but it moved the removal to backend_disconnect().
-Then the upstream commit c55f34b6aec2 ("xen-netback: only remove
-'hotplug-status' when the vif is actually destroyed") moved it finally
-back to netback_remove(). The thing to note being it is removed
-unconditionally this time around.
+On Mon, Dec 19, 2022 at 10:40:15AM +0800, Xiangsheng Hou wrote:
+> Add mediatek,rx-latch-latency-ns property which adjust data read
+> latch latency in the unit of nanoseconds.
+> 
+> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml         | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+> index bab23f1b11fd..1e5e89a693c3 100644
+> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+> @@ -45,6 +45,9 @@ properties:
+>      description: device-tree node of the accompanying ECC engine.
+>      $ref: /schemas/types.yaml#/definitions/phandle
+>  
+> +  mediatek,rx-latch-latency-ns:
+> +    description: Data read latch latency, unit is nanoseconds.
 
-The story on v5.4.y adds to this confusion. Commit 60e4e3198ce8 ("Revert
-"xen-netback: remove 'hotplug-status' once it has served its purpose"")
-is backported to v5.4.y but the original commit that it tries to revert
-was never present on 5.4. So the backport incorrectly ends up just
-adding another xenbus_rm() of "hotplug-status" in backend_disconnect().
+Doesn't the common 'rx-sample-delay-ns' work for you?
 
-Now in v5.4.y it is removed in both backend_disconnect() and
-netback_remove(). But it should only be removed in netback_remove(), as
-the upstream version does.
-
-Removing "hotplug-status" in backend_disconnect() causes problems when
-the frontend unilaterally disconnects, as explained in
-c55f34b6aec2 ("xen-netback: only remove 'hotplug-status' when the vif is
-actually destroyed").
-
-Remove "hotplug-status" in the same place as it is done on the upstream
-version to ensure unilateral re-connection of frontend continues to
-work.
-
-Fixes: 60e4e3198ce8 ("Revert "xen-netback: remove 'hotplug-status' once it has served its purpose"")
-Signed-off-by: Pratyush Yadav <ptyadav@amazon.de>
----
- drivers/net/xen-netback/xenbus.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/net/xen-netback/xenbus.c b/drivers/net/xen-netback/xenbus.c
-index 44e353dd2ba1..43bd881ab3dd 100644
---- a/drivers/net/xen-netback/xenbus.c
-+++ b/drivers/net/xen-netback/xenbus.c
-@@ -202,10 +202,10 @@ static int netback_remove(struct xenbus_device *dev)
- 	set_backend_state(be, XenbusStateClosed);
-
- 	unregister_hotplug_status_watch(be);
-+	xenbus_rm(XBT_NIL, dev->nodename, "hotplug-status");
- 	if (be->vif) {
- 		kobject_uevent(&dev->dev.kobj, KOBJ_OFFLINE);
- 		xen_unregister_watchers(be->vif);
--		xenbus_rm(XBT_NIL, dev->nodename, "hotplug-status");
- 		xenvif_free(be->vif);
- 		be->vif = NULL;
- 	}
-@@ -435,7 +435,6 @@ static void backend_disconnect(struct backend_info *be)
- 		unsigned int queue_index;
-
- 		xen_unregister_watchers(vif);
--		xenbus_rm(XBT_NIL, be->dev->nodename, "hotplug-status");
- #ifdef CONFIG_DEBUG_FS
- 		xenvif_debugfs_delif(vif);
- #endif /* CONFIG_DEBUG_FS */
---
-2.38.1
-
+Rob
