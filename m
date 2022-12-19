@@ -2,154 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836D36514C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 22:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7314D6514C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 22:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbiLSVWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 16:22:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
+        id S232023AbiLSVXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 16:23:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbiLSVWg (ORCPT
+        with ESMTP id S229690AbiLSVXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 16:22:36 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DBF13F3D;
-        Mon, 19 Dec 2022 13:22:34 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id v3so7061109pgh.4;
-        Mon, 19 Dec 2022 13:22:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LZ6E54gQso9A3AZTU5M12wLSIgrxkuCsiZqbTjl9O+k=;
-        b=l3qDTyq/WO1/cjtxD3IaspFo1xRvEv77I/YPtlYY0faD0+9e55S301Keu5ZRn2BOAJ
-         /06AfNo/vBoHZij1MSCG6Uv5+1+IiiBAgy2JIhC7QTpbMY0cZlMcpdNFXzr6mc4GHd2n
-         d2rHms6UaQeM/CfhVjMj5K5PTDHw9ItNUw8UjI+cv9LXwbrIi5iIogfGJOkiUHCkBSxG
-         3wkE9PfNcCfJoosdjppXgb4kwVXjOvgse+8quW9q5UjKI65S7hmjNgYCLObocfy4UJdu
-         Y76S2/ind4Za8KgctFd1vblXIyRGQOhfNIEqIcwMDe9VPC82QSRH+yLCio90FvmxMza4
-         auhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LZ6E54gQso9A3AZTU5M12wLSIgrxkuCsiZqbTjl9O+k=;
-        b=LEsrtlNPwtKgb8Ms9tcq7kqZN9LwfLsFIA4+pTFf0GOrnzdVA9rqDgF/fHuWUXlmOF
-         qszc4Jbs3QYZ8UNtSk5dm74aC9Kc1SLU3yuHqVoHmKV7Bb6hfg0B/N88aWLsOlq7teMV
-         R+klFN4Nsv3dOdWp5RUQG/FY6srgzdGOVns8g2TzrTeSD/DbANcrY/tnuGq7m86/VjH1
-         R3m4PceR4etqVWUFlR8x09ZsoPUU/mrKmykpxklqU/BFtLeeyKzum5uoT6LELWDVC9SV
-         IaprLIizsuLFE5Ht+Rva8yVYvh2o5j2vVYSMeOBF38nwJtRPvVEk0520oBJD4WlOM9t0
-         Ckxg==
-X-Gm-Message-State: ANoB5pk1Tmy2/j3S42ZcWAvvnkQOOyoE3I1DNsAbK8UmlyLDqlPvEYhz
-        OvW/XM3SP+gKHpEEzR9+dl8=
-X-Google-Smtp-Source: AA0mqf4GNUUgsa5NhaJR3cFapsTr3kZZBSqUFeHuXA63LQ9DzYn4iI6gzAmeuLTBTHWHv2CgPnW24w==
-X-Received: by 2002:a62:6445:0:b0:577:51b1:375e with SMTP id y66-20020a626445000000b0057751b1375emr46370720pfb.26.1671484953947;
-        Mon, 19 Dec 2022 13:22:33 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id h18-20020aa79f52000000b00576df4543d4sm7038458pfr.166.2022.12.19.13.22.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 13:22:33 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 19 Dec 2022 11:22:32 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jinke Han <hanjinke.666@bytedance.com>
-Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com
-Subject: Re: [PATCH] blk-throtl: Introduce sync and async queues for
- blk-throtl
-Message-ID: <Y6DWGBQSP/DA7apC@slm.duckdns.org>
-References: <20221218111314.55525-1-hanjinke.666@bytedance.com>
+        Mon, 19 Dec 2022 16:23:09 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE87DF84;
+        Mon, 19 Dec 2022 13:23:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BojGtvTf32ARfMwz4BQwWRfKsdgMPOlVK/P6QP9ISHo=; b=lPfupz9sQfcNAdc57/GQHfJRXj
+        SUi9Ut0JgRQ/1IgCD5jL6qfi3q4eXK22s8zW01J8vl5jeSxm80SnyhiMugKySB8fkI9oSm27eKMOa
+        89LI54WU4aQTgJK33H41XztGhPuy9V5OOER7cit9K8IDTUHMxFkpxU2xpBg4ESogIx22kD7aKkRTc
+        +ZCeeMTxkVSTL5VwaINGX4t075gnr5hA8r30EO5QzEjiAcpn1Y+Hf/BrtLrKYAQusqxAeBOGs+H+w
+        pBBfAIK7IqGqLP93KnCYWEneOWiLzjjnOwBVso0GwKS5A6yHNaClivE+6BN2lwaKtuLpZCfD+z2Ar
+        ctluURyg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p7NbF-003uI0-U9; Mon, 19 Dec 2022 21:23:05 +0000
+Date:   Mon, 19 Dec 2022 13:23:05 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Allen Webb <allenwebb@google.com>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v9 01/10] imx: Fix typo
+Message-ID: <Y6DWOdd3XtibtiLW@bombadil.infradead.org>
+References: <20221219191855.2010466-1-allenwebb@google.com>
+ <20221219204619.2205248-1-allenwebb@google.com>
+ <20221219204619.2205248-2-allenwebb@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221218111314.55525-1-hanjinke.666@bytedance.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221219204619.2205248-2-allenwebb@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Dec 19, 2022 at 02:46:09PM -0600, Allen Webb wrote:
+> A one character difference in the name supplied to MODULE_DEVICE_TABLE
+> breaks a future patch set, so fix the typo.
 
-This looks generally fine to me. Some nits below.
+What behaviour is broken here for older kernels? What would not work
+that makes this patch worthy of consideration for stable? The commit
+log should be clear on that.
 
-> +static inline struct bio *throtl_qnode_bio_peek(struct throtl_qnode *qn)
-> +{
-> +	struct bio *bio1, *bio2;
-> +
-> +	/* qn for read ios */
-> +	if (qn->dispatch_sync_cnt == UINT_MAX)
-> +		return bio_list_peek(&qn->bios[SYNC]);
-> +
-> +	/* qn for write ios */
-> +	bio1 = bio_list_peek(&qn->bios[SYNC]);
-> +	bio2 = bio_list_peek(&qn->bios[ASYNC]);
-> +
-> +	if (bio1 && bio2) {
-> +		if (qn->dispatch_sync_cnt == THROTL_SYNC_FACTOR)
-> +			return bio2;
-> +		return bio1;
-> +	}
-> +
-> +	return bio1 ?: bio2;
-> +}
+In the future, it may be useful for you to wait at least 1 week or so
+before sending a new series becuase just a couple of days is not enough
+if you are getting feedback.
 
-Wouldn't it be simpler to write:
+So before sending a v10, please give it at least a few days or a week.
 
-        if (qn->dispatch_sync_count < THROTL_SYNC_FACTOR)
-                return bio1 ?: bio2;
-        else
-                return bio2 ?: bio1;
-
-> +/**
-> + * throtl_qnode_bio_pop: pop a bio from a qnode
-> + * @qn: the qnode to pop a bio from
-> + *
-> + * For read io qn, just pop bio from sync queu and return.
-> + * For write io qn, the target queue to pop was determined by the dispatch_sync_cnt.
-> + * Try to pop bio from target queue, fetch the bio and return when it is not empty.
-> + * If the target queue empty, pop bio from other queue instead.
-> + */
-> +static inline struct bio *throtl_qnode_bio_pop(struct throtl_qnode *qn)
-> +{
-> +	struct bio *bio;
-> +
-> +	/* qn for read ios */
-> +	if (qn->dispatch_sync_cnt == UINT_MAX)
-> +		return bio_list_pop(&qn->bios[SYNC]);
-> +
-> +	/* try to dispatch sync io */
-> +	if (qn->dispatch_sync_cnt < THROTL_SYNC_FACTOR) {
-> +		bio = bio_list_pop(&qn->bios[SYNC]);
-> +		if (bio) {
-> +			qn->dispatch_sync_cnt++;
-> +			return bio;
-> +		}
-> +		bio = bio_list_pop(&qn->bios[ASYNC]);
-> +		qn->dispatch_sync_cnt = 0;
-> +		return bio;
-> +	}
-> +
-> +	/* try to dispatch async io */
-> +	bio = bio_list_pop(&qn->bios[ASYNC]);
-> +	if (bio) {
-> +		qn->dispatch_sync_cnt = 0;
-> +		return bio;
-> +	}
-> +	bio = bio_list_pop(&qn->bios[SYNC]);
-> +
-> +	return bio;
-> +}
-
-This also seems like it can be simplified a bit.
-
-Thanks.
-
--- 
-tejun
+  Luis
