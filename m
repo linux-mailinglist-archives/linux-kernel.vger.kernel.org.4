@@ -2,94 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD2C6510E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA996510EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232295AbiLSRDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 12:03:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42772 "EHLO
+        id S232245AbiLSRIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 12:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231539AbiLSRDb (ORCPT
+        with ESMTP id S231391AbiLSRIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 12:03:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4E91086;
-        Mon, 19 Dec 2022 09:03:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 442F961083;
-        Mon, 19 Dec 2022 17:03:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 051EDC433F1;
-        Mon, 19 Dec 2022 17:03:28 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="XMRa40qI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1671469407;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IefjMF7tOMH0wax39/RLpi+AIb8VNuSkBwczTr3jg6k=;
-        b=XMRa40qIaLchprvRhvNLCvBS530OrT6/v1C5KPpOPluQiOEVDkHZbWbUp4Wgb8X+xltoKG
-        8u90rDBiULYuX+kPqz3Rs442oh5uOKN6U84shsRyDrWHkEM7TmqLiIdpAL6NSrWVZacxd3
-        6guAoT8yiTi7sDMPVlOP4U3Bi9kJ7bo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 79318d9d (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 19 Dec 2022 17:03:27 +0000 (UTC)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-3b48b139b46so135030227b3.12;
-        Mon, 19 Dec 2022 09:03:26 -0800 (PST)
-X-Gm-Message-State: ANoB5pn4QngIirf/dIqawWvqMyN/ZdEWGRwobncjPB5ygGo6Xw9FCyY+
-        O0Xpy50/CSsNSfpBYkv5DRnNKQQAQwld+Gj1CmM=
-X-Google-Smtp-Source: AA0mqf56hSUvnp6sOH/4lCw8h7C5hUdYBXkDOQf8YsHAL5a33e68otGl2Xumid7SYgRvw7HIbTyPONVAqZXy7J7ezBw=
-X-Received: by 2002:a0d:c6c3:0:b0:3f8:5b0b:bbb8 with SMTP id
- i186-20020a0dc6c3000000b003f85b0bbbb8mr14883107ywd.79.1671469396034; Mon, 19
- Dec 2022 09:03:16 -0800 (PST)
-MIME-Version: 1.0
-References: <20221219153525.632521981@infradead.org> <20221219154118.889543494@infradead.org>
- <Y6CJsWBhcbKatZNg@zx2c4.com> <Y6CYu4skFFMopU+g@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y6CYu4skFFMopU+g@hirez.programming.kicks-ass.net>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 19 Dec 2022 18:03:04 +0100
-X-Gmail-Original-Message-ID: <CAHmME9oCBgNCfYFxirA-fdarGip5MvOG-iUxT=2HC=iSXRMH-Q@mail.gmail.com>
-Message-ID: <CAHmME9oCBgNCfYFxirA-fdarGip5MvOG-iUxT=2HC=iSXRMH-Q@mail.gmail.com>
-Subject: Re: [RFC][PATCH 01/12] crypto: Remove u128 usage
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
-        boqun.feng@gmail.com, mark.rutland@arm.com,
-        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, Herbert Xu <herbert@gondor.apana.org.au>,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 19 Dec 2022 12:08:15 -0500
+Received: from out30-6.freemail.mail.aliyun.com (out30-6.freemail.mail.aliyun.com [115.124.30.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FE5DEEE;
+        Mon, 19 Dec 2022 09:08:13 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R631e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VXiBJoO_1671469668;
+Received: from localhost(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0VXiBJoO_1671469668)
+          by smtp.aliyun-inc.com;
+          Tue, 20 Dec 2022 01:08:11 +0800
+From:   Wen Gu <guwen@linux.alibaba.com>
+To:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, jaka@linux.ibm.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH net-next 0/5] Introduce SMC-D based loopback acceleration
+Date:   Tue, 20 Dec 2022 01:07:43 +0800
+Message-Id: <1671469668-82691-1-git-send-email-guwen@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NUMERIC_HTTP_ADDR,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 6:01 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Mon, Dec 19, 2022 at 04:56:33PM +0100, Jason A. Donenfeld wrote:
->
-> > Why not just use `u128` from types.h in this file?
->
-> Ordering, I can't very well introduce it in types.h while other
-> definitions exist in the tree. So I first have to clean up the u128
-> namespace.
+Hi, all
 
-Is there a patch at the end of the series that adds it back in to use u128?
+# Background
+
+As previously mentioned in [1], we (Alibaba Cloud) are trying to use SMC
+to accelerate TCP applications in cloud environment, improving inter-host
+or inter-VM communication.
+
+In addition of these, we also found the value of SMC-D in scenario of local
+inter-process communication, such as accelerate communication between containers
+within the same host. So this RFC tries to provide a SMC-D loopback solution
+in such scenario, to bring a significant improvement in latency and throughput
+compared to TCP loopback.
+
+# Design
+
+This patch set provides a kind of SMC-D loopback solution.
+
+Patch #1/5 and #2/5 provide an SMC-D based dummy device, preparing for the
+inter-process communication acceleration. Except for loopback acceleration,
+the dummy device can also meet the requirements mentioned in [2], which is
+providing a way to test SMC-D logic for broad community without ISM device.
+
+ +------------------------------------------+
+ |  +-----------+           +-----------+   |
+ |  | process A |           | process B |   |
+ |  +-----------+           +-----------+   |
+ |       ^                        ^         |
+ |       |    +---------------+   |         |
+ |       |    |   SMC stack   |   |         |
+ |       +--->| +-----------+ |<--|         |
+ |            | |   dummy   | |             |
+ |            | |   device  | |             |
+ |            +-+-----------+-+             |
+ |                   VM                     |
+ +------------------------------------------+
+
+Patch #3/5, #4/5, #5/5 provides a way to avoid data copy from sndbuf to RMB
+and improve SMC-D loopback performance. Through extending smcd_ops with two
+new semantic: attach_dmb and detach_dmb, sender's sndbuf shares the same
+physical memory region with receiver's RMB. The data copied from userspace
+to sender's sndbuf directly reaches the receiver's RMB without unnecessary
+memory copy in the same kernel.
+
+ +----------+                     +----------+
+ | socket A |                     | socket B |
+ +----------+                     +----------+
+       |                               ^
+       |         +---------+           |
+  regard as      |         | ----------|
+  local sndbuf   |  B's    |     regard as
+       |         |  RMB    |     local RMB
+       |-------> |         |
+                 +---------+
+
+# Benchmark Test
+
+ * Test environments:
+      - VM with Intel Xeon Platinum 8 core 2.50GHz, 16 GiB mem.
+      - SMC sndbuf/RMB size 1MB.
+
+ * Test object:
+      - TCP: run on TCP loopback.
+      - domain: run on UNIX domain.
+      - SMC lo: run on SMC loopback device with patch #1/5 ~ #2/5.
+      - SMC lo-nocpy: run on SMC loopback device with patch #1/5 ~ #5/5.
+
+1. ipc-benchmark (see [3])
+
+ - ./<foo> -c 1000000 -s 100
+
+                       TCP              domain              SMC-lo             SMC-lo-nocpy
+Message
+rate (msg/s)         75140      129548(+72.41)    152266(+102.64%)         151914(+102.17%)
+
+2. sockperf
+
+ - serv: <smc_run> taskset -c <cpu> sockperf sr --tcp
+ - clnt: <smc_run> taskset -c <cpu> sockperf { tp | pp } --tcp --msg-size={ 64000 for tp | 14 for pp } -i 127.0.0.1 -t 30
+
+                       TCP                  SMC-lo             SMC-lo-nocpy
+Bandwidth(MBps)   4943.359        4936.096(-0.15%)        8239.624(+66.68%)
+Latency(us)          6.372          3.359(-47.28%)            3.25(-49.00%)
+
+3. nginx/wrk
+
+ - serv: <smc_run> nginx
+ - clnt: <smc_run> wrk -t 8 -c 500 -d 30 http://127.0.0.1:80
+
+                       TCP                   SMC-lo             SMC-lo-nocpy
+Requests/s       154643.22       220894.03(+42.84%)        226754.3(+46.63%)
+
+
+# Discussion
+
+1. API between SMC-D and ISM device
+
+As Jan mentioned in [2], IBM are working on placing an API between SMC-D
+and the ISM device for easier use of different "devices" for SMC-D.
+
+So, considering that the introduction of attach_dmb or detach_dmb can
+effectively avoid data copying from sndbuf to RMB and brings obvious
+throughput advantages in inter-VM or inter-process scenarios, can the
+attach/detach semantics be taken into consideration when designing the
+API to make it a standard ISM device behavior?
+
+Maybe our RFC of SMC-D based inter-process acceleration (this one) and
+inter-VM acceleration (will coming soon, which is the update of [1])
+can provide some examples for new API design. And we are very glad to
+discuss this on the mail list.
+
+2. Way to select different ISM-like devices
+
+With the proposal of SMC-D loopback 'device' (this RFC) and incoming
+device used for inter-VM acceleration as update of [1], SMC-D has more
+options to choose from. So we need to consider that how to indicate
+supported devices, how to determine which one to use, and their priority...
+
+IMHO, this may require an update of CLC message and negotiation mechanism.
+Again, we are very glad to discuss this with you on the mailing list.
+
+[1] https://lore.kernel.org/netdev/20220720170048.20806-1-tonylu@linux.alibaba.com/
+[2] https://lore.kernel.org/netdev/35d14144-28f7-6129-d6d3-ba16dae7a646@linux.ibm.com/
+[3] https://github.com/goldsborough/ipc-bench
+
+
+Wen Gu (5):
+  net/smc: introduce SMC-D loopback device
+  net/smc: choose loopback device in SMC-D communication
+  net/smc: add dmb attach and detach interface
+  net/smc: avoid data copy from sndbuf to peer RMB in SMC-D loopback
+  net/smc: logic of cursors update in SMC-D loopback connections
+
+ include/net/smc.h      |   3 +
+ net/smc/Makefile       |   2 +-
+ net/smc/af_smc.c       |  88 +++++++++++-
+ net/smc/smc_cdc.c      |  59 ++++++--
+ net/smc/smc_cdc.h      |   1 +
+ net/smc/smc_clc.c      |   4 +-
+ net/smc/smc_core.c     |  62 +++++++++
+ net/smc/smc_core.h     |   2 +
+ net/smc/smc_ism.c      |  39 +++++-
+ net/smc/smc_ism.h      |   2 +
+ net/smc/smc_loopback.c | 365 +++++++++++++++++++++++++++++++++++++++++++++++++
+ net/smc/smc_loopback.h |  63 +++++++++
+ 12 files changed, 669 insertions(+), 21 deletions(-)
+ create mode 100644 net/smc/smc_loopback.c
+ create mode 100644 net/smc/smc_loopback.h
+
+-- 
+1.8.3.1
+
