@@ -2,94 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19263650B8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B53650BA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 13:32:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbiLSM1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 07:27:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
+        id S231938AbiLSMcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 07:32:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232114AbiLSM06 (ORCPT
+        with ESMTP id S231712AbiLSMbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 07:26:58 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1636DFD6;
-        Mon, 19 Dec 2022 04:26:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671452817; x=1702988817;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=SYtkw/hm1hSKB4vnlGtuHusIzAgneRrEzLZaacIs33Y=;
-  b=iYfpR9pJBQ1dLOxi55T9PoYVRzA3kiN7pWlJ9TMW4R6A2YytMsxTX/d7
-   nAq4GodGUYRNuCsVEEQftN9MrnhUaAd5EyAvzIclFUK94UH3BZ6xoZfmy
-   hbVEByFt5t+t7hLl40E3fsPi5vZz16/LCpCEFUmqP/7SmKz32MqbxMGBb
-   rk8kcLHdJ6/z9r1D5P4bowftOgf4uGmCn1GbDeuKDn8Gb9zoXEhDk3CSN
-   IZVHPTQuu78liinWkYQydVulHCYA4zS9gn8jExshQlolKDExNuCFV/3cs
-   ui2NFe5r4YQdEnq4J3Wb+KYT8ASLJAHPsqfAi9ScIFv5APCPjJkTY1FZM
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="318024754"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="318024754"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 04:26:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="681209042"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="681209042"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 19 Dec 2022 04:26:54 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 5AAF0F7; Mon, 19 Dec 2022 14:27:24 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v1 1/1] pinctrl: intel: Convert to generic_handle_domain_irq()
-Date:   Mon, 19 Dec 2022 14:27:22 +0200
-Message-Id: <20221219122722.3639-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 19 Dec 2022 07:31:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58B7101E9;
+        Mon, 19 Dec 2022 04:30:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98323B80DEC;
+        Mon, 19 Dec 2022 12:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3740FC433EF;
+        Mon, 19 Dec 2022 12:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671453016;
+        bh=zSdqXMb4K/fJ1ucxsistP/D6X+IyGXlXaIYBLlqpdnA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=JXobkxaK5msKZ8yEJMXg7aQQQUaNLkcxs/rJODgaYJRuoGi8+1JUp6tjTpp5woL7O
+         cod5tpF7FxZquyM+7jMVfYivFhw1A7yLr8Y1P4pREhqKeAhGK0A9zvZ83KW3U+HHMb
+         GeqBDCgHdlutqqAH9oNswhRbJ5EAQZCWpDs3zvTuKEqYcFxFhGGe1+zGMslfGMkBeX
+         NQSsPj7d5HifE7hmyzr6yjOVR925A6jhizvluh9tXZgISv98sRH/q9TWuqg/ERezt0
+         qK/sp/ec4OtyqrabLt9Zt4eeWX3iMNSTIX4pflrYr0WkMdJQ7goEn/vmfDQjXnldkc
+         J1vQoR2Q96aVQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1C171E21EF8;
+        Mon, 19 Dec 2022 12:30:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net v2] net: microchip: vcap: Fix initialization of value and
+ mask
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167145301611.31436.11110109817741497081.git-patchwork-notify@kernel.org>
+Date:   Mon, 19 Dec 2022 12:30:16 +0000
+References: <20221219082215.76652-1-horatiu.vultur@microchip.com>
+In-Reply-To: <20221219082215.76652-1-horatiu.vultur@microchip.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        lars.povlsen@microchip.com, Steen.Hegelund@microchip.com,
+        daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
+        lkp@intel.com, error27@gmail.com, saeed@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace construct that matches generic_handle_irq(irq_find_mapping())
-to a single call to generic_handle_domain_irq().
+Hello:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/pinctrl/intel/pinctrl-intel.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
-index 4029891ba628..8181a65fb815 100644
---- a/drivers/pinctrl/intel/pinctrl-intel.c
-+++ b/drivers/pinctrl/intel/pinctrl-intel.c
-@@ -1215,13 +1215,8 @@ static int intel_gpio_community_irq_handler(struct intel_pinctrl *pctrl,
- 		/* Only interrupts that are enabled */
- 		pending &= enabled;
- 
--		for_each_set_bit(gpp_offset, &pending, padgrp->size) {
--			unsigned int irq;
--
--			irq = irq_find_mapping(gc->irq.domain,
--					       padgrp->gpio_base + gpp_offset);
--			generic_handle_irq(irq);
--		}
-+		for_each_set_bit(gpp_offset, &pending, padgrp->size)
-+			generic_handle_domain_irq(gc->irq.domain, padgrp->gpio_base + gpp_offset);
- 
- 		ret += pending ? 1 : 0;
- 	}
+On Mon, 19 Dec 2022 09:22:15 +0100 you wrote:
+> Fix the following smatch warning:
+> 
+> smatch warnings:
+> drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c:103 vcap_debugfs_show_rule_keyfield() error: uninitialized symbol 'value'.
+> drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c:106 vcap_debugfs_show_rule_keyfield() error: uninitialized symbol 'mask'.
+> 
+> In case the vcap field was VCAP_FIELD_U128 and the key was different
+> than IP6_S/DIP then the value and mask were not initialized, therefore
+> initialize them.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v2] net: microchip: vcap: Fix initialization of value and mask
+    https://git.kernel.org/netdev/net/c/10073399cb5e
+
+You are awesome, thank you!
 -- 
-2.35.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
