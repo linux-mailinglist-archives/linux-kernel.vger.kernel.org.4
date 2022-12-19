@@ -2,142 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47FE651127
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE94651130
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 18:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbiLSRTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 12:19:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
+        id S232009AbiLSRYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 12:24:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbiLSRT2 (ORCPT
+        with ESMTP id S229618AbiLSRYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 12:19:28 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4E195B1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 09:19:27 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id q93-20020a17090a1b6600b0021311ab9082so3769785pjq.7
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 09:19:27 -0800 (PST)
+        Mon, 19 Dec 2022 12:24:06 -0500
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A27C1B;
+        Mon, 19 Dec 2022 09:24:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u1OxrZzOIajVGZwkXAPogH/ue04ueQgByOpRB200gSU=;
-        b=RrzqGferbVNclkVYmMFvgCACtExupzd+zXKlb6mqsno4S/mJv3bQ7LCh29DMgCaVEu
-         2CVeVtbR98sVzCFZ2PrSeFfDjxBsanG7unC6LTZ7Pvf17Vx8sM/YNe1dVT1DS32UDOfh
-         hteFFn+helbDlE1Cubk5wDLAOGDZTao2EiDVP5kj+BdQOCHaKmFNXcNu8HKZCtnL9iyX
-         UvcOAjulhbrTLhfQXqDGVd6ILFbWZpvYCOcYGraPxPkQ5N8U1+IGg20DKKAkhwCg15pi
-         vN8zy17Y1pJ978V2ET2wigwRRg4poqTNOFZW76ogCRe/tD9RrpOZq/XyQhTz3HV37t5n
-         N0tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:reply-to:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=u1OxrZzOIajVGZwkXAPogH/ue04ueQgByOpRB200gSU=;
-        b=twtiR+Yp4Jg32U/R0trLGS2G773orZWM/PfYxE1rf9tndXnft26epMvPyW++GxbbBW
-         AcfQrIbcU7WkLsWJUywsufD9tO0v4yq27QR0AMiFw0vzDLYHwBtwyLaxbCb6/KRtvQrY
-         NK/bofdpRIOyGtlAb0dh/MKccn6HLgpqcOnLycJ62F9g6FXAH6V2jlF57lj6kIc4wAf/
-         AYu5+Xn4oHAFhg01EicjIJCkJAbzC+xClzfTBMQtUqoIpuTd7mCElhlweDYQpNsE4d6N
-         scg+DUqqk15+5fkcPk11ss7blx5C3wpYKDMGKvarrXgaP7XRY6SbAgaQfuaXhvmDOjD5
-         UrEw==
-X-Gm-Message-State: ANoB5plwCts5iKYOirJetIzI816R3vYjOvx2PxcpvKbgi9B+njdcqkS9
-        DFsyBYrrzd0h+kL0tAq3oznZ3kN5FUE=
-X-Google-Smtp-Source: AA0mqf47iFBIWrLHBVtRlKfWtlwfs4338UwzR9+snJh/ddN8hNpdi0zwWP4rl94BM9iTNW8RowDHx1ocEik=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:cf02:b0:189:d193:95e7 with SMTP id
- i2-20020a170902cf0200b00189d19395e7mr21663279plg.1.1671470367133; Mon, 19 Dec
- 2022 09:19:27 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Mon, 19 Dec 2022 17:19:24 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221219171924.67989-1-seanjc@google.com>
-Subject: [PATCH] KVM: Destroy target device if coalesced MMIO unregistration fails
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "=?UTF-8?q?=E6=9F=B3=E8=8F=81=E5=B3=B0?=" <liujingfeng@qianxin.com>,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1671470645; x=1703006645;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vtbtqkF+fUxlkt4jhfRzQrVkQWSPkoqmSUAFWXoi41I=;
+  b=u3n6CNgwyfcVawdP4qlvVLdE4IYZ+0rVgJAU6xG2+R+Yam9A9BP46t0H
+   eBSgysMluZE15ycpjCLtCKc1Tt2pW7x7jey6pGZtiGafMOaITQzE6WYOg
+   f8dsYtRFDVNAGzRj1vcveTTbwIdV1pbdz5Dgqf+N+zLvZHkvkcQgypHly
+   4=;
+X-IronPort-AV: E=Sophos;i="5.96,257,1665446400"; 
+   d="scan'208";a="278737540"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-d40ec5a9.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 17:24:04 +0000
+Received: from EX13D34EUA003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-m6i4x-d40ec5a9.us-west-2.amazon.com (Postfix) with ESMTPS id C897E4168F;
+        Mon, 19 Dec 2022 17:24:01 +0000 (UTC)
+Received: from EX19D019EUA002.ant.amazon.com (10.252.50.84) by
+ EX13D34EUA003.ant.amazon.com (10.43.165.126) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Mon, 19 Dec 2022 17:24:00 +0000
+Received: from dev-dsk-hhhawa-1b-84e0d7ff.eu-west-1.amazon.com (10.43.161.114)
+ by EX19D019EUA002.ant.amazon.com (10.252.50.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.20; Mon, 19 Dec 2022 17:23:55 +0000
+From:   Hanna Hawa <hhhawa@amazon.com>
+To:     <wsa@kernel.org>, <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <Suravee.Suthikulpanit@amd.com>, <mika.westerberg@linux.intel.com>,
+        <jsd@semihalf.com>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
+        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <farbere@amazon.com>, <itamark@amazon.com>, <hhhawa@amazon.com>
+Subject: [PATCH 1/1] i2c: designware: fix i2c_dw_clk_rate() return size to be u32
+Date:   Mon, 19 Dec 2022 17:23:45 +0000
+Message-ID: <20221219172345.14272-1-hhhawa@amazon.com>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.161.114]
+X-ClientProxiedBy: EX13D28UWB002.ant.amazon.com (10.43.161.140) To
+ EX19D019EUA002.ant.amazon.com (10.252.50.84)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Destroy and free the target coalesced MMIO device if unregistering said
-device fails.  As clearly noted in the code, kvm_io_bus_unregister_dev()
-does not destroy the target device.
+Make i2c_dw_clk_rate() to return u32 instead of unsigned long, as the
+function return the value of get_clk_rate_khz() which returns u32.
 
-  BUG: memory leak
-  unreferenced object 0xffff888112a54880 (size 64):
-    comm "syz-executor.2", pid 5258, jiffies 4297861402 (age 14.129s)
-    hex dump (first 32 bytes):
-      38 c7 67 15 00 c9 ff ff 38 c7 67 15 00 c9 ff ff  8.g.....8.g.....
-      e0 c7 e1 83 ff ff ff ff 00 30 67 15 00 c9 ff ff  .........0g.....
-    backtrace:
-      [<0000000006995a8a>] kmalloc include/linux/slab.h:556 [inline]
-      [<0000000006995a8a>] kzalloc include/linux/slab.h:690 [inline]
-      [<0000000006995a8a>] kvm_vm_ioctl_register_coalesced_mmio+0x8e/0x3d0 =
-arch/x86/kvm/../../../virt/kvm/coalesced_mmio.c:150
-      [<00000000022550c2>] kvm_vm_ioctl+0x47d/0x1600 arch/x86/kvm/../../../=
-virt/kvm/kvm_main.c:3323
-      [<000000008a75102f>] vfs_ioctl fs/ioctl.c:46 [inline]
-      [<000000008a75102f>] file_ioctl fs/ioctl.c:509 [inline]
-      [<000000008a75102f>] do_vfs_ioctl+0xbab/0x1160 fs/ioctl.c:696
-      [<0000000080e3f669>] ksys_ioctl+0x76/0xa0 fs/ioctl.c:713
-      [<0000000059ef4888>] __do_sys_ioctl fs/ioctl.c:720 [inline]
-      [<0000000059ef4888>] __se_sys_ioctl fs/ioctl.c:718 [inline]
-      [<0000000059ef4888>] __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
-      [<000000006444fa05>] do_syscall_64+0x9f/0x4e0 arch/x86/entry/common.c=
-:290
-      [<000000009a4ed50b>] entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-  BUG: leak checking failed
-
-Fixes: 5d3c4c79384a ("KVM: Stop looking for coalesced MMIO zones if the bus=
- is destroyed")
-Cc: stable@vger.kernel.org
-Reported-by: =E6=9F=B3=E8=8F=81=E5=B3=B0 <liujingfeng@qianxin.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Fixes: b33af11de236 ("i2c: designware: Do not require clock when SSCN and FFCN are provided")
+Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
 ---
- virt/kvm/coalesced_mmio.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/i2c/busses/i2c-designware-common.c | 2 +-
+ drivers/i2c/busses/i2c-designware-core.h   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/virt/kvm/coalesced_mmio.c b/virt/kvm/coalesced_mmio.c
-index 0be80c213f7f..5ef88f5a0864 100644
---- a/virt/kvm/coalesced_mmio.c
-+++ b/virt/kvm/coalesced_mmio.c
-@@ -187,15 +187,17 @@ int kvm_vm_ioctl_unregister_coalesced_mmio(struct kvm=
- *kvm,
- 			r =3D kvm_io_bus_unregister_dev(kvm,
- 				zone->pio ? KVM_PIO_BUS : KVM_MMIO_BUS, &dev->dev);
-=20
-+			kvm_iodevice_destructor(&dev->dev);
-+
- 			/*
- 			 * On failure, unregister destroys all devices on the
- 			 * bus _except_ the target device, i.e. coalesced_zones
--			 * has been modified.  No need to restart the walk as
--			 * there aren't any zones left.
-+			 * has been modified.  Bail after destroying the target
-+			 * device, there's no need to restart the walk as there
-+			 * aren't any zones left.
- 			 */
- 			if (r)
- 				break;
--			kvm_iodevice_destructor(&dev->dev);
- 		}
- 	}
-=20
-
-base-commit: 9d75a3251adfbcf444681474511b58042a364863
---=20
-2.39.0.314.g84b9a713c41-goog
+diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+index c023b691441e..e0a46dfd1c15 100644
+--- a/drivers/i2c/busses/i2c-designware-common.c
++++ b/drivers/i2c/busses/i2c-designware-common.c
+@@ -462,7 +462,7 @@ void __i2c_dw_disable(struct dw_i2c_dev *dev)
+ 	dev_warn(dev->dev, "timeout in disabling adapter\n");
+ }
+ 
+-unsigned long i2c_dw_clk_rate(struct dw_i2c_dev *dev)
++u32 i2c_dw_clk_rate(struct dw_i2c_dev *dev)
+ {
+ 	/*
+ 	 * Clock is not necessary if we got LCNT/HCNT values directly from
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index 4d3a3b464ecd..56a029da448a 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -322,7 +322,7 @@ int i2c_dw_init_regmap(struct dw_i2c_dev *dev);
+ u32 i2c_dw_scl_hcnt(u32 ic_clk, u32 tSYMBOL, u32 tf, int cond, int offset);
+ u32 i2c_dw_scl_lcnt(u32 ic_clk, u32 tLOW, u32 tf, int offset);
+ int i2c_dw_set_sda_hold(struct dw_i2c_dev *dev);
+-unsigned long i2c_dw_clk_rate(struct dw_i2c_dev *dev);
++u32 i2c_dw_clk_rate(struct dw_i2c_dev *dev);
+ int i2c_dw_prepare_clk(struct dw_i2c_dev *dev, bool prepare);
+ int i2c_dw_acquire_lock(struct dw_i2c_dev *dev);
+ void i2c_dw_release_lock(struct dw_i2c_dev *dev);
+-- 
+2.38.1
 
