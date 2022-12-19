@@ -2,146 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 703E9650705
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 05:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2501365070F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 05:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbiLSEWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 23:22:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
+        id S230061AbiLSEWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 23:22:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbiLSEV6 (ORCPT
+        with ESMTP id S230494AbiLSEWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 23:21:58 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1896355
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 20:21:57 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id g10so7825031plo.11
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 20:21:57 -0800 (PST)
+        Sun, 18 Dec 2022 23:22:22 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD52165B1;
+        Sun, 18 Dec 2022 20:22:20 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id d3so7831743plr.10;
+        Sun, 18 Dec 2022 20:22:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GYOZHntsfq9Oqu0AIUyQ2czFdBjuydE+iWot/+A9tks=;
-        b=fEja4+CjRKWn1HDf3oFuDpMNyY4ILeRfE6RyXf0N2LsVGmugFuW2LT6wBLvR6OZXw9
-         s7Ow9Tn4mA/gsew93EA7bvJIULnSNmtXKHha8fd4yKp0848Rnd2RaM+zozllRMJQGKiD
-         YzpUJErUX5fuOJ9C3DrXLrszMo6EGkBz7qB/UlNLp9AMG39/IhkTewQMLspDIb/7h5YR
-         Jh+wMWr03nP/1Ezja2nIjoDlOek8aBKBej7A59SoRbd8+UQhut9sop6owyMfWOr40tCg
-         +AnnrBajRSBuPP66YlCcU8f/TvAO45u1pOkTX9gcECAFBg6CJ6JqAONJQqspnXEmodWF
-         BHnQ==
+        bh=U/dEEVX13cf5N+hd3J7uA7Y2/NQepsAAVSk8729Qq40=;
+        b=qFO7HG25w+cLED22tN8Huxazgyrk+kzJbcPjLeO6N5NIO87MAUVwX6Mumxf/9vIlzh
+         +SYfE99b2GWxjvw+XvnIxmevcqKVbYVkJwRKvvepIVV4eWzKf9wEw+N2umVIZRO4JXBV
+         ekPbMz+RLOENjk59Ctzt6ajDF4ya3KrNjAHvEJIPbD7d88ck1eOcPWWojDK8oQYLwEeG
+         lq8QiVRcQPU9zlXHRVIsRlNveA6XFeHGCtp7y8RJzugbu2S5Vpxgtxzo0GpeE1l+3WDV
+         vDrHp6LeT8Pi4lu3o3MPD/ixNr4yiRXnmlBF4q2vBQU2dEs/UVzFDkLwqOcTdpML+5qC
+         eGbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GYOZHntsfq9Oqu0AIUyQ2czFdBjuydE+iWot/+A9tks=;
-        b=pcjNS9e5KeB4JrI/3UXhAd4lkw9O0rnLcoFsdfBRxFVegPIfc8kUZOEGYlGBm6mEiZ
-         r4zYIrHklGd8jGaogPz7NPgDWddQQniFIlCMBlaf8eMkZocxW995aIjwHt1xKycOGF6n
-         U8cjZTgS5ACLUIi0kS7huXyxXHa1aJhuM4EghitQJPPvTrmd2fYvunr1NM/a4VenvPoX
-         37ELuMo9t7wfjieQ+r9WTl5iGytQRpjGr/8pk9UK+6VI7HQayQMXx9GBC4zmZWDwMXRt
-         ldf1uBmeByS0BtfvidPR6C380bDBWRB5xvVceJn8stOCK9wGzGdS0xcn43lpXn3oo6ew
-         0jow==
-X-Gm-Message-State: AFqh2krpeB5e68hwBHu1lMIJ30y+flRZ1AvElFdnFNuRAfWWASdoHfal
-        qwW/lP8EuAZ+7zFYRVda1Q==
-X-Google-Smtp-Source: AMrXdXsShbSg9tkRr9cAr4isOuGI/2MNiXO5pgVI8hqOMcUl02pgbWJV8ue4UcuPDHun13xdkKLxfA==
-X-Received: by 2002:a17:902:cf08:b0:191:282:5d6c with SMTP id i8-20020a170902cf0800b0019102825d6cmr14622492plg.61.1671423716287;
-        Sun, 18 Dec 2022 20:21:56 -0800 (PST)
-Received: from localhost.localdomain ([144.214.0.6])
-        by smtp.gmail.com with ESMTPSA id t9-20020a170902e84900b001888cadf8f6sm5896615plg.49.2022.12.18.20.21.54
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 18 Dec 2022 20:21:55 -0800 (PST)
-From:   Hao Sun <sunhao.th@gmail.com>
-To:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Cc:     daniel@iogearbox.net, Hao Sun <sunhao.th@gmail.com>
-Subject: [PATCH] mm: new primitive kvmemdup()
-Date:   Mon, 19 Dec 2022 12:21:26 +0800
-Message-Id: <20221219042126.3396-1-sunhao.th@gmail.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        bh=U/dEEVX13cf5N+hd3J7uA7Y2/NQepsAAVSk8729Qq40=;
+        b=MkUn123ZIukvYcQdfI+nszcXtpXVgUzG5x/BRXGP7IuVpgGd742ujVfKbvTUb+YtKm
+         EOd7QgaMLg/hXBrQ76B5YO/pwDcT+hVrxq5qSgXjsgdQlKvVLKTQgV0FjbRRyLbcvm8i
+         dGx4p0IR48IdSuaVh1H7Fxe0Gb0UxVVnuc7FvLd/pVaIfyHR0yFcYEVD+18ep2jDKc7X
+         eCAzkysfaVCYw20gG1Jj3DlsZw90T4Igp4XyuDkjeXTTDuv+Y2xUbCXjCoS+8M+N4fUR
+         n81TcBaLsAicrrUXyjOLeTR/ryDwcg/wxfYJImkFrfl1eJyU88gbW2TrtswKX5QzYh/w
+         6XwQ==
+X-Gm-Message-State: ANoB5plL3fcaivlygyZrig1J6ZoMquuXbvugqhhwiwe28ukp3aEIDTPs
+        YGeaz2AnlWj/5zXv2+A0cmo=
+X-Google-Smtp-Source: AA0mqf7Dj9UJegqhAEUhYQZb1em+WjZomT0tTm+r878JDjrhX6fvMKEXBZnjRus0pjIo2fhCrCzOnQ==
+X-Received: by 2002:a05:6a20:bc9b:b0:ac:3bb0:5346 with SMTP id fx27-20020a056a20bc9b00b000ac3bb05346mr43688488pzb.49.1671423740291;
+        Sun, 18 Dec 2022 20:22:20 -0800 (PST)
+Received: from debian.me (subs32-116-206-28-20.three.co.id. [116.206.28.20])
+        by smtp.gmail.com with ESMTPSA id a11-20020a1709027e4b00b00189a7fbfd44sm5833480pln.211.2022.12.18.20.22.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Dec 2022 20:22:19 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 7F17B103FA2; Mon, 19 Dec 2022 11:22:13 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH 00/10] docs: cgroup-v1: formatting improv for "Memory Resource Controller" doc
+Date:   Mon, 19 Dec 2022 11:21:59 +0700
+Message-Id: <20221219042209.22898-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1307; i=bagasdotme@gmail.com; h=from:subject; bh=9tZWDHm18Fs9yM3gahlNr+8oWRyGbaFrmuTs8kx2K9Y=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMnznz2bYXQ7luWTyI/JguFViRrree0P749+tHGCyfZ/H1fn l6hu6yhlYRDjYpAVU2SZlMjXdHqXkciF9rWOMHNYmUCGMHBxCsBEzoQwMmypnO4aKnYoMvXzfpaNH5 nsvnkfjGxNmL9ZdUlKie/SozcZ/sqVX7ghs/N3p7WjUsRC2TXvBUrncGjOPObadH9F/ATTqZwA
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to kmemdup(), but support large amount of bytes with kvmalloc()
-and does *not* guarantee that the result will be physically contiguous.
-Use only in cases where kvmalloc() is needed and free it with kvfree().
+"Memory Resource Controller" CGroup v1 documentation has been in reST
+since 99c8b231ae6c6c ("docs: cgroup-v1: convert docs to ReST and rename to *.rst"). The current doc look is kinda ugly, so improve the formatting (only
+htmldocs is tested).
 
-Suggested-by: Daniel Borkmann <daniel@iogearbox.net> 
-Signed-off-by: Hao Sun <sunhao.th@gmail.com>
----
-This pattern has been used in several places and we're also going to
-do this[1], seems reasonable to add this so that bpf and in future
-others could make use of it.
+The first patch is a fix for recently reported htmldocs warning, which can
+be pickup separately from rest of the series.
 
-[1] https://lore.kernel.org/bpf/7d274284-0fcc-061c-582e-3dfb629c6a44@iogearbox.net/T/#t
----
- include/linux/string.h |  1 +
- mm/util.c              | 24 +++++++++++++++++++++++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
+Bagas Sanjaya (10):
+  docs: cgroup-v1: extend underline of section 8
+  docs: cgroup-v1: replace custom note constructs with appropriate
+    admonition blocks
+  docs: cgroup-v1: wrap remaining admonitions in admonition blocks
+  docs: cgroup-v1: use code block for locking order schema
+  docs: cgroup-v1: fix footnotes
+  docs: cgroup-v1: move hierarchy of accounting caption
+  docs: cgroup-v1: use bullet lists for list of stat file tables
+  docs: cgroup-v1: use make swap extension subsections subsections
+  docs: cgroup-v1: add internal cross-references
+  docs: cgroup-v1: use numbered lists for user interface setup
 
-diff --git a/include/linux/string.h b/include/linux/string.h
-index db28802ab0a6..c062c581a98b 100644
---- a/include/linux/string.h
-+++ b/include/linux/string.h
-@@ -177,6 +177,7 @@ extern char *kstrdup(const char *s, gfp_t gfp) __malloc;
- extern const char *kstrdup_const(const char *s, gfp_t gfp);
- extern char *kstrndup(const char *s, size_t len, gfp_t gfp);
- extern void *kmemdup(const void *src, size_t len, gfp_t gfp) __realloc_size(2);
-+extern void *kvmemdup(const void *src, size_t len, gfp_t gfp) __realloc_size(2);
- extern char *kmemdup_nul(const char *s, size_t len, gfp_t gfp);
- 
- extern char **argv_split(gfp_t gfp, const char *str, int *argcp);
-diff --git a/mm/util.c b/mm/util.c
-index b56c92fb910f..cec9327b27b4 100644
---- a/mm/util.c
-+++ b/mm/util.c
-@@ -120,7 +120,8 @@ EXPORT_SYMBOL(kstrndup);
-  * @len: memory region length
-  * @gfp: GFP mask to use
-  *
-- * Return: newly allocated copy of @src or %NULL in case of error
-+ * Return: newly allocated copy of @src or %NULL in case of error,
-+ * result is physically contiguous. Use kfree() to free.
-  */
- void *kmemdup(const void *src, size_t len, gfp_t gfp)
- {
-@@ -133,6 +134,27 @@ void *kmemdup(const void *src, size_t len, gfp_t gfp)
- }
- EXPORT_SYMBOL(kmemdup);
- 
-+/**
-+ * kvmemdup - duplicate region of memory
-+ *
-+ * @src: memory region to duplicate
-+ * @len: memory region length
-+ * @gfp: GFP mask to use
-+ *
-+ * Return: newly allocated copy of @src or %NULL in case of error,
-+ * result may be not physically contiguous. Use kvfree() to free.
-+ */
-+void *kvmemdup(const void *src, size_t len, gfp_t gfp)
-+{
-+	void *p;
-+
-+	p = kvmalloc(len, gfp);
-+	if (p)
-+		memcpy(p, src, len);
-+	return p;
-+}
-+EXPORT_SYMBOL(kvmemdup);
-+
- /**
-  * kmemdup_nul - Create a NUL-terminated string from unterminated data
-  * @s: The data to stringify
+ .../admin-guide/cgroup-v1/cgroups.rst         |   2 +
+ .../admin-guide/cgroup-v1/memory.rst          | 290 ++++++++++--------
+ 2 files changed, 158 insertions(+), 134 deletions(-)
 
-base-commit: f9ff5644bcc04221bae56f922122f2b7f5d24d62
+
+base-commit: fb94e0734a2aaf6fc11c92959efc640370df8d42
 -- 
-2.39.0
+An old man doll... just what I always wanted! - Clara
 
