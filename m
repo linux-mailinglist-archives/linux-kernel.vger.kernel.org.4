@@ -2,257 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CF96505D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 01:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFC66505D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 01:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbiLSAE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Dec 2022 19:04:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
+        id S230427AbiLSAPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Dec 2022 19:15:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiLSAE0 (ORCPT
+        with ESMTP id S229570AbiLSAPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Dec 2022 19:04:26 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4846BA180
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 16:04:25 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id 1so11435577lfz.4
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 16:04:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tPvUHEz/lJ33Hi7CkPgpILSAI47KZFMUKJUPwIXUyf8=;
-        b=kkui8mzTOoVPKxSjezZdbbQ0s/rBXPZnafOSq6CGGtx/xieKNqrH5BUIJxwMQpreS/
-         1DnLsMpwxd3NdZuK4dE1swyF8/ZNXGcNPLHDqe5Xz1dqDNNQao9YNQhc+RsI7M9WXO63
-         LlCBKkLnlbUlrI6SAeS6djv041CERrijuigJc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tPvUHEz/lJ33Hi7CkPgpILSAI47KZFMUKJUPwIXUyf8=;
-        b=yzCV83YKeg/P+zysWcGPPxc0lXgCwYWhasayGAHdN1kVZPjvODDW3MYiFy7NktoL61
-         CqGsfqEyFipfGjAGmVR6rJ8xT/l5z988eMtI5jXk7rH2ezKi0kl9jw5xsfsYEl4PPfy9
-         WcK6LAbRXIvm6FWZqArzIAsNyHP3FX1FX9OCRd05oMal4R9Sr3b/jqemt1xulSTDNbiH
-         wL9ZQtAgtwnPPYLbDL4CVuXK2xWf5x0NJ1ukM2sG6XIUtvifQj/TM5JDhJgVpz8TH3rG
-         3y3AoGaJQHZof/3Z8oCa8vjl1TYDKUhxM2NF/x0ZR1SmvbtM7LgydZjrwPSlYsL1GNFC
-         i9+A==
-X-Gm-Message-State: AFqh2kol2g8wcaSxst7NUpEMtTJ7kDsm1RWIrd5BOSCAHbsW8UTsMjvN
-        OlwsWBNs2Egw1F9APuTTcO4Y9Ej2t/I3o1SpZ0pFRFjqeKhRGXmx
-X-Google-Smtp-Source: AMrXdXuYNL3oYDSB6XDvbVneusKWCYh4IuhsbZ0KYqyRO5jfc43I7H0aK3+HTUbfrz1cNNlrDyQKPRgXRJN0wQRB+lQ=
-X-Received: by 2002:a05:6512:228c:b0:4bc:bdf5:f163 with SMTP id
- f12-20020a056512228c00b004bcbdf5f163mr755262lfu.583.1671408263534; Sun, 18
- Dec 2022 16:04:23 -0800 (PST)
+        Sun, 18 Dec 2022 19:15:21 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE60BB1D3
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 16:15:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=fVnyyBD7kx0Gx0PlYopsq5AR/KWJf1gV7ckpQE7AXHs=; b=akcQGxbop4xCXRDwR72jcyrOrX
+        Wv+SkSMFqZJwnhyHF/fa7KNjc99xiyPI4Cu8ByvzF7sBAqTtwelWjnIOMqn0QyZ8uB6OFA190ZGlX
+        7l2NYaYky2GKujiS0TLrFdxCrCI5TFQJQetr2/T3JVHHgsoi92MwAEhCaBxbq878Yw2aY9pQyi3T1
+        GXyPrrwaQt4o4nOP6q6lbajjgEQ10eIPa8AOwYFoBbckJL02RROQz6JiemS+vX9bGlVQqNxkqeha4
+        wtcq+Xp3spgMZX0+DpvCJHrbcU+FrH9S2PbtPGVfYvGbde2XjvmU/qNuiwivF5jAW/RTZhh1PC+kU
+        7O55PQVA==;
+Received: from [41.74.137.107] (helo=mail.igalia.com)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1p73oF-005tgA-S8; Mon, 19 Dec 2022 01:15:11 +0100
+Date:   Sun, 18 Dec 2022 23:14:59 -0100
+From:   Melissa Wen <mwen@igalia.com>
+To:     =?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>
+Cc:     emma@anholt.net, airlied@gmail.com, daniel@ffwll.ch,
+        kernel-dev@igalia.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH v2 2/2] drm/v3d: replace obj lookup steps with
+ drm_gem_objects_lookup
+Message-ID: <20221219001459.dcjvn35xei6qmep3@mail.igalia.com>
+References: <20221205135538.3545051-1-mwen@igalia.com>
+ <20221205135538.3545051-3-mwen@igalia.com>
+ <66a7178e-5af2-2aab-dc3f-3c1a4ef991dd@igalia.com>
 MIME-Version: 1.0
-References: <20221218191310.130904-1-joel@joelfernandes.org>
- <589da7c9-5fb7-5f6f-db88-ca464987997e@efficios.com> <CAEXW_YQHpz3dNqW1ocqjr-e9qn09Rkg4kQ19byZORGbO18Xckg@mail.gmail.com>
- <2da94283-4fce-9aff-ac5d-ba181fa0f008@efficios.com>
-In-Reply-To: <2da94283-4fce-9aff-ac5d-ba181fa0f008@efficios.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sun, 18 Dec 2022 19:04:12 -0500
-Message-ID: <CAEXW_YQBmwynuBOWbV6_L2itRr_i3BZUxQ91PDC2We2vXhpztQ@mail.gmail.com>
-Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="liu2hk6vtght2cxq"
+Content-Disposition: inline
+In-Reply-To: <66a7178e-5af2-2aab-dc3f-3c1a4ef991dd@igalia.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mathieu,
 
-On Sun, Dec 18, 2022 at 6:38 PM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
->
-> On 2022-12-18 16:30, Joel Fernandes wrote:
-> > Hi Mathieu,
-> >
-> > On Sun, Dec 18, 2022 at 3:56 PM Mathieu Desnoyers
-> > <mathieu.desnoyers@efficios.com> wrote:
-> >>
-> >> On 2022-12-18 14:13, Joel Fernandes (Google) wrote:
-> >>> Hello, I believe the pre-flip memory barrier is not required. The only reason I
-> >>> can say to remove it, other than the possibility that it is unnecessary, is to
-> >>> not have extra code that does not help. However, since we are issuing a fully
-> >>> memory-barrier after the flip, I cannot say that it hurts to do it anyway.
-> >>>
-> >>> For this reason, please consider these patches as "informational", than a
-> >>> "please merge". :-) Though, feel free to consider merging if you agree!
-> >>>
-> >>> All SRCU scenarios pass with these, with 6 hours of testing.
-> >>
-> >> Hi Joel,
-> >>
-> >> Please have a look at the comments in my side-rcu implementation [1, 2].
-> >> It is similar to what SRCU does (per-cpu counter based grace period
-> >> tracking), but implemented for userspace. The comments explain why this
-> >> works without the memory barrier you identify as useless in SRCU.
-> >>
-> >> Following my implementation of side-rcu, I reviewed the SRCU comments
-> >> and identified that the barrier "/* E */" appears to be useless. I even
-> >> discussed this privately with Paul E. McKenney.
-> >>
-> >> My implementation and comments go further though, and skip the period
-> >> "flip" entirely if the first pass observes that all readers (in both
-> >> periods) are quiescent.
-> >
-> > Actually in SRCU, the first pass scans only 1 index, then does the
-> > flip, and the second pass scans the second index. Without doing a
-> > flip, an index cannot be scanned for forward progress reasons because
-> > it is still "active". So I am curious how you can skip flip and still
-> > scan both indexes? I will dig more into your implementation to learn more.
->
-> If we look at SRCU read-side:
->
-> int __srcu_read_lock(struct srcu_struct *ssp)
-> {
->          int idx;
->
->          idx = READ_ONCE(ssp->srcu_idx) & 0x1;
->          this_cpu_inc(ssp->sda->srcu_lock_count[idx]);
->          smp_mb(); /* B */  /* Avoid leaking the critical section. */
->          return idx;
-> }
->
-> If the thread is preempted for a long period of time between load of
-> ssp->srcu_idx and increment of srcu_lock_count[idx], this means this
-> thread can appear as a "new reader" for the idx period at any arbitrary
-> time in the future, independently of which period is the current one
-> within a future grace period.
->
-> As a result, the grace period algorithm needs to inherently support the
-> fact that a "new reader" can appear in any of the two periods,
-> independently of the current period state.
->
-> As a result, this means that while within period "0", we _need_ to allow
-> newly coming readers to appear as we scan period "0".
+--liu2hk6vtght2cxq
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sure, it already does handle it but that is I believe it is a corner
-case, not the norm.
+On 12/05, Ma=EDra Canal wrote:
+> On 12/5/22 10:55, Melissa Wen wrote:
+> > As v3d_lookup_bos() performs the same steps as drm_gem_objects_lookup(),
+> > replace the explicit code in v3d to simply use the DRM function.
+> >=20
+> > Signed-off-by: Melissa Wen <mwen@igalia.com>
+>=20
+> Reviewed-by: Ma=EDra Canal <mcanal@igalia.com>
 
-> As a result, we can simply scan both periods 0/1 for reader quiescence,
-> even while new readers appear within those periods.
+Applied this series to drm-misc-next.
 
-I think this is a bit dangerous. Yes there is the preemption thing you
-mentioned above, but that is bounded since you can only have a fixed
-number of tasks that underwent that preemption, and it is quite rare
-in the sense, each reader should get preempted just after sampling idx
-but not incrementing lock count.
+Thanks,
 
-However, if we scan while new readers appear (outside of the above
-preemption problem), we can have counter wrap causing a false match
-much quicker.
-The scan loop is:
-check_readers(idx) {
-   count_all_unlocks(idx);
-   smp_mb();
-   count_all_locks(idx);
-   bool done = (locks == unlocks)
-   if (done) {
-         // readers are done, end scan for this idx.
-   } else {
-         // try again later
-   }
-}
+Melissa
 
-So if check_readers() got preempted just after the smp_mb(), then you
-can have lots of tasks enter and exit the read-side critical section
-and increment the locks count. Eventually locks == unlocks will
-happen, and it is screwed. Sure this is also theoretical, but yeah
-that issue can be made "worse" by scanning active readers
-deliberately, especially when such readers can also nest arbitrarily.
+>=20
+> Best Regards,
+> - Ma=EDra Canal
+>=20
+> > ---
+> >  drivers/gpu/drm/v3d/v3d_gem.c | 49 +++--------------------------------
+> >  1 file changed, 3 insertions(+), 46 deletions(-)
+> >=20
+> > diff --git a/drivers/gpu/drm/v3d/v3d_gem.c b/drivers/gpu/drm/v3d/v3d_ge=
+m.c
+> > index 31a37572c11d..6e152ef26358 100644
+> > --- a/drivers/gpu/drm/v3d/v3d_gem.c
+> > +++ b/drivers/gpu/drm/v3d/v3d_gem.c
+> > @@ -299,10 +299,6 @@ v3d_lookup_bos(struct drm_device *dev,
+> >  	       u64 bo_handles,
+> >  	       u32 bo_count)
+> >  {
+> > -	u32 *handles;
+> > -	int ret =3D 0;
+> > -	int i;
+> > -
+> >  	job->bo_count =3D bo_count;
+> > =20
+> >  	if (!job->bo_count) {
+> > @@ -313,48 +309,9 @@ v3d_lookup_bos(struct drm_device *dev,
+> >  		return -EINVAL;
+> >  	}
+> > =20
+> > -	job->bo =3D kvmalloc_array(job->bo_count,
+> > -				 sizeof(struct drm_gem_dma_object *),
+> > -				 GFP_KERNEL | __GFP_ZERO);
+> > -	if (!job->bo) {
+> > -		DRM_DEBUG("Failed to allocate validated BO pointers\n");
+> > -		return -ENOMEM;
+> > -	}
+> > -
+> > -	handles =3D kvmalloc_array(job->bo_count, sizeof(u32), GFP_KERNEL);
+> > -	if (!handles) {
+> > -		ret =3D -ENOMEM;
+> > -		DRM_DEBUG("Failed to allocate incoming GEM handles\n");
+> > -		goto fail;
+> > -	}
+> > -
+> > -	if (copy_from_user(handles,
+> > -			   (void __user *)(uintptr_t)bo_handles,
+> > -			   job->bo_count * sizeof(u32))) {
+> > -		ret =3D -EFAULT;
+> > -		DRM_DEBUG("Failed to copy in GEM handles\n");
+> > -		goto fail;
+> > -	}
+> > -
+> > -	spin_lock(&file_priv->table_lock);
+> > -	for (i =3D 0; i < job->bo_count; i++) {
+> > -		struct drm_gem_object *bo =3D idr_find(&file_priv->object_idr,
+> > -						     handles[i]);
+> > -		if (!bo) {
+> > -			DRM_DEBUG("Failed to look up GEM BO %d: %d\n",
+> > -				  i, handles[i]);
+> > -			ret =3D -ENOENT;
+> > -			spin_unlock(&file_priv->table_lock);
+> > -			goto fail;
+> > -		}
+> > -		drm_gem_object_get(bo);
+> > -		job->bo[i] =3D bo;
+> > -	}
+> > -	spin_unlock(&file_priv->table_lock);
+> > -
+> > -fail:
+> > -	kvfree(handles);
+> > -	return ret;
+> > +	return drm_gem_objects_lookup(file_priv,
+> > +				      (void __user *)(uintptr_t)bo_handles,
+> > +				      job->bo_count, &job->bo);
+> >  }
+> > =20
+> >  static void
 
-> As a result, flipping between periods 0/1 is just relevant for forward
-> progress, not for correctness.
+--liu2hk6vtght2cxq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Sure, agreed, forward progress.
+-----BEGIN PGP SIGNATURE-----
 
->
-> As a result, we can remove barrier /* E */.
->
+iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmOfrPYACgkQwqF3j0dL
+ehxE7w/+NQiNuy5iBh9dTDO9ndipHbsDHfGm+dYsbFmHQwrXt1OdhJJJQRX/CQMG
+N7Y2UNzsCHPD4yob2EJ2A5O6FfRSuJfUB1TDnS2yKtd0c+8h7AZ7JmE3ZSNY4B1q
+6DGRFQSLNPm+QLMplNePSIZlYylbOFBL6pNg0SGlx+RySiOY62mN1ULsGppoajFv
+6PGcLU0e0QANMmWUCr/AqDSYbg9qJS4kclLrkt+Hrv9M8QnqIIaXYb2rTyP98LYX
+Ywm4qzjr4YRtvhh/gGMGUxx2Y3aDdNaoQ4SU2Sp7l8F83Jm3Neml6T7Gr2HwB4R9
+iiz8co76iI3WreWcZkW1ELaigxlIjSLtLwD4fsH4GBdJQzHs7WU2JSOBLYQDtnqx
+NvGG6oiaT7XKhHMmeuywT/idnNVmg6ZXaKX1G6GuRB9Qo6jO/q+L3VJM1Zgj+c9p
+nqlX/xUDjVipeRqF6EWNUQe+e+u/cEtLEwZsXfldVKjD21OYa7kWfH4t0kxmQ0wa
+LJulPhuSb1kxtCYTK8FW5IZ9010JChaByFXB8D6kzXzmsRXfFbnlZKA5QZwlpkd/
+tKkXL8eaej8qM/1WKVp54trF5aLHNerexaO0caMfciYZ1yC20XRfGy4BRf88KSd/
+DvbAb1umF+WsUIQGXs+0yYAOub8saGVXsBF7QJOgOYV4XX1g8aA=
+=T89u
+-----END PGP SIGNATURE-----
 
-IMO, the "E" is not needed at all even if you do the flip because of
-the reasons in the patch series changelogs, so whether we do flip less
-frequently, we still don't need "E" IMHO.
-
-Thanks!
-
- - Joel
-
-
-> Thoughts ?
->
-> Thanks,
->
-> Mathieu
->
->
-> >
-> >> The most relevant comment in side-rcu is:
-> >>
-> >>    * The grace period completes when it observes that there are no active
-> >>    * readers within each of the periods.
-> >>    *
-> >>    * The active_readers state is initially true for each period, until the
-> >>    * grace period observes that no readers are present for each given
-> >>    * period, at which point the active_readers state becomes false.
-> >>
-> >> So I agree with the clarifications you propose here, but I think we can
-> >> improve the grace period implementation further by clarifying the SRCU
-> >> grace period model.
-> >
-> > Thanks a lot, I am curious how you do the "detection of no new
-> > readers" part without globally doing some kind of synchronization. I
-> > will dig more into your implementation to learn more.
-> >
-> > Thanks,
-> >
-> >   - Joel
-> >
-> >
-> >
-> >>
-> >> Thanks,
-> >>
-> >> Mathieu
-> >>
-> >>
-> >> [1] https://github.com/efficios/libside/blob/master/src/rcu.h
-> >> [2] https://github.com/efficios/libside/blob/master/src/rcu.c
-> >>
-> >>>
-> >>> thanks,
-> >>>
-> >>>    - Joel
-> >>>
-> >>> Joel Fernandes (Google) (2):
-> >>> srcu: Remove comment about prior read lock counts
-> >>> srcu: Remove memory barrier "E" as it is not required
-> >>>
-> >>> kernel/rcu/srcutree.c | 10 ----------
-> >>> 1 file changed, 10 deletions(-)
-> >>>
-> >>> --
-> >>> 2.39.0.314.g84b9a713c41-goog
-> >>>
-> >>
-> >> --
-> >> Mathieu Desnoyers
-> >> EfficiOS Inc.
-> >> https://www.efficios.com
-> >>
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> https://www.efficios.com
->
+--liu2hk6vtght2cxq--
