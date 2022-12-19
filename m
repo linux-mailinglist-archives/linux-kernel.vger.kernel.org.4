@@ -2,130 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 485C3651547
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 23:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EE765154C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 23:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232634AbiLSWEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 17:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        id S233009AbiLSWFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 17:05:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232633AbiLSWDf (ORCPT
+        with ESMTP id S232905AbiLSWFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 17:03:35 -0500
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D82140F6;
-        Mon, 19 Dec 2022 14:03:21 -0800 (PST)
-Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJJr66N024598;
-        Mon, 19 Dec 2022 22:03:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pps0720;
- bh=O4GnIk7zd/4MqgzKF2156bsbM+N7CAdELJWrz2MCgdk=;
- b=SXjklFqcz0t9iTLogr2jGRxusZQC60LRJIbIqsGnHdNhOeE83d0mLu6phlugRe6kfDdl
- ujMBmMkL3+aSMn/R5QtS1k8ppkPjA30SDCRTBZjjRBwzMwo5K+1PjoPBD26ysB8lyGd9
- of2PLn64zaXCZUBrDiUbra03X5J58JNqmanlAa+mW0NIHQ33QqDfYxADKh0vM7qjFsBH
- SpVWFE56M6x1iieblh75hPbo7NYyWq5txFHkhqWf/LvJly+c0NXNQ3EMH4LFCyDPiMwz
- NeyIiMhWVvzLs0BfE7BGpIv6R3CspSX1Sytg5q/vN3npNUgjoDt0DmASHBDpEeVkgWs1 SA== 
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3mjx3b10yx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 22:03:05 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 75DB84AC45;
-        Mon, 19 Dec 2022 22:03:04 +0000 (UTC)
-Received: from adevxp033-sys.us.rdlabs.hpecorp.net (unknown [16.231.227.36])
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id A8B1380649A;
-        Mon, 19 Dec 2022 22:03:03 +0000 (UTC)
-From:   Robert Elliott <elliott@hpe.com>
-To:     herbert@gondor.apana.org.au, davem@davemloft.net, Jason@zx2c4.com,
-        ardb@kernel.org, ap420073@gmail.com, David.Laight@ACULAB.COM,
-        ebiggers@kernel.org, tim.c.chen@linux.intel.com, peter@n8pjl.ca,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com
-Cc:     linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Robert Elliott <elliott@hpe.com>
-Subject: [PATCH 13/13] crypto: x86/aria - yield FPU context only when needed
-Date:   Mon, 19 Dec 2022 16:02:23 -0600
-Message-Id: <20221219220223.3982176-14-elliott@hpe.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221219220223.3982176-1-elliott@hpe.com>
-References: <20221219220223.3982176-1-elliott@hpe.com>
+        Mon, 19 Dec 2022 17:05:37 -0500
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A0E15A29;
+        Mon, 19 Dec 2022 14:03:38 -0800 (PST)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1443a16b71cso13252749fac.13;
+        Mon, 19 Dec 2022 14:03:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9zNRISushP1uPF43nvBSWhUAx98/OjFNEuU2dho5Z9w=;
+        b=2pWyxlgYs8qHkzD/2svN0AwUKKUrmFaRCn3ZG5QjyvYUmefFyP624JiYcAuUczt0Dd
+         qB6IY4Rdy5JrekAlBzZO4FmHAtcqVyesBj2FpJwcN91ONOOycMS9C/EZCU+35eoa6Txa
+         TkdbXGXtzHqxqABjTNXPOBO9ZEH/69k5rCkHlvmOv5puFLbFsT8M8TL8zyn6r282/b67
+         HhJkHvlFkrj4IwHqPvEdqo45z+gJgKOUYkvZ8CsoIMgTQkO4eoqmaNl9ULKnNcnmbNCH
+         9uZ6L27Rjobc+wPlejUPq6ImJkVdYJRT+rCEhkyfjSDP5pXz0CdAYVB4cG85UThtQ6nd
+         cJ5w==
+X-Gm-Message-State: ANoB5pl7NGjxHzR7mwhF5DIdfu8SSPqm1Qpv8Vmed9ML2yMPxB5R57XI
+        2evIS0x1bAFlIPjADE1keYlcCnAo9Q==
+X-Google-Smtp-Source: AA0mqf4ys9pwJ+gHtqOsGOwRvOjjpV0tRqVRI7kSauPbUgOkNYnPhQR5UDcCu1PouMxza+VuOKb2Pw==
+X-Received: by 2002:a05:6870:4604:b0:13b:7f03:2a7e with SMTP id z4-20020a056870460400b0013b7f032a7emr19966043oao.16.1671487416162;
+        Mon, 19 Dec 2022 14:03:36 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q22-20020a4a8e16000000b004982f2d3c03sm4380763ook.25.2022.12.19.14.03.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 14:03:35 -0800 (PST)
+Received: (nullmailer pid 2409793 invoked by uid 1000);
+        Mon, 19 Dec 2022 22:03:35 -0000
+Date:   Mon, 19 Dec 2022 16:03:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        bruno.thomsen@gmail.com,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: rtc: pcf2127: add missing pcf/pca2129
+ entries
+Message-ID: <20221219220335.GA2400372-robh@kernel.org>
+References: <20221219194241.3817250-1-hugo@hugovil.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: l8D768RjsgE5OEabaL3ZFIEKiFHi-Ky-
-X-Proofpoint-GUID: l8D768RjsgE5OEabaL3ZFIEKiFHi-Ky-
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-19_01,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- clxscore=1015 impostorscore=0 priorityscore=1501 bulkscore=0 adultscore=0
- lowpriorityscore=0 phishscore=0 suspectscore=0 malwarescore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212190193
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219194241.3817250-1-hugo@hugovil.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The x86 assembly language implementations using SIMD process data
-between kernel_fpu_begin() and kernel_fpu_end() calls. That
-disables scheduler preemption, so prevents the CPU core from being
-used by other threads.
+On Mon, Dec 19, 2022 at 02:42:40PM -0500, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> 
+> The pcf2127_of_match structure in drivers/rtc/rtc-pcf2127.c also
+> contains:
+>     nxp,pcf2129
+>     ncp,pca2129
+> 
+> Add these missing entries.
+> 
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> ---
+>  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+> index cde7b1675ead..00dbae7e23c2 100644
+> --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+> @@ -14,7 +14,10 @@ maintainers:
+>  
+>  properties:
+>    compatible:
+> -    const: nxp,pcf2127
+> +    enum:
+> +      - nxp,pcf2127
+> +      - nxp,pcf2129
+> +      - ncp,pca2129
 
-During ctr mode, rather than break the processing into 256 byte
-passes, each of which unilaterally calls kernel_fpu_begin() and
-kernel_fpu_end(), periodically check if the kernel scheduler wants
-to run something else on the CPU. If so, yield the kernel FPU
-context and let the scheduler intervene.
+Check Documentation/devicetree/bindings/rtc/trivial-rtc.yaml.
 
-Signed-off-by: Robert Elliott <elliott@hpe.com>
----
- arch/x86/crypto/aria_aesni_avx_glue.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Maybe they aren't trivial after all and should be removed? Or 
+nxp,pcf2127 is also trivial?
 
-diff --git a/arch/x86/crypto/aria_aesni_avx_glue.c b/arch/x86/crypto/aria_aesni_avx_glue.c
-index c561ea4fefa5..6657ce576e6c 100644
---- a/arch/x86/crypto/aria_aesni_avx_glue.c
-+++ b/arch/x86/crypto/aria_aesni_avx_glue.c
-@@ -5,6 +5,7 @@
-  * Copyright (c) 2022 Taehee Yoo <ap420073@gmail.com>
-  */
- 
-+#include <asm/simd.h>
- #include <crypto/algapi.h>
- #include <crypto/internal/simd.h>
- #include <crypto/aria.h>
-@@ -85,17 +86,19 @@ static int aria_avx_ctr_encrypt(struct skcipher_request *req)
- 		const u8 *src = walk.src.virt.addr;
- 		u8 *dst = walk.dst.virt.addr;
- 
-+		kernel_fpu_begin();
- 		while (nbytes >= ARIA_AESNI_PARALLEL_BLOCK_SIZE) {
- 			u8 keystream[ARIA_AESNI_PARALLEL_BLOCK_SIZE];
- 
--			kernel_fpu_begin();
- 			aria_ops.aria_ctr_crypt_16way(ctx, dst, src, keystream,
- 						      walk.iv);
--			kernel_fpu_end();
- 			dst += ARIA_AESNI_PARALLEL_BLOCK_SIZE;
- 			src += ARIA_AESNI_PARALLEL_BLOCK_SIZE;
- 			nbytes -= ARIA_AESNI_PARALLEL_BLOCK_SIZE;
-+
-+			kernel_fpu_yield();
- 		}
-+		kernel_fpu_end();
- 
- 		while (nbytes >= ARIA_BLOCK_SIZE) {
- 			u8 keystream[ARIA_BLOCK_SIZE];
--- 
-2.38.1
+Rob
 
+P.S. 'make dt_compatible_check' will check in the kernel for 
+undocumented (by a schema) compatibles.
