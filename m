@@ -2,211 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635AD6512F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:25:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0112D651302
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232772AbiLSTZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 14:25:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50298 "EHLO
+        id S232361AbiLST0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 14:26:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231821AbiLSTZJ (ORCPT
+        with ESMTP id S232746AbiLSTZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 14:25:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A6612AE8;
-        Mon, 19 Dec 2022 11:24:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F19876109A;
-        Mon, 19 Dec 2022 19:24:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA2C8C433EF;
-        Mon, 19 Dec 2022 19:24:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1671477890;
-        bh=VEG+uXiflBKhgqBO/xFeCoQH0Zpafl5hadus6dwG1Fc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=E4/jb++WWMo/EyVUzGh1yKmxCtM+4dFlkE0bumKwIHclJKx8UWGHVWcTJU42xOXwv
-         jq+tNByZHcVc6ghPYlWMpo5Ob6EuzRrCFmem7V+i4zDoVee/1A3lAaajgtlyR9nLnh
-         WOAFMyJwsdUCUyf/CKmiAaEP4rnnUPI43Ai6sGF4=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 6.0 00/28] 6.0.15-rc1 review
-Date:   Mon, 19 Dec 2022 20:22:47 +0100
-Message-Id: <20221219182944.179389009@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.0
-MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.15-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-6.0.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 6.0.15-rc1
-X-KernelTest-Deadline: 2022-12-21T18:29+00:00
+        Mon, 19 Dec 2022 14:25:44 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18F4C02;
+        Mon, 19 Dec 2022 11:25:42 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJIwxkW007687;
+        Mon, 19 Dec 2022 19:22:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type :
+ content-transfer-encoding : in-reply-to : mime-version; s=corp-2022-7-12;
+ bh=SlWWY7t2+2YgwdzarOOQstzXkTfP5P21pbnljBQ7tlE=;
+ b=0OxptIEqjnm1bseqLKEuUhJpj0/UyLtQI5HyTLM0paRfo701FalT/BEwWv+u8T72aRY1
+ 5BKDlPGk8sX3We5PjGSVxfwGESomJFm8K/cqgpRotCtm59h5Tw6467BBTt8DKCzx/55P
+ ZUetTmRc6FGwvnXIzoWemRHlbGdS6Xe2i8mBu5cD0Se1OGcmUc4B5fwcRhggvFLmKnzD
+ vMqoRGHH36z7Ey1Ma44zfv3GdHrF51yjkhce6eNdzHamlyNnjKV3/cjzIIXTUYexIpgi
+ 8Topnv3Nrn9bQxi2S09EBclCVnQWCNSXRsakxuoN4hsdVa6FjYqX9zFJ1MHtjyOUr0TX Bw== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3mh6tm3pt2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 19 Dec 2022 19:22:56 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2BJHt6iP003454;
+        Mon, 19 Dec 2022 19:22:55 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2105.outbound.protection.outlook.com [104.47.55.105])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3mh473yxh2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 19 Dec 2022 19:22:55 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QEukeyVKrTMGl6WR15zDq7yKKP1Xl2ireNnSuFfZesGUtECAKJgAwBodkriSTsKetn2leygfvwVRnJ0pfqizfN83EAQHg27X+z5Btw5Q9LGP8+yEtI/n45Sm5LvS44tVzUBYV3/JrKBsX7wSJ2bmMQkjIdIdCJY1g3gwfDouPqCe4FSpRGVp8Aw9nhwHaZ8J6QSU0k1rmJ9y9kic8hgX77YYJ02rAqsWuTpxmTsStbv7OtEORBYxw7lsHg8Zz3rHgCOuYVRld8xyvGHf4b9YAjZZVAF9JGfkgJL5t8BFl/cyoZ+CB8J0MS1lKy6OHvLLJM9327YXAkQI4IzExPK1cw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CFj8boNVCdt47AAYwo2owRRmTQOIZbkSIZy1UEoRjeg=;
+ b=BSAZKQnbirUGALmPEQaAoB2O9jXOpJa8QjogMXJl4tVaXo6PnI6L8gIOMh5UFMHjmeJhMOXB2SIx+iwl6q2LPX1TFpqLwuado7BDToWoS2/kVzdTkBJzR9qTInaU3gFgoM74IRI2C2/l7GqOrHpuVhnheRbQX+AQ4l24qQqLoana62b4m9HT0H1SZcYWCEltrxrFl24ALvC3FDyVSW9wu4YWnCJWMRk2iTRdOap5C4YXkbFH78EB8UBDHD5tyvfpJS7N4aoxgMZpMn88dHQ6JISaB2KvRV/wusFYgJSRIiBi+Z/bMyj0ZhlTHiksK8t1SEwPlsTjtVB5b3Tq6CVEMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CFj8boNVCdt47AAYwo2owRRmTQOIZbkSIZy1UEoRjeg=;
+ b=YQfsu0pq4rUCmVegNHf8B44P2gwb3m7tMKECnDkQyizKUzQJeUIW1HN/yLL3cWwVSMNMNpyt0y2kuOHiQ+XZsdmebaX/V7Y3dH8H+gtFGc1BSE/gIYqzt8ygPjjF4lCHGXRAYtaI9V+kDyZdbQtsvSziZouol+zJmsUM8pzECBk=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by SJ0PR10MB4463.namprd10.prod.outlook.com (2603:10b6:a03:2af::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Mon, 19 Dec
+ 2022 19:22:53 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::8d67:8c42:d124:3721]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::8d67:8c42:d124:3721%4]) with mapi id 15.20.5924.016; Mon, 19 Dec 2022
+ 19:22:52 +0000
+Date:   Mon, 19 Dec 2022 11:22:47 -0800
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Michal Hocko <mhocko@suse.com>,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rik van Riel <riel@surriel.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [RFC PATCH] mm: remove zap_page_range and change callers to use
+ zap_vma_page_range
+Message-ID: <Y6C6B08nTWusK3RI@monkey>
+References: <20221216192012.13562-1-mike.kravetz@oracle.com>
+ <Y6A6KqXObGKxvDrX@dhcp22.suse.cz>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y6A6KqXObGKxvDrX@dhcp22.suse.cz>
+X-ClientProxiedBy: MW4PR03CA0083.namprd03.prod.outlook.com
+ (2603:10b6:303:b6::28) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|SJ0PR10MB4463:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2e1db3a1-9c4b-4cec-562f-08dae1f66bc2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RVA8FuHVq8M6ma2de51gHpPsESP3hciVufbSxkmOdg56EoBV8nPeLc37BteYHjwzWmLxXTz2tADI5FDn8DNByWSVArX+2qiaQlNF55WboLdYrtv/PTouDknIDpyUOxaXnWNTzpoHMGZSxRR9yGnGf3GTxR5+p/ghqXW6JNUaRLjcCJf3NutHtZaMGNb3eVezUGLM+ejhx1tSJU7FUY28ld0l1rzT3GpRdy+PTSzlKd4oKgJswkJ5An7iffSSV79DDlaPirJYTjI4R9Co8UbKFP/B4zhtuu+284QHP8RnR2mmPlPubUb/pRNtNQCHqctiYG2dZHSGG9rFrtCg0P/G/7YpORp8i7Klyv/C2Rq7XbqxGOHaWPEmm17jJh8B1SkNGMcpq9vvpl1SHLAKeQIZPKDx2LaJnxwmXWfHniRM6SIZe+SBka8Kdj09//mBSs6aCERJbReGFoZvFw/iER6Fi63PDTiQMkj26q/iMylj7E+/FkWJrxs5wMVTaIgXN/xzxZHh/2V9PhbdY9Eu75rWwTWxbufYeIvIimI+FsVW7GbdvXADR71fp9AON1cNEuTxN11YHzH9AvHGjuqfuxD5QnLQi1L1XFcYdcLpBkvUSS09AM5cfp9BjSKVQyX88fQEPVcTVF8PRqEk7ox/W71S4XzygxbodN0KMzZhsR+wPZs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(366004)(136003)(376002)(39860400002)(346002)(451199015)(8936002)(41300700001)(66574015)(9686003)(186003)(6512007)(110136005)(54906003)(316002)(66946007)(4326008)(44832011)(86362001)(33716001)(38100700002)(83380400001)(7416002)(8676002)(66476007)(66556008)(5660300002)(2906002)(966005)(6486002)(478600001)(53546011)(6506007)(6666004)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?/hVNmuwB9+o9K6QTCPA7AevS8LE04A2rg3/2mFF79DHCbZeXOcyIG8gdO9?=
+ =?iso-8859-1?Q?eVBrZr+PbWUI6KDIn2aHLLyj81NWeJ98VLUfo4QxoUXhSovX8vnoyNa++F?=
+ =?iso-8859-1?Q?9F3LHpImeEvPvtifvKeIQ5rXNQKPlH4Ljdgz59GXWbbkWmFLJFfsvYnf52?=
+ =?iso-8859-1?Q?SCi9zXwt7qb3qP6I+gq1hxqhoVS1fLqcxyXvX4jNa3LwN9E1PNQx5+9GNr?=
+ =?iso-8859-1?Q?I+U2LenkB0hPsDUEa3TOGuLKRiiW73W/CG412EdPmcV/od6Ph4Liq12wR2?=
+ =?iso-8859-1?Q?k32DZjT1mgkWyCq2/TWA5Bt1V+d0hVS6d8GfT/UBjQt6BzinAT85Lk6xM8?=
+ =?iso-8859-1?Q?yYBxCgRFondqXBH6OQE3PesGrVCFf7VdEHnvws327EyEc4+KlwuKxyxqws?=
+ =?iso-8859-1?Q?7SLXOIQs60QWWkb0oO2n4oH8Ep9ltjNZUQPU9QCHCPDgVPd6O5TolMIEXV?=
+ =?iso-8859-1?Q?LDVOR88BZpvwdS66G+sGPflSeIh6DViVUm4mkGAwZBQDIabJ7mEmALBuYH?=
+ =?iso-8859-1?Q?eZpQUjMG9xJnGMsHfTRM8rtUSAcj442qHR4++V7OXpBCH0M1p7DVlWvCI+?=
+ =?iso-8859-1?Q?gT9awH+pDgVQwDFuqiNHJX8BXlIMKUmCgyx23JBFLbNx7AHQlGiOuOu58d?=
+ =?iso-8859-1?Q?/D4ppWq7D5GrWixQFhEdhHgNEVUAUT56cF75RY2sz+WFvFwn7LsLl2W/jj?=
+ =?iso-8859-1?Q?Ldgu88LYPNEP5RleYLjlC+bJtBP50eNlSZ9OJyYw5KZFdUlmTpQbbH57bu?=
+ =?iso-8859-1?Q?/LFCYdvnJFpE2kArCLQS3lUic9IHs16yOtyKySoBiEenyZuFdA1nn1ixHQ?=
+ =?iso-8859-1?Q?yUbmoY+pKrjy9jmonz2OoyEC84sK8WnZ8HPqDk+PMEXfj9/emMHs2L/BHm?=
+ =?iso-8859-1?Q?563GMz1RkNwhYaVFgXlcbAxDEpNsJkG4QP7ktJuGKfshtXHH1v0O7jFL9R?=
+ =?iso-8859-1?Q?c35xLObcNbrvj7nOURdghtrH62BJh/L3MOuCUBHjlReUImrv0DhQX6RE+a?=
+ =?iso-8859-1?Q?PHo3nDnGLE1MCWE46JSaEw/+IrBnJKgXCX+hNbKWrZuU2hrTvaacY8ybqR?=
+ =?iso-8859-1?Q?B1ot+1RBeGv4080bLD3hN7GC2uXChSGvZLIsiuIbuU7uBJo6LVOnoIdlbv?=
+ =?iso-8859-1?Q?yokgBls+EjSvZ0X1Fy4GmYStlL04oU4UwJwGWNqmZLMQMXes2RrENXLs6p?=
+ =?iso-8859-1?Q?87PQBBfXu00lFFRGdGDW6jUXw8fjjD+NNl6YMdte36Acs9FaMSZmgt5mSk?=
+ =?iso-8859-1?Q?s93in/dFoQp6OkQ1085qFSWeUG/sQj24AcUII7ruJ0UoWN5SRZCiQ6dtIc?=
+ =?iso-8859-1?Q?6Yj0le3rFWkIK0H8Q28F8D3Gq7nw6Jhucck/AoQG5MUGLPXfQwa3vwk7hf?=
+ =?iso-8859-1?Q?1U9aCOk0PZbo+cL+arajdlWWF4sUie14NW9YRxwz99FKbK4jNNX7BJ+oxd?=
+ =?iso-8859-1?Q?ANpZHGdjZ3GxOVmvnRkeoZ88b20RhI7ro+YIi4+6xjHLj1X2/u8bCtaIR0?=
+ =?iso-8859-1?Q?oIxbjkSybIZJB4pt+RHztHJh6/olzFKACpZLcATXBC/VKeWL2JRx16HLgJ?=
+ =?iso-8859-1?Q?MwzMw1H0qW4Jm1X5lsXKDUlialIHPusrWiO4TUe6V639VV+O7AvnK0cCv5?=
+ =?iso-8859-1?Q?W/WFx7vtdzFEJA8RZNwhaKK7wBFHQeJ+O1LIXDZTvadkijrSOVVi8qxw?=
+ =?iso-8859-1?Q?=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e1db3a1-9c4b-4cec-562f-08dae1f66bc2
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2022 19:22:51.9805
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ca6o4sLz+HWPiq//yOqMs8dwEVB0205yUdETFnVWAsjwmNrBfVt4pwovsst2v81cis09FFnBx7YR8kIUBMq0uw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4463
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-19_01,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0 suspectscore=0
+ adultscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212190172
+X-Proofpoint-GUID: 4wAKUmjGiA2Tyfd4C2xWtgZTWvB4HmLf
+X-Proofpoint-ORIG-GUID: 4wAKUmjGiA2Tyfd4C2xWtgZTWvB4HmLf
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 6.0.15 release.
-There are 28 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+On 12/19/22 13:06, Michal Hocko wrote:
+> On Fri 16-12-22 11:20:12, Mike Kravetz wrote:
+> > zap_page_range was originally designed to unmap pages within an address
+> > range that could span multiple vmas.  While working on [1], it was
+> > discovered that all callers of zap_page_range pass a range entirely within
+> > a single vma.  In addition, the mmu notification call within zap_page
+> > range does not correctly handle ranges that span multiple vmas as calls
+> > should be vma specific.
+> 
+> Could you spend a sentence or two explaining what is wrong here?
 
-Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
-Anything received after that time might be too late.
+Hmmmm?  My assumption was that the range passed to mmu_notifier_range_init()
+was supposed to be within the specified vma.  When looking into the notifier
+routines, I could not find any documentation about the usage of the vma within
+the mmu_notifier_range structure.  It was introduced with commit bf198b2b34bf
+"mm/mmu_notifier: pass down vma and reasons why mmu notifier is happening".
+However, I do not see this being used today.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.15-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-and the diffstat can be found below.
+Of course, I could be missing something, so adding Jérôme.
 
-thanks,
+> 
+> > Instead of fixing zap_page_range, change all callers to use the new
+> > routine zap_vma_page_range.  zap_vma_page_range is just a wrapper around
+> > zap_page_range_single passing in NULL zap details.  The name is also
+> > more in line with other exported routines that operate within a vma.
+> > We can then remove zap_page_range.
+> 
+> I would stick with zap_page_range_single rather than adding a new
+> wrapper but nothing really critical.
 
-greg k-h
+I am fine with doing that as well.  My only reason for the wrapper is that all 
+callers outside mm/memory.c would pass in NULL zap details.
 
--------------
-Pseudo-Shortlog of commits:
+> 
+> > Also, change madvise_dontneed_single_vma to use this new routine.
+> > 
+> > [1] https://lore.kernel.org/linux-mm/20221114235507.294320-2-mike.kravetz@oracle.com/
+> > Suggested-by: Peter Xu <peterx@redhat.com>
+> > Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> 
+> Other than that LGTM
+> Acked-by: Michal Hocko <mhocko@suse.com>
+> 
+> Thanks!
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 6.0.15-rc1
-
-Rasmus Villemoes <linux@rasmusvillemoes.dk>
-    net: loopback: use NET_NAME_PREDICTABLE for name_assign_type
-
-Tiezhu Yang <yangtiezhu@loongson.cn>
-    selftests: net: Use "grep -E" instead of "egrep"
-
-Sungwoo Kim <iam@sung-woo.kim>
-    Bluetooth: L2CAP: Fix u8 overflow
-
-Ferry Toth <ftoth@exalondelft.nl>
-    usb: ulpi: defer ulpi_register on ulpi_read_id timeout
-
-Nikolaus Voss <nikolaus.voss@haag-streit.com>
-    KEYS: encrypted: fix key instantiation with user-provided data
-
-Shruthi Sanil <shruthi.sanil@intel.com>
-    usb: dwc3: pci: Update PCIe device ID for USB3 controller on CPU sub-system for Raptor Lake
-
-Heikki Krogerus <heikki.krogerus@linux.intel.com>
-    usb: typec: ucsi: Resume in separate work
-
-Tony Nguyen <anthony.l.nguyen@intel.com>
-    igb: Initialize mailbox message for VF reset
-
-Reka Norman <rekanorman@chromium.org>
-    xhci: Apply XHCI_RESET_TO_DEFAULT quirk to ADL-N
-
-Andy Chi <andy.chi@canonical.com>
-    ALSA: hda/realtek: fix mute/micmute LEDs for a HP ProBook
-
-Johan Hovold <johan@kernel.org>
-    USB: serial: f81534: fix division by zero on line-speed change
-
-Johan Hovold <johan@kernel.org>
-    USB: serial: f81232: fix division by zero on line-speed change
-
-Bruno Thomsen <bruno.thomsen@gmail.com>
-    USB: serial: cp210x: add Kamstrup RF sniffer PIDs
-
-Duke Xin <duke_xinanwen@163.com>
-    USB: serial: option: add Quectel EM05-G modem
-
-Szymon Heidrich <szymon.heidrich@gmail.com>
-    usb: gadget: uvc: Prevent buffer overflow in setup handler
-
-Jan Kara <jack@suse.cz>
-    udf: Fix extending file within last block
-
-Jan Kara <jack@suse.cz>
-    udf: Do not bother looking for prealloc extents if i_lenExtents matches i_size
-
-Jan Kara <jack@suse.cz>
-    udf: Fix preallocation discarding at indirect extent boundary
-
-Jan Kara <jack@suse.cz>
-    udf: Discard preallocation before extending file with a hole
-
-Jiri Olsa <jolsa@kernel.org>
-    selftests/bpf: Add kprobe_multi kmod attach api tests
-
-Jiri Olsa <jolsa@kernel.org>
-    selftests/bpf: Add kprobe_multi check to module attach test
-
-Jiri Olsa <jolsa@kernel.org>
-    selftests/bpf: Add bpf_testmod_fentry_* functions
-
-Jiri Olsa <jolsa@kernel.org>
-    selftests/bpf: Add load_kallsyms_refresh function
-
-Jiri Olsa <jolsa@kernel.org>
-    bpf: Take module reference on kprobe_multi link
-
-Jiri Olsa <jolsa@kernel.org>
-    bpf: Rename __bpf_kprobe_multi_cookie_cmp to bpf_kprobe_multi_addrs_cmp
-
-Jiri Olsa <jolsa@kernel.org>
-    ftrace: Add support to resolve module symbols in ftrace_lookup_symbols
-
-Jiri Olsa <jolsa@kernel.org>
-    kallsyms: Make module_kallsyms_on_each_symbol generally available
-
-John Thomson <git@johnthomson.fastmail.com.au>
-    PCI: mt7621: Add sentinel to quirks table
-
-
--------------
-
-Diffstat:
-
- Documentation/security/keys/trusted-encrypted.rst  |  3 +-
- Makefile                                           |  4 +-
- drivers/net/ethernet/intel/igb/igb_main.c          |  2 +-
- drivers/net/loopback.c                             |  2 +-
- drivers/pci/controller/pcie-mt7621.c               |  3 +-
- drivers/usb/common/ulpi.c                          |  2 +-
- drivers/usb/dwc3/dwc3-pci.c                        |  2 +-
- drivers/usb/gadget/function/f_uvc.c                |  5 +-
- drivers/usb/host/xhci-pci.c                        |  4 +-
- drivers/usb/serial/cp210x.c                        |  2 +
- drivers/usb/serial/f81232.c                        | 12 +--
- drivers/usb/serial/f81534.c                        | 12 +--
- drivers/usb/serial/option.c                        |  3 +
- drivers/usb/typec/ucsi/ucsi.c                      | 17 +++-
- drivers/usb/typec/ucsi/ucsi.h                      |  1 +
- fs/udf/inode.c                                     | 76 ++++++++---------
- fs/udf/truncate.c                                  | 48 ++++-------
- include/linux/module.h                             |  9 ++
- kernel/module/kallsyms.c                           |  2 -
- kernel/trace/bpf_trace.c                           | 98 +++++++++++++++++++++-
- kernel/trace/ftrace.c                              | 16 ++--
- net/bluetooth/l2cap_core.c                         |  3 +-
- security/keys/encrypted-keys/encrypted.c           |  6 +-
- sound/pci/hda/patch_realtek.c                      |  2 +
- .../selftests/bpf/bpf_testmod/bpf_testmod.c        | 24 ++++++
- .../bpf/prog_tests/kprobe_multi_testmod_test.c     | 89 ++++++++++++++++++++
- .../selftests/bpf/prog_tests/module_attach.c       |  7 ++
- tools/testing/selftests/bpf/progs/kprobe_multi.c   | 50 +++++++++++
- .../selftests/bpf/progs/test_module_attach.c       |  6 ++
- tools/testing/selftests/bpf/trace_helpers.c        | 20 +++--
- tools/testing/selftests/bpf/trace_helpers.h        |  2 +
- tools/testing/selftests/net/toeplitz.sh            |  2 +-
- 32 files changed, 412 insertions(+), 122 deletions(-)
-
-
+Thanks for taking a look.
+-- 
+Mike Kravetz
