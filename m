@@ -2,160 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0EE650AAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 12:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FE1650AAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 12:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbiLSLUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 06:20:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35444 "EHLO
+        id S231747AbiLSLVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 06:21:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbiLSLUb (ORCPT
+        with ESMTP id S231301AbiLSLVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 06:20:31 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABD82672;
-        Mon, 19 Dec 2022 03:20:30 -0800 (PST)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJ9k2UO010321;
-        Mon, 19 Dec 2022 05:20:22 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=u5lQpuaVFsCIgj9TsW97JvpQ+ol6bSgZvGNrCVXttmk=;
- b=El1/Q2GA+SZ66Xyichte/akd+hpM37MMnx+lLZsJYZWyt/yfkYRY0tjZBhT9JbZJmQlQ
- YNJ9L1ZPCNCZ2z3I45BTOCH62YuX2Bd3zC47oMAs1df6+ycaoiQrJDSpeCsyIGTsx551
- DxKdTb4Ivftv4aOVjqZpWIazn70bd+/2980gpaUbg6nx6RD0efOAujw8u4l4ViVsjSow
- qCHGudMIp82N1fHsCZ1FrtYzPOguTn0cp0jHUhEQngSZTVp4DgOCK8Fi4/BZXwLMj/C/
- 1XrOdRqUQs4eF9R6XKqYzqsjGG98NnDrhzXO7tg4XqFYqD72TJG7Xe59FFgJBhfgwjbQ Xg== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3mhc27afp1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 05:20:22 -0600
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Mon, 19 Dec
- 2022 05:20:20 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Mon, 19 Dec 2022 05:20:20 -0600
-Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.111])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id F051011CC;
-        Mon, 19 Dec 2022 11:20:19 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
-        <wsa@kernel.org>
-CC:     <hdegoede@redhat.com>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH v3] i2c: designware: Fix unbalanced suspended flag
-Date:   Mon, 19 Dec 2022 11:20:19 +0000
-Message-ID: <20221219112019.882092-1-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 19 Dec 2022 06:21:30 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD9A2AFB;
+        Mon, 19 Dec 2022 03:21:29 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id b69so12367200edf.6;
+        Mon, 19 Dec 2022 03:21:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UQqA7ygsto6xaIwShunauCg+8P+zPr4dDwx6z8aEPXk=;
+        b=Qecx+b4KPAd9/b+nHyGpQdY6ioSxL7WtnO/O8BKN3xlRrLDu4JKdWez/YZqgCM1pkU
+         oHF+aaw7v+iHBPAflj8s1AqvmZPQf9WosqgePDkQqSAMQsZRl9uS6MDOBkJs4qLTdjLN
+         SQApEspVNLNaQtalgfWwNv3X2bW2/XQSKHnQdyEIWc6AMe/ah26IgFYyZZGzVZxVlSit
+         jxESMo2+x+rGcJsXCPmlVQUoUOJvFjEOzZ6pxPwjXk6pLb/8BuVYiftWXsCQRuk8IkRI
+         8229+/qKrVwOXwHsVskI6ZwbVklg1K/bbTEOgTzVO6ge0EC+UYkPwu05a4ta3BUOzrb8
+         Piwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UQqA7ygsto6xaIwShunauCg+8P+zPr4dDwx6z8aEPXk=;
+        b=1UnEeDlM2CUgN3U1AjnZhyqKKAZv0ZDqWCq/BSLbecm/cIKWaEq2qN2Xpavmn0Y8ge
+         QdZYlHirFXagIpZCbur3+jtbDQC3Bs/oYqZ+0B5m8hLyvD+CfNJYjW0fA8VXJjBG09rl
+         B5709zhjZ24QmpjkNbjHPk0X7s3cUaS0DgTYFaov63sfIPXgsy7ZazEU7fUtNHtMybce
+         ligx4YfusKz7CQSJBwdYt9mB7qVnBXS2L7XxXiHUwzKc+75x/SYgMwDuHX+kESV9DZ9e
+         pN3dPzclp5yCWEIDKyW0Qc+8v6JlvhtHXcckJ5ubQA30IGJ20lv+aoL8Iv14NH9M/2/a
+         v1Ow==
+X-Gm-Message-State: ANoB5plqBtxolRC+6dGyXsJ6G8UL9tvzYmjV2UTwlsbsA/cYwdGsM7ma
+        hmnMr74kFtld1sAyNEtmawjmzZNez+aE8AW9xIBG2u2NSVr7tA==
+X-Google-Smtp-Source: AA0mqf4MJzdQeHVxrr4jU2yyYqIoZSH1BCgma3gnh1/Vinrzu8kFrTI3pr7SAtSy6Z9epAityEv24oeSY2sHT6rbsPM=
+X-Received: by 2002:aa7:cc08:0:b0:461:8a43:e93 with SMTP id
+ q8-20020aa7cc08000000b004618a430e93mr10171686edt.275.1671448887967; Mon, 19
+ Dec 2022 03:21:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: szsJb1a1oTWtpjGAp2R6PRe5kwA6Y5qX
-X-Proofpoint-GUID: szsJb1a1oTWtpjGAp2R6PRe5kwA6Y5qX
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221212115505.36770-5-prabhakar.mahadev-lad.rj@bp.renesas.com> <Y54r+5lkSvgA9IxR@spud>
+In-Reply-To: <Y54r+5lkSvgA9IxR@spud>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 19 Dec 2022 11:21:01 +0000
+Message-ID: <CA+V-a8vdijL7qcju2zH2phfj2+NXNkw35g8j8KX=RR74jSAK1Q@mail.gmail.com>
+Subject: Re: [PATCH v5 4/6] riscv: mm: dma-noncoherent: Pass direction and
+ operation to ALT_CMO_OP()
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Guo Ren <guoren@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
-i2c_mark_adapter_resumed().
+Hi Conor,
 
-dw_i2c_plat_resume() must always be called, so that
-i2c_mark_adapter_resumed() is called. This is not compatible with
-DPM_FLAG_MAY_SKIP_RESUME, so remove the flag.
+Thank you for the review.
 
-Since the controller is always resumed on system resume the
-dw_i2c_plat_complete() callback is redundant and has been removed.
+On Sat, Dec 17, 2022 at 8:52 PM Conor Dooley <conor@kernel.org> wrote:
+>
+> Hey Prabhakar,
+>
+> On Mon, Dec 12, 2022 at 11:55:03AM +0000, Prabhakar wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Pass direction and operation to ALT_CMO_OP() macro.
+> >
+> > Vendors might want to perform different operations based on the direction
+> > and callbacks (arch_sync_dma_for_device/arch_sync_dma_for_cpu/
+> > arch_dma_prep_coherent) so to handle such cases pass the direction and
+> > operation to ALT_CMO_OP() macro. This is in preparation for adding errata
+> > for the Andes CPU core.
+>
+> This patch seems to break the build on top of the most recent
+> linux-next:
+> ......./stuff/linux/arch/riscv/mm/pmem.c:13:53: error: too few arguments provided to function-like macro invocation
+>         ALT_CMO_OP(clean, addr, size, riscv_cbom_block_size);
+>                                                            ^
+> /stuff/linux/arch/riscv/include/asm/errata_list.h:127:9: note: macro 'ALT_CMO_OP' defined here
+> #define ALT_CMO_OP(_op, _start, _size, _cachesize, _dir, _ops)          \
+>         ^
+> ..  CC      block/partitions/sgi.o
+> .+...+/stuff/linux/arch/riscv/mm/pmem.c:13:2: error: use of undeclared identifier 'ALT_CMO_OP'
+>         ALT_CMO_OP(clean, addr, size, riscv_cbom_block_size);
+>         ^
+> /stuff/linux/arch/riscv/mm/pmem.c:19:53: error: too few arguments provided to function-like macro invocation
+>         ALT_CMO_OP(inval, addr, size, riscv_cbom_block_size);
+>                                                            ^
+> /stuff/linux/arch/riscv/include/asm/errata_list.h:127:9: note: macro 'ALT_CMO_OP' defined here
+> #define ALT_CMO_OP(_op, _start, _size, _cachesize, _dir, _ops)          \
+>         ^
+> ...........  AR      lib/math/built-in.a
+> ./stuff/linux/arch/riscv/mm/pmem.c:19:2: .error: use of undeclared identifier 'ALT_CMO_OP'
+>         ALT_CMO_OP(inval, addr, size, riscv_cbom_block_size);
+>         ^
+> ..4 errors generated.
+>
+> The pmem stuff is new so that'd be why it has not come up before.
+>
+> (FWIW, clang allmodconfig)
+>
+Yes I need to rebase my changes on Palmer's branch.
 
-The unbalanced suspended flag was introduced by
-commit c57813b8b288 ("i2c: designware: Lock the adapter while setting the
-suspended flag")
-
-Before that commit, the system and runtime PM used the same functions. The
-DPM_FLAG_MAY_SKIP_RESUME was used to skip the system resume if the driver
-had been in runtime-suspend. If system resume was skipped, the suspended
-flag would be cleared by the next runtime resume. The check of the
-suspended flag was _after_ the call to pm_runtime_get_sync() in
-i2c_dw_xfer(). So either a system resume or a runtime resume would clear
-the flag before it was checked.
-
-Having introduced the unbalanced suspended flag with that commit, a further
-commit 80704a84a9f8 ("i2c: designware: Use the
-i2c_mark_adapter_suspended/resumed() helpers")
-
-changed from using a local suspended flag to using the
-i2c_mark_adapter_suspended/resumed() functions. These use a flag that is
-checked by I2C core code before issuing the transfer to the bus driver, so
-there was no opportunity for the bus driver to runtime resume itself before
-the flag check.
-
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-Fixes: c57813b8b288 ("i2c: designware: Lock the adapter while setting the suspended flag")
----
- drivers/i2c/busses/i2c-designware-platdrv.c | 20 ++------------------
- 1 file changed, 2 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index ba043b547393..74182db03a88 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -351,13 +351,11 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
- 
- 	if (dev->flags & ACCESS_NO_IRQ_SUSPEND) {
- 		dev_pm_set_driver_flags(&pdev->dev,
--					DPM_FLAG_SMART_PREPARE |
--					DPM_FLAG_MAY_SKIP_RESUME);
-+					DPM_FLAG_SMART_PREPARE);
- 	} else {
- 		dev_pm_set_driver_flags(&pdev->dev,
- 					DPM_FLAG_SMART_PREPARE |
--					DPM_FLAG_SMART_SUSPEND |
--					DPM_FLAG_MAY_SKIP_RESUME);
-+					DPM_FLAG_SMART_SUSPEND);
- 	}
- 
- 	device_enable_async_suspend(&pdev->dev);
-@@ -419,21 +417,8 @@ static int dw_i2c_plat_prepare(struct device *dev)
- 	 */
- 	return !has_acpi_companion(dev);
- }
--
--static void dw_i2c_plat_complete(struct device *dev)
--{
--	/*
--	 * The device can only be in runtime suspend at this point if it has not
--	 * been resumed throughout the ending system suspend/resume cycle, so if
--	 * the platform firmware might mess up with it, request the runtime PM
--	 * framework to resume it.
--	 */
--	if (pm_runtime_suspended(dev) && pm_resume_via_firmware())
--		pm_request_resume(dev);
--}
- #else
- #define dw_i2c_plat_prepare	NULL
--#define dw_i2c_plat_complete	NULL
- #endif
- 
- #ifdef CONFIG_PM
-@@ -483,7 +468,6 @@ static int __maybe_unused dw_i2c_plat_resume(struct device *dev)
- 
- static const struct dev_pm_ops dw_i2c_dev_pm_ops = {
- 	.prepare = dw_i2c_plat_prepare,
--	.complete = dw_i2c_plat_complete,
- 	SET_LATE_SYSTEM_SLEEP_PM_OPS(dw_i2c_plat_suspend, dw_i2c_plat_resume)
- 	SET_RUNTIME_PM_OPS(dw_i2c_plat_runtime_suspend, dw_i2c_plat_runtime_resume, NULL)
- };
--- 
-2.30.2
-
+Cheers,
+Prabhakar
