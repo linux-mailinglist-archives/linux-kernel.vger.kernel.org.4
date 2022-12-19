@@ -2,172 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B4B650E23
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7EE7650DCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232543AbiLSO6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 09:58:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S232131AbiLSOrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 09:47:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232456AbiLSO6Q (ORCPT
+        with ESMTP id S231775AbiLSOrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 09:58:16 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA66103E;
-        Mon, 19 Dec 2022 06:55:12 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.96.64]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MsaeR-1oslfq133D-00tyIB; Mon, 19 Dec 2022 15:44:53 +0100
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id A7FAB3C1B9;
-        Mon, 19 Dec 2022 15:44:49 +0100 (CET)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id 711B377B; Mon, 19 Dec 2022 15:44:38 +0100 (CET)
-Date:   Mon, 19 Dec 2022 15:44:38 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 3/5] tools lib subcmd: Add dependency test to
- install_headers
-Message-ID: <Y6B41hsv1KHDQMYh@bergen.fjasle.eu>
-References: <20221202045743.2639466-1-irogers@google.com>
- <20221202045743.2639466-4-irogers@google.com>
- <Y5eVwlId2A2/pN40@fjasle.eu>
- <CAP-5=fXeYsOs-YJH+hx=haGwJ_eqDNXYQQ30AiyDDfc5P2o84Q@mail.gmail.com>
+        Mon, 19 Dec 2022 09:47:16 -0500
+Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 974F36412;
+        Mon, 19 Dec 2022 06:47:03 -0800 (PST)
+Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id 61A7EE0EAE;
+        Mon, 19 Dec 2022 17:47:01 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        baikalelectronics.ru; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:from:from:message-id
+        :mime-version:reply-to:subject:subject:to:to; s=post; bh=JwJ8ZVq
+        ga8qK6SSkODgpRgbexFsvsnQMRTLb5EFZ3go=; b=n2clWKkXEXn0XS2yvYnCEqg
+        Kk/Q1uW6tQxcd/UuYeGdNPUMnntm5WWyUv+uvKC1GZ0iEUS8PO8r2iUH6RRtVZK8
+        PlBszylV95s4vx4sbSiohB3EQl+y9cMjw/HcKTgq8EI7BFXzHD0O9Ud6yG3gcnxj
+        R//NnJBoyUXN9dudINZM=
+Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id 4A88AE0E70;
+        Mon, 19 Dec 2022 17:47:01 +0300 (MSK)
+Received: from localhost (10.8.30.14) by mail (192.168.51.25) with Microsoft
+ SMTP Server (TLS) id 15.0.1395.4; Mon, 19 Dec 2022 17:47:00 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        <linux-pci@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v8 00/26] dmaengine: dw-edma: Add RP/EP local DMA controllers support
+Date:   Mon, 19 Dec 2022 17:46:31 +0300
+Message-ID: <20221219144658.26620-1-Sergey.Semin@baikalelectronics.ru>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="keRu1ywOaLNQdaoA"
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fXeYsOs-YJH+hx=haGwJ_eqDNXYQQ30AiyDDfc5P2o84Q@mail.gmail.com>
-Jabber-ID: nicolas@fjasle.eu
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:yl11gYBxldkrWBmMWqPPZ7dMxGlIZugrpEYUIRHh38u8ZimLr8b
- 1zTL5CA03GKrLX5KddnhDPuoCpPPCg+XKi/89LoG0aHPG00VlmGn/jQV3VjU1FEc4f6/ABR
- jsQKfhRcYUBTk0oCwwjJI68WUTsXD6fXYAmi610sEyBVz3cb9ONljYGLMYEhu2tGphMNhD7
- bstfVrPwf9h8u+5BFyLGQ==
-UI-OutboundReport: notjunk:1;M01:P0:GHm+LHFQNqM=;mbXxJ8TCl6plJc3uEROHGtH5QWS
- ohcK7K8aIm9/1DEoWLoqekUocP4s9FK9CGV4HA77xIclj+OJXXiXRjA6ABAY9IPeU59ZZL7lw
- 45+9Y+kwa8v7RXP9Qr0bjykHxKXmHUPFYKpGfugcCylUBfRxMKjYdB01RVeA1bongbHK35cOO
- lh61W1x8L66izMQSP+DhE/KAjcac/4RDTPryPN7sxORT/gCGJVrSWF8hSaxjB1OAoO1dUWPfo
- bw8Vl9ZnIudAkhqRH99kN5wL/81yB56IjG6eNwc/eASdZov95NkMWArTEY647JbsnV7aUnPMI
- G2TMcqMoNSu8teietwr5yJGeWYAYz/eRG7An37WNzdAC6GzTTMaDF05bY29hGxipWtYGR0Nnh
- 8jZ6h3Zh0nWhdgCbog1GBMLTb1HfpCmxB/myZVhB/6UbUZm6LFn8cA98+18aJvccmtkJNjWHF
- 0fZ6nMhmzdH/LS/lyy+Dg4svw2ESUSHJSPGNhRWZzx3f3zEHfCl/LbM6th/BKIdfdoaIo4Gmj
- cC08goRSqAvozbO4clExazOPUgAOGfKYRZiS5G9EBgJMt8QqTlHb5tJDnLct9dbvXtOa6ScpH
- MkxjNDHKo1hexGbyn+ar9rK7Pgk159Zv4Ij4uAu4Xxq3BlVdX6oLNy1iq7CVO4GxXj00ciucA
- cw2LTJiz6kGQPdxaslNpEWG7i4kCB5494Khzbc2RQg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.8.30.14]
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is a final patchset in the series created in the framework of
+my Baikal-T1 PCIe/eDMA-related work:
 
---keRu1ywOaLNQdaoA
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[1: Done v5] PCI: dwc: Various fixes and cleanups
+Link: https://lore.kernel.org/linux-pci/20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru/
+Merged: kernel 6.0-rc1
+[2: Done v4] PCI: dwc: Add hw version and dma-ranges support
+Link: https://lore.kernel.org/linux-pci/20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru/
+Merged: kernel 6.0-rc1
+[3: Done v7] PCI: dwc: Add generic resources and Baikal-T1 support
+Link: https://lore.kernel.org/linux-pci/20221113191301.5526-1-Sergey.Semin@baikalelectronics.ru/
+Merged: kernel 6.2-rc1
+[4: In-review v7] dmaengine: dw-edma: Add RP/EP local DMA support
+Link: ---you are looking at it---
 
-On Tue 13 Dec 2022 13:28:21 GMT, Ian Rogers wrote:
-> On Mon, Dec 12, 2022 at 12:57 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
-> >
-> > On Thu, Dec 01, 2022 at 08:57:41PM -0800 Ian Rogers wrote:
-> > > Compute the headers to be installed from their source headers and make
-> > > each have its own build target to install it. Using dependencies
-> > > avoids headers being reinstalled and getting a new timestamp which
-> > > then causes files that depend on the header to be rebuilt.
-> > >
-> > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > ---
-> > >  tools/lib/subcmd/Makefile | 23 +++++++++++++----------
-> > >  1 file changed, 13 insertions(+), 10 deletions(-)
-> > >
-> > > diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
-> > > index 9a316d8b89df..b87213263a5e 100644
-> > > --- a/tools/lib/subcmd/Makefile
-> > > +++ b/tools/lib/subcmd/Makefile
-> > > @@ -89,10 +89,10 @@ define do_install_mkdir
-> > >  endef
-> > >
-> > >  define do_install
-> > > -     if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
-> > > -             $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
-> > > +     if [ ! -d '$2' ]; then             \
-> > > +             $(INSTALL) -d -m 755 '$2'; \
-> > >       fi;                                             \
-> > > -     $(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
-> > > +     $(INSTALL) $1 $(if $3,-m $3,) '$2'
-> >
-> > What about using '$(INSTALL) -D ...' instead of the if-mkdir-block abov=
-e?
-> > (E.g. as in tools/debugging/Makefile.)
-> >
-> > Kind regards,
-> > Nicolas
->=20
-> Thanks Nicolas, the reason was to keep the code consistent. That's not
-> to say this is the best approach. For example, here is the same thing
-> for tools/lib/api:
-> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools=
-/lib/api/Makefile?h=3Dperf/core&id=3Df43368371888694a2eceaaad8f5e9775c09200=
-9a#n84
->=20
-> If you'd like to improve this in all the versions and send patches I'd
-> be happy to take a look.
->=20
-> Thanks,
-> Ian
+Note it is very recommended to merge the patchsets in the same order as
+they are listed in the set above in order to have them applied smoothly.
+Since the patchsets 1-3 have already been merged into the mainline kernel
+this series can be applied via any DMA-engine or PCI repos.
 
-Ian, while watching at tools/lib/*/Makefile I stumple across the=20
-special single-quote handling (e.g. 'DESTDIR_SQ') several times. =20
+Here is a short summary regarding this patchset. The series starts with
+fixes patches. We discovered that the dw-edma-pcie.c driver incorrectly
+initializes the LL/DT base addresses for the platforms with not matching
+CPU and PCIe memory spaces. It is fixed by using the pci_bus_address()
+method to get a correct base address. After that you can find a series of
+the interleaved xfers fixes. It turned out the interleaved transfers
+implementation didn't work quite correctly from the very beginning for
+instance missing src/dst addresses initialization, etc. In the framework
+of the next two patches we suggest to add a new platform-specific
+callback - pci_address() and use it to convert the CPU address to the PCIe
+space address. It is at least required for the DW eDMA remote End-point
+setup on the platforms with not-matching CPU/PCIe address spaces. In case
+of the DW eDMA local RP/EP setup the conversion will be done automatically
+by the outbound iATU (if no DMA-bypass flag is specified for the
+corresponding iATU window). Then we introduce a set of the patches to make
+the DebugFS part of the code supporting the multi-eDMA controllers
+platforms. It starts with several cleanup patches and is closed joining
+the Read/Write channels into a single DMA-device as they originally should
+have been. After that you can find the patches with adding the non-atomic
+io-64 methods usage, dropping DT-region descriptors allocation, replacing
+chip IDs with the device name. In addition to that in order to have the
+eDMA embedded into the DW PCIe RP/EP supported we need to bypass the
+dma-ranges-based memory ranges mapping since in case of the root port DT
+node it's applicable for the peripheral PCIe devices only. Finally at the
+series closure we introduce a generic DW eDMA controller support being
+available in the DW PCIe Root Port/Endpoint driver.
 
-Top-level Makefile and kbuild are not designed to work with file or=20
-directory names containing spaces.  Do you know whether this is needed=20
-for the installation rules in tools/lib/?  I'd like to remove support=20
-for path names with spaces for a increasing simplicity and consistency.
+Link: https://lore.kernel.org/linux-pci/20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Drop the patches:
+  [PATCH 1/25] dmaengine: dw-edma: Drop dma_slave_config.direction field usage
+  [PATCH 2/25] dmaengine: dw-edma: Fix eDMA Rd/Wr-channels and DMA-direction semantics
+  since they are going to be merged in in the framework of the
+  Frank's patchset.
+- Add a new patch: "dmaengine: dw-edma: Release requested IRQs on
+  failure."
+- Drop __iomem qualifier from the struct dw_edma_debugfs_entry instance
+  definition in the dw_edma_debugfs_u32_get() method. (@Manivannan)
+- Add a new patch: "dmaengine: dw-edma: Rename DebugFS dentry variables to
+  'dent'." (@Manivannan)
+- Slightly extend the eDMA name array size. (@Manivannan)
+- Change the specific DMA mapping comment a bit to being
+  clearer. (@Manivannan)
+- Add a new patch: "PCI: dwc: Add generic iATU/eDMA CSRs space detection
+  method."
+- Don't fail eDMA detection procedure if the DW eDMA driver couldn't probe
+  device. That happens if the driver is disabled. (@Manivannan)
+- Add "dma" registers resource mapping procedure. (@Manivannan)
+- Move the eDMA CSRs space detection into the dw_pcie_map_detect() method.
+- Remove eDMA on the dw_pcie_ep_init() internal errors. (@Manivannan)
+- Remove eDMA in the dw_pcie_ep_exit() method.
+- Move the dw_pcie_edma_detect() method execution to the tail of the
+  dw_pcie_ep_init() function.
 
-Kind regards,
-Nicolas
+Link: https://lore.kernel.org/linux-pci/20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- Conditionally set dchan->dev->device.dma_coherent field since it can
+  be missing on some platforms. (@Manivannan)
+- Drop the patch: "PCI: dwc: Add generic iATU/eDMA CSRs space detection
+  method". A similar modification has been done in another patchset.
+- Add more comprehensive and less regression prune eDMA block detection
+  procedure.
+- Drop the patch: "dma-direct: take dma-ranges/offsets into account in
+  resource mapping". It will be separately reviewed.
+- Remove Manivannan tb tag from the modified patches.
+- Rebase onto the kernel v5.18.
 
---keRu1ywOaLNQdaoA
-Content-Type: application/pgp-signature; name="signature.asc"
+Link: https://lore.kernel.org/linux-pci/20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru
+Changelog v4:
+- Rabase onto the laters Frank Li series:
+Link: https://lore.kernel.org/all/20220524152159.2370739-1-Frank.Li@nxp.com/
+- Add Vinod' Ab-tag.
+- Rebase onto the kernel v5.19-rcX.
 
------BEGIN PGP SIGNATURE-----
+Link: https://lore.kernel.org/linux-pci/20220728142841.12305-1-Sergey.Semin@baikalelectronics.ru
+Changelog v5:
+- Just resend.
+- Rebase onto the kernel v6.0-rc2.
 
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmOgeNUACgkQB1IKcBYm
-EmmqvBAAvc+hpUNMRLt4cfWfIA2KsbSBDQLjh+dWIF4bhH9lSOuSlfmwlYSaCjpG
-r656tEHGAS2oYr12RNBwDa7Rpl8M0XycHyCO39PmsUrjFDNlIrsIclhYo++9X+9G
-iJJIzy8fsBAW3apLVOv3sPnzMcv6jPj8QD4nQXtgAqBy1Nj798t416TC9gkd6ZXC
-ZBYbV2d6I4EtIbD24IK5eptBObyjSU1WlsZRlLq60JCMNjXTszsBTmN+qi91bZs0
-cctgVxhXxkB0d75w3KWHXKSbbAHurLtmIjzZMJEI3f+o+ptEwOWiP/+Sk3NXu7JX
-udi4vKNCX4TXXf3cOUmhKqGigaYpbCn4drPCa4r0kmdE7zkCeGtEuNLs8ocItiOS
-fRsxU9bTXcC/7Ox0DqX1/qBYQgHBmbF5eXqAg4UerAn4/8l4fxdXemeO/LwNVpGC
-Pkmioif0PU4wZFU27qzOqKnjgKfioLh8qLgXmTPMo8Hq7c62ytA/A35Hcn9ZEE/X
-e9F8Kg734p1LUHPTrpCfOg3Q3X0t9c2ra+4wBa8d7zhOWhFFfQDjsaIuoe8ZiSqv
-ZITXn7XySp/0sjot8HyO0a9bIZvR5RK9OfEayShgLuLIkd5yoByEjz551oh5I753
-KyeIgi+OMvO56V0n0kd2rh4O5E4IggpGJbjvG+KO4uY9L1DYYcU=
-=DYaH
------END PGP SIGNATURE-----
+Link: https://lore.kernel.org/linux-pci/20220822185332.26149-1-Sergey.Semin@baikalelectronics.ru
+Changelog v6:
+- Fix some patchlog and in-line comments misspells. (@Bjorn)
+- Directly call *_dma_configure() method on the DW eDMA channel child
+  device used for the DMA buffers mapping. (@Robin)
+- Explicitly set the DMA-mask of the child device in the channel
+  allocation proecedure. (@Robin)
+- Rebase onto the kernel v6.1-rc3.
 
---keRu1ywOaLNQdaoA--
+Link: https://lore.kernel.org/linux-pci/20221107210438.1515-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v7:
+- Activate the mapping auto-detection procedure for IP-cores older than
+  5.40a. The viewport-based access has been removed since that
+  version. (@Yoshihiro)
+- Drop the patch
+  [PATCH v6 22/24] dmaengine: dw-edma: Bypass dma-ranges mapping for the local setup
+  since the problem has been fixed in the commit f1ad5338a4d5 ("of: Fix
+  "dma-ranges" handling for bus controllers"). (@Robin)
+- Add a new patch:
+  [PATCH v7 23/25] PCI: dwc: Restore DMA-mask after MSI-data allocation
+  (@Robin)
+- Add a new patch:
+  [PATCH v7 24/25] PCI: bt1: Set 64-bit DMA-mask
+  (@Robin)
+
+Link: https://lore.kernel.org/linux-pci/20221214235305.31744-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v8:
+- Add a new patch:
+  [PATCH v8 23/26] dmaengine: dw-edma: Relax driver config settings
+  (@tbot)
+- Replace the patch
+  [PATCH v7 23/25] PCI: dwc: Restore DMA-mask after MSI-data allocation
+  with a new one:
+  [PATCH v8 24/26] PCI: dwc: Set coherent DMA-mask on MSI-address allocation
+  (@Robin, @Christoph)
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: "Krzysztof Wilczyński" <kw@linux.com>
+Cc: caihuoqing <caihuoqing@baidu.com>
+Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc: linux-pci@vger.kernel.org
+Cc: dmaengine@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (26):
+  dmaengine: Fix dma_slave_config.dst_addr description
+  dmaengine: dw-edma: Release requested IRQs on failure
+  dmaengine: dw-edma: Convert ll/dt phys-address to PCIe bus/DMA address
+  dmaengine: dw-edma: Fix missing src/dst address of the interleaved
+    xfers
+  dmaengine: dw-edma: Don't permit non-inc interleaved xfers
+  dmaengine: dw-edma: Fix invalid interleaved xfers semantics
+  dmaengine: dw-edma: Add CPU to PCIe bus address translation
+  dmaengine: dw-edma: Add PCIe bus address getter to the remote EP
+    glue-driver
+  dmaengine: dw-edma: Drop chancnt initialization
+  dmaengine: dw-edma: Fix DebugFS reg entry type
+  dmaengine: dw-edma: Stop checking debugfs_create_*() return value
+  dmaengine: dw-edma: Add dw_edma prefix to the DebugFS nodes descriptor
+  dmaengine: dw-edma: Convert DebugFS descs to being kz-allocated
+  dmaengine: dw-edma: Rename DebugFS dentry variables to 'dent'
+  dmaengine: dw-edma: Simplify the DebugFS context CSRs init procedure
+  dmaengine: dw-edma: Move eDMA data pointer to DebugFS node descriptor
+  dmaengine: dw-edma: Join Write/Read channels into a single device
+  dmaengine: dw-edma: Use DMA-engine device DebugFS subdirectory
+  dmaengine: dw-edma: Use non-atomic io-64 methods
+  dmaengine: dw-edma: Drop DT-region allocation
+  dmaengine: dw-edma: Replace chip ID number with device name
+  dmaengine: dw-edma: Skip cleanup procedure if no private data found
+  dmaengine: dw-edma: Relax driver config settings
+  PCI: dwc: Set coherent DMA-mask on MSI-address allocation
+  PCI: bt1: Set 64-bit DMA-mask
+  PCI: dwc: Add DW eDMA engine support
+
+ drivers/dma/dw-edma/Kconfig                   |   5 +-
+ drivers/dma/dw-edma/dw-edma-core.c            | 196 ++++-----
+ drivers/dma/dw-edma/dw-edma-core.h            |  10 +-
+ drivers/dma/dw-edma/dw-edma-pcie.c            |  24 +-
+ drivers/dma/dw-edma/dw-edma-v0-core.c         |  60 +--
+ drivers/dma/dw-edma/dw-edma-v0-core.h         |   1 -
+ drivers/dma/dw-edma/dw-edma-v0-debugfs.c      | 372 ++++++++----------
+ drivers/dma/dw-edma/dw-edma-v0-debugfs.h      |   5 -
+ drivers/pci/controller/dwc/pcie-bt1.c         |   4 +
+ .../pci/controller/dwc/pcie-designware-ep.c   |  12 +-
+ .../pci/controller/dwc/pcie-designware-host.c |  24 +-
+ drivers/pci/controller/dwc/pcie-designware.c  | 195 +++++++++
+ drivers/pci/controller/dwc/pcie-designware.h  |  21 +
+ include/linux/dma/edma.h                      |  20 +-
+ include/linux/dmaengine.h                     |   2 +-
+ 15 files changed, 592 insertions(+), 359 deletions(-)
+
+-- 
+2.38.1
+
+
