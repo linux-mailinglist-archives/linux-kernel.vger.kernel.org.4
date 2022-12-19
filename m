@@ -2,102 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6312C6516C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 00:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF336516C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 00:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbiLSXiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 18:38:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
+        id S232570AbiLSXjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 18:39:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiLSXis (ORCPT
+        with ESMTP id S232438AbiLSXjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 18:38:48 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDA4EE37;
-        Mon, 19 Dec 2022 15:38:47 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so10405093pjo.3;
-        Mon, 19 Dec 2022 15:38:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iXhT24A08qIcxdPTrS8ABQk+wBAUtPj45USUD+WsbiA=;
-        b=ikqXE5Sv3C0Z7QeUtZToua8qSUDYVrSpl1Z9eJm2snZpS6OYsJc66Mfj20vV+0kPqu
-         dJhRFfhQtTYN1idfPqN83/0d5vmM5VLsImAkcxhWamazE/Rzr8GOW4qft50gVwJ4Hhme
-         9FnDCgoMYp+l81g3xM7zvGN5i5vgKDqndedskEpd/sQeT2H2JIeNd14Z3ce5m6XtXvot
-         t6C0qffyNuSAAtBnkYOAXx8MwJ/Del1fMjSU8HT5jS04SBiPtD2lzNOJZJliwGOsDDBk
-         VC10uCA4xKtmWCbS/HtqbWj3Q2c/3GeZueSi6nzS4zUf2jKbbiY97HjsaePUMSCqfFFm
-         lxvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iXhT24A08qIcxdPTrS8ABQk+wBAUtPj45USUD+WsbiA=;
-        b=iyskpS0iD2qszOGQTkI9DUXtYv3h/XcqJZsKy44aii4IdDeNJ0k28N9WE72uZfPLop
-         Ut5JEbEwZyaSDf/QW2FDkdJORW0H+cJ5zlvo8rJy3wJIu0de1LJtIMMVbz4MahmBxDto
-         DBLzVJo7Kx0SAbRPsViINcMGFt8wUtZCkDb0lfrZm5tSAEJrRPvv6AgYkIVn35tEy40T
-         vvXfcPlExAv4qzqTKro/pEzzswETWTq4bt8EaNimW/Lv2SRTn+4bh3HIZX4C0tSz6iYr
-         yvyoE1VSuYrhCEhbF/Xtk1dAFq25dYUpcOWD0F91AOrTNydKHE0iohP73PzP1VhlV5e3
-         m8Pg==
-X-Gm-Message-State: ANoB5pnX94wWLlciXObOxgdXKElpiA5DQZgcQSR06W031ZxqC1bhlXGP
-        lKYOQB2oa3JTqzjjyn35YoI=
-X-Google-Smtp-Source: AA0mqf55hr5HQ4Ig2SkTPhbHUQlrDlMKeYo/BxR2QRmG3IvAb7Xasm3E+qJ9b5UhrNWehUFuiwNBQA==
-X-Received: by 2002:a05:6a20:9c8f:b0:a2:17a6:3e86 with SMTP id mj15-20020a056a209c8f00b000a217a63e86mr32379941pzb.55.1671493126783;
-        Mon, 19 Dec 2022 15:38:46 -0800 (PST)
-Received: from localhost ([124.248.219.206])
-        by smtp.gmail.com with ESMTPSA id w6-20020a170902e88600b0017f8094a52asm7790420plg.29.2022.12.19.15.38.46
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 19 Dec 2022 15:38:46 -0800 (PST)
-Date:   Mon, 19 Dec 2022 15:38:41 -0800
-From:   Dan Li <ashimida.1990@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Marco Elver <elver@google.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Song Liu <song@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Yuntao Wang <ytcoode@gmail.com>,
-        Changbin Du <changbin.du@intel.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC/RFT] CFI: Add support for gcc CFI in aarch64
-Message-ID: <20221219233841.4ywyegnzqhzfr4fo@ubuntu>
-References: <20221219061758.23321-1-ashimida.1990@gmail.com>
- <Y6A/k7/KrCCDuux6@hirez.programming.kicks-ass.net>
- <20221219132731.6ng4sz2nv6ujvu7i@ubuntu>
- <Y6B9l/aDnsek8Zyl@hirez.programming.kicks-ass.net>
+        Mon, 19 Dec 2022 18:39:06 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2077.outbound.protection.outlook.com [40.107.244.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790C2FCD4;
+        Mon, 19 Dec 2022 15:39:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kanuVz+y6mekdg0hRIX8uThNzn53a6puPa/W0dRJEhjMK2hk1ulhFMMk61ahxkcoBfiWTy8jYRhIQm+89QlKBom5tu6PPgArTw0fS0SVMO7nUpxxqknguV8pUAonLdRAHHdJM4IaHlqhA7ZWL+pxb+BMCbwbyF8Vek0r/1tfFzGkm+ubUhi1UigPy6zgcJwqgJYisnPfQ129Be9IDLpzTR5DL+RnSyJI9jfRWH5u4rhH+a3fmFu9OYeWeFH9TMGB10wKmQCiSLG/wAPOKvFwdYMd7bnfxxINsHAcGv9gZzC6/R0cyNiTq1o/9GrYkVwttXq9MgadOQfZdd3RkH8VEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kHrbGt91maFUx0UX3hGSwdUarMEGwM6MaQYrk/mGkc8=;
+ b=ffXZfzrBY8/EA3W6mjmenSOixOaP9H3WLvTM2tVM9dtYZhA20QTf20E6A9VO9FPaNkE0djOazKGVbidCmtddwADYdGubknud2tVZKDd3VTgwn+4geRoI6ABhwHRwFIPeKI3fkkvx9cei3M0xg/3FXdy8kxbsAh5/VildxKTl8zleZdx695j++v6qaSBzVA082ayYsSS1O1/r3jbfa4ZGiYZQ8XG6pR4BTSLfdapMH6gSWyCqb/u8s/qstoaVDeeANzfJ8w84/Vz8eEMmzUj1VLChL81guwqXKJz1rbRL8dTunadevTrBj6z7QtjS6lkiP2bMc0K4B6uMKLFp7onbKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kHrbGt91maFUx0UX3hGSwdUarMEGwM6MaQYrk/mGkc8=;
+ b=0ldSwmY3eUV93n31rmHUYgc3mITTtmeUDJYwoF8BHIQzyu8FOCcseppg2yewKYFC3v88n+iyeWpI3BjKYWPldrTOelK4TUPxGSieXslF7mVMNziT0hdtsg1HOyw5ZW12F4iIJgdUFP/bTZeqiKTQcCZdWuS4zuyavcvOYP7KHjw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by BY5PR12MB4871.namprd12.prod.outlook.com (2603:10b6:a03:1d1::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Mon, 19 Dec
+ 2022 23:39:02 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::ff3c:2d37:75f3:442a]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::ff3c:2d37:75f3:442a%4]) with mapi id 15.20.5924.016; Mon, 19 Dec 2022
+ 23:39:01 +0000
+Message-ID: <d4b602e0-53cb-e7d5-7055-ea4b79fc909b@amd.com>
+Date:   Mon, 19 Dec 2022 17:38:59 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v8 09/13] cpufreq: amd-pstate: add driver working mode
+ switch support
+Content-Language: en-US
+To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
+        ray.huang@amd.com, viresh.kumar@linaro.org
+Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
+        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
+        Xiaojian.Du@amd.com, Li.Meng@amd.com, wyes.karny@amd.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221219064042.661122-1-perry.yuan@amd.com>
+ <20221219064042.661122-10-perry.yuan@amd.com>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <20221219064042.661122-10-perry.yuan@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL0PR05CA0009.namprd05.prod.outlook.com
+ (2603:10b6:208:91::19) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6B9l/aDnsek8Zyl@hirez.programming.kicks-ass.net>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|BY5PR12MB4871:EE_
+X-MS-Office365-Filtering-Correlation-Id: f0e64b4a-aeb0-4bde-8ce2-08dae21a353a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZxABG+6I/c+PWpYI3mIhrDJAt88GWqOL3to7cEl0/I4TLktRjd6Ld4fAty50ARFis8NbLLGjzIwqT9GmejgWGV3EJCETvJ+UHw2c5M7iRrgf+FOJnpNTLmmz7D7nCkK15lKxxFdI8nNvvJDPiTuXc1nGfjPA27KrKpEDmOq6sHU0yeHUpXLbrZMupL5yw2KxOqo50ku+TSkdBA2Nfp1NjPHIuuG9ytGt7JyUzIegckWkgs4bbaKFlnrSDubsebEBYYZ7qyTuRrQb3CaI2YcZG00h2TsjzJvSdfzO9QQqURhSNdgGrpr341qk+4AlOOA2NYUFpvUKbLDj6ag+GZkmfZ6jyFQklXY3omBXagKBE4i6TMfI9Az18aH2rfcCprG6gFAURL+cSTzCahdkEfqrK2DQVKF58JT59B5JmoFChLPH/AKyvc6NydWPTxEEGyDnmx1/7jKY2ome+R6wMw8jxn//ifbFeQvti+oCCi+gEEuEXW6mowsBjjVTFrCl4VSwC4b5DaTJhnL8Y9JPLCH1Z7we0Ea33LI0no8p0vQyevk6CWc4em8lrfpjetCWL15L5NknkNPTgDHfo66BGMgScy4biXhhCdYb6n++umGeVNSxO2zyOE7yH6AIxrnEhM1r7jKDIxOzlXKkaIHAHCNNHy+QFcXPkFlqETUDZNLhIyLIOSk0c8tsPVKrBMxlA6BqQGBbyqxfrjfmfrIC+ltyjlPbLgnxtS/FzgT6lDBzJ+I=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(376002)(136003)(396003)(346002)(451199015)(31686004)(5660300002)(8676002)(86362001)(4326008)(6512007)(6486002)(186003)(26005)(316002)(31696002)(2616005)(66556008)(66476007)(66946007)(478600001)(6506007)(53546011)(38100700002)(8936002)(83380400001)(36756003)(41300700001)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YTd1cEJGVWlVeGJEY1JVaHNTVmluOVZxdUJYNDlpcE5xNWdFQmE5YmpCUnhD?=
+ =?utf-8?B?RkRvb1V2S2dJR2h3bzZUdFdjblNnNVNDMThuOEJTb2NiaGgrUEVyclNxTVhD?=
+ =?utf-8?B?Zyt5YWVpcm5rQjU5TTEzYjFDeW5RdG5PeUlnU2IyYjdFWmZSd2xUNVMzU2hv?=
+ =?utf-8?B?d2VIMm45Mmdpa0J5eWtmWVdiRjVmNXNwVW1wVk53dW8xOFZvVGthS20vamN1?=
+ =?utf-8?B?YnAwbkFtRXp2SWRhZ0dxbWZGai8yc2dGVDB0eXkveTRyOWtYUWUxR05SZ0xo?=
+ =?utf-8?B?RFBCVWJ3OEd1NCt5UFNNM253bDkrbjc2R296T0xDdDYyVW90TVBNUGI1NDZE?=
+ =?utf-8?B?OFo3b29zQ3NYYmJGU01TYi9ZY0ZyZ1FiMllHNW92dUkxa002NnNsa1FtbU1k?=
+ =?utf-8?B?ekhuSnV1VGFIVUdCazlWOCtJY283SlNnd2U2dUcreWRNTXlaYkhWQU5tLzM3?=
+ =?utf-8?B?MTJCTmlPTHJaTGl0SFBaTnhaUkR2cmRhTll4MTRsYitPV3VFQXNVbTdrcXgw?=
+ =?utf-8?B?alNBMSswUkRCQ1dPSWNGVllBSktGR01GM3pmcXl5aDVnY1duWnZTWlc2WjJ5?=
+ =?utf-8?B?dm9odFJWa1orRHpiKzVsZ3FEd2pEQVd4Z1RzL2ZYdTV1ZVlHUVFmZ2tIUzJX?=
+ =?utf-8?B?ZWpvV1hHSkhBa21WMjFPRWh1TXN5blYxZ0crQ3NZTlp2RnZFZWFLVXU3U3JE?=
+ =?utf-8?B?d3lpMmRJNVVXNXk4SzdibWtwS3ZEMVpwaWt2U2hWRmZNUml4ckFvWG1hK3l2?=
+ =?utf-8?B?Z3VTb2lBRzNzZzJKT05sdXZFYkR0ejVlQXFoZGFla28yNndDeENlN2FQV3kz?=
+ =?utf-8?B?ODJkKy9wd3hIdzBETW1JNGdQOVRiQjVKNDdHWVkzYjJvak9zSGNGaEVraEVH?=
+ =?utf-8?B?aURld0F4OGRvTER2VFVDV0dqMGJuWTBlelFkR1U5UHpiRkF3UWR4ckxrU2hC?=
+ =?utf-8?B?SUpHa1l2cFl1MDkvUjl4Q2pLQm80ZGlxREM5TkI3aXB3TmFURHF3L1FaNFB1?=
+ =?utf-8?B?ZytPMHpYdi9CWEJhSFlBQnRpZGE2aGxqWnIxeDljOWc2MFUvVTRlemZjLzNv?=
+ =?utf-8?B?MjU0dUZQMjVhdG5CTllFVHV5QURCbXQ2MkdLSVdJdFcwbkE0dmhHb05WWlRZ?=
+ =?utf-8?B?UW1KOFRBSWhkMmxOUXdLaWg5RHR4WDdvd05hN2JoSGlHTTRJQzhPZXhvbnRr?=
+ =?utf-8?B?Y3Qvb3pCV2RRNGxjeEhxckZYSFhSZmZlZGxZWm50NFZhWnppRDIxMkViYmZJ?=
+ =?utf-8?B?TVU5SjFlYlZLMXdYZ3M5ZjRSd3hEVGUrdHd6T0lPQW85dlVjMENnekxsUjNo?=
+ =?utf-8?B?WmVIRzQxSlVWZW1PMk5pdlA2b3o5MS94MVNGNkxkQllCUk53T21telRvbFRH?=
+ =?utf-8?B?Yk5xMWdGYmxvZHVpWHV6b1duaFBTdy9VaHJBVllIS0t1OEd5bm15aWxZSGxC?=
+ =?utf-8?B?bWVHRXp2bUtTNVJxR3UxMHArMUt3aElUY1Q0dk5aMlUvMk1zUVVLbW9VdU1q?=
+ =?utf-8?B?QytRQkRaNlpsMWxpUnlSTDRWd3VrbTV1UHdLMTNDMmdjQ1c3NGdzdUNLRHBY?=
+ =?utf-8?B?NzB1Qzk0SmcxN3NEcDhyMTU1dHlrMkxEcnhuVVFQZWJlenZGZjZTWjNwdjRM?=
+ =?utf-8?B?RmRiR2oxYXUyYklOaTlsU0lZVTNJbDRjbEpra3RUNHFWa2RGdnJUalJPdHI3?=
+ =?utf-8?B?Z0MxMzJsaWYyMm5BSTdIcDVBalpWMURKUVgwVEtQUUFCdUJIRHVwTURORWJR?=
+ =?utf-8?B?bWJLZmRQTzdJLzUwM1Z3Y0FVcXdtODdFNzcveHIwQXA4aFQvK3A5djRDNHIx?=
+ =?utf-8?B?cnNiMWwwalhQanBQTHBYejhOSE9nNlNEL1dyTklyaE0rRTUrTE13RVVEbERy?=
+ =?utf-8?B?U2toeWYwOUFyZ0RkeW9kVS92TnJKQkRTVHFKTjdUMElBZ3lBbzhFRUNlclU1?=
+ =?utf-8?B?UlhBSzRvS1F0aGNXY2E2Wkg5a2ZKZEYwVHFsRGoyYWYrNWhyVEJkUkhUSkpm?=
+ =?utf-8?B?bUZHYnVZVmJvL3lmY2lBSmwzZkVVNUhNenJlVTFtZFQwYkxWNVc2cnByL29l?=
+ =?utf-8?B?OHFvekh0VVE2MkZVOWJNc2lna3lHUTJwRnp2RkNNTzRneFVOMEJiU1FMTGFn?=
+ =?utf-8?Q?jJ7Gv4uPYIjtjhPbkAkcytQV9?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f0e64b4a-aeb0-4bde-8ce2-08dae21a353a
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2022 23:39:01.7340
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: l70Dx1gUwBWIbSw0EvL2H9IhqVIsBnU+hqA5DCcDO+PwmzE8CxDiAi/gQ/U7w09FVGkFPjw5keZ43Wg7cZAUHQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4871
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,39 +129,242 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/19, Peter Zijlstra wrote:
-> On Mon, Dec 19, 2022 at 05:32:04AM -0800, Dan Li wrote:
-> > Hi Peter,
-> > 
-> > On 12/19, Peter Zijlstra wrote:
-> > > On Sun, Dec 18, 2022 at 10:17:58PM -0800, Dan Li wrote:
-> > > 
-> > > > 1. When a typeid mismatch is detected, the cfi_check_failed function
-> > > >    will be called instead of the brk instruction. This function needs
-> > > >    to be implemented by the compiler user.
-> > > >    If there are user mode programs or other systems that want to use
-> > > >    this feature, it may be more convenient to use a callback (so this
-> > > >    compilation option is set to -fsanitize=cfi instead of kcfi).
-> > > 
-> > > This is not going to be acceptible for x86_64.
-> > 
-> > I'm not familiar enough with the x86_64 platform, could you please
-> > tell me why this is not acceptable? Is there a similar situation
-> > on the arm64 platform?
+On 12/19/2022 00:40, Perry Yuan wrote:
+> From: Perry Yuan <Perry.Yuan@amd.com>
 > 
-> Mostly because the call would be a 5 byte instruction while the trap
-> (UD2) is only 2 bytes.
-
-Oh ok, got it.
-
-> I suspect Argh64 has a similar problem if the to be called function is
-> outside the immediate range (26 bits or thereabout), in which case you
-> end up with a multi-instruction sequence to construct the call target or
-> so. A trap is always a single instruction.
+> While amd-pstate driver was loaded with specific driver mode, it will
+> need to check which mode is enabled for the pstate driver,add this sysfs
+> entry to show the current status
 > 
+> $ cat /sys/devices/system/cpu/amd-pstate/status
+> active
+> 
+> Meanwhile, user can switch the pstate driver mode with writing mode
+> string to sysfs entry as below.
+> 
+> Enable passive mode:
+> $ sudo bash -c "echo passive >  /sys/devices/system/cpu/amd-pstate/status"
+> 
+> Enable active mode (EPP driver mode):
+> $ sudo bash -c "echo active > /sys/devices/system/cpu/amd-pstate/status"
+> 
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> ---
+>   drivers/cpufreq/amd-pstate.c | 128 +++++++++++++++++++++++++++++++++++
+>   1 file changed, 128 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index fc12d35bc7bd..e8996e937e63 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -64,6 +64,7 @@ static struct cpufreq_driver amd_pstate_driver;
+>   static struct cpufreq_driver amd_pstate_epp_driver;
+>   static struct amd_cpudata **all_cpu_data;
+>   static int cppc_state = AMD_PSTATE_DISABLE;
+> +struct kobject *amd_pstate_kobj;
+>   
+>   static inline int get_mode_idx_from_str(const char *str, size_t size)
+>   {
+> @@ -90,6 +91,8 @@ static struct amd_pstate_params global_params;
+>   static DEFINE_MUTEX(amd_pstate_limits_lock);
+>   static DEFINE_MUTEX(amd_pstate_driver_lock);
+>   
+> +static DEFINE_SPINLOCK(cppc_notify_lock);
+> +
+>   static s16 amd_pstate_get_epp(struct amd_cpudata *cpudata, u64 cppc_req_cached)
+>   {
+>   	u64 epp;
+> @@ -644,6 +647,8 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+>   	policy->driver_data = cpudata;
+>   
+>   	amd_pstate_boost_init(cpudata);
+> +	if (!default_pstate_driver->adjust_perf)
+> +		default_pstate_driver->adjust_perf = amd_pstate_adjust_perf;
+>   
+>   	return 0;
+>   
+> @@ -784,12 +789,106 @@ static ssize_t show_energy_performance_preference(
+>   	return sysfs_emit(buf, "%s\n", energy_perf_strings[preference]);
+>   }
+>   
+> +static ssize_t amd_pstate_show_status(char *buf)
+> +{
+> +	if (!default_pstate_driver)
+> +		return sysfs_emit(buf, "off\n");
+> +
+> +	return sysfs_emit(buf, "%s\n", default_pstate_driver == &amd_pstate_epp_driver ?
+> +					"active" : "passive");
 
-Yes, IIRC, long jumps also typically require at least three instructions
-in arm64.
+Didn't you introduce const strings for this in an earlier patch from the 
+series?
 
-Thanks,
-Dan.
+How about using the indices from that rather than hardcoding /another/ 
+string.
+
+Also keep in mind guided mode will be coming so
+"case ? true_val : false_val"
+
+So perhaps you should just have have some if cases so you don't have to 
+switch the whole thing out.
+
+> +}
+> +
+> +static void amd_pstate_driver_cleanup(void)
+> +{
+> +	unsigned int cpu;
+> +
+> +	cpus_read_lock();
+> +	for_each_online_cpu(cpu) {
+> +		if (all_cpu_data[cpu]) {
+> +			spin_lock(&cppc_notify_lock);
+> +			kfree(all_cpu_data[cpu]);
+> +			WRITE_ONCE(all_cpu_data[cpu], NULL);
+> +			spin_unlock(&cppc_notify_lock);
+> +		}
+> +	}
+> +	cpus_read_unlock();
+> +
+> +	default_pstate_driver = NULL;
+> +}
+> +
+> +static int amd_pstate_update_status(const char *buf, size_t size)
+> +{
+
+Rather than looking at each size for each case, how about you just look 
+at the boundaries once?  Something like this:
+
+if (size > 7 || size < 3)
+	return -EINVAL;
+
+Then you should be able to run strncmp for each of your cases.
+
+> +	if (size == 3 && !strncmp(buf, "off", size)) {
+
+This seems like another case that would be good to use the const strings 
+you already introduced for state machine checking.
+
+> +		if (!default_pstate_driver)
+> +			return -EINVAL;
+> +
+> +		if (cppc_state == AMD_PSTATE_ACTIVE)
+> +			return -EBUSY;
+> +
+> +		cpufreq_unregister_driver(default_pstate_driver);
+> +		amd_pstate_driver_cleanup();
+> +		return 0;
+> +	}
+> +
+> +	if (size == 6 && !strncmp(buf, "active", size)) {
+
+This seems like another case that would be good to use the const strings 
+you already introduced for state machine checking.
+
+> +		if (default_pstate_driver) {
+> +			if (default_pstate_driver == &amd_pstate_epp_driver)
+> +				return 0;
+> +			cpufreq_unregister_driver(default_pstate_driver);
+> +			default_pstate_driver = &amd_pstate_epp_driver;
+> +			cppc_state = AMD_PSTATE_ACTIVE;
+> +		}
+> +
+> +		return cpufreq_register_driver(default_pstate_driver);
+> +	}
+> +
+> +	if (size == 7 && !strncmp(buf, "passive", size)) {
+
+This seems like another case that would be good to use the const strings 
+you already introduced for state machine checking.
+
+> +		if (default_pstate_driver) {
+> +			if (default_pstate_driver == &amd_pstate_driver)
+> +				return 0;
+> +			cpufreq_unregister_driver(default_pstate_driver);
+> +			cppc_state = AMD_PSTATE_PASSIVE;
+> +			default_pstate_driver = &amd_pstate_driver;
+> +		}
+> +
+> +		return cpufreq_register_driver(default_pstate_driver);
+> +	}
+> +
+> +	return -EINVAL;
+> +}
+> +
+> +static ssize_t show_status(struct kobject *kobj,
+> +			   struct kobj_attribute *attr, char *buf)
+> +{
+> +	ssize_t ret;
+> +
+> +	mutex_lock(&amd_pstate_driver_lock);
+> +	ret = amd_pstate_show_status(buf);
+> +	mutex_unlock(&amd_pstate_driver_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static ssize_t store_status(struct kobject *a, struct kobj_attribute *b,
+> +			    const char *buf, size_t count)
+> +{
+> +	char *p = memchr(buf, '\n', count);
+> +	int ret;
+> +
+> +	mutex_lock(&amd_pstate_driver_lock);
+> +	ret = amd_pstate_update_status(buf, p ? p - buf : count);
+> +	mutex_unlock(&amd_pstate_driver_lock);
+> +
+> +	return ret < 0 ? ret : count;
+> +}
+> +
+>   cpufreq_freq_attr_ro(amd_pstate_max_freq);
+>   cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
+>   
+>   cpufreq_freq_attr_ro(amd_pstate_highest_perf);
+>   cpufreq_freq_attr_rw(energy_performance_preference);
+>   cpufreq_freq_attr_ro(energy_performance_available_preferences);
+> +define_one_global_rw(status);
+>   
+>   static struct freq_attr *amd_pstate_attr[] = {
+>   	&amd_pstate_max_freq,
+> @@ -807,6 +906,15 @@ static struct freq_attr *amd_pstate_epp_attr[] = {
+>   	NULL,
+>   };
+>   
+> +static struct attribute *pstate_global_attributes[] = {
+> +	&status.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group amd_pstate_global_attr_group = {
+> +	.attrs = pstate_global_attributes,
+> +};
+> +
+>   static inline void update_boost_state(void)
+>   {
+>   	u64 misc_en;
+> @@ -1228,6 +1336,26 @@ static int __init amd_pstate_init(void)
+>   	if (ret)
+>   		pr_err("failed to register with return %d\n", ret);
+>   
+> +	amd_pstate_kobj = kobject_create_and_add("amd-pstate", &cpu_subsys.dev_root->kobj);
+> +	if (!amd_pstate_kobj) {
+> +		ret = -EINVAL;
+> +		pr_err("global sysfs registration failed.\n");
+> +		goto kobject_free;
+> +	}
+> +
+> +	ret = sysfs_create_group(amd_pstate_kobj, &amd_pstate_global_attr_group);
+> +	if (ret) {
+> +		pr_err("sysfs attribute export failed with error %d.\n", ret);
+> +		goto global_attr_free;
+> +	}
+> +
+> +	return ret;
+> +
+> +global_attr_free:
+> +	kobject_put(amd_pstate_kobj);
+> +kobject_free:
+> +	kfree(cpudata);
+> +	cpufreq_unregister_driver(default_pstate_driver);
+>   	return ret;
+>   }
+>   device_initcall(amd_pstate_init);
+
