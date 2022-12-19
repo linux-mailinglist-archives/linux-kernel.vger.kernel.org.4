@@ -2,76 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6009651482
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 21:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6886651483
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 21:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbiLSU5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 15:57:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
+        id S232556AbiLSU5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 15:57:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232473AbiLSU4x (ORCPT
+        with ESMTP id S232574AbiLSU5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 15:56:53 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ADFA1A6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 12:56:53 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id l10so10221576plb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 12:56:52 -0800 (PST)
+        Mon, 19 Dec 2022 15:57:24 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5E525F9
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 12:57:24 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id o8so5387865ilo.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 12:57:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AP0DPgy6juzYjbnmoSK4DSIse02YvBVHuic1zb1crI0=;
-        b=n2Cb9GinsIjyEaT+YGxcLDI2zefP9STnyh6mk+easKE+YmRAE9neZPO5KKQ0un7hzA
-         1WfQoF2Qy0Oo6ffwsDhxOVc59fCZU/OEXw2pDj+gQV0719Bol/qBcaBjr/N/1fCixHbV
-         ii3Mixw1qykkBdRq56vPuUoU5eSuiWj0Y/li7hPZ1nkZn0PUrxr1Ssco3G6XWTYk0jUX
-         q4f7k/NwuXW5lT7SorZpgTcJN3pVISAhO39PNgwLfXd7DlNY8/GHIY8XYdFgsXUjmFu0
-         W9mV9ZnGjHaq6eAnzo7i3kzYthj9wRa40zLu/snuft72nTrG+Y3Azx55N1JgbakviMQY
-         s+6A==
+        bh=BHLoLmIiSoPJZR4YAxyoxo6homLq85o/pXatGwtOBd4=;
+        b=M5IvWyti2zneCdkihUCbhFIXnDGpDURNdh8G/pL8UOONPP0dpLk1YETOXcgQIif9ZW
+         Iz3kYjieWW69i7MLTSxbSqvsbTfeoxTLPrjS9/RWd6rtn2bMANtZMWpBpPAmh4SEbt+Y
+         eEwigiKbpnSeXluNX5eIPfyGXFWs1luPa4IKI8SufRfSZRYcSQbysLRRyL2oVHXoXGFp
+         lJQ3XLTawpGMvNhdKZPqaIlbGYocFgYVRPngsJXxrc7uN0xsyK7BrUmK8KR59U0Rp5N8
+         uMi5V412Rqgp7t7GkDWE2gZpxd1FZ4DrMlYBUxiPCxKSWJD3XOwLgve+7ljuezEbnxAJ
+         MWHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AP0DPgy6juzYjbnmoSK4DSIse02YvBVHuic1zb1crI0=;
-        b=Vbgv8s2rzvbK+ZcMmytE4oKknC585Vj4NmyOVNN/satdsYbCvxt4VjVZy5DoOPZvj1
-         Zkyba78EhqdmK60cTMAKaVrTf4taHsOHkwE9ZZodHG2I/TJD1WdDk8RxEeNj5TWAQi7E
-         nXkEfruLTMYshPQt0653BJ6CCuI7BrF3020aSqNaO7PrEjz+BlndRdkYwZhiF8Aih+Ws
-         d6RHBCYYEDx9PTpB7yh6SD8KXQzr/FEDsvU8NA349VPb6ICCg6S5aZvoVJQTWqA6OMMZ
-         AAPTjxFhHNh6chFYBQTohDGG2CPgGOaYIrl8L69iHUms5ZWov9E2YFzCUpdtA6A6utcn
-         PTQQ==
-X-Gm-Message-State: AFqh2kpKQ374rss5x1KZgIGpQGMBz5Uti7ZI4FQVayPMjnG7+g3gjXip
-        mJT0m34aTbIKpKwM2HPdwSQ4yQ==
-X-Google-Smtp-Source: AMrXdXuYwK2oZVtQXVR6Uo4lZSOvVHJU5q2NtoAiJA4PqmRch5RIgzCrcaxiZPZosP5g1PcjUUJE1g==
-X-Received: by 2002:a17:902:e5cd:b0:189:b910:c6d2 with SMTP id u13-20020a170902e5cd00b00189b910c6d2mr1353085plf.1.1671483412369;
-        Mon, 19 Dec 2022 12:56:52 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id q18-20020a17090311d200b00188f07c9eedsm7601657plh.176.2022.12.19.12.56.51
+        bh=BHLoLmIiSoPJZR4YAxyoxo6homLq85o/pXatGwtOBd4=;
+        b=ZEBOqaojkdF91iqn5p9sfIWdBZOpjAd0DoQyv+lsmBNMmAKebXt7EfK0A/HZF4Q4X0
+         qouEIP9hmC0uywiG1IC8GXBwINvrYdON4XI+ZVycKseZKsv82pY1SMepfpRMtm7q70CD
+         SWMt/mPheybDoF/X1FE/CsH9vx+eva5X5LLLvqjTYNblRtFmjCRclgjOnioQxDiwQ4uv
+         MXP2coSr/2lfn9EGop7eG5e+LJcltbr1Fmhy9WDk/nDiLQA8FMA+DQ8BBxUNpLFDf4uP
+         jI8pzcW+Z5FoquyWudGqhMUUNQ4uv4nydBUzU47wDrUFem2fr0KjMSOWTlScwnQlYwWw
+         sDXg==
+X-Gm-Message-State: AFqh2koayPYYGnUN991ILbUO5cbBIRv6OWC2apA5I+aa/doI9y3qu9P3
+        YVSStUba10XAInqKn1vZrgd0uC5D5a4y/9zg
+X-Google-Smtp-Source: AMrXdXuDDYR+DHPnYc6sGD78qAsLbyttwkWPBjanNGn40a8uT3LNC2mXQyhlFqcHpqZJ3pL9mxe8+w==
+X-Received: by 2002:a05:6e02:512:b0:302:c07e:49f8 with SMTP id d18-20020a056e02051200b00302c07e49f8mr7541450ils.32.1671483443381;
+        Mon, 19 Dec 2022 12:57:23 -0800 (PST)
+Received: from google.com ([2620:15c:183:200:6550:fd9a:e118:25dc])
+        by smtp.gmail.com with ESMTPSA id v25-20020a02b919000000b0038a5af5e831sm3965386jan.100.2022.12.19.12.57.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 12:56:51 -0800 (PST)
-Date:   Mon, 19 Dec 2022 20:56:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     coverity-bot <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        kvm@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: Coverity: handle_vmclear(): Error handling issues
-Message-ID: <Y6DQEFYmjLTXvw/g@google.com>
-References: <202212010825.C23022D@keescook>
+        Mon, 19 Dec 2022 12:57:22 -0800 (PST)
+Date:   Mon, 19 Dec 2022 13:57:18 -0700
+From:   Ross Zwisler <zwisler@google.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Zheng Yejian <zhengyejian1@huawei.com>
+Subject: Re: [PATCH 1/2] tracing: Add a way to filter function addresses to
+ function names
+Message-ID: <Y6DQLgVYHedPB+F+@google.com>
+References: <20221219183106.518341498@goodmis.org>
+ <20221219183213.916833763@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202212010825.C23022D@keescook>
+In-Reply-To: <20221219183213.916833763@goodmis.org>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,52 +77,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022, coverity-bot wrote:
-> Hello!
+On Mon, Dec 19, 2022 at 01:31:07PM -0500, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> This is an experimental semi-automated report about issues detected by
-> Coverity from a scan of next-20221201 as part of the linux-next scan project:
-> https://scan.coverity.com/projects/linux-next-weekly-scan
+> There's been several times where an event records a function address in
+> its field and I needed to filter on that address for a specific function
+> name. It required looking up the function in kallsyms, finding its size,
+> and doing a compare of "field >= function_start && field < function_end".
 > 
-> You're getting this email because you were associated with the identified
-> lines of code (noted below) that were touched by commits:
+> But this would change from boot to boot and is unreliable in scripts.
+> Also, it is useful to have this at boot up, where the addresses will not
+> be known. For example, on the boot command line:
 > 
->   Fri Dec 14 17:59:46 2018 +0100
->     55d2375e58a6 ("KVM: nVMX: Move nested code to dedicated files")
+>   trace_trigger="initcall_finish.traceoff if func.function == acpi_init"
 > 
-> Coverity reported the following:
+> To implement this, add a ".function" prefix, that will check that the
+> field is of size long, and the only operations allowed (so far) are "=="
+> and "!=".
 > 
-> *** CID 1527765:  Error handling issues  (CHECKED_RETURN)
-> arch/x86/kvm/vmx/nested.c:5269 in handle_vmclear()
-> 5263     	 */
-> 5264     	if (likely(!guest_cpuid_has_evmcs(vcpu) ||
-> 5265     		   !evmptr_is_valid(nested_get_evmptr(vcpu)))) {
-> 5266     		if (vmptr == vmx->nested.current_vmptr)
-> 5267     			nested_release_vmcs12(vcpu);
-> 5268
-> vvv     CID 1527765:  Error handling issues  (CHECKED_RETURN)
-> vvv     Calling "kvm_vcpu_write_guest" without checking return value (as is done elsewhere 7 out of 8 times).
-> 5269     		kvm_vcpu_write_guest(vcpu,
-> 5270     				     vmptr + offsetof(struct vmcs12,
-> 5271     						      launch_state),
-> 5272     				     &zero, sizeof(zero));
-> 5273     	} else if (vmx->nested.hv_evmcs && vmptr == vmx->nested.hv_evmcs_vmptr) {
-> 5274     		nested_release_evmcs(vcpu);
-> 
-> If this is a false positive, please let us know so we can mark it as
-> such, or teach the Coverity rules to be smarter. If not, please make
-> sure fixes get into linux-next. :) For patches fixing this, please
-> include these lines (but double-check the "Fixes" first):
-> 
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1527765 ("Error handling issues")
-> Fixes: 55d2375e58a6 ("KVM: nVMX: Move nested code to dedicated files")
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Nit on the bot, if it's going to provide a Fixes without human verification, then
-it should probably try to bisect (which I realize could get quite nasty).  Both
-this VMCLEAR issue and the SMM issue report bogus Fixes due to code movement.  If
-the blamed commit on this won't hadn't been so obviously wrong I likely would have
-copy+pasted without ever verifying.
-
-Maybe just omit the Fixes entirely and rely on the above "touched by commits" to
-provide the developer with the hint?
+Reviewed-by: Ross Zwisler <zwisler@google.com>
