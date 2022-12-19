@@ -2,191 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A61650D2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:24:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C15650D29
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 15:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231641AbiLSOYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 09:24:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
+        id S231586AbiLSOXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 09:23:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbiLSOYQ (ORCPT
+        with ESMTP id S230373AbiLSOXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 09:24:16 -0500
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBA12BF6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 06:24:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1671459814; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=acZ1fov4ki9u2AnkKuWBzsGnuiDOCWbHLX4PdhHmIH2kGT/Gr9pjQGOFU5UwWtQkKPFYm+Q49escKKx3H2yYY/S9Q1e/LBn5IdxDXPiyA4zLcTjFvl0BiQo20zvTlw5eRRr5w5Kn9I8SWWKK7jsLxe4A0Z5tnsTBIriZ3o35ueE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1671459814; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=/KkACYHujfaGKX6lGYzfdfF8MvLQer0ZrR0Xvcz+8Pg=; 
-        b=G1PZhlnGUFJQfIXR3sUFFDrxr31/MdjOB6zp4QzztXRMLAdSru3jLaSO+wG9eEovnFA0UBfCyRbwIXjI9rMyEHFU6Nn+Gvi8qjd9rJWyuWUd8sMZjXnQ/GsUMBwHdZIFbj1c760h6Y/bJ5YrE587F5hYhmiJFdPMrCcv+vgcjX8=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1671459814;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-        bh=/KkACYHujfaGKX6lGYzfdfF8MvLQer0ZrR0Xvcz+8Pg=;
-        b=qB4uFp3H3gNfY41OgmzaL/Y9TOCV0FdF20zOKObIIaWaEK3W9aYspuPROiXBdgIy
-        brEir+1l1y+CFJfptk5qaGTnWwQpbDNeD1xNtenE6SgimLLnsf8J+jh94gkp9Xl49kz
-        coV4kP9qKLKtpx18WSO88sYFuOKhQka/ea8chAgs=
-Received: from kampyooter.. (110.226.31.37 [110.226.31.37]) by mx.zoho.in
-        with SMTPS id 1671459813592928.3801402610421; Mon, 19 Dec 2022 19:53:33 +0530 (IST)
-From:   Siddh Raman Pant <code@siddh.me>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <20221219142319.79827-1-code@siddh.me>
-Subject: [PATCH] drm: Replace DRM_INFO() with pr_info()
-Date:   Mon, 19 Dec 2022 19:53:19 +0530
-X-Mailer: git-send-email 2.35.1
+        Mon, 19 Dec 2022 09:23:36 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205D8F006;
+        Mon, 19 Dec 2022 06:23:35 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id ud5so21871783ejc.4;
+        Mon, 19 Dec 2022 06:23:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gkz73r1Eb7Lcu2UFxAAgyawdXAVgK+nUDNDZI6NypmI=;
+        b=lrK6/UvA0iB5QyZKs21O4DDtfVksA/wJmDdFI3vbYuBtAGlQGsgPT2fh0Cf4N2QS6x
+         oamZ0dNV7Qyl2NQRqZAx42e2t8jodmut605Os1ZviwfCuRiKPFa7UIqCkRYYjq5iIE55
+         hEIjMexAke+0iT2SP4qc2qmrW/R0KoWPj8ALc7WK51KklI+NqE8Wf762Qu2/w/3XbJtp
+         O6P7AsGQKBIiPvXrnV2bsYc6rb9mJmfvnzQYgHZX1LzfzTbSzXUhzk+m1P114Q4srqx9
+         v9QAGqLXUIfVAcjksSORECeS8nRpfNkYx52r1KboWugeZ6Cx1qlSg2h8+vhuLgBQ6/vu
+         ws+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gkz73r1Eb7Lcu2UFxAAgyawdXAVgK+nUDNDZI6NypmI=;
+        b=KDIsXlxqqhZTzi2msBA0V/dZ5CtI6a5jYX5PWtXYwmTrjJepzcZcayx+Mt+hbhtym0
+         Ot7r2AGDEJOvddtLvWSue9yELryE4OVfNpnBs4/fio8jhVr/wru3cnO51lj7ugb2L2R/
+         ixM+QDmjWwFVz+4yWgc58BDKWmxZnC7AaA/Q5uGeiZ9gNDa5s118KY4Qnk6mpmNPFpfS
+         2vg7daHYoIxYu0YyM1QRi9ZN9WzH53hOsKj7Wq0OkxGAKKkBzy0InCAhrCMf8KhGFBUI
+         r8QfoUupPhX5FkOZInwB2xbxK0ZMyOpqZ3MU9Jq9YVCt3KaE+tLFh/SS+zPeJE5Pd3gR
+         2G3g==
+X-Gm-Message-State: ANoB5pkt57EsSlQDteIRaLCszbEnsqJRuPSD8qii27F2EuJPa0AmPN2A
+        e1uhMYh1+lPC9ST8rF/CzmQ=
+X-Google-Smtp-Source: AA0mqf4Glrj80Pn6SO+5YOa1CODh03vabAMBUtymLKCKDN//Cz/MMQ0Pk5yKzavBrdNqIg2OJ2YxFA==
+X-Received: by 2002:a17:906:1711:b0:7c1:3fbd:d569 with SMTP id c17-20020a170906171100b007c13fbdd569mr33253033eje.8.1671459813432;
+        Mon, 19 Dec 2022 06:23:33 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id w5-20020a17090652c500b007c4fbb79535sm4399120ejn.82.2022.12.19.06.23.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Dec 2022 06:23:32 -0800 (PST)
+Message-ID: <5e05a6d5-bc89-fb66-fcae-2e1194e23c12@gmail.com>
+Date:   Mon, 19 Dec 2022 15:23:31 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-Content-Type: text/plain; charset=utf8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3] dt-bindings: display: rockchip: convert
+ rockchip-lvds.txt to YAML
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        heiko@sntech.de
+Cc:     hjc@rock-chips.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, airlied@gmail.com,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <fd51df66-147d-d40f-913e-385625a71984@gmail.com>
+ <8db62d1a-365c-d41d-90aa-4c78c5d5e9ce@linaro.org>
+Content-Language: en-US
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <8db62d1a-365c-d41d-90aa-4c78c5d5e9ce@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Line 536 of drm_print.h says DRM_INFO() is deprecated
-in favor of pr_info().
-
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
----
- drivers/gpu/drm/drm_client_modeset.c |  2 +-
- drivers/gpu/drm/drm_connector.c      |  8 ++++----
- drivers/gpu/drm/drm_drv.c            | 10 +++++-----
- drivers/gpu/drm/drm_edid_load.c      | 14 +++++++-------
- drivers/gpu/drm/drm_pci.c            |  2 +-
- 5 files changed, 18 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_client_modeset.c b/drivers/gpu/drm/drm_cli=
-ent_modeset.c
-index bbc535cc50dd..2e2891614c58 100644
---- a/drivers/gpu/drm/drm_client_modeset.c
-+++ b/drivers/gpu/drm/drm_client_modeset.c
-@@ -335,7 +335,7 @@ static bool drm_client_target_cloned(struct drm_device =
-*dev,
- =09=09DRM_DEBUG_KMS("can clone using 1024x768\n");
- =09=09return true;
- =09}
--=09DRM_INFO("kms: can't enable cloning when we probably wanted to.\n");
-+=09pr_info("[drm] kms: can't enable cloning when we probably wanted to.\n"=
-);
- =09return false;
- }
-=20
-diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connecto=
-r.c
-index 61c29ce74b03..26a03b70e2c6 100644
---- a/drivers/gpu/drm/drm_connector.c
-+++ b/drivers/gpu/drm/drm_connector.c
-@@ -165,14 +165,14 @@ static void drm_connector_get_cmdline_mode(struct drm=
-_connector *connector)
- =09=09return;
-=20
- =09if (mode->force) {
--=09=09DRM_INFO("forcing %s connector %s\n", connector->name,
--=09=09=09 drm_get_connector_force_name(mode->force));
-+=09=09pr_info("[drm] forcing %s connector %s\n", connector->name,
-+=09=09=09drm_get_connector_force_name(mode->force));
- =09=09connector->force =3D mode->force;
- =09}
-=20
- =09if (mode->panel_orientation !=3D DRM_MODE_PANEL_ORIENTATION_UNKNOWN) {
--=09=09DRM_INFO("cmdline forces connector %s panel_orientation to %d\n",
--=09=09=09 connector->name, mode->panel_orientation);
-+=09=09pr_info("[drm] cmdline forces connector %s panel_orientation to %d\n=
-",
-+=09=09=09connector->name, mode->panel_orientation);
- =09=09drm_connector_set_panel_orientation(connector,
- =09=09=09=09=09=09    mode->panel_orientation);
- =09}
-diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
-index 203bf8d6c34c..1486df097908 100644
---- a/drivers/gpu/drm/drm_drv.c
-+++ b/drivers/gpu/drm/drm_drv.c
-@@ -898,11 +898,11 @@ int drm_dev_register(struct drm_device *dev, unsigned=
- long flags)
- =09if (drm_core_check_feature(dev, DRIVER_MODESET))
- =09=09drm_modeset_register_all(dev);
-=20
--=09DRM_INFO("Initialized %s %d.%d.%d %s for %s on minor %d\n",
--=09=09 driver->name, driver->major, driver->minor,
--=09=09 driver->patchlevel, driver->date,
--=09=09 dev->dev ? dev_name(dev->dev) : "virtual device",
--=09=09 dev->primary->index);
-+=09pr_info("[drm] Initialized %s %d.%d.%d %s for %s on minor %d\n",
-+=09=09driver->name, driver->major, driver->minor,
-+=09=09driver->patchlevel, driver->date,
-+=09=09dev->dev ? dev_name(dev->dev) : "virtual device",
-+=09=09dev->primary->index);
-=20
- =09goto out_unlock;
-=20
-diff --git a/drivers/gpu/drm/drm_edid_load.c b/drivers/gpu/drm/drm_edid_loa=
-d.c
-index 37d8ba3ddb46..d3cb198380c5 100644
---- a/drivers/gpu/drm/drm_edid_load.c
-+++ b/drivers/gpu/drm/drm_edid_load.c
-@@ -242,9 +242,9 @@ static void *edid_load(struct drm_connector *connector,=
- const char *name,
- =09=09u8 *new_edid;
-=20
- =09=09edid[EDID_LENGTH-1] +=3D edid[0x7e] - valid_extensions;
--=09=09DRM_INFO("Found %d valid extensions instead of %d in EDID data "
--=09=09    "\"%s\" for connector \"%s\"\n", valid_extensions,
--=09=09    edid[0x7e], name, connector_name);
-+=09=09pr_info("[drm] Found %d valid extensions instead of %d in EDID data =
-"
-+=09=09=09"\"%s\" for connector \"%s\"\n", valid_extensions,
-+=09=09=09edid[0x7e], name, connector_name);
- =09=09edid[0x7e] =3D valid_extensions;
-=20
- =09=09new_edid =3D krealloc(edid, (valid_extensions + 1) * EDID_LENGTH,
-@@ -253,10 +253,10 @@ static void *edid_load(struct drm_connector *connecto=
-r, const char *name,
- =09=09=09edid =3D new_edid;
- =09}
-=20
--=09DRM_INFO("Got %s EDID base block and %d extension%s from "
--=09    "\"%s\" for connector \"%s\"\n", (builtin >=3D 0) ? "built-in" :
--=09    "external", valid_extensions, valid_extensions =3D=3D 1 ? "" : "s",
--=09    name, connector_name);
-+=09pr_info("[drm] Got %s EDID base block and %d extension%s from "
-+=09=09"\"%s\" for connector \"%s\"\n", (builtin >=3D 0) ? "built-in" :
-+=09=09"external", valid_extensions, valid_extensions =3D=3D 1 ? "" : "s",
-+=09=09name, connector_name);
-=20
- out:
- =09release_firmware(fw);
-diff --git a/drivers/gpu/drm/drm_pci.c b/drivers/gpu/drm/drm_pci.c
-index 39d35fc3a43b..94ee194ce927 100644
---- a/drivers/gpu/drm/drm_pci.c
-+++ b/drivers/gpu/drm/drm_pci.c
-@@ -262,7 +262,7 @@ void drm_legacy_pci_exit(const struct drm_driver *drive=
-r,
- =09=09}
- =09=09mutex_unlock(&legacy_dev_list_lock);
- =09}
--=09DRM_INFO("Module unloaded\n");
-+=09pr_info("[drm] Module unloaded\n");
- }
- EXPORT_SYMBOL(drm_legacy_pci_exit);
-=20
---=20
-2.35.1
 
 
+On 12/19/22 14:04, Krzysztof Kozlowski wrote:
+> On 19/12/2022 13:32, Johan Jonker wrote:
+>> Convert rockchip-lvds.txt to YAML.
+>>
+>> Changed:
+>>   Add power-domains property.
+>>   Requirements between PX30 and RK3288
+>>
+>> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+>> ---
+>>
+>> Changed V3:
+>>   Filename matching compatible style
+>>   Drop "Regulator phandle for "
+>>   Specify properties and requirements per SoC
+>>   Sort order and restyle
+>>
+>> Changed V2:
+>>   Fix title
+>> ---
+>>  .../display/rockchip/rockchip,lvds.yaml       | 170 ++++++++++++++++++
+>>  .../display/rockchip/rockchip-lvds.txt        |  92 ----------
+>>  2 files changed, 170 insertions(+), 92 deletions(-)
+>>  create mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+>>  delete mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
+>>
+>> diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml b/Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+>> new file mode 100644
+>> index 000000000..03b002a05
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+>> @@ -0,0 +1,170 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/display/rockchip/rockchip,lvds.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Rockchip low-voltage differential signal (LVDS) transmitter
+>> +
+>> +maintainers:
+>> +  - Sandy Huang <hjc@rock-chips.com>
+>> +  - Heiko Stuebner <heiko@sntech.de>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - rockchip,px30-lvds
+>> +      - rockchip,rk3288-lvds
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  clock-names:
+>> +    const: pclk_lvds
+>> +
+>> +  avdd1v0-supply:
+>> +    description: 1.0V analog power.
+>> +
+>> +  avdd1v8-supply:
+>> +    description: 1.8V analog power.
+>> +
+>> +  avdd3v3-supply:
+>> +    description: 3.3V analog power.
+>> +
+>> +  rockchip,grf:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +    description: Phandle to the general register files syscon.
+>> +
+>> +  rockchip,output:
+>> +    $ref: /schemas/types.yaml#/definitions/string
+>> +    enum: [rgb, lvds, duallvds]
+>> +    description: This describes the output interface.
+>> +
+>> +  phys:
+>> +    maxItems: 1
+>> +
+>> +  phy-names:
+>> +    const: dphy
+>> +
+>> +  pinctrl-names:
+>> +    const: lcdc
+>> +
+>> +  pinctrl-0: true
+>> +
+>> +  power-domains:
+>> +    maxItems: 1
+>> +
+>> +  ports:
+>> +    $ref: /schemas/graph.yaml#/properties/ports
+>> +
+>> +    properties:
+>> +      port@0:
+>> +        $ref: /schemas/graph.yaml#/properties/port
+>> +        description:
+>> +          Video port 0 for the VOP input.
+>> +          The remote endpoint maybe vopb or vopl.
+>> +
+>> +      port@1:
+>> +        $ref: /schemas/graph.yaml#/properties/port
+>> +        description:
+>> +          Video port 1 for either a panel or subsequent encoder.
+>> +
+>> +    required:
+>> +      - port@0
+>> +      - port@1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - rockchip,grf
+>> +  - rockchip,output
+>> +  - ports
+>> +
+>> +allOf:
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            const: rockchip,px30-lvds
+>> +
+>> +    then:
+>> +      properties:
+>> +        reg: false
+>> +        clocks: false
+>> +        clock-names: false
+>> +        avdd1v0-supply: false
+>> +        avdd1v8-supply: false
+>> +        avdd3v3-supply: false
+>> +
+> 
+
+> I see one compatible expects regmap from parent (grf is the parent here)
+> and other is directly on MMIO bus. Not the best combination... Maybe
+> this  should be just split to two separate bindings? Looking at driver,
+> their code is also very different between these two variants.
+
+Looking at the manufacturer tree we can expect the rest with grf parent, but also in the same driver combined with different registers and common probe.
+Due to common probe I prefer one common document.
+
+Johan
+
+===
+
+https://github.com/rockchip-linux/kernel/blob/develop-5.10/drivers/gpu/drm/rockchip/rockchip_lvds.c#L671
+
+
+rockchip,rk3126-lvds
+https://github.com/rockchip-linux/kernel/blob/develop-5.10/arch/arm/boot/dts/rk312x.dtsi#L914
+
+rockchip,rk3368-lvds
+https://github.com/rockchip-linux/kernel/blob/develop-4.4/arch/arm64/boot/dts/rockchip/rk3368.dtsi#L1196
+
+rockchip,rk3568-lvds
+https://github.com/rockchip-linux/kernel/blob/develop-5.10/arch/arm64/boot/dts/rockchip/rk3568.dtsi#L734
+
+> 
+> Best regards,
+> Krzysztof
+> 
