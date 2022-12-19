@@ -2,106 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0FA651565
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 23:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 394CD651567
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 23:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbiLSWMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 17:12:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
+        id S232916AbiLSWNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 17:13:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbiLSWMW (ORCPT
+        with ESMTP id S232883AbiLSWMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 17:12:22 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145AF164A3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 14:11:43 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id o13so5471425ilc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 14:11:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=i+5fBxr0lCerXn/Yuwt3YA+eF3QHf4Pm/K1HNIdR4Yw=;
-        b=WKqyAZIz5MUR5DDQkGcUJRFdyBbNq2tXpvuDOOH+hVMD3E+SxrOeOkx5+TlsJ/sUdT
-         FXk/bdGSfJjW9Y1f1Tuxfw6uG8doVAVWWuCqAR+NzOzS7/dsaclGzGhUYJcCbg5lwmXb
-         o7v99LwuQk5vgQkCJ1vuFxXZCmezv9I4nkb6I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i+5fBxr0lCerXn/Yuwt3YA+eF3QHf4Pm/K1HNIdR4Yw=;
-        b=u8OzIq4RbAFq5mW33GaHglKo0nSYpRfOMOi2MX3e1xnOQZniEZ4JpwwkuGFAHdJ891
-         V6fatLkTKRxNOPs9rdWG1LpIe3er70VdwPFvlPHsmrBunNQj7arp4/n42QAUI0Ps2k+v
-         zBCWhPf9JQ7NRgF8MkWllbIsQoYsWMcF5xUTB9CIs3mFQRqri84ftlejw+EyQIpjd6Up
-         tPoRaE7S2wmuWLbs2opE146I3R0UwjEwZMkKcagkKyTi2wawafQIj4jY6LiCLyKWRglc
-         npJGSLgSsMKaeuDz7byoBU9p52kTuFZTkMmEesIbfpZwMO3dF1FLt5ZD3NjxWG4yN6ux
-         jLPw==
-X-Gm-Message-State: ANoB5pkNU8NyRPeMvJvMMuSFu0RW8G/aXJ5JabAqFC2J2alsvt3UHuXb
-        6KPcEcErX7uX3NbeYrFvpulLHg==
-X-Google-Smtp-Source: AA0mqf7zghrpxEOqa7lnFcSPA7YcI61pK9QzyHtXriaC03/iIxTUF+IEgYcbz1U9j1kWNEWsoJgg7A==
-X-Received: by 2002:a05:6e02:892:b0:303:9c30:7eff with SMTP id z18-20020a056e02089200b003039c307effmr4662210ils.2.1671487902382;
-        Mon, 19 Dec 2022 14:11:42 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id v8-20020a056e020f8800b002e939413e83sm3602774ilo.48.2022.12.19.14.11.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 14:11:40 -0800 (PST)
-Message-ID: <5e3e9408-8ddd-3649-ef98-4bd611c528cc@linuxfoundation.org>
-Date:   Mon, 19 Dec 2022 15:11:39 -0700
+        Mon, 19 Dec 2022 17:12:36 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786546242;
+        Mon, 19 Dec 2022 14:12:18 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id BFCEF1C09DB; Mon, 19 Dec 2022 23:12:15 +0100 (CET)
+Date:   Mon, 19 Dec 2022 23:12:15 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 00/18] 5.10.161-rc1 review
+Message-ID: <Y6DhvxdHiEdZJppL@duo.ucw.cz>
+References: <20221219182940.701087296@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/2] tracing/selftests: Add test for event filtering on
- function name
-To:     Ross Zwisler <zwisler@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Zheng Yejian <zhengyejian1@huawei.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221219183106.518341498@goodmis.org>
- <20221219183214.075559302@goodmis.org> <Y6DQTvOrHRZ8gjDz@google.com>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <Y6DQTvOrHRZ8gjDz@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="Bst3xzJjWFMj0Wu6"
+Content-Disposition: inline
+In-Reply-To: <20221219182940.701087296@linuxfoundation.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/19/22 13:57, Ross Zwisler wrote:
-> On Mon, Dec 19, 2022 at 01:31:08PM -0500, Steven Rostedt wrote:
->> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
->>
->> With the new filter logic of passing in the name of a function to match an
->> instruction pointer (or the address of the function), add a test to make
->> sure that it is functional.
->>
->> This is also the first test to test plain filtering. The filtering has
->> been tested via the trigger logic, which uses the same code, but there was
->> nothing to test just the event filter, so this test is the first to add
->> such a case.
->>
->> Cc: Shuah Khan <shuah@kernel.org>
->> Cc: Shuah Khan <skhan@linuxfoundation.org>
->> Cc: linux-kselftest@vger.kernel.org
->> Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> 
-> Reviewed-by: Ross Zwisler <zwisler@google.com>
 
-Thank you both. I will apply this after rc1 comes out.
+--Bst3xzJjWFMj0Wu6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-thanks,
--- Shuah
+Hi!
+
+> This is the start of the stable review cycle for the 5.10.161 release.
+> There are 18 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
+> Anything received after that time might be too late.
+
+CIP testing did not find any problems here:
+
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+5.10.y
+
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+
+Best regards,
+                                                                Pavel
+        =20
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--Bst3xzJjWFMj0Wu6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY6DhvwAKCRAw5/Bqldv6
+8nOCAJ4ve55wRy+QunGz3mPUT/tdRaMApACfakHjB9YA5LnK7jboPfN1jTbGpDI=
+=GZYy
+-----END PGP SIGNATURE-----
+
+--Bst3xzJjWFMj0Wu6--
