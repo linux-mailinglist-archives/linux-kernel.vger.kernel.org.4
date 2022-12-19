@@ -2,83 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C2B65086E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 09:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA759650850
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 08:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbiLSIOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 03:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
+        id S231136AbiLSH7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 02:59:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiLSION (ORCPT
+        with ESMTP id S231418AbiLSH7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 03:14:13 -0500
-X-Greylist: delayed 945 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 19 Dec 2022 00:14:11 PST
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FC2D5FFD
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 00:14:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Hzd8l
-        f6HY4y2Yw9uc+TdTUhpidkvFZA9uoCnx/ZjXJY=; b=UykVbeZaZcR2s+sQubBlD
-        Gsa9w0ba/ivcEYX4AGmLCBHWkNum3qHH7OBFjoLsIYujCvedluxNUWSVNHUlaroz
-        Q0iyNvwrBN79oTsgcnXNWLLTwnqEmcU2h01h768tl/HLe+vuhCvPofLHwxEz6D/T
-        47DERHVVrrH/n4IXvrHRHA=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g0-2 (Coremail) with SMTP id _____wCXjF1NGaBjOMpSAA--.24784S2;
-        Mon, 19 Dec 2022 15:57:02 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     zhi.a.wang@intel.com
-Cc:     1002992920@qq.com, airlied@gmail.com, airlied@linux.ie,
-        alex000young@gmail.com, dri-devel@lists.freedesktop.org,
-        gregkh@linuxfoundation.org, hackerzheng666@gmail.com,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        joonas.lahtinen@linux.intel.com, linux-kernel@vger.kernel.org,
-        security@kernel.org, tvrtko.ursulin@linux.intel.com,
-        zhenyuw@linux.intel.com, zyytlz.wz@163.com
-Subject: Re: [Intel-gfx] [PATCH v3] drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
-Date:   Mon, 19 Dec 2022 15:57:00 +0800
-Message-Id: <20221219075700.220058-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <da557524-02ff-2ac7-7960-6f710c2d41d6@intel.com>
-References: <da557524-02ff-2ac7-7960-6f710c2d41d6@intel.com>
+        Mon, 19 Dec 2022 02:59:51 -0500
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5407EBE21
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Dec 2022 23:59:50 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:87b:c831:2ca7:222d])
+        by albert.telenet-ops.be with bizsmtp
+        id y7zn28005471bjf067znpQ; Mon, 19 Dec 2022 08:59:47 +0100
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1p7B3q-000Zlc-Tw; Mon, 19 Dec 2022 08:59:46 +0100
+Date:   Mon, 19 Dec 2022 08:59:46 +0100 (CET)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+X-X-Sender: geert@ramsan.of.borg
+To:     linux-kernel@vger.kernel.org
+cc:     mm-commits@vger.kernel.org, davidgow@google.com,
+        brendanhiggins@google.com, arnd@arndb.de, geert+renesas@glider.be,
+        akpm@linux-foundation.org
+Subject: Re: + lib-add-dhrystone-benchmark-test.patch added to mm-nonmm-unstable
+ branch
+In-Reply-To: <20221216224923.58770C433D2@smtp.kernel.org>
+Message-ID: <alpine.DEB.2.22.394.2212190857310.137329@ramsan.of.borg>
+References: <20221216224923.58770C433D2@smtp.kernel.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wCXjF1NGaBjOMpSAA--.24784S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7GF48GF45Kr43KF4UtFWDurg_yoWfZFc_uF
-        yxCwn7Cw1DJFsxWw43tFnxXr409rn5XrZ2g3yFvrW7GasrZFnrWas3J3sIgrs7t393KrW5
-        Kr4DXrWjvryj9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRtMKCJUUUUU==
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiQhHcU1aED4R+7wAAsU
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhi,
+ 	Hi Andrew,
 
-Thanks again for your reply and clear explaination about the function.
-I still have some doubt about the fix. Here is a invoke chain :
-ppgtt_populate_spt
-  ->ppgtt_populate_shadow_entry
-    ->split_2MB_gtt_entry
-As far as I'm concerned, when something error happens in DMA mapping,
-which will make intel_gvt_dma_map_guest_page return none-zero code,
-It will invoke ppgtt_invalidate_spt and call ppgtt_free_spt,which will
-finally free spt by kfree. But the caller doesn't notice that and frees
-spt by calling ppgtt_free_spt again. This is a typical UAF/Double Free
-vulnerability. So I think the key point is about how to handle spt properly.
-The handle newly allocated spt (aka sub_spt) is not the root cause of this
-issue. Could you please give me more advice about how to fix this security
-bug? Besides, I'm not sure if there are more similar problems in othe location.
+On Fri, 16 Dec 2022, Andrew Morton wrote:
+> The patch titled
+>     Subject: lib: add Dhrystone benchmark test
+> has been added to the -mm mm-nonmm-unstable branch.  Its filename is
+>     lib-add-dhrystone-benchmark-test.patch
+>
+> This patch will shortly appear at
+>     https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/lib-add-dhrystone-benchmark-test.patch
+>
+> This patch will later appear in the mm-nonmm-unstable branch at
+>    git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+>
+> Before you just go and hit "reply", please:
+>   a) Consider who else should be cc'ed
+>   b) Prefer to cc a suitable mailing list as well
+>   c) Ideally: find the original patch on the mailing list and do a
+>      reply-to-all to that, adding suitable additional cc's
+>
+> *** Remember to use Documentation/process/submit-checklist.rst when testing your code ***
+>
+> The -mm tree is included into linux-next via the mm-everything
+> branch at git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> and is updated there every 2-3 working days
+>
+> ------------------------------------------------------
 
-Best regards,
-Zheng Wang
+Can you please squash the following small fix?
+(Obviously I'm still not used to using a newer gcc than the good
+  old 4.1, which would have warned about this for sure ;-)
 
+Thanks!
+
+From f03a6abd766c685741dccc59157f4d1addee7ed4 Mon Sep 17 00:00:00 2001
+Message-Id: <f03a6abd766c685741dccc59157f4d1addee7ed4.1671436679.git.geert+renesas@glider.be>
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+Date: Sun, 18 Dec 2022 10:51:59 +0100
+Subject: [PATCH] squash! lib: Add Dhrystone benchmark test
+
+v2:
+   - Fix uninitialized use of ret, as reported by kernel test robot
+     <lkp@intel.com>.
+---
+  lib/dhry_run.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/dhry_run.c b/lib/dhry_run.c
+index 31a1d442e4a0fc19..f9d33efa6d090604 100644
+--- a/lib/dhry_run.c
++++ b/lib/dhry_run.c
+@@ -69,7 +69,7 @@ static int dhry_run_set(const char *val, const struct kernel_param *kp)
+  	if (dhry_run && system_state == SYSTEM_RUNNING)
+  		dhry_benchmark();
+
+-	return ret;
++	return 0;
+  }
+
+  static int __init dhry_init(void)
 -- 
 2.25.1
-
