@@ -2,78 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707A365135E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A6465135F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbiLSTgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 14:36:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
+        id S231344AbiLSTjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 14:39:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbiLSTgR (ORCPT
+        with ESMTP id S229564AbiLSTjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 14:36:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35367B34
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 11:36:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E637CB80EF7
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 19:36:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AEAA3C433D2;
-        Mon, 19 Dec 2022 19:36:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671478574;
-        bh=Ca/uscCkiFzOQ77KyfVqfIPrusZEf557kvGSDEn7/5s=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=S/ohq+j5f0LS8fxnFN9N0q6tjgNWO8Wb9U0A/xJvfaDOpsC37WEYXiXHhwK/NB9tN
-         hJRMGERrryBhrdFHk6xd8skx+Y7X9B/XnuhKieDAL6tEij0MbJjEFqZTDg2NPlznyX
-         2AczTWNaf1buKmH679HODTyGHSgDC7N/naC6vJiZ8gZPkZ1Z4vIIljBM1KV+w8RR5T
-         Hh/JsS1kjKyxy4UmjMVln28pSs0UMvVpupKQza/wDLfLH2o5i+hTxnwABT8cmn6cF/
-         feV62VJFpQywku6FdySSHv8MSWjO6yIoG2gHASNkrdhzLmOJUwFFPE8lshFsykj47P
-         2xGSQjUxuG/5A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9E0BBE21EEE;
-        Mon, 19 Dec 2022 19:36:14 +0000 (UTC)
-Subject: Re: [GIT PULL] zstd changes for v6.2-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <9956A306-DFFD-4D23-869A-8B6EC0B88EE6@fb.com>
-References: <9956A306-DFFD-4D23-869A-8B6EC0B88EE6@fb.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <9956A306-DFFD-4D23-869A-8B6EC0B88EE6@fb.com>
-X-PR-Tracked-Remote: https://github.com/terrelln/linux.git tags/zstd-linus-v6.2
-X-PR-Tracked-Commit-Id: 70d822cfb782ebed5c41bdad9fa520b5ec1c6923
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 158738ea75059fb4ddf812e2cb9fe1ff6e22bc70
-Message-Id: <167147857464.10172.7478974368220617726.pr-tracker-bot@kernel.org>
-Date:   Mon, 19 Dec 2022 19:36:14 +0000
-To:     Nick Terrell <terrelln@meta.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Nick Terrell <nickrterrell@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?iso-8859-1?Q?Andr=E9_Goddard_Rosa?= <andre.goddard@gmail.com>,
-        David Sterba <dsterba@suse.cz>,
-        Sam Hardeman <natrox@outlook.com>,
-        Kernel Team <kernel-team@meta.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 19 Dec 2022 14:39:35 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC50A9B
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 11:39:34 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id o12so6919513qvn.3
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 11:39:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qwBHnN2XVu4+0SF8dWKpDPbcRCSXj6F42AS9B3puGuI=;
+        b=kaE6y9tsMsBueNXs0gNvf/SBmxv1gEWOGL46Cgy6DFkoNEL46EfnNUX9qvbIS//73M
+         EXeD3w8EI/uv1NRjVdx/Qs5PTW6oV8gnoeVuq1Y6Pb+HZpFM3O/Jm4Ga7rqVbjElii4W
+         6He7djaG2TsloMI18lV/axe/ByYM4iEYRVxUJq2E/OI+CAEF50L6G82pvCYLbbJDda8n
+         yeDLWQ4pXD2VuMsuNnBzP2LFJHZNscpzUQd5eerU0PpMp4ewAJUbk6aJFC9LN4Dhyvxm
+         tpL9DMAnIzdI4K64IPxowGrWcm1u4dtfuPuxc0h99+22zwZzPp8JVIrCjJezCDG/92mP
+         GjCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qwBHnN2XVu4+0SF8dWKpDPbcRCSXj6F42AS9B3puGuI=;
+        b=aS2ir8yhEaIvnohB2U3t9tB1SC9kZHxAAFwD9SSp20hKin9QmoTxL1igyonyUYEzTu
+         ucffgjL9VOUGr5jDqA3dwfqdqRKP0Cmln0rmXgcWqRD3seSr8HWYlCQ45M9xYQx0f+dR
+         DIJjzBB9pOhqZ1rmM+35GpsSzXJMm1POBmkgfzbzmixD6fy/wwLUA7RYhBt5Diy2dzVE
+         0nthuOFzcxSChE0EjUv9noxjWH03R7xtsCK30qiDphwmvgB/6lCAXW+6y0morI8O42l0
+         5ECOny0MhGVEMdyxBctD4Nf31rOmt1+rJ6o5rWaQe98D4CtqDx2dKzdWPgRmOsIpmWci
+         zZ7A==
+X-Gm-Message-State: ANoB5pmXilJfuGnz/GeU7LdHHhxWS1GmhhcpD9siSt1wZzdiJjd9j6ak
+        uKeSJXuLokRQGqZYAPhsxlyyWJCPhw==
+X-Google-Smtp-Source: AA0mqf7q16iL0flP1B75wUVzZIYe4C55zWMeCm+np/5ufqtxSQuopAqqm7pByHJxHC0RTztpQF9BMg==
+X-Received: by 2002:a05:6214:1190:b0:4df:2bdc:14e1 with SMTP id t16-20020a056214119000b004df2bdc14e1mr38848654qvv.47.1671478773475;
+        Mon, 19 Dec 2022 11:39:33 -0800 (PST)
+Received: from citadel.. (075-134-122-108.res.spectrum.com. [75.134.122.108])
+        by smtp.gmail.com with ESMTPSA id c25-20020a05620a269900b006fc447eebe5sm7654130qkp.27.2022.12.19.11.39.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 11:39:33 -0800 (PST)
+From:   Brian Gerst <brgerst@gmail.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Brian Gerst <brgerst@gmail.com>
+Subject: [PATCH 0/2] More x86 signal cleanups
+Date:   Mon, 19 Dec 2022 14:39:02 -0500
+Message-Id: <20221219193904.190220-1-brgerst@gmail.com>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sat, 17 Dec 2022 01:24:40 +0000:
+This patch set takes code from signal_compat.c and moves it to the
+appropriate signal_$(BITS).c file.  No functional changes.
 
-> https://github.com/terrelln/linux.git tags/zstd-linus-v6.2
+Brian Gerst (2):
+  x86/signal: Move siginfo field tests
+  x86/signal/compat: Move sigaction_compat_abi() to signal_64.c
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/158738ea75059fb4ddf812e2cb9fe1ff6e22bc70
-
-Thank you!
+ arch/x86/kernel/Makefile        |   1 -
+ arch/x86/kernel/signal_32.c     | 127 +++++++++++++++++++++
+ arch/x86/kernel/signal_64.c     | 127 +++++++++++++++++++++
+ arch/x86/kernel/signal_compat.c | 191 --------------------------------
+ 4 files changed, 254 insertions(+), 192 deletions(-)
+ delete mode 100644 arch/x86/kernel/signal_compat.c
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.38.1
+
