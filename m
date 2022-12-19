@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83DC651684
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 00:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE6F651683
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 00:05:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233105AbiLSXFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 18:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
+        id S233094AbiLSXF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 18:05:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232989AbiLSXD2 (ORCPT
+        with ESMTP id S233086AbiLSXD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 18:03:28 -0500
+        Mon, 19 Dec 2022 18:03:29 -0500
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B683167E8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFBB15807;
         Mon, 19 Dec 2022 15:01:09 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJMN9Wk027753;
-        Mon, 19 Dec 2022 23:00:50 GMT
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJMvhas000408;
+        Mon, 19 Dec 2022 23:00:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=CEq8c94IBG6Nvn6CnZAOeBhIxN7kOp8McXlsMOcGt/E=;
- b=ZDrqc8PJ9eBpd3DhCkpHL8mw95krPSUw8tEyJeWctopdnojP7lQQkWAl7foR4X39MYkT
- 4j0fO6QyLz1NkBM9v4lMGuCT+Q4R5QKVrZqxvhQYbwcGVDjtekt8WsgOF3rV2W2JuaJp
- N6j/9Yh0/114HXK03wG7WurEgfh7rzJiAmADpkjJpG5JlF2q4Gh/dvgcTwsiF2tatKan
- fyA5TnWVvVjMl/xT1jeWnl+ze9meK330aF6X65tVsbh29C7vkhkTWuRXhJDR6WJ2DAuP
- 9hbumyWnrPghdhBjlHX3eUC0W/v7o0zdnnuqDSryCAhr9xlso6ujWFGZi8RuhVYv17Ng Jg== 
+ bh=8DBfpRw1P55kghMA1skoq1VZPxEn4zlEz457ZcB/ftk=;
+ b=hCAU7T9RFl8J9xpxEVKp89JkjYx9olGDDgbTeo3WtVGJLIeh6lUxYXERCeqwHcRizbZj
+ 70mY7avvqVZCBlOd+pv4EVCEvu2ijGEb0dc9uljfTyrLcuqupe3hEL7c7oCPnHdgoOSm
+ Wcg3OS5HJVArgQXGV0wUnu6b0Qvv1SZ7qkWLeen/irfS1ZlHpG46btS/YplTCt6XTvah
+ e5vNUyWcJN++vi0n4MBf+Pj2Y0RdPTPRmLPAX0gm2DQn7AAI3MVX2p8BAEl/CwLBf5Kj
+ uHo1Lt9EMqdxyK7u43zulEb+Su6QESmjbVMrtI1IyjGv03PP0k/4SbmXHYOrGtjXMNBY Pg== 
 Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mh34udrf7-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mh4sedk88-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 23:00:50 +0000
+        Mon, 19 Dec 2022 23:00:52 +0000
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BJN0n2W007943
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BJN0ow7007956
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 23:00:49 GMT
+        Mon, 19 Dec 2022 23:00:50 GMT
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 19 Dec 2022 15:00:48 -0800
+ 15.2.986.36; Mon, 19 Dec 2022 15:00:50 -0800
 From:   Elliot Berman <quic_eberman@quicinc.com>
 To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
         Elliot Berman <quic_eberman@quicinc.com>,
@@ -64,9 +64,9 @@ CC:     Trilok Soni <quic_tsoni@quicinc.com>,
         <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-acpi@vger.kernel.org>
-Subject: [PATCH v8 23/28] virt: gunyah: Add resource tickets
-Date:   Mon, 19 Dec 2022 14:58:44 -0800
-Message-ID: <20221219225850.2397345-24-quic_eberman@quicinc.com>
+Subject: [PATCH v8 24/28] virt: gunyah: Add IO handlers
+Date:   Mon, 19 Dec 2022 14:58:45 -0800
+Message-ID: <20221219225850.2397345-25-quic_eberman@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221219225850.2397345-1-quic_eberman@quicinc.com>
 References: <20221219225850.2397345-1-quic_eberman@quicinc.com>
@@ -78,15 +78,15 @@ X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 4_OVl2SDQwk6HGf4b6SFB5ryrjLKLYYt
-X-Proofpoint-GUID: 4_OVl2SDQwk6HGf4b6SFB5ryrjLKLYYt
+X-Proofpoint-GUID: 4oHTluD6IInIRKW9dxLPspFOq9X51blc
+X-Proofpoint-ORIG-GUID: 4oHTluD6IInIRKW9dxLPspFOq9X51blc
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-19_01,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- lowpriorityscore=0 malwarescore=0 suspectscore=0 priorityscore=1501
- phishscore=0 impostorscore=0 mlxscore=0 adultscore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ mlxscore=0 suspectscore=0 bulkscore=0 spamscore=0 phishscore=0
+ impostorscore=0 priorityscore=1501 adultscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2212190202
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
@@ -97,203 +97,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some VM functions need to acquire Gunyah resources. For instance, Gunyah
-vCPUs are exposed to the host as a resource. The Gunyah vCPU function
-will register a resource ticket and be able to interact with the
-hypervisor once the resource ticket is filled.
+Add framework for VM functions to handle stage-2 write faults from Gunyah
+guest virtual machines. IO handlers have a range of addresses which they
+apply to. Optionally, they may apply to only when the value written
+matches the IO handler's value.
 
+Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- drivers/virt/gunyah/vm_mgr.c  | 93 ++++++++++++++++++++++++++++++++++-
- drivers/virt/gunyah/vm_mgr.h  |  5 ++
- include/linux/gunyah.h        |  1 +
- include/linux/gunyah_vm_mgr.h | 14 ++++++
- 4 files changed, 112 insertions(+), 1 deletion(-)
+ drivers/virt/gunyah/vm_mgr.c  | 85 +++++++++++++++++++++++++++++++++++
+ drivers/virt/gunyah/vm_mgr.h  |  4 ++
+ include/linux/gunyah_vm_mgr.h | 25 +++++++++++
+ 3 files changed, 114 insertions(+)
 
 diff --git a/drivers/virt/gunyah/vm_mgr.c b/drivers/virt/gunyah/vm_mgr.c
-index a5bda4d6613b..3328b84fa681 100644
+index 3328b84fa681..dcca255bc11f 100644
 --- a/drivers/virt/gunyah/vm_mgr.c
 +++ b/drivers/virt/gunyah/vm_mgr.c
-@@ -115,6 +115,56 @@ static long gh_vm_add_function(struct gunyah_vm *ghvm, struct gunyah_vm_function
- 	return r;
+@@ -165,6 +165,91 @@ void ghvm_remove_resource_ticket(struct gunyah_vm *ghvm, struct gunyah_vm_resour
  }
+ EXPORT_SYMBOL_GPL(ghvm_remove_resource_ticket);
  
-+int ghvm_add_resource_ticket(struct gunyah_vm *ghvm, struct gunyah_vm_resource_ticket *ticket)
++static inline bool gh_vm_io_handler_matches(struct gunyah_vm_io_handler *io_hdlr, u64 addr,
++						u64 len, u64 data)
 +{
-+	struct gunyah_vm_resource_ticket *iter;
-+	struct gunyah_resource *ghrsc;
-+	int ret = 0;
++	u64 mask = BIT_ULL(io_hdlr->len * BITS_PER_BYTE) - 1;
 +
-+	mutex_lock(&ghvm->resources_lock);
-+	list_for_each_entry(iter, &ghvm->resource_tickets, list) {
-+		if (iter->resource_type == ticket->resource_type && iter->label == ticket->label) {
-+			ret = -EEXIST;
-+			goto out;
-+		}
-+	}
++	if (io_hdlr->addr != addr)
++		return false;
 +
-+	if (!try_module_get(ticket->owner)) {
-+		ret = -ENODEV;
-+		goto out;
-+	}
++	if (!io_hdlr->datamatch)
++		return true;
 +
-+	list_add(&ticket->list, &ghvm->resource_tickets);
-+	INIT_LIST_HEAD(&ticket->resources);
++	if (io_hdlr->len != len)
++		return false;
 +
-+	list_for_each_entry(ghrsc, &ghvm->resources, list) {
-+		if (ghrsc->type == ticket->resource_type && ghrsc->rm_label == ticket->label) {
-+			if (!ticket->populate(ticket, ghrsc))
-+				list_move(&ghrsc->list, &ticket->resources);
-+		}
-+	}
-+out:
-+	mutex_unlock(&ghvm->resources_lock);
-+	return ret;
++	return (data & mask) == (io_hdlr->data & mask);
 +}
-+EXPORT_SYMBOL_GPL(ghvm_add_resource_ticket);
 +
-+void ghvm_remove_resource_ticket(struct gunyah_vm *ghvm, struct gunyah_vm_resource_ticket *ticket)
++static struct gunyah_vm_io_handler *gh_vm_mgr_find_io_hdlr(struct gunyah_vm *ghvm, u64 addr,
++								u64 len, u64 data)
 +{
-+	struct gunyah_resource *ghrsc;
++	struct gunyah_vm_io_handler *io_hdlr = NULL;
++	struct rb_node *root = NULL;
 +
-+	mutex_lock(&ghvm->resources_lock);
-+	list_for_each_entry(ghrsc, &ticket->resources, list) {
-+		ticket->unpopulate(ticket, ghrsc);
-+		list_move(&ghrsc->list, &ghvm->resources);
++	root = ghvm->mmio_handler_root.rb_node;
++	while (root) {
++		io_hdlr = rb_entry(root, struct gunyah_vm_io_handler, node);
++		if (addr < io_hdlr->addr)
++			root = root->rb_left;
++		else if (addr > io_hdlr->addr)
++			root = root->rb_right;
++		else if (gh_vm_io_handler_matches(io_hdlr, addr, len, data))
++			return io_hdlr;
++	}
++	return NULL;
++}
++
++int gh_vm_mgr_mmio_write(struct gunyah_vm *ghvm, u64 addr, u32 len, u64 data)
++{
++	struct gunyah_vm_io_handler *io_hdlr = NULL;
++
++	io_hdlr = gh_vm_mgr_find_io_hdlr(ghvm, addr, len, data);
++	if (!io_hdlr)
++		return -ENODEV;
++
++	if (io_hdlr->ops && io_hdlr->ops->write)
++		return io_hdlr->ops->write(io_hdlr, addr, len, data);
++
++	return -ENODEV;
++}
++EXPORT_SYMBOL_GPL(gh_vm_mgr_mmio_write);
++
++int gh_vm_mgr_add_io_handler(struct gunyah_vm *ghvm, struct gunyah_vm_io_handler *io_hdlr)
++{
++	struct rb_node **root, *parent = NULL;
++
++	if (io_hdlr->datamatch &&
++		(!io_hdlr->len || io_hdlr->len > (sizeof(io_hdlr->data) * BITS_PER_BYTE)))
++		return -EINVAL;
++
++	root = &ghvm->mmio_handler_root.rb_node;
++	while (*root) {
++		struct gunyah_vm_io_handler *curr = rb_entry(*root, struct gunyah_vm_io_handler,
++								node);
++
++		parent = *root;
++		if (io_hdlr->addr < curr->addr)
++			root = &((*root)->rb_left);
++		else if (io_hdlr->addr > curr->addr)
++			root = &((*root)->rb_right);
++		else
++			return -EEXIST;
 +	}
 +
-+	module_put(ticket->owner);
-+	list_del(&ticket->list);
-+	mutex_unlock(&ghvm->resources_lock);
++	rb_link_node(&io_hdlr->node, parent, root);
++	rb_insert_color(&io_hdlr->node, &ghvm->mmio_handler_root);
++	return 0;
 +}
-+EXPORT_SYMBOL_GPL(ghvm_remove_resource_ticket);
++EXPORT_SYMBOL_GPL(gh_vm_mgr_add_io_handler);
++
++void gh_vm_mgr_remove_io_handler(struct gunyah_vm *ghvm, struct gunyah_vm_io_handler *io_hdlr)
++{
++	rb_erase(&io_hdlr->node, &ghvm->mmio_handler_root);
++}
++EXPORT_SYMBOL_GPL(gh_vm_mgr_remove_io_handler);
 +
  static void ghvm_put(struct kref *kref)
  {
  	struct gunyah_vm *ghvm = container_of(kref, struct gunyah_vm, kref);
-@@ -156,17 +206,41 @@ static __must_check struct gunyah_vm *gunyah_vm_alloc(struct gh_rm_rpc *rm)
- 	INIT_LIST_HEAD(&ghvm->memory_mappings);
- 	init_rwsem(&ghvm->status_lock);
- 	kref_init(&ghvm->kref);
-+	mutex_init(&ghvm->resources_lock);
-+	INIT_LIST_HEAD(&ghvm->resources);
-+	INIT_LIST_HEAD(&ghvm->resource_tickets);
- 	INIT_LIST_HEAD(&ghvm->functions);
- 
- 	return ghvm;
- }
- 
-+static void gh_vm_add_resource(struct gunyah_vm *ghvm, struct gunyah_resource *ghrsc)
-+{
-+	struct gunyah_vm_resource_ticket *ticket;
-+
-+	mutex_lock(&ghvm->resources_lock);
-+	list_for_each_entry(ticket, &ghvm->resource_tickets, list) {
-+		if (ghrsc->type == ticket->resource_type && ghrsc->rm_label == ticket->label) {
-+			if (!ticket->populate(ticket, ghrsc)) {
-+				list_add(&ghrsc->list, &ticket->resources);
-+				goto found;
-+			}
-+		}
-+	}
-+	list_add(&ghrsc->list, &ghvm->resources);
-+found:
-+	mutex_unlock(&ghvm->resources_lock);
-+}
-+
- static int gh_vm_start(struct gunyah_vm *ghvm)
- {
- 	struct gunyah_vm_memory_mapping *mapping;
- 	u64 dtb_offset;
- 	u32 mem_handle;
--	int ret;
-+	ssize_t num_hyp_resources;
-+	struct gunyah_resource *ghrsc;
-+	struct gh_rm_hyp_resource *resources;
-+	int ret, i;
- 
- 	down_write(&ghvm->status_lock);
- 	if (ghvm->vm_status != GH_RM_VM_STATUS_NO_STATE) {
-@@ -198,6 +272,23 @@ static int gh_vm_start(struct gunyah_vm *ghvm)
- 		goto err;
- 	}
- 
-+	num_hyp_resources = gh_rm_get_hyp_resources(ghvm->rm, ghvm->vmid, &resources);
-+	if (num_hyp_resources < 0) {
-+		pr_warn("Failed to get hypervisor resources for VM: %ld\n", num_hyp_resources);
-+		ret = -EINVAL;
-+		goto err;
-+	}
-+
-+	for (i = 0; i < num_hyp_resources; i++) {
-+		ghrsc = gh_rm_alloc_resource(ghvm->rm, &resources[i]);
-+		if (!ghrsc) {
-+			ret = -ENOMEM;
-+			goto err;
-+		}
-+
-+		gh_vm_add_resource(ghvm, ghrsc);
-+	}
-+
- 	ret = gh_rm_vm_start(ghvm->rm, ghvm->vmid);
- 	if (ret) {
- 		pr_warn("Failed to start VM: %d\n", ret);
 diff --git a/drivers/virt/gunyah/vm_mgr.h b/drivers/virt/gunyah/vm_mgr.h
-index 2c4fd240792a..8a71f97960bc 100644
+index 8a71f97960bc..46ba2e530be2 100644
 --- a/drivers/virt/gunyah/vm_mgr.h
 +++ b/drivers/virt/gunyah/vm_mgr.h
-@@ -7,6 +7,7 @@
- #define _GH_PRIV_VM_MGR_H
+@@ -58,6 +58,8 @@ struct gunyah_vm {
+ 	struct list_head resources;
+ 	struct list_head resource_tickets;
  
- #include <linux/gunyah_rsc_mgr.h>
-+#include <linux/gunyah_vm_mgr.h>
- #include <linux/list.h>
- #include <linux/kref.h>
- #include <linux/miscdevice.h>
-@@ -53,6 +54,10 @@ struct gunyah_vm {
- 	struct mutex mm_lock;
- 	struct list_head memory_mappings;
- 
-+	struct mutex resources_lock;
-+	struct list_head resources;
-+	struct list_head resource_tickets;
++	struct rb_root mmio_handler_root;
 +
  	struct list_head functions;
  };
  
-diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
-index 8cb6af88c75d..af69a3479025 100644
---- a/include/linux/gunyah.h
-+++ b/include/linux/gunyah.h
-@@ -28,6 +28,7 @@ struct gunyah_resource {
- 	int irq;
+@@ -68,4 +70,6 @@ struct gunyah_vm_memory_mapping *gh_vm_mem_mapping_find(struct gunyah_vm *ghvm,
+ struct gunyah_vm_memory_mapping *gh_vm_mem_mapping_find_mapping(struct gunyah_vm *ghvm,
+ 								u64 gpa, u32 size);
  
- 	/* To help allocator in resource manager */
-+	struct list_head list;
- 	u32 rm_label;
- };
- 
++int gh_vm_mgr_mmio_write(struct gunyah_vm *ghvm, u64 addr, u32 len, u64 data);
++
+ #endif
 diff --git a/include/linux/gunyah_vm_mgr.h b/include/linux/gunyah_vm_mgr.h
-index 4bb06f100ae5..3e6e6e0ab7f0 100644
+index 3e6e6e0ab7f0..5b17cb54ba01 100644
 --- a/include/linux/gunyah_vm_mgr.h
 +++ b/include/linux/gunyah_vm_mgr.h
-@@ -65,4 +65,18 @@ void gunyah_vm_function_unregister(struct gunyah_vm_function_driver *f);
- 	}								\
- 	module_exit(_name##_mod_exit)
+@@ -79,4 +79,29 @@ struct gunyah_vm_resource_ticket {
+ int ghvm_add_resource_ticket(struct gunyah_vm *ghvm, struct gunyah_vm_resource_ticket *ticket);
+ void ghvm_remove_resource_ticket(struct gunyah_vm *ghvm, struct gunyah_vm_resource_ticket *ticket);
  
-+struct gunyah_vm_resource_ticket {
-+	struct list_head list;
-+	struct list_head resources;
-+	enum gunyah_resource_type resource_type;
-+	u32 label;
++/*
++ * gunyah_vm_io_handler contains the info about an io device and its associated
++ * addr and the ops associated with the io device.
++ */
++struct gunyah_vm_io_handler {
++	struct rb_node node;
++	u64 addr;
 +
-+	struct module *owner;
-+	int (*populate)(struct gunyah_vm_resource_ticket *ticket, struct gunyah_resource *ghrsc);
-+	void (*unpopulate)(struct gunyah_vm_resource_ticket *ticket, struct gunyah_resource *ghrsc);
++	bool datamatch;
++	u8 len;
++	u64 data;
++	struct gunyah_vm_io_handler_ops *ops;
 +};
 +
-+int ghvm_add_resource_ticket(struct gunyah_vm *ghvm, struct gunyah_vm_resource_ticket *ticket);
-+void ghvm_remove_resource_ticket(struct gunyah_vm *ghvm, struct gunyah_vm_resource_ticket *ticket);
++/*
++ * gunyah_vm_io_handler_ops contains function pointers associated with an iodevice.
++ */
++struct gunyah_vm_io_handler_ops {
++	int (*read)(struct gunyah_vm_io_handler *io_dev, u64 addr, u32 len, u64 data);
++	int (*write)(struct gunyah_vm_io_handler *io_dev, u64 addr, u32 len, u64 data);
++};
++
++int gh_vm_mgr_add_io_handler(struct gunyah_vm *ghvm, struct gunyah_vm_io_handler *io_dev);
++void gh_vm_mgr_remove_io_handler(struct gunyah_vm *ghvm, struct gunyah_vm_io_handler *io_dev);
 +
  #endif
 -- 
