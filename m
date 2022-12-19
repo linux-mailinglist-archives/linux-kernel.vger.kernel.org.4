@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF2D6512DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 635AD6512F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Dec 2022 20:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232725AbiLSTYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 14:24:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
+        id S232772AbiLSTZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 14:25:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232717AbiLSTXm (ORCPT
+        with ESMTP id S231821AbiLSTZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 14:23:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98164140AF;
-        Mon, 19 Dec 2022 11:23:11 -0800 (PST)
+        Mon, 19 Dec 2022 14:25:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A6612AE8;
+        Mon, 19 Dec 2022 11:24:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33D9961128;
-        Mon, 19 Dec 2022 19:23:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AFB9C433D2;
-        Mon, 19 Dec 2022 19:23:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F19876109A;
+        Mon, 19 Dec 2022 19:24:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA2C8C433EF;
+        Mon, 19 Dec 2022 19:24:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1671477790;
-        bh=UmWRj50CS+Sz6srh573HQXVnfVm/n0diT9WYhtc13GI=;
+        s=korg; t=1671477890;
+        bh=VEG+uXiflBKhgqBO/xFeCoQH0Zpafl5hadus6dwG1Fc=;
         h=From:To:Cc:Subject:Date:From;
-        b=sgwqocd/vGoGHICDJT69TSTjv5ANAa/w4Adp6pr3kzaUvyisBPjKF/iR/kfcvtnGG
-         RXJefU4lu9f6TxgZ4bjRNTgHiF/QFoTzXBM0fBPSlnjAzKctTGOixdeLJcL6fs4nyA
-         qdestD57XuuCQvEkrOwgb5F9Hzwcu8skqSeQtup0=
+        b=E4/jb++WWMo/EyVUzGh1yKmxCtM+4dFlkE0bumKwIHclJKx8UWGHVWcTJU42xOXwv
+         jq+tNByZHcVc6ghPYlWMpo5Ob6EuzRrCFmem7V+i4zDoVee/1A3lAaajgtlyR9nLnh
+         WOAFMyJwsdUCUyf/CKmiAaEP4rnnUPI43Ai6sGF4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,19 +38,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 6.1 00/25] 6.1.1-rc1 review
-Date:   Mon, 19 Dec 2022 20:22:39 +0100
-Message-Id: <20221219182943.395169070@linuxfoundation.org>
+Subject: [PATCH 6.0 00/28] 6.0.15-rc1 review
+Date:   Mon, 19 Dec 2022 20:22:47 +0100
+Message-Id: <20221219182944.179389009@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.1-rc1.gz
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.15-rc1.gz
 X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-6.1.y
+X-KernelTest-Branch: linux-6.0.y
 X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 6.1.1-rc1
+X-KernelTest-Version: 6.0.15-rc1
 X-KernelTest-Deadline: 2022-12-21T18:29+00:00
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -62,8 +62,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 6.1.1 release.
-There are 25 patches in this series, all will be posted as a response
+This is the start of the stable review cycle for the 6.0.15 release.
+There are 28 patches in this series, all will be posted as a response
 to this one.  If anyone has any issues with these being applied, please
 let me know.
 
@@ -71,9 +71,9 @@ Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
 Anything received after that time might be too late.
 
 The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.1-rc1.gz
+	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.15-rc1.gz
 or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
 and the diffstat can be found below.
 
 thanks,
@@ -84,16 +84,22 @@ greg k-h
 Pseudo-Shortlog of commits:
 
 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 6.1.1-rc1
+    Linux 6.0.15-rc1
+
+Rasmus Villemoes <linux@rasmusvillemoes.dk>
+    net: loopback: use NET_NAME_PREDICTABLE for name_assign_type
+
+Tiezhu Yang <yangtiezhu@loongson.cn>
+    selftests: net: Use "grep -E" instead of "egrep"
+
+Sungwoo Kim <iam@sung-woo.kim>
+    Bluetooth: L2CAP: Fix u8 overflow
 
 Ferry Toth <ftoth@exalondelft.nl>
     usb: ulpi: defer ulpi_register on ulpi_read_id timeout
 
 Nikolaus Voss <nikolaus.voss@haag-streit.com>
     KEYS: encrypted: fix key instantiation with user-provided data
-
-Paulo Alcantara <pc@cjr.nz>
-    cifs: fix oops during encryption
 
 Shruthi Sanil <shruthi.sanil@intel.com>
     usb: dwc3: pci: Update PCIe device ID for USB3 controller on CPU sub-system for Raptor Lake
@@ -103,9 +109,6 @@ Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 Tony Nguyen <anthony.l.nguyen@intel.com>
     igb: Initialize mailbox message for VF reset
-
-Martin Kaiser <martin@kaiser.cx>
-    staging: r8188eu: fix led register settings
 
 Reka Norman <rekanorman@chromium.org>
     xhci: Apply XHCI_RESET_TO_DEFAULT quirk to ADL-N
@@ -140,60 +143,70 @@ Jan Kara <jack@suse.cz>
 Jan Kara <jack@suse.cz>
     udf: Discard preallocation before extending file with a hole
 
-Sean Anderson <sean.anderson@seco.com>
-    irqchip/ls-extirq: Fix endianness detection
+Jiri Olsa <jolsa@kernel.org>
+    selftests/bpf: Add kprobe_multi kmod attach api tests
 
-John Thomson <git@johnthomson.fastmail.com.au>
-    mips: ralink: mt7621: do not use kzalloc too early
+Jiri Olsa <jolsa@kernel.org>
+    selftests/bpf: Add kprobe_multi check to module attach test
 
-John Thomson <git@johnthomson.fastmail.com.au>
-    mips: ralink: mt7621: soc queries and tests as functions
+Jiri Olsa <jolsa@kernel.org>
+    selftests/bpf: Add bpf_testmod_fentry_* functions
 
-John Thomson <git@johnthomson.fastmail.com.au>
-    mips: ralink: mt7621: define MT7621_SYSC_BASE with __iomem
+Jiri Olsa <jolsa@kernel.org>
+    selftests/bpf: Add load_kallsyms_refresh function
+
+Jiri Olsa <jolsa@kernel.org>
+    bpf: Take module reference on kprobe_multi link
+
+Jiri Olsa <jolsa@kernel.org>
+    bpf: Rename __bpf_kprobe_multi_cookie_cmp to bpf_kprobe_multi_addrs_cmp
+
+Jiri Olsa <jolsa@kernel.org>
+    ftrace: Add support to resolve module symbols in ftrace_lookup_symbols
+
+Jiri Olsa <jolsa@kernel.org>
+    kallsyms: Make module_kallsyms_on_each_symbol generally available
 
 John Thomson <git@johnthomson.fastmail.com.au>
     PCI: mt7621: Add sentinel to quirks table
-
-David Michael <fedora.dm0@gmail.com>
-    libbpf: Fix uninitialized warning in btf_dump_dump_type_data
-
-Nathan Chancellor <nathan@kernel.org>
-    x86/vdso: Conditionally export __vdso_sgx_enter_enclave()
 
 
 -------------
 
 Diffstat:
 
- Documentation/security/keys/trusted-encrypted.rst |   3 +-
- Makefile                                          |   4 +-
- arch/mips/include/asm/mach-ralink/mt7621.h        |   4 +-
- arch/mips/ralink/mt7621.c                         |  97 ++++++++++-----
- arch/x86/entry/vdso/vdso.lds.S                    |   2 +
- drivers/irqchip/irq-ls-extirq.c                   |   2 +-
- drivers/net/ethernet/intel/igb/igb_main.c         |   2 +-
- drivers/pci/controller/pcie-mt7621.c              |   3 +-
- drivers/staging/r8188eu/core/rtw_led.c            |  25 +---
- drivers/usb/common/ulpi.c                         |   2 +-
- drivers/usb/dwc3/dwc3-pci.c                       |   2 +-
- drivers/usb/gadget/function/f_uvc.c               |   5 +-
- drivers/usb/host/xhci-pci.c                       |   4 +-
- drivers/usb/serial/cp210x.c                       |   2 +
- drivers/usb/serial/f81232.c                       |  12 +-
- drivers/usb/serial/f81534.c                       |  12 +-
- drivers/usb/serial/option.c                       |   3 +
- drivers/usb/typec/ucsi/ucsi.c                     |  17 ++-
- drivers/usb/typec/ucsi/ucsi.h                     |   1 +
- fs/cifs/cifsglob.h                                |  68 ++++++++++
- fs/cifs/cifsproto.h                               |   4 +-
- fs/cifs/misc.c                                    |   4 +-
- fs/cifs/smb2ops.c                                 | 143 ++++++++++------------
- fs/udf/inode.c                                    |  76 +++++-------
- fs/udf/truncate.c                                 |  48 +++-----
- security/keys/encrypted-keys/encrypted.c          |   6 +-
- sound/pci/hda/patch_realtek.c                     |   2 +
- tools/lib/bpf/btf_dump.c                          |   2 +-
- 28 files changed, 319 insertions(+), 236 deletions(-)
+ Documentation/security/keys/trusted-encrypted.rst  |  3 +-
+ Makefile                                           |  4 +-
+ drivers/net/ethernet/intel/igb/igb_main.c          |  2 +-
+ drivers/net/loopback.c                             |  2 +-
+ drivers/pci/controller/pcie-mt7621.c               |  3 +-
+ drivers/usb/common/ulpi.c                          |  2 +-
+ drivers/usb/dwc3/dwc3-pci.c                        |  2 +-
+ drivers/usb/gadget/function/f_uvc.c                |  5 +-
+ drivers/usb/host/xhci-pci.c                        |  4 +-
+ drivers/usb/serial/cp210x.c                        |  2 +
+ drivers/usb/serial/f81232.c                        | 12 +--
+ drivers/usb/serial/f81534.c                        | 12 +--
+ drivers/usb/serial/option.c                        |  3 +
+ drivers/usb/typec/ucsi/ucsi.c                      | 17 +++-
+ drivers/usb/typec/ucsi/ucsi.h                      |  1 +
+ fs/udf/inode.c                                     | 76 ++++++++---------
+ fs/udf/truncate.c                                  | 48 ++++-------
+ include/linux/module.h                             |  9 ++
+ kernel/module/kallsyms.c                           |  2 -
+ kernel/trace/bpf_trace.c                           | 98 +++++++++++++++++++++-
+ kernel/trace/ftrace.c                              | 16 ++--
+ net/bluetooth/l2cap_core.c                         |  3 +-
+ security/keys/encrypted-keys/encrypted.c           |  6 +-
+ sound/pci/hda/patch_realtek.c                      |  2 +
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c        | 24 ++++++
+ .../bpf/prog_tests/kprobe_multi_testmod_test.c     | 89 ++++++++++++++++++++
+ .../selftests/bpf/prog_tests/module_attach.c       |  7 ++
+ tools/testing/selftests/bpf/progs/kprobe_multi.c   | 50 +++++++++++
+ .../selftests/bpf/progs/test_module_attach.c       |  6 ++
+ tools/testing/selftests/bpf/trace_helpers.c        | 20 +++--
+ tools/testing/selftests/bpf/trace_helpers.h        |  2 +
+ tools/testing/selftests/net/toeplitz.sh            |  2 +-
+ 32 files changed, 412 insertions(+), 122 deletions(-)
 
 
