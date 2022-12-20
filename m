@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 092C26522A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 087FE6522A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbiLTOci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 09:32:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
+        id S234069AbiLTOco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 09:32:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234046AbiLTObY (ORCPT
+        with ESMTP id S234140AbiLTOcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:31:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF06F1B782;
-        Tue, 20 Dec 2022 06:31:22 -0800 (PST)
+        Tue, 20 Dec 2022 09:32:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E756DDEA9;
+        Tue, 20 Dec 2022 06:32:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 569E6B815CF;
-        Tue, 20 Dec 2022 14:31:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB19FC433D2;
-        Tue, 20 Dec 2022 14:31:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671546680;
-        bh=oix6jCKBIRd4Jchx3qGUz2mMR6jkFXMwNkKxKvweSs8=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=Fg8XoC6CLThJ3btHF1n1G5bB8DueBBrq7hyOcf4oAYFL4YoLjfI6DHZjaHWE2bfU6
-         bQBasAOd3/8K3jIGVazW9jAe5qn9uwbk329gHOhxI6p/67cO/Yk1RtwLXL4feV4oBX
-         F5VdyX+tVmxm77pBszpuZ6acwFVe6S/Qy0RERtDOLvLrT7eXMHBVPyAO9n3swU28AY
-         DqFiVV2uMR+NM2MYCeFVLYlXqJ/EtlUSIM9RUc/jlw4wCgI+YMsPiWk5ineb7fSI6r
-         WVRmjMteia5Tp/X38BrWneqrEBXzpOv+GIPMt4IBkYZ3hridsR5qJbtAARvaZILn1B
-         TxIQlTT5pI6ow==
-Date:   Tue, 20 Dec 2022 15:31:20 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     =?ISO-8859-15?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-cc:     benjamin.tissoires@redhat.com, rydberg@bitmath.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND 0/1] HID: input: map battery system charging
-In-Reply-To: <20221124175937.7631-1-jose.exposito89@gmail.com>
-Message-ID: <nycvar.YFH.7.76.2212201530500.9000@cbobk.fhfr.pm>
-References: <20221124175937.7631-1-jose.exposito89@gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DC6A61478;
+        Tue, 20 Dec 2022 14:32:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B91C433EF;
+        Tue, 20 Dec 2022 14:32:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671546739;
+        bh=I9Cu+kAKzr7nMCJCiEna+C9QzBUQlwXRBtFRhj+AnWY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i6ikgmsgRMPQj5I+OkiUddOnkhLld+aADGqP/TPYKPzpZ6Exmj7qfvunajVl8SbaS
+         BwClnc3miLkgwLxgoLdjqCg7/7pVvccQuRisfE4G4cBqLkhv8j7gI6cUC6PxerLH7H
+         O/wxsdusiIWFJl/5DkVzQqiUMAepsFo1sb96DzAk=
+Date:   Tue, 20 Dec 2022 15:32:15 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Allen Webb <allenwebb@google.com>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v9 01/10] imx: Fix typo
+Message-ID: <Y6HHb8alGpMHLpM/@kroah.com>
+References: <20221219191855.2010466-1-allenwebb@google.com>
+ <20221219204619.2205248-1-allenwebb@google.com>
+ <20221219204619.2205248-2-allenwebb@google.com>
+ <Y6FZWOC1DSHHZNWy@kroah.com>
+ <CAJzde06et8qZPmu=zF13rJt8=v_etMjgTRhv9y75wdrX7doC0g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJzde06et8qZPmu=zF13rJt8=v_etMjgTRhv9y75wdrX7doC0g@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,31 +58,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Nov 2022, José Expósito wrote:
-
-> Hi everyone,
+On Tue, Dec 20, 2022 at 08:26:06AM -0600, Allen Webb wrote:
+> On Mon, Dec 19, 2022 at 3:23 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Mon, Dec 19, 2022 at 02:46:09PM -0600, Allen Webb wrote:
+> > > A one character difference in the name supplied to MODULE_DEVICE_TABLE
+> > > breaks a future patch set, so fix the typo.
+> >
+> > What behaviour is broken here for older kernels? What would not work
+> > that makes this patch worthy of consideration for stable? The commit
+> > log should be clear on that.
+> >
+> > In the future, it may be useful for you to wait at least 1 week or so
+> > before sending a new series becuase just a couple of days is not enough
+> > if you are getting feedback.
+> >
+> > So before sending a v10, please give it at least a few days or a week.
+> >
+> >   Luis
 > 
-> This patch adds support for reporting battery status (charging/discharging)
-> for devices with a charging usage in their HID descriptor:
+> On Tue, Dec 20, 2022 at 12:42 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Mon, Dec 19, 2022 at 02:46:09PM -0600, Allen Webb wrote:
+> > > A one character difference in the name supplied to MODULE_DEVICE_TABLE
+> > > breaks a future patch set, so fix the typo.
+> >
+> > Breaking a future change is not worth a stable backport, right?  Doesn't
+> > this fix a real issue now?  If so, please explain that.
+> >
+> > thanks,
+> >
+> > greg k-h
 > 
-> 	0x05, 0x85,         /*      Usage Page (Battery System),    */
-> 	0x09, 0x44,         /*      Usage Page (Charging),          */
-> 
-> I tested it on Apple hardware (mouse, trackpad and keyboard) as well as
-> on UCLogic tablets with battery [1].
-> 
-> On other hardware (HID_DC_BATTERYSTRENGTH or digitizers with battery)
-> discharging should be reported for backwards compatibility.
-> I did my best to keep the old behaviour by adding KUnit tests; However,
-> I don't own any of those devices, so I'd appreciate any help testing
-> the patch from someone with the actual hardware.
+> I will update the commit message to say that it breaks compilation
+> when building imx8mp-blk-ctrl as a module (and so forth for the other
+> similar patches).
 
-I have applied this to hid.git#for-6.3/hid-core so that we get early 
-testing coverage in linux-next as soon as 6.2-rc1 is out.
-
-Thanks,
-
--- 
-Jiri Kosina
-SUSE Labs
-
+Can that code be built as a module?  Same for the other changes...
