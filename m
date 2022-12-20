@@ -2,102 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E9A651A93
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 07:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BD1651A95
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 07:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbiLTGSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 01:18:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
+        id S232948AbiLTGSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 01:18:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiLTGSC (ORCPT
+        with ESMTP id S232561AbiLTGSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 01:18:02 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71031BF62;
-        Mon, 19 Dec 2022 22:18:01 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id q17-20020a17090aa01100b002194cba32e9so15484524pjp.1;
-        Mon, 19 Dec 2022 22:18:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sV3GdJRgw7ANtPiQXbnToVWO7ur10T1KkZZv0V5kzic=;
-        b=ETUoe0DUHMPzx8IcF3aR9TtpmS3nzPbdSIGGDg6iWm8vTQ4ERpEfDr5bEUV13UZtOa
-         loiZsYnSfgi/EihBYGcBeR4Jra9efQwnUcgGc0ak7ERPCJbR2JjA1s2wpfj9ypsgToOL
-         aX3yRUmvBneXCEfuMawM7lBNpy2vvqWbVuW7BnbMHmiypvjcuXHJMo7ZxV1cQf3ZPLEX
-         wb2ZwiNxkRuydjJxDva7NgsdZTrDpruAcaCY9jwWXbPf6+oBh80+vJ76iHJ6Z8mYfwG+
-         TGlTh0QNLNXegahIJUZZjfIV2wfPfFqS88PCZiGxIdGLhq8NKAyZorf3QPrxXZKU6kg7
-         QsDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sV3GdJRgw7ANtPiQXbnToVWO7ur10T1KkZZv0V5kzic=;
-        b=6jbuyH6v2XSe8+cmiYLPnYu/qX3+z1QVfNDHQnXMrRx5ehnONYnrvMhW7pWPtguJwE
-         y69+cN73fMP0GXccbSsJAkGV90FrdI0fCY0iBSUsnziQY3QE0Ntkhv9qhXK4HCW/6uuS
-         7YfBDgpJ8zuJ0EFGSuu0P14kcvm8oEbpth1QMchYM17Cx6D8UanaPxJ8V6SburKw9+vV
-         Cr09ZMTxOEjWJiCMG//35vgl4rFiTlQdQ9KpyX3vbDhYJBFYl4+COE+PwMAnSvaqu3L7
-         0whEWDr55UKai0hcTPl5h4BdmuO1v060PxBCfnb0EXhJV8sqz/Wn5EoD8zr2DEvGJb9z
-         ry+A==
-X-Gm-Message-State: AFqh2kpo0RPQsUiv+SJuB+Sl7JB1og/BFtu7RiMN7OdgqqNjjcdlwhuW
-        jaXVH9T6j2fwvdP1NvJPE70=
-X-Google-Smtp-Source: AMrXdXtd+0jy1nZvXObO4KWAlTvHzUuXn1E2PMZdsW5JDTMsQ/ZC9T2O6LWe2QxEFW5fIQgNowL3Hg==
-X-Received: by 2002:a17:902:dccc:b0:190:f82e:8a21 with SMTP id t12-20020a170902dccc00b00190f82e8a21mr18065245pll.4.1671517080949;
-        Mon, 19 Dec 2022 22:18:00 -0800 (PST)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id n10-20020a170902e54a00b0018b025d9a40sm8326021plf.256.2022.12.19.22.17.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 22:18:00 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Logan Gunthorpe <logang@deltatee.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dan Carpenter <error27@gmail.com>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] dmaengine: plx_dma: Fix potential double free in plx_dma_create
-Date:   Tue, 20 Dec 2022 10:17:51 +0400
-Message-Id: <20221220061752.1120381-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 20 Dec 2022 01:18:15 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C0BD2C8;
+        Mon, 19 Dec 2022 22:18:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671517095; x=1703053095;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WsZmWKqOwZ07+RR1l0e8u+N6CmhZA2Av9/5pF57cJns=;
+  b=VhbTY4IrhOUMJg/RNFYzO00k3/CvowVHwz7KUlXLOSBMPMB5CIJueDIt
+   kUDQuU4OxbyVbDHVWEkFIxTy9TFv4yP0PdTLk11oq3gIC1MxJxgvPtSSc
+   i04GAvpZ5ltNK0Tp+9/KcVjoaSaGz4PGHsNBaMTaWY9d5ddM8MAP0MsyP
+   SXJTBw/mmuTQGvsWgSrnvhjsWvX9jti+0I3ITacwEjqUzlyhZacmcIpI0
+   BHWBLHiUs5kWohh86gHKnfwhSquFo4JXkTp6IyI3rnzHIRkhCfKvHewSZ
+   XOuNG4UT73xWfVjdEyfYP0F3tNwOmA9I4cjtGzkxqMtn5qq41Ur70u5Aw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="319592329"
+X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
+   d="scan'208";a="319592329"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 22:18:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="683299120"
+X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
+   d="scan'208";a="683299120"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 19 Dec 2022 22:18:13 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 197AEF7; Tue, 20 Dec 2022 08:18:42 +0200 (EET)
+Date:   Tue, 20 Dec 2022 08:18:42 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v1 1/4] pinctrl: intel: Add default case to
+ intel_config_set_pull()
+Message-ID: <Y6FTwscP2xOw5ADE@black.fi.intel.com>
+References: <20221219123208.5505-1-andriy.shevchenko@linux.intel.com>
+ <Y6B4HrOXNPXGBDWZ@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y6B4HrOXNPXGBDWZ@smile.fi.intel.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When all references are dropped, callback function plx_dma_release()
-for put_device() will call kfree(plxdev) to release memory.
-Fix the error path to fix the possible double free.
+On Mon, Dec 19, 2022 at 04:41:34PM +0200, Andy Shevchenko wrote:
+> On Mon, Dec 19, 2022 at 02:32:05PM +0200, Andy Shevchenko wrote:
+> > For the sake of symmetry with intel_config_get_pull(), add
+> > a default case to the outer switch.
+> 
+> The stats for the entire series:
+> 
+>  drivers/pinctrl/intel/pinctrl-intel.c | 45 +++++++++++++++++++++++++++------------------
+>   1 file changed, 27 insertions(+), 18 deletions(-)
 
-Fixes: 07503e6aefe4 ("dmaengine: plx_dma: add a missing put_device() on error path")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-Please correct me if I make mistakes, thanks for your review.
----
- drivers/dma/plx_dma.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Thanks!
 
-diff --git a/drivers/dma/plx_dma.c b/drivers/dma/plx_dma.c
-index 12725fa1655f..bce724ff4e16 100644
---- a/drivers/dma/plx_dma.c
-+++ b/drivers/dma/plx_dma.c
-@@ -546,8 +546,9 @@ static int plx_dma_create(struct pci_dev *pdev)
- 	return 0;
- 
- put_device:
--	put_device(&pdev->dev);
- 	free_irq(pci_irq_vector(pdev, 0),  plxdev);
-+	put_device(&pdev->dev);
-+	return rc;
- free_plx:
- 	kfree(plxdev);
- 
--- 
-2.25.1
+For the series,
 
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
