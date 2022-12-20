@@ -2,228 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB5F65224A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E04B8652250
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbiLTORu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 09:17:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
+        id S233920AbiLTOTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 09:19:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbiLTORZ (ORCPT
+        with ESMTP id S233191AbiLTOSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:17:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABAE31CB05;
-        Tue, 20 Dec 2022 06:16:43 -0800 (PST)
+        Tue, 20 Dec 2022 09:18:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0C6E53;
+        Tue, 20 Dec 2022 06:18:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53487B812A5;
-        Tue, 20 Dec 2022 14:16:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AB36C433EF;
-        Tue, 20 Dec 2022 14:16:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BA1661473;
+        Tue, 20 Dec 2022 14:18:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6088AC433EF;
+        Tue, 20 Dec 2022 14:17:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671545801;
-        bh=aR9QMgocYSz4U3/eJjLNgSMrMPwutNnlewjFdmIWMQI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=E+g1heNbk3hVgPX/xsLcnO+qMA1B/n7mMRO7BFY23RHjFVf5Jt2vgcAXq1NPSpYw/
-         jZswuIsc6hoUfipvCtbCkH1LI/iRTGN5C4B6XbF97TLDCbze6Sk9TCd2eTXFLnXOr1
-         cJhOg6U8Pkno1VWGThe35ikbnJ/mHFuBWb6NEMku/2t39bU1PvN2w37kcOLP6HRgyT
-         KcTo0cyE7XLjzCGDK5vSnkCqu9RThBwPAplSIYLSKYtGu0nTZNCw3t/nEUGpS/WiMS
-         vsMTNJE5hvJP6e8Cg8t1EbaXEIEGrh32XXDJrff1r1BF2fSQsvu9aTgVH8pPgCCJUP
-         nGfnycrL2zf8w==
-Message-ID: <3a0980ef-7128-1153-7016-6bb44760bf3b@kernel.org>
-Date:   Tue, 20 Dec 2022 15:16:37 +0100
+        s=k20201202; t=1671545879;
+        bh=9w9mUpOi4j/n7V+26T6rTz39VVMp4D5rzvOlDNl1rog=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CiIUCoTtBPLvhr7noYZBUfo0rFO41nmEai7Y9mD7czhlrVwqWGZhZgiGbNTjeDu8j
+         OkNDWB9mBQMSaP/YVkK3nQ6ZketVFR8vpN9cA5x75dxA8SFfdJTOPVXliMITt0NAh9
+         VLGPUL5WIBZsoOGqEO8AZt9XN5BY+WA+/+34qeENofuWqYzfqminpdZU+P46lgSjmw
+         vW7yqpH5qM//g7FUwDGff+Zbz+BHACj08saLZOAjG4ejoGIfowiLbz4lsYkJVDLvrG
+         G55PYmReLAlGTUWvRLf3fCF9hyCEQsq08EysRZVJfuzfqn+SATvyTFs2RWckdbs0jw
+         yFv9S6grSP3fQ==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Seth Forshee <sforshee@kernel.org>
+Subject: [GIT PULL] vfsuid fix for v6.2-rc1
+Date:   Tue, 20 Dec 2022 15:17:43 +0100
+Message-Id: <20221220141743.813176-1-brauner@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 1/4] dt-bindings: media: Document bindings for DW MIPI
- CSI-2 Host
-Content-Language: en-US
-To:     Eugen Hristev <eugen.hristev@microchip.com>,
-        linux-media@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, luis.oliveira@synopsys.com,
-        Luis Oliveira <lolivei@synopsys.com>
-References: <20221216143717.1002015-1-eugen.hristev@microchip.com>
- <20221216143717.1002015-2-eugen.hristev@microchip.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20221216143717.1002015-2-eugen.hristev@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1893; i=brauner@kernel.org; h=from:subject; bh=9w9mUpOi4j/n7V+26T6rTz39VVMp4D5rzvOlDNl1rog=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSQvPPz/QEGOX8CVbJ3HAt+MiiY96Ti4+bkv42zjoG33zvRX r34Y3lHKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjAR5SKGf4rftTY39zqc93L64ftJUv Xgtk5nvaC+lvdvw21kuENCvjL84ZooJ+jSxud+j1Vzq+ublZctEiadmVqnEbjiG39bmcBhdgA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/12/2022 15:37, Eugen Hristev wrote:
-> Add bindings for Synopsys DesignWare MIPI CSI-2 host.
-> 
-> Signed-off-by: Luis Oliveira <lolivei@synopsys.com>
-> [eugen.hristev@microchip.com: reworked binding, converted to yaml]
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> ---
+Hey Linus,
 
-1. Please use scripts/get_maintainers.pl to get a list of necessary
-people and lists to CC.  It might happen, that command when run on an
-older kernel, gives you outdated entries.  Therefore please be sure you
-base your patches on recent Linux kernel.
+/* Summary */
+This moves the ima specific vfs{g,u}id_t comparison helpers out of the header
+and into the one file in ima where they are used. We shouldn't incentivize
+people to use them by placing them into the header. As discussed and suggested
+by Linus in [1] let's just define them locally in the one file in ima where
+they are used.
 
-You did not CC anyone, so who is supposed to take this patch?
+Link: https://lore.kernel.org/lkml/CAHk-=wj+tqv2nyUZ5T5EwYWzDAAuhxQ+-DA2nC9yYOTUo5NOPg@mail.gmail.com [1]
 
-2. Subject: drop second, redundant "bindings for".
+/* Testing */
+clang: Ubuntu clang version 15.0.2-1
+gcc: gcc (Ubuntu 12.2.0-3ubuntu1) 12.2.0
 
->  .../bindings/media/snps,dw-csi.yaml           | 149 ++++++++++++++++++
->  1 file changed, 149 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/snps,dw-csi.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/snps,dw-csi.yaml b/Documentation/devicetree/bindings/media/snps,dw-csi.yaml
-> new file mode 100644
-> index 000000000000..439eadc8e517
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/snps,dw-csi.yaml
-> @@ -0,0 +1,149 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/snps,dw-csi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Synopsys DesignWare CSI-2 Host controller (csi2host)
-> +
-> +maintainers:
-> +  - Eugen Hristev <eugen.hristev@microchip.com>
-> +
-> +description:
-> +  CSI2HOST is used to receive image coming from an MIPI CSI-2 compatible
-> +  camera. It will convert the incoming CSI-2 stream into a dedicated
-> +  interface called the Synopsys IDI (Image Data Interface).
-> +  This interface is a 32-bit SoC internal only, and can be assimilated
-> +  with a CSI-2 interface.
-> +
-> +properties:
-> +  compatible:
-> +    const: snps,dw-csi
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    description:
-> +      CSI2HOST can have two clocks connected. One clock is the
-> +      peripheral clock for the inside functionality of the hardware block.
-> +      This is named 'perclk'. The second clock can be the phy clock,
-> +      which is used to clock the phy via an internal link.
-> +      This clock is named 'phyclk', phy clock.
-> +    items:
-> +      - const: perclk
-> +      - const: phyclk
+No build failures or warnings were observed. All old and new tests in fstests,
+selftests, and LTP pass without regressions.
 
-Drop "clk" from both
+/* Conflicts */
+At the time of creating this PR no merge conflicts were reported from
+linux-next and no merge conflicts showed up doing a test-merge with current
+mainline.
 
+The following changes since commit 764822972d64e7f3e6792278ecc7a3b3c81087cd:
 
-> +
-> +  phys:
-> +    maxItems: 1
-> +    description: MIPI D-PHY
-> +
-> +  phy-names:
-> +    items:
-> +      - const: dphy
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description:
-> +          Input port node, single endpoint describing the input port.
-> +
-> +        properties:
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +            description: Endpoint connected to input device
-> +
-> +            properties:
-> +              bus-type:
-> +                const: 4
-> +
-> +              data-lanes:
-> +                minItems: 1
-> +                maxItems: 4
-> +                items:
-> +                  maximum: 4
-> +
-> +              clock-lanes:
-> +                maxItems: 1
-> +
-> +              remote-endpoint: true
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description:
-> +          Output port node, single endpoint describing the output port.
-> +
-> +        properties:
-> +          endpoint:
-> +            unevaluatedProperties: false
-> +            $ref: video-interfaces.yaml#
-> +            description: Endpoint connected to output device
-> +
-> +            properties:
-> +              bus-type:
-> +                const: 4
-> +
-> +              remote-endpoint: true
-> +
-> +    required:
-> +      - port@0
-> +      - port@1
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - ports
+  Merge tag 'nfsd-6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux (2022-12-12 20:54:39 -0800)
 
-reg? phys? interrupts? All others?
+are available in the Git repository at:
 
-> +
-> +examples:
-> +  - |
-> +    csi2: csi2@3000 {
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git tags/fs.vfsuid.ima.v6.2-rc1
 
-Generic node names, so "csi"
+for you to fetch changes up to 2c05bf3aa0741f4f3c72432db7801371dbbcf289:
 
-> +        compatible = "snps,dw-csi";
-> +        reg = <0x03000 0x7FF>;
+  mnt_idmapping: move ima-only helpers to ima (2022-12-13 12:28:51 +0100)
 
-lowercase hex
+Please consider pulling these changes from the signed fs.vfsuid.ima.v6.2-rc1 tag.
 
-> +        phys = <&mipi_dphy_rx>;
-> +        phy-names = "dphy";
-> +        resets = <&dw_rst 1>;
-> +        interrupts = <2>;
-> +
+Thanks!
+Christian
 
-Best regards,
-Krzysztof
+----------------------------------------------------------------
+fs.vfsuid.ima.v6.2-rc1
 
+----------------------------------------------------------------
+Christian Brauner (1):
+      mnt_idmapping: move ima-only helpers to ima
+
+ include/linux/mnt_idmapping.h       | 20 --------------------
+ security/integrity/ima/ima_policy.c | 24 ++++++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 20 deletions(-)
