@@ -2,154 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0483651B99
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A387651BAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233731AbiLTH0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 02:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
+        id S233573AbiLTH36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 02:29:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233648AbiLTHZ5 (ORCPT
+        with ESMTP id S233497AbiLTH3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 02:25:57 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF35AE64
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:25:56 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id s196so7792985pgs.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:25:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XyF9JuxS6b1bMIxmIDmo5YIppyUDgtVjeA/J5ZBy/Sg=;
-        b=bZlL202+3g/lBUVxaTio6INJ4AnCFIK4K1tm95ryvusKHLN4qgv8Xdg9fQcsvNbRgY
-         HuZ3lt2jYcmxhGdFgyZxc5l7Rqj/TwgybpEfpzllnB3CohJAJsellYQL5vo3f924l65W
-         A7zJKiwVcGRuKChNh49XsLYRRty/AZrL4S8mxYRVyK6u1kHnTOdMkohZkYsHZzbi/RqH
-         PMjn3PNK/k/rhQCAVgVR1xUvQizCi83l55O3/YvA0tfLQuotemf78cIKorMHrcrJEFgj
-         hwGPkM0YbCUspKAISFNqg2mZCsXi1CY6Ia82TlREDiqt/JcEwXq353qv9J09cDq3UAfh
-         wzUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XyF9JuxS6b1bMIxmIDmo5YIppyUDgtVjeA/J5ZBy/Sg=;
-        b=R6h4tSbh3trfw+Ll6ApXCokOw4uFWda+UI0ArS/yA53Z/gvaK47yceXZsHaVN6Yy7G
-         7FcX7CmeMhaicMusqJJc3gzc8XkjZ3jXLRA5UMUTb4N37WYYHW6KlF+CoCW7Nylu8RQz
-         5gmlLsIdr1T0I1AIcc5WUzgjHPxDuwYf5fxJbuWmQAAEPgpjb4TpAzFEJkAIOM5XNmko
-         iPurRDfJBovqPY2IBYVJi8cMiDyUjIt63EvXQoJapk4wKbE4j6u8N0GepcQkd2uIKUrW
-         JAUCtEPcDmJWhchV9bsWfqWRFoc9l0pz3dVx9WKZAbnEhi2YjWoT0P+IRoer3wW+Xgpd
-         hkug==
-X-Gm-Message-State: ANoB5pntsqK7RlY9LCC0teRLQ4iChT5CHTJC5GR5Sa3liDjnnlqdiIuY
-        ykkBegjSaSR+FXLdCIF/2lU=
-X-Google-Smtp-Source: AA0mqf5HNABnkdJTVab5ykwjMWNSwkewL4JhDHIv8ftE7XKfaXPk26d71RZVeX1DPtdPy2jxjzxsXw==
-X-Received: by 2002:aa7:82d7:0:b0:575:a4f5:7812 with SMTP id f23-20020aa782d7000000b00575a4f57812mr45041888pfn.4.1671521155748;
-        Mon, 19 Dec 2022 23:25:55 -0800 (PST)
-Received: from archlinux.localdomain ([140.121.198.213])
-        by smtp.googlemail.com with ESMTPSA id q15-20020aa7982f000000b00576f9773c80sm7865544pfl.206.2022.12.19.23.25.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 23:25:54 -0800 (PST)
-From:   Chih-En Lin <shiyn.lin@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Nadav Amit <namit@vmware.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Yang Shi <shy828301@gmail.com>, Peter Xu <peterx@redhat.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Colin Cross <ccross@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Barry Song <baohua@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Brian Geffon <bgeffon@google.com>, Yu Zhao <yuzhao@google.com>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Li kunyu <kunyu@nfschina.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Hugh Dickins <hughd@google.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Gautam Menghani <gautammenghani201@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Barret Rhoden <brho@google.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Dinglan Peng <peng301@purdue.edu>,
-        Pedro Fonseca <pfonseca@purdue.edu>,
-        Jim Huang <jserv@ccns.ncku.edu.tw>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>,
-        Chih-En Lin <shiyn.lin@gmail.com>
-Subject: [PATCH v3 06/14] mm/ksm: Break COW PTE before modify shared PTE
-Date:   Tue, 20 Dec 2022 15:27:35 +0800
-Message-Id: <20221220072743.3039060-7-shiyn.lin@gmail.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221220072743.3039060-1-shiyn.lin@gmail.com>
-References: <20221220072743.3039060-1-shiyn.lin@gmail.com>
+        Tue, 20 Dec 2022 02:29:32 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47A710FE6;
+        Mon, 19 Dec 2022 23:28:33 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BK5RAJd001604;
+        Tue, 20 Dec 2022 07:27:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=xeKKQ88IuYossQcN2ogc+EvMSdj5DUJ0cd+4pncWdSY=;
+ b=T2FVEHl9YyMFJfvZ6/+WCN261qjlWXc5XseXS+7ibAWRNeNzWxfilo1w6obtWoVRgOlB
+ BVFHxB3p6mhtWpoQKJYTV5PwyKWJmshT4/6S5V7nyZSbFpCAsGdH8VIfKJ9Qb2rHSUsB
+ 199C3T95R9XgP6NKIBFi20vwaFx7eSWFBtt3PfqWiWosJ8UH+m2+kbmO1U0s6KmibH0n
+ VM3S90zRiQbU92kzL/gajQKFVKhDaTnUeF10WjYGzXoLvU6IkWjVDUXi+Gr/aJPEOHO5
+ VUBKLgQeTtXF0EDqoLP/rpov3KE2Sf5jeuI7PZfzgrOiYAt+gMyaKf9f+w2txlG57IAf 2g== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mjw8th946-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 07:27:49 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BK7Rmws012280
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 07:27:48 GMT
+Received: from [10.216.34.45] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 19 Dec
+ 2022 23:27:40 -0800
+Message-ID: <b4150898-d5f0-894d-2c69-b98e56142481@quicinc.com>
+Date:   Tue, 20 Dec 2022 12:57:35 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 2/2] docs: remoteproc: Update section header name
+ requirement
+Content-Language: en-US
+To:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>,
+        <krzysztof.kozlowski@linaro.org>, <mathieu.poirier@linaro.org>,
+        <corbet@lwn.net>
+References: <1670924929-26507-1-git-send-email-quic_srivasam@quicinc.com>
+ <1670924929-26507-3-git-send-email-quic_srivasam@quicinc.com>
+ <ac2d90e2-6fc3-98dc-8c73-936132b6c8d5@linaro.org>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <ac2d90e2-6fc3-98dc-8c73-936132b6c8d5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: VYv8MAuX0_dTRBmZNAywc-Z18L7enu3L
+X-Proofpoint-GUID: VYv8MAuX0_dTRBmZNAywc-Z18L7enu3L
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-20_01,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 lowpriorityscore=0 malwarescore=0 spamscore=0
+ suspectscore=0 adultscore=0 mlxscore=0 phishscore=0 clxscore=1011
+ mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2212200061
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Break COW PTE before merge the page that reside in COW-ed PTE.
 
-Signed-off-by: Chih-En Lin <shiyn.lin@gmail.com>
----
- mm/ksm.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/mm/ksm.c b/mm/ksm.c
-index c19fcca9bc03d..896a14c44a858 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -1017,7 +1017,7 @@ static int write_protect_page(struct vm_area_struct *vma, struct page *page,
- 			      pte_t *orig_pte)
- {
- 	struct mm_struct *mm = vma->vm_mm;
--	DEFINE_PAGE_VMA_WALK(pvmw, page, vma, 0, 0);
-+	DEFINE_PAGE_VMA_WALK(pvmw, page, vma, 0, PVMW_BREAK_COW_PTE);
- 	int swapped;
- 	int err = -EFAULT;
- 	struct mmu_notifier_range range;
-@@ -1136,6 +1136,8 @@ static int replace_page(struct vm_area_struct *vma, struct page *page,
- 	barrier();
- 	if (!pmd_present(pmde) || pmd_trans_huge(pmde))
- 		goto out;
-+	if (break_cow_pte(vma, pmd, addr) < 0)
-+		goto out;
- 
- 	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, mm, addr,
- 				addr + PAGE_SIZE);
--- 
-2.37.3
-
+On 12/15/2022 12:55 PM, Philippe Mathieu-Daudé wrote:
+Thanks for your time Phil!!!
+> On 13/12/22 10:48, Srinivasa Rao Mandadapu wrote:
+>> Add section header name requirement specification in elf segments.
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> ---
+>>   Documentation/staging/remoteproc.rst | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/Documentation/staging/remoteproc.rst 
+>> b/Documentation/staging/remoteproc.rst
+>> index 348ee7e..3125030 100644
+>> --- a/Documentation/staging/remoteproc.rst
+>> +++ b/Documentation/staging/remoteproc.rst
+>> @@ -245,6 +245,8 @@ if the remote processor is accessing memory 
+>> directly).
+>>     In addition to the standard ELF segments, most remote processors 
+>> would
+>>   also include a special section which we call "the resource table".
+>> +This resource table section name may have anything appended after it,
+>> +but it must start with ".resource_table"
+>
+> What do you think of:
+>
+>    In addition to the standard ELF segments, most remote processors would
+>    also include a special section which we call the "resource table".
+>    A "resource table" section name must start with the ".resource_table"
+>    prefix, optionally having a more descriptive string appended. For
+>    example, ".resource_table.my_rproc" is a valid section name.
+Okay. Will change accordingly and re-spin the patch set.
+>
+> Regards,
+>
+> Phil.
