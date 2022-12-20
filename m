@@ -2,176 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4195365254B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:11:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A084652566
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234184AbiLTRLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 12:11:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
+        id S233802AbiLTRPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 12:15:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234135AbiLTRK7 (ORCPT
+        with ESMTP id S230128AbiLTRPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 12:10:59 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612E155B9
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 09:10:57 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so17142412pjj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 09:10:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=aurora.tech; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sRFWK6w5Cy23e8XWT1rWbDLN91A4EEYHoS5gC9uHUWw=;
-        b=byb0eseT4pcRW7S1BedH8qClZpIZ/t1ewezDb5xRPr2nNpYMyTy7+iiI819WXurMX9
-         9xv2F5V8ypRxyfEHgBkAC5bKHMb5v7MNGLZ+0pzO8ZYD8/BnQLcypHHj9+tqdHyVUkJY
-         LUkx7dQJKfaRr1cHjB9EVB5TTv2igixjA78VN7hDpweg/AeHGxEXq7XkmtT+nop/9hIN
-         OFuv2GXqlGcR1/FE18gKxF12JDHQVlVT+ImihF/4a4CILJtg4Y7QaWeRb+et/42zjhus
-         0HHPTXnPGVUP5/3cX5WyUiIvZX9gQd3CxEt6+tcAw9QrdoMMK6Jr7CHOeCLv7ix7UJcL
-         bxyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sRFWK6w5Cy23e8XWT1rWbDLN91A4EEYHoS5gC9uHUWw=;
-        b=sag0t8MvC+42DVkieHz5PChbJGljK8I1umjtsjjLkKSG94iuStC+zzEaozmDVo0LdI
-         Loqbc7mOo1etyfyG3nI777dhpMrYhJKtP3OuuI1O1X7XkjsyreD1AMCRQdPgvoOBk5aA
-         JzRL6Ns/M+OqEapUH8V0a/ggGoyWSnGUxNiPdBVfRnBp9/h1SHjKyYip7HCPReda7iuN
-         Pa81Owdedlksc2SGu+ujAh+V8svhUZW9cmZR0eAUcreiu4AdvFV01ddgjnstcN2zlzFV
-         KGRoKKYQx0rODQ6CsRb73t3TY84AOC8rNJ+hoNy7slLWv+EaKOrBpLLNTLDqscWlfnpI
-         Q/VQ==
-X-Gm-Message-State: AFqh2krAhtoO3rB6Cy4hRp7gpuDUnYYOAa1FoYJM8V28YezH7AXse1FT
-        4WA69HpHekakJbeKK23Nb4rsGzbb7ePGF9xT3O18/A==
-X-Google-Smtp-Source: AMrXdXsALyFNjPlFG4yf3lODzR8YQRjaaupV8Exb4GUM16lEM67mrUbJLzgTaW82cCAQqC1FoplqXzbCU+2Xwheo+Hg=
-X-Received: by 2002:a17:90b:17d0:b0:219:d33d:4689 with SMTP id
- me16-20020a17090b17d000b00219d33d4689mr2035693pjb.233.1671556256903; Tue, 20
- Dec 2022 09:10:56 -0800 (PST)
+        Tue, 20 Dec 2022 12:15:42 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC916B72;
+        Tue, 20 Dec 2022 09:15:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671556540; x=1703092540;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Xc2bOu5Jx2qLb5if/xEFuzyv4WYObGfuBikBeB+HOMo=;
+  b=NIxkzJDwi0QFHKfBTU+9BEKRMUKFCeDYf0HAUB9EGCh0VvY0Es/00IP8
+   CciWVEsulciUrHGdq72QcJfzyHewpn+0djdGz+LBB3aBJOJGyaWSajVml
+   1Buj/W9EMOkXTPA+v6V8yyFDSlJWQhWR4Rf0RuJMFE9RqN6v6xijrAK4m
+   46Pf2AmCHQRyHuWXzfHk133K0EbxGwI5WXkz5/Xnw6aqEaUt+X1msbE/Z
+   m2rx9ufEpCGnsVZQ8+sSyZDPrF4JSLpnF/Cr4RCZmCZDW1CY89xWJkH0n
+   o04HB91PGjcK9jaZqRNGB0ejMlMS3Vdq2LW4IhGUnyHg/WbC8QexFCaT5
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="318361851"
+X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
+   d="scan'208";a="318361851"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 09:11:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="601173719"
+X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
+   d="scan'208";a="601173719"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 20 Dec 2022 09:11:53 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p7g9f-00D1PM-21;
+        Tue, 20 Dec 2022 19:11:51 +0200
+Date:   Tue, 20 Dec 2022 19:11:51 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hanna Hawa <hhhawa@amazon.com>
+Cc:     wsa@kernel.org, jarkko.nikula@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com,
+        linus.walleij@linaro.org, ben-linux@fluff.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dwmw@amazon.co.uk, benh@amazon.com, ronenk@amazon.com,
+        talel@amazon.com, jonnyc@amazon.com, hanochu@amazon.com,
+        farbere@amazon.com, itamark@amazon.com,
+        Lareine Khawaly <lareine@amazon.com>
+Subject: Re: [PATCH v4 1/1] i2c: designware: use casting of u64 in clock
+ multiplication to avoid overflow
+Message-ID: <Y6Hs1xwB45K3Ufb8@smile.fi.intel.com>
+References: <20221220164806.77576-1-hhhawa@amazon.com>
 MIME-Version: 1.0
-References: <20221208075604.811710-1-junxiao.chang@intel.com> <BN9PR11MB5370BA8A506EB8519DC879C1ECEA9@BN9PR11MB5370.namprd11.prod.outlook.com>
-In-Reply-To: <BN9PR11MB5370BA8A506EB8519DC879C1ECEA9@BN9PR11MB5370.namprd11.prod.outlook.com>
-From:   Alison Chaiken <achaiken@aurora.tech>
-Date:   Tue, 20 Dec 2022 09:10:45 -0800
-Message-ID: <CAFzL-7t4AxR-8j6_JP-MQPOqw-tjq6Ds5MTgy4bgRUCK7Ga8bQ@mail.gmail.com>
-Subject: Re: [PATCH] softirq: wake up ktimer thread in softirq context
-To:     "Chang, Junxiao" <junxiao.chang@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rt-users@vger.kernel.org" <linux-rt-users@vger.kernel.org>,
-        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Peh, Hock Zhang" <hock.zhang.peh@intel.com>,
-        Glenn Elliott <glenn@aurora.tech>,
-        Rami Jaber <rjaber@aurora.tech>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220164806.77576-1-hhhawa@amazon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 2:44 AM Chang, Junxiao <junxiao.chang@intel.com> wr=
-ote:
-> Any comment? This patch is for 6.1-rt, issue could be reproduced with 5.1=
-9-rt kernel as well.
+On Tue, Dec 20, 2022 at 04:48:06PM +0000, Hanna Hawa wrote:
+> From: Lareine Khawaly <lareine@amazon.com>
+> 
+> In functions i2c_dw_scl_lcnt() and i2c_dw_scl_hcnt() may have overflow
+> by depending on the values of the given parameters including the ic_clk.
+> For example in our use case where ic_clk is larger than one million,
+> multiplication of ic_clk * 4700 will result in 32 bit overflow.
+> 
+> Add cast of u64 to the calculation to avoid multiplication overflow, and
+> use the corresponding define for divide.
 
-In
+...
 
-https://lore.kernel.org/linux-rt-users/CAFzL-7v-NSFKAsyhxReEES7bMomSTwYyrZs=
-cnjbkydEP3CTXmQ@mail.gmail.com/
+> -		return DIV_ROUND_CLOSEST(ic_clk * tSYMBOL, MICRO) - 8 + offset;
+> +		return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * tSYMBOL, MICRO) - 8 +
+> +			offset;
 
-we reported an occasional problem with an x86 system entering a deep C
-state even though timers were pending.   Perhaps your patch would
-prevent this transition.
+Broken indentation.
 
-> This issue is easier to reproduced when there is heavy network workload w=
-hich introduces a lot of softirq events. If hrtimer interrupt is triggered =
-in softirq context, with current RT kernel, it will not wake up ktimers thr=
-ead which handles hrtimer event because in function __irq_exit_rcu, "in_int=
-errupt()" is true:
->
-> static inline void __irq_exit_rcu(void)
-> {
-> ...
->         preempt_count_sub(HARDIRQ_OFFSET);
->         if (!in_interrupt()) {
->                 if (local_softirq_pending())
->                         invoke_softirq();
->
->                 if (IS_ENABLED(CONFIG_PREEMPT_RT) && local_pending_timers=
-())
->                         wake_timersd();
->         }
-> ...
-> }
->
+...
 
-Isn't removing the check for IS_ENABLED(CONFIG_PREEMPT_RT) inadvisable?
+> -		return DIV_ROUND_CLOSEST(ic_clk * (tSYMBOL + tf), MICRO) - 3 + offset;
+> +		return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tSYMBOL + tf),
+> +					     MICRO) - 3 + offset;
 
-> Then ktimers threads stays in sleep state, hrtimer function will not be c=
-alled although hrtimer interrupt has been triggered. Ktimers thread might b=
-e woken up in next timer interrupt which introduces long delay.
->
-> Any comments are welcome.
->
-> Regards,
-> Junxiao
+I would still go with 'MICRO) -' part to be on the previous line despite being
+over 80, this is logical split which increases readability.
 
--- Alison Chaiken
-Aurora Innovation
+> -	return DIV_ROUND_CLOSEST(ic_clk * (tLOW + tf), MICRO) - 1 + offset;
+> +	return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tLOW + tf), MICRO) - 1 +
+> +		offset;
+
+Broken indentation.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
- -----Original Message-----
-> From: Chang, Junxiao <junxiao.chang@intel.com>
-> Sent: Thursday, December 8, 2022 3:56 PM
-> To: linux-kernel@vger.kernel.org
-> Cc: linux-rt-users@vger.kernel.org; bigeasy@linutronix.de; tglx@linutroni=
-x.de; rostedt@goodmis.org; Chang, Junxiao <junxiao.chang@intel.com>; Peh, H=
-ock Zhang <hock.zhang.peh@intel.com>
-> Subject: [PATCH] softirq: wake up ktimer thread in softirq context
->
-> Occiaionally timer interrupt might be triggered in softirq context, ktime=
-r thread should be woken up with RT kernel, or else ktimer thread might sta=
-y in sleep state although timer interrupt has been triggered.
->
-> This change fixes a latency issue that timer handler is delayed for more =
-than 4ms in network related test.
->
-> Fixes: 2165d27554e8 ("softirq: Use a dedicated thread for timer wakeups."=
-)
-> Reported-by: Peh, Hock Zhang <hock.zhang.peh@intel.com>
-> Signed-off-by: Junxiao Chang <junxiao.chang@intel.com>
-> ---
->  kernel/softirq.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
->
-> diff --git a/kernel/softirq.c b/kernel/softirq.c index ab1fe34326bab..34a=
-e39e4a3d10 100644
-> --- a/kernel/softirq.c
-> +++ b/kernel/softirq.c
-> @@ -664,13 +664,10 @@ static inline void __irq_exit_rcu(void)  #endif
->         account_hardirq_exit(current);
->         preempt_count_sub(HARDIRQ_OFFSET);
-> -       if (!in_interrupt()) {
-> -               if (local_softirq_pending())
-> -                       invoke_softirq();
-> -
-> -               if (IS_ENABLED(CONFIG_PREEMPT_RT) && local_pending_timers=
-())
-> -                       wake_timersd();
-> -       }
-> +       if (!in_interrupt() && local_softirq_pending())
-> +               invoke_softirq();
-> +       if (!(in_nmi() || in_hardirq()) && local_pending_timers())
-> +               wake_timersd();
->
->         tick_irq_exit();
->  }
-> --
-> 2.25.1
->
