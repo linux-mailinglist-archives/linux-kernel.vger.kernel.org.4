@@ -2,117 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5C8652116
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 13:59:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A77B6652121
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 14:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiLTM7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 07:59:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
+        id S233733AbiLTNBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 08:01:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232633AbiLTM7e (ORCPT
+        with ESMTP id S233572AbiLTNBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 07:59:34 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAD9BE36
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 04:59:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9DkvdiaBZqUHcco7XfIMGg1vO7ZJS1qXjuZnq3ZNZLM=; b=bAKalqIkNBnuonpJYyIbPfwUP1
-        48V91BGNyo2/WsWNAufJpcYh/5+2nGzkKji8RLrNhf7cct3dmTxiNcVolhz1z+eKRJ8q+Q3vzFlKL
-        jMT75NJhJqfl6QIMezCHQdyOADkxeIar7EuIHE2hONH8R8Ns9FsKXP/uGMt0k+m8/DFXA3GP8pbSm
-        tmO4+1DAOjP/EnSkEfPTPlORY4GcDmAzAXm++UG8njXe6+lj2TS+pCA3xruPdWMYoLLcxoel9CPUZ
-        k/sBK0/bN1k7y/axDNvLlFWvEDmUu5PmZgZIhUmcflXxJnLLo6qtMLnWZsVlDL9mlKGs2yVqU5Y9Q
-        HmJaFovg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1p7cDK-00D01L-23;
-        Tue, 20 Dec 2022 12:59:22 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CC18C3000DD;
-        Tue, 20 Dec 2022 13:59:21 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A8F2C20C02114; Tue, 20 Dec 2022 13:59:21 +0100 (CET)
-Date:   Tue, 20 Dec 2022 13:59:21 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] sched: Make const-safe
-Message-ID: <Y6Gxqe5ZpB+uesxL@hirez.programming.kicks-ass.net>
-References: <20221212144946.2657785-1-willy@infradead.org>
- <Y5mTJVi2PBix+Gy6@hirez.programming.kicks-ass.net>
- <Y5oP2Psz++gHholO@casper.infradead.org>
+        Tue, 20 Dec 2022 08:01:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105C7D139;
+        Tue, 20 Dec 2022 05:01:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6DCCB8120C;
+        Tue, 20 Dec 2022 13:01:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03CF8C433D2;
+        Tue, 20 Dec 2022 13:01:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671541306;
+        bh=slrz46HiCnR36Ttz5lZwi2BzDl4AV9enAoKXs0qjmNM=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=UXKqSGIOyQZvfv+enBZrb4w4rxIfUxpC8+O6/Z9APCEJ7LTp1RxkoilHrcPTfgiom
+         A/E2K6hgvdTdkF+03z6Wj5wceZ7w0g4Z8H15BanUZR0qfQArf1zXWW/sviGezn9WKb
+         4aj/Q2APzcDuWMp8Fa+Bmz2Sc4iIjs2Ll0G76mH33aZiaC4l0TDEua3SGeEvgMdzXx
+         Sx171OfV+uC4PIa+oqWFqrAmX7bQIRKhvgFo8N7a21xgMNkuqll2G8uhXkeuspPCpv
+         fsU58EpwbZeqgaimp2KZsMWL6M8/Okvia8qgDROZWupSsfi9rV7MHI4Mf7OfKMb/Aa
+         JlU8uG8IuNL7A==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5oP2Psz++gHholO@casper.infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] wifi: mt76: mt7996: select CONFIG_RELAY
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20221215163133.4152299-1-arnd@kernel.org>
+References: <20221215163133.4152299-1-arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <167154130077.23629.13270502460080911055.kvalo@kernel.org>
+Date:   Tue, 20 Dec 2022 13:01:42 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 06:03:04PM +0000, Matthew Wilcox wrote:
-> On Wed, Dec 14, 2022 at 10:11:01AM +0100, Peter Zijlstra wrote:
-> > On Mon, Dec 12, 2022 at 02:49:46PM +0000, Matthew Wilcox (Oracle) wrote:
-> > > With a modified container_of() that preserves constness, the compiler
-> > > finds some pointers which should have been marked as const.  task_of()
-> > > also needs to become const-preserving for the !FAIR_GROUP_SCHED case so
-> > > that cfs_rq_of() can take a const argument.  No change to generated code.
-> > 
-> > More const more better I suppose.. Thanks!
-> > 
-> > Happen to have a sha for the container_of() commit handy?
+Arnd Bergmann <arnd@kernel.org> wrote:
+
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> There isn't one yet.  Obviously we can't make container_of()
-> const-preserving until we've fixed all the places which would warn.
-> The diff I have in my tree looks like this:
+> Without CONFIG_RELAY, the driver fails to link:
 > 
-> diff --git a/include/linux/container_of.h b/include/linux/container_of.h
-> index 1d898f9158b4..9416e6cc8c88 100644
-> --- a/include/linux/container_of.h
-> +++ b/include/linux/container_of.h
-> @@ -20,7 +20,10 @@
->         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
->                       __same_type(*(ptr), void),                        \
->                       "pointer type mismatch in container_of()");       \
-> -       ((type *)(__mptr - offsetof(type, member))); })
-> +       __mptr -= offsetof(type, member);                               \
-> +       _Generic(ptr,                                                   \
-> +               const typeof(*(ptr)) *: (const type *)__mptr,           \
-> +               default: ((type *)__mptr)); })
+> ERROR: modpost: "relay_flush" [drivers/net/wireless/mediatek/mt76/mt7996/mt7996e.ko] undefined!
+> ERROR: modpost: "relay_switch_subbuf" [drivers/net/wireless/mediatek/mt76/mt7996/mt7996e.ko] undefined!
+> ERROR: modpost: "relay_open" [drivers/net/wireless/mediatek/mt76/mt7996/mt7996e.ko] undefined!
+> ERROR: modpost: "relay_reset" [drivers/net/wireless/mediatek/mt76/mt7996/mt7996e.ko] undefined!
+> ERROR: modpost: "relay_file_operations" [drivers/net/wireless/mediatek/mt76/mt7996/mt7996e.ko] undefined!
 > 
->  /**
->   * container_of_const - cast a member of a structure out to the containing
+> The same change was done in mt7915 for the corresponding copy of the code.
 > 
-> I have all of fs/ and net/ compiling cleanly now.  There are a few
-> places which really need the const-removing properties, and I've made
-> those call a new macro called container_of_not_const(), but I don't
-> like that name.
+> Fixes: 98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
+> See-also: 988845c9361a ("mt76: mt7915: add support for passing chip/firmware debug data to user space")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-#define const_cast(T, exp)	_Generic((exp), const T : (T)(exp), default: (exp))
+Patch applied to wireless.git, thanks.
 
-perhaps? Then one can write something like:
+37fc9ad1617a wifi: mt76: mt7996: select CONFIG_RELAY
 
-	struct task_struct *p = const_cast(struct task_struct *,
-					   constainer_of(node, struct task_struct *, run_node));
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20221215163133.4152299-1-arnd@kernel.org/
 
-The repetition is a bit naf, but at least the construct is more
-generally useful.
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
-(I really wish there was a qualifier stripping typeof() variant -- and
-yes, I know about the _Atomic thing).
