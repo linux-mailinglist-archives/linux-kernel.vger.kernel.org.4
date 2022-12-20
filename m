@@ -2,84 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8F4652456
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D97B4652452
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:09:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbiLTQLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 11:11:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
+        id S233981AbiLTQJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 11:09:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233945AbiLTQI4 (ORCPT
+        with ESMTP id S233912AbiLTQIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 11:08:56 -0500
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EB91DDC1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:07:28 -0800 (PST)
-Received: by mail-qv1-xf2e.google.com with SMTP id q10so8472582qvt.10
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:07:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=N69AnN/HCGfz6y/pBDE+Dl/UeoUyFu+chnsy6BgVL3w=;
-        b=AeRgstx1cCT95ZSqqjbb0GKPXOYVhZE6R9V7VefA0fuOv1IQyjSThAUuHdmwVnnlwI
-         J+pHWLQ9/btK/Bbr26xFePa4nNDVhGq1HgL9+ysZsavOpVvcwUAAyzyu4tQCL4RhQcfJ
-         tnVIdnTnfnoJDi1BiXApTBA+gc7afeH4jfmOy9uzcXLRI2cnltWkAYFKDLrymTD2cq7J
-         F1pDiKQeiRZZ6QXxucTvaql35Jt8YRMXbB/PftvS4tX5KZOg6FGCzbcDR3/Hn42lSqwg
-         HqqKhe8YXkk7/2SCbe6UMLVu+MtM8aNoqPN/LdDEWVFG/huTmFGddFVwhFL2ztYZ5/dx
-         NNaA==
+        Tue, 20 Dec 2022 11:08:53 -0500
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C4F1D668;
+        Tue, 20 Dec 2022 08:07:24 -0800 (PST)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1443a16b71cso15838043fac.13;
+        Tue, 20 Dec 2022 08:07:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N69AnN/HCGfz6y/pBDE+Dl/UeoUyFu+chnsy6BgVL3w=;
-        b=G8DPdAGeuGLdwSYOWMXGN5W+DkNIJ+MTRoU0MfCsGymvTHkqz0di7ryYHHkRbyuWSk
-         Y+okxTQTXNxK8LhZ9FQq8VZgyAnqTXFbrjOWPWY6FpWdr5rH1QnpnQG+8DaSkWGqM+NS
-         d0aJsNucJZy/0BHJea0azANEKeiBa69XQGS8EbEjmAi1fhQNQgHJVZeh0kW+Ty8C/n5i
-         PZA5tsu1+nJ68T8IoHREetffb5GfwgVeJGYTskMVFrq3+ZQe2x4MwcsVLshk7NfA3bGO
-         elBQOsk/CSd1lbQjlSjPEYpHPVP462fJ2Nj+A6H5Np/Y17MpQDi/tkhZkshjPhPMV5xP
-         z2Hw==
-X-Gm-Message-State: AFqh2kpk7ladDxfyI7K9lcMTI33Z3OMlLuGjwVOR5MdZsFdtk1uQ7+NG
-        Tu1BqEhrnW7y5iJmHtvvvJmzP/rqv+VXwW7Q3cs3LA==
-X-Google-Smtp-Source: AMrXdXsBNTd5k7lmnyqqX9fuJ3m71PHVIcvyxLDNEzzwTVKxCrIS5FWKx9DnSYOatAouialVfNPvEhcABgtwbnY2Seo=
-X-Received: by 2002:a05:6214:5c83:b0:4f4:65c1:d799 with SMTP id
- lj3-20020a0562145c8300b004f465c1d799mr1004017qvb.81.1671552447953; Tue, 20
- Dec 2022 08:07:27 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q/u+y5GSLZEEG0FI6JVp5YQvEAR9DtzlzUi4XN5IYYg=;
+        b=mt+KXqsEk7bQfD5MVipOX6CdRgPWbe7p/6SdezuFDxN5TU1F8Vh2sj06RUtvR6dojY
+         xCGBeMcfj4gwixBF7HsxoSbgjZuhRsq6gUOTN9UKgsctXqw7L2O2Nx2ob+cWbZ8AVP6Q
+         P4qbbSNo0CO7SuxVnKuKRlCX/aEGKvPkdjvknCYZ+cnIYEaUkDoV7YUQ28nMdP22rMCg
+         u0jMDENMIYyXKb6gJxdDCGvAFNqUrdfougeILwcJo4foVwmReCjCPMUdLpG61QtjQgN/
+         mUBAmJO+VAuJrVp0477Z/6scDDsHb5m48yienroc4LoGqjHQBdzgybTykGz/64kugWBg
+         +4nA==
+X-Gm-Message-State: ANoB5pmItgFGp3TthVL7i3W8GC60bPMHWNyD+9O3+TrgL3K+hgZ6FQtc
+        /5AO0Qk27Mu7mfYodUU86g==
+X-Google-Smtp-Source: AA0mqf7Vr3fx/nZSVhqd0FR3tqQ0t2069C3rCa0EhIFdtpBAjjoKR5PH1zTpaiGVYRnNzM3trAwTnQ==
+X-Received: by 2002:a05:6870:1696:b0:144:7a85:63ea with SMTP id j22-20020a056870169600b001447a8563eamr23948571oae.23.1671552443772;
+        Tue, 20 Dec 2022 08:07:23 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z9-20020a056870460900b00140d421445bsm6185661oao.11.2022.12.20.08.07.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 08:07:23 -0800 (PST)
+Received: (nullmailer pid 647058 invoked by uid 1000);
+        Tue, 20 Dec 2022 16:07:22 -0000
+Date:   Tue, 20 Dec 2022 10:07:22 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     heiko@sntech.de, hjc@rock-chips.com,
+        krzysztof.kozlowski+dt@linaro.org, airlied@gmail.com,
+        daniel@ffwll.ch, vkoul@kernel.org, kishon@kernel.org,
+        linux-phy@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/5] dt-bindings: soc: rockchip: grf: add
+ rockchip,lvds.yaml
+Message-ID: <20221220160722.GA635186-robh@kernel.org>
+References: <7f38e245-4fc0-1754-e75c-10c1e31bbd4d@gmail.com>
+ <0b9bb507-1819-4bfa-593f-8b7e92c2ce3d@gmail.com>
 MIME-Version: 1.0
-References: <20221216133125.3159406-1-peternewman@google.com>
-In-Reply-To: <20221216133125.3159406-1-peternewman@google.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Tue, 20 Dec 2022 17:07:17 +0100
-Message-ID: <CALPaoCiQmh-t_Wj8mzr6+_EUo_9x2=xVQOYh0_NSP+sVHGvCtA@mail.gmail.com>
-Subject: Re: [PATCH v6] x86/resctrl: Fix task CLOSID/RMID update race
-To:     reinette.chatre@intel.com, fenghua.yu@intel.com
-Cc:     bp@alien8.de, derkling@google.com, eranian@google.com,
-        hpa@zytor.com, james.morse@arm.com, jannh@google.com,
-        kpsingh@google.com, linux-kernel@vger.kernel.org, mingo@redhat.com,
-        tglx@linutronix.de, x86@kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0b9bb507-1819-4bfa-593f-8b7e92c2ce3d@gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 2:31 PM Peter Newman <peternewman@google.com> wrote:
-> In a memory bandwidth-metered compute host, malicious jobs could exploit
-> this race to remain in a previous CLOSID or RMID in order to dodge a
-> class-of-service downgrade imposed by an admin or to steal bandwidth.
+On Mon, Dec 19, 2022 at 05:56:35PM +0100, Johan Jonker wrote:
+> Add new converted rockchip,lvds.yaml to grf.yaml file.
+> Prepare for more SoCs with lvds output.
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  .../devicetree/bindings/soc/rockchip/grf.yaml          | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+> index 2ed8cca79..d74295e98 100644
+> --- a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+> +++ b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+> @@ -75,13 +75,17 @@ allOf:
+>        properties:
+>          compatible:
+>            contains:
+> -            const: rockchip,px30-grf
+> +            enum:
+> +              - rockchip,px30-grf
+> 
+>      then:
+>        properties:
+>          lvds:
+> -          description:
+> -            Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
+> +          type: object
+> +
+> +          $ref: "/schemas/display/rockchip/rockchip,lvds.yaml#"
 
-After discussing with Reinette some more[1], I think the payoff of
-exploiting this is too little for this to concern me, so I'll remove
-the paragraph above.
+You can drop the quotes.
 
-[1] https://lore.kernel.org/lkml/CALPaoCi8hcFzNN9O9fS9Etri_KMdU32UU1tJsfeO1OxR-i1j7g@mail.gmail.com/
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Consequently I don't think this fix is critical enough to be needed on
-stable, so I'll drop the CC: stable from the update.
+> +
+> +          unevaluatedProperties: false
+> 
+>    - if:
+>        properties:
+> --
+> 2.20.1
+> 
+> 
