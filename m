@@ -2,211 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57C65652767
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 20:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62CC065276A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 20:56:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234221AbiLTTxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 14:53:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
+        id S234173AbiLTTz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 14:55:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234181AbiLTTxI (ORCPT
+        with ESMTP id S234162AbiLTTzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 14:53:08 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA151E70A
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 11:53:01 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id z200-20020a6bc9d1000000b006e003aecf04so5997507iof.16
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 11:53:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+i8FFh1FnjkNUTt4og1tmxEewmzGnn8u3D3n4Csj6W0=;
-        b=IAn11BgJc4SN/jDXF/ipXParUGVZf2Q0+Q3H/2dWv0HgOFUCi4zcz1bLmjN3641CRN
-         3/wU/7b0QgRZ0l8xSPVtUH88qIu1z4JXFLkOnAg2xKvRRCQX16tN09brvjbGOy8ohsIZ
-         QJ+HzyDBFpBPDjiotk2mkQZwbpGzvT9WOw/e9tU14PsJJ8EqE1PDYG9yq954H4UvfJQx
-         vMFK4FNWIvT1lCpmgNWtBxGAhXNMhfPdQTQosQIMI45ZLX/Tgvf4Mdvmu/EBZWrdM9Wg
-         VK1U5HFGz1u3ZjwN0RGZxpUu5+/9LPs8+6dY7pImcFzF5yCVOg6qLyBokr2NN5/RJ9Di
-         zjuQ==
-X-Gm-Message-State: ANoB5pmIAHnFW5AIWSO0GDJhJYsGZIfMa/GWOyvZBjKr63JCTZNWK/Tv
-        OPwgeUSsnEb32lSP0wKdZOAq+6eyuzn62YJJX7pOXETpuLzc
-X-Google-Smtp-Source: AA0mqf6ZTN8pHmD2iNpEObxm79VpKDzHx50cQYKxWMuP081Zm2C1q2SijOgjhAIOfVsqkisE5LC9+k7AnCioJi3M14vyudCsVMO9
+        Tue, 20 Dec 2022 14:55:01 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46161EC55;
+        Tue, 20 Dec 2022 11:53:53 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6CD44764EF;
+        Tue, 20 Dec 2022 19:53:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1671566032;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jP7cOlzdQLz38OgaGOcsb9anR7C9s6SwVuf2yXeXxt0=;
+        b=GsEjVPTajiJGYzjwxs+kmWycYcr0taR2CcWe87UUxU9FuQiNsC9JDgmMmcMSjJT5VwbWPl
+        1loLd4Yda1SbKhpI29Uxv31dihbg/t3NyVlJAG3jjXgEkbgPopjDGHfAtBb6OPVBK4CpQJ
+        NPeOZQvaAOksWNOFga7HgYs06hsBHlM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1671566032;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jP7cOlzdQLz38OgaGOcsb9anR7C9s6SwVuf2yXeXxt0=;
+        b=Vn5a1KAYIMs3+PjcDp5Y4caiTrJMsXNc4MgiK0o50MRUCcTV6yUE6WPv+OnF9S9VBEt83F
+        Nh0QeNHj60udVlBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2961213254;
+        Tue, 20 Dec 2022 19:53:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yUY3CdASomN7SAAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 20 Dec 2022 19:53:52 +0000
+Date:   Tue, 20 Dec 2022 20:53:06 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     wqu@suse.com
+Cc:     Chung-Chiang Cheng <shepjeng@gmail.com>,
+        Chung-Chiang Cheng <cccheng@synology.com>, clm@fb.com,
+        josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@cccheng.net, Johnny Chang <johnnyc@synology.com>
+Subject: Re: [PATCH] btrfs: refuse to remount read-write with unsupported
+ compat-ro features
+Message-ID: <20221220195306.GU10499@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <20221201160724.2593341-1-cccheng@synology.com>
+ <CAL3q7H5oet2P9XijTtzPo3joZWdoa3OuD9L-wK9nTEFya2PY8w@mail.gmail.com>
+ <CAHuHWtnbVsS2pp5EySmZ_72fCrDqKJTAOkssa-D-X5wKoR9uWQ@mail.gmail.com>
+ <CAL3q7H5+aVYC-nQaX4_F=eRPpU8xRNEE73MHy-_fdoQFwNMDsA@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:dc8b:0:b0:302:4c01:2d2b with SMTP id
- c11-20020a92dc8b000000b003024c012d2bmr34716421iln.2.1671565980499; Tue, 20
- Dec 2022 11:53:00 -0800 (PST)
-Date:   Tue, 20 Dec 2022 11:53:00 -0800
-In-Reply-To: <Y6ISmUxKqXP6VpLS@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007c858705f047c8ae@google.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in copy_array
-From:   syzbot <syzbot+b1e1f7feb407b56d0355@syzkaller.appspotmail.com>
-To:     sdf@google.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com,
-        hawk@kernel.org, john.fastabend@gmail.com, jolsa@kernel.org,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org,
-        ndesaulniers@google.com, netdev@vger.kernel.org, sdf@google.com,
-        song@kernel.org, syzkaller-bugs@googlegroups.com, trix@redhat.com,
-        yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL3q7H5+aVYC-nQaX4_F=eRPpU8xRNEE73MHy-_fdoQFwNMDsA@mail.gmail.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 11/28, syzbot wrote:
->> Hello,
->> 
->> syzbot found the following issue on:
->> 
->> HEAD commit:    c35bd4e42885 Add linux-next specific files for 20221124
->> git tree:       linux-next
->> console+strace: https://syzkaller.appspot.com/x/log.txt?x=13369dc5880000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=11e19c740a0b2926
->> dashboard link: https://syzkaller.appspot.com/bug?extid=b1e1f7feb407b56d0355
->> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1345a205880000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124c644b880000
->> 
->> Downloadable assets:
->> disk image: https://storage.googleapis.com/syzbot-assets/968fee464d14/disk-c35bd4e4.raw.xz
->> vmlinux: https://storage.googleapis.com/syzbot-assets/4f46fe801b5b/vmlinux-c35bd4e4.xz
->> kernel image: https://storage.googleapis.com/syzbot-assets/c2cdf8fb264e/bzImage-c35bd4e4.xz
->> 
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+b1e1f7feb407b56d0355@syzkaller.appspotmail.com
->> 
->> ==================================================================
->> BUG: KASAN: slab-out-of-bounds in copy_array+0x96/0x100 kernel/bpf/verifier.c:1032
->> Write of size 232 at addr ffff88801ed62600 by task syz-executor990/5290
->> 
->> CPU: 0 PID: 5290 Comm: syz-executor990 Not tainted 6.1.0-rc6-next-20221124-syzkaller #0
->> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
->> Call Trace:
->>  <TASK>
->>  __dump_stack lib/dump_stack.c:88 [inline]
->>  dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
->>  print_address_description mm/kasan/report.c:253 [inline]
->>  print_report+0x15e/0x45d mm/kasan/report.c:364
->>  kasan_report+0xbf/0x1f0 mm/kasan/report.c:464
->>  check_region_inline mm/kasan/generic.c:183 [inline]
->>  kasan_check_range+0x141/0x190 mm/kasan/generic.c:189
->>  memcpy+0x3d/0x60 mm/kasan/shadow.c:66
->>  copy_array+0x96/0x100 kernel/bpf/verifier.c:1032
->>  copy_verifier_state+0xa9/0xbe0 kernel/bpf/verifier.c:1210
->>  pop_stack+0x8c/0x2f0 kernel/bpf/verifier.c:1273
->>  do_check kernel/bpf/verifier.c:13733 [inline]
->>  do_check_common+0x372b/0xc5e0 kernel/bpf/verifier.c:15991
->>  do_check_main kernel/bpf/verifier.c:16054 [inline]
->>  bpf_check+0x7371/0xad00 kernel/bpf/verifier.c:16624
->>  bpf_prog_load+0x1543/0x2230 kernel/bpf/syscall.c:2619
->>  __sys_bpf+0x1436/0x4ff0 kernel/bpf/syscall.c:4979
->>  __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
->>  __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
->>  __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5081
->>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> RIP: 0033:0x7fc18e7bbc29
->> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
->> RSP: 002b:00007ffd8f27a968 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
->> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc18e7bbc29
->> RDX: 0000000000000048 RSI: 0000000020000200 RDI: 0000000000000005
->> RBP: 00007fc18e77fdd0 R08: 0000000000000000 R09: 0000000000000000
->> R10: 00000000ffffffff R11: 0000000000000246 R12: 00007fc18e77fe60
->> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
->>  </TASK>
->> 
->> Allocated by task 5290:
->>  kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
->>  kasan_set_track+0x25/0x30 mm/kasan/common.c:52
->>  ____kasan_kmalloc mm/kasan/common.c:376 [inline]
->>  ____kasan_kmalloc mm/kasan/common.c:335 [inline]
->>  __kasan_krealloc+0x145/0x180 mm/kasan/common.c:444
->>  kasan_krealloc include/linux/kasan.h:232 [inline]
->>  __do_krealloc mm/slab_common.c:1348 [inline]
->>  krealloc+0xa8/0x100 mm/slab_common.c:1385
->>  push_jmp_history+0x89/0x260 kernel/bpf/verifier.c:2528
->>  is_state_visited kernel/bpf/verifier.c:13269 [inline]
->>  do_check kernel/bpf/verifier.c:13466 [inline]
->>  do_check_common+0x4b47/0xc5e0 kernel/bpf/verifier.c:15991
->>  do_check_main kernel/bpf/verifier.c:16054 [inline]
->>  bpf_check+0x7371/0xad00 kernel/bpf/verifier.c:16624
->>  bpf_prog_load+0x1543/0x2230 kernel/bpf/syscall.c:2619
->>  __sys_bpf+0x1436/0x4ff0 kernel/bpf/syscall.c:4979
->>  __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
->>  __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
->>  __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5081
->>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> 
->> The buggy address belongs to the object at ffff88801ed62600
->>  which belongs to the cache kmalloc-256 of size 256
->> The buggy address is located 0 bytes inside of
->>  256-byte region [ffff88801ed62600, ffff88801ed62700)
->> 
->> The buggy address belongs to the physical page:
->> page:ffffea00007b5880 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1ed62
->> head:ffffea00007b5880 order:1 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
->> flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
->> raw: 00fff00000010200 ffff888012441b40 ffffea0000809f80 dead000000000002
->> raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
->> page dumped because: kasan: bad access detected
->> page_owner tracks the page as allocated
->> page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 56, tgid 56 (kworker/u4:4), ts 7761288109, free_ts 0
->>  prep_new_page mm/page_alloc.c:2541 [inline]
->>  get_page_from_freelist+0x119c/0x2cd0 mm/page_alloc.c:4293
->>  __alloc_pages+0x1cb/0x5b0 mm/page_alloc.c:5551
->>  alloc_pages+0x1aa/0x270 mm/mempolicy.c:2285
->>  alloc_slab_page mm/slub.c:1833 [inline]
->>  allocate_slab+0x25e/0x350 mm/slub.c:1980
->>  new_slab mm/slub.c:2033 [inline]
->>  ___slab_alloc+0xa91/0x1400 mm/slub.c:3211
->>  __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3310
->>  slab_alloc_node mm/slub.c:3395 [inline]
->>  __kmem_cache_alloc_node+0x1a9/0x430 mm/slub.c:3472
->>  kmalloc_trace+0x26/0x60 mm/slab_common.c:1049
->>  kmalloc include/linux/slab.h:571 [inline]
->>  scsi_probe_and_add_lun+0x3ae/0x34d0 drivers/scsi/scsi_scan.c:1186
->>  __scsi_scan_target+0x21f/0xda0 drivers/scsi/scsi_scan.c:1664
->>  scsi_scan_channel drivers/scsi/scsi_scan.c:1752 [inline]
->>  scsi_scan_channel+0x148/0x1e0 drivers/scsi/scsi_scan.c:1728
->>  scsi_scan_host_selected+0x2e3/0x3b0 drivers/scsi/scsi_scan.c:1781
->>  do_scsi_scan_host+0x1e8/0x260 drivers/scsi/scsi_scan.c:1920
->>  do_scan_async+0x42/0x500 drivers/scsi/scsi_scan.c:1930
->>  async_run_entry_fn+0x9c/0x530 kernel/async.c:127
->>  process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
->> page_owner free stack trace missing
->> 
->> Memory state around the buggy address:
->>  ffff88801ed62500: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->>  ffff88801ed62580: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->> >ffff88801ed62600: 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc fc
->>                                ^
->>  ffff88801ed62680: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->>  ffff88801ed62700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->> ==================================================================
->> 
->> 
->> ---
->> This report is generated by a bot. It may contain errors.
->> See https://goo.gl/tpsmEJ for more information about syzbot.
->> syzbot engineers can be reached at syzkaller@googlegroups.com.
->> 
->> syzbot will keep track of this issue. See:
->> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->> syzbot can test patches for this issue, for details see:
->> https://goo.gl/tpsmEJ#testing-patches
->
-> #syz test
+On Tue, Dec 06, 2022 at 11:14:56AM +0000, Filipe Manana wrote:
+> On Tue, Dec 6, 2022 at 2:42 AM Chung-Chiang Cheng <shepjeng@gmail.com> wrote:
+> >
+> > On Mon, Dec 5, 2022 at 6:45 PM Filipe Manana <fdmanana@kernel.org> wrote:
+> > >
+> > > Wasn't this already done by the following commit?
+> > >
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=81d5d61454c365718655cfc87d8200c84e25d596
+> > >
+> > > Thanks.
+> > >
+> >
+> > Wow. I did not notice this commit doing the same job by Qu. But I have
+> > tested the latest linux-6.1 rc-7, and it's still able to mount a unsupported
+> > comat-ro btrfs as read-write via remount.
+> >
+> > It's caused by the follow-up commit d7f67ac9a928 ("btrfs: relax
+> > block-group-tree feature dependency checks"). This commit checks read-
+> > only with the current superblock, which will always pass in the situation
+> > remounting from read-only to read-write. It seems `btrfs_check_features()`
+> > cannot cover this scenario.
+> >
+> >         if (compat_ro_unsupp && !sb_rdonly(sb)) {
+> >                                 ^^^^^^^^^^^^^^
+> 
+> Yep, that's a bug.
+> btrfs_check_features() is called before the read only flag is updated
+> in the super block.
+> 
+> So the condition should be:
+> 
+> if (compat_ro_unsupp && sb_rdonly(sb) && we_want_to_transition_to_rw)
+> 
+> We need to pass the flags passed to btrfs_remount() to
+> btrfs_check_features() for that "we_want_to_transition_to_rw" check.
+> 
+> That seems to be what needs to be fixed.
 
-want 2 args (repo, branch), got 1
-
+Qu, can you please have a look, it's caused by commit
+81d5d61454c365718655cfc87d8200c84e25d596 that's also in stable kernels
+so this should be fixed quickly.
