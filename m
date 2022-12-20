@@ -2,166 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C101651D23
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 10:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A21651D24
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 10:20:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233253AbiLTJUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 04:20:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
+        id S229769AbiLTJUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 04:20:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232897AbiLTJUm (ORCPT
+        with ESMTP id S233115AbiLTJUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 20 Dec 2022 04:20:42 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897F812C;
-        Tue, 20 Dec 2022 01:20:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1671528031; bh=adfkfewkwjQteurWnKEPbrhw+//bwdG2TBvIgRmXXIc=;
-        h=X-UI-Sender-Class:Date:From:To:Subject;
-        b=sXTwYNNQaWfS8wz7ifn1zQC7vj2PBvNiL1CcFIWjBM9uTw8j0qbcnu47cKJ1pMhr2
-         rxYkidBtOpi8W7aZNfeTNnnccUxWyED8hC5ZxjCUHxcplzBfKda9VpDSGC+N1XotOZ
-         A+3DIgZERIuHOlbn85t8LL+reFtr2hfA95lGqt2ppsT48rvMvrj3jJmpjpdh7zLbiX
-         2/FVewJw7ZBKpVXb4MoMe9OIpznF3e99YjzkKa+cWEJUQfIwx2CCrMwcplv/KmL0tr
-         BrBcmrc3c8rKlc1JhglIV7FdW6ShPBcKughTO+GLy5Os2Vcr8Ydcnx8kgOrAbby5+i
-         Ih7kmS6+zmVyA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from p100 ([92.116.174.3]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mq2j2-1oUb5J0jGU-00nC2s; Tue, 20
- Dec 2022 10:20:31 +0100
-Date:   Tue, 20 Dec 2022 10:20:29 +0100
-From:   Helge Deller <deller@gmx.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        John David Anglin <dave.anglin@bell.net>
-Subject: [GIT PULL] parisc architecture fixes for v6.2-rc1
-Message-ID: <Y6F+XbLE2B7oPY6J@p100>
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A225ACE9
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 01:20:41 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id 124so8134516pfy.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 01:20:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u0kUVeZvZDV2Kx8BbblSmig5GTII1WAhwsA2y6hEzi8=;
+        b=ZVTPWKsXd1fzOA2wA22mD9Rt4Ju6SJK/sY2lgW28dsjZToWoKY0HgpHD81zIQPgDbg
+         ax946E9pCm3lteOui4VJgyAD5UsRNg4YJfNKatOL4oiWTY8sSZmMAwp2ybbmJtzHqe6p
+         zGedDflXJctQU/CijWcQtCZXuLss78Z1h5gbc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u0kUVeZvZDV2Kx8BbblSmig5GTII1WAhwsA2y6hEzi8=;
+        b=sfzgzwXZ9XsG21kr9HEgFijEUbIHs4/nN3uPYi8eqwqatXHo7sNxYybLYxlz3egkkn
+         tjdunUTSc2L1kzDBrZRgMRB0xizsaU64ZOeOf6J4T+ngHwPfGDjfTAazJumXDRzYWZKO
+         /SKDv2Sx4Py3AGJyUowgpez3KcMgzlCosl54EtYGyF4KSJV0t7gEvQB61Stli/TY2NBu
+         bQqri2Sei0P5KrrTpaiK2Hf0ZSaED/xJQHrqU6wZ3OHSZsVpNXkWYJ3Un6UtjPEzsuq/
+         vqvRbArI8bKqwNKqEtLV61klm9mesfiURoJ52qJMcQIRpNLtiH+EqxJvjB00fMfY/uui
+         FEAA==
+X-Gm-Message-State: ANoB5plAL9/tig7daG87oVVEuMMZQYy/fO/D9K3IKjSp0GXS/BsE8/H3
+        T1HROSsMC/DheKrUVklDih1O4g==
+X-Google-Smtp-Source: AA0mqf49lj61k6YHOJb6LKCtzVpzarpMBrdoGW0/AkN8gST9ofl9jS8iP7p5fDZuCz57F2wvnaJkcA==
+X-Received: by 2002:aa7:8c04:0:b0:578:202d:a33e with SMTP id c4-20020aa78c04000000b00578202da33emr41586500pfd.20.1671528040886;
+        Tue, 20 Dec 2022 01:20:40 -0800 (PST)
+Received: from ec167f3768ca ([220.253.112.46])
+        by smtp.gmail.com with ESMTPSA id d26-20020aa797ba000000b005745eb7eccasm8135211pfq.112.2022.12.20.01.20.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 01:20:40 -0800 (PST)
+Date:   Tue, 20 Dec 2022 09:20:33 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 00/25] 6.1.1-rc1 review
+Message-ID: <20221220092032.GA955642@ec167f3768ca>
+References: <20221219182943.395169070@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Provags-ID: V03:K1:wwV8PcFNUkUX7RtNR0GPK4yFeK8WX1kYZVYQkrC0FKe0jkId2dG
- X3+nvs0Yz+AVaW0DpPU1C091pFZHrHJ5Ph3mhzglTBhDWkaOD+jG4EYC26pVEZ2u9zwYst6
- 7jwbBAYPtUBqBdIh1AUbXchWFP5zc537gYqbmmsbqwEXUy8l8SGZSCXACETaDTEW8sqbGJG
- tcOQ7cl0/mnyfIYP27+zQ==
-UI-OutboundReport: notjunk:1;M01:P0:BISQ6QrfUFA=;kOXpr4vDyNoJsuBGEeXUlSDwJWC
- N+lfuuMFhaLVTD8KywVAm2ZHzh7QTqjP0S37DWsLOWStOH8eCrSR4ZCAN2rfQZKIJ65DOmXA4
- ZhpfhckyL4xBe1VGQ1caA0s2pYAm5CksyvLWPchndiYgIBNJz2E0IEDr62EK3+o4eESz9OPRI
- ZnyqhhBb/Hw956FSQWDXmnFG7IYouMktSV85pe7bhV80/2NADmaYFE0xGzoImMCk1du71ziSb
- cO2eH031jjWrXJ9ywrJXf90MOoFTcXK7x4J4I/X9n3nD25qPiU1v8t/id0rUzr1cKtXSs9zjh
- HZzK6+X5N8lu2qMbjWWgeTqbYOlrMymgVbdZKLSPBDLoe1fyifGTw4ivDr9chbhadSYvonkvG
- BM1wPE9k3lmkXG2COnLHvMB8BKGoY9lxabBENXUFxZDiibU41baxFZpp+MbdjxxhQe0vHnbzv
- qpjSvFVO7VAZ6nume9WMLR1McqxdVAtS4zsegxzu3gU+6pOQ32JBvwTrQYbjNsRrxugsqSqE/
- 9ELBp+usw1FlyvXNN+0xgwIa6axuPWnQaou1pux3oCR+Xu6g5/0nRQ3KlQ/7fEV8iJPecYUSv
- UtuITMISGVipjO0iNrlJw31zrrivt8z9ASbr+fVCJcQc/BC+9vRVz9pAwlvXO07MhELH4HUnM
- PLLvk2ghhCysz7hNPcBjnktlOeTtrt9wMqYsRz7bSwk3FKe81/8asSRjCadzfmhwDSkdiZVqt
- WdQzor7n6bKMi8JH3Ry3+Y7+NyW5fyq5Tk5R+i4xrfO78+KRv+HR2VcDDMTnzKXkxMxE8KMrU
- LjZfAl+MwLC8PJf+eySaor37+jp0HAAHFxscrHVpxba/Gm9R+SnYXhf5MkXHh7tOfmb6UYueI
- PuvEbDkK2jKbgkpM5U8hcN9vOMru1D6YYTOwQkbjJjYs7Ile3O4Pf9vM0ZJT9Up0bzC9O30TL
- 3CfGU31w1sP2zapbC8W5Cf+51oM=
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221219182943.395169070@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon, Dec 19, 2022 at 08:22:39PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.1 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
+> Anything received after that time might be too late.
 
-please pull the latest updates and fixes for the parisc architecture.
+Hi Greg,
 
-There is one noteable patch, which allows the parisc kernel to use the sam=
-e
-MADV_xxx constants as the other architectures going forward.  With that ch=
-ange
-only alpha has one entry left (MADV_DONTNEED is 6 vs 4 on others) which is
-different.  To prevent an ABI breakage, a wrapper is included which transl=
-ates
-old MADV values to the new ones, so existing userspace isn't affected.
-Reason for that patch is, that some applications wrongly used the standard
-MADV_xxx values even on some non-x86 platforms and as such those
-programs failed to run correctly on parisc (examples are qemu-user, tor
-browser and boringssl).
+6.1.1-rc1 tested.
 
-Then the kgdb console and the LED code received some fixes, and some
-0-day warnings are now gone.  Finally, the very last compile warning
-which was visible during a kernel build is now fixed too (in the vDSO
-code).
+Run tested on:
+- Intel Alder Lake x86_64 (nuc12 i7-1260P)
+- SolidRun Cubox-i Dual/Quad - NXP iMX6 (Cubox-i4Pro)
 
-The majority of the patches are tagged for stable series and in summary
-this patchset is quite small and drops more code than it adds.
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- Allwinner H6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
 
-Thanks!
-Helge
-
-=2D---------------------------------------------------------------
-The following changes since commit 830b3c68c1fb1e9176028d02ef86f3cf76aa247=
-6:
-
-  Linux 6.1 (2022-12-11 14:15:18 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git ta=
-gs/parisc-for-6.2-1
-
-for you to fetch changes up to 4934fbfb3ff09b8500f63d4624ed8b41647bb822:
-
-  parisc: Show MPE/iX model string at bootup (2022-12-19 16:08:52 +0100)
-
-=2D---------------------------------------------------------------
-parisc architecture fixes for kernel v6.2-rc1:
-
-Fixes:
-- Fix potential null-ptr-deref in start_task()
-- Fix kgdb console on serial port
-- Add missing FORCE prerequisites in Makefile
-- Drop PMD_SHIFT from calculation in pgtable.h
-
-Enhancements:
-- Implement a wrapper to align madvise() MADV_* constants with other
-  architectures
-- If machine supports running MPE/XL, show the MPE model string
-
-Cleanups:
-- Drop duplicate kgdb console code
-- Indenting fixes in setup_cmdline()
-
-=2D---------------------------------------------------------------
-Helge Deller (9):
-      parisc: Fix inconsistent indenting in setup_cmdline()
-      parisc: Align parisc MADV_XXX constants with all other architectures
-      parisc: Drop PMD_SHIFT from calculation in pgtable.h
-      parisc: Fix locking in pdc_iodc_print() firmware call
-      parisc: Drop duplicate kgdb_pdc console
-      parisc: Drop locking in pdc console code
-      parisc: Move pdc_result struct to firmware.c
-      parisc: Add missing FORCE prerequisites in Makefile
-      parisc: Show MPE/iX model string at bootup
-
-Shang XiaoJing (1):
-      parisc: led: Fix potential null-ptr-deref in start_task()
-
- arch/parisc/include/asm/pdc.h             |  2 +-
- arch/parisc/include/asm/pgtable.h         |  4 ++--
- arch/parisc/include/uapi/asm/mman.h       | 29 ++++++++++++++------------=
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
 --
- arch/parisc/kernel/firmware.c             | 32 ++++++++++++++++----------=
------
- arch/parisc/kernel/kgdb.c                 | 20 -------------------
- arch/parisc/kernel/pdc_cons.c             | 16 +++-------------
- arch/parisc/kernel/processor.c            |  9 +++++++--
- arch/parisc/kernel/real2.S                | 17 ++--------------
- arch/parisc/kernel/setup.c                | 26 ++++++++++++-------------
- arch/parisc/kernel/sys_parisc.c           | 28 ++++++++++++++++++++++++++=
-+
- arch/parisc/kernel/syscalls/syscall.tbl   |  2 +-
- arch/parisc/kernel/vdso32/Makefile        |  4 ++--
- arch/parisc/kernel/vdso64/Makefile        |  4 ++--
- drivers/parisc/led.c                      |  3 +++
- tools/arch/parisc/include/uapi/asm/mman.h | 12 ++++++------
- tools/perf/bench/bench.h                  | 12 ------------
- 16 files changed, 100 insertions(+), 120 deletions(-)
+Rudi
