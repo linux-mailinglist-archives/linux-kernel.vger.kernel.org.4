@@ -2,159 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C886519E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 05:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 190726519E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 05:13:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233019AbiLTEHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 23:07:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
+        id S233041AbiLTENJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 23:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiLTEHc (ORCPT
+        with ESMTP id S229532AbiLTENG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 23:07:32 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC54558B
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 20:07:30 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id j4so16844368lfk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 20:07:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qDu+2HB9LCelBr6OwQ3TS8ifZcPH8YwgroAjWq1C00k=;
-        b=Y86xtdv3XMJ+nN6oow1JLrJgBuF3civOC/ytVGb1nq+LnnsmCdw6yZQ1wsodZHZu+h
-         ln3X2He+1mz1o7S8y46L4rQlGaYaBQ3m+ZhGRpa0x2Dr6YQUhUY/Or9zntk/NTPI0NQ4
-         QIH1W0OWhRa+DH724vkVR9Fb504i+gqDmStIQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qDu+2HB9LCelBr6OwQ3TS8ifZcPH8YwgroAjWq1C00k=;
-        b=vlVFECtqjRVuD02MYWn567P8Fmh/RtXoEIwRTYcssoCfAjtU3uu5W74yW9/t6CP47c
-         qc7AMUD6EVHsRfP8mPzDXe6bEcuXcZUV0IMwLKWI24nwer76vInEenoqR+B7hFBiRlq/
-         Sb4jTMQwXXeJEKRdIGwNtUPfvUFvYtLzpTQ+5ZIKckU62J3touolb7NbLfvgAo+sxXmP
-         MznNHozERLuXSeTzS72ovcpgZ8J9PROPpbimZ27MvfGdLEDLnl7BcrB3GIw4gesAFQ13
-         vmFlJnRKgGFDx2NOQwSVOVH1aWxfjFmr5n9LogPhzlYGjlaPiBNA72xHgbLr0KaJmF4y
-         tERQ==
-X-Gm-Message-State: ANoB5pl6odnYXjGc3YPMOzedfIN1ad0m/6Vwm+nYH16nS0o/v8ODDXWP
-        UNMO44dAcRSnJ8dSYn8UHcyR5Y4XNvTKBOuaiRqcs/txEEDmfbJJrQ0=
-X-Google-Smtp-Source: AA0mqf6VnHU/0i+jLya+GHkKML+2c0Byt6jC+vJK2QzrSvQpzsNLCtjhYeKCE9zL7w5NgiRdEhGskhzdRPYMZSBcSdU=
-X-Received: by 2002:a05:6512:224c:b0:4b5:ad89:8174 with SMTP id
- i12-20020a056512224c00b004b5ad898174mr3579330lfu.84.1671509248402; Mon, 19
- Dec 2022 20:07:28 -0800 (PST)
+        Mon, 19 Dec 2022 23:13:06 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9862727
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 20:13:04 -0800 (PST)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2BK4Bcj21617553
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Mon, 19 Dec 2022 20:11:39 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2BK4Bcj21617553
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022120601; t=1671509502;
+        bh=4fkXFH0sW5ZGQC33LFxm1QzpGPoew8Q0xRPlzvCq1nQ=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=Pi5fP/o5I2P1JC2H3FoVs5Rgkk/IsKgVSe499ohBroXNnQWUaqlfizGtLhY3jnIH4
+         BVBgKJ2JdCZvkXA3PqduOSIWKj97/qSH8ucxQPkuAgaTHgCKLVeDHijKmjdRiBus/C
+         16cOgJMYRHlr4XtkFoneI3WWGJ42aNqBth5twrPgBZgE1aBbUTvGjRWgVWfG7WZCjO
+         lrETkKASOjTTNZAwHR21esKipc8XRi4fA6dqXXVJ754vl0xn7lKq4sMWuiwn7k4GoL
+         V/e8eZL5+3/AiYXJuq1pDKyIwAV3HuzExlLYUPrpVOJcHxHnOZHz6ZEJlPIh0h3Yhn
+         1tde5K+LCO3wQ==
+Date:   Mon, 19 Dec 2022 20:11:37 -0800
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
+        boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, davem@davemloft.net, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC][PATCH 01/12] crypto: Remove u128 usage
+User-Agent: K-9 Mail for Android
+In-Reply-To: <Y6ExF8mchgYiiRB0@gondor.apana.org.au>
+References: <20221219153525.632521981@infradead.org> <20221219154118.889543494@infradead.org> <Y6CJsWBhcbKatZNg@zx2c4.com> <Y6CYu4skFFMopU+g@hirez.programming.kicks-ass.net> <CAHmME9oCBgNCfYFxirA-fdarGip5MvOG-iUxT=2HC=iSXRMH-Q@mail.gmail.com> <Y6ExF8mchgYiiRB0@gondor.apana.org.au>
+Message-ID: <7C23FA3C-A967-4BAE-970B-5E6FAF4DE037@zytor.com>
 MIME-Version: 1.0
-References: <20221218191310.130904-1-joel@joelfernandes.org>
-In-Reply-To: <20221218191310.130904-1-joel@joelfernandes.org>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Mon, 19 Dec 2022 23:07:17 -0500
-Message-ID: <CAEXW_YRjAsx0HCnmjvth+yi0COTiynPRvjyT2sf1utMw5bTgiw@mail.gmail.com>
-Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
-To:     linux-kernel@vger.kernel.org
-Cc:     Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 18, 2022 at 2:13 PM Joel Fernandes (Google)
-<joel@joelfernandes.org> wrote:
+On December 19, 2022 7:50:47 PM PST, Herbert Xu <herbert@gondor=2Eapana=2Eo=
+rg=2Eau> wrote:
+>On Mon, Dec 19, 2022 at 06:03:04PM +0100, Jason A=2E Donenfeld wrote:
+>>
+>> Is there a patch at the end of the series that adds it back in to use u=
+128?
 >
-> Hello, I believe the pre-flip memory barrier is not required. The only reason I
-> can say to remove it, other than the possibility that it is unnecessary, is to
-> not have extra code that does not help. However, since we are issuing a fully
-> memory-barrier after the flip, I cannot say that it hurts to do it anyway.
+>Could we do some ifdef trickery to reduce the amount of code churn
+>please? Changing everything away from u128 and then back to it seems
+>silly=2E
 >
-> For this reason, please consider these patches as "informational", than a
-> "please merge". :-) Though, feel free to consider merging if you agree!
->
-> All SRCU scenarios pass with these, with 6 hours of testing.
->
-> thanks,
->
->  - Joel
->
-> Joel Fernandes (Google) (2):
-> srcu: Remove comment about prior read lock counts
-> srcu: Remove memory barrier "E" as it is not required
+>Thanks,
 
-And litmus tests confirm that "E" does not really do what the comments
-say, PTAL:
-Test 1:
-C mbe
-(*
- * Result: sometimes
- * Does previous scan see old reader's lock count, if a new reader saw
-the new srcu_idx?
- *)
-
-{}
-
-P0(int *lockcount, int *srcu_idx) // updater
-{
-        int r0;
-        r0 = READ_ONCE(*lockcount);
-        smp_mb();       // E
-        WRITE_ONCE(*srcu_idx, 1);
-}
-
-P1(int *lockcount, int *srcu_idx) // reader
-{
-        int r0;
-        WRITE_ONCE(*lockcount, 1); // previous reader
-        smp_mb();       // B+C
-        r0 = READ_ONCE(*srcu_idx); // new reader
-}
-exists (0:r0=0 /\ 1:r0=1) (* Bad outcome. *)
-
-Test 2:
-C mbe2
-
-(*
- * Result: sometimes
- * If updater saw reader's lock count, was that reader using the old idx?
- *)
-
-{}
-
-P0(int *lockcount, int *srcu_idx) // updater
-{
-        int r0;
-        r0 = READ_ONCE(*lockcount);
-        smp_mb();       // E
-        WRITE_ONCE(*srcu_idx, 1);
-}
-
-P1(int *lockcount, int *srcu_idx) // reader
-{
-        int r0;
-        int r1;
-        r1 = READ_ONCE(*srcu_idx); // previous reader
-        WRITE_ONCE(*lockcount, 1); // previous reader
-        smp_mb();       // B+C
-        r0 = READ_ONCE(*srcu_idx); // new reader
-}
-exists (0:r0=1 /\ 1:r1=1) (* Bad outcome. *)
-
-thanks,
-
- - Joel
-
-
->
-> kernel/rcu/srcutree.c | 10 ----------
-> 1 file changed, 10 deletions(-)
->
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+Seems like "merging common code snippets" is something we at least used to=
+ do with single patches=2E=2E=2E
