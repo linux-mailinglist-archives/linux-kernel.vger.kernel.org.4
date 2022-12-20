@@ -2,251 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F63B651F24
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45954651F27
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbiLTKoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:44:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
+        id S233311AbiLTKoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:44:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiLTKoJ (ORCPT
+        with ESMTP id S232633AbiLTKoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:44:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E6317E06
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:43:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671533002;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=54Q/AOcDCXt2WoQ+wVvIhTTtHPQ1SiD8DKjFK54h2ww=;
-        b=VGNRrvPDROMo7S+iD4NLFUoMc8Hs5+dfuMVp7mSfiLM4Vt9sVGG5aQOuL0HoBV3lzTDWGg
-        ZfA8AlH/OB0kWknYAsy7aTk2l6/bzhXES3YU161KLoUvb/S/BMQlLz9ZB2TtLFRGgiteP0
-        OT8NaqF9kMpMlcX3Wa680219UwSEMlk=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-515-mOZkMOVgOVCv_nG3KxoZjg-1; Tue, 20 Dec 2022 05:43:21 -0500
-X-MC-Unique: mOZkMOVgOVCv_nG3KxoZjg-1
-Received: by mail-wm1-f70.google.com with SMTP id q6-20020a05600c2e4600b003d211775a99so306451wmf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:43:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=54Q/AOcDCXt2WoQ+wVvIhTTtHPQ1SiD8DKjFK54h2ww=;
-        b=wOuJgMP3EcWpOrmr6TikaYP0chfPy3u/0wOKhiuNSFKXc2Coe12AeaJjat1WvszG81
-         yIpApo6wx264h0zGgz+6bI2ibcqIfgikeL7jS0jgIa25aWDofPjnZV0LMDu35lK5/hul
-         jKdyDntU8wqHumoc4Kqo+qjAfknn91dIuqKlLHdU9bjdPs0Zo+DQYmY4W9artu5kgBYF
-         hZMaB+9OZOdPEAuhVN4kQuVebfLUqJZI2p8jcG51b86M6YQMyIZnMELQsxj/SSM5E8UZ
-         7Etd6GaPpFnawVmFyfKdx6vyKErlFpJkPGj93G/8oCM9/j5UQqYLa1udCeYCSGnyb0IE
-         18Sw==
-X-Gm-Message-State: ANoB5pmfJrVlvvWp2NDhTO9s6WTf5NpIX0nENBTbR99yH+PKkTwmLRRp
-        OOHiikexk5SZ1JmGIL03/9Os9BzAvEgK/sUQXHhVByYKxq+5sD9QkSF9niyPFxVWF9DzOA+bn5s
-        HpbgmCiTdhnKsQBQfbZKypgEB
-X-Received: by 2002:adf:f54b:0:b0:24d:cac0:96bb with SMTP id j11-20020adff54b000000b0024dcac096bbmr25182766wrp.67.1671532999523;
-        Tue, 20 Dec 2022 02:43:19 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5pgx3uCD9jue3Oj7nRI0x/hmaTvFuwAA61WD4OHNFKM6UQY27q4Mc9WDLqzqUBHxHaNQLKKw==
-X-Received: by 2002:adf:f54b:0:b0:24d:cac0:96bb with SMTP id j11-20020adff54b000000b0024dcac096bbmr25182747wrp.67.1671532999208;
-        Tue, 20 Dec 2022 02:43:19 -0800 (PST)
-Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
-        by smtp.gmail.com with ESMTPSA id k6-20020a5d66c6000000b00242271fd2besm12375033wrw.89.2022.12.20.02.43.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 02:43:18 -0800 (PST)
-Date:   Tue, 20 Dec 2022 11:43:12 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        Krasnov Arseniy <oxffffaa@gmail.com>
-Subject: Re: [RFC PATCH v1 0/2] virtio/vsock: fix mutual rx/tx hungup
-Message-ID: <20221220104312.5efhzu5ildj5smnn@sgarzare-redhat>
-References: <39b2e9fd-601b-189d-39a9-914e5574524c@sberdevices.ru>
- <CAGxU2F4ca5pxW3RX4wzsTx3KRBtxLK_rO9KxPgUtqcaSNsqXCA@mail.gmail.com>
- <2bc5a0c0-5fb7-9d0e-bd45-879e42c1ea50@sberdevices.ru>
- <20221220083313.mj2fd4tvfoifayaq@sgarzare-redhat>
- <741d7969-0c39-1e09-7297-84edbc8fddc7@sberdevices.ru>
+        Tue, 20 Dec 2022 05:44:11 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43618178BC;
+        Tue, 20 Dec 2022 02:44:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671533050; x=1703069050;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=pYWu9IQAQd9FCG7kppU3+lTqRZPpJjg5wnZGRUd/5Jk=;
+  b=V4SEAFrO5BiY60g+iTByMmKONpJfVwwWsh+foh7r/lmpUugDiOC4Z8kE
+   5xPASXGbAQSduGzBZ2Dhwjitvhfnfm96ekQJrXqRkKO3gJFM4VV1XtRfj
+   6/ZTwu5kff1Hvyak3nLNKtUm0C0vWJ6zRncKm8oegN8W7VTfpgJwbXPOb
+   QmW0Tl+80aLLVHUsFmecwmgzF8ZQ0TFsvAePEg74EBQAq3KEdSIm6RrCX
+   DvHauLPcRdMPfJ/T2jyPdrAlNjFtzDaRYUP9iBLg3WYTbgi/Ib1fSVwNO
+   SmetrXh1NXITtMpaY3DjW2hQ3nsVqOJxn9JRKOPJV58SfWyO4b0LNujtb
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="317220301"
+X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
+   d="scan'208";a="317220301"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 02:44:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="739703560"
+X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
+   d="scan'208";a="739703560"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Dec 2022 02:44:09 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 20 Dec 2022 02:44:09 -0800
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 20 Dec 2022 02:44:09 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 20 Dec 2022 02:44:09 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.102)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 20 Dec 2022 02:44:08 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MjBhtka24k9fXBgUhcudoP+/mQdT9Wpcdxoh5nUIhP0Awo7OfpgyzGcxQOD6Oy4Mf1fsvPnxn2xZtt8u56BqQfpdhRkxBBNMAHpR3Sg6ZwqCemZvFDBQlqmErZY3Z3/jtrcz+OoSTleMG9Sdo9xl9w/YhO2lBS4myEZU3ajXgsPQlYq67JSQO9RsN2ybrhA4FXyHpES7fmq7Wz0sjU0m+XRkjOj2DePMqt1rS+xQU7oqeQsnYNTEieSNF9e+cczMz9qb4ZFFnLvdEaaX36NpbI1dUfxAnHWsSks5KJQtCRMV9ZQWRxtPdDbtVEdWVu1k9duJ0cKKJhIqOyz7sWPyRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UekyEtwAaw2T+U5o6Tc9qpvyYM3KzlMWkBDZuCve/ZY=;
+ b=fFRJZzGlDo6nfOGrxdra5yWD6fHnCVbZuSvDVLCg53OSsVFhwFdCf5zgiSGdUpRL0cc7vWnMjM+ix00v4v3lgT4GVEX4JuaHNTJzFMk7mbdTjI5jS4B/iAVkgdV8pdHQ+5p8TfhmZy1TmF4owC0qZEgcSfJK95yFlG43A9j1mvHw3DsFBfF/LSIBRWxJt20RWGmS/MlCscj8dfuQufSKJZyER76YHRHukdPrVwNY/5Sry9wFI8ZptiuUNSfffEtsgwp1frD1daal1BRiFIjV8kwCBEXw9PdcKxHDh3oTAfKfneZlREO48RYYtmfEa/lMcEwHolUJeaFURojORg2V6w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5370.namprd11.prod.outlook.com (2603:10b6:408:11b::8)
+ by DS0PR11MB6399.namprd11.prod.outlook.com (2603:10b6:8:c8::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5924.16; Tue, 20 Dec 2022 10:44:07 +0000
+Received: from BN9PR11MB5370.namprd11.prod.outlook.com
+ ([fe80::3ca9:a067:1c92:7a31]) by BN9PR11MB5370.namprd11.prod.outlook.com
+ ([fe80::3ca9:a067:1c92:7a31%2]) with mapi id 15.20.5924.016; Tue, 20 Dec 2022
+ 10:44:07 +0000
+From:   "Chang, Junxiao" <junxiao.chang@intel.com>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "linux-rt-users@vger.kernel.org" <linux-rt-users@vger.kernel.org>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "Peh, Hock Zhang" <hock.zhang.peh@intel.com>
+Subject: RE: [PATCH] softirq: wake up ktimer thread in softirq context
+Thread-Topic: [PATCH] softirq: wake up ktimer thread in softirq context
+Thread-Index: AQHZCtu9FgSt2BLnhEqT/Df9j5aCWK52jjbA
+Date:   Tue, 20 Dec 2022 10:44:07 +0000
+Message-ID: <BN9PR11MB5370BA8A506EB8519DC879C1ECEA9@BN9PR11MB5370.namprd11.prod.outlook.com>
+References: <20221208075604.811710-1-junxiao.chang@intel.com>
+In-Reply-To: <20221208075604.811710-1-junxiao.chang@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5370:EE_|DS0PR11MB6399:EE_
+x-ms-office365-filtering-correlation-id: 721eb6fd-57e8-46fc-0602-08dae2771eca
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ojiL+RT0N4XzU8wCaRIpKBQsmZUPqqzzwxzysevS0vUnvwOhfY3BUzizorYAEWTgQPQ0+HfdTLZ3kva5qabfM01luHetqV1VVPWjtBCQ4ozr54qK8SLJs4R6KJA7KF4BlvniwpqJMQT+5ay82BQvfgcKPEIgkX4AeTXYnNWQ7rIbgbeEN3u3xNF38Wq3k9aRWAa6iFb7qGWez/3VNdh+D88ARqbQ9xG8q01e9Tfj1Y0kkFNxHkD1I2laEH1VdTP+XrESDMt5D8fwkXXMFi7xZ2hKrN1LYQsLyOLcfPXbbv6F8jJ3cPVe9Mzv1d3sX84j1R+QDTuNW3YxsYQpYgxASJE/FlPdDD2wuBPaia91ukdaTbvD/StLHqZoP6Cdnbsc0ji7Et3pjfcNvR/reNKr5SzYZlfKKxn2W/jkOWwk7xzryreuutVFTHRVc0nMqy3Jl4K2IoWvZ0lEMEGlv7mBqin7tKjYa8BpI42jUO5rmSr5Kx0lV6Ak/AvThkXUkVh2lF9txxZHPPL7iOiSFfYCpspVkLWyUWWIOyIgOiju3SRa2htLYXBbwk7YKd4JmXwk6bKr0/5UBDdR5JF8lkTwnPvQRBilwyTDZ+oQ+NeUw+P67f1QjbaAgpRqWwJCYd5olrU/CHJ13ViZhJ1R1Z19l20YEO1ThUSTuOAr02vVEme5XZ8o7d6UTq8OFLHYYZs3UZ4BHQXfuL3wc1KBnoHTew==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5370.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(136003)(376002)(346002)(396003)(366004)(451199015)(66899015)(2906002)(41300700001)(86362001)(8936002)(76116006)(52536014)(5660300002)(66446008)(64756008)(33656002)(66946007)(66476007)(8676002)(4326008)(66556008)(316002)(6916009)(54906003)(38070700005)(71200400001)(38100700002)(478600001)(122000001)(9686003)(26005)(7696005)(55016003)(53546011)(6506007)(83380400001)(186003)(107886003)(82960400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?PN/GBqKUgUqmCdqOd8jG9dHByHXF0NuIPWUjG2bpcI/jY6aTxporCJF5zyzv?=
+ =?us-ascii?Q?bt3FbaHQyquFTVOq+0aBFl7Eq8bAFUACYqCzYzbuO+WzpTciBkBmvmOGz1vs?=
+ =?us-ascii?Q?VJey24FFrRQGl4bVoq3HHuJJbnxWMIy8CpY0ji7I36ubOzdE8cBZinKS27Iv?=
+ =?us-ascii?Q?3yV+y8pFP2rVv+SoOgxOD0ryi2gQkplnrmHDTv+6i6EdlZDdA+NBCdhIxw/2?=
+ =?us-ascii?Q?SY/iN/vE9Y+KZ4J3uo5I3u7g2R3e62on3hDBSNoLcEWLKU6v2DL0b+JqzeB7?=
+ =?us-ascii?Q?ENK4r6Qe3VdK4pshGVZGWX6WMfobJV8+rySiOwPDz4gvEvjby/oV/sNq1NM+?=
+ =?us-ascii?Q?TpCpXvs48Cdyuc6Ud+ceApjUm707Vpb6fP0/kMny9jAHCkzBFyGNmCklEt53?=
+ =?us-ascii?Q?Jqu1AIUK1F9GX9BnvEFeOhvM3mjyZdWmrrpEnhdmn1bVAqUEZ8mK2bjO+C1w?=
+ =?us-ascii?Q?l2HUHlH3MDaDUISyljjThD0JfLZT50A6GYe/Ua0zFaHf6xvLn8bFwiAo+BKF?=
+ =?us-ascii?Q?kTACWwOlsgmf2emWyA2npp8uNTOkUITbVrQbb4QwUBhxO/byAaVp8tZoj9/W?=
+ =?us-ascii?Q?lU0+KTdx/PdVQAHZDrQ0dCct+HsG8SXUDGZgOlmnOSst7uxwMIxRQXU+Lq7I?=
+ =?us-ascii?Q?/VFesbKeqaZuWAHOnace2sPfSsq4nMAV441xJ/zxaWGUxqmLcwwRJaKND4bI?=
+ =?us-ascii?Q?huPRWIkGny7KH22GsKdvpt7XDNqPlK2O/hvx8JC+qrUnUsRBabnqAIFiZ6/P?=
+ =?us-ascii?Q?aIarhvG23ajZhbPVB3PO5VCSzs9m8UPaELV9ZAq09fhlLDENTvE747EF65JD?=
+ =?us-ascii?Q?9Bo0LZqJ5o7AkJ2i0VArwSB4c7X4TXMs+nY/fylIRs5cIwgsr2PjgHZaF5E2?=
+ =?us-ascii?Q?jhQOg8QxEJnIExVTyx8chaN3Ke/K43K2hm6GmPfaaXKVbDmQxDBipgR0MWk0?=
+ =?us-ascii?Q?/zZEsN+ITGQFi1SUwulUYDsjZK2IKgxqXybS9ZnnfoRWkmodRT7fVSIsDfXW?=
+ =?us-ascii?Q?QVqzwnYC3QoKYnFbI2ejyVKKmiFmGhASEntM24sKGnJ6pEjn3y7LseXOjjev?=
+ =?us-ascii?Q?UDD1L34kGVOt5cvUUafRrBiQ99w97VdLe5z+CT4mxUEet+jf5alJ/C94hOce?=
+ =?us-ascii?Q?JhtuojwB5u05hlUNfmrRubPWQAaE2aPP4pTyIV7pq1lq4B2cunIJ8EqPVv9+?=
+ =?us-ascii?Q?AiC6hLfUsFOQBR+WzWAEnVK7z0uHmEA3gr1PoQmzvPgSbm34/qIUXXSmCz6t?=
+ =?us-ascii?Q?889YaUkKHOu24/agrtucBulHGGwWdb2dfTyyN/qoWGIMxjgPI6P6JKqY1K6U?=
+ =?us-ascii?Q?eM58AJE2VMQJj4DfMjk1OHuc1iYwRaVGnuYN8LqkLWQjealRC9IzrtNU4S8u?=
+ =?us-ascii?Q?++gNe1v7DomoNmqncRBuO5PSOlWDmMg3iSOLlPlWTdQ/33GsIF2MMfVd1kKw?=
+ =?us-ascii?Q?LGK5xK/UqjZr6LNMfyHNCUUgrtgQdD2urgPI0ovZxsl2jIlMmgY8QuevYjsP?=
+ =?us-ascii?Q?yTRIcr2I0BxdcymM1z76+DVKxq6nTiCFSGF2waflkqWYhjAF25kWgSAwUC0P?=
+ =?us-ascii?Q?0ub+XQFu/oEE120PBDwt7QAPf/Sfx4zAJcMv9J3I?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <741d7969-0c39-1e09-7297-84edbc8fddc7@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5370.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 721eb6fd-57e8-46fc-0602-08dae2771eca
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Dec 2022 10:44:07.1575
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: N+Rr8xoJB8rx21bN/LhYzGZ3dkKdJNAzKxUOgxaqq2YCoUVkL/EYs0c0ElCI7IrwfNbZvB2qw60rKNotr1VaHA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6399
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 09:23:17AM +0000, Arseniy Krasnov wrote:
->On 20.12.2022 11:33, Stefano Garzarella wrote:
->> On Tue, Dec 20, 2022 at 07:14:27AM +0000, Arseniy Krasnov wrote:
->>> On 19.12.2022 18:41, Stefano Garzarella wrote:
->>>
->>> Hello!
->>>
->>>> Hi Arseniy,
->>>>
->>>> On Sat, Dec 17, 2022 at 8:42 PM Arseniy Krasnov <AVKrasnov@sberdevices.ru> wrote:
->>>>>
->>>>> Hello,
->>>>>
->>>>> seems I found strange thing(may be a bug) where sender('tx' later) and
->>>>> receiver('rx' later) could stuck forever. Potential fix is in the first
->>>>> patch, second patch contains reproducer, based on vsock test suite.
->>>>> Reproducer is simple: tx just sends data to rx by 'write() syscall, rx
->>>>> dequeues it using 'read()' syscall and uses 'poll()' for waiting. I run
->>>>> server in host and client in guest.
->>>>>
->>>>> rx side params:
->>>>> 1) SO_VM_SOCKETS_BUFFER_SIZE is 256Kb(e.g. default).
->>>>> 2) SO_RCVLOWAT is 128Kb.
->>>>>
->>>>> What happens in the reproducer step by step:
->>>>>
->>>>
->>>> I put the values of the variables involved to facilitate understanding:
->>>>
->>>> RX: buf_alloc = 256 KB; fwd_cnt = 0; last_fwd_cnt = 0;
->>>>     free_space = buf_alloc - (fwd_cnt - last_fwd_cnt) = 256 KB
->>>>
->>>> The credit update is sent if
->>>> free_space < VIRTIO_VSOCK_MAX_PKT_BUF_SIZE [64 KB]
->>>>
->>>>> 1) tx tries to send 256Kb + 1 byte (in a single 'write()')
->>>>> 2) tx sends 256Kb, data reaches rx (rx_bytes == 256Kb)
->>>>> 3) tx waits for space in 'write()' to send last 1 byte
->>>>> 4) rx does poll(), (rx_bytes >= rcvlowat) 256Kb >= 128Kb, POLLIN is set
->>>>> 5) rx reads 64Kb, credit update is not sent due to *
->>>>
->>>> RX: buf_alloc = 256 KB; fwd_cnt = 64 KB; last_fwd_cnt = 0;
->>>>     free_space = 192 KB
->>>>
->>>>> 6) rx does poll(), (rx_bytes >= rcvlowat) 192Kb >= 128Kb, POLLIN is set
->>>>> 7) rx reads 64Kb, credit update is not sent due to *
->>>>
->>>> RX: buf_alloc = 256 KB; fwd_cnt = 128 KB; last_fwd_cnt = 0;
->>>>     free_space = 128 KB
->>>>
->>>>> 8) rx does poll(), (rx_bytes >= rcvlowat) 128Kb >= 128Kb, POLLIN is set
->>>>> 9) rx reads 64Kb, credit update is not sent due to *
->>>>
->>>> Right, (free_space < VIRTIO_VSOCK_MAX_PKT_BUF_SIZE) is still false.
->>>>
->>>> RX: buf_alloc = 256 KB; fwd_cnt = 196 KB; last_fwd_cnt = 0;
->>>>     free_space = 64 KB
->>>>
->>>>> 10) rx does poll(), (rx_bytes < rcvlowat) 64Kb < 128Kb, rx waits in poll()
->>>>
->>>> I agree that the TX is stuck because we are not sending the credit
->>>> update, but also if RX sends the credit update at step 9, RX won't be
->>>> woken up at step 10, right?
->>>
->>> Yes, RX will sleep, but TX will wake up and as we inform TX how much
->>> free space we have, now there are two cases for TX:
->>> 1) send "small" rest of data(e.g. without blocking again), leave 'write()'
->>>   and continue execution. RX still waits in 'poll()'. Later TX will
->>>   send enough data to wake up RX.
->>> 2) send "big" rest of data - if rest is too big to leave 'write()' and TX
->>>   will wait again for the free space - it will be able to send enough data
->>>   to wake up RX as we compared 'rx_bytes' with rcvlowat value in RX.
->>
->> Right, so I'd update the test to behave like this.
->Sorry, You mean vsock_test? To cover TX waiting for free space at RX, thus checking
->this kernel patch logic?
+Any comment? This patch is for 6.1-rt, issue could be reproduced with 5.19-=
+rt kernel as well.
 
-Yep, I mean the test that you added in this series.
+This issue is easier to reproduced when there is heavy network workload whi=
+ch introduces a lot of softirq events. If hrtimer interrupt is triggered in=
+ softirq context, with current RT kernel, it will not wake up ktimers threa=
+d which handles hrtimer event because in function __irq_exit_rcu, "in_inter=
+rupt()" is true:
 
->> And I'd explain better the problem we are going to fix in the commit message.
->Ok
->>
->>>>
->>>>>
->>>>> * is optimization in 'virtio_transport_stream_do_dequeue()' which
->>>>>   sends OP_CREDIT_UPDATE only when we have not too much space -
->>>>>   less than VIRTIO_VSOCK_MAX_PKT_BUF_SIZE.
->>>>>
->>>>> Now tx side waits for space inside write() and rx waits in poll() for
->>>>> 'rx_bytes' to reach SO_RCVLOWAT value. Both sides will wait forever. I
->>>>> think, possible fix is to send credit update not only when we have too
->>>>> small space, but also when number of bytes in receive queue is smaller
->>>>> than SO_RCVLOWAT thus not enough to wake up sleeping reader. I'm not
->>>>> sure about correctness of this idea, but anyway - I think that problem
->>>>> above exists. What do You think?
->>>>
->>>> I'm not sure, I have to think more about it, but if RX reads less than
->>>> SO_RCVLOWAT, I expect it's normal to get to a case of stuck.
->>>>
->>>> In this case we are only unstucking TX, but even if it sends that single
->>>> byte, RX is still stuck and not consuming it, so it was useless to wake
->>>> up TX if RX won't consume it anyway, right?
->>>
->>> 1) I think it is not useless, because we inform(not just wake up) TX that
->>> there is free space at RX side - as i mentioned above.
->>> 2) Anyway i think that this situation is a little bit strange: TX thinks that
->>> there is no free space at RX and waits for it, but there is free space at RX!
->>> At the same time, RX waits in poll() forever - it is ready to get new portion
->>> of data to return POLLIN, but TX "thinks" exactly opposite thing - RX is full
->>> of data. Of course, if there will be just stalls in TX data handling - it will
->>> be ok - just performance degradation, but TX stucks forever.
->>
->> We did it to avoid a lot of credit update messages.
->Yes, i see
->> Anyway I think here the main point is why RX is setting SO_RCVLOWAT to 128 KB and then reads only half of it?
->>
->> So I think if the users set SO_RCVLOWAT to a value and then RX reads less then it, is expected to get stuck.
->That a really interesting question, I've found nothing about this case in Google(not sure for 100%) or POSIX. But,
->i can modify reproducer: it sets SO_RCVLOWAT to 128Kb BEFORE entering its last poll where it will stuck. In this
->case behaviour looks more legal: it uses default SO_RCVLOWAT of 1, read 64Kb each time. Finally it sets SO_RCVLOWAT
->to 128Kb(and imagine that it prepares 128Kb 'read()' buffer) and enters poll() - we will get same effect: TX will wait
->for space, RX waits in 'poll()'.
+static inline void __irq_exit_rcu(void)
+{
+...
+        preempt_count_sub(HARDIRQ_OFFSET);
+        if (!in_interrupt()) {
+                if (local_softirq_pending())
+                        invoke_softirq();
 
-Good point!
+                if (IS_ENABLED(CONFIG_PREEMPT_RT) && local_pending_timers()=
+)
+                        wake_timersd();
+        }
+...
+}
 
->>
->> Anyway, since the change will not impact the default behaviour (SO_RCVLOWAT = 1) we can merge this patch, but IMHO we need to explain the case better and improve the test.
->I see, of course I'm not sure about this change, just want to ask 
->someone who knows this code better
+Then ktimers threads stays in sleep state, hrtimer function will not be cal=
+led although hrtimer interrupt has been triggered. Ktimers thread might be =
+woken up in next timer interrupt which introduces long delay.
 
-Yes, it's an RFC, so you did well! :-)
+Any comments are welcome.
 
->>
->>>
->>>>
->>>> If RX woke up (e.g. SO_RCVLOWAT = 64KB) and read the remaining 64KB,
->>>> then it would still send the credit update even without this patch and
->>>> TX will send the 1 byte.
->>>
->>> But how RX will wake up in this case? E.g. it calls poll() without timeout,
->>> connection is established, RX ignores signal
->>
->> RX will wake up because SO_RCVLOWAT is 64KB and there are 64 KB in the buffer. Then RX will read it and send the credit update to TX because
->> free_space is 0.
->IIUC, i'm talking about 10 steps above, e.g. RX will never wake up, 
->because TX is waiting for space.
+Regards,
+Junxiao
 
-Yep, but if RX uses SO_RCVLOWAT = 64 KB instead of 128 KB (I mean if RX 
-reads all the bytes that it's waiting as it specified in SO_RCVLOWAT), 
-then RX will send the credit message.
+-----Original Message-----
+From: Chang, Junxiao <junxiao.chang@intel.com>=20
+Sent: Thursday, December 8, 2022 3:56 PM
+To: linux-kernel@vger.kernel.org
+Cc: linux-rt-users@vger.kernel.org; bigeasy@linutronix.de; tglx@linutronix.=
+de; rostedt@goodmis.org; Chang, Junxiao <junxiao.chang@intel.com>; Peh, Hoc=
+k Zhang <hock.zhang.peh@intel.com>
+Subject: [PATCH] softirq: wake up ktimer thread in softirq context
 
-But there is the case that you mentioned, when SO_RCVLOWAT is chagend 
-while executing.
+Occiaionally timer interrupt might be triggered in softirq context, ktimer =
+thread should be woken up with RT kernel, or else ktimer thread might stay =
+in sleep state although timer interrupt has been triggered.
 
-Thanks,
-Stefano
+This change fixes a latency issue that timer handler is delayed for more th=
+an 4ms in network related test.
+
+Fixes: 2165d27554e8 ("softirq: Use a dedicated thread for timer wakeups.")
+Reported-by: Peh, Hock Zhang <hock.zhang.peh@intel.com>
+Signed-off-by: Junxiao Chang <junxiao.chang@intel.com>
+---
+ kernel/softirq.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/kernel/softirq.c b/kernel/softirq.c index ab1fe34326bab..34ae3=
+9e4a3d10 100644
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -664,13 +664,10 @@ static inline void __irq_exit_rcu(void)  #endif
+ 	account_hardirq_exit(current);
+ 	preempt_count_sub(HARDIRQ_OFFSET);
+-	if (!in_interrupt()) {
+-		if (local_softirq_pending())
+-			invoke_softirq();
+-
+-		if (IS_ENABLED(CONFIG_PREEMPT_RT) && local_pending_timers())
+-			wake_timersd();
+-	}
++	if (!in_interrupt() && local_softirq_pending())
++		invoke_softirq();
++	if (!(in_nmi() || in_hardirq()) && local_pending_timers())
++		wake_timersd();
+=20
+ 	tick_irq_exit();
+ }
+--
+2.25.1
 
