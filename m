@@ -2,63 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B10651A78
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 07:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 242DE651A82
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 07:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbiLTGAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 01:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
+        id S229527AbiLTGCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 01:02:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLTGA1 (ORCPT
+        with ESMTP id S233062AbiLTGB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 01:00:27 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848B011474
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 22:00:26 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id 7so2628905pga.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 22:00:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=huaqin-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vlt5L7PlVbNdJJaExwquyrI4ZxAOGOeQ6ynKwqgYwpA=;
-        b=U4aWNeCxYSUN5ig1wQqKMbkaUkYM7c0YFJoV+eHi0OiAN/CzAW3LpMzr6H1o5c/aCU
-         hAfqE/riijqebe1EKvmAr2wE70NX87sEQIgpMCGsMfHPZy82EX8541fD1iBLnLH8jldg
-         X7yCrXbv9icl7HW072RwN5TSqB/LxwTagF5edyStp+OszCGE/A/0dECGM06Lf2s/WHkL
-         Ohk2ukrdn2BsUFWbqmPgiJEjvofz4vARX9vtA3FbEkNfoe6sA8yFSMNCPtN4VyPJXOLi
-         YsTtVEfW9qTQA7yVdc3nHPaNOrodY4yhdS1RZCaHKQSIt7/VzLibS2teawEx9rSqkOma
-         ol1A==
+        Tue, 20 Dec 2022 01:01:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E74EA5
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 22:01:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671516071;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CxcvbW4SQ7pucHdedQHJukcG8VAvXPlq9vKxUj0hMx4=;
+        b=CI19OwdKKIwpz+GLHY37h2SRPO/m6g61XfH52RDQKTEX49TgKyaE0UioyhQ2jaDSngqdJZ
+        N5tb/REyWsV443B0+wcPQHlmq4qNE/ewA/1+Y8B4/z5fkpqfeGeryPJYV2tqt9uBeyZedv
+        HJZQu7ZtWV6q+9Ow3T3jbYww6AdQF9Y=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-639-i4l1UMXnNc6oqYMI7mNntw-1; Tue, 20 Dec 2022 01:01:09 -0500
+X-MC-Unique: i4l1UMXnNc6oqYMI7mNntw-1
+Received: by mail-qt1-f198.google.com with SMTP id cm12-20020a05622a250c00b003a521f66e8eso5095916qtb.17
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 22:01:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vlt5L7PlVbNdJJaExwquyrI4ZxAOGOeQ6ynKwqgYwpA=;
-        b=DBrvNtdwwIn8ZzErxleuKJhCkbWEuKga/8cdbg55oX4ovZJuzCvn996WP2Bb1DZvdo
-         3p6b7vR0ot9LP8G41YppxDpq+elVJ30UsZZS/Ueid8Yt/+8VxX3tMLaUZP9PFsGV0g2c
-         aCb5bxGwEjJ+/gcX5DEGNuzOQPS8Uul+RHO2ogf2YYP9O6w3PDP3mlwU1m/TixoH/8eS
-         OsS0fyOLAVFBS3/ry68kMKA0BGS1GXdsCjgGFFIM2EDqhMAIgc9QoHovrlWm/fr8bwQ5
-         9aBkXFvnhcS+YPILRfH/TtqR7q0IgGj20Mm5MBQ1JXZn6e2Giqk00nD1Bvva8KL50tOt
-         izrw==
-X-Gm-Message-State: AFqh2kobcUH8KN1/zLw7eacTicj3N9CJxdJmajOW93OfEHLJgJPlK8/3
-        ctvEbA6/WAPYn42PfptqNxeEoQ==
-X-Google-Smtp-Source: AMrXdXsihtHIsVRfcKkT0WgAyl4LWKBQjahqEdXysshmOPl7jp1UPWw1Jij+kWJt93rhBxkxdY4qog==
-X-Received: by 2002:a05:6a00:f0f:b0:578:4efa:e3ae with SMTP id cr15-20020a056a000f0f00b005784efae3aemr15144736pfb.33.1671516025983;
-        Mon, 19 Dec 2022 22:00:25 -0800 (PST)
-Received: from ruihai-HP.huaqin.com ([101.78.151.205])
-        by smtp.gmail.com with ESMTPSA id 12-20020a62150c000000b00574f83c5d51sm7637913pfv.198.2022.12.19.22.00.23
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CxcvbW4SQ7pucHdedQHJukcG8VAvXPlq9vKxUj0hMx4=;
+        b=exwQNuAZzMrBc7qAopBqDPwA/ohNHoq1opXpEbatzgd6L2uKiu6sqf3jUqVs+X531V
+         UFaYYiWeYRZrT9wYdwgc1QxTrNzfRPjiOwJWKX5oFdzcr7jcgHVa/Gwo7EppDwDH03Ob
+         Zas3Da9cfrqRG7lB9wC7WUQfHqw/jdieEqUvmepGFkzJXC7MyXE2UGMA9Nb2fkcAVxYQ
+         /peiwkXVfLDVLX79pRRb+lBEDaIV8J07aSihe9xXLY8wTGGicOYAdWrVpBniS9udsFjN
+         tTnNeNfZpbbbBp7gH1hibVP3H8tiq25g17dDnGUkpTS668alHs9A4gQRSbHaeuQ1E6+q
+         KNSg==
+X-Gm-Message-State: AFqh2kqyAfK9Du9W3ML0jZUYIrNpGi2I/u7QgryCqirvThbjUeraS+iF
+        Tbc/03jTTjwp89vAB+uyOm+i5bBVtnFALTL9nBwYBC3MsukaLN77KhnL3YT5Wa3ZaKqckFHWMd3
+        t3mCmUzefT9YTF6zr0lZxD1nO
+X-Received: by 2002:ac8:6b82:0:b0:39c:efc8:b2a8 with SMTP id z2-20020ac86b82000000b0039cefc8b2a8mr1860741qts.27.1671516068868;
+        Mon, 19 Dec 2022 22:01:08 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsw52UDtMVMxI8ZArmIc5bnjpD/48/efjCKcb+gL01Wag8osM5NZqk2rULUr1W6iSJyLCyEPg==
+X-Received: by 2002:ac8:6b82:0:b0:39c:efc8:b2a8 with SMTP id z2-20020ac86b82000000b0039cefc8b2a8mr1860722qts.27.1671516068550;
+        Mon, 19 Dec 2022 22:01:08 -0800 (PST)
+Received: from redhat.com ([45.144.113.29])
+        by smtp.gmail.com with ESMTPSA id y23-20020ac87097000000b003a50b9f099esm7063711qto.12.2022.12.19.22.01.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 22:00:25 -0800 (PST)
-From:   Ruihai Zhou <zhouruihai@huaqin.corp-partner.google.com>
-To:     pmalani@chromium.org, bleung@chromium.org, groeck@chromium.org,
-        knoxchiou@chromium.org, weishunc@chromium.org
-Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Ruihai Zhou <zhouruihai@huaqin.corp-partner.google.com>
-Subject: [PATCH] platform/chrome: cros_ec_typec: deferred probe when typec count mismatch
-Date:   Tue, 20 Dec 2022 13:59:54 +0800
-Message-Id: <20221220055954.11197-1-zhouruihai@huaqin.corp-partner.google.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Mon, 19 Dec 2022 22:01:07 -0800 (PST)
+Date:   Tue, 20 Dec 2022 01:01:03 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Ricardo =?iso-8859-1?Q?Ca=F1uelo?= 
+        <ricardo.canuelo@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the vhost tree
+Message-ID: <20221220010040-mutt-send-email-mst@kernel.org>
+References: <20221220105956.4786852d@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220105956.4786852d@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,31 +79,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel bootup is much faster with normal mode. In this case,
-there is a chance that the cros-ec-typec module get the actual typec
-port counts but not accurate from ec before ec is able to setup it.
-It will block the HDMI mux function.
-Hence, return -EPROBE_DEFER to put the device onto the deferred probe
-list when the typec count mismatch between ec and node.
+On Tue, Dec 20, 2022 at 10:59:56AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the vhost tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> include/linux/virtio_config.h:74: warning: duplicate section name 'Note'
+> include/linux/virtio_config.h:94: warning: expecting prototype for virtio_config_ops(). Prototype was for vq_callback_t() instead
+> 
+> Revelealed by commit
+> 
+>   333723e8bc39 ("docs: driver-api: virtio: virtio on Linux")
 
-Signed-off-by: Ruihai Zhou <zhouruihai@huaqin.corp-partner.google.com>
----
- drivers/platform/chrome/cros_ec_typec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-index 59de4ce01fab..d821501e875c 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -382,7 +382,7 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
- 
- 	if (nports > typec->num_ports) {
- 		dev_err(dev, "More ports listed than can be supported.\n");
--		return -EINVAL;
-+		return -EPROBE_DEFER;
- 	}
- 
- 	/* DT uses "reg" to specify port number. */
--- 
-2.17.1
+Ricardo I assume you will fix this? Patch on top is ok.
+
+> -- 
+> Cheers,
+> Stephen Rothwell
+
 
