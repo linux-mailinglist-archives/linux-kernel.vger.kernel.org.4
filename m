@@ -2,177 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9914652297
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1196D65229B
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233851AbiLTObK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 09:31:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S233849AbiLTObe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 09:31:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233880AbiLTOal (ORCPT
+        with ESMTP id S234023AbiLTOa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:30:41 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB41E1C125;
-        Tue, 20 Dec 2022 06:29:45 -0800 (PST)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NbzQG6fCnzHqST;
-        Tue, 20 Dec 2022 22:25:58 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 20 Dec 2022 22:29:43 +0800
-Subject: Re: [PATCH] kallsyms: Fix sleeping function called from invalid
- context when CONFIG_KALLSYMS_SELFTEST=y
-To:     Petr Mladek <pmladek@suse.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-References: <20221220063923.1937-1-thunder.leizhen@huawei.com>
- <df75bb4e-6cf8-7f41-b053-9619c13d1c72@csgroup.eu> <Y6GWInExu2m48K/C@alley>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <c5a04eaa-2b8d-647a-7c70-9262e6147394@huawei.com>
-Date:   Tue, 20 Dec 2022 22:29:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Tue, 20 Dec 2022 09:30:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D7419293;
+        Tue, 20 Dec 2022 06:30:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91121B815C2;
+        Tue, 20 Dec 2022 14:30:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEB6AC433EF;
+        Tue, 20 Dec 2022 14:30:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671546625;
+        bh=70XXttVOGVIVhY0cgtn/nOiywONR5LfAWdNk1kH9ePA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JYhMcKJV+ufvydMktI3+ZAaFKxmd3n6769WXov0wiyNSeG1tahVuEe9f+adUbjxBa
+         Hn45Tfuf/sQcPrOlssz1QEcwKfWiPGN7uuAGvk5UB5GGFQgtT4DBTKlaJgFqkLmQjv
+         MG9iDymZYT60yOL8U/eFlbS1Vmv74td1FruZTgjo=
+Date:   Tue, 20 Dec 2022 15:30:22 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
+Cc:     linux-kernel@vger.kernel.org, will@kernel.org, axboe@kernel.dk,
+        robh+dt@kernel.org, mb@lightnvm.io, ckeepax@opensource.cirrus.com,
+        arnd@arndb.d, mst@redhat.com, javier@javigon.com,
+        mikelley@microsoft.com, jasowang@redhat.com,
+        sunilmut@microsoft.com, bjorn.andersson@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        ashish.deshpande@nxp.com, rvmanjumce@gmail.com
+Subject: Re: [EXT] Re: [PATCH v5 2/2] misc: nxp-sr1xx: UWB driver support for
+ sr1xx series chip
+Message-ID: <Y6HG/vz4MWRwcEhj@kroah.com>
+References: <20220914142944.576482-1-manjunatha.venkatesh@nxp.com>
+ <20220914142944.576482-3-manjunatha.venkatesh@nxp.com>
+ <YyHq9OOKBLP2GEcc@kroah.com>
+ <5d1485d4-08d4-1e26-f597-b5fa6cc65ce6@nxp.com>
+ <Y4cF2pX4Lohefm4f@kroah.com>
+ <bbfd859e-b8fb-d69f-887b-4a3d82bb0437@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <Y6GWInExu2m48K/C@alley>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bbfd859e-b8fb-d69f-887b-4a3d82bb0437@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/12/20 19:01, Petr Mladek wrote:
-> On Tue 2022-12-20 08:15:40, Christophe Leroy wrote:
->>
->>
->> Le 20/12/2022 à 07:39, Zhen Lei a écrit :
->>> [T58] BUG: sleeping function called from invalid context at kernel/kallsyms.c:305
->>> [T58] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 58, name: kallsyms_test
->>> [T58] preempt_count: 0, expected: 0
->>> [T58] RCU nest depth: 0, expected: 0
->>> [T58] no locks held by kallsyms_test/58.
->>> [T58] irq event stamp: 18899904
->>> [T58] hardirqs last enabled at (18899903): finish_task_switch.isra.0 (core.c:?)
->>> [T58] hardirqs last disabled at (18899904): test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
->>> [T58] softirqs last enabled at (18899886): __do_softirq (??:?)
->>> [T58] softirqs last disabled at (18899879): ____do_softirq (irq.c:?)
->>> [T58] CPU: 0 PID: 58 Comm: kallsyms_test Tainted: G T  6.1.0-next-20221215 #2
->>> [T58] Hardware name: linux,dummy-virt (DT)
->>> [T58] Call trace:
->>> [T58] dump_backtrace (??:?)
->>> [T58] show_stack (??:?)
->>> [T58] dump_stack_lvl (??:?)
->>> [T58] dump_stack (??:?)
->>> [T58] __might_resched (??:?)
->>> [T58] kallsyms_on_each_symbol (??:?)
->>> [T58] test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
->>> [T58] test_entry (kallsyms_selftest.c:?)
->>> [T58] kthread (kthread.c:?)
->>> [T58] ret_from_fork (??:?)
->>> [T58] kallsyms_selftest: kallsyms_on_each_symbol() traverse all: 5744310840 ns
->>> [T58] kallsyms_selftest: kallsyms_on_each_match_symbol() traverse all: 1164580 ns
->>> [T58] kallsyms_selftest: finish
->>>
->>> Functions kallsyms_on_each_symbol() and kallsyms_on_each_match_symbol()
->>> call the user-registered hook function for each symbol that meets the
->>> requirements. Because it is uncertain how long that hook function will
->>> execute, they call cond_resched() to avoid consuming CPU resources for a
->>> long time. However, irqs need to be disabled during the performance test
->>> to ensure the accuracy of test data. Because the performance test hook is
->>> very clear, very simple function, let's do not call cond_resched() when
->>> CONFIG_KALLSYMS_SELFTEST=y.
->>
->> I don't think it is appropriate to change the behaviour of a core 
->> function based on whether a compile time option related to tests is 
->> selected or not, because you will change the behaviour for all users, 
->> not only for the tests.
+On Tue, Dec 20, 2022 at 07:39:52PM +0530, Manjunatha Venkatesh wrote:
+> On 11/30/2022 12:57 PM, Greg KH wrote:
+> > Caution: EXT Email
+> > 
+> > On Wed, Nov 30, 2022 at 09:10:08AM +0530, Manjunatha Venkatesh wrote:
+> > > On 9/14/2022 8:23 PM, Greg KH wrote:
+> > Note, originally you all were "rushed" to get this accepted, and now
+> > this took 2 1/2 months to respond back to a code review?  Something is
+> > wrong here, when responding so late, almost all context is lost :(
 > 
-> I agree. This is very bad idea. It would change the behavior for
-> the entire system.
+> Sorry for the delayed response,further we will make sure address the review
+> comments ASAP.
+> 
+> > 
+> > > > Caution: EXT Email
+> > > > 
+> > > > On Wed, Sep 14, 2022 at 07:59:44PM +0530, Manjunatha Venkatesh wrote:
+> > > > > +++ b/drivers/misc/nxp-sr1xx.c
+> > > > > @@ -0,0 +1,794 @@
+> > > > > +// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+> > > > Please no.  If you really want to dual-license your Linux kernel code,
+> > > > that's fine, but I will insist that you get a signed-off-by from your
+> > > > corporate lawyer so that I know that they agree with this and are
+> > > > willing to handle all of the complex issues that this entails as it will
+> > > > require work on their side over time.
+> > > > 
+> > > > If that's not worth bothering your lawyers over, please just stick with
+> > > > GPL as the only license.
+> > > Dual-license is signed-off by NXP corporate lawyer.
+> > We need a signed-off-by on the patch itself.
+> As part of Version6 patch submission signed-off by NXP corporate lawyer
+> updated
+> > > Though, we would like to understand what complex issues which require
+> > > work over the time?
+> > I am not a lawyer and can not advise you of this, please work with yours
+> > to set into place the requirements you will have to keep this working
+> > properly.  Note, it is not trivial, and will require work on your end.
+> > 
+> > I will push back again, and ask "Why?"  Why do you want this dual
+> > licensed?  What is driving that requirement and what will having it
+> > licensed like this enable you to do that having it just under GPL-2.0
+> > will not?
+> 
+> Our corporate lawyer suggested to use this dual license for NXP UWB product.
 
-It just doesn't look so good, but it doesn't affect the entire system,
-and the proposed changes below will.
+And I need a tangable _reason_ why a dual license is needed here.
+Remember, dual licensing takes from the community and does not give
+back, so justifications for why this is required is essencial if you
+wish for people to at the very least, review your code...
 
 > 
->> If the problem is that IRQs are disabled, maybe the solution is
->>
->> 	if (!irqs_disabled())
->> 		cond_resched();
-
-If irqs is disabled by the upper layer, this error cannot be easily detected.
-
->>
->> Or try to disable the call to cond_resched() in a way or another during 
->> the run of selftests.
+> > > > > +#define SR1XX_SET_PWR _IOW(SR1XX_MAGIC, 0x01, long)
+> > > > > +#define SR1XX_SET_FWD _IOW(SR1XX_MAGIC, 0x02, long)
+> > > > You can't stick ioctl command definitions in a .c file that userspace
+> > > > never sees.  How are your userspace tools supposed to know what the
+> > > > ioctl is and how it is defined?
+> > > We will move ioctl command definitions into user space header file as part
+> > > of our next patch submission.
+> > > > How was this ever tested and where is your userspace code that interacts
+> > > > with this code?
+> > > We will share the corresponding user space code soon,meanwhile can you
+> > > please suggest how to share this user space code?
+> > You all have ways of posting code publicly :)
 > 
-> If I get it correctly, the problem is this code in kernel/kallsyms_selftest.c:
-
-Yes, another method is to remove the interrupt protection.
-
+> NXP UWB user space code available at below shared path.
 > 
-> static int lookup_name(void *data, const char *name, struct module *mod, unsigned long addr)
-> {
-> [...]
-> 	local_irq_save(flags);
-> 	t0 = sched_clock();
-> 	(void)kallsyms_lookup_name(name);
-> 	t1 = sched_clock();
-> 	local_irq_restore(flags);
-> [...]
-> 
-> and IRQs are disabled to measure the time spent in this function
-> without interruption and rescheduling.
-> 
-> I am sure that there are better ways how to measure the time.
-> Even the "time" command in userspace is able to show time how much CPU
-> time a command used.
+> https://github.com/NXP/uwb-driver-testapp
 
-I've got an idea:
+And the code there shows that you did not write the kernel side
+correctly :(
 
-local_irq_save(flags);
-//get the count and cputime of interrupts
-t0 = sched_clock();
-local_irq_restore(flags);
+Please fix it all up for your next submission.
 
-(void)kallsyms_lookup_name(name);
+thanks,
 
-local_irq_save(flags);
-t1 = sched_clock();
-//get the count and cputime of interrupts
-local_irq_restore(flags);
-
-minus the cputime of local_irq_save(flags)/local_irq_restore(flags)
-
-if count changed, minus the cputime of interrupts
-
-> 
-> I am not familiar with it. But task_cputime() in
-> kernel/sched/cputime.c looks promising. And there must be
-> the interface how the user space get this information.
-> Some is available via /proc/<PID>/... I am not sure
-> if there is a syscall.
-> 
-> Best Regards,
-> Petr
-> .
-> 
-
--- 
-Regards,
-  Zhen Lei
+greg k-h
