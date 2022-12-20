@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C32651721
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 01:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73655651726
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 01:21:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232799AbiLTAUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 19:20:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
+        id S232777AbiLTAVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 19:21:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232586AbiLTAUn (ORCPT
+        with ESMTP id S231860AbiLTAVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 19:20:43 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AA71106
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 16:20:42 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id s16so5603242iln.4
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 16:20:42 -0800 (PST)
+        Mon, 19 Dec 2022 19:21:21 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D096228;
+        Mon, 19 Dec 2022 16:21:20 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id s7so10654818plk.5;
+        Mon, 19 Dec 2022 16:21:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DUmTkQx7tlD5TtKn/80kREr/JVEYJaIJGvPROtM0mL0=;
-        b=V1bSJIjuBtSv1w3SCnclZTPLvXyYvVXc/LPgCKLTtKSAfsB8hOrwi33/EEocHBEyeJ
-         CCM2zV5bYQH4zUR1U/KtO9Wd/kQly6llVM8lZsiPhymWipFBD/iZJ2XVMUxsIdqr7y6A
-         ovm7qpfayvFhzp5b0o/hs8RpO/Xs6LFKzcdbc=
+        bh=FaK6z3GrOP0OER65BMHomvnlNSQmxSYdORpZuG0pagA=;
+        b=e8/N4LJyB7BHMSYTtZ8iOTuZ8R7DVv0z7VuE9DQ0nbPp+tetGwMcDrnIxW3CSymell
+         7IeZujNbYNUoKSI5UNIX6Xzq370Svem1Ec8on9zzt8Rq7HBKgHi8U+2KQmQKYKhBLckm
+         Qx8hVeNAb8g2B/i7wTdmaDtCARm8nKk+y+F/rpC/qdCU/OC0cASOQr4Lk6euxYzDsYqM
+         Mec3Ytsi0JdtwSdvjvQaaw7jOeBirIywMyYkvoBlayaSinQKfaCvtY9irnyIoCyOrdm1
+         Gy7ZdOWFNqKLaIgVjSe2mc/sIGw7irkqKzjogqEycchqwWP6zTK8FhzYEzNRKmlGYG6v
+         aaqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DUmTkQx7tlD5TtKn/80kREr/JVEYJaIJGvPROtM0mL0=;
-        b=6SbJeNETkzOXUa5kgRT6U0mp38pVhqF8AASS09TM4BhNOllwdVp6Mn705mK+11cN9t
-         HmXJPVtxVIlN6wUBf8o4r29qQpRVmDQdIfFYIiFu5G0vGbOnO7GTiTwhhO8Z1w8035gf
-         rSEwLPXrp4pI5ECsgmZuQtz3a9S5KMa/aIdfKs1bARhwauGMF6pmuND5bQnzXQ3kxURW
-         jsTUtZXORjDD9UvA8zrxs/Z/JNhKKNK0nHsPaLSj2ioHiREW/m4lYxYxQ54Y7jr+Wfh9
-         OB9VTzsJluhFo1CNn1z1aeOdkWy5kc3hA161RpQPipn1QLkXUm0CNir5XRNAAZ4vD1lE
-         HsoA==
-X-Gm-Message-State: AFqh2kroOga33meUApFHVwE+7zIdoLpwZY/keLCKth6uxHq985I4rFVE
-        egj/i7yOx4hFxt719W69IUDw1Q==
-X-Google-Smtp-Source: AMrXdXuap7STFlwgIf/xUI3fUSBGXTjHraLQ8dMYhPMnmA2yfkEi9u43IpR8pCb/aNk3jfIetDBl2g==
-X-Received: by 2002:a05:6e02:1a2e:b0:30b:1aa9:8663 with SMTP id g14-20020a056e021a2e00b0030b1aa98663mr1187288ile.2.1671495641440;
-        Mon, 19 Dec 2022 16:20:41 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id r9-20020a92c5a9000000b003039e7d680fsm3803031ilt.11.2022.12.19.16.20.40
+        bh=FaK6z3GrOP0OER65BMHomvnlNSQmxSYdORpZuG0pagA=;
+        b=xiiihhfFEGRYgphCDLpIAGQxRvAGe9om1Wf+58LKyMslBuoSVjXTb+/GSVUgErlpSl
+         p+oJNNVovwhZJsPCA6lvJ8y8dDWqTZ5QTIg3C44VoKBKe3CzRqynFSra7pxZPBNfBU04
+         k3FVAkp0qSWJilt33iJ4O5MVD5nPAS3h1P4KuFZnWgN+87Sdj3WiUSblEhNIhdfaQNbY
+         HpOoR0tOK31dMmJnnT9Xu4c7ccALUHD89IuyvM+OHFiZcxP3neZUhUaOd9bvXCZTSTyv
+         kCX2CulOgafbaN4cDGgMcD/Brr9xAlhd8rzuBVVuQ7Goq6YvtvG6mVUHWW9ex9RqyiBK
+         R9cw==
+X-Gm-Message-State: ANoB5pm/Bybcqkt57rNtoJEV5pfDbkNXG4zpvG+HQb9ThFZcWdqtuPNY
+        fGmcDj4aQeHv/c/YdeKhELI=
+X-Google-Smtp-Source: AA0mqf4asHePCzJlxD4MPUU/8AE/RF08E4I9Vdi3on0Hz0v8fFVMf7L1GhK413Ftj6MrZm7Zvc3r8g==
+X-Received: by 2002:a05:6a21:789e:b0:a4:4578:8caf with SMTP id bf30-20020a056a21789e00b000a445788cafmr64431166pzc.43.1671495679854;
+        Mon, 19 Dec 2022 16:21:19 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id om7-20020a17090b3a8700b001fde655225fsm34989pjb.2.2022.12.19.16.21.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 16:20:40 -0800 (PST)
-Message-ID: <a854db66-0a14-e40b-f3f0-369228fcd835@linuxfoundation.org>
-Date:   Mon, 19 Dec 2022 17:20:39 -0700
+        Mon, 19 Dec 2022 16:21:19 -0800 (PST)
+Message-ID: <423d222b-5b71-a179-b2f8-f4231aa03270@gmail.com>
+Date:   Mon, 19 Dec 2022 16:21:16 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 2/2] tracing/selftests: Add test for event filtering on
- function name
+Subject: Re: [PATCH 6.1 00/25] 6.1.1-rc1 review
 Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ross Zwisler <zwisler@google.com>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Zheng Yejian <zhengyejian1@huawei.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221219183106.518341498@goodmis.org>
- <20221219183214.075559302@goodmis.org> <Y6DQTvOrHRZ8gjDz@google.com>
- <5e3e9408-8ddd-3649-ef98-4bd611c528cc@linuxfoundation.org>
- <20221219173507.410915a3@gandalf.local.home>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221219173507.410915a3@gandalf.local.home>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221219182943.395169070@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221219182943.395169070@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,42 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/19/22 15:35, Steven Rostedt wrote:
-> On Mon, 19 Dec 2022 15:11:39 -0700
-> Shuah Khan <skhan@linuxfoundation.org> wrote:
+On 12/19/22 11:22, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.1 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
->> On 12/19/22 13:57, Ross Zwisler wrote:
->>> On Mon, Dec 19, 2022 at 01:31:08PM -0500, Steven Rostedt wrote:
->>>> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
->>>>
->>>> With the new filter logic of passing in the name of a function to match an
->>>> instruction pointer (or the address of the function), add a test to make
->>>> sure that it is functional.
->>>>
->>>> This is also the first test to test plain filtering. The filtering has
->>>> been tested via the trigger logic, which uses the same code, but there was
->>>> nothing to test just the event filter, so this test is the first to add
->>>> such a case.
->>>>
->>>> Cc: Shuah Khan <shuah@kernel.org>
->>>> Cc: Shuah Khan <skhan@linuxfoundation.org>
->>>> Cc: linux-kselftest@vger.kernel.org
->>>> Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->>>> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
->>>
->>> Reviewed-by: Ross Zwisler <zwisler@google.com>
->>
->> Thank you both. I will apply this after rc1 comes out.
+> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
+> Anything received after that time might be too late.
 > 
-> It's dependent on the first patch.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.1-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
 > 
+> thanks,
+> 
+> greg k-h
 
-In which case,
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
-
-
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
