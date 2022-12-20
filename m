@@ -2,94 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03D1651EBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:24:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0C1651EC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:26:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233733AbiLTKY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:24:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
+        id S230238AbiLTK0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:26:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233710AbiLTKY0 (ORCPT
+        with ESMTP id S230074AbiLTKZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:24:26 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A258FAF2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:24:25 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id m29so17669985lfo.11
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:24:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6AyEVG/P5nSoRfbYs4O0LF6hVQK/yIYZW8GprMFhulM=;
-        b=DE0eQoJ7ELLT8LEacgTlFtKqS9382+ykke9M7VDtII9e+XqXp4vcG9+XeqPxBo2SH+
-         EC6BH1QQ11k5zkXqZWMZ8Ghenhje4M78HjX+FbuVyogCGdVsTapPkN3wkOrpVJvlSIW/
-         N68tp8U8/NBl+vo2BkzDipOQRyfZOUgV7VOuZBO3ubwv6VjsFF0r2WUP+a2OhI3PgtyA
-         eq90g/i6lOh0qk+84KPVQ/KrxMe1qisUv0rEDCXZ2nPEw+Fmyots2ozIkBMCYS2aKwj6
-         lJP32lm/bqvO3/R4dbir5v6EG7Ij++7ENuPuk3wU6dcUrIbkvJO2NTPUL05q6aXusAQL
-         eHCg==
+        Tue, 20 Dec 2022 05:25:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BF0A192
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:25:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671531912;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sFprmyhyXtWWl/GWswLwnRk9bAltqimW1rgZ5muozxA=;
+        b=eWymMlDNyS2cwMbV44K2X8X7rabeSf+urDbglyNnES0eZnQTbyp4PyE2yGjxFU5CSzNBnK
+        39XPgSCPeaoQSJTAfKJbuL9PMLwMiNgd5J6EDhBlmT8NG53qWXe69eU9FrZOMGsWsmlUWv
+        eMxzjWdtty2m1DuG9o5wp2W6aOlBly8=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-59-HmaWikEIO5eKT3UsCUQAsg-1; Tue, 20 Dec 2022 05:25:11 -0500
+X-MC-Unique: HmaWikEIO5eKT3UsCUQAsg-1
+Received: by mail-qv1-f69.google.com with SMTP id r10-20020ad4522a000000b004d28fcbfe17so6870105qvq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:25:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6AyEVG/P5nSoRfbYs4O0LF6hVQK/yIYZW8GprMFhulM=;
-        b=E1ftFI38HS6CgaEDSwmd8MLs0GygDne9IbwFGixaEjsUTDaz8NVaPX2vI6/vMMZeJU
-         Og5cyzXekq4LjdMkeg7AyH3Jp4qJwfp4qzVRfLcuvA1Sn5LxpBBR6ctJUPixiqRt3+dg
-         vkeqH/TpAupNl77rlP2TQLAjK2jX244mx8j8uy1db8lTBAJOLorkXAbF6dRgVu2EbpwW
-         awrCvH2IkulUiy/qbf3TKEJCiFEdjNEAzvMbAsLiTVEBybJYlw0iS1lv3CNyH+6BPubf
-         PVlT5I5/AM1nlkgwAubB0lD2MZhkhWIiaWbMAWOrGL4Xp/7lflGcEhStBDjjyGm2Yt5M
-         Iw7w==
-X-Gm-Message-State: AFqh2kqbnCNHunwjJEFv+S0eWJVzAZ0MNosVsA+DqTm798nWiNFl/mx+
-        z6WgqGbYwvxUv8a4WQwK5VSJ3Q==
-X-Google-Smtp-Source: AMrXdXslDBTiA36fc5Dis/BQkmDERjTO+2h+WiQGJwpuxHA8cCzVONlNCAEVf5N+zBuqL9xBy81I0w==
-X-Received: by 2002:ac2:48a2:0:b0:4b5:a65d:9b7c with SMTP id u2-20020ac248a2000000b004b5a65d9b7cmr508386lfg.21.1671531863586;
-        Tue, 20 Dec 2022 02:24:23 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o22-20020ac25e36000000b004ab52b0bcf9sm1403854lfg.207.2022.12.20.02.24.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 02:24:23 -0800 (PST)
-Message-ID: <6de40fac-3903-665c-2014-07d3c90ba639@linaro.org>
-Date:   Tue, 20 Dec 2022 11:24:22 +0100
+        bh=sFprmyhyXtWWl/GWswLwnRk9bAltqimW1rgZ5muozxA=;
+        b=AB0ikRldIHvhCxJSaLuv1a9kzI68YlrAAOYdXfw6FKH9p2jpm8upBYCqQ9UDyxLX0P
+         m/SLRlA4mfTgOm7m9vnzyk+acK1RVlfY/fBLTZHnqPtlN8h2BAt0ZNNYRTs04NBQhPw5
+         KdsscWmrEvLoZjOaA0EFg7fJBJQMwpd1KK+1A1ee1s7tq88DjuLihW7aaitKJr1mHwub
+         s5PDpRVTcY9WYx/oOqxgQ2yzfhVdHy5BjQ5T0zsmQKCXIbJSjP+S99prTDiEqzNOg9qK
+         BoZJcbt8x0uAq4lcRZXLnmb550YsEbjhz63Fs664h8stTJexpBjIWu8mLGHf0TgvcAwJ
+         95Sg==
+X-Gm-Message-State: ANoB5pkx1xae+dMUeNyYh0wxu6/pad/+S6VbUYZAjOqguY4fV8WvqR02
+        R3LSu9/+7RXiQo/zvVSvVd82qw8KFr/EmFF3GttaAUQxQwqLw/QHCqFj0ZlkFEJKE86pHGbCI78
+        ubkjQaPhGKaSTbyq4kmaPnLHw
+X-Received: by 2002:ac8:5196:0:b0:3a8:2ccb:f55d with SMTP id c22-20020ac85196000000b003a82ccbf55dmr31369909qtn.33.1671531910849;
+        Tue, 20 Dec 2022 02:25:10 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5s5r8ee0zNepl2yTpSZkf9vUEHeFz4DqkBlyrZAPziMRft+VMGYHoUlkzApghdDwESVdTexw==
+X-Received: by 2002:ac8:5196:0:b0:3a8:2ccb:f55d with SMTP id c22-20020ac85196000000b003a82ccbf55dmr31369889qtn.33.1671531910547;
+        Tue, 20 Dec 2022 02:25:10 -0800 (PST)
+Received: from redhat.com ([37.19.199.118])
+        by smtp.gmail.com with ESMTPSA id a12-20020ac84d8c000000b003434d3b5938sm7346943qtw.2.2022.12.20.02.25.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 02:25:10 -0800 (PST)
+Date:   Tue, 20 Dec 2022 05:25:04 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Ricardo =?iso-8859-1?Q?Ca=F1uelo?= <ricardo.canuelo@collabora.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, sfr@canb.auug.org.au,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kernel@collabora.com
+Subject: Re: [PATCH] virtio: fix virtio_config_ops kerneldocs
+Message-ID: <20221220052333-mutt-send-email-mst@kernel.org>
+References: <20221220073709.2687151-1-ricardo.canuelo@collabora.com>
+ <Y6F8dlRQbOzIvJff@debian.me>
+ <bf9bd0ba-c703-1903-7df2-ac95dea0f3e8@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 1/3] dt-bindings: PCI: qcom: Update maintainers
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     bhelgaas@google.com, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221219191427.480085-1-manivannan.sadhasivam@linaro.org>
- <20221219191427.480085-2-manivannan.sadhasivam@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221219191427.480085-2-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bf9bd0ba-c703-1903-7df2-ac95dea0f3e8@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/12/2022 20:14, Manivannan Sadhasivam wrote:
-> Stanimir has left mm-sol and already expressed his wish to not continue
-> maintaining the PCIe RC driver. So his entry can be removed.
+On Tue, Dec 20, 2022 at 10:54:17AM +0100, Ricardo Cañuelo wrote:
+> Hi Bagas,
 > 
-> Adding myself as the co-maintainer since I took over the PCIe RC driver
-> maintainership from Stanimir.
+> Thanks for the review, some comments below:
 > 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> On 20/12/22 10:12, Bagas Sanjaya wrote:> On Tue, Dec 20, 2022 at 08:37:09AM +0100, Ricardo Cañuelo wrote:
+> > Describe the steps needed to fix both warnings above. I see in the diff that:
+> > 
+> >    * move vq_callback_t() declaration above;
+> >    * match entity type of virtio_config_ops; and
+> >    * reformat @finalize_features description.
+> 
+> I wouldn't like to add redundant info in the commit message for
+> such a trivial patch. The commit message describes _what_ the
+> patch does. The _how_ is just as clear in the patch itself as in
+> this description, IMO.
 
+Yea it's overkill for this patch.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > 
+> > > Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
+> > 
+> > You need to add appropriate tags:
+> > 
+> > Link: https://lore.kernel.org/linux-next/20221220105956.4786852d@canb.auug.org.au/
+> > Fixes: 333723e8bc393d ("docs: driver-api: virtio: virtio on Linux")
+> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> 
+> Thanks for the tip although, actually, it's not that commit that
+> needs to be fixed but the kerneldoc itself.
 
-Best regards,
-Krzysztof
+This doesn't matter I think, what Fixes tag does is tell tools
+if you have commit A you want this one on top.
+
+> The warnings were
+> made visible after that commit but not introduced by it. I'll add
+> the Reported-by tag in v2.
+> 
+> Cheers,
+> Ricardo
 
