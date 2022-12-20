@@ -2,172 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1661652501
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:55:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7542F652505
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbiLTQzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 11:55:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
+        id S233854AbiLTQzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 11:55:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiLTQzI (ORCPT
+        with ESMTP id S229945AbiLTQzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 11:55:08 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5B81C126;
-        Tue, 20 Dec 2022 08:55:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671555307; x=1703091307;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=R6K/H5pO31FhA0um2GXBaKaif6nripCQw9ffL3vSoM0=;
-  b=km7YHAzItsrZtUojWX0MH/LFVHiymSOSTwnnjFZy8OoX82oEJQJm50GN
-   aIUXBROQhVpPlRWfbRT9CrE/FrQmJDEaeCNfbmErg5H5evMgyaw1WrPFA
-   Dp5jCBwtjlhRBPw7rUe8EiNj7IVnuagMGLLzdDvzLCNkwvEnS1dyQuwaO
-   x+LQ6TmeKQz3JydNpjnT0P4hLFqisH+5fsZkLtLOi9yRKj6tMzRk8xSlZ
-   rKIfmF8Wn8+5bcRM6yvbvButz1s6iQHA/D0jYU40nGzV3XoYpeUAIS7/A
-   xCmnx8rrewNsiHm2keJxAauFvpTDSANfBK/hSVdexM4rssbCGTCLDZ3i0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="319712525"
-X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
-   d="scan'208";a="319712525"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 08:54:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="653179514"
-X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
-   d="scan'208";a="653179514"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 20 Dec 2022 08:54:40 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p7fsz-00D0rs-2Q;
-        Tue, 20 Dec 2022 18:54:37 +0200
-Date:   Tue, 20 Dec 2022 18:54:37 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com, bagasdotme@gmail.com,
-        Basheer Ahmed Muddebihal 
-        <basheer.ahmed.muddebihal@linux.intel.com>
-Subject: Re: [PATCH v7 2/4] fpga: dfl: Add DFHv1 Register Definitions
-Message-ID: <Y6HozWmkwElC8pUc@smile.fi.intel.com>
-References: <20221220163652.499831-1-matthew.gerlach@linux.intel.com>
- <20221220163652.499831-3-matthew.gerlach@linux.intel.com>
+        Tue, 20 Dec 2022 11:55:38 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08B91CB12
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:55:29 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id y3so6615908ilq.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:55:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UmTBCjd4WfDkEIZ41SUabqVQsCDpgvamQQ85cJ8gqF0=;
+        b=CSJ9LGK+9xR1eOwHmVWnalfCyuk+oL/PCYF6ETNL7lFOI3yzt/TaJ7C+YlXlpXEDMJ
+         Uzk7kF3dgaX9Wkqm4cTgekfJXPnLf9iAiCeEUInmVbE/gmNFvvx97KY6JTrWSLzftHWK
+         BzRVwwchdTfgQj7qLq0lDyeRw9+bUl8d5sDWQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UmTBCjd4WfDkEIZ41SUabqVQsCDpgvamQQ85cJ8gqF0=;
+        b=7/RjAbBF2/f1iqBBLLwxhT9jpWlZ8qYkp7muWPzhQD13lxX8ALOsRpZlv4LoaWlHzK
+         XZ/py30u3WQIF3EmE00NtqKGK113uAPAjKLI2URbaU5vozVwfkmRvggI5Z3MxMRTP/yq
+         dtK2K7pir7E1cDS5IDqkXpUJDgqS5YGUFF4+YDlz21lqAH2O04HKDrVkRTY0gm41SDJe
+         dGCEYLq+hy1zlI5D0VfLFZnXgqKUeuvLudUW/9NIlwn6JMHWDrzfT/nqXMM/VOguW1DI
+         xk4esC2LUxiBCobS18p+gSHv/OwHLLkRO5kvmApcoUFfakoQ4YOFkN6/bQNMzZEaw6TV
+         OQOQ==
+X-Gm-Message-State: ANoB5pl8xUrokqr72ShZiSQQg/IhTefDabNqBZP1MuFL82WmNgQF/HWN
+        LcDKarvp4BD2xxO7uXAPL1UYJg==
+X-Google-Smtp-Source: AA0mqf5be6/mjb1uYLE+7Ce9R+B32f8xgMhK4AQZTwjI9AF9595PyJn41kXUUx+xKiFc9qajiFTWcA==
+X-Received: by 2002:a92:d3ce:0:b0:303:d8:f309 with SMTP id c14-20020a92d3ce000000b0030300d8f309mr4378979ilh.2.1671555329106;
+        Tue, 20 Dec 2022 08:55:29 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id s12-20020a92cb0c000000b0030005ae9241sm4493573ilo.43.2022.12.20.08.55.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 08:55:28 -0800 (PST)
+Message-ID: <f185bb42-b29c-977e-312e-3349eea15383@linuxfoundation.org>
+Date:   Tue, 20 Dec 2022 09:55:26 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221220163652.499831-3-matthew.gerlach@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+To:     Jeff Xu <jeffxu@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Kees Cook <keescook@chromium.org>, Peter Xu <peterx@redhat.com>,
+        jeffxu@chromium.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com,
+        linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20221207154939.2532830-1-jeffxu@google.com>
+ <20221207154939.2532830-4-jeffxu@google.com> <202212080821.5AE7EE99@keescook>
+ <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
+ <Y5yS8wCnuYGLHMj4@x1n>
+ <CALmYWFsDhX76zbcyhYAW-u0BBwD+m+TKpt4_pZTMt+22zHhrGQ@mail.gmail.com>
+ <20221216094259.bec91e4abd6cf54a05ce2813@linux-foundation.org>
+ <CALmYWFsNp87a5uVQUAb4PG0khFN8Xxd=ibh9Q7g-Y0XW1Mn-8Q@mail.gmail.com>
+ <202212161233.85C9783FB@keescook>
+ <CALmYWFuENPRvCAOF6of=Ufct5jjAbJ=iDyH7eODhdbm24uAK3Q@mail.gmail.com>
+ <20221216140641.bf6e47b7c4f5a53f34c8cf9a@linux-foundation.org>
+ <CALmYWFuqAruM=Brh_54hWL+HiKD+RABK4y+hzd4phOzOZ_0=CA@mail.gmail.com>
+Content-Language: en-US
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <CALmYWFuqAruM=Brh_54hWL+HiKD+RABK4y+hzd4phOzOZ_0=CA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 08:36:50AM -0800, matthew.gerlach@linux.intel.com wrote:
-> From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
-> 
-> This patch adds the definitions for DFHv1 header and related register
-> bitfields.
-
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Signed-off-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
-> Co-developed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
-> v7: no change
-> 
-> v6: remove parameter definitions from include/linux/dfl.h
-> 
-> v5: consistently use fields for parameter data
->     s/EOL/EOP/ to match doc
->     remove unneeded mask
->     added Co-developed-by
-> 
-> v4: s/MSIX/MSI_X/g
->     move kerneldoc to implementation
->     don't change copyright date
-> 
-> v3:
->     keep DFHv1 definitions "hidden" in drivers/fpga/dfl.h
-> 
-> v2: clean up white space and one line comments
->     remove extra space in commit
->     use uniform number of digits in constants
->     don't change copyright date because of removed content
-> ---
->  drivers/fpga/dfl.h | 32 ++++++++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
-> 
-> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> index 06cfcd5e84bb..fc59f33367ee 100644
-> --- a/drivers/fpga/dfl.h
-> +++ b/drivers/fpga/dfl.h
-> @@ -74,11 +74,43 @@
->  #define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
->  #define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
->  #define DFH_EOL			BIT_ULL(40)		/* End of list */
-> +#define DFH_VERSION		GENMASK_ULL(59, 52)	/* DFH version */
->  #define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
->  #define DFH_TYPE_AFU		1
->  #define DFH_TYPE_PRIVATE	3
->  #define DFH_TYPE_FIU		4
->  
-> +/*
-> + * DFHv1 Register Offset definitons
-> + * In DHFv1, DFH + GUID + CSR_START + CSR_SIZE_GROUP + PARAM_HDR + PARAM_DATA
-> + * as common header registers
-> + */
-> +#define DFHv1_CSR_ADDR		0x18  /* CSR Register start address */
-> +#define DFHv1_CSR_SIZE_GRP	0x20  /* Size of Reg Block and Group/tag */
-> +#define DFHv1_PARAM_HDR		0x28  /* Optional First Param header */
-> +
-> +/*
-> + * CSR Rel Bit, 1'b0 = relative (offset from feature DFH start),
-> + * 1'b1 = absolute (ARM or other non-PCIe use)
-> + */
-> +#define DFHv1_CSR_ADDR_REL	BIT_ULL(0)
-> +
-> +/* CSR Header Register Bit Definitions */
-> +#define DFHv1_CSR_ADDR_MASK       GENMASK_ULL(63, 1)  /* 63:1 of CSR address */
-> +
-> +/* CSR SIZE Goup Register Bit Definitions */
-> +#define DFHv1_CSR_SIZE_GRP_INSTANCE_ID	GENMASK_ULL(15, 0)	/* Enumeration instantiated IP */
-> +#define DFHv1_CSR_SIZE_GRP_GROUPING_ID	GENMASK_ULL(30, 16)	/* Group Features/interfaces */
-> +#define DFHv1_CSR_SIZE_GRP_HAS_PARAMS	BIT_ULL(31)		/* Presence of Parameters */
-> +#define DFHv1_CSR_SIZE_GRP_SIZE		GENMASK_ULL(63, 32)	/* Size of CSR Block in bytes */
-> +
-> +/* PARAM Header Register Bit Definitions */
-> +#define DFHv1_PARAM_HDR_ID		GENMASK_ULL(15, 0) /* Id of this Param  */
-> +#define DFHv1_PARAM_HDR_VER		GENMASK_ULL(31, 16) /* Version Param */
-> +#define DFHv1_PARAM_HDR_NEXT_OFFSET	GENMASK_ULL(63, 35) /* Offset of next Param */
-> +#define DFHv1_PARAM_HDR_NEXT_EOP	BIT_ULL(32)
-> +#define DFHv1_PARAM_DATA		0x08  /* Offset of Param data from Param header */
-> +
->  /* Next AFU Register Bitfield */
->  #define NEXT_AFU_NEXT_DFH_OFST	GENMASK_ULL(23, 0)	/* Offset to next AFU */
->  
-> -- 
-> 2.25.1
+On 12/16/22 16:40, Jeff Xu wrote:
+> On Fri, Dec 16, 2022 at 2:06 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>>
+>> On Fri, 16 Dec 2022 13:46:58 -0800 Jeff Xu <jeffxu@google.com> wrote:
+>>
+>>> On Fri, Dec 16, 2022 at 12:35 PM Kees Cook <keescook@chromium.org> wrote:
+>>>>
+>>>> On Fri, Dec 16, 2022 at 10:11:44AM -0800, Jeff Xu wrote:
+>>>>> Once per boot seems too little, it would be nice if we can list all processes.
+>>>>> I agree ratelimited might be too much.
+>>>>> There is a feature gap here for logging.
+>>>>>
+>>>>> Kees, what do you think ?
+>>>>
+>>>> I agree once per boot is kind of frustrating "I fixed the one warning,
+>>>> oh, now it's coming from a different process". But ratelimit is, in
+>>>> retrospect, still too often.
+>>>>
+>>>> Let's go with per boot -- this should be noisy "enough" to get the
+>>>> changes in API into the callers without being too much of a hassle.
+>>>>
+>>> Agreed.  Let's go with per boot.
+>>>
+>>> Hi Andrew, what is your preference ? I can send a patch  or you
+>>> directly fix it in mm-unstable ?
+>>
+>> Like this?
+>>
+> Yes. Thanks!
 > 
 
--- 
-With Best Regards,
-Andy Shevchenko
+Sorry jumping into this discussion a bit late. Is it possible to provide
+a way to enable full logging as a debug option to tag more processes?
 
+thanks,
+-- Shuah
 
