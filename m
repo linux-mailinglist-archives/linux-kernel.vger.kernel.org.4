@@ -2,226 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F8665263A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 19:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1788B65263C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 19:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234011AbiLTS21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 13:28:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
+        id S234088AbiLTS3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 13:29:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233985AbiLTS2I (ORCPT
+        with ESMTP id S234039AbiLTS2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 13:28:08 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8524CE07;
-        Tue, 20 Dec 2022 10:28:06 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1671560885;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YesO5scRwOOin7uW7PZmPoS44XmivgS0ElHSpIPIVmE=;
-        b=uj/7yvtKjoxajolPjtroGBuMqcW9xd/ppyLXn1op6xg0jwxNhV/i7tWBgzXE7hMxU7ZOg2
-        5YnAteiyU3LPromj1Y2rl9NJzDsH3ZSZvNaCXoL5YyWtmpdEj5VNLkeKsdpOM0ZXg9BxQ1
-        nwtLRs6SLSSxrFSJHvJFeux6PLl778Y=
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     linux-mm@kvack.org
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Subject: [PATCH RFC 2/2] mm: kmem: add direct objcg pointer to task_struct
-Date:   Tue, 20 Dec 2022 10:27:45 -0800
-Message-Id: <20221220182745.1903540-3-roman.gushchin@linux.dev>
-In-Reply-To: <20221220182745.1903540-1-roman.gushchin@linux.dev>
-References: <20221220182745.1903540-1-roman.gushchin@linux.dev>
+        Tue, 20 Dec 2022 13:28:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883941DDE3;
+        Tue, 20 Dec 2022 10:28:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFCF7B818B1;
+        Tue, 20 Dec 2022 18:28:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 562FEC433D2;
+        Tue, 20 Dec 2022 18:28:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671560922;
+        bh=26BJsZF4v8uYU+L0SWB1rBznQrtMVFzrBO3rH/jfIS8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D2sAAWG/LXFS34fdSRfw357w1UrXDJZSLS4z+ZYrJo6SksVGs4VPcrDjh41Mvutum
+         DzVEnhqLHx6jcY9S5xr86JnmdAFvpU0YGtyLRjdGRUMpwSqmN9mSLH+2Quns37R99o
+         4VFSXUs1SBVDZtWZaXc1RTuS1RwidB2SaffXiC9qY7PUozDejgvW49e1/QqTjRxHK9
+         oooxQL/c29B0k1lV/WBjOEhuamumGIRN9ih5AJkNRP1SDHixz/mTLnRiQA8FziSrwG
+         xk97wG0I6IjAdn0uJtU5Y6gPrD5H93v6QvfOUh7XoIVi3E0WZ8yPR4xSp9nu5J2eC2
+         ogjV1vlgh1R8g==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7ECDA40367; Tue, 20 Dec 2022 15:28:39 -0300 (-03)
+Date:   Tue, 20 Dec 2022 15:28:39 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
+        Blake Jones <blakejones@google.com>, bpf@vger.kernel.org
+Subject: Re: [PATCH 0/6] perf lock contention: Add more filter options (v1)
+Message-ID: <Y6H+11oOgpSpHuh/@kernel.org>
+References: <20221219201732.460111-1-namhyung@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219201732.460111-1-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To charge a freshly allocated kernel object to a memory cgroup, the
-kernel needs to obtain an objcg pointer. Currently it does it
-indirectly by obtaining the memcg pointer first and then calling to
-__get_obj_cgroup_from_memcg().
+Em Mon, Dec 19, 2022 at 12:17:26PM -0800, Namhyung Kim escreveu:
+> Hello,
+> 
+> This patchset adds a couple of filters to perf lock contention command.
 
-Usually tasks spend their entire life belonging to the same object
-cgroup. So it makes sense to save the objcg pointer on task_struct
-directly, so it can be obtained faster. It requires some work on fork,
-exit and cgroup migrate paths, but these paths are way colder.
+Thanks, applied.
 
-The old indirect way is still used for remote memcg charging.
+- Arnaldo
 
-Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
----
- include/linux/sched.h |  4 +++
- mm/memcontrol.c       | 84 +++++++++++++++++++++++++++++++++++++------
- 2 files changed, 77 insertions(+), 11 deletions(-)
+ 
+> The -Y/--type-filter is to filter by lock types like spinlock or mutex.
+> 
+>   $ sudo ./perf lock con -ab -Y spinlock -E 3 -- ./perf bench sched messaging
+>   # Running 'sched/messaging' benchmark:
+>   # 20 sender and receiver processes per group
+>   # 10 groups == 400 processes run
+> 
+>        Total time: 0.167 [sec]
+>    contended   total wait     max wait     avg wait         type   caller
+> 
+>           11    669.31 us    107.17 us     60.85 us     spinlock   remove_wait_queue+0x14
+>           10    586.85 us     87.62 us     58.68 us     spinlock   prepare_to_wait+0x27
+>          186    497.36 us     12.94 us      2.67 us     spinlock   try_to_wake_up+0x1f5
+> 
+> For the same workload, you can see the rwlock results only like below.
+> 
+>   $ sudo ./perf lock con -ab -Y rwlock -E 3 -- ./perf bench sched messaging
+>   # Running 'sched/messaging' benchmark:
+>   # 20 sender and receiver processes per group
+>   # 10 groups == 400 processes run
+> 
+>        Total time: 0.171 [sec]
+>    contended   total wait     max wait     avg wait         type   caller
+> 
+>           20    142.11 us     17.10 us      7.11 us     rwlock:W   do_exit+0x36d
+>            3     26.49 us     12.04 us      8.83 us     rwlock:W   release_task+0x6e
+>            5     12.46 us      5.12 us      2.49 us     rwlock:R   do_wait+0x8b
+> 
+> The -L/--lock-filter is to filter by lock address or name.  You can use
+> the existing -l/--lock-addr option to get the info.
+> 
+>   $ sudo ./perf lock con -abl -- ./perf bench sched messaging 2>&1 | grep tasklist_lock
+>           25     39.78 us     16.51 us      1.59 us   ffffffff9d006080   tasklist_lock
+> 
+> And use it with -L option like below.
+> 
+>   $ sudo ./perf lock con -ab -L tasklist_lock -- ./perf bench sched messaging 2>&1
+>   # Running 'sched/messaging' benchmark:
+>   # 20 sender and receiver processes per group
+>   # 10 groups == 400 processes run
+> 
+>        Total time: 0.174 [sec]
+>    contended   total wait     max wait     avg wait         type   caller
+> 
+>           22    227.18 us     24.16 us     10.33 us     rwlock:W   do_exit+0x36d
+>            3     26.12 us     18.03 us      8.71 us     rwlock:W   release_task+0x6e
+> 
+> Passing the address is supported too.
+> 
+>   $ sudo ./perf lock con -ab -L ffffffff9d006080 -- ./perf bench sched messaging 2>&1
+>   # Running 'sched/messaging' benchmark:
+>   # 20 sender and receiver processes per group
+>   # 10 groups == 400 processes run
+> 
+>        Total time: 0.190 [sec]
+>    contended   total wait     max wait     avg wait         type   caller
+> 
+>           28    276.62 us     16.90 us      9.88 us     rwlock:W   do_exit+0x36d
+>            4     22.36 us      7.04 us      5.59 us     rwlock:R   do_wait+0x8b
+>            2     10.51 us      5.38 us      5.25 us     rwlock:W   release_task+0x6e
+> 
+> You can get it from 'perf/lock-filter-v1' branch in
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+> 
+> Thanks,
+> Namhyung
+> 
+> 
+> Namhyung Kim (6):
+>   perf lock contention: Factor out lock_type_table
+>   perf lock contention: Add -Y/--type-filter option
+>   perf lock contention: Support lock type filtering for BPF
+>   perf lock contention: Add -L/--lock-filter option
+>   perf lock contention: Support lock addr/name filtering for BPF
+>   perf test: Update perf lock contention test
+> 
+>  tools/perf/Documentation/perf-lock.txt        |  27 +-
+>  tools/perf/builtin-lock.c                     | 305 ++++++++++++++++--
+>  tools/perf/tests/shell/lock_contention.sh     |  58 +++-
+>  tools/perf/util/bpf_lock_contention.c         |  55 +++-
+>  .../perf/util/bpf_skel/lock_contention.bpf.c  |  38 ++-
+>  tools/perf/util/lock-contention.h             |  10 +
+>  6 files changed, 451 insertions(+), 42 deletions(-)
+> 
+> 
+> base-commit: 51c4f2bf5397b34b79a6712221606e0ab2e6f7ed
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 853d08f7562b..e17be609cbcb 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1435,6 +1435,10 @@ struct task_struct {
- 	struct mem_cgroup		*active_memcg;
- #endif
- 
-+#ifdef CONFIG_MEMCG_KMEM
-+	struct obj_cgroup		*objcg;
-+#endif
-+
- #ifdef CONFIG_BLK_CGROUP
- 	struct request_queue		*throttle_queue;
- #endif
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 82828c51d2ea..e0547b224f40 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -3001,23 +3001,29 @@ static struct obj_cgroup *__get_obj_cgroup_from_memcg(struct mem_cgroup *memcg)
- __always_inline struct obj_cgroup *get_obj_cgroup_from_current(void)
- {
- 	struct mem_cgroup *memcg;
--	struct obj_cgroup *objcg;
-+	struct obj_cgroup *objcg = NULL;
- 
- 	if (in_task()) {
- 		memcg = current->active_memcg;
--
--		/* Memcg to charge can't be determined. */
--		if (likely(!memcg) && (!current->mm || (current->flags & PF_KTHREAD)))
--			return NULL;
-+		if (unlikely(memcg))
-+			goto from_memcg;
-+
-+		if (current->objcg) {
-+			rcu_read_lock();
-+			do {
-+				objcg = READ_ONCE(current->objcg);
-+			} while (objcg && !obj_cgroup_tryget(objcg));
-+			rcu_read_unlock();
-+		}
- 	} else {
- 		memcg = this_cpu_read(int_active_memcg);
--		if (likely(!memcg))
--			return NULL;
-+		if (unlikely(memcg))
-+			goto from_memcg;
- 	}
-+	return objcg;
- 
-+from_memcg:
- 	rcu_read_lock();
--	if (!memcg)
--		memcg = mem_cgroup_from_task(current);
- 	objcg = __get_obj_cgroup_from_memcg(memcg);
- 	rcu_read_unlock();
- 	return objcg;
-@@ -6303,6 +6309,28 @@ static void mem_cgroup_move_task(void)
- 		mem_cgroup_clear_mc();
- 	}
- }
-+
-+#ifdef CONFIG_MEMCG_KMEM
-+static void mem_cgroup_fork(struct task_struct *task)
-+{
-+	struct mem_cgroup *memcg;
-+
-+	rcu_read_lock();
-+	memcg = mem_cgroup_from_task(task);
-+	if (!memcg || mem_cgroup_is_root(memcg))
-+		task->objcg = NULL;
-+	else
-+		task->objcg = __get_obj_cgroup_from_memcg(memcg);
-+	rcu_read_unlock();
-+}
-+
-+static void mem_cgroup_exit(struct task_struct *task)
-+{
-+	if (task->objcg)
-+		obj_cgroup_put(task->objcg);
-+}
-+#endif
-+
- #else	/* !CONFIG_MMU */
- static int mem_cgroup_can_attach(struct cgroup_taskset *tset)
- {
-@@ -6317,7 +6345,7 @@ static void mem_cgroup_move_task(void)
- #endif
- 
- #ifdef CONFIG_LRU_GEN
--static void mem_cgroup_attach(struct cgroup_taskset *tset)
-+static void mem_cgroup_lru_gen_attach(struct cgroup_taskset *tset)
- {
- 	struct task_struct *task;
- 	struct cgroup_subsys_state *css;
-@@ -6335,10 +6363,38 @@ static void mem_cgroup_attach(struct cgroup_taskset *tset)
- 	task_unlock(task);
- }
- #else
-+static void mem_cgroup_lru_gen_attach(struct cgroup_taskset *tset) {}
-+#endif /* CONFIG_LRU_GEN */
-+
-+#ifdef CONFIG_MEMCG_KMEM
-+static void mem_cgroup_kmem_attach(struct cgroup_taskset *tset)
-+{
-+	struct task_struct *task;
-+	struct cgroup_subsys_state *css;
-+
-+	cgroup_taskset_for_each(task, css, tset) {
-+		struct mem_cgroup *memcg;
-+
-+		if (task->objcg)
-+			obj_cgroup_put(task->objcg);
-+
-+		rcu_read_lock();
-+		memcg = container_of(css, struct mem_cgroup, css);
-+		task->objcg = __get_obj_cgroup_from_memcg(memcg);
-+		rcu_read_unlock();
-+	}
-+}
-+#else
-+static void mem_cgroup_kmem_attach(struct cgroup_taskset *tset) {}
-+#endif /* CONFIG_MEMCG_KMEM */
-+
-+#if defined(CONFIG_MEMCG_KMEM) || defined(CONFIG_MEMCG_KMEM)
- static void mem_cgroup_attach(struct cgroup_taskset *tset)
- {
-+	mem_cgroup_lru_gen_attach(tset);
-+	mem_cgroup_kmem_attach(tset);
- }
--#endif /* CONFIG_LRU_GEN */
-+#endif
- 
- static int seq_puts_memcg_tunable(struct seq_file *m, unsigned long value)
- {
-@@ -6816,9 +6872,15 @@ struct cgroup_subsys memory_cgrp_subsys = {
- 	.css_reset = mem_cgroup_css_reset,
- 	.css_rstat_flush = mem_cgroup_css_rstat_flush,
- 	.can_attach = mem_cgroup_can_attach,
-+#if defined(CONFIG_MEMCG_KMEM) || defined(CONFIG_MEMCG_KMEM)
- 	.attach = mem_cgroup_attach,
-+#endif
- 	.cancel_attach = mem_cgroup_cancel_attach,
- 	.post_attach = mem_cgroup_move_task,
-+#ifdef CONFIG_MEMCG_KMEM
-+	.fork = mem_cgroup_fork,
-+	.exit = mem_cgroup_exit,
-+#endif
- 	.dfl_cftypes = memory_files,
- 	.legacy_cftypes = mem_cgroup_legacy_files,
- 	.early_init = 0,
 -- 
-2.39.0
 
+- Arnaldo
