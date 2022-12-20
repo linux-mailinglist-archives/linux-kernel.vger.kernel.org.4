@@ -2,134 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E181651F41
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 719B9651F40
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:52:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbiLTKwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:52:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58812 "EHLO
+        id S233215AbiLTKwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233590AbiLTKv4 (ORCPT
+        with ESMTP id S233664AbiLTKwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:51:56 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4609186C1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:51:54 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id m4so11880975pls.4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:51:54 -0800 (PST)
+        Tue, 20 Dec 2022 05:52:06 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDDA186B4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:52:05 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id b13so18019928lfo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:52:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3J2t6zleCgSaKLgdwsyrOWk3vUr6ggb3hDwqkO8Hsk8=;
-        b=yhJTjcPyEVStYIqzGKgu5LXSn6WS+0vwVkXG5oR+b5ML6XrciGesuHKBApFAUcmCJu
-         txkw4JXcbHCIoLUnNMFU2YIdYzn5/KFH1sb8CCCqkUon43LmuU5k2pSPdezzgcJwlweU
-         4W6Kw1T9xr4KiyydwA0f5BpuH/neWa8SYEi+ko/Ggm5qkaJSRYcilX/d4sSFHgDw/fkx
-         wb5jwMoypxD2HdtVZQYt/2AjuOgKZ9HKoK6H2hUOcRD+kROH+DryZzmyHAGTsjTdw/0Y
-         MMxiZvZoQzyT0tTZk/S6MBKHavCvMM2AAAny+UkoJ7hxBSx6Ju/x/tS9qerbsTGm6fz3
-         NhKw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Xhjhk+r4I/urUe50CHvmJaxBj9q3ZzrLGBb8/x9cWjw=;
+        b=N7iPb/8U9sNHulv5n/T/nqtYGRGjrlGEMFOBX/D45ZP8pBDQ4bQn9gpWmqvXZ7SjyA
+         ShmX8Onj+yeLWXIMzWY/slE6G4UgoDzLe5+ETDepQe0pCWjO5t+OZ+dlXQUUPEH1B5pZ
+         lKY2Wk/RbKX1jia06jDA8UsJVXAUCPOozwk3L88tx1JGbt7dsyU4W7mawrqiiECvxWNB
+         4pFvgp9E3+W/Nv9hEcE9c740Af97tL4s2O6Rm0Lv88JbRX2S21A5jJTtgsvAC39cuBuL
+         FI4kTTD7IjvFfo8XATLf8eyKBD2sY/MKDEY2UjDalSHbh/BlEAx0L4vlRxG1RrpdweNU
+         locg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3J2t6zleCgSaKLgdwsyrOWk3vUr6ggb3hDwqkO8Hsk8=;
-        b=KXif6RuqwvumhRwy86KiN2o2IzuVznBA3bJFl/xqHiHT1LmzMsPiAP7PoPtKqsrXuo
-         DitwBMo6wimG+FS2P7eZpiQaIZtsXU95Jy0JRCzdztvZPzwjU8uJGhmDxHsogN1K4a+Y
-         FxwAJ7LvLKZ2I+JvioPAlhwnfkfHZRVX34kPYgM3pdHPIGwQseRz8RBwCVBwVzaVRovw
-         Ad7WJqAZdUcENIcpmvUKH4ACECKiOvoD4xBjEGfqzPonv9g0pri5n5WdMe+DDA3ZTF9R
-         kJFalQrZywszQIDmiuPYyd4iSqFNWCmM4bMQQMiU+OsuB24UoS8KjlWBpn6d6UousmIc
-         ys7g==
-X-Gm-Message-State: AFqh2kp+8C2WefaBB0SMesbkit4D7HSx/8EyyY1qeFQGRGLfi0cr6mHE
-        O9Cu8d2qG+o9LXiz7fyGIpIc/epCBu72+Q3j3kt19A==
-X-Google-Smtp-Source: AMrXdXsbMmZ+abZvthKeUcE6S5KJ0Nw21C9lu75JjjhYsXq0C550qP+sb4SA09XW0kDvRbpGa0qljFkuavCHYUa5urw=
-X-Received: by 2002:a17:903:25c5:b0:191:4149:2800 with SMTP id
- jc5-20020a17090325c500b0019141492800mr208plb.3.1671533514185; Tue, 20 Dec
- 2022 02:51:54 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xhjhk+r4I/urUe50CHvmJaxBj9q3ZzrLGBb8/x9cWjw=;
+        b=KJYJZ2RoPKcMZ+mE8u0+fOenHCoHnpsdJVhgB83/DJRnLlc0yJXdX7mv2VfxJrVbwT
+         LRQ86b7blu/o95hX+n3WDrNx5MGUpFFpc0hpIuReqnQ+eWN1i2qnuUiyVOUUW6DAV1Pv
+         VcMVuP06BCi7To/Qll+xGYYyxyx2ri7gZ7yyg/PuhQM23YHKsIjMja8SlSVz0eiD7vC9
+         LGB7dkKKz60AkP8gswnrBVA+VvbzRbCuCvFB3Fam3Hg/z4Et+1HD+3cmBmMlEetwgZos
+         USKACbfDAJ1wOpQsUzXSxnyyKXwzmdgOG/yfVN7t4rdK3Q2BoS64x7tkKT/9yagaGs3K
+         RdfQ==
+X-Gm-Message-State: ANoB5pkIADLJ6H0mWFZ2cGI7Lzk+/F5Wse60OSkBqq7+/QWvQE2I0uLF
+        HfBvA41usKraoj4EayM836Iy3A==
+X-Google-Smtp-Source: AA0mqf57xGpbOxVQYqGlY6dApDnrR3iSOA73z3w87Bf1ofEDLxMNEwYRikJWL2oK3oz6tOWmIy39Sg==
+X-Received: by 2002:a19:6a0f:0:b0:4b5:6db0:d598 with SMTP id u15-20020a196a0f000000b004b56db0d598mr12785985lfu.20.1671533523447;
+        Tue, 20 Dec 2022 02:52:03 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c5-20020a056512074500b004994117b0fdsm1398758lfs.281.2022.12.20.02.52.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 02:52:03 -0800 (PST)
+Message-ID: <a3414477-eb9b-83ee-ab11-b2b629b6d23b@linaro.org>
+Date:   Tue, 20 Dec 2022 11:52:02 +0100
 MIME-Version: 1.0
-References: <20221024094853.2877441-1-yulei.sh@bytedance.com>
- <HK0PR06MB32022348EA65805C7109B7D080329@HK0PR06MB3202.apcprd06.prod.outlook.com>
- <CAGm54UExHOBw61DJNqxvW67OSr60fQ+Q247t63RzymiMOmHmFg@mail.gmail.com>
- <HK0PR06MB320203EF8E3AD14C34359B0580329@HK0PR06MB3202.apcprd06.prod.outlook.com>
- <Y1ueEYJk2epT/g4J@kroah.com> <HK0PR06MB32024F58191E17DC5ABC99F380329@HK0PR06MB3202.apcprd06.prod.outlook.com>
- <Y1uyssu84kl1INSR@kroah.com>
-In-Reply-To: <Y1uyssu84kl1INSR@kroah.com>
-From:   Lei Yu <yulei.sh@bytedance.com>
-Date:   Tue, 20 Dec 2022 18:51:42 +0800
-Message-ID: <CAGm54UGmp=kTKGLhEfENF4SqkvRt_GcpuGH_g5PjtQiBkwtOsA@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: aspeed: fix buffer overflow
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Henry Tian <tianxiaofeng@bytedance.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/3] dt-bindings: m41t80: add xtal load capacitance
+Content-Language: en-US
+To:     Dennis Lambe Jr <dennis@sparkcharge.io>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, Alexander Bigga <ab@mycable.de>
+References: <20221219190915.3912384-1-dennis@sparkcharge.io>
+ <20221219190915.3912384-3-dennis@sparkcharge.io>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221219190915.3912384-3-dennis@sparkcharge.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 6:45 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Oct 28, 2022 at 09:55:57AM +0000, Neal Liu wrote:
-> > > > > > Thanks for your feedback.
-> > > > > > I tried to reproduce it on my side, and it cannot be reproduce it.
-> > > > > > Here are my test sequences:
-> > > > > > 1. emulate one of the vhub port to usb ethernet through Linux
-> > > > > > gadget
-> > > > > > (ncm)
-> > > > >
-> > > > > We are using rndis instead of ncm.
-> > > > >
-> > > > > > 2. connect BMC vhub to Host
-> > > > > > 3. BMC & Host can ping each other (both usb eth dev default mtu is
-> > > > > > 1500) 4. Set BMC mtu to 1000 (Host OS cannot set usb eth dev mtu
-> > > > > > to 2000, it's maxmtu is 1500)
-> > > > >
-> > > > > Not sure if it's related, but in my case (USB rndis, Debian 10 OS)
-> > > > > it should be able to set MTU to 2000.
-> > > >
-> > > > Using rndis is able to set MTU to 2000, and the issue can be reproduced.
+On 19/12/2022 20:09, Dennis Lambe Jr wrote:
+> The ST m41t82 and m41t83 support programmable load capacitance from 3.5
+> pF to 17.4 pF. The hardware defaults to 12.5 pF.
+> 
+> The accuracy of the xtal can be calibrated precisely by adjusting the
+> load capacicance.
+> 
+> Add default, minimum, and maximum for the standard rtc property
+> quartz-load-femtofarads on compatible devices.
+> 
+> Signed-off-by: Dennis Lambe Jr <dennis@sparkcharge.io>
+> ---
+>  .../devicetree/bindings/rtc/st,m41t80.yaml     | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/st,m41t80.yaml b/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
+> index fc9c6da6483f..6b72580dc031 100644
+> --- a/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
+> @@ -33,6 +33,11 @@ properties:
+>    "#clock-cells":
+>      const: 1
+>  
+> +  quartz-load-femtofarads:
+> +    default: 12500
+> +    minimum: 3500
+> +    maximum: 17375
+> +
+>    clock-output-names:
+>      maxItems: 1
+>      description: From common clock binding to override the default output clock name.
+> @@ -44,8 +49,21 @@ properties:
+>        clock-frequency:
+>          const: 32768
+>  
+> +  wakeup-source: true
 
-USB ecm is also tested and it is possible to set MTU to 2000, and
-could reproduce the issue.
-So I think this patch is needed anyway.
+Why do you need it here? It's already accepted in rtc.yaml. Adding it is
+not explained in commit msg.
 
-@Neal Liu Could you kindly help to verify the USB ECM case?
+> +
+>  allOf:
 
-> > >
-> > > Please NEVER use rndis anymore.  I need to go just delete that driver from
-> > > the tree.
-> > >
-> > > It is insecure-by-design and will cause any system that runs it to be instantly
-> > > compromised and it can not be fixed.  Never trust it.
-> > >
-> > > Even for data throughput tests, I wouldn't trust it as it does odd things with
-> > > packet sizes as you show here.
-> >
-> > Thanks for the info, Greg.
-> > If rndis will no longer be supported, how to use usb-ethernet on Windows OS?
-> > For my understanding, ncm/ecm cannot work on Windows OS.
->
-> rndis should ONLY be there for Windows XP, which is long out-of-support.
-> Newer versions of windows have more sane usb protocols built into it and
-> this driver is not needed.
->
-> As proof of this, Android devices removed this from their kernel
-> configuration a few years ago and no one has complained :)
->
-> thanks,
->
-> greg k-h
+
+Best regards,
+Krzysztof
+
