@@ -2,73 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45DDD651F39
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E222651F3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbiLTKuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:50:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
+        id S233416AbiLTKv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:51:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiLTKuK (ORCPT
+        with ESMTP id S230132AbiLTKvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:50:10 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D622612
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:50:09 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id 1so18000061lfz.4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:50:08 -0800 (PST)
+        Tue, 20 Dec 2022 05:51:22 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469C4186B2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:51:21 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id k11so11406735vsr.4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:51:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9gfcuA14rqPUTUjjsVp9VcIwRZasaVKQdRygjZ2irTU=;
-        b=anpeRiNM7FlnxT5gtmKwEo9mEc9aOuR5M4DaPXbt9wiIelhZdcKyYLsH612lT0gdbn
-         k4QJetrOLBEGyAF5BB/xzz09GIr8IYoOPuni7OuY50H3Je9KBocnD21s1cDJLacRSOCt
-         HxEoPB81hUQCY/IhV7rb28/FHCgqP+9h7g/RY8Zb2N0fXTc8w+Dk6Oiro79nAhSNsI2R
-         5vQPplpMQBhj2Run4kIKddQzon2gMb8F20JP4rR3ynDsUph9i5Gkx5DrGM9bR658Flqu
-         2oOVfMSYawPY18055kSFOQ//Q6uFcPFnScZlUFTeHHAKEPW6nNpR3GzDUMIRWWa5MAjU
-         JWXw==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RJ6o5IfEsp0BRG4ODzXEEbhMqj09Ho4N8ZgzbSCiNbQ=;
+        b=wuFdu1lNeZnmuY+TQyGTF90b7b7Yr93aYUkTKYZa+q6l2lCRUzWT/V9214ACcP7y1A
+         pYcQnf79+txo7ZqMDJTAgDqJayBqnhf5Cu0Rj5kSFVlA7mX1+InE7E81x4yw/T3S2ZUh
+         j923E1jSxI8j94WpiaOwiWJS68ToxMI0Y663nBiw+pUTSLIM/XEL3wyOvwjuZ4oFhf8/
+         ld2yE9nokjhd7vrODE6iAhQqFHoT6alEMD52MHlHXEgyF+WpM04W7gtuROYETmfONgMS
+         acIRbilGilfctkj1xsavIgF/sfXEYB9n/AboHW+1Ik7Xs+qsGdGkDv0v8Tx7w/7kn+Zr
+         LiAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9gfcuA14rqPUTUjjsVp9VcIwRZasaVKQdRygjZ2irTU=;
-        b=3EZ8SK6T0yNh6nvJwDh5nv1uiKplr5WplHEmishgU+nrrNzNpwP3F6XTtoNg1I4l4w
-         OEZSWlGQMA8At490KlfU6NeHjt6fZ1TjGZ0qgXQr7ir+6CrNPdZG2uqyAfLk60nNDFvl
-         /bcEpEi+oqumxXaPe5n0PSJH/sF4NzVQyMrZo8KzaCbx8F5L7/BKcT0cmHGLMDHXhS6a
-         fF4GXaVzGXoybKnBqWSAXv2GN/m6NvFb0fqW9pTM0c3FQOam0DL/UqL/78ZNE5j6LfP7
-         ZDTm/cThZcqPl9KQguDeUH+KQhonzk/5GNzPQ+4QjVG8QlWTimMTvwtiqm+clmFYsu4H
-         WdrQ==
-X-Gm-Message-State: AFqh2kpYqiMi953kc/36BIKjxXUevmFKgAZziCQrUo8Ye53Y5DnS0Y74
-        gCTbjCnh3pPhgRfDbuFbiAp07g==
-X-Google-Smtp-Source: AMrXdXuW0FVi+JBWXdCwrMCPwlIJkB9K57igjb8vvaYBBu5oPOgHP59tcGGEBi0Ow1zr3U4zP9sWhQ==
-X-Received: by 2002:a05:6512:308a:b0:4c0:91d0:e7bc with SMTP id z10-20020a056512308a00b004c091d0e7bcmr5642377lfd.26.1671533407452;
-        Tue, 20 Dec 2022 02:50:07 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id m8-20020a056512358800b004b5284a92f9sm1404763lfr.208.2022.12.20.02.50.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 02:50:06 -0800 (PST)
-Message-ID: <ff5b09db-4900-0b5b-e821-fa05b8d907a4@linaro.org>
-Date:   Tue, 20 Dec 2022 11:50:05 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RJ6o5IfEsp0BRG4ODzXEEbhMqj09Ho4N8ZgzbSCiNbQ=;
+        b=YO+koW6nHMLDTqWqQOOFkaui48pJtNxGFu7O6W1NTvraJHj4WQw6hFXckWvY9gN5+M
+         9zeM1f5U0oxACk9DbTkFSEfdUsIAshPs20NwWjvYqnrYHlmLpR6NY7ASLGva6arf48Xs
+         X2CC67Huonc6Q/afpHfaDTBq5NGx0/nLAIoRTkEXYpSZGha2z8YIRup/49RdBFAjm0f4
+         PowDoG/XVMrZhLORCdX8KsczeI0VVRjYsCTvw9OLhcdGSTVVYpGxFP8QYVq2Hh5dC5WP
+         WPTAFvIxY1KTj09MwkegQzJ1UnDvCcMkmkSmMVRLy3YEW6pTb9TaGuKU2mS6HTG52ync
+         Xa0w==
+X-Gm-Message-State: ANoB5pkMztNcxP8+qOZAob3gIvgxMn/MS4s+fLstqZ35vSEXdPxMFiHP
+        wmqroRrLpwFgIKFTo66DWfhBQXnv/HibqiG5KIPY1mlzPyTPrXba
+X-Google-Smtp-Source: AA0mqf7htH1ST4A0I16Ps1jABr9Nv4RhZ4YwRf4zg3dkfPJUvWzJ6AvII66m3g5kNuVUfYK4+FNIbPV+a8xJ8NyuswQ=
+X-Received: by 2002:a05:6102:3ca1:b0:3b5:d38:9d4 with SMTP id
+ c33-20020a0561023ca100b003b50d3809d4mr3972802vsv.9.1671533480206; Tue, 20 Dec
+ 2022 02:51:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] arm64: dts: ti: k3-j721s2: Add support for ADC nodes
-Content-Language: en-US
-To:     Bhavya Kapoor <b-kapoor@ti.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        kristo@kernel.org, nm@ti.com
-References: <20221220101249.46450-1-b-kapoor@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221220101249.46450-1-b-kapoor@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20221219182943.395169070@linuxfoundation.org>
+In-Reply-To: <20221219182943.395169070@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 20 Dec 2022 16:21:09 +0530
+Message-ID: <CA+G9fYtDkQr74iFPJN91zYuL48sW1G0FmCZkvZk1cKF4==Ua5Q@mail.gmail.com>
+Subject: Re: [PATCH 6.1 00/25] 6.1.1-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,49 +72,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/12/2022 11:12, Bhavya Kapoor wrote:
-> J721s2 has two instances of 8 channel ADCs in MCU domain. Add DT nodes
-> for 8 channel ADCs for J721s2 SoC.
-> 
-> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
-> ---
->  .../dts/ti/k3-j721s2-common-proc-board.dts    | 14 +++++++
->  .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 42 ++++++++++++++++++-
->  2 files changed, 55 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-> index a7aa6cf08acd..67593aa69327 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-> @@ -309,3 +309,17 @@ &mcu_mcan1 {
->  	pinctrl-0 = <&mcu_mcan1_pins_default>;
->  	phys = <&transceiver2>;
->  };
-> +
-> +&tscadc0 {
-> +	status = "okay";
-> +	adc {
-> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
-> +	};
-> +};
-> +
-> +&tscadc1 {
-> +	status = "okay";
-> +	adc {
-> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
-> +	};
-> +};
-> \ No newline at end of file
+On Tue, 20 Dec 2022 at 00:53, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.1 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.1-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-This is a friendly reminder during the review process.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Thank you.
+## Build
+* kernel: 6.1.1-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.1.y
+* git commit: 4478ff938eb5814bd2ae93b7e2d68c4fe54e9380
+* git describe: v6.1-26-g4478ff938eb5
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1-2=
+6-g4478ff938eb5/
 
-Best regards,
-Krzysztof
+## Test Regressions (compared to v6.1)
 
+## Metric Regressions (compared to v6.1)
+
+## Test Fixes (compared to v6.1)
+
+## Metric Fixes (compared to v6.1)
+
+## Test result summary
+total: 173959, pass: 152611, fail: 5743, skip: 15605, xfail: 0
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 146 passed, 5 failed
+* arm64: 49 total, 48 passed, 1 failed
+* i386: 39 total, 36 passed, 3 failed
+* mips: 30 total, 28 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 38 total, 32 passed, 6 failed
+* riscv: 16 total, 16 passed, 0 failed
+* s390: 16 total, 16 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 41 passed, 1 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
