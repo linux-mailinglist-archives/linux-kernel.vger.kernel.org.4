@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0384C651BE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF1C651BE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbiLTHpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 02:45:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
+        id S233595AbiLTHp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 02:45:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiLTHpT (ORCPT
+        with ESMTP id S233713AbiLTHpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 02:45:19 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9915B15FE5;
-        Mon, 19 Dec 2022 23:45:18 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BK7OcwP027435;
-        Tue, 20 Dec 2022 07:44:55 GMT
+        Tue, 20 Dec 2022 02:45:14 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3FF17058;
+        Mon, 19 Dec 2022 23:45:13 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BK5nVjf002722;
+        Tue, 20 Dec 2022 07:45:00 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=4avUJ6eT6timfJ1oT1Ic5+SQBnl6DCVHXqurbLuTIjU=;
- b=hsBwRnTsXWBnYJ8PhupghNAKV8jhpicXz76gaRxWBpTG0eV7bZIB8oPmdjOztX9b7CTV
- YV8Y4ztYxhRtuGbY02E10gnLAdb/u7NOCsqcpCwMFMdf0eHoTbG5VsvcEuYXYacfoZjK
- P95rRKIb2SOmzymQwLCfjygAGpnRliiZcO7usEaue3GOBtj/vAQjjXopneq7pLQpPH3D
- dU4qMyenWcPrVvAN0CGYiEFN3hk3XGDJ5BzP7QJDqTFxViMjLNdeKYDRr/VlKaLsZjcn
- lC9jM9Z/tMarjPIOoqb0RowQbZlx6SQViMgkTuoWE3fISsNmFg4/73MD5JFAHfWpTH/3 jQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mk8mn01qh-1
+ bh=q1T6+ZT4WDRSBPsnLGaxnzS8ZQZfGMgIsBVr0Y6i4VQ=;
+ b=jHLWArf+8R0JW1izpWUOQwpmpRn6INH5qMTmpiRYAPc7dy2RouRcskmDazXaYAm7HowC
+ 346IQMUMdRfDcGEi5jjdyYJtPIsUCT7UhZSgNlDp0QCWgP7vaOnBHCI8wa+lm4Swacpq
+ d37KaDls6kAW6Y090JLBKMMHGGgQvajh/Hnbf8fdUIF9bItSySs8lOP6tLopxBVZh1pw
+ uFRbHP7/Ed/1wbBXAQrZQob7lhA1c661tQT915zSofMXyDtgLiKbNX4ZxZE3qRNiaruS
+ PekeTwdSgPU0Nem5R0SykJVADUfMjAFhBDBpzeNjKdsT0sgoHKmg2B2sxXQaHjOIelqb Kw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mk195gu6c-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Dec 2022 07:44:55 +0000
+        Tue, 20 Dec 2022 07:45:00 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BK7isDE031043
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BK7ixvx018073
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Dec 2022 07:44:54 GMT
+        Tue, 20 Dec 2022 07:44:59 GMT
 Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 19 Dec 2022 23:44:48 -0800
+ 15.2.986.36; Mon, 19 Dec 2022 23:44:54 -0800
 From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
 To:     freedreno <freedreno@lists.freedesktop.org>,
         <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
@@ -49,17 +49,15 @@ To:     freedreno <freedreno@lists.freedesktop.org>,
         Philipp Zabel <p.zabel@pengutronix.de>
 CC:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@gmail.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Douglas Anderson" <dianders@chromium.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Douglas Anderson <dianders@chromium.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Sean Paul <sean@poorly.run>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 3/5] drm/msm/a6xx: Vote for cx gdsc from gpu driver
-Date:   Tue, 20 Dec 2022 13:14:15 +0530
-Message-ID: <20221220131255.v3.3.I7f545d8494dcdbe6e96a15fbe8aaf5bb0c003d50@changeid>
+Subject: [PATCH v3 4/5] drm/msm/a6xx: Remove cx gdsc polling using 'reset'
+Date:   Tue, 20 Dec 2022 13:14:16 +0530
+Message-ID: <20221220131255.v3.4.I96e0bf9eaf96dd866111c1eec8a4c9b70fd7cbcb@changeid>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1671522257-38778-1-git-send-email-quic_akhilpo@quicinc.com>
 References: <1671522257-38778-1-git-send-email-quic_akhilpo@quicinc.com>
@@ -70,139 +68,110 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: cIT-jEoU0Q8aPnN8N5-yELuTFANiwD8k
-X-Proofpoint-GUID: cIT-jEoU0Q8aPnN8N5-yELuTFANiwD8k
+X-Proofpoint-GUID: YnYS5AWrjD_QgnvuTwYKcX3sqrPN9cCh
+X-Proofpoint-ORIG-GUID: YnYS5AWrjD_QgnvuTwYKcX3sqrPN9cCh
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-20_01,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 adultscore=0 lowpriorityscore=0 phishscore=0 clxscore=1015
- bulkscore=0 mlxscore=0 mlxlogscore=999 spamscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212200063
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ priorityscore=1501 mlxlogscore=999 mlxscore=0 impostorscore=0
+ lowpriorityscore=0 adultscore=0 bulkscore=0 malwarescore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212200064
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a device has multiple power domains, dev->power_domain is left
-empty during probe. That didn't cause any issue so far because we are
-freeloading on smmu driver's vote on cx gdsc. Instead of that, create
-a device_link between cx genpd device and gmu device to keep a vote from
-gpu driver.
+Remove the unused 'reset' interface which was supposed to help to ensure
+that cx gdsc has collapsed during gpu recovery. This is was not enabled
+so far due to missing gpucc driver support. Similar functionality using
+genpd framework will be implemented in the upcoming patch.
 
-Before this patch:
-localhost ~ # cat /sys/kernel/debug/pm_genpd/pm_genpd_summary
-gx_gdsc		on		0
-    /devices/genpd:1:3d6a000.gmu		active		0
-cx_gdsc		on		0
-    /devices/platform/soc@0/3da0000.iommu	active		0
-
-After this patch:
-localhost ~ # cat /sys/kernel/debug/pm_genpd/pm_genpd_summary
-gx_gdsc		on		0
-    /devices/genpd:1:3d6a000.gmu		active		0
-cx_gdsc		on		0
-    /devices/platform/soc@0/3da0000.iommu	active		0
-    /devices/genpd:0:3d6a000.gmu		active		0
+This effectively reverts commit 1f6cca404918
+("drm/msm/a6xx: Ensure CX collapse during gpu recovery").
 
 Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
 ---
 
-(no changes since v1)
+Changes in v3:
+- Updated commit msg (Philipp)
 
- drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 31 +++++++++++++++++++++++++++----
- drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  1 +
- 2 files changed, 28 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 4 ----
+ drivers/gpu/drm/msm/msm_gpu.c         | 4 ----
+ drivers/gpu/drm/msm/msm_gpu.h         | 4 ----
+ 3 files changed, 12 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-index 6484b97c5344..1580d0090f35 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-@@ -1479,6 +1479,12 @@ void a6xx_gmu_remove(struct a6xx_gpu *a6xx_gpu)
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+index 36c8fb699b56..4b16e75dfa50 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+@@ -10,7 +10,6 @@
  
- 	pm_runtime_force_suspend(gmu->dev);
+ #include <linux/bitfield.h>
+ #include <linux/devfreq.h>
+-#include <linux/reset.h>
+ #include <linux/soc/qcom/llcc-qcom.h>
  
-+	/*
-+	 * Since cxpd is a virt device, the devlink with gmu-dev will be removed
-+	 * automatically when we do detach
-+	 */
-+	dev_pm_domain_detach(gmu->cxpd, false);
-+
- 	if (!IS_ERR_OR_NULL(gmu->gxpd)) {
- 		pm_runtime_disable(gmu->gxpd);
- 		dev_pm_domain_detach(gmu->gxpd, false);
-@@ -1605,8 +1611,10 @@ int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
+ #define GPU_PAS_ID 13
+@@ -1298,9 +1297,6 @@ static void a6xx_recover(struct msm_gpu *gpu)
+ 	/* And the final one from recover worker */
+ 	pm_runtime_put_sync(&gpu->pdev->dev);
  
- 	if (adreno_is_a650_family(adreno_gpu)) {
- 		gmu->rscc = a6xx_gmu_get_mmio(pdev, "rscc");
--		if (IS_ERR(gmu->rscc))
-+		if (IS_ERR(gmu->rscc)) {
-+			ret = -ENODEV;
- 			goto err_mmio;
-+		}
- 	} else {
- 		gmu->rscc = gmu->mmio + 0x23000;
- 	}
-@@ -1615,8 +1623,22 @@ int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
- 	gmu->hfi_irq = a6xx_gmu_get_irq(gmu, pdev, "hfi", a6xx_hfi_irq);
- 	gmu->gmu_irq = a6xx_gmu_get_irq(gmu, pdev, "gmu", a6xx_gmu_irq);
- 
--	if (gmu->hfi_irq < 0 || gmu->gmu_irq < 0)
-+	if (gmu->hfi_irq < 0 || gmu->gmu_irq < 0) {
-+		ret = -ENODEV;
-+		goto err_mmio;
-+	}
-+
-+	gmu->cxpd = dev_pm_domain_attach_by_name(gmu->dev, "cx");
-+	if (IS_ERR(gmu->cxpd)) {
-+		ret = PTR_ERR(gmu->cxpd);
- 		goto err_mmio;
-+	}
-+
-+	if (!device_link_add(gmu->dev, gmu->cxpd,
-+					DL_FLAG_PM_RUNTIME)) {
-+		ret = -ENODEV;
-+		goto detach_cxpd;
-+	}
- 
- 	/*
- 	 * Get a link to the GX power domain to reset the GPU in case of GMU
-@@ -1634,6 +1656,9 @@ int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
- 
- 	return 0;
- 
-+detach_cxpd:
-+	dev_pm_domain_detach(gmu->cxpd, false);
-+
- err_mmio:
- 	iounmap(gmu->mmio);
- 	if (platform_get_resource_byname(pdev, IORESOURCE_MEM, "rscc"))
-@@ -1641,8 +1666,6 @@ int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
- 	free_irq(gmu->gmu_irq, gmu);
- 	free_irq(gmu->hfi_irq, gmu);
- 
--	ret = -ENODEV;
+-	/* Call into gpucc driver to poll for cx gdsc collapse */
+-	reset_control_reset(gpu->cx_collapse);
 -
- err_memory:
- 	a6xx_gmu_memory_free(gmu);
- err_put_device:
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
-index e034935b3986..5a42dd4dd31f 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
-@@ -56,6 +56,7 @@ struct a6xx_gmu {
- 	int gmu_irq;
+ 	pm_runtime_use_autosuspend(&gpu->pdev->dev);
  
- 	struct device *gxpd;
-+	struct device *cxpd;
+ 	if (active_submits)
+diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
+index 30ed45af76ad..97e1319d4577 100644
+--- a/drivers/gpu/drm/msm/msm_gpu.c
++++ b/drivers/gpu/drm/msm/msm_gpu.c
+@@ -16,7 +16,6 @@
+ #include <generated/utsrelease.h>
+ #include <linux/string_helpers.h>
+ #include <linux/devcoredump.h>
+-#include <linux/reset.h>
+ #include <linux/sched/task.h>
  
- 	int idle_level;
+ /*
+@@ -933,9 +932,6 @@ int msm_gpu_init(struct drm_device *drm, struct platform_device *pdev,
+ 	if (IS_ERR(gpu->gpu_cx))
+ 		gpu->gpu_cx = NULL;
  
+-	gpu->cx_collapse = devm_reset_control_get_optional_exclusive(&pdev->dev,
+-			"cx_collapse");
+-
+ 	gpu->pdev = pdev;
+ 	platform_set_drvdata(pdev, &gpu->adreno_smmu);
+ 
+diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
+index 651786bc55e5..fa9e34d02c91 100644
+--- a/drivers/gpu/drm/msm/msm_gpu.h
++++ b/drivers/gpu/drm/msm/msm_gpu.h
+@@ -13,7 +13,6 @@
+ #include <linux/interconnect.h>
+ #include <linux/pm_opp.h>
+ #include <linux/regulator/consumer.h>
+-#include <linux/reset.h>
+ 
+ #include "msm_drv.h"
+ #include "msm_fence.h"
+@@ -282,9 +281,6 @@ struct msm_gpu {
+ 	bool hw_apriv;
+ 
+ 	struct thermal_cooling_device *cooling;
+-
+-	/* To poll for cx gdsc collapse during gpu recovery */
+-	struct reset_control *cx_collapse;
+ };
+ 
+ static inline struct msm_gpu *dev_to_gpu(struct device *dev)
 -- 
 2.7.4
 
