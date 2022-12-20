@@ -2,113 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6D26522A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 092C26522A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234009AbiLTOcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 09:32:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
+        id S233872AbiLTOci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 09:32:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234076AbiLTOcC (ORCPT
+        with ESMTP id S234046AbiLTObY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:32:02 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D302A1903F;
-        Tue, 20 Dec 2022 06:31:57 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id bj12so29531502ejb.13;
-        Tue, 20 Dec 2022 06:31:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kKA2m1GpNhmHLnfnQbZcy+sQ/FmMKp62G6SqfzzaR/M=;
-        b=GDczp8FDlsiECF3tY8paH+ODlk3YQmcQFUEjE/Oa2vdD3wnxeYKa9SJqSCLsn+kB+K
-         Tk3MEwBVsD5awvi2o5OLix9zX7WpBiC428wLOjBDVzB/gkY8mbD5GuzMWelCVN6EAWVu
-         hezcxEreawPnKBIm4oUTx07+MJ6ku5nnwX61E9kHg/1O7TkLnXdFlYqOy6XKau+TFp6/
-         9vFym2pLNuT3dRTXHZHlJ0KHABWb8/FXdXdFRZe55XI1PTqabwb31Xt9/Q+KEYjb+NO8
-         9VgBPf4JscWb3Qu0gKJUbklaFUvRpgAfc/DH5eq3j1yNizPOQMfy9krmfkiTIVBuaoTh
-         7yEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kKA2m1GpNhmHLnfnQbZcy+sQ/FmMKp62G6SqfzzaR/M=;
-        b=Dd+EkwRQ4R2e3jlNZ7HjT6kcvCrnFb2rjV1PUhDCPqo6dkDJirMXW3NvQX0ERONlkf
-         eshSCPGwYb3o9Hsgxc77RC4+vCwE0m4pJI7JSS3HnlvDlVpLqdq1zxzscpplYiOB4JVM
-         fVjlKwoD01qA6GXikvtArXc09IHKzFJJHtOZPu60daG8HEDcFNtTmGeaGgNo7zb1D+rP
-         PDAQZSRy5IHgvAY0SnIo5cwv4KNJ3davAZGyUcJfDHG8lv5A5JPMmrX3nWmn4ZNEU5dy
-         BkyzUVbr2TFJwIpo2TD0bx71vUDL29Q7fQgf5P/9IS8kEKCecj9RXHwvlTXe4rC5sBKL
-         MivA==
-X-Gm-Message-State: ANoB5pnlUg27msjhTqbVtdjCoFluwV1y2tpwnJoio/MKdahYVXDYaZnT
-        VGJRE2XvZ/cJJ7EjvMWLups7hlB9ySEXWH2oFSI=
-X-Google-Smtp-Source: AA0mqf4Df+9Kirvr72XWWNGdIIHj0am8gCWMVFtNo1gKBiqkjG+h4fG/V2e23bwp/xaEEI/U1+5KQF9JWa50d/cJwm4=
-X-Received: by 2002:a17:906:6d03:b0:78d:9d0b:a9f6 with SMTP id
- m3-20020a1709066d0300b0078d9d0ba9f6mr38397050ejr.661.1671546716154; Tue, 20
- Dec 2022 06:31:56 -0800 (PST)
+        Tue, 20 Dec 2022 09:31:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF06F1B782;
+        Tue, 20 Dec 2022 06:31:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 569E6B815CF;
+        Tue, 20 Dec 2022 14:31:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB19FC433D2;
+        Tue, 20 Dec 2022 14:31:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671546680;
+        bh=oix6jCKBIRd4Jchx3qGUz2mMR6jkFXMwNkKxKvweSs8=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=Fg8XoC6CLThJ3btHF1n1G5bB8DueBBrq7hyOcf4oAYFL4YoLjfI6DHZjaHWE2bfU6
+         bQBasAOd3/8K3jIGVazW9jAe5qn9uwbk329gHOhxI6p/67cO/Yk1RtwLXL4feV4oBX
+         F5VdyX+tVmxm77pBszpuZ6acwFVe6S/Qy0RERtDOLvLrT7eXMHBVPyAO9n3swU28AY
+         DqFiVV2uMR+NM2MYCeFVLYlXqJ/EtlUSIM9RUc/jlw4wCgI+YMsPiWk5ineb7fSI6r
+         WVRmjMteia5Tp/X38BrWneqrEBXzpOv+GIPMt4IBkYZ3hridsR5qJbtAARvaZILn1B
+         TxIQlTT5pI6ow==
+Date:   Tue, 20 Dec 2022 15:31:20 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     =?ISO-8859-15?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+cc:     benjamin.tissoires@redhat.com, rydberg@bitmath.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND 0/1] HID: input: map battery system charging
+In-Reply-To: <20221124175937.7631-1-jose.exposito89@gmail.com>
+Message-ID: <nycvar.YFH.7.76.2212201530500.9000@cbobk.fhfr.pm>
+References: <20221124175937.7631-1-jose.exposito89@gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-References: <20221219182943.395169070@linuxfoundation.org> <Y6Gp25YJ/m+DcgWH@debian>
-In-Reply-To: <Y6Gp25YJ/m+DcgWH@debian>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Tue, 20 Dec 2022 14:31:20 +0000
-Message-ID: <CADVatmM9_d6gOo7VTM1ybVgNDM_w2+NdKM3DC67L9KjeWL7Ltg@mail.gmail.com>
-Subject: Re: [PATCH 6.1 00/25] 6.1.1-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Thu, 24 Nov 2022, José Expósito wrote:
 
-On Tue, 20 Dec 2022 at 12:26, Sudip Mukherjee (Codethink)
-<sudipm.mukherjee@gmail.com> wrote:
->
-> Hi Greg,
->
-> On Mon, Dec 19, 2022 at 08:22:39PM +0100, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 6.1.1 release.
-> > There are 25 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
-> > Anything received after that time might be too late.
->
+> Hi everyone,
+> 
+> This patch adds support for reporting battery status (charging/discharging)
+> for devices with a charging usage in their HID descriptor:
+> 
+> 	0x05, 0x85,         /*      Usage Page (Battery System),    */
+> 	0x09, 0x44,         /*      Usage Page (Charging),          */
+> 
+> I tested it on Apple hardware (mouse, trackpad and keyboard) as well as
+> on UCLogic tablets with battery [1].
+> 
+> On other hardware (HID_DC_BATTERYSTRENGTH or digitizers with battery)
+> discharging should be reported for backwards compatibility.
+> I did my best to keep the old behaviour by adding KUnit tests; However,
+> I don't own any of those devices, so I'd appreciate any help testing
+> the patch from someone with the actual hardware.
 
-<snip>
+I have applied this to hid.git#for-6.3/hid-core so that we get early 
+testing coverage in linux-next as soon as 6.2-rc1 is out.
 
->
-> Boot test:
-> x86_64: Booted on my test laptop. No regression.
-> x86_64: Booted on qemu. No regression. [1]
-> arm64: Booted on rpi4b (4GB model). No regression. [2]
-> mips: Booted on ci20 board. Regression.
->
-> Note:
-> networking.service is failing on mips ci20 boards. Issue seen on v6.1 also.
-> Will report upstream after bisecting.
-
-This has already been fixed in mainline by:
-ca637c0ece14 ("MIPS: DTS: CI20: fix reset line polarity of the
-ethernet controller")
-
-I have tested 6.1.1-rc1 with the above commit cherry-picked and it has
-fixed the issue.
-
+Thanks,
 
 -- 
-Regards
-Sudip
+Jiri Kosina
+SUSE Labs
+
