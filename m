@@ -2,99 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B036D6526E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 20:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05FD06526EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 20:28:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234040AbiLTT1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 14:27:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
+        id S234005AbiLTT20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 14:28:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiLTT1L (ORCPT
+        with ESMTP id S229724AbiLTT2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 14:27:11 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C121E15A12;
-        Tue, 20 Dec 2022 11:27:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671564430; x=1703100430;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JKi7Gbk8QaG/Kih0RcBWajsCoTFOfbRBkS4nokxwglo=;
-  b=FiM5Q6mEnvFgXc1oVGo91q4SCN+FQQO1XHDFBYy7U2ukRChYxMQQd0pY
-   npFm8QAQBfxwBcZU5KqPI6FaEjfAUKKxYteJYrF/DROC+EC5lO+K+/LBN
-   NpLBvw1dSD2RGE7N0aMG6sNmsTCH6HMJ+yaHFBVrUZCuEFztTt4bIJ8fh
-   LeNeVjdzPpEb8B9Nfmqmr6+EkZVp21BU/4eDQ4nBmjHmlEy7CrZAlGkoA
-   ZKuNzHRtQ4eJACHyKaHllCLCL/6Jo183HSwnwtM8bFXkFsvfCMa1alY/B
-   mzczSgWCp3ypr1wYOXd3JDFUb+4T81gZ6/yiRp6vbhWNeE12sOzd1VYDw
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="381924653"
-X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
-   d="scan'208";a="381924653"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 11:27:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="825387496"
-X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
-   d="scan'208";a="825387496"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 20 Dec 2022 11:27:04 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p7iGU-00D9UL-0K;
-        Tue, 20 Dec 2022 21:27:02 +0200
-Date:   Tue, 20 Dec 2022 21:27:01 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Hawa, Hanna" <hhhawa@amazon.com>
-Cc:     wsa@kernel.org, jarkko.nikula@linux.intel.com,
-        mika.westerberg@linux.intel.com, jsd@semihalf.com,
-        linus.walleij@linaro.org, ben-linux@fluff.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dwmw@amazon.co.uk, benh@amazon.com, ronenk@amazon.com,
-        talel@amazon.com, jonnyc@amazon.com, hanochu@amazon.com,
-        farbere@amazon.com, itamark@amazon.com,
-        Lareine Khawaly <lareine@amazon.com>
-Subject: Re: [PATCH v4 1/1] i2c: designware: use casting of u64 in clock
- multiplication to avoid overflow
-Message-ID: <Y6IMhZsbOk/J9xZB@smile.fi.intel.com>
-References: <20221220164806.77576-1-hhhawa@amazon.com>
- <Y6Hs1xwB45K3Ufb8@smile.fi.intel.com>
- <cc16a489-f711-0c54-8576-ef7974b3cb79@amazon.com>
- <Y6ILydYEWzJdzwBJ@smile.fi.intel.com>
+        Tue, 20 Dec 2022 14:28:24 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6072115A12
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 11:28:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=cjwugnyOcfkc5U5fWcTHxiaxFg7f7rBtDIM03J92Ct0=; b=SnBtcTV75E1lEfSyHuKfTiMV5H
+        dMwnXrYDrExtJHABsJMQgpNI2DqpYMI2olV+z/urHHiT3C1ZtDTjema5OKq06/N2qkYkJLeGLXm5g
+        l/sXtbaeIeXm/nkVlgAvu5iKq1Ezgz2HN6J7/KVvMIxvdoKVAoNQvTUhHDArZlKD+TWir5KTQmXZt
+        lv6BvBQmi0J1H8eVp405HYKR1f+Nz4V8AIa93X0BnmS574dZAfJi0Utos3uUnHohfmQWwIdbwQa5H
+        VRl4zrt8JzJmyCGTWn5XSMppc2YXzL2G0YBy7AdGCsLA+/NiNo0K/NgvNAS9Z6gseI/xYA0jGHyGw
+        t+3dXwgw==;
+Received: from [177.34.169.227] (helo=[192.168.0.8])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1p7iHI-007609-Ub; Tue, 20 Dec 2022 20:27:53 +0100
+Message-ID: <9c9d97a9-7543-06ed-f50b-f48b1c3a9def@igalia.com>
+Date:   Tue, 20 Dec 2022 16:27:43 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6ILydYEWzJdzwBJ@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] drm/tests: reduce drm_mm_test stack usage
+To:     Arnd Bergmann <arnd@kernel.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Tom Rix <trix@redhat.com>,
+        Daniel Latypov <dlatypov@google.com>, llvm@lists.linux.dev,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>
+References: <20221215163511.266214-1-arnd@kernel.org>
+Content-Language: en-US
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <20221215163511.266214-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 09:23:53PM +0200, Andy Shevchenko wrote:
-> On Tue, Dec 20, 2022 at 07:43:06PM +0200, Hawa, Hanna wrote:
-
-...
-
-> 		return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * tSYMBOL, MICRO) -
-> 		       8 + offset;
+On 12/15/22 13:34, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> 		return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tSYMBOL + tf), MICRO) -
-> 		       3 + offset;
+> The check_reserve_boundaries function uses a lot of kernel stack,
+> and it gets inlined by clang, which makes __drm_test_mm_reserve
+> use even more of it, to the point of hitting the warning limit:
 > 
-> 	return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tLOW + tf), MICRO) -
-> 	       1 + offset;
+> drivers/gpu/drm/tests/drm_mm_test.c:344:12: error: stack frame size (1048) exceeds limit (1024) in '__drm_test_mm_reserve' [-Werror,-Wframe-larger-than]
+> 
+> When building with gcc, this does not happen, but the structleak
+> plugin can similarly increase the stack usage and needs to be
+> disabled, as we do for all other kunit users.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Thinking more on this, I would probably replace the order of arguments to make
-it ' + offset - N' in each case. Since plus will be on the previous line and
-become first it will be easier to parse the arithmetical expression.
+Apart from the checkpatch problem on the function
+check_reserve_boundaries(),
 
--- 
-With Best Regards,
-Andy Shevchenko
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
 
+Best Regards,
+- Maíra Canal
 
+> ---
+>  drivers/gpu/drm/tests/Makefile      | 2 ++
+>  drivers/gpu/drm/tests/drm_mm_test.c | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Makefile
+> index b29ef1085cad..f896ef85c2f2 100644
+> --- a/drivers/gpu/drm/tests/Makefile
+> +++ b/drivers/gpu/drm/tests/Makefile
+> @@ -12,3 +12,5 @@ obj-$(CONFIG_DRM_KUNIT_TEST) += \
+>  	drm_mm_test.o \
+>  	drm_plane_helper_test.o \
+>  	drm_rect_test.o
+> +
+> +CFLAGS_drm_mm_test.o := $(DISABLE_STRUCTLEAK_PLUGIN)
+> diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
+> index 89f12d3b4a21..90a5becc99b8 100644
+> --- a/drivers/gpu/drm/tests/drm_mm_test.c
+> +++ b/drivers/gpu/drm/tests/drm_mm_test.c
+> @@ -298,7 +298,7 @@ static bool expect_reserve_fail(struct kunit *test, struct drm_mm *mm, struct dr
+>  	return false;
+>  }
+>  
+> -static bool check_reserve_boundaries(struct kunit *test, struct drm_mm *mm,
+> +static bool noinline_for_stack check_reserve_boundaries(struct kunit *test, struct drm_mm *mm,
+>  				     unsigned int count,
+>  				     u64 size)
+>  {
