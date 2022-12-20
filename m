@@ -2,154 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CAD9652019
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 13:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32CE0652023
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 13:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233443AbiLTMB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 07:01:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57490 "EHLO
+        id S233311AbiLTMEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 07:04:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233239AbiLTMBT (ORCPT
+        with ESMTP id S229713AbiLTMEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 07:01:19 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39804D2F2;
-        Tue, 20 Dec 2022 04:01:18 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id v7so8562814wmn.0;
-        Tue, 20 Dec 2022 04:01:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GccDBeJZjaH9XCmg3AAu3a9rt4MbZnC2S1dc4W7SU5o=;
-        b=Fk5ZJdVFnJ7r2G0RFverr6ublZxy8NcXwcgNGsXo1b9n8bpZhcR4c2itnoxmq9ci/M
-         mS82N1AUGIzKdToiR6D9eeSalfgBYVUBxPYUq4M3r3/E/AokqIDyVPfsloY0rcY1Z4+s
-         4Ot9cwW8Kt/Sz+HqnJ5bCTUFguLFAJEn9lDUrooMZDpYLM0E55ZILwp1RFhl7yMM6+JP
-         dDB2GgNQL5o2IOrcfy9KeKpki+RdqB8owi/khENc3kKGOgBsagGBPxhP4/JGAh3L3WYX
-         KJyqbBua9QdrNSKRluP17z/BLHd78TDcZYTZxpA02bTr7g8HkFOyWe4cDkC8XFcdklJT
-         cM9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GccDBeJZjaH9XCmg3AAu3a9rt4MbZnC2S1dc4W7SU5o=;
-        b=QbmE8oKBcIkNKzTT1z7d7evWFz/85e6yueO+7Sdu3JHwrMvd6D99qNhwDUYFEG8vvI
-         qeHCydNcMokKQrbhdm+h3Dqz9ERXhC/QY+U8Z+Nz+hRuDbGR8KtYqgNbIzn6M/qx9OGI
-         3MOXF9uJYSo89PpuwrStuYy/wEj5MUqv4P3N/MtOo16Pe2vylpsaHeb/j09U9vt4s8Up
-         9Htg/NdHm10IOfaOI1+z5F1HdIj0tN8/FGJJX3QbBIA4FPgFJ2Y04M1Tqoe9ehEsctFe
-         GymvVL1nnqBMDMKVdjcihL7XzC9GxBgSkJ45hSV/bgka7ADoJfZ6GbQ1YU09lcLhj3Rt
-         sqpw==
-X-Gm-Message-State: ANoB5pk8/9oqzg725z1zJrEtXtoOIt1rYvz4JqU41+wUQTGZ40Ez381P
-        c8jsqGDHnqsgEu5O0CKXlxPqWE1KWb0=
-X-Google-Smtp-Source: AA0mqf6qCxOt/snVy2o1Qpdg+T6cqG4NvfpldAZS0aFU2zO0U/4UPj7DnHR8IayPG4+Mh+7wc1Q87A==
-X-Received: by 2002:a05:600c:22ca:b0:3d1:ee97:980 with SMTP id 10-20020a05600c22ca00b003d1ee970980mr46536595wmg.7.1671537676543;
-        Tue, 20 Dec 2022 04:01:16 -0800 (PST)
-Received: from localhost.localdomain (2a02-8428-46a0-7c01-43c0-f52a-beed-541b.rev.sfr.net. [2a02:8428:46a0:7c01:43c0:f52a:beed:541b])
-        by smtp.gmail.com with ESMTPSA id q1-20020a1c4301000000b003d04e4ed873sm22843188wma.22.2022.12.20.04.01.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 04:01:16 -0800 (PST)
-From:   Christophe Branchereau <cbranchereau@gmail.com>
-To:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, paul@crapouillou.net,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Christophe Branchereau <cbranchereau@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 2/2] dt-bindings: display/panel: Add AUO A030JTN01
-Date:   Tue, 20 Dec 2022 13:01:08 +0100
-Message-Id: <20221220120108.481554-3-cbranchereau@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221220120108.481554-1-cbranchereau@gmail.com>
-References: <20221220120108.481554-1-cbranchereau@gmail.com>
+        Tue, 20 Dec 2022 07:04:43 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D00BE03F;
+        Tue, 20 Dec 2022 04:04:42 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DB86C1EC01E0;
+        Tue, 20 Dec 2022 13:04:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1671537880;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=YmPCUZ1R0QUQOqRZ0OqQKPBGrzkADkw5btPSP+uFxWE=;
+        b=VXb46m3IH27tFi5RRjOddleYF2fgg2kb0dmYnqtTe6NRX7NUssuAUNIPkcNeuQnUdHoNvY
+        dQaX/H2OzSqzyueWORh3Y+HSdThQKf8MU32SB8oYaDsEG1+JwIlIbm0fwAcjld1Osp9Cid
+        FkgRFSEciBVevEdYElpC9gDsOdAzWFg=
+Date:   Tue, 20 Dec 2022 13:04:36 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
+Subject: Re: [PATCH v4 06/39] x86/fpu: Add helper for modifying xstate
+Message-ID: <Y6Gk1CcK/dHWqaVA@zn.tnic>
+References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
+ <20221203003606.6838-7-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221203003606.6838-7-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Cercueil <paul@crapouillou.net>
+On Fri, Dec 02, 2022 at 04:35:33PM -0800, Rick Edgecombe wrote:
+> +void fpregs_lock_and_load(void)
 
-Add binding for the AUO A030JTN01 panel, which is a 320x480 3.0" 4:3
-24-bit TFT LCD panel with non-square pixels and a delta-RGB 8-bit
-interface.
+Fun naming :)
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/display/panel/auo,a030jtn01.yaml | 54 +++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/display/panel/auo,a030jtn01.yaml
+> +{
+> +	/*
+> +	 * fpregs_lock() only disables preemption (mostly). So modifing state
 
-diff --git a/Documentation/devicetree/bindings/display/panel/auo,a030jtn01.yaml b/Documentation/devicetree/bindings/display/panel/auo,a030jtn01.yaml
-new file mode 100644
-index 000000000000..0d1e6b45b0f7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/display/panel/auo,a030jtn01.yaml
-@@ -0,0 +1,54 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/display/panel/auo,a030jtn01.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: AUO A030JTN01 3.0" (320x480 pixels) 24-bit TFT LCD panel
-+
-+description: |
-+  Delta RGB 8-bit panel found in some Retrogame handhelds
-+
-+maintainers:
-+  - Paul Cercueil <paul@crapouillou.net>
-+  - Christophe Branchereau <cbranchereau@gmail.com>
-+
-+allOf:
-+  - $ref: panel-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: auo,a030jtn01
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - power-supply
-+  - reset-gpios
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    panel@0 {
-+      compatible = "auo,a030jtn01";
-+      reg = <0>;
-+
-+      spi-max-frequency = <10000000>;
-+
-+      reset-gpios = <&gpe 4 GPIO_ACTIVE_LOW>;
-+      power-supply = <&lcd_power>;
-+
-+      backlight = <&backlight>;
-+
-+      port {
-+        panel_input: endpoint {
-+          remote-endpoint = <&panel_output>;
-+        };
-+      };
-+    };
+Unknown word [modifing] in comment.
+Suggestions: ['modifying',...
+
+> +	 * in an interrupt could screw up some in progress fpregs operation,
+> +	 * but appear to work. Warn about it.
+> +	 */
+> +	WARN_ON_ONCE(!irq_fpu_usable());
+> +	WARN_ON_ONCE(current->flags & PF_KTHREAD);
+> +
+> +	fpregs_lock();
+
+So it locks them here...
+
+/me goes further into the patchset
+
+aha, and the counterpart of this function is fpregs_unlock() so
+everything gets sandwitched between the two.
+
+Ok, I guess.
+
+> +EXPORT_SYMBOL_GPL(fpregs_lock_and_load);
+
+Exported for KVM?
+
 -- 
-2.35.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
