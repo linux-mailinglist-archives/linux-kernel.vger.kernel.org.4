@@ -2,200 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70421652886
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 22:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A32EE652888
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 22:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234040AbiLTVry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 16:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
+        id S233996AbiLTVsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 16:48:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiLTVrs (ORCPT
+        with ESMTP id S229451AbiLTVsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 16:47:48 -0500
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6418DB867
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 13:47:47 -0800 (PST)
-Received: by mail-vk1-xa2e.google.com with SMTP id r204so6399032vkf.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 13:47:47 -0800 (PST)
+        Tue, 20 Dec 2022 16:48:50 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23EB1B867;
+        Tue, 20 Dec 2022 13:48:50 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id v11so13774957ljk.12;
+        Tue, 20 Dec 2022 13:48:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=criticallink.com; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VhZgaicca9LJo+DcaX0+4mdob/y6A/dlgKOdUG8hAQ8=;
-        b=EDJt3mLQj1WwTJ31Q6XEL5N7U3t3sJCRSw5Gl+XLC+KJrTSm5kPmgNu1r+geG53I1w
-         dZ4ZdF4Uq5McPr5gRJFnoSVpx2RwRF0hKtABLwjJ6UjO1q1aQ4nnGoNsFIUu948Hh6Ql
-         TI6D7O7W9TOHkpwmeB5w+jD4UgEc2VmtX9ereM4H4PQdelRY/7S16ZHiOGqZ+FzzwMKU
-         oYBiri4PKyBJW9oYimO1afyXI17pZowy4QySimCq0r3xgmMZczmQ9dQfNMnYzeKaIdrD
-         2nma3SQy0teE60eQphOA3jMXOanP8r1SAWAtxQIPRYAAJfFloko2ZbgpH2lPRaV+M6n4
-         nM3g==
+        bh=zKdby5jz1dpXnJrBgCDeZHqY7CetYnf+rddUGWikGd8=;
+        b=LtuYYUO4y4anNRiDR9VxdCz9svNTEEzoi2IJE7Pr+nOG55Vtu0ZImP/8W71R3G5n94
+         6ozdzrhj7jctdQj2v4Ucy669R8l0R7/KczTwZApy/tPj9ZTA522l5zf5tcm8zBnKC54q
+         2xIkgk1eLVV5cJ7x+nAGwO/T4GE15a7iVQR7ucjoc5bj4nwKJmUqlKvxBZSoGuv9Nezt
+         11MLvkjgYLbs0pXj5DxXffqWFp6FzFRHdWmxseyR0VtbVBfq+/QyU7pbljX8Xb/dqfCv
+         BhOCYdlQcT5lnoBdobE08OsEHvQkfZyxgaZMNDolTHTEDZoTJ+TF0X/Xim8TXz+5HUkd
+         n6RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VhZgaicca9LJo+DcaX0+4mdob/y6A/dlgKOdUG8hAQ8=;
-        b=ERithkZ2uBRuiLqZFko0NE0YpFi7ipPS1owxoAqJqUf40q3gGbqLv7RlqW3IHABCHv
-         alupW8D+UveaoTaXPLPVnTBP6E+VV/T9vlSkPsl9d5J7EV1/El0NK6Ai/xaQePZftWMa
-         biTvnauupmQEDufsGf0Fv/cfiV5bqJRIDQT1YByJd7dh80kcK+KsWbnAdzoxP0upw3Up
-         yQoP8ITZWZaoFoTfEiV4ZnGjAzHx8D7NYcwiGtsVYmCW8w9+9Hq0gpsM8wCR3rJQeces
-         66vFR0tnD5OberHFhnfaLSPsPQLl2cH1mY5ucw4IIn+r0B1OO2Ubbw+viKYw0Velqa0J
-         E+7g==
-X-Gm-Message-State: AFqh2koHB5KWIFAzFRfCspA+r446Xm6+j764/ubmmdnHsSbq5es70Gos
-        rDoqWOY55BYR7E7KEKNfRNLsOosVXvJu3sfh829I/w==
-X-Google-Smtp-Source: AMrXdXt121kbSX/DN1gbxAGQs1zdX6/46XJEuREBUk/e9/77sXOnjAs85qH1gLyo4Ed2wpSZsPW8gyKMsUixPohw24Q=
-X-Received: by 2002:a05:6122:2cd:b0:3c8:f99f:1934 with SMTP id
- k13-20020a05612202cd00b003c8f99f1934mr2557502vki.28.1671572866443; Tue, 20
- Dec 2022 13:47:46 -0800 (PST)
+        bh=zKdby5jz1dpXnJrBgCDeZHqY7CetYnf+rddUGWikGd8=;
+        b=jm5o7aJEs6qxjotVNjC9SoFHlDWyMH5tmmdJ8M54p0XkTy0KAUs4MMLs8bwG/tc08Q
+         3F6gWCvYb7zgYF77ntB9vNqizLfzuT9uFEZbYNoz5i5hPEi54vrsaqDut/kwsaGQWH1p
+         kTI877KDRwtvMjC3hScV2gZhSFFW5oqeh1xp3EUcVcDWdIpchEefcjGYhTEvTR+xdPkU
+         q/N6hv5R2k1turPJS5lJ3rPj8tGcvpNi7Pg2YMKltnCjcpzk8O/GwZ2RGaqHVjqW/9y3
+         tQxkQLzZkAj7MAGJq7yjhJPnhvs+bg42YTS6oGanXpbB6fm5stXuWtpdRk7lQxUJCk9R
+         Elbg==
+X-Gm-Message-State: ANoB5pkrWDfqqBPgB73SKMfl6C2ifHNQetz6g2GDnIkpD3Xf1ETsC5Z9
+        0Ts9NWTat8TeJcBijtqaQzD2fT+oXjZMESGaPqs=
+X-Google-Smtp-Source: AA0mqf6Ot5BbhKa9nqhoWKc7zCkXPZaY9j/Fc/XYicCvofHnkGVqSHdeU+JJZ+8iSuF8Ln3O6mpM2CqNTNOEIE9VQf4=
+X-Received: by 2002:a2e:bc0b:0:b0:27b:5a9f:3bf5 with SMTP id
+ b11-20020a2ebc0b000000b0027b5a9f3bf5mr1880153ljf.320.1671572928246; Tue, 20
+ Dec 2022 13:48:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20221214220727.1350784-1-jcormier@criticallink.com>
- <20221220000457.1163446-1-jcormier@criticallink.com> <20221220000457.1163446-2-jcormier@criticallink.com>
- <e0f620b4-5780-fbea-4446-fd68f281281a@linaro.org> <CADL8D3YUzgk+H70wEG1Qfq-kcn_csUdJyRg2rWfraVb3JsEa_g@mail.gmail.com>
- <20221220144656.GA3748047@roeck-us.net>
-In-Reply-To: <20221220144656.GA3748047@roeck-us.net>
-From:   Jon Cormier <jcormier@criticallink.com>
-Date:   Tue, 20 Dec 2022 16:47:34 -0500
-Message-ID: <CADL8D3bRFdj0FL41xNc+sdH515sEyxH5Uk-g+n5rpyKck_ES7A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: hwmon: adi,ltc2945: Add binding
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bob Duke <bduke@criticallink.com>,
-        John Pruitt <jpruitt@criticallink.com>
+References: <20221218234801.579114-1-jmaxwell37@gmail.com> <9f145202ca6a59b48d4430ed26a7ab0fe4c5dfaf.camel@redhat.com>
+In-Reply-To: <9f145202ca6a59b48d4430ed26a7ab0fe4c5dfaf.camel@redhat.com>
+From:   Jonathan Maxwell <jmaxwell37@gmail.com>
+Date:   Wed, 21 Dec 2022 08:48:11 +1100
+Message-ID: <CAGHK07ALtLTjRP-XOepqoc8xzWcT8=0v5ccL-98f4+SU9vwfsg@mail.gmail.com>
+Subject: Re: [net-next] ipv6: fix routing cache overflow for raw sockets
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Okay so for V3, I see only 2 changes. Please let me know if I've
-overlooked something else.
-- Remove "Also adds shunt-resistor-micro-ohms parameter" from commit description
-- Remove extra newline from binding doc
-
-Resending in plaintext...
-
-
-On Tue, Dec 20, 2022 at 9:46 AM Guenter Roeck <linux@roeck-us.net> wrote:
+On Tue, Dec 20, 2022 at 11:35 PM Paolo Abeni <pabeni@redhat.com> wrote:
 >
-> On Tue, Dec 20, 2022 at 09:35:38AM -0500, Jon Cormier wrote:
-> > On Tue, Dec 20, 2022 at 5:15 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> > >
-> > > On 20/12/2022 01:04, Cormier, Jonathan wrote:
-> > > > Create initial binding for the LTC2945 I2C power monitor.
-> > > > Also adds shunt-resistor-micro-ohms parameter
-> > >
-> > > The last sentence does not make sense. I propose to skip it.
-> > Ok
-> > >
-> > > >
-> > > > Signed-off-by: "Cormier, Jonathan" <jcormier@criticallink.com>
-> > > > ---
-> > > >  .../bindings/hwmon/adi,ltc2945.yaml           | 50 +++++++++++++++++++
-> > > >  1 file changed, 50 insertions(+)
-> > > >  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..f90d40919ee6
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
-> > > > @@ -0,0 +1,50 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/hwmon/adi,ltc2945.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Analog Devices LTC2945 wide range i2c power monitor
-> > > > +
-> > > > +maintainers:
-> > > > +  - Guenter Roeck <linux@roeck-us.net>
-> > >
-> > > Maintainer of binding is person interested in the device, e.g. having
-> > > the hardware or datasheet. Not the subsystem maintainer. Unless by
-> > > coincidence this is the same person here?
-> > What do you do with a basic kernel driver which hasn't been touched
-> > since it was introduced except for various refactors? He seems to be
-> > the one who introduced it and most consistently made changes to it.
+> On Mon, 2022-12-19 at 10:48 +1100, Jon Maxwell wrote:
+> > Sending Ipv6 packets in a loop via a raw socket triggers an issue where a
+> > route is cloned by ip6_rt_cache_alloc() for each packet sent. This quickly
+> > consumes the Ipv6 max_size threshold which defaults to 4096 resulting in
+> > these warnings:
+> >
+> > [1]   99.187805] dst_alloc: 7728 callbacks suppressed
+> > [2] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
+> > .
+> > .
+> > [300] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
 >
-> FWIW, if I was not ok with being listed as maintainer I would have objected.
+> If I read correctly, the maximum number of dst that the raw socket can
+> use this way is limited by the number of packets it allows via the
+> sndbuf limit, right?
 >
-> Having said that, it is just as fine with me to list someone else.
+
+Yes, but in my test sndbuf limit is never hit so it clones a route for
+every packet.
+
+e.g:
+
+output from C program sending 5000000 packets via a raw socket.
+
+ip raw: total num pkts 5000000
+
+# bpftrace -e 'kprobe:dst_alloc {@count[comm] = count()}'
+Attaching 1 probe...
+
+@count[a.out]: 5000009
+
+> Are other FLOWI_FLAG_KNOWN_NH users affected, too? e.g. nf_dup_ipv6,
+> ipvs, seg6?
 >
-> Guenter
+
+Any call to ip6_pol_route(s) where no res.nh->fib_nh_gw_family is 0 can do it.
+But we have only seen this for raw sockets so far.
+
+Regards
+
+Jon
+
+> @DavidA: why do we need to create RTF_CACHE clones for KNOWN_NH flows?
 >
-> > >
-> > >
-> > > > +
-> > > > +description: |
-> > > > +  Analog Devices LTC2945 wide range i2c power monitor over I2C.
-> > > > +
-> > > > +  https://www.analog.com/media/en/technical-documentation/data-sheets/LTC2945.pdf
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    enum:
-> > > > +      - adi,ltc2945
-> > > > +
-> > > > +  reg:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  shunt-resistor-micro-ohms:
-> > > > +    description:
-> > > > +      Shunt resistor value in micro-Ohms
-> > > > +    default: 1000
-> > > > +
-> > > > +required:
-> > > > +  - compatible
-> > > > +  - reg
-> > > > +
-> > > > +
-> > > This is a friendly reminder during the review process.
-> > >
-> > > It seems my previous comments were not fully addressed. Maybe my
-> > > feedback got lost between the quotes, maybe you just forgot to apply it.
-> > > Please go back to the previous discussion and either implement all
-> > > requested changes or keep discussing them.
-> > My bad,
-> > >
-> > > Thank you.
-> > >
-> > > > +additionalProperties: false
-> > > > +
-> > >
-> > > Best regards,
-> > > Krzysztof
-> > >
-> >
-> >
-> > --
-> > Jonathan Cormier
-> > Software Engineer
-> >
-> > Voice:  315.425.4045 x222
-> >
-> >
-> >
-> > http://www.CriticalLink.com
-> > 6712 Brooklawn Parkway, Syracuse, NY 13211
-
-
-
--- 
-Jonathan Cormier
-Software Engineer
-
-Voice:  315.425.4045 x222
-
-
-
-http://www.CriticalLink.com
-6712 Brooklawn Parkway, Syracuse, NY 13211
+> Thanks,
+>
+> Paolo
+>
