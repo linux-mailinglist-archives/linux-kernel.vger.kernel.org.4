@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED6A651F8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E92B5651F91
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiLTLS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 06:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
+        id S232021AbiLTLTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 06:19:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiLTLSZ (ORCPT
+        with ESMTP id S230506AbiLTLTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 06:18:25 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC905F9B;
-        Tue, 20 Dec 2022 03:18:24 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id h10so11407181wrx.3;
-        Tue, 20 Dec 2022 03:18:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mtoQLOQcMrzMvarcNfJn3CYdynYcRi+UXcHZGS5Iv9E=;
-        b=kABbtNC75GxFicSWkl2QLheKTFhLPIaxtsW4wPGRDbjmzXn3Z1esbIBSHk98AaGtHr
-         8lUx6nqY4j/NtQJxKg50K0pX37ue+UX90OTbVtQn5M0cnnTLmL9uqI5/mdwL5R6dwHHC
-         3jXQuOddLVsCS6yMblyjOPNv1mXbs55XjzWuKHhZBmoPdtEjGRbHXgl9vAdzIZL+H34O
-         pNfu+zCYICY3fKUDMq1dA9WLF9yoN7781/KYVrvDWh3OJB3rlpM4+gawFXBBoJX9Du7C
-         Dos1JVeqFKdDDsCghpdWZKoKzxwe19BvbwEiNyFf3rC664n1K37DzMLzJ3bBLDuuvUZG
-         MjEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mtoQLOQcMrzMvarcNfJn3CYdynYcRi+UXcHZGS5Iv9E=;
-        b=jo8pxca2x5ASNLxHjElfDRaz5yDLPjx9d+ZF20QriWnFRx9tKVxBsdpmqTRyYVFQDv
-         o6Coa4AvkG4IeceTsOgPvjldSZK9dUySE6ghQX97EUA2w17DfusR6xZNHooCAH4UvFF9
-         s9ZucpdbSVw2jEI/pv9Be7qBDhYK0Cx3Nm95FaN/83LAKSdDrtEdAU6XlkHFRWVBMSHX
-         2YxjTCR8aDGKcbhCtjJ1pRu80BzZbqje7KjQZiUhydRooow0oAaWOAueLkwODTN7rHZw
-         TbX2VtEXsupXiZPCSEGaS/qbSz1x65vc7cwutZ7e5+3o6XEPa3sA1RbL39alZeDQvTdA
-         bL8w==
-X-Gm-Message-State: ANoB5pnLGE0TqFapajyjRbEcsZYrICMk78uri3+VCPj/WT9k+8sG87Eb
-        dvg+r4Pn3E3wNlM6d23s/FE=
-X-Google-Smtp-Source: AA0mqf5nzKQxGjJrCbgu0kJhJRMCNqeV8ZxKRevg1rDIoBoXvAF9t7txIwXZ8EXHy2bNzm36/LTxZA==
-X-Received: by 2002:a5d:4112:0:b0:242:1433:a8ba with SMTP id l18-20020a5d4112000000b002421433a8bamr30717013wrp.20.1671535102555;
-        Tue, 20 Dec 2022 03:18:22 -0800 (PST)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id y14-20020adffa4e000000b00268aae5fb5bsm215451wrr.3.2022.12.20.03.18.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 03:18:22 -0800 (PST)
-Date:   Tue, 20 Dec 2022 11:18:20 +0000
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 00/18] 5.10.161-rc1 review
-Message-ID: <Y6GZ/NLLnGD4hOYL@debian>
-References: <20221219182940.701087296@linuxfoundation.org>
+        Tue, 20 Dec 2022 06:19:51 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6A45F9B;
+        Tue, 20 Dec 2022 03:19:50 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BKBJbt0048830;
+        Tue, 20 Dec 2022 05:19:37 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1671535177;
+        bh=jEGXTNEkgEJDAQg4D1e1XQUrvQwR9bOKhG+iF6Bxcfk=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Ims0169tydbccpvKS0rLJyObQQwfiWxAqCZFbsl5eZT6y9y9ROlP7Ijvx9BrWnf4R
+         Fy74d1OTqmJ6EhVyyxBJd7QeKR9TsHWpbq2Ib4i/gAepzZD3WaJ6xpFoGP7w5GCPce
+         Nt7QGxTrxZxnlaiakHPTid4NyrtqTdOV+LzazQgE=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BKBJbHU036031
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 20 Dec 2022 05:19:37 -0600
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 20
+ Dec 2022 05:19:37 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 20 Dec 2022 05:19:37 -0600
+Received: from [10.250.232.115] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BKBJWTh130880;
+        Tue, 20 Dec 2022 05:19:33 -0600
+Message-ID: <b22b6349-9cec-2e86-294a-249f24de2345@ti.com>
+Date:   Tue, 20 Dec 2022 16:49:31 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219182940.701087296@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/3] arm64: dts: ti: k3-am62-main: Update OTAP and ITAP
+ delay select
+Content-Language: en-US
+To:     Sjoerd Simons <sjoerd@collabora.com>, Nishanth Menon <nm@ti.com>
+CC:     <martyn.welch@collabora.com>, Nitin Yadav <n-yadav@ti.com>,
+        "Aswath Govindraju" <a-govindraju@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Tero Kristo" <kristo@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221216143624.23708-1-sjoerd@collabora.com>
+ <20221216143624.23708-2-sjoerd@collabora.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <20221216143624.23708-2-sjoerd@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,39 +73,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
 
-On Mon, Dec 19, 2022 at 08:24:53PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.161 release.
-> There are 18 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+
+On 16/12/22 8:06 pm, Sjoerd Simons wrote:
+> From: Nitin Yadav <n-yadav@ti.com>
 > 
-> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
-> Anything received after that time might be too late.
+> UHS Class U1 sd-card are not getting detected due to incorrect
+> OTAP/ITAP delay select values in linux. Update OTAP and ITAP
+> delay select values for various speed modes. For sdhci0, update
+> OTAP delay values for ddr52 & HS200 and add ITAP delay for legacy
+> & mmc-hs. For sdhci1 & sdhci2, update OTAP & ITAP delay select
+> recommended as in RIOT for various speed modes.
+> 
+> Signed-off-by: Nitin Yadav <n-yadav@ti.com>
+> [cherry-pick from vendor BSP]
+> Signed-off-by: Sjoerd Simons <sjoerd@collabora.com>
+> ---
+> 
+>  arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 46 ++++++++++++------------
+>  1 file changed, 24 insertions(+), 22 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+> index 03660476364f..28c250a8d1ec 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+> @@ -391,8 +391,10 @@ sdhci0: mmc@fa10000 {
+>  		ti,clkbuf-sel = <0x7>;
+>  		ti,otap-del-sel-legacy = <0x0>;
+>  		ti,otap-del-sel-mmc-hs = <0x0>;
+> -		ti,otap-del-sel-ddr52 = <0x9>;
+> -		ti,otap-del-sel-hs200 = <0x6>;
+> +		ti,otap-del-sel-ddr52 = <0x5>;
+> +		ti,otap-del-sel-hs200 = <0x5>;
+> +		ti,itap-del-sel-legacy = <0xa>;
 
-Build test (gcc version 11.3.1 20221127):
-mips: 63 configs -> no failure
-arm: 104 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+This is pretty useless without corresponding driver changes 
+to pick up ti,itap-del-sel-legacy as well
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/commit/drivers/mmc/host/sdhci_am654.c?h=ti-linux-5.10.y&id=93d22fc56007ee13e589debf0d32c8b1d5fdc6d8
+https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/commit/drivers/mmc/host/sdhci_am654.c?h=ti-linux-5.10.y&id=9c878c3dc642f7f1f3ab6ca7f812cd43fe7ed7d8
 
-[1]. https://openqa.qa.codethink.co.uk/tests/2409
-[2]. https://openqa.qa.codethink.co.uk/tests/2424
+Could you list that cards affected and fixed by this change?
 
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
--- 
 Regards
-Sudip
+Vignesh
+
+[...]
