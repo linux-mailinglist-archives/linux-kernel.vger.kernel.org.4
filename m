@@ -2,90 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCC6651A65
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 06:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12881651A68
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 06:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233104AbiLTFp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 00:45:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
+        id S232937AbiLTFto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 00:49:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232937AbiLTFpj (ORCPT
+        with ESMTP id S229500AbiLTFtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 00:45:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCBE95BC;
-        Mon, 19 Dec 2022 21:45:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 691BF6125E;
-        Tue, 20 Dec 2022 05:45:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 817CEC433D2;
-        Tue, 20 Dec 2022 05:45:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671515136;
-        bh=QcK/x+eqx8iacc7s1AbUsKNKBvDGfjfcoe194ABwpQM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F8xxaZB9wVAaw8858zsn8j1mrqTrJVesFUAdVe1W83ufJ9sHcvCYkV2q2anEmukUN
-         m1NdhGXzBH6dnyOgVPP1qWonQ5KDZOv4oGgd66a1HDiUHo8tyaR6C3rklA4HaPex8T
-         6El86mTLGFyzwTBHvO1T6TKqSr1Gluavng5x1qicELSXHhUHzLp5Yt6NrtuNXWla+z
-         OwhmF2NtdbiZ6g7uwEgtX/hs9JZptcnA9ToGBHbwN5w+6ddS8cho+unrKLXqMcqQHL
-         /99nwU6CNZMNgTkrx9zgJkD/Ng5bgFcZ4+HjTqlpCIoQQLeK2jct+t2dfB0xpzdzD4
-         51h2h+3/WkC/g==
-Date:   Mon, 19 Dec 2022 21:45:33 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
-        boqun.feng@gmail.com, mark.rutland@arm.com,
-        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, Herbert Xu <herbert@gondor.apana.org.au>,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC][PATCH 02/12] crypto/ghash-clmulni: Use (struct) be128
-Message-ID: <Y6FL/WRO1cleCI2w@sol.localdomain>
-References: <20221219153525.632521981@infradead.org>
- <20221219154118.955831880@infradead.org>
+        Tue, 20 Dec 2022 00:49:42 -0500
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEEE20D;
+        Mon, 19 Dec 2022 21:49:41 -0800 (PST)
+Received: by mail-pj1-f54.google.com with SMTP id b13-20020a17090a5a0d00b0021906102d05so11042181pjd.5;
+        Mon, 19 Dec 2022 21:49:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NRazUl1sRq3nHsv4iSumaCdK0OTW7rNnCuqNd/Xi384=;
+        b=yg88aU2ybi63pXPdtjQRhVODu9Ij/SEnSJYYXCEaFOcW2rNwe7TzsnI+VzX1jboYLF
+         N6cxQcECvRxgKTe4visDmUj98dGfnL7hsC/ju2+Ch6ARKQ+XzINm9WfozS8bsHkm0jI8
+         VZEG6qXFKMcI7q6DkjPv3NEg/IcH3qMIKUKXVDFn/fKawiB0SYqKrCkuR1dH6T+RKDPB
+         mlHfvs0Uj2GoQ03AUj+lDZMuNxy1urJ9SNsZevSjB2N6bxYj/OXL+3zmV6tCq8g/CGmQ
+         fniz+2oUcMOOaIYIA0Tq6+ATOOpJgWPUR/zZq0M1rMspNDmnkjR/77k08atOXCBiKLC3
+         Sz+Q==
+X-Gm-Message-State: AFqh2kr7rTm7byK/lipr+9Xc9LloyBgw3lpKRxE//hzd9xGMtfgQVM61
+        klKZZuT3lFUv08oiT8V0JFOYdND5yf3fSDI2KhE=
+X-Google-Smtp-Source: AMrXdXvfV1TvcAeZAo3YfDXWC5f/F5u6QP1TLuI8WS42DPMzbxPHdhhk5CIMP1LTlwDre2hjczIfEVotQS10Gt+3a4c=
+X-Received: by 2002:a17:90b:23ca:b0:221:4b1c:3b29 with SMTP id
+ md10-20020a17090b23ca00b002214b1c3b29mr1650503pjb.92.1671515380691; Mon, 19
+ Dec 2022 21:49:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219154118.955831880@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221219212717.1298282-1-frank.jungclaus@esd.eu>
+In-Reply-To: <20221219212717.1298282-1-frank.jungclaus@esd.eu>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 20 Dec 2022 14:49:29 +0900
+Message-ID: <CAMZ6RqKAmrgQUKLehUZx+hiSk3jD+o44uGtzrRFk+RBk8Bt81A@mail.gmail.com>
+Subject: Re: [PATCH 2/3] can: esd_usb: Improved behavior on esd CAN_ERROR_EXT
+ event (2)
+To:     Frank Jungclaus <frank.jungclaus@esd.eu>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 04:35:27PM +0100, Peter Zijlstra wrote:
-> Even though x86 is firmly little endian, use be128 because le128 is in
-> fact the wrong way around :/ The actual code is already using be128 in
-> ghash_setkey() so this shouldn't be more confusing.
-> 
-> This frees up the u128 name for a real u128 type.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On Tue. 20 Dec. 2022 at 06:29, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
+> Started a rework initiated by Vincents remarks "You should not report
+> the greatest of txerr and rxerr but the one which actually increased."
+> [1]
 
-This patch doesn't make sense.  The x86 ghash code is definitely storing the key
-as a little endian value, not big endian.  The reason be128 shows up in
-ghash_setkey() is because the code is doing a byteswap from the original key
-bytes.  Also, this patch causes 'sparse' warnings.
+I do not see this comment being addressed. You are still assigning the
+flags depending on the highest value, not the one which actually
+changed.
 
-Can you consider
-https://lore.kernel.org/linux-crypto/20221220054042.188537-1-ebiggers@kernel.org/T/#u
-instead?
+> and "As far as I understand, those flags should be set only when
+> the threshold is *reached*" [2] .
+>
+> Now setting the flags for CAN_ERR_CRTL_[RT]X_WARNING and
+> CAN_ERR_CRTL_[RT]X_PASSIVE regarding REC and TEC, when the
+> appropriate threshold is reached.
+>
+> Fixes: 96d8e90382dc ("can: Add driver for esd CAN-USB/2 device")
+> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
+> Link: [1] https://lore.kernel.org/all/CAMZ6RqKGBWe15aMkf8-QLf-cOQg99GQBebSm+1wEzTqHgvmNuw@mail.gmail.com/
+> Link: [2] https://lore.kernel.org/all/CAMZ6Rq+QBO1yTX_o6GV0yhdBj-RzZSRGWDZBS0fs7zbSTy4hmA@mail.gmail.com/
+> ---
+>  drivers/net/can/usb/esd_usb.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
+> index 5e182fadd875..09745751f168 100644
+> --- a/drivers/net/can/usb/esd_usb.c
+> +++ b/drivers/net/can/usb/esd_usb.c
+> @@ -255,10 +255,18 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
+>                                 can_bus_off(priv->netdev);
+>                                 break;
+>                         case ESD_BUSSTATE_WARN:
+> +                               cf->can_id |= CAN_ERR_CRTL;
+> +                               cf->data[1] = (txerr > rxerr) ?
+> +                                               CAN_ERR_CRTL_TX_WARNING :
+> +                                               CAN_ERR_CRTL_RX_WARNING;
 
-- Eric
+Nitpick: when a ternary operator is too long to fit on one line,
+prefer an if/else.
+
+>                                 priv->can.state = CAN_STATE_ERROR_WARNING;
+>                                 priv->can.can_stats.error_warning++;
+>                                 break;
+>                         case ESD_BUSSTATE_ERRPASSIVE:
+> +                               cf->can_id |= CAN_ERR_CRTL;
+> +                               cf->data[1] = (txerr > rxerr) ?
+> +                                               CAN_ERR_CRTL_TX_PASSIVE :
+> +                                               CAN_ERR_CRTL_RX_PASSIVE;
+
+Same.
+
+>                                 priv->can.state = CAN_STATE_ERROR_PASSIVE;
+>                                 priv->can.can_stats.error_passive++;
+>                                 break;
+> @@ -296,12 +304,6 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
+>                         /* Bit stream position in CAN frame as the error was detected */
+>                         cf->data[3] = ecc & SJA1000_ECC_SEG;
+>
+> -                       if (priv->can.state == CAN_STATE_ERROR_WARNING ||
+> -                           priv->can.state == CAN_STATE_ERROR_PASSIVE) {
+> -                               cf->data[1] = (txerr > rxerr) ?
+> -                                       CAN_ERR_CRTL_TX_PASSIVE :
+> -                                       CAN_ERR_CRTL_RX_PASSIVE;
+> -                       }
+>                         cf->data[6] = txerr;
+>                         cf->data[7] = rxerr;
+>                 }
+
+Yours sincerely,
+Vincent Mailhol
