@@ -2,60 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A5F6527E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 21:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 915AC6527EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 21:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234311AbiLTUch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 15:32:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
+        id S234144AbiLTUde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 15:33:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234409AbiLTUcB (ORCPT
+        with ESMTP id S234330AbiLTUdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 15:32:01 -0500
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2E51F636;
-        Tue, 20 Dec 2022 12:31:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1671568268; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=AIc5uaO3ypMUPMx3xjmDnPW1UDmslbJttmZf8L9NU0Rz/6VVWPKkgAEWv3NPmNesImnjkCeRz4KDUa+DVGs6hX5NiU9pG6M/XNvx1Sp6Dq20nRixmbCfF1DoOacIqPdTILOkieMWF63xXt7rL7oIIN2Vz15snr3Z44CWLNIaLiY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1671568268; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=MwpXKEJAPVR+byJdB5oIAwS4ZE/NgA8mrHIQ8L3UdxQ=; 
-        b=Ux9m/rWxrQPC7m1Ld/p7XMtM9JMX9vmfduafJjBQ1y9+yey+IvWO/H0lXOAJd8cRzf7LOhJrDyBIKaznzSkMo3zcD6Eybu5vmhb2lmDddSV7v0omfUfPg5wv5u9IZuLNlGYko9CIPEYY6BpvpRknvCNqWxjx6agJ+jwRYHGFyvA=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1671568268;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Message-ID:Date:Date:MIME-Version:From:From:Subject:Subject:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=MwpXKEJAPVR+byJdB5oIAwS4ZE/NgA8mrHIQ8L3UdxQ=;
-        b=jTOmAqMexqMX0S9XtrQ0BdGZgCbmPtk17u9NJNA6oiASBgLqsDtF/q2Snd9kWygq
-        IuvLnUMDLT2S6mXgiWHyQcxnqOJw6EkFWVTgnGjNenBoA+6PTzw3oo2YuyHnpm+D+lj
-        vY839xcFVCpIZFmYCpUOutOOYfLnt10UwKM/ZnVQ=
-Received: from [192.168.1.9] (110.226.31.37 [110.226.31.37]) by mx.zoho.in
-        with SMTPS id 1671568266792170.31739805186044; Wed, 21 Dec 2022 02:01:06 +0530 (IST)
-Message-ID: <9e1390c5-844c-9fa5-693e-da9d10c64e21@siddh.me>
-Date:   Wed, 21 Dec 2022 02:01:04 +0530
+        Tue, 20 Dec 2022 15:33:01 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A111CB3A
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 12:32:57 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id y25so20343836lfa.9
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 12:32:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i1rCPEjDDB4aTaz1z66evVwngn0CcNCDZ7iQ3I9uTtA=;
+        b=SiZ7G0lOmd3LM+BkyU6zFbx1cmhPFz8r9B84QnM/EyJC3pRZnnAH1gEmvr5RW9JLnl
+         jLVKPWgCYnVq0xVbJgVMW4MnubN2URImjjHEGICs+ANuk3eAIkqHD91B7wCaSV1nmGWY
+         ehs1+81om8j98YzZFB7Dg8v+TxXw93b0/Le0PHYvnZPzuk68bxY78y8bTlNotVzLgPEw
+         uIDaXrgqEGHZu2IhNQ82FbHGB1S1dDN3ZPuNm4E7VSkRSaVx3uyNG8AF+QHVwH8WVOdx
+         7JJzsJCE5gQP7YrnevEGf0igMPGjGvN6I7rOuHqjA2p5LHx0kmOB/1xZkSlMQv4zocDQ
+         pH2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i1rCPEjDDB4aTaz1z66evVwngn0CcNCDZ7iQ3I9uTtA=;
+        b=AYdwi/H+C7eOvaib7gxPdum+duprUV4161Gp60bnu8I54DQ60+YG3bYhLA+JGvpmWF
+         KHy8TuspJTg53C+pW+QJwFhhi5Q8963EIBTrZbumqtJkLsif4XLJvrtG53LfCfrChEI1
+         MOxf0Y3cTONTcPZJYprGKOlPI84T26GD3zSqARg7uk06YoXdJ3H8XDANpPrCQOnvDxcl
+         q2srd1CR+Vn5sJZN6C7OAbHIkH9N0hkf0qEKyCZyikwee8PhmE8g/jYKmYuQQb3xydO1
+         j6FJaSseVzhReoLklumi9jvdO//Lr5GIq1PnvWaUq0PnHVesqSORDBNqTMeHn4QAg4kC
+         HNTg==
+X-Gm-Message-State: AFqh2kpDOnmYSHOAs6o2T80mnwt/L7Irwr3CfXzqtCqTnAX1JFEsagZa
+        V4+2J+5gnglBmB8M3SKExf96h+ObkNS3NYdmhbg=
+X-Google-Smtp-Source: AMrXdXvVICNdQgl7zMMbAM9Ga7nB0iu59zrYProEc4CLdp+1dPMe4Je+hA8dnAdXT8DrmDazBtR5Ww==
+X-Received: by 2002:a19:e01b:0:b0:4a6:7271:e314 with SMTP id x27-20020a19e01b000000b004a67271e314mr1034718lfg.62.1671568376163;
+        Tue, 20 Dec 2022 12:32:56 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id v21-20020a056512349500b004a44ffb1050sm1568398lfr.171.2022.12.20.12.32.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 12:32:55 -0800 (PST)
+Message-ID: <d6fe27d0-729a-1730-9b57-6bdb2a76e6d0@linaro.org>
+Date:   Tue, 20 Dec 2022 22:32:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-From:   Siddh Raman Pant <code@siddh.me>
-Subject: Re: [PATCH] selftests: Add missing <sys/syscall.h> to mount_setattr
- test
-To:     Daan De Meyer <daan.j.demeyer@gmail.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-kselftests <linux-kselftest@vger.kernel.org>,
-        Seth Forshee <sforshee@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-References: <20221201150218.2374366-1-daan.j.demeyer@gmail.com>
-Content-Language: en-US, en-GB, hi-IN
-In-Reply-To: <20221201150218.2374366-1-daan.j.demeyer@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v4 2/4] arm64: dts: qcom: sm6125: Add UFS nodes
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Lux Aliaga <they@mint.lgbt>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221215190404.398788-1-they@mint.lgbt>
+ <20221215190404.398788-2-they@mint.lgbt>
+ <e474f99d-2375-c8db-203c-632c918d8e4d@linaro.org>
+ <9c185e36-4342-0f8e-1816-494303ebd072@mint.lgbt>
+ <66140726-0771-a28b-4916-cc3aef569cab@linaro.org>
+ <CAA8EJprw+314QagdqmvZ7_6SR-TH5NSmndL66DQqc2=zeaT6AA@mail.gmail.com>
+In-Reply-To: <CAA8EJprw+314QagdqmvZ7_6SR-TH5NSmndL66DQqc2=zeaT6AA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,35 +83,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01 2022 at 20:32:18 +0530, Daan De Meyer wrote:
-> Including <sys/syscall.h> is required to define __NR_mount_setattr
-> and __NR_open_tree which the mount_setattr test relies on.
+On 20/12/2022 22:30, Dmitry Baryshkov wrote:
+> On Tue, 20 Dec 2022 at 21:33, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>>
+>>
+>> On 20.12.2022 19:57, Lux Aliaga wrote:
+>>> On 16/12/2022 08:24, Konrad Dybcio wrote:
+>>>
+>>>>
+>>>> On 15.12.2022 20:04, Lux Aliaga wrote:
+>>>>> Adds a UFS host controller node and its corresponding PHY to
+>>>>> the sm6125 platform.
+>>>>>
+>>>>> Signed-off-by: Lux Aliaga <they@mint.lgbt>
+>>>>> ---
+>>>> Please include a changelog, I don't know what you changed and
+>>>> what you didn't. Also, you sent 4 revisions in one day, not
+>>>> letting others review it.
+>>>>
+>>>>
+>>>>>    arch/arm64/boot/dts/qcom/sm6125.dtsi | 67 ++++++++++++++++++++++++++++
+>>>>>    1 file changed, 67 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+>>>>> index 7e25a4f85594..b64c5bc1452f 100644
+>>>>> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
+>>>>> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+>>>>> @@ -508,6 +508,73 @@ sdhc_2: mmc@4784000 {
+>>>>>                status = "disabled";
+>>>>>            };
+>>>>>    +        ufs_mem_hc: ufs@4804000 {
+>>>>> +            compatible = "qcom,sm6125-ufshc", "qcom,ufshc", "jedec,ufs-2.0";
+>>>>> +            reg = <0x04804000 0x3000>, <0x04810000 0x8000>;
+>>>>> +            reg-names = "std", "ice";
+>>>>> +            interrupts = <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>;
+>>>>> +            phys = <&ufs_mem_phy_lanes>;
+>>>>> +            phy-names = "ufsphy";
+>>>>> +            lanes-per-direction = <1>;
+>>>>> +            #reset-cells = <1>;
+>>>>> +            resets = <&gcc GCC_UFS_PHY_BCR>;
+>>>>> +            reset-names = "rst";
+>>>>> +
+>>>>> +            clock-names = "core_clk",
+>>>>> +                      "bus_aggr_clk",
+>>>>> +                      "iface_clk",
+>>>>> +                      "core_clk_unipro",
+>>>>> +                      "ref_clk",
+>>>>> +                      "tx_lane0_sync_clk",
+>>>>> +                      "rx_lane0_sync_clk",
+>>>>> +                      "ice_core_clk";
+>>>>> +            clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
+>>>>> +                 <&gcc GCC_SYS_NOC_UFS_PHY_AXI_CLK>,
+>>>>> +                 <&gcc GCC_UFS_PHY_AHB_CLK>,
+>>>>> +                 <&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
+>>>>> +                 <&rpmcc RPM_SMD_XO_CLK_SRC>,
+>>>>> +                 <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
+>>>>> +                 <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
+>>>>> +                 <&gcc GCC_UFS_PHY_ICE_CORE_CLK>;
+>>>>> +            freq-table-hz = <50000000 240000000>,
+>>>>> +                    <0 0>,
+>>>>> +                    <0 0>,
+>>>>> +                    <37500000 150000000>,
+>>>>> +                    <0 0>,
+>>>>> +                    <0 0>,
+>>>>> +                    <0 0>,
+>>>>> +                    <75000000 300000000>;
+>>>>> +
+>>>>> +            non-removable;
+>>>>> +            status = "disabled";
+>>>>> +        };
+>>>>> +
+>>>>> +        ufs_mem_phy: phy@4807000 {
+>>>>> +            compatible = "qcom,sm6115-qmp-ufs-phy";
+>>>> Krzysztof asked you to add a SoC-specific compatible in v1.
+>>> I'm working on adding a new compatible for sm6125's UFS PHY. Should I copy sm6115's tables or just reference them in the sm6125's config in drivers/phy/qualcomm/phy-qcom-qmp-ufs.c?
+>> If they're identical, you can just do something like this:
+>>
+>> compatible = "qcom,sm6125-qmp-ufs-phy", "qcom,sm6115-qmp-ufs-phy";
 > 
-> Signed-off-by: Daan De Meyer <daan.j.demeyer@gmail.com>
-> ---
->  tools/testing/selftests/mount_setattr/mount_setattr_test.c | 1 +
->  1 file changed, 1 insertion(+)
+> Ugh. I'd prefer to see either of the compatible strings here, but not
+> both of them.
+
+I hit send too quick, so the justification didn't get in.
+
+Currently we list a single compatibility string for all QMP PHYs. Having 
+just a single exception stands out, so I'd advise against doing that 
+(despite Konrad's suggestion being technically correct).
+
 > 
-> diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-> index 8c5fea68ae67..da85f8af482c 100644
-> --- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-> +++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-> @@ -11,6 +11,7 @@
->  #include <sys/wait.h>
->  #include <sys/vfs.h>
->  #include <sys/statvfs.h>
-> +#include <sys/syscall.h>
->  #include <sys/sysinfo.h>
->  #include <stdlib.h>
->  #include <unistd.h>
+>>
+>> And ensure your newly added compatible is documented in bindings.
+>> This way, the driver will fall back to the 6115 compatible that's
+>> defined in .c, but if we ever need to adjust something specific
+>> for 6125, we will just use the define that we added here. That's
+>> important, as we're supposed to stay backwards-compatible with
+>> old device trees.
+>>
+>> Also, wrap your emails at around 80 chars or so, some people
+>> are grumpy about that :P
+>>
+>> Konrad
+>>>
+> 
+> 
+> 
 
-Tested-by: Siddh Raman Pant <code@siddh.me>
+-- 
+With best wishes
+Dmitry
 
-Though this oversight actually led to gcc detecting another
-another error [1], as it entered the #ifndef __NR_mount_setattr
-block.
-
-Thanks,
-Siddh
-
-[1] https://lore.kernel.org/all/20221211092820.85527-1-code@siddh.me/
