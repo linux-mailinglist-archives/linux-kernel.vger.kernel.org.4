@@ -2,149 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C19B4651F20
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F63B651F24
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233054AbiLTKnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:43:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53962 "EHLO
+        id S232606AbiLTKoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233162AbiLTKnZ (ORCPT
+        with ESMTP id S229600AbiLTKoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:43:25 -0500
-Received: from domac.alu.hr (domac.alu.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AA11836D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:43:17 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 9B76E604F2;
-        Tue, 20 Dec 2022 11:43:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1671532994; bh=28aeNJcZhjH4Yc/hQCSZhSLXij8XcqFFnXNqh8P8y2M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EBp4dCbynhsaxmTNbOQcgyE1FbKslOetKbsd5S9ZybFvV+jLNtnpaC/qYL1Ej0t2m
-         mzGZimiLApSFx1XlUKIQvwRPQtAo8LOXtZSdsfsUCNSnz3eQ/qd7n2FNV7oYSfTpag
-         3Iwf00b13aDedmWjmzWnifM3JIOAiOYc+et7ase82JG7O7Xul4G/vONb4nlkZb96ak
-         HBZ052XKTJFjcHTSYbzhLvnOyRYVNqJBlYSEGilbyZbqw3Jq67jicBlPA3roVR8f+O
-         qbUz8bFL8x+bVyxjIitysyzFdU72VnT8QLoSbwVto0c9/70OZM2DevtfdP7s/pBUkQ
-         Ag8ikGkVOoOOg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Jzd7WZzt8pYI; Tue, 20 Dec 2022 11:43:12 +0100 (CET)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id 008E7604F1;
-        Tue, 20 Dec 2022 11:43:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1671532992; bh=28aeNJcZhjH4Yc/hQCSZhSLXij8XcqFFnXNqh8P8y2M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=xSH9wgnl4FggF4bm0pn6Ga1tcTGMT+PU2F7lssMixIyr4osrxrOklflRBlsRwkuB3
-         xlEqhENuFYkZ/BQrnkulLlA7SzO64EhS+4HiqnT0C/jpXIbd/g0acj+z6mxETc/VrJ
-         LSRs5rr0FuFgMcUIXEtbi725e8Zyqwik8Nmqk2zLsCcf95eGFKcqm+4x+xx5tOjPoH
-         1fzNHa8MNfsdkBi5w2OOO5ZuowqDCimRtwuDmT+NknCWKdw2NPcmBbRinhh05iCbT1
-         zKG1aM7Dm5gBiTnyi06Ji/nLTr6iZUppj/v0zh8u5G46v9/xIgnTvBri4anhNvcJq/
-         67FZopUYLWs5Q==
-Message-ID: <d4a5ead8-9e9d-b6ac-d0f2-7d46b4f5e4c2@alu.unizg.hr>
-Date:   Tue, 20 Dec 2022 11:43:11 +0100
+        Tue, 20 Dec 2022 05:44:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E6317E06
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:43:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671533002;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=54Q/AOcDCXt2WoQ+wVvIhTTtHPQ1SiD8DKjFK54h2ww=;
+        b=VGNRrvPDROMo7S+iD4NLFUoMc8Hs5+dfuMVp7mSfiLM4Vt9sVGG5aQOuL0HoBV3lzTDWGg
+        ZfA8AlH/OB0kWknYAsy7aTk2l6/bzhXES3YU161KLoUvb/S/BMQlLz9ZB2TtLFRGgiteP0
+        OT8NaqF9kMpMlcX3Wa680219UwSEMlk=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-515-mOZkMOVgOVCv_nG3KxoZjg-1; Tue, 20 Dec 2022 05:43:21 -0500
+X-MC-Unique: mOZkMOVgOVCv_nG3KxoZjg-1
+Received: by mail-wm1-f70.google.com with SMTP id q6-20020a05600c2e4600b003d211775a99so306451wmf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:43:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=54Q/AOcDCXt2WoQ+wVvIhTTtHPQ1SiD8DKjFK54h2ww=;
+        b=wOuJgMP3EcWpOrmr6TikaYP0chfPy3u/0wOKhiuNSFKXc2Coe12AeaJjat1WvszG81
+         yIpApo6wx264h0zGgz+6bI2ibcqIfgikeL7jS0jgIa25aWDofPjnZV0LMDu35lK5/hul
+         jKdyDntU8wqHumoc4Kqo+qjAfknn91dIuqKlLHdU9bjdPs0Zo+DQYmY4W9artu5kgBYF
+         hZMaB+9OZOdPEAuhVN4kQuVebfLUqJZI2p8jcG51b86M6YQMyIZnMELQsxj/SSM5E8UZ
+         7Etd6GaPpFnawVmFyfKdx6vyKErlFpJkPGj93G/8oCM9/j5UQqYLa1udCeYCSGnyb0IE
+         18Sw==
+X-Gm-Message-State: ANoB5pmfJrVlvvWp2NDhTO9s6WTf5NpIX0nENBTbR99yH+PKkTwmLRRp
+        OOHiikexk5SZ1JmGIL03/9Os9BzAvEgK/sUQXHhVByYKxq+5sD9QkSF9niyPFxVWF9DzOA+bn5s
+        HpbgmCiTdhnKsQBQfbZKypgEB
+X-Received: by 2002:adf:f54b:0:b0:24d:cac0:96bb with SMTP id j11-20020adff54b000000b0024dcac096bbmr25182766wrp.67.1671532999523;
+        Tue, 20 Dec 2022 02:43:19 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5pgx3uCD9jue3Oj7nRI0x/hmaTvFuwAA61WD4OHNFKM6UQY27q4Mc9WDLqzqUBHxHaNQLKKw==
+X-Received: by 2002:adf:f54b:0:b0:24d:cac0:96bb with SMTP id j11-20020adff54b000000b0024dcac096bbmr25182747wrp.67.1671532999208;
+        Tue, 20 Dec 2022 02:43:19 -0800 (PST)
+Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
+        by smtp.gmail.com with ESMTPSA id k6-20020a5d66c6000000b00242271fd2besm12375033wrw.89.2022.12.20.02.43.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 02:43:18 -0800 (PST)
+Date:   Tue, 20 Dec 2022 11:43:12 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        Krasnov Arseniy <oxffffaa@gmail.com>
+Subject: Re: [RFC PATCH v1 0/2] virtio/vsock: fix mutual rx/tx hungup
+Message-ID: <20221220104312.5efhzu5ildj5smnn@sgarzare-redhat>
+References: <39b2e9fd-601b-189d-39a9-914e5574524c@sberdevices.ru>
+ <CAGxU2F4ca5pxW3RX4wzsTx3KRBtxLK_rO9KxPgUtqcaSNsqXCA@mail.gmail.com>
+ <2bc5a0c0-5fb7-9d0e-bd45-879e42c1ea50@sberdevices.ru>
+ <20221220083313.mj2fd4tvfoifayaq@sgarzare-redhat>
+ <741d7969-0c39-1e09-7297-84edbc8fddc7@sberdevices.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: BUG: in squashfs_xz_uncompress() (Was: RCU stalls in
- squashfs_readahead())
-Content-Language: en-US, hr
-To:     "Elliott, Robert (Servers)" <elliott@hpe.com>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     "phillip.lougher@gmail.com" <phillip.lougher@gmail.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-References: <9697fcf5-4213-3d5e-176a-e82d4bd07870@alu.unizg.hr>
- <eac8af79-8936-f845-c8dd-c63ebf0d5e81@alu.unizg.hr>
- <02877aee-8c05-6534-8a91-94ba366d0276@squashfs.org.uk>
- <MW5PR84MB1842F7A2DD9A9948A647AC5DAB099@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <MW5PR84MB1842F7A2DD9A9948A647AC5DAB099@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <741d7969-0c39-1e09-7297-84edbc8fddc7@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/18/22 17:51, Elliott, Robert (Servers) wrote:
-> 
-> 
->> -----Original Message-----
->> From: Phillip Lougher <phillip@squashfs.org.uk>
->> Sent: Friday, November 18, 2022 12:11 AM
->> To: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>; LKML <linux-
->> kernel@vger.kernel.org>; Paul E. McKenney <paulmck@kernel.org>
->> Cc: phillip.lougher@gmail.com; Thorsten Leemhuis
->> <regressions@leemhuis.info>
->> Subject: Re: BUG: in squashfs_xz_uncompress() (Was: RCU stalls in
->> squashfs_readahead())
->>
->> On 17/11/2022 23:05, Mirsad Goran Todorovac wrote:
->>> Hi,
+On Tue, Dec 20, 2022 at 09:23:17AM +0000, Arseniy Krasnov wrote:
+>On 20.12.2022 11:33, Stefano Garzarella wrote:
+>> On Tue, Dec 20, 2022 at 07:14:27AM +0000, Arseniy Krasnov wrote:
+>>> On 19.12.2022 18:41, Stefano Garzarella wrote:
 >>>
->>> While trying to bisect, I've found another bug that predated the
->>> introduction of squashfs_readahead(), but it has
->>> a common denominator in squashfs_decompress() and
->> squashfs_xz_uncompress().
+>>> Hello!
+>>>
+>>>> Hi Arseniy,
+>>>>
+>>>> On Sat, Dec 17, 2022 at 8:42 PM Arseniy Krasnov <AVKrasnov@sberdevices.ru> wrote:
+>>>>>
+>>>>> Hello,
+>>>>>
+>>>>> seems I found strange thing(may be a bug) where sender('tx' later) and
+>>>>> receiver('rx' later) could stuck forever. Potential fix is in the first
+>>>>> patch, second patch contains reproducer, based on vsock test suite.
+>>>>> Reproducer is simple: tx just sends data to rx by 'write() syscall, rx
+>>>>> dequeues it using 'read()' syscall and uses 'poll()' for waiting. I run
+>>>>> server in host and client in guest.
+>>>>>
+>>>>> rx side params:
+>>>>> 1) SO_VM_SOCKETS_BUFFER_SIZE is 256Kb(e.g. default).
+>>>>> 2) SO_RCVLOWAT is 128Kb.
+>>>>>
+>>>>> What happens in the reproducer step by step:
+>>>>>
+>>>>
+>>>> I put the values of the variables involved to facilitate understanding:
+>>>>
+>>>> RX: buf_alloc = 256 KB; fwd_cnt = 0; last_fwd_cnt = 0;
+>>>>     free_space = buf_alloc - (fwd_cnt - last_fwd_cnt) = 256 KB
+>>>>
+>>>> The credit update is sent if
+>>>> free_space < VIRTIO_VSOCK_MAX_PKT_BUF_SIZE [64 KB]
+>>>>
+>>>>> 1) tx tries to send 256Kb + 1 byte (in a single 'write()')
+>>>>> 2) tx sends 256Kb, data reaches rx (rx_bytes == 256Kb)
+>>>>> 3) tx waits for space in 'write()' to send last 1 byte
+>>>>> 4) rx does poll(), (rx_bytes >= rcvlowat) 256Kb >= 128Kb, POLLIN is set
+>>>>> 5) rx reads 64Kb, credit update is not sent due to *
+>>>>
+>>>> RX: buf_alloc = 256 KB; fwd_cnt = 64 KB; last_fwd_cnt = 0;
+>>>>     free_space = 192 KB
+>>>>
+>>>>> 6) rx does poll(), (rx_bytes >= rcvlowat) 192Kb >= 128Kb, POLLIN is set
+>>>>> 7) rx reads 64Kb, credit update is not sent due to *
+>>>>
+>>>> RX: buf_alloc = 256 KB; fwd_cnt = 128 KB; last_fwd_cnt = 0;
+>>>>     free_space = 128 KB
+>>>>
+>>>>> 8) rx does poll(), (rx_bytes >= rcvlowat) 128Kb >= 128Kb, POLLIN is set
+>>>>> 9) rx reads 64Kb, credit update is not sent due to *
+>>>>
+>>>> Right, (free_space < VIRTIO_VSOCK_MAX_PKT_BUF_SIZE) is still false.
+>>>>
+>>>> RX: buf_alloc = 256 KB; fwd_cnt = 196 KB; last_fwd_cnt = 0;
+>>>>     free_space = 64 KB
+>>>>
+>>>>> 10) rx does poll(), (rx_bytes < rcvlowat) 64Kb < 128Kb, rx waits in poll()
+>>>>
+>>>> I agree that the TX is stuck because we are not sending the credit
+>>>> update, but also if RX sends the credit update at step 9, RX won't be
+>>>> woken up at step 10, right?
+>>>
+>>> Yes, RX will sleep, but TX will wake up and as we inform TX how much
+>>> free space we have, now there are two cases for TX:
+>>> 1) send "small" rest of data(e.g. without blocking again), leave 'write()'
+>>>   and continue execution. RX still waits in 'poll()'. Later TX will
+>>>   send enough data to wake up RX.
+>>> 2) send "big" rest of data - if rest is too big to leave 'write()' and TX
+>>>   will wait again for the free space - it will be able to send enough data
+>>>   to wake up RX as we compared 'rx_bytes' with rcvlowat value in RX.
 >>
->> Wrong, the stall is happening in the XZ decompressor library, which
->> is *not* in Squashfs.
->>
->> This reported stall in the decompressor code is likely a symptom of you
->> deliberately thrashing your system.  When the system thrashes everything
->> starts to happen very slowly, and the system will spend a lot of
->> its time doing page I/O, and the CPU will spend a lot of time in
->> any CPU intensive code like the XZ decompressor library.
->>
->> So the fact the stall is being hit here is a symptom and not
->> a cause.  The decompressor code is likely running slowly due to
->> thrashing and waiting on paged-out buffers.  This is not indicative
->> of any bug, merely a system running slowly due to overload.
->>
->> As I said, this is not a Squashfs issue, because the code when the
->> stall takes place isn't in Squashfs.
->>
->> The people responsible for the rcu code should have a lot more insight
->> about what happens when the system is thrashing, and how this will
->> throw up false positives.  In this I believe this is an instance of
->> perfectly correct code running slowly due to thrashing incorrectly
->> being flagged as looping.
->>
->> CC'ing Paul E. McKenney <paulmck@kernel.org>
->>
->> Phillip
-> 
-> How big can these readahead sizes be? Should one of the loops include
-> cond_resched() calls?
+>> Right, so I'd update the test to behave like this.
+>Sorry, You mean vsock_test? To cover TX waiting for free space at RX, thus checking
+>this kernel patch logic?
 
-Please allow me to assert that 6.1.0+ kernel (this Berlin time 6 AM 
-morning's build on on Torvalds' tree) built with CONFIG_KMEMLEAK=y, 
-CONFIG_KASAN=y, CONFIG_LRU_GEN=y (multi-gen LRU) and
-CONFIG_RCU_EXP_CPU_STALL_TIMEOUT=20 doesn't exhibit before seen RCU 
-stalls even with such a low timeout as 20 ms.
+Yep, I mean the test that you added in this series.
 
-So I guess kudos go to the MG-LRU developers, or has Mr. Lougher done 
-something efficient in the meantime.
+>> And I'd explain better the problem we are going to fix in the commit message.
+>Ok
+>>
+>>>>
+>>>>>
+>>>>> * is optimization in 'virtio_transport_stream_do_dequeue()' which
+>>>>>   sends OP_CREDIT_UPDATE only when we have not too much space -
+>>>>>   less than VIRTIO_VSOCK_MAX_PKT_BUF_SIZE.
+>>>>>
+>>>>> Now tx side waits for space inside write() and rx waits in poll() for
+>>>>> 'rx_bytes' to reach SO_RCVLOWAT value. Both sides will wait forever. I
+>>>>> think, possible fix is to send credit update not only when we have too
+>>>>> small space, but also when number of bytes in receive queue is smaller
+>>>>> than SO_RCVLOWAT thus not enough to wake up sleeping reader. I'm not
+>>>>> sure about correctness of this idea, but anyway - I think that problem
+>>>>> above exists. What do You think?
+>>>>
+>>>> I'm not sure, I have to think more about it, but if RX reads less than
+>>>> SO_RCVLOWAT, I expect it's normal to get to a case of stuck.
+>>>>
+>>>> In this case we are only unstucking TX, but even if it sends that single
+>>>> byte, RX is still stuck and not consuming it, so it was useless to wake
+>>>> up TX if RX won't consume it anyway, right?
+>>>
+>>> 1) I think it is not useless, because we inform(not just wake up) TX that
+>>> there is free space at RX side - as i mentioned above.
+>>> 2) Anyway i think that this situation is a little bit strange: TX thinks that
+>>> there is no free space at RX and waits for it, but there is free space at RX!
+>>> At the same time, RX waits in poll() forever - it is ready to get new portion
+>>> of data to return POLLIN, but TX "thinks" exactly opposite thing - RX is full
+>>> of data. Of course, if there will be just stalls in TX data handling - it will
+>>> be ok - just performance degradation, but TX stucks forever.
+>>
+>> We did it to avoid a lot of credit update messages.
+>Yes, i see
+>> Anyway I think here the main point is why RX is setting SO_RCVLOWAT to 128 KB and then reads only half of it?
+>>
+>> So I think if the users set SO_RCVLOWAT to a value and then RX reads less then it, is expected to get stuck.
+>That a really interesting question, I've found nothing about this case in Google(not sure for 100%) or POSIX. But,
+>i can modify reproducer: it sets SO_RCVLOWAT to 128Kb BEFORE entering its last poll where it will stuck. In this
+>case behaviour looks more legal: it uses default SO_RCVLOWAT of 1, read 64Kb each time. Finally it sets SO_RCVLOWAT
+>to 128Kb(and imagine that it prepares 128Kb 'read()' buffer) and enters poll() - we will get same effect: TX will wait
+>for space, RX waits in 'poll()'.
 
-My $0.02!
+Good point!
 
-Thank you,
-Mirsad
+>>
+>> Anyway, since the change will not impact the default behaviour (SO_RCVLOWAT = 1) we can merge this patch, but IMHO we need to explain the case better and improve the test.
+>I see, of course I'm not sure about this change, just want to ask 
+>someone who knows this code better
 
--- 
-Mirsad Goran Todorovac
-Sistem inÅ¾enjer
-GrafiÄki fakultet | Akademija likovnih umjetnosti
-SveuÄiliÅ¡te u Zagrebu
--- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
+Yes, it's an RFC, so you did well! :-)
+
+>>
+>>>
+>>>>
+>>>> If RX woke up (e.g. SO_RCVLOWAT = 64KB) and read the remaining 64KB,
+>>>> then it would still send the credit update even without this patch and
+>>>> TX will send the 1 byte.
+>>>
+>>> But how RX will wake up in this case? E.g. it calls poll() without timeout,
+>>> connection is established, RX ignores signal
+>>
+>> RX will wake up because SO_RCVLOWAT is 64KB and there are 64 KB in the buffer. Then RX will read it and send the credit update to TX because
+>> free_space is 0.
+>IIUC, i'm talking about 10 steps above, e.g. RX will never wake up, 
+>because TX is waiting for space.
+
+Yep, but if RX uses SO_RCVLOWAT = 64 KB instead of 128 KB (I mean if RX 
+reads all the bytes that it's waiting as it specified in SO_RCVLOWAT), 
+then RX will send the credit message.
+
+But there is the case that you mentioned, when SO_RCVLOWAT is chagend 
+while executing.
+
+Thanks,
+Stefano
+
