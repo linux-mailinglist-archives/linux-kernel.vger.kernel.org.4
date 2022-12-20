@@ -2,254 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2286516F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 01:03:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8E765170A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 01:06:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbiLTADd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 19:03:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
+        id S232792AbiLTAFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 19:05:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiLTAD3 (ORCPT
+        with ESMTP id S232444AbiLTAFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 19:03:29 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E25342613;
-        Mon, 19 Dec 2022 16:03:27 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 67DA2AD7;
-        Mon, 19 Dec 2022 16:04:08 -0800 (PST)
-Received: from slackpad.lan (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 46D2A3F71E;
-        Mon, 19 Dec 2022 16:03:25 -0800 (PST)
-Date:   Tue, 20 Dec 2022 00:01:40 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
-        samuel@sholland.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH AUTOSEL 6.1 8/9] arm64: dts: allwinner: h616: Add USB
- nodes
-Message-ID: <20221220000115.19c152fe@slackpad.lan>
-In-Reply-To: <20221217000937.41115-8-sashal@kernel.org>
-References: <20221217000937.41115-1-sashal@kernel.org>
-        <20221217000937.41115-8-sashal@kernel.org>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
+        Mon, 19 Dec 2022 19:05:46 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421602A4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 16:05:43 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id 128so10316049vsz.12
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 16:05:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=criticallink.com; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x550/OsiWnsnhCUH29zWgidKchxtQqaOBRoxd0yhd7E=;
+        b=GPj+5IMRq85Ho5NoEcvHo8LtajbZsJ8dG9i7MTd85YImxaRBB9aIQq4hcxc7u2Tsl5
+         tcbkTr/hO7d0u5DKnxFhxpd5R1inx8+cbEcDnTG30hIGAU7zmmOJA8cFNXcZv3T7jUD/
+         p8OwhospT1ni8Y5B4jX6AGJ3DI/bHVaDthDgexvKds2CBJ30AhagUJOlt9y8Jwi8EVVr
+         mtqVYCLFgObGhUCwYtNaK1218e5khIWj46SQ2IHsDTfsUT05yG75qXYjj6Ahu8gb6YSL
+         +Bnv8Vv3UO71PjYB7jlNhyJ+Me8xEhwBO+DvayhrZydv7+c+9Lg+/39aUgSHApbel9M6
+         J6Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=x550/OsiWnsnhCUH29zWgidKchxtQqaOBRoxd0yhd7E=;
+        b=hct4vV5J0EFQ1mmnjq1RhJYMaRoq27Zvcl7lXG4kBJurA34q8y86VRWeMjpyMNega3
+         b4ryUgtdsf/ooK8fjHm1hpgVHntcWn6nGG1ScJLV1Qp/9MPJ8xf1Xe/TvNez5P58nMYl
+         xNGyZ9RMbHFbExaW7fyfYER1fEKLBkS9SNtmGB39KlRmoIoBR07lgW8ms8n+QZX8mIUq
+         JXml/p245PrNsIUqADXYgNxx1Rf9ns3hD8NpZfpla2pJKHFAUkLLYIrZeokZPXVmDwCc
+         KLqa9C5LrMr+SV2A8yCjGVrgEUYS7MNRXnfDDIMxWAk9O7dlDZWEEaVcN2/PomCFNqyw
+         ZPOg==
+X-Gm-Message-State: AFqh2krF4IsgF0bZmFmxi0KcCHk+zCjIlqn2BCuPKbXBd5gbBIDiMAQy
+        Mte7Qc9dYtrZqZSreBvTZbaTsQ==
+X-Google-Smtp-Source: AMrXdXtxeE+xv5Ro1p1xozvtIVG8oryRUQqJ43vEvCn0SHdJtiWMLmXV4nqIUbrxWF9bWawfoWGDyg==
+X-Received: by 2002:a67:af1a:0:b0:3ac:df02:e954 with SMTP id v26-20020a67af1a000000b003acdf02e954mr3720164vsl.10.1671494742304;
+        Mon, 19 Dec 2022 16:05:42 -0800 (PST)
+Received: from jcormier-MS-7A93.syr.criticallink.com (static-72-90-70-109.syrcny.fios.verizon.net. [72.90.70.109])
+        by smtp.gmail.com with ESMTPSA id o70-20020a374149000000b006e702033b15sm7721430qka.66.2022.12.19.16.05.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 16:05:41 -0800 (PST)
+From:   "Cormier, Jonathan" <jcormier@criticallink.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     "Cormier, Jonathan" <jcormier@criticallink.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bob Duke <bduke@criticallink.com>,
+        John Pruitt <jpruitt@criticallink.com>
+Subject: [PATCH v2 0/2] hwmon: ltc2945: Add binding and shunt resistor support
+Date:   Mon, 19 Dec 2022 19:04:53 -0500
+Message-Id: <20221220000457.1163446-1-jcormier@criticallink.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221214220727.1350784-1-jcormier@criticallink.com>
+References: <20221214220727.1350784-1-jcormier@criticallink.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Dec 2022 19:09:35 -0500
-Sasha Levin <sashal@kernel.org> wrote:
+Added the ability to specify the value of the shunt resistor in the
+device tree instead of assuming it is 1 milliOhm.
 
-> From: Andre Przywara <andre.przywara@arm.com>
-> 
-> [ Upstream commit f40cf244c3feb4e1a442f8029b691add2c65b3ab ]
+Would be good to backport as well
 
-This is not really a backport candidate:
-- This is not a fix, but a new feature.
-- This relies on the H616 USB PHY support patch, which will be only in
-  v6.2 (and won't be backported).
-- DT backports are generally not useful to begin with, and should
-  actually not be necessary anyway.
+Changes since v1:
+- Add devicetree match table
+- Add kerneldoc for the ltc2945_data struct
+- Cleanup excesive comments about the shunt resistor
+- Switch to device_property_read_u32()
 
-Cheers,
-Andre
+Cormier, Jonathan (1):
+  dt-bindings: hwmon: adi,ltc2945: Add binding
 
-> 
-> Add the nodes for the MUSB and the four USB host controllers to the SoC
-> .dtsi, along with the PHY node needed to bind all of them together.
-> 
-> EHCI/OHCI and MUSB are compatible to previous SoCs, but the PHY requires
-> some quirks (handled in the driver).
-> 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Link: https://lore.kernel.org/r/20221031111358.3387297-6-andre.przywara@arm.com
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  .../arm64/boot/dts/allwinner/sun50i-h616.dtsi | 160 ++++++++++++++++++
->  1 file changed, 160 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
-> index 622a1f7d1641..74aed0d232a9 100644
-> --- a/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
-> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
-> @@ -504,6 +504,166 @@ mdio0: mdio {
->  			};
->  		};
->  
-> +		usbotg: usb@5100000 {
-> +			compatible = "allwinner,sun50i-h616-musb",
-> +				     "allwinner,sun8i-h3-musb";
-> +			reg = <0x05100000 0x0400>;
-> +			clocks = <&ccu CLK_BUS_OTG>;
-> +			resets = <&ccu RST_BUS_OTG>;
-> +			interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "mc";
-> +			phys = <&usbphy 0>;
-> +			phy-names = "usb";
-> +			extcon = <&usbphy 0>;
-> +			status = "disabled";
-> +		};
-> +
-> +		usbphy: phy@5100400 {
-> +			compatible = "allwinner,sun50i-h616-usb-phy";
-> +			reg = <0x05100400 0x24>,
-> +			      <0x05101800 0x14>,
-> +			      <0x05200800 0x14>,
-> +			      <0x05310800 0x14>,
-> +			      <0x05311800 0x14>;
-> +			reg-names = "phy_ctrl",
-> +				    "pmu0",
-> +				    "pmu1",
-> +				    "pmu2",
-> +				    "pmu3";
-> +			clocks = <&ccu CLK_USB_PHY0>,
-> +				 <&ccu CLK_USB_PHY1>,
-> +				 <&ccu CLK_USB_PHY2>,
-> +				 <&ccu CLK_USB_PHY3>,
-> +				 <&ccu CLK_BUS_EHCI2>;
-> +			clock-names = "usb0_phy",
-> +				      "usb1_phy",
-> +				      "usb2_phy",
-> +				      "usb3_phy",
-> +				      "pmu2_clk";
-> +			resets = <&ccu RST_USB_PHY0>,
-> +				 <&ccu RST_USB_PHY1>,
-> +				 <&ccu RST_USB_PHY2>,
-> +				 <&ccu RST_USB_PHY3>;
-> +			reset-names = "usb0_reset",
-> +				      "usb1_reset",
-> +				      "usb2_reset",
-> +				      "usb3_reset";
-> +			status = "disabled";
-> +			#phy-cells = <1>;
-> +		};
-> +
-> +		ehci0: usb@5101000 {
-> +			compatible = "allwinner,sun50i-h616-ehci",
-> +				     "generic-ehci";
-> +			reg = <0x05101000 0x100>;
-> +			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&ccu CLK_BUS_OHCI0>,
-> +				 <&ccu CLK_BUS_EHCI0>,
-> +				 <&ccu CLK_USB_OHCI0>;
-> +			resets = <&ccu RST_BUS_OHCI0>,
-> +				 <&ccu RST_BUS_EHCI0>;
-> +			phys = <&usbphy 0>;
-> +			phy-names = "usb";
-> +			status = "disabled";
-> +		};
-> +
-> +		ohci0: usb@5101400 {
-> +			compatible = "allwinner,sun50i-h616-ohci",
-> +				     "generic-ohci";
-> +			reg = <0x05101400 0x100>;
-> +			interrupts = <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&ccu CLK_BUS_OHCI0>,
-> +				 <&ccu CLK_USB_OHCI0>;
-> +			resets = <&ccu RST_BUS_OHCI0>;
-> +			phys = <&usbphy 0>;
-> +			phy-names = "usb";
-> +			status = "disabled";
-> +		};
-> +
-> +		ehci1: usb@5200000 {
-> +			compatible = "allwinner,sun50i-h616-ehci",
-> +				     "generic-ehci";
-> +			reg = <0x05200000 0x100>;
-> +			interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&ccu CLK_BUS_OHCI1>,
-> +				 <&ccu CLK_BUS_EHCI1>,
-> +				 <&ccu CLK_USB_OHCI1>;
-> +			resets = <&ccu RST_BUS_OHCI1>,
-> +				 <&ccu RST_BUS_EHCI1>;
-> +			phys = <&usbphy 1>;
-> +			phy-names = "usb";
-> +			status = "disabled";
-> +		};
-> +
-> +		ohci1: usb@5200400 {
-> +			compatible = "allwinner,sun50i-h616-ohci",
-> +				     "generic-ohci";
-> +			reg = <0x05200400 0x100>;
-> +			interrupts = <GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&ccu CLK_BUS_OHCI1>,
-> +				 <&ccu CLK_USB_OHCI1>;
-> +			resets = <&ccu RST_BUS_OHCI1>;
-> +			phys = <&usbphy 1>;
-> +			phy-names = "usb";
-> +			status = "disabled";
-> +		};
-> +
-> +		ehci2: usb@5310000 {
-> +			compatible = "allwinner,sun50i-h616-ehci",
-> +				     "generic-ehci";
-> +			reg = <0x05310000 0x100>;
-> +			interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&ccu CLK_BUS_OHCI2>,
-> +				 <&ccu CLK_BUS_EHCI2>,
-> +				 <&ccu CLK_USB_OHCI2>;
-> +			resets = <&ccu RST_BUS_OHCI2>,
-> +				 <&ccu RST_BUS_EHCI2>;
-> +			phys = <&usbphy 2>;
-> +			phy-names = "usb";
-> +			status = "disabled";
-> +		};
-> +
-> +		ohci2: usb@5310400 {
-> +			compatible = "allwinner,sun50i-h616-ohci",
-> +				     "generic-ohci";
-> +			reg = <0x05310400 0x100>;
-> +			interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&ccu CLK_BUS_OHCI2>,
-> +				 <&ccu CLK_USB_OHCI2>;
-> +			resets = <&ccu RST_BUS_OHCI2>;
-> +			phys = <&usbphy 2>;
-> +			phy-names = "usb";
-> +			status = "disabled";
-> +		};
-> +
-> +		ehci3: usb@5311000 {
-> +			compatible = "allwinner,sun50i-h616-ehci",
-> +				     "generic-ehci";
-> +			reg = <0x05311000 0x100>;
-> +			interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&ccu CLK_BUS_OHCI3>,
-> +				 <&ccu CLK_BUS_EHCI3>,
-> +				 <&ccu CLK_USB_OHCI3>;
-> +			resets = <&ccu RST_BUS_OHCI3>,
-> +				 <&ccu RST_BUS_EHCI3>;
-> +			phys = <&usbphy 3>;
-> +			phy-names = "usb";
-> +			status = "disabled";
-> +		};
-> +
-> +		ohci3: usb@5311400 {
-> +			compatible = "allwinner,sun50i-h616-ohci",
-> +				     "generic-ohci";
-> +			reg = <0x05311400 0x100>;
-> +			interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&ccu CLK_BUS_OHCI3>,
-> +				 <&ccu CLK_USB_OHCI3>;
-> +			resets = <&ccu RST_BUS_OHCI3>;
-> +			phys = <&usbphy 3>;
-> +			phy-names = "usb";
-> +			status = "disabled";
-> +		};
-> +
->  		rtc: rtc@7000000 {
->  			compatible = "allwinner,sun50i-h616-rtc";
->  			reg = <0x07000000 0x400>;
+John Pruitt (1):
+  hwmon: ltc2945: Allow setting shunt resistor
 
+ .../bindings/hwmon/adi,ltc2945.yaml           | 50 +++++++++++
+ drivers/hwmon/ltc2945.c                       | 86 ++++++++++++++-----
+ 2 files changed, 115 insertions(+), 21 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
+
+--
+2.25.1
