@@ -2,69 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61ABF651B04
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 07:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B023651B02
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 07:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbiLTG6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 01:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
+        id S233160AbiLTG6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 01:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233116AbiLTG6M (ORCPT
+        with ESMTP id S233116AbiLTG6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 01:58:12 -0500
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203F914014
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 22:58:11 -0800 (PST)
-Received: by mail-vs1-xe2d.google.com with SMTP id i188so5001375vsi.8
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 22:58:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6MavG/BSQqfihoP4/TEaeDzAmuIP/BPU7laq0dLUyiQ=;
-        b=GsBIWFnT67ZXpkQFI41zO7pdeNulIK0cVZLpWDYskvgqyrQdpmlEdzr2EKpEtXwSj3
-         gZqRHTZwWTQbhlCkmIhEmVdLUEtkhNcdvFOBsph1AMsAE773QmNpBLAUY/QE4+u1gYUb
-         T96CUBgYX58tl0FY64tMUEWU58vkayPCkgP6vsI1kgoFzZlsgFlhhkZZywdeYv53Wq/Y
-         MWyVNxU3jsdI67qhujEhlerm6M4/V0Vhbk+gzclM2FKthDTLBn/godyJJcEP5V+Tcn69
-         YPkKUfgxjeaA0oHkn2D3jjfPLmHHfTGX/TDaz8WlB+m7Y/HfXEwYcLgw63XsoQmyo1XG
-         LVOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6MavG/BSQqfihoP4/TEaeDzAmuIP/BPU7laq0dLUyiQ=;
-        b=X7chTh5hrlA6vf45C1hLSrSo68KkMf6AsSF5erKWNGWH+ai7/Rrcs3PKicY8sZzQCZ
-         AKp7Qq1q14ugtgOyw8q6v9qiLxJZYbuC+vWDFwu9Jy8+3dTZIJhw2pRZz7E+//y+UTlU
-         kygMPPZhMKenk6J7YZxHGO11kJm3+NvXnoxtkqxqaCA91WKgQ+28XIsTp4BXsDYbl8tg
-         rpkV6q3mYAZbgBuIxUzP0DaNvKV6mO2MwFZtmOxGeNYpp1oy0jP7a1rcjOM/ELLUk8m9
-         lCkwXGb/O2w6pkok46JXhZA58Rp50F+9jZzGZo0mmJIlKPQPytAatW/PZnEbJjAwFxyd
-         gj9A==
-X-Gm-Message-State: ANoB5pm8NRn6ZeMkYuQf988h93gUUavFxae9nTZZYHGcj3w2pf3aeVPu
-        GqFviRTSQmOcLerqYpOOdj60kvtR4/j2qjaL6/iKAA==
-X-Google-Smtp-Source: AA0mqf60OEcAqwDC44GHkHjuifLu/BTy8qOiOSkp6A3Th2X7AaA7e/B5gMVBtzfUeCtjXgGkusTs4hIXFPxTNRnwWA8=
-X-Received: by 2002:a05:6102:3ca1:b0:3b5:d38:9d4 with SMTP id
- c33-20020a0561023ca100b003b50d3809d4mr3899571vsv.9.1671519490093; Mon, 19 Dec
- 2022 22:58:10 -0800 (PST)
+        Tue, 20 Dec 2022 01:58:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057C6140AC;
+        Mon, 19 Dec 2022 22:58:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD887B811A0;
+        Tue, 20 Dec 2022 06:58:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F7C6C433D2;
+        Tue, 20 Dec 2022 06:58:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671519484;
+        bh=hezfHxyVtEQckJyh4KpukNcGmjuAeZBzbORAHzBO+L0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y+FbG7jq2WiorMSGVEt1LOS6JezSbl1gvPuIFj8mIJR08aCmSTXlqguUyyRDLCXjE
+         bIfbr+49tX9D9RzoKKPHVXO/svnFqyR9WEApoYrXym1zTbFBtcc7HZh91b42oZieVs
+         OFfXQyvHBuDbBEBI/hOIsWV8ygYT6wqc0I8Rlv9A=
+Date:   Tue, 20 Dec 2022 07:58:01 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>
+Subject: Re: [PATCH] usb: misc: onboard_usb_hub: Don't defer probing for
+ 'incomplete' DT nodes
+Message-ID: <Y6Fc+QU1kM7fTvH2@kroah.com>
+References: <20221220004427.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
 MIME-Version: 1.0
-References: <20221219182940.701087296@linuxfoundation.org>
-In-Reply-To: <20221219182940.701087296@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 20 Dec 2022 12:27:59 +0530
-Message-ID: <CA+G9fYvCfYJF_7XXt+JGb+yZsjM21bmWQd4yO44gKqp7stfP1A@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/18] 5.10.161-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220004427.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,179 +53,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Dec 2022 at 00:58, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.161 release.
-> There are 18 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.161-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, Dec 20, 2022 at 12:45:01AM +0000, Matthias Kaehlcke wrote:
+> Some boards have device tree nodes for USB hubs supported by the
+> onboard_usb_hub driver, but the nodes don't have all properties
+> needed for the driver to work properly (which is not necessarily
+> an error in the DT). Currently _find_onboard_hub() returns
+> -EPROBE_DEFER in such cases, which results in an unusable USB hub,
+> since successive probes fail in the same way. Use the absence of
+> the "vdd" supply as an indicator of such 'incomplete' DT nodes
+> and return -ENODEV.
+> 
+> Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+> Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.10.161-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: bc32b2c55e20a98b04c9ccb34c50e4fbd7f2b8cd
-* git describe: v5.10.160-19-gbc32b2c55e20
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.160-19-gbc32b2c55e20
-
-## Test Regressions (compared to v5.10.160)
-
-## Metric Regressions (compared to v5.10.160)
-
-## Test Fixes (compared to v5.10.160)
-
-## Metric Fixes (compared to v5.10.160)
-
-## Test result summary
-total: 120764, pass: 105386, fail: 2229, skip: 12725, xfail: 424
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 147 total, 146 passed, 1 failed
-* arm64: 45 total, 43 passed, 2 failed
-* i386: 35 total, 33 passed, 2 failed
-* mips: 27 total, 24 passed, 3 failed
-* parisc: 6 total, 6 passed, 0 failed
-* powerpc: 28 total, 23 passed, 5 failed
-* riscv: 12 total, 12 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 12 total, 12 passed, 0 failed
-* sparc: 6 total, 6 passed, 0 failed
-* x86_64: 38 total, 36 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+No cc: stable?
