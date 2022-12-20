@@ -2,76 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5D86523B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:33:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A62D6523BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233829AbiLTPdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 10:33:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34984 "EHLO
+        id S233392AbiLTPep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 10:34:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233782AbiLTPdr (ORCPT
+        with ESMTP id S233208AbiLTPej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 10:33:47 -0500
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48A518699;
-        Tue, 20 Dec 2022 07:33:46 -0800 (PST)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-142b72a728fso15770139fac.9;
-        Tue, 20 Dec 2022 07:33:46 -0800 (PST)
+        Tue, 20 Dec 2022 10:34:39 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8501AF3B
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 07:34:37 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id 38-20020a630b26000000b004773803dda1so7397859pgl.17
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 07:34:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yo9h1s1BW8zwaie0UAm0eYHIJR1g4N+GT2rF9fz7vic=;
-        b=OH8omz7lzZJc7F8hJUoZthfy0hS/ASASJYCBkwoLLLOxuJAUAl4NVe04TcQAviA+1E
-         hQSW+rnxdGi7d9SDSBC1PUrxU2gPwbmw0ofFxJmHYH6mDDwwuLmLsiYkO2UGUWvWrQWw
-         Nhw3Eh20rJbEo1ONMmfwCWKO/T95f61Ts78E0yvAND2fP3N1Q7e+5vNiq/DQ/oZuLGfN
-         4PsxzpIKi6XbmwaI8hsUv3GMQDhaB2FNStByDt7Sp2/q/op9b02zgJXSRtCUjvxOovsA
-         qJghdTMxk3+Kn300Wgc9rjtKZ5YTanFk3CuT5btqskoA/PNGDNygo5Y0WHQoPN9ZObWj
-         nHJw==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lFWkgUzHga/e5JHoMlfzC+mErHa+mSIMGGohb+jRGNo=;
+        b=fi7fXpoGUB+Abb4BxUCuSzcg9/bZWNR15BAEfaXLucXwwrahK1PJ697VeDtiRT4SDW
+         1KZjgyicGKoWPnFA1A5xjVMowe+BbXe1aYE0cbAqSydDf2ZKkB9IImY26fl6v0sw0mcp
+         n/HMxH8Ir5eo/6xTYmdSvrfa5hWCT9ChexUnI54r9i7jnnJK5g2QOLQ1qybAzIMBXfc+
+         J+dUFEhSzcNy40FlO/YyaXiwGAxt9Ex7ZKlubMfs7E/swYdGTH0sW4OylwZh4v/SE1/c
+         GmgSlWBhlH1gSuOPHDAPmJuXzEyV87lM3KR62lW72dtSbS72cqbYempUuPLdRw3fUhJD
+         Dllw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yo9h1s1BW8zwaie0UAm0eYHIJR1g4N+GT2rF9fz7vic=;
-        b=F4nr3A1Ss5H70nUwoqtxfqAHV6JrCmExgoQhFJWNLpbOOd+aMBPsGWNOtNF7Fg8iCY
-         ujDnO/kPG86x7hJuuvtrROAXwz9w71nOSsTdcbmyB9acz5/6U6SeCibks8tFh3WzFUqf
-         s44ThhGGRGBr2kJ/tA2W4iAoJFTfUB7f5lStH6YrEVP8b5V1SvBIvd1ChM18FRAsuJbr
-         qnMu2n06Zbf9CmqlUMP3wRf6PMmPM1l0JUi8XJnvbPB+wxw0l9hqizaavWG9M6OF49pk
-         j2Pb0oaVuhQWt2yMLiYnsLyYHIlUWLzRygeyJyV7FkYQCRh3FSN07r8mLbTWouw0hT7Z
-         oKGQ==
-X-Gm-Message-State: AFqh2koBajpD+JIeggVU9lHDeR72AKqQN2n162ir18UN2bgWiOVmp/61
-        TCA1j7+7QYUfwZBaxMpX4I4=
-X-Google-Smtp-Source: AMrXdXtzfQWHHnPWPb1ZCg6RnAuIr+IAtaebPI2baMpcCwPSDN0D2ABCsJs1j6r043zth35mfgDwtw==
-X-Received: by 2002:a05:6870:9a97:b0:13b:d910:5001 with SMTP id hp23-20020a0568709a9700b0013bd9105001mr7557544oab.1.1671550426293;
-        Tue, 20 Dec 2022 07:33:46 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t41-20020a05680815a900b003458d346a60sm5607487oiw.25.2022.12.20.07.33.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 07:33:46 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 20 Dec 2022 07:33:45 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 00/18] 5.10.161-rc1 review
-Message-ID: <20221220153345.GC907923@roeck-us.net>
-References: <20221219182940.701087296@linuxfoundation.org>
- <20221220144806.GB3748047@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221220144806.GB3748047@roeck-us.net>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lFWkgUzHga/e5JHoMlfzC+mErHa+mSIMGGohb+jRGNo=;
+        b=DNNRdqeT2Lp3flEy+1fh8Edo1K4BKlAHpdKyAmOKtma/uK0Lz1/cYvJeDlgLVczsEp
+         SZnwxSzx8Xvtx3LciBSe8+rEbyu/XXfbJWE8LGVki1mZ1tNn50OkChKVfjBWANpjrFTv
+         IvYLrk3fP1AA4rnhzB2uB1kplySGeU3TA2TyurY3qosKXHu7OHLhef/DXBqZAGOvOyd/
+         DbaN225apr5+tp2JoQ3q1fLV0B5OrjaSrEOvnLAroHcrW5rxfPZQMdb66Ek1mlDd/TQB
+         Ztr5hWszdNLy4JpxDe8eNLNdws/80METr8cz1H0+TubX7Lge3M01XfYOc+min58EwmAS
+         8knQ==
+X-Gm-Message-State: ANoB5pkWp4+m3+xqtdWJdeAziAalAHGSMG621enVU4cqb/3vuiegEAqC
+        /cB9VHNEtk7up9gi8konGRlkxQ/C04Y=
+X-Google-Smtp-Source: AA0mqf6qTu63JLlBKDJPaqZlXXwD4ay4Xx0F3GWmKRs52hOMT92vTE2a0VAU8MbZURY6+FipY1ueZiaNCIY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:2350:b0:189:8ea3:7455 with SMTP id
+ c16-20020a170903235000b001898ea37455mr51904343plh.19.1671550476739; Tue, 20
+ Dec 2022 07:34:36 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue, 20 Dec 2022 15:34:27 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20221220153427.514032-1-seanjc@google.com>
+Subject: [PATCH] KVM: x86: Sanity check inputs to kvm_handle_memory_failure()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,23 +67,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 06:48:08AM -0800, Guenter Roeck wrote:
-> On Mon, Dec 19, 2022 at 08:24:53PM +0100, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.10.161 release.
-> > There are 18 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
-> > Anything received after that time might be too late.
-> > 
-> 
-> Build results:
-> 	total: 162 pass: 162 fail: 0
-> Qemu test results:
-> 	total: 475 pass: 475 fail: 0
-> 
+Add a sanity check in kvm_handle_memory_failure() to assert that a valid
+x86_exception structure is provided if the memory "failure" wants to
+propagate a fault into the guest.  If a memory failure happens during a
+direct guest physical memory access, e.g. for nested VMX, KVM hardcodes
+the failure to X86EMUL_IO_NEEDED and doesn't provide an exception pointer
+(because the exception struct would just be filled with garbage).
 
-Also wrong. Sorry.
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/x86.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Guenter
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 312aea1854ae..da4bbd043a7b 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -13132,6 +13132,9 @@ int kvm_handle_memory_failure(struct kvm_vcpu *vcpu, int r,
+ 			      struct x86_exception *e)
+ {
+ 	if (r == X86EMUL_PROPAGATE_FAULT) {
++		if (KVM_BUG_ON(!e, vcpu->kvm))
++			return -EIO;
++
+ 		kvm_inject_emulated_page_fault(vcpu, e);
+ 		return 1;
+ 	}
+
+base-commit: 9d75a3251adfbcf444681474511b58042a364863
+-- 
+2.39.0.314.g84b9a713c41-goog
+
