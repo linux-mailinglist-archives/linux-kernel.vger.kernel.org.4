@@ -2,77 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7595265260B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 19:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E724652610
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 19:12:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233594AbiLTSLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 13:11:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
+        id S233849AbiLTSMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 13:12:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233711AbiLTSLA (ORCPT
+        with ESMTP id S229703AbiLTSMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 13:11:00 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7292A12D2C;
-        Tue, 20 Dec 2022 10:10:58 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id f16so13194689ljc.8;
-        Tue, 20 Dec 2022 10:10:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YCgvLxGszpcqBmYL7G26fw2zZ2/wqSpCHLDM+cNyPgI=;
-        b=JflZ991nO9+q3StleuPYPYvI/SYtKxCV57+m2ta6t9PMPKDqmD8KqrZGSEjnbhACAf
-         f3GTO4rdd6omXL/Lk00wxSUeoACwLmO2Yy/j8LdGpAok4aafVK86coQ1VAXKjn8dmHRz
-         YaXg1ebaI5OuDYTEj/Eb2GTL3idtNktkpdlc3hg2uDctk9XGaqLRqLdgZFizmhybwcnT
-         jPK1sheetvmtAF3DGG0pxOkyWaY+B/mjmFxnl9w2clkRWPHA59hX3lEJEk1bYUF8yLqS
-         hjyUC58RzVyKFQkPejKQGXzdz7fVHeTxLdb9UllXhjsN0hIA189VHR0NQvHWwhDQh3a0
-         l8Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YCgvLxGszpcqBmYL7G26fw2zZ2/wqSpCHLDM+cNyPgI=;
-        b=kTXqLvyQHtNOaMadeXQQS0rs92I+vWqbz+/CIHNKTBJ9AI5jwUKq2QkwEhGYP7ojgx
-         HGcB79dusGwkU56GQjZsi+V5b/B23TeXEPnJw5Z2kG+Yo+o0na+XzYFLK7ICH8avOwig
-         OXYp9GyEk++qBqHOUGkenjkGj8HuKDaDR+a/Vs6gsjso4krC+ECED/W32U0VwpTqHI8y
-         EUQBTbsjwqpEVrQm0ONJTqnVu1RiHcJldX1SG1cFKL5LVQBRYp+qN0NiwR8rSdYougJY
-         JYYwPpehvMdqA/7z6T3d+Ac3FFFSBxDR9aJ9AXwxa2Yr+fij+pvviKSPecQvwyKQ422m
-         GcDA==
-X-Gm-Message-State: ANoB5pmeoIFxw2DhzF1Y/+2j+tnKlFLtF4SbetGCZxvrV/jm923dnJ3Y
-        hfxSYUW/Ohn9aslvVx/pUfA=
-X-Google-Smtp-Source: AA0mqf4aKschK9ygVYnNCcRfkDlSGFMATrw4+unJGjXm+d3l3pObcsb2tfiatDf4kFWqCaNWs4g1Dw==
-X-Received: by 2002:a05:651c:198c:b0:279:6514:54e6 with SMTP id bx12-20020a05651c198c00b00279651454e6mr16704634ljb.45.1671559856707;
-        Tue, 20 Dec 2022 10:10:56 -0800 (PST)
-Received: from [192.168.2.145] (109-252-113-89.nat.spd-mgts.ru. [109.252.113.89])
-        by smtp.googlemail.com with ESMTPSA id q14-20020a2eb4ae000000b002790fbb5f89sm1088848ljm.44.2022.12.20.10.10.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 10:10:56 -0800 (PST)
-Message-ID: <4d562b75-854d-1997-8969-e7ef222e4e37@gmail.com>
-Date:   Tue, 20 Dec 2022 21:10:49 +0300
+        Tue, 20 Dec 2022 13:12:16 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C73218696;
+        Tue, 20 Dec 2022 10:12:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mQu+Me2Zll0UL7j/3P/n52Hs7DxCwP73ZIgzQwDiwlY=; b=lTJOAZQLu4JJ1jtQj6RldEOzvO
+        Ail1xiWwwJhqpX4Ss1/tX3TP45Hd9xAJ1HbAF5G0mWRiYw1XgbPohwbMmwB5IotjNbJj0rom18WvN
+        UKZI2wzAjoFkxDlbVx/CKPSBq+3bpSJneMgPK0s7d6oMTeA4BDXsZurwRsIF8fCTerd/vOGBET3de
+        wgEp0Ym0fnfN562kZWOh9NaZQw2vFEw2SVbV+jq430SXYH+r30Y6ZywtboEfyMftkk3p11lITwsgA
+        c2Zk34SvjAT+sBI/4YaZOGw3V+OFLjU+Kqo3m900uazcOt5EV/czwbhD9ZnOJA+IRTgIsrnaEWrNj
+        U7yRi32A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p7h65-0020Ag-9h; Tue, 20 Dec 2022 18:12:13 +0000
+Date:   Tue, 20 Dec 2022 10:12:13 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Allen Webb <allenwebb@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v9 02/10] rockchip-mailbox: Fix typo
+Message-ID: <Y6H6/U0w96Z4kpDn@bombadil.infradead.org>
+References: <20221219191855.2010466-1-allenwebb@google.com>
+ <20221219204619.2205248-1-allenwebb@google.com>
+ <20221219204619.2205248-3-allenwebb@google.com>
+ <Y6FaUynXTrYD6OYT@kroah.com>
+ <CAJzde04Hbd2+s-Bqog2V81dBEeZD7WWaFCf2BkesQS4yUAKiNA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
- scaling in Tegra234
-Content-Language: en-US
-To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        krzysztof.kozlowski@linaro.org, dmitry.osipenko@collabora.com,
-        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-2-sumitg@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20221220160240.27494-2-sumitg@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJzde04Hbd2+s-Bqog2V81dBEeZD7WWaFCf2BkesQS4yUAKiNA@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,15 +58,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-20.12.2022 19:02, Sumit Gupta пишет:
-> +static int tegra_emc_icc_get_init_bw(struct icc_node *node, u32 *avg, u32 *peak)
-> +{
-> +	*avg = 0;
-> +	*peak = 0;
-> +
-> +	return 0;
-> +}
+On Tue, Dec 20, 2022 at 08:58:36AM -0600, Allen Webb wrote:
+> As mentioned in a different sub-thread this cannot be built as a
+> module so I updated the commit message to:
+> 
+> imx: Fix typo
+>
+> A one character difference in the name supplied to MODULE_DEVICE_TABLE
+> breaks compilation for SOC_IMX8M after built-in modules can generate
+> match-id based module aliases, so fix the typo.
 
-Looks wrong, you should add ICC support to all the drivers first and
-only then enable ICC. I think you added this init_bw() to work around
-the fact that ICC isn't supported by T234 drivers.
+Are you saying that it is a typo *now* only, and fixing it does not fix
+compilation now, but that fixing the typo will fix a future compilation
+issue once your patches get merged for built-in module aliases?
+
+> This was not caught earlier because SOC_IMX8M can not be built as a
+> module and MODULE_DEVICE_TABLE is a no-op for built-in modules.
+
+Odd, so why did it use MODULE_DEVICE_TABLE then? What was the reason for
+the driver having MODULE_DEVICE_TABLE if it was a no-op?
+
+  Luis
