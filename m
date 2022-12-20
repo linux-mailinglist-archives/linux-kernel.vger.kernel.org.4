@@ -2,195 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29C865246B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FEEB65245A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233906AbiLTQMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 11:12:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
+        id S233028AbiLTQLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 11:11:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233944AbiLTQL6 (ORCPT
+        with ESMTP id S229994AbiLTQLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 11:11:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929CF10C8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:11:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671552673;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gL4ubDGmpZPREUzlL6lX1lQIdm4xmJ6HjbdnwaH7Trs=;
-        b=JxIl/bMIpRaPSJZUsvTheg0vq+2ADQahACPvOMBmMDpEaP9Wp4xgOCVzZkzjQmGXx9GFEm
-        p9zeaD6Sbia0YgEbLHqPr1V7GgbJbv+Tx5GBcCniBc2Bj+xJFMYYoYAuDk4rD1P7+wKzE4
-        WnLNdRcGirriC5PJf2q8ZhBGec2Jstg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-651-ptZWGK8QOha6tlhNqraP0w-1; Tue, 20 Dec 2022 11:11:09 -0500
-X-MC-Unique: ptZWGK8QOha6tlhNqraP0w-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3F2D51C08994;
-        Tue, 20 Dec 2022 16:11:09 +0000 (UTC)
-Received: from [10.22.18.106] (unknown [10.22.18.106])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CBCE82026D2B;
-        Tue, 20 Dec 2022 16:11:08 +0000 (UTC)
-Message-ID: <6fb04ee9-ce77-4835-2ad1-b7f8419cfb77@redhat.com>
-Date:   Tue, 20 Dec 2022 11:11:08 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [RFC PATCH] clocksource: Suspend the watchdog temporarily when
- high read lantency detected
-Content-Language: en-US
-To:     Feng Tang <feng.tang@intel.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Tim Chen <tim.c.chen@intel.com>
-References: <20221220082512.186283-1-feng.tang@intel.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221220082512.186283-1-feng.tang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 20 Dec 2022 11:11:35 -0500
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90D52DC8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:11:34 -0800 (PST)
+Received: by mail-wm1-x349.google.com with SMTP id 9-20020a1c0209000000b003d1c0a147f6so8229326wmc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:11:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/U0q2wRubnZu5FYqunFl3L2DBsGtVJyPPmHqxy8Kmzo=;
+        b=nghl4OeuPYr6raBj+HAei9HlEFQuarj+nwUhjwTMtIDjH4GZAftkIPfFWdft+oqDtV
+         4eET4FRnLq7t+XE0KQyRtPN96gGj+aZjmkF3UXzzJ6S/Rk/hylNoTbRpBcg0GyDOQz7v
+         woK5piLQ2wC4tin8ctPO1WVDJlV38zvf/6nMPVpJZkX8qw8Gbs/nKjZ3iyJlsN3YbTbF
+         bLSDivHx9jtOgEQ0f1eX3V7JtnkbJp1cNuHf9TYqjyIpD0fy1TuVsGyqdkklJzzZQp8Q
+         wTtkR8N8oyggEJ2iQOmpa4h3EjaY9tNna0E0loDBY4BqGWth/GR/Img6Idm4AENwTi1N
+         vBcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/U0q2wRubnZu5FYqunFl3L2DBsGtVJyPPmHqxy8Kmzo=;
+        b=E/0N+MchVA+BnrWHlR+hyiUujeT16+8d26Q1r7FlokmzKHPaPG0GyC7rLcMet8MBhR
+         43qJgID25xiorhvuqCoN4bmpfvegVA8v3WSbw4tM6vTjP1ilBrJl3yJbG9bAK8vNYYWG
+         QsK3nvSc8hNmXT5gcQha+8gYgBL0K5f350G2LW9KJqBIw8oQrqzGgwzz48hYl9OTRpRl
+         rAkmT/+CC69URuihwn9kc8L6G0IgRVDsuBj+joTYCOAvK/MudEsS4rDwmN1oynan6v2R
+         f8EWgpPTdrNX/0DPw7qJpOeZMJMm9V9H7oH3OW2kUxGnDMKj6ErxSWNIbBiomBu9zPGx
+         TwGQ==
+X-Gm-Message-State: ANoB5pn11OvtKEETH2tdtLqHNt315u28qt4P3Nr9leXNbISQjdAcYc7j
+        5xlqOOLd3txErL0A/8rwDlaQF3VVHLFepWf06g==
+X-Google-Smtp-Source: AA0mqf6KPDdpTcftcLyBvglxFar2cEa8ruo0iOnNcEIiYNkoKmEV+aRszY0GXWcON8JbKXhIrlT4ue8uNLGCdoPz7A==
+X-Received: from peternewman10.zrh.corp.google.com ([2a00:79e0:9d:6:8175:5362:6754:c66d])
+ (user=peternewman job=sendgmr) by 2002:a5d:46ce:0:b0:242:487:35bf with SMTP
+ id g14-20020a5d46ce000000b00242048735bfmr41364128wrs.616.1671552693185; Tue,
+ 20 Dec 2022 08:11:33 -0800 (PST)
+Date:   Tue, 20 Dec 2022 17:11:23 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20221220161123.432120-1-peternewman@google.com>
+Subject: [PATCH v7] x86/resctrl: Fix task CLOSID/RMID update race
+From:   Peter Newman <peternewman@google.com>
+To:     fenghua.yu@intel.com, reinette.chatre@intel.com
+Cc:     bp@alien8.de, derkling@google.com, eranian@google.com,
+        hpa@zytor.com, james.morse@arm.com, jannh@google.com,
+        kpsingh@google.com, linux-kernel@vger.kernel.org, mingo@redhat.com,
+        tglx@linutronix.de, x86@kernel.org,
+        Peter Newman <peternewman@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/20/22 03:25, Feng Tang wrote:
-> There were bug reported on 8 sockets x86 machines that TSC was wrongly
-> disabled when system is under heavy workload.
->
->   [ 818.380354] clocksource: timekeeping watchdog on CPU336: hpet wd-wd read-back delay of 1203520ns
->   [ 818.436160] clocksource: wd-tsc-wd read-back delay of 181880ns, clock-skew test skipped!
->   [ 819.402962] clocksource: timekeeping watchdog on CPU338: hpet wd-wd read-back delay of 324000ns
->   [ 819.448036] clocksource: wd-tsc-wd read-back delay of 337240ns, clock-skew test skipped!
->   [ 819.880863] clocksource: timekeeping watchdog on CPU339: hpet read-back delay of 150280ns, attempt 3, marking unstable
->   [ 819.936243] tsc: Marking TSC unstable due to clocksource watchdog
->   [ 820.068173] TSC found unstable after boot, most likely due to broken BIOS. Use 'tsc=unstable'.
->   [ 820.092382] sched_clock: Marking unstable (818769414384, 1195404998)
->   [ 820.643627] clocksource: Checking clocksource tsc synchronization from CPU 267 to CPUs 0,4,25,70,126,430,557,564.
->   [ 821.067990] clocksource: Switched to clocksource hpet
->
-> This can be reproduced when system is running memory intensive 'stream'
-> test, or some stress-ng subcases like 'ioport'.
->
-> The reason is when system is under heavy load, the read latency of
-> clocksource can be very high, it can be seen even with lightweight
-> TSC read, and is much worse on MMIO or IO port read based external
-> clocksource. Causing the watchdog check to be inaccurate.
->
-> As the clocksource watchdog is a lifetime check with frequency of
-> twice a second, there is no need to rush doing it when the system
-> is under heavy load and the clocksource read latency is very high,
-> suspend the watchdog timer for 5 minutes.
->
-> Signed-off-by: Feng Tang <feng.tang@intel.com>
-> ---
->   kernel/time/clocksource.c | 45 ++++++++++++++++++++++++++++-----------
->   1 file changed, 32 insertions(+), 13 deletions(-)
->
-> diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-> index 9cf32ccda715..8cd74b89d577 100644
-> --- a/kernel/time/clocksource.c
-> +++ b/kernel/time/clocksource.c
-> @@ -384,6 +384,15 @@ void clocksource_verify_percpu(struct clocksource *cs)
->   }
->   EXPORT_SYMBOL_GPL(clocksource_verify_percpu);
->   
-> +static inline void clocksource_reset_watchdog(void)
-> +{
-> +	struct clocksource *cs;
-> +
-> +	list_for_each_entry(cs, &watchdog_list, wd_list)
-> +		cs->flags &= ~CLOCK_SOURCE_WATCHDOG;
-> +}
-> +
-> +
->   static void clocksource_watchdog(struct timer_list *unused)
->   {
->   	u64 csnow, wdnow, cslast, wdlast, delta;
-> @@ -391,6 +400,7 @@ static void clocksource_watchdog(struct timer_list *unused)
->   	int64_t wd_nsec, cs_nsec;
->   	struct clocksource *cs;
->   	enum wd_read_status read_ret;
-> +	unsigned long extra_wait = 0;
->   	u32 md;
->   
->   	spin_lock(&watchdog_lock);
-> @@ -410,13 +420,30 @@ static void clocksource_watchdog(struct timer_list *unused)
->   
->   		read_ret = cs_watchdog_read(cs, &csnow, &wdnow);
->   
-> -		if (read_ret != WD_READ_SUCCESS) {
-> -			if (read_ret == WD_READ_UNSTABLE)
-> -				/* Clock readout unreliable, so give it up. */
-> -				__clocksource_unstable(cs);
-> +		if (read_ret == WD_READ_UNSTABLE) {
-> +			/* Clock readout unreliable, so give it up. */
-> +			__clocksource_unstable(cs);
->   			continue;
->   		}
->   
-> +		/*
-> +		 * When WD_READ_SKIP is returned, it means the system is likely
-> +		 * under very heavy load, where the latency of reading
-> +		 * watchdog/clocksource is very big, and affect the accuracy of
-> +		 * watchdog check. So give system some space and suspend the
-> +		 * watchdog check for 5 minutes.
-> +		 */
-> +		if (read_ret == WD_READ_SKIP) {
-> +			/*
-> +			 * As the watchdog timer will be suspended, and
-> +			 * cs->last could keep unchanged for 5 minutes, reset
-> +			 * the counters.
-> +			 */
-> +			clocksource_reset_watchdog();
-> +			extra_wait = HZ * 300;
-> +			break;
-> +		}
-> +
->   		/* Clocksource initialized ? */
->   		if (!(cs->flags & CLOCK_SOURCE_WATCHDOG) ||
->   		    atomic_read(&watchdog_reset_pending)) {
-> @@ -512,7 +539,7 @@ static void clocksource_watchdog(struct timer_list *unused)
->   	 * pair clocksource_stop_watchdog() clocksource_start_watchdog().
->   	 */
->   	if (!timer_pending(&watchdog_timer)) {
-> -		watchdog_timer.expires += WATCHDOG_INTERVAL;
-> +		watchdog_timer.expires += WATCHDOG_INTERVAL + extra_wait;
->   		add_timer_on(&watchdog_timer, next_cpu);
->   	}
->   out:
-> @@ -537,14 +564,6 @@ static inline void clocksource_stop_watchdog(void)
->   	watchdog_running = 0;
->   }
->   
-> -static inline void clocksource_reset_watchdog(void)
-> -{
-> -	struct clocksource *cs;
-> -
-> -	list_for_each_entry(cs, &watchdog_list, wd_list)
-> -		cs->flags &= ~CLOCK_SOURCE_WATCHDOG;
-> -}
-> -
->   static void clocksource_resume_watchdog(void)
->   {
->   	atomic_inc(&watchdog_reset_pending);
+When the user moves a running task to a new rdtgroup using the tasks
+file interface or by deleting its rdtgroup, the resulting change in
+CLOSID/RMID must be immediately propagated to the PQR_ASSOC MSR on the
+task(s) CPUs.
 
-It looks reasonable to me. Thanks for the patch.
+x86 allows reordering loads with prior stores, so if the task starts
+running between a task_curr() check that the CPU hoisted before the
+stores in the CLOSID/RMID update then it can start running with the old
+CLOSID/RMID until it is switched again because __rdtgroup_move_task()
+failed to determine that it needs to be interrupted to obtain the new
+CLOSID/RMID.
 
-Acked-by: Waiman Long <longman@redhat.com>
+Refer to the diagram below:
+
+CPU 0                                   CPU 1
+-----                                   -----
+__rdtgroup_move_task():
+  curr <- t1->cpu->rq->curr
+                                        __schedule():
+                                          rq->curr <- t1
+                                        resctrl_sched_in():
+                                          t1->{closid,rmid} -> {1,1}
+  t1->{closid,rmid} <- {2,2}
+  if (curr == t1) // false
+   IPI(t1->cpu)
+
+A similar race impacts rdt_move_group_tasks(), which updates tasks in a
+deleted rdtgroup.
+
+In both cases, use smp_mb() to order the task_struct::{closid,rmid}
+stores before the loads in task_curr().  In particular, in the
+rdt_move_group_tasks() case, simply execute an smp_mb() on every
+iteration with a matching task.
+
+It is possible to use a single smp_mb() in rdt_move_group_tasks(), but
+this would require two passes and a means of remembering which
+task_structs were updated in the first loop. However, benchmarking
+results below showed too little performance impact in the simple
+approach to justify implementing the two-pass approach.
+
+Times below were collected using `perf stat` to measure the time to
+remove a group containing a 1600-task, parallel workload.
+
+CPU: Intel(R) Xeon(R) Platinum P-8136 CPU @ 2.00GHz (112 threads)
+
+ # mkdir /sys/fs/resctrl/test
+ # echo $$ > /sys/fs/resctrl/test/tasks
+ # perf bench sched messaging -g 40 -l 100000
+
+task-clock time ranges collected using:
+
+ # perf stat rmdir /sys/fs/resctrl/test
+
+Baseline:                     1.54 - 1.60 ms
+smp_mb() every matching task: 1.57 - 1.67 ms
+
+Fixes: ae28d1aae48a ("x86/resctrl: Use an IPI instead of task_work_add() to update PQR_ASSOC MSR")
+Fixes: 0efc89be9471 ("x86/intel_rdt: Update task closid immediately on CPU in rmdir and unmount")
+Signed-off-by: Peter Newman <peternewman@google.com>
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+---
+Patch history:
+
+v7:
+ - Remove exploit case added in v6 and un-CC stable
+v6:
+ - Explain exploit case in changelog for stable
+ - Add Fixes: lines
+v5:
+ - Just put an smp_mb() between CLOSID/RMID stores and task_curr() calls
+ - Add a diagram detailing the race to the changelog
+v4:
+ - Reorder the patches so that justification for sending more IPIs can
+   reference the patch fixing __rdtgroup_move_task().
+ - Correct tense of wording used in changelog and comments
+v3:
+ - Split the handling of multi-task and single-task operations into
+   separate patches, now that they're handled differently.
+ - Clarify justification in the commit message, including moving some of
+   it out of inline code comment.
+v2:
+ - Following Reinette's suggestion: use task_call_func() for single
+   task, IPI broadcast for group movements.
+ - Rebased to v6.1-rc4
+
+v1: https://lore.kernel.org/lkml/20221103141641.3055981-1-peternewman@google.com/
+v2: https://lore.kernel.org/lkml/20221110135346.2209839-1-peternewman@google.com/
+v3: https://lore.kernel.org/lkml/20221115141953.816851-1-peternewman@google.com/
+v4: https://lore.kernel.org/lkml/20221129111055.953833-1-peternewman@google.com/
+v5: https://lore.kernel.org/lkml/20221214114447.1935755-1-peternewman@google.com/
+v6: https://lore.kernel.org/lkml/20221216133125.3159406-1-peternewman@google.com/
+---
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+index e5a48f05e787..5993da21d822 100644
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+@@ -580,8 +580,10 @@ static int __rdtgroup_move_task(struct task_struct *tsk,
+ 	/*
+ 	 * Ensure the task's closid and rmid are written before determining if
+ 	 * the task is current that will decide if it will be interrupted.
++	 * This pairs with the full barrier between the rq->curr update and
++	 * resctrl_sched_in() during context switch.
+ 	 */
+-	barrier();
++	smp_mb();
+ 
+ 	/*
+ 	 * By now, the task's closid and rmid are set. If the task is current
+@@ -2401,6 +2403,14 @@ static void rdt_move_group_tasks(struct rdtgroup *from, struct rdtgroup *to,
+ 			WRITE_ONCE(t->closid, to->closid);
+ 			WRITE_ONCE(t->rmid, to->mon.rmid);
+ 
++			/*
++			 * Order the closid/rmid stores above before the loads
++			 * in task_curr(). This pairs with the full barrier
++			 * between the rq->curr update and resctrl_sched_in()
++			 * during context switch.
++			 */
++			smp_mb();
++
+ 			/*
+ 			 * If the task is on a CPU, set the CPU in the mask.
+ 			 * The detection is inaccurate as tasks might move or
+
+base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
+-- 
+2.39.0.314.g84b9a713c41-goog
 
