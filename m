@@ -2,94 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5670F651BCE
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A55F8651BBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233298AbiLTHlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 02:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
+        id S233298AbiLTHdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 02:33:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbiLTHln (ORCPT
+        with ESMTP id S232465AbiLTHdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 02:41:43 -0500
-X-Greylist: delayed 579 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 19 Dec 2022 23:41:42 PST
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D22F72
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:41:42 -0800 (PST)
-Received: from webmail.kmu-office.ch (unknown [IPv6:2a02:418:6a02::a3])
-        by mail.kmu-office.ch (Postfix) with ESMTPSA id AEEBC5C03AF;
-        Tue, 20 Dec 2022 08:32:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=agner.ch; s=dkim;
-        t=1671521520;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/z0MB0ZIFP6aeujFH0p44anRHbnTFFLRrIGfOtCkCsA=;
-        b=wgXLk1fPwI5tusswIE/FVXABCqdMsTd4Ewelb8wZZfeqOiyccCdgwwMycuAL9xayASQ5OP
-        NPl6uRIVPAqWR3ncZNOHxYkBz9ZHZQJKSUf2V1sxdsTKuqrAAmgiWFIEth433dZFi6IG9F
-        84bJ8jwNDilNZ+t8o29aIl5LA+nVjVU=
+        Tue, 20 Dec 2022 02:33:19 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD5BCD;
+        Mon, 19 Dec 2022 23:33:18 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BK6UY33027388;
+        Tue, 20 Dec 2022 07:32:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=6A2qUgdtnzjOdP0NB3K4qRoy0y5kw1SQGVtydHBhUa4=;
+ b=bV9e4XgUpQvG1+2Y6+P35+ZaDyGlu4WD/to3ILZumDDVAZr0/Tb2dFVApDTPA6A4r4Jq
+ MQN7+OuxBHsGooX7gOhZPw6B+MWkntMrAOYKhFkxTTfTrcavoJEATpqXVbkLoVZYBfpp
+ g5qVPzGXkcwirQFQ2SdlmnOxeC4NMzASaiZEKKpxHrPHCWvkkO6Z0fSAVK204ByNi1q6
+ iZVBoXqI8IP8zuoc7K+QpoVjCa+goPrBMLBA4yMmZvWJMEa+x8/3QUapxZyv+PvLjgLY
+ PNtfegiNcfbc34sHfjqBkVB/rn3DhMQY3GthPGjR4u4murhXBRnMFGNZBnKy8WAcWAjk Zw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mk39t8kw6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 07:32:26 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BK7WPpv024206
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 07:32:25 GMT
+Received: from [10.216.34.45] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 19 Dec
+ 2022 23:32:17 -0800
+Message-ID: <5e0abe83-22ac-137b-d08f-6b34353c06a7@quicinc.com>
+Date:   Tue, 20 Dec 2022 13:02:13 +0530
 MIME-Version: 1.0
-Date:   Tue, 20 Dec 2022 08:32:00 +0100
-From:   Stefan Agner <stefan@agner.ch>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     Alison Wang <alison.wang@nxp.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: Re: [PATCH] drm/fsl-dcu: Remove redundant error logging
-In-Reply-To: <Y5Wwo6Gr1rJOdf3B@qemulion>
-References: <Y5Wwo6Gr1rJOdf3B@qemulion>
-Message-ID: <cbc2c587a04324f807a9c3d8d221f289@agner.ch>
-X-Sender: stefan@agner.ch
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/2] remoteproc: elf_loader: Update resource table name
+ check
+Content-Language: en-US
+To:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <judyhsiao@chromium.org>,
+        <devicetree@vger.kernel.org>, <krzysztof.kozlowski@linaro.org>,
+        <mathieu.poirier@linaro.org>, <corbet@lwn.net>,
+        Stephen Boyd <swboyd@chromium.org>
+References: <1670924929-26507-1-git-send-email-quic_srivasam@quicinc.com>
+ <1670924929-26507-2-git-send-email-quic_srivasam@quicinc.com>
+ <fe761bbe-96f9-75ae-b4be-e94b718abac3@linaro.org>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <fe761bbe-96f9-75ae-b4be-e94b718abac3@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: gD1mn5sBzc4LKdecMyC0tUeZQkSPtZuu
+X-Proofpoint-GUID: gD1mn5sBzc4LKdecMyC0tUeZQkSPtZuu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-20_01,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 spamscore=0 clxscore=1015 adultscore=0 priorityscore=1501
+ impostorscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212200062
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-11 11:27, Deepak R Varma wrote:
-> A call to platform_get_irq() already prints an error on failure within
-> its own implementation. So printing another error based on its return
-> value in the caller is redundant and should be removed. The clean up
-> also makes if condition block braces unnecessary. Remove that as well.
-> 
-> Issue identified using platform_get_irq.cocci coccicheck script.
-> 
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
 
-Reviewed-by: Stefan Agner <stefan@agner.ch>
-
---
-Stefan
-
-> ---
->  drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-> b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-> index 8579c7629f5e..1ba7d95e1956 100644
-> --- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-> +++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-> @@ -272,10 +272,8 @@ static int fsl_dcu_drm_probe(struct platform_device *pdev)
->  	}
-> 
->  	fsl_dev->irq = platform_get_irq(pdev, 0);
-> -	if (fsl_dev->irq < 0) {
-> -		dev_err(dev, "failed to get irq\n");
-> +	if (fsl_dev->irq < 0)
->  		return fsl_dev->irq;
-> -	}
-> 
->  	fsl_dev->regmap = devm_regmap_init_mmio(dev, base,
->  			&fsl_dcu_regmap_config);
-> --
-> 2.34.1
+On 12/15/2022 12:36 PM, Philippe Mathieu-Daudé wrote:
+Thanks for your time Phil!!!
+> On 13/12/22 10:48, Srinivasa Rao Mandadapu wrote:
+>> Update the way of checking resource table name with prefix
+>> substring search instead of complete string search.
+>> In general Qualcomm DSP binary is prepared by combining different elfs,
+>
+> Maybe 'ELFs'? (twice).
+Okay. Will update accordingly.
+>
+>> hence section header name (e.g. .resource_table), appended with elf name
+>> to differentiate with same section of different elfs.
+>
+> Please include here the section info parsed by readelf as an example,
+> as suggested by Stephen in your v1:
+> https://lore.kernel.org/linux-remoteproc/CAE-0n52cNite8-4HDoQcsZ+UvZFkJU8c5oUjxPB5ag5WP6E9=g@mail.gmail.com/ 
+>
+Okay. Will include example and re-spin the patch set.
+>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> ---
+>> Changes since v1:
+>>      -- Update the commit message.
+>>     -- Use strstarts instead of strstr.
+>>
+>>   drivers/remoteproc/remoteproc_elf_loader.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c 
+>> b/drivers/remoteproc/remoteproc_elf_loader.c
+>> index 5a412d7..77330d6 100644
+>> --- a/drivers/remoteproc/remoteproc_elf_loader.c
+>> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
+>> @@ -272,7 +272,7 @@ find_table(struct device *dev, const struct 
+>> firmware *fw)
+>>           u64 offset = elf_shdr_get_sh_offset(class, shdr);
+>>           u32 name = elf_shdr_get_sh_name(class, shdr);
+>>   -        if (strcmp(name_table + name, ".resource_table"))
+>> +        if (!strstarts(name_table + name, ".resource_table"))
+>>               continue;
+>>             table = (struct resource_table *)(elf_data + offset);
+>
