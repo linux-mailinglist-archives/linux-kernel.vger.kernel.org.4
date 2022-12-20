@@ -2,79 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8B2652226
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70FAD65223F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbiLTOOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 09:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
+        id S233871AbiLTOPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 09:15:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233711AbiLTOOJ (ORCPT
+        with ESMTP id S233876AbiLTOPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:14:09 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6DEE4F
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:14:07 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id x22so29451204ejs.11
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:14:07 -0800 (PST)
+        Tue, 20 Dec 2022 09:15:23 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26FD102E
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:15:22 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id y3so6375566ilq.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:15:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=n5fs+Kj2TKNXRVqSR0rgis6N6X60utvp2C6Jand8s1Y=;
-        b=ijjqx9oupsxuYSmXMrKrH8nkUFzOk0E3Nmwy7F6jptKnYuh1nkkUXY5f76xHoRIIfi
-         gsZU7NqH5JaPlD2s+zuGx7MRwBKWni0AHrK80r/iKqH6E2Y4UCKlUMaos0zSTfd1FPml
-         2VUrBS1/ODQO8ejTi8cFWzHy2R+ipInWdDQvWeb4oxn2eQcNWN4FuxyXbvX4+2V1y/9j
-         91JjvyOZD/oL/sam5JBdH7WNslgY7TDgcitNm1aoEIP6du5Mp85fszlY7Pf/CaaRJBAl
-         15iEjZEngjpCWBJnIIsRVFOJ/3skVMKGD0aS6XSuiJtQHBTu/L+0MwI7grWyC9LYuX4T
-         vuKQ==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n5YVSZP1qMDUAMZj5yVmhmGJiwrbCGslZLrs7dgXveI=;
+        b=aahg07TO5qqL2P8ldfKzEwDW1JTMSKZC7uZ2mS+qUzY52sD3nQxiCcE25vBpcZMwT7
+         T0KbmRrQs2AL/Lk12okLloni24OffsT9qD+DcZwuA5dWv9rz/8xsHtOPduvCVfpPpOn+
+         gekyUcos3FunUsdfbc3cGdQFcOxsjMgLrt1zE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n5fs+Kj2TKNXRVqSR0rgis6N6X60utvp2C6Jand8s1Y=;
-        b=15vdm1Gub92KvfQlp693tw3pB8UBMHGUny7sG94tMfoj9Cbvb6OClQfKOuhgvhkVBS
-         AcIlsuI86R5fAlFNarg+ozpVEtTeHNvZbot1eS74/FWBrt7xLs9+LdvQJt3amkVu+pVk
-         n9Oi5j32rFOpafs2cM+PkTmtavXhYAf6adi37PXWESSgRBHsEkEK3QmK0XpzcDx6Hdka
-         PEgYPoCS+YPVkGPM2mtE2ixh6z17blG5nSWYV7pvIGLmIzzfeb35PDTbBpwPU7XreltN
-         hXeW/8jVOfoY+eO7o6mp8h3OMErt4TNt9zfhHiRuU5Z4//xZlN7jOsoqyp9Vno0Ny3bN
-         nAgw==
-X-Gm-Message-State: AFqh2kqq38jmqKbJuKkwdcQGoDRzOm2wt1Waocnw62KXjbzbwW1Mxpb6
-        sRjCuTuEt/bxVXqvrGR3xopHK3RqQgK1hp4PvXw=
-X-Google-Smtp-Source: AMrXdXs0yq9xnker9MEu2UBDCU8ggXuMtmd//f4AdQAe9CrTO3QsyZRZ71+QWTztvl3HcRqOwz7hmq1J1EfSRiPvgDs=
-X-Received: by 2002:a17:907:c00c:b0:82a:5b57:3fe7 with SMTP id
- ss12-20020a170907c00c00b0082a5b573fe7mr459530ejc.310.1671545646090; Tue, 20
- Dec 2022 06:14:06 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n5YVSZP1qMDUAMZj5yVmhmGJiwrbCGslZLrs7dgXveI=;
+        b=f+rTs0clBnVGtduevmUu6EnkYr7mOjppHBLVK0wY+OqOHTMESBdBmPNvc8tNbP2JZt
+         x8Cq5gc/xNDxFaSk0UzNKyxmrwv39L651A/ZAsoj0WpkyHL1m/ABnCW8hf+GJzzuDt1d
+         rCtRbrMCTWNRXAs2zEYKQN8F6Gq0GDFP6cg3mJfe5FH4e/P4RITKmPNlOyS7uqb3I2O6
+         NA/kyeiDAyUUnT/G0bTmTHM8fGjEq00MWDLco87SEaiA2XSF8cuPAJti0jlOqBxA3VXX
+         S+CR5eC47zo81QF36/D+Sh2eFWbQxqkGiQfq6UPMcCiMLMnSB4qFSPEziBVkBlKLAwG9
+         KMJw==
+X-Gm-Message-State: AFqh2kryzn21jJADHAYAW+ucLIkXeneYwOgW96h1/b6KHe4yB2TEBUMx
+        AoivMTEOAwmHMVNuay95xebFgA==
+X-Google-Smtp-Source: AMrXdXuRFfwLfDBIq+/ekNW2bbhN+jz9C7S5kvkw7f7+IrC7TMcYvk71jw6fIXy2uItSi8mNpHIEtg==
+X-Received: by 2002:a05:6e02:4aa:b0:300:9a8:f586 with SMTP id e10-20020a056e0204aa00b0030009a8f586mr7189236ils.16.1671545722315;
+        Tue, 20 Dec 2022 06:15:22 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id x24-20020a0566380cb800b00389d6a02740sm4628983jad.157.2022.12.20.06.15.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 06:15:21 -0800 (PST)
+Date:   Tue, 20 Dec 2022 14:15:19 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>
+Subject: Re: [PATCH] usb: misc: onboard_usb_hub: Don't defer probing for
+ 'incomplete' DT nodes
+Message-ID: <Y6HDXiRzaAZ+3uTp@google.com>
+References: <20221220004427.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
+ <Y6FqiA/SoZHr36jl@hovoldconsulting.com>
 MIME-Version: 1.0
-Received: by 2002:a05:640c:390f:b0:191:4c1d:8324 with HTTP; Tue, 20 Dec 2022
- 06:14:05 -0800 (PST)
-From:   "Phillip Maxwell." <phillipmaxwell12@gmail.com>
-Date:   Tue, 20 Dec 2022 15:14:05 +0100
-Message-ID: <CAH6BY-K+Tt+2fFFD30WEA1LrOHmfWyoAhH3nka5tyQ7Z=6YCoQ@mail.gmail.com>
-Subject: OUR COMPANY NEED YOU FOR PRODUCT SUPPLIER IN YOUR REGION-
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y6FqiA/SoZHr36jl@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear,
+Hi Johan,
 
-Good day to you.I decided to contact you directly for the sake of
-business collaboration. I represent a Research and Development
-Department looking for a Supplier in your Country so that we can
-invest heavily in a product. Please reply for further explanation.
+On Tue, Dec 20, 2022 at 08:55:52AM +0100, Johan Hovold wrote:
+> On Tue, Dec 20, 2022 at 12:45:01AM +0000, Matthias Kaehlcke wrote:
+> > Some boards have device tree nodes for USB hubs supported by the
+> > onboard_usb_hub driver, but the nodes don't have all properties
+> > needed for the driver to work properly (which is not necessarily
+> > an error in the DT). Currently _find_onboard_hub() returns
+> > -EPROBE_DEFER in such cases, which results in an unusable USB hub,
+> > since successive probes fail in the same way. Use the absence of
+> > the "vdd" supply as an indicator of such 'incomplete' DT nodes
+> > and return -ENODEV.
+> > 
+> > Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+> > Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> > 
+> >  drivers/usb/misc/onboard_usb_hub.c | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> > 
+> > diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> > index d63c63942af1..2968da515016 100644
+> > --- a/drivers/usb/misc/onboard_usb_hub.c
+> > +++ b/drivers/usb/misc/onboard_usb_hub.c
+> > @@ -363,6 +363,15 @@ static struct onboard_hub *_find_onboard_hub(struct device *dev)
+> >  	hub = dev_get_drvdata(&pdev->dev);
+> >  	put_device(&pdev->dev);
+> >  
+> > +	/*
+> > +	 * Some boards have device tree nodes for USB hubs supported by this
+> > +	 * driver, but the nodes don't have all properties needed for the driver
+> > +	 * to work properly. Use the absence of the "vdd" supply as an indicator
+> > +	 * of such nodes.
+> > +	 */
+> > +	if (!of_get_property(pdev->dev.of_node, "vdd", NULL))
+> > +		return ERR_PTR(-ENODEV);
+> 
+> Does this not break your original use case? Don't you want "vdd-supply"
+> here?
 
+Ouch, yes it does (to a certain degree). Thanks for pointing it out. My
+sanity check didn't catch this because the platform driver still probes
+successfully and powers the hub on.
 
-Regards
-Phillip Maxwell.
-360 Pharmaceutical Group (USA) Inc .
-10B Forbes Rd #120Braintree,
-MA 02184, United States.
+> That said, this seems like the wrong property to look for both in
+> principle and as it is described as optional by the binding:
+> 
+> 	Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
+> 
+> It seems that you should use the compatible property and check that it
+> holds one of the expected values:
+> 
+>  - usbbda,5411
+>  - usbbda,411
+> 
+> rather than treat every hub node as describing a realtek hub (AFAIK,
+> there is no generic binding for this yet).
+
+The driver only probes for specific hub models, among them the Microchip
+USB2514B hub with which Stefan encountered the regression [1].
+
+My initial assumption when writing this driver was that the existence of
+a node for a supported hub means that the driver should be used. However
+the regression encountered by Stefan makes clear that this assumption is
+incorrect. It's not common, but a device tree may have nodes for onboard
+USB devices, among them hubs (which might become more common with this
+driver). Not in all instances the hub nodes were added with the intention
+of using this driver for power sequencing the hub (e.g. [2]). The
+compatible string alone doesn't indicate that the onboard_hub driver
+should be instantiated for a given hub, which is why I'm using the
+existence of "vdd-supply" as indicator.
+
+Thanks
+
+m.
+
+[1] https://lore.kernel.org/linux-usb/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com/
+[2] https://elixir.bootlin.com/linux/v6.1/source/arch/arm/boot/dts/bcm283x-rpi-lan7515.dtsi
