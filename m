@@ -2,115 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BDB651F35
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C54651F33
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbiLTKsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:48:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56626 "EHLO
+        id S233331AbiLTKri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:47:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiLTKr6 (ORCPT
+        with ESMTP id S230189AbiLTKre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:47:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF10B5E
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:47:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671533245;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BtcNXhVAF5Mh5/Biw8m1gljXz/koZEnrJ8YAHCfLSVg=;
-        b=Z1TZBCI3zN9PU4yrFqRqXxPmBSMvy7+/p/iyD1RGTQ/pN4JiNk8Mxn4JsN6SmobIhhDxdO
-        kvzbPEke9izlKV3qEsUnSPhyxPSSY6kxkx52PIGM3OVss+lL8RfwNC0IY2hVQCiIzk1thQ
-        +3HRK9izcHmPh2cUDv6Wm+sTBGmhEUY=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-180-LtCS5ra5N9ObXhog-4_yBg-1; Tue, 20 Dec 2022 05:47:23 -0500
-X-MC-Unique: LtCS5ra5N9ObXhog-4_yBg-1
-Received: by mail-il1-f199.google.com with SMTP id l13-20020a056e021c0d00b003034e24b866so8275342ilh.22
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:47:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BtcNXhVAF5Mh5/Biw8m1gljXz/koZEnrJ8YAHCfLSVg=;
-        b=coke4S1/8CX/VUpWVjie6Q6lB8ZT4anHzlRl8kVZfSV3xnLacvHl69mEHCOr+j5lzJ
-         Nkutf7l+3NxGC8pIyWUzHiHL+1rWrNBdnnbwSVwNWTVwFT8g8Hn5HBPLBjhLGJWa+02n
-         gLvstRmOugZvemHOvesuLWzcfN7K07+74ESVOuSbbIAFGjQMqJEkVfdxe2RQOq5pRh++
-         Sw3h1X/zxY5UoEsR0yLsxlp/ahZdjbs7Xgu6A5tEbm4gs3Z7QQ9Rumz6E4t5mhsZSRMf
-         ZFKwpuiUyYBwtOtc/3Dh/Jm6gAzND7QihulBZbFBP2XpCMp1RWKKBYa/+j7MlMCzZN6Y
-         2yRg==
-X-Gm-Message-State: ANoB5pnijkX4Zu05joLV5Sz6muZBfJuzPsSfICOE+jKvEUht1ym12K+0
-        6iSxg4/Z43sBMQ4yUqHjCz+DVtwjW3ZQata+RPpJc4NuCHcnpmuzDq7SIygbJ6t75arnRkW/54q
-        /5n4BMFaYwCq9S2O+HVbVD0DsZ+sCST20y3t0GL4E
-X-Received: by 2002:a02:a089:0:b0:375:2a78:73fd with SMTP id g9-20020a02a089000000b003752a7873fdmr46525967jah.217.1671533242986;
-        Tue, 20 Dec 2022 02:47:22 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7JBXJpg6qNm9SgzBNzQZEfnJaZx37hGB0TWVUAAFj/Mc2O387CUR2IQywQyTtLbStHSDLWatI/4QD3XC8tKTg=
-X-Received: by 2002:a02:a089:0:b0:375:2a78:73fd with SMTP id
- g9-20020a02a089000000b003752a7873fdmr46525962jah.217.1671533242764; Tue, 20
- Dec 2022 02:47:22 -0800 (PST)
+        Tue, 20 Dec 2022 05:47:34 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC4BBA6;
+        Tue, 20 Dec 2022 02:47:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671533254; x=1703069254;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ta1sJj/uDkGNDBiA/7uQgZKkGRhsWyBagI/fpBvf+pM=;
+  b=ICWJkgO6sFzwNbyrE58EhZy9kzQdP5McynerpiSl5ieodTRWFoPOE6mz
+   f7xcupLMka5Gq4CtrieJ3MYqzGOCdQeUVQOZkEKbP0/urR4ZrfXXiR8rl
+   O8Hy6HhVuI+WeBSnDZXAfWIx+VzItiiVImAR6ovFzV5roU+vaPUwkHSB8
+   S9HgdD/TnSBZB6jNNWqAdqNlfUn4U66+iRNGSSmkx3NzX6g9iyUqRBTBp
+   p1hLuBYO31IrdVJSoenX8KXcs+RBOKbv6IvhBPgBWCIYd0FIQYGz9dRrZ
+   bI9YUrsbPV408/wcgeX8FV/h6TyJYj0nUtiEdV24+RVOYkNX7dZ1k9ogF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="299927963"
+X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
+   d="scan'208";a="299927963"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 02:47:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="650951239"
+X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
+   d="scan'208";a="650951239"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 20 Dec 2022 02:47:21 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p7a9X-00CpST-2S;
+        Tue, 20 Dec 2022 12:47:19 +0200
+Date:   Tue, 20 Dec 2022 12:47:19 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hanna Hawa <hhhawa@amazon.com>
+Cc:     wsa@kernel.org, jarkko.nikula@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dwmw@amazon.co.uk, benh@amazon.com, ronenk@amazon.com,
+        talel@amazon.com, jonnyc@amazon.com, hanochu@amazon.com,
+        farbere@amazon.com, itamark@amazon.com, lareine@amazon.com
+Subject: Re: [PATCH v3 1/1] i2c: designware: use casting of u64 in clock
+ multiplication to avoid overflow
+Message-ID: <Y6GSt8AOS1nsN0dn@smile.fi.intel.com>
+References: <20221219171713.10108-1-hhhawa@amazon.com>
 MIME-Version: 1.0
-References: <20221220024921.21992-1-jiasheng@iscas.ac.cn> <035598f0-3174-9677-0b53-f3ccbfb54155@amd.com>
-In-Reply-To: <035598f0-3174-9677-0b53-f3ccbfb54155@amd.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 20 Dec 2022 11:47:11 +0100
-Message-ID: <CAO-hwJ++Dr94062SPnbqRJ33yJ5qB48--rnGyNQ12d6VvsCRUA@mail.gmail.com>
-Subject: Re: [PATCH] HID: amd_sfh: Add missing check for dma_alloc_coherent
-To:     Basavaraj Natikar <bnatikar@amd.com>
-Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, basavaraj.natikar@amd.com,
-        jikos@kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219171713.10108-1-hhhawa@amazon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 7:53 AM Basavaraj Natikar <bnatikar@amd.com> wrote:
->
->
-> On 12/20/2022 8:19 AM, Jiasheng Jiang wrote:
-> > Add check for the return value of the dma_alloc_coherent since
-> > it may return NULL pointer if allocation fails.
-> >
-> > Fixes: 4b2c53d93a4b ("SFH:Transport Driver to add support of AMD Sensor Fusion Hub (SFH)")
-> > Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> > ---
-> >  drivers/hid/amd-sfh-hid/amd_sfh_client.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_client.c b/drivers/hid/amd-sfh-hid/amd_sfh_client.c
-> > index 8275bba63611..ab125f79408f 100644
-> > --- a/drivers/hid/amd-sfh-hid/amd_sfh_client.c
-> > +++ b/drivers/hid/amd-sfh-hid/amd_sfh_client.c
-> > @@ -237,6 +237,10 @@ int amd_sfh_hid_client_init(struct amd_mp2_dev *privdata)
-> >               in_data->sensor_virt_addr[i] = dma_alloc_coherent(dev, sizeof(int) * 8,
-> >                                                                 &cl_data->sensor_dma_addr[i],
-> >                                                                 GFP_KERNEL);
-> > +             if (!in_data->sensor_virt_addr[i]) {
-> > +                     rc = -ENOMEM;
-> > +                     goto cleanup;
-> > +             }
-> >               cl_data->sensor_sts[i] = SENSOR_DISABLED;
-> >               cl_data->sensor_requested_cnt[i] = 0;
-> >               cl_data->cur_hid_dev = i;
->
-> looks good to me.
->
-> Acked-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+On Mon, Dec 19, 2022 at 05:17:13PM +0000, Hanna Hawa wrote:
+> From: Lareine Khawaly <lareine@amazon.com>
 
-Thanks.
+Thank you for an update, my comments below.
 
-I have now applied this patch to hid.git branch for-6.2/upstream-fixes.
+> In functions i2c_dw_scl_lcnt() and i2c_dw_scl_hcnt() may have overflow
+> by depending on the values of the given parameters including the ic_clk.
+> For example in our use case where ic_clk is larger than one million,
+> multiplication of ic_clk * 4700 will result in 32 bit overflow.
+> 
+> Add cast of u64 to the calculation to avoid multiplication overflow, and
+> use the corresponding define for divide.
+> 
+> Fixes: 2373f6b9744d ("i2c-designware: split of i2c-designware.c into core and bus specific parts")
 
-Cheers,
-Benjamin
+It's not clear if the second patch you sent (about unsigned long --> u32) is
+required or not, can you clarify this in the changelog?
+
+> Signed-off-by: Lareine Khawaly <lareine@amazon.com>
+> Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
+
+This should be last part of the message body. The cutter '---' line makes it
+so, currently you finish your message with a changelog and not tags. So, you
+need to move the changelog after the cutter line.
+
+> Change Log v2->v3:
+> - Avoid changing the ic_clk parameter to u64, and do casting in the
+>   calculation itself instead.
+> - use DIV_ROUND_CLOSEST_ULL instead of DIV_ROUND_CLOSEST
+> 
+> Change Log v1->v2:
+> - Update commit message and add fix tag.
+> ---
+>  drivers/i2c/busses/i2c-designware-common.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+> index e0a46dfd1c15..9cc02d0142df 100644
+> --- a/drivers/i2c/busses/i2c-designware-common.c
+> +++ b/drivers/i2c/busses/i2c-designware-common.c
+> @@ -351,7 +351,8 @@ u32 i2c_dw_scl_hcnt(u32 ic_clk, u32 tSYMBOL, u32 tf, int cond, int offset)
+>  		 *
+>  		 * If your hardware is free from tHD;STA issue, try this one.
+>  		 */
+> -		return DIV_ROUND_CLOSEST(ic_clk * tSYMBOL, MICRO) - 8 + offset;
+> +		return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * tSYMBOL,
+> +					     MICRO) - 8 + offset;
+
+There is still a room for 'MICRO) -' part on the previous line.
+Ditto for the similar cases.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
