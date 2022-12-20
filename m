@@ -2,72 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9AC652621
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 19:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C839D652628
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 19:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbiLTSUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 13:20:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
+        id S229720AbiLTSYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 13:24:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233872AbiLTSUC (ORCPT
+        with ESMTP id S229819AbiLTSY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 13:20:02 -0500
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1FD1C113
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 10:20:01 -0800 (PST)
-Received: by mail-vs1-xe2a.google.com with SMTP id i188so6580652vsi.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 10:20:01 -0800 (PST)
+        Tue, 20 Dec 2022 13:24:28 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A216264
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 10:24:27 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id d7so13086744pll.9
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 10:24:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=botoMruAittvs+rTHSmzE3zrQGz596aYpbROQsMAW8A=;
-        b=N3/3XOMf30/cvQ8Yxflqc8xDvvKIdFXEIfFToqSiw8sHWW69unaujMovBLHOue+TEF
-         oaUTqjGhRgxvLGkjCJvvetJyGePOMcRYZy1RrY0l7sFJIa+ElElKIh5PO3fiN8YITtUg
-         B9nic5CJRwBRd9L88dQ5B8AxwXWaoDfTXjWKh4KLIBT+mw5tlyYHNQMQvUlftXQapFIu
-         g80SV0RRYdRszPeAqDnqoV2olfVoGiCS8tP9e8EDdnY7QZzlMgXB8THifsfD8IZpBKBH
-         7DYR6qrK/gE9k78axURhYvhNFT2gZWlT1P/PJ5kpReB4bNv7IeefokQqvrZnNiXkn3ct
-         Yy2g==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=o7XRAbsxNuIYu3KQ5/USPQPXIGs2guhsK+wps5cunj4=;
+        b=GFCimm18q8wY/9h430uhcQ/hM8cVruVSMQMNt0m/PbuC/5FH4uhgVLM3NstUsLhseA
+         inMCDdiG1w/UBbL6GCuSN+smbrRnGLJX+biDLLQLpVpFUQPJ/36H2gXGI8r8Jz16RVT0
+         bSPPSNv9Oh8RuRRZQrmkDdIhGlPHMRYR95WxGg4Vo8abdwPGhNV614fX5CRqduKkayaY
+         y8hC7XN5a/qWk2WGm9OuDjw8682vSrRI6aIa4mBb7mXiOd2beZi3c8gCa2hFkl9pTR7h
+         6+xPm/KVF9dkZNMGJJusIB2Hf7k8zZABDTDYrqx8DGHuf6t3TtLtlR6n4fd93OTqfGcz
+         926A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=botoMruAittvs+rTHSmzE3zrQGz596aYpbROQsMAW8A=;
-        b=mrVAzwEtyuqboW1loaUa+UMJ/53I93AA9qr3q4NpUYrGPm+OKKi1WZT1rVNsQdr9/t
-         VurUgsBECipR4277yFvndejAT6zjdzTxbHdElCDhUPlifu8TeNfdnVl5CuLnCZpAMU3E
-         q11cr14eAIncpMphKFr+kj4twZ9jM5kowsJ28NyNScNJb83zQMj7fc94XlcmlLwCxCxy
-         4YbciZSGp7x6HhMP9QAgcoHfAxUARjkejSkEfz+teUZ0/FschGeQu9qC0rj11i/lt6b0
-         hP+/kPScKNRE+iw8d9QHoLaBO57Qm+poS2px36lNqsU7Fr74b3voLEzWlhf16hCcHKhX
-         tYww==
-X-Gm-Message-State: ANoB5plvfYGf6wVLefnAlwduKYaK16fazDPm+UfUh9xtMnv6fSPwpNWJ
-        hk6dthdEE5wssi3c2Ct1aTv7YJs7+9+C6nsZl3i4+A==
-X-Google-Smtp-Source: AA0mqf7erm0Oj3LUs9Qxaq96ITPNngZ894gOmdkDcPjxJqB/rvjmTnBJI2L68bZknCHaVECiTMKDoWMnSKQUyiiAUKI=
-X-Received: by 2002:a05:6102:578c:b0:3b5:1de3:19fa with SMTP id
- dh12-20020a056102578c00b003b51de319famr3230005vsb.35.1671560400231; Tue, 20
- Dec 2022 10:20:00 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o7XRAbsxNuIYu3KQ5/USPQPXIGs2guhsK+wps5cunj4=;
+        b=Gre0kEO2JheRvWO/1TRuISs1FZvXLi8woWR4TD54uNKKI3qWjyC9ljxZkQCMkMcYik
+         w00qcVO/Jy50PkzN2zUHU8BDxCy+HBqD9qfrS0ViTZE2+ZVu7TwAHw6zCB4iLXCVTNTQ
+         saR14GC3hKNPszrHtMtmJyslgdydpnwSJj6vqmhW4SVpS5fCEu6hIP6ASUA4mWHOsaI7
+         uE0Q+iJFg49Hsc6E/Siya9iVffuxcJiYIobVf9E81tS0Q8/v7SY/jp8Mtcso2+xNb+g9
+         fvJLn2dGRXxtB/yUSYtP+zHf1Cm8f/YPEQE+QvreP/AmQJaqPgWLPAaDh9qC2NAblyJz
+         FmUw==
+X-Gm-Message-State: ANoB5pmjDabXd0lvssgB5YX0m9/L+VZUKf0q6U7KkaaSkzSvvvNg6xRi
+        1s7WTgXehauXNwxqIOM1uHy6RA==
+X-Google-Smtp-Source: AA0mqf7WGh5q57NqYW/sta5mWz33Ig1/oATnC1/Qe4LITz31fdCYepKYrQ4ZELmnD1F8VXOM5aUevA==
+X-Received: by 2002:a17:902:930a:b0:188:da5c:152b with SMTP id bc10-20020a170902930a00b00188da5c152bmr46790309plb.9.1671560666986;
+        Tue, 20 Dec 2022 10:24:26 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id l8-20020a170903244800b001894dc5fdf2sm9632987pls.296.2022.12.20.10.24.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 10:24:26 -0800 (PST)
+Date:   Tue, 20 Dec 2022 10:24:22 -0800
+From:   David Matlack <dmatlack@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Robert Hoo <robert.hu@linux.intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Subject: Re: [PATCH 4/5] KVM: x86/mmu: Don't install TDP MMU SPTE if SP has
+ unexpected level
+Message-ID: <Y6H91qfq24CaCi6l@google.com>
+References: <20221213033030.83345-1-seanjc@google.com>
+ <20221213033030.83345-5-seanjc@google.com>
+ <CALzav=d-9G6SSBCB=TbVWi9Szprm1wD3AqqgZzoCq26_LF_ySw@mail.gmail.com>
+ <Y5jBXIF26odk6jWC@google.com>
 MIME-Version: 1.0
-References: <20221219191855.2010466-1-allenwebb@google.com>
- <20221219204619.2205248-1-allenwebb@google.com> <20221219204619.2205248-3-allenwebb@google.com>
- <Y6FaUynXTrYD6OYT@kroah.com> <CAJzde04Hbd2+s-Bqog2V81dBEeZD7WWaFCf2BkesQS4yUAKiNA@mail.gmail.com>
- <Y6H6/U0w96Z4kpDn@bombadil.infradead.org>
-In-Reply-To: <Y6H6/U0w96Z4kpDn@bombadil.infradead.org>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Tue, 20 Dec 2022 12:19:49 -0600
-Message-ID: <CAJzde04igO0LJ46Hsbcm-hJBFtPdqJC6svaoMkb3WBG0e1fGBw@mail.gmail.com>
-Subject: Re: [PATCH v9 02/10] rockchip-mailbox: Fix typo
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5jBXIF26odk6jWC@google.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,41 +80,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 12:12 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Tue, Dec 20, 2022 at 08:58:36AM -0600, Allen Webb wrote:
-> > As mentioned in a different sub-thread this cannot be built as a
-> > module so I updated the commit message to:
-> >
-> > imx: Fix typo
-> >
-> > A one character difference in the name supplied to MODULE_DEVICE_TABLE
-> > breaks compilation for SOC_IMX8M after built-in modules can generate
-> > match-id based module aliases, so fix the typo.
->
-> Are you saying that it is a typo *now* only, and fixing it does not fix
-> compilation now, but that fixing the typo will fix a future compilation
-> issue once your patches get merged for built-in module aliases?
+On Tue, Dec 13, 2022 at 06:15:56PM +0000, Sean Christopherson wrote:
+> On Tue, Dec 13, 2022, David Matlack wrote:
+> > On Mon, Dec 12, 2022 at 7:30 PM Sean Christopherson <seanjc@google.com> wrote:
+> > >
+> > > Don't install a leaf TDP MMU SPTE if the parent page's level doesn't
+> > > match the target level of the fault, and instead have the vCPU retry the
+> > > faulting instruction after warning.  Continuing on is completely
+> > > unnecessary as the absolute worst case scenario of retrying is DoSing
+> > > the vCPU, whereas continuing on all but guarantees bigger explosions, e.g.
+> > 
+> > Would it make sense to kill the VM instead via KVM_BUG()?
+> 
+> No, because if bug that hits this escapes to a release, odds are quite high that
+> retrying will succeed.  E.g. the fix earlier in this series is for a rare corner
+> case that I was able to hit consistently only by hacking KVM to effectively
+> synchronize the page fault and zap.  Other than an extra page fault, no harm has
+> been done to the guest, e.g. there's no need to kill the VM to protect it from
+> data corruption.
 
-It was always a typo, it just doesn't affect the build because
-MODULE_DEVICE_TABLE is not doing anything for built-in modules before
-this patch series.
-
->
-> > This was not caught earlier because SOC_IMX8M can not be built as a
-> > module and MODULE_DEVICE_TABLE is a no-op for built-in modules.
->
-> Odd, so why did it use MODULE_DEVICE_TABLE then? What was the reason for
-> the driver having MODULE_DEVICE_TABLE if it was a no-op?
-
-That is a good question. I can only speculate as to the answer but it
-is plausible people copied a common pattern and since no breakage was
-noticed left it as is.
-
-It also raises the question how many modules have device tables, but
-do not call MODULE_DEVICE_TABLE since they are only ever built-in.
-Maybe there should be some build time enforcement mechanism to make
-sure that these are consistent.
-
->
->   Luis
+Good points, agreed!
