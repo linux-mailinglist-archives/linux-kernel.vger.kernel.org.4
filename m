@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38B26527B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 21:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 850486527C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 21:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiLTUQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 15:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
+        id S234275AbiLTUVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 15:21:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbiLTUP4 (ORCPT
+        with ESMTP id S234273AbiLTUUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 15:15:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6711EAF5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 12:15:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4ECB1B818AD
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 20:15:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA3F9C433EF;
-        Tue, 20 Dec 2022 20:15:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671567352;
-        bh=Ysbhxfb4+GSt8g7B+0msZxC7XX+fKQNQougHwdZVmyk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sn6Oh5cYMfEPaNmNUsOnY6L7sLghzqaf92oeLFwxc4sUmT+Ku4UEMJl/QMossxE7k
-         fkWLOdLaE64rx8tXdUhvi3+902orunRfP7G4ahtigr3Ab0O5GA93jF8ELkPVT0i6+Y
-         Pxx1l1hyrcHua1ceEIDp+vCOp4wMxOekOaVaXVA9NBEdB/TX9zEW1DhH37Idk9ObK0
-         Ph7Wib9FEtR8/LMy4E0JjUDAPuGvutlR+5oNSEk2g4jh/T+x5jkwnqmau63fyOYB11
-         4pqqNHkYOiD6q19fKDaKf2QO8UFxJPbbJCZi1Vj599TiAqz/mD7VmfDNBdE7eh5h1u
-         T3Nyt28m84plQ==
-Received: by pali.im (Postfix)
-        id ABF36963; Tue, 20 Dec 2022 21:15:49 +0100 (CET)
-Date:   Tue, 20 Dec 2022 21:15:49 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>, jbglaw@lug-owl.de,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 4/5] powerpc: Remove cpu-as-y completely
-Message-ID: <20221220201549.fpnopv6h4y5mpabj@pali>
-References: <38a8d765ed9149bc6b5484a7142e3bc59ffa3b1a.1671475543.git.christophe.leroy@csgroup.eu>
- <9e43ad8b173c2fdb540e2555a8ba3e375419f3cf.1671475543.git.christophe.leroy@csgroup.eu>
+        Tue, 20 Dec 2022 15:20:32 -0500
+Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D877E60
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 12:19:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1671567417; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=O2fp4AM28cnbKodTzMrLVyXE0wr/t8Ys7yBBf4qImAw228dgshvX1rn6+8uxvWW1ezHSQJWN8cmwXHMG7W1Q5cKwjxANbVy3Ia0U0eff+D6I6HUTy5cWrZP8JZEg/gqLjRREk5JvwT55tlfHD4a/wLfb1lErrCpUi84IaY5Tiho=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1671567417; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=JlRM3rCUPaDSbEmeJCKwpeV0esy7S6JTSYavzUNBpRM=; 
+        b=Hj+rTSLHEjJPUEqjm2I26BNxLnIqMU1LQqHKC4DgnAkPTlLz258PC1MsfZJ6h+u+NFTYTnFlYIAIG4HpnBrOSznxTYobo3TpK/nwVlB1FvEE/1IVcItYihuocByl4EHNfP10JVU+eDSNOwfknVXKnvVV69vBWNFsuA9pV2RDP3k=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1671567417;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+        bh=JlRM3rCUPaDSbEmeJCKwpeV0esy7S6JTSYavzUNBpRM=;
+        b=ObSev0hn26mww8d1Jxy2qHMLYMKH+RGdBoOFLOcbEzevFP0ohDKPTESX0wt/gfIL
+        3b6yhzF1ErgYCsGmdJkDyb185J1e6/p5NnmdxKGs2KmKAIqSXc6Z826DQMhoLmS2bNW
+        thiHfEkG0bsDwLs6KFSpf2q2GEKN3o0eNgbmbPrs=
+Received: from kampyooter.. (110.226.31.37 [110.226.31.37]) by mx.zoho.in
+        with SMTPS id 16715674172169.971315320491499; Wed, 21 Dec 2022 01:46:57 +0530 (IST)
+From:   Siddh Raman Pant <code@siddh.me>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <cover.1671566741.git.code@siddh.me>
+Subject: [PATCH 00/10] drm: Remove usage of deprecated DRM_* macros
+Date:   Wed, 21 Dec 2022 01:46:35 +0530
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9e43ad8b173c2fdb540e2555a8ba3e375419f3cf.1671475543.git.christophe.leroy@csgroup.eu>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,55 +60,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 19 December 2022 19:45:59 Christophe Leroy wrote:
-> cpu-as-y is there to force assembler building options.
-> But there is no need for that. Gcc is passed the necessary
-> options and it automatically pass the appropriate option to
-> GAS.
-> 
-> GCC is given -maltivec when relevant, so no need
-> for -Wa,-maltivec in addition
-> 
-> And -Wa,-many is wrong as it will hide innapropriate
-> instructions. Better to detect them and handle them on a
-> case by case basis.
-> -Wa,-many was added by commit 960e30029863 ("powerpc/Makefile:
-> Fix PPC_BOOK3S_64 ASFLAGS") in order to fix an issue with
-> clang and the passed -Wa,-mpower4 option. But we have now
-> removed it expecting the compiler to automatically pass the
-> proper options and instructions based on -mcpu=power4
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+This patchset aims to remove usages of deprecated DRM_* macros from the
+files residing in drivers/gpu/drm root.
 
-Acked-by: Pali Rohár <pali@kernel.org>
+In process, I found out that NULL as first argument of drm_dbg_* wasn't
+working, but it was listed as the alternative in deprecation comment,
+so I fixed that before removing usages of DRM_DEBUG_* macros.
 
-> ---
->  arch/powerpc/Makefile | 12 ------------
->  1 file changed, 12 deletions(-)
-> 
-> diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-> index 0f9f291895cb..7e67f939a243 100644
-> --- a/arch/powerpc/Makefile
-> +++ b/arch/powerpc/Makefile
-> @@ -201,18 +201,6 @@ KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
->  # often slow when they are implemented at all
->  KBUILD_CFLAGS		+= $(call cc-option,-mno-string)
->  
-> -cpu-as-$(CONFIG_ALTIVEC)	+= $(call as-option,-Wa$(comma)-maltivec)
-> -
-> -# When using '-many -mpower4' gas will first try and find a matching power4
-> -# mnemonic and failing that it will allow any valid mnemonic that GAS knows
-> -# about. GCC will pass -many to GAS when assembling, clang does not.
-> -# LLVM IAS doesn't understand either flag: https://github.com/ClangBuiltLinux/linux/issues/675
-> -# but LLVM IAS only supports ISA >= 2.06 for Book3S 64 anyway...
-> -cpu-as-$(CONFIG_PPC_BOOK3S_64)	+= $(call as-option,-Wa$(comma)-many)
-> -
-> -KBUILD_AFLAGS += $(cpu-as-y)
-> -KBUILD_CFLAGS += $(cpu-as-y)
-> -
->  KBUILD_AFLAGS += $(aflags-y)
->  KBUILD_CFLAGS += $(cflags-y)
->  
-> -- 
-> 2.38.1
-> 
+This patchset should be applied in order as changes might be dependent.
+
+Please review and let me know if any errors are there, and hopefully
+this gets accepted.
+
+Siddh Raman Pant (10):
+  drm: Remove usage of deprecated DRM_INFO
+  drm: Remove usage of deprecated DRM_NOTE
+  drm: Remove usage of deprecated DRM_ERROR
+  drm/print: Fix support for NULL as first argument of drm_dbg_*
+  drm: Remove usage of deprecated DRM_DEBUG
+  drm: Remove usage of deprecated DRM_DEBUG_DRIVER
+  drm: Remove usage of deprecated DRM_DEBUG_KMS
+  drm: Remove usage of deprecated DRM_DEBUG_PRIME
+  drm/drm_blend: Remove usage of deprecated DRM_DEBUG_ATOMIC
+  drm/drm_lease: Remove usage of deprecated DRM_DEBUG_LEASE
+
+ drivers/gpu/drm/drm_agpsupport.c        |   4 +-
+ drivers/gpu/drm/drm_blend.c             |  13 ++-
+ drivers/gpu/drm/drm_bridge.c            |   8 +-
+ drivers/gpu/drm/drm_bufs.c              | 122 ++++++++++++------------
+ drivers/gpu/drm/drm_client_modeset.c    | 118 +++++++++++++----------
+ drivers/gpu/drm/drm_color_mgmt.c        |   4 +-
+ drivers/gpu/drm/drm_connector.c         |  28 +++---
+ drivers/gpu/drm/drm_context.c           |  18 ++--
+ drivers/gpu/drm/drm_crtc.c              |  36 ++++---
+ drivers/gpu/drm/drm_crtc_helper.c       |  62 ++++++------
+ drivers/gpu/drm/drm_debugfs_crc.c       |   8 +-
+ drivers/gpu/drm/drm_displayid.c         |   6 +-
+ drivers/gpu/drm/drm_dma.c               |  10 +-
+ drivers/gpu/drm/drm_drv.c               |  28 +++---
+ drivers/gpu/drm/drm_edid.c              |  17 ++--
+ drivers/gpu/drm/drm_file.c              |  18 ++--
+ drivers/gpu/drm/drm_flip_work.c         |   2 +-
+ drivers/gpu/drm/drm_framebuffer.c       |   3 +-
+ drivers/gpu/drm/drm_gem.c               |   7 +-
+ drivers/gpu/drm/drm_gem_dma_helper.c    |   6 +-
+ drivers/gpu/drm/drm_gem_shmem_helper.c  |   6 +-
+ drivers/gpu/drm/drm_hashtab.c           |  10 +-
+ drivers/gpu/drm/drm_ioc32.c             |  13 +--
+ drivers/gpu/drm/drm_ioctl.c             |  24 ++---
+ drivers/gpu/drm/drm_irq.c               |   4 +-
+ drivers/gpu/drm/drm_kms_helper_common.c |   2 +-
+ drivers/gpu/drm/drm_lease.c             |  68 ++++++-------
+ drivers/gpu/drm/drm_legacy_misc.c       |   4 +-
+ drivers/gpu/drm/drm_lock.c              |  36 +++----
+ drivers/gpu/drm/drm_mipi_dbi.c          |  19 ++--
+ drivers/gpu/drm/drm_mm.c                |   8 +-
+ drivers/gpu/drm/drm_mode_config.c       |   2 +-
+ drivers/gpu/drm/drm_mode_object.c       |   6 +-
+ drivers/gpu/drm/drm_modes.c             |  10 +-
+ drivers/gpu/drm/drm_modeset_helper.c    |   2 +-
+ drivers/gpu/drm/drm_pci.c               |  14 +--
+ drivers/gpu/drm/drm_plane.c             |  46 ++++-----
+ drivers/gpu/drm/drm_probe_helper.c      |  39 ++++----
+ drivers/gpu/drm/drm_rect.c              |   4 +-
+ drivers/gpu/drm/drm_scatter.c           |  19 ++--
+ drivers/gpu/drm/drm_syncobj.c           |   2 +-
+ drivers/gpu/drm/drm_sysfs.c             |  22 ++---
+ drivers/gpu/drm/drm_vm.c                |  45 +++++----
+ include/drm/drm_print.h                 |  91 ++++++++++++++----
+ 44 files changed, 549 insertions(+), 465 deletions(-)
+
+--=20
+2.35.1
+
+
