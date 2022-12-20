@@ -2,80 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E724652610
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 19:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AB0652614
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 19:14:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233849AbiLTSMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 13:12:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53360 "EHLO
+        id S233935AbiLTSOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 13:14:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiLTSMQ (ORCPT
+        with ESMTP id S233912AbiLTSN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 13:12:16 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C73218696;
-        Tue, 20 Dec 2022 10:12:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mQu+Me2Zll0UL7j/3P/n52Hs7DxCwP73ZIgzQwDiwlY=; b=lTJOAZQLu4JJ1jtQj6RldEOzvO
-        Ail1xiWwwJhqpX4Ss1/tX3TP45Hd9xAJ1HbAF5G0mWRiYw1XgbPohwbMmwB5IotjNbJj0rom18WvN
-        UKZI2wzAjoFkxDlbVx/CKPSBq+3bpSJneMgPK0s7d6oMTeA4BDXsZurwRsIF8fCTerd/vOGBET3de
-        wgEp0Ym0fnfN562kZWOh9NaZQw2vFEw2SVbV+jq430SXYH+r30Y6ZywtboEfyMftkk3p11lITwsgA
-        c2Zk34SvjAT+sBI/4YaZOGw3V+OFLjU+Kqo3m900uazcOt5EV/czwbhD9ZnOJA+IRTgIsrnaEWrNj
-        U7yRi32A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p7h65-0020Ag-9h; Tue, 20 Dec 2022 18:12:13 +0000
-Date:   Tue, 20 Dec 2022 10:12:13 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Allen Webb <allenwebb@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v9 02/10] rockchip-mailbox: Fix typo
-Message-ID: <Y6H6/U0w96Z4kpDn@bombadil.infradead.org>
-References: <20221219191855.2010466-1-allenwebb@google.com>
- <20221219204619.2205248-1-allenwebb@google.com>
- <20221219204619.2205248-3-allenwebb@google.com>
- <Y6FaUynXTrYD6OYT@kroah.com>
- <CAJzde04Hbd2+s-Bqog2V81dBEeZD7WWaFCf2BkesQS4yUAKiNA@mail.gmail.com>
+        Tue, 20 Dec 2022 13:13:56 -0500
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FBA186A9;
+        Tue, 20 Dec 2022 10:13:54 -0800 (PST)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4Nc4TB5pRLz9sc0;
+        Tue, 20 Dec 2022 19:13:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1671560030;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oBh94zxafkf8iTW1Whfw20TE2z6rdPEY1QkbgbOuVtQ=;
+        b=FjllJCc5aV+4Vb4wmDNbcI/umMRd6w96wSaDdSTmt8OIeMZWc+uqcQ3EBZC63eENDn4dx5
+        v/wN203UciUlRNvPUsSqrOZpc8iOOd8pSnfXSFz6oA++RuJM8fo+xKpMvy0q+Um8zHalMw
+        k05k+P3N/6PLomS5k25kSIDZir+AzZJyXTMVYy085sHzDM1HLUWH8h3mfj39/sRYlcjV3J
+        Kn6pt5HWpBcrVdRw6vmZcJM8otvMyXvNAI0J/8ZMSQHx3ZqExL7E/9fOvLaiBVJfHOk7Hn
+        Xp06hp1MYIV2YRvdcXY6MUr8If5Lx35SSyzrQiMk0eeEgIM42UeDbl4n48AZ/w==
+Message-ID: <73b77acd-813a-458b-61e2-87116720cc38@mailbox.org>
+Date:   Tue, 20 Dec 2022 18:13:41 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJzde04Hbd2+s-Bqog2V81dBEeZD7WWaFCf2BkesQS4yUAKiNA@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v8 00/13] Implement AMD Pstate EPP Driver
+To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
+        Mario.Limonciello@amd.com, ray.huang@amd.com,
+        viresh.kumar@linaro.org
+Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
+        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
+        Xiaojian.Du@amd.com, Li.Meng@amd.com, wyes.karny@amd.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221219064042.661122-1-perry.yuan@amd.com>
+Content-Language: en-US
+From:   Tor Vic <torvic9@mailbox.org>
+In-Reply-To: <20221219064042.661122-1-perry.yuan@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-MBO-RS-ID: 661c4c9fef32c1424ae
+X-MBO-RS-META: 87fq1ukmy3s3oekqxsiqibqdpwt7uebx
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 08:58:36AM -0600, Allen Webb wrote:
-> As mentioned in a different sub-thread this cannot be built as a
-> module so I updated the commit message to:
+
+On 19.12.22 06:40, Perry Yuan wrote:
+> Hi all,
 > 
-> imx: Fix typo
->
-> A one character difference in the name supplied to MODULE_DEVICE_TABLE
-> breaks compilation for SOC_IMX8M after built-in modules can generate
-> match-id based module aliases, so fix the typo.
+> This patchset implements one new AMD CPU frequency driver
+> `amd-pstate-epp` instance for better performance and power control.
+> CPPC has a parameter called energy preference performance (EPP).
+> The EPP is used in the CCLK DPM controller to drive the frequency that a core
+> is going to operate during short periods of activity.
+> EPP values will be utilized for different OS profiles (balanced, performance, power savings).
+> 
 
-Are you saying that it is a typo *now* only, and fixing it does not fix
-compilation now, but that fixing the typo will fix a future compilation
-issue once your patches get merged for built-in module aliases?
+Using v8 and clang-15 on 6.1 I get:
 
-> This was not caught earlier because SOC_IMX8M can not be built as a
-> module and MODULE_DEVICE_TABLE is a no-op for built-in modules.
+---
+ld.lld: error: undefined symbol: energy_perf_strings
+ >>> referenced by amd-pstate.c:789 
+(/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:789)
+ >>>               vmlinux.o:(show_energy_performance_preference)
+ >>> referenced by amd-pstate.c:768 
+(/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:768)
+ >>>               vmlinux.o:(store_energy_performance_preference)
+ >>> referenced by amd-pstate.c:749 
+(/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:749)
+ >>>               vmlinux.o:(show_energy_performance_available_preferences)
+ >>> referenced 1 more times
+ >>> did you mean: energy_perf_strings
+ >>> defined in: vmlinux.o
 
-Odd, so why did it use MODULE_DEVICE_TABLE then? What was the reason for
-the driver having MODULE_DEVICE_TABLE if it was a no-op?
+ld.lld: error: undefined symbol: epp_values
+ >>> referenced by amd-pstate.c:189 
+(/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:189)
+ >>>               vmlinux.o:(store_energy_performance_preference)
+---
 
-  Luis
+and a few warnings:
+
+---
+drivers/cpufreq/amd-pstate.c:966:6: warning: variable 'ret' is used 
+uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+         if (rc)
+             ^~
+drivers/cpufreq/amd-pstate.c:1025:9: note: uninitialized use occurs here
+         return ret;
+                ^~~
+drivers/cpufreq/amd-pstate.c:966:2: note: remove the 'if' if its 
+condition is always false
+         if (rc)
+         ^~~~~~~
+drivers/cpufreq/amd-pstate.c:962:6: warning: variable 'ret' is used 
+uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+         if (!dev)
+             ^~~~
+drivers/cpufreq/amd-pstate.c:1025:9: note: uninitialized use occurs here
+         return ret;
+                ^~~
+drivers/cpufreq/amd-pstate.c:962:2: note: remove the 'if' if its 
+condition is always false
+         if (!dev)
+         ^~~~~~~~~
+drivers/cpufreq/amd-pstate.c:949:66: note: initialize the variable 'ret' 
+to silence this warning
+         int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
+                                                                         ^
+ 
+  = 0
+drivers/cpufreq/amd-pstate.c:996:52: warning: variable 'value' is 
+uninitialized when used here [-Wuninitialized]
+         cpudata->epp_cached = amd_pstate_get_epp(cpudata, value);
+                                                           ^~~~~
+drivers/cpufreq/amd-pstate.c:953:11: note: initialize the variable 
+'value' to silence this warning
+         u64 value;
+                  ^
+                   = 0
+drivers/cpufreq/amd-pstate.c:1085:6: warning: variable 'epp' is used 
+uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+         if (cpudata->epp_policy == cpudata->policy)
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/cpufreq/amd-pstate.c:1110:30: note: uninitialized use occurs here
+         amd_pstate_set_epp(cpudata, epp);
+                                     ^~~
+drivers/cpufreq/amd-pstate.c:1085:2: note: remove the 'if' if its 
+condition is always false
+         if (cpudata->epp_policy == cpudata->policy)
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/cpufreq/amd-pstate.c:1064:9: note: initialize the variable 'epp' 
+to silence this warning
+         s16 epp;
+                ^
+                 = 0
+---
+
+Cheers,
+
+Tor Vic
+
