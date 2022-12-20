@@ -2,255 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79463651AF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 07:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA05651AF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 07:53:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiLTGtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 01:49:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
+        id S232896AbiLTGxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 01:53:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232897AbiLTGtN (ORCPT
+        with ESMTP id S229511AbiLTGxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 01:49:13 -0500
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C58415A28
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 22:49:11 -0800 (PST)
-Received: by mail-vs1-xe2e.google.com with SMTP id b189so10910913vsc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 22:49:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=js2ufOjBmmgGy8PvjmPtd+4QZZsXyUTcMnnsyn0kH4g=;
-        b=JOVAogE1ejpgQTqA9TTAPdAyL5qjaC8H210ZmtKV1cEqz2y/OZKbnOyyRprvDQ3Ujb
-         mhDUeac8ByG3HVa06zkrmFEBbp8txoab+7LFC8Du1ErLh8WdpOaYMvXUL3u2ndDEHAJa
-         kYeX8orYGquhNt7AriPjlGSsMSH4v3tthsdvS+MMNXjfpqCIB9VB1HAx/RVpFLCis8Bv
-         Qk+Fl51/5C79y/BBnk//8h13HfC8LTyPgDWu5csPOJlIyz2bcn674BXMtf+ySxoaYfxR
-         Q3LDTJumwIYTxldipCE2/s98/bFKqo2tJTYlNLoNiygWR4G+oXRM4BhyjSgk6894wEyn
-         5Hcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=js2ufOjBmmgGy8PvjmPtd+4QZZsXyUTcMnnsyn0kH4g=;
-        b=gAPU91qNhbnJMAnCM3+2UBD75Wi6VUXpKeDIasfQQHEmfSeUpsM6S4dFg1W0r82N3B
-         37PqGDoLC9VG/ZRRX8p5dpzDRBqAOZexRhAAo5l7KzPpCYeOe+TCWknqjkQA4s/hqUYN
-         Qq4AeWzTVCoaj/PPg8Nlryjrw3823V4aQAAIAD37bh6gsDgE3LvESkFBrk7x3li3U4Dw
-         Mi3BcTjM5Fr+6kNR3bMhDMitXCLDgRyeI2zcUYMkXwfrT+o6mj98btB6rso+kkpMwrfk
-         3UV8FeqsNcwm05JAJzCij1rqA+JXA59/8/rSo80+aS2k6Mn1+C8MMmAUY7RQ/LV+SGFZ
-         O3SA==
-X-Gm-Message-State: ANoB5pmsMJhN7YpwGLzZS3Rz7KlplbLJIp+hwXmrVkxJ+0gYuFyz9c5e
-        Vs9JjJ1vvErGPyZQ2OfpF5geh8vzpTRkWl/YmB44ag==
-X-Google-Smtp-Source: AA0mqf7M+QFzXIepln2+4d+ZDhXcaia0gI29dkHFuRQuZpSXS9dxbWHuTRbE5lswl1IWHvWJA3AkHvaI3zwN2wrVsmY=
-X-Received: by 2002:a05:6102:21b6:b0:3b5:21d5:5a0b with SMTP id
- i22-20020a05610221b600b003b521d55a0bmr2921509vsb.34.1671518950130; Mon, 19
- Dec 2022 22:49:10 -0800 (PST)
+        Tue, 20 Dec 2022 01:53:00 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2047.outbound.protection.outlook.com [40.107.94.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7860A9FEB;
+        Mon, 19 Dec 2022 22:52:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ibn+Uc0qv+7tCGynz0FfZm/IqWxmnsQCI0Sy6UvWLywHxrcNWDMVu+ZOtzxlMwX+f0iUf9SsKqjR9xFQp9nCZ61vZs1OlM+0XG3QpBWCygl8FrCMqLxZakO6iMw6ojXRAy3CbUk6mxjZTubU1mHP2vyOnY1ohYxeM95IkuupORdPevQjmy3cHVNbNlpaR2t/7zY0XXw4seAThajVWBtqO+Rc3qC+N2KREgd9FwBVKnj/vNfNa6zVAyHohW6djiND0Mz3r4qUjGBhYFk/O/O2teUlZjKEyZkV1doRN38aRk1eKSznO17BCpiEj+BmiZ9inTgYTlSMsAMp/P1ifD38kQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=t3LbiqKqVBj4/lLB41lnyfLloSE2FJocfe5gXLzyDCQ=;
+ b=G0K7OLVQlVqU390tvVVMaL7Ty8Oh9bEnTI0FrJE5bXQc3coRnGepNXFaxF8tEK6J/QSrTaTtWzGsyCqHIBtpd9CHd4xIYfTkQnRRUDPOfHGuQRbNxy+348pTA2LuzFPfcI94UwGdKb8XDpP8VROVUvCE3nfzb/we5j6yA/CQiKMAbwzfwNITlNKMlNQmwpcT9CbMGlSA8BbI1lITv65kmGA5xYyXOAGIeveYxDrAWb67VV1frksEZezzQ7F/rR4oREE6YrbcLgqZMn+fMywffsGqwwBpyJcoqzSAPXskoxlcDGGhmHD37gsv6Vvo/ILtkNvJq7SYgu5B1/cq4VmTuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=t3LbiqKqVBj4/lLB41lnyfLloSE2FJocfe5gXLzyDCQ=;
+ b=ZgKFPZwxqJ61OOopkS3ELUID4WFrUQpg1+wtET9KdWjwRp0B4zVEQnClDvKwRZfTAw8npp7wdn9l8PRoi+PmYQ3AvQcO/0GZs6ZKNK2NqUIHE6D0cNysmvbOY9wSBFtTbPoEmVmscsrfUfRCNNMKHbu6bgKY/hRlUUI3iIS0Txc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5040.namprd12.prod.outlook.com (2603:10b6:5:38b::19)
+ by CO6PR12MB5458.namprd12.prod.outlook.com (2603:10b6:5:35b::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Tue, 20 Dec
+ 2022 06:52:56 +0000
+Received: from DM4PR12MB5040.namprd12.prod.outlook.com
+ ([fe80::9444:21e0:2a65:da95]) by DM4PR12MB5040.namprd12.prod.outlook.com
+ ([fe80::9444:21e0:2a65:da95%6]) with mapi id 15.20.5924.016; Tue, 20 Dec 2022
+ 06:52:56 +0000
+Message-ID: <035598f0-3174-9677-0b53-f3ccbfb54155@amd.com>
+Date:   Tue, 20 Dec 2022 12:22:45 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] HID: amd_sfh: Add missing check for dma_alloc_coherent
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, basavaraj.natikar@amd.com,
+        jikos@kernel.org, benjamin.tissoires@redhat.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221220024921.21992-1-jiasheng@iscas.ac.cn>
+Content-Language: en-US
+From:   Basavaraj Natikar <bnatikar@amd.com>
+In-Reply-To: <20221220024921.21992-1-jiasheng@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0189.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:e8::10) To DM4PR12MB5040.namprd12.prod.outlook.com
+ (2603:10b6:5:38b::19)
 MIME-Version: 1.0
-References: <20221219182940.739981110@linuxfoundation.org>
-In-Reply-To: <20221219182940.739981110@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 20 Dec 2022 12:18:59 +0530
-Message-ID: <CA+G9fYtWgwmEZVY7pQHQ4kKadxtgM71v-3goRq0gikDMoFdKjQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/17] 5.15.85-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5040:EE_|CO6PR12MB5458:EE_
+X-MS-Office365-Filtering-Correlation-Id: 04b13ae8-62ea-4716-d4a4-08dae256d31e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YAVJce55FwdYz6+GTsA95RWSovhkmtpFL6eq/j8TGjfFs+FDgOeLdJ0HQYrAGj72PkAMUH+VX47nkTosC2MD5izu5vDG3ca3N1vdv/BAJjz/Qfw01mt0NNkrJxsKaUkMEondfYnsQJukUGN+8StNp69LVJWYS1ffEp2WCGVPMslhj1adVY0wKVVXQGjZfAQoW+QIQDL4j9BndzpOO68D6U5V5S7fngN1b90Ua/YkDa+QCwCB1y/NpA+q8ClXNvlLPv6IRiZSxwEChFj0Gnh/P/xd+WKnvVfj9mcpKfF6F5J5yIyTfx/Fxccl5qvCzSCdAjjAt2zQxZ/4Ce8dEw8kbE2HDUDQUmRm8jUDDwe52CcqjaN4JjJEjIXK4EHyQbpGmO3yFKGWBn0HpZAZipCenyCINZ8waQbUZgpBtyXGZMTGuyseKTsXVSsTc8Mgp7Pe3zhTtC0FLT8aGiVGNzG6d0I5VUwCP1ktYvVv8bEbkDz1k5ALjQ3tgG8IQYmiM8MXgq64UDoCyU1QpyumD99eMcrA4YMnQqTMhYoThcVVsc31sZ34ZzotMny3Yf4Tf1/ezLXkECenl8ycf+6ZYu4xWrSANYP56IMDzPjAKzPWEjDC39T4RCRcCjsMaFWT2tVi3unuWVT2X8bGZmKibvObgjHTMFPB1ibL35XQbxm5uH9mcYZpRTTNOoC6pi7A97YxqItXrky8LT8fzN+gfiozo8il92sy6BKbDx6VdbWJP0A=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5040.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(39860400002)(376002)(136003)(366004)(451199015)(478600001)(6486002)(2906002)(316002)(36756003)(83380400001)(38100700002)(31696002)(6666004)(26005)(2616005)(53546011)(186003)(6506007)(66476007)(66556008)(66946007)(41300700001)(8936002)(8676002)(5660300002)(4326008)(6512007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V3pUT1JOWmZUZmRMUG0zbHd6SmMyTTd4dGtSMXNMMGJOODIrekk0TTVGOFcx?=
+ =?utf-8?B?NzdNOTNoZ2VEcTNUOUVTSW9CY1hJekVhNXJpYTAza0RqVmk5NGJJS2IxMEt3?=
+ =?utf-8?B?TzRzQUcvWENGeGFMVzAwcjl3cFFPSkFlWlBMS3lCbnRMRGs3RnNzcUlqVDN2?=
+ =?utf-8?B?RTY0ZE84ZFYzcnN5UEoxNHJtZTBybE40aUU3NzhlWjIxVjR5Y1lTT1g1UExT?=
+ =?utf-8?B?QlRHVU1MOWkwVjl0N01ZMnRHc2NYdXZSMXRZRytzS25jL0N1WGxVZDE4L3F3?=
+ =?utf-8?B?QXJhYk8yMmFhWUdmWTNTR0VyVktHb0xiSWd6SXBVV0pncGJXc0RraEdoY04w?=
+ =?utf-8?B?cUJTVnE3bHhjVXU2bVFxRHFlbnVDd0srMGtFZGJqWkl5RW1wUVdyZmF6Zmcw?=
+ =?utf-8?B?YmhQTHBqV1ZPNnJGYitSZEk0ZXF6c2RxUEFOOFo5S0pLVU1MSXRQb1BXaUVN?=
+ =?utf-8?B?a01tRmlVWWdJV1gyWVd4SmJJZDhVU1FpU2NrK3IxSHZSRjk2M0R0YkRUald6?=
+ =?utf-8?B?M1B1SVB5YWtnOVo5NElZalhVMzVvMzJ1QUUrZGhpUEE4S2xNQkE3NDR2Qkl3?=
+ =?utf-8?B?YnNLNGtMeXBXait0VFZLY1Y5cWFVUFFUMmVCTFJ2UTJkRmI4RWMyeEhoaHB0?=
+ =?utf-8?B?YkJvZ0ZZNm9EeWtzMTdRQWg4VnY0SWV6MTV4SzlOUWR5M05Qd0gwYnZLQU5p?=
+ =?utf-8?B?V2pEWDlBdE5kbXJxc3hDMVZLY0xzaGxKYWx4VlZwdlRKZCt4WGZDMUMwS3FS?=
+ =?utf-8?B?NE1pVnAxdGhVaHVKVk0ydDRZNnVlbzlRQmNJUlYzN2NpekNNNU4wRS9BZGYy?=
+ =?utf-8?B?NFNZaStuTlpIaTNuczgwNzRnWGdNNjlMQ2hZbVRaWFM2UmE2TnFpTnZub3dB?=
+ =?utf-8?B?NGNXYWFuNEVVQjJqNEZrbFNoV3BIU2J5eDU1NGF6R25CM1hrdEcrV1dXKzBy?=
+ =?utf-8?B?czI3RXFCT0szMFIwdjlrenRlTWdsTGhqd2wyRU5pTUN6SmVCUEZIL2k2cCtG?=
+ =?utf-8?B?MlFrcElmRExEbXBzTFBqN3R5Ymd2M2ZRR2kyY2VrQWg2Uk5wWlp2ZjBleFFO?=
+ =?utf-8?B?ZkVBSjZybDRUbE5OOHFZcnUwYzBMWkcxWlVpRzYvenB1aWlraU1jQitCU1pG?=
+ =?utf-8?B?bVljNW5jR3lLOXd0MUVQSlRvMFhrWEpJenRiMUluQkdYQ0IyaVB1SkZaWGhX?=
+ =?utf-8?B?WGFZZERFVm1mNEFJWHcrSzdSS3lMajE1N1Ayb0dHYTlWajg5WURiNFdSUTIr?=
+ =?utf-8?B?b09jTlh6c1UwMHpLbTNUSHg2QUhuQWNPT0VJS3Jmbm9qQVh1NmpQVUpWeGtm?=
+ =?utf-8?B?bDBiNTREaDZyQno3eWpVMFlOR2tYUXZCV3hhamlINUFkMTFia0xhYjR6dTQz?=
+ =?utf-8?B?YWdOMmlMM1pkalNuZjEwalhsNVBSVkJQTE5lbUEyeVpucVY5c3VVWkVIZUp2?=
+ =?utf-8?B?Q3dEYVZzUjNjUGxOaEhQcStaYk11eFZUM212N014OHNXdWhOMVJNUHAzWnFi?=
+ =?utf-8?B?N0RrRTUreTk0NklaY3haWUt1RVZNSllMUXJFbEJ2dmNWSEw4ei8rY3lWRFlh?=
+ =?utf-8?B?TWRpTFJ5Q09RTitWNGRiV2ZQcmdjb0J5QWx3dkNZVVZxekZCNGhxVlBvWTFP?=
+ =?utf-8?B?aStnZjgvUVRzOWZCWEJNZWtVUDV0K0JOS2V1VnhHa1g4WDZRUkVDWlhiYjUx?=
+ =?utf-8?B?d1FIK3NIUXA3MmFBOGd5M3NBZENlbUc5TTBDYVJSaTlDaGpSaGtmOWpCQytM?=
+ =?utf-8?B?TGRCYm8wSU9XYm1DSHVVVXUxWDFPQWE4NXRYVzdoMjBqS0QzWFl4bCt0Tzg3?=
+ =?utf-8?B?cHZOUzJEU3FDNk9oTHYyeVpGd3hzSjk3M21pa1ByMFRFdEU2WitSQTdITCt1?=
+ =?utf-8?B?TmFielBwUGpFZFUreHA3YkJFK3pwTkxhcUp2WFpYYzRkVkQ1d2R0aVZqTjIw?=
+ =?utf-8?B?SndmZnhFbFM4WVZ0dG4xZ2ZMM2M5eDV0RjJSN0VZWEN1dytERUdybDhQd2Nv?=
+ =?utf-8?B?Zk5tdENReCtpTm9kV2Eyalp3MW01SWJ6K0VuL2R1VmJOdTdFY2h0UENIM3p2?=
+ =?utf-8?B?RkhRQ2JsRTJoMTQrK2o0MkJhNHJNL0ZrVmkwWjNscG01Z2dzUURDbUs3QkpZ?=
+ =?utf-8?Q?j1+S1N8Ujl9/wJ75u1mgQSg8v?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04b13ae8-62ea-4716-d4a4-08dae256d31e
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5040.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2022 06:52:56.6392
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sOgYwWJmKKe5hlH3ZsvK6wOR80vXQTQNwdSF0XZ9R8lYawz3wJ6yCw65rEOV6GUeKhPj5/WeHXA4gI20d57u3A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5458
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Dec 2022 at 00:57, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+
+On 12/20/2022 8:19 AM, Jiasheng Jiang wrote:
+> Add check for the return value of the dma_alloc_coherent since
+> it may return NULL pointer if allocation fails.
 >
-> This is the start of the stable review cycle for the 5.15.85 release.
-> There are 17 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> Fixes: 4b2c53d93a4b ("SFH:Transport Driver to add support of AMD Sensor Fusion Hub (SFH)")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  drivers/hid/amd-sfh-hid/amd_sfh_client.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
-> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.85-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_client.c b/drivers/hid/amd-sfh-hid/amd_sfh_client.c
+> index 8275bba63611..ab125f79408f 100644
+> --- a/drivers/hid/amd-sfh-hid/amd_sfh_client.c
+> +++ b/drivers/hid/amd-sfh-hid/amd_sfh_client.c
+> @@ -237,6 +237,10 @@ int amd_sfh_hid_client_init(struct amd_mp2_dev *privdata)
+>  		in_data->sensor_virt_addr[i] = dma_alloc_coherent(dev, sizeof(int) * 8,
+>  								  &cl_data->sensor_dma_addr[i],
+>  								  GFP_KERNEL);
+> +		if (!in_data->sensor_virt_addr[i]) {
+> +			rc = -ENOMEM;
+> +			goto cleanup;
+> +		}
+>  		cl_data->sensor_sts[i] = SENSOR_DISABLED;
+>  		cl_data->sensor_requested_cnt[i] = 0;
+>  		cl_data->cur_hid_dev = i;
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+looks good to me.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Acked-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
 
-## Build
-* kernel: 5.15.85-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: bef75c6188c78b9ddf305681393ec04bd7d2ad30
-* git describe: v5.15.84-18-gbef75c6188c7
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.84-18-gbef75c6188c7
-
-## Test Regressions (compared to v5.15.84)
-
-## Metric Regressions (compared to v5.15.84)
-
-## Test Fixes (compared to v5.15.84)
-
-## Metric Fixes (compared to v5.15.84)
-
-## Test result summary
-total: 139603, pass: 121329, fail: 2908, skip: 14952, xfail: 414
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 151 total, 148 passed, 3 failed
-* arm64: 49 total, 47 passed, 2 failed
-* i386: 39 total, 35 passed, 4 failed
-* mips: 31 total, 29 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 34 total, 32 passed, 2 failed
-* riscv: 14 total, 14 passed, 0 failed
-* s390: 16 total, 14 passed, 2 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 42 total, 40 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* v4l2-compliance
-* vdso
-
+Thanks,
 --
-Linaro LKFT
-https://lkft.linaro.org
+Basavaraj
+
