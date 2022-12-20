@@ -2,170 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18390652043
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 13:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFA3652041
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 13:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiLTMPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 07:15:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
+        id S233153AbiLTMPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 07:15:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233220AbiLTMPY (ORCPT
+        with ESMTP id S230179AbiLTMO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 07:15:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70927186CE
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 04:14:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671538478;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yj0H0OPjYYhukChGoShtr+NfxDhWzTB9QJrl0G0MvS0=;
-        b=OegDTwTceAiQ751lx8FWp1D4L0XhTo+CZOwaA/Ch+DmY3lFjdFBAO7BP18fOzZn+I0UjEw
-        o9GRNm3gBlYYnBi6I2vNAHqg8nMO2BrlG99qUe/Y9eoM2hhO4G42HW2zJSmhqW5VaqHSoM
-        NJEpCvSUe7jwko8RDSSPk/5qi7jzmqQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-161-bUmU_UJjMBy7kaG3QYQxjw-1; Tue, 20 Dec 2022 07:14:33 -0500
-X-MC-Unique: bUmU_UJjMBy7kaG3QYQxjw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F0ADB299E741;
-        Tue, 20 Dec 2022 12:14:32 +0000 (UTC)
-Received: from localhost (ovpn-12-53.pek2.redhat.com [10.72.12.53])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B0632C158BB;
-        Tue, 20 Dec 2022 12:14:23 +0000 (UTC)
-Date:   Tue, 20 Dec 2022 20:14:15 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, urezki@gmail.com,
-        stephen.s.brennan@oracle.com, willy@infradead.org,
-        akpm@linux-foundation.org, hch@infradead.org
-Subject: Re: [PATCH v2 2/7] mm/vmalloc.c: add flags to mark vm_map_ram area
-Message-ID: <Y6GnF51yd+d1qINF@MiWiFi-R3L-srv>
-References: <20221217015435.73889-1-bhe@redhat.com>
- <20221217015435.73889-3-bhe@redhat.com>
- <Y52rllbXHMwbpJ8K@lucifer>
- <Y6AaPKT7mdVxdHRl@MiWiFi-R3L-srv>
- <Y6AqRauq6wEYK0n5@lucifer>
- <Y6BYD24wzAogqRyT@MiWiFi-R3L-srv>
- <Y6Bgt7k1H7Ez4EEb@lucifer>
+        Tue, 20 Dec 2022 07:14:59 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4CF186D0;
+        Tue, 20 Dec 2022 04:14:58 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BKABAMI032452;
+        Tue, 20 Dec 2022 12:14:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=wLqDcO+Wsi26P0nos/+8/kSQfghM5ThFrgbZ4/Pqpn8=;
+ b=jVXUPoovH6l3UXbdHTkvrxkegxnp9pGaYIGsoK8PPCPQqIyEgHztqL+dn0fLRDj1dAQu
+ iVegfwcwYkmvD2UQPSwNMS2B2SShNkEtJx7yCngp7RifeS5cWlhdQCF+FkduNx3GfLkx
+ gz4XDNWR8wDM8u/0Fq/+H6MIhFWPntWkzgJRWDCfUxgl+8uhFbY/ouyXdLn+1Jz90cKP
+ Mr/XgXuSbtZ7Ut9LuS3NsGwdI2Rq1YHTM1W8dYwJFjjG/oAPY1HJIQ6OeHTtJWBe4uqT
+ i4s9LMEvJ88oz6PZNOcWWFWHpQMr8MBRmiKlq8nPGGz+YqX2vRiYydjb/+PzzdshSYQZ hQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mk39t96pd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 12:14:40 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BKCEdqR003361
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 12:14:39 GMT
+Received: from [10.216.28.180] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 20 Dec
+ 2022 04:14:35 -0800
+Message-ID: <56d4941a-ad35-37ca-48ca-5f1bf7a86d25@quicinc.com>
+Date:   Tue, 20 Dec 2022 17:44:31 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6Bgt7k1H7Ez4EEb@lucifer>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] ath10k: snoc: enable threaded napi on WCN3990
+Content-Language: en-US
+To:     Abhishek Kumar <kuabhs@chromium.org>, <kvalo@kernel.org>
+CC:     <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+References: <20221220075215.1.Ic12e347e0d61a618124b742614e82bbd5d770173@changeid>
+From:   Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
+In-Reply-To: <20221220075215.1.Ic12e347e0d61a618124b742614e82bbd5d770173@changeid>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: y7oCJvTmlbthnqGTIZ5zOR0qIdiaHjqF
+X-Proofpoint-GUID: y7oCJvTmlbthnqGTIZ5zOR0qIdiaHjqF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-20_05,2022-12-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 spamscore=0 clxscore=1011 adultscore=0 priorityscore=1501
+ impostorscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212200101
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/19/22 at 01:01pm, Lorenzo Stoakes wrote:
-> On Mon, Dec 19, 2022 at 08:24:47PM +0800, Baoquan He wrote:
-> > In fact, I should not do the checking, but do the clearing anyway. If I
-> > change it as below, does it look better to you?
-> >
-> >
-> > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> > index 5e578563784a..369b848d097a 100644
-> > --- a/mm/vmalloc.c
-> > +++ b/mm/vmalloc.c
-> > @@ -2253,8 +2253,7 @@ void vm_unmap_ram(const void *mem, unsigned int count)
-> >  	spin_lock(&vmap_area_lock);
-> >  	va = __find_vmap_area((unsigned long)addr, &vmap_area_root);
-> >  	BUG_ON(!va);
-> > -	if (va)
-> > -		va->flags &= ~VMAP_RAM;
-> > +	va->flags &= ~VMAP_RAM;
-> >  	spin_unlock(&vmap_area_lock);
-> >  	debug_check_no_locks_freed((void *)va->va_start,
-> >  				    (va->va_end - va->va_start));
+On 12/20/2022 1:25 PM, Abhishek Kumar wrote:
+> NAPI poll can be done in threaded context along with soft irq
+> context. Threaded context can be scheduled efficiently, thus
+> creating less of bottleneck during Rx processing. This patch is
+> to enable threaded NAPI on ath10k driver.
 > 
-> This is better as it avoids the slightly contradictory situation of checking for
-> a condition we've asserted is not the case, but I would still far prefer keeping
-> this as-is and placing the unlock before the BUG_ON().
+> Based on testing, it was observed that on WCN3990, the CPU0 reaches
+> 100% utilization when napi runs in softirq context. At the same
+> time the other CPUs are at low consumption percentage. This
+> does not allow device to reach its maximum throughput potential.
+> After enabling threaded napi, CPU load is balanced across all CPUs
+> and following improvments were observed:
+> - UDP_RX increase by ~22-25%
+> - TCP_RX increase by ~15%
 > 
-> This avoids explicitly and knowingly holding a lock over a BUG_ON() and is
-> simple to implement, e.g.:-
+> Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2-00696-QCAHLSWMTPL-1
+> Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
+> ---
 > 
->   	spin_lock(&vmap_area_lock);
->   	va = __find_vmap_area((unsigned long)addr, &vmap_area_root);
->  	if (va)
->  		va->flags &= ~VMAP_RAM;
->   	spin_unlock(&vmap_area_lock);
->   	BUG_ON(!va);
-
-OK, I will change like this.
-
+>   drivers/net/wireless/ath/ath10k/core.c | 16 ++++++++++++++++
+>   drivers/net/wireless/ath/ath10k/hw.h   |  2 ++
+>   drivers/net/wireless/ath/ath10k/snoc.c |  3 +++
+>   3 files changed, 21 insertions(+)
 > 
-> > > You are at this point clearing the VMAP_RAM flag though, so if it is unimportant
-> > > what the flags are after this call, why are you clearing this one?
-> >
-> > With my understanding, We had better do the clearing. Currently, from
-> > the code, not doing the clearing won't cause issue. If possible, I would
-> > like to clear it as below draft code.
-> >
-> 
-> Sure, it seems appropriate to clear it, I'm just unsure as to why you aren't
-> just clearing both flags? Perhaps just set va->flags = 0?
+> diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
+> index 5eb131ab916fd..ee4b6ba508c81 100644
+> --- a/drivers/net/wireless/ath/ath10k/core.c
+> +++ b/drivers/net/wireless/ath/ath10k/core.c
+> @@ -100,6 +100,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = false,
+>   		.use_fw_tx_credits = true,
+>   		.delay_unmap_buffer = false,
+> +		.enable_threaded_napi = false,
+>   	},
+>   	{
+>   		.id = QCA988X_HW_2_0_VERSION,
+> @@ -140,6 +141,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = false,
+>   		.use_fw_tx_credits = true,
+>   		.delay_unmap_buffer = false,
+> +		.enable_threaded_napi = false,
+>   	},
+>   	{
+>   		.id = QCA9887_HW_1_0_VERSION,
+> @@ -181,6 +183,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = false,
+>   		.use_fw_tx_credits = true,
+>   		.delay_unmap_buffer = false,
+> +		.enable_threaded_napi = false,
+>   	},
+>   	{
+>   		.id = QCA6174_HW_3_2_VERSION,
+> @@ -217,6 +220,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = false,
+>   		.use_fw_tx_credits = true,
+>   		.delay_unmap_buffer = false,
+> +		.enable_threaded_napi = false,
+>   	},
+>   	{
+>   		.id = QCA6174_HW_2_1_VERSION,
+> @@ -257,6 +261,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = false,
+>   		.use_fw_tx_credits = true,
+>   		.delay_unmap_buffer = false,
+> +		.enable_threaded_napi = false,
+>   	},
+>   	{
+>   		.id = QCA6174_HW_2_1_VERSION,
+> @@ -297,6 +302,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = false,
+>   		.use_fw_tx_credits = true,
+>   		.delay_unmap_buffer = false,
+> +		.enable_threaded_napi = false,
+>   	},
+>   	{
+>   		.id = QCA6174_HW_3_0_VERSION,
+> @@ -337,6 +343,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = false,
+>   		.use_fw_tx_credits = true,
+>   		.delay_unmap_buffer = false,
+> +		.enable_threaded_napi = false,
+>   	},
+>   	{
+>   		.id = QCA6174_HW_3_2_VERSION,
+> @@ -381,6 +388,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = false,
+>   		.use_fw_tx_credits = true,
+>   		.delay_unmap_buffer = false,
+> +		.enable_threaded_napi = false,
+>   	},
+>   	{
+>   		.id = QCA99X0_HW_2_0_DEV_VERSION,
+> @@ -427,6 +435,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = false,
+>   		.use_fw_tx_credits = true,
+>   		.delay_unmap_buffer = false,
+> +		.enable_threaded_napi = false,
+>   	},
+>   	{
+>   		.id = QCA9984_HW_1_0_DEV_VERSION,
+> @@ -480,6 +489,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = false,
+>   		.use_fw_tx_credits = true,
+>   		.delay_unmap_buffer = false,
+> +		.enable_threaded_napi = false,
+>   	},
+>   	{
+>   		.id = QCA9888_HW_2_0_DEV_VERSION,
+> @@ -530,6 +540,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = false,
+>   		.use_fw_tx_credits = true,
+>   		.delay_unmap_buffer = false,
+> +		.enable_threaded_napi = false,
+>   	},
+>   	{
+>   		.id = QCA9377_HW_1_0_DEV_VERSION,
+> @@ -570,6 +581,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = false,
+>   		.use_fw_tx_credits = true,
+>   		.delay_unmap_buffer = false,
+> +		.enable_threaded_napi = false,
+>   	},
+>   	{
+>   		.id = QCA9377_HW_1_1_DEV_VERSION,
+> @@ -612,6 +624,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = false,
+>   		.use_fw_tx_credits = true,
+>   		.delay_unmap_buffer = false,
+> +		.enable_threaded_napi = false,
+>   	},
+>   	{
+>   		.id = QCA9377_HW_1_1_DEV_VERSION,
+> @@ -645,6 +658,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = false,
+>   		.use_fw_tx_credits = true,
+>   		.delay_unmap_buffer = false,
+> +		.enable_threaded_napi = false,
+>   	},
+>   	{
+>   		.id = QCA4019_HW_1_0_DEV_VERSION,
+> @@ -692,6 +706,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = false,
+>   		.use_fw_tx_credits = true,
+>   		.delay_unmap_buffer = false,
+> +		.enable_threaded_napi = false,
+>   	},
+>   	{
+>   		.id = WCN3990_HW_1_0_DEV_VERSION,
+> @@ -725,6 +740,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>   		.hw_restart_disconnect = true,
+>   		.use_fw_tx_credits = false,
+>   		.delay_unmap_buffer = true,
+> +		.enable_threaded_napi = true,
+>   	},
+>   };
+>   
+> diff --git a/drivers/net/wireless/ath/ath10k/hw.h b/drivers/net/wireless/ath/ath10k/hw.h
+> index 9643031a4427a..adf3076b96503 100644
+> --- a/drivers/net/wireless/ath/ath10k/hw.h
+> +++ b/drivers/net/wireless/ath/ath10k/hw.h
+> @@ -639,6 +639,8 @@ struct ath10k_hw_params {
+>   	bool use_fw_tx_credits;
+>   
+>   	bool delay_unmap_buffer;
+> +
+> +	bool enable_threaded_napi;
+>   };
+>   
+>   struct htt_resp;
+> diff --git a/drivers/net/wireless/ath/ath10k/snoc.c b/drivers/net/wireless/ath/ath10k/snoc.c
+> index cfcb759a87dea..b94150fb6ef06 100644
+> --- a/drivers/net/wireless/ath/ath10k/snoc.c
+> +++ b/drivers/net/wireless/ath/ath10k/snoc.c
+> @@ -927,6 +927,9 @@ static int ath10k_snoc_hif_start(struct ath10k *ar)
+>   
+>   	bitmap_clear(ar_snoc->pending_ce_irqs, 0, CE_COUNT_MAX);
+>   
+> +	if (ar->hw_params.enable_threaded_napi)
+> +		dev_set_threaded(&ar->napi_dev, true);
+> +
 
-Hmm, for the two kinds of vm_map_ram areas, their code paths are
-different. for unmapping vmap_block vm_map_ram, it goes through
-vb_free(). I can only do the clearing in free_vmap_block().
+Since this is done in the API specific to WCN3990, we do not need 
+hw_param for this.
 
-  -->vm_unmap_ram()
-     -->vb_free()
-        -->free_vmap_block()
-
-For non vmap_block vm_map_ram area, I can do the clearing in
-vm_unmap_ram().
-  -->vm_unmap_ram()
-     -->__find_vmap_area()
-     -->free_unmap_vmap_area()
-
-As said earlier, clearing va->flags when unmap vm_map_ram area, or
-clearing va->vm in remove_vm_area(), these have better be done.
-However, not clearing them won't cause issue currently. Because the
-old vmap_area is inserted into free_vmap_area_root, when we allocate a
-new vmap_area through alloc_vmap_area(), we will get q new vmap_area
-from vmap_area_cachep, the old va->flags or va->vm won't be carried into
-the new vmap_area. Clearing them is a good to have, just in case.
-
-Rethinking about this, I may need to do the clearing when freeing
-vmap_block. Otherwise, people will be confused why the clearing is not
-done.
-
-@@ -1815,6 +1815,7 @@ static void free_vmap_area_noflush(struct vmap_area *va)
-
-        spin_lock(&vmap_area_lock);
-        unlink_va(va, &vmap_area_root);
-+       va->flags = 0;
-        spin_unlock(&vmap_area_lock);
-
-        nr_lazy = atomic_long_add_return((va->va_end - va->va_start) >>
-
-> 
-> > >
-> > > It is just a little confusing, I wonder whether the VMAP_BLOCK flag is necessary
-> > > at all, is it possible to just treat a non-VMAP_BLOCK VMAP_RAM area as if it
-> > > were simply a fully occupied block? Do we gain much by the distinction?
-> >
-> > Yeah, VMAP_BLOCK flag is necessary. vmap_block contains used region,
-> > or dirty/free regions. While the non-vmap_blcok vm_map_ram area is
-> > similar with the non vm_map_ram area. When reading out vm_map_ram
-> > regions, vmap_block regions need be treated differently.
-> 
-> OK looking through again closely I see you're absolutely right, I wondered
-> whether you could somehow make a non-VMAP_BLOCK vread() operation be equivalent
-> to a block one (only across the whole mapping), but I don't think you can.
-
-Right, it's much easier to do the same handling on non-VMAP_BLOCK vm_map_ram
-as the normal vmap area.
-
+Thanks,
+Manikanta
