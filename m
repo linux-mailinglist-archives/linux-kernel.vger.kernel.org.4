@@ -2,256 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87AD3651C02
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:56:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA1B651BFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233197AbiLTHzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 02:55:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34390 "EHLO
+        id S233036AbiLTHzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 02:55:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiLTHzu (ORCPT
+        with ESMTP id S229690AbiLTHzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 02:55:50 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758C53892
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:55:48 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so11301291pjo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:55:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+lUH7ICleRb/CYwKzbaXCdf221Goq9bYxBGSvWpk034=;
-        b=m5nTnrA9JUKHMNfFob+CNWz9Y5A1kA/3Jg6cLD2QsBzePMwiGtry/ONhtt0M6DLHQp
-         nDTdgG2QLz7YZjToSy+z02blQQO/SSdch1ihyHDei1Ao12BSLtsQM0JaN95eblZG12ss
-         2eoqXXhHY7PGgAznQJ9xkaJaha4nQFcP00W2M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+lUH7ICleRb/CYwKzbaXCdf221Goq9bYxBGSvWpk034=;
-        b=uyAEE8HkSCRmIlqTiaVzYivYvOndO7uQnu1rLCLKkAXMiEDFr4jDBxyvhocT3WV1hP
-         XKuOVveWTzqX/ORVoRJD7lJGOnhO6Yz90CsMBPNQjlNZSXIRpr+OUgMpQnxFNGvGUOKV
-         4mnRwcwc/vfV+tVnp3EuRKMMLhWqN/8iFkQysYPBDc9Ntlqc6VYE2+vbHAS5SwBRX7q0
-         js2R4sFfkuLKLMxUkdfo1xpzQcLQygockujg0uCNxwMk9J/1fvpnJpQcBWUV/bWeQeOK
-         USzUZBb1NaAyi43H1iVAfJVXV6pQMEL3t3PTrE9EPqN2vlX3gtZETiWoy4VnGHYoN9lc
-         P4Fw==
-X-Gm-Message-State: AFqh2kruar4X9gP4HW5/fnAXJPODQ30QDJggm9wC3LuR93g3oMeyfqb4
-        mJ6xIZ9tFC6OqWS+ed3ODGHsDQ==
-X-Google-Smtp-Source: AMrXdXuRYKUKejxanv4Te75F99BbTwv5kTv7YHUdJwG87aH6dXGAIybbLVj7i9Do71YO5LR1lUMflw==
-X-Received: by 2002:a05:6a20:9e05:b0:b2:18da:1515 with SMTP id ms5-20020a056a209e0500b000b218da1515mr3509202pzb.20.1671522947919;
-        Mon, 19 Dec 2022 23:55:47 -0800 (PST)
-Received: from kuabhs-cdev.c.googlers.com.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id u31-20020a63235f000000b00488b8ad57bfsm5124215pgm.54.2022.12.19.23.55.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 23:55:47 -0800 (PST)
-From:   Abhishek Kumar <kuabhs@chromium.org>
-To:     kvalo@kernel.org
-Cc:     ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        kuabhs@chromium.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH] ath10k: snoc: enable threaded napi on WCN3990
-Date:   Tue, 20 Dec 2022 07:55:06 +0000
-Message-Id: <20221220075215.1.Ic12e347e0d61a618124b742614e82bbd5d770173@changeid>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+        Tue, 20 Dec 2022 02:55:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822B92629;
+        Mon, 19 Dec 2022 23:55:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DBA7B8105C;
+        Tue, 20 Dec 2022 07:55:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6CD7C433EF;
+        Tue, 20 Dec 2022 07:55:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671522907;
+        bh=Tyff5dKkJUEMJgpOCplHCQLNFPV2khvh5mON+5VPI9w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L1jWkxqZy7WM77o3a+22gS5N/twe7BP74DnPzl0gynYuF9JdkfQB+FkmLu4HajH0m
+         JmBWY6bDKaLO6pQB/eAZfrQBsPD9zfZK0vxFkkWG17qCI/wLHoGAdh9qSvlM8Rxt/T
+         ZOVpPUFKhd/e362JjgZdarddkMfsb2jiDW6pL36tNXagoE/TdSmocusVZdozAk2p1J
+         BwYU1lo8gzDApn5TlvHgTAxWYg/zFZT0zxS7mZXMnTKO1RtdOywql0lwv+eRKKJe9M
+         umOYeL/zAvN1t5FEL6SOPucJSMA+Ri3/uOp/eod+tDzFnoeuJzBi6WrZQhe79pmIEZ
+         9VZA+bySEvXSw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p7XTc-00015F-D2; Tue, 20 Dec 2022 08:55:52 +0100
+Date:   Tue, 20 Dec 2022 08:55:52 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Matthias Kaehlcke <mka@chromium.org>, Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>
+Subject: Re: [PATCH] usb: misc: onboard_usb_hub: Don't defer probing for
+ 'incomplete' DT nodes
+Message-ID: <Y6FqiA/SoZHr36jl@hovoldconsulting.com>
+References: <20221220004427.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220004427.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NAPI poll can be done in threaded context along with soft irq
-context. Threaded context can be scheduled efficiently, thus
-creating less of bottleneck during Rx processing. This patch is
-to enable threaded NAPI on ath10k driver.
+On Tue, Dec 20, 2022 at 12:45:01AM +0000, Matthias Kaehlcke wrote:
+> Some boards have device tree nodes for USB hubs supported by the
+> onboard_usb_hub driver, but the nodes don't have all properties
+> needed for the driver to work properly (which is not necessarily
+> an error in the DT). Currently _find_onboard_hub() returns
+> -EPROBE_DEFER in such cases, which results in an unusable USB hub,
+> since successive probes fail in the same way. Use the absence of
+> the "vdd" supply as an indicator of such 'incomplete' DT nodes
+> and return -ENODEV.
+> 
+> Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+> Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+> 
+>  drivers/usb/misc/onboard_usb_hub.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> index d63c63942af1..2968da515016 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.c
+> +++ b/drivers/usb/misc/onboard_usb_hub.c
+> @@ -363,6 +363,15 @@ static struct onboard_hub *_find_onboard_hub(struct device *dev)
+>  	hub = dev_get_drvdata(&pdev->dev);
+>  	put_device(&pdev->dev);
+>  
+> +	/*
+> +	 * Some boards have device tree nodes for USB hubs supported by this
+> +	 * driver, but the nodes don't have all properties needed for the driver
+> +	 * to work properly. Use the absence of the "vdd" supply as an indicator
+> +	 * of such nodes.
+> +	 */
+> +	if (!of_get_property(pdev->dev.of_node, "vdd", NULL))
+> +		return ERR_PTR(-ENODEV);
 
-Based on testing, it was observed that on WCN3990, the CPU0 reaches
-100% utilization when napi runs in softirq context. At the same
-time the other CPUs are at low consumption percentage. This
-does not allow device to reach its maximum throughput potential.
-After enabling threaded napi, CPU load is balanced across all CPUs
-and following improvments were observed:
-- UDP_RX increase by ~22-25%
-- TCP_RX increase by ~15%
+Does this not break your original use case? Don't you want "vdd-supply"
+here?
 
-Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2-00696-QCAHLSWMTPL-1
-Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
----
+That said, this seems like the wrong property to look for both in
+principle and as it is described as optional by the binding:
 
- drivers/net/wireless/ath/ath10k/core.c | 16 ++++++++++++++++
- drivers/net/wireless/ath/ath10k/hw.h   |  2 ++
- drivers/net/wireless/ath/ath10k/snoc.c |  3 +++
- 3 files changed, 21 insertions(+)
+	Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
 
-diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
-index 5eb131ab916fd..ee4b6ba508c81 100644
---- a/drivers/net/wireless/ath/ath10k/core.c
-+++ b/drivers/net/wireless/ath/ath10k/core.c
-@@ -100,6 +100,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = false,
- 		.use_fw_tx_credits = true,
- 		.delay_unmap_buffer = false,
-+		.enable_threaded_napi = false,
- 	},
- 	{
- 		.id = QCA988X_HW_2_0_VERSION,
-@@ -140,6 +141,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = false,
- 		.use_fw_tx_credits = true,
- 		.delay_unmap_buffer = false,
-+		.enable_threaded_napi = false,
- 	},
- 	{
- 		.id = QCA9887_HW_1_0_VERSION,
-@@ -181,6 +183,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = false,
- 		.use_fw_tx_credits = true,
- 		.delay_unmap_buffer = false,
-+		.enable_threaded_napi = false,
- 	},
- 	{
- 		.id = QCA6174_HW_3_2_VERSION,
-@@ -217,6 +220,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = false,
- 		.use_fw_tx_credits = true,
- 		.delay_unmap_buffer = false,
-+		.enable_threaded_napi = false,
- 	},
- 	{
- 		.id = QCA6174_HW_2_1_VERSION,
-@@ -257,6 +261,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = false,
- 		.use_fw_tx_credits = true,
- 		.delay_unmap_buffer = false,
-+		.enable_threaded_napi = false,
- 	},
- 	{
- 		.id = QCA6174_HW_2_1_VERSION,
-@@ -297,6 +302,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = false,
- 		.use_fw_tx_credits = true,
- 		.delay_unmap_buffer = false,
-+		.enable_threaded_napi = false,
- 	},
- 	{
- 		.id = QCA6174_HW_3_0_VERSION,
-@@ -337,6 +343,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = false,
- 		.use_fw_tx_credits = true,
- 		.delay_unmap_buffer = false,
-+		.enable_threaded_napi = false,
- 	},
- 	{
- 		.id = QCA6174_HW_3_2_VERSION,
-@@ -381,6 +388,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = false,
- 		.use_fw_tx_credits = true,
- 		.delay_unmap_buffer = false,
-+		.enable_threaded_napi = false,
- 	},
- 	{
- 		.id = QCA99X0_HW_2_0_DEV_VERSION,
-@@ -427,6 +435,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = false,
- 		.use_fw_tx_credits = true,
- 		.delay_unmap_buffer = false,
-+		.enable_threaded_napi = false,
- 	},
- 	{
- 		.id = QCA9984_HW_1_0_DEV_VERSION,
-@@ -480,6 +489,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = false,
- 		.use_fw_tx_credits = true,
- 		.delay_unmap_buffer = false,
-+		.enable_threaded_napi = false,
- 	},
- 	{
- 		.id = QCA9888_HW_2_0_DEV_VERSION,
-@@ -530,6 +540,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = false,
- 		.use_fw_tx_credits = true,
- 		.delay_unmap_buffer = false,
-+		.enable_threaded_napi = false,
- 	},
- 	{
- 		.id = QCA9377_HW_1_0_DEV_VERSION,
-@@ -570,6 +581,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = false,
- 		.use_fw_tx_credits = true,
- 		.delay_unmap_buffer = false,
-+		.enable_threaded_napi = false,
- 	},
- 	{
- 		.id = QCA9377_HW_1_1_DEV_VERSION,
-@@ -612,6 +624,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = false,
- 		.use_fw_tx_credits = true,
- 		.delay_unmap_buffer = false,
-+		.enable_threaded_napi = false,
- 	},
- 	{
- 		.id = QCA9377_HW_1_1_DEV_VERSION,
-@@ -645,6 +658,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = false,
- 		.use_fw_tx_credits = true,
- 		.delay_unmap_buffer = false,
-+		.enable_threaded_napi = false,
- 	},
- 	{
- 		.id = QCA4019_HW_1_0_DEV_VERSION,
-@@ -692,6 +706,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = false,
- 		.use_fw_tx_credits = true,
- 		.delay_unmap_buffer = false,
-+		.enable_threaded_napi = false,
- 	},
- 	{
- 		.id = WCN3990_HW_1_0_DEV_VERSION,
-@@ -725,6 +740,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_restart_disconnect = true,
- 		.use_fw_tx_credits = false,
- 		.delay_unmap_buffer = true,
-+		.enable_threaded_napi = true,
- 	},
- };
- 
-diff --git a/drivers/net/wireless/ath/ath10k/hw.h b/drivers/net/wireless/ath/ath10k/hw.h
-index 9643031a4427a..adf3076b96503 100644
---- a/drivers/net/wireless/ath/ath10k/hw.h
-+++ b/drivers/net/wireless/ath/ath10k/hw.h
-@@ -639,6 +639,8 @@ struct ath10k_hw_params {
- 	bool use_fw_tx_credits;
- 
- 	bool delay_unmap_buffer;
-+
-+	bool enable_threaded_napi;
- };
- 
- struct htt_resp;
-diff --git a/drivers/net/wireless/ath/ath10k/snoc.c b/drivers/net/wireless/ath/ath10k/snoc.c
-index cfcb759a87dea..b94150fb6ef06 100644
---- a/drivers/net/wireless/ath/ath10k/snoc.c
-+++ b/drivers/net/wireless/ath/ath10k/snoc.c
-@@ -927,6 +927,9 @@ static int ath10k_snoc_hif_start(struct ath10k *ar)
- 
- 	bitmap_clear(ar_snoc->pending_ce_irqs, 0, CE_COUNT_MAX);
- 
-+	if (ar->hw_params.enable_threaded_napi)
-+		dev_set_threaded(&ar->napi_dev, true);
-+
- 	ath10k_core_napi_enable(ar);
- 	ath10k_snoc_irq_enable(ar);
- 	ath10k_snoc_rx_post(ar);
--- 
-2.39.0.314.g84b9a713c41-goog
+It seems that you should use the compatible property and check that it
+holds one of the expected values:
 
+ - usbbda,5411
+ - usbbda,411
+
+rather than treat every hub node as describing a realtek hub (AFAIK,
+there is no generic binding for this yet).
+
+> +
+>  	/*
+>  	 * The presence of drvdata ('hub') indicates that the platform driver
+>  	 * finished probing. This handles the case where (conceivably) we could
+
+Johan
