@@ -2,90 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3504651A37
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 06:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F97651A3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 06:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232798AbiLTFZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 00:25:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
+        id S232923AbiLTF1e convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Dec 2022 00:27:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiLTFZg (ORCPT
+        with ESMTP id S229454AbiLTF1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 00:25:36 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF61C12759
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 21:25:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1671513916; bh=sFskYXbidjd/kcmqsM6ylTeRnbnKAC12byfrx9G5ZBw=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=e0NyAsLbQs/avEnwiC7ZsVK9GU4zrPuQ2XS2Ty1xYms0TvZepQfGJFyoXdovGjoPg
-         nLFh9Azc+zv2bYdeL81WbyjoQwjCRe+8KHm/0j+9fgCl8r4OFQLTKGwboLCvlQzsrA
-         h66ImFahB2Wf5lr5pJmUA8uWAo9X2/daha3s3yRU=
-Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Tue, 20 Dec 2022 06:25:16 +0100 (CET)
-X-EA-Auth: UI0gHJBKyazNjZiXWvC0DmV1kOkEQvUhUW4KYOzbDoHDVw8pLiXzVtXTgzUhY3wuuWiIusiFO/ZVMxGyeNWUeIXmzD/eWeUJ
-Date:   Tue, 20 Dec 2022 10:55:11 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>, drv@mailo.com
-Subject: [PATCH] ARM/dma-mapping: use kvzalloc for fallback memory allocation
- need
-Message-ID: <Y6FHN9RyUKsQLo0i@qemulion>
+        Tue, 20 Dec 2022 00:27:30 -0500
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8084FB9;
+        Mon, 19 Dec 2022 21:27:29 -0800 (PST)
+Received: by mail-pf1-f176.google.com with SMTP id 124so7818735pfy.0;
+        Mon, 19 Dec 2022 21:27:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9fgdIcNnHtv/UvgykaD5KYGncbrMyeY4TxNRMdBaCn4=;
+        b=LUEOG8MgTans4f30L2NcYeXm80k6UeeTVN6/YSumqyr1lAx4ghQXLfotJwxEWB5Bl3
+         Vvm2XlPQvFTk1A38TQu35mWDN8sxQiSHhHfYvP2BX1UmaJfU6DZivotRFo5jqfarDYb6
+         qPe4p3SKFWw/TPcnIBVxAPhdXAQbTWkvHSZwJeNqy5cA0UMIDGaUH+oJJ0ZFzrmlkPdD
+         0ftArsZ/4ErMsSkYs4XOg7+KOf2XCK1VdV30Q/mWZH5E295/ryJ2tWvPY1O4Sj2Y7wDc
+         blcqOXHxbxBXzAQvDPkuvB0HOOKZaCN3AszxSnVoJLilK3TAwmKOP8IR31IyPxLb+SFM
+         z35w==
+X-Gm-Message-State: AFqh2koqscvnC/i2VNTOXrYsEd4e1Fta5G8qdGtHTjSyMFL8FzZloYGG
+        EgXRD2EzJht8qxkuTSWMV+lq7OtddnLtcvEee0s=
+X-Google-Smtp-Source: AMrXdXuMHderDr6lO+hCyLC5OapmMH7udHPoJpowuLYkKofpHWJueSqy55RTn/lwwS+K7Ow/nnFJSwHN0+UusvdXErE=
+X-Received: by 2002:a63:584c:0:b0:484:2672:2c6a with SMTP id
+ i12-20020a63584c000000b0048426722c6amr854698pgm.535.1671514048877; Mon, 19
+ Dec 2022 21:27:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221219212717.1298282-1-frank.jungclaus@esd.eu> <20221219212717.1298282-2-frank.jungclaus@esd.eu>
+In-Reply-To: <20221219212717.1298282-2-frank.jungclaus@esd.eu>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 20 Dec 2022 14:27:17 +0900
+Message-ID: <CAMZ6RqKMSGpxBbgfD6Q4DB9V0EWmzXknUW6btWudtjDu=uF4iQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] can: esd_usb: Improved decoding for
+ ESD_EV_CAN_ERROR_EXT messages
+To:     Frank Jungclaus <frank.jungclaus@esd.eu>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the memory sizes are not known upfront, it is preferred to use the
-kvzalloc helper function instead of direct conditional evaluation of
-size and kzalloc/vzalloc fallback design. The kvzalloc helper function
-in this case is more efficient as it avoids indefinite kzalloc retries
-when a small memory size is needed but is unavailable.
-This LWN article has further details on the advantages of using
-kvzalloc in case of fallback memory allocation needs:
- 	https://lwn.net/Articles/711653/
+Le mar. 20 déc. 2022 à 06:28, Frank Jungclaus <frank.jungclaus@esd.eu> a écrit :
+>
+> As suggested by Marc there now is a union plus a struct ev_can_err_ext
+> for easier decoding of an ESD_EV_CAN_ERROR_EXT event message (which
+> simply is a rx_msg with some dedicated data).
+>
+> Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Link: https://lore.kernel.org/linux-can/20220621071152.ggyhrr5sbzvwpkpx@pengutronix.de/
+> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
+> ---
+>  drivers/net/can/usb/esd_usb.c | 18 +++++++++++++-----
+>  1 file changed, 13 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
+> index 09745751f168..f90bb2c0ba15 100644
+> --- a/drivers/net/can/usb/esd_usb.c
+> +++ b/drivers/net/can/usb/esd_usb.c
+> @@ -127,7 +127,15 @@ struct rx_msg {
+>         u8 dlc;
+>         __le32 ts;
+>         __le32 id; /* upper 3 bits contain flags */
+> -       u8 data[8];
+> +       union {
+> +               u8 data[8];
+> +               struct {
+> +                       u8 status; /* CAN Controller Status */
+> +                       u8 ecc;    /* Error Capture Register */
+> +                       u8 rec;    /* RX Error Counter */
+> +                       u8 tec;    /* TX Error Counter */
+> +               } ev_can_err_ext;  /* For ESD_EV_CAN_ERROR_EXT */
+> +       };
+>  };
+>
+>  struct tx_msg {
+> @@ -229,10 +237,10 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
+>         u32 id = le32_to_cpu(msg->msg.rx.id) & ESD_IDMASK;
+>
+>         if (id == ESD_EV_CAN_ERROR_EXT) {
+> -               u8 state = msg->msg.rx.data[0];
+> -               u8 ecc = msg->msg.rx.data[1];
+> -               u8 rxerr = msg->msg.rx.data[2];
+> -               u8 txerr = msg->msg.rx.data[3];
+> +               u8 state = msg->msg.rx.ev_can_err_ext.status;
+> +               u8 ecc = msg->msg.rx.ev_can_err_ext.ecc;
+> +               u8 rxerr = msg->msg.rx.ev_can_err_ext.rec;
+> +               u8 txerr = msg->msg.rx.ev_can_err_ext.tec;
 
-This patch proposal is based on following Coccinelle warning using the
-kvmalloc.cocci semantic patch.
+I do not like how you have to write msg->msg.rx.something. I think it
+would be better to make the union within struct esd_usb_msg anonymous:
 
-arch/arm/mm/dma-mapping.c:858:28-29: WARNING opportunity for kvmalloc
+  https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/esd_usb.c#L169
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
-Note: The patch proposal is compile tested only.
+That said, this is not a criticism of this patch but more something to
+be addressed in a separate clean-up patch.
 
- arch/arm/mm/dma-mapping.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
-index c135f6e37a00..2b79af377a81 100644
---- a/arch/arm/mm/dma-mapping.c
-+++ b/arch/arm/mm/dma-mapping.c
-@@ -855,10 +855,7 @@ static struct page **__iommu_alloc_buffer(struct device *dev, size_t size,
- 	int i = 0;
- 	int order_idx = 0;
-
--	if (array_size <= PAGE_SIZE)
--		pages = kzalloc(array_size, GFP_KERNEL);
--	else
--		pages = vzalloc(array_size);
-+	pages = kvzalloc(array_size, GFP_KERNEL);
- 	if (!pages)
- 		return NULL;
-
---
-2.34.1
-
-
-
+>                 netdev_dbg(priv->netdev,
+>                            "CAN_ERR_EV_EXT: dlc=%#02x state=%02x ecc=%02x rec=%02x tec=%02x\n",
+> --
+> 2.25.1
+>
