@@ -2,80 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DD8651DD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 10:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2953651DE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 10:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233535AbiLTJoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 04:44:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
+        id S232897AbiLTJrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 04:47:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233470AbiLTJnf (ORCPT
+        with ESMTP id S233159AbiLTJqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 04:43:35 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FE918E24;
-        Tue, 20 Dec 2022 01:42:47 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+        Tue, 20 Dec 2022 04:46:32 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4800CF57;
+        Tue, 20 Dec 2022 01:45:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=yty8ngXs7Md4XfIPXQ3stkVPahwwXV961hO25HdOnVA=; b=IuOejSTU6Xbgfu804q+t96rvyf
+        n0PrW5jRCupq+/t81JJcX9y5ZMc/j3MUhzthuEXbc2lOQANX4iDcBk2Dwo+XQJ8K8rNpQpeV1YVZg
+        0kDXF/wvPoPeyo6J9LglaJeqz4I11u5QXRa3M/ByPsGSQHhpRgU7vLKk+ahgcHG/bOVK4UKB3vtoW
+        3NfU/NH2D5hW+h/RsoUDjtHddaSz1naHikBINHub+oVHzWHi85SASxI0atZ82gKugHrEtM4XzWXIG
+        n3iNILYmN7urrOiTe3u6fozJeT4Q3tIOn/LodVlJKRdNaVUz+NJnuWeHtzI1cYQ5E6cjXEnKz01PO
+        GodK13+A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1p7ZBY-00Cwpk-3A;
+        Tue, 20 Dec 2022 09:45:21 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0BE0F6602CAA;
-        Tue, 20 Dec 2022 09:42:44 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671529365;
-        bh=BWqzEXUidYwX8sbz46KDwZyzdQJjYGcYq+SPymmJ8Fk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GhcV6fJym8BwiN8M2gDxmkftRbcNNi22Fc4BrS0q4RVTrNOYhZsZPJ2v+E55CmxN5
-         0jKdeqYJ8/6/kS9qW44Y8r7mXx3VyUMSST2mlWaCc/ujUQizgcV1qB2IObYWfE0/tD
-         WZHnA1oJLvuipSwi8S6axT0CD5jq/oEuNGvAsm9CFsrC0qdFz5ZS514efumcYeZaKp
-         i5tl+WJ0SW86AtHjmVrfx0xdxAe34+sW1aJVnSiMbfd1Yz+FZUr4g2WRbWct0fggJj
-         W30PjCR4M/HJC+5ytewQJf/L8xUdfApY92Z897zkbFTPshktLfgAIunAEowdVcZkhO
-         RD+SP+k80c1Pw==
-Message-ID: <51e82ede-a6d4-8e7b-88d1-93a1aba1f845@collabora.com>
-Date:   Tue, 20 Dec 2022 10:42:42 +0100
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7FA29300023;
+        Tue, 20 Dec 2022 10:45:19 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 687A72C5F840A; Tue, 20 Dec 2022 10:45:19 +0100 (CET)
+Date:   Tue, 20 Dec 2022 10:45:19 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Xin Li <xin3.li@intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        andrew.cooper3@citrix.com, seanjc@google.com, pbonzini@redhat.com,
+        ravi.v.shankar@intel.com
+Subject: Re: [RFC PATCH 22/32] x86/fred: FRED initialization code
+Message-ID: <Y6GELyEJeKY3dEqJ@hirez.programming.kicks-ass.net>
+References: <20221220063658.19271-1-xin3.li@intel.com>
+ <20221220063658.19271-23-xin3.li@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] iommu/mediatek-v1: Fix an error handling path in
- mtk_iommu_v1_probe()
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Honghui Zhang <honghui.zhang@mediatek.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Joerg Roedel <jroedel@suse.de>, iommu@lists.linux.dev,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <593e7b7d97c6e064b29716b091a9d4fd122241fb.1671473163.git.christophe.jaillet@wanadoo.fr>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <593e7b7d97c6e064b29716b091a9d4fd122241fb.1671473163.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220063658.19271-23-xin3.li@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 19/12/22 19:06, Christophe JAILLET ha scritto:
-> A clk, prepared and enabled in mtk_iommu_v1_hw_init(), is not released in
-> the error handling path of mtk_iommu_v1_probe().
-> 
-> Add the corresponding clk_disable_unprepare(), as already done in the
-> remove function.
-> 
-> Fixes: b17336c55d89 ("iommu/mediatek: add support for mtk iommu generation one HW")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+On Mon, Dec 19, 2022 at 10:36:48PM -0800, Xin Li wrote:
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> +	wrmsrl(MSR_IA32_FRED_STKLVLS,
+> +	       FRED_STKLVL(X86_TRAP_DB,  1) |
+> +	       FRED_STKLVL(X86_TRAP_NMI, 2) |
+> +	       FRED_STKLVL(X86_TRAP_MC,  2) |
+> +	       FRED_STKLVL(X86_TRAP_DF,  3));
+> +
+> +	/* The FRED equivalents to IST stacks... */
+> +	wrmsrl(MSR_IA32_FRED_RSP1, __this_cpu_ist_top_va(DB));
+> +	wrmsrl(MSR_IA32_FRED_RSP2, __this_cpu_ist_top_va(NMI));
+> +	wrmsrl(MSR_IA32_FRED_RSP3, __this_cpu_ist_top_va(DF));
 
+Not quite.. IIRC fred only switches to another stack when the level of
+the exception is higher. Specifically, if we trigger #DB while inside
+#NMI we will not switch to the #DB stack (since 1 < 2).
 
+Now, as mentioned elsewhere, it all nests a lot saner, but stack
+exhaustion is still a thing, given the above, what happens when a #DB
+hits an #NMI which tickles a #VE or something?
+
+I don't think we've increased the exception stack size, but perhaps we
+should for FRED?
