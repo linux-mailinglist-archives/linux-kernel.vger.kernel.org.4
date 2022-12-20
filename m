@@ -2,152 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32001651865
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 02:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47236651868
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 02:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232809AbiLTBhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 20:37:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43532 "EHLO
+        id S233162AbiLTBma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 20:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233106AbiLTBgi (ORCPT
+        with ESMTP id S233148AbiLTBmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 20:36:38 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99A41CFDC;
-        Mon, 19 Dec 2022 17:27:17 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id fy4so10918525pjb.0;
-        Mon, 19 Dec 2022 17:27:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VyFIxEgnWqnUvo2rmjS4K7Tu88OX44TFhCrJ6tX8KIo=;
-        b=pRhs1ishrMoO0v8GXYtYFW3V+IYFBQEmh2x+AG0gOs6cT4Uy5tiuqt4aiyOJ4DJiun
-         qWBHDzAZRkNq82gRAyZOOKcgHg8Ynw3f6FQSMYViTs2HWZloSoO+Yg2eKt9VJNo5mZgE
-         bCAy05R8dfxMCrw6+wP3K3n1C1OOIRc+hWNNrvOjkVqNo4ZW00A7/1ovOIO/QtULkWnB
-         mh1q5TY54GdeYuOJvU1couiG3TPM0EDfr4UDySQFkaljr5/BuQoriv5m44ADD6bUvjbM
-         lZYej0+R2o3mt3V8VnQFeA+soAQO3pAacWqfZeRBZVX4VZ6mZ7ERXAjCTqWEAlvD3hGd
-         OUpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VyFIxEgnWqnUvo2rmjS4K7Tu88OX44TFhCrJ6tX8KIo=;
-        b=PKQ0H63iDmBiqQ11wLfgSeUj7o6IM7cclQZmf2uA2Q1gzPezcWEPHUUE9Fj87uTNnf
-         4CqFa9TYqqmNa1kkgKcpR6TXCYBpMmIIoDmBZQ66K87Wd96oQn3sARFmpa3RSxZKu/OX
-         YxKTMyYaA7kbqxtBLZqdg7SyWOE51cy7FCP3HMXBn3nzWtNOLxBwcQS9WLdgR2Qk3L0d
-         vreUKkNFhdILrluzoN17ystf/qQFzdbeoXhAREkDG3c4hxBzDC7uQnfSavck1cUAEuDP
-         WJF1v5wlfWPpYxgQijSqHJrh3DG9bW9JV+5DjNVtto1su+5YXhikx2uTkg911SpyZLv7
-         Mzxg==
-X-Gm-Message-State: ANoB5plcwtY8Xwjx9aTT4ugbgnpDguwYU8j+VV4r1/bo8//WJiOlmRsb
-        LiViE+6Md8tUDVBQj4VxZK8=
-X-Google-Smtp-Source: AA0mqf4OqzW+ADzg42aFu8z0iEvFsDM+iVlEHmzssm+K1iZXv+6XSb7BY4xrtjZfxfX7dQl4HvxQgg==
-X-Received: by 2002:a17:902:e5c8:b0:189:6ab3:9e75 with SMTP id u8-20020a170902e5c800b001896ab39e75mr63049706plf.15.1671499612787;
-        Mon, 19 Dec 2022 17:26:52 -0800 (PST)
-Received: from mail.google.com ([103.135.102.144])
-        by smtp.gmail.com with ESMTPSA id l16-20020a170903121000b001745662d568sm7826467plh.278.2022.12.19.17.26.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 17:26:52 -0800 (PST)
-Date:   Tue, 20 Dec 2022 09:26:47 +0800
-From:   Changbin Du <changbin.du@gmail.com>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Changbin Du <changbin.du@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] bpf: makefiles: do not generate empty vmlinux.h
-Message-ID: <20221220012647.oytzq7q6ahwfhdow@mail.google.com>
-References: <20221217223509.88254-1-changbin.du@gmail.com>
- <20221217223509.88254-3-changbin.du@gmail.com>
- <Y5/hqqIwJIjdBSRh@leoy-yangtze.lan>
+        Mon, 19 Dec 2022 20:42:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32B71FCC4;
+        Mon, 19 Dec 2022 17:29:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D4AC61230;
+        Tue, 20 Dec 2022 01:29:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9334C433D2;
+        Tue, 20 Dec 2022 01:29:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671499746;
+        bh=CzMOONJds4355vEVodv5P3MSV2ciisK6U6eGKiAsX+8=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=CseRq+aP5oZUpjjA0SyL3jLdIjcIbmWUkE7/hMpLMbChi1mlIKSRG4xPTdk+CsTHA
+         tTVg1clRlf3fAMXlSLlWtEmTWlGCGWEDAHIXZHFU5UbFjRqYtRY8kqpKR8XA6LErPF
+         zpfaflwN+E19NiTda59iJGGUkVFzqgZ7YyKpnTJHbkjXoQBVpjPUWQfYUF9LY+6tI5
+         OgYVyqSdVGOX0xrGMJdn66m6dlxVc3M3QgE1Seg5HKm0Yar/arsd3yRzPsuFa87dCN
+         sO62X3XGXyZ5u5Qcj8LazSKhYwRaC5oXAimc9G3wQQFRHlAEq64YlI3yHfboEKaHA5
+         N5X1gc1Ox8JUA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 5CD9C5C09C9; Mon, 19 Dec 2022 17:29:06 -0800 (PST)
+Date:   Mon, 19 Dec 2022 17:29:06 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de,
+        rcu@vger.kernel.org, kernel-team@fb.com, rostedt@goodmis.org
+Subject: [GIT PULL] Avoid synchronize_rcu() false positives in semi-early boot
+Message-ID: <20221220012906.GA3102709@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5/hqqIwJIjdBSRh@leoy-yangtze.lan>
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URG_BIZ autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 11:59:38AM +0800, Leo Yan wrote:
-> On Sun, Dec 18, 2022 at 06:35:09AM +0800, Changbin Du wrote:
-> > Remove the empty vmlinux.h if bpftool failed to dump btf info.
-> > The empty vmlinux.h can hide real error when reading output
-> > of make.
-> > 
-> > This is done by adding .DELETE_ON_ERROR special target in related
-> > makefiles.
-> 
-> We need to handle the same case for perf building, its makefile
-> linux/tools/perf/Makefile.perf also uses bpftool to generate
-> vmlinux.h, see:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/perf/Makefile.perf#n1067
-> 
-> Please consider to use a separate patch to add the same change in
-> Makefile.perf?
->
-It's alreay there.
-https://lore.kernel.org/lkml/20221217225151.90387-1-changbin.du@gmail.com/T/
+Hello, Linus,
 
-> Thanks,
-> Leo
-> 
-> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> > ---
-> >  tools/bpf/bpftool/Makefile           | 3 +++
-> >  tools/testing/selftests/bpf/Makefile | 3 +++
-> >  2 files changed, 6 insertions(+)
-> > 
-> > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> > index 787b857d3fb5..313fd1b09189 100644
-> > --- a/tools/bpf/bpftool/Makefile
-> > +++ b/tools/bpf/bpftool/Makefile
-> > @@ -289,3 +289,6 @@ FORCE:
-> >  .PHONY: all FORCE bootstrap clean install-bin install uninstall
-> >  .PHONY: doc doc-clean doc-install doc-uninstall
-> >  .DEFAULT_GOAL := all
-> > +
-> > +# Delete partially updated (corrupted) files on error
-> > +.DELETE_ON_ERROR:
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> > index c22c43bbee19..205e8c3c346a 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -626,3 +626,6 @@ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)	\
-> >  			       liburandom_read.so)
-> >  
-> >  .PHONY: docs docs-clean
-> > +
-> > +# Delete partially updated (corrupted) files on error
-> > +.DELETE_ON_ERROR:
-> > -- 
-> > 2.37.2
-> > 
+Another merge window, another fix for another regression noted by Steve
+Rostedt.  In the true spirit of closing the barn door after the horse
+has escaped, the following commit is queued on -rcu to detect this sort
+of bug in the future:
 
--- 
-Cheers,
-Changbin Du
+f13c14392ebc ("rcu: Test synchronous RCU grace periods at the end of rcu_init()")
+
+The fix simply avoids consulting lockdep about interrupts-disabled
+state before the scheduler has been initialized.  After all, before that
+time, it is perfectly legal to invoke synchronize_rcu() with interrupts
+disabled.
+
+The following changes since commit 31d8aaa87fcef1be5932f3813ea369e21bd3b11d:
+
+  rcu: Keep synchronize_rcu() from enabling irqs in early boot (2022-10-20 15:34:49 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/rcu-urgent.2022.12.17a
+
+for you to fetch changes up to 3f6c3d29df58f391cf487b50a24ebd24045ba569:
+
+  rcu: Don't assert interrupts enabled too early in boot (2022-12-17 16:12:20 -0800)
+
+----------------------------------------------------------------
+Urgent RCU pull request for v6.2
+
+This commit fixes a lockdep false positive in synchronize_rcu() that
+can otherwise occur during early boot.  Theis fix simply avoids invoking
+lockdep if the scheduler has not yet been initialized, that is, during
+that portion of boot when interrupts are disabled.
+
+----------------------------------------------------------------
+Paul E. McKenney (1):
+      rcu: Don't assert interrupts enabled too early in boot
+
+ kernel/rcu/tree.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
