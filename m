@@ -2,61 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D1A6529AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 00:14:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A04196529B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 00:15:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiLTXOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 18:14:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
+        id S234230AbiLTXPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 18:15:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiLTXOq (ORCPT
+        with ESMTP id S234214AbiLTXPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 18:14:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911821F2D5;
-        Tue, 20 Dec 2022 15:14:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3704D6160B;
-        Tue, 20 Dec 2022 23:14:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E418C433EF;
-        Tue, 20 Dec 2022 23:14:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671578084;
-        bh=1qveDXbwTyZ9N1/g+135Ft0QqSPob+h8v7iVN3aBATg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i9cOOtng6EqNe5Mi1O9jX+BxuA1ZhQzp4Vy0mkLQzrWMMgs0OoP3OrhihIWguyUjG
-         zgYhKNiITUyuTxkQzcV5kxy426iM51Om3ARwP1dYwDHCa2XYE9+tebHZHnKxxh0NmO
-         0F58k1XBCS2DMcFuz3hfVZiuHw0d8LmFiGkwGIzv7anNIpwWlTXcMqzivbhxDICV1U
-         x3bIYMMYJkujGz459ooFeMY1ZwAMXVwp0WtHKKT+ZflSG6so6QomLOaRkgcuneOcG8
-         5OUETTXGSJyLCU0UYxz55DtvrjO0vUjRWkA8dsHocoGtOfNKSQCQE/gttRimMXFtK6
-         7tVyWoxQv0Lyw==
-Date:   Tue, 20 Dec 2022 23:14:39 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 07/11] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
-Message-ID: <Y6JB37Pd5TZoGMy4@spud>
-References: <20221220005054.34518-1-hal.feng@starfivetech.com>
- <20221220005054.34518-8-hal.feng@starfivetech.com>
+        Tue, 20 Dec 2022 18:15:06 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1644D1F9E0;
+        Tue, 20 Dec 2022 15:15:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=x5/QJWQ6pT9UNed4MJJUNjKK7z37Rzd1j39nzY3Rc/c=; b=NE4Yhhg8vNnDmlhRkH7B8dReg4
+        x+PZ3mV8DLeDtPgoua/BWxj27mT9mDh1GCRwuijklDEo4NsRJN6bE/9zmiwO7L9gLsGFlJspFlW2d
+        L6fVSHOTtOMmLYJsdEQyeAn3b12C38H1E2wzZJZVyzcVA5RjS6QqQorRlSX6xWVc1Kh5K+uhJLbrQ
+        v2olsuncrZ+dVwuk/FFX1Ui+Kcye3g7OAcv70S/Ot7pMi/5dPumm3FNxeTMBSfYxmnjroAkGOcXDy
+        Jd6CJDCyBPBSbp16rQ6M+4kzhTQndg8dPe4inR8IB1lbhNVkyc0knAZS7fAp0Nr7F9cqXAy28Hx1C
+        moLhqL9A==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p7lp7-005jBb-V4; Tue, 20 Dec 2022 23:15:02 +0000
+Message-ID: <864ef3f5-4bf6-9012-eccb-f65d07b9470b@infradead.org>
+Date:   Tue, 20 Dec 2022 15:15:01 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5z5zKcEbEyZyLNXj"
-Content-Disposition: inline
-In-Reply-To: <20221220005054.34518-8-hal.feng@starfivetech.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2] USB: Improve usb_fill_* documentation
+Content-Language: en-US
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221220-usb-dmadoc-v2-0-4dd4f198113e@chromium.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20221220-usb-dmadoc-v2-0-4dd4f198113e@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,171 +56,119 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---5z5zKcEbEyZyLNXj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 20, 2022 at 08:50:50AM +0800, Hal Feng wrote:
-> From: Emil Renner Berthing <kernel@esmil.dk>
->=20
-> Add bindings for the system clock and reset generator (SYSCRG) on the
-> JH7110 RISC-V SoC by StarFive Ltd.
->=20
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+On 12/20/22 15:13, Ricardo Ribalda wrote:
+> Make the developer aware of the requirements of transfer buffer.
+> 
+> The buffer must be DMAble, if the developer uses an invalid buffer, data
+> corruption might happen.
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 > ---
->  .../clock/starfive,jh7110-syscrg.yaml         |  80 +++++++
->  MAINTAINERS                                   |   8 +-
->  .../dt-bindings/clock/starfive,jh7110-crg.h   | 207 ++++++++++++++++++
->  .../dt-bindings/reset/starfive,jh7110-crg.h   | 142 ++++++++++++
->  4 files changed, 434 insertions(+), 3 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh71=
-10-syscrg.yaml
->  create mode 100644 include/dt-bindings/clock/starfive,jh7110-crg.h
->  create mode 100644 include/dt-bindings/reset/starfive,jh7110-crg.h
->=20
-> diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-sysc=
-rg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.ya=
-ml
-> new file mode 100644
-> index 000000000000..ec81504dcb27
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/starfive,jh7110-syscrg.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive JH7110 System Clock and Reset Generator
-> +
-> +maintainers:
-> +  - Emil Renner Berthing <kernel@esmil.dk>
-> +
-> +properties:
-> +  compatible:
-> +    const: starfive,jh7110-syscrg
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Main Oscillator (24 MHz)
-> +      - description: GMAC1 RMII reference
-> +      - description: GMAC1 RGMII RX
-> +      - description: External I2S TX bit clock
-> +      - description: External I2S TX left/right channel clock
-> +      - description: External I2S RX bit clock
-> +      - description: External I2S RX left/right channel clock
-> +      - description: External TDM clock
-> +      - description: External audio master clock
+> USB: Improve usb_fill_* documentation
+> 
+> After trying to "cleanup" the uvc code, I was patiently explained about
+> the requirements of the urb transfer buffers.
+> 
+> Lets make this explicit, so other developers do not make the same mistake.
+> 
+> To: Randy Dunlap <rdunlap@infradead.org>
+> To: Alan Stern <stern@rowland.harvard.edu>
+> To: Christoph Hellwig <hch@lst.de>
+> To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
 
-So, from peeking at the clock driver & the dt - it looks like a bunch of
-these are not actually required?
-I'd have ploughed through this, but having read Krzysztof's comments on
-the DTS I'm not sure that this binding is correct.
-https://lore.kernel.org/linux-riscv/20221220011247.35560-1-hal.feng@starfiv=
-etech.com/T/#mdf67621a2344dce801aa8015d4963593a2c28bcc
+LGTM. Thanks.
 
-I *think* the DT is correct - the fixed clocks are all inputs from clock
-sources on the board and as such they are empty in soc.dtsi and are
-populated in board.dts?
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-However, are they all actually required? In the driver I see:
-	JH71X0__MUX(JH7110_SYSCLK_GMAC1_RX, "gmac1_rx", 2,
-		    JH7110_SYSCLK_GMAC1_RGMII_RXIN,
-		    JH7110_SYSCLK_GMAC1_RMII_RTX),
-That macro is:
-#define JH71X0__MUX(_idx, _name, _nparents, ...) [_idx] =3D {			\
-	.name =3D _name,								\
-	.flags =3D 0,								\
-	.max =3D ((_nparents) - 1) << JH71X0_CLK_MUX_SHIFT,			\
-	.parents =3D { __VA_ARGS__ },						\
-}
+> ---
+> Changes in v2:
+> - s/allocatiing/allocating/ Thanks Randy
+> - Link to v1: https://lore.kernel.org/r/20221220-usb-dmadoc-v1-0-28386d2eb6cd@chromium.org
+> ---
+>  include/linux/usb.h | 27 ++++++++++++++++++++++++---
+>  1 file changed, 24 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/usb.h b/include/linux/usb.h
+> index 7d5325d47c45..1144ef6e4151 100644
+> --- a/include/linux/usb.h
+> +++ b/include/linux/usb.h
+> @@ -1627,13 +1627,20 @@ struct urb {
+>   * @dev: pointer to the struct usb_device for this urb.
+>   * @pipe: the endpoint pipe
+>   * @setup_packet: pointer to the setup_packet buffer
+> - * @transfer_buffer: pointer to the transfer buffer
+> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable for DMA.
+>   * @buffer_length: length of the transfer buffer
+>   * @complete_fn: pointer to the usb_complete_t function
+>   * @context: what to set the urb context to.
+>   *
+>   * Initializes a control urb with the proper information needed to submit
+>   * it to a device.
+> + *
+> + * The transfer buffer might be filled via DMA. The simplest way to get
+> + * a buffer that can be DMAed to, is allocating it via kmalloc() or
+> + * equivalent, even for very small buffers. If transfer_buffer is embedded
+> + * in a bigger structure, there is a risk that the previous and following
+> + * fields are left in a corrupted state by the DMA engine, if the platform
+> + * is not cache coherent.
+>   */
+>  static inline void usb_fill_control_urb(struct urb *urb,
+>  					struct usb_device *dev,
+> @@ -1658,13 +1665,20 @@ static inline void usb_fill_control_urb(struct urb *urb,
+>   * @urb: pointer to the urb to initialize.
+>   * @dev: pointer to the struct usb_device for this urb.
+>   * @pipe: the endpoint pipe
+> - * @transfer_buffer: pointer to the transfer buffer
+> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable for DMA.
+>   * @buffer_length: length of the transfer buffer
+>   * @complete_fn: pointer to the usb_complete_t function
+>   * @context: what to set the urb context to.
+>   *
+>   * Initializes a bulk urb with the proper information needed to submit it
+>   * to a device.
+> + *
+> + * The transfer buffer might be filled via DMA. The simplest way to get
+> + * a buffer that can be DMAed to, is allocating it via kmalloc() or
+> + * equivalent, even for very small buffers. If transfer_buffer is embedded
+> + * in a bigger structure, there is a risk that the previous and following
+> + * fields are left in a corrupted state by the DMA engine, if the platform
+> + * is not cache coherent.
+>   */
+>  static inline void usb_fill_bulk_urb(struct urb *urb,
+>  				     struct usb_device *dev,
+> @@ -1687,7 +1701,7 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
+>   * @urb: pointer to the urb to initialize.
+>   * @dev: pointer to the struct usb_device for this urb.
+>   * @pipe: the endpoint pipe
+> - * @transfer_buffer: pointer to the transfer buffer
+> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable for DMA.
+>   * @buffer_length: length of the transfer buffer
+>   * @complete_fn: pointer to the usb_complete_t function
+>   * @context: what to set the urb context to.
+> @@ -1697,6 +1711,13 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
+>   * Initializes a interrupt urb with the proper information needed to submit
+>   * it to a device.
+>   *
+> + * The transfer buffer might be filled via DMA. The simplest way to get
+> + * a buffer that can be DMAed to, is allocating it via kmalloc() or
+> + * equivalent, even for very small buffers. If transfer_buffer is embedded
+> + * in a bigger structure, there is a risk that the previous and following
+> + * fields are left in a corrupted state by the DMA engine, if the platform
+> + * is not cache coherent.
+> + *
+>   * Note that High Speed and SuperSpeed(+) interrupt endpoints use a logarithmic
+>   * encoding of the endpoint interval, and express polling intervals in
+>   * microframes (eight per millisecond) rather than in frames (one per
+> 
+> ---
+> base-commit: b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
+> change-id: 20221220-usb-dmadoc-29384acebd48
+> 
+> Best regards,
 
-AFAICT, RMII reference feeds RMII_RTX & RGMII RX *is* RGMII_RXIN?
-Does that mean you need to populate only one of GMAC1 RMII reference
-and GMAC1 RMGII RX and the other is optional?
-
-What have I missed?
-
-> +
-> +  clock-names:
-> +    items:
-> +      - const: osc
-> +      - const: gmac1_rmii_refin
-> +      - const: gmac1_rgmii_rxin
-> +      - const: i2stx_bclk_ext
-> +      - const: i2stx_lrck_ext
-> +      - const: i2srx_bclk_ext
-> +      - const: i2srx_lrck_ext
-> +      - const: tdm_ext
-> +      - const: mclk_ext
-
-If all clocks are in fact required though, isn't this kinda pointless to
-have since we already know that the order is fixed from the "clocks"
-property?
-Krzk/Rob?
-
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +    description:
-> +      See <dt-bindings/clock/starfive,jh7110-crg.h> for valid indices.
-> +
-> +  '#reset-cells':
-> +    const: 1
-> +    description:
-> +      See <dt-bindings/reset/starfive,jh7110-crg.h> for valid indices.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - '#clock-cells'
-> +  - '#reset-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    clock-controller@13020000 {
-> +        compatible =3D "starfive,jh7110-syscrg";
-> +        reg =3D <0x13020000 0x10000>;
-> +        clocks =3D <&osc>, <&gmac1_rmii_refin>,
-> +                 <&gmac1_rgmii_rxin>,
-> +                 <&i2stx_bclk_ext>, <&i2stx_lrck_ext>,
-> +                 <&i2srx_bclk_ext>, <&i2srx_lrck_ext>,
-> +                 <&tdm_ext>, <&mclk_ext>;
-> +        clock-names =3D "osc", "gmac1_rmii_refin",
-> +                      "gmac1_rgmii_rxin",
-> +                      "i2stx_bclk_ext", "i2stx_lrck_ext",
-> +                      "i2srx_bclk_ext", "i2srx_lrck_ext",
-> +                      "tdm_ext", "mclk_ext";
-> +        #clock-cells =3D <1>;
-> +        #reset-cells =3D <1>;
-> +    };
-
-Also, whatever happened to GMAC0? It has fixed-clocks defined in the DTS
-but doesn't appear in the binding or driver?
-
-Thanks,
-Conor.
-
-
---5z5zKcEbEyZyLNXj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6JB3wAKCRB4tDGHoIJi
-0iDdAP97AduwIcoTKoPNnBB0gAM3K5QzthQrp2V3dnOQWEadiAEA7ILIoHeqrA45
-dIeJz/PtVaBTaAIHfCuDn/tpoSgf/gw=
-=Kng0
------END PGP SIGNATURE-----
-
---5z5zKcEbEyZyLNXj--
+-- 
+~Randy
