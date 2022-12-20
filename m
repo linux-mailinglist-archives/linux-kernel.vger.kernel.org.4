@@ -2,120 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742AD651B79
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC6D651BA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:28:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233228AbiLTHWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 02:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43430 "EHLO
+        id S233785AbiLTH2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 02:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232948AbiLTHWF (ORCPT
+        with ESMTP id S233506AbiLTH17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 02:22:05 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719E02703;
-        Mon, 19 Dec 2022 23:22:03 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id D40B75FD04;
-        Tue, 20 Dec 2022 10:22:01 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1671520921;
-        bh=ANEKJ6F8QuXnin42o/uUpelhBVJ43NT/3G5MapBsZtg=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=KJdwjX569Bp8t0f0Yu8w2ITPygjp31O2DIEbgNfvclOkZbptjzWg5xDhTWLZku7HM
-         nEeUdEbyJ5kl9FJ0G6TU7dJYW5oPyT0MJXv0/uNO8wsEHAfDbq4k7x4bGCU1PnQwtn
-         HzMc4a24YOK9PwbjbeWCMK+IF6svJ1m+kkqadMAx0Flruiu+k62PhBYQnq0E2OkPGs
-         h2UbuftPTiDOYvstUDno6+Leo1u8tUTHXcdyF4MrOinGamKSuhSwVW5JVHklx4iPyb
-         qJtso54SjmTAiOB3vgbybsoHhBezWMtLWLNuN3KgvdhSVTXy4RwrWNckZCgpGCuGPi
-         SeURQpg2+2/IQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 20 Dec 2022 10:22:01 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "Bobby Eshleman" <bobby.eshleman@bytedance.com>
-Subject: [RFC PATCH v5 3/4] test/vsock: add big message test
-Thread-Topic: [RFC PATCH v5 3/4] test/vsock: add big message test
-Thread-Index: AQHZFEPAMOXvH3JfwUe+sCSOebwoGg==
-Date:   Tue, 20 Dec 2022 07:22:01 +0000
-Message-ID: <8b17e81c-a6a2-cec4-9694-2baf4a65c2a0@sberdevices.ru>
-In-Reply-To: <e04f749e-f1a7-9a1d-8213-c633ffcc0a69@sberdevices.ru>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0D92BB1846FDC24DB13E947B5BD05455@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Tue, 20 Dec 2022 02:27:59 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61042120B6;
+        Mon, 19 Dec 2022 23:27:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671521220; x=1703057220;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=c7MFanM5OsQxf4mfVMxJdtJD6xfrjMgUk4/0Zk73muk=;
+  b=diQ/TTC4A/f0m3ip6hLGojkoKtLi1yb+0prGnGDiqcK0tG3ov2K3kDcX
+   jDVl1uj0ZpchIffz/L8jjz8ZWqs11AW66NO3YuEZ/8gI9Z0aIzgKbHD7R
+   hn+zzznAoF7u6IPp8uaC9ejjRz+ohaBy+PHB9fToL6oNo/7ywztCd2Bjf
+   scTJgKSLdnrI5QQul4tv/Hu/EL1zV/rfJch0LZq+FIIxKXiSeEBXHJ9YT
+   dPApISjd4ejTcZibrseEFNAyr6bhP8Id+lOdw2jBLQbtg5Kd0lMMG4jyj
+   yTjzNTVUdmUW/MxNKza3/GkRbh/V4MEK9zejFlGcAUXN+Cp+BbobD+3im
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="317184648"
+X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
+   d="scan'208";a="317184648"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 23:26:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="714332739"
+X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
+   d="scan'208";a="714332739"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Dec 2022 23:26:44 -0800
+Date:   Tue, 20 Dec 2022 15:22:28 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
+        "tabba@google.com" <tabba@google.com>,
+        "Hocko, Michal" <mhocko@suse.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "dhildenb@redhat.com" <dhildenb@redhat.com>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+        "vannapurve@google.com" <vannapurve@google.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "mail@maciej.szmigiero.name" <mail@maciej.szmigiero.name>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "qperret@google.com" <qperret@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "ddutile@redhat.com" <ddutile@redhat.com>,
+        "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "wanpengli@tencent.com" <wanpengli@tencent.com>,
+        "yu.c.zhang@linux.intel.com" <yu.c.zhang@linux.intel.com>,
+        "hughd@google.com" <hughd@google.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "jlayton@kernel.org" <jlayton@kernel.org>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "steven.price@arm.com" <steven.price@arm.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>
+Subject: Re: [PATCH v10 1/9] mm: Introduce memfd_restricted system call to
+ create restricted user memory
+Message-ID: <20221220072228.GA1724933@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
+ <5c6e2e516f19b0a030eae9bf073d555c57ca1f21.camel@intel.com>
+ <20221219075313.GB1691829@chaop.bj.intel.com>
+ <deba096c85e41c3a15d122f2159986a74b16770f.camel@intel.com>
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/12/20 03:38:00 #20687629
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <deba096c85e41c3a15d122f2159986a74b16770f.camel@intel.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhpcyBhZGRzIHRlc3QgZm9yIHNlbmRpbmcgbWVzc2FnZSwgYmlnZ2VyIHRoYW4gcGVlcidzIGJ1
-ZmZlciBzaXplLg0KRm9yIFNPQ0tfU0VRUEFDS0VUIHNvY2tldCBpdCBtdXN0IGZhaWwsIGFzIHRo
-aXMgdHlwZSBvZiBzb2NrZXQgaGFzDQptZXNzYWdlIHNpemUgbGltaXQuDQoNClNpZ25lZC1vZmYt
-Ynk6IEFyc2VuaXkgS3Jhc25vdiA8QVZLcmFzbm92QHNiZXJkZXZpY2VzLnJ1Pg0KUmV2aWV3ZWQt
-Ynk6IFN0ZWZhbm8gR2FyemFyZWxsYSA8c2dhcnphcmVAcmVkaGF0LmNvbT4NCi0tLQ0KIHRvb2xz
-L3Rlc3RpbmcvdnNvY2svdnNvY2tfdGVzdC5jIHwgNjkgKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysNCiAxIGZpbGUgY2hhbmdlZCwgNjkgaW5zZXJ0aW9ucygrKQ0KDQpkaWZmIC0tZ2l0
-IGEvdG9vbHMvdGVzdGluZy92c29jay92c29ja190ZXN0LmMgYi90b29scy90ZXN0aW5nL3Zzb2Nr
-L3Zzb2NrX3Rlc3QuYw0KaW5kZXggMjZjMzhhZDlkMDdiLi42N2U5ZjlkZjNhOGMgMTAwNjQ0DQot
-LS0gYS90b29scy90ZXN0aW5nL3Zzb2NrL3Zzb2NrX3Rlc3QuYw0KKysrIGIvdG9vbHMvdGVzdGlu
-Zy92c29jay92c29ja190ZXN0LmMNCkBAIC01NjksNiArNTY5LDcwIEBAIHN0YXRpYyB2b2lkIHRl
-c3Rfc2VxcGFja2V0X3RpbWVvdXRfc2VydmVyKGNvbnN0IHN0cnVjdCB0ZXN0X29wdHMgKm9wdHMp
-DQogCWNsb3NlKGZkKTsNCiB9DQogDQorc3RhdGljIHZvaWQgdGVzdF9zZXFwYWNrZXRfYmlnbXNn
-X2NsaWVudChjb25zdCBzdHJ1Y3QgdGVzdF9vcHRzICpvcHRzKQ0KK3sNCisJdW5zaWduZWQgbG9u
-ZyBzb2NrX2J1Zl9zaXplOw0KKwlzc2l6ZV90IHNlbmRfc2l6ZTsNCisJc29ja2xlbl90IGxlbjsN
-CisJdm9pZCAqZGF0YTsNCisJaW50IGZkOw0KKw0KKwlsZW4gPSBzaXplb2Yoc29ja19idWZfc2l6
-ZSk7DQorDQorCWZkID0gdnNvY2tfc2VxcGFja2V0X2Nvbm5lY3Qob3B0cy0+cGVlcl9jaWQsIDEy
-MzQpOw0KKwlpZiAoZmQgPCAwKSB7DQorCQlwZXJyb3IoImNvbm5lY3QiKTsNCisJCWV4aXQoRVhJ
-VF9GQUlMVVJFKTsNCisJfQ0KKw0KKwlpZiAoZ2V0c29ja29wdChmZCwgQUZfVlNPQ0ssIFNPX1ZN
-X1NPQ0tFVFNfQlVGRkVSX1NJWkUsDQorCQkgICAgICAgJnNvY2tfYnVmX3NpemUsICZsZW4pKSB7
-DQorCQlwZXJyb3IoImdldHNvY2tvcHQiKTsNCisJCWV4aXQoRVhJVF9GQUlMVVJFKTsNCisJfQ0K
-Kw0KKwlzb2NrX2J1Zl9zaXplKys7DQorDQorCWRhdGEgPSBtYWxsb2Moc29ja19idWZfc2l6ZSk7
-DQorCWlmICghZGF0YSkgew0KKwkJcGVycm9yKCJtYWxsb2MiKTsNCisJCWV4aXQoRVhJVF9GQUlM
-VVJFKTsNCisJfQ0KKw0KKwlzZW5kX3NpemUgPSBzZW5kKGZkLCBkYXRhLCBzb2NrX2J1Zl9zaXpl
-LCAwKTsNCisJaWYgKHNlbmRfc2l6ZSAhPSAtMSkgew0KKwkJZnByaW50ZihzdGRlcnIsICJleHBl
-Y3RlZCAnc2VuZCgyKScgZmFpbHVyZSwgZ290ICV6aVxuIiwNCisJCQlzZW5kX3NpemUpOw0KKwkJ
-ZXhpdChFWElUX0ZBSUxVUkUpOw0KKwl9DQorDQorCWlmIChlcnJubyAhPSBFTVNHU0laRSkgew0K
-KwkJZnByaW50ZihzdGRlcnIsICJleHBlY3RlZCBFTVNHU0laRSBpbiAnZXJybm8nLCBnb3QgJWlc
-biIsDQorCQkJZXJybm8pOw0KKwkJZXhpdChFWElUX0ZBSUxVUkUpOw0KKwl9DQorDQorCWNvbnRy
-b2xfd3JpdGVsbigiQ0xJU0VOVCIpOw0KKw0KKwlmcmVlKGRhdGEpOw0KKwljbG9zZShmZCk7DQor
-fQ0KKw0KK3N0YXRpYyB2b2lkIHRlc3Rfc2VxcGFja2V0X2JpZ21zZ19zZXJ2ZXIoY29uc3Qgc3Ry
-dWN0IHRlc3Rfb3B0cyAqb3B0cykNCit7DQorCWludCBmZDsNCisNCisJZmQgPSB2c29ja19zZXFw
-YWNrZXRfYWNjZXB0KFZNQUREUl9DSURfQU5ZLCAxMjM0LCBOVUxMKTsNCisJaWYgKGZkIDwgMCkg
-ew0KKwkJcGVycm9yKCJhY2NlcHQiKTsNCisJCWV4aXQoRVhJVF9GQUlMVVJFKTsNCisJfQ0KKw0K
-Kwljb250cm9sX2V4cGVjdGxuKCJDTElTRU5UIik7DQorDQorCWNsb3NlKGZkKTsNCit9DQorDQog
-I2RlZmluZSBCVUZfUEFUVEVSTl8xICdhJw0KICNkZWZpbmUgQlVGX1BBVFRFUk5fMiAnYicNCiAN
-CkBAIC04NTEsNiArOTE1LDExIEBAIHN0YXRpYyBzdHJ1Y3QgdGVzdF9jYXNlIHRlc3RfY2FzZXNb
-XSA9IHsNCiAJCS5ydW5fY2xpZW50ID0gdGVzdF9zdHJlYW1fcG9sbF9yY3Zsb3dhdF9jbGllbnQs
-DQogCQkucnVuX3NlcnZlciA9IHRlc3Rfc3RyZWFtX3BvbGxfcmN2bG93YXRfc2VydmVyLA0KIAl9
-LA0KKwl7DQorCQkubmFtZSA9ICJTT0NLX1NFUVBBQ0tFVCBiaWcgbWVzc2FnZSIsDQorCQkucnVu
-X2NsaWVudCA9IHRlc3Rfc2VxcGFja2V0X2JpZ21zZ19jbGllbnQsDQorCQkucnVuX3NlcnZlciA9
-IHRlc3Rfc2VxcGFja2V0X2JpZ21zZ19zZXJ2ZXIsDQorCX0sDQogCXt9LA0KIH07DQogDQotLSAN
-CjIuMjUuMQ0K
+On Mon, Dec 19, 2022 at 08:48:10AM +0000, Huang, Kai wrote:
+> On Mon, 2022-12-19 at 15:53 +0800, Chao Peng wrote:
+> > > 
+> > > [...]
+> > > 
+> > > > +
+> > > > +	/*
+> > > > +	 * These pages are currently unmovable so don't place them into
+> > > > movable
+> > > > +	 * pageblocks (e.g. CMA and ZONE_MOVABLE).
+> > > > +	 */
+> > > > +	mapping = memfd->f_mapping;
+> > > > +	mapping_set_unevictable(mapping);
+> > > > +	mapping_set_gfp_mask(mapping,
+> > > > +			     mapping_gfp_mask(mapping) & ~__GFP_MOVABLE);
+> > > 
+> > > But, IIUC removing __GFP_MOVABLE flag here only makes page allocation from
+> > > non-
+> > > movable zones, but doesn't necessarily prevent page from being migrated.  My
+> > > first glance is you need to implement either a_ops->migrate_folio() or just
+> > > get_page() after faulting in the page to prevent.
+> > 
+> > The current api restrictedmem_get_page() already does this, after the
+> > caller calling it, it holds a reference to the page. The caller then
+> > decides when to call put_page() appropriately.
+> 
+> I tried to dig some history. Perhaps I am missing something, but it seems Kirill
+> said in v9 that this code doesn't prevent page migration, and we need to
+> increase page refcount in restrictedmem_get_page():
+> 
+> https://lore.kernel.org/linux-mm/20221129112139.usp6dqhbih47qpjl@box.shutemov.name/
+> 
+> But looking at this series it seems restrictedmem_get_page() in this v10 is
+> identical to the one in v9 (except v10 uses 'folio' instead of 'page')?
+
+restrictedmem_get_page() increases page refcount several versions ago so
+no change in v10 is needed. You probably missed my reply:
+
+https://lore.kernel.org/linux-mm/20221129135844.GA902164@chaop.bj.intel.com/
+
+The current solution is clear: unless we have better approach, we will
+let restrictedmem user (KVM in this case) to hold the refcount to
+prevent page migration.
+
+Thanks,
+Chao
+> 
+> Anyway if this is not fixed, then it should be fixed.  Otherwise, a comment at
+> the place where page refcount is increased will be helpful to help people
+> understand page migration is actually prevented.
+> 
