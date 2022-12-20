@@ -2,120 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A21F76518BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 03:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B606518C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 03:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbiLTCQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 21:16:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
+        id S229963AbiLTCZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 21:25:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiLTCQs (ORCPT
+        with ESMTP id S229477AbiLTCZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 21:16:48 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E412DC2;
-        Mon, 19 Dec 2022 18:16:47 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NbgDp1FT1z4f3mLF;
-        Tue, 20 Dec 2022 10:16:42 +0800 (CST)
-Received: from [10.67.109.184] (unknown [10.67.109.184])
-        by APP3 (Coremail) with SMTP id _Ch0CgAHAiALG6FjbzqlAA--.4009S2;
-        Tue, 20 Dec 2022 10:16:45 +0800 (CST)
-Message-ID: <2509f619-15a4-84d6-d199-12e4526bf30e@huaweicloud.com>
-Date:   Tue, 20 Dec 2022 10:16:43 +0800
+        Mon, 19 Dec 2022 21:25:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620EBB90
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 18:25:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D12DDB80D2F
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:25:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCFAFC433EF;
+        Tue, 20 Dec 2022 02:25:06 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dk2sESxH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1671503104;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=GONWkYR5ETRlvmjHJNSwCeq8iqU0rT6jTSaQSVLxGz4=;
+        b=dk2sESxHrdei6xMlG087PmIVoxtEye0K1eOR4CFHYeoa6REbhlfP5hnYl2p3R21tIR9wxT
+        d6kvl8NtRfuiIoKcQMjEesfA/iOBxAuAk+KFdd5B6TiGvyrQrUSFKYkNwuCsKX4zvsTTYg
+        kmiPAIPJcwjupR4FqYj/hwlSgisjktk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f89d33e8 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 20 Dec 2022 02:25:04 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [GIT PULL] random number generator fixes for 6.2-rc1, part 2
+Date:   Tue, 20 Dec 2022 03:24:58 +0100
+Message-Id: <20221220022458.11682-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RFC PATCH bpf-next 0/4] Support bpf trampoline for RV64
-Content-Language: en-US
-To:     bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Pu Lehui <pulehui@huawei.com>
-References: <20221219133736.1387008-1-pulehui@huaweicloud.com>
-From:   Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <20221219133736.1387008-1-pulehui@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: _Ch0CgAHAiALG6FjbzqlAA--.4009S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFW8WrWkGFWkJry5XF48Crg_yoW8XrWxpa
-        y8Kry3ur1vqFy7CwnIq3WUXF1Fvr4kX3W3Gw13J3yxC3WYqry7Jr1Fgay3A3s5AF93ua4U
-        tr4YvFn0kw1DAa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvSb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43
-        ZEXa7IU13rcDUUUUU==
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
+As mentioned in the first pull for 6.2-rc1, this second late pull request has
+two remaining changes that are now possible after you merged a few other
+trees:
 
-On 2022/12/19 21:37, Pu Lehui wrote:
-> BPF trampoline is the critical infrastructure of the bpf
-> subsystem, acting as a mediator between kernel functions
-> and BPF programs. Numerous important features, such as
-> using ebpf program for zero overhead kernel introspection,
-> rely on this key component. We can't wait to support bpf
-> trampoline on RV64. The implementation of bpf trampoline
-> was closely to x86 and arm64 for future development.
-> 
-> As most of riscv cpu support unaligned memory accesses,
-> we temporarily use patch [1] to facilitate testing. The
-> test results are as follow, and test_verifier with no
-> new failure ceses.
-> 
-> - fexit_test:OK
-> - fentry_test:OK
-> - fentry_fexit:OK
-> - fexit_stress:OK
-> - fexit_bpf2bpf:OK
-> - dummy_st_ops:OK
-> - modify_return:OK
-> - get_func_ip_test:OK
-> - get_func_args_test:OK
-> - trampoline_count:OK
-> 
-> [1] https://lore.kernel.org/linux-riscv/20210916130855.4054926-2-chenhuang5@huawei.com/
-> 
-> Pu Lehui (4):
->    bpf: Rollback to text_poke when arch not supported ftrace direct call
->    riscv, bpf: Factor out emit_call for kernel and bpf context
->    riscv, bpf: Add bpf_arch_text_poke support for RV64
->    riscv, bpf: Add bpf trampoline support for RV64
-> 
->   arch/riscv/net/bpf_jit.h        |   5 +
->   arch/riscv/net/bpf_jit_comp64.c | 484 ++++++++++++++++++++++++++++++--
->   kernel/bpf/trampoline.c         |   8 +-
->   3 files changed, 472 insertions(+), 25 deletions(-)
-> 
+- #include <asm/archrandom.h> can be removed from random.h now, making the
+  direct use of the arch_random_* API more of a private implementation detail
+  between the archs and random.c, rather than something for general consumers.
 
-sorry, small problem of this patchset, have been resend.
+- Two additional uses of prandom_u32_max() snuck in during the initial phase
+  of pulls, so these have been converted to get_random_u32_below(), and now
+  the deprecated prandom_u32_max() alias -- which was just a wrapper around
+  get_random_u32_below() -- can be removed.
 
+In addition, there is one fix:
+
+- Check efi_rt_services_supported() before attempting to use an EFI runtime
+  function. This affected EFI systems that disable runtime services yet still
+  boot via EFI (e.g. the reporter's Dell arm64 laptop), as well systems where
+  EFI runtime services have been forcibly disabled, such as on PREEMPT_RT. On
+  those machines, a very early and hard to diagnose crash would happen,
+  preventing boot.
+
+Please pull.
+
+Thanks,
+Jason
+
+The following changes since commit 6feb57c2fd7c787aecf2846a535248899e7b70fa:
+
+  Merge tag 'kbuild-v6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild (2022-12-19 12:33:32 -0600)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git tags/random-6.2-rc1-for-linus
+
+for you to fetch changes up to 3c202d14a9d73fb63c3dccb18feac5618c21e1c4:
+
+  prandom: remove prandom_u32_max() (2022-12-20 03:13:45 +0100)
+
+----------------------------------------------------------------
+Random number generator fixes for Linux 6.2-rc1.
+----------------------------------------------------------------
+
+Jason A. Donenfeld (2):
+      random: do not include <asm/archrandom.h> from random.h
+      prandom: remove prandom_u32_max()
+
+Johan Hovold (1):
+      efi: random: fix NULL-deref when refreshing seed
+
+ arch/powerpc/kernel/setup-common.c   | 1 +
+ arch/s390/kernel/setup.c             | 1 +
+ arch/x86/mm/cpu_entry_area.c         | 2 +-
+ drivers/char/hw_random/powernv-rng.c | 1 +
+ drivers/char/hw_random/s390-trng.c   | 1 +
+ drivers/char/random.c                | 1 +
+ drivers/firmware/efi/efi.c           | 4 +++-
+ include/linux/prandom.h              | 6 ------
+ include/linux/random.h               | 2 --
+ net/ipv4/tcp_plb.c                   | 2 +-
+ 10 files changed, 10 insertions(+), 11 deletions(-)
