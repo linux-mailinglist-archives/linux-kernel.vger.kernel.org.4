@@ -2,201 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FEEB65245A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A8665246F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233028AbiLTQLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 11:11:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
+        id S233878AbiLTQLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 11:11:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiLTQLf (ORCPT
+        with ESMTP id S233234AbiLTQLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 11:11:35 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90D52DC8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:11:34 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id 9-20020a1c0209000000b003d1c0a147f6so8229326wmc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:11:34 -0800 (PST)
+        Tue, 20 Dec 2022 11:11:36 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183A238A5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:11:35 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id cf42so19348624lfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:11:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/U0q2wRubnZu5FYqunFl3L2DBsGtVJyPPmHqxy8Kmzo=;
-        b=nghl4OeuPYr6raBj+HAei9HlEFQuarj+nwUhjwTMtIDjH4GZAftkIPfFWdft+oqDtV
-         4eET4FRnLq7t+XE0KQyRtPN96gGj+aZjmkF3UXzzJ6S/Rk/hylNoTbRpBcg0GyDOQz7v
-         woK5piLQ2wC4tin8ctPO1WVDJlV38zvf/6nMPVpJZkX8qw8Gbs/nKjZ3iyJlsN3YbTbF
-         bLSDivHx9jtOgEQ0f1eX3V7JtnkbJp1cNuHf9TYqjyIpD0fy1TuVsGyqdkklJzzZQp8Q
-         wTtkR8N8oyggEJ2iQOmpa4h3EjaY9tNna0E0loDBY4BqGWth/GR/Img6Idm4AENwTi1N
-         vBcQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4OPu185Q0+akxyPV8Q2zM2VcNp2VyoX7hjbTkMDLjNA=;
+        b=MLr0HIKRQZqoRZ78fC/VihpPBV8UTSHsUHNZoeJiDyKbp8xpDzVFUz5wAMjhGwTD5J
+         QpUW3E/lJJ/YzE/FVbv0CGDl4uFyt+nymKPo2zhgLinE2Lc8L3FiAP0bILUUe2GKb4uo
+         JueXkX6I8F7NyUo73gGMyUa2I45HSthxUjbZo2zTyXeKeZAzu5DXHUNBS6Gctd1+T8Q4
+         qwMyWzd3fa8uNahKQFQS8LECl16xw6kaLt/y+QafLf6WUnaC6GnHm8eJpPq5MGdyQlzn
+         F6XiVOp6BcG74A8cq3u8s5MrsO0RqCXRO8ynhkcPlMr5ZkREeLX7GcS4h2tydCTZ+Q1K
+         9iMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/U0q2wRubnZu5FYqunFl3L2DBsGtVJyPPmHqxy8Kmzo=;
-        b=E/0N+MchVA+BnrWHlR+hyiUujeT16+8d26Q1r7FlokmzKHPaPG0GyC7rLcMet8MBhR
-         43qJgID25xiorhvuqCoN4bmpfvegVA8v3WSbw4tM6vTjP1ilBrJl3yJbG9bAK8vNYYWG
-         QsK3nvSc8hNmXT5gcQha+8gYgBL0K5f350G2LW9KJqBIw8oQrqzGgwzz48hYl9OTRpRl
-         rAkmT/+CC69URuihwn9kc8L6G0IgRVDsuBj+joTYCOAvK/MudEsS4rDwmN1oynan6v2R
-         f8EWgpPTdrNX/0DPw7qJpOeZMJMm9V9H7oH3OW2kUxGnDMKj6ErxSWNIbBiomBu9zPGx
-         TwGQ==
-X-Gm-Message-State: ANoB5pn11OvtKEETH2tdtLqHNt315u28qt4P3Nr9leXNbISQjdAcYc7j
-        5xlqOOLd3txErL0A/8rwDlaQF3VVHLFepWf06g==
-X-Google-Smtp-Source: AA0mqf6KPDdpTcftcLyBvglxFar2cEa8ruo0iOnNcEIiYNkoKmEV+aRszY0GXWcON8JbKXhIrlT4ue8uNLGCdoPz7A==
-X-Received: from peternewman10.zrh.corp.google.com ([2a00:79e0:9d:6:8175:5362:6754:c66d])
- (user=peternewman job=sendgmr) by 2002:a5d:46ce:0:b0:242:487:35bf with SMTP
- id g14-20020a5d46ce000000b00242048735bfmr41364128wrs.616.1671552693185; Tue,
- 20 Dec 2022 08:11:33 -0800 (PST)
-Date:   Tue, 20 Dec 2022 17:11:23 +0100
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221220161123.432120-1-peternewman@google.com>
-Subject: [PATCH v7] x86/resctrl: Fix task CLOSID/RMID update race
-From:   Peter Newman <peternewman@google.com>
-To:     fenghua.yu@intel.com, reinette.chatre@intel.com
-Cc:     bp@alien8.de, derkling@google.com, eranian@google.com,
-        hpa@zytor.com, james.morse@arm.com, jannh@google.com,
-        kpsingh@google.com, linux-kernel@vger.kernel.org, mingo@redhat.com,
-        tglx@linutronix.de, x86@kernel.org,
-        Peter Newman <peternewman@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4OPu185Q0+akxyPV8Q2zM2VcNp2VyoX7hjbTkMDLjNA=;
+        b=qgEyPZbDEYlVLcdSw/deZoSvkZpNv0vvsQJAQkCtquWzxNJ+DDUf1e5+Of5DCkltqT
+         DYnWBA4u9wIF7asgMT8u81Gs0xuZqgpkgVVmlfdZnfapk8Fe62EnojUboyraKVWn7DlD
+         7cCj0JFDnvOs00oDlRCNEvQC7cVKr4SWnjQUtb2zFXvYWGS5ATJ3l/YG8zo+9B53Gqin
+         7hdboJjITd3zYFzqHSZExb5pUwpU8OBxC5XHTpuTlDn+7pjztB+ogiESmWejsm+RM4MS
+         UWt0zJKcBhwqz+Fawe3+/QJqXe92UGD8GocGCfWErY0nq63bjpRDHhMofPILVG6k5K7f
+         q0ww==
+X-Gm-Message-State: AFqh2ko+4A2J5qbkhTTlppYjj3ztpdjID8OXTE5B1/zoH8Wxye76lAn+
+        x/jbN+1D2QUlsMH/vsNyWll3Tg==
+X-Google-Smtp-Source: AMrXdXslAPY7XyfhFtimUpegXKFxo4fzvFsxFhl4uTujqL2DLM10DmkgXmu8w7QZbjikyIW034Cqcg==
+X-Received: by 2002:ac2:4e90:0:b0:4c3:7634:234c with SMTP id o16-20020ac24e90000000b004c37634234cmr3780393lfr.57.1671552693487;
+        Tue, 20 Dec 2022 08:11:33 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a5-20020a056512390500b004b5ab5e904esm1519306lfu.306.2022.12.20.08.11.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 08:11:32 -0800 (PST)
+Message-ID: <44a62c49-1894-aee2-63fd-05b2e70a8aef@linaro.org>
+Date:   Tue, 20 Dec 2022 17:11:31 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v9 2/7] media: dt-binding: nuvoton: Add NPCM VCD and ECE
+ engine
+Content-Language: en-US
+To:     Marvin Lin <milkfafa@gmail.com>, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, andrzej.p@collabora.com
+Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        kwliu@nuvoton.com, kflin@nuvoton.com
+References: <20221220094055.3011916-1-milkfafa@gmail.com>
+ <20221220094055.3011916-3-milkfafa@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221220094055.3011916-3-milkfafa@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the user moves a running task to a new rdtgroup using the tasks
-file interface or by deleting its rdtgroup, the resulting change in
-CLOSID/RMID must be immediately propagated to the PQR_ASSOC MSR on the
-task(s) CPUs.
+On 20/12/2022 10:40, Marvin Lin wrote:
+> Add dt-binding document for Video Capture/Differentiation Engine (VCD)
+> and Encoding Compression Engine (ECE) present on Nuvoton NPCM SoCs.
+> 
+> Signed-off-by: Marvin Lin <milkfafa@gmail.com>
+> ---
+>  .../bindings/media/nuvoton,npcm-ece.yaml      | 43 +++++++++++
+>  .../bindings/media/nuvoton,npcm-vcd.yaml      | 72 +++++++++++++++++++
+>  2 files changed, 115 insertions(+)
 
-x86 allows reordering loads with prior stores, so if the task starts
-running between a task_curr() check that the CPU hoisted before the
-stores in the CLOSID/RMID update then it can start running with the old
-CLOSID/RMID until it is switched again because __rdtgroup_move_task()
-failed to determine that it needs to be interrupted to obtain the new
-CLOSID/RMID.
 
-Refer to the diagram below:
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-CPU 0                                   CPU 1
------                                   -----
-__rdtgroup_move_task():
-  curr <- t1->cpu->rq->curr
-                                        __schedule():
-                                          rq->curr <- t1
-                                        resctrl_sched_in():
-                                          t1->{closid,rmid} -> {1,1}
-  t1->{closid,rmid} <- {2,2}
-  if (curr == t1) // false
-   IPI(t1->cpu)
-
-A similar race impacts rdt_move_group_tasks(), which updates tasks in a
-deleted rdtgroup.
-
-In both cases, use smp_mb() to order the task_struct::{closid,rmid}
-stores before the loads in task_curr().  In particular, in the
-rdt_move_group_tasks() case, simply execute an smp_mb() on every
-iteration with a matching task.
-
-It is possible to use a single smp_mb() in rdt_move_group_tasks(), but
-this would require two passes and a means of remembering which
-task_structs were updated in the first loop. However, benchmarking
-results below showed too little performance impact in the simple
-approach to justify implementing the two-pass approach.
-
-Times below were collected using `perf stat` to measure the time to
-remove a group containing a 1600-task, parallel workload.
-
-CPU: Intel(R) Xeon(R) Platinum P-8136 CPU @ 2.00GHz (112 threads)
-
- # mkdir /sys/fs/resctrl/test
- # echo $$ > /sys/fs/resctrl/test/tasks
- # perf bench sched messaging -g 40 -l 100000
-
-task-clock time ranges collected using:
-
- # perf stat rmdir /sys/fs/resctrl/test
-
-Baseline:                     1.54 - 1.60 ms
-smp_mb() every matching task: 1.57 - 1.67 ms
-
-Fixes: ae28d1aae48a ("x86/resctrl: Use an IPI instead of task_work_add() to update PQR_ASSOC MSR")
-Fixes: 0efc89be9471 ("x86/intel_rdt: Update task closid immediately on CPU in rmdir and unmount")
-Signed-off-by: Peter Newman <peternewman@google.com>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
----
-Patch history:
-
-v7:
- - Remove exploit case added in v6 and un-CC stable
-v6:
- - Explain exploit case in changelog for stable
- - Add Fixes: lines
-v5:
- - Just put an smp_mb() between CLOSID/RMID stores and task_curr() calls
- - Add a diagram detailing the race to the changelog
-v4:
- - Reorder the patches so that justification for sending more IPIs can
-   reference the patch fixing __rdtgroup_move_task().
- - Correct tense of wording used in changelog and comments
-v3:
- - Split the handling of multi-task and single-task operations into
-   separate patches, now that they're handled differently.
- - Clarify justification in the commit message, including moving some of
-   it out of inline code comment.
-v2:
- - Following Reinette's suggestion: use task_call_func() for single
-   task, IPI broadcast for group movements.
- - Rebased to v6.1-rc4
-
-v1: https://lore.kernel.org/lkml/20221103141641.3055981-1-peternewman@google.com/
-v2: https://lore.kernel.org/lkml/20221110135346.2209839-1-peternewman@google.com/
-v3: https://lore.kernel.org/lkml/20221115141953.816851-1-peternewman@google.com/
-v4: https://lore.kernel.org/lkml/20221129111055.953833-1-peternewman@google.com/
-v5: https://lore.kernel.org/lkml/20221214114447.1935755-1-peternewman@google.com/
-v6: https://lore.kernel.org/lkml/20221216133125.3159406-1-peternewman@google.com/
----
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index e5a48f05e787..5993da21d822 100644
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -580,8 +580,10 @@ static int __rdtgroup_move_task(struct task_struct *tsk,
- 	/*
- 	 * Ensure the task's closid and rmid are written before determining if
- 	 * the task is current that will decide if it will be interrupted.
-+	 * This pairs with the full barrier between the rq->curr update and
-+	 * resctrl_sched_in() during context switch.
- 	 */
--	barrier();
-+	smp_mb();
- 
- 	/*
- 	 * By now, the task's closid and rmid are set. If the task is current
-@@ -2401,6 +2403,14 @@ static void rdt_move_group_tasks(struct rdtgroup *from, struct rdtgroup *to,
- 			WRITE_ONCE(t->closid, to->closid);
- 			WRITE_ONCE(t->rmid, to->mon.rmid);
- 
-+			/*
-+			 * Order the closid/rmid stores above before the loads
-+			 * in task_curr(). This pairs with the full barrier
-+			 * between the rq->curr update and resctrl_sched_in()
-+			 * during context switch.
-+			 */
-+			smp_mb();
-+
- 			/*
- 			 * If the task is on a CPU, set the CPU in the mask.
- 			 * The detection is inaccurate as tasks might move or
-
-base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
--- 
-2.39.0.314.g84b9a713c41-goog
+Best regards,
+Krzysztof
 
