@@ -2,114 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A2B65185F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 02:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32001651865
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 02:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbiLTB2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 20:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
+        id S232809AbiLTBhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 20:37:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233333AbiLTBZJ (ORCPT
+        with ESMTP id S233106AbiLTBgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 20:25:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4231705F;
-        Mon, 19 Dec 2022 17:22:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ABB92B810FA;
-        Tue, 20 Dec 2022 01:22:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6075C433D2;
-        Tue, 20 Dec 2022 01:22:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671499375;
-        bh=gAFZb8faV3YgZ5vtseSPpLIZ9vCLlGJBezFEgZpNGec=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CrHKaB4/VWTNNP81VxOfBvoDtl84qDXnh/AmFkKo9L/oh3AeDR1IvIRHy+ZHZ+6KR
-         rcDowBU4vKC2vpHh9F4fKsworSRbLpB4VbriKimKPFWocIp0bLDFqs1osLuiSWh7pD
-         d3n1u5TjRXvTuyJrNTX4e3xV8s5Q6PdmSZaPOtTbsTVv4C0YsetxXeXDiMo4/vrVDX
-         rxHmPFl2yd314hXPNd+DRWmh+K4Kb8AaOmESgUIrDs12wG3obxe3rF2QJYLzlvw1/f
-         mag86Vin1Xo8JimPkraE0Tm29hrQa5WD51LeJpnHSPkFi7EkqRAyK++MhRQjb9TLlD
-         5/MHOQQ0HOBxA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhang Xiaoxu <zhangxiaoxu5@huawei.com>,
-        Mike Marshall <hubcap@omnibond.com>,
-        Sasha Levin <sashal@kernel.org>, devel@lists.orangefs.org
-Subject: [PATCH AUTOSEL 4.9 3/3] orangefs: Fix kmemleak in orangefs_prepare_debugfs_help_string()
-Date:   Mon, 19 Dec 2022 20:22:49 -0500
-Message-Id: <20221220012249.1222904-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221220012249.1222904-1-sashal@kernel.org>
-References: <20221220012249.1222904-1-sashal@kernel.org>
+        Mon, 19 Dec 2022 20:36:38 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99A41CFDC;
+        Mon, 19 Dec 2022 17:27:17 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id fy4so10918525pjb.0;
+        Mon, 19 Dec 2022 17:27:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VyFIxEgnWqnUvo2rmjS4K7Tu88OX44TFhCrJ6tX8KIo=;
+        b=pRhs1ishrMoO0v8GXYtYFW3V+IYFBQEmh2x+AG0gOs6cT4Uy5tiuqt4aiyOJ4DJiun
+         qWBHDzAZRkNq82gRAyZOOKcgHg8Ynw3f6FQSMYViTs2HWZloSoO+Yg2eKt9VJNo5mZgE
+         bCAy05R8dfxMCrw6+wP3K3n1C1OOIRc+hWNNrvOjkVqNo4ZW00A7/1ovOIO/QtULkWnB
+         mh1q5TY54GdeYuOJvU1couiG3TPM0EDfr4UDySQFkaljr5/BuQoriv5m44ADD6bUvjbM
+         lZYej0+R2o3mt3V8VnQFeA+soAQO3pAacWqfZeRBZVX4VZ6mZ7ERXAjCTqWEAlvD3hGd
+         OUpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VyFIxEgnWqnUvo2rmjS4K7Tu88OX44TFhCrJ6tX8KIo=;
+        b=PKQ0H63iDmBiqQ11wLfgSeUj7o6IM7cclQZmf2uA2Q1gzPezcWEPHUUE9Fj87uTNnf
+         4CqFa9TYqqmNa1kkgKcpR6TXCYBpMmIIoDmBZQ66K87Wd96oQn3sARFmpa3RSxZKu/OX
+         YxKTMyYaA7kbqxtBLZqdg7SyWOE51cy7FCP3HMXBn3nzWtNOLxBwcQS9WLdgR2Qk3L0d
+         vreUKkNFhdILrluzoN17ystf/qQFzdbeoXhAREkDG3c4hxBzDC7uQnfSavck1cUAEuDP
+         WJF1v5wlfWPpYxgQijSqHJrh3DG9bW9JV+5DjNVtto1su+5YXhikx2uTkg911SpyZLv7
+         Mzxg==
+X-Gm-Message-State: ANoB5plcwtY8Xwjx9aTT4ugbgnpDguwYU8j+VV4r1/bo8//WJiOlmRsb
+        LiViE+6Md8tUDVBQj4VxZK8=
+X-Google-Smtp-Source: AA0mqf4OqzW+ADzg42aFu8z0iEvFsDM+iVlEHmzssm+K1iZXv+6XSb7BY4xrtjZfxfX7dQl4HvxQgg==
+X-Received: by 2002:a17:902:e5c8:b0:189:6ab3:9e75 with SMTP id u8-20020a170902e5c800b001896ab39e75mr63049706plf.15.1671499612787;
+        Mon, 19 Dec 2022 17:26:52 -0800 (PST)
+Received: from mail.google.com ([103.135.102.144])
+        by smtp.gmail.com with ESMTPSA id l16-20020a170903121000b001745662d568sm7826467plh.278.2022.12.19.17.26.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 17:26:52 -0800 (PST)
+Date:   Tue, 20 Dec 2022 09:26:47 +0800
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Changbin Du <changbin.du@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] bpf: makefiles: do not generate empty vmlinux.h
+Message-ID: <20221220012647.oytzq7q6ahwfhdow@mail.google.com>
+References: <20221217223509.88254-1-changbin.du@gmail.com>
+ <20221217223509.88254-3-changbin.du@gmail.com>
+ <Y5/hqqIwJIjdBSRh@leoy-yangtze.lan>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5/hqqIwJIjdBSRh@leoy-yangtze.lan>
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+On Mon, Dec 19, 2022 at 11:59:38AM +0800, Leo Yan wrote:
+> On Sun, Dec 18, 2022 at 06:35:09AM +0800, Changbin Du wrote:
+> > Remove the empty vmlinux.h if bpftool failed to dump btf info.
+> > The empty vmlinux.h can hide real error when reading output
+> > of make.
+> > 
+> > This is done by adding .DELETE_ON_ERROR special target in related
+> > makefiles.
+> 
+> We need to handle the same case for perf building, its makefile
+> linux/tools/perf/Makefile.perf also uses bpftool to generate
+> vmlinux.h, see:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/perf/Makefile.perf#n1067
+> 
+> Please consider to use a separate patch to add the same change in
+> Makefile.perf?
+>
+It's alreay there.
+https://lore.kernel.org/lkml/20221217225151.90387-1-changbin.du@gmail.com/T/
 
-[ Upstream commit d23417a5bf3a3afc55de5442eb46e1e60458b0a1 ]
+> Thanks,
+> Leo
+> 
+> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> > ---
+> >  tools/bpf/bpftool/Makefile           | 3 +++
+> >  tools/testing/selftests/bpf/Makefile | 3 +++
+> >  2 files changed, 6 insertions(+)
+> > 
+> > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> > index 787b857d3fb5..313fd1b09189 100644
+> > --- a/tools/bpf/bpftool/Makefile
+> > +++ b/tools/bpf/bpftool/Makefile
+> > @@ -289,3 +289,6 @@ FORCE:
+> >  .PHONY: all FORCE bootstrap clean install-bin install uninstall
+> >  .PHONY: doc doc-clean doc-install doc-uninstall
+> >  .DEFAULT_GOAL := all
+> > +
+> > +# Delete partially updated (corrupted) files on error
+> > +.DELETE_ON_ERROR:
+> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> > index c22c43bbee19..205e8c3c346a 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -626,3 +626,6 @@ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)	\
+> >  			       liburandom_read.so)
+> >  
+> >  .PHONY: docs docs-clean
+> > +
+> > +# Delete partially updated (corrupted) files on error
+> > +.DELETE_ON_ERROR:
+> > -- 
+> > 2.37.2
+> > 
 
-When insert and remove the orangefs module, then debug_help_string will
-be leaked:
-
-  unreferenced object 0xffff8881652ba000 (size 4096):
-    comm "insmod", pid 1701, jiffies 4294893639 (age 13218.530s)
-    hex dump (first 32 bytes):
-      43 6c 69 65 6e 74 20 44 65 62 75 67 20 4b 65 79  Client Debug Key
-      77 6f 72 64 73 20 61 72 65 20 75 6e 6b 6e 6f 77  words are unknow
-    backtrace:
-      [<0000000004e6f8e3>] kmalloc_trace+0x27/0xa0
-      [<0000000006f75d85>] orangefs_prepare_debugfs_help_string+0x5e/0x480 [orangefs]
-      [<0000000091270a2a>] _sub_I_65535_1+0x57/0xf70 [crc_itu_t]
-      [<000000004b1ee1a3>] do_one_initcall+0x87/0x2a0
-      [<000000001d0614ae>] do_init_module+0xdf/0x320
-      [<00000000efef068c>] load_module+0x2f98/0x3330
-      [<000000006533b44d>] __do_sys_finit_module+0x113/0x1b0
-      [<00000000a0da6f99>] do_syscall_64+0x35/0x80
-      [<000000007790b19b>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-When remove the module, should always free debug_help_string. Should
-always free the allocated buffer when change the free_debug_help_string.
-
-Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
-Signed-off-by: Mike Marshall <hubcap@omnibond.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/orangefs/orangefs-debugfs.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/fs/orangefs/orangefs-debugfs.c b/fs/orangefs/orangefs-debugfs.c
-index 7d7df003f9d8..401d70944e49 100644
---- a/fs/orangefs/orangefs-debugfs.c
-+++ b/fs/orangefs/orangefs-debugfs.c
-@@ -253,6 +253,8 @@ static int orangefs_kernel_debug_init(void)
- void orangefs_debugfs_cleanup(void)
- {
- 	debugfs_remove_recursive(debug_dir);
-+	kfree(debug_help_string);
-+	debug_help_string = NULL;
- }
- 
- /* open ORANGEFS_KMOD_DEBUG_HELP_FILE */
-@@ -706,6 +708,7 @@ int orangefs_prepare_debugfs_help_string(int at_boot)
- 		memset(debug_help_string, 0, DEBUG_HELP_STRING_SIZE);
- 		strlcat(debug_help_string, new, string_size);
- 		mutex_unlock(&orangefs_help_file_lock);
-+		kfree(new);
- 	}
- 
- 	rc = 0;
 -- 
-2.35.1
-
+Cheers,
+Changbin Du
