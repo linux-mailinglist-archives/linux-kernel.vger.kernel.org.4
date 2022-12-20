@@ -2,166 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F18965279F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 21:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED60F65279E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 21:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234183AbiLTUNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 15:13:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
+        id S234197AbiLTUNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 15:13:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233789AbiLTUNQ (ORCPT
+        with ESMTP id S234181AbiLTUNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 15:13:16 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D581C914;
-        Tue, 20 Dec 2022 12:13:15 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id y4so13554755ljc.9;
-        Tue, 20 Dec 2022 12:13:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1I2R1NZ0M+nrKQ/AIqMBDxMCjwYm6eh5zT5Z3Yt5WA0=;
-        b=PDYeSRtsu33EXQkhnsspag/LUhaX1lMTn7pNFrzAyj1XFX8wy6YdHaSDAxvVJhXUWn
-         qsLIvyUEQ5ZgWVm/cKqAB0R0zeD+1Ln6ilLi4HXKSpHPtyF71c2SDU2mWsD0xd3z1x+M
-         maIsV09+EMKAMAH+wea8PkBIlQ4YOuI44dvL2mY+493yStMOr2LxY2ilm+Wqlk2fIgTd
-         78F0VOpL4KhrYsMRxvVs1RixpOUEBonPzMFuxgRGBeqAiX2DqzmDGqSQV8r1LkzfT6JU
-         AjbdVWrKKLPHWusFE461b39Fsij6mviXAVj6O+x0FVQ/PwtGib4j1RawyAoyA/id+i1/
-         e8wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1I2R1NZ0M+nrKQ/AIqMBDxMCjwYm6eh5zT5Z3Yt5WA0=;
-        b=1HrAHAZTgOE254/sJNVAaiwtRPGeEn/rSFUmnXp50+DKnQWxLxItANbmTGSYTwOyTc
-         43x52oGAgcO1C1JGgS9EDvU67kAZz825e9O1TbsXUXCP9fKsI7/cYu1ZoGWPhZyO/5ll
-         UUzYtAQguy41rKhUP8mQLKweIjxJrcMUOXaYIEUCqzwUoM24+KB/khGI11B5qQblFOD/
-         g+RNLh/ZlTD6F7FuzWwYcNlXWmeC/wVyxMgvGqtpG5u841KBMTwHJrM6sAmyAzxfsH7P
-         w9y348qSKItVGpM7+m3HmjbySVN4WdL+pvIS2yeJ7GRc4orolWDqn9ObjKWJpMeACKrf
-         1B3g==
-X-Gm-Message-State: ANoB5plgna54TKSbj5gdbiP7RZhleDU1B93X0Zhfs+/rwEDWDkncLoOL
-        7N7ZDq+0Fb/QZwIgYSQV/u8=
-X-Google-Smtp-Source: AA0mqf4TcaS04q2CPdCkB6V3ZtYJQs3DghgWFYP0vVIPsJ3WsKjDKJhXEhWWitXs5pzRNslqXHbBSw==
-X-Received: by 2002:a2e:8048:0:b0:279:fe89:fbb5 with SMTP id p8-20020a2e8048000000b00279fe89fbb5mr11873978ljg.32.1671567193388;
-        Tue, 20 Dec 2022 12:13:13 -0800 (PST)
-Received: from [192.168.2.145] (109-252-113-89.nat.spd-mgts.ru. [109.252.113.89])
-        by smtp.googlemail.com with ESMTPSA id e14-20020a05651c038e00b00277025ddc9esm1126484ljp.54.2022.12.20.12.13.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 12:13:12 -0800 (PST)
-Message-ID: <38c7cfe0-62e0-066a-d8dd-4ed4243a552e@gmail.com>
-Date:   Tue, 20 Dec 2022 23:13:05 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 01/21] dt-bindings: display: tegra: add Tegra20 VIP
-Content-Language: en-US
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tue, 20 Dec 2022 15:13:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211011D64E;
+        Tue, 20 Dec 2022 12:13:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A78AA6159F;
+        Tue, 20 Dec 2022 20:13:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2276C433EF;
+        Tue, 20 Dec 2022 20:13:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671567196;
+        bh=Gv7ILarnqG6VXDv1zDoq4dXMcpli2fdU3fYWtrhD7CU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BNIgEyD2b/kwnXbaR5eP2QBP6UOPAvQD/zXFajZWt6RT74gXhm2s6OW4N4KlIDYfC
+         Wxj/cb6C47OFZnLUTyNjRVTrtsstBCz34eSTcFuSh8xOdIJfvtKJ0/S3YG8qtuZO+h
+         LVw/GM01Blb4idgGSfUfT/5N9ejTRXvuE5Mw1vrfiD3+t4k4Xbat5lWBMHcLkl/46L
+         MZPNmMJsegfvf0rTSEXW5sH0CokCzOrUgUPmh+IzXUqga3I07y9uao2n9w8QT5IQiS
+         MZzetOEpR2Sv47PnKm1OJ3NaodmMfXpe4ekWd75YuDtjccDI1UPYcXzuqMblveH5rR
+         DHTVp2kedMNHw==
+Date:   Tue, 20 Dec 2022 20:13:14 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Richard Leitner <richard.leitner@skidata.com>
-References: <20221128152336.133953-1-luca.ceresoli@bootlin.com>
- <20221128152336.133953-2-luca.ceresoli@bootlin.com>
- <20221201231936.GB1660613-robh@kernel.org> <20221202091108.5f492d6f@booty>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20221202091108.5f492d6f@booty>
-Content-Type: text/plain; charset=UTF-8
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v12 0/6] implement getrandom() in vDSO
+Message-ID: <Y6IXWltScF2CI1v3@gmail.com>
+References: <20221212185347.1286824-1-Jason@zx2c4.com>
+ <86cfa465-2485-ff24-16f5-9014e25a0e98@csgroup.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <86cfa465-2485-ff24-16f5-9014e25a0e98@csgroup.eu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-02.12.2022 11:11, Luca Ceresoli Ð¿Ð¸ÑˆÐµÑ‚:
-> Hello Rob,
+On Tue, Dec 20, 2022 at 05:17:52PM +0000, Christophe Leroy wrote:
+> Hi Jason,
 > 
-> Thanks for your review.
+> Le 12/12/2022 à 19:53, Jason A. Donenfeld a écrit :
+> > Changes v11->v12:
+> > ----------------
+> > - In order to avoid mlock()ing pages, and the related rlimit and fork
+> >    inheritance issues there, Introduce VM_DROPPABLE to prevent swapping
+> >    while meeting the cache-like requirements of vDSO getrandom().
+> > 
+> >    This has some tenticles in mm/ and arch/x86/ code, so I've marked the
+> >    two patches for that as still RFC, while the rest of the series is not
+> >    RFC.
+> > 
+> > - Mandate that opaque state blobs don't straddle page boundaries, so
+> >    that VM_DROPPABLE can work on page-level granularity rather than
+> >    allocation-level granularity.
+> > 
+> > - Add compiler barriers to vDSO getrandom() to prevent theoretical
+> >    reordering potential.
+> > 
+> > - Initialize the trials loop counter in the chacha test.
 > 
-> On Thu, 1 Dec 2022 17:19:36 -0600
-> Rob Herring <robh@kernel.org> wrote:
+> I would have liked to give it a try on powerpc, but the series 
+> conflicts. I tried both on v6.1 and on linus/master from now:
 > 
->> On Mon, Nov 28, 2022 at 04:23:16PM +0100, Luca Ceresoli wrote:
->>> VIP is the parallel video capture component within the video input
->>> subsystem of Tegra20 (and other Tegra chips, apparently).
->>>
->>> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
->>>
->>> ---
->>>
->>> Changed in v2 (suggested by Krzysztof Kozlowski):
->>> - remove redundant "bindings" from subject line
->>> - remove $nodename
->>> - add channel@0 description
->>> - add reg: const: 0
->>> ---
->>>  .../display/tegra/nvidia,tegra20-vip.yaml     | 63 +++++++++++++++++++
->>>  MAINTAINERS                                   |  7 +++
->>>  2 files changed, 70 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vip.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vip.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vip.yaml
->>> new file mode 100644
->>> index 000000000000..44be2e16c9b4
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vip.yaml
->>> @@ -0,0 +1,63 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/display/tegra/nvidia,tegra20-vip.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: NVIDIA Tegra VIP (parallel video capture) controller
->>> +
->>> +maintainers:
->>> +  - Luca Ceresoli <luca.ceresoli@bootlin.com>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - nvidia,tegra20-vip
->>> +
->>> +  "#address-cells":
->>> +    const: 1
->>> +
->>> +  "#size-cells":
->>> +    const: 0
->>> +
->>> +  channel@0:  
->> Kind of odd there is only 1 channel with a unit-address. Are more 
->> channels coming? Please make the binding as complete as possible even if 
->> no driver support yet.
-> This was discussed in v1 with Krzysztof and the outcome was that it's
-> OK because it's likely that other SoCs have more, but the documentation
-> is not public so I cannot add examples.
-> 
-> Full discussion (pretty short indeed):
-> 
-> https://lore.kernel.org/linux-devicetree/5292cc1b-c951-c5c5-b2ef-c154baf6d7fd@linaro.org/
-> 
-> Do you agree that the unit-address should be kept?
 
-It's doubtful that there is a SoC having a VIP with multiple channels.
-I'd expect it to be multiple VIPs rather than channels. There are NVIDIA
-people to confirm that.
+Same here, I can't figure out how to apply this series.
 
-The "channel" itself looks redundant to me, i.e. the reg and ports
-should be moved to the vip node.
+It would help if people always used the --base option to git format-patch...
+
+- Eric
