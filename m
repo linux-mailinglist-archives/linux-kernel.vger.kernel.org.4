@@ -2,121 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF6E652354
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F04652353
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234158AbiLTPAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 10:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
+        id S234120AbiLTPAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 10:00:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233987AbiLTPAI (ORCPT
+        with ESMTP id S234089AbiLTPAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 10:00:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A583F10A8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:59:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671548362;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=loRMWcnY9Zc3gsu659uSvWGLXQHgBLYyUdhTzCHdJL4=;
-        b=XOLvc/kiSpcjdQy0iDMSP3CbSfXHhqzwiIaP2R3QYfd94Y2ibDvtA/jnEXpDCtICPGaP3r
-        UFrr4dcmcDKO4s5ZTihW2R4GWDyem7b/oQYBZpoTNwCUpHGTL5M0I7x9UpoV12YkOFSc/W
-        AdVTvd5JyMEnnEUqS/PFYrLROigt6x0=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-21-sZcogwOOMhuBl77V1Aum1w-1; Tue, 20 Dec 2022 09:59:21 -0500
-X-MC-Unique: sZcogwOOMhuBl77V1Aum1w-1
-Received: by mail-qk1-f199.google.com with SMTP id bs13-20020a05620a470d00b007024c37f800so4579766qkb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:59:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=loRMWcnY9Zc3gsu659uSvWGLXQHgBLYyUdhTzCHdJL4=;
-        b=aqGxWiTxdRqHbOgP09P9blBntFQ9rlN5VeBLVjHbMdvtntd8x6hImEnpbFmP/8bJvy
-         Gl/TTc4ex/Z8ShAyObEvo7vzVaXn9P1Ay1txKfaLRLKMdV72qWgbmaLGzfdEgEcCfCnO
-         zNADy4gmJTfstFurr5NgC+ECUKO3mG7N/QYfX41IBBtYKDJwlz5iTcdtpqVruvfeyXho
-         J/qqi5nHaodg/F03E1XHO4RyaqUv4qQ7+v61SgZ2mbjIAqlHSPajAaSK6X0nXp4+zNt0
-         e1QbTmwPpkq6fhR6bgtlu93TYwqClt+zqS/CPtAcrOYmRio1vj1z3YP23WZVL+a3oicG
-         AFiA==
-X-Gm-Message-State: ANoB5pmlh3HRBOY1Qkjynv1g9zJ/xhGeT6NulHZNry5NfI39Tjx8Pr/q
-        /2WRLf4aZJX1JMx11ebyF38ImzMAm6xF/4tUD+tn6LPpoCxJm7jIlRZeF2n4HU5ZaDwQdrRBggl
-        qwBv81QJ9P2g9aqQ6yJSdq5TQ
-X-Received: by 2002:ac8:5c03:0:b0:3a6:6181:f4ef with SMTP id i3-20020ac85c03000000b003a66181f4efmr82323446qti.60.1671548360855;
-        Tue, 20 Dec 2022 06:59:20 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf50BUcQSQHcEJygADcQA4vzlJrzyssyNaJu8beb5GdIxP7FEGhAjq5wBqu7xFkLkoDZIUDEVw==
-X-Received: by 2002:ac8:5c03:0:b0:3a6:6181:f4ef with SMTP id i3-20020ac85c03000000b003a66181f4efmr82323421qti.60.1671548360597;
-        Tue, 20 Dec 2022 06:59:20 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-101-173.dyn.eolo.it. [146.241.101.173])
-        by smtp.gmail.com with ESMTPSA id bn1-20020a05620a2ac100b006fafc111b12sm8962497qkb.83.2022.12.20.06.59.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 06:59:19 -0800 (PST)
-Message-ID: <367438a5296d6b43d92287289f44f0e1dfe01d1a.camel@redhat.com>
-Subject: Re: [PATCH] net: bridge: mcast: read ngrec once in igmp3/mld2 report
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Nikolay Aleksandrov <razor@blackwall.org>,
-        Joy Gu <jgu@purestorage.com>, bridge@lists.linux-foundation.org
-Cc:     roopa@nvidia.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, joern@purestorage.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 20 Dec 2022 15:59:15 +0100
-In-Reply-To: <05d630bf-7fa8-4495-6345-207f133ef746@blackwall.org>
-References: <20221220024807.36502-1-jgu@purestorage.com>
-         <05d630bf-7fa8-4495-6345-207f133ef746@blackwall.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 20 Dec 2022 10:00:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656A6E0C5;
+        Tue, 20 Dec 2022 07:00:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01268614BB;
+        Tue, 20 Dec 2022 15:00:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 66C95C433D2;
+        Tue, 20 Dec 2022 15:00:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671548404;
+        bh=RhhYveTe4PV2aVo5QXa0aTaNJMH2Z/t2DTNsTsnzQwI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Kv3Y/OJ3D4vaoY1GAX/sAd2EoCl9LL2vSOiDtcE6VkTdnQxOUOtbDzm4f2Q9iAFbf
+         UEHGHpJkt/4sj0bGyBuy2biEc4Y7puC7Ws9Tzhtra2kxskx9QP0GDokinPT3qKbGJm
+         /xWGsYZ9H0YY9IXzIak33ohIIFcVbTR3qycgJHDXNvEG6dMLfoeGwx8eNAUBRpbY58
+         H7IfUJS9gM3gM9T8yo7TOoOg4drBPm2tIK9bkuK6DcsqPSXfkffW/+56uHTr9b2xS9
+         iyl//KCfD/lnM1n2xDvWBabiEHEVGAaBjuRUL0Oi1fXh8NXQkRegLPYqLX2N4wM3wn
+         3n4CBZzuwQZAA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4405DC43141;
+        Tue, 20 Dec 2022 15:00:04 +0000 (UTC)
+Subject: Re: [git pull] m68knommu changes for v6.2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <ac9f88a2-de77-d753-d1d6-210fca529c71@linux-m68k.org>
+References: <ac9f88a2-de77-d753-d1d6-210fca529c71@linux-m68k.org>
+X-PR-Tracked-List-Id: <linux-m68k.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ac9f88a2-de77-d753-d1d6-210fca529c71@linux-m68k.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gerg/m68knommu.git tags/m68knommu-for-v6.2
+X-PR-Tracked-Commit-Id: af5d74e32eb8e1b833f687047f0ffe3801d7229d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
+Message-Id: <167154840426.23352.1774236829731804686.pr-tracker-bot@kernel.org>
+Date:   Tue, 20 Dec 2022 15:00:04 +0000
+To:     Greg Ungerer <gerg@linux-m68k.org>
+Cc:     torvalds@linux-foundation.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux/m68k <linux-m68k@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, gerg@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-12-20 at 12:13 +0200, Nikolay Aleksandrov wrote:
-> On 20/12/2022 04:48, Joy Gu wrote:
-> > In br_ip4_multicast_igmp3_report() and br_ip6_multicast_mld2_report(),
-> > "ih" or "mld2r" is a pointer into the skb header. It's dereferenced to
-> > get "num", which is used in the for-loop condition that follows.
-> > 
-> > Compilers are free to not spend a register on "num" and dereference that
-> > pointer every time "num" would be used, i.e. every loop iteration. Which
-> > would be a bug if pskb_may_pull() (called by ip_mc_may_pull() or
-> > ipv6_mc_may_pull() in the loop body) were to change pointers pointing
-> > into the skb header, e.g. by freeing "skb->head".
-> > 
-> > We can avoid this by using READ_ONCE().
-> > 
-> > Suggested-by: Joern Engel <joern@purestorage.com>
-> > Signed-off-by: Joy Gu <jgu@purestorage.com>
-> > ---
-> >  net/bridge/br_multicast.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> 
-> I doubt any compiler would do that (partly due to the ntohs()). 
+The pull request you sent on Tue, 20 Dec 2022 08:33:16 +1000:
 
-I would say that any compiler behaving as described above is buggy, as
-'skb' is modified inside the loop, and the header pointer is fetched
-from the skb, it can't be considered invariant.
+> git://git.kernel.org/pub/scm/linux/kernel/git/gerg/m68knommu.git tags/m68knommu-for-v6.2
 
-> If you have hit a bug or
-> seen this with some compiler please provide more details, disassembly of the resulting
-> code would be best.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
 
-Exactly. A more detailed description of the issue you see is necessary.
-And very likely the proposed solution is not the correct one.
+Thank you!
 
-Cheers,
-
-Paolo
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
