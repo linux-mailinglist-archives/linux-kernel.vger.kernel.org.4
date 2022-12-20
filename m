@@ -2,128 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC4D651A5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 06:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCC6651A65
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 06:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232761AbiLTFpV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Dec 2022 00:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
+        id S233104AbiLTFp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 00:45:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiLTFpS (ORCPT
+        with ESMTP id S232937AbiLTFpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 00:45:18 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C9F66343;
-        Mon, 19 Dec 2022 21:45:14 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BK5hpWW3002719, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BK5hpWW3002719
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Tue, 20 Dec 2022 13:43:51 +0800
-Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Tue, 20 Dec 2022 13:44:42 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 20 Dec 2022 13:44:42 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
- RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
- 15.01.2375.007; Tue, 20 Dec 2022 13:44:42 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Jun ASAKA <JunASAKA@zzy040330.moe>,
-        "Jes.Sorensen@gmail.com" <Jes.Sorensen@gmail.com>
-CC:     "kvalo@kernel.org" <kvalo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] wifi: rtl8xxxu: fixing transmisison failure for rtl8192eu
-Thread-Topic: [PATCH] wifi: rtl8xxxu: fixing transmisison failure for
- rtl8192eu
-Thread-Index: AQHZEcSxpWNKKfbUGEumZ8h5P7r+XK52Rmng
-Date:   Tue, 20 Dec 2022 05:44:42 +0000
-Message-ID: <3b4124ebabcb4ceaae89cd9ccf84c7de@realtek.com>
-References: <20221217030659.12577-1-JunASAKA@zzy040330.moe>
-In-Reply-To: <20221217030659.12577-1-JunASAKA@zzy040330.moe>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/12/20_=3F=3F_02:24:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Tue, 20 Dec 2022 00:45:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCBE95BC;
+        Mon, 19 Dec 2022 21:45:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 691BF6125E;
+        Tue, 20 Dec 2022 05:45:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 817CEC433D2;
+        Tue, 20 Dec 2022 05:45:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671515136;
+        bh=QcK/x+eqx8iacc7s1AbUsKNKBvDGfjfcoe194ABwpQM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F8xxaZB9wVAaw8858zsn8j1mrqTrJVesFUAdVe1W83ufJ9sHcvCYkV2q2anEmukUN
+         m1NdhGXzBH6dnyOgVPP1qWonQ5KDZOv4oGgd66a1HDiUHo8tyaR6C3rklA4HaPex8T
+         6El86mTLGFyzwTBHvO1T6TKqSr1Gluavng5x1qicELSXHhUHzLp5Yt6NrtuNXWla+z
+         OwhmF2NtdbiZ6g7uwEgtX/hs9JZptcnA9ToGBHbwN5w+6ddS8cho+unrKLXqMcqQHL
+         /99nwU6CNZMNgTkrx9zgJkD/Ng5bgFcZ4+HjTqlpCIoQQLeK2jct+t2dfB0xpzdzD4
+         51h2h+3/WkC/g==
+Date:   Mon, 19 Dec 2022 21:45:33 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
+        boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, Herbert Xu <herbert@gondor.apana.org.au>,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC][PATCH 02/12] crypto/ghash-clmulni: Use (struct) be128
+Message-ID: <Y6FL/WRO1cleCI2w@sol.localdomain>
+References: <20221219153525.632521981@infradead.org>
+ <20221219154118.955831880@infradead.org>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219154118.955831880@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Jun ASAKA <JunASAKA@zzy040330.moe>
-> Sent: Saturday, December 17, 2022 11:07 AM
-> To: Jes.Sorensen@gmail.com
-> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
-> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Jun ASAKA
-> <JunASAKA@zzy040330.moe>
-> Subject: [PATCH] wifi: rtl8xxxu: fixing transmisison failure for rtl8192eu
+On Mon, Dec 19, 2022 at 04:35:27PM +0100, Peter Zijlstra wrote:
+> Even though x86 is firmly little endian, use be128 because le128 is in
+> fact the wrong way around :/ The actual code is already using be128 in
+> ghash_setkey() so this shouldn't be more confusing.
 > 
-> Fixing transmission failure which results in
-> "authentication with ... timed out". This can be
-> fixed by disable the REG_TXPAUSE.
+> This frees up the u128 name for a real u128 type.
 > 
-> Signed-off-by: Jun ASAKA <JunASAKA@zzy040330.moe>
-> ---
->  drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
-> b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
-> index a7d76693c02d..9d0ed6760cb6 100644
-> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
-> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
-> @@ -1744,6 +1744,11 @@ static void rtl8192e_enable_rf(struct rtl8xxxu_priv *priv)
->  	val8 = rtl8xxxu_read8(priv, REG_PAD_CTRL1);
->  	val8 &= ~BIT(0);
->  	rtl8xxxu_write8(priv, REG_PAD_CTRL1, val8);
-> +
-> +	/*
-> +	 * Fix transmission failure of rtl8192e.
-> +	 */
-> +	rtl8xxxu_write8(priv, REG_TXPAUSE, 0x00);
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-I trace when rtl8xxxu set REG_TXPAUSE=0xff that will stop TX.
-The occasions include RF calibration, LPS mode (called by power off), and
-going to stop. So, I think RF calibration does TX pause but not restore
-settings after calibration, and causes TX stuck. As the flow I traced,
-this patch looks reasonable. But, I wonder why other people don't meet
-this problem.
+This patch doesn't make sense.  The x86 ghash code is definitely storing the key
+as a little endian value, not big endian.  The reason be128 shows up in
+ghash_setkey() is because the code is doing a byteswap from the original key
+bytes.  Also, this patch causes 'sparse' warnings.
 
-Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
+Can you consider
+https://lore.kernel.org/linux-crypto/20221220054042.188537-1-ebiggers@kernel.org/T/#u
+instead?
 
->  }
-> 
->  static s8 rtl8192e_cck_rssi(struct rtl8xxxu_priv *priv, u8 cck_agc_rpt)
-> --
-> 2.31.1
-
+- Eric
