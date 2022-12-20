@@ -2,197 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D065651AC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 07:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 307D3651ABF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 07:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbiLTGdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 01:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
+        id S232901AbiLTGdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 01:33:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232887AbiLTGdQ (ORCPT
+        with ESMTP id S229662AbiLTGdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 01:33:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642656142
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 22:32:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671517948;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+6Z7EO57bf3vC7QJ473McXF6jeTHHBAdGwLsa49M35I=;
-        b=WQqXz8MwmkPOppZ6u6se6b4He/rvCG6CFuIo0vlK30Hz2GSt+CU9/aFKXINVyKh5Q5JwWK
-        +32czqEz3ntl80/smbcWIE/aUvRXjOcPHU9zaCZcgV0Glx2UsVuVtVWDtNcSXnwxFA9nKz
-        g624F1TSu5xHwf2m9ETJ9y4LrtJyHU8=
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
- [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-39-b2LxKc8HPRWhHNcixdJjZw-1; Tue, 20 Dec 2022 01:32:27 -0500
-X-MC-Unique: b2LxKc8HPRWhHNcixdJjZw-1
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-1447ffe6046so5160071fac.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 22:32:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+6Z7EO57bf3vC7QJ473McXF6jeTHHBAdGwLsa49M35I=;
-        b=w90BTMD0DWYbOepjhlseGx3W5WeZtA0v8TuIWCm/UXjjxcNbPLxhG9qCBONfoVzev9
-         K2vDJ6SDcu8dfY1lJZNM8IYwUWbL/4JVVHiVfnF8BLrA8z9B/WLD7tB7dTNPoWCooOQE
-         egQww/J3lPSrHza5zcJ3DXBH+4+A5BLWsOZ07i4OCEqWh0s7m1vV2NVBG6FwtePY3fBf
-         QVak1RLBWztzVNSFGH17UcQDhJSPahedh6FWwOXu1PxSRpuLBG+05Byx9S/WmjK6iidU
-         LvpqkDcvXNYCMFEzTiV1Ql4Ac+YX4YUCwXOmV0loLmm3tKtoZey6mAv0S0jVeyXi9pJJ
-         6mxw==
-X-Gm-Message-State: ANoB5pnmSRV7ZPE1O9pfcfijnueORwWjCBAq5mKa7LqokCsY8LnP67yn
-        fI7/7iFJ1k79GnwLh+ZV8PzUROLrdXMdeJX2pfzgQc/1LSWhRw1K0+BpoxZXQpIGPSfCiEMXEpf
-        JoLDdPYWQis3BwKJ84kIqPg49oyzziQ2v3Mk3N+f0
-X-Received: by 2002:a05:6808:9b0:b0:35c:303d:fe37 with SMTP id e16-20020a05680809b000b0035c303dfe37mr815060oig.35.1671517946184;
-        Mon, 19 Dec 2022 22:32:26 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6O8kKBLs/Zg9r7I75zBRxziZNso13xp/D7qM4wHnsDLFUHGNeAKcDTWJ0wXqNqaUKzZpAGbB0GD/k3tgBINsw=
-X-Received: by 2002:a05:6808:9b0:b0:35c:303d:fe37 with SMTP id
- e16-20020a05680809b000b0035c303dfe37mr815059oig.35.1671517945980; Mon, 19 Dec
- 2022 22:32:25 -0800 (PST)
+        Tue, 20 Dec 2022 01:33:00 -0500
+Received: from smtp.cecloud.com (unknown [106.39.185.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D295D615C
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 22:32:56 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.cecloud.com (Postfix) with ESMTP id 8ED8417E0207;
+        Tue, 20 Dec 2022 14:32:51 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (unknown [111.48.58.13])
+        by smtp.cecloud.com (postfix) whith ESMTP id P2473742T281457142133104S1671517970621458_;
+        Tue, 20 Dec 2022 14:32:51 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <3cad95c469ae8f2eea65a6d463006468>
+X-RL-SENDER: zhangyanjun@cestc.cn
+X-SENDER: zhangyanjun@cestc.cn
+X-LOGIN-NAME: zhangyanjun@cestc.cn
+X-FST-TO: sagi@grimberg.me
+X-RCPT-COUNT: 9
+X-SENDER-IP: 111.48.58.13
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   zhangyanjun@cestc.cn
+To:     sagi@grimberg.me, axboe@kernel.dk, kbusch@kernel.org, axboe@fb.com,
+        hch@lst.de
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, Yanjun Zhang <zhangyanjun@cestc.cn>
+Subject: [PATCH v2] nvme: fix multipath crash caused by flush request when blktrace is enabled
+Date:   Tue, 20 Dec 2022 14:32:33 +0800
+Message-Id: <20221220063233.43932-1-zhangyanjun@cestc.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20221205084127.535-1-xieyongji@bytedance.com> <20221205085846.741-1-xieyongji@bytedance.com>
- <CACGkMEuhYO3neFmxwiBp8C0QTaa+Mb13kken+RZ9QuruMct6tA@mail.gmail.com> <CACycT3vu0_xCG7SvdP-zkZkuOGdudx2apOwi3CZ4MOFSe-XAFg@mail.gmail.com>
-In-Reply-To: <CACycT3vu0_xCG7SvdP-zkZkuOGdudx2apOwi3CZ4MOFSe-XAFg@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 20 Dec 2022 14:32:14 +0800
-Message-ID: <CACGkMEs9nD--8y-dKsv23OK6G7LAC5dLDRRT8sKA5dUrAo0QbQ@mail.gmail.com>
-Subject: Re: [PATCH v2 06/11] vduse: Support automatic irq callback affinity
-To:     Yongji Xie <xieyongji@bytedance.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@lst.de>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 12:56 PM Yongji Xie <xieyongji@bytedance.com> wrote:
->
-> On Fri, Dec 16, 2022 at 1:30 PM Jason Wang <jasowang@redhat.com> wrote:
-> >
-> > On Mon, Dec 5, 2022 at 4:59 PM Xie Yongji <xieyongji@bytedance.com> wrote:
-> > >
-> > > This brings current interrupt affinity spreading mechanism
-> > > to vduse device. We will make use of irq_create_affinity_masks()
-> > > to create an irq callback affinity mask for each virtqueue of
-> > > vduse device. Then we will choose the CPU which has the lowest
-> > > number of interrupt allocated in the affinity mask to run the
-> > > irq callback.
-> >
-> > This seems a balance mechanism but it might not be the semantic of the
-> > affinity or any reason we need to do this? I guess we should use at
-> > least round-robin in this case.
-> >
->
-> Here we try to follow the pci interrupt management mechanism. In VM
-> cases, the interrupt should always be triggered to one specific CPU
-> rather than to each CPU in turn.
+From: Yanjun Zhang <zhangyanjun@cestc.cn>
 
-If I was not wrong, when using MSI, most arch allows not only the
-cpuid as the destination but policy like rr and low priority first.
+The flush request initialized by blk_kick_flush has NULL bio,
+and it may be dealt with nvme_end_req during io completion.
+When blktrace is enabled, nvme_trace_bio_complete with multipath
+activated trying to access NULL pointer bio from flush request
+results in the following crash:
 
-Thanks
+[ 2517.831677] BUG: kernel NULL pointer dereference, address: 000000000000001a
+[ 2517.835213] #PF: supervisor read access in kernel mode
+[ 2517.838724] #PF: error_code(0x0000) - not-present page
+[ 2517.842222] PGD 7b2d51067 P4D 0
+[ 2517.845684] Oops: 0000 [#1] SMP NOPTI
+[ 2517.849125] CPU: 2 PID: 732 Comm: kworker/2:1H Kdump: loaded Tainted: G S                5.15.67-0.el9.x86_64 #1
+[ 2517.852723] Hardware name: XFUSION 2288H V6/BC13MBSBC, BIOS 1.13 07/27/2022
+[ 2517.856358] Workqueue: nvme_tcp_wq nvme_tcp_io_work [nvme_tcp]
+[ 2517.859993] RIP: 0010:blk_add_trace_bio_complete+0x6/0x30
+[ 2517.863628] Code: 1f 44 00 00 48 8b 46 08 31 c9 ba 04 00 10 00 48 8b 80 50 03 00 00 48 8b 78 50 e9 e5 fe ff ff 0f 1f 44 00 00 41 54 49 89 f4 55 <0f> b6 7a 1a 48 89 d5 e8 3e 1c 2b 00 48 89 ee 4c 89 e7 5d 89 c1 ba
+[ 2517.871269] RSP: 0018:ff7f6a008d9dbcd0 EFLAGS: 00010286
+[ 2517.875081] RAX: ff3d5b4be00b1d50 RBX: 0000000002040002 RCX: ff3d5b0a270f2000
+[ 2517.878966] RDX: 0000000000000000 RSI: ff3d5b0b021fb9f8 RDI: 0000000000000000
+[ 2517.882849] RBP: ff3d5b0b96a6fa00 R08: 0000000000000001 R09: 0000000000000000
+[ 2517.886718] R10: 000000000000000c R11: 000000000000000c R12: ff3d5b0b021fb9f8
+[ 2517.890575] R13: 0000000002000000 R14: ff3d5b0b021fb1b0 R15: 0000000000000018
+[ 2517.894434] FS:  0000000000000000(0000) GS:ff3d5b42bfc80000(0000) knlGS:0000000000000000
+[ 2517.898299] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 2517.902157] CR2: 000000000000001a CR3: 00000004f023e005 CR4: 0000000000771ee0
+[ 2517.906053] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 2517.909930] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 2517.913761] PKRU: 55555554
+[ 2517.917558] Call Trace:
+[ 2517.921294]  <TASK>
+[ 2517.924982]  nvme_complete_rq+0x1c3/0x1e0 [nvme_core]
+[ 2517.928715]  nvme_tcp_recv_pdu+0x4d7/0x540 [nvme_tcp]
+[ 2517.932442]  nvme_tcp_recv_skb+0x4f/0x240 [nvme_tcp]
+[ 2517.936137]  ? nvme_tcp_recv_pdu+0x540/0x540 [nvme_tcp]
+[ 2517.939830]  tcp_read_sock+0x9c/0x260
+[ 2517.943486]  nvme_tcp_try_recv+0x65/0xa0 [nvme_tcp]
+[ 2517.947173]  nvme_tcp_io_work+0x64/0x90 [nvme_tcp]
+[ 2517.950834]  process_one_work+0x1e8/0x390
+[ 2517.954473]  worker_thread+0x53/0x3c0
+[ 2517.958069]  ? process_one_work+0x390/0x390
+[ 2517.961655]  kthread+0x10c/0x130
+[ 2517.965211]  ? set_kthread_struct+0x40/0x40
+[ 2517.968760]  ret_from_fork+0x1f/0x30
+[ 2517.972285]  </TASK>
 
->
-> > >
-> > > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-> > > ---
-> > >  drivers/vdpa/vdpa_user/vduse_dev.c | 50 ++++++++++++++++++++++++++++++
-> > >  1 file changed, 50 insertions(+)
-> > >
-> > > diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-> > > index d126f3e32a20..90c2896039d9 100644
-> > > --- a/drivers/vdpa/vdpa_user/vduse_dev.c
-> > > +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-> > > @@ -23,6 +23,7 @@
-> > >  #include <linux/nospec.h>
-> > >  #include <linux/vmalloc.h>
-> > >  #include <linux/sched/mm.h>
-> > > +#include <linux/interrupt.h>
-> > >  #include <uapi/linux/vduse.h>
-> > >  #include <uapi/linux/vdpa.h>
-> > >  #include <uapi/linux/virtio_config.h>
-> > > @@ -58,6 +59,8 @@ struct vduse_virtqueue {
-> > >         struct work_struct inject;
-> > >         struct work_struct kick;
-> > >         int irq_effective_cpu;
-> > > +       struct cpumask irq_affinity;
-> > > +       spinlock_t irq_affinity_lock;
-> >
-> > Ok, I'd suggest to squash this into patch 5 to make it more easier to
-> > be reviewed.
-> >
->
-> OK.
->
-> > >  };
-> > >
-> > >  struct vduse_dev;
-> > > @@ -123,6 +126,7 @@ struct vduse_control {
-> > >
-> > >  static DEFINE_MUTEX(vduse_lock);
-> > >  static DEFINE_IDR(vduse_idr);
-> > > +static DEFINE_PER_CPU(unsigned long, vduse_allocated_irq);
-> > >
-> > >  static dev_t vduse_major;
-> > >  static struct class *vduse_class;
-> > > @@ -710,6 +714,49 @@ static u32 vduse_vdpa_get_generation(struct vdpa_device *vdpa)
-> > >         return dev->generation;
-> > >  }
-> > >
-> > > +static void vduse_vq_update_effective_cpu(struct vduse_virtqueue *vq)
-> > > +{
-> > > +       unsigned int cpu, best_cpu;
-> > > +       unsigned long allocated, allocated_min = UINT_MAX;
-> > > +
-> > > +       spin_lock(&vq->irq_affinity_lock);
-> > > +
-> > > +       best_cpu = vq->irq_effective_cpu;
-> > > +       if (best_cpu != -1)
-> > > +               per_cpu(vduse_allocated_irq, best_cpu) -= 1;
-> > > +
-> > > +       for_each_cpu(cpu, &vq->irq_affinity) {
-> > > +               allocated = per_cpu(vduse_allocated_irq, cpu);
-> > > +               if (!cpu_online(cpu) || allocated >= allocated_min)
-> > > +                       continue;
-> > > +
-> > > +               best_cpu = cpu;
-> > > +               allocated_min = allocated;
-> > > +       }
-> > > +       vq->irq_effective_cpu = best_cpu;
-> > > +       per_cpu(vduse_allocated_irq, best_cpu) += 1;
-> > > +
-> > > +       spin_unlock(&vq->irq_affinity_lock);
-> > > +}
-> > > +
-> > > +static void vduse_vdpa_set_irq_affinity(struct vdpa_device *vdpa,
-> > > +                                       struct irq_affinity *desc)
-> > > +{
-> > > +       struct vduse_dev *dev = vdpa_to_vduse(vdpa);
-> > > +       struct irq_affinity_desc *affd = NULL;
-> > > +       int i;
-> > > +
-> > > +       affd = irq_create_affinity_masks(dev->vq_num, desc);
-> > > +       if (!affd)
-> >
-> > Let's add a comment on the vdpa config ops to say set_irq_affinity()
-> > is best effort.
-> >
->
-> OK.
->
-> Thanks,
-> Yongji
->
+To avoid this situation, add one more check with is_flush_rq before
+calling trace_block_bio_complete.
+
+Signed-off-by: Yanjun Zhang <zhangyanjun@cestc.cn>
+---
+ block/blk-flush.c        | 1 +
+ drivers/nvme/host/nvme.h | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/block/blk-flush.c b/block/blk-flush.c
+index 53202eff5..4504321ed 100644
+--- a/block/blk-flush.c
++++ b/block/blk-flush.c
+@@ -276,6 +276,7 @@ bool is_flush_rq(struct request *rq)
+ {
+ 	return rq->end_io == flush_end_io;
+ }
++EXPORT_SYMBOL(is_flush_rq);
+ 
+ /**
+  * blk_kick_flush - consider issuing flush request
+diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
+index a29877217..1f1bd375f 100644
+--- a/drivers/nvme/host/nvme.h
++++ b/drivers/nvme/host/nvme.h
+@@ -884,11 +884,12 @@ void nvme_mpath_revalidate_paths(struct nvme_ns *ns);
+ void nvme_mpath_clear_ctrl_paths(struct nvme_ctrl *ctrl);
+ void nvme_mpath_shutdown_disk(struct nvme_ns_head *head);
+ 
++extern bool is_flush_rq(struct request *rq);
+ static inline void nvme_trace_bio_complete(struct request *req)
+ {
+ 	struct nvme_ns *ns = req->q->queuedata;
+ 
+-	if (req->cmd_flags & REQ_NVME_MPATH)
++	if (req->cmd_flags & REQ_NVME_MPATH && !is_flush_rq(req))
+ 		trace_block_bio_complete(ns->head->disk->queue, req->bio);
+ }
+ 
+-- 
+2.31.1
+
+
 
