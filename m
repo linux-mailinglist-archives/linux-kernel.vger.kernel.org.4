@@ -2,133 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44364651FF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:53:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECED7651FF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232937AbiLTLxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 06:53:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54508 "EHLO
+        id S229960AbiLTL4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 06:56:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiLTLxB (ORCPT
+        with ESMTP id S229515AbiLTL4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 06:53:01 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A3163DD;
-        Tue, 20 Dec 2022 03:53:01 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id m4so12022943pls.4;
-        Tue, 20 Dec 2022 03:53:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lso547JX5vTY2uG06uoFIFztgpYecJYWXqOFJKfCq9A=;
-        b=NZBmBWT0pXX5TaRDccE1wmua0oWib2GxgHdFapwRZJovA6yEJLwSuHqnjdnlGzvdFx
-         sbJoX6yb8Ubb1qa/54JSFrn8/KVPrk6Zgz6ksxwgK7Hge+QQx4JOp44XYTbyOv7c4QrN
-         9dmddS+pG07psJp1LojSHEDz6xCj+gviFXyTAPvuGbyard1kB/iP+sfVUeNMN05dsEKw
-         a4LoQ/J+rOjMQgkXk7qHVIwsgnkqkVeZENxlDA/NMfH20WJ9u/+M3Di90NUfk9/r76RN
-         6+MJ9C/BG2GMl8fCxkMRohgwfz6z8QRM3msAgJv1RLsrde9Niq4pBZ11iPtgjvhGD3BP
-         BX6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lso547JX5vTY2uG06uoFIFztgpYecJYWXqOFJKfCq9A=;
-        b=AGcuIoxtEJDvEqzVXux+3AKB9iqro+Iwq+zJA/Zy+29Jgs7BpgfcFObrPiDWSsP97e
-         w34Rsmx4VNT75qip9xgDbPUGEBjoAgRKP4tzN9MVMeUH1BiY7VBP2osqairxI3dp2Pfp
-         YVwUMbT+EgxiTU0g/G9jKUm4fAC8jG+sXgpXpQwC+nnu0rdKf0oIN7f5EzI+PkcOrZR/
-         yGKFrnvofaet+Ee2U+N7z9XZvex6PQIBNqMt4LQxvvp/3aZXp8GZAh6B9oJjcmPUn8jL
-         TLztXZmyQ7oC/cWOc+ZZrcvbxoBSjFOK5J105u2DzPLXuSfn8/2l7LO60eAArnQfWssd
-         CKCw==
-X-Gm-Message-State: ANoB5pkGisgo6dpC/Hr8TwzXBm2xhRDJhrJOqpNC0wYe4Z7gxT4saA5X
-        gxanCK/BT4eEfS9UbBzlryc=
-X-Google-Smtp-Source: AA0mqf74eIrv2LcbZ4UdOuZq35RVyjX2oL4FLp5h/Guu7OQyM9gJa2Y4Kvx4rn4wBkEUJM22lye9Ug==
-X-Received: by 2002:a17:903:515:b0:189:ec2d:89c0 with SMTP id jn21-20020a170903051500b00189ec2d89c0mr46662475plb.59.1671537180573;
-        Tue, 20 Dec 2022 03:53:00 -0800 (PST)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id j5-20020a170902c3c500b00172fad607b3sm9140276plj.207.2022.12.20.03.52.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 03:52:59 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Eric Anholt <eric@anholt.net>, linux-input@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] input: raspberrypi-ts: Fix refcount leak in rpi_ts_probe
-Date:   Tue, 20 Dec 2022 15:52:43 +0400
-Message-Id: <20221220115246.1522054-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 20 Dec 2022 06:56:04 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108F32654;
+        Tue, 20 Dec 2022 03:56:02 -0800 (PST)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Nbw3s5SpCzRpwv;
+        Tue, 20 Dec 2022 19:54:49 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.61) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 20 Dec 2022 19:55:58 +0800
+From:   Yang Jihong <yangjihong1@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>,
+        <illusionist.neo@gmail.com>, <linux@armlinux.org.uk>,
+        <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <yangjihong1@huawei.com>
+Subject: [PATCH bpf-next v4] bpf: Add kernel function call support in 32-bit ARM for EABI
+Date:   Tue, 20 Dec 2022 19:53:13 +0800
+Message-ID: <20221220115313.29949-1-yangjihong1@huawei.com>
+X-Mailer: git-send-email 2.30.GIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.61]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rpi_firmware_get() take reference, we need to release it in error paths
-as well. Add missing rpi_firmware_put() in the error handling to fix it.
+This patch adds kernel function call support to 32-bit ARM bpf jit for
+EABI.
 
-Fixes: 0b9f28fed3f7 ("Input: add official Raspberry Pi's touchscreen driver")
-Fixes: 3b8ddff780b7 ("input: raspberrypi-ts: Release firmware handle when not needed")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
 ---
- drivers/input/touchscreen/raspberrypi-ts.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/input/touchscreen/raspberrypi-ts.c b/drivers/input/touchscreen/raspberrypi-ts.c
-index 5000f5fd9ec3..114237c76378 100644
---- a/drivers/input/touchscreen/raspberrypi-ts.c
-+++ b/drivers/input/touchscreen/raspberrypi-ts.c
-@@ -140,21 +140,24 @@ static int rpi_ts_probe(struct platform_device *pdev)
- 		return -EPROBE_DEFER;
- 
- 	ts = devm_kzalloc(dev, sizeof(*ts), GFP_KERNEL);
--	if (!ts)
--		return -ENOMEM;
-+	if (!ts) {
-+		error = -ENOMEM;
-+		goto err_put_fw;
-+	}
- 	ts->pdev = pdev;
- 
- 	ts->fw_regs_va = dma_alloc_coherent(dev, PAGE_SIZE, &ts->fw_regs_phys,
- 					    GFP_KERNEL);
- 	if (!ts->fw_regs_va) {
- 		dev_err(dev, "failed to dma_alloc_coherent\n");
--		return -ENOMEM;
-+		error = -ENOMEM;
-+		goto err_put_fw;
- 	}
- 
- 	error = devm_add_action_or_reset(dev, rpi_ts_dma_cleanup, ts);
- 	if (error) {
- 		dev_err(dev, "failed to devm_add_action_or_reset, %d\n", error);
--		return error;
-+		goto err_put_fw;
- 	}
- 
- 	touchbuf = (u32)ts->fw_regs_phys;
-@@ -206,6 +209,10 @@ static int rpi_ts_probe(struct platform_device *pdev)
- 	}
- 
- 	return 0;
-+
-+err_put_fw:
-+	rpi_firmware_put(fw);
-+	return error;
+Changes since v3:
+  - Submit patches related to the ARM32 architecture separately.
+
+Changes since v2:
+  - Remove patches to adjust sk size check for CO_RE in 32-bit arch.
+  - Add check of kfunc's return value in insn_def_regno.
+  - Adjust is_reg64 for insn_def_regno.
+  - The check of CONFIG_AEABI is moved from emit_kfunc_call to
+    bpf_jit_supports_kfunc_call.
+  - Fix a comment error in fixup_kfunc_call.
+
+ arch/arm/net/bpf_jit_32.c | 137 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 137 insertions(+)
+
+diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
+index 6a1c9fca5260..ae3a36d909f4 100644
+--- a/arch/arm/net/bpf_jit_32.c
++++ b/arch/arm/net/bpf_jit_32.c
+@@ -1337,6 +1337,125 @@ static void build_epilogue(struct jit_ctx *ctx)
+ #endif
  }
  
- static const struct of_device_id rpi_ts_match[] = {
++/*
++ * Input parameters of function in 32-bit ARM architecture:
++ * The first four word-sized parameters passed to a function will be
++ * transferred in registers R0-R3. Sub-word sized arguments, for example,
++ * char, will still use a whole register.
++ * Arguments larger than a word will be passed in multiple registers.
++ * If more arguments are passed, the fifth and subsequent words will be passed
++ * on the stack.
++ *
++ * The first for args of a function will be considered for
++ * putting into the 32bit register R1, R2, R3 and R4.
++ *
++ * Two 32bit registers are used to pass a 64bit arg.
++ *
++ * For example,
++ * void foo(u32 a, u32 b, u32 c, u32 d, u32 e):
++ *      u32 a: R0
++ *      u32 b: R1
++ *      u32 c: R2
++ *      u32 d: R3
++ *      u32 e: stack
++ *
++ * void foo(u64 a, u32 b, u32 c, u32 d):
++ *      u64 a: R0 (lo32) R1 (hi32)
++ *      u32 b: R2
++ *      u32 c: R3
++ *      u32 d: stack
++ *
++ * void foo(u32 a, u64 b, u32 c, u32 d):
++ *       u32 a: R0
++ *       u64 b: R2 (lo32) R3 (hi32)
++ *       u32 c: stack
++ *       u32 d: stack
++ *
++ * void foo(u32 a, u32 b, u64 c, u32 d):
++ *       u32 a: R0
++ *       u32 b: R1
++ *       u64 c: R2 (lo32) R3 (hi32)
++ *       u32 d: stack
++ *
++ * void foo(u64 a, u64 b):
++ *       u64 a: R0 (lo32) R1 (hi32)
++ *       u64 b: R2 (lo32) R3 (hi32)
++ *
++ * The return value will be stored in the R0 (and R1 for 64bit value).
++ *
++ * For example,
++ * u32 foo(u32 a, u32 b, u32 c):
++ *      return value: R0
++ *
++ * u64 foo(u32 a, u32 b, u32 c):
++ *      return value: R0 (lo32) R1 (hi32)
++ *
++ * The above is for AEABI only, OABI does not support this function.
++ */
++static int emit_kfunc_call(const struct bpf_insn *insn, struct jit_ctx *ctx, const u32 func)
++{
++	int i;
++	const struct btf_func_model *fm;
++	const s8 *tmp = bpf2a32[TMP_REG_1];
++	const u8 arg_regs[] = { ARM_R0, ARM_R1, ARM_R2, ARM_R3 };
++	int nr_arg_regs = ARRAY_SIZE(arg_regs);
++	int arg_regs_idx = 0, stack_off = 0;
++	const s8 *rd;
++	s8 rt;
++
++	fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
++	if (!fm)
++		return -EINVAL;
++
++	for (i = 0; i < fm->nr_args; i++) {
++		if (fm->arg_size[i] > sizeof(u32)) {
++			rd = arm_bpf_get_reg64(bpf2a32[BPF_REG_1 + i], tmp, ctx);
++
++			if (arg_regs_idx + 1 < nr_arg_regs) {
++				/*
++				 * AAPCS states:
++				 * A double-word sized type is passed in two
++				 * consecutive registers (e.g., r0 and r1, or
++				 * r2 and r3). The content of the registers is
++				 * as if the value had been loaded from memory
++				 * representation with a single LDM instruction.
++				 */
++				if (arg_regs_idx & 1)
++					arg_regs_idx++;
++
++				emit(ARM_MOV_R(arg_regs[arg_regs_idx++], rd[1]), ctx);
++				emit(ARM_MOV_R(arg_regs[arg_regs_idx++], rd[0]), ctx);
++			} else {
++				stack_off = ALIGN(stack_off, STACK_ALIGNMENT);
++
++				if (__LINUX_ARM_ARCH__ >= 6 ||
++				    ctx->cpu_architecture >= CPU_ARCH_ARMv5TE) {
++					emit(ARM_STRD_I(rd[1], ARM_SP, stack_off), ctx);
++				} else {
++					emit(ARM_STR_I(rd[1], ARM_SP, stack_off), ctx);
++					emit(ARM_STR_I(rd[0], ARM_SP, stack_off), ctx);
++				}
++
++				stack_off += 8;
++			}
++		} else {
++			rt = arm_bpf_get_reg32(bpf2a32[BPF_REG_1 + i][1], tmp[1], ctx);
++
++			if (arg_regs_idx  < nr_arg_regs) {
++				emit(ARM_MOV_R(arg_regs[arg_regs_idx++], rt), ctx);
++			} else {
++				emit(ARM_STR_I(rt, ARM_SP, stack_off), ctx);
++				stack_off += 4;
++			}
++		}
++	}
++
++	emit_a32_mov_i(tmp[1], func, ctx);
++	emit_blx_r(tmp[1], ctx);
++
++	return 0;
++}
++
+ /*
+  * Convert an eBPF instruction to native instruction, i.e
+  * JITs an eBPF instruction.
+@@ -1603,6 +1722,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 	case BPF_LDX | BPF_MEM | BPF_H:
+ 	case BPF_LDX | BPF_MEM | BPF_B:
+ 	case BPF_LDX | BPF_MEM | BPF_DW:
++	case BPF_LDX | BPF_PROBE_MEM | BPF_W:
++	case BPF_LDX | BPF_PROBE_MEM | BPF_H:
++	case BPF_LDX | BPF_PROBE_MEM | BPF_B:
++	case BPF_LDX | BPF_PROBE_MEM | BPF_DW:
+ 		rn = arm_bpf_get_reg32(src_lo, tmp2[1], ctx);
+ 		emit_ldx_r(dst, rn, off, ctx, BPF_SIZE(code));
+ 		break;
+@@ -1785,6 +1908,16 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 		const s8 *r5 = bpf2a32[BPF_REG_5];
+ 		const u32 func = (u32)__bpf_call_base + (u32)imm;
+ 
++		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
++			int err;
++
++			err = emit_kfunc_call(insn, ctx, func);
++
++			if (err)
++				return err;
++			break;
++		}
++
+ 		emit_a32_mov_r64(true, r0, r1, ctx);
+ 		emit_a32_mov_r64(true, r1, r2, ctx);
+ 		emit_push_r64(r5, ctx);
+@@ -2022,3 +2155,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 	return prog;
+ }
+ 
++bool bpf_jit_supports_kfunc_call(void)
++{
++	return IS_ENABLED(CONFIG_AEABI);
++}
 -- 
-2.25.1
+2.30.GIT
 
