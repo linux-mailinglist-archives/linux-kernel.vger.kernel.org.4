@@ -2,101 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311D5651FA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25261651FA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233239AbiLTL0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 06:26:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
+        id S229628AbiLTL3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 06:29:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233179AbiLTL0D (ORCPT
+        with ESMTP id S229515AbiLTL3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 06:26:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F6A167DF
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 03:26:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A623061328
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 11:26:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2317DC433EF;
-        Tue, 20 Dec 2022 11:25:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671535561;
-        bh=jOVtCJggIM0oxUKo//5l6aX8dwZIk924IfBqQt7vbrM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mgS3NVOeg1pd9UJNxmP5UOtnYwr2w+8pQZ2nJORyPmrwapaNeygrtQUAPIz/uNG/r
-         h6DXcKDNeXy7i01pPwh9CgAWz/3sAoayIdGpfyefpbQpODgVtEJmxRsnft/+eg/f/r
-         19OwfEKFnXB64EVX4hOYEyNl+R6jhiUsdPJAZQFhbo8mqdHjr7Ee7rOAiEDMQAfbTo
-         O8a180lboW6tZzqqR9hC+OVyqt+/FFx+6GZpH+UBmkRF41VHM7C+7WQQXnx4l7TS//
-         fVQGCaR3eUnZX5a9Uqtk7MSMpsAk0Y7s/Zq3DKS8rL3ssmgIKf+h9OKiCaAI5mN4u2
-         7FQHafbBlKNtA==
-Date:   Tue, 20 Dec 2022 11:25:57 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Lee Jones <lee@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] Backlight for v6.2
-Message-ID: <Y6GbxUZ2weD7PxoN@google.com>
+        Tue, 20 Dec 2022 06:29:43 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F041659E;
+        Tue, 20 Dec 2022 03:29:39 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 162933200033;
+        Tue, 20 Dec 2022 06:29:36 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 20 Dec 2022 06:29:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1671535775; x=1671622175; bh=dP
+        vWHtRpiToYLYps59erVZEsBmGTOXtq9s1AIPA2oCg=; b=gJHOH5uirsRWgqSr65
+        0cA1hIVM+KcAlYVIXIhgjXMgivg3WQYEgqXa4h8Todw1ZIBRF/ba6e/xxCIwPTZS
+        Gq3VkYbYXiuwif1hy0ifMQq2YWdrlAZIYAdtNb4Br8u4v7j7PK/FS+dbrpJjWIjh
+        O0Jn+6Qvdk3x6hW3obbyc/5T2dOLxHAG1ec6bOSI1b/CAF+JeVvKjB928VnpTsDT
+        84kPH14mOZC6+NcFDEZtkzdo99mSBtGFpegWRGPDEPO2aGQExWISDYyLD+Bf4M0i
+        8dfj9LGv8UZxnwptUdKnu8eXE53aNqeNl+m9ppoHrotMhPdCb4qtVk9c79mF2+g7
+        NTjw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1671535775; x=1671622175; bh=dPvWHtRpiToYL
+        Yps59erVZEsBmGTOXtq9s1AIPA2oCg=; b=vvNZcyFGV9q/YRGbrxsZJsu5ajAtE
+        3lCT7mYGqZRuV3Q9xXd5aYMZy4RXMFjpgFjqcyEhsAIQoeHhwGvLp7J+pcGyhYYN
+        4moM+7tQoLnQnc6hFUTMF04p+2rUyLOkMM4RnJHcRbY4WvzrtYIV3Dsa5eYntjGz
+        M54ptwd0YkKza+PWjS6pS19CyQ8n9K2Dv37dkyIjZ1GEFdiNB2SjiZr2BMhtgdeB
+        0JT5AyCQxT5/dFDrELAUkwa3Us3+zsCOyJYa55epSt87vxV9gIjKa1JRs2wFjYIF
+        fP30WxCEk979ZJc1kGjTshC9CV15UwQW0+9FEFbOb8j06rA9K4Tb+7kDw==
+X-ME-Sender: <xms:n5yhY5lIq2SZuLi_tkUrd3bJkaxDJLFyxYG9kUD1mxW_dBgxMeNnKA>
+    <xme:n5yhY017KaNv-CRJQVus_vXS1N5QWMDsQLGCbCd627wlqjYnibw9ggD3OzDKeJo2O
+    HDYGlCG7Ef2gWA1Vss>
+X-ME-Received: <xmr:n5yhY_oFzSW_ZXkY29O2OyOxhhmMPhunQtjOfAMpN5PCBz8IK6qQBfLAjbSkGuKuQ3KXlWDmKMkR>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeigddtudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgtggfgsehtkeertd
+    ertdejnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
+    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepffekhfelteeggf
+    etieekteekhedtffekvddtveetgeffgfelffeftdehuefgheefnecuvehluhhsthgvrhfu
+    ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
+    htrghirhdvfedrmhgv
+X-ME-Proxy: <xmx:n5yhY5mTBd8J3hGNvJTN6WhXh7BzO-CPr0uZDqzmSuSxmBuMczGMrQ>
+    <xmx:n5yhY30SS_OMDbuc4pcCAdBa8KGf0bXDyz63Vp_OIyDm9ChcDod_Qg>
+    <xmx:n5yhY4vJtfsOx4GTlXqpAiuaGKUUgqL3o_KzTTmit8zgG11hdZVjew>
+    <xmx:n5yhY-0vO0nYRzB3SBUN5jrTk5w302acMFTDClWEJcZJYhncsAm-KA>
+Feedback-ID: ifd214418:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 20 Dec 2022 06:29:29 -0500 (EST)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     linux-kernel@vger.kernel.org, shawnguo@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        s.hauer@pengutronix.de, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux@armlinux.org.uk, festevam@gmail.com, kernel@pengutronix.de,
+        arnd@arndb.de, alistair23@gmail.com, jernej.skrabec@gmail.com,
+        Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v2 0/3] imx7d-remarkable2: Enable cyttsp5 and rohm,bd71815
+Date:   Tue, 20 Dec 2022 21:29:24 +1000
+Message-Id: <20221220112927.440506-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.38.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good morning Linus,
+Enable the cyttsp5 and rohm,bd71815 in the device trees and
+defconfig for the reMarkable 2.
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+v2:
+ - Fixup DT formatting issues in path 3
 
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+Alistair Francis (3):
+  ARM: dts: imx7d-remarkable2: Enable the cyttsp5
+  ARM: imx_v6_v7_defconfig: Enable rohm,bd71815
+  ARM: dts: imx7d-remarkable2: Enable the rohm,bd71815
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git tags/backlight-next-6.2
-
-for you to fetch changes up to 0de796b6047d1ccc29d03fcd0a93dca52691ec21:
-
-  backlight: tosa: Convert to i2c's .probe_new() (2022-12-07 13:33:03 +0000)
-
-----------------------------------------------------------------
- - Fix-ups
-   - Convert a bunch of I2C class drivers over to .probe_new()
-
-----------------------------------------------------------------
-Angel Iglesias (1):
-      i2c: core: Introduce i2c_client_get_device_id helper function
-
-Uwe Kleine-König (9):
-      backlight: adp8860: Convert to i2c's .probe_new()
-      backlight: adp8870: Convert to i2c's .probe_new()
-      backlight: arcxcnn: Convert to i2c's .probe_new()
-      backlight: bd6107: Convert to i2c's .probe_new()
-      backlight: lm3630a: Convert to i2c's .probe_new()
-      backlight: lm3639: Convert to i2c's .probe_new()
-      backlight: lp855x: Convert to i2c's .probe_new()
-      backlight: lv5207lp: Convert to i2c's .probe_new()
-      backlight: tosa: Convert to i2c's .probe_new()
-
- drivers/i2c/i2c-core-base.c          | 14 ++++++++++++++
- drivers/video/backlight/adp8860_bl.c |  6 +++---
- drivers/video/backlight/adp8870_bl.c |  6 +++---
- drivers/video/backlight/arcxcnn_bl.c |  4 ++--
- drivers/video/backlight/bd6107.c     |  5 ++---
- drivers/video/backlight/lm3630a_bl.c |  5 ++---
- drivers/video/backlight/lm3639_bl.c  |  5 ++---
- drivers/video/backlight/lp855x_bl.c  |  5 +++--
- drivers/video/backlight/lv5207lp.c   |  5 ++---
- drivers/video/backlight/tosa_bl.c    |  5 ++---
- include/linux/i2c.h                  |  1 +
- 11 files changed, 36 insertions(+), 25 deletions(-)
+ arch/arm/boot/dts/imx7d-remarkable2.dts | 257 ++++++++++++++++++++++++
+ arch/arm/configs/imx_v6_v7_defconfig    |   5 +
+ 2 files changed, 262 insertions(+)
 
 -- 
-Lee Jones [李琼斯]
+2.38.1
+
