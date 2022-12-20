@@ -2,118 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1410B652993
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 00:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82494652998
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 00:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234095AbiLTXFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 18:05:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
+        id S234180AbiLTXGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 18:06:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiLTXF2 (ORCPT
+        with ESMTP id S229756AbiLTXGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 18:05:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CBC1EEE9;
-        Tue, 20 Dec 2022 15:05:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06CDFB81A52;
-        Tue, 20 Dec 2022 23:05:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33817C433EF;
-        Tue, 20 Dec 2022 23:05:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671577524;
-        bh=rMikaFC2i5Sq8/9qOrsykFHBkwjk4NkB/GCAN55ieQs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RqNJad/CCU03ruRHzQo7qvBQAg7VQXCk/2vjESpO4UYBvAC/iXKzGWLh/vRm0Ux8R
-         hSR/kEOkd1tathgoc2IEVK1sHHkPzNjR7NY90mSVL9P4yRqADXeBmxhEi8VIQDQtuK
-         M8cr2Eb8VsHAMlUGWfZh+cUB3s3SHRfroZMYooXxowDvcK4WY3knu7Vfhbb8GGiI0G
-         qBfTYan4+wAp5k/44/hzb4E1KorBALZzpL3YKn3ZMTnoJ9D27yFHdsVpEtpV/welb6
-         3bYcDX0KKzGDCF8yAUu/lYr/YmwaEyz9Hm4qw+w8NpAHV7PBsS4XR78JWN7GbW6YrW
-         qDJBOtt0LRRxw==
-Date:   Wed, 21 Dec 2022 00:05:21 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
-Message-ID: <20221220230521.GC26563@lothringen>
-References: <6438d903-ab97-48c7-c338-9f0bc2686f94@efficios.com>
- <7A9876BA-C375-42A7-A5C9-FD940D2898D7@joelfernandes.org>
- <5bd5ee4a-710a-96bc-abe8-772b2e60f478@efficios.com>
- <CAEXW_YRFbsCzT9iPdVfmeZ5qK+2fnVAwSzxbj1EXmU+vepOKdg@mail.gmail.com>
+        Tue, 20 Dec 2022 18:06:13 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D043BF;
+        Tue, 20 Dec 2022 15:06:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=/lhPmtQgl/IJPDhv6NELGDuHRTBu3I0donBbwWDLdR0=; b=D0hceBkT1mABNuA0N726RESH8f
+        7gs47AzhPRyEEjy3FokVywzS95ehk4c63TaIyJfuttSfJJRmrgLrnW3+p8GQD5Z8ljXYbuKPnuoCK
+        Nvz8Z3zIB3dUVbygEvyiI9+sWoYRa+l16n6eplmcZfc+q8HlSwngOA5G5IHEEeW30rwkAO4jTY7fZ
+        Rya+w2ZhdXTIcvfz+Y8fSmc+lLFlZF4Tx9oTgoinDQm2Z3qFV+IvBXOQjlWXgCi9HyYohUHT4q0tj
+        Qpv+huA4Lri7C0GK/cQoIjuR9GzJZov7PIxbexSKiqEiN9AWGiyBKeiSnRbCyeU5R6PsMQds/WBg8
+        tH5FAMjw==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p7lgT-005ep6-0H; Tue, 20 Dec 2022 23:06:05 +0000
+Message-ID: <e436ead2-ce8e-6d66-a123-0a6a2d344ffb@infradead.org>
+Date:   Tue, 20 Dec 2022 15:06:02 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEXW_YRFbsCzT9iPdVfmeZ5qK+2fnVAwSzxbj1EXmU+vepOKdg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] USB: Improve usb_fill_* documentation
+Content-Language: en-US
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221220-usb-dmadoc-v1-0-28386d2eb6cd@chromium.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20221220-usb-dmadoc-v1-0-28386d2eb6cd@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 07:06:57PM +0000, Joel Fernandes wrote:
-> On Tue, Dec 20, 2022 at 7:01 PM Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
-> >
-> > On 2022-12-20 13:29, Joel Fernandes wrote:
-> > >
-> >
-> > > I do want to finish my memory barrier studies of SRCU over the holidays since I have been deep in the hole with that already. Back to the post flip memory barrier here since I think now even that might not be needed…
-> >
-> > I strongly suspect the memory barrier after flip is useless for the same
-> > reasons I mentioned explaining why the barrier before the flip is useless.
-> >
-> > However, we need to double-check that we have memory barriers at the
-> > beginning and end of synchronize_srcu, and between load of "unlock"
-> > counters and load of "lock" counters.
-> >
-> > Where is the barrier at the beginning of synchronize_srcu ?
+
+
+On 12/20/22 14:52, Ricardo Ribalda wrote:
+> Make the developer aware of the requirements of transfer buffer.
 > 
-> I believe we don't need another memory barrier at the beginning of
-> synchronize_srcu() (but this part of my SRCU study is still pending
-> ;)) . The grace period guarantee (read-side critical sections don't
-> span the GP) is already enforced by the memory barrier between
-> scanning for all unlocks, and scanning for all locks (Paired with
-> corresponding memory barriers on the read-side).
+> The buffer must be DMAble, if the developer uses an invalid buffer, data
+> corruption might happen.
 > 
-> Accordingly, before we scan all locks and match lock == unlock, there
-> is an smp_mb(). Why is that not sufficient?
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+> USB: Improve usb_fill_* documentation
+> 
+> After trying to "cleanup" the uvc code, I was patiently explained about
+> the requirements of the urb transfer buffers.
+> 
+> Lets make this explicit, so other developers do not make the same mistake.
+> 
+> To: Alan Stern <stern@rowland.harvard.edu>
+> To: Christoph Hellwig <hch@lst.de>
+> To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+>  include/linux/usb.h | 27 ++++++++++++++++++++++++---
+>  1 file changed, 24 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/usb.h b/include/linux/usb.h
+> index 7d5325d47c45..033ca69b563d 100644
+> --- a/include/linux/usb.h
+> +++ b/include/linux/usb.h
+> @@ -1627,13 +1627,20 @@ struct urb {
+>   * @dev: pointer to the struct usb_device for this urb.
+>   * @pipe: the endpoint pipe
+>   * @setup_packet: pointer to the setup_packet buffer
+> - * @transfer_buffer: pointer to the transfer buffer
+> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable for DMA.
+>   * @buffer_length: length of the transfer buffer
+>   * @complete_fn: pointer to the usb_complete_t function
+>   * @context: what to set the urb context to.
+>   *
+>   * Initializes a control urb with the proper information needed to submit
+>   * it to a device.
+> + *
+> + * The transfer buffer might be filled via DMA. The simplest way to get
+> + * a buffer that can be DMAed to, is allocatiing it via kmalloc() or
 
-That's not enough, you still need a barrier between the updater's pre-GP
-accesses and the scans, so that post-GP read side sees the updater's pre-GP
-accesses:
+                                        allocating
 
+> + * equivalent, even for very small buffers. If transfer_buffer is embedded
+> + * in a bigger structure, there is a risk that the previous and following
+> + * fields are left in a corrupted state by the DMA engine, if the platform
+> + * is not cache coherent.
+>   */
+>  static inline void usb_fill_control_urb(struct urb *urb,
+>  					struct usb_device *dev,
+> @@ -1658,13 +1665,20 @@ static inline void usb_fill_control_urb(struct urb *urb,
+>   * @urb: pointer to the urb to initialize.
+>   * @dev: pointer to the struct usb_device for this urb.
+>   * @pipe: the endpoint pipe
+> - * @transfer_buffer: pointer to the transfer buffer
+> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable for DMA.
+>   * @buffer_length: length of the transfer buffer
+>   * @complete_fn: pointer to the usb_complete_t function
+>   * @context: what to set the urb context to.
+>   *
+>   * Initializes a bulk urb with the proper information needed to submit it
+>   * to a device.
+> + *
+> + * The transfer buffer might be filled via DMA. The simplest way to get
+> + * a buffer that can be DMAed to, is allocatiing it via kmalloc() or
 
-            UPDATER                        READER
-            -------                        ------
-            WRITE A                        WRITE srcu_read_lock
-            smp_mb() //rcu_seq_snap()      smp_mb()
-            READ srcu_read_lock //scans    READ A
+                                        allocating
+
+> + * equivalent, even for very small buffers. If transfer_buffer is embedded
+> + * in a bigger structure, there is a risk that the previous and following
+> + * fields are left in a corrupted state by the DMA engine, if the platform
+> + * is not cache coherent.
+>   */
+>  static inline void usb_fill_bulk_urb(struct urb *urb,
+>  				     struct usb_device *dev,
+> @@ -1687,7 +1701,7 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
+>   * @urb: pointer to the urb to initialize.
+>   * @dev: pointer to the struct usb_device for this urb.
+>   * @pipe: the endpoint pipe
+> - * @transfer_buffer: pointer to the transfer buffer
+> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable for DMA.
+>   * @buffer_length: length of the transfer buffer
+>   * @complete_fn: pointer to the usb_complete_t function
+>   * @context: what to set the urb context to.
+> @@ -1697,6 +1711,13 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
+>   * Initializes a interrupt urb with the proper information needed to submit
+>   * it to a device.
+>   *
+> + * The transfer buffer might be filled via DMA. The simplest way to get
+> + * a buffer that can be DMAed to, is allocatiing it via kmalloc() or
+
+                                        allocating
+
+> + * equivalent, even for very small buffers. If transfer_buffer is embedded
+> + * in a bigger structure, there is a risk that the previous and following
+> + * fields are left in a corrupted state by the DMA engine, if the platform
+> + * is not cache coherent.
+> + *
+>   * Note that High Speed and SuperSpeed(+) interrupt endpoints use a logarithmic
+>   * encoding of the endpoint interval, and express polling intervals in
+>   * microframes (eight per millisecond) rather than in frames (one per
+> 
+> ---
+> base-commit: b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
+> change-id: 20221220-usb-dmadoc-29384acebd48
+> 
+> Best regards,
 
 Thanks.
 
-> 
-> Thanks,
-> 
->  - Joel
-> 
-> >
-> > Thanks,
-> >
-> > Mathieu
-> >
-> > --
-> > Mathieu Desnoyers
-> > EfficiOS Inc.
-> > https://www.efficios.com
-> >
+-- 
+~Randy
