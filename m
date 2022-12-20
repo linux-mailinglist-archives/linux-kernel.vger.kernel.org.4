@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212B765171F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 01:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C32651721
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 01:20:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232725AbiLTATO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 19:19:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
+        id S232799AbiLTAUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 19:20:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232695AbiLTATI (ORCPT
+        with ESMTP id S232586AbiLTAUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 19:19:08 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB8815816
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 16:19:06 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id d123so5612514iof.6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 16:19:06 -0800 (PST)
+        Mon, 19 Dec 2022 19:20:43 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AA71106
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 16:20:42 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id s16so5603242iln.4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 16:20:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gc3hWzYWnwxE0KxM3PiNn4ggv+l8ysEvnTXP4M8gEZQ=;
-        b=YcWERSawby9HLFUaDofFiqJzjtWuQQAV8Bl+fepedaQ1d9EZ70C9z8QkDjUBQB+PNU
-         VZC4qDjIwalMd7bTkNNCQz7SrhRiptA87TzW1AfI2UsfgeqDuZ1nlUkuIOsvqYngyXyt
-         5idFkzqWLBbDopUyg5fYV4Ych4BjZgtXS+VNs=
+        bh=DUmTkQx7tlD5TtKn/80kREr/JVEYJaIJGvPROtM0mL0=;
+        b=V1bSJIjuBtSv1w3SCnclZTPLvXyYvVXc/LPgCKLTtKSAfsB8hOrwi33/EEocHBEyeJ
+         CCM2zV5bYQH4zUR1U/KtO9Wd/kQly6llVM8lZsiPhymWipFBD/iZJ2XVMUxsIdqr7y6A
+         ovm7qpfayvFhzp5b0o/hs8RpO/Xs6LFKzcdbc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gc3hWzYWnwxE0KxM3PiNn4ggv+l8ysEvnTXP4M8gEZQ=;
-        b=wXBTLroKH9LuUiYZSAJEpVfnneXBUwnQC+MfrN2AISN3kM6R5tAFKUrU7jJg2Nt0ZR
-         vhL4y5rUpJtwWfWTzJGbsElx3XIOShy35mYtlEN9g2iluCZsTuX5djuMFZCXOGsPtnFv
-         3kinusuPMRI8EAUWG3scbFblciBjWqi+tJbZRf47/klyJGkpDjhH3ljkFMKru3BFYSzP
-         i4tx5ATCDYAy5pWyHZ1YzidiGR6f5nXwWs5m6Vw9oWMjwBVOnWkzxd4n0Hl+CT5KqpqI
-         yQbjf2/b+CdjfAChr9XkVRS6ja5ohH9/MdOuUj7venjKevx/TQ20VrpQDbrX1azwPdRw
-         4s7g==
-X-Gm-Message-State: ANoB5pmvZsv26U9HOqq8YRa85KYgNxytL3TCN9pYkMj4acyZCyLbemyH
-        ad08nBT5C1dX5OnZ+F3nK6R3ZQ==
-X-Google-Smtp-Source: AA0mqf6R8XlJpG3NHFCje5qyDPzOlJZOb1SXv7X2p+7WpO9xBGKQIDDqaHDJbW/l5NpYWHcWNYbyXw==
-X-Received: by 2002:a6b:500e:0:b0:6e2:d3f7:3b60 with SMTP id e14-20020a6b500e000000b006e2d3f73b60mr4534593iob.2.1671495546007;
-        Mon, 19 Dec 2022 16:19:06 -0800 (PST)
+        bh=DUmTkQx7tlD5TtKn/80kREr/JVEYJaIJGvPROtM0mL0=;
+        b=6SbJeNETkzOXUa5kgRT6U0mp38pVhqF8AASS09TM4BhNOllwdVp6Mn705mK+11cN9t
+         HmXJPVtxVIlN6wUBf8o4r29qQpRVmDQdIfFYIiFu5G0vGbOnO7GTiTwhhO8Z1w8035gf
+         rSEwLPXrp4pI5ECsgmZuQtz3a9S5KMa/aIdfKs1bARhwauGMF6pmuND5bQnzXQ3kxURW
+         jsTUtZXORjDD9UvA8zrxs/Z/JNhKKNK0nHsPaLSj2ioHiREW/m4lYxYxQ54Y7jr+Wfh9
+         OB9VTzsJluhFo1CNn1z1aeOdkWy5kc3hA161RpQPipn1QLkXUm0CNir5XRNAAZ4vD1lE
+         HsoA==
+X-Gm-Message-State: AFqh2kroOga33meUApFHVwE+7zIdoLpwZY/keLCKth6uxHq985I4rFVE
+        egj/i7yOx4hFxt719W69IUDw1Q==
+X-Google-Smtp-Source: AMrXdXuap7STFlwgIf/xUI3fUSBGXTjHraLQ8dMYhPMnmA2yfkEi9u43IpR8pCb/aNk3jfIetDBl2g==
+X-Received: by 2002:a05:6e02:1a2e:b0:30b:1aa9:8663 with SMTP id g14-20020a056e021a2e00b0030b1aa98663mr1187288ile.2.1671495641440;
+        Mon, 19 Dec 2022 16:20:41 -0800 (PST)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id r2-20020a028802000000b0038a5b8d79basm3984074jai.106.2022.12.19.16.19.04
+        by smtp.gmail.com with ESMTPSA id r9-20020a92c5a9000000b003039e7d680fsm3803031ilt.11.2022.12.19.16.20.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 16:19:05 -0800 (PST)
-Message-ID: <74cad41d-e088-f8c3-3bda-d9e2843ae9f2@linuxfoundation.org>
-Date:   Mon, 19 Dec 2022 17:19:04 -0700
+        Mon, 19 Dec 2022 16:20:40 -0800 (PST)
+Message-ID: <a854db66-0a14-e40b-f3f0-369228fcd835@linuxfoundation.org>
+Date:   Mon, 19 Dec 2022 17:20:39 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 5.15 00/17] 5.15.85-rc1 review
+Subject: Re: [PATCH 2/2] tracing/selftests: Add test for event filtering on
+ function name
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Ross Zwisler <zwisler@google.com>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Zheng Yejian <zhengyejian1@huawei.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20221219182940.739981110@linuxfoundation.org>
+References: <20221219183106.518341498@goodmis.org>
+ <20221219183214.075559302@goodmis.org> <Y6DQTvOrHRZ8gjDz@google.com>
+ <5e3e9408-8ddd-3649-ef98-4bd611c528cc@linuxfoundation.org>
+ <20221219173507.410915a3@gandalf.local.home>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221219182940.739981110@linuxfoundation.org>
+In-Reply-To: <20221219173507.410915a3@gandalf.local.home>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -78,29 +82,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/19/22 12:24, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.85 release.
-> There are 17 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 12/19/22 15:35, Steven Rostedt wrote:
+> On Mon, 19 Dec 2022 15:11:39 -0700
+> Shuah Khan <skhan@linuxfoundation.org> wrote:
 > 
-> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
-> Anything received after that time might be too late.
+>> On 12/19/22 13:57, Ross Zwisler wrote:
+>>> On Mon, Dec 19, 2022 at 01:31:08PM -0500, Steven Rostedt wrote:
+>>>> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+>>>>
+>>>> With the new filter logic of passing in the name of a function to match an
+>>>> instruction pointer (or the address of the function), add a test to make
+>>>> sure that it is functional.
+>>>>
+>>>> This is also the first test to test plain filtering. The filtering has
+>>>> been tested via the trigger logic, which uses the same code, but there was
+>>>> nothing to test just the event filter, so this test is the first to add
+>>>> such a case.
+>>>>
+>>>> Cc: Shuah Khan <shuah@kernel.org>
+>>>> Cc: Shuah Khan <skhan@linuxfoundation.org>
+>>>> Cc: linux-kselftest@vger.kernel.org
+>>>> Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>>>> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>>>
+>>> Reviewed-by: Ross Zwisler <zwisler@google.com>
+>>
+>> Thank you both. I will apply this after rc1 comes out.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.85-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> It's dependent on the first patch.
 > 
 
-Compiled and booted on my test system. No dmesg regressions.
+In which case,
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
 thanks,
 -- Shuah
+
+
+
