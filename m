@@ -2,127 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA52E651EEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:37:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E4D651EF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbiLTKhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:37:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
+        id S232419AbiLTKj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:39:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiLTKhg (ORCPT
+        with ESMTP id S229819AbiLTKj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:37:36 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B342BE3D;
-        Tue, 20 Dec 2022 02:37:34 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NbtB95WQzz9xqwx;
-        Tue, 20 Dec 2022 18:30:09 +0800 (CST)
-Received: from [10.45.156.176] (unknown [10.45.156.176])
-        by APP2 (Coremail) with SMTP id GxC2BwDXqWBMkKFj9NEqAA--.5576S2;
-        Tue, 20 Dec 2022 11:37:10 +0100 (CET)
-Message-ID: <a04e6458-6814-97fc-f03a-617809e2e6ce@huaweicloud.com>
-Date:   Tue, 20 Dec 2022 11:36:50 +0100
+        Tue, 20 Dec 2022 05:39:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E699B15F01
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:38:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671532715;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pGyKBGNxgSsLzO3pKUHqDVQ10lAuvdMbzCBmDzDMwWg=;
+        b=WoSAHdsU75G92QfJJmIcriu9iWWlTSZ83TtO0TeDa8HXHbq3tcAqxhn8JGEw1DwZJ8jbTO
+        4u751afqa3ozBAb0HRrBx4l82WkxE04IkP73NZEB5rplAFZDu34DbG355RhPxFeXSji+fD
+        UGWrsAm+ZLHlcPvzE0NuNn6jkacoo0E=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-283-mU4H5d3ONTCmRPA4yRwlyg-1; Tue, 20 Dec 2022 05:38:34 -0500
+X-MC-Unique: mU4H5d3ONTCmRPA4yRwlyg-1
+Received: by mail-wm1-f70.google.com with SMTP id q21-20020a7bce95000000b003d236c91639so2454648wmj.8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:38:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pGyKBGNxgSsLzO3pKUHqDVQ10lAuvdMbzCBmDzDMwWg=;
+        b=JXH0ugvjHBOC1XDgbxmxSZ7BiptrVXtz6Sgh/81Z5cKVipbJ+w9LeH/Klw5Jd3yR9f
+         GltFx6LFsleSmrYuqr9LB86Nx8hZ/JVi5cYCnof7hUi1Wg1vI89l8LoNkPbx5jIWLX+L
+         gdJSoqSLrkgq83c7OpD0m81CdNBncHOq8DUbXgi6HDXuE9sO80460AqF5tJ4tLRKfhGi
+         08PVNPiXsO44We1q/wLxFEoXvQ5IdSv5xBcSYcLJPUDd9qQ0QraynAR77IuMgc9HQVg2
+         ofDmDGjKihd6eGAn8BnbVayWNXKeJOpeNw5ecYR9XP5w3noYh65yQthwUujP7w1/AJU1
+         hbJw==
+X-Gm-Message-State: ANoB5pnHdDPh0kYy7C6r6HixO1JCD5QhPfXA9QApbO7hPFwHe9IkxDmT
+        ko05BPR353ZM2wZEeH8UyZHk/ArKm8/+p/hoyHH+X4x3tlhMzAjG3rgHk/N7btp+kp56tPyLBlu
+        coICPiSh18HRuRIGsiQHNpD4F
+X-Received: by 2002:a5d:6a0c:0:b0:242:4bbe:2d20 with SMTP id m12-20020a5d6a0c000000b002424bbe2d20mr27326556wru.42.1671532710891;
+        Tue, 20 Dec 2022 02:38:30 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6khTwIwEcU2qnc4GKFKF5TXghb3TA4wdU4AkUtOMeLLbU1Z1pmd4Etf27CLPRLnoQwbbImWA==
+X-Received: by 2002:a5d:6a0c:0:b0:242:4bbe:2d20 with SMTP id m12-20020a5d6a0c000000b002424bbe2d20mr27326542wru.42.1671532710621;
+        Tue, 20 Dec 2022 02:38:30 -0800 (PST)
+Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
+        by smtp.gmail.com with ESMTPSA id s13-20020a5d510d000000b00241e5b917d0sm14621347wrt.36.2022.12.20.02.38.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 02:38:30 -0800 (PST)
+Date:   Tue, 20 Dec 2022 11:38:24 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>
+Subject: Re: [RFC PATCH v5 0/4] vsock: update tools and error handling
+Message-ID: <20221220103824.w7xcwsg3o2mls7cs@sgarzare-redhat>
+References: <e04f749e-f1a7-9a1d-8213-c633ffcc0a69@sberdevices.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] lib/mpi: Fix buffer overrun when SG is too long
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Eric Biggers <ebiggers@kernel.org>, dhowells@redhat.com,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Tadeusz Struk <tadeusz.struk@intel.com>
-References: <20221209150633.1033556-1-roberto.sassu@huaweicloud.com>
- <Y5OGr59A9wo86rYY@sol.localdomain>
- <fa8a307541735ec9258353d8ccb75c20bb22aafe.camel@huaweicloud.com>
- <Y5bxJ5UZNPzxwtoy@gondor.apana.org.au>
- <0f80852578436dbba7a0fce03d86c3fa2d38c571.camel@huaweicloud.com>
- <Y6FjQPZiJYTEG1zI@gondor.apana.org.au>
-Content-Language: en-US
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <Y6FjQPZiJYTEG1zI@gondor.apana.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwDXqWBMkKFj9NEqAA--.5576S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tr4rXrW5Aw45ArW3Zw4fZrb_yoW8Xw17pF
-        4DXa1UGrWvg3yIy3ZrW3W8K345C3s8GF47Crs7tr1j9rZ3tw1FkrW0kw4F9347Wr4kXr4U
-        Ja4qva4fZrWkArUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU13rcDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBF1jj4bWLQABsE
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <e04f749e-f1a7-9a1d-8213-c633ffcc0a69@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/20/2022 8:24 AM, Herbert Xu wrote:
-> On Mon, Dec 19, 2022 at 09:49:29AM +0100, Roberto Sassu wrote:
->>
->> do you have any news on this bug?
-> 
-> Thanks for the reminder.  Could you please try this patch?
+On Tue, Dec 20, 2022 at 07:16:38AM +0000, Arseniy Krasnov wrote:
+>Patchset consists of two parts:
+>
+>1) Kernel patch
+>One patch from Bobby Eshleman. I took single patch from Bobby:
+>https://lore.kernel.org/lkml/d81818b868216c774613dd03641fcfe63cc55a45
+>.1660362668.git.bobby.eshleman@bytedance.com/ and use only part for
+>af_vsock.c, as VMCI and Hyper-V parts were rejected.
+>
+>I used it, because for SOCK_SEQPACKET big messages handling was broken -
+>ENOMEM was returned instead of EMSGSIZE. And anyway, current logic which
+>always replaces any error code returned by transport to ENOMEM looks
+>strange for me also(for example in EMSGSIZE case it was changed to
+>ENOMEM).
+>
+>2) Tool patches
+>Since there is work on several significant updates for vsock(virtio/
+>vsock especially): skbuff, DGRAM, zerocopy rx/tx, so I think that this
+>patchset will be useful.
+>
+>This patchset updates vsock tests and tools a little bit. First of all
+>it updates test suite: two new tests are added. One test is reworked
+>message bound test. Now it is more complex. Instead of sending 1 byte
+>messages with one MSG_EOR bit, it sends messages of random length(one
+>half of messages are smaller than page size, second half are bigger)
+>with random number of MSG_EOR bits set. Receiver also don't know total
+>number of messages. Message bounds control is maintained by hash sum
+>of messages length calculation. Second test is for SOCK_SEQPACKET - it
+>tries to send message with length more than allowed. I think both tests
+>will be useful for DGRAM support also.
+>
+>Third thing that this patchset adds is small utility to test vsock
+>performance for both rx and tx. I think this util could be useful as
+>'iperf'/'uperf', because:
+>1) It is small comparing to 'iperf' or 'uperf', so it very easy to add
+>   new mode or feature to it(especially vsock specific).
+>2) It allows to set SO_RCVLOWAT and SO_VM_SOCKETS_BUFFER_SIZE option.
+>   Whole throughtput depends on both parameters.
+>3) It is located in the kernel source tree, so it could be updated by
+>   the same patchset which changes related kernel functionality in vsock.
+>
+>I used this util very often to check performance of my rx zerocopy
+>support(this tool has rx zerocopy support, but not in this patchset).
+>
+>Here is comparison of outputs from three utils: 'iperf', 'uperf' and
+>'vsock_perf'. In all three cases sender was at guest side. rx and
+>tx buffers were always 64Kb(because by default 'uperf' uses 8K).
+>
+>iperf:
+>
+>   [ ID] Interval           Transfer     Bitrate
+>   [  5]   0.00-10.00  sec  12.8 GBytes  11.0 Gbits/sec sender
+>   [  5]   0.00-10.00  sec  12.8 GBytes  11.0 Gbits/sec receiver
+>
+>uperf:
+>
+>   Total     16.27GB /  11.36(s) =    12.30Gb/s       23455op/s
+>
+>vsock_perf:
+>
+>   tx performance: 12.301529 Gbits/s
+>   rx performance: 12.288011 Gbits/s
+>
+>Results are almost same in all three cases.
 
-Tried, could not boot the UML kernel.
+Thanks for checking this!
 
-After looking, it seems we have to call sg_miter_stop(). Or 
-alternatively, we could let sg_miter_next() be called but not writing 
-anything inside the loop.
+>
+>Patchset was rebased and tested on skbuff v8 patch from Bobby Eshleman:
+>https://lore.kernel.org/netdev/20221215043645.3545127-1-bobby.eshleman@bytedance.com/
 
-With either of those fixes, the tests pass (using one scatterlist).
+I reviewed all the patches, in the last one there is just to update the 
+README, so I think it is ready for net-next (when it will re-open).
 
-Roberto
-
-> ---8<---
-> The helper mpi_read_raw_from_sgl ignores the second parameter
-> nbytes when reading the SG list and may overrun its own buffer
-> because it only allocates enough memory according to nbytes.
-> 
-> Fixes: 2d4d1eea540b ("lib/mpi: Add mpi sgl helpers")
-> Reported-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-> 
-> diff --git a/lib/mpi/mpicoder.c b/lib/mpi/mpicoder.c
-> index 39c4c6731094..6bffc68c1a5a 100644
-> --- a/lib/mpi/mpicoder.c
-> +++ b/lib/mpi/mpicoder.c
-> @@ -494,17 +494,15 @@ MPI mpi_read_raw_from_sgl(struct scatterlist *sgl, unsigned int nbytes)
->   	val->sign = 0;
->   	val->nlimbs = nlimbs;
->   
-> -	if (nbytes == 0)
-> -		return val;
-> -
->   	j = nlimbs - 1;
->   	a = 0;
->   	z = BYTES_PER_MPI_LIMB - nbytes % BYTES_PER_MPI_LIMB;
->   	z %= BYTES_PER_MPI_LIMB;
->   
-> -	while (sg_miter_next(&miter)) {
-> +	while (nbytes && sg_miter_next(&miter)) {
->   		buff = miter.addr;
-> -		len = miter.length;
-> +		len = min_t(unsigned, miter.length, nbytes);
-> +		nbytes -= len;
->   
->   		for (x = 0; x < len; x++) {
->   			a <<= 8;
+Thanks,
+Stefano
 
