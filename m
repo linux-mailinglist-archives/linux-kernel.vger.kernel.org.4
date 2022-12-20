@@ -2,149 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24D2651E88
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB65B651E89
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbiLTKNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39154 "EHLO
+        id S233725AbiLTKNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:13:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbiLTKNK (ORCPT
+        with ESMTP id S233708AbiLTKNQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:13:10 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC736388;
-        Tue, 20 Dec 2022 02:13:08 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BKACrVx084420;
-        Tue, 20 Dec 2022 04:12:53 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1671531173;
-        bh=CiV9OzgO0kBsrP7mVMTyx4gTrBVonvx4gVFVswlYw/U=;
-        h=From:To:CC:Subject:Date;
-        b=mEkhkQjShyJCKMsRDakRvKnFDA+piWuq1JfVaNY1PSDWdWgnheyZJ8qhy9fCeoRoo
-         hWx/J8JBVTrkGcjaLJEusZvZk7X6WRUJjUZqoScNNx9t32Ze+wYsyhOFC+wxHLtIAK
-         jTvy7v5Qk18KO0MbbqT8XhAbykFAUmPUMmsTHtuI=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BKACr4i104635
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 20 Dec 2022 04:12:53 -0600
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 20
- Dec 2022 04:12:52 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 20 Dec 2022 04:12:52 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BKACo7H075817;
-        Tue, 20 Dec 2022 04:12:52 -0600
-From:   Bhavya Kapoor <b-kapoor@ti.com>
-To:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <kristo@kernel.org>, <nm@ti.com>
-Subject: [PATCH] arm64: dts: ti: k3-j721s2: Add support for ADC nodes
-Date:   Tue, 20 Dec 2022 15:42:49 +0530
-Message-ID: <20221220101249.46450-1-b-kapoor@ti.com>
-X-Mailer: git-send-email 2.37.2
+        Tue, 20 Dec 2022 05:13:16 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E32AE4F
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:13:15 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id m19so16756970edj.8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:13:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6UrO2j9DEey1G8UqydjmxQqMxVbqAZzAn1bK1fPzhSc=;
+        b=Ce84Cz9ZMLrEN2Gk2uhhVVozKt2Ab9/SVRJooyCg87u9QWuaXj2DzyRfdtJPOtJ/y1
+         caxj6AxhZeVQV21Mz7mN99Oe9sUOteH83ZZBnEC1zGQIS+y56hR0g9LEc4yKwfcI876m
+         8BL/xL0n1Zkpxa4xIK8ntmNbuGmbMqXb6DMKHmlGAeEQ07STXlZkyerrchrhlcAXsq5O
+         fEuxO7r57G7VHe8XV15zLqyUdmuh4l/DQIhRor++mvff2ByfO+/2rKHymzbFOkLs2/RX
+         OyoVx1HDQm1yNO0rfnMdz7pIKj106xQFQo/JrlKIe1Ae9oFkDn+G/SislAwKHyP3092p
+         Ssow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6UrO2j9DEey1G8UqydjmxQqMxVbqAZzAn1bK1fPzhSc=;
+        b=dGgXGcBkjS58JX8q3EX9/u4mBS5JjPoi1XiE/AAMo87UXEdVW/bRBp+02VVNZrXxxO
+         3SSpiuyhSsTnXtjH0l2z3bLBAkE7Cd3DNRiwF4WmSkqVZ2yVSASQovM2msYFuQ0R+KPq
+         VgjYo68PPL9ZXHu3b/Hrtn9AW9WoZbHwL4wC1XW+kse7kGV99A7rvD7afQsVQo1v/xWe
+         /NWgGc6qUSYEd81ASI0hmw1sOTJd32kWK7338iIcRtV4A0oFlIrKeRgJql+Wi1M7/DvH
+         C1wae2ZEyfmeh64CTIt407DC5f8aEOUWl3GUo74KtWwc5tWxCItbJaEBp6EONTaZHWNk
+         ZjNQ==
+X-Gm-Message-State: ANoB5plJqQBWo0Rgmyz1y/ti5dV+mFnIXTinN0TAd/oCH8JqSvZ8l27w
+        oW93MGcSPiZ8HFUY4WCp8HptoQ==
+X-Google-Smtp-Source: AA0mqf526bxkpxOkdLFI2Q1atb7+xe2frMnb8gtgGOtE6L+34AT1XQfmQutkBdDLaHHRiCaFlZSlhQ==
+X-Received: by 2002:a05:6402:3641:b0:462:6d7d:ab09 with SMTP id em1-20020a056402364100b004626d7dab09mr41021775edb.38.1671531193850;
+        Tue, 20 Dec 2022 02:13:13 -0800 (PST)
+Received: from [192.168.0.161] (79-100-144-200.ip.btc-net.bg. [79.100.144.200])
+        by smtp.gmail.com with ESMTPSA id n1-20020a05640206c100b0046150ee13besm5360318edy.65.2022.12.20.02.13.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 02:13:13 -0800 (PST)
+Message-ID: <05d630bf-7fa8-4495-6345-207f133ef746@blackwall.org>
+Date:   Tue, 20 Dec 2022 12:13:12 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] net: bridge: mcast: read ngrec once in igmp3/mld2 report
+Content-Language: en-US
+To:     Joy Gu <jgu@purestorage.com>, bridge@lists.linux-foundation.org
+Cc:     roopa@nvidia.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, joern@purestorage.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221220024807.36502-1-jgu@purestorage.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20221220024807.36502-1-jgu@purestorage.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-J721s2 has two instances of 8 channel ADCs in MCU domain. Add DT nodes
-for 8 channel ADCs for J721s2 SoC.
+On 20/12/2022 04:48, Joy Gu wrote:
+> In br_ip4_multicast_igmp3_report() and br_ip6_multicast_mld2_report(),
+> "ih" or "mld2r" is a pointer into the skb header. It's dereferenced to
+> get "num", which is used in the for-loop condition that follows.
+> 
+> Compilers are free to not spend a register on "num" and dereference that
+> pointer every time "num" would be used, i.e. every loop iteration. Which
+> would be a bug if pskb_may_pull() (called by ip_mc_may_pull() or
+> ipv6_mc_may_pull() in the loop body) were to change pointers pointing
+> into the skb header, e.g. by freeing "skb->head".
+> 
+> We can avoid this by using READ_ONCE().
+> 
+> Suggested-by: Joern Engel <joern@purestorage.com>
+> Signed-off-by: Joy Gu <jgu@purestorage.com>
+> ---
+>  net/bridge/br_multicast.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
 
-Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
----
- .../dts/ti/k3-j721s2-common-proc-board.dts    | 14 +++++++
- .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 42 ++++++++++++++++++-
- 2 files changed, 55 insertions(+), 1 deletion(-)
+I doubt any compiler would do that (partly due to the ntohs()). If you have hit a bug or
+seen this with some compiler please provide more details, disassembly of the resulting
+code would be best.
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-index a7aa6cf08acd..67593aa69327 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-@@ -309,3 +309,17 @@ &mcu_mcan1 {
- 	pinctrl-0 = <&mcu_mcan1_pins_default>;
- 	phys = <&transceiver2>;
- };
-+
-+&tscadc0 {
-+	status = "okay";
-+	adc {
-+		ti,adc-channels = <0 1 2 3 4 5 6 7>;
-+	};
-+};
-+
-+&tscadc1 {
-+	status = "okay";
-+	adc {
-+		ti,adc-channels = <0 1 2 3 4 5 6 7>;
-+	};
-+};
-\ No newline at end of file
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-index 0af242aa9816..ad1bc31619c4 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-@@ -306,4 +306,44 @@ cpts@3d000 {
- 			ti,cpts-periodic-outputs = <2>;
- 		};
- 	};
--};
-+
-+	tscadc0: tscadc@40200000 {
-+		compatible = "ti,am3359-tscadc";
-+		reg = <0x0 0x40200000 0x0 0x1000>;
-+		interrupts = <GIC_SPI 892 IRQ_TYPE_LEVEL_HIGH>;
-+		power-domains = <&k3_pds 0 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 0 0>;
-+		assigned-clocks = <&k3_clks 0 2>;
-+		assigned-clock-rates = <60000000>;
-+		clock-names = "adc_tsc_fck";
-+		dmas = <&main_udmap 0x7400>,
-+			<&main_udmap 0x7401>;
-+		dma-names = "fifo0", "fifo1";
-+		status = "disabled";
-+
-+		adc {
-+			#io-channel-cells = <1>;
-+			compatible = "ti,am3359-adc";
-+		};
-+	};
-+
-+	tscadc1: tscadc@40210000 {
-+		compatible = "ti,am3359-tscadc";
-+		reg = <0x0 0x40210000 0x0 0x1000>;
-+		interrupts = <GIC_SPI 893 IRQ_TYPE_LEVEL_HIGH>;
-+		power-domains = <&k3_pds 1 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 1 0>;
-+		assigned-clocks = <&k3_clks 1 2>;
-+		assigned-clock-rates = <60000000>;
-+		clock-names = "adc_tsc_fck";
-+		dmas = <&main_udmap 0x7402>,
-+			<&main_udmap 0x7403>;
-+		dma-names = "fifo0", "fifo1";
-+		status = "disabled";
-+
-+		adc {
-+			#io-channel-cells = <1>;
-+			compatible = "ti,am3359-adc";
-+		};
-+	};
-+ };
-\ No newline at end of file
--- 
-2.37.2
+Thanks.
 
