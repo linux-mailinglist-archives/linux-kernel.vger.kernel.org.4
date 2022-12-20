@@ -2,183 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7676521AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 14:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFD06521B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 14:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233567AbiLTNr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 08:47:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
+        id S233346AbiLTNtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 08:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiLTNrY (ORCPT
+        with ESMTP id S233263AbiLTNs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 08:47:24 -0500
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A0A63EC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 05:47:22 -0800 (PST)
-Received: by mail-ua1-x92c.google.com with SMTP id 97so2864676uam.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 05:47:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZVeLoqXHDdEY++spzbSQ8fZ7YOLAGM87RhDMbRiu33A=;
-        b=KW0xW2q4x7FcPnfxpIRPrG6OkKXU9/l9h3qoqF+vxfBML6QrMYgS2EWenpj1SP3af8
-         78GnZhAphPt/kFXETy+P9ARj9JIX/jUo9tkrz0GRb3MV3f7pi0QYd3c2s9o678PZ1eBI
-         PsttecEwu1JW2rfdwfwBKLc5qpyvZLVk5MraAddGa3+Wk7Ougwtq8eglAvtWnrpNUCUS
-         KfiA3b0098QEhleJoUAcLCg0A9ewkiDdNhMxcr2MZujXBCRdEi6uqWjrvvqHtxElk+9A
-         s3YnQFOBY6XC5nZ0obv8Zvyrk+jcpeEO3dInfKjKWLxy5v0FF72ViSGo/wc5jElJcJq6
-         cnnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZVeLoqXHDdEY++spzbSQ8fZ7YOLAGM87RhDMbRiu33A=;
-        b=pntR3THrlSZoUismlspJJdE2rRhVRRmuWynQZjokdoDzZQl9r1R6uoAeZqpdHVprZ5
-         jr+Z09BQiWS+A4MPNYldgt6xYONy7NlxpdTO4VDdT7FSh9FR/5RfuE4s7NwS1JT0GjBS
-         WjMLhoT/tVbpExBwN0JE7naS4BOxG/QotyAl69IZNlNgbzOFLTgumbVHVX+hGdbwTeZP
-         e3gYe3TR5DHTfUyncMJEKFM65XYccihOlHjLf6hayqK8w7rxM8+49c43rxzd5ba5AM6j
-         UH+stJoJWH5QwpkwTtvGtAASmh/hf5htTeLYj2cR+l0DuWGEgVuJIKbVRmu4iGbBBmFl
-         UUtw==
-X-Gm-Message-State: ANoB5pmB2SbB+FmjS7x+1AiqV2CH0LZ73orxdjkREKELqQHyuiUABo6K
-        Ish3SsFOisTZGJdvyJcMr8s3fRgoH+JhRP/cxsf4Tw==
-X-Google-Smtp-Source: AA0mqf6W5zpDKROjnMl3GTjIXaJn/aDyyirurkunUdso7ifE6KFYTLQyFvO/n1jCPAVwyJOIhMU88JPNhp0PxlfMVBc=
-X-Received: by 2002:ab0:77c1:0:b0:418:620e:6794 with SMTP id
- y1-20020ab077c1000000b00418620e6794mr58514960uar.59.1671544041123; Tue, 20
- Dec 2022 05:47:21 -0800 (PST)
+        Tue, 20 Dec 2022 08:48:56 -0500
+Received: from pv50p00im-ztdg10021901.me.com (pv50p00im-ztdg10021901.me.com [17.58.6.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E1F95B6
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 05:48:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zzy040330.moe;
+        s=sig1; t=1671544134;
+        bh=urUTsBdrwL9I2ZT1boNQEfwYLQQMShMrrqH0rVVbrRQ=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=hxXLRvEY1Rw90AMW1xuOflDjkIAEi6yOifccnQqfhTN+rHhYIqQGQi36UP+dTULY2
+         dC1j0dXbnd+Lwdiu8kkMVFiSJ6CGBPcLc7i1xtwMhSZe1LkS7hzZZHCtUEe3AIQQBu
+         OxRaEC3CuaDMZcRKHQbyJBVAMQCsxcUCkdTOpDNn6sSzfTFodJEJdttsgZawo1TbNS
+         836qnX6RXG662HKxiR7ksNFhK9jZmDzJdxVer7VhGf6Ua5hGvPNvxBLlR8bxeZTxm+
+         6GKQiF8avPyHipXPG/DJHfQ9AHb77OJQSrDyun+TxnHM6fz8JL/a6xLkk89/cRA8M4
+         2Ju7/P70wM8Kw==
+Received: from [192.168.1.30] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+        by pv50p00im-ztdg10021901.me.com (Postfix) with ESMTPSA id A408C814DA;
+        Tue, 20 Dec 2022 13:48:50 +0000 (UTC)
+Message-ID: <192a31a9-ea33-0c51-6549-0525fd3a5b4e@zzy040330.moe>
+Date:   Tue, 20 Dec 2022 21:48:47 +0800
 MIME-Version: 1.0
-References: <CA+G9fYvz1eNS5fw1Wg5f4HqwdWPNg3EQyrGZVEOJ=OQzYzZ_YQ@mail.gmail.com>
- <1671532079.1159124-1-xuanzhuo@linux.alibaba.com> <20221220054938-mutt-send-email-mst@kernel.org>
- <CGME20221220131747eucas1p1411947fee7d65825ccedad8f8a12a4df@eucas1p1.samsung.com>
- <206f30df-4833-3909-2d01-472fcfa2baa6@samsung.com> <20221220082606-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20221220082606-mutt-send-email-mst@kernel.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 20 Dec 2022 19:17:09 +0530
-Message-ID: <CA+G9fYtaKquTs-pz2Lc2bgDiQw5d2nFKK1kGwFR2WWDBKNbRkQ@mail.gmail.com>
-Subject: Re: next: kernel BUG at drivers/virtio/virtio.c:122!
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Shaoqin Huang <shaoqin.huang@intel.com>,
-        Angus Chen <angus.chen@jaguarmicro.com>,
-        =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        virtualization@lists.linux-foundation.org, dmitry.fomichev@wdc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] wifi: rtl8xxxu: fixing transmisison failure for rtl8192eu
+Content-Language: en-US
+To:     Bitterblue Smith <rtl8821cerfe2@gmail.com>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        "Jes.Sorensen@gmail.com" <Jes.Sorensen@gmail.com>
+Cc:     "kvalo@kernel.org" <kvalo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221217030659.12577-1-JunASAKA@zzy040330.moe>
+ <3b4124ebabcb4ceaae89cd9ccf84c7de@realtek.com>
+ <33b2b585-c5b1-5888-bcee-ca74ce809a44@gmail.com>
+From:   Jun ASAKA <JunASAKA@zzy040330.moe>
+In-Reply-To: <33b2b585-c5b1-5888-bcee-ca74ce809a44@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: q507JHXLFw3SkZ5kvQgEzDwMs_YeXnWm
+X-Proofpoint-GUID: q507JHXLFw3SkZ5kvQgEzDwMs_YeXnWm
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.883,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-06-21=5F08:2020-02-14=5F02,2022-06-21=5F08,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 clxscore=1030 bulkscore=0
+ mlxlogscore=692 adultscore=0 suspectscore=0 mlxscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2212200113
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Dec 2022 at 18:56, Michael S. Tsirkin <mst@redhat.com> wrote:
+On 20/12/2022 21:03, Bitterblue Smith wrote:
+
+> On 20/12/2022 07:44, Ping-Ke Shih wrote:
+>>
+>>> -----Original Message-----
+>>> From: Jun ASAKA <JunASAKA@zzy040330.moe>
+>>> Sent: Saturday, December 17, 2022 11:07 AM
+>>> To: Jes.Sorensen@gmail.com
+>>> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
+>>> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Jun ASAKA
+>>> <JunASAKA@zzy040330.moe>
+>>> Subject: [PATCH] wifi: rtl8xxxu: fixing transmisison failure for rtl8192eu
+>>>
+>>> Fixing transmission failure which results in
+>>> "authentication with ... timed out". This can be
+>>> fixed by disable the REG_TXPAUSE.
+>>>
+>>> Signed-off-by: Jun ASAKA <JunASAKA@zzy040330.moe>
+>>> ---
+>>>   drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c | 5 +++++
+>>>   1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>> b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>> index a7d76693c02d..9d0ed6760cb6 100644
+>>> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>> @@ -1744,6 +1744,11 @@ static void rtl8192e_enable_rf(struct rtl8xxxu_priv *priv)
+>>>   	val8 = rtl8xxxu_read8(priv, REG_PAD_CTRL1);
+>>>   	val8 &= ~BIT(0);
+>>>   	rtl8xxxu_write8(priv, REG_PAD_CTRL1, val8);
+>>> +
+>>> +	/*
+>>> +	 * Fix transmission failure of rtl8192e.
+>>> +	 */
+>>> +	rtl8xxxu_write8(priv, REG_TXPAUSE, 0x00);
+>> I trace when rtl8xxxu set REG_TXPAUSE=0xff that will stop TX.
+>> The occasions include RF calibration, LPS mode (called by power off), and
+>> going to stop. So, I think RF calibration does TX pause but not restore
+>> settings after calibration, and causes TX stuck. As the flow I traced,
+>> this patch looks reasonable. But, I wonder why other people don't meet
+>> this problem.
+>>
+> Other people have this problem too:
+> https://bugzilla.kernel.org/show_bug.cgi?id=196769
+> https://bugzilla.kernel.org/show_bug.cgi?id=216746
+Actually, one of the two bug was issued by me. Also, my friend who is 
+using a TP-Link rtl8192eu device said that his device doesn't work as well.
 >
-> On Tue, Dec 20, 2022 at 02:17:45PM +0100, Marek Szyprowski wrote:
-> > On 20.12.2022 11:54, Michael S. Tsirkin wrote:
-> > > On Tue, Dec 20, 2022 at 06:27:59PM +0800, Xuan Zhuo wrote:
-> > >> On Tue, 20 Dec 2022 14:51:54 +0530, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > >>> The qemu-x86_64 and qemu-arm64 boot failed with Linux next-20221220 tag.
-> > >>> It is always reproducible with gcc-11/ gcc-12 and clang tool chains.
-> > >>>
-> > >>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > >>>
-> > >>> <6>[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x000f0510]
-> > >>> <5>[    0.000000] Linux version 6.1.0-next-20221220 (tuxmake@tuxmake)
-> > >>> (Debian clang version 16.0.0
-> > >>> (++20221218072110+9c1b82599dac-1~exp1~20221218072217.501), Debian LLD
-> > >>> 16.0.0) #1 SMP PREEMPT @1671498176
-> > >>> <5>[    0.000000] random: crng init done
-> > >>> <6>[    0.000000] Machine model: linux,dummy-virt
-> > >>> ....
-> > >>> <6>[    3.571098] loop: module loaded
-> > >>> <6>[    3.573410] virtio_blk virtio0: 1/0/0 default/read/poll queues
-> > >>> <5>[    3.578816] virtio_blk virtio0: [vda] 2816420 512-byte logical
-> > >>> blocks (1.44 GB/1.34 GiB)
-> > >>> <4>[    3.581234] ------------[ cut here ]------------
-> > >>> <2>[    3.581595] kernel BUG at drivers/virtio/virtio.c:122!
-> > >>> <0>[    3.582906] Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-
-<Trim>
-
-> > > Testing this fixup now:
-
-Thanks for providing a quick fix.
-
-> > > commit f9503d0fd839b59e0f48b00c20635437c41420ed
-> > > Author: Michael S. Tsirkin <mst@redhat.com>
-> > > Date:   Tue Dec 20 05:53:41 2022 -0500
-> > >
-> > >      fixup! virtio-blk: add support for zoned block devices
-> >
-> > I also confirm that this patch fixes the issue with broken virtio block
-> > device observed on QEMU arm/arm64 'virt' machines and linux
-> > next-20221220. Thanks for the fix!
-> >
-> > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
->
-> Merged the fix already so I'm not sure I can add this tag.
-> If I rebase before pull request I will, thanks!
-
-[Sorry for delayed reply]
-
-> > > diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
-> > > index ff49052e26f7..d8cdaeb51d1c 100644
-> > > --- a/drivers/block/virtio_blk.c
-> > > +++ b/drivers/block/virtio_blk.c
-> > > @@ -775,6 +775,10 @@ static int virtblk_probe_zoned_device(struct virtio_device *vdev,
-> > >     return ret;
-> > >   }
-> > >
-> > > +static inline bool virtblk_has_zoned_feature(struct virtio_device *vdev)
-> > > +{
-> > > +   return virtio_has_feature(vdev, VIRTIO_BLK_F_ZONED);
-> > > +}
-> > >   #else
-> > >
-> > >   /*
-> > > @@ -790,6 +794,11 @@ static inline int virtblk_probe_zoned_device(struct virtio_device *vdev,
-> > >   {
-> > >     return -EOPNOTSUPP;
-> > >   }
-> > > +
-> > > +static inline bool virtblk_has_zoned_feature(struct virtio_device *vdev)
-> > > +{
-> > > +   return false;
-> > > +}
-> > >   #endif /* CONFIG_BLK_DEV_ZONED */
-> > >
-> > >   /* return id (s/n) string for *disk to *id_str
-> > > @@ -1576,11 +1585,11 @@ static int virtblk_probe(struct virtio_device *vdev)
-> > >             else
-> > >                     q->limits.discard_granularity = blk_size;
-> > >     }
-> > >
-> > >     virtblk_update_capacity(vblk, false);
-> > >     virtio_device_ready(vdev);
-> > >
-> > > -   if (virtio_has_feature(vdev, VIRTIO_BLK_F_ZONED)) {
-> > > +   if (virtblk_has_zoned_feature(vdev)) {
-> > >             err = virtblk_probe_zoned_device(vdev, vblk, q);
-> > >             if (err)
-> > >                     goto out_cleanup_disk;
-> >
-> > Best regards
-> > --
-> > Marek Szyprowski, PhD
-> > Samsung R&D Institute Poland
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> The RF calibration does restore REG_TXPAUSE at the end. What happens is
+> when you plug in the device, something (mac80211? wpa_supplicant?) calls
+> rtl8xxxu_start(), then rtl8xxxu_stop(), then rtl8xxxu_start() again.
+> rtl8xxxu_stop() sets REG_TXPAUSE to 0xff and nothing sets it back to 0.
