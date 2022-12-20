@@ -2,129 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 511B1651EB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE9D651EB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233632AbiLTKWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:22:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45036 "EHLO
+        id S233686AbiLTKXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233296AbiLTKWi (ORCPT
+        with ESMTP id S233296AbiLTKXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:22:38 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD3129FE9;
-        Tue, 20 Dec 2022 02:22:37 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 857892F4;
-        Tue, 20 Dec 2022 02:23:18 -0800 (PST)
-Received: from [10.57.12.74] (unknown [10.57.12.74])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A50E3F71A;
-        Tue, 20 Dec 2022 02:22:34 -0800 (PST)
-Message-ID: <6f7291d7-ed3d-2ed2-654f-b8ba1a63cbad@arm.com>
-Date:   Tue, 20 Dec 2022 10:22:32 +0000
+        Tue, 20 Dec 2022 05:23:42 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8415FAF2;
+        Tue, 20 Dec 2022 02:23:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1671531821;
+  x=1703067821;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Xh5Y6FwbdNID/96r51blgPxGkBw0GmwLd4y9nEZHdW0=;
+  b=DVqNZTjdvFEIArPZTwailrkzdVyJbTakHZgTPrNY8UXrDGwsIVWBcZZS
+   WkVNux1lEm0Crly1hCPMtZo92onHvmUhCVbDir5GZ81XEWiQxKC3D/pdA
+   LgkFH3E0+PbNPDp+hZdmW2bVEiihhcDEVL974Kysyt0UzilNKl1cT19WL
+   4n8bysDuEW8lTAVx/gmnoMla0dmuBXsiytSTO3ImogIxqTmIxJ4V7t6ga
+   QZud7kbeYPa7MW7RDI5jEsrVe7wYuU5xKk9rxGxq8GsecB7SK/FPGr0qh
+   l90YNmfPSewY6k5V4VPgmqiszwr5BCFNp6V4I4ZFgv8C+JGYZZWP8p1EP
+   Q==;
+From:   Rickard Andersson <rickaran@axis.com>
+To:     <linux-kernel@vger.kernel.org>, <oberpar@linux.ibm.com>
+CC:     <rickard314.andersson@gmail.com>, <mliska@suse.cz>,
+        <Jesper.Nilsson@axis.com>, Rickard x Andersson <rickaran@axis.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v2] gcov: Add support for checksum field
+Date:   Tue, 20 Dec 2022 11:23:18 +0100
+Message-ID: <20221220102318.3418501-1-rickaran@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 1/4] perf event: Add simd_flags field to perf_sample
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     linux-perf-users@vger.kernel.org, robh@kernel.org,
-        German Gomez <german.gomez@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20221219161259.3097213-1-james.clark@arm.com>
- <20221219161259.3097213-2-james.clark@arm.com>
- <CAM9d7chFXKTcD80dLkFLwQVT9M+k0oRSB5C7gXUXUS2OZ0UusQ@mail.gmail.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <CAM9d7chFXKTcD80dLkFLwQVT9M+k0oRSB5C7gXUXUS2OZ0UusQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.0.5.60]
+X-ClientProxiedBy: se-mail05w.axis.com (10.20.40.11) To se-mail03w.axis.com
+ (10.20.40.9)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Rickard x Andersson <rickaran@axis.com>
 
+In GCC version 12.1 a checksum field was added.
 
-On 19/12/2022 18:21, Namhyung Kim wrote:
-> Hi James,
-> 
-> On Mon, Dec 19, 2022 at 8:13 AM James Clark <james.clark@arm.com> wrote:
->>
->> From: German Gomez <german.gomez@arm.com>
->>
->> Add new field to the struct perf_sample to store flags related to SIMD
->> ops.
->>
->> It will be used to store SIMD information from SVE and NEON when
->> profiling using ARM SPE.
->>
->> Signed-off-by: German Gomez <german.gomez@arm.com>
->> Signed-off-by: James Clark <james.clark@arm.com>
->> ---
->>  tools/perf/util/sample.h | 13 +++++++++++++
->>  1 file changed, 13 insertions(+)
->>
->> diff --git a/tools/perf/util/sample.h b/tools/perf/util/sample.h
->> index 60ec79d4eea4..bdf52faf165f 100644
->> --- a/tools/perf/util/sample.h
->> +++ b/tools/perf/util/sample.h
->> @@ -66,6 +66,18 @@ struct aux_sample {
->>         void *data;
->>  };
->>
->> +struct simd_flags {
->> +       u64     arch:1, /* architecture (isa) */
->> +               pred:2; /* predication */
-> 
-> Can we reserve more bits for possible future extension or
-> other arch support?  It seems to be too tight for each field.
-> Do you plan to add more info to the struct in the future?
+This patch fixes a kernel crash occurring during boot when
+using gcov-kernel with GCC version 12.2. The crash occurred on
+a system running on i.MX6SX.
 
-As far as I can see because this is userspace only, reserving bits
-doesn't be done ahead of time. When we need more bits we can just add
-it. It never gets written to a file either so there is no need for
-backwards compatibility.
+Fixes: 977ef30a7d88 ("gcov: support GCC 12.1 and newer compilers")
+Signed-off-by: Rickard x Andersson <rickaran@axis.com>
+Reviewed-by: Peter Oberparleiter <oberpar@linux.ibm.com>
+Tested-by: Peter Oberparleiter <oberpar@linux.ibm.com>
+Cc: <stable@vger.kernel.org>
+---
+ kernel/gcov/gcc_4_7.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> 
-> Thanks,
-> Namhyung
-> 
-> 
->> +};
->> +
->> +/* simd architecture flags */
->> +#define SIMD_OP_FLAGS_ARCH_SVE         0x01    /* ARM SVE */
->> +
->> +/* simd predicate flags */
->> +#define SIMD_OP_FLAGS_PRED_PARTIAL     0x01    /* partial predicate */
->> +#define SIMD_OP_FLAGS_PRED_EMPTY       0x02    /* empty predicate */
->> +
->>  struct perf_sample {
->>         u64 ip;
->>         u32 pid, tid;
->> @@ -103,6 +115,7 @@ struct perf_sample {
->>         struct stack_dump user_stack;
->>         struct sample_read read;
->>         struct aux_sample aux_sample;
->> +       struct simd_flags simd_flags;
->>  };
->>
->>  /*
->> --
->> 2.25.1
->>
+diff --git a/kernel/gcov/gcc_4_7.c b/kernel/gcov/gcc_4_7.c
+index c699feda21ac..04880d8fba25 100644
+--- a/kernel/gcov/gcc_4_7.c
++++ b/kernel/gcov/gcc_4_7.c
+@@ -85,6 +85,7 @@ struct gcov_fn_info {
+  * @version: gcov version magic indicating the gcc version used for compilation
+  * @next: list head for a singly-linked list
+  * @stamp: uniquifying time stamp
++ * @checksum: unique object checksum
+  * @filename: name of the associated gcov data file
+  * @merge: merge functions (null for unused counter type)
+  * @n_functions: number of instrumented functions
+@@ -97,6 +98,10 @@ struct gcov_info {
+ 	unsigned int version;
+ 	struct gcov_info *next;
+ 	unsigned int stamp;
++ /* Since GCC 12.1 a checksum field is added. */
++#if (__GNUC__ >= 12)
++	unsigned int checksum;
++#endif
+ 	const char *filename;
+ 	void (*merge[GCOV_COUNTERS])(gcov_type *, unsigned int);
+ 	unsigned int n_functions;
+-- 
+2.30.2
+
