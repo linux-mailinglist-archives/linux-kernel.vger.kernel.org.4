@@ -2,151 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F0D65232D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54508652335
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:55:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233263AbiLTOy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 09:54:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
+        id S233724AbiLTOzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 09:55:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233480AbiLTOyP (ORCPT
+        with ESMTP id S233397AbiLTOzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:54:15 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55DC1AA2B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:54:13 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id p36so18924852lfa.12
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:54:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CpNRpO9wa9stwssfJtyLudHPW4w/SlfVzYpf2TY5wXw=;
-        b=qmspUH8EQvvCbrbdWy1eZ2Kl+G8Ef6clk3GUnGWJhxrfkEKF/qtlnI6mufTZZ4Wi+d
-         FkY9N1XkwWeh/yrG/uoow2svYQQMrMwyBeARY6QTS3036Yqs4mMKVRWiqNRH8SH1zsuq
-         5vWN94KS9IXJIkdcsQYOv7FsBho4cmozIgMrcmY7JoeMt5RBjk4Am7r8Iz43fVlY7+Gc
-         LR0QItfv1S7tnQQehVv29JTrs2NRJe5oj0vo8RZSa9YYtbiVVwKzwSmewcTdYtlJc4th
-         hD4rA58+p4fan4Di2bnVrtXTn3qE2rmqkr0EGDX11XKgDdslDm9kUTpwGH6/wsVhd1Q1
-         UVYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CpNRpO9wa9stwssfJtyLudHPW4w/SlfVzYpf2TY5wXw=;
-        b=lRCNsgBJHQTn3chm/0Ifx8iicBMH0CESWNrbVqJwdeBHJ9+KTpphetZIVRxGxqBMfk
-         NQofx1PS1TkrDDKKaelO84DVCpCXT9AQhq0FriZbyY0Bq16l8sj+TH3XcdvCaww9hykn
-         bmx/1ij9YsDopVuTEI9ALuQZsNm9TUxwx/uZjSo1nGm10hG47lOb6rUJMIPHvwlXEJPi
-         F+T+BVFn0KFmdUHCbPvQPppGBwD61lfQ+5zXJaHKeVthKx65+i07j9UwXG2uNBPCccgh
-         qQU7g5qprcgKKOnj3YDnFBYd/LpWBf4s5uMjx0J/zaZRWqgM7vnJkamiu3x65Hqvj4HS
-         2i6A==
-X-Gm-Message-State: AFqh2krJMDbJrIxGzMjXaMJmo7qpMLoGag9aJrQxjJN4J0RQHE6dmc4I
-        C20uNSiZeDFIlQdYsJs4eGAS5w==
-X-Google-Smtp-Source: AMrXdXs3MjWU/d2BMKBSMrPV3puVinkewStaqEJThI3KvVlGwi+i8CEnNWpd0NY8YOmO/6Xom1daqA==
-X-Received: by 2002:a05:6512:3b2c:b0:4a4:68b7:deab with SMTP id f44-20020a0565123b2c00b004a468b7deabmr1102337lfv.7.1671548052179;
-        Tue, 20 Dec 2022 06:54:12 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id s12-20020a056512214c00b00498f00420e9sm1477486lfr.194.2022.12.20.06.54.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 06:54:11 -0800 (PST)
-Message-ID: <5ba4295f-1197-913c-b1eb-a23798c3badf@linaro.org>
-Date:   Tue, 20 Dec 2022 15:54:10 +0100
+        Tue, 20 Dec 2022 09:55:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E711B7BC
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:54:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671548088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ko0kNgzYIZhZ7GeMVgSXuptscUvRr7VT4Xy66tEkl3E=;
+        b=LxS+PsRCSWhEd1EsfjKCuGQPbtu5jZA7KLxumqHUV2rIkCkSVrJp+wH7cDF6ZXwZfwOUhl
+        Ni6I0Qn0I0rDqPksksXsdKF0CrTXZR+q3c+v4m6Bgpa0Yl6rOWG7qYxdO3ErKkePe9k2UG
+        zaDCsVhYAuynGn3XTbxlCySZYvWFTwA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-312-vgw5XObPNZOYOnHOttwghA-1; Tue, 20 Dec 2022 09:54:46 -0500
+X-MC-Unique: vgw5XObPNZOYOnHOttwghA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 62D4D1C25E84;
+        Tue, 20 Dec 2022 14:54:46 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4708C112132C;
+        Tue, 20 Dec 2022 14:54:46 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM/RISC-V changes for Linux 6.2
+Date:   Tue, 20 Dec 2022 09:54:45 -0500
+Message-Id: <20221220145445.1221050-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 4/6] dt-bindings: power: supply: add MAX77659 charger
- binding
-Content-Language: en-US
-To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
-        lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org,
-        lgirdwood@gmail.com, broonie@kernel.org
-Cc:     Nurettin.Bolucu@analog.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20221220132250.19383-1-Zeynep.Arslanbenzer@analog.com>
- <20221220132250.19383-5-Zeynep.Arslanbenzer@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221220132250.19383-5-Zeynep.Arslanbenzer@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/12/2022 14:22, Zeynep Arslanbenzer wrote:
-> This patch adds device tree binding documentation for MAX77659 charger.
+Linus,
 
-Do not use "This commit/patch".
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+The following changes since commit 76dcd734eca23168cb008912c0f69ff408905235:
 
-> 
-> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> ---
->  .../power/supply/adi,max77659-charger.yaml    | 42 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 43 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/adi,max77659-charger.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/adi,max77659-charger.yaml b/Documentation/devicetree/bindings/power/supply/adi,max77659-charger.yaml
-> new file mode 100644
-> index 000000000000..24f8b5a2bd84
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/adi,max77659-charger.yaml
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/adi,max77659-charger.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Battery charger for MAX77659 PMIC from ADI.
+  Linux 6.1-rc8 (2022-12-04 14:48:12 -0800)
 
-Drop full stop.
+are available in the Git repository at:
 
-> +
-> +maintainers:
-> +  - Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> +
-> +description: |
-> +  This module is part of the MAX77659 MFD device. For more details
-> +  see Documentation/devicetree/bindings/mfd/adi,max77659.yaml.
-> +
-> +  The charger is represented as a sub-node of the PMIC node on the device tree.
-> +
-> +properties:
-> +  compatible:
-> +    const: adi,max77659-charger
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  adi,fast-charge-timer:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Fast-charge safety timer value (in hours).
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-No, use suffixes for common units.
+for you to fetch changes up to 6ebbdecff6ae00557a52539287b681641f4f0d33:
 
-> +
-> +  adi,fast-charge-microamp:
-> +    description: Fast-charge constant current value.
+  RISC-V: KVM: Add ONE_REG interface for mvendorid, marchid, and mimpid (2022-12-07 09:17:49 +0530)
 
-> +
-> +  adi,topoff-timer:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Top-Off timer value (in minutes).
+----------------------------------------------------------------
+KVM/riscv changes for 6.2
 
-No, use suffixes for common units.
+* Allow unloading KVM module
 
+* Allow KVM user-space to set mvendorid, marchid, and mimpid
 
-Best regards,
-Krzysztof
+* Several fixes and cleanups
+
+----------------------------------------------------------------
+Anup Patel (9):
+      RISC-V: KVM: Exit run-loop immediately if xfer_to_guest fails
+      RISC-V: KVM: Fix reg_val check in kvm_riscv_vcpu_set_reg_config()
+      RISC-V: KVM: Remove redundant includes of asm/kvm_vcpu_timer.h
+      RISC-V: KVM: Remove redundant includes of asm/csr.h
+      RISC-V: KVM: Use switch-case in kvm_riscv_vcpu_set/get_reg()
+      RISC-V: KVM: Move sbi related struct and functions to kvm_vcpu_sbi.h
+      RISC-V: Export sbi_get_mvendorid() and friends
+      RISC-V: KVM: Save mvendorid, marchid, and mimpid when creating VCPU
+      RISC-V: KVM: Add ONE_REG interface for mvendorid, marchid, and mimpid
+
+Bo Liu (1):
+      RISC-V: KVM: use vma_lookup() instead of find_vma_intersection()
+
+Christophe JAILLET (1):
+      RISC-V: KVM: Simplify kvm_arch_prepare_memory_region()
+
+XiakaiPan (1):
+      RISC-V: KVM: Add exit logic to main.c
+
+ arch/riscv/include/asm/kvm_host.h     | 16 +++----
+ arch/riscv/include/asm/kvm_vcpu_sbi.h |  6 +++
+ arch/riscv/include/uapi/asm/kvm.h     |  3 ++
+ arch/riscv/kernel/sbi.c               |  3 ++
+ arch/riscv/kvm/main.c                 |  6 +++
+ arch/riscv/kvm/mmu.c                  |  6 +--
+ arch/riscv/kvm/vcpu.c                 | 85 ++++++++++++++++++++++++++---------
+ arch/riscv/kvm/vcpu_sbi_base.c        | 13 +++---
+ arch/riscv/kvm/vcpu_sbi_hsm.c         |  1 -
+ arch/riscv/kvm/vcpu_sbi_replace.c     |  1 -
+ arch/riscv/kvm/vcpu_sbi_v01.c         |  1 -
+ 11 files changed, 97 insertions(+), 44 deletions(-)
 
