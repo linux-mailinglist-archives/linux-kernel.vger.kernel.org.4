@@ -2,179 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FDF1651C4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 09:25:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C138F651C54
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 09:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233260AbiLTIZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 03:25:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
+        id S233099AbiLTI2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 03:28:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiLTIZU (ORCPT
+        with ESMTP id S230090AbiLTI2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 03:25:20 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B32178AC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 00:24:53 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id c17so16361865edj.13
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 00:24:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vn9Nt9IJlIMMg9LSThVifFo0TYNvYT361Pi382B0888=;
-        b=jx1t0UmKWYYGeYew+Prv1/KTMXe4NVP1XdzX6/GnM0M3k9//zj4kooOPQXvcPu75LH
-         GCmCdDrHwI4sFxhFlHdc5GfTOuLxFA+uRpxs/2srtHiayEFQiwcmTepPdBK8ntKRT7ZC
-         43ffFyv9l1TJlboTSFjSyUswCC5VqcVzYdAGkgyyoNFCetacuEDrcidB4qNpUlz9zSoH
-         X9zCH0QficOj4ARwc5lECKhaNeEt3AjOHrl7LAnHzljKAmyXVQ1LVG/hZ0bCaeBDmlzD
-         SADUE6xhKw5RAx/II/8JQbhGAnUTsPKqoIuDzicHv4BQuC7SNwbsEuH49vgyvJBKqtM4
-         YQgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vn9Nt9IJlIMMg9LSThVifFo0TYNvYT361Pi382B0888=;
-        b=g4jirFwaafV3nikU2+85pwdFYVrSx3wpJtqSERsRngZ4Ezhry+JDcP4upd7UMdjUk6
-         eBnzUudJJK+6kNHMWrinUMmYxif4SiCQ/jOTuNgs2zRoAb1b+gWOUjvDg9NAshHzwbfO
-         OeUP5Q9iYZM5EAILPXX8JCVnvke7XDbZJkBX4hlqX6OF63Aq72bK6agBOs7xfwLkMR0v
-         SXl75KAc2ebwBDei7/NwvDJoKTTErJNaeHUme9DvBbzPkjOPTCabTiA3tpES7swfFBLy
-         4qQy+lwXuXgp7D1OqrS7X/ToaIggcYeonmvk3/ekegqTGK9s16KUFoCINAgIqRS094Ei
-         e0iw==
-X-Gm-Message-State: ANoB5pmofgXkWqcdDiBs4Es9obJbLt4LevnHmE9WYTpI9+D+rMqDj2b+
-        0xf4vEtP1Qiv06Oxm/Ry5qn8Ydp5Rsh/83XBQ2oP
-X-Google-Smtp-Source: AA0mqf459+YxUfzZAII1ome4M5LVER7wiG4cpr6EAzpkTjR2jCTKL6j4Uh1ZisOt10fKlv4tZ2j1QGGwdFkr30+qOkU=
-X-Received: by 2002:aa7:d4d4:0:b0:46b:5c9f:52e with SMTP id
- t20-20020aa7d4d4000000b0046b5c9f052emr43944453edr.416.1671524691636; Tue, 20
- Dec 2022 00:24:51 -0800 (PST)
-MIME-Version: 1.0
-References: <20221205084127.535-1-xieyongji@bytedance.com> <20221205090243.791-1-xieyongji@bytedance.com>
- <20221205090243.791-2-xieyongji@bytedance.com> <CACGkMEsX1RjU_ncNTY-KbeUY8bxm7X62V_SNO=hMehZRuGQ+CQ@mail.gmail.com>
- <CACycT3sGf9-zvR_XGEJuPVQhLSp4zsiO1x7RZ5KHBKbE5Deu2Q@mail.gmail.com> <CACGkMEuDXytqSWNsx1+GDOSLL0X2Z1fEWWBWT5_nJc-iks9Udw@mail.gmail.com>
-In-Reply-To: <CACGkMEuDXytqSWNsx1+GDOSLL0X2Z1fEWWBWT5_nJc-iks9Udw@mail.gmail.com>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Tue, 20 Dec 2022 16:24:39 +0800
-Message-ID: <CACycT3stmvptVrbvFXXgM2oWzHwG_rGRuO=WkpbNcZ=Dvujy-A@mail.gmail.com>
-Subject: Re: [PATCH v2 08/11] vduse: Add sysfs interface for irq callback affinity
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Tue, 20 Dec 2022 03:28:01 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E50D165B3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 00:28:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671524880; x=1703060880;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=T158du3kGmXXokicPR6fB328LpH2wH7Nj0/DHwUoQRI=;
+  b=KIvnwobu77IleDooldn66umBovdYqOgGCMySIhPpw21iY5pIaWdfG/mA
+   BkRwm2qzNXWbZ8U39z7SbybuwTut8/REKoRqwBgjF4WW9fzkwllFGhLpg
+   UXWEe4KAZOqOr6mQpRhvs5zwz2kZYVtch83FSQHWk5UejythVg2LTNDz8
+   cxVPZpKVbwV3KNa8kurPB4tUFUycAoACa1mhwjOejwHAdUrZH533zwxU4
+   0awhQJBiqZJCOzcb5fZvMOfS8VtcFJGl19MjgWT/ZnO/Px0pkqk4hFCve
+   KWOoA3xb1hcbWaDH5JuVJki9/XnskJ9dyqxtDJP8oY55zO1pFZM/ltPSn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="307240031"
+X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
+   d="scan'208";a="307240031"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 00:27:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="793206662"
+X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
+   d="scan'208";a="793206662"
+Received: from feng-clx.sh.intel.com ([10.238.200.228])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Dec 2022 00:27:56 -0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     John Stultz <john.stultz@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@lst.de>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Stephen Boyd <sboyd@kernel.org>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Feng Tang <feng.tang@intel.com>
+Subject: [RFC PATCH] clocksource: Suspend the watchdog temporarily when high read lantency detected
+Date:   Tue, 20 Dec 2022 16:25:12 +0800
+Message-Id: <20221220082512.186283-1-feng.tang@intel.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 2:29 PM Jason Wang <jasowang@redhat.com> wrote:
->
-> On Mon, Dec 19, 2022 at 1:16 PM Yongji Xie <xieyongji@bytedance.com> wrote:
-> >
-> > On Fri, Dec 16, 2022 at 1:35 PM Jason Wang <jasowang@redhat.com> wrote:
-> > >
-> > > On Mon, Dec 5, 2022 at 5:03 PM Xie Yongji <xieyongji@bytedance.com> wrote:
-> > > >
-> > > > Add sysfs interface for each vduse virtqueue to
-> > > > show the affinity and effective affinity for irq
-> > > > callback.
-> > > >
-> > > > And we can also use this interface to change the
-> > > > effective affinity which must be a subset of the
-> > > > irq callback affinity mask for the virtqueue. This
-> > > > might be useful for performance tuning when the irq
-> > > > callback affinity mask contains more than one CPU.
-> > > >
-> > > > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-> > > > ---
-> > > >  drivers/vdpa/vdpa_user/vduse_dev.c | 148 ++++++++++++++++++++++++++---
-> > > >  1 file changed, 137 insertions(+), 11 deletions(-)
-> > > >
-> > > > diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-> > > > index 6507a78abc9d..c65f84100e30 100644
-> > > > --- a/drivers/vdpa/vdpa_user/vduse_dev.c
-> > > > +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-> > > > @@ -61,6 +61,7 @@ struct vduse_virtqueue {
-> > > >         int irq_effective_cpu;
-> > > >         struct cpumask irq_affinity;
-> > > >         spinlock_t irq_affinity_lock;
-> > > > +       struct kobject kobj;
-> > > >  };
-> > > >
-> > > >  struct vduse_dev;
-> > > > @@ -1419,6 +1420,120 @@ static const struct file_operations vduse_dev_fops = {
-> > > >         .llseek         = noop_llseek,
-> > > >  };
-> > > >
-> > > > +static ssize_t irq_cb_affinity_show(struct vduse_virtqueue *vq, char *buf)
-> > > > +{
-> > > > +       return sprintf(buf, "%*pb\n", cpumask_pr_args(&vq->irq_affinity));
-> > > > +}
-> > > > +
-> > > > +static ssize_t irq_cb_effective_affinity_show(struct vduse_virtqueue *vq,
-> > > > +                                             char *buf)
-> > > > +{
-> > > > +       struct cpumask all_mask = CPU_MASK_ALL;
-> > > > +       const struct cpumask *mask = &all_mask;
-> > > > +
-> > > > +       if (vq->irq_effective_cpu != -1)
-> > > > +               mask = get_cpu_mask(vq->irq_effective_cpu);
-> > >
-> > > Shouldn't this be vq->irq_affinity?
-> > >
-> >
-> > This sysfs interface is provided for effective irq affinity rather
-> > than irq affinity. We created another read-only sysfs interface for
-> > irq affinity.
-> >
-> > > > +
-> > > > +       return sprintf(buf, "%*pb\n", cpumask_pr_args(mask));
-> > > > +}
-> > > > +
-> > > > +static ssize_t irq_cb_effective_affinity_store(struct vduse_virtqueue *vq,
-> > > > +                                              const char *buf, size_t count)
-> > > > +{
-> > > > +       cpumask_var_t new_value;
-> > > > +       int ret;
-> > > > +
-> > > > +       if (!zalloc_cpumask_var(&new_value, GFP_KERNEL))
-> > > > +               return -ENOMEM;
-> > > > +
-> > > > +       ret = cpumask_parse(buf, new_value);
-> > > > +       if (ret)
-> > > > +               goto free_mask;
-> > > > +
-> > > > +       ret = -EINVAL;
-> > > > +       if (!cpumask_intersects(new_value, &vq->irq_affinity))
-> > > > +               goto free_mask;
-> > > > +
-> > > > +       spin_lock(&vq->irq_affinity_lock);
-> > > > +
-> > > > +       if (vq->irq_effective_cpu != -1)
-> > > > +               per_cpu(vduse_allocated_irq, vq->irq_effective_cpu) -= 1;
-> > > > +
-> > > > +       vq->irq_effective_cpu = cpumask_first(new_value);
-> > >
-> > > Does this mean except for the first cpu, the rest of the mask is unused?
-> > >
-> >
-> > Yes, but the user should always specify a mask that only contains one
-> > CPU to make it work as expected.
->
-> This doesn't seem to be the way that the IRQ affinity{hint} exported
-> via /sys work. Any reason for doing this?
->
-> (E.g we may have the require to limit the IRQ/callback to a NUMA node
-> instead of a specific cpu)
->
+There were bug reported on 8 sockets x86 machines that TSC was wrongly
+disabled when system is under heavy workload.
 
-Yes, I think we need to make the sysfs interface for irq affinity
-writable. The effective irq affinity can be removed now since we
-choose using round-robin to spread IRQs between CPUs.
+ [ 818.380354] clocksource: timekeeping watchdog on CPU336: hpet wd-wd read-back delay of 1203520ns
+ [ 818.436160] clocksource: wd-tsc-wd read-back delay of 181880ns, clock-skew test skipped!
+ [ 819.402962] clocksource: timekeeping watchdog on CPU338: hpet wd-wd read-back delay of 324000ns
+ [ 819.448036] clocksource: wd-tsc-wd read-back delay of 337240ns, clock-skew test skipped!
+ [ 819.880863] clocksource: timekeeping watchdog on CPU339: hpet read-back delay of 150280ns, attempt 3, marking unstable
+ [ 819.936243] tsc: Marking TSC unstable due to clocksource watchdog
+ [ 820.068173] TSC found unstable after boot, most likely due to broken BIOS. Use 'tsc=unstable'.
+ [ 820.092382] sched_clock: Marking unstable (818769414384, 1195404998)
+ [ 820.643627] clocksource: Checking clocksource tsc synchronization from CPU 267 to CPUs 0,4,25,70,126,430,557,564.
+ [ 821.067990] clocksource: Switched to clocksource hpet
 
-Thanks,
-Yongji
+This can be reproduced when system is running memory intensive 'stream'
+test, or some stress-ng subcases like 'ioport'.
+
+The reason is when system is under heavy load, the read latency of
+clocksource can be very high, it can be seen even with lightweight
+TSC read, and is much worse on MMIO or IO port read based external
+clocksource. Causing the watchdog check to be inaccurate.
+
+As the clocksource watchdog is a lifetime check with frequency of
+twice a second, there is no need to rush doing it when the system
+is under heavy load and the clocksource read latency is very high,
+suspend the watchdog timer for 5 minutes.
+
+Signed-off-by: Feng Tang <feng.tang@intel.com>
+---
+ kernel/time/clocksource.c | 45 ++++++++++++++++++++++++++++-----------
+ 1 file changed, 32 insertions(+), 13 deletions(-)
+
+diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
+index 9cf32ccda715..8cd74b89d577 100644
+--- a/kernel/time/clocksource.c
++++ b/kernel/time/clocksource.c
+@@ -384,6 +384,15 @@ void clocksource_verify_percpu(struct clocksource *cs)
+ }
+ EXPORT_SYMBOL_GPL(clocksource_verify_percpu);
+ 
++static inline void clocksource_reset_watchdog(void)
++{
++	struct clocksource *cs;
++
++	list_for_each_entry(cs, &watchdog_list, wd_list)
++		cs->flags &= ~CLOCK_SOURCE_WATCHDOG;
++}
++
++
+ static void clocksource_watchdog(struct timer_list *unused)
+ {
+ 	u64 csnow, wdnow, cslast, wdlast, delta;
+@@ -391,6 +400,7 @@ static void clocksource_watchdog(struct timer_list *unused)
+ 	int64_t wd_nsec, cs_nsec;
+ 	struct clocksource *cs;
+ 	enum wd_read_status read_ret;
++	unsigned long extra_wait = 0;
+ 	u32 md;
+ 
+ 	spin_lock(&watchdog_lock);
+@@ -410,13 +420,30 @@ static void clocksource_watchdog(struct timer_list *unused)
+ 
+ 		read_ret = cs_watchdog_read(cs, &csnow, &wdnow);
+ 
+-		if (read_ret != WD_READ_SUCCESS) {
+-			if (read_ret == WD_READ_UNSTABLE)
+-				/* Clock readout unreliable, so give it up. */
+-				__clocksource_unstable(cs);
++		if (read_ret == WD_READ_UNSTABLE) {
++			/* Clock readout unreliable, so give it up. */
++			__clocksource_unstable(cs);
+ 			continue;
+ 		}
+ 
++		/*
++		 * When WD_READ_SKIP is returned, it means the system is likely
++		 * under very heavy load, where the latency of reading
++		 * watchdog/clocksource is very big, and affect the accuracy of
++		 * watchdog check. So give system some space and suspend the
++		 * watchdog check for 5 minutes.
++		 */
++		if (read_ret == WD_READ_SKIP) {
++			/*
++			 * As the watchdog timer will be suspended, and
++			 * cs->last could keep unchanged for 5 minutes, reset
++			 * the counters.
++			 */
++			clocksource_reset_watchdog();
++			extra_wait = HZ * 300;
++			break;
++		}
++
+ 		/* Clocksource initialized ? */
+ 		if (!(cs->flags & CLOCK_SOURCE_WATCHDOG) ||
+ 		    atomic_read(&watchdog_reset_pending)) {
+@@ -512,7 +539,7 @@ static void clocksource_watchdog(struct timer_list *unused)
+ 	 * pair clocksource_stop_watchdog() clocksource_start_watchdog().
+ 	 */
+ 	if (!timer_pending(&watchdog_timer)) {
+-		watchdog_timer.expires += WATCHDOG_INTERVAL;
++		watchdog_timer.expires += WATCHDOG_INTERVAL + extra_wait;
+ 		add_timer_on(&watchdog_timer, next_cpu);
+ 	}
+ out:
+@@ -537,14 +564,6 @@ static inline void clocksource_stop_watchdog(void)
+ 	watchdog_running = 0;
+ }
+ 
+-static inline void clocksource_reset_watchdog(void)
+-{
+-	struct clocksource *cs;
+-
+-	list_for_each_entry(cs, &watchdog_list, wd_list)
+-		cs->flags &= ~CLOCK_SOURCE_WATCHDOG;
+-}
+-
+ static void clocksource_resume_watchdog(void)
+ {
+ 	atomic_inc(&watchdog_reset_pending);
+-- 
+2.34.1
+
