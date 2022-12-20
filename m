@@ -2,150 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFCF0651F1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C19B4651F20
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233065AbiLTKnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:43:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
+        id S233054AbiLTKnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:43:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233054AbiLTKnE (ORCPT
+        with ESMTP id S233162AbiLTKnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:43:04 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EF21758A
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:43:03 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id 36so8053009pgp.10
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:43:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=b0sworZPpV39dvKSU5Er/1+K+fBlUn/pwprcfA9fWjg=;
-        b=UPZjp3NhkTvRx7voavcOfvoi0wXnDbntHlqrWLQEpJRMH70XIGjTUH4Ic1t5K8jP1n
-         ySm8VsLljS21AO8zugdKzI4QMcKfgu1qUsUJg1HPbg90mv4hRp1HYyG5ocVXiljFtkuR
-         RXU6PiSHItDCRhhZOLc0DgIrZZW2elyRPm9j+ecXBif+ZH4dlPH5Z55YgXA9XHb/yGku
-         TMewQReh0D0JzzxVLPqAYEHFNvhqxwg30vk3Ji3g6zdO35XlDCumwzVEz5pJcWtRFLxp
-         lJrh4W6Udcj4HOyIGdYDhA5s1MHJ76Dx/X1YrTJ5FFEJN1FK4Re2XJmiahOrXJl2OIfq
-         arOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b0sworZPpV39dvKSU5Er/1+K+fBlUn/pwprcfA9fWjg=;
-        b=6RyoykSYidTUY8s10aq0dEPZnD/lOBocRPaoD06QpDQP3ftrRFTPf+dOJZC/FjU738
-         6MSK9e8wzHz6U77nOrtD+GL/ecxsDB8ddG1+1I2P7wVk8WZ29hB4IwMafJ4rR7dvVFMC
-         +mK2x2v+7eDxDKrH+Z6M0rzErr0g6p3g86CR4VGkdSAOPPrUu988GUg3frRfm5zPRHpH
-         CfF4M6HdoUNpMtL2jW5UENIld0RTGL+EFltTbyApgsAgmPWDARMuW5g1BJXb7EWHAbyJ
-         KntdtDxrLvdH7ijXOoPsMK0eXMleAKLjFhnWq9V24jnPrBOLZlW4KfVbQKKYKZ8Yni5p
-         7smw==
-X-Gm-Message-State: AFqh2kp+pdtu7xZuXOz54xCse9rc5sCOn5uCWTSiE2Coob8j9hSfsvnz
-        i0KCCdc1/k7KKXP5Hsut8c5L
-X-Google-Smtp-Source: AMrXdXvDC3OcmYhX7lW8IjrwijjX+MzcN/cD5PBnovhqEiCJ9LQXD/3u0dWKi7FfhTdkXuhJzMw85Q==
-X-Received: by 2002:a05:6a00:1da5:b0:576:5a71:454a with SMTP id z37-20020a056a001da500b005765a71454amr9275995pfw.2.1671532982752;
-        Tue, 20 Dec 2022 02:43:02 -0800 (PST)
-Received: from thinkpad ([117.217.181.222])
-        by smtp.gmail.com with ESMTPSA id i126-20020a62c184000000b0056c349f5c70sm8264005pfg.79.2022.12.20.02.42.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 02:43:01 -0800 (PST)
-Date:   Tue, 20 Dec 2022 16:12:52 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bhelgaas@google.com,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm8450: Use GIC-ITS for PCIe0 and
- PCIe1
-Message-ID: <20221220104252.GC38609@thinkpad>
-References: <20221219191427.480085-1-manivannan.sadhasivam@linaro.org>
- <20221219191427.480085-4-manivannan.sadhasivam@linaro.org>
- <741887b5-8f83-4db5-bb17-755afc18716d@linaro.org>
+        Tue, 20 Dec 2022 05:43:25 -0500
+Received: from domac.alu.hr (domac.alu.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AA11836D
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:43:17 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 9B76E604F2;
+        Tue, 20 Dec 2022 11:43:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1671532994; bh=28aeNJcZhjH4Yc/hQCSZhSLXij8XcqFFnXNqh8P8y2M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=EBp4dCbynhsaxmTNbOQcgyE1FbKslOetKbsd5S9ZybFvV+jLNtnpaC/qYL1Ej0t2m
+         mzGZimiLApSFx1XlUKIQvwRPQtAo8LOXtZSdsfsUCNSnz3eQ/qd7n2FNV7oYSfTpag
+         3Iwf00b13aDedmWjmzWnifM3JIOAiOYc+et7ase82JG7O7Xul4G/vONb4nlkZb96ak
+         HBZ052XKTJFjcHTSYbzhLvnOyRYVNqJBlYSEGilbyZbqw3Jq67jicBlPA3roVR8f+O
+         qbUz8bFL8x+bVyxjIitysyzFdU72VnT8QLoSbwVto0c9/70OZM2DevtfdP7s/pBUkQ
+         Ag8ikGkVOoOOg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Jzd7WZzt8pYI; Tue, 20 Dec 2022 11:43:12 +0100 (CET)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id 008E7604F1;
+        Tue, 20 Dec 2022 11:43:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1671532992; bh=28aeNJcZhjH4Yc/hQCSZhSLXij8XcqFFnXNqh8P8y2M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=xSH9wgnl4FggF4bm0pn6Ga1tcTGMT+PU2F7lssMixIyr4osrxrOklflRBlsRwkuB3
+         xlEqhENuFYkZ/BQrnkulLlA7SzO64EhS+4HiqnT0C/jpXIbd/g0acj+z6mxETc/VrJ
+         LSRs5rr0FuFgMcUIXEtbi725e8Zyqwik8Nmqk2zLsCcf95eGFKcqm+4x+xx5tOjPoH
+         1fzNHa8MNfsdkBi5w2OOO5ZuowqDCimRtwuDmT+NknCWKdw2NPcmBbRinhh05iCbT1
+         zKG1aM7Dm5gBiTnyi06Ji/nLTr6iZUppj/v0zh8u5G46v9/xIgnTvBri4anhNvcJq/
+         67FZopUYLWs5Q==
+Message-ID: <d4a5ead8-9e9d-b6ac-d0f2-7d46b4f5e4c2@alu.unizg.hr>
+Date:   Tue, 20 Dec 2022 11:43:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: BUG: in squashfs_xz_uncompress() (Was: RCU stalls in
+ squashfs_readahead())
+Content-Language: en-US, hr
+To:     "Elliott, Robert (Servers)" <elliott@hpe.com>,
+        Phillip Lougher <phillip@squashfs.org.uk>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     "phillip.lougher@gmail.com" <phillip.lougher@gmail.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+References: <9697fcf5-4213-3d5e-176a-e82d4bd07870@alu.unizg.hr>
+ <eac8af79-8936-f845-c8dd-c63ebf0d5e81@alu.unizg.hr>
+ <02877aee-8c05-6534-8a91-94ba366d0276@squashfs.org.uk>
+ <MW5PR84MB1842F7A2DD9A9948A647AC5DAB099@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <MW5PR84MB1842F7A2DD9A9948A647AC5DAB099@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <741887b5-8f83-4db5-bb17-755afc18716d@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 09:51:40PM +0100, Konrad Dybcio wrote:
+On 11/18/22 17:51, Elliott, Robert (Servers) wrote:
 > 
 > 
-> On 19.12.2022 20:14, Manivannan Sadhasivam wrote:
-> > Both PCIe0 and PCIe1 controllers are capable of receiving MSIs from
-> > endpoint devices using GIC-ITS MSI controller. Add support for it.
-> > 
-> > Currently, BDF (0:0.0) and BDF (1:0.0) are enabled and with the
-> > msi-map-mask of 0xff00, all the 32 devices under these two busses can
-> > share the same Device ID.
-> > 
-> > The GIC-ITS MSI implementation provides an advantage over internal MSI
-> > implementation using Locality-specific Peripheral Interrupts (LPI) that
-> > would allow MSIs to be targeted for each CPU core.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> This breaks PCIe Wi-Fi on Xperia 1 IV:
+>> -----Original Message-----
+>> From: Phillip Lougher <phillip@squashfs.org.uk>
+>> Sent: Friday, November 18, 2022 12:11 AM
+>> To: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>; LKML <linux-
+>> kernel@vger.kernel.org>; Paul E. McKenney <paulmck@kernel.org>
+>> Cc: phillip.lougher@gmail.com; Thorsten Leemhuis
+>> <regressions@leemhuis.info>
+>> Subject: Re: BUG: in squashfs_xz_uncompress() (Was: RCU stalls in
+>> squashfs_readahead())
+>>
+>> On 17/11/2022 23:05, Mirsad Goran Todorovac wrote:
+>>> Hi,
+>>>
+>>> While trying to bisect, I've found another bug that predated the
+>>> introduction of squashfs_readahead(), but it has
+>>> a common denominator in squashfs_decompress() and
+>> squashfs_xz_uncompress().
+>>
+>> Wrong, the stall is happening in the XZ decompressor library, which
+>> is *not* in Squashfs.
+>>
+>> This reported stall in the decompressor code is likely a symptom of you
+>> deliberately thrashing your system.  When the system thrashes everything
+>> starts to happen very slowly, and the system will spend a lot of
+>> its time doing page I/O, and the CPU will spend a lot of time in
+>> any CPU intensive code like the XZ decompressor library.
+>>
+>> So the fact the stall is being hit here is a symptom and not
+>> a cause.  The decompressor code is likely running slowly due to
+>> thrashing and waiting on paged-out buffers.  This is not indicative
+>> of any bug, merely a system running slowly due to overload.
+>>
+>> As I said, this is not a Squashfs issue, because the code when the
+>> stall takes place isn't in Squashfs.
+>>
+>> The people responsible for the rcu code should have a lot more insight
+>> about what happens when the system is thrashing, and how this will
+>> throw up false positives.  In this I believe this is an instance of
+>> perfectly correct code running slowly due to thrashing incorrectly
+>> being flagged as looping.
+>>
+>> CC'ing Paul E. McKenney <paulmck@kernel.org>
+>>
+>> Phillip
 > 
-> [   32.711199] ath11k_pci 0000:01:00.0: Adding to iommu group 5
-> [   32.713738] ath11k_pci 0000:01:00.0: BAR 0: assigned [mem 0x60400000-0x605fffff 64bit]
-> [   32.715447] ath11k_pci 0000:01:00.0: MSI vectors: 32
-> [   32.715485] ath11k_pci 0000:01:00.0: wcn6855 hw2.1
-> [   32.873873] mhi mhi0: Requested to power ON
-> [   32.873896] mhi mhi0: Power on setup success
-> [   65.161798] arm-smmu 15000000.iommu: Unhandled context fault: fsr=0x402, iova=0x91517088, fsynr=0x640001, cbfrsynra=0x1c00, cb=5
-> 
+> How big can these readahead sizes be? Should one of the loops include
+> cond_resched() calls?
 
-Thanks a lot for testing! Can you please share the full dmesg log?
+Please allow me to assert that 6.1.0+ kernel (this Berlin time 6 AM 
+morning's build on on Torvalds' tree) built with CONFIG_KMEMLEAK=y, 
+CONFIG_KASAN=y, CONFIG_LRU_GEN=y (multi-gen LRU) and
+CONFIG_RCU_EXP_CPU_STALL_TIMEOUT=20 doesn't exhibit before seen RCU 
+stalls even with such a low timeout as 20 ms.
 
-Thanks,
-Mani
+So I guess kudos go to the MG-LRU developers, or has Mr. Lougher done 
+something efficient in the meantime.
 
-> 
-> Konrad
-> >  arch/arm64/boot/dts/qcom/sm8450.dtsi | 12 ++++++------
-> >  1 file changed, 6 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> > index 570475040d95..276ceba4c247 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> > @@ -1733,9 +1733,9 @@ pcie0: pci@1c00000 {
-> >  			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
-> >  				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
-> >  
-> > -			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
-> > -			interrupt-names = "msi";
-> > -			#interrupt-cells = <1>;
-> > +			msi-map = <0x0 &gic_its 0x5980 0x1>,
-> > +				  <0x100 &gic_its 0x5981 0x1>;
-> > +			msi-map-mask = <0xff00>;
-> >  			interrupt-map-mask = <0 0 0 0x7>;
-> >  			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
-> >  					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
-> > @@ -1842,9 +1842,9 @@ pcie1: pci@1c08000 {
-> >  			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
-> >  				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
-> >  
-> > -			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
-> > -			interrupt-names = "msi";
-> > -			#interrupt-cells = <1>;
-> > +			msi-map = <0x0 &gic_its 0x5a01 0x1>,
-> > +				  <0x100 &gic_its 0x5a00 0x1>;
-> > +			msi-map-mask = <0xff00>;
-> >  			interrupt-map-mask = <0 0 0 0x7>;
-> >  			interrupt-map = <0 0 0 1 &intc 0 0 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
-> >  					<0 0 0 2 &intc 0 0 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+My $0.02!
+
+Thank you,
+Mirsad
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+-- 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
