@@ -2,73 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3226525D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:54:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0826525DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:56:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233677AbiLTRyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 12:54:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
+        id S233789AbiLTR4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 12:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233923AbiLTRyL (ORCPT
+        with ESMTP id S229819AbiLTR4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 12:54:11 -0500
-Received: from mail-40136.proton.ch (mail-40136.proton.ch [185.70.40.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D023163B9
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 09:54:09 -0800 (PST)
-Date:   Tue, 20 Dec 2022 17:54:04 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fanf.eu;
-        s=protonmail; t=1671558847; x=1671818047;
-        bh=YjIrzqQGcrOiPUWhgGtB+g/tDdsalo99mkx+OIkMm1c=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-        b=YqSnxXgtCs4jDQzc2UB5o2+ZP49gzOBeVGTyd3DlWOMVQFj5QBIMT2eeAOvL69K2n
-         dxDJ2dMYH/+wfEY7aRCaTj08TgY5a67HPx3lUhNEkB+DOo0az5NesPDsbU5eMWXjMW
-         0aA5HM/YKhNlKgb3xGE03I9921fSYVPRO856Ti0o=
-To:     mario.limonciello@amd.com
-From:   "francois@fanf.eu" <francois@fanf.eu>
-Cc:     Shyam-sundar.S-k@amd.com, anson.tsao@amd.com, ben@bcheng.me,
-        bilkow@tutanota.com, lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, paul@zogpog.com,
-        philipp.zabel@gmail.com, rafael.j.wysocki@intel.com,
-        rafael@kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] ACPI: x86: s2idle: Stop using AMD specific codepath for Rembrandt+
-Message-ID: <fb729a11-46e4-4aab-bfa5-42afca476785@fanf.eu>
-Feedback-ID: 8996646:user:proton
+        Tue, 20 Dec 2022 12:56:30 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D51DFDC;
+        Tue, 20 Dec 2022 09:56:28 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id bx10so12570503wrb.0;
+        Tue, 20 Dec 2022 09:56:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Unl6QfwtHEjfkMdy1Yw/MGc3MT3pIvqz7ripxlsDJwM=;
+        b=EJ1/cehcjfRl7EyInh5Z/uLfXOFn4tMBnMQQ6rcV4YHol8i34pvIst2Ahka5JldZaP
+         lgVnL2M95Kx7ZtPmQOiOxQrdK43tDxqmZzIJ812UKMFrrOiNznIlnm/GaQjLBl+/8DV+
+         ap27LBUVSlFidCzIIR8b7smAgZrmeNOmkjq7ypf+LfWlhNxBaTIX8190o8X7xLv8B/8a
+         KfD6Y/OQ5F/pPuEo5+VmjXfIvpoW0oPYALDh51UTtJeshDp6JLpuALDQKJnj4f513YgC
+         97yryLVIiNobqGU5OyKP0oScWZiHPoMCcTcWjZSpv5Q8hTni76Fm9/WtO8fwkmWo/hzS
+         Tnww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Unl6QfwtHEjfkMdy1Yw/MGc3MT3pIvqz7ripxlsDJwM=;
+        b=eVRh/+00BlvApbIGihanaj4p3yLmTKHwURf24BOg873Co/DnNst9UBNV8P1aGRj/sU
+         XQp4ajO9eeyzkgKGECO6CT2N3oErHTkEG7I+B8ZbfE3YGw0Lsp9aoOGLLHbO7F/oUFP1
+         KUnPlvMze5Vn0EY6ZOWEZCRtyuL/niJuHB5Nmq+kTq4BO2lX/ksd4rHmKSw8z/5h+Y98
+         qqsYFudn3Xc2mTLV8EC87gykyUyK0pWsuWv8hiaueBJxaWB/jmreezJbcWZdOmJXKIIm
+         bOyBQvernTvRR22GupEsy1pOj0PoWPU6ZFrc2ZzxQvrzxPV/e30Cr0Z7Lpy/m21Dr+8n
+         NK0g==
+X-Gm-Message-State: ANoB5pnoFDUEqwcon/sr2by1yvf5a3JX4JGZQ7cdQW4Me2lucvRGDkhZ
+        c9TfZMpgEzDSl7KZArujMchFfbHihEk=
+X-Google-Smtp-Source: AA0mqf5k4KBGN5C8h8zW51eNSSAnzEWtuRSO5cEDFNQ1ez9Ol0mqDVlVrZfId73bwnnWDFTcIvsYlA==
+X-Received: by 2002:a5d:40c1:0:b0:242:81da:f3c3 with SMTP id b1-20020a5d40c1000000b0024281daf3c3mr30834520wrq.63.1671558987030;
+        Tue, 20 Dec 2022 09:56:27 -0800 (PST)
+Received: from xws.localdomain ([194.126.177.41])
+        by smtp.gmail.com with ESMTPSA id u18-20020adfeb52000000b002423dc3b1a9sm13206300wrn.52.2022.12.20.09.56.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 09:56:26 -0800 (PST)
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] platform/surface: aggregator: Add missing call to ssam_request_sync_free()
+Date:   Tue, 20 Dec 2022 18:56:07 +0100
+Message-Id: <20221220175608.1436273-1-luzmaximilian@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Thu, Dec 15, 2022 at 01:16:16PM -0600 schrieb Mario Limonciello:
-> After we introduced a module parameter and quirk infrastructure for  > pi=
-cking the Microsoft GUID over the SOC vendor GUID we discovered >
-that lots and lots of systems are getting this wrong. > > The table
-continues to grow, and is becoming unwieldy. > > We don't really have
-any benefit to forcing vendors to populate the > AMD GUID. This is just
-extra work, and more and more vendors seem > to mess it up. As the
-Microsoft GUID is used by Windows as well, > it's very likely that it
-won't be messed up like this. > > So drop all the quirks forcing it and
-the Rembrandt behavior. This > means that Cezanne or later effectively
-only run the Microsoft GUID > codepath with the exception of HP
-Elitebook 8*5 G9. > > Fixes: fd894f05cf30 ("ACPI: x86: s2idle: If a new
-AMD _HID is missing assume Rembrandt") > Cc: stable@vger.kernel.org #
-6.1 > Reported-by: Benjamin Cheng <ben@bcheng.me> > Reported-by:
-bilkow@tutanota.com > Reported-by: Paul <paul@zogpog.com> > Link:
-https://gitlab.freedesktop.org/drm/amd/-/issues/2292 > Link:
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216768 > Signed-off-by:
-Mario Limonciello <mario.limonciello@amd.com> Tested-by: Fran=C3=A7ois ARMA=
-ND <francois@fanf.eu>
-Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2307
+Although rare, ssam_request_sync_init() can fail. In that case, the
+request should be freed via ssam_request_sync_free(). Currently it is
+leaked instead. Fix this.
 
-Regards - and thanks for the help Mario!
-Fran=C3=A7ois
+Fixes: c167b9c7e3d6 ("platform/surface: Add Surface Aggregator subsystem")
+Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+---
+ drivers/platform/surface/aggregator/controller.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-
+diff --git a/drivers/platform/surface/aggregator/controller.c b/drivers/platform/surface/aggregator/controller.c
+index 43e765199137..c6537a1b3a2e 100644
+--- a/drivers/platform/surface/aggregator/controller.c
++++ b/drivers/platform/surface/aggregator/controller.c
+@@ -1700,8 +1700,10 @@ int ssam_request_sync(struct ssam_controller *ctrl,
+ 		return status;
+ 
+ 	status = ssam_request_sync_init(rqst, spec->flags);
+-	if (status)
++	if (status) {
++		ssam_request_sync_free(rqst);
+ 		return status;
++	}
+ 
+ 	ssam_request_sync_set_resp(rqst, rsp);
+ 
+-- 
+2.39.0
 
