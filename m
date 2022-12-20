@@ -2,102 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD38652783
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 21:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C9F652787
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 21:04:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234024AbiLTUCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 15:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45950 "EHLO
+        id S234079AbiLTUDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 15:03:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232195AbiLTUCw (ORCPT
+        with ESMTP id S232195AbiLTUDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 15:02:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CCB1D321;
-        Tue, 20 Dec 2022 12:02:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5BC0AB81980;
-        Tue, 20 Dec 2022 20:02:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B59D8C433EF;
-        Tue, 20 Dec 2022 20:02:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671566568;
-        bh=NuKWALWvqUDHPuIolpje8BOkN9wBD5QKiFERUmc1WBc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W4YVmBvyCUSn46y+nCKFk/IoGWAEo/35kPbbHetOA98UicNzQLIds7TTZW7PJERv2
-         ZlBx3JTMi5jmsT4A4xJuBy7QGGBPYX5FtY+KaPQpAi7EDiyxnLjwjruAlL1zSU5Vmu
-         177R/Sl/CsryALUwidpzw/p+cWrusCGk13BVhCJ0LFzE8BfBlk9VsmGb9ixUh5p/S1
-         e6I4Urq4iYmt+P0fAtA+qooekYQqcXN3TQidEwQK1O56y5PE3vZRnfBlWqef8TRsb8
-         OrUdt4p9WS27wKYMa3abNrTX8SQ+0/Gmyhbcg1aX/y7671alVzMzbDmCBOkXoVeVsx
-         ki1mt+2sbSyoQ==
-Date:   Tue, 20 Dec 2022 20:02:32 +0000
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Robert Elliott <elliott@hpe.com>
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net, Jason@zx2c4.com,
-        ardb@kernel.org, ap420073@gmail.com, David.Laight@aculab.com,
-        tim.c.chen@linux.intel.com, peter@n8pjl.ca, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/13] crypto: x86 - yield FPU context during long loops
-Message-ID: <Y6IU2CmNE18RzByP@gmail.com>
-References: <20221219220223.3982176-1-elliott@hpe.com>
+        Tue, 20 Dec 2022 15:03:30 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33A91D321;
+        Tue, 20 Dec 2022 12:03:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UlAEvc5vrzcxeVoggj4bi4wq684c5KQyaWNN4gbqhuI=; b=jyIHu/BsHD4RKeUC+9/gkw5a8x
+        9UhiqjxcN4ZnmrJ6qjyf6nS+b9Mor/YznV+zrh7vcDYRwGXa2T7VT1aSHMH6aA6NXsabAFn1FEkS/
+        acCKvzNcVWH1MdLQFY9b7s9erGWNKtuRpI7sJTej22och5Vhabr9d0uTPRl37LqB2ApTqfhiIogDz
+        llNQBcHXYalrdeRR50pXhOHjY/2oE2AVqQQuPH9VgFy92uzIw1xGVMmYy0lZxupGbJZe+a+9TxTEr
+        QwiE8Os3w9fhkriWNev9KvKa2ZBpaPrj3eoCrE9zcBMo0QkRQHT3UzeO5EFRDGd8ALVHAA0FBSUQO
+        8e8TA4LA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p7ipg-003fXB-Vh; Tue, 20 Dec 2022 20:03:24 +0000
+Date:   Tue, 20 Dec 2022 12:03:24 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Allen Webb <allenwebb@google.com>
+Cc:     Nick Alcock <nick.alcock@oracle.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v9 02/10] rockchip-mailbox: Fix typo
+Message-ID: <Y6IVDE3NEE6teggy@bombadil.infradead.org>
+References: <20221219191855.2010466-1-allenwebb@google.com>
+ <20221219204619.2205248-1-allenwebb@google.com>
+ <20221219204619.2205248-3-allenwebb@google.com>
+ <Y6FaUynXTrYD6OYT@kroah.com>
+ <CAJzde04Hbd2+s-Bqog2V81dBEeZD7WWaFCf2BkesQS4yUAKiNA@mail.gmail.com>
+ <Y6H6/U0w96Z4kpDn@bombadil.infradead.org>
+ <CAJzde04igO0LJ46Hsbcm-hJBFtPdqJC6svaoMkb3WBG0e1fGBw@mail.gmail.com>
+ <Y6IDOwxOxZpsdtiu@bombadil.infradead.org>
+ <CAJzde06q3w7CHd8FSs-bwS3EeVv6xrBzCwerQVqps49V=_voQQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221219220223.3982176-1-elliott@hpe.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJzde06q3w7CHd8FSs-bwS3EeVv6xrBzCwerQVqps49V=_voQQ@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 04:02:10PM -0600, Robert Elliott wrote:
-> This is an offshoot of the previous patch series at:
->   https://lore.kernel.org/linux-crypto/20221219202910.3063036-1-elliott@hpe.com
+On Tue, Dec 20, 2022 at 01:49:04PM -0600, Allen Webb wrote:
+> I took another stab at clarifying (and also dropped the ifdev since
+> the same macro works both for separate and built-in modules:
 > 
-> Add a kernel_fpu_yield() function for x86 crypto drivers to call
-> periodically during long loops.
-> 
-> Test results
-> ============
-> I created 28 tcrypt modules so modprobe can run concurrent tests,
-> added 1 MiB functional and speed tests to tcrypt, and ran three processes
-> spawning 28 subprocesses (one per physical CPU core) each looping forever
-> through all the tcrypt test modes. This keeps the system quite busy,
-> generating RCU stalls and soft lockups during both generic and x86
-> crypto function processing.
-> 
-> In conjunction with these patch series:
-> * [PATCH 0/8] crypto: kernel-doc for assembly language
->   https://lore.kernel.org/linux-crypto/20221219185555.433233-1-elliott@hpe.com
-> * [PATCH 0/3] crypto/rcu: suppress unnecessary CPU stall warnings
->   https://lore.kernel.org/linux-crypto/20221219202910.3063036-1-elliott@hpe.com
-> * [PATCH 0/3] crypto: yield at end of operations
->   https://lore.kernel.org/linux-crypto/20221219203733.3063192-1-elliott@hpe.com
-> 
-> while using the default RCU values (60 s stalls, 21 s expedited stalls),
-> several nights of testing did not result in any RCU stall warnings or soft
-> lockups in any of these preemption modes:
->    preempt=none
->    preempt=voluntary
->    preempt=full
-> 
-> Setting the shortest possible RCU timeouts (3 s, 20 ms) did still result
-> in RCU stalls, but only about one every 2 hours, and not occurring
-> on particular modules like sha512_ssse3 and sm4-generic.
-> 
-> systemd usually crashes and restarts when its journal becomes full from
-> all the tcrypt printk messages. Without the patches, that triggered more
-> RCU stall reports and soft lockups; with the patches, only userspace
-> seems perturbed.
-> 
+> /*
+>  * Creates an alias so file2alias.c can find device table.
+>  *
+>  * Use this in cases where a device table is used to match devices because it
+>  * surfaces match-id based module aliases to userspace for:
+>  *   - Automatic module loading.
+>  *   - Tools like USBGuard which allow or block devices based on policy such as
+>  *     which modules match a device.
+>  *
+>  * The module name is included in the alias for two reasons:
+>  *   - It avoids creating two aliases with the same name for built-in modules.
+>  *     Historically MODULE_DEVICE_TABLE was a no-op for built-in modules, so
+>  *     there was nothing to stop different modules from having the same device
+>  *     table name and consequently the same alias when building as a module.
+>  *   - The module name is needed by files2alias.c to associate a particular
+>  *     device table with its associated module for built-in modules since
+>  *     files2alias would otherwise see the module name as `vmlinuz.o`.
+>  */
 
-Where does this patch series apply to?
+This is still weak in light of the questions I had. It does not make it
+easy for a driver developer who is going to support only built-in only
+if they need to define this or not. And it seems we're still discussing
+the merits of this, so I'd wait until this is fleshed out, but I think
+we are on the right track finally.
 
-- Eric
+> The deciding factor in whether it makes sense to remove these vs fix
+> them seems to be, "How complete do we want modules.builtin.alias to
+> be?"
+> 
+> Arguably we should just drop these in cases where there isn't an
+> "authorized" sysfs attribute but following that logic there is not any
+> reason to generate built-in aliases for anything except USB and
+> thunderbolt.
+
+There we go, now we have a *real* use case for this for built-in stuff
+to consider. Is USBGuard effective even for built-in stuff?
+
+Given everything discussed so far I'd like to get clarification if it
+even help for built-in USB / thunderbolt. Does it? If so how? What could
+userspace do with this information if the driver is already built-in?
+
+> On the flip side, if we are going to the effort to make this a generic
+> solution that covers everything, the built-in aliases are only as
+> useful as they are complete, so we would want everything that defines
+> a device table to call the macro correctly.
+
+It is the ambiguity which is terrible to add. If the only use case is
+for USB and Thunderbolt then we can spell it out, then only those driver
+developers would care to consider it if the driver is bool. And, a
+respective tooling would scrape only those drivers to verify if the
+table is missing for built-in too.
+
+> It definitely is needed for never-tristate modules that match devices
+> in subsystems that surface the authorized attribute.
+
+What is this "authorized attribute" BTW exactly? Do have some
+documentation reference?
+
+  Luis
