@@ -2,135 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2349C651BC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A75D1651BC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbiLTHfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 02:35:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
+        id S233234AbiLTHhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 02:37:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233208AbiLTHfs (ORCPT
+        with ESMTP id S233591AbiLTHhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 02:35:48 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F10113A;
-        Mon, 19 Dec 2022 23:35:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671521747; x=1703057747;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=Io5/0LTamGxAQ1GAoe77xZCJBzvj1G4adgYcSaVbOu4=;
-  b=MZIWh/zk1DpcFjoSc85L3NJlUe7huV6wGF4Czpthd/Jdp/jIi/XeQygR
-   lF+1t+VbRjFESurCe3BTWGqLw9VHCtrkfJLL5oGDBSpXGInq0r6zdm+xP
-   NE6u/nYnLVAfticGfIXqoKiS4jPwAqePlowLxf7oSGNepodJOaREppsHO
-   Sv/nNQ3/jY8kJY+TKvqBjj6Rf5jknL02lmEDDvmsgwgZbtwdI+bYrwCm5
-   hLxrum+3x/qmVmwln6joibLKNb/62AFeDDTykNTa75MH1I0OCTMfWjLVC
-   xMbgJhfD+M5L583RF91qdXGVTsvLSxrs+giEp/9tglIKfoQlAPDZzZ0uG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="299892100"
-X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
-   d="scan'208";a="299892100"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 23:35:46 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="628626396"
-X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
-   d="scan'208";a="628626396"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.45.157])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 23:35:39 -0800
-Message-ID: <e2c01688-d27d-51df-65eb-f7bdd26c99d0@intel.com>
-Date:   Tue, 20 Dec 2022 09:35:36 +0200
+        Tue, 20 Dec 2022 02:37:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99624DEC9;
+        Mon, 19 Dec 2022 23:37:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FADF61280;
+        Tue, 20 Dec 2022 07:37:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2691C433EF;
+        Tue, 20 Dec 2022 07:37:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671521826;
+        bh=66SlnYG/nwUzCZrhRPG1TjPvZM9jtU1rQo7zEHGPSqU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=vJB4jk/y5LQIaiEIhTFeBKn0rmFWU1H/8Vzf0VJLLZspPVyyheAqH7K3M9YGN6wgX
+         UxMCDyPdyAWw/z2IKWHGy4uJwYQEmV/txn3N8VAw29BBAavaTQ/MJmmO8HxKKz9oQq
+         ebsD/pIY0KHJHnocDD+LZnWleYHvr2G9Q6f69MxEiVFzixTTgwrFwJ3t8tZwxG560n
+         mtTkiMpkNBDjNusK3sJqN5gLT2S85Au+/5errsNy+6xPf1nJBONFCfQhOaECaAts87
+         zsmQ5L2zsoWepxt7mpIIdmvmXrhHtXUK4RLGzrFxVNMJ2d8OKTVo+DGy6ImTfE/joh
+         aXj4zPS8Tjtig==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Rob Herring <robh@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     linux-rockchip@lists.infradead.org,
+        Johan Jonker <jbx6244@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: usb: rockchip,dwc3: Move RK3399 to its
+ own schema
+In-Reply-To: <20221219191038.1973807-2-robh@kernel.org>
+References: <20221219191038.1973807-1-robh@kernel.org>
+ <20221219191038.1973807-2-robh@kernel.org>
+Date:   Tue, 20 Dec 2022 09:37:00 +0200
+Message-ID: <87bknya5lv.fsf@balbi.sh>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [PATCH 1/3] perf tools: Set debug_peo_args and redirect_to_stderr
- to correct values in perf_quiet_option
-Content-Language: en-US
-To:     Yang Jihong <yangjihong1@huawei.com>, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, carsten.haitzler@arm.com,
-        leo.yan@linaro.org, ravi.bangoria@amd.com, martin.lau@kernel.org,
-        ak@linux.intel.com, masami.hiramatsu.pt@hitachi.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221220035702.188413-1-yangjihong1@huawei.com>
- <20221220035702.188413-2-yangjihong1@huawei.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20221220035702.188413-2-yangjihong1@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/12/22 05:57, Yang Jihong wrote:
-> When perf uses quiet mode, perf_quiet_option sets debug_peo_args to -1,
-> and display_attr incorrectly determines the value of debug_peo_args.
-> As a result, unexpected information is displayed.
-> 
-> Before:
->   # perf record --quiet -- ls > /dev/null
->   ------------------------------------------------------------
->   perf_event_attr:
->     size                             128
->     { sample_period, sample_freq }   4000
->     sample_type                      IP|TID|TIME|PERIOD
->     read_format                      ID|LOST
->     disabled                         1
->     inherit                          1
->     mmap                             1
->     comm                             1
->     freq                             1
->     enable_on_exec                   1
->     task                             1
->     precise_ip                       3
->     sample_id_all                    1
->     exclude_guest                    1
->     mmap2                            1
->     comm_exec                        1
->     ksymbol                          1
->     bpf_event                        1
->   ------------------------------------------------------------
->   ...
-> 
-> After:
->   # perf record --quiet -- ls > /dev/null
->   #
-> 
-> redirect_to_stderr is a similar problem.
-> 
-> Fixes: f78eaef0e049 ("perf tools: Allow to force redirect pr_debug to stderr.")
-> Fixes: ccd26741f5e6 ("perf tool: Provide an option to print perf_event_open args and return value")
-> Suggested-by: Adrian Hunter <adrian.hunter@intel.com>
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+Rob Herring <robh@kernel.org> writes:
 
-> ---
->  tools/perf/util/debug.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/perf/util/debug.c b/tools/perf/util/debug.c
-> index 65e6c22f38e4..190e818a0717 100644
-> --- a/tools/perf/util/debug.c
-> +++ b/tools/perf/util/debug.c
-> @@ -241,6 +241,10 @@ int perf_quiet_option(void)
->  		opt++;
->  	}
->  
-> +	/* For debug variables that are used as bool types, set to 0. */
-> +	redirect_to_stderr = 0;
-> +	debug_peo_args = 0;
-> +
->  	return 0;
->  }
->  
+> The rockchip,dwc3.yaml schema defines a single DWC3 node, but the RK3399
+> uses the discouraged parent wrapper node and child 'generic' DWC3 node.
 
+Why discouraged? Splitting those two separate devices (yes, they are
+separate physical modules) has greatly simplified e.g. power management
+and encapsulation of the core module.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEEg3wK/NVnD14JZqsmho6y4DXKpEQFAmOhZhwRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQho6y4DXKpEQmdQ/9HUBWlOG25MYVfiwdxaImz5mgCa6Tkae3
+5Jsmxxfrv702yoTBc/Pfh32g6Vfbn5u0zO0D956HzXZub+q4ZXKNzJMRz6Hkgq5Q
+8L3ta+RfPmSGc3pd9cB0zY77xeI4NAWQXeIbt1wz3uik9+RqHONmz2oTU47vIgHS
+U6yNIecEBDIPBIxJ8jgi1kadmPeyBZAEzHjwqzMsJjDM3aYUXY3pMn+tL4N3noxD
+xtCLfnCKSStZfkf1I+J9IG25apct/gdJmVXh8nkL4jxnLJKvobCXBszM/AI4uBo9
+ROgE8mzawpuR8cBzh0FQMhSwcEHFkPoOA30GgJXwgnvrsSXgNSFAWQTdY4T38201
+gKaWXK3dIeQBU32K1Zxlm7/vcLZn2mR6HfkmgRG0Y6ZlVeLvZIj2UVkcQHrMVAGx
+GEjhev3Yn3TBU+237RRAYR6+uYKcFFgtmhc7YU1u6uQWJUVniztdpEe/Yvocz6xK
+CVU8EYO1y4U1jo326JCRnGMwHDKH9JUyt0so+mDmuVGltkMCb+4R26VAXGC3iNl+
+rs2pUYlXUn178Zs8rbBEBQUg/OoToFaT7R3h5zvdDiMr7ux+AhJALy2b+El63q1N
+724mM2/9cm84opCok1LxBLaxeLxUGdCREL7A3uJrhiqK9rC6za8emL86KNPuh6na
+ttm1GYfsohg=
+=LkjN
+-----END PGP SIGNATURE-----
+--=-=-=--
