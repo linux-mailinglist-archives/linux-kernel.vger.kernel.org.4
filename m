@@ -2,99 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAECA652378
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:10:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 294D1652382
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233060AbiLTPKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 10:10:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
+        id S233296AbiLTPL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 10:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiLTPKf (ORCPT
+        with ESMTP id S233257AbiLTPLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 10:10:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD88301;
-        Tue, 20 Dec 2022 07:10:34 -0800 (PST)
+        Tue, 20 Dec 2022 10:11:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF59E6360;
+        Tue, 20 Dec 2022 07:11:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFF1A614AE;
-        Tue, 20 Dec 2022 15:10:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2ED6C433D2;
-        Tue, 20 Dec 2022 15:10:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671549033;
-        bh=MnSUn++QuKMw7l2ujm9/FRvrB65xWP0qsHEyLbhYtWU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MPH4tkYl4WoZvpgX6HOcoeqj7Vuil+JozuFFEEUko0cOsINtzcrOt1wmTR1p6ZOcQ
-         wwpknn1G15WEFA2wu99Zj7Bib4E3D5pztbar0m+HixMN19Rg95UKyGEZQnwxJY+un4
-         URTuAzkwj6+FJ8ccSi2A0j5sGVOqAFM6szdKM4fjNcgMwzNK6SvqReZRQ5IEeLqOjg
-         sXUODwX67a4B1FiPA0k/juUlJ+zm+tSiBz7PBwsY7tEeaZEBstbn62XxaNqUD4TGtZ
-         juCybEBSEeYbl9ejnrRHwesbE4SzNwSNx/p3z5LBhjb9/TJx/WdGbLzw8GTW6ZihXi
-         1BQ/pxOUtfYzw==
-Message-ID: <bf56c3aa-85df-734d-f419-835a35e66e03@kernel.org>
-Date:   Tue, 20 Dec 2022 08:10:32 -0700
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6274DB815D2;
+        Tue, 20 Dec 2022 15:10:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 855CAC433D2;
+        Tue, 20 Dec 2022 15:10:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671549058;
+        bh=XNu6R5cnDmMVOTCw3M+ehR8p/ez6OcAEVLZNjcUbJ5M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xnj2m/1vwjkEH8GXJ4YKF77MX+5gYT9b5GTSg9oj3Nq+y2tj06cl9D5KXJH9IbiDM
+         RWiyGiL1LV5gIGgcFMcorX86BJESam+qVTMKddpGnwRqM3uXwA+Op/XvUIFzjA2Iok
+         agIRYYESDygJ5o5htJUDxf7JjbLEL/3CLK0N04uM=
+Date:   Tue, 20 Dec 2022 16:10:55 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 00/25] 6.1.1-rc1 review
+Message-ID: <Y6HQfwEnw75iajYr@kroah.com>
+References: <20221219182943.395169070@linuxfoundation.org>
+ <20221220150049.GE3748047@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [net-next] ipv6: fix routing cache overflow for raw sockets
-Content-Language: en-US
-To:     Paolo Abeni <pabeni@redhat.com>,
-        Jon Maxwell <jmaxwell37@gmail.com>, davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, yoshfuji@linux-ipv6.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221218234801.579114-1-jmaxwell37@gmail.com>
- <9f145202ca6a59b48d4430ed26a7ab0fe4c5dfaf.camel@redhat.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <9f145202ca6a59b48d4430ed26a7ab0fe4c5dfaf.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220150049.GE3748047@roeck-us.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/20/22 5:35 AM, Paolo Abeni wrote:
-> On Mon, 2022-12-19 at 10:48 +1100, Jon Maxwell wrote:
->> Sending Ipv6 packets in a loop via a raw socket triggers an issue where a 
->> route is cloned by ip6_rt_cache_alloc() for each packet sent. This quickly 
->> consumes the Ipv6 max_size threshold which defaults to 4096 resulting in 
->> these warnings:
->>
->> [1]   99.187805] dst_alloc: 7728 callbacks suppressed
->> [2] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
->> .
->> .
->> [300] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
+On Tue, Dec 20, 2022 at 07:00:49AM -0800, Guenter Roeck wrote:
+> On Mon, Dec 19, 2022 at 08:22:39PM +0100, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 6.1.1 release.
+> > There are 25 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
+> > Anything received after that time might be too late.
+> > 
 > 
-> If I read correctly, the maximum number of dst that the raw socket can
-> use this way is limited by the number of packets it allows via the
-> sndbuf limit, right?
+> Build results:
+> 	total: 155 pass: 155 fail: 0
+> Qemu test results:
+> 	total: 500 pass: 498 fail: 2
+> Failed tests:
+> 	arm:xilinx-zynq-a9:multi_v7_defconfig:usb0:mem128:net,default:zynq-zc702:rootfs
+> 	arm:xilinx-zynq-a9:multi_v7_defconfig:usb0:mem128:zynq-zed:rootfs
 > 
-> Are other FLOWI_FLAG_KNOWN_NH users affected, too? e.g. nf_dup_ipv6,
-> ipvs, seg6?
-> 
-> @DavidA: why do we need to create RTF_CACHE clones for KNOWN_NH flows?
-> 
-> Thanks,
-> 
-> Paolo
-> 
+> The failure bisects to commit e013ba1e4e12 ("usb: ulpi: defer ulpi_register on
+> ulpi_read_id timeout") and is inherited from mainline. Reverting the offending
+> patch fixes the problem.
 
-If I recall the details correctly: that sysctl limit was added back when
-ipv6 routes were managed as dst_entries and there was a desire to allow
-an admin to limit the memory consumed. At this point in time, IPv6 is
-more inline with IPv4 - a separate struct for fib entries from dst
-entries. That "Route cache is full" message is now out of date since
-this is dst_entries which have a gc mechanism.
+Odd, yet that same commit works just fine on 6.0 and 5.15 and 5.10?  I
+hadn't had any reports of this being an issue on Linus's tree either,
+did I miss those?
 
-IPv4 does not limit the number of dst_entries that can be allocated
-(ip_rt_max_size is the sysctl variable behind the ipv4 version of
-max_size and it is a no-op). IPv6 can probably do the same here?
+thanks,
 
-I do not believe the suggested flag is the right change.
+greg k-h
