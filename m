@@ -2,76 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F0165298F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 00:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1410B652993
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 00:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiLTXBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 18:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
+        id S234095AbiLTXFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 18:05:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233881AbiLTXBN (ORCPT
+        with ESMTP id S229756AbiLTXF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 18:01:13 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB321F2CE
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 15:01:12 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id c7so9480277pfc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 15:01:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KkiJ1ANycOXXcLUSQunU9hEFpqvc/70bYGXZQhbyeNg=;
-        b=Ar3IxXrjO3+TRdtQqazvIuXU9c0ET//xY/lBbKAynjrFCGSMq0S0raOICgiIBgfMHk
-         Ls1drrCWCUgsW30MOqT17Stk/RSeQMMMhw5pAjaJ70VNxzDplCKkMrO6GNHUYQNuEydV
-         /uuVMSIB8Fg8u60HXSBg9llVzl1QDNbUgF1kg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KkiJ1ANycOXXcLUSQunU9hEFpqvc/70bYGXZQhbyeNg=;
-        b=YZqr21/dbLGAVf2yvPqXRhhygOtSXYo8Da1yhWndiUP7CbaciwM2bRTOkTt/ZgJ7Cv
-         JXxIkdk4EMenJG09gHIhmgYYvthGrowb0PR4ZpU1EuPUmk54S09Crgqu8GDniJTShuI0
-         Q/a1VkPBHNqb453PuiNcmRQ/dR9HJO8CSOgZC+zz/leRjVvx0yIX8qp524gNmvMm3VD3
-         uPGbMvsxEAvBIMYAOGkQP8oEl8XTCaPpx8Q1U9N9IHee84QG4nuSi4M+cLnmeZoWZ+Jl
-         tl6x3E8vU8kRnUDY6FS3lIpmT6FLkHi4MsI41KLVbpkAyalEmLG4JWKVngJWuBGRoW+p
-         dzgw==
-X-Gm-Message-State: AFqh2krKn+FF/5ztqRvLtztVMQg+P3UwfNNPxwY49uNeOcgGJHN1rMJQ
-        rAM1oTcS0mMPTWjHja7idS3ZA0fA+ETzfpDLK+4=
-X-Google-Smtp-Source: AMrXdXvwatwPOyT2PurWM8el63gxRndgFdV1bnxg8K5qoB8Oh5ukTLPMh0Yz1kq2F/FrhmGTsGWAHw==
-X-Received: by 2002:a62:1994:0:b0:573:a0a0:c5d2 with SMTP id 142-20020a621994000000b00573a0a0c5d2mr17552822pfz.7.1671577272023;
-        Tue, 20 Dec 2022 15:01:12 -0800 (PST)
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com. [209.85.216.51])
-        by smtp.gmail.com with ESMTPSA id h4-20020a62de04000000b0057462848b94sm9132424pfg.184.2022.12.20.15.01.10
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 15:01:11 -0800 (PST)
-Received: by mail-pj1-f51.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso296457pjh.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 15:01:10 -0800 (PST)
-X-Received: by 2002:a17:90b:1489:b0:219:8132:70db with SMTP id
- js9-20020a17090b148900b00219813270dbmr2555154pjb.183.1671577269523; Tue, 20
- Dec 2022 15:01:09 -0800 (PST)
+        Tue, 20 Dec 2022 18:05:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CBC1EEE9;
+        Tue, 20 Dec 2022 15:05:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06CDFB81A52;
+        Tue, 20 Dec 2022 23:05:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33817C433EF;
+        Tue, 20 Dec 2022 23:05:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671577524;
+        bh=rMikaFC2i5Sq8/9qOrsykFHBkwjk4NkB/GCAN55ieQs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RqNJad/CCU03ruRHzQo7qvBQAg7VQXCk/2vjESpO4UYBvAC/iXKzGWLh/vRm0Ux8R
+         hSR/kEOkd1tathgoc2IEVK1sHHkPzNjR7NY90mSVL9P4yRqADXeBmxhEi8VIQDQtuK
+         M8cr2Eb8VsHAMlUGWfZh+cUB3s3SHRfroZMYooXxowDvcK4WY3knu7Vfhbb8GGiI0G
+         qBfTYan4+wAp5k/44/hzb4E1KorBALZzpL3YKn3ZMTnoJ9D27yFHdsVpEtpV/welb6
+         3bYcDX0KKzGDCF8yAUu/lYr/YmwaEyz9Hm4qw+w8NpAHV7PBsS4XR78JWN7GbW6YrW
+         qDJBOtt0LRRxw==
+Date:   Wed, 21 Dec 2022 00:05:21 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
+Message-ID: <20221220230521.GC26563@lothringen>
+References: <6438d903-ab97-48c7-c338-9f0bc2686f94@efficios.com>
+ <7A9876BA-C375-42A7-A5C9-FD940D2898D7@joelfernandes.org>
+ <5bd5ee4a-710a-96bc-abe8-772b2e60f478@efficios.com>
+ <CAEXW_YRFbsCzT9iPdVfmeZ5qK+2fnVAwSzxbj1EXmU+vepOKdg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
- <20220920-resend-meta-v4-3-3ac355b66723@chromium.org> <Y45tnp0naosOrYCY@pendragon.ideasonboard.com>
- <CANiDSCtRoVQ2+asPmOacarvC2VrJYTbU67+wKJq1ciuMrwguPg@mail.gmail.com>
-In-Reply-To: <CANiDSCtRoVQ2+asPmOacarvC2VrJYTbU67+wKJq1ciuMrwguPg@mail.gmail.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 21 Dec 2022 00:00:58 +0100
-X-Gmail-Original-Message-ID: <CANiDSCtav5U6759tvt7Hm0nR+8Hz22qfWft3OEFOotSeHpxnAA@mail.gmail.com>
-Message-ID: <CANiDSCtav5U6759tvt7Hm0nR+8Hz22qfWft3OEFOotSeHpxnAA@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] media: uvcvideo: Add a unique suffix to camera names
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Yunke Cao <yunkec@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEXW_YRFbsCzT9iPdVfmeZ5qK+2fnVAwSzxbj1EXmU+vepOKdg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,112 +61,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
-
-On Tue, 6 Dec 2022 at 00:02, Ricardo Ribalda <ribalda@chromium.org> wrote:
->
-> Hi Laurent
->
-> On Mon, 5 Dec 2022 at 23:16, Laurent Pinchart
-> <laurent.pinchart@ideasonboard.com> wrote:
+On Tue, Dec 20, 2022 at 07:06:57PM +0000, Joel Fernandes wrote:
+> On Tue, Dec 20, 2022 at 7:01 PM Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
 > >
-> > Hi Ricardo,
-> >
-> > Thank you for the patch.
-> >
-> > On Fri, Dec 02, 2022 at 06:08:19PM +0100, Ricardo Ribalda wrote:
-> > > Some cameras have multiple data inputs (i.e. IR sensor and RGB sensor),
-> > > append a unique number to the device name.
+> > On 2022-12-20 13:29, Joel Fernandes wrote:
 > > >
-> > > Fixes v4l2-compliance:
-> > >     Media Controller ioctls:
-> > >          fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
-> > >        test MEDIA_IOC_G_TOPOLOGY: FAIL
-> > >          fail: v4l2-test-media.cpp(394): num_data_links != num_links
-> > >        test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
-> > >
-> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > ---
-> > >  drivers/media/usb/uvc/uvc_driver.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > > index 215fb483efb0..f4032ebb3689 100644
-> > > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > > @@ -1963,7 +1963,8 @@ int uvc_register_video_device(struct uvc_device *dev,
-> > >               break;
-> > >       }
-> > >
-> > > -     strscpy(vdev->name, dev->name, sizeof(vdev->name));
-> > > +     snprintf(vdev->name, sizeof(vdev->name), "%s %u", dev->name,
-> > > +              stream->header.bTerminalLink);
 > >
-> > This won't be perfect as the string is not guaranteed to fit in
-> > vdev->name, but I suppose it will help as a quick fix for some devices.
-> > How about the other devices ? Won't they still exhibit the above
-> > v4l2-compliance failure ? Isn't that something that will still affect
-> > Chrome OS devices ?
->
-> We could place the id first... but that will look bad: Eg:
->
-> 1- My favorite camera
->
-> Another option is to remove the last chars to fit the id. Eg:
->
-> My favorite came-1
->
-> If you prefer any of those options or have a better idea I can implement that.
-
-@Laurent
-
-Any preference here?
-
-Thanks!
-
->
->
+> > > I do want to finish my memory barrier studies of SRCU over the holidays since I have been deep in the hole with that already. Back to the post flip memory barrier here since I think now even that might not be needed…
 > >
-> > The change should not cause any regression as big as in patch 1/3.
-> > However, unless I'm mistaken users will notice a device name change,
-> > especially when selecting a device in their web browser. Could that be a
-> > problem ?
->
-> I think the only side effect is that the first time that the kernel
-> changes the naming convention, if there are more than one camera on
-> the system, the video conference might pick a different camera.
-> The good news is that the user will be presented with cameras with
-> different names. Now some cameras show very confusing names:
->
-> ribalda@alco:~/work/linux$ for a in /dev/video* ; do yavta -l $a| grep
-> "Dell Webcam"; done
-> Device `Dell Webcam WB7022' on `usb-0000:2d:00.0-1.2.3.1' (driver
-> 'uvcvideo') supports video, capture, without mplanes.
-> Device `Dell Webcam WB7022' on `usb-0000:2d:00.0-1.2.3.1' (driver
-> 'uvcvideo') supports meta-data, capture, without mplanes.
-> Device `Dell Webcam WB7022' on `usb-0000:2d:00.0-1.2.3.1' (driver
-> 'uvcvideo') supports video, capture, without mplanes.
-> Device `Dell Webcam WB7022' on `usb-0000:2d:00.0-1.2.3.1' (driver
-> 'uvcvideo') supports meta-data, capture, without mplanes.
->
->
->
+> > I strongly suspect the memory barrier after flip is useless for the same
+> > reasons I mentioned explaining why the barrier before the flip is useless.
 > >
-> > >       /*
-> > >        * Set the driver data before calling video_register_device, otherwise
-> > >
+> > However, we need to double-check that we have memory barriers at the
+> > beginning and end of synchronize_srcu, and between load of "unlock"
+> > counters and load of "lock" counters.
+> >
+> > Where is the barrier at the beginning of synchronize_srcu ?
+> 
+> I believe we don't need another memory barrier at the beginning of
+> synchronize_srcu() (but this part of my SRCU study is still pending
+> ;)) . The grace period guarantee (read-side critical sections don't
+> span the GP) is already enforced by the memory barrier between
+> scanning for all unlocks, and scanning for all locks (Paired with
+> corresponding memory barriers on the read-side).
+> 
+> Accordingly, before we scan all locks and match lock == unlock, there
+> is an smp_mb(). Why is that not sufficient?
+
+That's not enough, you still need a barrier between the updater's pre-GP
+accesses and the scans, so that post-GP read side sees the updater's pre-GP
+accesses:
+
+
+            UPDATER                        READER
+            -------                        ------
+            WRITE A                        WRITE srcu_read_lock
+            smp_mb() //rcu_seq_snap()      smp_mb()
+            READ srcu_read_lock //scans    READ A
+
+Thanks.
+
+> 
+> Thanks,
+> 
+>  - Joel
+> 
+> >
+> > Thanks,
+> >
+> > Mathieu
 > >
 > > --
-> > Regards,
+> > Mathieu Desnoyers
+> > EfficiOS Inc.
+> > https://www.efficios.com
 > >
-> > Laurent Pinchart
->
->
->
-> --
-> Ricardo Ribalda
-
-
-
--- 
-Ricardo Ribalda
