@@ -2,98 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33963651FB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25287651FB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:31:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232093AbiLTLbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 06:31:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
+        id S233065AbiLTLbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 06:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233497AbiLTLbK (ORCPT
+        with ESMTP id S233364AbiLTLbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 06:31:10 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA94219295;
-        Tue, 20 Dec 2022 03:31:02 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso11838178pjh.1;
-        Tue, 20 Dec 2022 03:31:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ue5drNbkBvKVzpPDG78ZMfbrHrE9A5Ia9TcUjCSfCo=;
-        b=m5ESKvT3Lf0CT9weWsfxqVpy1q9ZvbcLvSundZywEFYQEH5yXW5k+2ZrrKlnPsgxK8
-         +2SbLpoj+YfpyhPNVvVqFCsKkmctQLGIu6NzUdOYm7kbT9awps9bcn5VgcpjBXEyxvTc
-         ovkKDmcHJ0Ifco/pZI+bxsQO8XfpkMg7QreIoU+tik2Lx7DFX+L6aTOr6qLj5XaysIo9
-         gqvjojE7osPcGGc84kXE7KvYSM2lmv5GnyuvxqWM6Jxno//iKbgKL4wWE/AWy5K2NuVk
-         6A/TqhOWZ5V1ej2FpGgXS116W/XsZ4m8saXKe205ZRWd6Ao1VamJzCdqnGQ65Awt1Iaw
-         rThQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9ue5drNbkBvKVzpPDG78ZMfbrHrE9A5Ia9TcUjCSfCo=;
-        b=hAqB66ZuxCQUVkuVE+H7NfnvjvKkY9/7NrC1aZVbR5Go3g/lBdtoFEMpWePRRkxNH1
-         yEIdPrubLFiRLlfXYDXOc6G27DIjMT0mJkzrqLLTMLQpT17VkE8DzceKzdRH9Y+RGk4U
-         Q3g95wra101D5N1rRyKF5eOxkDJJOuqN+l5YrbUUb6NziDYfsliXPIZy85XK3X7WdTwN
-         TPZqUby9tiz4HBCjXdf3QWXz5oy2CQMr7yrQg8rz3JmDI5J+qHaWPgI+2vp2ylrQxenI
-         oMpk8FiPixrbjRSrfz4nuu78zbGnPFqq1hd5UjLl/F/6NzdKGy/oFt4DHLWhCoF3P0JN
-         kuug==
-X-Gm-Message-State: ANoB5plr/xxtzlQzorEhQPKOg8l9hfmtkVPW2ktdOk6e7YlP0xX85DWa
-        CjeiSIDmsmlqrl11hsl8++0=
-X-Google-Smtp-Source: AA0mqf7DsevXhPH+pg5x4yR1bV/jgh97+nllSGVEptRsYXvX/5pCbpKmv2jrsggHJl6z4SFRO+8O9w==
-X-Received: by 2002:a17:90a:f191:b0:21a:1b9b:139e with SMTP id bv17-20020a17090af19100b0021a1b9b139emr47606235pjb.8.1671535862337;
-        Tue, 20 Dec 2022 03:31:02 -0800 (PST)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id om7-20020a17090b3a8700b001fde655225fsm1610785pjb.2.2022.12.20.03.30.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 06:31:08 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8720219027;
         Tue, 20 Dec 2022 03:31:01 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Haoyue Xu <xuhaoyue1@hisilicon.com>,
-        Wenpeng Liang <liangwenpeng@huawei.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Yixing Liu <liuyixing1@huawei.com>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] RDMA/hns: Fix refcount leak in hns_roce_mmap
-Date:   Tue, 20 Dec 2022 15:30:47 +0400
-Message-Id: <20221220113047.1463078-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Received: from [192.168.231.135] (unknown [213.194.155.136])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: rcn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A8C3A6602C93;
+        Tue, 20 Dec 2022 11:30:59 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671535860;
+        bh=7KC4YI1sDz0S6IQfm/3XQMk26kdbVIwgc8Q3poa1r2o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GM2xSuclMOqT50UvTJT4P5UCtApCtyE+Uqp76bWqvdlkqBgk0LwMbmpvORs0EbilB
+         SGP6+2tJd5NV+DiFb7EF2PCxWpf5yryVof1NqWfjJiSurcWM0yPgxB3aePSLafXaPb
+         cuYAGHSMSL6EfCrMKgHxsKM1r2bpaADAq0eJofyrz9mzSJEsEMcmH+G2PoosIP7omz
+         W0WNtpGIgq1kTtPxbbyneiHnk6Zg4ys5eTHQyQus7YaIpTpGZeOBgrta5LChwTu/aW
+         /x+2gb8sbwQKFTpFGgdJ6bVemj2coiuHzhZJf4zgejwiEwDKDWPeFaatqhw1rFl/oa
+         9J/x/2XYpMYQw==
+Message-ID: <c8a55105-7dd4-c90c-33e2-31c4808892c6@collabora.com>
+Date:   Tue, 20 Dec 2022 12:30:57 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] virtio: fix virtio_config_ops kerneldocs
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, sfr@canb.auug.org.au,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kernel@collabora.com
+References: <20221220073709.2687151-1-ricardo.canuelo@collabora.com>
+ <Y6F8dlRQbOzIvJff@debian.me>
+ <bf9bd0ba-c703-1903-7df2-ac95dea0f3e8@collabora.com>
+ <20221220052333-mutt-send-email-mst@kernel.org>
+From:   =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>
+In-Reply-To: <20221220052333-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rdma_user_mmap_entry_get_pgoff() takes reference.
-Add missing rdma_user_mmap_entry_put() to release the reference.
+On 20/12/22 11:25, Michael S. Tsirkin wrote:
+> This doesn't matter I think, what Fixes tag does is tell tools
+> if you have commit A you want this one on top.
 
-Fixes: 0045e0d3f42e ("RDMA/hns: Support direct wqe of userspace")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/infiniband/hw/hns/hns_roce_main.c | 1 +
- 1 file changed, 1 insertion(+)
+Ok, thanks for clarifying. v3 submitted.
 
-diff --git a/drivers/infiniband/hw/hns/hns_roce_main.c b/drivers/infiniband/hw/hns/hns_roce_main.c
-index 8ba68ac12388..fbff8df9236d 100644
---- a/drivers/infiniband/hw/hns/hns_roce_main.c
-+++ b/drivers/infiniband/hw/hns/hns_roce_main.c
-@@ -443,6 +443,7 @@ static int hns_roce_mmap(struct ib_ucontext *uctx, struct vm_area_struct *vma)
- 		prot = pgprot_device(vma->vm_page_prot);
- 		break;
- 	default:
-+		rdma_user_mmap_entry_put(rdma_entry);
- 		return -EINVAL;
- 	}
- 
--- 
-2.25.1
-
+Cheers,
+Ricardo
