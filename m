@@ -2,66 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C510651E55
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F454651E58
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233652AbiLTKEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:04:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        id S233720AbiLTKFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:05:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233601AbiLTKEH (ORCPT
+        with ESMTP id S233779AbiLTKE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:04:07 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4BD15FEC;
-        Tue, 20 Dec 2022 02:02:55 -0800 (PST)
+        Tue, 20 Dec 2022 05:04:57 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CB918B1F;
+        Tue, 20 Dec 2022 02:04:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=6rsBo09ooyd8tgU+HKMozFrDhJd3cHOmSKWXCS0o8X0=; b=BoKMiTBwIr94CpJv3JnJvQNei8
-        9zf8Bp/kesSQRe50mgJ0N4geqDVuS1oq3pTpSpBx5TANrC+wIiqd5y6pWH8CBsWg1mUhv651fkZg2
-        8rENtRx7ODsfTNqxqLbnFSiFgDy1ZwHxso1uyJ350r9QaeyVsGS0x2tKBEV0s3nHUqxEzxqsjtb2a
-        u0nbR7wrOF+wH7gqQUj291VO3etma0vlq0UQQjooD24WxARCjX4Ez1zKCvbJRn84MtoJfA4/BslIG
-        5Mrj4idDp3ERrZZpFno1QkLj0A7lJ/jSWEY/QBEkE2ZVouC+WFVatQD68Y3F22TwAHH+LWO7y4sxq
-        O+CjB0IQ==;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=wFmQ7lRJi3uyaPcaAHBI+uNPG9r+91kEtiS0MtrW62Q=; b=ScnmtR6fKw0ny50Sd65lB+3C84
+        RcMtR5j+YKw3plF+WWUHvXhSVAXY5LxHFvM0YlSZbBCVC/+3kMn7+3uZz7Dzb9r416KpywdWCJxsj
+        Z9H6qgrAJG9oHh5mOccz4OIiPzm44i/mCbGJ8xJe4rGCkqSSLQvJqzyUjQW70Zz0pKnrNz6SiHj6R
+        FWObk0Ihgn1D4KJnB4ODt/qkjfEqJQb6ysAtNBqjY8Ju1EBQUAsUuD0zcdbs4bVdWBVjEBfgr+ewU
+        pHbjD5kkxQ6KwLEhhCGqDeA+D2v1oTEHMHzextFn2WtLNtH9JBBNZU8KJYOYFOcnFHvYgBKMNXPOs
+        TyODiHQA==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p7ZSM-001g9x-Mb; Tue, 20 Dec 2022 10:02:42 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1p7ZU6-00CxAQ-2C;
+        Tue, 20 Dec 2022 10:04:30 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6D5E63000DD;
-        Tue, 20 Dec 2022 11:02:31 +0100 (CET)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EF9CE3000DD;
+        Tue, 20 Dec 2022 11:04:30 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 54AFA200A4AD7; Tue, 20 Dec 2022 11:02:31 +0100 (CET)
-Date:   Tue, 20 Dec 2022 11:02:31 +0100
+        id B82CA200A4AD7; Tue, 20 Dec 2022 11:04:30 +0100 (CET)
+Date:   Tue, 20 Dec 2022 11:04:30 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc:     Xin Li <xin3.li@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "ravi.v.shankar@intel.com" <ravi.v.shankar@intel.com>
-Subject: Re: [RFC PATCH 22/32] x86/fred: FRED initialization code
-Message-ID: <Y6GIN5Uf7Qd43A9U@hirez.programming.kicks-ass.net>
-References: <20221220063658.19271-1-xin3.li@intel.com>
- <20221220063658.19271-23-xin3.li@intel.com>
- <Y6GELyEJeKY3dEqJ@hirez.programming.kicks-ass.net>
- <16972e64-7d7b-ad8c-f8dc-6dcab69e629e@citrix.com>
+To:     syzbot <syzbot+b8e8c01c8ade4fe6e48f@syzkaller.appspotmail.com>
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        bpf@vger.kernel.org, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Read in put_pmu_ctx
+Message-ID: <Y6GIrqpDU331TTeB@hirez.programming.kicks-ass.net>
+References: <Y6Fxfw5fhHhQYaSd@hirez.programming.kicks-ass.net>
+ <000000000000de0f0b05f03e6d9b@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <16972e64-7d7b-ad8c-f8dc-6dcab69e629e@citrix.com>
+In-Reply-To: <000000000000de0f0b05f03e6d9b@google.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -71,38 +62,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 09:55:31AM +0000, Andrew Cooper wrote:
-> On 20/12/2022 9:45 am, Peter Zijlstra wrote:
-> > On Mon, Dec 19, 2022 at 10:36:48PM -0800, Xin Li wrote:
-> >
-> >> +	wrmsrl(MSR_IA32_FRED_STKLVLS,
-> >> +	       FRED_STKLVL(X86_TRAP_DB,  1) |
-> >> +	       FRED_STKLVL(X86_TRAP_NMI, 2) |
-> >> +	       FRED_STKLVL(X86_TRAP_MC,  2) |
-> >> +	       FRED_STKLVL(X86_TRAP_DF,  3));
-> >> +
-> >> +	/* The FRED equivalents to IST stacks... */
-> >> +	wrmsrl(MSR_IA32_FRED_RSP1, __this_cpu_ist_top_va(DB));
-> >> +	wrmsrl(MSR_IA32_FRED_RSP2, __this_cpu_ist_top_va(NMI));
-> >> +	wrmsrl(MSR_IA32_FRED_RSP3, __this_cpu_ist_top_va(DF));
-> > Not quite.. IIRC fred only switches to another stack when the level of
-> > the exception is higher. Specifically, if we trigger #DB while inside
-> > #NMI we will not switch to the #DB stack (since 1 < 2).
+On Tue, Dec 20, 2022 at 12:43:25AM -0800, syzbot wrote:
+> Hello,
 > 
-> There needs to be a new stack for #DF, and just possibly one for #MC. 
-> NMI and #DB do not need separate stacks under FRED.
-
-True, there is very little need to use additional stacks with FRED.
-
-> > Now, as mentioned elsewhere, it all nests a lot saner, but stack
-> > exhaustion is still a thing, given the above, what happens when a #DB
-> > hits an #NMI which tickles a #VE or something?
-> >
-> > I don't think we've increased the exception stack size, but perhaps we
-> > should for FRED?
+> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> INFO: rcu detected stall in corrupted
 > 
-> Not sure if it matters too much - it doesn't seem usefully different to
-> IDT delivery.  #DB shouldn't get too deep, and NMI gets properly
-> inhibited now.
+> rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P5791 } 2673 jiffies s: 2805 root: 0x0/T
+> rcu: blocking rcu_node structures (internal RCU debug):
 
-Both #DB and #NMI can end up in perf, and all that goes quite deep :/
+That is an entirely different issue methinks. Let me go write up a
+Changelog for that thing and stuff it somewhere /urgent.
