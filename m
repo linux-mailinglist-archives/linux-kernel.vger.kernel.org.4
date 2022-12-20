@@ -2,138 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C21465283E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 22:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C43A652844
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 22:15:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233782AbiLTVPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 16:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
+        id S233993AbiLTVPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 16:15:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiLTVPF (ORCPT
+        with ESMTP id S234048AbiLTVP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 16:15:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9858D13F2D;
-        Tue, 20 Dec 2022 13:15:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48F8DB8197B;
-        Tue, 20 Dec 2022 21:15:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF7AC433F0;
-        Tue, 20 Dec 2022 21:14:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671570900;
-        bh=SaFUQnlPhWnTefMSF5TAmmsvzt+RR7tzLYrYhfEmis0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dtq3Vii3FFUmY7uPnKp1pGMPMgrNezTyLuqse4FRH+UF9Ync/PyefOXNY71Hhc6IY
-         +jLyZOuZsgMeL1q2fRu4KgHmMFUWQ6SVXtll2Dia6MNw47eAb33WTQNDEsvibdATi/
-         4JXYj98wyj6t02rm2543hoNkkz52RCT64JDpOduLvWBfVtX7gO+UaUJKIjaIigufRJ
-         e+G57//D5fOoFHj9CsNR7SaGXmzONTnzXUyQC9li6hGf3LkWbTGWsaTs4Jy80mKuqK
-         czT/gO5oB/uyCkwCUvVn+Q+0kZmMBxEWE/7osckawfcClGGlR1QiOUVfjriS4/wnLo
-         G12eip1n2jN4Q==
-Date:   Tue, 20 Dec 2022 21:14:54 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/7] soc: sifive: ccache: Add StarFive JH7110 support
-Message-ID: <Y6IlztUSTEiBw7Pd@spud>
-References: <20221220011247.35560-1-hal.feng@starfivetech.com>
- <20221220011247.35560-6-hal.feng@starfivetech.com>
+        Tue, 20 Dec 2022 16:15:26 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFE11EAEB;
+        Tue, 20 Dec 2022 13:15:23 -0800 (PST)
+Date:   Tue, 20 Dec 2022 13:15:16 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1671570922;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YR2G1tfnt1QeRb9BvoQh2xZ0Hit39TayrVYxM23Ti5o=;
+        b=cBJO2EIe6oiGh2ENr1dP4PUWluxLFCOQnl1rnqFwsqvzqef+3Rd/UJmBPLbq5IL4/dcQEn
+        gN4B8V37nJGryYOHvpTd23Gf5nrA6ZTRW9dEdQKd/He/k9s9kK8CV0Agq/XwjtfIEVbjoQ
+        ujr36SB+a8Yw8C6daF2iwukLgcHSDDY=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH RFC 1/2] mm: kmem: optimize get_obj_cgroup_from_current()
+Message-ID: <Y6Il5L00NIviTIe4@P9FQF9L96D.corp.robot.car>
+References: <20221220182745.1903540-1-roman.gushchin@linux.dev>
+ <20221220182745.1903540-2-roman.gushchin@linux.dev>
+ <CALvZod5q0koAckpTr4VBq-_KiQpsmC86bE4eP9gzX71PzRdicA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="VgU9tBCqHV9nCZZx"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221220011247.35560-6-hal.feng@starfivetech.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CALvZod5q0koAckpTr4VBq-_KiQpsmC86bE4eP9gzX71PzRdicA@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 20, 2022 at 11:55:34AM -0800, Shakeel Butt wrote:
+> On Tue, Dec 20, 2022 at 10:28 AM Roman Gushchin
+> <roman.gushchin@linux.dev> wrote:
+> >
+> > Manually inline memcg_kmem_bypass() and active_memcg() to speed up
+> > get_obj_cgroup_from_current() by avoiding duplicate in_task() checks
+> > and active_memcg() readings.
+> >
+> > Also add a likely() macro to __get_obj_cgroup_from_memcg():
+> > obj_cgroup_tryget() should succeed at almost all times except
+> > a very unlikely race with the memcg deletion path.
+> >
+> > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> 
+> Can you please add your performance experiment setup and result of
+> this patch in the commit description of this patch as well?
 
---VgU9tBCqHV9nCZZx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sure. I used a small hack to just do a bunch of allocations in a raw
+and measured the time. Will include it into the commit message.
 
-On Tue, Dec 20, 2022 at 09:12:45AM +0800, Hal Feng wrote:
-> From: Emil Renner Berthing <kernel@esmil.dk>
->=20
-> This adds support for the StarFive JH7110 SoC which also
-> features this SiFive cache controller.
->=20
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+Also will fix the #ifdef thing from the second patch, thanks for spotting
+it.
 
-I'll queue this and the ccache binding for v6.3 once -rc1 is tagged,
-once again with the caveat that screaming from Emil with dissuade me.
-Ordinarily, I'd wait for his R-b, but he is the author..
+> 
+> Acked-by: Shakeel Butt <shakeelb@google.com>
 
-Thanks,
-Conor.
-
-> ---
->  drivers/soc/Makefile       | 2 +-
->  drivers/soc/sifive/Kconfig | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-> index 69ba6508cf2c..534669840858 100644
-> --- a/drivers/soc/Makefile
-> +++ b/drivers/soc/Makefile
-> @@ -26,7 +26,7 @@ obj-y				+=3D qcom/
->  obj-y				+=3D renesas/
->  obj-y				+=3D rockchip/
->  obj-$(CONFIG_SOC_SAMSUNG)	+=3D samsung/
-> -obj-$(CONFIG_SOC_SIFIVE)	+=3D sifive/
-> +obj-y				+=3D sifive/
->  obj-y				+=3D sunxi/
->  obj-$(CONFIG_ARCH_TEGRA)	+=3D tegra/
->  obj-y				+=3D ti/
-> diff --git a/drivers/soc/sifive/Kconfig b/drivers/soc/sifive/Kconfig
-> index ed4c571f8771..e86870be34c9 100644
-> --- a/drivers/soc/sifive/Kconfig
-> +++ b/drivers/soc/sifive/Kconfig
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
-> =20
-> -if SOC_SIFIVE
-> +if SOC_SIFIVE || SOC_STARFIVE
-> =20
->  config SIFIVE_CCACHE
->  	bool "Sifive Composable Cache controller"
-> --=20
-> 2.38.1
->=20
->=20
-
---VgU9tBCqHV9nCZZx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6IlzgAKCRB4tDGHoIJi
-0kY+AP9enkrvYXKKa5SNA4sSbGwZDhvcoCcsSCloARVs+Qc36QD/cb/vWsgaFwSK
-q42fkVYJ4ro/LJiPrNEB+YgA+WF5aQk=
-=ZTcn
------END PGP SIGNATURE-----
-
---VgU9tBCqHV9nCZZx--
+Thank you for taking a look!
