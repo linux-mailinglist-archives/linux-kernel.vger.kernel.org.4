@@ -2,103 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B500F652127
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 14:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F11B765212C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 14:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233837AbiLTNCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 08:02:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
+        id S233450AbiLTND0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 08:03:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233810AbiLTNC0 (ORCPT
+        with ESMTP id S233868AbiLTNDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 08:02:26 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F761403A;
-        Tue, 20 Dec 2022 05:02:21 -0800 (PST)
-Received: from [IPV6:2a01:e0a:120:3210:bf7d:b502:d93b:e4e3] (unknown [IPv6:2a01:e0a:120:3210:bf7d:b502:d93b:e4e3])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 20 Dec 2022 08:03:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D622316596;
+        Tue, 20 Dec 2022 05:03:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D83F36602CA4;
-        Tue, 20 Dec 2022 13:02:19 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671541340;
-        bh=haA6w9EmCpkqi5iB2LLsKdnh/6FRvbucp0GFooZKrYY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ig+qjYbgy6FmCKIolAqd/b+GmUivS+lSt3G3l1Jky716MRoHegVUU/ybihyrv7VZp
-         Kw6t2o6sGuTp8iSV/p7h1I1Bx60Yn2/R0Yz92bD8CpzY/32VjOgI4dVJF7IAnUr/wI
-         YIvlidIoBzkNi1jZqow35Y6HWkT6LLeCEUkyI19rfYCjQvvPmMS/shlpl0sgqtAtvC
-         sAqxuLw6gENlQnloy2hk8RfLXMvYqYozSweCl1Daee9MYSnGS4kJzwxmTiB9M56R30
-         3U2MWzr2HgLc/omi6nDnD9GOQlKZCziVddk/qPypwQTpcYjc0GdwjWF3bQiMOrRhXF
-         0anirHn4J3A4w==
-Message-ID: <4aae8684-5ab4-c5a6-cc73-5dc61309b745@collabora.com>
-Date:   Tue, 20 Dec 2022 14:02:17 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 723F66140B;
+        Tue, 20 Dec 2022 13:03:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 597F2C433EF;
+        Tue, 20 Dec 2022 13:02:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671541380;
+        bh=KNR9UnmTyhihgi7laGFrXDHTFdgw9AYrYBt6eXlxzEc=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=e5lgBX5fVfhnsY4PqerckGNNZlav8e4jbXNfSHCsY1OMUaOYPxY3oYIhhEK9hQhh4
+         h7jOYPaAF9DXimmzmDjMsLOX9ckpBsDbljXEezDF0pl0TsLh2t3rXzup90tF+oUnZ6
+         U6Az8A7+HsTU81pOZ5xW4RZCwMb+j3p0HrTx4N7ARKWTVNKRdVn4rg6P+KcE2ZJKtG
+         S1zL9ApVk6KHcY2AHaFTbjfNy8pJFYJu9IzlNa25vlkvnxK5m2Cac1XyAAVrW2+qMl
+         hqJLitpOJc+wDM2XBa9h9IXNI4XPEOmC85Vc/S9+EjyoAExSPVHBHxDGsNdBtaE6vr
+         iTCzprh1j8PpQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 4/9] media: verisilicon: Check AV1 bitstreams bit depth
-Content-Language: en-US
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
- <20221219155616.848690-5-benjamin.gaignard@collabora.com>
- <e3663c85c75d09259a3135cb6ccfe7d6231bd752.camel@ndufresne.ca>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <e3663c85c75d09259a3135cb6ccfe7d6231bd752.camel@ndufresne.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: wifi: ath9k: use proper statements in conditionals
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20221215165553.1950307-1-arnd@kernel.org>
+References: <20221215165553.1950307-1-arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <167154137625.23629.16918732467799210521.kvalo@kernel.org>
+Date:   Tue, 20 Dec 2022 13:02:58 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Arnd Bergmann <arnd@kernel.org> wrote:
 
-Le 19/12/2022 à 21:38, Nicolas Dufresne a écrit :
-> Le lundi 19 décembre 2022 à 16:56 +0100, Benjamin Gaignard a écrit :
->> The driver supports 8 and 10 bits bitstreams, make sure to discard
->> other cases.
->>
->> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->> ---
->>   drivers/media/platform/verisilicon/hantro_drv.c | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
->> index 8e93710dcfed..e10fc59634dd 100644
->> --- a/drivers/media/platform/verisilicon/hantro_drv.c
->> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
->> @@ -282,7 +282,13 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
->>   		/* We only support profile 0 */
->>   		if (dec_params->profile != 0)
->>   			return -EINVAL;
->> +	} else if (ctrl->id == V4L2_CID_STATELESS_AV1_SEQUENCE) {
->> +		const struct v4l2_ctrl_av1_sequence *sequence = ctrl->p_new.p_av1_sequence;
->> +
->> +		if (sequence->bit_depth != 8 && sequence->bit_depth != 10)
->> +			return -EINVAL;
-> As you state in the cover letter, should this just be this for now ?
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> A previous cleanup patch accidentally broke some conditional
+> expressions by replacing the safe "do {} while (0)" constructs
+> with empty macros. gcc points this out when extra warnings
+> are enabled:
+> 
+> drivers/net/wireless/ath/ath9k/hif_usb.c: In function 'ath9k_skb_queue_complete':
+> drivers/net/wireless/ath/ath9k/hif_usb.c:251:57: error: suggest braces around empty body in an 'else' statement [-Werror=empty-body]
+>   251 |                         TX_STAT_INC(hif_dev, skb_failed);
+> 
+> Make both sets of macros proper expressions again.
+> 
+> Fixes: d7fc76039b74 ("ath9k: htc: clean up statistics macros")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
 
-The driver can decode 8 or 10 bits bitstreams but will on produce 8bits (NV12_4L4 or NV12)
-frames. The hardware is able to truncate 10bits bitstreams to 8 bits output.
+Patch applied to wireless.git, thanks.
 
->
->
->> +		if (sequence->bit_depth != 8)
->> +			return -EINVAL;
->
->>   	}
->> +
->>   	return 0;
->>   }
->>   
+b7dc753fe33a wifi: ath9k: use proper statements in conditionals
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20221215165553.1950307-1-arnd@kernel.org/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
