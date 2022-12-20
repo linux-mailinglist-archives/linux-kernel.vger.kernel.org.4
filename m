@@ -2,119 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E60A652161
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 14:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0185652167
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 14:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233158AbiLTNWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 08:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
+        id S233294AbiLTNY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 08:24:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbiLTNV4 (ORCPT
+        with ESMTP id S233208AbiLTNYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 08:21:56 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D91B16496;
-        Tue, 20 Dec 2022 05:21:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=yG9JT2qsJ2n+skS1+0XzJ/VYZa3AXEt7ITVQuCUV1C0=; b=aT1aKF06u3GCpyS2nN5Mip9dok
-        7cSBZ4usFrAq3Yov6E7gOReOYM8xYez4xHpA1TM4NAuF8rJRxO9Oecfjkld/zx9V0q/yDNGViyN76
-        SC3ywvArxUg2Z20BmlXsd+vGOkgWYdNY2YFOoQ+i7scdGE6Kde4jnaTg4YMVLJESGNPU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1p7cYk-0005b6-06; Tue, 20 Dec 2022 14:21:30 +0100
-Date:   Tue, 20 Dec 2022 14:21:29 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>, Xu Liang <lxu@maxlinear.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH net-next v1 3/4] dt-bindings: net: phy: add MaxLinear
- GPY2xx bindings
-Message-ID: <Y6G22e06gQ2+kM+G@lunn.ch>
-References: <20221202151204.3318592-1-michael@walle.cc>
- <20221202151204.3318592-4-michael@walle.cc>
- <20221205212924.GA2638223-robh@kernel.org>
- <99d4f476d4e0ce5945fa7e1823d9824a@walle.cc>
- <9c0506a6f654f72ea62fed864c1b2a26@walle.cc>
- <2597b9e5-7c61-e91c-741c-3fe18247e27c@linaro.org>
- <6c82b403962aaf1450eb5014c9908328@walle.cc>
- <796a528b23aded95c1a647317c277b1f@walle.cc>
+        Tue, 20 Dec 2022 08:24:20 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E601812A85;
+        Tue, 20 Dec 2022 05:24:18 -0800 (PST)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BKBTI6o000448;
+        Tue, 20 Dec 2022 08:24:09 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3mh8gbh9bj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 08:24:09 -0500
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 2BKDO7tG053410
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 20 Dec 2022 08:24:07 -0500
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Tue, 20 Dec 2022 08:24:07 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Tue, 20 Dec 2022 08:24:06 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Tue, 20 Dec 2022 08:24:06 -0500
+Received: from IST-LT-42339.ad.analog.com (IST-LT-42339.ad.analog.com [10.117.192.221])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2BKDNoP2010583;
+        Tue, 20 Dec 2022 08:23:53 -0500
+From:   Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+To:     <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <sre@kernel.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>
+CC:     <Zeynep.Arslanbenzer@analog.com>, <Nurettin.Bolucu@analog.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+Subject: [PATCH 0/6] drivers: mfd: Add MAX77659 MFD and related device drivers
+Date:   Tue, 20 Dec 2022 16:22:44 +0300
+Message-ID: <20221220132250.19383-1-Zeynep.Arslanbenzer@analog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <796a528b23aded95c1a647317c277b1f@walle.cc>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: DPnePs4ZUNXLWrXsnfbdmBGFB6xzn2wy
+X-Proofpoint-GUID: DPnePs4ZUNXLWrXsnfbdmBGFB6xzn2wy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-20_05,2022-12-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ lowpriorityscore=0 bulkscore=0 phishscore=0 mlxlogscore=665 clxscore=1011
+ impostorscore=0 mlxscore=0 spamscore=0 priorityscore=1501 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212200110
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->  (2) Krzysztof pointed out that there is still the issue raised by
->      Rob, that the schemas haven't any compatible and cannot be
->      validated. I think that applies to all the network PHY bindings
->      in the tree right now. I don't know how to fix them.
+This patchset adds mfd, regulator and charger driver and related bindings.The patches 
+are required to be applied in sequence.
 
-i've been offline for a while, i sabotaged my own mail server...
+Zeynep Arslanbenzer (6):
+  drivers: mfd: add MAX77659 PMIC support
+  dt-bindings: mfd: add MAX77659 binding
+  drivers: power: supply: add MAX77659 charger support
+  dt-bindings: power: supply: add MAX77659 charger binding
+  drivers: regulator: add MAX77659 regulator support
+  dt-bindings: regulator: add MAX77659 regulator binding
 
-You can always add an unneeded compatible, using the PHY devices ID:
+ .../devicetree/bindings/mfd/adi,max77659.yaml |  70 +++
+ .../power/supply/adi,max77659-charger.yaml    |  42 ++
+ .../regulator/adi,max77659-regulator.yaml     |  31 +
+ MAINTAINERS                                   |  13 +
+ drivers/mfd/Kconfig                           |  14 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/max77659.c                        | 188 ++++++
+ drivers/power/supply/Kconfig                  |   7 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/max77659-charger.c       | 547 ++++++++++++++++++
+ drivers/regulator/Kconfig                     |   8 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/max77659-regulator.c        |  98 ++++
+ include/linux/mfd/max77659.h                  |  60 ++
+ 14 files changed, 1081 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77659.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/adi,max77659-charger.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/adi,max77659-regulator.yaml
+ create mode 100644 drivers/mfd/max77659.c
+ create mode 100644 drivers/power/supply/max77659-charger.c
+ create mode 100644 drivers/regulator/max77659-regulator.c
+ create mode 100644 include/linux/mfd/max77659.h
 
-      - pattern: "^ethernet-phy-id[a-f0-9]{4}\\.[a-f0-9]{4}$"
-        description:
-          If the PHY reports an incorrect ID (or none at all) then the
-          compatible list may contain an entry with the correct PHY ID
-          in the above form.
-          The first group of digits is the 16 bit Phy Identifier 1
-          register, this is the chip vendor OUI bits 3:18. The
-          second group of digits is the Phy Identifier 2 register,
-          this is the chip vendor OUI bits 19:24, followed by 10
-          bits of a vendor specific ID.
-
-It would be fine to do this in the example in the binding, but i would
-add a comment something like:
-
-"Compatible generally only needed to make DT lint tools work. Mostly
-not needed for real DT descriptions"
-
-Examples often get cut/paste without thinking, and we don't really
-want the compatible used unless it is really needed.
-
-This is however a bigger problem than just PHYs. It applies to any
-device which can be enumerated on a bus, e.g. USB, PCI. So maybe this
-limitation of the DT linting tools should be fixed once at a higher
-level?
-
->  (3) The main problem with the broken interrupt handling of the PHY
->      is that it will disturb other devices on that interrupt line.
->      IOW if the interrupt line is shared the PHY should fall back
->      to polling mode. I haven't found anything in the interrupt
->      subsys to query if a line is shared and I guess it's also
->      conceptually impossible to do such a thing, because there
->      might be any driver probed at a later time which also uses
->      that line.
->      Rob had the idea to walk the device tree and determine if
->      a particular interrupt is used by other devices, too. If
->      feasable, this sounds like a good enough heuristic for our
->      problem. Although there might be some edge cases, like
->      DT overlays loaded at linux runtime (?!).
-
-My humble opinion is that it is not worth the complexity for just one
-PHY which should work in polling mode without problems. I think the
-boolean property you propose is KISS and does what is needed.
-
-	Andrew
+-- 
+2.25.1
 
