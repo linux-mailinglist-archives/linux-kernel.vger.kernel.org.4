@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AB0652614
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 19:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DC9652612
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 19:13:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233935AbiLTSOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 13:14:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
+        id S233716AbiLTSNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 13:13:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233912AbiLTSN4 (ORCPT
+        with ESMTP id S231638AbiLTSNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 13:13:56 -0500
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FBA186A9;
-        Tue, 20 Dec 2022 10:13:54 -0800 (PST)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4Nc4TB5pRLz9sc0;
-        Tue, 20 Dec 2022 19:13:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1671560030;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oBh94zxafkf8iTW1Whfw20TE2z6rdPEY1QkbgbOuVtQ=;
-        b=FjllJCc5aV+4Vb4wmDNbcI/umMRd6w96wSaDdSTmt8OIeMZWc+uqcQ3EBZC63eENDn4dx5
-        v/wN203UciUlRNvPUsSqrOZpc8iOOd8pSnfXSFz6oA++RuJM8fo+xKpMvy0q+Um8zHalMw
-        k05k+P3N/6PLomS5k25kSIDZir+AzZJyXTMVYy085sHzDM1HLUWH8h3mfj39/sRYlcjV3J
-        Kn6pt5HWpBcrVdRw6vmZcJM8otvMyXvNAI0J/8ZMSQHx3ZqExL7E/9fOvLaiBVJfHOk7Hn
-        Xp06hp1MYIV2YRvdcXY6MUr8If5Lx35SSyzrQiMk0eeEgIM42UeDbl4n48AZ/w==
-Message-ID: <73b77acd-813a-458b-61e2-87116720cc38@mailbox.org>
-Date:   Tue, 20 Dec 2022 18:13:41 +0000
+        Tue, 20 Dec 2022 13:13:38 -0500
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD52FD5;
+        Tue, 20 Dec 2022 10:13:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1671560015;
+        bh=PeVvyGS6MVyRwG704+tnWCDsPqrngVfhXtM8AuLKXms=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ee9nivXnI0kdtqFaTVTCwD1LfrS/vLM6j46f3NKrmEpEaj+nHtPJlgoqq88uhRm+D
+         Cr4n/fTt9bt796Gkv9c/UQR1YiI1hoMPwxfqJPwJ8FsjSk9SpDe3c95qAXkN4z3VC1
+         eZW0e8YNU6vB64shL827BGX/qEqMCHmT12kFtD36qAgrxR70jw96X/O/HXkUoX+OIV
+         WqPUUyFKHHLxHHSsRgO0RaCQO7ZLlMAJg5w28qlCmFkMcFai5+dpwycPxLlpLLNqp6
+         oxCg9XfZZ0Wplb8JrZf5BOKTMWQ+mKagGv+gxLodyGjuvQDUgEL6ZM4IvAjvAcUVpN
+         r6po7iibbiSQw==
+Received: from [10.1.0.205] (192-222-188-97.qc.cable.ebox.net [192.222.188.97])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Nc4Sv3vfvzbcW;
+        Tue, 20 Dec 2022 13:13:35 -0500 (EST)
+Message-ID: <6438d903-ab97-48c7-c338-9f0bc2686f94@efficios.com>
+Date:   Tue, 20 Dec 2022 13:14:00 -0500
 MIME-Version: 1.0
-Subject: Re: [PATCH v8 00/13] Implement AMD Pstate EPP Driver
-To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
-        Mario.Limonciello@amd.com, ray.huang@amd.com,
-        viresh.kumar@linaro.org
-Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
-        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
-        Xiaojian.Du@amd.com, Li.Meng@amd.com, wyes.karny@amd.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221219064042.661122-1-perry.yuan@amd.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
 Content-Language: en-US
-From:   Tor Vic <torvic9@mailbox.org>
-In-Reply-To: <20221219064042.661122-1-perry.yuan@amd.com>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+References: <20221218191310.130904-1-joel@joelfernandes.org>
+ <589da7c9-5fb7-5f6f-db88-ca464987997e@efficios.com>
+ <CAEXW_YQHpz3dNqW1ocqjr-e9qn09Rkg4kQ19byZORGbO18Xckg@mail.gmail.com>
+ <2da94283-4fce-9aff-ac5d-ba181fa0f008@efficios.com>
+ <CAEXW_YQBmwynuBOWbV6_L2itRr_i3BZUxQ91PDC2We2vXhpztQ@mail.gmail.com>
+ <CAEXW_YTyZaE4ULvm-HygFN2BGm-jayHTbpnYbrJFoo_GOsYKQg@mail.gmail.com>
+ <659763b0-eee4-10dd-5f4a-37241173809c@efficios.com>
+ <CAEXW_YQ+NTaM43Va5FG8kYSxr2gsbjar4_f3xnpSAHzgUVZ-+g@mail.gmail.com>
+ <CAEXW_YRqscm++0TP9bEnM0PQNLMe4cXFWAdRvHh2M5chERm+UA@mail.gmail.com>
+ <35293ec4-40a1-cf6b-3bdd-0e3e30819c06@efficios.com>
+ <CAEXW_YR194jzDQM7YZr0H8pDjhxUdymFbaheOGsMXq8judgGEQ@mail.gmail.com>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <CAEXW_YR194jzDQM7YZr0H8pDjhxUdymFbaheOGsMXq8judgGEQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MBO-RS-ID: 661c4c9fef32c1424ae
-X-MBO-RS-META: 87fq1ukmy3s3oekqxsiqibqdpwt7uebx
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,100 +65,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 19.12.22 06:40, Perry Yuan wrote:
-> Hi all,
+On 2022-12-20 13:05, Joel Fernandes wrote:
+> Hi Mathieu,
 > 
-> This patchset implements one new AMD CPU frequency driver
-> `amd-pstate-epp` instance for better performance and power control.
-> CPPC has a parameter called energy preference performance (EPP).
-> The EPP is used in the CCLK DPM controller to drive the frequency that a core
-> is going to operate during short periods of activity.
-> EPP values will be utilized for different OS profiles (balanced, performance, power savings).
+> On Tue, Dec 20, 2022 at 5:00 PM Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
+>>
+>> On 2022-12-19 20:04, Joel Fernandes wrote:
+>>> On Mon, Dec 19, 2022 at 7:55 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> [...]
+>>>>> On a 64-bit system, where 64-bit counters are used, AFAIU this need to
+>>>>> be exactly 2^64 read-side critical sections.
+>>>>
+>>>> Yes, but what about 32-bit systems?
+>>
+>> The overflow indeed happens after 2^32 increments, just like seqlock.
+>> The question we need to ask is therefore: if 2^32 is good enough for
+>> seqlock, why isn't it good enough for SRCU ?
 > 
+> I think Paul said wrap around does happen with SRCU on 32-bit but I'll
+> let him talk more about it. If 32-bit is good enough, let us also drop
+> the size of the counters for 64-bit then?
+> 
+>>>>> There are other synchronization algorithms such as seqlocks which are
+>>>>> quite happy with much less protection against overflow (using a 32-bit
+>>>>> counter even on 64-bit architectures).
+>>>>
+>>>> The seqlock is an interesting point.
+>>>>
+>>>>> For practical purposes, I suspect this issue is really just theoretical.
+>>>>
+>>>> I have to ask, what is the benefit of avoiding a flip and scanning
+>>>> active readers? Is the issue about grace period delay or performance?
+>>>> If so, it might be worth prototyping that approach and measuring using
+>>>> rcutorture/rcuscale. If there is significant benefit to current
+>>>> approach, then IMO it is worth exploring.
+>>
+>> The main benefit I expect is improved performance of the grace period
+>> implementation in common cases where there are few or no readers
+>> present, especially on machines with many cpus.
+>>
+>> It allows scanning both periods (0/1) for each cpu within the same pass,
+>> therefore loading both period's unlock counters sitting in the same
+>> cache line at once (improved locality), and then loading both period's
+>> lock counters, also sitting in the same cache line.
+>>
+>> It also allows skipping the period flip entirely if there are no readers
+>> present, which is an -arguably- tiny performance improvement as well.
+> 
+> The issue of counter wrap aside, what if a new reader always shows up
+> in the active index being scanned, then can you not delay the GP
+> indefinitely? It seems like writer-starvation is possible then (sure
+> it is possible also with preemption after reader-index-sampling, but
+> scanning active index deliberately will make that worse). Seqlock does
+> not have such writer starvation just because the writer does not care
+> about what the readers are doing.
 
-Using v8 and clang-15 on 6.1 I get:
+No, it's not possible for "current index" readers to starve the g.p. 
+with the side-rcu scheme, because the initial pass (sampling both 
+periods) only opportunistically skips flipping the period if there 
+happens to be no readers in both periods.
 
----
-ld.lld: error: undefined symbol: energy_perf_strings
- >>> referenced by amd-pstate.c:789 
-(/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:789)
- >>>               vmlinux.o:(show_energy_performance_preference)
- >>> referenced by amd-pstate.c:768 
-(/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:768)
- >>>               vmlinux.o:(store_energy_performance_preference)
- >>> referenced by amd-pstate.c:749 
-(/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:749)
- >>>               vmlinux.o:(show_energy_performance_available_preferences)
- >>> referenced 1 more times
- >>> did you mean: energy_perf_strings
- >>> defined in: vmlinux.o
+If there are readers in the "non-current" period, the grace period waits 
+for them.
 
-ld.lld: error: undefined symbol: epp_values
- >>> referenced by amd-pstate.c:189 
-(/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:189)
- >>>               vmlinux.o:(store_energy_performance_preference)
----
+If there are readers in the "current" period, it flips the period and 
+then waits for them.
 
-and a few warnings:
+> 
+> That said, the approach of scanning both counters does seem attractive
+> for when there are no readers, for the reasons you mentioned. Maybe a
+> heuristic to count the number of readers might help? If we are not
+> reader-heavy, then scan both. Otherwise, just scan the inactive ones,
+> and also couple that heuristic with the number of CPUs. I am
+> interested in working on such a design with you! Let us do it and
+> prototype/measure. ;-)
 
----
-drivers/cpufreq/amd-pstate.c:966:6: warning: variable 'ret' is used 
-uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-         if (rc)
-             ^~
-drivers/cpufreq/amd-pstate.c:1025:9: note: uninitialized use occurs here
-         return ret;
-                ^~~
-drivers/cpufreq/amd-pstate.c:966:2: note: remove the 'if' if its 
-condition is always false
-         if (rc)
-         ^~~~~~~
-drivers/cpufreq/amd-pstate.c:962:6: warning: variable 'ret' is used 
-uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-         if (!dev)
-             ^~~~
-drivers/cpufreq/amd-pstate.c:1025:9: note: uninitialized use occurs here
-         return ret;
-                ^~~
-drivers/cpufreq/amd-pstate.c:962:2: note: remove the 'if' if its 
-condition is always false
-         if (!dev)
-         ^~~~~~~~~
-drivers/cpufreq/amd-pstate.c:949:66: note: initialize the variable 'ret' 
-to silence this warning
-         int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
-                                                                         ^
- 
-  = 0
-drivers/cpufreq/amd-pstate.c:996:52: warning: variable 'value' is 
-uninitialized when used here [-Wuninitialized]
-         cpudata->epp_cached = amd_pstate_get_epp(cpudata, value);
-                                                           ^~~~~
-drivers/cpufreq/amd-pstate.c:953:11: note: initialize the variable 
-'value' to silence this warning
-         u64 value;
-                  ^
-                   = 0
-drivers/cpufreq/amd-pstate.c:1085:6: warning: variable 'epp' is used 
-uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-         if (cpudata->epp_policy == cpudata->policy)
-             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/cpufreq/amd-pstate.c:1110:30: note: uninitialized use occurs here
-         amd_pstate_set_epp(cpudata, epp);
-                                     ^~~
-drivers/cpufreq/amd-pstate.c:1085:2: note: remove the 'if' if its 
-condition is always false
-         if (cpudata->epp_policy == cpudata->policy)
-         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/cpufreq/amd-pstate.c:1064:9: note: initialize the variable 'epp' 
-to silence this warning
-         s16 epp;
-                ^
-                 = 0
----
+Considering that it would add extra complexity, I'm unsure what that 
+extra heuristic would improve over just scanning both periods in the 
+first pass.
 
-Cheers,
+I'll be happy to work with you on such a design :) I think we can borrow 
+quite a few concepts from side-rcu for this. Please be aware that my 
+time is limited though, as I'm currently supposed to be on vacation. :)
 
-Tor Vic
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
