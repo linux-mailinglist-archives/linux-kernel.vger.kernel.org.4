@@ -2,97 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E4865228C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9914652297
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234037AbiLTO2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 09:28:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
+        id S233851AbiLTObK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 09:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234026AbiLTO1g (ORCPT
+        with ESMTP id S233880AbiLTOal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:27:36 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEC31CB0E;
-        Tue, 20 Dec 2022 06:27:08 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BKEBZCT013246;
-        Tue, 20 Dec 2022 14:27:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=kAiTr09gTCSa0bRz1xrLbKGHm6rIsulW+/p4y36QdY4=;
- b=lQV38wCUW/L8B5NQfYfZ164Mfffw3VJOfVCJAUc//vCzW+6T+R8o7eV5qU0AqncfEjeS
- U85jRA25ngQ8YX8lEZATLaQBmEA2YKlsDfgWdDaTJVxjwz+GI8lZ8eufDnKGP5l/TA0Y
- 9e6SRK2CFbEsIsdy6JIpFwLGcGvFI2vii2bEFiEj73cV8+wuqH0b9lxbaSclFpFqabYH
- htCNBSCk/LkhaG57Lj2/vEYnxwI2BbpyJ/zVzfVw6kGWVJ+vZfB3LuZK/v/8hEVp6RPH
- YNPDpNaBYkRhXXdzkkmVlBL+lH9PynXasLavHbPV5YuHzRFXm5dSORzds6vFBEs1GjzU Ow== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mkekjrkq1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Dec 2022 14:27:07 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BKEBmu0018099;
-        Tue, 20 Dec 2022 14:27:06 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mkekjrkp7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Dec 2022 14:27:06 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BKC38VR021674;
-        Tue, 20 Dec 2022 14:27:05 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3mh6yxmtk2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Dec 2022 14:27:05 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BKER4A436176342
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 20 Dec 2022 14:27:04 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 34A255805D;
-        Tue, 20 Dec 2022 14:27:04 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 38DE058043;
-        Tue, 20 Dec 2022 14:27:03 +0000 (GMT)
-Received: from [9.160.121.75] (unknown [9.160.121.75])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 20 Dec 2022 14:27:03 +0000 (GMT)
-Message-ID: <021bd231-409b-f9c5-7371-c77425c131d4@linux.ibm.com>
-Date:   Tue, 20 Dec 2022 09:27:02 -0500
+        Tue, 20 Dec 2022 09:30:41 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB41E1C125;
+        Tue, 20 Dec 2022 06:29:45 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NbzQG6fCnzHqST;
+        Tue, 20 Dec 2022 22:25:58 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 20 Dec 2022 22:29:43 +0800
+Subject: Re: [PATCH] kallsyms: Fix sleeping function called from invalid
+ context when CONFIG_KALLSYMS_SELFTEST=y
+To:     Petr Mladek <pmladek@suse.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+References: <20221220063923.1937-1-thunder.leizhen@huawei.com>
+ <df75bb4e-6cf8-7f41-b053-9619c13d1c72@csgroup.eu> <Y6GWInExu2m48K/C@alley>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <c5a04eaa-2b8d-647a-7c70-9262e6147394@huawei.com>
+Date:   Tue, 20 Dec 2022 22:29:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 6/7] s390/vfio_ap: increase max wait time for reset
- verification
+In-Reply-To: <Y6GWInExu2m48K/C@alley>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     freude@linux.ibm.com
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, jjherne@linux.ibm.com, borntraeger@de.ibm.com,
-        cohuck@redhat.com, mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20221213154437.15480-1-akrowiak@linux.ibm.com>
- <20221213154437.15480-7-akrowiak@linux.ibm.com>
- <14f20c6e389f8a9d169e398621bec13f@linux.ibm.com>
-From:   Anthony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <14f20c6e389f8a9d169e398621bec13f@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FDgLIqM8yhoGkryiafvAH4y_x6tOI5Xm
-X-Proofpoint-ORIG-GUID: ynP9c-kn7ecmJ0XbZLNgpRcxw4_GO6hk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-20_05,2022-12-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- spamscore=0 phishscore=0 priorityscore=1501 impostorscore=0 suspectscore=0
- lowpriorityscore=0 clxscore=1015 adultscore=0 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212200116
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -100,54 +56,123 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 12/15/22 5:58 AM, Harald Freudenberger wrote:
-> On 2022-12-13 16:44, Tony Krowiak wrote:
->> Increase the maximum time to wait for verification of a queue reset
->> operation to 200ms.
->>
->> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
->> ---
->>  drivers/s390/crypto/vfio_ap_ops.c | 10 +++++++---
->>  1 file changed, 7 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/s390/crypto/vfio_ap_ops.c
->> b/drivers/s390/crypto/vfio_ap_ops.c
->> index dbf681715a6d..e80c5a6b91be 100644
->> --- a/drivers/s390/crypto/vfio_ap_ops.c
->> +++ b/drivers/s390/crypto/vfio_ap_ops.c
->> @@ -30,6 +30,9 @@
->>  #define AP_QUEUE_UNASSIGNED "unassigned"
->>  #define AP_QUEUE_IN_USE "in use"
->>
->> +#define MAX_RESET_CHECK_WAIT    200    /* Sleep max 200ms for reset 
->> check    */
->> +#define AP_RESET_INTERVAL        20    /* Reset sleep interval 
->> (20ms)        */
->> +
->>  static int vfio_ap_mdev_reset_queues(struct ap_queue_table *qtable);
->>  static struct vfio_ap_queue *vfio_ap_find_queue(int apqn);
->>  static const struct vfio_device_ops vfio_ap_matrix_dev_ops;
->> @@ -1615,11 +1618,12 @@ static int apq_status_check(int apqn, struct
->> ap_queue_status *status)
->>
->>  static int apq_reset_check(struct vfio_ap_queue *q)
->>  {
->> -    int iters = 2, ret;
->> +    int ret;
->> +    int iters = MAX_RESET_CHECK_WAIT / AP_RESET_INTERVAL;
->>      struct ap_queue_status status;
->>
->> -    while (iters--) {
->> -        msleep(20);
->> +    for (; iters > 0; iters--) {
->> +        msleep(AP_RESET_INTERVAL);
->>          status = ap_tapq(q->apqn, NULL);
->>          ret = apq_status_check(q->apqn, &status);
->>          if (ret != -EBUSY)
->
-> Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
 
+On 2022/12/20 19:01, Petr Mladek wrote:
+> On Tue 2022-12-20 08:15:40, Christophe Leroy wrote:
+>>
+>>
+>> Le 20/12/2022 à 07:39, Zhen Lei a écrit :
+>>> [T58] BUG: sleeping function called from invalid context at kernel/kallsyms.c:305
+>>> [T58] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 58, name: kallsyms_test
+>>> [T58] preempt_count: 0, expected: 0
+>>> [T58] RCU nest depth: 0, expected: 0
+>>> [T58] no locks held by kallsyms_test/58.
+>>> [T58] irq event stamp: 18899904
+>>> [T58] hardirqs last enabled at (18899903): finish_task_switch.isra.0 (core.c:?)
+>>> [T58] hardirqs last disabled at (18899904): test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
+>>> [T58] softirqs last enabled at (18899886): __do_softirq (??:?)
+>>> [T58] softirqs last disabled at (18899879): ____do_softirq (irq.c:?)
+>>> [T58] CPU: 0 PID: 58 Comm: kallsyms_test Tainted: G T  6.1.0-next-20221215 #2
+>>> [T58] Hardware name: linux,dummy-virt (DT)
+>>> [T58] Call trace:
+>>> [T58] dump_backtrace (??:?)
+>>> [T58] show_stack (??:?)
+>>> [T58] dump_stack_lvl (??:?)
+>>> [T58] dump_stack (??:?)
+>>> [T58] __might_resched (??:?)
+>>> [T58] kallsyms_on_each_symbol (??:?)
+>>> [T58] test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
+>>> [T58] test_entry (kallsyms_selftest.c:?)
+>>> [T58] kthread (kthread.c:?)
+>>> [T58] ret_from_fork (??:?)
+>>> [T58] kallsyms_selftest: kallsyms_on_each_symbol() traverse all: 5744310840 ns
+>>> [T58] kallsyms_selftest: kallsyms_on_each_match_symbol() traverse all: 1164580 ns
+>>> [T58] kallsyms_selftest: finish
+>>>
+>>> Functions kallsyms_on_each_symbol() and kallsyms_on_each_match_symbol()
+>>> call the user-registered hook function for each symbol that meets the
+>>> requirements. Because it is uncertain how long that hook function will
+>>> execute, they call cond_resched() to avoid consuming CPU resources for a
+>>> long time. However, irqs need to be disabled during the performance test
+>>> to ensure the accuracy of test data. Because the performance test hook is
+>>> very clear, very simple function, let's do not call cond_resched() when
+>>> CONFIG_KALLSYMS_SELFTEST=y.
+>>
+>> I don't think it is appropriate to change the behaviour of a core 
+>> function based on whether a compile time option related to tests is 
+>> selected or not, because you will change the behaviour for all users, 
+>> not only for the tests.
+> 
+> I agree. This is very bad idea. It would change the behavior for
+> the entire system.
 
-Thanks for the review.
+It just doesn't look so good, but it doesn't affect the entire system,
+and the proposed changes below will.
 
+> 
+>> If the problem is that IRQs are disabled, maybe the solution is
+>>
+>> 	if (!irqs_disabled())
+>> 		cond_resched();
 
+If irqs is disabled by the upper layer, this error cannot be easily detected.
+
+>>
+>> Or try to disable the call to cond_resched() in a way or another during 
+>> the run of selftests.
+> 
+> If I get it correctly, the problem is this code in kernel/kallsyms_selftest.c:
+
+Yes, another method is to remove the interrupt protection.
+
+> 
+> static int lookup_name(void *data, const char *name, struct module *mod, unsigned long addr)
+> {
+> [...]
+> 	local_irq_save(flags);
+> 	t0 = sched_clock();
+> 	(void)kallsyms_lookup_name(name);
+> 	t1 = sched_clock();
+> 	local_irq_restore(flags);
+> [...]
+> 
+> and IRQs are disabled to measure the time spent in this function
+> without interruption and rescheduling.
+> 
+> I am sure that there are better ways how to measure the time.
+> Even the "time" command in userspace is able to show time how much CPU
+> time a command used.
+
+I've got an idea:
+
+local_irq_save(flags);
+//get the count and cputime of interrupts
+t0 = sched_clock();
+local_irq_restore(flags);
+
+(void)kallsyms_lookup_name(name);
+
+local_irq_save(flags);
+t1 = sched_clock();
+//get the count and cputime of interrupts
+local_irq_restore(flags);
+
+minus the cputime of local_irq_save(flags)/local_irq_restore(flags)
+
+if count changed, minus the cputime of interrupts
+
+> 
+> I am not familiar with it. But task_cputime() in
+> kernel/sched/cputime.c looks promising. And there must be
+> the interface how the user space get this information.
+> Some is available via /proc/<PID>/... I am not sure
+> if there is a syscall.
+> 
+> Best Regards,
+> Petr
+> .
+> 
+
+-- 
+Regards,
+  Zhen Lei
