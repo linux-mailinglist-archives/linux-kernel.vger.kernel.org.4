@@ -2,153 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D5D6525AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 504A16525B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:42:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233438AbiLTRkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 12:40:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
+        id S233522AbiLTRmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 12:42:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiLTRkC (ORCPT
+        with ESMTP id S229536AbiLTRmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 12:40:02 -0500
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8711EFF1;
-        Tue, 20 Dec 2022 09:40:01 -0800 (PST)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-144b21f5e5fso16178680fac.12;
-        Tue, 20 Dec 2022 09:40:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T+uqKNupLom5HOX393/X5dcMBDb877yjyv1k5TVvfHA=;
-        b=dYy9G5znw3qUvh2+VZkZceDeq9Lw8DSJHuPCnucxj3I2yFDJGt3+U4uuckwosxmSci
-         871zqwT91uuGI6q4UVfUGnloPMvMAessZtb4HxRUGtijSN1lfnOMl3uSqt6f9yBqan0J
-         bStGHJZa4jcHF9CHKQwFbvb9aIVyUblAezMfipzFV1bXMorx7lV8kYzKDY9rSCrwFes0
-         0vvr4xWIujVKyMzS/tgD2inoTrAXFmgluLSn9FleU3HkyVTRZZww0Ba9dahJks71n1dX
-         FgRJ7DxlIt1TnhwRhPh8RK1VnauNMxm27IwTK4QFSIwtZmPCbaUFhlqJGQr6r32L3Pvv
-         rcVw==
-X-Gm-Message-State: ANoB5pkryApv9g3LiySo4iYTHevuXf2iSg7z/jXxD4YkqGGUGMFf+PNE
-        0KJHXz7bOZt8QAFXUDSSkw==
-X-Google-Smtp-Source: AA0mqf76SVmlQ2s3MNPaz5jKJiFUnELkYDbfYdBJK/nJs4YnkQox5rSMMXsrtk/xEbpO8oFir2KjVQ==
-X-Received: by 2002:a05:6870:2dc8:b0:13b:9ee:aa19 with SMTP id op8-20020a0568702dc800b0013b09eeaa19mr20163092oab.55.1671558000766;
-        Tue, 20 Dec 2022 09:40:00 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id er34-20020a056870c8a200b0014866eb34cesm6216065oab.48.2022.12.20.09.39.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 09:39:59 -0800 (PST)
-Received: (nullmailer pid 796697 invoked by uid 1000);
-        Tue, 20 Dec 2022 17:39:58 -0000
-Date:   Tue, 20 Dec 2022 11:39:58 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Subject: Re: [PATCH v7 11/11] dt-bindings: net: dsa: qca8k: add LEDs
- definition example
-Message-ID: <20221220173958.GA784285-robh@kernel.org>
-References: <20221214235438.30271-1-ansuelsmth@gmail.com>
- <20221214235438.30271-12-ansuelsmth@gmail.com>
+        Tue, 20 Dec 2022 12:42:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D233D13E02
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 09:42:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 743AFB81730
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 17:42:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7AF4C433EF;
+        Tue, 20 Dec 2022 17:42:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671558158;
+        bh=ay/IGDAHS26YEOIr3j/wpp5tD0PTAZRTpXY6UkVBeCw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DYSCZIqKS6jqYOo4DYD4I1fbADR3kMVfSaT0nPGRzdXux4PBffsM7My3QssI2HMb3
+         TUpzuVW4RoKDBbruQRuAMUdJNJf6mtsCClU3COT29L3yETHcaJKmWM2q1Yus2q+veE
+         5IvaZTeGkEJJhfYJLcWEJvr/et+EbV5pRleTEiJ33ikjg5JYFZ3ueZ7PoMxmR76pDe
+         wmrQwNa0Jl211MenCMNKq+Yy7GrejxUnjFEQ09pzeJNaE+SA76DfpdzK4RQGqhVV0V
+         Uxsqt0GFnLVAjcapkcM3ap3s3hR8LGHJZpKLquFx4oqBwu70OqOlg6kjmwvkFosS1K
+         jBCgWC2i3K3Gg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 6967040367; Tue, 20 Dec 2022 14:42:35 -0300 (-03)
+Date:   Tue, 20 Dec 2022 14:42:35 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Andreas Schwab <schwab@linux-m68k.org>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: [PATCH 1/1 fyi] tools headers UAPI: Sync powerpc syscall table with
+ the kernel sources
+Message-ID: <Y6H0C5plZ4V4aiPm@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221214235438.30271-12-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 12:54:38AM +0100, Christian Marangi wrote:
-> Add LEDs definition example for qca8k using the offload trigger as the
-> default trigger and add all the supported offload triggers by the
-> switch.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  .../devicetree/bindings/net/dsa/qca8k.yaml    | 24 +++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
-> index 978162df51f7..4090cf65c41c 100644
-> --- a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
-> +++ b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
-> @@ -65,6 +65,8 @@ properties:
->                   internal mdio access is used.
->                   With the legacy mapping the reg corresponding to the internal
->                   mdio is the switch reg with an offset of -1.
-> +                 Each phy have at least 3 LEDs connected and can be declared
-> +                 using the standard LEDs structure.
->  
->  patternProperties:
->    "^(ethernet-)?ports$":
-> @@ -202,6 +204,7 @@ examples:
->      };
->    - |
->      #include <dt-bindings/gpio/gpio.h>
-> +    #include <dt-bindings/leds/common.h>
->  
->      mdio {
->          #address-cells = <1>;
-> @@ -284,6 +287,27 @@ examples:
->  
->                  internal_phy_port1: ethernet-phy@0 {
->                      reg = <0>;
-> +
-> +                    leds {
-> +                        #address-cells = <1>;
-> +                        #size-cells = <0>;
-> +
-> +                        led@0 {
-> +                            reg = <0>;
-> +                            color = <LED_COLOR_ID_WHITE>;
-> +                            function = LED_FUNCTION_LAN;
-> +                            function-enumerator = <1>;
-> +                            linux,default-trigger = "netdev";
+tldr; Just FYI, I'm carrying this on the perf tools tree.
 
-'function' should replace this. Don't encourage more users. 
+- Arnaldo
 
-Also, 'netdev' is not documented which leaves me wondering why there's 
-no warning? Either this patch didn't apply or there's a problem in the 
-schema that's not checking this node.
+Full explanation:
 
-> +                        };
-> +
-> +                        led@1 {
-> +                            reg = <1>;
-> +                            color = <LED_COLOR_ID_AMBER>;
-> +                            function = LED_FUNCTION_LAN;
-> +                            function-enumerator = <1>;
+There used to be no copies, with tools/ code using kernel headers
+directly. From time to time tools/perf/ broke due to legitimate kernel
+hacking. At some point Linus complained about such direct usage. Then we
+adopted the current model.
 
-Typo? These are supposed to be unique. Can't you use 'reg' in your case?
+The way these headers are used in perf are not restricted to just
+including them to compile something.
 
+There are sometimes used in scripts that convert defines into string
+tables, etc, so some change may break one of these scripts, or new MSRs
+may use some different #define pattern, etc.
 
-> +                            linux,default-trigger = "netdev";
-> +                        };
-> +                    };
->                  };
->  
->                  internal_phy_port2: ethernet-phy@1 {
-> -- 
-> 2.37.2
-> 
-> 
+E.g.:
+
+  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
+  tools/perf/trace/beauty/arch_errno_names.sh
+  tools/perf/trace/beauty/drm_ioctl.sh
+  tools/perf/trace/beauty/fadvise.sh
+  tools/perf/trace/beauty/fsconfig.sh
+  tools/perf/trace/beauty/fsmount.sh
+  $
+  $ tools/perf/trace/beauty/fadvise.sh
+  static const char *fadvise_advices[] = {
+  	[0] = "NORMAL",
+  	[1] = "RANDOM",
+  	[2] = "SEQUENTIAL",
+  	[3] = "WILLNEED",
+  	[4] = "DONTNEED",
+  	[5] = "NOREUSE",
+  };
+  $
+
+The tools/perf/check-headers.sh script, part of the tools/ build
+process, points out changes in the original files.
+
+So its important not to touch the copies in tools/ when doing changes in
+the original kernel headers, that will be done later, when
+check-headers.sh inform about the change to the perf tools hackers.
+
+---
+
+To pick the changes in these csets:
+
+  ce883a2ba310cd7c ("powerpc/32: fix syscall wrappers with 64-bit arguments")
+
+That doesn't cause any changes in the perf tools.
+
+This table is used in tools perf to allow features as described in the
+last update to this file.
+
+This addresses this perf build warning:
+
+  Warning: Kernel ABI header at 'tools/perf/arch/powerpc/entry/syscalls/syscall.tbl' differs from latest version at 'arch/powerpc/kernel/syscalls/syscall.tbl'
+  diff -u tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/powerpc/kernel/syscalls/syscall.tbl
+
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Andreas Schwab <schwab@linux-m68k.org>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Link: https://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/perf/arch/powerpc/entry/syscalls/syscall.tbl | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
+index e9e0df4f9a61a494..a0be127475b1f761 100644
+--- a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
++++ b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
+@@ -394,8 +394,11 @@
+ 305	common	signalfd			sys_signalfd			compat_sys_signalfd
+ 306	common	timerfd_create			sys_timerfd_create
+ 307	common	eventfd				sys_eventfd
+-308	common	sync_file_range2		sys_sync_file_range2		compat_sys_ppc_sync_file_range2
+-309	nospu	fallocate			sys_fallocate			compat_sys_fallocate
++308	32	sync_file_range2		sys_ppc_sync_file_range2	compat_sys_ppc_sync_file_range2
++308	64	sync_file_range2		sys_sync_file_range2
++308	spu	sync_file_range2		sys_sync_file_range2
++309	32	fallocate			sys_ppc_fallocate		compat_sys_fallocate
++309	64	fallocate			sys_fallocate
+ 310	nospu	subpage_prot			sys_subpage_prot
+ 311	32	timerfd_settime			sys_timerfd_settime32
+ 311	64	timerfd_settime			sys_timerfd_settime
+-- 
+2.38.1
+
