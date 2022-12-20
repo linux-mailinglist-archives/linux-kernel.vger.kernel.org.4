@@ -2,118 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4B1652702
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 20:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A010652716
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 20:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234114AbiLTTaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 14:30:21 -0500
+        id S233117AbiLTTdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 14:33:36 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234087AbiLTT37 (ORCPT
+        with ESMTP id S234001AbiLTTcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 14:29:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F5A1D0D6
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 11:29:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671564555;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ecs0/8gH1scEMeIme5t6fO1yMGgoodnS/vov5q84tRw=;
-        b=dmjl5jNVqL4ShvoCDOvE/0l3ABx29Q/xfpq219T1q8hLH5Pd/wQ7/+oZDCFN1F3ABe+AL/
-        fE6hejfUa7uYTIZyLn2QS4y/1KxAxNbKo0m377TOS6cOaKYRfWOm/wsTZtKtgKRZje2obu
-        x1HdyUSd7ZQKwqfgEg3wR2JEtrKZSfM=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-263-iW6VLAtsN8iqCsPZpsABGA-1; Tue, 20 Dec 2022 14:29:14 -0500
-X-MC-Unique: iW6VLAtsN8iqCsPZpsABGA-1
-Received: by mail-qt1-f197.google.com with SMTP id bb12-20020a05622a1b0c00b003a98dd528f0so2527675qtb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 11:29:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ecs0/8gH1scEMeIme5t6fO1yMGgoodnS/vov5q84tRw=;
-        b=Pjh6rvBaWXi3Yw2IDVy+fsV+Jw55uMf88nX6dtsV+6vfgjkG5Z18XCQxbBlWboMQ4C
-         /uN40jawA/OWfZnAmSit7P5Lk8lvVx/0jgfnmeP/bvCcnRihyYc5nSFaI/VaVLn7TyYo
-         Zz9KcNJq4RDytUphV3VvUm22eyR09vblRpnrjH1o87Lq5jzqpyMenIuHiehpewkYutOi
-         2IsTc19brGZ5IBmyTQgpikRowXL1N6D+2nXxdDSlotVdDkLO2JDCG3sVJ2Nqa85QrNb9
-         veCmTCZ9rc+eH3nTi7dRpwaDRLkkcVG/Cvi2YxLJm4iGll096ewskUzgdx4dDyJthFZo
-         9eSg==
-X-Gm-Message-State: ANoB5pnrjNVbUI4WToqyt8fDom+JtsjXMBATzg5CaWHab+KYoQyCUVUE
-        hVp3PtjGo5pwoU0BtV1TgYgdGoRIf5YBGCjF4yzLB+/Y+C8i0IjzShSVxnhnZYHy48mcd3+CSHS
-        T0UGX/8OfTO+xyiJ7ApxLnM+s
-X-Received: by 2002:ac8:409c:0:b0:3a7:e1d5:3429 with SMTP id p28-20020ac8409c000000b003a7e1d53429mr70867692qtl.22.1671564553693;
-        Tue, 20 Dec 2022 11:29:13 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4GKVILLxTyjNI2fMC1r5Q2z5HoeC9HtLC0jziqMaxlNF9RToh9O46Khi3OzGsyiVdZQmbEug==
-X-Received: by 2002:ac8:409c:0:b0:3a7:e1d5:3429 with SMTP id p28-20020ac8409c000000b003a7e1d53429mr70867672qtl.22.1671564553450;
-        Tue, 20 Dec 2022 11:29:13 -0800 (PST)
-Received: from x1.redhat.com (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id gd15-20020a05622a5c0f00b003a82ca4e81csm744348qtb.80.2022.12.20.11.29.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 11:29:12 -0800 (PST)
-From:   Brian Masney <bmasney@redhat.com>
-To:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     quic_shazhuss@quicinc.com, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, johan+linaro@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ahalaney@redhat.com,
-        echanude@redhat.com
-Subject: [PATCH v3 7/7] arm64: dts: qcom: sc8280xp: add rng device tree node
-Date:   Tue, 20 Dec 2022 14:28:54 -0500
-Message-Id: <20221220192854.521647-8-bmasney@redhat.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221220192854.521647-1-bmasney@redhat.com>
-References: <20221220192854.521647-1-bmasney@redhat.com>
+        Tue, 20 Dec 2022 14:32:54 -0500
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4665C2AE2;
+        Tue, 20 Dec 2022 11:32:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1671564742; x=1703100742;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=XLm7cNL3POipI7HaTToaL7zsWVQbDAv5oCT+Dy2vuxc=;
+  b=I3Ewi1c0gz+jy+rBpp3Xx0WEsMJhiRz6cifpWjzsVvS7W+/GmTBkAONF
+   ZYP4Or3PFyEAoF0mnoxoIcN3DtbDV25JfMgELJ0T8dXM1gXx3uY4sMgN2
+   3jaxeHODu7IZ8vzA7L8L9EgQCUj8coD0h2oHbKIF+p6mZCjuC61udxmRV
+   g=;
+X-IronPort-AV: E=Sophos;i="5.96,259,1665446400"; 
+   d="scan'208";a="275441227"
+Subject: Re: [PATCH v3 1/1] i2c: Set pinctrl recovery info to device pinctrl
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-189d700f.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 19:32:18 +0000
+Received: from EX13MTAUWA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-m6i4x-189d700f.us-west-2.amazon.com (Postfix) with ESMTPS id 93BFF41713;
+        Tue, 20 Dec 2022 19:32:16 +0000 (UTC)
+Received: from EX19D021UWA004.ant.amazon.com (10.13.139.67) by
+ EX13MTAUWA002.ant.amazon.com (10.43.160.12) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Tue, 20 Dec 2022 19:32:16 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX19D021UWA004.ant.amazon.com (10.13.139.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.20; Tue, 20 Dec 2022 19:32:16 +0000
+Received: from [192.168.1.158] (10.1.213.27) by mail-relay.amazon.com
+ (10.43.160.118) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
+ Transport; Tue, 20 Dec 2022 19:32:12 +0000
+Message-ID: <a82ba757-3b9c-d54b-76bf-ceef84239295@amazon.com>
+Date:   Tue, 20 Dec 2022 21:32:11 +0200
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     <wsa@kernel.org>, <linus.walleij@linaro.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <dwmw@amazon.co.uk>,
+        <benh@amazon.com>, <ronenk@amazon.com>, <talel@amazon.com>,
+        <jonnyc@amazon.com>, <hanochu@amazon.com>, <farbere@amazon.com>,
+        <itamark@amazon.com>
+References: <20221219193228.35078-1-hhhawa@amazon.com>
+ <Y6GUKf5TCumM1Swy@smile.fi.intel.com>
+ <4344f575-65f5-2fde-e2d5-3dd5a18d13cb@amazon.com>
+ <Y6IKit5XMcSLBgpO@smile.fi.intel.com>
+From:   "Hawa, Hanna" <hhhawa@amazon.com>
+In-Reply-To: <Y6IKit5XMcSLBgpO@smile.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-13.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the necessary device tree node for qcom,prng-ee so we can use the
-hardware random number generator. This functionality was tested on a
-SA8540p automotive development board using kcapi-rng from libkcapi.
 
-Signed-off-by: Brian Masney <bmasney@redhat.com>
----
-Changes from v2 to v3:
-- Correctly sort node by MMIO address
 
-Patch introduced in v2
+On 12/20/2022 9:18 PM, Andy Shevchenko wrote:
+>> How you suggest to simplify this?
+> Using Elvis operator, which is ?:.
 
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+Are you refer to use 'return dev->pins && dev->pins->p ?: NULL;' ?
+Can't use Elvis operator in this way, because it will return the result 
+of 'dev->pins && dev->pins->p' and not the value of 'dev->pins->p'
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 4591d411f5fb..6c2cae83dac6 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -1602,6 +1602,13 @@ spi15: spi@a9c000 {
- 			};
- 		};
- 
-+		rng: rng@10d3000 {
-+			compatible = "qcom,prng-ee";
-+			reg = <0 0x010d3000 0 0x1000>;
-+			clocks = <&rpmhcc RPMH_HWKM_CLK>;
-+			clock-names = "core";
-+		};
-+
- 		pcie4: pcie@1c00000 {
- 			device_type = "pci";
- 			compatible = "qcom,pcie-sc8280xp";
--- 
-2.38.1
+> 
+>> I can use 'return dev->pins ? dev->pins->p ?: dev->pins->p : NULL;'
+> Have you even try to compile this?
+Yup, the code compiled, but i think the first suggestion is more readable.
+
+> 
 
