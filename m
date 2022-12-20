@@ -2,125 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D707652119
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 14:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5C8652116
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 13:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233546AbiLTNAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 08:00:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34760 "EHLO
+        id S229812AbiLTM7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 07:59:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiLTNAU (ORCPT
+        with ESMTP id S232633AbiLTM7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 08:00:20 -0500
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7D2BE36;
-        Tue, 20 Dec 2022 05:00:19 -0800 (PST)
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 2BKCxvxw007257;
-        Tue, 20 Dec 2022 21:59:57 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2BKCxvxw007257
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1671541197;
-        bh=as1wqnJSUPY4IGZCP7Jr1uSZ8lvavefiRWrJjkOPjbk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vntPLzuj71ZKh61z01mTLpE2zVyv3Fej/dWQX2xm4FTJUb1AWRmE0l6fFoHrgsn78
-         7b9wwKl6etKT0pmM19YqTZnWd1KsDfPpUrDZwNhvwVxJxtjYALFnCPU1qA52iv9KpQ
-         /PdU4fKClowaaNgEW5pDdjETmcaKXhmxpqrobxTGcL6RsuLqn7gWD1kU4I1aZxqU9s
-         Vyi5SwRSZ1UtgYevZYholnz4LbNmEHCqVLu4XPJLgoxBAVFZLLi/QJbNnmUHEIX7Ie
-         OxXzAYR6OHP+PNZtuak+D8zx6AeH/uxzhTPTyorccJyqTYxrR5DAcAGSS32FMLRFd6
-         +j/UhZYTO6+Bw==
-X-Nifty-SrcIP: [209.85.160.46]
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1322d768ba7so15277193fac.5;
-        Tue, 20 Dec 2022 04:59:57 -0800 (PST)
-X-Gm-Message-State: AFqh2krKvoB738gwUXvLvmndIJu7bjlRWN8S8XEaOhFjE6+GGib8U2TV
-        7+/hhSLpCUOPoy7vH6wwpRkIs5qe+zMAJKGpND0=
-X-Google-Smtp-Source: AMrXdXvIZRCGb5rv78/PDTcz2Y7Kc/eQC18CumXPRSz4fKFJxbpS8kSZyozTqQpqkMPK5inAG+wcMvDKMRcRUXJ1EXw=
-X-Received: by 2002:a05:6870:a11e:b0:144:d060:72e with SMTP id
- m30-20020a056870a11e00b00144d060072emr2088002oae.287.1671541196422; Tue, 20
- Dec 2022 04:59:56 -0800 (PST)
+        Tue, 20 Dec 2022 07:59:34 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAD9BE36
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 04:59:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=9DkvdiaBZqUHcco7XfIMGg1vO7ZJS1qXjuZnq3ZNZLM=; b=bAKalqIkNBnuonpJYyIbPfwUP1
+        48V91BGNyo2/WsWNAufJpcYh/5+2nGzkKji8RLrNhf7cct3dmTxiNcVolhz1z+eKRJ8q+Q3vzFlKL
+        jMT75NJhJqfl6QIMezCHQdyOADkxeIar7EuIHE2hONH8R8Ns9FsKXP/uGMt0k+m8/DFXA3GP8pbSm
+        tmO4+1DAOjP/EnSkEfPTPlORY4GcDmAzAXm++UG8njXe6+lj2TS+pCA3xruPdWMYoLLcxoel9CPUZ
+        k/sBK0/bN1k7y/axDNvLlFWvEDmUu5PmZgZIhUmcflXxJnLLo6qtMLnWZsVlDL9mlKGs2yVqU5Y9Q
+        HmJaFovg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1p7cDK-00D01L-23;
+        Tue, 20 Dec 2022 12:59:22 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CC18C3000DD;
+        Tue, 20 Dec 2022 13:59:21 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A8F2C20C02114; Tue, 20 Dec 2022 13:59:21 +0100 (CET)
+Date:   Tue, 20 Dec 2022 13:59:21 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] sched: Make const-safe
+Message-ID: <Y6Gxqe5ZpB+uesxL@hirez.programming.kicks-ass.net>
+References: <20221212144946.2657785-1-willy@infradead.org>
+ <Y5mTJVi2PBix+Gy6@hirez.programming.kicks-ass.net>
+ <Y5oP2Psz++gHholO@casper.infradead.org>
 MIME-Version: 1.0
-References: <20221220013233.2890335-1-robh@kernel.org>
-In-Reply-To: <20221220013233.2890335-1-robh@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 20 Dec 2022 21:59:20 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARMg-Opnnkc5Y6pv64S6+qqUALhze4Ag9ZrH=MyVEAA8Q@mail.gmail.com>
-Message-ID: <CAK7LNARMg-Opnnkc5Y6pv64S6+qqUALhze4Ag9ZrH=MyVEAA8Q@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Optionally enable schema checks for %.dtb targets
-To:     Rob Herring <robh@kernel.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Marek Vasut <marex@denx.de>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5oP2Psz++gHholO@casper.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 10:32 AM Rob Herring <robh@kernel.org> wrote:
->
-> While not documented, schema checks for single dtb targets mostly work
-> already by setting 'CHECK_DTBS=1'. However, the dependencies are not
-> handled and it only works if 'make dt_bindings_check' was run first and
-> generated processed-schema.json. In addition, changing a binding file
-> doesn't cause the schema to be rebuilt and dtb to be revalidated.
->
-> Making this work turns out to be simple. Whenever CHECK_DTBS is set,
-> make 'dt_binding_check' a 'dtbs_prepare' dependency.
->
-> I reimplemented here what Masahiro had originally come up with a while
-> back.
+On Wed, Dec 14, 2022 at 06:03:04PM +0000, Matthew Wilcox wrote:
+> On Wed, Dec 14, 2022 at 10:11:01AM +0100, Peter Zijlstra wrote:
+> > On Mon, Dec 12, 2022 at 02:49:46PM +0000, Matthew Wilcox (Oracle) wrote:
+> > > With a modified container_of() that preserves constness, the compiler
+> > > finds some pointers which should have been marked as const.  task_of()
+> > > also needs to become const-preserving for the !FAIR_GROUP_SCHED case so
+> > > that cfs_rq_of() can take a const argument.  No change to generated code.
+> > 
+> > More const more better I suppose.. Thanks!
+> > 
+> > Happen to have a sha for the container_of() commit handy?
+> 
+> There isn't one yet.  Obviously we can't make container_of()
+> const-preserving until we've fixed all the places which would warn.
+> The diff I have in my tree looks like this:
+> 
+> diff --git a/include/linux/container_of.h b/include/linux/container_of.h
+> index 1d898f9158b4..9416e6cc8c88 100644
+> --- a/include/linux/container_of.h
+> +++ b/include/linux/container_of.h
+> @@ -20,7 +20,10 @@
+>         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+>                       __same_type(*(ptr), void),                        \
+>                       "pointer type mismatch in container_of()");       \
+> -       ((type *)(__mptr - offsetof(type, member))); })
+> +       __mptr -= offsetof(type, member);                               \
+> +       _Generic(ptr,                                                   \
+> +               const typeof(*(ptr)) *: (const type *)__mptr,           \
+> +               default: ((type *)__mptr)); })
+> 
+>  /**
+>   * container_of_const - cast a member of a structure out to the containing
+> 
+> I have all of fs/ and net/ compiling cleanly now.  There are a few
+> places which really need the const-removing properties, and I've made
+> those call a new macro called container_of_not_const(), but I don't
+> like that name.
 
+#define const_cast(T, exp)	_Generic((exp), const T : (T)(exp), default: (exp))
 
-Oh, I just recalled this patch.
+perhaps? Then one can write something like:
 
-https://lore.kernel.org/all/CAA8EJprdCftvie3UF9QpCWr9oQ5SQbqW8OPOHg0qigf9=RXU-w@mail.gmail.com/T/#m2ce6b1de3c74333645831399c0d1775129d7661a
+	struct task_struct *p = const_cast(struct task_struct *,
+					   constainer_of(node, struct task_struct *, run_node));
 
-Dritry tested it.
+The repetition is a bit naf, but at least the construct is more
+generally useful.
 
-Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-Acked-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Tested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-
-
-
->
-> Cc: Marek Vasut <marex@denx.de>
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Makefile | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/Makefile b/Makefile
-> index 6aa709df6bde..a99d5c4de0fc 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1467,7 +1467,10 @@ dtbs_prepare: include/config/kernel.release scripts_dtc
->
->  ifneq ($(filter dtbs_check, $(MAKECMDGOALS)),)
->  export CHECK_DTBS=y
-> -dtbs: dt_binding_check
-> +endif
-> +
-> +ifneq ($(CHECK_DTBS),)
-> +dtbs_prepare: dt_binding_check
->  endif
->
->  dtbs_check: dtbs
-> --
-> 2.35.1
->
-
-
---
-Best Regards
-Masahiro Yamada
+(I really wish there was a qualifier stripping typeof() variant -- and
+yes, I know about the _Atomic thing).
