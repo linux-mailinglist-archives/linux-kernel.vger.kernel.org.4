@@ -2,233 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45954651F27
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:44:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC49D651F2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:45:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233311AbiLTKoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:44:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
+        id S233217AbiLTKpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:45:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232633AbiLTKoL (ORCPT
+        with ESMTP id S230189AbiLTKpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:44:11 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43618178BC;
-        Tue, 20 Dec 2022 02:44:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671533050; x=1703069050;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=pYWu9IQAQd9FCG7kppU3+lTqRZPpJjg5wnZGRUd/5Jk=;
-  b=V4SEAFrO5BiY60g+iTByMmKONpJfVwwWsh+foh7r/lmpUugDiOC4Z8kE
-   5xPASXGbAQSduGzBZ2Dhwjitvhfnfm96ekQJrXqRkKO3gJFM4VV1XtRfj
-   6/ZTwu5kff1Hvyak3nLNKtUm0C0vWJ6zRncKm8oegN8W7VTfpgJwbXPOb
-   QmW0Tl+80aLLVHUsFmecwmgzF8ZQ0TFsvAePEg74EBQAq3KEdSIm6RrCX
-   DvHauLPcRdMPfJ/T2jyPdrAlNjFtzDaRYUP9iBLg3WYTbgi/Ib1fSVwNO
-   SmetrXh1NXITtMpaY3DjW2hQ3nsVqOJxn9JRKOPJV58SfWyO4b0LNujtb
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="317220301"
-X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
-   d="scan'208";a="317220301"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 02:44:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="739703560"
-X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
-   d="scan'208";a="739703560"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Dec 2022 02:44:09 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 20 Dec 2022 02:44:09 -0800
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 20 Dec 2022 02:44:09 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 20 Dec 2022 02:44:09 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.102)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 20 Dec 2022 02:44:08 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MjBhtka24k9fXBgUhcudoP+/mQdT9Wpcdxoh5nUIhP0Awo7OfpgyzGcxQOD6Oy4Mf1fsvPnxn2xZtt8u56BqQfpdhRkxBBNMAHpR3Sg6ZwqCemZvFDBQlqmErZY3Z3/jtrcz+OoSTleMG9Sdo9xl9w/YhO2lBS4myEZU3ajXgsPQlYq67JSQO9RsN2ybrhA4FXyHpES7fmq7Wz0sjU0m+XRkjOj2DePMqt1rS+xQU7oqeQsnYNTEieSNF9e+cczMz9qb4ZFFnLvdEaaX36NpbI1dUfxAnHWsSks5KJQtCRMV9ZQWRxtPdDbtVEdWVu1k9duJ0cKKJhIqOyz7sWPyRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UekyEtwAaw2T+U5o6Tc9qpvyYM3KzlMWkBDZuCve/ZY=;
- b=fFRJZzGlDo6nfOGrxdra5yWD6fHnCVbZuSvDVLCg53OSsVFhwFdCf5zgiSGdUpRL0cc7vWnMjM+ix00v4v3lgT4GVEX4JuaHNTJzFMk7mbdTjI5jS4B/iAVkgdV8pdHQ+5p8TfhmZy1TmF4owC0qZEgcSfJK95yFlG43A9j1mvHw3DsFBfF/LSIBRWxJt20RWGmS/MlCscj8dfuQufSKJZyER76YHRHukdPrVwNY/5Sry9wFI8ZptiuUNSfffEtsgwp1frD1daal1BRiFIjV8kwCBEXw9PdcKxHDh3oTAfKfneZlREO48RYYtmfEa/lMcEwHolUJeaFURojORg2V6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5370.namprd11.prod.outlook.com (2603:10b6:408:11b::8)
- by DS0PR11MB6399.namprd11.prod.outlook.com (2603:10b6:8:c8::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5924.16; Tue, 20 Dec 2022 10:44:07 +0000
-Received: from BN9PR11MB5370.namprd11.prod.outlook.com
- ([fe80::3ca9:a067:1c92:7a31]) by BN9PR11MB5370.namprd11.prod.outlook.com
- ([fe80::3ca9:a067:1c92:7a31%2]) with mapi id 15.20.5924.016; Tue, 20 Dec 2022
- 10:44:07 +0000
-From:   "Chang, Junxiao" <junxiao.chang@intel.com>
-To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "linux-rt-users@vger.kernel.org" <linux-rt-users@vger.kernel.org>,
-        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Peh, Hock Zhang" <hock.zhang.peh@intel.com>
-Subject: RE: [PATCH] softirq: wake up ktimer thread in softirq context
-Thread-Topic: [PATCH] softirq: wake up ktimer thread in softirq context
-Thread-Index: AQHZCtu9FgSt2BLnhEqT/Df9j5aCWK52jjbA
-Date:   Tue, 20 Dec 2022 10:44:07 +0000
-Message-ID: <BN9PR11MB5370BA8A506EB8519DC879C1ECEA9@BN9PR11MB5370.namprd11.prod.outlook.com>
-References: <20221208075604.811710-1-junxiao.chang@intel.com>
-In-Reply-To: <20221208075604.811710-1-junxiao.chang@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5370:EE_|DS0PR11MB6399:EE_
-x-ms-office365-filtering-correlation-id: 721eb6fd-57e8-46fc-0602-08dae2771eca
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ojiL+RT0N4XzU8wCaRIpKBQsmZUPqqzzwxzysevS0vUnvwOhfY3BUzizorYAEWTgQPQ0+HfdTLZ3kva5qabfM01luHetqV1VVPWjtBCQ4ozr54qK8SLJs4R6KJA7KF4BlvniwpqJMQT+5ay82BQvfgcKPEIgkX4AeTXYnNWQ7rIbgbeEN3u3xNF38Wq3k9aRWAa6iFb7qGWez/3VNdh+D88ARqbQ9xG8q01e9Tfj1Y0kkFNxHkD1I2laEH1VdTP+XrESDMt5D8fwkXXMFi7xZ2hKrN1LYQsLyOLcfPXbbv6F8jJ3cPVe9Mzv1d3sX84j1R+QDTuNW3YxsYQpYgxASJE/FlPdDD2wuBPaia91ukdaTbvD/StLHqZoP6Cdnbsc0ji7Et3pjfcNvR/reNKr5SzYZlfKKxn2W/jkOWwk7xzryreuutVFTHRVc0nMqy3Jl4K2IoWvZ0lEMEGlv7mBqin7tKjYa8BpI42jUO5rmSr5Kx0lV6Ak/AvThkXUkVh2lF9txxZHPPL7iOiSFfYCpspVkLWyUWWIOyIgOiju3SRa2htLYXBbwk7YKd4JmXwk6bKr0/5UBDdR5JF8lkTwnPvQRBilwyTDZ+oQ+NeUw+P67f1QjbaAgpRqWwJCYd5olrU/CHJ13ViZhJ1R1Z19l20YEO1ThUSTuOAr02vVEme5XZ8o7d6UTq8OFLHYYZs3UZ4BHQXfuL3wc1KBnoHTew==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5370.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(136003)(376002)(346002)(396003)(366004)(451199015)(66899015)(2906002)(41300700001)(86362001)(8936002)(76116006)(52536014)(5660300002)(66446008)(64756008)(33656002)(66946007)(66476007)(8676002)(4326008)(66556008)(316002)(6916009)(54906003)(38070700005)(71200400001)(38100700002)(478600001)(122000001)(9686003)(26005)(7696005)(55016003)(53546011)(6506007)(83380400001)(186003)(107886003)(82960400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?PN/GBqKUgUqmCdqOd8jG9dHByHXF0NuIPWUjG2bpcI/jY6aTxporCJF5zyzv?=
- =?us-ascii?Q?bt3FbaHQyquFTVOq+0aBFl7Eq8bAFUACYqCzYzbuO+WzpTciBkBmvmOGz1vs?=
- =?us-ascii?Q?VJey24FFrRQGl4bVoq3HHuJJbnxWMIy8CpY0ji7I36ubOzdE8cBZinKS27Iv?=
- =?us-ascii?Q?3yV+y8pFP2rVv+SoOgxOD0ryi2gQkplnrmHDTv+6i6EdlZDdA+NBCdhIxw/2?=
- =?us-ascii?Q?SY/iN/vE9Y+KZ4J3uo5I3u7g2R3e62on3hDBSNoLcEWLKU6v2DL0b+JqzeB7?=
- =?us-ascii?Q?ENK4r6Qe3VdK4pshGVZGWX6WMfobJV8+rySiOwPDz4gvEvjby/oV/sNq1NM+?=
- =?us-ascii?Q?TpCpXvs48Cdyuc6Ud+ceApjUm707Vpb6fP0/kMny9jAHCkzBFyGNmCklEt53?=
- =?us-ascii?Q?Jqu1AIUK1F9GX9BnvEFeOhvM3mjyZdWmrrpEnhdmn1bVAqUEZ8mK2bjO+C1w?=
- =?us-ascii?Q?l2HUHlH3MDaDUISyljjThD0JfLZT50A6GYe/Ua0zFaHf6xvLn8bFwiAo+BKF?=
- =?us-ascii?Q?kTACWwOlsgmf2emWyA2npp8uNTOkUITbVrQbb4QwUBhxO/byAaVp8tZoj9/W?=
- =?us-ascii?Q?lU0+KTdx/PdVQAHZDrQ0dCct+HsG8SXUDGZgOlmnOSst7uxwMIxRQXU+Lq7I?=
- =?us-ascii?Q?/VFesbKeqaZuWAHOnace2sPfSsq4nMAV441xJ/zxaWGUxqmLcwwRJaKND4bI?=
- =?us-ascii?Q?huPRWIkGny7KH22GsKdvpt7XDNqPlK2O/hvx8JC+qrUnUsRBabnqAIFiZ6/P?=
- =?us-ascii?Q?aIarhvG23ajZhbPVB3PO5VCSzs9m8UPaELV9ZAq09fhlLDENTvE747EF65JD?=
- =?us-ascii?Q?9Bo0LZqJ5o7AkJ2i0VArwSB4c7X4TXMs+nY/fylIRs5cIwgsr2PjgHZaF5E2?=
- =?us-ascii?Q?jhQOg8QxEJnIExVTyx8chaN3Ke/K43K2hm6GmPfaaXKVbDmQxDBipgR0MWk0?=
- =?us-ascii?Q?/zZEsN+ITGQFi1SUwulUYDsjZK2IKgxqXybS9ZnnfoRWkmodRT7fVSIsDfXW?=
- =?us-ascii?Q?QVqzwnYC3QoKYnFbI2ejyVKKmiFmGhASEntM24sKGnJ6pEjn3y7LseXOjjev?=
- =?us-ascii?Q?UDD1L34kGVOt5cvUUafRrBiQ99w97VdLe5z+CT4mxUEet+jf5alJ/C94hOce?=
- =?us-ascii?Q?JhtuojwB5u05hlUNfmrRubPWQAaE2aPP4pTyIV7pq1lq4B2cunIJ8EqPVv9+?=
- =?us-ascii?Q?AiC6hLfUsFOQBR+WzWAEnVK7z0uHmEA3gr1PoQmzvPgSbm34/qIUXXSmCz6t?=
- =?us-ascii?Q?889YaUkKHOu24/agrtucBulHGGwWdb2dfTyyN/qoWGIMxjgPI6P6JKqY1K6U?=
- =?us-ascii?Q?eM58AJE2VMQJj4DfMjk1OHuc1iYwRaVGnuYN8LqkLWQjealRC9IzrtNU4S8u?=
- =?us-ascii?Q?++gNe1v7DomoNmqncRBuO5PSOlWDmMg3iSOLlPlWTdQ/33GsIF2MMfVd1kKw?=
- =?us-ascii?Q?LGK5xK/UqjZr6LNMfyHNCUUgrtgQdD2urgPI0ovZxsl2jIlMmgY8QuevYjsP?=
- =?us-ascii?Q?yTRIcr2I0BxdcymM1z76+DVKxq6nTiCFSGF2waflkqWYhjAF25kWgSAwUC0P?=
- =?us-ascii?Q?0ub+XQFu/oEE120PBDwt7QAPf/Sfx4zAJcMv9J3I?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 20 Dec 2022 05:45:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A40F17E06
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:44:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671533089;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9ajR0rcdEYVn40evpdL64dzX3TMn0eK0HIoxkoNxemU=;
+        b=gmPNGxoZzaiYJB9Lr04G+ycUVvePrhOT4VhglyNj0H60T/LAE8ZHiSv5VJ9NP5Ejflfb13
+        2ahoXtPv8HvNxgOZsuyQ+pYPmMOr/SsscAeoKjkVWA3PI4YBP3FOMYxrbiUMgoXbe4YEWX
+        und9L79o5p7X1jNuUPIvXatZHXZ1LaI=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-319-CjKP0bgePtGLhaR3HMgFog-1; Tue, 20 Dec 2022 05:44:48 -0500
+X-MC-Unique: CjKP0bgePtGLhaR3HMgFog-1
+Received: by mail-qt1-f200.google.com with SMTP id i3-20020ac87643000000b003a816421776so5372237qtr.22
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:44:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9ajR0rcdEYVn40evpdL64dzX3TMn0eK0HIoxkoNxemU=;
+        b=la5v1uwKp73bJ+X3WUlQsAr8rH9SSDxTqTJNgWhwaxhA7E/WnAm9w26hfoUq7uzVtI
+         hKE/7Qds+lddLSKOVNDo/9DlwQe6FrzAZ3tRL15VjbKH7aPDKS98x/PEDSRHsAcrZroj
+         hUHP7MLR35dmug03UXqkbXE3Ah6P5HquyfCPB34SmdJf/PIv896vDN69wo+jE/MbSswG
+         EN1q2AK8SNs0bGGd4yruy9GugYypoMoejz8gAgqsdpzXHy2m6hjCNcBfMo0z5opnYELQ
+         ap7tHsaGIAGPDF5+H2C+kDnzUIqanQ49FL0fxDhaAVTlpTFBjYHAPgATpqw5ag/Kakzr
+         tHPQ==
+X-Gm-Message-State: ANoB5plHh+egzvsvg6JnUTQF+a+K1ioyfan8Sdf0DmOC1OrULWRouG9L
+        3Hiryne/QFSbAaf4zsGk4NH4wgbJBDW/3fGm4OItT3xE0h6xQ+KjEUvHXz8DH86xjBGTgihttkv
+        Eg2EcuY04MGUOu5d56zsUVc7T
+X-Received: by 2002:ac8:4ccf:0:b0:3a8:b4cf:5217 with SMTP id l15-20020ac84ccf000000b003a8b4cf5217mr25140724qtv.48.1671533085833;
+        Tue, 20 Dec 2022 02:44:45 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7nT+vZcBGL+legno7SMwRPHBRbZkqPvxLtCPks9IuHozAMbTxT5IJU4jUnUzlyZlC0pFeL5A==
+X-Received: by 2002:ac8:4ccf:0:b0:3a8:b4cf:5217 with SMTP id l15-20020ac84ccf000000b003a8b4cf5217mr25140711qtv.48.1671533085545;
+        Tue, 20 Dec 2022 02:44:45 -0800 (PST)
+Received: from redhat.com ([37.19.199.118])
+        by smtp.gmail.com with ESMTPSA id t22-20020ac87616000000b003a7e9db074asm7382008qtq.67.2022.12.20.02.44.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 02:44:45 -0800 (PST)
+Date:   Tue, 20 Dec 2022 05:44:37 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Shaoqin Huang <shaoqin.huang@intel.com>,
+        Angus Chen <angus.chen@jaguarmicro.com>,
+        Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        virtualization@lists.linux-foundation.org, dmitry.fomichev@wdc.com
+Subject: Re: next: kernel BUG at drivers/virtio/virtio.c:122!
+Message-ID: <20221220054426-mutt-send-email-mst@kernel.org>
+References: <CA+G9fYvz1eNS5fw1Wg5f4HqwdWPNg3EQyrGZVEOJ=OQzYzZ_YQ@mail.gmail.com>
+ <1671532079.1159124-1-xuanzhuo@linux.alibaba.com>
+ <CA+G9fYvd3SuT6ijxO8J1+zx05ZvSR8dspz7vKgSWB+c_AvkqnQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5370.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 721eb6fd-57e8-46fc-0602-08dae2771eca
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Dec 2022 10:44:07.1575
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: N+Rr8xoJB8rx21bN/LhYzGZ3dkKdJNAzKxUOgxaqq2YCoUVkL/EYs0c0ElCI7IrwfNbZvB2qw60rKNotr1VaHA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6399
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYvd3SuT6ijxO8J1+zx05ZvSR8dspz7vKgSWB+c_AvkqnQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Any comment? This patch is for 6.1-rt, issue could be reproduced with 5.19-=
-rt kernel as well.
+On Tue, Dec 20, 2022 at 04:12:05PM +0530, Naresh Kamboju wrote:
+> On Tue, 20 Dec 2022 at 16:04, Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+> >
+> > On Tue, 20 Dec 2022 14:51:54 +0530, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > > The qemu-x86_64 and qemu-arm64 boot failed with Linux next-20221220 tag.
+> > > It is always reproducible with gcc-11/ gcc-12 and clang tool chains.
+> > >
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > >
+> > > <6>[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x000f0510]
+> > > <5>[    0.000000] Linux version 6.1.0-next-20221220 (tuxmake@tuxmake)
+> > > (Debian clang version 16.0.0
+> > > (++20221218072110+9c1b82599dac-1~exp1~20221218072217.501), Debian LLD
+> > > 16.0.0) #1 SMP PREEMPT @1671498176
+> > > <5>[    0.000000] random: crng init done
+> > > <6>[    0.000000] Machine model: linux,dummy-virt
+> > > ....
+> > > <6>[    3.571098] loop: module loaded
+> > > <6>[    3.573410] virtio_blk virtio0: 1/0/0 default/read/poll queues
+> > > <5>[    3.578816] virtio_blk virtio0: [vda] 2816420 512-byte logical
+> > > blocks (1.44 GB/1.34 GiB)
+> > > <4>[    3.581234] ------------[ cut here ]------------
+> > > <2>[    3.581595] kernel BUG at drivers/virtio/virtio.c:122!
+> > > <0>[    3.582906] Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
+> > > <4>[    3.583672] Modules linked in:
+> > > <4>[    3.584905] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
+> > > 6.1.0-next-20221220 #1
+> > > <4>[    3.585801] Hardware name: linux,dummy-virt (DT)
+> > > <4>[    3.586591] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT
+> > > -SSBS BTYPE=--)
+> > > <4>[    3.587349] pc : virtio_check_driver_offered_feature+0x60/0x6c
+> > > <4>[    3.588613] lr : virtblk_probe+0x7cc/0x8f0
+> > > <4>[    3.588915] sp : ffff80000802b840
+> > > <4>[    3.589314] x29: ffff80000802b850 x28: 0000000000000000 x27:
+> > > 0000000000000001
+> > > <4>[    3.590509] x26: 0000000000000001 x25: 0000000000000200 x24:
+> > > ffff0000c1699b00
+> > > <4>[    3.590832] x23: 00000000000000fe x22: ffff0000c0313c30 x21:
+> > > ffff0000c0313c00
+> > > <4>[    3.591568] x20: ffff0000c02f4080 x19: 0000000000000000 x18:
+> > > ffffffffffffffff
+> > > <4>[    3.592056] x17: 00000000ffffffea x16: 00000000fffffffe x15:
+> > > 0000000000000004
+> > > <4>[    3.592632] x14: 0000000000000fff x13: ffff800008028000 x12:
+> > > ffff80000802c000
+> > > <4>[    3.593157] x11: 000000000000000f x10: 000000000000000f x9 :
+> > > ffffae66eee314d8
+> > > <4>[    3.594048] x8 : 0000000000000000 x7 : 3631383837352e33 x6 :
+> > > 202020205b3e353c
+> > > <4>[    3.594429] x5 : 0000000000000001 x4 : 0000000000000000 x3 :
+> > > ffff80000802b780
+> > > <4>[    3.594956] x2 : ffff80000802b6f8 x1 : 0000000000000011 x0 :
+> > > ffff0000c02f4080
+> > > <4>[    3.595811] Call trace:
+> > > <4>[    3.596120]  virtio_check_driver_offered_feature+0x60/0x6c
+> > > <4>[    3.596632]  virtio_dev_probe+0x274/0x320
+> > > <4>[    3.597064]  really_probe+0x178/0x418
+> > > <4>[    3.597547]  __driver_probe_device+0x120/0x188
+> > > <4>[    3.597820]  driver_probe_device+0x48/0x22c
+> > > <4>[    3.598189]  __driver_attach+0xf8/0x250
+> > > <4>[    3.598656]  bus_for_each_dev+0x8c/0xd8
+> > > <4>[    3.599151]  driver_attach+0x30/0x3c
+> > > <4>[    3.599321]  bus_add_driver+0x11c/0x22c
+> > > <4>[    3.599684]  driver_register+0x84/0x120
+> > > <4>[    3.600175]  register_virtio_driver+0x38/0x48
+> > > <4>[    3.600575]  virtio_blk_init+0x6c/0xb4
+> > > <4>[    3.600759]  do_one_initcall+0xe0/0x2f8
+> > > <4>[    3.601197]  do_initcall_level+0xa8/0x150
+> > > <4>[    3.601703]  do_initcalls+0x60/0xa0
+> > > <4>[    3.601892]  do_basic_setup+0x28/0x34
+> > > <4>[    3.602229]  kernel_init_freeable+0x100/0x178
+> > > <4>[    3.602706]  kernel_init+0x2c/0x1b4
+> > > <4>[    3.603162]  ret_from_fork+0x10/0x20
+> > > <0>[    3.604398] Code: 540000a0 91001129 f1000508 54ffff61 (d4210000)
+> > > <4>[    3.606108] ---[ end trace 0000000000000000 ]---
+> > > <6>[    3.606714] note: swapper/0[1] exited with preempt_count 1
+> > > <0>[    3.608155] Kernel panic - not syncing: Attempted to kill init!
+> > > exitcode=0x0000000b
+> > > <2>[    3.609173] SMP: stopping secondary CPUs
+> > > <0>[    3.610506] Kernel Offset: 0x2e66e4800000 from 0xffff800008000000
+> > > <0>[    3.610970] PHYS_OFFSET: 0x40000000
+> > > <0>[    3.611428] CPU features: 0x00000,003a612f,cd22773f
+> > > <0>[    3.612277] Memory Limit: none
+> > > <0>[    3.613192] ---[ end Kernel panic - not syncing: Attempted to
+> > > kill init! exitcode=0x0000000b ]---
+> > >
+> > > Ref Links,
+> > > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221220/testrun/13764099/suite/log-parser-test/test/check-kernel-bug/details/
+> > > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221220/testrun/13766814/suite/boot/test/clang-nightly-lkftconfig/details/
+> > > https://storage.tuxsuite.com/public/linaro/lkft/builds/2J9l3qxSBmPWVa1S2uWn0Xuwl1J/config
+> > >
+> >
+> >
+> > I think there is a bug, VIRTIO_BLK_F_ZONED depends the CONFIG_BLK_DEV_ZONE, but
+> > checking its code in virtblk_probe does not depend on this config.
+> 
+> I see this in my config,
+> # CONFIG_BLK_DEV_ZONED is not set
+> 
+> >
+> > This option in your config file is indeed not opened.
+> >
+> > static int virtblk_probe(struct virtio_device *vdev){
+> > .....
+> >         virtblk_update_capacity(vblk, false);
+> >         virtio_device_ready(vdev);
+> >
+> >         if (virtio_has_feature(vdev, VIRTIO_BLK_F_ZONED)) {
+> >                 err = virtblk_probe_zoned_device(vdev, vblk, q);
+> >                 if (err)
+> >                         goto out_cleanup_disk;
+> >         }
+> >
+> >         dev_info(&vdev->dev, "blk config size: %zu\n",
+> >                 sizeof(struct virtio_blk_config));
+> >
+> > ....
+> >
+> > static unsigned int features[] = {
+> >         VIRTIO_BLK_F_SEG_MAX, VIRTIO_BLK_F_SIZE_MAX, VIRTIO_BLK_F_GEOMETRY,
+> >         VIRTIO_BLK_F_RO, VIRTIO_BLK_F_BLK_SIZE,
+> >         VIRTIO_BLK_F_FLUSH, VIRTIO_BLK_F_TOPOLOGY, VIRTIO_BLK_F_CONFIG_WCE,
+> >         VIRTIO_BLK_F_MQ, VIRTIO_BLK_F_DISCARD, VIRTIO_BLK_F_WRITE_ZEROES,
+> >         VIRTIO_BLK_F_SECURE_ERASE, VIRTIO_BLK_F_LIFETIME,
+> > #ifdef CONFIG_BLK_DEV_ZONED
+> >         VIRTIO_BLK_F_ZONED,
+> > #endif /* CONFIG_BLK_DEV_ZONED */
+> > }
+> 
+> I have attached config files to this email.
+> 
+> >
+> > Thanks.
+> >
+> >
+> > >
+> > > --
+> > > Linaro LKFT
+> > > https://lkft.linaro.org
 
-This issue is easier to reproduced when there is heavy network workload whi=
-ch introduces a lot of softirq events. If hrtimer interrupt is triggered in=
- softirq context, with current RT kernel, it will not wake up ktimers threa=
-d which handles hrtimer event because in function __irq_exit_rcu, "in_inter=
-rupt()" is true:
 
-static inline void __irq_exit_rcu(void)
-{
-...
-        preempt_count_sub(HARDIRQ_OFFSET);
-        if (!in_interrupt()) {
-                if (local_softirq_pending())
-                        invoke_softirq();
+Thanks a lot!
 
-                if (IS_ENABLED(CONFIG_PREEMPT_RT) && local_pending_timers()=
-)
-                        wake_timersd();
-        }
-...
-}
-
-Then ktimers threads stays in sleep state, hrtimer function will not be cal=
-led although hrtimer interrupt has been triggered. Ktimers thread might be =
-woken up in next timer interrupt which introduces long delay.
-
-Any comments are welcome.
-
-Regards,
-Junxiao
-
------Original Message-----
-From: Chang, Junxiao <junxiao.chang@intel.com>=20
-Sent: Thursday, December 8, 2022 3:56 PM
-To: linux-kernel@vger.kernel.org
-Cc: linux-rt-users@vger.kernel.org; bigeasy@linutronix.de; tglx@linutronix.=
-de; rostedt@goodmis.org; Chang, Junxiao <junxiao.chang@intel.com>; Peh, Hoc=
-k Zhang <hock.zhang.peh@intel.com>
-Subject: [PATCH] softirq: wake up ktimer thread in softirq context
-
-Occiaionally timer interrupt might be triggered in softirq context, ktimer =
-thread should be woken up with RT kernel, or else ktimer thread might stay =
-in sleep state although timer interrupt has been triggered.
-
-This change fixes a latency issue that timer handler is delayed for more th=
-an 4ms in network related test.
-
-Fixes: 2165d27554e8 ("softirq: Use a dedicated thread for timer wakeups.")
-Reported-by: Peh, Hock Zhang <hock.zhang.peh@intel.com>
-Signed-off-by: Junxiao Chang <junxiao.chang@intel.com>
----
- kernel/softirq.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
-
-diff --git a/kernel/softirq.c b/kernel/softirq.c index ab1fe34326bab..34ae3=
-9e4a3d10 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -664,13 +664,10 @@ static inline void __irq_exit_rcu(void)  #endif
- 	account_hardirq_exit(current);
- 	preempt_count_sub(HARDIRQ_OFFSET);
--	if (!in_interrupt()) {
--		if (local_softirq_pending())
--			invoke_softirq();
--
--		if (IS_ENABLED(CONFIG_PREEMPT_RT) && local_pending_timers())
--			wake_timersd();
--	}
-+	if (!in_interrupt() && local_softirq_pending())
-+		invoke_softirq();
-+	if (!(in_nmi() || in_hardirq()) && local_pending_timers())
-+		wake_timersd();
-=20
- 	tick_irq_exit();
- }
---
-2.25.1
+-- 
+MST
 
