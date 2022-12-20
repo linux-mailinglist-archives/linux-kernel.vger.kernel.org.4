@@ -2,219 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064F4652486
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:19:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B5A65248C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233346AbiLTQTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 11:19:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
+        id S233594AbiLTQU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 11:20:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbiLTQTm (ORCPT
+        with ESMTP id S233652AbiLTQUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 11:19:42 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE765B64;
-        Tue, 20 Dec 2022 08:19:40 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 75E321EC0529;
-        Tue, 20 Dec 2022 17:19:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1671553178;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=+VYkEsGbPer0Bj0EJK+U0s1hj+W19pg2cIhh+c92hxo=;
-        b=Z+AMWLFjrXMCFqZqAZLklJL+QZbXdYnOba8zcsxcCf56dnbY0+Ti5dMWHLhy4BO0x4ooFU
-        MNTthb5m2GcBbLG4RIv0Sek45g9ffbVSH5B3iuWQcoMT51PzTcOCVE/gGfEsPbltAkqTzW
-        pD/5rWjPw4uIQKMM0WL6uBUE8HkE2zQ=
-Date:   Tue, 20 Dec 2022 17:19:32 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: Re: [PATCH v4 07/39] x86: Add user control-protection fault handler
-Message-ID: <Y6HglBhrccduDTQA@zn.tnic>
-References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-8-rick.p.edgecombe@intel.com>
+        Tue, 20 Dec 2022 11:20:25 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAF2186F4;
+        Tue, 20 Dec 2022 08:20:24 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BKG5DSI031984;
+        Tue, 20 Dec 2022 16:20:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=R/BpPMd44v1k6ngEGCI6UQY0jeFUNFYr1adUuR3PqwY=;
+ b=ZrzH7Oe0HGqBcv2uRrZ46w6gK3zQlX26C3c2Axt93i6LV4rxIACGlwaDhVL1fOLu+ZFQ
+ mpWaFQ0KvYbyDd8JCndzx80vUDk5kPjX5X0O5aCWW6HRHczobXuhZo0WyMeYt0+zC0KP
+ eQU8aRdqpcolRQM1mvomwz6ACCGlOjT9BvBTqPEedIsKkIVIarU1h2ljA8VnGMKteKlo
+ q8Q4PnWAccekF/DM2xzWiiDMUa5vdETYUeMi4Yzz7aVKyDVV7AwzWLic6f8pc2IbkLLl
+ 9L+s+OTBzGg0oNqa29MnIsXvy/DUClObokdmFVvUFk+2jhLziZvQZM5AYyiVXeBNJ0cY KQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mkcxv8fqm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 16:20:13 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BKGKDGr025643
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 16:20:13 GMT
+Received: from [10.216.18.69] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 20 Dec
+ 2022 08:20:09 -0800
+Message-ID: <e269300d-539e-9eb8-8b3c-d309f3abca1b@quicinc.com>
+Date:   Tue, 20 Dec 2022 21:50:06 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221203003606.6838-8-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v4 1/2] dt-bindings: arm: qcom: Document the sc7280 CRD
+ Pro boards
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dianders@chromium.org>
+References: <20221216112918.1243-1-quic_rjendra@quicinc.com>
+ <Y5x+WEwTtpoV0gaR@google.com>
+ <fd23e295-fea0-1b0a-752c-3cce26b57346@quicinc.com>
+ <Y6HHCrl0q5BhrHOY@google.com>
+From:   Rajendra Nayak <quic_rjendra@quicinc.com>
+In-Reply-To: <Y6HHCrl0q5BhrHOY@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: bLLBgro-Hn6fKPwvi5QjtWa2p6PqdU38
+X-Proofpoint-ORIG-GUID: bLLBgro-Hn6fKPwvi5QjtWa2p6PqdU38
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-20_06,2022-12-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 impostorscore=0 clxscore=1015 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 mlxlogscore=977 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212200135
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:35:34PM -0800, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+
+
+On 12/20/2022 8:00 PM, Matthias Kaehlcke wrote:
+> On Tue, Dec 20, 2022 at 10:30:32AM +0530, Rajendra Nayak wrote:
+>>
+>> On 12/16/2022 7:49 PM, Matthias Kaehlcke wrote:
+>>> On Fri, Dec 16, 2022 at 04:59:17PM +0530, Rajendra Nayak wrote:
+>>>> Add compatibles for the Pro SKU of the sc7280 CRD boards
+>>>> which come with a Pro variant of the qcard.
+>>>> The Pro qcard variant has smps9 from pm8350c ganged up with
+>>>> smps7 and smps8.
+>>>>
+>>>> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+>>>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+>>>> ---
+>>>> v4 changes:
+>>>> Added the zoglin-sku1536 compatible along with hoglin-sku1536.
+>>>> Zoglin is same as the Hoglin variant, with the SPI Flash reduced
+>>>> from 64MB to 8MB
+>>>>
+>>>>    Documentation/devicetree/bindings/arm/qcom.yaml | 6 ++++++
+>>>>    1 file changed, 6 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+>>>> index 1b5ac6b02bc5..07771d4c91bd 100644
+>>>> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+>>>> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+>>>> @@ -558,6 +558,12 @@ properties:
+>>>>              - const: google,hoglin
+>>>>              - const: qcom,sc7280
+>>>> +      - description: Qualcomm Technologies, Inc. sc7280 CRD Pro platform (newest rev)
+>>>> +        items:
+>>>> +          - const: google,zoglin-sku1536
+>>>> +          - const: google,hoglin-sku1536
+>>>
+>>> Is there actually such a thing as a 'hoglin-sku1536', i.e. the Pro qcard
+>>> with 64MB of SPI flash, or do they all have 8MB of flash?
+>>
+>> The SPI flash is on the CRD mother-board and not on the qcards, so if you replace
+>> the qcards on the CRDs with 64MB flash you would need the hoglin-sku1536 to
+>> boot on those.
 > 
-> A control-protection fault is triggered when a control-flow transfer
-> attempt violates Shadow Stack or Indirect Branch Tracking constraints.
-> For example, the return address for a RET instruction differs from the copy
-> on the shadow stack.
-> 
-> There already exists a control-protection fault handler for handling kernel
-> IBT. Refactor this fault handler into sparate user and kernel handlers,
+> With such a configuration how does the bootloader know it should pass the kernel
+> the device tree for 'hoglin-sku1536' (pro) and not the non-pro variant? IIUC the
+> device tree is selected based on pin strappings on the mother-board, not the
+> qcard.
 
-Unknown word [sparate] in commit message.
-Suggestions: ['separate', 
-
-You could use a spellchecker with your commit messages so that it
-catches all those typos.
-
-...
-
-> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-> index 8b83d8fbce71..e35c70dc1afb 100644
-> --- a/arch/x86/kernel/traps.c
-> +++ b/arch/x86/kernel/traps.c
-> @@ -213,12 +213,7 @@ DEFINE_IDTENTRY(exc_overflow)
->  	do_error_trap(regs, 0, "overflow", X86_TRAP_OF, SIGSEGV, 0, NULL);
->  }
->  
-> -#ifdef CONFIG_X86_KERNEL_IBT
-> -
-> -static __ro_after_init bool ibt_fatal = true;
-> -
-> -extern void ibt_selftest_ip(void); /* code label defined in asm below */
-> -
-> +#ifdef CONFIG_X86_CET
->  enum cp_error_code {
->  	CP_EC        = (1 << 15) - 1,
->  
-> @@ -231,15 +226,87 @@ enum cp_error_code {
->  	CP_ENCL	     = 1 << 15,
->  };
->  
-> -DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
-> +static const char control_protection_err[][10] = {
-
-You already use the "cp_" prefix for the other things, might as well use
-it here too.
-
-> +	[0] = "unknown",
-> +	[1] = "near ret",
-> +	[2] = "far/iret",
-> +	[3] = "endbranch",
-> +	[4] = "rstorssp",
-> +	[5] = "setssbsy",
-> +};
-> +
-> +static const char *cp_err_string(unsigned long error_code)
-> +{
-> +	unsigned int cpec = error_code & CP_EC;
-> +
-> +	if (cpec >= ARRAY_SIZE(control_protection_err))
-> +		cpec = 0;
-> +	return control_protection_err[cpec];
-> +}
-> +
-> +static void do_unexpected_cp(struct pt_regs *regs, unsigned long error_code)
-> +{
-> +	WARN_ONCE(1, "Unexpected %s #CP, error_code: %s\n",
-> +		     user_mode(regs) ? "user mode" : "kernel mode",
-> +		     cp_err_string(error_code));
-> +}
-> +#endif /* CONFIG_X86_CET */
-> +
-> +void do_user_cp_fault(struct pt_regs *regs, unsigned long error_code);
-
-What's that forward declaration for?
-
-In any case, push it into traps.h pls.
-
-I gotta say, I'm not a big fan of that ifdeffery here. Do we really
-really need it?
-
-> +#ifdef CONFIG_X86_USER_SHADOW_STACK
-> +static DEFINE_RATELIMIT_STATE(cpf_rate, DEFAULT_RATELIMIT_INTERVAL,
-> +			      DEFAULT_RATELIMIT_BURST);
-> +
-> +void do_user_cp_fault(struct pt_regs *regs, unsigned long error_code)
->  {
-> -	if (!cpu_feature_enabled(X86_FEATURE_IBT)) {
-> -		pr_err("Unexpected #CP\n");
-> -		BUG();
-> +	struct task_struct *tsk;
-> +	unsigned long ssp;
-> +
-> +	/*
-> +	 * An exception was just taken from userspace. Since interrupts are disabled
-> +	 * here, no scheduling should have messed with the registers yet and they
-> +	 * will be whatever is live in userspace. So read the SSP before enabling
-> +	 * interrupts so locking the fpregs to do it later is not required.
-> +	 */
-> +	rdmsrl(MSR_IA32_PL3_SSP, ssp);
-> +
-> +	cond_local_irq_enable(regs);
-> +
-> +	tsk = current;
-> +	tsk->thread.error_code = error_code;
-> +	tsk->thread.trap_nr = X86_TRAP_CP;
-> +
-> +	/* Ratelimit to prevent log spamming. */
-> +	if (show_unhandled_signals && unhandled_signal(tsk, SIGSEGV) &&
-> +	    __ratelimit(&cpf_rate)) {
-> +		pr_emerg("%s[%d] control protection ip:%lx sp:%lx ssp:%lx error:%lx(%s)%s",
-> +			 tsk->comm, task_pid_nr(tsk),
-> +			 regs->ip, regs->sp, ssp, error_code,
-> +			 cp_err_string(error_code),
-> +			 error_code & CP_ENCL ? " in enclave" : "");
-> +		print_vma_addr(KERN_CONT " in ", regs->ip);
-> +		pr_cont("\n");
->  	}
->  
-> -	if (WARN_ON_ONCE(user_mode(regs) || (error_code & CP_EC) != CP_ENDBR))
-> +	force_sig_fault(SIGSEGV, SEGV_CPERR, (void __user *)0);
-> +	cond_local_irq_disable(regs);
-> +}
-> +#endif
-> +
-> +void do_kernel_cp_fault(struct pt_regs *regs, unsigned long error_code);
-> +
-> +#ifdef CONFIG_X86_KERNEL_IBT
-> +static __ro_after_init bool ibt_fatal = true;
-> +
-> +extern void ibt_selftest_ip(void); /* code label defined in asm below */
-
-Yeah, pls put that comment above the function. Side comments are nasty.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+The device tree is selected based on the pin strappings _and_ additional logic
+to dynamically identify modem/non-modem(wifi) as well as pro/non-pro SKUs which
+was added in the bootloaders.
