@@ -2,167 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC96C65170D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 01:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E08B06516F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 01:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232877AbiLTAGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 19:06:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51880 "EHLO
+        id S232399AbiLTAD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 19:03:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232455AbiLTAFt (ORCPT
+        with ESMTP id S231972AbiLTADu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 19:05:49 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095F2C37
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 16:05:48 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-3b10392c064so149768257b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 16:05:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=criticallink.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bLlc7QfWYSwhEPXevanfM/J17xcjG7QbxYgYWgfuSbs=;
-        b=L6fludGALr816IQEcsLG5CKJL99qb7vbg9Za3eDAXs31j7Z4+mej3LnSey8IvNKQUW
-         KGn9kDOFk6YegAX5kFF8xNBuiAOjdZynbmQOX0VvlTDm1lRiv6hgBJGuiJc8GodiKg68
-         QfeLOcbeAJG0RPs+MvH+TetN/fSrn3Xv6x/JxFDxVmWQe2egMHt32vYzQU5xTl+XG27z
-         gm5GqIoQeLN72/mX7VFwG8p8mwoHB3NAbHjKnEIUHxkwG1hbGgIt1oOfovBcCrJAB4fm
-         nErLujaoPwbKFtS600ER+TxQnYZPsKeWgKWtEw6zeqsMtsJ7T+zwXV2aJsoUdnwLPnQP
-         E8Kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bLlc7QfWYSwhEPXevanfM/J17xcjG7QbxYgYWgfuSbs=;
-        b=YhL1NsIpmQ47hhYzqjAQym2vkz3ZJK/djX63E5EmEOPFwucv/UpoUEpM3AyrywjezF
-         Xh7hEEHJvL7OKGEkXNWl5mHqaNK/YjrPm49yVwZqs1/2aFEFkpuOzn6IsT59n9piTcou
-         vlVWIN8zUFoCBj5LIQnmZzxqurV9Dv1bG7rcRwuE/fiBrn51rIMZbjV2e1E0KvrgBrFt
-         z0Ry7qYHiMslxLiVMMeWjZX2l4s1WYOjhWhilTDGO0bmqVvVWqTS5bFgF5iI8Bqrcj6m
-         C5Vl6vcMLQFAeB68xN8JA3Fv+Amu0uwkpEy84rJ1s5yFzaRTdLduPifV2So2ua6LbNLw
-         Rllw==
-X-Gm-Message-State: AFqh2krEAZv6dNVjTSAlcCGB50h836xOoHx0uDdQyH35FII0XGRLaeLh
-        1XZ2GvKIz2Xo7Rsqq+MPMNCBMA==
-X-Google-Smtp-Source: AMrXdXtq6B2lyfUWipnsaxJbnCjl3OmnmZxDDLAMGMiW2C7JTWrPi7OmxPJzwoOHN1GMu0imH3aylA==
-X-Received: by 2002:a81:4e57:0:b0:38f:91bf:7783 with SMTP id c84-20020a814e57000000b0038f91bf7783mr8802927ywb.25.1671494747189;
-        Mon, 19 Dec 2022 16:05:47 -0800 (PST)
-Received: from jcormier-MS-7A93.syr.criticallink.com (static-72-90-70-109.syrcny.fios.verizon.net. [72.90.70.109])
-        by smtp.gmail.com with ESMTPSA id o70-20020a374149000000b006e702033b15sm7721430qka.66.2022.12.19.16.05.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 16:05:46 -0800 (PST)
-From:   "Cormier, Jonathan" <jcormier@criticallink.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     John Pruitt <jpruitt@criticallink.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bob Duke <bduke@criticallink.com>,
-        "Cormier, Jonathan" <jcormier@criticallink.com>
-Subject: [PATCH v2 4/4] hwmon: ltc2945: Fix possible overflows
-Date:   Mon, 19 Dec 2022 19:04:57 -0500
-Message-Id: <20221220000457.1163446-5-jcormier@criticallink.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221220000457.1163446-1-jcormier@criticallink.com>
-References: <20221214220727.1350784-1-jcormier@criticallink.com>
- <20221220000457.1163446-1-jcormier@criticallink.com>
+        Mon, 19 Dec 2022 19:03:50 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D760B10560;
+        Mon, 19 Dec 2022 16:03:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671494627; x=1703030627;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Vr/SeBC9IFaZopstbB44559M0UlClDlFGYHsafNAZtY=;
+  b=gAv9X5y+cgFYLjp80mPW4qTn17SgDUzXmjK02unxjNyrJpK7PvGB4TE4
+   OVKXHEb2bw3Ovg0NpBAw/ivz+8QRX5rh/wSI+fvkANSrRroJsEEgH/Nbl
+   eLM1ybcvloDDJAPW/y92Uk1z3dcs0ZC79XwWNVZe5MmSTEg0LT9fYPE7E
+   qcwxLbmdAqdskbfVO2PD8F4xqpy2GWgd+ryj5+AlnB/EN8cLkUlNRN8xU
+   UAM8sPjmK7Bf2cMW6YmC/H+hq1b8zrJCNBqhSXrXJ4z4PbRw6uPL8PLt6
+   uiiP3qSghorIwTC2JepmhPusJdmgI4fudD7cr7KnDSkhwVa89lCk/cdco
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="307164912"
+X-IronPort-AV: E=Sophos;i="5.96,257,1665471600"; 
+   d="scan'208";a="307164912"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 16:03:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="896210743"
+X-IronPort-AV: E=Sophos;i="5.96,257,1665471600"; 
+   d="scan'208";a="896210743"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga006.fm.intel.com with ESMTP; 19 Dec 2022 16:03:46 -0800
+Date:   Mon, 19 Dec 2022 16:12:13 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v2 02/22] sched: Add interfaces for IPC classes
+Message-ID: <20221220001213.GA23844@ranerica-svr.sc.intel.com>
+References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
+ <20221128132100.30253-3-ricardo.neri-calderon@linux.intel.com>
+ <Y5Gf9wGB5nFa4EDv@arm.com>
+ <20221214003128.GA30234@ranerica-svr.sc.intel.com>
+ <Y5pZGu0NnXsOyfUv@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5pZGu0NnXsOyfUv@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Pruitt <jpruitt@criticallink.com>
+On Wed, Dec 14, 2022 at 11:15:56PM +0000, Ionela Voinescu wrote:
+> Hi,
+> 
+> On Tuesday 13 Dec 2022 at 16:31:28 (-0800), Ricardo Neri wrote:
+> > On Thu, Dec 08, 2022 at 08:48:46AM +0000, Ionela Voinescu wrote:
+> > > Hi,
+> > > 
+> > > On Monday 28 Nov 2022 at 05:20:40 (-0800), Ricardo Neri wrote:
+> > > [..]
+> > > > +#ifndef arch_has_ipc_classes
+> > > > +/**
+> > > > + * arch_has_ipc_classes() - Check whether hardware supports IPC classes of tasks
+> > > > + *
+> > > > + * Returns: true of IPC classes of tasks are supported.
+> > > > + */
+> > > > +static __always_inline
+> > > > +bool arch_has_ipc_classes(void)
+> > > > +{
+> > > > +	return false;
+> > > > +}
+> > > > +#endif
+> > > > +
+> > > > +#ifndef arch_update_ipcc
+> > > > +/**
+> > > > + * arch_update_ipcc() - Update the IPC class of the current task
+> > > > + * @curr:		The current task
+> > > > + *
+> > > > + * Request that the IPC classification of @curr is updated.
+> > > > + *
+> > > > + * Returns: none
+> > > > + */
+> > > > +static __always_inline
+> > > > +void arch_update_ipcc(struct task_struct *curr)
+> > > > +{
+> > > > +}
+> > > > +#endif
+> > > > +
+> > > > +#ifndef arch_get_ipcc_score
+> > > > +/**
+> > > > + * arch_get_ipcc_score() - Get the IPC score of a class of task
+> > > > + * @ipcc:	The IPC class
+> > > > + * @cpu:	A CPU number
+> > > > + *
+> > > > + * Returns the performance score of an IPC class when running on @cpu.
+> > > > + * Error when either @class or @cpu are invalid.
+> > > > + */
+> > > > +static __always_inline
+> > > > +int arch_get_ipcc_score(unsigned short ipcc, int cpu)
+> > > > +{
+> > > > +	return 1;
+> > > > +}
+> > > > +#endif
+> > 
+> > Thank you very much for your feedback Ionela!
+> > 
+> > > 
+> > > The interface looks mostly alright but this arch_get_ipcc_score() leaves
+> > > unclear what are the characteristics of the returned value.
+> > 
+> > Fair point. I mean for the return value to be defined by architectures;
+> > but yes, architectures need to know how to implement this function.
+> > 
+> > > 
+> > > Does it have a meaning as an absolute value or is it a value on an
+> > > abstract scale? If it should be interpreted as instructions per cycle,
+> > > if I wanted to have a proper comparison between the ability of two CPUs
+> > > to handle this class of tasks then I would need to take into consideration
+> > > the maximum frequency of each CPU.
+> > 
+> > Do you mean when calling arch_get_ipcc_score()? If yes, then I agree, IPC
+> > class may not be the only factor, but the criteria to use the return value
+> > is up to the caller.
+> > 
+> 
+> Yes, but if different architectures give different meanings to this score
+> (scale, relative difference between two values, etc) while the policies
+> are common (uses of arch_get_ipcc_score() in common scheduler paths)
+> then the outcome can be vastly different.
 
-Use 64-bit values for intermediate calculations. Check for
-overflows and return INT_MAX if overflows happened.
+One more reason to leave to the caller the handling of the returned value.
 
-Signed-off-by: John Pruitt <jpruitt@criticallink.com>
-Signed-off-by: "Cormier, Jonathan" <jcormier@criticallink.com>
----
- drivers/hwmon/ltc2945.c | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+> 
+> If the "criteria to use the returned value is up to the caller", then
+> the caller of arch_get_ipcc_score() should always be architecture
+> specific code, which currently is not (see 09/22).
 
-diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
-index fc7d399b2c85..7239422fc6db 100644
---- a/drivers/hwmon/ltc2945.c
-+++ b/drivers/hwmon/ltc2945.c
-@@ -126,6 +126,10 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
- 		}
- 		val *= 1000;
- 		val = DIV_ROUND_CLOSEST_ULL(val, shunt_resistor);
-+		/* check for overflow, use MAX value if it happened */
-+		if (val > INT_MAX)
-+			val = INT_MAX;
-+
- 		break;
- 	case LTC2945_VIN_H:
- 	case LTC2945_MAX_VIN_H:
-@@ -159,12 +163,14 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
- }
+Agreed. I now get your point. I'll change my patch accordingly.
 
- static int ltc2945_val_to_reg(struct device *dev, u8 reg,
--			      unsigned long val)
-+			      unsigned long val_32)
- {
- 	struct ltc2945_data *data = dev_get_drvdata(dev);
- 	struct regmap *regmap = data->regmap;
- 	u32 shunt_resistor = data->shunt_resistor;
- 	unsigned int control;
-+	/* use 64-bit val for intermediate calculations */
-+	unsigned long long val = val_32;
- 	int ret;
+> 
+> > In asym_packing it is assumed that higher-priority CPUs are preferred.
+> > When balancing load, IPC class scores are used to select between otherwise
+> > identical runqueues. This should also be the case for migrate_misfit: we
+> > know already that the tasks being considered do not fit on their current
+> > CPU.
+> > 
+> > We would need to think what to do with other type of balancing, if at all.
+> > 
+> > That said, arch_get_ipcc_score() should only return a metric of the
+> > instructions-per-*cycle*, independent of frequency, no?
+> > 
+> 
+> Yes, performance on an abstract scale is preferred here. We would not
+> want to have to scale the score by frequency :). It was just an example
+> showing that the description of arch_get_ipcc_score() should be clarified.
+> Another possible clarification: is it expected that the scores scale
+> linearly with performance (does double the score mean double the
+> performance?).
 
- 	switch (reg) {
-@@ -184,7 +190,7 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
- 		if (control & CONTROL_MULT_SELECT) {
- 			/* 25 mV * 25 uV = 0.625 uV resolution. */
- 			val *= shunt_resistor;
--			val = DIV_ROUND_CLOSEST(val, 625 * 1000);
-+			val = DIV_ROUND_CLOSEST_ULL(val, 625LL * 1000LL);
- 		} else {
- 			/*
- 			 * 0.5 mV * 25 uV = 0.0125 uV resolution.
-@@ -192,7 +198,7 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
- 			 * accept loss of accuracy.
- 			 */
- 			val *= shunt_resistor;
--			val = DIV_ROUND_CLOSEST(val, 25 * 1000) * 2;
-+			val = DIV_ROUND_CLOSEST_ULL(val, 25LL * 1000LL) * 2;
- 		}
- 		break;
- 	case LTC2945_VIN_H:
-@@ -201,7 +207,7 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
- 	case LTC2945_MAX_VIN_THRES_H:
- 	case LTC2945_MIN_VIN_THRES_H:
- 		/* 25 mV resolution. */
--		val /= 25;
-+		val = DIV_ROUND_CLOSEST_ULL(val, 25LL);
- 		break;
- 	case LTC2945_ADIN_H:
- 	case LTC2945_MAX_ADIN_H:
-@@ -218,11 +224,15 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
- 	case LTC2945_MIN_SENSE_THRES_H:
- 		/* 25 uV resolution. Convert to  mA. */
- 		val *= shunt_resistor;
--		val = DIV_ROUND_CLOSEST(val, 25 * 1000);
-+		val = DIV_ROUND_CLOSEST_ULL(val, 25LL * 1000LL);
- 		break;
- 	default:
- 		return -EINVAL;
- 	}
-+	/* If val is too large, just return the max value */
-+	if (val > INT_MAX)
-+		return INT_MAX;
-+
- 	return val;
- }
+Indeed this seems sensible.
 
---
-2.25.1
+> 
+> > > If it's a performance value on an
+> > > abstract scale (more likely), similar cu capacity, then it might be good
+> > > to better define this abstract scale. That would help with the default
+> > > implementation where possibly the best choice for a return value would
+> > > be the maximum value on the scale, suggesting equal/maximum performance
+> > > for different CPUs handling the class of tasks.
+> > 
+> > I guess something like:
+> > 
+> > #define SCHED_IPCC_DEFAULT_SCALE 1024
+> > 
+> > ?
+> > 
+> > I think I am fine with this value being the default. I also think that it
+> > is up to architectures to whether scale all IPC class scores from the
+> > best-performing class on the best-performing CPU. Doing so would introduce
+> > overhead, especially if hardware updates the IPC class scores multiple
+> > times during runtime.
+> >
+> 
+> Yes, it's a very good point. Initially I thought that one would need to
+> rescale the values anyway for them to make sense relative to each other,
+> but I now realise that would not be needed.
+> 
+> Therefore, you are right, to avoid this extra work it's best to leave
+> the range of possible score values up to the implementer and not force
+> something like [0 - 1024].
+> 
+> But again, this raises the point that if one architecture decides to
+> return its scores on a scale [0 - 1024] and possibly use these scores to
+> scale utilization/alter capacity for example, this cannot be generic
+> policy as not all architectures are guaranteed to use this scale for its
+> scores.
+
+Very good point.
+
+> 
+> So leaving the score unrestricted makes it more difficult to have
+> generic policies across architectures that use them.
+>
+
+In asym_packing we select the CPU of higher priority, regardless of how big
+the priority delta is. IPC classes extend the same mechanism. (We do have
+a throughput calculation, but it does not require IPC class to be scaled).
+
+So yes, IPC classes need to be scaled when combined with another metric.
+
+Another addition to the documentation of the interface? :)
+
+> 
+> > > 
+> > > I suppose you avoided returning 0 for the default implementation as you
+> > > intend that to mean the inability of the CPU to handle that class of
+> > > tasks? It would be good to document this.
+> > 
+> > I meant this to be minimum possible IPC class score for any CPU: any
+> > CPU should be able handle any IPC class. If not implemented, all CPUs
+> > handle all IPC classes equally.
+> > 
+> 
+> Ah, I see. In this case you might as well return 0 in the default
+> implementation of arch_get_ipcc_score(). I know it does not matter much
+> what gets returned there, but returning a meaningless "1" is strange to
+> me :).
+
+Yes, the value does not really matter to my use case, as long as it the
+same for all all CPUs. I can use 1024 as other scheduler metrics.
+
+Thanks and BR,
+Ricardo
