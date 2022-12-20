@@ -2,103 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A23651D90
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 10:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA3F651DB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 10:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233288AbiLTJiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 04:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43828 "EHLO
+        id S233590AbiLTJlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 04:41:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiLTJiM (ORCPT
+        with ESMTP id S233569AbiLTJlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 04:38:12 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30956E7;
-        Tue, 20 Dec 2022 01:38:10 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Nbs241Ps8z4f3kp0;
-        Tue, 20 Dec 2022 17:38:04 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgCH77J9gqFjqGHIAA--.26945S3;
-        Tue, 20 Dec 2022 17:38:07 +0800 (CST)
-Subject: Re: [PATCH -next 2/4] blk-iocost: don't throttle bio if iocg is
- offlined
-To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20221217030527.1250083-1-yukuai1@huaweicloud.com>
- <20221217030527.1250083-3-yukuai1@huaweicloud.com>
- <Y6DXkLeOmu7VWovz@slm.duckdns.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <beb75b37-6088-5f23-6602-5aff22213e41@huaweicloud.com>
-Date:   Tue, 20 Dec 2022 17:38:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 20 Dec 2022 04:41:25 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 731F817599
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 01:41:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=5U/Q0
+        IzBncgGJ65mZDk0e6NuKaOGAn75Xs2OHH9bGHk=; b=SrkBw11w8K6FHxt1r/Cva
+        GQWOb75ACnz7P5xM98IkqXOjfmO8KduGo4Pv8Xi7FjygF1zJFdFsOK1cgwI4gtKh
+        IJ3JRQ+xud5UYjcCa/m1uk+LeX95NeT/jesrY9D1/ctk2Px2r0+2yJ7uTM6P29q3
+        vrWyHZx9Z+ZeDdw9r7kMUo=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g0-3 (Coremail) with SMTP id _____wB3j3r_gqFjgjtjAA--.34322S2;
+        Tue, 20 Dec 2022 17:40:15 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     zhi.a.wang@intel.com
+Cc:     1002992920@qq.com, airlied@gmail.com, airlied@linux.ie,
+        alex000young@gmail.com, dri-devel@lists.freedesktop.org,
+        gregkh@linuxfoundation.org, hackerzheng666@gmail.com,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        joonas.lahtinen@linux.intel.com, linux-kernel@vger.kernel.org,
+        security@kernel.org, tvrtko.ursulin@linux.intel.com,
+        zhenyuw@linux.intel.com, zyytlz.wz@163.com
+Subject: [PATCH v5] drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
+Date:   Tue, 20 Dec 2022 17:40:14 +0800
+Message-Id: <20221220094014.1128207-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <11728bc1-7b59-1623-b517-d1a0d57eb275@intel.com>
+References: <11728bc1-7b59-1623-b517-d1a0d57eb275@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <Y6DXkLeOmu7VWovz@slm.duckdns.org>
-Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCH77J9gqFjqGHIAA--.26945S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Xr4xtr17Aw1kZFWfuw4Uurg_yoW8Jr48pF
-        yfG395Cr4qy3yftrWay3W8trySvFs3Zry5AryfKw1DCFWaqF9Yyr4fJw17ury5WFs7W3yx
-        GF1Fvay8Xwn0y37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
-        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
-        BIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wB3j3r_gqFjgjtjAA--.34322S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7AFW8WFy7XF4DtF17trWxtFb_yoW5JF43pF
+        W8XF4YyF48ZF1Ivw47uF18AFy3Z3W3Xa48WrZ7Ka4Ykrs0qF1qkr90yFW5Xr97uFWDAw4f
+        Cr4DJrW3Ca4jvaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRomh7UUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzgbdU2I0W3z3ogAAsi
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+If intel_gvt_dma_map_guest_page failed, it will call
+ ppgtt_invalidate_spt, which will finally free the spt. But the
+ caller function ppgtt_populate_spt_by_guest_entry does not notice
+ that, it will free spt again in its error path.
 
-ÔÚ 2022/12/20 5:28, Tejun Heo Ð´µÀ:
-> On Sat, Dec 17, 2022 at 11:05:25AM +0800, Yu Kuai wrote:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> bio will grab blkg reference, however, blkcg->online_pin is not grabbed,
->> hence cgroup can be removed after thread exit while bio is still in
->> progress. Bypass io in this case since it doesn't make sense to
->> throttle bio while cgroup is removed.
-> 
-> I don't get it. Why wouldn't that make sense? ISTR some occasions where we
-> clear the config to mitigate exits stalling for too long but in general a
-> policy being active on a draining cgroup shouldn't be a problem.
+Fix this by undoing the mapping of DMA address and freeing sub_spt.
+Besides, leave the handle of spt destroy to caller function instead of
+callee function when error occurs.
 
-The main reason here for patch 2/3 is for patch 4, since bio can still
-reach rq_qos after pd_offline_fn is called.
+Fixes: b901b252b6cf ("drm/i915/gvt: Add 2M huge gtt support")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+v5:
+- remove unnecessary switch-case code for there is only one particular case,
+correct the unmap target from parent_spt to sub_spt.add more details in
+commit message. All suggested by Zhenyu
 
-Currently, it's not consistent and seems messy how different policies
-implement pd_alloc/free_fn, pd_online/offline_fn, and pd_init_fn. For
-iocost, iocg is exited in pd_free_fn, and parent iocg can exits before
-child, which will cause many problems.
+v4:
+- fix by undo the mapping of DMA address and free sub_spt suggested by Zhi
 
-Patch 2/3 are not necessary if we don't choose to fix such problems by
-exiting iocg in ioc_pd_offline() in patch 4.
+v3:
+- correct spelling mistake and remove unused variable suggested by Greg
 
-I'll try to think about how to use refcnting, either from blkg layer or
-add refcnting for iocg.
+v2: https://lore.kernel.org/all/20221006165845.1735393-1-zyytlz.wz@163.com/
 
-Thanks,
-Kuai
-> 
-> Thanks.
-> 
+v1: https://lore.kernel.org/all/20220928033340.1063949-1-zyytlz.wz@163.com/
+---
+ drivers/gpu/drm/i915/gvt/gtt.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
+index 51e5e8fb505b..4d478a59eb7d 100644
+--- a/drivers/gpu/drm/i915/gvt/gtt.c
++++ b/drivers/gpu/drm/i915/gvt/gtt.c
+@@ -1209,10 +1209,8 @@ static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
+ 	for_each_shadow_entry(sub_spt, &sub_se, sub_index) {
+ 		ret = intel_gvt_dma_map_guest_page(vgpu, start_gfn + sub_index,
+ 						   PAGE_SIZE, &dma_addr);
+-		if (ret) {
+-			ppgtt_invalidate_spt(spt);
+-			return ret;
+-		}
++		if (ret)
++			goto err;
+ 		sub_se.val64 = se->val64;
+ 
+ 		/* Copy the PAT field from PDE. */
+@@ -1231,6 +1229,18 @@ static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
+ 	ops->set_pfn(se, sub_spt->shadow_page.mfn);
+ 	ppgtt_set_shadow_entry(spt, se, index);
+ 	return 0;
++err:
++	/* Undone the existing mappings of DMA addr. */
++	for_each_present_shadow_entry(sub_spt, &sub_se, sub_index) {
++		gvt_vdbg_mm("invalidate 4K entry\n");
++		ppgtt_invalidate_pte(sub_spt, &sub_se);
++	}
++	/* Release the new allocated spt. */
++	trace_spt_change(sub_spt->vgpu->id, "release", sub_spt,
++		sub_spt->guest_page.gfn, sub_spt->shadow_page.type);
++	ppgtt_free_spt(sub_spt);
++	sub_spt = NULL;
++	return ret;
+ }
+ 
+ static int split_64KB_gtt_entry(struct intel_vgpu *vgpu,
+-- 
+2.25.1
 
