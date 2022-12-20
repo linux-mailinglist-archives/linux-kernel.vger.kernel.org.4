@@ -2,99 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F79652820
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 21:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D72DF652824
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 21:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbiLTU6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 15:58:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41094 "EHLO
+        id S234344AbiLTU64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 15:58:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234201AbiLTU6i (ORCPT
+        with ESMTP id S234288AbiLTU6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 15:58:38 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5581DF1B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 12:58:33 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id s6-20020a259006000000b00706c8bfd130so15433277ybl.11
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 12:58:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xKXJYD4y3GZm6HnbUvNVngViJ+1dwURTi8LZvK89erU=;
-        b=RXCH9eozNGJe68h9FMYrzQJhw22LY0QHXX6+wB2um85IcAi5F13jRtC7I0TNFbJIar
-         RwQvRrrx7hfydCNo0RhFfUO89kcOUdFDqQDCHOt4/Iifcm1/zFd3wX+48WBj+rWbV1ZT
-         v2kGq6yI4qZj5C14WmsSZIK8enEWBQbGS4KpYT3VvM6NafsmikBtRWx1bcZPBkCYeEXM
-         ZrCsjNSciIkJu9ZGo027Kyo7DBkJ1Y4VcNjzH5HCVG73UcVlirgFm+ql7XrJ363COUiG
-         EKvLb1wejLOUOro1C4+BpciF34R+J4JCJcXFqZCJ6R1Ks5lIbZ2NAuvIVUL3cfOq/oLc
-         sNwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xKXJYD4y3GZm6HnbUvNVngViJ+1dwURTi8LZvK89erU=;
-        b=rMKPag+QwpLjWxjFhjSSUXXN29z5srEvdQXwIycZhp2fkmz0BgrCHN3jp7pwSw54G3
-         d/BKkokE+dnxntQL5V2yPvfgalW6NNN2am1fSdUmX0Oon+7AsCflJHbASnH9bNsmMIzU
-         gKjnMCVZRU9Kj5k5tAo/an/UJ4lpfMPvN2tuy6Fbodxil1mgmB7+XABy4WFJEHv7lcHn
-         4DyB+jIUr/pzV3RSWdgCicJ1JgdkOK7iiYXDVixN+a3SZOHUuyR7kXWYPiMb7k2adAdQ
-         tLWzHgD/JyMxSz23NPlX4IFDelPT/TgXa4DiyHpau9bciWq3SN+IgL02S20J/OTgZwAb
-         93vw==
-X-Gm-Message-State: ANoB5pnXG9HepNHOnYSKfrIhUT/Jcy2m+ZUXDCzqrScuQOdq9u5S8AV5
-        CWbKC6O80oZc+7HYqCXxUfbCRV8=
-X-Google-Smtp-Source: AA0mqf62lrjKa/xKuoPUB06pOfTcVG9jO7sxI6hq7SOB/NNrncyWkccriCLbejKVXjezqQgqvYhpWDE=
-X-Received: from ptf16.nyc.corp.google.com ([2620:0:1003:314:ef24:68f2:407a:84b9])
- (user=ptf job=sendgmr) by 2002:a0d:e783:0:b0:3bc:d289:f4b6 with SMTP id
- q125-20020a0de783000000b003bcd289f4b6mr4168855ywe.417.1671569913163; Tue, 20
- Dec 2022 12:58:33 -0800 (PST)
-Date:   Tue, 20 Dec 2022 15:58:26 -0500
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221220205826.178008-1-ptf@google.com>
-Subject: [PATCH] drm: Add orientation quirk for Lenovo ideapad D330-10IGL
-From:   Patrick Thompson <ptf@google.com>
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Patrick Thompson <ptf@google.com>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 20 Dec 2022 15:58:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E595A1DF13;
+        Tue, 20 Dec 2022 12:58:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1D67B8133B;
+        Tue, 20 Dec 2022 20:58:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E06EBC433D2;
+        Tue, 20 Dec 2022 20:58:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671569924;
+        bh=x403go0noSlBok3l6ETWm1H3es1ov0ErW3hoGi/bwMc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aU3RHF9M+DZ4tI565UV/fbP23ssYCNG9RrmVtrLxQP6C9Dyad3GbQN4ByNAkRnWmH
+         +GmPE6SFXeBFvKJAT6EGzTHjzr+KXLxVhYwmT9jgY/DIZ5hjEuFw1Iasw5UEiBKqnO
+         gmYqW96z3Yi5oJZUotd5OAhXnvIn010Ou4Z7YcnMfEpT52Vpdt4euSQNhNXSBwVK5y
+         y7ToHcx3su6+z+LttHYc6iyjqUjp9ytxuocCKPkMUilZbeh9TfZyCbPnP6E78VxZFu
+         pjYfvZPm/TtMp6Q0531Jv63rNcAOsKFKyQNpMqdBJOieMWweCVeBWCOeVi3t64LBP0
+         YQVDkK43LtMBQ==
+Date:   Tue, 20 Dec 2022 20:58:38 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/7] dt-bindings: riscv: Add StarFive JH7110 SoC and
+ VisionFive 2 board
+Message-ID: <Y6Ih/oG661gkA9Rd@spud>
+References: <20221220011247.35560-1-hal.feng@starfivetech.com>
+ <20221220011247.35560-2-hal.feng@starfivetech.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="QuMAt+cWIHQmpruC"
+Content-Disposition: inline
+In-Reply-To: <20221220011247.35560-2-hal.feng@starfivetech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Panel is 800x1280 but mounted on a detachable form factor sideways.
 
-Signed-off-by: Patrick Thompson <ptf@google.com>
----
+--QuMAt+cWIHQmpruC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- drivers/gpu/drm/drm_panel_orientation_quirks.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Tue, Dec 20, 2022 at 09:12:41AM +0800, Hal Feng wrote:
+> From: Emil Renner Berthing <kernel@esmil.dk>
+>=20
+> Add device tree bindings for the StarFive JH7110 RISC-V SoC
+> and the VisionFive 2 board equipped with it.
+>=20
+> VisionFive 2 board has version A and version B, which are
+> different in gmac and phy chip. The version A board has one
+> 1000Mbps and one 100Mbps Ethernet ports while the version B
+> board has two 1000Mbps Ethernet ports.
+>=20
+> Link: https://doc-en.rvspace.org/Doc_Center/jh7110.html
+> Link: https://doc-en.rvspace.org/Doc_Center/visionfive_2.html
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
 
-diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
-index 52d8800a8ab86..3659f0465a724 100644
---- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
-+++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
-@@ -304,6 +304,12 @@ static const struct dmi_system_id orientation_data[] = {
- 		  DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Lenovo ideapad D330-10IGM"),
- 		},
- 		.driver_data = (void *)&lcd1200x1920_rightside_up,
-+	}, {	/* Lenovo Ideapad D330-10IGL (HD) */
-+		.matches = {
-+		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+		  DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Lenovo ideapad D330-10IGL"),
-+		},
-+		.driver_data = (void *)&lcd800x1280_rightside_up,
- 	}, {	/* Lenovo Yoga Book X90F / X91F / X91L */
- 		.matches = {
- 		  /* Non exact match to match all versions */
--- 
-2.39.0.314.g84b9a713c41-goog
+Unless Emil objects, I'll queue this for 6.3 once -rc1 has been tagged.
 
+Thanks,
+Conor.
+=20
+
+--QuMAt+cWIHQmpruC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6Ih4QAKCRB4tDGHoIJi
+0ow7AQCts2dR5OUFsLgM+2Wp9kFTFTakGv8Ot3caCKUwNJ8MxQD+KvD5x2VCii5O
+85RYKGwAvcTntvHA9kodjRaPru06QAY=
+=bgMZ
+-----END PGP SIGNATURE-----
+
+--QuMAt+cWIHQmpruC--
