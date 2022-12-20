@@ -2,80 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0721E651E96
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2040E651E9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233438AbiLTKPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:15:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
+        id S233495AbiLTKQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:16:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233265AbiLTKP2 (ORCPT
+        with ESMTP id S233249AbiLTKQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:15:28 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D5F2653;
-        Tue, 20 Dec 2022 02:15:23 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p7Zeb-0008Ua-WB; Tue, 20 Dec 2022 11:15:22 +0100
-Message-ID: <343bc8a5-a426-8f6a-70b9-3877f53c003f@leemhuis.info>
-Date:   Tue, 20 Dec 2022 11:15:21 +0100
+        Tue, 20 Dec 2022 05:16:32 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBB63B4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:16:31 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id m29so17640738lfo.11
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:16:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eC4q4jvQ90KMOVQHs85KxE496/zijPcFgBm5g6Iu/3E=;
+        b=GCU0csYhyLdA1fUP+FjiVmbzah9iH+QaVF0tn15WKsJ4PYEdvpkzSJ3zGxOT+3R558
+         IGlNh3UIZ1KBW7+Cw/2m6Mscqsqfsogrh0bGpCxCD0SVHXwHhCluNtSvNmerctLfgQtY
+         y9+Mn9FGCUVv0IpJzFT+iHURKB0py8fV4V0AJSUoqn/UAUKkfDn2acYf6WUKSuEnJZiE
+         BGeg5YQP3f+Q1itjz4Dp60cl1LxZgXJe9+84PjMV03I1UvD5ro6BPu12F/mziHyVPLSD
+         QYLOnxe7wYkzZBG7fWAxqsfpsvZGnkd0YhC81bUbD+6uG4fVVrsxVpiJz8nCKEzW3vP7
+         8Npg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eC4q4jvQ90KMOVQHs85KxE496/zijPcFgBm5g6Iu/3E=;
+        b=SRMVQeJJoyeUq6fdZi7VyaTRvWIXmEZA7TCVNwl9s0jsnTBFd+8YwhR5xg4HFnpPLl
+         VxC/7Z39R7EgrHgaCtRXcqEgr7m3TswEGXry7VcDctHulkqmQSrhnE38qEm9WmQb75NK
+         HlkEZ2+OJbJBV4Gy6g0sNeDxX5DSf3gg1PtOUBnQWrvp9Fdu1dLG1IScgg/MFX+CyttI
+         54JMUZhuY6QBW6A+xXlWdaosB5ew04hCu3+MUuzUynUMrFbmnjqn5ooZvRtk2L+RXTjE
+         +eVz98GHCpnKKVzSeK4x4Hqq/5DUeJ3dnt4px5PDDyrclkh2GSLkaGIseScHHO36NwBQ
+         P+2A==
+X-Gm-Message-State: ANoB5pkdFgirLPhkjxUXKpV9dh8fCKJaooCIAeYIM/ObIDgM8QzNS/mY
+        L52xW5s9/l0gUxFCkj/R/lsoYA==
+X-Google-Smtp-Source: AA0mqf4WdhFI3RPoXCV33iInsZM3tU7zqqIoK39AHQ/gdV9jF5c3SPV50QDxMOvhX45TBpH7BfPX4w==
+X-Received: by 2002:a05:6512:3e19:b0:4b0:6023:6f6f with SMTP id i25-20020a0565123e1900b004b060236f6fmr17385142lfv.57.1671531389777;
+        Tue, 20 Dec 2022 02:16:29 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id u23-20020a196a17000000b004b5774726dcsm1394418lfu.236.2022.12.20.02.16.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 02:16:29 -0800 (PST)
+Message-ID: <c0e89d2b-1b99-4224-9003-c583cf5171e7@linaro.org>
+Date:   Tue, 20 Dec 2022 11:16:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [git pull] Input updates for v6.1-rc5 #forregzbot
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <Y3gwySzRvhCwdSgW@google.com>
- <824effa5-8b9a-c28a-82bb-9b0ab24623e1@kernel.org>
- <95b6739b-6d8e-dc41-b637-e366ac883829@leemhuis.info>
-In-Reply-To: <95b6739b-6d8e-dc41-b637-e366ac883829@leemhuis.info>
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] dt-bindings: rtc: pcf2127: add missing pcf/pca2129
+ entries
+Content-Language: en-US
+To:     Hugo Villeneuve <hugo@hugovil.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     bruno.thomsen@gmail.com,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221219194241.3817250-1-hugo@hugovil.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221219194241.3817250-1-hugo@hugovil.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1671531323;f87be96b;
-X-HE-SMSGID: 1p7Zeb-0008Ua-WB
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Note: this mail contains only information for Linux kernel regression
-tracking. Mails like these contain '#forregzbot' in the subject to make
-then easy to spot and filter out. The author also tried to remove most
-or all individuals from the list of recipients to spare them the hassle.]
-
-On 15.12.22 08:39, Thorsten Leemhuis wrote:
-
->> This was reported downstream as a regression between 6.0.10 and 6.0.12:
->> https://bugzilla.suse.com/show_bug.cgi?id=1206358
->>
->> Full dmesgs available there too.
->>
->>
->> 6.0.10 has this instead of the above:
->> psmouse serio1: synaptics: queried max coordinates: x [..5648], y [..4826]
->> psmouse serio1: synaptics: queried min coordinates: x [1292..], y [1026..]
->> psmouse serio1: synaptics: Your touchpad (PNP: SYN3286 PNP0f13) says it
->> can support a different bus. If i2c-hid and hid-rmi are not used, you
->> might want to try setting psmouse.synaptics_intertouch to 1 and report
->> this to linux-input@vger.kernel.org.
->> psmouse serio1: synaptics: Touchpad model: 1, fw: 8.16, id: 0x1e2b1,
->> caps: 0xf00323/0x840300/0x2e800/0x400000, board id: 3320, fw id: 2659795
+On 19/12/2022 20:42, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > 
-> P.P.S.: I for now assume that it's a problem that also is present in
-> mainline and thus will track it as such.
+> The pcf2127_of_match structure in drivers/rtc/rtc-pcf2127.c also
+> contains:
+>     nxp,pcf2129
+>     ncp,pca2129
 > 
-> #regzbot introduced ac5408991ea6
-> https://bugzilla.suse.com/show_bug.cgi?id=1206358
-> #regzbot title input: synaptics: keyboard broken on HP's 15-da1xxx
-> #regzbot ignore-activity
+> Add these missing entries.
+> 
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> ---
+>  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+> index cde7b1675ead..00dbae7e23c2 100644
+> --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+> @@ -14,7 +14,10 @@ maintainers:
+>  
+>  properties:
+>    compatible:
+> -    const: nxp,pcf2127
+> +    enum:
+> +      - nxp,pcf2127
+> +      - nxp,pcf2129
+> +      - ncp,pca2129
 
+Keep the entries sorted, e.g. alphabetically.
 
-#regzbot fix: Revert "Input: synaptics - switch touchpad on HP Laptop
-15-da3001TU to RMI mode"
+Best regards,
+Krzysztof
+
