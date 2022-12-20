@@ -2,142 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F0B65213E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 14:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B64D65213F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 14:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233787AbiLTNHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 08:07:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
+        id S233610AbiLTNIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 08:08:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiLTNHU (ORCPT
+        with ESMTP id S231790AbiLTNIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 08:07:20 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F1A100A;
-        Tue, 20 Dec 2022 05:07:19 -0800 (PST)
-Received: from beast.luon.net (unknown [IPv6:2a10:3781:2531::8])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Tue, 20 Dec 2022 08:08:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84910EE0E;
+        Tue, 20 Dec 2022 05:08:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sjoerd)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 103A46602CA4;
-        Tue, 20 Dec 2022 13:07:18 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671541638;
-        bh=dwGE8muU+/jqx+FXW5bPekgc9rReC9jOQ7EeZGHDZW0=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=SMU1eWWa/XtkeC+AMWYvC1/Fb6h053BvmQBU9t5O64HJA6aaRCLgJ+yYjIBqgoJpw
-         zFRKU1vDIrJD8k/aCybGYbWK9DNm3XEDhGYQ7xYfq53qRrLVBhitxJM3dLnmclum6o
-         lbhrMSxttzvCyLtgnNj2nM9MHPjgD0TuoRyJkaqKJCFy2ZnV3yOE8fN5ozerez1O+M
-         2wt7vK3YDBBc8Dnw3o+8LUGGqcx/TZ8oO+bjcethwafjrRkvHBaNS2xUoY1LjrvWV2
-         jadNMV2Ih+iCzpARDMbXPwctl0/tG8/UeAKhCuI8KEx/G6uhs5KMIS0PbCx9ai+bxE
-         2FZNcbKMtbVGg==
-Received: by beast.luon.net (Postfix, from userid 1000)
-        id 10B9E5E81B6D; Tue, 20 Dec 2022 14:07:15 +0100 (CET)
-Message-ID: <a85e08c6af0fbdafaa6f3799264e92bba7607b9c.camel@collabora.com>
-Subject: Re: [PATCH 1/3] arm64: dts: ti: k3-am62-main: Update OTAP and ITAP
- delay select
-From:   Sjoerd Simons <sjoerd@collabora.com>
-To:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>
-Cc:     martyn.welch@collabora.com, Nitin Yadav <n-yadav@ti.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Tue, 20 Dec 2022 14:07:14 +0100
-In-Reply-To: <b22b6349-9cec-2e86-294a-249f24de2345@ti.com>
-References: <20221216143624.23708-1-sjoerd@collabora.com>
-         <20221216143624.23708-2-sjoerd@collabora.com>
-         <b22b6349-9cec-2e86-294a-249f24de2345@ti.com>
-Organization: Collabora Ltd.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2-1 
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D43BC61414;
+        Tue, 20 Dec 2022 13:08:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0DF8C433D2;
+        Tue, 20 Dec 2022 13:08:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671541685;
+        bh=mE5BvE/i4BNlPYZYGRNiCNfd6he/sFm8J9pnZ0DgWHs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Lcs2lUJU0r2xFJK4cI2leOC6qttxLPlpSCcDQmjItc9+atxoowLCobv7FTGvh6v03
+         xowvNMefcl21T/t2fqVVSRB9zVphQJnk9I6ERFmaHGyfabmTdnCsRvUYW64mIsCf7Z
+         wnoE4wl8rbkEmw6Wg+0XLV0qa8z5Xlaf4qSYeT748AUcZUaXOOKn6gwrplrV++UUdj
+         Ve+Kq6h6elkPRt+7/nL2vKVefoIeACQHiOge6AIug8ZeIw4LsSAq6dtDqx9k3aUgZs
+         EKkIXuGH1qiZ35qh58XKYOAMKgc7kvFLpzi9BBOvc5ZTNQ/dY3eoYzmWo3fTEjPQP4
+         rto7aUYzMbkiQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3BE7C40367; Tue, 20 Dec 2022 10:08:02 -0300 (-03)
+Date:   Tue, 20 Dec 2022 10:08:02 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Ian Rogers <irogers@google.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        James Clark <james.clark@arm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kautuk Consul <kconsul@ventanamicro.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Nikita Shubin <n.shubin@yadro.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: Re: [GIT PULL] perf tools changes for v6.2: 1st batch
+Message-ID: <Y6GzshPKxK2Oiqjg@kernel.org>
+References: <20221216143609.186415-1-acme@kernel.org>
+ <CAHk-=wj+FNSnspKwVWAatD+DHz3Uy4eHxQryrfoZz6=4D=1X1w@mail.gmail.com>
+ <Y53XHw3rlsaaUgOs@kernel.org>
+ <CAHk-=wjpO5LBx-mVD8+GBj3u7iNJHXn5y4OreKxsoRGi+4vMCQ@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wjpO5LBx-mVD8+GBj3u7iNJHXn5y4OreKxsoRGi+4vMCQ@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Vignesh
+tldr;: if you do:
 
-On Tue, 2022-12-20 at 16:49 +0530, Vignesh Raghavendra wrote:
->=20
->=20
-> On 16/12/22 8:06 pm, Sjoerd Simons wrote:
-> > From: Nitin Yadav <n-yadav@ti.com>
-> >=20
-> > UHS Class U1 sd-card are not getting detected due to incorrect
-> > OTAP/ITAP delay select values in linux. Update OTAP and ITAP
-> > delay select values for various speed modes. For sdhci0, update
-> > OTAP delay values for ddr52 & HS200 and add ITAP delay for legacy
-> > & mmc-hs. For sdhci1 & sdhci2, update OTAP & ITAP delay select
-> > recommended as in RIOT for various speed modes.
-> >=20
-> > Signed-off-by: Nitin Yadav <n-yadav@ti.com>
-> > [cherry-pick from vendor BSP]
-> > Signed-off-by: Sjoerd Simons <sjoerd@collabora.com>
-> > ---
-> >=20
-> > =C2=A0arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 46 ++++++++++++-------=
--
-> > ----
-> > =C2=A01 file changed, 24 insertions(+), 22 deletions(-)
-> >=20
-> > diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> > b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> > index 03660476364f..28c250a8d1ec 100644
-> > --- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> > +++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> > @@ -391,8 +391,10 @@ sdhci0: mmc@fa10000 {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0ti,clkbuf-sel =3D <0x7>;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0ti,otap-del-sel-legacy =3D <0x0>;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0ti,otap-del-sel-mmc-hs =3D <0x0>;
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0ti,otap-del-sel-ddr52 =3D <0x9>;
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0ti,otap-del-sel-hs200 =3D <0x6>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0ti,otap-del-sel-ddr52 =3D <0x5>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0ti,otap-del-sel-hs200 =3D <0x5>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0ti,itap-del-sel-legacy =3D <0xa>;
->=20
-> This is pretty useless without corresponding driver changes=20
-> to pick up ti,itap-del-sel-legacy as well
+$ make -C tools clean
+$ sudo dnf remove python2 python2-devel
+$ sudo dnf install python-devel
 
-Right; itap-del-sel-legacy is properly documented in the device-tree
-binding and was already previously set ofcourse so i didn't pick up it
-needed more driver changes. That said the dtb change itself should
-still be valid even if not actually applied.
+It should build cleanly, below I looked at the various places these
+feature detections are made and found places for improving messages,
+etc.
 
-> https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/commit/drivers/mm=
-c/host/sdhci_am654.c?h=3Dti-linux-5.10.y&id=3D93d22fc56007ee13e589debf0d32c=
-8b1d5fdc6d8
-> https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/commit/drivers/mm=
-c/host/sdhci_am654.c?h=3Dti-linux-5.10.y&id=3D9c878c3dc642f7f1f3ab6ca7f812c=
-d43fe7ed7d8
->=20
-> Could you list that cards affected and fixed by this change?
+Ian, that "jevent generation" gets confused when python2 _and_ python3
+is installed, please take a look at that.
 
-It's a Collabora branded UHS class 1 (SDR104) card; Matching the commit
-message indication given by Nitin. So that in particular i guess, will
-have been fixed by the change to the ti,otap-del-sel-sdr104 value for
-sdhci1.
+- Arnaldo
 
-For the two patches you highlighted above; Is TI planning to upstream
-those as well?=20
+Em Sat, Dec 17, 2022 at 01:55:25PM -0600, Linus Torvalds escreveu:
+> On Sat, Dec 17, 2022 at 8:50 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > The python3-setuptools package is needed to build the python binding, so
+> > that one can use things like:
+> 
+> So this fixes the error, but there's some other reason for it.
+> 
+> I have
+> 
+>   Package python3-setuptools-59.6.0-3.fc36.noarch is already installed.
+> 
+> and with that patch the 'perf' build now works for me, but it says:
+> 
+>     Makefile.config:898: Missing python setuptools, the python binding
+> won't be built, please install python3-setuptools or equivalent
+> 
+> and then (pre-existing)
+> 
+>     Makefile.config:921: Python interpreter too old (older than 3.6)
+> disabling jevent generation
+> 
+> but I have
+> 
+>     python3-3.10.8-3.fc36.x86_64
+> 
+> Now, for some reason I *also* have python2 installed, but that one is
+> called "python2".
+
+> [ Me trying to figure things out ]
+> 
+> Ok, so if I uninstall my old python2 install, I now get
+> 
+>   Makefile.config:880: No python interpreter was found: disables
+> Python support - please install python-devel/python-dev
+
+>   Makefile.config:915: No python interpreter disabling jevent generation
+> 
+> ok, so I didn't have 'python3-devel' installed. Installing that fixes
+> some things, but then I get
+> 
+>   Makefile.config:889: No 'Python.h' (for Python 2.x support) was
+> found: disables Python support - please install
+> python-devel/python-dev
+
+Humm, I couldn't reproduce this one, as I have:
+
+⬢[acme@toolbox perf]$ grep libpython /tmp/build/perf/FEATURE-DUMP
+feature-libpython=1
+⬢[acme@toolbox perf]$
+
+And that message only happens when that feature-libpython != 1
+
+That is set by this feature query snippet:
+
+⬢[acme@toolbox perf]$ cat tools/build/feature/test-libpython.c
+// SPDX-License-Identifier: GPL-2.0
+#include <Python.h>
+
+int main(void)
+{
+	Py_Initialize();
+
+	return 0;
+}
+#undef _GNU_SOURCE
+⬢[acme@toolbox perf]$
+
+One can see the output of building it at (if you build it without O=,
+please look at tools/build/feature/test-libpython.make.output instead):
+):
+
+⬢[acme@toolbox perf]$ cat /tmp/build/perf/feature/test-libpython.make.output
+⬢[acme@toolbox perf]$
+
+In my case, it is working, so empty make.output file and the test binary
+works and links with python3 (tools/build/feature/test-libpython.bin
+when building without O=):
+
+⬢[acme@toolbox perf]$ file /tmp/build/perf/feature/test-libpython.bin
+/tmp/build/perf/feature/test-libpython.bin: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=601e3a065cc8e045e7a46199234c0bbf80707981, for GNU/Linux 3.2.0, not stripped
+⬢[acme@toolbox perf]$ ldd /tmp/build/perf/feature/test-libpython.bin
+	linux-vdso.so.1 (0x00007ffc371fe000)
+	libpython3.10.so.1.0 => /lib64/libpython3.10.so.1.0 (0x00007fddb0200000)
+	libcrypt.so.2 => /lib64/libcrypt.so.2 (0x00007fddb05f9000)
+	libm.so.6 => /lib64/libm.so.6 (0x00007fddb0122000)
+	libc.so.6 => /lib64/libc.so.6 (0x00007fddafe00000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007fddb063f000)
+⬢[acme@toolbox perf]$
+
+The needed file is available and is part of the python3-devel file:
+
+⬢[acme@toolbox perf]$ ls -la /usr/include/python3.10/Python.h
+-rw-r--r--. 1 root root 3224 Oct 11 08:21 /usr/include/python3.10/Python.h
+⬢[acme@toolbox perf]$ rpm -qf /usr/include/python3.10/Python.h
+python3-devel-3.10.8-3.fc36.x86_64
+⬢[acme@toolbox perf]$
+
+That message needs updating, its from a long time ago:
+
+9734163b6ee1425c6 tools/perf/config/Makefile (Ingo Molnar 2013-09-30 15:18:37 +0200  888)       ifneq ($(feature-libpython), 1)
+6c5aa23704e2786eb tools/perf/config/Makefile (Ingo Molnar 2015-02-28 09:33:45 +0100  889)         $(call disable-python,No 'Python.h' (for Python 2.x support) was found: disables Python support - please install python-devel/python-dev)
+6e533cf12de06368a tools/perf/config/Makefile (Jiri Olsa   2013-03-18 00:35:32 +0100  890)       else
+
+> so apparently perf really wants *both* python2 and python3 installed.
+> Isn't that a bit excessive?
+
+I'll update that message, its one or the other, and we will work to make
+it support only python3 as python2 is deprecated.
+ 
+> Anyway, it's clearly something about the install on this laptop, but
+> the error messages and the "this package is missing" things are
+> clearly not entirely right.
+
+Right, perhaps a 'make -C tools clean' may clean some previous feature
+detection that stuck somehow? I'll do continue tinkering here to see if
+I get this in a better shape.
+ 
+> Whatever. It does build cleanly now for me, and I'll ignore that "No
+> 'Python.h' (for Python 2.x support)" thing.
+
+The only time I got this message was now that I uninstalled
+python3-devel:
+
+Makefile.config:889: No 'Python.h' (for Python 2.x support) was found: disables Python support - please install python-devel/python-dev
+
+The next one I got because I have python2 installed:
+
+⬢[acme@toolbox perf]$ rpm -qa | grep python2
+python2.7-2.7.18-22.fc36.x86_64
+
+Makefile.config:921: Python interpreter too old (older than 3.6) disabling jevent generation
+
+Removing python2 I get:
+
+Makefile.config:880: No python interpreter was found: disables Python support - please install python-devel/python-dev
+Makefile.config:915: No python interpreter disabling jevent generation
+
+So you get this message:
+
+>   Makefile.config:889: No 'Python.h' (for Python 2.x support) was
+> found: disables Python support - please install
+> python-devel/python-dev
+
+When you have python2 and python3 but no python3-devel nor
+python2-devel:
+
+⬢[acme@toolbox perf]$ rpm -q python3
+python3-3.10.8-3.fc36.x86_64
+⬢[acme@toolbox perf]$ rpm -qa | grep python2
+python2.7-2.7.18-22.fc36.x86_64
+⬢[acme@toolbox perf]$ rpm -q python2-devel
+package python2-devel is not installed
+⬢[acme@toolbox perf]$ rpm -q python3-devel
+package python3-devel is not installed
+⬢[acme@toolbox perf]$ m
+make: Entering directory '/var/home/acme/git/perf/tools/perf'
+  BUILD:   Doing 'make -j32' parallel build
+<SNIP>
+Makefile.config:889: No 'Python.h' (for Python 2.x support) was found: disables Python support - please install python-devel/python-dev
+Makefile.config:921: Python interpreter too old (older than 3.6) disabling jevent generation
+
+Auto-detecting system features:
+<SNIP>
+...                               libpython: [ OFF ]
+⬢[acme@toolbox perf]$
+
+If I then uninstall python2:
+
+⬢[acme@toolbox perf]$ sudo dnf remove python2
+
+It changes to:
+
+Makefile.config:880: No python interpreter was found: disables Python support - please install python-devel/python-dev
+Makefile.config:915: No python interpreter disabling jevent generation
+
+Which is more sensible, then if I install python-devel:
+
+⬢[acme@toolbox perf]$ sudo dnf install python-devel
+
+$ sudo dnf install python-devel
+
+I see no warnings, clean build and libpython detected:
+
+...                               libpython: [ on  ]
 
 
---=20
-Sjoerd Simons
-Collabora Ltd.
+⬢[acme@toolbox perf]$ ldd /tmp/build/perf/perf | grep python
+	libpython3.10.so.1.0 => /lib64/libpython3.10.so.1.0 (0x00007f1eea200000)
+⬢[acme@toolbox perf]$
+
+- Arnaldo
