@@ -2,102 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D8D651FC1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E99651FC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232989AbiLTLdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 06:33:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
+        id S229657AbiLTLek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 06:34:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233462AbiLTLcz (ORCPT
+        with ESMTP id S229628AbiLTLei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 06:32:55 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11F08FF9;
-        Tue, 20 Dec 2022 03:32:53 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 668B91EC01A9;
-        Tue, 20 Dec 2022 12:32:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1671535972;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=wyzmMh12AaSVV79EeqKy/Z7fsafEU9gQ+LmCE+KG+KU=;
-        b=MUUCsxZak/9lH5l9wDluLn9SmGkROwMkDwX3t4XZYsW4yGHs7sY5xxcLNaBSR/QO6CKBys
-        1m3UJXRwOfgyfkAFC9fu+/kMPByCRcw84M1Tpp2/aiDzEsEcHMmC2lYe6KO7hDMBFHmVc0
-        jWNp3LKRIz3whhea1YxwNJ96pGT5f+0=
-Date:   Tue, 20 Dec 2022 12:32:46 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Tue, 20 Dec 2022 06:34:38 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A08B04
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 03:34:36 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so16191985pjj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 03:34:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/5PyI2r45cXC4VPa82F8kchhQCGmhp0Mxv2K4MPTItM=;
+        b=L7GMgutRkj3qZcXp5mrTJlXEpwbu1F0SAXifZWMH02YWGo4hvzmU2XUWBMUyIKPJFb
+         5dml+ojCzx4kiyathxHYShcXYhTOa3u0S/BqwYKviEQrPml5/Fgy48H1wOyQ0U2GUq61
+         EsGrwuo4pQeBzGKkO4iKgeuzby26OGVIkolGy3Wl+Qdt1/BeZHkos9eNKDSG5lI/ajBG
+         ETKAidRnsolKk5Q2DxQz+AMbznaYDhMdXCIEs133YNyQWmSur5hzrrRFAI0atg89Hrz5
+         e59Bez8vgRnqVtGyF3USTpTbi06QgyvjAH4qmpuGPuyRwyUh/8+b95n0qk0JK4IMmFuD
+         yoOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/5PyI2r45cXC4VPa82F8kchhQCGmhp0Mxv2K4MPTItM=;
+        b=1SJgTQIzxbM7wC0NG/m9QZZZ8S/YsSQNIwqN4GVMF3KV/34ACjNOPRj9nRWELT7TFB
+         iTsLamuPI+xHPyP+rlhQ/J9mKDjAYwwO8o2lgIUY9CLQAYRou4txeLT5BmfN53Dts6Lb
+         Uuz4GT+e8XucdG8J9LSKvsBsL8b/ItElirVYEjK3h+k41g5p90HUfud3zGkrOD0Or4UA
+         WkpaMft7b8KoEX98dbOBidQgIoAQXj3tG3vMgKtojZxfUGUVLWke2MRVOZqLvzRkofvA
+         t5Wf5Bt2QkYcw/Ha4PRU9Tn2dEM52EJ8CrNUeJp6UuzeXtipEwv8+PFiAUHM2W301WMn
+         DbLQ==
+X-Gm-Message-State: AFqh2kowTsYPlpynX9VrNbFfOl6Xb1GVdr3roqZY4YrhgJqM788dtgg5
+        C2vYV/WmPKZIFl9EMD5fKVtdgA==
+X-Google-Smtp-Source: AMrXdXvRJRRuzf5iiZZtPcbDflEUSnOntQw6ZxrOmIwG9QK7NVw99YemyhduBzYpoEASU5mYreb0CA==
+X-Received: by 2002:a17:902:ea91:b0:189:c6fb:f933 with SMTP id x17-20020a170902ea9100b00189c6fbf933mr12287704plb.28.1671536076042;
+        Tue, 20 Dec 2022 03:34:36 -0800 (PST)
+Received: from leoy-yangtze.lan ([152.70.116.104])
+        by smtp.gmail.com with ESMTPSA id f7-20020a170902ce8700b00186b758c9fasm9178299plg.33.2022.12.20.03.34.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 03:34:35 -0800 (PST)
+Date:   Tue, 20 Dec 2022 19:34:21 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v4 05/39] x86/fpu/xstate: Introduce CET MSR and XSAVES
- supervisor states
-Message-ID: <Y6GdXvj2woHqG4qa@zn.tnic>
-References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-6-rick.p.edgecombe@intel.com>
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] libbpf: show error info about missing ".BTF"
+ section
+Message-ID: <Y6GdofET0gHQzRX6@leoy-yangtze.lan>
+References: <20221217223509.88254-1-changbin.du@gmail.com>
+ <20221217223509.88254-2-changbin.du@gmail.com>
+ <Y5/eE+ds+e+k3VJO@leoy-yangtze.lan>
+ <20221220013114.zkkxkqh7orahxbzh@mail.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221203003606.6838-6-rick.p.edgecombe@intel.com>
+In-Reply-To: <20221220013114.zkkxkqh7orahxbzh@mail.google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:35:32PM -0800, Rick Edgecombe wrote:
-> @@ -252,6 +254,14 @@ struct pkru_state {
->  	u32				pad;
->  } __packed;
->  
-> +/*
-> + * State component 11 is Control-flow Enforcement user states
-> + */
-> +struct cet_user_state {
-> +	u64 user_cet;			/* user control-flow settings */
-> +	u64 user_ssp;			/* user shadow stack pointer */
+On Tue, Dec 20, 2022 at 09:31:14AM +0800, Changbin Du wrote:
 
-Please put those side comments over the members, like struct fpstate
-does it in that same file.
+[...]
 
-Rest looks good.
+> > > Now will print below info:
+> > > libbpf: failed to find '.BTF' ELF section in /home/changbin/work/linux/vmlinux
+> > 
+> > Recently I encountered the same issue, it could be caused by:
+> > either missing to install tool pahole or missing to enable kernel
+> > configuration CONFIG_DEBUG_INFO_BTF.
+> > 
+> > Could we give explict info for reasoning failure?  Like:
+> > 
+> > "libbpf: failed to find '.BTF' ELF section in /home/changbin/work/linux/vmlinux,
+> > please install pahole and enable CONFIG_DEBUG_INFO_BTF=y for kernel building".
+> >
+> This is vmlinux special information and similar tips are removed from
+> patch V2. libbpf is common for all ELFs.
 
-Thx.
+Okay, I see.  Sorry for noise.
 
--- 
-Regards/Gruss,
-    Boris.
+> > > Error: failed to load BTF from /home/changbin/work/linux/vmlinux: No such file or directory
+> > 
+> > This log is confusing when we can find vmlinux file but without BTF
+> > section.  Consider to use a separate patch to detect vmlinux not
+> > found case and print out "No such file or directory"?
+> >
+> I think it's already there. If the file doesn't exist, open will fail.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+[...]
+
+> > > @@ -990,6 +990,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+> > >  	err = 0;
+> > >  
+> > >  	if (!btf_data) {
+> > > +		pr_warn("failed to find '%s' ELF section in %s\n", BTF_ELF_SEC, path);
+> > >  		err = -ENOENT;
+
+btf_parse_elf() returns -ENOENT when ELF file doesn't contain BTF
+section, therefore, bpftool dumps error string "No such file or
+directory".  It's confused that actually vmlinux is existed.
+
+I am wondering if we can use error -LIBBPF_ERRNO__FORMAT (or any
+better choice?) to replace -ENOENT at here, this can avoid bpftool to
+outputs "No such file or directory" in this case.
+
+Thanks,
+Leo
