@@ -2,84 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42487652386
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E43652396
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233367AbiLTPPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 10:15:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
+        id S233482AbiLTPSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 10:18:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiLTPPA (ORCPT
+        with ESMTP id S229684AbiLTPSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 10:15:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23599B4AC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 07:14:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671549265;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=bMwcEP88aaxPcKpXm4Jr7ZoA7j+pIF0TnJwOHWp6n0E=;
-        b=eQNZVP7xmLmiQ/e6P+T5VsSm/WW8/GXyV3vHld0WvAuiOWx+IlWaMJkwWDET8wvpYYleAT
-        90m8R67uHo8uhHUXGD7RvRZxXX2cdMln98TtES2fc/3291tNQqSbwiluaMne99ObUDi0kV
-        JSU4ETvtQNLsjylbqFsFpRVjh8F+tDk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-586-uA6-OmjONnKk2VNk8fsJgQ-1; Tue, 20 Dec 2022 10:14:21 -0500
-X-MC-Unique: uA6-OmjONnKk2VNk8fsJgQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2C8AE2802E3A;
-        Tue, 20 Dec 2022 15:14:21 +0000 (UTC)
-Received: from metal.redhat.com (ovpn-194-53.brq.redhat.com [10.40.194.53])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7DC2D2026D4B;
-        Tue, 20 Dec 2022 15:14:19 +0000 (UTC)
-From:   Daniel Vacek <neelx@redhat.com>
-To:     Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Daniel Vacek <neelx@redhat.com>, cgroups@vger.kernel.org,
+        Tue, 20 Dec 2022 10:18:12 -0500
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A0D0765A;
+        Tue, 20 Dec 2022 07:18:11 -0800 (PST)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id 48B6B35023;
+        Tue, 20 Dec 2022 17:18:09 +0200 (EET)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id DE98434F96;
+        Tue, 20 Dec 2022 17:18:03 +0200 (EET)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id DB4243C07CC;
+        Tue, 20 Dec 2022 17:18:00 +0200 (EET)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 2BKFHvIe064995;
+        Tue, 20 Dec 2022 17:17:58 +0200
+Date:   Tue, 20 Dec 2022 17:17:57 +0200 (EET)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Paolo Abeni <pabeni@redhat.com>
+cc:     Jon Maxwell <jmaxwell37@gmail.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] cgroup/cpuset: no need to explicitly init a global static variable
-Date:   Tue, 20 Dec 2022 16:14:15 +0100
-Message-Id: <20221220151415.856093-1-neelx@redhat.com>
+Subject: Re: [net-next] ipv6: fix routing cache overflow for raw sockets
+In-Reply-To: <9f145202ca6a59b48d4430ed26a7ab0fe4c5dfaf.camel@redhat.com>
+Message-ID: <4ed37beb-7562-f5e4-8d8-4665a653b8c2@ssi.bg>
+References: <20221218234801.579114-1-jmaxwell37@gmail.com> <9f145202ca6a59b48d4430ed26a7ab0fe4c5dfaf.camel@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cpuset_rwsem is a static variable. It's initialized at build time and so
-there's no need for explicit runtime init leaking one percpu int.
 
-Signed-off-by: Daniel Vacek <neelx@redhat.com>
----
- kernel/cgroup/cpuset.c | 2 --
- 1 file changed, 2 deletions(-)
+	Hello,
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index a29c0b13706bb..87fe410361b3d 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -3281,8 +3281,6 @@ struct cgroup_subsys cpuset_cgrp_subsys = {
- 
- int __init cpuset_init(void)
- {
--	BUG_ON(percpu_init_rwsem(&cpuset_rwsem));
--
- 	BUG_ON(!alloc_cpumask_var(&top_cpuset.cpus_allowed, GFP_KERNEL));
- 	BUG_ON(!alloc_cpumask_var(&top_cpuset.effective_cpus, GFP_KERNEL));
- 	BUG_ON(!zalloc_cpumask_var(&top_cpuset.subparts_cpus, GFP_KERNEL));
--- 
-2.38.1
+On Tue, 20 Dec 2022, Paolo Abeni wrote:
+
+> On Mon, 2022-12-19 at 10:48 +1100, Jon Maxwell wrote:
+> > Sending Ipv6 packets in a loop via a raw socket triggers an issue where a 
+> > route is cloned by ip6_rt_cache_alloc() for each packet sent. This quickly 
+> > consumes the Ipv6 max_size threshold which defaults to 4096 resulting in 
+> > these warnings:
+> > 
+> > [1]   99.187805] dst_alloc: 7728 callbacks suppressed
+> > [2] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
+> > .
+> > .
+> > [300] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
+> 
+> If I read correctly, the maximum number of dst that the raw socket can
+> use this way is limited by the number of packets it allows via the
+> sndbuf limit, right?
+> 
+> Are other FLOWI_FLAG_KNOWN_NH users affected, too? e.g. nf_dup_ipv6,
+> ipvs, seg6?
+
+	For IPVS there is no sndbuf limit. IPVS uses this flag
+when receiving packets from world (destined to some local Virtual
+IP) and then diverts/redirects the packets (without changing daddr)
+to one of its backend servers on the LAN (no RTF_GATEWAY on such routes).
+So, for each packet IPVS requests output route with FLOWI_FLAG_KNOWN_NH
+flag and then sends the packet to backend server (nexthop) using
+this route attached to the skb. Packet rate is usually high. The goal is 
+nexthop to be used from the route, not from the IP header. KNOWN_NH 
+means "nexthop is provided in route, not in daddr". As for the 
+implementation details in ipv6, I can not comment. But all users that
+set the flag wants this, to send packet where daddr can be != nexthop.
+
+> @DavidA: why do we need to create RTF_CACHE clones for KNOWN_NH flows?
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
 
