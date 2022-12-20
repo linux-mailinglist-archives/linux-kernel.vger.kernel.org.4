@@ -2,187 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C138F651C54
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 09:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F24651C52
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 09:26:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233099AbiLTI2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 03:28:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
+        id S232920AbiLTIZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 03:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiLTI2B (ORCPT
+        with ESMTP id S232561AbiLTIZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 03:28:01 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E50D165B3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 00:28:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671524880; x=1703060880;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=T158du3kGmXXokicPR6fB328LpH2wH7Nj0/DHwUoQRI=;
-  b=KIvnwobu77IleDooldn66umBovdYqOgGCMySIhPpw21iY5pIaWdfG/mA
-   BkRwm2qzNXWbZ8U39z7SbybuwTut8/REKoRqwBgjF4WW9fzkwllFGhLpg
-   UXWEe4KAZOqOr6mQpRhvs5zwz2kZYVtch83FSQHWk5UejythVg2LTNDz8
-   cxVPZpKVbwV3KNa8kurPB4tUFUycAoACa1mhwjOejwHAdUrZH533zwxU4
-   0awhQJBiqZJCOzcb5fZvMOfS8VtcFJGl19MjgWT/ZnO/Px0pkqk4hFCve
-   KWOoA3xb1hcbWaDH5JuVJki9/XnskJ9dyqxtDJP8oY55zO1pFZM/ltPSn
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="307240031"
-X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
-   d="scan'208";a="307240031"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 00:27:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="793206662"
-X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
-   d="scan'208";a="793206662"
-Received: from feng-clx.sh.intel.com ([10.238.200.228])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Dec 2022 00:27:56 -0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     John Stultz <john.stultz@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Feng Tang <feng.tang@intel.com>
-Subject: [RFC PATCH] clocksource: Suspend the watchdog temporarily when high read lantency detected
-Date:   Tue, 20 Dec 2022 16:25:12 +0800
-Message-Id: <20221220082512.186283-1-feng.tang@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 20 Dec 2022 03:25:53 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0465FD1;
+        Tue, 20 Dec 2022 00:25:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0yOdjbyBKeATeXcB92POCQhYVLCuEOP2fcG8B0Ly8LY=; b=FAlD/xR/cOWA99CT742YXA7n9e
+        DzUMqoCklUiXSnLTnKWzIGJYqM8p+psf7dRQPHYHORdwC0pZB9FOWpr1D8Ft4cp9Rm15jVUULapmd
+        0irrxkMVKe5wHuiP8K47Y991ErPLwJxiquvUo5B/Y3XNqZn+7mak2jxDavglJj9lyOTOZXXMZAEwx
+        k8f+9N0wowB/7AgBbuoC/lDxIq3FKm3OnNJlpdff/z/iPODiuN00jyaVAkRMHIdXh7weT0/+lCf8e
+        u1LKoDhLF0Ng2/xZZPuOlS1bed2dcWA0+Qq0NLrwH4sSWxj4gwZQiwb8EAolmEgZef8WzV0OfixL7
+        NRg4eK4Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p7Xwa-001avT-PX; Tue, 20 Dec 2022 08:25:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 34374300023;
+        Tue, 20 Dec 2022 09:25:36 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1C66320B0EF91; Tue, 20 Dec 2022 09:25:36 +0100 (CET)
+Date:   Tue, 20 Dec 2022 09:25:35 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     syzbot <syzbot+b8e8c01c8ade4fe6e48f@syzkaller.appspotmail.com>
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        bpf@vger.kernel.org, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Read in put_pmu_ctx
+Message-ID: <Y6Fxfw5fhHhQYaSd@hirez.programming.kicks-ass.net>
+References: <000000000000a20a2e05f029c577@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000a20a2e05f029c577@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There were bug reported on 8 sockets x86 machines that TSC was wrongly
-disabled when system is under heavy workload.
+On Mon, Dec 19, 2022 at 12:04:43AM -0800, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    13e3c7793e2f Merge tag 'for-netdev' of https://git.kernel...
+> git tree:       bpf
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=177df7e0480000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=b0e91ad4b5f69c47
+> dashboard link: https://syzkaller.appspot.com/bug?extid=b8e8c01c8ade4fe6e48f
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e87100480000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ceeb13880000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/373a99daa295/disk-13e3c779.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/7fa71ed0fe17/vmlinux-13e3c779.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/2842ad5c698b/bzImage-13e3c779.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+b8e8c01c8ade4fe6e48f@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: use-after-free in __lock_acquire+0x3ee7/0x56d0 kernel/locking/lockdep.c:4925
+> Read of size 8 at addr ffff8880237d6018 by task syz-executor287/8300
 
- [ 818.380354] clocksource: timekeeping watchdog on CPU336: hpet wd-wd read-back delay of 1203520ns
- [ 818.436160] clocksource: wd-tsc-wd read-back delay of 181880ns, clock-skew test skipped!
- [ 819.402962] clocksource: timekeeping watchdog on CPU338: hpet wd-wd read-back delay of 324000ns
- [ 819.448036] clocksource: wd-tsc-wd read-back delay of 337240ns, clock-skew test skipped!
- [ 819.880863] clocksource: timekeeping watchdog on CPU339: hpet read-back delay of 150280ns, attempt 3, marking unstable
- [ 819.936243] tsc: Marking TSC unstable due to clocksource watchdog
- [ 820.068173] TSC found unstable after boot, most likely due to broken BIOS. Use 'tsc=unstable'.
- [ 820.092382] sched_clock: Marking unstable (818769414384, 1195404998)
- [ 820.643627] clocksource: Checking clocksource tsc synchronization from CPU 267 to CPUs 0,4,25,70,126,430,557,564.
- [ 821.067990] clocksource: Switched to clocksource hpet
+OK, lemme try this.. still think having to repeat the tree it already
+has is daft..
 
-This can be reproduced when system is running memory intensive 'stream'
-test, or some stress-ng subcases like 'ioport'.
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git 13e3c7793e2f
 
-The reason is when system is under heavy load, the read latency of
-clocksource can be very high, it can be seen even with lightweight
-TSC read, and is much worse on MMIO or IO port read based external
-clocksource. Causing the watchdog check to be inaccurate.
 
-As the clocksource watchdog is a lifetime check with frequency of
-twice a second, there is no need to rush doing it when the system
-is under heavy load and the clocksource read latency is very high,
-suspend the watchdog timer for 5 minutes.
-
-Signed-off-by: Feng Tang <feng.tang@intel.com>
----
- kernel/time/clocksource.c | 45 ++++++++++++++++++++++++++++-----------
- 1 file changed, 32 insertions(+), 13 deletions(-)
-
-diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-index 9cf32ccda715..8cd74b89d577 100644
---- a/kernel/time/clocksource.c
-+++ b/kernel/time/clocksource.c
-@@ -384,6 +384,15 @@ void clocksource_verify_percpu(struct clocksource *cs)
- }
- EXPORT_SYMBOL_GPL(clocksource_verify_percpu);
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index eacc3702654d..7da593504c5b 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -12689,7 +12689,8 @@ SYSCALL_DEFINE5(perf_event_open,
+ 	return event_fd;
  
-+static inline void clocksource_reset_watchdog(void)
-+{
-+	struct clocksource *cs;
-+
-+	list_for_each_entry(cs, &watchdog_list, wd_list)
-+		cs->flags &= ~CLOCK_SOURCE_WATCHDOG;
-+}
-+
-+
- static void clocksource_watchdog(struct timer_list *unused)
- {
- 	u64 csnow, wdnow, cslast, wdlast, delta;
-@@ -391,6 +400,7 @@ static void clocksource_watchdog(struct timer_list *unused)
- 	int64_t wd_nsec, cs_nsec;
- 	struct clocksource *cs;
- 	enum wd_read_status read_ret;
-+	unsigned long extra_wait = 0;
- 	u32 md;
- 
- 	spin_lock(&watchdog_lock);
-@@ -410,13 +420,30 @@ static void clocksource_watchdog(struct timer_list *unused)
- 
- 		read_ret = cs_watchdog_read(cs, &csnow, &wdnow);
- 
--		if (read_ret != WD_READ_SUCCESS) {
--			if (read_ret == WD_READ_UNSTABLE)
--				/* Clock readout unreliable, so give it up. */
--				__clocksource_unstable(cs);
-+		if (read_ret == WD_READ_UNSTABLE) {
-+			/* Clock readout unreliable, so give it up. */
-+			__clocksource_unstable(cs);
- 			continue;
- 		}
- 
-+		/*
-+		 * When WD_READ_SKIP is returned, it means the system is likely
-+		 * under very heavy load, where the latency of reading
-+		 * watchdog/clocksource is very big, and affect the accuracy of
-+		 * watchdog check. So give system some space and suspend the
-+		 * watchdog check for 5 minutes.
-+		 */
-+		if (read_ret == WD_READ_SKIP) {
-+			/*
-+			 * As the watchdog timer will be suspended, and
-+			 * cs->last could keep unchanged for 5 minutes, reset
-+			 * the counters.
-+			 */
-+			clocksource_reset_watchdog();
-+			extra_wait = HZ * 300;
-+			break;
-+		}
-+
- 		/* Clocksource initialized ? */
- 		if (!(cs->flags & CLOCK_SOURCE_WATCHDOG) ||
- 		    atomic_read(&watchdog_reset_pending)) {
-@@ -512,7 +539,7 @@ static void clocksource_watchdog(struct timer_list *unused)
- 	 * pair clocksource_stop_watchdog() clocksource_start_watchdog().
- 	 */
- 	if (!timer_pending(&watchdog_timer)) {
--		watchdog_timer.expires += WATCHDOG_INTERVAL;
-+		watchdog_timer.expires += WATCHDOG_INTERVAL + extra_wait;
- 		add_timer_on(&watchdog_timer, next_cpu);
- 	}
- out:
-@@ -537,14 +564,6 @@ static inline void clocksource_stop_watchdog(void)
- 	watchdog_running = 0;
- }
- 
--static inline void clocksource_reset_watchdog(void)
--{
--	struct clocksource *cs;
--
--	list_for_each_entry(cs, &watchdog_list, wd_list)
--		cs->flags &= ~CLOCK_SOURCE_WATCHDOG;
--}
--
- static void clocksource_resume_watchdog(void)
- {
- 	atomic_inc(&watchdog_reset_pending);
--- 
-2.34.1
-
+ err_context:
+-	/* event->pmu_ctx freed by free_event() */
++	put_pmu_ctx(event->pmu_ctx);
++	event->pmu_ctx = NULL; /* _free_event() */
+ err_locked:
+ 	mutex_unlock(&ctx->mutex);
+ 	perf_unpin_context(ctx);
