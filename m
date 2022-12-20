@@ -2,119 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6B0652473
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7E6652477
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233916AbiLTQLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 11:11:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
+        id S233789AbiLTQO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 11:14:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233336AbiLTQLi (ORCPT
+        with ESMTP id S234104AbiLTQOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 11:11:38 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF67327;
-        Tue, 20 Dec 2022 08:11:38 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id k189so10963760oif.7;
-        Tue, 20 Dec 2022 08:11:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0nqVemB5NAW8Opb3ZlNFskEE6ackCvwbZHpBlW+CEzU=;
-        b=Lw3RYRPrt5CsG/F80OVaJpBpo1+1aPazHI9eR3wxDkd72rUvLTnr/o2KwGKah3nnJ/
-         Gxfuw0PcR/8+hHifhxJP1ebrHm0whKWJoJHPiEwPWkcAZbpYD/dxc/a+QDBhLCSZ07Fe
-         1I8c2uAyJ/wV+5O6VPUt0UU7SQ8YwPEkZx5yGQUI7tLO5NhjPnPSiniA/BbaVKIUUPvm
-         hlNHxg8bUO7poz5nMdZsKd5SjTzViACgGG6A6gnP6n/CuU/5RRdx+G4T9jjPi+hZiAn0
-         J+aT6QOGqqMc6w5RHF5To+oV7cAYKTKFm9g1Mn3Uc+c073df1IYNCQY3aIQxdbv5wtjv
-         doOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0nqVemB5NAW8Opb3ZlNFskEE6ackCvwbZHpBlW+CEzU=;
-        b=aTg1eygaSp5jPlJsFzhFFrHngxH+xHSQD1NqdOQNdRoT3+prMQEm1T/o8GcjoZl6LM
-         sF4SBkKLehj6mYvu1J8mRy2Ay97zHG6Euivg1QOonaeTsXn5c02zYQMQVrNfBhC4Aaj3
-         ZXblAxksxO+toh32Q6YQ9G5ETktYua+3WA7IJcNsU7LaugxPF5rnWHjXD381m5a9F1Pj
-         cYKgIVTbPDJsO/qkVxd1T12gZhlB31yBVUba+vggBm4yYikgl9sSUzFrIFvXmjztKCKP
-         HQ1JbcHlfniexfUoAbVrygLrcFmWrksPAjWxLgXQbF/7udp/p1gCsHICvhUdc541cxLV
-         YYqA==
-X-Gm-Message-State: AFqh2kris9UenW/bcq3Hm8x4B9wb+12DIlXKr0etbL2BMf3Pf0VCk8Bd
-        6O/UvKWIBvVbjRpCuECiTAE=
-X-Google-Smtp-Source: AMrXdXsWsGlu/AHcFFzt8quemYx+kRMP2DB1Pf5xDEub/X32Us+pjyG/4psspaaVA1dIyQ6StI/dTw==
-X-Received: by 2002:aca:5ec3:0:b0:35e:de12:d768 with SMTP id s186-20020aca5ec3000000b0035ede12d768mr8438517oib.53.1671552697389;
-        Tue, 20 Dec 2022 08:11:37 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id et1-20020a056808280100b00359a9663053sm5660017oib.4.2022.12.20.08.11.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 08:11:37 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 20 Dec 2022 08:11:35 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 00/25] 6.1.1-rc1 review
-Message-ID: <20221220161135.GA1983195@roeck-us.net>
-References: <20221219182943.395169070@linuxfoundation.org>
- <20221220150049.GE3748047@roeck-us.net>
- <Y6HQfwEnw75iajYr@kroah.com>
+        Tue, 20 Dec 2022 11:14:10 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1517C1C93A
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:13:56 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B07AD76747;
+        Tue, 20 Dec 2022 16:13:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1671552834; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ReqZqe9RHLFwjUQKIFVU9RESaXvc2/+pS7g2MXdWdQI=;
+        b=dOSDzwvr3WGLxyNJyezQu+f1JmJM4FVZG+3Ke2yI8n2nWP+Y6Pk9EXKAQLD8twLlVhCgnI
+        /Z7R1TAkR+Q3DwRXmKB4/3wY5SSY220xnjEwT2ThwEOzVMbOWNEa8Zdtgqq8V/GSS31BLl
+        rk9I02BHSdar1rDFJOAbxqEqYb3RQos=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1671552834;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ReqZqe9RHLFwjUQKIFVU9RESaXvc2/+pS7g2MXdWdQI=;
+        b=MORkHgQFW66j7A8utv1Ow4/DRTf+129DWlTttIYDdm7xoepkqtl5t51FK2VCQOmvVVXb9M
+        3xb/QPZq7w9YtcCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7DEB81390E;
+        Tue, 20 Dec 2022 16:13:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 5Xe0HULfoWMGZgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 20 Dec 2022 16:13:54 +0000
+Message-ID: <5ffe297c-f2b6-c669-768a-3f367b15a9a8@suse.de>
+Date:   Tue, 20 Dec 2022 17:13:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6HQfwEnw75iajYr@kroah.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] drm/sprd: remove redundant error logging
+Content-Language: en-US
+To:     Deepak R Varma <drv@mailo.com>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Saurabh Singh Sengar <ssengar@microsoft.com>
+References: <Y5XhPJ39ipMCcctq@qemulion> <Y6DPxKGmfRH5Bujn@qemulion>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <Y6DPxKGmfRH5Bujn@qemulion>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------mlzTiaT9zYKqbOoepSx4xXnY"
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 04:10:55PM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Dec 20, 2022 at 07:00:49AM -0800, Guenter Roeck wrote:
-> > On Mon, Dec 19, 2022 at 08:22:39PM +0100, Greg Kroah-Hartman wrote:
-> > > This is the start of the stable review cycle for the 6.1.1 release.
-> > > There are 25 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > > 
-> > > Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
-> > > Anything received after that time might be too late.
-> > > 
-> > 
-> > Build results:
-> > 	total: 155 pass: 155 fail: 0
-> > Qemu test results:
-> > 	total: 500 pass: 498 fail: 2
-> > Failed tests:
-> > 	arm:xilinx-zynq-a9:multi_v7_defconfig:usb0:mem128:net,default:zynq-zc702:rootfs
-> > 	arm:xilinx-zynq-a9:multi_v7_defconfig:usb0:mem128:zynq-zed:rootfs
-> > 
-> > The failure bisects to commit e013ba1e4e12 ("usb: ulpi: defer ulpi_register on
-> > ulpi_read_id timeout") and is inherited from mainline. Reverting the offending
-> > patch fixes the problem.
-> 
-> Odd, yet that same commit works just fine on 6.0 and 5.15 and 5.10?  I
-> hadn't had any reports of this being an issue on Linus's tree either,
-> did I miss those?
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------mlzTiaT9zYKqbOoepSx4xXnY
+Content-Type: multipart/mixed; boundary="------------NaXIDhrKjegA7vAvMQvrMCta";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Deepak R Varma <drv@mailo.com>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Orson Zhai <orsonzhai@gmail.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Chunyan Zhang <zhang.lyra@gmail.com>, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org
+Cc: Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+ Saurabh Singh Sengar <ssengar@microsoft.com>
+Message-ID: <5ffe297c-f2b6-c669-768a-3f367b15a9a8@suse.de>
+Subject: Re: [PATCH] drm/sprd: remove redundant error logging
+References: <Y5XhPJ39ipMCcctq@qemulion> <Y6DPxKGmfRH5Bujn@qemulion>
+In-Reply-To: <Y6DPxKGmfRH5Bujn@qemulion>
 
-I testbed has a bad hair day. The reports for the other branches are wrong.
-I restarted the tests and expect them to fail there as well. Sorry for that.
+--------------NaXIDhrKjegA7vAvMQvrMCta
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-You probably didn't see any reports on mainline because I didn't report
-the issue there yet. There are so many failures in mainline that it is
-a bit difficult to keep up. This would be a full-time job, and I just
-don't have that much time, sorry.
+SGkNCg0KQW0gMTkuMTIuMjIgdW0gMjE6NTUgc2NocmllYiBEZWVwYWsgUiBWYXJtYToNCj4g
+T24gU3VuLCBEZWMgMTEsIDIwMjIgYXQgMDc6MjU6MDhQTSArMDUzMCwgRGVlcGFrIFIgVmFy
+bWEgd3JvdGU6DQo+IA0KPiBIZWxsbywNCj4gTWF5IEkgcGxlYXNlIHJlcXVlc3QgYSByZXZp
+ZXcgYW5kIGZlZWRiYWNrIG9uIHRoaXMgcGF0Y2ggcHJvcG9zYWw/DQoNCkFkZGVkIHRvIGRy
+bS1taXNjLW5leHQuIFRoYW5rcyBmb3IgdGhlIHBhdGNoLg0KDQpCZXN0IHJlZ2FyZHMNClRo
+b21hcw0KDQo+IA0KPiBUaGFuayB5b3UsDQo+IC4vZHJ2DQo+IA0KPj4gQSBjYWxsIHRvIHBs
+YXRmb3JtX2dldF9pcnEoKSBhbHJlYWR5IHByaW50cyBhbiBlcnJvciBvbiBmYWlsdXJlIHdp
+dGhpbg0KPj4gaXRzIG93biBpbXBsZW1lbnRhdGlvbi4gU28gcHJpbnRpbmcgYW5vdGhlciBl
+cnJvciBiYXNlZCBvbiBpdHMgcmV0dXJuDQo+PiB2YWx1ZSBpbiB0aGUgY2FsbGVyIGlzIHJl
+ZHVuZGFudCBhbmQgc2hvdWxkIGJlIHJlbW92ZWQuIFRoZSBjbGVhbiB1cA0KPj4gYWxzbyBt
+YWtlcyBpZiBjb25kaXRpb24gYmxvY2sgYnJhY2VzIHVubmVjZXNzYXJ5LiBSZW1vdmUgdGhh
+dCBhcyB3ZWxsLg0KPj4NCj4+IElzc3VlIGlkZW50aWZpZWQgdXNpbmcgcGxhdGZvcm1fZ2V0
+X2lycS5jb2NjaSBjb2NjaWNoZWNrIHNjcmlwdC4NCj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBE
+ZWVwYWsgUiBWYXJtYSA8ZHJ2QG1haWxvLmNvbT4NCj4+IC0tLQ0KPj4gICBkcml2ZXJzL2dw
+dS9kcm0vc3ByZC9zcHJkX2RwdS5jIHwgNCArLS0tDQo+PiAgIDEgZmlsZSBjaGFuZ2VkLCAx
+IGluc2VydGlvbigrKSwgMyBkZWxldGlvbnMoLSkNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvZHJp
+dmVycy9ncHUvZHJtL3NwcmQvc3ByZF9kcHUuYyBiL2RyaXZlcnMvZ3B1L2RybS9zcHJkL3Nw
+cmRfZHB1LmMNCj4+IGluZGV4IDg4ZjQyNTk2ODBmMS4uZGIwYmNlYTFkOWY0IDEwMDY0NA0K
+Pj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL3NwcmQvc3ByZF9kcHUuYw0KPj4gKysrIGIvZHJp
+dmVycy9ncHUvZHJtL3NwcmQvc3ByZF9kcHUuYw0KPj4gQEAgLTgwMywxMCArODAzLDggQEAg
+c3RhdGljIGludCBzcHJkX2RwdV9jb250ZXh0X2luaXQoc3RydWN0IHNwcmRfZHB1ICpkcHUs
+DQo+PiAgIAl9DQo+Pg0KPj4gICAJY3R4LT5pcnEgPSBwbGF0Zm9ybV9nZXRfaXJxKHBkZXYs
+IDApOw0KPj4gLQlpZiAoY3R4LT5pcnEgPCAwKSB7DQo+PiAtCQlkZXZfZXJyKGRldiwgImZh
+aWxlZCB0byBnZXQgZHB1IGlycVxuIik7DQo+PiArCWlmIChjdHgtPmlycSA8IDApDQo+PiAg
+IAkJcmV0dXJuIGN0eC0+aXJxOw0KPj4gLQl9DQo+Pg0KPj4gICAJLyogZGlzYWJsZSBhbmQg
+Y2xlYXIgaW50ZXJydXB0cyBiZWZvcmUgcmVnaXN0ZXIgZHB1IElSUS4gKi8NCj4+ICAgCXdy
+aXRlbCgweDAwLCBjdHgtPmJhc2UgKyBSRUdfRFBVX0lOVF9FTik7DQo+PiAtLQ0KPj4gMi4z
+NC4xDQo+Pg0KPiANCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERy
+aXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0K
+TWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBB
+RyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-Guenter
+--------------NaXIDhrKjegA7vAvMQvrMCta--
+
+--------------mlzTiaT9zYKqbOoepSx4xXnY
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmOh30IFAwAAAAAACgkQlh/E3EQov+C5
+2RAAsHgJfI0eY4pk+UtWQm0zGU81TXmuagZJ3wDkF7Z1T8shIXO3PWqmY6bRhclMVSSSBSyjAciz
++ykkGfaDTiUCGpY7JeOC9cWu0KywSzi4w3veuGL4srDITsoxxsPPp9MG4iXAmf0MbY2tP+d2+kZ0
+cjRHNAYmWLf2SVcUQ9nn6+kiH+p61dgNJ45wLhE9b6pva3v+W4uSeZ4CFRU+NmcaZvf8PGeNR5AO
+GqRD2QmatVR0b82hglKR8WRDLF/cmnzFkaoXM2cLo3dmJ8VVbjV6RVc4Qubt2vLjz3oZ1bouPzyY
+Eq5i0nV2nTBl0Eu+P1qJc3MdFdJ5+ZieN5a/sXcNkDOUGKiUAQfatZ0zUG9Lj0e38Q9ZoTXYGwBH
+joDgnyUULvxFMyJPnPw33Vbgqdr/fp6yPK5jxwuyoqievalVSkFRthbUQv0wxgf2q1CnLEjUELM0
+81yAm00Of2F8ig2ZMtEkfe4w47dEP+IZL9zwCLBsBhZjj2kqhDJFJR8a7kyCVsI0sIFNwBlb7Crm
+kvAAGWSUzOGgTXIPTTl2NKNXqqgTwQnmy60vON2J6pqEJoSHANZkzirlTv6LeOeAMPyr/t/cqGWk
+Hoqj20GWByB/PpGrbMBI3TvqIBBZ76BcDYwUfA1F9jGjWV8GfCZLM7ueuInl+3yukIWzVrsAyeTV
+ZuY=
+=QUGT
+-----END PGP SIGNATURE-----
+
+--------------mlzTiaT9zYKqbOoepSx4xXnY--
