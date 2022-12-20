@@ -2,138 +2,429 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25959651E72
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1729651E7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233463AbiLTKJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37354 "EHLO
+        id S233573AbiLTKKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233194AbiLTKJs (ORCPT
+        with ESMTP id S230100AbiLTKKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:09:48 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA58B195;
-        Tue, 20 Dec 2022 02:09:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mQoXx7ooWzXAgLu3DbAl3UCLnz1vvc6S+1s5Rvnq/UI=; b=mifUTTsP8pp/47e91n+1G5oAGl
-        Sytj5m/XMsUymJR6hl/wNCZLxJsqkWKZXV+2zQ9MuvryuM7nKDKoAqAQ47XIXHOwTkmCnuAIWfLzy
-        kvCyAKW+BmJSyHpcIlgvM9T9OjzbLtAmUKFjsenj43QJM2fi5Xma65xF7N16RYVY+HIBbMM/xNj8m
-        NKKtjqtohqpqRmTU/UMIe6VUfhSD3zdYZD+48z3UOu2A8I28cV3h4WcSCrs4PMqs35w3gh9dWKGpE
-        lNnqsH4LvQIcWKg375a/JZouT1oGuIk24Gb0pp6Tk1QK1kw2Is+yw2SAYC4ayabXxOXP9bj1K0vvl
-        6nEPcutQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p7ZYt-001gUJ-QB; Tue, 20 Dec 2022 10:09:27 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 237DC300023;
-        Tue, 20 Dec 2022 11:09:17 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DF1E6200AB1CE; Tue, 20 Dec 2022 11:09:16 +0100 (CET)
-Date:   Tue, 20 Dec 2022 11:09:16 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-crypto@vger.kernel.org, corbet@lwn.net, will@kernel.org,
-        boqun.feng@gmail.com, mark.rutland@arm.com,
-        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, Herbert Xu <herbert@gondor.apana.org.au>,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org
-Subject: Re: [PATCH 3/3] crypto: x86/ghash - add comment and fix broken link
-Message-ID: <Y6GJzD9PLKj+Ocr2@hirez.programming.kicks-ass.net>
-References: <20221220054042.188537-1-ebiggers@kernel.org>
- <20221220054042.188537-4-ebiggers@kernel.org>
+        Tue, 20 Dec 2022 05:10:16 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C888732D
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:10:14 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id b3so17886368lfv.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:10:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q5nIqDU3UUGi3Rg5H51YN1/uE1UBBhaJzW8Igj65Eo0=;
+        b=geKdNRxmbxPQocBMUjegJOuN9Cq+leOpLZZ0P+J2NArfjj/TE3jDUpm9b9lVGkpWEO
+         uQ1RoqOUtIbvtuArjbnV4L+pxEfqEujcv5ynEh8aI+k+Wk9EhycH7zmat8LQuWOEQGgp
+         wUL9F5oaMehJvvxOcGQB2pzFixYys95723dwkxkrGTaKsrSMlhxn0YGs+ZkMiV+qaqur
+         FY+kgcl237aU+YuBwy/DQtEZMOQyqP2BeqPzz0jxVx/HBTk8GA4SjYdIheHWuA2KXlL3
+         QjhQgdknXlYW3PjJ4LHHP172ce7lfaeqDtRhuPoR4X2iJBYxJA4ZT4Wf4/U6Golv+kvr
+         22SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q5nIqDU3UUGi3Rg5H51YN1/uE1UBBhaJzW8Igj65Eo0=;
+        b=Z4B0QsT/91uEoOYmcWQQaXY5v012QENYbOvvo0cFU7O7/VLYsPjIITnvckETHE5HRI
+         z7WKg2XJO+3xDBzGeOXIiNjlJh5/Nvu7iAE0v8ckRRKSUZ/m4HSAdBuMNFSjgEGbPTMA
+         auNjdREiqUB+8p9zWQPVVn7qgbHScqBlz2/sBPTPq678zoDP4IYOaS7MgvOid3VzUBo2
+         3E3ZK+9QLk8HsIKEbnZlOREWRpROY5aVdfwjcFXMltKVcyryq8eluX9fbpfkYyerLrtv
+         a6QzkdR5Albxy+em+RZ6kCcZi+GbCJrE7RJFqaBUKpE5zjKloRP4+jrDpJUk147LW8iC
+         qaPw==
+X-Gm-Message-State: AFqh2ko3ghBq1S1FdlFpF94deJlN2zAz9DjHofbOUABMPSBkJR1eGquN
+        2I0aPYka1EuY87wyxpxCA3mQDQ==
+X-Google-Smtp-Source: AMrXdXvMErEP+dfsE5G/puEph/u8A7ysD6PEtYb76Tg/KI5fTVwbPfTulajPAEB3+aHtv3wp29wMIw==
+X-Received: by 2002:a05:6512:3da2:b0:4b9:f5e5:8fb4 with SMTP id k34-20020a0565123da200b004b9f5e58fb4mr784949lfv.3.1671531013165;
+        Tue, 20 Dec 2022 02:10:13 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id f2-20020a2eb5a2000000b00279f213302bsm973530ljn.57.2022.12.20.02.10.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 02:10:12 -0800 (PST)
+Message-ID: <ebb27bb2-158c-8207-7184-0d5b5ca0ce14@linaro.org>
+Date:   Tue, 20 Dec 2022 11:10:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221220054042.188537-4-ebiggers@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 6/7] riscv: dts: starfive: Add initial StarFive JH7110
+ device tree
+Content-Language: en-US
+To:     Hal Feng <hal.feng@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+References: <20221220011247.35560-1-hal.feng@starfivetech.com>
+ <20221220011247.35560-7-hal.feng@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221220011247.35560-7-hal.feng@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 09:40:42PM -0800, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
+On 20/12/2022 02:12, Hal Feng wrote:
+> From: Emil Renner Berthing <kernel@esmil.dk>
 > 
-> Add a comment that explains what ghash_setkey() is doing, as it's hard
-> to understand otherwise.  Also fix a broken hyperlink.
+> Add initial device tree for the JH7110 RISC-V SoC by StarFive
+> Technology Ltd.
 > 
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Co-developed-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+> Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
 > ---
->  arch/x86/crypto/ghash-clmulni-intel_asm.S  |  2 +-
->  arch/x86/crypto/ghash-clmulni-intel_glue.c | 27 ++++++++++++++++++----
->  2 files changed, 24 insertions(+), 5 deletions(-)
+>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 411 +++++++++++++++++++++++
+>  1 file changed, 411 insertions(+)
+>  create mode 100644 arch/riscv/boot/dts/starfive/jh7110.dtsi
 > 
-> diff --git a/arch/x86/crypto/ghash-clmulni-intel_asm.S b/arch/x86/crypto/ghash-clmulni-intel_asm.S
-> index 9dfeb4d31b92..257ed9446f3e 100644
-> --- a/arch/x86/crypto/ghash-clmulni-intel_asm.S
-> +++ b/arch/x86/crypto/ghash-clmulni-intel_asm.S
-> @@ -4,7 +4,7 @@
->   * instructions. This file contains accelerated part of ghash
->   * implementation. More information about PCLMULQDQ can be found at:
->   *
-> - * http://software.intel.com/en-us/articles/carry-less-multiplication-and-its-usage-for-computing-the-gcm-mode/
-> + * https://www.intel.com/content/dam/develop/external/us/en/documents/clmul-wp-rev-2-02-2014-04-20.pdf
+> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> new file mode 100644
+> index 000000000000..64d260ea1f29
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> @@ -0,0 +1,411 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR MIT
+> +/*
+> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+> + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
+> + */
+> +
+> +/dts-v1/;
+> +#include <dt-bindings/clock/starfive,jh7110-crg.h>
+> +#include <dt-bindings/reset/starfive,jh7110-crg.h>
+> +
+> +/ {
+> +	compatible = "starfive,jh7110";
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +
+> +	cpus {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		S76_0: cpu@0 {
+> +			compatible = "sifive,u74-mc", "riscv";
+> +			reg = <0>;
+> +			d-cache-block-size = <64>;
+> +			d-cache-sets = <64>;
+> +			d-cache-size = <8192>;
+> +			d-tlb-sets = <1>;
+> +			d-tlb-size = <40>;
+> +			device_type = "cpu";
+> +			i-cache-block-size = <64>;
+> +			i-cache-sets = <64>;
+> +			i-cache-size = <16384>;
+> +			i-tlb-sets = <1>;
+> +			i-tlb-size = <40>;
+> +			mmu-type = "riscv,sv39";
+> +			next-level-cache = <&ccache>;
+> +			riscv,isa = "rv64imac";
+> +			tlb-split;
+> +			status = "disabled";
+> +
+> +			cpu0_intc: interrupt-controller {
+> +				compatible = "riscv,cpu-intc";
+> +				interrupt-controller;
+> +				#interrupt-cells = <1>;
+> +			};
+> +		};
+> +
+> +		U74_1: cpu@1 {
+> +			compatible = "sifive,u74-mc", "riscv";
+> +			reg = <1>;
+> +			d-cache-block-size = <64>;
+> +			d-cache-sets = <64>;
+> +			d-cache-size = <32768>;
+> +			d-tlb-sets = <1>;
+> +			d-tlb-size = <40>;
+> +			device_type = "cpu";
+> +			i-cache-block-size = <64>;
+> +			i-cache-sets = <64>;
+> +			i-cache-size = <32768>;
+> +			i-tlb-sets = <1>;
+> +			i-tlb-size = <40>;
+> +			mmu-type = "riscv,sv39";
+> +			next-level-cache = <&ccache>;
+> +			riscv,isa = "rv64imafdc";
+> +			tlb-split;
+> +
+> +			cpu1_intc: interrupt-controller {
+> +				compatible = "riscv,cpu-intc";
+> +				interrupt-controller;
+> +				#interrupt-cells = <1>;
+> +			};
+> +		};
+> +
+> +		U74_2: cpu@2 {
+> +			compatible = "sifive,u74-mc", "riscv";
+> +			reg = <2>;
+> +			d-cache-block-size = <64>;
+> +			d-cache-sets = <64>;
+> +			d-cache-size = <32768>;
+> +			d-tlb-sets = <1>;
+> +			d-tlb-size = <40>;
+> +			device_type = "cpu";
+> +			i-cache-block-size = <64>;
+> +			i-cache-sets = <64>;
+> +			i-cache-size = <32768>;
+> +			i-tlb-sets = <1>;
+> +			i-tlb-size = <40>;
+> +			mmu-type = "riscv,sv39";
+> +			next-level-cache = <&ccache>;
+> +			riscv,isa = "rv64imafdc";
+> +			tlb-split;
+> +
+> +			cpu2_intc: interrupt-controller {
+> +				compatible = "riscv,cpu-intc";
+> +				interrupt-controller;
+> +				#interrupt-cells = <1>;
+> +			};
+> +		};
+> +
+> +		U74_3: cpu@3 {
+> +			compatible = "sifive,u74-mc", "riscv";
+> +			reg = <3>;
+> +			d-cache-block-size = <64>;
+> +			d-cache-sets = <64>;
+> +			d-cache-size = <32768>;
+> +			d-tlb-sets = <1>;
+> +			d-tlb-size = <40>;
+> +			device_type = "cpu";
+> +			i-cache-block-size = <64>;
+> +			i-cache-sets = <64>;
+> +			i-cache-size = <32768>;
+> +			i-tlb-sets = <1>;
+> +			i-tlb-size = <40>;
+> +			mmu-type = "riscv,sv39";
+> +			next-level-cache = <&ccache>;
+> +			riscv,isa = "rv64imafdc";
+> +			tlb-split;
+> +
+> +			cpu3_intc: interrupt-controller {
+> +				compatible = "riscv,cpu-intc";
+> +				interrupt-controller;
+> +				#interrupt-cells = <1>;
+> +			};
+> +		};
+> +
+> +		U74_4: cpu@4 {
+> +			compatible = "sifive,u74-mc", "riscv";
+> +			reg = <4>;
+> +			d-cache-block-size = <64>;
+> +			d-cache-sets = <64>;
+> +			d-cache-size = <32768>;
+> +			d-tlb-sets = <1>;
+> +			d-tlb-size = <40>;
+> +			device_type = "cpu";
+> +			i-cache-block-size = <64>;
+> +			i-cache-sets = <64>;
+> +			i-cache-size = <32768>;
+> +			i-tlb-sets = <1>;
+> +			i-tlb-size = <40>;
+> +			mmu-type = "riscv,sv39";
+> +			next-level-cache = <&ccache>;
+> +			riscv,isa = "rv64imafdc";
+> +			tlb-split;
+> +
+> +			cpu4_intc: interrupt-controller {
+> +				compatible = "riscv,cpu-intc";
+> +				interrupt-controller;
+> +				#interrupt-cells = <1>;
+> +			};
+> +		};
+> +
+> +		cpu-map {
+> +			cluster0 {
+> +				core0 {
+> +					cpu = <&S76_0>;
+> +				};
+> +
+> +				core1 {
+> +					cpu = <&U74_1>;
+> +				};
+> +
+> +				core2 {
+> +					cpu = <&U74_2>;
+> +				};
+> +
+> +				core3 {
+> +					cpu = <&U74_3>;
+> +				};
+> +
+> +				core4 {
+> +					cpu = <&U74_4>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	osc: osc {
 
-Since these things have a habbit if changing, we tend to prefer to host
-a copy on kernel.org somewhere (used to be bugzilla, but perhaps there's
-a better places these days).
+Node names should be generic, so why this is "osc" and other oscillators
+are not "osc"?
 
->   *
->   * Copyright (c) 2009 Intel Corp.
->   *   Author: Huang Ying <ying.huang@intel.com>
-> diff --git a/arch/x86/crypto/ghash-clmulni-intel_glue.c b/arch/x86/crypto/ghash-clmulni-intel_glue.c
-> index 9453b094bb3b..700ecaee9a08 100644
-> --- a/arch/x86/crypto/ghash-clmulni-intel_glue.c
-> +++ b/arch/x86/crypto/ghash-clmulni-intel_glue.c
-> @@ -60,16 +60,35 @@ static int ghash_setkey(struct crypto_shash *tfm,
->  	if (keylen != GHASH_BLOCK_SIZE)
->  		return -EINVAL;
->  
-> -	/* perform multiplication by 'x' in GF(2^128) */
-> +	/*
-> +	 * GHASH maps bits to polynomial coefficients backwards, which makes it
-> +	 * hard to implement.  But it can be shown that the GHASH multiplication
-> +	 *
-> +	 *	D * K (mod x^128 + x^7 + x^2 + x + 1)
-> +	 *
-> +	 * (where D is a data block and K is the key) is equivalent to:
-> +	 *
-> +	 *	bitreflect(D) * bitreflect(K) * x^(-127)
-> +	 *		(mod x^128 + x^127 + x^126 + x^121 + 1)
-> +	 *
-> +	 * So, the code below precomputes:
-> +	 *
-> +	 *	bitreflect(K) * x^(-127) (mod x^128 + x^127 + x^126 + x^121 + 1)
-> +	 *
-> +	 * ... but in Montgomery form (so that Montgomery multiplication can be
-> +	 * used), i.e. with an extra x^128 factor, which means actually:
-> +	 *
-> +	 *	bitreflect(K) * x (mod x^128 + x^127 + x^126 + x^121 + 1)
-> +	 *
-> +	 * The within-a-byte part of bitreflect() cancels out GHASH's built-in
-> +	 * reflection, and thus bitreflect() is actually a byteswap.
-> +	 */
 
-Whee, thanks, that was indeed entirely non-obvious.
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	rtc_osc: rtc_osc {
+
+No underscores in node names. Generic node names (so each of them
+starting or ending with clock).
+
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	gmac0_rmii_refin: gmac0_rmii_refin {
+
+Same problem... and actually you have way too many fixed clocks which do
+nothing. It looks like you avoid to define proper clock controller.
+What's the point for all these clocks? These are no-op.
+
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	gmac0_rgmii_rxin: gmac0_rgmii_rxin {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	gmac1_rmii_refin: gmac1_rmii_refin {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	gmac1_rgmii_rxin: gmac1_rgmii_rxin {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	i2stx_bclk_ext: i2stx_bclk_ext {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	i2stx_lrck_ext: i2stx_lrck_ext {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	i2srx_bclk_ext: i2srx_bclk_ext {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	i2srx_lrck_ext: i2srx_lrck_ext {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	tdm_ext: tdm_ext {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	mclk_ext: mclk_ext {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	soc {
+> +		compatible = "simple-bus";
+> +		interrupt-parent = <&plic>;
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		clint: clint@2000000 {
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +			compatible = "starfive,jh7110-clint", "sifive,clint0";
+> +			reg = <0x0 0x2000000 0x0 0x10000>;
+> +			interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>,
+> +					      <&cpu1_intc 3>, <&cpu1_intc 7>,
+> +					      <&cpu2_intc 3>, <&cpu2_intc 7>,
+> +					      <&cpu3_intc 3>, <&cpu3_intc 7>,
+> +					      <&cpu4_intc 3>, <&cpu4_intc 7>;
+> +		};
+> +
+> +		plic: plic@c000000 {
+
+Node names should be generic, so interrupt-controller
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +			compatible = "starfive,jh7110-plic", "sifive,plic-1.0.0";
+> +			reg = <0x0 0xc000000 0x0 0x4000000>;
+> +			interrupts-extended = <&cpu0_intc 11>,
+> +					      <&cpu1_intc 11>, <&cpu1_intc 9>,
+> +					      <&cpu2_intc 11>, <&cpu2_intc 9>,
+> +					      <&cpu3_intc 11>, <&cpu3_intc 9>,
+> +					      <&cpu4_intc 11>, <&cpu4_intc 9>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <1>;
+> +			#address-cells = <0>;
+> +			riscv,ndev = <136>;
+> +		};
+> +
+> +		ccache: cache-controller@2010000 {
+> +			compatible = "starfive,jh7110-ccache", "sifive,ccache0", "cache";
+> +			reg = <0x0 0x2010000 0x0 0x4000>;
+> +			interrupts = <1>, <3>, <4>, <2>;
+> +			cache-block-size = <64>;
+> +			cache-level = <2>;
+> +			cache-sets = <2048>;
+> +			cache-size = <2097152>;
+> +			cache-unified;
+> +		};
+> +
+> +		uart0: serial@10000000 {
+> +			compatible = "snps,dw-apb-uart";
+> +			reg = <0x0 0x10000000 0x0 0x10000>;
+> +			clocks = <&syscrg JH7110_SYSCLK_UART0_CORE>,
+> +				 <&syscrg JH7110_SYSCLK_UART0_APB>;
+> +			clock-names = "baudclk", "apb_pclk";
+> +			resets = <&syscrg JH7110_SYSRST_UART0_APB>;
+> +			interrupts = <32>;
+> +			reg-io-width = <4>;
+> +			reg-shift = <2>;
+> +			status = "disabled";
+> +		};
+> +
+
+Best regards,
+Krzysztof
+
