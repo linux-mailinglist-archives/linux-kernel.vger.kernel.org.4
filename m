@@ -2,88 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53CC6652193
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 14:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85248652197
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 14:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbiLTNc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 08:32:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52910 "EHLO
+        id S233536AbiLTNdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 08:33:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiLTNcy (ORCPT
+        with ESMTP id S229522AbiLTNdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 08:32:54 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C983DB859
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 05:32:53 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8477C2F4;
-        Tue, 20 Dec 2022 05:33:34 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC1233F703;
-        Tue, 20 Dec 2022 05:32:52 -0800 (PST)
-Date:   Tue, 20 Dec 2022 13:32:50 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Martin Kaiser <martin@kaiser.cx>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        lv.ruyi@zte.com.cn, cgel.zte@gmail.com
-Subject: Re: [PATCH 1/2] ARM: highbank: add missing of_node_put call
-Message-ID: <20221220133250.3b38a17d@donnerap.cambridge.arm.com>
-In-Reply-To: <20221218142647.394881-2-martin@kaiser.cx>
-References: <20221218142647.394881-1-martin@kaiser.cx>
-        <20221218142647.394881-2-martin@kaiser.cx>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        Tue, 20 Dec 2022 08:33:37 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613BF18B3E;
+        Tue, 20 Dec 2022 05:33:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=PBKohcfzjSqRdddPpAv4Rwpq7IkcN9J0lMnnbLlGi0M=; b=Z9cx2J1jhbD8p1DOS0Grff44Qn
+        5pp0l9vnMbZknZIlhVTaanZNAJrZ7hCXkOyvCGELpS/Pddu7B5x6tOAS9riIEDi2hDtZzwdRJM4pJ
+        gEzkqbDNXRr6j86EJFL6H8M5eVvVWpqemh0+HsOYXB8NP0WWF3NHGTrDjlOd63wlPkMo=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p7ckI-0005gG-Lp; Tue, 20 Dec 2022 14:33:26 +0100
+Date:   Tue, 20 Dec 2022 14:33:26 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Xu Liang <lxu@maxlinear.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v1 4/4] net: phy: mxl-gpy: disable interrupts on
+ GPY215 by default
+Message-ID: <Y6G5phSGSPk+7Dgj@lunn.ch>
+References: <20221202151204.3318592-1-michael@walle.cc>
+ <20221202151204.3318592-5-michael@walle.cc>
+ <Y4pHCQrDbXXmOT+A@lunn.ch>
+ <69e0468cf192455fd2dc7fc93194a8ff@walle.cc>
+ <Y4uzYVSRiE9feD01@lunn.ch>
+ <34dc81b01930e594ca4773ddb8c24160@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <34dc81b01930e594ca4773ddb8c24160@walle.cc>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 18 Dec 2022 15:26:46 +0100
-Martin Kaiser <martin@kaiser.cx> wrote:
-
-Hi Martin,
-
-> A node that is returned by of_find_compatible_node has its refcount
-> incremented. We have to call of_node_put when the node is no longer
-> needed.
+> > Yes, it is a valid point to do this check, but on its own i don't
+> > think it is sufficient.
 > 
-> Add a missing of_node_put call in function highbank_init.
-
-Thanks for the patch.
-So Ruyi sent the exact same one earlier this year already:
-https://lore.kernel.org/linux-arm-kernel/20220408094817.2494756-1-lv.ruyi@zte.com.cn/
-
-I asked Arnd and Olof to take it back then (see my reply), but this somehow
-got lost.
-
-I will try to push on both Ruyi's and your second patch again - but I
-guess only after the holidays.
-
-Cheers,
-Andre
-
-> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
-> ---
->  arch/arm/mach-highbank/highbank.c | 1 +
->  1 file changed, 1 insertion(+)
+> Care to elaborate a bit? E.g. what is the difference to the case
+> the phy would have an interrupt described but no .config_intr()
+> op.
 > 
-> diff --git a/arch/arm/mach-highbank/highbank.c b/arch/arm/mach-highbank/highbank.c
-> index 5d4f977ac7d2..97ccb8c1b3cd 100644
-> --- a/arch/arm/mach-highbank/highbank.c
-> +++ b/arch/arm/mach-highbank/highbank.c
-> @@ -141,6 +141,7 @@ static void __init highbank_init(void)
->  	/* Map system registers */
->  	np = of_find_compatible_node(NULL, NULL, "calxeda,hb-sregs");
->  	sregs_base = of_iomap(np, 0);
-> +	of_node_put(np);
->  	WARN_ON(!sregs_base);
->  
->  	pm_power_off = highbank_power_off;
+> > > > I think a better place for this test is in gpy_config_intr(), return
+> > > > -EOPNOTSUPP. phy_enable_interrupts() failing should then cause
+> > > > phy_request_interrupt() to use polling.
+> > > 
+> > > Which will then print a warning, which might be misleading.
+> > > Or we disable the warning if -EOPNOTSUPP is returned?
+> > 
+> > Disabling the warning is the right thing to do.
+> 
+> There is more to this. .config_intr() is also used in
+> phy_init_hw() and phy_drv_supports_irq(). The latter would
+> still return true in our case. I'm not sure that is correct.
+> 
+> After trying your suggestion, I'm still in favor of somehow
+> tell the phy core to force polling mode during probe() of the
+> driver.
 
+The problem is that the MAC can set the interrupt number after the PHY
+probe has been called. e.g.
+
+https://elixir.bootlin.com/linux/latest/source/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c#L524
+
+The interrupt needs to be set by the time the PHY is connected to the
+MAC, which is often in the MAC open method, much later than the PHY
+probe.
+
+     Andrew
