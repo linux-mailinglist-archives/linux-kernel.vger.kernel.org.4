@@ -2,187 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6E3652603
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 19:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 783B3652606
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 19:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233726AbiLTSIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 13:08:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51600 "EHLO
+        id S233842AbiLTSJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 13:09:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiLTSIj (ORCPT
+        with ESMTP id S229514AbiLTSJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 13:08:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D3B1030;
-        Tue, 20 Dec 2022 10:08:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5B316B81730;
-        Tue, 20 Dec 2022 18:08:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC06C433EF;
-        Tue, 20 Dec 2022 18:08:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671559714;
-        bh=lB2f0VZzRDnpVDFsJZNCkOFilXouYW8XaLO5xKfkXA4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Xw//83I4T5G2s6zbNzvr18lw1tHHR40FeD4UhkSkUEA2LVGVg7/LbJ9cdQNHj0sbA
-         9nr5OU9rLt9Kwol0x4qxknbedboIxIl5bbY17dChjDZEMsywibP6trM6j/EcyF8Pxv
-         pwyfdOqNyhiYjSbDRrHV8XQ38rEdgxSgcq8nVLRCPG0lT8OCDwZdz4L6+GnWrejWPe
-         QxYWtJe3kgf9QowiSdShhwoUYP9gn16Y1rJAWx/TlfZZT2WKssv9vTaf89vkWThnhl
-         SADRmdYcg8Dv+s8AmQ+1ifAarXSca55D3Hke/OSOERFCvHyaSWXE2wsv5onet2rtns
-         sZ2CTvEx4ZAEQ==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        Ben Levinsky <ben.levinsky@amd.com>,
-        Tanmay Shah <tanmay.shah@amd.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Shang XiaoJing <shangxiaojing@huawei.com>,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>,
-        Maria Yu <quic_aiquny@quicinc.com>,
-        Yuan Can <yuancan@huawei.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>
-Subject: [GIT PULL] remoteproc updates for v6.2
-Date:   Tue, 20 Dec 2022 12:08:32 -0600
-Message-Id: <20221220180832.93801-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.37.1
+        Tue, 20 Dec 2022 13:09:47 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2062.outbound.protection.outlook.com [40.107.94.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE89B380;
+        Tue, 20 Dec 2022 10:09:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oav0J4Pvp033xvYrBad0icWkbnjZV2YRg9wbb3CgxejciOw6g5a5WOZypEMBNCPZKTr2TBYHS9D7Rn8ahjLYC7vhno35D35anFQH2z90taBU0Sqz1aQaOeesocpKVcFjB1Hx6M8nKi+BqlwtkEdfJJ/Mg4F+w8/0qOv+32M4lpNyWCpSP4pEw5q9qkCBemk1AhlKPsb1xqD04kDKeDzfYgH4TlbVm7OmZzjkkytL4GCzaPt5eJvP3C2a0hLi8WeV3LkmCaUVFlhJQeLpdulZ6IQ6alOBBuv2OArhjaGYPkfkDANuu7GaPVr2ljHkOmivFZVdRzDy9F1DnVv9hQkXQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KFO6W+Xx76V5181aOb0d1ktYMSzn6teFfixcm9IwRnY=;
+ b=LDFlgcU6JzpOFaHkSpUTaNwk3/9tQVIBKFr+eFKCAEvMyOfGBrwbrl/QR7fNmO8PI1+exkskTG4oh0t5euUPM7iq9GJMlW+H5CkWn4c5U6qfBg4fUCXw5prHgrZt9v3jmXv1t+3/ID2m+HrD+fDfBPeAUFzCDSw4Q8VMwoDSrezA9w3uWR7ajP8I3AlaCnLpZdthlj9jQG4qLYVieGcW3LGUqD4fxPWYpGFAtk1FCxcE173STYVDdqNwGmDQYiEYP0VX5wqcsHLkdQzfS5qI1YQFNiHXsYIlq5OUB0H0hzMJZrL3Nc8q0STU2WSXXXJ9egtXBSbrpeTFa+EkcshoYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KFO6W+Xx76V5181aOb0d1ktYMSzn6teFfixcm9IwRnY=;
+ b=jCKsXxnsGYBut7hMmBITPqzYZEy4FsqVMVbpcE4XIyrdxI5VizgK+1WxNnXBfbA2f0IGDe/lvadecYeFi8oho0IhfWl+wIxUGW7enxxPDPdMYUF+a2At7J4CmkrBbO43ACP2FIuBH0u9AjsVfPGw6PI4vwGjqKwvLwrROGscHm+CVIAL7/vBqjqzx10+UqCtU5HheuTWYhPLm4eZlL3knoHDbthGyU/SWz+biT1zK3rPNToCJ5vxySxVGectCps+3kjpGEJQDXl2uA6aqUOw0NVcR3gOfoiIOSu4lD5P4swiqgO8uEnXY9YAWvqwia1ZVU4beqJ+OH8N8MjEQ+oi0A==
+Received: from BN0PR03CA0037.namprd03.prod.outlook.com (2603:10b6:408:e7::12)
+ by SJ2PR12MB7917.namprd12.prod.outlook.com (2603:10b6:a03:4cc::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Tue, 20 Dec
+ 2022 18:09:43 +0000
+Received: from BN8NAM11FT022.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e7:cafe::bf) by BN0PR03CA0037.outlook.office365.com
+ (2603:10b6:408:e7::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.21 via Frontend
+ Transport; Tue, 20 Dec 2022 18:09:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT022.mail.protection.outlook.com (10.13.176.112) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5944.6 via Frontend Transport; Tue, 20 Dec 2022 18:09:42 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 20 Dec
+ 2022 10:09:25 -0800
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 20 Dec
+ 2022 10:09:25 -0800
+Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Tue, 20 Dec 2022 10:09:24 -0800
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 6.1 00/25] 6.1.1-rc1 review
+In-Reply-To: <20221219182943.395169070@linuxfoundation.org>
+References: <20221219182943.395169070@linuxfoundation.org>
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <1eb93980-15f6-423e-9f50-9c05bb25dfd8@rnnvmail202.nvidia.com>
+Date:   Tue, 20 Dec 2022 10:09:24 -0800
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT022:EE_|SJ2PR12MB7917:EE_
+X-MS-Office365-Filtering-Correlation-Id: 31531a03-997c-40fc-771f-08dae2b55e85
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Qr36L5vJooJG5Iv/6xXbwXOba9VTzIDoaBwK7Ng3r7WHYQxHjPuuQWL5BewC/DSSncGAcZ+KDrgrBtGzotxNmNwtHPaMtNzEH47ZhdkmEJpwtx45k2i4fmxbdMw8X3bGX6SSqgeqOHiiLZZWksKKIhqrnl8YqhtSU6hYPNPlfkBqWG9KWpdQWmU6I54yY7FD6dul0t4z0ePhLBj0A3hhU4SdvRalZdHGnjeqH8YglHB1A/4ZprB6yLuY/aVtdu5fx97eS05t8fWiW1c8g55UeGWm0t3xkDazaKM/1B22/GCCsUrvLJSMb2r5BcD24G9rU+PCRAlY8k+XJ9/RVs/RQKCxC0wtoex7QeEtourS62pXT7iSUwsl2ACoj39Y40ut7xqvPrEaDpo0k9404i+L5oUvRsMzNEZD9HbhENMcZoZIJy66kNxwo/vFEJW7qxaK00+ACmJHCgi5iJE7Z6c2ed+IAZ64ieH60RAJaA1WWOiteTw8Gn4tCW/UAK/8WhTQAXv41+/HO+MC/1thp+Q4dBRE2rLZUEm+M7fGPBLF/xA7j2keVfB5iAfylgid6MK9HyxinTjLJ0syTr3OoPTbYLlZ8eNlFHn8p73K3JZEnIeFHnDhIBeDwF1p2uozDU1+OSW6437M4nopgWNpNF87Lm34YH2/ti6hFfNPJOLx0jmUf7kku6viot1xLAsVS8rkHhJmytfAFBjdpFonjcZC74f0OojNQk1t5wote6L58vLA0s6cwI+2/68mW/CmOaiuGVjYE90m0r84TmQSG/JjWm7nWenSTFck0hONHJmcSo8=
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(376002)(39860400002)(136003)(451199015)(40470700004)(46966006)(36840700001)(426003)(8936002)(47076005)(40480700001)(31686004)(5660300002)(186003)(41300700001)(26005)(336012)(2906002)(316002)(70206006)(40460700003)(36860700001)(82740400003)(478600001)(966005)(54906003)(6916009)(7416002)(86362001)(31696002)(356005)(82310400005)(70586007)(4326008)(7636003)(8676002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2022 18:09:42.6922
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31531a03-997c-40fc-771f-08dae2b55e85
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT022.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7917
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon, 19 Dec 2022 20:22:39 +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.1 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.1-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-There's a trivial merge conflict between this pull and the SPI tree.
-Courtesy of Stephen Rothwell, here's the expected resolution:
+All tests passing for Tegra ...
 
-> diff --cc include/linux/firmware/xlnx-zynqmp.h
-> index fac37680ffe7,cf92e739fa3b..000000000000
-> --- a/include/linux/firmware/xlnx-zynqmp.h
-> +++ b/include/linux/firmware/xlnx-zynqmp.h
-> @@@ -135,7 -138,10 +138,11 @@@ enum pm_ret_status
->   };
->
->   enum pm_ioctl_id {
-> +       IOCTL_GET_RPU_OPER_MODE = 0,
-> +       IOCTL_SET_RPU_OPER_MODE = 1,
-> +       IOCTL_RPU_BOOT_ADDR_CONFIG = 2,
-> +       IOCTL_TCM_COMB_CONFIG = 3,
->  +      IOCTL_SET_TAPDELAY_BYPASS = 4,
->         IOCTL_SD_DLL_RESET = 6,
->         IOCTL_SET_SD_TAPDELAY = 7,
->         IOCTL_SET_PLL_FRAC_MODE = 8,
+Test results for stable-v6.1:
+    11 builds:	11 pass, 0 fail
+    28 boots:	28 pass, 0 fail
+    130 tests:	130 pass, 0 fail
 
-Regards,
-Bjorn
+Linux version:	6.1.1-rc1-g4478ff938eb5
+Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
+                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
+                tegra20-ventana, tegra210-p2371-2180,
+                tegra210-p3450-0000, tegra30-cardhu-a04
 
-The following changes since commit 247f34f7b80357943234f93f247a1ae6b6c3a740:
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
 
-  Linux 6.1-rc2 (2022-10-23 15:27:33 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rproc-v6.2
-
-for you to fetch changes up to 11c7f9e3131ad14b27a957496088fa488b153a48:
-
-  remoteproc: core: Do pm_relax when in RPROC_OFFLINE state (2022-12-07 11:20:55 -0700)
-
-----------------------------------------------------------------
-remoteproc updates for v6.2
-
-rproc-virtio device names are now auto generated, to avoid conflicts
-between remoteproc instances.
-
-The imx_rproc driver is extended with support for communicating with and
-attaching to a running M4 on i.MX8QXP, as well as support for
-attaching to the M4 after self-recovering from a crash. Support is
-added for i.MX8QM and mailbox channels are reconnected during the
-recovery process, in order to avoid data corruption.
-
-The Xilinx Zynqmp firmware interface is extended and support for the
-Xilinx R5 RPU is introduced.
-
-Various resources leaks, primarily in error paths, throughout the
-Qualcomm drivers are corrected.
-
-Lastly a fix to ensure that pm_relax is invoked even if the remoteproc
-instance is stopped between a crash is being reported and the recovery
-handler is scheduled.
-
-----------------------------------------------------------------
-Ben Levinsky (3):
-      firmware: xilinx: Add ZynqMP firmware ioctl enums for RPU configuration.
-      firmware: xilinx: Add shutdown/wakeup APIs
-      firmware: xilinx: Add RPU configuration APIs
-
-Gaosheng Cui (1):
-      remoteproc: sysmon: fix memory leak in qcom_add_sysmon_subdev()
-
-Jeff Johnson (1):
-      remoteproc: sysmon: Make QMI message rules const
-
-Luca Weiss (2):
-      remoteproc: qcom_q6v5_pas: disable wakeup on probe fail or remove
-      remoteproc: qcom_q6v5_pas: detach power domains on remove
-
-Maria Yu (1):
-      remoteproc: core: Do pm_relax when in RPROC_OFFLINE state
-
-Peng Fan (8):
-      dt-bindings: remoteproc: imx_rproc: Support i.MX8QXP
-      dt-bindings: remoteproc: imx_rproc: Support i.MX8QM
-      remoteproc: imx_rproc: Support attaching to i.MX8QXP M4
-      remoteproc: imx_rproc: Support kicking Mcore from Linux for i.MX8QXP
-      remoteproc: imx_rproc: Support i.MX8QM
-      remoteproc: imx_rproc: Request mbox channel later
-      remoteproc: imx_rproc: Enable attach recovery for i.MX8QM/QXP
-      remoteproc: imx_rproc: Correct i.MX93 DRAM mapping
-
-Shang XiaoJing (2):
-      remoteproc: qcom: q6v5: Fix potential null-ptr-deref in q6v5_wcss_init_mmio()
-      remoteproc: qcom: q6v5: Fix missing clk_disable_unprepare() in q6v5_wcss_qcs404_power_on()
-
-Shengjiu Wang (2):
-      remoteproc: core: Auto select rproc-virtio device id
-      remoteproc: imx_dsp_rproc: Add mutex protection for workqueue
-
-Tanmay Shah (3):
-      dt-bindings: remoteproc: Add Xilinx RPU subsystem bindings
-      arm64: dts: xilinx: zynqmp: Add RPU subsystem device node
-      drivers: remoteproc: Add Xilinx r5 remoteproc driver
-
-Yuan Can (1):
-      remoteproc: qcom_q6v5_pas: Fix missing of_node_put() in adsp_alloc_memory_region()
-
-ye xingchen (1):
-      remoteproc: core: Use device_match_of_node()
-
- .../bindings/remoteproc/fsl,imx-rproc.yaml         |   16 +
- .../bindings/remoteproc/xlnx,zynqmp-r5fss.yaml     |  135 +++
- arch/arm64/boot/dts/xilinx/zynqmp.dtsi             |   33 +
- drivers/firmware/xilinx/zynqmp.c                   |   97 ++
- drivers/remoteproc/Kconfig                         |   13 +
- drivers/remoteproc/Makefile                        |    1 +
- drivers/remoteproc/imx_dsp_rproc.c                 |   12 +-
- drivers/remoteproc/imx_rproc.c                     |  298 +++++-
- drivers/remoteproc/qcom_q6v5_pas.c                 |    4 +
- drivers/remoteproc/qcom_q6v5_wcss.c                |    6 +-
- drivers/remoteproc/qcom_sysmon.c                   |   13 +-
- drivers/remoteproc/remoteproc_core.c               |   19 +-
- drivers/remoteproc/xlnx_r5_remoteproc.c            | 1067 ++++++++++++++++++++
- include/dt-bindings/power/xlnx-zynqmp-power.h      |    6 +
- include/linux/firmware/xlnx-zynqmp.h               |   60 ++
- 15 files changed, 1760 insertions(+), 20 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/remoteproc/xlnx,zynqmp-r5fss.yaml
- create mode 100644 drivers/remoteproc/xlnx_r5_remoteproc.c
+Jon
