@@ -2,154 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D8C651EE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13EDD651EE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231859AbiLTKeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:34:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
+        id S230179AbiLTKgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:36:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbiLTKeL (ORCPT
+        with ESMTP id S229999AbiLTKge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:34:11 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7A71583A
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:34:10 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id fy4so12026278pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:34:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5HcjsPgT2Huo/8axIHpoMgW6KyD2HQnudHSnjh27AGw=;
-        b=i/NxBUj8QPvNHEvcdQ65/NQfhsk2PYAX6KipLmhtxb4obV9TRqYcPYrsi59isg5nSA
-         591cjrO13Y+ySJP+WwpUdxxIQmRTqq61oGuln9dW+4OgagHOOnEsrFlkSl4RpaDbdew3
-         1S2+Z+GNqYO0dPku13wzUjnjw+wNEIQyzRwWWX7D7K5d7ZbiqmNeTqPsEQWPZHyo7YSu
-         MgEwLkfNgDIavpk5UJGrhKI0UycKSd9I3uDH4g5sZ37t5L8QYpC28XD2Be3FcOBgOSeL
-         mSh3+DvWhkgdBHD7WxPS3sUolfEAMdbz0Vd4b/97n+ujt1RtovANBabcmpsK726TsroQ
-         qhKw==
+        Tue, 20 Dec 2022 05:36:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D27BE3D
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:35:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671532547;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0xIE948N+OVyD9RxTPjKQ11q6Fjch6dgm41Al2E4iz0=;
+        b=hErDz/vIIXmxX6pXfMRZRf6yr1oVt7xtf1J8SvGy+bXyrsyf91yufTNNcXqLXsQGeMuPRE
+        I+q5JjJTkXBt8eeSyzjx+5dIs9ccDJqRRehP2e8TjW42Keb+rcqaiOL0NQx9P+c/6zOehH
+        p0lKpdU0V8EmVBUnVPG+BnuQMqsZ5JQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-652-QSEUWu0gO1ysYUMcpYrDZQ-1; Tue, 20 Dec 2022 05:35:45 -0500
+X-MC-Unique: QSEUWu0gO1ysYUMcpYrDZQ-1
+Received: by mail-wm1-f69.google.com with SMTP id i132-20020a1c3b8a000000b003d0f49bc21bso7862466wma.6
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:35:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5HcjsPgT2Huo/8axIHpoMgW6KyD2HQnudHSnjh27AGw=;
-        b=d0D2X+1usHznATcOE8mQQsdnEw646noP5yg40sXHYchFP3auO5l3w3KZ73WJ9uvz3D
-         AkYrM4+3YljdgRuVrlJ6JeAk3YnfLm5zvED5AS3PnTSesh1qe/VZW/LLr/OPvoC5GdrS
-         IzGP4RE7eI0Izofz2gvoLdYozywW3Addz9X0bLLMzK99uRQDKaJJD8dOeMKNxqMZeYFI
-         QzWQV5FddUxJ3Td3kZeI2UHV3SarmngAG7iAsI2+N1DGXBIWxSb+Q65qB9V2ekYeiGvR
-         7mO58C4g9pWUSxkB8k9aQuAOtAXcEPgT8wz2QKOsRx0JAVUeuGL6+A30F4gkCOY2G/M0
-         CK7g==
-X-Gm-Message-State: AFqh2kqzAsh4u3EA0/Z1W1zV5mNe/WnS1JLSaeQwdHnGYD4lsxyoSOuK
-        vL4Nv713Y/vSVLt1B0LvsNpC
-X-Google-Smtp-Source: AMrXdXuwjT5auxfIEPMBUp6EOd7lGMoElCiqh37+vvQd/Lbzlf1Dx8j0QZjDWIwNDJLWHVEmOyMVmA==
-X-Received: by 2002:a17:902:a9c9:b0:191:217f:b2ea with SMTP id b9-20020a170902a9c900b00191217fb2eamr6450308plr.40.1671532449512;
-        Tue, 20 Dec 2022 02:34:09 -0800 (PST)
-Received: from thinkpad ([117.217.181.222])
-        by smtp.gmail.com with ESMTPSA id v20-20020a170902ca9400b001708c4ebbaesm8934788pld.309.2022.12.20.02.34.05
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0xIE948N+OVyD9RxTPjKQ11q6Fjch6dgm41Al2E4iz0=;
+        b=5ED0wIXnZYbCCtjmJ/Q7C59OPaUnQIYSbC9fotgqUtB5BdoNDN/GSJRDkchfvS2aAN
+         zt3QMYhXeqfan1QAWhNwELOjl3FZqRGVcG10vpMTBkIPEaMzF9IpEvGr8I6b5L4BIw7O
+         6boL3LxGRb663VR7rzAHvi07il7Wu1zdn2zhJmlaISThgByPMmoxNeJTjFBY9nfVdpM+
+         cRUuCuTV2gFxSbIQhVHSaKEQZwh8aJQL8T7YMLu91LWbszCnZaVuk7yfJQj+0SYyNW6s
+         4Ps7F1dFdmqc88keln5iENO7Me+ylDGTBnve7ZAYAXTV8iTIBppWnWAGvWYbJT+Ifomv
+         gmZg==
+X-Gm-Message-State: AFqh2kp1oGRg7ureJukXnV81z2KSPIljg5Ki5DAgdbwxpIdh9Dyr+zGf
+        SCqDuiZzB3dVgLGZFuiTybkVtDZnOOQZr/5fI7jUnPP2OAG33Rrm9D6AKdFg9Leui+Xe2YLdd0K
+        lPZDaAFagqybFqFokPsU24pd+
+X-Received: by 2002:a05:600c:3b08:b0:3d3:4a47:52e9 with SMTP id m8-20020a05600c3b0800b003d34a4752e9mr8998383wms.15.1671532544034;
+        Tue, 20 Dec 2022 02:35:44 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXswZvLV6vC3rUs9MMkLlnmeQY6d+pmClDori0caDrXbfFSl7htQYg5vZB4m7wOx5HQXfo1nIg==
+X-Received: by 2002:a05:600c:3b08:b0:3d3:4a47:52e9 with SMTP id m8-20020a05600c3b0800b003d34a4752e9mr8998362wms.15.1671532543832;
+        Tue, 20 Dec 2022 02:35:43 -0800 (PST)
+Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
+        by smtp.gmail.com with ESMTPSA id 1-20020a05600c228100b003d23928b654sm21773342wmf.11.2022.12.20.02.35.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 02:34:08 -0800 (PST)
-Date:   Tue, 20 Dec 2022 16:04:00 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bhelgaas@google.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm8450: Use GIC-ITS for PCIe0 and
- PCIe1
-Message-ID: <20221220103400.GB38609@thinkpad>
-References: <20221219191427.480085-1-manivannan.sadhasivam@linaro.org>
- <20221219191427.480085-4-manivannan.sadhasivam@linaro.org>
- <6a59addb-b1a0-8536-c909-25c4c4447e09@linaro.org>
+        Tue, 20 Dec 2022 02:35:43 -0800 (PST)
+Date:   Tue, 20 Dec 2022 11:35:38 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>
+Subject: Re: [RFC PATCH v5 4/4] test/vsock: vsock_perf utility
+Message-ID: <20221220103538.msrgcwsolmzoc2r4@sgarzare-redhat>
+References: <e04f749e-f1a7-9a1d-8213-c633ffcc0a69@sberdevices.ru>
+ <d92184cd-e79b-80ae-4f89-92dfd43d1e92@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6a59addb-b1a0-8536-c909-25c4c4447e09@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <d92184cd-e79b-80ae-4f89-92dfd43d1e92@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 11:46:03PM +0200, Dmitry Baryshkov wrote:
-> On 19/12/2022 21:14, Manivannan Sadhasivam wrote:
-> > Both PCIe0 and PCIe1 controllers are capable of receiving MSIs from
-> > endpoint devices using GIC-ITS MSI controller. Add support for it.
-> > 
-> > Currently, BDF (0:0.0) and BDF (1:0.0) are enabled and with the
-> > msi-map-mask of 0xff00, all the 32 devices under these two busses can
-> > share the same Device ID.
-> > 
-> > The GIC-ITS MSI implementation provides an advantage over internal MSI
-> > implementation using Locality-specific Peripheral Interrupts (LPI) that
-> > would allow MSIs to be targeted for each CPU core.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >   arch/arm64/boot/dts/qcom/sm8450.dtsi | 12 ++++++------
-> >   1 file changed, 6 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> > index 570475040d95..276ceba4c247 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> > @@ -1733,9 +1733,9 @@ pcie0: pci@1c00000 {
-> >   			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
-> >   				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
-> > -			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
-> > -			interrupt-names = "msi";
-> > -			#interrupt-cells = <1>;
-> > +			msi-map = <0x0 &gic_its 0x5980 0x1>,
-> > +				  <0x100 &gic_its 0x5981 0x1>;
-> 
-> Does ITS support handling more than one MSI interrupt per device? Otherwise
-> it might be better to switch to multi-MSI scheme using SPI interrupts.
-> 
+On Tue, Dec 20, 2022 at 07:23:46AM +0000, Arseniy Krasnov wrote:
+>This adds utility to check vsock rx/tx performance.
+>
+>Usage as sender:
+>./vsock_perf --sender <cid> --port <port> --bytes <bytes to send>
+>Usage as receiver:
+>./vsock_perf --port <port> --rcvlowat <SO_RCVLOWAT>
+>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> tools/testing/vsock/Makefile     |   3 +-
+> tools/testing/vsock/README       |  34 +++
+> tools/testing/vsock/vsock_perf.c | 441 +++++++++++++++++++++++++++++++
+> 3 files changed, 477 insertions(+), 1 deletion(-)
+> create mode 100644 tools/testing/vsock/vsock_perf.c
+>
+>diff --git a/tools/testing/vsock/Makefile b/tools/testing/vsock/Makefile
+>index f8293c6910c9..43a254f0e14d 100644
+>--- a/tools/testing/vsock/Makefile
+>+++ b/tools/testing/vsock/Makefile
+>@@ -1,8 +1,9 @@
+> # SPDX-License-Identifier: GPL-2.0-only
+>-all: test
+>+all: test vsock_perf
+> test: vsock_test vsock_diag_test
+> vsock_test: vsock_test.o timeout.o control.o util.o
+> vsock_diag_test: vsock_diag_test.o timeout.o control.o util.o
+>+vsock_perf: vsock_perf.o
+>
+> CFLAGS += -g -O2 -Werror -Wall -I. -I../../include -I../../../usr/include -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -D_GNU_SOURCE
+> .PHONY: all test clean
+>diff --git a/tools/testing/vsock/README b/tools/testing/vsock/README
+>index 4d5045e7d2c3..e6f6735bba05 100644
+>--- a/tools/testing/vsock/README
+>+++ b/tools/testing/vsock/README
+>@@ -35,3 +35,37 @@ Invoke test binaries in both directions as follows:
+>                        --control-port=$GUEST_IP \
+>                        --control-port=1234 \
+>                        --peer-cid=3
+>+
+>+vsock_perf utility
+>+-------------------
+>+'vsock_perf' is a simple tool to measure vsock performance. It works in
+>+sender/receiver modes: sender connect to peer at the specified port and
+>+starts data transmission to the receiver. After data processing is done,
+>+it prints several metrics(see below).
+>+
+>+Usage:
+>+# run as sender
+>+# connect to CID 2, port 1234, send 1G of data, tx buf size is 1M
+>+./vsock_perf --sender 2 --port 1234 --bytes 1G --buf-size 1M
+>+
+>+Output:
+>+tx performance: A Gb/s
+>+
+>+Output explanation:
+>+A is calculated as "number of bytes to send" / "time in tx loop"
+>+
+>+# run as receiver
+>+# listen port 1234, rx buf size is 1M, socket buf size is 1G, SO_RCVLOWAT is 64K
+>+./vsock_perf --port 1234 --buf-size 1M --vsk-size 1G --rcvlowat 64K
+>+
+>+Output:
+>+rx performance: A Gb/s
+>+total in 'read()': B sec
+>+POLLIN wakeups: C
+>+average in 'read()': D ns
+>+
+>+Output explanation:
+>+A is calculated as "number of received bytes" / "time in rx loop".
+>+B is time, spent in 'read()' system call(excluding 'poll()')
+>+C is number of 'poll()' wake ups with POLLIN bit set.
+>+D is B / C, e.g. average amount of time, spent in single 'read()'.
 
-Yes, it does support multiple MSIs from endpoints. I've verified it using the
-MHI Endpoint device.
+Since now we prints Gbits/s I think we should update the previous lines.
+But the rest looks good to me. So with the updated README:
 
-> > +			msi-map-mask = <0xff00>;
-> >   			interrupt-map-mask = <0 0 0 0x7>;
-> >   			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
-> >   					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
-> > @@ -1842,9 +1842,9 @@ pcie1: pci@1c08000 {
-> >   			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
-> >   				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
-> > -			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
-> > -			interrupt-names = "msi";
-> > -			#interrupt-cells = <1>;
-> > +			msi-map = <0x0 &gic_its 0x5a01 0x1>,
-> > +				  <0x100 &gic_its 0x5a00 0x1>;
-> 
-> Are you sure that the order is correct here?
-> 
-
-Ideally, BDF (1:0.0) should be assinged the Device ID of 0x5a01. But based on my
-experiments, it doesn't work. But if the Device ID gets swapped, it works.
-
-Maybe I should add a comment here.
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
 Thanks,
-Mani
+Stefano
 
-> > +			msi-map-mask = <0xff00>;
-> >   			interrupt-map-mask = <0 0 0 0x7>;
-> >   			interrupt-map = <0 0 0 1 &intc 0 0 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
-> >   					<0 0 0 2 &intc 0 0 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
-> 
-> -- 
-> With best wishes
-> Dmitry
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
