@@ -2,64 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64EAE65197A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 04:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9E7651957
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 04:12:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232939AbiLTDQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 22:16:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48064 "EHLO
+        id S229866AbiLTDM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 22:12:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232859AbiLTDQV (ORCPT
+        with ESMTP id S229515AbiLTDMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 22:16:21 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C735513FB2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 19:16:19 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-43611d26a97so128208047b3.7
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 19:16:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=O38uW0vTxSxK8tvIH6taDalP5oh7NUvMww4e0LxgzMs=;
-        b=W6TYVAsdFdjy72l6R3z+9WaVEobO2ZdQYioXrCcpwEqRjSKSt1AN0ptWIKS4zt5UTM
-         +8mcMy8SFmM5FmMwjATQiwm9RpEpPJ80th954wJk9iM7vqs7eoKgyI6qtONNh0l+q1Bl
-         r2LMs3ZV2pNyKaXcVEPuIalAlGb9dviug5nP1bLklMamurRwyKlocGkgTyOUPgvrE7sD
-         nCwKQN4V2hOTwzesir6wWD5TN15/RHq0FM3lMwV5/3ZX9cGW6wPbKdEM5YIsuZw0pW4E
-         bs/VLssn/VJVLOT/lxDYaSBBd63tQn2tCXyoCWnzZRtDiAWSnmo8RzNAkVpuNUnz6lRr
-         HYZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O38uW0vTxSxK8tvIH6taDalP5oh7NUvMww4e0LxgzMs=;
-        b=lXLvrYznQ3aLpO0aLdwTPquB8dcestliKiRvXfh9USJ7dm36wgrtf1xcdWUJBSswwR
-         rj5+9xAW66ep5aYDPYf0xNnNudPKRf83vYTur/ThPjp5o5+fTKwQcr4gJBpMuGN5L468
-         3Batv2zFl2TKR1wYHlwJDcF7KvbExiREi+zR4bIJEaiWYlNtcPV9pYcG8kPA04i0uR4k
-         3ONHml7QAkkI4+JD1OREHzEQi6saA8S2Ojita+i/ejG3kMlog+8pUsyIDv99gnILAYq1
-         8SHn9uOBRnSJCeiUvg6FtdwjEEWVgcZ/4dVUM47gobV2PyU67kUakT7hgR9Yu9CK2AW0
-         KAIw==
-X-Gm-Message-State: ANoB5pmuYmPrh5jwpmgpX6nIMpNca0ZGhe0mRpRqT4gq0FX0rw6o4iwq
-        4yhSergskR4TH/Gvau51Ly3glfA4Aw==
-X-Google-Smtp-Source: AA0mqf7+SG9QQr4ChEZ4sKnDsdIMCafLEqYtXNPlq5Zd9ywRMyIS5oHpyA9F1UOhkEf7zH4WKHITKlccvw==
-X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a25:9ac7:0:b0:708:c3d2:a2bd with SMTP id
- t7-20020a259ac7000000b00708c3d2a2bdmr12152865ybo.138.1671506179087; Mon, 19
- Dec 2022 19:16:19 -0800 (PST)
-Date:   Tue, 20 Dec 2022 03:10:23 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221220031023.197178-1-rmoar@google.com>
-Subject: [PATCH v1] lib/hashtable_test.c: add test for the hashtable structure
-From:   Rae Moar <rmoar@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
-Cc:     skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Rae Moar <rmoar@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        Mon, 19 Dec 2022 22:12:25 -0500
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2040.outbound.protection.outlook.com [40.107.15.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECF72DC0;
+        Mon, 19 Dec 2022 19:12:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jMbfURUq7bl4DXOfzoujT0ao1SIngcTGFx12W6/ej2JcO34I0nRExFlh8Oau8q3SFDtOU2kNjz3efH1yHVt9NPub/w4wO3JMQIlaN6fzOFCletB/SiVGnwgMZAxK+JXF6CNLyCTsDOmTFhVNtkasU17E9GLoJQlMr3dmcIOL9A/85vY2/zqIytuQ/KvM2z+5WlhTigYik9r9H4pvH7qBCr7oslkX7OLdMnjq8OLfLhd/RGO5xG/ErI3LTdmzjVM2P0i7kfIMAqorptuIipRBX3UQGHkrun5IQ4FQZWJi37r+Skr9cN/YZId4eO32niNWnOoKrCX6Cr+Vi3JHovfnMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=onDvRx36hzQTbrWH/7EsNnQuFRKaCZVGcXYH3ZOTRNE=;
+ b=PH9OUbkh4mX8ZfTWsWhgxQitHWWGwTXDVAuWc5wYX9Y1FxehpXc1tSA5mzZLHNv8/klF1OFK51k7Pax5vp4FFFFbe29cNP8/3yx6MI1LFAdInDc1PduNghZB7J6mQ1NojZHW5oT5+tProoPnLszSnhPjXQa2d5kiLjuaEIJBbMtlZGiv0u05V/Q4+mv0rs2O0gAXTteuyXGh9ja2nykH1SDPVurbwS30kpdsMQa/pDB+LlWsx8soBchJSdi/Gqc4QLMX6zErkhUrTlDLHm4Ak4eD4BSElqzQUMcJxOhnYQMjwdQAaMqJTkMT5jWbLnd95I41c+XILIc2tc1WPre+kQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=onDvRx36hzQTbrWH/7EsNnQuFRKaCZVGcXYH3ZOTRNE=;
+ b=QwWz3d9e0XmxVbCXO2BKqc3XG+1VtYTElIGp0K8mXGJe6ZCXkbaMfOrOLk4XjQwV1q5xrVzQGWjYKt2QKxRgvmvESzwY4WydpHzwo1jmJmjcMes7NhLok41AyZGXc6ZX0qwSnKINSAFsGqhRi/cF6V77NiYh4uVLOkF6/mQbCmc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by AS1PR04MB9405.eurprd04.prod.outlook.com (2603:10a6:20b:4db::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Tue, 20 Dec
+ 2022 03:12:22 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::3a82:42b3:f1ed:5c3d]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::3a82:42b3:f1ed:5c3d%7]) with mapi id 15.20.5924.016; Tue, 20 Dec 2022
+ 03:12:16 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     mchehab@kernel.org, mirela.rabulea@oss.nxp.com,
+        hverkuil-cisco@xs4all.nl
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 00/10] media: imx-jpeg: Add support for 12 bit extended
+Date:   Tue, 20 Dec 2022 11:11:30 +0800
+Message-Id: <cover.1671071730.git.ming.qian@nxp.com>
+X-Mailer: git-send-email 2.38.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR04CA0014.apcprd04.prod.outlook.com
+ (2603:1096:4:197::18) To AM6PR04MB6341.eurprd04.prod.outlook.com
+ (2603:10a6:20b:d8::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|AS1PR04MB9405:EE_
+X-MS-Office365-Filtering-Correlation-Id: 137a8540-4fb3-4161-a8a0-08dae237ff1f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yZlNrVIMiEBiXhHGP0LHAwx3Taig0cQNmAowA1jJq90bZ8cNxokahOZIng5dfz1oq8JgL9ydroSyKAXl0pt0AYAN2+Zb/Gpo8O06j6PMUapGqofyDtTT2Dlg3nWXnueVLuwgOz2JhL9dgHfhAx4ghK+kovUfOJ8WIZDWjq2vFmQLcczBUBj0rbealrxs3B6CRP5K5H5GXFWrOigUBXbydG/iyaPsLTRgEbSFb6okYOKCiyUupslKXDptv1ua+/ebPTG2UHB8kybwCX1E45FaD84P8EPSj72vZKQe3XiM7Sy2SGxRkmNvFi1DmE82dBoCyA5iStwWDqlxldlwI4Zu8ngU9ZkH9Ox72Jbzpyw+9xor4uodUJLlMdQAnAvRJ4xYtECwUSlrzOj3Z1smDbZNIxKbby51L8uRR3dvyTenWogK32mW2fMB219I+JQmjw3b8q+7NXI6DXa3KDRGLxS/Bfk5QQJQz3pWg+7y2j5TM5GlNZzE8mnMbQaTaqKr60LXkOKkTLZ+knYEFOyMr6vmRhi2PVgbRmQmidjHHz5L9x1wH6ya/RO1n8K69VES4xxNSv/Bvue11AjAZlGUzTIhDBE7o7yc0F7Y8WStc39x3s3Y8dCvj/uumkdABt83zmf6xgyLEOSoWr7Ex8DRy+A+qFRu+088AlCLlnnYwZyDoryFnQIWmoSShfHjJdpjQ2ujJ0qwxDArvB1C/+fQuQnkhQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(396003)(366004)(39860400002)(346002)(451199015)(36756003)(86362001)(478600001)(316002)(6486002)(66476007)(8676002)(52116002)(7416002)(2906002)(6666004)(5660300002)(44832011)(66946007)(41300700001)(8936002)(66556008)(4326008)(6506007)(38100700002)(26005)(38350700002)(6512007)(186003)(83380400001)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/GvBuRMnFE7mtWANEHykkc1oc2i5x3MZp/AWpoBoNB9xp0f538e6Kj4oMAWC?=
+ =?us-ascii?Q?eyRaDcyxNA/KRnqMnBdrtifGgkDkll+lFKRB1v9Icc2LftSswE/4zVbUtVNy?=
+ =?us-ascii?Q?DK7C4PeHI07eLnJ+nJre0cksIB/obWI4XvM2Svd/jEwIVtqO/b/adNbE0YFZ?=
+ =?us-ascii?Q?mxJhnucAj1Tm2LerEQdRnEG7ENUoNy977cBJlrcOmfYX/U/UVEgz8T/pYtg7?=
+ =?us-ascii?Q?Y2MgjP5ZLRT2ZfvmrGQfeWOwanBReZ061uKLQwmfJ7WOD/N6sItNgvsXxc5X?=
+ =?us-ascii?Q?2JiVYsbA6fbm5dFEzaT85wHsM5AgZq3Ps4Mq1Nm96tlLe5DGg1pp/mh2HFkz?=
+ =?us-ascii?Q?LMz5Oh6H3NxL0mrT33toSxT+DfXdOO0v8FhfXIa9ag+eKEW9eVulWO0eloLt?=
+ =?us-ascii?Q?rBjyXvIe1N1BZGrMkfIsRJ3J6IDs7455s3INZtnwYrhhz5xQ7YQRsOzw2nHs?=
+ =?us-ascii?Q?XZhealqWW2rYJRQktHHtWxl+NJXGVAXE4wAsoZ0SOa2Dk2IZJ7VitLBImR+v?=
+ =?us-ascii?Q?vw/qnyXMDVEsRVfYQi35kDx1PJyIYHf+5n9cLkmRSAG8/puL5DIrFItxP523?=
+ =?us-ascii?Q?c9XkPqyrlU5vEAqaMqureJRLfE15/20HkDidWqwWu3lZwYzJRmH/OLrhSJ2H?=
+ =?us-ascii?Q?TxJO8jEuvO+cY+C3M/ZULs2AmBu7ydbiOlcgi3UI0usYj8Qy/545YLC5bTNv?=
+ =?us-ascii?Q?kQDZKO9kV9bAi1tfPj/cGwe5J40jELW9Ca3F0iyuoD2wbtHQER5+GIxyr82C?=
+ =?us-ascii?Q?f0WogQiV4hJnw7tDaK6Y499MqxH+7YM7V1q//7Sgbeeq45ExsBnUS8AGCKlA?=
+ =?us-ascii?Q?am10p5ADmWt3NU+vAHkh60NKGNZL3t8nvPXQMn23uaKVIWUzi+mNoOayrF73?=
+ =?us-ascii?Q?jCeiVIU+vi/7+iaXdYeMhteb8HrqfAYRkuo8p+2i85lLuV3eFDBoZke+LVjb?=
+ =?us-ascii?Q?Q+Z/bPJYtEWeshY+IYUGXbBqktIaBNC1Z0hxjHgYu9Xjr9f4T13H7p9LFEme?=
+ =?us-ascii?Q?zEpAWnE4A5UjNr61XZCizcGeFv2m1dISKfzyNto0yFTd6+rQrmJPc3/N1Ddl?=
+ =?us-ascii?Q?T047tyDekq978DAH49JcEIiXxUMWqCeGxEGw+gfb46SlHvmUoypkOnCMD6gn?=
+ =?us-ascii?Q?HykHkEW9rM1ZV66dUIwfnURXEinJuAcdsHYLX2C9eaerKO+Pcl9auGiOKwia?=
+ =?us-ascii?Q?3tWT5h9T1DmDwPRLAMSABvXmQxvpcTUizpPqXp/o0ExNgl75GGmc1VR7N5Fm?=
+ =?us-ascii?Q?mymKxXdyeh5dYSkNgllPmDJ84wDb3VvUh8vn/Gd3898Ft4mhgJeth6ZosCEA?=
+ =?us-ascii?Q?6um6SLlUkac6WL8EgUNoo68x10DE8o658xeYs1azBkCWzfjN6Vijy/fqJIoG?=
+ =?us-ascii?Q?s+1m8iRgnia1blPpATO3aR7flZJQm4zUv1qQkCFJ+K8HOMb6tXI+CkpU9hA0?=
+ =?us-ascii?Q?f0Gmssmu+6gTDMzK216t6PPldk7m1Menaijqw411zwIh3caqIAaI0iw6Yucm?=
+ =?us-ascii?Q?XndInzpmEvyR6Wnomx5qvMeNqGCONB8g2ylWPALNrB73UmunRh/ggXljAacx?=
+ =?us-ascii?Q?zTWIrTs90rIfGn2L2z9r/ZDvMqd6dfZbJFcvJYpz?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 137a8540-4fb3-4161-a8a0-08dae237ff1f
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2022 03:12:15.9408
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: r5KI4vVUpng7hdCA0BypxJ0WkB0jVAgu1NWFJ4DwSdjFaMNJ/KuJismgPnjE95uDKthahxmfCbpHQZOK644cIw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9405
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,369 +114,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a KUnit test for the kernel hashtable implementation in
-include/linux/hashtable.h.
+the imx8 jpeg codec support ISO/IEC 10918-1 Standard Baseline and
+Extended Sequential DCT modes.
+it can support 8-bit and 12-bit per color samples.
+Currently we only enable the 8-bit jpeg,
+and we can enable the 12-bit extended jpeg
+with the new defined 12 bit pixel format.
 
-Note that this version does not yet test each of the rcu
-alternative versions of functions.
 
-Signed-off-by: Rae Moar <rmoar@google.com>
----
+Ming Qian (10):
+  media: Add P012 and P012M video format
+  media: Add Y012 video format
+  media: Add Y212 video format
+  media: Add Y312 video format
+  media: Add B312 video format
+  media: Add B412 video format
+  media: imx-jpeg: Refine the function mxc_jpeg_find_format
+  media: imx-jpeg: Clear slot next desc ptr if config error
+  media: imx-jpeg: Decoder add support for 12bit jpeg
+  media: imx-jpeg: Encoder add support for 12bit jpeg
 
-Note: The check patch script is outputting open brace errors on lines
-154, 186, 231 of lib/hashtable_test.c but I believe the format of the
-braces on those lines is consistent with the Linux Kernel style guide.
-Will continue to look at these errors.
+ .../media/v4l/pixfmt-packed-yuv.rst           |  70 ++++
+ .../userspace-api/media/v4l/pixfmt-rgb.rst    |  44 +++
+ .../media/v4l/pixfmt-yuv-luma.rst             |  11 +
+ .../media/v4l/pixfmt-yuv-planar.rst           |  94 +++++
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c |  19 +-
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h |   5 +-
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 326 ++++++++++++++++--
+ drivers/media/v4l2-core/v4l2-common.c         |   6 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |   7 +
+ include/uapi/linux/videodev2.h                |   9 +
+ 10 files changed, 565 insertions(+), 26 deletions(-)
 
- lib/Kconfig.debug    |  13 ++
- lib/Makefile         |   1 +
- lib/hashtable_test.c | 299 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 313 insertions(+)
- create mode 100644 lib/hashtable_test.c
-
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 3fc7abffc7aa..3cf3b6f8cff4 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2458,6 +2458,19 @@ config LIST_KUNIT_TEST
- 
- 	  If unsure, say N.
- 
-+config HASHTABLE_KUNIT_TEST
-+	tristate "KUnit Test for Kernel Hashtable structures" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This builds the hashtable KUnit test suite.
-+	  It tests the API and basic functionality of the functions
-+	  and associated macros defined in include/linux/hashtable.h.
-+	  For more information on KUnit and unit tests in general please refer
-+	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+	  If unsure, say N.
-+
- config LINEAR_RANGES_TEST
- 	tristate "KUnit test for linear_ranges"
- 	depends on KUNIT
-diff --git a/lib/Makefile b/lib/Makefile
-index 161d6a724ff7..9036d3aeee0a 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -370,6 +370,7 @@ obj-$(CONFIG_PLDMFW) += pldmfw/
- CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
- obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
- obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
-+obj-$(CONFIG_HASHTABLE_KUNIT_TEST) += hashtable_test.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
- obj-$(CONFIG_BITS_TEST) += test_bits.o
- obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
-diff --git a/lib/hashtable_test.c b/lib/hashtable_test.c
-new file mode 100644
-index 000000000000..7907df66a8e7
---- /dev/null
-+++ b/lib/hashtable_test.c
-@@ -0,0 +1,299 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit test for the Kernel Hashtable structures.
-+ *
-+ * Copyright (C) 2022, Google LLC.
-+ * Author: Rae Moar <rmoar@google.com>
-+ */
-+#include <kunit/test.h>
-+
-+#include <linux/hashtable.h>
-+
-+struct hashtable_test_entry {
-+	int key;
-+	int data;
-+	struct hlist_node node;
-+	int visited;
-+};
-+
-+static void hashtable_test_hash_init(struct kunit *test)
-+{
-+	/* Test the different ways of initialising a hashtable. */
-+	DEFINE_HASHTABLE(hash1, 3);
-+	DECLARE_HASHTABLE(hash2, 3);
-+
-+	hash_init(hash1);
-+	hash_init(hash2);
-+
-+	KUNIT_EXPECT_TRUE(test, hash_empty(hash1));
-+	KUNIT_EXPECT_TRUE(test, hash_empty(hash2));
-+}
-+
-+static void hashtable_test_hash_empty(struct kunit *test)
-+{
-+	struct hashtable_test_entry a;
-+	DEFINE_HASHTABLE(hash, 3);
-+
-+	hash_init(hash);
-+	KUNIT_EXPECT_TRUE(test, hash_empty(hash));
-+
-+	a.key = 1;
-+	a.data = 13;
-+	hash_add(hash, &a.node, a.key);
-+
-+	/* Hashtable should no longer be empty. */
-+	KUNIT_EXPECT_FALSE(test, hash_empty(hash));
-+}
-+
-+static void hashtable_test_hash_hashed(struct kunit *test)
-+{
-+	struct hashtable_test_entry a, b;
-+	DEFINE_HASHTABLE(hash, 3);
-+
-+	hash_init(hash);
-+	a.key = 1;
-+	a.data = 13;
-+	b.key = 1;
-+	b.data = 2;
-+
-+	hash_add(hash, &a.node, a.key);
-+	hash_add(hash, &b.node, b.key);
-+
-+	KUNIT_EXPECT_TRUE(test, hash_hashed(&a.node));
-+	KUNIT_EXPECT_TRUE(test, hash_hashed(&b.node));
-+}
-+
-+static void hashtable_test_hash_add(struct kunit *test)
-+{
-+	struct hashtable_test_entry a, b, *x;
-+	int bkt;
-+	DEFINE_HASHTABLE(hash, 3);
-+
-+	hash_init(hash);
-+	a.key = 1;
-+	a.data = 13;
-+	a.visited = 0;
-+	b.key = 2;
-+	b.data = 10;
-+	b.visited = 0;
-+
-+	hash_add(hash, &a.node, a.key);
-+	hash_add(hash, &b.node, b.key);
-+
-+	hash_for_each(hash, bkt, x, node) {
-+		if (x->key == a.key && x->data == a.data)
-+			a.visited += 1;
-+		if (x->key == b.key && x->data == b.data)
-+			b.visited += 1;
-+	}
-+
-+	/* Both entries should have been visited exactly once. */
-+	KUNIT_EXPECT_EQ(test, a.visited, 1);
-+	KUNIT_EXPECT_EQ(test, b.visited, 1);
-+}
-+
-+static void hashtable_test_hash_del(struct kunit *test)
-+{
-+	struct hashtable_test_entry a, b, *x;
-+	DEFINE_HASHTABLE(hash, 3);
-+
-+	hash_init(hash);
-+	a.key = 1;
-+	a.data = 13;
-+	b.key = 2;
-+	b.data = 10;
-+	b.visited = 0;
-+
-+	hash_add(hash, &a.node, a.key);
-+	hash_add(hash, &b.node, b.key);
-+
-+	hash_del(&b.node);
-+	hash_for_each_possible(hash, x, node, b.key) {
-+		if (x->key == b.key && x->data == b.data)
-+			b.visited += 1;
-+	}
-+
-+	/* The deleted entry should not have been visited. */
-+	KUNIT_EXPECT_EQ(test, b.visited, 0);
-+
-+	hash_del(&a.node);
-+
-+	/* The hashtable should be empty. */
-+	KUNIT_EXPECT_TRUE(test, hash_empty(hash));
-+}
-+
-+static void hashtable_test_hash_for_each(struct kunit *test)
-+{
-+	struct hashtable_test_entry entries[3];
-+	struct hashtable_test_entry *x;
-+	int bkt, i, j, count;
-+	DEFINE_HASHTABLE(hash, 3);
-+
-+	/* Initialize a hashtable with three entries. */
-+	hash_init(hash);
-+	for (i = 0; i < 3; i++) {
-+		entries[i].key = i;
-+		entries[i].data = i + 10;
-+		entries[i].visited = 0;
-+		hash_add(hash, &entries[i].node, entries[i].key);
-+	}
-+
-+	count = 0;
-+	hash_for_each(hash, bkt, x, node) {
-+		if (x->key >= 0 && x->key < 3)
-+			entries[x->key].visited += 1;
-+		count++;
-+	}
-+
-+	/* Should have visited each entry exactly once. */
-+	KUNIT_EXPECT_EQ(test, count, 3);
-+	for (j = 0; j < 3; j++)
-+		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
-+}
-+
-+static void hashtable_test_hash_for_each_safe(struct kunit *test)
-+{
-+	struct hashtable_test_entry entries[3];
-+	struct hashtable_test_entry *x;
-+	struct hlist_node *tmp;
-+	int bkt, i, j, count;
-+	DEFINE_HASHTABLE(hash, 3);
-+
-+	/* Initialize a hashtable with three entries. */
-+	hash_init(hash);
-+	for (i = 0; i < 3; i++) {
-+		entries[i].key = i;
-+		entries[i].data = i + 10;
-+		entries[i].visited = 0;
-+		hash_add(hash, &entries[i].node, entries[i].key);
-+	}
-+
-+	count = 0;
-+	hash_for_each_safe(hash, bkt, tmp, x, node) {
-+		if (x->key >= 0 && x->key < 3) {
-+			entries[x->key].visited += 1;
-+			hash_del(&entries[x->key].node);
-+		}
-+		count++;
-+	}
-+
-+	/* Should have visited each entry exactly once. */
-+	KUNIT_EXPECT_EQ(test, count, 3);
-+	for (j = 0; j < 3; j++)
-+		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
-+}
-+
-+static void hashtable_test_hash_for_each_possible(struct kunit *test)
-+{
-+	struct hashtable_test_entry entries[4];
-+	struct hashtable_test_entry *x;
-+	int i, j, count;
-+	DEFINE_HASHTABLE(hash, 3);
-+
-+	/* Initialize a hashtable with three entries with key = 1. */
-+	hash_init(hash);
-+	for (i = 0; i < 3; i++) {
-+		entries[i].key = 1;
-+		entries[i].data = i;
-+		entries[i].visited = 0;
-+		hash_add(hash, &entries[i].node, entries[i].key);
-+	}
-+
-+	/* Add an entry with key = 2. */
-+	entries[3].key = 2;
-+	entries[3].data = 3;
-+	entries[3].visited = 0;
-+	hash_add(hash, &entries[3].node, entries[3].key);
-+
-+	count = 0;
-+	hash_for_each_possible(hash, x, node, 1) {
-+		if (x->data >= 0 && x->data < 4)
-+			entries[x->data].visited += 1;
-+		count++;
-+	}
-+
-+	/* Should have visited each entry with key = 1 exactly once. */
-+	for (j = 0; j < 3; j++)
-+		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
-+
-+	/* If entry with key = 2 is in the same bucket as the entries with
-+	 * key = 1, check it was visited. Otherwise ensure that only three
-+	 * entries were visited.
-+	 */
-+	if (hash_min(1, HASH_BITS(hash)) == hash_min(2, HASH_BITS(hash))) {
-+		KUNIT_EXPECT_EQ(test, count, 4);
-+		KUNIT_EXPECT_EQ(test, entries[3].visited, 1);
-+	} else {
-+		KUNIT_EXPECT_EQ(test, count, 3);
-+	}
-+}
-+
-+static void hashtable_test_hash_for_each_possible_safe(struct kunit *test)
-+{
-+	struct hashtable_test_entry entries[4];
-+	struct hashtable_test_entry *x;
-+	struct hlist_node *tmp;
-+	int i, j, count;
-+	DEFINE_HASHTABLE(hash, 3);
-+
-+	/* Initialize a hashtable with three entries with key = 1. */
-+	hash_init(hash);
-+	for (i = 0; i < 3; i++) {
-+		entries[i].key = 1;
-+		entries[i].data = i;
-+		entries[i].visited = 0;
-+		hash_add(hash, &entries[i].node, entries[i].key);
-+	}
-+
-+	/* Add an entry with key = 2. */
-+	entries[3].key = 2;
-+	entries[3].data = 3;
-+	entries[3].visited = 0;
-+	hash_add(hash, &entries[3].node, entries[3].key);
-+
-+	count = 0;
-+	hash_for_each_possible_safe(hash, x, tmp, node, 1) {
-+		if (x->data >= 0 && x->data < 4) {
-+			entries[x->data].visited += 1;
-+			hash_del(&entries[x->data].node);
-+		}
-+		count++;
-+	}
-+
-+	/* Should have visited each entry with key = 1 exactly once. */
-+	for (j = 0; j < 3; j++)
-+		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
-+
-+	/* If entry with key = 2 is in the same bucket as the entries with
-+	 * key = 1, check it was visited. Otherwise ensure that only three
-+	 * entries were visited.
-+	 */
-+	if (hash_min(1, HASH_BITS(hash)) == hash_min(2, HASH_BITS(hash))) {
-+		KUNIT_EXPECT_EQ(test, count, 4);
-+		KUNIT_EXPECT_EQ(test, entries[3].visited, 1);
-+	} else {
-+		KUNIT_EXPECT_EQ(test, count, 3);
-+	}
-+}
-+
-+static struct kunit_case hashtable_test_cases[] = {
-+	KUNIT_CASE(hashtable_test_hash_init),
-+	KUNIT_CASE(hashtable_test_hash_empty),
-+	KUNIT_CASE(hashtable_test_hash_hashed),
-+	KUNIT_CASE(hashtable_test_hash_add),
-+	KUNIT_CASE(hashtable_test_hash_del),
-+	KUNIT_CASE(hashtable_test_hash_for_each),
-+	KUNIT_CASE(hashtable_test_hash_for_each_safe),
-+	KUNIT_CASE(hashtable_test_hash_for_each_possible),
-+	KUNIT_CASE(hashtable_test_hash_for_each_possible_safe),
-+	{},
-+};
-+
-+static struct kunit_suite hashtable_test_module = {
-+	.name = "hashtable",
-+	.test_cases = hashtable_test_cases,
-+};
-+
-+kunit_test_suites(&hashtable_test_module);
-+
-+MODULE_LICENSE("GPL");
-
-base-commit: 054be257f28ca8eeb8e3620766501b81ceb4b293
 -- 
-2.39.0.314.g84b9a713c41-goog
+2.38.1
 
