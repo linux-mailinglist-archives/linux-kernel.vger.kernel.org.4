@@ -2,181 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8541652808
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 21:44:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D35C65280A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 21:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233685AbiLTUoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 15:44:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37538 "EHLO
+        id S234120AbiLTUpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 15:45:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbiLTUoV (ORCPT
+        with ESMTP id S234171AbiLTUo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 15:44:21 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A202CE1E
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 12:44:20 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id gt4so13649263pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 12:44:20 -0800 (PST)
+        Tue, 20 Dec 2022 15:44:56 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DAA1B9D1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 12:44:55 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-45c1b233dd7so17929607b3.20
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 12:44:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JFJ52Jvif4kqXh2cyc1/ZmoPfPIQip5jewjrb6LAFws=;
-        b=Pd4ElttST4MpL9hibF2X3mMy+HUUfHhLj41kwyBAQaoYc1y2g0UHePF5FEZcnSduPY
-         MLmI6S9+QF6SIny/exlAYN4fslzCVAhmMKqn/ZNFhkR3sWXpg9LXaLJ0+FxGo9hAO17v
-         u4a/3gzKxYd16I/oOHmZQCuxu/S5Gihpx6O44=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cBjT4mczGAcRKDxekCfUuigKoWGhE5GXVDzxsCw5lgg=;
+        b=OA4QXKd1zWYDWeOzVIH4Wrq5hlCeBDbXDJWgpzsHk99f4TlV6VjTbZnrGQYSmZIzsp
+         wptYRnLPhR0gqxp6ulCpkDMq4n+DAEbCNTd3W0705Vi6ViIVRHozFSAG+Vc6ud9u5XhJ
+         F5VLTAa2nRkAY7dVYZRbEMWZa/goOubpR+k1LSoQbHiO5GM9jHhaKxbwsa2aV8VlXoeR
+         jFUSkhVqK9NZ2OPbp4t4azw2rU6IQebrmbydwjbXgx5eoblFkjy+GCT+hEIHq3tympjp
+         q+b4x3p+FN60peVEBp+HM4OAlUwig2nY1Sko9FzvcUKknWf9/EiHSSDMAk385v5U20aR
+         HrKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JFJ52Jvif4kqXh2cyc1/ZmoPfPIQip5jewjrb6LAFws=;
-        b=V2KDgwpSgkjcjVlumMc4lNr4cU5NIB5MpWGpw96+xoR1zP08NGtvZ08I8YjS2htWd6
-         8BvuJPKiLJuYzAT0xwcY1FP9uMr+BhMF5eUpFdbDLN/c+btTiHZ65DuqxHtNM7yE9YWl
-         ChJgijfXADa5WeZ+uvrVr12ib4A+AFhzqHm0/bu5dNEUldmyy3w3tacRPhCkKtlUD7Vj
-         99N3gK+KLvoLSfzAfh8XkOtNMC16ubIptVNVn+XZgjQMKwzxWyXAHYFfHiWnYeP1Vg1T
-         /qHOqjw6y6Sur6xUtW6MH6uUPU8GyWESzGC1bR/jJmZrWss3c+S7gVStiES9w8AkDl+F
-         Cm9w==
-X-Gm-Message-State: AFqh2kpPXbC3AtQ38cnOqw1052N5zJmyObipL4ANgHRf44TqAzzvIDJ6
-        /JKjqarIprh/O4RHHhg21w+97RzVdhnBOwCW
-X-Google-Smtp-Source: AMrXdXtY8jHjX3hCbl+H5A3IaUWbZ2g6RlDBSLQUai0Xl7ruTeRaFxjVnP5YYPxsjFxoxoiAm78IkA==
-X-Received: by 2002:a17:902:e845:b0:187:3a79:6038 with SMTP id t5-20020a170902e84500b001873a796038mr20912825plg.18.1671569059685;
-        Tue, 20 Dec 2022 12:44:19 -0800 (PST)
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com. [209.85.216.48])
-        by smtp.gmail.com with ESMTPSA id o15-20020a170902778f00b001891a17bd93sm9784340pll.43.2022.12.20.12.44.18
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 12:44:18 -0800 (PST)
-Received: by mail-pj1-f48.google.com with SMTP id gt4so13649176pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 12:44:18 -0800 (PST)
-X-Received: by 2002:a17:90a:9c09:b0:219:33a1:d05f with SMTP id
- h9-20020a17090a9c0900b0021933a1d05fmr1883291pjp.116.1671569057656; Tue, 20
- Dec 2022 12:44:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20221127-mtk-svs-v1-0-7a5819595838@chromium.org>
- <d683a2e7-b886-9bf6-27df-d8c67cedbbdd@collabora.com> <b8b14bcb-845f-aa18-f8aa-ad0bed9fb0bb@gmail.com>
- <52fb6ccf3fe1cb11f3e330ecc4d9c6cf1225c98a.camel@mediatek.com> <e0d3f5c7-6f6b-ee21-170c-51e5240de114@gmail.com>
-In-Reply-To: <e0d3f5c7-6f6b-ee21-170c-51e5240de114@gmail.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 20 Dec 2022 21:44:06 +0100
-X-Gmail-Original-Message-ID: <CANiDSCv-625Jt7KYe3QdHv1tmU2W_c5195T+SitSM1ROocbQ2g@mail.gmail.com>
-Message-ID: <CANiDSCv-625Jt7KYe3QdHv1tmU2W_c5195T+SitSM1ROocbQ2g@mail.gmail.com>
-Subject: Re: [PATCH] soc: mediatek: mtk-svs: Enable the IRQ later
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     =?UTF-8?B?Um9nZXIgTHUgKOmZuOeRnuWCkSk=?= <Roger.Lu@mediatek.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cBjT4mczGAcRKDxekCfUuigKoWGhE5GXVDzxsCw5lgg=;
+        b=jf7H7i6Nj5Mj6b43R1iii0d/0Gnj50f7WKTrYPPGw9mhk1pZiKFuLX+pioiwpL/pDU
+         R1CtMQtf4F9GNgTOqr6os5v/1bsPK2iH56AqgrCWi+GFoQvA9GQ+TeKLQd7YRUHhM/af
+         JxEAtlbzI0QH2x1q+E6zYCCTye+vCT3rtE6Y1b7WSn1zJqlpxbOUerM35vkOJ4Pe9Eb6
+         tK/luhVQn1XOQXdKyady37mQv9OG2/4wjqJJvhoeVEV86dwhtP2T3771WH6KycyEmWhc
+         1uWSDnrzhj4pMvmkJ2bsnOj02bGMkNYZh5H/hsFK3AGy+0v4SQKl7xyzFSZ1GPlCuekB
+         FfGA==
+X-Gm-Message-State: ANoB5pnbs/MeFPcvj+Z3Mq58YSNuYWH4OA1gRRo84mZ3ouZTEk6BbppT
+        7+36Fv5iDs1gqOah02cch2HZEcReF0EtUA==
+X-Google-Smtp-Source: AA0mqf6q4KkdILzROX+6s6HGH0tYbSQJMSxDCqi4MHeQm1aNhPJEzlJ9ngPFtJxoZwYj7Jm7hNmp0WB9B/C9SA==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
+ (user=shakeelb job=sendgmr) by 2002:a25:bcd:0:b0:6fc:4d8a:f401 with SMTP id
+ 196-20020a250bcd000000b006fc4d8af401mr33434506ybl.170.1671569094462; Tue, 20
+ Dec 2022 12:44:54 -0800 (PST)
+Date:   Tue, 20 Dec 2022 20:44:51 +0000
+In-Reply-To: <20221220182745.1903540-3-roman.gushchin@linux.dev>
+Mime-Version: 1.0
+References: <20221220182745.1903540-1-roman.gushchin@linux.dev> <20221220182745.1903540-3-roman.gushchin@linux.dev>
+Message-ID: <20221220204451.gm5d3pdbfvd5ki6b@google.com>
+Subject: Re: [PATCH RFC 2/2] mm: kmem: add direct objcg pointer to task_struct
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger
+On Tue, Dec 20, 2022 at 10:27:45AM -0800, Roman Gushchin wrote:
+> To charge a freshly allocated kernel object to a memory cgroup, the
+> kernel needs to obtain an objcg pointer. Currently it does it
+> indirectly by obtaining the memcg pointer first and then calling to
+> __get_obj_cgroup_from_memcg().
+> 
+> Usually tasks spend their entire life belonging to the same object
+> cgroup. So it makes sense to save the objcg pointer on task_struct
+> directly, so it can be obtained faster. It requires some work on fork,
+> exit and cgroup migrate paths, but these paths are way colder.
+> 
+> The old indirect way is still used for remote memcg charging.
+> 
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
 
-Thanks for the heads up.
+This looks good too. Few comments below:
 
-This is the tree that I am using to test this:
-https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/=
-3918592/7
-( https://chromium.googlesource.com/chromiumos/third_party/kernel/+/3daf57d=
-76c9e3d7c73d038ff2e43984412b503a2
-)
+[...]
+> +
+> +#ifdef CONFIG_MEMCG_KMEM
+> +static void mem_cgroup_kmem_attach(struct cgroup_taskset *tset)
+> +{
+> +	struct task_struct *task;
+> +	struct cgroup_subsys_state *css;
+> +
+> +	cgroup_taskset_for_each(task, css, tset) {
+> +		struct mem_cgroup *memcg;
+> +
+> +		if (task->objcg)
+> +			obj_cgroup_put(task->objcg);
+> +
+> +		rcu_read_lock();
+> +		memcg = container_of(css, struct mem_cgroup, css);
+> +		task->objcg = __get_obj_cgroup_from_memcg(memcg);
+> +		rcu_read_unlock();
+> +	}
+> +}
+> +#else
+> +static void mem_cgroup_kmem_attach(struct cgroup_taskset *tset) {}
+> +#endif /* CONFIG_MEMCG_KMEM */
+> +
+> +#if defined(CONFIG_MEMCG_KMEM) || defined(CONFIG_MEMCG_KMEM)
 
-You can use this tool for kexec:
-https://chromium-review.googlesource.com/c/chromiumos/platform2/+/3953579
+I think you want CONFIG_LRU_GEN in the above check.
 
-The syntax is kexec-lite  --reboot --kernel /boot/Image --cmdline
-"$(cat /proc/cmdline)"
+>  static void mem_cgroup_attach(struct cgroup_taskset *tset)
+>  {
+> +	mem_cgroup_lru_gen_attach(tset);
+> +	mem_cgroup_kmem_attach(tset);
+>  }
+> -#endif /* CONFIG_LRU_GEN */
+> +#endif
+>  
+>  static int seq_puts_memcg_tunable(struct seq_file *m, unsigned long value)
+>  {
+> @@ -6816,9 +6872,15 @@ struct cgroup_subsys memory_cgrp_subsys = {
+>  	.css_reset = mem_cgroup_css_reset,
+>  	.css_rstat_flush = mem_cgroup_css_rstat_flush,
+>  	.can_attach = mem_cgroup_can_attach,
+> +#if defined(CONFIG_MEMCG_KMEM) || defined(CONFIG_MEMCG_KMEM)
 
-On Tue, 20 Dec 2022 at 15:50, Matthias Brugger <matthias.bgg@gmail.com> wro=
-te:
->
->
->
-> On 20/12/2022 12:03, Roger Lu (=E9=99=B8=E7=91=9E=E5=82=91) wrote:
-> > Hi Matthias Sir,
-> >
-> > After applying this patch, SVS probes fail as below on my MT8192 platfo=
-rm. If
-> > thing isn't too late, please do not merge this patch. I'll ask Ricardo =
-how to
-> > reproduce this issue and give the correct solution. Thanks in advance.
-> >
->
-> Ok, I just dropped the patch from v6.2-tmp/soc branch.
->
-> Regards,
-> Matthias
->
-> > #MT8192 platform SVS probe fail log
-> > [   10.209430]  SVSB_GPU_LOW: init02 completion timeout
-> > [   10.214402] mtk-svs 1100b000.svs: svs start fail: -16
-> > [   10.219479] mtk-svs: probe of 1100b000.svs failed with error -16
-> >
-> > Hi Ricardo,
-> >
-> > Could you share us how you reproduce this issue? I have MT8192 Chromebo=
-ok and
-> > can give it a try to reproduce the issue you encountered. Thanks a lot.
-> >
-> > Sincerely,
-> > Roger Lu.
-> >
-> > On Fri, 2022-12-16 at 13:47 +0100, Matthias Brugger wrote:
-> >>
-> >> On 30/11/2022 12:00, AngeloGioacchino Del Regno wrote:
-> >> > Il 27/11/22 21:22, Ricardo Ribalda ha scritto:
-> >> > > If the system does not come from reset (like when is booted via
-> >> > > kexec()), the peripheral might triger an IRQ before the data struc=
-tures
-> >> > > are initialised.
-> >> > >
-> >> > > Fixes:
-> >> > >
-> >> > > [    0.227710] Unable to handle kernel NULL pointer dereference at
-> >> > > virtual
-> >> > > address 0000000000000f08
-> >> > > [    0.227913] Call trace:
-> >> > > [    0.227918]  svs_isr+0x8c/0x538
-> >> > >
-> >> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> >> >
-> >> > Reviewed-by: AngeloGioacchino Del Regno <
-> >> > angelogioacchino.delregno@collabora.com>
-> >> >
-> >> >
-> >>
-> >> Applied thanks!
-> >>
-> >
-> > ************* MEDIATEK Confidentiality Notice ********************
-> > The information contained in this e-mail message (including any
-> > attachments) may be confidential, proprietary, privileged, or otherwise
-> > exempt from disclosure under applicable laws. It is intended to be
-> > conveyed only to the designated recipient(s). Any use, dissemination,
-> > distribution, printing, retaining or copying of this e-mail (including =
-its
-> > attachments) by unintended recipient(s) is strictly prohibited and may
-> > be unlawful. If you are not an intended recipient of this e-mail, or be=
-lieve
-> > that you have received this e-mail in error, please notify the sender
-> > immediately (by replying to this e-mail), delete any and all copies of
-> > this e-mail (including any attachments) from your system, and do not
-> > disclose the content of this e-mail to any other person. Thank you!
+Same here.
 
-
-
---=20
-Ricardo Ribalda
+>  	.attach = mem_cgroup_attach,
+> +#endif
+>  	.cancel_attach = mem_cgroup_cancel_attach,
+>  	.post_attach = mem_cgroup_move_task,
+> +#ifdef CONFIG_MEMCG_KMEM
+> +	.fork = mem_cgroup_fork,
+> +	.exit = mem_cgroup_exit,
+> +#endif
+>  	.dfl_cftypes = memory_files,
+>  	.legacy_cftypes = mem_cgroup_legacy_files,
+>  	.early_init = 0,
+> -- 
+> 2.39.0
+> 
