@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01A16524E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:48:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BF16524ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233873AbiLTQse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 11:48:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
+        id S233894AbiLTQtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 11:49:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbiLTQsc (ORCPT
+        with ESMTP id S229536AbiLTQtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 11:48:32 -0500
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79900DF7B;
-        Tue, 20 Dec 2022 08:48:31 -0800 (PST)
-Received: by mail-ot1-f42.google.com with SMTP id l8-20020a056830054800b006705fd35eceso7469708otb.12;
-        Tue, 20 Dec 2022 08:48:31 -0800 (PST)
+        Tue, 20 Dec 2022 11:49:42 -0500
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76BD165A2;
+        Tue, 20 Dec 2022 08:49:40 -0800 (PST)
+Received: by mail-oi1-f170.google.com with SMTP id s187so11033858oie.10;
+        Tue, 20 Dec 2022 08:49:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZmWMDsM7gBznInWF119ExXVPhyOUt68trxWCdWxjVKs=;
-        b=ffAowPzaXEW0mkp3KDPjaBpcJ/97DBoaMDfawi7rXzsPOX9n5wRTIfH5RRk/RVzLfq
-         LB3XygoiNhRdMMxjdMDHSQ1HPYDWa6YIBP5yGHR9b5j7TvbpshzwKMHwuNBap18yTDWb
-         ixJzM4fo9XPuZcs8rxAiohXbVtg3NDHnwFRT4mM4INBuoh8SeXfNo03AJleBR06lcMtu
-         xX8IqKEhX8CecA5EpTzLpDcRztIW28deJl1OE6JEwzQg5fXT4u7bER0USWsGhGq1Qxg3
-         lRKkOyVLoveW/oTQFVyN3C695m/8hZncBbc1Mrl+TrNQmIWyTnEl2Ba77Prn7NA/uQmf
-         nhpQ==
-X-Gm-Message-State: ANoB5pl/Pj3zGufnO/+Ce5+84XnO88px26FuntfmkPzz+Me2RIWl3h/N
-        CbA9T0I2anhXulCFKGsczbeSNb9cTQ==
-X-Google-Smtp-Source: AA0mqf5tVUyJtFiNpYpVQp7R2aB336NTL+3o9bQ1N6XYmFOiUby946PPltH3ZKYoBVVoMdlkJn8Icw==
-X-Received: by 2002:a05:6830:144d:b0:670:7c74:2616 with SMTP id w13-20020a056830144d00b006707c742616mr20951968otp.11.1671554910735;
-        Tue, 20 Dec 2022 08:48:30 -0800 (PST)
+        bh=Xfo0DKmMuO25A+nCHOD0jlMrFZ6CXCqZIybciF03fMk=;
+        b=HYQayYd90MT6Vg6nImVPPml7ciY+lCznR1dk1q/DT6m3OAYezOirIMV4mEhNJ6uohy
+         QDDsQtKPNyWirKnWyZfkK5Wd5n9/XpO0fEiS5T4mbGJL0pBfvlHilty4utNhj69mRuuV
+         TqIF7lDGj5wZgNzLy4iAjl0ZgDtBLp7JPN8t35AnEvxdXRj+HYEdHuj6VcDJNqDlnZbh
+         kXEh7KrZwbGzZyAt5MHhWnDm6EgAE1loxHfXDZAQvFH/rVcQ+ON7oT3cA2mP1toBRykq
+         2aTesAJXinEtXvqgq2UH7DxqlCHPCqlO6KLwINyvw8SmqO6TKed0Ok7i/DG7dRCFWuSb
+         swYg==
+X-Gm-Message-State: AFqh2krd+kXV4T/C7NPT8H4S5ZuqFK+qRl7/a5ZWLlT6z0ez9sXV2yTm
+        usB8vsD/YlvRH+zPLb4hQw==
+X-Google-Smtp-Source: AMrXdXtb9dnjg9S/upe3GH/oPYQi1IvGTkfvaKUQWnOl0cMjKRXg+yxj5Ga1ozak5D9lrEdX8QEf5Q==
+X-Received: by 2002:a05:6808:200e:b0:35c:2451:59bb with SMTP id q14-20020a056808200e00b0035c245159bbmr6658804oiw.20.1671554979988;
+        Tue, 20 Dec 2022 08:49:39 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t26-20020a05683022fa00b00661ad8741b4sm5889102otc.24.2022.12.20.08.48.29
+        by smtp.gmail.com with ESMTPSA id ec10-20020a056808638a00b0035acd0a6eb2sm5668080oib.41.2022.12.20.08.49.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 08:48:30 -0800 (PST)
-Received: (nullmailer pid 724855 invoked by uid 1000);
-        Tue, 20 Dec 2022 16:48:29 -0000
-Date:   Tue, 20 Dec 2022 10:48:29 -0600
+        Tue, 20 Dec 2022 08:49:39 -0800 (PST)
+Received: (nullmailer pid 726453 invoked by uid 1000);
+        Tue, 20 Dec 2022 16:49:38 -0000
+Date:   Tue, 20 Dec 2022 10:49:38 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     linux-rtc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        bruno.thomsen@gmail.com, linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH] dt-bindings: rtc: pcf2127: remove pca/pcf2129 from
- trivial RTC devices list
-Message-ID: <167155487539.723236.827037175847349918.robh@kernel.org>
-References: <20221220152237.1125178-1-hugo@hugovil.com>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     daniel@ffwll.ch, agross@kernel.org, david@ixit.cz,
+        robh+dt@kernel.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, swboyd@chromium.org,
+        quic_abhinavk@quicinc.com, andersson@kernel.org, airlied@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        robdclark@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
+        dmitry.baryshkov@linaro.org, dianders@chromium.org, sean@poorly.run
+Subject: Re: [PATCH v5 07/21] dt-bindings: msm: dsi-controller-main: Fix
+ clock declarations
+Message-ID: <167155496351.726025.910828492116114621.robh@kernel.org>
+References: <20221220123634.382970-1-bryan.odonoghue@linaro.org>
+ <20221220123634.382970-8-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221220152237.1125178-1-hugo@hugovil.com>
+In-Reply-To: <20221220123634.382970-8-bryan.odonoghue@linaro.org>
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,17 +71,30 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 20 Dec 2022 10:22:37 -0500, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+On Tue, 20 Dec 2022 12:36:20 +0000, Bryan O'Donoghue wrote:
+> When converting from .txt to .yaml dt-binding descriptions we appear to
+> have missed some of the previous detail on the number and names of
+> permissible clocks.
 > 
-> pca/pcf2129 devices can also have the 'reset-source' property, so
-> remove them from the trivial RTC devices list.
+> Fix this by listing the clock descriptions against the clock names at a
+> high level.
 > 
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> Fixes: 4dbe55c97741 ("dt-bindings: msm: dsi: add yaml schemas for DSI bindings")
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > ---
->  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 5 ++++-
->  Documentation/devicetree/bindings/rtc/trivial-rtc.yaml | 2 --
->  2 files changed, 4 insertions(+), 3 deletions(-)
+>  .../display/msm/dsi-controller-main.yaml      | 20 ++++++++++++-------
+>  1 file changed, 13 insertions(+), 7 deletions(-)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
+
+If a tag was not added on purpose, please state why and what changed.
+
+Missing tags:
+
+Acked-by: Rob Herring <robh@kernel.org>
+
+
