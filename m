@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED4A651BA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 508F5651BAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:28:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233743AbiLTH2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 02:28:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47078 "EHLO
+        id S233626AbiLTH2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 02:28:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233728AbiLTH1u (ORCPT
+        with ESMTP id S233591AbiLTH2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 02:27:50 -0500
+        Tue, 20 Dec 2022 02:28:04 -0500
 Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA8517AAA
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:26:56 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id 21so7933674pfw.4
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:26:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554DF167DF
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:27:04 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id 21so7933866pfw.4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:27:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gNIdCDWNwkrih/VXKM4PFxJFrGROnp7zsY1kJg/1Z4M=;
-        b=gz1nFEL3YX0f+2Ug9WMH010mYn/MV/3KGNNouFO6lfF7BH9Ve3+BLXxeFDAJuISZBj
-         B3Z1Fsk/aVHyfQMxzLEqeLGhKCpu2JVWiw4EuNZnCyCXlGcn7N9jc7zsDFgb191Gf86q
-         j0/cfv87RORRD7VqFxu293jwGkwCB/EH/aCw6e1z2N2XToOWJQvQMB7JcxygpBVhHxxp
-         954CNvUu7r70gJBapgsoa93wOWSmimAkNHfZOOUcLvxDwc8FQEsgP8/UIz+S2dsZ0/Ha
-         XfISSvcnATb8mG3jzngNjLEWua9Pe+d2e+I4iDBl5Xr7H232pYSLjqZOw/RzwUt4XB0r
-         Lwow==
+        bh=xOFwABHyEQomQ1BAaOhC3aSTvtto13Wh1TP7RdkKGVE=;
+        b=QnipYX8r/cNxeA/VcnjSW/OSh/9P8UNJuqQNtxcvn2GyxEmaZw9iQabvRE1dwc3IsR
+         dAuFzZZSQzfKXY8pwrONKqRlExpvyWNEEsnwOOsEFk8OM76ZgWJfE5+Pm/D85D6rLtW3
+         Q9Uig/Noj0FXSt2AVzDvVG5SlyyDuU1JFt7gyRzHkSbSziPG0wdVLdfYwo3VpTPPazVd
+         +pikE3ai8HaktWHADnbHo51lZ0dczhIifhyThwjVXSQCiEmVGod8pYv8ZVMXJ/vQQlZX
+         eWhrMJgRDJUqm/f0KPO3VCs6J2V65fgNZVsZZxuLUtYnBItYK9U4Esqgrg1J0+rzfRhY
+         Y+uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gNIdCDWNwkrih/VXKM4PFxJFrGROnp7zsY1kJg/1Z4M=;
-        b=kTY2kebefOqYykQNO11iCYoJZzowzpG+hMh+OM+mpUJKuZNdhA4rY/USppZyXb1apR
-         pn+C0jIfsSsICxpeXji2D96GzQosw2HNqM1MdiKWkbXHYs6e/1F20aES2mQZt9iRVlNz
-         cQammwtcMRoi/cfNeU/yElPLr17ghyCPBQ2dalEuSEHUU/I8LeR6w9497X2Fje64KK5D
-         JlSEJzl6FmtLWudgaXSeT/k4ECmzkbsS7VZwvKZsQKA05+3e6kfdcDyaTHKmc6K/59Yz
-         4mFWI8SOr/3rk5M8jobsesj5++YvLNLXpC7xa7CUyKdmRxUe4oEsXnKhd06vnQ5zYILX
-         z8QQ==
-X-Gm-Message-State: AFqh2koRqWP9BtvxRSQSJ0stSeSC36gICSLyx+jY2ygaaY3P8qt+2twy
-        2kQbq6xq461+RZ9Pj7qBhiI=
-X-Google-Smtp-Source: AA0mqf7f1ezLfkTLN/HA7kNFS1SqVBkEd8L8aWm+KL4xeaHkvPNKNWao+2auP5GeoK2czvTXY8A3RA==
-X-Received: by 2002:aa7:9f88:0:b0:57d:56f1:6ae7 with SMTP id z8-20020aa79f88000000b0057d56f16ae7mr23753731pfr.33.1671521215509;
-        Mon, 19 Dec 2022 23:26:55 -0800 (PST)
+        bh=xOFwABHyEQomQ1BAaOhC3aSTvtto13Wh1TP7RdkKGVE=;
+        b=BTJvYS4spxawqClPZN3JsF5BIQur69dzc90zuaFE6cJJCiJZrUzmmtEjfU6YgIC4Z6
+         AJGWICq80lXPLJTaCpEry0jEUsI55tWgfpMcY7Wpv4XramshiAeqtFLbBFtRkBDlkbOh
+         BJfwA0UsEXWPhCKOxLbLHZOGf+frofbiJa6ledrcZ7r9xq60C5PFgdDlRizjaJt3KDNH
+         fzJCs43P7v4qrH/fhzaPtY7sIlBHV6+rpY17IhFoLBsMBX+1hjVTmbmlmnlG+V69jsxQ
+         SvmJILou60+0PH+KkLNkER3GvgXXnCIY2cxkxML5eb4a+ppQO9KxkRjc8dW14FV2BBCj
+         tHzA==
+X-Gm-Message-State: AFqh2krG3eOY2N1S2whT1jEN2oCVqBDtTx2PImWJebHTKpEFZFrWB5He
+        aKJ78XnHUCKTvWbNUMc487o=
+X-Google-Smtp-Source: AMrXdXtiyKeI7TFFv6WMGqX0SE+95zDp3DgcU0JzPCjOSWZyo1MAwEssYqWeR06tsKbgCRIzVkuWew==
+X-Received: by 2002:a05:6a00:2dc:b0:57e:866d:c095 with SMTP id b28-20020a056a0002dc00b0057e866dc095mr18317032pft.25.1671521223915;
+        Mon, 19 Dec 2022 23:27:03 -0800 (PST)
 Received: from archlinux.localdomain ([140.121.198.213])
-        by smtp.googlemail.com with ESMTPSA id q15-20020aa7982f000000b00576f9773c80sm7865544pfl.206.2022.12.19.23.26.47
+        by smtp.googlemail.com with ESMTPSA id q15-20020aa7982f000000b00576f9773c80sm7865544pfl.206.2022.12.19.23.26.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 23:26:54 -0800 (PST)
+        Mon, 19 Dec 2022 23:27:03 -0800 (PST)
 From:   Chih-En Lin <shiyn.lin@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Qi Zheng <zhengqi.arch@bytedance.com>,
@@ -103,9 +103,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Jim Huang <jserv@ccns.ncku.edu.tw>,
         Huichun Feng <foxhoundsk.tw@gmail.com>,
         Chih-En Lin <shiyn.lin@gmail.com>
-Subject: [PATCH v3 13/14] events/uprobes: Break COW PTE before replacing page
-Date:   Tue, 20 Dec 2022 15:27:42 +0800
-Message-Id: <20221220072743.3039060-14-shiyn.lin@gmail.com>
+Subject: [PATCH v3 14/14] mm: fork: Enable COW PTE to fork system call
+Date:   Tue, 20 Dec 2022 15:27:43 +0800
+Message-Id: <20221220072743.3039060-15-shiyn.lin@gmail.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221220072743.3039060-1-shiyn.lin@gmail.com>
 References: <20221220072743.3039060-1-shiyn.lin@gmail.com>
@@ -121,26 +121,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Break COW PTE if we want to replace the page which
-resides in COW-ed PTE.
+This patch enables the Copy-On-Write (COW) mechanism to the PTE table
+in fork system call. To let the process do COW PTE fork, use
+prctl(PR_SET_COW_PTE), it will set the MMF_COW_PTE_READY flag to the
+process for enabling COW PTE during the next time of fork.
+
+It uses the MMF_COW_PTE flag to distinguish the normal page table
+and the COW one. Moreover, it is difficult to distinguish whether all
+the page tables is out of COW state. So the MMF_COW_PTE flag won't be
+disabled after setup.
 
 Signed-off-by: Chih-En Lin <shiyn.lin@gmail.com>
 ---
- kernel/events/uprobes.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/fork.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-index d9e357b7e17c9..2956a53da01a1 100644
---- a/kernel/events/uprobes.c
-+++ b/kernel/events/uprobes.c
-@@ -157,7 +157,7 @@ static int __replace_page(struct vm_area_struct *vma, unsigned long addr,
- 	struct folio *old_folio = page_folio(old_page);
- 	struct folio *new_folio;
- 	struct mm_struct *mm = vma->vm_mm;
--	DEFINE_FOLIO_VMA_WALK(pvmw, old_folio, vma, addr, 0);
-+	DEFINE_FOLIO_VMA_WALK(pvmw, old_folio, vma, addr, PVMW_BREAK_COW_PTE);
- 	int err;
- 	struct mmu_notifier_range range;
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 08969f5aa38d5..ef3d27577aa43 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -2668,6 +2668,11 @@ pid_t kernel_clone(struct kernel_clone_args *args)
+ 			trace = 0;
+ 	}
+ 
++	if (current->mm && test_bit(MMF_COW_PTE_READY, &current->mm->flags)) {
++		clear_bit(MMF_COW_PTE_READY, &current->mm->flags);
++		set_bit(MMF_COW_PTE, &current->mm->flags);
++	}
++
+ 	p = copy_process(NULL, trace, NUMA_NO_NODE, args);
+ 	add_latent_entropy();
  
 -- 
 2.37.3
