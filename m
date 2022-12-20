@@ -2,86 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2953651DE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 10:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73583651DEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 10:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbiLTJrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 04:47:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
+        id S233437AbiLTJr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 04:47:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233159AbiLTJqc (ORCPT
+        with ESMTP id S233448AbiLTJrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 04:46:32 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4800CF57;
-        Tue, 20 Dec 2022 01:45:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yty8ngXs7Md4XfIPXQ3stkVPahwwXV961hO25HdOnVA=; b=IuOejSTU6Xbgfu804q+t96rvyf
-        n0PrW5jRCupq+/t81JJcX9y5ZMc/j3MUhzthuEXbc2lOQANX4iDcBk2Dwo+XQJ8K8rNpQpeV1YVZg
-        0kDXF/wvPoPeyo6J9LglaJeqz4I11u5QXRa3M/ByPsGSQHhpRgU7vLKk+ahgcHG/bOVK4UKB3vtoW
-        3NfU/NH2D5hW+h/RsoUDjtHddaSz1naHikBINHub+oVHzWHi85SASxI0atZ82gKugHrEtM4XzWXIG
-        n3iNILYmN7urrOiTe3u6fozJeT4Q3tIOn/LodVlJKRdNaVUz+NJnuWeHtzI1cYQ5E6cjXEnKz01PO
-        GodK13+A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1p7ZBY-00Cwpk-3A;
-        Tue, 20 Dec 2022 09:45:21 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7FA29300023;
-        Tue, 20 Dec 2022 10:45:19 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 687A72C5F840A; Tue, 20 Dec 2022 10:45:19 +0100 (CET)
-Date:   Tue, 20 Dec 2022 10:45:19 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Xin Li <xin3.li@intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        andrew.cooper3@citrix.com, seanjc@google.com, pbonzini@redhat.com,
-        ravi.v.shankar@intel.com
-Subject: Re: [RFC PATCH 22/32] x86/fred: FRED initialization code
-Message-ID: <Y6GELyEJeKY3dEqJ@hirez.programming.kicks-ass.net>
-References: <20221220063658.19271-1-xin3.li@intel.com>
- <20221220063658.19271-23-xin3.li@intel.com>
+        Tue, 20 Dec 2022 04:47:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EBC1109
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 01:45:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671529547;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5NoS+Bqz9ATFzWnlIG9oJwXTJiAoyqlPjgi89DKPgSU=;
+        b=Ii7O1Vin8T/B4QwSEDA84JIbbNnI8P4J/paF2XqmlDRh/G4GioMP4z1iDAlzsQvkCOF+oS
+        DI7KGmFpv9ffv4ZVOM76b4yjU7mrxrcyAUJLf7oxhPlkfLibOzvrQqpkHDfs7PbcqasAEF
+        f9sJn6G3DmZGiYHRuccAYY+LAWrzhSg=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-651-KQvy0uoZOxapWSsITfUBAg-1; Tue, 20 Dec 2022 04:45:32 -0500
+X-MC-Unique: KQvy0uoZOxapWSsITfUBAg-1
+Received: by mail-qt1-f197.google.com with SMTP id j26-20020ac84c9a000000b003a7e6d38e01so5304349qtv.14
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 01:45:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5NoS+Bqz9ATFzWnlIG9oJwXTJiAoyqlPjgi89DKPgSU=;
+        b=GpiBryIH92VC81RPxsVlYriZKSr42fB7NQBC0lkTiOqq3M+YNYgmdHlm0crqrsdGvf
+         snyQGhUnG10pmzY5fsUH1EpmUlr/LvbHHY3E9WLY5WkMaQHyH4mi9bSbt/kD4x356B1B
+         veqJDbrPCL5ztN18Fgt6ccj029mU3acpm+D71b2RHEtabz7xfbfu0B+xYsceh6vw0OMr
+         jrIvUdZO8eGTnjbIf3lByPf1be0XBYwBmjn9b81OM6a9XB+eT5n1agqreRPCWFrxx4v7
+         GoUZhz/VbrWwwOxaf+tYEYeWl4HY+vzfLwNMh+o6e30mhI/dPavtbkHVNZmb9XmS1bZe
+         rjBg==
+X-Gm-Message-State: AFqh2kq9IRXMqmUUpZ1/JvlkTRLUNb6oktXsreinf3UgfB1bAE+4/MRT
+        TSyXDR17NFtEs08DX3cyZqDhl2+aUOtd/Bb4L9qDQC3uk75G3e9q/KP7vqswg14Vbbc2F/iZKmf
+        EJ/tXKLWnIaunZ0U7euYC/Wnc
+X-Received: by 2002:ac8:4752:0:b0:3a5:6961:e1c5 with SMTP id k18-20020ac84752000000b003a56961e1c5mr2603572qtp.48.1671529531667;
+        Tue, 20 Dec 2022 01:45:31 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXta/lY2p7viJf764arQSIM+mAkP5mp0z/MMrwsYN8PvneFOw07z0yJIqG58rVh6SkI8fJdTIg==
+X-Received: by 2002:ac8:4752:0:b0:3a5:6961:e1c5 with SMTP id k18-20020ac84752000000b003a56961e1c5mr2603558qtp.48.1671529531425;
+        Tue, 20 Dec 2022 01:45:31 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-101-173.dyn.eolo.it. [146.241.101.173])
+        by smtp.gmail.com with ESMTPSA id 124-20020a370582000000b006fae7e6204bsm8403328qkf.108.2022.12.20.01.45.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 01:45:30 -0800 (PST)
+Message-ID: <ddac533a2c4db7efd4214a5a4f7f9f5797bf2a51.camel@redhat.com>
+Subject: Re: [PATCH] net: alx: Switch to DEFINE_SIMPLE_DEV_PM_OPS() and
+ pm_sleep_ptr()
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Christoph Heiss <christoph@c8h4.io>,
+        Chris Snook <chris.snook@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 20 Dec 2022 10:45:27 +0100
+In-Reply-To: <20221217104024.1954875-1-christoph@c8h4.io>
+References: <20221217104024.1954875-1-christoph@c8h4.io>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221220063658.19271-23-xin3.li@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 10:36:48PM -0800, Xin Li wrote:
+Hello,
 
-> +	wrmsrl(MSR_IA32_FRED_STKLVLS,
-> +	       FRED_STKLVL(X86_TRAP_DB,  1) |
-> +	       FRED_STKLVL(X86_TRAP_NMI, 2) |
-> +	       FRED_STKLVL(X86_TRAP_MC,  2) |
-> +	       FRED_STKLVL(X86_TRAP_DF,  3));
-> +
-> +	/* The FRED equivalents to IST stacks... */
-> +	wrmsrl(MSR_IA32_FRED_RSP1, __this_cpu_ist_top_va(DB));
-> +	wrmsrl(MSR_IA32_FRED_RSP2, __this_cpu_ist_top_va(NMI));
-> +	wrmsrl(MSR_IA32_FRED_RSP3, __this_cpu_ist_top_va(DF));
+On Sat, 2022-12-17 at 11:40 +0100, Christoph Heiss wrote:
+> Using these macros allows to remove an #ifdef-guard on CONFIG_PM_SLEEP.
+> No functional changes.
+> 
+> Signed-off-by: Christoph Heiss <christoph@c8h4.io>
 
-Not quite.. IIRC fred only switches to another stack when the level of
-the exception is higher. Specifically, if we trigger #DB while inside
-#NMI we will not switch to the #DB stack (since 1 < 2).
+# Form letter - net-next is closed
 
-Now, as mentioned elsewhere, it all nests a lot saner, but stack
-exhaustion is still a thing, given the above, what happens when a #DB
-hits an #NMI which tickles a #VE or something?
+We have already submitted the networking pull request to Linus
+for v6.2 and therefore net-next is closed for new drivers, features,
+code refactoring and optimizations. We are currently accepting
+bug fixes only.
 
-I don't think we've increased the exception stack size, but perhaps we
-should for FRED?
+Please repost when net-next reopens after Jan 2nd.
+
+RFC patches sent for review only are obviously welcome at any time.
+
