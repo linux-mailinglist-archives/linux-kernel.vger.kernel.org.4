@@ -2,85 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7542F652505
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0063D652508
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233854AbiLTQzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 11:55:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
+        id S233685AbiLTQ4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 11:56:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiLTQzi (ORCPT
+        with ESMTP id S229723AbiLTQz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 11:55:38 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08B91CB12
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:55:29 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id y3so6615908ilq.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:55:29 -0800 (PST)
+        Tue, 20 Dec 2022 11:55:59 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832CC1176
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:55:57 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id q2so3753687ljp.6
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:55:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UmTBCjd4WfDkEIZ41SUabqVQsCDpgvamQQ85cJ8gqF0=;
-        b=CSJ9LGK+9xR1eOwHmVWnalfCyuk+oL/PCYF6ETNL7lFOI3yzt/TaJ7C+YlXlpXEDMJ
-         Uzk7kF3dgaX9Wkqm4cTgekfJXPnLf9iAiCeEUInmVbE/gmNFvvx97KY6JTrWSLzftHWK
-         BzRVwwchdTfgQj7qLq0lDyeRw9+bUl8d5sDWQ=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RV2b+N4EY8X7AP+wxiTDOB1h8DJAj0YpeZrRZGqmAGU=;
+        b=igIjFRYBlJmWR+sZzIcsLQyE8jdrcsZ97Cj+D0lh8XfZDlJVuOVWRPQt09Trny3eXg
+         bg2r5Razpu5YSMx9vnnA7dWArKG/M1TKW/pRjYwznlxc47EnxLyCIvEFR7S+IpfqW6wA
+         jh3FMFMBbPDbKyRZSxiiojjYCT66FLvvfoyGbTbpMXeO+Rfg0qMOhpPUrK131Ptn9K3x
+         iwULuAoKCHJJM346zXtDA5zd6Yeoe9ZSs5EKzGS/2kNLrW5lFF3UJkeVBK3HPgZRh/gE
+         BCeZc1TQ9C2mek0+Pej07us+LIxQ2EvvnoIrH7joXWeS5wi/PwfpGQhrluFFh3q/LL0o
+         xvyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UmTBCjd4WfDkEIZ41SUabqVQsCDpgvamQQ85cJ8gqF0=;
-        b=7/RjAbBF2/f1iqBBLLwxhT9jpWlZ8qYkp7muWPzhQD13lxX8ALOsRpZlv4LoaWlHzK
-         XZ/py30u3WQIF3EmE00NtqKGK113uAPAjKLI2URbaU5vozVwfkmRvggI5Z3MxMRTP/yq
-         dtK2K7pir7E1cDS5IDqkXpUJDgqS5YGUFF4+YDlz21lqAH2O04HKDrVkRTY0gm41SDJe
-         dGCEYLq+hy1zlI5D0VfLFZnXgqKUeuvLudUW/9NIlwn6JMHWDrzfT/nqXMM/VOguW1DI
-         xk4esC2LUxiBCobS18p+gSHv/OwHLLkRO5kvmApcoUFfakoQ4YOFkN6/bQNMzZEaw6TV
-         OQOQ==
-X-Gm-Message-State: ANoB5pl8xUrokqr72ShZiSQQg/IhTefDabNqBZP1MuFL82WmNgQF/HWN
-        LcDKarvp4BD2xxO7uXAPL1UYJg==
-X-Google-Smtp-Source: AA0mqf5be6/mjb1uYLE+7Ce9R+B32f8xgMhK4AQZTwjI9AF9595PyJn41kXUUx+xKiFc9qajiFTWcA==
-X-Received: by 2002:a92:d3ce:0:b0:303:d8:f309 with SMTP id c14-20020a92d3ce000000b0030300d8f309mr4378979ilh.2.1671555329106;
-        Tue, 20 Dec 2022 08:55:29 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id s12-20020a92cb0c000000b0030005ae9241sm4493573ilo.43.2022.12.20.08.55.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 08:55:28 -0800 (PST)
-Message-ID: <f185bb42-b29c-977e-312e-3349eea15383@linuxfoundation.org>
-Date:   Tue, 20 Dec 2022 09:55:26 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RV2b+N4EY8X7AP+wxiTDOB1h8DJAj0YpeZrRZGqmAGU=;
+        b=Bv/oYSNMIqQ0ITpZiIS6wDgjSiU/xXID419WkBjt/g42wdumfgkqG3616zjXe7vQAg
+         fiT9HPblReGGm4ex5r1N5YAv2ZPpvNfb617a3vMPoISdpK3YaY3Nus79Y8VsjSjCH0Xf
+         NNinbielJFwvEypwfMwKfkuALwaMcHrzzUpeUVq3h/PTOKQNA1hsF44OwZq1+cl2dgRV
+         GPnGHjOBt9WrFx6z+pBK7suDvTlIAyDNRItOSz7VNpcZ1J+TF0dgjuaPTkwMS2F2XflD
+         iE3GqFtAakAZTO1qvsfKZzKrB+qimLAPHqYXUYiu3rvKBmFmT3YtuWG4y5J3u1PuZaGJ
+         k7jw==
+X-Gm-Message-State: ANoB5pnI7O9BGLSYAumSh9kfQiKu1SWFRw92FJ9fPUVCyT/UaZgSeTnQ
+        Wyi4zPnDIN5bxKTeFpIr2qY=
+X-Google-Smtp-Source: AA0mqf4k8IpjOpJrh6S3u5p9mOLpoXNiRbJdsIh5YoWG5Dxh22i4epGSO1G9gwynRJDnANzyqfU1Kg==
+X-Received: by 2002:a05:651c:1145:b0:277:744:1f34 with SMTP id h5-20020a05651c114500b0027707441f34mr18843183ljo.25.1671555355739;
+        Tue, 20 Dec 2022 08:55:55 -0800 (PST)
+Received: from pc636 (host-90-233-218-120.mobileonline.telia.com. [90.233.218.120])
+        by smtp.gmail.com with ESMTPSA id t23-20020a2e8e77000000b00279e618444dsm1061417ljk.122.2022.12.20.08.55.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 08:55:55 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Tue, 20 Dec 2022 17:55:53 +0100
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, urezki@gmail.com,
+        stephen.s.brennan@oracle.com, willy@infradead.org,
+        akpm@linux-foundation.org, hch@infradead.org
+Subject: Re: [PATCH v2 2/7] mm/vmalloc.c: add flags to mark vm_map_ram area
+Message-ID: <Y6HpGayyQZH7U7Fd@pc636>
+References: <20221217015435.73889-1-bhe@redhat.com>
+ <20221217015435.73889-3-bhe@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
-To:     Jeff Xu <jeffxu@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, Peter Xu <peterx@redhat.com>,
-        jeffxu@chromium.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, jannh@google.com,
-        linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221207154939.2532830-1-jeffxu@google.com>
- <20221207154939.2532830-4-jeffxu@google.com> <202212080821.5AE7EE99@keescook>
- <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
- <Y5yS8wCnuYGLHMj4@x1n>
- <CALmYWFsDhX76zbcyhYAW-u0BBwD+m+TKpt4_pZTMt+22zHhrGQ@mail.gmail.com>
- <20221216094259.bec91e4abd6cf54a05ce2813@linux-foundation.org>
- <CALmYWFsNp87a5uVQUAb4PG0khFN8Xxd=ibh9Q7g-Y0XW1Mn-8Q@mail.gmail.com>
- <202212161233.85C9783FB@keescook>
- <CALmYWFuENPRvCAOF6of=Ufct5jjAbJ=iDyH7eODhdbm24uAK3Q@mail.gmail.com>
- <20221216140641.bf6e47b7c4f5a53f34c8cf9a@linux-foundation.org>
- <CALmYWFuqAruM=Brh_54hWL+HiKD+RABK4y+hzd4phOzOZ_0=CA@mail.gmail.com>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CALmYWFuqAruM=Brh_54hWL+HiKD+RABK4y+hzd4phOzOZ_0=CA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221217015435.73889-3-bhe@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,40 +74,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/16/22 16:40, Jeff Xu wrote:
-> On Fri, Dec 16, 2022 at 2:06 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->>
->> On Fri, 16 Dec 2022 13:46:58 -0800 Jeff Xu <jeffxu@google.com> wrote:
->>
->>> On Fri, Dec 16, 2022 at 12:35 PM Kees Cook <keescook@chromium.org> wrote:
->>>>
->>>> On Fri, Dec 16, 2022 at 10:11:44AM -0800, Jeff Xu wrote:
->>>>> Once per boot seems too little, it would be nice if we can list all processes.
->>>>> I agree ratelimited might be too much.
->>>>> There is a feature gap here for logging.
->>>>>
->>>>> Kees, what do you think ?
->>>>
->>>> I agree once per boot is kind of frustrating "I fixed the one warning,
->>>> oh, now it's coming from a different process". But ratelimit is, in
->>>> retrospect, still too often.
->>>>
->>>> Let's go with per boot -- this should be noisy "enough" to get the
->>>> changes in API into the callers without being too much of a hassle.
->>>>
->>> Agreed.  Let's go with per boot.
->>>
->>> Hi Andrew, what is your preference ? I can send a patch  or you
->>> directly fix it in mm-unstable ?
->>
->> Like this?
->>
-> Yes. Thanks!
+> Through vmalloc API, a virtual kernel area is reserved for physical
+> address mapping. And vmap_area is used to track them, while vm_struct
+> is allocated to associate with the vmap_area to store more information
+> and passed out.
 > 
+> However, area reserved via vm_map_ram() is an exception. It doesn't have
+> vm_struct to associate with vmap_area. And we can't recognize the
+> vmap_area with '->vm == NULL' as a vm_map_ram() area because the normal
+> freeing path will set va->vm = NULL before unmapping, please see
+> function remove_vm_area().
+> 
+A normal "free" path sets it to NULL in order to prevent a double-free
+of same VA. We can avoid of touching the va->vm if needed and do an unlink
+on entry in the remove_vm_area() when a lock is taken to find an area.
 
-Sorry jumping into this discussion a bit late. Is it possible to provide
-a way to enable full logging as a debug option to tag more processes?
+Will it help you?
 
-thanks,
--- Shuah
+> Meanwhile, there are two types of vm_map_ram area. One is the whole
+> vmap_area being reserved and mapped at one time; the other is the
+> whole vmap_area with VMAP_BLOCK_SIZE size being reserved, while mapped
+> into split regions with smaller size several times via vb_alloc().
+> 
+> To mark the area reserved through vm_map_ram(), add flags field into
+> struct vmap_area. Bit 0 indicates whether it's a vm_map_ram area,
+> while bit 1 indicates whether it's a vmap_block type of vm_map_ram
+> area.
+> 
+> This is a preparatoin for later use.
+> 
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> ---
+>  include/linux/vmalloc.h |  1 +
+>  mm/vmalloc.c            | 22 +++++++++++++++++-----
+>  2 files changed, 18 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+> index 096d48aa3437..69250efa03d1 100644
+> --- a/include/linux/vmalloc.h
+> +++ b/include/linux/vmalloc.h
+> @@ -76,6 +76,7 @@ struct vmap_area {
+>  		unsigned long subtree_max_size; /* in "free" tree */
+>  		struct vm_struct *vm;           /* in "busy" tree */
+>  	};
+> +	unsigned long flags; /* mark type of vm_map_ram area */
+>  };
+>  
+>  /* archs that select HAVE_ARCH_HUGE_VMAP should override one or more of these */
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 5d3fd3e6fe09..190f29bbaaa7 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -1586,7 +1586,8 @@ preload_this_cpu_lock(spinlock_t *lock, gfp_t gfp_mask, int node)
+>  static struct vmap_area *alloc_vmap_area(unsigned long size,
+>  				unsigned long align,
+>  				unsigned long vstart, unsigned long vend,
+> -				int node, gfp_t gfp_mask)
+> +				int node, gfp_t gfp_mask,
+> +				unsigned long va_flags)
+>  {
+>  	struct vmap_area *va;
+>  	unsigned long freed;
+> @@ -1630,6 +1631,7 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
+>  	va->va_start = addr;
+>  	va->va_end = addr + size;
+>  	va->vm = NULL;
+> +	va->flags = va_flags;
+>  
+>  	spin_lock(&vmap_area_lock);
+>  	insert_vmap_area(va, &vmap_area_root, &vmap_area_list);
+> @@ -1887,6 +1889,10 @@ struct vmap_area *find_vmap_area(unsigned long addr)
+>  
+>  #define VMAP_BLOCK_SIZE		(VMAP_BBMAP_BITS * PAGE_SIZE)
+>  
+> +#define VMAP_RAM		0x1
+> +#define VMAP_BLOCK		0x2
+> +#define VMAP_FLAGS_MASK		0x3
+> 
+Maybe to rename a VMAP_BLOCK to something like VMAP_BLOCK_RESERVED or
+VMAP_PER_CPU_BLOCK?
 
+>  struct vmap_block_queue {
+>  	spinlock_t lock;
+>  	struct list_head free;
+> @@ -1962,7 +1968,8 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
+>  
+>  	va = alloc_vmap_area(VMAP_BLOCK_SIZE, VMAP_BLOCK_SIZE,
+>  					VMALLOC_START, VMALLOC_END,
+> -					node, gfp_mask);
+> +					node, gfp_mask,
+> +					VMAP_RAM|VMAP_BLOCK);
+>
+A new_vmap_block() is for a per-cpu path. As far as i see the VMAP_BLOCK
+flag is used to mark a VA that corresponds to a reserved per-cpu free area.
+
+Whereas a VMAP_RAM is for VA that was obtained over per-cpu path but
+over alloc_vmap_area() thus a VA should be read out over "busy" tree
+directly.
+
+Why do you need to set here both VMAP_RAM and VMAP_BLOCK?
+
+>  	if (IS_ERR(va)) {
+>  		kfree(vb);
+>  		return ERR_CAST(va);
+> @@ -2229,8 +2236,12 @@ void vm_unmap_ram(const void *mem, unsigned int count)
+>  		return;
+>  	}
+>  
+> -	va = find_vmap_area(addr);
+> +	spin_lock(&vmap_area_lock);
+> +	va = __find_vmap_area((unsigned long)addr, &vmap_area_root);
+>  	BUG_ON(!va);
+> +	if (va)
+> +		va->flags &= ~VMAP_RAM;
+> +	spin_unlock(&vmap_area_lock);
+>  	debug_check_no_locks_freed((void *)va->va_start,
+>
+Agree with Lorenzo. BUG_ON() should be out of spinlock(). Furthermore
+i think it makes sense to go with WARN_ON_ONCE() and do not kill a system.
+Instead emit a warning and bailout.
+
+What do you think? Maybe separate patch for it?
+
+>  				    (va->va_end - va->va_start));
+>  	free_unmap_vmap_area(va);
+> @@ -2265,7 +2276,8 @@ void *vm_map_ram(struct page **pages, unsigned int count, int node)
+>  	} else {
+>  		struct vmap_area *va;
+>  		va = alloc_vmap_area(size, PAGE_SIZE,
+> -				VMALLOC_START, VMALLOC_END, node, GFP_KERNEL);
+> +				VMALLOC_START, VMALLOC_END,
+> +				node, GFP_KERNEL, VMAP_RAM);
+>  		if (IS_ERR(va))
+>  			return NULL;
+>  
+> @@ -2505,7 +2517,7 @@ static struct vm_struct *__get_vm_area_node(unsigned long size,
+>  	if (!(flags & VM_NO_GUARD))
+>  		size += PAGE_SIZE;
+>  
+> -	va = alloc_vmap_area(size, align, start, end, node, gfp_mask);
+> +	va = alloc_vmap_area(size, align, start, end, node, gfp_mask, 0);
+>  	if (IS_ERR(va)) {
+>  		kfree(area);
+>  		return NULL;
+>
+I know we have already discussed the new parameter. But what if we just
+use atomic_set operation to mark VA as either vmap-ram or vmap-block?
+
+As for alloc_vmap_area() we set it just as zero.
+
+--
+Uladzislau Rezki
