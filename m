@@ -2,102 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 878C46518F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 03:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0A5651928
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 03:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiLTCpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 21:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
+        id S232464AbiLTCtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 21:49:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiLTCpI (ORCPT
+        with ESMTP id S229647AbiLTCs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 21:45:08 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C75212D29;
-        Mon, 19 Dec 2022 18:45:07 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 5DB2D80CB0;
-        Tue, 20 Dec 2022 03:45:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1671504305;
-        bh=IprEi+qVnctNMnKAlyk6243hIepwAWWu6ePom6r/wMg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ARtCj1wmZcCyOZI5N/kIaiLe+nT7YwpX6LLMVl6zseUgGZkHnh411bc1vcS94DgaL
-         envbGCEUP423Xn/dFjhvRa8Pif0ffQHfUpDMsxM+KKOZwQEizXvV0z4bgyncaKMDxw
-         YsAS7qQecit0OiyFDpA4QnpWwzChui0dikPadfEwVF+77rsQnrripx//ryzXqe/jPd
-         7DtYqrJHg9RhKl2OzcLJgB/hN57UWTWGvso/StWtehGO3GNxvcS59TVVE6xq19xjRl
-         ZaUktmvc4szac42IqVUUeqPW6p5czJlSBnmJAy8anbUZPRIr2dgWaLJ37G6yZ4Qf3g
-         aaTF2cLyY4X2g==
-Message-ID: <a5880060-c5ef-b12d-fb41-4f7f71cfe316@denx.de>
-Date:   Tue, 20 Dec 2022 03:45:03 +0100
+        Mon, 19 Dec 2022 21:48:59 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1747F13CC4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 18:48:58 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id o8so5738638ilo.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 18:48:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google2022;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=frWLw2ZkVObcc07j9dtQMFLxjnvLrXU3PwzZGX4Mo7w=;
+        b=eduU04r8hf3vvnHc0OMdNDtR057TK+Snzk8vQVcuXrsnOT88upRHhU9h+0XUMlna8a
+         gUf4xd7jISw24azRqDOgbn3C38HFfLvqW/W+MqKYRsbWzlfhFY4LCwsuWU86Ek02VpmP
+         lQCTtUQ128C8+W5PdwtcECwTcDBM42bnqb0RiKyV1qCgx6e7AMbgFw1RfGTtyWU7sTmD
+         ZCmhq6FggXO8KcVAt4QeON0+KXKfFCn2lVsKbntLz3MyFlb7UI1zCEMvzEagSmAV2x3o
+         x6UpeRgDSrU+4hJDnqANPAkpLGMoPKl0tNYn/TKlaS7lOG+0gxMpXZDY8S+iY7ujStgZ
+         fU0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=frWLw2ZkVObcc07j9dtQMFLxjnvLrXU3PwzZGX4Mo7w=;
+        b=762ADpz2lnIQYnDAdGQwidvcne12nJ+ILsunTdLO2dxwXciTRXRO2GoihAzCBgsnjw
+         Htw0bnruMDFl011UtjbUMU6UcJCJuWN5dnGW9Jy30fqgWsBqlBqmFzhHzydfPWdx/axu
+         /x8p/+DJN0Ax7dVlUM9VPdEQriF65LUdalYFVD1EXDpw0f5332nkaHFxempZeOoThisH
+         8/3QdMIekGVGtlf/2oi+iQ46KiqNoqHhl+0fxRk+/KOMMl94lq5OOg6pzoXF+w+avKgf
+         XEHeyRgEU4AbqQ4UBOHnV0Cnn7ypfM1utVPTjCMh6KbtWQYy4/3iyMFvHND1P8t8TVeR
+         sdKA==
+X-Gm-Message-State: ANoB5pn9n2FRhlxctYYimO0m/iSu8vOQmOCE9gj6UqL8uCveAtRu2LeH
+        TaDQFntXQqVFB91Y7eawp7TV1Q==
+X-Google-Smtp-Source: AA0mqf7BWvvYPtstOR7XHomWWQoZlWrLYrQ2ES1K/rZlfQTN2lBkBV1cd6n+hJYADCwJYr1fNSjZeQ==
+X-Received: by 2002:a92:cac9:0:b0:302:bd25:c1a3 with SMTP id m9-20020a92cac9000000b00302bd25c1a3mr18694114ilq.21.1671504537395;
+        Mon, 19 Dec 2022 18:48:57 -0800 (PST)
+Received: from dev-jgu.dev.purestorage.com ([208.88.159.128])
+        by smtp.googlemail.com with ESMTPSA id l17-20020a92d951000000b00305e3da5f7dsm3427582ilq.85.2022.12.19.18.48.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 18:48:56 -0800 (PST)
+From:   Joy Gu <jgu@purestorage.com>
+To:     bridge@lists.linux-foundation.org
+Cc:     roopa@nvidia.com, razor@blackwall.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        joern@purestorage.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Joy Gu <jgu@purestorage.com>
+Subject: [PATCH] net: bridge: mcast: read ngrec once in igmp3/mld2 report
+Date:   Mon, 19 Dec 2022 18:48:07 -0800
+Message-Id: <20221220024807.36502-1-jgu@purestorage.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] kbuild: Optionally enable schema checks for %.dtb targets
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221220013233.2890335-1-robh@kernel.org>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20221220013233.2890335-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SPF_PERMERROR autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/20/22 02:32, Rob Herring wrote:
-> While not documented, schema checks for single dtb targets mostly work
-> already by setting 'CHECK_DTBS=1'. However, the dependencies are not
-> handled and it only works if 'make dt_bindings_check' was run first and
-> generated processed-schema.json. In addition, changing a binding file
-> doesn't cause the schema to be rebuilt and dtb to be revalidated.
-> 
-> Making this work turns out to be simple. Whenever CHECK_DTBS is set,
-> make 'dt_binding_check' a 'dtbs_prepare' dependency.
-> 
-> I reimplemented here what Masahiro had originally come up with a while
-> back.
-> 
-> Cc: Marek Vasut <marex@denx.de>
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->   Makefile | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 6aa709df6bde..a99d5c4de0fc 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1467,7 +1467,10 @@ dtbs_prepare: include/config/kernel.release scripts_dtc
->   
->   ifneq ($(filter dtbs_check, $(MAKECMDGOALS)),)
->   export CHECK_DTBS=y
-> -dtbs: dt_binding_check
-> +endif
-> +
-> +ifneq ($(CHECK_DTBS),)
-> +dtbs_prepare: dt_binding_check
->   endif
->   
->   dtbs_check: dtbs
+In br_ip4_multicast_igmp3_report() and br_ip6_multicast_mld2_report(),
+"ih" or "mld2r" is a pointer into the skb header. It's dereferenced to
+get "num", which is used in the for-loop condition that follows.
 
-Tested-by: Marek Vasut <marex@denx.de>
+Compilers are free to not spend a register on "num" and dereference that
+pointer every time "num" would be used, i.e. every loop iteration. Which
+would be a bug if pskb_may_pull() (called by ip_mc_may_pull() or
+ipv6_mc_may_pull() in the loop body) were to change pointers pointing
+into the skb header, e.g. by freeing "skb->head".
 
-Thank you!
+We can avoid this by using READ_ONCE().
+
+Suggested-by: Joern Engel <joern@purestorage.com>
+Signed-off-by: Joy Gu <jgu@purestorage.com>
+---
+ net/bridge/br_multicast.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/net/bridge/br_multicast.c b/net/bridge/br_multicast.c
+index 48170bd3785e..2ac4b099e00d 100644
+--- a/net/bridge/br_multicast.c
++++ b/net/bridge/br_multicast.c
+@@ -2624,11 +2624,11 @@ static int br_ip4_multicast_igmp3_report(struct net_bridge_mcast *brmctx,
+ 	bool changed = false;
+ 	int err = 0;
+ 	u16 nsrcs;
+ 
+ 	ih = igmpv3_report_hdr(skb);
+-	num = ntohs(ih->ngrec);
++	num = ntohs(READ_ONCE(ih->ngrec));
+ 	len = skb_transport_offset(skb) + sizeof(*ih);
+ 
+ 	for (i = 0; i < num; i++) {
+ 		len += sizeof(*grec);
+ 		if (!ip_mc_may_pull(skb, len))
+@@ -2750,11 +2750,11 @@ static int br_ip6_multicast_mld2_report(struct net_bridge_mcast *brmctx,
+ 
+ 	if (!ipv6_mc_may_pull(skb, sizeof(*mld2r)))
+ 		return -EINVAL;
+ 
+ 	mld2r = (struct mld2_report *)icmp6_hdr(skb);
+-	num = ntohs(mld2r->mld2r_ngrec);
++	num = ntohs(READ_ONCE(mld2r->mld2r_ngrec));
+ 	len = skb_transport_offset(skb) + sizeof(*mld2r);
+ 
+ 	for (i = 0; i < num; i++) {
+ 		__be16 *_nsrcs, __nsrcs;
+ 		u16 nsrcs;
+-- 
+2.39.0
+
