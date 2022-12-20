@@ -2,88 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543C06520E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 13:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2531C6520EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 13:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233450AbiLTMo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 07:44:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
+        id S229592AbiLTMqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 07:46:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbiLTMod (ORCPT
+        with ESMTP id S233700AbiLTMpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 07:44:33 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA29216596;
-        Tue, 20 Dec 2022 04:41:15 -0800 (PST)
-Received: from beast.luon.net (unknown [IPv6:2a10:3781:2531::8])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sjoerd)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6FBE4660035B;
-        Tue, 20 Dec 2022 12:41:14 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671540074;
-        bh=vcofDtvgGSQwoQWEQaw0YQls3ZMtwb+RUV1w+HRNNzM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=RbQ0jlpvFUTW+nC36fMlzEhALhExfUY9AiIDaVgBR5KEP20Xk3ecswSXfxnSDotS3
-         A2X/HVVzgMqDG6iDR5VyQOHpa2q+r6/Kwfhr6RRUvq0YCR6ZrKYnyA2JhHKOSMUVMz
-         NPomXdhkFaC5hNtGNx7PD3p732BLexKTtH40QGVCgibVCofVC34EcFBbb+dzwbIdKQ
-         fdJaGG2Sz/vPQQLoEinluusPYHz8k0VQegEFSxg1ccAqyH0QLGpTImXZiTg98jZz63
-         0O+QjqV1MnoPX3IGSr+8mMls0tFaRdXHn5pl3IPR2jbaNBIkkeHSQh2ckq+DPPlX//
-         d3usQsgwsCeIQ==
-Received: by beast.luon.net (Postfix, from userid 1000)
-        id C97E35E817D0; Tue, 20 Dec 2022 13:41:11 +0100 (CET)
-Message-ID: <8d874a1bb2ba974cdaed5fe47c1b92c76ac3e364.camel@collabora.com>
-Subject: Re: [PATCH 0/3] Improve K3-am625-sk support (USB, MMC)
-From:   Sjoerd Simons <sjoerd@collabora.com>
-To:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>
-Cc:     martyn.welch@collabora.com, Nitin Yadav <n-yadav@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Tue, 20 Dec 2022 13:41:11 +0100
-In-Reply-To: <d882df13-33e6-db53-e59e-53419db4255d@ti.com>
-References: <20221216143624.23708-1-sjoerd@collabora.com>
-         <d882df13-33e6-db53-e59e-53419db4255d@ti.com>
-Organization: Collabora Ltd.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2-1 
+        Tue, 20 Dec 2022 07:45:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFB913D23
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 04:42:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671540120;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=a9dphcXJKbDgaDzxRRBiVFA9p7kE9yji17UDhT5ug+8=;
+        b=jDlbCVx5ASW9WXd/pM0qM3JKtx5JDLczj05mZ/T2tx3j0JEJLNlBevQSTFkX69JY6oVB/1
+        b4dITTT2oSk8ueGT+FDcKRgoHHg+EdroInniqMs45LSF6jleOztdCILOUBTeG3O3WVGOx8
+        UD/5q+Kq63GELU0sYr2RDhIJh1veFRs=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-486-QPCcPzcRNLy3P7IjJkXiwg-1; Tue, 20 Dec 2022 07:41:59 -0500
+X-MC-Unique: QPCcPzcRNLy3P7IjJkXiwg-1
+Received: by mail-qt1-f198.google.com with SMTP id bt4-20020ac86904000000b003a96b35e7a8so5417343qtb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 04:41:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a9dphcXJKbDgaDzxRRBiVFA9p7kE9yji17UDhT5ug+8=;
+        b=AojLgKbjrw8xOw+luvIwJDIu1NqJp5rCR738Yjz0/emluJUsXJqbrIDG2JGNAtkjtQ
+         J017ucEFZcbeQ0WMaKYQ/MXMB4g8CRfh4E/huiTxZkuzGk6HO9FxMM1E0bi0WpgvhAhF
+         AEnragPuP3Uzjks+glfDtoxUyB+Nb7stfnytakEv69o3i9ejvzAhpQ8mE+CuJOM7K3qg
+         OifyYFj8fuf7TcNhg9pHF7Xd21LaxlbRLXNyhyR818Aw80mgS+ZNXoI7QV4dwZSAdgj6
+         Q3a0tyCBPGkDJD0zwXF7OWApTsVVWmCwOKvVikUDFYinw3TYvATTaoCoBgNZqb26C8sB
+         1Rkw==
+X-Gm-Message-State: AFqh2kqqrKromN57WzZ4lUGcSSOB34vxps89PXAxV7FUt8nawbabqx/1
+        qKUZQ69W3cgde+V1/kt3XiOnWKwPlreC++4jDtZ9LMAVBfZEktdBslvtwtlrD7PJ0Eg5i7nGEhj
+        XPNiZnBPZn9J9gQCgYVjHQZUVabiwg5KYSh1XbJeKeNmILo2uttfEoNfiSyFk59i65bJnDg==
+X-Received: by 2002:ac8:6904:0:b0:3a9:6b48:a130 with SMTP id bt4-20020ac86904000000b003a96b48a130mr25323887qtb.34.1671540119087;
+        Tue, 20 Dec 2022 04:41:59 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsSZ+R1ipZB7Pp5jlH4N4rO4W1kiXyv4dXazNe/fcZv+aCknM6mHWYUdqpnkHeBoyJ3nTFEpA==
+X-Received: by 2002:ac8:6904:0:b0:3a9:6b48:a130 with SMTP id bt4-20020ac86904000000b003a96b48a130mr25323850qtb.34.1671540118802;
+        Tue, 20 Dec 2022 04:41:58 -0800 (PST)
+Received: from redhat.com ([37.19.199.118])
+        by smtp.gmail.com with ESMTPSA id i8-20020a05620a404800b006fbaf9c1b70sm8781028qko.133.2022.12.20.04.41.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 04:41:58 -0800 (PST)
+Date:   Tue, 20 Dec 2022 07:41:53 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        virtualization@lists.linux-foundation.org,
+        linux-block@vger.kernel.org
+Subject: [PATCH] virtio_blk: temporary variable type tweak
+Message-ID: <20221220124152.523531-1-mst@redhat.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
+X-Mutt-Fcc: =sent
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Vignesh,
+virtblk_result returns blk_status_t which is a bitwise restricted type,
+so we are not supposed to stuff it in a plain int temporary variable.
+All we do with it is pass it on to a function expecting blk_status_t so
+the generated code is ok, but we get warnings from sparse:
 
-On Tue, 2022-12-20 at 17:02 +0530, Vignesh Raghavendra wrote:
-> Hi,
->=20
-> On 16/12/22 8:06 pm, Sjoerd Simons wrote:
-> >=20
-> > This series picks up a few patches from the TI BSP tree that
-> > unfortunately didn't make it upstream thusfar.
-...
-> > 0:
-> > https://lore.kernel.org/lkml/f714ee55-ef47-317d-81b9-57020dda064b@ti.co=
-m/T/
-> >=20
-> >=20
-> Really appreciate porting and posting these patches to mainline!
-> Wondering what tree are these patches based on?
-> I cannot apply cleanly on linux-next.
+drivers/block/virtio_blk.c:326:36: sparse: sparse: incorrect type in initializer (different base types) @@     expected int status @@
++got restricted blk_status_t @@
+drivers/block/virtio_blk.c:334:33: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected restricted
++blk_status_t [usertype] error @@     got int status @@
 
-These are against Linux 6.1 ; I'll happy rebase agains next for the
-next round or is there a specific tree you prefer to base against?
+Make sparse happy by using the correct type.
 
-Regards,
---=20
-Sjoerd Simons
-Collabora Ltd.
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+---
+ drivers/block/virtio_blk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
+index 88d8410ecc5e..73cd5db0d7d5 100644
+--- a/drivers/block/virtio_blk.c
++++ b/drivers/block/virtio_blk.c
+@@ -336,7 +336,7 @@ static blk_status_t virtblk_setup_cmd(struct virtio_device *vdev,
+ static inline void virtblk_request_done(struct request *req)
+ {
+ 	struct virtblk_req *vbr = blk_mq_rq_to_pdu(req);
+-	int status = virtblk_result(vbr->status);
++	blk_status_t status = virtblk_result(vbr->status);
+ 
+ 	virtblk_unmap_data(req, vbr);
+ 	virtblk_cleanup_cmd(req);
+-- 
+MST
+
