@@ -2,170 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13EDD651EE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA52E651EEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:37:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiLTKgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:36:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
+        id S232408AbiLTKhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:37:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiLTKge (ORCPT
+        with ESMTP id S229575AbiLTKhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:36:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D27BE3D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:35:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671532547;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0xIE948N+OVyD9RxTPjKQ11q6Fjch6dgm41Al2E4iz0=;
-        b=hErDz/vIIXmxX6pXfMRZRf6yr1oVt7xtf1J8SvGy+bXyrsyf91yufTNNcXqLXsQGeMuPRE
-        I+q5JjJTkXBt8eeSyzjx+5dIs9ccDJqRRehP2e8TjW42Keb+rcqaiOL0NQx9P+c/6zOehH
-        p0lKpdU0V8EmVBUnVPG+BnuQMqsZ5JQ=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-652-QSEUWu0gO1ysYUMcpYrDZQ-1; Tue, 20 Dec 2022 05:35:45 -0500
-X-MC-Unique: QSEUWu0gO1ysYUMcpYrDZQ-1
-Received: by mail-wm1-f69.google.com with SMTP id i132-20020a1c3b8a000000b003d0f49bc21bso7862466wma.6
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:35:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0xIE948N+OVyD9RxTPjKQ11q6Fjch6dgm41Al2E4iz0=;
-        b=5ED0wIXnZYbCCtjmJ/Q7C59OPaUnQIYSbC9fotgqUtB5BdoNDN/GSJRDkchfvS2aAN
-         zt3QMYhXeqfan1QAWhNwELOjl3FZqRGVcG10vpMTBkIPEaMzF9IpEvGr8I6b5L4BIw7O
-         6boL3LxGRb663VR7rzAHvi07il7Wu1zdn2zhJmlaISThgByPMmoxNeJTjFBY9nfVdpM+
-         cRUuCuTV2gFxSbIQhVHSaKEQZwh8aJQL8T7YMLu91LWbszCnZaVuk7yfJQj+0SYyNW6s
-         4Ps7F1dFdmqc88keln5iENO7Me+ylDGTBnve7ZAYAXTV8iTIBppWnWAGvWYbJT+Ifomv
-         gmZg==
-X-Gm-Message-State: AFqh2kp1oGRg7ureJukXnV81z2KSPIljg5Ki5DAgdbwxpIdh9Dyr+zGf
-        SCqDuiZzB3dVgLGZFuiTybkVtDZnOOQZr/5fI7jUnPP2OAG33Rrm9D6AKdFg9Leui+Xe2YLdd0K
-        lPZDaAFagqybFqFokPsU24pd+
-X-Received: by 2002:a05:600c:3b08:b0:3d3:4a47:52e9 with SMTP id m8-20020a05600c3b0800b003d34a4752e9mr8998383wms.15.1671532544034;
-        Tue, 20 Dec 2022 02:35:44 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXswZvLV6vC3rUs9MMkLlnmeQY6d+pmClDori0caDrXbfFSl7htQYg5vZB4m7wOx5HQXfo1nIg==
-X-Received: by 2002:a05:600c:3b08:b0:3d3:4a47:52e9 with SMTP id m8-20020a05600c3b0800b003d34a4752e9mr8998362wms.15.1671532543832;
-        Tue, 20 Dec 2022 02:35:43 -0800 (PST)
-Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
-        by smtp.gmail.com with ESMTPSA id 1-20020a05600c228100b003d23928b654sm21773342wmf.11.2022.12.20.02.35.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 02:35:43 -0800 (PST)
-Date:   Tue, 20 Dec 2022 11:35:38 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>
-Subject: Re: [RFC PATCH v5 4/4] test/vsock: vsock_perf utility
-Message-ID: <20221220103538.msrgcwsolmzoc2r4@sgarzare-redhat>
-References: <e04f749e-f1a7-9a1d-8213-c633ffcc0a69@sberdevices.ru>
- <d92184cd-e79b-80ae-4f89-92dfd43d1e92@sberdevices.ru>
+        Tue, 20 Dec 2022 05:37:36 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B342BE3D;
+        Tue, 20 Dec 2022 02:37:34 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NbtB95WQzz9xqwx;
+        Tue, 20 Dec 2022 18:30:09 +0800 (CST)
+Received: from [10.45.156.176] (unknown [10.45.156.176])
+        by APP2 (Coremail) with SMTP id GxC2BwDXqWBMkKFj9NEqAA--.5576S2;
+        Tue, 20 Dec 2022 11:37:10 +0100 (CET)
+Message-ID: <a04e6458-6814-97fc-f03a-617809e2e6ce@huaweicloud.com>
+Date:   Tue, 20 Dec 2022 11:36:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <d92184cd-e79b-80ae-4f89-92dfd43d1e92@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] lib/mpi: Fix buffer overrun when SG is too long
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Eric Biggers <ebiggers@kernel.org>, dhowells@redhat.com,
+        davem@davemloft.net, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Tadeusz Struk <tadeusz.struk@intel.com>
+References: <20221209150633.1033556-1-roberto.sassu@huaweicloud.com>
+ <Y5OGr59A9wo86rYY@sol.localdomain>
+ <fa8a307541735ec9258353d8ccb75c20bb22aafe.camel@huaweicloud.com>
+ <Y5bxJ5UZNPzxwtoy@gondor.apana.org.au>
+ <0f80852578436dbba7a0fce03d86c3fa2d38c571.camel@huaweicloud.com>
+ <Y6FjQPZiJYTEG1zI@gondor.apana.org.au>
+Content-Language: en-US
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <Y6FjQPZiJYTEG1zI@gondor.apana.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwDXqWBMkKFj9NEqAA--.5576S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tr4rXrW5Aw45ArW3Zw4fZrb_yoW8Xw17pF
+        4DXa1UGrWvg3yIy3ZrW3W8K345C3s8GF47Crs7tr1j9rZ3tw1FkrW0kw4F9347Wr4kXr4U
+        Ja4qva4fZrWkArUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU13rcDUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBF1jj4bWLQABsE
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 07:23:46AM +0000, Arseniy Krasnov wrote:
->This adds utility to check vsock rx/tx performance.
->
->Usage as sender:
->./vsock_perf --sender <cid> --port <port> --bytes <bytes to send>
->Usage as receiver:
->./vsock_perf --port <port> --rcvlowat <SO_RCVLOWAT>
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> tools/testing/vsock/Makefile     |   3 +-
-> tools/testing/vsock/README       |  34 +++
-> tools/testing/vsock/vsock_perf.c | 441 +++++++++++++++++++++++++++++++
-> 3 files changed, 477 insertions(+), 1 deletion(-)
-> create mode 100644 tools/testing/vsock/vsock_perf.c
->
->diff --git a/tools/testing/vsock/Makefile b/tools/testing/vsock/Makefile
->index f8293c6910c9..43a254f0e14d 100644
->--- a/tools/testing/vsock/Makefile
->+++ b/tools/testing/vsock/Makefile
->@@ -1,8 +1,9 @@
-> # SPDX-License-Identifier: GPL-2.0-only
->-all: test
->+all: test vsock_perf
-> test: vsock_test vsock_diag_test
-> vsock_test: vsock_test.o timeout.o control.o util.o
-> vsock_diag_test: vsock_diag_test.o timeout.o control.o util.o
->+vsock_perf: vsock_perf.o
->
-> CFLAGS += -g -O2 -Werror -Wall -I. -I../../include -I../../../usr/include -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -D_GNU_SOURCE
-> .PHONY: all test clean
->diff --git a/tools/testing/vsock/README b/tools/testing/vsock/README
->index 4d5045e7d2c3..e6f6735bba05 100644
->--- a/tools/testing/vsock/README
->+++ b/tools/testing/vsock/README
->@@ -35,3 +35,37 @@ Invoke test binaries in both directions as follows:
->                        --control-port=$GUEST_IP \
->                        --control-port=1234 \
->                        --peer-cid=3
->+
->+vsock_perf utility
->+-------------------
->+'vsock_perf' is a simple tool to measure vsock performance. It works in
->+sender/receiver modes: sender connect to peer at the specified port and
->+starts data transmission to the receiver. After data processing is done,
->+it prints several metrics(see below).
->+
->+Usage:
->+# run as sender
->+# connect to CID 2, port 1234, send 1G of data, tx buf size is 1M
->+./vsock_perf --sender 2 --port 1234 --bytes 1G --buf-size 1M
->+
->+Output:
->+tx performance: A Gb/s
->+
->+Output explanation:
->+A is calculated as "number of bytes to send" / "time in tx loop"
->+
->+# run as receiver
->+# listen port 1234, rx buf size is 1M, socket buf size is 1G, SO_RCVLOWAT is 64K
->+./vsock_perf --port 1234 --buf-size 1M --vsk-size 1G --rcvlowat 64K
->+
->+Output:
->+rx performance: A Gb/s
->+total in 'read()': B sec
->+POLLIN wakeups: C
->+average in 'read()': D ns
->+
->+Output explanation:
->+A is calculated as "number of received bytes" / "time in rx loop".
->+B is time, spent in 'read()' system call(excluding 'poll()')
->+C is number of 'poll()' wake ups with POLLIN bit set.
->+D is B / C, e.g. average amount of time, spent in single 'read()'.
+On 12/20/2022 8:24 AM, Herbert Xu wrote:
+> On Mon, Dec 19, 2022 at 09:49:29AM +0100, Roberto Sassu wrote:
+>>
+>> do you have any news on this bug?
+> 
+> Thanks for the reminder.  Could you please try this patch?
 
-Since now we prints Gbits/s I think we should update the previous lines.
-But the rest looks good to me. So with the updated README:
+Tried, could not boot the UML kernel.
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+After looking, it seems we have to call sg_miter_stop(). Or 
+alternatively, we could let sg_miter_next() be called but not writing 
+anything inside the loop.
 
-Thanks,
-Stefano
+With either of those fixes, the tests pass (using one scatterlist).
+
+Roberto
+
+> ---8<---
+> The helper mpi_read_raw_from_sgl ignores the second parameter
+> nbytes when reading the SG list and may overrun its own buffer
+> because it only allocates enough memory according to nbytes.
+> 
+> Fixes: 2d4d1eea540b ("lib/mpi: Add mpi sgl helpers")
+> Reported-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+> 
+> diff --git a/lib/mpi/mpicoder.c b/lib/mpi/mpicoder.c
+> index 39c4c6731094..6bffc68c1a5a 100644
+> --- a/lib/mpi/mpicoder.c
+> +++ b/lib/mpi/mpicoder.c
+> @@ -494,17 +494,15 @@ MPI mpi_read_raw_from_sgl(struct scatterlist *sgl, unsigned int nbytes)
+>   	val->sign = 0;
+>   	val->nlimbs = nlimbs;
+>   
+> -	if (nbytes == 0)
+> -		return val;
+> -
+>   	j = nlimbs - 1;
+>   	a = 0;
+>   	z = BYTES_PER_MPI_LIMB - nbytes % BYTES_PER_MPI_LIMB;
+>   	z %= BYTES_PER_MPI_LIMB;
+>   
+> -	while (sg_miter_next(&miter)) {
+> +	while (nbytes && sg_miter_next(&miter)) {
+>   		buff = miter.addr;
+> -		len = miter.length;
+> +		len = min_t(unsigned, miter.length, nbytes);
+> +		nbytes -= len;
+>   
+>   		for (x = 0; x < len; x++) {
+>   			a <<= 8;
 
