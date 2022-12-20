@@ -2,151 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D643B65231A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:51:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 065FE652322
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233877AbiLTOva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 09:51:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
+        id S234152AbiLTOvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 09:51:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiLTOux (ORCPT
+        with ESMTP id S233008AbiLTOvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:50:53 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23A01CFC1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:50:30 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id bx10so12019293wrb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:50:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OjZvuZKXxzFJRZq3j75PnAQGUgw8cFsM3I4S8oUerK0=;
-        b=WeKBmMXkUslzNxtSl6xTWfys/L0DO0+UMz2LRHCQAQYGrsz2BBNvQt8vKMu96DAo9q
-         xvKkCWuB0tULogMjegQmkUADXcLST3yFJga1+5MXRKp5XSkiSH58ERtX6pFouLpnFHxn
-         SPXQCgRDarI3pgV8Nl58IS0adEHjPL+0GwFUw6J65qosRLkir1LtI4qUecSPwsRy1wcm
-         OtkLGwZglNOSxNpp5XW07h7g4gCYrspHFABL1Q+xlxBxrXAv+y1RtdWvlkIebIYVbhEO
-         HE5EkduLREZPmvj2mwAIIqGkcAHYAQsR+OdOuYPJalEig1ZD4/w30qDKAAD+VWGO+T5U
-         3xyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OjZvuZKXxzFJRZq3j75PnAQGUgw8cFsM3I4S8oUerK0=;
-        b=6q+k1K7lpBRh6vJysgVA3WskcT2FqH3aXezt+/oJ0hn0E9I9of4oqI5l0as0t55JJr
-         rs4Aj+zMHCzRSgVxRghguw1ZVODHhD7k+lbaN/2x/Q/AISlu/14jHEu/lFGn0mlKyhxW
-         PehPHuezHeT5mYi818mFeS8MfiTnYKBW1fVXNgFDfB8LWlteeO3ZFqru7y6XMNP+uLgs
-         YGO9HTZVwSDiD7uYCGAMcXdKVQvChX9r2dY8lgWEC5mB6QTqhxgB42JqaRTGrTFnSLJH
-         nDES9m4Lgux118lC/FCWOpNgy1QYb98hmhiPo59S670JOV68I/dPoeGOqS5FxlZvcgZL
-         Df6g==
-X-Gm-Message-State: AFqh2koY6KcdbMWPnObUPsbK6QYqZsIpk5bsTWMw+um06SMQtv+eomC1
-        6Lbge2zznDqCDP+LyN+6gLM=
-X-Google-Smtp-Source: AMrXdXsRXdqhXHnX5GaEcKChWQBEkh2vtqo9tt4aSVQrTqMRw9a6fhOSpxHrDn1nBpfr/5ne00KT+A==
-X-Received: by 2002:adf:a554:0:b0:248:ab8a:5144 with SMTP id j20-20020adfa554000000b00248ab8a5144mr1823739wrb.63.1671547829189;
-        Tue, 20 Dec 2022 06:50:29 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id b13-20020a05600003cd00b0024cb961b6aesm13171989wrg.104.2022.12.20.06.50.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 06:50:28 -0800 (PST)
-Message-ID: <e0d3f5c7-6f6b-ee21-170c-51e5240de114@gmail.com>
-Date:   Tue, 20 Dec 2022 15:50:27 +0100
+        Tue, 20 Dec 2022 09:51:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44981ADA2;
+        Tue, 20 Dec 2022 06:51:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51B0661483;
+        Tue, 20 Dec 2022 14:51:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29E88C433D2;
+        Tue, 20 Dec 2022 14:51:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671547871;
+        bh=8qfJFUhqIYAmakBUNqRQLV+S2J2kQjEkKqD3B2baYNY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MahFJzZ0/YsemtAPaBWoLZpZa0yQ9OPF5IW4EL/QZbKpKv+XN0erB+OpY7bVCpf4x
+         zQR+9d6CmQFMm2oCpOt7JPBu2dy/Kh883LRX5Pm3b9nm/ATYQVWnbQ9wX2xeNPxS0C
+         2dD92jBv2KH4Rs4xiKoutfO2kfTFz6MVAxWC24Po=
+Date:   Tue, 20 Dec 2022 15:51:08 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        robh+dt@kernel.org, mb@lightnvm.io, ckeepax@opensource.cirrus.com,
+        arnd@arndb.d, mst@redhat.com, javier@javigon.com,
+        mikelley@microsoft.com, jasowang@redhat.com,
+        sunilmut@microsoft.com, bjorn.andersson@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        ashish.deshpande@nxp.com, rvmanjumce@gmail.com
+Subject: Re: [EXT] Re: [PATCH v5 2/2] misc: nxp-sr1xx: UWB driver support for
+ sr1xx series chip
+Message-ID: <Y6HL3ATPfulakJwS@kroah.com>
+References: <20220914142944.576482-1-manjunatha.venkatesh@nxp.com>
+ <20220914142944.576482-3-manjunatha.venkatesh@nxp.com>
+ <0b2da6f2-62f8-41a3-bf07-b6895a2dedee@www.fastmail.com>
+ <cd397721-f549-5c65-2c65-35b09c3ea7f9@nxp.com>
+ <Y0A+Y3uNzpzGx0Ey@kroah.com>
+ <dfe167cf-5d4e-6fc7-c954-25f719b1e843@nxp.com>
+ <Y4cE8MvAS8bpcQmW@kroah.com>
+ <0fc29cde-69b1-867c-0e4b-0682af9f8aff@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] soc: mediatek: mtk-svs: Enable the IRQ later
-Content-Language: en-US
-To:     =?UTF-8?B?Um9nZXIgTHUgKOmZuOeRnuWCkSk=?= <Roger.Lu@mediatek.com>,
-        "ribalda@chromium.org" <ribalda@chromium.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>
-References: <20221127-mtk-svs-v1-0-7a5819595838@chromium.org>
- <d683a2e7-b886-9bf6-27df-d8c67cedbbdd@collabora.com>
- <b8b14bcb-845f-aa18-f8aa-ad0bed9fb0bb@gmail.com>
- <52fb6ccf3fe1cb11f3e330ecc4d9c6cf1225c98a.camel@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <52fb6ccf3fe1cb11f3e330ecc4d9c6cf1225c98a.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0fc29cde-69b1-867c-0e4b-0682af9f8aff@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 20, 2022 at 08:03:08PM +0530, Manjunatha Venkatesh wrote:
+> 
+> On 11/30/2022 12:53 PM, Greg Kroah-Hartman wrote:
+> > Caution: EXT Email
+> > 
+> > On Wed, Nov 30, 2022 at 09:39:59AM +0530, Manjunatha Venkatesh wrote:
+> > > On 10/7/2022 8:27 PM, Greg Kroah-Hartman wrote:
+> > > > Caution: EXT Email
+> > > > 
+> > > > On Fri, Oct 07, 2022 at 07:34:25PM +0530, Manjunatha Venkatesh wrote:
+> > > > > On 9/14/2022 8:39 PM, Arnd Bergmann wrote:
+> > > > > > Caution: EXT Email
+> > > > > > 
+> > > > > > On Wed, Sep 14, 2022, at 4:29 PM, Manjunatha Venkatesh wrote:
+> > > > > > 
+> > > > > > > NXP has SR1XX family of UWB Subsystems (UWBS) devices. SR1XX SOCs
+> > > > > > > are FiRa Compliant. SR1XX SOCs are flash less devices and they need
+> > > > > > > Firmware Download on every device boot. More details on the SR1XX Family
+> > > > > > > can be found athttps://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.nxp.com%2Fproducts%2F%3AUWB-TRIMENSION&amp;data=05%7C01%7Cmanjunatha.venkatesh%40nxp.com%7C46c5718c03ee429cf57208dad2a3cad7%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638053898170779252%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=S2BswHaF22edAfiZXEKUwGfUTNi1nuQzQSdGDb26peI%3D&amp;reserved=0
+> > > > > > > 
+> > > > > > > The sr1xx driver work the SR1XX Family of UWBS, and uses UWB Controller
+> > > > > > > Interface (UCI).  The corresponding details are available in the FiRa
+> > > > > > > Consortium Website (https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.firaconsortium.org%2F&amp;data=05%7C01%7Cmanjunatha.venkatesh%40nxp.com%7C46c5718c03ee429cf57208dad2a3cad7%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638053898170779252%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=0fFcimUd6gOxTV0EKS%2BfxRZfrMDg0fytq1eSDmkMZ9E%3D&amp;reserved=0).
+> > > > > > I know nothing about UWB, so I have no idea if the user interface
+> > > > > > you propose here makes sense. My guess is that there is a good chance
+> > > > > > that there are other implementations of UWB that would not work
+> > > > > > with this specific driver interface, so you probably need a
+> > > > > > slightly higher-level abstraction.
+> > > > > > 
+> > > > > > We had an older subsystem that was called UWB and that got removed
+> > > > > > a while ago:
+> > > > > > 
+> > > > > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Ftorvalds%2Flinux.git%2Fcommit%2Fdrivers%2Fstaging%2Fuwb%3Fid%3Dcaa6772db4c1deb5d9add48e95d6eab50699ee5e&amp;data=05%7C01%7Cmanjunatha.venkatesh%40nxp.com%7C46c5718c03ee429cf57208dad2a3cad7%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638053898170779252%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=XXYgofE9LlBCPGW1aKxKUOBEIGF0aQv%2Bh6x6iNATkLQ%3D&amp;reserved=0
+> > > > > > 
+> > > > > > Is that the same UWB or something completely different?
+> > > > > Basically, it is SPI device driver which supports UCI(Ultra-wide band
+> > > > > Command Interface) packet structure. It is not same as in mentioned link.
+> > > > Why isn't this just a normal SPI driver and you do the "UCI" commands
+> > > > from userspace through the device node there?
+> > > > 
+> > > > I know I asked this before, but I can't remember the answer, sorry, so
+> > > > please include that in the changelog information when you resubmit.
+> > > > 
+> > > > thanks,
+> > > > 
+> > > > greg k-h
+> > > The IO Handshake needed with SR1XX Family of SOCs cannot use the RAW SPI
+> > > Module's APIs and hence custom APIs are added for communication with the
+> > > UWBS,
+> > I do not understand, what "IO handshake"?  What is missing from the
+> > userspace spi api that is needed here?
+> > 
+> > > With this will get required throughput for UWBS use cases to avoid multiple
+> > > round trip between user  and kernel mode.
+> > Based on the speed of the SPI bus, this should not be an issue at all.
+> > If it is, please provide us real performance numbers showing the
+> > problem, as there are ways of speeding that up.
+> 
+> Not only throughput and also this driver customized ioctls to be controlled
+> 
+> from the user space for different scenarios.
 
+Then you need to strongly document this.
 
-On 20/12/2022 12:03, Roger Lu (陸瑞傑) wrote:
-> Hi Matthias Sir,
-> 
-> After applying this patch, SVS probes fail as below on my MT8192 platform. If
-> thing isn't too late, please do not merge this patch. I'll ask Ricardo how to
-> reproduce this issue and give the correct solution. Thanks in advance.
-> 
+> Current driver have UCI (UWB Command Interface) specific header parsing
+> logic.
 
-Ok, I just dropped the patch from v6.2-tmp/soc branch.
+What does this mean?
 
-Regards,
-Matthias
+> There is a specific GPIOs hand shake mechanism required between Host Driver
+> and UWBS
+> 
+> at driver level which is tightly coupled with our UWBS chip.
 
-> #MT8192 platform SVS probe fail log
-> [   10.209430]  SVSB_GPU_LOW: init02 completion timeout
-> [   10.214402] mtk-svs 1100b000.svs: svs start fail: -16
-> [   10.219479] mtk-svs: probe of 1100b000.svs failed with error -16
+Why can't you do this in userspace?
+
+> Basically UWBS expecting acknowledgement from Host driver after first
+> interrupt request
 > 
-> Hi Ricardo,
-> 
-> Could you share us how you reproduce this issue? I have MT8192 Chromebook and
-> can give it a try to reproduce the issue you encountered. Thanks a lot.
-> 
-> Sincerely,
-> Roger Lu.
-> 
-> On Fri, 2022-12-16 at 13:47 +0100, Matthias Brugger wrote:
->> 
->> On 30/11/2022 12:00, AngeloGioacchino Del Regno wrote:
->> > Il 27/11/22 21:22, Ricardo Ribalda ha scritto:
->> > > If the system does not come from reset (like when is booted via
->> > > kexec()), the peripheral might triger an IRQ before the data structures
->> > > are initialised.
->> > > 
->> > > Fixes:
->> > > 
->> > > [    0.227710] Unable to handle kernel NULL pointer dereference at
->> > > virtual 
->> > > address 0000000000000f08
->> > > [    0.227913] Call trace:
->> > > [    0.227918]  svs_isr+0x8c/0x538
->> > > 
->> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
->> > 
->> > Reviewed-by: AngeloGioacchino Del Regno <
->> > angelogioacchino.delregno@collabora.com>
->> > 
->> > 
->> 
->> Applied thanks!
->> 
-> 
-> ************* MEDIATEK Confidentiality Notice ********************
-> The information contained in this e-mail message (including any
-> attachments) may be confidential, proprietary, privileged, or otherwise
-> exempt from disclosure under applicable laws. It is intended to be
-> conveyed only to the designated recipient(s). Any use, dissemination,
-> distribution, printing, retaining or copying of this e-mail (including its
-> attachments) by unintended recipient(s) is strictly prohibited and may
-> be unlawful. If you are not an intended recipient of this e-mail, or believe
-> that you have received this e-mail in error, please notify the sender
-> immediately (by replying to this e-mail), delete any and all copies of
-> this e-mail (including any attachments) from your system, and do not
-> disclose the content of this e-mail to any other person. Thank you!
+> triggered then Host driver acknowledge to UWBS through dedicated GPIOs.
+
+Again, why can't you do this in userspace?
+
+> After this one more interrupt request will be triggered from UWBS for read
+> operation.
+
+Again, userspace?
+
+thanks,
+
+greg k-h
