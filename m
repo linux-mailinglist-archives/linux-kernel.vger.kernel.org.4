@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E4365290A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 23:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C78665290E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 23:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233873AbiLTW2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 17:28:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
+        id S229791AbiLTW3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 17:29:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiLTW2p (ORCPT
+        with ESMTP id S229448AbiLTW3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 17:28:45 -0500
+        Tue, 20 Dec 2022 17:29:32 -0500
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D102B4B0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 14:28:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE32DD4;
+        Tue, 20 Dec 2022 14:29:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671575324; x=1703111324;
+  t=1671575371; x=1703111371;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
   bh=HvkRqojfi6ClONQSzxg0z+qJIiMeSeXELz4Q5owrY9g=;
-  b=IXPOz0Z+Ij1+GCBz2US5QOPMYG3vrInssXbNfpc1SpllF39ZuURJy38S
-   +9EQuAfSwmm/TbPE6BEHPqDxQjRtl/hBTs2lIDHpt9Pfi5/GS3suOC20S
-   yR7oT56QpQo/NNG+gTUFr2Zz4VQCRbupVX0eRwGQglfzpIGnCtDjT9Wqu
-   a19Yp2R4heNWKI1q1BQec64RF56z87gUtRA396Sr/s177OwAsTyj3XrXI
-   q24iqCEibm7cRsjhzJin4cxzNlKU6nWiDIYjXQHyo2nCmP87MR57IKPXk
-   JHvQiJcQGMHt3GqwzBVBkRPPKztTQCTqqYDghpi0TK5DbfJ+gxKQBNuVT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="317368989"
+  b=GSfrMCwox83nT3VvqTQ3XoeDXj+bqpdX5s22cfYyOfuQWute01hDfOKq
+   Qf3uhMBnB5wCIAZqynVx4zmB24FGUdTqBcDl62KdfMvt5djMDV8kVQV+A
+   j5WcbajbbiHPBLtA6oeHFKwLlsoXUhLFu/C+0fgGUIpwprIxF0ADUE5c/
+   eZKPME8t3kz55Dcb5bo6IPVUhlZPsrApgDQ0lxTS0tsqRYGHFmgVRBVaL
+   PeJL+2gkmrixDyJzwr6knQzOEIxoTWhSASYBNpkecBchdOdDrzv9J1v2/
+   1KHFdyt1WpPAA40CN55TjALjGhCyQ1oazhwVB2/ukaZQVVN0celiaTlR2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="317369079"
 X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
-   d="scan'208";a="317368989"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 14:28:44 -0800
+   d="scan'208";a="317369079"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 14:29:30 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="825434877"
+X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="683566946"
 X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
-   d="scan'208";a="825434877"
+   d="scan'208";a="683566946"
 Received: from uhpatel-desk4.jf.intel.com ([10.23.15.157])
-  by orsmga005.jf.intel.com with ESMTP; 20 Dec 2022 14:28:43 -0800
+  by orsmga001.jf.intel.com with ESMTP; 20 Dec 2022 14:29:30 -0800
 From:   Utkarsh Patel <utkarsh.h.patel@intel.com>
 To:     mika.westerberg@linux.intel.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.or
+        linux-usb@vger.kernel.org
 Cc:     rajmohan.mani@intel.com, Utkarsh Patel <utkarsh.h.patel@intel.com>
 Subject: [PATCH] thunderbolt: Do not report errors if on-board retimers are found
-Date:   Tue, 20 Dec 2022 14:29:12 -0800
-Message-Id: <20221220222912.3145485-1-utkarsh.h.patel@intel.com>
+Date:   Tue, 20 Dec 2022 14:30:06 -0800
+Message-Id: <20221220223006.3145568-1-utkarsh.h.patel@intel.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
