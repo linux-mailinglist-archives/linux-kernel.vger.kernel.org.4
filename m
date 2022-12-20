@@ -2,102 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BEA76524AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E56746524C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233878AbiLTQfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 11:35:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
+        id S233677AbiLTQi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 11:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiLTQfs (ORCPT
+        with ESMTP id S234099AbiLTQhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 11:35:48 -0500
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D416ECE2;
-        Tue, 20 Dec 2022 08:35:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:To:
-        MIME-Version:Date:Message-ID:cc:content-disposition;
-        bh=X0gMC66yAM1WCttF9nywv1Rf8Fk/yP6MzkrnIjOEB1A=; b=nAFnTlbuGJayuJui/tlPii109S
-        mBQEJHVd87OVAyvlvx0AO3vUgwBKAhb9y2tbuzpsLh1ZrbL+mjNhKCbTJ02NQenzGWUQviLSsm4nZ
-        LgJ5CQxikz0/XZFigfwtPbf0zS+APceZ9JPD1EZbHp+6JFhWjABOPO4FkKQ4f3pS22s10ueFpFW4P
-        cuivc6JhZdQWnY2O93v3I8kcj0pHce0+45MjfdyThbQSjzDha0E5SaSyOe7ucqoiBEPKQIjYhBAmv
-        sEdBmMdTgELgtafmPsmRAFyKbtv7cbbVLnhk2EYxHaAHeusrnr0xtEibjcN9XhPIcgQag8sW4RQLB
-        Ck9Zp6vQ==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1p7fad-00D1UD-Qh; Tue, 20 Dec 2022 09:35:40 -0700
-Message-ID: <31659f35-453e-2a5a-2f93-e35ef1395ad7@deltatee.com>
-Date:   Tue, 20 Dec 2022 09:35:38 -0700
+        Tue, 20 Dec 2022 11:37:31 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED0415700
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:36:50 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id d185so12323682vsd.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:36:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xuaIgdrjgSOzMo0krQvdSpwz4+gLmJzCPx4n2C3GWWg=;
+        b=KA5C5mCK4DkoBX7TmkC4kDN2pWzNfgWi+uuBcg83pVxnMliZJB1+YE6X9022DlADKE
+         36+dVkarCwV8znCcsO1M8QYkrpr/eBuY7YUhHisKuhaQsP0fykmOlqU7wyW3J1BeuX6S
+         4aZ4arDyWmi2WaukiIt2POIdojW86TKr9fko+44PduAwEMA41FCgmQuZOErhUxtfTT/Q
+         WMU1B1vo1pd6X7ZCRNIAl0Fom0vLTYA9gHweKvIC1Yk4og73wWll3jO03H/gzs9YxxC9
+         MkPBJa9YXyiyHgubnhQ14h+icm2P2qWSgpkzG94fAc7fsQf6qIFYY8JR0VL+bkON2nzg
+         FhkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xuaIgdrjgSOzMo0krQvdSpwz4+gLmJzCPx4n2C3GWWg=;
+        b=bPwcRMXXpD/clKjwbI4EjmvkykMJOlaFf/TW6rxnZnABP6lYDQo0LADE8PE4/muuJm
+         qV70dSloIasD3Jo4VFJYeIach7xK4DR/kYK8L6YmtewlrmT+fJQ7TOWZAc6frMxIrNei
+         m6Id9SirkQYaM2CAjmnnF7AwI/GZUPwwbstQ+7xEawEHC36B4sI5SAzI9AfXZoevJV5t
+         0DloVaYbX8NhYJwTUS6PpfnooZc54ZlIhoXEzBO5fz4sDShDixHIckAgCHX2XqOorZ47
+         iA+74mXb++/nbKGbcxbUhOWtlqqApPaZ69LODQ0/K8Slhk5f0MYL0gGRDPAGD4Cy9U2C
+         MhBw==
+X-Gm-Message-State: ANoB5pnVKQCe6gTNLGxrpsYMG9BfPVoqMkuya4icy9ddX43evS6fATqN
+        6ykl1EEny82mx147Bn3Opo9K9YCXzpMv64K24ALFDA==
+X-Google-Smtp-Source: AA0mqf46UpQnJlDvWcWPOzfpi6F2pJn5D75RpfYbIbNwm3EJr4pDvZD7b3Y6oOAJz8qvfWxFWzDmm9zIBqZ/CczeVfU=
+X-Received: by 2002:a67:f04e:0:b0:3b1:1713:ba11 with SMTP id
+ q14-20020a67f04e000000b003b11713ba11mr21621691vsm.76.1671554208999; Tue, 20
+ Dec 2022 08:36:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Content-Language: en-CA
-To:     Miaoqian Lin <linmq006@gmail.com>, Vinod Koul <vkoul@kernel.org>,
-        Dan Carpenter <error27@gmail.com>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221220061752.1120381-1-linmq006@gmail.com>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <20221220061752.1120381-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: linmq006@gmail.com, vkoul@kernel.org, error27@gmail.com, dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: logang@deltatee.com
+References: <20221219191855.2010466-1-allenwebb@google.com>
+ <20221219204619.2205248-1-allenwebb@google.com> <20221219204619.2205248-6-allenwebb@google.com>
+ <Y6FaEoAAFFP0WqK3@kroah.com>
+In-Reply-To: <Y6FaEoAAFFP0WqK3@kroah.com>
+From:   Allen Webb <allenwebb@google.com>
+Date:   Tue, 20 Dec 2022 10:36:37 -0600
+Message-ID: <CAJzde04mhRh2SajwdfMTzoDJ_F_Xo_3utfcvxY1Dpgqrv-rzOg@mail.gmail.com>
+Subject: Re: [PATCH v9 05/10] module.h: MODULE_DEVICE_TABLE for built-in modules
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH] dmaengine: plx_dma: Fix potential double free in
- plx_dma_create
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-12-19 23:17, Miaoqian Lin wrote:
-> When all references are dropped, callback function plx_dma_release()
-> for put_device() will call kfree(plxdev) to release memory.
-> Fix the error path to fix the possible double free.
+On Tue, Dec 20, 2022 at 12:45 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Fixes: 07503e6aefe4 ("dmaengine: plx_dma: add a missing put_device() on error path")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
-> Please correct me if I make mistakes, thanks for your review.
-> ---
->  drivers/dma/plx_dma.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/dma/plx_dma.c b/drivers/dma/plx_dma.c
-> index 12725fa1655f..bce724ff4e16 100644
-> --- a/drivers/dma/plx_dma.c
-> +++ b/drivers/dma/plx_dma.c
-> @@ -546,8 +546,9 @@ static int plx_dma_create(struct pci_dev *pdev)
->  	return 0;
->  
->  put_device:
-> -	put_device(&pdev->dev);
->  	free_irq(pci_irq_vector(pdev, 0),  plxdev);
-> +	put_device(&pdev->dev);
-> +	return rc;
->  free_plx:
->  	kfree(plxdev);
->  
+> On Mon, Dec 19, 2022 at 02:46:13PM -0600, Allen Webb wrote:
+> > Implement MODULE_DEVICE_TABLE for build-in modules to make it possible
+> > to generate a builtin.alias file to complement modules.alias.
+> >
+> > Signed-off-by: Allen Webb <allenwebb@google.com>
+> > ---
+> >  include/linux/module.h | 15 ++++++++++++++-
+> >  1 file changed, 14 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/module.h b/include/linux/module.h
+> > index ec61fb53979a..3d1b04ca6350 100644
+> > --- a/include/linux/module.h
+> > +++ b/include/linux/module.h
+> > @@ -243,7 +243,20 @@ extern void cleanup_module(void);
+> >  extern typeof(name) __mod_##type##__##name##_device_table            \
+> >    __attribute__ ((unused, alias(__stringify(name))))
+> >  #else  /* !MODULE */
+> > -#define MODULE_DEVICE_TABLE(type, name)
+> > +/*
+> > + * The names may not be unique for built-in modules, so include the module name
+> > + * to guarantee uniqueness.
+>
+> What "names" are you referring to here with the words, "The names"?
+>
+> And built-in modules have the same rules as external names, they have to
+> be unique so I do not understand the problem you are trying to solve
+> here, which means you need to describe it better in both the changelog
+> text and the comment.
 
+I changed the comment to:
+/*
+ * Creates an alias so file2alias.c can find device table for built in modules.
+ *
+ * The module name is included for two reasons:
+ *   - Adding the module name to the alias avoids creating two aliases with the
+ *     same name. Historically MODULE_DEVICE_TABLE was a no-op for built-in
+ *     modules, so there was nothing to stop different modules from having the
+ *     same device table name and consequently the same alias when building as a
+ *     module.
+ *   - The module name is needed by files2alias.c to associate a particular
+ *     device table with its associated module since files2alias would otherwise
+ *     see the module name as `vmlinuz.o` for built-in modules.
+ */
 
-Sorry, after reviewing, I don't think this patch is correct.
+>
+> > + *
+> > + * Note that extern is needed because modpost reads these symbols to generate
+> > + * modalias entries for each match id in each device table. They are not used
+> > + * at runtime.
+>
+> This comment isn't explaining much about what the #define is to be used
+> for, is it?
 
-plx_dma_release() is called from dma_async_device_unregister() which
-won't be called if dma_async_device_register() fails. It does not get
-freed when the pci device is put. So I don't think this is a possible
-double free.
+I will drop this. I originally added the comment because Christophe Leroy said:
+"'extern' keyword is pointless of function prototypes and deprecated.
+Don't add new occurences."
 
-Logan
+This is clearly not a typical function prototype and the guidance from:
+https://www.kernel.org/doc/html/latest/process/coding-style.html#function-prototypes
+should not apply.
 
+>
+> confused,
+>
+> greg k-h
