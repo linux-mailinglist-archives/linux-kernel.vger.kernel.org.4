@@ -2,98 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29EF9651DF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 10:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A122D651DF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 10:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233349AbiLTJtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 04:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
+        id S233448AbiLTJtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 04:49:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233482AbiLTJtE (ORCPT
+        with ESMTP id S233239AbiLTJtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 04:49:04 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5775D15FEC;
-        Tue, 20 Dec 2022 01:48:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CDEWKy3f1j+rMvWE2BFmn93ICBXtlTPwxsYai1OPD+w=; b=DNNtWJsE1HRjRGp2bWBHoH9eEU
-        bH2i4QKHD5hYgFy3K9O1oPoK5JmsiYbaoQWHVUd7VXqfM9S5QmRp+B2wXvYlrd/xFizgui2TaQxTm
-        mp15icy2JW8AyhrVD0PwOaD6JVAM8HNJTQ6ZmlHHwL3kIrsrzb5aO0q58KxZLGp8ytxnaVznSx9ug
-        L6jYdReo0bN5N1g78yESk2MwmePNaiRfkWcDkowMEwWaO0WSBOsb38EMGIXtaFaf/iypnciwE/ZJx
-        QqF2MQNCt0boiRWkZsFrB+xqRcPEO/nvrbGs9cRZeEyA42jsdFzZvWaV8j0lJnz68nM+Qk6K7iojv
-        aRMc77Ng==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p7ZF1-001fWO-3x; Tue, 20 Dec 2022 09:48:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 634E6300322;
-        Tue, 20 Dec 2022 10:48:44 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4C0172C5F840A; Tue, 20 Dec 2022 10:48:44 +0100 (CET)
-Date:   Tue, 20 Dec 2022 10:48:44 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Xin Li <xin3.li@intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        andrew.cooper3@citrix.com, seanjc@google.com, pbonzini@redhat.com,
-        ravi.v.shankar@intel.com
-Subject: Re: [RFC PATCH 23/32] x86/fred: update MSR_IA32_FRED_RSP0 during
- task switch
-Message-ID: <Y6GE/Fnl1tuER1fF@hirez.programming.kicks-ass.net>
-References: <20221220063658.19271-1-xin3.li@intel.com>
- <20221220063658.19271-24-xin3.li@intel.com>
+        Tue, 20 Dec 2022 04:49:17 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8670CBF5;
+        Tue, 20 Dec 2022 01:49:15 -0800 (PST)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NbsBd1rQLzHqXM;
+        Tue, 20 Dec 2022 17:45:29 +0800 (CST)
+Received: from [10.174.179.14] (10.174.179.14) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 20 Dec 2022 17:49:13 +0800
+Subject: Re: [PATCH V2] scsi: libsas: Directly kick-off EH when ATA device
+ fell off
+To:     John Garry <john.g.garry@oracle.com>,
+        yangxingui <yangxingui@huawei.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <damien.lemoal@opensource.wdc.com>,
+        <linux-ide@vger.kernel.org>, <hare@suse.com>, <hch@lst.de>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
+        <kangfenglong@huawei.com>
+References: <20221216100327.7386-1-yangxingui@huawei.com>
+ <565fcf28-ec53-8d74-00a3-94be8e5b60e4@oracle.com>
+ <f15c142c-669d-6bc7-f9b9-c05cc3df1542@huawei.com>
+ <9b8da72d-f251-9c1b-0727-28254d7007c3@oracle.com>
+From:   Jason Yan <yanaijie@huawei.com>
+Message-ID: <fe4ed9f7-4032-f1e2-d6c0-6a7bc99ec3b1@huawei.com>
+Date:   Tue, 20 Dec 2022 17:49:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221220063658.19271-24-xin3.li@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9b8da72d-f251-9c1b-0727-28254d7007c3@oracle.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.14]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 10:36:49PM -0800, Xin Li wrote:
-> From: "H. Peter Anvin (Intel)" <hpa@zytor.com>
-> 
-> MSR_IA32_FRED_RSP0 is used during ring 3 event delivery, and needs to
-> be updated to point to the top of next task stack during task switch.
-> 
-> Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-> Signed-off-by: Xin Li <xin3.li@intel.com>
-> ---
->  arch/x86/include/asm/switch_to.h | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/switch_to.h b/arch/x86/include/asm/switch_to.h
-> index c08eb0fdd11f..c28170d4fbba 100644
-> --- a/arch/x86/include/asm/switch_to.h
-> +++ b/arch/x86/include/asm/switch_to.h
-> @@ -71,9 +71,13 @@ static inline void update_task_stack(struct task_struct *task)
->  	else
->  		this_cpu_write(cpu_tss_rw.x86_tss.sp1, task->thread.sp0);
->  #else
-> -	/* Xen PV enters the kernel on the thread stack. */
-> -	if (static_cpu_has(X86_FEATURE_XENPV))
-> +	if (cpu_feature_enabled(X86_FEATURE_FRED)) {
-> +		wrmsrl(MSR_IA32_FRED_RSP0,
-> +		       task_top_of_stack(task) + TOP_OF_KERNEL_STACK_PADDING);
+On 2022/12/19 22:53, John Garry wrote:
+> Are you sure you mean sas_abort_task()? That is for the LLDD to issue an 
+> abort TMF. I assume that you mean sas_task_abort(). If so, I am not too 
+> keen on the idea of libsas calling into the LLDD to inform of such an 
+> event. Note that maybe a tagset iter function could be used by libsas to 
+> abort each active IO, but I don't like libsas messing with such a thing; 
+> in addition, there may be some conflict between libsas aborting the IO 
+> and the IO completing with error in the LLDD.
 
-Urgh, I'm assuming this is a *fast* MSR ?
+Itering tagset in libsas is odd.
 
-> +	} else if (static_cpu_has(X86_FEATURE_XENPV)) {
-> +		/* Xen PV enters the kernel on the thread stack. */
->  		load_sp0(task_top_of_stack(task));
-> +	}
->  #endif
+The question is, shall we implement the aborting from the driver side, 
+such as what sas_ata_device_link_abort() do. Or shall we implement the 
+aborting from the upper side(scsi middle layer or block layer), such as 
+trigger block layer time out handler immediately after we found device 
+is gone?
 
-
+Thanks,
+Jason
