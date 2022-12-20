@@ -2,103 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CCC652580
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C42652585
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233632AbiLTRXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 12:23:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S233847AbiLTRYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 12:24:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiLTRXD (ORCPT
+        with ESMTP id S229626AbiLTRYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 12:23:03 -0500
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470551869E;
-        Tue, 20 Dec 2022 09:23:02 -0800 (PST)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1445ca00781so16198893fac.1;
-        Tue, 20 Dec 2022 09:23:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9m759R3NNJtMIrV9Yundq41ukEnmCHJ740TTiiogoDM=;
-        b=RrayoGatYQwyU7x2ZYod3NbCY+8W0zVMIIVtqpqtqCFDYHdZvvCLVwG6YPYCs6l6Lu
-         S6d35DInK19D/uAfiBYHrJqyIq3jIM7OSb8aulUoLuCOfJ6ScFteDbr9enmU+9dOgsCS
-         lNQIILp3pJnocS8A9iDLTeUVhOpUrJ7n9OIPaIWS9lVo/PbVA6oVsp2JotF0VVlru/jw
-         gcoxDf+E+MimfyW+1vp+OHuAxXLRbwdLtTEYG9mkHCSSwbyuMlw/1IN0CDkIId0iVDvi
-         8qElgAK+qgd14ni+SrsMULplOygQJ4SFfshWXRU9aXkISSFsBAZMfTzDN9slnneMw6bS
-         RNYw==
-X-Gm-Message-State: AFqh2kqfG+ms/ichTjAwkyNlUGNndDA9deQsgDwRx/r9NoeUbOuQPKnb
-        ua7wzwqwzLMA0/yyjuOZcA==
-X-Google-Smtp-Source: AMrXdXsO8yqVRg7avcaopThhKulTDE9MWTEUA6xsuEbVm364CmV8ytfwd7JYTHsN4QCxJtQ+X6Zyrg==
-X-Received: by 2002:a05:6870:e08:b0:14c:6a72:dd31 with SMTP id mp8-20020a0568700e0800b0014c6a72dd31mr639642oab.18.1671556981556;
-        Tue, 20 Dec 2022 09:23:01 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l44-20020a05687106ac00b0013bc95650c8sm6216885oao.54.2022.12.20.09.22.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 09:23:00 -0800 (PST)
-Received: (nullmailer pid 774015 invoked by uid 1000);
-        Tue, 20 Dec 2022 17:22:59 -0000
-Date:   Tue, 20 Dec 2022 11:22:59 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Phong LE <ple@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        list@opendingux.net, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/10] dt-bindings: display: bridge: it66121: Add
- compatible string for IT6610
-Message-ID: <20221220172259.GA768859-robh@kernel.org>
-References: <20221214125821.12489-1-paul@crapouillou.net>
- <20221214125821.12489-2-paul@crapouillou.net>
- <CAG3jFytgK0noWteGvXTdSm9as9Q=qfhf_ep3Z8Wv2ofmLzGb=A@mail.gmail.com>
- <c78e92ae3cbea037abdd31ecd64e997c8dd1def2.camel@crapouillou.net>
- <bb2b5b72-42b3-3a6c-d865-9e338e34aba0@linaro.org>
- <d1f6d19d3218d9f1acc9b38e44af413f72f8a824.camel@crapouillou.net>
+        Tue, 20 Dec 2022 12:24:25 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB931869E;
+        Tue, 20 Dec 2022 09:24:25 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BKHBXOX026866;
+        Tue, 20 Dec 2022 17:24:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=aiH0PO5eCp70Y1allX9v3AQ7ZXTE1QRbTnrXA7+6sOI=;
+ b=BQ9N3AEUmcYnt9CLdANwCb0QtZe849M1l7uGJi06yRs6e6YNXlmvYvtGr6Pi/ekm0sN8
+ dWyJSVTFCtuJhTDD7QYzqAdJpAv9jM9QLE0NUPJ3y1skGqiaLAk8Ml1lo82Gy3UCGMym
+ kEXN5poy9GWwWJCeF9cT0NVNZ+tjduOW8lvwFoPTDHbBAdm69VKQ1wsUiG1kUJHq4mtb
+ pHPZMGF2lM6axWZulj8PFB162UWZ4pepnczujq66r1YjFhfCTG3Px/zP3Z1UFKu6O8Em
+ UFFI1amQ/bGcAksydceC8FLS/7hMbEPBIEfFEdk5JY9rN/doKQrKt5EcHQvibCKOfceS +A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mkh7w8cg6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 17:24:23 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BKHCtg3001391;
+        Tue, 20 Dec 2022 17:24:23 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mkh7w8cf5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 17:24:23 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BK6LH1M019071;
+        Tue, 20 Dec 2022 17:24:20 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3mh6yw4bep-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 17:24:20 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BKHOHnZ29295052
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Dec 2022 17:24:17 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3F69820043;
+        Tue, 20 Dec 2022 17:24:17 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7EB5E20040;
+        Tue, 20 Dec 2022 17:24:12 +0000 (GMT)
+Received: from li-ce58cfcc-320b-11b2-a85c-85e19b5285e0 (unknown [9.163.32.224])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with SMTP;
+        Tue, 20 Dec 2022 17:24:12 +0000 (GMT)
+Date:   Tue, 20 Dec 2022 18:24:07 +0100
+From:   Halil Pasic <pasic@linux.ibm.com>
+To:     Anthony Krowiak <akrowiak@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, jjherne@linux.ibm.com, freude@linux.ibm.com,
+        borntraeger@de.ibm.com, cohuck@redhat.com, mjrosato@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com, Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: [PATCH 7/7] s390/vfio_ap: always clean up IRQ resources
+Message-ID: <20221220182407.5959a4b6.pasic@linux.ibm.com>
+In-Reply-To: <7b6d7e91-ba00-6486-39ae-91fca30b2cfb@linux.ibm.com>
+References: <20221213154437.15480-1-akrowiak@linux.ibm.com>
+        <20221213154437.15480-8-akrowiak@linux.ibm.com>
+        <20221219151007.639dff5f.pasic@linux.ibm.com>
+        <7b6d7e91-ba00-6486-39ae-91fca30b2cfb@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <d1f6d19d3218d9f1acc9b38e44af413f72f8a824.camel@crapouillou.net>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: LCojPCoC4Vc8zDT39bI9snV0u-Day-8t
+X-Proofpoint-ORIG-GUID: gaMcQtHj1rBFy2jwTyFrYpjd2Wtwo9m4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-20_06,2022-12-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 malwarescore=0 mlxscore=0 spamscore=0 clxscore=1015
+ mlxlogscore=999 adultscore=0 priorityscore=1501 bulkscore=0
+ lowpriorityscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2212200141
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 01:21:54PM +0100, Paul Cercueil wrote:
-> Hi Krzysztof,
-> 
-> Le vendredi 16 décembre 2022 à 12:21 +0100, Krzysztof Kozlowski a
-> écrit :
-> > On 16/12/2022 11:46, Paul Cercueil wrote:
-> > 
-> > > > >  properties:
-> > > > >    compatible:
-> > > > > -    const: ite,it66121
-> > > > > +    enum:
-> > > > > +      - ite,it66121
-> > > > > +      - ite,it6610
-> > 
-> > These should be ordered alphabetically. What's with the tendency of
-> > adding always to the end?
-> 
-> I'm too used to the "inverse christmas tree" sort :)
+On Tue, 20 Dec 2022 09:33:03 -0500
+Anthony Krowiak <akrowiak@linux.ibm.com> wrote:
 
-Come on, the DT standard is sideways christmas tree. ;)
+> On 12/19/22 9:10 AM, Halil Pasic wrote:
+> > On Tue, 13 Dec 2022 10:44:37 -0500
+> > Tony Krowiak <akrowiak@linux.ibm.com> wrote:
+> >  
+> >> Clean up IRQ resources even when a PQAP(ZAPQ) function fails with an error
+> >> not handled by a case statement.  
+> > Why?  
+> 
+> 
+> If the ZAPQ failed, then instructions submitted to the same queue will 
+> likewise fail. Are you saying it's not safe to assume, therefore, that 
+> interrupts will not be occurring?
 
-Rob
+Right. We are talking about the default branch here, and I suppose, the
+codes where we know that it is safe to assume that no reset is needed
+handled separately (AP_RESPONSE_DECONFIGURED).
+
+I'm not convinced that if we take the default branch we can safely
+assume, that we won't see any interrupts.
+
+For example consider hot-unplug as done by KVM. We modify the
+CRYCB/APCB with all vCPUS take out of SIE, but we don't keep
+the vCPUs out of SIE until the resets of the unpugged queues
+are done, and we don't do any extra interrupt disablement
+with all vCPUs keept out of SIE. So I believe currently there
+may be a window where the guest can observe a 01 but the
+interrupts are still live. That may be a bug, but IMHO it ain't clear
+cut.
+
+But it is not just about interrupts. Before we returned an error
+code, which gets propagated to the userspace if this reset was
+triggered via the ioctl.
+
+With this change, ret seems to be uninitialized when returned 
+if we take the code path which you change here. So we would
+end up logging a warning and returning garbage?
+
+One could also debate, whether RCs introduced down the road
+can affect the logic here (even if the statement "if we
+see an RC other that 00 and 02, we don't need to pursue a
+reset any further, and interrpts are disabled" were to be
+guaranteed to be true now, new RCs could theoretically mess
+this up).
+
+ 
+> 
+> 
+> >
+> > I'm afraid this is a step in the wrong direction...  
+> 
+> 
+> Please explain why.
+> 
+
+Sorry, I kept this brief because IMHO it is your job to tell us why
+this needs to be changed. But I gave in, as you see.
+
+Regards,
+Halil
