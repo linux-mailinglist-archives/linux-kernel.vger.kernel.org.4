@@ -2,172 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2A265291E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 23:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A148652927
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 23:45:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbiLTWfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 17:35:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
+        id S229750AbiLTWpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 17:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiLTWfl (ORCPT
+        with ESMTP id S229560AbiLTWpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 17:35:41 -0500
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E780246
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 14:35:39 -0800 (PST)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 20 Dec 2022 17:45:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C1DFCD8;
+        Tue, 20 Dec 2022 14:45:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 27C982020A;
-        Tue, 20 Dec 2022 23:35:37 +0100 (CET)
-Date:   Tue, 20 Dec 2022 23:35:35 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        sunliming <sunliming@kylinos.cn>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/6] drm/msm: DSC Electric Boogaloo for sm8[12]50
-Message-ID: <20221220223535.gzjkr4rsflrujl4o@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        sunliming <sunliming@kylinos.cn>, Sam Ravnborg <sam@ravnborg.org>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221213232207.113607-1-marijn.suijten@somainline.org>
- <154b2e08-25a0-c8b7-1dc8-2d41b8787f05@linaro.org>
- <20221214192322.vs4tvhlzjc265bva@SoMainline.org>
- <560508a2-9ff5-16b5-ac50-efe9a2afbddb@linaro.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2875B61502;
+        Tue, 20 Dec 2022 22:45:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC4A1C433D2;
+        Tue, 20 Dec 2022 22:45:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671576302;
+        bh=5IELGNaBxVETUQUabu4l0UoJNA+N6l/vC4jUFz5K578=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jqOFxGduPFwaIXvWUGHJrw+Bk/wQyGVrQ0l4gQf8rIfoxKqmrL1D/sarA9sj68/yf
+         lPc8SPAW7Bo+qdpY/sx87YZXOZbFabl3LhFDZHYuXRjTESSxCkj0fr9Up8Hc6tLOTT
+         6/WRx+Ho5rKdlqW4lCuxT6UEk5qT60vDQDldrnoRgaYGWw07U4beumuYrIblKtIw50
+         c+UFdnzctNI2u7AGMyYwK86z9E36O1549IDqlJ/e8xgF+0mzNmLxermsLfBVNPoGcm
+         fCD9LJ81qUN3uWBhR6rQOQlkEAWi0CW10s5dRH/bYYbB1lksptFwaebm+wJFhTwI6z
+         YUtj1imCiC8Cg==
+Date:   Tue, 20 Dec 2022 23:44:59 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
+Message-ID: <20221220224459.GA25175@lothringen>
+References: <20221220140714.GB22763@lothringen>
+ <CA83E649-8C79-4D39-9BFE-BBEF95968B98@joelfernandes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <560508a2-9ff5-16b5-ac50-efe9a2afbddb@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA83E649-8C79-4D39-9BFE-BBEF95968B98@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-15 02:52:01, Dmitry Baryshkov wrote:
-> On 14/12/2022 21:23, Marijn Suijten wrote:
-> > On 2022-12-14 20:40:06, Dmitry Baryshkov wrote:
-> >> On 14/12/2022 01:22, Marijn Suijten wrote:
-> >>> This preliminary Display Stream Compression support package for
-> >>> (initially tested on) sm8[12]50 is based on comparing DSC behaviour
-> >>> between downstream and mainline.  Some new callbacks are added (for
-> >>> binding blocks on active CTLs), logic bugs are corrected, zeroed struct
-> >>> members are now assigned proper values, and RM allocation and hw block
-> >>> retrieval now hand out (or not) DSC blocks without causing null-pointer
-> >>> dereferences.
-> >>>
-> >>> Unfortunately it is not yet enough to get rid of completely corrupted
-> >>> display output on the boards I tested here:
-> >>> - Sony Xperia 1 (sm8150), 1644x3840 or 1096x2560 pixels;
-> >>> - Sony Xperia 5II (sm8250), 1080x2520, at 60 or 120Hz;
-> >>> - (can include more Xperia boards if desired)
-> >>>
-> >>> Both devices use the DUALPIPE_DSCMERGE topology downstream: dual LM, PP
-> >>> and DSC, but only a single INTF/encoder/DSI-link.
-> >>>
-> >>> Hopefully this spawns some community/upstream interest to help rootcause
-> >>> our corruption issues (after we open a drm/msm report on GitLab for more
-> >>> appropriate tracking).
-> >>>
-> >>> The Sony Xperia XZ3 (sdm845) was fully tested and validated with this
-> >>> series to not cause any regressions (an one of the math fixes now allows
-> >>> us to change slice_count in the panel driver, which would corrupt
-> >>> previously).
-> >>>
-> >>> Marijn Suijten (6):
-> >>>     drm/msm/dpu1: Implement DSC binding to PP block for CTL V1
-> >>>     drm/msm/dpu1: Add DSC config for sm8150 and sm8250
-> >>>     drm/msm/dpu1: Wire up DSC mask for active CTL configuration
-> >>>     drm/msm/dsi: Use DSC slice(s) packet size to compute word count
-> >>>     drm/msm/dsi: Flip greater-than check for slice_count and
-> >>>       slice_per_intf
-> >>>     drm/msm/dpu: Disallow unallocated (DSC) resources to be returned
-> >>
-> >> General comment: patches with Fixes ideally should come first. Usually
-> >> they are picked into -fixes and/or stable kernels. If the Fixes patches
-> >> are in the middle of the series, one can not be sure that they do not
-> >> have dependencies on previous patches. If there is one, it should
-> >> probably be stated clearly to ease work on backporting them.
+On Tue, Dec 20, 2022 at 09:20:08AM -0500, Joel Fernandes wrote:
+> > On Dec 20, 2022, at 9:07 AM, Frederic Weisbecker <frederic@kernel.org> wrote:
 > > 
-> > Ack, I may have rushed these RFC patches straight off my branches onto
-> > the lists in hopes of sparking some suggestions on what may still be
-> > broken or missing to get DSC working on sm[12]50, but will keep this in
-> > mind for v2 after receiving some more review.
+> > ﻿On Tue, Dec 20, 2022 at 08:44:40AM -0500, Joel Fernandes wrote:
+> >>> C w-depend-r
+> >>> 
+> >>> {
+> >>>   PLOCK=LOCK0;
+> >>> }
+> >>> 
+> >>> // updater
+> >>> P0(int *LOCK1, int **PLOCK)
+> >>> {
+> >>>   int lock1;
+> >>> 
+> >>>   lock1 = READ_ONCE(*LOCK1); // READ from inactive idx
+> >>>   smp_mb();
+> >>>   WRITE_ONCE(*PLOCK, LOCK1); // Flip idx
+> >>> }
+> >>> 
+> >>> // reader
+> >>> P1(int **PLOCK)
+> >>> {
+> >>>   int *plock;
+> >>> 
+> >>>   plock = READ_ONCE(*PLOCK);    // Read active idx
+> >>>   WRITE_ONCE(*plock, 1); // Write to active idx
+> >> 
+> >> I am a bit lost here, why would the reader want to write to the active idx?
+> >> The reader does not update the idx, only the lock count.
 > > 
-> > That said, any suggestions?
+> > So &ssp->sda->srcu_lock_count is the base address and idx is the offset, right?
+> > The write is then displayed that way:
+> > 
+> >     this_cpu_inc(ssp->sda->srcu_lock_count[idx].counter);
+> > 
+> > But things could be also thought the other way around with idx being the base address and
+> > ssp->sda->srcu_lock_count being the offset.
+> > 
+> >     this_cpu_inc(idx[ssp->sda->srcu_lock_count].counter);
+> > 
+> > That would require to change some high level types but the result would be the same from
+> > the memory point of view (and even from the ASM point of view). In the end we
+> > are dealing with the same address and access.
+> > 
+> > Now ssp->sda->srcu_lock_count is a constant address value. It doesn't change.
+> > So it can be zero for example. Then the above increment becomes:
+> > 
+> >   this_cpu_inc(idx.counter);
+> > 
+> > And then it can be modelized as in the above litmus test.
+> > 
+> > I had to play that trick because litmus doesn't support arrays but I believe
+> > it stands. Now of course I may well have got something wrong since I've always
+> > been terrible at maths...
 > 
-> 
->  From what I've noticed lately:
+> Ah ok, I get where you were going with that. Yes there is address dependency
+> between reading idx and writing lock count. But IMHO, the access on the update
+> side is trying to order write to index, and reads from a lock count of a
+> previous index (as far as E / B+C is concerned). So IMHO, on the read side you
+> have to consider 2 consecutive readers and not the same reader in order to
+> pair the same accesses correctly. But I could be missing something.
 
-Apologies for the late reply, I wanted to double-check this but now
-ended up basing my
+And you're right, for the first part of the comment (let's call that (1)):
 
-> - set dsc_version_major/dsc_version_minor
+	 * Ensure that if this updater saw a given reader's increment
+	 * from __srcu_read_lock(), that reader was using an old value
+	 * of ->srcu_idx.
 
-We always set these in our panel drivers (all the way from back when our
-initial panel driver changes were based on what Vinod did for Pixel 3),
-both to 1.  As expected this results in 0x11 in the first byte of the
-Pixel Parameter Set sent to the DrIC over DSI.
+My litmus test shows the ordering displayed in the second part of the comment
+(call it (2)):
 
-> - try using dsc params from 1.2 rater than 1.1 version spec (there is 
-> small difference there)
+         * Also ensure that if a given reader sees the
+	 * new value of ->srcu_idx, this updater's earlier scans cannot
+	 * have seen that reader's increments (which is OK, because this
+	 * grace period need not wait on that reader).
 
-Didn't have any effect and this is not what downstream sets/sends
-regardless, all our panels (on these sm8[12]50 SoCs) are hardcoded to
-DSC 1.1 downstream.
+_ In (1), E indeed pairs with B and C
+_ In (2), E pairs with the address-dependency between idx and lock_count.
 
-Should I test this again, but also setting the version in the
-compression_mode command?
-
-- Marijn
+Thanks.
