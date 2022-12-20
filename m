@@ -2,119 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4955651AED
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 07:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79463651AF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 07:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiLTGtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 01:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
+        id S229540AbiLTGtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 01:49:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLTGs6 (ORCPT
+        with ESMTP id S232897AbiLTGtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 01:48:58 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2AC115B;
-        Mon, 19 Dec 2022 22:48:50 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 8F2BD24DBD3;
-        Tue, 20 Dec 2022 14:48:38 +0800 (CST)
-Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 20 Dec
- 2022 14:48:38 +0800
-Received: from [192.168.120.49] (171.223.208.138) by EXMBX173.cuchost.com
- (172.16.6.93) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 20 Dec
- 2022 14:48:36 +0800
-Message-ID: <7f4339df-6616-120f-f16a-cd38a2b6ea1d@starfivetech.com>
-Date:   Tue, 20 Dec 2022 14:48:36 +0800
+        Tue, 20 Dec 2022 01:49:13 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C58415A28
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 22:49:11 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id b189so10910913vsc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 22:49:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=js2ufOjBmmgGy8PvjmPtd+4QZZsXyUTcMnnsyn0kH4g=;
+        b=JOVAogE1ejpgQTqA9TTAPdAyL5qjaC8H210ZmtKV1cEqz2y/OZKbnOyyRprvDQ3Ujb
+         mhDUeac8ByG3HVa06zkrmFEBbp8txoab+7LFC8Du1ErLh8WdpOaYMvXUL3u2ndDEHAJa
+         kYeX8orYGquhNt7AriPjlGSsMSH4v3tthsdvS+MMNXjfpqCIB9VB1HAx/RVpFLCis8Bv
+         Qk+Fl51/5C79y/BBnk//8h13HfC8LTyPgDWu5csPOJlIyz2bcn674BXMtf+ySxoaYfxR
+         Q3LDTJumwIYTxldipCE2/s98/bFKqo2tJTYlNLoNiygWR4G+oXRM4BhyjSgk6894wEyn
+         5Hcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=js2ufOjBmmgGy8PvjmPtd+4QZZsXyUTcMnnsyn0kH4g=;
+        b=gAPU91qNhbnJMAnCM3+2UBD75Wi6VUXpKeDIasfQQHEmfSeUpsM6S4dFg1W0r82N3B
+         37PqGDoLC9VG/ZRRX8p5dpzDRBqAOZexRhAAo5l7KzPpCYeOe+TCWknqjkQA4s/hqUYN
+         Qq4AeWzTVCoaj/PPg8Nlryjrw3823V4aQAAIAD37bh6gsDgE3LvESkFBrk7x3li3U4Dw
+         Mi3BcTjM5Fr+6kNR3bMhDMitXCLDgRyeI2zcUYMkXwfrT+o6mj98btB6rso+kkpMwrfk
+         3UV8FeqsNcwm05JAJzCij1rqA+JXA59/8/rSo80+aS2k6Mn1+C8MMmAUY7RQ/LV+SGFZ
+         O3SA==
+X-Gm-Message-State: ANoB5pmsMJhN7YpwGLzZS3Rz7KlplbLJIp+hwXmrVkxJ+0gYuFyz9c5e
+        Vs9JjJ1vvErGPyZQ2OfpF5geh8vzpTRkWl/YmB44ag==
+X-Google-Smtp-Source: AA0mqf7M+QFzXIepln2+4d+ZDhXcaia0gI29dkHFuRQuZpSXS9dxbWHuTRbE5lswl1IWHvWJA3AkHvaI3zwN2wrVsmY=
+X-Received: by 2002:a05:6102:21b6:b0:3b5:21d5:5a0b with SMTP id
+ i22-20020a05610221b600b003b521d55a0bmr2921509vsb.34.1671518950130; Mon, 19
+ Dec 2022 22:49:10 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 2/9] dt-bindings: net: snps,dwmac: Update the maxitems
- number of resets and reset-names
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20221216070632.11444-1-yanhong.wang@starfivetech.com>
- <20221216070632.11444-3-yanhong.wang@starfivetech.com>
- <040b56b1-c65c-34c3-e4a1-5cae4428d1d2@linaro.org>
-Content-Language: en-US
-From:   yanhong wang <yanhong.wang@starfivetech.com>
-In-Reply-To: <040b56b1-c65c-34c3-e4a1-5cae4428d1d2@linaro.org>
+References: <20221219182940.739981110@linuxfoundation.org>
+In-Reply-To: <20221219182940.739981110@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 20 Dec 2022 12:18:59 +0530
+Message-ID: <CA+G9fYtWgwmEZVY7pQHQ4kKadxtgM71v-3goRq0gikDMoFdKjQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/17] 5.15.85-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX173.cuchost.com
- (172.16.6.93)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 20 Dec 2022 at 00:57, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.85 release.
+> There are 17 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.85-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-On 2022/12/16 19:03, Krzysztof Kozlowski wrote:
-> On 16/12/2022 08:06, Yanhong Wang wrote:
->> Some boards(such as StarFive VisionFive v2) require more than one value
->> which defined by resets property, so the original definition can not
->> meet the requirements. In order to adapt to different requirements,
->> adjust the maxitems number from 1 to 3..
->> 
->> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
->> ---
->>  .../devicetree/bindings/net/snps,dwmac.yaml       | 15 +++++++++++----
->>  1 file changed, 11 insertions(+), 4 deletions(-)
->> 
->> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->> index e26c3e76ebb7..7870228b4cd3 100644
->> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->> @@ -133,12 +133,19 @@ properties:
->>          - ptp_ref
->>  
->>    resets:
->> -    maxItems: 1
->> -    description:
->> -      MAC Reset signal.
->> +    minItems: 1
->> +    maxItems: 3
->> +    additionalItems: true
->> +    items:
->> +      - description: MAC Reset signal
->>  
->>    reset-names:
->> -    const: stmmaceth
->> +    minItems: 1
->> +    maxItems: 3
->> +    additionalItems: true
->> +    contains:
->> +      enum:
->> +        - stmmaceth
-> 
-> No, this is highly unspecific and you know affect all the schemas using
-> snps,dwmac.yaml. Both lists must be specific - for your device and for
-> others.
-> 
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-I have tried to define the resets in "starfive,jh71x0-dwmac.yaml", but it can not over-write the maxItems limit in "snps,dwmac.yaml",therefore, it will report error "reset-names: ['stmmaceth', 'ahb'] is too long"  running "make dt_binding_check". Do you have any suggestions to deal with this situation?
+## Build
+* kernel: 5.15.85-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: bef75c6188c78b9ddf305681393ec04bd7d2ad30
+* git describe: v5.15.84-18-gbef75c6188c7
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.84-18-gbef75c6188c7
 
-> Best regards,
-> Krzysztof
-> 
+## Test Regressions (compared to v5.15.84)
+
+## Metric Regressions (compared to v5.15.84)
+
+## Test Fixes (compared to v5.15.84)
+
+## Metric Fixes (compared to v5.15.84)
+
+## Test result summary
+total: 139603, pass: 121329, fail: 2908, skip: 14952, xfail: 414
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 148 passed, 3 failed
+* arm64: 49 total, 47 passed, 2 failed
+* i386: 39 total, 35 passed, 4 failed
+* mips: 31 total, 29 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 34 total, 32 passed, 2 failed
+* riscv: 14 total, 14 passed, 0 failed
+* s390: 16 total, 14 passed, 2 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 40 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
