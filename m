@@ -2,190 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C46652860
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 22:26:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8791652864
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 22:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbiLTV0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 16:26:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
+        id S233491AbiLTV2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 16:28:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbiLTV0Q (ORCPT
+        with ESMTP id S233971AbiLTV2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 16:26:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0A963E9;
-        Tue, 20 Dec 2022 13:26:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 20 Dec 2022 16:28:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CAF51EAE3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 13:27:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671571643;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=CjIdiy7qWudpHRQwlyIrGgwMBBb8yFPp0r6JrGVeizM=;
+        b=NmPhOzAD9kG5ed4ZkOq4b/EVs23lQNBYOsOk2EvIivzBVAgTqftvdIg/bOT/Esni4FG3Rb
+        mitnZ/tgiFzyGLA+JncKxy/XO9l7uU56+R94TBtGg0NJohN5iVlN43/2Ju1Rft2FMegUU4
+        ryBaquioSE1jbX2xhHKvZD9LUIsJymI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-217-TVK56jxcNsCi8i3ey1DOLA-1; Tue, 20 Dec 2022 16:27:20 -0500
+X-MC-Unique: TVK56jxcNsCi8i3ey1DOLA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7165A615C2;
-        Tue, 20 Dec 2022 21:26:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A0BC433EF;
-        Tue, 20 Dec 2022 21:26:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671571573;
-        bh=S5/irmbdxPHRGjloGu2y2uI3gxorhqGUs8rELs0Mt1s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b89knfYZlcl38WQkiGRpaBqBApY5hUs2S/aKIKXC+AC2zW9UlG2rT1zozbgOYyQYr
-         QlrgGtoXRAacuK1DGl9ldAm/+npm77BPnUGKrnVJa15xA523jHpJKk0rTl7PHncgue
-         05UCdMXCtlpxq+OLIggWjkzIbYlQ9tabdCNhWq+Dm5X54FQL5fxwEoSD4RLIApbUk2
-         vQYlrgvY9LQD8nazrhiDVuBD8lm9VYHs1h5YgxiQeoMNEuG1Tn2UxtUmHboFexaYv0
-         rBqAbktDmO5WCAHhLaWGVkppG20n5ILPS8owoOB7uqZtjXNfddyKdhPBEYVQJg2jpI
-         LKlDqyIveRHqw==
-Date:   Tue, 20 Dec 2022 21:26:07 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3B0D3858F0E;
+        Tue, 20 Dec 2022 21:27:18 +0000 (UTC)
+Received: from RHTPC1VM0NT.lan (unknown [10.22.32.165])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9387D492B00;
+        Tue, 20 Dec 2022 21:27:17 +0000 (UTC)
+From:   Aaron Conole <aconole@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Pravin B Shelar <pshelar@ovn.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Thomas Graf <tgraf@suug.ch>, dev@openvswitch.org,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Ilya Maximets <i.maximets@ovn.org>,
+        wangchuanlei <wangchuanlei@inspur.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 7/7] riscv: dts: starfive: Add StarFive JH7110
- VisionFive 2 board device tree
-Message-ID: <Y6Iob3csmKMl0rB/@spud>
-References: <20221220011247.35560-1-hal.feng@starfivetech.com>
- <20221220011247.35560-8-hal.feng@starfivetech.com>
+Subject: [PATCH net] net: openvswitch: release vport resources on failure
+Date:   Tue, 20 Dec 2022 16:27:17 -0500
+Message-Id: <20221220212717.526780-1-aconole@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="8xrhEquv/3PxHBwz"
-Content-Disposition: inline
-In-Reply-To: <20221220011247.35560-8-hal.feng@starfivetech.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+A recent commit introducing upcall packet accounting failed to properly
+release the vport object when the per-cpu stats struct couldn't be
+allocated.  This can cause dangling pointers to dp objects long after
+they've been released.
 
---8xrhEquv/3PxHBwz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Cc: Eelco Chaudron <echaudro@redhat.com>
+Cc: wangchuanlei <wangchuanlei@inspur.com>
+Fixes: 1933ea365aa7 ("net: openvswitch: Add support to count upcall packets")
+Reported-by: syzbot+8f4e2dcfcb3209ac35f9@syzkaller.appspotmail.com
+Signed-off-by: Aaron Conole <aconole@redhat.com>
+---
+ net/openvswitch/datapath.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-On Tue, Dec 20, 2022 at 09:12:47AM +0800, Hal Feng wrote:
-> From: Emil Renner Berthing <kernel@esmil.dk>
->=20
-> Add a minimal device tree for StarFive JH7110 VisionFive 2 board
-> which has version A and version B. Support booting and basic
-> clock/reset/pinctrl/uart drivers.
->=20
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Co-developed-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-> Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> ---
->  arch/riscv/boot/dts/starfive/Makefile         |   1 +
->  .../jh7110-starfive-visionfive-2-va.dts       |  13 ++
->  .../jh7110-starfive-visionfive-2-vb.dts       |  13 ++
->  .../jh7110-starfive-visionfive-2.dtsi         | 111 ++++++++++++++++++
->  4 files changed, 138 insertions(+)
->  create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfi=
-ve-2-va.dts
->  create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfi=
-ve-2-vb.dts
->  create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfi=
-ve-2.dtsi
->=20
-> diff --git a/arch/riscv/boot/dts/starfive/Makefile b/arch/riscv/boot/dts/=
-starfive/Makefile
-> index 0ea1bc15ab30..79e925a4a227 100644
-> --- a/arch/riscv/boot/dts/starfive/Makefile
-> +++ b/arch/riscv/boot/dts/starfive/Makefile
-> @@ -1,2 +1,3 @@
->  # SPDX-License-Identifier: GPL-2.0
->  dtb-$(CONFIG_SOC_STARFIVE) +=3D jh7100-beaglev-starlight.dtb
-> +dtb-$(CONFIG_SOC_STARFIVE) +=3D jh7110-starfive-visionfive-2-va.dtb jh71=
-10-starfive-visionfive-2-vb.dtb
+diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
+index 932bcf766d63..6774baf9e212 100644
+--- a/net/openvswitch/datapath.c
++++ b/net/openvswitch/datapath.c
+@@ -1854,7 +1854,7 @@ static int ovs_dp_cmd_new(struct sk_buff *skb, struct genl_info *info)
+ 	vport->upcall_stats = netdev_alloc_pcpu_stats(struct vport_upcall_stats_percpu);
+ 	if (!vport->upcall_stats) {
+ 		err = -ENOMEM;
+-		goto err_destroy_portids;
++		goto err_destroy_vport;
+ 	}
+ 
+ 	err = ovs_dp_cmd_fill_info(dp, reply, info->snd_portid,
+@@ -1869,6 +1869,8 @@ static int ovs_dp_cmd_new(struct sk_buff *skb, struct genl_info *info)
+ 	ovs_notify(&dp_datapath_genl_family, reply, info);
+ 	return 0;
+ 
++err_destroy_vport:
++	ovs_dp_detach_port(vport);
+ err_destroy_portids:
+ 	kfree(rcu_dereference_raw(dp->upcall_portids));
+ err_unlock_and_destroy_meters:
+@@ -2316,7 +2318,7 @@ static int ovs_vport_cmd_new(struct sk_buff *skb, struct genl_info *info)
+ 	vport->upcall_stats = netdev_alloc_pcpu_stats(struct vport_upcall_stats_percpu);
+ 	if (!vport->upcall_stats) {
+ 		err = -ENOMEM;
+-		goto exit_unlock_free;
++		goto exit_unlock_free_vport;
+ 	}
+ 
+ 	err = ovs_vport_cmd_fill_info(vport, reply, genl_info_net(info),
+@@ -2336,6 +2338,8 @@ static int ovs_vport_cmd_new(struct sk_buff *skb, struct genl_info *info)
+ 	ovs_notify(&dp_vport_genl_family, reply, info);
+ 	return 0;
+ 
++exit_unlock_free_vport:
++	ovs_dp_detach_port(vport);
+ exit_unlock_free:
+ 	ovs_unlock();
+ 	kfree_skb(reply);
+-- 
+2.31.1
 
-Could you rebase on top of v6.2-rc1 when you submit your next version
-squash this in please (unless Emil hates it):
-diff --git a/arch/riscv/boot/dts/starfive/Makefile b/arch/riscv/boot/dts/st=
-arfive/Makefile
-index c38a9ade7f48..b3744420253a 100644
---- a/arch/riscv/boot/dts/starfive/Makefile
-+++ b/arch/riscv/boot/dts/starfive/Makefile
-@@ -1,3 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--dtb-$(CONFIG_SOC_STARFIVE) +=3D jh7100-beaglev-starlight.dtb jh7100-starfi=
-ve-visionfive-v1.dtb
--dtb-$(CONFIG_SOC_STARFIVE) +=3D jh7110-starfive-visionfive-2-va.dtb jh7110=
--starfive-visionfive-2-vb.dtb
-+dtb-$(CONFIG_SOC_STARFIVE) +=3D jh7100-beaglev-starlight.dtb
-+dtb-$(CONFIG_SOC_STARFIVE) +=3D jh7100-starfive-visionfive-v1.dtb
-+dtb-$(CONFIG_SOC_STARFIVE) +=3D jh7110-starfive-visionfive-2-va.dtb
-+dtb-$(CONFIG_SOC_STARFIVE) +=3D jh7110-starfive-visionfive-2-vb.dtb
-
-I'd rather have more, but easier to read lines than long ones.
-
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dt=
-si b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> new file mode 100644
-> index 000000000000..c60280b89c73
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> @@ -0,0 +1,111 @@
-> +// SPDX-License-Identifier: GPL-2.0 OR MIT
-> +/*
-> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
-> + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
-> + */
-> +
-> +/dts-v1/;
-> +#include "jh7110.dtsi"
-> +#include "jh7110-pinfunc.h"
-> +#include <dt-bindings/gpio/gpio.h>
-> +
-> +/ {
-> +	aliases {
-> +		serial0 =3D &uart0;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path =3D "serial0:115200n8";
-> +	};
-> +
-> +	cpus {
-> +		timebase-frequency =3D <4000000>;
-> +	};
-> +
-> +	memory@40000000 {
-> +		device_type =3D "memory";
-> +		reg =3D <0x0 0x40000000 0x1 0x0>;
-
-Is this a good idea when you have SKUs with 2, 4 & 8 GiB of DDR?
-
-Anyways, I can't review this as I've got neither board nor
-documentation, so with the above stuff sorted out:
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-I'll not apply it until the clock binding header is in my tree.
-
-Thanks,
-Conor.
-
-
---8xrhEquv/3PxHBwz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6IobwAKCRB4tDGHoIJi
-0jwaAQD7o1TKtLNZlBTk13ECBN0bhssFOZvOLHHDM950ZiX1dAD/Vwfu94KObi+g
-P1wOYMlvne8eqaD+rVW4wZn2KtuR4wU=
-=PJBb
------END PGP SIGNATURE-----
-
---8xrhEquv/3PxHBwz--
