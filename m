@@ -2,122 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B2A651ED5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D8C651EE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiLTKcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:32:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48742 "EHLO
+        id S231859AbiLTKeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:34:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbiLTKcB (ORCPT
+        with ESMTP id S231650AbiLTKeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:32:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3755B14023
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:31:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671532279;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ymr7dvYm0bPIMGfQN+EFR1KRA6011TA++6Gv0jSwMRI=;
-        b=ZNMOnTgftsysAiTrYdiH5JR6qEJIYBpnUqyO6xKrzw/iIjpMiHDKqVOeDnvIuEo6a/K9CV
-        t103u8FEFZjIww08ksHmP6kt1Ng0JQNjIYSq90BNWq7MEuF62X6IlctnW3ResRrdB/ms9l
-        d2U6ievO0DIy2fViYtFcW37GwZmcOVg=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-596-R5rGUXTDOIizzJSRover1A-1; Tue, 20 Dec 2022 05:31:18 -0500
-X-MC-Unique: R5rGUXTDOIizzJSRover1A-1
-Received: by mail-wr1-f70.google.com with SMTP id v14-20020adf8b4e000000b0024174021277so2131651wra.13
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:31:17 -0800 (PST)
+        Tue, 20 Dec 2022 05:34:11 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7A71583A
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:34:10 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id fy4so12026278pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:34:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5HcjsPgT2Huo/8axIHpoMgW6KyD2HQnudHSnjh27AGw=;
+        b=i/NxBUj8QPvNHEvcdQ65/NQfhsk2PYAX6KipLmhtxb4obV9TRqYcPYrsi59isg5nSA
+         591cjrO13Y+ySJP+WwpUdxxIQmRTqq61oGuln9dW+4OgagHOOnEsrFlkSl4RpaDbdew3
+         1S2+Z+GNqYO0dPku13wzUjnjw+wNEIQyzRwWWX7D7K5d7ZbiqmNeTqPsEQWPZHyo7YSu
+         MgEwLkfNgDIavpk5UJGrhKI0UycKSd9I3uDH4g5sZ37t5L8QYpC28XD2Be3FcOBgOSeL
+         mSh3+DvWhkgdBHD7WxPS3sUolfEAMdbz0Vd4b/97n+ujt1RtovANBabcmpsK726TsroQ
+         qhKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ymr7dvYm0bPIMGfQN+EFR1KRA6011TA++6Gv0jSwMRI=;
-        b=XwSYAnGfziImaiT67LQR1gEgHF/s2nhH+sFSk4U4TOn4maha2p2FoS4eOdKbCTWcyB
-         ErUm/xo6tpgFZKfRHyH2l9ZrqUdgPmm8s/TkcP4zhq22136E9BPm8daj9K5whrH8DLDC
-         6x3hioYDzxWqmw1wF8ksrqtPk+Rh+dzQ7dvT5HMlMAGrbM5peEV+8Usi+veh23QJrJGb
-         xwN+tX0WC7jgt2j/5KJJNYmPc6M6rXLxIFa6t2TWP1gZ8eFMCoNp0PgPVn3lwuNKMMjy
-         BMrY7lDM2K+OSqDv4EkpqfhLqHY/Iumr8dH9aYvVnDEYa/9nIaY3aPELKth2dMMmDorb
-         cf1g==
-X-Gm-Message-State: ANoB5plM1gToXiQtGqRD853dKg8/sAyURvAXO7ZcHs7d/TY4wwtdVHSA
-        i51jgwzDQkfNIX1+wiQUXHoKI2f0lXaF3UwCIuclkdTBBrXAlzz73Qlj9Rf/4u0ssf8ToGG05BI
-        WG3DDuPT9gEL3I4etxeJ8jU5K
-X-Received: by 2002:a05:600c:6549:b0:3c7:1359:783b with SMTP id dn9-20020a05600c654900b003c71359783bmr37201628wmb.1.1671532276956;
-        Tue, 20 Dec 2022 02:31:16 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5x1TeapVDCTlsoX2XzG7CqIUw11/Yk6M+YURbcyrD4F7TcwGxHCWM4JyoUR/l0n84xqNGPTg==
-X-Received: by 2002:a05:600c:6549:b0:3c7:1359:783b with SMTP id dn9-20020a05600c654900b003c71359783bmr37201614wmb.1.1671532276748;
-        Tue, 20 Dec 2022 02:31:16 -0800 (PST)
-Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
-        by smtp.gmail.com with ESMTPSA id r8-20020a05600c35c800b003a2f2bb72d5sm30909143wmq.45.2022.12.20.02.31.15
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5HcjsPgT2Huo/8axIHpoMgW6KyD2HQnudHSnjh27AGw=;
+        b=d0D2X+1usHznATcOE8mQQsdnEw646noP5yg40sXHYchFP3auO5l3w3KZ73WJ9uvz3D
+         AkYrM4+3YljdgRuVrlJ6JeAk3YnfLm5zvED5AS3PnTSesh1qe/VZW/LLr/OPvoC5GdrS
+         IzGP4RE7eI0Izofz2gvoLdYozywW3Addz9X0bLLMzK99uRQDKaJJD8dOeMKNxqMZeYFI
+         QzWQV5FddUxJ3Td3kZeI2UHV3SarmngAG7iAsI2+N1DGXBIWxSb+Q65qB9V2ekYeiGvR
+         7mO58C4g9pWUSxkB8k9aQuAOtAXcEPgT8wz2QKOsRx0JAVUeuGL6+A30F4gkCOY2G/M0
+         CK7g==
+X-Gm-Message-State: AFqh2kqzAsh4u3EA0/Z1W1zV5mNe/WnS1JLSaeQwdHnGYD4lsxyoSOuK
+        vL4Nv713Y/vSVLt1B0LvsNpC
+X-Google-Smtp-Source: AMrXdXuwjT5auxfIEPMBUp6EOd7lGMoElCiqh37+vvQd/Lbzlf1Dx8j0QZjDWIwNDJLWHVEmOyMVmA==
+X-Received: by 2002:a17:902:a9c9:b0:191:217f:b2ea with SMTP id b9-20020a170902a9c900b00191217fb2eamr6450308plr.40.1671532449512;
+        Tue, 20 Dec 2022 02:34:09 -0800 (PST)
+Received: from thinkpad ([117.217.181.222])
+        by smtp.gmail.com with ESMTPSA id v20-20020a170902ca9400b001708c4ebbaesm8934788pld.309.2022.12.20.02.34.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 02:31:16 -0800 (PST)
-Date:   Tue, 20 Dec 2022 11:31:05 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        kernel <kernel@sberdevices.ru>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>
-Subject: Re: [RFC PATCH v5 1/4] vsock: return errors other than -ENOMEM to
- socket
-Message-ID: <20221220103105.njugghpvvjusfjrs@sgarzare-redhat>
-References: <e04f749e-f1a7-9a1d-8213-c633ffcc0a69@sberdevices.ru>
- <c22a2ad3-1670-169b-7184-8f4a6d90ba06@sberdevices.ru>
+        Tue, 20 Dec 2022 02:34:08 -0800 (PST)
+Date:   Tue, 20 Dec 2022 16:04:00 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bhelgaas@google.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm8450: Use GIC-ITS for PCIe0 and
+ PCIe1
+Message-ID: <20221220103400.GB38609@thinkpad>
+References: <20221219191427.480085-1-manivannan.sadhasivam@linaro.org>
+ <20221219191427.480085-4-manivannan.sadhasivam@linaro.org>
+ <6a59addb-b1a0-8536-c909-25c4c4447e09@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c22a2ad3-1670-169b-7184-8f4a6d90ba06@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6a59addb-b1a0-8536-c909-25c4c4447e09@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 07:18:48AM +0000, Arseniy Krasnov wrote:
->This removes behaviour, where error code returned from any transport
->was always switched to ENOMEM. For example when user tries to send too
->big message via SEQPACKET socket, transport layers return EMSGSIZE, but
->this error code was always replaced with ENOMEM and returned to user.
->
->Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> net/vmw_vsock/af_vsock.c | 3 ++-
-> 1 file changed, 2 insertions(+), 1 deletion(-)
+On Mon, Dec 19, 2022 at 11:46:03PM +0200, Dmitry Baryshkov wrote:
+> On 19/12/2022 21:14, Manivannan Sadhasivam wrote:
+> > Both PCIe0 and PCIe1 controllers are capable of receiving MSIs from
+> > endpoint devices using GIC-ITS MSI controller. Add support for it.
+> > 
+> > Currently, BDF (0:0.0) and BDF (1:0.0) are enabled and with the
+> > msi-map-mask of 0xff00, all the 32 devices under these two busses can
+> > share the same Device ID.
+> > 
+> > The GIC-ITS MSI implementation provides an advantage over internal MSI
+> > implementation using Locality-specific Peripheral Interrupts (LPI) that
+> > would allow MSIs to be targeted for each CPU core.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >   arch/arm64/boot/dts/qcom/sm8450.dtsi | 12 ++++++------
+> >   1 file changed, 6 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> > index 570475040d95..276ceba4c247 100644
+> > --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> > @@ -1733,9 +1733,9 @@ pcie0: pci@1c00000 {
+> >   			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
+> >   				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
+> > -			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
+> > -			interrupt-names = "msi";
+> > -			#interrupt-cells = <1>;
+> > +			msi-map = <0x0 &gic_its 0x5980 0x1>,
+> > +				  <0x100 &gic_its 0x5981 0x1>;
+> 
+> Does ITS support handling more than one MSI interrupt per device? Otherwise
+> it might be better to switch to multi-MSI scheme using SPI interrupts.
+> 
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Yes, it does support multiple MSIs from endpoints. I've verified it using the
+MHI Endpoint device.
 
->
->diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->index d593d5b6d4b1..19aea7cba26e 100644
->--- a/net/vmw_vsock/af_vsock.c
->+++ b/net/vmw_vsock/af_vsock.c
->@@ -1861,8 +1861,9 @@ static int vsock_connectible_sendmsg(struct socket *sock, struct msghdr *msg,
-> 			written = transport->stream_enqueue(vsk,
-> 					msg, len - total_written);
-> 		}
->+
-> 		if (written < 0) {
->-			err = -ENOMEM;
->+			err = written;
-> 			goto out_err;
-> 		}
->
->-- 
->2.25.1
+> > +			msi-map-mask = <0xff00>;
+> >   			interrupt-map-mask = <0 0 0 0x7>;
+> >   			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+> >   					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> > @@ -1842,9 +1842,9 @@ pcie1: pci@1c08000 {
+> >   			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
+> >   				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
+> > -			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
+> > -			interrupt-names = "msi";
+> > -			#interrupt-cells = <1>;
+> > +			msi-map = <0x0 &gic_its 0x5a01 0x1>,
+> > +				  <0x100 &gic_its 0x5a00 0x1>;
+> 
+> Are you sure that the order is correct here?
+> 
 
+Ideally, BDF (1:0.0) should be assinged the Device ID of 0x5a01. But based on my
+experiments, it doesn't work. But if the Device ID gets swapped, it works.
+
+Maybe I should add a comment here.
+
+Thanks,
+Mani
+
+> > +			msi-map-mask = <0xff00>;
+> >   			interrupt-map-mask = <0 0 0 0x7>;
+> >   			interrupt-map = <0 0 0 1 &intc 0 0 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+> >   					<0 0 0 2 &intc 0 0 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> 
+> -- 
+> With best wishes
+> Dmitry
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
