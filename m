@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D18D6525CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:52:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8B66525CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233969AbiLTRwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 12:52:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S229756AbiLTRxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 12:53:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233990AbiLTRvv (ORCPT
+        with ESMTP id S229727AbiLTRxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 12:51:51 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A9C14D15
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 09:51:32 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id x22so30965890ejs.11
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 09:51:32 -0800 (PST)
+        Tue, 20 Dec 2022 12:53:45 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED6BF006
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 09:53:44 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id t2so13039340ply.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 09:53:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PRgONfXfB/7FqR4XdC/Xkc2dAxhyGRzjwvi7G1EBGTA=;
-        b=aVXzPynpu6zHW+Lah2IIFVHDNmSkg7tuOJyBpw0GMkjRkVlNgcwKmr6RqJUYvdEARq
-         SCnyQLAjupkHPwIDusYDnQjeWY8W+rYBn7oVAVQou8BOmniLngC2MGhZBum3MNVByCFp
-         fjasBMDxoenpRCN+JmbcWsPtflzSXwqowMCX33JkCTZN4uxGeGPDC7UtQhB/xDF5QzNa
-         QXObqzWn1RApZsFHuHebRzNtDzVQNjx5FZHv29Nau61Lxmg7W/NxexcZC90EdNqdplgP
-         ZyTsjmM5KTubdNfmbPIX9CNhMATHwrBMf2XBE0Ez3D6kqYkHw3VZ97/kFGbjYAcug6uO
-         K0Dg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7kMtd6mFHIc4lyhSJG2bAKq04EpZF7qYfB8BpwW0nVo=;
+        b=DyCDc111EoEh+DmSSMOeFWtySplI1Ib9bmFK44m9bE1COHOn/+Kpk3ddIYdz7TdNMQ
+         yRrGN+EFGsnSr94QcB+Cx9h31S1FQBPw4oQX+RGgzobFttJfsNTy8UAHqeLZFvFqGEN+
+         7RGeBsCvFnl7JPXOS/s34AScNFaOG2gS7l9Q7eguuDtxIe5z3uE4l6CGby9Nw/dXHNFV
+         N2RcO0kSJtmKNbHRTMfMynVCBSSOtsTRHbD8j0ucsT3hBp9fYZ9yVYTMpv0Cg84tOjr7
+         S6HfQVcVmXGe1eltsbNywOdScXRVxOWL3iQBdLU+XAC8NXmWoA5528Bvt2bmFhRHCHPd
+         5P6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PRgONfXfB/7FqR4XdC/Xkc2dAxhyGRzjwvi7G1EBGTA=;
-        b=hV1jwY4ZLdAmd3BDrEZ5FETcgpg2mJ45ar1Hr/s0DhDs87MgP108NS++uvzW4p8uYJ
-         AkU0LD3gc7ECNNs4llSILmrGWuz2UJXjc44x9nUgnFw0a/Pva68OIEeVG8pCvp6pB6BV
-         nR6STo2t16TcgUD5JvojFIfgqAofSKQDBcxL1UBQ1HpUe1THDoACM2CcY+62L75mAQci
-         f+VF4n79dW+ZiZOCX491rSsBir2yzywpSPs3h/fEINKoiANGPTi3nmHloR5SWm3uLDs5
-         IgFg0QyyotA0oEfUvG6fsrE1KBi3EqhD45DFBrA3HNJ3CiGbLRfIUXCSqZ4miAUjLSS1
-         zolg==
-X-Gm-Message-State: ANoB5pmbIIwi5GQYLxKqFSCNZw4sPnmyQfd37qfvjQsCaUobXnrB1i3f
-        algxBd8D0GsjywuSCSm5vOBR7lyS/Vjbef/KpfX73g==
-X-Google-Smtp-Source: AA0mqf6K3DgnpNq5BPEBPwiAnFimPE08LSclQ04Z2HtjgeLiG+JllJC4+1qdGRhnHawP8Cy0Ir7UCvu9HaChnF+UVhI=
-X-Received: by 2002:a17:906:b0b:b0:7c1:36:8ffe with SMTP id
- u11-20020a1709060b0b00b007c100368ffemr15363825ejg.725.1671558690342; Tue, 20
- Dec 2022 09:51:30 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7kMtd6mFHIc4lyhSJG2bAKq04EpZF7qYfB8BpwW0nVo=;
+        b=6qt+xmsB3fYO79jI6E9w1BoeIVuaCDm9K75HEItNjpdQjFDic6MGx2jba+CyUbMF0p
+         mfU3WgtvAYxyLPDjRa8tk/fwQhcaGNTL+xG41HvpPDBishwGv0MW86lzISITn5AH3acI
+         FZS+zZVQFgz+oPAMw8zhTRD1+LtrSGxXvPWZpD9ZuE/DO8OW63+1JeGxYDnPcMWpEFhc
+         clbeKBHU2/Q5rUWwnYQYEEBjUwFjHsck6wVqAIVc1gz3JMwLofOMFNOnmIEbp46d0aTQ
+         1BDsnufxvNG7CxOM7YB1VFQLbk9M9hSXa6n4tOYB5PHLgNxCvl6SVNd/FlH/n9vPwyy0
+         z0tA==
+X-Gm-Message-State: ANoB5pmwY9+S/bXgZhn07WUtK+wX8nl4SoMtzqv4EM1LhAumFHM6ZtUu
+        0q2QdEJvmkiq64UwKKc0me1FWCUOaNOao7lL
+X-Google-Smtp-Source: AA0mqf4eoxE+3oewFG3WTI/JCe7yAnoR/fzEyYECfgKB0p4Yu/W4BXjz/RNAe/cakHnILwsg49OuTw==
+X-Received: by 2002:a17:90b:1484:b0:21b:e47f:2fb2 with SMTP id js4-20020a17090b148400b0021be47f2fb2mr47394121pjb.37.1671558823931;
+        Tue, 20 Dec 2022 09:53:43 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id om7-20020a17090b3a8700b001fde655225fsm2216367pjb.2.2022.12.20.09.53.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 09:53:43 -0800 (PST)
+Date:   Tue, 20 Dec 2022 09:53:39 -0800
+From:   David Matlack <dmatlack@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Robert Hoo <robert.hu@linux.intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Subject: Re: [PATCH 5/5] KVM: x86/mmu: Move kvm_tdp_mmu_map()'s prolog and
+ epilog to its caller
+Message-ID: <Y6H2o2ADCALDA2oL@google.com>
+References: <20221213033030.83345-1-seanjc@google.com>
+ <20221213033030.83345-6-seanjc@google.com>
 MIME-Version: 1.0
-References: <20221207164338.1535591-1-mclapinski@google.com>
- <20221207164338.1535591-2-mclapinski@google.com> <843af7b5-8917-e9e3-de27-cb328f53fb70@efficios.com>
- <CAAi7L5eVa-KFxG5DLrFXbEdVx-CxLLPzg_kPE9OLa3mkrV+AjQ@mail.gmail.com>
-In-Reply-To: <CAAi7L5eVa-KFxG5DLrFXbEdVx-CxLLPzg_kPE9OLa3mkrV+AjQ@mail.gmail.com>
-From:   =?UTF-8?B?TWljaGHFgiBDxYJhcGnFhHNraQ==?= <mclapinski@google.com>
-Date:   Tue, 20 Dec 2022 18:51:18 +0100
-Message-ID: <CAAi7L5cRRbT=N1TmMc+SVnym7UOgD+2F=Skjzx=7CbUoyCzUhw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] sched/membarrier: Introduce MEMBARRIER_CMD_GET_REGISTRATIONS
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrei Vagin <avagin@gmail.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221213033030.83345-6-seanjc@google.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -75,176 +78,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 7:04 PM Micha=C5=82 C=C5=82api=C5=84ski <mclapinski@=
-google.com> wrote:
->
-> On Wed, Dec 7, 2022 at 6:07 PM Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
-> >
-> > On 2022-12-07 11:43, Michal Clapinski wrote:
-> > > Provide a method to query previously issued registrations.
-> > >
-> > > Signed-off-by: Michal Clapinski <mclapinski@google.com>
-> > > ---
-> > >   include/uapi/linux/membarrier.h |  4 ++++
-> > >   kernel/sched/membarrier.c       | 39 ++++++++++++++++++++++++++++++=
-++-
-> > >   2 files changed, 42 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/include/uapi/linux/membarrier.h b/include/uapi/linux/mem=
-barrier.h
-> > > index 737605897f36..5f3ad6d5be6f 100644
-> > > --- a/include/uapi/linux/membarrier.h
-> > > +++ b/include/uapi/linux/membarrier.h
-> > > @@ -137,6 +137,9 @@
-> > >    * @MEMBARRIER_CMD_SHARED:
-> > >    *                          Alias to MEMBARRIER_CMD_GLOBAL. Provide=
-d for
-> > >    *                          header backward compatibility.
-> > > + * @MEMBARRIER_CMD_GET_REGISTRATIONS:
-> > > + *                          Returns a bitmask of previously issued
-> > > + *                          registration commands.
-> > >    *
-> > >    * Command to be passed to the membarrier system call. The commands=
- need to
-> > >    * be a single bit each, except for MEMBARRIER_CMD_QUERY which is a=
-ssigned to
-> > > @@ -153,6 +156,7 @@ enum membarrier_cmd {
-> > >       MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE     =3D (1 =
-<< 6),
-> > >       MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ                   =3D (1 =
-<< 7),
-> > >       MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ          =3D (1 =
-<< 8),
-> > > +     MEMBARRIER_CMD_GET_REGISTRATIONS                        =3D (1 =
-<< 9),
->
-> Btw. I could do this as a flag to MEMBARRIER_CMD_QUERY instead of a
-> separate command. Would that be preferable?
->
->
-> > >
-> > >       /* Alias for header backward compatibility. */
-> > >       MEMBARRIER_CMD_SHARED                   =3D MEMBARRIER_CMD_GLOB=
-AL,
-> > > diff --git a/kernel/sched/membarrier.c b/kernel/sched/membarrier.c
-> > > index 0c5be7ebb1dc..2ad881d07752 100644
-> > > --- a/kernel/sched/membarrier.c
-> > > +++ b/kernel/sched/membarrier.c
-> > > @@ -159,7 +159,8 @@
-> > >       | MEMBARRIER_CMD_PRIVATE_EXPEDITED                             =
- \
-> > >       | MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED                    =
- \
-> > >       | MEMBARRIER_PRIVATE_EXPEDITED_SYNC_CORE_BITMASK               =
- \
-> > > -     | MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK)
-> > > +     | MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK                    =
- \
-> > > +     | MEMBARRIER_CMD_GET_REGISTRATIONS)
-> > >
-> > >   static void ipi_mb(void *info)
-> > >   {
-> > > @@ -540,6 +541,40 @@ static int membarrier_register_private_expedited=
-(int flags)
-> > >       return 0;
-> > >   }
-> > >
-> > > +static int membarrier_get_registrations(void)
-> > > +{
-> > > +     struct task_struct *p =3D current;
-> > > +     struct mm_struct *mm =3D p->mm;
-> > > +     int registrations_mask =3D 0, membarrier_state, i;
-> > > +     static const int states[] =3D {
-> > > +             MEMBARRIER_STATE_GLOBAL_EXPEDITED |
-> > > +                     MEMBARRIER_STATE_GLOBAL_EXPEDITED_READY,
-> >
-> > What is the purpose of checking for the _READY state flag as well here =
-?
->
-> Answered below.
->
->
-> >
-> >
-> > > +             MEMBARRIER_STATE_PRIVATE_EXPEDITED |
-> > > +                     MEMBARRIER_STATE_PRIVATE_EXPEDITED_READY,
-> > > +             MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE |
-> > > +                     MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE_RE=
-ADY,
-> > > +             MEMBARRIER_STATE_PRIVATE_EXPEDITED_RSEQ |
-> > > +                     MEMBARRIER_STATE_PRIVATE_EXPEDITED_RSEQ_READY
-> > > +     };
-> > > +     static const int registration_cmds[] =3D {
-> > > +             MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED,
-> > > +             MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED,
-> > > +             MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE,
-> > > +             MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ
-> > > +     };
-> > > +     BUILD_BUG_ON(ARRAY_SIZE(states) !=3D ARRAY_SIZE(registration_cm=
-ds));
-> > > +
-> > > +     membarrier_state =3D atomic_read(&mm->membarrier_state);
-> > > +     for (i =3D 0; i < ARRAY_SIZE(states); ++i) {
-> > > +             if (membarrier_state & states[i]) {
-> >
-> > The mask will match if either of the flags to match are set. Is that
-> > your intent ?
->
-> Kind of, it was just the easiest to write. As explained in the cover
-> letter, I don't really care much about the result of this while the
-> process is running. And when the process is frozen, either state and
-> state_ready are set or none of them.
->
->
-> >
-> >
-> > > +                     registrations_mask |=3D registration_cmds[i];
-> > > +                     membarrier_state &=3D ~states[i];
-> >
-> > So I understand that those _READY flags are there purely for making sur=
-e
-> > we clear the membarrier_state for validation that they have all been
-> > checked with the following WARN_ON_ONCE(). Am I on the right track ?
->
-> Yes, exactly. It wastes time but I'm worried about people adding new
-> states and not updating this function. A suggestion on how to do this
-> better (especially at compile time) would be greatly appreciated.
->
->
-> >
-> > > +             }
-> > > +     }
-> > > +     WARN_ON_ONCE(membarrier_state !=3D 0);
-> >
-> > Thanks,
-> >
-> > Mathieu
-> >
-> > > +     return registrations_mask;
-> > > +}
-> > > +
-> > >   /**
-> > >    * sys_membarrier - issue memory barriers on a set of threads
-> > >    * @cmd:    Takes command values defined in enum membarrier_cmd.
-> > > @@ -623,6 +658,8 @@ SYSCALL_DEFINE3(membarrier, int, cmd, unsigned in=
-t, flags, int, cpu_id)
-> > >               return membarrier_private_expedited(MEMBARRIER_FLAG_RSE=
-Q, cpu_id);
-> > >       case MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ:
-> > >               return membarrier_register_private_expedited(MEMBARRIER=
-_FLAG_RSEQ);
-> > > +     case MEMBARRIER_CMD_GET_REGISTRATIONS:
-> > > +             return membarrier_get_registrations();
-> > >       default:
-> > >               return -EINVAL;
-> > >       }
-> >
-> > --
-> > Mathieu Desnoyers
-> > EfficiOS Inc.
-> > https://www.efficios.com
-> >
+On Tue, Dec 13, 2022 at 03:30:30AM +0000, Sean Christopherson wrote:
+> Move the hugepage adjust, tracepoint, and RCU (un)lock logic out of
+> kvm_tdp_mmu_map() and into its sole caller, kvm_tdp_mmu_page_fault(), to
+> eliminate the gotos used to bounce through rcu_read_unlock() when bailing
+> from the walk.
+> 
+> Opportunistically mark kvm_mmu_hugepage_adjust() as static as
+> kvm_tdp_mmu_map() was the only external user.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c          |  9 ++++++++-
+>  arch/x86/kvm/mmu/mmu_internal.h |  1 -
+>  arch/x86/kvm/mmu/tdp_mmu.c      | 22 ++++------------------
+>  3 files changed, 12 insertions(+), 20 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 254bc46234e0..99c40617d325 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -3085,7 +3085,8 @@ int kvm_mmu_max_mapping_level(struct kvm *kvm,
+>  	return min(host_level, max_level);
+>  }
+>  
+> -void kvm_mmu_hugepage_adjust(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> +static void kvm_mmu_hugepage_adjust(struct kvm_vcpu *vcpu,
+> +				    struct kvm_page_fault *fault)
+>  {
+>  	struct kvm_memory_slot *slot = fault->slot;
+>  	kvm_pfn_t mask;
+> @@ -4405,7 +4406,13 @@ static int kvm_tdp_mmu_page_fault(struct kvm_vcpu *vcpu,
+>  	if (is_page_fault_stale(vcpu, fault))
+>  		goto out_unlock;
+>  
+> +	kvm_mmu_hugepage_adjust(vcpu, fault);
 
-Hi Mathieu,
-is there anything more you need from my side?
+Can you also move the call to kvm_mmu_hugepage_adjust() from
+direct_map() to direct_page_fault()? I do think it's worth the
+maintenence burden to keep those functions consistent.
+
+> +
+> +	trace_kvm_mmu_spte_requested(fault);
+> +
+> +	rcu_read_lock();
+>  	r = kvm_tdp_mmu_map(vcpu, fault);
+> +	rcu_read_unlock();
+
+I would prefer to keep these in tdp_mmu.c, to reduce the amount of TDP
+MMU details that bleed into mmu.c (RCU) and for consistency with other
+TDP MMU APIs that don't require the caller to acquire RCU.  This will
+also be helpful for the Common MMU, as the tracepoint and RCU will be
+common.
+
+e.g.
+
+static int __kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+{
+	...
+}
+
+int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+{
+	int r;
+
+	trace_kvm_mmu_spte_requested(fault);
+
+	rcu_read_lock();
+	r = __kvm_tdp_mmu_map(vcpu, fault);
+	rcu_read_unlock();
+
+	return r;
+}
