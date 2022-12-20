@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A084A65227F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B104C652280
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:26:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233949AbiLTO0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 09:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
+        id S233507AbiLTO0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 09:26:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233900AbiLTO0Y (ORCPT
+        with ESMTP id S233340AbiLTO03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:26:24 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42912DCE
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:26:21 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id gv5-20020a17090b11c500b00223f01c73c3so1026631pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:26:21 -0800 (PST)
+        Tue, 20 Dec 2022 09:26:29 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFB318B34
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:26:26 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id m4so12428269pls.4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:26:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HfWc+IW6nWXzRkOrGK/ueRRgIPCILPfnnkeIVCLq74U=;
-        b=TeiDgLuoaSaSiPApyjb1Fhhm8t8VMCYNyiEN2ze8FJFk51Mtz/3aIwxLVxe36XME88
-         9/VdFQRiAhx7U3kvtv9zhNzvh1ZgS2aVflH9tgYbbX6yu9mg5ncoIieDsyKcUO0ChG94
-         YnpzKSksKjSCgfWOlsN3dP3ICB/Ju6jFGVF8+G2+EIpVEuPoyccstZnwmxS0x9I1QNPW
-         sr3jMBSkUEWlzMGmWg/vCqaCKPyevnVxGOod6RSHQUg4t+eAOlzEmBXudIE5LHBIZqJZ
-         AEJ0jGQKJWUuTLYCl95DGIV0oExq+QIiXNkHKPVto+PV3gtyX+zdtCSi97svN8f/Skmw
-         J5Hw==
+        bh=RInimQUAJH6gGKd+DihgXOqmcnGSJ33LRPnqziACYsI=;
+        b=XIEcnWkobtVg4DIxwFqH41x2Ge6wQKVtzVCpH+HAHZ9lrboAxazyK/Mo/Z2Uafuz7G
+         oVxlJFG/hvLdO+asmcnKKWHeUxTK/DJq6T4n2q3O4Oj+zqjIdhOW7jCqU1aKoSIRefQx
+         BQd2+PvqrXPf3e572PEis73X0EPGP7kGZimbNakPpcFYd9MD0yd7og6Zzi1igGaq0zVE
+         i4F2JGU9FIC47BjZjAayOoLGOPa+APh4JFIToNjMdRYh4Zuet863l1DTN91GggWW6WYA
+         juqMmEYbwbLmRAXIRSmP3eTkFdOe+fRpfR7vynpnlmaNhB7T/ChRAYGrrCGLk2IuR/KX
+         VuYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HfWc+IW6nWXzRkOrGK/ueRRgIPCILPfnnkeIVCLq74U=;
-        b=T89Q0uZF8voyhXMnBnLRvgkph/CkVXsatZKMd3wygdB/17jN1PcfwJa7fhosKkWVTP
-         in1Qr4D5U0qxt/iQ42uZsjg2020Ex9pWGt7NkDNT5mfwzCLoNEcQT9hbih4FAKY2tN7k
-         0XTKjn/Lv7QuAG8S53SOD9XeOx4ZAVDr0o/hv+92dYrvSkmTf9KE7ysWsyFcVQlORdKl
-         8hkqpKl7N5wBUc9m2r2xuTsuEGMCfWKam2tY+IQp2Uxi5RCIrU2C2tvJ1vM0hdLcaSHn
-         0dwk9Ax99ICAjnP5BLbqYjQGYYmbLKgG97E2v0ZPvcUf2KOSvlz5pNIvH51Kyou+wySB
-         mbjw==
-X-Gm-Message-State: ANoB5pkjzQYp5Ot5h/3eFd3MGyogeMUdwYOB4CpkHP1xplkV31JdbeJR
-        /Z5JHwwCNHH8LcXdftjhgQY=
-X-Google-Smtp-Source: AA0mqf4Jzoj3nYSEHFPpblQQJKZafsl2JD5FJFN8mWm1RMCGOXRAgrRwgUPRpJ5e+ZAnh8d8mn6GqQ==
-X-Received: by 2002:a17:902:ce10:b0:189:e577:c842 with SMTP id k16-20020a170902ce1000b00189e577c842mr50431735plg.45.1671546381492;
-        Tue, 20 Dec 2022 06:26:21 -0800 (PST)
+        bh=RInimQUAJH6gGKd+DihgXOqmcnGSJ33LRPnqziACYsI=;
+        b=XWETGgy6ZotBWazBZUEJT1josh5Qlqm7Q/XYKDd9x+2K8Dy+Cjacdt70+3PjCMd2GN
+         /WQ37hGxYVaS9Sn5ShCw/vVRM00MARi1gNT/nsHgpe2hFMQ9G3D4mP5BbD4WM9O6y7fP
+         EmrYAyUX6cIPrDbc+w/IzZL/lAlJplHlow8fKrWfUXqMAka7h0zsm93hasf7wRHQ5ii+
+         OG3zhBdHhXRbTlcvk/xFNR4fuqYiWhvwEJXp0wDXIGyPRBPAT5IGc/LjPdQWvmQcmhJN
+         1B7/lfyCQfQSXiT1quT6o4/vh7ZejtTqU4LE4rwtwVPBICAPaJBrOuE0QhClw8AB22EF
+         5mUA==
+X-Gm-Message-State: AFqh2koD2S3DAziGheNANKGdKc7NV5dVFG+3rupfY+/M/8rZ4SxsLmtr
+        rQNyd53MBOh+x1Pk+0xj3SE=
+X-Google-Smtp-Source: AMrXdXs7gvwBQc0QwQTsi06bOGn3/m/+wQv4kHmB9AFGvp1HZZowDJP4qN/se1I2HhNrMjR6065J9Q==
+X-Received: by 2002:a17:903:4281:b0:189:8062:d8e with SMTP id ju1-20020a170903428100b0018980620d8emr14791000plb.7.1671546386139;
+        Tue, 20 Dec 2022 06:26:26 -0800 (PST)
 Received: from vernon-pc.. ([114.231.52.81])
-        by smtp.gmail.com with ESMTPSA id ik11-20020a170902ab0b00b001897bfc9800sm9383398plb.53.2022.12.20.06.26.19
+        by smtp.gmail.com with ESMTPSA id ik11-20020a170902ab0b00b001897bfc9800sm9383398plb.53.2022.12.20.06.26.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 06:26:21 -0800 (PST)
+        Tue, 20 Dec 2022 06:26:25 -0800 (PST)
 From:   Vernon Yang <vernon2gm@gmail.com>
 To:     Liam.Howlett@oracle.com, akpm@linux-foundation.org
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Vernon Yang <vernon2gm@gmail.com>
-Subject: [PATCH 2/8] maple_tree: remove extra return statement
-Date:   Tue, 20 Dec 2022 22:26:00 +0800
-Message-Id: <20221220142606.1698836-3-vernon2gm@gmail.com>
+Subject: [PATCH 3/8] maple_tree: use mt_node_max() instead of direct operations mt_max[]
+Date:   Tue, 20 Dec 2022 22:26:01 +0800
+Message-Id: <20221220142606.1698836-4-vernon2gm@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221220142606.1698836-2-vernon2gm@gmail.com>
 References: <20221220142606.1698836-2-vernon2gm@gmail.com>
@@ -72,35 +72,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For functions with a return type of void, it is unnecessary to
-add a reurn statement at the end of the function, so drop it.
+Use mt_node_max() to get the maximum number of slots for a node,
+rather than direct operations mt_max[], makes it better portability.
 
 Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
 ---
- lib/maple_tree.c | 3 ---
- 1 file changed, 3 deletions(-)
+ lib/maple_tree.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 8ace65a5eea5..34aa93c85d6e 100644
+index 34aa93c85d6e..3d45c515ed42 100644
 --- a/lib/maple_tree.c
 +++ b/lib/maple_tree.c
-@@ -1276,7 +1276,6 @@ static inline void mas_alloc_nodes(struct ma_state *mas, gfp_t gfp)
- 	if (mas->alloc && !(((unsigned long)mas->alloc & 0x1)))
- 		mas->alloc->total = success;
- 	mas_set_err(mas, -ENOMEM);
--	return;
- }
+@@ -6723,7 +6723,7 @@ static void mt_dump_range64(const struct maple_tree *mt, void *entry,
  
- /*
-@@ -4710,8 +4709,6 @@ static inline void mas_rewalk(struct ma_state *mas, unsigned long index)
- 	mas_state_walk(mas);
- 	if (mas_is_start(mas))
- 		goto retry;
--
--	return;
+ 		if (i < (MAPLE_RANGE64_SLOTS - 1))
+ 			last = node->pivot[i];
+-		else if (!node->slot[i] && max != mt_max[mte_node_type(entry)])
++		else if (!node->slot[i] && max != mt_node_max(entry))
+ 			break;
+ 		if (last == 0 && i > 0)
+ 			break;
+@@ -6830,7 +6830,7 @@ void mt_dump(const struct maple_tree *mt)
+ 	if (!xa_is_node(entry))
+ 		mt_dump_entry(entry, 0, 0, 0);
+ 	else if (entry)
+-		mt_dump_node(mt, entry, 0, mt_max[mte_node_type(entry)], 0);
++		mt_dump_node(mt, entry, 0, mt_node_max(entry), 0);
  }
+ EXPORT_SYMBOL_GPL(mt_dump);
  
- /*
 -- 
 2.34.1
 
