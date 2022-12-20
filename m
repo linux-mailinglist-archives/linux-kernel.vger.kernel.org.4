@@ -2,137 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E542652333
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:55:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E907652342
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233240AbiLTOza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 09:55:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
+        id S233829AbiLTO6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 09:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233375AbiLTOz0 (ORCPT
+        with ESMTP id S233822AbiLTO6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:55:26 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB4321A5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:55:25 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id v11so12621071ljk.12
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:55:25 -0800 (PST)
+        Tue, 20 Dec 2022 09:58:49 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47775B71
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:58:48 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id c184so11999728vsc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:58:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4uW33jwDELgyifIlOmrFnOAcTY9sX6eDLte3xh/fS64=;
-        b=BuSd/1xUhhuYWEHJ4j0G243EPKhduqoDU90y9Vzu2TvGr1QAyoltMopFsvxhgoSmg4
-         xH7OH0ivwTnehzuACKM0cdZkWFaHGj6pHC7u+gN9MRJ/d+0xXJckKheHuDrbK4gSOMkS
-         nPQ39/axOJ+/vxnt6r6owpfQugXxblTDJJcXSvSq3kKgvEQol7+UxQkJ7nxEkNjDQ4z/
-         ikgXO1fIbLrOEdvEJk2CIsn0/f4OLmVl2J0LbU7ns16lOE74MaftWrrWZeiUvURr0SPj
-         Put5KHjcxFi3GNeRjJ7kVPi4d93h6isEq4K0vF8gOVp8KIhWVj0R9ichdR3Nw8oHGhdo
-         Mdrw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=T9or8qu6JKMppO0BjvG4KREN0TsiXIo9VR7tBdWz3E0=;
+        b=sPle1K98siElwEnQSiMSRFrbgOEdMk7AXUbhOqXsaSV3Bw7f1zRzWc5v5zL8E23TQ8
+         v5FzdF6/flsDvwdOac02sbokPlxi3AZpf2hFVMMQo43etJX5x5oleEEQXg0EBhvajE13
+         pmfNGb8J0qWPH9LONzY4jRebTvPmrFuBQ2yKb7Ij16b63ccVWYUut/1XRE4P59a9bWew
+         mkkAOXCkbggcQTKhc0yZy1zTXmxMuSmW8um8sjLOtGw7kZkvr/rQPsBq2Pb1weUVL2Xn
+         j3Vxeo7Pm2E1o0Fyb8/fph9Jv1o8UaRuy8NtnjUzcFqVMZhLJVkxkazImisksnSpjstq
+         PADQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4uW33jwDELgyifIlOmrFnOAcTY9sX6eDLte3xh/fS64=;
-        b=jTmkEBMzE+L6VtREvKRBV/MJfWnBpmmtEYL9XKqLxgGsHLpajutfvYB9LdnKBbnce3
-         UKyybzj0+nvMZXfcvSGL0Q3MZtZ7PXJU96djChE3MMacSAmzrJk6BVoLtli486Sosb1M
-         KrVw3gWeN3ocgggjiRkTmj6++JDcj7/AqG37Oi+oLXBu4AFRztOGk7fESTm0IRHPgIiN
-         IqmMsKTRkRh2KJKUhlBEl8yuFz/f7jW7n6tQMlDoSZ9WdQGyGjd0R9ah4k7d2WmEUbLE
-         QP6DAZUyiFL2giRRBh/OvXrzkKXCZguu4wCewAs89dzTD9Q9TDGI4n/wVgfHEwR3TtR/
-         2bnQ==
-X-Gm-Message-State: AFqh2krwID7I0h0EdICnyuLwOrMn/wX303fi/Y7e2Woi7BM7Kfzd6ejM
-        ZOZ8QAGiXpSI1SmjCvunwO9pmQ==
-X-Google-Smtp-Source: AMrXdXtHsnA1I4DZEO8UsCzaa1oL2KIP37sv76nO2NvXT5H5nLksDQ2J6JnZKZ6DreHjxOvP79n2rw==
-X-Received: by 2002:a05:651c:1722:b0:27a:51d:53d0 with SMTP id be34-20020a05651c172200b0027a051d53d0mr710858ljb.11.1671548124047;
-        Tue, 20 Dec 2022 06:55:24 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v6-20020ac258e6000000b0048afb8b8e53sm1485123lfo.80.2022.12.20.06.55.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 06:55:23 -0800 (PST)
-Message-ID: <34c48a5a-fa49-6725-c640-ee1f8130b921@linaro.org>
-Date:   Tue, 20 Dec 2022 15:55:22 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T9or8qu6JKMppO0BjvG4KREN0TsiXIo9VR7tBdWz3E0=;
+        b=lzAA2T6KgBMJvilWiw/mUlw9/VbOrG35aCcCiFmS/2uUPR+Vz/szy3QU39E1GfyGwX
+         +7d+Z9o5AUWcWpAMYpVdzpbYpzm5+uGVZDwnrnfGOohlPnIUrrUimi3dfK7OfTwx+CAk
+         XBtLn73RV+OyqcfMQf3KSjQ8esaB0TAtaocOc/zlmkayGJpHRlRmbaHcjPTUcQNsJQuQ
+         uRVpg2FwLIJ7USpeDsj2fuRD8p+2y4D/5U5WBtohW3WYRJpipuDuG4XPtzllHYHsFGzh
+         lByHiRfzrDvnPwCXLis2p5kVnhRobpXW5Lit8RoWmiVmbSHTW3jerRVfkZkQpxqT34p5
+         9+Nw==
+X-Gm-Message-State: ANoB5pkJDejnmPdmhjHrXXKdxsEkba9ZXR86lcnPegWqpWUHQIRvicGx
+        NxueDRfQgYJPtOr2toSLtfEGlRNhHlKVsdXE+19LCczGzU/tGpVtU8M=
+X-Google-Smtp-Source: AA0mqf5fv+7lxM44X5zQadpbNX4thXysP7TTw1cJN8453k0zXr+e2ecNZCtvPFF7CSoZc8hzKCodtgJ5Kzs6Mo72Y6M=
+X-Received: by 2002:a67:f04e:0:b0:3b1:1713:ba11 with SMTP id
+ q14-20020a67f04e000000b003b11713ba11mr21573437vsm.76.1671548327302; Tue, 20
+ Dec 2022 06:58:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 6/6] dt-bindings: regulator: add MAX77659 regulator
- binding
-Content-Language: en-US
-To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
-        lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org,
-        lgirdwood@gmail.com, broonie@kernel.org
-Cc:     Nurettin.Bolucu@analog.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20221220132250.19383-1-Zeynep.Arslanbenzer@analog.com>
- <20221220132250.19383-7-Zeynep.Arslanbenzer@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221220132250.19383-7-Zeynep.Arslanbenzer@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221219191855.2010466-1-allenwebb@google.com>
+ <20221219204619.2205248-1-allenwebb@google.com> <20221219204619.2205248-3-allenwebb@google.com>
+ <Y6FaUynXTrYD6OYT@kroah.com>
+In-Reply-To: <Y6FaUynXTrYD6OYT@kroah.com>
+From:   Allen Webb <allenwebb@google.com>
+Date:   Tue, 20 Dec 2022 08:58:36 -0600
+Message-ID: <CAJzde04Hbd2+s-Bqog2V81dBEeZD7WWaFCf2BkesQS4yUAKiNA@mail.gmail.com>
+Subject: Re: [PATCH v9 02/10] rockchip-mailbox: Fix typo
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/12/2022 14:22, Zeynep Arslanbenzer wrote:
-> This patch adds device tree binding documentation for MAX77659 regulator.
+On Tue, Dec 20, 2022 at 12:46 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Dec 19, 2022 at 02:46:10PM -0600, Allen Webb wrote:
+> > A one character difference in the name supplied to MODULE_DEVICE_TABLE
+> > breaks a future patch set, so fix the typo.
+> >
+> > Cc: stable@vger.kernel.org
+> > Fixes: f70ed3b5dc8b ("mailbox: rockchip: Add Rockchip mailbox driver")
+>
+> How has this been an issue since the 4.6 kernel and no one has noticed
+> it?  Can this code not be built as a module?  If not, then please
+> explain this.
 
-Do not use "This commit/patch".
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+As mentioned in a different sub-thread this cannot be built as a
+module so I updated the commit message to:
 
-> 
-> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> ---
->  .../regulator/adi,max77659-regulator.yaml     | 31 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 32 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/adi,max77659-regulator.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/adi,max77659-regulator.yaml b/Documentation/devicetree/bindings/regulator/adi,max77659-regulator.yaml
-> new file mode 100644
-> index 000000000000..c1e2d88be25b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/adi,max77659-regulator.yaml
-> @@ -0,0 +1,31 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/adi,max77659-regulator.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Regulator driver for MAX77659 PMIC from ADI.
+imx: Fix typo
 
-It's not a driver. Drop.
-Also full stop
+A one character difference in the name supplied to MODULE_DEVICE_TABLE
+breaks compilation for SOC_IMX8M after built-in modules can generate
+match-id based module aliases, so fix the typo.
 
-> +
-> +maintainers:
-> +  - Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> +
-> +description: |
-> +  This module is part of the MAX77659 MFD device. For more details
-> +  see Documentation/devicetree/bindings/mfd/adi,max77659.yaml.
-> +
-> +  The regulator is represented as a sub-node of the PMIC node on the device tree.
-> +
-> +properties:
-> +  compatible:
-> +    const: adi,max77650-regulator
-> +
-> +  regulator-boot-on: true
-> +  regulator-always-on: true
-> +
+This was not caught earlier because SOC_IMX8M can not be built as a
+module and MODULE_DEVICE_TABLE is a no-op for built-in modules.
 
-Missing reference to regulator schema.
+Fixes: 556f5cf9568a ("soc: imx: add i.MX8MP HSIO blk-ctrl")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Allen Webb <allenwebb@google.com>
 
-Best regards,
-Krzysztof
-
+>
+> thanks,
+>
+> greg k-h
