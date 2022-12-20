@@ -2,147 +2,407 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912676525C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 594466525C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233929AbiLTRvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 12:51:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
+        id S233677AbiLTRvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 12:51:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233845AbiLTRvM (ORCPT
+        with ESMTP id S232400AbiLTRvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 12:51:12 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB851009;
-        Tue, 20 Dec 2022 09:51:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gfr3PrA8himQPCsEXwJITO87tIXl+U5a9XwrfHcz2LQzeL0CxMkr3kzswsoVRVJ0oUZlPLvSJH64zEDdztKr5hZg0LpNmC0v0veOUG4tCcpv8LekDE3U+vW5PwG0gMGtWZ05CSZoR8kIb/jnVj4bIUB6h8+PjFPhrgmfzFtiLxDEgETaaSPTKUuY2VL6rtknTRIZxIs40RX4FsoHWwTS7gadmyMxP1vEYYGvA7Y4TFa4qjoCiYS+f8j5kVscmY+ovvF3nHH5FgOF5ltZbDg0wu93gd00K3kKDIe9w1ZGiQbhsIU1Mq9K4mmxwRqmfM4QFkYNxTJ1AxHFL41UnOSsrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a6hdL+gw19Rizjs7FEE9DrCVAnhLDleiFeNfobflQCc=;
- b=mAjpomfSzTGVJo8Kwgk9zXL9PERGpLyBjlpx9MnM92atgPTA0XFtgzxRIDPCEZjyzQ6HBGL4fawmUYuJ6qFeGszjZ+2ubqT0wf0Gs+A6/v4o++1gSiEsh7IsdEuC3D+AIz6b1wl+feZHubcWeuZ34mrq+f9lZDRbbacHK9XfncEfcRT+vlCnOOY5b9U3gmAUcFmotZlPXfxdPqKpDUlCCLjyR5tqpn2BZDvSjoFW1LQvcUYM5VNZopAYLrqJHE+PpnLvWE6Kl56LbK7SSfqIkJfRyUBdlSTqPj5OoEepRv4qtrJBrHwAog95lwjTeIF715/uLW+X8wcKywaIoAAvOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a6hdL+gw19Rizjs7FEE9DrCVAnhLDleiFeNfobflQCc=;
- b=nCokLBhvb8sfhAdGsTivVmPS+gcCS2kvLScrA3tRByjooC58u426QxeAhp7gGAbseuoWRTXMWce6xWgK/FR61R9LAtD/VRD8XdD99sB6bfMZrJhnqyZf6Mu2xySe9RBoVqEWLA3P/shE8ukCHWt3i9f0xxMogk481OAH1J2j5Qks63hhWLYMduvEzJLtenxR7XHEN5LrBRLAkxWeCRkgVGHY+skSsE80wWLqJYcTEqk5UdaKNlyhFIiAxbfRYZkItSnQIoLq2vSb2sphe5GHv8HprbR/2P8LSU3JfgZlBfaqp9MlCcILvRFCvZ8KtmWv11/a/nJpb0ZseM0OzCAPkQ==
-Received: from CY5PR15CA0194.namprd15.prod.outlook.com (2603:10b6:930:82::12)
- by SN7PR12MB6864.namprd12.prod.outlook.com (2603:10b6:806:263::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Tue, 20 Dec
- 2022 17:51:05 +0000
-Received: from CY4PEPF0000C971.namprd02.prod.outlook.com
- (2603:10b6:930:82:cafe::ed) by CY5PR15CA0194.outlook.office365.com
- (2603:10b6:930:82::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.21 via Frontend
- Transport; Tue, 20 Dec 2022 17:51:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CY4PEPF0000C971.mail.protection.outlook.com (10.167.242.9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.10 via Frontend Transport; Tue, 20 Dec 2022 17:51:04 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 20 Dec
- 2022 09:50:52 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 20 Dec
- 2022 09:50:52 -0800
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Tue, 20 Dec 2022 09:50:51 -0800
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5.10 00/18] 5.10.161-rc1 review
-In-Reply-To: <20221219182940.701087296@linuxfoundation.org>
-References: <20221219182940.701087296@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Tue, 20 Dec 2022 12:51:11 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F5F63B9
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 09:51:06 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id f34so4533864lfv.10
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 09:51:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rHl7DUyTvcef1vakQykBmVgLoqu1XzqD5qrW5toutx8=;
+        b=UyedfnEMy2lSwu/EBpuJhNdb3wzwTdWwFSC0sXbM3PC/QP1MLNsYgUgAzLnzztmNka
+         z+pdmgzehGNKyMT8Rqe+xwh/prIRMsSZtHnu4dxFqgszYUUuYRLtYAybQ3rSkctKs2B+
+         uW8TVUuWpPBWnix9cuctglLtFfdc7D3w12JTMDaELW/87Aby32HzrDdH5bvfaA7XCMJi
+         /gYr0/mN0cIHe74gF5arbR4mNULIyO+Tt9hW8lcT6/yiWGBrAt5+h4bIimh1aw9gNq+9
+         VSjoU6eARQZgp8NCUbVzpS5lKIbMS9euOeidPTfXgh3Di/PT+9oqMhk0q8KEmsZAn06P
+         loFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rHl7DUyTvcef1vakQykBmVgLoqu1XzqD5qrW5toutx8=;
+        b=0PcAwJ4RhOcNFB/W6BnRsNFGnmQT6BT8LKx9EAeQgmA8Hx5bVgTx3mS4C0lSkhXrPp
+         9dpUpSUMnR3crKy/7midKZwXSi+McNVnKclHdqKJLDFhvypsIs6o2Ai2CbxAaUwB5Iyj
+         EZmzuiu7dZ1xc+7gzGL5uK7vCn0JbwFPWeHOYzJ4u3HQmL+o/2/uE75bq3bl0b3b2wdd
+         8ymkLQZuBUEfp/8Ben1qHzR2s5XbJT7jpJ7rFuGNKk7YzYE5sgvM/xUTYlvt6UHQez5q
+         ljDeiAx7rc95BHLCeZj52Xw9Olxrj0mh7STMdaebN/xzeKficbbTNsKbD7nYk+GZbxN2
+         7OaQ==
+X-Gm-Message-State: AFqh2kpjRHkgvKIu4kQ3+dEPtgN5jQLk/KTGOG5s62/xqHMT/ZbkhL8P
+        LgFApbg4o3DS8xpy/LSy6UBzZ/stcPQaT/5AhOfoHIq2GRUdjw==
+X-Google-Smtp-Source: AMrXdXt+Nku7xH6nEaUhF0SiqYoWvfNx12ABoprTKiUiAMc9hp8K4cjh3AUli4aNe5/k65ZfLHl2dO4nl150orWJVrc=
+X-Received: by 2002:a05:6512:251e:b0:4c1:1e10:e36d with SMTP id
+ be30-20020a056512251e00b004c11e10e36dmr696127lfb.286.1671558664984; Tue, 20
+ Dec 2022 09:51:04 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <3caa3b99-78ab-44ff-a2ff-8c8ea18a36d5@rnnvmail205.nvidia.com>
-Date:   Tue, 20 Dec 2022 09:50:51 -0800
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000C971:EE_|SN7PR12MB6864:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5010ed57-c7f6-4dc1-57f8-08dae2b2c421
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5tfduKpVrVxCrFq6Fe8nTkysLeNSwTxhz8U3kGjjKdeZAjBo40cvIiUldJpcain1p2eKbsKW5sunqgysGOoP/fSmvGFyWdPesEmUWrRYsaIepjHTw43wZ07TyHymzFH1vKAW6skYg9pLkQe6aegwIrw8e/NMjZoZZXjMF4bDmcU8/56MVukjCbc/RIAGQSar4OrkUIxefECwgwwy0Bv8MGcJWqgdrm9YfQuGdKePctanz2r/Fdvfxuec6YuwTl/fmmOou61EJfH9zbxvJNYiALe7hGgXngs8UoxklGR+KIqIy8phxLka7C3hPIjPZZ28GdX4hlaGzezhTgD30f1QG7IaToUURBz1r2MXc+4jpjx+J+umaaUogkexc61oDyefcJPpx16VpH2pm0QaMvykrvwgLOOEmm/fXSGApaGmRchbngFIdkz1IUj8C3eZsigm6JQjqcWH8lGF/LdqcgUMftwqm3zrI0kdFSaLY6usOmfcAN3uDdLI9iOMlMzVKCh322MUdK990SVCruUtVvLCjkB5F+i1sFdy1gjhvJvu0hPuhlR3WCyySi7cKLiOyVC80V7GDp6kU/ElHIn3ut8JTkG9rdCLfl9rPV/NzJ6wNFi6PHJIIy/A5cik4iY1Qy48+0/7eoLGSXg/leuTFpskLyvQHhGm3fy79Ggz6ju86KGsSP2ePR6xSIpwit5wI8UYu/SdNnb92Gf0vik3Rf2Ygwu4A59rQN5h5aCIeFEFdy9WmT1ewQxaxchiPMSc5kUD6WeFyxDzmc2LlpbxdKMUDXtO84zty9z+WnDz1OzWuaA=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(396003)(346002)(136003)(451199015)(40470700004)(36840700001)(46966006)(40480700001)(8676002)(31696002)(86362001)(2906002)(336012)(4326008)(70206006)(26005)(186003)(41300700001)(478600001)(6916009)(54906003)(316002)(40460700003)(36860700001)(356005)(82740400003)(7416002)(7636003)(8936002)(426003)(5660300002)(47076005)(70586007)(966005)(31686004)(82310400005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2022 17:51:04.7515
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5010ed57-c7f6-4dc1-57f8-08dae2b2c421
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C971.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6864
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
+ <CAAEAJfBP_D65kjHbwYP+LWfWKfzFtHtWo+3bDcbdO8tPtBurUA@mail.gmail.com>
+ <20221219215431.GB26315@pengutronix.de> <CAAEAJfBzZWHu9YE38HzRUQ2xRZohYa19JaK7EOaQDqz5K1sz_g@mail.gmail.com>
+ <20221220134003.GC26315@pengutronix.de> <c3f40678b49b137e7caaa51778389caee59d8d6f.camel@ndufresne.ca>
+In-Reply-To: <c3f40678b49b137e7caaa51778389caee59d8d6f.camel@ndufresne.ca>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Tue, 20 Dec 2022 14:50:53 -0300
+Message-ID: <CAAEAJfCOt0SEsLBAL0bK2nY6uChVO5ORfdnmgPWnTwYTy9oGuw@mail.gmail.com>
+Subject: Re: [PATCH v1 0/9] AV1 stateless decoder for RK3588
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     Michael Grzeschik <mgr@pengutronix.de>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        p.zabel@pengutronix.de, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Sebastian Fricke <sebastian.fricke@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Dec 2022 20:24:53 +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.161 release.
-> There are 18 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.161-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Bonjour Nicolas,
 
-All tests passing for Tegra ...
+On Tue, Dec 20, 2022 at 2:15 PM Nicolas Dufresne <nicolas@ndufresne.ca> wro=
+te:
+>
+> Le mardi 20 d=C3=A9cembre 2022 =C3=A0 14:40 +0100, Michael Grzeschik a =
+=C3=A9crit :
+> > Hi Ezequiel,
+> >
+> > On Mon, Dec 19, 2022 at 10:52:02PM -0300, Ezequiel Garcia wrote:
+> > > On Mon, Dec 19, 2022 at 6:54 PM Michael Grzeschik <mgr@pengutronix.de=
+> wrote:
+> > > > On Mon, Dec 19, 2022 at 06:07:38PM -0300, Ezequiel Garcia wrote:
+> > > > > On Mon, Dec 19, 2022 at 12:56 PM Benjamin Gaignard
+> > > > > <benjamin.gaignard@collabora.com> wrote:
+> > > > > >
+> > > > > > This series implement AV1 stateless decoder for RK3588 SoC.
+> > > > > > The harware support 8 and 10 bits bitstreams up to 7680x4320.
+> > > > > > AV1 feature like film grain or scaling are done by the postproc=
+essor.
+> > > > > > The driver can produce NV12_4L4 and NV12 pixel formats.
+> > > > > > A native 10bits NV12_4L4 format is possible but need more inves=
+tigation
+> > > > > > to be completly documented and enabled.
+> > > > > >
+> > > > > > It is based on Daniel's "[RFC,v3] media: Add AV1 uAPI" [1] patc=
+hes and
+> > > > > > Sebastian's device-tree patches for RK3588.
+> > > > > >
+> > > > >
+> > > > > I thought the AV1 decoder in RK3588 was really a separate hardwar=
+e
+> > > > > from the Hantro G1/G2.
+> > > > >
+> > > > > Shouldn't this need a new driver for this new hardware?
+> > > >
+> > > > Just jumping into this discussion as I am currently working on the =
+rkvenc driver.
+> > > >
+> > >
+> > > The more the merrier, there's always room for developers :-)
+> > >
+> > > > In my case I am extending the rkvdec driver to become more generic =
+for
+> > > > other rockchip specific enc/decoders.
+> > > >
+> > > > My first change looks like this:
+> > > > ---
+> > > >  drivers/staging/media/rkvdec/Makefile              |   4 +-
+> > > >  drivers/staging/media/rkvdec/rkvdec-h264.c         | 100 ++++-----
+> > > >  drivers/staging/media/rkvdec/rkvdec-vp9.c          | 142 ++++++---=
+----
+> > > >  drivers/staging/media/rkvdec/{rkvdec.c =3D> rkvpu.c} | 510 +++++++=
+++++++++++++++++-----------------------
+> > > >  drivers/staging/media/rkvdec/{rkvdec.h =3D> rkvpu.h} |  66 +++---
+> > > > ---
+> > > >
+> > > > While working on other parts of the encoder I found many places in =
+the
+> > > > rkvdec driver (e.g. v4l2 and vb2 callbacks) that looked familiar to=
+ the hantro
+> > > > functions but where limited to the decoder case.
+> > > >
+> > >
+> > > Because stateless decoders devices are very similar in their general =
+behavior,
+> > > their drivers could be very similar.
+> > >
+> > > Hantro and Rkvdec could look similar because the same humans worked o=
+n them.
+> > >
+> > > Most boilerplate code, as well as V4L2 format negotiation, VB2 buffer=
+ handling
+> > > could be shared among all stateless decoder drivers. I think even at =
+one point
+> > > we experimented with having a shared/common code base for all statele=
+ss codecs.
+> > >
+> > > In other words, it's entirely possible to support Hantro devices in
+> > > the Cedrus driver
+> > > and vice-versa, you would only have to write the hardware-specific bi=
+ts.
+> > >
+> > > However, there is consensus to have a separate driver for each
+> > > different hardware,
+> > > even when the hardware is a bit similar. This may lead to some code d=
+uplication,
+> > > but it's less fragile / more flexible. Maintaining drivers this way a=
+llows
+> > > developers to evolve, testing on a small family of devices, without
+> > > breaking support
+> > > for other devices.
+> > >
+> > > This is important as sometimes it's hard to get the hardware,
+> > > but we still don't want to break the support!
+> > >
+> > > > I think there are two options for the av1 codec.
+> > > >
+> > > > 1) If the vpu981 is a driver that has nothing to do with verisilico=
+n but
+> > > > works with this driver framework, then we should integrate vepu981 =
+into it
+> > > > but consider rename the verisilicon unrelated parts to something ge=
+neric.
+> > > >
+> > > > 2) Move the vepu981 av1 driver into the rkvdec instead.
+> > > >
+> > > > If 1) is the way to go, we can even think of moving the staging cod=
+e parts from
+> > > > rkvdec to the verisilicon code. Likewise to the vepu981-av1.
+> > > >
+> > >
+> > > The Hantro driver should only support G1, G2, and VC8000D;
+> > > which can be said to belong to the same family.
+> > >
+> > > The RKVDEC driver supports Rockchip vdpu34x core. I have to admit
+> > > I'm not exactly sure if we support anything else than vdpu34x.
+> >
+> > Currently the rkvdec is only supporting vdpu34x. My work would integrat=
+e
+> > vepu54x into the rkvdec boilerplate and so it would support encode as d=
+ecode.
+>
+> Which CODEC do you currently work on ? We are about to send a first RFC f=
+or a
+> VP8 stateless encoder API (with a rk3399 driver to test), but haven't wri=
+tten
+> the Stateless Encoder API spec yet, so still some work there. And was pla=
+nning
+> to make an H.264 Sateless Encoder soon. Would be nice to avoid duplicatin=
+g the
+> effort.
+>
+> >
+> > > I'm not familiar with the AV1 support provided by this patch,
+> > > but looking at the mpp code:
+> > >
+> > > ...
+> > >        "rk3588",
+> > >        ROCKCHIP_SOC_RK3588,
+> > >        HAVE_VDPU2 | HAVE_VDPU2_PP | HAVE_VEPU2 | HAVE_RKVDEC | HAVE_R=
+KVENC |
+> > >        HAVE_JPEG_DEC | HAVE_AV1DEC | HAVE_AVSDEC | HAVE_VEPU2_JPEG,
+> > >        {   &vdpu38x, &rkjpegd, &vdpu2, &vdpu2_jpeg_pp, &av1d, &avspd}=
+,
+> > >        {   &vepu58x, &vepu2, &vepu2_jpeg, NULL, },
+> > >
+> > > Seems RK3588 supports a Hantro core (VDPU2), a vdpu38x core and this =
+AV1 core,
+> > > which according to this patchset is vdpu981 (?)
+> > >
+> > > If the vdpu38x device interface, configuration, buffer handling and
+> > > registers are
+> > > similar enough with vdpu34x, adding vdpu38x to the Rkvdec driver
+> > > should be straightforward.
+> > > If the vdpu38x core differs, it may be reason enough to consider a ne=
+w driver.
+> > >
+> > > As for vdpu981 (AV1), I'm inclined to think it deserves its own drive=
+r.
+>
+> Well, it has its own driver, Hantro (which is not rkvdec). But maybe you =
+could
+> extend on why you think VC9000D decoder have no place in the hantro/veris=
+ilicon
+> family ?
+>
 
-Test results for stable-v5.10:
-    11 builds:	11 pass, 0 fail
-    28 boots:	28 pass, 0 fail
-    75 tests:	75 pass, 0 fail
+Oh good, then the AV1 core in RK3588 is actually a Verisilicon VC9000D core=
+,
+I didn't know that.
 
-Linux version:	5.10.161-rc1-gbc32b2c55e20
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                tegra20-ventana, tegra210-p2371-2180,
-                tegra210-p3450-0000, tegra30-cardhu-a04
+Maybe the naming in the driver should be vc9000? Or maybe it should be note=
+d
+in comments and documentation. If that was already documented somewhere
+in this patchset, then I definitely missed it.
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+> > >
+> > > Again, I'm far less worried for a little code duplication in the
+> > > boilerplate (which can be solved
+> > > with helpers, etc.) and more worried about making sure we can evolve
+> > > drivers easily,
+> > > while minimizing regressions.
+> >
+> > Thanks for the explanation.
+> >
+> > As I agree that not breaking current drivers is a strong argument. Also
+> > rkvdec is still in staging, which makes it less harmful for the
+> > integration of the encoder path.
+>
+> We are working on unstaging patches.
+>
 
-Jon
+Rkvdec can be unstaged.
+
+Sebastian: I remember you were working on Rkvdec.
+If you want to unstage this driver now, and work on features later,
+I believe that would make a lot of sense!
+
+Thanks!
+Ezequiel
+
+
+> >
+> > Since we can not ensure that the rkvenc/rkvdec is not another unknown
+> > verisilicon core, going the way of working on a common rkvpu driver is
+> > probably the best for now.
+>
+> We can collectively share our knowledge (to the limit of our legal rights=
+ to
+> share) make the right call. In the case of this VC9000D decoder, there is=
+ a
+> massive amount of registers that aren't AV1 specific, and existed in VC80=
+00
+> cores as it, same offset, same size. Hantro designs have this very specif=
+ic
+> style, which is to share register, giving it a meaning for multiple CODEC=
+s.
+>
+> I've commented about that in my review, but until we have more codecs sup=
+port on
+> VC9000 cores, generalizing the register definition is premature.
+>
+> Though, an typical example of things that are Hantro specific and common =
+to G1,
+> VC8000 and VC9000, is the handling of references for H.264 decoding. This
+> differs massively from how it works with rkvdec here.
+>
+> >
+> > Also, since I have already done some work into that direction, it sound=
+s
+> > good for me. :)
+>
+> Great. For you interest, the modified Hantro H1 encoder is an information=
+ that
+> Rockchip disclosed to us directly. And that whys vepu121 (if my memory is=
+ right)
+> is implemented in Hantro driver. The register layout have been altered by=
+ RK but
+> that's all there is, it does share semantic (and a lot of code) with the =
+"real"
+> H1 found on RK3288, IMX8M Mini and others.
+>
+> >
+> >
+> > > > I could also keep on integrating the rkvenc on that base instead.
+> > > >
+> > > > Regards,
+> > > > Michael
+> > > >
+> > > > > > The full branch can be found here:
+> > > > > > https://gitlab.collabora.com/linux/for-upstream/-/commits/rk358=
+8_av1_decoder_v1
+> > > > > >
+> > > > > > Fluster score is: 151/239 while testing AV1-TEST-VECTORS with G=
+Streamer-AV1-V4L2SL-Gst1.0.
+> > > > > > The failing tests are:
+> > > > > > - 10bits bitstream because 10bits output formats aren't yet imp=
+lemented.
+> > > > > > - the 2 tests with 2 spatial layers: few errors in luma/chroma =
+values
+> > > > > > - tests with resolution < hardware limit (64x64)
+> > > > > >
+> > > > > > Benjamin
+> > > > > >
+> > > > > > Benjamin Gaignard (9):
+> > > > > >   dt-bindings: media: rockchip-vpu: Add rk3588 vpu compatible
+> > > > > >   media: verisilicon: Add AV1 decoder mode and controls
+> > > > > >   media: verisilicon: Save bit depth for AV1 decoder
+> > > > > >   media: verisilicon: Check AV1 bitstreams bit depth
+> > > > > >   media: verisilicon: Compute motion vectors size for AV1 frame=
+s
+> > > > > >   media: verisilicon: Add AV1 entropy helpers
+> > > > > >   media: verisilicon: Add Rockchip AV1 decoder
+> > > > > >   media: verisilicon: Add film grain feature to AV1 driver
+> > > > > >   media: verisilicon: Enable AV1 decoder on rk3588
+> > > > > >
+> > > > > >  .../bindings/media/rockchip-vpu.yaml          |    1 +
+> > > > > >  drivers/media/platform/verisilicon/Makefile   |    3 +
+> > > > > >  drivers/media/platform/verisilicon/hantro.h   |    5 +
+> > > > > >  .../media/platform/verisilicon/hantro_drv.c   |   54 +
+> > > > > >  .../media/platform/verisilicon/hantro_hw.h    |  102 +
+> > > > > >  .../platform/verisilicon/hantro_postproc.c    |    3 +
+> > > > > >  .../media/platform/verisilicon/hantro_v4l2.c  |    5 +
+> > > > > >  .../verisilicon/rockchip_av1_entropymode.c    | 4536 +++++++++=
+++++++++
+> > > > > >  .../verisilicon/rockchip_av1_entropymode.h    |  272 +
+> > > > > >  .../verisilicon/rockchip_av1_filmgrain.c      |  401 ++
+> > > > > >  .../verisilicon/rockchip_av1_filmgrain.h      |   36 +
+> > > > > >  .../verisilicon/rockchip_vpu981_hw_av1_dec.c  | 2280 +++++++++
+> > > > > >  .../verisilicon/rockchip_vpu981_regs.h        |  477 ++
+> > > > > >  .../platform/verisilicon/rockchip_vpu_hw.c    |  116 +
+> > > > > >  14 files changed, 8291 insertions(+)
+> > > > > >  create mode 100644 drivers/media/platform/verisilicon/rockchip=
+_av1_entropymode.c
+> > > > > >  create mode 100644 drivers/media/platform/verisilicon/rockchip=
+_av1_entropymode.h
+> > > > > >  create mode 100644 drivers/media/platform/verisilicon/rockchip=
+_av1_filmgrain.c
+> > > > > >  create mode 100644 drivers/media/platform/verisilicon/rockchip=
+_av1_filmgrain.h
+> > > > > >  create mode 100644 drivers/media/platform/verisilicon/rockchip=
+_vpu981_hw_av1_dec.c
+> > > > > >  create mode 100644 drivers/media/platform/verisilicon/rockchip=
+_vpu981_regs.h
+> > > > > >
+> > > > > > --
+> > > > > > 2.34.1
+> > > > > >
+> > > > >
+> > > > > _______________________________________________
+> > > > > linux-arm-kernel mailing list
+> > > > > linux-arm-kernel@lists.infradead.org
+> > > > > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> > > > >
+> > > >
+> > > > --
+> > > > Pengutronix e.K.                           |                       =
+      |
+> > > > Steuerwalder Str. 21                       | http://www.pengutronix=
+.de/  |
+> > > > 31137 Hildesheim, Germany                  | Phone: +49-5121-206917=
+-0    |
+> > > > Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917=
+-5555 |
+> > >
+> >
+>
