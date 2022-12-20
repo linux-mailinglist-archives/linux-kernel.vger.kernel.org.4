@@ -2,82 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7B5651A89
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 07:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E9A651A93
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 07:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233148AbiLTGF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 01:05:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
+        id S232995AbiLTGSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 01:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233169AbiLTGFu (ORCPT
+        with ESMTP id S229769AbiLTGSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 01:05:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752678FCC;
-        Mon, 19 Dec 2022 22:05:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F782B80B4A;
-        Tue, 20 Dec 2022 06:05:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AF6BC433EF;
-        Tue, 20 Dec 2022 06:05:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671516342;
-        bh=1q6F9HNnOxLzAlccZIWYJYxCV4vTjQ58G8TbnRun3FA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gYzRYG0FCuUOf26u1OX5hnuA+G8KVfSbQftswoWRj59ri/Jiwp5nGTvNiiwMUWt8X
-         p0YHJOsCCinfM+oLrWZ1T0LJCYJmSgVz2PXbToQDaldFYzzVcgUxLMFq98dH6RPc9s
-         0Rqgkp5iMn9RNk9s0IJeTzaX0wmsOpcdSqknwXbC5DyAuEDRknTXYhibFrSXYTPW3M
-         xHbibRlQN88wJLlSFM3tliEBXRP8Aj5HzcDSZKZzBJyfvu8UYFkmzVECgKi9HOM/KB
-         bGszvFw/v9ujLbI8eA4LkG35lk6SCaP9Dv35vMKDx2m5x9CojOvhkscf6PD1qNfUhd
-         S8nFfLcQJS8kw==
-Date:   Mon, 19 Dec 2022 22:05:40 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Robert Elliott <elliott@hpe.com>
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        Tue, 20 Dec 2022 01:18:02 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71031BF62;
+        Mon, 19 Dec 2022 22:18:01 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id q17-20020a17090aa01100b002194cba32e9so15484524pjp.1;
+        Mon, 19 Dec 2022 22:18:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sV3GdJRgw7ANtPiQXbnToVWO7ur10T1KkZZv0V5kzic=;
+        b=ETUoe0DUHMPzx8IcF3aR9TtpmS3nzPbdSIGGDg6iWm8vTQ4ERpEfDr5bEUV13UZtOa
+         loiZsYnSfgi/EihBYGcBeR4Jra9efQwnUcgGc0ak7ERPCJbR2JjA1s2wpfj9ypsgToOL
+         aX3yRUmvBneXCEfuMawM7lBNpy2vvqWbVuW7BnbMHmiypvjcuXHJMo7ZxV1cQf3ZPLEX
+         wb2ZwiNxkRuydjJxDva7NgsdZTrDpruAcaCY9jwWXbPf6+oBh80+vJ76iHJ6Z8mYfwG+
+         TGlTh0QNLNXegahIJUZZjfIV2wfPfFqS88PCZiGxIdGLhq8NKAyZorf3QPrxXZKU6kg7
+         QsDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sV3GdJRgw7ANtPiQXbnToVWO7ur10T1KkZZv0V5kzic=;
+        b=6jbuyH6v2XSe8+cmiYLPnYu/qX3+z1QVfNDHQnXMrRx5ehnONYnrvMhW7pWPtguJwE
+         y69+cN73fMP0GXccbSsJAkGV90FrdI0fCY0iBSUsnziQY3QE0Ntkhv9qhXK4HCW/6uuS
+         7YfBDgpJ8zuJ0EFGSuu0P14kcvm8oEbpth1QMchYM17Cx6D8UanaPxJ8V6SburKw9+vV
+         Cr09ZMTxOEjWJiCMG//35vgl4rFiTlQdQ9KpyX3vbDhYJBFYl4+COE+PwMAnSvaqu3L7
+         0whEWDr55UKai0hcTPl5h4BdmuO1v060PxBCfnb0EXhJV8sqz/Wn5EoD8zr2DEvGJb9z
+         ry+A==
+X-Gm-Message-State: AFqh2kpo0RPQsUiv+SJuB+Sl7JB1og/BFtu7RiMN7OdgqqNjjcdlwhuW
+        jaXVH9T6j2fwvdP1NvJPE70=
+X-Google-Smtp-Source: AMrXdXtd+0jy1nZvXObO4KWAlTvHzUuXn1E2PMZdsW5JDTMsQ/ZC9T2O6LWe2QxEFW5fIQgNowL3Hg==
+X-Received: by 2002:a17:902:dccc:b0:190:f82e:8a21 with SMTP id t12-20020a170902dccc00b00190f82e8a21mr18065245pll.4.1671517080949;
+        Mon, 19 Dec 2022 22:18:00 -0800 (PST)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id n10-20020a170902e54a00b0018b025d9a40sm8326021plf.256.2022.12.19.22.17.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 22:18:00 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Logan Gunthorpe <logang@deltatee.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dan Carpenter <error27@gmail.com>, dmaengine@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 8/8] crypto: x86/chacha - add kernel-doc comments to
- assembly
-Message-ID: <Y6FQtNgZy8lXKfiz@sol.localdomain>
-References: <20221215063857.161665-1-elliott@hpe.com>
- <20221219185555.433233-1-elliott@hpe.com>
- <20221219185555.433233-9-elliott@hpe.com>
+Cc:     linmq006@gmail.com
+Subject: [PATCH] dmaengine: plx_dma: Fix potential double free in plx_dma_create
+Date:   Tue, 20 Dec 2022 10:17:51 +0400
+Message-Id: <20221220061752.1120381-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219185555.433233-9-elliott@hpe.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 12:55:55PM -0600, Robert Elliott wrote:
-> +/**
-> + * chacha_2block_xor_avx2 - Encrypt 2 blocks using the x86 AVX2 feature set
-> + * @state:	address of input state matrix, s (%rdi)
-> + * @dst:	address of up to 2 data blocks output, o (%rsi)
-> + * @src:	address of up to 2 data blocks input, i (%rdx)
-> + * @len:	input/output length in bytes (%rcx)
-> + * @nrounds:	number of rounds (%r8d)
-> + *
-> + * This function encrypts two ChaCha blocks by loading the state
-> + * matrix twice across four AVX registers. It performs matrix operations
-> + * on four words in each matrix in parallel, but requires shuffling to
-> + * rearrange the words after each round.
+When all references are dropped, callback function plx_dma_release()
+for put_device() will call kfree(plxdev) to release memory.
+Fix the error path to fix the possible double free.
 
-2 blocks, or up to 2 blocks?  What does that mean?
+Fixes: 07503e6aefe4 ("dmaengine: plx_dma: add a missing put_device() on error path")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+Please correct me if I make mistakes, thanks for your review.
+---
+ drivers/dma/plx_dma.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> + *
-> + * Return:	none
-> + * Prototype:	asmlinkage void chacha_2block_xor_avx2(u32 *state, u8 *dst, const u8 *src,
-> + *						       unsigned int len, int nrounds);
+diff --git a/drivers/dma/plx_dma.c b/drivers/dma/plx_dma.c
+index 12725fa1655f..bce724ff4e16 100644
+--- a/drivers/dma/plx_dma.c
++++ b/drivers/dma/plx_dma.c
+@@ -546,8 +546,9 @@ static int plx_dma_create(struct pci_dev *pdev)
+ 	return 0;
+ 
+ put_device:
+-	put_device(&pdev->dev);
+ 	free_irq(pci_irq_vector(pdev, 0),  plxdev);
++	put_device(&pdev->dev);
++	return rc;
+ free_plx:
+ 	kfree(plxdev);
+ 
+-- 
+2.25.1
 
-When the return type is void, there is no need to write "Return: none".
-
-- Eric
