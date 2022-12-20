@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED496524D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A41F6524D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234065AbiLTQmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 11:42:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
+        id S233527AbiLTQmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 11:42:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiLTQlq (ORCPT
+        with ESMTP id S230117AbiLTQly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 11:41:46 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211081581B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:41:45 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id o5-20020a05600c510500b003cfca1a327fso6785986wms.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:41:45 -0800 (PST)
+        Tue, 20 Dec 2022 11:41:54 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577B76348
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:41:53 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3b5da1b3130so147447767b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:41:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=OTNceY23AA38a0nnsKzPgPMXfy0S7X52/MJzcro4EXc=;
-        b=MP6A5o/sswJ8AVbWgBG0Qiw5G/Sd/4XmeRK871/E+itWC425/UWTA+3yF6kdSm+y8V
-         CVIMwkHnWvHBP02oJEBGOusy/IimIHMH20oQcvGdaucSMpckrK/S1d18048ion+N8iMa
-         0L94kAXC18YKiQ1kbAkxVDSUlL5i+GLOmkR3U5kBpqz5wgDaVzfdvX74/Ev+/FSQ3+fu
-         AS8gSxVy1gYemsu0YepZKSSWc2l4dQOL0XoIdA5XUnCT9xGssF2Oq5ETLvKC66AkYE1d
-         jH9zjD39wPvfcrfb2JO6psmcYWc150l8BXEMxmIKSKdyi65HIhm1CSan7e6Uto3SlRhH
-         ZwrQ==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ddxu02Fh985Hkv+dloyjYYVxCvgT54odhdsQPfp8+qk=;
+        b=dtZ2FoIE8vSOyMFWa4Ib2Ngomw3+orv/5Y7dkDgPUC3bNOs0ezgSwkeSn3FhzekFi5
+         +gfuVW12SQftxn7Y2p8SU2QoFzuMboKd9662L8TlqhdYPbal3kndZYKlSL8Lm3Pt48C3
+         jSk7Qn8qVjZK1npJX+olXvODzx4FFWIouP9vnCTrPUsEO72yhmY3hlujrTOPG4peRewT
+         QtwOu9q8wR161mcr23qO/wVn1d9JMnB1g4Axt95/xCAoIQXYmiad6QEDsW9BZ46N/W72
+         80kxTHh6SIvmVvEB8CGQXcUU4M4KuQFWz9xUo3FyqMKIraiN9tpfY4N89eA6Illhxt7F
+         fpfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OTNceY23AA38a0nnsKzPgPMXfy0S7X52/MJzcro4EXc=;
-        b=ZAzIQG/SrCPGtYuHQYlONjtZadaL79i14MYUhhP1SuendJgjhG65QGzM4b1IbkukeJ
-         IxLmbPBpNKX2HKcu/Q50sNI85n9llFxX+CKvT6X5UNcIynRasDwx/RC/8X2xxKMPT3k/
-         AnZ51rcZeSb71rDUy5rjdim2pUwKpZeaDLF0MIqwQMG2xOlhIpjkgo2SLO67px2gIYfq
-         AW6XtpD0aN5lQJiCi9TVWRktFW4tRocBZyJAv0w95rSVATOxjA+4+54O6w927fkeClzB
-         NQg0z0YtimKwbpUSAVC2AiVOovkd6JwTabGQJAL+J4MPZ8D+7tF/1M4Y9SM2aXxeYiWf
-         jq8Q==
-X-Gm-Message-State: AFqh2kpj/NtagKpWeUNKlpm0hJuM8fMuyPEPpmWed1zXDA/OKNxsIPOj
-        CkYdwDk3XpHjW/HtETLPi1yEYdzfGiOlcpoJlw==
-X-Google-Smtp-Source: AMrXdXvB8Wyf6pcwsq4X1oo8PHLh1LbYA/KH4Cza2WstD2/dEP9f3qpqfFFvchaiblUbVod5g44Xm8QTQAoeh6nTrQ==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ddxu02Fh985Hkv+dloyjYYVxCvgT54odhdsQPfp8+qk=;
+        b=fMOevg2Yu3CMPTbktfQbPgaIOG/iVSE3jFDJJnaw1chpyCbiYPJntFOJm82tRz99VP
+         lY1qArxLO4+zJOgOj1KX3U9C0rDtQHqYVbov33cj9bIhbzgnQoq7n3OVjq1SZXp09JyQ
+         PeqpDU4u1xZBVqMaCiG5HUW60g+5dThreiq8w1of11HIdFTyhnoOXjX2R5oCHGFfIgQO
+         aWEvEzPwMQfGfy3G2FGHITcheASEZhNAG193GWVobRmF7cQ6rV/YKp7H0P2aZsxgo+Gc
+         nJO2YAkuUw3t8hLLM75ckbvMG2mUtEJZ9sS9am6cK1m6kog/dxNURRKWj/nJfMMf+8Tw
+         36EQ==
+X-Gm-Message-State: AFqh2krD8ogSVz9xi8WK3CnNExzq6rKXy4fLJPj+gzf/DnBTPrG7dkDp
+        biPMKkNXwaaN6n9bSkaLTfUTVxp+V3JLsD+gRw==
+X-Google-Smtp-Source: AMrXdXt0FTT1E3EqyHHltyedu+Wxt+iC1y/i3hWsPNEPxDe5jTUfb0lz40Vl/NsOP57vv/aBVT9mBfAPZCyTvBl9sw==
 X-Received: from peternewman10.zrh.corp.google.com ([2a00:79e0:9d:6:8175:5362:6754:c66d])
- (user=peternewman job=sendgmr) by 2002:a05:600c:3553:b0:3cf:6f23:a3e3 with
- SMTP id i19-20020a05600c355300b003cf6f23a3e3mr56813wmq.1.1671554503082; Tue,
- 20 Dec 2022 08:41:43 -0800 (PST)
-Date:   Tue, 20 Dec 2022 17:41:31 +0100
+ (user=peternewman job=sendgmr) by 2002:a0d:e24b:0:b0:3d7:28d5:1c6f with SMTP
+ id l72-20020a0de24b000000b003d728d51c6fmr1552006ywe.227.1671554512615; Tue,
+ 20 Dec 2022 08:41:52 -0800 (PST)
+Date:   Tue, 20 Dec 2022 17:41:32 +0100
+In-Reply-To: <20221220164132.443083-1-peternewman@google.com>
 Mime-Version: 1.0
+References: <20221220164132.443083-1-peternewman@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221220164132.443083-1-peternewman@google.com>
-Subject: [PATCH v3 1/2] x86/resctrl: Fix event counts regression in reused RMIDs
+Message-ID: <20221220164132.443083-2-peternewman@google.com>
+Subject: [PATCH v3 2/2] x86/resctrl: Avoid redundant counter read in __mon_event_count()
 From:   Peter Newman <peternewman@google.com>
 To:     reinette.chatre@intel.com, fenghua.yu@intel.com
 Cc:     Babu.Moger@amd.com, bp@alien8.de, dave.hansen@linux.intel.com,
@@ -58,7 +60,7 @@ Cc:     Babu.Moger@amd.com, bp@alien8.de, dave.hansen@linux.intel.com,
         linux-kernel@vger.kernel.org, mingo@redhat.com,
         quic_jiles@quicinc.com, tan.shaopeng@fujitsu.com,
         tglx@linutronix.de, x86@kernel.org,
-        Peter Newman <peternewman@google.com>, stable@vger.kernel.org
+        Peter Newman <peternewman@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -70,116 +72,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When creating a new monitoring group, the RMID allocated for it may have
-been used by a group which was previously removed. In this case, the
-hardware counters will have non-zero values which should be deducted
-from what is reported in the new group's counts.
+__mon_event_count() does the per-RMID, per-domain work for
+user-initiated event count reads and the initialization of new monitor
+groups.
 
-resctrl_arch_reset_rmid() initializes the prev_msr value for counters to
-0, causing the initial count to be charged to the new group. Resurrect
-__rmid_read() and use it to initialize prev_msr correctly.
+In the initialization case, after resctrl_arch_reset_rmid() calls
+__rmid_read() to record an initial count for a new monitor group, it
+immediately calls resctrl_arch_rmid_read(). This re-read of the hardware
+counter is unnecessary and the following computations are ignored by the
+caller during initialization.
 
-Unlike before, __rmid_read() checks for error bits in the MSR read so
-that callers don't need to.
+Following return from resctrl_arch_reset_rmid(), just clear the
+mbm_state and return. This involves moving the mbm_state lookup into the
+rr->first case, as it's not needed for regular event count reads: the
+QOS_L3_OCCUP_EVENT_ID case was redundant with the accumulating logic at
+the end of the function.
 
-Fixes: 1d81d15db39c ("x86/resctrl: Move mbm_overflow_count() into resctrl_arch_rmid_read()")
 Signed-off-by: Peter Newman <peternewman@google.com>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-Cc: stable@vger.kernel.org
 ---
 v3:
- - add changelog
- - CC stable
+ - changelog clarifications suggested by Reinette
 v2:
- - move error bit processing into __rmid_read()
+ (patch introduced)
 
-v1: https://lore.kernel.org/lkml/20221207112924.3602960-1-peternewman@google.com/
-v2: https://lore.kernel.org/lkml/20221214160856.2164207-1-peternewman@google.com/
+v2: https://lore.kernel.org/lkml/20221214160856.2164207-2-peternewman@google.com/
 ---
- arch/x86/kernel/cpu/resctrl/monitor.c | 49 ++++++++++++++++++---------
- 1 file changed, 33 insertions(+), 16 deletions(-)
+ arch/x86/kernel/cpu/resctrl/monitor.c | 43 ++++++++++++---------------
+ 1 file changed, 19 insertions(+), 24 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-index efe0c30d3a12..77538abeb72a 100644
+index 77538abeb72a..e708df478077 100644
 --- a/arch/x86/kernel/cpu/resctrl/monitor.c
 +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-@@ -146,6 +146,30 @@ static inline struct rmid_entry *__rmid_entry(u32 rmid)
- 	return entry;
+@@ -366,41 +366,36 @@ void free_rmid(u32 rmid)
+ 		list_add_tail(&entry->list, &rmid_free_lru);
  }
  
-+static int __rmid_read(u32 rmid, enum resctrl_event_id eventid, u64 *val)
++static struct mbm_state *get_mbm_state(struct rdt_domain *d, u32 rmid,
++				       enum resctrl_event_id evtid)
 +{
-+	u64 msr_val;
-+
-+	/*
-+	 * As per the SDM, when IA32_QM_EVTSEL.EvtID (bits 7:0) is configured
-+	 * with a valid event code for supported resource type and the bits
-+	 * IA32_QM_EVTSEL.RMID (bits 41:32) are configured with valid RMID,
-+	 * IA32_QM_CTR.data (bits 61:0) reports the monitored data.
-+	 * IA32_QM_CTR.Error (bit 63) and IA32_QM_CTR.Unavailable (bit 62)
-+	 * are error bits.
-+	 */
-+	wrmsr(MSR_IA32_QM_EVTSEL, eventid, rmid);
-+	rdmsrl(MSR_IA32_QM_CTR, msr_val);
-+
-+	if (msr_val & RMID_VAL_ERROR)
-+		return -EIO;
-+	if (msr_val & RMID_VAL_UNAVAIL)
-+		return -EINVAL;
-+
-+	*val = msr_val;
-+	return 0;
++	switch (evtid) {
++	case QOS_L3_MBM_TOTAL_EVENT_ID:
++		return &d->mbm_total[rmid];
++	case QOS_L3_MBM_LOCAL_EVENT_ID:
++		return &d->mbm_local[rmid];
++	default:
++		return NULL;
++	}
 +}
 +
- static struct arch_mbm_state *get_arch_mbm_state(struct rdt_hw_domain *hw_dom,
- 						 u32 rmid,
- 						 enum resctrl_event_id eventid)
-@@ -172,8 +196,12 @@ void resctrl_arch_reset_rmid(struct rdt_resource *r, struct rdt_domain *d,
- 	struct arch_mbm_state *am;
+ static int __mon_event_count(u32 rmid, struct rmid_read *rr)
+ {
+ 	struct mbm_state *m;
+ 	u64 tval = 0;
  
- 	am = get_arch_mbm_state(hw_dom, rmid, eventid);
--	if (am)
-+	if (am) {
- 		memset(am, 0, sizeof(*am));
-+
-+		/* Record any initial, non-zero count value. */
-+		__rmid_read(rmid, eventid, &am->prev_msr);
+-	if (rr->first)
++	if (rr->first) {
+ 		resctrl_arch_reset_rmid(rr->r, rr->d, rmid, rr->evtid);
++		m = get_mbm_state(rr->d, rmid, rr->evtid);
++		if (m)
++			memset(m, 0, sizeof(struct mbm_state));
++		return 0;
 +	}
- }
  
- static u64 mbm_overflow_count(u64 prev_msr, u64 cur_msr, unsigned int width)
-@@ -191,25 +219,14 @@ int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
- 	struct rdt_hw_domain *hw_dom = resctrl_to_arch_dom(d);
- 	struct arch_mbm_state *am;
- 	u64 msr_val, chunks;
-+	int ret;
+ 	rr->err = resctrl_arch_rmid_read(rr->r, rr->d, rmid, rr->evtid, &tval);
+ 	if (rr->err)
+ 		return rr->err;
  
- 	if (!cpumask_test_cpu(smp_processor_id(), &d->cpu_mask))
- 		return -EINVAL;
- 
--	/*
--	 * As per the SDM, when IA32_QM_EVTSEL.EvtID (bits 7:0) is configured
--	 * with a valid event code for supported resource type and the bits
--	 * IA32_QM_EVTSEL.RMID (bits 41:32) are configured with valid RMID,
--	 * IA32_QM_CTR.data (bits 61:0) reports the monitored data.
--	 * IA32_QM_CTR.Error (bit 63) and IA32_QM_CTR.Unavailable (bit 62)
--	 * are error bits.
--	 */
--	wrmsr(MSR_IA32_QM_EVTSEL, eventid, rmid);
--	rdmsrl(MSR_IA32_QM_CTR, msr_val);
--
--	if (msr_val & RMID_VAL_ERROR)
--		return -EIO;
--	if (msr_val & RMID_VAL_UNAVAIL)
+-	switch (rr->evtid) {
+-	case QOS_L3_OCCUP_EVENT_ID:
+-		rr->val += tval;
+-		return 0;
+-	case QOS_L3_MBM_TOTAL_EVENT_ID:
+-		m = &rr->d->mbm_total[rmid];
+-		break;
+-	case QOS_L3_MBM_LOCAL_EVENT_ID:
+-		m = &rr->d->mbm_local[rmid];
+-		break;
+-	default:
+-		/*
+-		 * Code would never reach here because an invalid
+-		 * event id would fail in resctrl_arch_rmid_read().
+-		 */
 -		return -EINVAL;
-+	ret = __rmid_read(rmid, eventid, &msr_val);
-+	if (ret)
-+		return ret;
+-	}
+-
+-	if (rr->first) {
+-		memset(m, 0, sizeof(struct mbm_state));
+-		return 0;
+-	}
+-
+ 	rr->val += tval;
  
- 	am = get_arch_mbm_state(hw_dom, rmid, eventid);
- 	if (am) {
-
-base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
+ 	return 0;
 -- 
 2.39.0.314.g84b9a713c41-goog
 
