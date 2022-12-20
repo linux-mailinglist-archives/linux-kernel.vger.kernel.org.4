@@ -2,147 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D09651E10
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 10:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D1C651E37
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 10:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbiLTJv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 04:51:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
+        id S233729AbiLTJzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 04:55:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233239AbiLTJuc (ORCPT
+        with ESMTP id S232836AbiLTJyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 04:50:32 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4295216596
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 01:50:31 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id t17so27960599eju.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 01:50:31 -0800 (PST)
+        Tue, 20 Dec 2022 04:54:46 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304431A21F
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 01:52:21 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id v23so6644640pju.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 01:52:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YrmisNdFh4dnt9ytoeo+6poFPTzYMLU2CG2aCASb5S8=;
-        b=ZX0sUBUOD6mPT1AjhAZd7kvr1+ZWD9nSdZjiZGFC/svzDQfSnRl4W9n1U/QeXgs7EV
-         qQN8PCBGt04xy/2ftpEWFicBC5qKiM97p9wgw5uIZ0ZnRCrENJx45pvrj0Xr8nhxWDSC
-         VrJ8SWgtKkNRlFi7sVuOI2qZyEvg59yg9hljAT3AydDMdGUOY0WFjrcwI0zk8tIIf45G
-         JYtpJkUl+YqkVkFnCQHIa43fO5Vu2fOVMrTBSx+XjyRUemA1RCx30YRzpVvwXhW1v9zx
-         8k1WzVqKTuMupdET2wCUpjAUgm3Jsuksi0UhVy2NAdM+PeIg+0DhbKMXK87CZzTHpGD8
-         UVFg==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=x1sqN6s64DKmqX1n8+pEPeL7f/ccChvue6Aarj0Kqbo=;
+        b=Ua5TLwTLrhXAmRSe17hmpe4tnygG9EOqZG6jLeeviASHUZkorxg5FIqn3CSxjJ4Ycx
+         nsSXKUwiZCn2U8zqBEeZFPHgIfp0H5gNySiDViiuekBDfo+ImkPG7eE1q7mxBn+k9aPW
+         FEWnjtw3htnw5Od+9kzkgLbS+JgM6jviA2nxaY3HFnia1hE6LAbxciZQGHQZok+sRjv2
+         WQWragYZ3hnPj0YZ1xYiEzgFFhLxBJxMRtM2PaMb3TEK7fx5H0H+60WlheRYiulGdGuv
+         sfq3U05Z6i1kbUNFKSqgLASlIyiR14LHV5S+SYtzlobgCKDzitfTFmK2LZngumgQ3NHC
+         MkIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YrmisNdFh4dnt9ytoeo+6poFPTzYMLU2CG2aCASb5S8=;
-        b=qcmWiQFhLgL5B1JnCEnx/nvWfVCrH8DhO+ZQGxTt3+DfmgvyiXxne3a9ihzIIIMMDh
-         xQvaisE2dSh700osBb4/82D1Yv7uXPv1q1tXqoR6SsNtGcJZwsXPGrrB+8vHWSnX1Gdn
-         y8s6fc8DtCl4F+9AY5xrkD4v85Bmc34FD7891FF/pu+nsUraAxtTh+jIVDnrMZ/U/a02
-         8Rgfra8bxB+7XI1BEXrwujWC0NzCCFDQ55XtNq7C0JhvUOg7CvQhEwK5DFX6a7czo11W
-         LL6AO3rUOezfCTfIuGPg3Rv1TgvyJpvDcvxjZsDGEbvOg1D+ab52vxXHeSgMFefIMaqw
-         Tvog==
-X-Gm-Message-State: ANoB5pkh1stdPcXeyPAnJ0gHsqeyt/Vhru0F83A8HWfy13BNbogdfysx
-        gsxjZrRvu6B7dhBf1nf9XcpeqA==
-X-Google-Smtp-Source: AA0mqf6Bo+WQfwOiqLeFeZbWG9C1okNWBOzgG3xfzENouUIanG47suRpxj5JcgziewuIdwN+229BQQ==
-X-Received: by 2002:a17:906:f6d7:b0:7c0:bf7c:19f4 with SMTP id jo23-20020a170906f6d700b007c0bf7c19f4mr38470939ejb.74.1671529829849;
-        Tue, 20 Dec 2022 01:50:29 -0800 (PST)
-Received: from MBP-di-Paolo.station (net-93-70-85-0.cust.vodafonedsl.it. [93.70.85.0])
-        by smtp.gmail.com with ESMTPSA id c2-20020a17090618a200b0082ea03c395esm1669207ejf.74.2022.12.20.01.50.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 20 Dec 2022 01:50:29 -0800 (PST)
-From:   Paolo Valente <paolo.valente@linaro.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arie.vanderhoeven@seagate.com, rory.c.chen@seagate.com,
-        glen.valante@linaro.org, Davide Zini <davidezini2@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Paolo Valente <paolo.valente@linaro.org>
-Subject: [PATCH V11 8/8] block, bfq: balance I/O injection among underutilized actuators
-Date:   Tue, 20 Dec 2022 10:50:13 +0100
-Message-Id: <20221220095013.55803-9-paolo.valente@linaro.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221220095013.55803-1-paolo.valente@linaro.org>
-References: <20221220095013.55803-1-paolo.valente@linaro.org>
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x1sqN6s64DKmqX1n8+pEPeL7f/ccChvue6Aarj0Kqbo=;
+        b=F+VWv+fyJb6J+JmxFa6zU9ghAOC7NH+tJNISUxVaxHhEuAgfDdkf0vINwLhEcXsesp
+         4H8nGcejs4qmLQVRx1nmFqTUaeFbJnqpSracr5lBiCAsd2cZ9gZB+m59gGyNN93w01vq
+         vqIJDO+go5oIv7+hfC9TAW2D3LuV4xY07QWko7xGbkkH4SY/b3+64nv/rCdK5i3wYpI1
+         Eo9dNkmJpym/v2MnZCz/RqcFJ4tTNs51jB7m6pUJA2hHLqZHLOEawd2Na0sIeSaBUCBi
+         RjMFZJee5j3iFke6y/ETBcz5hUYQs3WqQjvga+jGO70YZbYJngG8lkfWmk8epsPTEmln
+         CVYQ==
+X-Gm-Message-State: AFqh2krmmM5AD+PYRTwMijGVCXZwHuXQeZMvFRlhryEhcmwP5svBYFrW
+        n2cs6/s6wS7sUDrjVrdRUUZ1
+X-Google-Smtp-Source: AMrXdXtmqt8YlfWPVesarE4ixcOEv2JovpIYF49omWQXDoYQSZ+LOG9P6rMWs+aQyRUCdOhmIjKJ8g==
+X-Received: by 2002:a05:6a20:8f21:b0:af:88d2:33f8 with SMTP id b33-20020a056a208f2100b000af88d233f8mr19370358pzk.7.1671529938744;
+        Tue, 20 Dec 2022 01:52:18 -0800 (PST)
+Received: from thinkpad ([117.217.181.222])
+        by smtp.gmail.com with ESMTPSA id y5-20020a623205000000b00575448ab0e9sm8141421pfy.123.2022.12.20.01.52.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 01:52:17 -0800 (PST)
+Date:   Tue, 20 Dec 2022 15:22:07 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
+        tony.luck@intel.com, quic_saipraka@quicinc.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
+        ahalaney@redhat.com
+Subject: Re: [PATCH v3 06/15] arm64: dts: qcom: sc8280xp: Fix the base
+ addresses of LLCC banks
+Message-ID: <20221220095207.GA38609@thinkpad>
+References: <20221219182958.476231-1-manivannan.sadhasivam@linaro.org>
+ <20221219182958.476231-7-manivannan.sadhasivam@linaro.org>
+ <CAKXuJqgL5GsyjaNpkeMf4=72sjw+6ytFUm+yt1WjLyoFLrgm3g@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+In-Reply-To: <CAKXuJqgL5GsyjaNpkeMf4=72sjw+6ytFUm+yt1WjLyoFLrgm3g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Davide Zini <davidezini2@gmail.com>
+Hi Steev,
 
-Upon the invocation of its dispatch function, BFQ returns the next I/O
-request of the in-service bfq_queue, unless some exception holds. One
-such exception is that there is some underutilized actuator, different
-from the actuator for which the in-service queue contains I/O, and
-that some other bfq_queue happens to contain I/O for such an
-actuator. In this case, the next I/O request of the latter bfq_queue,
-and not of the in-service bfq_queue, is returned (I/O is injected from
-that bfq_queue). To find such an actuator, a linear scan, in
-increasing index order, is performed among actuators.
+On Mon, Dec 19, 2022 at 10:56:22PM -0600, Steev Klimaszewski wrote:
+> On Mon, Dec 19, 2022 at 12:31 PM Manivannan Sadhasivam
+> <manivannan.sadhasivam@linaro.org> wrote:
+> >
+> > The LLCC block has several banks each with a different base address
+> > and holes in between. So it is not a correct approach to cover these
+> > banks with a single offset/size. Instead, the individual bank's base
+> > address needs to be specified in devicetree with the exact size.
+> >
+> > Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 10 ++++++++--
+> >  1 file changed, 8 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > index 109c9d2b684d..0510a5d510e7 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > @@ -1856,8 +1856,14 @@ opp-6 {
+> >
+> >                 system-cache-controller@9200000 {
+> >                         compatible = "qcom,sc8280xp-llcc";
+> > -                       reg = <0 0x09200000 0 0x58000>, <0 0x09600000 0 0x58000>;
+> > -                       reg-names = "llcc_base", "llcc_broadcast_base";
+> > +                       reg = <0 0x09200000 0 0x58000>, <0 0x09280000 0 0x58000>,
+> > +                             <0 0x09300000 0 0x58000>, <0 0x09380000 0 0x58000>,
+> > +                             <0 0x09400000 0 0x58000>, <0 0x09480000 0 0x58000>,
+> > +                             <0 0x09500000 0 0x58000>, <0 0x09580000 0 0x58000>,
+> > +                             <0 0x09600000 0 0x58000>;
+> > +                       reg-names = "llcc0_base", "llcc1_base", "llcc2_base",
+> > +                                   "llcc3_base", "llcc4_base", "llcc5_base",
+> > +                                   "llcc6_base", "llcc7_base",  "llcc_broadcast_base";
+> >                         interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
+> >                 };
+> >
+> > --
+> > 2.25.1
+> >
+> Hi Mani,
+> 
+> Replying on this one, because I tested v3 on the Thinkpad X13s here...
+> The module probes fine, and like Andrew I see it loading...
+> 
+> But there still seem to be some issues...
+> 
+> I installed edac-utils, and I had to edit /etc/default/edac to
+> actually tell it to use the qcom_edac module, since it could not
+> figure this out on its own.
+> Restarting the edac service, seemed to go okay, but *stopping* it,
+> which unloads the module (though restarting did the same thing, so I'm
+> not sure why it succeeded the first time and not the second) and we
+> get:
+> 
 
-Performing a linear scan entails a prioritization among actuators: an
-underutilized actuator may be considered for injection only if all
-actuators with a lower index are currently fully utilized, or if there
-is no pending I/O for any lower-index actuator that happens to be
-underutilized.
+Thanks for testing the series and reporting the issue.
 
-This commits breaks this prioritization and tends to distribute
-injection uniformly across actuators. This is obtained by adding the
-following condition to the linear scan: even if an actuator A is
-underutilized, A is however skipped if its load is higher than that of
-the next actuator.
+This is a genuine use-after-free bug that happens because the edac core frees
+the memory assigned to "llcc_driv_data" pointer that gets passed as "pvt_info".
 
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
-Signed-off-by: Davide Zini <davidezini2@gmail.com>
----
- block/bfq-iosched.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+Here, the LLCC driver is one creating the "qcom_llcc_edac" platform device and
+also allocating memory for "llcc_driv_data". But since during qcom_edac driver
+removal, we are just unregistering the driver and the platform device still
+stays around, the edac driver is not supposed to free any memory associated
+with the platform device.
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index c46f1f81e65b..35d7b8123501 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -4761,10 +4761,16 @@ bfq_find_active_bfqq_for_actuator(struct bfq_data *bfqd, int idx)
- 
- /*
-  * Perform a linear scan of each actuator, until an actuator is found
-- * for which the following two conditions hold: the load of the
-- * actuator is below the threshold (see comments on actuator_load_threshold
-- * for details), and there is a queue that contains I/O for that
-- * actuator. On success, return that queue.
-+ * for which the following three conditions hold: the load of the
-+ * actuator is below the threshold (see comments on
-+ * actuator_load_threshold for details) and lower than that of the
-+ * next actuator (comments on this extra condition below), and there
-+ * is a queue that contains I/O for that actuator. On success, return
-+ * that queue.
-+ *
-+ * Performing a plain linear scan entails a prioritization among
-+ * actuators. The extra condition above breaks this prioritization and
-+ * tends to distribute injection uniformly across actuators.
-  */
- static struct bfq_queue *
- bfq_find_bfqq_for_underused_actuator(struct bfq_data *bfqd)
-@@ -4772,7 +4778,9 @@ bfq_find_bfqq_for_underused_actuator(struct bfq_data *bfqd)
- 	int i;
- 
- 	for (i = 0 ; i < bfqd->num_actuators; i++) {
--		if (bfqd->rq_in_driver[i] < bfqd->actuator_load_threshold) {
-+		if (bfqd->rq_in_driver[i] < bfqd->actuator_load_threshold &&
-+		    (i == bfqd->num_actuators - 1 ||
-+		     bfqd->rq_in_driver[i] < bfqd->rq_in_driver[i+1])) {
- 			struct bfq_queue *bfqq =
- 				bfq_find_active_bfqq_for_actuator(bfqd, i);
- 
+So the fix is to not pass "llcc_driv_data" as the "pvt_info" but instead use
+the "dev->platform_data" throughout the qcom_edac driver for referencing to
+"llcc_driv_data".
+
+I added a patch locally and with that, I can remove and add the driver multiple
+times without any issues. I also verified the change using KASAN.
+
+I will add this patch to v4. Please test and report back :)
+
+Thanks once again!
+
+-Mani
+
+> [ 8470.972150] EDAC MC: Removed device 0 for qcom_llcc_edac llcc: DEV
+> qcom_llcc_edac
+> [ 8471.047124] EDAC DEVICE1: Giving out device to module
+> qcom_llcc_edac controller llcc: DEV qcom_llcc_edac (INTERRUPT)
+> [ 8477.005625] EDAC MC: Removed device 1 for qcom_llcc_edac llcc: DEV
+> qcom_llcc_edac
+> [ 8477.005659] ------------[ cut here ]------------
+> [ 8477.005661] kernel BUG at mm/slub.c:435!
+> [ 8477.005668] Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
+> [ 8477.005674] Modules linked in: qcom_edac(-) aes_ce_ccm michael_mic
+> snd_soc_wsa883x q6prm_clocks q6apm_lpass_dais snd_q6dsp_common
+> q6apm_dai q6prm qrtr_mhi snd_seq_dummy snd_hrtimer snd_seq
+> snd_seq_device nls_ascii nls_cp437 vfat fat sg snd_q6apm qrtr_smd
+> pm8941_pwrkey overlay aes_ce_blk aes_ce_cipher ghash_ce gf128mul
+> sha2_ce qcom_spmi_adc_tm5 qcom_spmi_adc5 sha256_arm64 qcom_vadc_common
+> qcom_pon sha1_ce snd_soc_wcd938x qcom_spmi_temp_alarm regmap_sdw
+> ath11k_pci snd_soc_sc8280xp snd_soc_wcd938x_sdw industrialio
+> snd_soc_hdmi_codec ath11k snd_soc_qcom_common snd_soc_wcd_mbhc
+> mac80211 snd_soc_lpass_rx_macro snd_soc_lpass_va_macro
+> snd_soc_lpass_tx_macro soundwire_qcom snd_soc_lpass_macro_common
+> snd_soc_lpass_wsa_macro libarc4 snd_soc_core snd_compress
+> soundwire_bus snd_pcm_dmaengine cfg80211 snd_pcm qcom_q6v5_pas mhi
+> qcom_pil_info qcom_q6v5 snd_timer qcom_sysmon snd qcom_common slimbus
+> soundcore qcom_rng qcom_battmgr joydev hid_multitouch evdev
+> binfmt_misc fuse configfs ip_tables x_tables
+> [ 8477.005791] autofs4 ext4 mbcache jbd2 uas msm mdt_loader ocmem
+> gpu_sched llcc_qcom gpio_keys qrtr [last unloaded: qcom_edac]
+> [ 8477.005814] CPU: 7 PID: 3215 Comm: modprobe Not tainted
+> 6.1.0-next-20221219 #25
+> [ 8477.005818] Hardware name: LENOVO 21BX0015US/21BX0015US, BIOS
+> N3HET74W (1.46 ) 10/12/2022
+> [ 8477.005822] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [ 8477.005826] pc : __slab_free+0x118/0x550
+> [ 8477.005839] lr : __slab_free+0x48/0x550
+> [ 8477.005847] sp : ffff80000ca1ba70
+> [ 8477.005849] x29: ffff80000ca1ba70 x28: ffff1b0bc0002200 x27: 0000000000000000
+> [ 8477.005855] x26: 0000000000e46b07 x25: 0000000000000000 x24: ffff1b133bf3e800
+> [ 8477.005862] x23: 000000000020001f x22: ffff1b133bf3e800 x21: ffffaf4f127f0470
+> [ 8477.005867] x20: ffff1b133bf3e800 x19: fffffc6c4cefcf80 x18: ffffffffffffffff
+> [ 8477.005873] x17: 63636c6c5f6d6f63 x16: ffffaf4f127ee274 x15: 636c6c2063616465
+> [ 8477.005878] x14: 0000000000000004 x13: ffff1b0bc0271810 x12: 0000000000000000
+> [ 8477.005884] x11: ffff1b0bfe2d2720 x10: ffff1b0bfe2d26c8 x9 : ffffaf4f120cda00
+> [ 8477.005889] x8 : ffff80000ca1bb40 x7 : 0000000000000000 x6 : 0000000000000000
+> [ 8477.005894] x5 : ffffaf4f127f0470 x4 : 0000000000000000 x3 : ffff1b133bf3e840
+> [ 8477.005899] x2 : ffffffffffffffc0 x1 : 0000000000000000 x0 : 0000000000000040
+> [ 8477.005905] Call trace:
+> [ 8477.005907] __slab_free+0x118/0x550
+> [ 8477.005914] __kmem_cache_free+0x290/0x2b4
+> [ 8477.005918] kfree+0x8c/0x174
+> [ 8477.005925] edac_device_ctrl_master_release+0x30/0x60
+> [ 8477.005933] kobject_put+0xb0/0x220
+> [ 8477.005940] edac_device_unregister_sysfs_main_kobj+0x1c/0x30
+> [ 8477.005944] edac_device_free_ctl_info+0x18/0x2c
+> [ 8477.005950] qcom_llcc_edac_remove+0x2c/0x40 [qcom_edac]
+> [ 8477.005962] platform_remove+0x30/0x64
+> [ 8477.005969] device_remove+0x54/0x8c
+> [ 8477.005973] device_release_driver_internal+0x1ec/0x260
+> [ 8477.005978] driver_detach+0x58/0xa0
+> [ 8477.005983] bus_remove_driver+0x64/0x100
+> [ 8477.005988] driver_unregister+0x38/0x70
+> [ 8477.005993] platform_driver_unregister+0x1c/0x30
+> [ 8477.005998] qcom_llcc_edac_driver_exit+0x18/0x918 [qcom_edac]
+> [ 8477.006007] __arm64_sys_delete_module+0x1c0/0x340
+> [ 8477.006014] invoke_syscall+0x50/0x120
+> [ 8477.006021] el0_svc_common.constprop.0+0x4c/0xf4
+> [ 8477.006026] do_el0_svc+0x40/0xbc
+> [ 8477.006032] el0_svc+0x2c/0x84
+> [ 8477.006038] el0t_64_sync_handler+0xf4/0x120
+> [ 8477.006043] el0t_64_sync+0x190/0x194
+> [ 8477.006049] Code: b9402b80 8b000283 eb1402df 54fffb01 (d4210000)
+> [ 8477.006053] ---[ end trace 0000000000000000 ]---
+> [ 8477.006056] note: modprobe[3215] exited with preempt_count 1
+> [ 8477.006282] ------------[ cut here ]------------
+> [ 8477.006285] WARNING: CPU: 7 PID: 0 at kernel/context_tracking.c:128
+> ct_kernel_exit.constprop.0+0xe0/0xf0
+> [ 8477.006294] Modules linked in: qcom_edac(-) aes_ce_ccm michael_mic
+> snd_soc_wsa883x q6prm_clocks q6apm_lpass_dais snd_q6dsp_common
+> q6apm_dai q6prm qrtr_mhi snd_seq_dummy snd_hrtimer snd_seq
+> snd_seq_device nls_ascii nls_cp437 vfat fat sg snd_q6apm qrtr_smd
+> pm8941_pwrkey overlay aes_ce_blk aes_ce_cipher ghash_ce gf128mul
+> sha2_ce qcom_spmi_adc_tm5 qcom_spmi_adc5 sha256_arm64 qcom_vadc_common
+> qcom_pon sha1_ce snd_soc_wcd938x qcom_spmi_temp_alarm regmap_sdw
+> ath11k_pci snd_soc_sc8280xp snd_soc_wcd938x_sdw industrialio
+> snd_soc_hdmi_codec ath11k snd_soc_qcom_common snd_soc_wcd_mbhc
+> mac80211 snd_soc_lpass_rx_macro snd_soc_lpass_va_macro
+> snd_soc_lpass_tx_macro soundwire_qcom snd_soc_lpass_macro_common
+> snd_soc_lpass_wsa_macro libarc4 snd_soc_core snd_compress
+> soundwire_bus snd_pcm_dmaengine cfg80211 snd_pcm qcom_q6v5_pas mhi
+> qcom_pil_info qcom_q6v5 snd_timer qcom_sysmon snd qcom_common slimbus
+> soundcore qcom_rng qcom_battmgr joydev hid_multitouch evdev
+> binfmt_misc fuse configfs ip_tables x_tables
+> [ 8477.006378] autofs4 ext4 mbcache jbd2 uas msm mdt_loader ocmem
+> gpu_sched llcc_qcom gpio_keys qrtr [last unloaded: qcom_edac]
+> [ 8477.006395] CPU: 7 PID: 0 Comm: swapper/7 Tainted: G D
+> 6.1.0-next-20221219 #25
+> [ 8477.006399] Hardware name: LENOVO 21BX0015US/21BX0015US, BIOS
+> N3HET74W (1.46 ) 10/12/2022
+> [ 8477.006401] pstate: 204003c5 (nzCv DAIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [ 8477.006405] pc : ct_kernel_exit.constprop.0+0xe0/0xf0
+> [ 8477.006411] lr : ct_kernel_exit.constprop.0+0x48/0xf0
+> [ 8477.006417] sp : ffff800008253d50
+> [ 8477.006419] x29: ffff800008253d50 x28: 0000000000000000 x27: 0000000000000000
+> [ 8477.006424] x26: 0000000000000000 x25: 0000000000000000 x24: 000007b5b4f2b289
+> [ 8477.006430] x23: 0000000000000000 x22: ffff1b133bd4deb0 x21: ffffaf4f138ce178
+> [ 8477.006435] x20: ffffaf4f130c6940 x19: ffffaf4f1339eeb0 x18: ffff1b0bc9725a0c
+> [ 8477.006440] x17: 3430303030303030 x16: ffff1b0bc9725b00 x15: ffff80000ca1b5d8
+> [ 8477.006446] x14: 0000ffffee58afff x13: ffffffffffffffff x12: ffffaf4f138c9bb0
+> [ 8477.006451] x11: 0000000000000001 x10: 0000000000000b80 x9 : ffffaf4f12806da8
+> [ 8477.006457] x8 : ffff1b0bc03a3be0 x7 : 0000000000000004 x6 : 00000013d6932dd5
+> [ 8477.006462] x5 : 00ffffffffffffff x4 : 0000000000000001 x3 : ffffaf4f1338f008
+> [ 8477.006467] x2 : ffff6bc4289af000 x1 : 4000000000000002 x0 : 4000000000000000
+> [ 8477.006473] Call trace:
+> [ 8477.006475] ct_kernel_exit.constprop.0+0xe0/0xf0
+> [ 8477.006481] ct_idle_enter+0x10/0x20
+> [ 8477.006487] cpuidle_enter_state+0x244/0x4e0
+> [ 8477.006493] cpuidle_enter+0x40/0x60
+> [ 8477.006498] do_idle+0x234/0x2c0
+> [ 8477.006504] cpu_startup_entry+0x2c/0x3c
+> [ 8477.006509] secondary_start_kernel+0x128/0x150
+> [ 8477.006514] __secondary_switched+0xb0/0xb4
+> [ 8477.006520] ---[ end trace 0000000000000000 ]---
+> 
+> I'm not entirely sure it's this driver, but removing the module can
+> reliably reproduce it.
+> --steev
+
 -- 
-2.20.1
-
+மணிவண்ணன் சதாசிவம்
