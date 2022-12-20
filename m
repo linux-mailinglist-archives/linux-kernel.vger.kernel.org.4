@@ -2,91 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915A6652251
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:19:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C202652259
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:22:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233937AbiLTOTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 09:19:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        id S229638AbiLTOVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 09:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233931AbiLTOS5 (ORCPT
+        with ESMTP id S233884AbiLTOVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:18:57 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBB5F59F
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:18:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671545920; x=1703081920;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RNoKwRr5C4L86GoAxSCU/infqiCSap2MrAl/iBgBGgQ=;
-  b=W0xtRITmjTpTntT6Luilo+Pxgi5MmAmhD6OnH+TMVdcIb44a2+zBtDBr
-   TRKeYOb9dTRBjn4/6WJbAYtEbmas+SHb3IhxHH1qjgoQHYYVq/hJd4LQY
-   cQd2pe14hCrWnoSnORiFzoLKFMTeyV4aqj8m7hfneZY/5R3OsQpmo17Ii
-   25+sAMOYcG2h6DfPEeHzj7whOJDnyL3Vo3C0kAw40R51gSp9qv+9YVIcr
-   y219G1nrtEyVigKxFKXJuf4PjYADQmtrjSSWLo+h0+7NesZqTIb40H9YC
-   P7sHTZlH2nN/Q+ev8rCrMOnVenW7Qp2hlTDXoE/r6RAYTzbY3Mh2lgBdz
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="299964369"
-X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
-   d="scan'208";a="299964369"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 06:18:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="825277253"
-X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
-   d="scan'208";a="825277253"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 20 Dec 2022 06:18:35 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 70BAC11D; Tue, 20 Dec 2022 16:19:05 +0200 (EET)
-Date:   Tue, 20 Dec 2022 16:19:05 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Takahiro Kuwano <Takahiro.Kuwano@infineon.com>,
-        Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Mauro Lima <mauro.lima@eclypsium.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v2] mtd: cfi: allow building spi-intel standalone
-Message-ID: <Y6HEWZ840GiS0STk@black.fi.intel.com>
-References: <20221220141352.1486360-1-arnd@kernel.org>
-MIME-Version: 1.0
+        Tue, 20 Dec 2022 09:21:15 -0500
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409E71CFF5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:20:21 -0800 (PST)
+Received: by mail-vk1-xa2f.google.com with SMTP id o136so5829438vka.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:20:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jXqd4DeCvaiHMvVaq9cytI+IuzgZuGKPfi29NnINfkE=;
+        b=dAZyD+m3bgniuwaWLPaRBC5YwocyRFsx0wGLSyIYl2gLqm7j1bmSOaHcu00h/BuPyQ
+         F6xpcobLLoNenZ9jpBOf04uQ11ooByc1VQCu9Py7RC3QULBl9Xb5Ez5bHqGjfLYpnXWb
+         xbRYg0GjJQixNJWkXPg4jj9nxEicaarM01r2I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jXqd4DeCvaiHMvVaq9cytI+IuzgZuGKPfi29NnINfkE=;
+        b=F8EBAk5o/SucZwMikBzkyEnSo2iob5Z/geAIfxK2qH9hzFjKoEmZx9hRitNHk3NKVR
+         IPvyw4iyBUzlZ4a05/aBigPmUpUYbENewTvjEIpDwv/H0XdlR2pMI8Po09FaGzPX6GOF
+         d2MOmndIbL648QdB+MztxM0PLUNTDtQ+HGL5qKkFfH1pf9rv3ogHSJ8jqUekj5Oldly/
+         ZSNoDt5BDzRxDV6je+I7Iu8bFaVY/Tq3o0q9dCDHDokWc7TIvYs/5vS4ZLHXf1dQM1NX
+         hMu6tZheT2oJ7/6pgMghMeFdraRL2izzxir8gOkpUe5appemSTu7A+mVxq07u9QqD0o/
+         MAxw==
+X-Gm-Message-State: AFqh2kpnbAoSl4fVMCIJ5FX+LnIiw7yzTw+0/AC5UAIB2BgfIA3MFynV
+        +EvNCaiqszjD0PR2bQfSzovOJA==
+X-Google-Smtp-Source: AMrXdXtJ2GG+nwNShqyvaTrXXvUFXW/zWGMJEZCBt4H5k90N6WB2mU9+U6pbmaxHFQ+cAvol6kMqrg==
+X-Received: by 2002:a1f:9ed1:0:b0:3bc:961f:d9c with SMTP id h200-20020a1f9ed1000000b003bc961f0d9cmr4330132vke.8.1671546020224;
+        Tue, 20 Dec 2022 06:20:20 -0800 (PST)
+Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
+        by smtp.gmail.com with ESMTPSA id 195-20020a370ccc000000b006eee3a09ff3sm8818979qkm.69.2022.12.20.06.20.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 06:20:19 -0800 (PST)
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221220141352.1486360-1-arnd@kernel.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
+Date:   Tue, 20 Dec 2022 09:20:08 -0500
+Message-Id: <CA83E649-8C79-4D39-9BFE-BBEF95968B98@joelfernandes.org>
+References: <20221220140714.GB22763@lothringen>
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+In-Reply-To: <20221220140714.GB22763@lothringen>
+To:     Frederic Weisbecker <frederic@kernel.org>
+X-Mailer: iPhone Mail (20B101)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_QP_LONG_LINE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 03:13:34PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> When MTD or MTD_CFI_GEOMETRY is disabled, the spi-intel driver
-> fails to build, as it includes the shared CFI header:
-> 
-> include/linux/mtd/cfi.h:62:2: error: #warning No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work. [-Werror=cpp]
->    62 | #warning No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work.
-> 
-> linux/mtd/spi-nor.h does not actually need to include cfi.h, so
-> remove the inclusion here to fix the warning. This uncovers a
-> missing #include in spi-nor/core.c so add that there to
-> prevent a different build issue.
-> 
-> Fixes: e23e5a05d1fd ("mtd: spi-nor: intel-spi: Convert to SPI MEM")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+
+> On Dec 20, 2022, at 9:07 AM, Frederic Weisbecker <frederic@kernel.org> wro=
+te:
+>=20
+> =EF=BB=BFOn Tue, Dec 20, 2022 at 08:44:40AM -0500, Joel Fernandes wrote:
+>>> C w-depend-r
+>>>=20
+>>> {
+>>>   PLOCK=3DLOCK0;
+>>> }
+>>>=20
+>>> // updater
+>>> P0(int *LOCK1, int **PLOCK)
+>>> {
+>>>   int lock1;
+>>>=20
+>>>   lock1 =3D READ_ONCE(*LOCK1); // READ from inactive idx
+>>>   smp_mb();
+>>>   WRITE_ONCE(*PLOCK, LOCK1); // Flip idx
+>>> }
+>>>=20
+>>> // reader
+>>> P1(int **PLOCK)
+>>> {
+>>>   int *plock;
+>>>=20
+>>>   plock =3D READ_ONCE(*PLOCK);    // Read active idx
+>>>   WRITE_ONCE(*plock, 1); // Write to active idx
+>>=20
+>> I am a bit lost here, why would the reader want to write to the active id=
+x?
+>> The reader does not update the idx, only the lock count.
+>=20
+> So &ssp->sda->srcu_lock_count is the base address and idx is the offset, r=
+ight?
+> The write is then displayed that way:
+>=20
+>     this_cpu_inc(ssp->sda->srcu_lock_count[idx].counter);
+>=20
+> But things could be also thought the other way around with idx being the b=
+ase address and
+> ssp->sda->srcu_lock_count being the offset.
+>=20
+>     this_cpu_inc(idx[ssp->sda->srcu_lock_count].counter);
+>=20
+> That would require to change some high level types but the result would be=
+ the same from
+> the memory point of view (and even from the ASM point of view). In the end=
+ we
+> are dealing with the same address and access.
+>=20
+> Now ssp->sda->srcu_lock_count is a constant address value. It doesn't chan=
+ge.
+> So it can be zero for example. Then the above increment becomes:
+>=20
+>   this_cpu_inc(idx.counter);
+>=20
+> And then it can be modelized as in the above litmus test.
+>=20
+> I had to play that trick because litmus doesn't support arrays but I belie=
+ve
+> it stands. Now of course I may well have got something wrong since I've al=
+ways
+> been terrible at maths...
+
+Ah ok, I get where you were going with that. Yes there is address dependency=
+ between reading idx and writing lock count. But IMHO, the access on the upd=
+ate side is trying to order write to index, and reads from a lock count of a=
+ previous index (as far as E / B+C is concerned). So IMHO, on the read side y=
+ou have to consider 2 consecutive readers and not the same reader in order t=
+o pair the same accesses correctly. But I could be missing something.
+
+>> Further, the comment does not talk about implicit memory ordering, it=E2=80=
+=99s talking about explicit ordering due to B+C on one side, and E on the ot=
+her.
+>=20
+> Not arguing I'm also still confused by the comment...
+
+;-)
+
+Thanks,
+
+ - Joel
+
+
+>=20
+> Thanks.
