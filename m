@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F0F6526CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 20:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E626C6526D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 20:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233940AbiLTTJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 14:09:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
+        id S234004AbiLTTMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 14:12:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiLTTJv (ORCPT
+        with ESMTP id S229536AbiLTTMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 14:09:51 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24418E0C3;
-        Tue, 20 Dec 2022 11:09:51 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id fy4so13425816pjb.0;
-        Tue, 20 Dec 2022 11:09:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1OBgH6qhxVhNETTJtpKxpJyJJwZSaJxAnc72NIfU7q8=;
-        b=B8qxUMoE7+EAlwHOenlxiYcmaNiVCwIkv+cLWtLf1DvdFen8d5/GPfZO2AcZfsFJ+C
-         j9hKmE40U0KY1rBXhWTq6axC8jKgEHENzByO3DzGSvsXsk3kzgD/ueQ1XjSumKsvw67C
-         y+kSElTk1YFddpEjE2jy6j0gWutWnUhdwFkykKJchKbQjtqs6pUgSIHs5QtUPPIxIedB
-         2Jsas5Y3PJ+eIGoYWT4tqfcZlY4GmmYmJsmqsb0eMX5qgvYQEtDKc2EjR5LhCvmGA4eX
-         0AzQAky1NMtPLHLKhJ0dAoGNm6Ehfa7t2qqsmbvjggeZ45KTdpX37xBZGvLmGfyaVhmz
-         EeKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1OBgH6qhxVhNETTJtpKxpJyJJwZSaJxAnc72NIfU7q8=;
-        b=V9Vps8QUJLwS36b+fmbCYqSTLxul5rcOq5BMMDam0gUrz9flwHTfuLPYe+4FLyjZWA
-         hM7Q6DSZau3xh8tRpIXx12Q4n7pyS0nKOA+ZBDJo9z991Te0t9BgnT2iEBr2eXzaxIeY
-         fPxVn3J0pOQ4+Rl8TfuVnKLy893FxCVojDsF8neNdAroGCLkE306tTxITKKSqqVADcdD
-         jc0LSk1QW13LbVLHv2QjrK5+VfVTjOUmmKeMG9Jaw8pQ38wGJCqhzYJtKrTjVQcT2dz8
-         pieIPkm31ex1tzVINTMMrM4/1OSxBgDTUmIb8zJp4LBXGijRDoQp61jnKQ5uT/7+ZrLm
-         v/jA==
-X-Gm-Message-State: ANoB5plkIzRya6cfMMhrQqtlbR2IAvpFFFv407M4NyV4Mwx6jhxu70x+
-        mKzF04kch8Bq6DbXkfoSICEivltyK4rZaw==
-X-Google-Smtp-Source: AA0mqf7jxeSkhNjsR5qNP89OERmGp1AZFIPJVGSOIRilOBXNnwoMcgsIbLYs+BJQGOvtpQXPjSsqhw==
-X-Received: by 2002:a05:6a20:d046:b0:af:7762:4c0b with SMTP id hv6-20020a056a20d04600b000af77624c0bmr32394792pzb.34.1671563390179;
-        Tue, 20 Dec 2022 11:09:50 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id h5-20020a656385000000b0045ff216a0casm8586163pgv.3.2022.12.20.11.09.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 11:09:49 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-mips@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] MIPS: dts: bcm63268: Add missing properties to the TWD node
-Date:   Tue, 20 Dec 2022 11:09:46 -0800
-Message-Id: <20221220190947.2681192-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 20 Dec 2022 14:12:06 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61037E006;
+        Tue, 20 Dec 2022 11:12:05 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 812AF1EC0518;
+        Tue, 20 Dec 2022 20:12:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1671563523;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=zottXoJ/NEKpHsW/kd7TgYecyr34sKhq/L0t7TIzFDc=;
+        b=Yht1hyw3SPwhLbr1jN7iM7vkbPRNoFAZnpsrsXf4hIVQnP9d6VPHdtXWUhkace+7M+Ikm+
+        I+9vCO1PbUle6DpXPFPyV4kfN0BR8EeUHgxRBlWc+s4GpQZqDSQ27I9Ev3850pVGZLuQzL
+        zZRkKeJdaxU00wQNnf9iSZVbCdRq7IQ=
+Date:   Tue, 20 Dec 2022 20:11:59 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v4 08/39] x86/mm: Remove _PAGE_DIRTY from kernel RO pages
+Message-ID: <Y6II/4b/lF/w1gRk@zn.tnic>
+References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
+ <20221203003606.6838-9-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221203003606.6838-9-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We currently have a DTC warning with the current DTS due to the lack of
-a suitable #address-cells and #size-cells property:
+Just typos and spelling fixes:
 
-  DTC     arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb
-arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_format): /ubus/timer-mfd@10000080/timer@0:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
-arch/mips/boot/dts/brcm/bcm63268.dtsi:120.5-22: Warning (reg_format): /ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
-arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_format): /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid length (12 bytes) (parent #address-cells == 1, child #address-cells == 2, #size-cells == 1)
+On Fri, Dec 02, 2022 at 04:35:35PM -0800, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> 
+> New processors that support Shadow Stack regard Write=0,Dirty=1 PTEs as
+> shadow stack pages.
+> 
+> In normal cases, it can be helpful to create Write=1 PTEs as also Dirty=1
+> if HW dirty tracking is not needed, because if the Dirty bit is not already
+> set the CPU has to set Dirty=1 when it the memory gets written to. This
 
-Fixes: d3db4b96ab7f ("mips: dts: bcm63268: add TWD block timer")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- arch/mips/boot/dts/brcm/bcm63268.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+s/it //
 
-diff --git a/arch/mips/boot/dts/brcm/bcm63268.dtsi b/arch/mips/boot/dts/brcm/bcm63268.dtsi
-index c663efce91cf..7b788757cb1e 100644
---- a/arch/mips/boot/dts/brcm/bcm63268.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm63268.dtsi
-@@ -109,6 +109,8 @@ timer-mfd@10000080 {
- 			compatible = "brcm,bcm7038-twd", "simple-mfd", "syscon";
- 			reg = <0x10000080 0x30>;
- 			ranges = <0x0 0x10000080 0x30>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
- 
- 			timer@0 {
- 				compatible = "brcm,bcm6345-timer";
+> creates addiontal work for the CPU.
+
+"additional"
+
+> So tradional wisdom was to simply set
+
+Unknown word [tradional] in commit message.
+Suggestions: ['traditional', ...
+
+> the Dirty bit whenever you didn't care about it. However, it was never
+> really very helpful for read only kernel memory.
+
+read-only
+
+> When CR4.CET=1 and IA32_S_CET.SH_STK_EN=1, some instructions can write to
+> such supervisor memory. The kernel does not set IA32_S_CET.SH_STK_EN, so
+> avoiding kernel Write=0,Dirty=1 memory is not strictly needed for any
+> functional reason. But having Write=0,Dirty=1 kernel memory doesn't have
+> any functional benefit either, so to reduce ambiguity between shadow stack
+> and regular Write=0 pages, removed Dirty=1 from any kernel Write=0 PTEs.
+
+s/removed/remove/
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
