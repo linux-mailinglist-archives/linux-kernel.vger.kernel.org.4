@@ -2,201 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B836522E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354666522FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234065AbiLTOoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 09:44:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
+        id S234089AbiLTOqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 09:46:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234021AbiLTOn5 (ORCPT
+        with ESMTP id S234105AbiLTOqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:43:57 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7850C1AA19
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:43:55 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id f34so3715024lfv.10
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:43:55 -0800 (PST)
+        Tue, 20 Dec 2022 09:46:03 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0CCFFC
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:46:00 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id 128so11923115vsz.12
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:46:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HohHf39oSurGOCgSZ1vXA2EUahkSr4A+Gq02PFcucLQ=;
-        b=u0XcuAXXcRkOW3gsXtqP1C10lIs8mGZ0IQKt6SlNapl2SsVp+83HYw99tPJtj/1kCT
-         KOkq4WN697oPUDW4MYWjrVuR3rQLYHD0sxBklvokpXdRPyoBFAzD8bWa4RgzF667BfWa
-         OyF1i99R/sfj+kBvbXA11NLiXN5mkf0fuON28zVlUhssbplZsfkxiDYd+IYYd1TQk285
-         eFO8BKg0qVmtd0JmzMe4o+BlZb8LIB59BNsyI6GsmBjy+2SLAHhBXmmIbq8+AKQHAM4G
-         MRvs6Ljr51To9qBf4VmEe0PnzkGzuFaLyViTRHFT0o+fuA5bJ2zbPTs3NT53EEgzNRC8
-         1+8w==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7HC4qlOKB+DV/kQUmV/UX6t7pk+Pw6VldO/FKc2Kz+8=;
+        b=q2JpO7TB5c5ty9Zf8VhtiI8gbxFjhI0pDBkJ3Z2u7pJ8g3VYOtRg/GX7Dgl2IRhzdR
+         0/zVbXFUyfARbciZ98KtaCjD7WbtHJhwz+HvwzP0vTeE37CNb/gtVHR9gv8qfCluhgI/
+         R9kSHQEv/4FA33N9H4vVSIY7zNVH0yZj+wMuRfAoPbH4Id3Rb3JRuMoXuV06H/rk0QrT
+         eXiSiGJBhEEbf6cBEJgG+EdfGHKWO7xkFpFA4y9IK5/KVUojWWsLhb7Pb1kZyKm1d4Ud
+         4uD4RIeyfkBMnOENbUi3tiGDmvlN83ItO/gmxSzGSg/Keqtf3JoSvVSitK+m6HbIZAiu
+         LWkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HohHf39oSurGOCgSZ1vXA2EUahkSr4A+Gq02PFcucLQ=;
-        b=xEU2k9+4Y0Z5giZKgGYLf416D3CFkMEFcya/OcsHlB9YUYqVjQ6YgcNp3A1IYSUZUP
-         j9/7rkJo5N5ZnkRtsDcPpLaSM14uytGwxGAQ9Qr5so5Jj43dhWXBgHasZeGz3qykLZGW
-         SpmivYDSVw2AIBPUsNhVdYhnxQLpz5ivBjpG904iO7OeP36PT/V51qohAe0hHHI4Yc3x
-         RjFy70F5qd2T0amu9kEVQrf2mrOHeExUVwKXcMz6CHlL+vvlc8fwYFDQ1t3Rpg3s5YL4
-         ObcRPKyog9wEh/2SRQrRoQNONeFHMzNAlaIPhnkyob3YvnnCbg9XyTfInkbt2rIfTSW8
-         oufw==
-X-Gm-Message-State: ANoB5pkqShaAoQy7cdZTSsrbUm9jQtsbvtn2eD1vqn5U8/CmR+0qdjzr
-        3ggHRo/q7IAUMAss3t74FbcC8A==
-X-Google-Smtp-Source: AA0mqf6MGqCcqLPuSOjIizAtHLhT18Ci+phi9dXJfAhatT9rs0Ufw/hl3iaU6iyyQsJeq62Vcd35tQ==
-X-Received: by 2002:ac2:5233:0:b0:4b5:b661:5c5e with SMTP id i19-20020ac25233000000b004b5b6615c5emr17135242lfl.55.1671547433798;
-        Tue, 20 Dec 2022 06:43:53 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b6-20020a056512070600b004b51ab265f8sm1483925lfs.193.2022.12.20.06.43.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 06:43:53 -0800 (PST)
-Message-ID: <65345e03-d82b-89b1-ed86-b0606368b709@linaro.org>
-Date:   Tue, 20 Dec 2022 15:43:52 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7HC4qlOKB+DV/kQUmV/UX6t7pk+Pw6VldO/FKc2Kz+8=;
+        b=Kzjv+oPk0BNwSWekDmTzY1r2CPSVjd57U4feSW7erGQbMMecLDvQLLjOfltgEFLkj7
+         mJHos3+FCzQh+1IAOsDd7JLFytr4M+2q6Bmy2wYvWWcGQXfvCxdcNjJJp9OsJaIl1wFO
+         V6SL3zpwzR1/Sg6aRROHqWY66Dl36ctqlx5mZ5NR4RlpeXtb8Z5HKBBeZLsDL2WEaVhr
+         OQTON/RlaqYkpQPWg04IGzvJxpi6YRIuGBmlokNv3g4UqGKlSTM54vTxziFVaGZig0TD
+         QaZV9Aligql3siuLRPDoAGHKgMWFGZlXgF4UU9iq+g8Rb48Hcr7sGqhdiDTGIrYXqUuY
+         k4AQ==
+X-Gm-Message-State: ANoB5pm2LVKr21sRwgU02HdQ48HaeZp8gykYIIv8nq0Z2r41qAM7wG5q
+        V+6Nn/Tb0tsLW3xwd4Z3egQ2jzzXjl5BLIFRAoepog==
+X-Google-Smtp-Source: AA0mqf5yQLmpSVdtAnFMtorbc897HTaDSF7eVW0ETN5ux8oIwTgrBEdfaw5c3Sxp5LRxc7nKc9yDcFgo2JBf25RTsAQ=
+X-Received: by 2002:a67:bd14:0:b0:3b2:e40d:1d9b with SMTP id
+ y20-20020a67bd14000000b003b2e40d1d9bmr12372544vsq.51.1671547559757; Tue, 20
+ Dec 2022 06:45:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/6] dt-bindings: mfd: add MAX77659 binding
-Content-Language: en-US
-To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
-        lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org,
-        lgirdwood@gmail.com, broonie@kernel.org
-Cc:     Nurettin.Bolucu@analog.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20221220132250.19383-1-Zeynep.Arslanbenzer@analog.com>
- <20221220132250.19383-3-Zeynep.Arslanbenzer@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221220132250.19383-3-Zeynep.Arslanbenzer@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221219191855.2010466-1-allenwebb@google.com>
+ <20221219204619.2205248-1-allenwebb@google.com> <20221219204619.2205248-2-allenwebb@google.com>
+ <Y6FZWOC1DSHHZNWy@kroah.com> <CAJzde06et8qZPmu=zF13rJt8=v_etMjgTRhv9y75wdrX7doC0g@mail.gmail.com>
+ <Y6HHb8alGpMHLpM/@kroah.com>
+In-Reply-To: <Y6HHb8alGpMHLpM/@kroah.com>
+From:   Allen Webb <allenwebb@google.com>
+Date:   Tue, 20 Dec 2022 08:45:48 -0600
+Message-ID: <CAJzde05ZWmXrxKE+B8_YHd1nEzHpFfodSdGbS6jVOCqKAj-fxQ@mail.gmail.com>
+Subject: Re: [PATCH v9 01/10] imx: Fix typo
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/12/2022 14:22, Zeynep Arslanbenzer wrote:
-> This patch adds binding document for MAX77659 MFD driver.
+On Tue, Dec 20, 2022 at 8:32 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Dec 20, 2022 at 08:26:06AM -0600, Allen Webb wrote:
+> > On Mon, Dec 19, 2022 at 3:23 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > >
+> > > On Mon, Dec 19, 2022 at 02:46:09PM -0600, Allen Webb wrote:
+> > > > A one character difference in the name supplied to MODULE_DEVICE_TABLE
+> > > > breaks a future patch set, so fix the typo.
+> > >
+> > > What behaviour is broken here for older kernels? What would not work
+> > > that makes this patch worthy of consideration for stable? The commit
+> > > log should be clear on that.
+> > >
+> > > In the future, it may be useful for you to wait at least 1 week or so
+> > > before sending a new series becuase just a couple of days is not enough
+> > > if you are getting feedback.
+> > >
+> > > So before sending a v10, please give it at least a few days or a week.
+> > >
+> > >   Luis
+> >
+> > On Tue, Dec 20, 2022 at 12:42 AM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Mon, Dec 19, 2022 at 02:46:09PM -0600, Allen Webb wrote:
+> > > > A one character difference in the name supplied to MODULE_DEVICE_TABLE
+> > > > breaks a future patch set, so fix the typo.
+> > >
+> > > Breaking a future change is not worth a stable backport, right?  Doesn't
+> > > this fix a real issue now?  If so, please explain that.
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> >
+> > I will update the commit message to say that it breaks compilation
+> > when building imx8mp-blk-ctrl as a module (and so forth for the other
+> > similar patches).
+>
+> Can that code be built as a module?  Same for the other changes...
 
-1. Do not use "This commit/patch".
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+Nope, I will remove the cc: stable and revert the commit messages back
+to just referencing the future change, but this time I will be more
+specific.
 
-2. Subject: drop second, redundant "binding".
+SOC_IMX8M
+symbol value 'm' invalid for SOC_IMX8M
 
-> 
-> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> ---
->  .../devicetree/bindings/mfd/adi,max77659.yaml | 70 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77659.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/adi,max77659.yaml b/Documentation/devicetree/bindings/mfd/adi,max77659.yaml
-> new file mode 100644
-> index 000000000000..6bec11607615
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/adi,max77659.yaml
-> @@ -0,0 +1,70 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/adi,max77659.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MAX77659 SIMO PMIC from ADI.
+ROCKCHIP_MBOX
+symbol value 'm' invalid for ROCKCHIP_MBOX
 
-Drop full stop.
-
-> +
-> +maintainers:
-> +  - Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> +
-> +description: |
-> +  MAX77659 is an PMIC providing battery charging and power
-> +  supply solutions for low-power applications.
-> +
-> +  For device-tree bindings of other sub-modules (regulator, power supply
-> +  refer to the binding documents under the respective
-> +  sub-system directories.
-
-Drop this part, not really relevant.
-
-> +
-> +properties:
-> +  compatible:
-> +    const: adi,max77659
-> +
-> +  reg:
-> +    description:
-> +      I2C device address.
-
-Drop description.
-
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  charger:
-> +    $ref: ../power/supply/adi,max77659-charger.yaml
-
-Full path, so /schemas/
-
-There is no such file so you did not test the patch.
-
-> +
-> +  regulator:
-> +    $ref: ../regulator/adi,max77659-regulator.yaml
-
-Ditto
-
-
-There is no such file so you did not test the patch.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        pmic@40 {
-> +            compatible = "adi,max77659";
-> +            reg = <0x40>;
-> +            interrupt-parent = <&gpio>;
-> +            #interrupt-cells = <2>;
-> +            interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
-> +            regulator {
-> +                compatible = "adi,max77659-regulator";
-> +                regulator-boot-on;
-> +                regulator-always-on;
-> +            };
-> +            charger {
-> +                compatible = "adi,max77659-charger";
-> +                adi,fast-charge-timer   = <5>;
-
-That's not DT coding style...
-
-> +                adi,fast-charge-microamp = <15000>;
-> +                adi,topoff-timer  =  <30>;
-
-Same problem.
-
-
->  
-
-Best regards,
-Krzysztof
-
+STMPE_SPI
+symbol value 'm' invalid for STMPE_SPI
