@@ -2,153 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8B66525CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABDAD6525D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:54:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiLTRxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 12:53:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
+        id S229514AbiLTRy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 12:54:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiLTRxp (ORCPT
+        with ESMTP id S229626AbiLTRyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 12:53:45 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED6BF006
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 09:53:44 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id t2so13039340ply.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 09:53:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7kMtd6mFHIc4lyhSJG2bAKq04EpZF7qYfB8BpwW0nVo=;
-        b=DyCDc111EoEh+DmSSMOeFWtySplI1Ib9bmFK44m9bE1COHOn/+Kpk3ddIYdz7TdNMQ
-         yRrGN+EFGsnSr94QcB+Cx9h31S1FQBPw4oQX+RGgzobFttJfsNTy8UAHqeLZFvFqGEN+
-         7RGeBsCvFnl7JPXOS/s34AScNFaOG2gS7l9Q7eguuDtxIe5z3uE4l6CGby9Nw/dXHNFV
-         N2RcO0kSJtmKNbHRTMfMynVCBSSOtsTRHbD8j0ucsT3hBp9fYZ9yVYTMpv0Cg84tOjr7
-         S6HfQVcVmXGe1eltsbNywOdScXRVxOWL3iQBdLU+XAC8NXmWoA5528Bvt2bmFhRHCHPd
-         5P6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7kMtd6mFHIc4lyhSJG2bAKq04EpZF7qYfB8BpwW0nVo=;
-        b=6qt+xmsB3fYO79jI6E9w1BoeIVuaCDm9K75HEItNjpdQjFDic6MGx2jba+CyUbMF0p
-         mfU3WgtvAYxyLPDjRa8tk/fwQhcaGNTL+xG41HvpPDBishwGv0MW86lzISITn5AH3acI
-         FZS+zZVQFgz+oPAMw8zhTRD1+LtrSGxXvPWZpD9ZuE/DO8OW63+1JeGxYDnPcMWpEFhc
-         clbeKBHU2/Q5rUWwnYQYEEBjUwFjHsck6wVqAIVc1gz3JMwLofOMFNOnmIEbp46d0aTQ
-         1BDsnufxvNG7CxOM7YB1VFQLbk9M9hSXa6n4tOYB5PHLgNxCvl6SVNd/FlH/n9vPwyy0
-         z0tA==
-X-Gm-Message-State: ANoB5pmwY9+S/bXgZhn07WUtK+wX8nl4SoMtzqv4EM1LhAumFHM6ZtUu
-        0q2QdEJvmkiq64UwKKc0me1FWCUOaNOao7lL
-X-Google-Smtp-Source: AA0mqf4eoxE+3oewFG3WTI/JCe7yAnoR/fzEyYECfgKB0p4Yu/W4BXjz/RNAe/cakHnILwsg49OuTw==
-X-Received: by 2002:a17:90b:1484:b0:21b:e47f:2fb2 with SMTP id js4-20020a17090b148400b0021be47f2fb2mr47394121pjb.37.1671558823931;
-        Tue, 20 Dec 2022 09:53:43 -0800 (PST)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id om7-20020a17090b3a8700b001fde655225fsm2216367pjb.2.2022.12.20.09.53.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 09:53:43 -0800 (PST)
-Date:   Tue, 20 Dec 2022 09:53:39 -0800
-From:   David Matlack <dmatlack@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Robert Hoo <robert.hu@linux.intel.com>,
-        Greg Thelen <gthelen@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Subject: Re: [PATCH 5/5] KVM: x86/mmu: Move kvm_tdp_mmu_map()'s prolog and
- epilog to its caller
-Message-ID: <Y6H2o2ADCALDA2oL@google.com>
-References: <20221213033030.83345-1-seanjc@google.com>
- <20221213033030.83345-6-seanjc@google.com>
+        Tue, 20 Dec 2022 12:54:25 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E162865DB;
+        Tue, 20 Dec 2022 09:54:24 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BKHhbrS025375;
+        Tue, 20 Dec 2022 17:54:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=K6TTv6Wy5iMjG3NldPXdah0kMw4suzOvdHwCh1UyfJ4=;
+ b=GAk2BHJfFWBQRvJGacpWNUJnEE09zzpKGZfBPbBUYmOtP8QFkr9ae99oX8m4grWXqWnq
+ d8bqniMzbyl4vFFTMHjoludF6VwQtALe54lW1Vr9XvozIINjW4Xaw8ZJHWv60I1j0GK7
+ edvG+7dlWRoSxkx3+pa9TZuo30YVnaf+bOaxOt2H2baAFV85mCr/KdX+1rRdygk0b3rj
+ BQue4bHhFpBb9aX5RAHpZdlPzqzzZBrPw0QZbbrBRMeWL+ykRCSJMLglbs10rcqxy8uJ
+ JZvTnp05kzoP7fU9zqeUSaIbdln+fWPNzGGGirFFaGOvXPgYhoAmMZqCeXoQAdF5Q6FR cw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mkhpyr8j2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 17:54:19 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BKHhgxV025964;
+        Tue, 20 Dec 2022 17:54:18 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mkhpyr8hd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 17:54:18 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BK2b0uc031759;
+        Tue, 20 Dec 2022 17:54:16 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3mh6yw35m4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 17:54:16 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BKHsEVM47841558
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Dec 2022 17:54:14 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5594320043;
+        Tue, 20 Dec 2022 17:54:14 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C308120040;
+        Tue, 20 Dec 2022 17:54:12 +0000 (GMT)
+Received: from [9.171.170.120] (unknown [9.171.170.120])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 20 Dec 2022 17:54:12 +0000 (GMT)
+Message-ID: <22a981c2-2896-bc2e-115c-f1d85c0084bd@linux.ibm.com>
+Date:   Tue, 20 Dec 2022 18:53:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221213033030.83345-6-seanjc@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2] gcov: Add support for checksum field
+To:     Rickard Andersson <rickaran@axis.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     rickard314.andersson@gmail.com, mliska@suse.cz,
+        Jesper.Nilsson@axis.com, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221220102318.3418501-1-rickaran@axis.com>
+Content-Language: en-US
+From:   Peter Oberparleiter <oberpar@linux.ibm.com>
+In-Reply-To: <20221220102318.3418501-1-rickaran@axis.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 2IGTKjfofqA9QIiCTRAD_GnqvLzzcziX
+X-Proofpoint-GUID: DcnKJYy7h_NyPg9Wb7f6t7cZuxnMkLMG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-20_06,2022-12-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ suspectscore=0 bulkscore=0 malwarescore=0 adultscore=0 lowpriorityscore=0
+ mlxlogscore=999 phishscore=0 impostorscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212200146
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 03:30:30AM +0000, Sean Christopherson wrote:
-> Move the hugepage adjust, tracepoint, and RCU (un)lock logic out of
-> kvm_tdp_mmu_map() and into its sole caller, kvm_tdp_mmu_page_fault(), to
-> eliminate the gotos used to bounce through rcu_read_unlock() when bailing
-> from the walk.
+On 20.12.2022 11:23, Rickard Andersson wrote:
+> From: Rickard x Andersson <rickaran@axis.com>
 > 
-> Opportunistically mark kvm_mmu_hugepage_adjust() as static as
-> kvm_tdp_mmu_map() was the only external user.
+> In GCC version 12.1 a checksum field was added.
 > 
-> No functional change intended.
+> This patch fixes a kernel crash occurring during boot when
+> using gcov-kernel with GCC version 12.2. The crash occurred on
+> a system running on i.MX6SX.
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Fixes: 977ef30a7d88 ("gcov: support GCC 12.1 and newer compilers")
+> Signed-off-by: Rickard x Andersson <rickaran@axis.com>
+> Reviewed-by: Peter Oberparleiter <oberpar@linux.ibm.com>
+> Tested-by: Peter Oberparleiter <oberpar@linux.ibm.com>
+> Cc: <stable@vger.kernel.org>
+
+Thank you for the fix!
+
+Andrew, could you pick this up via your tree?
+
 > ---
->  arch/x86/kvm/mmu/mmu.c          |  9 ++++++++-
->  arch/x86/kvm/mmu/mmu_internal.h |  1 -
->  arch/x86/kvm/mmu/tdp_mmu.c      | 22 ++++------------------
->  3 files changed, 12 insertions(+), 20 deletions(-)
+>  kernel/gcov/gcc_4_7.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 254bc46234e0..99c40617d325 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -3085,7 +3085,8 @@ int kvm_mmu_max_mapping_level(struct kvm *kvm,
->  	return min(host_level, max_level);
->  }
->  
-> -void kvm_mmu_hugepage_adjust(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> +static void kvm_mmu_hugepage_adjust(struct kvm_vcpu *vcpu,
-> +				    struct kvm_page_fault *fault)
->  {
->  	struct kvm_memory_slot *slot = fault->slot;
->  	kvm_pfn_t mask;
-> @@ -4405,7 +4406,13 @@ static int kvm_tdp_mmu_page_fault(struct kvm_vcpu *vcpu,
->  	if (is_page_fault_stale(vcpu, fault))
->  		goto out_unlock;
->  
-> +	kvm_mmu_hugepage_adjust(vcpu, fault);
+> diff --git a/kernel/gcov/gcc_4_7.c b/kernel/gcov/gcc_4_7.c
+> index c699feda21ac..04880d8fba25 100644
+> --- a/kernel/gcov/gcc_4_7.c
+> +++ b/kernel/gcov/gcc_4_7.c
+> @@ -85,6 +85,7 @@ struct gcov_fn_info {
+>   * @version: gcov version magic indicating the gcc version used for compilation
+>   * @next: list head for a singly-linked list
+>   * @stamp: uniquifying time stamp
+> + * @checksum: unique object checksum
+>   * @filename: name of the associated gcov data file
+>   * @merge: merge functions (null for unused counter type)
+>   * @n_functions: number of instrumented functions
+> @@ -97,6 +98,10 @@ struct gcov_info {
+>  	unsigned int version;
+>  	struct gcov_info *next;
+>  	unsigned int stamp;
+> + /* Since GCC 12.1 a checksum field is added. */
+> +#if (__GNUC__ >= 12)
+> +	unsigned int checksum;
+> +#endif
+>  	const char *filename;
+>  	void (*merge[GCOV_COUNTERS])(gcov_type *, unsigned int);
+>  	unsigned int n_functions;
 
-Can you also move the call to kvm_mmu_hugepage_adjust() from
-direct_map() to direct_page_fault()? I do think it's worth the
-maintenence burden to keep those functions consistent.
+-- 
+Peter Oberparleiter
+Linux on IBM Z Development - IBM Germany R&D
 
-> +
-> +	trace_kvm_mmu_spte_requested(fault);
-> +
-> +	rcu_read_lock();
->  	r = kvm_tdp_mmu_map(vcpu, fault);
-> +	rcu_read_unlock();
-
-I would prefer to keep these in tdp_mmu.c, to reduce the amount of TDP
-MMU details that bleed into mmu.c (RCU) and for consistency with other
-TDP MMU APIs that don't require the caller to acquire RCU.  This will
-also be helpful for the Common MMU, as the tracepoint and RCU will be
-common.
-
-e.g.
-
-static int __kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-{
-	...
-}
-
-int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-{
-	int r;
-
-	trace_kvm_mmu_spte_requested(fault);
-
-	rcu_read_lock();
-	r = __kvm_tdp_mmu_map(vcpu, fault);
-	rcu_read_unlock();
-
-	return r;
-}
