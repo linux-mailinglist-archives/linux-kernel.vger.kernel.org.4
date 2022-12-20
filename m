@@ -2,80 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F7465211B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 14:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6B8652110
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 13:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233652AbiLTNAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 08:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
+        id S231790AbiLTM5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 07:57:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiLTNA2 (ORCPT
+        with ESMTP id S229498AbiLTM5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 08:00:28 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C35DEE7;
-        Tue, 20 Dec 2022 05:00:27 -0800 (PST)
-Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NbxVC0T72zmWkd;
-        Tue, 20 Dec 2022 20:59:15 +0800 (CST)
-Received: from localhost.localdomain (10.67.165.24) by
- dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 20 Dec 2022 21:00:21 +0800
-From:   Xingui Yang <yangxingui@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <john.g.garry@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <yangxingui@huawei.com>,
-        <prime.zeng@hisilicon.com>, <kangfenglong@huawei.com>
-Subject: [PATCH] scsi: libsas: Grab the host lock in sas_ata_device_link_abort()
-Date:   Tue, 20 Dec 2022 12:53:49 +0000
-Message-ID: <20221220125349.45091-1-yangxingui@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 20 Dec 2022 07:57:03 -0500
+Received: from forwardcorp1a.mail.yandex.net (forwardcorp1a.mail.yandex.net [178.154.239.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D24BBC29;
+        Tue, 20 Dec 2022 04:57:01 -0800 (PST)
+Received: from vla5-b2806cb321eb.qloud-c.yandex.net (vla5-b2806cb321eb.qloud-c.yandex.net [IPv6:2a02:6b8:c18:3e0d:0:640:b280:6cb3])
+        by forwardcorp1a.mail.yandex.net (Yandex) with ESMTP id A85675FEA8;
+        Tue, 20 Dec 2022 15:56:59 +0300 (MSK)
+Received: from d-tatianin-nix.yandex-team.ru (unknown [2a02:6b8:b081:b519::1:14])
+        by vla5-b2806cb321eb.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id pukBv71RZ8c1-9pi6xWIM;
+        Tue, 20 Dec 2022 15:56:59 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
+        t=1671541019; bh=vFwXBebNUlstJNleJj/+YwuX9WYFUWsusCZsNeUI/tI=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=P26cwXMrMC1AmK/pAG1ea6we/Fx114ISiscz/reQIKWtSQMQRAfe4T1GEVXhwF2Ve
+         PgT8lrWrjGhs/gL5rWPxSieC8+eM8TuwEgh0jtlCVmf2Cys2Zi1DdpjqSF/mJUjW66
+         HXc7Jdh8mGWdgHesa59oAalESOX1si+/mUpgtJtA=
+Authentication-Results: vla5-b2806cb321eb.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
+From:   Daniil Tatianin <d-tatianin@yandex-team.ru>
+To:     Shahed Shaikh <shshaikh@marvell.com>
+Cc:     Daniil Tatianin <d-tatianin@yandex-team.ru>,
+        Manish Chopra <manishc@marvell.com>,
+        GR-Linux-NIC-Dev@marvell.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] qlcnic: prevent ->dcb use-after-free on qlcnic_dcb_enable() failure
+Date:   Tue, 20 Dec 2022 15:56:49 +0300
+Message-Id: <20221220125649.1637829-1-d-tatianin@yandex-team.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500012.china.huawei.com (7.185.36.89)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Grab the host lock in sas_ata_device_link_abort() before calling
-ata_link_abort(), as the comment in ata_link_abort() mentions.
+adapter->dcb would get silently freed inside qlcnic_dcb_enable() in
+case qlcnic_dcb_attach() would return an error, which always happens
+under OOM conditions. This would lead to use-after-free because both
+of the existing callers invoke qlcnic_dcb_get_info() on the obtained
+pointer, which is potentially freed at that point.
 
-Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+Propagate errors from qlcnic_dcb_enable(), and instead free the dcb
+pointer at callsite.
+
+Found by Linux Verification Center (linuxtesting.org) with the SVACE
+static analysis tool.
+
+Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
 ---
- drivers/scsi/libsas/sas_ata.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c | 9 ++++++++-
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h       | 5 ++---
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c      | 9 ++++++++-
+ 3 files changed, 18 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
-index f7439bf9cdc6..4f2017b21e6d 100644
---- a/drivers/scsi/libsas/sas_ata.c
-+++ b/drivers/scsi/libsas/sas_ata.c
-@@ -889,7 +889,9 @@ void sas_ata_device_link_abort(struct domain_device *device, bool force_reset)
- {
- 	struct ata_port *ap = device->sata_dev.ap;
- 	struct ata_link *link = &ap->link;
-+	unsigned long flags;
+diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c
+index dbb800769cb6..465f149d94d4 100644
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c
+@@ -2505,7 +2505,14 @@ int qlcnic_83xx_init(struct qlcnic_adapter *adapter)
+ 		goto disable_mbx_intr;
  
-+	spin_lock_irqsave(ap->lock, flags);
- 	device->sata_dev.fis[2] = ATA_ERR | ATA_DRDY; /* tf status */
- 	device->sata_dev.fis[3] = ATA_ABORTED; /* tf error */
+ 	qlcnic_83xx_clear_function_resources(adapter);
+-	qlcnic_dcb_enable(adapter->dcb);
++
++	err = qlcnic_dcb_enable(adapter->dcb);
++	if (err) {
++		qlcnic_clear_dcb_ops(adapter->dcb);
++		adapter->dcb = NULL;
++		goto disable_mbx_intr;
++	}
++
+ 	qlcnic_83xx_initialize_nic(adapter, 1);
+ 	qlcnic_dcb_get_info(adapter->dcb);
  
-@@ -897,6 +899,7 @@ void sas_ata_device_link_abort(struct domain_device *device, bool force_reset)
- 	if (force_reset)
- 		link->eh_info.action |= ATA_EH_RESET;
- 	ata_link_abort(link);
-+	spin_unlock_irqrestore(ap->lock, flags);
+diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
+index 7519773eaca6..e1460f9c38bf 100644
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
+@@ -112,9 +112,8 @@ static inline void qlcnic_dcb_init_dcbnl_ops(struct qlcnic_dcb *dcb)
+ 		dcb->ops->init_dcbnl_ops(dcb);
  }
- EXPORT_SYMBOL_GPL(sas_ata_device_link_abort);
+ 
+-static inline void qlcnic_dcb_enable(struct qlcnic_dcb *dcb)
++static inline int qlcnic_dcb_enable(struct qlcnic_dcb *dcb)
+ {
+-	if (dcb && qlcnic_dcb_attach(dcb))
+-		qlcnic_clear_dcb_ops(dcb);
++	return dcb ? qlcnic_dcb_attach(dcb) : 0;
+ }
+ #endif
+diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
+index 28476b982bab..36ba15fc9776 100644
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
+@@ -2599,7 +2599,14 @@ qlcnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 			 "Device does not support MSI interrupts\n");
+ 
+ 	if (qlcnic_82xx_check(adapter)) {
+-		qlcnic_dcb_enable(adapter->dcb);
++		err = qlcnic_dcb_enable(adapter->dcb);
++		if (err) {
++			qlcnic_clear_dcb_ops(adapter->dcb);
++			adapter->dcb = NULL;
++			dev_err(&pdev->dev, "Failed to enable DCB\n");
++			goto err_out_free_hw;
++		}
++
+ 		qlcnic_dcb_get_info(adapter->dcb);
+ 		err = qlcnic_setup_intr(adapter);
  
 -- 
-2.17.1
+2.25.1
 
