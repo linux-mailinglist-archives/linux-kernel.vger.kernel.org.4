@@ -2,434 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA513651790
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 02:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9261E65179A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 02:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbiLTBMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 20:12:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
+        id S232883AbiLTBM6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 19 Dec 2022 20:12:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiLTBMW (ORCPT
+        with ESMTP id S229489AbiLTBMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 20:12:22 -0500
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436F311C15;
-        Mon, 19 Dec 2022 17:12:21 -0800 (PST)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-143ffc8c2b2so13791434fac.2;
-        Mon, 19 Dec 2022 17:12:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0lq/bPpBCckHEaeP84YP3OrcTYEbg/cWVNuiIRlyVbI=;
-        b=g/O1s/D3tvfBRYJ2Wye5c7f4XYfv166pE5fioZRzYwubTPG08SMDxO9oT+zx1BhPA8
-         lFncyyszK60VnZE52h+uHVCtQPFTWlPOg94FQKxJbC72YCK3qmBBobeGBmtRzLiM1WgX
-         0PwQfekubVdARZjxKOcoQW4G6aI8PnFFbGfC+0MedoMmfrm6qw3uRcBfVedwDrGixALg
-         E6eM5CWlNr46zzFAOD5l0UrLtH0TsGEysVOGh5cpWWq3v8UuwLOxG6UJAc/bhHTMJlcd
-         uB9LzRI7A0mL+7xC7sdEypX+Dxvlfh79iVRjQr/ktQa4N/HVX7dbnDo96J+nUbRkrPy7
-         qiTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0lq/bPpBCckHEaeP84YP3OrcTYEbg/cWVNuiIRlyVbI=;
-        b=iMO4vYlk+A2TNNm12byynqGyD1JK5OEPVWoGNfq5pEAshh4Qx7UMmxjtuHFN9+afjm
-         U00SNYwtKkiLtks8PjZnylpqPO96BFiqaLp7/tL/YBqsZ0MYvmC7H1/VPdZprnIeTyI7
-         Xq0D0y0nrrCxmJ6urJo8Xge/Q6tGJxnNupsQW0dW/K4KzwFhR1UgjzD5tqhQZVyMTG6D
-         /Zmb5I+UNy1Z3WanBLAaOOvU/y+ZB9k951Sp5cY9w6vYpTjQQogWLce2hloZ6kRhfN4y
-         xuGYJpXQiPSsSORlLfvjyXXtFgwcnl2pqkbZwEBNN688UN+7XmAPgAAk/z/DjESNQl8E
-         wp4A==
-X-Gm-Message-State: AFqh2kp2gZWnUPv5z+MOFH8Dl95Fjy2sThGjkl+o2Cz7fdMUuT2llYOb
-        +A9cofzmJmze4q/9ihkpZedzyhVaMNm2P/bKDZjvZcg5hIuorg==
-X-Google-Smtp-Source: AMrXdXvuRgQtXAwjFfk9/mnVgfNiZbzBjawi/L0Sh5W9B5ZhAw+IwM6N3XmCJ6TQWIH2gIxMrpv4G0xHb1Sb/sUHNeU=
-X-Received: by 2002:a05:6870:9e43:b0:144:9744:2be3 with SMTP id
- pt3-20020a0568709e4300b0014497442be3mr998112oab.93.1671498740519; Mon, 19 Dec
- 2022 17:12:20 -0800 (PST)
+        Mon, 19 Dec 2022 20:12:53 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C5711C14;
+        Mon, 19 Dec 2022 17:12:50 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 8E78924E199;
+        Tue, 20 Dec 2022 09:12:49 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 20 Dec
+ 2022 09:12:49 +0800
+Received: from ubuntu.localdomain (183.27.97.120) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 20 Dec
+ 2022 09:12:48 +0800
+From:   Hal Feng <hal.feng@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>
+CC:     Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/7] Basic device tree support for StarFive JH7110 RISC-V SoC
+Date:   Tue, 20 Dec 2022 09:12:40 +0800
+Message-ID: <20221220011247.35560-1-hal.feng@starfivetech.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <yq15zo86nvk.fsf@oracle.com> <20190819163546.915-1-khorenko@virtuozzo.com>
- <CADvTj4rVS-wJy1B=dgEO1AOADNYgL3XkZ01Aq=RTfPGEZC+VMA@mail.gmail.com>
- <ffdb2223-eed3-75b4-a003-4e4c96b49947@grossegger.com> <yq135kacnny.fsf@ca-mkp.ca.oracle.com>
- <CADvTj4qfPhEKy2V0crGs+Hc_fq=P5OKWFohG9QbTHK3i+GWc=Q@mail.gmail.com>
- <106f384f-d9e2-905d-5ac5-fe4ffd962122@virtuozzo.com> <CADvTj4rd+Z8S8vwnsmn2a7BXDPBwx1iqWRmE+SbtWep=Lnr20g@mail.gmail.com>
- <BYAPR11MB36066925274C38555F20FB17FA339@BYAPR11MB3606.namprd11.prod.outlook.com>
- <CADvTj4qH5xuK9ecEPi3Pm9t962E=nnH0oTBqWv4UPmibeASqdQ@mail.gmail.com>
- <BYAPR11MB36065EE0321C0AE6A4A3ECC7FA049@BYAPR11MB3606.namprd11.prod.outlook.com>
- <CADvTj4oej_E3tHm6tzOAhA=n2WughvDfQsaxKbP5Sxb+CeZu=w@mail.gmail.com>
- <BYAPR11MB360625E5945D5D3B29571857FA099@BYAPR11MB3606.namprd11.prod.outlook.com>
- <CADvTj4oNCrwHBRu-rUZtnxoqVkvyxG_Cg07RTAuwpNsGfjWKcw@mail.gmail.com>
- <BYAPR11MB3606FB1E651EC9B51BD8A0B7FA1B9@BYAPR11MB3606.namprd11.prod.outlook.com>
- <BYAPR11MB3606E15393A4C11CCFAF9C53FAE69@BYAPR11MB3606.namprd11.prod.outlook.com>
-In-Reply-To: <BYAPR11MB3606E15393A4C11CCFAF9C53FAE69@BYAPR11MB3606.namprd11.prod.outlook.com>
-From:   James Hilliard <james.hilliard1@gmail.com>
-Date:   Mon, 19 Dec 2022 18:12:09 -0700
-Message-ID: <CADvTj4qJZH5PoFJRKVF9zfQZAG-GOt2QHC7fDGiLPzo+iOX0cw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/1] aacraid: Host adapter Adaptec 6405 constantly
- resets under high io load
-To:     Sagar.Biradar@microchip.com
-Cc:     martin.petersen@oracle.com, khorenko@virtuozzo.com,
-        christian@grossegger.com, aacraid@microsemi.com,
-        Don.Brace@microchip.com, Tom.White@microchip.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Gilbert.Wu@microchip.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [183.27.97.120]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 1:44 PM <Sagar.Biradar@microchip.com> wrote:
->
-> Hi James / Konstantin,
-> Here are the details that we have compiled so far . .
-> I will just repost the problem definition and the concerns discussed so f=
-ar (to avoid back and forth)...
->
-> Issue : Series 6 Patch [regression] aacraid: Host adapter constantly abor=
-ts under load (https://bugzilla.redhat.com/show_bug.cgi?id=3D1724077)
->
-> Synopsis: running mkfs.ext4 on different disks on the same controller in =
-parallel. (Nothing seems to break, appears to always recover, but there are=
- a lot of timeouts.)
-> [  699.442950] aacraid: Host adapter reset request. SCSI hang ?
-> [  759.515013] aacraid 0000:03:00.0: Issuing IOP reset
-> [  850.296705] aacraid 0000:03:00.0: IOP reset succeeded
-> * with kernel 3.10.0-862.20.2.el7.x86_64 - PASS
-> * with kernel 3.10.0-957.21.3.el7.x86_64 - FAIL
->
-> Konstantin=E2=80=99s patch (https://lkml.org/lkml/2019/8/19/758) : upon t=
-esting the patch on the Virtuozzo kernel, it was found to be working fine, =
-and the same issue was observed on Ubuntu later.
-> But MCHP knows this patch/change will have issues with Xeon V2 interrupts=
-, adding this change into the tree can harm the customers who use this proc=
-essor. (CPU Intel Xeon E5-2609/2630/2650 v2 ( E5-26XX V2))
-> However, the patch may work fine on Xeon V3/V4 and later processors.
->
-> Adaptec ASK Article references our concern : https://ask.adaptec.com/app/=
-answers/detail/a_id/17400/kw/msi
-> Though the article lists appears like a "VMware" specific - the issue is =
-independent of the Operating system.
-> We have discovered a conflict between the Series 6 and 6E RAID controller=
-s, VMware ESXi 5.5 and Intel Xeon V2 processors that is caused by incorrect=
- interrupt handling.
-> The system is using the legacy interrupt handling but needs to be switche=
-d to MSI (Message Signaled Interrupts) instead.
-> This issue caused by switching to the legacy mode occurs on CPU Intel Xeo=
-n E5-2609/2630/2650 v2 ( E5-26XX V2).
-> * Note: Xeon V2 is =E2=80=9CIvy Bridge=E2=80=9D
->
-> Workaround: The proposed solution would be to let the driver use the MSI =
-mechanism with the aacraid driver parameter "msi" set to 1 (=E2=80=9Cmsi=3D=
-1") .  ("echo 1 > /sys/module/aacraid/parameters/msi")
+This patch series adds basic device tree support for StarFive JH7110 SoC.
+This patch series depends on series [1] and [2]. You can simply get or
+review the patches at the link [3].
 
-Hmm, so this commit indicates that series 6 raid cards should be always usi=
-ng
-MSI interrupts regardless of that msi param:
-https://github.com/torvalds/linux/commit/9022d375bd22869ba3e5ad3635f00427cf=
-b934fc
+[1]: https://lore.kernel.org/all/20221220005054.34518-1-hal.feng@starfivetech.com/
+[2]: https://lore.kernel.org/all/20221220005529.34744-1-hal.feng@starfivetech.com/
+[3]: https://github.com/hal-feng/linux/commits/visionfive2-minimal
 
-However it appears that the aac_msi check wasn't removed here, maybe it
-should have been?:
-https://github.com/torvalds/linux/blob/v6.1/drivers/scsi/aacraid/rx.c#L647
+Changes since v2:
+- Rebased on tag v6.1.
+- Dropped patch 8 because it was merged.
+Patch 1:
+- Made the links into "Link:" tags. (by Conor)
+- Corrected the board name to "VisionFive 2" instead of
+  "VisionFive V2" and added compatibles for version A and
+  version B of VisionFive 2. (by Emil)
+Patch 4:
+- Used "sifive,ccache0" compatible string to match. (by Conor)
+Patch 5:
+- Dropped "select SIFIVE_CCACHE" in config SOC_STARFIVE. (by Conor)
+- Dropped "starfive,jh7110-ccache" compatible in
+  drivers/soc/sifive/sifive_ccache.c.
+Patch 6:
+- Removed all "clock-frequency = <0>". (by Conor)
+- Sorted the nodes after their addresses. (by Emil)
+- Renamed "clk_rtc" to "rtc_osc".
+- Added "sifive,ccache0" compatible in the cache-controller node.
+- Renamed "JH7110_SYSCLK_APB_BUS_FUNC" to "JH7110_SYSCLK_APB_BUS" and
+  renamed "apb_bus_func" to "apb_bus".
+  Renamed "JH7110_SYSCLK_IOMUX" to "JH7110_SYSCLK_IOMUX_APB".
+  Renamed "JH7110_SYSRST_IOMUX" to "JH7110_SYSRST_IOMUX_APB".
+  Renamed "JH7110_AONRST_AON_IOMUX" to "JH7110_AONRST_IOMUX".
+- Removed "reg-names" in gpio nodes.
+Patch 7:
+- Corrected the board name to "VisionFive 2" instead of "VisionFive V2".
+- Renamed jh7110-starfive-visionfive-v2.dts to
+  jh7110-starfive-visionfive-2.dtsi.
+- Added dts for VisionFive 2 version A and version B boards.
+- In the chosen node, deleted "linux,initrd-start" and "linux,initrd-end"
+  and changed the value of "stdout-path" to "serial0:115200n8".
+- Changed the bias of uart0 "rx-pins" to
+  "bias-disable; /* external pull-up */".
+- Renamed "clk_rtc" to "rtc_osc".
+- Moved the gpio node behind the uart0 node.
 
->
-> Konstantin,
-> Is it possible for you or someone you know to test on your original test =
-bed with the "msi" set to "1", and post the results?
-> We are parallelly working on additional tests locally.
-> Please write to me if you need more information
->
->
-> Thanks in advance
-> Sagar
->
->
-> -----Original Message-----
-> From: Sagar.Biradar@microchip.com <Sagar.Biradar@microchip.com>
-> Sent: Tuesday, December 6, 2022 11:30 AM
-> To: james.hilliard1@gmail.com
-> Cc: martin.petersen@oracle.com; khorenko@virtuozzo.com; christian@grosseg=
-ger.com; aacraid@microsemi.com; Don Brace - C33706 <Don.Brace@microchip.com=
->; Tom White - C33503 <Tom.White@microchip.com>; linux-scsi@vger.kernel.org=
-; linux-kernel@vger.kernel.org
-> Subject: RE: [PATCH v3 0/1] aacraid: Host adapter Adaptec 6405 constantly=
- resets under high io load
->
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
-e content is safe
->
-> Hi James,
-> We were in the process of finding the related information and we have fin=
-ally found some details.
-> I am reviewing that as I write this email.
-> I will get back to you once I review and sort that information with more =
-details.
->
-> Thanks
-> Sagar
->
-> -----Original Message-----
-> From: James Hilliard <james.hilliard1@gmail.com>
-> Sent: Sunday, December 4, 2022 5:26 AM
-> To: Sagar Biradar - C34249 <Sagar.Biradar@microchip.com>
-> Cc: martin.petersen@oracle.com; khorenko@virtuozzo.com; christian@grosseg=
-ger.com; aacraid@microsemi.com; Don Brace - C33706 <Don.Brace@microchip.com=
->; Tom White - C33503 <Tom.White@microchip.com>; linux-scsi@vger.kernel.org=
-; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH v3 0/1] aacraid: Host adapter Adaptec 6405 constantly=
- resets under high io load
->
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
-e content is safe
->
-> On Thu, Nov 17, 2022 at 11:36 PM <Sagar.Biradar@microchip.com> wrote:
-> >
-> > Hi James,
-> > Thanks for your response.
-> > This issue seems to be slightly different and may have been originating=
- from the drive itself (not too sure).
->
-> Yeah, the drive was having hardware issues, although it does sound like a=
- potential error condition that's not being correctly handled by aacraid.
->
-> >
-> > The original issue I was talking about would still occur with the missi=
-ng legacy interrupt on certain processors.
-> > We are still actively looking into the old "int-x missing" issue that w=
-e suspect might possibly originate from the patch.
->
-> Hmm, are there any available details on this "int-x missing" issue, I cou=
-ldn't find any public details/reports relating to that.
->
-> Is there a list of CPU's known to be affected?
->
-> Does it occur in the vendor aacraid release that has this patch merged?
->
-> >
-> >
-> >
-> > -----Original Message-----
-> > From: James Hilliard <james.hilliard1@gmail.com>
-> > Sent: Thursday, November 17, 2022 3:26 AM
-> > To: Sagar Biradar - C34249 <Sagar.Biradar@microchip.com>
-> > Cc: martin.petersen@oracle.com; khorenko@virtuozzo.com;
-> > christian@grossegger.com; aacraid@microsemi.com; Don Brace - C33706
-> > <Don.Brace@microchip.com>; Tom White - C33503
-> > <Tom.White@microchip.com>; linux-scsi@vger.kernel.org;
-> > linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH v3 0/1] aacraid: Host adapter Adaptec 6405
-> > constantly resets under high io load
-> >
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know
-> > the content is safe
-> >
-> > On Tue, Nov 15, 2022 at 10:05 AM <Sagar.Biradar@microchip.com> wrote:
-> > >
-> > > Hi James,
-> > > I have looked into the patch thoroughly.
-> > > We suspect this change might expose an old legacy interrupt issue on =
-some processors.
-> >
-> > I did see this error once with this patch when a drive was having issue=
-s:
-> > [ 4306.357531] aacraid: Host adapter abort request.
-> >                aacraid: Outstanding commands on (0,1,41,0):
-> > [ 4335.030025] aacraid: Host adapter abort request.
-> >                aacraid: Outstanding commands on (0,1,41,0):
-> > [ 4335.030111] aacraid: Host adapter abort request.
-> >                aacraid: Outstanding commands on (0,1,41,0):
-> > [ 4335.030172] aacraid: Host adapter abort request.
-> >                aacraid: Outstanding commands on (0,1,41,0):
-> > [ 4335.189886] aacraid: Host bus reset request. SCSI hang ?
-> > [ 4335.189951] aacraid 0000:81:00.0: outstanding cmd: midlevel-0 [ 4335=
-.189989] aacraid 0000:81:00.0: outstanding cmd: lowlevel-0 [ 4335.190101] a=
-acraid 0000:81:00.0: outstanding cmd: error handler-3 [ 4335.190141] aacrai=
-d 0000:81:00.0: outstanding cmd: firmware-0 [ 4335.190177] aacraid 0000:81:=
-00.0: outstanding cmd: kernel-0 [ 4335.274070] aacraid 0000:81:00.0: Contro=
-ller reset type is 3 [ 4335.274142] aacraid 0000:81:00.0: Issuing IOP reset=
- [ 4365.862127] aacraid 0000:81:00.0: IOP reset succeeded [ 4365.895079] aa=
-craid: Comm Interface type2 enabled [ 4374.938119] aacraid 0000:81:00.0: Sc=
-heduling bus rescan [ 4387.022913] sd 0:1:41:0: [sdi] 27344764928 512-byte =
-logical blocks:
-> > (14.0 TB/12.7 TiB)
-> > [ 4387.022988] sd 0:1:41:0: [sdi] 4096-byte physical blocks [ 5643.7143=
-01] aacraid: Host adapter abort request.
-> >                aacraid: Outstanding commands on (0,1,41,0):
-> > [ 5672.349423] BUG: kernel NULL pointer dereference, address: 000000000=
-0000018 [ 5672.351532] #PF: supervisor read access in kernel mode [ 5672.35=
-3262] #PF: error_code(0x0000) - not-present page [ 5672.354860] PGD 8000007=
-ad6ac7067 P4D 8000007ad6ac7067 PUD 7af0892067 PMD 0 [ 5672.356444] Oops: 00=
-00 [#1] SMP PTI
-> > [ 5672.358075] CPU: 9 PID: 644201 Comm: cc1plus Tainted: P           O
-> >      5.15.64-1-pve #1
-> > [ 5672.359749] Hardware name: Supermicro Super Server/X10DRC, BIOS 3.4
-> > 05/21/2021
-> > [ 5672.361465] RIP: 0010:dma_direct_unmap_sg+0x49/0x1a0
-> > [ 5672.363223] Code: ec 20 89 4d d4 4c 89 45 c8 85 d2 0f 8e bb 00 00
-> > 00 49 89 fe 49 89 f7 89 d3 45 31 ed 4c 8b 05 ae fd b0 01 49 8b be 60
-> > 02 00 00 <45> 8b 4f 18 49 8b 77 10 49 f7 d0 48 85 ff 0f 84 06 01 00 00
-> > 4c 8b [ 5672.367024] RSP: 0000:ffffa4ff58c7cde0 EFLAGS: 00010046 [
-> > 5672.369020] RAX: 0000000000000000 RBX: 0000000000000003 RCX:
-> > 0000000000000001 [ 5672.371073] RDX: 0000000000000003 RSI:
-> > 0000000000000000 RDI: 0000000000000000 [ 5672.373007] RBP:
-> > ffffa4ff58c7ce28 R08: 0000000000000000 R09: 0000000000000001 [
-> > 5672.374795] R10: 0000000000000000 R11: ffffa4ff58c7cff8 R12:
-> > 0000000000000000 [ 5672.376418] R13: 0000000000000000 R14:
-> > ffff88968e1ec0d0 R15: 0000000000000000 [ 5672.378136] FS:
-> > 00007ff103d25ac0(0000) GS:ffff89547fac0000(0000)
-> > knlGS:0000000000000000
-> > [ 5672.379760] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033 [ 5672=
-.381402] CR2: 0000000000000018 CR3: 0000007ae90cc004 CR4: 00000000001706e0 =
-[ 5672.383023] Call Trace:
-> > [ 5672.384673]  <IRQ>
-> > [ 5672.386282]  ? task_tick_fair+0x88/0x530 [ 5672.386469] aacraid: Hos=
-t adapter abort request.
-> >                aacraid: Outstanding commands on (0,1,41,0):
-> > [ 5672.387921]  dma_unmap_sg_attrs+0x32/0x50 [ 5672.391431] aacraid: Ho=
-st adapter abort request.
-> >                aacraid: Outstanding commands on (0,1,41,0):
-> > [ 5672.393273]  scsi_dma_unmap+0x3b/0x50 [ 5672.397079] aacraid: Host a=
-dapter abort request.
-> >                aacraid: Outstanding commands on (0,1,41,0):
-> > [ 5672.398180]  aac_srb_callback+0x88/0x3c0 [aacraid]
-> >
-> > Does that look related?
-> >
-> > >
-> > > We are currently debugging and digging further details to be able to =
-explain it in much detailed fashion.
-> > > I will keep you the thread posted as soon as we have something intere=
-sting.
-> > >
-> > > Sagar
-> > >
-> > > -----Original Message-----
-> > > From: James Hilliard <james.hilliard1@gmail.com>
-> > > Sent: Monday, November 14, 2022 12:13 AM
-> > > To: Sagar Biradar - C34249 <Sagar.Biradar@microchip.com>
-> > > Cc: martin.petersen@oracle.com; khorenko@virtuozzo.com;
-> > > christian@grossegger.com; aacraid@microsemi.com; Don Brace - C33706
-> > > <Don.Brace@microchip.com>; Tom White - C33503
-> > > <Tom.White@microchip.com>; linux-scsi@vger.kernel.org; Linux Kernel
-> > > Mailing List <linux-kernel@vger.kernel.org>
-> > > Subject: Re: [PATCH v3 0/1] aacraid: Host adapter Adaptec 6405
-> > > constantly resets under high io load
-> > >
-> > > EXTERNAL EMAIL: Do not click links or open attachments unless you
-> > > know the content is safe
-> > >
-> > > On Thu, Oct 27, 2022 at 1:17 PM <Sagar.Biradar@microchip.com> wrote:
-> > > >
-> > > > Hi James and Konstantin,
-> > > >
-> > > > *Limiting the audience to avoid spamming*
-> > > >
-> > > > Sorry for delayed response as I was on vacation.
-> > > > This one got missed somehow as someone else was looking into this a=
-nd is no longer with the company.
-> > > >
-> > > > I will look into this, meanwhile I wanted to check if you (or someo=
-ne else you know) had a chance to test this thoroughly with the latest kern=
-el?
-> > > > I will get back to you with some more questions or the confirmation=
- in a day or two max.
-> > >
-> > > Did this ever get looked at?
-> > >
-> > > As this exact patch was merged into the vendor aacraid a while ago I'=
-m not sure why it wouldn't be good to merge to mainline as well.
-> > >
-> > > Vendor aacraid release with this patch merged:
-> > > https://download.adaptec.com/raid/aac/linux/aacraid-linux-src-1.2.1-
-> > > 60
-> > > 001.tgz
-> > >
-> > > >
-> > > >
-> > > > Thanks for your patience.
-> > > > Sagar
-> > > >
-> > > >
-> > > > -----Original Message-----
-> > > > From: James Hilliard <james.hilliard1@gmail.com>
-> > > > Sent: Thursday, October 27, 2022 1:40 AM
-> > > > To: Martin K. Petersen <martin.petersen@oracle.com>
-> > > > Cc: Konstantin Khorenko <khorenko@virtuozzo.com>; Christian
-> > > > Gro=C3=9Fegger <christian@grossegger.com>; linux-scsi@vger.kernel.o=
-rg;
-> > > > Adaptec OEM Raid Solutions <aacraid@microsemi.com>; Sagar Biradar
-> > > > -
-> > > > C34249 <Sagar.Biradar@microchip.com>; Linux Kernel Mailing List
-> > > > <linux-kernel@vger.kernel.org>; Don Brace - C33706
-> > > > <Don.Brace@microchip.com>
-> > > > Subject: Re: [PATCH v3 0/1] aacraid: Host adapter Adaptec 6405
-> > > > constantly resets under high io load
-> > > >
-> > > > EXTERNAL EMAIL: Do not click links or open attachments unless you
-> > > > know the content is safe
-> > > >
-> > > > On Wed, Oct 19, 2022 at 2:03 PM Konstantin Khorenko <khorenko@virtu=
-ozzo.com> wrote:
-> > > > >
-> > > > > On 10.10.2022 14:31, James Hilliard wrote:
-> > > > > > On Tue, Feb 22, 2022 at 10:41 PM Martin K. Petersen
-> > > > > > <martin.petersen@oracle.com> wrote:
-> > > > > >>
-> > > > > >>
-> > > > > >> Christian,
-> > > > > >>
-> > > > > >>> The faulty patch (Commit: 395e5df79a9588abf) from 2017
-> > > > > >>> should be repaired with Konstantin Khorenko (1):
-> > > > > >>>
-> > > > > >>>    scsi: aacraid: resurrect correct arc ctrl checks for
-> > > > > >>> Series-6
-> > > > > >>
-> > > > > >> It would be great to get this patch resubmitted by Konstantin
-> > > > > >> and acked by Microchip.
-> > > >
-> > > > Can we merge this as is since microchip does not appear to be maint=
-aining this driver any more or responding?
-> > > >
-> > > > > >
-> > > > > > Does the patch need to be rebased?
-> > > > >
-> > > > > James, i have just checked - the old patch (v3) applies cleanly o=
-nto latest master branch.
-> > > > >
-> > > > > > Based on this it looks like someone at microchip may have alrea=
-dy reviewed:
-> > > > > > v3 changes:
-> > > > > >   * introduced another wrapper to check for devices except for =
-Series 6
-> > > > > >     controllers upon request from Sagar Biradar (Microchip)
-> > > > >
-> > > > > Well, back in the year 2019 i've created a bug in RedHat
-> > > > > bugzilla
-> > > > > https://bugzilla.redhat.com/show_bug.cgi?id=3D1724077
-> > > > > (the bug is private, this is default for Redhat bugs)
-> > > > >
-> > > > > In this bug Sagar Biradar (with the email @microchip.com)
-> > > > > suggested me to rework the patch - i've done that and sent the v3=
-.
-> > > > >
-> > > > > And nothing happened after that, but in a ~year (2020-06-19) the
-> > > > > bug was closed with the resolution NOTABUG and a comment that S6 =
-users will find the patch useful.
-> > > > >
-> > > > > i suppose S6 is so old that RedHat just does not have customers
-> > > > > using it and Microchip company itself is also not that interested=
- in handling so old hardware issues.
-> > > > >
-> > > > > Sorry, i was unable to get a final ack from Microchip, i've
-> > > > > written direct emails to the addresses which is found in the
-> > > > > internet, tried to connect via linkedin, no luck.
-> > > > >
-> > > > > --
-> > > > > Konstantin Khorenko
+  v2: https://lore.kernel.org/all/20221118011714.70877-1-hal.feng@starfivetech.com/
+
+Changes since v1:
+- Rebased on tag v6.1-rc5.
+- Added blank line in patch 1. (by Krzysztof)
+- Rebased patch 4 and 6 on the newest code. (by Conor)
+- Dropped patch 5. (by Conor)
+- Removed the quirk of JH7100 in patch 6, considering this patch series
+  should only add support for JH7110.
+- For patch 27, added Co-developed-by tag for Jianlong and me. Renamed
+  cpu labels to "S76_0", "U74_*" instead of "cpu*" following the style
+  of jh7100.dtsi. Moved all "clock-frequency" properties to the board dts.
+  Rewrote clock-controller nodes and deleted reset-controller nodes for
+  using auxiliary bus. Rewrote gpio nodes following generic pinctrl
+  bindings. Removed the redundant second reset entry of uart nodes.
+- For patch 28, added Co-developed-by tag for Jianlong and me. Added a
+  chosen node. Removed reserved-memory node. Added fixed frequency clock
+  nodes for overriding the "clock-frequency" properties. Rewrote the gpio
+  nodes following generic pinctrl bindings.
+- Dropped patch 30. (by Conor)
+- Reworded the commit messages.
+
+  v1: https://lore.kernel.org/all/20220929143225.17907-1-hal.feng@linux.starfivetech.com/
+
+Emil Renner Berthing (7):
+  dt-bindings: riscv: Add StarFive JH7110 SoC and VisionFive 2 board
+  dt-bindings: timer: Add StarFive JH7110 clint
+  dt-bindings: interrupt-controller: Add StarFive JH7110 plic
+  dt-bindings: sifive,ccache0: Support StarFive JH7110 SoC
+  soc: sifive: ccache: Add StarFive JH7110 support
+  riscv: dts: starfive: Add initial StarFive JH7110 device tree
+  riscv: dts: starfive: Add StarFive JH7110 VisionFive 2 board device
+    tree
+
+ .../sifive,plic-1.0.0.yaml                    |   1 +
+ .../bindings/riscv/sifive,ccache0.yaml        |   9 +-
+ .../devicetree/bindings/riscv/starfive.yaml   |   6 +
+ .../bindings/timer/sifive,clint.yaml          |   1 +
+ arch/riscv/boot/dts/starfive/Makefile         |   1 +
+ .../jh7110-starfive-visionfive-2-va.dts       |  13 +
+ .../jh7110-starfive-visionfive-2-vb.dts       |  13 +
+ .../jh7110-starfive-visionfive-2.dtsi         | 111 +++++
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      | 411 ++++++++++++++++++
+ drivers/soc/Makefile                          |   2 +-
+ drivers/soc/sifive/Kconfig                    |   2 +-
+ 11 files changed, 567 insertions(+), 3 deletions(-)
+ create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-va.dts
+ create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-vb.dts
+ create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+ create mode 100644 arch/riscv/boot/dts/starfive/jh7110.dtsi
+
+
+base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
+prerequisite-patch-id: 4dc515731ce237184553c1606ffb3afaeb51c3d8
+prerequisite-patch-id: 09c98554df52d17ba5fd604125f8cdd62cbe80d1
+prerequisite-patch-id: a798370d170dc2bcc79ed86f741c21c1e6d87c78
+prerequisite-patch-id: bd9fd8b5cb2376dc7a5e08e1a1fbb969cf475926
+prerequisite-patch-id: c57ebb83bc43ccd2a8366ff166eb499da1e1d2cf
+prerequisite-patch-id: a1673a9e9f19d6fab5a51abb721e54e36636f067
+prerequisite-patch-id: 94860423c7acc9025249d4bb36652a585bd0a797
+prerequisite-patch-id: b5084253283929d9a6d0e66c350400c7c85d034d
+prerequisite-patch-id: 6e369dbe9dca2785e4ea7d0b80e525e227a90a6e
+prerequisite-patch-id: e08806183c152714c563f3a21c6d7b2f539c4d6e
+prerequisite-patch-id: 79db8036abdc48fd36da227652ec62627a6b548b
+prerequisite-patch-id: 06971b8e6bddc0e87e63bfdb0ce8bfb653bd73aa
+prerequisite-patch-id: 16309a0e23811a2c55d2e56886de3e8eccc51554
+prerequisite-patch-id: bf4f7ab0b6cfa90b6e49e66c7d75ed2eaaebbe78
+prerequisite-patch-id: 38468d532e87867990055d3320679f18c5f52278
+prerequisite-patch-id: 4710f2ac22dca0bdd9ff5d744d2c37cab3c74515
+-- 
+2.38.1
+
