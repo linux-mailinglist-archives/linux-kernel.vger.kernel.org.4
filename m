@@ -2,143 +2,349 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 062C7652937
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 23:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6CEB65293C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 23:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiLTW4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 17:56:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
+        id S234052AbiLTW5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 17:57:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiLTW4G (ORCPT
+        with ESMTP id S233998AbiLTW5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 17:56:06 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2054.outbound.protection.outlook.com [40.107.244.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AFABA8;
-        Tue, 20 Dec 2022 14:56:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Nnl19Vri52YAbEtZ7UYlJo+gfKyrF4lOlX4wAn8G/Y4eGN19kEwax+UWmfVNmxD84ZtkkrqI10rZJlnWEOiVZRdGPn0ATaEzZVFD05+xNUvPgqmjk432g7/r6AQw9ka5za4ST5ZN+aDTIyho/gQQjMa66RmEW/pm1U+Q1Pd/il5ogKqbCIWBxyLtzPnwbZYJAwpbE7PVQC0TwIAAPGZsHpbbLe+bw9+L8orqogYVcojdky34YkWVgWzhymiyZ49sbnsIYrA+rOiYjK/93SXaamlGFGn2XMWhTTOG8GWJIQQx2gv7vNiSEjADEdHE1/WWQ/k2Doyoo19NZ6ZJqPawhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xvBVB/DF1XXxqUlj7HPicxWAqIHk0fcS167YG27OAdc=;
- b=D/B1mFb1DPTHIth7Pfb761GtVekS2vQ5ixZkZWXmOF1hZQoNmstB1eESHIm6nav9cWll4kS6JKzcm/+0Moux6P1Py6i/a1zftZG+kB19c85b4WcXEhVbXjpPFa37Nk8UAv+vQ2K4l26b8Az3mjUSw8hSPHqDx1X46W+AB8QkwKnMNekfRyQHVuvV1mL80Su/vaMtQnqfT6pCXq8xInIA+SAFiJT/EVvPgTGmk3jcMoBq8OBGV4vBPwu7B7RG+aZ3jN0Gc4KwGlQwjuxEphYVNwV6WHIWwGtSwf3YI7cbATRzmc7Q3yt6owkahLiJd2XgDbgdHm40zPZMuABs4mUqMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xvBVB/DF1XXxqUlj7HPicxWAqIHk0fcS167YG27OAdc=;
- b=d8TgZb26VryaxCm7vese4z3HdLbbMH92sqemugNEIqTs/z5acr+JsIYdTGCS1iW1zTSC1gJD0bb/Yuktq814tt6qwpssu3lJiETbjeOw1JlTA8WvlxF6WTjcFsmGwBpK5BLnKyulRfYmZ+wxCG2dbZI+tG/8vlcxJ/x1QsrmkbUkN673JI2JX7Gr6lF8iLN5rmIg29H7YN7t7bg0gsFsTG/k3tiDCb+YwMeoyR4cd0j/vzDPMoswXyb0QxDKnkhkKGWyOcQUf2dW2tW+0JuqG6zeN1ZZFL8r/ZJJl0fu72zbiimxiQkvtzEHZ7T10Po+c0B3RQj9tSA7Ot76LnWU6A==
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
- by DM4PR12MB6493.namprd12.prod.outlook.com (2603:10b6:8:b6::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Tue, 20 Dec
- 2022 22:56:01 +0000
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::b84c:b6e:dc0:8d7]) by MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::b84c:b6e:dc0:8d7%2]) with mapi id 15.20.5924.016; Tue, 20 Dec 2022
- 22:56:01 +0000
-From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Jens Axboe <axboe@kernel.dk>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH] virtio_blk: zone append in header type tweak
-Thread-Topic: [PATCH] virtio_blk: zone append in header type tweak
-Thread-Index: AQHZFHH4oOTnmKndB0uRqhZGeI3qjq53Y5AA
-Date:   Tue, 20 Dec 2022 22:56:00 +0000
-Message-ID: <c06737ab-66d1-77bd-7afa-0a23cbe6aeef@nvidia.com>
-References: <20221220125154.564265-1-mst@redhat.com>
-In-Reply-To: <20221220125154.564265-1-mst@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MW2PR12MB4667:EE_|DM4PR12MB6493:EE_
-x-ms-office365-filtering-correlation-id: 9686202d-af2a-4bad-64be-08dae2dd5d7c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hBxoDS+YoyAgosiNlKyFBt5tw7IZaxYaUYqU/8Jdkt0fDiNlQlA58zxiRYmQw3eNIIaKIHpQ6UXv/rpJp2acquMnzaOv6x10fMJY2bzHckTIi9PeIsrgV9PAiwgHEsNnGZT/supkhzkWgYBaD/rb6OpIETU2oW6b0Kh3NP7v063fQHqvy6JFzLL7mY6l6K3JyzV9nYourfspyAZSsEpcfKnegvqew6lqwBXMS3FLbeH/ntRB8GtIbXmLpf2b87MzbAhRta3Yqy4VKBGBy1Pl6jE0566t6qK/7oz3boS6ToCgt8jK/Q1Mbkym0bMmcjs68+JOJa+Ysj2vy01a3BrxQlHVkA9b8Uex46OlegSsMLAE9eDshI1BfY0qO7Hd+BcKK32obTSuGx+Ecc2dOip7FacndhP85cdUKdKOgERh9WYVJquru4CleAQpKVh8sgsDHeDySgngAnYNoX9dBrogR5hM0B5S8n84VCDWZ4a5EpH+JwvcIwAdyZ06MJD2hIxD4JkDXST4etGqV+eNXcQw6epAtqUK9bXmNQlsnFqx3w63TMZkUR9GgPgzJ/KAFPyLTgxQS/1Ro7E5+Lkljk+002cptEHftQaC6TsUBpQq7WhFQMoTdztrNmOEIa81d3UW7bK4Dxc+GicSAwl3jGlxeZH//0d2AQxs1go0I4BR2UHaQTGtmyx7Qv/6pnkqzcn6unhIgcN+/X/ciP0thIKUP4z4OgWefHw//yL+1VgiunqNlOCxkTn45pXLLUrZwc13
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(366004)(376002)(39860400002)(396003)(451199015)(4326008)(8936002)(478600001)(91956017)(66476007)(76116006)(66556008)(41300700001)(64756008)(110136005)(66946007)(36756003)(38100700002)(53546011)(122000001)(83380400001)(38070700005)(6486002)(86362001)(6512007)(316002)(8676002)(186003)(6506007)(66446008)(2616005)(71200400001)(31696002)(2906002)(31686004)(54906003)(5660300002)(4744005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TFhRZ2FPRjZvNFZQSkRUY0FXQk9uQm5uamJuOHpPYWxPMVNFSVFXT0RWR1Rw?=
- =?utf-8?B?OUhaWFhFa0kra0I2NGhiQjdqenlaeGt2eUI0Z0dMUVdReU9Zd0pPZXIxc1pK?=
- =?utf-8?B?T29ONlpSNWlWaUdyU0ZnS1JNNE1zM2hoYmhodWhCY1lGTXRvR0VHellpcWV3?=
- =?utf-8?B?Y3VvQ2kwd0YvcTZodGZDMk1ERzRBZ2JFdC84enR3QUFhT2VmczdMZHBEUFpR?=
- =?utf-8?B?V2V4MElVblYvQXdLNE9QYlJ1c092cGRidkFENjBsbW83TmxYaUtiZWliZDFp?=
- =?utf-8?B?dk9jUmlUWXc1VDlvR1RMSDFEMmlodVFITzdmQWJxQldDSlV2bzMzY2tvOWJ0?=
- =?utf-8?B?emNySkM0QXpXZE1hU0VLeTVpSEgxU1hzanRnNlY2MXpJa0hVQ2VzbFd0R3pz?=
- =?utf-8?B?VnVhQmZvYlhzMklEMStWb0V3SVY3NVUxZmxTTVF3a2dLTWxHVjJPbmw5NXZY?=
- =?utf-8?B?V04yL1V4dnExM2R2ck1qdFBwazQ0UzNONC8yVm9VY09FSStHNlVWNXVidTgx?=
- =?utf-8?B?aS84TTlscDl4dEhsRmc1RzV2aHNlTG85ME11blZObktZWHVENlFWdzlYajBR?=
- =?utf-8?B?a1lGdUE0cW84ZVZGN011TzhiRFJ0cDc0K201RVBEczJZNG5IejZrZHRMWE1w?=
- =?utf-8?B?TXVPSWo4Z242eTBoQi9PZkZpYkIyVEh5RkM5cGZoU2w4VVdYb3hUeHlMaWZm?=
- =?utf-8?B?UXYyWHI0WkNDQm9DM3dlTmdLMVJiZHE1Z1ZGbGRjVzhEeExzOUE3eTJuN3lR?=
- =?utf-8?B?UjlqMDlLL1p3ZGl2SlVGZEc0aUFyWkpSL2J3YUNrdS9SUDgrYVJ5dEFhZm9P?=
- =?utf-8?B?aE1qSXRVV3R4MDB4Q0xkN0RPNGs0QVlXa05UWjF2Y2F6YXgvRy9wYy9aemhR?=
- =?utf-8?B?Y2I3R2x4M3pYOFlvTWsvY1V3Yk9QTFIvSzVPRElGWWI2a2Jza3J4YjVtejlC?=
- =?utf-8?B?WmNwRkl5czBuNUYzL0c2SGJ5V1pKOERKUnY5ZzBIWWpmTWR2TnJlZTBhTS9h?=
- =?utf-8?B?cjY4d3JUVUliS0ozOGdEOUIzUmZYN1J4MGZGWFF2Q1FQVmhsOXdpblA4V202?=
- =?utf-8?B?eEliVFpQUnNQN29BRmxtaUhNV3c5bWRrenRPSElPQjl3cy8yay9zMmpjZkpY?=
- =?utf-8?B?VmxjanladHp4Wjhyc0dkcGlseTg0SElvWDhieU9aNDZIcUlUODVicW5EUGFs?=
- =?utf-8?B?eUgvcVJ2S1Q0a0JRZjdXdG9nSmNlRGlHTTJMVjRIakhWK1dCYXVXZjIwZVZR?=
- =?utf-8?B?NE5YdVRlakxoaVR2QU55S1dKekRHbHowMTgxK0pwNTNCeFZBZVJ3cWNlQTV2?=
- =?utf-8?B?ZUhXeFFFUzBiRGRab1dKUnFYRGVTTE90ekJVNmgySzIrYmwvVzZzTmgydzc2?=
- =?utf-8?B?NStmWVcvZlR4aVpGZjByeGJFb2lVY3pNV2d1R2VIU0xvWjVDT3BQeDdzZzBr?=
- =?utf-8?B?Y3ZHd1lmeFZneUNBR25lU2U4WWtLdHZpaE5lQ1hIYlRSYjdwT01weEpiL01o?=
- =?utf-8?B?bUtvS3hBSUxSRGpYL25HaC9DOWE2NW9JM2ZTZjYzWnRkZW5nWDZsSlYzVUUx?=
- =?utf-8?B?NUJBbEFtN3diNUJKR2lkS2V3NndUc1piLzlYcVdJNUlFMnF1ZzZSVG84YVoy?=
- =?utf-8?B?VGdNSEZMU09vckI5TkVsd3NlU0REWXpsc0hKSXZHL2hUd2dzRHUzTnNsQ2I0?=
- =?utf-8?B?b0FLMitwTm9RZlE1cTZTTmhvOVpZK3VTVE4zbktrT05DVFQyYTl4NE0zbVMr?=
- =?utf-8?B?OVh2WXpPVXNUMGtxUjRVNEZrODJzNU9Qc0FRMDZkSDR3Nk55NVY3eVorb1ll?=
- =?utf-8?B?TnJEVi9TRXFtWEJDY2xmWEFuazFHbVBjUE4wNXRLb3lTM3NDb3pBYkFBYnY5?=
- =?utf-8?B?QVEzdVpsWEYyMXZhTThtR0ZqTXZvbURCdFpMK3BjbEx4SFk3M1lFbmFRaDlW?=
- =?utf-8?B?ald1R0NmaUFLMGJVbVJEM3ZhcGdIczRMRno1NFV0YVo5RWJrYTFxQVk0RFNv?=
- =?utf-8?B?WEhDUHlGYW84WEpNRmhwQ2JIK1FYM21menJwWWJGMWt5RGNjL01RenRzckxB?=
- =?utf-8?B?d2wzQ3Vpd2RDWUNiTFlHeWF1dDV0T1cxZnRLc3NLWG4xRHlaRXdGRWp5MVFN?=
- =?utf-8?B?aTRQRyt3MmR0UElWK1IwdTQxQ09zVUFSWHg0MUFXQitybks4RFlEOWZvWXh6?=
- =?utf-8?B?ZkE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <507357BC8CBA4A4BBAC5A0C7A6150A05@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 20 Dec 2022 17:57:00 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260391F2E5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 14:56:59 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id fc4so32693396ejc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 14:56:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yxqcWft59OCWANRJjSvyfqsF4e3tYjtaN8mGnqPFcrM=;
+        b=HwKksefmkXM1Z0jtxl0KaOpO1Y00sA/hkiAIB8Wpd6CjmUrozXs7vT/NXfy31uZYde
+         1FCcoj9YELckVnNjL240yzzcTbzFgL2L+NEGdzEvlFZ3vb1cQKK4tkvGyBoZRcFnn/60
+         /ywhFDj9xRGFGQGWgl2p51VerCzEBXnXN8ygo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yxqcWft59OCWANRJjSvyfqsF4e3tYjtaN8mGnqPFcrM=;
+        b=KJj4+kR/pt4HXSVMxnGvphqNTMu9QkJ/PMRY0+UtM0Gd0HvAZWVFBm8Tn1MQyFGqhZ
+         7m4DZ4gBX1Ho1Wz6k8CUxLtsuAUsQksbcis5fYZ9BvPaINQQrqqArEA2fVlxBxuRjqLX
+         OQ1mTk4gdMm7+6WFYeniXr5xcgKjZe2fE/SNgt551Y9Vs/e72YCAIId1OQmw8BrPQ6+E
+         nNZOeDD0OSoJSzo89uV9v60355erJ7C+W527htAhr7EC8ZSnQ7HonYHoJMWeS4KA3y3M
+         oz5AZf2E6stxJAgrmIUwVgkCW7J+xJI616SxKt2qosqDJy8qsZauMv49lqnAu0bjOh+e
+         NuKg==
+X-Gm-Message-State: AFqh2krF7oUcwDE/b2cMlp8RrD2ocYJGhXKoTS1NgVe+VOWxWqG0QFZy
+        8ht3R91EUtUTzGgxnFjo8GgyXg==
+X-Google-Smtp-Source: AMrXdXt7nJbqWOjvERSz/X2De5muQiPY8l6Cv4NcDW8mCWLM6bENx7erv5Ztp8N+ogBJb5te6PChKA==
+X-Received: by 2002:a17:906:bcd1:b0:7c0:e4b6:601d with SMTP id lw17-20020a170906bcd100b007c0e4b6601dmr3762377ejb.7.1671577017707;
+        Tue, 20 Dec 2022 14:56:57 -0800 (PST)
+Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id v18-20020a170906293200b0078e0973d1f5sm6219658ejd.0.2022.12.20.14.56.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 14:56:57 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 20 Dec 2022 23:56:44 +0100
+Subject: [PATCH v4] media: uvcvideo: Remove void casting for the status endpoint
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9686202d-af2a-4bad-64be-08dae2dd5d7c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Dec 2022 22:56:00.9960
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: k+YxDC19aIFXcEsuJ7Izd6TQduqJWSqbqzlDx7Nr+YihTubOQyNxNW4pKlcxpLAEpZ+sCJw+se3VHPJ631vB8g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6493
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221214-uvc-status-alloc-v4-0-f8e3e2994ebd@chromium.org>
+To:     Yunke Cao <yunkec@chromium.org>, Max Staudt <mstaudt@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-kernel@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8364; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=GLzZxhMplXLe8qPa6WyRPuVdAJ3PPq3ffZj4Q/FP2SA=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjoj21qRQBOkeRbT2hKyyen551oMXpQehjq6rAKSQn
+ aI9oE4yJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY6I9tQAKCRDRN9E+zzrEiNcSD/
+ 9jl03axlJkkvj4ZUNN3zGLW2+ELC1r705TtJ07PMqy/KYzc2SHiZQh3p9CVNQZkPRXx6Hu1SAJoXAS
+ mFHmovwsB6NFJl6onobaLNsbRb3l8fnyuzgSs0bfn1NYmXIVAweSimsIp8XcPqI1wzmvY4v6WJjwW+
+ NGOyxjWOGA/N76Fssruv3QwT1mQapdZVK5CtUDDJGKdJjnrrjXm78Ff7rokSaAXuRcRrgKidiYmuZH
+ R0+4fNfG2D9UJVoZGJ7rmd0ySBY5ewu+ZzF+a+GLftqCJ6WBpxZEcOrWBZt+DekIxch1U8SRret7KP
+ +cGq0MQd1DyKKafOa/2k33UgfHGBKnTPuKDpEk+mbByB8cFLZhQash2as9ei+DITKdCFOQiraSjw/w
+ FIdWaNiEn9WLgHxp7zxeB+2nqke/Ci1nMicuhsNW51zA4xXyOWtBqCpuEBpBhx/RjB9J8sxHLG84zh
+ 5r4r4NIT5G0OL4iYMh8awwjb7rYOg/KBP0xFjZt0SD4j6LYbHhscZFhZOUUJzmZunzcRGZ+A5HhW8X
+ PYNuMHYhjC96RP+/Lqp7cJGUoN4dnTYj2oXHcfJUGYT/7zI1Z+XN6dx3va9uTmQOLF8cBJnop/pBil
+ EbajJhB+N9TRUXmzqtD9bjO+0D2dniJO3QDk/ciiL6mlWuBuOWK1UXijCnkg==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTIvMjAvMjIgMDQ6NTIsIE1pY2hhZWwgUy4gVHNpcmtpbiB3cm90ZToNCj4gdmlydGlvIGJs
-ayByZXR1cm5zIGEgNjQgYml0IGFwcGVuZF9zZWN0b3IgaW4gYW4gaW5wdXQgYnVmZmVyLA0KPiBp
-biBMRSBmb3JtYXQuIFRoaXMgZmllbGQgaXMgbm90IHRhZ2dlZCBhcyBMRSBjb3JyZWN0bHksIHNv
-DQo+IGV2ZW4gdGhvdWdoIHRoZSBnZW5lcmF0ZWQgY29kZSBpcyBvaywgd2UgZ2V0IHdhcm5pbmdz
-IGZyb20gc3BhcnNlOg0KPiANCj4gZHJpdmVycy9ibG9jay92aXJ0aW9fYmxrLmM6MzMyOjMzOiBz
-cGFyc2U6IHNwYXJzZTogY2FzdCB0byByZXN0cmljdGVkIF9fbGU2NA0KPiANCj4gTWFrZSBzcGFy
-c2UgaGFwcHkgYnkgdXNpbmcgdGhlIGNvcnJlY3QgdHlwZS4NCj4gDQoNClJldmlld2VkLWJ5OiBD
-aGFpdGFueWEgS3Vsa2FybmkgPGtjaEBudmlkaWEuY29tPg0KDQotY2sNCg0K
+Make the code more resiliant, by replacing the castings with proper
+structure definitions and using offsetof() instead of open coding the
+location of the data.
+
+Suggested-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+media: uvcvideo: Code cleanup for dev->status
+
+Lets remove all the castings and open coding of offsets for it.
+
+To: Yunke Cao <yunkec@chromium.org>
+To: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Max Staudt <mstaudt@chromium.org>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes in v4:
+- Fix sizeof() error.
+- Keep kzalloc(). Thanks Alan, Christoph and Jonathan
+- Reducing the cc: to:
+- Link to v3: https://lore.kernel.org/r/20221214-uvc-status-alloc-v3-0-9a67616cc549@chromium.org
+
+Changes in v3:
+- Split the patch in two
+- Add linux-usb, Alan and Christoph for the allocation change.
+- Link to v2: https://lore.kernel.org/r/20221214-uvc-status-alloc-v2-0-3f1cba6fc734@chromium.org
+
+Changes in v2:
+- using __aligned(), to keep the old alignment
+- Adding Johnathan Cameron to:, as he has some similar experience with iio
+- Adding Ming Lei, as this patch kind of revert his patch.
+- Link to v1: https://lore.kernel.org/r/20221214-uvc-status-alloc-v1-0-a0098ddc7c93@chromium.org
+---
+ drivers/media/usb/uvc/uvc_status.c | 66 +++++++++++++-------------------------
+ drivers/media/usb/uvc/uvcvideo.h   | 25 +++++++++++++--
+ 2 files changed, 45 insertions(+), 46 deletions(-)
+
+diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
+index 7518ffce22ed..00f4036d0683 100644
+--- a/drivers/media/usb/uvc/uvc_status.c
++++ b/drivers/media/usb/uvc/uvc_status.c
+@@ -73,38 +73,24 @@ static void uvc_input_report_key(struct uvc_device *dev, unsigned int code,
+ /* --------------------------------------------------------------------------
+  * Status interrupt endpoint
+  */
+-struct uvc_streaming_status {
+-	u8	bStatusType;
+-	u8	bOriginator;
+-	u8	bEvent;
+-	u8	bValue[];
+-} __packed;
+-
+-struct uvc_control_status {
+-	u8	bStatusType;
+-	u8	bOriginator;
+-	u8	bEvent;
+-	u8	bSelector;
+-	u8	bAttribute;
+-	u8	bValue[];
+-} __packed;
+-
+ static void uvc_event_streaming(struct uvc_device *dev,
+-				struct uvc_streaming_status *status, int len)
++				struct uvc_status *status, int len)
+ {
+-	if (len < 3) {
++	if (len <= offsetof(struct uvc_status, bEvent)) {
+ 		uvc_dbg(dev, STATUS,
+ 			"Invalid streaming status event received\n");
+ 		return;
+ 	}
+ 
+ 	if (status->bEvent == 0) {
+-		if (len < 4)
++		if (len <= offsetof(struct uvc_status, streaming))
+ 			return;
++
+ 		uvc_dbg(dev, STATUS, "Button (intf %u) %s len %d\n",
+ 			status->bOriginator,
+-			status->bValue[0] ? "pressed" : "released", len);
+-		uvc_input_report_key(dev, KEY_CAMERA, status->bValue[0]);
++			status->streaming.button ? "pressed" : "released", len);
++		uvc_input_report_key(dev, KEY_CAMERA,
++				     status->streaming.button);
+ 	} else {
+ 		uvc_dbg(dev, STATUS, "Stream %u error event %02x len %d\n",
+ 			status->bOriginator, status->bEvent, len);
+@@ -131,7 +117,7 @@ static struct uvc_control *uvc_event_entity_find_ctrl(struct uvc_entity *entity,
+ }
+ 
+ static struct uvc_control *uvc_event_find_ctrl(struct uvc_device *dev,
+-					const struct uvc_control_status *status,
++					const struct uvc_status *status,
+ 					struct uvc_video_chain **chain)
+ {
+ 	list_for_each_entry((*chain), &dev->chains, list) {
+@@ -143,7 +129,7 @@ static struct uvc_control *uvc_event_find_ctrl(struct uvc_device *dev,
+ 				continue;
+ 
+ 			ctrl = uvc_event_entity_find_ctrl(entity,
+-							  status->bSelector);
++						     status->control.bSelector);
+ 			if (ctrl)
+ 				return ctrl;
+ 		}
+@@ -153,7 +139,7 @@ static struct uvc_control *uvc_event_find_ctrl(struct uvc_device *dev,
+ }
+ 
+ static bool uvc_event_control(struct urb *urb,
+-			      const struct uvc_control_status *status, int len)
++			      const struct uvc_status *status, int len)
+ {
+ 	static const char *attrs[] = { "value", "info", "failure", "min", "max" };
+ 	struct uvc_device *dev = urb->context;
+@@ -161,24 +147,24 @@ static bool uvc_event_control(struct urb *urb,
+ 	struct uvc_control *ctrl;
+ 
+ 	if (len < 6 || status->bEvent != 0 ||
+-	    status->bAttribute >= ARRAY_SIZE(attrs)) {
++	    status->control.bAttribute >= ARRAY_SIZE(attrs)) {
+ 		uvc_dbg(dev, STATUS, "Invalid control status event received\n");
+ 		return false;
+ 	}
+ 
+ 	uvc_dbg(dev, STATUS, "Control %u/%u %s change len %d\n",
+-		status->bOriginator, status->bSelector,
+-		attrs[status->bAttribute], len);
++		status->bOriginator, status->control.bSelector,
++		attrs[status->control.bAttribute], len);
+ 
+ 	/* Find the control. */
+ 	ctrl = uvc_event_find_ctrl(dev, status, &chain);
+ 	if (!ctrl)
+ 		return false;
+ 
+-	switch (status->bAttribute) {
++	switch (status->control.bAttribute) {
+ 	case UVC_CTRL_VALUE_CHANGE:
+ 		return uvc_ctrl_status_event_async(urb, chain, ctrl,
+-						   status->bValue);
++						   status->control.bValue);
+ 
+ 	case UVC_CTRL_INFO_CHANGE:
+ 	case UVC_CTRL_FAILURE_CHANGE:
+@@ -214,28 +200,22 @@ static void uvc_status_complete(struct urb *urb)
+ 
+ 	len = urb->actual_length;
+ 	if (len > 0) {
+-		switch (dev->status[0] & 0x0f) {
++		switch (dev->status->bStatusType & 0x0f) {
+ 		case UVC_STATUS_TYPE_CONTROL: {
+-			struct uvc_control_status *status =
+-				(struct uvc_control_status *)dev->status;
+-
+-			if (uvc_event_control(urb, status, len))
++			if (uvc_event_control(urb, dev->status, len))
+ 				/* The URB will be resubmitted in work context. */
+ 				return;
+ 			break;
+ 		}
+ 
+ 		case UVC_STATUS_TYPE_STREAMING: {
+-			struct uvc_streaming_status *status =
+-				(struct uvc_streaming_status *)dev->status;
+-
+-			uvc_event_streaming(dev, status, len);
++			uvc_event_streaming(dev, dev->status, len);
+ 			break;
+ 		}
+ 
+ 		default:
+ 			uvc_dbg(dev, STATUS, "Unknown status event type %u\n",
+-				dev->status[0]);
++				dev->status->bStatusType);
+ 			break;
+ 		}
+ 	}
+@@ -259,12 +239,12 @@ int uvc_status_init(struct uvc_device *dev)
+ 
+ 	uvc_input_init(dev);
+ 
+-	dev->status = kzalloc(UVC_MAX_STATUS_SIZE, GFP_KERNEL);
+-	if (dev->status == NULL)
++	dev->status = kzalloc(sizeof(*dev->status), GFP_KERNEL);
++	if (!dev->status)
+ 		return -ENOMEM;
+ 
+ 	dev->int_urb = usb_alloc_urb(0, GFP_KERNEL);
+-	if (dev->int_urb == NULL) {
++	if (!dev->int_urb) {
+ 		kfree(dev->status);
+ 		return -ENOMEM;
+ 	}
+@@ -281,7 +261,7 @@ int uvc_status_init(struct uvc_device *dev)
+ 		interval = fls(interval) - 1;
+ 
+ 	usb_fill_int_urb(dev->int_urb, dev->udev, pipe,
+-		dev->status, UVC_MAX_STATUS_SIZE, uvc_status_complete,
++		dev->status, sizeof(*dev->status), uvc_status_complete,
+ 		dev, interval);
+ 
+ 	return 0;
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index df93db259312..84326991ec36 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -51,8 +51,6 @@
+ #define UVC_URBS		5
+ /* Maximum number of packets per URB. */
+ #define UVC_MAX_PACKETS		32
+-/* Maximum status buffer size in bytes of interrupt URB. */
+-#define UVC_MAX_STATUS_SIZE	16
+ 
+ #define UVC_CTRL_CONTROL_TIMEOUT	5000
+ #define UVC_CTRL_STREAMING_TIMEOUT	5000
+@@ -527,6 +525,26 @@ struct uvc_device_info {
+ 	const struct uvc_control_mapping **mappings;
+ };
+ 
++struct uvc_status_streaming {
++	u8	button;
++} __packed;
++
++struct uvc_status_control {
++	u8	bSelector;
++	u8	bAttribute;
++	u8	bValue[11];
++} __packed;
++
++struct uvc_status {
++	u8	bStatusType;
++	u8	bOriginator;
++	u8	bEvent;
++	union {
++		struct uvc_status_control control;
++		struct uvc_status_streaming streaming;
++	};
++} __packed;
++
+ struct uvc_device {
+ 	struct usb_device *udev;
+ 	struct usb_interface *intf;
+@@ -559,7 +577,8 @@ struct uvc_device {
+ 	/* Status Interrupt Endpoint */
+ 	struct usb_host_endpoint *int_ep;
+ 	struct urb *int_urb;
+-	u8 *status;
++	struct uvc_status *status;
++
+ 	struct input_dev *input;
+ 	char input_phys[64];
+ 
+
+---
+base-commit: 0ec5a38bf8499f403f81cb81a0e3a60887d1993c
+change-id: 20221214-uvc-status-alloc-93becb783898
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
