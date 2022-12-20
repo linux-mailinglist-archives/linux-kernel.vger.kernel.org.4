@@ -2,174 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BDE651CCB
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 10:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9B2651CD0
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 10:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233274AbiLTJD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 04:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S233295AbiLTJHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 04:07:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiLTJDz (ORCPT
+        with ESMTP id S233036AbiLTJG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 04:03:55 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292AD113B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 01:03:54 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-14455716674so14700291fac.7
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 01:03:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UzvNL+TsR6wJp/VVk0N1EHg2FFHt1BbH9bwtEX37Mi8=;
-        b=l3PXEmY/Kh0b3BeAbHpZa0feNze1JUpM8+hStS2W1fAAhwIMr19+c7vde4hb3ClotP
-         Je6KhjVpQ3nXGc+tmOdyLDy1po5FWDBYKeh3I0dcKWIb49j6tkB8f3AIgrICYeIEDYo6
-         vwbcqk2Oz9ctUixuyecsbsY7PtYPFr5RuMYa2CAix4hdO/zOtysHwkRTIuW4Za+b8R0T
-         fD0n7MzKKc8jibi1q4YkG7zWGsHs7/zmm35OhNU+w5QLrsyN1gZBG1PVQPHgTF3MMs9H
-         4LkJytrnPymeTkXq5oXhKRy0tzt2k3W2V1XWQz0kOpmvPcCjQ23PtZWRsfyXpOxXk5yP
-         jicQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UzvNL+TsR6wJp/VVk0N1EHg2FFHt1BbH9bwtEX37Mi8=;
-        b=B6x5n1WVZOF4sRmf8Ocob9m2MFkMn9yfsoytVNkUCCpzcXV2Qa4lCvLZscTGrI753e
-         ejQL6V/m6tZikIv5R805B1voM5SDjfbJWjDu+MT07FMsd6TgTiUfvjIBoMoVWRHf5RKi
-         up4t6/8yVKKv+VHRx2LAcG1acq1rasz5S7JuCmuxNqvH4KYQ37iqhDbcouSz7lS29VwV
-         0vsgLpgPLTXTHL9ao4a4nKexoM3wkyloHcHSsr+UNchKgifbQTEqPthLDn8WHr4/Av3B
-         GawMzxyh/iI80t7bf61q/JKCee/a/TVqibZBEr5nGwfkcv95ICkv+wDXPVeDdP+cTMVi
-         fPDg==
-X-Gm-Message-State: AFqh2koxbuvMIpdmkc5yQ7T10+Fe+t/41VN/gsBqV/GuWa25Nbcl4bGl
-        xhH11Zq+6KneGs7Jo1pzbHZbsQuoIcuFhPrToNk=
-X-Google-Smtp-Source: AMrXdXveFr80wwpqNX3EU58rZEURdkoOkmVxIfys7NPcpdUmvbzGH0j/NN1RcyEMJ4xghKpphstg1uEAj1cGVX+gMlU=
-X-Received: by 2002:a05:6870:6083:b0:14b:7e0a:eefa with SMTP id
- t3-20020a056870608300b0014b7e0aeefamr1637834oae.49.1671527033285; Tue, 20 Dec
- 2022 01:03:53 -0800 (PST)
+        Tue, 20 Dec 2022 04:06:59 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B730D7661
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 01:06:58 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p7YZ4-0002Et-EN; Tue, 20 Dec 2022 10:05:34 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:8d35:355:a4c0:ddb8])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 760C2143A12;
+        Tue, 20 Dec 2022 09:05:33 +0000 (UTC)
+Date:   Tue, 20 Dec 2022 10:05:25 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Frank Jungclaus <frank.jungclaus@esd.eu>,
+        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] can: esd_usb: Improved decoding for
+ ESD_EV_CAN_ERROR_EXT messages
+Message-ID: <20221220090525.tvmgmtffmy7ruyi3@pengutronix.de>
+References: <20221219212717.1298282-1-frank.jungclaus@esd.eu>
+ <20221219212717.1298282-2-frank.jungclaus@esd.eu>
+ <CAMZ6RqKMSGpxBbgfD6Q4DB9V0EWmzXknUW6btWudtjDu=uF4iQ@mail.gmail.com>
+ <CAMZ6RqKRzJwmMShVT9QKwiQ5LJaQupYqkPkKjhRBsP=12QYpfA@mail.gmail.com>
 MIME-Version: 1.0
-References: <11728bc1-7b59-1623-b517-d1a0d57eb275@intel.com>
- <20221219125204.1001149-1-zyytlz.wz@163.com> <20221220082255.GE30028@zhen-hp.sh.intel.com>
-In-Reply-To: <20221220082255.GE30028@zhen-hp.sh.intel.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Tue, 20 Dec 2022 17:03:41 +0800
-Message-ID: <CAJedcCzD6Zc=ncxH5821OA=zL49bUFqD2hYT=TruU2AVt+_2hg@mail.gmail.com>
-Subject: Re: [RESEND PATCH v4] drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
-To:     Zhenyu Wang <zhenyuw@linux.intel.com>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, zhi.a.wang@intel.com,
-        alex000young@gmail.com, security@kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        tvrtko.ursulin@linux.intel.com, airlied@linux.ie,
-        gregkh@linuxfoundation.org, intel-gfx@lists.freedesktop.org,
-        joonas.lahtinen@linux.intel.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, 1002992920@qq.com, airlied@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l2o3hyqitwoctluq"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqKRzJwmMShVT9QKwiQ5LJaQupYqkPkKjhRBsP=12QYpfA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zhenyu Wang <zhenyuw@linux.intel.com> =E4=BA=8E2022=E5=B9=B412=E6=9C=8820=
-=E6=97=A5=E5=91=A8=E4=BA=8C 16:25=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 2022.12.19 20:52:04 +0800, Zheng Wang wrote:
-> > If intel_gvt_dma_map_guest_page failed, it will call
-> >  ppgtt_invalidate_spt, which will finally free the spt. But the caller =
-does
-> >  not notice that, it will free spt again in error path.
+
+--l2o3hyqitwoctluq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 20.12.2022 17:53:28, Vincent MAILHOL wrote:
+> > >  struct tx_msg {
+> > > @@ -229,10 +237,10 @@ static void esd_usb_rx_event(struct esd_usb_net=
+_priv *priv,
+> > >         u32 id =3D le32_to_cpu(msg->msg.rx.id) & ESD_IDMASK;
+> > >
+> > >         if (id =3D=3D ESD_EV_CAN_ERROR_EXT) {
+> > > -               u8 state =3D msg->msg.rx.data[0];
+> > > -               u8 ecc =3D msg->msg.rx.data[1];
+> > > -               u8 rxerr =3D msg->msg.rx.data[2];
+> > > -               u8 txerr =3D msg->msg.rx.data[3];
+> > > +               u8 state =3D msg->msg.rx.ev_can_err_ext.status;
+> > > +               u8 ecc =3D msg->msg.rx.ev_can_err_ext.ecc;
+> > > +               u8 rxerr =3D msg->msg.rx.ev_can_err_ext.rec;
+> > > +               u8 txerr =3D msg->msg.rx.ev_can_err_ext.tec;
 > >
->
-> It's not clear from this description which caller is actually wrong,
-> better to clarify the problem in ppgtt_populate_spt_by_guest_entry() func=
-tion.
->
-
-Get it, will do in the next fix.
-
-
-> >                                                  PAGE_SIZE, &dma_addr);
-> > -             if (ret) {
-> > -                     ppgtt_invalidate_spt(spt);
-> > -                     return ret;
-> > -             }
-> > +             if (ret)
-> > +                     goto err;
->
-> I think it's fine to remove this and leave to upper caller, but again ple=
-ase
-> describe the behavior change in commit message as well, e.g to fix the sa=
-nity
-> of spt destroy that leaving previous invalidate and free of spt to caller=
- function
-> instead of within callee function.
-
-Sorry for my bad habit. Will do in the next version.
-
-> >               sub_se.val64 =3D se->val64;
+> > I do not like how you have to write msg->msg.rx.something. I think it
+> > would be better to make the union within struct esd_usb_msg anonymous:
 > >
-> >               /* Copy the PAT field from PDE. */
-> > @@ -1231,6 +1229,47 @@ static int split_2MB_gtt_entry(struct intel_vgpu=
- *vgpu,
-> >       ops->set_pfn(se, sub_spt->shadow_page.mfn);
-> >       ppgtt_set_shadow_entry(spt, se, index);
-> >       return 0;
-> > +err:
-> > +     /* Undone the existing mappings of DMA addr. */
-> > +     for_each_present_shadow_entry(spt, &e, parent_index) {
->
-> sub_spt? We're undoing what's mapped for sub_spt right?
+> >   https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/es=
+d_usb.c#L169
+>=20
+> Or maybe just declare esd_usb_msg as an union instead of a struct:
 
-Yes, will change it to sub_spt in the next version.
++1
 
->
-> > +             switch (e.type) {
-> > +             case GTT_TYPE_PPGTT_PTE_4K_ENTRY:
-> > +                     gvt_vdbg_mm("invalidate 4K entry\n");
-> > +                     ppgtt_invalidate_pte(spt, &e);
-> > +                     break;
-> > +             case GTT_TYPE_PPGTT_PTE_64K_ENTRY:
-> > +                     /* We don't setup 64K shadow entry so far. */
-> > +                     WARN(1, "suspicious 64K gtt entry\n");
-> > +                     continue;
-> > +             case GTT_TYPE_PPGTT_PTE_2M_ENTRY:
-> > +                     gvt_vdbg_mm("invalidate 2M entry\n");
-> > +                     continue;
-> > +             case GTT_TYPE_PPGTT_PTE_1G_ENTRY:
-> > +                     WARN(1, "GVT doesn't support 1GB page\n");
-> > +                     continue;
-> > +             case GTT_TYPE_PPGTT_PML4_ENTRY:
-> > +             case GTT_TYPE_PPGTT_PDP_ENTRY:
-> > +             case GTT_TYPE_PPGTT_PDE_ENTRY:
->
-> I don't think this all entry type makes sense, as here we just split
-> 2M entry for multiple 4K PTE entry.
+>   union esd_usb_msg {
+>           struct header_msg hdr;
+>           struct version_msg version;
+>           struct version_reply_msg version_reply;
+>           struct rx_msg rx;
+>           struct tx_msg tx;
+>           struct tx_done_msg txdone;
+>           struct set_baudrate_msg setbaud;
+>           struct id_filter_msg filter;
+>   };
 
-I got it. I will leave the code for handling 4K PTE entry only.
+Marc
 
->
-> > +                     gvt_vdbg_mm("invalidate PMUL4/PDP/PDE entry\n");
-> > +                     ret1 =3D ppgtt_invalidate_spt_by_shadow_entry(
-> > +                                     spt->vgpu, &e);
-> > +                     if (ret1) {
-> > +                             gvt_vgpu_err("fail: shadow page %p shadow=
- entry 0x%llx type %d\n",
-> > +                             spt, e.val64, e.type);
-> > +                             goto free_spt;
-> > +                     }
->
-> for above reason, I don't think this is valid.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Got it.
+--l2o3hyqitwoctluq
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-Thanks for your carefully reviewing. I'll try to fix that in the coming pat=
-ch.
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOhetIACgkQrX5LkNig
+012WuQf+IkVianuuTf4emi0PthBoG9enYth6Nfh6yWTLf0lV3jR5vcMvxG8yumAm
+zx1cOZCy5lJmn+TWdEAuqGl7Pe4jC+JNsoZSDMe/2psnH9EVwMonpQFkC5LLi1vt
+7+6zDZRHV6xxbAvu4m3cZaGFrWpYFSmUubbXZdnrrvw2TNbX7vMAC5oRXOv6Bio5
+3yAX5F7Ax6sKiG/YmkrzaqxlvFWwhu2VT4L4qInKAW0D7ePx7V+IWZ1muKaNUV+j
+LqFUqQlAaHJ3CFTkbXaSfw2Y+wGonZ+9mmuPz7j9hUM9PUIATlUAfDrAsbv5y+NZ
+c1g2LnpW73YZndeI7oPwqfCf/Tb+Eg==
+=9Pzh
+-----END PGP SIGNATURE-----
 
-Best regards,
-Zheng Wang
+--l2o3hyqitwoctluq--
