@@ -2,138 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D3B652A07
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 00:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 127F7652A0B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 00:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbiLTXxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 18:53:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
+        id S234164AbiLTXxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 18:53:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiLTXxP (ORCPT
+        with ESMTP id S233411AbiLTXxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 18:53:15 -0500
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2066.outbound.protection.outlook.com [40.107.114.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B93815A2C
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 15:53:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I+Bd2VU8FyNFYiAyH98t2SeK+GM7B6W4SctsIH24aRlAirtjCTeoUO2JZeVq9Hg7+oWoZx04Sl+S6GlBrAQqM6SeMrua+IoRX1TPDmjPZvV6kzo6/cPYEr80Gh3C6y5kivaQjVOIwPrKO70gy40vHNmmVM7bHANFhh4JWL5k5Gle6oULkXKrueLeksJjFfBTHYAr6ZPmDc/XSfI3126XvazwtW3E4LB7towydDx/HhOD2xrBHC9lgMttZMGN5gwUYZr0Td1w3pSJidlC1+e4u6QXesHPDLGZFlBruXxhJJgSSyMiK9T0E/cGxBmheYKC/muMfYvwM5JYA0WFD1Yz+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IXBCKpU0wNjTIfKdJU9NQPrjAgODEB0Gaw5tQi9QbEE=;
- b=JTciBhtKPvv14mtG3vCrgh4QXYlj0oPn7OmADe8rdaJZkNWZAHGpk4r4hB/Lo0NjNfjD8KTKpqHw9padAe+BNCVlTbIyB/JKtWwRq59on2mpUs9wjOzy5E/h5Xm1wii3hK6cPx3jCvT5aeMtloZriJn000b1bsrYjkRA6etqyRxuiZ+9gpPrKA0oG4U5ONpC4Iq3KyRwP9Rz2ffwKQPX96dw/LjX38+FwAxXD6lUb67Ey/ltaDCrlU5oLglfnWt+nlMLi4yel1Ribkeb1MaXQs3k5CgBuoX6hSadT1pX+pOw50Kal1tQ6VNZ6vGGkc7aKrdtYInsuM8Qz1XyFOcLkQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
- header.d=nec.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IXBCKpU0wNjTIfKdJU9NQPrjAgODEB0Gaw5tQi9QbEE=;
- b=UWtSBJCOUtEa66iapJ4hZztNs4QZEWdVX0GeuP8lYKn3SsPEgxtDXMeI15LQeNHonCdoa9ZyQA3vHhRgaH0ds/KAnnHyMpDWqXjB5MnTt6wgKcRD3vdIzhIcN9Z6iZrJFVLes0+cBezXHOicju+dqcWF0CIkN83L4sVvyqoPCBo=
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
- by TYCPR01MB8534.jpnprd01.prod.outlook.com (2603:1096:400:153::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Tue, 20 Dec
- 2022 23:53:11 +0000
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::8c61:6836:588:47aa]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::8c61:6836:588:47aa%4]) with mapi id 15.20.5924.016; Tue, 20 Dec 2022
- 23:53:11 +0000
-From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
-        <naoya.horiguchi@nec.com>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-CC:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Joe Perches <joe@perches.com>, Petr Mladek <pmladek@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Matthew WilCox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC v3 1/4] mm/hwpoison: remove MF_MSG_SLAB from
- action_page_types
-Thread-Topic: [RFC v3 1/4] mm/hwpoison: remove MF_MSG_SLAB from
- action_page_types
-Thread-Index: AQHZFM43bQ2DWz1Qc0mA6D7JK/lfUw==
-Date:   Tue, 20 Dec 2022 23:53:11 +0000
-Message-ID: <20221220235246.GA2334024@hori.linux.bs1.fc.nec.co.jp>
-References: <20221218101901.373450-1-42.hyeyoo@gmail.com>
- <20221218101901.373450-2-42.hyeyoo@gmail.com>
-In-Reply-To: <20221218101901.373450-2-42.hyeyoo@gmail.com>
-Accept-Language: ja-JP, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nec.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYWPR01MB8591:EE_|TYCPR01MB8534:EE_
-x-ms-office365-filtering-correlation-id: 022d8a65-712e-4a90-beb8-08dae2e55a0e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5Uo3CkXpeWp5UN89pppBUMDJTqHqjLHql4zRPjq6QnxLpM7ggn0rsGpmCGakwMwD9NU26pJpmE3f/0lvGnmUIbn5bQaCUrCl8zRorTbC1Ev6R+BPETp8jiLzwqEW8cc29PZ4jaULvDf444RmLtAuTVJFLreO6o/wZ5C5zor8XJzlIQpbneDpCl8tQU8MwKttBTYmjnLaNWB9xs8ctdSmJRRoO4rKtM9BHRjOR157LdYbAIKqufs6yvoXIGSiqQLzA4IMxUJZqFR4nljkzqch3bgfm0zrsnTgvhxUw386Mztdb/F92LOTIykTrnx4gROwX9Uco/x9zEhnU9z2GXKZMjyUGYVl34bwJTAn1hfqy8LGgRjMbqH13uSVIEYSfrl8+lIZ0WqmAPD00NEmSRkMaFmY7xo6XOzdOhPFkDM0iYGdUbhqQ300vTLRFaYnRHVpkFgW8zxFg607b+pZ+5onh9vUkzUEclSrZTscOdwyVKuK92WIMj/W2Dni/XYE1VaKcogkdCbkv327onipZJfjS6UhyZm90oGkdi3XfPRNDBliKDoL5L2O6Mfgvgv43loUEQ8toJeizEUHpbjfx3bdVN25jlCZonXiJciPpYyKdtqSd3ar8dBynUsorCIjZUoAyWNs8OhLJ5pSsddwYjcR4wgF9AvcCpQsRBKA+w5WNuPA+eAYvNNea6BUHpjdlixfZvrgpH/RYEh7XK3PbaLYl/hhdSps29i77XyyV5aqPAM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(346002)(396003)(376002)(136003)(451199015)(86362001)(82960400001)(38100700002)(26005)(71200400001)(6512007)(9686003)(2906002)(186003)(55236004)(33656002)(478600001)(54906003)(966005)(6486002)(85182001)(6506007)(6916009)(316002)(8936002)(122000001)(66946007)(4326008)(64756008)(66446008)(66556008)(41300700001)(4744005)(76116006)(66476007)(83380400001)(5660300002)(8676002)(7416002)(38070700005)(1076003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZjErT1g1QUppenF0Z0FiOXZhQ3JQeGJ1MFl6WENBT2FMK0JKMkJ5TlVpYTVm?=
- =?utf-8?B?VUFtK1RtSElTeTJ5czhvV3dLL2NheTN5ZHFsaUNSKzc1TVNMZmxPaHkwZHN4?=
- =?utf-8?B?SVVmcEdhSFpIeEVPdEJaSFJBalQxb3lpUnQrVWp3SUhMckZwWkFBYnc0dk1M?=
- =?utf-8?B?Z1l4U1N6QUhBUmxSYjVPenRacGdqekIwd2JTZzM4elltUG1JSWtkV1dnNGlu?=
- =?utf-8?B?amhOcnMxTEZZK0wvZmQrc044bGIrY0t4d1Z3Z3B0OFlvWE9TeDNqOHRJclZq?=
- =?utf-8?B?M2E2cC9Qa2NsV2JyZy9NNGtEK0prbXQxMWJUZWM2R2pNWVlMaEtXUU5McmFY?=
- =?utf-8?B?VDdFMW1jOTIwZmtwMlk1ejJjN05KbWh5RmVDWjJWdkxYMHV6MklKS0NGdCs0?=
- =?utf-8?B?TUFmNVhtWXJ2aVh5T3NydnJzTWZGYVJaTDVKNXN0R2FxaERuRlJyd0tweC8w?=
- =?utf-8?B?N2ZzQ3JDWlZZV005WU03QnQ0ci84T3JIaWU1TlpoT3c1ZDVIRFBMMEU5YU9E?=
- =?utf-8?B?OHM0bytoMnhXVWlJUStZVlV6YW1CellkQWE5R3k1SHlSMzE4YmN1eUtpc2xM?=
- =?utf-8?B?dGNMU255SHhkS1RoLzlKdkZQQUJXNkpCS2l3anU3NFdsRnB2WHJkWlRRaW9E?=
- =?utf-8?B?azI1MEpwSVVJUVZIdnlxeEhQV2JqM0JZN01rRU1oNXZ0RVhYMGlwdTNOY0Er?=
- =?utf-8?B?U3BDaGJBWmFBQXRWenYwemUyQU05SStaOWszeTZEMGJBbVdndjNVbC90eFp1?=
- =?utf-8?B?cGY1WDIxamZRQ1JVWDZ5cG1PdG9uWjlSNm82MlB4SXVNMmw3b3VBNXYzSXRx?=
- =?utf-8?B?eDkrd2NuK08vdThqSSs1aUlPeXRraFVzY1dzQTEzTVFFVHVCaGJUZ1ZzTkQx?=
- =?utf-8?B?eTlGZXdROVZiMWRRVTFYNlJSbjExZ041dytjeWV4RjNjcTVDQzRkeVpsRFFQ?=
- =?utf-8?B?MjJrZ1J5NjhjZHVrRHFESGdMNGpVRjE1U1AxekR0UWNsUlBpVktwQW9vMCs0?=
- =?utf-8?B?UnVFQWRaQmNOSVh6UWhNMUZkNUh1N3U2WFBRR0wvTHo3ZWxyNnE5SE14eXpo?=
- =?utf-8?B?WSszZTc1Mk5JbThJNlNoWmpwSHhMWkoxNitOVHM2OEpud3FaSi93VmpZZnlM?=
- =?utf-8?B?bFozWC9LRkp6cTNyZ0g3aFhadFZ5c1dmdkNRTlhsU1JhLy8vclF2K1MvdHU0?=
- =?utf-8?B?LzFpU1I3RVg3L2MzZHJuKzVPd0YyWnp1eGk5bXZVeGVMOHdWY0ZueWF2eURa?=
- =?utf-8?B?YlVJNjk4SGZXSHR3Wms5blN6NUhTaWxwWENUbmtlVHlzdExadkppeGVyYVZu?=
- =?utf-8?B?azRTK1R0Z3RpK0ZkVktaaS9aa1BaR05hRVdnSVRYNlBsUnNMUXJnaTNaQTUw?=
- =?utf-8?B?RG1FdHVBTlpDajZVSm5nL1VSalBSakJrNUlmWjVnOUZxNjNWVm1HMlhNZGYy?=
- =?utf-8?B?OHlRTTZSQ29NOGpreWRTc1BWdUNXK09VWjNhaC93d0FMcWpiMjNyY2JMd0F6?=
- =?utf-8?B?Uk41cWJzZ21GdzJMTlVybThJOEovMkFRaUNkWm9la0pua2w2M2NDdzhrSEhR?=
- =?utf-8?B?eGNrZG5qQlpSdWpQT29ZOEZ1NW51ZjIzcWlXb3lXR2lGbk9IbFV2WEZiQS9z?=
- =?utf-8?B?OWRxSWVTOHRLOGxOdEdDejl4SGNMS0h2b3QzcFQveVJ2UWFVMmdmaEkyZ3Ey?=
- =?utf-8?B?ZlVGUThtOHNETUowcTRrWU16QVJ4QzB1bmVnQ00yOXBtdUJGMlhOZkJjZ0hn?=
- =?utf-8?B?YVpYSzdacVBOT0lvR1IwN2p6ZGNPdXVncHJZMXkvTFkxU3BySSsrdjkxSXo0?=
- =?utf-8?B?ekgxSXI1Q2FoLzZLK1hyOUk4dFo2RWlSOG5ZM1FSL0JzSiszdjZvKzVTZDhy?=
- =?utf-8?B?cFBNNExrc2RrWmh0ekViM2xmY2ZLa1hYTmVrWU5MR2VYcEZFa05nMDRtZjZI?=
- =?utf-8?B?c04vZC9YelR3c0ZXSXNaRGJMMitGcldKNTlYMXVjUldoaU42OWhRRnR0TWhF?=
- =?utf-8?B?Qmt5K3F5K3h4YUVWWFJpVzlHQ3NNVmxMRERKUmQzbUJtWnpEbllVcjB6ZUtK?=
- =?utf-8?B?REhidW9CaE9lU2NRV0NBeGVHSVZCZzdnd1dEVHdpYlZqV0w3UUVLaFFuT2c0?=
- =?utf-8?B?T2xqbzNUU2M5eWxNa0NZR0hPeWIxbGdBeFFFcFk4eU9yaEIvYTBwU3BHNklI?=
- =?utf-8?B?cGc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <466E8D64D138224586099FE6492796D1@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 20 Dec 2022 18:53:37 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3102018D;
+        Tue, 20 Dec 2022 15:53:32 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id t17so33090360eju.1;
+        Tue, 20 Dec 2022 15:53:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cXG4ipWOzV3qnuOL8kIDVZtwHABa7RGkv0p2OaiKEGY=;
+        b=QNE/TtVmkQFkp2Sui6Nq1j4kR9fj336ofXGWqO/OQ0maXdPISEgTuTD45ETIekPY0W
+         iSpJD8LDEkCRtMYFO4BdEMzCIiGA4ltrxfFfqEgvmqpBHg/9RxfDFb9weKayyV83sfUU
+         fXKoJ+R2R089iep7IiNkeQIEbTlHJWd3wNiymVlVgVQQcN1iaXiLEw5Ev1a+G0MSUmXj
+         O2la1sS5vXGvizb9az2YWDT1cEf8ywK3JLLYSwFd0hDmD9QNvL5YFlw3Ef6G3NKjXGng
+         UysOb79dmnx1h9g0PEke0lTaRJfTOv/aeBLkCknuJOUD/35rv6xu87Mj18igTUgX9Kyj
+         xExw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cXG4ipWOzV3qnuOL8kIDVZtwHABa7RGkv0p2OaiKEGY=;
+        b=DRS90qYT1q+9sr5hB+ro4p5PFyxoLfEvdwAcOpXnTjwetmHZ2WutAHPe9G1GWrb630
+         /xkVW+rgQhDtfe2Vp1sZcrXbRO4BqF/voxq5pkHAnjauq1tPZ009roTKiJdKzPqoJRib
+         ukRMYe57ViAEx83VIJRfvsR2yoESxXLzNMAuig0nNdVxXrb6K1akADzWPRDY+X7wWmqe
+         xhGqRFOceSXbPun7EHeAgqwlYJLu6uDcvRkkpVD+MU+gRy+LG58EOmW18ReEqUNgx4aU
+         is9JOpeihWukLBKEXw36VXjQmhLhKbIVtggqi22YuImu3swd6MNgQ7DifvzhVFGtA/TO
+         6bIw==
+X-Gm-Message-State: AFqh2koFVcK0dGhXV81A+4MP1FzLr9lkBIvZhFfr4oJEbwjuLbmOGJPC
+        fgCUse49zE6CFEXQvJt66kDVCcRFndvLxqg7IOE=
+X-Google-Smtp-Source: AMrXdXviZyBghq3LZaqtV9KLIgNRs1EC4Zd2CZKEq3hUKJepXOaeG9eG9Lug01R1sD6EJudUjbjOQwmXGGs1/3l3eyA=
+X-Received: by 2002:a17:906:f153:b0:83d:2544:a11 with SMTP id
+ gw19-20020a170906f15300b0083d25440a11mr22976ejb.226.1671580411054; Tue, 20
+ Dec 2022 15:53:31 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: nec.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 022d8a65-712e-4a90-beb8-08dae2e55a0e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Dec 2022 23:53:11.2337
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 15CP4ud+tomfdzsx4tBAbCk73GfJnTWzvpffYqxpTkrRqEsVhzOQ7BAxfROLTKe73AeH+nkv5rEki+uuUpUy3w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8534
+References: <Y6CyatoFytXToO/g@google.com> <20221220015635.4394-1-liuxin350@huawei.com>
+In-Reply-To: <20221220015635.4394-1-liuxin350@huawei.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 20 Dec 2022 15:53:18 -0800
+Message-ID: <CAEf4BzYFrXRp+b9j7vsqhVDpWSrA3mP73GLT3c7JMd6k3nKAPg@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: fix crash when input null program point in USDT API
+To:     Xin Liu <liuxin350@huawei.com>
+Cc:     sdf@google.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, haoluo@google.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kongweibin2@huawei.com,
+        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@linux.dev, song@kernel.org, wuchangye@huawei.com,
+        xiesongyang@huawei.com, yanan@huawei.com, yhs@fb.com,
+        zhangmingyi5@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -141,17 +72,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU3VuLCBEZWMgMTgsIDIwMjIgYXQgMDc6MTg6NThQTSArMDkwMCwgSHllb25nZ29uIFlvbyB3
-cm90ZToNCj4gQXMgc3VnZ2VzdGVkIGJ5IE5hb3lhIFsxXSwgaWRlbnRpZnlfcGFnZV9zdGF0ZSgp
-IGlzIG5ldmVyDQo+IGNhbGxlZCB3aGVuIGhhbmRsaW5nIG1lbW9yeSBlcnJvciBvbiBhIHNsYWIg
-cGFnZS4NCj4gDQo+IENsZWFuIHRoaXMgdXAgYmVmb3JlIG1vdmluZyBQR19zbGFiIGZsYWcgdG8g
-cGFnZV90eXBlIGluIGxhdGVyIHBhdGNoLg0KPiANCj4gWzFdIGh0dHBzOi8vbG9yZS5rZXJuZWwu
-b3JnL2xpbnV4LW1tL1kycytkbkJzSEFKdTE5b2JAaHlleW9vLyNyDQo+IA0KPiBTdWdnZXN0ZWQt
-Ynk6IE5hb3lhIEhvcmlndWNoaSA8bmFveWEuaG9yaWd1Y2hpQG5lYy5jb20+DQo+IFNpZ25lZC1v
-ZmYtYnk6IEh5ZW9uZ2dvbiBZb28gPDQyLmh5ZXlvb0BnbWFpbC5jb20+DQoNClRoYW5rIHlvdSBm
-b3IgdGhlIHBhdGNoLA0KSSB0aGluayB0aGVyZSdyZSBhIGZldyBvdGhlciBwbGFjZXMgdG8gcmVt
-b3ZlIHVuZGVyIGluY2x1ZGUvLg0KDQogICQgZ3JlcCAtaW5yIE1GX01TR19TTEEgaW5jbHVkZQ0K
-ICBpbmNsdWRlL3Jhcy9yYXNfZXZlbnQuaDozNTk6ICAgIEVNICggTUZfTVNHX1NMQUIsICJrZXJu
-ZWwgc2xhYiBwYWdlIiApICAgICAgICAgICAgICAgICAgICAgICAgICBcDQogIGluY2x1ZGUvbGlu
-dXgvbW0uaDozNTAyOiAgICAgICAgTUZfTVNHX1NMQUIsDQoNCiwgc28gY291bGQgeW91IHVwZGF0
-ZSB0aGVtIHRvZ2V0aGVyPw0KDQpUaGFua3MsDQpOYW95YSBIb3JpZ3VjaGk=
+On Mon, Dec 19, 2022 at 5:57 PM Xin Liu <liuxin350@huawei.com> wrote:
+>
+> On Tue, 20 Dec 2022 2:50:18 +0800 sdf<sdf@google.com> wrote:
+> > On 12/19, Xin Liu wrote:
+> > > The API functions bpf_program__attach_perf_event_opts and
+> > > bpf_program_attach_usdt can be invoked by users. However, when the
+> > > input prog parameter is null, the API uses name and obj without
+> > > check. This will cause program to crash directly.
+> >
+> > Why do we care about these only? We have a lot of functions invoked
+> > by the users which don't check the arguments. Can the caller ensure
+> > the prog is valid/consistent before calling these?
+> >
+>
+> Thanks to sdf for this suggestions.
+>
+> But I don't think it's a good idea to let the user guarantee:
+> 1.We can't require all users to verify parameters before transferring
+>   parameters. Some parameters may be omitted. If the user forgets to check
+>   the program pointer and it happens to be NULL, the program will crash
+>   without any last words, and the user can only use the debugging tool to
+>   collect relevant clues, which is a disaster for the user.
+> 2.Code changes are required for completed user programs and places where
+>   the API is invoked. For users, the cost of ensuring that each parameter
+>   check result is correct is high, which is much higher than that of
+>   directly verifying the parameter in libbpf.
+>
+> So I think we should do some validation at the API entrance, whick is a
+> big benefit at the minimum cost, and in fact we do that, for example,
+> OPTS_VALID validation, right?
+>
+
+I agree with Stanislav. There is no reason for user to assume that
+passing NULL works as a general rule. We do not check for NULL
+everywhere. If user doesn't follow API contract, yes, they will get
+crashes or confusing behavior, unfortunately.
+
+For APIs that explicitly allow passing NULL for strings, documentation
+clearly states that. And if not, we should improve documentation.
+
+> > > Signed-off-by: Xin Liu <liuxin350@huawei.com>
+> > > ---
+> > >   tools/lib/bpf/libbpf.c | 13 ++++++++++++-
+> > >   1 file changed, 12 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > > index 2a82f49ce16f..0d21de4f7d5c 100644
+> > > --- a/tools/lib/bpf/libbpf.c
+> > > +++ b/tools/lib/bpf/libbpf.c
+> > > @@ -9764,6 +9764,11 @@ struct bpf_link
+> > > *bpf_program__attach_perf_event_opts(const struct bpf_program *p
+> > >     if (!OPTS_VALID(opts, bpf_perf_event_opts))
+> > >             return libbpf_err_ptr(-EINVAL);
+> > >
+> > > +   if (!prog || !prog->name) {
+> > > +           pr_warn("prog: invalid prog\n");
+> > > +           return libbpf_err_ptr(-EINVAL);
+> > > +   }
+> > > +
+> > >     if (pfd < 0) {
+> > >             pr_warn("prog '%s': invalid perf event FD %d\n",
+> > >                     prog->name, pfd);
+> > > @@ -10967,7 +10972,7 @@ struct bpf_link *bpf_program__attach_usdt(const
+> > > struct bpf_program *prog,
+> > >                                       const struct bpf_usdt_opts *opts)
+> > >   {
+> > >     char resolved_path[512];
+> > > -   struct bpf_object *obj = prog->obj;
+> > > +   struct bpf_object *obj;
+> > >     struct bpf_link *link;
+> > >     __u64 usdt_cookie;
+> > >     int err;
+> > > @@ -10975,6 +10980,11 @@ struct bpf_link *bpf_program__attach_usdt(const
+> > > struct bpf_program *prog,
+> > >     if (!OPTS_VALID(opts, bpf_uprobe_opts))
+> > >             return libbpf_err_ptr(-EINVAL);
+> > >
+> > > +   if (!prog || !prog->name || !prog->obj) {
+> > > +           pr_warn("prog: invalid prog\n");
+> > > +           return libbpf_err_ptr(-EINVAL);
+> > > +   }
+> > > +
+> > >     if (bpf_program__fd(prog) < 0) {
+> > >             pr_warn("prog '%s': can't attach BPF program w/o FD (did you load
+> > > it?)\n",
+> > >                     prog->name);
+> > > @@ -10997,6 +11007,7 @@ struct bpf_link *bpf_program__attach_usdt(const
+> > > struct bpf_program *prog,
+> > >     /* USDT manager is instantiated lazily on first USDT attach. It will
+> > >      * be destroyed together with BPF object in bpf_object__close().
+> > >      */
+> > > +   obj = prog->obj;
+> > >     if (IS_ERR(obj->usdt_man))
+> > >             return libbpf_ptr(obj->usdt_man);
+> > >     if (!obj->usdt_man) {
+> > > --
+> > > 2.33.0
