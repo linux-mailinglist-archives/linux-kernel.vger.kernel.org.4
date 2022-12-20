@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0AE652283
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:27:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52513652284
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234051AbiLTO1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 09:27:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
+        id S233875AbiLTO1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 09:27:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233946AbiLTO0f (ORCPT
+        with ESMTP id S233962AbiLTO0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:26:35 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D0DDF85
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:26:33 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id u4-20020a17090a518400b00223f7eba2c4so164850pjh.5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:26:33 -0800 (PST)
+        Tue, 20 Dec 2022 09:26:46 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931041BEBF
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:26:37 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so16648296pjj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:26:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Bn2usd8RhSGSmZWb5B1NWCCF5E+CujnFtBp0hU4Vhaw=;
-        b=QAeeyh1BDYIV8cysQl2toWaUGz8d3JI5Fx2R7je5aKyPI8FrS9vaiR/WWyQUfMZGHO
-         toNL8WesHyJHxS9B5e+U2mFpDVG4didblkCkoBIA+RIAw+EvyVLAc2gNxEAuws6MyNNZ
-         Rek1JwcQmqwB9CveuiscUcQc/7dmK7A7FCE0DTwv1JUICXSZVjsHtRQGFT5L65kpQQTX
-         h56Ljtc90jh1ZPUWtZzsumI07vT0462LU6Sh0iOM4l/zqChr0l02cdrH3m5PLzfujitC
-         HcAyxPjw7KYBQpGRkyoOJxaCThVEAbZIGLvu21lT3ORsUjc4tAJnQnHRJCw2KKa9V03d
-         ag2g==
+        bh=64X91MxhUjBzxu+FEguvTjtV3XYA1aG2BvuE/3RmIsU=;
+        b=pwS2mq20b00ht0wE2sWSAi//5IyViRE4tk4NShJksyXTZz/akL7cBWz6/VHCOlXW8H
+         5lpls1Jrlydt+SfvxiSDPAMt8uunxlGtSWYoZSb+FJp8D6WqxZNjqdMojTi4Dg39wJ1s
+         +MyNdHEZqmyls/+f+7XKUzdi9QYNhyBibjLQObyULeQtIHrdIRFPwjdpK3qBp8kcqJWc
+         EobCF9X3GOOPdg8Na3/ISn5vAP74qhE5ovZX85ObPYXCY1BdYnMAVsFBpZDtvRVsXpZv
+         2k0X9/Sep5GWsomQj7VHPmITAPA33n06HzYrqGUiKpUNVQPsRymZW4Nt/tW2IdGzGJY3
+         POfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Bn2usd8RhSGSmZWb5B1NWCCF5E+CujnFtBp0hU4Vhaw=;
-        b=P+skyVUxW16btpj6EL2ml3bouLpxQKzWddGWotORs0ye0ljOsgfk3CUTwuXKYuOF8F
-         YPC9T+MZ8WCoVzxHCh4D1Un0P+IQgyoSFoU3w3cGgCeOXtqSCqEA/Orooqpzg18vyrmH
-         lrj5cn1LTx+DWYVShD7Kpna6pS0fSpTDSjlnv0kIKnNw3weFTAzjDle2EgQDuIFRPVo8
-         qjd1c1O6h9Ndfizylww2W1y/Kq/3lO49a/rV8AFopTZU0mWmC1OKz+gqPv0v+IjaLa5M
-         eo8q7SJvuXHkF1+dR0hs6FGmuZ+W2cURS4A7eRYbLFHcJYX7hF0C0wXUJJRCWXq7wOEK
-         HFww==
-X-Gm-Message-State: ANoB5pl1sR3qV2f8dgVvZELLh/e/6avL91kqbfQYMIKBbTqMBelOeqR2
-        6a7kcX2fNuTq39Btv1CodRY=
-X-Google-Smtp-Source: AA0mqf6XV9AK7/ROL6sxQsVqW/vSv3j9dGERWBjFCKqTC/Hkp51i5+bxCYvWKi5cl933ffR6sQsiiw==
-X-Received: by 2002:a17:903:26d3:b0:18d:9214:1ae5 with SMTP id jg19-20020a17090326d300b0018d92141ae5mr43056033plb.23.1671546393514;
-        Tue, 20 Dec 2022 06:26:33 -0800 (PST)
+        bh=64X91MxhUjBzxu+FEguvTjtV3XYA1aG2BvuE/3RmIsU=;
+        b=JchpKRd6d5mOyQpsecqR++AuNQUamyXhf7xp6P2tjexy1vbTGhhLPyZ2p75NkpageD
+         mF/eiI4OrqJRsvljPaPT0jk1eVhhZSMWnvNPY1e/6KhpActxSFaBEScZnF7IwPHp1veE
+         i0q0bqCbSIO9ieeSl36uW2MkqWjd62mzcSZBinOS0Uil5llXzHI640c/oDLroz2MozMs
+         NGVvBkGj7IhDATrYvG8Hwe1UpO5o8/cs9/KbKw9zEwGBGxwYkMDx+c4PSkpRQB2F4zDp
+         y5R+DKhBLAVIFk5ADS7+7R/i2YeCrFglIB8kIdrxtN4LBNrwnYzbqFZJum5vMLnIj4oj
+         hGPA==
+X-Gm-Message-State: ANoB5plsbC7meR6ttJg9nlsQf1QRl5T0Ob8zU3t8xLFLzi21mxRBPoXn
+        uIffLBqANrzzFJxiI8Q+mYA=
+X-Google-Smtp-Source: AA0mqf4k9upkMP0HrkhE5OVZzy1A8zaOGUBPPVz6j2/KB5BycYN82mg+ag6TUmJNR552xEd5Q/fchQ==
+X-Received: by 2002:a17:902:76c1:b0:186:ad88:43a9 with SMTP id j1-20020a17090276c100b00186ad8843a9mr50979497plt.36.1671546396976;
+        Tue, 20 Dec 2022 06:26:36 -0800 (PST)
 Received: from vernon-pc.. ([114.231.52.81])
-        by smtp.gmail.com with ESMTPSA id ik11-20020a170902ab0b00b001897bfc9800sm9383398plb.53.2022.12.20.06.26.31
+        by smtp.gmail.com with ESMTPSA id ik11-20020a170902ab0b00b001897bfc9800sm9383398plb.53.2022.12.20.06.26.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 06:26:33 -0800 (PST)
+        Tue, 20 Dec 2022 06:26:36 -0800 (PST)
 From:   Vernon Yang <vernon2gm@gmail.com>
 To:     Liam.Howlett@oracle.com, akpm@linux-foundation.org
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Vernon Yang <vernon2gm@gmail.com>
-Subject: [PATCH 5/8] maple_tree: remove the redundant code
-Date:   Tue, 20 Dec 2022 22:26:03 +0800
-Message-Id: <20221220142606.1698836-6-vernon2gm@gmail.com>
+Subject: [PATCH 6/8] maple_tree: change return type of mas_commit_b_node()
+Date:   Tue, 20 Dec 2022 22:26:04 +0800
+Message-Id: <20221220142606.1698836-7-vernon2gm@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221220142606.1698836-2-vernon2gm@gmail.com>
 References: <20221220142606.1698836-2-vernon2gm@gmail.com>
@@ -72,37 +72,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The macros CONFIG_DEBUG_MAPLE_TREE_VERBOSE no one uses, functions
-mas_dup_tree() and mas_dup_store() are not implemented, just
-function declaration, so drop it.
+The return value of mas_commit_b_node() function represents whether
+the submit b_node is successful, and can only be false and true, so
+the return value type is bool is more appropriate and for better
+readability.
 
 Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
 ---
- include/linux/maple_tree.h | 4 ----
- 1 file changed, 4 deletions(-)
+ lib/maple_tree.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
-index 4ee5a969441c..815a27661517 100644
---- a/include/linux/maple_tree.h
-+++ b/include/linux/maple_tree.h
-@@ -12,7 +12,6 @@
- #include <linux/rcupdate.h>
- #include <linux/spinlock.h>
- /* #define CONFIG_MAPLE_RCU_DISABLED */
--/* #define CONFIG_DEBUG_MAPLE_TREE_VERBOSE */
+diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+index b3a215dd961e..e7dde4a1d6cb 100644
+--- a/lib/maple_tree.c
++++ b/lib/maple_tree.c
+@@ -3578,7 +3578,7 @@ static inline bool mas_reuse_node(struct ma_wr_state *wr_mas,
+  * @b_node: The maple big node
+  * @end: The end of the data.
+  */
+-static inline int mas_commit_b_node(struct ma_wr_state *wr_mas,
++static inline bool mas_commit_b_node(struct ma_wr_state *wr_mas,
+ 			    struct maple_big_node *b_node, unsigned char end)
+ {
+ 	struct maple_node *node;
+@@ -3598,7 +3598,7 @@ static inline int mas_commit_b_node(struct ma_wr_state *wr_mas,
  
- /*
-  * Allocated nodes are mutable until they have been inserted into the tree,
-@@ -483,9 +482,6 @@ static inline bool mas_is_paused(struct ma_state *mas)
- 	return mas->node == MAS_PAUSE;
+ 	mas_node_count(wr_mas->mas, 1);
+ 	if (mas_is_err(wr_mas->mas))
+-		return 0;
++		return false;
+ 
+ 	node = mas_pop_node(wr_mas->mas);
+ 	node->parent = mas_mn(wr_mas->mas)->parent;
+@@ -3607,7 +3607,7 @@ static inline int mas_commit_b_node(struct ma_wr_state *wr_mas,
+ 	mas_replace(wr_mas->mas, false);
+ reuse_node:
+ 	mas_update_gap(wr_mas->mas);
+-	return 1;
++	return true;
  }
  
--void mas_dup_tree(struct ma_state *oldmas, struct ma_state *mas);
--void mas_dup_store(struct ma_state *mas, void *entry);
--
  /*
-  * This finds an empty area from the highest address to the lowest.
-  * AKA "Topdown" version,
 -- 
 2.34.1
 
