@@ -2,132 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1C0651ECE
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 007EC651ED2
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbiLTK2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:28:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
+        id S231650AbiLTK3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:29:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiLTK2O (ORCPT
+        with ESMTP id S229714AbiLTK3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:28:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC92D67
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:27:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671532049;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LXpV1QNUoibeoH4rMcuwRGMEdg3d0Uub6iMLUL63Tnc=;
-        b=PDNNc58oi2g6NFYOLTgvSDc5WEez5Ug2oauIl6HaROKoyLHuTQnVhw838EGkO0djc20Nrb
-        MNEYTmc4mfC/O7b+jSgOeE6NiMtes9V4fjchTZikCbkru/qYP3kQkitc38CakCZ8FgWcYt
-        QfT4mQdvd7AoKQD5P/txo11cKn4lU7s=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-610-8BDCkdiEN0me2uoJ4WS9hQ-1; Tue, 20 Dec 2022 05:27:25 -0500
-X-MC-Unique: 8BDCkdiEN0me2uoJ4WS9hQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7199F3814590;
-        Tue, 20 Dec 2022 10:27:24 +0000 (UTC)
-Received: from starship (ovpn-192-71.brq.redhat.com [10.40.192.71])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 49D62492B03;
-        Tue, 20 Dec 2022 10:27:19 +0000 (UTC)
-Message-ID: <7af086556ff794bbe78e48c882b6e91aa5ad4022.camel@redhat.com>
-Subject: Re: [PATCH v2 00/11] SVM: vNMI (with my fixes)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Santosh Shukla <santosh.shukla@amd.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
-        Jing Liu <jing2.liu@intel.com>,
-        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Tue, 20 Dec 2022 12:27:18 +0200
-In-Reply-To: <20221129193717.513824-1-mlevitsk@redhat.com>
-References: <20221129193717.513824-1-mlevitsk@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Tue, 20 Dec 2022 05:29:05 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3056125F3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:29:04 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id cf42so17944654lfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:29:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7ydZyRIw+gbw3s3ZZRZA72xvAQO6P+Q4roI+F5gT9UA=;
+        b=wYNN5qex0BsQtkbHRrHRAdPUbH4rl2x+fw3y4EZ0jrzWGueboTKWpyLFwU8LuNKlXP
+         E+LW5AKrXKf3T5Rlja4zp+rda3keUg9MksjhSa5+G1a3+KsOdAvjGZ+XvZy8A6XZOCsk
+         WOdg1040Disj86cuVGVMgk0sLjKw8wgxAbnWM4PTIjoCpm070kskfxe9FhvDAlp1hMru
+         dTTgoXpAuOKKbrV2g8ewiYEBigg68FziITN08TbDhAa+M0KTZozgoHzkjg3ASrdUqy99
+         Mhe8I77tlTpkWxd9YlVGur2Xrg6z5i8gm4hr8riO+IVkANOjj5ztcMEVgOb6oec5GWwp
+         I9Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7ydZyRIw+gbw3s3ZZRZA72xvAQO6P+Q4roI+F5gT9UA=;
+        b=jiuueOO6jRka3Fr2vU2JprbYHzqy8Lh/tyOkCywSAWRuJEXwAhXUgR2bCcnjFeBp77
+         2xrmERJtIzp1RHi0ztLSv+tcjXWSTjXolfz4MJwWSGS1xxb6sfyNdRN+LWVJdHrBdwaU
+         Jqf6HQfFlPWtYUCvh59GE+/2uArUviSrXGJQDRVU2P3+CvhP8ct5O4/EM+YKwxJ02/Sb
+         G6k5erhlKF57mNT04Sbl3O21CnT/pqf6MSr+cD11Uqxx0tlCPZh7bZbdJMPaAFUBJDB3
+         ksQVptq5OGUqmxzCK2yGM6FOP46Ovz9DV+H3NfUj+bSRAvNl7C6dfNvKutqmJwDpuwwC
+         fGqA==
+X-Gm-Message-State: AFqh2kppWPOl9WFxVOvU+EzeImCZgvw8y1i1spBKNnVbDsWw9QUag12Q
+        vE3dF4paMazfOWZIy9EM5QmSZA==
+X-Google-Smtp-Source: AMrXdXseYHTPE//qxrEh1Phx1J0z+h8J366WPR39QnMQvkCBso8AfZsQ67rNJksjHyDhd23aKIOB7Q==
+X-Received: by 2002:a05:6512:2a90:b0:4ac:b7bf:697a with SMTP id dt16-20020a0565122a9000b004acb7bf697amr599270lfb.4.1671532142550;
+        Tue, 20 Dec 2022 02:29:02 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id b15-20020a056512070f00b004c325f34043sm1118867lfs.100.2022.12.20.02.29.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 02:29:02 -0800 (PST)
+Message-ID: <426723e7-bb5d-d409-2ad8-a8f4a286e9e1@linaro.org>
+Date:   Tue, 20 Dec 2022 11:29:01 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/3] dt-bindings: PCI: qcom: Document msi-map and
+ msi-map-mask properties
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     bhelgaas@google.com, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221219191427.480085-1-manivannan.sadhasivam@linaro.org>
+ <20221219191427.480085-3-manivannan.sadhasivam@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221219191427.480085-3-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-29 at 21:37 +0200, Maxim Levitsky wrote:
-> Hi!
+On 19/12/2022 20:14, Manivannan Sadhasivam wrote:
+> The Qcom PCIe controller is capable of using either internal MSI controller
+> or the external GIC-ITS for receiving the MSIs from endpoint devices.
+> Currently, the binding only documents the internal MSI implementation.
 > 
-> This is the vNMI patch series based on Santosh Shukla's vNMI patch series.
+> Let's document the GIC-ITS imeplementation by making use of msi-map and
+> msi-map-mask properties.
 > 
-> In this version of this patch series I addressed most of the review feedback
-> added some more refactoring and also I think fixed the issue with migration.
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  .../devicetree/bindings/pci/qcom,pcie.yaml       | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
 > 
-> I only tested this on a machine which doesn't have vNMI, so this does need
-> some testing to ensure that nothing is broken.
-> 
-> Best regards,
->        Maxim Levitsky
-> 
-> Maxim Levitsky (9):
->   KVM: nSVM: don't sync back tlb_ctl on nested VM exit
->   KVM: nSVM: clean up the copying of V_INTR bits from vmcb02 to vmcb12
->   KVM: nSVM: explicitly raise KVM_REQ_EVENT on nested VM exit if L1
->     doesn't intercept interrupts
->   KVM: SVM: drop the SVM specific H_FLAGS
->   KVM: x86: emulator: stop using raw host flags
->   KVM: SVM: add wrappers to enable/disable IRET interception
->   KVM: x86: add a delayed hardware NMI injection interface
->   KVM: SVM: implement support for vNMI
->   KVM: nSVM: implement support for nested VNMI
-> 
-> Santosh Shukla (2):
->   x86/cpu: Add CPUID feature bit for VNMI
->   KVM: SVM: Add VNMI bit definition
-> 
->  arch/x86/include/asm/cpufeatures.h |   1 +
->  arch/x86/include/asm/kvm-x86-ops.h |   2 +
->  arch/x86/include/asm/kvm_host.h    |  24 +++--
->  arch/x86/include/asm/svm.h         |   7 ++
->  arch/x86/kvm/emulate.c             |  11 +--
->  arch/x86/kvm/kvm_emulate.h         |   7 +-
->  arch/x86/kvm/smm.c                 |   2 -
->  arch/x86/kvm/svm/nested.c          | 102 ++++++++++++++++---
->  arch/x86/kvm/svm/svm.c             | 154 ++++++++++++++++++++++-------
->  arch/x86/kvm/svm/svm.h             |  41 +++++++-
->  arch/x86/kvm/x86.c                 |  50 ++++++++--
->  11 files changed, 318 insertions(+), 83 deletions(-)
-> 
-> -- 
-> 2.26.3
-> 
-> 
-A very kind ping on these patches.
+> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> index 02450fb26bb9..24c3e7ef14eb 100644
+> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> @@ -100,18 +100,28 @@ properties:
+>      description: GPIO controlled connection to WAKE# signal
+>      maxItems: 1
+>  
+> +  msi-map: true
+> +
+> +  msi-map-mask: true
+
+You should not need these. Just like interrup-map-mask, it is coming
+from pci-bus.yaml.
 
 
 Best regards,
-	Maxim Levitsky
+Krzysztof
 
