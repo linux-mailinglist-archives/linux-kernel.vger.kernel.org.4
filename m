@@ -2,111 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5DB652917
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 23:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94789652915
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 23:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234036AbiLTWbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 17:31:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
+        id S234116AbiLTWcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 17:32:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233959AbiLTWbp (ORCPT
+        with ESMTP id S233873AbiLTWcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 17:31:45 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A131C931;
-        Tue, 20 Dec 2022 14:31:43 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id u7so5528861plq.11;
-        Tue, 20 Dec 2022 14:31:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=U5Pe07mEzVE78EvLTCD6fYM83lCIt58BET379Vpv3LY=;
-        b=lBmDibocl83YZZUlii4qBcmZIL6kJHoMdaPxxevMX/AMm7ohl8MRB/WRDsgspNmm1m
-         IzyOwftrVlNRB4tE9MYO5wMYlNmFa5ExN9SQ76W9ZXT2s2fTkO4jWtToNuVBCmwzaO4z
-         XWYneZWgqKA57oOeCNdqudLQ5doMieYnTGrFTJMT9wZhdGacEPYQ4fdXXP4L8FfKab2/
-         wTfl4XG+plwSe7Q7cRwVfcBjdeGF8vgZIdGi7tVxbCQMyVbNaxYCLXurftJqQkNtfLOi
-         6mSUHQKLMZKD7zVyv+MRhdmfcR4iHepny1M0aK7svv45n8Ui5oGxayQ6rK2xhtAozrjd
-         p8eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U5Pe07mEzVE78EvLTCD6fYM83lCIt58BET379Vpv3LY=;
-        b=BG6c0h2PTnSzT1sjLy48AvnMMjWKfJIHCdYn37OYGhQFyEKxx1/De8pDISL6QtnzNw
-         waajJK4NcpZIMloYfX8v025SWaXq0HyHU+dmsyi2oLHO2DrKujDA0bfaKUyiaQArsTzG
-         +XemE4HUpnA2/viWqmoh3qcCBFmYUVtaZMeOzWjmULzY3FNGPJnHjY67sW8TvnIr33oZ
-         HrUymNGCjsMDmKgA9s/qAXakvLr4gLK4m/cd7L7FJ6mM6ccisfT9mDZlbDq8SST+fpfe
-         d67qOsA2DyfmRVg/D0XLLUpKenJ1WagoEK9eLSsI+7c6GUpEw+TpDRt1YQXhLLJOHPGh
-         2ZcA==
-X-Gm-Message-State: ANoB5pkedZaczw1G5zzhQUbIcENzXWJ0AAIMjG0AtQvOJhxmdDgNUV3O
-        LGvAlRGbO6Ib3E9rLg8wiVDDD/tLn0k=
-X-Google-Smtp-Source: AA0mqf5LuRIdIk4PYrZKXumJjG3QgBVNkkjlDKnDo121XGrjUdZSDjk44in+fEvN8zigBudZ7CUGSA==
-X-Received: by 2002:a17:902:f602:b0:187:4920:3a3c with SMTP id n2-20020a170902f60200b0018749203a3cmr51067334plg.33.1671575503283;
-        Tue, 20 Dec 2022 14:31:43 -0800 (PST)
-Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:68c4:de54:581a:ee2])
-        by smtp.gmail.com with ESMTPSA id f15-20020a170902684f00b00182d25a1e4bsm9825160pln.259.2022.12.20.14.31.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 14:31:42 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        KP Singh <kpsingh@kernel.org>, stable@vger.kernel.org,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH RESEND] perf/core: Call LSM hook after copying perf_event_attr
-Date:   Tue, 20 Dec 2022 14:31:40 -0800
-Message-Id: <20221220223140.4020470-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+        Tue, 20 Dec 2022 17:32:12 -0500
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B923E1DA47
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 14:32:10 -0800 (PST)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 477B2201D6;
+        Tue, 20 Dec 2022 23:32:06 +0100 (CET)
+Date:   Tue, 20 Dec 2022 23:32:04 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        sunliming <sunliming@kylinos.cn>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 3/6] drm/msm/dpu1: Wire up DSC mask for active CTL
+ configuration
+Message-ID: <20221220223204.i3tfa2biq7bgkg5o@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        sunliming <sunliming@kylinos.cn>, Sam Ravnborg <sam@ravnborg.org>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221213232207.113607-1-marijn.suijten@somainline.org>
+ <20221213232207.113607-4-marijn.suijten@somainline.org>
+ <184d22f1-7ed1-4a67-1c25-9fafeb94db83@linaro.org>
+ <20221214193026.dv2fuubysctcvlkg@SoMainline.org>
+ <658da2cf-1e1a-af27-b085-edf0887b8dae@linaro.org>
+ <8f33c1d0-a2ca-dc49-1884-01541ad83d49@quicinc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <8f33c1d0-a2ca-dc49-1884-01541ad83d49@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It passes the attr struct to the security_perf_event_open() but it's
-not initialized yet.
+On 2022-12-16 14:20:52, Abhinav Kumar wrote:
+> 
+> 
+> On 12/14/2022 5:08 PM, Dmitry Baryshkov wrote:
+> > On 14/12/2022 21:30, Marijn Suijten wrote:
+> >> On 2022-12-14 20:43:29, Dmitry Baryshkov wrote:
+> >>> On 14/12/2022 01:22, Marijn Suijten wrote:
+> >>>> [..]
+> >>> We usually don't have DSC with the writeback, don't we?
+> >>
+> >> I am unsure so ended up adding them in writeback regardless.  Downstream
+> >> uses a separate callback to process intf_cfg.dsc instead of going
+> >> through setup_intf_cfg().
+> >>
+> >> To prevent these from being missed again (in the case of copy&paste),
+> >> how about instead having some function that sets up intf_cfg with these
+> >> default values from a phys_enc?  That way most of this remains oblivious
+> >> to the caller.
+> > 
+> > I'm not sure this is possible. E.g. intf_cfg.dsc should not be set for 
+> > the WB.
+> > 
+> 
+> Although this change is harmless because 
+> dpu_encoder_helper_get_dsc(phys_enc) will not return a valid DSC mask 
+> for the WB encoder, hence the setup_intf_cfg will just skip the DSC 
+> programming, I also agree that we can skip setting the intf_cfg.dsc for 
+> the writeback encoder in this patch.
 
-Fixes: da97e18458fb ("perf_event: Add support for LSM and SELinux checks")
-Cc: stable@vger.kernel.org
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- kernel/events/core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Since both of you agree that it is useless I'll drop this in V2.  Have
+to confess that I know nothing about the writeback interface and haven't
+even read the code; does it run in parallel to a "physical" (e.g.
+DP/DSI) interface to capture screenshots (or even video) of what is
+currently being shown on the screen?  By that logic the WB may have
+needed to know what is going on in the HW, but it wouldn't have made any
+sense regardless if the presented planes first pass through DSC before
+being captured.  Something for me to read up on :)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 65e20c5c3c44..5d7193d3ffef 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -12293,12 +12293,12 @@ SYSCALL_DEFINE5(perf_event_open,
- 	if (flags & ~PERF_FLAG_ALL)
- 		return -EINVAL;
- 
--	/* Do we allow access to perf_event_open(2) ? */
--	err = security_perf_event_open(&attr, PERF_SECURITY_OPEN);
-+	err = perf_copy_attr(attr_uptr, &attr);
- 	if (err)
- 		return err;
- 
--	err = perf_copy_attr(attr_uptr, &attr);
-+	/* Do we allow access to perf_event_open(2) ? */
-+	err = security_perf_event_open(&attr, PERF_SECURITY_OPEN);
- 	if (err)
- 		return err;
- 
--- 
-2.39.0.314.g84b9a713c41-goog
-
+- Marijn
