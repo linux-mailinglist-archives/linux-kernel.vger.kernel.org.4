@@ -2,221 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB92651FEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44364651FF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:53:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233349AbiLTLvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 06:51:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
+        id S232937AbiLTLxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 06:53:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233248AbiLTLvf (ORCPT
+        with ESMTP id S229657AbiLTLxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 06:51:35 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C6FBCB8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 03:51:33 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id m14so11468981wrh.7
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 03:51:33 -0800 (PST)
+        Tue, 20 Dec 2022 06:53:01 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A3163DD;
+        Tue, 20 Dec 2022 03:53:01 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id m4so12022943pls.4;
+        Tue, 20 Dec 2022 03:53:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2IFHwf3PZoIlb3TFc7LKyLHPvFKgU3mx6c729/ao6P8=;
-        b=KGBOMCVcGVKBXskn32NrUuRBQsNEZGoWTiRBlVrmOwTdCYTkMp08EVAkvjN2E1gls5
-         AjBv7U4VTcBXUqaGK1TIgnWA//h9h2684PY3noMtSij6DU4TaImgmd8ju275B+nC4fRx
-         JApm7FXhBPqF/ZYwOrSO+dumozi1gUELkBzj8njaJpHH9q0VpBEcKZ9whf6Vx+5foqJm
-         sb5b7WGKYmTSup4mtfFCUi8RR0bn7qRuPc9UWwDFy6dVdd1bSYRvqvhGr1/T23Z7fy/P
-         3jhlBt/CLBO5q2KsJmgLX9QenXspEfq7SBT+TSdxS/HdmC8zGpd6XxKn19uPYVYLeCSa
-         LYvw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lso547JX5vTY2uG06uoFIFztgpYecJYWXqOFJKfCq9A=;
+        b=NZBmBWT0pXX5TaRDccE1wmua0oWib2GxgHdFapwRZJovA6yEJLwSuHqnjdnlGzvdFx
+         sbJoX6yb8Ubb1qa/54JSFrn8/KVPrk6Zgz6ksxwgK7Hge+QQx4JOp44XYTbyOv7c4QrN
+         9dmddS+pG07psJp1LojSHEDz6xCj+gviFXyTAPvuGbyard1kB/iP+sfVUeNMN05dsEKw
+         a4LoQ/J+rOjMQgkXk7qHVIwsgnkqkVeZENxlDA/NMfH20WJ9u/+M3Di90NUfk9/r76RN
+         6+MJ9C/BG2GMl8fCxkMRohgwfz6z8QRM3msAgJv1RLsrde9Niq4pBZ11iPtgjvhGD3BP
+         BX6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2IFHwf3PZoIlb3TFc7LKyLHPvFKgU3mx6c729/ao6P8=;
-        b=a488CxGkQSu1kMNph9e5IbP/jknmqt+muH6UuwbLYwQOP0LPluxuwcnGH8GSZErKhd
-         7o62EvuN61CMDio6LiPnSkr8uKxC0VyEJYZpiGiM0WfOkIVSrQLt2SjeOqedcz+Jo0/p
-         E/ZfXi0XbNVxuwaaFBb6mKlR3U0RX9aDHi9T/4bZKP4GP11uO0tuALaCYfrvem1fjjJ2
-         CP+6N6zllILqldtvJNZ5ezu/9i7UXbxzxK91pWoH1o5hTah5AZRRei9T62zxziSA4wci
-         C4yAnWGAo+cm8p9kqEhuViLmaokPMj8akezKH4cu828ejeeSXt66YrQ3/Fof6vsu28ZH
-         T1wQ==
-X-Gm-Message-State: ANoB5pl9tY7QMNmHaM8ElqdkNmPoKHCwrtTEEOwdx8Vw2XAUiuqgcZ+C
-        gWMkmMHXU53woqB4ClI3PPKh5w==
-X-Google-Smtp-Source: AA0mqf4I34hp/H6yiZNrwzo77ElvDz1txdC/DrS3wQ8HbZCxejNZplEulTAGEtxTj3odeydSdYNQuw==
-X-Received: by 2002:a5d:5950:0:b0:242:88f8:a67c with SMTP id e16-20020a5d5950000000b0024288f8a67cmr27941684wri.42.1671537091800;
-        Tue, 20 Dec 2022 03:51:31 -0800 (PST)
-Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id s13-20020a5d510d000000b00241e5b917d0sm14811325wrt.36.2022.12.20.03.51.30
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lso547JX5vTY2uG06uoFIFztgpYecJYWXqOFJKfCq9A=;
+        b=AGcuIoxtEJDvEqzVXux+3AKB9iqro+Iwq+zJA/Zy+29Jgs7BpgfcFObrPiDWSsP97e
+         w34Rsmx4VNT75qip9xgDbPUGEBjoAgRKP4tzN9MVMeUH1BiY7VBP2osqairxI3dp2Pfp
+         YVwUMbT+EgxiTU0g/G9jKUm4fAC8jG+sXgpXpQwC+nnu0rdKf0oIN7f5EzI+PkcOrZR/
+         yGKFrnvofaet+Ee2U+N7z9XZvex6PQIBNqMt4LQxvvp/3aZXp8GZAh6B9oJjcmPUn8jL
+         TLztXZmyQ7oC/cWOc+ZZrcvbxoBSjFOK5J105u2DzPLXuSfn8/2l7LO60eAArnQfWssd
+         CKCw==
+X-Gm-Message-State: ANoB5pkGisgo6dpC/Hr8TwzXBm2xhRDJhrJOqpNC0wYe4Z7gxT4saA5X
+        gxanCK/BT4eEfS9UbBzlryc=
+X-Google-Smtp-Source: AA0mqf74eIrv2LcbZ4UdOuZq35RVyjX2oL4FLp5h/Guu7OQyM9gJa2Y4Kvx4rn4wBkEUJM22lye9Ug==
+X-Received: by 2002:a17:903:515:b0:189:ec2d:89c0 with SMTP id jn21-20020a170903051500b00189ec2d89c0mr46662475plb.59.1671537180573;
+        Tue, 20 Dec 2022 03:53:00 -0800 (PST)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id j5-20020a170902c3c500b00172fad607b3sm9140276plj.207.2022.12.20.03.52.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 03:51:31 -0800 (PST)
-Date:   Tue, 20 Dec 2022 11:51:30 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
-Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
- capacity inversion
-Message-ID: <20221220115130.lhhakj36kn3opqtz@airbuntu>
-References: <20221127141742.1644023-4-qyousef@layalina.io>
- <CAKfTPtCawKvhMwJYVUskYcX7eR2K7SziWVzvjGh6JCVB+WT5tQ@mail.gmail.com>
- <20221203143323.w32boxa6asqvvdnp@airbuntu>
- <CAKfTPtCZYGEvDBe5X1v7TiNZag0atUozGKip6EAgvZDWyo8e-g@mail.gmail.com>
- <20221205110159.nd5igwvsaj55jar7@airbuntu>
- <CAKfTPtAOhQyfyH_qRArC2SZ1sQOBnRZ4CXARiWu2fvb+KPGsXw@mail.gmail.com>
- <20221208140526.vvmjxlz6akgqyoma@airbuntu>
- <20221209164739.GA24368@vingu-book>
- <20221212184317.sntxy3h6k44oz4mo@airbuntu>
- <19bd3f60-63ea-4ccc-b5a2-6507276c8f0d@arm.com>
+        Tue, 20 Dec 2022 03:52:59 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Eric Anholt <eric@anholt.net>, linux-input@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] input: raspberrypi-ts: Fix refcount leak in rpi_ts_probe
+Date:   Tue, 20 Dec 2022 15:52:43 +0400
+Message-Id: <20221220115246.1522054-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <19bd3f60-63ea-4ccc-b5a2-6507276c8f0d@arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/22 17:42, Lukasz Luba wrote:
-> Hi Qais,
-> 
-> I thought I could help with this issue.
+rpi_firmware_get() take reference, we need to release it in error paths
+as well. Add missing rpi_firmware_put() in the error handling to fix it.
 
-Thanks Lukasz!
+Fixes: 0b9f28fed3f7 ("Input: add official Raspberry Pi's touchscreen driver")
+Fixes: 3b8ddff780b7 ("input: raspberrypi-ts: Release firmware handle when not needed")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/input/touchscreen/raspberrypi-ts.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-> 
-> On 12/12/22 18:43, Qais Yousef wrote:
-> > On 12/09/22 17:47, Vincent Guittot wrote:
-> > 
-> > [...]
-> > 
-> > > > > > > This patch loops on all cpufreq policy in sched softirq, how can this
-> > > > > > > be sane ? and not only in eas mode but also in the default asymmetric
-> > > > > > 
-> > > > > > Hmm I'm still puzzled. Why it's not sane to do it here but it's okay to do it
-> > > > > > in the wake up path in feec()?
-> > > > > 
-> > > > > feec() should be considered as an exception not as the default rule.
-> > > > > Thing like above which loops for_each on external subsystem should be
-> > > > > prevented and the fact that feec loops all PDs doesn't means that we
-> > > > > can put that everywhere else
-> > > > 
-> > > > Fair enough. But really understanding the root cause behind this limitation
-> > > > will be very helpful. I don't have the same appreciation of why this is
-> > > > a problem, and shedding more light will help me to think more about it in the
-> > > > future.
-> > > > 
-> > > 
-> > > Take the example of 1k cores with per cpu policy. Do you really think a
-> > > for_each_cpufreq_policy would be reasonable ?
-> > 
-> > Hmm I don't think such an HMP system makes sense to ever exist.
-> > 
-> > That system has to be a multi-socket system and I doubt inversion detection is
-> > something of value.
-> > 
-> > Point taken anyway. Let's find another way to do this.
-> > 
-> 
-> Another way might be to use the 'update' code path, which sets this
-> information source, for the thermal pressure. That code path isn't as
-> hot as this in the task scheduler. Furthermore, we would also
-> have time and handle properly CPU hotplug callbacks there.
-> 
-> So something like this, I have in mind:
-> 
-> ------------------------------8<-----------------------------
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index e7d6e6657ffa..7f372a93e21b 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -16,6 +16,7 @@
->  #include <linux/sched/topology.h>
->  #include <linux/cpuset.h>
->  #include <linux/cpumask.h>
-> +#include <linux/mutex.h>
->  #include <linux/init.h>
->  #include <linux/rcupdate.h>
->  #include <linux/sched.h>
-> @@ -153,6 +154,33 @@ void topology_set_freq_scale(const struct cpumask
-> *cpus, unsigned long cur_freq,
->  DEFINE_PER_CPU(unsigned long, cpu_scale) = SCHED_CAPACITY_SCALE;
->  DEFINE_PER_CPU(unsigned long, cpu_scale) = SCHED_CAPACITY_SCALE;
->  EXPORT_PER_CPU_SYMBOL_GPL(cpu_scale);
-> 
-> +static struct cpumask highest_capacity_mask;
-> 
-> +static struct cpumask highest_capacity_mask;
-> +static unsigned int max_possible_capacity;
-> +static DEFINE_MUTEX(max_capacity_lock);
-> +
-> +static void max_capacity_update(const struct cpumask *cpus,
-> +                               unsigned long capacity)
-> +{
-> +       mutex_lock(&max_capacity_lock);
-> +
-> +       if (max_possible_capacity < capacity) {
-> +               max_possible_capacity = capacity;
-> +
-> +               cpumask_clear(&highest_capacity_mask);
-> +
-> +               cpumask_or(&highest_capacity_mask,
-> +                          &highest_capacity_mask, cpus);
-> +       }
-> +
-> +       mutex_unlock(&max_capacity_lock);
-> +}
-> +
-> +bool topology_test_max_cpu_capacity(unsigned int cpu)
-> +{
-> +       return cpumask_test_cpu(cpu, &highest_capacity_mask);
-> +}
-> +EXPORT_SYMBOL_GPL(topology_test_max_cpu_capacity);
-> +
->  void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity)
->  {
->         per_cpu(cpu_scale, cpu) = capacity;
-> @@ -203,6 +231,8 @@ void topology_update_thermal_pressure(const struct
-> cpumask *cpus,
-> 
->         for_each_cpu(cpu, cpus)
->                 WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
-> +
-> +       max_capacity_update(cpus, capacity);
->  }
->  EXPORT_SYMBOL_GPL(topology_update_thermal_pressure);
-> 
-> 
-> --------------------------->8--------------------------------
-> 
-> We could use the RCU if there is a potential to read racy date
-> while the updater modifies the mask in the meantime. Mutex is to
-> serialize the thermal writers which might be kicked for two
-> policies at the same time.
-> 
-> If you like I can develop and test such code in the arch_topology.c
+diff --git a/drivers/input/touchscreen/raspberrypi-ts.c b/drivers/input/touchscreen/raspberrypi-ts.c
+index 5000f5fd9ec3..114237c76378 100644
+--- a/drivers/input/touchscreen/raspberrypi-ts.c
++++ b/drivers/input/touchscreen/raspberrypi-ts.c
+@@ -140,21 +140,24 @@ static int rpi_ts_probe(struct platform_device *pdev)
+ 		return -EPROBE_DEFER;
+ 
+ 	ts = devm_kzalloc(dev, sizeof(*ts), GFP_KERNEL);
+-	if (!ts)
+-		return -ENOMEM;
++	if (!ts) {
++		error = -ENOMEM;
++		goto err_put_fw;
++	}
+ 	ts->pdev = pdev;
+ 
+ 	ts->fw_regs_va = dma_alloc_coherent(dev, PAGE_SIZE, &ts->fw_regs_phys,
+ 					    GFP_KERNEL);
+ 	if (!ts->fw_regs_va) {
+ 		dev_err(dev, "failed to dma_alloc_coherent\n");
+-		return -ENOMEM;
++		error = -ENOMEM;
++		goto err_put_fw;
+ 	}
+ 
+ 	error = devm_add_action_or_reset(dev, rpi_ts_dma_cleanup, ts);
+ 	if (error) {
+ 		dev_err(dev, "failed to devm_add_action_or_reset, %d\n", error);
+-		return error;
++		goto err_put_fw;
+ 	}
+ 
+ 	touchbuf = (u32)ts->fw_regs_phys;
+@@ -206,6 +209,10 @@ static int rpi_ts_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	return 0;
++
++err_put_fw:
++	rpi_firmware_put(fw);
++	return error;
+ }
+ 
+ static const struct of_device_id rpi_ts_match[] = {
+-- 
+2.25.1
 
-As we discussed offline, Vincent is keen on decoupling the util_fits_cpu()
-logic from HMP - which means I need to reword this differently.
-
-Let's keep this in the back burner in case we need to revisit it again.
-
-Appreciate the proposal!!
-
-
-Many thanks
-
---
-Qais Yousef
