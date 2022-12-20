@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1394651B9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B23651BA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:27:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233576AbiLTH12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 02:27:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
+        id S233737AbiLTH1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 02:27:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233644AbiLTH0e (ORCPT
+        with ESMTP id S233795AbiLTH1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 02:26:34 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6DF327
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:26:30 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id f9so7777995pgf.7
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:26:30 -0800 (PST)
+        Tue, 20 Dec 2022 02:27:08 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FCA175BD
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:26:38 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id e190so3335492pgc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:26:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lJ2p4kzRZQx2M+uHMuQF7vBRM0anRv9EBumcihg3PQc=;
-        b=BBqm0Mh4ePRByKmrLfvCwkScNbWATyCDynwf1JxizlYMlSLRoxUJrIiVqjr2xr4xeM
-         dmXraAU1naXOkExZXTq2HDWn1prL9xIFcS7HvM38W6tUrv6fZxpiarjsNpU32ymNLIQr
-         1HTwmj84kS7nDjMjYHgpU6TL4ka5SbrZPgwfjoq37iHoJJ51q0qV5SBZnfIY4Sob7Kaj
-         IINB5xEwVrLOVXzzDrayCqBRJ+fzoXCVnctZ8OeeV9k357WHdx8XMkir3f9v6g+4S1ji
-         kEFwAKqEguWLqCHDeSOnPuATmQFixsk2ZArf6QhMk5xYmzSmirPCclh4X9xne4SlPwtn
-         3JgQ==
+        bh=bwVOI/UUu1ABuS2KCRqzKXC5K7Q/+T6ANJVcDug2ZfE=;
+        b=BrhX07zrzIpvGLJX0fQwCopam6mGHXBowlolWZ0TNNwJxoVszhbWaofdn/qtuBfm/c
+         OlW0Dl05bnhzU2G9MaRprfM6XJ1G41VZB7EZmJuTs/Qff+kX2r5AGV2rV8O04MXC9Fbz
+         u1gsRw5xqriQjCIKIwyk3uyFEFIh4qY8bmnDuQikfTU/5eBgAA+wJVelu3IMIr/d73ya
+         nRFL6I3cmj1aAjNAsAHd2zJm8NXgJHG7Aq6ltHfeEruRr1lmX74hfCu+3wBFF1fVwxlp
+         yeISuWe9bh9Uh8PpP8bB5ff/C9et2/ft7OTjy0w5wUF48dg9LnjeFtP8dK9MlTSBidIH
+         NrJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lJ2p4kzRZQx2M+uHMuQF7vBRM0anRv9EBumcihg3PQc=;
-        b=OwxTFswTlHXzb3njO/InGtoiNFM1zx+zzC5C2VaU7cqTiXT4B1XTW8RNGbzOgXtNH4
-         8WLlgB6tDBKBD3OSl2+/JiPqNaaKCXDnJkSZtqbBVC6AIVvYheax21SVkFVZ818iRSPu
-         1tlr1aJ3ZDMomhDnRQHK80z9k+QOEVLuT5Wd3KnoLca9QhO/LvkBPcK/jnMnVaDraw7q
-         ajtKOq66Ci192MBi9DNqjTbZ5WhzGv1OPKEYMMRezBNr1XULASgm01Zy/qFkEKYZFnHo
-         6jLrPCgBUnqUAvOck/KFxflhPYvVBhZJl3qkyG42fsa57tbsH3vePLOD+awEEnj8TxVl
-         2DcA==
-X-Gm-Message-State: AFqh2kpG+rzDZ3p63f+zyx2RfXIjRS0U3cFe2XlfVuF3m8q/8Bd+QJ9T
-        ESpDYL5NoYJzjKQGZvssleM=
-X-Google-Smtp-Source: AMrXdXtfjmPeOLI9E+pbL9c2dP4v9DUaY59cThOKU2xu/3lwgRPb90rNOhO2dbkDkDN2F6VXbNEsrA==
-X-Received: by 2002:aa7:874b:0:b0:57e:c106:d50c with SMTP id g11-20020aa7874b000000b0057ec106d50cmr13197565pfo.17.1671521189678;
-        Mon, 19 Dec 2022 23:26:29 -0800 (PST)
+        bh=bwVOI/UUu1ABuS2KCRqzKXC5K7Q/+T6ANJVcDug2ZfE=;
+        b=HwMlmDh9qLzqX4Q+3g5I+MGOV7mQOzA+DdSx4CezeSEcLOOYzPmfNAT2F6zBBc7uoI
+         3cRA1BvJ8xbD3tNEhSwKGvTYV4fvaO2T0XOxG08iV7kv/Fb7qVQU8TcrGFHvYdFKjAhY
+         DyFoZww6CzsPq0o7ob6kcJiKxaKkNax6a752XF4CdKVn9O1Jblnu0w/ENxVYkF/Fr6PZ
+         gtk9dEOK3QXo00WZuGJcliEl39USU3PAzzjfhdUDow80oUNuFlvnH7g5C401OJbItNM4
+         OlynlyFmLfFDeDm/I4e5IfshEvjuwhHCjk+yV3NZZcIhXag205xG5TmYmUgDDfUpN1mk
+         YeYg==
+X-Gm-Message-State: ANoB5plt3txPASL9h8BzbiC+OYp1XZL+L40h5ia6+JW9hhWCUy834GRH
+        Fxxr0a4rvc9ah8II1NcA4N0=
+X-Google-Smtp-Source: AA0mqf6YqNZk4ITPJSCpg7CeWUIx50XL/iBuxra6VL+g21vXDtDQwTBItG+8v2X3J92lZ1TFysHKmA==
+X-Received: by 2002:a05:6a00:1e:b0:576:e704:d8c3 with SMTP id h30-20020a056a00001e00b00576e704d8c3mr43783857pfk.23.1671521198441;
+        Mon, 19 Dec 2022 23:26:38 -0800 (PST)
 Received: from archlinux.localdomain ([140.121.198.213])
-        by smtp.googlemail.com with ESMTPSA id q15-20020aa7982f000000b00576f9773c80sm7865544pfl.206.2022.12.19.23.26.21
+        by smtp.googlemail.com with ESMTPSA id q15-20020aa7982f000000b00576f9773c80sm7865544pfl.206.2022.12.19.23.26.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 23:26:28 -0800 (PST)
+        Mon, 19 Dec 2022 23:26:37 -0800 (PST)
 From:   Chih-En Lin <shiyn.lin@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Qi Zheng <zhengqi.arch@bytedance.com>,
@@ -103,9 +103,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Jim Huang <jserv@ccns.ncku.edu.tw>,
         Huichun Feng <foxhoundsk.tw@gmail.com>,
         Chih-En Lin <shiyn.lin@gmail.com>
-Subject: [PATCH v3 10/14] mm/userfaultfd: Support COW PTE
-Date:   Tue, 20 Dec 2022 15:27:39 +0800
-Message-Id: <20221220072743.3039060-11-shiyn.lin@gmail.com>
+Subject: [PATCH v3 11/14] mm/migrate_device: Support COW PTE
+Date:   Tue, 20 Dec 2022 15:27:40 +0800
+Message-Id: <20221220072743.3039060-12-shiyn.lin@gmail.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221220072743.3039060-1-shiyn.lin@gmail.com>
 References: <20221220072743.3039060-1-shiyn.lin@gmail.com>
@@ -121,37 +121,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If uffd fills the zeropage or installs to COW-ed PTE, break it first.
+Break COW PTE before collecting the pages in COW-ed PTE.
 
 Signed-off-by: Chih-En Lin <shiyn.lin@gmail.com>
 ---
- mm/userfaultfd.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ mm/migrate_device.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index 650ab6cfd5f49..4ee21c0d42d90 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -69,6 +69,9 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
- 	struct inode *inode;
- 	pgoff_t offset, max_off;
+diff --git a/mm/migrate_device.c b/mm/migrate_device.c
+index 721b2365dbca9..f6d67bd9629f5 100644
+--- a/mm/migrate_device.c
++++ b/mm/migrate_device.c
+@@ -106,6 +106,8 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+ 		}
+ 	}
  
-+	if (break_cow_pte(dst_vma, dst_pmd, dst_addr) < 0)
-+		return -ENOMEM;
-+
- 	_dst_pte = mk_pte(page, dst_vma->vm_page_prot);
- 	_dst_pte = pte_mkdirty(_dst_pte);
- 	if (page_in_cache && !vm_shared)
-@@ -227,6 +230,9 @@ static int mfill_zeropage_pte(struct mm_struct *dst_mm,
- 	pgoff_t offset, max_off;
- 	struct inode *inode;
++	if (!break_cow_pte_range(vma, pmdp, start, end))
++		return migrate_vma_collect_skip(start, end, walk);
+ 	if (unlikely(pmd_bad(*pmdp)))
+ 		return migrate_vma_collect_skip(start, end, walk);
  
-+	if (break_cow_pte(dst_vma, dst_pmd, dst_addr) < 0)
-+		return -ENOMEM;
-+
- 	_dst_pte = pte_mkspecial(pfn_pte(my_zero_pfn(dst_addr),
- 					 dst_vma->vm_page_prot));
- 	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
 -- 
 2.37.3
 
