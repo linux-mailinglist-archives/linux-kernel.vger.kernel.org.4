@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA91D651B58
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF99F651B5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233446AbiLTHO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 02:14:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S233545AbiLTHQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 02:16:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233565AbiLTHOA (ORCPT
+        with ESMTP id S233288AbiLTHQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 02:14:00 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2F618B3D;
-        Mon, 19 Dec 2022 23:07:22 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id js9so11525185pjb.2;
-        Mon, 19 Dec 2022 23:07:22 -0800 (PST)
+        Tue, 20 Dec 2022 02:16:03 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AE72DE4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:14:10 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id b12so7760946pgj.6
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:14:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AwGJvi0Hqvv9JsuJy6Gv715wZTJNC2wfNDuRpG/Z03c=;
-        b=eMolG9vHTtOXK18ugSCIT0pCtnwCyoEsJeJ5PFZQGlEJEv8sGasn8k+mDNhl13PHtY
-         KxdPALt6iNv1ZxEOScug4CjFT4yCtXaPilRS4KpEie5J9Y8SLqmppp5JrDNEKt+UxiZk
-         eqBpTCNCaf/7o148rNd27ULe/kJ9Xn6dxiP231e6ygEywzOKaGrwUesy9DXrmQask2mJ
-         QivmeB3xkmUMw8175037K8srGanPjwIp2+itZCK6uHl1Delon502RC/BOMncaixcxKaP
-         c0p0fyUNurBXLQPHDAAE3x9UdnNFTS36u+ZdnOICTnOxYQF2w5zemVtMudmeT7rOIbzN
-         0jbg==
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4X0KQlryzQSZ+A4CVvWMh3bk/BYXb4lDOcSFPf4dERI=;
+        b=O3jU0vIb6ea9nh+Bgjte/SdIn9p0YWtJsbkYgoyRZB/22pbybFOkDM/zjfkZK95NS8
+         hlc12iVfjGojWYDDiSEmqHHoPwnW6m/yvEnnBWZWMR55rroMxtTZCH6L9bY9iEgsFC3y
+         cRuyvzWp+IDKXiMTE8uAIEF9RomYRULP5ZWAOIUJIrSo3cgeuxQJxAWT+5RntNVNBTtH
+         CC96FzoISDrbY8/auKGNA5P2ewYertaxz13PBcXPO+xpEyi9d4Am+syiGmLFBfIZhhLg
+         0pXJBgEK8VGK2oFrkVcwj/uTdsIqvNQQ4xy5jQTZagXwqkqvdsikJtp12i7pQEAst+hJ
+         Nr+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AwGJvi0Hqvv9JsuJy6Gv715wZTJNC2wfNDuRpG/Z03c=;
-        b=gPquulXJNuhOIpoQuDEhq2z6kNRJrpGx9JLcx908mWGEILxmKGXsb/AboKNo7Gx2U0
-         Rti3PIQ/t4YxeCV40Ab7Dnyk063etWWJzTXtEI7tZIhiUPKQISrrYwkucxwXxOBD73Ox
-         5NyGghyD9i7YwigRYXuqAKmwszra49lpriFNNOtoU/o0z72xyvZRcAIUDjCSMx9k1qWk
-         7hQD4t7RZ0+x/fGhbPRxDzPk5zOX+YXFMnVBbxxbY4HdJvtfRtR1R/x6Fs+rVD+ysRw3
-         4j58p5rX/UiscZ26sQs5GEvbK4+MOsTE2EjXzdgXu9gSeLyC6f4L4mh0fIUujFwE7Qoo
-         mz2g==
-X-Gm-Message-State: ANoB5pn4/4XKsNAQ9vPbeX5KET5xaY7DRcb0iXFDdfv4UF90BPC/llUq
-        PVJvv0AhtkTGsjji7qN3fRIvkdUOryZVIg==
-X-Google-Smtp-Source: AA0mqf4iLIizbzTJRsINqgiMybAadqDLhEvMnVzW3qXyXFfY1t4pTIN5jFY0V6pdOozi2j7p8S7Jsg==
-X-Received: by 2002:a17:90b:1916:b0:21a:4bf:eeb0 with SMTP id mp22-20020a17090b191600b0021a04bfeeb0mr46812820pjb.28.1671520041576;
-        Mon, 19 Dec 2022 23:07:21 -0800 (PST)
-Received: from bobo.ozlabs.ibm.com (203-219-149-28.tpgi.com.au. [203.219.149.28])
-        by smtp.gmail.com with ESMTPSA id f10-20020a17090ace0a00b00219220edf0dsm7074232pju.48.2022.12.19.23.07.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 23:07:20 -0800 (PST)
-From:   Nicholas Piggin <npiggin@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rik van Riel <riel@surriel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org
-Subject: [PATCH] cputime: remove cputime_to_nsecs fallback
-Date:   Tue, 20 Dec 2022 17:07:05 +1000
-Message-Id: <20221220070705.2958959-1-npiggin@gmail.com>
-X-Mailer: git-send-email 2.37.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4X0KQlryzQSZ+A4CVvWMh3bk/BYXb4lDOcSFPf4dERI=;
+        b=kzU09RHyCzUVtoZ691uzHWOP0rxeFVjXRnYZqAiM8Y7ldiGzhtr4FK/UVcD1IullO7
+         44ovGU2fjFWm9+aZnbZTfvP1LqtFJY1uzK4RsErHpNInlMkMMyBKAn4esff1TS978Kfh
+         JhGJJAarpqS5zEqwWkPbolBlEVnkW+HRS4PfolWItQ7ob+HelduDQ2n69aADOobo8t5g
+         EnMUiT6TI32p2cv0jO8q4N8erqlsqEQDkd8RaTbvJGOFEu5NCvi0OFlnHzEtM8ksvbh/
+         u7PZDmhEnAAWl5XsHmSSqbULpnYk9oTKLGETJmnJg9/IN52WyILtaihHsFvAX6RGqNxc
+         9zdg==
+X-Gm-Message-State: AFqh2kp/DtN7SLarQLJ5LTtrlhJk9QI2k8PxNY5sgqysBac2GvRCT5W2
+        2Zqe0Kwb12P+YX0iQVBGhKE=
+X-Google-Smtp-Source: AMrXdXvslA2U0jhUAUr74lSlPSD7waWGk26xbpwKt9BGBFbVdBVYRvEU4Gp/ZyI+fHKYLBVgfLQfTA==
+X-Received: by 2002:aa7:870f:0:b0:57e:c08b:b7b9 with SMTP id b15-20020aa7870f000000b0057ec08bb7b9mr18824159pfo.10.1671520450031;
+        Mon, 19 Dec 2022 23:14:10 -0800 (PST)
+Received: from localhost (203-219-149-28.tpgi.com.au. [203.219.149.28])
+        by smtp.gmail.com with ESMTPSA id h10-20020a62830a000000b00574ffc5976fsm7869168pfe.159.2022.12.19.23.14.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Dec 2022 23:14:09 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 20 Dec 2022 17:14:05 +1000
+Message-Id: <CP6GJNNB62LY.N38DBL6D2S79@bobo>
+Cc:     <linux-kernel@vger.kernel.org>,
+        "Michael Ellerman" <mpe@ellerman.id.au>
+Subject: Re: [PATCH] exit: Detect and fix irq disabled state in oops
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Nicholas Piggin" <npiggin@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+X-Mailer: aerc 0.13.0
+References: <20221004094401.708299-1-npiggin@gmail.com>
+In-Reply-To: <20221004094401.708299-1-npiggin@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -75,106 +74,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The archs that use cputime_to_nsecs() internally provide their own
-definition and don't need the fallback. cputime_to_usecs() unused except
-in this fallback, and is not defined anywhere.
+On Tue Oct 4, 2022 at 7:44 PM AEST, Nicholas Piggin wrote:
+> If a task oopses with irqs disabled, this can cause various cascading
+> problems in the oops path such as sleep-from-invalid warnings, and
+> potentially worse.
+>
+> Since commit 0258b5fd7c712 ("coredump: Limit coredumps to a single
+> thread group"), the unconditional irq enable in coredump_task_exit()
+> will "fix" the irq state to be enabled early in do_exit(), so currently
+> this may not be triggerable, but that is coincidental and fragile.
+>
+> Detect and fix the irqs_disabled() condition in the oops path before
+> calling do_exit(), similarly to the way in_atomic() is handled.
+>
+> Reported-by: Michael Ellerman <mpe@ellerman.id.au>
+> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 
-This removes the final remnant of the cputime_t code from the kernel.
-
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Rik van Riel <riel@surriel.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Frederic Weisbecker <fweisbec@gmail.com>
-Cc: Sven Schnelle <svens@linux.ibm.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-s390@vger.kernel.org
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
----
-This required a couple of tweaks to s390 includes so we're not pulling
-asm/cputime.h into the core header unnecessarily. In that case maybe
-this can go via s390 tree because the patch should be otherwise quite
-trivial. Could it get an ack or two from a core maintainer to support
-that?
+Hey Eric, did you have any thoughts on this?
 
 Thanks,
 Nick
 
- arch/s390/kernel/idle.c       | 2 +-
- arch/s390/kernel/vtime.c      | 2 +-
- include/linux/sched/cputime.h | 9 ---------
- kernel/sched/cputime.c        | 4 ++++
- 4 files changed, 6 insertions(+), 11 deletions(-)
-
-diff --git a/arch/s390/kernel/idle.c b/arch/s390/kernel/idle.c
-index 4bf1ee293f2b..a6bbceaf7616 100644
---- a/arch/s390/kernel/idle.c
-+++ b/arch/s390/kernel/idle.c
-@@ -12,9 +12,9 @@
- #include <linux/notifier.h>
- #include <linux/init.h>
- #include <linux/cpu.h>
--#include <linux/sched/cputime.h>
- #include <trace/events/power.h>
- #include <asm/cpu_mf.h>
-+#include <asm/cputime.h>
- #include <asm/nmi.h>
- #include <asm/smp.h>
- #include "entry.h"
-diff --git a/arch/s390/kernel/vtime.c b/arch/s390/kernel/vtime.c
-index 9436f3053b88..e0a88dcaf5cb 100644
---- a/arch/s390/kernel/vtime.c
-+++ b/arch/s390/kernel/vtime.c
-@@ -7,13 +7,13 @@
-  */
- 
- #include <linux/kernel_stat.h>
--#include <linux/sched/cputime.h>
- #include <linux/export.h>
- #include <linux/kernel.h>
- #include <linux/timex.h>
- #include <linux/types.h>
- #include <linux/time.h>
- #include <asm/alternative.h>
-+#include <asm/cputime.h>
- #include <asm/vtimer.h>
- #include <asm/vtime.h>
- #include <asm/cpu_mf.h>
-diff --git a/include/linux/sched/cputime.h b/include/linux/sched/cputime.h
-index ce3c58286062..5f8fd5b24a2e 100644
---- a/include/linux/sched/cputime.h
-+++ b/include/linux/sched/cputime.h
-@@ -8,15 +8,6 @@
-  * cputime accounting APIs:
-  */
- 
--#ifdef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
--#include <asm/cputime.h>
--
--#ifndef cputime_to_nsecs
--# define cputime_to_nsecs(__ct)	\
--	(cputime_to_usecs(__ct) * NSEC_PER_USEC)
--#endif
--#endif /* CONFIG_VIRT_CPU_ACCOUNTING_NATIVE */
--
- #ifdef CONFIG_VIRT_CPU_ACCOUNTING_GEN
- extern bool task_cputime(struct task_struct *t,
- 			 u64 *utime, u64 *stime);
-diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
-index 95fc77853743..af7952f12e6c 100644
---- a/kernel/sched/cputime.c
-+++ b/kernel/sched/cputime.c
-@@ -3,6 +3,10 @@
-  * Simple CPU accounting cgroup controller
-  */
- 
-+#ifdef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
-+ #include <asm/cputime.h>
-+#endif
-+
- #ifdef CONFIG_IRQ_TIME_ACCOUNTING
- 
- /*
--- 
-2.37.2
+> ---
+>  kernel/exit.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/kernel/exit.c b/kernel/exit.c
+> index 84021b24f79e..fa696765f694 100644
+> --- a/kernel/exit.c
+> +++ b/kernel/exit.c
+> @@ -738,6 +738,7 @@ void __noreturn do_exit(long code)
+>  	struct task_struct *tsk =3D current;
+>  	int group_dead;
+> =20
+> +	WARN_ON(irqs_disabled());
+>  	WARN_ON(tsk->plug);
+> =20
+>  	kcov_task_exit(tsk);
+> @@ -865,6 +866,11 @@ void __noreturn make_task_dead(int signr)
+>  	if (unlikely(!tsk->pid))
+>  		panic("Attempted to kill the idle task!");
+> =20
+> +	if (unlikely(irqs_disabled())) {
+> +		pr_info("note: %s[%d] exited with irqs disabled\n",
+> +			current->comm, task_pid_nr(current));
+> +		local_irq_enable();
+> +	}
+>  	if (unlikely(in_atomic())) {
+>  		pr_info("note: %s[%d] exited with preempt_count %d\n",
+>  			current->comm, task_pid_nr(current),
+> --=20
+> 2.37.2
 
