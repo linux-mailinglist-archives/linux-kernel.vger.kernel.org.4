@@ -2,103 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506E265239F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE49D6523B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233780AbiLTPXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 10:23:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32830 "EHLO
+        id S233741AbiLTPdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 10:33:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233685AbiLTPXC (ORCPT
+        with ESMTP id S229861AbiLTPdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 10:23:02 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6561C120;
-        Tue, 20 Dec 2022 07:22:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
-        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
-        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
-        List-Owner:List-Archive; bh=SVbYqkm4a1E3YCr2+Z9+Ruxlvn1hYXuMe1ljbrNYwLE=; b=s
-        sysWeiBuf4lgKjt5pmVFyWrfWSCbF+mipDzCgh3W/kl0FudRX3pLmenMmJ60nH3riJXJrDB7h8JaC
-        29UUlZivK6qNs0yoBEV88QLYGnEUShu9p93YiRgsk2oYZ5fNS9vtsfUYt+n7NKOjTnVN8VcKfs08E
-        BA3WVbbD7hm2U/aM=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:48674 helo=pettiford.lan)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1p7eS0-0005MP-Vg; Tue, 20 Dec 2022 10:22:41 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     hugo@hugovil.com, bruno.thomsen@gmail.com,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 20 Dec 2022 10:22:37 -0500
-Message-Id: <20221220152237.1125178-1-hugo@hugovil.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 20 Dec 2022 10:33:05 -0500
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF6DB489;
+        Tue, 20 Dec 2022 07:33:04 -0800 (PST)
+Received: by mail-oo1-xc35.google.com with SMTP id z20-20020a4a4914000000b004b026afa844so929652ooa.13;
+        Tue, 20 Dec 2022 07:33:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=suyFY8xw9UxN+N9G3efEmh94rT9pPwpzgTHk6VM1Dqc=;
+        b=CIleh4Apr8LRwfvI+A+BsYTd8i+SO+iVA99bQOSI4JQAHRn00el5BF74vki3nnnQWY
+         banuUqWAjPRDPdL8dzb4s3OqgCEKOyXs818a0XC83NfMZuGCbPaFOPpEAMHFqLwUP8qV
+         Tpet8LXYFdPAdlsTNpNOWnJR96Nz/xQep1lubNOKqVFu8YhDdllvDH9mAFVZWQJZzh8R
+         cRcduHW6iXhNpJtqbljF+TlwS6TCJjVHC8GfR+bI6rmI22Qubs997URFoo+5G8Qv2A3A
+         UXdTuHKLUo5fTvGtBEupnxRaTN2W4HzSEPlAVO2ZNpsnCGsZ+vAWIXMhNKJ69+13h5o7
+         4dcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=suyFY8xw9UxN+N9G3efEmh94rT9pPwpzgTHk6VM1Dqc=;
+        b=PM8Tqzqps/r+cUDl3XFRWSAx3LGyT2V1RVKDxFJD09L+VRP8T68jlGkHuEv7q5az3+
+         57yZASA6PRSmk2xEDCeKKX+/VxS5yCewtTfIsmuZ677A4zRgJivChMsvO1DWMvKmepzY
+         lohD+kS4ndEMmieMivvSsLrRLpFBkUQe700SJYac0IJ0OMwaV9jMXPJkFQz2WWym/9/F
+         hk2WPTYBRnwFXKvPffZwanqVhLbBZo7ghagJt8DLBHV/Ilij7ktX0ZfB0dtAQ0BpS1mS
+         GZDdtLTNH8320MA0wYq4LWME7F8thNBiO2PD+S6WZ7WkA+i0IO4K/TlCRzS5ALYmkQoB
+         70AA==
+X-Gm-Message-State: ANoB5pk6yIDNczT1cq+OLblc+3WwoT/+rmLbUY/Y43mNhGdLKhJEebUG
+        wlXuvOLo4XrtskiPGbxF6Z0=
+X-Google-Smtp-Source: AA0mqf6A884VIUJ2aHIMNtCymsgMVLg/Y+NGc14jOkcXUYSbZVFFvdSEPHpAYHEIkM7ElnSyrNgM5A==
+X-Received: by 2002:a4a:d12e:0:b0:4a4:9a57:8eb2 with SMTP id n14-20020a4ad12e000000b004a49a578eb2mr12778900oor.1.1671550383589;
+        Tue, 20 Dec 2022 07:33:03 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n14-20020a4a344e000000b004a5811080dfsm5156134oof.40.2022.12.20.07.33.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 07:33:03 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 20 Dec 2022 07:33:02 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.0 00/28] 6.0.15-rc1 review
+Message-ID: <20221220153302.GA907923@roeck-us.net>
+References: <20221219182944.179389009@linuxfoundation.org>
+ <20221220144900.GD3748047@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220144900.GD3748047@roeck-us.net>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH] dt-bindings: rtc: pcf2127: remove pca/pcf2129 from trivial RTC devices list
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+On Tue, Dec 20, 2022 at 06:49:02AM -0800, Guenter Roeck wrote:
+> On Mon, Dec 19, 2022 at 08:22:47PM +0100, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 6.0.15 release.
+> > There are 28 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
+> > Anything received after that time might be too late.
+> > 
+> 
+> Build results:
+> 	total: 155 pass: 155 fail: 0
+> Qemu test results:
+> 	total: 500 pass: 500 fail: 0
+> 
+> Tested-by: Guenter Roeck <linux@roeck-us.net>
+> 
 
-pca/pcf2129 devices can also have the 'reset-source' property, so
-remove them from the trivial RTC devices list.
+Wrong results, sorry. I'll resend once I have real ones. 
 
-Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
----
- Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 5 ++++-
- Documentation/devicetree/bindings/rtc/trivial-rtc.yaml | 2 --
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-index cde7b1675ead..a1148eb22c24 100644
---- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-+++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-@@ -14,7 +14,10 @@ maintainers:
- 
- properties:
-   compatible:
--    const: nxp,pcf2127
-+    enum:
-+      - nxp,pca2129
-+      - nxp,pcf2127
-+      - nxp,pcf2129
- 
-   reg:
-     maxItems: 1
-diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-index d9fc120c61cc..82a4b002cf3d 100644
---- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-@@ -53,8 +53,6 @@ properties:
-       - microcrystal,rv3029
-       # Real Time Clock
-       - microcrystal,rv8523
--      - nxp,pca2129
--      - nxp,pcf2129
-       # Real-time Clock Module
-       - pericom,pt7c4338
-       # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
-
-base-commit: e88f319a2546fd7772c726bf3a82a23b0859ddeb
--- 
-2.30.2
-
+Guenter
