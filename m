@@ -2,37 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774C36523E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77EF16523E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233853AbiLTPn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 10:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
+        id S233918AbiLTPof convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Dec 2022 10:44:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233534AbiLTPny (ORCPT
+        with ESMTP id S233912AbiLTPoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 10:43:54 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7CE18686;
-        Tue, 20 Dec 2022 07:43:53 -0800 (PST)
+        Tue, 20 Dec 2022 10:44:16 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2288917E35;
+        Tue, 20 Dec 2022 07:44:12 -0800 (PST)
 Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6E45024000C;
-        Tue, 20 Dec 2022 15:43:50 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1AE2040003;
+        Tue, 20 Dec 2022 15:44:09 +0000 (UTC)
+Message-ID: <db717b228dabc53b5d726c6e57076917dfecba37.camel@hadess.net>
+Subject: Re: [PATCH 1/3] Revert "HID: logitech-hidpp: add a module parameter
+ to keep firmware gestures"
 From:   Bastien Nocera <hadess@hadess.net>
 To:     linux-input@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
-        =?UTF-8?q?Filipe=20La=C3=ADns?= <lains@riseup.net>,
+        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
         Nestor Lopez Casado <nlopezcasad@logitech.com>
-Subject: [PATCH v2 3/3] HID: logitech-hidpp: Remove HIDPP_QUIRK_NO_HIDINPUT quirk
-Date:   Tue, 20 Dec 2022 16:43:45 +0100
-Message-Id: <20221220154345.474596-3-hadess@hadess.net>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221220154345.474596-1-hadess@hadess.net>
-References: <20221220154345.474596-1-hadess@hadess.net>
+Date:   Tue, 20 Dec 2022 16:44:09 +0100
+In-Reply-To: <20221220092207.428640-1-hadess@hadess.net>
+References: <20221220092207.428640-1-hadess@hadess.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -42,59 +44,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HIDPP_QUIRK_NO_HIDINPUT isn't used by any devices but still happens to
-work as HIDPP_QUIRK_DELAYED_INIT is defined to the same value. Remove
-HIDPP_QUIRK_NO_HIDINPUT and use HIDPP_QUIRK_DELAYED_INIT everywhere
-instead.
+On Tue, 2022-12-20 at 10:22 +0100, Bastien Nocera wrote:
+> Now that we're in 2022, and the majority of desktop environments can
+> and
+> should support touchpad gestures through libinput, remove the legacy
+> module parameter that made it possible to use gestures implemented in
+> firmware.
+> 
+> This will eventually allow simplifying the driver's initialisation
+> code.
+> 
+> This reverts commit 9188dbaed68a4b23dc96eba165265c08caa7dc2a.
 
-Tested on a T650 which requires that quirk, and a number of unifying and
-Bluetooth devices that don't.
+Forgot the signed-off-by, resent as v2.
 
-Signed-off-by: Bastien Nocera <hadess@hadess.net>
----
- drivers/hid/hid-logitech-hidpp.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
-index b4e4a8c79c75..2092fb1be627 100644
---- a/drivers/hid/hid-logitech-hidpp.c
-+++ b/drivers/hid/hid-logitech-hidpp.c
-@@ -67,7 +67,7 @@ MODULE_PARM_DESC(disable_tap_to_click,
- /* bits 2..20 are reserved for classes */
- /* #define HIDPP_QUIRK_CONNECT_EVENTS		BIT(21) disabled */
- #define HIDPP_QUIRK_WTP_PHYSICAL_BUTTONS	BIT(22)
--#define HIDPP_QUIRK_NO_HIDINPUT			BIT(23)
-+#define HIDPP_QUIRK_DELAYED_INIT		BIT(23)
- #define HIDPP_QUIRK_FORCE_OUTPUT_REPORTS	BIT(24)
- #define HIDPP_QUIRK_UNIFYING			BIT(25)
- #define HIDPP_QUIRK_HIDPP_WHEELS		BIT(26)
-@@ -83,8 +83,6 @@ MODULE_PARM_DESC(disable_tap_to_click,
- 					 HIDPP_CAPABILITY_HIDPP20_HI_RES_SCROLL | \
- 					 HIDPP_CAPABILITY_HIDPP20_HI_RES_WHEEL)
- 
--#define HIDPP_QUIRK_DELAYED_INIT		HIDPP_QUIRK_NO_HIDINPUT
--
- #define HIDPP_CAPABILITY_HIDPP10_BATTERY	BIT(0)
- #define HIDPP_CAPABILITY_HIDPP20_BATTERY	BIT(1)
- #define HIDPP_CAPABILITY_BATTERY_MILEAGE	BIT(2)
-@@ -4205,7 +4203,7 @@ static void hidpp_connect_event(struct hidpp_device *hidpp)
- 	if (hidpp->capabilities & HIDPP_CAPABILITY_HI_RES_SCROLL)
- 		hi_res_scroll_enable(hidpp);
- 
--	if (!(hidpp->quirks & HIDPP_QUIRK_NO_HIDINPUT) || hidpp->delayed_input)
-+	if (!(hidpp->quirks & HIDPP_QUIRK_DELAYED_INIT) || hidpp->delayed_input)
- 		/* if the input nodes are already created, we can stop now */
- 		return;
- 
-@@ -4436,7 +4434,7 @@ static int hidpp_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		hid_hw_close(hdev);
- 		hid_hw_stop(hdev);
- 
--		if (hidpp->quirks & HIDPP_QUIRK_NO_HIDINPUT)
-+		if (hidpp->quirks & HIDPP_QUIRK_DELAYED_INIT)
- 			connect_mask &= ~HID_CONNECT_HIDINPUT;
- 
- 		/* Now export the actual inputs and hidraw nodes to the world */
--- 
-2.38.1
+> ---
+>  drivers/hid/hid-logitech-hidpp.c | 10 ----------
+>  1 file changed, 10 deletions(-)
+> 
+> diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-
+> logitech-hidpp.c
+> index 08ad19097e9e..7f9187201913 100644
+> --- a/drivers/hid/hid-logitech-hidpp.c
+> +++ b/drivers/hid/hid-logitech-hidpp.c
+> @@ -32,11 +32,6 @@ MODULE_LICENSE("GPL");
+>  MODULE_AUTHOR("Benjamin Tissoires <benjamin.tissoires@gmail.com>");
+>  MODULE_AUTHOR("Nestor Lopez Casado <nlopezcasad@logitech.com>");
+>  
+> -static bool disable_raw_mode;
+> -module_param(disable_raw_mode, bool, 0644);
+> -MODULE_PARM_DESC(disable_raw_mode,
+> -       "Disable Raw mode reporting for touchpads and keep firmware
+> gestures.");
+> -
+>  static bool disable_tap_to_click;
+>  module_param(disable_tap_to_click, bool, 0644);
+>  MODULE_PARM_DESC(disable_tap_to_click,
+> @@ -4355,11 +4350,6 @@ static int hidpp_probe(struct hid_device
+> *hdev, const struct hid_device_id *id)
+>             hidpp_application_equals(hdev, HID_GD_KEYBOARD))
+>                 hidpp->quirks |=
+> HIDPP_QUIRK_HIDPP_CONSUMER_VENDOR_KEYS;
+>  
+> -       if (disable_raw_mode) {
+> -               hidpp->quirks &= ~HIDPP_QUIRK_CLASS_WTP;
+> -               hidpp->quirks &= ~HIDPP_QUIRK_NO_HIDINPUT;
+> -       }
+> -
+>         if (hidpp->quirks & HIDPP_QUIRK_CLASS_WTP) {
+>                 ret = wtp_allocate(hdev, id);
+>                 if (ret)
 
