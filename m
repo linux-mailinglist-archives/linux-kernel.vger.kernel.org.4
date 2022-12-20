@@ -2,160 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0599E6518D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 03:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF4D6518DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 03:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232807AbiLTCiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 21:38:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34984 "EHLO
+        id S232840AbiLTCjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 21:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232858AbiLTCik (ORCPT
+        with ESMTP id S232762AbiLTCjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 21:38:40 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C7F11A24
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 18:38:13 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id f3so7472606pgc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 18:38:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XdsW29O/6Xn6rXQsu5aPcLciaxL4xlcszGahdv8fEa4=;
-        b=JX+Yf4WHK86OHRDqIF+sLMufhIcZDg+3+srs173HnZoa49DGsPAWF5Dr5GAckDMRWz
-         FKHkNX+zSoaW4T6mj7PFoBB+R7aIPFkoDT6C/zaKh7Fr6YFcJKKB+3TP03RHpygnFjIk
-         zT4pk334VL7ur7W5QNW3BqlUa/W794r2umr3pX1aAVp3AXfUJGFwSzJu8dGpw7ZCgTEG
-         4NVifBZ8i6VMj0URqFcOG+fZKYrG0HAfPsGfyCS0BgcNENC/nKgRAk4PMZc5vosOwenc
-         Y434W1ZNjXPpGBrbmjcVPOpgMpveICUYsPsb8oI5lQrxmvtyQ5C3+4gEoXEATonYs6ZV
-         7YBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XdsW29O/6Xn6rXQsu5aPcLciaxL4xlcszGahdv8fEa4=;
-        b=PxSKoA2NYdZUkBxXFhrShonWkIBohoWg5dh7ty7L9xojcKnq59R6ovE7O41UftfzFB
-         WHG1ZXbVZR6AaPn+4yey36VjanXXd2CdUKVezvtVHQEmK+8kHE8E+SF4gYhQQc4l3Z8C
-         biztNhlawgs5feZIpx/5lDFmwbaIur7Q4wbBzscaeODZYloGSqkekTdvgdcXVxoFw+G3
-         vFQ1l2QB8Acw7Mh5sW60l6NFIe2oIg+Vb7GDGMSasP9tI/kQHx8zZCLeFCTVFgDokDR5
-         kmz5JuL/I4FNkli/rBGUUqHsnpMnRRvBFN0zP7hLfnu68+U40L4JGTqUu1yxY9Jgw7Gj
-         oygw==
-X-Gm-Message-State: ANoB5pllkV+TBj6WqX3qLPm4KszcKsSGvDS4qfYUZLeyx5kz11XgLLPf
-        grSYSm8g2nFSdHlqKuKZQU/6Ja8DGeiFjBg0iUU=
-X-Google-Smtp-Source: AA0mqf56VtST1wkF2n8PGxLj9I+dEzc6pW0gRfjpWT3uBZx2CydeTcTnKx4AzFZWXiGsSCMKonwciw==
-X-Received: by 2002:aa7:956f:0:b0:576:e1f0:c812 with SMTP id x15-20020aa7956f000000b00576e1f0c812mr42718289pfq.30.1671503893422;
-        Mon, 19 Dec 2022 18:38:13 -0800 (PST)
-Received: from [10.254.36.84] ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id 81-20020a621654000000b00574740c99e9sm7306038pfw.129.2022.12.19.18.38.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 18:38:12 -0800 (PST)
-Message-ID: <78028f86-4fb4-e24e-a01b-d1f8a51cff87@bytedance.com>
-Date:   Tue, 20 Dec 2022 10:38:08 +0800
+        Mon, 19 Dec 2022 21:39:06 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA8F1263F;
+        Mon, 19 Dec 2022 18:39:04 -0800 (PST)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NbgjR5gyTzJqYR;
+        Tue, 20 Dec 2022 10:38:03 +0800 (CST)
+Received: from [10.174.179.14] (10.174.179.14) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 20 Dec 2022 10:39:02 +0800
+Subject: Re: [PATCH V2] scsi: libsas: Directly kick-off EH when ATA device
+ fell off
+To:     John Garry <john.g.garry@oracle.com>,
+        Xingui Yang <yangxingui@huawei.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <damien.lemoal@opensource.wdc.com>,
+        <linux-ide@vger.kernel.org>, <hare@suse.com>, <hch@lst.de>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
+        <kangfenglong@huawei.com>
+References: <20221216100327.7386-1-yangxingui@huawei.com>
+ <565fcf28-ec53-8d74-00a3-94be8e5b60e4@oracle.com>
+From:   Jason Yan <yanaijie@huawei.com>
+Message-ID: <a50ed139-c82f-6d07-ae76-a690cada2c90@huawei.com>
+Date:   Tue, 20 Dec 2022 10:39:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [External] Re: [PATCH] blk-throtl: Introduce sync and async
- queues for blk-throtl
-To:     Tejun Heo <tj@kernel.org>
-Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com
-References: <20221218111314.55525-1-hanjinke.666@bytedance.com>
- <Y6DWGBQSP/DA7apC@slm.duckdns.org>
-From:   hanjinke <hanjinke.666@bytedance.com>
-In-Reply-To: <Y6DWGBQSP/DA7apC@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <565fcf28-ec53-8d74-00a3-94be8e5b60e4@oracle.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.179.14]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/12/19 17:23, John Garry wrote:
+> On 16/12/2022 10:03, Xingui Yang wrote:
+>> If the ATA device fell off, call sas_ata_device_link_abort() directly and
+>> mark all outstanding QCs as failed and kick-off EH Immediately. This 
+>> avoids
+>> having to wait for block layer timeouts.
+>>
+>> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+>> ---
+>> Changes to v1:
+>> - Use dev_is_sata() to check ATA device type
+>>   drivers/scsi/libsas/sas_discover.c | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/drivers/scsi/libsas/sas_discover.c 
+>> b/drivers/scsi/libsas/sas_discover.c
+>> index d5bc1314c341..a12b65eb4a2a 100644
+>> --- a/drivers/scsi/libsas/sas_discover.c
+>> +++ b/drivers/scsi/libsas/sas_discover.c
+>> @@ -362,6 +362,9 @@ static void sas_destruct_ports(struct asd_sas_port 
+>> *port)
+>>   void sas_unregister_dev(struct asd_sas_port *port, struct 
+>> domain_device *dev)
+>>   {
+>> +    if (test_bit(SAS_DEV_GONE, &dev->state) && dev_is_sata(dev))
+>> +        sas_ata_device_link_abort(dev, false);
+> 
+> Firstly, I think that there is a bug in sas_ata_device_link_abort() -> 
+> ata_link_abort() code in that the host lock in not grabbed, as the 
+> comment in ata_port_abort() mentions. Having said that, libsas had 
+> already some dodgy host locking usage - specifically dropping the lock 
+> for the queuing path (that's something else to be fixed up ... I think 
+> that is due to queue command CB calling task_done() in some cases), but 
+> I still think that sas_ata_device_link_abort() should be fixed (to grab 
+> the host lock).
+> 
+> Secondly, this just seems like a half solution to the age-old problem - 
+> that is, EH eventually kicking in only after 30 seconds when a disk is 
+> removed with active IO. I say half solution as SAS disks still have this 
+> issue for libsas. Can we instead push to try to solve both of them now?
+> 
+> There was a broad previous discussion on this:
+> https://urldefense.com/v3/__https://lore.kernel.org/linux-scsi/Ykqg0kr0F*2Fyzk2XW@infradead.org/__;JQ!!ACWV5N9M2RV99hQ!MwAZFXXIwuP0lv-kuUIJ0ekUiGBWlTBhU3oQjyOf_yuP1rHDJb8UKMzJjndXNQ-W1PQGJXzgc0bQUsHh4NGh21EOc50$ 
+> 
+> 
+>  From that discussion, Hannes was doing some related prep work series, 
+> but I don't think it got completed.
 
+That discussion is not exactly the same with our issue. That discussion 
+focused on whether one device's error handling can not suspend the other 
+other devices's IO dispatching on the same host. That is something like 
+parallelize the error handling for different device.
 
-在 2022/12/20 上午5:22, Tejun Heo 写道:
-> Hello,
-> 
-> This looks generally fine to me. Some nits below.
-> 
->> +static inline struct bio *throtl_qnode_bio_peek(struct throtl_qnode *qn)
->> +{
->> +	struct bio *bio1, *bio2;
->> +
->> +	/* qn for read ios */
->> +	if (qn->dispatch_sync_cnt == UINT_MAX)
->> +		return bio_list_peek(&qn->bios[SYNC]);
->> +
->> +	/* qn for write ios */
->> +	bio1 = bio_list_peek(&qn->bios[SYNC]);
->> +	bio2 = bio_list_peek(&qn->bios[ASYNC]);
->> +
->> +	if (bio1 && bio2) {
->> +		if (qn->dispatch_sync_cnt == THROTL_SYNC_FACTOR)
->> +			return bio2;
->> +		return bio1;
->> +	}
->> +
->> +	return bio1 ?: bio2;
->> +}
-> 
-> Wouldn't it be simpler to write:
-> 
->          if (qn->dispatch_sync_count < THROTL_SYNC_FACTOR)
->                  return bio1 ?: bio2;
->          else
->                  return bio2 ?: bio1;
-> 
->> +/**
->> + * throtl_qnode_bio_pop: pop a bio from a qnode
->> + * @qn: the qnode to pop a bio from
->> + *
->> + * For read io qn, just pop bio from sync queu and return.
->> + * For write io qn, the target queue to pop was determined by the dispatch_sync_cnt.
->> + * Try to pop bio from target queue, fetch the bio and return when it is not empty.
->> + * If the target queue empty, pop bio from other queue instead.
->> + */
->> +static inline struct bio *throtl_qnode_bio_pop(struct throtl_qnode *qn)
->> +{
->> +	struct bio *bio;
->> +
->> +	/* qn for read ios */
->> +	if (qn->dispatch_sync_cnt == UINT_MAX)
->> +		return bio_list_pop(&qn->bios[SYNC]);
->> +
->> +	/* try to dispatch sync io */
->> +	if (qn->dispatch_sync_cnt < THROTL_SYNC_FACTOR) {
->> +		bio = bio_list_pop(&qn->bios[SYNC]);
->> +		if (bio) {
->> +			qn->dispatch_sync_cnt++;
->> +			return bio;
->> +		}
->> +		bio = bio_list_pop(&qn->bios[ASYNC]);
->> +		qn->dispatch_sync_cnt = 0;
->> +		return bio;
->> +	}
->> +
->> +	/* try to dispatch async io */
->> +	bio = bio_list_pop(&qn->bios[ASYNC]);
->> +	if (bio) {
->> +		qn->dispatch_sync_cnt = 0;
->> +		return bio;
->> +	}
->> +	bio = bio_list_pop(&qn->bios[SYNC]);
->> +
->> +	return bio;
->> +}
-> 
-> This also seems like it can be simplified a bit.
-> 
-> Thanks.
-> 
+However what we are trying to resolve here is to shorten the timeout 
+handling of a unplugged device. The scsi middle layer doesn't know the 
+device is gone and still waiting for the IO until timeout kicks in and 
+start the error handling. This made the applications stuck for a 
+significant long time.But libsas knows that because it receives the phy 
+down event, it knows that device will not come back and there is no need 
+to wait for the timeout.
 
-Indeed, I will make it more clear and send the v2.
+It's true that this is a half solution. I'd like to have a complete 
+solution too. So we will try to solve both of them.
 
-Thanks.
+Thanks,
+Jason
