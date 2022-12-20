@@ -2,99 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A62D6523BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:34:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0253D6523C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233392AbiLTPep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 10:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
+        id S229810AbiLTPin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 10:38:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233208AbiLTPej (ORCPT
+        with ESMTP id S229551AbiLTPii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 10:34:39 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8501AF3B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 07:34:37 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id 38-20020a630b26000000b004773803dda1so7397859pgl.17
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 07:34:37 -0800 (PST)
+        Tue, 20 Dec 2022 10:38:38 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCD2B34
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 07:38:37 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso11397859wme.5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 07:38:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lFWkgUzHga/e5JHoMlfzC+mErHa+mSIMGGohb+jRGNo=;
-        b=fi7fXpoGUB+Abb4BxUCuSzcg9/bZWNR15BAEfaXLucXwwrahK1PJ697VeDtiRT4SDW
-         1KZjgyicGKoWPnFA1A5xjVMowe+BbXe1aYE0cbAqSydDf2ZKkB9IImY26fl6v0sw0mcp
-         n/HMxH8Ir5eo/6xTYmdSvrfa5hWCT9ChexUnI54r9i7jnnJK5g2QOLQ1qybAzIMBXfc+
-         J+dUFEhSzcNy40FlO/YyaXiwGAxt9Ex7ZKlubMfs7E/swYdGTH0sW4OylwZh4v/SE1/c
-         GmgSlWBhlH1gSuOPHDAPmJuXzEyV87lM3KR62lW72dtSbS72cqbYempUuPLdRw3fUhJD
-         Dllw==
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/34tJIyjAP7baqWGpngAiiqvT8UHp3bz8kKbMzeEnfA=;
+        b=14PCLWLvyaoEwZR603D8HJggj8rZdeGLGfIE/VDYssMSht2WCH/1E7Kt5QWRr9n9EY
+         TcF6F7/j6gsa/ZDHUWgrEuGVeurxWoywI5LwqgeHyXSNeB+aM1PomKtmFiVrJY9iFCax
+         0ChwJRiihnKqrwx9JLYyjh0jMK8zvF1LjM/bgN9KuDDWDdhHaA3V6QlIsC+3/X2MTeCS
+         YvmbF0MN8Zrd5CZaZDQiMB5R60hbYtoIn3jsJM4Vwq9Dk3R0uItZc7qOCtvqwuEVQ4mv
+         OfCq3VUlOMrFqCKovJ8HiF0YE/8hgNWYgoFFJ2tp0d8NK65qxBT9cSF5pVj981pywgSc
+         fpaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lFWkgUzHga/e5JHoMlfzC+mErHa+mSIMGGohb+jRGNo=;
-        b=DNNRdqeT2Lp3flEy+1fh8Edo1K4BKlAHpdKyAmOKtma/uK0Lz1/cYvJeDlgLVczsEp
-         SZnwxSzx8Xvtx3LciBSe8+rEbyu/XXfbJWE8LGVki1mZ1tNn50OkChKVfjBWANpjrFTv
-         IvYLrk3fP1AA4rnhzB2uB1kplySGeU3TA2TyurY3qosKXHu7OHLhef/DXBqZAGOvOyd/
-         DbaN225apr5+tp2JoQ3q1fLV0B5OrjaSrEOvnLAroHcrW5rxfPZQMdb66Ek1mlDd/TQB
-         Ztr5hWszdNLy4JpxDe8eNLNdws/80METr8cz1H0+TubX7Lge3M01XfYOc+min58EwmAS
-         8knQ==
-X-Gm-Message-State: ANoB5pkWp4+m3+xqtdWJdeAziAalAHGSMG621enVU4cqb/3vuiegEAqC
-        /cB9VHNEtk7up9gi8konGRlkxQ/C04Y=
-X-Google-Smtp-Source: AA0mqf6qTu63JLlBKDJPaqZlXXwD4ay4Xx0F3GWmKRs52hOMT92vTE2a0VAU8MbZURY6+FipY1ueZiaNCIY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:2350:b0:189:8ea3:7455 with SMTP id
- c16-20020a170903235000b001898ea37455mr51904343plh.19.1671550476739; Tue, 20
- Dec 2022 07:34:36 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 20 Dec 2022 15:34:27 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221220153427.514032-1-seanjc@google.com>
-Subject: [PATCH] KVM: x86: Sanity check inputs to kvm_handle_memory_failure()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        bh=/34tJIyjAP7baqWGpngAiiqvT8UHp3bz8kKbMzeEnfA=;
+        b=1ZDIfSjl43O5J+9Edqii55jmg5kObgT3c9ob90PLmTvbhlkIyWMX+jWhY7Zonwucqa
+         V80QQ7gefj+8zQuV8hoMkEwTDJMEMpqTMVd9oHI9T1I2eDzWRNZJq9UWSFt1JrFWL/O/
+         9iuQ1QQDxRjObwBChw1NM37DAikHL7AeWxecvE1tBf2Fi0shsFItqqno3A4aoNNqQBOJ
+         YHtRROfF8T/lozALTZq9Z/oJTL4UwbX+T1gUjwbhum3MVRX9UwtiO3IJYHHSaKfRrO/C
+         y+cFCbGofPxM2nWVzeyzg8ZcrHQF0eQxUeBfXqJObIf2iy3lzmdeR9Xpz3FQrXPkEhkV
+         kQ9A==
+X-Gm-Message-State: AFqh2koMxsbJ/bWtcW8SlPc2pqF+B7iIxEg+TG1Z2M4ZVdCs/q+qu9nE
+        jXd4w5eGXLPDlSqqQRmzQUu/aw==
+X-Google-Smtp-Source: AMrXdXuGOqlBaXnhHjBX3CP3CTvS32W4Oo+9iEk8VgNIUYzXfPokTe3bS7Lxl4mRzN6alWA3vKArHA==
+X-Received: by 2002:a05:600c:54ed:b0:3d3:3c74:dbd0 with SMTP id jb13-20020a05600c54ed00b003d33c74dbd0mr14531267wmb.13.1671550715837;
+        Tue, 20 Dec 2022 07:38:35 -0800 (PST)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id p13-20020a05600c1d8d00b003d01b84e9b2sm16544121wms.27.2022.12.20.07.38.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 07:38:35 -0800 (PST)
+Message-ID: <b5fcbefa-75d5-b716-10f7-bd7ab1f6ff9b@isovalent.com>
+Date:   Tue, 20 Dec 2022 15:38:34 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3 2/2] bpf: makefiles: do not generate empty vmlinux.h
+Content-Language: en-GB
+To:     Changbin Du <changbin.du@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20221217223509.88254-1-changbin.du@gmail.com>
+ <20221217223509.88254-3-changbin.du@gmail.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20221217223509.88254-3-changbin.du@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a sanity check in kvm_handle_memory_failure() to assert that a valid
-x86_exception structure is provided if the memory "failure" wants to
-propagate a fault into the guest.  If a memory failure happens during a
-direct guest physical memory access, e.g. for nested VMX, KVM hardcodes
-the failure to X86EMUL_IO_NEEDED and doesn't provide an exception pointer
-(because the exception struct would just be filled with garbage).
+2022-12-18 06:35 UTC+0800 ~ Changbin Du <changbin.du@gmail.com>
+> Remove the empty vmlinux.h if bpftool failed to dump btf info.
+> The empty vmlinux.h can hide real error when reading output
+> of make.
+> 
+> This is done by adding .DELETE_ON_ERROR special target in related
+> makefiles.
+> 
+> Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> ---
+>  tools/bpf/bpftool/Makefile           | 3 +++
+>  tools/testing/selftests/bpf/Makefile | 3 +++
+>  2 files changed, 6 insertions(+)
+> 
+> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> index 787b857d3fb5..313fd1b09189 100644
+> --- a/tools/bpf/bpftool/Makefile
+> +++ b/tools/bpf/bpftool/Makefile
+> @@ -289,3 +289,6 @@ FORCE:
+>  .PHONY: all FORCE bootstrap clean install-bin install uninstall
+>  .PHONY: doc doc-clean doc-install doc-uninstall
+>  .DEFAULT_GOAL := all
+> +
+> +# Delete partially updated (corrupted) files on error
+> +.DELETE_ON_ERROR:
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/x86.c | 3 +++
- 1 file changed, 3 insertions(+)
+Acked-by: Quentin Monnet <quentin@isovalent.com>
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 312aea1854ae..da4bbd043a7b 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -13132,6 +13132,9 @@ int kvm_handle_memory_failure(struct kvm_vcpu *vcpu, int r,
- 			      struct x86_exception *e)
- {
- 	if (r == X86EMUL_PROPAGATE_FAULT) {
-+		if (KVM_BUG_ON(!e, vcpu->kvm))
-+			return -EIO;
-+
- 		kvm_inject_emulated_page_fault(vcpu, e);
- 		return 1;
- 	}
-
-base-commit: 9d75a3251adfbcf444681474511b58042a364863
--- 
-2.39.0.314.g84b9a713c41-goog
+Thanks!
 
