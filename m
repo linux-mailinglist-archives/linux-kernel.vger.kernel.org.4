@@ -2,102 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB65B651E89
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A708B651E8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:14:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233725AbiLTKNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
+        id S233632AbiLTKOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:14:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233708AbiLTKNQ (ORCPT
+        with ESMTP id S233751AbiLTKNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:13:16 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E32AE4F
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:13:15 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id m19so16756970edj.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:13:15 -0800 (PST)
+        Tue, 20 Dec 2022 05:13:47 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3307B6333
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:13:38 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id fy4so11978595pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:13:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6UrO2j9DEey1G8UqydjmxQqMxVbqAZzAn1bK1fPzhSc=;
-        b=Ce84Cz9ZMLrEN2Gk2uhhVVozKt2Ab9/SVRJooyCg87u9QWuaXj2DzyRfdtJPOtJ/y1
-         caxj6AxhZeVQV21Mz7mN99Oe9sUOteH83ZZBnEC1zGQIS+y56hR0g9LEc4yKwfcI876m
-         8BL/xL0n1Zkpxa4xIK8ntmNbuGmbMqXb6DMKHmlGAeEQ07STXlZkyerrchrhlcAXsq5O
-         fEuxO7r57G7VHe8XV15zLqyUdmuh4l/DQIhRor++mvff2ByfO+/2rKHymzbFOkLs2/RX
-         OyoVx1HDQm1yNO0rfnMdz7pIKj106xQFQo/JrlKIe1Ae9oFkDn+G/SislAwKHyP3092p
-         Ssow==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WKWuiWJK1VUk2sx6mP2owWmQ2TcPLqUMaM1CIaK+WNw=;
+        b=nLDU6NbS02qEIso3O1llT91Th+xwxyVdcHH2xvwS0nKtaCIC3aKIRU0gvRLlHrwcrp
+         rQWK1qO4+yi4InODdFkoT4N2zxGnR5jB3KqWNMAuR5lAySOK2i0kF0aoRDMZx2U0n3u9
+         c280ebDXDKhr5j4NquUcsv9m8DITxInf2uHg7fLm+J43GDizKZ/osz7IPEe6uzAPldkA
+         z6ggB8hlDUFI/eQQ9kSLBLe/HMv6aD93gam8WZ0q3gtGMWD3RB879WYaztX4lBh29MJD
+         yCcbjDPvshDsw+kAWLY8jZDXJDX10jtecZKycQAL/0gBEfEnuxF0pxr/2qflwMm8LPSY
+         cH4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6UrO2j9DEey1G8UqydjmxQqMxVbqAZzAn1bK1fPzhSc=;
-        b=dGgXGcBkjS58JX8q3EX9/u4mBS5JjPoi1XiE/AAMo87UXEdVW/bRBp+02VVNZrXxxO
-         3SSpiuyhSsTnXtjH0l2z3bLBAkE7Cd3DNRiwF4WmSkqVZ2yVSASQovM2msYFuQ0R+KPq
-         VgjYo68PPL9ZXHu3b/Hrtn9AW9WoZbHwL4wC1XW+kse7kGV99A7rvD7afQsVQo1v/xWe
-         /NWgGc6qUSYEd81ASI0hmw1sOTJd32kWK7338iIcRtV4A0oFlIrKeRgJql+Wi1M7/DvH
-         C1wae2ZEyfmeh64CTIt407DC5f8aEOUWl3GUo74KtWwc5tWxCItbJaEBp6EONTaZHWNk
-         ZjNQ==
-X-Gm-Message-State: ANoB5plJqQBWo0Rgmyz1y/ti5dV+mFnIXTinN0TAd/oCH8JqSvZ8l27w
-        oW93MGcSPiZ8HFUY4WCp8HptoQ==
-X-Google-Smtp-Source: AA0mqf526bxkpxOkdLFI2Q1atb7+xe2frMnb8gtgGOtE6L+34AT1XQfmQutkBdDLaHHRiCaFlZSlhQ==
-X-Received: by 2002:a05:6402:3641:b0:462:6d7d:ab09 with SMTP id em1-20020a056402364100b004626d7dab09mr41021775edb.38.1671531193850;
-        Tue, 20 Dec 2022 02:13:13 -0800 (PST)
-Received: from [192.168.0.161] (79-100-144-200.ip.btc-net.bg. [79.100.144.200])
-        by smtp.gmail.com with ESMTPSA id n1-20020a05640206c100b0046150ee13besm5360318edy.65.2022.12.20.02.13.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 02:13:13 -0800 (PST)
-Message-ID: <05d630bf-7fa8-4495-6345-207f133ef746@blackwall.org>
-Date:   Tue, 20 Dec 2022 12:13:12 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WKWuiWJK1VUk2sx6mP2owWmQ2TcPLqUMaM1CIaK+WNw=;
+        b=XMznAIMYu49bkKNQShAebQcTl6094GMqKCisAX7KjBZFvw0F5Q8y5jCM4mm9NCmkSE
+         7TZ2zH2HGBvsoBMxWQAJ6bxNe3523johlNdRDaJTI9/YDZ/bVfOgGOiH2+xnjVWUzlqb
+         y0X97gJJtUVsmfmb7lgh2Sx8pYIgsm8ySqkIDYC+aNHtIUGY1BQZaRxeqTG3PYG7GHdf
+         V5aAvJtbsaZXp0VNONKdCiFHwROT7Bf3GgyiWX6oJ2hn2Y6NdYzhdmo94C4i6V3bEGA9
+         HGJhVKLxzMgryou+bKkTTeI22olV06mdAJbifg1EORIFzV4k5LpWzOZEYj+jN31n4qbq
+         na/A==
+X-Gm-Message-State: ANoB5pn9P3sIKEpV6PCY5XOYpmxy9YOq7KPBsZUedsgicecfnbKwZy13
+        P36FtTn05eXKmjq7CONjzWo=
+X-Google-Smtp-Source: AA0mqf7Np0s/2XeR23VVVqkPaORBn/PV5YYEGpKvssPmLDbdOtBhOfylLp1que/1ewEJPRQ5FWJ28Q==
+X-Received: by 2002:a17:90a:6be6:b0:219:34cb:476c with SMTP id w93-20020a17090a6be600b0021934cb476cmr48632133pjj.9.1671531217733;
+        Tue, 20 Dec 2022 02:13:37 -0800 (PST)
+Received: from bobo.ozlabs.ibm.com (203-219-149-28.tpgi.com.au. [203.219.149.28])
+        by smtp.gmail.com with ESMTPSA id j3-20020a17090a694300b002190eabb890sm10766225pjm.25.2022.12.20.02.13.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 02:13:37 -0800 (PST)
+From:   Nicholas Piggin <npiggin@gmail.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] tools/objtool: tolerate STT_NOTYPE symbols at end of section
+Date:   Tue, 20 Dec 2022 20:13:23 +1000
+Message-Id: <20221220101323.3119939-1-npiggin@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] net: bridge: mcast: read ngrec once in igmp3/mld2 report
-Content-Language: en-US
-To:     Joy Gu <jgu@purestorage.com>, bridge@lists.linux-foundation.org
-Cc:     roopa@nvidia.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, joern@purestorage.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221220024807.36502-1-jgu@purestorage.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20221220024807.36502-1-jgu@purestorage.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/12/2022 04:48, Joy Gu wrote:
-> In br_ip4_multicast_igmp3_report() and br_ip6_multicast_mld2_report(),
-> "ih" or "mld2r" is a pointer into the skb header. It's dereferenced to
-> get "num", which is used in the for-loop condition that follows.
-> 
-> Compilers are free to not spend a register on "num" and dereference that
-> pointer every time "num" would be used, i.e. every loop iteration. Which
-> would be a bug if pskb_may_pull() (called by ip_mc_may_pull() or
-> ipv6_mc_may_pull() in the loop body) were to change pointers pointing
-> into the skb header, e.g. by freeing "skb->head".
-> 
-> We can avoid this by using READ_ONCE().
-> 
-> Suggested-by: Joern Engel <joern@purestorage.com>
-> Signed-off-by: Joy Gu <jgu@purestorage.com>
-> ---
->  net/bridge/br_multicast.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
+Hand-written asm often contains non-function symbols in executable
+sections. _end symbols for finding the size of instruction blocks
+for runtime processing is one such usage.
 
-I doubt any compiler would do that (partly due to the ntohs()). If you have hit a bug or
-seen this with some compiler please provide more details, disassembly of the resulting
-code would be best.
+optprobe_template_end is one example that causes the warning:
 
-Thanks.
+  objtool: optprobe_template_end(): can't find starting instruction
+
+This is because the symbol happens to be at the end of the file (and
+therefore end of a section in the object file).
+
+So ignore end-of-section STT_NOTYPE symbols instead of bailing out
+because an instruction can't be found. While we're here, add a more
+descriptive warning for STT_FUNC symbols found at the end of a
+section.
+
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+---
+ tools/objtool/check.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 4350be739f4f..4b7c8b33069e 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -427,6 +427,15 @@ static int decode_instructions(struct objtool_file *file)
+ 			if (func->type != STT_NOTYPE && func->type != STT_FUNC)
+ 				continue;
+ 
++			if (func->offset == sec->sh.sh_size) {
++				/* Heuristic: likely an "end" symbol */
++				if (func->type == STT_NOTYPE)
++					continue;
++				WARN("%s(): STT_FUNC at end of section",
++				     func->name);
++				return -1;
++			}
++
+ 			if (func->return_thunk || func->alias != func)
+ 				continue;
+ 
+-- 
+2.37.2
 
