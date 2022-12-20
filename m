@@ -2,182 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3596528C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 23:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9601A6528CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 23:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233609AbiLTWLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 17:11:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
+        id S233609AbiLTWPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 17:15:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiLTWLn (ORCPT
+        with ESMTP id S229560AbiLTWPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 17:11:43 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AC3B1EC;
-        Tue, 20 Dec 2022 14:11:42 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id m19so19517993edj.8;
-        Tue, 20 Dec 2022 14:11:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=T/2atre4fqcaQWMoy90Y5c5y8r7zl/7TlfkEDDKjaPc=;
-        b=XcL2vSQOhOS8sMQoxX+9NInFqIHnIBx83y5aUKny/mrm9vhhZ5p6KDDT5A9GB40o8c
-         HAJ+O+ZfQFNLfb3tGHVEK4ROaUvSsgjvThmFyE6aQtROVkiSrmR1CCEdsEltJ+hRp66x
-         M/b2OA1JggnbVJQKzlrdSUdrsJmXHHHqj3CLvKJQR4ZY3xu6rBSSvdB+Ij5izOkZebgd
-         QW8knvlVtKsh/lDsGO4l1Y2gGoQHbAefTmEOdGa7eJOtYdPMpLX1JvCCJy7wpZ7C/UFK
-         zCgZXtZg4+0aLv15j1aW5OoLOrysGeGPqj1PEgccDuAEmCEEDY5cWN99+GUL7iXkgVEQ
-         1fNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T/2atre4fqcaQWMoy90Y5c5y8r7zl/7TlfkEDDKjaPc=;
-        b=Dw/9E6P19/VPCrFo3QdRtWyh/CUL2txldFEiNSP3fLlKEa3fxWuVqv1nPZMg+iBzhj
-         ebqcbxo65wnoMndTR5OzS6S/Glo/zV38GW1k9s1E52un2mUiyhZqjP8vDAav94qahtam
-         ApuH/NLItxyGKydl27mPKlfUQBjqQCPRv0QCZ9zvgdMOfPXV3+f6Wi+pqWG7hEspznql
-         IgxVIQA0FZN0iJUixAJGvXozcpSFVZLZSJaGh2sOn7BJMDj6fILxA1aj9Q5zi/jj2ZhQ
-         SY5YZL1duWGZUkIhpFPJtGLWL4uyc5mai8qSEs5Yaa3lcqL+mdGVSH3nDjdudP10Rq1Y
-         l1yA==
-X-Gm-Message-State: ANoB5pn9mak/Vc8Iodqxp6QGFHOnyynd0fzbl5KkL+SXgZUmOTeMwiV8
-        MUd1NZlI0vs7hyUEQysC8KRzPVNU/PGOJ8gZ1MQ=
-X-Google-Smtp-Source: AA0mqf7UVFbJnkjONnKYPvSbXdCh3YuMhG3ja1r1HUzIWRe7Q0T22Q2cY9hfkKfMZdhkNp/68jILn9lPlVsXh+Egu8U=
-X-Received: by 2002:a05:6402:2421:b0:461:524f:a8f4 with SMTP id
- t33-20020a056402242100b00461524fa8f4mr89321779eda.260.1671574301228; Tue, 20
- Dec 2022 14:11:41 -0800 (PST)
-MIME-Version: 1.0
-References: <20221215005315.186787-1-connoro@google.com> <0fc1e9bd-e70b-28a2-bc09-629414a619b0@meta.com>
-In-Reply-To: <0fc1e9bd-e70b-28a2-bc09-629414a619b0@meta.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 20 Dec 2022 14:11:28 -0800
-Message-ID: <CAEf4Bzbw4acHiWie=jgqHY63JEZosN4t_KBcQfzS=012GgGBTA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: btf: limit logging of ignored BTF mismatches
-To:     Yonghong Song <yhs@meta.com>
-Cc:     "Connor O'Brien" <connoro@google.com>, bpf@vger.kernel.org,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Tue, 20 Dec 2022 17:15:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794491F631;
+        Tue, 20 Dec 2022 14:15:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A1A0615C8;
+        Tue, 20 Dec 2022 22:15:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01C14C433EF;
+        Tue, 20 Dec 2022 22:15:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671574515;
+        bh=/hXbsdZlpPJ092brHoQdM/vjvfB74qXktqitZJsVKZ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qHSQ22X8muE+CwnZqqGtUeYuyyk0+PRIYvmBqqB8UfP0aE6/Dr8/0Ux5uZVL4t5d2
+         rsVF/fIglHI3PPCJ+5AjFHCgsiOCBZztKBEKWsLOtGVHxC2vzjy31PTGrvrAYgdxXN
+         QJLWqmxKi91UZnaUSSVQSqA77Y2PgTFn/X9Exu4/9bhDHM6pL1tfrXVF+/+QKuVhxq
+         UbPE9OdVKs+VvBDmfGDMVTRXHDPfz2m5YllUGciZ9ZfLiPh+Fyu/1lvyCSNV0CznO/
+         dyzxJ5sU1xA9UpIZCohRQ1G4bKgC49gPDg0jsziHV7HrJGD7pKjSqzyRAJxg7Hp/hz
+         +mVICg5lrS7jA==
+Date:   Tue, 20 Dec 2022 22:15:10 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 03/11] reset: Create subdirectory for StarFive drivers
+Message-ID: <Y6Iz7pzG3Zmecm3S@spud>
+References: <20221220005054.34518-1-hal.feng@starfivetech.com>
+ <20221220005054.34518-4-hal.feng@starfivetech.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zh1KmNPWKa/82vyz"
+Content-Disposition: inline
+In-Reply-To: <20221220005054.34518-4-hal.feng@starfivetech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 9:06 PM Yonghong Song <yhs@meta.com> wrote:
->
->
->
-> On 12/14/22 4:53 PM, Connor O'Brien wrote:
-> > Enabling CONFIG_MODULE_ALLOW_BTF_MISMATCH is an indication that BTF
-> > mismatches are expected and module loading should proceed
-> > anyway. Logging with pr_warn() on every one of these "benign"
-> > mismatches creates unnecessary noise when many such modules are
-> > loaded. Instead, handle this case with a single log warning that BTF
-> > info may be unavailable.
-> >
-> > Mismatches also result in calls to __btf_verifier_log() via
-> > __btf_verifier_log_type() or btf_verifier_log_member(), adding several
-> > additional lines of logging per mismatched module. Add checks to these
-> > paths to skip logging for module BTF mismatches in the "allow
-> > mismatch" case.
-> >
-> > All existing logging behavior is preserved in the default
-> > CONFIG_MODULE_ALLOW_BTF_MISMATCH=n case.
-> >
-> > Signed-off-by: Connor O'Brien <connoro@google.com>
->
-> Ack with a few nits below.
->
-> Acked-by: Yonghong Song <yhs@fb.com>
->
-> > ---
-> > v2:
-> > - Use pr_warn_once instead of skipping logging entirely
-> > - Also skip btf verifier logs for ignored mismatches
-> >
-> > v1: https://lore.kernel.org/bpf/20221109024155.2810410-1-connoro@google.com/
-> > ---
-> >   kernel/bpf/btf.c | 24 +++++++++++++++++++++---
-> >   1 file changed, 21 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > index f7dd8af06413..16b959b49595 100644
-> > --- a/kernel/bpf/btf.c
-> > +++ b/kernel/bpf/btf.c
-> > @@ -1404,6 +1404,13 @@ __printf(4, 5) static void __btf_verifier_log_type(struct btf_verifier_env *env,
-> >       if (log->level == BPF_LOG_KERNEL && !fmt)
-> >               return;
-> >
-> > +     /*
-> > +      * Skip logging when loading module BTF with mismatches permitted
-> > +      */
->
-> Just use one line for the above comment.
->
-> > +     if (env->btf->base_btf && env->btf->kernel_btf &&
-> > +         IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
-> > +             return;
->
-> I believe env->btf->base_btf alone is enough to test it should be a
-> module btf. If env->btf->base_btf is true, env->btf->kernel_btf should
-> also be true. The other way is not true, env->btf->kernel_btf is true,
-> the btf could be vmlinux (env->btf->base_btf == NULL) or be a module.
->
 
-Seems like we are also using log->level == BPF_LOG_KERNEL check for
-when working with kernel BTFs, so let's stick to the same pattern?
+--zh1KmNPWKa/82vyz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Dec 20, 2022 at 08:50:46AM +0800, Hal Feng wrote:
+> From: Emil Renner Berthing <kernel@esmil.dk>
+>=20
+> This moves the StarFive JH7100 reset driver to a new subdirectory in
+> preparation for adding more StarFive reset drivers.
+>=20
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> ---
+>  MAINTAINERS                                          | 2 +-
+>  drivers/reset/Kconfig                                | 8 +-------
+>  drivers/reset/Makefile                               | 2 +-
+>  drivers/reset/starfive/Kconfig                       | 8 ++++++++
+>  drivers/reset/starfive/Makefile                      | 2 ++
+>  drivers/reset/{ =3D> starfive}/reset-starfive-jh7100.c | 0
+>  6 files changed, 13 insertions(+), 9 deletions(-)
+>  create mode 100644 drivers/reset/starfive/Kconfig
+>  create mode 100644 drivers/reset/starfive/Makefile
+>  rename drivers/reset/{ =3D> starfive}/reset-starfive-jh7100.c (100%)
+>=20
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fd90403c33bd..117024b52d06 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19651,7 +19651,7 @@ STARFIVE JH7100 RESET CONTROLLER DRIVER
+>  M:	Emil Renner Berthing <kernel@esmil.dk>
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
+> -F:	drivers/reset/reset-starfive-jh7100.c
+> +F:	drivers/reset/starfive/reset-starfive-jh7100.c
+>  F:	include/dt-bindings/reset/starfive-jh7100.h
+> =20
+>  STATIC BRANCH/CALL
+> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+> index de176c2fbad9..1e8e1c4954cd 100644
+> --- a/drivers/reset/Kconfig
+> +++ b/drivers/reset/Kconfig
+> @@ -232,13 +232,6 @@ config RESET_SOCFPGA
+>  	  This enables the reset driver for the SoCFPGA ARMv7 platforms. This
+>  	  driver gets initialized early during platform init calls.
+> =20
+> -config RESET_STARFIVE_JH7100
+> -	bool "StarFive JH7100 Reset Driver"
+> -	depends on SOC_STARFIVE || COMPILE_TEST
+> -	default SOC_STARFIVE
+> -	help
+> -	  This enables the reset controller driver for the StarFive JH7100 SoC.
+> -
+>  config RESET_SUNPLUS
+>  	bool "Sunplus SoCs Reset Driver" if COMPILE_TEST
+>  	default ARCH_SUNPLUS
+> @@ -320,6 +313,7 @@ config RESET_ZYNQ
+>  	help
+>  	  This enables the reset controller driver for Xilinx Zynq SoCs.
+> =20
+> +source "drivers/reset/starfive/Kconfig"
+>  source "drivers/reset/sti/Kconfig"
+>  source "drivers/reset/hisilicon/Kconfig"
+>  source "drivers/reset/tegra/Kconfig"
+> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+> index 3e7e5fd633a8..fee17a0e3a16 100644
+> --- a/drivers/reset/Makefile
+> +++ b/drivers/reset/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-y +=3D core.o
+>  obj-y +=3D hisilicon/
+> +obj-$(CONFIG_SOC_STARFIVE) +=3D starfive/
+>  obj-$(CONFIG_ARCH_STI) +=3D sti/
+>  obj-$(CONFIG_ARCH_TEGRA) +=3D tegra/
+>  obj-$(CONFIG_RESET_A10SR) +=3D reset-a10sr.o
+> @@ -30,7 +31,6 @@ obj-$(CONFIG_RESET_RZG2L_USBPHY_CTRL) +=3D reset-rzg2l-=
+usbphy-ctrl.o
+>  obj-$(CONFIG_RESET_SCMI) +=3D reset-scmi.o
+>  obj-$(CONFIG_RESET_SIMPLE) +=3D reset-simple.o
+>  obj-$(CONFIG_RESET_SOCFPGA) +=3D reset-socfpga.o
+> -obj-$(CONFIG_RESET_STARFIVE_JH7100) +=3D reset-starfive-jh7100.o
+>  obj-$(CONFIG_RESET_SUNPLUS) +=3D reset-sunplus.o
+>  obj-$(CONFIG_RESET_SUNXI) +=3D reset-sunxi.o
+>  obj-$(CONFIG_RESET_TI_SCI) +=3D reset-ti-sci.o
+> diff --git a/drivers/reset/starfive/Kconfig b/drivers/reset/starfive/Kcon=
+fig
+> new file mode 100644
+> index 000000000000..cddebdba7177
+> --- /dev/null
+> +++ b/drivers/reset/starfive/Kconfig
+> @@ -0,0 +1,8 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +config RESET_STARFIVE_JH7100
+> +	bool "StarFive JH7100 Reset Driver"
+> +	depends on SOC_STARFIVE || COMPILE_TEST
+> +	default SOC_STARFIVE
 
-> > +
-> >       __btf_verifier_log(log, "[%u] %s %s%s",
-> >                          env->log_type_id,
-> >                          btf_type_str(t),
-> > @@ -1443,6 +1450,14 @@ static void btf_verifier_log_member(struct btf_verifier_env *env,
-> >
-> >       if (log->level == BPF_LOG_KERNEL && !fmt)
-> >               return;
-> > +
-> > +     /*
-> > +      * Skip logging when loading module BTF with mismatches permitted
-> > +      */
->
-> Same, just use one line for the above comments.
->
-> > +     if (env->btf->base_btf && env->btf->kernel_btf &&
-> > +         IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
-> > +             return;
-> > +
-> >       /* The CHECK_META phase already did a btf dump.
-> >        *
-> >        * If member is logged again, it must hit an error in
-> > @@ -7260,11 +7275,14 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
-> >               }
-> >               btf = btf_parse_module(mod->name, mod->btf_data, mod->btf_data_size);
-> >               if (IS_ERR(btf)) {
-> > -                     pr_warn("failed to validate module [%s] BTF: %ld\n",
-> > -                             mod->name, PTR_ERR(btf));
-> >                       kfree(btf_mod);
-> > -                     if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
-> > +                     if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH)) {
-> > +                             pr_warn("failed to validate module [%s] BTF: %ld\n",
-> > +                                     mod->name, PTR_ERR(btf));
-> >                               err = PTR_ERR(btf);
-> > +                     } else {
-> > +                             pr_warn_once("Kernel module BTF mismatch detected, BTF debug info may be unavailable for some modules\n");
-> > +                     }
-> >                       goto out;
-> >               }
-> >               err = btf_alloc_id(btf);
+You could in theory drop the default that I added & replace it with a y,
+since the subdir is gated by the symbol. I don't really care though tbh.
+The movement seems fine to me..
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Thanks,
+Conor.
+
+> +	help
+> +	  This enables the reset controller driver for the StarFive JH7100 SoC.
+> diff --git a/drivers/reset/starfive/Makefile b/drivers/reset/starfive/Mak=
+efile
+> new file mode 100644
+> index 000000000000..670d049423f5
+> --- /dev/null
+> +++ b/drivers/reset/starfive/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +obj-$(CONFIG_RESET_STARFIVE_JH7100)		+=3D reset-starfive-jh7100.o
+> diff --git a/drivers/reset/reset-starfive-jh7100.c b/drivers/reset/starfi=
+ve/reset-starfive-jh7100.c
+> similarity index 100%
+> rename from drivers/reset/reset-starfive-jh7100.c
+> rename to drivers/reset/starfive/reset-starfive-jh7100.c
+> --=20
+> 2.38.1
+>=20
+>=20
+
+--zh1KmNPWKa/82vyz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6Iz7gAKCRB4tDGHoIJi
+0kwrAQD7r8oFTH5a1/NbDQ7ZWs5mjPOXmg4cAFGBu3Vqn0qaLgD+L5pc3W4etT/y
+5+k6f4WdYdsVirsXBaQu5wFN5I19LgQ=
+=9xHl
+-----END PGP SIGNATURE-----
+
+--zh1KmNPWKa/82vyz--
