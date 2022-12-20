@@ -2,218 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA876525A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:34:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ECEF6525A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233916AbiLTReN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 12:34:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
+        id S229827AbiLTRfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 12:35:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiLTReK (ORCPT
+        with ESMTP id S233812AbiLTRfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 12:34:10 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7EA1A3B4;
-        Tue, 20 Dec 2022 09:34:08 -0800 (PST)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        Tue, 20 Dec 2022 12:35:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E269D1C434
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 09:35:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 5D9FB851EE;
-        Tue, 20 Dec 2022 18:34:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1671557646;
-        bh=e6i2o1JZsIOo4aNIzLcaOSiBPGTjt24suNHUWdBp7aQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CoMyUqCDMAq/4ooZ4MuAE5DWfyerc4wAkudLxyDp31y4O+ZK0C/+VAK8W0f1d3TCx
-         8zvjr7agVBU+Zy+FVju7HdKZThNw4lggIJBAhCTx9hbtzRVuqfXim0uMl/Kby+hjxg
-         rXSCBbSUpnnmufG+lTG2XVhvGRTSGMtnlHG3UoYsfAAbZRMAo+BTuCuD+vJgfW46E0
-         KMVZqqejl5KVn1WGGnO19gjlyrjbHrFJbn5v8zwyx7KFYgKMrv/BT3s/1afY24V9Gb
-         SFSCWSoufpEuW2uOuj+OOhMmmBIWdr9ZsInOLU3tZpGuZOy0iC9QwLI3nwiSGG15Vo
-         5Qo/LL+0KHYiw==
-Date:   Tue, 20 Dec 2022 18:33:59 +0100
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Alexander Duyck <alexander.duyck@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dsa: marvell: Provide per device information
- about max frame size
-Message-ID: <20221220183359.4b9cd95c@wsk>
-In-Reply-To: <20221219130005.6e995cb0@wsk>
-References: <20221215144536.3810578-1-lukma@denx.de>
-        <4d16ffd327d193f8c1f7c40f968fda90a267348e.camel@gmail.com>
-        <20221216140526.799bd82f@wsk>
-        <CAKgT0Udm6s8Wib1dFp6f4yVhdMm62-4kjetYSucLr-Ruyg7-yg@mail.gmail.com>
-        <20221219130005.6e995cb0@wsk>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86E1661530
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 17:35:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 942AFC433EF;
+        Tue, 20 Dec 2022 17:35:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671557711;
+        bh=74nxGtd6FVQBOWPGlgjOv5Cufmb5KWmhsUgAhxcSeSo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=iImDE5Jm87JD3/H2n5SnFI7/TZMQpSoiGWZbjo3WDfSl1rmKC+OEx1JthQwfpF/an
+         t5I6faAzX1pDL3GioJlwbaE50LgpnTjCWI7v4QoLm803lRZRDbIxwCJ9raBqT6oaLk
+         jVkUqxaighFMBhIcYDsrXSIXfZthxu/0KVoA7FC7sEVz4E8zVhmUtZ429x8BkIkzwA
+         +dvhg+xn3TPcGKTKzHoJ7QMBrSRwEXDodkxc4Gqh71s72235L3mQOd/TXIzU/lGY8b
+         yYHNpWrltXCQqchyY6BxamoRiQQUq3Ah/DkCXOHKJVzJJaSf23rW41hlzgvZr/4/B6
+         BGLFjFGNLefLg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2BC1040367; Tue, 20 Dec 2022 14:35:08 -0300 (-03)
+Date:   Tue, 20 Dec 2022 14:35:08 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH 1/1 fyi] tools arch x86: Sync the msr-index.h copy with the
+ kernel sources
+Message-ID: <Y6HyTOGRNvKfCVe4@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/V55Prcsx6GdYTgrCs5T4fzE";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/V55Prcsx6GdYTgrCs5T4fzE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+tldr; Just FYI, I'm carrying this on the perf tools tree.
 
-Hi Alexander,
+- Arnaldo
 
-> Hi Alexander,
->=20
-> > On Fri, Dec 16, 2022 at 5:05 AM Lukasz Majewski <lukma@denx.de>
-> > wrote: =20
-> > >
-> > > Hi Alexander,
-> > >   =20
-> > > > On Thu, 2022-12-15 at 15:45 +0100, Lukasz Majewski wrote:   =20
-> > > > > Different Marvell DSA switches support different size of max
-> > > > > frame bytes to be sent.
-> > > > >
-> > > > > For example mv88e6185 supports max 1632 bytes, which is now
-> > > > > in-driver standard value. On the other hand - mv88e6250
-> > > > > supports 2048 bytes.
-> > > > >
-> > > > > As this value is internal and may be different for each switch
-> > > > > IC, new entry in struct mv88e6xxx_info has been added to store
-> > > > > it.
-> > > > >
-> > > > > Signed-off-by: Lukasz Majewski <lukma@denx.de>
-> > > > > ---
-> > > > > Changes for v2:
-> > > > > - Define max_frame_size with default value of 1632 bytes,
-> > > > > - Set proper value for the mv88e6250 switch SoC (linkstreet)
-> > > > > family ---
-> > > > >  drivers/net/dsa/mv88e6xxx/chip.c | 13 ++++++++++++-
-> > > > >  drivers/net/dsa/mv88e6xxx/chip.h |  1 +
-> > > > >  2 files changed, 13 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/drivers/net/dsa/mv88e6xxx/chip.c
-> > > > > b/drivers/net/dsa/mv88e6xxx/chip.c index
-> > > > > 2ca3cbba5764..7ae4c389ce50 100644 ---
-> > > > > a/drivers/net/dsa/mv88e6xxx/chip.c +++
-> > > > > b/drivers/net/dsa/mv88e6xxx/chip.c @@ -3093,7 +3093,9 @@
-> > > > > static int mv88e6xxx_get_max_mtu(struct dsa_switch *ds, int
-> > > > > port) if (chip->info->ops->port_set_jumbo_size) return 10240 -
-> > > > > VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN; else if
-> > > > > (chip->info->ops->set_max_frame_size)
-> > > > > -           return 1632 - VLAN_ETH_HLEN - EDSA_HLEN -
-> > > > > ETH_FCS_LEN;
-> > > > > +           return (chip->info->max_frame_size  -
-> > > > > VLAN_ETH_HLEN
-> > > > > +                   - EDSA_HLEN - ETH_FCS_LEN);
-> > > > > +
-> > > > >     return 1522 - VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN;
-> > > > >  }
-> > > > >
-> > > > >   =20
-> > > >
-> > > > Is there any specific reason for triggering this based on the
-> > > > existance of the function call?   =20
-> > >
-> > > This was the original code in this driver.
-> > >
-> > > This value (1632 or 2048 bytes) is SoC (family) specific.
-> > >
-> > > By checking which device defines set_max_frame_size callback, I
-> > > could fill the chip->info->max_frame_size with 1632 value.
-> > >   =20
-> > > > Why not just replace:
-> > > >       else if (chip->info->ops->set_max_frame_size)
-> > > > with:
-> > > >       else if (chip->info->max_frame_size)
-> > > >   =20
-> > >
-> > > I think that the callback check is a bit "defensive" approach ->
-> > > 1522B is the default value and 1632 (or 10240 - jumbo) can be set
-> > > only when proper callback is defined.
-> > >   =20
-> > > > Otherwise my concern is one gets defined without the other
-> > > > leading to a future issue as 0 - extra headers will likely wrap
-> > > > and while the return value may be a signed int, it is usually
-> > > > stored in an unsigned int so it would effectively uncap the
-> > > > MTU.   =20
-> > >
-> > > Please correct me if I misunderstood something:
-> > >
-> > > The problem is with new mv88eXXXX devices, which will not provide
-> > > max_frame_size information to their chip->info struct?
-> > >
-> > > Or is there any other issue?   =20
-> >=20
-> > That was mostly my concern. I was adding a bit of my own defensive
-> > programming in the event that somebody forgot to fill out the
-> > chip->info. If nothing else it might make sense to add a check to
-> > verify that the max_frame_size is populated before blindly using it.
-> > So perhaps you could do something similar to the max_t approach I
-> > had called out earlier but instead of applying it on the last case
-> > you could apply it for the "set_max_frame_size" case with 1632
-> > being the minimum and being overwritten by 2048 if it is set in
-> > max_frame_size. =20
->=20
-> I think that I shall add:
->=20
-> else if (chip->info->ops->set_max_frame_size)
-> 	return max_t(int, chip->info->max_frame_size, 1632) -
-> (headers)
->=20
-> So then the "default" value of 1632 will be overwritten by 2048 bytes.
->=20
+Full explanation:
 
-Is this approach acceptable for you?
+There used to be no copies, with tools/ code using kernel headers
+directly. From time to time tools/perf/ broke due to legitimate kernel
+hacking. At some point Linus complained about such direct usage. Then we
+adopted the current model.
 
->=20
-> Best regards,
->=20
-> Lukasz Majewski
->=20
-> --
->=20
-> DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-> HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-> Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email:
-> lukma@denx.de
+The way these headers are used in perf are not restricted to just
+including them to compile something.
 
+There are sometimes used in scripts that convert defines into string
+tables, etc, so some change may break one of these scripts, or new MSRs
+may use some different #define pattern, etc.
 
+E.g.:
 
+  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
+  tools/perf/trace/beauty/arch_errno_names.sh
+  tools/perf/trace/beauty/drm_ioctl.sh
+  tools/perf/trace/beauty/fadvise.sh
+  tools/perf/trace/beauty/fsconfig.sh
+  tools/perf/trace/beauty/fsmount.sh
+  $
+  $ tools/perf/trace/beauty/fadvise.sh
+  static const char *fadvise_advices[] = {
+  	[0] = "NORMAL",
+  	[1] = "RANDOM",
+  	[2] = "SEQUENTIAL",
+  	[3] = "WILLNEED",
+  	[4] = "DONTNEED",
+  	[5] = "NOREUSE",
+  };
+  $
 
-Best regards,
+The tools/perf/check-headers.sh script, part of the tools/ build
+process, points out changes in the original files.
 
-Lukasz Majewski
+So its important not to touch the copies in tools/ when doing changes in
+the original kernel headers, that will be done later, when
+check-headers.sh inform about the change to the perf tools hackers.
 
---
+---
 
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
+To pick up the changes in:
 
---Sig_/V55Prcsx6GdYTgrCs5T4fzE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+  97fa21f65c3eb5bb ("x86/resctrl: Move MSR defines into msr-index.h")
+  7420ae3bb977b46e ("x86/intel_epb: Set Alder Lake N and Raptor Lake P normal EPB")
 
------BEGIN PGP SIGNATURE-----
+Addressing these tools/perf build warnings:
 
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmOh8gcACgkQAR8vZIA0
-zr0jRwf/YKx8sTurFMMsicIKIhMlAHQ+vcrCXDVACtJhUOm6FFluAbvXHsWiWo6S
-XFA1gY7zDyD+H7v0G4nzLyxN8+VIK0P/GWGVrE4ghSShtbZoqKqm35PRYFf9F33Y
-d8fuv4zzQGEO98ej/YwuLHjn+4TKu8jau67UiuEj1gAYKasD6n/FFOZ/PnCpLpbv
-4B3ZAScS9SaH3cIJbJUPLpMlqs2wknNkibGx4EVzcyPmeEvBj4IcRqEE3Rt8bIO9
-iuC2Uod8y5vb4Hf1RWHPGm95GMKSih9l67BRO/nkWhid5OH+KctbHtUBYR1bVKXa
-UVGYI55ueXbamxbKxKV4fyXNpSWhqw==
-=G6wU
------END PGP SIGNATURE-----
+    diff -u tools/arch/x86/include/asm/msr-index.h arch/x86/include/asm/msr-index.h
+    Warning: Kernel ABI header at 'tools/arch/x86/include/asm/msr-index.h' differs from latest version at 'arch/x86/include/asm/msr-index.h'
 
---Sig_/V55Prcsx6GdYTgrCs5T4fzE--
+That makes the beautification scripts to pick some new entries:
+
+  $ tools/perf/trace/beauty/tracepoints/x86_msr.sh > before
+  $ cp arch/x86/include/asm/msr-index.h tools/arch/x86/include/asm/msr-index.h
+  $ tools/perf/trace/beauty/tracepoints/x86_msr.sh > after
+  $ diff -u before after
+  --- before	2022-12-20 14:28:40.893794072 -0300
+  +++ after	2022-12-20 14:28:54.831993914 -0300
+  @@ -266,6 +266,7 @@
+   	[0xc0000104 - x86_64_specific_MSRs_offset] = "AMD64_TSC_RATIO",
+   	[0xc000010e - x86_64_specific_MSRs_offset] = "AMD64_LBR_SELECT",
+   	[0xc000010f - x86_64_specific_MSRs_offset] = "AMD_DBG_EXTN_CFG",
+  +	[0xc0000200 - x86_64_specific_MSRs_offset] = "IA32_MBA_BW_BASE",
+   	[0xc0000300 - x86_64_specific_MSRs_offset] = "AMD64_PERF_CNTR_GLOBAL_STATUS",
+   	[0xc0000301 - x86_64_specific_MSRs_offset] = "AMD64_PERF_CNTR_GLOBAL_CTL",
+   	[0xc0000302 - x86_64_specific_MSRs_offset] = "AMD64_PERF_CNTR_GLOBAL_STATUS_CLR",
+  $
+
+Now one can trace systemwide asking to see backtraces to where that MSR
+is being read/written, see this example with a previous update:
+
+  # perf trace -e msr:*_msr/max-stack=32/ --filter="msr>=IA32_U_CET && msr<=IA32_INT_SSP_TAB"
+  ^C#
+
+If we use -v (verbose mode) we can see what it does behind the scenes:
+
+  # perf trace -v -e msr:*_msr/max-stack=32/ --filter="msr>=IA32_U_CET && msr<=IA32_INT_SSP_TAB"
+  Using CPUID AuthenticAMD-25-21-0
+  0x6a0
+  0x6a8
+  New filter for msr:read_msr: (msr>=0x6a0 && msr<=0x6a8) && (common_pid != 597499 && common_pid != 3313)
+  0x6a0
+  0x6a8
+  New filter for msr:write_msr: (msr>=0x6a0 && msr<=0x6a8) && (common_pid != 597499 && common_pid != 3313)
+  mmap size 528384B
+  ^C#
+
+Example with a frequent msr:
+
+  # perf trace -v -e msr:*_msr/max-stack=32/ --filter="msr==IA32_SPEC_CTRL" --max-events 2
+  Using CPUID AuthenticAMD-25-21-0
+  0x48
+  New filter for msr:read_msr: (msr==0x48) && (common_pid != 2612129 && common_pid != 3841)
+  0x48
+  New filter for msr:write_msr: (msr==0x48) && (common_pid != 2612129 && common_pid != 3841)
+  mmap size 528384B
+  Looking at the vmlinux_path (8 entries long)
+  symsrc__init: build id mismatch for vmlinux.
+  Using /proc/kcore for kernel data
+  Using /proc/kallsyms for symbols
+     0.000 Timer/2525383 msr:write_msr(msr: IA32_SPEC_CTRL, val: 6)
+                                       do_trace_write_msr ([kernel.kallsyms])
+                                       do_trace_write_msr ([kernel.kallsyms])
+                                       __switch_to_xtra ([kernel.kallsyms])
+                                       __switch_to ([kernel.kallsyms])
+                                       __schedule ([kernel.kallsyms])
+                                       schedule ([kernel.kallsyms])
+                                       futex_wait_queue_me ([kernel.kallsyms])
+                                       futex_wait ([kernel.kallsyms])
+                                       do_futex ([kernel.kallsyms])
+                                       __x64_sys_futex ([kernel.kallsyms])
+                                       do_syscall_64 ([kernel.kallsyms])
+                                       entry_SYSCALL_64_after_hwframe ([kernel.kallsyms])
+                                       __futex_abstimed_wait_common64 (/usr/lib64/libpthread-2.33.so)
+     0.030 :0/0 msr:write_msr(msr: IA32_SPEC_CTRL, val: 2)
+                                       do_trace_write_msr ([kernel.kallsyms])
+                                       do_trace_write_msr ([kernel.kallsyms])
+                                       __switch_to_xtra ([kernel.kallsyms])
+                                       __switch_to ([kernel.kallsyms])
+                                       __schedule ([kernel.kallsyms])
+                                       schedule_idle ([kernel.kallsyms])
+                                       do_idle ([kernel.kallsyms])
+                                       cpu_startup_entry ([kernel.kallsyms])
+                                       secondary_startup_64_no_verify ([kernel.kallsyms])
+  #
+
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Link: https://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/arch/x86/include/asm/msr-index.h | 24 +++++++++++++++++-------
+ 1 file changed, 17 insertions(+), 7 deletions(-)
+
+diff --git a/tools/arch/x86/include/asm/msr-index.h b/tools/arch/x86/include/asm/msr-index.h
+index f17ade084720d508..37ff47552bcb7b57 100644
+--- a/tools/arch/x86/include/asm/msr-index.h
++++ b/tools/arch/x86/include/asm/msr-index.h
+@@ -4,12 +4,7 @@
+ 
+ #include <linux/bits.h>
+ 
+-/*
+- * CPU model specific register (MSR) numbers.
+- *
+- * Do not add new entries to this file unless the definitions are shared
+- * between multiple compilation units.
+- */
++/* CPU model specific register (MSR) numbers. */
+ 
+ /* x86-64 specific MSRs */
+ #define MSR_EFER		0xc0000080 /* extended feature register */
+@@ -537,7 +532,7 @@
+ #define MSR_AMD64_DC_CFG		0xc0011022
+ 
+ #define MSR_AMD64_DE_CFG		0xc0011029
+-#define MSR_AMD64_DE_CFG_LFENCE_SERIALIZE_BIT	1
++#define MSR_AMD64_DE_CFG_LFENCE_SERIALIZE_BIT	 1
+ #define MSR_AMD64_DE_CFG_LFENCE_SERIALIZE	BIT_ULL(MSR_AMD64_DE_CFG_LFENCE_SERIALIZE_BIT)
+ 
+ #define MSR_AMD64_BU_CFG2		0xc001102a
+@@ -798,6 +793,7 @@
+ #define ENERGY_PERF_BIAS_PERFORMANCE		0
+ #define ENERGY_PERF_BIAS_BALANCE_PERFORMANCE	4
+ #define ENERGY_PERF_BIAS_NORMAL			6
++#define ENERGY_PERF_BIAS_NORMAL_POWERSAVE	7
+ #define ENERGY_PERF_BIAS_BALANCE_POWERSAVE	8
+ #define ENERGY_PERF_BIAS_POWERSAVE		15
+ 
+@@ -1052,6 +1048,20 @@
+ #define VMX_BASIC_MEM_TYPE_WB	6LLU
+ #define VMX_BASIC_INOUT		0x0040000000000000LLU
+ 
++/* Resctrl MSRs: */
++/* - Intel: */
++#define MSR_IA32_L3_QOS_CFG		0xc81
++#define MSR_IA32_L2_QOS_CFG		0xc82
++#define MSR_IA32_QM_EVTSEL		0xc8d
++#define MSR_IA32_QM_CTR			0xc8e
++#define MSR_IA32_PQR_ASSOC		0xc8f
++#define MSR_IA32_L3_CBM_BASE		0xc90
++#define MSR_IA32_L2_CBM_BASE		0xd10
++#define MSR_IA32_MBA_THRTL_BASE		0xd50
++
++/* - AMD: */
++#define MSR_IA32_MBA_BW_BASE		0xc0000200
++
+ /* MSR_IA32_VMX_MISC bits */
+ #define MSR_IA32_VMX_MISC_INTEL_PT                 (1ULL << 14)
+ #define MSR_IA32_VMX_MISC_VMWRITE_SHADOW_RO_FIELDS (1ULL << 29)
+-- 
+2.38.1
+
