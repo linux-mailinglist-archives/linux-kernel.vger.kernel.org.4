@@ -2,142 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739636524E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A01A16524E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233665AbiLTQs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 11:48:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
+        id S233873AbiLTQse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 11:48:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbiLTQsZ (ORCPT
+        with ESMTP id S230058AbiLTQsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 11:48:25 -0500
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AB9B850;
-        Tue, 20 Dec 2022 08:48:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1671554906; x=1703090906;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=pS7MvaBVz12cHvVa/K3ipBPyhpGu7jCdmRrme/dkBwA=;
-  b=dRy7rzV860gl0/TvBTgYVou/Q01JRkfadvjsLo8XsA8N+yq3kjMWzeuZ
-   mSGktAH/g5b+BaNfO0zzeJLa63CzrAlCrKj8gFyFEkQRlHvK7Olf/AHWQ
-   qR6F3hjrtS+6DayN2BYQSxDPa3PWZbjUp/1qERYYdWp7hG2vLYXV0d2/V
-   g=;
-X-IronPort-AV: E=Sophos;i="5.96,259,1665446400"; 
-   d="scan'208";a="275378947"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-47cc8a4c.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 16:48:23 +0000
-Received: from EX13D36EUA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1a-m6i4x-47cc8a4c.us-east-1.amazon.com (Postfix) with ESMTPS id 964F01610EA;
-        Tue, 20 Dec 2022 16:48:19 +0000 (UTC)
-Received: from EX19D019EUA002.ant.amazon.com (10.252.50.84) by
- EX13D36EUA001.ant.amazon.com (10.43.165.127) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Tue, 20 Dec 2022 16:48:18 +0000
-Received: from dev-dsk-hhhawa-1b-84e0d7ff.eu-west-1.amazon.com (10.43.160.83)
- by EX19D019EUA002.ant.amazon.com (10.252.50.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.20; Tue, 20 Dec 2022 16:48:13 +0000
-From:   Hanna Hawa <hhhawa@amazon.com>
-To:     <wsa@kernel.org>, <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
-        <linus.walleij@linaro.org>, <ben-linux@fluff.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
-        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <farbere@amazon.com>, <itamark@amazon.com>,
-        Lareine Khawaly <lareine@amazon.com>,
-        Hanna Hawa <hhhawa@amazon.com>
-Subject: [PATCH v4 1/1] i2c: designware: use casting of u64 in clock multiplication to avoid overflow
-Date:   Tue, 20 Dec 2022 16:48:06 +0000
-Message-ID: <20221220164806.77576-1-hhhawa@amazon.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 20 Dec 2022 11:48:32 -0500
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79900DF7B;
+        Tue, 20 Dec 2022 08:48:31 -0800 (PST)
+Received: by mail-ot1-f42.google.com with SMTP id l8-20020a056830054800b006705fd35eceso7469708otb.12;
+        Tue, 20 Dec 2022 08:48:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZmWMDsM7gBznInWF119ExXVPhyOUt68trxWCdWxjVKs=;
+        b=ffAowPzaXEW0mkp3KDPjaBpcJ/97DBoaMDfawi7rXzsPOX9n5wRTIfH5RRk/RVzLfq
+         LB3XygoiNhRdMMxjdMDHSQ1HPYDWa6YIBP5yGHR9b5j7TvbpshzwKMHwuNBap18yTDWb
+         ixJzM4fo9XPuZcs8rxAiohXbVtg3NDHnwFRT4mM4INBuoh8SeXfNo03AJleBR06lcMtu
+         xX8IqKEhX8CecA5EpTzLpDcRztIW28deJl1OE6JEwzQg5fXT4u7bER0USWsGhGq1Qxg3
+         lRKkOyVLoveW/oTQFVyN3C695m/8hZncBbc1Mrl+TrNQmIWyTnEl2Ba77Prn7NA/uQmf
+         nhpQ==
+X-Gm-Message-State: ANoB5pl/Pj3zGufnO/+Ce5+84XnO88px26FuntfmkPzz+Me2RIWl3h/N
+        CbA9T0I2anhXulCFKGsczbeSNb9cTQ==
+X-Google-Smtp-Source: AA0mqf5tVUyJtFiNpYpVQp7R2aB336NTL+3o9bQ1N6XYmFOiUby946PPltH3ZKYoBVVoMdlkJn8Icw==
+X-Received: by 2002:a05:6830:144d:b0:670:7c74:2616 with SMTP id w13-20020a056830144d00b006707c742616mr20951968otp.11.1671554910735;
+        Tue, 20 Dec 2022 08:48:30 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t26-20020a05683022fa00b00661ad8741b4sm5889102otc.24.2022.12.20.08.48.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 08:48:30 -0800 (PST)
+Received: (nullmailer pid 724855 invoked by uid 1000);
+        Tue, 20 Dec 2022 16:48:29 -0000
+Date:   Tue, 20 Dec 2022 10:48:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     linux-rtc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        bruno.thomsen@gmail.com, linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH] dt-bindings: rtc: pcf2127: remove pca/pcf2129 from
+ trivial RTC devices list
+Message-ID: <167155487539.723236.827037175847349918.robh@kernel.org>
+References: <20221220152237.1125178-1-hugo@hugovil.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.160.83]
-X-ClientProxiedBy: EX13D44UWC001.ant.amazon.com (10.43.162.26) To
- EX19D019EUA002.ant.amazon.com (10.252.50.84)
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220152237.1125178-1-hugo@hugovil.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lareine Khawaly <lareine@amazon.com>
 
-In functions i2c_dw_scl_lcnt() and i2c_dw_scl_hcnt() may have overflow
-by depending on the values of the given parameters including the ic_clk.
-For example in our use case where ic_clk is larger than one million,
-multiplication of ic_clk * 4700 will result in 32 bit overflow.
+On Tue, 20 Dec 2022 10:22:37 -0500, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> 
+> pca/pcf2129 devices can also have the 'reset-source' property, so
+> remove them from the trivial RTC devices list.
+> 
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> ---
+>  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 5 ++++-
+>  Documentation/devicetree/bindings/rtc/trivial-rtc.yaml | 2 --
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+> 
 
-Add cast of u64 to the calculation to avoid multiplication overflow, and
-use the corresponding define for divide.
-
-Fixes: 2373f6b9744d ("i2c-designware: split of i2c-designware.c into core and bus specific parts")
-Signed-off-by: Lareine Khawaly <lareine@amazon.com>
-Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
-
----
-Change Log v3->v4:
-- update line length when possible
-- fix change log location in the patch
-
-Change Log v2->v3:
-- Avoid changing the ic_clk parameter to u64, and do casting in the
-  calculation itself instead.
-- i2c_dw_clk_rate() returns unsigned long which is confusing because the
-  function return the value of get_clk_rate_khz() which returns u32.
-  This is not effect the overflow issue, pushed change in separated
-  patch.
-- use DIV_ROUND_CLOSEST_ULL instead of DIV_ROUND_CLOSEST
-
-Change Log v1->v2:
-- Update commit message and add fix tag.
-
- drivers/i2c/busses/i2c-designware-common.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
-index e0a46dfd1c15..2a669da08762 100644
---- a/drivers/i2c/busses/i2c-designware-common.c
-+++ b/drivers/i2c/busses/i2c-designware-common.c
-@@ -351,7 +351,8 @@ u32 i2c_dw_scl_hcnt(u32 ic_clk, u32 tSYMBOL, u32 tf, int cond, int offset)
- 		 *
- 		 * If your hardware is free from tHD;STA issue, try this one.
- 		 */
--		return DIV_ROUND_CLOSEST(ic_clk * tSYMBOL, MICRO) - 8 + offset;
-+		return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * tSYMBOL, MICRO) - 8 +
-+			offset;
- 	else
- 		/*
- 		 * Conditional expression:
-@@ -367,7 +368,8 @@ u32 i2c_dw_scl_hcnt(u32 ic_clk, u32 tSYMBOL, u32 tf, int cond, int offset)
- 		 * The reason why we need to take into account "tf" here,
- 		 * is the same as described in i2c_dw_scl_lcnt().
- 		 */
--		return DIV_ROUND_CLOSEST(ic_clk * (tSYMBOL + tf), MICRO) - 3 + offset;
-+		return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tSYMBOL + tf),
-+					     MICRO) - 3 + offset;
- }
- 
- u32 i2c_dw_scl_lcnt(u32 ic_clk, u32 tLOW, u32 tf, int offset)
-@@ -383,7 +385,8 @@ u32 i2c_dw_scl_lcnt(u32 ic_clk, u32 tLOW, u32 tf, int offset)
- 	 * account the fall time of SCL signal (tf).  Default tf value
- 	 * should be 0.3 us, for safety.
- 	 */
--	return DIV_ROUND_CLOSEST(ic_clk * (tLOW + tf), MICRO) - 1 + offset;
-+	return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tLOW + tf), MICRO) - 1 +
-+		offset;
- }
- 
- int i2c_dw_set_sda_hold(struct dw_i2c_dev *dev)
--- 
-2.38.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
