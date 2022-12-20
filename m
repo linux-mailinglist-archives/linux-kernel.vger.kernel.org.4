@@ -2,102 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A149651A33
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 06:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3504651A37
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 06:25:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbiLTFQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 00:16:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48680 "EHLO
+        id S232798AbiLTFZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 00:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiLTFQx (ORCPT
+        with ESMTP id S229454AbiLTFZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 00:16:53 -0500
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6038E60DF;
-        Mon, 19 Dec 2022 21:16:51 -0800 (PST)
-Received: by mail-pf1-f175.google.com with SMTP id k79so7759040pfd.7;
-        Mon, 19 Dec 2022 21:16:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y+Qr8XUVpxB/+TLY0Usi8j5C3U+ntsf3C3rD3sN9jR4=;
-        b=s4tZtPN2g9gpUdRv1EJX0cbBYlfQotV2IW2D8jRMG5Jucu1czIFnR3hL9t96Umth3j
-         Ph//UGAQegLEjx4P3dB4Tz2Ek/4VqFkkJRKIn4VUOWjT3TX7E8REvGF6bLWaVpOSygnh
-         X4c+lu7+0bOTkNRUYRQLvOxdhXrUtmyxqhmo5zQoZGf55EnTPNJeKt3vfyfI614uChyd
-         Ii3op6cnuHLg1IecjWC69dIJKivYm6AF5ypSHU4f7wFN47EX5agxWEg6bOOkIVcvFXjI
-         142RmAHkoerDJlHzZzRoDWHaA1eyZHkuai7DT9NmZmKC4jnsgTHU22dsGTXm4N6WY7kk
-         ogIA==
-X-Gm-Message-State: AFqh2kpHJT2ePNaOlBhoK3KI2L9g9sobNJMHLVkhrVMiKbrPns4oWObD
-        blyaECJoYpjKj+RbmL7/IAqE65Ps95cLoYNvabU=
-X-Google-Smtp-Source: AMrXdXs15pGNbOpDcT2+T1FhTjoIu/dIQv+ESXHxbEPaBKEcsgo0JwldUymd3df/4+UrhYKmOdn//GLV9KFNmSUVd0k=
-X-Received: by 2002:a63:2163:0:b0:483:f80c:cdf3 with SMTP id
- s35-20020a632163000000b00483f80ccdf3mr798360pgm.70.1671513410744; Mon, 19 Dec
- 2022 21:16:50 -0800 (PST)
+        Tue, 20 Dec 2022 00:25:36 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF61C12759
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 21:25:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1671513916; bh=sFskYXbidjd/kcmqsM6ylTeRnbnKAC12byfrx9G5ZBw=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=e0NyAsLbQs/avEnwiC7ZsVK9GU4zrPuQ2XS2Ty1xYms0TvZepQfGJFyoXdovGjoPg
+         nLFh9Azc+zv2bYdeL81WbyjoQwjCRe+8KHm/0j+9fgCl8r4OFQLTKGwboLCvlQzsrA
+         h66ImFahB2Wf5lr5pJmUA8uWAo9X2/daha3s3yRU=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Tue, 20 Dec 2022 06:25:16 +0100 (CET)
+X-EA-Auth: UI0gHJBKyazNjZiXWvC0DmV1kOkEQvUhUW4KYOzbDoHDVw8pLiXzVtXTgzUhY3wuuWiIusiFO/ZVMxGyeNWUeIXmzD/eWeUJ
+Date:   Tue, 20 Dec 2022 10:55:11 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>, drv@mailo.com
+Subject: [PATCH] ARM/dma-mapping: use kvzalloc for fallback memory allocation
+ need
+Message-ID: <Y6FHN9RyUKsQLo0i@qemulion>
 MIME-Version: 1.0
-References: <20221219212013.1294820-1-frank.jungclaus@esd.eu> <20221219212013.1294820-2-frank.jungclaus@esd.eu>
-In-Reply-To: <20221219212013.1294820-2-frank.jungclaus@esd.eu>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 20 Dec 2022 14:16:39 +0900
-Message-ID: <CAMZ6RqKc0mvfQGEGb7gCE69Mskhzq5YKF88Jhe+1VR=43YW3Xg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] can: esd_usb: Improved behavior on esd CAN_ERROR_EXT
- event (1)
-To:     Frank Jungclaus <frank.jungclaus@esd.eu>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue. 20 Dec. 2022 at 06:25, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
->
-> Moved the supply for cf->data[3] (bit stream position of CAN error)
-> outside of the "switch (ecc & SJA1000_ECC_MASK){}"-statement, because
-> this position is independent of the error type.
->
-> Fixes: 96d8e90382dc ("can: Add driver for esd CAN-USB/2 device")
-> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
-> ---
->  drivers/net/can/usb/esd_usb.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-> index 42323f5e6f3a..5e182fadd875 100644
-> --- a/drivers/net/can/usb/esd_usb.c
-> +++ b/drivers/net/can/usb/esd_usb.c
-> @@ -286,7 +286,6 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
->                                 cf->data[2] |= CAN_ERR_PROT_STUFF;
->                                 break;
->                         default:
-> -                               cf->data[3] = ecc & SJA1000_ECC_SEG;
->                                 break;
->                         }
->
-> @@ -294,6 +293,9 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
->                         if (!(ecc & SJA1000_ECC_DIR))
->                                 cf->data[2] |= CAN_ERR_PROT_TX;
->
-> +                       /* Bit stream position in CAN frame as the error was detected */
-> +                       cf->data[3] = ecc & SJA1000_ECC_SEG;
+When the memory sizes are not known upfront, it is preferred to use the
+kvzalloc helper function instead of direct conditional evaluation of
+size and kzalloc/vzalloc fallback design. The kvzalloc helper function
+in this case is more efficient as it avoids indefinite kzalloc retries
+when a small memory size is needed but is unavailable.
+This LWN article has further details on the advantages of using
+kvzalloc in case of fallback memory allocation needs:
+ 	https://lwn.net/Articles/711653/
 
-Can you confirm that the value returned by the device matches the
-specifications from linux/can/error.h?
+This patch proposal is based on following Coccinelle warning using the
+kvmalloc.cocci semantic patch.
 
-  https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/can/error.h#L90
+arch/arm/mm/dma-mapping.c:858:28-29: WARNING opportunity for kvmalloc
 
->                         if (priv->can.state == CAN_STATE_ERROR_WARNING ||
->                             priv->can.state == CAN_STATE_ERROR_PASSIVE) {
->                                 cf->data[1] = (txerr > rxerr) ?
-> --
-> 2.25.1
->
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+Note: The patch proposal is compile tested only.
+
+ arch/arm/mm/dma-mapping.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
+index c135f6e37a00..2b79af377a81 100644
+--- a/arch/arm/mm/dma-mapping.c
++++ b/arch/arm/mm/dma-mapping.c
+@@ -855,10 +855,7 @@ static struct page **__iommu_alloc_buffer(struct device *dev, size_t size,
+ 	int i = 0;
+ 	int order_idx = 0;
+
+-	if (array_size <= PAGE_SIZE)
+-		pages = kzalloc(array_size, GFP_KERNEL);
+-	else
+-		pages = vzalloc(array_size);
++	pages = kvzalloc(array_size, GFP_KERNEL);
+ 	if (!pages)
+ 		return NULL;
+
+--
+2.34.1
+
+
+
