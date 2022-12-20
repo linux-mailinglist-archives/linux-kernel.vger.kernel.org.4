@@ -2,126 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4134F65192E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 03:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA92651934
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 04:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbiLTCxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 21:53:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
+        id S232394AbiLTDBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 22:01:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiLTCxR (ORCPT
+        with ESMTP id S229492AbiLTDBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 21:53:17 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2082.outbound.protection.outlook.com [40.107.237.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E4B13CD0;
-        Mon, 19 Dec 2022 18:53:16 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H9sj9XvtXCa+heyOfQGa65R+xbqB2FI0G9xQB/v3MbFq4voI84hqin7bMmTz/PYpbU3uefUzU4utlgLdjlD4i90OCLy8zGTMZCR3KZ4128VazWXlIDnn0Qzh6oNzzRdes1i7cOOXlTf9mRF1mmUfbbtf8GwJQkUci2eWtmqQXlbwltORgLEbBlNq7xnlbrCp/ty0keoCnAd3Hd2kxTmYmLxz4MySyXvhVX2aLW4Yz/aj5o9VjtkNpxG3mfF7G6zYGcbsFdIh2t1oFN9gWLNPpALiKA7VxBLqSg7naV7y0ytYXiwR7haT4GEMGiI7ZA20kh7nb4x2299LTzVoqyc1Gg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qRzpDxDhl1vFJdBU2Z3i1SGucCoSxHMAFn/muFgtPic=;
- b=UB9hOoeYhKoOHN+BIdCuYHRwF/ldBSjapj5ncKs5L4V31ppw7GPLwR+P2LumTrpQ3VziPTmePnBjKHzPYNBxtmO/YdNoN0M91ToVvxbvQ1DxSSyDTu4QD3uvYqqDaE+jLXRVOKPPnYy6vkcn81u433Qu5WJE9baeC0fqH/5wl42z6y+vhsXsF48zUJZK+w0s9hVFVO8oZC3Cu32AydSOeyQjv265BSSoUOu78PV1QSdMSKMdKC2eMHikPLS8P6b9Z1RBZzHKvSiNzvntRfbVu+4hZZQ4xK7E8kepNiMflZ2dhPR3086lCeGsGrCOGIUsxahAg0cVCJPPn5AwDwRxBw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qRzpDxDhl1vFJdBU2Z3i1SGucCoSxHMAFn/muFgtPic=;
- b=nlWFtqf9wPM8gLj16UFqLFhena+cLRMYXBRdsKyAd6M9fih1edQUE3ppoamhTFhoV+XShzXc3pbGgpD+8rX9FFplz+sqmfJLY+CX0VktaMZug2IatIg7+Ry+1gD1XRbvr8qBEUWnXa3IwGYJd9e/txsdnlLfyIXGpCdlsTMWqlE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DM4PR12MB5360.namprd12.prod.outlook.com (2603:10b6:5:39f::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Tue, 20 Dec
- 2022 02:53:14 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::ff3c:2d37:75f3:442a]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::ff3c:2d37:75f3:442a%4]) with mapi id 15.20.5924.016; Tue, 20 Dec 2022
- 02:53:14 +0000
-Message-ID: <4da9ffcd-34f6-d756-1ab5-95ba99a8739c@amd.com>
-Date:   Mon, 19 Dec 2022 20:53:11 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v8 03/13] cpufreq: intel_pstate: use common macro
- definition for Energy Preference Performance(EPP)
-Content-Language: en-US
-To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
-        ray.huang@amd.com, viresh.kumar@linaro.org
-Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
-        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
-        Xiaojian.Du@amd.com, Li.Meng@amd.com, wyes.karny@amd.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221219064042.661122-1-perry.yuan@amd.com>
- <20221219064042.661122-4-perry.yuan@amd.com>
-From:   Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20221219064042.661122-4-perry.yuan@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN1PR12CA0081.namprd12.prod.outlook.com
- (2603:10b6:802:21::16) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Mon, 19 Dec 2022 22:01:04 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E301262B;
+        Mon, 19 Dec 2022 19:01:01 -0800 (PST)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NbhBd2DjHzmWjK;
+        Tue, 20 Dec 2022 10:59:53 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 20 Dec 2022 11:00:58 +0800
+Message-ID: <27a7b2ff-c0db-7fa0-2da0-8d76899f94f8@huawei.com>
+Date:   Tue, 20 Dec 2022 11:00:58 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DM4PR12MB5360:EE_
-X-MS-Office365-Filtering-Correlation-Id: c0017403-74cf-467b-99ac-08dae235566a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MR8KmBuCUHdQaE1LIKLTSmQgsmXH0PGfnhR75lwBcPM/60yRomxQPVXPaxl+pfnsVoFyBvmQ2DEJY+vqsUNB5PE0/WYGPtDE7yfYwl0qq7WfjeEzbmXfN9RssAfhphzo+1FbbvIlbYUKntSkmzJ2iAWb3G2MxvTfQMvjG46cWV/5WyYWaR7G7jkr1/ccbRau7VWkvHez6HrBSgaBvsr8Zbj/2PhDImUtUJMYQ+ptSmhxMzs9quJim4t1LFUbXfQROIxCUTDViBYdTgONvjbX6KCCx4ksSl20lul+gNifjHBPG36NDGifPF5mD5A4ZzRp6ffu+npsJrnSU+TxpTvGkFLbxo9li69QjW+R0ZpClenuFuaNpQ3wjXaD2xVcdiFZdjnEe4lEGQc9qrv1DgDQza54JmVkiB0vYxVeETE+X5CiLyijoDrhtzKDV8MyJk5B9bly2prbObNO7XdbudgMGfOsIe4AYQA4sONZNBkUjSEw6uhlA7xautl2kLAOrZLx4SjaRrnkMbL5aDyopyuK51vZobSPv7heMZhK62QWqjywed7wp13rEbQa213zZS5UQYX12R40ZAS96fWlcCUHOwirh+UQID6G2T8s0cEGJBa/mu3RwPwmbosBLWAsfcU4IZ0boVK2K5kG+Vn5wgPxHcB3pCwW3ysW7HxTdIU6DbADD/ovv9HcV/WTGmYtpUaL9qdmMYkq07QrR5jDW8cA0Du8bu2hpp9JORXU1GPXaUA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(396003)(39860400002)(376002)(136003)(451199015)(31686004)(2616005)(86362001)(38100700002)(6666004)(53546011)(186003)(2906002)(6512007)(26005)(6506007)(478600001)(6486002)(36756003)(8936002)(316002)(66556008)(44832011)(4326008)(66946007)(31696002)(66476007)(41300700001)(83380400001)(5660300002)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WndqSHB0UG1WVDBtZGc0OUYwMTVXZThGNGJ1SXVtZU1SZVJKOXI1VGs2V21I?=
- =?utf-8?B?bTk2SWE4eGFsdUNoYVlrN3FzT0Y3S1J5bHo1a0loOXMwN0c2aDlMRjB1dnFq?=
- =?utf-8?B?WnlpSUJpTElZNWIyTVBBT2ZRRDl5TktrK25qWFhadU9oVEl2U2hEbzJ6NjVR?=
- =?utf-8?B?TmtNc2JHQmcxS1E3UFpmYW4zUCs1dzlZOXRLQ2dBT3JTUmQ0dGFkbkc2aEIr?=
- =?utf-8?B?TTNNUkRYWFVaUmwvUUdHSFpudjhqYU91aGkrOU5kMDJMM0gvYjQwU1ROK0JH?=
- =?utf-8?B?ZFhHRjZZbGpsMTlwNUJZbGpEdjdzTjV3dlBGT3VlWFFpQzIwQ2VZZS9WdlV1?=
- =?utf-8?B?c2ZmWHdEaERYRUFkTFpzMEpVSmw5Y01IdXZESzBuNkc1TzVlNXd2QVFNOGVv?=
- =?utf-8?B?cllTZWt2L21XbjFNanlqdFZpblF2aWhuS1p6Y0xtc0NlMnF0bk1sdHY4T3oy?=
- =?utf-8?B?d1RULy9LNGE5M05vVlYwNXFEdXEzWVUwa3hqZzZ6MUVKY2tzalhGVnFuS3Bx?=
- =?utf-8?B?Zk1IQk82Z0NGMXBSa0lpRC91QVI3R2NYYnZDVFBLUmFsWW5udXUzYmFhcWpv?=
- =?utf-8?B?bGpEc0NJSk4xaFg5aXMyTFprUDY1VE1TVlJ3NkMwbDlBMjd5dFpPTFNWMUFK?=
- =?utf-8?B?c1RXOEQ2VW9HRkhSS2lsQUxUZUJXUktjeEYyNVRHN3JZdnBXNkZXcFN0NUZ6?=
- =?utf-8?B?NC9EdjlyclVTcUNRMmlNVlQ5aHNIUFo1U0RFRTh0dFFrZ3ZNRUhXYjlMcEtQ?=
- =?utf-8?B?ZXRRTGd1aUMrRGxrK0pGV0RqMHBDUjhWWTlRWjlxckZKZSsvOVVZOXRMSThO?=
- =?utf-8?B?VEhuZE5IdFF6TlMzWEZGZDhpTzl6VmFRTTI2RjcyVmxxd21sODdBa09xZHRF?=
- =?utf-8?B?YStuTXRwMVVmRG9IWDljdDl6eXhrRGJqeUVJMWcvZy8rc2VpUXBtanorWHc2?=
- =?utf-8?B?dGN6R1FwcVB1NzRUcUQxT0xMSGxzMkY5anRSbXFRSDViaEhURkNPN2lhOVBl?=
- =?utf-8?B?Uk1WNUlHRUQ3NGZPZThKOVR4SUlhcld1bTVGWXZZQmtCR0FadmJhTnc3aFVV?=
- =?utf-8?B?NmVULzkzc2JrMU1Yb2hFYjlmakJtOEoyS0lhMGZWbzBUVHJla0c4dVQ3WEZl?=
- =?utf-8?B?OEs2Wlk4L1lvUXVtc1hXdlBsbStvaldENVlTYkNveUVQNlQxMmp4L0xhblRF?=
- =?utf-8?B?UVI5NUhsV0owTituYkpXQVh3cURhcVlBNVRweTJEZ3oxSktNQ1dtaDZiTjdq?=
- =?utf-8?B?cnozbEgrUzFNcnFxYnd1bWUzVnlGck5HTnBoWVdBdERzMEE4SHZpZ0lKaEVt?=
- =?utf-8?B?SlFOaDl3MG9VMnVXY09tMVR4T1VxY0VGSHJsUS9ITGRIamZBWWFJK3JpQ01n?=
- =?utf-8?B?LzNtU0d5RmNnT3RHN010bVJ0MGdkbVlRL21BRWRPRDVTS0RCOHpXL1FwRFJL?=
- =?utf-8?B?VXYvNE9QcEQ1dFQxRmtlaXJEMGNjSlg2SHFPRlR1K1BJK0tyd3RXYW5mbXQy?=
- =?utf-8?B?VWM2UGdXMEUvUUlMamxjVWxXUThJcG16Z1puRnh4Uy83K2sxSVAybzJLL014?=
- =?utf-8?B?ZmsxdmVFTE1JUW8yMHFWRGNyb0FJSWEwWFA4T3ZTRUQ2MzkxaHQ4MTNITXNZ?=
- =?utf-8?B?NmVkQ1FXdCtyNWNwcGZNTzhYYmJ0VisvZGZEZjdFd2FId3l4ckxEeUZzSVFm?=
- =?utf-8?B?OUVhMTF6bVVEWmp1RUVJZjFYV1o1K0EvMUxNbXU3R2VOaitXVG85Q2Jhak5L?=
- =?utf-8?B?TU5ibVUrUk83NWZRallZMldtTzJyUmN5Rkw4QXlnTFVSYWYwTGwyTWV3OEE2?=
- =?utf-8?B?WFdTR096bC9mRFlUQUJZWitYZWYzM3pVMmFpb1VvcTBIYko4T013b1kybEtm?=
- =?utf-8?B?M1VNQ3JZaWJ1Q1pqMnI2UW9TYTlic0VCS29VWkIwZW05UDVqa1RxQUJQQjZG?=
- =?utf-8?B?TVE4WkpUcjFmejEvcnh4aWtCYkVpTU5JUjVqUUlIcEZ1c3l6eGdsMVYrSnhU?=
- =?utf-8?B?ZEFSK2JsenVzU1dHWDRmOS9GTjNQdmtYS21Ga3psNkprUk9PUFhNbEdINC8r?=
- =?utf-8?B?TWhLUjNzeE9LTEh5N0dxZlZhQ1RZZjNQNlZIbmtLRUtlMHdGTlJQRkVjUXdN?=
- =?utf-8?Q?w54CjjKfvsIDi08mPyt96wUNL?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0017403-74cf-467b-99ac-08dae235566a
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2022 02:53:13.8723
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vZbaPxqK8+h1VnQhPeX866d8aV96Vg9xOcP+juOU+M6rWllikoB7RO2t7FkLlluD+z7t0ermDFd/ugE5eXVQHA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5360
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RFC PATCH RESEND bpf-next 3/4] riscv, bpf: Add
+ bpf_arch_text_poke support for RV64
+Content-Language: en-US
+To:     Pu Lehui <pulehui@huaweicloud.com>, <bpf@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+CC:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        Xi Wang <xi.wang@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Pu Lehui <pulehui@huawei.com>
+References: <20221220021319.1655871-1-pulehui@huaweicloud.com>
+ <20221220021319.1655871-4-pulehui@huaweicloud.com>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <20221220021319.1655871-4-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,84 +67,217 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/19/22 00:40, Perry Yuan wrote:
-> make the energy preference performance strings and profiles using one
-> common header for intel_pstate driver, then the amd_pstate epp driver can
-> use the common header as well. This will simpify the intel_pstate and
-> amd_pstate driver.
+On 12/20/2022 10:13 AM, Pu Lehui wrote:
+> From: Pu Lehui <pulehui@huawei.com>
 > 
-> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+> Implement bpf_arch_text_poke for RV64. For call scenario,
+> ftrace framework reserve 4 nops for RV64 kernel function
+> as function entry, and use auipc+jalr instructions to call
+> kernel or module functions. However, since the auipc+jalr
+> call instructions is non-atomic operation, we need to use
+> stop-machine to make sure instruction patching in atomic
+> context. As for jump scenario, since we only jump inside
+> the trampoline, a jal instruction is sufficient.
+> 
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
 > ---
->   drivers/cpufreq/intel_pstate.c | 13 +++----------
->   include/linux/cpufreq.h        | 11 +++++++++++
->   2 files changed, 14 insertions(+), 10 deletions(-)
+>   arch/riscv/net/bpf_jit.h        |   5 ++
+>   arch/riscv/net/bpf_jit_comp64.c | 131 +++++++++++++++++++++++++++++++-
+>   2 files changed, 134 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index ad9be31753b6..93a60fdac0fc 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -640,15 +640,7 @@ static int intel_pstate_set_epb(int cpu, s16 pref)
->    *	4		power
->    */
+> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+> index d926e0f7ef57..bf9802a63061 100644
+> --- a/arch/riscv/net/bpf_jit.h
+> +++ b/arch/riscv/net/bpf_jit.h
+> @@ -573,6 +573,11 @@ static inline u32 rv_fence(u8 pred, u8 succ)
+>   	return rv_i_insn(imm11_0, 0, 0, 0, 0xf);
+>   }
 >   
-> -enum energy_perf_value_index {
-> -	EPP_INDEX_DEFAULT = 0,
-> -	EPP_INDEX_PERFORMANCE,
-> -	EPP_INDEX_BALANCE_PERFORMANCE,
-> -	EPP_INDEX_BALANCE_POWERSAVE,
-> -	EPP_INDEX_POWERSAVE,
-> -};
-> -
-> -static const char * const energy_perf_strings[] = {
-> +const char * const energy_perf_strings[] = {
->   	[EPP_INDEX_DEFAULT] = "default",
->   	[EPP_INDEX_PERFORMANCE] = "performance",
->   	[EPP_INDEX_BALANCE_PERFORMANCE] = "balance_performance",
-> @@ -656,7 +648,8 @@ static const char * const energy_perf_strings[] = {
->   	[EPP_INDEX_POWERSAVE] = "power",
->   	NULL
->   };
-> -static unsigned int epp_values[] = {
+> +static inline u32 rv_nop(void)
+> +{
+> +	return rv_i_insn(0, 0, 0, 0, 0x13);
+> +}
 > +
-> +unsigned int epp_values[] = {
->   	[EPP_INDEX_DEFAULT] = 0, /* Unused index */
->   	[EPP_INDEX_PERFORMANCE] = HWP_EPP_PERFORMANCE,
->   	[EPP_INDEX_BALANCE_PERFORMANCE] = HWP_EPP_BALANCE_PERFORMANCE,
-
-I think this is going to make CONFIG_AMD_PSTATE depend on 
-CONFIG_INTEL_PSTATE.  What you'll want to do is put these symbols in a 
-"common" C file used by both.  How about in the cppc lib stuff?
-
-Please make sure that you test compile/link of v9 both with 
-CONFIG_AMD_PSTATE/CONFIG_INTEL_PSTATE set and either or set.
-
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index d5595d57f4e5..e63309d497fe 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -20,6 +20,7 @@
->   #include <linux/pm_qos.h>
->   #include <linux/spinlock.h>
->   #include <linux/sysfs.h>
-> +#include <asm/msr.h>
+>   /* RVC instrutions. */
 >   
->   /*********************************************************************
->    *                        CPUFREQ INTERFACE                          *
-> @@ -185,6 +186,16 @@ struct cpufreq_freqs {
->   	u8 flags;		/* flags of cpufreq_driver, see below. */
->   };
+>   static inline u16 rvc_addi4spn(u8 rd, u32 imm10)
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+> index bf4721a99a09..fa8b03c52463 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -8,6 +8,8 @@
+>   #include <linux/bitfield.h>
+>   #include <linux/bpf.h>
+>   #include <linux/filter.h>
+> +#include <linux/memory.h>
+> +#include <linux/stop_machine.h>
+>   #include "bpf_jit.h"
 >   
-> +enum energy_perf_value_index {
-> +	EPP_INDEX_DEFAULT = 0,
-> +	EPP_INDEX_PERFORMANCE,
-> +	EPP_INDEX_BALANCE_PERFORMANCE,
-> +	EPP_INDEX_BALANCE_POWERSAVE,
-> +	EPP_INDEX_POWERSAVE,
+>   #define RV_REG_TCC RV_REG_A6
+> @@ -238,7 +240,7 @@ static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
+>   	if (!is_tail_call)
+>   		emit_mv(RV_REG_A0, RV_REG_A5, ctx);
+>   	emit_jalr(RV_REG_ZERO, is_tail_call ? RV_REG_T3 : RV_REG_RA,
+> -		  is_tail_call ? 4 : 0, /* skip TCC init */
+> +		  is_tail_call ? 20 : 0, /* skip reserved nops and TCC init */
+>   		  ctx);
+>   }
+>   
+> @@ -615,6 +617,127 @@ static int add_exception_handler(const struct bpf_insn *insn,
+>   	return 0;
+>   }
+>   
+> +struct text_poke_args {
+> +	void *addr;
+> +	const void *insns;
+> +	size_t len;
+> +	atomic_t cpu_count;
 > +};
-> +extern const char * const energy_perf_strings[];
-> +extern unsigned int epp_values[];
 > +
->   /* Only for ACPI */
->   #define CPUFREQ_SHARED_TYPE_NONE (0) /* None */
->   #define CPUFREQ_SHARED_TYPE_HW	 (1) /* HW does needed coordination */
+> +static int do_text_poke(void *data)
+> +{
+> +	int ret = 0;
+> +	struct text_poke_args *patch = data;
+> +
+> +	if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
+
+seems this sync is not needed, why not calling stop machine like this:
+
+stop_machine(do_text_poke, &patch, NULL);
+
+> +		ret = patch_text_nosync(patch->addr, patch->insns, patch->len);
+> +		atomic_inc(&patch->cpu_count);
+> +	} else {
+> +		while (atomic_read(&patch->cpu_count) <= num_online_cpus())
+> +			cpu_relax();
+> +		smp_mb();
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int bpf_text_poke_stop_machine(void *addr, const void *insns, size_t len)
+> +{
+> +	struct text_poke_args patch = {
+> +		.addr = addr,
+> +		.insns = insns,
+> +		.len = len,
+> +		.cpu_count = ATOMIC_INIT(0),
+> +	};
+> +
+> +	return stop_machine(do_text_poke, &patch, cpu_online_mask);
+> +}
+> +
+> +static int gen_call_or_nops(void *target, void *ip, u32 *insns)
+> +{
+> +	int i, ret;
+> +	s64 rvoff;
+> +	struct rv_jit_context ctx;
+> +
+> +	ctx.ninsns = 0;
+> +	ctx.insns = (u16 *)insns;
+> +
+> +	if (!target) {
+> +		for (i = 0; i < 4; i++)
+> +			emit(rv_nop(), &ctx);
+> +		return 0;
+> +	}
+> +
+> +	rvoff = (s64)(target - ip);
+> +	emit(rv_sd(RV_REG_SP, -8, RV_REG_RA), &ctx);
+> +	ret = emit_jump_and_link(RV_REG_RA, rvoff, false, &ctx);
+> +	if (ret)
+> +		return ret;
+> +	emit(rv_ld(RV_REG_RA, -8, RV_REG_SP), &ctx);
+> +
+> +	return 0;
+> +
+> +}
+> +
+> +static int bpf_text_poke_call(void *ip, void *old_addr, void *new_addr)
+> +{
+> +	int ret;
+> +	u32 old_insns[4], new_insns[4];
+> +
+> +	ret = gen_call_or_nops(old_addr, ip + 4, old_insns);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = gen_call_or_nops(new_addr, ip + 4, new_insns);
+> +	if (ret)
+> +		return ret;
+> +
+> +	mutex_lock(&text_mutex);
+> +	if (memcmp(ip, old_insns, sizeof(old_insns))) {
+> +		ret = -EFAULT;
+> +		goto out;
+> +	}
+> +
+> +	if (memcmp(ip, new_insns, sizeof(new_insns)))
+> +		ret = bpf_text_poke_stop_machine(ip, new_insns, sizeof(new_insns));
+
+since there are 4 instructions being replaced, it is possible that
+serveral old instructions were already executed before stop machine.
+
+> +out:
+> +	mutex_unlock(&text_mutex);
+> +	return ret;
+> +}
+> +
+> +static int bpf_text_poke_jump(void *ip, void *old_addr, void *new_addr)
+> +{
+> +	int ret;
+> +	u32 old_insn, new_insn;
+> +
+> +	old_insn = old_addr ? rv_jal(RV_REG_ZERO, (s64)(old_addr - ip) >> 1) : rv_nop();
+> +	new_insn = new_addr ? rv_jal(RV_REG_ZERO, (s64)(new_addr - ip) >> 1) : rv_nop();
+> +
+> +	mutex_lock(&text_mutex);
+> +	if (memcmp(ip, &old_insn, sizeof(old_insn))) {
+> +		ret = -EFAULT;
+> +		goto out;
+> +	}
+> +
+> +	if (memcmp(ip, &new_insn, sizeof(new_insn)))
+> +		ret = patch_text_nosync(ip, &new_insn, sizeof(new_insn));
+> +out:
+> +	mutex_unlock(&text_mutex);
+> +	return ret;
+> +}
+> +
+> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+> +		       void *old_addr, void *new_addr)
+> +{
+> +	if (!is_kernel_text((unsigned long)ip) &&
+> +	    !is_bpf_text_address((unsigned long)ip))
+> +		return -ENOTSUPP;
+> +
+> +	return poke_type == BPF_MOD_CALL ?
+> +	       bpf_text_poke_call(ip, old_addr, new_addr) :
+> +	       bpf_text_poke_jump(ip, old_addr, new_addr);
+> +}
+> +
+>   int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   		      bool extra_pass)
+>   {
+> @@ -1266,7 +1389,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   
+>   void bpf_jit_build_prologue(struct rv_jit_context *ctx)
+>   {
+> -	int stack_adjust = 0, store_offset, bpf_stack_adjust;
+> +	int i, stack_adjust = 0, store_offset, bpf_stack_adjust;
+>   	bool is_main_prog = ctx->prog->aux->func_idx == 0;
+>   
+>   	bpf_stack_adjust = round_up(ctx->prog->aux->stack_depth, 16);
+> @@ -1294,6 +1417,10 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx)
+>   
+>   	store_offset = stack_adjust - 8;
+>   
+> +	/* reserve 4 nop insns */
+> +	for (i = 0; i < 4; i++)
+> +		emit(rv_nop(), ctx);
+> +
+>   	/* First instruction is always setting the tail-call-counter
+>   	 * (TCC) register. This instruction is skipped for tail calls.
+>   	 * Force using a 4-byte (non-compressed) instruction.
 
