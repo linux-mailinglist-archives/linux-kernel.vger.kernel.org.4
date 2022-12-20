@@ -2,157 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BCE65213B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 14:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F0B65213E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 14:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233825AbiLTNFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 08:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
+        id S233787AbiLTNHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 08:07:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233846AbiLTNFW (ORCPT
+        with ESMTP id S229684AbiLTNHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 08:05:22 -0500
+        Tue, 20 Dec 2022 08:07:20 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC29915829;
-        Tue, 20 Dec 2022 05:05:20 -0800 (PST)
-Received: from [IPV6:2a01:e0a:120:3210:bf7d:b502:d93b:e4e3] (unknown [IPv6:2a01:e0a:120:3210:bf7d:b502:d93b:e4e3])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F1A100A;
+        Tue, 20 Dec 2022 05:07:19 -0800 (PST)
+Received: from beast.luon.net (unknown [IPv6:2a10:3781:2531::8])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2ABFD6602CA4;
-        Tue, 20 Dec 2022 13:05:19 +0000 (GMT)
+        (Authenticated sender: sjoerd)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 103A46602CA4;
+        Tue, 20 Dec 2022 13:07:18 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671541519;
-        bh=OZ5V6cubKSs1/Cqc7qWLtyNRVl+rKSAvSR5Yfr2fDJM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Eelb0qPONmvnhvRWV6iOO/SnhhjV8OLKGMn0n+F23B8Yx17pTHBUr5CoA6czuzfjR
-         iVmfuQhEY4Fm49gXzubK4JZ3ARNdXnxghDJ8JCJAdpfCqloVOG71TSn2vVvqhQqp9z
-         fYyyMPCc8p8KlDwA/wq0Kjwg4y70NUFyICN9fCZdde/MQPOYL0Pwx6XlOUC9pdOaag
-         dH+r13qlZ/58guRIylb0a2FTcpUw6aDEA8gqNAAhG37d8BEkCIeAQeRic7mYzSnt2L
-         dVSzXA0piLq0qpu1qoQXmvEelsFJHU+QiOc63IRuSfBRjGzNlPhRrvLeWY1pr0JdnS
-         BwXoJYNKzlkbQ==
-Message-ID: <d5191316-97d1-185a-703d-c0932f91c9ee@collabora.com>
-Date:   Tue, 20 Dec 2022 14:05:16 +0100
+        s=mail; t=1671541638;
+        bh=dwGE8muU+/jqx+FXW5bPekgc9rReC9jOQ7EeZGHDZW0=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=SMU1eWWa/XtkeC+AMWYvC1/Fb6h053BvmQBU9t5O64HJA6aaRCLgJ+yYjIBqgoJpw
+         zFRKU1vDIrJD8k/aCybGYbWK9DNm3XEDhGYQ7xYfq53qRrLVBhitxJM3dLnmclum6o
+         lbhrMSxttzvCyLtgnNj2nM9MHPjgD0TuoRyJkaqKJCFy2ZnV3yOE8fN5ozerez1O+M
+         2wt7vK3YDBBc8Dnw3o+8LUGGqcx/TZ8oO+bjcethwafjrRkvHBaNS2xUoY1LjrvWV2
+         jadNMV2Ih+iCzpARDMbXPwctl0/tG8/UeAKhCuI8KEx/G6uhs5KMIS0PbCx9ai+bxE
+         2FZNcbKMtbVGg==
+Received: by beast.luon.net (Postfix, from userid 1000)
+        id 10B9E5E81B6D; Tue, 20 Dec 2022 14:07:15 +0100 (CET)
+Message-ID: <a85e08c6af0fbdafaa6f3799264e92bba7607b9c.camel@collabora.com>
+Subject: Re: [PATCH 1/3] arm64: dts: ti: k3-am62-main: Update OTAP and ITAP
+ delay select
+From:   Sjoerd Simons <sjoerd@collabora.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>
+Cc:     martyn.welch@collabora.com, Nitin Yadav <n-yadav@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tero Kristo <kristo@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Tue, 20 Dec 2022 14:07:14 +0100
+In-Reply-To: <b22b6349-9cec-2e86-294a-249f24de2345@ti.com>
+References: <20221216143624.23708-1-sjoerd@collabora.com>
+         <20221216143624.23708-2-sjoerd@collabora.com>
+         <b22b6349-9cec-2e86-294a-249f24de2345@ti.com>
+Organization: Collabora Ltd.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 3/9] media: verisilicon: Save bit depth for AV1 decoder
-Content-Language: en-US
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc:     p.zabel@pengutronix.de, mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
- <20221219155616.848690-4-benjamin.gaignard@collabora.com>
- <07747babe7f83a496f9cd82849c6c2386550ac28.camel@ndufresne.ca>
- <CAAEAJfDoX_aSTg1TO8F21iSriYeTXtRbHPo8wxx5br2v6eCt7Q@mail.gmail.com>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <CAAEAJfDoX_aSTg1TO8F21iSriYeTXtRbHPo8wxx5br2v6eCt7Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hey Vignesh
 
-Le 19/12/2022 à 22:29, Ezequiel Garcia a écrit :
-> Bonjour Nicolas,
->
-> On Mon, Dec 19, 2022 at 5:37 PM Nicolas Dufresne <nicolas@ndufresne.ca> wrote:
->> Le lundi 19 décembre 2022 à 16:56 +0100, Benjamin Gaignard a écrit :
->>> Store bit depth information from AV1 sequence control.
->>>
->>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->>> ---
->>>   .../media/platform/verisilicon/hantro_drv.c   | 26 +++++++++++++++++++
->>>   1 file changed, 26 insertions(+)
->>>
->>> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
->>> index 4500e1fc0f2c..8e93710dcfed 100644
->>> --- a/drivers/media/platform/verisilicon/hantro_drv.c
->>> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
->>> @@ -324,6 +324,25 @@ static int hantro_vp9_s_ctrl(struct v4l2_ctrl *ctrl)
->>>        return 0;
->>>   }
->>>
->>> +static int hantro_av1_s_ctrl(struct v4l2_ctrl *ctrl)
->>> +{
->>> +     struct hantro_ctx *ctx;
->>> +
->>> +     ctx = container_of(ctrl->handler,
->>> +                        struct hantro_ctx, ctrl_handler);
->>> +
->>> +     switch (ctrl->id) {
->>> +     case V4L2_CID_STATELESS_AV1_SEQUENCE:
->>> +             ctx->bit_depth = ctrl->p_new.p_av1_sequence->bit_depth;
->> That seems a little be weak, what happens if you change the bit_depth with a
->> non-request s_ctrl while its decoding ? To be this deserve a little bit of
->> protection, a something that validate and copy it at the start of the decoding.
->>
-> Oh, nice catch. We need to return EBUSY, see
-> https://www.kernel.org/doc/html/v5.0/media/uapi/v4l/buffer.html#interactions-between-formats-controls-and-buffers.
->
-> There's already an API in the V4L2 control framework for drivers to use,
-> see v4l2_ctrl_grab in
-> https://www.kernel.org/doc/html/v5.0/media/kapi/v4l2-controls.html#active-and-grabbed-controls.
->
->> p.s. I know, VP9 seems similar, though arguably that was copied from jpeg, for
->> which it seems totally save to change the quality at run-time.
->>
-> No, wasn't copied from JPEG :-) I just didn't realize this was an
-> issue, but it is
-> given the bit_depth affects the buffers so you are correct, it needs
-> to be fixed for VP9 too.
+On Tue, 2022-12-20 at 16:49 +0530, Vignesh Raghavendra wrote:
+>=20
+>=20
+> On 16/12/22 8:06 pm, Sjoerd Simons wrote:
+> > From: Nitin Yadav <n-yadav@ti.com>
+> >=20
+> > UHS Class U1 sd-card are not getting detected due to incorrect
+> > OTAP/ITAP delay select values in linux. Update OTAP and ITAP
+> > delay select values for various speed modes. For sdhci0, update
+> > OTAP delay values for ddr52 & HS200 and add ITAP delay for legacy
+> > & mmc-hs. For sdhci1 & sdhci2, update OTAP & ITAP delay select
+> > recommended as in RIOT for various speed modes.
+> >=20
+> > Signed-off-by: Nitin Yadav <n-yadav@ti.com>
+> > [cherry-pick from vendor BSP]
+> > Signed-off-by: Sjoerd Simons <sjoerd@collabora.com>
+> > ---
+> >=20
+> > =C2=A0arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 46 ++++++++++++-------=
+-
+> > ----
+> > =C2=A01 file changed, 24 insertions(+), 22 deletions(-)
+> >=20
+> > diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+> > b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+> > index 03660476364f..28c250a8d1ec 100644
+> > --- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+> > +++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+> > @@ -391,8 +391,10 @@ sdhci0: mmc@fa10000 {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0ti,clkbuf-sel =3D <0x7>;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0ti,otap-del-sel-legacy =3D <0x0>;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0ti,otap-del-sel-mmc-hs =3D <0x0>;
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ti,otap-del-sel-ddr52 =3D <0x9>;
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ti,otap-del-sel-hs200 =3D <0x6>;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ti,otap-del-sel-ddr52 =3D <0x5>;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ti,otap-del-sel-hs200 =3D <0x5>;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ti,itap-del-sel-legacy =3D <0xa>;
+>=20
+> This is pretty useless without corresponding driver changes=20
+> to pick up ti,itap-del-sel-legacy as well
 
-I will use v4l2_ctrl_grab() in codecs->ops init() and exit() functions
-but it will be on patch 7 because it where they appear for this codec.
+Right; itap-del-sel-legacy is properly documented in the device-tree
+binding and was already previously set ofcourse so i didn't pick up it
+needed more driver changes. That said the dtb change itself should
+still be valid even if not actually applied.
 
-Benjamin
+> https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/commit/drivers/mm=
+c/host/sdhci_am654.c?h=3Dti-linux-5.10.y&id=3D93d22fc56007ee13e589debf0d32c=
+8b1d5fdc6d8
+> https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/commit/drivers/mm=
+c/host/sdhci_am654.c?h=3Dti-linux-5.10.y&id=3D9c878c3dc642f7f1f3ab6ca7f812c=
+d43fe7ed7d8
+>=20
+> Could you list that cards affected and fixed by this change?
 
->
-> Thanks!
-> Ezequiel
->
->>> +             break;
->>> +     default:
->>> +             return -EINVAL;
->>> +     }
->>> +
->>> +     return 0;
->>> +}
->>> +
->>> +
->>>   static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
->>>        .try_ctrl = hantro_try_ctrl,
->>>   };
->>> @@ -336,6 +355,12 @@ static const struct v4l2_ctrl_ops hantro_vp9_ctrl_ops = {
->>>        .s_ctrl = hantro_vp9_s_ctrl,
->>>   };
->>>
->>> +static const struct v4l2_ctrl_ops hantro_av1_ctrl_ops = {
->>> +     .try_ctrl = hantro_try_ctrl,
->>> +     .s_ctrl = hantro_av1_s_ctrl,
->>> +};
->>> +
->>> +
->>>   #define HANTRO_JPEG_ACTIVE_MARKERS   (V4L2_JPEG_ACTIVE_MARKER_APP0 | \
->>>                                         V4L2_JPEG_ACTIVE_MARKER_COM | \
->>>                                         V4L2_JPEG_ACTIVE_MARKER_DQT | \
->>> @@ -513,6 +538,7 @@ static const struct hantro_ctrl controls[] = {
->>>                .codec = HANTRO_AV1_DECODER,
->>>                .cfg = {
->>>                        .id = V4L2_CID_STATELESS_AV1_SEQUENCE,
->>> +                     .ops = &hantro_av1_ctrl_ops,
->>>                },
->>>        }, {
->>>                .codec = HANTRO_AV1_DECODER,
+It's a Collabora branded UHS class 1 (SDR104) card; Matching the commit
+message indication given by Nitin. So that in particular i guess, will
+have been fixed by the change to the ti,otap-del-sel-sdr104 value for
+sdhci1.
+
+For the two patches you highlighted above; Is TI planning to upstream
+those as well?=20
+
+
+--=20
+Sjoerd Simons
+Collabora Ltd.
