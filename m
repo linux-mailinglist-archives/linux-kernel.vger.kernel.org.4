@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2182651F9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 311D5651FA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232839AbiLTLZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 06:25:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
+        id S233239AbiLTL0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 06:26:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiLTLZ4 (ORCPT
+        with ESMTP id S233179AbiLTL0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 06:25:56 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32E914029
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 03:25:54 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so16140567pje.5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 03:25:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qL3q8JCSm7dZpOMKxIJmM85ousNnPYyNvyBWJgJYTmw=;
-        b=VGFKrEB5fp2xCuXYNsMMXnJNbm8MkZ1iJbKa2Rwjkhmj3iefziiq9C1Kdq9KwbGPB+
-         3lQQ/dCEqIbaz0Ov/yxEGTRCupOiUzBiycb5Ng8xHjhk2iB+1IFbNAyQ5+33k7NEuU7A
-         yc+p5rQVKmx3vklhIpZiRnu2vIpl5dGLwvFhXz6j7CtuRoLDweynCz6s3IsDSoCUMME8
-         kx68hTeIlJGWI8XrySClqh+4Md2tZUqP8x2Vruai9KEjFsuMLyCZ/MITj86mrgu1Uy3+
-         72zjtQ4MQZyH3g7XE7CiRphZZBJ754Im7DmJh4OGXtXwOTUdlP15L98DX5n6saPJUfAT
-         VVgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qL3q8JCSm7dZpOMKxIJmM85ousNnPYyNvyBWJgJYTmw=;
-        b=wSB4HtVjPK5PjCSsU6i4lCxtjjPL8jA2348DVCBWkiLRk4vOA+feFljklWqSIL2Vry
-         z2f63UCMLre0tXWktqgQAsbX3dBy0WpeKZ6EbEGsM/s0skU2XqWdEsz1BPw6n/LtACuM
-         /JgDwFeEEIdmV4aWew4ewFn/+yxwLRudWwOaGLdnizhozABL2weMN+QpY3jl1j4XU3GI
-         cy7B6wn4T7ZsNbQCh7aGCu9BsAEXLXEL8eMC7VROFZeqkS1vws8NqShXJXDp+isNlucx
-         7+3IMXkw5e9c587SYILlSUs5AxoLLX/XhFGCXhwy6N1W1lSpyt741e/dfF21SaFM9NaJ
-         LQEA==
-X-Gm-Message-State: AFqh2ko26Sp7B070NFbCQi/YoBdiXgiNyDNA930Xmx80aKoBQE2aRu/7
-        vn12SuLbLVYvDyL9OiZLRK0=
-X-Google-Smtp-Source: AMrXdXtQog0J3OQ9/m/1FZxavZLd2S1k9iOW5sVlK6YbMXoSVlJieaashWu6o3f4JuLz8MC66NknHw==
-X-Received: by 2002:a17:90a:cc08:b0:223:2aa6:7f0f with SMTP id b8-20020a17090acc0800b002232aa67f0fmr26260754pju.7.1671535554392;
-        Tue, 20 Dec 2022 03:25:54 -0800 (PST)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id qe12-20020a17090b4f8c00b00212cf2fe8c3sm1194982pjb.1.2022.12.20.03.25.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 03:25:53 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] drm/vc4: Fix refcount leak in vc4_hvs_bind
-Date:   Tue, 20 Dec 2022 15:25:44 +0400
-Message-Id: <20221220112545.1460168-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 20 Dec 2022 06:26:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F6A167DF
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 03:26:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A623061328
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 11:26:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2317DC433EF;
+        Tue, 20 Dec 2022 11:25:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671535561;
+        bh=jOVtCJggIM0oxUKo//5l6aX8dwZIk924IfBqQt7vbrM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mgS3NVOeg1pd9UJNxmP5UOtnYwr2w+8pQZ2nJORyPmrwapaNeygrtQUAPIz/uNG/r
+         h6DXcKDNeXy7i01pPwh9CgAWz/3sAoayIdGpfyefpbQpODgVtEJmxRsnft/+eg/f/r
+         19OwfEKFnXB64EVX4hOYEyNl+R6jhiUsdPJAZQFhbo8mqdHjr7Ee7rOAiEDMQAfbTo
+         O8a180lboW6tZzqqR9hC+OVyqt+/FFx+6GZpH+UBmkRF41VHM7C+7WQQXnx4l7TS//
+         fVQGCaR3eUnZX5a9Uqtk7MSMpsAk0Y7s/Zq3DKS8rL3ssmgIKf+h9OKiCaAI5mN4u2
+         7FQHafbBlKNtA==
+Date:   Tue, 20 Dec 2022 11:25:57 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Lee Jones <lee@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] Backlight for v6.2
+Message-ID: <Y6GbxUZ2weD7PxoN@google.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rpi_firmware_get() takes refcount, we should release it with
-rpi_firmware_put(), add missing rpi_firmware_put() in the error path.
+Good morning Linus,
 
-Fixes: 2a001ca00ad5 ("drm/vc4: hdmi: Rework hdmi_enable_4kp60 detection code")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/gpu/drm/vc4/vc4_hvs.c | 1 +
- 1 file changed, 1 insertion(+)
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-diff --git a/drivers/gpu/drm/vc4/vc4_hvs.c b/drivers/gpu/drm/vc4/vc4_hvs.c
-index c4453a5ae163..816844ea60b1 100644
---- a/drivers/gpu/drm/vc4/vc4_hvs.c
-+++ b/drivers/gpu/drm/vc4/vc4_hvs.c
-@@ -809,6 +809,7 @@ static int vc4_hvs_bind(struct device *dev, struct device *master, void *data)
- 		hvs->core_clk = devm_clk_get(&pdev->dev, NULL);
- 		if (IS_ERR(hvs->core_clk)) {
- 			dev_err(&pdev->dev, "Couldn't get core clock\n");
-+			rpi_firmware_put(firmware);
- 			return PTR_ERR(hvs->core_clk);
- 		}
- 
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git tags/backlight-next-6.2
+
+for you to fetch changes up to 0de796b6047d1ccc29d03fcd0a93dca52691ec21:
+
+  backlight: tosa: Convert to i2c's .probe_new() (2022-12-07 13:33:03 +0000)
+
+----------------------------------------------------------------
+ - Fix-ups
+   - Convert a bunch of I2C class drivers over to .probe_new()
+
+----------------------------------------------------------------
+Angel Iglesias (1):
+      i2c: core: Introduce i2c_client_get_device_id helper function
+
+Uwe Kleine-König (9):
+      backlight: adp8860: Convert to i2c's .probe_new()
+      backlight: adp8870: Convert to i2c's .probe_new()
+      backlight: arcxcnn: Convert to i2c's .probe_new()
+      backlight: bd6107: Convert to i2c's .probe_new()
+      backlight: lm3630a: Convert to i2c's .probe_new()
+      backlight: lm3639: Convert to i2c's .probe_new()
+      backlight: lp855x: Convert to i2c's .probe_new()
+      backlight: lv5207lp: Convert to i2c's .probe_new()
+      backlight: tosa: Convert to i2c's .probe_new()
+
+ drivers/i2c/i2c-core-base.c          | 14 ++++++++++++++
+ drivers/video/backlight/adp8860_bl.c |  6 +++---
+ drivers/video/backlight/adp8870_bl.c |  6 +++---
+ drivers/video/backlight/arcxcnn_bl.c |  4 ++--
+ drivers/video/backlight/bd6107.c     |  5 ++---
+ drivers/video/backlight/lm3630a_bl.c |  5 ++---
+ drivers/video/backlight/lm3639_bl.c  |  5 ++---
+ drivers/video/backlight/lp855x_bl.c  |  5 +++--
+ drivers/video/backlight/lv5207lp.c   |  5 ++---
+ drivers/video/backlight/tosa_bl.c    |  5 ++---
+ include/linux/i2c.h                  |  1 +
+ 11 files changed, 36 insertions(+), 25 deletions(-)
+
 -- 
-2.25.1
-
+Lee Jones [李琼斯]
