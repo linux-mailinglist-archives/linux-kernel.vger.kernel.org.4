@@ -2,112 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007EC651ED2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B2A651ED5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 11:32:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231650AbiLTK3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 05:29:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
+        id S229999AbiLTKcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 05:32:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiLTK3F (ORCPT
+        with ESMTP id S231650AbiLTKcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 05:29:05 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3056125F3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:29:04 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id cf42so17944654lfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:29:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7ydZyRIw+gbw3s3ZZRZA72xvAQO6P+Q4roI+F5gT9UA=;
-        b=wYNN5qex0BsQtkbHRrHRAdPUbH4rl2x+fw3y4EZ0jrzWGueboTKWpyLFwU8LuNKlXP
-         E+LW5AKrXKf3T5Rlja4zp+rda3keUg9MksjhSa5+G1a3+KsOdAvjGZ+XvZy8A6XZOCsk
-         WOdg1040Disj86cuVGVMgk0sLjKw8wgxAbnWM4PTIjoCpm070kskfxe9FhvDAlp1hMru
-         dTTgoXpAuOKKbrV2g8ewiYEBigg68FziITN08TbDhAa+M0KTZozgoHzkjg3ASrdUqy99
-         Mhe8I77tlTpkWxd9YlVGur2Xrg6z5i8gm4hr8riO+IVkANOjj5ztcMEVgOb6oec5GWwp
-         I9Gg==
+        Tue, 20 Dec 2022 05:32:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3755B14023
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:31:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671532279;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ymr7dvYm0bPIMGfQN+EFR1KRA6011TA++6Gv0jSwMRI=;
+        b=ZNMOnTgftsysAiTrYdiH5JR6qEJIYBpnUqyO6xKrzw/iIjpMiHDKqVOeDnvIuEo6a/K9CV
+        t103u8FEFZjIww08ksHmP6kt1Ng0JQNjIYSq90BNWq7MEuF62X6IlctnW3ResRrdB/ms9l
+        d2U6ievO0DIy2fViYtFcW37GwZmcOVg=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-596-R5rGUXTDOIizzJSRover1A-1; Tue, 20 Dec 2022 05:31:18 -0500
+X-MC-Unique: R5rGUXTDOIizzJSRover1A-1
+Received: by mail-wr1-f70.google.com with SMTP id v14-20020adf8b4e000000b0024174021277so2131651wra.13
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:31:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7ydZyRIw+gbw3s3ZZRZA72xvAQO6P+Q4roI+F5gT9UA=;
-        b=jiuueOO6jRka3Fr2vU2JprbYHzqy8Lh/tyOkCywSAWRuJEXwAhXUgR2bCcnjFeBp77
-         2xrmERJtIzp1RHi0ztLSv+tcjXWSTjXolfz4MJwWSGS1xxb6sfyNdRN+LWVJdHrBdwaU
-         Jqf6HQfFlPWtYUCvh59GE+/2uArUviSrXGJQDRVU2P3+CvhP8ct5O4/EM+YKwxJ02/Sb
-         G6k5erhlKF57mNT04Sbl3O21CnT/pqf6MSr+cD11Uqxx0tlCPZh7bZbdJMPaAFUBJDB3
-         ksQVptq5OGUqmxzCK2yGM6FOP46Ovz9DV+H3NfUj+bSRAvNl7C6dfNvKutqmJwDpuwwC
-         fGqA==
-X-Gm-Message-State: AFqh2kppWPOl9WFxVOvU+EzeImCZgvw8y1i1spBKNnVbDsWw9QUag12Q
-        vE3dF4paMazfOWZIy9EM5QmSZA==
-X-Google-Smtp-Source: AMrXdXseYHTPE//qxrEh1Phx1J0z+h8J366WPR39QnMQvkCBso8AfZsQ67rNJksjHyDhd23aKIOB7Q==
-X-Received: by 2002:a05:6512:2a90:b0:4ac:b7bf:697a with SMTP id dt16-20020a0565122a9000b004acb7bf697amr599270lfb.4.1671532142550;
-        Tue, 20 Dec 2022 02:29:02 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b15-20020a056512070f00b004c325f34043sm1118867lfs.100.2022.12.20.02.29.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 02:29:02 -0800 (PST)
-Message-ID: <426723e7-bb5d-d409-2ad8-a8f4a286e9e1@linaro.org>
-Date:   Tue, 20 Dec 2022 11:29:01 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ymr7dvYm0bPIMGfQN+EFR1KRA6011TA++6Gv0jSwMRI=;
+        b=XwSYAnGfziImaiT67LQR1gEgHF/s2nhH+sFSk4U4TOn4maha2p2FoS4eOdKbCTWcyB
+         ErUm/xo6tpgFZKfRHyH2l9ZrqUdgPmm8s/TkcP4zhq22136E9BPm8daj9K5whrH8DLDC
+         6x3hioYDzxWqmw1wF8ksrqtPk+Rh+dzQ7dvT5HMlMAGrbM5peEV+8Usi+veh23QJrJGb
+         xwN+tX0WC7jgt2j/5KJJNYmPc6M6rXLxIFa6t2TWP1gZ8eFMCoNp0PgPVn3lwuNKMMjy
+         BMrY7lDM2K+OSqDv4EkpqfhLqHY/Iumr8dH9aYvVnDEYa/9nIaY3aPELKth2dMMmDorb
+         cf1g==
+X-Gm-Message-State: ANoB5plM1gToXiQtGqRD853dKg8/sAyURvAXO7ZcHs7d/TY4wwtdVHSA
+        i51jgwzDQkfNIX1+wiQUXHoKI2f0lXaF3UwCIuclkdTBBrXAlzz73Qlj9Rf/4u0ssf8ToGG05BI
+        WG3DDuPT9gEL3I4etxeJ8jU5K
+X-Received: by 2002:a05:600c:6549:b0:3c7:1359:783b with SMTP id dn9-20020a05600c654900b003c71359783bmr37201628wmb.1.1671532276956;
+        Tue, 20 Dec 2022 02:31:16 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5x1TeapVDCTlsoX2XzG7CqIUw11/Yk6M+YURbcyrD4F7TcwGxHCWM4JyoUR/l0n84xqNGPTg==
+X-Received: by 2002:a05:600c:6549:b0:3c7:1359:783b with SMTP id dn9-20020a05600c654900b003c71359783bmr37201614wmb.1.1671532276748;
+        Tue, 20 Dec 2022 02:31:16 -0800 (PST)
+Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
+        by smtp.gmail.com with ESMTPSA id r8-20020a05600c35c800b003a2f2bb72d5sm30909143wmq.45.2022.12.20.02.31.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 02:31:16 -0800 (PST)
+Date:   Tue, 20 Dec 2022 11:31:05 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        kernel <kernel@sberdevices.ru>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>
+Subject: Re: [RFC PATCH v5 1/4] vsock: return errors other than -ENOMEM to
+ socket
+Message-ID: <20221220103105.njugghpvvjusfjrs@sgarzare-redhat>
+References: <e04f749e-f1a7-9a1d-8213-c633ffcc0a69@sberdevices.ru>
+ <c22a2ad3-1670-169b-7184-8f4a6d90ba06@sberdevices.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/3] dt-bindings: PCI: qcom: Document msi-map and
- msi-map-mask properties
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     bhelgaas@google.com, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221219191427.480085-1-manivannan.sadhasivam@linaro.org>
- <20221219191427.480085-3-manivannan.sadhasivam@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221219191427.480085-3-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <c22a2ad3-1670-169b-7184-8f4a6d90ba06@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/12/2022 20:14, Manivannan Sadhasivam wrote:
-> The Qcom PCIe controller is capable of using either internal MSI controller
-> or the external GIC-ITS for receiving the MSIs from endpoint devices.
-> Currently, the binding only documents the internal MSI implementation.
-> 
-> Let's document the GIC-ITS imeplementation by making use of msi-map and
-> msi-map-mask properties.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  .../devicetree/bindings/pci/qcom,pcie.yaml       | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> index 02450fb26bb9..24c3e7ef14eb 100644
-> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> @@ -100,18 +100,28 @@ properties:
->      description: GPIO controlled connection to WAKE# signal
->      maxItems: 1
->  
-> +  msi-map: true
-> +
-> +  msi-map-mask: true
+On Tue, Dec 20, 2022 at 07:18:48AM +0000, Arseniy Krasnov wrote:
+>This removes behaviour, where error code returned from any transport
+>was always switched to ENOMEM. For example when user tries to send too
+>big message via SEQPACKET socket, transport layers return EMSGSIZE, but
+>this error code was always replaced with ENOMEM and returned to user.
+>
+>Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> net/vmw_vsock/af_vsock.c | 3 ++-
+> 1 file changed, 2 insertions(+), 1 deletion(-)
 
-You should not need these. Just like interrup-map-mask, it is coming
-from pci-bus.yaml.
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-
-Best regards,
-Krzysztof
+>
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index d593d5b6d4b1..19aea7cba26e 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -1861,8 +1861,9 @@ static int vsock_connectible_sendmsg(struct socket *sock, struct msghdr *msg,
+> 			written = transport->stream_enqueue(vsk,
+> 					msg, len - total_written);
+> 		}
+>+
+> 		if (written < 0) {
+>-			err = -ENOMEM;
+>+			err = written;
+> 			goto out_err;
+> 		}
+>
+>-- 
+>2.25.1
 
