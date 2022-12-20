@@ -2,109 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7626523E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CCB6523E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:46:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233938AbiLTPpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 10:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
+        id S233536AbiLTPqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 10:46:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233886AbiLTPox (ORCPT
+        with ESMTP id S229756AbiLTPq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 10:44:53 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C83F1789D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 07:44:52 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id m18so30147605eji.5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 07:44:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NwruL0979JFuznH/sYcDGOyKnO5iM9PcWtLgGuw0NsU=;
-        b=p4V2EGt3ZnZQxaCBjlBhrwCG5HcuYcfA7xUfw/CAQ6IyHD/S44ZCqBrSM5JZDwLerm
-         GDjFxBiBAXvKJRwWq0H9SwdUEBM8miqRLpSQR2LBmndgqIQTP+4W5xQSySG7/v7bXpQj
-         uHFauQbgi3qKRcAEbHn06zTXAZei2M4vEAg3KFGpHPeGYq0ryjr7WGElleLmEv2cUcQ1
-         twbHF5it2suv2ThaShjVv3CPErmvCAy8n58V3dwHL6A4rEpS7EkGa81BUTG1bgxaNGfb
-         upWph0T1Xg8ePls6P+kIATtC/FNrnOzBTzZsJ3B8IQAdYU7ufW3f83co90ZVag4iRVFI
-         q/8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NwruL0979JFuznH/sYcDGOyKnO5iM9PcWtLgGuw0NsU=;
-        b=CNJFgIp9FzrjuJWB/gwGGEJy6rybFUH4GBb1IVpqeyoECgxNja1m+PH6XESNS2qSl1
-         7wbRTck30Y5hdeQLn7uvWzo/ervrwAoVeaDBBMz+aoIbaJt54UU7NMf6ileAumY2BDwn
-         8zt+pV/JYpDerfISFKBc1GfhduQS+WrmNVpk/I1rJ1OL8Gdl7f4CPGPAXsHMZrrrBe2c
-         AmSaeTJNtnBmGfh9bVw9c9eGh3N/NDOCrUljW6sX82C/chwWfGWHmLflcak1Ig/Tkst7
-         3T6XnWpQTzxZd7C4wRLbAhlhNGhyTmKN0wqiEPmWm6aMEbPguZPafeyt5rMBuJK7xuZq
-         e13A==
-X-Gm-Message-State: ANoB5pklaMVTnk6PY7FxSkjSdz2k1uQSqip8PyatDqN3O0BTmIvPFouR
-        wkSE8swqkNWeLs6u/mAL3fVkNQ==
-X-Google-Smtp-Source: AMrXdXseLZUtPK83YwnsfQ0466FsHGDk9R7HCChN4XLU5MhKcRPjDUQ3xQu6Zo3PCJe1EY5ZLlvGVA==
-X-Received: by 2002:a17:906:858e:b0:7c2:3b8a:9f0d with SMTP id v14-20020a170906858e00b007c23b8a9f0dmr25004914ejx.51.1671551091036;
-        Tue, 20 Dec 2022 07:44:51 -0800 (PST)
-Received: from [192.168.0.104] ([82.77.81.131])
-        by smtp.gmail.com with ESMTPSA id j2-20020a170906410200b007ae693cd265sm5825058ejk.150.2022.12.20.07.44.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 07:44:50 -0800 (PST)
-Message-ID: <cae6328b-5204-a1ab-810d-8fb64e466453@linaro.org>
-Date:   Tue, 20 Dec 2022 17:44:49 +0200
+        Tue, 20 Dec 2022 10:46:26 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0B52C5;
+        Tue, 20 Dec 2022 07:46:24 -0800 (PST)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Nc19M0047z6H6hp;
+        Tue, 20 Dec 2022 23:44:54 +0800 (CST)
+Received: from localhost (10.81.208.216) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 20 Dec
+ 2022 15:46:21 +0000
+Date:   Tue, 20 Dec 2022 15:46:20 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+        <ira.weiny@intel.com>, <bwidawsk@kernel.org>, <dave@stgolabs.net>,
+        <a.manzanares@samsung.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC] cxl_test: upgrade as a first class citizen selftests
+ capable driver
+Message-ID: <20221220154620.000003b2@Huawei.com>
+In-Reply-To: <Y6Crh5DiGPPzKoYp@bombadil.infradead.org>
+References: <20221217034947.1174795-1-mcgrof@kernel.org>
+        <639d4bb71bada_b41e329452@dwillia2-xfh.jf.intel.com.notmuch>
+        <20221218160824.0000583d@Huawei.com>
+        <Y6Crh5DiGPPzKoYp@bombadil.infradead.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] [v2] mtd: cfi: allow building spi-intel standalone
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Takahiro Kuwano <Takahiro.Kuwano@infineon.com>,
-        Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Mauro Lima <mauro.lima@eclypsium.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221220141352.1486360-1-arnd@kernel.org>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20221220141352.1486360-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.81.208.216]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Arnd,
+On Mon, 19 Dec 2022 10:20:55 -0800
+Luis Chamberlain <mcgrof@kernel.org> wrote:
 
-On 20.12.2022 16:13, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+> On Sun, Dec 18, 2022 at 04:08:24PM +0000, Jonathan Cameron wrote:
+> > QEMU based CI should go two ways:
+> > 1) QEMU CI would typically pin particular kernel version and verify that
+> >    QEMU changed don't break that. If we need new features for a new test,
+> >    we move that kernel version used.  Existing tests should never break
+> >    against a fixed kernel version as that's a regression in QEMU (or
+> >    maybe a bug elsewhere) Ultimately we should have this running in the
+> >    normal QEMU gitlab CI.  
 > 
-> When MTD or MTD_CFI_GEOMETRY is disabled, the spi-intel driver
-> fails to build, as it includes the shared CFI header:
+> Sounds sensible.
 > 
-> include/linux/mtd/cfi.h:62:2: error: #warning No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work. [-Werror=cpp]
->     62 | #warning No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work.
+> > 2) Kernel CI against QEMU would typically pin particular QEMU version
+> >    and check that kernel changes don't break.  This will have rough edges
+> >    for a while yet as we are still adding mandatory features to the QEMU
+> >    emulation (e.g. events support).  Again, as we add new features / tests
+> >    may need to move the QEMU version forwards to support them.  
 > 
-> linux/mtd/spi-nor.h does not actually need to include cfi.h, so
-> remove the inclusion here to fix the warning. This uncovers a
-> missing #include in spi-nor/core.c so add that there to
-> prevent a different build issue.
+> Sure - but for this today other than ensuring a kernel does not crash upon
+> bootup we also have cxl_test, but not much else.
 > 
-> Fixes: e23e5a05d1fd ("mtd: spi-nor: intel-spi: Convert to SPI MEM")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> We'll want to exand a set of target tests on CXL enabled nodes, without
+> cxl_test. Other than verifying the topology matches, we'll want to start
+> mimicking actual use cases / performance stuff.
 
-Looks good to me. I'll let the linux-0day bot run over it and apply it
-once -rc1 is out.
+Definitely good to mimic usecases, but in using the QEMU emulation,
+performance is probably not sensible as there are some horrible slow
+paths in the emulation such as how we do interleaving.  Could be
+improved with some caching of look ups, but the result wouldn't look
+much like real devices.
 
-Thanks,
-ta
+Doing it on a limited set of hardware is viable, but it'll be a while
+before we have all the fun options available.
+
+> 
+> > I don't think we much care about backwards compatibility so once we've
+> > moved the pinned element forwards in the above, we won't care about the
+> > old version.   
+> 
+> Making tests simply skip if the feature is not available doens't take
+> much effort but forward thinking.
+> 
+> > The aim here isn't really to ensure no regressions when
+> > running on QEMU (though that CI is nice to have), but more that we have
+> > no problems in kernel side of things.  
+> 
+> Sure.
+> 
+> > This is a way off yet.  Not seeing this as being part of linux.git.
+> > The QEMU CI stuff will be in the qemu.git and Kernel CI stuff probably
+> > sit out of tree - there shouldn't be a tight coupling beyond new tests
+> > wanting to check available features etc. I might ask a friendly
+> > CI project to add this to their normal runs.  
+> 
+> OK in case it helps, cxl-enabled qemu building bringup / ndctl building
+> and install is all now automated and integratead as part of kdevops so
+> patches welcomed to expand that coverage.
+
+Excellent.  I'll take a look at kdevops sometime next year.
+
+> 
+> > I don't have strong feelings on cxl_test. Tend not to use it myself
+> > and haven't yet contributed to it.  
+> 
+> Thanks, this is useful information.
+
+Different approaches. I can appreciate cxl_tests usecase, but I've mostly been hacking
+on the corners that are tricky to test with a mocking driver and
+it's easy to hack stuff into the QEMU emulation (for me - now :)
+
+Jonathan
+
+> 
+>   Luis
+
