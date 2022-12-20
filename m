@@ -2,69 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D243765282F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 22:01:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F73365283B
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 22:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234360AbiLTVBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 16:01:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
+        id S234029AbiLTVJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 16:09:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234328AbiLTVB3 (ORCPT
+        with ESMTP id S229727AbiLTVJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 16:01:29 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E8B12C
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 13:01:27 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id z3-20020a170903018300b0018fb8ca1688so9787871plg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 13:01:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=itk7nw0c+OuKQnm6jna9zr/WZJlRpFbxS6KR0m68jCM=;
-        b=EGQmhFPZpH7KKSwVEVKq91F113Yloib87gbgjMLd3xbPUQykXsgSRbjlo8pGV2Legq
-         +C4jMsTEtG5766VxXjbhywZ4aa5BgU2HkwtBuCuBysIluc2FixHb8Qee7ZrZ1YpQ0EuC
-         24JeNFDaOKRSGBhWmI4cNngTLvKq5193BkwL9XBHQSZjf5Kt2885nVNWmD1XOgPD6Yxs
-         j09spNJ2DdDHf1z+JQI+wenAimLBLWFbZZA78WiJA4ccKw2gSst6jX8DlDhU6QL/zh6K
-         287cdi32GiSrZgYJiPCFDerah4zTPbGzy0wfW/Z/JndSkOhw4yRk/LcmXOII476drHDa
-         SxLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=itk7nw0c+OuKQnm6jna9zr/WZJlRpFbxS6KR0m68jCM=;
-        b=uWpyySq1iJd3fjEfiOv8KmEP+jcXy2zmyK+QgJDTc6VNtC3qkF/3LrWk4fllL0BF3q
-         xgbMWUqAZhxiE4cetEiSQ3RievBf1gJs4ZMyEf0PxQ7ysItybb+A7wY7h9QVJ5CyQJFY
-         0t9sJgrnpK09pj/cLTPow52D+XIjFLYcaPBo/zr20qFV8DcpVhWnSuH3TUNLv33csqt3
-         2wSHgVzW1Ge0FrLdijQruPsBdgyCEUk5pvkKxeN6p4KRcoqtKuIErYOmc97MTLfvrmQL
-         8ALE0qGlfwcn3DLgFA5b3flwI597A+yaTay48zhpUetj5g0BjZWCYAZg3JG5ovJaHBZs
-         sfkQ==
-X-Gm-Message-State: ANoB5plvG7B4rYnyqlZr/TReFoDW/WsyUEBzduufYTeuCBqg7liC5w8H
-        j7l7Ftg6yr8an6BPGVo1ZNuZEwI=
-X-Google-Smtp-Source: AA0mqf4WMpNZvUx0NnxNJzfUMKqDRaa3h5EX/CR7OVCNa4Dr0CiYAraCpCKuMOnep0FQH5R/z/dvpGI=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:aa7:9aee:0:b0:577:dd64:5d4f with SMTP id
- y14-20020aa79aee000000b00577dd645d4fmr3299711pfp.8.1671570087342; Tue, 20 Dec
- 2022 13:01:27 -0800 (PST)
-Date:   Tue, 20 Dec 2022 13:01:25 -0800
-In-Reply-To: <000000000000ab724705ee87e321@google.com>
-Mime-Version: 1.0
-References: <000000000000ab724705ee87e321@google.com>
-Message-ID: <Y6Iipad5vz55tl2A@google.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in copy_array
-From:   sdf@google.com
-To:     syzbot <syzbot+b1e1f7feb407b56d0355@syzkaller.appspotmail.com>
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com,
-        hawk@kernel.org, john.fastabend@gmail.com, jolsa@kernel.org,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org,
-        ndesaulniers@google.com, netdev@vger.kernel.org, song@kernel.org,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
-Content-Type: multipart/mixed; charset="UTF-8"; boundary="Ijr6ssyB62nlum1R"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Tue, 20 Dec 2022 16:09:34 -0500
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2116.outbound.protection.outlook.com [40.107.113.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11991E3F3;
+        Tue, 20 Dec 2022 13:09:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YgpwRHo/azanQagh/LYIMyphlSNXfg31nag+M0zKULfU9LDYfw+38LmsJQqJEuRALQXdoXAesyw/FzPlc6PySUARw0lKKVB4MO36g+NqtQTIeCBVHEZsKT3He+NPyh4bZQjGHBxU6pZcZO76Z8lly65O6cbbhyfdF4tooupyzF1/QRYGztyBXFqxaKRuCQ6fAwa2NkKZu0WnZrm6IqIgV6j4hrubSkWAJ81YWVdC6PGqNMIm2SRnBbCCiaWGu/sxW56ozKDmG69egFZF7O++JevDvNKo5jCwjFVFw9MVLs5FtulsbmskW58lzi6nfv75U7bmpHb1b6bDzh1Ilz+jBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=trDK9wtCuqPx3ibYkdEErNEnSpZ2bDWOuptS1YxUp6c=;
+ b=EaRrfqtgJsZQaVxuFHhCc0+aHQuFy8ObyuHLeBgvO2vDOR4ezlCUZQ6eyDE6YcJiG4nEYxKi0YfK/tnHFvEwUIqLgtB/JabrROCw2EqRAz9UsfEwQddcrAzRwPEa+TRtbcmB3e6ilKPt8bH2fKnJg0SPom1FappvNcD4q1UBRajCnndHzXn0VfM87kSyEtfjxQtxKAJkXJFgK27uc+xFwIRZMmYFbrhCs6K45v0Me8Ef9xRyBCpInvuBzQK46j82lTHszzS+e47JujVUclNSe+zIoqAPDfU/50S+NBw/2xPkhZCLomzRRGjTsz5vATc+QuouD+/EsT1EpK44i1tUKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=trDK9wtCuqPx3ibYkdEErNEnSpZ2bDWOuptS1YxUp6c=;
+ b=bQa9jBrZ4H3K27YbPRzWCBtOApsZTnQvfgo3neoKbyu5iIxqaAflKKugTd4SHS4e6fyCKBwqiy6V+SQZBBNE1EXQDCiYV/R0+Jt83uGzYcrNJTn+95J4gUSEHt85ON/h08t3QCBdLDz88sEJrD1upC0ZCO9u+P1SBCBsSD3+qzQ=
+Received: from TYWPR01MB8775.jpnprd01.prod.outlook.com (2603:1096:400:169::11)
+ by OS3PR01MB10315.jpnprd01.prod.outlook.com (2603:1096:604:1df::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Tue, 20 Dec
+ 2022 21:09:29 +0000
+Received: from TYWPR01MB8775.jpnprd01.prod.outlook.com
+ ([fe80::9459:ffa9:a884:8a8e]) by TYWPR01MB8775.jpnprd01.prod.outlook.com
+ ([fe80::9459:ffa9:a884:8a8e%3]) with mapi id 15.20.5924.016; Tue, 20 Dec 2022
+ 21:09:29 +0000
+From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lee Jones <lee@kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: RE: [PATCH 3/5] dt-bindings: mfd: Add RZ/V2M PWC global registers
+ bindings
+Thread-Topic: [PATCH 3/5] dt-bindings: mfd: Add RZ/V2M PWC global registers
+ bindings
+Thread-Index: AQHZD0RWUdljgAcvZkylOB1He+HHvK5tkDWAgAm+C+A=
+Date:   Tue, 20 Dec 2022 21:09:29 +0000
+Message-ID: <TYWPR01MB877555D5335FF3D743E54F7AC2EA9@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+References: <20221213224310.543243-1-fabrizio.castro.jz@renesas.com>
+ <20221213224310.543243-4-fabrizio.castro.jz@renesas.com>
+ <20221214161607.GA1154595-robh@kernel.org>
+In-Reply-To: <20221214161607.GA1154595-robh@kernel.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYWPR01MB8775:EE_|OS3PR01MB10315:EE_
+x-ms-office365-filtering-correlation-id: 911cb8c6-cb0b-40ef-35ec-08dae2ce7baa
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +gNTa6xwxFQqwj9mbaL1WcJGKq001/1tQCJlu7YZsEW1pmavww0pKGtwOmN6dUw1hQstyRsUoMZkl3+Cup1Xmi9kXTwdueWsbK2pqqoJSQQEUNRrc2sX5s6HPIiM+d22TsfGBjn6U5lTuZIiOQG3sVymVsWuwUci0NuXZZiiax+5A5FCKbm3C9D4fx69wVpODQLMrlJMZ3smrsZS/6gdyCzyG2nPkMdCnl9pdZrV5mtJpXAkGAmzC9BUM7J6/73j/rL6pTeKJC6ItNX+djs2UTQ/FtR2Acrz4LBbHYqzxFPVqkP6UkSx66QcvSzD82RznRKG7/weK9UqMDnGVVfH0KLqCJvY7ojfV7XcD5UQW+2Mw/fhf4qbwa+Zkvk48AAYktyNAFObaVl6bsUFUdAtrrqOFMJDfwlGfgrEzIAEEXbpphBsT552zc4feeO0Ok5xVATpFsKvRUn27puwTV5UzTcXHGy5eMFEGlG62hqFRRgdvM+O8wzLCEgtC/+RSbx+Za+P4XxS1XfoZbOQ//jWvYSLWYCzP+m7qNicnfWSTnOW9GIImx17Frl78VpZdUtJuM9eIzEcMlVtXhrVNFBGOnGQHd8dNeLUUgTA2ocLKJshp/z4F9VRP0i/T0QRZcYWvt3dHQorrCf6qs1CkaF64rYWNkygwwr8AePqL9Jx7AZkmky/3wmWh9IjNFTCmoaOLddgjiwxJhUxbU/eVJ1FwA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8775.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(346002)(366004)(39860400002)(376002)(451199015)(2906002)(122000001)(52536014)(38100700002)(5660300002)(7416002)(38070700005)(8936002)(41300700001)(316002)(71200400001)(6916009)(66476007)(66446008)(64756008)(8676002)(66946007)(4326008)(33656002)(478600001)(76116006)(66556008)(26005)(86362001)(186003)(53546011)(54906003)(7696005)(6506007)(9686003)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?zixgI4gzxwiPcyKt7XJnE3z2//yZI7BpgnRh01BBSgDFUKcN6DSQAV/Ulh16?=
+ =?us-ascii?Q?waKWXZ7he1jZt51FxclU5hN+DHZ9Znwphl4gxYMaP6xSOL7z4rFOkaPe9oEb?=
+ =?us-ascii?Q?SVe9o7sFX+NZ0YcqZVx2V7ceTxWrdTRUiUn6IT3qFQR/aB3kHYiKfvB53JWb?=
+ =?us-ascii?Q?b4cysknzKlw7mL28o7vIvdi1WNRJagnuaa7rvbivzbREDwd8cqNdPZ2eOR6n?=
+ =?us-ascii?Q?QW7GHvHHKV72nxstv3e6D1IV3aJW5Zb7bIJ3QQmxN0uksQppj3e5HmyywNBU?=
+ =?us-ascii?Q?RCAVZS85Fzc0ur4vk6TJkhHIb4UlONeZxClqSlo9CZDjNVcvZCVGN1JcQtDd?=
+ =?us-ascii?Q?T+YD6dx12mxOQQGd051xspAwJrIVNgnYodCgy2Ep1DTnVUkYLfzksP1x4YN5?=
+ =?us-ascii?Q?Og2rFMtMC5JkWwWdvwVrsdVdPUk/r1o9qarMayBEfxQh25dng76pYEjb9VfQ?=
+ =?us-ascii?Q?0VaNo6nP2gVDSLLbR/tP6l819YKfE2b7IsJTa2lKbtXOWbzVHTDnzkpFmKzr?=
+ =?us-ascii?Q?kGEojYY2gwGNJMpFkOwkFZNTg5s1FpO+cEFTukDWPAQtnmUN+oz+PnASrOdE?=
+ =?us-ascii?Q?2a2lRpwHu9inTO3q8tzTW3IigJto7+wQV3RNosgIgGoJCk1wJVccQJOUX53P?=
+ =?us-ascii?Q?GyD418sllQYIHfK7Jbz3XbOM96pc2fxMMUB/IYnt5yNXVRiQ9I/2mYRJuX2P?=
+ =?us-ascii?Q?fHl/P0TrQZvrgumSh4qPDKPUsQn7c9MVKeo63q5eRoBXk3klkCpGQH7NK49w?=
+ =?us-ascii?Q?emn9qg3WchGD63nZvFDH/OYb+yo3uWG3acOKZXhLU3DrVoXwPF+PvnozOliP?=
+ =?us-ascii?Q?P/04mN7sN2Ciqr6rtA13BjZ+1Pq0/LEjSx138MlEAhNQmg5vTB5w8keYm0Vq?=
+ =?us-ascii?Q?eC9S8e2/MVFraznCawdQ/8uz6EebZUr6cJ/FsWRdrXkIRTJXBh4lAaVVyMk3?=
+ =?us-ascii?Q?7j0+92+ZUmVHmOZPi1dm5LVvz3qUhh38oTMAfQX4aCLLjdltroEFk0/DqM0f?=
+ =?us-ascii?Q?aaBhFsZPBiu4r/DofJ/x2vundmAwGrIE8w3I5aad5WDfF7iFZ1uQcrD9L4zG?=
+ =?us-ascii?Q?PM0PZfaLrpk0QreQKsdOSqM2lkhuRaVeT26v69yuKLtTj54zosf34AnxSknF?=
+ =?us-ascii?Q?gZ6qhfI3GLrVuH2cGVFrP6jarArsT4aHIwL/eL0M5MrHayvcNNxq+fXHBtgp?=
+ =?us-ascii?Q?ovltEg/XZURSQE/sOUzFWevO5U+kaxu4xJ44H4qObW/PiS5BYozB4GhLhSds?=
+ =?us-ascii?Q?oZ8CizKUXBn1R5Elk7DwwhP17OJMiPZXh+X67Y5H7VxGaua44gDodsvi2Kee?=
+ =?us-ascii?Q?KBI8RsMtKTV/63bd7VWjY9akPHQcyLWyXp5XTsK1kkCc+pzCHlSvbGQbgpcs?=
+ =?us-ascii?Q?cWLMy+tHNY/1OiHxGIbqvRzfs1ZvSv6S5V9G2i1BmrpQo8JMVkKP67ZcjGqM?=
+ =?us-ascii?Q?NqLMnnzgdZqNze1l6jB3JROwplkAzvDfJ/PlH2fB/VNXPiYhJGy6GbmG2glv?=
+ =?us-ascii?Q?WT/98rtgLqAYZDQCYs8/tMA2XKwBsPhoBXtblxF8Spzw+dW4so2/LsAh5grd?=
+ =?us-ascii?Q?MLzryuZzFkdXBrkaBcwYzOP8WN1jKTfPTLUlXL8CXGTwuUzrEDIFBdgeSYXk?=
+ =?us-ascii?Q?wQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8775.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 911cb8c6-cb0b-40ef-35ec-08dae2ce7baa
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Dec 2022 21:09:29.1770
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Wz/jshU9WouJIY6yduBgwe70CevRlriYfpKw2m1BX5UydV+F51fcEzYdCB3bdyCcwVDNZdYhmKxwIfslL415uxYvNURMGqUR5HDmw62iHuQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB10315
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,274 +135,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Rob,
 
---Ijr6ssyB62nlum1R
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks for the feeback.
 
-On 11/28, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    c35bd4e42885 Add linux-next specific files for 20221124
-> git tree:       linux-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=13369dc5880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=11e19c740a0b2926
-> dashboard link: https://syzkaller.appspot.com/bug?extid=b1e1f7feb407b56d0355
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1345a205880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124c644b880000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/968fee464d14/disk-c35bd4e4.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/4f46fe801b5b/vmlinux-c35bd4e4.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/c2cdf8fb264e/bzImage-c35bd4e4.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+b1e1f7feb407b56d0355@syzkaller.appspotmail.com
-> 
-> ==================================================================
-> BUG: KASAN: slab-out-of-bounds in copy_array+0x96/0x100 kernel/bpf/verifier.c:1032
-> Write of size 232 at addr ffff88801ed62600 by task syz-executor990/5290
-> 
-> CPU: 0 PID: 5290 Comm: syz-executor990 Not tainted 6.1.0-rc6-next-20221124-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
->  print_address_description mm/kasan/report.c:253 [inline]
->  print_report+0x15e/0x45d mm/kasan/report.c:364
->  kasan_report+0xbf/0x1f0 mm/kasan/report.c:464
->  check_region_inline mm/kasan/generic.c:183 [inline]
->  kasan_check_range+0x141/0x190 mm/kasan/generic.c:189
->  memcpy+0x3d/0x60 mm/kasan/shadow.c:66
->  copy_array+0x96/0x100 kernel/bpf/verifier.c:1032
->  copy_verifier_state+0xa9/0xbe0 kernel/bpf/verifier.c:1210
->  pop_stack+0x8c/0x2f0 kernel/bpf/verifier.c:1273
->  do_check kernel/bpf/verifier.c:13733 [inline]
->  do_check_common+0x372b/0xc5e0 kernel/bpf/verifier.c:15991
->  do_check_main kernel/bpf/verifier.c:16054 [inline]
->  bpf_check+0x7371/0xad00 kernel/bpf/verifier.c:16624
->  bpf_prog_load+0x1543/0x2230 kernel/bpf/syscall.c:2619
->  __sys_bpf+0x1436/0x4ff0 kernel/bpf/syscall.c:4979
->  __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
->  __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
->  __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5081
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7fc18e7bbc29
-> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffd8f27a968 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc18e7bbc29
-> RDX: 0000000000000048 RSI: 0000000020000200 RDI: 0000000000000005
-> RBP: 00007fc18e77fdd0 R08: 0000000000000000 R09: 0000000000000000
-> R10: 00000000ffffffff R11: 0000000000000246 R12: 00007fc18e77fe60
-> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
->  </TASK>
-> 
-> Allocated by task 5290:
->  kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
->  kasan_set_track+0x25/0x30 mm/kasan/common.c:52
->  ____kasan_kmalloc mm/kasan/common.c:376 [inline]
->  ____kasan_kmalloc mm/kasan/common.c:335 [inline]
->  __kasan_krealloc+0x145/0x180 mm/kasan/common.c:444
->  kasan_krealloc include/linux/kasan.h:232 [inline]
->  __do_krealloc mm/slab_common.c:1348 [inline]
->  krealloc+0xa8/0x100 mm/slab_common.c:1385
->  push_jmp_history+0x89/0x260 kernel/bpf/verifier.c:2528
->  is_state_visited kernel/bpf/verifier.c:13269 [inline]
->  do_check kernel/bpf/verifier.c:13466 [inline]
->  do_check_common+0x4b47/0xc5e0 kernel/bpf/verifier.c:15991
->  do_check_main kernel/bpf/verifier.c:16054 [inline]
->  bpf_check+0x7371/0xad00 kernel/bpf/verifier.c:16624
->  bpf_prog_load+0x1543/0x2230 kernel/bpf/syscall.c:2619
->  __sys_bpf+0x1436/0x4ff0 kernel/bpf/syscall.c:4979
->  __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
->  __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
->  __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5081
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> The buggy address belongs to the object at ffff88801ed62600
->  which belongs to the cache kmalloc-256 of size 256
-> The buggy address is located 0 bytes inside of
->  256-byte region [ffff88801ed62600, ffff88801ed62700)
-> 
-> The buggy address belongs to the physical page:
-> page:ffffea00007b5880 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1ed62
-> head:ffffea00007b5880 order:1 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
-> flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-> raw: 00fff00000010200 ffff888012441b40 ffffea0000809f80 dead000000000002
-> raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
-> page_owner tracks the page as allocated
-> page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 56, tgid 56 (kworker/u4:4), ts 7761288109, free_ts 0
->  prep_new_page mm/page_alloc.c:2541 [inline]
->  get_page_from_freelist+0x119c/0x2cd0 mm/page_alloc.c:4293
->  __alloc_pages+0x1cb/0x5b0 mm/page_alloc.c:5551
->  alloc_pages+0x1aa/0x270 mm/mempolicy.c:2285
->  alloc_slab_page mm/slub.c:1833 [inline]
->  allocate_slab+0x25e/0x350 mm/slub.c:1980
->  new_slab mm/slub.c:2033 [inline]
->  ___slab_alloc+0xa91/0x1400 mm/slub.c:3211
->  __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3310
->  slab_alloc_node mm/slub.c:3395 [inline]
->  __kmem_cache_alloc_node+0x1a9/0x430 mm/slub.c:3472
->  kmalloc_trace+0x26/0x60 mm/slab_common.c:1049
->  kmalloc include/linux/slab.h:571 [inline]
->  scsi_probe_and_add_lun+0x3ae/0x34d0 drivers/scsi/scsi_scan.c:1186
->  __scsi_scan_target+0x21f/0xda0 drivers/scsi/scsi_scan.c:1664
->  scsi_scan_channel drivers/scsi/scsi_scan.c:1752 [inline]
->  scsi_scan_channel+0x148/0x1e0 drivers/scsi/scsi_scan.c:1728
->  scsi_scan_host_selected+0x2e3/0x3b0 drivers/scsi/scsi_scan.c:1781
->  do_scsi_scan_host+0x1e8/0x260 drivers/scsi/scsi_scan.c:1920
->  do_scan_async+0x42/0x500 drivers/scsi/scsi_scan.c:1930
->  async_run_entry_fn+0x9c/0x530 kernel/async.c:127
->  process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
-> page_owner free stack trace missing
-> 
-> Memory state around the buggy address:
->  ffff88801ed62500: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->  ffff88801ed62580: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> >ffff88801ed62600: 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc fc
->                                ^
->  ffff88801ed62680: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->  ffff88801ed62700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> ==================================================================
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
-
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git e45fb347b630
-
---Ijr6ssyB62nlum1R
-Content-Type: text/x-diff; charset=us-ascii
-Content-Disposition: attachment; filename="syz.patch"
-
-commit d8e76e85481b7885ee86bb57a11274ae9b68454e
-Author:     Stanislav Fomichev <sdf@google.com>
-AuthorDate: Tue Dec 20 13:00:17 2022 -0800
-Commit:     Stanislav Fomichev <sdf@google.com>
-CommitDate: Tue Dec 20 13:00:17 2022 -0800
-
-    Revert "mm: Make ksize() a reporting-only function"
-    
-    This reverts commit 38931d8989b5760b0bd17c9ec99e81986258e4cb.
-
-diff --git a/mm/kasan/kasan_test.c b/mm/kasan/kasan_test.c
-index 74cd80c12b25..d1439669d6bc 100644
---- a/mm/kasan/kasan_test.c
-+++ b/mm/kasan/kasan_test.c
-@@ -825,30 +825,23 @@ static void kasan_global_oob_left(struct kunit *test)
- 	KUNIT_EXPECT_KASAN_FAIL(test, *(volatile char *)p);
- }
- 
--/* Check that ksize() does NOT unpoison whole object. */
-+/* Check that ksize() makes the whole object accessible. */
- static void ksize_unpoisons_memory(struct kunit *test)
- {
- 	char *ptr;
--	size_t size = 128 - KASAN_GRANULE_SIZE - 5;
--	size_t real_size;
-+	size_t size = 123, real_size;
- 
- 	ptr = kmalloc(size, GFP_KERNEL);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
+> From: Rob Herring <robh@kernel.org>
+> Sent: 14 December 2022 16:16
+> To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> Subject: Re: [PATCH 3/5] dt-bindings: mfd: Add RZ/V2M PWC global register=
+s
+> bindings
+>=20
+> On Tue, Dec 13, 2022 at 10:43:08PM +0000, Fabrizio Castro wrote:
+> > The RZ/V2M PWC is a multi-function device, and its software
+> > support relies on "syscon" and "simple-mfd".
+> > Add the dt-bindings for the top level device tree node.
+> >
+> > Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> > ---
+> >  .../bindings/mfd/renesas,rzv2m-pwc.yaml       | 70 +++++++++++++++++++
+> >  1 file changed, 70 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/mfd/renesas,rzv2m=
 -
- 	real_size = ksize(ptr);
--	KUNIT_EXPECT_GT(test, real_size, size);
- 
- 	OPTIMIZER_HIDE_VAR(ptr);
- 
--	/* These accesses shouldn't trigger a KASAN report. */
--	ptr[0] = 'x';
--	ptr[size - 1] = 'x';
-+	/* This access shouldn't trigger a KASAN report. */
-+	ptr[size] = 'x';
- 
--	/* These must trigger a KASAN report. */
--	if (IS_ENABLED(CONFIG_KASAN_GENERIC))
--		KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[size]);
--	KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[size + 5]);
--	KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[real_size - 1]);
-+	/* This one must. */
-+	KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[real_size]);
- 
- 	kfree(ptr);
- }
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 1cba98acc486..3e49bb830060 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -1348,11 +1348,11 @@ __do_krealloc(const void *p, size_t new_size, gfp_t flags)
- 	void *ret;
- 	size_t ks;
- 
--	/* Check for double-free before calling ksize. */
-+	/* Don't use instrumented ksize to allow precise KASAN poisoning. */
- 	if (likely(!ZERO_OR_NULL_PTR(p))) {
- 		if (!kasan_check_byte(p))
- 			return NULL;
--		ks = ksize(p);
-+		ks = kfence_ksize(p) ?: __ksize(p);
- 	} else
- 		ks = 0;
- 
-@@ -1420,21 +1420,21 @@ void kfree_sensitive(const void *p)
- 	void *mem = (void *)p;
- 
- 	ks = ksize(mem);
--	if (ks) {
--		kasan_unpoison_range(mem, ks);
-+	if (ks)
- 		memzero_explicit(mem, ks);
--	}
- 	kfree(mem);
- }
- EXPORT_SYMBOL(kfree_sensitive);
- 
- size_t ksize(const void *objp)
- {
-+	size_t size;
-+
- 	/*
--	 * We need to first check that the pointer to the object is valid.
--	 * The KASAN report printed from ksize() is more useful, then when
--	 * it's printed later when the behaviour could be undefined due to
--	 * a potential use-after-free or double-free.
-+	 * We need to first check that the pointer to the object is valid, and
-+	 * only then unpoison the memory. The report printed from ksize() is
-+	 * more useful, then when it's printed later when the behaviour could
-+	 * be undefined due to a potential use-after-free or double-free.
- 	 *
- 	 * We use kasan_check_byte(), which is supported for the hardware
- 	 * tag-based KASAN mode, unlike kasan_check_read/write().
-@@ -1448,7 +1448,13 @@ size_t ksize(const void *objp)
- 	if (unlikely(ZERO_OR_NULL_PTR(objp)) || !kasan_check_byte(objp))
- 		return 0;
- 
--	return kfence_ksize(objp) ?: __ksize(objp);
-+	size = kfence_ksize(objp) ?: __ksize(objp);
-+	/*
-+	 * We assume that ksize callers could use whole allocated area,
-+	 * so we need to unpoison this area.
-+	 */
-+	kasan_unpoison_range(objp, size);
-+	return size;
- }
- EXPORT_SYMBOL(ksize);
- 
+> pwc.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/mfd/renesas,rzv2m-
+> pwc.yaml b/Documentation/devicetree/bindings/mfd/renesas,rzv2m-pwc.yaml
+> > new file mode 100644
+> > index 000000000000..a7e180bfbd83
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/mfd/renesas,rzv2m-pwc.yaml
+> > @@ -0,0 +1,70 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +
+> > +title: Renesas RZ/V2M External Power Sequence Controller (PWC)
+> > +
+> > +description: |+
+> > +  The PWC IP found in the RZ/V2M family of chips comes with the below
+> > +  capabilities
+> > +    - external power supply on/off sequence generation
+> > +    - on/off signal generation for the LPDDR4 core power supply (LPVDD=
+)
+> > +    - key input signals processing
+> > +    - general-purpose output pins
+> > +
+> > +maintainers:
+> > +  - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - enum:
+> > +          - renesas,r9a09g011-pwc # RZ/V2M
+> > +          - renesas,r9a09g055-pwc # RZ/V2MA
+> > +      - const: renesas,rzv2m-pwc
+> > +      - const: syscon
+> > +      - const: simple-mfd
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  gpio:
+> > +    type: object
+> > +    $ref: /schemas/gpio/renesas,rzv2m-pwc-gpio.yaml#
+> > +    description: General-Purpose Output pins controller.
+> > +
+> > +  poweroff:
+> > +    type: object
+> > +    $ref: /schemas/power/reset/renesas,rzv2m-pwc-poweroff.yaml#
+> > +    description: Power OFF controller.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    pwc: pwc@a3700000 {
+> > +            compatible =3D "renesas,r9a09g011-pwc", "renesas,rzv2m-pwc=
+",
+> "syscon",
+> > +                         "simple-mfd";
+> > +            reg =3D <0xa3700000 0x800>;
+> > +
+> > +            gpio {
+> > +                    compatible =3D "renesas,r9a09g011-pwc-gpio",
+> > +                                 "renesas,rzv2m-pwc-gpio";
+> > +                    regmap =3D <&pwc>;
+> > +                    offset =3D <0x80>;
+> > +                    gpio-controller;
+> > +                    #gpio-cells =3D <2>;
+> > +            };
+> > +
+> > +            poweroff {
+> > +                    compatible =3D "renesas,r9a09g011-pwc-poweroff",
+> > +                                 "renesas,rzv2m-pwc-poweroff";
+> > +                    regmap =3D <&pwc>;
+>=20
+> Why does this need to be a child node? There aren't any resources for
+> it. 'regmap' is just the parent node.
+>=20
+> Assuming this binding is complete, I don't think you need any child
+> nodes. A single node can have multiple providers.
 
---Ijr6ssyB62nlum1R--
+Alright, then I'll just put everything the device needs into a single
+node. I'll send v2 based on the below snippet:
+
+    pwc@a3700000 {
+      compatible =3D "renesas,r9a09g011-pwc", "renesas,rzv2m-pwc";
+      reg =3D <0xa3700000 0x800>;
+      gpio-controller;
+      #gpio-cells =3D <2>;
+      renesas,rzv2m-pwc-power;
+    };
+
+Thanks,
+Fab
+
+>=20
+> Rob
