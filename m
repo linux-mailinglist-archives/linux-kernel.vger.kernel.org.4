@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F106526C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 20:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F0F6526CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 20:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233977AbiLTTJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 14:09:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S233940AbiLTTJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 14:09:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiLTTJY (ORCPT
+        with ESMTP id S229536AbiLTTJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 14:09:24 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA0EE0C3;
-        Tue, 20 Dec 2022 11:09:23 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so13133270pjj.4;
-        Tue, 20 Dec 2022 11:09:23 -0800 (PST)
+        Tue, 20 Dec 2022 14:09:51 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24418E0C3;
+        Tue, 20 Dec 2022 11:09:51 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id fy4so13425816pjb.0;
+        Tue, 20 Dec 2022 11:09:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
         bh=1OBgH6qhxVhNETTJtpKxpJyJJwZSaJxAnc72NIfU7q8=;
-        b=UKLuyNP1k8kPnnBJmVy3aAk0U+W/95TQoufIGcDgjVFiLwIeIk2TBu1oY/qGg9+tud
-         IB50e+biUVM5s5wt5rOswlQCHfqug/M2Ei7YRJOChGAiCW2B4Q3XKxOMFSU5Vq4eAxvx
-         OK7eWudtHiUpS5Wtkd4Xwv9pbZRhA1lesJRxUKlb17aIxaAtIyrrBiwQHZk5NWEJjKxR
-         4NyGfKSLw8Bh1b9z72YGiLMcOt42EfNFO3niBDtur1JAstaVwgYTMI1tnjRzrSFQETl0
-         owZfWzbGPktA8S3I9qm6WGr1sSV1Omz8vD6jATxZRZbYoXB/EABKjT4O5faxS86UgOqg
-         WVBA==
+        b=B8qxUMoE7+EAlwHOenlxiYcmaNiVCwIkv+cLWtLf1DvdFen8d5/GPfZO2AcZfsFJ+C
+         j9hKmE40U0KY1rBXhWTq6axC8jKgEHENzByO3DzGSvsXsk3kzgD/ueQ1XjSumKsvw67C
+         y+kSElTk1YFddpEjE2jy6j0gWutWnUhdwFkykKJchKbQjtqs6pUgSIHs5QtUPPIxIedB
+         2Jsas5Y3PJ+eIGoYWT4tqfcZlY4GmmYmJsmqsb0eMX5qgvYQEtDKc2EjR5LhCvmGA4eX
+         0AzQAky1NMtPLHLKhJ0dAoGNm6Ehfa7t2qqsmbvjggeZ45KTdpX37xBZGvLmGfyaVhmz
+         EeKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
         bh=1OBgH6qhxVhNETTJtpKxpJyJJwZSaJxAnc72NIfU7q8=;
-        b=YujHYemoKBQidgO8QyGYOJUdCkObKQlNoh3Rf1uujj3GjLKtUYjpMAeDPGgqXZTbvd
-         hDdauuSlWImcrnHXyCqD89v8q6aflep/CQK4R8tcMEETkiE1phxo9J6u6f/gp6p6RKQy
-         gexOyXMiXemDwsDon/6DvGxh5QtLDrptIdbFNrNyAXYDbJZlU1OiKf5t8ljpXpVDdeq9
-         ThCvGqvVlSN/rtnn/4DenmpoBnax8KjHXTvfD9dLs8SuqkuDScckmRqooBy4FQ5D2lpe
-         2OTXYeXcGC35+3S3GUJOlJzlzFgBYPf+W+kXGQap5pgKthXLP2hTPI6WVbORDsP0Byv1
-         DQtQ==
-X-Gm-Message-State: ANoB5pn5HaMDGG+RjDpKwTlYQa3F2zYmkeVOppLGKYIeDvw0eaJHpIF3
-        vOqitqA/vvrezd+CrEUudqM=
-X-Google-Smtp-Source: AA0mqf44hNs+GUi8hvM/wSk9nI9bt394TZ0kMyNtYXB/FndXQ6XulwJXq8q6c9Sbnw3nHrI8Qeo5Jw==
-X-Received: by 2002:a17:90a:3188:b0:219:3e5f:2a65 with SMTP id j8-20020a17090a318800b002193e5f2a65mr49327344pjb.36.1671563363053;
-        Tue, 20 Dec 2022 11:09:23 -0800 (PST)
+        b=V9Vps8QUJLwS36b+fmbCYqSTLxul5rcOq5BMMDam0gUrz9flwHTfuLPYe+4FLyjZWA
+         hM7Q6DSZau3xh8tRpIXx12Q4n7pyS0nKOA+ZBDJo9z991Te0t9BgnT2iEBr2eXzaxIeY
+         fPxVn3J0pOQ4+Rl8TfuVnKLy893FxCVojDsF8neNdAroGCLkE306tTxITKKSqqVADcdD
+         jc0LSk1QW13LbVLHv2QjrK5+VfVTjOUmmKeMG9Jaw8pQ38wGJCqhzYJtKrTjVQcT2dz8
+         pieIPkm31ex1tzVINTMMrM4/1OSxBgDTUmIb8zJp4LBXGijRDoQp61jnKQ5uT/7+ZrLm
+         v/jA==
+X-Gm-Message-State: ANoB5plkIzRya6cfMMhrQqtlbR2IAvpFFFv407M4NyV4Mwx6jhxu70x+
+        mKzF04kch8Bq6DbXkfoSICEivltyK4rZaw==
+X-Google-Smtp-Source: AA0mqf7jxeSkhNjsR5qNP89OERmGp1AZFIPJVGSOIRilOBXNnwoMcgsIbLYs+BJQGOvtpQXPjSsqhw==
+X-Received: by 2002:a05:6a20:d046:b0:af:7762:4c0b with SMTP id hv6-20020a056a20d04600b000af77624c0bmr32394792pzb.34.1671563390179;
+        Tue, 20 Dec 2022 11:09:50 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id o37-20020a17090a0a2800b00219ebdf797csm11358864pjo.24.2022.12.20.11.09.21
+        by smtp.gmail.com with ESMTPSA id h5-20020a656385000000b0045ff216a0casm8586163pgv.3.2022.12.20.11.09.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 11:09:22 -0800 (PST)
+        Tue, 20 Dec 2022 11:09:49 -0800 (PST)
 From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-mips@lists.infradead.org
+To:     linux-mips@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         Broadcom internal kernel review list 
         <bcm-kernel-feedback-list@broadcom.com>,
@@ -58,12 +58,11 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
         devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
         DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list)
 Subject: [PATCH] MIPS: dts: bcm63268: Add missing properties to the TWD node
-Date:   Tue, 20 Dec 2022 11:09:15 -0800
-Message-Id: <20221220190916.2681165-1-f.fainelli@gmail.com>
+Date:   Tue, 20 Dec 2022 11:09:46 -0800
+Message-Id: <20221220190947.2681192-1-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
