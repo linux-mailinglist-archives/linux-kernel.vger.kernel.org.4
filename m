@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52513652284
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C268A652286
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 15:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233875AbiLTO1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 09:27:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
+        id S229684AbiLTO1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 09:27:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233962AbiLTO0q (ORCPT
+        with ESMTP id S233974AbiLTO0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:26:46 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931041BEBF
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:26:37 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so16648296pjj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:26:37 -0800 (PST)
+        Tue, 20 Dec 2022 09:26:47 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCAF1C12A
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:26:41 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id u4-20020a17090a518400b00223f7eba2c4so165252pjh.5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 06:26:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=64X91MxhUjBzxu+FEguvTjtV3XYA1aG2BvuE/3RmIsU=;
-        b=pwS2mq20b00ht0wE2sWSAi//5IyViRE4tk4NShJksyXTZz/akL7cBWz6/VHCOlXW8H
-         5lpls1Jrlydt+SfvxiSDPAMt8uunxlGtSWYoZSb+FJp8D6WqxZNjqdMojTi4Dg39wJ1s
-         +MyNdHEZqmyls/+f+7XKUzdi9QYNhyBibjLQObyULeQtIHrdIRFPwjdpK3qBp8kcqJWc
-         EobCF9X3GOOPdg8Na3/ISn5vAP74qhE5ovZX85ObPYXCY1BdYnMAVsFBpZDtvRVsXpZv
-         2k0X9/Sep5GWsomQj7VHPmITAPA33n06HzYrqGUiKpUNVQPsRymZW4Nt/tW2IdGzGJY3
-         POfg==
+        bh=WdykleZ4reuZUDGuALMZqWmYTc5/lzRFBIQz0bC+lNM=;
+        b=MjWc8w+J1L/tQILl3fKHOTFPdPs4BkgGvNq9Ml0XhG6X+6LIzrSZQOi3N6Dt2yivwF
+         x1VWHknuFzz/h9fQO6fsK+pGbqdDG9ykURDlJPWXGCLIWAfKmcaP6+gjc52dxFKODS1A
+         VPtN5QlkkET/bPsQltPV7i/6/QA+N9vRe74+/204GPE7KL9Zry5fXf1didvfwwwKbFMk
+         eJpotQlOzt/ox/8DO57kgjajFvSe9QllroD4IwNLNqdPIs3WYTP3fUrUczTvExvA4efz
+         58wPCroWJz1YGYjBTPIe5C8uvianCzXItcy/sHWPhhtUlyVwjRZL+W4uEUK7SF5dsBdM
+         WHtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=64X91MxhUjBzxu+FEguvTjtV3XYA1aG2BvuE/3RmIsU=;
-        b=JchpKRd6d5mOyQpsecqR++AuNQUamyXhf7xp6P2tjexy1vbTGhhLPyZ2p75NkpageD
-         mF/eiI4OrqJRsvljPaPT0jk1eVhhZSMWnvNPY1e/6KhpActxSFaBEScZnF7IwPHp1veE
-         i0q0bqCbSIO9ieeSl36uW2MkqWjd62mzcSZBinOS0Uil5llXzHI640c/oDLroz2MozMs
-         NGVvBkGj7IhDATrYvG8Hwe1UpO5o8/cs9/KbKw9zEwGBGxwYkMDx+c4PSkpRQB2F4zDp
-         y5R+DKhBLAVIFk5ADS7+7R/i2YeCrFglIB8kIdrxtN4LBNrwnYzbqFZJum5vMLnIj4oj
-         hGPA==
-X-Gm-Message-State: ANoB5plsbC7meR6ttJg9nlsQf1QRl5T0Ob8zU3t8xLFLzi21mxRBPoXn
-        uIffLBqANrzzFJxiI8Q+mYA=
-X-Google-Smtp-Source: AA0mqf4k9upkMP0HrkhE5OVZzy1A8zaOGUBPPVz6j2/KB5BycYN82mg+ag6TUmJNR552xEd5Q/fchQ==
-X-Received: by 2002:a17:902:76c1:b0:186:ad88:43a9 with SMTP id j1-20020a17090276c100b00186ad8843a9mr50979497plt.36.1671546396976;
-        Tue, 20 Dec 2022 06:26:36 -0800 (PST)
+        bh=WdykleZ4reuZUDGuALMZqWmYTc5/lzRFBIQz0bC+lNM=;
+        b=33JMh0FB55p+DDxN6WH83qUpnsRaIVm6NcDifanGi0EFiS3+Cm1Wq8i3QiVEuib57S
+         QzYiGljNnBd1z2N+i/qLpsOXqt5d9jgV48lhUYmvU9N1MjnaeW8X1vgm8tn8O58KRJv4
+         iJmTSuWxA3OQgDGYdw/k0gb+Oc72mIvDEo8Be+17NdbBS8D7NGrtwPwxtCv2hlJn66nw
+         wry7ztMH4tbel6/2zRt8mZWXjqeWXvkxBp9BBzieYJQP4lg1Z4e7INw+sotX51ZAML1o
+         ZraxXE4oWU4zYbFR8dePeC/Hy2K0ITJ8yZlH+iucD53MFKsYezA5UAKSJ1On7S3xfeRh
+         ctew==
+X-Gm-Message-State: AFqh2koxCOguIZTTH/55q5UU6lLRMOr4XqpqeGmjItREC6lDHx+TErRK
+        ntq1ELbH9lUWKTO4o74jt84=
+X-Google-Smtp-Source: AMrXdXsBSW0EHE7rAoMotD3hOgcA/OPQtakxM4iNqFUFItIPYliZloQamq8otuQdfILXanPorw0cxQ==
+X-Received: by 2002:a17:902:710f:b0:190:d69c:1418 with SMTP id a15-20020a170902710f00b00190d69c1418mr12103783pll.2.1671546400816;
+        Tue, 20 Dec 2022 06:26:40 -0800 (PST)
 Received: from vernon-pc.. ([114.231.52.81])
-        by smtp.gmail.com with ESMTPSA id ik11-20020a170902ab0b00b001897bfc9800sm9383398plb.53.2022.12.20.06.26.34
+        by smtp.gmail.com with ESMTPSA id ik11-20020a170902ab0b00b001897bfc9800sm9383398plb.53.2022.12.20.06.26.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 06:26:36 -0800 (PST)
+        Tue, 20 Dec 2022 06:26:40 -0800 (PST)
 From:   Vernon Yang <vernon2gm@gmail.com>
 To:     Liam.Howlett@oracle.com, akpm@linux-foundation.org
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Vernon Yang <vernon2gm@gmail.com>
-Subject: [PATCH 6/8] maple_tree: change return type of mas_commit_b_node()
-Date:   Tue, 20 Dec 2022 22:26:04 +0800
-Message-Id: <20221220142606.1698836-7-vernon2gm@gmail.com>
+Subject: [PATCH 7/8] maple_tree: refine ma_state init from mas_start()
+Date:   Tue, 20 Dec 2022 22:26:05 +0800
+Message-Id: <20221220142606.1698836-8-vernon2gm@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221220142606.1698836-2-vernon2gm@gmail.com>
 References: <20221220142606.1698836-2-vernon2gm@gmail.com>
@@ -72,10 +72,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of mas_commit_b_node() function represents whether
-the submit b_node is successful, and can only be false and true, so
-the return value type is bool is more appropriate and for better
-readability.
+If mas->node is an MAS_START, there are three cases, and they
+all assign different values to mas->node and mas->offset. So
+there is no need to set them to a default value before updating.
+
+Update them directly to make them easier to understand and for
+better readability.
 
 Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
 ---
@@ -83,36 +85,43 @@ Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index b3a215dd961e..e7dde4a1d6cb 100644
+index e7dde4a1d6cb..16cdcf309e97 100644
 --- a/lib/maple_tree.c
 +++ b/lib/maple_tree.c
-@@ -3578,7 +3578,7 @@ static inline bool mas_reuse_node(struct ma_wr_state *wr_mas,
-  * @b_node: The maple big node
-  * @end: The end of the data.
-  */
--static inline int mas_commit_b_node(struct ma_wr_state *wr_mas,
-+static inline bool mas_commit_b_node(struct ma_wr_state *wr_mas,
- 			    struct maple_big_node *b_node, unsigned char end)
- {
- 	struct maple_node *node;
-@@ -3598,7 +3598,7 @@ static inline int mas_commit_b_node(struct ma_wr_state *wr_mas,
+@@ -1329,7 +1329,7 @@ static void mas_node_count(struct ma_state *mas, int count)
+  * mas_start() - Sets up maple state for operations.
+  * @mas: The maple state.
+  *
+- * If mas->node == MAS_START, then set the min, max, depth, and offset to
++ * If mas->node == MAS_START, then set the min, max and depth to
+  * defaults.
+  *
+  * Return:
+@@ -1343,22 +1343,22 @@ static inline struct maple_enode *mas_start(struct ma_state *mas)
+ 	if (likely(mas_is_start(mas))) {
+ 		struct maple_enode *root;
  
- 	mas_node_count(wr_mas->mas, 1);
- 	if (mas_is_err(wr_mas->mas))
--		return 0;
-+		return false;
+-		mas->node = MAS_NONE;
+ 		mas->min = 0;
+ 		mas->max = ULONG_MAX;
+ 		mas->depth = 0;
+-		mas->offset = 0;
  
- 	node = mas_pop_node(wr_mas->mas);
- 	node->parent = mas_mn(wr_mas->mas)->parent;
-@@ -3607,7 +3607,7 @@ static inline int mas_commit_b_node(struct ma_wr_state *wr_mas,
- 	mas_replace(wr_mas->mas, false);
- reuse_node:
- 	mas_update_gap(wr_mas->mas);
--	return 1;
-+	return true;
- }
+ 		root = mas_root(mas);
+ 		/* Tree with nodes */
+ 		if (likely(xa_is_node(root))) {
+ 			mas->depth = 1;
+ 			mas->node = mte_safe_root(root);
++			mas->offset = 0;
+ 			return NULL;
+ 		}
  
- /*
+ 		/* empty tree */
+ 		if (unlikely(!root)) {
++			mas->node = MAS_NONE;
+ 			mas->offset = MAPLE_NODE_SLOTS;
+ 			return NULL;
+ 		}
 -- 
 2.34.1
 
