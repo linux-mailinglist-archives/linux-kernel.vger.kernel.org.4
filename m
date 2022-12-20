@@ -2,124 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E3F652406
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 16:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08C965240C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbiLTP6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 10:58:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
+        id S229819AbiLTQBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 11:01:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiLTP61 (ORCPT
+        with ESMTP id S233220AbiLTQBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 10:58:27 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED5B6313
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 07:58:26 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id b3so19301464lfv.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 07:58:26 -0800 (PST)
+        Tue, 20 Dec 2022 11:01:33 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BCC38A5;
+        Tue, 20 Dec 2022 08:01:32 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id fy4so12887523pjb.0;
+        Tue, 20 Dec 2022 08:01:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Iok0tfWHvjI2YIYrpMqgnqWPH9Pjk6yIC34HQbrXVj4=;
-        b=RHiDD0Q1KfR73AVqO7L8iHjH8Yux5ME2eL7xpgBKCc30RV1Iyh1q1NGTmb1eO/Ic8l
-         dPt6OcHhrtmUgFnF+oZkf0TbrTnbHZfo44UdT4s2JKnHg/5q+jm/PU7XcouNLkZQpBoo
-         JoH0Td0EJCTrKYu7IOX745vxYJOF82lwVeX/XB1eCo4AGj+vYFpCy2XHcYuyN+rAzLPs
-         xB9ZnGEboaqimD8My81UVte474Mxxz3omYXP3GcqfFUanJYXWuZkrhHCg8bf4SxmkV8V
-         TcTW97t1DY7v+lXdU4gh0prnpaGteo6IsB2+le6s/tQ6eqnbnp1bCIwHaJD/h9MFKdH4
-         YL6w==
+        bh=CZMmU+pGQ8I5cymzBUpFRodcntV5ODz7Rjd+p+IjcxM=;
+        b=FgJB7RQvMGsU5maNwk7Ibn2Kug3rClLlbV+23BVAoBFTwzYdicUZXx3BxJFCWZACEC
+         POblY96MELR7T8nVNu6GLXbVj3mdBhx9OWg+ZlzMjrulDNLSzZubdpBOCyAOuYAk1GLg
+         6rEUYa4jn5ws84VoWzD+jGpalbsPbcEv6MtfvQfmUe3Bwh0ZymytgdtxzCe4SAxSrrZW
+         JRsTSU42YJ8g0PZRLD5Dt3rOnvuYZyElq0JPi8DYrCTyyg7ARVSRAGy7Z5/+NF+zqMkJ
+         O+XjDFoi/9ao4U8frNn+BxeKGEMMB+OkJytTxfidyNroPX4BqWLhwMp6/SNiMJGUxwc6
+         GPyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Iok0tfWHvjI2YIYrpMqgnqWPH9Pjk6yIC34HQbrXVj4=;
-        b=j8V+toNHtlkNznIIhh5zsiupMr/ypMR3DEnvubG7WEH7riAheGNaEeZhtHOkOVoQrZ
-         kD4qPSQO07HuDGBy0pfV3FAYMhwfMoio3/dAB8DvDTrO1Pk5Oric/qE13/x3xm+U7/J8
-         0Z59ToPVe7HX2iN4buxTkOg8d7n0etIi5tfi6On6zeMNWmGWs2/FbFOg+ng6wJt7t8CZ
-         8IqAMsGDpmrMw1y+PoovDkEDQ+uk3qQkMGcmKmKF3MWBp6/R+jlXkpgXTkRAILdJcwin
-         TWUGzRRP3vt7/p1kcRoKKQ4v9J7nJrI5jgWXqN2IHFtweKuKmgG7uR/cvIiSnxTqPitp
-         4G6w==
-X-Gm-Message-State: ANoB5pm+UZS4LEwXzAY1rwQb+eCmzbjA0Kpqe9T+LyEUdrV0VQ2FWSYY
-        IR034uhi2dtB8eusxIKXZwsNhg==
-X-Google-Smtp-Source: AA0mqf7Bcg6J6e7YwYfJL8HhIHW8PORg+AXoOGUHvmnFbL4Yp1Ia/8QU4IGfubKk/IuBXEfxBiANjw==
-X-Received: by 2002:a19:c502:0:b0:4b6:edee:586e with SMTP id w2-20020a19c502000000b004b6edee586emr9387032lfe.10.1671551904993;
-        Tue, 20 Dec 2022 07:58:24 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v13-20020ac258ed000000b004996fbfd75esm1495078lfo.71.2022.12.20.07.58.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 07:58:24 -0800 (PST)
-Message-ID: <93fbb172-2b0a-cfb1-effd-1b6f1245f91f@linaro.org>
-Date:   Tue, 20 Dec 2022 16:58:23 +0100
+        bh=CZMmU+pGQ8I5cymzBUpFRodcntV5ODz7Rjd+p+IjcxM=;
+        b=HIbvMRIRuWcK9mtq2UIMCz89ZoSubGN75W0cfLi5N4PQqXumfYyaBLaD7hVr9YmTUq
+         vKob0wknlACA4esasc7l2krq9OU9opAyKlDhKoAgStdokhv4T5G9B0s9qplBPVVwyJ13
+         fzd/jqE3iVDQP/66WCXo0Iw8ou/gLkO7WCjzusZ8JuzKv0ioxA9xAZS4q/UgmavG/tHl
+         h52H7b5PbUIUD5MmT8mhkLSpB3UaoGMgj4W5AAne4/dTeJ2+sjcFdHf7MFgdSG4b0nQB
+         VW/M34cIloYn9PIMXVDPimxNlHKU6yAMcs5cJXRfbiE/ZYQqG2YYC6CDGJq76QND8kH0
+         LMdA==
+X-Gm-Message-State: AFqh2kq8lqQ3gSoZTzZKgC3pKwIsvRDpMMhA7bdePJnZr9FjsPzhOKn8
+        mDTQArYpjDx2avZZt/lLW0s=
+X-Google-Smtp-Source: AMrXdXu/PTWG3RF5FJl77akOeoAMUXeZltzVrigzm8q6ibeY4U1MWMGr6FwSCANfZHn/XMjGC92vWg==
+X-Received: by 2002:a05:6a20:d385:b0:b0:3318:ab59 with SMTP id iq5-20020a056a20d38500b000b03318ab59mr12279097pzb.14.1671552091976;
+        Tue, 20 Dec 2022 08:01:31 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id 64-20020a620543000000b00574b86040a4sm8846432pff.3.2022.12.20.08.01.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 08:01:31 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 20 Dec 2022 06:01:30 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH -next 0/4] blk-cgroup: synchronize del_gendisk() with
+ configuring cgroup policy
+Message-ID: <Y6HcWiJbaWjN3jlt@slm.duckdns.org>
+References: <20221217030908.1261787-1-yukuai1@huaweicloud.com>
+ <Y6DP3aOSad8+D1yY@slm.duckdns.org>
+ <e01daffe-a3e3-8bf2-40ee-192a9e70d911@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v6 2/2] misc: nxp-sr1xx: UWB driver support for sr1xx
- series chip
-Content-Language: en-US
-To:     Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        will@kernel.org, axboe@kernel.dk, robh+dt@kernel.org
-Cc:     mb@lightnvm.io, ckeepax@opensource.cirrus.com, arnd@arndb.d,
-        mst@redhat.com, javier@javigon.com, mikelley@microsoft.com,
-        jasowang@redhat.com, sunilmut@microsoft.com,
-        bjorn.andersson@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, ashish.deshpande@nxp.com,
-        rvmanjumce@gmail.com, Kwame Adwere <kwame.adwere@nxp.com>
-References: <20221220154747.2372597-1-manjunatha.venkatesh@nxp.com>
- <20221220154747.2372597-3-manjunatha.venkatesh@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221220154747.2372597-3-manjunatha.venkatesh@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e01daffe-a3e3-8bf2-40ee-192a9e70d911@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/12/2022 16:47, Manjunatha Venkatesh wrote:
-> Ultra-wideband (UWB) is a short-range wireless communication protocol.
+Hello,
+
+On Tue, Dec 20, 2022 at 05:19:12PM +0800, Yu Kuai wrote:
+> Yes, that sounds good. BTW, queue_lock is also used to protect
+> pd_alloc_fn/pd_init_fn，and we found that blkcg_activate_policy() is
+> problematic:
 > 
-> NXP has SR1XX family of UWB Subsystems (UWBS) devices. SR1XX SOCs
-> are FiRa Compliant. SR1XX SOCs are flash less devices and they need
-> Firmware Download on every device boot. More details on the SR1XX Family
-> can be found at https://www.nxp.com/products/:UWB-TRIMENSION
+> blkcg_activate_policy
+>  spin_lock_irq(&q->queue_lock);
+>  list_for_each_entry_reverse(blkg, &q->blkg_list
+>   pd_alloc_fn(GFP_NOWAIT | __GFP_NOWARN,...) -> failed
 > 
+>   spin_unlock_irq(&q->queue_lock);
+>   // release queue_lock here is problematic, this will cause
+> pd_offline_fn called without pd_init_fn.
+>   pd_alloc_fn(__GFP_NOWARN,...)
 
-(...)
+So, if a blkg is destroyed while a policy is being activated, right?
 
-> +
-> +/**
-> + * sr1xx_dev_suspend
-> + *
-> + * Executed before putting the system into a sleep state
-> + *
-> + */
-> +int sr1xx_dev_suspend(struct device *dev)
-> +{
-> +	struct sr1xx_dev *sr1xx_dev = dev_get_drvdata(dev);
-> +
-> +	if (device_may_wakeup(dev))
-> +		disable_irq_wake(sr1xx_dev->spi->irq);
-> +	return 0;
-> +}
-> +
-> +/**
-> + * sr1xx_dev_resume
-> + *
-> + * Executed after waking the system up from a sleep state
-> + *
-> + */
+> If we are using a mutex to protect rq_qos ops, it seems the right thing
+> to do do also using the mutex to protect blkcg_policy ops, and this
+> problem can be fixed because mutex can be held to alloc memroy with
+> GFP_KERNEL. What do you think?
 
-Lines of comments or code should not be part of anyone's Key Performance
-Indicators (KPI). Don't bring your KPI to Linux. Drop all such useless
-comments and adjust your style to Linux coding style.
+One worry is that switching to mutex can be more headache due to destroy
+path synchronization. Another approach would be using a per-blkg flag to
+track whether a blkg has been initialized.
 
-Best regards,
-Krzysztof
+Thanks.
 
+-- 
+tejun
