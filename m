@@ -2,105 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D839B651FB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33963651FB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbiLTLb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 06:31:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
+        id S232093AbiLTLbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 06:31:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233537AbiLTLbD (ORCPT
+        with ESMTP id S233497AbiLTLbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 06:31:03 -0500
-Received: from abi149hd125.arn1.oracleemaildelivery.com (abi149hd125.arn1.oracleemaildelivery.com [129.149.84.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DC2DE9
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 03:30:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=oci-arn1-20220924;
- d=augustwikerfors.se;
- h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
- bh=LWl+dwuFvwHM/La+sthWt8IK+hkiLuNLi0fAV3LorRw=;
- b=sMh80TyaViBU8f0N1VOTpbz/32r4zlEP2Jo54z0E4Qcj6yHglfzLPDMmgeNcBU2VcACkaKl/dOBD
-   bVfQPMH8MwhVjaRU2uJqElJM/FqOKafUuYNb9WpPequEdZDGNkXiFrMUgKQXPNJhjdCDRqe9P4nh
-   RJWNvb0CeEniJqXe/zkBw5PSBH24y4QzPy06E8gv9kww2Q/ld7ngL0Wo07aDHIxwSbqPoMK9GEgj
-   R3soMwhcs2YT/Ijid7R59IDFwrBtA4X7HGTsycBL0uIEsx3zY2cpBx8/9eFZzHu7QdfRmzZzjf5I
-   thdFkvY15i+cdZfA/94u5iDHOdlUp1fOnOJqzg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=prod-arn-20211201;
- d=arn1.rp.oracleemaildelivery.com;
- h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
- bh=LWl+dwuFvwHM/La+sthWt8IK+hkiLuNLi0fAV3LorRw=;
- b=auIOpP+0iiXAAS9+7sJaG9ODk1UCeEVb6T7IKc1eVzwrRWOKmqu/quNxNFrZBqOWFW2Td/ciM/nU
-   NuUoerXSUR6HIDVPShtkj0uWCfoZwhmPeBm51oTSTut0/KUr8uMrWDsbdYSRb4SU3neIBFLRlt9N
-   WByy/Uhjp7cAIwjUI/W553dJkzVMUlqex1azTeUoqLrY3irtf96vF1XRkMQ5ixRRaBB1X3nmIF3X
-   SwrxMNH9Az0iW/skZJ70RqLu7Zzw5U23OyqnP4rbyJWH1kYcolV5d7uuH0QJqHkk3PMw2TPvkbV0
-   KwQBMQltdYSjGOIwt9NfoGjicyrC8+Hyg8aJsg==
-Received: by omta-ad1-fd1-101-eu-stockholm-1.omtaad1.vcndparn.oraclevcn.com
- (Oracle Communications Messaging Server 8.1.0.1.20221212 64bit (built Dec 12
- 2022))
- with ESMTPS id <0RN600LPXTB6XSB0@omta-ad1-fd1-101-eu-stockholm-1.omtaad1.vcndparn.oraclevcn.com>
- for linux-kernel@vger.kernel.org; Tue, 20 Dec 2022 11:30:42 +0000 (GMT)
-Message-id: <a80857cb-e3a0-74b2-a7c4-a1afb34e5082@augustwikerfors.se>
-Date:   Tue, 20 Dec 2022 12:30:39 +0100
-MIME-version: 1.0
-Subject: Re: [PATCH] nvme-pci: add NVME_QUIRK_BOGUS_NID for Samsung PM9B1 256G
- and 512G
-Content-language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kanchan Joshi <joshi.k@samsung.com>
-References: <20221116171727.4083-1-git@augustwikerfors.se>
- <CGME20221116172324epcas5p3d9877249797ac741ead5785cba27e00e@epcas5p3.samsung.com>
- <20221116171935.GA24524@lst.de> <20221117031951.GB392@test-zns>
- <20221206055928.GB24451@test-zns>
-From:   August Wikerfors <git@augustwikerfors.se>
-In-reply-to: <20221206055928.GB24451@test-zns>
-Content-type: text/plain; charset=UTF-8; format=flowed
-Content-transfer-encoding: 7bit
-Reporting-Meta: AAGILxLChfRQdNmOHagNzZxsBm++OdYCqjaY8vHGYk7FpcpdeqBieFG87sYLWtZE
- 9KAz4qXu7D9U91Btd+Yjlw6FxRtZl6XjVEKGEXZrhEWBTRRCsIwsA6omS0X+6IUm
- RbpExorMWpollADH5GHiIp/ugzlDMlRTHT8tu5PP/P/rBhrWZPCQpR7sE+39OAI2
- B7V4SaaozLh6AwapbQL61+KeYW5SliBUAYJ2eCi0D6V1bgZo6/IxqzzytShcAWXH
- jmmKWiuJ/mKgGFUnQOQ1aFTK4bZMgffUZol7jW9JilxfUODLlwN4d/03Bb1H/IcE
- SPKKrEiiFhE08FBrXemLv0z1BY10D/6Smz5ZjzhSKyzNYkVmFfAZfCzNAT2dCI3B
- GhdiI9+CCBbMUOC+xidO712tTgSmU63fHj2d56hV47j+8uXxaN+UuQYGD7x8m3P1 a1+f1g==
+        Tue, 20 Dec 2022 06:31:10 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA94219295;
+        Tue, 20 Dec 2022 03:31:02 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso11838178pjh.1;
+        Tue, 20 Dec 2022 03:31:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9ue5drNbkBvKVzpPDG78ZMfbrHrE9A5Ia9TcUjCSfCo=;
+        b=m5ESKvT3Lf0CT9weWsfxqVpy1q9ZvbcLvSundZywEFYQEH5yXW5k+2ZrrKlnPsgxK8
+         +2SbLpoj+YfpyhPNVvVqFCsKkmctQLGIu6NzUdOYm7kbT9awps9bcn5VgcpjBXEyxvTc
+         ovkKDmcHJ0Ifco/pZI+bxsQO8XfpkMg7QreIoU+tik2Lx7DFX+L6aTOr6qLj5XaysIo9
+         gqvjojE7osPcGGc84kXE7KvYSM2lmv5GnyuvxqWM6Jxno//iKbgKL4wWE/AWy5K2NuVk
+         6A/TqhOWZ5V1ej2FpGgXS116W/XsZ4m8saXKe205ZRWd6Ao1VamJzCdqnGQ65Awt1Iaw
+         rThQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9ue5drNbkBvKVzpPDG78ZMfbrHrE9A5Ia9TcUjCSfCo=;
+        b=hAqB66ZuxCQUVkuVE+H7NfnvjvKkY9/7NrC1aZVbR5Go3g/lBdtoFEMpWePRRkxNH1
+         yEIdPrubLFiRLlfXYDXOc6G27DIjMT0mJkzrqLLTMLQpT17VkE8DzceKzdRH9Y+RGk4U
+         Q3g95wra101D5N1rRyKF5eOxkDJJOuqN+l5YrbUUb6NziDYfsliXPIZy85XK3X7WdTwN
+         TPZqUby9tiz4HBCjXdf3QWXz5oy2CQMr7yrQg8rz3JmDI5J+qHaWPgI+2vp2ylrQxenI
+         oMpk8FiPixrbjRSrfz4nuu78zbGnPFqq1hd5UjLl/F/6NzdKGy/oFt4DHLWhCoF3P0JN
+         kuug==
+X-Gm-Message-State: ANoB5plr/xxtzlQzorEhQPKOg8l9hfmtkVPW2ktdOk6e7YlP0xX85DWa
+        CjeiSIDmsmlqrl11hsl8++0=
+X-Google-Smtp-Source: AA0mqf7DsevXhPH+pg5x4yR1bV/jgh97+nllSGVEptRsYXvX/5pCbpKmv2jrsggHJl6z4SFRO+8O9w==
+X-Received: by 2002:a17:90a:f191:b0:21a:1b9b:139e with SMTP id bv17-20020a17090af19100b0021a1b9b139emr47606235pjb.8.1671535862337;
+        Tue, 20 Dec 2022 03:31:02 -0800 (PST)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id om7-20020a17090b3a8700b001fde655225fsm1610785pjb.2.2022.12.20.03.30.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 03:31:01 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Haoyue Xu <xuhaoyue1@hisilicon.com>,
+        Wenpeng Liang <liangwenpeng@huawei.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Yixing Liu <liuyixing1@huawei.com>, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] RDMA/hns: Fix refcount leak in hns_roce_mmap
+Date:   Tue, 20 Dec 2022 15:30:47 +0400
+Message-Id: <20221220113047.1463078-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-06 06:59, Kanchan Joshi wrote:
-> On Thu, Nov 17, 2022 at 08:49:51AM +0530, Kanchan Joshi wrote:
->> On Wed, Nov 16, 2022 at 06:19:35PM +0100, Christoph Hellwig wrote:
->>> On Wed, Nov 16, 2022 at 06:17:27PM +0100, August Wikerfors wrote:
->>>> The Samsung PM9B1 512G SSD found in some Lenovo Yoga 7 14ARB7 laptop 
->>>> units
->>>> reports eui as 0001000200030004 when resuming from s2idle, causing the
->>>> device to be removed with this error in dmesg:
->>>>
->>>> nvme nvme0: identifiers changed for nsid 1
->>>
->>> What EUI did it report before? Is the identifier stable after
->>> multiple resume cycles?
->>>
->>> Can some of the Samsung folks here reach out to the relevant firmware
->>> team to see if they have any clues?
->>
->> I will check.
-> 
-> Took more time than I wanted. Firmware team mentioned that issue existed
-> in this firmware. This is fixed in new firmware, but bit of travel time
-> is involved when official release from OEM (Lenovo) comes out.
-> 
-> Hope the information is sufficient, and quirk can go in.
-> 
-> If required, Acked-by: Kanchan Joshi <joshi.k@samsung.com>
+rdma_user_mmap_entry_get_pgoff() takes reference.
+Add missing rdma_user_mmap_entry_put() to release the reference.
 
-Ping, anything left for me to do before this can be merged?
+Fixes: 0045e0d3f42e ("RDMA/hns: Support direct wqe of userspace")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/infiniband/hw/hns/hns_roce_main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-August Wikerfors
+diff --git a/drivers/infiniband/hw/hns/hns_roce_main.c b/drivers/infiniband/hw/hns/hns_roce_main.c
+index 8ba68ac12388..fbff8df9236d 100644
+--- a/drivers/infiniband/hw/hns/hns_roce_main.c
++++ b/drivers/infiniband/hw/hns/hns_roce_main.c
+@@ -443,6 +443,7 @@ static int hns_roce_mmap(struct ib_ucontext *uctx, struct vm_area_struct *vma)
+ 		prot = pgprot_device(vma->vm_page_prot);
+ 		break;
+ 	default:
++		rdma_user_mmap_entry_put(rdma_entry);
+ 		return -EINVAL;
+ 	}
+ 
+-- 
+2.25.1
+
