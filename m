@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B606518C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 03:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 167006518C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 03:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiLTCZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Dec 2022 21:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59328 "EHLO
+        id S232465AbiLTCZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Dec 2022 21:25:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiLTCZM (ORCPT
+        with ESMTP id S232444AbiLTCZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Dec 2022 21:25:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620EBB90
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 18:25:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D12DDB80D2F
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 02:25:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCFAFC433EF;
-        Tue, 20 Dec 2022 02:25:06 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dk2sESxH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1671503104;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=GONWkYR5ETRlvmjHJNSwCeq8iqU0rT6jTSaQSVLxGz4=;
-        b=dk2sESxHrdei6xMlG087PmIVoxtEye0K1eOR4CFHYeoa6REbhlfP5hnYl2p3R21tIR9wxT
-        d6kvl8NtRfuiIoKcQMjEesfA/iOBxAuAk+KFdd5B6TiGvyrQrUSFKYkNwuCsKX4zvsTTYg
-        kmiPAIPJcwjupR4FqYj/hwlSgisjktk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f89d33e8 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 20 Dec 2022 02:25:04 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [GIT PULL] random number generator fixes for 6.2-rc1, part 2
-Date:   Tue, 20 Dec 2022 03:24:58 +0100
-Message-Id: <20221220022458.11682-1-Jason@zx2c4.com>
+        Mon, 19 Dec 2022 21:25:36 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5128BDCD
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 18:25:33 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id D67642C04E6;
+        Tue, 20 Dec 2022 15:25:27 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1671503127;
+        bh=t6cFuNQ2LnmXhrjxApGRATADLMRoFZkTZNyrVhsq+Z0=;
+        h=From:To:Subject:Date:References:In-Reply-To:From;
+        b=KVmBEhjZlIGLtuPo4NxBnHkqAjCOQnpz9VRCo6GyDMnoeavIkWSVt31qZKry3x2XK
+         O57Z0ZEQwMCu15RtqMRzTxYvuG7BTOQ5ALgTjGoGk/uo5Mnc1/jJXTMRymuIr+SQ7v
+         eAw/brKtoF7nUpqyVNpvlQnqQIunxRoBDcGEMtdX/anIDORCL/7bTTC5YGlIvaZb2f
+         mw7KCN/BdBNPSI+jlDwDd0bqYqfsbY24UseZVSowrZNqSYF/dCE+G+d1WCWHRnPILh
+         BoZJRY1otbG5V6g6s8Oo9fWIK+QxVXXnxPxiApO0qhLe1E7GtV4IMZJhQlV/o+EneY
+         yxJ6CoOE3sxeg==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B63a11d170001>; Tue, 20 Dec 2022 15:25:27 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.42; Tue, 20 Dec 2022 15:25:27 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.044; Tue, 20 Dec 2022 15:25:27 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>,
+        "dsahern@kernel.org" <dsahern@kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "a@unstable.cc" <a@unstable.cc>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/2] ip/ip6_gre: Fix GRE tunnels not generating IPv6 link
+ local addresses
+Thread-Topic: [PATCH 0/2] ip/ip6_gre: Fix GRE tunnels not generating IPv6 link
+ local addresses
+Thread-Index: AQHZFBpSn9BtuUDucEWGwn1kCNMLnQ==
+Date:   Tue, 20 Dec 2022 02:25:27 +0000
+Message-ID: <8e4ad680-4406-e6df-5335-ffe53a60aa83@alliedtelesis.co.nz>
+References: <20221219010619.1826599-1-Thomas.Winter@alliedtelesis.co.nz>
+In-Reply-To: <20221219010619.1826599-1-Thomas.Winter@alliedtelesis.co.nz>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8BA6A3B56D8E1146AFA84300D1EE8928@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=X/cs11be c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=sHyYjHe8cH0A:10 a=VwQbUJbxAAAA:8 a=ycHaLhVXlY9nsrgXMBQA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-As mentioned in the first pull for 6.2-rc1, this second late pull request has
-two remaining changes that are now possible after you merged a few other
-trees:
-
-- #include <asm/archrandom.h> can be removed from random.h now, making the
-  direct use of the arch_random_* API more of a private implementation detail
-  between the archs and random.c, rather than something for general consumers.
-
-- Two additional uses of prandom_u32_max() snuck in during the initial phase
-  of pulls, so these have been converted to get_random_u32_below(), and now
-  the deprecated prandom_u32_max() alias -- which was just a wrapper around
-  get_random_u32_below() -- can be removed.
-
-In addition, there is one fix:
-
-- Check efi_rt_services_supported() before attempting to use an EFI runtime
-  function. This affected EFI systems that disable runtime services yet still
-  boot via EFI (e.g. the reporter's Dell arm64 laptop), as well systems where
-  EFI runtime services have been forcibly disabled, such as on PREEMPT_RT. On
-  those machines, a very early and hard to diagnose crash would happen,
-  preventing boot.
-
-Please pull.
-
-Thanks,
-Jason
-
-The following changes since commit 6feb57c2fd7c787aecf2846a535248899e7b70fa:
-
-  Merge tag 'kbuild-v6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild (2022-12-19 12:33:32 -0600)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git tags/random-6.2-rc1-for-linus
-
-for you to fetch changes up to 3c202d14a9d73fb63c3dccb18feac5618c21e1c4:
-
-  prandom: remove prandom_u32_max() (2022-12-20 03:13:45 +0100)
-
-----------------------------------------------------------------
-Random number generator fixes for Linux 6.2-rc1.
-----------------------------------------------------------------
-
-Jason A. Donenfeld (2):
-      random: do not include <asm/archrandom.h> from random.h
-      prandom: remove prandom_u32_max()
-
-Johan Hovold (1):
-      efi: random: fix NULL-deref when refreshing seed
-
- arch/powerpc/kernel/setup-common.c   | 1 +
- arch/s390/kernel/setup.c             | 1 +
- arch/x86/mm/cpu_entry_area.c         | 2 +-
- drivers/char/hw_random/powernv-rng.c | 1 +
- drivers/char/hw_random/s390-trng.c   | 1 +
- drivers/char/random.c                | 1 +
- drivers/firmware/efi/efi.c           | 4 +++-
- include/linux/prandom.h              | 6 ------
- include/linux/random.h               | 2 --
- net/ipv4/tcp_plb.c                   | 2 +-
- 10 files changed, 10 insertions(+), 11 deletions(-)
+SGkgVGhvbWFzLA0KDQpPbiAxOS8xMi8yMiAxNDowNiwgVGhvbWFzIFdpbnRlciB3cm90ZToNCj4g
+Rm9yIG91ciBwb2ludC10by1wb2ludCBHUkUgdHVubmVscywgdGhleSBoYXZlIElONl9BRERSX0dF
+Tl9NT0RFX05PTkUNCj4gd2hlbiB0aGV5IGFyZSBjcmVhdGVkIHRoZW4gd2Ugc2V0IElONl9BRERS
+X0dFTl9NT0RFX0VVSTY0IHdoZW4gdGhleQ0KPiBjb21lIHVwIHRvIGdlbmVyYXRlIHRoZSBJUHY2
+IGxpbmsgbG9jYWwgYWRkcmVzcyBmb3IgdGhlIGludGVyZmFjZS4NCj4gUmVjZW50bHkgd2UgZm91
+bmQgdGhhdCB0aGV5IHdlcmUgbm8gbG9uZ2VyIGdlbmVyYXRpbmcgSVB2NiBhZGRyZXNzZXMuDQo+
+DQo+IEFsc28sIG5vbi1wb2ludC10by1wb2ludCB0dW5uZWxzIHdlcmUgbm90IGdlbmVyYXRpbmcg
+YW55IElQdjYgbGluaw0KPiBsb2NhbCBhZGRyZXNzIGFuZCBpbnN0ZWFkIGdlbmVyYXRpbmcgYW4g
+SVB2NiBjb21wYXQgYWRkcmVzcywNCj4gYnJlYWtpbmcgSVB2NiBjb21tdW5pY2F0aW9uIG9uIHRo
+ZSB0dW5uZWwuDQo+DQo+IFRoZXNlIGZhaWx1cmVzIHdlcmUgY2F1c2VkIGJ5IGNvbW1pdCBlNWRk
+NzI5NDYwY2EgYW5kIHRoaXMgcGF0Y2ggc2V0DQo+IGFpbXMgdG8gcmVzb2x2ZSB0aGVzZSBpc3N1
+ZXMuDQoNClRoaXMgYXBwZWFycyB0byBiZSBhIHYyIG9mIA0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5v
+cmcvYWxsLzIwMjIxMjE4MjE1NzE4LjE0OTE0NDQtMS1UaG9tYXMuV2ludGVyQGFsbGllZHRlbGVz
+aXMuY28ubnovI3QgDQpidXQgeW91IGhhdmVuJ3Qgc2FpZCBzbyBpbiB0aGUgc3ViamVjdCBub3Ig
+aGF2ZSB5b3UgaW5jbHVkZWQgYSBjaGFuZ2Vsb2cgDQppbiB0aGUgcGF0Y2hlcyBvciBpbiB0aGUg
+Y292ZXIgbGV0dGVyLg0KDQpBbHNvIGZvciBuZXR3b3JraW5nIHBhdGNoZXMgeW91IHNob3VsZCBp
+bmNsdWRlIGVpdGhlciAibmV0IiBvciANCiJuZXQtbmV4dCIgaW4gdGhlIHN1YmplY3QgcHJlZml4
+LiBBcyB0aGlzIGFwcGVhcnMgdG8gYmUgYSBidWdmaXggIm5ldCIgDQppcyBhcHByb3ByaWF0ZS4N
+Cg0KPg0KPiBUaG9tYXMgV2ludGVyICgyKToNCj4gICAgaXAvaXA2X2dyZTogRml4IGNoYW5naW5n
+IGFkZHIgZ2VuIG1vZGUgbm90IGdlbmVyYXRpbmcgSVB2NiBsaW5rIGxvY2FsDQo+ICAgICAgYWRk
+cmVzcw0KPiAgICBpcC9pcDZfZ3JlOiBGaXggbm9uLXBvaW50LXRvLXBvaW50IHR1bm5lbCBub3Qg
+Z2VuZXJhdGluZyBJUHY2IGxpbmsNCj4gICAgICBsb2NhbCBhZGRyZXNzDQo+DQo+ICAgbmV0L2lw
+djYvYWRkcmNvbmYuYyB8IDU3ICsrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0t
+LS0tLS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAzMSBpbnNlcnRpb25zKCspLCAyNiBkZWxldGlv
+bnMoLSkNCj4=
