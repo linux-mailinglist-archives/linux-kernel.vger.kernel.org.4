@@ -2,53 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6756765248B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A303652494
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 17:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbiLTQUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 11:20:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
+        id S233346AbiLTQXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 11:23:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233684AbiLTQUh (ORCPT
+        with ESMTP id S229638AbiLTQXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 11:20:37 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155A6E38;
-        Tue, 20 Dec 2022 08:20:36 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Nc1tl5mXmz688J2;
-        Wed, 21 Dec 2022 00:17:19 +0800 (CST)
-Received: from localhost (10.81.208.216) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 20 Dec
- 2022 16:20:32 +0000
-Date:   Tue, 20 Dec 2022 16:20:29 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <alison.schofield@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 3/5] cxl/memdev: Add trigger_poison_list sysfs
- attribute
-Message-ID: <20221220162029.00001da7@Huawei.com>
-In-Reply-To: <965d66486eb3ebbca6b1b265678130edd66f105e.1671135967.git.alison.schofield@intel.com>
-References: <cover.1671135967.git.alison.schofield@intel.com>
-        <965d66486eb3ebbca6b1b265678130edd66f105e.1671135967.git.alison.schofield@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Tue, 20 Dec 2022 11:23:44 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF07438A7
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:23:42 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id bj12so30331359ejb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 08:23:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vpeOz/atwWaq5P+CzmUvCEmhM3lI80E7mUtcoB02w74=;
+        b=H6Xnf+DoOeubjON59vfR3tll2Ze7ycAtog0dv21Ya81ghBJC9fektXMQfA1cStPSN7
+         EoAvTghXN+hfj0lthh4Ij34eDAY1+g2sgITyBBD7iwOE2BEskHY1Dr4boqeVnmuGH9yZ
+         ZNCN+HQ+8Y46Tz0fkpi1xrFzvMzu3TJHOXMP0Y/yPviDcyQ1ZkGu6EqMs8pOoPEQNzgn
+         XuZ4+wudLVbXfCjfGR7djXLa1MUn2DN26epRM7SvhVWAT37tHWzpMj6jrPuzIbUpiWSB
+         cchN/TrkD+uloNXMmtC6PVRXcLQiWkkM+h68nq+G3nmPHWG6GkJ0srjvxh02xwYSPUMU
+         IkMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vpeOz/atwWaq5P+CzmUvCEmhM3lI80E7mUtcoB02w74=;
+        b=ncMlKvX7XzWjjKL/kFZ3DJmfpyOW5udIxIW9m8E9/ezAbDMWBiCUZyrCad+pBuGhxb
+         t96k6dBu37+tm+9vj6D2QJmTEAWjzTPb2xSJsge5lE+TVt9KVDh9l8yzKVU2EydFSuYR
+         lfROXZ9BobXs9rEvjhPeie8iTvfZC1sRxXrOd0gzMVUGo3koZmqRrlDMCLyPWQ4OCi4K
+         pbLjVGD06GS3BTTiDi5djhDWk9mJ07ebBgslmgI7rTlVb+Mutqf2zehCjaiJ3O8QU69o
+         /cdhuL5RP0l/+zU8PGPX3aXACj/pTDPAXEQRauzRA/00jkVXYI7ZTk3kO+NXoNTYetT+
+         z78w==
+X-Gm-Message-State: ANoB5pmvH8t1YoTTruL0ljcsTfs31ynfZ9SSH6FuiorJscbfukd2Fycx
+        H/OqhROMuBAoImTD1dEBhNgAB6bO1Yj7l+y7XCM=
+X-Google-Smtp-Source: AA0mqf7RHX17NWI60VxPqknRtjbPtOmXKODWqoZQXgjdLGnZtvU+eamDexaf47D2fnFUX3bRkcSd+f0KIrd9WSEHU5I=
+X-Received: by 2002:a17:906:d8a6:b0:7c0:b741:8b61 with SMTP id
+ qc6-20020a170906d8a600b007c0b7418b61mr30324621ejb.625.1671553421350; Tue, 20
+ Dec 2022 08:23:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.208.216]
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Tue, 20 Dec 2022 10:23:30 -0600
+Message-ID: <CABb+yY1_UYa9T7pNc0yPhmx4hy3W=O5xL4mhfSjZx3s-jnRV7A@mail.gmail.com>
+Subject: [GIT PULL] Mailbox changes for v6.2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,133 +64,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 13:17:45 -0800
-alison.schofield@intel.com wrote:
+Hi Linus,
 
-> From: Alison Schofield <alison.schofield@intel.com>
-> 
-> When a boolean 'true' is written to this attribute the memdev driver
-> retrieves the poison list from the device. The list consists of
-> addresses that are poisoned, or would result in poison if accessed,
-> and the source of the poison. This attribute is only visible for
-> devices supporting the capability. The retrieved errors are logged
-> as kernel trace events with the label 'cxl_poison'.
-> 
-> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-LGTM
+The following changes since commit 76dcd734eca23168cb008912c0f69ff408905235:
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+  Linux 6.1-rc8 (2022-12-04 14:48:12 -0800)
 
+are available in the Git repository at:
 
+  git://git.linaro.org/landing-teams/working/fujitsu/integration.git
+tags/mailbox-v6.2
 
-> ---
->  Documentation/ABI/testing/sysfs-bus-cxl | 14 ++++++++
->  drivers/cxl/core/memdev.c               | 45 +++++++++++++++++++++++++
->  drivers/cxl/cxlmem.h                    |  2 +-
->  3 files changed, 60 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-cxl b/Documentation/ABI/testing/sysfs-bus-cxl
-> index 8494ef27e8d2..df40ed09ea67 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-cxl
-> +++ b/Documentation/ABI/testing/sysfs-bus-cxl
-> @@ -388,3 +388,17 @@ Description:
->  		1), and checks that the hardware accepts the commit request.
->  		Reading this value indicates whether the region is committed or
->  		not.
-> +
-> +
-> +What:		/sys/bus/cxl/devices/memX/trigger_poison_list
-> +Date:		November, 2022
-> +KernelVersion:	v6.2
-> +Contact:	linux-cxl@vger.kernel.org
-> +Description:
-> +		(WO) When a boolean 'true' is written to this attribute the
-> +		memdev driver retrieves the poison list from the device. The
-> +		list consists of addresses that are poisoned, or would result
-> +		in poison if accessed, and the source of the poison. This
-> +		attribute is only visible for devices supporting the
-> +		capability. The retrieved errors are logged as kernel
-> +		trace events with the label 'cxl_poison'.
-> diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
-> index a74a93310d26..e0af7e9c9989 100644
-> --- a/drivers/cxl/core/memdev.c
-> +++ b/drivers/cxl/core/memdev.c
-> @@ -106,12 +106,49 @@ static ssize_t numa_node_show(struct device *dev, struct device_attribute *attr,
->  }
->  static DEVICE_ATTR_RO(numa_node);
->  
-> +static ssize_t trigger_poison_list_store(struct device *dev,
-> +					 struct device_attribute *attr,
-> +					 const char *buf, size_t len)
-> +{
-> +	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
-> +	struct cxl_dev_state *cxlds = cxlmd->cxlds;
-> +	u64 offset, length;
-> +	bool tmp;
-> +	int rc;
-> +
-> +	if (kstrtobool(buf, &tmp))
-> +		return -EINVAL;
-> +
-> +	/* CXL 3.0 Spec 8.2.9.8.4.1 Separate pmem and ram poison requests */
-> +	if (resource_size(&cxlds->pmem_res)) {
-> +		offset = cxlds->pmem_res.start;
-> +		length = resource_size(&cxlds->pmem_res);
-> +		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +	if (resource_size(&cxlds->ram_res)) {
-> +		offset = cxlds->ram_res.start;
-> +		length = resource_size(&cxlds->ram_res);
-> +		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
-> +		/*
-> +		 * Invalid Physical Address is not an error for
-> +		 * volatile addresses. Device support is optional.
-> +		 */
-> +		if (rc && rc != -EFAULT)
-> +			return rc;
-> +	}
-> +	return len;
-> +}
-> +static DEVICE_ATTR_WO(trigger_poison_list);
-> +
->  static struct attribute *cxl_memdev_attributes[] = {
->  	&dev_attr_serial.attr,
->  	&dev_attr_firmware_version.attr,
->  	&dev_attr_payload_max.attr,
->  	&dev_attr_label_storage_size.attr,
->  	&dev_attr_numa_node.attr,
-> +	&dev_attr_trigger_poison_list.attr,
->  	NULL,
->  };
->  
-> @@ -130,6 +167,14 @@ static umode_t cxl_memdev_visible(struct kobject *kobj, struct attribute *a,
->  {
->  	if (!IS_ENABLED(CONFIG_NUMA) && a == &dev_attr_numa_node.attr)
->  		return 0;
-> +
-> +	if (a == &dev_attr_trigger_poison_list.attr) {
-> +		struct device *dev = kobj_to_dev(kobj);
-> +
-> +		if (!test_bit(CXL_MEM_COMMAND_ID_GET_POISON,
-> +			      to_cxl_memdev(dev)->cxlds->enabled_cmds))
-> +			return 0;
-> +	}
->  	return a->mode;
->  }
->  
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index f53fae20f502..28ba0cd8f2d3 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -139,7 +139,7 @@ struct cxl_mbox_cmd {
->  	C(FWROLLBACK, -ENXIO, "rolled back to the previous active FW"),         \
->  	C(FWRESET, -ENXIO, "FW failed to activate, needs cold reset"),		\
->  	C(HANDLE, -ENXIO, "one or more Event Record Handles were invalid"),     \
-> -	C(PADDR, -ENXIO, "physical address specified is invalid"),		\
-> +	C(PADDR, -EFAULT, "physical address specified is invalid"),		\
->  	C(POISONLMT, -ENXIO, "poison injection limit has been reached"),        \
->  	C(MEDIAFAILURE, -ENXIO, "permanent issue with the media"),		\
->  	C(ABORT, -ENXIO, "background cmd was aborted by device"),               \
+for you to fetch changes up to 53c60d1004270045d63cdee91aa77c145282d7e4:
 
+  dt-bindings: mailbox: qcom-ipcc: Add compatible for SM8550
+(2022-12-18 20:40:31 -0600)
+
+----------------------------------------------------------------
+- qcom: enable sc8280xp, sm8550 and sm4250 support
+- ti: default to ARCH_K3 for msg manager
+- mediatek: add mt8188 and mt8186 support
+            request irq only after got ready
+- zynq-ipi: fix error handling after device_register
+- mpfs: check sys-con status
+- rockchip: simplify by using device_get_match_data
+
+----------------------------------------------------------------
+Abel Vesa (1):
+      dt-bindings: mailbox: qcom-ipcc: Add compatible for SM8550
+
+AngeloGioacchino Del Regno (1):
+      mailbox: mtk-cmdq-mailbox: Use platform data directly instead of copying
+
+Bhupesh Sharma (2):
+      dt-bindings: mailbox: qcom: Add SM4250 APCS compatible
+      mailbox: qcom-apcs-ipc: Add SM4250 APCS IPC support
+
+Conor Dooley (1):
+      mailbox: mpfs: read the system controller's status
+
+Elvis Wang (2):
+      dt-bindings: mailbox: add GCE header file for mt8188
+      dt-bindings: mailbox: mediatek,gce-mailbox: add mt8188 compatible name
+
+Luca Weiss (1):
+      dt-bindings: mailbox: qcom-ipcc: Add sc8280xp compatible
+
+Nicolas Frayer (1):
+      mailbox: config: ti-msgmgr: Default set to ARCH_K3 for TI msg manager
+
+Ricardo Ribalda (1):
+      mailbox: mtk-cmdq: Do not request irq until we are ready
+
+Yang Yingliang (2):
+      mailbox: arm_mhuv2: Fix return value check in mhuv2_probe()
+      mailbox: zynq-ipi: fix error handling while device_register() fails
+
+Yongqiang Niu (4):
+      mailbox: mtk-cmdq: Use GCE_CTRL_BY_SW definition instead of number
+      mailbox: mtk-cmdq: add gce software ddr enable private data
+      mailbox: mtk-cmdq: add gce ddr enable support flow
+      mailbox: mtk-cmdq: add MT8186 support
+
+ye xingchen (1):
+      mailbox: rockchip: Use device_get_match_data() to simplify the code
+
+ .../bindings/mailbox/mediatek,gce-mailbox.yaml     |   1 +
+ .../bindings/mailbox/qcom,apcs-kpss-global.yaml    |   1 +
+ .../devicetree/bindings/mailbox/qcom-ipcc.yaml     |   4 +-
+ drivers/mailbox/Kconfig                            |   1 +
+ drivers/mailbox/arm_mhuv2.c                        |   4 +-
+ drivers/mailbox/mailbox-mpfs.c                     |  31 +-
+ drivers/mailbox/mtk-cmdq-mailbox.c                 | 130 ++-
+ drivers/mailbox/qcom-apcs-ipc-mailbox.c            |   1 +
+ drivers/mailbox/rockchip-mailbox.c                 |   4 +-
+ drivers/mailbox/zynqmp-ipi-mailbox.c               |   4 +-
+ include/dt-bindings/mailbox/mediatek,mt8188-gce.h  | 967 +++++++++++++++++++++
+ 11 files changed, 1090 insertions(+), 58 deletions(-)
+ create mode 100644 include/dt-bindings/mailbox/mediatek,mt8188-gce.h
