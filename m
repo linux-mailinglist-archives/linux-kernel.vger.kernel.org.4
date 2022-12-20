@@ -2,54 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A148652927
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 23:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A1B65292A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 23:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiLTWpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 17:45:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
+        id S229448AbiLTWtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 17:49:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiLTWpE (ORCPT
+        with ESMTP id S229451AbiLTWti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 17:45:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C1DFCD8;
-        Tue, 20 Dec 2022 14:45:03 -0800 (PST)
+        Tue, 20 Dec 2022 17:49:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C171A801;
+        Tue, 20 Dec 2022 14:49:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2875B61502;
-        Tue, 20 Dec 2022 22:45:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC4A1C433D2;
-        Tue, 20 Dec 2022 22:45:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5D48B81982;
+        Tue, 20 Dec 2022 22:49:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEE36C433EF;
+        Tue, 20 Dec 2022 22:49:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671576302;
-        bh=5IELGNaBxVETUQUabu4l0UoJNA+N6l/vC4jUFz5K578=;
+        s=k20201202; t=1671576574;
+        bh=4wODmTjWcv6PbL1g82ucHA5Q1cZyzD8D2OlhOsOTZD4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jqOFxGduPFwaIXvWUGHJrw+Bk/wQyGVrQ0l4gQf8rIfoxKqmrL1D/sarA9sj68/yf
-         lPc8SPAW7Bo+qdpY/sx87YZXOZbFabl3LhFDZHYuXRjTESSxCkj0fr9Up8Hc6tLOTT
-         6/WRx+Ho5rKdlqW4lCuxT6UEk5qT60vDQDldrnoRgaYGWw07U4beumuYrIblKtIw50
-         c+UFdnzctNI2u7AGMyYwK86z9E36O1549IDqlJ/e8xgF+0mzNmLxermsLfBVNPoGcm
-         fCD9LJ81qUN3uWBhR6rQOQlkEAWi0CW10s5dRH/bYYbB1lksptFwaebm+wJFhTwI6z
-         YUtj1imCiC8Cg==
-Date:   Tue, 20 Dec 2022 23:44:59 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
-Message-ID: <20221220224459.GA25175@lothringen>
-References: <20221220140714.GB22763@lothringen>
- <CA83E649-8C79-4D39-9BFE-BBEF95968B98@joelfernandes.org>
+        b=kz7yPoUPqqRMy5nk4QHcbiZ7Pyrz9cvx7gQ21k4OlhB+olAQu9l9Tl2Wayy4hTMKk
+         +ju4cn2E1NSUqsjhiN8M6UR3fmdWzrP7dMhGOV0sVRZDZ331wl3se3sVx+JcNHrt3E
+         vwyDd5Gxn0p97Tsvp2JPIKfmMj2Z85R9XTq9CVKneg2zeCNddb2Z0NFzfad7prWcID
+         MupBssUJz33BpeVaf5yBhPfys4mgbHbMJIxwYUzRaEtk0sZ3ooeWcQgBkELaSjDQef
+         UakD5z+Hhc2idqjBA/OW403J+R/7WTf8LD8l2WOLv7kbILv5j1Th9KTDfGdVzK0Xzj
+         rdOLnqDqqQFNw==
+Date:   Tue, 20 Dec 2022 22:49:29 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 06/11] reset: starfive: jh71x0: Use 32bit I/O on 32bit
+ registers
+Message-ID: <Y6I7+apspEgczfzG@spud>
+References: <20221220005054.34518-1-hal.feng@starfivetech.com>
+ <20221220005054.34518-7-hal.feng@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="9bznr0tDVP4t2+zy"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA83E649-8C79-4D39-9BFE-BBEF95968B98@joelfernandes.org>
+In-Reply-To: <20221220005054.34518-7-hal.feng@starfivetech.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,84 +63,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 09:20:08AM -0500, Joel Fernandes wrote:
-> > On Dec 20, 2022, at 9:07 AM, Frederic Weisbecker <frederic@kernel.org> wrote:
-> > 
-> > ﻿On Tue, Dec 20, 2022 at 08:44:40AM -0500, Joel Fernandes wrote:
-> >>> C w-depend-r
-> >>> 
-> >>> {
-> >>>   PLOCK=LOCK0;
-> >>> }
-> >>> 
-> >>> // updater
-> >>> P0(int *LOCK1, int **PLOCK)
-> >>> {
-> >>>   int lock1;
-> >>> 
-> >>>   lock1 = READ_ONCE(*LOCK1); // READ from inactive idx
-> >>>   smp_mb();
-> >>>   WRITE_ONCE(*PLOCK, LOCK1); // Flip idx
-> >>> }
-> >>> 
-> >>> // reader
-> >>> P1(int **PLOCK)
-> >>> {
-> >>>   int *plock;
-> >>> 
-> >>>   plock = READ_ONCE(*PLOCK);    // Read active idx
-> >>>   WRITE_ONCE(*plock, 1); // Write to active idx
-> >> 
-> >> I am a bit lost here, why would the reader want to write to the active idx?
-> >> The reader does not update the idx, only the lock count.
-> > 
-> > So &ssp->sda->srcu_lock_count is the base address and idx is the offset, right?
-> > The write is then displayed that way:
-> > 
-> >     this_cpu_inc(ssp->sda->srcu_lock_count[idx].counter);
-> > 
-> > But things could be also thought the other way around with idx being the base address and
-> > ssp->sda->srcu_lock_count being the offset.
-> > 
-> >     this_cpu_inc(idx[ssp->sda->srcu_lock_count].counter);
-> > 
-> > That would require to change some high level types but the result would be the same from
-> > the memory point of view (and even from the ASM point of view). In the end we
-> > are dealing with the same address and access.
-> > 
-> > Now ssp->sda->srcu_lock_count is a constant address value. It doesn't change.
-> > So it can be zero for example. Then the above increment becomes:
-> > 
-> >   this_cpu_inc(idx.counter);
-> > 
-> > And then it can be modelized as in the above litmus test.
-> > 
-> > I had to play that trick because litmus doesn't support arrays but I believe
-> > it stands. Now of course I may well have got something wrong since I've always
-> > been terrible at maths...
-> 
-> Ah ok, I get where you were going with that. Yes there is address dependency
-> between reading idx and writing lock count. But IMHO, the access on the update
-> side is trying to order write to index, and reads from a lock count of a
-> previous index (as far as E / B+C is concerned). So IMHO, on the read side you
-> have to consider 2 consecutive readers and not the same reader in order to
-> pair the same accesses correctly. But I could be missing something.
 
-And you're right, for the first part of the comment (let's call that (1)):
+--9bznr0tDVP4t2+zy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-	 * Ensure that if this updater saw a given reader's increment
-	 * from __srcu_read_lock(), that reader was using an old value
-	 * of ->srcu_idx.
+On Tue, Dec 20, 2022 at 08:50:49AM +0800, Hal Feng wrote:
+> From: Emil Renner Berthing <kernel@esmil.dk>
+>=20
+> We currently use 64bit I/O on the 32bit registers. This works because
+> there are an even number of assert and status registers, so they're only
+> ever accessed in pairs on 64bit boundaries.
+>=20
+> There are however other reset controllers for audio and video on the
+> JH7100 SoC with only one status register that isn't 64bit aligned so
+> 64bit I/O results in an unaligned access exception.
+>=20
+> Switch to 32bit I/O in preparation for supporting these resets too.
+>=20
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> ---
+>  .../reset/starfive/reset-starfive-jh7100.c    | 14 ++++-----
+>  .../reset/starfive/reset-starfive-jh71x0.c    | 31 +++++++++----------
+>  .../reset/starfive/reset-starfive-jh71x0.h    |  2 +-
+>  3 files changed, 23 insertions(+), 24 deletions(-)
+>=20
+> diff --git a/drivers/reset/starfive/reset-starfive-jh7100.c b/drivers/res=
+et/starfive/reset-starfive-jh7100.c
+> index 5f06e5ae3346..2a56f7fd4ba7 100644
+> --- a/drivers/reset/starfive/reset-starfive-jh7100.c
+> +++ b/drivers/reset/starfive/reset-starfive-jh7100.c
+> @@ -30,16 +30,16 @@
+>   * lines don't though, so store the expected value of the status registe=
+rs when
+>   * all lines are asserted.
+>   */
+> -static const u64 jh7100_reset_asserted[2] =3D {
+> +static const u32 jh7100_reset_asserted[4] =3D {
+>  	/* STATUS0 */
+> -	BIT_ULL_MASK(JH7100_RST_U74) |
+> -	BIT_ULL_MASK(JH7100_RST_VP6_DRESET) |
+> -	BIT_ULL_MASK(JH7100_RST_VP6_BRESET) |
+> +	BIT(JH7100_RST_U74 % 32) |
+> +	BIT(JH7100_RST_VP6_DRESET % 32) |
+> +	BIT(JH7100_RST_VP6_BRESET % 32),
 
-My litmus test shows the ordering displayed in the second part of the comment
-(call it (2)):
+And this change is required cos BITS_PER_LONG is 64 for rv64 and
+therefore you cannot use BIT_MASK, right?
 
-         * Also ensure that if a given reader sees the
-	 * new value of ->srcu_idx, this updater's earlier scans cannot
-	 * have seen that reader's increments (which is OK, because this
-	 * grace period need not wait on that reader).
+Otherwise, does look to be a 64 -> 32 conversion, `word-diff` coming in
+super handy for this series!
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-_ In (1), E indeed pairs with B and C
-_ In (2), E pairs with the address-dependency between idx and lock_count.
+>  	/* STATUS1 */
+> -	BIT_ULL_MASK(JH7100_RST_HIFI4_DRESET) |
+> -	BIT_ULL_MASK(JH7100_RST_HIFI4_BRESET),
+> +	BIT(JH7100_RST_HIFI4_DRESET % 32) |
+> +	BIT(JH7100_RST_HIFI4_BRESET % 32),
+>  	/* STATUS2 */
+> -	BIT_ULL_MASK(JH7100_RST_E24) |
+> +	BIT(JH7100_RST_E24 % 32),
+>  	/* STATUS3 */
+>  	0,
+>  };
+> diff --git a/drivers/reset/starfive/reset-starfive-jh71x0.c b/drivers/res=
+et/starfive/reset-starfive-jh71x0.c
+> index 1f201c612583..c62d0c309c62 100644
+> --- a/drivers/reset/starfive/reset-starfive-jh71x0.c
+> +++ b/drivers/reset/starfive/reset-starfive-jh71x0.c
+> @@ -8,7 +8,6 @@
+>  #include <linux/bitmap.h>
+>  #include <linux/device.h>
+>  #include <linux/io.h>
+> -#include <linux/io-64-nonatomic-lo-hi.h>
+>  #include <linux/iopoll.h>
+>  #include <linux/reset-controller.h>
+>  #include <linux/spinlock.h>
+> @@ -19,7 +18,7 @@ struct jh71x0_reset {
+>  	spinlock_t lock;
+>  	void __iomem *assert;
+>  	void __iomem *status;
+> -	const u64 *asserted;
+> +	const u32 *asserted;
+>  };
+> =20
+>  static inline struct jh71x0_reset *
+> @@ -32,12 +31,12 @@ static int jh71x0_reset_update(struct reset_controlle=
+r_dev *rcdev,
+>  			       unsigned long id, bool assert)
+>  {
+>  	struct jh71x0_reset *data =3D jh71x0_reset_from(rcdev);
+> -	unsigned long offset =3D BIT_ULL_WORD(id);
+> -	u64 mask =3D BIT_ULL_MASK(id);
+> -	void __iomem *reg_assert =3D data->assert + offset * sizeof(u64);
+> -	void __iomem *reg_status =3D data->status + offset * sizeof(u64);
+> -	u64 done =3D data->asserted ? data->asserted[offset] & mask : 0;
+> -	u64 value;
+> +	unsigned long offset =3D id / 32;
+> +	u32 mask =3D BIT(id % 32);
+> +	void __iomem *reg_assert =3D data->assert + offset * sizeof(u32);
+> +	void __iomem *reg_status =3D data->status + offset * sizeof(u32);
+> +	u32 done =3D data->asserted ? data->asserted[offset] & mask : 0;
+> +	u32 value;
+>  	unsigned long flags;
+>  	int ret;
+> =20
+> @@ -46,15 +45,15 @@ static int jh71x0_reset_update(struct reset_controlle=
+r_dev *rcdev,
+> =20
+>  	spin_lock_irqsave(&data->lock, flags);
+> =20
+> -	value =3D readq(reg_assert);
+> +	value =3D readl(reg_assert);
+>  	if (assert)
+>  		value |=3D mask;
+>  	else
+>  		value &=3D ~mask;
+> -	writeq(value, reg_assert);
+> +	writel(value, reg_assert);
+> =20
+>  	/* if the associated clock is gated, deasserting might otherwise hang f=
+orever */
+> -	ret =3D readq_poll_timeout_atomic(reg_status, value, (value & mask) =3D=
+=3D done, 0, 1000);
+> +	ret =3D readl_poll_timeout_atomic(reg_status, value, (value & mask) =3D=
+=3D done, 0, 1000);
+> =20
+>  	spin_unlock_irqrestore(&data->lock, flags);
+>  	return ret;
+> @@ -88,10 +87,10 @@ static int jh71x0_reset_status(struct reset_controlle=
+r_dev *rcdev,
+>  			       unsigned long id)
+>  {
+>  	struct jh71x0_reset *data =3D jh71x0_reset_from(rcdev);
+> -	unsigned long offset =3D BIT_ULL_WORD(id);
+> -	u64 mask =3D BIT_ULL_MASK(id);
+> -	void __iomem *reg_status =3D data->status + offset * sizeof(u64);
+> -	u64 value =3D readq(reg_status);
+> +	unsigned long offset =3D id / 32;
+> +	u32 mask =3D BIT(id % 32);
+> +	void __iomem *reg_status =3D data->status + offset * sizeof(u32);
+> +	u32 value =3D readl(reg_status);
+> =20
+>  	return !((value ^ data->asserted[offset]) & mask);
+>  }
+> @@ -105,7 +104,7 @@ static const struct reset_control_ops jh71x0_reset_op=
+s =3D {
+> =20
+>  int reset_starfive_jh71x0_register(struct device *dev, struct device_nod=
+e *of_node,
+>  				   void __iomem *assert, void __iomem *status,
+> -				   const u64 *asserted, unsigned int nr_resets,
+> +				   const u32 *asserted, unsigned int nr_resets,
+>  				   struct module *owner)
+>  {
+>  	struct jh71x0_reset *data;
+> diff --git a/drivers/reset/starfive/reset-starfive-jh71x0.h b/drivers/res=
+et/starfive/reset-starfive-jh71x0.h
+> index ac9e80dd3f59..db7d39a87f87 100644
+> --- a/drivers/reset/starfive/reset-starfive-jh71x0.h
+> +++ b/drivers/reset/starfive/reset-starfive-jh71x0.h
+> @@ -8,7 +8,7 @@
+> =20
+>  int reset_starfive_jh71x0_register(struct device *dev, struct device_nod=
+e *of_node,
+>  				   void __iomem *assert, void __iomem *status,
+> -				   const u64 *asserted, unsigned int nr_resets,
+> +				   const u32 *asserted, unsigned int nr_resets,
+>  				   struct module *owner);
+> =20
+>  #endif /* __RESET_STARFIVE_JH71X0_H */
+> --=20
+> 2.38.1
+>=20
+>=20
 
-Thanks.
+--9bznr0tDVP4t2+zy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6I7+QAKCRB4tDGHoIJi
+0mIGAP9Lzp79OLLpHZnDGnKCol5QCgY02fi/AfBG4nDnjLwJ/gD+MMUiXSzwHsk4
+slBi8jzod3luuZHPdATCJZIFe/AONQg=
+=ND0s
+-----END PGP SIGNATURE-----
+
+--9bznr0tDVP4t2+zy--
