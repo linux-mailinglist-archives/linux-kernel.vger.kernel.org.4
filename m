@@ -2,111 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF54651FBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:33:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D8D651FC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 12:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiLTLdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 06:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
+        id S232989AbiLTLdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 06:33:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233281AbiLTLcz (ORCPT
+        with ESMTP id S233462AbiLTLcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 20 Dec 2022 06:32:55 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33ACF18E34;
-        Tue, 20 Dec 2022 03:32:52 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BKBWZic121289;
-        Tue, 20 Dec 2022 05:32:35 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1671535955;
-        bh=Hv0mbIKFyBb598pquBKlVFVb7r1h3Fu4j9stmCLwOV4=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=PHTk9AE9xGEYTv0kO727iLPBYS8JmgogTJk9aK8sEeT+pZdlaCczXhVh/VwzkfDrB
-         j3EqR42a3diUrKsP4bgTL53ArX78A83/GbZnCR21dH557XIjs2n9ihuJyGpFgHUa0+
-         2ZBwEUyKyq0XvZrj6+NDtza/VCR00Eu5mhC08ahY=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BKBWZdD129770
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 20 Dec 2022 05:32:35 -0600
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 20
- Dec 2022 05:32:35 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 20 Dec 2022 05:32:35 -0600
-Received: from [10.250.232.115] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BKBWVRq010449;
-        Tue, 20 Dec 2022 05:32:32 -0600
-Message-ID: <d882df13-33e6-db53-e59e-53419db4255d@ti.com>
-Date:   Tue, 20 Dec 2022 17:02:30 +0530
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11F08FF9;
+        Tue, 20 Dec 2022 03:32:53 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 668B91EC01A9;
+        Tue, 20 Dec 2022 12:32:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1671535972;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=wyzmMh12AaSVV79EeqKy/Z7fsafEU9gQ+LmCE+KG+KU=;
+        b=MUUCsxZak/9lH5l9wDluLn9SmGkROwMkDwX3t4XZYsW4yGHs7sY5xxcLNaBSR/QO6CKBys
+        1m3UJXRwOfgyfkAFC9fu+/kMPByCRcw84M1Tpp2/aiDzEsEcHMmC2lYe6KO7hDMBFHmVc0
+        jWNp3LKRIz3whhea1YxwNJ96pGT5f+0=
+Date:   Tue, 20 Dec 2022 12:32:46 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v4 05/39] x86/fpu/xstate: Introduce CET MSR and XSAVES
+ supervisor states
+Message-ID: <Y6GdXvj2woHqG4qa@zn.tnic>
+References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
+ <20221203003606.6838-6-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 0/3] Improve K3-am625-sk support (USB, MMC)
-Content-Language: en-US
-To:     Sjoerd Simons <sjoerd@collabora.com>, Nishanth Menon <nm@ti.com>
-CC:     <martyn.welch@collabora.com>, Nitin Yadav <n-yadav@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221216143624.23708-1-sjoerd@collabora.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20221216143624.23708-1-sjoerd@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221203003606.6838-6-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Dec 02, 2022 at 04:35:32PM -0800, Rick Edgecombe wrote:
+> @@ -252,6 +254,14 @@ struct pkru_state {
+>  	u32				pad;
+>  } __packed;
+>  
+> +/*
+> + * State component 11 is Control-flow Enforcement user states
+> + */
+> +struct cet_user_state {
+> +	u64 user_cet;			/* user control-flow settings */
+> +	u64 user_ssp;			/* user shadow stack pointer */
 
-On 16/12/22 8:06 pm, Sjoerd Simons wrote:
-> 
-> This series picks up a few patches from the TI BSP tree that
-> unfortunately didn't make it upstream thusfar.
-> 
-> The first patch improve SD card compatibility (allowing U1 class cards
-> to be used), the remaining ones add USB support.
-> 
-> The type-c connector isn't entirely modelled with these changes as
-> it goes through a TPS6598 PD controller. Unfortunately the dtb bindings
-> for that currently require an irq line, which is not connected on E1 and
-> E2 version boards. The patchese to support this setup unfortunately didn't land
-> yet[0].. As such the last patch ignored the PD controller and simply
-> configures usb0 as periphal only rather then mode switch capable, which
-> at least gives some basic usability of that USB port.
-> 
-> 0: https://lore.kernel.org/lkml/f714ee55-ef47-317d-81b9-57020dda064b@ti.com/T/
-> 
-> 
-Really appreciate porting and posting these patches to mainline!
-Wondering what tree are these patches based on?
-I cannot apply cleanly on linux-next.
+Please put those side comments over the members, like struct fpstate
+does it in that same file.
 
+Rest looks good.
 
-> Aswath Govindraju (2):
->   arm64: dts: ti: k3-am62-main: Add support for USB
->   arm64: dts: ti: k3-am625-sk: Add support for USB
-> 
-> Nitin Yadav (1):
->   arm64: dts: ti: k3-am62-main: Update OTAP and ITAP delay select
-> 
->  arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 90 ++++++++++++++++++------
->  arch/arm64/boot/dts/ti/k3-am625-sk.dts   | 22 ++++++
->  2 files changed, 90 insertions(+), 22 deletions(-)
-> 
+Thx.
 
-Regards
-Vignesh
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
