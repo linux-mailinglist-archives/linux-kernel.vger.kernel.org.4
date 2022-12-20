@@ -2,109 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C98652561
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7638C652544
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 18:11:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233794AbiLTRPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 12:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
+        id S234137AbiLTRLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 12:11:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232195AbiLTROm (ORCPT
+        with ESMTP id S234026AbiLTRKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 12:14:42 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE283E4F;
-        Tue, 20 Dec 2022 09:14:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671556470; x=1703092470;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9d1nJaAzSfJTMXVymi/H0f1f3ZOMiYblofLgN80VI2Y=;
-  b=kZ2uRO1Ijw7zVrxG1za+CMINZHxhmW25l/sU1D9f9FrpOtqUATkWly1w
-   pw2C30G9N0ZiJd6baSgNBIl5c0h7czddLbKpnHh07eN42zgwItY64bK0H
-   NopmKlxixpHKFtKYhbAZk5F5+hNuP1SZm4eLiaXGjfp9C4WQIvf4VDPn5
-   Txc56VRJw/USCIPhRE33C4bqL5VmbMy42HDx3PP6kYXp97oPshsHLRqtT
-   EYpyJL/LgPOj4aDGTpGuNF1vVrss8xBkKpXDnf9A0I3vP+RqoLQV+C3V6
-   UpPDnS9K05bt0vxVP2BR8fV4r3sb71VfFm3yC83iZjGR4qbx7MF/tK9ye
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="299337927"
-X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
-   d="scan'208";a="299337927"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 09:09:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="775401914"
-X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
-   d="scan'208";a="775401914"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 20 Dec 2022 09:09:23 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p7g7E-00D1Kc-1b;
-        Tue, 20 Dec 2022 19:09:20 +0200
-Date:   Tue, 20 Dec 2022 19:09:20 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com, bagasdotme@gmail.com
-Subject: Re: [PATCH v7 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-Message-ID: <Y6HsQJQMDnHgTesF@smile.fi.intel.com>
-References: <20221220163652.499831-1-matthew.gerlach@linux.intel.com>
- <20221220163652.499831-5-matthew.gerlach@linux.intel.com>
+        Tue, 20 Dec 2022 12:10:45 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B39C1E
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 09:10:43 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id c13so8936160pfp.5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 09:10:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=o6/NwTvG1ts0rBmQ9K+XNWZapy07EBTMQ36kpdSkC/M=;
+        b=SuEARZa3uOm8eCuCEdXiIA4dUUCYwaj39AXx4CUb7Emp5srU0IfqLWX6UpLoFkhSXZ
+         4Mpvt6m02Lqbp9omusDqgAq5VhcKkgz7khoAAomedfqx1V48/bPStI1ncUcCylbg3I2B
+         QvcwA7StM6sYXK6TQSvsS6bPctruF9XULezH8Lijef5n63XHHBDfj+IyhhnuHi8c11pG
+         COmMgXNoS1H6eAQYcE3YfG8lCkOqNNS5AHqbwi37wmrPl82aRzed5fYoPwcrKAG/N8oy
+         rfIY2P6TciwstqsQc+Ngkgjr0l5NSK64VOq0/LdvgV/kIm8z/2sbGCgsjdmP8Xyo6EqH
+         nA7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o6/NwTvG1ts0rBmQ9K+XNWZapy07EBTMQ36kpdSkC/M=;
+        b=4t1RGhW2ZmHV8b1eC8SbLVOTNHRvBJOhQmFaKG/V+JCpbG77ZDr4UWjj2ts/nnDX0S
+         7YBs4K8d6Z58UtAlMXIilchdkgohjieJE9Cd8rq1+o0vYNe+wr9ix6dMPQ7uFGA/D/eh
+         41F1s6soie42utSkz/Lifd4KnARkHFhzS47OUmhA9gAL/yTQaw6Ex5VF8aOU+kUyLBOI
+         erjNZ8iHWqEvRD1cosntSlYsTjKPcDSXw30usSUsQHXLl+Zv6v5aBDt56YGSdIcXBQQE
+         cIYKkQ/kZ9BksAnOa8McELUJn1pEpNPXWouNG7gwWrSeOb2BMEtE/AItIgAHCffNk3Tj
+         RLYQ==
+X-Gm-Message-State: ANoB5pmg6o3pm5E78VA1IkfZF+nkSoJYSUAAXecUOqZ09rwJLkCv5Ecp
+        zVXovYOe/tqh9PxGPOQ6Stus+2Fm3ezZiCZHnMengA==
+X-Google-Smtp-Source: AA0mqf4ZwwT4lP5lED/bdOCSru0RBf/NPcsWF81/I6R8hZ5dZvndnY8Ixug9Xf50fLBW1lod+238c4F2sWPMYEy34po=
+X-Received: by 2002:a63:2160:0:b0:46f:f26e:e8ba with SMTP id
+ s32-20020a632160000000b0046ff26ee8bamr74067527pgm.250.1671556242235; Tue, 20
+ Dec 2022 09:10:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221220163652.499831-5-matthew.gerlach@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000a20a2e05f029c577@google.com> <Y6B3xEgkbmFUCeni@hirez.programming.kicks-ass.net>
+ <Y6C8iQGENUk/XY/A@google.com> <Y6Fw1ymTcFrMR3Hl@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y6Fw1ymTcFrMR3Hl@hirez.programming.kicks-ass.net>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Tue, 20 Dec 2022 09:10:30 -0800
+Message-ID: <CAKH8qBs1UiikX=_CBzRC_2rg3sp8CU5hhB7sOkNkNBqm8OqFEw@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in put_pmu_ctx
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     syzbot <syzbot+b8e8c01c8ade4fe6e48f@syzkaller.appspotmail.com>,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        bpf@vger.kernel.org, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: multipart/mixed; boundary="0000000000000ba28505f0458408"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 08:36:52AM -0800, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> 
-> Add a Device Feature List (DFL) bus driver for the Altera
-> 16550 implementation of UART.
+--0000000000000ba28505f0458408
+Content-Type: text/plain; charset="UTF-8"
 
-In general the code here looks good to me, but one thing to discuss due to
-comment to the previous patch(es).
+On Tue, Dec 20, 2022 at 12:22 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, Dec 19, 2022 at 11:33:29AM -0800, sdf@google.com wrote:
+> > On 12/19, Peter Zijlstra wrote:
+> > > On Mon, Dec 19, 2022 at 12:04:43AM -0800, syzbot wrote:
+>
+> > > > HEAD commit:    13e3c7793e2f Merge tag 'for-netdev' of
+> > > https://git.kernel...
+> > > > git tree:       bpf
+> > > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=177df7e0480000
+> > > > kernel config:
+> > > https://syzkaller.appspot.com/x/.config?x=b0e91ad4b5f69c47
+> > > > dashboard link:
+> > > https://syzkaller.appspot.com/bug?extid=b8e8c01c8ade4fe6e48f
+>
+> ^ so syzbot knows what tree and config were used to trigger the report,
+> then why:
 
-...
+I haven't used it before and wasn't sure whether it would take the
+last commit from the branch of the one where it failed. Adding them
+shouldn't hurt, right?
 
-> +	u64 *p;
-> +
-> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ);
-> +	if (!p)
-> +		return dev_err_probe(dev, -EINVAL, "missing CLK_FRQ param\n");
-> +
-> +	p++;
-> +	uart->port.uartclk = *p;
+> > Let's maybe try it this way:
+> >
+> > #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
+> > 13e3c7793e2f
+>
+> do you have to repeat that again in order for it to test something?
 
-So, here and the below is using always the second u64 from the returned data.
-Does it mean:
-- we always skip the first u64 from the returned buffer and hence... (see below)
-- we may actually return the second u64 as a plain number (not a pointer) from
-  (an additional?) API? In such case we would not need to take care about this
-  p++; lines here and there.
-- we have fixed length of the data, returned by find_param(), i.e. 2 u64 words?
+Yeah, I was trying to understand why it doesn't like my patch. It
+seems I can retry with the patch attached which hopefully should fix
+the possible formatting issue; let's see.
 
--- 
-With Best Regards,
-Andy Shevchenko
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
+13e3c7793e2f
 
+--0000000000000ba28505f0458408
+Content-Type: text/x-patch; charset="US-ASCII"; name="pmu.patch"
+Content-Disposition: attachment; filename="pmu.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_lbwhemfp0>
+X-Attachment-Id: f_lbwhemfp0
 
+ZGlmZiAtLWdpdCBhL2tlcm5lbC9ldmVudHMvY29yZS5jIGIva2VybmVsL2V2ZW50cy9jb3JlLmMK
+aW5kZXggZTQ3OTE0YWM4NzMyLi5iYmZmNTUxNzgzZTEgMTAwNjQ0Ci0tLSBhL2tlcm5lbC9ldmVu
+dHMvY29yZS5jCisrKyBiL2tlcm5lbC9ldmVudHMvY29yZS5jCkBAIC0xMjY4OSw3ICsxMjY4OSw4
+IEBAIFNZU0NBTExfREVGSU5FNShwZXJmX2V2ZW50X29wZW4sCiAJcmV0dXJuIGV2ZW50X2ZkOwog
+CiBlcnJfY29udGV4dDoKLQkvKiBldmVudC0+cG11X2N0eCBmcmVlZCBieSBmcmVlX2V2ZW50KCkg
+Ki8KKwlwdXRfcG11X2N0eChldmVudC0+cG11X2N0eCk7CisJZXZlbnQtPnBtdV9jdHggPSBOVUxM
+OyAvKiBfZnJlZV9ldmVudCgpICovCiBlcnJfbG9ja2VkOgogCW11dGV4X3VubG9jaygmY3R4LT5t
+dXRleCk7CiAJcGVyZl91bnBpbl9jb250ZXh0KGN0eCk7Cg==
+--0000000000000ba28505f0458408--
