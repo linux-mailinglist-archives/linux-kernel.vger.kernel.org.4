@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD6965276F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 20:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC19C652773
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 20:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234242AbiLTTzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 14:55:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40024 "EHLO
+        id S234154AbiLTT4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 14:56:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234198AbiLTTyL (ORCPT
+        with ESMTP id S233802AbiLTT4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 14:54:11 -0500
+        Tue, 20 Dec 2022 14:56:21 -0500
 Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E846E1EAC9
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 11:53:36 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id c140so14139792ybf.11
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 11:53:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA111AD83
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 11:55:46 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id o127so14162132yba.5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 11:55:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cwnFJcsPqbI2VW6I+d19akHrm08uYcpLxkV9m2vTx7w=;
-        b=N3VO6fanbQzcFw59rJk0rVdplAN7v/iHLbeJj+WFonDxzSeTtb0ll+pVmlMqhBYsl4
-         SJ3CxZ0uhpHf7rNAKLG8lei3eumcjLyNQrqGRCiqT7hq7GwYWrSfWeouZaBZB7VIHQTq
-         JC5OAOzb2isd15RQvajiIZOtGFHt1Bks++0AQdaLrIQR62gzFD7KJ8oot/Ipp773F9SN
-         GULsheIgURn7bGYRfPlPtkgOJJczRme9Oz9FT0+AAmgw/da/hLFxyLdipTc46iWG90kJ
-         Pt1QnGTQiaOKEL98hdGcqlDwXQwOzHToZA1GGEwc3qujLTZCso5E6yq6V2yYmAuYZIiL
-         7QEg==
+        bh=T6Ibv8lELNGtBRxXq2xqbZ6XNIWdISjKd5l36khEMAE=;
+        b=KSZwcjFTFFO55WSmVmRgONnRwskWoYawCL4xr2GcTp5EfCyO5dWsx7AbSD6Ir/ybby
+         C7hVXroJGbjMZ6JZecHbZizIkqMntO9LCfTQjh70KYV62x3n7GT3pigY+IdDXJ6+hW0U
+         mEwxE2cJuzhZ473p3CRLSLMKt5y1k+WqODiXLaurmLprlQIu83KIRui/7aB62vVSerFG
+         oJ6BbA0p2cayN9RAavaPE83CL3JFmwg8mr83/EY4R4NMFXcDSamu5fqDMXFsJi4+yNTL
+         KYFBpfYMu9bW5ttoTGe9B6d7fqichfkqe1iiFZLjZZbtB+BAkuBEyxDREF+RcnvyviBH
+         sPNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cwnFJcsPqbI2VW6I+d19akHrm08uYcpLxkV9m2vTx7w=;
-        b=tiryZC9xhIStEf3bkeRdolZludIshs5yJW5owA7nppQzE0bny0fcrrl8/MEVMlTFdZ
-         bPRG1J712Dl67r6PI+t5x5ooE/SJgAPDTV0ORT6hEt/2937n6xvhkOdIYBl68HTstZxe
-         /3ezCCAJV50O2JLmt4G/de8TYiNvViY7pzhXlZaVVbtdbbI5w3l9nOpusXE3kcNTxYUl
-         DsdezABWkorct7Gqe636zQ3k8DY/Pfp3YG8eJndTcQvLYQboztsrVEVaKqY6VW3/mFXX
-         /N1ou7A0JnsUPg82BbfnaXDZ4uwDIr9tvlWUrabzGd+PDV2bvnRXbS2vRZIfGLctsB00
-         Ddaw==
-X-Gm-Message-State: AFqh2kq+q7idkcQvHcov21VtT4zT1nj7MnZ82zIT4ZDVN3PkRwaDYrle
-        z7rrVNM+WXzDL1m49ExkSfR7hssZmMbGj7yUvKpVCw==
-X-Google-Smtp-Source: AMrXdXten50mZXwWCtKExqPt0K7Es831NSWlVxmiQDT2EWU7O5xHDwK71SO8HCl1Op7eIvZmf0R5iZOgwen/jai4Qgs=
-X-Received: by 2002:a25:9847:0:b0:733:af24:fe57 with SMTP id
- k7-20020a259847000000b00733af24fe57mr1508197ybo.228.1671566016054; Tue, 20
- Dec 2022 11:53:36 -0800 (PST)
+        bh=T6Ibv8lELNGtBRxXq2xqbZ6XNIWdISjKd5l36khEMAE=;
+        b=cKl/QcID0eCwTdQjsiuUKw/ag1tpk9nXVMen7UWXDzWjsJu2eR5JsxPWf536jRUQZZ
+         RvQAjvb8r5519/qJHp/bh0/+ssNUAYl+JJkWsavharmKfSrpBkVGmhtGD7eCEHtgcRsT
+         j2BDNDsKhVDliRq5jmZ4JcdShRAqdwsvbmQOysODozzjt7Q0W0BgzHCGrNyEwSRyvkWR
+         pT2fwDz7LuI6n89f2YAWY8LUj6RaA1QyQaTeimeiAbtG1hse9LmsxwukyaBMscg+9i9h
+         m0aG9VYnSYFwUJuq2akxPl8NFENZ4n2z/nHspMa1Yq9iihDIKoEsxvELbzF7jJMlvv6L
+         steg==
+X-Gm-Message-State: ANoB5pkDBlv7YS0Ee0Yzv5zQ5cnbtXi8/x6aeICnbFIqmhDNNqzL4aSt
+        CWRMvI4XVqvpK1j3rQ1LV0Jy9sSn9sWI0JNBj6tr9g==
+X-Google-Smtp-Source: AA0mqf7NCtlgUgNd0Hd1SP3QL7km2fBfAOvVUDERTH4v4MYwU6+4xOVJ3IJ4IDEzTj4uQn7xjEc4O/4GfJxHa4RW258=
+X-Received: by 2002:a25:5047:0:b0:70b:e651:d1e6 with SMTP id
+ e68-20020a255047000000b0070be651d1e6mr6047265ybb.363.1671566145422; Tue, 20
+ Dec 2022 11:55:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20221220184813.1908318-1-roman.gushchin@linux.dev>
-In-Reply-To: <20221220184813.1908318-1-roman.gushchin@linux.dev>
+References: <20221220182745.1903540-1-roman.gushchin@linux.dev> <20221220182745.1903540-2-roman.gushchin@linux.dev>
+In-Reply-To: <20221220182745.1903540-2-roman.gushchin@linux.dev>
 From:   Shakeel Butt <shakeelb@google.com>
-Date:   Tue, 20 Dec 2022 11:53:25 -0800
-Message-ID: <CALvZod7WNxj0vdfiEad_xfBACsJu3iA0nF25m4VN3M=yLF4igg@mail.gmail.com>
-Subject: Re: [PATCH RFC] ipc/mqueue: introduce msg cache
-To:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
+Date:   Tue, 20 Dec 2022 11:55:34 -0800
+Message-ID: <CALvZod5q0koAckpTr4VBq-_KiQpsmC86bE4eP9gzX71PzRdicA@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/2] mm: kmem: optimize get_obj_cgroup_from_current()
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
         Michal Hocko <mhocko@kernel.org>,
         Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Waiman Long <longman@redhat.com>,
-        Sven Luther <Sven.Luther@windriver.com>
+        Andrew Morton <akpm@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -74,21 +71,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Vlastimil
-
-On Tue, Dec 20, 2022 at 10:48 AM Roman Gushchin
+On Tue, Dec 20, 2022 at 10:28 AM Roman Gushchin
 <roman.gushchin@linux.dev> wrote:
 >
-> Sven Luther reported a regression in the posix message queues
-> performance caused by switching to the per-object tracking of
-> slab objects introduced by patch series ending with the
-> commit 10befea91b61 ("mm: memcg/slab: use a single set of kmem_caches for all
-> allocations").
+> Manually inline memcg_kmem_bypass() and active_memcg() to speed up
+> get_obj_cgroup_from_current() by avoiding duplicate in_task() checks
+> and active_memcg() readings.
 >
-> To mitigate the regression cache allocated mqueue messages on a small
-> percpu cache instead of releasing and re-allocating them every time.
+> Also add a likely() macro to __get_obj_cgroup_from_memcg():
+> obj_cgroup_tryget() should succeed at almost all times except
+> a very unlikely race with the memcg deletion path.
 >
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
 
-Seems fine with me but I am wondering what is stopping us to do this
-caching in the slab layer for all accounted allocations? Does this
-only make sense for specific scenarios/use-cases?
+Can you please add your performance experiment setup and result of
+this patch in the commit description of this patch as well?
+
+Acked-by: Shakeel Butt <shakeelb@google.com>
