@@ -2,131 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE1E651BB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96607651B86
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233796AbiLTHaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 02:30:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47078 "EHLO
+        id S233329AbiLTHZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 02:25:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233677AbiLTH3o (ORCPT
+        with ESMTP id S233191AbiLTHYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 02:29:44 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E9417059;
-        Mon, 19 Dec 2022 23:29:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671521355; x=1703057355;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=fjNSa0+921I8s8ST66iQKKAKKNcHFJo2C7vp0DyF6bU=;
-  b=btMmDhriNUXIYE3RDC/D+VlLnxqJpYdVAtCnKG6Y00TuZKg18RKtoen/
-   ncKwhvbRaEWA1yueeu/7jrTKZZOoQBLg26c0Jt3b66l28RtiMKqyl9/ZK
-   BgHqrpZBvLVYRk05frWTi7WjlYd3SqywoATxQxUttzwFkOdyx0XW+LztN
-   CT8l4frasDPosl1OcaAHaow6ysNwW+VRk+KO1MvSkc8CdXfQLlS84LxHt
-   PsQDsqnKCjOamEfvwz7swdwU6fxTOAEc4xaYAcKCHBhwLzFWG5Ik71Oci
-   VCft7PHZkTWzSaxoNXv3sAK88Okxl6FcOPm9twU7H/ESpoxPiFwvgzL6V
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="307230620"
-X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
-   d="scan'208";a="307230620"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 23:29:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="775191645"
-X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
-   d="scan'208";a="775191645"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga004.jf.intel.com with ESMTP; 19 Dec 2022 23:29:03 -0800
-Date:   Tue, 20 Dec 2022 15:24:46 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
-Message-ID: <20221220072446.GB1724933@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
- <Y5yKEpwCzZpNoBrp@zn.tnic>
- <20221219081532.GD1691829@chaop.bj.intel.com>
- <Y6A6MkFjckQ18fFH@zn.tnic>
+        Tue, 20 Dec 2022 02:24:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869C09FF7
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:24:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 190F96128D
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 07:24:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85303C433D2;
+        Tue, 20 Dec 2022 07:24:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671521091;
+        bh=fic7UtMekVGEyz7xE6CP02+SrSkeyzgkK1qckUpJxvo=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=BgCC8unpIs6R9kXkB5SLbQ0dhtZZTWyvqbAMbGoTcTfehE9vDNoJUdFpaW4zq31DR
+         +UZcfx5gdsxhRR5a40U2Wrlpt29QpnyGwVD/YgVLfAOLHV6Pr/eBjvUWcSd/5VYuN8
+         xCCDVsMKwVkiihX9ZHZ9lXJIRd78Ng0+wUcHnpvtEeZXjGASC5e2vxl2ADfAbOXjHY
+         wB7g0XiqfjM7Y5IsuwiZMPJHANDPtNtY7P79f4s1q123xaYECW8+StaIEQ/48JsdQK
+         LsVqm5Xa/XfqgzZAq4lhVvEhqGM4PVMM9cUu08D3zszOviLDAVGfrmNrlBNUPgbsB3
+         WwXbTxYq0ga2Q==
+Message-ID: <4414ea75-7fd9-258c-789a-3026c1117630@kernel.org>
+Date:   Tue, 20 Dec 2022 15:24:47 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6A6MkFjckQ18fFH@zn.tnic>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20221219132517.17576-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+Subject: Re: [PATCH v2] f2fs: merge f2fs_show_injection_info() into
+ time_to_inject()
+In-Reply-To: <20221219132517.17576-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 11:17:22AM +0100, Borislav Petkov wrote:
-> On Mon, Dec 19, 2022 at 04:15:32PM +0800, Chao Peng wrote:
-> > Tamping down with error number a bit:
-> > 
-> >         if (attrs->flags)
-> >                 return -ENXIO;
-> >         if (attrs->attributes & ~supported_attrs)
-> >                 return -EOPNOTSUPP;
-> >         if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size) ||
-> >             attrs->size == 0)
-> >                 return -EINVAL;
-> >         if (attrs->address + attrs->size < attrs->address)
-> >                 return -E2BIG;
-> 
-> Yap, better.
-> 
-> I guess you should add those to the documentation of the ioctl too
-> so that people can find out why it fails. Or, well, they can look
-> at the code directly too but still... imagine some blurb about
-> user-friendliness here...
+On 2022/12/19 21:25, Yangtao Li wrote:
+> There is no need to additionally use f2fs_show_injection_info()
+> to output information. Concatenate time_to_inject() and
+> __time_to_inject() via a macro. In the new __time_to_inject()
+> function, pass in the caller function name. And in order to avoid
+> this inline function is not expanded causing __builtin_return_address(0)
+> return address of of time_to_inject(), mark time_to_inject() as
+> __always_inline.
 
-Thanks for reminding. Yes KVM api doc is the right place to put these
-documentation in.
+IMO, we'd better have a good reason (maybe performace related) to change
+inline to __always_inline, rather than avoiding printed message change
+due to compile option.
+
+> -static inline bool time_to_inject(struct f2fs_sb_info *sbi, int type)
+> +#define time_to_inject(sbi, type) __time_to_inject(sbi, type, __func__)
+> +static __always_inline bool __time_to_inject(struct f2fs_sb_info *sbi, int type,
+> +								    const char *func_name)
+
+How about:
+
+#define time_to_inject(sbi, type) __time_to_inject(sbi, type, __func__,	\
+					__builtin_return_address(0))
+static inline bool __time_to_inject(struct f2fs_sb_info *sbi, int type,
+				const char *func, const char *parent_func)
 
 Thanks,
-Chao
-> 
-> :-)
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
