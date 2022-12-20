@@ -2,121 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E541D651BCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 416E2651BF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Dec 2022 08:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbiLTHmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 02:42:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
+        id S233267AbiLTHr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 02:47:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbiLTHmD (ORCPT
+        with ESMTP id S229556AbiLTHrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 02:42:03 -0500
-Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C2CF72
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Dec 2022 23:42:02 -0800 (PST)
-Received: from gproxy3-pub.mail.unifiedlayer.com (unknown [69.89.30.42])
-        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id E9F518028FEE
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 07:42:01 +0000 (UTC)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 761FD10047B05
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 07:41:41 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 7XFtptxx6D5vC7XFtpGz2l; Tue, 20 Dec 2022 07:41:41 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=CODv4TnD c=1 sm=1 tr=0 ts=63a16735
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=sHyYjHe8cH0A:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=iUC+0qtUXBzYSUU3EVNigEQd6hZ9Bsf/9QV9KlPcDa8=; b=0Q/vb/4xkk988RFSIRbbJ0s834
-        x+CL4H9imwgaqIMtKciqho2e5El0ZwHhK8sU8kwoIEWYux+Qya8H8O0O7nng97QP4jJ7TUIzUsEam
-        Qi1WCDEAsMTZDQn2wRB+Xy9wO4j8FU1MCORpLQa38buTBcQwFPXdPqFLqtsdjZ1c8j1Q4S2RFJGCN
-        7mpWnvZ8p7Ni8xA1/11XLjmb0jG1TwvgJqYczIoZPy3EBhnq/X5NjuTxU8bE3cDdzqnaP+4lk1vq4
-        BasB/gSUtLq83yhkUAE1xvcqtdhAdf+wyt6+9v+ePEmIv6OVbohPzhBsY9HX/bpYXrwovnSMfc07a
-        wuIioH0w==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33920 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1p7XFr-002DHK-VC;
-        Tue, 20 Dec 2022 00:41:40 -0700
-Subject: Re: [PATCH 6.1 00/25] 6.1.1-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221219182943.395169070@linuxfoundation.org>
-In-Reply-To: <20221219182943.395169070@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <cf3ca40f-2bce-0b86-81c8-cd982b1f7378@w6rz.net>
-Date:   Mon, 19 Dec 2022 23:41:33 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 20 Dec 2022 02:47:49 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD2A106;
+        Mon, 19 Dec 2022 23:47:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671522468; x=1703058468;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=18JY1Rv+JmD8fqHB1Zwfy2CyVc6av0CO+XzWDU5pLU8=;
+  b=cvT3hrCnlih0FOk9rqv+UWjL3sEjGz0Y7aaLsz37QwUFtTyPcNKqcYFE
+   p4HFw9mVsrCDLGtvZFb65MKGgey0+vZ5rHKCU6Khc15qVY3oZp3HnvqTI
+   RcPpA+cy9HNUSBNNWdo63xMW1LG3Iu5YtiuinDx0oJbXVeR/qn/k5+GHp
+   Fx2Bt8MCL/zjLBAlv+6Y19rX0NPzDFLz+qpvt/9uj5rJ0CDvzOfxs827I
+   s7bvoHeI1wcA5LJb5xYGllAOWxAFKIO958eWZEXm0unBG29D4aM2V3/Oe
+   8kPqSp3/Yy7YbJfbHC3t1ie9PykQtP6HYnngfkP7IsuILxbCmk0BJpzMz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="317187844"
+X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
+   d="scan'208";a="317187844"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 23:47:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="896319288"
+X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
+   d="scan'208";a="896319288"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by fmsmga006.fm.intel.com with ESMTP; 19 Dec 2022 23:47:34 -0800
+Date:   Tue, 20 Dec 2022 15:43:18 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <20221220074318.GC1724933@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
+ <Y6B27MpZO8o1Asfe@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1p7XFr-002DHK-VC
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:33920
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6B27MpZO8o1Asfe@zn.tnic>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/19/22 11:22 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.1 release.
-> There are 25 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.1-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Mon, Dec 19, 2022 at 03:36:28PM +0100, Borislav Petkov wrote:
+> On Fri, Dec 02, 2022 at 02:13:41PM +0800, Chao Peng wrote:
+> > In memory encryption usage, guest memory may be encrypted with special
+> > key and can be accessed only by the guest itself. We call such memory
+> > private memory. It's valueless and sometimes can cause problem to allow
+> 
+> valueless?
+> 
+> I can't parse that.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+It's unnecessary and ...
 
-Tested-by: Ron Economos <re@w6rz.net>
+> 
+> > userspace to access guest private memory. This new KVM memslot extension
+> > allows guest private memory being provided through a restrictedmem
+> > backed file descriptor(fd) and userspace is restricted to access the
+> > bookmarked memory in the fd.
+> 
+> bookmarked?
 
+userspace is restricted to access the memory content in the fd.
+
+> 
+> > This new extension, indicated by the new flag KVM_MEM_PRIVATE, adds two
+> > additional KVM memslot fields restricted_fd/restricted_offset to allow
+> > userspace to instruct KVM to provide guest memory through restricted_fd.
+> > 'guest_phys_addr' is mapped at the restricted_offset of restricted_fd
+> > and the size is 'memory_size'.
+> > 
+> > The extended memslot can still have the userspace_addr(hva). When use, a
+> 
+> "When un use, ..."
+
+When both userspace_addr and restricted_fd/offset were used, ...
+
+> 
+> ...
+> 
+> > diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+> > index a8e379a3afee..690cb21010e7 100644
+> > --- a/arch/x86/kvm/Kconfig
+> > +++ b/arch/x86/kvm/Kconfig
+> > @@ -50,6 +50,8 @@ config KVM
+> >  	select INTERVAL_TREE
+> >  	select HAVE_KVM_PM_NOTIFIER if PM
+> >  	select HAVE_KVM_MEMORY_ATTRIBUTES
+> > +	select HAVE_KVM_RESTRICTED_MEM if X86_64
+> > +	select RESTRICTEDMEM if HAVE_KVM_RESTRICTED_MEM
+> 
+> Those deps here look weird.
+> 
+> RESTRICTEDMEM should be selected by TDX_GUEST as it can't live without
+> it.
+
+RESTRICTEDMEM is needed by TDX_HOST, not TDX_GUEST.
+
+> 
+> Then you don't have to select HAVE_KVM_RESTRICTED_MEM simply because of
+> X86_64 - you need that functionality when the respective guest support
+> is enabled in KVM.
+
+Letting the actual feature(e.g. TDX or pKVM) select it or add dependency
+sounds a viable and clearer solution. Sean, let me know your opinion.
+
+> 
+> Then, looking forward into your patchset, I'm not sure you even
+> need HAVE_KVM_RESTRICTED_MEM - you could make it all depend on
+> CONFIG_RESTRICTEDMEM. But that's KVM folks call - I'd always aim for
+> less Kconfig items because we have waay too many.
+
+The only reason to add another HAVE_KVM_RESTRICTED_MEM is some code only
+works for 64bit[*] and CONFIG_RESTRICTEDMEM is not sufficient to enforce
+that.
+
+[*] https://lore.kernel.org/all/YkJLFu98hZOvTSrL@google.com/
+
+Thanks,
+Chao
+> 
+> Thx.
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
