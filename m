@@ -2,140 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E1D652D0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 07:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD942652D0B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 07:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234105AbiLUGtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 01:49:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
+        id S234292AbiLUGuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 01:50:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiLUGtt (ORCPT
+        with ESMTP id S233806AbiLUGuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 01:49:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CB61F2C4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:49:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671605341;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+/4TAy3lxZDNq7ujOJb9FKrW+iCRhzmTxD7N7cv0eCg=;
-        b=M0Gx+SvVFpoLKQ8Odmy7Q5rAifxcqFJ0UeQOoJk1fXnQz3bHryG2OlrnpaokTj01rYhf4v
-        Oj7NVg0BdHTuUOn23MfWPfNK15nnmO3Hy9TkuStP/uu8PvD2Fdt3W+b/WIGNe4WQMLV8/I
-        KnKg3r5OE0G63ge/dw+KyB3UAYGoLn4=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-441-kjiDS59sMcqND9-MV6_UWA-1; Wed, 21 Dec 2022 01:48:52 -0500
-X-MC-Unique: kjiDS59sMcqND9-MV6_UWA-1
-Received: by mail-oo1-f71.google.com with SMTP id u22-20020a4a6c56000000b004a38aa46a1fso6663287oof.22
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:48:52 -0800 (PST)
+        Wed, 21 Dec 2022 01:50:04 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862161F2C4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:50:03 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id z10so3398227wrh.10
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:50:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=l3DtQUdn5yG8C3edbDeOK2NMVM1cqCLWe0A5+U54eM4=;
+        b=pgqp3sYgI0M2y0TLRjzoFFM/5rxF4gkCBlezPnjShaxGBb39t7uWWapYEzhh3ZuOdB
+         DqlaarruN8SdkiwbO3z9OmoCsj07wvdHXWjH9OZmIvUu2VgeZbTw2BZYhgKT1t/T6147
+         cjzOjcdrBNMo1G2UIqkGp3o/l92YwMMX+GBT42W07QEn25bV9MNZun2QsSQlObsFYTSc
+         kCFKO80yY+LhokCaqch1jmWEP+Ff4PJCThkr0cuvMd5NmdOdlfjOTnXvw/1DPcsBTWJJ
+         A7IwVaAnT6RDRfUY1ntnMBplgoIF5Klb6KUCVImaffNSNB2ViJyqVCYJlgshKwtr0QYI
+         x1Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+/4TAy3lxZDNq7ujOJb9FKrW+iCRhzmTxD7N7cv0eCg=;
-        b=jLRoLzARokAFvR+kYWelLpXzRQX88X/t9V57Ox9N1MdEMCoBjmUQuu73WWnGr3fdr4
-         b6lfmmbQA1Xh2QOocUKgD1GHTuheOyz4OUo5jfKiFkFYI97Yrd6RfTH0ANLjt6qDcqLD
-         IssedVNBAEMw3zUqAUj49usNRxMyy9WThYqny5EAfYcR6nIKSXtnWSTgqtlZv+PCC8jo
-         3MC/iqL1lCqa73zz3dMDj04QzZmq+e+b9OfJwc4h/wPgNtmfcSF301CmvB138y4EJQUf
-         D3bnLtM84MXAGbydyAQsfzUk6D+8WWgV4bTyW2qyQDgey6+zrQx38egHh+KJZrKOm22o
-         3r/g==
-X-Gm-Message-State: AFqh2kr3buMXpkvUgrXJVNiuJ4QrZ1cfCdFildHRx7QlrdHXzyhMnCwc
-        iZ3qPheaoZ1LCsl1UpGeCIrgX8IGHKBiZUowFudULvrWrufdOUq/xhLKjP1GclJqCtP8dZdtYRy
-        RVWIum4s4U3ECgwnTUjt5HOy5msBsvNPGoh0gg/Fi
-X-Received: by 2002:a05:6870:4413:b0:144:a97b:1ae2 with SMTP id u19-20020a056870441300b00144a97b1ae2mr29059oah.35.1671605331286;
-        Tue, 20 Dec 2022 22:48:51 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXu80udxD6YrnxsV720q5HV+2HR8kMLdfBS0FZI0RkgPvpsYJe396SNLloD8Y2DlUjugZ1aCdXjvrEHubwRFXk0=
-X-Received: by 2002:a05:6870:4413:b0:144:a97b:1ae2 with SMTP id
- u19-20020a056870441300b00144a97b1ae2mr29055oah.35.1671605331053; Tue, 20 Dec
- 2022 22:48:51 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l3DtQUdn5yG8C3edbDeOK2NMVM1cqCLWe0A5+U54eM4=;
+        b=4Kci7kTIzM2DqA4tHw5AhVaMZiAGFqb6Ho4FDQsuJxO6rKLj5L+ZH/1Wn3o4nHRl7r
+         z10com7gDqmtC5rfw2kF+mqG2L0OWM8Xm5ldMvwRNt7uzTjYTni1d6TvZHhr99AN7Z0r
+         L+JpNLJdNZzrZTrrDITlgY96tgvMp57K5jIihsKAj3olT7FUtyAu6bmXWg2PP47VZBK1
+         sXtt5LMQEYJOmxQOBLKPRx9C2cSVMzRupAPOMSqjxowSI07GE1S8Td1km8c8qEbL72lA
+         BnJaKXgCdRXXfHPdCDtLqKRlTITaEweZVBnfCXkBhZcRysJnobBgVkcGyDsjQD4GEJWk
+         KjBQ==
+X-Gm-Message-State: AFqh2kooForQHfbaYmCs9hHtEDHTwwZkaa0g5O27tGLmRUeb4EUcoHP/
+        CrbZEglZwsvDBW/OATQabKBA06noa+WZ18jD
+X-Google-Smtp-Source: AMrXdXth8YVxu/eVaNR55QfF/dyr7TzuzV6+kGR9hoc4Qpo+Qp8xSopCCpRvF2Wi2pqThcWKuwXA4w==
+X-Received: by 2002:adf:e54f:0:b0:242:7fd6:1c82 with SMTP id z15-20020adfe54f000000b002427fd61c82mr278418wrm.16.1671605402105;
+        Tue, 20 Dec 2022 22:50:02 -0800 (PST)
+Received: from [192.168.0.173] ([82.77.81.131])
+        by smtp.gmail.com with ESMTPSA id d11-20020adff84b000000b002425787c5easm14324294wrq.96.2022.12.20.22.50.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 22:50:01 -0800 (PST)
+Message-ID: <026225c6-f17f-e9da-b7c0-5d3473a97e89@linaro.org>
+Date:   Wed, 21 Dec 2022 08:49:59 +0200
 MIME-Version: 1.0
-References: <20221220140205.795115-1-lulu@redhat.com> <CACGkMEuJuUrA220XgHDOruK-aHWSfJ6mTaqNVQCAcOsPEwV91A@mail.gmail.com>
- <20221221013359-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20221221013359-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 21 Dec 2022 14:48:40 +0800
-Message-ID: <CACGkMEuXPoR_yp3ZC7XH4TZ8NdL21kWtJaxq22+VU7RQG13f8Q@mail.gmail.com>
-Subject: Re: [PATCH] vhost_vdpa: fix the compile issue in commit 881ac7d2314f
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Cindy Lu <lulu@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] [v2] mtd: cfi: allow building spi-intel standalone
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Walle <michael@walle.cc>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Takahiro Kuwano <Takahiro.Kuwano@infineon.com>,
+        Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Mauro Lima <mauro.lima@eclypsium.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221220141352.1486360-1-arnd@kernel.org>
+ <cae6328b-5204-a1ab-810d-8fb64e466453@linaro.org>
+ <20221220165701.5696df1a@xps-13>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <20221220165701.5696df1a@xps-13>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 2:35 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Wed, Dec 21, 2022 at 11:23:09AM +0800, Jason Wang wrote:
-> > On Tue, Dec 20, 2022 at 10:02 PM Cindy Lu <lulu@redhat.com> wrote:
-> > >
-> > > The input of  vhost_vdpa_iotlb_unmap() was changed in 881ac7d2314f,
-> > > But some function was not changed while calling this function.
-> > > Add this change
-> > >
-> > > Cc: stable@vger.kernel.org
-> > > Fixes: 881ac7d2314f ("vhost_vdpa: fix the crash in unmap a large memory")
-> >
-> > Is this commit merged into Linus tree?
-> >
-> > Btw, Michael, I'd expect there's a respin of the patch so maybe Cindy
-> > can squash the fix into the new version?
-> >
-> > Thanks
->
-> Thanks, I fixed it myself already. Why do you want a respin?
 
-For some reason I miss v4, so it should be fine.
 
-Thanks
+On 20.12.2022 17:57, Miquel Raynal wrote:
+> Hi Tudor,
+> 
 
-> That will mean trouble as the fixed patch is now being tested.
->
->
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Signed-off-by: Cindy Lu <lulu@redhat.com>
-> > > ---
-> > >  drivers/vhost/vdpa.c | 6 +++---
-> > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> > > index 46ce35bea705..ec32f785dfde 100644
-> > > --- a/drivers/vhost/vdpa.c
-> > > +++ b/drivers/vhost/vdpa.c
-> > > @@ -66,8 +66,8 @@ static DEFINE_IDA(vhost_vdpa_ida);
-> > >  static dev_t vhost_vdpa_major;
-> > >
-> > >  static void vhost_vdpa_iotlb_unmap(struct vhost_vdpa *v,
-> > > -                                  struct vhost_iotlb *iotlb,
-> > > -                                  u64 start, u64 last);
-> > > +                                  struct vhost_iotlb *iotlb, u64 start,
-> > > +                                  u64 last, u32 asid);
-> > >
-> > >  static inline u32 iotlb_to_asid(struct vhost_iotlb *iotlb)
-> > >  {
-> > > @@ -139,7 +139,7 @@ static int vhost_vdpa_remove_as(struct vhost_vdpa *v, u32 asid)
-> > >                 return -EINVAL;
-> > >
-> > >         hlist_del(&as->hash_link);
-> > > -       vhost_vdpa_iotlb_unmap(v, &as->iotlb, 0ULL, 0ULL - 1);
-> > > +       vhost_vdpa_iotlb_unmap(v, &as->iotlb, 0ULL, 0ULL - 1, asid);
-> > >         kfree(as);
-> > >
-> > >         return 0;
-> > > --
-> > > 2.34.3
-> > >
->
+Hi,
 
+> tudor.ambarus@linaro.org wrote on Tue, 20 Dec 2022 17:44:49 +0200:
+> 
+>> Hi, Arnd,
+>>
+>> On 20.12.2022 16:13, Arnd Bergmann wrote:
+>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>
+>>> When MTD or MTD_CFI_GEOMETRY is disabled, the spi-intel driver
+>>> fails to build, as it includes the shared CFI header:
+>>>
+>>> include/linux/mtd/cfi.h:62:2: error: #warning No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work. [-Werror=cpp]
+>>>      62 | #warning No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work.
+>>>
+>>> linux/mtd/spi-nor.h does not actually need to include cfi.h, so
+>>> remove the inclusion here to fix the warning. This uncovers a
+>>> missing #include in spi-nor/core.c so add that there to
+>>> prevent a different build issue.
+>>>
+>>> Fixes: e23e5a05d1fd ("mtd: spi-nor: intel-spi: Convert to SPI MEM")
+>>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>>
+>> Looks good to me. I'll let the linux-0day bot run over it and apply it
+>> once -rc1 is out.
+> 
+> The issue sometimes produces build errors, shall I send it through a
+> fixes PR instead?
+> 
+
+Yes, that I was thinking about.
+
+Thanks,
+ta
