@@ -2,176 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0AEF6531A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18906531A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:25:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232547AbiLUNZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 08:25:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
+        id S234062AbiLUNZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 08:25:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiLUNZ0 (ORCPT
+        with ESMTP id S229612AbiLUNZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 08:25:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85DE220C7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:25:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F09A617A8
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 13:25:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43971C433D2;
-        Wed, 21 Dec 2022 13:25:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671629124;
-        bh=g6jee0CSun7KRiuaMBv5r2gX/s8rOE47WIb/+eVUIkk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=IZm8zrCAB7DLTXIG+LDNCZlJg9QAwDos+ye87GjOB85qaA/OiJ8J0Wd0o7BDdgFQr
-         yLlf3nxMM0o38dgxPhGUKuVHpEwEWRB5mJRvHUVmw28rrKz41Upr1ULZ2LKTeC1bFz
-         wrZVbZMSnsMbF+twTBNaTe7MCnIytkRSJMAc7TFlzjhLe9zr4EZn2we2CYPkZlhgWc
-         0tszDwwXUXVHN5fJf+qbC4IGl5wdssHZ4ZBKZQRuO2aSJbmgIUOePswqi1neFB3UtL
-         fPlausRsFqh0XX71fkhyLyu4Y2ocv3m7HP9pb9YtTsfEFgQ8VmMiK7r6M59rz5kF1W
-         tE+G4QLbMTvMQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        Brent Lu <brent.lu@intel.com>, Yong Zhi <yong.zhi@intel.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Muralidhar Reddy <muralidhar.reddy@intel.com>,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        David Lin <CTLIN0@nuvoton.com>,
-        Libin Yang <libin.yang@intel.com>,
-        Mac Chiang <mac.chiang@intel.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: Intel: sof-nau8825: fix module alias overflow
-Date:   Wed, 21 Dec 2022 14:24:56 +0100
-Message-Id: <20221221132515.2363276-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Wed, 21 Dec 2022 08:25:33 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E22220C7;
+        Wed, 21 Dec 2022 05:25:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1671629130; x=1703165130;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9OBG3ndMcB4Yh+Zf7d0uJm/I1/nGZ85J8AhipMgp+MM=;
+  b=fJgpDD89SvcHlQj0wog3khUtREMw8mIdXvV4gXcWXveMlRxFtsGF+pkm
+   yFeKSfng/saKlCUGVF0j4MjPz5wWPos3+pYZlmEukcwtams/whsCAUIYl
+   iNnvxV9ANY4TbUphg9c3S0bgoq2rhjPSzQjIVNXan+hRPPcce+0vw9IZf
+   EE4gCj10F2PZWmmNBWWNPtHyejDQCu9P+ixcXaDTyeEQ77KLNj/owfnsW
+   +hDRX4vy8Jx6VBvZDpukPiIIN7VHttwuIYxy1x+52DM/UyWkEG/4haN1+
+   a6pLjDtxWU7nSYFcWQ3zf9N7tgg9uCdp2Qt156VUsnmBTEc5ls0RzQAop
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,262,1665471600"; 
+   d="scan'208";a="192695936"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Dec 2022 06:25:29 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 21 Dec 2022 06:25:27 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Wed, 21 Dec 2022 06:25:24 -0700
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     Steen Hegelund <steen.hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Casper Andersson" <casper.casan@gmail.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "Nathan Huckleberry" <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Steen Hegelund" <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Dan Carpenter <error27@gmail.com>
+Subject: [PATCH net 0/8] Add support for two classes of VCAP rules
+Date:   Wed, 21 Dec 2022 14:25:09 +0100
+Message-ID: <20221221132517.2699698-1-steen.hegelund@microchip.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+This adds support for two classes of VCAP rules:
 
-The maximum name length for a platform_device_id entry is 20 characters
-including the trailing NUL byte. The sof_nau8825.c file exceeds that,
-which causes an obscure error message:
+- Permanent rules (added e.g. for PTP support)
+- TC user rules (added by the TC userspace tool)
 
-sound/soc/intel/boards/snd-soc-sof_nau8825.mod.c:35:45: error: illegal character encoding in string literal [-Werror,-Winvalid-source-encoding]
-MODULE_ALIAS("platform:adl_max98373_nau8825<U+0018><AA>");
-                                                   ^~~~
-include/linux/module.h:168:49: note: expanded from macro 'MODULE_ALIAS'
-                                                ^~~~~~
-include/linux/module.h:165:56: note: expanded from macro 'MODULE_INFO'
-                                                       ^~~~
-include/linux/moduleparam.h:26:47: note: expanded from macro '__MODULE_INFO'
-                = __MODULE_INFO_PREFIX __stringify(tag) "=" info
+For this to work the VCAP Loopups must be enabled from boot, so that the
+"internal" clients like PTP can add rules that are always active.
 
-I could not figure out how to make the module handling robust enough
-to handle this better, but as a quick fix, using slightly shorter
-names that are still unique avoids the build issue.
+When the TC tool add a flower filter the VCAP rule corresponding to this
+filter will be disabled (kept in memory) until a TC matchall filter creates
+a link from chain 0 to the chain (lookup) where the flower filter was
+added.
 
-Fixes: 8d0872f6239f ("ASoC: Intel: add sof-nau8825 machine driver")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- sound/soc/intel/boards/sof_nau8825.c              | 8 ++++----
- sound/soc/intel/common/soc-acpi-intel-adl-match.c | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+When the flower filter is enabled it will be written to the appropriate
+VCAP lookup and become active in HW.
 
-diff --git a/sound/soc/intel/boards/sof_nau8825.c b/sound/soc/intel/boards/sof_nau8825.c
-index 27880224359d..009a41fbefa1 100644
---- a/sound/soc/intel/boards/sof_nau8825.c
-+++ b/sound/soc/intel/boards/sof_nau8825.c
-@@ -618,7 +618,7 @@ static const struct platform_device_id board_ids[] = {
- 
- 	},
- 	{
--		.name = "adl_rt1019p_nau8825",
-+		.name = "adl_rt1019p_8825",
- 		.driver_data = (kernel_ulong_t)(SOF_NAU8825_SSP_CODEC(0) |
- 					SOF_SPEAKER_AMP_PRESENT |
- 					SOF_RT1019P_SPEAKER_AMP_PRESENT |
-@@ -626,7 +626,7 @@ static const struct platform_device_id board_ids[] = {
- 					SOF_NAU8825_NUM_HDMIDEV(4)),
- 	},
- 	{
--		.name = "adl_max98373_nau8825",
-+		.name = "adl_max98373_8825",
- 		.driver_data = (kernel_ulong_t)(SOF_NAU8825_SSP_CODEC(0) |
- 					SOF_SPEAKER_AMP_PRESENT |
- 					SOF_MAX98373_SPEAKER_AMP_PRESENT |
-@@ -637,7 +637,7 @@ static const struct platform_device_id board_ids[] = {
- 	},
- 	{
- 		/* The limitation of length of char array, shorten the name */
--		.name = "adl_mx98360a_nau8825",
-+		.name = "adl_mx98360a_8825",
- 		.driver_data = (kernel_ulong_t)(SOF_NAU8825_SSP_CODEC(0) |
- 					SOF_SPEAKER_AMP_PRESENT |
- 					SOF_MAX98360A_SPEAKER_AMP_PRESENT |
-@@ -648,7 +648,7 @@ static const struct platform_device_id board_ids[] = {
- 
- 	},
- 	{
--		.name = "adl_rt1015p_nau8825",
-+		.name = "adl_rt1015p_8825",
- 		.driver_data = (kernel_ulong_t)(SOF_NAU8825_SSP_CODEC(0) |
- 					SOF_SPEAKER_AMP_PRESENT |
- 					SOF_RT1015P_SPEAKER_AMP_PRESENT |
-diff --git a/sound/soc/intel/common/soc-acpi-intel-adl-match.c b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
-index 60aee56f94bd..1f79fef600ac 100644
---- a/sound/soc/intel/common/soc-acpi-intel-adl-match.c
-+++ b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
-@@ -474,21 +474,21 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_adl_machines[] = {
- 	},
- 	{
- 		.id = "10508825",
--		.drv_name = "adl_rt1019p_nau8825",
-+		.drv_name = "adl_rt1019p_8825",
- 		.machine_quirk = snd_soc_acpi_codec_list,
- 		.quirk_data = &adl_rt1019p_amp,
- 		.sof_tplg_filename = "sof-adl-rt1019-nau8825.tplg",
- 	},
- 	{
- 		.id = "10508825",
--		.drv_name = "adl_max98373_nau8825",
-+		.drv_name = "adl_max98373_8825",
- 		.machine_quirk = snd_soc_acpi_codec_list,
- 		.quirk_data = &adl_max98373_amp,
- 		.sof_tplg_filename = "sof-adl-max98373-nau8825.tplg",
- 	},
- 	{
- 		.id = "10508825",
--		.drv_name = "adl_mx98360a_nau8825",
-+		.drv_name = "adl_mx98360a_8825",
- 		.machine_quirk = snd_soc_acpi_codec_list,
- 		.quirk_data = &adl_max98360a_amp,
- 		.sof_tplg_filename = "sof-adl-max98360a-nau8825.tplg",
-@@ -502,7 +502,7 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_adl_machines[] = {
- 	},
- 	{
- 		.id = "10508825",
--		.drv_name = "adl_rt1015p_nau8825",
-+		.drv_name = "adl_rt1015p_8825",
- 		.machine_quirk = snd_soc_acpi_codec_list,
- 		.quirk_data = &adl_rt1015p_amp,
- 		.sof_tplg_filename = "sof-adl-rt1015-nau8825.tplg",
+Likewise the flower filter will be disabled if there is no link from chain
+0 to the chain of the filter (lookup), and when that happens the
+corresponding VCAP rule will be read from the VCAP instance and stored in
+memory until it is deleted or enabled again.
+
+Steen Hegelund (8):
+  net: microchip: vcap api: Erase VCAP cache before encoding rule
+  net: microchip: sparx5: Reset VCAP counter for new rules
+  net: microchip: vcap api: Always enable VCAP lookups
+  net: microchip: vcap api: Convert multi-word keys/actions when
+    encoding
+  net: microchip: vcap api: Use src and dst chain id to chain VCAP
+    lookups
+  net: microchip: vcap api: Check chains when adding a tc flower filter
+  net: microchip: vcap api: Add a storage state to a VCAP rule
+  net: microchip: vcap api: Enable/Disable rules via chains in VCAP HW
+
+ .../ethernet/microchip/lan966x/lan966x_goto.c |  10 +-
+ .../ethernet/microchip/lan966x/lan966x_main.h |   3 +-
+ .../microchip/lan966x/lan966x_tc_flower.c     |  30 +-
+ .../microchip/lan966x/lan966x_tc_matchall.c   |  16 +-
+ .../microchip/lan966x/lan966x_vcap_impl.c     |  24 +-
+ .../microchip/sparx5/sparx5_tc_flower.c       |  28 +-
+ .../microchip/sparx5/sparx5_tc_matchall.c     |  16 +-
+ .../microchip/sparx5/sparx5_vcap_debugfs.c    |   2 +-
+ .../microchip/sparx5/sparx5_vcap_impl.c       |  29 +-
+ .../net/ethernet/microchip/vcap/vcap_api.c    | 752 +++++++++++++-----
+ .../net/ethernet/microchip/vcap/vcap_api.h    |   5 -
+ .../ethernet/microchip/vcap/vcap_api_client.h |   8 +-
+ .../microchip/vcap/vcap_api_debugfs.c         |  57 +-
+ .../microchip/vcap/vcap_api_debugfs_kunit.c   |  10 +-
+ .../ethernet/microchip/vcap/vcap_api_kunit.c  |  32 +-
+ .../microchip/vcap/vcap_api_private.h         |  12 +-
+ 16 files changed, 685 insertions(+), 349 deletions(-)
+
 -- 
-2.35.1
+2.39.0
 
