@@ -2,187 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFC465389F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 23:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A976538A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 23:30:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235148AbiLUW3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 17:29:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        id S235089AbiLUWaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 17:30:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234974AbiLUW3f (ORCPT
+        with ESMTP id S235081AbiLUW3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 17:29:35 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C98E1E736;
-        Wed, 21 Dec 2022 14:27:47 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5C0A7FB;
-        Wed, 21 Dec 2022 23:27:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671661636;
-        bh=fJ5ABdqr3DN2A4UXuA1ib5uu0RZIn00+scvFGMBFEnE=;
+        Wed, 21 Dec 2022 17:29:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A277427B0D;
+        Wed, 21 Dec 2022 14:28:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1788BB81C3B;
+        Wed, 21 Dec 2022 22:27:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8FAEC433D2;
+        Wed, 21 Dec 2022 22:27:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671661639;
+        bh=DeE701axTftUD20gtPeSs1lKxbAiPCgvCwAGUnPUotc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=koyyQkvrmW70liTGR9RmXe9j5oAIrRu/M9hfM2YK6Z8lmfimKUo31pgtX58XRwvPk
-         bFk0wXzkJdIvD3GnxsfuhYe63HYd1i1JvuIceCNDIc7cZBt47DuSDWM6j2Pob4GD9w
-         fI0LA7XHMAKvvKSxF5Y+XtCdQF7s7qPE1OGY/DEQ=
-Date:   Thu, 22 Dec 2022 00:27:11 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Yunke Cao <yunkec@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] media: uvcvideo: Add a unique suffix to camera
- names
-Message-ID: <Y6OIP6ODpWOvTMYr@pendragon.ideasonboard.com>
-References: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
- <20220920-resend-meta-v4-3-3ac355b66723@chromium.org>
- <Y45tnp0naosOrYCY@pendragon.ideasonboard.com>
- <CANiDSCtRoVQ2+asPmOacarvC2VrJYTbU67+wKJq1ciuMrwguPg@mail.gmail.com>
- <CANiDSCtav5U6759tvt7Hm0nR+8Hz22qfWft3OEFOotSeHpxnAA@mail.gmail.com>
- <Y6LmJGgBYfSMBsj+@pendragon.ideasonboard.com>
- <CANiDSCs3dd7uzts6jgAd-G9pkH5mszxNm2-61T_yAeXBWj6LNw@mail.gmail.com>
- <Y6LsrH9pOVqt6ZXr@pendragon.ideasonboard.com>
- <CANiDSCumQ3a-vYKGpEYYLxUSL55M4BxqFJRfN=dNdUELhhknEw@mail.gmail.com>
+        b=oED22h9AA7zhPbiAm+t/bfkORPfkBBplYle9i80ogu2iI0R0hSCNlbuuUrJQXglJq
+         VbhwcTVRv0/TUUVp+a9nD7aM1WR0EDmhcJJ4edq/R6SFJf3U/vEQRdvi91VDfygIQy
+         1lUJex0/ja206oOC1Pljtm2j+7wOSwuO5HyJ8swczrpICErAPymSVuFIX0/BQngPzO
+         DPvnJTgLTl74oraEzLJr7bomNkZfoiFXZBSTYXcrVPDzEj7oeSjAsvv8o/CiOOrjUH
+         ZvKS19BjRlb1BNlsP0qaxcVhcT4z28rF6ndGQxQ5iWyZ4Ap4wYr+0LUR3zGkm4H8Qi
+         kZ56BRxVt4TOw==
+Date:   Wed, 21 Dec 2022 22:27:15 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2] riscv: Allow to downgrade paging mode from the
+ command line
+Message-ID: <Y6OIQ1OzjWRkYxHH@spud>
+References: <20221215081948.1256610-1-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2CgsAwd7ZL+qgvLr"
 Content-Disposition: inline
-In-Reply-To: <CANiDSCumQ3a-vYKGpEYYLxUSL55M4BxqFJRfN=dNdUELhhknEw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221215081948.1256610-1-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
 
-On Wed, Dec 21, 2022 at 09:21:57PM +0100, Ricardo Ribalda wrote:
-> On Wed, 21 Dec 2022 at 12:23, Laurent Pinchart wrote:
-> > On Wed, Dec 21, 2022 at 11:57:48AM +0100, Ricardo Ribalda wrote:
-> > > On Wed, 21 Dec 2022 at 11:55, Laurent Pinchart wrote:
-> > > > On Wed, Dec 21, 2022 at 12:00:58AM +0100, Ricardo Ribalda wrote:
-> > > > > On Tue, 6 Dec 2022 at 00:02, Ricardo Ribalda wrote:
-> > > > > > On Mon, 5 Dec 2022 at 23:16, Laurent Pinchart wrote:
-> > > > > > > On Fri, Dec 02, 2022 at 06:08:19PM +0100, Ricardo Ribalda wrote:
-> > > > > > > > Some cameras have multiple data inputs (i.e. IR sensor and RGB sensor),
-> > > >
-> > > > Did you mean "data outputs" by the way ?
-> > > >
-> > > > > > > > append a unique number to the device name.
-> > > > > > > >
-> > > > > > > > Fixes v4l2-compliance:
-> > > > > > > >     Media Controller ioctls:
-> > > > > > > >          fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
-> > > > > > > >        test MEDIA_IOC_G_TOPOLOGY: FAIL
-> > > > > > > >          fail: v4l2-test-media.cpp(394): num_data_links != num_links
-> > > > > > > >        test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
-> > > > > > > >
-> > > > > > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > > > > > > ---
-> > > > > > > >  drivers/media/usb/uvc/uvc_driver.c | 3 ++-
-> > > > > > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > > > > > > > index 215fb483efb0..f4032ebb3689 100644
-> > > > > > > > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > > > > > > > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > > > > > > > @@ -1963,7 +1963,8 @@ int uvc_register_video_device(struct uvc_device *dev,
-> > > > > > > >               break;
-> > > > > > > >       }
-> > > > > > > >
-> > > > > > > > -     strscpy(vdev->name, dev->name, sizeof(vdev->name));
-> > > > > > > > +     snprintf(vdev->name, sizeof(vdev->name), "%s %u", dev->name,
-> > > > > > > > +              stream->header.bTerminalLink);
-> > > > > > >
-> > > > > > > This won't be perfect as the string is not guaranteed to fit in
-> > > > > > > vdev->name, but I suppose it will help as a quick fix for some devices.
-> > > > > > > How about the other devices ? Won't they still exhibit the above
-> > > > > > > v4l2-compliance failure ? Isn't that something that will still affect
-> > > > > > > Chrome OS devices ?
-> > > > > >
-> > > > > > We could place the id first... but that will look bad: Eg:
-> > > > > >
-> > > > > > 1- My favorite camera
-> > > > > >
-> > > > > > Another option is to remove the last chars to fit the id. Eg:
-> > > > > >
-> > > > > > My favorite came-1
-> > > > > >
-> > > > > > If you prefer any of those options or have a better idea I can implement that.
-> > > > >
-> > > > > @Laurent
-> > > > >
-> > > > > Any preference here?
-> > > >
-> > > > I think the latter is better. Could we do so only when there are
-> > > > multiple video capture devices (excluding the metadata device) though ?
-> > > > That way we won't have a weird "-n" suffix in the majority of use cases.
-> > > >
-> > > > > > > The change should not cause any regression as big as in patch 1/3.
-> > > > > > > However, unless I'm mistaken users will notice a device name change,
-> > > > > > > especially when selecting a device in their web browser. Could that be a
-> > > > > > > problem ?
-> > > > > >
-> > > > > > I think the only side effect is that the first time that the kernel
-> > > > > > changes the naming convention, if there are more than one camera on
-> > > > > > the system, the video conference might pick a different camera.
-> > > > > > The good news is that the user will be presented with cameras with
-> > > > > > different names. Now some cameras show very confusing names:
-> > > > > >
-> > > > > > ribalda@alco:~/work/linux$ for a in /dev/video* ; do yavta -l $a| grep
-> > > > > > "Dell Webcam"; done
-> > > > > > Device `Dell Webcam WB7022' on `usb-0000:2d:00.0-1.2.3.1' (driver
-> > > > > > 'uvcvideo') supports video, capture, without mplanes.
-> > > > > > Device `Dell Webcam WB7022' on `usb-0000:2d:00.0-1.2.3.1' (driver
-> > > > > > 'uvcvideo') supports meta-data, capture, without mplanes.
-> > > > > > Device `Dell Webcam WB7022' on `usb-0000:2d:00.0-1.2.3.1' (driver
-> > > > > > 'uvcvideo') supports video, capture, without mplanes.
-> > > > > > Device `Dell Webcam WB7022' on `usb-0000:2d:00.0-1.2.3.1' (driver
-> > > > > > 'uvcvideo') supports meta-data, capture, without mplanes.
-> > > >
-> > > > I'm tempted to add a new model read-only string control to overcome the
-> > > > length limitation. It could then be combined with other information
-> > > > (such as the location and supported pixel formats) to create a
-> > > > user-friendly camera name by applications.
-> > >
-> > > Adding the vid:pid would be really useful! Mapping a /dev/videoX to
-> > > vid:pid is kind of complicated now.
-> >
-> > libcamera can help there ;-) We already extract the vendor and product
-> > ID. They are only used to create the camera ID at the moment, they are
-> > not exposed to applications independently. That would be a good
-> > addition.
-> >
-> > Overall, device naming is something that we have decided *not* to handle
-> > in libcamera. We provide information to applications to help them
-> > construct a meaningful name, but don't create the name ourselves. This
-> > was decided because naming schemes are dependent on application use
-> > cases, and in many cases should be localized (e.g. "Front camera" and
-> > "Back camera" vs. "Etukamera" and "Takakamera").
-> 
-> Thanks for the explanation!
-> 
-> My use case is: vendor apps for doing provisioning or low level
-> testing. Libcamera would be a bit too much for that ;)
-> 
-> Most of the time they do not get an image, but set fancy controls.
+--2CgsAwd7ZL+qgvLr
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I see what you mean. libcamera isn't the right tool for that indeed, but
-maybe the additional complexity of looking up the VID:PID isn't such a
-big deal in those cases ? It's not that complicated using sysfs, and can
-even be done quite simply with a shell script. Maybe a standard simple
-script in v4l-utils (or in another location) could help ?
+Hey Alex,
 
-> > > > > > > >       /*
-> > > > > > > >        * Set the driver data before calling video_register_device, otherwise
-> > > > > > > >
+On Thu, Dec 15, 2022 at 09:19:48AM +0100, Alexandre Ghiti wrote:
+> Add 2 early command line parameters called "no5lvl" and "no4lvl" (using
+> the same naming as x86) to allow a user to downgrade from sv57 (the
+> default mode if the hardware supports it) to sv48 or sv39.
 
--- 
-Regards,
+Pardon my innocence here, but does the "no4lvl" option not also allow
+downgrading from sv48 to sv39? If that's the case, I assume the message
+could be amended on application.
 
-Laurent Pinchart
+> Note that going through the device tree to get the kernel command line
+> works with ACPI too since the efi stub creates a device tree anyway with
+> the command line.
+>=20
+> Also, as those params are treated very early in the boot process and we
+> use standard device tree functions that may be kasan instrumented, we
+> only enable them for !KASAN configurations.
+
+I don't have a suggestion for you, so I am just airing my thoughts
+really - are we likely to end up confusing people as it's not
+immediately obvious that these options do not work if KASAN is enabled?
+I know KASAN really isn't something you want in a production kernel,
+but should we be flagging the incompatibility somewhere that "users"
+would see?
+kernel-parameters.txt does usually seem to mention config options where
+relevant, and in the case of iommu.strict also mentions some arch
+specific behaviour. Should we mention it there then?
+
+Thanks,
+Conor.
+
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>=20
+> v2:
+> - Honor CMDLINE_EXTEND and CMDLINE_FORCE as noticed by Bj=F6rn
+>=20
+>  .../admin-guide/kernel-parameters.txt         |  5 +-
+>  arch/riscv/mm/init.c                          | 72 +++++++++++++++++--
+>  2 files changed, 70 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
+ion/admin-guide/kernel-parameters.txt
+> index a465d5242774..6741524aa980 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -3548,7 +3548,10 @@
+>  			emulation library even if a 387 maths coprocessor
+>  			is present.
+> =20
+> -	no5lvl		[X86-64] Disable 5-level paging mode. Forces
+> +	no4lvl		[RISCV] Disable 4-level paging mode. Forces
+> +			kernel to use 3-level paging instead.
+> +
+> +	no5lvl		[X86-64,RISCV] Disable 5-level paging mode. Forces
+>  			kernel to use 4-level paging instead.
+> =20
+>  	nofsgsbase	[X86] Disables FSGSBASE instructions.
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index b56a0a75533f..d90fbe9ad494 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -746,17 +746,77 @@ static void __init disable_pgtable_l4(void)
+>  	satp_mode =3D SATP_MODE_39;
+>  }
+> =20
+> +#ifndef CONFIG_KASAN
+> +static __init bool match_noXlvl(const char *cmdline)
+> +{
+> +	if (strstr(cmdline, "no5lvl")) {
+> +		disable_pgtable_l5();
+> +	} else if (strstr(cmdline, "no4lvl")) {
+> +		disable_pgtable_l5();
+> +		disable_pgtable_l4();
+> +		return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +static int __init print_no4lvl(char *p)
+> +{
+> +	pr_info("Disabled 4-level and 5-level paging");
+> +	return 0;
+> +}
+> +early_param("no4lvl", print_no4lvl);
+> +
+> +static int __init print_no5lvl(char *p)
+> +{
+> +	pr_info("Disabled 5-level paging");
+> +	return 0;
+> +}
+> +early_param("no5lvl", print_no5lvl);
+> +#endif
+> +
+>  /*
+>   * There is a simple way to determine if 4-level is supported by the
+>   * underlying hardware: establish 1:1 mapping in 4-level page table mode
+>   * then read SATP to see if the configuration was taken into account
+>   * meaning sv48 is supported.
+>   */
+> -static __init void set_satp_mode(void)
+> +static __init void set_satp_mode(uintptr_t dtb_pa)
+>  {
+>  	u64 identity_satp, hw_satp;
+>  	uintptr_t set_satp_mode_pmd =3D ((unsigned long)set_satp_mode) & PMD_MA=
+SK;
+> -	bool check_l4 =3D false;
+> +
+> +#ifndef CONFIG_KASAN
+> +	/*
+> +	 * The below fdt functions are kasan instrumented, since at this point
+> +	 * there is no mapping for the kasan shadow memory, this can't be used
+> +	 * when kasan is enabled.
+> +	 */
+> +	int chosen_node;
+> +	unsigned int fdt_cmdline_size =3D 0;
+> +
+> +	if (!IS_ENABLED(CONFIG_CMDLINE_FORCE)) {
+> +		chosen_node =3D fdt_path_offset((void *)dtb_pa, "/chosen");
+> +		if (chosen_node >=3D 0) {
+> +			const char *fdt_cmdline;
+> +
+> +			fdt_cmdline =3D fdt_getprop((void *)dtb_pa, chosen_node,
+> +						  "bootargs", NULL);
+> +			if (fdt_cmdline) {
+> +				if (match_noXlvl(fdt_cmdline))
+> +					return;
+> +				fdt_cmdline_size =3D strlen(fdt_cmdline);
+> +			}
+> +		}
+> +	}
+> +
+> +	if (IS_ENABLED(CONFIG_CMDLINE_EXTEND) ||
+> +	    IS_ENABLED(CONFIG_CMDLINE_FORCE) ||
+> +	    fdt_cmdline_size =3D=3D 0 /* CONFIG_CMDLINE_FALLBACK */) {
+> +		if (match_noXlvl(CONFIG_CMDLINE))
+> +			return;
+> +	}
+> +#endif
+> =20
+>  	create_p4d_mapping(early_p4d,
+>  			set_satp_mode_pmd, (uintptr_t)early_pud,
+> @@ -775,7 +835,8 @@ static __init void set_satp_mode(void)
+>  retry:
+>  	create_pgd_mapping(early_pg_dir,
+>  			   set_satp_mode_pmd,
+> -			   check_l4 ? (uintptr_t)early_pud : (uintptr_t)early_p4d,
+> +			   pgtable_l5_enabled ?
+> +				(uintptr_t)early_p4d : (uintptr_t)early_pud,
+>  			   PGDIR_SIZE, PAGE_TABLE);
+> =20
+>  	identity_satp =3D PFN_DOWN((uintptr_t)&early_pg_dir) | satp_mode;
+> @@ -786,9 +847,8 @@ static __init void set_satp_mode(void)
+>  	local_flush_tlb_all();
+> =20
+>  	if (hw_satp !=3D identity_satp) {
+> -		if (!check_l4) {
+> +		if (pgtable_l5_enabled) {
+>  			disable_pgtable_l5();
+> -			check_l4 =3D true;
+>  			memset(early_pg_dir, 0, PAGE_SIZE);
+>  			goto retry;
+>  		}
+> @@ -979,7 +1039,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>  #endif
+> =20
+>  #if defined(CONFIG_64BIT) && !defined(CONFIG_XIP_KERNEL)
+> -	set_satp_mode();
+> +	set_satp_mode(dtb_pa);
+>  #endif
+> =20
+>  	kernel_map.va_pa_offset =3D PAGE_OFFSET - kernel_map.phys_addr;
+> --=20
+> 2.37.2
+>=20
+>=20
+
+--2CgsAwd7ZL+qgvLr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6OIQwAKCRB4tDGHoIJi
+0l9pAQD5X/kxAPfoDuAklRSqKRdq2/SSSr4DNDtuvpbT6yKVZQD/eHjqmn5HHG1P
+B58VNpyWRtwZkIRPH/BfDEJGzdpAigs=
+=usPd
+-----END PGP SIGNATURE-----
+
+--2CgsAwd7ZL+qgvLr--
