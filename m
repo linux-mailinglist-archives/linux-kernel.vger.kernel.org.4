@@ -2,59 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7092653363
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:30:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAA3653325
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234875AbiLUPaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 10:30:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
+        id S234615AbiLUPZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 10:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234834AbiLUP32 (ORCPT
+        with ESMTP id S229679AbiLUPZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 10:29:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EFC25E80
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:26:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671636363;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IBBAPxnl7DwOOsdKQMEBGtzB4FUQAydS0fgSBc7KeGs=;
-        b=YJkwA98iJMTSeyGvjjorteL9qNkS6hfzGD+NfuN0PC3kSaSuHlqdnV7K/enJQ9TFP+Y/Xj
-        s3BlC/XXKkthi32jtZjzoZH6FlLWvT1JwMmxfJi24Y1IIWwIz4J7JZl8v0HO4SD4xv8ni8
-        dxLfWkDIPtUXMu2HWqZa9dstSnEVlI0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-298-63KRRxRYO-2yACRTfpl55A-1; Wed, 21 Dec 2022 10:26:00 -0500
-X-MC-Unique: 63KRRxRYO-2yACRTfpl55A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 04FC387B2A1;
-        Wed, 21 Dec 2022 15:26:00 +0000 (UTC)
-Received: from rules.brq.redhat.com (ovpn-208-25.brq.redhat.com [10.40.208.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C019B40C2064;
-        Wed, 21 Dec 2022 15:25:57 +0000 (UTC)
-From:   Vladis Dronov <vdronov@redhat.com>
-To:     nstange@suse.de
-Cc:     davem@davemloft.net, herbert@gondor.apana.org.au,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        smueller@chronox.de, vdronov@redhat.com
-Subject: [PATCH 5/6] crypto: xts - drop xts_check_key()
-Date:   Wed, 21 Dec 2022 16:25:17 +0100
-Message-Id: <20221221152517.8567-1-vdronov@redhat.com>
-In-Reply-To: <20221108142025.13461-1-nstange@suse.de>
-References: <20221108142025.13461-1-nstange@suse.de>
+        Wed, 21 Dec 2022 10:25:44 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B78E0D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:25:42 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id d20so22555992edn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:25:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=e2mkku343U5D/UFeX6GPxNJ2xnofRb9nj6juvn1mIAg=;
+        b=UabexA0/CRsCXfwCSv8pNmuh3PvQl3OpCyLgITIz3S7q1+tTnGdqNfTJzjgg62mRcI
+         gxE9n6cdka3y/Fh1yel4m+5E5DDpMCTQP+rVgZ9bqfGv+RMwjkgY4jApbfwLX7ls5+B2
+         kqPw7ixGW+u4cvthuLYRoGocxctUnOsI+sbyenES+ObkJ304Kb6IfJYVBxoPQjVVeMKJ
+         W0tE6IXzzdUGVjolKsHBnZRSJHJePZPQUJAse8fjNQ5ptJvRZ71WNZhq7tBxRmcQ6tMB
+         HRsEypzKIgHLmGB+u7B1GUET2xgkfxqfTf0OZC3HY0Pn5Hh5ZyWpYRb9Tg0S8cKLpLIi
+         zDcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e2mkku343U5D/UFeX6GPxNJ2xnofRb9nj6juvn1mIAg=;
+        b=lA3p8pA+KshsuJG+g/moQ7SAxqZIPRU6bZu1uPlgm9H0Kzuy29Z256IDa+y9qaUAr2
+         ynbqhLmpJgCV5sTfzsy6HCla4VSot0R0Rfg3nFy4hVNsSlQ5fzyOpviABhmJMlNV0LTW
+         BQ8g6FYAeN7HGklX0249mPDeEgDM78u2na5t4ubYD23IK/AV32lsoYZlNSe2uRrjvFag
+         0qFaVVc52VTQWWy7RXyzx01wRMpdMGhZ9McgGMGTpzWowi1P60o+QvkdlRunhzDc0rbB
+         G3tIXVfSQlES3yhJ2h2Ixbs5fUVv9eSO43hBcNMsuBJ1ZjHi5Wb+NMnCEt86gj8723JE
+         eKcQ==
+X-Gm-Message-State: AFqh2krX+8npbc/tAVPwNO0pm2ySiDTS00EyuAOLfTxeOSbGbxOr270j
+        XMSMdAmBDzHiEbqEvoV+2nu0dQ==
+X-Google-Smtp-Source: AMrXdXuWgi9Ls253r6P2zIs/ZhDmWFBRs2hmO7z7cBibYROYhfNI9Zytz5qR/nOtGvuAlnxn/7Lm5Q==
+X-Received: by 2002:a05:6402:5285:b0:45c:834b:eb5f with SMTP id en5-20020a056402528500b0045c834beb5fmr2082155edb.42.1671636340912;
+        Wed, 21 Dec 2022 07:25:40 -0800 (PST)
+Received: from blmsp.fritz.box ([2001:4091:a245:805c:8713:84e4:2a9e:cbe8])
+        by smtp.gmail.com with ESMTPSA id n19-20020aa7c793000000b0045cf4f72b04sm7105428eds.94.2022.12.21.07.25.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Dec 2022 07:25:40 -0800 (PST)
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: [PATCH 00/18] can: m_can: Optimizations for m_can/tcan part 2
+Date:   Wed, 21 Dec 2022 16:25:19 +0100
+Message-Id: <20221221152537.751564-1-msp@baylibre.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,201 +72,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xts_check_key() is obsoleted by xts_verify_key(). Over time XTS crypto
-drivers adopted the newer xts_verify_key() variant, but xts_check_key()
-is still used by a number of drivers. Switch drivers to use the newer
-xts_verify_key() and make a couple of cleanups. This allows us to drop
-xts_check_key() completely and avoid redundancy.
+Hi Marc and everyone,
 
-Signed-off-by: Vladis Dronov <vdronov@redhat.com>
----
- arch/s390/crypto/paes_s390.c                  |  2 +-
- drivers/crypto/atmel-aes.c                    |  2 +-
- drivers/crypto/axis/artpec6_crypto.c          |  2 +-
- drivers/crypto/cavium/cpt/cptvf_algs.c        |  8 +++----
- .../crypto/cavium/nitrox/nitrox_skcipher.c    |  8 +++----
- drivers/crypto/ccree/cc_cipher.c              |  2 +-
- .../crypto/marvell/octeontx/otx_cptvf_algs.c  |  2 +-
- .../marvell/octeontx2/otx2_cptvf_algs.c       |  2 +-
- include/crypto/xts.h                          | 21 +++----------------
- 9 files changed, 15 insertions(+), 34 deletions(-)
+this is the second part now. I know it is the merge window right now but
+I am quite sure this won't be merged immediately anyways, so if you have
+some time for some comments I would appreciate it. So it is still based
+on v6.1-rc8 + the patches that got applied.
 
-diff --git a/arch/s390/crypto/paes_s390.c b/arch/s390/crypto/paes_s390.c
-index a279b7d23a5e..29dc827e0fe8 100644
---- a/arch/s390/crypto/paes_s390.c
-+++ b/arch/s390/crypto/paes_s390.c
-@@ -474,7 +474,7 @@ static int xts_paes_set_key(struct crypto_skcipher *tfm, const u8 *in_key,
- 		return rc;
- 
- 	/*
--	 * xts_check_key verifies the key length is not odd and makes
-+	 * xts_verify_key verifies the key length is not odd and makes
- 	 * sure that the two keys are not the same. This can be done
- 	 * on the two protected keys as well
- 	 */
-diff --git a/drivers/crypto/atmel-aes.c b/drivers/crypto/atmel-aes.c
-index 886bf258544c..130f8bf09a9a 100644
---- a/drivers/crypto/atmel-aes.c
-+++ b/drivers/crypto/atmel-aes.c
-@@ -1879,7 +1879,7 @@ static int atmel_aes_xts_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 	struct atmel_aes_xts_ctx *ctx = crypto_skcipher_ctx(tfm);
- 	int err;
- 
--	err = xts_check_key(crypto_skcipher_tfm(tfm), key, keylen);
-+	err = xts_verify_key(tfm, key, keylen);
- 	if (err)
- 		return err;
- 
-diff --git a/drivers/crypto/axis/artpec6_crypto.c b/drivers/crypto/axis/artpec6_crypto.c
-index 51c66afbe677..f6f41e316dfe 100644
---- a/drivers/crypto/axis/artpec6_crypto.c
-+++ b/drivers/crypto/axis/artpec6_crypto.c
-@@ -1621,7 +1621,7 @@ artpec6_crypto_xts_set_key(struct crypto_skcipher *cipher, const u8 *key,
- 		crypto_skcipher_ctx(cipher);
- 	int ret;
- 
--	ret = xts_check_key(&cipher->base, key, keylen);
-+	ret = xts_verify_key(cipher, key, keylen);
- 	if (ret)
- 		return ret;
- 
-diff --git a/drivers/crypto/cavium/cpt/cptvf_algs.c b/drivers/crypto/cavium/cpt/cptvf_algs.c
-index ce3b91c612f0..6a7760544780 100644
---- a/drivers/crypto/cavium/cpt/cptvf_algs.c
-+++ b/drivers/crypto/cavium/cpt/cptvf_algs.c
-@@ -232,13 +232,12 @@ static int cvm_decrypt(struct skcipher_request *req)
- static int cvm_xts_setkey(struct crypto_skcipher *cipher, const u8 *key,
- 		   u32 keylen)
- {
--	struct crypto_tfm *tfm = crypto_skcipher_tfm(cipher);
--	struct cvm_enc_ctx *ctx = crypto_tfm_ctx(tfm);
-+	struct cvm_enc_ctx *ctx = crypto_skcipher_ctx(cipher);
- 	int err;
- 	const u8 *key1 = key;
- 	const u8 *key2 = key + (keylen / 2);
- 
--	err = xts_check_key(tfm, key, keylen);
-+	err = xts_verify_key(cipher, key, keylen);
- 	if (err)
- 		return err;
- 	ctx->key_len = keylen;
-@@ -289,8 +288,7 @@ static int cvm_validate_keylen(struct cvm_enc_ctx *ctx, u32 keylen)
- static int cvm_setkey(struct crypto_skcipher *cipher, const u8 *key,
- 		      u32 keylen, u8 cipher_type)
- {
--	struct crypto_tfm *tfm = crypto_skcipher_tfm(cipher);
--	struct cvm_enc_ctx *ctx = crypto_tfm_ctx(tfm);
-+	struct cvm_enc_ctx *ctx = crypto_skcipher_ctx(cipher);
- 
- 	ctx->cipher_type = cipher_type;
- 	if (!cvm_validate_keylen(ctx, keylen)) {
-diff --git a/drivers/crypto/cavium/nitrox/nitrox_skcipher.c b/drivers/crypto/cavium/nitrox/nitrox_skcipher.c
-index 248b4fff1c72..138261dcd032 100644
---- a/drivers/crypto/cavium/nitrox/nitrox_skcipher.c
-+++ b/drivers/crypto/cavium/nitrox/nitrox_skcipher.c
-@@ -337,12 +337,11 @@ static int nitrox_3des_decrypt(struct skcipher_request *skreq)
- static int nitrox_aes_xts_setkey(struct crypto_skcipher *cipher,
- 				 const u8 *key, unsigned int keylen)
- {
--	struct crypto_tfm *tfm = crypto_skcipher_tfm(cipher);
--	struct nitrox_crypto_ctx *nctx = crypto_tfm_ctx(tfm);
-+	struct nitrox_crypto_ctx *nctx = crypto_skcipher_ctx(cipher);
- 	struct flexi_crypto_context *fctx;
- 	int aes_keylen, ret;
- 
--	ret = xts_check_key(tfm, key, keylen);
-+	ret = xts_verify_key(cipher, key, keylen);
- 	if (ret)
- 		return ret;
- 
-@@ -362,8 +361,7 @@ static int nitrox_aes_xts_setkey(struct crypto_skcipher *cipher,
- static int nitrox_aes_ctr_rfc3686_setkey(struct crypto_skcipher *cipher,
- 					 const u8 *key, unsigned int keylen)
- {
--	struct crypto_tfm *tfm = crypto_skcipher_tfm(cipher);
--	struct nitrox_crypto_ctx *nctx = crypto_tfm_ctx(tfm);
-+	struct nitrox_crypto_ctx *nctx = crypto_skcipher_ctx(cipher);
- 	struct flexi_crypto_context *fctx;
- 	int aes_keylen;
- 
-diff --git a/drivers/crypto/ccree/cc_cipher.c b/drivers/crypto/ccree/cc_cipher.c
-index 309da6334a0a..2cd44d7457a4 100644
---- a/drivers/crypto/ccree/cc_cipher.c
-+++ b/drivers/crypto/ccree/cc_cipher.c
-@@ -460,7 +460,7 @@ static int cc_cipher_setkey(struct crypto_skcipher *sktfm, const u8 *key,
- 	}
- 
- 	if (ctx_p->cipher_mode == DRV_CIPHER_XTS &&
--	    xts_check_key(tfm, key, keylen)) {
-+	    xts_verify_key(sktfm, key, keylen)) {
- 		dev_dbg(dev, "weak XTS key");
- 		return -EINVAL;
- 	}
-diff --git a/drivers/crypto/marvell/octeontx/otx_cptvf_algs.c b/drivers/crypto/marvell/octeontx/otx_cptvf_algs.c
-index 01c48ddc4eeb..b9e7433aba8e 100644
---- a/drivers/crypto/marvell/octeontx/otx_cptvf_algs.c
-+++ b/drivers/crypto/marvell/octeontx/otx_cptvf_algs.c
-@@ -398,7 +398,7 @@ static int otx_cpt_skcipher_xts_setkey(struct crypto_skcipher *tfm,
- 	const u8 *key1 = key;
- 	int ret;
- 
--	ret = xts_check_key(crypto_skcipher_tfm(tfm), key, keylen);
-+	ret = xts_verify_key(tfm, key, keylen);
- 	if (ret)
- 		return ret;
- 	ctx->key_len = keylen;
-diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-index 67530e90bbfe..11b7f504bbd7 100644
---- a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-+++ b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-@@ -412,7 +412,7 @@ static int otx2_cpt_skcipher_xts_setkey(struct crypto_skcipher *tfm,
- 	const u8 *key1 = key;
- 	int ret;
- 
--	ret = xts_check_key(crypto_skcipher_tfm(tfm), key, keylen);
-+	ret = xts_verify_key(tfm, key, keylen);
- 	if (ret)
- 		return ret;
- 	ctx->key_len = keylen;
-diff --git a/include/crypto/xts.h b/include/crypto/xts.h
-index a233c1054df2..5a6a2cc89d49 100644
---- a/include/crypto/xts.h
-+++ b/include/crypto/xts.h
-@@ -8,23 +8,6 @@
- 
- #define XTS_BLOCK_SIZE 16
- 
--static inline int xts_check_key(struct crypto_tfm *tfm,
--				const u8 *key, unsigned int keylen)
--{
--	/*
--	 * key consists of keys of equal size concatenated, therefore
--	 * the length must be even.
--	 */
--	if (keylen % 2)
--		return -EINVAL;
--
--	/* ensure that the AES and tweak key are not identical */
--	if (fips_enabled && !crypto_memneq(key, key + (keylen / 2), keylen / 2))
--		return -EINVAL;
--
--	return 0;
--}
--
- static inline int xts_verify_key(struct crypto_skcipher *tfm,
- 				 const u8 *key, unsigned int keylen)
- {
-@@ -42,7 +25,9 @@ static inline int xts_verify_key(struct crypto_skcipher *tfm,
- 	if (fips_enabled && keylen != 32 && keylen != 64)
- 		return -EINVAL;
- 
--	/* ensure that the AES and tweak key are not identical */
-+	/* ensure that the AES and tweak key are not identical
-+	 * when in FIPS mode or the FORBID_WEAK_KEYS flag is set.
-+	 */
- 	if ((fips_enabled || (crypto_skcipher_get_flags(tfm) &
- 			      CRYPTO_TFM_REQ_FORBID_WEAK_KEYS)) &&
- 	    !crypto_memneq(key, key + (keylen / 2), keylen / 2))
+I tried to do as small patches as possible so it is easier to
+understand. The series changed a lot compared to v1 I sent so I didn't
+call it v2. There are a lot of new patches as well.
+
+The series contains a few small fixes and optimizations at the
+beginning, then adding coalescing support and at the end removing the
+restrictions on the number of parallel transmits in flight.
+
+Note that the last patch 'Implement transmit submission coalescing' does
+not perform well for me in a loopback testing setup. However I think it
+may work well in normal testcases. I attached this mechanism to the
+tx-frames coalescing option, let me know if this is the correct option.
+
+Best,
+Markus
+
+part 1:
+v1 - https://lore.kernel.org/lkml/20221116205308.2996556-1-msp@baylibre.com
+v2 - https://lore.kernel.org/lkml/20221206115728.1056014-1-msp@baylibre.com
+
+Markus Schneider-Pargmann (18):
+  can: tcan4x5x: Remove reserved register 0x814 from writable table
+  can: tcan4x5x: Check size of mram configuration
+  can: m_can: Remove repeated check for is_peripheral
+  can: m_can: Always acknowledge all interrupts
+  can: m_can: Remove double interrupt enable
+  can: m_can: Disable unused interrupts
+  can: m_can: Keep interrupts enabled during peripheral read
+  can: m_can: Write transmit header and data in one transaction
+  can: m_can: Implement receive coalescing
+  can: m_can: Implement transmit coalescing
+  can: m_can: Add rx coalescing ethtool support
+  can: m_can: Add tx coalescing ethtool support
+  can: m_can: Cache tx putidx
+  can: m_can: Use the workqueue as queue
+  can: m_can: Introduce a tx_fifo_in_flight counter
+  can: m_can: Use tx_fifo_in_flight for netif_queue control
+  can: m_can: Implement BQL
+  can: m_can: Implement transmit submission coalescing
+
+ drivers/net/can/m_can/m_can.c           | 498 ++++++++++++++++++------
+ drivers/net/can/m_can/m_can.h           |  36 +-
+ drivers/net/can/m_can/tcan4x5x-core.c   |   5 +
+ drivers/net/can/m_can/tcan4x5x-regmap.c |   1 -
+ 4 files changed, 418 insertions(+), 122 deletions(-)
+
 -- 
-2.37.2
+2.38.1
 
