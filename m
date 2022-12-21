@@ -2,71 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8E4652C52
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 06:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5819A652C56
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 06:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233998AbiLUFO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 00:14:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
+        id S234385AbiLUFS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 00:18:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiLUFOz (ORCPT
+        with ESMTP id S229472AbiLUFS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 00:14:55 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B811AF1D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 21:14:54 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id v23so9374631pju.3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 21:14:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=58KPHzr5CDwAEkwIK5uh0Ypn+WKmBYyNXwDDK5i4gXQ=;
-        b=M1Oddl2gOUYbTrW4XB8DG47MMPushgPON4TF1M7LHhxcESU1HF6DYc3ehQ9/sSZYb4
-         VJ6SWVm06ro9wP7cEsBDXRC9m3FU7SBGVrn5gavydEyoJcl6m6NXVkOatc7KqNSBlPtp
-         sDucdUbphnxPNxzzfWLfhCihtg43VQ++VhRjPBbCIS4AuZb5oe3kt/At9Xi80pOiTGsj
-         Lu8BPcdD/cCXGOQictIf5oSN9Ch4rnDb/IwWqgUD1O/JzScQuaxspiK4xEOa7UBOi091
-         o/pRllQj1H+Pz1BN7DTn4Ylh4B91Wm0TOdDxUmNpb1ckscS/gLu6ERYXTCniMra8VqgS
-         HmZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=58KPHzr5CDwAEkwIK5uh0Ypn+WKmBYyNXwDDK5i4gXQ=;
-        b=fY+gB7DBbhKIjt7XR5NmFRqiT2p01nD+oi+RPN5rendKlXi7VbVvp0Eq6SRkN2GbWk
-         RwKBHigx6r7pJxUUvtOa9obtbM0t6sZ1NaUjnJZM89EQBGFAAwByL65B/fiRQkkxHaCW
-         YEB7fW/+I5i+AG+ndPcbZnZzuNc/+sfqSl7NtCkppyxOZQOwOWoPgfdl+Mdnm9Y64oKK
-         G2mc7CvW0aAh9lMvvvgvd4p45b0yuu5cRRc5rvGCiMZ0ypnj517t48edLbvGk/6sFBRi
-         DNiWGnXCHRO410l1tlDK62xrOYksx4AJKyrenDe1Pvjt55YTbVrCIuw5GNfOIuQ3+Mes
-         quQA==
-X-Gm-Message-State: AFqh2koLjnXxaZ9TMuTE7FZMHCNoDZABSsT+eN/ZLQLqUrIePWUBy3iN
-        ooxE/1rWpoiQfqy/JrtMXdOtVn8f4XjYLNKR
-X-Google-Smtp-Source: AMrXdXvv4OT1+XTFELG23gnsrUFM3riOp0HUS6LR7fuyRYoEazUkZB3ssZV2lapXKDi8/9vURCYC1A==
-X-Received: by 2002:a05:6a20:cb44:b0:af:e129:cc4 with SMTP id hd4-20020a056a20cb4400b000afe1290cc4mr991565pzb.41.1671599693593;
-        Tue, 20 Dec 2022 21:14:53 -0800 (PST)
-Received: from vernon-pc ([114.231.52.81])
-        by smtp.gmail.com with ESMTPSA id b3-20020a636703000000b004768b74f208sm9248045pgc.4.2022.12.20.21.14.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 21:14:53 -0800 (PST)
-Date:   Wed, 21 Dec 2022 13:14:48 +0800
-From:   Vernon Yang <vernon2gm@gmail.com>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 6/8] maple_tree: change return type of mas_commit_b_node()
-Message-ID: <Y6KWSLm2AqpqqfW7@vernon-pc>
-References: <20221220142606.1698836-2-vernon2gm@gmail.com>
- <20221220142606.1698836-7-vernon2gm@gmail.com>
- <20221220150310.kfzx5paymtaepbxk@revolver>
+        Wed, 21 Dec 2022 00:18:57 -0500
+Received: from qproxy4-pub.mail.unifiedlayer.com (qproxy4-pub.mail.unifiedlayer.com [66.147.248.250])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C448C1FCE8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 21:18:56 -0800 (PST)
+Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
+        by qproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id 381648027456
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:18:44 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 33E7910046F8A
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:17:43 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id 7rU7pIBUgxJBC7rU7psGaG; Wed, 21 Dec 2022 05:17:43 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=V9y4bcri c=1 sm=1 tr=0 ts=63a296f7
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=sHyYjHe8cH0A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=TnKrfx86Qffcr4YpYupUCLTqyu8tLQWTLm+aaRfgSMY=; b=ANsOuBG49Umw2hTrvUyGr8uZga
+        Y8T1AEk/C+4/s0qkclA89sL+HUOTPzEeiIqFNE1NMYzjhMH53Q/cXNalZA/ynFF5/8bUT+1rejqdY
+        xfIFHHiKE6mwBpLiJ0ESaIs8G6zI2L/PBALEiMrr4WQPJ3710Uw0glTqfd8HCjBAW0+KDlxW7VPSm
+        4aj5piYBdnQo6J8nkMuWFU9Wl8X1BcOgbCkCP9Ph6JcRU7So0IGEhQWZ0mY46Rxi3vqKODUI9VmPz
+        NIKLs1y/nubrnz6wB54SespNkTRhh+F2eVz5aNVhu7VC4xojf6gioDU7aHS28czos2lqmwwdBWcvK
+        QjPEp8kg==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:34026 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1p7rU4-001tac-Vp;
+        Tue, 20 Dec 2022 22:17:41 -0700
+Subject: Re: [PATCH 5.15 00/17] 5.15.85-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221219182940.739981110@linuxfoundation.org>
+In-Reply-To: <20221219182940.739981110@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <38e9d6c4-b351-cadd-35b9-c0a1720d494f@w6rz.net>
+Date:   Tue, 20 Dec 2022 21:17:34 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221220150310.kfzx5paymtaepbxk@revolver>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1p7rU4-001tac-Vp
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:34026
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,72 +98,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 03:03:36PM +0000, Liam Howlett wrote:
-> * Vernon Yang <vernon2gm@gmail.com> [221220 09:26]:
-> > The return value of mas_commit_b_node() function represents whether
-> > the submit b_node is successful, and can only be false and true, so
-> > the return value type is bool is more appropriate and for better
-> > readability.
-> >
-> > Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
-> > ---
-> >  lib/maple_tree.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-> > index b3a215dd961e..e7dde4a1d6cb 100644
-> > --- a/lib/maple_tree.c
-> > +++ b/lib/maple_tree.c
-> > @@ -3578,7 +3578,7 @@ static inline bool mas_reuse_node(struct ma_wr_state *wr_mas,
-> >   * @b_node: The maple big node
-> >   * @end: The end of the data.
-> >   */
-> > -static inline int mas_commit_b_node(struct ma_wr_state *wr_mas,
-> > +static inline bool mas_commit_b_node(struct ma_wr_state *wr_mas,
-> >  			    struct maple_big_node *b_node, unsigned char end)
+On 12/19/22 11:24 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.85 release.
+> There are 17 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> mas_commit_b_node() can also return the ints from mas_split() and
-> mas_rebalance().  I'm fine with changing the return, but it seems odd to
-> only half-change it?
-Oh, sorry, I forgot to changes the return value type of the mas_split()
-and mas_rebalance()
-
+> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
+> Anything received after that time might be too late.
 >
-> Initially I had a different intention for the return type of int, but it
-> seems the return isn't used at all from this function.  We should
-> just change mas_commit_b_node(), mas_split(), and mas_rebalance() to
-> return type void if we're going to clean it up.
-Yes, the return isn't used at all from this function, have noticed.
-
-Initially, I also wanted to change the return type void, but these
-functions have an error condition that returns early, so I'm more
-inclined to have an error value return so that it's clearer and
-for better readable.
-
-en... I temporarily remove this patch 6
-
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.85-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
 >
-> >  {
-> >  	struct maple_node *node;
-> > @@ -3598,7 +3598,7 @@ static inline int mas_commit_b_node(struct ma_wr_state *wr_mas,
-> >
-> >  	mas_node_count(wr_mas->mas, 1);
-> >  	if (mas_is_err(wr_mas->mas))
-> > -		return 0;
-> > +		return false;
-> >
-> >  	node = mas_pop_node(wr_mas->mas);
-> >  	node->parent = mas_mn(wr_mas->mas)->parent;
-> > @@ -3607,7 +3607,7 @@ static inline int mas_commit_b_node(struct ma_wr_state *wr_mas,
-> >  	mas_replace(wr_mas->mas, false);
-> >  reuse_node:
-> >  	mas_update_gap(wr_mas->mas);
-> > -	return 1;
-> > +	return true;
-> >  }
-> >
-> >  /*
-> > --
-> > 2.34.1
-> >
-> >
+> thanks,
+>
+> greg k-h
+
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+
+Tested-by: Ron Economos <re@w6rz.net>
+
