@@ -2,139 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B406652E28
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 10:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E31E8652E29
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 10:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234435AbiLUJAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 04:00:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33624 "EHLO
+        id S234460AbiLUJCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 04:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiLUJAu (ORCPT
+        with ESMTP id S229696AbiLUJCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 04:00:50 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93B85F18
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 01:00:48 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 040462F4;
-        Wed, 21 Dec 2022 01:01:29 -0800 (PST)
-Received: from [10.57.44.6] (unknown [10.57.44.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5BC293F71A;
-        Wed, 21 Dec 2022 01:00:46 -0800 (PST)
-Message-ID: <9cfb3356-3e3b-e9f3-1e16-ff02790e5829@arm.com>
-Date:   Wed, 21 Dec 2022 10:00:39 +0100
+        Wed, 21 Dec 2022 04:02:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19846D2F6
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 01:01:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671613314;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9iIYwD1s+rp4gdocvftwkwpTMI6nv2X3CbOpNxwVqmA=;
+        b=Q/U2uNpFroCrr/tIxh+mg6fLor/zKdy3rldKjHfP126WCVgW/fCreqWwERcjbWvE53z3Rt
+        On3BKjeAmqurUA5Cb9rX0wP8/MOFxQScY4x7Jqdx/AbGqbOCfc9GbJXry/J0TXjG1UT1oE
+        VpgjO2DExDdSOgxNp+yylqera6Nr7jU=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-557--C_dCHDmPciLYUg4VMmGmg-1; Wed, 21 Dec 2022 04:01:53 -0500
+X-MC-Unique: -C_dCHDmPciLYUg4VMmGmg-1
+Received: by mail-wr1-f72.google.com with SMTP id s1-20020adfa281000000b00241f7467851so2681501wra.17
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 01:01:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9iIYwD1s+rp4gdocvftwkwpTMI6nv2X3CbOpNxwVqmA=;
+        b=A5QsD58daDRdfiggW0qy9Z1aOMZpw04mmbS+pzuWI8MS4OmnghkoTNajIdOzTKUXJH
+         G0llpD3YY7EVRZ5XmvuwNBZpfurSrJX+rZgU6K2R5He0g+R93fJztNJfZOj9Sb9GcCri
+         b7jbVvhjyjC7TOf0/if+9r7P4jhDRVqw9780dCrgWIUe0MbS+tFR9IP1rVwTXWiKMdOR
+         hntbIYYEUrYo97iRAJSO3PRa37KroVjFeqOKpB42pmNoLgqHL4I/DeE7DEvI5L2DvuQd
+         uX+rLkWhrBg5NJcgwv1tlTCXoCYo34NMuQlAqeAUuaPgqTKCZP8TGpgwvZZFt2xmyhpQ
+         MQhQ==
+X-Gm-Message-State: AFqh2kqK7Y/Ft/V7c1hJjrJf9FNI8rkrDCwv9eL2500YDUWyyhpWW9t2
+        fqHZlJmAjxwD00S1cr0zDG8yMSH1RIzgKTa3f6RmxKtXuuErXyrnXpyS4g8iZu4U94gYj1iUeki
+        Bx78xMtUK8PbNFSM50wacJbt6
+X-Received: by 2002:a7b:ca51:0:b0:3d2:7a7:5cc6 with SMTP id m17-20020a7bca51000000b003d207a75cc6mr3878753wml.18.1671613311760;
+        Wed, 21 Dec 2022 01:01:51 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsFpDODvdOo0JOg/vTTOqd2Zt1dsK4GxSMtz2DQ5Uf2cga8GhvxOFQbbrezG3xKpcxKAKW9cw==
+X-Received: by 2002:a7b:ca51:0:b0:3d2:7a7:5cc6 with SMTP id m17-20020a7bca51000000b003d207a75cc6mr3878729wml.18.1671613311446;
+        Wed, 21 Dec 2022 01:01:51 -0800 (PST)
+Received: from ?IPV6:2003:cb:c706:7300:2cf4:73e7:69d5:9e80? (p200300cbc70673002cf473e769d59e80.dip0.t-ipconnect.de. [2003:cb:c706:7300:2cf4:73e7:69d5:9e80])
+        by smtp.gmail.com with ESMTPSA id o25-20020a05600c379900b003d208eb17ecsm1546199wmr.26.2022.12.21.01.01.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 01:01:51 -0800 (PST)
+Message-ID: <d95d59d7-308d-831c-d8bd-16d06e66e8af@redhat.com>
+Date:   Wed, 21 Dec 2022 10:01:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-From:   Pierre Gondois <pierre.gondois@arm.com>
-Subject: Re: [PATCH v2 1/1] drivers: base: cacheinfo: fix shared_cpu_map
-To:     Yong-Xuan Wang <yongxuan.wang@sifive.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20221219105132.27690-1-yongxuan.wang@sifive.com>
- <20221219105132.27690-2-yongxuan.wang@sifive.com>
+ Thunderbird/102.5.1
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     kernel@collabora.com, peterx@redhat.com,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20221220162606.1595355-1-usama.anjum@collabora.com>
 Content-Language: en-US
-In-Reply-To: <20221219105132.27690-2-yongxuan.wang@sifive.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH RFC] mm: implement granular soft-dirty vma support
+In-Reply-To: <20221220162606.1595355-1-usama.anjum@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Yong-Xuan,
-Except for the nit below, I tried the patch and everything seemed ok, so
-with that:
-Reviewed-by: Pierre Gondois <pierre.gondois@arm.com>
+On 20.12.22 17:26, Muhammad Usama Anjum wrote:
+> The VM_SOFTDIRTY is used to mark a whole VMA soft-dirty. Sometimes
+> soft-dirty and non-soft-dirty VMAs are merged making the non-soft-dirty
+> region soft-dirty. This creates problems as the whole VMA region comes
+> out to be soft-dirty while in-reality no there is no soft-dirty page.
+> This can be solved by not merging the VMAs with different soft-dirty
+> flags. But it has potential to cause regression as the number of VMAs
+> can increase drastically.
 
-Regards,
-Pierre
+I'm not going to look into the details of this RFC, but (1) it looks 
+over-engineered and (2) is increases the size of each and every VMA in 
+the system.
 
-On 12/19/22 11:51, Yong-Xuan Wang wrote:
-> The cacheinfo sets up the shared_cpu_map by checking whether the caches
-> with the same index are shared between CPUs. However, this will trigger
-> slab-out-of-bounds access if the CPUs do not have the same cache hierarchy.
-> Another problem is the mismatched shared_cpu_map when the shared cache does
-> not have the same index between CPUs.
-> 
-> CPU0	I	D	L3
-> index	0	1	2	x
-> 	^	^	^	^
-> index	0	1	2	3
-> CPU1	I	D	L2	L3
-> 
-> This patch checks each cache is shared with all caches on other CPUs.
-> 
-> Signed-off-by: Yong-Xuan Wang <yongxuan.wang@sifive.com>
-> ---
->   drivers/base/cacheinfo.c | 25 +++++++++++++++----------
->   1 file changed, 15 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
-> index 950b22cdb5f7..d38f80f6fff1 100644
-> --- a/drivers/base/cacheinfo.c
-> +++ b/drivers/base/cacheinfo.c
-> @@ -256,7 +256,7 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
->   {
->   	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
->   	struct cacheinfo *this_leaf, *sib_leaf;
-> -	unsigned int index;
-> +	unsigned int index, sib_index;
->   	int ret = 0;
->   
->   	if (this_cpu_ci->cpu_map_populated)
-> @@ -284,11 +284,12 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
->   
->   			if (i == cpu || !sib_cpu_ci->info_list)
->   				continue;/* skip if itself or no cacheinfo */
-> -
-> -			sib_leaf = per_cpu_cacheinfo_idx(i, index);
-> -			if (cache_leaves_are_shared(this_leaf, sib_leaf)) {
-> -				cpumask_set_cpu(cpu, &sib_leaf->shared_cpu_map);
-> -				cpumask_set_cpu(i, &this_leaf->shared_cpu_map);
-> +			for (sib_index = 0; sib_index < cache_leaves(i); sib_index++) {
-> +				sib_leaf = per_cpu_cacheinfo_idx(i, sib_index);;
+Let's talk about what happens when we stop merging VMAs where 
+VM_SOFTDIRTY differs:
 
-It seems there are 2 ';' above (same in the block below).
+(a) Not merging VMAs when VM_SOFTDIRTY differs will only affect
+     processes with active softdirty tracking (i.e., after
+     CLEAR_REFS_SOFT_DIRTY). All other VMAs have VM_SOFTDIRTY set and
+     will get merged. Processes without CLEAR_REFS_SOFT_DIRTY behave the
+     same.
 
-> +				if (cache_leaves_are_shared(this_leaf, sib_leaf)) {
-> +					cpumask_set_cpu(cpu, &sib_leaf->shared_cpu_map);
-> +					cpumask_set_cpu(i, &this_leaf->shared_cpu_map);
-> +				}
->   			}
->   		}
->   		/* record the maximum cache line size */
-> @@ -302,7 +303,7 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
->   static void cache_shared_cpu_map_remove(unsigned int cpu)
->   {
->   	struct cacheinfo *this_leaf, *sib_leaf;
-> -	unsigned int sibling, index;
-> +	unsigned int sibling, index, sib_index;
->   
->   	for (index = 0; index < cache_leaves(cpu); index++) {
->   		this_leaf = per_cpu_cacheinfo_idx(cpu, index);
-> @@ -313,9 +314,13 @@ static void cache_shared_cpu_map_remove(unsigned int cpu)
->   			if (sibling == cpu || !sib_cpu_ci->info_list)
->   				continue;/* skip if itself or no cacheinfo */
->   
-> -			sib_leaf = per_cpu_cacheinfo_idx(sibling, index);
-> -			cpumask_clear_cpu(cpu, &sib_leaf->shared_cpu_map);
-> -			cpumask_clear_cpu(sibling, &this_leaf->shared_cpu_map);
-> +			for (sib_index = 0; sib_index < cache_leaves(sibling); sib_index++) {
-> +				sib_leaf = per_cpu_cacheinfo_idx(sibling, sib_index);;
-> +				if (cache_leaves_are_shared(this_leaf, sib_leaf)) {
-> +					cpumask_clear_cpu(cpu, &sib_leaf->shared_cpu_map);
-> +					cpumask_clear_cpu(sibling, &this_leaf->shared_cpu_map);
-> +				}
-> +			}
->   		}
->   	}
->   }
+(b) After CLEAR_REFS_SOFT_DIRTY, old mappings will have VM_SOFTDIRTY set
+     but new ones won't. We can't merge them. Consequently, we might not
+     merge these VMAs and create more.
+
+(c) The problem about (b) is that it will get worse every time we
+     CLEAR_REFS_SOFT_DIRTY, because we're not merging the old ones that
+     could get merged.
+
+
+To tackle (c), we can simply try merging VMAs in clear_refs_write() when 
+clearing VM_SOFTDIRTY. We're already properly holding the mmap lock in 
+write mode, so it's easy to check if we can merge the modified VMA into 
+the previous one or into the next one -- or if we can merge all of them 
+into a single VMA.
+
+
+For (b), the usual thing we care about is most probably
+
+[!VM_SOFTDIRTY][VM_SOFTDIRTY]
+
+No longer getting merged into a single VMA. This would imply that during 
+(b), we could have doubled the #VMAs.
+
+Of course, there are cases like
+
+[!VM_SOFTDIRTY][VM_SOFTDIRTY][!VM_SOFTDIRTY]
+
+where we could triple them or even a chain like
+
+[!VM_SOFTDIRTY][VM_SOFTDIRTY][!VM_SOFTDIRTY][VM_SOFTDIRTY]...
+
+where the #VMAs could explode. BUT, that would imply that someone has to 
+do fine-grained mmap()'s over an existing mmap()'s (or into holes) and 
+heavily relies on VMA merging to happen. I assume that only with 
+anonymous memory this really works as expected, so I am not sure how 
+likely such a pattern is in applications we care about and if we should 
+really care.
+
+My suggestion would be to
+
+(1) Make the new merging behavior (consider VM_SOFTDIRTY or ignore
+     VM_SOFTDIRTY) configurable (per process? for the system) to not
+     accidentally degrade existing users of soft-dirty tracking with such
+     "special" applications.
+(2) Implement conditional VMA merging during CLEAR_REFS_SOFT_DIRTY: if
+     we consider VM_SOFTDIRTY when making merging decisions, we want to
+     try merging VMAs here after clearing VM_SOFTDIRTY.
+(2) For your use case, enable the new behavior and eventually slightly
+     bump up the #VMA limit in case you're dealing with "special"
+     applications.
+
+(1) would be called something like "precise_softdirty_tracking". 
+Disabled is old handling, enabled is new handling. Precision here means 
+that we're not over-indicating softdirty due to VMA merging.
+
+
+Anything important I am missing? Are we aware of such applications for 
+your use-case?
+
+-- 
+Thanks,
+
+David / dhildenb
+
