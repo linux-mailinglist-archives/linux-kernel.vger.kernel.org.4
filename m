@@ -2,162 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB97652E0F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 09:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A35CD652E1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 09:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233321AbiLUIn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 03:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
+        id S234376AbiLUIvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 03:51:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiLUIn4 (ORCPT
+        with ESMTP id S231245AbiLUIuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 03:43:56 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8793A18E17;
-        Wed, 21 Dec 2022 00:43:52 -0800 (PST)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4FE021BF203;
-        Wed, 21 Dec 2022 08:43:47 +0000 (UTC)
-Date:   Wed, 21 Dec 2022 09:43:47 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Shravan.Chippa@microchip.com
-Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 1/5] media: i2c: imx334: modify link frequency as for
- the configureation
-Message-ID: <20221221084347.3d4f73txlcgiisvz@uno.localdomain>
-References: <20221219061526.3169369-1-shravan.chippa@microchip.com>
- <20221219061526.3169369-2-shravan.chippa@microchip.com>
- <20221219144414.lfusj67ojjk2phkv@uno.localdomain>
- <PH0PR11MB5611CA9634C1A7A66434703C81EA9@PH0PR11MB5611.namprd11.prod.outlook.com>
+        Wed, 21 Dec 2022 03:50:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B6C2098A
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:50:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671612606;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4dBwPnF71tq2OBO2+/MVeKfW3ISUERpMcMh5zSeUYQo=;
+        b=Dvwe/fgv3RdROeps1ZWhjDPLHSHBwevbfmt7eSB2Nzc53XzlRvHPQ7iyE4BLI/ntvzfkJG
+        PmEmykTwOIWB2xPKOLcuuQO7ydgU3PENnNPS+tkaZNU9Qyy/dpADEx8VBFlj9AOwqnkZ/M
+        tjTN2VjC35GFEkZMPiFFsn7vZ/cwS5A=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-582-DMI5Nkd9OoWoUZjxP2P4vQ-1; Wed, 21 Dec 2022 03:50:05 -0500
+X-MC-Unique: DMI5Nkd9OoWoUZjxP2P4vQ-1
+Received: by mail-oo1-f72.google.com with SMTP id v10-20020a4a860a000000b00480b3e2b5afso6664798ooh.12
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:50:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4dBwPnF71tq2OBO2+/MVeKfW3ISUERpMcMh5zSeUYQo=;
+        b=tlnUOT48O+Qa1f1NgKPIGiWMlZYRTreoa+lHuutLKe9K+v9SepKn8yFCSHJHX1oXnJ
+         r4CiKG/7YnciVIt2sHwgJvcEZgTbV3OF5QXC6QhhXTrC73Rtfg6GSlRPDz+KJ/2cIYdl
+         6Tl195zLG+o6Dlqv0d0TKr5PpV4cABePNUgT3RQjBkHw6NzuUgezBGBwyYPfGUKsHMOv
+         o7W1uJ29lRF5IlQmUIocGxJJ4wfz8lPEa/njI4nZREFYSm3XrzaMAaGarxVMaKPlC3OV
+         n0G15hREDnGcqZur5Cn1goerI0BjDGDXGLqnkwzXFvlNl/DJBoSYEARC9pZYKXBo7Pls
+         bvAw==
+X-Gm-Message-State: AFqh2kqpWE3s+jBQ2YRMlVa0HIEmwS9gLBoKjKLhknxdeoI2xF3Fis0Y
+        IJpz/1q+iCYGHGqCjYh4PJgmLMHB/Mz9SEZFRazm+KBY+EHR/5ifVz5taC3AvOSeVjcf6q7aJAW
+        q+lX4LFzyvTeKWrI+oBL9L0fo6+qhXw0lmITbhpXp
+X-Received: by 2002:a4a:980c:0:b0:4a0:62e4:a192 with SMTP id y12-20020a4a980c000000b004a062e4a192mr51320ooi.78.1671612604601;
+        Wed, 21 Dec 2022 00:50:04 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXslyTOgeUlNt0sPUExCep8NUGSb37Gj09+Cg6gLHYKbelf9rY8DM5avfZcrkERlhspuorchfOA8RlSLk1PbuLE=
+X-Received: by 2002:a4a:980c:0:b0:4a0:62e4:a192 with SMTP id
+ y12-20020a4a980c000000b004a062e4a192mr51318ooi.78.1671612604440; Wed, 21 Dec
+ 2022 00:50:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB5611CA9634C1A7A66434703C81EA9@PH0PR11MB5611.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221220151415.856093-1-neelx@redhat.com> <9295b73a-5a3c-b1f6-d892-0da1d356ab9f@redhat.com>
+In-Reply-To: <9295b73a-5a3c-b1f6-d892-0da1d356ab9f@redhat.com>
+From:   Daniel Vacek <neelx@redhat.com>
+Date:   Wed, 21 Dec 2022 09:49:28 +0100
+Message-ID: <CACjP9X90VT=sd_wT9MWg062qs=CRadsaj6V9gOMXSEJ7Up5Hzg@mail.gmail.com>
+Subject: Re: [PATCH] cgroup/cpuset: no need to explicitly init a global static variable
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shravan
-
-On Tue, Dec 20, 2022 at 11:11:15AM +0000, Shravan.Chippa@microchip.com wrote:
+On Tue, Dec 20, 2022 at 5:59 PM Waiman Long <longman@redhat.com> wrote:
 >
+> On 12/20/22 10:14, Daniel Vacek wrote:
+> > cpuset_rwsem is a static variable. It's initialized at build time and so
+> > there's no need for explicit runtime init leaking one percpu int.
 >
-> > -----Original Message-----
-> > From: Jacopo Mondi <jacopo@jmondi.org>
-> > Sent: 19 December 2022 08:14 PM
-> > To: shravan Chippa - I35088 <Shravan.Chippa@microchip.com>
-> > Cc: paul.j.murphy@intel.com; daniele.alessandrelli@intel.com;
-> > mchehab@kernel.org; linux-media@vger.kernel.org; linux-
-> > kernel@vger.kernel.org
-> > Subject: Re: [PATCH v7 1/5] media: i2c: imx334: modify link frequency as for
-> > the configureation
-> >
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the
-> > content is safe
-> >
-> > Hi Shravan
-> >
-> > On Mon, Dec 19, 2022 at 11:45:22AM +0530, shravan kumar wrote:
-> > > From: Shravan Chippa <shravan.chippa@microchip.com>
-> > >
-> > > Currently imx334 sensor driver is configured for 1782Mbps/lane for
-> > > 3840x2160@60 resolution with reqired reg mode values but if we run the
-> > > command "v4l2-ctl --all -d /dev/v4l-subdevX" it is showing incorrect
-> > > link frequeny, This is because of the incorrect value of
-> > > IMX334_LINK_FREQ witch is 891000000. it should be 1782000000.
-> > >
-> > > In general with the value of 891000000 link frequency it is not
-> > > possible to configure 3840x2160@60 resolution.
-> > >
-> > > Fixes: 9746b11715c3 ("media: i2c: Add imx334 camera sensor driver")
-> > >
-> > > Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
-> > > ---
-> > >  drivers/media/i2c/imx334.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
-> > > index 7b0a9086447d..acc9f9f15e47 100644
-> > > --- a/drivers/media/i2c/imx334.c
-> > > +++ b/drivers/media/i2c/imx334.c
-> > > @@ -49,7 +49,7 @@
-> > >  #define IMX334_INCLK_RATE    24000000
-> > >
-> > >  /* CSI2 HW configuration */
-> > > -#define IMX334_LINK_FREQ     891000000
-> > > +#define IMX334_LINK_FREQ     1782000000
-> >
-> > Is this your reasoning ?
-> >
-> > width: 3840
-> > hblank: 560
-> > height: 2160
-> > vblank: 2340
-> > bpp: 12
-> > fps: 60
-> > lanes: 4
-> >
-> > Total bandwidth: (3840 + 560) * (2160 + 2340) * 60 * 12 = 14.256.000.000
-> > Bandwidth per lane = Total / 4 = 3.564.000.000 mipi clock =
-> > Bandwidth_per_lane / 2 = 1.782.000.000
-> >
-> > Two questions:
-> >
-> > - Should you update the pixel clock as well ? It is currently set to
-> >   594000000 while as per the above reasoning it should be doubled too.
-> >
-> > - Where is the sensor's clock tree programmed in the driver ?
-> >   It's kind of weird that the pixel_clock and link_freq in the driver
-> >   are half of what they theoretically should be...
-> >
-> >
-> As per my understanding.
-> the mode_3840x2160_regs[] array value which is written through the i2c bus is 4k resolution, 60fps,  link frequency 1782Mbps per lane
-> but the vblank value is dynamic from user space.
-> Min-90 to Max-130000, default value is 2340. With the default value, we will get 30fps.
+> It will be clearer if you mention that DEFINE_STATIC_PERCPU_RWSEM() is
+> used to set up cpuset_rwsem at build time. Other than that, the patch
+> looks good to me.
 
-Ah, it's 30, not 60. So my calculations above should be halved
+That's true. I only figured later.
+Whoever is going to apply it, feel free to amend the message if you like.
 
->
-> if we set vblank value from user space it will change FPS.
+--nX
+
+> Cheers,
+> Longman
 >
 
-Sure, but the link frequency stays the same, and it should be computed
-with the FPS resulting from the current blankings
-
-> Total bandwidth: (3840 + 560) * (2160 + 2340) * 30 * 12 = 7.128.000.000
-
-Correct
-
-> Bandwidth per lane = Total / 4 = 1.782.000.000
-
-Correct.
-
-But with CID_LINK_FREQ you're reporting the bus link frequency, not
-the lane bandwidth. As MIPI CSI-2 uses DDR read mode, two bits per
-clock cycle are transmitted, hence the bus frequency is half of the lane
-bandwidth.
-
-TL;DR you don't need this patch, the current value is correct as it is in my
-understanding.
-
-Thanks
-  j
-
->
-> Thanks,
-> Shravan
->
-> >
-> > >  #define IMX334_NUM_DATA_LANES        4
-> > >
-> > >  #define IMX334_REG_MIN               0x00
-> > > --
-> > > 2.34.1
-> > >
