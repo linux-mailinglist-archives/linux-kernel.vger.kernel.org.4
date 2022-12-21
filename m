@@ -2,74 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0486533C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:10:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD8A6533D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbiLUQKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 11:10:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
+        id S233349AbiLUQMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 11:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiLUQKb (ORCPT
+        with ESMTP id S233234AbiLUQMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 11:10:31 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23D321E07
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 08:10:29 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id i14-20020a056e020d8e00b003034b93bd07so10346474ilj.14
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 08:10:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=la4vkjbmp/hoBiwyPidnlDXslDjnZqNzD4iiQiAwR94=;
-        b=RzMSnvr5LmhCL3DhUWc77Jaxfmnjswtw1e0TL6Gkp6AjG1tHBRyspb8Fs05Kc9Mx64
-         7IjeDbIzXRYLp79ImmSt2zkdAHDNIVS+DUJlb3e1FwcTDO6qlbvrHMSH7vukJWXze2IV
-         tgKEZwjGcPCUiWFYLgJV8SS6a4X78Cp25n4kzqhqn5R60chrIt4Bv/hH56EVogppnkzs
-         0sOb/MN9mxh6aOdn5UhSJOwMaBS6GxbuinL2qFOKcmnyd92yA9D2RVgcjeOaxlGLIuXV
-         B9KbQDIIzuiLCdxIUHpLuH7+pdV2+WQpeB9vHKhIx91vjMqUEgGGTKGD6ztUO5vRI+Ac
-         Ojqw==
-X-Gm-Message-State: AFqh2kq9mgubQdCceQUURvOY9T27TyomM7nUn26bicLsuwQMu5xKPhMB
-        D1BtZZgay/0HuYo8vaZM9dQQkxKWf/KOAup9ZKI5rQk/Zjg2
-X-Google-Smtp-Source: AMrXdXvTaIHDV02F+gBN/7BxU/Jg7ssMmiZ9326P326GYCmN7SMnumn5KR5+R2sxh6DqFQF8gNFqXa0r5U+3Zef+PScetgItthKv
+        Wed, 21 Dec 2022 11:12:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCBA205E8;
+        Wed, 21 Dec 2022 08:12:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BAB73B81B97;
+        Wed, 21 Dec 2022 16:12:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D61CDC433EF;
+        Wed, 21 Dec 2022 16:12:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671639126;
+        bh=hMWOzJQfGrw2VL5wnUwgg7mMwK3iZwR3rvS7osSgTt0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Iprb43Ps2hq4dF7WNEy32ZrQBxFf4DPgGbQiRk2liWNRucM2WQ8AxSEMjs4EsINTP
+         8EZyveHceJ7MeIWBzWW0tGAivl6bt2iqcXB/iWKaTHFd37vL8/Ghfw7yvmpXIOrMCc
+         z31B5tiz66mfKYdRZBazgafXZbugQEJY9Q5Wc778=
+Date:   Wed, 21 Dec 2022 17:12:03 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 00/25] 6.1.1-rc1 review
+Message-ID: <Y6MwU0kvczAkzT6C@kroah.com>
+References: <20221219182943.395169070@linuxfoundation.org>
+ <20221220150049.GE3748047@roeck-us.net>
+ <Y6HQfwEnw75iajYr@kroah.com>
+ <20221220161135.GA1983195@roeck-us.net>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d602:0:b0:30b:dae5:c56 with SMTP id
- w2-20020a92d602000000b0030bdae50c56mr101654ilm.99.1671639029041; Wed, 21 Dec
- 2022 08:10:29 -0800 (PST)
-Date:   Wed, 21 Dec 2022 08:10:29 -0800
-In-Reply-To: <7c89b1c8-f012-3965-ab77-3bc19b3cedaa@kernel.dk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000084d53b05f058cabc@google.com>
-Subject: Re: [syzbot] WARNING in io_sync_cancel
-From:   syzbot <syzbot+7df055631cd1be4586fd@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220161135.GA1983195@roeck-us.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Dec 20, 2022 at 08:11:35AM -0800, Guenter Roeck wrote:
+> On Tue, Dec 20, 2022 at 04:10:55PM +0100, Greg Kroah-Hartman wrote:
+> > On Tue, Dec 20, 2022 at 07:00:49AM -0800, Guenter Roeck wrote:
+> > > On Mon, Dec 19, 2022 at 08:22:39PM +0100, Greg Kroah-Hartman wrote:
+> > > > This is the start of the stable review cycle for the 6.1.1 release.
+> > > > There are 25 patches in this series, all will be posted as a response
+> > > > to this one.  If anyone has any issues with these being applied, please
+> > > > let me know.
+> > > > 
+> > > > Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
+> > > > Anything received after that time might be too late.
+> > > > 
+> > > 
+> > > Build results:
+> > > 	total: 155 pass: 155 fail: 0
+> > > Qemu test results:
+> > > 	total: 500 pass: 498 fail: 2
+> > > Failed tests:
+> > > 	arm:xilinx-zynq-a9:multi_v7_defconfig:usb0:mem128:net,default:zynq-zc702:rootfs
+> > > 	arm:xilinx-zynq-a9:multi_v7_defconfig:usb0:mem128:zynq-zed:rootfs
+> > > 
+> > > The failure bisects to commit e013ba1e4e12 ("usb: ulpi: defer ulpi_register on
+> > > ulpi_read_id timeout") and is inherited from mainline. Reverting the offending
+> > > patch fixes the problem.
+> > 
+> > Odd, yet that same commit works just fine on 6.0 and 5.15 and 5.10?  I
+> > hadn't had any reports of this being an issue on Linus's tree either,
+> > did I miss those?
+> > 
+> 
+> I testbed has a bad hair day. The reports for the other branches are wrong.
+> I restarted the tests and expect them to fail there as well. Sorry for that.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-INFO: rcu detected stall in corrupted
+No worries, I've deleted this patch from all branches now, thanks.
 
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P5778 } 2634 jiffies s: 2893 root: 0x0/T
-rcu: blocking rcu_node structures (internal RCU debug):
-
-
-Tested on:
-
-commit:         071531e9 io_uring/cancel: mark task running before re-..
-git tree:       git://git.kernel.dk/linux.git io_uring-6.2
-console output: https://syzkaller.appspot.com/x/log.txt?x=13042ae8480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2edd87fe5cbdf43f
-dashboard link: https://syzkaller.appspot.com/bug?extid=7df055631cd1be4586fd
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
+greg k-h
