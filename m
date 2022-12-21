@@ -2,125 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D195652DCE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 09:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A03652DD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 09:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234444AbiLUITW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 03:19:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
+        id S234457AbiLUIT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 03:19:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbiLUISm (ORCPT
+        with ESMTP id S234357AbiLUITA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 03:18:42 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD12721814
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:17:56 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.25.143])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8AA736602CB6;
-        Wed, 21 Dec 2022 08:17:52 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671610675;
-        bh=9v9PWqa/qTx5cLrzTGi9/aiXNRHSQhPIhrxa12rDPXI=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=L61GocnZyLdobxoaWkciTAuhJH5ImCZENucuu+fNdyuyCe+eiW+4PQcoGIyv3iZCc
-         3yiI6L8GEp1oau1i88ADFY0KeZLFuwePQYuysPcuQUnFpSIV9AOImhTrHkobJup9G2
-         tRyvJygfN6aviuv4qKdoaCcp27SNBwOghUcqX2H64Be20PJ61paGkfClWr9/P+G0A5
-         jrKF1NQGaV5CvJVXja0srpmzVof5IES0DQpv75d7CFIqjqANane+70rb2czQigxT50
-         F+GeE59qLaABLWMjYa6lYBCq6CRFbvDxWVszsmXu2kRh0EcxUvDJFAFtOQxI7o90xJ
-         jitCL7owd04BQ==
-Message-ID: <0d0e370c-04bd-aca4-ecb9-e50c06022183@collabora.com>
-Date:   Wed, 21 Dec 2022 13:17:47 +0500
+        Wed, 21 Dec 2022 03:19:00 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D141C218AF
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:18:48 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id o6so17481952lfi.5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:18:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/HGF2fhKsWDQ7WBFdpIdxBNae7b7JtegXaa6d/s2yVE=;
+        b=M+Rp7XMdR3phHvKr1+wBuW6TN2gVtY2vZvzAnvqfd8wDdvSbTKoRBjU26o6FUNbz2C
+         I1lKWV1zWn7O5JoKqIiFLqEWVQzEeb4lV8kIXHvKu565IeZkxKJHpZxPrFoU/aqw8tdW
+         VVwuiqIL4f6zuUQjNnaxhD4KcfFTTc22trow7bz62w7gcyj7wkWCXb4UrykSVjQlr6/h
+         s0opHG9KD1G2g+t7Ldd/DRpVVIEsChEeHM7S/xk2FRSmtBX9McbronWg8+Xw99YuIWX9
+         3aXfw1pseRu6e8kYwMzXS7sCr51ok8OlVPLZLtx0kE6nfiX0RvtsxeK+sbUi8+oo5z1A
+         QjFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/HGF2fhKsWDQ7WBFdpIdxBNae7b7JtegXaa6d/s2yVE=;
+        b=cIUarZfU79Nk+2zXedY/h/bVG7i+VcCDgUIMieEyofaiwRKH5IZG/5lkogM6kjd0Q7
+         VnXdEeWsT8+0+HMMFE635vSn4hod+vIyvm0exWA3dIQCe+1A/4oosQxEe1CRmpGX076U
+         WnzmhwmqNSMJ8YQuyURXT2cEfkVqF9f5v9YJkZ2H4uVkAGcG0oFXcEW697T8V2i483Jb
+         ejVv3g1n2NVmDW8UdU1owRDkgrSG6MGRN02XHknfa5v7OJEfexfC6U8/cjgar87tk94O
+         YVEUtyJVpW4oXI1iov2ACijUjzHw0ZKj1Rn0xGFYWI43bikMLt/20RAM+hHB/kVn1dpQ
+         JDmw==
+X-Gm-Message-State: AFqh2kq/ZIKso4mp8K/eiYRkJX/GXiGT1y5SP9ofpaSNdLbmP6HuXj7M
+        3YPTO6Zsp3DRXFK0kUT2ey72ug==
+X-Google-Smtp-Source: AMrXdXumkHpg5R8oY2pi3IoHZOyLAx2N7jkHqChZPKbE1dwJOyeB0Mhj8tdy//9McTUZadobH7VeUw==
+X-Received: by 2002:a05:6512:2822:b0:4a4:68b9:60ae with SMTP id cf34-20020a056512282200b004a468b960aemr396528lfb.57.1671610727261;
+        Wed, 21 Dec 2022 00:18:47 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056512118600b00494a603953dsm1767280lfr.89.2022.12.21.00.18.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 00:18:46 -0800 (PST)
+Message-ID: <6576a435-dcc1-af80-bbe9-dd98bb0d53e8@linaro.org>
+Date:   Wed, 21 Dec 2022 09:18:45 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        kernel@collabora.com
-Subject: Re: [PATCH v4 1/3] mm/mprotect: Fix soft-dirty check in
- can_change_pte_writable()
-To:     Peter Xu <peterx@redhat.com>
-References: <20220725142048.30450-1-peterx@redhat.com>
- <20220725142048.30450-2-peterx@redhat.com>
- <b75653b8-5264-ca03-bf5c-671e07e7fdd8@collabora.com> <Y3gRy8pUiYWFGqcI@x1n>
- <a9984aa6-41bc-17c3-b564-87b997c0f2d0@collabora.com> <Y3vq18eTOE0e7I1+@x1n>
- <e3c26b56-5458-eb25-c753-fc4c058ba1b1@collabora.com> <Y6Hc2d+7eTKs7AiH@x1n>
- <0a3e3397-6ff3-1203-52cb-49636ef38247@collabora.com> <Y6IGr2Y21GlLTSRl@x1n>
+Subject: Re: [PATCH v2 5/6] dt-bindings: arm: mediatek: Add missing
+ power-domains property
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ikjoon Jang <ikjn@chromium.org>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        angelogioacchino.delregno@collabora.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>
+References: <20221221034407.19605-1-allen-kh.cheng@mediatek.com>
+ <20221221034407.19605-6-allen-kh.cheng@mediatek.com>
 Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Y6IGr2Y21GlLTSRl@x1n>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221221034407.19605-6-allen-kh.cheng@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/22 12:02 AM, Peter Xu wrote:
-> On Tue, Dec 20, 2022 at 11:15:00PM +0500, Muhammad Usama Anjum wrote:
->> Hi Peter,
-> 
-> Hi, Muhammad,
-> 
-> [...]
-> 
->> Nothing has changed for the userspace. But when the default soft-dirty
->> feature always updates the soft-dirty flag in the PTEs regardless of
->> VM_SOFTDIRTY is set or not
-> 
-> But it was not?  I don't see why the pte flags must be considered at all if
-> VM_SOFTDIRTY is set in existing code base, or before this patch.
-I completely agree that setting pte flags isn't needed if VM_SOFTDIRTY is
-set. It is wasted effort. Before this patch, the effort was being wasted in
-the default part of the feature and in the other related components as
-well. After this patch, the effort is being wasted only in the default part
-of the feature and other related components have stopped doing this wasted
-effort which is a good thing. But now there is discrepancy that one part of
-code keeps on tracking pte while other has moved on/improved.
+On 21/12/2022 04:44, Allen-KH Cheng wrote:
+> The "mediatek,mt8192-scp_adsp" binding requires a power domain to be
+> specified.
 
-> 
->> why does other components of the mm stop caring for soft-dirty flag in
->> the PTE when VM_SOFTDIRTY is set?
->>
->>>
->>> Your approach introduced PAGEMAP_NO_REUSED_REGIONS but that special
->>> information is not remembered in vma, IIUC that's why you find things
->>> messed up.  Fundamentally, it's because you're trying to reuse soft-dirty
->>> design but it's not completely soft-dirty anymore.
->> Correct, that's why I'm trying to find a way to correct the soft-dirty
->> support instead of using anything else. We should try and correct it. I've
->> sent a RFC to track the soft-dirty flags for sub regions in the VMA.
-> 
-> Note that I'm not against the change if that's servicing the purpose of the
-> enhancement you're proposing.  But again I wouldn't use "correct" as the
-> word here because I still didn't see anything wrong with the old code.
-> 
-> so IMHO the extra complexity on handling VM_SOFTDIRTY (even if to drop it
-> and replace with other structures to maintain ranged soft-dirty) needs to
-> be justified along with the feature introduced, not be justified as a fix.
-The question of tracking re-used regions should be answered by the original
-developers of the feature. I've been trying to get comments from them. But
-I've not got any. Maybe some conference talk can work where the
-maintainers/developers are present? Or I'll summarize the whole problem and
-ask Andrew directly.
+That's not true. Before this patch, how does the binding require a power
+domain? Please show me the part of binding which requires it.
 
-> 
-> Thanks,
-> 
+Best regards,
+Krzysztof
 
--- 
-BR,
-Muhammad Usama Anjum
