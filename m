@@ -2,75 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4116652B8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 03:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B970652B96
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 03:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234276AbiLUCoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 21:44:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
+        id S234273AbiLUCrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 21:47:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234265AbiLUCoO (ORCPT
+        with ESMTP id S234186AbiLUCra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 21:44:14 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D30A1D0EE;
-        Tue, 20 Dec 2022 18:44:13 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id l4so2893422pld.13;
-        Tue, 20 Dec 2022 18:44:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=J/RXyzLEOjOd19EjSvWsrGGKWPgbNTJbgOMFPprH9ag=;
-        b=HXveTWymAztH91B55Q7BBiyOM/Au4FIKsUxCSj7BLah1DbQqaY+zVDl3D548Qg9sDM
-         HGc2Y0k1NTT08755C/3N6JRYZ34gtpAA09c6atZLpU/w6xioXg3WUBM4MlAU3vVhipaM
-         /SQe1e7KcSI7xa6lM3F1QRVDB+8Vpg58pfUZbfYergofs0B8yLFDGFRqEtXl4F79Qhxg
-         eGcbch8KKQn/rlidmhJJVJmHNLIbI5sa0SnRBHQlQapHmU9zwdQWeUuHwspUlC8+P55Z
-         BtNzG5fZCFSjGOByViqPOt+ZFy+LZVJMafF4kSBugFQCji28qzuBDAnzmjZ9rrl1rlP8
-         SsUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J/RXyzLEOjOd19EjSvWsrGGKWPgbNTJbgOMFPprH9ag=;
-        b=GWjqtKan8iOMw1w2Iidv4DIU1VLskKCO21MX+7zUQ3SDa3vyC1a242cJfB6g9XKQBS
-         SMISDQgg1+wFIyY6wQ/UZAKmNOz5nc4fu9UcLXzC+/hrR5kbIeZVyAAbyvZ12Z4Xoh8n
-         R7nRvgKYpQHk39YtLn9iNCByq1NkWaoq+i2GsyHmUCbXONOfmZnqFkMVNpSmzccEEfU0
-         /Y6CxPNZTwYMiHfcTOrDuNLFT54WW1Lhz5FK2bmS9SxWyIfAVW7u0VsMrH9qoz6HEy4G
-         YeTyIUqnW1b1vTmCDlT1l5mF+slOLhkIaLN9i/G/4ClcVafaTbOxaL6oBJsRP+7NfzPZ
-         QpfA==
-X-Gm-Message-State: AFqh2kr7zFi7UAL3QjGRRAGTKxIbmpG2FBvE079EwH0hwqlSnNp+Bo/M
-        ypGo2ULbxfdS+Icdv6PsDwDC5ld4qAs=
-X-Google-Smtp-Source: AMrXdXuhVNnNrM0S9tDiL4YW351ngONGWMku/LFmjAT+yDN1mxln0zia6ID/jhIXxJo9ApRjNSwqIw==
-X-Received: by 2002:a17:902:b109:b0:190:bf01:3a45 with SMTP id q9-20020a170902b10900b00190bf013a45mr18618572plr.25.1671590653005;
-        Tue, 20 Dec 2022 18:44:13 -0800 (PST)
-Received: from debian.me (subs28-116-206-12-57.three.co.id. [116.206.12.57])
-        by smtp.gmail.com with ESMTPSA id l18-20020a170903245200b00177e5d83d3esm10115137pls.88.2022.12.20.18.44.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 18:44:12 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id EEBF7104964; Wed, 21 Dec 2022 09:44:07 +0700 (WIB)
-Date:   Wed, 21 Dec 2022 09:44:07 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
+        Tue, 20 Dec 2022 21:47:30 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id D9DD11D0EC
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 18:47:28 -0800 (PST)
+Received: (qmail 75129 invoked by uid 1000); 20 Dec 2022 21:47:28 -0500
+Date:   Tue, 20 Dec 2022 21:47:28 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Ricardo Ribalda <ribalda@chromium.org>
 Cc:     Christoph Hellwig <hch@lst.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2] USB: Improve usb_fill_* documentation
-Message-ID: <Y6Jy90O38E25QgN6@debian.me>
+Message-ID: <Y6JzwChVdOIx1vPD@rowland.harvard.edu>
 References: <20221220-usb-dmadoc-v2-0-4dd4f198113e@chromium.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hNraL9BI9bJyuoZF"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20221220-usb-dmadoc-v2-0-4dd4f198113e@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,51 +40,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---hNraL9BI9bJyuoZF
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
 On Wed, Dec 21, 2022 at 12:13:08AM +0100, Ricardo Ribalda wrote:
 > Make the developer aware of the requirements of transfer buffer.
->=20
+> 
 > The buffer must be DMAble, if the developer uses an invalid buffer, data
 > corruption might happen.
-
-Better say:
-
-```
-Document the transfer buffer requirement. That is, the buffer must be
-DMAble - otherwise data corruption might occur.
-```
-
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+> USB: Improve usb_fill_* documentation
+> 
+> After trying to "cleanup" the uvc code, I was patiently explained about
+> the requirements of the urb transfer buffers.
+> 
+> Lets make this explicit, so other developers do not make the same mistake.
+> 
+> To: Randy Dunlap <rdunlap@infradead.org>
+> To: Alan Stern <stern@rowland.harvard.edu>
+> To: Christoph Hellwig <hch@lst.de>
+> To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+> Changes in v2:
+> - s/allocatiing/allocating/ Thanks Randy
+> - Link to v1: https://lore.kernel.org/r/20221220-usb-dmadoc-v1-0-28386d2eb6cd@chromium.org
+> ---
+>  include/linux/usb.h | 27 ++++++++++++++++++++++++---
+>  1 file changed, 24 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/usb.h b/include/linux/usb.h
+> index 7d5325d47c45..1144ef6e4151 100644
+> --- a/include/linux/usb.h
+> +++ b/include/linux/usb.h
+> @@ -1627,13 +1627,20 @@ struct urb {
+>   * @dev: pointer to the struct usb_device for this urb.
+>   * @pipe: the endpoint pipe
+>   * @setup_packet: pointer to the setup_packet buffer
 > - * @transfer_buffer: pointer to the transfer buffer
-> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable fo=
-r DMA.
+> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable for DMA.
 
-"... The buffer must be ..."
+For control URBs, the setup_packet must also be suitable for DMA.  It's 
+a little less critical, though, because the setup_packet is only used 
+for DMA out, never DMA in.
 
+>   * @buffer_length: length of the transfer buffer
+>   * @complete_fn: pointer to the usb_complete_t function
+>   * @context: what to set the urb context to.
+>   *
+>   * Initializes a control urb with the proper information needed to submit
+>   * it to a device.
+> + *
+> + * The transfer buffer might be filled via DMA.
+
+"might" is too weak.  For nonzero-length IN transfers, the transfer 
+buffer is certain to be filled via DMA (except for the very few cases of 
+USB controller hardware using PIO instead of DMA).
+
+> The simplest way to get
+> + * a buffer that can be DMAed to, is allocating it via kmalloc() or
+> + * equivalent, even for very small buffers. If transfer_buffer is embedded
+> + * in a bigger structure, there is a risk that the previous and following
+> + * fields are left in a corrupted state by the DMA engine, if the platform
+> + * is not cache coherent.
+
+There is also a risk that data read from the device is corrupted.  And 
+accesses of the surrounding fields may well be slowed down because the 
+DMA mapping evicts them from the cache.
+
+>   */
+>  static inline void usb_fill_control_urb(struct urb *urb,
+>  					struct usb_device *dev,
+> @@ -1658,13 +1665,20 @@ static inline void usb_fill_control_urb(struct urb *urb,
+>   * @urb: pointer to the urb to initialize.
+>   * @dev: pointer to the struct usb_device for this urb.
+>   * @pipe: the endpoint pipe
 > - * @transfer_buffer: pointer to the transfer buffer
-> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable fo=
-r DMA.
+> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable for DMA.
+>   * @buffer_length: length of the transfer buffer
+>   * @complete_fn: pointer to the usb_complete_t function
+>   * @context: what to set the urb context to.
+>   *
+>   * Initializes a bulk urb with the proper information needed to submit it
+>   * to a device.
+> + *
+> + * The transfer buffer might be filled via DMA. The simplest way to get
+> + * a buffer that can be DMAed to, is allocating it via kmalloc() or
+> + * equivalent, even for very small buffers. If transfer_buffer is embedded
+> + * in a bigger structure, there is a risk that the previous and following
+> + * fields are left in a corrupted state by the DMA engine, if the platform
+> + * is not cache coherent.
 
-Same here.
+I see no point in repeating exactly the same text multiple times.  
+Instead, just put a reference to the original occurrence of this 
+warning.
 
-The rest is LGTM, thanks.
+Alan Stern
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---hNraL9BI9bJyuoZF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY6Jy8AAKCRD2uYlJVVFO
-oyu4AP9RGvSyV5sX7yoqWF3dHrsRR+M4rQJ2i3D6CPVgp3/t9AD+Pmacn28PzDkQ
-GL575b2RdKJ8bAecfEy3HFHXqCnW7QE=
-=bOKJ
------END PGP SIGNATURE-----
-
---hNraL9BI9bJyuoZF--
+>   */
+>  static inline void usb_fill_bulk_urb(struct urb *urb,
+>  				     struct usb_device *dev,
+> @@ -1687,7 +1701,7 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
+>   * @urb: pointer to the urb to initialize.
+>   * @dev: pointer to the struct usb_device for this urb.
+>   * @pipe: the endpoint pipe
+> - * @transfer_buffer: pointer to the transfer buffer
+> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable for DMA.
+>   * @buffer_length: length of the transfer buffer
+>   * @complete_fn: pointer to the usb_complete_t function
+>   * @context: what to set the urb context to.
+> @@ -1697,6 +1711,13 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
+>   * Initializes a interrupt urb with the proper information needed to submit
+>   * it to a device.
+>   *
+> + * The transfer buffer might be filled via DMA. The simplest way to get
+> + * a buffer that can be DMAed to, is allocating it via kmalloc() or
+> + * equivalent, even for very small buffers. If transfer_buffer is embedded
+> + * in a bigger structure, there is a risk that the previous and following
+> + * fields are left in a corrupted state by the DMA engine, if the platform
+> + * is not cache coherent.
+> + *
+>   * Note that High Speed and SuperSpeed(+) interrupt endpoints use a logarithmic
+>   * encoding of the endpoint interval, and express polling intervals in
+>   * microframes (eight per millisecond) rather than in frames (one per
+> 
+> ---
+> base-commit: b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
+> change-id: 20221220-usb-dmadoc-29384acebd48
+> 
+> Best regards,
+> -- 
+> Ricardo Ribalda <ribalda@chromium.org>
