@@ -2,151 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432C0652B22
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 03:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F831652B63
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 03:09:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234178AbiLUCCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 21:02:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S229944AbiLUCJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 21:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiLUCCI (ORCPT
+        with ESMTP id S229451AbiLUCIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 21:02:08 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C585186D5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 18:01:42 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso708411pjt.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 18:01:42 -0800 (PST)
+        Tue, 20 Dec 2022 21:08:49 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72ECC95BD
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 18:08:48 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id 186so14989065ybe.8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 18:08:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zQEUHbVoMRZdqdXl0f6UHd/WvWI7JLs5FDI1gkZIurU=;
-        b=fygB+zg4HxJHbHL8GWFwzTRr2qDAaxHPnmyJZnE6hsSOeCRf3S9VYqPFTZj7A9sVOA
-         JtpofC7t+HXsGsxKLKRX95noSaqGNsF7zyG1bkyhr52CXequgXSGlCdczTHJ7lAA2e4c
-         9Ob9YFSZzwD2hJdKepi09URgQPdTt4u0tlNttloOPZrMu95JUrXXXcg2rHfB4gI6b6jo
-         gFg4JwKtkzv27mvznQmMSMJCefTjeebRDgkFXfxxtCiztNSpUJn/tWknv/uViuV9/tqs
-         9K39Be9RqMLJ9OtgJdPJIb47Dt6sAV2hUxFKM1Wxg3Fqe9yZmyen9U+N6x2iHCvmtJMx
-         w2wQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3J2CGbQX4q+YsoLQrSOy9tiqJqmA9W+9l2T9zjpYzfo=;
+        b=oWXg6yukI8AQM4hKT42z9MDC60HAN6qkxGwspr6cfzE7yfkNVQdJqaJ0fljHNo9jDM
+         aehZcpz60AezXX/DsYaWKuZmcrgIn5iwAhHQD4w/bmfT6NRpJbS5kiOAs/WTUh6d5C8O
+         i2TPTn+byP1AJVyILX+T1CrtgcuXswH3UJhY8IEeHorf6oPqr19nsC3yGFnbTN0Uuf5J
+         Wrj9R3zXAmPtUSz17R5u9m6mM2OVu09HMWw9Y0AEix1my/n6WrDWob6fXWTKHJwGzSII
+         YZVPlQeS9spgKq3vglVwxMVDyVgcUm5E9YIN/mPXonxHs97wNLQXibnApvA29gZH3qYj
+         x2Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zQEUHbVoMRZdqdXl0f6UHd/WvWI7JLs5FDI1gkZIurU=;
-        b=G2O8M/KQbjUxTtezSIkcq9+SB+8hCXB8tDm3uN4tLl1+YBLVwK5vOM0s4pGWJsobUW
-         6QfUW4OQ31cwaxjHdA82cyK2mtIROjoXX2hPMU7M0qR+eBr6HjnLKSrtHp/aG+T7IiKq
-         MQ22KwGoin+WxDhcg98cfNblaDO8fJA2lIbDQxr+hOaV/TdNy8Qo88rNzkhEv21CfFus
-         8JzrOK6zw28EPEYzRU4AO7dVRv6n5tFsj9bUvZ9ziVXb5rGbwxfeWxIgqhaOc1M9+iZK
-         ERVZ6DSxIg5+UMKYUf/Zaaqd9CGoIagIWigUDQm73q7//DBWpIfrmKn2lmP841jyP8mL
-         bJIw==
-X-Gm-Message-State: AFqh2kpuyMZlSGAy33Mq67bQbJi/GnZUWGQO9pkYwNr2KBk8Ts+S/znA
-        zkhfM3T/dWoWV/KFLhJ+3mkWNw==
-X-Google-Smtp-Source: AMrXdXsO0JRD6wYYAIXYBqKcELLABb0gI3rrDVrhgglm07MyEUS+7OrRvXk577RfQAlFW+nRPDWEtQ==
-X-Received: by 2002:a17:902:cf12:b0:189:aa51:e27f with SMTP id i18-20020a170902cf1200b00189aa51e27fmr17848956plg.44.1671588102115;
-        Tue, 20 Dec 2022 18:01:42 -0800 (PST)
-Received: from ?IPV6:2409:8a28:e63:2da0:b0e9:bb47:3cf6:6095? ([2409:8a28:e63:2da0:b0e9:bb47:3cf6:6095])
-        by smtp.gmail.com with ESMTPSA id f15-20020a170902684f00b0018699e6afd8sm10012068pln.265.2022.12.20.18.01.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 18:01:41 -0800 (PST)
-Message-ID: <6d7288f0-1b85-6a4f-d39e-a46675f60d5f@bytedance.com>
-Date:   Wed, 21 Dec 2022 10:01:30 +0800
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3J2CGbQX4q+YsoLQrSOy9tiqJqmA9W+9l2T9zjpYzfo=;
+        b=G28N0stECgjQ3PUv+j5WW5OSBnjJSE0/cSO2PoCFDtkzvLyq0i7/Mek8Vmo8bHqRir
+         f+3rOSeL4I2yt03x+nslp2iqBSqHdzPjQ9TIb88Ol9iNV7QYB1Owev4LPl5kp8p13Bfh
+         4q5Abucsw8u5YdnF7Gj6iLsnDcjWNnLcve6fwyX1+dsIDUxDCS7f1SWUb5jUIsSJUvgB
+         uXCKkQNoGS/9Vq/zMLGLh4NGKgpZuN4l5gqfjzTeNPvTP+Ck8/E4ErAo2Y+RKekR1N6f
+         6WhgBt1bQ5yat5k/bM+s9BrZt7HWasqqheQ/QiTtYpUiiRDLxxjbGsDA/PtGM0QScsot
+         EhEA==
+X-Gm-Message-State: AFqh2kpFugWo1A2bFeylwHdfpaspxDJns/L71MNHgI5dYasiIWS8F3J4
+        ucaQXvhkz+1QYxr57xbr3GauA6M3TB4hD33448U=
+X-Google-Smtp-Source: AMrXdXt7EK48t1I9dSGT04qZNSlPxDUc1blrgswankhQK3MDZ3wZJPClkq1l+6HQRTvM6zNUOJyU+eme24aOlACZDVs=
+X-Received: by 2002:a25:7345:0:b0:746:1d3:4657 with SMTP id
+ o66-20020a257345000000b0074601d34657mr14222ybc.174.1671588527201; Tue, 20 Dec
+ 2022 18:08:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.0
-Subject: Re: [PATCH v5 1/2] sched/core: Minor optimize ttwu_runnable()
-To:     mingo@redhat.com, peterz@infradead.org
-Cc:     juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, bagasdotme@gmail.com,
-        yu.c.chen@intel.com
-References: <20221208032007.94459-1-zhouchengming@bytedance.com>
-Content-Language: en-US
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <20221208032007.94459-1-zhouchengming@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7000:2b98:b0:3b8:2614:8853 with HTTP; Tue, 20 Dec 2022
+ 18:08:46 -0800 (PST)
+From:   "La Post Agent ;JOE AMAVIM" <togoapostoffice@gmail.com>
+Date:   Wed, 21 Dec 2022 03:08:46 +0100
+Message-ID: <CAC36GzCDCx1QdDVKLAPfWRS5EToMORxYVb0AZjahEXqWsyu2_w@mail.gmail.com>
+Subject: Ecowas Courier Diplomatic Agency Lome-Togo,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.5 required=5.0 tests=ADVANCE_FEE_4_NEW_FORM,
+        BAYES_50,DEAR_BENEFICIARY,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+        DKIM_VALID_EF,FILL_THIS_FORM,FILL_THIS_FORM_LONG,FORM_FRAUD_5,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b35 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [togoapostoffice[at]gmail.com]
+        *  1.5 DEAR_BENEFICIARY BODY: Dear Beneficiary:
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+        *  2.4 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  1.0 ADVANCE_FEE_4_NEW_FORM Advance Fee fraud and a form
+        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, ping :-)
+Ecowas Courier Diplomatic Agency Lome-Togo,
+First-class Official Agent Mr.JOE AMAVIM
+Official Email (togoapostoffice@gmail.com)
+T=C3=A9l=C3=A9phone/Whtsapp+22897881529
+DEPOSIT CERTIFICATE CODE SCTC/BUN/xxiv/2022-3 /850/01
 
+Attention; Beneficiary, EMAIL ACCOUNT OWNER;
 
-On 2022/12/8 11:20, Chengming Zhou wrote:
-> ttwu_runnable() is used as a fast wakeup path when the wakee task
-> is running on CPU or runnable on RQ, in both cases we can just
-> set its state to TASK_RUNNING to prevent a sleep.
-> 
-> If the wakee task is on_cpu running, we don't need to update_rq_clock()
-> or check_preempt_curr().
-> 
-> But if the wakee task is on_rq && !on_cpu (e.g. an IRQ hit before
-> the task got to schedule() and the task been preempted), we should
-> check_preempt_curr() to see if it can preempt the current running.
-> 
-> This also removes the class->task_woken() callback from ttwu_runnable(),
-> which wasn't required per the RT/DL implementations: any required push
-> operation would have been queued during class->set_next_task() when p
-> got preempted.
-> 
-> ttwu_runnable() also loses the update to rq->idle_stamp, as by definition
-> the rq cannot be idle in this scenario.
-> 
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> Suggested-by: Valentin Schneider <vschneid@redhat.com>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Reviewed-by: Valentin Schneider <vschneid@redhat.com>
-> ---
-> v5:
->  - Split the reorganization and optimization into two patches
->    per Chen Yu. Thanks!
-> 
-> v4:
->  - s/This patch reorg/Reorganize/ per Bagas Sanjaya. Thanks!
-> 
-> v3:
->  - Improve the changelog per Valentin Schneider. Thanks!
-> 
-> v2:
->  - keep check_preempt_curr() for on_rq && !on_cpu case in ttwu_runnable(),
->    per Valentin Schneider.
->  - reorg ttwu_do_wakeup() and ttwu_do_activate() code, so ttwu_do_wakeup()
->    can be reused in ttwu_runnable(), per Peter Zijlstra.
->  - reuse ttwu_do_wakeup() in try_to_wake_up() (p == current) fast path too,
->    so ttwu_do_wakeup() become the only place we mark task runnable.
-> ---
->  kernel/sched/core.c | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 314c2c0219d9..60aa7774e5f4 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -3718,9 +3718,16 @@ static int ttwu_runnable(struct task_struct *p, int wake_flags)
->  
->  	rq = __task_rq_lock(p, &rf);
->  	if (task_on_rq_queued(p)) {
-> -		/* check_preempt_curr() may use rq clock */
-> -		update_rq_clock(rq);
-> -		ttwu_do_wakeup(rq, p, wake_flags, &rf);
-> +		if (!task_on_cpu(rq, p)) {
-> +			/*
-> +			 * When on_rq && !on_cpu the task is preempted, see if
-> +			 * it should preempt whatever is current there now.
-> +			 */
-> +			update_rq_clock(rq);
-> +			check_preempt_curr(rq, p, wake_flags);
-> +		}
-> +		WRITE_ONCE(p->__state, TASK_RUNNING);
-> +		trace_sched_wakeup(p);
->  		ret = 1;
->  	}
->  	__task_rq_unlock(rq, &rf);
+Greetings to you from Ecowas Courier Company Lome-Togo, as I have been
+waiting for you to contact me with the yellow immunity tag fee of 195$
+for non-inspection of any homeland security upon your approved visa
+card delivery movement into your country.
+
+Again it is important to note that your Fund/Payment was released with
+the following particulars attached to it by UNITED NATIONS
+COMPENSATION AWARD PROGRAM.
+
+(1) File Number: F1267-2009, (2) Ref. Code: KP23/857/MCL5 /CO,(3)
+Grant Number: MICC / 97846563459/206,(4) Personal Identification
+Number (PIN):0866750
+
+So, go ahead and make the payment under our cashier name Mrs.Okosi
+Onuoha for me to obtain the immunity yellow tag and placed it upon
+your delivery duty parcel and start coming into your country.
+
+Use the data's below for urgent payment of $195;
+Names; Mrs.Onuoha Okosi
+Address; 17C BE-KPOTA ROAD LOME-TOGO REPUBLIC
+Question; Yes/ Answer; Yes
+Amount; 195$ Only
+
+Finally, I will carry on the delivery upon my receiving of this tag
+fee to avoid any intervention of any kind of homeland security along
+the line. And please don=E2=80=99t fail to reconfirm to us once again these
+data's;
+
+ Your Full Names;........,Your home/office Address;........,Your
+direct contact number;........
+
+Thanks as we never stop working on your behalf based on the coverage
+bond certificate will be done upon my reconfirmation of my final
+terminal before I will contact the National Assurance agency for the
+bond collection on your name together with Intent Letter of claim
+certificate.
+
+Yours in Charge
+Mr.JOE AMAVIM
+(Ecowas Courier Diplomatic Agent)
+Email :( togoapostoffice@gmail.com)Telephone;+22897881529
