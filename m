@@ -2,253 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC6E652DC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 09:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A45A652DCB
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 09:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbiLUIQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 03:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
+        id S234572AbiLUIRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 03:17:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234547AbiLUIPt (ORCPT
+        with ESMTP id S234569AbiLUIQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 03:15:49 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C0D636D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:15:46 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id s2-20020a056e02216200b0030bc3be69e5so2797737ilv.20
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:15:46 -0800 (PST)
+        Wed, 21 Dec 2022 03:16:17 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DE121E22
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:16:06 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id cf42so22379781lfb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:16:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dRBaCHV+UNDOXNoLk4RfhR9W0+ki+Ik/87sPPJy8yrI=;
+        b=CVZQdBzEjr6RL1Ae0Eo+U9kj3bBVkp3n+L9Xmdm68zecrs+0PcSmQ6xCzdWoTgVNko
+         OLkvzYmtIY5JmEWTyZiHP11QfUZ2V43ZWAf8717nGRFZ3h9IV3mnviXd3F1MK5aVPd5a
+         ChiI0Kgd9eW8buDR/xEiuRePbnduQ8D49GclP1GorMzdPoGZ2prXAvUuR8/nhPGF9KlC
+         5X2LtCk/6Z1Yq62MXp1aRSUDfRNUr5aIzaL5AUn1AZVDJlWHf+03BuPuPmLLO26AmnfD
+         gBe6SxsY+KCSawtftjWBcQUXkXAHUFxpbd8S0KhL6AtbAbXWJROx8vn9hLTLwTCO6Z8P
+         8v/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mMzPRxOPZqhngdN1cZmIq8P1MO04u/BexRoyy50ugc0=;
-        b=1poYQbD/mLWrFy7LyX1GCsOXzf6Rg6vl9+8hZkrVkEInC4g0NthnurEfei3xmtx+oP
-         7GAgaKIchwNBRZuAYPj4r7w+x8PJFWddpFhgkJDYaQX68Z00X8llu8UuNT/xJVfiwOXq
-         ninr43pmf4NXYh/rM/BP6+4XnwPFzAMm2tqLQidxdTh6PjLgavix4HPSnJew4sR1kWWL
-         U3sRCktmuQq3Y9o9E8156l5MIsI8Nk3tffsHtXSc7l/aeEMbJz/4Chr2MmBHS+q0JEUE
-         KLhf/+arKKQ1RvUebgo7/eY9U3W/V50ik9aA1dDw/VrRRhOOIvY27blsDKkMlDEuivz2
-         bJMQ==
-X-Gm-Message-State: AFqh2kpOOptuUtnAJrhO5LpeKJqkz9TpgZ2G3q0RQ4ULs2C2CS1eQA5D
-        XLmWxE8hKpdRo6Zu5I7mU8U+KwRu6YqeyDSAVOuhCo8PoO7Y
-X-Google-Smtp-Source: AMrXdXuqAeEJW/YmlRJHpE1A0vEZhXOkM30EfuEpFQqt88nO7mdzMlR2OfZ8SLhYv/H26aIcJgjOSF74UuK6wHvrfhsaHlfag93E
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dRBaCHV+UNDOXNoLk4RfhR9W0+ki+Ik/87sPPJy8yrI=;
+        b=KZ/Fg907DZqd6HdB0s/SMXqO/UGyuqb0WZtfCZXEPxCS2M3tG/ofTYvQRO1vkkYsUf
+         X4ktWVONZ0azC4e81mUJwiu4DzkBvKI3GwCObflgBZZ+90OYI8zQfEx8twKcESDtRLAC
+         s1lUFUV1kk0c0PE+b5ghF/noZu2caaGiTNvejz2xIthdCRNcFxOCTF+6Wv1QVY8Re5p5
+         mr9ddBXpP5hV5NwsOeBCOPT8J8X1QlplUZUKR/A2VncZ0Rp7KPdKyOKMX2RqQCT1wDKS
+         mOarUpYFy3I8ZHLU49oUJYtkaosdv/CfXCP3Td7im0wLYW6olN4Tm6zd6fK9pRQCDhbF
+         EWFA==
+X-Gm-Message-State: AFqh2koJuLld22Lm7HDayvPtajQlnTNx6x0cxReq+nrNWGeXHOzDn/TY
+        +ZizRp7Wu3BC45MlJIjaKQPh3g==
+X-Google-Smtp-Source: AMrXdXvu0JzewlvcpSAFLMx6y5F94at0p3f/YQ/rIg3GUPVVM1J4xERq2AC2ortFxt652/XA6s6dLQ==
+X-Received: by 2002:a05:6512:3048:b0:4b5:5f2b:ddf8 with SMTP id b8-20020a056512304800b004b55f2bddf8mr419900lfb.7.1671610564375;
+        Wed, 21 Dec 2022 00:16:04 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id h10-20020ac2596a000000b004b4b69af17dsm1764774lfp.214.2022.12.21.00.16.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 00:16:03 -0800 (PST)
+Message-ID: <5a7907e3-f79e-5de9-ed1b-ec24ea52c437@linaro.org>
+Date:   Wed, 21 Dec 2022 09:16:02 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:c61:b0:302:a229:3090 with SMTP id
- f1-20020a056e020c6100b00302a2293090mr117861ilj.90.1671610546257; Wed, 21 Dec
- 2022 00:15:46 -0800 (PST)
-Date:   Wed, 21 Dec 2022 00:15:46 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d0021505f0522813@google.com>
-Subject: [syzbot] possible deadlock in page_cache_ra_unbounded
-From:   syzbot <syzbot+47c7e14e1bd09234d0ad@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 2/2] dt-bindings: arm: rockchip: Add EmbedFire LubanCat
+ 1
+Content-Language: en-US
+To:     Yuteng Zhong <zonyitoo@gmail.com>, Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>, Peter Geis <pgwipeout@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, DHDAXCW <lasstp5011@gmail.com>
+References: <Y6KfFEChA67E7oX/@VM-66-53-centos>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y6KfFEChA67E7oX/@VM-66-53-centos>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 21/12/2022 06:52, Yuteng Zhong wrote:
+> from: DHDAXCW <lasstp5011@gmail.com>
+> 
+> LubanCat 1 is a Rockchip RK3566 SBC based
+> is developed by EmbedFire Electronics Co., Ltd.
+> Mini Linux Card Type Cheap Computer Development Board
 
-syzbot found the following issue on:
+This is a friendly reminder during the review process.
 
-HEAD commit:    6feb57c2fd7c Merge tag 'kbuild-v6.2' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13abf993880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d3fb546de56fbf8d
-dashboard link: https://syzkaller.appspot.com/bug?extid=47c7e14e1bd09234d0ad
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+It seems my previous comments were not fully addressed. Maybe my
+feedback got lost between the quotes, maybe you just forgot to apply it.
+Please go back to the previous discussion and either implement all
+requested changes or keep discussing them.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Thank you.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/81556e491789/disk-6feb57c2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/065c943ec9de/vmlinux-6feb57c2.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/66e98c522c1f/bzImage-6feb57c2.xz
+> 
+> Signed-off-by: Yuteng Zhong <zonyitoo@gmail.com>
+> Signed-off-by: DHDAXCW <lasstp5011@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
+> index 88ff4422a8c1..84d39a3a8843 100644
+> --- a/Documentation/devicetree/bindings/arm/rockchip.yaml
+> +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+> @@ -781,6 +781,11 @@ properties:
+>            - const: rockchip,rk3568-bpi-r2pro
+>            - const: rockchip,rk3568
+>  
+> +      - description: EmbedFire LubanCat 1
+> +        items:
+> +          - const: embedfire,lubancat-1
+> +          - const: rockchip,rk3566
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+47c7e14e1bd09234d0ad@syzkaller.appspotmail.com
+Here as well.
 
-REISERFS (device loop4): Created .reiserfs_priv - reserved for xattr storage.
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-syzkaller-13822-g6feb57c2fd7c #0 Not tainted
-------------------------------------------------------
-syz-executor.4/3542 is trying to acquire lock:
-ffff88803bf4f520 (mapping.invalidate_lock#11){.+.+}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
-ffff88803bf4f520 (mapping.invalidate_lock#11){.+.+}-{3:3}, at: page_cache_ra_unbounded+0xe9/0x820 mm/readahead.c:226
+Best regards,
+Krzysztof
 
-but task is already holding lock:
-ffff88802540e090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (&sbi->lock){+.+.}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
-       reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
-       reiserfs_get_block+0x24e/0x5180 fs/reiserfs/inode.c:680
-       do_mpage_readpage+0x970/0x1c50 fs/mpage.c:208
-       mpage_readahead+0x210/0x380 fs/mpage.c:361
-       read_pages+0x169/0x9c0 mm/readahead.c:161
-       page_cache_ra_unbounded+0x703/0x820 mm/readahead.c:270
-       page_cache_sync_readahead include/linux/pagemap.h:1210 [inline]
-       filemap_get_pages+0x465/0x10d0 mm/filemap.c:2600
-       filemap_read+0x3cf/0xea0 mm/filemap.c:2694
-       call_read_iter include/linux/fs.h:2180 [inline]
-       generic_file_splice_read+0x1ff/0x5d0 fs/splice.c:309
-       do_splice_to fs/splice.c:793 [inline]
-       splice_direct_to_actor+0x41b/0xc00 fs/splice.c:865
-       do_splice_direct+0x279/0x3d0 fs/splice.c:974
-       do_sendfile+0x5fb/0xf80 fs/read_write.c:1255
-       __do_sys_sendfile64 fs/read_write.c:1323 [inline]
-       __se_sys_sendfile64+0x14f/0x1b0 fs/read_write.c:1309
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (mapping.invalidate_lock#11){.+.+}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
-       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       down_read+0x39/0x50 kernel/locking/rwsem.c:1509
-       filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
-       page_cache_ra_unbounded+0xe9/0x820 mm/readahead.c:226
-       do_sync_mmap_readahead+0x4b2/0x9a0
-       filemap_fault+0x38d/0x1060 mm/filemap.c:3154
-       __do_fault+0x136/0x4f0 mm/memory.c:4163
-       do_shared_fault mm/memory.c:4569 [inline]
-       do_fault mm/memory.c:4647 [inline]
-       handle_pte_fault mm/memory.c:4931 [inline]
-       __handle_mm_fault mm/memory.c:5073 [inline]
-       handle_mm_fault+0x18bc/0x26b0 mm/memory.c:5219
-       do_user_addr_fault+0x69b/0xcb0 arch/x86/mm/fault.c:1428
-       handle_page_fault arch/x86/mm/fault.c:1519 [inline]
-       exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
-       asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
-       __put_user_4+0x12/0x20 arch/x86/lib/putuser.S:93
-       reiserfs_ioctl+0x14b/0x340 fs/reiserfs/ioctl.c:96
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&sbi->lock);
-                               lock(mapping.invalidate_lock#11);
-                               lock(&sbi->lock);
-  lock(mapping.invalidate_lock#11);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor.4/3542:
- #0: ffff88802540e090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
-
-stack backtrace:
-CPU: 1 PID: 3542 Comm: syz-executor.4 Not tainted 6.1.0-syzkaller-13822-g6feb57c2fd7c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
- check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
- __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
- lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
- down_read+0x39/0x50 kernel/locking/rwsem.c:1509
- filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
- page_cache_ra_unbounded+0xe9/0x820 mm/readahead.c:226
- do_sync_mmap_readahead+0x4b2/0x9a0
- filemap_fault+0x38d/0x1060 mm/filemap.c:3154
- __do_fault+0x136/0x4f0 mm/memory.c:4163
- do_shared_fault mm/memory.c:4569 [inline]
- do_fault mm/memory.c:4647 [inline]
- handle_pte_fault mm/memory.c:4931 [inline]
- __handle_mm_fault mm/memory.c:5073 [inline]
- handle_mm_fault+0x18bc/0x26b0 mm/memory.c:5219
- do_user_addr_fault+0x69b/0xcb0 arch/x86/mm/fault.c:1428
- handle_page_fault arch/x86/mm/fault.c:1519 [inline]
- exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
- asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
-RIP: 0010:__put_user_4+0x12/0x20 arch/x86/lib/putuser.S:95
-Code: 01 31 c9 0f 01 ca c3 90 0f 01 cb 66 89 01 31 c9 0f 01 ca c3 0f 1f 40 00 48 bb fd ef ff ff ff 7f 00 00 48 39 d9 73 54 0f 01 cb <89> 01 31 c9 0f 01 ca c3 66 0f 1f 44 00 00 0f 01 cb 89 01 31 c9 0f
-RSP: 0018:ffffc90014c97eb0 EFLAGS: 00050297
-RAX: 0000000000000000 RBX: 00007fffffffeffd RCX: 0000000020000000
-RDX: 0000000000000001 RSI: ffffffff8aedcc60 RDI: ffffffff8b4bc060
-RBP: 1ffff110077e9e4b R08: dffffc0000000000 R09: fffffbfff1d2ccfe
-R10: fffffbfff1d2ccfe R11: 1ffffffff1d2ccfd R12: 0000000020000000
-R13: ffff88803bf4f698 R14: ffff88803bf4f258 R15: ffff8880205c9400
- reiserfs_ioctl+0x14b/0x340 fs/reiserfs/ioctl.c:96
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0a0548c0d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f0a061d5168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f0a055abf80 RCX: 00007f0a0548c0d9
-RDX: 0000000020000000 RSI: 0000000080087601 RDI: 0000000000000004
-RBP: 00007f0a054e7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc8aa2e79f R14: 00007f0a061d5300 R15: 0000000000022000
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	01 31                	add    %esi,(%rcx)
-   2:	c9                   	leaveq
-   3:	0f 01 ca             	clac
-   6:	c3                   	retq
-   7:	90                   	nop
-   8:	0f 01 cb             	stac
-   b:	66 89 01             	mov    %ax,(%rcx)
-   e:	31 c9                	xor    %ecx,%ecx
-  10:	0f 01 ca             	clac
-  13:	c3                   	retq
-  14:	0f 1f 40 00          	nopl   0x0(%rax)
-  18:	48 bb fd ef ff ff ff 	movabs $0x7fffffffeffd,%rbx
-  1f:	7f 00 00
-  22:	48 39 d9             	cmp    %rbx,%rcx
-  25:	73 54                	jae    0x7b
-  27:	0f 01 cb             	stac
-* 2a:	89 01                	mov    %eax,(%rcx) <-- trapping instruction
-  2c:	31 c9                	xor    %ecx,%ecx
-  2e:	0f 01 ca             	clac
-  31:	c3                   	retq
-  32:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
-  38:	0f 01 cb             	stac
-  3b:	89 01                	mov    %eax,(%rcx)
-  3d:	31 c9                	xor    %ecx,%ecx
-  3f:	0f                   	.byte 0xf
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
