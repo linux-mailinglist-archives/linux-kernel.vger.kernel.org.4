@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72584653765
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 21:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B78B965376D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 21:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234754AbiLUUN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 15:13:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
+        id S234790AbiLUUPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 15:15:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiLUUN0 (ORCPT
+        with ESMTP id S229620AbiLUUPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 15:13:26 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A8EFE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:13:24 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so3509071pje.5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:13:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zLXJYoqrA8qjYj9G2HQZKjo0c3Ld+Ma9nTGSOm1fY/s=;
-        b=lDjSKwbp4bofJhEAqRo/WnqiarwYW0DG6LpPc3cfdsyZB0jGuYoqb8cutonM3jZ3uI
-         zcmaJMlCgyeqGvUKzXavLKYDm/sW6Qyl/zCiaX32ela93wCMV1a7JKBS3UkxVkTU72Z6
-         FXAK7UUh24Fc4fg3dXP/Ua5Cj3Cx0smUVJG4I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zLXJYoqrA8qjYj9G2HQZKjo0c3Ld+Ma9nTGSOm1fY/s=;
-        b=0P1YFWkcS5Z6/K7VRnzgzdN1PlkoESISWMilUbPUn9LatycEj8xjG0wd2RAPg5rgre
-         R8Rn365MlOzrVmsDgIoR+LfwYW+23rj/ge/xfdnV1Wgs7u8bfxyChBM1XTfM2e9ncXT7
-         z0wJAN//SjnT0A46B4QKADcfs2G5GvDdc6qFN9QnjCkV7GlvDg8hHxpDWxWwXbMd3dIU
-         vCFcDJPzZ6+qJF90gIeJn2SekBYOQbOfO9FAt5zRafoKMhzsD1H6S6JWiH8Gc+f32FFe
-         TY1uA8lHvhBvlEV8yoa1/bbZHsxtrkVx38XMCC3GN/YPSqhte+3UINGoB4TFDH5nqz5D
-         DtjA==
-X-Gm-Message-State: AFqh2koA9fDA5mdkSRUlFvK1xKIAsCPyvIAVxCgTiGvEm65Byu46oJD5
-        8bhMT5ifceSfSYI69u8AIJYzil867doarh3hk5U=
-X-Google-Smtp-Source: AMrXdXtlX6Qg/QoUZdg/sJvyK/B3sCmmXqb0oXwpsY1cTQgkixx9aj/J8rJpuq73KCQmtzo79Ncxrw==
-X-Received: by 2002:a17:90a:cc01:b0:223:e152:2ec0 with SMTP id b1-20020a17090acc0100b00223e1522ec0mr3583033pju.24.1671653604319;
-        Wed, 21 Dec 2022 12:13:24 -0800 (PST)
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com. [209.85.216.41])
-        by smtp.gmail.com with ESMTPSA id h8-20020a17090a604800b00219752c8ea3sm1747155pjm.48.2022.12.21.12.13.23
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 12:13:24 -0800 (PST)
-Received: by mail-pj1-f41.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso3573266pjt.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:13:23 -0800 (PST)
-X-Received: by 2002:a17:902:a984:b0:189:d081:1ebb with SMTP id
- bh4-20020a170902a98400b00189d0811ebbmr142129plb.130.1671653603257; Wed, 21
- Dec 2022 12:13:23 -0800 (PST)
+        Wed, 21 Dec 2022 15:15:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6B8B17
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:15:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72C9061926
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 20:15:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A559AC433EF;
+        Wed, 21 Dec 2022 20:15:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671653718;
+        bh=zwS4HPe49H8QrBBgPONoHxkOglzUkSxFJ1Px7xGQnKU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ab0ZdPdA6MUyKsyDpZfu1dxZxx3DsrKi3/UdPeM2YjbNOlF4Lw8mXROixUTC9Zbgh
+         ix8r1q5X9TyqaO0W75Bbmx23d7XPGvSwnJTHnaUrgXVelNuWUGmq75GNCygkybe+xx
+         rd4ff15BOGMtwZ4v/B7IWUwsxJB2tm4zu6jcsgmi8CGllg8D2WXeQjw4PWLgt/Aes4
+         o7OKupwvSy36sQUReGGrqMxV5Tgv5V+ESQcyzK5irsRqCuqqi7rBzREIfk/LoB0KyQ
+         ZuTBSj8zg0E/sCJyvpk2s1A2BITsKW64OEdspb2/dMqCUNJp1mbidBznSPAIqI7YUy
+         +jAZSwqi1c0dQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id C7A6D40367; Wed, 21 Dec 2022 17:15:15 -0300 (-03)
+Date:   Wed, 21 Dec 2022 17:15:15 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Leo Yan <leo.yan@linaro.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Hans-Peter Nilsson <hp@axis.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kim Phillips <kim.phillips@arm.com>
+Subject: Re: [PATCH] perf arm64: Fix mksyscalltbl, don't lose syscalls due to
+ sort -nu
+Message-ID: <Y6NpUyLRR0f9sQ9C@kernel.org>
+References: <20201228023941.E0DE2203B5@pchp3.se.axis.com>
+ <20201229030933.GC28115@leoy-ThinkPad-X240s>
+ <Y4Cspv98j8TqwCqZ@axis.com>
+ <Y4C66dg+9wwiXdVs@leoy-yangtze.lan>
+ <98978f82-eb78-4fa7-901e-76c3070362e3@app.fastmail.com>
 MIME-Version: 1.0
-References: <20221221-bpf-syscall-v1-0-9550f5f2c3fc@chromium.org> <CAKH8qBuLhZ+T9fvP=DXeYevdrNofTPpEiQqq2RenBUKVghPmtA@mail.gmail.com>
-In-Reply-To: <CAKH8qBuLhZ+T9fvP=DXeYevdrNofTPpEiQqq2RenBUKVghPmtA@mail.gmail.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 21 Dec 2022 21:13:12 +0100
-X-Gmail-Original-Message-ID: <CANiDSCv0EObZHCL1D1CHBRaNf68Df4Ur9kFgaoGSGH=KYwgOPw@mail.gmail.com>
-Message-ID: <CANiDSCv0EObZHCL1D1CHBRaNf68Df4Ur9kFgaoGSGH=KYwgOPw@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Remove unused field initialization
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Song Liu <song@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <98978f82-eb78-4fa7-901e-76c3070362e3@app.fastmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,82 +73,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stanislav
-
-On Wed, 21 Dec 2022 at 21:10, Stanislav Fomichev <sdf@google.com> wrote:
->
-> On Wed, Dec 21, 2022 at 11:55 AM Ricardo Ribalda <ribalda@chromium.org> wrote:
+Em Fri, Nov 25, 2022 at 02:56:31PM +0100, Arnd Bergmann escreveu:
+> On Fri, Nov 25, 2022, at 13:54, Leo Yan wrote:
+> > On Fri, Nov 25, 2022 at 12:53:10PM +0100, Vincent Whitchurch wrote:
+> 
+> >> It looks like this patch was never applied?  AFAICS it is still needed
+> >> on current HEAD and it still applies cleanly.
 > >
-> > Maxlen is used by standard proc_handlers such as proc_dointvec(), but in this
-> > case we have our own proc_handler. Remove the initialization.
->
-> Are you sure?
->
-> bpf_stats_handler
->   proc_dointvec_minmax
->     do_proc_dointvec
->       __do_proc_dointvec
->         vleft = table->maxlen / sizeof(*i);
-
-I believe do_proc_dointvec is using the value from:
-
-struct ctl_table tmp = {
-  .maxlen=sixeof(val);
-}
-
->
-> Maybe we should really do the following instead?
->
-> .maxlen: sizeof(int)
->
-> ?
->
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> > bpf: Trivial remove of unitialised field.
+> > Thanks a lot for bringing up this.
 > >
-> > I have inspired myself in your code and heritaded this bug :). Fixing this
-> > here so none else makes the same mistake.
-> >
-> > To: Alexei Starovoitov <ast@kernel.org>
-> > To: Daniel Borkmann <daniel@iogearbox.net>
-> > To: John Fastabend <john.fastabend@gmail.com>
-> > To: Andrii Nakryiko <andrii@kernel.org>
-> > To: Martin KaFai Lau <martin.lau@linux.dev>
-> > To: Song Liu <song@kernel.org>
-> > To: Yonghong Song <yhs@fb.com>
-> > To: KP Singh <kpsingh@kernel.org>
-> > To: Stanislav Fomichev <sdf@google.com>
-> > To: Hao Luo <haoluo@google.com>
-> > To: Jiri Olsa <jolsa@kernel.org>
-> > Cc: bpf@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > ---
-> >  kernel/bpf/syscall.c | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > index 35972afb6850..8e55456bd648 100644
-> > --- a/kernel/bpf/syscall.c
-> > +++ b/kernel/bpf/syscall.c
-> > @@ -5319,7 +5319,6 @@ static struct ctl_table bpf_syscall_table[] = {
-> >         {
-> >                 .procname       = "bpf_stats_enabled",
-> >                 .data           = &bpf_stats_enabled_key.key,
-> > -               .maxlen         = sizeof(bpf_stats_enabled_key),
-> >                 .mode           = 0644,
-> >                 .proc_handler   = bpf_stats_handler,
-> >         },
-> >
-> > ---
-> > base-commit: b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
-> > change-id: 20221221-bpf-syscall-58d1ac3f817a
-> >
-> > Best regards,
-> > --
-> > Ricardo Ribalda <ribalda@chromium.org>
+> > Before there have a discussion [1] for refactoring Arm64 system call
+> > table but it didn't really happen.
+> 
+> I actually worked on this last week and did a new series to convert
+> the old asm-generic/unistd.h header into the syscall.tbl format,
+> and change arm64 to use that.
+> 
+> You can find my work in the 'syscall-tbl' branch of my asm-generic
+> tree [1]. This has only seen light build testing so far, and is
+> probably still buggy, but most of the work is there. The missing
+> bits are the Makefiles for the other seven architectures using
+> asm-generic/unistd.h, and checking the output to ensure the
+> contents are still the same.
+> 
+> > I think it's the right thing to merge
+> > this patch, @Arnaldo, could you pick up this patch?
 
+So I'm adding the provided:
 
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
+Tested-by: Leo Yan <leo.yan@linaro.org>
 
--- 
-Ricardo Ribalda
+ 
+> That sounds fine to me.
+
+And taking this as an:
+
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+
+ok?
+
+- Arnaldo
+ 
+>     Arnd
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/
