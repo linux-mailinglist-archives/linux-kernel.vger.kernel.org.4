@@ -2,216 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A70B652D7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 08:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD16652D81
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 08:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234324AbiLUHx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 02:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
+        id S234390AbiLUHyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 02:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiLUHxY (ORCPT
+        with ESMTP id S229634AbiLUHx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 02:53:24 -0500
-Received: from out29-177.mail.aliyun.com (out29-177.mail.aliyun.com [115.124.29.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C9E20F7E;
-        Tue, 20 Dec 2022 23:53:21 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436266|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00335086-7.3198e-05-0.996576;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047203;MF=frank.sae@motor-comm.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.QaOHgqA_1671609177;
-Received: from sunhua.motor-comm.com(mailfrom:Frank.Sae@motor-comm.com fp:SMTPD_---.QaOHgqA_1671609177)
-          by smtp.aliyun-inc.com;
-          Wed, 21 Dec 2022 15:53:18 +0800
-From:   Frank <Frank.Sae@motor-comm.com>
-To:     andrew@lunn.ch
-Cc:     Frank.Sae@motor-comm.com, davem@davemloft.net, edumazet@google.com,
-        fei.zhang@motor-comm.com, hkallweit1@gmail.com,
-        hua.sun@motor-comm.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
-        netdev@vger.kernel.org, pabeni@redhat.com, pgwipeout@gmail.com,
-        xiaogang.fan@motor-comm.com
-Subject: Re: [PATCH net-next v2] net: phy: Add driver for Motorcomm yt8531 gigabit ethernet phy
-Date:   Wed, 21 Dec 2022 15:53:14 +0800
-Message-Id: <20221221075314.1990-1-Frank.Sae@motor-comm.com>
-X-Mailer: git-send-email 2.31.0.windows.1
+        Wed, 21 Dec 2022 02:53:57 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2054.outbound.protection.outlook.com [40.107.237.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E94F1AF08;
+        Tue, 20 Dec 2022 23:53:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MtWNyoRrqFy9UrqFdvxCYVPwaycH/fAqn8Bbz4owf+5sXlBWI3/S6olWlErcKoyHq58DiGlgXJhHwAegEo7GjtEzMBdBpNxF9pY1rIknseMkcxmx+mnKdpf+Zv0Gak3cz0Adxcdg6Qn5sIOzXdly8JFwgORb9ChwDB/hV5WKRXLMVR3ptyM4w78iRDjmzx5Bg11T+3daqBG2OELdRp5awz8TtQUddtWnftXC9J+oJqlRkl5ld3Dl8ZZWbwa35YcAl6QQjL9z5//rve90GEl7uCuVedtH0HBV4cqrP1JIbU1LRMNc0CTPZAJ+2k/IH3afM3brM3wbV/bRPaKd/UnDbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=udefmB4LIQT4WG7iLtbL1wQWJpKxFkNgYnah/UExfT0=;
+ b=mUQ1QdNWU1Yxofx78MtL4K+dlEXu1PUosqKSh0WxWwe1HwKmYY4vWCbRpJD5DGzCpoHgXdmL+t941Kq529lw/Qg8bHyR8Z0nAISAf4TTB9jXn+Eu6T4jNqRZY0MG8Ar4H4fuKgmOduGX+fqL11v6RVBEYP4fLoEr0SPNaakkQWcb1ay0upw/4Tas9tU0YBEeMUG92tIX3QNZad2I6E/Z2HLGc3IOZyyCMSiCWBi9BxGJzlMijZi1Tvust1EDgHVY+SrbaP4rNG2sDYSAH1057xo3xLCEahqC/RdirDq/VO+zmprxGQTKkTQnr+yrZaqfFNdHsv2/yF9iEKYTFXUwCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=udefmB4LIQT4WG7iLtbL1wQWJpKxFkNgYnah/UExfT0=;
+ b=iAkKq9Snmcrr3aEJBKkS+To/k0LEvqj7JoRPEwnLFIzYX01f9jDxRv8PFMPqCYZGWLO/tD/uMDUk+P3SrwqqlKv6gBLPRpt+JLZOeSgQnRlcZXOekpParj4aHC4aHahMxxJjyOA6Te8Yj8cLckoTzuByywLwPXc0FjZvEta1ak71u3cVs8hbS7pu6TVkVmtoik0lKo92Esnpmj95fa00qGRNTSl9sZvGWnhdhCW6PJEeQzDqTb/44Pvn6ZMMvUjiYUL6hZSpZfbW07yPYwgpITgoHimHupDPj+Zo2jqRCgTa4H+v/536Z/l2oqm9brZJoE38gFF7yAdSNMAUtEwmaA==
+Received: from BN1PR10CA0024.namprd10.prod.outlook.com (2603:10b6:408:e0::29)
+ by CH2PR12MB4198.namprd12.prod.outlook.com (2603:10b6:610:7e::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Wed, 21 Dec
+ 2022 07:53:54 +0000
+Received: from BN8NAM11FT081.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e0:cafe::2e) by BN1PR10CA0024.outlook.office365.com
+ (2603:10b6:408:e0::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.21 via Frontend
+ Transport; Wed, 21 Dec 2022 07:53:54 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT081.mail.protection.outlook.com (10.13.177.233) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5944.10 via Frontend Transport; Wed, 21 Dec 2022 07:53:54 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 20 Dec
+ 2022 23:53:45 -0800
+Received: from [10.41.21.79] (10.126.230.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 20 Dec
+ 2022 23:53:39 -0800
+Message-ID: <f4ba0a2b-55c2-e142-b002-07a3bcab172f@nvidia.com>
+Date:   Wed, 21 Dec 2022 13:23:37 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
+ scaling in Tegra234
+Content-Language: en-US
+To:     Dmitry Osipenko <digetx@gmail.com>, <treding@nvidia.com>,
+        <krzysztof.kozlowski@linaro.org>, <dmitry.osipenko@collabora.com>,
+        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
+        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Sumit Gupta <sumitg@nvidia.com>
+References: <20221220160240.27494-1-sumitg@nvidia.com>
+ <20221220160240.27494-2-sumitg@nvidia.com>
+ <8e7f0efb-dc90-9dc7-015e-a2d56630f495@gmail.com>
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <8e7f0efb-dc90-9dc7-015e-a2d56630f495@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.126.230.37]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT081:EE_|CH2PR12MB4198:EE_
+X-MS-Office365-Filtering-Correlation-Id: 570f773f-bea4-41ce-82e4-08dae32881e9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mjPeoBK5XXjjXoCDQ8hcP97595ukrOBFt2DILZHE271bayBowDbcFsnbOEQxqujUp0GQxCJx8X8Q/8x6LqKYWt3qEPliYi1O5AlONHZh2g0R/CT/0Nu0YR+LGdPeg7v4mTjNHt2yIAQgrzAHUZJP5mJuks7QS8MEONn7BPiBB9lpX/TbNA+bNh+L+FcpYiQFrk2ZQxs9rMzwS9g7G/x8PIHadn1eXFJQWw2fWgyD1ZbQGj2R7YLoBWQYrf+7Tf/gmtJNagXL0IH/Auf84WGyRWNMETWW/2nZIRCg0lzQ0a5Qr/iWqB7u66r45ebbDZnL+Vm3LGYS+t7+qubjSdaZsO0qjm4xA/RvJWWbLSCQlXKHtJvmp+/Z9kkTrhUUMm/tHySKVtyGmRMzwcanL/IuFxzOBuWE5r19giKOUYVoqUXlMCo6d9+OqB3/CB3p6YU0OoxL+fHN2DEl1jmUGJWtZXX8YVLnY8FuQzfH7f28kWr4PH1jE3yAXtQeD9wjI6fP2SW2KU3qpQ3iA5ROmdpfSJB6S4qqgAqY+AS3T5sIBm+rScNCDvWS+yX0fme0PguVJsnq1UYuarBtghqIBaUweohUx+zerWQIQAp5CDqRIJtzQk+uWYHZGlyajSElTLiKOmmD3det3rUZWK4RQHq5KLrLglx1p9iTOkn8+D2eVZSPwnjaPsPlRCDJP+G6vOcyv+ruyDnezhDRcydDkG/f3v2HKBH7+TBPukSSMWvavwxOs12ZxmQpsEj8+eTTK658
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(376002)(346002)(396003)(451199015)(36840700001)(46966006)(40470700004)(110136005)(40480700001)(478600001)(7636003)(82740400003)(4744005)(7416002)(2906002)(31686004)(36756003)(316002)(5660300002)(8936002)(36860700001)(70206006)(86362001)(70586007)(16576012)(31696002)(8676002)(40460700003)(426003)(26005)(921005)(356005)(336012)(41300700001)(53546011)(47076005)(2616005)(186003)(16526019)(82310400005)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2022 07:53:54.1920
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 570f773f-bea4-41ce-82e4-08dae32881e9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT081.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4198
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
-  I send you this mail on 2022-12-14 11:07 UTC, but it failed: 
-  "Connect to the recipient Email system failed. (9)connect to the "vps0.lunn.ch(x.x.x.x) of lunn.ch" server failed"
-  so I send it again.
 
-on Dec. 3, 2022, 8:47 p.m. UTC , Andrew Lunn wrote:
-> On Fri, Dec 02, 2022 at 01:34:16PM +0000, Russell King (Oracle) wrote:
-> > On Fri, Dec 02, 2022 at 02:27:43PM +0100, Andrew Lunn wrote:
-> > > > +static bool mdio_is_locked(struct phy_device *phydev)
-> > > > +{
-> > > > +	return mutex_is_locked(&phydev->mdio.bus->mdio_lock);
-> > > > +}
-> > > > +
-> > > > +#define ASSERT_MDIO(phydev) \
-> > > > +	WARN_ONCE(!mdio_is_locked(phydev), \
-> > > > +		  "MDIO: assertion failed at %s (%d)\n", __FILE__,  __LINE__)
-> > > > +
-> > > 
-> > > Hi Frank
-> > > 
-> > > You are not the only one who gets locking wrong. This could be used in
-> > > other drivers. Please add it to include/linux/phy.h,
-> > 
-> > That placement doesn't make much sense.
-> > 
-> > As I already said, we have lockdep checks in drivers/net/phy/mdio_bus.c,
-> > and if we want to increase their effectiveness, then that's the place
-> > that it should be done.
+
+On 20/12/22 23:35, Dmitry Osipenko wrote:
+> External email: Use caution opening links or attachments
 > 
-> I was following the ASSERT_RTNL model, but that is used in quite deep
-> and complex call stacks, and it is useful to scatter the macro in lots
-> of places. PHY drivers are however very shallow, so yes, putting them
-> in mdio_bus.c makes a lot of sense.
 > 
-> > I don't see any point in using __FILE__ and __LINE__ in the above
-> > macro either. Firstly, WARN_ONCE() already includes the file and line,
-> > and secondly, the backtrace is more useful than the file and line where
-> > the assertion occurs especially if it's placed in mdio_bus.c
+> 20.12.2022 19:02, Sumit Gupta пишет:
+>> @@ -779,6 +780,7 @@ const char *const tegra_mc_error_names[8] = {
+>>    */
+>>   static int tegra_mc_interconnect_setup(struct tegra_mc *mc)
+>>   {
+>> +     struct tegra_icc_node *tnode;
+>>        struct icc_node *node;
+>>        unsigned int i;
+>>        int err;
+>> @@ -792,7 +794,11 @@ static int tegra_mc_interconnect_setup(struct tegra_mc *mc)
+>>        mc->provider.data = &mc->provider;
+>>        mc->provider.set = mc->soc->icc_ops->set;
+>>        mc->provider.aggregate = mc->soc->icc_ops->aggregate;
+>> -     mc->provider.xlate_extended = mc->soc->icc_ops->xlate_extended;
+>> +     mc->provider.get_bw = mc->soc->icc_ops->get_bw;
+>> +     if (mc->soc->icc_ops->xlate)
+>> +             mc->provider.xlate = mc->soc->icc_ops->xlate;
+>> +     if (mc->soc->icc_ops->xlate_extended)
+>> +             mc->provider.xlate_extended = mc->soc->icc_ops->xlate_extended;
 > 
-> And PHY driver functions are simpler, there is a lot less inlining
-> going on, so the function name is probably all you need to know to
-> find where you messed up the locking. So i agree, they can be removed.
-> 
->      Andrew
+> These IFs look pointless
 
- Hi Andrew and Russell, Thanks!
- 
- change the mdio_bus.c like follow ok?
- 
- -add "ASSERT_MDIO"
- -add "ASSERT_MDIO(bus);" in __mdiobus_read and __mdiobus_write function 
- 
- 
- static inline bool mdiobus_is_locked(struct mii_bus *bus)
-{
-	return mutex_is_locked(&bus->mdio_lock);
-}
-
-#define ASSERT_MDIO(bus) \
-	WARN_ONCE(!mdiobus_is_locked(bus), \
-		  "MDIO: assertion failed\n")
-		  
- int __mdiobus_read(struct mii_bus *bus, int addr, u32 regnum)
-{
-	int retval;
-
-	ASSERT_MDIO(bus);
-	lockdep_assert_held_once(&bus->mdio_lock);
-
-	retval = bus->read(bus, addr, regnum);
-...
-}
-
- int __mdiobus_write(struct mii_bus *bus, int addr, u32 regnum, u16 val)
-{
-	int err;
-
-	ASSERT_MDIO(bus);
-	lockdep_assert_held_once(&bus->mdio_lock);
-
-	err = bus->write(bus, addr, regnum, val);
-...
-}
-
-
-on Dec. 2, 2022, 1:27 p.m. UTC , Andrew Lunn wrote:
-> >  /**
-> >   * ytphy_read_ext() - read a PHY's extended register
-> >   * @phydev: a pointer to a &struct phy_device
-> > @@ -258,6 +271,8 @@ static int ytphy_read_ext(struct phy_device *phydev, u16 regnum)
-> >  {
-> >  	int ret;
-> >  
-> > +	ASSERT_MDIO(phydev);
-> > +
-> >  	ret = __phy_write(phydev, YTPHY_PAGE_SELECT, regnum);
-> >  	if (ret < 0)
-> >  		return ret;
-> > @@ -297,6 +312,8 @@ static int ytphy_write_ext(struct phy_device *phydev, u16 regnum, u16 val)
-> >  {
-> >  	int ret;
-> >  
-> > +	ASSERT_MDIO(phydev);
-> > +
-> >  	ret = __phy_write(phydev, YTPHY_PAGE_SELECT, regnum);
-> >  	if (ret < 0)
-> >  		return ret;
-> > @@ -342,6 +359,8 @@ static int ytphy_modify_ext(struct phy_device *phydev, u16 regnum, u16 mask,
-> >  {
-> >  	int ret;
-> >  
-> > +	ASSERT_MDIO(phydev);
-> > +
-> >  	ret = __phy_write(phydev, YTPHY_PAGE_SELECT, regnum);
-> >  	if (ret < 0)
-> >  		return ret;
-> > @@ -479,6 +498,76 @@ static int ytphy_set_wol(struct phy_device *phydev, struct ethtool_wolinfo *wol)
-> >  	return phy_restore_page(phydev, old_page, ret);
-> >  }
-> 
-> Please make the above one patch, which adds the macro and its
-> users. There are a couple more below as well.
-> 
-> Did it find any problems in the current code? Any fixes mixed
-> in here?
-> 
-> Then add yt8531 is another patch.
-> 
-
- Thanks! 
- It not find any problems in the current code. 
- ASSERT_MDIO in motorcomm.c will be removed. 
- 
-> > +/**
-> > + * yt8531_set_wol() - turn wake-on-lan on or off
-> > + * @phydev: a pointer to a &struct phy_device
-> > + * @wol: a pointer to a &struct ethtool_wolinfo
-> > + *
-> > + * returns 0 or negative errno code
-> > + */
-> > +static int yt8531_set_wol(struct phy_device *phydev,
-> > +			  struct ethtool_wolinfo *wol)
-> > +{
-> > +	struct net_device *p_attached_dev;
-> > +	const u16 mac_addr_reg[] = {
-> > +		YTPHY_WOL_MACADDR2_REG,
-> > +		YTPHY_WOL_MACADDR1_REG,
-> > +		YTPHY_WOL_MACADDR0_REG,
-> > +	};
-> > +	const u8 *mac_addr;
-> > +	u16 mask;
-> > +	u16 val;
-> > +	int ret;
-> > +	u8 i;
-> > +
-> > +	if (wol->wolopts & WAKE_MAGIC) {
-> > +		p_attached_dev = phydev->attached_dev;
-> > +		if (!p_attached_dev)
-> > +			return -ENODEV;
-> > +
-> > +		mac_addr = (const u8 *)p_attached_dev->dev_addr;
-> 
-> Why the cast?
-
- I'm sorry. What does "Why the cast?" mean?
- 
-> 
-> > +		if (!is_valid_ether_addr(mac_addr))
-> > +			return -EINVAL;
-> 
->   Andrew
-> 
-
+Ok. Will remove.
