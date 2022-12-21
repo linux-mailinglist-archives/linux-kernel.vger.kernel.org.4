@@ -2,161 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C98652CAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 07:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A479652CB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 07:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234462AbiLUGFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 01:05:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
+        id S234445AbiLUGLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 01:11:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234271AbiLUGFi (ORCPT
+        with ESMTP id S229448AbiLUGLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 01:05:38 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408C4A471;
-        Tue, 20 Dec 2022 22:05:37 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id h21so318392qta.12;
-        Tue, 20 Dec 2022 22:05:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CTBES3yJ2k7kxHLxg2MFG4+FEG+X7BypxEdYc1isplY=;
-        b=j6+OwjMe6anmUq+Z3C3/J4Maz6ZD1sHsVp8b2rhiC95fY5rCdeszCdBt24wyGCjoOK
-         nLYcDq9p4/JAZuTH+53MR0me4StToMIBoVfY3Koc4f9bAGEMJsypaFYk3Cs2OqSAhqpw
-         BGr/bozkz6hE7kotPoZMCIqQKFgMisULFQwOSQ2595VCJnclSE2XjR6WmWf57Poyqqzr
-         NQPIgmufneDkl4vcHBcdl5K6JhoRs4bRkjtPnDNI4dJBJ94Ad4zxIpfxmD/o8FTHwGGZ
-         xu6LV6l2ckOvuVtkoJ8WUlEVHsqaXldO0TqFjNu0MTF3SLm/60lF0B6WuTsYe1y3JueA
-         eptw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CTBES3yJ2k7kxHLxg2MFG4+FEG+X7BypxEdYc1isplY=;
-        b=qarOVX5V/YPDID3d5/QfW2MSRn8AI1ajnt5zmiYg9zVNaNm8r+4SS6aQ4dvtl4/Hjf
-         gUcJnP2X1MFyTiAqijIhO4TtduqQuHH3FJJLsDHAzIQxYLXFVlP2Kvzh15OVhpHo7BaA
-         BpQLCAIl7b4Du8BQX6/eJ1DhFOV/Mj8jc3yHPLPExOBelNQi+I77Otie9Fktpas7YuaZ
-         g2UhGL6+iHNxcD6oIiLH/2T1JOSI75LcoxsbjuODCz26tMYB+XTfBlcHYCLHjez6hVC1
-         OJyzCFGdkBNML4QAc6UyIpGS+G5O4U77hTr/4+00WzhQAx8EMOyE5rD+z5RG8sxFe3jI
-         L2Lg==
-X-Gm-Message-State: AFqh2kpnmoOlGQP38wnTnhMPOW6ZSXK1GDCRWJ4+XV1JiVAHUchDVRUY
-        Z7uTl8NDD2cG205OGnUwnlk1ux7ElECsorXIX2g=
-X-Google-Smtp-Source: AMrXdXuvA6z58v9Nai5t2roZ9vzH69AVh8tmnOnXcsOWiWe1DlxGLth7lEHmgbtTjEtCWcsc56mREmz263dWwh3mQlE=
-X-Received: by 2002:a05:622a:1a06:b0:3a5:6822:1a42 with SMTP id
- f6-20020a05622a1a0600b003a568221a42mr18740qtb.174.1671602736260; Tue, 20 Dec
- 2022 22:05:36 -0800 (PST)
+        Wed, 21 Dec 2022 01:11:17 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22656D2FA;
+        Tue, 20 Dec 2022 22:11:17 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BL3UcOT024632;
+        Wed, 21 Dec 2022 06:11:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=Awi+JIG1pgsi1bJiA8m0s/QrQlUryW7+5yjBnK5ibNk=;
+ b=KWl6I3uBtKEkRfdSHtOL8OC/fsfAkHN9pJA8RSLBFzxqMXzXmO8fLEq685nMhT9/Iesc
+ QsBX1Wf0Uko6Y/g6DowGfD+3QLIFeDDnXNlmNnpoRqyxoy7pccF+ZLo2yr/hFQf9KFcr
+ 4E4I+IwwdRomT53lHYtVDAC/QsRO2qtDnDqqPmZ/9m8pn1Gf+m8StLZjtBqpiwDyIStG
+ DU1G9rue9gi/VbNbW41lYZhoaTXwVZKQ3t3uLi2cCkwohYo11EDC/3W0yBoUfJw9gtzB
+ KC2vJN5ZmdM2RutdTisDnSOuwer+s2yonnNKc2UFrxMt42PckPgzSvFmbFhgDFUZlOmR iw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mk83xthtv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Dec 2022 06:11:06 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BL6Av42012734
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Dec 2022 06:10:57 GMT
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 20 Dec 2022 22:10:51 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>,
+        <krzysztof.kozlowski@linaro.org>, <mathieu.poirier@linaro.org>,
+        <corbet@lwn.net>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v4 0/2] Update section header name check
+Date:   Wed, 21 Dec 2022 11:40:31 +0530
+Message-ID: <1671603033-4359-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <Y6GMnq3AC7Kbnag8@VM-66-53-centos> <a113d20c-dc6c-2e44-009f-d4b17beb8820@linaro.org>
- <3325915.e9J7NaK4W3@diego>
-In-Reply-To: <3325915.e9J7NaK4W3@diego>
-From:   ty <zonyitoo@gmail.com>
-Date:   Wed, 21 Dec 2022 14:05:25 +0800
-Message-ID: <CAMmci2UNqbv-ViaGM5Avi5fhSEuDa=MFkq1bDXyDsrNFM=t0jA@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: dts: rockchip: Add RK3566 LubanCat 1
-To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, DHDAXCW <lasstp5011@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: wnQbb8YFzfHRJhdq2FtgzfgnG6hmzdiP
+X-Proofpoint-GUID: wnQbb8YFzfHRJhdq2FtgzfgnG6hmzdiP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-21_02,2022-12-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=930
+ clxscore=1015 bulkscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0
+ adultscore=0 priorityscore=1501 spamscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212210044
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ok. Modifications are made in PATCH v4.
+Update section header name check and corresponding documentation.
+Changes since v3:
+    -- Rephrase commit message.
+Changes since v2:
+    -- Update the commit message with example.
+    -- Update the documentation text appropriately.
+Changes since v1:
+    -- Update the commit message.
+    -- Use strstarts instead of strstr.
+    -- Update documentation file.
 
-NOTE: PATCH v3 was sent with an old patch file as attachment, so please ign=
-ore.
-NOTE: Last Reply E-mail were sent in HTML mode.
+Srinivasa Rao Mandadapu (2):
+  remoteproc: elf_loader: Update resource table name check
+  docs: remoteproc: Update section header name requirement
 
+ Documentation/staging/remoteproc.rst       | 5 ++++-
+ drivers/remoteproc/remoteproc_elf_loader.c | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-Heiko St=C3=BCbner <heiko@sntech.de> =E4=BA=8E2022=E5=B9=B412=E6=9C=8821=E6=
-=97=A5=E5=91=A8=E4=B8=89 01:32=E5=86=99=E9=81=93=EF=BC=9A
->
-> Am Dienstag, 20. Dezember 2022, 17:14:51 CET schrieb Krzysztof Kozlowski:
-> > On 20/12/2022 11:21, Yuteng Zhong wrote:
-> > > LubanCat 1 is a Rockchip RK3566 SBC based
-> > > is developed by EmbedFire Electronics Co., Ltd.
-> > > Mini Linux Card Type Cheap Computer Development Board
-> >
-> > Please wrap commit message according to Linux coding style / submission
-> > process:
-> > https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process=
-/submitting-patches.rst#L586
-> >
-> > > +   rk809: pmic@20 {
-> > > +           compatible =3D "rockchip,rk809";
-> > > +           reg =3D <0x20>;
-> > > +           interrupt-parent =3D <&gpio0>;
-> > > +           interrupts =3D <RK_PA3 IRQ_TYPE_LEVEL_LOW>;
-> > > +           assigned-clocks =3D <&cru I2S1_MCLKOUT_TX>;
-> > > +           assigned-clock-parents =3D <&cru CLK_I2S1_8CH_TX>;
-> > > +           #clock-cells =3D <1>;
-> > > +           clock-names =3D "mclk";
-> > > +           clocks =3D <&cru I2S1_MCLKOUT_TX>;
-> > > +           pinctrl-names =3D "default";
-> > > +           pinctrl-0 =3D <&pmic_int>;
-> > > +           rockchip,system-power-controller;
-> > > +           #sound-dai-cells =3D <0>;
-> > > +           vcc1-supply =3D <&vcc3v3_sys>;
-> > > +           vcc2-supply =3D <&vcc3v3_sys>;
-> > > +           vcc3-supply =3D <&vcc3v3_sys>;
-> > > +           vcc4-supply =3D <&vcc3v3_sys>;
-> > > +           vcc5-supply =3D <&vcc3v3_sys>;
-> > > +           vcc6-supply =3D <&vcc3v3_sys>;
-> > > +           vcc7-supply =3D <&vcc3v3_sys>;
-> > > +           vcc8-supply =3D <&vcc3v3_sys>;
-> > > +           vcc9-supply =3D <&vcc3v3_sys>;
-> > > +           wakeup-source;
-> > > +
-> > > +           regulators {
-> > > +                   vdd_logic: DCDC_REG1 {
-> >
-> > No underscores in node names. Anything requires it?
->
-> looks like the answer is "it depends" :-)
->
-> When the regulator-framework searches for the node to get the init-data f=
-rom
-> it uses the actual node-name or the regulator-compatible property [0]
-> to match against.
->
-> And going via regulator-compatible was the "old" way, already deprecated
-> before the yaml-conversion [1] and not even included
->
-> So matching against the node-name is the correct way to go and it's actua=
-lly
-> part of the rk8xx-binding as well [2]
->
->
-> Hope that helps,
-> Heiko
->
->
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/drivers/regulator/of_regulator.c#n477
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
-mmit/Documentation/devicetree/bindings/regulator/regulator.txt?id=3D1914a99=
-6436b09186489da73b807e1df71259f67
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/Documentation/devicetree/bindings/mfd/rockchip,rk809.yaml#n84
->
->
+-- 
+2.7.4
 
-
---=20
-Y. T. Zhong
-Student of The University of Hong Kong, major in Computer Science.
-E-mail: zonyitoo@gmail.com
